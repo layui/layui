@@ -7,6 +7,8 @@
   经典模块化前端UI框架
 </p>
 
+---
+
 Layui 是一款带着浓烈情怀的前端UI框架，她追求极简，又不失丰盈的内在，说她是史上最轻量的结晶，似乎并不为过。一切都源自于她对原生态的执着，对前端社区的那些噪杂声音的过滤，以及她本身的精心雕琢。
 
 ## 经典，因返璞归真
@@ -111,4 +113,4 @@ layui.define(['layer', 'form'], function(){
 
 
 ## 相关
-[官网](http://www.layui.com/)、[更新日志](https://github.com/sentsin/layer/blob/master/CHANGELOG.md)、[社区交流](http://fly.layui.com)
+[官网](http://www.layui.com/)、[更新日志](https://github.com/sentsin/layui/blob/master/CHANGELOG.md)、[社区交流](http://fly.layui.com)
