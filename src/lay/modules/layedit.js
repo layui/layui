@@ -1,0 +1,524 @@
+/**
+
+ @Name：layui.layedit 富文本编辑器
+ @Author：贤心
+ @License：LGPL
+    
+ */
+ 
+layui.define(['layer', 'form'], function(exports){
+  "use strict";
+  
+  var $ = layui.jquery
+  ,layer = layui.layer
+  ,form = layui.form()
+  ,hint = layui.hint()
+  ,device = layui.device()
+  
+  ,MOD_NAME = 'layedit', THIS = 'layui-this', SHOW = 'layui-show', ABLED = 'layui-disabled'
+  
+  ,Edit = function(){
+    var that = this;
+    that.index = 0;
+    
+    //全局配置
+    that.config = {
+      //默认工具bar
+      tool: [
+        'strong', 'italic', 'underline', 'del'
+        ,'|'
+        ,'left', 'center', 'right'
+        ,'|'
+        , 'link', 'unlink', 'face', 'image'
+        
+      ]
+      ,hideTool: []
+      ,height: 280 //默认高
+    };
+  };
+  
+  //全局设置
+  Edit.prototype.set = function(options){
+    var that = this;
+    $.extend(true, that.config, options);
+    return that;
+  };
+  
+  //事件监听
+  Edit.prototype.on = function(events, callback){
+    return layui.onevent(MOD_NAME, events, callback);
+  };
+  
+  //建立编辑器
+  Edit.prototype.build = function(id, settings){
+    settings = settings || {};
+    
+    var that = this
+    ,config = that.config
+    ,ELEM = 'layui-layedit', textArea = $('#'+id)
+    ,name =  'LAY_layedit_'+ (++that.index)
+    ,haveBuild = textArea.next('.'+ELEM)
+    
+    ,set = $.extend({}, config, settings)
+    
+    ,tool = function(){
+      var node = [], hideTools = {};
+      layui.each(set.hideTool, function(_, item){
+        hideTools[item] = true;
+      });
+      layui.each(set.tool, function(_, item){
+        if(tools[item] && !hideTools[item]){
+          node.push(tools[item]);
+        }
+      });
+      return node.join('');
+    }()
+ 
+    
+    ,editor = $(['<div class="'+ ELEM +'">'
+      ,'<div class="layui-unselect layui-layedit-tool">'+ tool +'</div>'
+      ,'<div class="layui-layedit-iframe">'
+        ,'<iframe id="'+ name +'" name="'+ name +'" frameborder="0"></iframe>'
+      ,'</div>'
+    ,'</div>'].join(''))
+    
+    //编辑器不兼容ie8以下
+    if(device.ie && device.ie < 8){
+      return textArea.removeClass('layui-hide').addClass(SHOW);
+    }
+
+    haveBuild[0] && (haveBuild.remove());
+
+    setIframe.call(that, editor, textArea[0], set)
+    textArea.addClass('layui-hide').after(editor);
+
+    return that.index;
+  };
+  
+  //获得编辑器中内容
+  Edit.prototype.getContent = function(index){
+    var iframeWin = $('#LAY_layedit_'+ index).prop('contentWindow');
+    if(!iframeWin) return;
+    return iframeWin.document.body.innerHTML;
+  };
+  
+  //获得编辑器中纯文本内容
+  Edit.prototype.getText = function(index){
+    var iframeWin = $('#LAY_layedit_'+ index).prop('contentWindow');
+    if(!iframeWin) return;
+    return $(iframeWin.document.body).text();
+  };
+
+  //iframe初始化
+  var setIframe = function(editor, textArea, set){
+    var that = this, iframe = editor.find('iframe');
+
+    iframe.css({
+      height: set.height
+    }).on('load', function(){
+      var conts = iframe.contents()
+      ,iframeWin = iframe.prop('contentWindow')
+      ,head = conts.find('head')
+      ,style = $(['<style>'
+        ,'*{margin: 0; padding: 0;}'
+        ,'body{padding: 10px; line-height: 20px; overflow-x: hidden; word-wrap: break-word; font: 14px Helvetica Neue,Helvetica,PingFang SC,Microsoft YaHei,Tahoma,Arial,sans-serif; -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}'
+        ,'a{color:#01AAED; text-decoration:none;}a:hover{color:#c00}'
+        ,'p{margin-bottom: 10px;}'
+        ,'img{display: inline-block; border: none; vertical-align: middle;}'
+      ,'</style>'].join(''))
+      ,body = conts.find('body');
+      
+      head.append(style);
+      body.attr('contenteditable', 'true').css({
+        'min-height': set.height
+      }).html(textArea.value||'');
+
+      hotkey.apply(that, [iframeWin, iframe, textArea, set]); //快捷键处理
+      toolActive.call(that, iframeWin, editor, set); //触发工具
+
+    });
+  }
+  
+  //快捷键处理
+  ,hotkey = function(iframeWin, iframe, textArea, set){
+    var iframeDOM = iframeWin.document, body = $(iframeDOM.body);
+    body.on('keydown', function(e){
+      var keycode = e.keyCode;
+      //处理回车
+      if(keycode === 13){
+        //此处后续还要处理列表等情况
+        iframeDOM.execCommand('formatBlock', false, '<p>');
+      }
+      //给textarea同步内容
+      textArea.value = body.html();
+    });
+    
+    //处理粘贴
+    body.on('paste', function(e){
+      iframeDOM.execCommand('formatBlock', false, '<p>');
+      setTimeout(function(){
+        filter.call(iframeWin, body);
+        textArea.value = body.html();
+      }, 100); 
+    });
+  }
+  
+  //标签过滤
+  ,filter = function(body){
+    var iframeWin = this
+    ,iframeDOM = iframeWin.document;
+    
+    //清除影响版面的css属性
+    body.find('*[style]').each(function(){
+      var textAlign = this.style.textAlign;
+      this.removeAttribute('style');
+      $(this).css({
+        'text-align': textAlign || ''
+      })
+    });
+    
+    //修饰表格
+    body.find('table').addClass('layui-table');
+    
+    //移除不安全的标签
+    body.find('script,link').remove();
+  }
+  
+  //Range对象兼容性处理
+  ,Range = function(iframeDOM){
+    return iframeDOM.selection 
+      ? iframeDOM.selection.createRange()
+    : iframeDOM.getSelection().getRangeAt(0);
+  }
+  
+  //当前Range对象的endContainer兼容性处理
+  ,getContainer = function(range){
+    return range.endContainer || range.parentElement().childNodes[0]
+  }
+  
+  //在选区插入内联元素
+  ,insertInline = function(tagName, attr, range){
+    var iframeDOM = this.document
+    ,elem = document.createElement(tagName)
+    for(var key in attr){
+      elem.setAttribute(key, attr[key]);
+    }
+    elem.removeAttribute('text');
+
+    if(iframeDOM.selection){ //IE
+      var text = range.text || attr.text;
+      if(tagName === 'a' && !text) return;
+      if(text){
+        elem.innerHTML = text;
+      }
+      range.pasteHTML($(elem).prop('outerHTML')); 
+      range.select();
+    } else { //非IE
+      var text = range.toString() || attr.text;
+      if(tagName === 'a' && !text) return;
+      if(text){
+        elem.innerHTML = text;
+      }
+      range.deleteContents();
+      range.insertNode(elem);
+    }
+  }
+  
+  //工具选中
+  ,toolCheck = function(tools, othis){
+    var iframeDOM = this.document
+    ,CHECK = 'layedit-tool-active'
+    ,container = getContainer(Range(iframeDOM))
+    ,item = function(type){
+      return tools.find('.layedit-tool-'+type)
+    }
+
+    if(othis){
+      othis[othis.hasClass(CHECK) ? 'removeClass' : 'addClass'](CHECK);
+    }
+    
+    tools.find('>i').removeClass(CHECK);
+    item('unlink').addClass(ABLED);
+
+    $(container).parents().each(function(){
+      var tagName = this.tagName.toLowerCase()
+      ,textAlign = this.style.textAlign;
+
+      //文字
+      if(tagName === 'b' || tagName === 'strong'){
+        item('b').addClass(CHECK)
+      }
+      if(tagName === 'i' || tagName === 'em'){
+        item('i').addClass(CHECK)
+      }
+      if(tagName === 'u'){
+        item('u').addClass(CHECK)
+      }
+      if(tagName === 'strike'){
+        item('d').addClass(CHECK)
+      }
+      
+      //对齐
+      if(tagName === 'p'){
+        if(textAlign === 'center'){
+          item('center').addClass(CHECK);
+        } else if(textAlign === 'right'){
+          item('right').addClass(CHECK);
+        } else {
+          item('left').addClass(CHECK);
+        }
+      }
+      
+      //超链接
+      if(tagName === 'a'){
+        item('link').addClass(CHECK);
+        item('unlink').removeClass(ABLED);
+      }
+    });
+  }
+
+  //触发工具
+  ,toolActive = function(iframeWin, editor, set){
+    var iframeDOM = iframeWin.document
+    ,body = $(iframeDOM.body)
+    ,toolEvent = {
+      //超链接
+      link: function(range){
+        var container = getContainer(range)
+        ,parentNode = $(container).parent();
+        
+        link.call(body, {
+          href: parentNode.attr('href')
+          ,target: parentNode.attr('target')
+        }, function(field){
+          var parent = parentNode[0];
+          if(parent.tagName === 'A'){
+            parent.href = field.url;
+          } else {
+            insertInline.call(iframeWin, 'a', {
+              target: field.target
+              ,href: field.url
+              ,text: field.url
+            }, range);
+          }
+        });
+      }
+      //清除超链接
+      ,unlink: function(range){
+        iframeDOM.execCommand('unlink');
+      }
+      //表情
+      ,face: function(range){
+        face.call(this, function(img){
+          insertInline.call(iframeWin, 'img', {
+            src: img.src
+            ,alt: img.alt
+          }, range);
+        });
+      }
+      //图片
+      ,image: function(range){
+        var that = this;
+        layui.use('upload', function(upload){
+          var uploadImage = set.uploadImage || {};
+          upload({
+            url: uploadImage.url
+            ,method: uploadImage.type
+            ,elem: $(that).find('input')[0]
+            ,unwrap: true
+            ,success: function(res){
+              if(res.code == 0){
+                res.data = res.data || {};
+                insertInline.call(iframeWin, 'img', {
+                  src: res.data.src
+                  ,alt: res.data.title
+                }, range);
+              } else {
+                layer.msg(res.msg||'上传失败');
+              }
+            }
+          });
+        });
+      }
+      //插入代码
+      ,code: function(range){
+        layer.msg('Next Version');
+      }
+      //帮助
+      ,help: function(){
+        layer.open({
+          type: 2
+          ,title: '帮助'
+          ,area: ['600px', '380px']
+          ,shadeClose: true
+          ,shade: 0.1
+          ,skin: 'layui-layer-msg'
+          ,content: ['http://www.layui.com/about/layedit/help.html', 'no']
+        });
+      }
+    }
+    ,tools = editor.find('.layui-layedit-tool')
+    
+    ,click = function(){
+      var othis = $(this)
+      ,events = othis.attr('layedit-event')
+      ,command = othis.attr('lay-command');
+      
+      if(othis.hasClass(ABLED)) return;
+
+      body.focus();
+      
+      var range = Range(iframeDOM)
+      ,container = range.commonAncestorContainer
+      
+      if(command){
+        iframeDOM.execCommand(command);
+        if(/justifyLeft|justifyCenter|justifyRight/.test(command)){
+          iframeDOM.execCommand('formatBlock', false, '<p>');
+        }
+        setTimeout(function(){
+          body.focus();
+        }, 10);
+      } else {
+        toolEvent[events] && toolEvent[events].call(this, range);
+      }
+      toolCheck.call(iframeWin, tools, othis);
+    }
+    
+    ,isClick = /image/
+
+    tools.find('>i').on('mousedown', function(){
+      var othis = $(this)
+      ,events = othis.attr('layedit-event');
+      if(isClick.test(events)) return;
+      click.call(this)
+    }).on('click', function(){
+      var othis = $(this)
+      ,events = othis.attr('layedit-event');
+      if(!isClick.test(events)) return;
+      click.call(this)
+    });
+    
+    //触发内容区域
+    body.on('click', function(){
+      toolCheck.call(iframeWin, tools);
+    });
+  }
+  
+  //超链接面板
+  ,link = function(options, callback){
+    var body = this, index = layer.open({
+      type: 1
+      ,id: 'LAY_layedit_link'
+      ,area: '350px'
+      ,shade: 0.05
+      ,shadeClose: true
+      ,moveType: 1
+      ,title: '超链接'
+      ,skin: 'layui-layer-msg'
+      ,content: ['<ul class="layui-form" style="margin: 15px;">'
+        ,'<li class="layui-form-item">'
+          ,'<label class="layui-form-label" style="width: 60px;">URL</label>'
+          ,'<div class="layui-input-block" style="margin-left: 90px">'
+            ,'<input name="url" lay-verify="url" value="'+ (options.href||'') +'" autofocus="true" autocomplete="off" class="layui-input">'
+            ,'</div>'
+        ,'</li>'
+        ,'<li class="layui-form-item">'
+          ,'<label class="layui-form-label" style="width: 60px;">打开方式</label>'
+          ,'<div class="layui-input-block" style="margin-left: 90px">'
+            ,'<input type="radio" name="target" value="_self" class="layui-input" title="当前窗口"'
+            + ((options.target==='_self' || !options.target) ? 'checked' : '') +'>'
+            ,'<input type="radio" name="target" value="_blank" class="layui-input" title="新窗口" '
+            + (options.target==='_blank' ? 'checked' : '') +'>'
+            ,'</div>'
+        ,'</li>'
+        ,'<li class="layui-form-item" style="text-align: center;">'
+          ,'<button type="button" lay-submit lay-filter="layedit-link-yes" class="layui-btn"> 确定 </button>'
+          ,'<button style="margin-left: 20px;" type="button" class="layui-btn layui-btn-primary"> 取消 </button>'
+        ,'</li>'
+      ,'</ul>'].join('')
+      ,success: function(layero, index){
+        var eventFilter = 'submit(layedit-link-yes)';
+        form.render('radio');  
+        layero.find('.layui-btn-primary').on('click', function(){
+          layer.close(index);
+          body.focus();
+        });
+        delete layui.cache.event['form.'+eventFilter];
+        form.on(eventFilter, function(data){
+          layer.close(link.index);
+          callback && callback(data.field);
+        });
+      }
+    });
+    link.index = index;
+  }
+  
+  //表情面板
+  ,face = function(callback){
+    //表情库
+    var faces = function(){
+      var alt = ["[微笑]", "[嘻嘻]", "[哈哈]", "[可爱]", "[可怜]", "[挖鼻]", "[吃惊]", "[害羞]", "[挤眼]", "[闭嘴]", "[鄙视]", "[爱你]", "[泪]", "[偷笑]", "[亲亲]", "[生病]", "[太开心]", "[白眼]", "[右哼哼]", "[左哼哼]", "[嘘]", "[衰]", "[委屈]", "[吐]", "[哈欠]", "[抱抱]", "[怒]", "[疑问]", "[馋嘴]", "[拜拜]", "[思考]", "[汗]", "[困]", "[睡]", "[钱]", "[失望]", "[酷]", "[色]", "[哼]", "[鼓掌]", "[晕]", "[悲伤]", "[抓狂]", "[黑线]", "[阴险]", "[怒骂]", "[互粉]", "[心]", "[伤心]", "[猪头]", "[熊猫]", "[兔子]", "[ok]", "[耶]", "[good]", "[NO]", "[赞]", "[来]", "[弱]", "[草泥马]", "[神马]", "[囧]", "[浮云]", "[给力]", "[围观]", "[威武]", "[奥特曼]", "[礼物]", "[钟]", "[话筒]", "[蜡烛]", "[蛋糕]"], arr = {};
+      layui.each(alt, function(index, item){
+        arr[item] = layui.cache.dir + 'images/face/'+ index + '.gif';
+      });
+      return arr;
+    }();
+    face.hide = face.hide || function(e){
+      if($(e.target).attr('layedit-event') !== 'face'){
+        layer.close(face.index);
+      }
+    }
+    return face.index = layer.tips(function(){
+      var content = [];
+      layui.each(faces, function(key, item){
+        content.push('<li title="'+ key +'"><img src="'+ item +'" alt="'+ key +'"></li>');
+      });
+      return '<ul class="layui-clear">' + content.join('') + '</ul>';
+    }(), this, {
+      tips: 1
+      ,time: 0
+      ,skin: 'layui-box layui-util-face'
+      ,maxWidth: 500
+      ,success: function(layero, index){
+        layero.css({
+          marginTop: -4
+          ,marginLeft: -10
+        }).find('.layui-clear>li').on('click', function(){
+          callback && callback({
+            src: faces[this.title]
+            ,alt: this.title
+          });
+          layer.close(index);
+        });
+        $(document).off('click', face.hide).on('click', face.hide);
+      }
+    });
+  }
+  
+  //全部工具
+  ,tools = {
+    html: '<i class="layui-icon layedit-tool-html" title="HTML源代码" lay-command="html" layedit-event="html"">&#xe64b;</i><span class="layedit-tool-mid"></span>'
+    ,strong: '<i class="layui-icon layedit-tool-b" title="加粗" lay-command="Bold" layedit-event="b"">&#xe62b;</i>'
+    ,italic: '<i class="layui-icon layedit-tool-i" title="斜体" lay-command="italic" layedit-event="i"">&#xe644;</i>'
+    ,underline: '<i class="layui-icon layedit-tool-u" title="下划线" lay-command="underline" layedit-event="u"">&#xe646;</i>'
+    ,del: '<i class="layui-icon layedit-tool-d" title="删除线" lay-command="strikeThrough" layedit-event="d"">&#xe64f;</i>'
+    
+    ,'|': '<span class="layedit-tool-mid"></span>'
+    
+    ,left: '<i class="layui-icon layedit-tool-left" title="左对齐" lay-command="justifyLeft" layedit-event="left"">&#xe649;</i>'
+    ,center: '<i class="layui-icon layedit-tool-center" title="居中对齐" lay-command="justifyCenter" layedit-event="center"">&#xe647;</i>'
+    ,right: '<i class="layui-icon layedit-tool-right" title="右对齐" lay-command="justifyRight" layedit-event="right"">&#xe648;</i>'
+    ,link: '<i class="layui-icon layedit-tool-link" title="插入链接" layedit-event="link"">&#xe64c;</i>'
+    ,unlink: '<i class="layui-icon layedit-tool-unlink layui-disabled" title="清除链接" lay-command="unlink" layedit-event="unlink"">&#xe64d;</i>'
+    ,face: '<i class="layui-icon layedit-tool-face" title="表情" layedit-event="face"">&#xe650;</i>'
+    ,image: '<i class="layui-icon layedit-tool-image" title="图片" layedit-event="image">&#xe64a;<input type="file" name="file"></i>'
+    ,code: '<i class="layui-icon layedit-tool-code" title="插入代码" layedit-event="code">&#xe64e;</i>'
+    
+    ,help: '<i class="layui-icon layedit-tool-help" title="帮助" layedit-event="help">&#xe607;</i>'
+  }
+  
+  ,edit = new Edit();
+
+  exports(MOD_NAME, edit);
+});

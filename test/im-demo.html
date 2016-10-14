@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>layim - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+<style>
+html, body{background-color: #333;}
+body{height: 3000px;}
+</style>
+</head>
+<body>
+
+
+<script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://local.res.layui.com/lay/lib/layer/src/layer.js?v=2.4"></script>
+
+
+
+<script src="../build/layui.js"></script>
+<script>
+
+layui.use('layim', function(layim){
+  
+  //建立WebSocket通讯
+  /*
+  var socket = layui.socket('/im/', {
+    'force new connection': false
+  });
+  
+  socket.emit('system', {});
+  */
+  
+  var autoReplay = [
+    '您好，我现在有事不在，一会再和您联系。', 
+    '你没发错吧？face[微笑] ',
+    '洗澡中，请勿打扰，偷窥请购票，个体四十，团体八折，订票电话：一般人我不告诉他！face[哈哈] ',
+    '你好，我是主人的美女秘书，有什么事就跟我说吧，等他回来我会转告他的。face[心] face[心] face[心] ',
+    'face[威武] face[威武] face[威武] face[威武] ',
+    '<（@￣︶￣@）>',
+    '你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。',
+    'face[黑线]  你慢慢说，别急……',
+    '(*^__^*) face[嘻嘻] ，是贤心吗？'
+  ];
+  
+  //基础配置
+  layim.config({
+
+    //初始化接口
+    init: {
+      url: './json/layim/getList.json'
+      ,data: {}
+    }
+    
+    //,minRight: '90px'
+    
+    /*
+    ,mine: {
+      "username": "LayIM体验者" //我的昵称
+      ,"id": "100000123" //我的ID
+      ,"status": "online" //在线状态 online：在线、hide：隐身
+      ,"remark": "在深邃的编码世界，做一枚轻盈的纸飞机" //我的签名
+      ,"avatar": "a.jpg" //我的头像
+    }
+    */
+
+    //简约模式（不显示主面板）
+    //,brief: true
+    
+    //,title: 'WebIM'
+
+    //查看群员接口
+    ,members: {
+      url: './json/layim/getMembers.json'
+      ,data: {}
+    }
+    
+    //上传图片接口
+    ,uploadImage: {
+      url: '/upload/image' //（返回的数据格式见下文）
+      ,type: '' //默认post
+    } 
+    
+    //上传文件接口
+    ,uploadFile: {
+      url: '/upload/file' //（返回的数据格式见下文）
+      ,type: '' //默认post
+    } 
+    
+    //,right: '100px'
+    //,skin: ['http://cdn.firstlinkapp.com/upload/2016_4/1461747766565_14690.jpg'] //皮肤
+    //,isfriend: false //是否开启好友
+    //,isgroup: false //是否开启群组
+    //,min: true //是否始终最小化主面板（默认false）
+    ,chatLog: '/chat/log/' //聊天记录地址
+    ,find: '/find/'
+    //,copyright: true //是否授权
+  });
+
+  /*
+  layim.chat({
+    name: '在线客服-小苍'
+    ,type: 'kefu'
+    ,avatar: 'http://tva3.sinaimg.cn/crop.0.0.180.180.180/7f5f6861jw1e8qgp5bmzyj2050050aa8.jpg'
+    ,id: -1
+  });
+  layim.chat({
+    name: '在线客服-心心'
+    ,type: 'kefu'
+    ,avatar: 'http://tva1.sinaimg.cn/crop.219.144.555.555.180/0068iARejw8esk724mra6j30rs0rstap.jpg'
+    ,id: -2
+  });
+  layim.setChatMin();*/
+
+  //监听发送消息
+  layim.on('sendMessage', function(data){
+    var To = data.to;
+    console.log(data);
+    
+
+
+    //演示自动回复
+    setTimeout(function(){
+      var obj = {};
+      if(To.type === 'group'){
+        obj = {
+          username: '模拟群员'+(Math.random()*100|0)
+          ,avatar: layui.cache.dir + 'images/face/'+ (Math.random()*72|0) + '.gif'
+          ,id: To.id
+          ,type: To.type
+          ,content: autoReplay[Math.random()*9|0]
+        }
+      } else {
+        obj = {
+          username: To.name
+          ,avatar: To.avatar
+          ,id: To.id
+          ,type: To.type
+          ,content: autoReplay[Math.random()*9|0]
+        }
+      }
+      layim.getMessage(obj);
+    }, 1000);
+  });
+
+  //监听在线状态的切换事件
+  layim.on('online', function(data){
+    console.log(data);
+  });
+   
+ 
+
+  //layim建立就绪
+  layim.on('ready', function(res){
+
+    console.log(res.mine);
+  
+    //添加好友（如果检测到该socket）
+    layim.addList({
+      type: 'group'
+      ,avatar: "http://tva3.sinaimg.cn/crop.64.106.361.361.50/7181dbb3jw8evfbtem8edj20ci0dpq3a.jpg"
+      ,groupname: 'Angular开发'
+      ,id: "12333333"
+      ,members: 0
+    });
+    layim.addList({
+      type: 'friend'
+      ,avatar: "http://tp2.sinaimg.cn/2386568184/180/40050524279/0"
+      ,username: '冲田杏梨'
+      ,groupid: 2
+      ,id: "1233333312121212"
+      ,remark: "本人冲田杏梨将结束AV女优的工作"
+    });
+    
+    //接受消息（如果检测到该socket）
+    layim.getMessage({
+      username: "贤心"
+      ,avatar: "http://tp1.sinaimg.cn/1571889140/180/40030060651/1"
+      ,id: "100001"
+      ,type: "friend"
+      ,content: "嗨，你好！欢迎体验LayIM。演示标记："+ new Date().getTime()
+    });
+    layim.getMessage({
+      username: "Hi"
+      ,avatar: "http://qzapp.qlogo.cn/qzapp/100280987/56ADC83E78CEC046F8DF2C5D0DD63CDE/100"
+      ,id: "10000111"
+      ,type: "friend"
+      ,content: "临时："+ new Date().getTime()
+    });
+  });
+
+  //监听查看群员
+  layim.on('members', function(data){
+    console.log(data);
+  });
+  
+  //监听聊天窗口的切换
+  layim.on('chatChange', function(data){
+    console.log(data);
+  });
+  
+  
+
+});
+</script>
+</body>
+</html>

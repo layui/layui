@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>文件上传模块 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 50px 100px;}
+</style>
+</head>
+<body>
+
+<input type="file" name="file" class="layui-upload-file">
+<br><br>
+<i>保留原格式：</i><input type="file" name="file" id="test">
+<br><br>
+<input type="file" name="file1" lay-type="file" lay-ext="zip|rar" class="layui-upload-file">
+<br><br>
+<input type="file" name="file1" lay-type="audio" class="layui-upload-file">
+<br><br>
+<input type="file" name="file2" lay-type="video" class="layui-upload-file">
+
+<script src="../src/layui.js"></script>
+<script>
+layui.use('upload', function(){
+
+  layui.upload({
+    url: ''
+    ,success: function(src){
+      console.log(src)
+    }
+  });
+  
+  layui.upload({
+    url: 'http://zz:98/api/upload-test/'
+    ,elem: '#test'
+    ,unwrap: true
+    ,success: function(src){
+      console.log(src)
+    }
+  });
+  
+});
+</script>
+</body>
+</html>

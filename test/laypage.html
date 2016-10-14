@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>分页 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 10px;}
+</style>
+</head>
+<body>
+
+<div id="demo1"></div>
+<div id="demo2"></div>
+<div id="demo3"></div>
+<div id="demo4"></div>
+<div id="demo5"></div>
+<div id="demo6"></div>
+<div id="demo7"></div>
+
+
+<script src="../src/layui.js"></script>
+<script>
+
+layui.use(['laypage', 'layer'], function(){
+  var laypage = layui.laypage
+  ,layer = layui.layer;
+  
+  laypage({
+    cont: 'demo1'
+    ,pages: 100 //总页数
+    ,groups: 5 //连续显示分页数
+  });
+  
+  laypage({
+    cont: 'demo2'
+    ,pages: 100
+    ,skin: '#1E9FFF'
+  });
+  
+  laypage({
+    cont: 'demo3'
+    ,pages: 100
+    ,first: 1
+    ,last: 100
+    ,prev: '<em><</em>'
+    ,next: '<em>></em>'
+  });
+  
+  laypage({
+    cont: 'demo4'
+    ,pages: 100
+    ,first: false
+    ,last: false
+  });
+  
+  laypage({
+    cont: 'demo5'
+    ,pages: 100
+    ,curr: location.hash.replace('#!fenye=', '') //获取hash值为fenye的当前页
+    ,hash: 'fenye' //自定义hash值
+  });
+  
+  laypage({
+    cont: 'demo6'
+    ,pages: 5
+    ,groups: 0
+    ,first: false
+    ,last: false
+    ,jump: function(obj, first){
+      if(!first){
+        layer.msg('第 '+ obj.curr +'页');
+      }
+    }
+  });
+  
+  laypage({
+    cont: 'demo7'
+    ,pages: 100
+    ,skip: true
+  });
+  
+});
+</script>
+</body>
+</html>

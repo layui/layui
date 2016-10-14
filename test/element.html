@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>常用元素 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 10px;}
+</style>
+</head>
+<body>
+
+
+<ul class="layui-nav">
+  <li class="layui-nav-item"><a href="">最新活动</a></li>
+  <li class="layui-nav-item layui-this"><a href="">产品</a></li>
+  <li class="layui-nav-item"><a href="">解决方案</a></li>
+  <li class="layui-nav-item"><a href="">大数据</a></li>
+</ul>
+
+<br><br>
+
+<ul class="layui-nav layui-nav-tree">
+  <li class="layui-nav-item"><a href="">最新活动</a></li>
+  <li class="layui-nav-item layui-this"><a href="">产品</a></li>
+  <li class="layui-nav-item"><a href="">解决方案</a></li>
+  <li class="layui-nav-item"><a href="">大数据</a></li>
+  <li class="layui-nav-item"><a href="">云市场</a></li>
+  <li class="layui-nav-item"><a href="">社区</a></li>
+</ul>
+
+
+<br><br>
+
+<span class="layui-breadcrumb">
+  <a href="">首页</a>
+  <a href="">国际新闻</a>
+  <a href="">亚太地区</a>
+  <a><cite>正文</cite></a>
+</span>
+
+<br><br>
+
+<span class="layui-breadcrumb" lay-separator="|">
+  <a href="">娱乐</a>
+  <a href="">八卦</a>
+  <a href="">体育</a>
+  <a href="">搞笑</a>
+  <a href="">视频</a>
+  <a href="">游戏</a>
+  <a href="">综艺</a>
+</span>
+
+<br><br>
+
+<div class="layui-tab">
+  <ul class="layui-tab-title">
+    <li class="layui-this">标题1</li>
+    <li>标题2</li>
+    <li>标题3</li>
+    <li>标题4</li>
+    <li>标题5</li>
+  </ul>
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">1</div>
+    <div class="layui-tab-item">2</div>
+    <div class="layui-tab-item">3</div>
+    <div class="layui-tab-item">4</div>
+    <div class="layui-tab-item">5</div>
+  </div>
+</div>
+
+<div class="layui-tab layui-tab-brief">
+  <ul class="layui-tab-title">
+    <li class="layui-this">标题1</li>
+    <li>标题2</li>
+    <li>标题3</li>
+    <li>标题4</li>
+    <li>标题5</li>
+    <li>标题6</li>
+  </ul>
+</div>
+
+<div class="layui-inline">
+  <div class="layui-tab layui-tab-card">
+    <ul class="layui-tab-title">
+      <li class="layui-this">标题1</li>
+      <li>标题2</li>
+      <li>标题3</li>
+      <li>标题4</li>
+      <li>标题5</li>
+      <li>标题6</li>
+    </ul>
+    <div class="layui-tab-content">
+      <div class="layui-tab-item layui-show">1</div>
+      <div class="layui-tab-item">2</div>
+      <div class="layui-tab-item">3</div>
+      <div class="layui-tab-item">4</div>
+      <div class="layui-tab-item">5</div>
+      <div class="layui-tab-item">6</div>
+    </div>
+  </div>
+</div>
+
+<div class="layui-tab" lay-filter="test">
+  <ul class="layui-tab-title">
+    <li class="layui-this">标题1</li>
+    <li>标题2</li>
+    <li>标题3</li>
+    <li>标题4</li>
+    <li>标题5</li>
+    <li>标题6</li>
+    <li>标题7</li>
+    <li>标题8</li>
+  </ul>
+</div>
+
+
+
+<script src="../src/layui.js"></script>
+<script>
+
+layui.use('element', function(){
+  var element = layui.element();
+  
+  element.on('tab(test)', function(data){
+    console.log(this, data);
+  });
+});
+</script>
+</body>
+</html>

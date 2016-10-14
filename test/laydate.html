@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>表单模块 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 50px 100px;}
+</style>
+</head>
+<body>
+
+<ul class="layui-form">
+  <li class="layui-form-item">
+    <label class="layui-form-label">日期</label>
+    <div class="layui-input-inline">
+      <input required type="text" id="layui-laydate-input" class="layui-input">
+    </div>
+  </li>
+</ul>
+
+<script src="../src/layui.js"></script>
+<script>
+layui.use('laydate', function(){
+  var laydate = layui.laydate
+ 
+  laydate({
+    elem: '#layui-laydate-input'
+  });
+});
+</script>
+</body>
+</html>

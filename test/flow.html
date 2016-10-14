@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>流加载 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 15px;}
+.flow-default{height: 400px; overflow: auto; font-size: 0;}
+.flow-default li{display: inline-block; margin-right: 10px; font-size: 14px; width: 48%;  margin-bottom: 10px; height: 200px; line-height: 200px; text-align: center; background-color: #eee;}
+img{width: 500px; height: 300px;}
+.flow-default img{width: 100%; height: 100%;}
+</style>
+</head>
+<body>
+
+
+<ul class="flow-default">
+  <li>1</li>
+  <li>2</li>
+  <li>3</li>
+  <li>4</li>
+</ul>
+
+
+<div class="demo" style="height: 200px; overflow: auto;">
+  <img lay-src="http://s16.mogucdn.com/p2/160919/upload_493j665e50b0i0g8j61iie6f5aa5c_715x530.jpg">
+  <img lay-src="http://s7.mogucdn.com/p2/160920/in_1icf55k51643icf2i1i06g897hjdj_715x530.jpg">
+  <img lay-src="http://s10.mogucdn.com/p2/160918/oj_4hge1j47hl5ie0fljd6d07ha3kj2l_715x530.jpg">
+  <img lay-src="http://s7.mogucdn.com/p2/160914/iz_2lcjk0lbl8la70448hj0jg0l8gde5_305x330.jpg">
+  <img lay-src="http://s6.mogucdn.com/p2/160914/iz_5lc1cdg3j2hibl9ai99lg7c28k1fh_305x330.jpg">
+  <img lay-src="http://s8.mogucdn.com/p1/160721/iz_ifqtszjqgazdsmtfhezdambqgyyde_305x330.jpg">
+  <img lay-src="http://s18.mogucdn.com/p2/160919/upload_4dh1hfflhi031ll1akh49i5aeldjl_183x213.png">
+  <img lay-src="http://s8.mogucdn.com/p2/160907/1dq_16e3b4d04ck34g1fb61d5llj47526_175x170.png">
+  <img lay-src="http://s8.mogucdn.com/p2/160907/1dq_132fe83d4gi1jb6gehc8ibcl6944e_175x170.png">
+</div>
+
+
+<script src="../src/layui.js"></script>
+<script>
+layui.use('flow', function(){
+  var flow = layui.flow;
+
+  flow.load({
+    elem: '.flow-default' //流加载容器
+    ,scrollElem: '.flow-default' //滚动条所在元素，默认document
+    //,isAuto: false
+    //,isShowEnd: false
+    //,isLazyimg: true
+    ,done: function(page, next){ //加载下一页
+      console.log(page)
+      setTimeout(function(){
+        var lis = [];
+        for(var i = 0; i < 6; i++){
+          lis.push('<li><img src="http://s6.mogucdn.com/p2/160914/iz_5lc1cdg3j2hibl9ai99lg7c28k1fh_305x330.jpg?v='+ (page+i) +'"></li>')
+        }
+        next(lis.join(''), page > 5 ? 0 : 11);
+      }, 500);
+    }
+  });
+  
+  //按屏加载图片
+  flow.lazyimg({
+    elem: '.demo img'
+    ,scrollElem: '.demo'
+  });
+  
+});
+</script>
+
+</body>
+</html>
