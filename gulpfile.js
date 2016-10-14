@@ -29,6 +29,7 @@ var task = {
     
     return gulp.src([
       './src/**/*'+ mod +'.js'
+      ,'!./src/lay/all.js'
     ]).pipe(uglify())
      .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.description %> <%= pkg.license %> license By <%= pkg.homepage %> */\n ;', {pkg: pkg}))
     .pipe(gulp.dest('./build'))

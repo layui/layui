@@ -79,7 +79,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 
 /** 页面元素 **/
-.layui-btn, .layui-input, .layui-textarea, layui-upload-button{outline: none; -webkit-transition: border-color .3s cubic-bezier(.65,.05,.35,.5); transition: border-color .3s cubic-bezier(.65,.05,.35,.5); -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}
+.layui-btn, .layui-input, .layui-textarea, .layui-upload-button{outline: none; -webkit-transition: border-color .3s cubic-bezier(.65,.05,.35,.5); transition: border-color .3s cubic-bezier(.65,.05,.35,.5); -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}
 
 /* 引用 */.layui-elem-quote{margin-bottom: 10px; padding: 15px; border-left: 5px solid #009688; border-radius: 0 2px 2px 0; background-color: #f2f2f2;}
 /* 字段集合 */.layui-elem-field{padding: 0; border: 1px solid #e2e2e2;}
