@@ -430,7 +430,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 
 
 /** 响应式（前期不作为重心） **/
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 450px) {
   /** 表单 **/
   .layui-form-item .layui-form-label{text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
   .layui-form-item .layui-inline{display: block; margin-right: 0; margin-bottom: 20px; clear: both;}
