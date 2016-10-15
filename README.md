@@ -107,7 +107,7 @@ layui.define(['layer', 'form'], function(exports){
   
   layer.msg('Hello World');
   
-  exports(index, {});
+  exports('index', {});
 });  
 ```
 
