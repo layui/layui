@@ -101,12 +101,14 @@ layui.config({
   项目JS主入口
   以依赖Layui的layer和form模块为例
 **/    
-layui.define(['layer', 'form'], function(){
+layui.define(['layer', 'form'], function(exports){
   var layer = layui.layer
   ,form = layui.form();
   
   layer.msg('Hello World');
-});    
+  
+  exports(index, {});
+});  
 ```
 
 好了，不管你采用什么样的方式，从现在开始，尽情地使用Layui吧！但愿这是你的一段美妙的旅程。
