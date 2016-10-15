@@ -13,7 +13,7 @@
 "use strict";
 
 var Lay = function(){
-  this.v = '1.0.0'; //版本号
+  this.v = '1.0.1'; //版本号
 };
 
 Lay.fn = Lay.prototype;
@@ -296,18 +296,28 @@ Lay.fn.router = function(hash){
 //本地存储
 Lay.fn.data = function(table, settings){
   table = table || 'layui';
+  
+  if(!win.JSON || !win.JSON.parse) return;
+  
+  //如果settings为null，则删除表
+  if(settings === null){
+    return delete localStorage[table];
+  }
+  
   settings = typeof settings === 'object' 
     ? settings 
   : {key: settings};
-  if(!win.JSON || !win.JSON.parse) return;
+  
   try{
     var data = JSON.parse(localStorage[table]);
   } catch(e){
     var data = {};
   }
+  
   if(settings.value) data[settings.key] = settings.value;
   if(settings.remove) delete data[settings.key];
   localStorage[table] = JSON.stringify(data);
+  
   return settings.key ? data[settings.key] : data;
 };
 

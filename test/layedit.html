@@ -27,7 +27,10 @@ layui.use('layedit', function(){
   
   layedit.build('demo', {
     //hideTool: ['image']
-    //,uploadImages: {}
+    uploadImage: {
+      url: '/upload/test/'
+      ,type: 'post'
+    }
     //,tool: []
     //,height: 100
   });
