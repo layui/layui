@@ -402,6 +402,7 @@ layui.define(['layer', 'form'], function(exports){
     //触发内容区域
     body.on('click', function(){
       toolCheck.call(iframeWin, tools);
+      layer.close(face.index);
     });
   }
   

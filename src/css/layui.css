@@ -79,7 +79,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 
 /** 页面元素 **/
-.layui-btn, .layui-input, .layui-textarea, layui-upload-button{outline: none; -webkit-transition: border-color .3s cubic-bezier(.65,.05,.35,.5); transition: border-color .3s cubic-bezier(.65,.05,.35,.5); -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}
+.layui-btn, .layui-input, .layui-textarea, .layui-upload-button{outline: none; -webkit-transition: border-color .3s cubic-bezier(.65,.05,.35,.5); transition: border-color .3s cubic-bezier(.65,.05,.35,.5); -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}
 
 /* 引用 */.layui-elem-quote{margin-bottom: 10px; padding: 15px; border-left: 5px solid #009688; border-radius: 0 2px 2px 0; background-color: #f2f2f2;}
 /* 字段集合 */.layui-elem-field{padding: 0; border: 1px solid #e2e2e2;}
@@ -118,7 +118,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-btn-mini i{font-size: 14px !important;}
 
 /** 表单 **/
-.layui-input, .layui-textarea{display: block; width: 100%; padding: 0 10px; height: 38px;  line-height: 36px\9; border: 1px solid #e6e6e6; background-color: #fff; border-radius: 2px;}
+.layui-input, .layui-textarea{display: block; width: 100%; padding-left: 10px; height: 38px; line-height: 38px; line-height: 36px\9; border: 1px solid #e6e6e6; background-color: #fff; border-radius: 2px;}
 .layui-input:hover, .layui-textarea:hover{border-color: #D2D2D2 !important;}
 .layui-input:focus, .layui-textarea:focus{border-color: #C9C9C9 !important;}
 .layui-textarea{position: relative; min-height: 100px; height: auto; line-height: 20px; padding: 6px 10px; resize: vertical;}
@@ -430,7 +430,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 
 
 /** 响应式（前期不作为重心） **/
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 450px) {
   /** 表单 **/
   .layui-form-item .layui-form-label{text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
   .layui-form-item .layui-inline{display: block; margin-right: 0; margin-bottom: 20px; clear: both;}

@@ -19,5 +19,6 @@ node_modules/
 _site/
 run.bat
 dir.txt
-/**/layim.js
 /**/layim/
+/**/layim.js
+/**/layim.html
