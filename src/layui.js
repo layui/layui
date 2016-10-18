@@ -13,7 +13,7 @@
 "use strict";
 
 var Lay = function(){
-  this.v = '1.0.1'; //版本号
+  this.v = '1.0.2'; //版本号
 };
 
 Lay.fn = Lay.prototype;
@@ -396,9 +396,15 @@ Lay.fn.stope = function(e){
 Lay.fn.onevent = function(modName, events, callback){
   if(typeof modName !== 'string' 
   || typeof callback !== 'function') return this;
+  config.event[modName + '.' + events] = [callback];
+  
+  //不再对多次事件监听做支持
+  /*
   config.event[modName + '.' + events] 
     ? config.event[modName + '.' + events].push(callback) 
   : config.event[modName + '.' + events] = [callback];
+  */
+  
   return this;
 };
 
