@@ -17,7 +17,7 @@ body{padding: 50px 100px;}
   <li class="layui-form-item">
     <label class="layui-form-label">日期</label>
     <div class="layui-input-inline">
-      <input required type="text" id="layui-laydate-input" class="layui-input">
+      <input required type="text" id="layui-laydate-input" onclick="layui.laydate({elem: this})" class="layui-input">
     </div>
   </li>
 </ul>
@@ -26,10 +26,6 @@ body{padding: 50px 100px;}
 <script>
 layui.use('laydate', function(){
   var laydate = layui.laydate
- 
-  laydate({
-    elem: '#layui-laydate-input'
-  });
 });
 </script>
 </body>

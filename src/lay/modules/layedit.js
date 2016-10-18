@@ -29,8 +29,7 @@ layui.define(['layer', 'form'], function(exports){
         ,'|'
         ,'left', 'center', 'right'
         ,'|'
-        , 'link', 'unlink', 'face', 'image'
-        
+        ,'link', 'unlink', 'face', 'image'
       ]
       ,hideTool: []
       ,height: 280 //默认高
@@ -78,7 +77,7 @@ layui.define(['layer', 'form'], function(exports){
     ,editor = $(['<div class="'+ ELEM +'">'
       ,'<div class="layui-unselect layui-layedit-tool">'+ tool +'</div>'
       ,'<div class="layui-layedit-iframe">'
-        ,'<iframe id="'+ name +'" name="'+ name +'" frameborder="0"></iframe>'
+        ,'<iframe id="'+ name +'" name="'+ name +'" textarea="'+ id +'" frameborder="0"></iframe>'
       ,'</div>'
     ,'</div>'].join(''))
     
@@ -97,16 +96,24 @@ layui.define(['layer', 'form'], function(exports){
   
   //获得编辑器中内容
   Edit.prototype.getContent = function(index){
-    var iframeWin = $('#LAY_layedit_'+ index).prop('contentWindow');
-    if(!iframeWin) return;
-    return iframeWin.document.body.innerHTML;
+    var iframeWin = getWin(index);
+    if(!iframeWin[0]) return;
+    return toLower(iframeWin[0].document.body.innerHTML);
   };
   
   //获得编辑器中纯文本内容
   Edit.prototype.getText = function(index){
-    var iframeWin = $('#LAY_layedit_'+ index).prop('contentWindow');
-    if(!iframeWin) return;
-    return $(iframeWin.document.body).text();
+    var iframeWin = getWin(index);
+    if(!iframeWin[0]) return;
+    return $(iframeWin[0].document.body).text();
+  };
+  
+  //将编辑器内容同步到textarea（一般用于异步提交时）
+  Edit.prototype.sync = function(index){
+    var iframeWin = getWin(index);
+    if(!iframeWin[0]) return;
+    var textarea = $('#'+iframeWin[1].attr('textarea'));
+    textarea.val(toLower(iframeWin[0].document.body.innerHTML));
   };
 
   //iframe初始化
@@ -125,6 +132,7 @@ layui.define(['layer', 'form'], function(exports){
         ,'a{color:#01AAED; text-decoration:none;}a:hover{color:#c00}'
         ,'p{margin-bottom: 10px;}'
         ,'img{display: inline-block; border: none; vertical-align: middle;}'
+        ,'pre{margin: 10px 0; padding: 10px; line-height: 20px; border: 1px solid #ddd; border-left-width: 6px; background-color: #F2F2F2; color: #333; font-family: Courier New; font-size: 12px;}'
       ,'</style>'].join(''))
       ,body = conts.find('body');
       
@@ -139,6 +147,23 @@ layui.define(['layer', 'form'], function(exports){
     });
   }
   
+  //获得iframe窗口对象
+  ,getWin = function(index){
+    var iframe = $('#LAY_layedit_'+ index)
+    ,iframeWin = iframe.prop('contentWindow');
+    return [iframeWin, iframe];
+  }
+  
+  //IE8下将标签处理成小写
+  ,toLower = function(html){
+    if(device.ie == 8){
+      html = html.replace(/<.+>/g, function(str){
+        return str.toLowerCase();
+      });
+    }
+    return html;
+  }
+  
   //快捷键处理
   ,hotkey = function(iframeWin, iframe, textArea, set){
     var iframeDOM = iframeWin.document, body = $(iframeDOM.body);
@@ -146,11 +171,29 @@ layui.define(['layer', 'form'], function(exports){
       var keycode = e.keyCode;
       //处理回车
       if(keycode === 13){
-        //此处后续还要处理列表等情况
+        var range = Range(iframeDOM);
+        var container = getContainer(range)
+        ,parentNode = container.parentNode;
+        
+        if(parentNode.tagName.toLowerCase() === 'pre'){
+          if(e.shiftKey) return
+          layer.msg('请暂时用shift+enter');
+          return false;
+        }
         iframeDOM.execCommand('formatBlock', false, '<p>');
       }
-      //给textarea同步内容
-      textArea.value = body.html();
+    });
+    
+    //给textarea同步内容
+    $(textArea).parents('form').on('submit', function(){
+      var html = body.html();
+      //IE8下将标签处理成小写
+      if(device.ie == 8){
+        html = html.replace(/<.+>/g, function(str){
+          return str.toLowerCase();
+        });
+      }
+      textArea.value = html;
     });
     
     //处理粘贴
@@ -342,7 +385,12 @@ layui.define(['layer', 'form'], function(exports){
       }
       //插入代码
       ,code: function(range){
-        layer.msg('Next Version');
+        code.call(body, function(pre){
+          insertInline.call(iframeWin, 'pre', {
+            text: pre.code
+            ,'lay-lang': pre.lang
+          }, range);
+        });
       }
       //帮助
       ,help: function(){
@@ -431,7 +479,7 @@ layui.define(['layer', 'form'], function(exports){
             + ((options.target==='_self' || !options.target) ? 'checked' : '') +'>'
             ,'<input type="radio" name="target" value="_blank" class="layui-input" title="新窗口" '
             + (options.target==='_blank' ? 'checked' : '') +'>'
-            ,'</div>'
+          ,'</div>'
         ,'</li>'
         ,'<li class="layui-form-item" style="text-align: center;">'
           ,'<button type="button" lay-submit lay-filter="layedit-link-yes" class="layui-btn"> 确定 </button>'
@@ -445,7 +493,6 @@ layui.define(['layer', 'form'], function(exports){
           layer.close(index);
           body.focus();
         });
-        delete layui.cache.event['form.'+eventFilter];
         form.on(eventFilter, function(data){
           layer.close(link.index);
           callback && callback(data.field);
@@ -495,6 +542,61 @@ layui.define(['layer', 'form'], function(exports){
         $(document).off('click', face.hide).on('click', face.hide);
       }
     });
+  }
+  
+  //插入代码面板
+  ,code = function(callback){
+    var body = this, index = layer.open({
+      type: 1
+      ,id: 'LAY_layedit_code'
+      ,area: '550px'
+      ,shade: 0.05
+      ,shadeClose: true
+      ,moveType: 1
+      ,title: '插入代码'
+      ,skin: 'layui-layer-msg'
+      ,content: ['<ul class="layui-form layui-form-pane" style="margin: 15px;">'
+        ,'<li class="layui-form-item">'
+          ,'<label class="layui-form-label">请选择语言</label>'
+          ,'<div class="layui-input-block">'
+            ,'<select name="lang">'
+              ,'<option value="JavaScript">JavaScript</option>'
+              ,'<option value="HTML">HTML</option>'
+              ,'<option value="CSS">CSS</option>'
+              ,'<option value="Java">Java</option>'
+              ,'<option value="PHP">PHP</option>'
+              ,'<option value="C#">C#</option>'
+              ,'<option value="Python">Python</option>'
+              ,'<option value="Ruby">Ruby</option>'
+              ,'<option value="Go">Go</option>'
+            ,'</select>'
+          ,'</div>'
+        ,'</li>'
+        ,'<li class="layui-form-item layui-form-text">'
+          ,'<label class="layui-form-label">代码</label>'
+          ,'<div class="layui-input-block">'
+            ,'<textarea name="code" lay-verify="required" autofocus="true" class="layui-textarea" style="height: 200px;"></textarea>'
+          ,'</div>'
+        ,'</li>'
+        ,'<li class="layui-form-item" style="text-align: center;">'
+          ,'<button type="button" lay-submit lay-filter="layedit-code-yes" class="layui-btn"> 确定 </button>'
+          ,'<button style="margin-left: 20px;" type="button" class="layui-btn layui-btn-primary"> 取消 </button>'
+        ,'</li>'
+      ,'</ul>'].join('')
+      ,success: function(layero, index){
+        var eventFilter = 'submit(layedit-code-yes)';
+        form.render('select');  
+        layero.find('.layui-btn-primary').on('click', function(){
+          layer.close(index);
+          body.focus();
+        });
+        form.on(eventFilter, function(data){
+          layer.close(code.index);
+          callback && callback(data.field);
+        });
+      }
+    });
+    code.index = index;
   }
   
   //全部工具

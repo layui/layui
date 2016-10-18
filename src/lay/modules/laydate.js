@@ -144,7 +144,7 @@ layui.define(function(exports){
   Dates.run = function(options){
     var S = Dates.query, elem = options.elem, devt;
     
-    if(!options.elem) return;
+    if(!elem) return;
 
     as.elemv = /textarea|input/.test(elem.tagName.toLocaleLowerCase()) ? 'value' : 'innerHTML';
     if (('init' in options ? options.init : config.init) && (!elem[as.elemv])) elem[as.elemv] = laydate.now(null, options.format || config.format);
