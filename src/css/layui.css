@@ -331,7 +331,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-breadcrumb a span{padding-left: 8px; font-family: Sim sun;}
 
 /** Tab选项卡 **/
-.layui-tab{position: relative; margin: 10px 0; overflow: hidden; text-align: left !important;}
+.layui-tab{margin: 10px 0; overflow: hidden; text-align: left !important;}
 .layui-tab-title{position: relative; left: 0; height: 40px; white-space: nowrap; font-size: 0; border-bottom: 1px solid #e2e2e2; transition: all .2s; -webkit-transition: all .2s;}
 .layui-tab-title li{display: inline-block; *display: block; *zoom: 1; vertical-align: middle; font-size: 14px; transition: all .3s; -webkit-transition: all .3s;}
 .layui-tab-title li{position: relative; line-height: 40px; min-width: 65px; padding: 0 10px; text-align: center; cursor: pointer;}

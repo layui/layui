@@ -37,12 +37,13 @@ var task = {
   }
   ,alljs: function(){
     return gulp.src([
+      ,'./src/layui.js'
       ,'./src/lay/**/{all,laytpl,laypage,laydate,jquery,layer,element,upload,form,tree,util,flow,layedit,code}.js'
       ,'!./src/lay/**/layim.js' //LayIM需授权
       ,'!./src/lay/**/mobile/*.js'
     ]).pipe(uglify())
     .pipe(concat('layui.all.js', {newLine: ''}))
-    .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %>(All Modules) <%= pkg.license %> license By <%= pkg.homepage %> */\n ;', {pkg: pkg}))
+    .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.description %> <%= pkg.license %> license By <%= pkg.homepage %> */\n ;', {pkg: pkg}))
     .pipe(gulp.dest('./build/lay/dest/'));
   }
   ,mincss: function() {
