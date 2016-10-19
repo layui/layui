@@ -134,7 +134,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-form-item{margin-bottom: 15px; clear: both; *zoom: 1;}
 .layui-form-item:after{content:'\20'; clear: both; *zoom: 1; display: block; height:0;}
-.layui-form-label{position: relative; float: left; display: block; padding: 9px 15px;  width: 80px; line-height: 20px; text-align: right;}
+.layui-form-label{position: relative; float: left; display: block; padding: 9px 15px;  width: 80px; font-weight:normal;line-height: 20px; text-align: right;}
 .layui-form-item .layui-inline{margin-bottom: 5px; margin-right: 10px;}
 .layui-input-block, .layui-input-inline{position: relative;}
 .layui-input-block{margin-left: 110px; min-height: 36px;}
