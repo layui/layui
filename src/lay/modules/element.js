@@ -39,7 +39,7 @@ layui.define('jquery', function(exports){
         var othis = $(this)
         ,index = index || othis.index()
         ,parents = othis.parents('.layui-tab')
-        ,item = parents.find('.layui-tab-content .layui-tab-item')
+        ,item = parents.children('.layui-tab-content').children('.layui-tab-item')
         ,filter = parents.attr('lay-filter');
         
         othis.addClass(THIS).siblings().removeClass(THIS);
@@ -57,8 +57,8 @@ layui.define('jquery', function(exports){
         
         $('.layui-tab').each(function(){
           var othis = $(this)
-          ,title = othis.find('.layui-tab-title')
-          ,item = othis.find('.layui-tab-item')
+          ,title = othis.children('.layui-tab-title')
+          ,item = othis.children('.layui-tab-content').children('.layui-tab-item')
           ,STOPE = 'lay-stope="tabmore"'
           ,span = $('<span class="layui-unselect layui-tab-bar" '+ STOPE +'><i '+ STOPE +' class="layui-icon">&#xe61a;</i></span>');
           
@@ -73,7 +73,7 @@ layui.define('jquery', function(exports){
               close.on('click', function(){
                 var li = $(this).parent(), index = li.index();
                 var parents = li.parents('.layui-tab');
-                var item = parents.find('.layui-tab-content .layui-tab-item');
+                var item = parents.children('.layui-tab-content').children('.layui-tab-item')
                 
                 if(li.hasClass(THIS)){
                   if(li.next()[0]){

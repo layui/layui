@@ -54,6 +54,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /** 基础通用 **/
 /* 消除第三方ui可能造成的冲突 */.layui-box, .layui-box *{-webkit-box-sizing: content-box !important; -moz-box-sizing: content-box !important; box-sizing: content-box !important;}
+.layui-border-box, .layui-border-box *{-webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}
 .layui-clear{clear: both; *zoom: 1;}
 .layui-clear:after{content:'\20'; clear:both; *zoom:1; display:block; height:0;}
 .layui-inline{position: relative; display: inline-block; *display:inline; *zoom:1; vertical-align: middle;}
@@ -351,18 +352,18 @@ a cite{font-style: normal; *cursor:pointer;}
 /* Tab关闭 */.layui-tab-title li .layui-tab-close{ position: relative; margin-left: 8px; top: 1px; color: #c2c2c2;}
 .layui-tab-title li .layui-tab-close:hover{border-radius: 10px; background-color: #FF5722; color: #fff;}
 
-/* Tab简洁风格 */.layui-tab-brief .layui-this{color: #009688;}
-.layui-tab-brief .layui-this:after
-,.layui-tab-brief .layui-tab-more li.layui-this:after{border: none; border-radius: none; border-bottom: 3px solid #5FB878;}
+/* Tab简洁风格 */.layui-tab-brief > .layui-tab-title .layui-this{color: #009688;}
+.layui-tab-brief > .layui-tab-title .layui-this:after
+,.layui-tab-brief > .layui-tab-title .layui-tab-more li.layui-this:after{border: none; border-radius: 0; border-bottom: 3px solid #5FB878;}
 
 /* Tab卡片风格 */.layui-tab-card{border: 1px solid #e2e2e2; border-radius: 2px; box-shadow: 0 2px 5px 0 rgba(0,0,0,.1);}
-.layui-tab-card .layui-tab-title{ background-color: #f2f2f2;}
-.layui-tab-card .layui-tab-title li{margin-right: -1px; margin-left: -1px;}
-.layui-tab-card .layui-this{background-color: #fff;     }
-.layui-tab-card .layui-this:after{border-top: none; border-bottom-color: #fff;}
-.layui-tab-card .layui-tab-bar{height: 40px; line-height: 40px; border-radius: 0; border-top: none; border-right: none;}
-.layui-tab-card .layui-tab-more .layui-this{background: none; color: #5FB878;}
-.layui-tab-card .layui-tab-more .layui-this:after{border: none;}
+.layui-tab-card > .layui-tab-title{ background-color: #f2f2f2;}
+.layui-tab-card > .layui-tab-title li{margin-right: -1px; margin-left: -1px;}
+.layui-tab-card > .layui-tab-title .layui-this{background-color: #fff;     }
+.layui-tab-card > .layui-tab-title .layui-this:after{border-top: none; border-width: 1px; border-bottom-color: #fff;}
+.layui-tab-card > .layui-tab-title .layui-tab-bar{height: 40px; line-height: 40px; border-radius: 0; border-top: none; border-right: none;}
+.layui-tab-card > .layui-tab-title .layui-tab-more .layui-this{background: none; color: #5FB878;}
+.layui-tab-card > .layui-tab-title .layui-tab-more .layui-this:after{border: none;}
 
 /** fixbar **/
 .layui-fixbar{position: fixed; right: 15px; bottom: 15px; z-index: 9999;}
