@@ -132,40 +132,63 @@ layui.define('jquery', function(exports){
       //导航菜单
       ,nav: function(){
         var ELEM = '.layui-nav', ITEM = 'layui-nav-item', BAR = 'layui-nav-bar'
-        ,TREE = 'layui-nav-tree', TIME = 200, timer
-        ,follow = function(bar, nav){
-          var othis = $(this);
+        ,TREE = 'layui-nav-tree', CHILD = 'layui-nav-child', MORE = 'layui-nav-more'
+        ,TIME = 200, timer, timerMore, timeEnd, follow = function(bar, nav){
+          var othis = $(this), child = othis.find('.'+CHILD);
+          
           if(nav.hasClass(TREE)){
             bar.css({
               top: othis.position().top
-              ,height: othis.height()
+              ,height: othis.children('a').height()
               ,opacity: 1
             });
           } else {
+            child.addClass('layui-anim layui-anim-upbit');
             bar.css({
               left: othis.position().left + parseFloat(othis.css('marginLeft'))
               ,top: othis.position().top + othis.height() - 5
             });
+            
             timer = setTimeout(function(){
               bar.css({
                 width: othis.width()
                 ,opacity: 1
               });
             }, TIME);
+            
+            clearTimeout(timeEnd);
+            if(child.css('display') === 'block'){
+              clearTimeout(timerMore);
+            }
+            timerMore = setTimeout(function(){
+              child.show()
+              othis.find('.'+MORE).addClass(MORE+'d');
+            }, 300);
           }
         }
         
         $(ELEM).each(function(){
           var othis = $(this)
-          ,bar = $('<span class="'+ BAR +'"></span>');
+          ,bar = $('<span class="'+ BAR +'"></span>')
+          ,itemElem = othis.find('.'+ITEM);
+          
+          //Hover滑动效果
           if(!othis.find('.'+BAR)[0] && !(device.ie && device.ie < 10)){
             othis.append(bar);
-            othis.find('.'+ITEM).on('mouseenter', function(){
+            itemElem.on('mouseenter', function(){
               follow.call(this, bar, othis);
+            }).on('mouseleave', function(){
+              if(!othis.hasClass(TREE)){
+                clearTimeout(timerMore);
+                timerMore = setTimeout(function(){
+                  othis.find('.'+CHILD).hide();
+                  othis.find('.'+MORE).removeClass(MORE+'d');
+                }, 300);
+              }
             });
             othis.on('mouseleave', function(){
               clearTimeout(timer)
-              setTimeout(function(){
+              timeEnd = setTimeout(function(){
                 if(othis.hasClass(TREE)){
                   bar.css({
                     height: 0
@@ -182,6 +205,24 @@ layui.define('jquery', function(exports){
               }, TIME);
             });
           }
+          
+          //二级菜单
+          itemElem.each(function(){
+            var oitem = $(this), child = oitem.find('.'+CHILD);
+            if(child[0] && !oitem.find('.'+MORE)[0]){
+              oitem.children('a').append('<span class="'+ MORE +'"></span>');
+
+              if(!othis.hasClass(TREE)) return;
+              oitem.children('a').on('click', function(){
+                var a = $(this);
+                if(child.css('display') === 'none'){
+                  oitem.addClass(ITEM+'ed');
+                } else {
+                  oitem.removeClass(ITEM+'ed');
+                }
+              });
+            }
+          });
         });
       }
       //面包屑

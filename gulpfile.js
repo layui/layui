@@ -1,4 +1,4 @@
-﻿/**
+/**
  layui构建
 */
 
@@ -18,7 +18,7 @@ var argv = require('minimist')(process.argv.slice(2), {
   default: {
     ver: 'all' 
   }
-});
+}), mods = 'laytpl,laypage,laydate,jquery,layer,element,upload,form,tree,util,flow,layedit,code';
 
 var task = {
   minjs: function() {
@@ -30,20 +30,30 @@ var task = {
     return gulp.src([
       './src/**/*'+ mod +'.js'
       ,'!./src/lay/all.js'
+       ,'!./src/lay/mod.js'
     ]).pipe(uglify())
-     .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.description %> <%= pkg.license %> license By <%= pkg.homepage %> */\n ;', {pkg: pkg}))
+     .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> license By <%= pkg.homepage %> */\n ;', {pkg: pkg}))
     .pipe(gulp.dest('./build'))
     
   }
-  ,alljs: function(){
+  ,modjs: function(){
     return gulp.src([
-      ,'./src/layui.js'
-      ,'./src/lay/**/{all,laytpl,laypage,laydate,jquery,layer,element,upload,form,tree,util,flow,layedit,code}.js'
+      ,'./src/lay/**/{mod,'+ mods +'}.js'
       ,'!./src/lay/**/layim.js' //LayIM需授权
       ,'!./src/lay/**/mobile/*.js'
     ]).pipe(uglify())
+    .pipe(concat('layui.mod.js', {newLine: ''}))
+    .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %>(All Modules) <%= pkg.license %> license By <%= pkg.homepage %> */\n ;', {pkg: pkg}))
+    .pipe(gulp.dest('./build/lay/dest/'));
+  }
+  ,alljs: function(){
+    return gulp.src([
+      ,'./src/**/{layui,all,'+ mods +'}.js'
+      ,'!./src/lay/modules/layim.js' //LayIM需授权
+      ,'!./src/lay/modules/mobile/*.js'
+    ]).pipe(uglify())
     .pipe(concat('layui.all.js', {newLine: ''}))
-    .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.description %> <%= pkg.license %> license By <%= pkg.homepage %> */\n ;', {pkg: pkg}))
+    .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> license By <%= pkg.homepage %> */\n ;', {pkg: pkg}))
     .pipe(gulp.dest('./build/lay/dest/'));
   }
   ,mincss: function() {
@@ -51,7 +61,7 @@ var task = {
     .pipe(minify({
       compatibility: 'ie7'
     }))
-    .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.description %>@<%= pkg.license %> <%= pkg.homepage %> By <%= pkg.author %> */\n', {pkg : pkg} ))
+    .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> license By <%= pkg.homepage %> */\n', {pkg : pkg} ))
     .pipe(gulp.dest('./build/css'));
   }
   ,font: function() {
@@ -80,8 +90,11 @@ var task = {
 gulp.task('clear', function(cb) {
   return del(['./build/*'], cb);
 });
+
 gulp.task('minjs', task.minjs); //压缩js模块
-gulp.task('alljs', task.alljs); //打包模块完整版
+gulp.task('modjs', task.modjs); //打包PC完整模块，即各模块的合并
+gulp.task('alljs', task.alljs); //打包PC合并版，即包含layui.js和所有模块的合并
+
 gulp.task('mincss', task.mincss); //压缩css文件
 gulp.task('font', task.font); //复制iconfont文件
 gulp.task('images', task.images); //复制组件可能所需的图片

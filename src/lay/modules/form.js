@@ -95,7 +95,7 @@ layui.define('layer', function(exports){
           });
           
           //选择
-          reElem.find('ul>li').on('click', function(){
+          reElem.find('dl>dd').on('click', function(){
             var othis = $(this), value = othis.attr('lay-value');
             var filter = select.attr('lay-filter'); //获取过滤器
             
@@ -107,6 +107,10 @@ layui.define('layer', function(exports){
             });
           });
           
+          reElem.find('dl>dt').on('click', function(e){
+            layui.stope(e);
+          });
+          
           //关闭下拉
           $(document).off('click', hide).on('click', hide)
         }
@@ -114,21 +118,25 @@ layui.define('layer', function(exports){
         selects.each(function(index, select){
           var othis = $(this), hasRender = othis.next('.'+CLASS);
           var value = select.value, selected = $(select.options[select.selectedIndex]); //获取当前选中项
-          
+
           //替代元素
           var reElem = $(['<div class="layui-unselect '+ CLASS +'">'
             ,'<div class="'+ TITLE +'"><input type="text" placeholder="'+ (select.options[0].innerHTML ? select.options[0].innerHTML : TIPS) +'" value="'+ (value ? selected.html() : '') +'" readonly class="layui-input layui-unselect">'
             ,'<i class="layui-edge"></i></div>'
-            ,'<ul class="layui-anim layui-anim-upbit">'+ function(options){
+            ,'<dl class="layui-anim layui-anim-upbit'+ (othis.find('optgroup')[0] ? ' layui-select-group' : '') +'">'+ function(options){
               var arr = [];
               layui.each(options, function(index, item){
                 if(index === 0 && !item.value) return;
-                arr.push('<li lay-value="'+ item.value +'" '+ (value === item.value 
-                  ? 'class="'+ THIS +'"' 
-                : '')+'>'+ item.innerHTML +'</li>');
+                if(item.tagName.toLowerCase() === 'optgroup'){
+                  arr.push('<dt>'+ item.label +'</dt>'); 
+                } else {
+                  arr.push('<dd lay-value="'+ item.value +'" '+ (value === item.value 
+                    ? 'class="'+ THIS +'"' 
+                  : '')+'>'+ item.innerHTML +'</dd>');
+                }
               });
               return arr.join('');
-            }(this.options) +'</ul>'
+            }(othis.find('*')) +'</dl>'
           ,'</div>'].join(''));
           
           hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender

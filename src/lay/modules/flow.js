@@ -65,7 +65,7 @@ layui.define('jquery', function(exports){
     if(options.isLazyimg){
       var lazyimg = that.lazyimg({
         elem: options.elem + ' img'
-        ,scrollElem: scrollElem
+        ,scrollElem: options.scrollElem
       });
     }
     

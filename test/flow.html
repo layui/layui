@@ -9,7 +9,7 @@
 
 <style>
 body{padding: 15px;}
-.flow-default{height: 400px; overflow: auto; font-size: 0;}
+.flow-default{ font-size: 0;}
 .flow-default li{display: inline-block; margin-right: 10px; font-size: 14px; width: 48%;  margin-bottom: 10px; height: 200px; line-height: 200px; text-align: center; background-color: #eee;}
 img{width: 500px; height: 300px;}
 .flow-default img{width: 100%; height: 100%;}
@@ -46,16 +46,16 @@ layui.use('flow', function(){
 
   flow.load({
     elem: '.flow-default' //流加载容器
-    ,scrollElem: '.flow-default' //滚动条所在元素，默认document
+    //,scrollElem: '.flow-default' //滚动条所在元素，默认document
     //,isAuto: false
     //,isShowEnd: false
-    //,isLazyimg: true
+    ,isLazyimg: true
     ,done: function(page, next){ //加载下一页
       console.log(page)
       setTimeout(function(){
         var lis = [];
         for(var i = 0; i < 6; i++){
-          lis.push('<li><img src="http://s6.mogucdn.com/p2/160914/iz_5lc1cdg3j2hibl9ai99lg7c28k1fh_305x330.jpg?v='+ (page+i) +'"></li>')
+          lis.push('<li><img lay-src="http://s6.mogucdn.com/p2/160914/iz_5lc1cdg3j2hibl9ai99lg7c28k1fh_305x330.jpg?v='+ (page+i) +'"></li>')
         }
         next(lis.join(''), page > 5 ? 0 : 11);
       }, 500);

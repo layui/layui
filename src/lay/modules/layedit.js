@@ -115,6 +115,14 @@ layui.define(['layer', 'form'], function(exports){
     var textarea = $('#'+iframeWin[1].attr('textarea'));
     textarea.val(toLower(iframeWin[0].document.body.innerHTML));
   };
+  
+  //获取编辑器选中内容
+  Edit.prototype.getSelection = function(index){
+    var iframeWin = getWin(index);
+    if(!iframeWin[0]) return;
+    var range = Range(iframeWin[0].document);
+    return document.selection ? range.text : range.toString();
+  };
 
   //iframe初始化
   var setIframe = function(editor, textArea, set){
