@@ -1,6 +1,6 @@
 ﻿/**
 
- @Name：layer v3.0 Web弹层组件
+ @Name：layer v3.0.1 Web弹层组件
  @Author：贤心
  @Site：http://layer.layui.com
  @License：LGPL
@@ -26,7 +26,7 @@ var isLayui = window.layui && layui.define, $, win, ready = {
 
 //默认内置方法。
 var layer = {
-  v: '3.0',
+  v: '3.0.1',
   ie: function(){ //ie版本
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
@@ -83,7 +83,7 @@ var layer = {
   },
   
   ready: function(callback){
-    var cssname = 'skinlayercss', ver = '1172';
+    var cssname = 'skinlayercss', ver = '1110';
     isLayui ? layui.addcss('modules/layer/default/layer.css?v='+layer.v+ver, callback, cssname)
     : layer.link('skin/default/layer.css?v='+layer.v+ver, callback, cssname);
     return this;
@@ -325,7 +325,7 @@ Class.pt.creat = function(){
   
   //为兼容jQuery3.0的css动画影响元素尺寸计算
   if(doms.anim[config.anim]){
-    that.layero.addClass(doms.anim[config.anim]);
+    that.layero.addClass(doms.anim[config.anim]).data('anim', true);
   };
 };
 
@@ -766,6 +766,8 @@ layer.style = function(index, options, limit){
   }
   
   layero.css(options);
+  btnHeight = layero.find('.'+doms[6]).outerHeight();
+  
   if(type === ready.type[2]){
     layero.find('iframe').css({
       height: parseFloat(options.height) - titHeight - btnHeight
@@ -825,7 +827,7 @@ layer.restore = function(index){
     left: parseFloat(area[3]),
     position: layero.attr('position'),
     overflow: 'visible'
-  });
+  }, true);
   layero.find('.layui-layer-max').removeClass('layui-layer-maxmin');
   layero.find('.layui-layer-min').show();
   layero.attr('type') === 'page' && layero.find(doms[4]).show();
@@ -847,7 +849,7 @@ layer.full = function(index){
       left: isfix ? 0 : win.scrollLeft(),
       width: win.width(),
       height: win.height()
-    });
+    }, true);
     layero.find('.layui-layer-min').hide();
   }, 100);
 };
@@ -884,7 +886,11 @@ layer.close = function(index){
       layero.remove();
     }
   };
-  layero.addClass(closeAnim);
+  
+  if(layero.data('anim')){
+    layero.addClass(closeAnim);
+  }
+  
   $('#layui-layer-moves, #layui-layer-shade' + index).remove();
   layer.ie == 6 && ready.reselect();
   ready.rescollbar(index);
@@ -896,7 +902,7 @@ layer.close = function(index){
   }
   setTimeout(function(){
     remove();
-  }, (layer.ie && layer.ie < 10) ? 0 : 200);
+  }, ((layer.ie && layer.ie < 10) || !layero.data('anim')) ? 0 : 200);
 };
 
 //关闭所有层

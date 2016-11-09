@@ -13,7 +13,7 @@
 "use strict";
 
 var Lay = function(){
-  this.v = '1.0.2'; //版本号
+  this.v = '1.0.3'; //版本号
 };
 
 Lay.fn = Lay.prototype;
