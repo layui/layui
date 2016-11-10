@@ -9,7 +9,6 @@
 
 /** 初始化 **/
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,input,button,textarea,p,blockquote,th,td,form,pre{margin: 0; padding: 0; -webkit-tap-highlight-color:rgba(0,0,0,0)}
-body{-webkit-font-feature-settings: 'kern' 1; -moz-font-feature-settings: 'kern' 1; -o-font-feature-settings: 'kern' 1; text-rendering: geometricPrecision;}
 a:active,a:hover{outline:0}
 img{display: inline-block; border: none; vertical-align: middle;}
 li{list-style:none;}
