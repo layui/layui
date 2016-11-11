@@ -291,18 +291,18 @@ layui.define('layer', function(exports){
   };
 
   //自动完成渲染
-  var form = new Form(), body = $('body');
+  var form = new Form(), dom = $(document);
   form.render();
   
   //表单reset重置渲染
-  body.on('reset', ELEM, function(){
+  dom.on('reset', ELEM, function(){
     setTimeout(function(){
       form.render();
     }, 50);
   });
   
   //表单提交事件
-  body.on('submit', ELEM, submit)
+  dom.on('submit', ELEM, submit)
   .on('click', '*[lay-submit]', submit);
   
   exports(MOD_NAME, function(options){

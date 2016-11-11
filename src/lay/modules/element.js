@@ -118,7 +118,7 @@ layui.define('jquery', function(exports){
         call.tabAuto.call({});
         
         //Tab切换
-        body.off('click', TITLE, call.tabClick)
+        dom.off('click', TITLE, call.tabClick)
         .on('click', TITLE, call.tabClick); 
         
         //自适应
@@ -126,7 +126,7 @@ layui.define('jquery', function(exports){
         .on('resize', call.tabAuto); 
         
         //隐藏展开的Tab
-        $(document).off('click', call.hideTabMore)
+        dom.off('click', call.hideTabMore)
         .on('click', call.hideTabMore); 
       }
       //导航菜单
@@ -248,7 +248,7 @@ layui.define('jquery', function(exports){
   };
 
 
-  var element = new Element(), body = $('body');
+  var element = new Element(), dom = $(document);
   element.init();
   
   exports(MOD_NAME, function(options){
