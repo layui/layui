@@ -74,8 +74,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-side-scroll{width: 220px; height: 100%; overflow-x: hidden;}
 .layui-body{position: absolute; left: 200px; right: 0; top: 0; bottom: 0; z-index: 998; width: auto; overflow: hidden; overflow-y: auto; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;}
 
-/* 后台布局风格 */.layui-layout-admin .layui-header{border-bottom: 5px solid #5FB878;}
-.layui-layout-admin .layui-side{top: 65px; width: 200px; overflow-x: hidden;}
+/* 后台布局风格 */.layui-layout-admin .layui-header{border-bottom: 5px solid #1AA094;}
+.layui-layout-admin .layui-side{top: 70px; width: 200px; overflow-x: hidden;}
 .layui-layout-admin .layui-body{top: 70px; bottom: 44px;}
 .layui-layout-admin .layui-main{width: auto; margin: 0 15px;}
 .layui-layout-admin .layui-footer{position: fixed; left: 200px; right: 0; bottom: 0; height: 44px; background-color: #eee;}
@@ -158,10 +158,14 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-select dl dd:hover{background-color: #f2f2f2;}
 .layui-form-select .layui-select-group dd{padding-left: 20px;}
 .layui-form-select dl dd.layui-this{background-color: #5FB878; color: #fff;}
+.layui-form-select dl dd.layui-disabled{background-color: #fff;}
 .layui-form-selected dl{display: block;}
 .layui-form-selected .layui-edge{margin-top: -9px; -webkit-transform:rotate(180deg); transform: rotate(180deg);}
 .layui-form-selected .layui-edge{margin-top: -3px\0; }
 :root .layui-form-selected .layui-edge{margin-top: -9px\0/IE9;}
+
+.layui-select-disabled .layui-disabled{border-color: #eee !important;}
+.layui-select-disabled .layui-edge{border-top-color: #d2d2d2}
 
 /* 复选框 */.layui-form-checkbox{position: relative; display: inline-block; vertical-align: middle; height: 30px; line-height: 28px; margin: 4px 10px 0 0; padding-right: 30px; border: 1px solid #d2d2d2; background-color: #fff; cursor: pointer; font-size: 0; border-radius: 2px;  -webkit-transition: .1s linear; transition: .1s linear; box-sizing: border-box !important;}
 .layui-form-checkbox:hover{border: 1px solid #c2c2c2;}
@@ -180,12 +184,17 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-onswitch:before{content: 'ON'; color: #fff;}
 .layui-form-onswitch i{left: 30px; background-color: #fff;}
 
+.layui-checkbox-disbaled{border-color: #e2e2e2 !important;}
+.layui-checkbox-disbaled span{background-color: #e2e2e2 !important;}
+.layui-checkbox-disbaled:hover i{color: #fff !important;}
+
 /* 单选框 */
 .layui-form-radio{display: inline-block; vertical-align: middle; line-height: 28px; margin: 6px 10px 0 0; padding-right: 10px; cursor: pointer; font-size: 0;}
 .layui-form-radio *{display: inline-block; vertical-align: middle;}
 .layui-form-radio i{margin-right: 8px; font-size: 22px; color: #c2c2c2;}
 .layui-form-radio  span{font-size: 14px;}
 .layui-form-radioed i,.layui-form-radio i:hover{color: #5FB878;}
+.layui-radio-disbaled i{color: #e2e2e2 !important;}
 
 /* 表单方框风格 */.layui-form-pane .layui-form-label{width: 80px; padding: 8px 15px; line-height: 20px; border: 1px solid #e6e6e6; border-radius: 2px 0 0 2px; text-align: center; background-color: #FBFBFB; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .layui-form-pane .layui-input-inline{margin-left: -1px;}
@@ -261,13 +270,13 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-flow-more a i{font-size: 30px; color: #737383;}
 
 /** 分页 **/
-.layui-laypage{display: inline-block; vertical-align: middle; margin: 10px 0; background-color: #fff; font-size: 0;}
+.layui-laypage{display: inline-block; *display: block; *zoom: 1; vertical-align: middle; margin: 10px 0; background-color: #fff; font-size: 0;}
 .layui-laypage>*:first-child,
 .layui-laypage>*:first-child em{border-radius: 2px 0 0 2px;}
 .layui-laypage>*:last-child,
 .layui-laypage>*:last-child em{border-radius: 0 2px 2px 0;}
 .layui-laypage span,
-.layui-laypage a{display: inline-block; vertical-align: middle; padding: 0 15px; border: 1px solid #e2e2e2; height: 28px; line-height: 28px; margin: 0 -1px -1px 0; color: #333; font-size: 12px;}
+.layui-laypage a{display: inline-block; *display: block; *zoom: 1; vertical-align: middle; padding: 0 15px; border: 1px solid #e2e2e2; height: 28px; line-height: 28px; margin: 0 -1px 5px 0; color: #333; font-size: 12px;}
 .layui-laypage em{font-style: normal;}
 .layui-laypage span{color:#999; font-weight: 700;}
 .layui-laypage a{ text-decoration: none;}

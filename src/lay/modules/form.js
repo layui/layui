@@ -14,7 +14,7 @@ layui.define('layer', function(exports){
   ,hint = layui.hint()
   ,device = layui.device()
   
-  ,MOD_NAME = 'form', ELEM = '.layui-form', THIS = 'layui-this', SHOW = 'layui-show'
+  ,MOD_NAME = 'form', ELEM = '.layui-form', THIS = 'layui-this', SHOW = 'layui-show', DISABLED = 'layui-disabled'
   
   ,Form = function(){
     this.config = {
@@ -83,8 +83,10 @@ layui.define('layer', function(exports){
           }
         }
         
-        ,events = function(reElem){
+        ,events = function(reElem, disabled){
           var select = $(this), title = reElem.find('.' + TITLE);
+          
+          if(disabled) return;
           
           //展开下拉
           title.on('click', function(e){
@@ -98,6 +100,8 @@ layui.define('layer', function(exports){
           reElem.find('dl>dd').on('click', function(){
             var othis = $(this), value = othis.attr('lay-value');
             var filter = select.attr('lay-filter'); //获取过滤器
+
+            if(othis.hasClass(DISABLED)) return false;
             
             select.val(value).removeClass('layui-form-danger'), title.find('input').val(othis.text());
             othis.addClass(THIS).siblings().removeClass(THIS);
@@ -108,7 +112,7 @@ layui.define('layer', function(exports){
           });
           
           reElem.find('dl>dt').on('click', function(e){
-            layui.stope(e);
+            return false;
           });
           
           //关闭下拉
@@ -116,12 +120,12 @@ layui.define('layer', function(exports){
         }
         
         selects.each(function(index, select){
-          var othis = $(this), hasRender = othis.next('.'+CLASS);
+          var othis = $(this), hasRender = othis.next('.'+CLASS), disabled = this.disabled;
           var value = select.value, selected = $(select.options[select.selectedIndex]); //获取当前选中项
 
           //替代元素
-          var reElem = $(['<div class="layui-unselect '+ CLASS +'">'
-            ,'<div class="'+ TITLE +'"><input type="text" placeholder="'+ (select.options[0].innerHTML ? select.options[0].innerHTML : TIPS) +'" value="'+ (value ? selected.html() : '') +'" readonly class="layui-input layui-unselect">'
+          var reElem = $(['<div class="layui-unselect '+ CLASS + (disabled ? ' layui-select-disabled' : '') +'">'
+            ,'<div class="'+ TITLE +'"><input type="text" placeholder="'+ (select.options[0].innerHTML ? select.options[0].innerHTML : TIPS) +'" value="'+ (value ? selected.html() : '') +'" readonly class="layui-input layui-unselect'+ (disabled ? (' '+DISABLED) : '') +'">'
             ,'<i class="layui-edge"></i></div>'
             ,'<dl class="layui-anim layui-anim-upbit'+ (othis.find('optgroup')[0] ? ' layui-select-group' : '') +'">'+ function(options){
               var arr = [];
@@ -130,9 +134,7 @@ layui.define('layer', function(exports){
                 if(item.tagName.toLowerCase() === 'optgroup'){
                   arr.push('<dt>'+ item.label +'</dt>'); 
                 } else {
-                  arr.push('<dd lay-value="'+ item.value +'" '+ (value === item.value 
-                    ? 'class="'+ THIS +'"' 
-                  : '')+'>'+ item.innerHTML +'</dd>');
+                  arr.push('<dd lay-value="'+ item.value +'" class="'+ (value === item.value ?  THIS : '') + (item.disabled ? (' '+DISABLED) : '') +'">'+ item.innerHTML +'</dd>');
                 }
               });
               return arr.join('');
@@ -141,7 +143,7 @@ layui.define('layer', function(exports){
           
           hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender
           othis.after(reElem);
-          events.call(this, reElem);
+          events.call(this, reElem, disabled);
         });
       }
       //复选框/开关
@@ -158,6 +160,9 @@ layui.define('layer', function(exports){
           //勾选
           reElem.on('click', function(){
             var filter = check.attr('lay-filter'); //获取过滤器
+
+            if(check[0].disabled) return;
+            
             check[0].checked ? (
               check[0].checked = false
               ,reElem.removeClass(RE_CLASS[1])
@@ -173,14 +178,14 @@ layui.define('layer', function(exports){
         }
         
         checks.each(function(index, check){
-          var othis = $(this), skin = othis.attr('lay-skin');
+          var othis = $(this), skin = othis.attr('lay-skin'), disabled = this.disabled;
           if(skin === 'switch') skin = '_'+skin;
           var RE_CLASS = CLASS[skin] || CLASS.checkbox;
           
           //替代元素
           var hasRender = othis.next('.' + RE_CLASS[0]);
           var reElem = $(['<div class="layui-unselect '+ RE_CLASS[0] + (
-            check.checked ? (' '+RE_CLASS[1]) : '') +'">'
+            check.checked ? (' '+RE_CLASS[1]) : '') + (disabled ? ' layui-checkbox-disbaled '+DISABLED : '') +'">'
           ,{
             _switch: '<i></i>'
           }[skin] || ('<span>'+ (check.title || '勾选') +'</span><i class="layui-icon">&#xe618;</i>')
@@ -202,7 +207,9 @@ layui.define('layer', function(exports){
           reElem.on('click', function(){
             var name = radio[0].name, forms = radio.parents(ELEM);
             var filter = radio.attr('lay-filter'); //获取过滤器
-            var sameRadio = forms.find('input[name='+ name +']'); //找到相同name的兄弟
+            var sameRadio = forms.find('input[name='+ name.replace(/(\.|#|\[|\])/g, '\\$1') +']'); //找到相同name的兄弟
+            
+            if(radio[0].disabled) return;
             
             layui.each(sameRadio, function(){
               var next = $(this).next('.'+CLASS);
@@ -223,10 +230,10 @@ layui.define('layer', function(exports){
         };
         
         radios.each(function(index, radio){
-          var othis = $(this), hasRender = othis.next('.' + CLASS);
+          var othis = $(this), hasRender = othis.next('.' + CLASS), disabled = this.disabled;
           
           //替代元素
-          var reElem = $(['<div class="layui-unselect '+ CLASS + (radio.checked ? (' '+CLASS+'ed') : '') +'">'
+          var reElem = $(['<div class="layui-unselect '+ CLASS + (radio.checked ? (' '+CLASS+'ed') : '') + (disabled ? ' layui-radio-disbaled '+DISABLED : '') +'">'
           ,'<i class="layui-anim layui-icon">'+ ICON[radio.checked ? 0 : 1] +'</i>'
           ,'<span>'+ (radio.title||'未命名') +'</span>'
           ,'</div>'].join(''));
