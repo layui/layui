@@ -81,7 +81,7 @@ layui.define(function(exports){
     }
     for(; dict.start <= dict.end; dict.start++){
       if(dict.start === conf.curr){
-        view.push('<span class="layui-laypage-curr"><em class="layui-laypage-em" '+ (/^#/.test(conf.skin) ? 'style="background-color:'+ conf.skin +';' : '') +'"></em><em>'+ dict.start +'</em></span>');
+        view.push('<span class="layui-laypage-curr"><em class="layui-laypage-em" '+ (/^#/.test(conf.skin) ? 'style="background-color:'+ conf.skin +';"' : '') +'></em><em>'+ dict.start +'</em></span>');
       } else {
         view.push('<a href="javascript:;" data-page="'+ dict.start +'">'+ dict.start +'</a>');
       }

@@ -270,13 +270,13 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-flow-more a i{font-size: 30px; color: #737383;}
 
 /** 分页 **/
-.layui-laypage{display: inline-block; *display: block; *zoom: 1; vertical-align: middle; margin: 10px 0; background-color: #fff; font-size: 0;}
+.layui-laypage{display: inline-block; *display: inline; *zoom: 1; vertical-align: middle; margin: 10px 0; font-size: 0;}
 .layui-laypage>*:first-child,
 .layui-laypage>*:first-child em{border-radius: 2px 0 0 2px;}
 .layui-laypage>*:last-child,
 .layui-laypage>*:last-child em{border-radius: 0 2px 2px 0;}
 .layui-laypage span,
-.layui-laypage a{display: inline-block; *display: block; *zoom: 1; vertical-align: middle; padding: 0 15px; border: 1px solid #e2e2e2; height: 28px; line-height: 28px; margin: 0 -1px 5px 0; color: #333; font-size: 12px;}
+.layui-laypage a{display: inline-block; *display: inline; *zoom: 1; vertical-align: middle; padding: 0 15px; border: 1px solid #e2e2e2; height: 28px; line-height: 28px; margin: 0 -1px 5px 0; background-color: #fff; color: #333; font-size: 12px;}
 .layui-laypage em{font-style: normal;}
 .layui-laypage span{color:#999; font-weight: 700;}
 .layui-laypage a{ text-decoration: none;}
@@ -287,8 +287,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-laypage-prev em,
 .layui-laypage-next em{font-family: Sim sun; font-size: 16px;}
 
-.layui-laypage .layui-laypage-total{border: none;font-weight: 400;}
-.layui-laypage input, .layui-laypage button{height: 30px; line-height: 30px; border:1px solid #e2e2e2; border-radius: 2px; vertical-align: middle;  background-color: #fff; -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}
+.layui-laypage .layui-laypage-total{height: 30px; line-height: 30px; margin-left: 1px; border: none;font-weight: 400;}
+.layui-laypage input, .layui-laypage button{height: 30px; line-height: 30px; border:1px solid #e2e2e2; border-radius: 2px; vertical-align: top;  background-color: #fff; -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}
 .layui-laypage input{width: 50px; margin: 0 5px; text-align: center;}
 .layui-laypage button{margin-left: 5px; padding:0 15px; cursor: pointer;}
 
@@ -316,7 +316,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /** 导航菜单 **/
 .layui-nav{position: relative; padding: 0 20px; background-color: #393D49; color: #c2c2c2; border-radius: 2px; font-size: 0; -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}
 .layui-nav *{font-size: 14px;}
-.layui-nav .layui-nav-item{position: relative; display: inline-block; vertical-align: middle; line-height: 60px;}
+.layui-nav .layui-nav-item{position: relative; display: inline-block; *display: inline; *zoom: 1; vertical-align: middle; line-height: 60px;}
 .layui-nav .layui-nav-item a{display: block; padding: 0 20px; color: #c2c2c2; transition: all .3s; -webkit-transition: all .3s;}
 .layui-nav-bar,
 .layui-nav .layui-this:after{position: absolute; left: 0; top: 0; width: 0; height: 5px; background-color: #5FB878; transition: all .2s; -webkit-transition: all .2s;}
@@ -366,7 +366,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /** Tab选项卡 **/
 .layui-tab{margin: 10px 0; overflow: hidden; text-align: left !important;}
 .layui-tab-title{position: relative; left: 0; height: 40px; white-space: nowrap; font-size: 0; border-bottom: 1px solid #e2e2e2; transition: all .2s; -webkit-transition: all .2s;}
-.layui-tab-title li{display: inline-block; *display: block; *zoom: 1; vertical-align: middle; font-size: 14px; transition: all .3s; -webkit-transition: all .3s;}
+.layui-tab-title li{display: inline-block; *display: inline; *zoom: 1; vertical-align: middle; font-size: 14px; transition: all .3s; -webkit-transition: all .3s;}
 .layui-tab-title li{position: relative; line-height: 40px; min-width: 65px; padding: 0 10px; text-align: center; cursor: pointer;}
 .layui-tab-title .layui-this{color: #000;}
 

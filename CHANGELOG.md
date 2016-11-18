@@ -1,7 +1,7 @@
 
 # v1.0.4  2016-11-18
 
-* Tab选项卡新增用于添加Tab选项的接口：element.tabAdd(filter, index);
+* Tab选项卡新增用于添加Tab选项的接口：element.tabAdd(filter, options);
 * Tab选项卡新增用于外部删除Tab选项的接口：element.tabDelete(filter, index);
 * Tab选项卡新增用于动态切换的接口：element.tabChange(filter, index);
 * 表单组select、checkbox、radio等新增 disabled 属性的禁用支持
