@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>合并版使用 - layui</title>
+
+<link rel="stylesheet" href="../build/css/layui.css">
+
+<style>
+body{padding: 10px;}
+</style>
+</head>
+<body>
+
+<div id="demo1"></div>
+<button class="layui-btn demo" data-type="test">测试弹出式Form</button>
+
+
+<script src="../build/lay/dest/layui.all.js"></script>
+<script>
+;!function(){
+  var $ = layui.jquery
+  ,layer = layui.layer
+  ,form = layui.form()
+  ,laypage = layui.laypage;
+  
+  layer.ready(function(){
+    layer.msg('hello');
+  });
+  
+  laypage({
+    cont: 'demo1'
+    ,pages: 100 //总页数
+    ,groups: 5 //连续显示分页数
+  });
+  
+  
+  //触发事件
+  var active = {
+    test: function(){
+      layer.open({
+        type: 1
+        ,resize: false
+        ,content: ['<ul class="layui-form" style="margin: 10px;">'
+          ,'<li class="layui-form-item">'
+            ,'<label class="layui-form-label">邮箱激活</label>'
+            ,'<div class="layui-input-block">'
+              ,'<select name="activate">'
+                ,'<option value="0">未激活</option>'
+                ,'<option value="1">已激活</option>'
+              ,'<select>'
+            ,'</div>'
+          ,'</li>'
+          ,'<li class="layui-form-item" style="text-align:center;">'
+            ,'<button type="submit" lay-submit lay-filter="*" class="layui-btn">提交</button>'
+          ,'</li>'
+        ,'</ul>'].join('')
+        ,success: function(layero){
+          layero.find('.layui-layer-content').css('overflow', 'visible');
+          
+          form.render().on('submit(*)', function(data){
+            layer.msg(JSON.stringify(data.field));
+          });
+        }
+      });
+    }
+  };
+  $('.demo').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+}();
+</script>
+</body>
+</html>

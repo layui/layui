@@ -56,8 +56,23 @@ body{padding: 10px;}
         <select name="quiz">
           <option value="">请选择问题</option>
           <option value="你工作的第一个城市">你工作的第一个城市</option>
-          <option value="你的工号">你的工号</option>
+          <option value="你的工号" disabled>你的工号</option>
           <option value="你最喜欢的老师">你最喜欢的老师</option>
+        </select>
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">select分组</label>
+      <div class="layui-input-block">
+        <select name="quiz">
+          <option value="">请选择问题</option>
+          <optgroup label="城市记忆">
+            <option value="你工作的第一个城市">你工作的第一个城市</option>
+          </optgroup>
+          <optgroup label="学生时代">
+            <option value="你的工号" disabled>你的工号</option>
+            <option value="你最喜欢的老师">你最喜欢的老师</option>
+          </optgroup>
         </select>
       </div>
     </div>
@@ -80,13 +95,13 @@ body{padding: 10px;}
     <div class="layui-input-block">
       <input type="checkbox" name="like[write]" title="写作">
       <input type="checkbox" name="like[read]" title="阅读">
-      <input type="checkbox" name="like[game]" title="游戏">
+      <input type="checkbox" name="like[game]" title="游戏" disabled>
     </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">开关关</label>
     <div class="layui-input-block">
-      <input type="checkbox" name="close" lay-skin="switch" title="开关">
+      <input type="checkbox" name="close" lay-skin="switch" title="开关" disabled>
     </div>
   </div>
   <div class="layui-form-item">
@@ -100,7 +115,15 @@ body{padding: 10px;}
     <div class="layui-input-block">
       <input type="radio" name="sex" value="男" title="男">
       <input type="radio" name="sex" value="女" title="女" checked>
-      <input type="radio" name="sex" value="中型" title="中">
+      <input type="radio" name="sex" value="中型" title="中" disabled>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">单选框</label>
+    <div class="layui-input-block">
+      <input type="radio" name="sex.id" value="男" title="男">
+      <input type="radio" name="sex.id" value="女" title="女" checked>
+      <input type="radio" name="sex.id" value="中型" title="中">
     </div>
   </div>
   <div class="layui-form-item layui-form-text">
@@ -227,10 +250,16 @@ layui.use('form', function(){
 
 
 <form id="test">
-  <input type="radio" value="girl">
+  <input type="radio" value="girl" disabled>
   <input type="checkbox" name="love[a]">
   <input type="checkbox" name="love[b]">
   <input value="1">
+  <select name="quiz">
+    <option value="">请选择问题</option>
+    <option disabled value="你工作的第一个城市">你工作的第一个城市</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你最喜欢的老师">你最喜欢的老师</option>
+  </select>
   <button>go</button>
 </form>
 <script>

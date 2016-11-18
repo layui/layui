@@ -13,7 +13,7 @@
 "use strict";
 
 var Lay = function(){
-  this.v = '1.0.2'; //版本号
+  this.v = '1.0.4'; //版本号
 };
 
 Lay.fn = Lay.prototype;
@@ -55,7 +55,7 @@ modules = {
 
   ,jquery: 'lib/jquery' //DOM库（第三方）
   
-  ,'layui.all': 'dest/layui.all' //PC模块合并版
+  ,'layui.mod': 'dest/layui.mod' //PC模块合并版
 };
 
 config.modules = {}; //记录模块物理路径
@@ -179,7 +179,7 @@ Lay.fn.use = function(apps, callback, exports){
 
 //使用打包好的完整Layui库
 Lay.fn.all = function(callback){
-  this.use('layui.all', callback)
+  this.use('layui.mod', callback)
   return this;
 };
 

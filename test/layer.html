@@ -1,0 +1,47 @@
+ 
+ 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>layer弹层 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 50px 100px;}
+</style>
+</head>
+<body>
+
+<button class="layui-btn demo" data-type="test">测试一</button>
+<button class="layui-btn demo" data-type="test2">测试二</button>
+
+<script src="../src/layui.js"></script>
+<script>
+layui.use('layer', function(){
+  var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+  
+  //触发事件
+  var active = {
+    test: function(){
+      layer.alert('你好么，体验者');
+    }
+    ,test2: function(){
+      layer.open({
+        type: 2
+        ,content: 'http://fly.layui.com/'
+        ,area: ['375px', '500px']
+        ,maxmin: true
+      })
+    }
+  };
+  $('.demo').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
+</script>
+</body>
+</html>

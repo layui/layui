@@ -21,6 +21,7 @@ body{padding: 10px;}
       </textarea>
     </div>
     <button class="layui-btn">提交</button>
+    <a class="layui-btn" id="getChoose">获取选中内容</a>
   </form>
 </div>
 
@@ -30,7 +31,7 @@ body{padding: 10px;}
 layui.use('layedit', function(){
   var layedit = layui.layedit;
   
-  layedit.build('demo', {
+  var index = layedit.build('demo', {
     //hideTool: ['image']
     uploadImage: {
       url: '/upload/test/'
@@ -39,6 +40,11 @@ layui.use('layedit', function(){
     //,tool: []
     //,height: 100
   });
+  
+  getChoose.onclick = function(){
+    alert(layedit.getSelection(index));
+  };
+  
 });
 </script>
 </body>

@@ -35,18 +35,41 @@ body{padding: 10px;}
 <ul class="layui-nav">
   <li class="layui-nav-item"><a href="">最新活动</a></li>
   <li class="layui-nav-item layui-this"><a href="">产品</a></li>
-  <li class="layui-nav-item"><a href="">解决方案</a></li>
   <li class="layui-nav-item"><a href="">大数据</a></li>
+  <li class="layui-nav-item">
+    <a href="javascript:;">解决方案</a>
+    <dl class="layui-nav-child">
+      <dd><a href="">移动模块</a></dd>
+      <dd><a href="">后台模版</a></dd>
+      <dd><a href="">电商平台</a></dd>
+    </dl>
+  </li>
+  
 </ul>
 
 <br><br>
 
 <ul class="layui-nav layui-nav-tree">
   <li class="layui-nav-item"><a href="">最新活动</a></li>
-  <li class="layui-nav-item layui-this"><a href="">产品</a></li>
-  <li class="layui-nav-item"><a href="">解决方案</a></li>
+  <li class="layui-nav-item layui-nav-itemed layui-this">
+    <a class="" href="javascript:;">产品</a>
+    <dl class="layui-nav-child">
+      <dd><a href="">移动模块</a></dd>
+      <dd><a href="">后台模版</a></dd>
+      <dd><a href="">电商平台</a></dd>
+    </dl>
+  </li>
   <li class="layui-nav-item"><a href="">大数据</a></li>
+  
   <li class="layui-nav-item"><a href="">云市场</a></li>
+  <li class="layui-nav-item">
+    <a href="javascript:;">解决方案</a>
+    <dl class="layui-nav-child">
+      <dd><a href="">移动模块</a></dd>
+      <dd><a href="">后台模版</a></dd>
+      <dd><a href="">电商平台</a></dd>
+    </dl>
+  </li>
   <li class="layui-nav-item"><a href="">社区</a></li>
 </ul>
 
@@ -74,7 +97,7 @@ body{padding: 10px;}
 
 <br><br>
 
-<div class="layui-tab">
+<div class="layui-tab" lay-filter="tabDemo">
   <ul class="layui-tab-title">
     <li class="layui-this">标题1</li>
     <li>标题2</li>
@@ -83,7 +106,12 @@ body{padding: 10px;}
     <li>标题5</li>
   </ul>
   <div class="layui-tab-content">
-    <div class="layui-tab-item layui-show">1</div>
+    <div class="layui-tab-item layui-show">
+      1
+      <br><button class="layui-btn" onclick="layui.element().tabChange('tabDemo', 2)">手工切换到第三项</button>
+      <button class="layui-btn" onclick="layui.element().tabAdd('tabDemo', {title:'新标题', content:'新内容'})">添加Tab</button>
+      <button class="layui-btn" onclick="layui.element().tabDelete('tabDemo', 3)">删除第四项</button>
+    </div>
     <div class="layui-tab-item">2</div>
     <div class="layui-tab-item">3</div>
     <div class="layui-tab-item">4</div>
@@ -123,7 +151,7 @@ body{padding: 10px;}
   </div>
 </div>
 
-<div class="layui-tab" lay-filter="test">
+<div class="layui-tab" lay-filter="test" lay-allowClose="true">
   <ul class="layui-tab-title">
     <li class="layui-this">标题1</li>
     <li>标题2</li>
