@@ -70,6 +70,7 @@ layui.define('jquery', function(exports) {
             }, 10);
         });
     });
+    
 
     $(document).on('click keydown', function(event) {
         if (event.type === 'keydown' && event.keyCode === 27) {
