@@ -32,7 +32,7 @@ var task = {
       ,'!./src/lay/all.js'
        ,'!./src/lay/mod.js'
     ]).pipe(uglify())
-     .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> license By <%= pkg.homepage %> */\n ;', {pkg: pkg}))
+     .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %> LGPL License By <%= pkg.homepage %> */\n ;', {pkg: pkg}))
     .pipe(gulp.dest('./build'))
     
   }

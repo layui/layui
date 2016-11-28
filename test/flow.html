@@ -18,12 +18,7 @@ img{width: 500px; height: 300px;}
 <body>
 
 
-<ul class="flow-default">
-  <li>1</li>
-  <li>2</li>
-  <li>3</li>
-  <li>4</li>
-</ul>
+<ul class="flow-default"></ul>
 
 
 <div class="demo" style="height: 200px; overflow: auto;">
@@ -48,7 +43,7 @@ layui.use('flow', function(){
     elem: '.flow-default' //流加载容器
     //,scrollElem: '.flow-default' //滚动条所在元素，默认document
     //,isAuto: false
-    //,isShowEnd: false
+    //,end: '没了'
     ,isLazyimg: true
     ,done: function(page, next){ //加载下一页
       console.log(page)
@@ -57,7 +52,7 @@ layui.use('flow', function(){
         for(var i = 0; i < 6; i++){
           lis.push('<li><img lay-src="http://s6.mogucdn.com/p2/160914/iz_5lc1cdg3j2hibl9ai99lg7c28k1fh_305x330.jpg?v='+ (page+i) +'"></li>')
         }
-        next(lis.join(''), page > 5 ? 0 : 11);
+        next(lis.join(''), page < 3);
       }, 500);
     }
   });
