@@ -91,10 +91,6 @@ Lay.fn.use = function(apps, callback, exports){
   var head = doc.getElementsByTagName('head')[0];
 
   apps = typeof apps === 'string' ? [apps] : apps;
-
-  if(!apps || apps.length === 0 || layui['layui.all']){
-    return typeof callback === 'function' && callback.apply(layui, exports), that;
-  }
   
   //如果页面已经存在jQuery1.7+库且所定义的模块依赖jQuery，则不加载内部jquery模块
   if(window.jQuery && jQuery.fn.on){
@@ -111,6 +107,10 @@ Lay.fn.use = function(apps, callback, exports){
 
   //静态资源host
   config.host = config.host || (dir.match(/\/\/([\s\S]+?)\//)||['//'+ location.host +'/'])[0];
+  
+  if(apps.length === 0 || layui['layui.all']){
+    return typeof callback === 'function' && callback.apply(layui, exports), that;
+  }
 
   //加载完毕
   function onScriptLoad(e, url){
