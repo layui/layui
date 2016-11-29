@@ -108,7 +108,7 @@ Lay.fn.use = function(apps, callback, exports){
   //静态资源host
   config.host = config.host || (dir.match(/\/\/([\s\S]+?)\//)||['//'+ location.host +'/'])[0];
   
-  if(apps.length === 0 || layui['layui.all']){
+  if(apps.length === 0 || (layui['layui.all'] && modules[item])){
     return typeof callback === 'function' && callback.apply(layui, exports), that;
   }
 
