@@ -254,7 +254,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table[lay-skin="nob"] th, .layui-table[lay-skin="nob"] td{border: none;}
 
 /** 文件上传 **/
-.layui-upload-button{position: relative; display: inline-block; vertical-align: middle; min-width: 60px; height: 36px; line-height: 36px; border: 1px solid #DFDFDF; border-radius: 2px; overflow: hidden; background-color: #fff; color: #666;}
+.layui-upload-button{position: relative; display: inline-block; vertical-align: middle; min-width: 60px; height: 38px; line-height: 38px; border: 1px solid #DFDFDF; border-radius: 2px; overflow: hidden; background-color: #fff; color: #666;}
 .layui-upload-button:hover{border: 1px solid #aaa; color: #333;}
 .layui-upload-button:active{border: 1px solid #4CAF50; color: #000;}
 .layui-upload-file,

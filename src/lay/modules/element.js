@@ -153,15 +153,16 @@ layui.define('jquery', function(exports){
       ,filter = parents.attr('lay-filter');
       
       if(othis.find('.'+NAV_CHILD)[0]) return;
-      othis.addClass(THIS).siblings().removeClass(THIS);
+      parents.find('.'+THIS).removeClass(THIS);
+      othis.addClass(THIS);
       layui.event.call(this, MOD_NAME, 'nav('+ filter +')', othis);
     }
     //点击子菜单选中
     ,clickChild: function(){
       var othis = $(this), parents = othis.parents(NAV_ELEM)
       ,filter = parents.attr('lay-filter');
-      
-      othis.addClass(THIS).siblings().removeClass(THIS);
+      parents.find('.'+THIS).removeClass(THIS);
+      othis.addClass(THIS);
       layui.event.call(this, MOD_NAME, 'nav('+ filter +')', othis);
     }
     //展开二级菜单

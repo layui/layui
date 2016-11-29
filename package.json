@@ -1,6 +1,6 @@
 {
   "name": "layui",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "经典模块化前端框架",
   "main": "layui.js",
   "license": "LGPL-2.1",

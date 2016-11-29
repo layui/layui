@@ -14,81 +14,102 @@ var del = require('del');
 var gulpif = require('gulp-if');
 var minimist = require('minimist');
 
+//获取参数
 var argv = require('minimist')(process.argv.slice(2), {
   default: {
     ver: 'all' 
   }
-}), mods = 'laytpl,laypage,laydate,jquery,layer,element,upload,form,tree,util,flow,layedit,code';
+})
 
-var task = {
-  minjs: function() {
-    //可指定模块压缩
+//注释
+,note = [
+  '/** <%= pkg.name %>-v<%= pkg.version %><%= remark %> LGPL License By <%= pkg.homepage %> */\n ;'
+  ,{pkg: pkg, remark: ''}
+]
+
+//模块
+,mods = 'laytpl,laypage,laydate,jquery,layer,element,upload,form,tree,util,flow,layedit,code'
+
+//任务
+,task = {
+  minjs: function(ver) {
+    //可指定模块压缩，eg：gulp minjs --mod layer,laytpl
     var mod = argv.mod ? function(){
       return '(' + argv.mod.replace(/,/g, '|') + ')';
-    }() : '';
-    
-    return gulp.src([
+    }() : ''
+    ,src = [
       './src/**/*'+ mod +'.js'
       ,'!./src/lay/all.js'
-       ,'!./src/lay/mod.js'
-    ]).pipe(uglify())
-     .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %> LGPL License By <%= pkg.homepage %> */\n ;', {pkg: pkg}))
-    .pipe(gulp.dest('./build'))
+      ,'!./src/lay/mod.js'
+    ]
+    ,dir = ver === 'open' ? 'release' : 'build';
+    
+    //过滤 layim
+    if(ver === 'open' || argv.open){
+      src.push('!./src/lay/**/layim.js');
+    }
+
+    return gulp.src(src).pipe(uglify())
+     .pipe(header.apply(null, note))
+    .pipe(gulp.dest('./'+ dir));
     
   }
-  ,modjs: function(){
-    return gulp.src([
-      ,'./src/lay/**/{mod,'+ mods +'}.js'
-      ,'!./src/lay/**/layim.js' //LayIM需授权
-      ,'!./src/lay/**/mobile/*.js'
-    ]).pipe(uglify())
-    .pipe(concat('layui.mod.js', {newLine: ''}))
-    .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %>(All Modules) <%= pkg.license %> license By <%= pkg.homepage %> */\n ;', {pkg: pkg}))
-    .pipe(gulp.dest('./build/lay/dest/'));
+
+  ,alljs: function(ver){
+    var src = ['./src/**/{layui,all,'+ mods +'}.js']
+    ,dir = ver === 'open' ? 'release' : 'build';
+    
+    return gulp.src(src).pipe(uglify())
+      .pipe(concat('layui.all.js', {newLine: ''}))
+      .pipe(header.apply(null, note))
+    .pipe(gulp.dest('./'+ dir +'/lay/dest/'));
   }
-  ,alljs: function(){
-    return gulp.src([
-      ,'./src/**/{layui,all,'+ mods +'}.js'
-      ,'!./src/lay/modules/layim.js' //LayIM需授权
-      ,'!./src/lay/modules/mobile/*.js'
-    ]).pipe(uglify())
-    .pipe(concat('layui.all.js', {newLine: ''}))
-    .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> license By <%= pkg.homepage %> */\n ;', {pkg: pkg}))
-    .pipe(gulp.dest('./build/lay/dest/'));
-  }
-  ,mincss: function() {
-    return gulp.src('./src/css/**/*.css')
-    .pipe(minify({
+  
+  ,mincss: function(ver){
+    var src = ['./src/css/**/*.css']
+    ,dir = ver === 'open' ? 'release' : 'build';
+    
+    if(ver === 'open' || argv.open){
+      src.push('!./src/css/**/layim.css');
+    }
+    
+    return gulp.src(src).pipe(minify({
       compatibility: 'ie7'
-    }))
-    .pipe(header('/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> license By <%= pkg.homepage %> */\n', {pkg : pkg} ))
-    .pipe(gulp.dest('./build/css'));
+    })).pipe(header.apply(null, note))
+    .pipe(gulp.dest('./'+ dir +'/css'));
   }
-  ,font: function() {
+  
+  ,font: function(ver){
+    var dir = ver === 'open' ? 'release' : 'build';
+    
     return gulp.src('./src/font/*')
     .pipe(rename({}))
-    .pipe(gulp.dest('./build/font'));
+    .pipe(gulp.dest('./'+ dir +'/font'));
   }
-  ,images: function(){
-    gulp.src([
-      './src/css/**/*.png'
-      ,'./src/css/**/*.jpg'
-      ,'./src/css/**/*.gif'
-    ]).pipe(rename({}))
-    .pipe(gulp.dest('./build/css'));
+  
+  ,images: function(ver){
+    var src = [
+      './src/**/*.png'
+      ,'./src/**/*.jpg'
+      ,'./src/**/*.gif'
+    ]
+    ,dir = ver === 'open' ? 'release' : 'build';
     
-    return gulp.src([
-      './src/images/**/*.png'
-      ,'./src/images/**/*.jpg'
-      ,'./src/images/**/*.gif'
-    ]).pipe(rename({}))
-    .pipe(gulp.dest('./build/images'));
+    if(ver === 'open' || argv.open){
+      src.push('!./src/**/layim/**/*.*');
+    }
+    
+    gulp.src(src).pipe(rename({}))
+    .pipe(gulp.dest('./'+ dir));
   }
 };
 
 //清理
 gulp.task('clear', function(cb) {
   return del(['./build/*'], cb);
+});
+gulp.task('clearRelease', function(cb) {
+  return del(['./release/*'], cb);
 });
 
 gulp.task('minjs', task.minjs); //压缩js模块
@@ -99,17 +120,21 @@ gulp.task('mincss', task.mincss); //压缩css文件
 gulp.task('font', task.font); //复制iconfont文件
 gulp.task('images', task.images); //复制组件可能所需的图片
 
+//开源版
+gulp.task('default', ['clearRelease'], function(){
+  for(var key in task){
+    task[key]('open');
+  }
+});
+
 //完整任务
-gulp.task('default', ['clear'], function(){
+gulp.task('all', ['clear'], function(){
   for(var key in task){
     task[key]();
   }
 });
 
-//开源版
-gulp.task('open', ['clear'], function(){
-  
-});
+
 
 
 
