@@ -23,8 +23,8 @@ var argv = require('minimist')(process.argv.slice(2), {
 
 //注释
 ,note = [
-  '/** <%= pkg.name %>-v<%= pkg.version %><%= remark %> LGPL License By <%= pkg.homepage %> */\n ;'
-  ,{pkg: pkg, remark: ''}
+  '/** <%= pkg.name %>-v<%= pkg.version %> LGPL License By <%= pkg.homepage %> */\n <%= js %>'
+  ,{pkg: pkg, js: ';'}
 ]
 
 //模块
@@ -67,15 +67,18 @@ var argv = require('minimist')(process.argv.slice(2), {
   
   ,mincss: function(ver){
     var src = ['./src/css/**/*.css']
-    ,dir = ver === 'open' ? 'release' : 'build';
+    ,dir = ver === 'open' ? 'release' : 'build'
+    ,noteNew = JSON.parse(JSON.stringify(note));
     
     if(ver === 'open' || argv.open){
       src.push('!./src/css/**/layim.css');
     }
     
+    noteNew[1].js = '';
+    
     return gulp.src(src).pipe(minify({
       compatibility: 'ie7'
-    })).pipe(header.apply(null, note))
+    })).pipe(header.apply(null, noteNew))
     .pipe(gulp.dest('./'+ dir +'/css'));
   }
   
