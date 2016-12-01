@@ -88,8 +88,9 @@ layui.define(['layer', 'form'], function(exports){
 
     haveBuild[0] && (haveBuild.remove());
 
+   textArea.addClass('layui-hide').after(editor);
     setIframe.call(that, editor, textArea[0], set)
-    textArea.addClass('layui-hide').after(editor);
+    
 
     return that.index;
   };
@@ -130,7 +131,7 @@ layui.define(['layer', 'form'], function(exports){
 
     iframe.css({
       height: set.height
-    }).on('load', function(){
+    });
       var conts = iframe.contents()
       ,iframeWin = iframe.prop('contentWindow')
       ,head = conts.find('head')
@@ -151,8 +152,6 @@ layui.define(['layer', 'form'], function(exports){
 
       hotkey.apply(that, [iframeWin, iframe, textArea, set]); //快捷键处理
       toolActive.call(that, iframeWin, editor, set); //触发工具
-
-    });
   }
   
   //获得iframe窗口对象
