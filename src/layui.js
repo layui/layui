@@ -334,6 +334,8 @@ Lay.fn.device = function(key){
         return 'linux';
       } else if(/iphone|ipod|ipad|ios/.test(agent)){
         return 'ios';
+      } else if(/mac os/.test(agent)){
+        return 'mac os';
       }
     }()
     ,ie: function(){ //ie版本
