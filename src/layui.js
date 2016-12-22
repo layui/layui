@@ -339,7 +339,7 @@ Lay.fn.device = function(key){
       } else if(/linux/.test(agent)){
         return 'linux';
       } else if(/mac/.test(agent)){
-        return ‘mac’;
+        return 'mac';
       } else if(/iphone|ipod|ipad|ios/.test(agent)){
         return 'ios';
       }
