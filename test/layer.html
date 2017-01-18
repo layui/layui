@@ -17,6 +17,7 @@ body{padding: 50px 100px;}
 
 <button class="layui-btn demo" data-type="test">测试一</button>
 <button class="layui-btn demo" data-type="test2">测试二</button>
+<button class="layui-btn demo" data-type="test3">测试三</button>
 
 <script src="../src/layui.js"></script>
 <script>
@@ -30,10 +31,25 @@ layui.use('layer', function(){
     }
     ,test2: function(){
       layer.open({
-        type: 2
+         type: 2
         ,content: 'http://fly.layui.com/'
         ,area: ['375px', '500px']
         ,maxmin: true
+      })
+    }
+    ,test3: function(){
+      layer.open({
+         type: 1
+        ,content: '2秒后关闭关闭弹窗，并调用end方法'
+        ,area: ['375px', '200px']
+        ,success: function(layero,index){
+          setTimeout(function(){
+            layer.close(index, {result:'hello layui'});
+          },2000);
+        }
+        ,end: function(result){
+        	layer.alert(result);
+        }
       })
     }
   };
