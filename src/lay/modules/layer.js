@@ -24,9 +24,20 @@ var isLayui = window.layui && layui.define, $, win, ready = {
   type: ['dialog', 'page', 'iframe', 'loading', 'tips']
 };
 
+//UUID
+var uuid = function() {
+	var d = +(new Date());
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		var r = (d + Math.random() * 16) % 16 | 0;
+		d = Math.floor(d / 16);
+		return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+	});
+};
+
 //默认内置方法。
 var layer = {
   v: '3.0.1',
+  $uuid : uuid(),//页面标记
   ie: function(){ //ie版本
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
@@ -593,6 +604,11 @@ Class.pt.callback = function(){
       config.success(layero, that.index);
     }
   }
+
+  config.type == 2 && layero.find('iframe').on('load', function(){
+    layero.find('iframe')[0].contentWindow.layer.$opener_uuid = layer.$uuid;
+  });
+ 
   layer.ie == 6 && that.IE6(layero);
   
   //按钮
@@ -861,7 +877,33 @@ layer.title = function(name, index){
 };
 
 //关闭layer总方法
-layer.close = function(index){
+layer.close = function(index,result){
+
+  if(index==='#self'){
+    //遍历parent确定执行layer.open的页面
+    var opener = (function(uuid){
+		var win = window, stack = [];
+		while (win != win.parent) {
+			stack.push(win = win.parent);
+		}
+		for (; stack.length;) {
+			win = stack.pop()
+			try {
+				var all = win.document.getElementsByTagName('*');//忽略掉没有权限的页面
+				if(win.layer && win.layer.$uuid === uuid){
+					return win;
+				}
+			} catch (ex) {
+			}
+		}
+		return window;
+    })(layer.$opener_uuid);
+
+    var index = opener.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+    opener.layer.close(index,result); //再执行关闭 , 传递结果参数
+    return;
+  }
+
   var layero = $('#'+ doms[0] + index), type = layero.attr('type'), closeAnim = 'layer-anim-close';
   if(!layero[0]) return;
   var WRAP = 'layui-layer-wrap', remove = function(){
@@ -885,7 +927,7 @@ layer.close = function(index){
       layero[0].innerHTML = '';
       layero.remove();
     }
-    typeof ready.end[index] === 'function' && ready.end[index]();
+    typeof ready.end[index] === 'function' && ready.end[index](result);
     delete ready.end[index];
   };
   

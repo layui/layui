@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>layer弹层</title>
+<link rel="stylesheet" href="../src/css/layui.css">
+</head>
+<body>
+	<form id="form" class="layui-form layui-form-pane" style="margin:10px 10px;>
+		<input id="id" name="id" type="hidden">
+		<div class="layui-form-item">
+			<label class="layui-form-label">输入文字</label>
+			<div class="layui-input-block">
+				<input type="text" id="text" placeholder="请输入文字" autocomplete="off" class="layui-input" style="width:200px;">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button id="confirm" type="button" class="layui-btn">确定</button>
+				<button id="cancel" type="button" class="layui-btn layui-btn-primary">取消</button>
+			</div>
+		</div>
+	</form>
+
+<script src="../src/layui.js"></script>
+<script>
+layui.use('layer', function(){
+  var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+  $('#confirm').on('click', function(){
+	  layer.close('#self',$('#text').val());
+  });
+  $('#cancel').on('click', function(){
+	  layer.close('#self');
+  });
+});
+</script>
+</body>
+</html>
