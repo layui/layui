@@ -39,16 +39,11 @@ layui.use('layer', function(){
     }
     ,test3: function(){
       layer.open({
-         type: 1
-        ,content: '2秒后关闭关闭弹窗，并调用end方法'
+         type: 2
+        ,content: 'layer_dlg.html'
         ,area: ['375px', '200px']
-        ,success: function(layero,index){
-          setTimeout(function(){
-            layer.close(index, {result:'hello layui'});
-          },2000);
-        }
         ,end: function(result){
-        	layer.alert(result);
+        	layer.alert('输入的文字为：' + result);
         }
       })
     }
