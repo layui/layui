@@ -2,7 +2,7 @@
 
  @Name：layui.form 表单组件
  @Author：贤心
- @License：LGPL
+ @License：MIT
     
  */
  
@@ -264,21 +264,25 @@ layui.define('layer', function(exports){
  
     //开始校验
     layui.each(verifyElem, function(_, item){
-      var othis = $(this), ver = othis.attr('lay-verify'), tips = '';
-      var value = othis.val(), isFn = typeof verify[ver] === 'function';
+      var othis = $(this), ver = othis.attr('lay-verify').split('|');
+      var tips = '', value = othis.val();
       othis.removeClass(DANGER);
-      if(verify[ver] && (isFn ? tips = verify[ver](value, item) : !verify[ver][0].test(value)) ){
-        layer.msg(tips || verify[ver][1], {
-          icon: 5
-          ,shift: 6
-        });
-        //非移动设备自动定位焦点
-        if(!device.android && !device.ios){
-          item.focus();
+      layui.each(ver, function(_, thisVer){
+        var isFn = typeof verify[thisVer] === 'function';
+        if(verify[thisVer] && (isFn ? tips = verify[thisVer](value, item) : !verify[thisVer][0].test(value)) ){
+          layer.msg(tips || verify[thisVer][1], {
+            icon: 5
+            ,shift: 6
+          });
+          //非移动设备自动定位焦点
+          if(!device.android && !device.ios){
+            item.focus();
+          }
+          othis.addClass(DANGER);
+          return stop = true;
         }
-        othis.addClass(DANGER);
-        return stop = true;
-      }
+      });
+      if(stop) return stop;
     });
     
     if(stop) return false;

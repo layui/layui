@@ -4,7 +4,7 @@
  @Description：经典模块化前端框架
  @Site: www.layui.com
  @Author: 贤心
- @License：LGPL
+ @License：MIT
 
  */
  
@@ -13,7 +13,7 @@
 "use strict";
 
 var Lay = function(){
-  this.v = '1.0.7'; //版本号
+  this.v = '1.0.8'; //版本号
 };
 
 Lay.fn = Lay.prototype;
@@ -50,12 +50,10 @@ modules = {
   ,util: 'modules/util' //工具块
   ,flow: 'modules/flow' //流加载
   ,code: 'modules/code' //代码修饰器
-  ,single: 'modules/single' //单页应用
-  ,mobile: 'modules/mobile' //移动大模块
-
-  ,jquery: 'lib/jquery' //DOM库（第三方）
+  ,jquery: 'modules/jquery' //DOM库（第三方）
   
-  ,'layui.mod': 'dest/layui.mod' //PC模块合并版
+  ,mobile: 'modules/mobile' //移动大模块 | 若当前为开发目录，则为移动模块入口，否则为移动模块集合
+  ,'layui.all': 'dest/layui.all' //PC模块合并版
 };
 
 config.modules = {}; //记录模块物理路径
@@ -74,13 +72,16 @@ Lay.fn.define = function(deps, callback){
     });
     return this;
   };
+  
   type && (
     callback = deps,
     deps = []
   );
-  if(layui['layui.all']){
+  
+  if(layui['layui.all'] || (!layui['layui.all'] && layui['layui.mobile'])){
     return mods.call(that);
-  };
+  }
+  
   that.use(deps, mods);
   return that;
 };
@@ -108,8 +109,11 @@ Lay.fn.use = function(apps, callback, exports){
   //静态资源host
   config.host = config.host || (dir.match(/\/\/([\s\S]+?)\//)||['//'+ location.host +'/'])[0];
   
-  if(apps.length === 0 || (layui['layui.all'] && modules[item])){
-    return typeof callback === 'function' && callback.apply(layui, exports), that;
+  if(apps.length === 0 
+  || (layui['layui.all'] && modules[item]) 
+  || (!layui['layui.all'] && layui['layui.mobile'] && modules[item])
+  ){
+    return onCallback(), that;
   }
 
   //加载完毕

@@ -57,6 +57,17 @@ layui.define('jquery', function(exports){
     return this;
   };
   
+  //动态改变进度条
+  Element.prototype.progress = function(filter, percent){
+    var ELEM = 'layui-progress'
+    ,elem = $('.'+ ELEM +'[lay-filter='+ filter +']')
+    ,elemBar = elem.find('.'+ ELEM +'-bar')
+    ,text = elemBar.find('.'+ ELEM +'-text');
+    elemBar.css('width', percent);
+    text.text(percent);
+    return this;
+  };
+  
   var NAV_ELEM = '.layui-nav', NAV_ITEM = 'layui-nav-item', NAV_BAR = 'layui-nav-bar'
   ,NAV_TREE = 'layui-nav-tree', NAV_CHILD = 'layui-nav-child', NAV_MORE = 'layui-nav-more'
   ,NAV_ANIM = 'layui-anim layui-anim-upbit'
@@ -275,9 +286,10 @@ layui.define('jquery', function(exports){
           });
         });
       }
+      
       //面包屑
       ,breadcrumb: function(){
-        var ELEM = '.layui-breadcrumb'
+        var ELEM = '.layui-breadcrumb';
         
         $(ELEM).each(function(){
           var othis = $(this)
@@ -289,6 +301,23 @@ layui.define('jquery', function(exports){
             $(this).append('<span class="layui-box">'+ separator +'</span>');
           });
           othis.css('visibility', 'visible');
+        });
+      }
+      
+      //进度条
+      ,progress: function(){
+        var ELEM = 'layui-progress';
+        
+        $('.'+ELEM).each(function(){
+          var othis = $(this)
+          ,elemBar = othis.find('.layui-progress-bar')
+          ,width = elemBar.attr('lay-percent');
+          elemBar.css('width', width);
+          if(othis.attr('lay-showPercent')){
+            setTimeout(function(){
+              elemBar.html('<span class="'+ ELEM +'-text">'+ Math.round(elemBar.width()/othis.width()*100) +'%</span>');
+            },350);
+          }
         });
       }
     };

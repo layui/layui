@@ -3,7 +3,7 @@
  @Name：layer v3.0.1 Web弹层组件
  @Author：贤心
  @Site：http://layer.layui.com
- @License：LGPL
+ @License：MIT
     
  */
 
@@ -248,7 +248,7 @@ Class.pt.creat = function(){
   ,conType = typeof content === 'object'
   ,body = $('body');
   
-  if($('#'+config.id)[0])  return;
+  if(config.id && $('#'+config.id)[0])  return;
 
   if(typeof config.area === 'string'){
     config.area = config.area === 'auto' ? ['', ''] : [config.area, ''];
@@ -565,12 +565,13 @@ Class.pt.move = function(){
         ,height: dict.area[1] + Y
       })
       dict.isResize = true;
+      config.resizing && config.resizing(layero);
     }
   }).on('mouseup', function(e){
     if(dict.moveStart){
       delete dict.moveStart;
       ready.moveElem.hide();
-      config.moveEnd && config.moveEnd();
+      config.moveEnd && config.moveEnd(layero);
     }
     if(dict.resizeStart){
       delete dict.resizeStart;

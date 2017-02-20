@@ -6,11 +6,11 @@
 
  */
  
-layui.define('layer' , function(exports){
+layui.define(['layer-mobile', 'zepto'] , function(exports){
   "use strict";
   
-  var $ = layui.jquery;
-  var layer = layui.layer;
+  var $ = layui.zepto;
+  var layer = layui['layer-mobile'];
   var device = layui.device();
   
   var elemDragEnter = 'layui-upload-enter';
@@ -23,6 +23,14 @@ layui.define('layer' , function(exports){
     file: '文件'
     ,video: '视频'
     ,audio: '音频'
+  };
+  
+  layer.msg = function(content){
+    return layer.open({
+      content: content || ''
+      ,skin: 'msg'
+      ,time: 0 //2秒后自动关闭
+    });
   };
   
   var Upload = function(options){
@@ -150,7 +158,7 @@ layui.define('layer' , function(exports){
   };
   
   //暴露接口
-  exports('upload', function(options){
+  exports('upload-mobile', function(options){
     var upload = new Upload(options = options || {});
     upload.init();
   });

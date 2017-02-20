@@ -23,7 +23,7 @@ var argv = require('minimist')(process.argv.slice(2), {
 
 //注释
 ,note = [
-  '/** <%= pkg.name %>-v<%= pkg.version %> LGPL License By <%= pkg.homepage %> */\n <%= js %>'
+  '/** <%= pkg.name %>-v<%= pkg.version %> <%= pkg.license %> License By <%= pkg.homepage %> */\n <%= js %>'
   ,{pkg: pkg, js: ';'}
 ]
 
@@ -32,20 +32,26 @@ var argv = require('minimist')(process.argv.slice(2), {
 
 //任务
 ,task = {
+  
+  //压缩js模块
   minjs: function(ver) {
+    ver = ver === 'open' || argv.open;
+     
     //可指定模块压缩，eg：gulp minjs --mod layer,laytpl
     var mod = argv.mod ? function(){
       return '(' + argv.mod.replace(/,/g, '|') + ')';
     }() : ''
     ,src = [
       './src/**/*'+ mod +'.js'
+      ,'!./src/**/mobile/*.js'
+      ,'!./src/lay/**/mobile.js'
       ,'!./src/lay/all.js'
-      ,'!./src/lay/mod.js'
+      ,'!./src/lay/all-mobile.js'
     ]
-    ,dir = ver === 'open' ? 'release' : 'build';
+    ,dir = ver ? 'release' : 'build';
     
     //过滤 layim
-    if(ver === 'open' || argv.open){
+    if(ver){
       src.push('!./src/lay/**/layim.js');
     }
 
@@ -54,10 +60,16 @@ var argv = require('minimist')(process.argv.slice(2), {
     .pipe(gulp.dest('./'+ dir));
     
   }
-
+  
+  //打包PC合并版JS，即包含layui.js和所有模块的合并
   ,alljs: function(ver){
-    var src = ['./src/**/{layui,all,'+ mods +'}.js']
-    ,dir = ver === 'open' ? 'release' : 'build';
+    ver = ver === 'open' || argv.open;
+    
+    var src = [
+      './src/**/{layui,all,'+ mods +'}.js'
+      ,'!./src/**/mobile/*.js'
+    ]
+    ,dir = ver ? 'release' : 'build';
     
     return gulp.src(src).pipe(uglify())
       .pipe(concat('layui.all.js', {newLine: ''}))
@@ -65,12 +77,39 @@ var argv = require('minimist')(process.argv.slice(2), {
     .pipe(gulp.dest('./'+ dir +'/lay/dest/'));
   }
   
+  //打包mobile模块集合
+  ,mobile: function(ver){
+    ver = ver === 'open' || argv.open;
+
+    var mods = 'layer-mobile,zepto,upload-mobile', src = [
+      './src/lay/all-mobile.js'
+      ,'./src/lay/modules/laytpl.js'
+      ,'./src/**/mobile/{'+ mods +'}.js'
+    ]
+    ,dir = ver ? 'release' : 'build';
+    
+    if(ver){
+      src.push('./src/**/mobile/layim-mobile-open.js'); 
+    }
+    
+    src.push((ver ? '!' : '') + './src/**/mobile/layim-mobile.js');
+    src.push('./src/lay/modules/mobile.js');
+    
+    return gulp.src(src).pipe(uglify())
+      .pipe(concat('mobile.js', {newLine: ''}))
+      .pipe(header.apply(null, note))
+    .pipe(gulp.dest('./'+ dir + '/lay/modules/'));
+  }
+  
+  //压缩css文件
   ,mincss: function(ver){
+    ver = ver === 'open' || argv.open;
+    
     var src = ['./src/css/**/*.css']
-    ,dir = ver === 'open' ? 'release' : 'build'
+    ,dir = ver ? 'release' : 'build'
     ,noteNew = JSON.parse(JSON.stringify(note));
     
-    if(ver === 'open' || argv.open){
+    if(ver){
       src.push('!./src/css/**/layim.css');
     }
     
@@ -82,23 +121,25 @@ var argv = require('minimist')(process.argv.slice(2), {
     .pipe(gulp.dest('./'+ dir +'/css'));
   }
   
+  //复制iconfont文件
   ,font: function(ver){
-    var dir = ver === 'open' ? 'release' : 'build';
+    ver = ver === 'open' || argv.open;
+    
+    var dir = ver ? 'release' : 'build';
     
     return gulp.src('./src/font/*')
     .pipe(rename({}))
     .pipe(gulp.dest('./'+ dir +'/font'));
   }
   
-  ,images: function(ver){
-    var src = [
-      './src/**/*.png'
-      ,'./src/**/*.jpg'
-      ,'./src/**/*.gif'
-    ]
-    ,dir = ver === 'open' ? 'release' : 'build';
+  //复制组件可能所需的非css和js资源
+  ,mv: function(ver){
+    ver = ver === 'open' || argv.open;
     
-    if(ver === 'open' || argv.open){
+    var src = ['./src/**/*.{png,jpg,gif,html,mp3,json}']
+    ,dir = ver ? 'release' : 'build';
+    
+    if(ver){
       src.push('!./src/**/layim/**/*.*');
     }
     
@@ -115,13 +156,12 @@ gulp.task('clearRelease', function(cb) {
   return del(['./release/*'], cb);
 });
 
-gulp.task('minjs', task.minjs); //压缩js模块
-gulp.task('modjs', task.modjs); //打包PC完整模块，即各模块的合并
-gulp.task('alljs', task.alljs); //打包PC合并版，即包含layui.js和所有模块的合并
-
-gulp.task('mincss', task.mincss); //压缩css文件
-gulp.task('font', task.font); //复制iconfont文件
-gulp.task('images', task.images); //复制组件可能所需的图片
+gulp.task('minjs', task.minjs);
+gulp.task('alljs', task.alljs);
+gulp.task('mobile', task.mobile);
+gulp.task('mincss', task.mincss);
+gulp.task('font', task.font);
+gulp.task('mv', task.mv);
 
 //开源版
 gulp.task('default', ['clearRelease'], function(){
