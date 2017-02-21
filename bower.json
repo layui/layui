@@ -1,7 +1,7 @@
 {
   "name": "layui",
   "main": "src/layui.js",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "homepage": "https://github.com/sentsin/layui",
   "authors": [
     "sentsin <xu@sentsin.com>"
