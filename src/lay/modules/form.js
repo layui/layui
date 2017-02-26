@@ -165,9 +165,11 @@ layui.define('layer', function(exports){
             
             check[0].checked ? (
               check[0].checked = false
+              ,check.change()
               ,reElem.removeClass(RE_CLASS[1])
             ) : (
               check[0].checked = true
+              ,check.change()
               ,reElem.addClass(RE_CLASS[1])
             );
             layui.event(MOD_NAME, RE_CLASS[2]+'('+ filter +')', {
