@@ -1,9 +1,9 @@
-﻿/**
+/**
  
  @Name: layer
  @Author: 贤心
  
- */
+ **/
 
 *html{background-image: url(about:blank); background-attachment: fixed;}
 html #layuicss-skinlayercss{display: none; position: absolute; width: 1989px;}
@@ -16,7 +16,7 @@ html #layuicss-skinlayercss{display: none; position: absolute; width: 1989px;}
 .layui-layer-close{position:absolute;}
 .layui-layer-content{position:relative;}
 .layui-layer-border{border: 1px solid #B2B2B2; border: 1px solid rgba(0,0,0,.1); box-shadow: 1px 1px 5px rgba(0,0,0,.2);}
-.layui-layer-load{background:url(loading-1.gif) center center no-repeat;}
+.layui-layer-load{background:url(loading-1.gif) #eee center center no-repeat;}
 .layui-layer-ico{ background:url(icon.png) no-repeat;}
 .layui-layer-dialog .layui-layer-ico,
 .layui-layer-setwin a,
@@ -48,19 +48,7 @@ html #layuicss-skinlayercss{display: none; position: absolute; width: 1989px;}
 
 @keyframes layer-fadeIn{0%{opacity:0}100%{opacity:1}}.layer-anim-05{-webkit-animation-name:layer-fadeIn;animation-name:layer-fadeIn}
 
-@-webkit-keyframes shake{0%,100%{-webkit-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%,90%{-webkit-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%,80%{-webkit-transform:translateX(10px);transform:translateX(10px)}}@keyframes shake{0%,100%{-webkit-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%,90%{-webkit-transform:translateX(-10px);-ms-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%,80%{-webkit-transform:translateX(10px);-ms-transform:translateX(10px);transform:translateX(10px)}}.layer-anim-06{-webkit-animation-name:shake;animation-name:shake}@-webkit-keyframes layer-fadeIn{0%{opacity:0}100%{opacity:1}}
-
-@-webkit-keyframes layer-bounceOut { /* 关闭动画 */
-  100% {opacity: 0; -webkit-transform: scale(.7); transform: scale(.7)}
-  30% {-webkit-transform: scale(1.05); transform: scale(1.05)}
-  0% {-webkit-transform: scale(1); transform: scale(1);}
-}
-@keyframes layer-bounceOut {
-  100% {opacity: 0; -webkit-transform: scale(.7); -ms-transform: scale(.7); transform: scale(.7);}
-  30% {-webkit-transform: scale(1.05); -ms-transform: scale(1.05); transform: scale(1.05);}
-  0% {-webkit-transform: scale(1); -ms-transform: scale(1);transform: scale(1);}
-}
-.layer-anim-close{-webkit-animation-name: layer-bounceOut;animation-name: layer-bounceOut; -webkit-animation-duration:.2s; animation-duration:.2s;}
+@-webkit-keyframes layer-shake{0%,100%{-webkit-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%,90%{-webkit-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%,80%{-webkit-transform:translateX(10px);transform:translateX(10px)}}@keyframes layer-shake{0%,100%{-webkit-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%,90%{-webkit-transform:translateX(-10px);-ms-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%,80%{-webkit-transform:translateX(10px);-ms-transform:translateX(10px);transform:translateX(10px)}}.layer-anim-06{-webkit-animation-name:layer-shake;animation-name:layer-shake}@-webkit-keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 
 /* 标题栏 */
 .layui-layer-title{padding:0 80px 0 20px; height:42px; line-height:42px; border-bottom:1px solid #eee; font-size:14px; color:#333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background-color: #F8F8F8; border-radius: 2px 2px 0 0;}
@@ -72,14 +60,14 @@ html #layuicss-skinlayercss{display: none; position: absolute; width: 1989px;}
 .layui-layer-setwin .layui-layer-max:hover{background-position:-16px -40px;}
 .layui-layer-setwin .layui-layer-maxmin{background-position:-65px -40px;}
 .layui-layer-setwin .layui-layer-maxmin:hover{background-position:-49px -40px;}
-.layui-layer-setwin .layui-layer-close1{background-position:0 -40px; cursor:pointer;}
+.layui-layer-setwin .layui-layer-close1{background-position: 1px -40px; cursor: pointer;}
 .layui-layer-setwin .layui-layer-close1:hover{opacity:0.7;}
 .layui-layer-setwin .layui-layer-close2{position:absolute; right:-28px; top:-28px; width:30px; height:30px;  margin-left:0; background-position:-149px -31px; *right:-18px; _display:none;}
 .layui-layer-setwin .layui-layer-close2:hover{ background-position:-180px -31px;}
 
 /* 按钮栏 */
 .layui-layer-btn{text-align: right; padding:0 10px 12px; pointer-events: auto; user-select: none; -webkit-user-select: none;}
-.layui-layer-btn a{height: 28px; line-height: 28px; margin: 0 6px; padding: 0 15px; border:1px #dedede solid; background-color:#f1f1f1; color: #333; border-radius: 2px; font-weight:400; cursor:pointer; text-decoration: none;}
+.layui-layer-btn a{height: 28px; line-height: 28px; margin: 6px 6px 0; padding: 0 15px; border:1px #dedede solid; background-color:#f1f1f1; color: #333; border-radius: 2px; font-weight:400; cursor:pointer; text-decoration: none;}
 .layui-layer-btn a:hover{opacity: 0.9; text-decoration: none;}
 .layui-layer-btn a:active{opacity: 0.8;}
 .layui-layer-btn .layui-layer-btn0{border-color: #4898d5; background-color: #2e8ded; color:#fff;}
@@ -124,7 +112,7 @@ html #layuicss-skinlayercss{display: none; position: absolute; width: 1989px;}
 /* skin */
 .layui-layer-lan[type="dialog"]{min-width:280px;}
 .layui-layer-lan .layui-layer-title{background:#4476A7; color:#fff; border: none;}
-.layui-layer-lan .layui-layer-btn{padding:10px; text-align: right; border-top:1px solid #E9E7E7}
+.layui-layer-lan .layui-layer-btn{padding: 5px 10px 10px; text-align: right; border-top:1px solid #E9E7E7}
 .layui-layer-lan .layui-layer-btn a{background:#BBB5B5; border:none;}
 .layui-layer-lan .layui-layer-btn .layui-layer-btn1{background:#C9C5C5;}
 .layui-layer-molv .layui-layer-title{background:#009f95; color:#fff; border: none;}
@@ -159,7 +147,7 @@ html #layuicss-skinlayercss{display: none; position: absolute; width: 1989px;}
 .xubox_tabclose{position:absolute; right:10px; top:5px; cursor:pointer;}
 
 /* photo模式 */
-.layui-layer-photos{-webkit-animation-duration:1s; animation-duration:1s;}
+.layui-layer-photos{-webkit-animation-duration: .8s; animation-duration: .8s;}
 .layui-layer-photos .layui-layer-content{overflow:hidden; text-align: center;}
 .layui-layer-photos .layui-layer-phimg img{position: relative; width:100%; display: inline-block; *display:inline; *zoom:1; vertical-align:top;}
 .layui-layer-imguide,.layui-layer-imgbar{display:none;}
@@ -175,6 +163,18 @@ html #layuicss-skinlayercss{display: none; position: absolute; width: 1989px;}
 .layui-layer-imgtit a:hover{color:#fff; text-decoration:underline;}
 .layui-layer-imgtit em{padding-left:10px; font-style: normal;}
 
+/* 关闭动画 */
+@-webkit-keyframes layer-bounceOut {
+  100% {opacity: 0; -webkit-transform: scale(.7); transform: scale(.7)}
+  30% {-webkit-transform: scale(1.05); transform: scale(1.05)}
+  0% {-webkit-transform: scale(1); transform: scale(1);}
+}
+@keyframes layer-bounceOut {
+  100% {opacity: 0; -webkit-transform: scale(.7); -ms-transform: scale(.7); transform: scale(.7);}
+  30% {-webkit-transform: scale(1.05); -ms-transform: scale(1.05); transform: scale(1.05);}
+  0% {-webkit-transform: scale(1); -ms-transform: scale(1);transform: scale(1);}
+}
+.layer-anim-close{-webkit-animation-name: layer-bounceOut;animation-name: layer-bounceOut; -webkit-animation-duration:.2s; animation-duration:.2s;}
 
 @media screen and (max-width: 1100px) {
   .layui-layer-iframe{overflow-y: auto; -webkit-overflow-scrolling: touch;}

@@ -1,6 +1,6 @@
 ﻿/**
 
- @Name：layer v3.0.1 Web弹层组件
+ @Name：layer v3.0.2 Web弹层组件
  @Author：贤心
  @Site：http://layer.layui.com
  @License：MIT
@@ -26,7 +26,7 @@ var isLayui = window.layui && layui.define, $, win, ready = {
 
 //默认内置方法。
 var layer = {
-  v: '3.0.1',
+  v: '3.0.2',
   ie: function(){ //ie版本
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
@@ -83,7 +83,7 @@ var layer = {
   },
   
   ready: function(callback){
-    var cssname = 'skinlayercss', ver = '1110';
+    var cssname = 'skinlayercss', ver = '302';
     isLayui ? layui.addcss('modules/layer/default/layer.css?v='+layer.v+ver, callback, cssname)
     : layer.link('skin/default/layer.css?v='+layer.v+ver, callback, cssname);
     return this;
@@ -167,9 +167,11 @@ var Class = function(setings){
   var that = this;
   that.index = ++layer.index;
   that.config = $.extend({}, that.config, ready.config, setings);
-  document.body ? that.creat() : setTimeout(function(){
-    that.creat();
-  }, 50);
+  layer.ready(function(){
+    document.body ? that.creat() : setTimeout(function(){
+      that.creat();
+    }, 50);
+  });
 };
 
 Class.pt = Class.prototype;
@@ -942,6 +944,9 @@ layer.prompt = function(options, yes){
     return '<input type="'+ (options.formType == 1 ? 'password' : 'text') +'" class="layui-layer-input" value="'+ (options.value||'') +'">';
   }();
   
+  var success = options.success;
+  delete options.success;
+  
   return layer.open($.extend({
     type: 1
     ,btn: ['&#x786E;&#x5B9A;','&#x53D6;&#x6D88;']
@@ -951,6 +956,7 @@ layer.prompt = function(options, yes){
     ,success: function(layero){
       prompt = layero.find('.layui-layer-input');
       prompt.focus();
+      typeof success === 'function' && success(layero);
     }
     ,resize: false
     ,yes: function(index){
@@ -969,7 +975,12 @@ layer.prompt = function(options, yes){
 //tab层
 layer.tab = function(options){
   options = options || {};
-  var tab = options.tab || {};
+  
+  var tab = options.tab || {}
+  ,success = options.success;
+  
+  delete options.success;
+  
   return layer.open($.extend({
     type: 1,
     skin: 'layui-layer-tab' + skin('tab'),
@@ -1004,6 +1015,7 @@ layer.tab = function(options){
         main.eq(index).show().siblings().hide();
         typeof options.change === 'function' && options.change(index);
       });
+      typeof success === 'function' && success(layero);
     }
   }, options));
 };
@@ -1019,6 +1031,9 @@ layer.photos = function(options, loop, key){
   dict.imgIndex = (start|0) + 1;
   
   options.img = options.img || 'img';
+  
+  var success = options.success;
+  delete options.success;
 
   if(!type){ //页面直接获取
     var parent = $(options.photos), pushData = function(){
@@ -1098,7 +1113,9 @@ layer.photos = function(options, loop, key){
     if(data.length <= 1) return;
     photos.start = dict.imgIndex - 1;
     layer.close(dict.index);
-    layer.photos(options, true, key);
+    setTimeout(function(){
+      layer.photos(options, true, key);
+    }, 200);
   }
   
   //一些动作
@@ -1143,10 +1160,12 @@ layer.photos = function(options, loop, key){
     shade: 'shade' in options ? false : 0.9,
     scrollbar: false
   });
+
   loadImage(data[start].src, function(img){
     layer.close(dict.loadi);
     dict.index = layer.open($.extend({
       type: 1,
+      id: 'layui-layer-photos',
       area: function(){
         var imgarea = [img.width, img.height];
         var winarea = [$(window).width() - 100, $(window).height() - 100];
@@ -1187,6 +1206,7 @@ layer.photos = function(options, loop, key){
         dict.imgsee = layero.find('.layui-layer-imguide,.layui-layer-imgbar');
         dict.event(layero);
         options.tab && options.tab(data[start], layero);
+        typeof success === 'function' && success(layero);
       }, end: function(){
         dict.end = true;
         $(document).off('keyup', dict.keyup);
@@ -1227,7 +1247,7 @@ window.layui && layui.define ? (
     exports('layer', layer);
   })
 ) : (
-  typeof define === 'function' ? define(['jquery'], function(){ //requirejs加载
+  (typeof define === 'function' && define.amd) ? define(['jquery'], function(){ //requirejs加载
     ready.run(window.jQuery);
     return layer;
   }) : function(){ //普通script标签加载

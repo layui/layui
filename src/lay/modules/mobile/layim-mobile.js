@@ -1,6 +1,6 @@
 /**
 
- @Name：layim mobile 1.0.2 Beta 临时版
+ @Name：layim mobile 1.0.3
  @Author：贤心
  @Site：http://layim.layui.com
  @License：LGPL
@@ -9,7 +9,7 @@
  
 layui.define(['laytpl', 'upload-mobile', 'layer-mobile', 'zepto'], function(exports){
   
-  var v = '1.0 Beta';
+  var v = '1.0.3';
   var $ = layui.zepto;
   var laytpl = layui.laytpl;
   var layer = layui['layer-mobile'];
@@ -684,6 +684,6 @@ layui.define(['laytpl', 'upload-mobile', 'layer-mobile', 'zepto'], function(expo
   exports('layim-mobile', new LAYIM());
 
 }).addcss(
-  'modules/layim/mobile/layim.css?v=1.0Beta'
+  'modules/layim/mobile/layim.css?v=1.03'
   ,'skinlayim-mobilecss'
 );
