@@ -135,10 +135,6 @@ layui.define('jquery', function(exports){
           call.hideTabMore(true)
         }
         
-        if(!title[0]){
-          title = othis.children('.'+OVER).children('.layui-tab-title');
-        }
-        
         //允许关闭
         if(othis.attr('lay-allowClose')){
           title.find('li').each(function(){
