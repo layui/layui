@@ -205,20 +205,20 @@ layui.define('jquery', function(exports){
       ,elemCont = othis.siblings('.layui-colla-content')
       ,parents = othis.parents('.layui-collapse').eq(0)
       ,filter = parents.attr('lay-filter')
-      ,display = elemCont.css('display') === 'none';
+      ,isNone = elemCont.css('display') === 'none';
       //是否手风琴
       if(typeof parents.attr('lay-accordion') === 'string'){
         var show = parents.children('.layui-colla-item').children('.'+SHOW);
         show.siblings('.layui-colla-title').children('.layui-colla-icon').html('&#xe602;');
         show.removeClass(SHOW);
       }
-      elemCont[display ? 'addClass' : 'removeClass'](SHOW);
-      icon.html(display ? '&#xe61a;' : '&#xe602;');
+      elemCont[isNone ? 'addClass' : 'removeClass'](SHOW);
+      icon.html(isNone ? '&#xe61a;' : '&#xe602;');
       
       layui.event.call(this, MOD_NAME, 'collapse('+ filter +')', {
         title: othis
         ,content: elemCont
-        ,show: display
+        ,show: isNone
       });
     }
   };
@@ -366,11 +366,12 @@ layui.define('jquery', function(exports){
           elemItem.each(function(){
             var othis = $(this)
             ,elemTitle = othis.find('.layui-colla-title')
-            ,elemCont = othis.find('.layui-colla-content');
+            ,elemCont = othis.find('.layui-colla-content')
+            ,isNone = elemCont.css('display') === 'none';
             
             //初始状态
             elemTitle.find('.layui-colla-icon').remove();
-            elemTitle.append('<i class="layui-icon layui-colla-icon">'+ (elemCont.css('display') === 'none' ? '&#xe602;' : '&#xe61a;') +'</i>');
+            elemTitle.append('<i class="layui-icon layui-colla-icon">'+ (isNone ? '&#xe602;' : '&#xe61a;') +'</i>');
 
             //点击标题
             elemTitle.off('click', call.collapse).on('click', call.collapse);
