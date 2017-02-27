@@ -164,14 +164,14 @@ gulp.task('font', task.font);
 gulp.task('mv', task.mv);
 
 //开源版
-gulp.task('default', ['clearRelease'], function(){
+gulp.task('default', ['clearRelease'], function(){ //命令：gulp
   for(var key in task){
     task[key]('open');
   }
 });
 
 //完整任务
-gulp.task('all', ['clear'], function(){
+gulp.task('all', ['clear'], function(){ //命令：gulp all，过滤layim：gulp all --open
   for(var key in task){
     task[key]();
   }
