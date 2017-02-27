@@ -2,7 +2,7 @@
 
  @Name：layui.flow 流加载
  @Author：贤心
- @License：LGPL
+ @License：MIT
     
  */
  

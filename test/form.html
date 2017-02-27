@@ -82,6 +82,7 @@ body{padding: 10px;}
       </div>
     </div>
   </div>
+  
   <div class="layui-form-item">
     <label class="layui-form-label">选择框</label>
     <div class="layui-input-block">
@@ -95,6 +96,22 @@ body{padding: 10px;}
       </select>
     </div>
   </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">搜索选择框</label>
+    <div class="layui-input-inline">
+      <select name="interest" lay-filter="aihao" lay-search>
+        <option value=""></option>
+        <option value="0">写作</option>
+        <option value="1">阅读</option>
+        <option value="2">游戏</option>
+        <option value="3">音乐</option>
+        <option value="4">旅行</option>
+        <option value="5">读书</option>
+      </select>
+    </div>
+  </div>
+  
   <div class="layui-form-item" pane>
     <label class="layui-form-label">复选框</label>
     <div class="layui-input-block">
@@ -104,15 +121,23 @@ body{padding: 10px;}
     </div>
   </div>
   <div class="layui-form-item" pane>
+    <label class="layui-form-label">原始复选框</label>
+    <div class="layui-input-block">
+      <input type="checkbox" name="like1[write]" lay-skin="primary" title="写作">
+      <input type="checkbox" name="like1[read]" lay-skin="primary" title="阅读">
+      <input type="checkbox" name="like1[game]" lay-skin="primary" title="游戏" disabled>
+    </div>
+  </div>
+  <div class="layui-form-item" pane>
     <label class="layui-form-label">开关关</label>
     <div class="layui-input-block">
-      <input type="checkbox" name="close" lay-skin="switch" title="开关" disabled>
+      <input type="checkbox" name="close" lay-skin="switch" title="开关"  disabled>
     </div>
   </div>
   <div class="layui-form-item" pane>
     <label class="layui-form-label">开关开</label>
     <div class="layui-input-block">
-      <input type="checkbox" checked name="open" lay-skin="switch" lay-filter="switchTest" title="开关">
+      <input type="checkbox" checked name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
     </div>
   </div>
   <div class="layui-form-item" pane>

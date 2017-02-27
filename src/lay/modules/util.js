@@ -2,7 +2,7 @@
 
  @Name：layui.util 工具集
  @Author：贤心
- @License：LGPL
+ @License：MIT
     
 */
 

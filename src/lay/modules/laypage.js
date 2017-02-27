@@ -2,7 +2,7 @@
  
  @Name : layui.laypage 分页组件
  @Author：贤心
- @License：LGPL
+ @License：MIT
  
  */
 

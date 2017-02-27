@@ -2,7 +2,7 @@
 
  @Name：layui.code 代码修饰器
  @Author：贤心
- @License：LGPL
+ @License：MIT
     
  */
  
