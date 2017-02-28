@@ -31,9 +31,10 @@ pre{white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; w
 @font-face {font-family: 'layui-icon';
   src: url('../font/iconfont.eot?v=1.0.9');
   src: url('../font/iconfont.eot?v=1.0.9#iefix') format('embedded-opentype'),
+  url('../font/iconfont.svg?v=1.0.9#iconfont') format('svg'),
   url('../font/iconfont.woff?v=1.0.9') format('woff'),
-  url('../font/iconfont.ttf?v=1.0.9') format('truetype'),
-  url('../font/iconfont.svg?v=1.0.9#iconfont') format('svg');
+  url('../font/iconfont.ttf?v=1.0.9') format('truetype');
+  
 }
                     
 .layui-icon{
@@ -94,10 +95,10 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /* 进度条 */
 .layui-progress{position: relative; height: 6px; border-radius: 20px; background-color: #e2e2e2;}
-.layui-progress-bar{position: absolute; width: 0; height: 6px; border-radius: 20px; background-color: #5FB878; transition: all .3s; -webkit-transition: all .3s;}
+.layui-progress-bar{position: absolute; width: 0; max-width: 100%; height: 6px; border-radius: 20px; text-align: right; background-color: #5FB878; transition: all .3s; -webkit-transition: all .3s;}
 .layui-progress-big,
-.layui-progress-big .layui-progress-bar{height: 18px; line-height: 18px; text-align: right;}
-.layui-progress-text{position: absolute; right: 0; top: -16px; line-height: 18px; font-size: 12px; color: #666}
+.layui-progress-big .layui-progress-bar{height: 18px; line-height: 18px;}
+.layui-progress-text{position: relative; top: -18px; line-height: 18px; font-size: 12px; color: #666}
 .layui-progress-big .layui-progress-text{position: static; padding: 0 10px; color: #fff;}
 
 /* 折叠面板 */

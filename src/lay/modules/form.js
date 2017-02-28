@@ -297,7 +297,7 @@ layui.define('layer', function(exports){
             check.checked ? (' '+RE_CLASS[1]) : '') + (disabled ? ' layui-checkbox-disbaled '+DISABLED : '') +'" lay-skin="'+ (skin||'') +'">'
           ,{
             _switch: '<em>'+ ((check.checked ? text[0] : text[1])||'') +'</em><i></i>'
-          }[skin] || ('<span>'+ (check.title || '勾选') +'</span><i class="layui-icon">'+ (skin ? '&#xe605;' : '&#xe618;') +'</i>')
+          }[skin] || ((check.title.replace(/\s/g, '') ? ('<span>'+ check.title +'</span>') : '') +'<i class="layui-icon">'+ (skin ? '&#xe605;' : '&#xe618;') +'</i>')
           ,'</div>'].join(''));
 
           hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender

@@ -84,7 +84,7 @@ layui.define('jquery', function(exports){
     //Tab点击
     tabClick: function(e, index, liElem){
       var othis = liElem || $(this)
-      ,index = index || othis.index()
+      ,index = index || othis.parent().children('li').index(othis)
       ,parents = othis.parents('.layui-tab').eq(0)
       ,item = parents.children('.layui-tab-content').children('.layui-tab-item')
       ,filter = parents.attr('lay-filter');
@@ -351,7 +351,9 @@ layui.define('jquery', function(exports){
           elemBar.css('width', width);
           if(othis.attr('lay-showPercent')){
             setTimeout(function(){
-              elemBar.html('<span class="'+ ELEM +'-text">'+ Math.round(elemBar.width()/othis.width()*100) +'%</span>');
+              var percent = Math.round(elemBar.width()/othis.width()*100);
+              if(percent > 100) percent = 100;
+              elemBar.html('<span class="'+ ELEM +'-text">'+ percent +'%</span>');
             },350);
           }
         });
