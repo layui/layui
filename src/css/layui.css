@@ -211,7 +211,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-checked span, .layui-form-checked:hover span{background-color: #5FB878;}
 .layui-form-checked i, .layui-form-checked:hover i{color: #5FB878;}
 
-/* 复选框-原始风格 */.layui-form-checkbox[lay-skin="primary"]{margin-top: 6px; border: none!important; padding-right: 0;}
+/* 复选框-原始风格 */.layui-form-checkbox[lay-skin="primary"]{margin-top: 6px; border: none!important; padding-right: 0; background: none;}
 .layui-form-checkbox[lay-skin="primary"] span{float: right; background: none; color: #666;}
 .layui-form-checkbox[lay-skin="primary"] i{position: relative; top: 0; width: 16px; line-height: 16px; border: 1px solid #d2d2d2; font-size: 12px; border-radius: 2px; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
 .layui-form-checkbox[lay-skin="primary"]:hover i{border-color: #5FB878; color: #fff;}
