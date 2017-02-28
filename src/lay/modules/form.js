@@ -77,12 +77,14 @@ layui.define('layer', function(exports){
       //下拉选择框
       select: function(){
         var TIPS = '请选择', CLASS = 'layui-form-select', TITLE = 'layui-select-title'
-        ,NONE = 'layui-select-none', initValue = ''
+        ,NONE = 'layui-select-none', initValue = '', thatInput
         
         ,selects = $(ELEM).find('select'), hide = function(e, clear){
           if(!$(e.target).parent().hasClass(TITLE) || clear){
             $('.'+CLASS).removeClass(CLASS+'ed');
+            thatInput && initValue && thatInput.val(initValue);
           }
+          thatInput = null;
         }
         
         ,events = function(reElem, disabled, isSearch){
@@ -98,11 +100,17 @@ layui.define('layer', function(exports){
           //展开下拉
           var showDown = function(){
             reElem.addClass(CLASS+'ed');
-            initValue = input.val();
             dds.removeClass(HIDE);
           }, hideDown = function(){
             reElem.removeClass(CLASS+'ed');
             input.blur();
+            
+            notOption(input.val(), function(none){
+              if(none){
+                initValue = dl.find('.'+THIS).html();
+                input && input.val(initValue);
+              }
+            });
           };
           
           //点击标题区域
@@ -138,33 +146,50 @@ layui.define('layer', function(exports){
             }
           });
           
+          //检测值是否不属于select项
+          var notOption = function(value, callback, keyup){
+            var num = 0;
+            layui.each(dds, function(){
+              var othis = $(this)
+              ,text = othis.text()
+              ,not = text.indexOf(value) === -1;
+              if(value === '' || (keyup ? not : value !== text)) num++;
+              keyup && othis[not ? 'addClass' : 'removeClass'](HIDE);
+            });
+            var none = num === dds.length;
+            return callback(none), none;
+          };
+          
           //搜索匹配
-          if(isSearch){
-            var search = function(e){
-              var value = this.value, num = 0, keyCode = e.keyCode;
-              
-              if(keyCode === 9 || keyCode === 13 || keyCode === 37 || keyCode === 38 || keyCode === 39 || keyCode === 40){
-                return false;
-              }
-              
-              layui.each(dds, function(){
-                var othis = $(this), not = othis.text().indexOf(value) === -1;
-                if(not) num++;
-                othis[not ? 'addClass' : 'removeClass'](HIDE);
-              });
-              
-              if(num === dds.length){
+          var search = function(e){
+            var value = this.value, keyCode = e.keyCode;
+            
+            if(keyCode === 9 || keyCode === 13 
+              || keyCode === 37 || keyCode === 38 
+              || keyCode === 39 || keyCode === 40
+            ){
+              return false;
+            }
+            
+            notOption(value, function(none){
+              if(none){
                 dl.find('.'+NONE)[0] || dl.append('<p class="'+ NONE +'">无匹配项</p>');
               } else {
                 dl.find('.'+NONE).remove();
               }
-            };
-            input.on('keyup', search).on('blur', function(){
-              input.val(initValue);
+            }, true);
+            
+          };
+          if(isSearch){
+            input.on('keyup', search).on('blur', function(e){
+              thatInput = input;
+              initValue = dl.find('.'+THIS).html();
+              if(!initValue){
+                input.val('');
+              }
             });
           }
-          
-          
+
           //选择
           dds.on('click', function(){
             var othis = $(this), value = othis.attr('lay-value');
@@ -179,6 +204,10 @@ layui.define('layer', function(exports){
               ,value: value
               ,othis: reElem
             });
+
+            hideDown();
+            
+            return false;
           });
           
           reElem.find('dl>dt').on('click', function(e){
