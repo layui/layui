@@ -13,7 +13,7 @@
 "use strict";
 
 var Lay = function(){
-  this.v = '1.0.8'; //版本号
+  this.v = '1.0.9_rls'; //版本号
 };
 
 Lay.fn = Lay.prototype;
@@ -44,11 +44,11 @@ modules = {
   ,form: 'modules/form' //表单集
   ,upload: 'modules/upload' //上传
   ,tree: 'modules/tree' //树结构
-  ,slide: 'modules/slide' //轮播/滚动
   ,table: 'modules/table' //富表格
   ,element: 'modules/element' //常用元素操作
   ,util: 'modules/util' //工具块
   ,flow: 'modules/flow' //流加载
+  ,carousel: 'modules/carousel' //轮播
   ,code: 'modules/code' //代码修饰器
   ,jquery: 'modules/jquery' //DOM库（第三方）
   

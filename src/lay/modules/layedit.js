@@ -2,7 +2,7 @@
 
  @Name：layui.layedit 富文本编辑器
  @Author：贤心
- @License：LGPL
+ @License：MIT
     
  */
  

@@ -2,7 +2,7 @@
 
  @Name：layui.tree 树组件
  @Author：贤心
- @License：LGPL
+ @License：MIT
     
  */
  
