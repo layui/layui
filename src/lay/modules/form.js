@@ -147,14 +147,14 @@ layui.define('layer', function(exports){
           });
           
           //检测值是否不属于select项
-          var notOption = function(value, callback, keyup){
+          var notOption = function(value, callback, origin){
             var num = 0;
             layui.each(dds, function(){
               var othis = $(this)
               ,text = othis.text()
               ,not = text.indexOf(value) === -1;
-              if(value === '' || not) num++;
-              keyup && othis[not ? 'addClass' : 'removeClass'](HIDE);
+              if(value === '' || (origin === 'blur') ? value !== text : not) num++;
+              origin === 'keyup' && othis[not ? 'addClass' : 'removeClass'](HIDE);
             });
             var none = num === dds.length;
             return callback(none), none;
@@ -177,7 +177,7 @@ layui.define('layer', function(exports){
               } else {
                 dl.find('.'+NONE).remove();
               }
-            }, true);
+            }, 'keyup');
             
             if(value === ''){
               dl.find('.'+NONE).remove();
@@ -187,11 +187,13 @@ layui.define('layer', function(exports){
             input.on('keyup', search).on('blur', function(e){
               thatInput = input;
               initValue = dl.find('.'+THIS).html();
-              notOption(input.val(), function(none){
-                if(none && !initValue){
-                  input.val('');
-                }
-              });
+              setTimeout(function(){
+                notOption(input.val(), function(none){
+                  if(none && !initValue){
+                    input.val('');
+                  }
+                }, 'blur');
+              }, 200);
             });
           }
 
