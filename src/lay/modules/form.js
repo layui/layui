@@ -153,7 +153,7 @@ layui.define('layer', function(exports){
               var othis = $(this)
               ,text = othis.text()
               ,not = text.indexOf(value) === -1;
-              if(value === '' || (keyup ? not : value !== text)) num++;
+              if(value === '' || not) num++;
               keyup && othis[not ? 'addClass' : 'removeClass'](HIDE);
             });
             var none = num === dds.length;
@@ -179,14 +179,19 @@ layui.define('layer', function(exports){
               }
             }, true);
             
+            if(value === ''){
+              dl.find('.'+NONE).remove();
+            }
           };
           if(isSearch){
             input.on('keyup', search).on('blur', function(e){
               thatInput = input;
               initValue = dl.find('.'+THIS).html();
-              if(!initValue){
-                input.val('');
-              }
+              notOption(input.val(), function(none){
+                if(none && !initValue){
+                  input.val('');
+                }
+              });
             });
           }
 
