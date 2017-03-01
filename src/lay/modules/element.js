@@ -53,7 +53,6 @@ layui.define('jquery', function(exports){
   Element.prototype.tabChange = function(filter, layid){
     var tabElem = $('.layui-tab[lay-filter='+ filter +']')
     ,liElem = tabElem.children('.layui-tab-title').find('li[lay-id='+layid+']');
-    console.info(liElem);
     call.tabClick(null, null, liElem);
     return this;
   };
