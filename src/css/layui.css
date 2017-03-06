@@ -200,7 +200,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-select-disabled .layui-disabled{border-color: #eee !important;}
 .layui-select-disabled .layui-edge{border-top-color: #d2d2d2}
 
-/* 复选框 */.layui-form-checkbox{position: relative; display: inline-block; vertical-align: middle; height: 30px; line-height: 28px; margin: 4px 10px 0 0; padding-right: 30px; border: 1px solid #d2d2d2; background-color: #fff; cursor: pointer; font-size: 0; border-radius: 2px;  -webkit-transition: .1s linear; transition: .1s linear; box-sizing: border-box !important;}
+/* 复选框 */.layui-form-checkbox{position: relative; display: inline-block; vertical-align: middle; height: 30px; line-height: 28px; margin-right: 10px; padding-right: 30px; border: 1px solid #d2d2d2; background-color: #fff; cursor: pointer; font-size: 0; border-radius: 2px;  -webkit-transition: .1s linear; transition: .1s linear; box-sizing: border-box !important;}
 .layui-form-checkbox:hover{border: 1px solid #c2c2c2;}
 .layui-form-checkbox *{display: inline-block; vertical-align: middle;}
 .layui-form-checkbox span{padding: 0 10px; height: 100%; font-size: 14px; background-color: #d2d2d2; color: #fff; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
@@ -210,14 +210,16 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-checked, .layui-form-checked:hover{border-color: #5FB878;}
 .layui-form-checked span, .layui-form-checked:hover span{background-color: #5FB878;}
 .layui-form-checked i, .layui-form-checked:hover i{color: #5FB878;}
+.layui-form-item .layui-form-checkbox{margin-top: 4px;}
 
-/* 复选框-原始风格 */.layui-form-checkbox[lay-skin="primary"]{margin-top: 6px; border: none!important; padding-right: 0; background: none;}
-.layui-form-checkbox[lay-skin="primary"] span{float: right; background: none; color: #666;}
+/* 复选框-原始风格 */.layui-form-checkbox[lay-skin="primary"]{height: auto!important; line-height: normal!important; border: none!important; margin-right: 0; padding-right: 0; background: none;}
+.layui-form-checkbox[lay-skin="primary"] span{float: right; padding-right: 15px; line-height: 18px; background: none; color: #666;}
 .layui-form-checkbox[lay-skin="primary"] i{position: relative; top: 0; width: 16px; line-height: 16px; border: 1px solid #d2d2d2; font-size: 12px; border-radius: 2px; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
 .layui-form-checkbox[lay-skin="primary"]:hover i{border-color: #5FB878; color: #fff;}
 .layui-form-checked[lay-skin="primary"] i{border-color: #5FB878; background-color: #5FB878; color: #fff;}
 .layui-checkbox-disbaled[lay-skin="primary"] span{background: none!important;}
 .layui-checkbox-disbaled[lay-skin="primary"]:hover i{border-color: #d2d2d2;}
+.layui-form-item .layui-form-checkbox[lay-skin="primary"]{margin-top: 10px;}
 
 /* 复选框-开关风格 */.layui-form-switch{position: relative; display: inline-block; vertical-align: middle; height: 22px; line-height: 22px; width: 42px; padding: 0 5px; margin-top: 8px; border: 1px solid #d2d2d2; border-radius: 20px; cursor: pointer; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
 .layui-form-switch i{position: absolute; left: 5px; top: 3px; width: 16px; height: 16px; border-radius: 20px; background-color: #d2d2d2; -webkit-transition: .1s linear; transition: .1s linear;}

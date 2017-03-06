@@ -1,6 +1,6 @@
 ﻿/**
 
- @Name：layer v3.0.2 Web弹层组件
+ @Name：layer v3.0.3 Web弹层组件
  @Author：贤心
  @Site：http://layer.layui.com
  @License：MIT
@@ -26,7 +26,7 @@ var isLayui = window.layui && layui.define, $, win, ready = {
 
 //默认内置方法。
 var layer = {
-  v: '3.0.2',
+  v: '3.0.3',
   ie: function(){ //ie版本
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
@@ -83,7 +83,7 @@ var layer = {
   },
   
   ready: function(callback){
-    var cssname = 'skinlayercss', ver = '302';
+    var cssname = 'skinlayercss', ver = '303';
     isLayui ? layui.addcss('modules/layer/default/layer.css?v='+layer.v+ver, callback, cssname)
     : layer.link('skin/default/layer.css?v='+layer.v+ver, callback, cssname);
     return this;
@@ -167,11 +167,9 @@ var Class = function(setings){
   var that = this;
   that.index = ++layer.index;
   that.config = $.extend({}, that.config, ready.config, setings);
-  layer.ready(function(){
-    document.body ? that.creat() : setTimeout(function(){
-      that.creat();
-    }, 50);
-  });
+  document.body ? that.creat() : setTimeout(function(){
+    that.creat();
+  }, 30);
 };
 
 Class.pt = Class.prototype;
@@ -194,6 +192,7 @@ Class.pt.config = {
   zIndex: 19891014, 
   maxWidth: 360,
   anim: 0,
+  isOutAnim: true,
   icon: -1,
   moveType: 1,
   resize: true,
@@ -327,8 +326,13 @@ Class.pt.creat = function(){
   
   //为兼容jQuery3.0的css动画影响元素尺寸计算
   if(doms.anim[config.anim]){
-    that.layero.addClass(doms.anim[config.anim]).data('anim', true);
+    that.layero.addClass(doms.anim[config.anim]);
   };
+  
+  //记录关闭动画
+  if(config.isOutAnim){
+    that.layero.data('isOutAnim', true);
+  }
 };
 
 //自适应
@@ -346,7 +350,7 @@ Class.pt.auto = function(index){
   var btnHeight = layero.find('.'+doms[6]).outerHeight() || 0;
   function setHeight(elem){
     elem = layero.find(elem);
-    elem.height(area[1] - titHeight - btnHeight - 2*(parseFloat(elem.css('padding'))|0));
+    elem.height(area[1] - titHeight - btnHeight - 2*(parseFloat(elem.css('padding-top'))|0));
   }
   switch(config.type){
     case 2: 
@@ -892,7 +896,7 @@ layer.close = function(index){
     delete ready.end[index];
   };
   
-  if(layero.data('anim')){
+  if(layero.data('isOutAnim')){
     layero.addClass(closeAnim);
   }
   
@@ -903,9 +907,14 @@ layer.close = function(index){
     ready.minIndex--;
     ready.minLeft.push(layero.attr('minLeft'));
   }
-  setTimeout(function(){
-    remove();
-  }, ((layer.ie && layer.ie < 10) || !layero.data('anim')) ? 0 : 200);
+  
+  if((layer.ie && layer.ie < 10) || !layero.data('isOutAnim')){
+    remove()
+  } else {
+    setTimeout(function(){
+      remove();
+    }, 200);
+  }
 };
 
 //关闭所有层
@@ -1113,6 +1122,7 @@ layer.photos = function(options, loop, key){
     if(data.length <= 1) return;
     photos.start = dict.imgIndex - 1;
     layer.close(dict.index);
+    return layer.photos(options, true, key);
     setTimeout(function(){
       layer.photos(options, true, key);
     }, 200);
@@ -1192,7 +1202,8 @@ layer.photos = function(options, loop, key){
       moveType: 1,
       scrollbar: false,
       moveOut: true,
-      anim: Math.random()*5|0,
+      //anim: Math.random()*5|0,
+      isOutAnim: false,
       skin: 'layui-layer-photos' + skin('photos'),
       content: '<div class="layui-layer-phimg">'
         +'<img src="'+ data[start].src +'" alt="'+ (data[start].alt||'') +'" layer-pid="'+ data[start].pid +'">'
