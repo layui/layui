@@ -92,7 +92,7 @@ var argv = require('minimist')(process.argv.slice(2), {
       src.push('./src/**/mobile/layim-mobile-open.js'); 
     }
     
-    src.push(((ver || argv.open) ? '!' : '') + './src/**/mobile/layim-mobile.js');
+    src.push((ver ? '!' : '') + './src/**/mobile/layim-mobile.js');
     src.push('./src/lay/modules/mobile.js');
     
     return gulp.src(src).pipe(uglify())
