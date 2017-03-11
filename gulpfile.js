@@ -35,7 +35,7 @@ var argv = require('minimist')(process.argv.slice(2), {
   
   //压缩js模块
   minjs: function(ver) {
-    ver = ver === 'open' || argv.open;
+    ver = ver === 'open';
      
     //可指定模块压缩，eg：gulp minjs --mod layer,laytpl
     var mod = argv.mod ? function(){
@@ -51,7 +51,7 @@ var argv = require('minimist')(process.argv.slice(2), {
     ,dir = ver ? 'release' : 'build';
     
     //过滤 layim
-    if(ver){
+    if(ver || argv.open){
       src.push('!./src/lay/**/layim.js');
     }
 
@@ -63,7 +63,7 @@ var argv = require('minimist')(process.argv.slice(2), {
   
   //打包PC合并版JS，即包含layui.js和所有模块的合并
   ,alljs: function(ver){
-    ver = ver === 'open' || argv.open;
+    ver = ver === 'open';
     
     var src = [
       './src/**/{layui,all,'+ mods +'}.js'
@@ -79,7 +79,7 @@ var argv = require('minimist')(process.argv.slice(2), {
   
   //打包mobile模块集合
   ,mobile: function(ver){
-    ver = ver === 'open' || argv.open;
+    ver = ver === 'open';
 
     var mods = 'layer-mobile,zepto,upload-mobile', src = [
       './src/lay/all-mobile.js'
@@ -88,11 +88,11 @@ var argv = require('minimist')(process.argv.slice(2), {
     ]
     ,dir = ver ? 'release' : 'build';
     
-    if(ver){
+    if(ver || argv.open){
       src.push('./src/**/mobile/layim-mobile-open.js'); 
     }
     
-    src.push((ver ? '!' : '') + './src/**/mobile/layim-mobile.js');
+    src.push(((ver || argv.open) ? '!' : '') + './src/**/mobile/layim-mobile.js');
     src.push('./src/lay/modules/mobile.js');
     
     return gulp.src(src).pipe(uglify())
@@ -103,13 +103,13 @@ var argv = require('minimist')(process.argv.slice(2), {
   
   //压缩css文件
   ,mincss: function(ver){
-    ver = ver === 'open' || argv.open;
+    ver = ver === 'open';
     
     var src = ['./src/css/**/*.css']
     ,dir = ver ? 'release' : 'build'
     ,noteNew = JSON.parse(JSON.stringify(note));
     
-    if(ver){
+    if(ver || argv.open){
       src.push('!./src/css/**/layim.css');
     }
     
@@ -123,7 +123,7 @@ var argv = require('minimist')(process.argv.slice(2), {
   
   //复制iconfont文件
   ,font: function(ver){
-    ver = ver === 'open' || argv.open;
+    ver = ver === 'open';
     
     var dir = ver ? 'release' : 'build';
     
@@ -134,12 +134,12 @@ var argv = require('minimist')(process.argv.slice(2), {
   
   //复制组件可能所需的非css和js资源
   ,mv: function(ver){
-    ver = ver === 'open' || argv.open;
+    ver = ver === 'open';
     
     var src = ['./src/**/*.{png,jpg,gif,html,mp3,json}']
     ,dir = ver ? 'release' : 'build';
     
-    if(ver){
+    if(ver || argv.open){
       src.push('!./src/**/layim/**/*.*');
     }
     

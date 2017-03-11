@@ -66,8 +66,69 @@ label,input{vertical-align: middle;}
 .layui-upload-enter{border: 1px solid #009E94; background-color: #009E94; color: #fff; -webkit-transform: scale(1.1); transform: scale(1.1);}
 
 
-/** layer-mobile */
+/* 弹出动画 */
+@-webkit-keyframes layui-m-anim-scale { /* 默认 */
+	0% {opacity: 0; -webkit-transform: scale(.5); transform: scale(.5)}
+	100% {opacity: 1; -webkit-transform: scale(1); transform: scale(1)}
+}
+@keyframes layui-m-anim-scale { /* 由小到大 */
+	0% {opacity: 0; -webkit-transform: scale(.5); transform: scale(.5)}
+	100% {opacity: 1; -webkit-transform: scale(1); transform: scale(1)}
+}
+.layui-m-anim-scale{animation-name:  layui-m-anim-scale; -webkit-animation-name:  layui-m-anim-scale;}
 
+@-webkit-keyframes layui-m-anim-up{ /* 从下往上 */
+  0%{opacity: 0; -webkit-transform: translateY(100%); transform: translateY(100)}
+  100%{opacity: 1; -webkit-transform: translateY(0); transform: translateY(0)}
+}
+@keyframes layui-m-anim-up{
+  0%{opacity: 0; -webkit-transform: translateY(100); transform: translateY(100)}
+  100%{opacity: 1; -webkit-transform: translateY(0); transform: translateY(0)}
+}
+.layui-m-anim-up{-webkit-animation-name: layui-m-anim-up;animation-name: layui-m-anim-up}
+
+@-webkit-keyframes layui-m-anim-left{ /* 从右往左 */
+  0%{-webkit-transform: translateX(100%); transform: translateX(100%)}
+  100%{-webkit-transform: translateX(0); transform: translateX(0)}
+}
+@keyframes layui-m-anim-left{
+  0%{-webkit-transform: translateX(100%); transform: translateX(100%)}
+  100%{-webkit-transform: translateX(0); transform: translateX(0)}
+}
+.layui-m-anim-left{-webkit-animation-name: layui-m-anim-left; animation-name: layui-m-anim-left}
+
+@-webkit-keyframes layui-m-anim-right{ /* 从左往右 */
+  0%{-webkit-transform: translateX(-100%); transform: translateX(-100%)}
+  100%{-webkit-transform: translateX(0); transform: translateX(0)}
+}
+@keyframes layui-m-anim-right{
+  0%{-webkit-transform: translateX(-100%); transform: translateX(-100%)}
+  100%{-webkit-transform: translateX(0); transform: translateX(0)}
+}
+.layui-m-anim-right{-webkit-animation-name: layui-m-anim-right; animation-name: layui-m-anim-right}
+
+@-webkit-keyframes layui-m-anim-lout{ /* 往左收缩 */
+  0%{-webkit-transform: translateX(0); transform: translateX(0)}
+  100%{-webkit-transform: translateX(-100%); transform: translateX(-100%)}
+}
+@keyframes layui-m-anim-lout{
+  0%{-webkit-transform: translateX(0); transform: translateX(0)}
+  100%{-webkit-transform: translateX(-100%); transform: translateX(-100%)}
+}
+.layui-m-anim-lout{-webkit-animation-name: layui-m-anim-lout; animation-name: layui-m-anim-lout}
+
+@-webkit-keyframes layui-m-anim-rout{ /* 往右收缩 */
+  0%{-webkit-transform: translateX(0); transform: translateX(0)}
+  100%{-webkit-transform: translateX(100%); transform: translateX(100%)}
+}
+@keyframes layui-m-anim-rout{
+  0%{-webkit-transform: translateX(0); transform: translateX(0)}
+  100%{-webkit-transform: translateX(100%); transform: translateX(100%)}
+}
+.layui-m-anim-rout{-webkit-animation-name: layui-m-anim-rout; animation-name: layui-m-anim-rout}
+
+
+/** layer mobile */
 .layui-m-layer{position:relative; z-index: 19891014;}
 .layui-m-layer *{-webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box;}
 .layui-m-layershade,
@@ -77,27 +138,6 @@ label,input{vertical-align: middle;}
 .layui-m-layermain .layui-m-layersection{display:table-cell; vertical-align:middle; text-align:center;}
 .layui-m-layerchild{position:relative; display:inline-block; text-align:left; background-color:#fff; font-size:14px; border-radius: 5px; box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);  pointer-events:auto;  -webkit-overflow-scrolling: touch;}
 .layui-m-layerchild{-webkit-animation-fill-mode: both; animation-fill-mode: both; -webkit-animation-duration: .2s; animation-duration: .2s;}
-
-/* 弹出动画 */
-@-webkit-keyframes layui-m-anim-scale { /* 默认 */
-	0% {opacity: 0; -webkit-transform: scale(.5); transform: scale(.5)}
-	100% {opacity: 1; -webkit-transform: scale(1); transform: scale(1)}
-}
-@keyframes layui-m-anim-scale { /* 默认 */
-	0% {opacity: 0; -webkit-transform: scale(.5); transform: scale(.5)}
-	100% {opacity: 1; -webkit-transform: scale(1); transform: scale(1)}
-}
-.layui-m-anim-scale{animation-name:  layui-m-anim-scale; -webkit-animation-name:  layui-m-anim-scale;}
-
-@-webkit-keyframes layui-m-anim-up{
-  0%{opacity: 0; -webkit-transform: translateY(800px); transform: translateY(800px)}
-  100%{opacity: 1; -webkit-transform: translateY(0); transform: translateY(0)}
-}
-@keyframes layui-m-anim-up{
-  0%{opacity: 0; -webkit-transform: translateY(800px); transform: translateY(800px)}
-  100%{opacity: 1; -webkit-transform: translateY(0); transform: translateY(0)}
-}
-.layui-m-anim-up{-webkit-animation-name: layui-m-anim-up;animation-name: layui-m-anim-up}
 
 .layui-m-layer0 .layui-m-layerchild{width: 90%; max-width: 640px;}
 .layui-m-layer1 .layui-m-layerchild{border:none; border-radius:0;}
