@@ -78,14 +78,14 @@ label,input{vertical-align: middle;}
 .layui-m-anim-scale{animation-name:  layui-m-anim-scale; -webkit-animation-name:  layui-m-anim-scale;}
 
 @-webkit-keyframes layui-m-anim-up{ /* 从下往上 */
-  0%{opacity: 0; -webkit-transform: translateY(100%); transform: translateY(100)}
+  0%{opacity: 0; -webkit-transform: translateY(800px); transform: translateY(800px)}
   100%{opacity: 1; -webkit-transform: translateY(0); transform: translateY(0)}
 }
 @keyframes layui-m-anim-up{
-  0%{opacity: 0; -webkit-transform: translateY(100); transform: translateY(100)}
+  0%{opacity: 0; -webkit-transform: translateY(800px); transform: translateY(800px)}
   100%{opacity: 1; -webkit-transform: translateY(0); transform: translateY(0)}
 }
-.layui-m-anim-up{-webkit-animation-name: layui-m-anim-up;animation-name: layui-m-anim-up}
+.layui-m-anim-up{-webkit-animation-name: layui-m-anim-up; animation-name: layui-m-anim-up}
 
 @-webkit-keyframes layui-m-anim-left{ /* 从右往左 */
   0%{-webkit-transform: translateX(100%); transform: translateX(100%)}

@@ -29,7 +29,7 @@ layui.define(['layer-mobile', 'zepto'] , function(exports){
     return layer.open({
       content: content || ''
       ,skin: 'msg'
-      ,time: 0 //2秒后自动关闭
+      ,time: 2 //2秒后自动关闭
     });
   };
   

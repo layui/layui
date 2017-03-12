@@ -1,6 +1,6 @@
 /*!
 
- @Name：layer mobile v2.0 弹层组件移动版
+ @Name：layer mobile v2.0.0 弹层组件移动版
  @Author：贤心
  @Site：http://layer.layui.com/mobie/
  @License：MIT
