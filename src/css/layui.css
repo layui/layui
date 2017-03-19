@@ -352,6 +352,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-tree li a, 
 .layui-tree li .layui-tree-spread{display: inline-block; vertical-align: top; height: 26px; *display: inline; *zoom:1; cursor: pointer;}
 .layui-tree li a{font-size: 0;}
+.layui-tree li.layui-this>a {width: 100%; background: #eee;} /*增加高亮显示当前选择菜单项*/
 .layui-tree li a i{font-size: 16px;}
 .layui-tree li a cite{padding: 0 6px; font-size: 14px; font-style: normal;}
 .layui-tree li i{padding-left: 6px; color: #333; -moz-user-select: none;}
