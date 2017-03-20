@@ -107,7 +107,22 @@ layui.define(['layer', 'form'], function(exports){
     if(!iframeWin[0]) return;
     return $(iframeWin[0].document.body).text();
   };
-  
+  /**
+   * 设置编辑器内容
+   * @param {[type]} index   编辑器索引
+   * @param {[type]} content 要设置的内容
+   * @param {[type]} flag    是否追加模式
+   */
+  Edit.prototype.setContent = function(index, content, flag){
+    var iframeWin = getWin(index);
+    if(!iframeWin[0]) return;
+    if(flag){
+      $(iframeWin[0].document.body).append(content)
+    }else{
+      $(iframeWin[0].document.body).html(content)
+    };
+    layedit.sync(index)
+  };
   //将编辑器内容同步到textarea（一般用于异步提交时）
   Edit.prototype.sync = function(index){
     var iframeWin = getWin(index);
