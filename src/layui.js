@@ -203,7 +203,7 @@ Lay.fn.link = function(href, fn, cssname){
     head.appendChild(link);
   }
 
-  if(typeof fn !== 'function') return ;
+  if(typeof fn !== 'function') return that;
   
   //轮询css是否加载完毕
   (function poll() {
@@ -214,11 +214,13 @@ Lay.fn.link = function(href, fn, cssname){
       fn();
     }() : setTimeout(poll, 100);
   }());
+  
+  return that;
 };
 
 //css内部加载器
 Lay.fn.addcss = function(firename, fn, cssname){
-  layui.link(config.dir + 'css/' + firename, fn, cssname);
+  return layui.link(config.dir + 'css/' + firename, fn, cssname);
 };
 
 //图片预加载
@@ -273,22 +275,26 @@ Lay.fn.extend = function(options){
   return that;
 };
 
-//路由
+//路由解析
 Lay.fn.router = function(hash){
-  var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
-  var item, param = {
-    dir: []
+  var that = this, hash = hash || location.hash, data = {
+    path: []
+    ,search: {}
+    ,hash: (hash.match(/[^#](#.*$)/) || [])[1] || ''
   };
-  for(var i = 0; i < hashs.length; i++){
-    item = hashs[i].split('=');
-    /^\w+=/.test(hashs[i]) ? function(){
-      if(item[0] !== 'dir'){
-        param[item[0]] = item[1];
-      }
-    }() : param.dir.push(hashs[i]);
-    item = null;
-  }
-  return param;
+  
+  if(!/^#\//.test(hash)) return data; //禁止非路由规范
+  hash = hash.replace(/^#\//, '').replace(/([^#])(#.*$)/, '$1').split('/') || [];
+  
+  //提取Hash结构
+  that.each(hash, function(index, item){
+    /^\w+=/.test(item) ? function(){
+      item = item.split('=');
+      data.search[item[0]] = item[1];
+    }() : data.path.push(item);
+  });
+
+  return data;
 };
 
 //本地存储
