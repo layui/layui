@@ -206,7 +206,7 @@ layui.define(function(exports){
     if(Dates.ymd[1]+1 == Dates.mins[1] && Dates.ymd[2] == Dates.mins[2]){
       if(index === 0 && (times < Dates.mins[3])){
         return 1;
-      } else if(index === 1 && times < Dates.mins[4]){
+      } else if(index === 1 && times < Dates.mins[4] && Dates.hmsin[0].value <= Dates.mins[3]){
         return 1;
       } else if(index === 2 && times < Dates.mins[5]){
         return 1;
