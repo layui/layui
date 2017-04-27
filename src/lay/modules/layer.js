@@ -89,6 +89,15 @@ var layer = {
     return this;
   },
   
+  // 重新调整位置
+  offset: function(){
+	var that = this, layero = $('#'+ doms[0] + that.index);
+	var area = [layero.outerWidth(), layero.outerHeight()];
+	that.offsetTop = (win.height() - area[1])/2;
+	that.offsetLeft = (win.width() - area[0])/2;
+  	layero.css({top: that.offsetTop, left: that.offsetLeft});
+  },
+  
   //各种快捷引用
   alert: function(content, options, yes){
     var type = typeof options === 'function';
@@ -627,6 +636,15 @@ Class.pt.callback = function(){
   
   //右上角关闭回调
   layero.find('.'+ doms[7]).on('click', cancel);
+  
+  //打开窗口后按回车键 触发第一个按钮  yes btn0
+  if(config.onClick){
+  	$(document).keypress(function(e) {
+      if(e.which == 13) {
+   	    $('#layui-layer' + that.index).find('.layui-layer-btn0').click();  
+      }  
+    }); 
+  } 
   
   //点遮罩关闭
   if(config.shadeClose){
