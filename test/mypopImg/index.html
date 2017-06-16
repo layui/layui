@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>poping imgage</title>
+</head>
+
+<body>
+    <img src="images/1.png" width="200" height="200">
+    <script type="text/javascript" src="../../src/layui.js"></script>
+    <script type="text/javascript">
+    layui.config({
+        base: 'js/'
+    });
+    layui.use('popImg', function() {
+        var $ = layui.jquery,
+            popImg = layui.popImg;
+        var $img = $('img');
+        popImg($img);
+    })
+    </script>
+</body>
+
+</html>
