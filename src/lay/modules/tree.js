@@ -103,6 +103,9 @@ layui.define('jquery', function(exports){
     var that = this, options = that.options;
     elem.children('a').on('click', function(e){
       layui.stope(e);
+      //增加当前选择菜单项高亮显示
+      $(options.elem).find('li').removeClass('layui-this');
+      $(this).parent('li').addClass('layui-this');
       options.click(item)
     });
   };
