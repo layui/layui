@@ -108,5 +108,5 @@ layui.define(['layer', 'form'], function(exports){
 好了，不管你采用什么样的方式，从现在开始，尽情地使用Layui吧！但愿这是你的一段轻松而美妙的旅程。
 
 
-## 相关
+# 相关
 [官网](http://www.layui.com/)、[更新日志](https://github.com/sentsin/layui/blob/master/CHANGELOG.md)、[社区交流](http://fly.layui.com)
