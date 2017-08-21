@@ -10,8 +10,8 @@
 layui.define('jquery', function(exports){
   "use strict";
   
-  var $ = layui.jquery;
-  var hint = layui.hint();
+  var $ = layui.$
+  ,hint = layui.hint();
   
   var enterSkin = 'layui-tree-enter', Tree = function(options){
     this.options = options;

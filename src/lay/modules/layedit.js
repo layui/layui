@@ -9,9 +9,9 @@
 layui.define(['layer', 'form'], function(exports){
   "use strict";
   
-  var $ = layui.jquery
+  var $ = layui.$
   ,layer = layui.layer
-  ,form = layui.form()
+  ,form = layui.form
   ,hint = layui.hint()
   ,device = layui.device()
   

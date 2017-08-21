@@ -10,11 +10,11 @@
 html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 
 /* 默认风格 */
-.layui-code-view{display: block; position: relative; margin: 10px 0; padding: 0; border: 1px solid #ddd; border-left-width: 6px; background-color: #F2F2F2; color: #333; font-family: Courier New; font-size: 12px;}
-.layui-code-h3{position: relative; padding: 0 10px; height: 30px; line-height: 30px; border-bottom: 1px solid #ddd; font-size: 12px;}
+.layui-code-view{display: block; position: relative; margin: 10px 0; padding: 0; border: 1px solid #e2e2e2; border-left-width: 6px; background-color: #F2F2F2; color: #333; font-family: Courier New; font-size: 12px;}
+.layui-code-h3{position: relative; padding: 0 10px; height: 32px; line-height: 32px; border-bottom: 1px solid #e2e2e2; font-size: 12px;}
 .layui-code-h3 a{position: absolute; right: 10px; top: 0; color: #999;}
 .layui-code-view .layui-code-ol{position: relative; overflow: auto;}
-.layui-code-view .layui-code-ol li{position: relative; margin-left: 45px; line-height: 20px; padding: 0 5px; border-left: 1px solid #ddd; list-style-type: decimal-leading-zero; *list-style-type: decimal; background-color: #fff;}
+.layui-code-view .layui-code-ol li{position: relative; margin-left: 45px; line-height: 20px; padding: 0 5px; border-left: 1px solid #e2e2e2; list-style-type: decimal-leading-zero; *list-style-type: decimal; background-color: #fff;}
 .layui-code-view pre{margin: 0;}
 
 /* notepadd++风格 */

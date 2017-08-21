@@ -17,22 +17,21 @@ body{padding: 10px;}
 <button class="layui-btn demo" data-type="test">测试弹出式Form</button>
 
 
-<script src="../build/lay/dest/layui.all.js"></script>
+<script src="../dist/layui.all.js"></script>
 <script>
 ;!function(){
   var $ = layui.jquery
   ,layer = layui.layer
-  ,form = layui.form()
+  ,form = layui.form
   ,laypage = layui.laypage;
   
   layer.ready(function(){
     layer.msg('hello');
   });
   
-  laypage({
-    cont: 'demo1'
-    ,pages: 100 //总页数
-    ,groups: 5 //连续显示分页数
+  laypage.render({
+    elem: 'demo1'
+    ,count: 100 //总页数
   });
   
   

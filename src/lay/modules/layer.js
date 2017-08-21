@@ -1,6 +1,6 @@
 ﻿/**
 
- @Name：layer v3.0.3 Web弹层组件
+ @Name：layer v3.1.0 Web弹层组件
  @Author：贤心
  @Site：http://layer.layui.com
  @License：MIT
@@ -21,7 +21,43 @@ var isLayui = window.layui && layui.define, $, win, ready = {
   btn: ['&#x786E;&#x5B9A;', '&#x53D6;&#x6D88;'],
 
   //五种原始层模式
-  type: ['dialog', 'page', 'iframe', 'loading', 'tips']
+  type: ['dialog', 'page', 'iframe', 'loading', 'tips'],
+  
+  //获取节点的style属性值
+  getStyle: function(node, name){
+    var style = node.currentStyle ? node.currentStyle : win.getComputedStyle(node, null);
+    return style[style.getPropertyValue ? 'getPropertyValue' : 'getAttribute'](name);
+  },
+  
+  //载入CSS配件
+  link: function(href, fn, cssname){
+    
+    //未设置路径，则不主动加载css
+    if(!layer.path) return;
+    
+    var head = document.getElementsByTagName("head")[0], link = document.createElement('link');
+    if(typeof fn === 'string') cssname = fn;
+    var app = (cssname || href).replace(/\.|\//g, '');
+    var id = 'layuicss-'+ app, timeout = 0;
+    
+    link.rel = 'stylesheet';
+    link.href = layer.path + href;
+    link.id = id;
+    
+    if(!document.getElementById(id)){
+      head.appendChild(link);
+    }
+    
+    if(typeof fn !== 'function') return;
+    
+    //轮询css是否加载完毕
+    (function poll() {
+      if(++timeout > 8 * 1000 / 100){
+        return window.console && console.error('layer.css: Invalid');
+      };
+      parseInt(ready.getStyle(document.getElementById(id), 'width')) === 1989 ? fn() : setTimeout(poll, 100);
+    }());
+  }
 };
 
 //默认内置方法。
@@ -47,45 +83,16 @@ var layer = {
     
     isLayui 
       ? layui.addcss('modules/layer/' + options.extend)
-    : layer.link('skin/' + options.extend);
+    : ready.link('skin/' + options.extend);
     
     return this;
   },
-  
-  //载入CSS配件
-  link: function(href, fn, cssname){
-    
-    //未设置路径，则不主动加载css
-    if(!layer.path) return;
-    
-    var head = $('head')[0], link = document.createElement('link');
-    if(typeof fn === 'string') cssname = fn;
-    var app = (cssname || href).replace(/\.|\//g, '');
-    var id = 'layuicss-'+app, timeout = 0;
-    
-    link.rel = 'stylesheet';
-    link.href = layer.path + href;
-    link.id = id;
-    
-    if(!$('#'+ id)[0]){
-      head.appendChild(link);
-    }
-    
-    if(typeof fn !== 'function') return;
-    
-    //轮询css是否加载完毕
-    (function poll() {
-      if(++timeout > 8 * 1000 / 100){
-        return window.console && console.error('layer.css: Invalid');
-      };
-      parseInt($('#'+id).css('width')) === 1989 ? fn() : setTimeout(poll, 100);
-    }());
-  },
-  
+
+  //主体CSS等待事件
   ready: function(callback){
-    var cssname = 'skinlayercss', ver = '303';
-    isLayui ? layui.addcss('modules/layer/default/layer.css?v='+layer.v+ver, callback, cssname)
-    : layer.link('skin/default/layer.css?v='+layer.v+ver, callback, cssname);
+    var cssname = 'layer', ver = ''
+    ,path = (isLayui ? 'modules/layer/' : 'theme/') + 'default/layer.css?v='+ layer.v + ver;
+    isLayui ? layui.addcss(path, callback, cssname) : ready.link(path, callback, cssname);
     return this;
   },
   
@@ -338,6 +345,7 @@ Class.pt.creat = function(){
 //自适应
 Class.pt.auto = function(index){
   var that = this, config = that.config, layero = $('#'+ doms[0] + index);
+  
   if(config.area[0] === '' && config.maxWidth > 0){
     //为了修复IE7下一个让人难以理解的bug
     if(layer.ie && layer.ie < 8 && config.btn){
@@ -345,20 +353,25 @@ Class.pt.auto = function(index){
     }
     layero.outerWidth() > config.maxWidth && layero.width(config.maxWidth);
   }
-  var area = [layero.innerWidth(), layero.innerHeight()];
-  var titHeight = layero.find(doms[1]).outerHeight() || 0;
-  var btnHeight = layero.find('.'+doms[6]).outerHeight() || 0;
-  function setHeight(elem){
+  
+  var area = [layero.innerWidth(), layero.innerHeight()]
+  ,titHeight = layero.find(doms[1]).outerHeight() || 0
+  ,btnHeight = layero.find('.'+doms[6]).outerHeight() || 0
+  ,setHeight = function(elem){
     elem = layero.find(elem);
     elem.height(area[1] - titHeight - btnHeight - 2*(parseFloat(elem.css('padding-top'))|0));
-  }
+  };
+
   switch(config.type){
     case 2: 
       setHeight('iframe');
     break;
     default:
       if(config.area[1] === ''){
-        if(config.fixed && area[1] >= win.height()){
+        if(config.maxHeight > 0 && layero.outerHeight() > config.maxHeight){
+          area[1] = config.maxHeight;
+          setHeight('.'+doms[5]);
+        } else if(config.fixed && area[1] >= win.height()){
           area[1] = win.height();
           setHeight('.'+doms[5]);
         }
@@ -366,7 +379,8 @@ Class.pt.auto = function(index){
         setHeight('.'+doms[5]);
       }
     break;
-  }
+  };
+  
   return that;
 };
 
@@ -986,6 +1000,7 @@ layer.tab = function(options){
   options = options || {};
   
   var tab = options.tab || {}
+  ,THIS = 'layui-this'
   ,success = options.success;
   
   delete options.success;
@@ -997,7 +1012,7 @@ layer.tab = function(options){
     title: function(){
       var len = tab.length, ii = 1, str = '';
       if(len > 0){
-        str = '<span class="layui-layer-tabnow">'+ tab[0].title +'</span>';
+        str = '<span class="'+ THIS +'">'+ tab[0].title +'</span>';
         for(; ii < len; ii++){
           str += '<span>'+ tab[ii].title +'</span>';
         }
@@ -1007,7 +1022,7 @@ layer.tab = function(options){
     content: '<ul class="layui-layer-tabmain">'+ function(){
       var len = tab.length, ii = 1, str = '';
       if(len > 0){
-        str = '<li class="layui-layer-tabli xubox_tab_layer">'+ (tab[0].content || 'no content') +'</li>';
+        str = '<li class="layui-layer-tabli '+ THIS +'">'+ (tab[0].content || 'no content') +'</li>';
         for(; ii < len; ii++){
           str += '<li class="layui-layer-tabli">'+ (tab[ii].content || 'no  content') +'</li>';
         }
@@ -1020,7 +1035,7 @@ layer.tab = function(options){
       btn.on('mousedown', function(e){
         e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true;
         var othis = $(this), index = othis.index();
-        othis.addClass('layui-layer-tabnow').siblings().removeClass('layui-layer-tabnow');
+        othis.addClass(THIS).siblings().removeClass(THIS);
         main.eq(index).show().siblings().hide();
         typeof options.change === 'function' && options.change(index);
       });
@@ -1251,7 +1266,7 @@ window.layui && layui.define ? (
   layer.ready()
   ,layui.define('jquery', function(exports){ //layui加载
     layer.path = layui.cache.dir;
-    ready.run(layui.jquery);
+    ready.run(layui.$);
 
     //暴露模块
     window.layer = layer;

@@ -28,7 +28,7 @@ var argv = require('minimist')(process.argv.slice(2), {
 ]
 
 //模块
-,mods = 'laytpl,laypage,laydate,jquery,layer,element,upload,form,tree,util,flow,layedit,code'
+,mods = 'laytpl,laypage,laydate,jquery,layer,element,upload,form,tree,table,carousel,util,flow,layedit,code'
 
 //任务
 ,task = {
@@ -48,7 +48,7 @@ var argv = require('minimist')(process.argv.slice(2), {
       ,'!./src/lay/all.js'
       ,'!./src/lay/all-mobile.js'
     ]
-    ,dir = ver ? 'release' : 'build';
+    ,dir = ver ? 'release' : 'dist';
     
     //过滤 layim
     if(ver || argv.open){
@@ -69,12 +69,12 @@ var argv = require('minimist')(process.argv.slice(2), {
       './src/**/{layui,all,'+ mods +'}.js'
       ,'!./src/**/mobile/*.js'
     ]
-    ,dir = ver ? 'release' : 'build';
+    ,dir = ver ? 'release' : 'dist';
     
     return gulp.src(src).pipe(uglify())
       .pipe(concat('layui.all.js', {newLine: ''}))
       .pipe(header.apply(null, note))
-    .pipe(gulp.dest('./'+ dir +'/lay/dest/'));
+    .pipe(gulp.dest('./'+ dir));
   }
   
   //打包mobile模块集合
@@ -86,7 +86,7 @@ var argv = require('minimist')(process.argv.slice(2), {
       ,'./src/lay/modules/laytpl.js'
       ,'./src/**/mobile/{'+ mods +'}.js'
     ]
-    ,dir = ver ? 'release' : 'build';
+    ,dir = ver ? 'release' : 'dist';
     
     if(ver || argv.open){
       src.push('./src/**/mobile/layim-mobile-open.js'); 
@@ -106,7 +106,7 @@ var argv = require('minimist')(process.argv.slice(2), {
     ver = ver === 'open';
     
     var src = ['./src/css/**/*.css']
-    ,dir = ver ? 'release' : 'build'
+    ,dir = ver ? 'release' : 'dist'
     ,noteNew = JSON.parse(JSON.stringify(note));
     
     if(ver || argv.open){
@@ -125,7 +125,7 @@ var argv = require('minimist')(process.argv.slice(2), {
   ,font: function(ver){
     ver = ver === 'open';
     
-    var dir = ver ? 'release' : 'build';
+    var dir = ver ? 'release' : 'dist';
     
     return gulp.src('./src/font/*')
     .pipe(rename({}))
@@ -137,7 +137,7 @@ var argv = require('minimist')(process.argv.slice(2), {
     ver = ver === 'open';
     
     var src = ['./src/**/*.{png,jpg,gif,html,mp3,json}']
-    ,dir = ver ? 'release' : 'build';
+    ,dir = ver ? 'release' : 'dist';
     
     if(ver || argv.open){
       src.push('!./src/**/layim/**/*.*');
@@ -150,7 +150,7 @@ var argv = require('minimist')(process.argv.slice(2), {
 
 //清理
 gulp.task('clear', function(cb) {
-  return del(['./build/*'], cb);
+  return del(['./dist/*'], cb);
 });
 gulp.task('clearRelease', function(cb) {
   return del(['./release/*'], cb);

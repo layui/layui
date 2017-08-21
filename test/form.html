@@ -179,7 +179,7 @@ body{padding: 10px;}
 <script>
 
 layui.use('form', function(){
-  var form = layui.form();
+  var form = layui.form;
   
   //自定义验证规则
   form.verify({
@@ -194,15 +194,15 @@ layui.use('form', function(){
   
   //事件监听
   form.on('select', function(data){
-    console.log(data);
-  });
-
+    console.log(this);
+  })
+  
   form.on('select(aihao)', function(data){
     console.log(data);
   });
   
   form.on('checkbox', function(data){
-    console.log(data.elem.checked);
+    console.log(this.checked, data.elem.checked);
   });
   
   form.on('switch', function(data){

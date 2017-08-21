@@ -10,69 +10,26 @@
 <link rel="stylesheet" href="../src/css/layui.css">
 
 <style>
-body{padding: 50px 100px;}
+body{padding: 100px;}
 </style>
 </head>
 <body>
 
-<button class="layui-btn demo" data-type="test">测试一</button>
-<button class="layui-btn demo" data-type="test2">测试二</button>
-<button class="layui-btn demo" data-type="test3">捕获页</button>
+<button class="layui-btn demo" data-type="test">Alert</button>
+<button class="layui-btn demo" data-type="test2">Confirm</button>
+<button class="layui-btn demo" data-type="test3">Msg</button>
+<button class="layui-btn demo" data-type="test4">Tips</button>
+<button class="layui-btn demo" data-type="test5">Page</button>
+<button class="layui-btn demo" data-type="test6">Iframe</button>
+<button class="layui-btn demo" data-type="test7">Prompt</button>
+<button class="layui-btn demo" data-type="test8">Tab</button>
+<a href="http://layer.layui.com/" target="_blank" class="layui-btn demo">更多例子</a>
 
-<div id="bbs_update_form" style="display: none;padding: 20px;">
-  <form class="layui-form layui-form-pane" id="update_bbs_info_form">
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">论坛封面</label>
-    <div class="layui-input-block">
-      <input type="text" name="bbs_bg" autocomplete="off" placeholder="请输入图片地址（1045px*180px）" class="layui-input" value="http://q.jinsom.cn/wp-content/uploads/2016/12/bbs_bg.jpg">
-    </div>
-  </div>
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">论坛头像</label>
-    <div class="layui-input-block">
-      <input type="text" name="bbs_avatar" autocomplete="off" placeholder="请输入图片地址（150px*150px）" class="layui-input" value="http://q.jinsom.cn/wp-content/uploads/2016/12/timg.jpg">
-    </div>
-  </div>
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">论坛介绍</label>
-    <div class="layui-input-block">
-      <textarea placeholder="50字内" class="layui-textarea" name="bbs_desc" >LightSNS是一款wordpress轻社交主题，这里是关于你这个论坛的描述，随便扯吧。
-</textarea>
-    </div>
-  </div>
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">论坛公告</label>
-    <div class="layui-input-block">
-      <textarea placeholder="100字内" class="layui-textarea" name="bbs_notice">公告</textarea>
-    </div>
-  </div>
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">付费功能</label>
-    <div class="layui-input-block">
-      <input type="checkbox" name="bbs_fufei" lay-skin="switch" title="开启付费可看功能"  checked lay-skin="switch">
-    </div>
-  </div>
-
-  <div class="layui-form-item">
-    <label class="layui-form-label">验证码</label>
-    <div class="layui-input-block">
-      <input type="checkbox" name="bbs_captcha" lay-skin="switch" title="开启验证码功能" >
-    </div>
-  </div>
-
-  <div class="layui-form-item" style="text-align: right;">
-    <div class="layui-btn" id="bbs_update_button">更新</div>
-  </div>
-
-  </form>
+<div id="test11111" style="display: none;padding: 20px;">
+ 123
 </div>
 
-<script type='text/javascript' src='http://q.jinsom.cn/wp-content/themes/jinsomQ/js/jquery.min.js?ver=0.3'></script>
+
 <script src="../src/layui.js"></script>
 <script>
 layui.use('layer', function(){
@@ -84,22 +41,64 @@ layui.use('layer', function(){
       layer.alert('你好么，体验者');
     }
     ,test2: function(){
+      layer.confirm('您是如何看待前端开发？', {
+        btn: ['重要','奇葩'] //按钮
+      }, function(){
+        layer.msg('的确很重要', {icon: 1});
+      }, function(){
+        layer.msg('也可以这样', {
+          time: 20000, //20s后自动关闭
+          btn: ['明白了', '知道了']
+        });
+      });
+    }
+    ,test3: function(){
+      layer.msg('玩命提示中');
+    }
+    ,test4: function(){
+      layer.tips('Hi，我是一个小提示', this, {tips: 1});
+    }
+    ,test5: function(){
+       layer.open({
+        title:'更新论坛信息',
+        type: 1,
+        skin: 'layui-layer-rim', 
+        area: ['500px', '580px'], 
+        content: $('#test11111')
+      });
+    }
+    ,test6: function(){
       layer.open({
         type: 2
         ,content: 'http://fly.layui.com/'
         ,area: ['375px', '500px']
         ,maxmin: true
-      })
+      });
     }
-	,test3: function(){
-		 layer.open({
-      title:'更新论坛信息',
-      type: 1,
-      skin: 'layui-layer-rim', 
-      area: ['500px', '580px'], 
-      content: $('#bbs_update_form')
-    });
-	}
+    ,test7: function(){
+      layer.prompt({title: '输入任何口令，并确认', formType: 1}, function(pass, index){
+        layer.close(index);
+        layer.prompt({title: '随便写点啥，并确认', formType: 2}, function(text, index){
+          layer.close(index);
+          layer.msg('演示完毕！您的口令：'+ pass +'<br>您最后写下了：'+text);
+        });
+      });
+    }
+    ,test8: function(){
+      layer.tab({
+        area: ['600px', '300px'],
+        tab: [{
+          title: 'TAB1', 
+          content: '内容1'
+        }, {
+          title: 'TAB2', 
+          content: '内容2'
+        }, {
+          title: 'TAB3', 
+          content: '内容3'
+        }]
+      });
+    }
   };
   $('.demo').on('click', function(){
     var type = $(this).data('type');
