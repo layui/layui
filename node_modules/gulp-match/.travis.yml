@@ -1,8 +1,0 @@
-language: node_js
-node_js:
-  - "0.10"  # Unsupported
-  - "0.12"  # Supported till 2016-12-31
-  - "4"     # Supported till 2018-04-01
-  - "5"     # Unsupported
-  - "6"     # Supported till 2019-04-18
-  - "7"     # Active Development
