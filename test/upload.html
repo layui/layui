@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>文件上传模块 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 50px 100px;}
+.layui-upload-img{width: 92px; height: 92px; margin: 0 10px 10px 0;}
+hr{margin: 30px 0;}
+</style>
+</head>
+<body>
+
+<div class="layui-upload">
+  <button type="button" class="layui-btn" id="test1">上传图片</button>
+  
+  <div class="layui-upload-list">
+    <img class="layui-upload-img" src="" id="demo1">
+    <p id="demoText"></p>
+  </div>
+</div>
+
+<hr>
+
+<div class="layui-upload">
+  <button type="button" class="layui-btn" id="test2">多图片上传</button> 
+  <div class="layui-upload-list" id="demo2"></div>
+</div>
+
+<hr>
+
+<div class="layui-upload">
+  <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button> 
+  <div class="layui-upload-list">
+    <table class="layui-table">
+      <thead>
+        <th>文件名</th>
+        <th>大小</th>
+        <th>状态</th>
+        <th>操作</th>
+      </thead>
+      <tbody id="demoList"></tbody>
+    </table>
+  </div>
+  <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+</div>
+
+<hr>
+
+<button type="button" class="layui-btn" id="test3"><i class="layui-icon">&#xe67c;</i>上传文件</button>
+<button type="button" class="layui-btn layui-btn-primary" id="test33"><i class="layui-icon">&#xe67c;</i>换个样式</button>
+
+<button type="button" class="layui-btn" id="test4"><i class="layui-icon">&#xe67c;</i>上传视频</button>
+<button type="button" class="layui-btn" id="test5"><i class="layui-icon">&#xe67c;</i>上传音频</button>
+
+<hr>
+
+<div class="layui-upload">
+  <button type="button" class="layui-btn layui-btn-normal" id="test6">选择文件</button>
+  <button type="button" class="layui-btn" id="test7">开始上传</button>
+</div>
+
+<hr><br>
+
+<div class="layui-upload-drag" id="test9">
+  <i class="layui-icon">&#xe67c;</i>
+  <p>点击上传，或将文件拖拽到此处</p>
+</div>
+
+<hr><br>
+
+绑定原始文件域：<input type="file" name="file" id="test8">
+
+
+
+<script src="../src/layui.js"></script>
+<script>
+layui.use('upload', function(){
+  var $ = layui.jquery
+  ,upload = layui.upload;
+
+  var uploadInst = upload.render({
+    elem: '#test1'
+    ,url: '/upload/'
+    ,size: 60 //限制文件大小，单位 KB
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#demo1').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+      //如果上传失败
+      if(res.code > 0){
+        return layer.msg('上传失败');
+      }
+      //上传成功
+    }
+    ,error: function(){
+      //演示失败状态，并实现重传
+      var demoText = $('#demoText');
+      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+      demoText.find('.demo-reload').on('click', function(){
+        uploadInst.upload();
+      });
+    }
+  });
+  
+  upload.render({
+    elem: '#test2'
+    ,url: ''
+    ,multiple: true
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#demo2').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
+      });
+    }
+    ,done: function(res){
+      //上传完毕
+    }
+  });
+  
+  //演示多文件列表
+  var demoListView = $('#demoList');
+  var uploadListIns = upload.render({
+    elem: '#testList'
+    ,url: ''
+    ,accept: 'file'
+    ,multiple: true
+    ,auto: false
+    ,bindAction: '#testListAction'
+    ,choose: function(obj){   
+      var files = obj.pushFile(); //将每次选择的文件追加到文件队列
+
+      //读取本地文件
+      obj.preview(function(index, file, result){
+        var tr = $(['<tr id="upload-'+ index +'">'
+          ,'<td>'+ file.name +'</td>'
+          ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
+          ,'<td>等待上传</td>'
+          ,'<td>'
+            ,'<button class="layui-btn layui-btn-mini demo-reload layui-hide">重传</button>'
+            ,'<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>'
+          ,'</td>'
+        ,'</tr>'].join(''));
+        
+        //单个重传
+        tr.find('.demo-reload').on('click', function(){
+          obj.upload(index, file);
+        });
+        
+        //删除
+        tr.find('.demo-delete').on('click', function(){
+          delete files[index]; //删除对应的文件
+          tr.remove();
+        });
+        
+        demoListView.append(tr);
+      });
+    }
+    ,done: function(res, index, upload){
+      if(res.code == 0){ //上传成功
+        var tr = demoListView.find('tr#upload-'+ index)
+        ,tds = tr.children();
+        tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+        tds.eq(3).html(''); //清空操作
+        delete files[index]; //删除文件队列已经上传成功的文件
+        return;
+      }
+      this.error(index, upload);
+    }
+    ,error: function(index, upload){
+      var tr = demoListView.find('tr#upload-'+ index)
+      ,tds = tr.children();
+      tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+      tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+    }
+  });
+  
+
+  upload.render({
+    elem: '#test3'
+    ,url: ''
+    ,accept: 'file'
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+  upload.render({
+    elem: '#test33'
+    ,url: ''
+    ,accept: 'file'
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+  
+  upload.render({
+    elem: '#test4'
+    ,url: ''
+    ,accept: 'video'
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+  
+  upload.render({
+    elem: '#test5'
+    ,url: ''
+    ,accept: 'audio'
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+  
+  
+  upload.render({
+    elem: '#test6'
+    ,url: ''
+    ,auto: false
+    //,multiple: true
+    ,bindAction: '#test7'
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+  
+  upload.render({
+    elem: '#test8'
+    ,url: ''
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+  
+  upload.render({
+    elem: '#test9'
+    ,url: ''
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+  
+});
+</script>
+</body>
+</html>

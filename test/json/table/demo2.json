@@ -1,0 +1,42 @@
+{
+  "code": 0
+  ,"msg": ""
+  ,"count": 66
+  ,"data": [{
+    "username": "张小三"
+    ,"amount": 18
+    ,"province": "浙江"
+    ,"city": "杭州"
+    ,"county": "文一西路西溪园区"
+  }, {
+    "username": "李小四"
+    ,"amount": 39
+    ,"province": "江苏"
+    ,"city": "苏州"
+    ,"county": "丝绸路368号"
+  }, {
+    "username": "王小四"
+    ,"amount": 8
+    ,"province": "江西"
+    ,"city": "南昌"
+    ,"county": "艾溪湖一号楼"
+  }, {
+    "username": "赵小六"
+    ,"amount": 16
+    ,"province": "福建"
+    ,"city": "泉州"
+    ,"county": "晋江市南洋村"
+  }, {
+    "username": "孙小七"
+    ,"amount": 12
+    ,"province": "湖北"
+    ,"city": "武汉"
+    ,"county": "武昌大道19号"
+  }, {
+    "username": "周小八"
+    ,"amount": 11
+    ,"province": "安徽"
+    ,"city": "黄山"
+    ,"county": "汤口镇66号"
+  }]
+}  

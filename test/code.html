@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>代码修饰器 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 50px 100px;}
+pre{margin-bottom: 20px;}
+</style>
+</head>
+<body>
+
+<pre class="layui-code" lay-title="JavaScript" lay-height="300px">
+//路由
+LAY.fn.router = function(hash){
+  var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
+  var item, param = {
+    dir: []
+  };
+  for(var i = 0; i < hashs.length; i++){
+    item = hashs[i].split('=');
+    /^\w+=/.test(hashs[i]) ? function(){
+      if(item[0] !== 'dir'){
+        param[item[0]] = item[1];
+      }
+    }() : param.dir.push(hashs[i]);
+    item = null;
+  }
+  return param;
+};
+</pre>
+
+<pre class="layui-code" lay-skin="notepad">
+//路由
+LAY.fn.router = function(hash){
+  var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
+  var item, param = {
+    dir: []
+  };
+  for(var i = 0; i < hashs.length; i++){
+    item = hashs[i].split('=');
+    /^\w+=/.test(hashs[i]) ? function(){
+      if(item[0] !== 'dir'){
+        param[item[0]] = item[1];
+      }
+    }() : param.dir.push(hashs[i]);
+    item = null;
+  }
+  return param;
+};
+</pre>
+
+<pre class="layui-code">
+var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
+var item, param = {
+  dir: []
+};
+<pre class="layui-code">
+//代码中的代码
+var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
+var item, param = {
+  dir: []
+};
+</pre>
+</pre>
+
+<pre class="layui-code" lay-skin="notepad">
+//路由
+LAY.fn.router = function(hash){
+  var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
+  var item, param = {
+    dir: []
+  };
+  for(var i = 0; i < hashs.length; i++){
+    item = hashs[i].split('=');
+    /^\w+=/.test(hashs[i]) ? function(){
+      if(item[0] !== 'dir'){
+        param[item[0]] = item[1];
+      }
+    }() : param.dir.push(hashs[i]);
+    item = null;
+  }
+  return param;
+};
+<pre class="layui-code" lay-skin="notepad">
+//代码中的代码
+var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
+var item, param = {
+  dir: []
+};
+<pre class="layui-code" lay-skin="notepad">
+//代码中的代码
+var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
+var item, param = {
+  dir: []
+};
+<pre class="layui-code" lay-skin="notepad">
+//代码中的代码
+var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
+var item, param = {
+  dir: []
+};
+</pre>
+</pre>
+</pre>
+</pre>
+
+
+<pre class="layui-code" lay-encode="true">
+  <div>
+    123
+  </div>
+</pre>
+
+
+<script src="../src/layui.js"></script>
+<script>
+
+layui.use('code', function(){
+  layui.code();
+});
+
+</script>
+</body>
+</html>

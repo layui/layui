@@ -1,0 +1,110 @@
+ 
+ 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>layer弹层 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 100px;}
+</style>
+</head>
+<body>
+
+<button class="layui-btn demo" data-type="test">Alert</button>
+<button class="layui-btn demo" data-type="test2">Confirm</button>
+<button class="layui-btn demo" data-type="test3">Msg</button>
+<button class="layui-btn demo" data-type="test4">Tips</button>
+<button class="layui-btn demo" data-type="test5">Page</button>
+<button class="layui-btn demo" data-type="test6">Iframe</button>
+<button class="layui-btn demo" data-type="test7">Prompt</button>
+<button class="layui-btn demo" data-type="test8">Tab</button>
+<a href="http://layer.layui.com/" target="_blank" class="layui-btn demo">更多例子</a>
+
+<div id="test11111" style="display: none;padding: 20px;">
+ 123
+</div>
+
+
+<script src="../src/layui.js"></script>
+<script>
+layui.use('layer', function(){
+  var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+  
+  //触发事件
+  var active = {
+    test: function(){
+      layer.alert('你好么，体验者');
+    }
+    ,test2: function(){
+      layer.confirm('您是如何看待前端开发？', {
+        btn: ['重要','奇葩'] //按钮
+      }, function(){
+        layer.msg('的确很重要', {icon: 1});
+      }, function(){
+        layer.msg('也可以这样', {
+          time: 20000, //20s后自动关闭
+          btn: ['明白了', '知道了']
+        });
+      });
+    }
+    ,test3: function(){
+      layer.msg('玩命提示中');
+    }
+    ,test4: function(){
+      layer.tips('Hi，我是一个小提示', this, {tips: 1});
+    }
+    ,test5: function(){
+       layer.open({
+        title:'更新论坛信息',
+        type: 1,
+        skin: 'layui-layer-rim', 
+        area: ['500px', '580px'], 
+        content: $('#test11111')
+      });
+    }
+    ,test6: function(){
+      layer.open({
+        type: 2
+        ,content: 'http://fly.layui.com/'
+        ,area: ['375px', '500px']
+        ,maxmin: true
+      });
+    }
+    ,test7: function(){
+      layer.prompt({title: '输入任何口令，并确认', formType: 1}, function(pass, index){
+        layer.close(index);
+        layer.prompt({title: '随便写点啥，并确认', formType: 2}, function(text, index){
+          layer.close(index);
+          layer.msg('演示完毕！您的口令：'+ pass +'<br>您最后写下了：'+text);
+        });
+      });
+    }
+    ,test8: function(){
+      layer.tab({
+        area: ['600px', '300px'],
+        tab: [{
+          title: 'TAB1', 
+          content: '内容1'
+        }, {
+          title: 'TAB2', 
+          content: '内容2'
+        }, {
+          title: 'TAB3', 
+          content: '内容3'
+        }]
+      });
+    }
+  };
+  $('.demo').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
+</script>
+</body>
+</html>

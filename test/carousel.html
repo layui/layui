@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>轮播组件 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 20px;}
+
+/* 为了区分效果 */
+div[carousel-item]>*{text-align: center; line-height: 280px; color: #fff;}
+div[carousel-item]>*:nth-child(2n){background-color: #009688;}
+div[carousel-item]>*:nth-child(2n+1){background-color: #5FB878;}
+
+#test2 div[carousel-item]>*{line-height: 120px;}
+</style>
+</head>
+<body>
+
+<div class="layui-carousel" id="test1" lay-filter="test1">
+  <div carousel-item>
+    <div>条目1</div>
+    <div>条目2</div>
+    <div>条目3</div>
+    <div>条目4</div>
+  </div>
+</div>
+
+<br>
+
+<div class="layui-carousel" id="test2">
+  <div carousel-item>
+    <div>条目1</div>
+    <div>条目2</div>
+  </div>
+</div>
+
+<br>
+
+<div class="layui-carousel" id="test3">
+  <div carousel-item>
+    <div>条目1</div>
+    <div>条目2</div>
+    <div>条目3</div>
+    <div>条目4</div>
+  </div>
+</div>
+
+<br>
+
+<div class="layui-carousel" id="test4">
+  <div carousel-item>
+    <div><img src="http://s2.mogucdn.com/mlcdn/c45406/170714_2f9k4a3lgdfb80cie2g7aaba8l4ag_778x440.jpg_900x9999.v1c7E.70.webp"></div>
+    <div><img src="http://s10.mogucdn.com/mlcdn/c45406/170710_3a6jf5f0j24bgcc3i3f36el2a2ckj_778x440.jpg_900x9999.v1c7E.70.webp"></div>
+    <div><img src="http://s10.mogucdn.com/mlcdn/c45406/170714_5e8867724c4bfae8ka6l3a5274h0h_778x440.jpg_900x9999.v1c7E.70.webp"></div>
+    <div><img src="http://s3.mogucdn.com/mlcdn/c45406/170609_83i077ikhb3023kch5gah5b2il9k3_778x440.jpg_900x9999.v1c7E.70.webp"></div>
+    <div><img src="http://s10.mogucdn.com/mlcdn/c45406/170714_8d301bj507l9la1cjccbabg433beh_778x440.jpg_900x9999.v1c7E.70.webp"></div>
+    <div><img src="http://s10.mogucdn.com/mlcdn/c45406/170710_4kaiaee4j39899b08abc685j2ehk1_778x440.jpg_900x9999.v1c7E.70.webp"></div>
+    <div><img src="http://s10.mogucdn.com/mlcdn/c45406/170710_31a9gb225bga4agf4c9b25a8c8924_778x440.jpg_900x9999.v1c7E.70.webp"></div>
+  </div>
+</div>
+
+
+<script src="../src/layui.js"></script>
+<script>
+layui.use('carousel', function(){
+  var carousel = layui.carousel;
+  
+  //建造实例
+  carousel.render({
+    elem: '#test1'
+    ,index: 2
+    //,full: true
+    ,arrow: 'always'
+    //,autoplay: false
+    //,indicator: 'outside'
+    //,trigger: 'hover'
+  });
+  
+  //事件
+  carousel.on('change(test1)', function(res){
+    console.log(res)
+  });
+
+  carousel.render({
+    elem: '#test2'
+    ,interval: 1800
+    //,full: true
+    ,anim: 'fade'
+    ,height: '120px'
+  });
+  
+  carousel.render({
+    elem: '#test3'
+    //,full: true
+    ,arrow: 'always'
+    //,autoplay: false
+    //,indicator: 'outside'
+    //,trigger: 'hover'
+    ,anim: 'updown'
+    //,full: true
+  });
+  
+  carousel.render({
+    elem: '#test4'
+    ,width: '778px'
+    ,height: '440px'
+    ,interval: 5000
+  });
+});
+</script>
+</body>
+</html>

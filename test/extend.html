@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>自定义模块 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+
+</style>
+</head>
+<body>
+
+
+
+<script src="../src/layui.js"></script>
+<script>
+layui.config({
+  base: './js/'
+}).extend({
+  index: 'index'
+  ,test: 'child/test'
+}).use('test');
+
+layui.use('index')
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+ 
+ 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>日期模块 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 50px 100px;}
+.layui-inline{margin-right: 15px;}
+</style>
+</head>
+<body>
+
+日期时间范围选择：
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test1">
+</div>
+
+
+<br><br><hr><br>
+
+日期选择器：
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test2">
+</div>
+
+<br><br><hr><br>
+
+年选择器：
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test3">
+</div>
+
+年月选择器：
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test4">
+</div>
+
+时间时间器：
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test5">
+</div>
+
+<br><br><hr><br>
+
+时间范围选择
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test55">
+</div>
+
+自定义重要日：
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test555">
+</div>
+
+<br><br><hr><br>
+
+墨绿主题：
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test6-1">
+</div>
+
+自定义头部背景色：
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test6-2">
+</div>
+
+格子主题：
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test6-3">
+</div>
+
+<br><br><hr><br>
+
+<button class="layui-btn" id="test7">其它元素触发</button>
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test6">
+</div>
+
+<button class="layui-btn" id="test9">外部事件触发</button>
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test8">
+</div>
+
+<br><br><hr><br>
+直接嵌套在指定容器中：<br><br>
+<div class="layui-inline" id="test10"></div>
+<div class="layui-inline" id="test11" style="margin-left: 30px;"></div>
+
+<script src="../src/layui.js" charset="utf-8"></script>
+<script>
+layui.use('laydate', function(){
+  var laydate = layui.laydate;
+  
+  //双控件
+  laydate.render({
+    elem: '#test1' //指定元素
+    ,type: 'datetime'
+    ,trigger: 'click'
+    ,lang: 'en'
+    //,lang: 'en'
+    ,range: true //开启日期范围，默认使用“_”分割
+    ,done: function(value, date, endDate){
+      console.log(value, date, endDate);
+    }
+    ,change: function(value, date, endDate){
+      console.log(value, date, endDate);
+    }
+  });
+  
+  //单控件
+  laydate.render({
+    elem: '#test2'
+    ,format: 'y年MM月dd日'
+    //,value: new Date(2017,7,20)
+    ,min: -1 //负数代表为n天前，正数代表为n天后。或这种格式：min: '2017-8-20'
+    ,max: 1 //最大日期为n天后
+    ,done: function(value, date, endDate){
+      console.log(value, date, endDate);
+    }
+  });
+  
+  //年选择器
+  laydate.render({
+    elem: '#test3'
+    ,type: 'year'
+    //,range: true 
+    //,trigger: 'click'
+    ,done: function(value, date, endDate){
+      console.log(value, date, endDate);
+    }
+    ,change: function(value, date, endDate){
+      //this.elem.val(value)
+    }
+  });
+  
+  //年月选择器
+  laydate.render({
+    elem: '#test4'
+    ,type: 'month'
+    //,range: true 
+    //,trigger: 'click'
+    ,done: function(value, date, endDate){
+      console.log(value, date, endDate);
+    }
+    ,change: function(value, date, endDate){
+      this.elem.val(value)
+    }
+  });
+  
+  //时间选择器
+  laydate.render({
+    elem: '#test5'
+    ,type: 'time'
+    //,range: true
+    //,trigger: 'click'
+    ,min: '09:30:00'
+    ,max: '17:30:00'
+    ,done: function(value, date, endDate){
+      console.log(value, date, endDate);
+    }
+    ,change: function(value, date, endDate){
+      //this.elem.val(value)
+    }
+  });
+  
+  //时间范围选择器
+  laydate.render({
+    elem: '#test55'
+    ,type: 'time'
+    ,range: true
+    //,trigger: 'click'
+    ,done: function(value, date, endDate){
+      console.log(value, date, endDate);
+    }
+  });
+  
+  //自定义重要日
+  var ins555 = laydate.render({
+    elem: '#test555'
+    ,calendar: true //是否开启公历重要节日
+    ,mark: { //标记重要日子
+      '0-8-15': '纪念' //0代表：每年
+      ,'2017-8-20': '发布'
+      ,'2017-8-31': '月底'
+    } 
+    ,done: function(value, date, endDate){
+      if(date.year == 2017 && date.month == 8 && date.date == 15){
+        //console.log('中国人民战胜日本法西斯纪念日');
+      }
+    }
+    ,change: function(value, date, endDate){
+      console.log(value)
+    }
+  });
+  
+  //墨绿主题
+  laydate.render({
+    elem: '#test6-1' //指定元素
+    ,type: 'datetime'
+    ,theme: 'molv'
+    //,range: true
+    ,trigger: 'click'
+  });
+  
+  //自定义背景色主题
+  laydate.render({
+    elem: '#test6-2' //指定元素
+    ,type: 'datetime'
+    ,theme: '#393D49'
+    //,range: true
+    ,trigger: 'click'
+  });
+  
+  //格子主题
+  laydate.render({
+    elem: '#test6-3' //指定元素
+    //,type: 'datetime'
+    ,theme: 'grid'
+    //,range: true
+    ,trigger: 'click'
+  });
+  
+  //其它元素触发
+  laydate.render({
+    elem: '#test6' //指定元素
+    ,eventElem: '#test7' //绑定执行事件的元素
+    ,lang: 'en'
+  });
+  
+  //外部事件
+  lay('#test9').on('click', function(e){
+    laydate.render({
+      elem: '#test8'
+      ,type: 'datetime'
+      ,show: true
+      ,min: '2017-08-12 00:10:00'
+      ,max: '2017-08-12 23:10:10'
+      ,closeStop: '#test9' //点击 #test6 所在元素区域不关闭控件
+    });
+  });
+  
+  //直接嵌套在指定容器中
+  var ins10 = laydate.render({
+    elem: '#test10'
+    ,position: 'static'
+    ,calendar: true //是否开启公历重要节日
+    ,mark: { //标记重要日子
+      '2017-8-20': ''
+      ,'2017-8-21': ''
+    } 
+    ,done: function(value, date, endDate){
+      if(date.year == 2017 && date.month == 8 && date.date == 20){
+        ins10.hint('XX活动日');
+      }
+    }
+    ,change: function(value, date, endDate){
+      console.log(value)
+    }
+  });
+  
+  laydate.render({
+    elem: '#test11'
+    ,position: 'static'
+    ,lang: 'en'
+    ,type: 'datetime'
+    ,calendar: true //是否开启公历重要节日
+    ,done: function(value, date, endDate){
+      //console.log(value, date, endDate);
+    }
+    ,change: function(value, date, endDate){
+      console.log(value)
+    }
+  });
+});
+</script>
+</body>
+</html>

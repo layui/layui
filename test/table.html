@@ -1,0 +1,325 @@
+ 
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>表格操作 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 20px;}
+</style>
+</head>
+<body>
+
+<div class="layui-btn-group">
+  <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
+  <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+  <button class="layui-btn" data-type="isAll">验证是否全选</button>
+</div>
+
+<table class="layui-table" lay-data="{width:900, height:330, url:'json/table/demo1.json', page:true, id:'test'}" lay-filter="test">
+  <thead>
+    <tr>
+      <th lay-data="{checkbox:true, fixed: true}"></th>
+      <th lay-data="{field:'id', width:80, fixed: true, sort: true}">ID</th>
+      <th lay-data="{field:'username', width:120, sort: true, edit: 'text', templet: '#usernameTpl'}">用户名</th>
+      <th lay-data="{field:'email', width:150}">邮箱</th>
+      <th lay-data="{field:'sex', width:80}">性别</th>
+      <th lay-data="{field:'city', width:100}">城市</th>
+      <th lay-data="{field:'sign', width:150}">签名</th>
+      <th lay-data="{field:'experience', width:80, sort: true}">积分</th>
+      <th lay-data="{field:'ip', width:120}">IP</th>
+      <th lay-data="{field:'logins', width:100}">登入次数</th>
+      <th lay-data="{field:'joinTime', width:120}">加入时间</th>
+      <th lay-data="{fixed: 'right', toolbar: '#barDemo', width:150, align:'center'}">操作</th>
+    </tr>
+  </thead>
+</table>
+
+<div class="layui-hide" id="barDemo">
+  <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+</div>
+
+<table id="demo"></table>
+
+<table class="layui-table" lay-data="{height:350, url:'json/table/demo1.json', page: true}">
+  <thead>
+    <tr>
+      <th lay-data="{field:'id', width:80, fixed:true, unresize: true, sort: true}">ID</th>
+      <th lay-data="{checkbox:true}"></th> 
+      <th lay-data="{field:'username', width:120, templet: '#usernameTpl'}">用户名</th>
+      <th lay-data="{field:'email', width:150}">邮箱</th>
+      <th lay-data="{field:'sex', width:80, sort: true}">性别</th>
+      <th lay-data="{field:'city', width:100}">城市</th>
+      <th lay-data="{field:'sign', width:150}">签名</th>
+      <th lay-data="{field:'experience', width:80, sort: true}">积分</th>
+      <th lay-data="{field:'ip', width:120}">IP</th>
+      <th lay-data="{field:'logins', width:100, sort: true}">登入次数</th>
+      <th lay-data="{field:'joinTime', width:120}">加入时间</th>
+      <th lay-data="{fixed: 'right', toolbar: '#barDemo', width:150, align:'center'}">操作</th>
+    </tr>
+  </thead>
+</table>
+
+<script type="text/html" id="usernameTpl">
+  <a href="" class="layui-table-link">{{d.username}}</a>
+</script>
+<script type="text/html" id="LAY_table_tpl_email">
+  <span {{# if(!d.activate){ }}style="color:#999"{{# } }}>{{ d.email }}</span>
+</script>
+
+
+<table class="layui-table" lay-data="{width:723, height:235, url:'json/table/demo2.json', page: true, limit: 6}">
+  <thead>
+    <tr>
+      <th lay-data="{field:'username', width:80}" rowspan="2">联系人</th>
+      <th lay-data="{field:'amount', width:120}" rowspan="2">金额</th>
+      <th lay-data="{align:'center'}" colspan="3">地址</th>
+    </tr>
+    <tr>
+      <th lay-data="{field:'province', width:80}">省</th>
+      <th lay-data="{field:'city', width:120}">市</th>
+      <th lay-data="{field:'county', width:300}">详细</th>
+    </tr>
+  </thead>
+</table>
+
+<!--
+<table class="layui-table" lay-data="{width:1200, height:300}">
+  <thead>
+    <tr>
+      <th lay-data="{field:'username', width:80}" rowspan="3">联系人</th>
+      <th lay-data="{field:'mobile', width:120}" rowspan="3">金额</th>
+      <th colspan="5">地址</th>
+    </tr>
+    <tr>
+      <th lay-data="{field:'province', width:80}" rowspan="2">省</th>
+      <th lay-data="{field:'city', width:120}" rowspan="2">市</th>
+      <th lay-data="{field:'county', width:150}" rowspan="2">区</th>
+      <th colspan="2">其它</th>
+    </tr>
+    <tr>
+      <th lay-data="{field:'street', width:80}">街道</th>
+      <th lay-data="{field:'detailAdress', width:200}">详细</th>
+    </tr>
+  </thead>
+</table>
+-->
+
+<div class="layui-btn-group">
+  <button class="layui-btn" data-type="parseTable">转化为数据表格</button>
+</div>
+
+<table class="layui-table" lay-skin="line" lay-filter="parse-table-demo">
+  <thead>
+    <tr>
+      <th lay-data="{field:'username', width:200}">昵称</th>
+      <th lay-data="{field:'joinTime', width:150}">加入时间</th>
+      <th lay-data="{field:'sign', width:300}">签名</th>
+    </tr> 
+  </thead>
+  <tbody>
+    <tr>
+      <td>贤心1</td>
+      <td>2016-11-28</td>
+      <td>人生就像是一场修行a</td>
+    </tr>
+    <tr>
+      <td>贤心2</td>
+      <td>2016-11-29</td>
+      <td>人生就像是一场修行b</td>
+    </tr>
+    <tr>
+      <td>贤心3</td>
+      <td>2016-11-30</td>
+      <td>人生就像是一场修行c</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<script src="../src/layui.js" charset="utf-8"></script>
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+  
+  //方法级渲染
+  window.demoTable = table.render({
+    elem: '#demo'
+    //,url: 'json/table/demo1.json'
+    ,data: [{
+      "id": "10001"
+      ,"username": "杜甫"
+      ,"email": "xianxin@layui.com"
+      ,"sex": "男"
+      ,"city": "浙江杭州"
+      ,"sign": "人生恰似一场修行"
+      ,"experience": "116"
+      ,"ip": "192.168.0.8"
+      ,"logins": "108"
+      ,"joinTime": "2016-10-14"
+    }, {
+      "id": "10002"
+      ,"username": "李白"
+      ,"email": "xianxin@layui.com"
+      ,"sex": "男"
+      ,"city": "浙江杭州"
+      ,"sign": "人生恰似一场修行"
+      ,"experience": "12"
+      ,"ip": "192.168.0.8"
+      ,"logins": "106"
+      ,"joinTime": "2016-10-14"
+      ,"LAY_CHECKED": true
+    }, {
+      "id": "10003"
+      ,"username": "王勃"
+      ,"email": "xianxin@layui.com"
+      ,"sex": "男"
+      ,"city": "浙江杭州"
+      ,"sign": "人生恰似一场修行"
+      ,"experience": "65"
+      ,"ip": "192.168.0.8"
+      ,"logins": "106"
+      ,"joinTime": "2016-10-14"
+    }, {
+      "id": "10004"
+      ,"username": "贤心"
+      ,"email": "xianxin@layui.com"
+      ,"sex": "男"
+      ,"city": "浙江杭州"
+      ,"sign": "人生恰似一场修行"
+      ,"experience": "666"
+      ,"ip": "192.168.0.8"
+      ,"logins": "106"
+      ,"joinTime": "2016-10-14"
+    }, {
+      "id": "10005"
+      ,"username": "贤心"
+      ,"email": "xianxin@layui.com"
+      ,"sex": "男"
+      ,"city": "浙江杭州"
+      ,"sign": "人生恰似一场修行"
+      ,"experience": "86"
+      ,"ip": "192.168.0.8"
+      ,"logins": "106"
+      ,"joinTime": "2016-10-14"
+    }, {
+      "id": "10006"
+      ,"username": "贤心"
+      ,"email": "xianxin@layui.com"
+      ,"sex": "男"
+      ,"city": "浙江杭州"
+      ,"sign": "人生恰似一场修行"
+      ,"experience": "12"
+      ,"ip": "192.168.0.8"
+      ,"logins": "106"
+      ,"joinTime": "2016-10-14"
+    }, {
+      "id": "10007"
+      ,"username": "贤心"
+      ,"email": "xianxin@layui.com"
+      ,"sex": "男"
+      ,"city": "浙江杭州"
+      ,"sign": "人生恰似一场修行"
+      ,"experience": "16"
+      ,"ip": "192.168.0.8"
+      ,"logins": "106"
+      ,"joinTime": "2016-10-14"
+    }, {
+      "id": "10008"
+      ,"username": "贤心"
+      ,"email": "xianxin@layui.com"
+      ,"sex": "男"
+      ,"city": "浙江杭州"
+      ,"sign": "人生恰似一场修行"
+      ,"experience": "106"
+      ,"ip": "192.168.0.8"
+      ,"logins": "106"
+      ,"joinTime": "2016-10-14"
+    }]
+    ,width: 900
+    //,height: 274
+    ,cols: [[ //标题栏
+      {checkbox: true, LAY_CHECKED: true}
+      ,{field: 'id', title: 'ID', width: 80, sort: true}
+      ,{field: 'username', title: '用户名', width: 120}
+      ,{field: 'email', title: '邮箱', width: 150}
+      ,{field: 'sign', title: '签名', width: 150}
+      ,{field: 'sex', title: '性别', width: 80}
+      ,{field: 'city', title: '城市', width: 100}
+      ,{field: 'experience', title: '积分', width: 80, sort: true}
+    ]]
+    
+    ,skin: 'row' //表格风格
+    ,even: true
+    //,size: 'lg' //尺寸
+    
+    ,page: true //是否显示分页
+    ,limits: [3,5,10]
+    ,limit: 3 //每页默认显示的数量
+    //,loading: false //请求数据时，是否显示loading
+    //,id: 'test' //ID
+  });
+  
+  
+  //监听表格复选框选择
+  table.on('checkbox(test)', function(obj){
+    console.log(obj)
+  });
+  
+  //监听单元格编辑
+  table.on('edit(test)', function(obj){
+    var value = obj.value //得到修改后的值
+    ,data = obj.data //得到所在行所有键值
+    ,field = obj.field; //得到字段
+    
+    data[field] = value; //更新缓存中的值
+  });
+  
+  //监听工具条
+  table.on('tool(test)', function(obj){
+    var data = obj.data;
+    if(obj.event === 'del'){
+      layer.confirm('真的删除行么', function(index){
+        obj.del();
+        layer.close(index);
+      });
+    } else if(obj.event === 'edit'){
+      layer.alert('编辑行：<br>'+ JSON.stringify(data))
+    }
+  });
+  
+  
+  var $ = layui.jquery, active = {
+    getCheckData: function(){
+      var checkStatus = table.checkStatus('test')
+      ,data = checkStatus.data;
+      layer.alert(JSON.stringify(data));
+    }
+    ,getCheckLength: function(){
+      var checkStatus = table.checkStatus('test')
+      ,data = checkStatus.data;
+      layer.msg('选中了：'+ data.length + ' 个');
+    }
+    ,isAll: function(){
+      var checkStatus = table.checkStatus('test');
+      layer.msg(checkStatus.isAll ? '全选': '未全选')
+    }
+    ,parseTable: function(){
+      table.init('parse-table-demo');
+    }
+  };
+  
+  $('.layui-btn').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
+</script>
+</body>
+</html>

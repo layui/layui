@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>工具集 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 50px;}
+</style>
+</head>
+<body>
+
+<div id="test"></div>
+
+<hr>
+
+<div id="test1"></div>
+
+<hr>
+
+1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>
+
+<script src="../src/layui.js"></script>
+<script>
+layui.use('util', function(){
+  var util = layui.util
+  ,$ = layui.$;
+
+  //固定块
+  util.fixbar({
+    bar1: true
+    ,bar2: true
+    //,css: {right: 100, bottom: 100}
+    ,click: function(type){
+      console.log(this, type);
+    }
+  });
+  
+  //倒计时
+  var endTime = new Date(2099,1,1).getTime() //假设为结束日期
+  ,serverTime = new Date().getTime(); //假设为当前服务器时间，这里采用的是本地时间，实际使用一般是取服务端的
+   
+  util.countdown(endTime, serverTime, function(date, serverTime, timer){
+    var str = date[0] + '天' + date[1] + '时' +  date[2] + '分' + date[3] + '秒';
+    $('#test').html('距离2099年1月1日还有：'+ str);
+  });
+  
+  //某个时间在当前时间的多久前
+  var str = util.timeAgo(new Date(2017,7,15,2,58,0));
+  $('#test1').html('示例写于：'+ str);
+});
+</script>
+</body>
+</html>
