@@ -285,7 +285,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         var tds = [], tds_fixed = [], tds_fixed_r = [];
         that.eachCols(function(i3, item3){
           var content = item1[item3.field||i3];
-          if(content === undefined && content === null){
+          if(content === undefined || content === null){
             content = (i3 === 0 ? i1+1 : '');
           }
           
