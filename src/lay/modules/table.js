@@ -229,6 +229,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           page: curr
           ,limit: options.limit
         }, options.where)
+        ,dataType: 'json'
         ,success: function(res){
           if(res.code != 0){
             return layer.msg(res.msg);
@@ -283,7 +284,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       layui.each(data, function(i1, item1){
         var tds = [], tds_fixed = [], tds_fixed_r = [];
         that.eachCols(function(i3, item3){
-          var content = item1[item3.field||i3] || (i3 === 0 ? i1+1 : '');
+          var content = item1[item3.field||i3];
+          if(content === undefined && content === null){
+            content = (i3 === 0 ? i1+1 : '');
+          }
           
           if(item3.colspan > 1) return;
           
@@ -757,6 +761,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         ,event: othis.attr('lay-event')
         ,tr: tr
         ,del: function(){
+          var data = this.data;
+          delete data[table.config.checkName];
           tr.remove();
           that.scrollPatch();
         }

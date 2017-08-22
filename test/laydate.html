@@ -120,8 +120,11 @@ layui.use('laydate', function(){
     elem: '#test2'
     ,format: 'y年MM月dd日'
     //,value: new Date(2017,7,20)
-    ,min: -1 //负数代表为n天前，正数代表为n天后。或这种格式：min: '2017-8-20'
-    ,max: 1 //最大日期为n天后
+    //,min: -1 //负数代表为n天前，正数代表为n天后。或这种格式：min: '2017-8-20'
+    //,max: 1 //最大日期为n天后
+    ,ready: function(date){
+      console.log(date);
+    }
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
     }
@@ -241,9 +244,15 @@ layui.use('laydate', function(){
       elem: '#test8'
       ,type: 'datetime'
       ,show: true
-      ,min: '2017-08-12 00:10:00'
-      ,max: '2017-08-12 23:10:10'
+      //,min: '2017-08-12 00:10:00'
+      //,max: '2017-08-12 23:10:10'
       ,closeStop: '#test9' //点击 #test6 所在元素区域不关闭控件
+      ,change: function(value, date){
+        console.log(value, date)
+      }
+      ,done: function(value, date){
+        console.log(value, date)
+      }
     });
   });
   

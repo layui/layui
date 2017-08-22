@@ -1,6 +1,6 @@
 /**
  
- @Name : layDate 5.0 日期时间控件
+ @Name : layDate 5.0.1 日期时间控件
  @Author: 贤心
  @Site：http://www.layui.com/laydate/
  @License：MIT
@@ -55,7 +55,7 @@
   }
 
   ,laydate = {
-    v: '5.0'
+    v: '5.0.1'
     ,config: {} //全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: ready.getPath
@@ -705,7 +705,9 @@
     
     Class.thisElem = that.elemID;
     
-    typeof options.ready === 'function' && options.ready(options.dateTime);
+    typeof options.ready === 'function' && options.ready(lay.extend({}, options.dateTime, {
+      month: options.dateTime.month + 1
+    }));
   };
   
   //控件移除
@@ -865,6 +867,8 @@
       });
       checkValid(dateTime)
     };
+    
+    if(fn === 'limit') return checkValid(dateTime), that;
     
     value = value || options.value;
     if(typeof value === 'string'){
@@ -1212,7 +1216,7 @@
             that.list('month', index);
           }
         } else {
-          that.calendar();
+          that.checkDate('limit').calendar();
           that.closeList();
         }
 
@@ -1516,12 +1520,15 @@
         that.startState = true;
       }
       lay(that.footer).find(ELEM_CONFIRM)[that.endDate ? 'removeClass' : 'addClass'](DISABLED);
-    } else if(!(options.type === 'datatime' || options.position === 'static')){
-      setDateTime(true);
-      that.setValue(that.parse()).remove().done();
-    } else {
+    } else if(options.position === 'static'){ //直接嵌套的选中
       setDateTime(true);
       that.calendar().done().done(null, 'change');
+    } else if(options.type === 'date'){
+      setDateTime(true);
+      that.setValue(that.parse()).remove().done();
+    } else if(options.type === 'datetime'){
+      setDateTime(true);
+      that.calendar().done(null, 'change');
     }
   };
   
@@ -1634,7 +1641,7 @@
       prevYear: function(){
         if(addSubYeay('sub')) return;
         dateTime.year--;
-        that.calendar();
+        that.checkDate('limit').calendar();
         options.range || that.done(null, 'change');
       }
       ,prevMonth: function(){
@@ -1643,7 +1650,7 @@
           year: YM[0]
           ,month: YM[1]
         });
-        that.calendar();
+        that.checkDate('limit').calendar();
         options.range || that.done(null, 'change');
       }
       ,nextMonth: function(){
@@ -1652,13 +1659,13 @@
           year: YM[0]
           ,month: YM[1]
         });
-        that.calendar();
+        that.checkDate('limit').calendar();
         options.range || that.done(null, 'change');
       }
       ,nextYear: function(){
         if(addSubYeay()) return;
         dateTime.year++
-        that.calendar();
+        that.checkDate('limit').calendar();
         options.range || that.done(null, 'change');
       }
     };

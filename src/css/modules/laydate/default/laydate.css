@@ -8,6 +8,9 @@
 
 html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 
+/* 初始化 */
+.layui-laydate *{margin: 0; padding: 0;}
+
 /* 主体结构 */
 .layui-laydate, .layui-laydate *{box-sizing: border-box;}
 .layui-laydate{position: absolute; z-index: 66666666; margin: 5px 0; border-radius: 2px; font-size: 14px; -webkit-animation-duration: 0.3s; animation-duration: 0.3s; -webkit-animation-fill-mode: both; animation-fill-mode: both;}
@@ -105,7 +108,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-selected:hover{background-color: #00F7DE !important;}
 .layui-laydate-content td:hover,
 .layui-laydate-list li:hover{background-color: #eaeaea; color: #333;}
-.laydate-time-list li ol{border: 1px solid #e2e2e2; border-left-width: 0;}
+.laydate-time-list li ol{margin: 0; padding: 0; border: 1px solid #e2e2e2; border-left-width: 0;}
 .laydate-time-list li:first-child ol{border-left-width: 1px;}
 .laydate-time-list>li:hover{background: none;}
 .layui-laydate-content .laydate-day-prev,

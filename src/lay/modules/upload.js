@@ -193,6 +193,7 @@ layui.define('layer' , function(exports){
           ,data: formData
           ,contentType: false 
           ,processData: false
+          ,dataType: 'json'
           ,success: function(res){
             done(index, res);
           }
@@ -233,11 +234,13 @@ layui.define('layer' , function(exports){
     ,done = function(index, res){
       that.elemFile.next('.'+ ELEM_CHOOSE).remove();
       elemFile.value = '';
-      try {
-        res = JSON.parse(res);
-      } catch(e){
-        res = {};
-        return that.msg('请对上传接口返回有效JSON');
+      if(typeof res !== 'object'){
+        try {
+          res = JSON.parse(res);
+        } catch(e){
+          res = {};
+          return that.msg('请对上传接口返回有效JSON');
+        }
       }
       typeof options.done === 'function' && options.done(res, index || 0, function(files){
         that.upload(files);

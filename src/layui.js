@@ -19,7 +19,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.0.0'; //版本号
+    this.v = '2.0.1'; //版本号
   }
 
   //获取layui所在目录
@@ -415,7 +415,7 @@
     
     //如果是数字，按大小排序，如果是非数字，按字典序排序
     clone.sort(function(o1, o2){
-      var isNum = /^\d+\d+\d$/
+      var isNum = /^\d+$/
       ,v1 = o1[key]
       ,v2 = o2[key];
       
