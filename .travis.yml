@@ -1,6 +1,11 @@
 language: node_js
+dist: trusty
+addons:
+  chrome: stable
 node_js:
   - node
+addons:
+  sauce_connect: true
 sudo: false
 cache:
   directories:
