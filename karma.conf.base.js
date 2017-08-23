@@ -43,7 +43,7 @@ sourceFileMap.filter(function (uri) {
 });
 
 module.exports = function(config) {
-    config.set({
+    return {
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: '',
@@ -122,5 +122,5 @@ module.exports = function(config) {
         // if true, Karma captures browsers, runs the tests and exits
         // 脚本调用请设为 true
         singleRun: true
-    });
+    };
 };
