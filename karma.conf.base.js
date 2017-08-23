@@ -27,7 +27,7 @@ var sourceFileMap = [
     'src/lay/modules/util.js',
     'src/lay/modules/mobile/zepto.js',
     'src/lay/modules/mobile/layer-mobile.js',
-    'src/lay/modules/mobile/upload-mobile.js',
+    'src/lay/modules/mobile/upload-mobile.js'
 ];
 
 /**
@@ -42,9 +42,8 @@ sourceFileMap.filter(function (uri) {
     coverageFileMap[uri] = ['coverage'];
 });
 
-module.exports = function(config) {
+module.exports = function (config) {
     return {
-
         // base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: '',
 
