@@ -417,7 +417,7 @@ layui.define('layer' , function(exports){
     }
     
     //文件选择
-    that.elemFile.on('change', function(){
+    that.elemFile.off('upload.change').on('upload.change', function(){
       var files = this.files || [];
       setChooseFile(files);
       options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
@@ -430,6 +430,10 @@ layui.define('layer' , function(exports){
     
     //防止事件重复绑定
     if(options.elem.data('haveEvents')) return;
+    
+    that.elemFile.on('change', function(){
+      $(this).trigger('upload.change');
+    });
     
     options.elem.on('click', function(){
       if(that.isFile()) return;

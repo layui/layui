@@ -1,6 +1,6 @@
 /**
  
- @Name : layDate 5.0.1 日期时间控件
+ @Name : layDate 5.0.2 日期时间控件
  @Author: 贤心
  @Site：http://www.layui.com/laydate/
  @License：MIT
@@ -55,7 +55,7 @@
   }
 
   ,laydate = {
-    v: '5.0.1'
+    v: '5.0.2'
     ,config: {} //全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: ready.getPath
@@ -874,6 +874,12 @@
     if(typeof value === 'string'){
       value = value.replace(/\s+/g, ' ').replace(/^\s|\s$/g, '');
     }
+    
+    //如果点击了开始，单未选择结束就关闭，则重新选择开始
+    if(that.startState && !that.endState){
+      delete that.startState;
+      that.endState = true;
+    };
 
     if(typeof value === 'string' && value){
       if(that.EXP_IF.test(value)){ //校验日期格式
@@ -894,7 +900,7 @@
         ) + '<br>已为你重置');
         error = true;
       }
-    } else if(typeof value === 'object'){
+    } else if(value && value.constructor === Date){ //如果值为日期对象时
       options.dateTime = that.systemDate(value);
     } else {
       options.dateTime = that.systemDate();
@@ -1587,7 +1593,9 @@
       ,confirm: function(){
         if(options.range){
           if(!that.endDate) return that.hint('请先选择日期范围');
-          if(lay(btn).hasClass(DISABLED)) return;
+          if(lay(btn).hasClass(DISABLED)) return that.hint(
+            options.type === 'time' ? TIPS_OUT.replace(/日期/g, '时间') : TIPS_OUT
+          );
         } else {
           if(lay(btn).hasClass(DISABLED)) return that.hint('不在有效日期或时间范围内');
         }
@@ -1763,8 +1771,8 @@
       that.remove();
     }).on('keydown', function(e){
       if(e.keyCode === 13){
-        e.preventDefault();
         if(lay('#'+ that.elemID)[0] && that.elemID === Class.thisElem){
+          e.preventDefault();
           lay(that.footer).find(ELEM_CONFIRM)[0].click();
         }
       }
