@@ -79,10 +79,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-layout-right{position: absolute !important; right: 0; top: 0;}
 
 /* 响应式类 */
-.layui-hide-xs{display: none!important;}
-.layui-show-xs-block{display: block!important;}
-.layui-show-xs-inline{display: inline!important;}
-.layui-show-xs-inline-block{display: inline-block!important;}
+
 
 /* 栅格布局 */
 .layui-container{position: relative; margin: 0 auto; padding: 0 15px; box-sizing: border-box;}
@@ -122,7 +119,14 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-col-xs-offset11{margin-left: 91.66666667%;}
 .layui-col-xs-offset12{margin-left: 100%;}
 
-/* 小型屏幕（平板） */@media screen and (min-width: 780px) {
+/* 超小屏幕(手机) */@media screen and (max-width: 780px) {
+  .layui-hide-xs{display: none!important;}
+  .layui-show-xs-block{display: block!important;}
+  .layui-show-xs-inline{display: inline!important;}
+  .layui-show-xs-inline-block{display: inline-block!important;}
+}
+
+/* 小型屏幕(平板) */@media screen and (min-width: 780px) {
   .layui-container{width: 750px;}
   .layui-hide-sm{display: none!important;}
   .layui-show-sm-block{display: block!important;}
@@ -156,7 +160,7 @@ a cite{font-style: normal; *cursor:pointer;}
   .layui-col-sm-offset11{margin-left: 91.66666667%;}
   .layui-col-sm-offset12{margin-left: 100%;}
 }
-/* 中型屏幕（桌面） */@media screen and (min-width: 1000px) {
+/* 中型屏幕(桌面) */@media screen and (min-width: 1000px) {
   .layui-container{width: 970px;}
   .layui-hide-md{display: none!important;}
   .layui-show-md-block{display: block!important;}
@@ -190,7 +194,7 @@ a cite{font-style: normal; *cursor:pointer;}
   .layui-col-md-offset11{margin-left: 91.66666667%;}
   .layui-col-md-offset12{margin-left: 100%;}
 }
-/* 大型屏幕（桌面） */@media screen and (min-width: 1200px) {
+/* 大型屏幕(桌面) */@media screen and (min-width: 1200px) {
   .layui-container{width: 1170px;}
   .layui-hide-lg{display: none!important;}
   .layui-show-lg-block{display: block!important;}
