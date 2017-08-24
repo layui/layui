@@ -326,7 +326,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
                 }() +'>';
               }
               if(item3.toolbar){
-                return laytpl($(item3.toolbar).html()).render(item1);
+                return laytpl($(item3.toolbar).html()||'').render(item1);
               }
               return item3.templet ? laytpl($(item3.templet).html() || String(content)).render(item1) : content;
             }()

@@ -1,6 +1,6 @@
 {
   "name": "layui",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "经典模块化前端框架",
   "main": "layui.js",
   "license": "MIT",
