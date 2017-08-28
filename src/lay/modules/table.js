@@ -242,6 +242,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         }, options.where)
         ,dataType: 'json'
         ,success: function(res){
+          if(options.resultConverter != undefined){
+              options.resultConverter(res);
+          }
           if(res.code != 0){
             return layer.msg(res.msg);
           }
