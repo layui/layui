@@ -964,7 +964,11 @@ layer.prompt = function(options, yes){
     delete options.area;
   }
   var prompt, content = options.formType == 2 ? '<textarea class="layui-layer-input"' + style +'>' + (options.value||'') +'</textarea>' : function(){
-    return '<input type="'+ (options.formType == 1 ? 'password' : 'text') +'" class="layui-layer-input" value="'+ (options.value||'') +'">';
+    var input = document.createElement('input');
+    input.type = 1 == options.formType ? "password" : "text";
+    input.classList.add("layui-layer-input");
+    input.setAttribute('value', (options.value || ""));
+    return input.outerHTML;
   }();
   
   var success = options.success;
