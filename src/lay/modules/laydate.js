@@ -1,6 +1,6 @@
 /**
  
- @Name : layDate 5.0.2 日期时间控件
+ @Name : layDate 5.0.3 日期时间控件
  @Author: 贤心
  @Site：http://www.layui.com/laydate/
  @License：MIT
@@ -55,7 +55,7 @@
   }
 
   ,laydate = {
-    v: '5.0.2'
+    v: '5.0.3'
     ,config: {} //全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: ready.getPath
@@ -945,7 +945,6 @@
     ,options = that.config, timestrap = {}
     ,dateTime = options[index > 41 ? 'endDate' : 'dateTime']
     ,isOut, thisDateTime = lay.extend({}, dateTime, date || {});
-    
     lay.each({
       now: thisDateTime
       ,min: options.min
@@ -1118,12 +1117,18 @@
       lay.each(new Array(15), function(i){
         var li = lay.elem('li', {
           'lay-ym': yearNum
-        });
+        }), ymd = {year: yearNum};
         yearNum == listYM[0] && lay(li).addClass(THIS);
         li.innerHTML = yearNum + text;
         ul.appendChild(li);
-        
-        that.limit(lay(li), {year: yearNum}, index);
+        if(yearNum < that.firstDate.year){
+          ymd.month = options.min.month;
+          ymd.date = options.min.date;
+        } else if(yearNum > that.firstDate.year){
+          ymd.month = options.max.month;
+          ymd.date = options.max.date;
+        }
+        that.limit(lay(li), ymd, index);
         yearNum++;
       });
       lay(elemYM[isCN ? 0 : 1]).attr('lay-ym', (yearNum - 8) + '-' + listYM[1])
@@ -1132,12 +1137,16 @@
       lay.each(new Array(12), function(i){
         var li = lay.elem('li', {
           'lay-ym': i
-        });
+        }), ymd = {year: listYM[0], month: i};
         i + 1 == listYM[1] && lay(li).addClass(THIS);
         li.innerHTML = lang.month[i] + (isCN ? '月' : '');
         ul.appendChild(li);
-        
-        that.limit(lay(li), {year: listYM[0], month: i}, index);
+        if(listYM[0] < that.firstDate.year){
+          ymd.date = options.min.date;
+        } else if(listYM[0] > that.firstDate.year){
+          ymd.date = options.max.date;
+        }
+        that.limit(lay(li), ymd, index);
       });
       lay(elemYM[isCN ? 0 : 1]).attr('lay-ym', listYM[0] + '-' + listYM[1])
       .html(listYM[0] + text);
@@ -1704,8 +1713,12 @@
       //选择年月
       lay(header[2]).find('span').on('click', function(e){
         var othis = lay(this)
-        ,layYM = othis.attr('lay-ym').split('-')
+        ,layYM = othis.attr('lay-ym')
         ,layType = othis.attr('lay-type');
+        
+        if(!layYM) return;
+        
+        layYM = layYM.split('-');
 
         that.listYM[i] = [layYM[0] | 0, layYM[1] | 0];
         that.list(layType, i);

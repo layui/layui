@@ -22,11 +22,11 @@ pre{white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; w
 
 /** 图标字体 **/
 @font-face {font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=2.0.0');
-  src: url('../font/iconfont.eot?v=2.0.0#iefix') format('embedded-opentype'),
-  url('../font/iconfont.svg?v=2.0.0#iconfont') format('svg'),
-  url('../font/iconfont.woff?v=2.0.0') format('woff'),
-  url('../font/iconfont.ttf?v=2.0.0') format('truetype');
+  src: url('../font/iconfont.eot?v=2');
+  src: url('../font/iconfont.eot?v=2#iefix') format('embedded-opentype'),
+  url('../font/iconfont.svg?v=2#iconfont') format('svg'),
+  url('../font/iconfont.woff?v=2') format('woff'),
+  url('../font/iconfont.ttf?v=2') format('truetype');
   
 }
                     
@@ -119,14 +119,14 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-col-xs-offset11{margin-left: 91.66666667%;}
 .layui-col-xs-offset12{margin-left: 100%;}
 
-/* 超小屏幕(手机) */@media screen and (max-width: 780px) {
+/* 超小屏幕(手机) */@media screen and (max-width: 768px) {
   .layui-hide-xs{display: none!important;}
   .layui-show-xs-block{display: block!important;}
   .layui-show-xs-inline{display: inline!important;}
   .layui-show-xs-inline-block{display: inline-block!important;}
 }
 
-/* 小型屏幕(平板) */@media screen and (min-width: 780px) {
+/* 小型屏幕(平板) */@media screen and (min-width: 768px) {
   .layui-container{width: 750px;}
   .layui-hide-sm{display: none!important;}
   .layui-show-sm-block{display: block!important;}
@@ -160,7 +160,7 @@ a cite{font-style: normal; *cursor:pointer;}
   .layui-col-sm-offset11{margin-left: 91.66666667%;}
   .layui-col-sm-offset12{margin-left: 100%;}
 }
-/* 中型屏幕(桌面) */@media screen and (min-width: 1000px) {
+/* 中型屏幕(桌面) */@media screen and (min-width: 992px) {
   .layui-container{width: 970px;}
   .layui-hide-md{display: none!important;}
   .layui-show-md-block{display: block!important;}

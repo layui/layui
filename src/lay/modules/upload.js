@@ -283,7 +283,6 @@ layui.define('layer' , function(exports){
         });
         return that.files;
       }
-      ,elemFile: elemFile
     }
     
     //提交上传
@@ -389,6 +388,18 @@ layui.define('layer' , function(exports){
 
     //点击上传容器
     options.elem.off('upload.start').on('upload.start', function(){
+      var othis = $(this), data = othis.attr('lay-data');
+      
+      if(data){
+        try{
+          data = new Function('return '+ data)();
+          that.config = $.extend({}, options, data);
+        } catch(e){
+          hint.error('Upload element property lay-data configuration item has a syntax error: ' + data)
+        }
+      }
+      
+      that.config.item = othis;
       that.elemFile[0].click();
     });
     

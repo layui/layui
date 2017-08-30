@@ -19,7 +19,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.0.2'; //版本号
+    this.v = '2.1.0'; //版本号
   }
 
   //获取layui所在目录
@@ -430,6 +430,7 @@
         return 0;
       }
     });
+
     desc && clone.reverse(); //倒序
     return clone;
   };

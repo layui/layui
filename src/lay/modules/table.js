@@ -21,6 +21,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   ,table = {
     config: {
       checkName: 'LAY_CHECKED' //是否选中状态的字段名
+      ,indexName: 'LAY_TABLE_INDEX' //下标索引名
     } //全局配置项
     ,cache: {} //数据缓存
     ,index: layui.table ? (layui.table.index + 10000) : 0
@@ -40,12 +41,17 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   
   //操作当前实例
   ,thisTable = function(){
-    var that = this;
+    var that = this
+    ,options = that.config
+    ,id = options.id;
+    
+    id && (thisTable.config[id] = options);
+    
     return {
       reload: function(options){
         that.reload.call(that, options);
       }
-      ,config: that.config
+      ,config: options
     }
   }
   
@@ -174,19 +180,42 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   };
 
   //表格渲染
-  Class.prototype.render = function(){
-    var that = this, options = that.config;
-
+  Class.prototype.render = function(sets){
+    var that = this, options;
+    
+    if(sets) that.config = sets;
+    options = that.config;
+    
     options.elem = $(options.elem);
     options.where = options.where || {};
+    
+    //请求参数的自定义格式
+    options.request = $.extend({
+      pageName: 'page'
+      ,limitName: 'limit'
+    }, options.request)
+    
+    //响应数据的自定义格式
+    options.response = $.extend({
+      statusName: 'code'
+      ,statusCode: 0
+      ,msgName: 'msg'
+      ,dataName: 'data'
+      ,countName: 'count'
+    }, options.response)
     
     if(!options.elem[0]) return that;
 
     var othis = options.elem
-    ,hasRender = othis.next('.' + ELEM_VIEW)
+    ,hasRender = othis.next('.' + ELEM_VIEW);
+    
+    if(options.height && /^full-\d+$/.test(options.height)){ //full-差距值
+      that.fullHeightGap = options.height.split('-')[1];
+      options.height = _WIN.height() - that.fullHeightGap;
+    }
 
     //替代元素
-    ,reElem = that.elem = $(laytpl(TPL_MAIN).render({
+    var reElem = that.elem = $(laytpl(TPL_MAIN).render({
       VIEW_CLASS: ELEM_VIEW
       ,data: options
       ,index: that.index //索引
@@ -209,11 +238,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     
     //设置body区域高度
     if(options.height){
-      var bodyHeight = parseFloat(options.height) - parseFloat(that.layHeader.height()) - 1;
-      if(options.page){
-        bodyHeight = bodyHeight - parseFloat(that.layTool.outerHeight() + 1);
-      }
-      that.layBody.css('height', bodyHeight);
+      that.fullSize();
     }
     
     that.pullData(1);
@@ -230,39 +255,44 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   //获得数据
   Class.prototype.pullData = function(curr, loadIndex){
     var that = this
-    ,options = that.config;
+    ,options = that.config
+    ,request = options.request
+    ,response = options.response;
     
     if(options.url){ //Ajax请求
+      var params = {};
+      params[request.pageName] = curr;
+      params[request.limitName] = options.limit;
+      
       $.ajax({
         type: options.method || 'get'
         ,url: options.url
-        ,data: $.extend({
-          page: curr
-          ,limit: options.limit
-        }, options.where)
+        ,data: $.extend(params, options.where)
         ,dataType: 'json'
         ,success: function(res){
-          if(res.code != 0){
-            return layer.msg(res.msg);
+          if(res[response.statusName] != response.statusCode){
+            that.renderForm();
+            return that.layMain.html('<div class="layui-none">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');;
           }
-          that.renderData(res, curr, res.count);
+          that.renderData(res, curr, res[response.countName]);
           loadIndex && layer.close(loadIndex);
-          typeof options.done === 'function' && options.done(res, curr, res.count);
+          typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
         }
         ,error: function(e, m){
-          layer.msg('数据请求异常');
-          hint.error('初始table时的接口'+ options.url + '异常：'+ m);
+          that.layMain.html('<div class="layui-none">数据接口请求异常</div>');
+          that.renderForm();
           loadIndex && layer.close(loadIndex);
         }
       });
     } else if(options.data && options.data.constructor === Array){ //已知数据
-      var startLimit = curr*options.limit - options.limit
-      ,res = {
-        data: options.data.concat().splice(startLimit, options.limit)
-        ,count: options.data.length
-      };
+      var res = {}
+      ,startLimit = curr*options.limit - options.limit
+      
+      res[response.dataName] = options.data.concat().splice(startLimit, options.limit);
+      res[response.countName] = options.data.length;
+
       that.renderData(res, curr, options.data.length);
-      typeof options.done === 'function' && options.done(res, curr, res.count);
+      typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
     }
   };
   
@@ -281,8 +311,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   //数据渲染
   Class.prototype.renderData = function(res, curr, count, sort){
     var that = this
-    ,data = res.data
     ,options = that.config
+    ,data = res[options.response.dataName] || []
     ,trs = []
     ,trs_fixed = []
     ,trs_fixed_r = []
@@ -294,6 +324,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       }
       layui.each(data, function(i1, item1){
         var tds = [], tds_fixed = [], tds_fixed_r = [];
+        if(item1.length === 0) return;
+        if(!sort){
+          item1[table.config.indexName] = i1;
+        }
         that.eachCols(function(i3, item3){
           var content = item1[item3.field||i3];
           if(content === undefined || content === null) content = '';
@@ -346,7 +380,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       that.layFixLeft.find('tbody').html(trs_fixed.join(''));
       that.layFixRight.find('tbody').html(trs_fixed_r.join(''));
       
-      form.render('checkbox', 'LAY-table-'+that.index);
+      that.renderForm();
       that.syncCheckAll();
       that.haveInit ? that.scrollPatch() : setTimeout(function(){
         that.scrollPatch();
@@ -360,11 +394,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     //排序
     if(sort){
       return render();
-    } else {
-      that.cacheData = data;
     }
     
     if(data.length === 0){
+      that.renderForm();
+      that.layFixed.remove();
       return that.layMain.html('<div class="layui-none">无数据</div>');
     }
 
@@ -396,12 +430,18 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     }
   };
   
+  //渲染表单
+  Class.prototype.renderForm = function(type){
+    form.render((type || 'checkbox'), 'LAY-table-'+ this.index);
+  }
+  
   //数据排序
   Class.prototype.sort = function(th, type, pull){
     var that = this
     ,field
     ,config = that.config
-    ,thisData = table.cache[that.key];
+    ,filter = config.elem.attr('lay-filter')
+    ,data = table.cache[that.key], thisData;
     
     //字段匹配
     if(typeof th === 'string'){
@@ -415,7 +455,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         }
       });
     }
-    
+
     try {
       var field = field || th.data('field');
       
@@ -431,20 +471,21 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       elemSort.attr('lay-sort', type || null);
       that.layFixed.find('th')
     } catch(e){
-      return hint.error('未到匹配field');
+      return hint.error('Did not match to field');
     }
     
+    //记录排序索引和类型
     that.sortKey = {
       field: field
       ,sort: type
     };
 
     if(type === 'asc'){ //升序
-      thisData = layui.sort(thisData, field);
+      thisData = layui.sort(data, field);
     } else if(type === 'desc'){ //降序
-      thisData = layui.sort(thisData, field, true);
+      thisData = layui.sort(data, field, true);
     } else { //清除排序
-      thisData = that.cacheData;
+      thisData = layui.sort(data, table.config.indexName);
       delete that.sortKey;
     }
 
@@ -452,6 +493,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       data: thisData
     }, that.page, that.count, true);
     layer.close(that.tipsIndex);
+    
+    layui.event.call(th, MOD_NAME, 'sort('+ filter +')', {
+      field: field
+      ,type: type
+    });
   };
   
   //请求loading
@@ -478,7 +524,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     ,thisData = table.cache[that.key];
     if(!thisData[index]) return;
     thisData[index][config.checkName] = checked;
-    that.cacheData[index][config.checkName] = checked;
   };
   
   //同步全选按钮状态
@@ -500,13 +545,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     if(table.checkStatus(that.key).isAll){
       if(!checkAllElem[0].checked){
         checkAllElem.prop('checked', true);
-        form.render('checkbox', 'LAY-table-'+that.index);
+        that.renderForm();
       }
       syncColsCheck(true);
     } else {
       if(checkAllElem[0].checked){
         checkAllElem.prop('checked', false);
-        form.render('checkbox', 'LAY-table-'+that.index);
+        that.renderForm();
       }
       syncColsCheck(false);
     }
@@ -523,6 +568,26 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         return callback(item), true;
       }
     });
+  };
+  
+  //尺寸始终铺满
+  Class.prototype.fullSize = function(){
+    var that = this
+    ,options = that.config
+    ,height = options.height, bodyHeight;
+    
+    if(that.fullHeightGap){
+      height = _WIN.height() - that.fullHeightGap;
+      if(height < 135) height = 135;
+      that.elem.css('height', height);
+    }
+
+    //tbody区域高度
+    bodyHeight = parseFloat(height) - parseFloat(that.layHeader.height()) - 1;  
+    if(options.page){
+      bodyHeight = bodyHeight - parseFloat(that.layTool.outerHeight() + 1);
+    }
+    that.layBody.css('height', bodyHeight);
   };
   
   //滚动条补丁
@@ -650,7 +715,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           that.setCheckData(i, checked);
         });
         that.syncCheckAll();
-        form.render('checkbox', 'LAY-table-'+that.index);
+        that.renderForm();
       } else {
         that.setCheckData(index, checked);
         that.syncCheckAll();
@@ -679,9 +744,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       ,value = this.value
       ,field = othis.parent().data('field')
       ,index = othis.parents('tr').eq(0).data('index')
+      ,data = table.cache[that.key][index];
+      
+      data[field] = value; //更新缓存中的值
+      
       layui.event.call(this, MOD_NAME, 'edit('+ filter +')', {
         value: value
-        ,data: table.cache[that.key][index]
+        ,data: data
         ,field: field
       });
     }).on('blur', '.'+ELEM_EDIT, function(){
@@ -754,20 +823,19 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       var othis = $(this)
       ,index = othis.parents('tr').eq(0).data('index')
       ,tr = that.layBody.find('tr[data-index="'+ index +'"]')
-      ,ELEM_CLICK = 'layui-table-click';
+      ,ELEM_CLICK = 'layui-table-click'
+      ,data = table.cache[that.key][index];
       
       layui.event.call(this, MOD_NAME, 'tool('+ filter +')', {
-        data: table.cache[that.key][index]
+        data: table.clearCacheKey(data)
         ,event: othis.attr('lay-event')
         ,tr: tr
         ,del: function(){
-          var data = this.data;
-          delete data[table.config.checkName];
+          table.cache[that.key][index] = [];
           tr.remove();
           that.scrollPatch();
         }
         ,update: function(fields){
-          var data = this.data;
           fields = fields || {};
           layui.each(fields, function(key, value){
             if(key in data){
@@ -801,6 +869,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     });
     
     _WIN.on('resize', function(){ //自适应
+       that.fullSize();
        that.scrollPatch();
     });
   };
@@ -809,7 +878,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   table.init = function(filter, settings){
     settings = settings || {};
     var that = this
-    ,elemTable = filter ? $('table[lay-filter="'+ filter +'"]') : $(ELEM + '[lay-data]');
+    ,elemTable = filter ? $('table[lay-filter="'+ filter +'"]') : $(ELEM + '[lay-data]')
+    ,errorTips = 'Table element property lay-data configuration item has a syntax error: ';
 
     //遍历数据表格
     elemTable.each(function(){
@@ -818,7 +888,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       try{
         tableData = new Function('return '+ tableData)();
       } catch(e){
-        hint.error('table元素属性lay-data配置项存在语法错误：'+ tableData)
+        hint.error(errorTips + tableData)
       }
       
       var cols = [], options = $.extend({
@@ -841,7 +911,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           try{
             itemData = new Function('return '+ itemData)();
           } catch(e){
-            return hint.error('table元素属性lay-data配置项存在语法错误：'+ itemData)
+            return hint.error(errorTips + itemData)
           }
           
           var row = $.extend({
@@ -888,7 +958,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     layui.each(data, function(i, item){
       if(item[table.config.checkName]){
         nums++;
-        arr.push(item);
+        arr.push(table.clearCacheKey(item));
       }
     });
     return {
@@ -896,11 +966,27 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       ,isAll: nums === data.length //是否全选
     };
   };
+  
+  //表格重载
+  thisTable.config = {};
+  table.reload = function(id, options){
+    var config = thisTable.config[id];
+    if(!config) return hint.error('The ID option was not found in the table instance');
+    return table.render($.extend({}, config, options));
+  };
  
   //核心入口
   table.render = function(options){
     var inst = new Class(options);
     return thisTable.call(inst);
+  };
+  
+  //清除临时Key
+  table.clearCacheKey = function(data){
+    data = $.extend({}, data);
+    delete data[table.config.checkName];
+    delete data[table.config.indexName];
+    return data;
   };
   
   //自动完成渲染

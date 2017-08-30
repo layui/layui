@@ -36,8 +36,10 @@ layui.define('jquery', function(exports){
     var TITLE = '.layui-tab-title'
     ,tabElem = $('.layui-tab[lay-filter='+ filter +']')
     ,titElem = tabElem.children(TITLE)
-    ,contElem = tabElem.children('.layui-tab-content');
-    titElem.append('<li lay-id="'+ (options.id||'') +'">'+ (options.title||'unnaming') +'</li>');
+    ,barElem = titElem.children('.layui-tab-bar')
+    ,contElem = tabElem.children('.layui-tab-content')
+    ,li = '<li lay-id="'+ (options.id||'') +'">'+ (options.title||'unnaming') +'</li>';
+    barElem[0] ? barElem.before(li) : titElem.append(li);
     contElem.append('<div class="layui-tab-item">'+ (options.content||'') +'</div>');
     call.hideTabMore(true);
     call.tabAuto();
