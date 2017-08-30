@@ -42,7 +42,7 @@
     "gulp-if": "^2.0.1",
     "gulp-rename": "^1.2.2",
     "del": "^2.2.2",
-    "gulp-zip": "^gulp-zip",
+    "gulp-zip": "^4.0.0",
     "minimist": "^1.2.0"
   },
   "keywords": [
