@@ -421,6 +421,12 @@
       
       if(isNum.test(v1)) v1 = parseFloat(v1);
       if(isNum.test(v2)) v2 = parseFloat(v2);
+      
+      if(v1 && !v2){
+        return 1;
+      } else if(!v1 && v2){
+        return -1;
+      }
         
       if(v1 > v2){
         return 1;
