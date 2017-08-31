@@ -1,6 +1,7 @@
 language: node_js
 node_js:
   - node
+dist: trusty
 addons:
   sauce_connect: true
 sudo: false
