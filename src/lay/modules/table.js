@@ -436,7 +436,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   }
   
   //数据排序
-  Class.prototype.sort = function(th, type, pull){
+  Class.prototype.sort = function(th, type, pull, formEvent){
     var that = this
     ,field
     ,config = that.config
@@ -494,10 +494,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     }, that.page, that.count, true);
     layer.close(that.tipsIndex);
     
-    layui.event.call(th, MOD_NAME, 'sort('+ filter +')', {
-      field: field
-      ,type: type
-    });
+    if(formEvent){
+      layui.event.call(th, MOD_NAME, 'sort('+ filter +')', {
+        field: field
+        ,type: type
+      });
+    }
   };
   
   //请求loading
@@ -687,16 +689,16 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       } else {
         type = 'asc';
       }
-      that.sort(othis, type);
+      that.sort(othis, type, null, true);
     }).find(ELEM_SORT+' .layui-edge ').on('click', function(e){
       var othis = $(this)
       ,index = othis.index()
       ,field = othis.parents('th').eq(0).data('field')
       layui.stope(e);
       if(index === 0){
-        that.sort(field, 'asc');
+        that.sort(field, 'asc', null, true);
       } else {
-        that.sort(field, 'desc');
+        that.sort(field, 'desc', null, true);
       }
     });
     
