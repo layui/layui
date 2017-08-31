@@ -10,5 +10,9 @@ cache:
 script:
   - npm run test:cov
   - npm run test:sauce
-after_script: 
+after_script:
   - npm install coveralls && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+env:
+  global:
+    - SAUCE_USERNAME=layui
+    - secure: PHeqcsxnHrNJJDw+gnSnh2HgSEcz83BlhPa/C+rTxP2+DGNX7/WFcoQidM9X3Zoi2NQ5kZ9d9sZsxyK1OSI2YIWeUn9F5KOe1AkdQnQzR4N/0in8CJFnEe14BFujlVghyU2afKWNwoml22VdrboQvZpVsp6zDtGBnslAWxUIAEc3V+HWlBVJdVzOg/Hm09RowbLo+WXk1Z8kU95nf2+5p2UFwkeeMh9JqSYkyNAKR2Jlbk+u7Qx2DbTWik7t3+7FYe432PKm4SImbWLClMOqYtTl3zdT5SKw6oupat2hWMaeBo7mDSTiFNemNkuYgoxAdBYegxjUVyDmyB+EkKn6bHD4pfjaiCWV6CL5JBjkgxruuucKG8q1+z7K7peMc4RF91+AAsdmouzM+J/r80b3ZEDQVh8Mze48tgMJArncb1isptEDm7orqVFchHyzn+95fa1Q4i7aJ7upimq7Y65DbCU762UT21BtQVoa4syWnNmRAxa20YIVxWWkYfga2tJr8xlQ3Rt3xVIRG35FgEt4Ytk1JsaZpLo6Nj3O5LP+oqJ6SEPXwNS8genvYdcwoRzpfxLfXebTXGkWaNfHlpc7JjTG8koJ1b2tk/4VJ6/x1bi5Bx0fwAaF3UoENdt9OpJnND/mYpQACVMj05zO+pZN501CztbNNzp/xPypyn7Nxmg=
