@@ -23,7 +23,6 @@ body{padding: 50px 100px;}
   <input type="text" class="layui-input" id="test1">
 </div>
 
-
 <br><br><hr><br>
 
 日期选择器：
@@ -61,6 +60,21 @@ body{padding: 50px 100px;}
 </div>
 
 <br><br><hr><br>
+
+
+同时绑定多个：
+<div class="layui-inline">
+  <input type="text" class="layui-input test-item">
+</div>
+<div class="layui-inline">
+  <input type="text" class="layui-input test-item">
+</div>
+<div class="layui-inline">
+  <input type="text" class="layui-input test-item">
+</div>
+
+<br><br><hr><br>
+
 
 墨绿主题：
 <div class="layui-inline">
@@ -120,8 +134,8 @@ layui.use('laydate', function(){
     elem: '#test2'
     ,format: 'y年MM月dd日'
     //,value: new Date(2017,7,20)
-    //,min: -1 //负数代表为n天前，正数代表为n天后。或这种格式：min: '2017-8-20'
-    //,max: 1 //最大日期为n天后
+    ,min: '2016-9-20'
+    ,max: '2018-9-20'
     ,ready: function(date){
       console.log(date);
     }
@@ -183,6 +197,14 @@ layui.use('laydate', function(){
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
     }
+  });
+  
+  //同时绑定多个
+  lay('.test-item').each(function(){
+    laydate.render({
+      elem: this
+      ,trigger: 'click'
+    });
   });
   
   //自定义重要日

@@ -19,7 +19,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.0.1'; //版本号
+    this.v = '2.1.0'; //版本号
   }
 
   //获取layui所在目录
@@ -421,6 +421,12 @@
       
       if(isNum.test(v1)) v1 = parseFloat(v1);
       if(isNum.test(v2)) v2 = parseFloat(v2);
+      
+      if(v1 && !v2){
+        return 1;
+      } else if(!v1 && v2){
+        return -1;
+      }
         
       if(v1 > v2){
         return 1;
@@ -430,6 +436,7 @@
         return 0;
       }
     });
+
     desc && clone.reverse(); //倒序
     return clone;
   };

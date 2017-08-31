@@ -13,6 +13,7 @@ var header = require('gulp-header');
 var del = require('del');
 var gulpif = require('gulp-if');
 var minimist = require('minimist');
+var zip = require('gulp-zip');
 
 //获取参数
 var argv = require('minimist')(process.argv.slice(2), {
@@ -29,6 +30,10 @@ var argv = require('minimist')(process.argv.slice(2), {
 
 //模块
 ,mods = 'laytpl,laypage,laydate,jquery,layer,element,upload,form,tree,table,carousel,util,flow,layedit,code'
+
+//发行版本目录
+,releaseDir = './release/layui-v' + pkg.version
+,release = releaseDir + '/layui'
 
 //任务
 ,task = {
@@ -48,7 +53,7 @@ var argv = require('minimist')(process.argv.slice(2), {
       ,'!./src/lay/all.js'
       ,'!./src/lay/all-mobile.js'
     ]
-    ,dir = ver ? 'release' : 'dist';
+    ,dir = ver ? release : 'dist';
     
     //过滤 layim
     if(ver || argv.open){
@@ -69,7 +74,7 @@ var argv = require('minimist')(process.argv.slice(2), {
       './src/**/{layui,all,'+ mods +'}.js'
       ,'!./src/**/mobile/*.js'
     ]
-    ,dir = ver ? 'release' : 'dist';
+    ,dir = ver ? release : 'dist';
     
     return gulp.src(src).pipe(uglify())
       .pipe(concat('layui.all.js', {newLine: ''}))
@@ -86,7 +91,7 @@ var argv = require('minimist')(process.argv.slice(2), {
       ,'./src/lay/modules/laytpl.js'
       ,'./src/**/mobile/{'+ mods +'}.js'
     ]
-    ,dir = ver ? 'release' : 'dist';
+    ,dir = ver ? release : 'dist';
     
     if(ver || argv.open){
       src.push('./src/**/mobile/layim-mobile-open.js'); 
@@ -106,7 +111,7 @@ var argv = require('minimist')(process.argv.slice(2), {
     ver = ver === 'open';
     
     var src = ['./src/css/**/*.css']
-    ,dir = ver ? 'release' : 'dist'
+    ,dir = ver ? release : 'dist'
     ,noteNew = JSON.parse(JSON.stringify(note));
     
     if(ver || argv.open){
@@ -125,7 +130,7 @@ var argv = require('minimist')(process.argv.slice(2), {
   ,font: function(ver){
     ver = ver === 'open';
     
-    var dir = ver ? 'release' : 'dist';
+    var dir = ver ? release : 'dist';
     
     return gulp.src('./src/font/*')
     .pipe(rename({}))
@@ -137,7 +142,7 @@ var argv = require('minimist')(process.argv.slice(2), {
     ver = ver === 'open';
     
     var src = ['./src/**/*.{png,jpg,gif,html,mp3,json}']
-    ,dir = ver ? 'release' : 'dist';
+    ,dir = ver ? release : 'dist';
     
     if(ver || argv.open){
       src.push('!./src/**/layim/**/*.*');
@@ -146,6 +151,12 @@ var argv = require('minimist')(process.argv.slice(2), {
     gulp.src(src).pipe(rename({}))
     .pipe(gulp.dest('./'+ dir));
   }
+  
+  //复制发行的引导文件
+  ,release: function(){
+    gulp.src('./release/doc/**/*')
+    .pipe(gulp.dest(releaseDir));
+  }
 };
 
 //清理
@@ -153,7 +164,7 @@ gulp.task('clear', function(cb) {
   return del(['./dist/*'], cb);
 });
 gulp.task('clearRelease', function(cb) {
-  return del(['./release/*'], cb);
+  return del([releaseDir], cb);
 });
 
 gulp.task('minjs', task.minjs);
@@ -162,12 +173,33 @@ gulp.task('mobile', task.mobile);
 gulp.task('mincss', task.mincss);
 gulp.task('font', task.font);
 gulp.task('mv', task.mv);
+gulp.task('release', task.release);
 
 //开源版
 gulp.task('default', ['clearRelease'], function(){ //命令：gulp
   for(var key in task){
     task[key]('open');
   }
+});
+
+//压缩
+gulp.task('zip', function(){
+  gulp.src('./release/layui-v' + pkg.version + '/**/*')
+  .pipe(zip('layui-v' + pkg.version + '.zip'))
+  .pipe(gulp.dest('./release'));
+});
+
+//打包LayIM
+gulp.task('layim', function(){
+  var dir = './release/layui.layim-v'+ pkg.layimV;
+  gulp.src('./release/doc-layim/**/*')
+  .pipe(gulp.dest(dir))
+  
+  gulp.src('./src/**/*')
+  .pipe(gulp.dest(dir + '/src'))
+  
+  return gulp.src('./dist/**/*')
+  .pipe(gulp.dest(dir + '/dist'));
 });
 
 //完整任务

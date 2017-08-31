@@ -21,7 +21,7 @@ body{padding: 20px;}
   <button class="layui-btn" data-type="isAll">验证是否全选</button>
 </div>
 
-<table class="layui-table" lay-data="{width:900, height:330, url:'json/table/demo1.json', page:true, id:'test'}" lay-filter="test">
+<table class="layui-table" lay-data="{width:900, height:'full-100', url:'json/table/demo1.json', page:true, id:'test'}" lay-filter="test">
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed: true}"></th>
@@ -31,7 +31,7 @@ body{padding: 20px;}
       <th lay-data="{field:'sex', width:80}">性别</th>
       <th lay-data="{field:'city', width:100}">城市</th>
       <th lay-data="{field:'sign', width:150}">签名</th>
-      <th lay-data="{field:'experience', width:80, sort: true}">积分</th>
+      <th lay-data="{field:'experience', width:80, sort: true, edit: 'text'}">积分</th>
       <th lay-data="{field:'ip', width:120}">IP</th>
       <th lay-data="{field:'logins', width:100}">登入次数</th>
       <th lay-data="{field:'joinTime', width:120}">加入时间</th>
@@ -61,13 +61,13 @@ body{padding: 20px;}
       <th lay-data="{field:'ip', width:120}">IP</th>
       <th lay-data="{field:'logins', width:100, sort: true}">登入次数</th>
       <th lay-data="{field:'joinTime', width:120}">加入时间</th>
-      <th lay-data="{fixed: 'right', toolbar: '#barDemo', width:150, align:'center'}">操作</th>
+      <th lay-data="{fixed: 'right', toolbar: '#barDemo', width:150}">操作</th>
     </tr>
   </thead>
 </table>
 
 <script type="text/html" id="usernameTpl">
-  <a href="" class="layui-table-link">{{d.username}}</a>
+  <a href="" class="layui-table-link">{{d.username || ''}}</a>
 </script>
 <script type="text/html" id="LAY_table_tpl_email">
   <span {{# if(!d.activate){ }}style="color:#999"{{# } }}>{{ d.email }}</span>
@@ -245,7 +245,8 @@ layui.use('table', function(){
     ,width: 900
     //,height: 274
     ,cols: [[ //标题栏
-      {checkbox: true, LAY_CHECKED: true}
+      {space: true, fixed: true}
+      ,{checkbox: true, LAY_CHECKED: true}
       ,{field: 'id', title: 'ID', width: 80, sort: true}
       ,{field: 'username', title: '用户名', width: 120}
       ,{field: 'email', title: '邮箱', width: 150}
@@ -255,6 +256,7 @@ layui.use('table', function(){
       ,{field: 'experience', title: '积分', width: 80, sort: true}
     ]]
     
+    ,id:'test111'
     ,skin: 'row' //表格风格
     ,even: true
     //,size: 'lg' //尺寸
@@ -278,7 +280,6 @@ layui.use('table', function(){
     ,data = obj.data //得到所在行所有键值
     ,field = obj.field; //得到字段
     
-    data[field] = value; //更新缓存中的值
   });
   
   //监听工具条
@@ -292,6 +293,16 @@ layui.use('table', function(){
     } else if(obj.event === 'edit'){
       layer.alert('编辑行：<br>'+ JSON.stringify(data))
     }
+  });
+  
+  //监听排序
+  table.on('sort(test)', function(obj){
+    console.log(this, obj)
+    
+    return;
+    table.reload('test', {
+      height: 300
+    });
   });
   
   

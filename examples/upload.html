@@ -51,11 +51,16 @@ hr{margin: 30px 0;}
 
 <hr>
 
-<button type="button" class="layui-btn" id="test3"><i class="layui-icon">&#xe67c;</i>上传文件</button>
-<button type="button" class="layui-btn layui-btn-primary" id="test33"><i class="layui-icon">&#xe67c;</i>换个样式</button>
+<button type="button" class="layui-btn test333" lay-data="{size:10,url:'a'}" id="test3"><i class="layui-icon">&#xe67c;</i>上传文件</button>
+<button type="button" class="layui-btn layui-btn-primary test333" lay-data="{size:20,url:'b'}" id="test33"><i class="layui-icon">&#xe67c;</i>换个样式</button>
 
 <button type="button" class="layui-btn" id="test4"><i class="layui-icon">&#xe67c;</i>上传视频</button>
 <button type="button" class="layui-btn" id="test5"><i class="layui-icon">&#xe67c;</i>上传音频</button>
+
+<hr>
+
+<button class="layui-btn testm" lay-data="{url: '/a/'}">参数设在元素上</button>
+<button class="layui-btn testm" lay-data="{url: '/b/', accept: 'file',size:5}">参数设在元素上</button>
 
 <hr>
 
@@ -184,13 +189,26 @@ layui.use('upload', function(){
   
 
   upload.render({
-    elem: '#test3'
-    ,url: ''
+    elem: '.test333'
+    ,url: 'a'
     ,accept: 'file'
+    ,before: function(obj){
+      console.log(this.item);
+    }
     ,done: function(res){
       console.log(res)
     }
   });
+  
+  upload.render({
+    elem: '.testm'
+    ,done: function(res, index, upload){
+      //获取当前触发上传的元素，一般用于 elem 绑定 class 的情况，注意：此乃 layui 2.1.0 新增
+      var item = this.item;
+    }
+  })
+  
+  /*
   upload.render({
     elem: '#test33'
     ,url: ''
@@ -198,7 +216,7 @@ layui.use('upload', function(){
     ,done: function(res){
       console.log(res)
     }
-  });
+  });*/
   
   upload.render({
     elem: '#test4'

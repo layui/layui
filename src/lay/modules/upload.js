@@ -283,7 +283,6 @@ layui.define('layer' , function(exports){
         });
         return that.files;
       }
-      ,elemFile: elemFile
     }
     
     //提交上传
@@ -389,6 +388,18 @@ layui.define('layer' , function(exports){
 
     //点击上传容器
     options.elem.off('upload.start').on('upload.start', function(){
+      var othis = $(this), data = othis.attr('lay-data');
+      
+      if(data){
+        try{
+          data = new Function('return '+ data)();
+          that.config = $.extend({}, options, data);
+        } catch(e){
+          hint.error('Upload element property lay-data configuration item has a syntax error: ' + data)
+        }
+      }
+      
+      that.config.item = othis;
       that.elemFile[0].click();
     });
     
@@ -417,7 +428,7 @@ layui.define('layer' , function(exports){
     }
     
     //文件选择
-    that.elemFile.on('change', function(){
+    that.elemFile.off('upload.change').on('upload.change', function(){
       var files = this.files || [];
       setChooseFile(files);
       options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
@@ -430,6 +441,10 @@ layui.define('layer' , function(exports){
     
     //防止事件重复绑定
     if(options.elem.data('haveEvents')) return;
+    
+    that.elemFile.on('change', function(){
+      $(this).trigger('upload.change');
+    });
     
     options.elem.on('click', function(){
       if(that.isFile()) return;
