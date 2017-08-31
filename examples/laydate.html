@@ -134,8 +134,9 @@ layui.use('laydate', function(){
     elem: '#test2'
     ,format: 'y年MM月dd日'
     //,value: new Date(2017,7,20)
-    ,min: '2016-9-20'
-    ,max: '2018-9-20'
+    //,min: '2016-10-14'
+    //,max: -1
+    ,value: '1989年10月14日'
     ,ready: function(date){
       console.log(date);
     }
@@ -210,9 +211,10 @@ layui.use('laydate', function(){
   //自定义重要日
   var ins555 = laydate.render({
     elem: '#test555'
-    ,calendar: true //是否开启公历重要节日
+    //,calendar: true //是否开启公历重要节日
     ,mark: { //标记重要日子
       '0-8-15': '纪念' //0代表：每年
+      ,'0-0-15': '中旬'
       ,'2017-8-20': '发布'
       ,'2017-8-31': '月底'
     } 

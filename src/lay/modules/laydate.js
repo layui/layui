@@ -1,6 +1,6 @@
 /**
  
- @Name : layDate 5.0.3 日期时间控件
+ @Name : layDate 5.0.4 日期时间控件
  @Author: 贤心
  @Site：http://www.layui.com/laydate/
  @License：MIT
@@ -55,7 +55,7 @@
   }
 
   ,laydate = {
-    v: '5.0.3'
+    v: '5.0.4'
     ,config: {} //全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: ready.getPath
@@ -71,6 +71,7 @@
     ,ready: function(fn){
       var cssname = 'laydate', ver = ''
       ,path = (isLayui ? 'modules/laydate/' : 'theme/') + 'default/laydate.css?v='+ laydate.v + ver;
+      if(typeof define === 'function' && define.amd) return fn();
       isLayui ? layui.addcss(path, fn, cssname) : ready.link(path, fn, cssname);
       return this;
     }
@@ -438,6 +439,9 @@
     options.eventElem = lay(options.eventElem);
     
     if(!options.elem[0]) return;
+    
+    //默认赋值
+    options.value && that.setValue(options.value);
 
     //日期范围分隔符
     if(options.range === true) options.range = '-';
@@ -927,10 +931,11 @@
   Class.prototype.mark = function(td, YMD){
     var that = this
     ,mark, options = that.config;
-
     lay.each(options.mark, function(key, title){
       var keys = key.split('-');
-      if((keys[0] == YMD[0] || keys[0] == 0) && keys[1] == YMD[1] && keys[2] == YMD[2]){
+      if((keys[0] == YMD[0] || keys[0] == 0) //每年的每月
+      && (keys[1] == YMD[1] || keys[1] == 0) //每月的每日
+      && keys[2] == YMD[2]){ //特定日
         mark = title || YMD[2];
       }
     });
@@ -1124,7 +1129,7 @@
         if(yearNum < that.firstDate.year){
           ymd.month = options.min.month;
           ymd.date = options.min.date;
-        } else if(yearNum > that.firstDate.year){
+        } else if(yearNum >= that.firstDate.year){
           ymd.month = options.max.month;
           ymd.date = options.max.date;
         }
@@ -1143,7 +1148,7 @@
         ul.appendChild(li);
         if(listYM[0] < that.firstDate.year){
           ymd.date = options.min.date;
-        } else if(listYM[0] > that.firstDate.year){
+        } else if(listYM[0] >= that.firstDate.year){
           ymd.date = options.max.date;
         }
         that.limit(lay(li), ymd, index);

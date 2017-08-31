@@ -69,8 +69,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       ,'{{# layui.each(d.data.cols, function(i1, item1){ }}'
         ,'<tr>'
         ,'{{# layui.each(item1, function(i2, item2){ }}'
-          ,'{{# if(item2.fixed && item2.fixed !== "right"){ fixed = true; } }}'
-          ,'{{# if(item2.fixed){ right = true; } }}'
+          ,'{{# if(item2.fixed && item2.fixed !== "right"){ left = true; } }}'
+          ,'{{# if(item2.fixed === "right"){ right = true; } }}'
           ,function(){
             if(options.fixed && options.fixed !== 'right'){
               return '{{# if(item2.fixed && item2.fixed !== "right"){ }}';
@@ -81,9 +81,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
             return '';
           }()
           ,'{{# if(item2.checkbox){ }}'
-            ,'<th data-field="{{ item2.field||i2 }}" data-type="checkbox" unresize="true"><div class="layui-table-cell laytable-cell-checkbox"><input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose" {{# if(item2[d.data.checkName]){ }}checked{{# }; }}></div></th>'
+            ,'<th data-field="{{ item2.field||i2 }}" data-type="checkbox" {{#if(item2.colspan){}} colspan="{{item2.colspan}}"{{#} if(item2.rowspan){}} rowspan="{{item2.rowspan}}"{{#}}} unresize="true"><div class="layui-table-cell laytable-cell-checkbox"><input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose" {{# if(item2[d.data.checkName]){ }}checked{{# }; }}></div></th>'
           ,'{{# } else if(item2.space){ }}'
-            ,'<th data-field="{{ item2.field||i2 }}" unresize="true"><div class="layui-table-cell laytable-cell-space"></div></th>'
+            ,'<th data-field="{{ item2.field||i2 }}" {{#if(item2.colspan){}} colspan="{{item2.colspan}}"{{#} if(item2.rowspan){}} rowspan="{{item2.rowspan}}"{{#}}} unresize="true"><div class="layui-table-cell laytable-cell-space"></div></th>'
           ,'{{# } else { }}'
             ,'<th data-field="{{ item2.field||i2 }}" {{#if(item2.colspan){}} colspan="{{item2.colspan}}"{{#} if(item2.rowspan){}} rowspan="{{item2.rowspan}}"{{#}}} {{# if(item2.unresize){ }}unresize="true"{{# } }}>'
               ,'{{# if(item2.colspan > 1){ }}'
@@ -116,7 +116,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   
   //主模板
   ,TPL_MAIN = ['<div class="layui-form layui-border-box {{d.VIEW_CLASS}}" lay-filter="LAY-table-{{d.index}}" style="{{# if(d.data.width){ }}width:{{d.data.width}}px;{{# } }} {{# if(d.data.height){ }}height:{{d.data.height}}px;{{# } }}">'
-    ,'{{# var fixed, right; }}'
+    ,'{{# var left, right; }}'
     ,'<div class="layui-table-header">'
       ,TPL_HEADER()
     ,'</div>'
@@ -124,7 +124,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       ,TPL_BODY
     ,'</div>'
     
-    ,'{{# if(fixed && fixed !== "right"){ }}'
+    ,'{{# if(left){ }}'
     ,'<div class="layui-table-fixed layui-table-fixed-l">'
       ,'<div class="layui-table-header">'
         ,TPL_HEADER({fixed: true}) 
@@ -241,6 +241,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       that.fullSize();
     }
     
+    //如果多级表头，则填补表头高度
+    if(options.cols.length > 1){
+      var th = that.layFixed.find(ELEM_HEADER).find('th');
+      th.height(that.layHeader.height() - 1 - parseFloat(th.css('padding-top')) - parseFloat(th.css('padding-bottom')));
+    }
+    
     that.pullData(1);
     that.events();
   };
@@ -257,7 +263,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     var that = this
     ,options = that.config
     ,request = options.request
-    ,response = options.response;
+    ,response = options.response
+    ,sort = function(){
+      if(typeof options.initSort === 'object'){
+        that.sort(options.initSort.field, options.initSort.type);
+      }
+    };
     
     if(options.url){ //Ajax请求
       var params = {};
@@ -274,7 +285,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
             that.renderForm();
             return that.layMain.html('<div class="layui-none">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');;
           }
-          that.renderData(res, curr, res[response.countName]);
+          that.renderData(res, curr, res[response.countName]), sort();
           loadIndex && layer.close(loadIndex);
           typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
         }
@@ -291,7 +302,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       res[response.dataName] = options.data.concat().splice(startLimit, options.limit);
       res[response.countName] = options.data.length;
 
-      that.renderData(res, curr, options.data.length);
+      that.renderData(res, curr, options.data.length), sort();
       typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
     }
   };
@@ -471,7 +482,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       elemSort.attr('lay-sort', type || null);
       that.layFixed.find('th')
     } catch(e){
-      return hint.error('Did not match to field');
+      return hint.error('Table modules: Did not match to field');
     }
     
     //记录排序索引和类型

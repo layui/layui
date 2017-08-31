@@ -35,7 +35,8 @@ layui.define(function(exports){
   //分页视图
   Class.prototype.view = function(){
     var that = this
-    ,config = that.config;
+    ,config = that.config
+    ,groups = config.groups = 'groups' in config ? (config.groups|0) : 5; //连续页码个数
     
     //排版
     config.layout = typeof config.layout === 'object' 
@@ -44,7 +45,6 @@ layui.define(function(exports){
     
     config.count = config.count|0; //数据总数
     config.curr = (config.curr|0) || 1; //当前页
-    config.groups = (config.groups|0) || 5; //连续页码个数
 
     //每页条数的选择项
     config.limits = typeof config.limits === 'object'
@@ -61,18 +61,18 @@ layui.define(function(exports){
     }
     
     //连续分页个数不能低于0且不能大于总页数
-    if(config.groups < 0){
-      config.groups = 0
-    } else if (config.groups > config.pages){
-      config.groups = config.pages;
+    if(groups < 0){
+      groups = 1;
+    } else if (groups > config.pages){
+      groups = config.pages;
     }
     
     config.prev = 'prev' in config ? config.prev : '&#x4E0A;&#x4E00;&#x9875;'; //上一页文本
     config.next = 'next' in config ? config.next : '&#x4E0B;&#x4E00;&#x9875;'; //下一页文本
     
     //计算当前组
-    var index = config.pages > config.groups 
-      ? Math.ceil( (config.curr + (config.groups > 1 ? 1 : 0)) / (config.groups > 0 ? config.groups : 1) )
+    var index = config.pages > groups 
+      ? Math.ceil( (config.curr + (groups > 1 ? 1 : 0)) / (groups > 0 ? groups : 1) )
     : 1
     
     //试图片段
@@ -94,21 +94,21 @@ layui.define(function(exports){
         }
         
         //首页
-        if(index > 1 && config.first !== false && config.groups !== 0){
+        if(index > 1 && config.first !== false && groups !== 0){
           pager.push('<a href="javascript:;" class="layui-laypage-first" data-page="1"  title="&#x9996;&#x9875;">'+ (config.first || 1) +'</a>');
         }
 
         //计算当前页码组的起始页
-        var halve = Math.floor((config.groups-1)/2) //页码数等分
+        var halve = Math.floor((groups-1)/2) //页码数等分
         ,start = index > 1 ? config.curr - halve : 1
         ,end = index > 1 ? (function(){
-          var max = config.curr + (config.groups - halve - 1);
+          var max = config.curr + (groups - halve - 1);
           return max > config.pages ? config.pages : max;
-        }()) : config.groups;
+        }()) : groups;
         
         //防止最后一组出现“不规定”的连续页码数
-        if(end - start < config.groups - 1){
-          start = end - config.groups + 1;
+        if(end - start < groups - 1){
+          start = end - groups + 1;
         }
 
         //输出左分割符
@@ -127,11 +127,11 @@ layui.define(function(exports){
         }
         
         //输出输出右分隔符 & 末页
-        if(config.pages > config.groups && config.pages > end && config.last !== false){
+        if(config.pages > groups && config.pages > end && config.last !== false){
           if(end + 1 < config.pages){
             pager.push('<span class="layui-laypage-spr">&#x2026;</span>');
           }
-          if(config.groups !== 0){
+          if(groups !== 0){
             pager.push('<a href="javascript:;" class="layui-laypage-last" title="&#x5C3E;&#x9875;"  data-page="'+ config.pages +'">'+ (config.last || config.pages) +'</a>');
           }
         }

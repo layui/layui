@@ -341,19 +341,20 @@ layui.define('layer' , function(exports){
     
     //检验文件大小
     if(options.size > 0 && !(device.ie && device.ie < 10)){
-      return layui.each(that.chooseFiles, function(index, file){
+      var limitSize;
+      layui.each(that.chooseFiles, function(index, file){
         if(file.size > 1024*options.size){
           var size = options.size/1024;
           size = size >= 1 
             ? (Math.floor(size) + (size%1 > 0 ? size.toFixed(1) : 0)) + 'MB' 
           : options.size + 'KB'
           elemFile.value = '';
-          return that.msg('文件不能超过'+ size);
+          limitSize = size;
+          
         }
-        send();
       });
+      if(limitSize) return that.msg('文件不能超过'+ limitSize);
     }
-    
     send();
   };
   

@@ -77,6 +77,7 @@ body{padding: 20px;}
 <table class="layui-table" lay-data="{width:723, height:235, url:'json/table/demo2.json', page: true, limit: 6}">
   <thead>
     <tr>
+      <th lay-data="{checkbox:true, fixed:'left'}" rowspan="2"></th>
       <th lay-data="{field:'username', width:80}" rowspan="2">联系人</th>
       <th lay-data="{field:'amount', width:120}" rowspan="2">金额</th>
       <th lay-data="{align:'center'}" colspan="3">地址</th>
@@ -85,6 +86,7 @@ body{padding: 20px;}
       <th lay-data="{field:'province', width:80}">省</th>
       <th lay-data="{field:'city', width:120}">市</th>
       <th lay-data="{field:'county', width:300}">详细</th>
+      <th lay-data="{fixed: 'right', width: 120, align: 'center'}" rowspan="2">操作</th>
     </tr>
   </thead>
 </table>
@@ -297,11 +299,16 @@ layui.use('table', function(){
   
   //监听排序
   table.on('sort(test)', function(obj){
-    console.log(this, obj)
+    console.log(this, obj.field, obj.type)
     
-    return;
+    return
     table.reload('test', {
-      height: 300
+      initSort: obj
+      ,where: { //重新请求服务端
+        key: obj.field //排序字段
+        ,order: obj.type //排序方式
+      }
+      //,height: 300
     });
   });
   
