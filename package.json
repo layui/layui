@@ -5,7 +5,10 @@
   "main": "layui.js",
   "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "karma start karma.conf.unit.js",
+    "test:cov": "npm test -- --reporters mocha,coverage",
+    "test:sauce": "karma start karma.conf.sauce.js",
+    "test:watch": "npm test -- --auto-watch --no-single-run"
   },
   "repository": {
     "type": "git",
@@ -23,7 +26,19 @@
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.4",
     "gulp-zip": "^4.0.0",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "chai": "^3.5.0",
+    "karma": "^1.5.0",
+    "karma-chai": "^0.1.0",
+    "karma-chai-sinon": "^0.1.5",
+    "karma-coverage": "^1.1.1",
+    "karma-mocha": "^1.3.0",
+    "karma-sauce-launcher": "^1.1.0",
+    "karma-mocha-reporter": "^2.2.3",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "mocha": "^3.2.0",
+    "sinon": "^2.0.0",
+    "sinon-chai": "^2.8.0"
   },
   "bugs": {
     "url": "https://github.com/sentsin/layui/issues"
@@ -33,15 +48,6 @@
     "test": "test"
   },
   "dependencies": {
-    "gulp": "^3.9.1",
-    "gulp-uglify": "^1.5.4",
-    "gulp-minify-css": "^1.2.4",
-    "gulp-concat": "^2.6.0",
-    "gulp-header": "^1.8.8",
-    "gulp-if": "^2.0.1",
-    "gulp-rename": "^1.2.2",
-    "del": "^2.2.2",
-    "minimist": "^1.2.0"
   },
   "keywords": [
     "layui",
