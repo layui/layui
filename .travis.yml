@@ -1,17 +1,17 @@
 language: node_js
-dist: trusty
-addons:
-  chrome: stable
 node_js:
   - node
-#addons:
-#  sauce_connect: true
+dist: trusty
+addons:
+  sauce_connect:
+    username: "layui"
+    access_key: "8d5b59cf-94c0-44fa-8432-726f6502ca5c"
 sudo: false
 cache:
   directories:
     - node_modules
 script:
   - npm run test:cov
-  #- npm run test:sauce
-after_script: 
+  - npm run test:sauce
+after_script:
   - npm install coveralls && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage

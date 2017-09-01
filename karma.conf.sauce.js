@@ -35,11 +35,11 @@ var customLaunchers = {
         browserName: 'chrome'
     },
 
-    sl_ie_8: {
-        base: 'SauceLabs',
-        browserName: 'internet explorer',
-        version: '8'
-    },
+    // sl_ie_8: {
+    //     base: 'SauceLabs',
+    //     browserName: 'internet explorer',
+    //     version: '8'
+    // },
     sl_ie_9: {
         base: 'SauceLabs',
         browserName: 'internet explorer',
@@ -84,7 +84,7 @@ module.exports = function (config) {
     var options = Object.assign(base(config), {
         reporters: ['mocha', 'saucelabs'],
         sauceLabs: {
-            'testName': 'layui test case',
+            'testName': 'layui',
             'recordVideo': false,
             'recordScreenshots': false,
             'startConnect': false,
@@ -92,7 +92,7 @@ module.exports = function (config) {
                 'no-ssl-bump-domains': 'all'
             },
             'public': 'public',
-            'build': process.env.CIRCLE_BUILD_NUM || process.env.SAUCE_BUILD_ID || 'build-' + Date.now(),
+            'build': 'layui-build-' + process.env.TRAVIS_BUILD_NUMBER,
             'tunnelIdentifier': process.env.TRAVIS_JOB_NUMBER
         },
         customLaunchers: customLaunchers,
