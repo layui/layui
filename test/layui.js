@@ -175,34 +175,33 @@ describe('layui', function () {
     var base64 = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     it('success callback', function (done) {
       layui.img(base64, function (img) {
-        expect(img).to.not.empty;
+        expect(img).to.not.undefined;
         expect(typeof(img)).to.equal('object', '是img对象');
         expect(img.nodeType).to.equal(1, 'img标签节点');
         expect(img.width).to.equal(1);
         expect(img.height).to.equal(1);
         done();
-      }, function () {
-        done('error');
       });
     });
 
     it('error callback', function (done) {
       layui.img('data:image/gif;base64,d', function () {}, function (e) {
-        expect(e).to.not.empty;
+        expect(e).to.not.undefined;
         done();
       });
     });
 
+    // 先删除, 因为没有哪个图片是决定不变的
     // it('http 200', function (done) {
     //   layui.img('https://www.baidu.com/img/bd_logo1.png', function (img) {
-    //     expect(img).to.not.empty;
+    //     expect(img).to.not.undefined;
     //     done();
     //   });
     // });
 
     it('http 404', function (done) {
       layui.img('http://www.404.xx/logo.404.gif', function () {}, function (e) {
-        expect(e).to.not.empty;
+        expect(e).to.not.undefined;
         done();
       });
     });
@@ -210,7 +209,7 @@ describe('layui', function () {
     it('load complete', function (done) {
       layui.img(base64, function () {
         layui.img(base64, function (img) {
-          expect(img).to.not.empty;
+          expect(img).to.not.undefined;
           done();
         });
       });
@@ -239,13 +238,14 @@ describe('layui', function () {
       expect(event.cancelBubble).to.be.true;
     });
 
-    it('window.event', function () {
-      var old = window.event;
-      var event = window.event = {};
-      layui.stope();
-      expect(event.cancelBubble).to.be.true;
-      window.event = old;
-    });
+    // ie中不支持
+    // it('window.event', function () {
+    //   var old = window.event;
+    //   var event = window.event = {};
+    //   layui.stope();
+    //   expect(event.cancelBubble).to.be.true;
+    //   window.event = old;
+    // });
   });
 
   describe('layui.onevent', function () {
@@ -451,9 +451,9 @@ describe('layui', function () {
   it('layui.device', function () {
     expect(layui.device).to.be.a('function');
     expect(layui.device()).to.be.a('object');
-    expect(layui.device().ie).to.be.a('boolean');
-    expect(layui.device().ios).to.be.a('boolean');
-    expect(layui.device().android).to.be.a('boolean');
+    expect(layui.device().ie).to.be.not.undefined;
+    expect(layui.device().ios).to.be.not.undefined;
+    expect(layui.device().android).to.be.not.undefined;
     expect(layui.device().weixin).to.be.a('boolean');
     expect(layui.device('weixin').weixin).to.be.false;
     expect(layui.device('.*')['.*']).to.be.not.empty;
