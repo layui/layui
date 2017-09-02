@@ -415,7 +415,7 @@
     
     //如果是数字，按大小排序，如果是非数字，按字典序排序
     clone.sort(function(o1, o2){
-      var isNum = /^\d+$/
+      var isNum = /^-?\d+$/
       ,v1 = o1[key]
       ,v2 = o2[key];
       
