@@ -4,6 +4,7 @@
  */
 
 /* global layui */
+/* eslint-disable max-nested-callbacks, fecs-indent */
 
 var laytpl = layui.laytpl;
 
@@ -226,3 +227,4 @@ describe('laytpl', function () {
     });
   });
 });
+/* eslint-enable max-nested-callbacks, fecs-indent */

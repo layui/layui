@@ -4,7 +4,7 @@
  */
 
 /* global layui */
-/* eslint-disable max-nested-callbacks */
+/* eslint-disable max-nested-callbacks, fecs-indent */
 
 var $ = layui.$;
 
@@ -368,7 +368,7 @@ describe('layui', function () {
           key: '1'
         },
         {
-          key: '-1',
+          key: '-1'
         },
         {
           key: 2
@@ -504,4 +504,4 @@ describe('layui', function () {
     delete layui.modules[id];
   });
 });
-/* eslint-enable max-nested-callbacks */
+/* eslint-enable max-nested-callbacks, fecs-indent */
