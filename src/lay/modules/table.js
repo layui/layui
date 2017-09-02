@@ -274,7 +274,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       var params = {};
       params[request.pageName] = curr;
       params[request.limitName] = options.limit;
-      
       $.ajax({
         type: options.method || 'get'
         ,url: options.url
@@ -283,7 +282,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         ,success: function(res){
           if(res[response.statusName] != response.statusCode){
             that.renderForm();
-            return that.layMain.html('<div class="layui-none">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');;
+            return that.layMain.html('<div class="layui-none">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');
           }
           that.renderData(res, curr, res[response.countName]), sort();
           loadIndex && layer.close(loadIndex);
@@ -397,6 +396,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         that.scrollPatch();
       }, 50);
       that.haveInit = true;
+      layer.close(that.tipsIndex);
     };
     
     that.key = options.id || options.index;
@@ -521,8 +521,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       return layer.msg('数据请求中', {
         icon: 16
         ,offset: [
-          that.layTool.offset().top - 100 - _WIN.scrollTop() + 'px'
-          ,that.layTool.offset().left + that.layTool.width()/2 - 90 - _WIN.scrollLeft() + 'px'
+          that.elem.offset().top + that.elem.height()/2 - 35 - _WIN.scrollTop() + 'px'
+          ,that.elem.offset().left + that.elem.width()/2 - 90 - _WIN.scrollLeft() + 'px'
         ]
         ,anim: -1
         ,fixed: false
@@ -606,6 +606,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   //滚动条补丁
   Class.prototype.scrollPatch = function(){
     var that = this
+    ,layMainTable = that.layMain.children('table')
     ,scollWidth = that.layMain.width() - that.layMain.prop('clientWidth') //纵向滚动条宽度
     ,scollHeight = that.layMain.height() - that.layMain.prop('clientHeight'); //横向滚动条高度
     if(scollWidth && scollHeight){
@@ -620,7 +621,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       that.layHeader.eq(0).find('.layui-table-patch').remove();
     }
     that.layFixed.find(ELEM_BODY).css('height', that.layMain.height() - scollHeight); //固定列区域高度
-    that.layFixRight[scollHeight ? 'removeClass' : 'addClass'](HIDE);
+    that.layFixRight[layMainTable.width() > that.layMain.width() ? 'removeClass' : 'addClass'](HIDE); //表格宽度小于容器宽度时，隐藏固定列
     that.layFixRight.css('right', scollWidth - 1); //操作栏
   };
 

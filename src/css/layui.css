@@ -339,7 +339,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-btn-group+.layui-btn-group{margin-left: 10px;}
 
 /** 表单 **/
-.layui-input, .layui-textarea, .layui-select{height: 38px; line-height: 38px; line-height: 36px\9; border: 1px solid #e6e6e6; background-color: #fff; border-radius: 2px;}
+.layui-input, .layui-textarea, .layui-select{height: 38px; line-height: 36px\9; border: 1px solid #e6e6e6; background-color: #fff; border-radius: 2px;}
 .layui-input, .layui-textarea{display: block; width: 100%; padding-left: 10px;}
 .layui-input:hover, .layui-textarea:hover{border-color: #D2D2D2 !important;}
 .layui-input:focus, .layui-textarea:focus{border-color: #C9C9C9 !important;}
