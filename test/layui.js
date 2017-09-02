@@ -193,17 +193,15 @@ describe('layui', function () {
       });
     });
 
-    it('https 200 error', function (done) {
-      layui.img('https://www.baidu.com/img/bd_logo1.png', function (img) {
-        expect(img).to.not.empty;
-        done();
-      }, function (e) {
-        done('error');
-      });
-    });
+    // it('http 200', function (done) {
+    //   layui.img('https://www.baidu.com/img/bd_logo1.png', function (img) {
+    //     expect(img).to.not.empty;
+    //     done();
+    //   });
+    // });
 
-    it('https 404 error', function (done) {
-      layui.img('https://www.google.com/logo.404.gif', function () {}, function (e) {
+    it('http 404', function (done) {
+      layui.img('http://www.404.xx/logo.404.gif', function () {}, function (e) {
         expect(e).to.not.empty;
         done();
       });
