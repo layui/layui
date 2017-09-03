@@ -115,14 +115,14 @@ describe('laydate', function () {
 
       it('trigger', function (done) {
         laydate.render({
-          elem: '#test-input',
+          elem: '#test-div',
           ready: function (data) {
             expect(data).to.be.a('object');
             done();
           }
         });
 
-        $('#test-input').focus();
+        $('#test-div').click();
       });
 
       // 如果是div则自动切换成click
@@ -144,7 +144,7 @@ describe('laydate', function () {
       });
     });
 
-    it('options.elem', function () {
+    it('options.elem', function (done) {
       laydate.render({
         elem: '#test-div'
       });
@@ -156,7 +156,10 @@ describe('laydate', function () {
       $('#test-div-no').click();
       expect($('.layui-laydate').length).to.equal(0);
       $('#test-div').click();
-      expect($('.layui-laydate').length).to.equal(1, 'laydate主容器必须存在');
+      setTimeout(function () {
+        expect($('.layui-laydate').length).to.equal(1, 'laydate主容器必须存在');
+        done();
+      });
     });
 
     describe('options.type', function () {
@@ -405,14 +408,15 @@ describe('laydate', function () {
       });
 
       it('input default value format error', function (done) {
+        createNode('<input id="test-input-2" type="text" value="layui">');
+
         laydate.render({
-          elem: '#test-input'
+          elem: '#test-input-2'
         });
 
-        $('#test-input').val('layui').focus();
+        $('#test-input-2').focus();
 
         // 错误提示
-        // ie内可能有延迟
         setTimeout(function () {
           expect($('.layui-laydate-hint').text()).to.match(/日期格式不合法/);
           done();
