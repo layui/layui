@@ -37,8 +37,15 @@ var createNode = function (html) {
 var dateFormat = function (str, date) {
   str = str || 'yyyy-MM-dd HH:mm';
 
-  if (date && !(date instanceof Date)) {
+  if (date) {
+    if ('number' === typeof date && String(date).length !== 13) {
+      var temp = new Date();
+      temp.setDate(temp.getDate() + date);
+      date = temp;
+    }
+    else if (!(date instanceof Date)) {
       date = new Date(date);
+    }
   }
   else {
     date = new Date();
@@ -90,7 +97,6 @@ describe('laydate', function () {
   });
 
   describe('laydate.render()', function () {
-
     it('check params and return value', function () {
       expect(laydate.render()).to.be.a('object', 'render() 返回值必须是对象');
       expect(laydate.render('str')).to.have.property('hint');
@@ -421,6 +427,380 @@ describe('laydate', function () {
           expect($('.layui-laydate-hint').text()).to.match(/日期格式不合法/);
           done();
         });
+      });
+    });
+
+    describe('options.min and options.max', function () {
+      it('date string', function () {
+        laydate.render({
+          elem: '#test-div',
+          min: '2017-7-7',
+          max: '2017-7-8'
+        });
+
+        $('#test-div').click();
+        $('.laydate-set-ym').find('[lay-type="year"]').click();
+        expect($('.laydate-year-list .layui-this').text()).to.equal('2017年');
+
+        // 只有2017年可用
+        expect($('.laydate-year-list [lay-ym="2016"]').hasClass('laydate-disabled')).to.be.true;
+        expect($('.laydate-year-list [lay-ym="2018"]').hasClass('laydate-disabled')).to.be.true;
+
+        $('#test-div').click();
+        $('.laydate-set-ym').find('[lay-type="month"]').click();
+
+        // 只有7月可用
+        expect($('.laydate-month-list [lay-ym="5"]').hasClass('laydate-disabled')).to.be.true;
+        expect($('.laydate-month-list [lay-ym="7"]').hasClass('laydate-disabled')).to.be.true;
+      });
+
+      // 错误字符串时直接设为当天最小
+      it('error string', function () {
+        laydate.render({
+          elem: '#test-div',
+          min: 'layui',
+          max: 'layui'
+        });
+
+        $('#test-div').click();
+
+        expect($('.layui-laydate-content .layui-this').attr('lay-ymd')).to.equal(dateFormat('yyyy-M-d'), '默认选中日期');
+
+        // 昨天不可用, 判断是为了处理跨月
+        var $elem = $('.layui-laydate-content [lay-ymd="' + dateFormat('yyyy-M-d', -1) + '"]');
+        if ($elem.length) {
+          expect($elem.hasClass('laydate-disabled')).to.be.true;
+        }
+
+        // 明天不可用, 判断是为了处理跨月
+        $elem = $('.layui-laydate-content [lay-ymd="' + dateFormat('yyyy-M-d', 1) + '"]');
+        if ($elem.length) {
+          expect($elem.hasClass('laydate-disabled')).to.be.true;
+        }
+      });
+
+      it('date number', function () {
+        laydate.render({
+          elem: '#test-div',
+          min: -2,
+          max: 2
+        });
+
+        $('#test-div').click();
+
+        // 前两天应该是可用, 判断是为了处理跨月
+        var $elem = $('.layui-laydate-content [lay-ymd="' + dateFormat('yyyy-M-d', -2) + '"]');
+        if ($elem.length) {
+          expect($elem.hasClass('laydate-disabled')).to.be.false;
+        }
+
+        // 前三天应该是禁用的
+        $elem = $('.layui-laydate-content [lay-ymd="' + dateFormat('yyyy-M-d', -3) + '"]');
+        if ($elem.length) {
+          expect($elem.hasClass('laydate-disabled')).to.be.true;
+        }
+
+        // 后两天可用
+        $elem = $('.layui-laydate-content [lay-ymd="' + dateFormat('yyyy-M-d', 2) + '"]');
+        if ($elem.length) {
+          expect($elem.hasClass('laydate-disabled')).to.be.false;
+        }
+
+        // 后三天禁用
+        $elem = $('.layui-laydate-content [lay-ymd="' + dateFormat('yyyy-M-d', 3) + '"]');
+        if ($elem.length) {
+          expect($elem.hasClass('laydate-disabled')).to.be.true;
+        }
+      });
+
+      it('timestamp', function () {
+        var date = new Date();
+        var date2 = new Date();
+
+        // 获取前三天的时间缀
+        date.setDate(date.getDate() + -3);
+        date2.setDate(date2.getDate() + 3);
+
+        laydate.render({
+          elem: '#test-div',
+          min: date.getTime(),
+          max: date2.getTime()
+        });
+
+        $('#test-div').click();
+
+        // 前三天可用, 防止跨月
+        var $elem = $('.layui-laydate-content [lay-ymd="' + dateFormat('yyyy-M-d', -3) + '"]');
+        if ($elem.length) {
+          expect($elem.hasClass('laydate-disabled')).to.be.false;
+        }
+
+        // 前四天不可用
+        $elem = $('.layui-laydate-content [lay-ymd="' + dateFormat('yyyy-M-d', -4) + '"]');
+        if ($elem.length) {
+          expect($elem.hasClass('laydate-disabled')).to.be.true;
+        }
+
+        // 后三天可用
+        $elem = $('.layui-laydate-content [lay-ymd="' + dateFormat('yyyy-M-d', 3) + '"]');
+        if ($elem.length) {
+          expect($elem.hasClass('laydate-disabled')).to.be.false;
+        }
+
+        // 后四天不可用
+        $elem = $('.layui-laydate-content [lay-ymd="' + dateFormat('yyyy-M-d', 4) + '"]');
+        if ($elem.length) {
+          expect($elem.hasClass('laydate-disabled')).to.be.true;
+        }
+      });
+
+      it('and options.value', function () {
+        laydate.render({
+          elem: '#test-div',
+          min: '2017-7-7',
+          max: '2017-7-7',
+          value: '2017-7-7'
+        });
+
+        $('#test-div').click();
+
+        expect($('.layui-laydate-content .layui-this').attr('lay-ymd')).to.equal('2017-7-7', '默认选中日期');
+        expect($('.layui-laydate-content [lay-ymd="2017-7-6"]').hasClass('laydate-disabled')).to.be.true;
+        expect($('.layui-laydate-content [lay-ymd="2017-7-8"]').hasClass('laydate-disabled')).to.be.true;
+      });
+
+      // 当最大小于最小时, 日期选择都不可用
+      it('options.max < options.min', function () {
+        laydate.render({
+          elem: '#test-div',
+          min: '2017-7-7',
+          max: '2017-7-1'
+        });
+
+        $('#test-div').click();
+        $('.laydate-set-ym').find('[lay-type="year"]').click();
+
+        // 查找可用的年
+        var year = $('.laydate-year-list li').filter(function () {
+          return !$(this).hasClass('laydate-disabled');
+        }).get();
+        expect(year.length).to.equal(0);
+
+        $('#test-div').click();
+        $('.laydate-set-ym').find('[lay-type="month"]').click();
+
+        // 查找可用的月
+        var month = $('.laydate-month-list li').filter(function () {
+          return !$(this).hasClass('laydate-disabled');
+        }).get();
+        expect(month.length).to.equal(0);
+      });
+    });
+
+    describe('options.trigger', function () {
+      it('default value', function () {
+        var result = laydate.render({
+          elem: '#test-input'
+        });
+        expect(result.config.trigger).to.equal('focus');
+
+        result = laydate.render({
+          elem: '#test-div'
+        });
+        // div会默认转成click
+        expect(result.config.trigger).to.equal('click');
+      });
+
+      it('not click', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          trigger: 'layui',
+          ready: done
+        });
+
+        $('#test-div').click();
+
+        setTimeout(done);
+      });
+    });
+
+    describe('options.show', function () {
+      it('default value', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          ready: done
+        });
+        setTimeout(done);
+      });
+
+      it('show is true', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          ready: function () {
+            done();
+          }
+        });
+      });
+
+      // 以下2个是测试和`options.closeStop`的配合
+      it('element trigger show', function (done) {
+        createNode('<button id="test-trigger-show">显示</button>');
+        $('#test-trigger-show').on('click', function () {
+          laydate.render({
+            elem: '#test-div',
+            show: true
+          });
+        }).click();
+
+        setTimeout(function () {
+          expect($('.layui-laydate').length).to.equal(0);
+          done();
+        }, 100);
+      });
+      it('element trigger show and options.closeStop', function (done) {
+        createNode('<button id="test-trigger-show">显示</button>');
+        $('#test-trigger-show').on('click', function () {
+          laydate.render({
+            elem: '#test-div',
+            show: true,
+            closeStop: '#test-trigger-show'
+          });
+        }).click();
+
+        setTimeout(function () {
+          expect($('.layui-laydate').length).to.equal(1);
+          done();
+        }, 100);
+      });
+    });
+
+    describe('options.position', function () {
+      it('static', function () {
+        laydate.render({
+          elem: '#test-div',
+          position: 'static'
+        });
+
+        expect($('#test-div').find('.layui-laydate-static').length).to.equal(1);
+      });
+
+      it('fixed', function () {
+        laydate.render({
+          elem: '#test-div',
+          position: 'fixed',
+          show: true
+        });
+
+        expect($('.layui-laydate').css('position')).to.equal('fixed');
+      });
+    });
+
+    describe('options.zIndex', function () {
+      it('options.position is fixed', function () {
+        laydate.render({
+          elem: '#test-div',
+          position: 'fixed',
+          show: true,
+          zIndex: 10086
+        });
+
+        expect($('.layui-laydate').css('zIndex')).to.equal('10086');
+      });
+
+      it('options.position is abolute', function () {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          position: 'abolute',
+          zIndex: 10086
+        });
+
+        expect($('.layui-laydate').css('zIndex')).to.equal('10086');
+      });
+
+      it('options.position is static', function () {
+        laydate.render({
+          elem: '#test-div',
+          position: 'static',
+          show: true,
+          zIndex: 10086
+        });
+
+        expect($('.layui-laydate').css('zIndex')).to.equal('10086');
+      });
+    });
+
+    describe('options.showBottom', function () {
+      it('default value', function () {
+        laydate.render({
+          elem: '#test-div',
+          show: true
+        });
+
+        expect($('.layui-laydate-footer').length).to.equal(1);
+      });
+
+      it('is false', function () {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          showBottom: false
+        });
+
+        expect($('.layui-laydate-footer').length).to.equal(0);
+      });
+    });
+
+    describe('options.btns', function () {
+      it('default value', function () {
+        laydate.render({
+          elem: '#test-div',
+          show: true
+        });
+
+        var btns = $('.laydate-footer-btns span').map(function () {
+          return $(this).attr('lay-type');
+        }).get();
+
+        expect(btns).to.deep.equal([
+          'clear',
+          'now',
+          'confirm'
+        ]);
+      });
+
+      it('[confirm, now]', function () {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          btns: ['confirm', 'now']
+        });
+
+        var btns = $('.laydate-footer-btns span').map(function () {
+          return $(this).attr('lay-type');
+        }).get();
+
+        expect(btns).to.deep.equal([
+          'confirm',
+          'now'
+        ]);
+      });
+
+      it('error value', function () {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          btns: ['layui']
+        });
+
+        var btns = $('.laydate-footer-btns span').map(function () {
+          return $(this).attr('lay-type');
+        }).get();
+
+        expect(btns).to.deep.equal([
+          'layui',
+        ]);
       });
     });
   });
