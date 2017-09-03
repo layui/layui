@@ -440,9 +440,6 @@
     
     if(!options.elem[0]) return;
     
-    //默认赋值
-    options.value && that.setValue(options.value);
-
     //日期范围分隔符
     if(options.range === true) options.range = '-';
     
@@ -536,6 +533,15 @@
     
     if(options.show || isStatic) that.render();
     isStatic || that.events();
+    
+    //默认赋值
+    if(options.value){
+      if(value.constructor === Date){
+        that.setValue(that.parse(0, that.systemDate(options.value))); 
+      } else {
+        that.setValue(options.value); 
+      }
+    }
   };
   
   //控件主体渲染
@@ -1211,6 +1217,7 @@
         if(index === 0){
           dateTime[type] = ym;
           if(isAlone) that.startDate[type] = ym;
+          that.limit(lay(that.footer).find(ELEM_CONFIRM), null, 0);
         } else { //范围选择
           if(isAlone){ //非date/datetime类型
             that.endDate[type] = ym;
@@ -1337,12 +1344,12 @@
   };
   
   //转义为规定格式的日期字符
-  Class.prototype.parse = function(state){
+  Class.prototype.parse = function(state, date){
     var that = this
     ,options = that.config
-    ,dateTime = state 
+    ,dateTime = date || (state 
       ? lay.extend({}, that.endDate, that.endTime)
-    : (options.range ? lay.extend({}, that.startDate, that.startTime) : options.dateTime)
+    : (options.range ? lay.extend({}, that.startDate, that.startTime) : options.dateTime))
     ,format = that.format.concat();
 
     //转义为规定格式

@@ -32,7 +32,7 @@ var argv = require('minimist')(process.argv.slice(2), {
 ,mods = 'laytpl,laypage,laydate,jquery,layer,element,upload,form,tree,table,carousel,util,flow,layedit,code'
 
 //发行版本目录
-,releaseDir = './release/layui-v' + pkg.version
+,releaseDir = './release/zip/layui-v' + pkg.version
 ,release = releaseDir + '/layui'
 
 //任务
@@ -191,7 +191,7 @@ gulp.task('zip', function(){
 
 //打包LayIM
 gulp.task('layim', function(){
-  var dir = './release/layui.layim-v'+ pkg.layimV;
+  var dir = './release/zip/layui.layim-v'+ pkg.layimV;
   gulp.src('./release/doc-layim/**/*')
   .pipe(gulp.dest(dir))
   
