@@ -144,22 +144,22 @@ describe('laydate', function () {
       });
     });
 
-    it('options.elem', function (done) {
-      laydate.render({
-        elem: '#test-div'
-      });
-      laydate.render({
-        elem: '#test-div-no'
-      });
+    it('options.elem', function () {
+      expect(function () {
+        laydate.render({
+          elem: '#test-div'
+        });
+
+        laydate.render({
+          elem: '#test-div-layui'
+        });
+
+        laydate.render({
+          elem: '.ok-layui'
+        });
+      }).to.not.throw;
 
       expect($('.layui-laydate').length).to.equal(0);
-      $('#test-div-no').click();
-      expect($('.layui-laydate').length).to.equal(0);
-      $('#test-div').click();
-      setTimeout(function () {
-        expect($('.layui-laydate').length).to.equal(1, 'laydate主容器必须存在');
-        done();
-      });
     });
 
     describe('options.type', function () {
