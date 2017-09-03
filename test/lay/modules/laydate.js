@@ -156,9 +156,7 @@ describe('laydate', function () {
       $('#test-div-no').click();
       expect($('.layui-laydate').length).to.equal(0);
       $('#test-div').click();
-      expect($('.layui-laydate-header').length).to.equal(1);
-      expect($('.layui-laydate-content').length).to.equal(1);
-      expect($('.layui-laydate-footer').length).to.equal(1);
+      expect($('.layui-laydate').length).to.equal(1, 'laydate主容器必须存在');
     });
 
     describe('options.type', function () {
@@ -406,7 +404,7 @@ describe('laydate', function () {
         expect($('.layui-laydate-hint').text()).to.match(/日期格式不合法/);
       });
 
-      it('input default value format error', function () {
+      it('input default value format error', function (done) {
         laydate.render({
           elem: '#test-input'
         });
@@ -414,7 +412,11 @@ describe('laydate', function () {
         $('#test-input').val('layui').focus();
 
         // 错误提示
-        expect($('.layui-laydate-hint').text()).to.match(/日期格式不合法/);
+        // ie内可能有延迟
+        setTimeout(function () {
+          expect($('.layui-laydate-hint').text()).to.match(/日期格式不合法/);
+          done();
+        });
       });
     });
   });
