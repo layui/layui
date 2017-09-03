@@ -8,6 +8,13 @@
 
 var $ = layui.$;
 
+/**
+ * 是否基于`phantomjs`测试, 因为有些特殊的case在ie中是不可用的, 比如: `window.event = {}`
+ *
+ * @type {boolean}
+ */
+var IS_PHANTOMJS = layui.device('phantomjs').phantomjs;
+
 describe('layui', function () {
   it('version', function () {
     expect(layui.v).to.be.a('string');
@@ -201,12 +208,13 @@ describe('layui', function () {
     //   });
     // });
 
-    it('http 404', function (done) {
-      layui.img('http://www.404.xx/logo.404.gif', function () {}, function (e) {
-        expect(e).to.not.undefined;
-        done();
-      });
-    });
+    // 由于没有超时配置, 在部分设备中, dns解析可能超时
+    // it('http 404', function (done) {
+    //   layui.img('http://www.404.xx/logo.404.gif', function () {}, function (e) {
+    //     expect(e).to.not.undefined;
+    //     done();
+    //   });
+    // });
 
     it('load complete', function (done) {
       layui.img(base64, function () {
@@ -240,14 +248,16 @@ describe('layui', function () {
       expect(event.cancelBubble).to.be.true;
     });
 
-    // ie中不支持
-    // it('window.event', function () {
-    //   var old = window.event;
-    //   var event = window.event = {};
-    //   layui.stope();
-    //   expect(event.cancelBubble).to.be.true;
-    //   window.event = old;
-    // });
+    // ie中不支持, 只针对phantomjs测试
+    if (IS_PHANTOMJS) {
+      it('window.event', function () {
+        var old = window.event;
+        var event = window.event = {};
+        layui.stope();
+        expect(event.cancelBubble).to.be.true;
+        window.event = old;
+      });
+    }
   });
 
   describe('layui.onevent', function () {
@@ -309,7 +319,17 @@ describe('layui', function () {
       expect(index).to.equal(3);
     });
 
-    // todo多个事件
+    it('return value', function () {
+      expect(layui.event('id', 'event')).to.be.null;
+
+      // 只有在返回 false 时, 结果才是 false
+      layui.onevent('test-return-value-1', 'click', function (data) {
+        return data;
+      });
+      expect(layui.event('test-return-value-1', 'click', false)).to.be.false;
+      expect(layui.event('test-return-value-1', 'click', true)).to.be.null;
+      expect(layui.event('test-return-value-1', 'click')).to.be.null;
+    });
   });
 
   describe('layui.sort', function () {
@@ -502,6 +522,82 @@ describe('layui', function () {
     expect(layui.modules[id]).to.be.not.undefined;
     expect(layui.modules[id]).to.equal(id);
     delete layui.modules[id];
+  });
+
+  describe('layui.data', function () {
+    if (IS_PHANTOMJS) {
+      it('not support JSON', function () {
+        var old = window.JSON;
+        window.JSON = null;
+        expect(layui.data()).to.be.undefined;
+        window.JSON = {};
+        expect(layui.data()).to.be.undefined;
+        window.JSON = old;
+      });
+    }
+
+    // 在支持情况下才测试
+    if (window.localStorage) {
+      it('delete table data', function() {
+        var id = 'test-delete-data';
+        localStorage[id] = true;
+        expect(localStorage[id]).to.equal('true');
+        expect(layui.data(id, null)).to.be.true;
+        expect(localStorage[id]).to.be.undefined;
+      });
+
+      it('get table data', function () {
+        var table = 'test-get-table-data';
+        expect(layui.data(table)).to.deep.equal({});
+
+        layui.data(table, {
+          key: 'name',
+          value: 'layui'
+        });
+        expect(layui.data(table)).to.deep.equal({
+          name: 'layui'
+        });
+
+        // 删除数据
+        layui.data(table, null);
+      });
+
+      it('get data', function () {
+        var id = 'test-get-data';
+
+        // 直接获取肯定为空
+        expect(layui.data(null, id)).to.be.undefined;
+
+        // 写入数据
+        expect(layui.data(null, {
+          key: id,
+          value: true
+        })).to.be.true;
+
+        expect(layui.data(null, id)).to.be.true;
+
+        // 清除数据
+        layui.data(null, {
+          key: id,
+          remove: true
+        });
+      });
+
+      it('remove data', function () {
+        var id = 'test-remove-data';
+
+        layui.data(null, {
+          key: id,
+          value: true
+        });
+        expect(layui.data(null, id)).to.be.true;
+        layui.data(null, {
+          key: id,
+          remove: true
+        });
+        expect(layui.data(null, id)).to.be.undefined;
+      });
+    }
   });
 });
 /* eslint-enable max-nested-callbacks, fecs-indent */
