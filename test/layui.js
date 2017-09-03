@@ -201,12 +201,13 @@ describe('layui', function () {
     //   });
     // });
 
-    it('http 404', function (done) {
-      layui.img('http://www.404.xx/logo.404.gif', function () {}, function (e) {
-        expect(e).to.not.undefined;
-        done();
-      });
-    });
+    // 由于没有超时配置, 在部分设备中, dns解析可能超时
+    // it('http 404', function (done) {
+    //   layui.img('http://www.404.xx/logo.404.gif', function () {}, function (e) {
+    //     expect(e).to.not.undefined;
+    //     done();
+    //   });
+    // });
 
     it('load complete', function (done) {
       layui.img(base64, function () {
@@ -240,14 +241,16 @@ describe('layui', function () {
       expect(event.cancelBubble).to.be.true;
     });
 
-    // ie中不支持
-    // it('window.event', function () {
-    //   var old = window.event;
-    //   var event = window.event = {};
-    //   layui.stope();
-    //   expect(event.cancelBubble).to.be.true;
-    //   window.event = old;
-    // });
+    // ie中不支持, 只针对phantomjs测试
+    if (layui.device('phantomjs').phantomjs) {
+      it('window.event', function () {
+        var old = window.event;
+        var event = window.event = {};
+        layui.stope();
+        expect(event.cancelBubble).to.be.true;
+        window.event = old;
+      });
+    }
   });
 
   describe('layui.onevent', function () {
