@@ -536,7 +536,7 @@
     
     //默认赋值
     if(options.value){
-      if(value.constructor === Date){
+      if(options.value.constructor === Date){
         that.setValue(that.parse(0, that.systemDate(options.value))); 
       } else {
         that.setValue(options.value); 
