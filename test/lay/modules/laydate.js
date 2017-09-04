@@ -357,6 +357,52 @@ describe('laydate', function () {
         $('.laydate-btns-confirm').click();
         expect($('#test-div').text()).to.equal(dateFormat('yyyy年的M月某天晚上，大概5点'), '确认后输出选中的值');
       });
+
+      it('format and error value', function () {
+        laydate.render({
+          elem: '#test-div',
+          value: '2017年7月7日',
+          format: 'yyyy~MM~dd'
+        });
+
+        expect($('#test-div').text()).to.equal('2017年7月7日', '默认输出value的值到元素中');
+        $('#test-div').click();
+        expect($('#test-div').text()).to.equal(dateFormat('yyyy~MM~dd'), '根据options.format修正value为当天');
+
+        // 错误提示
+        expect($('.layui-laydate-hint').text()).to.match(/日期格式不合法/);
+        expect($('.layui-laydate-hint').text()).to.match(/yyyy~MM~dd/);
+      });
+
+      // 验证当format为 yyyyMMdd 和 value=20170707 时是否通过
+      it('format and number value', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          value: '20170707',
+          format: 'yyyyMMdd'
+        });
+
+        laydate.render({
+          elem: '#test-input',
+          value: '201777',
+          format: 'yyyyMd'
+        });
+
+        expect($('#test-div').text()).to.equal('20170707', '默认输出value的值到元素中');
+        expect($('#test-input').val()).to.equal('201777', '默认输出value的值到元素中');
+        $('#test-div').click();
+        expect($('#test-input').val()).to.equal('201777', 'value符合options.format格式, input通过验证');
+        $('#test-input').focus();
+
+        setTimeout(function () {
+          expect($('#test-div').text()).to.equal('20170707', 'value符合options.format格式, div通过验证');
+
+          // 错误提示
+          expect($('.layui-laydate-hint').length).to.equal(0);
+
+          done();
+        });
+      });
     });
 
     describe('options.value', function () {
