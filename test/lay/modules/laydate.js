@@ -199,14 +199,11 @@ describe('laydate', function () {
       it('is year', function () {
         var result = laydate.render({
           elem: '#test-div',
-          type: 'year'
+          type: 'year',
+          show: true
         });
 
         expect(result.config.type).to.equal('year');
-        expect($('.laydate-set-ym').length).to.equal(0);
-
-        $('#test-div').click();
-
         expect($('.laydate-set-ym').length).to.equal(1);
         expect($('.laydate-year-list .layui-this').text()).to.equal(dateFormat('yyyy年'), '默认高亮显示当前年');
 
@@ -217,14 +214,11 @@ describe('laydate', function () {
       it('is month', function () {
         var result = laydate.render({
           elem: '#test-div',
-          type: 'month'
+          type: 'month',
+          show: true
         });
 
         expect(result.config.type).to.equal('month');
-        expect($('.laydate-set-ym').length).to.equal(0);
-
-        $('#test-div').click();
-
         expect($('.laydate-set-ym').length).to.equal(1);
         expect($('.laydate-month-list .layui-this').attr('lay-ym'))
           .to.equal(dateFormat('M') - 1 + '', '默认高亮显示当前月');
@@ -236,15 +230,12 @@ describe('laydate', function () {
       it('is date', function () {
         var result = laydate.render({
           elem: '#test-div',
-          type: 'date'
+          type: 'date',
+          show: true
         });
         var now = new Date();
 
         expect(result.config.type).to.equal('date');
-        expect($('.laydate-set-ym').length).to.equal(0);
-
-        $('#test-div').click();
-
         expect($('.laydate-set-ym').text()).to.equal(dateFormat('yyyy年M月'), '标头内显示当前年+月');
         expect($('.layui-laydate-content .layui-this').attr('lay-ymd'))
           .to.equal(dateFormat('yyyy-M-d'), '默认高亮显示当前日');
@@ -256,14 +247,11 @@ describe('laydate', function () {
       it('is time', function () {
         var result = laydate.render({
           elem: '#test-div',
-          type: 'time'
+          type: 'time',
+          show: true
         });
 
         expect(result.config.type).to.equal('time');
-        expect($('.laydate-time-text').length).to.equal(0);
-
-        $('#test-div').click();
-
         expect($('.laydate-time-text').text()).to.equal('选择时间', '标头内显示当前年+月');
         expect($('.laydate-time-list').length).to.equal(1);
 
@@ -275,15 +263,12 @@ describe('laydate', function () {
       it('is datetime', function () {
         var result = laydate.render({
           elem: '#test-div',
-          type: 'datetime'
+          type: 'datetime',
+          show: true
         });
         var now = new Date();
 
         expect(result.config.type).to.equal('datetime');
-        expect($('.laydate-set-ym').length).to.equal(0);
-
-        $('#test-div').click();
-
         expect($('.laydate-set-ym').text()).to.equal(
           now.getFullYear() + '年' + (now.getMonth() + 1) + '月',
           '标头内显示当前年+月'
@@ -313,10 +298,10 @@ describe('laydate', function () {
         laydate.render({
           elem: '#test-div',
           type: 'time',
-          range: true
+          range: true,
+          show: true
         });
 
-        $('#test-div').click();
         expect($('.laydate-time-text').length).to.equal(2);
         $('.laydate-btns-confirm').click();
         expect($('#test-div').text()).to.equal('00:00:00 - 00:00:00', '确认后输出范围值');
@@ -326,10 +311,10 @@ describe('laydate', function () {
         laydate.render({
           elem: '#test-div',
           type: 'year',
-          range: '到'
+          range: '到',
+          show: true
         });
 
-        $('#test-div').click();
         $('.laydate-btns-confirm').click();
         expect($('#test-div').text()).to.match(/\d+\s到\s\d+/, '确认后输出范围值');
       });
