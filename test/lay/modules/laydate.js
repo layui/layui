@@ -196,7 +196,7 @@ describe('laydate', function () {
         }).to.throw();
       });
 
-      it('is year', function () {
+      it('is year', function (done) {
         var result = laydate.render({
           elem: '#test-div',
           type: 'year',
@@ -204,14 +204,18 @@ describe('laydate', function () {
         });
 
         expect(result.config.type).to.equal('year');
-        expect($('.laydate-set-ym').length).to.equal(1);
-        expect($('.laydate-year-list .layui-this').text()).to.equal(dateFormat('yyyy年'), '默认高亮显示当前年');
 
-        $('.laydate-btns-confirm').click();
-        expect($('#test-div').text()).to.equal(dateFormat('yyyy'), '确认后输出选中的值');
+        setTimeout(function () {
+          expect($('.laydate-set-ym').length).to.equal(1);
+          expect($('.laydate-year-list .layui-this').text()).to.equal(dateFormat('yyyy年'), '默认高亮显示当前年');
+
+          $('.laydate-btns-confirm').click();
+          expect($('#test-div').text()).to.equal(dateFormat('yyyy'), '确认后输出选中的值');
+          done();
+        });
       });
 
-      it('is month', function () {
+      it('is month', function (done) {
         var result = laydate.render({
           elem: '#test-div',
           type: 'month',
@@ -219,15 +223,19 @@ describe('laydate', function () {
         });
 
         expect(result.config.type).to.equal('month');
-        expect($('.laydate-set-ym').length).to.equal(1);
-        expect($('.laydate-month-list .layui-this').attr('lay-ym'))
-          .to.equal(dateFormat('M') - 1 + '', '默认高亮显示当前月');
 
-        $('.laydate-btns-confirm').click();
-        expect($('#test-div').text()).to.equal(dateFormat('yyyy-MM'), '确认后输出选中的值');
+        setTimeout(function () {
+          expect($('.laydate-set-ym').length).to.equal(1);
+          expect($('.laydate-month-list .layui-this').attr('lay-ym'))
+            .to.equal(dateFormat('M') - 1 + '', '默认高亮显示当前月');
+
+          $('.laydate-btns-confirm').click();
+          expect($('#test-div').text()).to.equal(dateFormat('yyyy-MM'), '确认后输出选中的值');
+          done();
+        });
       });
 
-      it('is date', function () {
+      it('is date', function (done) {
         var result = laydate.render({
           elem: '#test-div',
           type: 'date',
@@ -236,15 +244,19 @@ describe('laydate', function () {
         var now = new Date();
 
         expect(result.config.type).to.equal('date');
-        expect($('.laydate-set-ym').text()).to.equal(dateFormat('yyyy年M月'), '标头内显示当前年+月');
-        expect($('.layui-laydate-content .layui-this').attr('lay-ymd'))
-          .to.equal(dateFormat('yyyy-M-d'), '默认高亮显示当前日');
 
-        $('.laydate-btns-confirm').click();
-        expect($('#test-div').text()).to.equal(dateFormat('yyyy-MM-dd'), '确认后输出选中的值');
+        setTimeout(function () {
+          expect($('.laydate-set-ym').text()).to.equal(dateFormat('yyyy年M月'), '标头内显示当前年+月');
+          expect($('.layui-laydate-content .layui-this').attr('lay-ymd'))
+            .to.equal(dateFormat('yyyy-M-d'), '默认高亮显示当前日');
+
+          $('.laydate-btns-confirm').click();
+          expect($('#test-div').text()).to.equal(dateFormat('yyyy-MM-dd'), '确认后输出选中的值');
+          done();
+        });
       });
 
-      it('is time', function () {
+      it('is time', function (done) {
         var result = laydate.render({
           elem: '#test-div',
           type: 'time',
@@ -252,15 +264,19 @@ describe('laydate', function () {
         });
 
         expect(result.config.type).to.equal('time');
-        expect($('.laydate-time-text').text()).to.equal('选择时间', '标头内显示当前年+月');
-        expect($('.laydate-time-list').length).to.equal(1);
 
-        expect($('#test-div').text()).to.equal('');
-        $('.laydate-btns-confirm').click();
-        expect($('#test-div').text()).to.equal('00:00:00');
+        setTimeout(function () {
+          expect($('.laydate-time-text').text()).to.equal('选择时间', '标头内显示当前年+月');
+          expect($('.laydate-time-list').length).to.equal(1);
+
+          expect($('#test-div').text()).to.equal('');
+          $('.laydate-btns-confirm').click();
+          expect($('#test-div').text()).to.equal('00:00:00');
+          done();
+        });
       });
 
-      it('is datetime', function () {
+      it('is datetime', function (done) {
         var result = laydate.render({
           elem: '#test-div',
           type: 'datetime',
@@ -269,32 +285,36 @@ describe('laydate', function () {
         var now = new Date();
 
         expect(result.config.type).to.equal('datetime');
-        expect($('.laydate-set-ym').text()).to.equal(
-          now.getFullYear() + '年' + (now.getMonth() + 1) + '月',
-          '标头内显示当前年+月'
-        );
-        expect($('.layui-laydate-content .layui-this').attr('lay-ymd')).to.equal(
-          now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate(),
-          '默认高亮显示当前日'
-        );
-        expect($('.laydate-btns-time').text()).to.equal('选择时间');
-        expect($('.laydate-time-text').text()).to.equal('');
 
-        // 断定选择时间的切换
-        $('.laydate-btns-time').click();
-        expect($('.laydate-time-text').text()).to.equal('选择时间');
-        expect($('.laydate-btns-time').text()).to.equal('返回日期');
-        $('.laydate-btns-time').click();
-        expect($('.laydate-time-text').text()).to.equal('');
-        expect($('.laydate-btns-time').text()).to.equal('选择时间');
+        setTimeout(function () {
+          expect($('.laydate-set-ym').text()).to.equal(
+            now.getFullYear() + '年' + (now.getMonth() + 1) + '月',
+            '标头内显示当前年+月'
+          );
+          expect($('.layui-laydate-content .layui-this').attr('lay-ymd')).to.equal(
+            now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate(),
+            '默认高亮显示当前日'
+          );
+          expect($('.laydate-btns-time').text()).to.equal('选择时间');
+          expect($('.laydate-time-text').text()).to.equal('');
 
-        $('.laydate-btns-confirm').click();
-        expect($('#test-div').text()).to.equal(dateFormat('yyyy-MM-dd 00:00:00'), '确认后输出选中的值');
+          // 断定选择时间的切换
+          $('.laydate-btns-time').click();
+          expect($('.laydate-time-text').text()).to.equal('选择时间');
+          expect($('.laydate-btns-time').text()).to.equal('返回日期');
+          $('.laydate-btns-time').click();
+          expect($('.laydate-time-text').text()).to.equal('');
+          expect($('.laydate-btns-time').text()).to.equal('选择时间');
+
+          $('.laydate-btns-confirm').click();
+          expect($('#test-div').text()).to.equal(dateFormat('yyyy-MM-dd 00:00:00'), '确认后输出选中的值');
+          done();
+        });
       });
     });
 
     describe('options.range', function () {
-      it('time type and range', function () {
+      it('time type and range', function (done) {
         laydate.render({
           elem: '#test-div',
           type: 'time',
@@ -302,9 +322,12 @@ describe('laydate', function () {
           show: true
         });
 
-        expect($('.laydate-time-text').length).to.equal(2);
-        $('.laydate-btns-confirm').click();
-        expect($('#test-div').text()).to.equal('00:00:00 - 00:00:00', '确认后输出范围值');
+        setTimeout(function () {
+          expect($('.laydate-time-text').length).to.equal(2);
+          $('.laydate-btns-confirm').click();
+          expect($('#test-div').text()).to.equal('00:00:00 - 00:00:00', '确认后输出范围值');
+          done();
+        });
       });
 
       it('year type and range is split', function () {
