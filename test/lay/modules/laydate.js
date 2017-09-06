@@ -157,24 +157,84 @@ describe('laydate', function () {
           done();
         });
       });
+
+      // 当show=true时应该直接显示并执行ready事件
+      it('options.show is true', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          ready: function (data) {
+            expect(data).to.be.a('object');
+            done();
+          }
+        });
+      });
     });
 
-    it('options.elem', function () {
-      expect(function () {
-        laydate.render({
-          elem: '#test-div'
-        });
+    describe('options.elem', function () {
+      it('selector', function () {
+        expect(function () {
+          laydate.render({
+            elem: '#test-div'
+          });
 
-        laydate.render({
-          elem: '#test-div-layui'
-        });
+          laydate.render({
+            elem: '#test-div-layui'
+          });
 
-        laydate.render({
-          elem: '.ok-layui'
-        });
-      }).to.not.throw;
+          laydate.render({
+            elem: '.ok-layui'
+          });
+        }).to.not.throw;
 
-      expect($('.layui-laydate').length).to.equal(0);
+        expect($('.layui-laydate').length).to.equal(0);
+      });
+
+      it('error selector', function () {
+        expect(function () {
+          laydate.render({
+            elem: '#test-div-no-selector',
+            show: true
+          });
+
+          laydate.render({
+            elem: '.test-div-no-selector',
+            show: true
+          });
+
+        }).to.not.throw;
+
+        expect($('.layui-laydate').length).to.equal(0);
+      });
+
+      // it('className', function (done) {
+      //   var index = 0;
+
+      //   createNode([
+      //     '<div class="test-elem-class"></div>',
+      //     '<div class="test-elem-class"></div>',
+      //     '<div class="test-elem-class"></div>'
+      //   ].join(''));
+
+      //   laydate.render({
+      //     elem: '.test-elem-class',
+      //     ready: function () {
+      //       index += 1;
+      //     }
+      //   });
+
+      //   expect(index).to.equal(0, '初始索引');
+
+      //   $('.test-elem-class').eq(0).click();
+      //   $('.test-elem-class').eq(1).click();
+      //   $('.test-elem-class').eq(2).click();
+
+      //   setTimeout(function () {
+      //     expect(index).to.equal(3, '触发3次元素后索引为3');
+      //     expect($('.layui-laydate').length).to.equal(1, '页面laydate元素只有一个');
+      //     done();
+      //   }, 100);
+      // });
     });
 
     describe('options.type', function () {
