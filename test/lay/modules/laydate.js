@@ -96,6 +96,15 @@ describe('laydate', function () {
     expect(laydate.v).to.not.be.empty;
   });
 
+  it('loaded css link', function () {
+    // 验证页面元素
+    expect($('#layuicss-laydate').length).to.equal(1, '加载laydate.css的link标签必须存在');
+    expect($('#layuicss-laydate').css('display')).to.equal('none', '验证laydate.css是否生效');
+
+    // 验证一个不存在的元素
+    expect($('#layuicss-laydate-no-suceess').css('display')).to.be.undefined;
+  });
+
   describe('laydate.render()', function () {
     it('check params and return value', function () {
       expect(laydate.render()).to.be.a('object', 'render() 返回值必须是对象');
