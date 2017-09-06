@@ -543,6 +543,21 @@ describe('laydate', function () {
           done();
         });
       });
+
+      // 当元素值更新后, 再次显示日历时会更新
+      it('change value', function () {
+        laydate.render({
+          show: true,
+          value: '2017-3-7',
+          elem: '#test-div'
+        });
+
+        expect($('.layui-this').text()).to.equal('7', '显示默认的7');
+
+        $('.laydate-btns-confirm').click();
+        $('#test-div').text('2017-7-10').click();
+        expect($('.layui-this').text()).to.equal('10', '显示更新后的10');
+      });
     });
 
     describe('options.min and options.max', function () {
@@ -916,6 +931,216 @@ describe('laydate', function () {
         expect(btns).to.deep.equal([
           'layui',
         ]);
+      });
+    });
+
+    describe('options.lang', function () {
+      it('default value is cn', function () {
+        var result = laydate.render({
+          show: true,
+          elem: '#test-div'
+        });
+
+        var weeks = $('.layui-laydate-content').find('thead th').map(function () {
+          return $(this).text();
+        }).get();
+        expect(weeks).to.deep.equal(['日', '一', '二', '三', '四', '五', '六'], 'cn版本星期的标头');
+
+        expect($('.laydate-btns-confirm').text()).to.equal('确定', 'cn版本确定按钮');
+        expect($('.laydate-btns-now').text()).to.equal('现在', 'cn版本当前按钮');
+        expect($('.laydate-btns-clear').text()).to.equal('清空', 'cn版本清除按钮');
+        expect(result.config.lang).to.equal('cn');
+      });
+
+      it('en', function () {
+        var result = laydate.render({
+          show: true,
+          lang: 'en',
+          elem: '#test-div'
+        });
+
+        var weeks = $('.layui-laydate-content').find('thead th').map(function () {
+          return $(this).text();
+        }).get();
+        expect(weeks).to.deep.equal(['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'], 'en版本星期的标头');
+
+        expect($('.laydate-btns-confirm').text()).to.equal('Confirm', 'en版本确定按钮');
+        expect($('.laydate-btns-now').text()).to.equal('Now', 'en版本当前按钮');
+        expect($('.laydate-btns-clear').text()).to.equal('Clear', 'en版本清除按钮');
+        expect(result.config.lang).to.equal('en');
+      });
+
+      it('error vaue', function () {
+        var result = laydate.render({
+          show: true,
+          lang: 'layui',
+          elem: '#test-div'
+        });
+
+        expect($('.laydate-btns-confirm').text()).to.equal('确定', 'lang错误时默认为中文');
+        expect(result.config.lang).to.equal('layui');
+      });
+
+      // todo month, time, timeTips
+    });
+
+    describe('options.theme', function () {
+      it('molv', function () {
+        laydate.render({
+          show: true,
+          elem: '#test-div',
+          theme: 'molv'
+        });
+
+        expect($('.laydate-theme-molv').length).to.equal(1, '墨绿主题class存在');
+      });
+
+      it('grid', function () {
+        laydate.render({
+          show: true,
+          elem: '#test-div',
+          theme: 'grid'
+        });
+
+        expect($('.laydate-theme-grid').length).to.equal(1, '格子主题class存在');
+      });
+
+      it('error value', function () {
+        laydate.render({
+          show: true,
+          elem: '#test-div',
+          theme: 'layui-test'
+        });
+
+        expect($('.laydate-theme-layui-test').length).to.equal(1, '自定义主题class存在');
+      });
+
+      it('#color', function () {
+        // 主要处理多浏览器兼容
+        var colors = [
+          'rgb(0, 0, 0)',
+          'rgba(0, 0, 0, 0)',
+          '#000'
+        ];
+
+        laydate.render({
+          show: true,
+          elem: '#test-div',
+          theme: '#000'
+        });
+
+        $.each([
+          '.layui-this',
+          '.layui-laydate-header'
+        ], function (index, selector) {
+          expect(colors).to.includes($(selector).css('background-color'), '标头和当前选中颜色必须是设置的');
+        });
+      });
+    });
+
+    describe('options.calendar', function () {
+      it('default value', function () {
+        var result = laydate.render({
+          elem: '#test-div',
+          show: true,
+          value: '2017-3-8'
+        });
+
+        expect(result.config.calendar).to.equal(false, '默认值为false');
+        expect($('.layui-this').text()).to.equal('8', '显示数字');
+      });
+
+      it('is true', function () {
+        var result = laydate.render({
+          elem: '#test-div',
+          show: true,
+          value: '2017-3-8',
+          calendar: true
+        });
+
+        expect(result.config.calendar).to.equal(true, '默认值为false');
+        expect($('.layui-this').text()).to.equal('妇女', '显示妇女节');
+      });
+
+      it('options.lang is en', function () {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          lang: 'en',
+          value: '2017-3-8'
+        });
+
+        expect($('.layui-this').text()).to.equal('8', '国际版显示数字');
+      });
+    });
+
+    describe('options.mark', function () {
+      it('every year', function () {
+        laydate.render({
+          mark: {
+            '0-3-7': '妹子'
+          },
+          show: true,
+          value: '2017-3-7',
+          elem: '#test-div'
+        });
+
+        expect($('.layui-this').text()).to.equal('妹子', '显示自定义的妹子');
+
+        // 再看下4月7日
+        $('.laydate-btns-confirm').click();
+        $('#test-div').text('2017-4-7').click();
+        expect($('.layui-this').text()).to.equal('7', '显示日期');
+      });
+
+      it('every year and month', function () {
+        laydate.render({
+          mark: {
+            '0-0-7': '妹子'
+          },
+          show: true,
+          value: '2017-7-7',
+          elem: '#test-div'
+        });
+
+        expect($('.layui-this').text()).to.equal('妹子', '显示自定义的妹子');
+
+        // 再看下4月7日
+        $('.laydate-btns-confirm').click();
+        $('#test-div').text('2017-4-7').click();
+        expect($('.layui-this').text()).to.equal('妹子', '显示自定义的妹子');
+      });
+
+      it('yyyy-M-d', function () {
+        laydate.render({
+          mark: {
+            '2017-3-7': '妹子'
+          },
+          show: true,
+          value: '2017-3-7',
+          elem: '#test-div'
+        });
+
+        expect($('.layui-this').text()).to.equal('妹子', '显示自定义的妹子');
+
+        // 再看下2016年
+        $('.laydate-btns-confirm').click();
+        $('#test-div').text('2016-3-7').click();
+        expect($('.layui-this').text()).to.equal('7', '显示日期');
+      });
+
+      it('options.calendar is true', function () {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          value: '2017-3-8',
+          mark: {
+            '2017-3-8': '快乐'
+          },
+          calendar: true
+        });
+
+        expect($('.layui-this').text()).to.equal('快乐', '显示被mark覆盖的 快乐');
       });
     });
   });
