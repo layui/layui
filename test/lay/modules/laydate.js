@@ -113,64 +113,6 @@ describe('laydate', function () {
       expect(laydate.render({})).to.have.property('config');
     });
 
-    describe('options.ready', function () {
-      it('not elem', function (done) {
-        var flag = true;
-        laydate.render({
-          ready: function () {
-            flag = false;
-          }
-        });
-
-        setTimeout(function () {
-          expect(flag).to.be.true;
-          done();
-        }, 360);
-      });
-
-      it('trigger', function (done) {
-        laydate.render({
-          elem: '#test-div',
-          ready: function (data) {
-            expect(data).to.be.a('object');
-            done();
-          }
-        });
-
-        $('#test-div').click();
-      });
-
-      // 如果是div则自动切换成click
-      it('multiple trigger', function (done) {
-        var index = 0;
-
-        laydate.render({
-          elem: '#test-div',
-          ready: function () {
-            index += 1;
-          }
-        });
-        $('#test-div').click().click().click();
-
-        setTimeout(function () {
-          expect(index).to.equal(3);
-          done();
-        });
-      });
-
-      // 当show=true时应该直接显示并执行ready事件
-      it('options.show is true', function (done) {
-        laydate.render({
-          elem: '#test-div',
-          show: true,
-          ready: function (data) {
-            expect(data).to.be.a('object');
-            done();
-          }
-        });
-      });
-    });
-
     describe('options.elem', function () {
       it('selector', function () {
         expect(function () {
@@ -1141,6 +1083,66 @@ describe('laydate', function () {
         });
 
         expect($('.layui-this').text()).to.equal('快乐', '显示被mark覆盖的 快乐');
+      });
+    });
+  });
+
+  describe('callbacks', function () {
+    describe('laydate.render({ready})', function () {
+      it('not elem', function (done) {
+        var flag = true;
+        laydate.render({
+          ready: function () {
+            flag = false;
+          }
+        });
+
+        setTimeout(function () {
+          expect(flag).to.be.true;
+          done();
+        }, 360);
+      });
+
+      it('trigger', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          ready: function (data) {
+            expect(data).to.be.a('object');
+            done();
+          }
+        });
+
+        $('#test-div').click();
+      });
+
+      // 如果是div则自动切换成click
+      it('multiple trigger', function (done) {
+        var index = 0;
+
+        laydate.render({
+          elem: '#test-div',
+          ready: function () {
+            index += 1;
+          }
+        });
+        $('#test-div').click().click().click();
+
+        setTimeout(function () {
+          expect(index).to.equal(3);
+          done();
+        });
+      });
+
+      // 当show=true时应该直接显示并执行ready事件
+      it('options.show is true', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          ready: function (data) {
+            expect(data).to.be.a('object');
+            done();
+          }
+        });
       });
     });
   });
