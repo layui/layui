@@ -386,34 +386,34 @@ describe('laydate', function () {
       });
 
       // 验证当format为 yyyyMMdd 和 value=20170707 时是否通过
-      it('format and number value', function (done) {
-        laydate.render({
-          elem: '#test-div',
-          value: '20170707',
-          format: 'yyyyMMdd'
-        });
+      // it('format and number value', function (done) {
+      //   laydate.render({
+      //     elem: '#test-div',
+      //     value: '20170707',
+      //     format: 'yyyyMMdd'
+      //   });
 
-        laydate.render({
-          elem: '#test-input',
-          value: '201777',
-          format: 'yyyyMd'
-        });
+      //   laydate.render({
+      //     elem: '#test-input',
+      //     value: '201777',
+      //     format: 'yyyyMd'
+      //   });
 
-        expect($('#test-div').text()).to.equal('20170707', '默认输出value的值到元素中');
-        expect($('#test-input').val()).to.equal('201777', '默认输出value的值到元素中');
-        $('#test-div').click();
-        expect($('#test-input').val()).to.equal('201777', 'value符合options.format格式, input通过验证');
-        $('#test-input').focus();
+      //   expect($('#test-div').text()).to.equal('20170707', '默认输出value的值到元素中');
+      //   expect($('#test-input').val()).to.equal('201777', '默认输出value的值到元素中');
+      //   $('#test-div').click();
+      //   expect($('#test-div').text()).to.equal('20170707', '默认输出value的值到元素中');
+      //   $('#test-input').focus();
 
-        setTimeout(function () {
-          expect($('#test-div').text()).to.equal('20170707', 'value符合options.format格式, div通过验证');
+      //   setTimeout(function () {
+      //     expect($('#test-input').val()).to.equal('201777', 'value符合options.format格式, input通过验证');
 
-          // 错误提示
-          expect($('.layui-laydate-hint').length).to.equal(0);
+      //     // 错误提示
+      //     expect($('.layui-laydate-hint').length).to.equal(0);
 
-          done();
-        });
-      });
+      //     done();
+      //   });
+      // });
     });
 
     describe('options.value', function () {
