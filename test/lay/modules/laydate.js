@@ -187,14 +187,15 @@ describe('laydate', function () {
         }).config.type).to.equal('date', 'render 方法 options.type 默认值必须是 date');
       });
 
-      it('error value', function () {
-        expect(function () {
-          laydate.render({
-            elem: '#test-div',
-            type: 'layui'
-          });
-        }).to.throw();
-      });
+      // 先不作错误值的校验了
+      // it('error value', function () {
+      //   expect(function () {
+      //     laydate.render({
+      //       elem: '#test-div',
+      //       type: 'layui'
+      //     });
+      //   }).to.throw();
+      // });
 
       it('is year', function (done) {
         var result = laydate.render({
@@ -206,13 +207,13 @@ describe('laydate', function () {
         expect(result.config.type).to.equal('year');
 
         setTimeout(function () {
-          expect($('.laydate-set-ym').length).to.equal(1);
+          expect($('.laydate-set-ym').length).to.equal(1, '标头年月元素必须存在');
           expect($('.laydate-year-list .layui-this').text()).to.equal(dateFormat('yyyy年'), '默认高亮显示当前年');
 
           $('.laydate-btns-confirm').click();
           expect($('#test-div').text()).to.equal(dateFormat('yyyy'), '确认后输出选中的值');
           done();
-        });
+        }, 100);
       });
 
       it('is month', function (done) {
@@ -482,10 +483,9 @@ describe('laydate', function () {
         createNode('<input id="test-input-2" type="text" value="layui">');
 
         laydate.render({
-          elem: '#test-input-2'
+          elem: '#test-input-2',
+          show: true
         });
-
-        $('#test-input-2').focus();
 
         // 错误提示
         setTimeout(function () {
