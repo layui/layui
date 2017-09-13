@@ -19,7 +19,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.1.2'; //版本号
+    this.v = '2.1.3'; //版本号
   }
 
   //获取layui所在目录

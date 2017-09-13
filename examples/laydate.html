@@ -132,8 +132,10 @@ layui.use('laydate', function(){
   //单控件
   laydate.render({
     elem: '#test2'
-    ,format: 'y年MM月dd日'
-    ,value: new Date(1989,9,14)
+    //,format: 'yyyy年MM月dd日'
+    //,value: new Date(1989,9,14)
+    ,format: 'yyyyMMdd'
+    ,value: '20170910'
     //,max: 0
     //,min: '2016-10-14'
     //,max: -1
@@ -164,7 +166,7 @@ layui.use('laydate', function(){
   laydate.render({
     elem: '#test4'
     ,type: 'month'
-    //,range: true 
+    ,range: true 
     //,trigger: 'click'
     ,max: -30
     ,done: function(value, date, endDate){

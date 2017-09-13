@@ -600,7 +600,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     if(options.page){
       bodyHeight = bodyHeight - parseFloat(that.layTool.outerHeight() + 1);
     }
-    that.layBody.css('height', bodyHeight);
+    that.layMain.css('height', bodyHeight);
+    
   };
   
   //滚动条补丁
@@ -609,6 +610,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     ,layMainTable = that.layMain.children('table')
     ,scollWidth = that.layMain.width() - that.layMain.prop('clientWidth') //纵向滚动条宽度
     ,scollHeight = that.layMain.height() - that.layMain.prop('clientHeight'); //横向滚动条高度
+    
     if(scollWidth && scollHeight){
       if(!that.elem.find('.layui-table-patch')[0]){
         var patchElem = $('<th class="layui-table-patch"><div class="layui-table-cell"></div></th>'); //补丁元素
@@ -620,9 +622,17 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     } else {
       that.layHeader.eq(0).find('.layui-table-patch').remove();
     }
-    that.layFixed.find(ELEM_BODY).css('height', that.layMain.height() - scollHeight); //固定列区域高度
-    that.layFixRight[layMainTable.width() > that.layMain.width() ? 'removeClass' : 'addClass'](HIDE); //表格宽度小于容器宽度时，隐藏固定列
-    that.layFixRight.css('right', scollWidth - 1); //操作栏
+    
+    //固定列区域高度
+    var mainHeight = that.layMain.height()
+    ,fixHeight = mainHeight - scollHeight;
+    that.layFixed.find(ELEM_BODY).css('height', layMainTable.height() > fixHeight ? fixHeight : 'auto');
+    
+    //表格宽度小于容器宽度时，隐藏固定列
+    that.layFixRight[layMainTable.width() > that.layMain.width() ? 'removeClass' : 'addClass'](HIDE); 
+    
+    //操作栏
+    that.layFixRight.css('right', scollWidth - 1); 
   };
 
   //事件处理
@@ -853,16 +863,17 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           fields = fields || {};
           layui.each(fields, function(key, value){
             if(key in data){
-              var templet;
+              var templet, td = tr.children('td[data-field="'+ key +'"]');
               data[key] = value;
               that.eachCols(function(i, item2){
                 if(item2.field == key && item2.templet){
                   templet = item2.templet;
                 }
               });
-              tr.children('td[data-field="'+ key +'"]').children(ELEM_CELL).html(
+              td.children(ELEM_CELL).html(
                 templet ? laytpl($(templet).html() || value).render(data) : value
               );
+              td.data('content', value);
             }
           });
         }
@@ -930,15 +941,15 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           
           var row = $.extend({
             title: th.text()
-            ,colspan: th.attr('colspan') //列单元格
-            ,rowspan: th.attr('rowspan') //行单元格
+            ,colspan: th.attr('colspan') || null //列单元格
+            ,rowspan: th.attr('rowspan') || null //行单元格
           }, itemData);
-          
-          cols.push(row)
+
+          row.field && cols.push(row)
           options.cols[i].push(row);
         });
       });
-      
+
       //获取表体数据
       othis.find('tbody>tr').each(function(i1){
         var tr = $(this), row = {};

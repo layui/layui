@@ -1,6 +1,6 @@
 /**
  
- @Name : layDate 5.0.5 日期时间控件
+ @Name : layDate 5.0.6 日期时间控件
  @Author: 贤心
  @Site：http://www.layui.com/laydate/
  @License：MIT
@@ -55,7 +55,7 @@
   }
 
   ,laydate = {
-    v: '5.0.5'
+    v: '5.0.6'
     ,config: {} //全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: ready.getPath
@@ -92,7 +92,7 @@
   //字符常量
   ,MOD_NAME = 'laydate', ELEM = '.layui-laydate', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'laydate-disabled', TIPS_OUT = '开始日期超出了结束日期<br>建议重新选择', LIMIT_YEAR = [100, 200000]
   
-  ,ELEM_LIST = 'layui-laydate-list', ELEM_SELECTED = 'laydate-selected', ELEM_HINT = 'layui-laydate-hint', ELEM_PREV = 'laydate-day-prev', ELEM_NEXT = 'laydate-day-next', ELEM_FOOTER = 'layui-laydate-footer', ELEM_CONFIRM = '.laydate-btns-confirm', ELEM_TIME_TEXT = 'laydate-time-text', ELEM_TIME_BTN = '.laydate-btns-time'
+  ,ELEM_STATIC = 'layui-laydate-static', ELEM_LIST = 'layui-laydate-list', ELEM_SELECTED = 'laydate-selected', ELEM_HINT = 'layui-laydate-hint', ELEM_PREV = 'laydate-day-prev', ELEM_NEXT = 'laydate-day-next', ELEM_FOOTER = 'layui-laydate-footer', ELEM_CONFIRM = '.laydate-btns-confirm', ELEM_TIME_TEXT = 'laydate-time-text', ELEM_TIME_BTN = '.laydate-btns-time'
   
   //组件构造器
   ,Class = function(options){
@@ -456,21 +456,25 @@
     that.EXP_SPLIT = ''; 
     lay.each(that.format, function(i, item){
       var EXP =  new RegExp(dateType).test(item) 
-        ? '\\b\\d{1,'+ function(){
-          if(/yyyy/.test(item)) return 4;
-          if(/y/.test(item)) return 308;
-          return 2;
-        }() +'}\\b' 
+        ? '\\d{'+ function(){
+          if(new RegExp(dateType).test(that.format[i === 0 ? i + 1 : i - 1]||'')){
+            if(/^yyyy|y$/.test(item)) return 4;
+            return item.length;
+          }
+          if(/^yyyy$/.test(item)) return '1,4';
+          if(/^y$/.test(item)) return '1,308';
+          return '1,2';
+        }() +'}' 
       : '\\' + item;
       that.EXP_IF = that.EXP_IF + EXP;
-      that.EXP_SPLIT = that.EXP_SPLIT + (that.EXP_SPLIT ? '|' : '') + '('+ EXP + ')';
+      that.EXP_SPLIT = that.EXP_SPLIT + '(' + EXP + ')';
     });
     that.EXP_IF = new RegExp('^'+ (
       options.range ? 
         that.EXP_IF + '\\s\\'+ options.range + '\\s' + that.EXP_IF
       : that.EXP_IF
     ) +'$');
-    that.EXP_SPLIT = new RegExp(that.EXP_SPLIT, 'g');
+    that.EXP_SPLIT = new RegExp('^'+ that.EXP_SPLIT +'$', '');
     
     //如果不是input|textarea元素，则默认采用click事件
     if(!that.isInput(options.elem[0])){
@@ -557,7 +561,7 @@
       ,'class': [
         'layui-laydate'
         ,options.range ? ' layui-laydate-range' : ''
-        ,isStatic ? ' layui-laydate-static' : ''
+        ,isStatic ? (' '+ ELEM_STATIC) : ''
         ,options.theme && options.theme !== 'default' && !/^#/.test(options.theme) ? (' laydate-theme-' + options.theme) : ''
       ].join('')
     })
@@ -702,7 +706,7 @@
     }
     
     //移除上一个控件
-    that.remove(); 
+    that.remove(Class.thisElem); 
     
     //如果是静态定位，则插入到指定的容器中，否则，插入到body
     isStatic ? options.elem.append(elem) : (
@@ -721,11 +725,11 @@
   };
   
   //控件移除
-  Class.prototype.remove = function(){
+  Class.prototype.remove = function(prev){
     var that = this
     ,options = that.config
-    ,elem = lay('#'+ that.elemID);
-    if(elem[0] && options.position !== 'static'){
+    ,elem = lay('#'+ (prev || that.elemID));
+    if(elem[0] && !elem.hasClass(ELEM_STATIC)){
       that.checkDate(function(){
         elem.remove();
       });
@@ -844,7 +848,7 @@
     //获得初始化日期值
     ,initDate = function(dateTime, value, index){
       var startEnd = ['startTime', 'endTime'];
-      value = value.match(that.EXP_SPLIT);
+      value = (value.match(that.EXP_SPLIT) || []).slice(1);
       index = index || 0;
       if(options.range){
         that[startEnd[index]] = that[startEnd[index]] || {};
@@ -1288,16 +1292,13 @@
           }
           lay(ol).find('.'+ THIS).removeClass(THIS);
           lay(this).addClass(THIS);
-          
-          //同步按钮可点状态
-          that.setBtnStatus(
-            null
-            ,lay.extend({}, that.systemDate(), that.startTime)
-            ,lay.extend({}, that.systemDate(), that.endTime)
-          );
+
           setTimeStatus();
           scroll();
           (that.endDate || options.type === 'time') && that.done(null, 'change');
+          
+          //同步按钮可点状态
+          that.setBtnStatus();
         });
       });
     }
@@ -1325,7 +1326,7 @@
     var that = this
     ,options = that.config
     ,isOut, elemBtn = lay(that.footer).find(ELEM_CONFIRM)
-    ,isAlone = options.range && options.type !== 'date' && options.type !== 'datetime';
+    ,isAlone = options.range && options.type !== 'date' && options.type !== 'time';
     if(isAlone){
       start = start || that.startDate;
       end = end || that.endDate;
