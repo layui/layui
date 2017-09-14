@@ -315,7 +315,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /* 圆角 */.layui-btn-radius{border-radius: 100px;}
 .layui-btn .layui-icon{margin-right: 3px; font-size: 18px; vertical-align: bottom; vertical-align: middle\0;}
 
-/* 原始 */.layui-btn-primary{border: 1px solid #C9C9C9; background-color: #fff; color: #555;}
+/* 原始 */.layui-btn-primary{line-height: 36px; border: 1px solid #C9C9C9; background-color: #fff; color: #555;}
 .layui-btn-primary:hover{border-color: #009688; color: #333}
 /* 百搭 */.layui-btn-normal{background-color: #1E9FFF;}
 /* 暖色 */.layui-btn-warm{background-color: #FFB800;}

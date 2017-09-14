@@ -3,7 +3,7 @@
 */
 
 var pkg = require('./package.json');
-var inds = pkg.independent;
+var inds = pkg.independents;
 
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
