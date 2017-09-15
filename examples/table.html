@@ -74,44 +74,47 @@ body{padding: 20px;}
 </script>
 
 
-<table class="layui-table" lay-data="{width:723, height:235, url:'json/table/demo2.json', page: true, limit: 6}">
+<table class="layui-table" lay-data="{width:800, height:235, url:'json/table/demo2.json', page: true, limit: 6}">
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed:'left'}" rowspan="2"></th>
       <th lay-data="{field:'username', width:80}" rowspan="2">联系人</th>
       <th lay-data="{field:'amount', width:120}" rowspan="2">金额</th>
       <th lay-data="{align:'center'}" colspan="3">地址</th>
+      <th lay-data="{fixed: 'right', width: 155, align: 'center', toolbar: '#barDemo'}" rowspan="2">操作</th>
     </tr>
     <tr>
-      <th lay-data="{field:'province', width:80}">省</th>
-      <th lay-data="{field:'city', width:120}">市</th>
-      <th lay-data="{field:'county', width:300}">详细</th>
-      <th lay-data="{fixed: 'right', width: 120, align: 'center'}" rowspan="2">操作</th>
+      <th lay-data="{field:'province', width:130}">省</th>
+      <th lay-data="{field:'city', width:130}">市</th>
+      <th lay-data="{field:'zone', width:200}">区</th>
     </tr>
   </thead>
 </table>
 
-<!--
-<table class="layui-table" lay-data="{width:1200, height:300}">
+<table class="layui-table" lay-data="{height:315, url:'json/table/demo2.json', page: true, limit: 6}">
   <thead>
     <tr>
       <th lay-data="{field:'username', width:80}" rowspan="3">联系人</th>
-      <th lay-data="{field:'mobile', width:120}" rowspan="3">金额</th>
-      <th colspan="5">地址</th>
+      <th lay-data="{field:'amount', width:120}" rowspan="3">金额</th>
+      <th lay-data="{align:'center'}" colspan="5">地址1</th>
+      <th lay-data="{align:'center'}" colspan="2">地址2</th>
+      <th lay-data="{fixed: 'right', width: 120, align: 'center', toolbar: '#barDemo'}" rowspan="3">操作</th>
     </tr>
     <tr>
       <th lay-data="{field:'province', width:80}" rowspan="2">省</th>
-      <th lay-data="{field:'city', width:120}" rowspan="2">市</th>
-      <th lay-data="{field:'county', width:150}" rowspan="2">区</th>
-      <th colspan="2">其它</th>
+      <th lay-data="{field:'city', width:80}" rowspan="2">市</th>
+      <th lay-data="{align:'center'}" colspan="2">详细</th>
+      <th lay-data="{field:'zone', width:80}" rowspan="2">区</th>
+      <th lay-data="{field:'province', width:80}" rowspan="2">省</th>
+      <th lay-data="{field:'city', width:80}" rowspan="2">市</th>
     </tr>
     <tr>
-      <th lay-data="{field:'street', width:80}">街道</th>
-      <th lay-data="{field:'detailAdress', width:200}">详细</th>
+      <th lay-data="{field:'address', width:120}">小区</th>
+      <th lay-data="{field:'house', width:120}">单元</th>
     </tr>
   </thead>
 </table>
--->
+
 
 <div class="layui-btn-group">
   <button class="layui-btn" data-type="parseTable">转化为数据表格</button>
@@ -120,6 +123,7 @@ body{padding: 20px;}
 <table class="layui-table" lay-skin="line" lay-filter="parse-table-demo">
   <thead>
     <tr>
+      <th lay-data="{checkbox:true}"></th>
       <th lay-data="{field:'username', width:200}">昵称</th>
       <th lay-data="{field:'joinTime', width:150}">加入时间</th>
       <th lay-data="{field:'sign', width:300}">签名</th>
@@ -127,16 +131,19 @@ body{padding: 20px;}
   </thead>
   <tbody>
     <tr>
+      <td></td>
       <td>贤心1</td>
       <td>2016-11-28</td>
       <td>人生就像是一场修行a</td>
     </tr>
     <tr>
+      <td></td>
       <td>贤心2</td>
       <td>2016-11-29</td>
       <td>人生就像是一场修行b</td>
     </tr>
     <tr>
+      <td></td>
       <td>贤心3</td>
       <td>2016-11-30</td>
       <td>人生就像是一场修行c</td>
@@ -144,6 +151,44 @@ body{padding: 20px;}
   </tbody>
 </table>
 
+<table class="layui-table" lay-filter="parse-table-demo">
+  <thead>
+    <tr>
+     <td rowspan="2" lay-data="{field:'louceng', width:200}">楼层</td>
+     <td colspan="2">1单元</td>
+     <td colspan="2">2单元</td>
+    </tr>
+    <tr>
+     <td lay-data="{field:'men1', width:80}">1门</td>
+     <td lay-data="{field:'men2', width:80}">2门</td>
+     <td lay-data="{field:'men3', width:80}">1门</td>
+     <td lay-data="{field:'men4', width:80}">2门</td>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td>3楼</td>
+     <td>301</td>
+     <td>302</td>
+     <td>301</td>
+     <td>302</td>
+    </tr>
+    <tr>
+     <td>2楼</td>
+     <td>201</td>
+     <td>202</td>
+     <td>201</td>
+     <td>202</td>
+    </tr>
+    <tr>
+     <td>1楼</td>
+     <td>101</td>
+     <td>102</td>
+     <td>101</td>
+     <td>102</td>
+    </tr>
+  </tbody>
+</table>
 
 <script src="../src/layui.js" charset="utf-8"></script>
 <script>
@@ -293,7 +338,15 @@ layui.use('table', function(){
         layer.close(index);
       });
     } else if(obj.event === 'edit'){
-      layer.alert('编辑行：<br>'+ JSON.stringify(data))
+      layer.prompt({
+        formType: 2
+        ,value: data.username
+      }, function(value, index){
+        obj.update({
+          username: value
+        });
+        layer.close(index);
+      });
     }
   });
   
@@ -301,7 +354,7 @@ layui.use('table', function(){
   table.on('sort(test)', function(obj){
     console.log(this, obj.field, obj.type)
     
-    return
+    return;
     table.reload('test', {
       initSort: obj
       ,where: { //重新请求服务端

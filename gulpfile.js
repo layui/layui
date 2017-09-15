@@ -3,6 +3,7 @@
 */
 
 var pkg = require('./package.json');
+var inds = pkg.independents;
 
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
@@ -110,7 +111,10 @@ var argv = require('minimist')(process.argv.slice(2), {
   ,mincss: function(ver){
     ver = ver === 'open';
     
-    var src = ['./src/css/**/*.css']
+    var src = [
+      './src/css/**/*.css'
+      ,'!./src/css/**/font.css'
+    ]
     ,dir = ver ? release : 'dist'
     ,noteNew = JSON.parse(JSON.stringify(note));
     
@@ -175,23 +179,46 @@ gulp.task('font', task.font);
 gulp.task('mv', task.mv);
 gulp.task('release', task.release);
 
-//开源版
+//发行版
 gulp.task('default', ['clearRelease'], function(){ //命令：gulp
   for(var key in task){
     task[key]('open');
   }
 });
 
-//压缩
-gulp.task('zip', function(){
-  gulp.src('./release/layui-v' + pkg.version + '/**/*')
-  .pipe(zip('layui-v' + pkg.version + '.zip'))
-  .pipe(gulp.dest('./release'));
+//完整任务
+gulp.task('all', ['clear'], function(){ //命令：gulp all，过滤layim：gulp all --open
+  for(var key in task){
+    task[key]();
+  }
 });
 
-//打包LayIM
+//打包layer独立版
+gulp.task('layer', function(){
+  var dir = './release/layer';
+  
+  gulp.src('./src/css/modules/layer/default/*')
+  .pipe(gulp.dest(dir + '/src/theme/default'));
+
+  return gulp.src('./src/lay/modules/layer.js')
+  .pipe(gulp.dest(dir + '/src'));
+});
+
+//打包layDate独立版
+gulp.task('laydate', function(){
+  var dir = './release/laydate';
+  
+  gulp.src('./src/css/modules/laydate/default/{font,laydate}.css')
+    .pipe(concat('laydate.css', {newLine: '\n\n'}))
+  .pipe(gulp.dest(dir + '/src/theme/default'));
+
+  return gulp.src('./src/lay/modules/laydate.js')
+  .pipe(gulp.dest(dir + '/src'));
+});
+
+//打包LayIM版本
 gulp.task('layim', function(){
-  var dir = './release/zip/layui.layim-v'+ pkg.layimV;
+  var dir = './release/zip/layui.layim-v'+ inds.layim;
   gulp.src('./release/doc-layim/**/*')
   .pipe(gulp.dest(dir))
   
@@ -202,12 +229,7 @@ gulp.task('layim', function(){
   .pipe(gulp.dest(dir + '/dist'));
 });
 
-//完整任务
-gulp.task('all', ['clear'], function(){ //命令：gulp all，过滤layim：gulp all --open
-  for(var key in task){
-    task[key]();
-  }
-});
+
 
 
 
