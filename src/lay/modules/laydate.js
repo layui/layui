@@ -1,6 +1,6 @@
 /**
  
- @Name : layDate 5.0.6 日期时间控件
+ @Name : layDate 5.0.7 日期时间控件
  @Author: 贤心
  @Site：http://www.layui.com/laydate/
  @License：MIT
@@ -55,7 +55,7 @@
   }
 
   ,laydate = {
-    v: '5.0.6'
+    v: '5.0.7'
     ,config: {} //全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: ready.getPath
@@ -71,7 +71,6 @@
     ,ready: function(fn){
       var cssname = 'laydate', ver = ''
       ,path = (isLayui ? 'modules/laydate/' : 'theme/') + 'default/laydate.css?v='+ laydate.v + ver;
-      if(typeof define === 'function' && define.amd) return fn();
       isLayui ? layui.addcss(path, fn, cssname) : ready.link(path, fn, cssname);
       return this;
     }
