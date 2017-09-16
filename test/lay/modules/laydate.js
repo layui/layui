@@ -1105,25 +1105,28 @@ describe('laydate', function () {
       });
     });
 
-    it('options.dateTime', function (done) {
-      laydate.render({
-        elem: '#test-div',
-        show: true,
-        dateTime: {
-          year: 20000000,
-          month: 15,
-          minutes: 70,
-          seconds: 60,
-          hours: 25
-        },
-        done: function (value) {
-          expect(value).to.equal(dateFormat('yyyy-MM-dd'), '设置日期超出范围, 初始化为当天');
-          done();
-        }
-      });
+    // 基于phantomjs测试内部方法
+    if (IS_PHANTOMJS) {
+      it('options.dateTime', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          dateTime: {
+            year: 20000000,
+            month: 15,
+            minutes: 70,
+            seconds: 60,
+            hours: 25
+          },
+          done: function (value) {
+            expect(value).to.equal(dateFormat('yyyy-MM-dd'), '设置日期超出范围, 初始化为当天');
+            done();
+          }
+        });
 
-      $('.laydate-btns-confirm').click();
-    });
+        $('.laydate-btns-confirm').click();
+      });
+    }
   });
 
   describe('callbacks', function () {
