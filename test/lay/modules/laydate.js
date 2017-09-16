@@ -1189,29 +1189,15 @@ describe('laydate', function () {
           elem: '#test-div',
           range: true,
           show: true,
-          change: function (value, date, date2) {
+          change: function (value, date, endDate) {
             var start = dateFormat('yyyy-MM-dd');
             var end = dateFormat('yyyy-MM-dd', 1);
-            var startDate = parseDate(start);
-            var endDate = parseDate(end);
 
             expect(value).to.equal(start + ' - ' + end, '进入下一月的日期');
-            expect(date).to.deep.equal({
-              year: startDate.year,
-              month: startDate.month,
-              date: startDate.date,
-              hours: 0,
-              minutes: 0,
-              seconds: 0
-            }, '开始日期对象');
-            expect(date2).to.deep.equal({
-              year: endDate.year,
-              month: endDate.month,
-              date: endDate.date,
-              hours: 0,
-              minutes: 0,
-              seconds: 0
-            }, '结束日期对象');
+            expect(date).to.be.a('Object');
+            expect(date).to.not.deep.equal({});
+            expect(endDate).to.be.a('Object');
+            expect(endDate).to.not.deep.equal({}, '开启 options.range 时 endDate 不能为空');
 
             done();
           }
