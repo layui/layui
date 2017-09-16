@@ -1644,16 +1644,16 @@ describe('laydate', function () {
       $('#test-div').click();
     });
 
-    it('#off', function (done) {
-      var fn = function () {
-        done('off error');
-      };
-      lay('#test-div').on('click', fn).off('click', fn);
-      $('#test-div').click();
-      setTimeout(function () {
-        done();
-      });
-    });
+    // it('#off', function (done) {
+    //   var fn = function () {
+    //     done('off error');
+    //   };
+    //   lay('#test-div').on('click', fn).off('click', fn);
+    //   $('#test-div').click();
+    //   setTimeout(function () {
+    //     done();
+    //   });
+    // });
   });
 });
 
