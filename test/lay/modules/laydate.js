@@ -12,6 +12,8 @@ var laydate = layui.laydate;
 /**
  * 创建dom元素, 并返回 jquery 对象
  *
+ * @inner
+ *
  * @param  {string} html 标签
  *
  * @return {jQuery}
@@ -21,7 +23,43 @@ var createNode = function (html) {
 };
 
 /**
+ * 解析日期字符
+ *
+ * @inner
+ *
+ * @param  {string} date 字符符
+ *
+ * @return {Object}
+ */
+var parseDate = function (date) {
+  if (date) {
+    if ('number' === typeof date && String(date).length !== 13) {
+      var temp = new Date();
+      temp.setDate(temp.getDate() + date);
+      date = temp;
+    }
+    else if (!(date instanceof Date)) {
+      date = new Date(date);
+    }
+  }
+  else {
+    date = new Date();
+  }
+
+  return {
+    year: date.getFullYear(),
+    month: date.getMonth() + 1,
+    date: date.getDate(),
+    hours: date.getHours(),
+    minutes: date.getMinutes(),
+    seconds: date.getMilliseconds()
+  };
+};
+
+/**
  * 日期格式化
+ *
+ * @inner
  *
  * @param {string} str 格式
  * @param {Date|number|string} date 时间对象或者时间缀
@@ -77,7 +115,6 @@ var dateFormat = function (str, date) {
 
   return str;
 };
-
 
 describe('laydate', function () {
   // 输出测试节点
@@ -148,35 +185,6 @@ describe('laydate', function () {
 
         expect($('.layui-laydate').length).to.equal(0);
       });
-
-      // it('className', function (done) {
-      //   var index = 0;
-
-      //   createNode([
-      //     '<div class="test-elem-class"></div>',
-      //     '<div class="test-elem-class"></div>',
-      //     '<div class="test-elem-class"></div>'
-      //   ].join(''));
-
-      //   laydate.render({
-      //     elem: '.test-elem-class',
-      //     ready: function () {
-      //       index += 1;
-      //     }
-      //   });
-
-      //   expect(index).to.equal(0, '初始索引');
-
-      //   $('.test-elem-class').eq(0).click();
-      //   $('.test-elem-class').eq(1).click();
-      //   $('.test-elem-class').eq(2).click();
-
-      //   setTimeout(function () {
-      //     expect(index).to.equal(3, '触发3次元素后索引为3');
-      //     expect($('.layui-laydate').length).to.equal(1, '页面laydate元素只有一个');
-      //     done();
-      //   }, 100);
-      // });
     });
 
     describe('options.type', function () {
@@ -242,7 +250,6 @@ describe('laydate', function () {
           type: 'date',
           show: true
         });
-        var now = new Date();
 
         expect(result.config.type).to.equal('date');
 
@@ -395,34 +402,31 @@ describe('laydate', function () {
       });
 
       // 验证当format为 yyyyMMdd 和 value=20170707 时是否通过
-      // it('format and number value', function (done) {
-      //   laydate.render({
-      //     elem: '#test-div',
-      //     value: '20170707',
-      //     format: 'yyyyMMdd'
-      //   });
+      it('format and number value', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          value: '20170707',
+          format: 'yyyyMMdd',
+          show: true
+        });
 
-      //   laydate.render({
-      //     elem: '#test-input',
-      //     value: '201777',
-      //     format: 'yyyyMd'
-      //   });
+        laydate.render({
+          elem: '#test-input',
+          value: '201777',
+          format: 'yyyyMd',
+          show: true
+        });
 
-      //   expect($('#test-div').text()).to.equal('20170707', '默认输出value的值到元素中');
-      //   expect($('#test-input').val()).to.equal('201777', '默认输出value的值到元素中');
-      //   $('#test-div').click();
-      //   expect($('#test-div').text()).to.equal('20170707', '默认输出value的值到元素中');
-      //   $('#test-input').focus();
+        expect($('#test-div').text()).to.equal('20170707', '默认输出value的值到元素中');
+        expect($('#test-input').val()).to.equal('201777', '默认输出value的值到元素中');
 
-      //   setTimeout(function () {
-      //     expect($('#test-input').val()).to.equal('201777', 'value符合options.format格式, input通过验证');
+        setTimeout(function () {
+          // 错误提示
+          expect($('.layui-laydate-hint').length).to.equal(0, '格式正确没有错误提示');
 
-      //     // 错误提示
-      //     expect($('.layui-laydate-hint').length).to.equal(0);
-
-      //     done();
-      //   });
-      // });
+          done();
+        });
+      });
     });
 
     describe('options.value', function () {
@@ -879,7 +883,7 @@ describe('laydate', function () {
         }).get();
 
         expect(btns).to.deep.equal([
-          'layui',
+          'layui'
         ]);
       });
     });
@@ -1096,7 +1100,7 @@ describe('laydate', function () {
   });
 
   describe('callbacks', function () {
-    describe('laydate.render({ready})', function () {
+    describe('render', function () {
       it('not elem', function (done) {
         var flag = true;
         laydate.render({
@@ -1152,6 +1156,201 @@ describe('laydate', function () {
           }
         });
       });
+    });
+
+    describe('change', function () {
+      it('trigger', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          value: '2017-07-07',
+          range: false,
+          change: function (value, date, endDate) {
+            expect(value).to.equal('2017-08-07', '进入下一月的日期');
+            expect(date).to.deep.equal({
+              year: 2017,
+              month: 8,
+              date: 7,
+              hours: 0,
+              minutes: 0,
+              seconds: 0
+            }, '进入下一月的日期时间对象');
+            expect(endDate).to.deep.equal({}, '没有开启 options.range 时 endDate 为空对象');
+
+            done();
+          }
+        });
+
+        $('.laydate-next-m').click();
+      });
+
+      it('options.range is true', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          range: true,
+          show: true,
+          change: function (value, date, date2) {
+            var start = dateFormat('yyyy-MM-dd');
+            var end = dateFormat('yyyy-MM-dd', 1);
+            var startDate = parseDate(start);
+            var endDate = parseDate(end);
+
+            expect(value).to.equal(start + ' - ' + end, '进入下一月的日期');
+            expect(date).to.deep.equal({
+              year: startDate.year,
+              month: startDate.month,
+              date: startDate.date,
+              hours: 0,
+              minutes: 0,
+              seconds: 0
+            }, '开始日期对象');
+            expect(date2).to.deep.equal({
+              year: endDate.year,
+              month: endDate.month,
+              date: endDate.date,
+              hours: 0,
+              minutes: 0,
+              seconds: 0
+            }, '结束日期对象');
+
+            done();
+          }
+        });
+
+        // 模拟点击当天和下一天
+        $('[lay-ymd="' + dateFormat('yyyy-M-d') + '"]').click();
+        $('[lay-ymd="' + dateFormat('yyyy-M-d', 1) + '"]').click();
+      });
+    });
+
+    describe('done', function () {
+      it('click date', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          value: '2017-07-07',
+          range: false,
+          done: function (value, date, endDate) {
+            expect(value).to.equal('2017-07-07');
+            expect(date).to.deep.equal({
+              year: 2017,
+              month: 7,
+              date: 7,
+              hours: 0,
+              minutes: 0,
+              seconds: 0
+            });
+            expect(endDate).to.deep.equal({});
+
+            done();
+          }
+        });
+
+        $('.layui-this').click();
+      });
+
+      it('click confirm btn', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          value: '2017-07-07',
+          range: false,
+          done: function (value, date, endDate) {
+            expect(value).to.equal('2017-07-07');
+            expect(date).to.deep.equal({
+              year: 2017,
+              month: 7,
+              date: 7,
+              hours: 0,
+              minutes: 0,
+              seconds: 0
+            });
+            expect(endDate).to.deep.equal({});
+
+            done();
+          }
+        });
+
+        $('.laydate-btns-confirm').click();
+      });
+
+      it('click clear btn', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          value: '2017-07-07',
+          range: false,
+          done: function (value, date, endDate) {
+            expect(value).to.equal('');
+            expect(date).to.deep.equal({});
+            expect(endDate).to.deep.equal({});
+
+            done();
+          }
+        });
+
+        $('.laydate-btns-clear').click();
+      });
+
+      it('click now btn', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          value: '2017-07-07',
+          range: false,
+          done: function (value, date, endDate) {
+            expect(value).to.equal(dateFormat('yyyy-MM-dd'));
+
+            done();
+          }
+        });
+
+        $('.laydate-btns-now').click();
+      });
+    });
+  });
+
+  describe('#hint', function () {
+    it('set string', function () {
+      var app = laydate.render({
+        elem: '#test-div',
+        show: true
+      });
+
+      expect(app.hint).to.be.a('function', '.hint 必须是方法');
+      app.hint('layui');
+      expect($('.layui-laydate-hint').text()).to.equal('layui');
+    });
+
+    it('timeout 3000', function (done) {
+      var app = laydate.render({
+        elem: '#test-div',
+        show: true
+      });
+
+      app.hint('layui');
+      expect($('.layui-laydate-hint').length).to.equal(1);
+      setTimeout(function () {
+        expect($('.layui-laydate-hint').length).to.equal(0);
+        done();
+      }, 3500);
+    });
+  });
+  describe('.getEndDate', function () {
+    it('default params and return value', function () {
+      expect(laydate.getEndDate).to.be.a('function', 'laydate.getEndDate 必须是方法');
+      expect(laydate.getEndDate()).to.be.a('number', 'laydate.getEndDate 返回值必须是数字');
+      expect(laydate.getEndDate(10, 2017)).to.be.a('number', 'laydate.getEndDate 返回值必须是数字');
+      expect(laydate.getEndDate(10)).to.be.a('number', 'laydate.getEndDate 返回值必须是数字');
+    });
+
+    it('getEndDate(year)', function () {
+      expect(laydate.getEndDate(10)).to.equal(31, '10月最后一天为31');
+      expect(laydate.getEndDate(11)).to.equal(30, '11月最后一天为30');
+      expect(laydate.getEndDate(11, 2017)).to.equal(30, '2017年11月最后一天为30');
+      expect(laydate.getEndDate(10, 2017)).to.equal(31, '2017年10月最后一天为31');
+      expect(laydate.getEndDate(2, 2017)).to.equal(28, '2017年2月最后一天为28');
+      expect(laydate.getEndDate(2, 2016)).to.equal(29, '2016年2月最后一天为29');
     });
   });
 });
