@@ -8,6 +8,15 @@
 
 var $ = layui.$;
 var laydate = layui.laydate;
+var lay = window.lay;
+
+/**
+ * 是否基于`phantomjs`测试, 因为有些特殊的case在ie中是不可用的, 比如: `window.event = {}`
+ *
+ * @const
+ * @type {boolean}
+ */
+var IS_PHANTOMJS = layui.device('phantomjs').phantomjs;
 
 /**
  * 创建dom元素, 并返回 jquery 对象
@@ -22,39 +31,6 @@ var createNode = function (html) {
   return $(html).addClass('test-node').appendTo('body');
 };
 
-/**
- * 解析日期字符
- *
- * @inner
- *
- * @param  {string} date 字符符
- *
- * @return {Object}
- */
-var parseDate = function (date) {
-  if (date) {
-    if ('number' === typeof date && String(date).length !== 13) {
-      var temp = new Date();
-      temp.setDate(temp.getDate() + date);
-      date = temp;
-    }
-    else if (!(date instanceof Date)) {
-      date = new Date(date);
-    }
-  }
-  else {
-    date = new Date();
-  }
-
-  return {
-    year: date.getFullYear(),
-    month: date.getMonth() + 1,
-    date: date.getDate(),
-    hours: date.getHours(),
-    minutes: date.getMinutes(),
-    seconds: date.getMilliseconds()
-  };
-};
 
 /**
  * 日期格式化
@@ -1337,6 +1313,346 @@ describe('laydate', function () {
       expect(laydate.getEndDate(10, 2017)).to.equal(31, '2017年10月最后一天为31');
       expect(laydate.getEndDate(2, 2017)).to.equal(28, '2017年2月最后一天为28');
       expect(laydate.getEndDate(2, 2016)).to.equal(29, '2016年2月最后一天为29');
+    });
+  });
+
+  describe('lay', function () {
+    describe('lay.stope', function () {
+      it('stopPropagation', function (done) {
+        lay.stope({
+          stopPropagation: function (e) {
+            expect(e).to.be.undefined;
+            done();
+          }
+        });
+      });
+
+      it('cancelBubble', function () {
+        var event = {};
+        lay.stope(event);
+        expect(event.cancelBubble).to.be.true;
+      });
+
+      // ie中不支持, 只针对phantomjs测试
+      if (IS_PHANTOMJS) {
+        it('window.event', function () {
+          var old = window.event;
+          var event = window.event = {};
+          lay.stope();
+          expect(event.cancelBubble).to.be.true;
+          window.event = old;
+        });
+      }
+    });
+
+    describe('lay.extend', function () {
+      it('default params and return value', function () {
+        expect(lay.extend).to.be.a('function', '必须是方法');
+        expect(lay.extend()).to.be.a('object', '返回值必须是对象');
+        expect(lay.extend({})).to.be.a('object', '返回值必须是对象');
+        expect(lay.extend({}, {})).to.be.a('object', '返回值必须是对象');
+      });
+
+      it('multiple object', function () {
+        expect(lay.extend({}, {})).to.deep.equal({});
+        expect(lay.extend(true, {})).to.deep.equal({});
+        expect(lay.extend(true, {a: 1}, {b: 2})).to.deep.equal({
+          a: 1,
+          b: 2
+        }, '合并多个对象');
+        expect(lay.extend({a: 1}, {b: 2})).to.deep.equal({
+          a: 1,
+          b: 2
+        }, '合并多个对象');
+      });
+
+      it('recursion merge', function () {
+        expect(lay.extend({
+          a: 1,
+          b: {
+            b1: 1
+          }
+        }, {
+          b: {
+            b2: 1,
+            b3: [1]
+          }
+        }, {
+          c: null
+        })).to.deep.equal({
+          a: 1,
+          b: {
+            b1: 1,
+            b2: 1,
+            b3: [1]
+          },
+          c: null
+        });
+      });
+
+      it('clone object', function () {
+        var a = {};
+        lay.extend(a, {
+          b: 1
+        }, {
+          c: []
+        });
+
+        expect(a.b).to.equal(1, '污染了原对象');
+        expect(a.c).to.deep.equal([], '污染了原对象');
+      });
+    });
+
+    describe('lay.each', function () {
+      it('check params', function () {
+        expect(lay.each).to.be.a('function', '必须是方法');
+        expect(lay.each()).to.deep.equal(lay, '返回值判断');
+        expect(lay.each({})).to.deep.equal(lay);
+        expect(lay.each([])).to.deep.equal(lay);
+        expect(lay.each({}, function () {})).to.deep.equal(lay);
+      });
+
+      it('null params', function (done) {
+        var index = 0;
+        lay.each(null, function (index) {
+          index += 1;
+        });
+        setTimeout(function () {
+          expect(index).to.equal(0);
+          done();
+        });
+      });
+
+      it('object each', function (done) {
+        lay.each({
+          name: 'layui'
+        }, function (key, value) {
+          expect(this + '').to.deep.equal(value).and.equal('layui');
+          expect(key).to.equal('name');
+          done();
+        });
+      });
+
+      it('array each', function (done) {
+        lay.each([
+          'layui'
+        ], function (index, value) {
+          expect(this + '').to.deep.equal(value).and.equal('layui');
+          expect(index).to.equal(0);
+          done();
+        });
+      });
+
+      it('break array each', function () {
+        var arr = new Array(100).join(',').split(',');
+        var flag = -1;
+        lay.each(arr, function (index) {
+          flag = index;
+          if (index > 5) {
+            return true;
+          }
+        });
+        expect(flag).to.equal(6);
+
+        flag = -1;
+        lay.each(arr, function (index) {
+          flag = index;
+          if (index > 5) {
+            return false;
+          }
+        });
+        expect(flag).to.equal(99);
+      });
+
+      it('break object each', function () {
+        var obj = {
+          name: 'layui',
+          version: '2.x'
+        };
+        var flag = null;
+        lay.each(obj, function (key) {
+          flag = key;
+          return true;
+        });
+        expect(flag).to.equal('name');
+
+        flag = null;
+        lay.each(obj, function (key) {
+          flag = key;
+          return false;
+        });
+        expect(flag).to.equal('version');
+      });
+    });
+
+    describe('lay.elem', function () {
+      it('create div', function () {
+        expect(lay.elem('div')).to.be.an.instanceof(HTMLElement, '必须是 html 节点');
+      });
+
+      it('has error', function () {
+        expect(function () {
+          lay.elem([]);
+        }).to.throw;
+
+        expect(function () {
+          lay.elem();
+        }).to.throw;
+      });
+
+      it('set attrs', function () {
+        var node = lay.elem('div', {
+          'data-name': 'layui'
+        });
+
+        expect($(node).attr('data-name')).to.equal('layui');
+      });
+    });
+
+    describe('lay.digit', function () {
+      it('default params and return value', function () {
+        expect(lay.digit).to.be.a('function', '必须是方法');
+        expect(lay.digit()).to.equal('undefined', '无参数时返回 undefined');
+      });
+
+      it('default length', function () {
+        expect(lay.digit(1)).to.equal('01');
+        expect(lay.digit(1)).to.equal(lay.digit(1, 2));
+        expect(lay.digit(11)).to.equal('11');
+        expect(lay.digit('111')).to.equal('111');
+      });
+
+      it('set length', function () {
+        expect(lay.digit(1, 1)).to.equal('1');
+        expect(lay.digit(1, 2)).to.equal('01');
+        expect(lay.digit(11, 1)).to.equal('11');
+        expect(lay.digit('11', 10)).to.equal('0000000011', '补10位');
+        expect(lay.digit(1, 5)).to.equal('00001');
+        expect(lay.digit(1, 100).length).to.equal(100, '补100位');
+      });
+    });
+
+    if (IS_PHANTOMJS) {
+      it('lay.ie', function () {
+        expect(lay.ie).to.be.a('boolean');
+      });
+    }
+  });
+
+  describe('lay()', function () {
+    it('return value', function () {
+      expect(lay).to.be.a('function', '必须是方法');
+      expect(lay()).to.be.a('object');
+    });
+
+    it('#find', function () {
+      expect(lay('body').find()[0]).to.be.undefined;
+      expect(lay('body').find('.test-test-empty')[0]).to.be.undefined;
+      expect(lay('body').find('div')[0]).to.not.be.undefined;
+    });
+
+    it('#addClass', function () {
+      var $node = lay('#test-div');
+
+      expect($('#test-div').hasClass('layui')).to.be.false;
+      expect($node.addClass('layui')).to.deep.equal($node);
+      expect($('#test-div').hasClass('layui')).to.be.true;
+    });
+
+    it('#removeClass', function () {
+      var $node = lay('#test-div');
+
+      lay('#test-div').addClass('layui');
+      expect($('#test-div').hasClass('layui')).to.be.true;
+      expect($node.removeClass('layui')).to.deep.equal($node);
+      expect($('#test-div').hasClass('layui')).to.be.false;
+    });
+
+    it('#hasClass', function () {
+      expect(lay('#test-div').hasClass('layui')).to.be.false;
+      lay('#test-div').addClass('layui');
+      expect(lay('#test-div').hasClass('layui')).to.be.true;
+      lay('#test-div').removeClass('layui');
+      expect(lay('#test-div').hasClass('layui')).to.be.false;
+    });
+
+    it('#attr', function () {
+      $('#test-div').attr('data-name', 'layui');
+      expect(lay('#test-div').attr('data-name')).to.equal('layui');
+
+      var $node = lay('#test-div');
+      expect($node.attr('data-name', 'layui-2')).to.deep.equal($node);
+      expect(lay('#test-div').attr('data-name')).to.equal('layui-2');
+
+      expect(lay('#test-test-empty').attr('data-name')).to.be.undefined;
+    });
+
+    it('#removeAttr', function () {
+      var $node = lay('#test-div');
+
+      lay('#test-div').attr('data-name', 'layui');
+      expect(lay('#test-div').attr('data-name')).to.equal('layui');
+
+      expect(lay('#test-div').removeAttr('data-name')).to.deep.equal($node);
+      expect(lay('#test-div').attr('data-name')).to.not.equal('layui');
+    });
+
+    it('#html', function () {
+      var str = '<b>layui</b>';
+      var $node = lay('#test-div');
+      expect($node.html(str)).to.deep.equal($node);
+
+      expect($('#test-div').html()).to.equal(str);
+    });
+
+    it('#val', function () {
+      var $node = lay('#test-input');
+      expect($node.val('layui')).to.deep.equal($node);
+      expect($('#test-input').val()).to.equal('layui');
+    });
+
+    it('#append', function () {
+      var $node = lay('#test-div');
+
+      expect($node.append('<b>1</b>')).to.deep.equal($node);
+      lay('#test-div').append('<b>2</b>');
+      expect($('#test-div').html()).to.equal('<b>1</b><b>2</b>');
+      $('#test-div').empty();
+
+      var node = $('<b />').html('layui').get(0);
+      lay('#test-div').append(node);
+      expect($('#test-div').html()).to.equal('<b>layui</b>');
+    });
+
+    it('#remove', function () {
+      lay('#test-div').append('<div>1</div>');
+      expect($('#test-div').children().length).to.equal(1);
+      lay('#test-div').remove($('#test-div').children().get(0));
+      expect($('#test-div').children().length).to.equal(0);
+
+      lay('#test-div').append('<div>1</div>');
+      expect($('#test-div').children().length).to.equal(1);
+      lay('#test-div div').remove();
+      expect($('#test-div').children().length).to.equal(0);
+    });
+
+    it('#on', function (done) {
+      lay('#test-div').on('click', function (event) {
+        expect(event).to.be.not.undefined;
+        done();
+      });
+      $('#test-div').click();
+    });
+
+    it('#off', function (done) {
+      var fn = function () {
+        done('off error');
+      };
+      lay('#test-div').on('click', fn).off('click', fn);
+      $('#test-div').click();
+      setTimeout(function () {
+        done();
+      });
     });
   });
 });
