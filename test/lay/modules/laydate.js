@@ -406,6 +406,37 @@ describe('laydate', function () {
     });
 
     describe('options.value', function () {
+      it('2017-06-31', function (done) {
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          value: '2017-06-31',
+          done: function (value) {
+            expect(value).to.equal('2017-06-30', '6月最大为30号');
+            done();
+          }
+        });
+
+        $('.laydate-btns-confirm').click();
+      });
+
+      it('new Date()', function (done) {
+        var date = new Date();
+        date.setDate(date.getDate() + 1);
+
+        laydate.render({
+          elem: '#test-div',
+          show: true,
+          value: date,
+          done: function (value) {
+            expect(value).to.equal(dateFormat('yyyy-MM-dd', 1));
+            done();
+          }
+        });
+
+        $('.laydate-btns-confirm').click();
+      });
+
       it('yyyy-MM-dd', function () {
         laydate.render({
           elem: '#test-div',
@@ -1072,6 +1103,26 @@ describe('laydate', function () {
 
         expect($('.layui-this').text()).to.equal('快乐', '显示被mark覆盖的 快乐');
       });
+    });
+
+    it('options.dateTime', function (done) {
+      laydate.render({
+        elem: '#test-div',
+        show: true,
+        dateTime: {
+          year: 20000000,
+          month: 15,
+          minutes: 70,
+          seconds: 60,
+          hours: 25
+        },
+        done: function (value) {
+          expect(value).to.equal(dateFormat('yyyy-MM-dd'), '设置日期超出范围, 初始化为当天');
+          done();
+        }
+      });
+
+      $('.laydate-btns-confirm').click();
     });
   });
 
