@@ -59,6 +59,13 @@ var customLaunchers = {
         version: '11'
     },
 
+    sl_edga: {
+        base: 'SauceLabs',
+        browserName: 'microsoftedge',
+        platform: 'Windows 10',
+        version: '15'
+    },
+
     sl_firefox: {
         base: 'SauceLabs',
         browserName: 'firefox',
