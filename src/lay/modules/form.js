@@ -259,8 +259,8 @@ layui.define('layer', function(exports){
           ) : TIPS;
 
           //替代元素
-          var reElem = $(['<div class="layui-unselect '+ CLASS + (disabled ? ' layui-select-disabled' : '') +'">'
-            ,'<div class="'+ TITLE +'"><input type="text" placeholder="'+ placeholder +'" value="'+ (value ? selected.html() : '') +'" '+ (isSearch ? '' : 'readonly') +' class="layui-input layui-unselect'+ (disabled ? (' '+DISABLED) : '') +'">'
+          var reElem = $(['<div class="'+ (isSearch ? '' : 'layui-unselect ') + CLASS + (disabled ? ' layui-select-disabled' : '') +'">'
+            ,'<div class="'+ TITLE +'"><input type="text" placeholder="'+ placeholder +'" value="'+ (value ? selected.html() : '') +'" '+ (isSearch ? '' : 'readonly') +' class="layui-input'+ (isSearch ? '' : ' layui-unselect') + (disabled ? (' ' + DISABLED) : '') +'">'
             ,'<i class="layui-edge"></i></div>'
             ,'<dl class="layui-anim layui-anim-upbit'+ (othis.find('optgroup')[0] ? ' layui-select-group' : '') +'">'+ function(options){
               var arr = [];

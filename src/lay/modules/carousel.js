@@ -251,21 +251,17 @@ layui.define('jquery', function(exports){
     //滑动方向
     if(type === 'sub'){
       that.subIndex(num);
+      elemItem.eq(options.index).addClass(ELEM_PREV);
       setTimeout(function(){
-        elemItem.eq(options.index).addClass(ELEM_PREV);
-        setTimeout(function(){
-          elemItem.eq(thisIndex).addClass(ELEM_RIGHT);
-          elemItem.eq(options.index).addClass(ELEM_RIGHT);
-        }, 50);
+        elemItem.eq(thisIndex).addClass(ELEM_RIGHT);
+        elemItem.eq(options.index).addClass(ELEM_RIGHT);
       }, 50);
     } else { //默认递增滑
       that.addIndex(num);
+      elemItem.eq(options.index).addClass(ELEM_NEXT);
       setTimeout(function(){
-        elemItem.eq(options.index).addClass(ELEM_NEXT);
-        setTimeout(function(){
-          elemItem.eq(thisIndex).addClass(ELEM_LEFT);
-          elemItem.eq(options.index).addClass(ELEM_LEFT);
-        }, 50);  
+        elemItem.eq(thisIndex).addClass(ELEM_LEFT);
+        elemItem.eq(options.index).addClass(ELEM_LEFT);
       }, 50);  
     };
     
