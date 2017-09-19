@@ -162,7 +162,7 @@
   
   //中止冒泡
   lay.stope = function(e){
-    e = e || win.event;
+    e = e || window.event;
     e.stopPropagation 
       ? e.stopPropagation() 
     : e.cancelBubble = true;

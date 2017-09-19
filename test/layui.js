@@ -194,7 +194,7 @@ describe('layui', function () {
     });
 
     it('error callback', function (done) {
-      layui.img('/404/404.gif', function () {}, function (e) {
+      layui.img('/api/mock?statusCode=404', function () {}, function (e) {
         expect(e).to.not.undefined;
         done();
       });
