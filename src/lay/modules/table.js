@@ -350,15 +350,24 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     var that = this
     ,options = that.config
     ,data = res[options.response.dataName] || []
-    ,trs = []
-    ,trs_fixed = []
-    ,trs_fixed_r = []
-    
+    ,createdRow = 'function' === typeof options.createdRow && options.createdRow || null
+
     //渲染视图
     ,render = function(){
       if(!sort && that.sortKey){
         return that.sort(that.sortKey.field, that.sortKey.sort, true);
       }
+
+      that.layBody.scrollTop(0);
+      that.layMain.find('.'+ NONE).remove();
+      var mainTBody = that.layMain.find('tbody');
+      var fixLeftTBody = that.layFixLeft.find('tbody');
+      var fixRightTBody = that.layFixRight.find('tbody');
+
+      mainTBody.empty();
+      fixLeftTBody.empty();
+      fixRightTBody.empty();
+
       layui.each(data, function(i1, item1){
         var tds = [], tds_fixed = [], tds_fixed_r = [];
         if(item1.length === 0) return;
@@ -406,16 +415,21 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           if(item3.fixed && item3.fixed !== 'right') tds_fixed.push(td);
           if(item3.fixed === 'right') tds_fixed_r.push(td);
         });
-        trs.push('<tr data-index="'+ i1 +'">'+ tds.join('') + '</tr>');
-        trs_fixed.push('<tr data-index="'+ i1 +'">'+ tds_fixed.join('') + '</tr>');
-        trs_fixed_r.push('<tr data-index="'+ i1 +'">'+ tds_fixed_r.join('') + '</tr>');
+
+        var tr = $('<tr data-index="'+ i1 +'">'+ tds.join('') + '</tr>');
+        createdRow && createdRow(tr[0], item1, i1);
+        mainTBody.append(tr);
+        if(tds_fixed.length > 0){
+          var trsFixed = $('<tr data-index="'+ i1 +'">'+ tds_fixed.join('') + '</tr>');
+          createdRow && createdRow(trsFixed[0], item1, i1, 'left');
+          fixLeftTBody.append(trsFixed);
+        }
+        if(tds_fixed_r.length > 0){
+          var trsFixedR = $('<tr data-index="'+ i1 +'">'+ tds_fixed_r.join('') + '</tr>');
+          createdRow && createdRow(trsFixedR[0], item1, i1, 'right');
+          fixRightTBody.append(trsFixedR);
+        }
       });
-      
-      that.layBody.scrollTop(0);
-      that.layMain.find('.'+ NONE).remove();
-      that.layMain.find('tbody').html(trs.join(''));
-      that.layFixLeft.find('tbody').html(trs_fixed.join(''));
-      that.layFixRight.find('tbody').html(trs_fixed_r.join(''));
       
       that.renderForm();
       that.syncCheckAll();
