@@ -23,7 +23,6 @@ body{padding: 50px 100px;}
   <input type="text" class="layui-input" id="test1">
 </div>
 
-
 <br><br><hr><br>
 
 日期选择器：
@@ -61,6 +60,21 @@ body{padding: 50px 100px;}
 </div>
 
 <br><br><hr><br>
+
+
+同时绑定多个：
+<div class="layui-inline">
+  <input type="text" class="layui-input test-item">
+</div>
+<div class="layui-inline">
+  <input type="text" class="layui-input test-item">
+</div>
+<div class="layui-inline">
+  <input type="text" class="layui-input test-item">
+</div>
+
+<br><br><hr><br>
+
 
 墨绿主题：
 <div class="layui-inline">
@@ -118,10 +132,17 @@ layui.use('laydate', function(){
   //单控件
   laydate.render({
     elem: '#test2'
-    ,format: 'y年MM月dd日'
-    //,value: new Date(2017,7,20)
-    ,min: -1 //负数代表为n天前，正数代表为n天后。或这种格式：min: '2017-8-20'
-    ,max: 1 //最大日期为n天后
+    //,format: 'yyyy年MM月dd日'
+    //,value: new Date(1989,9,14)
+    ,format: 'yyyyMMdd'
+    ,value: '20170910'
+    //,max: 0
+    //,min: '2016-10-14'
+    //,max: -1
+    //,value: '1989年10月14日'
+    ,ready: function(date){
+      console.log(date);
+    }
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
     }
@@ -145,8 +166,9 @@ layui.use('laydate', function(){
   laydate.render({
     elem: '#test4'
     ,type: 'month'
-    //,range: true 
+    ,range: true 
     //,trigger: 'click'
+    ,max: -30
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
     }
@@ -182,12 +204,21 @@ layui.use('laydate', function(){
     }
   });
   
+  //同时绑定多个
+  lay('.test-item').each(function(){
+    laydate.render({
+      elem: this
+      ,trigger: 'click'
+    });
+  });
+  
   //自定义重要日
   var ins555 = laydate.render({
     elem: '#test555'
-    ,calendar: true //是否开启公历重要节日
+    //,calendar: true //是否开启公历重要节日
     ,mark: { //标记重要日子
       '0-8-15': '纪念' //0代表：每年
+      ,'0-0-15': '中旬'
       ,'2017-8-20': '发布'
       ,'2017-8-31': '月底'
     } 
@@ -241,9 +272,15 @@ layui.use('laydate', function(){
       elem: '#test8'
       ,type: 'datetime'
       ,show: true
-      ,min: '2017-08-12 00:10:00'
-      ,max: '2017-08-12 23:10:10'
+      //,min: '2017-08-12 00:10:00'
+      //,max: '2017-08-12 23:10:10'
       ,closeStop: '#test9' //点击 #test6 所在元素区域不关闭控件
+      ,change: function(value, date){
+        console.log(value, date)
+      }
+      ,done: function(value, date){
+        console.log(value, date)
+      }
     });
   });
   

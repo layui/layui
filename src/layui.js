@@ -19,7 +19,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.0.0'; //版本号
+    this.v = '2.1.5'; //版本号
   }
 
   //获取layui所在目录
@@ -56,7 +56,7 @@
     ,jquery: 'modules/jquery' //DOM库（第三方）
     
     ,mobile: 'modules/mobile' //移动大模块 | 若当前为开发目录，则为移动模块入口，否则为移动模块集合
-    ,'layui.all': 'dest/layui.all' //PC模块合并版
+    ,'layui.all': '../layui.all' //PC模块合并版
   };
 
   //记录基础数据
@@ -415,12 +415,18 @@
     
     //如果是数字，按大小排序，如果是非数字，按字典序排序
     clone.sort(function(o1, o2){
-      var isNum = /^\d+\d+\d$/
+      var isNum = /^-?\d+$/
       ,v1 = o1[key]
       ,v2 = o2[key];
       
       if(isNum.test(v1)) v1 = parseFloat(v1);
       if(isNum.test(v2)) v2 = parseFloat(v2);
+      
+      if(v1 && !v2){
+        return 1;
+      } else if(!v1 && v2){
+        return -1;
+      }
         
       if(v1 > v2){
         return 1;
@@ -430,6 +436,7 @@
         return 0;
       }
     });
+
     desc && clone.reverse(); //倒序
     return clone;
   };

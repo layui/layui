@@ -193,6 +193,7 @@ layui.define('layer' , function(exports){
           ,data: formData
           ,contentType: false 
           ,processData: false
+          ,dataType: 'json'
           ,success: function(res){
             done(index, res);
           }
@@ -233,11 +234,13 @@ layui.define('layer' , function(exports){
     ,done = function(index, res){
       that.elemFile.next('.'+ ELEM_CHOOSE).remove();
       elemFile.value = '';
-      try {
-        res = JSON.parse(res);
-      } catch(e){
-        res = {};
-        return that.msg('请对上传接口返回有效JSON');
+      if(typeof res !== 'object'){
+        try {
+          res = JSON.parse(res);
+        } catch(e){
+          res = {};
+          return that.msg('请对上传接口返回有效JSON');
+        }
       }
       typeof options.done === 'function' && options.done(res, index || 0, function(files){
         that.upload(files);
@@ -280,7 +283,6 @@ layui.define('layer' , function(exports){
         });
         return that.files;
       }
-      ,elemFile: elemFile
     }
     
     //提交上传
@@ -339,19 +341,20 @@ layui.define('layer' , function(exports){
     
     //检验文件大小
     if(options.size > 0 && !(device.ie && device.ie < 10)){
-      return layui.each(that.chooseFiles, function(index, file){
+      var limitSize;
+      layui.each(that.chooseFiles, function(index, file){
         if(file.size > 1024*options.size){
           var size = options.size/1024;
           size = size >= 1 
             ? (Math.floor(size) + (size%1 > 0 ? size.toFixed(1) : 0)) + 'MB' 
           : options.size + 'KB'
           elemFile.value = '';
-          return that.msg('文件不能超过'+ size);
+          limitSize = size;
+          
         }
-        send();
       });
+      if(limitSize) return that.msg('文件不能超过'+ limitSize);
     }
-    
     send();
   };
   
@@ -386,6 +389,18 @@ layui.define('layer' , function(exports){
 
     //点击上传容器
     options.elem.off('upload.start').on('upload.start', function(){
+      var othis = $(this), data = othis.attr('lay-data');
+      
+      if(data){
+        try{
+          data = new Function('return '+ data)();
+          that.config = $.extend({}, options, data);
+        } catch(e){
+          hint.error('Upload element property lay-data configuration item has a syntax error: ' + data)
+        }
+      }
+      
+      that.config.item = othis;
       that.elemFile[0].click();
     });
     
@@ -414,7 +429,7 @@ layui.define('layer' , function(exports){
     }
     
     //文件选择
-    that.elemFile.on('change', function(){
+    that.elemFile.off('upload.change').on('upload.change', function(){
       var files = this.files || [];
       setChooseFile(files);
       options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
@@ -427,6 +442,10 @@ layui.define('layer' , function(exports){
     
     //防止事件重复绑定
     if(options.elem.data('haveEvents')) return;
+    
+    that.elemFile.on('change', function(){
+      $(this).trigger('upload.change');
+    });
     
     options.elem.on('click', function(){
       if(that.isFile()) return;
