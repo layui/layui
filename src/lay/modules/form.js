@@ -251,7 +251,7 @@ layui.define('layer', function(exports){
           ,selected = $(select.options[select.selectedIndex]) //获取当前选中项
           ,optionsFirst = select.options[0];
           
-          if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
+          if(typeof othis.attr('lay-ignore') === 'string') return true;
           
           var isSearch = typeof othis.attr('lay-search') === 'string'
           ,placeholder = optionsFirst ? (
