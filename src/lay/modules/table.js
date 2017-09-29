@@ -841,7 +841,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       }
       
       //如果出现省略，则可查看更多
-      if(elemCell.prop('scrollWidth') > elemCell.outerWidth()){
+      if(Math.round(elemCell.prop('scrollWidth')) > Math.round(elemCell.outerWidth())){
         that.tipsIndex = layer.tips([
           '<div class="layui-table-tips-main" style="margin-top: -'+ (elemCell.height() + 16) +'px;'+ function(){
             if(config.size === 'sm'){
