@@ -399,9 +399,9 @@ layui.define('layer', function(exports){
   };
   
   //表单提交校验
-  var submit = function(){
+  var submit = function(event){
     var button = $(this), verify = form.config.verify, stop = null
-    ,DANGER = 'layui-form-danger', field = {} ,elem = button.parents(ELEM)
+    ,DANGER = 'layui-form-danger', field = {} ,elem = event.type == 'submit' ? button : button.parents(ELEM)
     
     ,verifyElem = elem.find('*[lay-verify]') //获取需要校验的元素
     ,formElem = button.parents('form')[0] //获取当前所在的form元素，如果存在的话
