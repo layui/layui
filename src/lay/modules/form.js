@@ -401,12 +401,20 @@ layui.define('layer', function(exports){
   //表单提交校验
   var submit = function(event){
     var button = $(this), verify = form.config.verify, stop = null
-    ,DANGER = 'layui-form-danger', field = {} ,elem = event.type == 'submit' ? button : button.parents(ELEM)
+    ,DANGER = 'layui-form-danger', field = {};
+
+    if (event.type == 'submit') {
+      var elem = button
+      ,formElem = this
+      ,filter = button.attr('lay-filter');
+    } else {
+      var elem = button.parents(ELEM)
+      ,formElem = button.parents('form')[0] //获取当前所在的form元素，如果存在的话
+      ,filter = elem.attr('lay-filter'); //获取过滤器
+    }
     
-    ,verifyElem = elem.find('*[lay-verify]') //获取需要校验的元素
-    ,formElem = button.parents('form')[0] //获取当前所在的form元素，如果存在的话
-    ,fieldElem = elem.find('input,select,textarea') //获取所有表单域
-    ,filter = button.attr('lay-filter'); //获取过滤器
+    var verifyElem = elem.find('*[lay-verify]') //获取需要校验的元素
+    ,fieldElem = elem.find('input,select,textarea'); //获取所有表单域
  
     //开始校验
     layui.each(verifyElem, function(_, item){
