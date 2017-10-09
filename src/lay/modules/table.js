@@ -521,14 +521,20 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       ,sort: type
     };
 
-    if(type === 'asc'){ //升序
-      thisData = layui.sort(data, field);
-    } else if(type === 'desc'){ //降序
-      thisData = layui.sort(data, field, true);
-    } else { //清除排序
-      thisData = layui.sort(data, table.config.indexName);
-      delete that.sortKey;
+    // 此处添加服务端排序判断 ajaxSort 参数，如果如果为 true, 则不用排序，排序数据由服务端返回。
+    if(config.ajaxSort === true){
+      thisData = data;
+    } else {
+      if(type === 'asc'){ //升序
+        thisData = layui.sort(data, field);
+      } else if(type === 'desc'){ //降序
+        thisData = layui.sort(data, field, true);
+      } else { //清除排序
+        thisData = layui.sort(data, table.config.indexName);
+        delete that.sortKey;
+      }
     }
+    
     
     res[config.response.dataName] = thisData;
     that.renderData(res, that.page, that.count, true);

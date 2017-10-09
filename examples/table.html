@@ -21,7 +21,7 @@ body{padding: 20px;}
   <button class="layui-btn" data-type="isAll">验证是否全选</button>
 </div>
 
-<table class="layui-table" lay-data="{width:900, height:'full-100', url:'json/table/demo1.json', page:true, id:'test'}" lay-filter="test">
+<table class="layui-table" lay-data="{width:900, ajaxSort: true, height:'full-100', url:'json/table/demo1.json', page:true, id:'test'}" lay-filter="test">
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed: true}"></th>
@@ -350,11 +350,12 @@ layui.use('table', function(){
     }
   });
   
-  //监听排序
+  //监听排序,
+  // id=test 使用服务器端排序，设置 ajaxSort 为 true
   table.on('sort(test)', function(obj){
     console.log(this, obj.field, obj.type)
     
-    return;
+    // return;
     table.reload('test', {
       initSort: obj
       ,where: { //重新请求服务端
