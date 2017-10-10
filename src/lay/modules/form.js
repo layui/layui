@@ -400,21 +400,12 @@ layui.define('layer', function(exports){
   
   //表单提交校验
   var submit = function(event){
-    var button = $(this), verify = form.config.verify, stop = null
-    ,DANGER = 'layui-form-danger', field = {};
-
-    if (event.type == 'submit') {
-      var elem = button
-      ,formElem = this
-      ,filter = button.attr('lay-filter');
-    } else {
-      var elem = button.parents(ELEM)
-      ,formElem = button.parents('form')[0] //获取当前所在的form元素，如果存在的话
-      ,filter = elem.attr('lay-filter'); //获取过滤器
-    }
+    var verify = form.config.verify, stop = null, DANGER = 'layui-form-danger', field = {}; 
     
-    var verifyElem = elem.find('*[lay-verify]') //获取需要校验的元素
-    ,fieldElem = elem.find('input,select,textarea'); //获取所有表单域
+    var $form = $(this).closest('form') //获取当前所在的form元素
+    ,verifyElem = $form.find('*[lay-verify]') //获取需要校验的元素
+    ,fieldElem = $form.find('input,select,textarea') //获取所有表单域
+    ,filter = $form.attr('lay-filter'); //获取过滤器
  
     //开始校验
     layui.each(verifyElem, function(_, item){
@@ -450,7 +441,7 @@ layui.define('layer', function(exports){
     //获取字段
     return layui.event.call(this, MOD_NAME, 'submit('+ filter +')', {
       elem: this
-      ,form: formElem
+      ,form: $form[0]
       ,field: field
     });
   };
