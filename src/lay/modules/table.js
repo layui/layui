@@ -173,6 +173,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     that.render();
   };
 
+  function htmlUnescape(s) {
+    if (!s) return '';
+    return s.replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+  }
+
   //默认配置
   Class.prototype.config = {
     limit: 30 //每页显示的数量
@@ -412,9 +419,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
                 }() +'>';
               }
               if(item3.toolbar){
-                return laytpl($(item3.toolbar).html()||'').render(item1);
+                return laytpl(htmlUnescape($(item3.toolbar).html())||'').render(item1);
               }
-              return item3.templet ? laytpl($(item3.templet).html() || String(content)).render(item1) : content;
+              return item3.templet ? laytpl(htmlUnescape($(item3.templet).html()) || String(content)).render(item1) : content;
             }()
           ,'</div></td>'].join('');
 
@@ -834,7 +841,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         }
       });
       othis.siblings(ELEM_CELL).html(
-        templet ? laytpl($(templet).html() || this.value).render(data) : this.value
+        templet ? laytpl(htmlUnescape($(templet).html()) || this.value).render(data) : this.value
       );
       othis.parent().data('content', this.value);
       othis.remove();
@@ -916,7 +923,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
                 }
               });
               td.children(ELEM_CELL).html(
-                templet ? laytpl($(templet).html() || value).render(data) : value
+                templet ? laytpl(htmlUnescape($(templet).html()) || value).render(data) : value
               );
               td.data('content', value);
             }
