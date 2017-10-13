@@ -268,6 +268,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
 
   //获取响应数据
   Class.prototype.fetchResponse = function(res, key){
+    if (res[key] != undefined) return res[key];
     var separator = this.config.response.separator || '.';
     if (key.indexOf(separator) != -1) {
       var keys = key.split(separator);
