@@ -329,15 +329,15 @@ layui.define('layer', function(exports){
           var hasRender = othis.next('.' + RE_CLASS[0]);
           var reElem = $(['<div class="layui-unselect '+ RE_CLASS[0] + (
             check.checked ? (' '+RE_CLASS[1]) : '') + (disabled ? ' layui-checkbox-disbaled '+DISABLED : '') +'" lay-skin="'+ (skin||'') +'">'
-          ,{
-            _switch: '<em>'+ ((check.checked ? text[0] : text[1])||'') +'</em><i></i>'
-          }[skin] || ((check.title.replace(/\s/g, '') ? ('<span>'+ check.title +'</span>') : '') +'<i class="layui-icon">'+ function () {
-              if (skin){
-                return icon ? icon : '&#xe605;';
+          ,function () {
+              if (skin === '_switch'){
+                return '<em>'+ ((check.checked ? text[0] : text[1])||'') +'</em><i></i>';
+              } else if (skin === 'expand'){
+                return '<i class="layui-icon">&#xe602;</i>';
               } else{
-                return '&#xe618;'
+                return ((check.title.replace(/\s/g, '') ? ('<span>'+ check.title +'</span>') : '') +'<i class="layui-icon">'+ (skin ? '&#xe605;' : '&#xe618;') +'</i>');
               }
-            }() +'</i>')
+            }()
           ,'</div>'].join(''));
 
           hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender

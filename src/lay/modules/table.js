@@ -84,7 +84,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           ,'{{# if(item2.checkbox){ }}'
             ,'<th data-field="{{ item2.field||i2 }}" data-type="checkbox" {{#if(item2.colspan){}} colspan="{{item2.colspan}}"{{#} if(item2.rowspan){}} rowspan="{{item2.rowspan}}"{{#}}} unresize="true"><div class="layui-table-cell laytable-cell-checkbox"><input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose" {{# if(item2[d.data.checkName]){ }}checked{{# }; }}></div></th>'
           ,'{{# } else if(item2.expandable){ }}'
-            ,'<th data-field="{{ item2.field||i2 }}" data-type="expandable" {{#if(item2.colspan){}} colspan="{{item2.colspan}}"{{#} if(item2.rowspan){}} rowspan="{{item2.rowspan}}"{{#}}} unresize="true"><div class="layui-table-cell laytable-cell-expandable"><input type="checkbox" name="layTableExpandable" lay-skin="primary" lay-filter="layTableAllExpand"></div></th>'
+            ,'<th data-field="{{ item2.field||i2 }}" data-type="expandable" {{#if(item2.colspan){}} colspan="{{item2.colspan}}"{{#} if(item2.rowspan){}} rowspan="{{item2.rowspan}}"{{#}}} unresize="true"><div class="layui-table-cell laytable-cell-expandable"><input type="checkbox" disabled name="layTableExpandable" lay-skin="expand" lay-filter="layTableAllExpand"></div></th>'
           ,'{{# } else if(item2.space){ }}'
             ,'<th data-field="{{ item2.field||i2 }}" {{#if(item2.colspan){}} colspan="{{item2.colspan}}"{{#} if(item2.rowspan){}} rowspan="{{item2.rowspan}}"{{#}}} unresize="true"><div class="layui-table-cell laytable-cell-space"></div></th>'
           ,'{{# } else { }}'
@@ -405,7 +405,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
                 }() +'>';
               } else if(item3.expandable){
                 expandable = true;
-                return '<input type="checkbox" name="layTableExpandable" lay-skin="primary" lay-icon="&#xe671;">';
+                return '<input type="checkbox" name="layTableExpandable" lay-skin="expand">';
               } else if(item3.space){
                 space = true;
                 colCnt--;
@@ -430,7 +430,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
               if (space) {
                 return '<td><div class="layui-table-cell laytable-cell-space"></div></td>';
               }
-            }() + '<td colspan="' + colCnt + '">aaa</td></tr>');
+            }() + '<td data-name="expand-content" colspan="' + colCnt + '"></td></tr>');
           trs_fixed.push('<tr data-expand-index="' + i1 + '" class="' + HIDE + '"><td><div class="layui-table-cell laytable-cell-space"></div></td></tr>');
           trs_fixed_r.push('<tr data-expand-index="' + i1 + '"  class="' + HIDE + '"><td><div class="layui-table-cell laytable-cell-space"></div></td></tr>');
         }
@@ -831,7 +831,17 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       layui.event.call(this, MOD_NAME, 'expandable('+ filter +')', {
         expanded: checked
         ,data: table.cache[that.key][index]
-        ,content: content
+        ,hasContent: content.find('td[data-name="expand-content"]').is(':empty')
+        ,addContent: function (element) {
+          var target = content.find('td[data-name="expand-content"]');
+          if (!checked) return;
+          if (!target.is(':empty')) {
+            target.html('');
+          }
+          target.append(element);
+          contentFixLeft.find('td:first').height(target.height());
+          contentFixRight.find('td:first').height(target.height());
+        }
       });
     });
     
