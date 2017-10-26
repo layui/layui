@@ -4,7 +4,7 @@
   </a>
 </p>
 <p align=center>
-  经典模块化前端UI框架
+  经典模块化前端UI框架阿道夫撒
 </p>
 
 <p align="center">
