@@ -3,19 +3,19 @@
  @Name：layui.form 表单组件
  @Author：贤心
  @License：MIT
-    
+
  */
- 
+
 layui.define('layer', function(exports){
   "use strict";
-  
+
   var $ = layui.$
   ,layer = layui.layer
   ,hint = layui.hint()
   ,device = layui.device()
-  
+
   ,MOD_NAME = 'form', ELEM = '.layui-form', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'layui-disabled'
-  
+
   ,Form = function(){
     this.config = {
       verify: {
@@ -49,26 +49,26 @@ layui.define('layer', function(exports){
       }
     };
   };
-  
+
   //全局设置
   Form.prototype.set = function(options){
     var that = this;
     $.extend(true, that.config, options);
     return that;
   };
-  
+
   //验证规则设定
   Form.prototype.verify = function(settings){
     var that = this;
     $.extend(true, that.config.verify, settings);
     return that;
   };
-  
+
   //表单事件监听
   Form.prototype.on = function(events, callback){
     return layui.onevent.call(this, MOD_NAME, events, callback);
   };
-  
+
   //表单控件渲染
   Form.prototype.render = function(type, filter){
     var that = this
@@ -76,12 +76,12 @@ layui.define('layer', function(exports){
       return filter ? ('[lay-filter="' + filter +'"]') : '';
     }())
     ,items = {
-      
+
       //下拉选择框
       select: function(){
         var TIPS = '请选择', CLASS = 'layui-form-select', TITLE = 'layui-select-title'
         ,NONE = 'layui-select-none', initValue = '', thatInput
-        
+
         ,selects = elemForm.find('select'), hide = function(e, clear){
           if(!$(e.target).parent().hasClass(TITLE) || clear){
             $('.'+CLASS).removeClass(CLASS+'ed ' + CLASS+'up');
@@ -89,24 +89,24 @@ layui.define('layer', function(exports){
           }
           thatInput = null;
         }
-        
+
         ,events = function(reElem, disabled, isSearch){
           var select = $(this)
           ,title = reElem.find('.' + TITLE)
           ,input = title.find('input')
           ,dl = reElem.find('dl')
           ,dds = dl.children('dd')
-          
-          
+
+
           if(disabled) return;
-          
+
           //展开下拉
           var showDown = function(){
             var top = reElem.offset().top + reElem.outerHeight() + 5 - win.scrollTop()
             ,dlHeight = dl.outerHeight();
             reElem.addClass(CLASS+'ed');
             dds.removeClass(HIDE);
-            
+
             //上下定位识别
             if(top + dlHeight > win.height() && top >= dlHeight){
               reElem.addClass(CLASS + 'up');
@@ -114,9 +114,9 @@ layui.define('layer', function(exports){
           }, hideDown = function(choose){
             reElem.removeClass(CLASS+'ed ' + CLASS+'up');
             input.blur();
-            
+
             if(choose) return;
-            
+
             notOption(input.val(), function(none){
               if(none){
                 initValue = dl.find('.'+THIS).html();
@@ -124,23 +124,23 @@ layui.define('layer', function(exports){
               }
             });
           };
-          
+
           //点击标题区域
           title.on('click', function(e){
             reElem.hasClass(CLASS+'ed') ? (
               hideDown()
             ) : (
-              hide(e, true), 
+              hide(e, true),
               showDown()
             );
             dl.find('.'+NONE).remove();
-          }); 
-          
+          });
+
           //点击箭头获取焦点
           title.find('.layui-edge').on('click', function(){
             input.focus();
           });
-          
+
           //键盘事件
           input.on('keyup', function(e){
             var keyCode = e.keyCode;
@@ -157,7 +157,7 @@ layui.define('layer', function(exports){
               e.preventDefault();
             }
           });
-          
+
           //检测值是否不属于select项
           var notOption = function(value, callback, origin){
             var num = 0;
@@ -171,18 +171,18 @@ layui.define('layer', function(exports){
             var none = num === dds.length;
             return callback(none), none;
           };
-          
+
           //搜索匹配
           var search = function(e){
             var value = this.value, keyCode = e.keyCode;
-            
-            if(keyCode === 9 || keyCode === 13 
-              || keyCode === 37 || keyCode === 38 
+
+            if(keyCode === 9 || keyCode === 13
+              || keyCode === 37 || keyCode === 38
               || keyCode === 39 || keyCode === 40
             ){
               return false;
             }
-            
+
             notOption(value, function(none){
               if(none){
                 dl.find('.'+NONE)[0] || dl.append('<p class="'+ NONE +'">无匹配项</p>');
@@ -190,7 +190,7 @@ layui.define('layer', function(exports){
                 dl.find('.'+NONE).remove();
               }
             }, 'keyup');
-            
+
             if(value === ''){
               dl.find('.'+NONE).remove();
             }
@@ -215,14 +215,14 @@ layui.define('layer', function(exports){
             var filter = select.attr('lay-filter'); //获取过滤器
 
             if(othis.hasClass(DISABLED)) return false;
-            
+
             if(othis.hasClass('layui-select-tips')){
               input.val('');
             } else {
               input.val(othis.text());
               othis.addClass(THIS);
             }
-            
+
             othis.siblings().removeClass(THIS);
             select.val(value).removeClass('layui-form-danger')
             layui.event.call(this, MOD_NAME, 'select('+ filter +')', {
@@ -234,15 +234,15 @@ layui.define('layer', function(exports){
             hideDown(true);
             return false;
           });
-          
+
           reElem.find('dl>dt').on('click', function(e){
             return false;
           });
-          
+
           //关闭下拉
           $(document).off('click', hide).on('click', hide);
         }
-        
+
         selects.each(function(index, select){
           var othis = $(this)
           ,hasRender = othis.next('.'+CLASS)
@@ -250,9 +250,9 @@ layui.define('layer', function(exports){
           ,value = select.value
           ,selected = $(select.options[select.selectedIndex]) //获取当前选中项
           ,optionsFirst = select.options[0];
-          
+
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
-          
+
           var isSearch = typeof othis.attr('lay-search') === 'string'
           ,placeholder = optionsFirst ? (
             optionsFirst.value ? TIPS : (optionsFirst.innerHTML || TIPS)
@@ -268,7 +268,7 @@ layui.define('layer', function(exports){
                 if(index === 0 && !item.value){
                   arr.push('<dd lay-value="" class="layui-select-tips">'+ (item.innerHTML || TIPS) +'</dd>');
                 } else if(item.tagName.toLowerCase() === 'optgroup'){
-                  arr.push('<dt>'+ item.label +'</dt>'); 
+                  arr.push('<dt>'+ item.label +'</dt>');
                 } else {
                   arr.push('<dd lay-value="'+ item.value +'" class="'+ (value === item.value ?  THIS : '') + (item.disabled ? (' '+DISABLED) : '') +'">'+ item.innerHTML +'</dd>');
                 }
@@ -277,9 +277,9 @@ layui.define('layer', function(exports){
               return arr.join('');
             }(othis.find('*')) +'</dl>'
           ,'</div>'].join(''));
-          
+
           hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender
-          othis.after(reElem);          
+          othis.after(reElem);
           events.call(this, reElem, disabled, isSearch);
         });
       }
@@ -290,17 +290,17 @@ layui.define('layer', function(exports){
           ,_switch: ['layui-form-switch', 'layui-form-onswitch', 'switch']
         }
         ,checks = elemForm.find('input[type=checkbox]')
-        
+
         ,events = function(reElem, RE_CLASS){
           var check = $(this);
-          
+
           //勾选
           reElem.on('click', function(){
             var filter = check.attr('lay-filter') //获取过滤器
             ,text = (check.attr('lay-text')||'').split('|');
 
             if(check[0].disabled) return;
-            
+
             check[0].checked ? (
               check[0].checked = false
               ,reElem.removeClass(RE_CLASS[1]).find('em').text(text[1])
@@ -308,7 +308,7 @@ layui.define('layer', function(exports){
               check[0].checked = true
               ,reElem.addClass(RE_CLASS[1]).find('em').text(text[0])
             );
-            
+
             layui.event.call(check[0], MOD_NAME, RE_CLASS[2]+'('+ filter +')', {
               elem: check[0]
               ,value: check[0].value
@@ -316,15 +316,15 @@ layui.define('layer', function(exports){
             });
           });
         }
-        
+
         checks.each(function(index, check){
           var othis = $(this), skin = othis.attr('lay-skin')
           ,text = (othis.attr('lay-text')||'').split('|'), disabled = this.disabled;
           if(skin === 'switch') skin = '_'+skin;
           var RE_CLASS = CLASS[skin] || CLASS.checkbox;
-          
+
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
-          
+
           //替代元素
           var hasRender = othis.next('.' + RE_CLASS[0]);
           var reElem = $(['<div class="layui-unselect '+ RE_CLASS[0] + (
@@ -343,28 +343,28 @@ layui.define('layer', function(exports){
       ,radio: function(){
         var CLASS = 'layui-form-radio', ICON = ['&#xe643;', '&#xe63f;']
         ,radios = elemForm.find('input[type=radio]')
-        
+
         ,events = function(reElem){
           var radio = $(this), ANIM = 'layui-anim-scaleSpring';
-          
+
           reElem.on('click', function(){
             var name = radio[0].name, forms = radio.parents(ELEM);
             var filter = radio.attr('lay-filter'); //获取过滤器
             var sameRadio = forms.find('input[name='+ name.replace(/(\.|#|\[|\])/g, '\\$1') +']'); //找到相同name的兄弟
-            
+
             if(radio[0].disabled) return;
-            
+
             layui.each(sameRadio, function(){
               var next = $(this).next('.'+CLASS);
               this.checked = false;
               next.removeClass(CLASS+'ed');
               next.find('.layui-icon').removeClass(ANIM).html(ICON[1]);
             });
-            
+
             radio[0].checked = true;
             reElem.addClass(CLASS+'ed');
             reElem.find('.layui-icon').addClass(ANIM).html(ICON[0]);
-            
+
             layui.event.call(radio[0], MOD_NAME, 'radio('+ filter +')', {
               elem: radio[0]
               ,value: radio[0].value
@@ -372,18 +372,18 @@ layui.define('layer', function(exports){
             });
           });
         };
-        
+
         radios.each(function(index, radio){
           var othis = $(this), hasRender = othis.next('.' + CLASS), disabled = this.disabled;
-          
+
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
-          
+
           //替代元素
           var reElem = $(['<div class="layui-unselect '+ CLASS + (radio.checked ? (' '+CLASS+'ed') : '') + (disabled ? ' layui-radio-disbaled '+DISABLED : '') +'">'
           ,'<i class="layui-anim layui-icon">'+ ICON[radio.checked ? 0 : 1] +'</i>'
           ,'<span>'+ (radio.title||'未命名') +'</span>'
           ,'</div>'].join(''));
-          
+
           hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender
           othis.after(reElem);
           events.call(this, reElem);
@@ -397,17 +397,17 @@ layui.define('layer', function(exports){
     });
     return that;
   };
-  
+
   //表单提交校验
   var submit = function(){
     var button = $(this), verify = form.config.verify, stop = null
     ,DANGER = 'layui-form-danger', field = {} ,elem = button.parents(ELEM)
-    
+
     ,verifyElem = elem.find('*[lay-verify]') //获取需要校验的元素
     ,formElem = button.parents('form')[0] //获取当前所在的form元素，如果存在的话
     ,fieldElem = elem.find('input,select,textarea') //获取所有表单域
     ,filter = button.attr('lay-filter'); //获取过滤器
- 
+
     //开始校验
     layui.each(verifyElem, function(_, item){
       var othis = $(this), ver = othis.attr('lay-verify').split('|');
@@ -416,10 +416,16 @@ layui.define('layer', function(exports){
       layui.each(ver, function(_, thisVer){
         var isFn = typeof verify[thisVer] === 'function';
         if(verify[thisVer] && (isFn ? tips = verify[thisVer](value, item) : !verify[thisVer][0].test(value)) ){
-          layer.msg(tips || verify[thisVer][1], {
-            icon: 5
-            ,shift: 6
-          });
+            if (form.config.tipVerify) {
+                layer.tips(tips || verify[thisVer][1], othis, {
+                    tips: [2, '#FF5722'] //还可配置颜色
+                });
+            }else{
+                layer.msg(tips || verify[thisVer][1], {
+                    icon: 5
+                    ,shift: 6
+                });
+            }
           //非移动设备自动定位焦点
           if(!device.android && !device.ios){
             item.focus();
@@ -430,15 +436,15 @@ layui.define('layer', function(exports){
       });
       if(stop) return stop;
     });
-    
+
     if(stop) return false;
-    
+
     layui.each(fieldElem, function(_, item){
       if(!item.name) return;
       if(/^checkbox|radio$/.test(item.type) && !item.checked) return;
       field[item.name] = item.value;
     });
- 
+
     //获取字段
     return layui.event.call(this, MOD_NAME, 'submit('+ filter +')', {
       elem: this
@@ -450,9 +456,9 @@ layui.define('layer', function(exports){
   //自动完成渲染
   var form = new Form()
   ,dom = $(document), win = $(window);
-  
+
   form.render();
-  
+
   //表单reset重置渲染
   dom.on('reset', ELEM, function(){
     var filter = $(this).attr('lay-filter');
@@ -460,11 +466,11 @@ layui.define('layer', function(exports){
       form.render(null, filter);
     }, 50);
   });
-  
+
   //表单提交事件
   dom.on('submit', ELEM, submit)
   .on('click', '*[lay-submit]', submit);
-  
+
   exports(MOD_NAME, form);
 });
 
