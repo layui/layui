@@ -1,8 +1,9 @@
 {
-  "name": "layui",
-  "version": "2.1.5",
+  "name": "layui-src",
+  "realname": "layui",
+  "version": "2.1.6",
   "independents": {
-    "layim": "3.7.2" 
+    "layim": "3.7.2"
   },
   "description": "经典模块化前端框架",
   "main": "layui.js",
@@ -48,6 +49,7 @@
   },
   "directories": {
     "doc": "doc",
+    "example": "examples",
     "test": "test"
   },
   "dependencies": {},

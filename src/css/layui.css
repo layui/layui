@@ -22,11 +22,11 @@ pre{white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; w
 
 /** 图标字体 **/
 @font-face {font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=213');
-  src: url('../font/iconfont.eot?v=213#iefix') format('embedded-opentype'),
-  url('../font/iconfont.svg?v=213#iconfont') format('svg'),
-  url('../font/iconfont.woff?v=213') format('woff'),
-  url('../font/iconfont.ttf?v=213') format('truetype');
+  src: url('../font/iconfont.eot?v=220');
+  src: url('../font/iconfont.eot?v=220#iefix') format('embedded-opentype'),
+  url('../font/iconfont.svg?v=220#iconfont') format('svg'),
+  url('../font/iconfont.woff?v=220') format('woff'),
+  url('../font/iconfont.ttf?v=220') format('truetype');
 }
                     
 .layui-icon{
@@ -273,6 +273,11 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-progress-big .layui-progress-bar{height: 18px; line-height: 18px;}
 .layui-progress-text{position: relative; top: -18px; line-height: 18px; font-size: 12px; color: #666}
 .layui-progress-big .layui-progress-text{position: static; padding: 0 10px; color: #fff;}
+
+/* 卡片面板 */
+.layui-card{margin-bottom: 15px; border-radius: 2px; background-color: #fff; box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);}
+.layui-card-header{position: relative; height: 42px; line-height: 42px; padding: 0 15px; border-bottom: 1px dotted #E9E9E9; color: #333; border-radius: 2px 2px 0 0; font-size: 14px;}
+.layui-card-body{padding: 10px 15px; line-height: 24px;}
 
 /* 折叠面板 */
 .layui-collapse{border: 1px solid #e2e2e2; border-radius: 2px;}
@@ -675,9 +680,9 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-nav-img{width: 30px; height: 30px; margin-right: 10px; border-radius: 50%;}
 
 .layui-nav .layui-nav-more{content:''; width: 0; height: 0; border-style: dashed; border-color: transparent; overflow: hidden; cursor: pointer; transition: all .2s; -webkit-transition: all .2s;}
-.layui-nav .layui-nav-more{position: absolute; top: 28px; right: 3px; border-width: 6px; border-top-style: solid; border-top-color: #fff; border-top-color: rgba(255,255,255,.7);}
+.layui-nav .layui-nav-more{position: absolute; top: 50%; right: 3px; margin-top: -3px; border-width: 6px; border-top-style: solid; border-top-color: #fff; border-top-color: rgba(255,255,255,.7);}
 .layui-nav .layui-nav-mored,
-.layui-nav-itemed .layui-nav-more{top: 22px; border-style: dashed; border-color: transparent; border-bottom-style: solid; border-bottom-color: #fff;}
+.layui-nav-itemed .layui-nav-more{margin-top: -9px; border-style: dashed; border-color: transparent; border-bottom-style: solid; border-bottom-color: #fff;}
 
 .layui-nav-child{display: none; position: absolute; left: 0; top: 65px; min-width: 100%; line-height: 36px; padding: 5px 0;  box-shadow: 0 2px 4px rgba(0,0,0,.12); border: 1px solid #d2d2d2; background-color: #fff; z-index: 100; border-radius: 2px; white-space: nowrap;}
 .layui-nav .layui-nav-child a{color: #333;}
@@ -689,7 +694,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 
 /* 垂直导航菜单 */.layui-nav-tree{width: 200px; padding: 0;}
 .layui-nav-tree .layui-nav-item{display: block; width: 100%; line-height: 45px;}
-.layui-nav-tree .layui-nav-item a{height: 45px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
+.layui-nav-tree .layui-nav-item a{height: 45px; line-height: 45px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .layui-nav-tree .layui-nav-item a:hover{background-color: #4E5465;}
 .layui-nav-tree .layui-nav-bar{width: 5px; height: 0;}
 .layui-nav-tree .layui-this,
@@ -708,7 +713,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-nav-tree .layui-nav-child a{color: #fff; color: rgba(255,255,255,.7);}
 .layui-nav-tree .layui-nav-child a:hover,
 .layui-nav-tree .layui-nav-child{background: none; color: #fff;}
-.layui-nav-tree .layui-nav-more{top: 20px; right: 10px;}
+.layui-nav-tree .layui-nav-more{top: 20px; right: 10px; margin: 0;}
 .layui-nav-itemed .layui-nav-more{top: 14px;}
 .layui-nav-itemed .layui-nav-child{display: block; padding: 0; background-color: rgba(0,0,0,.3) !important;} 
 
@@ -902,6 +907,18 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
   to {transform: translate3d(0, 0, 0);  opacity: 1;}
 }
 .layui-anim-upbit{-webkit-animation-name: layui-upbit; animation-name: layui-upbit;}
+
+@-webkit-keyframes layui-movey{ /* 垂直位移 */
+  0% {-webkit-transform: translate3d(0, 50px, 0);}
+  50% {-webkit-transform: translate3d(0, -50px, 0);}
+  100% {-webkit-transform: translate3d(0, 50px, 0);}
+}
+@keyframes layui-movey{
+  0% {transform: translate3d(0, 50px, 0);}
+  50% {transform: translate3d(0, -50px, 0);}
+  100% {transform: translate3d(0, 50px, 0);}
+}
+.layui-anim-movey{-webkit-animation-name: layui-movey; animation-name: layui-movey;}
 
 @-webkit-keyframes layui-scale { /* 放大 */
   0% {opacity: 0.3; -webkit-transform: scale(.5);}
