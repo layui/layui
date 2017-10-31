@@ -117,7 +117,7 @@
       var readyRegExp = navigator.platform === 'PLaySTATION 3' ? /^complete$/ : /^(complete|loaded)$/
       if (e.type === 'load' || (readyRegExp.test((e.currentTarget || e.srcElement).readyState))) {
         config.modules[item] = url;
-        config.debug || head.removeChild(node);
+        head.removeChild(node);
         (function poll() {
           if(++timeout > config.timeout * 1000 / 4){
             return error(item + ' is not a valid module');
