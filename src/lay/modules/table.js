@@ -22,6 +22,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     config: {
       checkName: 'LAY_CHECKED' //是否选中状态的字段名
       ,indexName: 'LAY_TABLE_INDEX' //下标索引名
+      ,curr:1
     } //全局配置项
     ,cache: {} //数据缓存
     ,index: layui.table ? (layui.table.index + 10000) : 0
@@ -246,8 +247,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       var th = that.layFixed.find(ELEM_HEADER).find('th');
       th.height(that.layHeader.height() - 1 - parseFloat(th.css('padding-top')) - parseFloat(th.css('padding-bottom')));
     }
-    
-    that.pullData(1);
+
+    that.pullData(that.config.curr);
     that.events();
   };
   
