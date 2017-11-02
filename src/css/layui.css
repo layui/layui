@@ -19,24 +19,6 @@ button,input,select,textarea{font-size: 100%; }
 input,button,textarea,select,optgroup,option{font-family: inherit; font-size: inherit; font-style: inherit; font-weight: inherit; outline: 0;}
 pre{white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;}
 
-
-/** 图标字体 **/
-@font-face {font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=220');
-  src: url('../font/iconfont.eot?v=220#iefix') format('embedded-opentype'),
-  url('../font/iconfont.svg?v=220#iconfont') format('svg'),
-  url('../font/iconfont.woff?v=220') format('woff'),
-  url('../font/iconfont.ttf?v=220') format('truetype');
-}
-                    
-.layui-icon{
-  font-family:"layui-icon" !important;
-  font-size: 16px;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 /** 初始化全局标签 **/
 body{line-height: 24px; font: 14px Helvetica Neue,Helvetica,PingFang SC,\5FAE\8F6F\96C5\9ED1,Tahoma,Arial,sans-serif;}
 hr{height: 1px; margin: 10px 0; border: 0; background-color: #e2e2e2; clear: both;}
@@ -58,6 +40,160 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-show{display: block !important;}
 .layui-hide{display: none !important;}
 
+/** 图标字体 **/
+@font-face {font-family: 'layui-icon';
+  src: url('../font/iconfont.eot?v=220');
+  src: url('../font/iconfont.eot?v=220#iefix') format('embedded-opentype'),
+  url('../font/iconfont.svg?v=220#iconfont') format('svg'),
+  url('../font/iconfont.woff?v=220') format('woff'),
+  url('../font/iconfont.ttf?v=220') format('truetype');
+}
+                    
+.layui-icon{
+  font-family:"layui-icon" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.layui-icon-duihua:before{content:"\e611"}
+.layui-icon-shezhi:before{content:"\e614"}
+.layui-icon-yinshenim:before{content:"\e60f"}
+.layui-icon-search:before{content:"\e615"}
+.layui-icon-fenxiang1:before{content:"\e641"}
+.layui-icon-shezhi1:before{content:"\e620"}
+.layui-icon-yinqing:before{content:"\e628"}
+.layui-icon-yuejuancuohao:before{content:"\1006"}
+.layui-icon-cuo:before{content:"\1007"}
+.layui-icon-baobiao:before{content:"\e629"}
+.layui-icon-star:before{content:"\e600"}
+.layui-icon-yuandian:before{content:"\e617"}
+.layui-icon-kefu:before{content:"\e606"}
+.layui-icon-logo:before{content:"\e609"}
+.layui-icon-list:before{content:"\e60a"}
+.layui-icon-tubiao:before{content:"\e62c"}
+.layui-icon-right:before{content:"\1005"}
+.layui-icon-huanfu2:before{content:"\e61b"}
+.layui-icon-On-line:before{content:"\e610"}
+.layui-icon-biaoge:before{content:"\e62d"}
+.layui-icon-youyou:before{content:"\e602"}
+.layui-icon-zuozuo:before{content:"\e603"}
+.layui-icon-cart:before{content:"\e698"}
+.layui-icon-cry:before{content:"\e69c"}
+.layui-icon-smile:before{content:"\e6af"}
+.layui-icon-survey:before{content:"\e6b2"}
+.layui-icon-icon5:before{content:"\e62e"}
+.layui-icon-iconfont17:before{content:"\e62f"}
+.layui-icon-tianjia:before{content:"\e61f"}
+.layui-icon-xiazai:before{content:"\e601"}
+.layui-icon-xuanzemoban48:before{content:"\e630"}
+.layui-icon-gongju:before{content:"\e631"}
+.layui-icon-tishilian:before{content:"\e664"}
+.layui-icon-bianji:before{content:"\e642"}
+.layui-icon-xiaoxi:before{content:"\e645"}
+.layui-icon-xiangxia:before{content:"\e61a"}
+.layui-icon-wenjian:before{content:"\e621"}
+.layui-icon-layouts:before{content:"\e632"}
+.layui-icon-duigou:before{content:"\e618"}
+.layui-icon-tianjia1:before{content:"\e608"}
+.layui-icon-yaoyaozhibofanye:before{content:"\e633"}
+.layui-icon-office:before{content:"\e705"}
+.layui-icon-404:before{content:"\e61c"}
+.layui-icon-lunbozutu:before{content:"\e634"}
+.layui-icon-help:before{content:"\e607"}
+.layui-icon-daima1:before{content:"\e635"}
+.layui-icon-jinshui:before{content:"\e636"}
+.layui-icon-faxian:before{content:"\e670"}
+.layui-icon-guanyu:before{content:"\e60b"}
+.layui-icon-map:before{content:"\e715"}
+.layui-icon-xiangshang:before{content:"\e619"}
+.layui-icon-bofang:before{content:"\e651"}
+.layui-icon-riqi:before{content:"\e637"}
+.layui-icon-uploadfile:before{content:"\e61d"}
+.layui-icon-delete:before{content:"\e640"}
+.layui-icon-bofangzanting02:before{content:"\e652"}
+.layui-icon-top:before{content:"\e604"}
+.layui-icon-haoyouqingqiu:before{content:"\e612"}
+.layui-icon-weibiaoti1:before{content:"\e605"}
+.layui-icon-chuangkou:before{content:"\e638"}
+.layui-icon-comiisbiaoqing:before{content:"\e60c"}
+.layui-icon-zhengque:before{content:"\e616"}
+.layui-icon-money:before{content:"\e659"}
+.layui-icon-iconfontwodehaoyou:before{content:"\e613"}
+.layui-icon-wenjianxiazai:before{content:"\e61e"}
+.layui-icon-tupian:before{content:"\e60d"}
+.layui-icon-lianjie:before{content:"\e64c"}
+.layui-icon-creditlevel:before{content:"\e735"}
+.layui-icon-jilu:before{content:"\e60e"}
+.layui-icon-liucheng:before{content:"\e622"}
+.layui-icon-fontstrikethrough:before{content:"\e64f"}
+.layui-icon-unlink:before{content:"\e64d"}
+.layui-icon-bianjiwenzi:before{content:"\e639"}
+.layui-icon-sanjiao:before{content:"\e623"}
+.layui-icon-danxuankuanghouxuan:before{content:"\e63f"}
+.layui-icon-danxuankuangxuanzhong:before{content:"\e643"}
+.layui-icon-juzhongduiqi:before{content:"\e647"}
+.layui-icon-youduiqi:before{content:"\e648"}
+.layui-icon-zuoduiqi:before{content:"\e649"}
+.layui-icon-gongsisvgtubiaozongji22:before{content:"\e626"}
+.layui-icon-gongsisvgtubiaozongji23:before{content:"\e627"}
+.layui-icon-shuaxin:before{content:"\1002"}
+.layui-icon-loading2:before{content:"\e63e"}
+.layui-icon-flow:before{content:"\e65c"}
+.layui-icon-jiacu:before{content:"\e62b"}
+.layui-icon-uploading:before{content:"\e67c"}
+.layui-icon-liaotianduihuaimgoutong:before{content:"\e63a"}
+.layui-icon-shipin1:before{content:"\e6ed"}
+.layui-icon-yinpin:before{content:"\e6fc"}
+.layui-icon-wenjianjiafan:before{content:"\e624"}
+.layui-icon-shouji:before{content:"\e63b"}
+.layui-icon-tianjia2:before{content:"\e654"}
+.layui-icon-wenjianjia:before{content:"\e7a0"}
+.layui-icon-biaoqing:before{content:"\e650"}
+.layui-icon-html:before{content:"\e64b"}
+.layui-icon-biaodan:before{content:"\e63c"}
+.layui-icon-goumai:before{content:"\e657"}
+.layui-icon-xiangjicopy2x:before{content:"\e65d"}
+.layui-icon-25:before{content:"\e62a"}
+.layui-icon-emwdaima:before{content:"\e64e"}
+.layui-icon-hot:before{content:"\e756"}
+.layui-icon-shezhi11:before{content:"\e716"}
+.layui-icon-zitixiahuaxian:before{content:"\e646"}
+.layui-icon-sanjiao1:before{content:"\e625"}
+.layui-icon-tupian-copy-copy:before{content:"\e64a"}
+.layui-icon-caidan:before{content:"\e671"}
+.layui-icon-zhuti2:before{content:"\e66c"}
+.layui-icon-loading1:before{content:"\e63d"}
+.layui-icon-xieti:before{content:"\e644"}
+.layui-icon-shuaxin-copy:before{content:"\e666"}
+.layui-icon-jine:before{content:"\e65e"}
+.layui-icon-zhuye:before{content:"\e68e"}
+.layui-icon-yonghu:before{content:"\e770"}
+.layui-icon-xiaoxi2:before{content:"\e667"}
+.layui-icon-yuyin:before{content:"\e688"}
+.layui-icon-download:before{content:"\e681"}
+.layui-icon-yemian1:before{content:"\e655"}
+.layui-icon-moban:before{content:"\e663"}
+.layui-icon-yibiaopan:before{content:"\e665"}
+.layui-icon-pindao:before{content:"\e653"}
+.layui-icon-xiayiye:before{content:"\e65a"}
+.layui-icon-huaban:before{content:"\e7ae"}
+.layui-icon-xiayiye1:before{content:"\e65b"}
+.layui-icon-yingyong:before{content:"\e857"}
+.layui-icon-more:before{content:"\e65f"}
+.layui-icon-xiangji:before{content:"\e660"}
+.layui-icon-refresh:before{content:"\e669"}
+.layui-icon-nv:before{content:"\e661"}
+.layui-icon-nan:before{content:"\e662"}
+.layui-icon-gaoji:before{content:"\e674"}
+.layui-icon-fengge:before{content:"\e66a"}
+.layui-icon-cai:before{content:"\e6c5"}
+.layui-icon-zan:before{content:"\e6c6"}
+.layui-icon-shoucang:before{content:"\e658"}
+.layui-icon-shuaxin2:before{content:"\e66b"}
+.layui-icon-moban1:before{content:"\e656"}
+.layui-icon-shuaxin3:before{content:"\e66d"}
 
 /* 基本布局 */
 .layui-main{position: relative; width: 1140px; margin: 0 auto;}
@@ -278,6 +414,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-card{margin-bottom: 15px; border-radius: 2px; background-color: #fff; box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);}
 .layui-card-header{position: relative; height: 42px; line-height: 42px; padding: 0 15px; border-bottom: 1px dotted #E9E9E9; color: #333; border-radius: 2px 2px 0 0; font-size: 14px;}
 .layui-card-body{padding: 10px 15px; line-height: 24px;}
+.layui-card-body .layui-table{margin: 5px 0;}
 
 /* 折叠面板 */
 .layui-collapse{border: 1px solid #e2e2e2; border-radius: 2px;}
@@ -306,8 +443,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-text h1{font-size: 30px;}
 .layui-text h2{font-size: 24px;}
 .layui-text h3{font-size: 18px;}
-.layui-text a{color: #01AAED;}
-.layui-text a:hover{text-decoration: underline;}
+.layui-text a:not(.layui-btn){color: #01AAED;}
+.layui-text a:not(.layui-btn):hover{text-decoration: underline;}
 .layui-text ul{padding: 5px 0 5px 15px;}
 .layui-text ul li{margin-top: 5px; list-style-type: disc;}
 .layui-text em,
@@ -788,14 +925,14 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-badge,
 .layui-badge-dot,
 .layui-badge-rim{position:relative; display: inline-block; font-size: 12px; background-color: #FF5722; color: #fff;}
-.layui-badge{min-width: 8px; height: 18px; line-height: 18px; padding: 0 5px; text-align: center; border-radius: 9px;}
+.layui-badge{min-width: 8px; height: 18px; line-height: 18px; padding: 0 5px; text-align: center; border-radius: 2px;}
 .layui-badge-dot{width: 8px; height: 8px; border-radius: 50%;}
 .layui-badge-rim{height: 18px; line-height: 18px; padding: 0 5px; border: 1px solid #e2e2e2; border-radius: 3px; background-color: #fff; color: #666;}
 
 .layui-btn .layui-badge,
 .layui-btn .layui-badge-dot{margin-left: 5px;}
 .layui-nav .layui-badge,
-.layui-nav .layui-badge-dot{position: absolute; top: 50%; margin: -10px 6px 0;}
+.layui-nav .layui-badge-dot{position: absolute; top: 50%; margin: -8px 6px 0;}
 .layui-tab-title .layui-badge,
 .layui-tab-title .layui-badge-dot{left: 5px; top: -2px;}
 
@@ -961,6 +1098,4 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
   100% {opacity: 0;}
 }
 .layui-anim-fadeout{-webkit-animation-name: layui-fadeout; animation-name: layui-fadeout}
-
-
 

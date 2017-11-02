@@ -277,7 +277,7 @@ layui.define('jquery', function(exports){
             child.addClass(NAV_ANIM);
             bar.css({
               left: othis.position().left + parseFloat(othis.css('marginLeft'))
-              ,top: othis.position().top + othis.height() - 5
+              ,top: othis.position().top + othis.height() - bar.height()
             });
             
             timer[index] = setTimeout(function(){
@@ -373,17 +373,20 @@ layui.define('jquery', function(exports){
       //进度条
       ,progress: function(){
         var ELEM = 'layui-progress';
-        
         $('.' + ELEM + elemFilter).each(function(){
           var othis = $(this)
           ,elemBar = othis.find('.layui-progress-bar')
-          ,width = elemBar.attr('lay-percent');
-          elemBar.css('width', width);
+          ,percent = elemBar.attr('lay-percent');
+
+          elemBar.css('width', function(){
+            return /^.+\/.+$/.test(percent) 
+              ? (new Function('return '+ percent)() * 100) + '%'
+           : percent;
+          }());
+          
           if(othis.attr('lay-showPercent')){
             setTimeout(function(){
-              var percent = Math.round(elemBar.width()/othis.width()*100);
-              if(percent > 100) percent = 100;
-              elemBar.html('<span class="'+ ELEM +'-text">'+ percent +'%</span>');
+              elemBar.html('<span class="'+ ELEM +'-text">'+ percent +'</span>');
             },350);
           }
         });
