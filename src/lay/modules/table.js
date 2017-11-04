@@ -280,7 +280,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         ,data: $.extend(params, options.where)
         ,dataType: 'json'
         ,success: function(res){
-          if(res[response.statusName] && res[response.statusName] !== response.statusCode){
+          if(res[response.statusName] !== undefined && res[response.statusName] !== response.statusCode){
             that.renderForm();
             return that.layMain.html('<div class="'+ NONE +'">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');
           }
