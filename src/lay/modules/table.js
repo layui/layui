@@ -396,9 +396,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
                 }() +'>';
               }
               if(item3.toolbar){
-                return laytpl($(item3.toolbar).html()||'').render(item1);
+                return layui.laytpl($(item3.toolbar).html()||'').render(item1);
               }
-              return item3.templet ? laytpl($(item3.templet).html() || String(content)).render(item1) : content;
+              return item3.templet ? layui.laytpl($(item3.templet).html() || String(content)).render(item1) : content;
             }()
           ,'</div></td>'].join('');
           
@@ -818,7 +818,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         }
       });
       othis.siblings(ELEM_CELL).html(
-        templet ? laytpl($(templet).html() || this.value).render(data) : this.value
+        templet ? layui.laytpl($(templet).html() || this.value).render(data) : this.value
       );
       othis.parent().data('content', this.value);
       othis.remove();
@@ -900,7 +900,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
                 }
               });
               td.children(ELEM_CELL).html(
-                templet ? laytpl($(templet).html() || value).render(data) : value
+                templet ? layui.laytpl($(templet).html() || value).render(data) : value
               );
               td.data('content', value);
             }
