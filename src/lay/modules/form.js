@@ -399,7 +399,7 @@ layui.define('layer', function(exports){
   };
   
   //表单提交校验
-  var submit = function(event){
+  var submit = function(){
     var othis = $(this), verify = form.config.verify, stop = null
     ,DANGER = 'layui-form-danger', field = {}, elem = othis.closest(ELEM)
     
