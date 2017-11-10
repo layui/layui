@@ -1,6 +1,6 @@
 /**
  
- @Name : layDate 5.0.7 日期时间控件
+ @Name : layDate 5.0.8 日期时间控件
  @Author: 贤心
  @Site：http://www.layui.com/laydate/
  @License：MIT
@@ -55,7 +55,7 @@
   }
 
   ,laydate = {
-    v: '5.0.7'
+    v: '5.0.8'
     ,config: {} //全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: ready.getPath
@@ -705,7 +705,7 @@
     }
     
     //移除上一个控件
-    that.remove(Class.thisElem); 
+    that.remove(Class.thisElemDate); 
     
     //如果是静态定位，则插入到指定的容器中，否则，插入到body
     isStatic ? options.elem.append(elem) : (
@@ -716,8 +716,8 @@
     that.checkDate().calendar(); //初始校验
     that.changeEvent(); //日期切换
     
-    Class.thisElem = that.elemID;
-    
+    Class.thisElemDate = that.elemID;
+
     typeof options.ready === 'function' && options.ready(lay.extend({}, options.dateTime, {
       month: options.dateTime.month + 1
     }));
@@ -728,7 +728,7 @@
     var that = this
     ,options = that.config
     ,elem = lay('#'+ (prev || that.elemID));
-    if(elem[0] && !elem.hasClass(ELEM_STATIC)){
+    if(!elem.hasClass(ELEM_STATIC)){
       that.checkDate(function(){
         elem.remove();
       });
@@ -1006,8 +1006,8 @@
     //计算当前月第一天的星期
     thisDate.setFullYear(dateTime.year, dateTime.month, 1);
     startWeek = thisDate.getDay();
-
-    prevMaxDate = laydate.getEndDate(dateTime.month, dateTime.year); //计算上个月的最后一天
+    
+    prevMaxDate = laydate.getEndDate(dateTime.month || 12, dateTime.year); //计算上个月的最后一天
     thisMaxDate = laydate.getEndDate(dateTime.month + 1, dateTime.year); //计算当前月的最后一天
     
     //赋值日

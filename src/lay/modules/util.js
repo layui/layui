@@ -95,13 +95,23 @@ layui.define('jquery', function(exports){
     
     //某个时间在当前时间的多久前
     ,timeAgo: function(time, onlyDate){
-      var stamp = new Date().getTime() - new Date(time).getTime();
+      var arr = [[], []]
+      ,stamp = new Date().getTime() - new Date(time).getTime();
       
-      //超过30天，返回具体日期
-      if(stamp > 1000*60*60*24*30){
-        stamp =  new Date(time).toLocaleString();
-        onlyDate && (stamp = stamp.replace(/\s[\S]+$/g, ''));
-        return stamp;
+      //返回具体日期
+      if(stamp > 1000*60*60*24*8){
+        stamp =  new Date(time);
+        arr[0][0] = stamp.getFullYear();
+        arr[0][1] = stamp.getMonth() + 1;
+        arr[0][2] = stamp.getDate();
+        
+        //是否输出时间
+        if(!onlyDate){
+          arr[1][0] = stamp.getHours();
+          arr[1][1] = stamp.getMinutes();
+          arr[1][2] = stamp.getSeconds();
+        }
+        return arr[0].join('-') + ' ' + arr[1].join(':');
       }
       
       //30天以内，返回“多久前”
@@ -109,7 +119,7 @@ layui.define('jquery', function(exports){
         return ((stamp/1000/60/60/24)|0) + '天前';
       } else if(stamp >= 1000*60*60){
         return ((stamp/1000/60/60)|0) + '小时前';
-      } else if(stamp >= 1000*60*3){ //3分钟以内为：刚刚
+      } else if(stamp >= 1000*60*2){ //2分钟以内为：刚刚
         return ((stamp/1000/60)|0) + '分钟前';
       } else if(stamp < 0){
         return '未来';
