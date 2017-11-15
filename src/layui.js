@@ -19,7 +19,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.1.7'; //版本号
+    this.v = '2.2.0'; //版本号
   }
 
   //获取layui所在目录
@@ -146,9 +146,16 @@
     //首次加载模块
     if(!config.modules[item]){
       var node = doc.createElement('script')
-      ,url =  (
-        modules[item] ? (dir + 'lay/') : (config.base || '')
+      
+      //如果是内置模块，则按照 dir 参数拼接模块路径
+      //如果是扩展模块，则判断模块路径值是否为 {!} 开头，
+      //  如果路径值是 {/} 开头，则模块路径即为后面紧跟的字符。
+      //  否则，则按照 base 参数拼接模块路径
+      ,url = ( modules[item] ? (dir + 'lay/') 
+        : (/^\{\/\}/.test(that.modules[item]) ? '' : (config.base || ''))
       ) + (that.modules[item] || item) + '.js';
+      
+      url = url.replace(/^\{\/\}/, '');
       
       node.async = true;
       node.charset = 'utf-8';
@@ -280,7 +287,7 @@
         that.modules[o] = options[o];
       }
     }
-    
+
     return that;
   };
 
@@ -329,7 +336,7 @@
       var data = {};
     }
     
-    if(settings.value) data[settings.key] = settings.value;
+    if('value' in settings) data[settings.key] = settings.value;
     if(settings.remove) delete data[settings.key];
     localStorage[table] = JSON.stringify(data);
     

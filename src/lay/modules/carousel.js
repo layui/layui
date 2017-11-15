@@ -88,10 +88,10 @@ layui.define('jquery', function(exports){
     
     //初始焦点状态
     that.elemItem.eq(options.index).addClass(THIS);
-    
+
     //指示器等动作
-    that.indicator();
     if(that.elemItem.length <= 1) return;
+    that.indicator();
     that.arrow();
     that.autoplay();
     that.events();

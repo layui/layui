@@ -28,19 +28,19 @@ body{padding: 10px;}
   <div class="layui-form-item">
     <label class="layui-form-label">手机</label>
     <div class="layui-input-block">
-      <input type="tel" name="phone" lay-verify="number" autocomplete="off" class="layui-input">
+      <input type="tel" name="phone" lay-verify="required|number" lay-verType="tips" autocomplete="off" class="layui-input">
     </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">邮箱</label>
     <div class="layui-input-block">
-      <input type="email" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+      <input type="email" name="email" lay-verify="email"  lay-verType="alert" autocomplete="off" class="layui-input">
     </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">密码</label>
     <div class="layui-input-inline">
-      <input type="password" name="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+      <input type="password" name="password" lay-verify="required|pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
     </div>
     <div class="layui-form-mid layui-word-aux">请务必填写用户名</div>
   </div>
@@ -100,7 +100,7 @@ body{padding: 10px;}
   <div class="layui-form-item">
     <label class="layui-form-label">搜索选择框</label>
     <div class="layui-input-inline">
-      <select name="interest" lay-filter="aihao" lay-search>
+      <select name="interest" lay-filter="aihao" lay-search lay-write>
         <option value=""></option>
         <option value="0">写作</option>
         <option value="1">阅读</option>
