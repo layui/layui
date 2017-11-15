@@ -1,0 +1,178 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'D:\\soft\\nodejs\\node.exe',
+1 verbose cli   'D:\\soft\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'publish' ]
+2 info using npm@3.10.10
+3 info using node@v6.11.2
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: 'D:\\web\\layui\\res\\layui',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory C:\Users\sents\AppData\Roaming\npm-cache\layui-src\2.2.0\package.tgz not in flight; packing
+9 verbose correctMkdir C:\Users\sents\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+10 info lifecycle layui-src@2.2.0~prepublish: layui-src@2.2.0
+11 silly lifecycle layui-src@2.2.0~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ 'C:\\Users\\sents\\AppData\\Roaming\\npm-cache\\layui-src\\2.2.0\\package.tgz',
+12 verbose tar pack   'D:\\web\\layui\\res\\layui' ]
+13 verbose tarball C:\Users\sents\AppData\Roaming\npm-cache\layui-src\2.2.0\package.tgz
+14 verbose folder D:\web\layui\res\layui
+15 verbose addLocalTarball adding from inside cache C:\Users\sents\AppData\Roaming\npm-cache\layui-src\2.2.0\package.tgz
+16 verbose correctMkdir C:\Users\sents\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+17 silly cache afterAdd layui-src@2.2.0
+18 verbose afterAdd C:\Users\sents\AppData\Roaming\npm-cache\layui-src\2.2.0\package\package.json not in flight; writing
+19 verbose correctMkdir C:\Users\sents\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+20 verbose afterAdd C:\Users\sents\AppData\Roaming\npm-cache\layui-src\2.2.0\package\package.json written
+21 silly publish { name: 'layui-src',
+21 silly publish   realname: 'layui',
+21 silly publish   version: '2.2.0',
+21 silly publish   independents: { layim: '3.7.3' },
+21 silly publish   description: '经典模块化前端框架',
+21 silly publish   main: 'layui.js',
+21 silly publish   license: 'MIT',
+21 silly publish   scripts:
+21 silly publish    { test: 'karma start karma.conf.unit.js',
+21 silly publish      'test:cov': 'npm test -- --reporters mocha,coverage',
+21 silly publish      'test:sauce': 'karma start karma.conf.sauce.js',
+21 silly publish      'test:watch': 'npm test -- --auto-watch --no-single-run' },
+21 silly publish   repository:
+21 silly publish    { type: 'git',
+21 silly publish      url: 'git+ssh://git@github.com/sentsin/layui.git' },
+21 silly publish   author: { name: '贤心' },
+21 silly publish   homepage: 'http://www.layui.com',
+21 silly publish   devDependencies:
+21 silly publish    { chai: '^4.1.1',
+21 silly publish      del: '^2.2.2',
+21 silly publish      gulp: '^3.9.1',
+21 silly publish      'gulp-concat': '^2.6.0 ',
+21 silly publish      'gulp-header': '^1.8.8',
+21 silly publish      'gulp-if': '^2.0.1',
+21 silly publish      'gulp-minify-css': '^1.2.4',
+21 silly publish      'gulp-rename': '^1.2.2',
+21 silly publish      'gulp-uglify': '^1.5.4',
+21 silly publish      'gulp-zip': '^4.0.0',
+21 silly publish      karma: '^1.5.0',
+21 silly publish      'karma-chai': '^0.1.0',
+21 silly publish      'karma-chai-sinon': '^0.1.5',
+21 silly publish      'karma-coverage': '^1.1.1',
+21 silly publish      'karma-mocha': '^1.3.0',
+21 silly publish      'karma-mocha-reporter': '^2.2.3',
+21 silly publish      'karma-phantomjs-launcher': '^1.0.4',
+21 silly publish      'karma-sauce-launcher': '^1.1.0',
+21 silly publish      minimist: '^1.2.0',
+21 silly publish      mocha: '^3.2.0',
+21 silly publish      sinon: '^3.2.1',
+21 silly publish      'sinon-chai': '^2.13.0' },
+21 silly publish   bugs: { url: 'https://github.com/sentsin/layui/issues' },
+21 silly publish   directories: { doc: 'doc', example: 'examples', test: 'test' },
+21 silly publish   dependencies: {},
+21 silly publish   keywords: [ 'layui', 'ui' ],
+21 silly publish   readme: '<p align=center>\r\n  <a href="http://www.layui.com">\r\n    <img src="http://cdn.layui.com/upload/2016_10/168_1476644144774_50450.png" alt="layui" width="520">\r\n  </a>\r\n</p>\r\n<p align=center>\r\n  经典模块化前端UI框架\r\n</p>\r\n\r\n<p align="center">\r\n  <a href="https://travis-ci.org/sentsin/layui"><img alt="Build Status" src="https://img.shields.io/travis/sentsin/layui/master.svg"></a>\r\n  <a href="https://saucelabs.com/beta/builds/7e6196205e4f492496203388fc003b65"><img src="https://saucelabs.com/buildstatus/layui" alt="Build Status"></a>\r\n  <a href="https://coveralls.io/r/sentsin/layui?branch=master"><img alt="Test Coverage" src="https://img.shields.io/coveralls/sentsin/layui/master.svg"></a>\r\n</p>\r\n<p align="center">\r\n  <a href="https://saucelabs.com/beta/builds/7e6196205e4f492496203388fc003b65"><img src="https://saucelabs.com/browser-matrix/layui.svg" alt="Browser Matrix"></a>\r\n</p>\r\n\r\n---\r\n\r\nlayui 是一款采用自身模块规范编写的情怀型前端UI框架，遵循原生HTML/CSS/JS的书写与组织形式，门槛极低，拿来即用。其外在极简，却又不失饱满的内在，体积轻盈，组件丰盈，从核心代码到API的每一处细节都经过精心雕琢，非常适合界面的快速开发。layui 首个版本发布于2016年金秋，她区别于那些基于MVVM底层的UI框架，却并非逆道而行，而是信奉返璞归真之道。准确地说，她更多是为服务端程序员量身定做，你无需涉足各种前端工具的复杂配置，只需面对浏览器本身，让一切你所需要的元素与交互，从这里信手拈来。\r\n\r\n## 返璞归真\r\n\r\nlayui 定义为“经典模块化”，并非是自吹她自身有多优秀，而是有意避开当下JS社区的主流方案，试图以最简单的方式去诠释高效！<em>她的所谓经典，是在于对返璞归真的执念</em>，她以当前浏览器普通认可的方式去组织模块！我们认为，这恰是符合当下国内绝大多数程序员从旧时代过渡到未来新标准的最佳指引。所以 layui 本身也并不是完全遵循于AMD时代，准确地说，她试图建立自己的模式，所以你会看到：\r\n\r\n```js\r\n//layui模块的定义\r\nlayui.define([mods], function(exports){\r\n  \r\n  //……\r\n  \r\n  exports(\'mod\', api);\r\n});  \r\n \r\n//layui模块的使用\r\nlayui.use([\'mod1\', \'mod2\'], function(args){\r\n  var mod = layui.mod1;\r\n  \r\n  //……\r\n  \r\n});    \r\n```\r\n没错，她具备AMD的影子，又并非受限于commonjs的那些条条框框，layui 认为这种轻量的组织方式，比WebPack更符合绝大多数场景。所以她坚持采用经典模块化，也正是能让人避开工具的复杂配置，回归简单，安静高效地撸一会原生态的HTML、CSS、JavaScript。\r\n\r\n但是 layui 又并非是Requirejs那样的模块加载器，而是一款UI解决方案，她与Bootstrap最大的不同恰恰在于她糅合了自身对经典模块化的理解。\r\n\r\n\r\n## 快速上手\r\n\r\n获得 layui 后，将其完整地部署到你的项目目录（或静态资源服务器），你只需要引入下述两个文件：\r\n\r\n```\r\n./layui/css/layui.css\r\n./layui/layui.js //提示：如果是采用非模块化方式（最下面有讲解），此处可换成：./layui/layui.all.js\r\n```\r\n\r\n不用去管其它任何文件。因为他们（比如各模块）都是在最终使用的时候才会自动加载。这是一个基本的入门页面：\r\n\r\n```html\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n  <meta charset="utf-8">\r\n  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">\r\n  <title>开始使用layui</title>\r\n  <link rel="stylesheet" href="../layui/css/layui.css">\r\n</head>\r\n<body>\r\n \r\n<!-- 你的HTML代码 -->\r\n \r\n<script src="../layui/layui.js"></script>\r\n<script>\r\n//一般直接写在一个js文件中\r\nlayui.use([\'layer\', \'form\'], function(){\r\n  var layer = layui.layer\r\n  ,form = layui.form;\r\n  \r\n  layer.msg(\'Hello World\');\r\n});\r\n</script> \r\n</body>\r\n</html>\r\n```\r\n\r\n如果你想采用非模块化方式（即所有模块一次性加载，尽管我们并不推荐你这么做），你也可以按照下面的方式使用：\r\n\r\n```html\r\n<!DOCTYPE html>\r\n<html>\r\n<head>\r\n  <meta charset="utf-8">\r\n  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">\r\n  <title>非模块化方式使用layui</title>\r\n  <link rel="stylesheet" href="../layui/css/layui.css">\r\n</head>\r\n<body>\r\n \r\n<!-- 你的HTML代码 -->\r\n \r\n<script src="../layui/layui.all.js"></script>\r\n<script>\r\n//由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：\r\n;!function(){\r\n  var layer = layui.layer\r\n  ,form = layui.form;\r\n  \r\n  layer.msg(\'Hello World\');\r\n}();\r\n</script> \r\n</body>\r\n</html>  \r\n```\r\n## [阅读文档](http://www.layui.com/)\r\n从现在开始，尽情地拥抱 layui 吧！但愿她能成为你长远的开发伴侣，化作你方寸屏幕前的亿万字节！\r\n\r\n## 相关\r\n[官网](http://www.layui.com/)、[更新日志](http://www.layui.com/doc/base/changelog.html)、[社区交流](http://fly.layui.com)',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: '3a6735e32b04a41eaa90855f33b9cb1a38a26eba',
+21 silly publish   _id: 'layui-src@2.2.0',
+21 silly publish   _shasum: 'cb69e3e31977aa2350d8abc4e1ab92be8903b9f7',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name layui-src
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'layui-src',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   escapedName: 'layui-src',
+26 silly mapToRegistry   name: 'layui-src',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/layui-src
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading C:\Users\sents\AppData\Roaming\npm-cache\layui-src\2.2.0\package.tgz
+30 verbose request uri https://registry.npmjs.org/layui-src
+31 verbose request sending authorization for write operation
+32 info attempt registry request try #1 at 21:20:59
+33 verbose request using bearer token for auth
+34 verbose request id 32865da4519727b6
+35 http request PUT https://registry.npmjs.org/layui-src
+36 http 503 https://registry.npmjs.org/layui-src
+37 verbose bad json <?xml version="1.0" encoding="utf-8"?>
+37 verbose bad json <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+37 verbose bad json  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+37 verbose bad json <html>
+37 verbose bad json   <head>
+37 verbose bad json     <title>503 first byte timeout</title>
+37 verbose bad json   </head>
+37 verbose bad json   <body>
+37 verbose bad json     <h1>Error 503 first byte timeout</h1>
+37 verbose bad json     <p>first byte timeout</p>
+37 verbose bad json     <h3>Guru Mediation:</h3>
+37 verbose bad json     <p>Details: cache-nrt6121-NRT 1510752202 1373672333</p>
+37 verbose bad json     <hr>
+37 verbose bad json     <p>Varnish cache server</p>
+37 verbose bad json   </body>
+37 verbose bad json </html>
+38 error registry error parsing json
+39 verbose headers { server: 'Varnish',
+39 verbose headers   'retry-after': '0',
+39 verbose headers   'content-type': 'text/html; charset=utf-8',
+39 verbose headers   'content-length': '448',
+39 verbose headers   'accept-ranges': 'bytes',
+39 verbose headers   date: 'Wed, 15 Nov 2017 13:23:21 GMT',
+39 verbose headers   via: '1.1 varnish',
+39 verbose headers   connection: 'close',
+39 verbose headers   'x-served-by': 'cache-nrt6121-NRT',
+39 verbose headers   'x-cache': 'MISS',
+39 verbose headers   'x-cache-hits': '0',
+39 verbose headers   'x-timer': 'S1510752103.442553,VS0,VE98433' }
+40 info retry will retry, error on last attempt: SyntaxError: Unexpected token < in JSON at position 1
+40 info retry
+40 info retry <?xml version="1.0" encoding="utf-8"?>
+40 info retry <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+40 info retry  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+40 info retry <html>
+40 info retry   <head>
+40 info retry     <title>503 first byte timeout</title>
+40 info retry   </head>
+40 info retry   <body>
+40 info retry     <h1>Error 503 first byte timeout</h1>
+40 info retry     <p>first byte timeout</p>
+40 info retry     <h3>Guru Mediation:</h3>
+40 info retry     <p>Details: cache-nrt6121-NRT 1510752202 1373672333</p>
+40 info retry     <hr>
+40 info retry     <p>Varnish cache server</p>
+40 info retry   </body>
+40 info retry </html>
+41 info attempt registry request try #2 at 21:23:31
+42 verbose request using bearer token for auth
+43 http request PUT https://registry.npmjs.org/layui-src
+44 info retry will retry, error on last attempt: Error: read ECONNRESET
+45 info attempt registry request try #3 at 21:33:15
+46 verbose request using bearer token for auth
+47 http request PUT https://registry.npmjs.org/layui-src
+48 verbose request invalidating C:\Users\sents\AppData\Roaming\npm-cache\registry.npmjs.org\layui-src on PUT
+49 error publish Failed PUT undefined
+50 verbose stack Error: read ECONNRESET
+50 verbose stack     at exports._errnoException (util.js:1020:11)
+50 verbose stack     at TLSWrap.onread (net.js:568:26)
+51 verbose cwd D:\web\layui\res\layui
+52 error Windows_NT 10.0.14393
+53 error argv "D:\\soft\\nodejs\\node.exe" "D:\\soft\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "publish"
+54 error node v6.11.2
+55 error npm  v3.10.10
+56 error code ECONNRESET
+57 error errno ECONNRESET
+58 error syscall read
+59 error network read ECONNRESET
+60 error network This is most likely not a problem with npm itself
+60 error network and is related to network connectivity.
+60 error network In most cases you are behind a proxy or have bad network settings.
+60 error network
+60 error network If you are behind a proxy, please make sure that the
+60 error network 'proxy' config is set properly.  See: 'npm help config'
+61 verbose exit [ 1, true ]

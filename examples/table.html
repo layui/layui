@@ -179,7 +179,9 @@ layui.use('table', function(){
     elem: '#test'
     ,height: 350
     ,url: 'json/table/demo1.json'
-    ,page: {}
+    ,page: {
+      
+    }
     ,toolbar: '#toolbarDemo'
     ,cols: [[
       {checkbox:true, fixed: 'left'}
@@ -201,23 +203,24 @@ layui.use('table', function(){
   table.render({
     elem: '#test2'
     ,url: 'json/table/demo1.json'
-    ,page: {}
+    ,page: { //详细参数可参考 laypage 组件文档
+      curr: 5
+      ,groups: 1
+      ,first: false
+      ,last: false
+      ,layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
+    }
     //,height: 300
+    ,cellMinWidth: 80
     ,cols: [[
       {type:'numbers'}
       ,{type: 'checkbox'}
-      ,{field:'id', title:'ID', width:100, unresize: true, sort: true}
-      ,{field:'username', title:'用户名', templet: '#usernameTpl'}
+      ,{field:'id', title:'ID', minWidth: 80, unresize: true, sort: true}
+      ,{field:'username', title:'用户名', minWidth: 200, templet: '#usernameTpl'}
       ,{field:'email', title:'邮箱'}
-      ,{field:'sex', title:'性别', width:85, templet: '#switchTpl'}
-      ,{field:'lock', title:'是否锁定', width:110, templet: '#checkboxTpl'}
-      ,{field:'city', title:'城市', width: 100}
-      //,{field:'sign', title:'签名', width:150}
-      //,{field:'experience', title:'积分', width:80, sort: true}
-      //,{field:'ip', title:'IP', width:120}
-      //,{field:'logins', title:'登入次数', width:100, sort: true}
-      //,{field:'joinTime', title:'加入时间', width:120}
-      //,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+      ,{field:'sex', title:'性别', templet: '#switchTpl', minWidth: 85, align:'center'}
+      ,{field:'lock', title:'是否锁定', templet: '#checkboxTpl', minWidth: 110, align:'center'}
+      ,{field:'city', title:'城市'}
       ,
     ]]
   });
