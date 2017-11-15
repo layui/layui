@@ -359,12 +359,13 @@ layui.define('jquery', function(exports){
         
         $(ELEM + elemFilter).each(function(){
           var othis = $(this)
-          ,separator = othis.attr('lay-separator') || '>'
+          ,ATTE_SPR = 'lay-separator'
+          ,separator = othis.attr(ATTE_SPR) || '/'
           ,aNode = othis.find('a');
-          if(aNode.find('.layui-box')[0]) return;
+          if(aNode.next('span['+ ATTE_SPR +']')[0]) return;
           aNode.each(function(index){
             if(index === aNode.length - 1) return;
-            $(this).append('<span class="layui-box">'+ separator +'</span>');
+            $(this).after('<span '+ ATTE_SPR +'>'+ separator +'</span>');
           });
           othis.css('visibility', 'visible');
         });

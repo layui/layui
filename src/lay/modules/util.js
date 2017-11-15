@@ -95,21 +95,22 @@ layui.define('jquery', function(exports){
     
     //某个时间在当前时间的多久前
     ,timeAgo: function(time, onlyDate){
-      var arr = [[], []]
+      var that = this
+      ,arr = [[], []]
       ,stamp = new Date().getTime() - new Date(time).getTime();
       
       //返回具体日期
       if(stamp > 1000*60*60*24*8){
         stamp =  new Date(time);
-        arr[0][0] = stamp.getFullYear();
-        arr[0][1] = stamp.getMonth() + 1;
-        arr[0][2] = stamp.getDate();
+        arr[0][0] = that.digit(stamp.getFullYear(), 4);
+        arr[0][1] = that.digit(stamp.getMonth() + 1);
+        arr[0][2] = that.digit(stamp.getDate());
         
         //是否输出时间
         if(!onlyDate){
-          arr[1][0] = stamp.getHours();
-          arr[1][1] = stamp.getMinutes();
-          arr[1][2] = stamp.getSeconds();
+          arr[1][0] = that.digit(stamp.getHours());
+          arr[1][1] = that.digit(stamp.getMinutes());
+          arr[1][2] = that.digit(stamp.getSeconds());
         }
         return arr[0].join('-') + ' ' + arr[1].join(':');
       }
@@ -126,6 +127,17 @@ layui.define('jquery', function(exports){
       } else {
         return '刚刚';
       }
+    }
+    
+    //数字前置补零
+    ,digit: function(num, length, end){
+      var str = '';
+      num = String(num);
+      length = length || 2;
+      for(var i = num.length; i < length; i++){
+        str += '0';
+      }
+      return num < Math.pow(10, length) ? str + (num|0) : num;
     }
   };
   
