@@ -63,6 +63,7 @@ layui.define('layer' , function(exports){
     ,bindAction: '' //手动上传触发的元素
     ,url: '' //上传地址
     ,field: 'file' //文件字段名
+    ,fileId: 'file' // 文件Id
     ,method: 'post' //请求上传的http类型
     ,data: {} //请求上传的额外参数
     ,drag: true //是否允许拖拽上传
@@ -87,7 +88,7 @@ layui.define('layer' , function(exports){
     var that = this
     ,options = that.config
     ,elemFile = that.elemFile = $([
-      '<input class="'+ ELEM_FILE +'" type="file" name="'+ options.field +'"'
+      '<input id="'+ options.fileId +'" class="'+ ELEM_FILE +'" type="file" name="'+ options.field +'"'
       ,(options.multiple ? ' multiple' : '') 
       ,'>'
     ].join(''))
@@ -142,7 +143,7 @@ layui.define('layer' , function(exports){
   
   //异常提示
   Class.prototype.msg = function(content){
-    return layer.msg(content, {
+    return top.layer.msg(content, {
       icon: 2
       ,shift: 6
     });
