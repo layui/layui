@@ -591,7 +591,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     if(options.page){
       that.page = curr;
       that.count = count;
-      options.page = $.extend({
+      options.page = $.extend(options.page, {
         elem: 'layui-table-page' + options.index
         ,count: count
         ,groups: 3
@@ -608,7 +608,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
             that.pullData(obj.curr, that.loading());
           }
         }
-      }, options.page);
+      });
       laypage.render(options.page);
     }
   };
