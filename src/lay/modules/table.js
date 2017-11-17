@@ -817,13 +817,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     ,scollWidth = that.layMain.width() - that.layMain.prop('clientWidth') //纵向滚动条宽度
     ,scollHeight = that.layMain.height() - that.layMain.prop('clientHeight') //横向滚动条高度
     ,getScrollWidth = that.getScrollWidth(that.layMain[0]) //获取主容器滚动条宽度，如果有的话
-    ,outWidth = layMainTable.width() - that.layMain.width(); //表格内容器的超出宽度
+    ,outWidth = layMainTable.outerWidth() - that.layMain.width(); //表格内容器的超出宽度
     
     //如果存在自动列宽，则要保证绝对填充满，并且不能出现滚动条
     if(that.autoColNums && !that.scrollPatchWStatus){
       var th = that.layHeader.eq(0).find('thead th:last-child')
       ,field = th.data('field');
-      
       that.getCssRule(field, function(item){
         var width = item.style.width || th.outerWidth();
         item.style.width = (parseFloat(width) - getScrollWidth - function(){
