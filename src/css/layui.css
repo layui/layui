@@ -13,7 +13,7 @@ a:active,a:hover{outline:0}
 img{display: inline-block; border: none; vertical-align: middle;}
 li{list-style:none;}
 table{border-collapse: collapse; border-spacing: 0;}
-h1,h2,h3{font-size: 14px; font-weight: 400;}
+h1,h2,h3{font-weight: 400;}
 h4, h5, h6{font-size: 100%; font-weight: 400;}
 button,input,select,textarea{font-size: 100%; }
 input,button,textarea,select,optgroup,option{font-family: inherit; font-size: inherit; font-style: inherit; font-weight: inherit; outline: 0;}
@@ -384,6 +384,7 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .layui-form select, 
 .layui-form input[type=checkbox],
 .layui-form input[type=radio]{display: none;}
+.layui-form *[lay-ignore]{display: initial;}
 
 .layui-form-item{margin-bottom: 15px; clear: both; *zoom: 1;}
 .layui-form-item:after{content:'\20'; clear: both; *zoom: 1; display: block; height:0;}
@@ -616,7 +617,7 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .layui-table-view .layui-form-checkbox[lay-skin="primary"] i{width: 18px; height: 18px;}
 .layui-table-header{border-width: 0; border-bottom-width: 1px; overflow: hidden;}
 .layui-table-header .layui-table{margin-bottom: -1px;}
-.layui-table-sort{width: 20px; height: 20px; margin-left: 5px; cursor: pointer!important;}
+.layui-table-sort{width: 10px; height: 20px; margin-left: 5px; cursor: pointer!important;}
 .layui-table-sort .layui-edge{position: absolute; left: 5px; border-width: 5px;}
 .layui-table-sort .layui-table-sort-asc{top: 4px; border-top: none; border-bottom-style: solid; border-bottom-color: #b2b2b2;}
 .layui-table-sort .layui-table-sort-asc:hover{border-bottom-color: #666;}
@@ -636,19 +637,18 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .layui-table-body .layui-none{line-height: 40px; text-align: center; color: #999;}
 .layui-table-fixed{position: absolute; left: 0; top: 0;}
 .layui-table-fixed .layui-table-body{overflow: hidden;}
-.layui-table-fixed-l{box-shadow: 0 -1px 8px rgba(0,0,0,.06);}
-.layui-table-fixed-r{left: auto; right: -1px; border-width: 0; border-left-width: 1px; box-shadow: -1px 0 8px rgba(0,0,0,.06);}
+.layui-table-fixed-l{box-shadow: 0 -1px 8px rgba(0,0,0,.08);}
+.layui-table-fixed-r{left: auto; right: -1px; border-width: 0; border-left-width: 1px; box-shadow: -1px 0 8px rgba(0,0,0,.08);}
 .layui-table-fixed-r .layui-table-header{position: relative; overflow: visible;}
 .layui-table-mend{position: absolute; right: -49px; top: 0; height: 100%; width: 50px;}
 
 .layui-table-tool{position: relative; width: 100%; height: 50px; line-height: 30px; padding: 10px 15px; border-width: 0; border-bottom-width: 1px;}
 
-.layui-table-page{position: relative; width: 100%; padding: 7px 7px 0; border-width: 0; border-top-width: 1px; height: 41px; margin-bottom: -1px; font-size: 12px;  white-space: nowrap;}
-.layui-table-page:hover{overflow-x: auto;}
+.layui-table-page{position: relative; width: 100%; padding: 7px 7px 0; border-width: 0; border-top-width: 1px; height: 41px; margin-bottom: -1px; font-size: 12px;}
 .layui-table-page>div{height: 26px;}
 .layui-table-page .layui-laypage{margin: 0;}
 .layui-table-page .layui-laypage a,
-.layui-table-page .layui-laypage span{height: 26px; line-height: 26px; border: none; background: none;}
+.layui-table-page .layui-laypage span{height: 26px; line-height: 26px; margin-bottom: 10px; border: none; background: none;}
 .layui-table-page .layui-laypage a,
 .layui-table-page .layui-laypage span.layui-laypage-curr{padding: 0 12px;}
 .layui-table-page .layui-laypage span{margin-left: 0; padding: 0;}
@@ -658,8 +658,8 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .layui-table-page .layui-laypage button{height: 26px; line-height: 26px; }
 .layui-table-page .layui-laypage input{width: 40px;}
 .layui-table-page .layui-laypage button{padding: 0 10px;}
-.layui-table-view select[lay-ignore]{display: inline-block;}
 .layui-table-page select{height: 18px;}
+.layui-table-view select[lay-ignore]{display: inline-block;}
 
 .layui-table-patch .layui-table-cell{padding: 0; width: 30px;}
 

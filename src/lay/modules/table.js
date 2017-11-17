@@ -202,7 +202,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     options.elem = $(options.elem);
     options.where = options.where || {};
     options.id = options.id || options.elem.attr('id');
-    
+
     //请求参数的自定义格式
     options.request = $.extend({
       pageName: 'page'
@@ -222,7 +222,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     if(typeof options.page === 'object'){
       options.limit = options.page.limit || options.limit;
       options.limits = options.page.limits || options.limits;
-      that.page = options.page.curr || that.page;
+      that.page = options.page.curr = options.page.curr || 1;
       delete options.page.elem;
       delete options.page.jump;
     }
@@ -353,6 +353,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       });
     });
     
+    that.autoColNums = autoColNums; //记录自动列数
+    
     //如果未填充满，则将剩余宽度平分。否则，给未设定宽度的列赋值一个默认宽
     (cntrWidth > countWidth && autoColNums) && (
       autoWidth = (cntrWidth - countWidth) / autoColNums
@@ -382,6 +384,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     that.render();
   };
   
+  //页码
+  Class.prototype.page = 1;
+  
   //获得数据
   Class.prototype.pullData = function(curr, loadIndex){
     var that = this
@@ -394,10 +399,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       }
     };
     
+    that.startTime = new Date().getTime(); //渲染开始时间
+    
     if(options.url){ //Ajax请求
       var params = {};
       params[request.pageName] = curr;
       params[request.limitName] = options.limit;
+      
       $.ajax({
         type: options.method || 'get'
         ,url: options.url
@@ -409,6 +417,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
             return that.layMain.html('<div class="'+ NONE +'">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');
           }
           that.renderData(res, curr, res[response.countName]), sort();
+          options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
           loadIndex && layer.close(loadIndex);
           typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
         }
@@ -429,9 +438,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
     }
   };
-  
-  //页码
-  Class.prototype.page = 1;
   
   //遍历表头
   Class.prototype.eachCols = function(callback){
@@ -479,7 +485,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     ,trs_fixed_r = []
     
     //渲染视图
-    ,render = function(){
+    ,render = function(){ //后续性能提升的重点
       if(!sort && that.sortKey){
         return that.sort(that.sortKey.field, that.sortKey.sort, true);
       }
@@ -547,11 +553,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           if(item3.fixed && item3.fixed !== 'right') tds_fixed.push(td);
           if(item3.fixed === 'right') tds_fixed_r.push(td);
         });
+        
         trs.push('<tr data-index="'+ i1 +'">'+ tds.join('') + '</tr>');
         trs_fixed.push('<tr data-index="'+ i1 +'">'+ tds_fixed.join('') + '</tr>');
         trs_fixed_r.push('<tr data-index="'+ i1 +'">'+ tds_fixed_r.join('') + '</tr>');
-        
-        
       });
       
       that.layBody.scrollTop(0);
@@ -584,31 +589,32 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       that.layMain.find('.'+ NONE).remove();
       return that.layMain.append('<div class="'+ NONE +'">无数据</div>');
     }
-
-    render();
     
-    //分页
+    render();
+
+    //同步分页状态
     if(options.page){
-      that.page = curr;
-      that.count = count;
       options.page = $.extend({
         elem: 'layui-table-page' + options.index
         ,count: count
-        ,groups: 3
-        ,limits: options.limits || [10,20,30,40,50,60,70,80,90]
         ,limit: options.limit
-        ,curr: curr
+        ,limits: options.limits || [10,20,30,40,50,60,70,80,90]
+        ,groups: 3
         ,layout: ['prev', 'page', 'next', 'skip', 'count', 'limit']
         ,prev: '<i class="layui-icon">&#xe603;</i>'
         ,next: '<i class="layui-icon">&#xe602;</i>'
         ,jump: function(obj, first){
           if(!first){
-            that.page = obj.curr;
-            options.limit = obj.limit;
+            //分页本身并非需要做以下更新，下面参数的同步，主要是因为其它处理统一用到了它们
+            //而并非用的是 options.page 中的参数（以确保分页未开启的情况仍能正常使用）
+            that.page = obj.curr; //更新页码
+            options.limit = obj.limit; //更新每页条数
+            
             that.pullData(obj.curr, that.loading());
           }
         }
       }, options.page);
+      options.page.count = count; //更新总条数
       laypage.render(options.page);
     }
   };
@@ -630,8 +636,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     var that = this
     ,field
     ,res = {}
-    ,config = that.config
-    ,filter = config.elem.attr('lay-filter')
+    ,options = that.config
+    ,filter = options.elem.attr('lay-filter')
     ,data = table.cache[that.key], thisData;
     
     //字段匹配
@@ -657,7 +663,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         }
       }
       
-      var elemSort = that.layHeader.find('th .laytable-cell-'+ config.index +'-'+ field).find(ELEM_SORT);
+      var elemSort = that.layHeader.find('th .laytable-cell-'+ options.index +'-'+ field).find(ELEM_SORT);
       that.layHeader.find('th').find(ELEM_SORT).removeAttr('lay-sort'); //清除其它标题排序状态
       elemSort.attr('lay-sort', type || null);
       that.layFixed.find('th')
@@ -680,7 +686,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       delete that.sortKey;
     }
     
-    res[config.response.dataName] = thisData;
+    res[options.response.dataName] = thisData;
     that.renderData(res, that.page, that.count, true);
     layer.close(that.tipsIndex);
     
@@ -695,8 +701,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   //请求loading
   Class.prototype.loading = function(){
     var that = this
-    ,config = that.config;
-    if(config.loading && config.url){
+    ,options = that.config;
+    if(options.loading && options.url){
       return layer.msg('数据请求中', {
         icon: 16
         ,offset: [
@@ -712,21 +718,22 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   //同步选中值状态
   Class.prototype.setCheckData = function(index, checked){
     var that = this
-    ,config = that.config
+    ,options = that.config
     ,thisData = table.cache[that.key];
     if(!thisData[index]) return;
-    thisData[index][config.checkName] = checked;
+    if(thisData[index].constructor === Array) return;
+    thisData[index][options.checkName] = checked;
   };
   
   //同步全选按钮状态
   Class.prototype.syncCheckAll = function(){
     var that = this
-    ,config = that.config
+    ,options = that.config
     ,checkAllElem = that.layHeader.find('input[name="layTableCheckbox"]')
     ,syncColsCheck = function(checked){
       that.eachCols(function(i, item){
-        if(item.checkbox){
-          item[config.checkName] = checked;
+        if(item.type === 'checkbox'){
+          item[options.checkName] = checked;
         }
       });
       return checked;
@@ -809,14 +816,20 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     ,layMainTable = that.layMain.children('table')
     ,scollWidth = that.layMain.width() - that.layMain.prop('clientWidth') //纵向滚动条宽度
     ,scollHeight = that.layMain.height() - that.layMain.prop('clientHeight') //横向滚动条高度
-    ,getScrollWidth = that.getScrollWidth(that.layMain[0]); //获取主容器滚动条宽度，如果有的话
-
-    if(getScrollWidth && !that.scrollPatchWStatus){
+    ,getScrollWidth = that.getScrollWidth(that.layMain[0]) //获取主容器滚动条宽度，如果有的话
+    ,outWidth = layMainTable.width() - that.layMain.width(); //表格内容器的超出宽度
+    
+    //如果存在自动列宽，则要保证绝对填充满，并且不能出现滚动条
+    if(that.autoColNums && !that.scrollPatchWStatus){
       var th = that.layHeader.eq(0).find('thead th:last-child')
       ,field = th.data('field');
+      
       that.getCssRule(field, function(item){
         var width = item.style.width || th.outerWidth();
-        item.style.width = (parseFloat(width) - getScrollWidth) + 'px';
+        item.style.width = (parseFloat(width) - getScrollWidth - function(){
+          if(outWidth < 0) return outWidth;
+          if(outWidth < 5) return outWidth;
+        }()) + 'px';
         that.scrollPatchWStatus = true;
       });
     }
@@ -839,7 +852,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     that.layFixed.find(ELEM_BODY).css('height', layMainTable.height() > fixHeight ? fixHeight : 'auto');
     
     //表格宽度小于容器宽度时，隐藏固定列
-    that.layFixRight[layMainTable.width() > that.layMain.width() ? 'removeClass' : 'addClass'](HIDE); 
+    that.layFixRight[outWidth > 0 ? 'removeClass' : 'addClass'](HIDE); 
     
     //操作栏
     that.layFixRight.css('right', scollWidth - 1); 
@@ -848,13 +861,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   //事件处理
   Class.prototype.events = function(){
     var that = this
-    ,config = that.config
+    ,options = that.config
     ,_BODY = $('body')
     ,dict = {}
     ,th = that.layHeader.find('th')
     ,resizing
     ,ELEM_CELL = '.layui-table-cell'
-    ,filter = config.elem.attr('lay-filter');
+    ,filter = options.elem.attr('lay-filter');
 
     //拖拽调整宽度    
     th.on('mousemove', function(e){
@@ -882,7 +895,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           var width = item.style.width || othis.outerWidth();
           dict.rule = item;
           dict.ruleWidth = parseFloat(width);
-          dict.minWidth = othis.data('minwidth') || config.cellMinWidth;
+          dict.minWidth = othis.data('minwidth') || options.cellMinWidth;
         });
       }
     });
@@ -1039,10 +1052,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       if(Math.round(elemCell.prop('scrollWidth')) > Math.round(elemCell.outerWidth())){
         that.tipsIndex = layer.tips([
           '<div class="layui-table-tips-main" style="margin-top: -'+ (elemCell.height() + 16) +'px;'+ function(){
-            if(config.size === 'sm'){
+            if(options.size === 'sm'){
               return 'padding: 4px 15px; font-size: 12px;';
             }
-            if(config.size === 'lg'){
+            if(options.size === 'lg'){
               return 'padding: 14px 15px;';
             }
             return '';
@@ -1201,11 +1214,16 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   //表格选中状态
   table.checkStatus = function(id){
     var nums = 0
+    ,invalidNum = 0
     ,arr = []
     ,data = table.cache[id];
     if(!data) return {};
     //计算全选个数
     layui.each(data, function(i, item){
+      if(item.constructor === Array){
+        invalidNum++; //无效数据，或已删除的
+        return;
+      }
       if(item[table.config.checkName]){
         nums++;
         arr.push(table.clearCacheKey(item));
@@ -1213,7 +1231,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     });
     return {
       data: arr //选中的数据
-      ,isAll: nums === data.length //是否全选
+      ,isAll: nums === (data.length - invalidNum) //是否全选
     };
   };
   
@@ -1222,7 +1240,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   table.reload = function(id, options){
     var config = thisTable.config[id];
     if(!config) return hint.error('The ID option was not found in the table instance');
-    return table.render($.extend({}, config, options));
+    return table.render($.extend(true, {}, config, options));
   };
  
   //核心入口

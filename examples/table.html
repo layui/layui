@@ -46,6 +46,7 @@ body{padding: 20px;}
   <span {{# if(!d.activate){ }}style="color:#999"{{# } }}>{{ d.email }}</span>
 </script>
 
+
 <table class="layui-table" lay-data="{width:800, height: 300, url:'json/table/demo2.json', page: true, limit: 6}">
   <thead>
     <tr>
@@ -182,6 +183,7 @@ layui.use('table', function(){
     ,page: {
       
     }
+    ,limit: 30
     ,toolbar: '#toolbarDemo'
     ,cols: [[
       {checkbox:true, fixed: 'left'}
@@ -215,8 +217,8 @@ layui.use('table', function(){
     ,cols: [[
       {type:'numbers'}
       ,{type: 'checkbox'}
-      ,{field:'id', title:'ID', minWidth: 80, unresize: true, sort: true}
-      ,{field:'username', title:'用户名', minWidth: 200, templet: '#usernameTpl'}
+      ,{field:'id', title:'ID', unresize: true, sort: true}
+      ,{field:'username', title:'用户名', templet: '#usernameTpl'}
       ,{field:'email', title:'邮箱'}
       ,{field:'sex', title:'性别', templet: '#switchTpl', minWidth: 85, align:'center'}
       ,{field:'lock', title:'是否锁定', templet: '#checkboxTpl', minWidth: 110, align:'center'}
@@ -263,14 +265,15 @@ layui.use('table', function(){
   table.on('sort(test)', function(obj){
     console.log(this, obj.field, obj.type)
     
-    return;
+    //return;
+    //服务端排序
     table.reload('test', {
       initSort: obj
+      //,page: {curr: 1} //重新从第一页开始
       ,where: { //重新请求服务端
         key: obj.field //排序字段
         ,order: obj.type //排序方式
       }
-      //,height: 300
     });
   });
   
@@ -370,9 +373,9 @@ layui.use('table', function(){
     ,width: 900
     //,height: 274
     ,cols: [[ //标题栏
-      {space: true, fixed: true}
-      ,{checkbox: true, LAY_CHECKED: true}
+      {type: 'checkbox', LAY_CHECKED: true}
       ,{field: 'id', title: 'ID', width: 80, sort: true}
+      ,{type: 'space', width: 100} //空列
       ,{field: 'username', title: '用户名', width: 120}
       ,{field: 'email', title: '邮箱', width: 150}
       ,{field: 'sign', title: '签名', width: 150}
@@ -409,7 +412,7 @@ layui.use('table', function(){
       layer.msg(checkStatus.isAll ? '全选': '未全选')
     }
     ,parseTable: function(){
-      table.init('parse-table-demo');
+      table.init('parse-table-demo',{limit: 1});
     }
   };
   
