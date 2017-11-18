@@ -287,7 +287,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-colla-item,
 .layui-colla-content{border-top-width: 1px; border-top-style: solid;}
 .layui-colla-item:first-child{border-top: none;}
-.layui-colla-title{position: relative; height: 42px; line-height: 42px; padding: 0 15px 0 35px; color: #333; background-color: #f2f2f2; cursor: pointer;}
+.layui-colla-title{position: relative; height: 42px; line-height: 42px; padding: 0 15px 0 35px; color: #333; background-color: #f2f2f2; cursor: pointer; font-size: 14px;}
 .layui-colla-content{display: none; padding: 10px 15px; line-height: 22px; color: #666;}
 .layui-colla-icon{position: absolute; left: 15px; top: 0; font-size: 14px;}
 

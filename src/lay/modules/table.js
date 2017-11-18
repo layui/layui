@@ -530,8 +530,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
               if(item3.type === 'checkbox'){
                 return '<input type="checkbox" name="layTableCheckbox" lay-skin="primary" '+ function(){
                   var checkName = table.config.checkName;
+                  //如果是全选
                   if(item3[checkName]){
-                    tplData[checkName] = item3[checkName];
+                    item1[checkName] = item3[checkName];
                     return item3[checkName] ? 'checked' : '';
                   }
                   return tplData[checkName] ? 'checked' : '';
@@ -818,17 +819,20 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     ,scollHeight = that.layMain.height() - that.layMain.prop('clientHeight') //横向滚动条高度
     ,getScrollWidth = that.getScrollWidth(that.layMain[0]) //获取主容器滚动条宽度，如果有的话
     ,outWidth = layMainTable.outerWidth() - that.layMain.width(); //表格内容器的超出宽度
-    
-    //如果存在自动列宽，则要保证绝对填充满，并且不能出现滚动条
-    if(that.autoColNums && !that.scrollPatchWStatus){
+
+    //如果存在自动列宽，则要保证绝对填充满，并且不能出现横向滚动条
+    if(that.autoColNums && outWidth < 5 && !that.scrollPatchWStatus){
       var th = that.layHeader.eq(0).find('thead th:last-child')
       ,field = th.data('field');
       that.getCssRule(field, function(item){
         var width = item.style.width || th.outerWidth();
-        item.style.width = (parseFloat(width) - getScrollWidth - function(){
-          if(outWidth < 0) return outWidth;
-          if(outWidth < 5) return outWidth;
-        }()) + 'px';
+        item.style.width = (parseFloat(width) - getScrollWidth - outWidth) + 'px';
+        
+        //二次校验，如果仍然出现横向滚动条
+        if(that.layMain.height() - that.layMain.prop('clientHeight') > 0){
+          item.style.width = parseFloat(item.style.width) - 1 + 'px';
+        }
+
         that.scrollPatchWStatus = true;
       });
     }
