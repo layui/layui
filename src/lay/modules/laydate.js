@@ -1,6 +1,6 @@
 /**
  
- @Name : layDate 5.0.85 日期时间控件
+ @Name : layDate 5.0.9 日期时间控件
  @Author: 贤心
  @Site：http://www.layui.com/laydate/
  @License：MIT
@@ -55,7 +55,7 @@
   }
 
   ,laydate = {
-    v: '5.0.85'
+    v: '5.0.9'
     ,config: {} //全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: ready.getPath
@@ -1379,6 +1379,7 @@
   
   //创建指定日期时间对象
   Class.prototype.newDate = function(dateTime){
+    dateTime = dateTime || {};
     return new Date(
       dateTime.year || 1
       ,dateTime.month || 0

@@ -293,8 +293,9 @@ layui.define(function(exports){
     }
     ,index: layui.laypage ? (layui.laypage.index + 10000) : 0
     ,on: function(elem, even, fn){
-      elem.attachEvent ? elem.attachEvent('on'+ even, function(e){
-        fn.call(elem, e); //for ie
+      elem.attachEvent ? elem.attachEvent('on'+ even, function(e){ //for ie
+        e.target = e.srcElement;
+        fn.call(elem, e);
       }) : elem.addEventListener(even, fn, false);
       return this;
     }

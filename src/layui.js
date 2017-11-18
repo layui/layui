@@ -19,13 +19,23 @@
   }
 
   ,Layui = function(){
-    this.v = '2.2.0'; //版本号
+    this.v = '2.2.2'; //版本号
   }
 
   //获取layui所在目录
   ,getPath = function(){
-    var js = doc.scripts
-    ,jsPath = js[js.length - 1].src;
+    var jsPath = doc.currentScript ? doc.currentScript.src : function(){
+      var js = doc.scripts
+      ,last = js.length - 1
+      ,src;
+      for(var i = last; i > 0; i--){
+        if(js[i].readyState === 'interactive'){
+          src = js[i].src;
+          break;
+        }
+      }
+      return src || js[last].src;
+    }();
     return jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
   }()
 
