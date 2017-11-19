@@ -62,10 +62,10 @@ var customLaunchers = {
         // platform: 'Windows 10'
     },
 
-    sl_firefox: {
-        base: 'SauceLabs',
-        browserName: 'firefox'
-    }
+    // sl_firefox: {
+    //     base: 'SauceLabs',
+    //     browserName: 'firefox'
+    // }
 };
 
 // 不支持本地运行
