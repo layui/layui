@@ -100,7 +100,9 @@ module.exports = function (config) {
         customLaunchers: customLaunchers,
         browsers: Object.keys(customLaunchers),
         captureTimeout: 1000 * 60 * 5,
-        browserNoActivityTimeout: 1000 * 60 * 5
+        browserNoActivityTimeout: 1000 * 60 * 5,
+        browserDisconnectTolerance: 3,
+        browserDisconnectTimeout: 10000
     });
 
     config.set(options);
