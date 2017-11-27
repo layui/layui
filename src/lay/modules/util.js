@@ -130,7 +130,7 @@ layui.define('jquery', function(exports){
     }
     
     //数字前置补零
-    ,digit: function(num, length, end){
+    ,digit: function(num, length){
       var str = '';
       num = String(num);
       length = length || 2;
@@ -138,6 +138,31 @@ layui.define('jquery', function(exports){
         str += '0';
       }
       return num < Math.pow(10, length) ? str + (num|0) : num;
+    }
+    
+    //转化为日期格式字符
+    ,toDateString: function(time, format){
+      var that = this
+      ,date = new Date(time || new Date())
+      ,ymd = [
+        that.digit(date.getFullYear(), 4)
+        ,that.digit(date.getMonth() + 1)
+        ,that.digit(date.getDate())
+      ]
+      ,hms = [
+        that.digit(date.getHours())
+        ,that.digit(date.getMinutes())
+        ,that.digit(date.getSeconds())
+      ];
+
+      format = format || 'yyyy-MM-dd HH:mm:ss';
+
+      return format.replace(/yyyy/g, ymd[0])
+      .replace(/MM/g, ymd[1])
+      .replace(/dd/g, ymd[2])
+      .replace(/HH/g, hms[0])
+      .replace(/mm/g, hms[1])
+      .replace(/ss/g, hms[2]);
     }
   };
   

@@ -426,7 +426,7 @@ layui.define('layer', function(exports){
           errorText = errorText || verify[thisVer][1];
           
           //如果是必填项或者非空命中校验，则阻止提交，弹出提示
-          if((isTrue && thisVer === 'required') || (isTrue && value)){
+          if(isTrue){
             //提示层风格
             if(verType === 'tips'){
               layer.tips(errorText, othis, {tips: 1});

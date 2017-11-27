@@ -67,6 +67,7 @@ layui.define('layer' , function(exports){
     ,data: {} //请求上传的额外参数
     ,drag: true //是否允许拖拽上传
     ,size: 0 //文件限制大小，默认不限制
+    ,number: 0 //允许同时上传的文件数，默认不限制
     ,multiple: false //是否允许多文件上传，不支持ie8-9
   };
   
@@ -355,9 +356,12 @@ layui.define('layer' , function(exports){
       break;
     }
     
-    //检验文件大小
+    //检验文件数量和大小
     if(options.size > 0 && !(device.ie && device.ie < 10)){
       var limitSize;
+      if(options.number && that.fileLength > options.number){
+        return that.msg('同时最多只能上传 '+ that.fileLength + ' 个');
+      }
       layui.each(that.chooseFiles, function(index, file){
         if(file.size > 1024*options.size){
           var size = options.size/1024;

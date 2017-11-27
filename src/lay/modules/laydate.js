@@ -12,8 +12,18 @@
 
   var isLayui = window.layui && layui.define, ready = {
     getPath: function(){
-      var js = document.scripts, script = js[js.length - 1], jsPath = script.src;
-      if(script.getAttribute('merge')) return;
+      var jsPath = document.currentScript ? document.currentScript.src : function(){
+        var js = document.scripts
+        ,last = js.length - 1
+        ,src;
+        for(var i = last; i > 0; i--){
+          if(js[i].readyState === 'interactive'){
+            src = js[i].src;
+            break;
+          }
+        }
+        return src || js[last].src;
+      }();
       return jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
     }()
     
@@ -63,7 +73,7 @@
     //设置全局项
     ,set: function(options){
       var that = this;
-      that.config = ready.extend({}, that.config, options);
+      that.config = lay.extend({}, that.config, options);
       return that;
     }
     

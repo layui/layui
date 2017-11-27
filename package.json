@@ -1,7 +1,7 @@
 {
   "name": "layui-src",
   "realname": "layui",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "independents": {
     "layim": "3.7.3"
   },

@@ -560,12 +560,14 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         trs_fixed_r.push('<tr data-index="'+ i1 +'">'+ tds_fixed_r.join('') + '</tr>');
       });
       
+      //if(data.length === 0) return;
+      
       that.layBody.scrollTop(0);
       that.layMain.find('.'+ NONE).remove();
       that.layMain.find('tbody').html(trs.join(''));
       that.layFixLeft.find('tbody').html(trs_fixed.join(''));
       that.layFixRight.find('tbody').html(trs_fixed_r.join(''));
-      
+
       that.renderForm();
       that.syncCheckAll();
       that.haveInit ? that.scrollPatch() : setTimeout(function(){
@@ -689,7 +691,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     
     res[options.response.dataName] = thisData;
     that.renderData(res, that.page, that.count, true);
-    layer.close(that.tipsIndex);
     
     if(formEvent){
       layui.event.call(th, MOD_NAME, 'sort('+ filter +')', {
@@ -740,7 +741,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       return checked;
     };
     
-    if(!checkAllElem[0]) return
+    if(!checkAllElem[0]) return;
 
     if(table.checkStatus(that.key).isAll){
       if(!checkAllElem[0].checked){
@@ -761,7 +762,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   Class.prototype.getCssRule = function(field, callback){
     var that = this
     ,style = that.elem.find('style')[0]
-    ,sheet = style.sheet || style.styleSheet
+    ,sheet = style.sheet || style.styleSheet || {}
     ,rules = sheet.cssRules || sheet.rules;
     layui.each(rules, function(i, item){
       if(item.selectorText === ('.laytable-cell-'+ that.index +'-'+ field)){
@@ -976,7 +977,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       }
       layui.event.call(this, MOD_NAME, 'checkbox('+ filter +')', {
         checked: checked
-        ,data: table.cache[that.key][index]
+        ,data: table.cache[that.key] ? (table.cache[that.key][index] || {}) : {}
         ,type: isAll ? 'all' : 'one'
       });
     });
@@ -1219,8 +1220,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     var nums = 0
     ,invalidNum = 0
     ,arr = []
-    ,data = table.cache[id];
-    if(!data) return {};
+    ,data = table.cache[id] || [];
     //计算全选个数
     layui.each(data, function(i, item){
       if(item.constructor === Array){
@@ -1234,7 +1234,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     });
     return {
       data: arr //选中的数据
-      ,isAll: nums === (data.length - invalidNum) //是否全选
+      ,isAll: data.length ? (nums === (data.length - invalidNum)) : false //是否全选
     };
   };
   

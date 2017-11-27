@@ -19,7 +19,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.2.2'; //版本号
+    this.v = '2.2.3'; //版本号
   }
 
   //获取layui所在目录
@@ -425,7 +425,7 @@
   //将数组中的对象按其某个成员排序
   Layui.prototype.sort = function(obj, key, desc){
     var clone = JSON.parse(
-      JSON.stringify(obj)
+      JSON.stringify(obj || [])
     );
     
     if(!key) return clone;
