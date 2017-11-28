@@ -1244,7 +1244,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     var config = thisTable.config[id];
     if(!config) return hint.error('The ID option was not found in the table instance');
     //表格重载支持重绘表头
-    config.cols= options.cols;
+    config.cols == options.cols || config.cols;
     return table.render($.extend(true, {}, config, options));
   };
  
