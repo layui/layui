@@ -346,17 +346,14 @@ describe('layui', function () {
     ];
 
     it('check params and return value', function () {
-      // 由于没有值参数, 导致 JSON.parse 失败
-      expect(function () {
-        layui.sort();
-      }).to.throw();
+      expect(layui.sort()).to.deep.equal([], '空参数时默认为空数组');
 
-      expect(layui.sort({})).to.deep.equal({});
+      expect(layui.sort({})).to.deep.equal({}, '只传空对象默认返回');
       expect(layui.sort({
         name: 'layui'
       })).to.deep.equal({
         name: 'layui'
-      });
+      }, '只传一个对象参数时返回');
 
       expect(layui.sort([{
         name: 'layui'
