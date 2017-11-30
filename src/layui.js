@@ -480,6 +480,7 @@
     return result;
   };
 
+
   win.layui = new Layui();
 
 }(window);

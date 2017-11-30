@@ -193,7 +193,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     options.request = $.extend({
       pageName: 'page'
       ,limitName: 'limit'
-    }, options.request)
+    }, options.request);
     
     //响应数据的自定义格式
     options.response = $.extend({
@@ -272,8 +272,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     
     if(options.url){ //Ajax请求
       var params = {};
-      params[request.pageName] = curr;
-      params[request.limitName] = options.limit;
+      //params[request.pageName] = curr;
+      //params[request.limitName] = options.limit;
+      _.set(params,request.pageName,curr);
+      _.set(params,request.limitName,options.limit);
+
       $.ajax({
         type: options.method || 'get'
         ,url: options.url
@@ -284,9 +287,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
             that.renderForm();
             return that.layMain.html('<div class="'+ NONE +'">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');
           }
-          that.renderData(res, curr, res[response.countName]), sort();
+          //that.renderData(res, curr, res[response.countName]), sort();
+          typeof options.beforeRender === 'function' && options.beforeRender(res);
+          that.renderData(res, curr,_.get(res,response.countName)), sort();
           loadIndex && layer.close(loadIndex);
-          typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
+          // typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
+          typeof options.done === 'function' && options.done(res, curr, _.get(res,response.countName));
         }
         ,error: function(e, m){
           that.layMain.html('<div class="'+ NONE +'">数据接口请求异常</div>');
@@ -296,13 +302,17 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       });
     } else if(options.data && options.data.constructor === Array){ //已知数据
       var res = {}
-      ,startLimit = curr*options.limit - options.limit
+      ,startLimit = curr*options.limit - options.limit;
+      typeof options.beforeRender === 'function' && options.beforeRender(res);
       
-      res[response.dataName] = options.data.concat().splice(startLimit, options.limit);
-      res[response.countName] = options.data.length;
-
-      that.renderData(res, curr, options.data.length), sort();
-      typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
+      // res[response.dataName] = options.data.concat().splice(startLimit, options.limit);
+      _.set(res,response.dataName,options.data.concat().splice(startLimit, options.limit));
+      // TODO: 扩展直接赋值数据支持分页
+      if(_.get(res,response.countName) == 0 ){
+          _.set(res,response.countName, options.data.length);
+      }
+      that.renderData(res, curr, _.get(res,response.countName) ), sort();
+      typeof options.done === 'function' && options.done(res, curr, _.get(res,response.countName) );
     }
   };
   
@@ -349,7 +359,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   Class.prototype.renderData = function(res, curr, count, sort){
     var that = this
     ,options = that.config
-    ,data = res[options.response.dataName] || []
+    // ,data = res[options.response.dataName] || []
+    ,data = _.get(res,options.response.dataName) || []
     ,trs = []
     ,trs_fixed = []
     ,trs_fixed_r = []
@@ -473,7 +484,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   //渲染表单
   Class.prototype.renderForm = function(type){
     form.render((type || 'checkbox'), 'LAY-table-'+ this.index);
-  }
+  };
   
   //数据排序
   Class.prototype.sort = function(th, type, pull, formEvent){
@@ -530,7 +541,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       delete that.sortKey;
     }
     
-    res[config.response.dataName] = thisData;
+    // res[config.response.dataName] = thisData;
+    _.set(res,config.response.dataName,thisData);
     that.renderData(res, that.page, that.count, true);
     layer.close(that.tipsIndex);
     
