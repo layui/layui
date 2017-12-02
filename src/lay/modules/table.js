@@ -383,37 +383,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     that.config = $.extend({}, that.config, options);
     that.render();
   };
- 
-  //获取嵌套对象值
-  Class.prototype.getVal = function(obj, keyPath) {
-      keyPath = keyPath.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
-      keyPath = keyPath.replace(/^\./, '');           // strip a leading dot
-      var a = keyPath.split('.');
-      for (var i = 0, n = a.length; i < n; ++i) {
-          var k = a[i];
-          if (k in obj) {
-              obj = obj[k];
-          } else {
-              return;
-          }
-      }
-      return obj;
-  };
-
-  //设置嵌套对象值
-  Class.prototype.setVal = function(obj, keyPath, value) {
-      keyPath = keyPath.replace(/\[(\w+)\]/g, '.$1');
-      keyPath = keyPath.replace(/^\./, '');
-      var a = keyPath.split('.');
-      var lastKeyIndex = a.length-1;
-      for (var i = 0; i < lastKeyIndex; ++ i) {
-          var key = a[i];
-          if (!(key in obj))
-              obj[key] = {}
-          obj = obj[key];
-      }
-      obj[a[lastKeyIndex]] = value;
-  };
   
   //页码
   Class.prototype.page = 1;
@@ -443,14 +412,14 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         ,data: $.extend(params, options.where)
         ,dataType: 'json'
         ,success: function(res){
-          if(that.getVal(res, response.statusName) != response.statusCode){
+          if(layui.get(res, response.statusName) != response.statusCode){
             that.renderForm();
-            return that.layMain.html('<div class="'+ NONE +'">'+ (that.getVal(res, response.msgName) || '返回的数据状态异常') +'</div>');
+            return that.layMain.html('<div class="'+ NONE +'">'+ (layui.get(res, response.msgName) || '返回的数据状态异常') +'</div>');
           }
-          that.renderData(res, curr, that.getVal(res, response.countName)), sort();
+          that.renderData(res, curr, layui.get(res, response.countName)), sort();
           options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
           loadIndex && layer.close(loadIndex);
-          typeof options.done === 'function' && options.done(res, curr, that.getVal(res, response.countName));
+          typeof options.done === 'function' && options.done(res, curr, layui.get(res, response.countName));
         }
         ,error: function(e, m){
           that.layMain.html('<div class="'+ NONE +'">数据接口请求异常</div>');
@@ -462,11 +431,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       var res = {}
       ,startLimit = curr*options.limit - options.limit
       
-      that.setVal(res, response.dataName, options.data.concat().splice(startLimit, options.limit));
-      that.setVal(res, response.countName, options.data.length);
+      layui.set(res, response.dataName, options.data.concat().splice(startLimit, options.limit));
+      layui.set(res, response.countName, options.data.length);
 
       that.renderData(res, curr, options.data.length), sort();
-      typeof options.done === 'function' && options.done(res, curr, that.getVal(res, response.countName));
+      typeof options.done === 'function' && options.done(res, curr, layui.get(res, response.countName));
     }
   };
   
@@ -510,7 +479,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   Class.prototype.renderData = function(res, curr, count, sort){
     var that = this
     ,options = that.config
-    ,data = that.getVal(options.response.dataName) || []
+    ,data = layui.get(options.response.dataName) || []
     ,trs = []
     ,trs_fixed = []
     ,trs_fixed_r = []
@@ -720,7 +689,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       delete that.sortKey;
     }
     
-    that.setVal(res, options.response.dataName, thisData);
+    layui.set(res, options.response.dataName, thisData);
     that.renderData(res, that.page, that.count, true);
     
     if(formEvent){
