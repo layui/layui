@@ -496,6 +496,37 @@
     filter[0] && layui.each(config.event[events], callback); //执行过滤器中的事件
     return result;
   };
+ 
+  //获取对象值
+  Layui.prototype.get = function(obj, keyPath) {
+      keyPath = keyPath.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+      keyPath = keyPath.replace(/^\./, '');           // strip a leading dot
+      var a = keyPath.split('.');
+      for (var i = 0, n = a.length; i < n; ++i) {
+          var k = a[i];
+          if (k in obj) {
+              obj = obj[k];
+          } else {
+              return;
+          }
+      }
+      return obj;
+  };
+
+  //设置对象值
+  Layui.prototype.set = function(obj, keyPath, value) {
+      keyPath = keyPath.replace(/\[(\w+)\]/g, '.$1');
+      keyPath = keyPath.replace(/^\./, '');
+      var a = keyPath.split('.');
+      var lastKeyIndex = a.length-1;
+      for (var i = 0; i < lastKeyIndex; ++ i) {
+          var key = a[i];
+          if (!(key in obj))
+              obj[key] = {}
+          obj = obj[key];
+      }
+      obj[a[lastKeyIndex]] = value;
+  };
 
   win.layui = new Layui();
 
