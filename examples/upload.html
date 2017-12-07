@@ -146,7 +146,7 @@ layui.use('upload', function(){
     ,auto: false
     ,bindAction: '#testListAction'
     ,choose: function(obj){   
-      var files = obj.pushFile(); //将每次选择的文件追加到文件队列
+      var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
 
       //读取本地文件
       obj.preview(function(index, file, result){
@@ -180,7 +180,7 @@ layui.use('upload', function(){
         ,tds = tr.children();
         tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
         tds.eq(3).html(''); //清空操作
-        delete files[index]; //删除文件队列已经上传成功的文件
+        delete this.files[index]; //删除文件队列已经上传成功的文件
         return;
       }
       this.error(index, upload);

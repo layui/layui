@@ -1246,6 +1246,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   thisTable.config = {};
   table.reload = function(id, options){
     var config = thisTable.config[id];
+    options = options || {};
     if(!config) return hint.error('The ID option was not found in the table instance');
     if(options.data && options.data.constructor === Array) delete config.data;
     return table.render($.extend(true, {}, config, options));
