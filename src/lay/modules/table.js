@@ -381,9 +381,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   
   //表格重载
   Class.prototype.reload = function(options){
-    var that = this
-    ,options = that.config;
-    if(options.data && options.data.constructor === Array) delete that.config.data;
+    var that = this;
+    if(that.config.data && that.config.data.constructor === Array) delete that.config.data;
     that.config = $.extend({}, that.config, options);
     that.render();
   };
