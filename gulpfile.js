@@ -193,7 +193,7 @@ gulp.task('all', ['clear'], function(){ //命令：gulp all，过滤layim：gulp
   }
 });
 
-//打包layer独立版
+//打包 layer 独立版
 gulp.task('layer', function(){
   var dir = './release/layer';
   
@@ -204,7 +204,7 @@ gulp.task('layer', function(){
   .pipe(gulp.dest(dir + '/src'));
 });
 
-//打包layDate独立版
+//打包 layDate 独立版
 gulp.task('laydate', function(){
   var dir = './release/laydate';
   
@@ -216,7 +216,7 @@ gulp.task('laydate', function(){
   .pipe(gulp.dest(dir + '/src'));
 });
 
-//打包LayIM版本
+//打包 LayIM 版本
 gulp.task('layim', function(){
   var dir = './release/zip/layui.layim-v'+ inds.layim;
   gulp.src('./release/doc-layim/**/*')

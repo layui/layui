@@ -1,5 +1,8 @@
 
 # 更新日志
+* [2.2.4](http://www.layui.com/doc/base/changelog.html#2-2-4)
+* [2.2.3](http://www.layui.com/doc/base/changelog.html#2-2-3)
+* [2.2.2](http://www.layui.com/doc/base/changelog.html#2-2-2)
 * [2.2.1](http://www.layui.com/doc/base/changelog.html#2-2-1)
 * [2.2.0](http://www.layui.com/doc/base/changelog.html#2-2-0)
 * [2.1.7](http://www.layui.com/doc/base/changelog.html#2-1-7)
