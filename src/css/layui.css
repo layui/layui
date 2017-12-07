@@ -571,7 +571,11 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .layui-table-header,
 .layui-table-tool,
 .layui-table-patch,
-.layui-table-mend{background-color: #f8f8f8;}
+.layui-table-mend,
+.layui-table[lay-even] tr:nth-child(even),
+.layui-table tbody tr:hover,
+.layui-table-hover,
+.layui-table-click{background-color: #f2f2f2;}
 
 .layui-table th,
 .layui-table td,
@@ -582,13 +586,9 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .layui-table-tool,
 .layui-table-page,
 .layui-table-fixed-r,
-.layui-table-tips-main{border-width: 1px; border-style: solid; border-color: #eee;}
+.layui-table-tips-main{border-width: 1px; border-style: solid; border-color: #e6e6e6;}
 
 .layui-table th, .layui-table td{position: relative; padding: 9px 15px; min-height: 20px; line-height: 20px;  font-size: 14px;}
-.layui-table[lay-even] tr:nth-child(even){background-color: #f8f8f8;}
-.layui-table tbody tr:hover,
-.layui-table-hover{background-color: #f8f8f8;}
-.layui-table-click{background-color: #f8f8f8;}
 
 .layui-table[lay-skin="line"] th, .layui-table[lay-skin="line"] td{border-width: 0; border-bottom-width: 1px;}
 .layui-table[lay-skin="row"] th, .layui-table[lay-skin="row"] td{border-width: 0;border-right-width: 1px;}

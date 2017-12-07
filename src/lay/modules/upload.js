@@ -324,6 +324,8 @@ layui.define('layer' , function(exports){
       ? ((elemFile.value.match(/[^\/\\]+\..+/g)||[]) || '')
     : value;
     
+    if(value.length === 0) return;
+
     switch(options.accept){
       case 'file': //一般文件
         if(exts && !RegExp('\\w\\.('+ exts +')$', 'i').test(escape(value))){
@@ -356,12 +358,23 @@ layui.define('layer' , function(exports){
       break;
     }
     
-    //检验文件数量和大小
+    //检验文件数量
+    that.fileLength = function(){
+      var length = 0
+      ,items = files || that.files || that.chooseFiles || elemFile.files;
+      layui.each(items, function(){
+        length++;
+      });
+      return length;
+    }();
+    if(options.number && that.fileLength > options.number){
+      return that.msg('同时最多只能上传的数量为：'+ options.number);
+    }
+    
+    //检验文件大小
     if(options.size > 0 && !(device.ie && device.ie < 10)){
       var limitSize;
-      if(options.number && that.fileLength > options.number){
-        return that.msg('同时最多只能上传 '+ that.fileLength + ' 个');
-      }
+      
       layui.each(that.chooseFiles, function(index, file){
         if(file.size > 1024*options.size){
           var size = options.size/1024;
@@ -451,7 +464,6 @@ layui.define('layer' , function(exports){
     //文件选择
     that.elemFile.off('upload.change').on('upload.change', function(){
       var files = this.files || [];
-      that.fileLength = files.length;
       setChooseFile(files);
       options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
     });

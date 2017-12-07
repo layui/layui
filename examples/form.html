@@ -22,6 +22,33 @@ body{padding: 10px;}
   <div class="layui-form-item">
     <label class="layui-form-label">输入框</label>
     <div class="layui-input-block">
+      <input type="text" name="xxx " autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">输入框</label>
+    <div class="layui-input-block">
+      <input type="text" name="arr[]" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">输入框</label>
+    <div class="layui-input-block">
+      <input type="text" name="arr[]" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+
+<form class="layui-form layui-form-pane1" action="">
+  <div class="layui-form-item">
+    <label class="layui-form-label">输入框</label>
+    <div class="layui-input-block">
       <input type="text" name="title" lay-verify="required|title" required placeholder="请输入标题" autocomplete="off" class="layui-input">
     </div>
   </div>
@@ -58,7 +85,7 @@ body{padding: 10px;}
     <div class="layui-inline">
       <label class="layui-form-label">行内表单</label>
       <div class="layui-input-block">
-        <select name="quiz">
+        <select name="quiz" lay-verify="required" lay-verType="tips">
           <option value="">请选择问题</option>
           <option value="你工作的第一个城市">你工作的第一个城市</option>
           <option value="你的工号" disabled>你的工号</option>

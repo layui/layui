@@ -80,8 +80,6 @@ hr{margin: 30px 0;}
 
 绑定原始文件域：<input type="file" name="file" id="test8">
 
-
-
 <script src="../src/layui.js"></script>
 <script>
 layui.use('upload', function(){
@@ -91,7 +89,9 @@ layui.use('upload', function(){
   var uploadInst = upload.render({
     elem: '#test1'
     ,url: '/upload/'
-    ,size: 60 //限制文件大小，单位 KB
+    //,size: 60 //限制文件大小，单位 KB
+    ,accept: 'file'
+    ,exts: "jpg|png|gif|bmp|jpeg|pdf"
     ,before: function(obj){
       //预读本地文件示例，不支持ie8
       obj.preview(function(index, file, result){
@@ -119,7 +119,7 @@ layui.use('upload', function(){
     elem: '#test2'
     ,url: ''
     ,multiple: true
-    //,number: 3
+    ,number: 3
     ,size: 1024
     ,before: function(obj){
       //预读本地文件示例，不支持ie8
@@ -142,6 +142,7 @@ layui.use('upload', function(){
     ,url: ''
     ,accept: 'file'
     ,multiple: true
+    ,number: 3
     ,auto: false
     ,bindAction: '#testListAction'
     ,choose: function(obj){   
@@ -183,6 +184,9 @@ layui.use('upload', function(){
         return;
       }
       this.error(index, upload);
+    }
+    ,allDone: function(obj){
+      console.log(obj)
     }
     ,error: function(index, upload){
       var tr = demoListView.find('tr#upload-'+ index)
