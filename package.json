@@ -5,7 +5,7 @@
   "independents": {
     "layim": "3.7.35"
   },
-  "description": "经典模块化前端框架",
+  "description": "经典模块化前端 UI 框架",
   "main": "layui.js",
   "license": "MIT",
   "scripts": {

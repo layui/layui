@@ -6,7 +6,7 @@
   "authors": [
     "sentsin <xu@sentsin.com>"
   ],
-  "description": "模块化前端UI框架",
+  "description": "经典模块化前端 UI 框架",
   "moduleType": [
     "amd",
     "globals"
