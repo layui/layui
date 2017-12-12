@@ -423,7 +423,15 @@ layui.define('layer', function(exports){
         
         //匹配验证规则
         if(verify[thisVer]){
-          var isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
+          var noIgnore = typeof othis.attr('lay-ignore') !== 'string',
+          isSelect = item.tagName.toLowerCase() === 'select',
+          isCheRad = /^checkbox|radio$/.test(item.type),
+          isTrue = isFn ? errorText = verify[thisVer](value, item) : (function(){
+            if(noIgnore && isCheRad){
+              return !$('input[name="'+item.name+'"]:checked').length;
+            }
+            return !verify[thisVer][0].test(value);
+          }());
           errorText = errorText || verify[thisVer][1];
           
           //如果是必填项或者非空命中校验，则阻止提交，弹出提示
@@ -431,10 +439,8 @@ layui.define('layer', function(exports){
             //提示层风格
             if(verType === 'tips'){
               layer.tips(errorText, function(){
-                if(typeof othis.attr('lay-ignore') !== 'string'){
-                  if(item.tagName.toLowerCase() === 'select' || /^checkbox|radio$/.test(item.type)){
-                    return othis.next();
-                  }
+                if(noIgnore && (isSelect || isCheRad)){
+                  return othis.next();
                 }
                 return othis;
               }(), {tips: 1});
@@ -443,7 +449,16 @@ layui.define('layer', function(exports){
             } else {
               layer.msg(errorText, {icon: 5, shift: 6});
             }
-            if(!device.android && !device.ios) item.focus(); //非移动设备自动定位焦点
+            if(!device.android && !device.ios){
+              if(noIgnore){
+                if(isSelect){
+                  othis.next().find('input').focus();;
+                } else if (isCheRad) {
+                  othis.show().focus().hide();
+                }
+              }
+              item.focus();
+            } //非移动设备自动定位焦点
             othis.addClass(DANGER);
             return stop = true;
           }
