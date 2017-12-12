@@ -45,6 +45,7 @@ layui.define(function(exports){
     
     config.count = config.count|0; //数据总数
     config.curr = (config.curr|0) || 1; //当前页
+	config.alwaysshow = config.alwaysshow || false;//是否总是显示，默认数据条数为0时不显示分页控件
 
     //每页条数的选择项
     config.limits = typeof config.limits === 'object'
@@ -97,11 +98,6 @@ layui.define(function(exports){
         if(config.count < 1){
           return '';
         }
-        
-        //首页
-        //if(index > 1 && config.first !== false && config.groups !== 0){
-        //  pager.push('<a href="javascript:;" class="layui-laypage-first" data-page="1"  title="&#x9996;&#x9875;">'+ (config.first || 1) +'</a>');
-        //}
 
         //计算当前页码组的起始页
         var halve = Math.floor((groups-1)/2) //页码数等分
@@ -136,9 +132,6 @@ layui.define(function(exports){
           if(end + 1 < config.pages){
             pager.push('<a class="layui-laypage-spr" href="javascript:;" data-page="' + (config.curr + 2) + '">&#x2026;</a>');
           }
-          //if(groups !== 0){
-          //  pager.push('<a href="javascript:;" class="layui-laypage-last" title="&#x5C3E;&#x9875;"  data-page="'+ config.pages +'">'+ (config.last || config.pages) +'</a>');
-          //}
         }
 
         return pager.join('');
@@ -155,13 +148,14 @@ layui.define(function(exports){
       ,last: function () {
         return config.last ? '<a href="javascript:;" class="layui-laypage-last' + (config.curr == config.pages ? (' ' + DISABLED) : '') + '" title="&#x5C3E;&#x9875;"  data-page="' + config.pages + '">' + (config.last || config.pages) + '</a>' : '';
       }()
+
       //数据总数
       ,count: '<span class="layui-laypage-count">共 '+ config.count +' 条</span>'
       
       //每页条数
       ,limit: function(){
         var options = ['<span class="layui-laypage-limits"><select lay-ignore>'];
-        layui.each(config.limits, function(index, item){
+        laypage.each(config.limits, function (index, item) {
           options.push(
             '<option value="'+ item +'"'
             +(item === config.limit ? 'selected' : '') 
@@ -182,7 +176,7 @@ layui.define(function(exports){
 
     return ['<div class="layui-box layui-laypage layui-laypage-'+ (config.theme ? (
       /^#/.test(config.theme) ? 'molv' : config.theme
-    ) : 'default') +'" id="layui-laypage-'+ config.index +'">'
+    ) : 'default') + (!config.alwaysshow && config.count == 0 ? ' layui-hide' : '') + '" id="layui-laypage-'+ config.index +'">'
       ,function(){
         var plate = [];
         layui.each(config.layout, function(index, item){
@@ -302,8 +296,9 @@ layui.define(function(exports){
     }
     ,index: layui.laypage ? (layui.laypage.index + 10000) : 0
     ,on: function(elem, even, fn){
-      elem.attachEvent ? elem.attachEvent('on'+ even, function(e){
-        fn.call(elem, e); //for ie
+      elem.attachEvent ? elem.attachEvent('on'+ even, function(e){ //for ie
+        e.target = e.srcElement;
+        fn.call(elem, e);
       }) : elem.addEventListener(even, fn, false);
       return this;
     }

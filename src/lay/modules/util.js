@@ -95,13 +95,24 @@ layui.define('jquery', function(exports){
     
     //某个时间在当前时间的多久前
     ,timeAgo: function(time, onlyDate){
-      var stamp = new Date().getTime() - new Date(time).getTime();
+      var that = this
+      ,arr = [[], []]
+      ,stamp = new Date().getTime() - new Date(time).getTime();
       
-      //超过30天，返回具体日期
-      if(stamp > 1000*60*60*24*30){
-        stamp =  new Date(time).toLocaleString();
-        onlyDate && (stamp = stamp.replace(/\s[\S]+$/g, ''));
-        return stamp;
+      //返回具体日期
+      if(stamp > 1000*60*60*24*8){
+        stamp =  new Date(time);
+        arr[0][0] = that.digit(stamp.getFullYear(), 4);
+        arr[0][1] = that.digit(stamp.getMonth() + 1);
+        arr[0][2] = that.digit(stamp.getDate());
+        
+        //是否输出时间
+        if(!onlyDate){
+          arr[1][0] = that.digit(stamp.getHours());
+          arr[1][1] = that.digit(stamp.getMinutes());
+          arr[1][2] = that.digit(stamp.getSeconds());
+        }
+        return arr[0].join('-') + ' ' + arr[1].join(':');
       }
       
       //30天以内，返回“多久前”
@@ -109,13 +120,49 @@ layui.define('jquery', function(exports){
         return ((stamp/1000/60/60/24)|0) + '天前';
       } else if(stamp >= 1000*60*60){
         return ((stamp/1000/60/60)|0) + '小时前';
-      } else if(stamp >= 1000*60*3){ //3分钟以内为：刚刚
+      } else if(stamp >= 1000*60*2){ //2分钟以内为：刚刚
         return ((stamp/1000/60)|0) + '分钟前';
       } else if(stamp < 0){
         return '未来';
       } else {
         return '刚刚';
       }
+    }
+    
+    //数字前置补零
+    ,digit: function(num, length){
+      var str = '';
+      num = String(num);
+      length = length || 2;
+      for(var i = num.length; i < length; i++){
+        str += '0';
+      }
+      return num < Math.pow(10, length) ? str + (num|0) : num;
+    }
+    
+    //转化为日期格式字符
+    ,toDateString: function(time, format){
+      var that = this
+      ,date = new Date(parseInt(time) || new Date())
+      ,ymd = [
+        that.digit(date.getFullYear(), 4)
+        ,that.digit(date.getMonth() + 1)
+        ,that.digit(date.getDate())
+      ]
+      ,hms = [
+        that.digit(date.getHours())
+        ,that.digit(date.getMinutes())
+        ,that.digit(date.getSeconds())
+      ];
+
+      format = format || 'yyyy-MM-dd HH:mm:ss';
+
+      return format.replace(/yyyy/g, ymd[0])
+      .replace(/MM/g, ymd[1])
+      .replace(/dd/g, ymd[2])
+      .replace(/HH/g, hms[0])
+      .replace(/mm/g, hms[1])
+      .replace(/ss/g, hms[2]);
     }
   };
   

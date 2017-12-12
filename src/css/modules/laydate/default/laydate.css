@@ -114,7 +114,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-content .laydate-day-prev,
 .layui-laydate-content .laydate-day-next{color: #d2d2d2;}
 .laydate-selected.laydate-day-prev,
-.laydate-selected.laydate-day-next{color: #fff !important;}
+.laydate-selected.laydate-day-next{background-color: #f8f8f8 !important;}
 .layui-laydate-footer{border-top: 1px solid #e2e2e2;}
 .layui-laydate-hint{color: #FF5722;}
 .laydate-day-mark::after{background-color: #5FB878;}
