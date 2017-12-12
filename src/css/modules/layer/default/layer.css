@@ -12,7 +12,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-shade, .layui-layer{position:fixed; _position:absolute; pointer-events: auto;}
 .layui-layer-shade{top:0; left:0; width:100%; height:100%; _height:expression(document.body.offsetHeight+"px");}
 .layui-layer{-webkit-overflow-scrolling: touch;}
-.layui-layer{top:150px; left: 0; margin:0; padding:0; background-color:#fff; -webkit-background-clip: content; box-shadow: 1px 1px 50px rgba(0,0,0,.3);}
+.layui-layer{top:150px; left: 0; margin:0; padding:0; background-color:#fff; -webkit-background-clip: content; border-radius: 2px; box-shadow: 1px 1px 50px rgba(0,0,0,.3);}
 .layui-layer-close{position:absolute;}
 .layui-layer-content{position:relative;}
 .layui-layer-border{border: 1px solid #B2B2B2; border: 1px solid rgba(0,0,0,.1); box-shadow: 1px 1px 5px rgba(0,0,0,.2);}
@@ -26,7 +26,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-resize{position: absolute; width: 15px; height: 15px; right: 0; bottom: 0; cursor: se-resize;}
 
 /* 动画 */
-.layui-layer{border-radius: 2px; -webkit-animation-fill-mode: both; animation-fill-mode: both; -webkit-animation-duration:.3s; animation-duration:.3s;}
+.layer-anim{-webkit-animation-fill-mode: both; animation-fill-mode: both; -webkit-animation-duration:.3s; animation-duration:.3s;}
 
 @-webkit-keyframes layer-bounceIn { /* 默认 */
 	0% {opacity: 0; -webkit-transform: scale(.5); transform: scale(.5)}
@@ -36,7 +36,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 	0% {opacity: 0; -webkit-transform: scale(.5); -ms-transform: scale(.5); transform: scale(.5)}
 	100% {opacity: 1; -webkit-transform: scale(1); -ms-transform: scale(1); transform: scale(1)}
 }
-.layer-anim{-webkit-animation-name: layer-bounceIn;animation-name: layer-bounceIn}
+.layer-anim-00{-webkit-animation-name: layer-bounceIn;animation-name: layer-bounceIn}
 
 @-webkit-keyframes layer-zoomInDown{0%{opacity:0;-webkit-transform:scale(.1) translateY(-2000px);transform:scale(.1) translateY(-2000px);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}60%{opacity:1;-webkit-transform:scale(.475) translateY(60px);transform:scale(.475) translateY(60px);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}}@keyframes layer-zoomInDown{0%{opacity:0;-webkit-transform:scale(.1) translateY(-2000px);-ms-transform:scale(.1) translateY(-2000px);transform:scale(.1) translateY(-2000px);-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out}60%{opacity:1;-webkit-transform:scale(.475) translateY(60px);-ms-transform:scale(.475) translateY(60px);transform:scale(.475) translateY(60px);-webkit-animation-timing-function:ease-out;animation-timing-function:ease-out}}.layer-anim-01{-webkit-animation-name:layer-zoomInDown;animation-name:layer-zoomInDown}
 
@@ -172,7 +172,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
   30% {-webkit-transform: scale(1.05); -ms-transform: scale(1.05); transform: scale(1.05);}
   0% {-webkit-transform: scale(1); -ms-transform: scale(1);transform: scale(1);}
 }
-.layer-anim-close{-webkit-animation-name: layer-bounceOut;animation-name: layer-bounceOut; -webkit-animation-duration:.2s; animation-duration:.2s;}
+.layer-anim-close{-webkit-animation-name: layer-bounceOut; animation-name: layer-bounceOut; -webkit-animation-fill-mode: both; animation-fill-mode: both; -webkit-animation-duration:.2s; animation-duration:.2s;}
 
 @media screen and (max-width: 1100px) {
   .layui-layer-iframe{overflow-y: auto; -webkit-overflow-scrolling: touch;}

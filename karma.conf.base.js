@@ -3,6 +3,36 @@
  * @author fe.xiaowu@gmail.com
  */
 
+var url = require('url');
+
+/**
+ * mock一个server供测试使用
+ *
+ * @param  {Object}   req  request
+ * @param  {Object}   res  response
+ * @param  {Function} next 下一路由
+ *
+ * @example
+ * 请求 /api/mock 参数如:
+ *     timeout - 超时时间, 默认 0
+ *     statusCode - 状态码, 默认 200
+ *     response - 响应内容, 默认 {}
+ *     dataType - 响应格式, 默认 json
+ */
+var httpServer = function (req, res, next) {
+    if (req.url.indexOf('/api/mock') === -1) {
+        return next();
+    }
+
+    var data = url.parse(req.url, true).query;
+
+    setTimeout(function () {
+        res.statusCode = data.statusCode || 200;
+        res.setHeader('content-type', data.contentType || 'json');
+        res.end(data.response || '{}');
+    }, data.timeout || 0);
+};
+
 /**
  * 源文件
  *
@@ -46,9 +76,6 @@ module.exports = function (config) {
     return {
         // base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: '',
-
-        // Important: 所有插件必须在此声明
-        plugins: ['karma-*'],
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
@@ -136,6 +163,16 @@ module.exports = function (config) {
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
         // 脚本调用请设为 true
-        singleRun: true
+        singleRun: true,
+
+        middleware: ['httpServer'],
+
+        plugins: ['karma-*', {
+            'middleware:httpServer': [
+                'factory', function () {
+                    return httpServer;
+                }
+            ]
+        }]
     };
 };

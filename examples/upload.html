@@ -80,8 +80,6 @@ hr{margin: 30px 0;}
 
 绑定原始文件域：<input type="file" name="file" id="test8">
 
-
-
 <script src="../src/layui.js"></script>
 <script>
 layui.use('upload', function(){
@@ -91,7 +89,9 @@ layui.use('upload', function(){
   var uploadInst = upload.render({
     elem: '#test1'
     ,url: '/upload/'
-    ,size: 60 //限制文件大小，单位 KB
+    //,size: 60 //限制文件大小，单位 KB
+    ,accept: 'file'
+    ,exts: "jpg|png|gif|bmp|jpeg|pdf"
     ,before: function(obj){
       //预读本地文件示例，不支持ie8
       obj.preview(function(index, file, result){
@@ -119,6 +119,7 @@ layui.use('upload', function(){
     elem: '#test2'
     ,url: ''
     ,multiple: true
+    ,number: 3
     ,size: 1024
     ,before: function(obj){
       //预读本地文件示例，不支持ie8
@@ -129,6 +130,9 @@ layui.use('upload', function(){
     ,done: function(res){
       //上传完毕
     }
+    ,allDone: function(obj){
+      console.log(obj)
+    }
   });
   
   //演示多文件列表
@@ -138,10 +142,11 @@ layui.use('upload', function(){
     ,url: ''
     ,accept: 'file'
     ,multiple: true
+    ,number: 3
     ,auto: false
     ,bindAction: '#testListAction'
     ,choose: function(obj){   
-      var files = obj.pushFile(); //将每次选择的文件追加到文件队列
+      var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
 
       //读取本地文件
       obj.preview(function(index, file, result){
@@ -164,6 +169,7 @@ layui.use('upload', function(){
         tr.find('.demo-delete').on('click', function(){
           delete files[index]; //删除对应的文件
           tr.remove();
+          uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
         });
         
         demoListView.append(tr);
@@ -175,10 +181,13 @@ layui.use('upload', function(){
         ,tds = tr.children();
         tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
         tds.eq(3).html(''); //清空操作
-        delete files[index]; //删除文件队列已经上传成功的文件
+        delete this.files[index]; //删除文件队列已经上传成功的文件
         return;
       }
       this.error(index, upload);
+    }
+    ,allDone: function(obj){
+      console.log(obj)
     }
     ,error: function(index, upload){
       var tr = demoListView.find('tr#upload-'+ index)

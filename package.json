@@ -1,8 +1,11 @@
 {
-  "name": "layui",
-  "version": "2.1.1",
-  "layimV": "3.7.0",
-  "description": "经典模块化前端框架",
+  "name": "layui-src",
+  "realname": "layui",
+  "version": "2.2.45",
+  "independents": {
+    "layim": "3.7.35"
+  },
+  "description": "经典模块化前端 UI 框架",
   "main": "layui.js",
   "license": "MIT",
   "scripts": {
@@ -46,6 +49,7 @@
   },
   "directories": {
     "doc": "doc",
+    "example": "examples",
     "test": "test"
   },
   "dependencies": {},
