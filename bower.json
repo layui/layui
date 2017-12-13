@@ -6,14 +6,17 @@
   "authors": [
     "sentsin <xu@sentsin.com>"
   ],
-  "description": "经典模块化前端 UI 框架",
+  "description": "Classic modular front-end component library",
   "moduleType": [
     "amd",
     "globals"
   ],
   "keywords": [
     "layui",
-    "ui"
+    "ui",
+    "JavaScript Framework",
+    "toolkit",
+    "front-end component library"
   ],
   "license": "MIT"
 }
