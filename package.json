@@ -18,7 +18,9 @@
     "type": "git",
     "url": "git+ssh://git@github.com/sentsin/layui.git"
   },
-  "author": "sentsin",
+  "author": [
+    "sentsin <xu@sentsin.com>"
+  ],
   "homepage": "https://www.layui.com",
   "devDependencies": {
     "chai": "^4.1.1",
