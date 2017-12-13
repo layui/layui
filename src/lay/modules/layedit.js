@@ -265,7 +265,7 @@ layui.define(['layer', 'form'], function(exports){
   //在选区插入内联元素
   ,insertInline = function(tagName, attr, range){
     var iframeDOM = this.document
-    ,elem = document.createElement(tagName)
+    ,elem = this.document.createElement(tagName)
     for(var key in attr){
       elem.setAttribute(key, attr[key]);
     }
