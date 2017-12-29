@@ -9,7 +9,7 @@
 layui.define(function(exports){
   "use strict";
   
-  var doc = document
+  var doc = window.parent.document
   ,id = 'getElementById'
   ,tag = 'getElementsByTagName'
   
