@@ -111,7 +111,7 @@ body{padding: 10px;}
     <div class="layui-inline">
       <label class="layui-form-label">select分组</label>
       <div class="layui-input-block">
-        <select name="quiz">
+        <select name="quiz" lay-filter="quiz">
           <option value="">请选择问题</option>
           <optgroup label="城市记忆">
             <option value="你工作的第一个城市">你工作的第一个城市</option>
@@ -128,7 +128,7 @@ body{padding: 10px;}
   <div class="layui-form-item">
     <label class="layui-form-label">选择框</label>
     <div class="layui-input-block">
-      <select name="interest" lay-filter="aihao">
+      <select name="interest" lay-filter="interest">
         <option value=""></option>
         <option value="0">写作</option>
         <option value="1" selected>阅读</option>
@@ -142,7 +142,7 @@ body{padding: 10px;}
   <div class="layui-form-item">
     <label class="layui-form-label">搜索选择框</label>
     <div class="layui-input-inline">
-      <select name="interest" lay-filter="aihao" lay-search lay-write>
+      <select name="interest-search" lay-filter="interest-search" lay-search lay-write>
         <option value=""></option>
         <option value="0">写作</option>
         <option value="1">阅读</option>
@@ -236,12 +236,18 @@ layui.use('form', function(){
   
   //事件监听
   form.on('select', function(data){
-    console.log(this);
-  })
-  
-  form.on('select(aihao)', function(data){
-    console.log(data);
+    console.log('select: ', this, data);
   });
+  
+  form.on('select(quiz)', function(data){
+    console.log('select.quiz：', this, data);
+  });
+  
+  form.on('select(interest)', function(data){
+    console.log('select.interest: ', this, data);
+  });
+  
+  
   
   form.on('checkbox', function(data){
     console.log(this.checked, data.elem.checked);

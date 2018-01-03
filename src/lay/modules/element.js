@@ -62,7 +62,7 @@ layui.define('jquery', function(exports){
     ,tabElem = $('.layui-tab[lay-filter='+ filter +']')
     ,titElem = tabElem.children(TITLE)
     ,liElem = titElem.find('>li[lay-id="'+ layid +'"]');
-    call.tabClick(null, null, liElem);
+    call.tabClick.call(liElem[0], null, null, liElem);
     return this;
   };
   
@@ -193,7 +193,7 @@ layui.define('jquery', function(exports){
       }
     }
     
-    //点击选中
+    //点击选中导航菜单
     ,clickThis: function(){
       var othis = $(this), parents = othis.parents(NAV_ELEM)
       ,filter = parents.attr('lay-filter')

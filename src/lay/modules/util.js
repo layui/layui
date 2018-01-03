@@ -143,7 +143,7 @@ layui.define('jquery', function(exports){
     //转化为日期格式字符
     ,toDateString: function(time, format){
       var that = this
-      ,date = new Date(parseInt(time) || new Date())
+      ,date = new Date(time || new Date())
       ,ymd = [
         that.digit(date.getFullYear(), 4)
         ,that.digit(date.getMonth() + 1)
