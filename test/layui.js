@@ -269,9 +269,7 @@ describe('layui', function () {
       expect(layui.onevent()).to.deep.equal(layui);
       expect(layui.onevent([], [], [])).to.deep.equal(layui);
       expect(layui.onevent({}, {}, {})).to.deep.equal(layui);
-
-      var result = layui.onevent('test-' + Date.now(), 'click', function () {});
-      expect(result).to.deep.equal(layui);
+      expect(layui.onevent('test-' + Date.now(), 'click', function () {})).to.not.deep.equal(layui);
     });
 
     it('bind event', function (done) {
@@ -279,8 +277,8 @@ describe('layui', function () {
       var data = {
         name: 'layui'
       };
-      var result = layui.onevent(id, 'click', function (param) {
-        expect(result).to.deep.equal(this).and.equal(layui);
+      layui.onevent(id, 'click', function (param) {
+        expect(this).to.deep.equal(layui);
         expect(param).to.deep.equal(data);
         done();
       });
