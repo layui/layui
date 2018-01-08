@@ -122,7 +122,7 @@ layui.define('jquery', function(exports){
       ,filter = parents.attr('lay-filter');
       
       if(li.hasClass(THIS)){
-        if(li.next()[0]){
+        if(li.next('li')[0]){
           call.tabClick.call(li.next()[0], null, index + 1);
         } else if(li.prev()[0]){
           call.tabClick.call(li.prev()[0], null, index - 1);
