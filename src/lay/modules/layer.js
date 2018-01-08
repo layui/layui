@@ -27,7 +27,7 @@ var isLayui = window.layui && layui.define, $, win, ready = {
     return jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
   }(),
 
-  config: {}, end: {}, minIndex: 0, minLeft: [],
+  config: {}, end: {},beforeClose:{}, minIndex: 0, minLeft: [],
   btn: ['&#x786E;&#x5B9A;', '&#x53D6;&#x6D88;'],
 
   //五种原始层模式
@@ -688,6 +688,7 @@ Class.pt.callback = function(){
   });
 
   config.end && (ready.end[that.index] = config.end);
+  config.beforeClose && (ready.beforeClose[that.index]=config.beforeClose);
 };
 
 //for ie6 恢复select
@@ -932,6 +933,8 @@ layer.close = function(index){
   if(layero.data('isOutAnim')){
     layero.addClass('layer-anim '+ closeAnim);
   }
+  typeof ready.beforeClose[index] === 'function' && ready.beforeClose[index]();
+  delete ready.beforeClose[index];
   
   $('#layui-layer-moves, #layui-layer-shade' + index).remove();
   layer.ie == 6 && ready.reselect();
