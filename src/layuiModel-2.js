@@ -21,12 +21,14 @@ var layConfig = {},
                 elem:"",
                 id:"",
                 url: "",
+                ajaxtype:"",
                 width: jwidth,
                 height: jheight,
                 numpage: 50,
                 limits:"",
                 page: true,
                 where:"",
+                checkName:'',
                 initSort: "",
                 done :""
             };
@@ -63,6 +65,7 @@ layInit.prototype = {
             id: data.id,
             cols: [data.columns],
             url: data.url,
+            method:data.ajaxtype,
             width: data.width,
             height: data.height,
             limit: data.numpage,
@@ -81,8 +84,13 @@ layInit.prototype = {
         if($(RenderJson.elem).attr('lay-filter') == undefined) {
             $(RenderJson.elem).attr('lay-filter',"LAY-table-1");
         }
-
         layConfig['RenderJson'] = RenderJson;
+
+        $(data.columns).each(function(index, el) {
+            if(el.checkbox || el.type == 'checkbox') {
+                data.checkName = el.field;
+            }
+        });
         layui.use(['table', 'form', 'layer', 'jquery'], function() {
             var table = layui.table,
                 form = layui.form,
@@ -97,28 +105,29 @@ layInit.prototype = {
             table.reloadData(selectData);
 
             table.on('checkbox(LAY-table-1)', function(obj){
-                var checkStatus = table.checkStatus(checkId); //test即为基础参数id对应的值
-                if(!layConfig.jChecbox) {
-                    checboxFid = [];
-                }
+                var checkStatus = table.checkStatus(checkId), //test即为基础参数id对应的值
+                    checkName = (data.checkName) ? data.checkName: 'FID'
+                ;
+                if(!layConfig.jChecbox) {checboxFid = [];}
                 if(obj.type == 'all') {
                     if(obj.checked){
                         checboxFid = [];
                         $(checkStatus.data).each(function(index, item) {
-                            checboxFid.push(item.FID)
+                            checboxFid.push(item[checkName]);
                         });
                     } else {
                         checboxFid = [];
                     }
                 } else {
                     if(obj.checked){
-                        checboxFid.push(obj.data.FID);
+                        checboxFid.push(obj.data[checkName]);
                     } else {
                         checboxFid = $.grep(checboxFid, function(value) {
                           return value != obj.data.FID;
                         });
                     }
                 }
+
                 layConfig.jChecbox = checboxFid;
                 // console.log(obj.checked); //当前是否选中状态
                 // console.log(obj.data.FID); //选中行的相关数据
@@ -183,18 +192,16 @@ layWindow =  {
                 anim: 0,
                 resize: true,
                 content: [OConfig.href] //iframe的url，no代表不显示滚动条
-
                 ,
                 success: function success(event, index) {
                     //给予index属性
                     event.attr("lr-index", index);
                 },
-                cancel: function cancel() {
-                    //右上角关闭按钮触发的回调
+                cancel: function cancel() {//右上角关闭按钮触发的回调
                     //回调函数
-                    if (callback) {
-                        callback();
-                    }
+                    // if (callback) {
+                    //     callback();
+                    // }
                 }
             });
             if (OConfig.maxmin == true) {
@@ -322,24 +329,49 @@ layWindow =  {
         }
     },
     //关闭自身
-    layerCloseSelf: function layerCloseSelf(callback) {
-        var index;
+    layerCloseSelf: function layerCloseSelf(callback,time) {
+        var index,isParent;
         layui.use(['layer'], function() {
             //关闭当前iframe,parent找不到就去top找
-            if (parent.layer.getFrameIndex(window.name)) {
-                if (callback) {
-                    callback();
+            index = (parent.layer.getFrameIndex(window.name)) ?  parent.layer.getFrameIndex(window.name): top.layer.getFrameIndex(window.name);
+            isParent = (parent.layer.getFrameIndex(window.name)) ? true :false ;
+            if (callback) { callback(); }
+            if(time) {
+                if(isParent) {
+                    setTimeout(function(){ parent.layWindow.layerClose(index); },time);
+                } else {
+                    setTimeout(function(){ top.layWindow.layerClose(index); },time) ;
                 }
-
-                index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                parent.layWindow.layerClose(index); //再执行关闭
             } else {
-                if (callback) {
-                    callback();
+                if(isParent) {
+                    parent.layWindow.layerClose(index);
+                } else {
+                    top.layWindow.layerClose(index);
                 }
-                index = top.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                top.layWindow.layerClose(index); //再执行关闭
             }
+
+
+            // if (parent.layer.getFrameIndex(window.name)) {
+            //     if (callback) { callback(); }
+
+            //     index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            //     if(time) {
+            //         setTimeout(function(){ parent.layWindow.layerClose(index); },time)
+            //     } else {
+            //         parent.layWindow.layerClose(index); //再执行关闭
+            //     }
+
+            // } else {
+            //     if (callback) { callback(); }
+
+            //     index = top.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+            //     if(time) {
+            //         setTimeout(function(){ top.layWindow.layerClose(index); },time)
+            //     } else {
+            //         top.layWindow.layerClose(index); //再执行关闭
+            //     }
+            // }
         });
     },
     //关闭所有
