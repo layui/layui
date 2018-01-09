@@ -308,7 +308,7 @@ describe('layui', function () {
       layui.event('test-trigger', 'click(*)', true);
     });
 
-    it('trigger multiple', function () {
+    it.skip('trigger multiple', function () {
       var index = 0;
       var id = 'test-trigger-multiple';
       layui.onevent(id, 'nav', function () {
