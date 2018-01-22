@@ -217,7 +217,16 @@ layui.define('layer' , function(exports){
             that.msg('请求上传接口出现异常');
             error(index);
             allDone();
-          }
+          },
+            xhr: function(){
+                var xhr = $.ajaxSettings.xhr();
+                if(process && xhr.upload) {
+                    xhr.upload.addEventListener("progress" , function (event){
+                        process(index,event);
+                    }, false);
+                }
+                return xhr;
+            }
         });
       });
     }
@@ -262,8 +271,14 @@ layui.define('layer' , function(exports){
       typeof options.done === 'function' && options.done(res, index || 0, function(files){
         that.upload(files);
       });
-    }
-    
+    },process = function(index,event){
+            "function" == typeof options.process && options.process(index,event || 0 ,function (files) {
+                that.upload(files)
+            })
+            if("function" != typeof options.process){
+                console.debug("上传进度："+index + "->" + new Number(event.loaded / event.total * 100).toFixed(2) + "%");
+            }
+        }
     //统一网络异常回调
     ,error = function(index){
       if(options.auto){
