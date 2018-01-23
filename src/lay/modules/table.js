@@ -58,7 +58,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   //字符常量
   ,MOD_NAME = 'table', ELEM = '.layui-table', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'layui-disabled', NONE = 'layui-none'
   
-  ,ELEM_VIEW = 'layui-table-view', ELEM_HEADER = '.layui-table-header', ELEM_BODY = '.layui-table-body', ELEM_MAIN = '.layui-table-main', ELEM_FIXED = '.layui-table-fixed', ELEM_FIXL = '.layui-table-fixed-l', ELEM_FIXR = '.layui-table-fixed-r', ELEM_TOOL = '.layui-table-tool', ELEM_PAGE = '.layui-table-page', ELEM_SORT = '.layui-table-sort', ELEM_EDIT = 'layui-table-edit', ELEM_HOVER = 'layui-table-hover'
+  ,ELEM_VIEW = 'layui-table-view', ELEM_HEADER = '.layui-table-header', ELEM_BODY = '.layui-table-body', ELEM_MAIN = '.layui-table-main', ELEM_FIXED = '.layui-table-fixed', ELEM_FIXL = '.layui-table-fixed-l', ELEM_FIXR = '.layui-table-fixed-r', ELEM_TOOL = '.layui-table-tool', ELEM_PAGE = '.layui-table-page', ELEM_SORT = '.layui-table-sort', ELEM_EDIT = 'layui-table-edit', ELEM_HOVER = 'layui-table-hover',ELEM_TR_CLICK = 'layui-table-tr-click',CHECKBOX_CHECK = 'layui-form-checked'
   
   //thead区域模板
   ,TPL_HEADER = function(options){
@@ -976,7 +976,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       ,index = checkbox.parents('tr').eq(0).data('index')
       ,checked = checkbox[0].checked
       ,isAll = checkbox.attr('lay-filter') === 'layTableAllChoose';
-      
       //全选
       if(isAll){
         childs.each(function(i, item){
@@ -1006,20 +1005,65 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       ,index = othis.index();
       that.layBody.find('tr:eq('+ index +')').removeClass(ELEM_HOVER)
     });
-    
-    //单元格编辑
-    that.layBody.on('change', '.'+ELEM_EDIT, function(){
-      var othis = $(this)
-      ,value = this.value
-      ,field = othis.parent().data('field')
-      ,index = othis.parents('tr').eq(0).data('index')
-      ,data = table.cache[that.key][index];
+
+    //行事件
+      that.layMain.on('click', 'tr', function(){
+          var index = $(this).data().index;
+          var checkBoxTable =  $(that.layFixLeft.find("table")[1]);
+          var div = $(checkBoxTable.find("tr")[index]).find("td")[0];
+          var checkBox = $(div).find("input");
+          var divClass = $(div).find("div :eq(1)");
+          if($(checkBox[0]).prop("checked")){
+              removeBox(div);
+              $(this).removeClass('active');
+          }else{
+              removeBox(null,index);
+              $(divClass).addClass("layui-form-checked");
+              $(checkBox[0]).prop("checked",true);
+              table.cache[that.key][index][table.config.checkName] = true;
+              $(this).addClass('active');
+          }
+      });
+
+      function removeBox(td,index) {
+         if (td !== undefined && td !==null){
+             var divClass = $(td).find("div :eq(1)");
+             var checkBox = $(td).find("input");
+             $(divClass).removeClass("layui-form-checked");
+             $(checkBox[0]).prop("checked",false);
+         }
+          var cache = table.cache[that.key];
+          var checkBoxTable =  $(that.layFixLeft.find("table")[1]);
+          for (var i=0;i<cache.length;i++){
+              var div = $(checkBoxTable.find("tr")[i]).find("td")[0];
+              divClass = $(div).find("div :eq(1)");
+              $(divClass).removeClass("layui-form-checked");
+              checkBox = $(div).find("input");
+              $(checkBox[0]).prop("checked",false);
+              if (cache[i][table.config.indexName] != index){
+                  cache[i][table.config.checkName] = false ;
+              }
+          }
+          var tr =  $(that.layMain).find("tr");
+         tr.each(function(i, item){
+              $(item).removeClass('active');
+          });
+      }
+
+
+      //单元格编辑
+      that.layBody.on('change', '.'+ELEM_EDIT, function(){
+          var othis = $(this)
+              ,value = this.value
+              ,field = othis.parent().data('field')
+              ,index = othis.parents('tr').eq(0).data('index')
+              ,data = table.cache[that.key][index];
       
-      data[field] = value; //更新缓存中的值
+          data[field] = value; //更新缓存中的值
       
-      layui.event.call(this, MOD_NAME, 'edit('+ filter +')', {
-        value: value
-        ,data: data
+          layui.event.call(this, MOD_NAME, 'edit('+ filter +')', {
+              value: value
+              ,data: data
         ,field: field
       });
     }).on('blur', '.'+ELEM_EDIT, function(){

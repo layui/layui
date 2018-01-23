@@ -897,6 +897,7 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .layui-table tbody tr:hover,
 .layui-table-hover,
 .layui-table-click{background-color: #f2f2f2;}
+.active{	background-color: #46ade4;}
 
 .layui-table th,
 .layui-table td,
