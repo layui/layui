@@ -411,7 +411,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       var params = {};
       params[request.pageName] = curr;
       params[request.limitName] = options.limit;
-      
+      layer.load(2);
       $.ajax({
         type: options.method || 'get'
         ,url: options.url
@@ -433,6 +433,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           that.renderForm();
           loadIndex && layer.close(loadIndex);
         }
+        ,complete:function () {
+              layer.closeAll('loading');
+         }
       });
     } else if(options.data && options.data.constructor === Array){ //已知数据
       var res = {}
