@@ -600,7 +600,7 @@ layui.define('layer', function(exports){
 
           var verifyRef = asyncVerify[verifyKey];
 
-          if(!verifyRef) return function() { $.Deferred().resolve(true).promise(); };
+          if(!verifyRef) return function() { return $.Deferred().resolve(null).promise(); };
 
           //设置异步校验过程
 
