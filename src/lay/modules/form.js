@@ -46,7 +46,8 @@ layui.define('layer', function(exports){
           /(^\d{15}$)|(^\d{17}(x|X|\d)$)/
           ,'请输入正确的身份证号'
         ]
-      }
+      },
+      asyncVerify: { }
     };
   };
   
@@ -63,7 +64,14 @@ layui.define('layer', function(exports){
     $.extend(true, that.config.verify, settings);
     return that;
   };
-  
+
+  //异步验证规则设定
+  Form.prototype.asyncVerify = function(settings) {
+    var that = this;
+    $.extend(true, that.config.asyncVerify, settings);
+    return that;
+  };
+
   //表单事件监听
   Form.prototype.on = function(events, callback){
     return layui.onevent.call(this, MOD_NAME, events, callback);
@@ -403,87 +411,331 @@ layui.define('layer', function(exports){
     });
     return that;
   };
-  
+
   //表单提交校验
-  var submit = function(){
-    var button = $(this), verify = form.config.verify, stop = null
-    ,DANGER = 'layui-form-danger', field = {} ,elem = button.parents(ELEM)
-    
-    ,verifyElem = elem.find('*[lay-verify]') //获取需要校验的元素
-    ,formElem = button.parents('form')[0] //获取当前所在的form元素，如果存在的话
-    ,fieldElem = elem.find('input,select,textarea') //获取所有表单域
-    ,filter = button.attr('lay-filter'); //获取过滤器
-   
-    
-    //开始校验
-    layui.each(verifyElem, function(_, item){
-      var othis = $(this)
-      ,vers = othis.attr('lay-verify').split('|')
-      ,verType = othis.attr('lay-verType') //提示方式
-      ,value = othis.val();
-      
-      othis.removeClass(DANGER);
-      layui.each(vers, function(_, thisVer){
-        var isTrue //是否命中校验
-        ,errorText = '' //错误提示文本
-        ,isFn = typeof verify[thisVer] === 'function';
-        
-        //匹配验证规则
-        if(verify[thisVer]){
-          var isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
-          errorText = errorText || verify[thisVer][1];
-          
-          //如果是必填项或者非空命中校验，则阻止提交，弹出提示
-          if(isTrue){
-            //提示层风格
-            if(verType === 'tips'){
-              layer.tips(errorText, function(){
-                if(typeof othis.attr('lay-ignore') !== 'string'){
-                  if(item.tagName.toLowerCase() === 'select' || /^checkbox|radio$/.test(item.type)){
-                    return othis.next();
-                  }
-                }
-                return othis;
-              }(), {tips: 1});
-            } else if(verType === 'alert') {
-              layer.alert(errorText, {title: '提示', shadeClose: true});
-            } else {
-              layer.msg(errorText, {icon: 5, shift: 6});
-            }
-            if(!device.android && !device.ios) item.focus(); //非移动设备自动定位焦点
-            othis.addClass(DANGER);
-            return stop = true;
-          }
-        }
-      });
-      if(stop) return stop;
-    });
-    
-    if(stop) return false;
-    
-    var nameIndex = {}; //数组 name 索引
-    layui.each(fieldElem, function(_, item){
-      item.name = (item.name || '').replace(/^\s*|\s*&/, '');
-      
-      if(!item.name) return;
-      
-      //用于支持数组 name
-      if(/^.*\[\]$/.test(item.name)){
-        var key = item.name.match(/^(.*)\[\]$/g)[0];
-        nameIndex[key] = nameIndex[key] | 0;
-        item.name = item.name.replace(/^(.*)\[\]$/, '$1['+ (nameIndex[key]++) +']');
+  var submit = function() {
+
+    var that = this;
+
+    //提交按钮
+
+    var button = $(this),
+
+        //同步校验规则
+
+        verify = form.config.verify,
+
+        //异步校验规则
+
+        asyncVerify = form.config.asyncVerify,
+
+        DANGER = 'layui-form-danger',
+
+        elem = button.parents(ELEM);
+
+    //是否需要进行异步校验
+
+    var needAsyncVerify = !$.isEmptyObject(asyncVerify);
+
+    //获取需要校验的元素
+
+    var verifyElem = elem.find('*[lay-verify]');
+
+    //获取需要异步校验的元素
+
+    var asyncVerifyElem = elem.find('*[lay-async-verify]');
+
+    //获取当前所在的form元素，如果存在的话
+
+    var formElem = button.parents('form')[0];
+
+    //获取所有表单域
+
+    var fieldElem = elem.find('input,select,textarea');
+
+    //获取过滤器
+
+    var filter = button.attr('lay-filter');
+
+    //校验成功
+
+    var onVerifyEnd = function() {
+
+      // 收集数据 提供给回调函数
+
+      var field = {};
+
+      for(var i = 0; i < fieldElem.length; ++i) {
+
+        var item = fieldElem[i];
+
+        if(!item.name) continue;
+
+        if(/^checkbox|radio$/.test(item.type) && !item.checked) continue;
+
+        field[item.name] = item.value;
       }
-      
-      if(/^checkbox|radio$/.test(item.type) && !item.checked) return;      
-      field[item.name] = item.value;
-    });
- 
-    //获取字段
-    return layui.event.call(this, MOD_NAME, 'submit('+ filter +')', {
-      elem: this
-      ,form: formElem
-      ,field: field
-    });
+
+      //获取字段
+
+      return layui.event.call(that, MOD_NAME, 'submit(' + filter + ')', { elem: that, form: formElem, field: field });
+    };
+
+    //校验失败
+
+    var onVerifyFailed = function(context) {
+
+      //移除校验失败前的全部元素的标记样式
+
+      var $obj = context.$obj, tip = context.tip;
+
+      for(var i = 0; i < verifyElem.length; ++i) {
+
+        var e = verifyElem[i], $e = $(e);
+
+        if($e === $obj) break;
+
+        $e.removeClass(DANGER);
+      }
+
+      //弹窗提示错误内容
+
+      layer.msg(tip, { icon: 5, shift: 6 });
+
+      //非移动设备自动定位焦点
+
+      if(!device.android && !device.ios) $obj.focus();
+
+      //校验失败元素添加标记样式
+
+      $obj.addClass(DANGER);
+    };
+
+    var mapFn = function(elements, fn) {
+
+      var ret = [];
+
+      for(var i = 0; i < elements.length; ++i) ret.push(fn(elements[i]));
+
+      return ret;
+    };
+
+    //同步校验
+
+    var applySyncVerify = function() {
+
+      var verifyContextLazyList = mapFn(verifyElem, function(ele) {
+
+        var e = $(ele), value = e.val();
+
+        var verifyFnArray = mapFn(e.attr('lay-verify').split('|'), function(verifyKey) {
+
+            return function() {
+
+                var verifyRef = verify[verifyKey];
+
+                if(!verifyRef) return;
+
+                var isFn = typeof verifyRef === 'function';
+
+                // 校验规则是一个函数
+
+                if(isFn) return verifyRef(value, ele);
+
+                // 校验规则是一个正则表达式
+
+                else if(!verifyRef[0].test(value)) return verifyRef[1];
+            };
+        });
+
+        var applyVerifyFnArray = function(i) {
+
+            if(i === undefined) i = 0;
+
+            if(i >= verifyFnArray.length) return null;
+
+            var tip = verifyFnArray[i]();
+
+            return tip ? tip : applyVerifyFnArray(i + 1);
+        };
+
+        return { $obj: e, itemVerifyFn: applyVerifyFnArray };
+      });
+
+      var findFirstIllegalContext = function(i) {
+
+        if(i === undefined) i = 0;
+
+        if(i >= verifyContextLazyList.length) return null;
+
+        var verifyContextRef = verifyContextLazyList[i];
+
+        var verifyTip = verifyContextRef.itemVerifyFn();
+
+        return verifyTip ? { $obj: verifyContextRef.$obj, tip: verifyTip } : findFirstIllegalContext(i + 1);
+      };
+
+      var illegalContext = findFirstIllegalContext();
+
+      //同步校验完毕 校验成功
+
+      if(!illegalContext) return true;
+
+      //同步校验完毕 校验失败
+
+      onVerifyFailed(illegalContext);
+
+      return false;
+    };
+
+    // 异步校验
+
+    var applyAsyncVerify = function() {
+
+      var asyncVerifyLazyList = mapFn(asyncVerifyElem, function(ele) {
+
+        var e = $(ele), value = e.val();
+
+        var verifyFnArray = mapFn(e.attr('lay-async-verify').split('|'), function(verifyKey) {
+
+          var verifyRef = asyncVerify[verifyKey];
+
+          if(!verifyRef) return function() { return $.Deferred().resolve(null).promise(); };
+
+          //设置异步校验过程
+
+          //处理异步校验发送的数据
+
+          var data = {};
+
+          //data属性是一个函数
+
+          if(typeof verifyRef.data === 'function') data = verifyRef.data($, value, ele);
+
+          //不存在data属性
+
+          else if (!verifyRef.data) data = { value: value };
+
+          //处理发送方式
+
+          var send = function() { return $.Deferred().resolve(data).promise(); };
+
+          if(typeof verifyRef.send === 'string') {
+
+            //send属性是一个字符串 那么send属性等价于url
+
+            send = function() { return $.post(verifyRef.send, data); };
+
+          } else if(typeof verifyRef.send === 'function') {
+
+            //send属性是一个函数 那么期望send方法返回一个promise
+
+            send = function() { return verifyRef.send($, data, ele); };
+          }
+
+          //处理接收方式
+
+          var receive = function($, data, ele) { return data; };
+
+          //存在自定义的接收方式
+
+          if(typeof verifyRef.receive === 'function') receive = verifyRef.receive;
+
+          //处理浏览器端校验方法
+
+          var accept = function($, data, ele) { return data.succ ? null : '该字段未通过校验'; };
+
+          //存在自定义的校验方式
+
+          if(typeof verifyRef.accept === 'function') accept = verifyRef.accept;
+
+          //整合形成返回promise的校验过程
+
+          return function() {
+
+            return send().then(function(ajaxData) { return accept($, receive($, ajaxData, ele), ele); });
+          };
+        });
+
+        return function(callback) {
+
+          var activatedVerifyFnArray = mapFn(verifyFnArray, function(fn) { return fn(); });
+
+          return $.when.apply(null, activatedVerifyFnArray).then(function() {
+
+            var tip = null;
+
+            for(var i = 0; i < arguments.length; ++i) {
+
+              if(!arguments[i]) continue;
+
+              tip = arguments[i];
+
+              break;
+            }
+
+            //异步校验失败
+
+            if(tip) {
+
+              onVerifyFailed({ $obj: e, tip: tip });
+
+              return;
+            }
+
+            //异步校验成功 对下一个元素进行校验
+
+            if(callback) {
+
+              callback();
+
+              return;
+            }
+
+            //完成全部异步校验 提交表单
+
+            onVerifyEnd();
+
+          }, function() {
+
+            layer.msg('网络连接异常，请稍后重试', { icon: 5, shift: 6 });
+          });
+        };
+      });
+
+      var composeAsyncVerify = function(i) {
+
+        if(i === undefined) i = 0;
+
+        if(i >= asyncVerifyLazyList.length - 1) return function() { asyncVerifyLazyList[i](null); };
+
+        return function() { asyncVerifyLazyList[i](composeAsyncVerify(i + 1)); };
+      };
+
+      var asyncVerifyChain = composeAsyncVerify();
+
+      asyncVerifyChain();
+    };
+
+    //执行同步校验结果
+
+    var syncVerifyResult = applySyncVerify();
+
+    //同步校验失败 阻止提交操作
+
+    if(!syncVerifyResult) return false;
+
+    //同步校验成功 且不需要进行异步校验 执行表单提交操作
+
+    if(syncVerifyResult && !needAsyncVerify) return onVerifyEnd();
+
+    //执行异步校验
+
+    applyAsyncVerify();
+
+    //阻止表单提交 提交表单的操作由回调函数触发
+
+    return false;
   };
 
   //自动完成渲染
