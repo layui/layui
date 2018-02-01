@@ -218,7 +218,7 @@ gulp.task('laydate', function(){
 
 //打包 LayIM 版本
 gulp.task('layim', function(){
-  var dir = './release/zip/layui.layim-v'+ inds.layim;
+  var dir = './release/zip/layim-v'+ inds.layim;
   gulp.src('./release/doc-layim/**/*')
   .pipe(gulp.dest(dir))
   

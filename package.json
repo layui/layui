@@ -1,11 +1,11 @@
 {
   "name": "layui-src",
   "realname": "layui",
-  "version": "2.2.45",
+  "version": "2.2.5",
   "independents": {
-    "layim": "3.7.35"
+    "layim": "3.7.6"
   },
-  "description": "经典模块化前端 UI 框架",
+  "description": "Classic modular front-end component library",
   "main": "layui.js",
   "license": "MIT",
   "scripts": {
@@ -18,8 +18,10 @@
     "type": "git",
     "url": "git+ssh://git@github.com/sentsin/layui.git"
   },
-  "author": "贤心",
-  "homepage": "http://www.layui.com",
+  "author": [
+    "sentsin <xu@sentsin.com>"
+  ],
+  "homepage": "https://www.layui.com",
   "devDependencies": {
     "chai": "^4.1.1",
     "del": "^2.2.2",
@@ -55,6 +57,9 @@
   "dependencies": {},
   "keywords": [
     "layui",
-    "ui"
+    "ui",
+    "JavaScript Framework",
+    "toolkit",
+    "front-end component library"
   ]
 }

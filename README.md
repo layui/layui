@@ -4,7 +4,7 @@
   </a>
 </p>
 <p align=center>
-  经典模块化前端UI框架
+  Classic modular front-end UI framework
 </p>
 
 <p align="center">

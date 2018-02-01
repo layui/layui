@@ -27,5 +27,6 @@ dir.txt
 
 release/
 build/
+rc/
 
 coverage/

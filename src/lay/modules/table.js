@@ -192,6 +192,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     limit: 10 //每页显示的数量
     ,loading: true //请求数据时，是否显示loading
     ,cellMinWidth: 60 //所有单元格默认最小宽度
+    ,text: {
+      none: '无数据'
+    }
   };
 
   //表格渲染
@@ -417,10 +420,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         ,success: function(res){
           if(res[response.statusName] != response.statusCode){
             that.renderForm();
-            return that.layMain.html('<div class="'+ NONE +'">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');
+            that.layMain.html('<div class="'+ NONE +'">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');
+          } else {
+            that.renderData(res, curr, res[response.countName]), sort();
+            options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
           }
-          that.renderData(res, curr, res[response.countName]), sort();
-          options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
           loadIndex && layer.close(loadIndex);
           typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
         }
@@ -548,8 +552,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
               if(item3.toolbar){
                 return laytpl($(item3.toolbar).html()||'').render(tplData);
               }
-              
-              return item3.templet ? laytpl($(item3.templet).html() || String(content)).render(tplData) : content;
+              return item3.templet ? function(){
+                return typeof item3.templet === 'function' 
+                  ? item3.templet(tplData)
+                : laytpl($(item3.templet).html() || String(content)).render(tplData) 
+              }() : content;
             }()
           ,'</div></td>'].join('');
           
@@ -583,6 +590,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     that.key = options.id || options.index;
     table.cache[that.key] = data; //记录数据
     
+    //显示隐藏分页栏
+    that.layPage[data.length === 0 && curr == 1 ? 'addClass' : 'removeClass'](HIDE);
+    
     //排序
     if(sort){
       return render();
@@ -593,7 +603,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       that.layFixed.remove();
       that.layMain.find('tbody').html('');
       that.layMain.find('.'+ NONE).remove();
-      return that.layMain.append('<div class="'+ NONE +'">无数据</div>');
+      return that.layMain.append('<div class="'+ NONE +'">'+ options.text.none +'</div>');
     }
     
     render();
