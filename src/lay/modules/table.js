@@ -411,11 +411,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       var params = {};
       params[request.pageName] = curr;
       params[request.limitName] = options.limit;
-      
+	  var dataObj = $.extend(params, options.where);
+      options.contentType = options.contentType || 'application/x-www-form-urlencoded '
       $.ajax({
         type: options.method || 'get'
         ,url: options.url
-        ,data: $.extend(params, options.where)
+		,contentType: options.contentType
+        ,data: options.contentType ==='application/json'?JSON.stringify(dataObj):dataObj
         ,dataType: 'json'
         ,success: function(res){
           if(res[response.statusName] != response.statusCode){
