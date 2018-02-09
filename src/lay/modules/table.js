@@ -424,7 +424,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
             that.renderForm();
             that.layMain.html('<div class="'+ NONE +'">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');
           } else {
-            that.renderData(res, curr, res[response.countName]), sort();
+            that.renderData(res, curr, that.treeToList(res,response.countName)), sort();
             options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
           }
           loadIndex && layer.close(loadIndex);
@@ -480,15 +480,24 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         callback(i, item);
       });
     };
-    
+
     eachArrs();
   };
-  
+
+    // 循环获取路径下对象
+  Class.prototype.treeToList = function (data, path) {
+      var propList = path.split('.');
+      for (var i = 0; i < propList.length; i++) {
+          data = data[propList[i]];
+      }
+      return data;
+  }
+
   //数据渲染
   Class.prototype.renderData = function(res, curr, count, sort){
     var that = this
     ,options = that.config
-    ,data = res[options.response.dataName] || []
+    ,data = that.treeToList(res, options.response.dataName) || []
     ,trs = []
     ,trs_fixed = []
     ,trs_fixed_r = []
