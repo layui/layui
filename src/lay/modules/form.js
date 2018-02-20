@@ -13,7 +13,6 @@ layui.define('layer', function(exports){
   ,layer = layui.layer
   ,hint = layui.hint()
   ,device = layui.device()
-  //,index = 1 //form下标
   ,MOD_NAME = 'form', ELEM = '.layui-form', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'layui-disabled'
   
   ,Form = function(){
