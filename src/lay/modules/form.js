@@ -13,7 +13,7 @@ layui.define('layer', function(exports){
   ,layer = layui.layer
   ,hint = layui.hint()
   ,device = layui.device()
-  
+  //,index = 1 //form下标
   ,MOD_NAME = 'form', ELEM = '.layui-form', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'layui-disabled'
   
   ,Form = function(){
@@ -68,13 +68,14 @@ layui.define('layer', function(exports){
   Form.prototype.on = function(events, callback){
     return layui.onevent.call(this, MOD_NAME, events, callback);
   };
-  
+
+
   //表单控件渲染
   Form.prototype.render = function(type, filter){
-    var that = this
-    ,elemForm = $(ELEM + function(){
-      return filter ? ('[lay-filter="' + filter +'"]') : '';
-    }())
+    var that = this,thiskey = ELEM + function(){
+        return filter ? ('[lay-filter="' + filter +'"]') : '';
+    }()
+    ,elemForm = $(thiskey)
     ,items = {
       
       //下拉选择框
@@ -240,7 +241,7 @@ layui.define('layer', function(exports){
           
           //关闭下拉
           $(document).off('click', hide).on('click', hide);
-        }
+        };
         
         selects.each(function(index, select){
           var othis = $(this)
@@ -314,7 +315,7 @@ layui.define('layer', function(exports){
               ,othis: reElem
             });
           });
-        }
+        };
         
         checks.each(function(index, check){
           var othis = $(this), skin = othis.attr('lay-skin')
@@ -401,10 +402,154 @@ layui.define('layer', function(exports){
     ) : layui.each(items, function(index, item){
       item();
     });
+
+    /*var formDatas = dom.data("formDatas");
+
+    if(!formDatas){
+       formDatas = {};
+    }
+
+    //缓存被操作对象，共外部调用方法
+    if(elemForm.length > 1){
+        elemForm.each(function(){
+            var $this = $(this);
+            if(ELEM === thiskey){
+                formDatas[thiskey + index] = $this;
+            }
+            else{
+                formDatas[thiskey] = $this;
+            }
+            $this.attr("index",index);
+            index++;
+
+            dom.data("formDatas",formDatas);
+        })
+    }else{
+        var $this = $(this);
+        if(ELEM === thiskey){
+            formDatas[thiskey + index] = $this;
+        }
+        else{
+            formDatas[thiskey] = $this;
+        }
+        $this.attr("index",index);
+        index++;
+
+        dom.data("formDatas",formDatas);
+    }*/
+
     return that;
   };
-  
-  //表单提交校验
+
+  // 开始验证
+  Form.prototype.doVerify = function (object) {
+
+      if(!object){
+          throw new Error( "Object can not be empty" );
+      }
+
+      var elem = null;
+      if($.type(object) === "string"){
+          var thiskey = ELEM + function(){
+              return object ? ('[lay-filter="' + object +'"]') : '';
+          }();
+          elem = $(thiskey);
+      }else if(object instanceof $){
+          elem = object;
+      }else {
+          elem = $(object);
+      }
+
+      var  verify = form.config.verify, stop = null
+      ,DANGER = 'layui-form-danger',verifyElem = elem.find('*[lay-verify]'); //获取需要校验的元素
+
+      //开始校验
+      layui.each(verifyElem, function(_, item){
+          var othis = $(this)
+              ,vers = othis.attr('lay-verify').split('|')
+              ,verType = othis.attr('lay-verType') //提示方式
+              ,value = othis.val();
+
+          othis.removeClass(DANGER);
+          layui.each(vers, function(_, thisVer){
+              var isTrue //是否命中校验
+                  ,errorText = '' //错误提示文本
+                  ,isFn = typeof verify[thisVer] === 'function';
+
+              //匹配验证规则
+              if(verify[thisVer]){
+                  var isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
+                  errorText = errorText || verify[thisVer][1];
+
+                  //如果是必填项或者非空命中校验，则阻止提交，弹出提示
+                  if(isTrue){
+                      //提示层风格
+                      if(verType === 'tips'){
+                          layer.tips(errorText, function(){
+                              if(typeof othis.attr('lay-ignore') !== 'string'){
+                                  if(item.tagName.toLowerCase() === 'select' || /^checkbox|radio$/.test(item.type)){
+                                      return othis.next();
+                                  }
+                              }
+                              return othis;
+                          }(), {tips: 1});
+                      } else if(verType === 'alert') {
+                          layer.alert(errorText, {title: '提示', shadeClose: true});
+                      } else {
+                          layer.msg(errorText, {icon: 5, shift: 6});
+                      }
+                      if(!device.android && !device.ios) item.focus(); //非移动设备自动定位焦点
+                      othis.addClass(DANGER);
+                      return stop = true;
+                  }
+              }
+          });
+          if(stop) return stop;
+      });
+      return !stop;
+  };
+
+  Form.prototype.getDatas = function (object) {
+
+      if(!object){
+          throw new Error( "Object can not be empty" );
+      }
+
+      var elem = null;
+      if($.type(object) === "string"){
+          var thiskey = ELEM + function(){
+              return object ? ('[lay-filter="' + object +'"]') : '';
+          }();
+          elem = $(thiskey);
+      }else if(object instanceof $){
+          elem = object;
+      }else {
+          elem = $(object);
+      }
+
+      var  field = {}
+          ,fieldElem = elem.find('input,select,textarea'); //获取所有表单域
+      var nameIndex = {}; //数组 name 索引
+      layui.each(fieldElem, function(_, item){
+          item.name = (item.name || '').replace(/^\s*|\s*&/, '');
+
+          if(!item.name) return;
+
+          //用于支持数组 name
+          if(/^.*\[\]$/.test(item.name)){
+              var key = item.name.match(/^(.*)\[\]$/g)[0];
+              nameIndex[key] = nameIndex[key] | 0;
+              item.name = item.name.replace(/^(.*)\[\]$/, '$1['+ (nameIndex[key]++) +']');
+          }
+
+          if(/^checkbox|radio$/.test(item.type) && !item.checked) return;
+          field[item.name] = item.value;
+      });
+      return field;
+  };
+
+
+    //表单提交校验
   var submit = function(){
     var button = $(this), verify = form.config.verify, stop = null
     ,DANGER = 'layui-form-danger', field = {} ,elem = button.parents(ELEM)
@@ -503,7 +648,9 @@ layui.define('layer', function(exports){
   //表单提交事件
   dom.on('submit', ELEM, submit)
   .on('click', '*[lay-submit]', submit);
-  
+
+
+
   exports(MOD_NAME, form);
 });
 

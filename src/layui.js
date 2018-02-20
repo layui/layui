@@ -376,7 +376,7 @@
   //本地会话性存储
   Layui.prototype.sessionData = function(table, settings){
     return this.data(table, settings, sessionStorage);
-  }
+  };
 
   //设备信息
   Layui.prototype.device = function(key){

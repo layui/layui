@@ -266,9 +266,29 @@ layui.use('form', function(){
     console.log(data)
     return false;
   });
+
+
   
 });
 
+function getDatas() {
+    layui.use(['layer', 'form'], function(){
+        var $ = layui.$;
+        var form = layui.form;
+      var datas = form.getDatas($("form")[0]);
+      console.log(datas);
+    });
+}
+
+
+function doVerify() {
+    layui.use(['layer', 'form'], function(){
+        var $ = layui.$;
+        var form = layui.form;
+        var flag = form.doVerify($($("form")[0]));
+        console.log(flag);
+    });
+}
 </script>
 
 
@@ -284,6 +304,8 @@ layui.use('form', function(){
     <option value="你最喜欢的老师">你最喜欢的老师</option>
   </select>
   <button>Go</button>
+  <input type="button" onclick="doVerify()" value="验证表单">
+  <input type="button" onclick="getDatas()" value="获得数据">
 </form>
 <script>
 layui.use('jquery', function(){
