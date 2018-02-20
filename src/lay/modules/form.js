@@ -403,41 +403,6 @@ layui.define('layer', function(exports){
       item();
     });
 
-    /*var formDatas = dom.data("formDatas");
-
-    if(!formDatas){
-       formDatas = {};
-    }
-
-    //缓存被操作对象，共外部调用方法
-    if(elemForm.length > 1){
-        elemForm.each(function(){
-            var $this = $(this);
-            if(ELEM === thiskey){
-                formDatas[thiskey + index] = $this;
-            }
-            else{
-                formDatas[thiskey] = $this;
-            }
-            $this.attr("index",index);
-            index++;
-
-            dom.data("formDatas",formDatas);
-        })
-    }else{
-        var $this = $(this);
-        if(ELEM === thiskey){
-            formDatas[thiskey + index] = $this;
-        }
-        else{
-            formDatas[thiskey] = $this;
-        }
-        $this.attr("index",index);
-        index++;
-
-        dom.data("formDatas",formDatas);
-    }*/
-
     return that;
   };
 
