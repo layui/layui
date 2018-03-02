@@ -8,11 +8,13 @@
 var syncCheckNode=function(){
   var e = event || window.event; 
   var checkboxlist = e.target.parentNode.parentNode.getElementsByTagName('input');
-  for(var i = 1;i<checkboxlist.length;i++){
-    checkboxlist[i].checked = checkboxlist[0].checked;
+  for(var i = 0;i<checkboxlist.length;i++){
+    checkboxlist[i].checked = e.target.checked;
     if(checkboxlist[i].disabled){
       checkboxlist[i].checked = false;
     }
+    checkboxlist[i].nextSibling.innerHTML = '<label for="' + checkboxlist[i].id + '" class="layui-icon layui-tree-branch">'
+    + (checkboxlist[i].checked? '&#xe627;':'&#xe626;') + '</label>';
   }
 }
  
@@ -65,8 +67,13 @@ layui.define('jquery', function(exports){
         ,function(){
           return options.check ? (
             '<i class="layui-tree-check">'+ (
-              options.check === 'checkbox'&&item.checkbox  ? '<input type="checkbox" '+(item.disable? 'disabled':'')+' '+(item.value ? 'value="'+item.value+'"':'')+(item.checkboxName? 'name="'+item.checkboxName+'"':'')+' onchange="syncCheckNode()"/>' : (
-                options.check === 'radio' ? icon.radio[0] : ''
+              options.check === 'checkbox'&&item.checkbox? '<input type="checkbox" id="' + item.id + '" style="display:none;" '
+              +(item.disable? 'disabled':'')
+              +(item.value? 'value="' + item.value + '"':'')
+              +(item.checkboxName? 'name="' + item.checkboxName + '"':'')
+              +' onchange="syncCheckNode()"/>'
+              +'<label for="' + item.id + '" class="layui-icon layui-tree-branch">&#xe626;</label>' 
+              : (options.check === 'radio' ? icon.radio[0] : ''
               )
             ) +'</i>'
           ) : '';

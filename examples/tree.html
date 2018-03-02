@@ -13,9 +13,9 @@ body{padding: 50px 100px;}
 </head>
 <body>
 
-<!--<ul id="demo"></ul>
+<ul id="demo"></ul>                              
 
-<ul id="demo1" style="margin-top: 50px;"></ul>-->
+<ul id="demo1" style="margin-top: 50px;"></ul>
 
 <ul id="checkboxTree" style="margin-top: 50px;"></ul>
 
@@ -144,7 +144,7 @@ layui.use('tree', function(){
     //,target: '_blank' //是否新选项卡打开（比如节点返回href才有效）
     ,drag: true
     ,click: function(item){ //点击节点回调
-      console.log(item)
+      console.log(item);
     }
     ,nodes: [ //节点
       {
@@ -211,7 +211,7 @@ layui.use('tree', function(){
 # checkbox支持
 * 1、在核心方法中开启：check: 'checkbox'
 * 2、在需要被选中的节点中添加：checkbox: true
-* 3、checkbox属性如下：value,disable,checkboxName
+* 3、node中可以设置如下属性：value,disable,checkboxName
 </pre>
 
 </body>
