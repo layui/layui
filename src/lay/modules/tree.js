@@ -5,7 +5,16 @@
  @License：MIT
     
  */
- 
+var syncCheckNode=function(){
+  var e = event || window.event; 
+  var checkboxlist = e.target.parentNode.parentNode.getElementsByTagName('input');
+  for(var i = 1;i<checkboxlist.length;i++){
+    checkboxlist[i].checked = checkboxlist[0].checked;
+    if(checkboxlist[i].disabled){
+      checkboxlist[i].checked = false;
+    }
+  }
+}
  
 layui.define('jquery', function(exports){
   "use strict";
@@ -52,12 +61,11 @@ layui.define('jquery', function(exports){
             item.spread ? icon.arrow[1] : icon.arrow[0]
           ) +'</i>' : '';
         }()
-        
-        //复选框/单选框
+
         ,function(){
           return options.check ? (
-            '<i class="layui-icon layui-tree-check">'+ (
-              options.check === 'checkbox' ? icon.checkbox[0] : (
+            '<i class="layui-tree-check">'+ (
+              options.check === 'checkbox'&&item.checkbox  ? '<input type="checkbox" '+(item.disable? 'disabled':'')+' '+(item.value ? 'value="'+item.value+'"':'')+(item.checkboxName? 'name="'+item.checkboxName+'"':'')+' onchange="syncCheckNode()"/>' : (
                 options.check === 'radio' ? icon.radio[0] : ''
               )
             ) +'</i>'

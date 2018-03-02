@@ -13,9 +13,11 @@ body{padding: 50px 100px;}
 </head>
 <body>
 
-<ul id="demo"></ul>
+<!--<ul id="demo"></ul>
 
-<ul id="demo1" style="margin-top: 50px;"></ul>
+<ul id="demo1" style="margin-top: 50px;"></ul>-->
+
+<ul id="checkboxTree" style="margin-top: 50px;"></ul>
 
 <script src="../src/layui.js"></script>
 <script>
@@ -134,6 +136,68 @@ layui.use('tree', function(){
     ,nodes: createTree()
   });
   
+
+  var tree = layui.tree({
+    elem: '#checkboxTree' //指定元素
+    ,check: 'checkbox' //勾选风格
+    ,skin: 'as' //设定皮肤
+    //,target: '_blank' //是否新选项卡打开（比如节点返回href才有效）
+    ,drag: true
+    ,click: function(item){ //点击节点回调
+      console.log(item)
+    }
+    ,nodes: [ //节点
+      {
+        name: '我的邮箱'
+        ,id: 2
+        ,spread: true
+        ,checkbox: true
+        ,children: [
+          {
+            name: 'QQ邮箱'
+            ,id: 21
+            ,spread: true
+            ,checkbox: true
+            ,children: [
+              {
+                name: '收件箱'
+                ,id: 211
+                ,checkbox: true
+                ,children: [
+                  {
+                    name: '所有未读'
+                    ,id: 2111
+                    ,value :'所有未读'
+                    ,checkbox: true
+                    ,checkboxName: 'inbox'
+                  }, {
+                    name: '置顶邮件'
+                    ,id: 2112
+                    ,value :'置顶邮件'
+                    ,checkbox: true
+                    ,checkboxName: 'inbox'
+                  }, {
+                    name: '标签邮件'
+                    ,id: 2113
+                    ,value :'标签邮件'
+                    ,checkbox: true
+                    ,disable: true
+                    ,checkboxName: 'inbox'
+                  }
+                ]
+              }, {
+                name: '已发出的邮件'
+                ,id: 212
+              }, {
+                name: '垃圾邮件'
+                ,id: 213
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  });
 });
 </script>
 
@@ -141,6 +205,13 @@ layui.use('tree', function(){
 # layui.tree-v2 备忘
 * check参数 - checkbox、radio的支持
 * 拖拽的支持
+</pre>
+
+<pre class="layui-code">
+# checkbox支持
+* 1、在核心方法中开启：check: 'checkbox'
+* 2、在需要被选中的节点中添加：checkbox: true
+* 3、checkbox属性如下：value,disable,checkboxName
 </pre>
 
 </body>
