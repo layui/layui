@@ -467,6 +467,8 @@ layui.define('layer', function(exports){
       
       if(!item.name) return;
       
+      if(/^checkbox|radio$/.test(item.type) && !item.checked) return;
+     
       //用于支持数组 name
       if(/^.*\[\]$/.test(item.name)){
         var key = item.name.match(/^(.*)\[\]$/g)[0];
@@ -474,7 +476,6 @@ layui.define('layer', function(exports){
         item.name = item.name.replace(/^(.*)\[\]$/, '$1['+ (nameIndex[key]++) +']');
       }
       
-      if(/^checkbox|radio$/.test(item.type) && !item.checked) return;      
       field[item.name] = item.value;
     });
  
