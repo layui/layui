@@ -411,11 +411,18 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       var params = {};
       params[request.pageName] = curr;
       params[request.limitName] = options.limit;
-      
+
+      var tmpdata = "";
+      if(options.contenttype.indexOf("application/json") == 0){
+        tmpdata = JSON.stringify($.extend(params, options.where));
+      } else {
+        tmpdata = $.extend(params, options.where);
+      }
       $.ajax({
         type: options.method || 'get'
         ,url: options.url
-        ,data: $.extend(params, options.where)
+        ,contentType: options.contenttype
+        ,data: tmpdata
         ,dataType: 'json'
         ,success: function(res){
           if(res[response.statusName] != response.statusCode){
