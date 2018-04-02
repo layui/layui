@@ -110,6 +110,7 @@ layui.define('jquery', function(exports){
       
       layui.event.call(this, MOD_NAME, 'tab('+ filter +')', {
         elem: parents
+        ,bodyElem: item.eq(index)
         ,index: index
       });
     }
