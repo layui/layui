@@ -45,6 +45,14 @@ layui.define('jquery', function(exports){
     call.tabAuto();
     return this;
   };
+ 
+ //外部Tab是否存在。返回bool类型。
+  Element.prototype.tabExists = function(filter, layid){
+    var selector = "[lay-filter|='" + filter +  "'] [lay-id|='" + layid + "']";
+    //上述的selector字符串是为了选择到特定filter下的layid，例如：
+    // $("[lay-filter|='demo'] [lay-id|='001']") 选择的是demo这个filter下面的001选项卡
+    return $(selector).length > 0;
+  }
   
   //外部Tab删除
   Element.prototype.tabDelete = function(filter, layid){
