@@ -88,7 +88,7 @@ layui.define('layer' , function(exports){
     var that = this
     ,options = that.config
     ,elemFile = that.elemFile = $([
-      '<input class="'+ ELEM_FILE +'" type="file" name="'+ options.field +'"'
+      '<input class="'+ ELEM_FILE +'" type="file" accept="'+ options.domAccept +'" name="'+ options.field +'"'
       ,(options.multiple ? ' multiple' : '') 
       ,'>'
     ].join(''))
