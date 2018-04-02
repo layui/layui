@@ -88,7 +88,7 @@ layui.define('layer' , function(exports){
     var that = this
     ,options = that.config
     ,elemFile = that.elemFile = $([
-      '<input class="'+ ELEM_FILE +'" type="file" accept="'+ options.domAccept +'" name="'+ options.field +'"'
+      '<input class="'+ ELEM_FILE +'" type="file" accept="'+ options.acceptMime +'" name="'+ options.field +'"'
       ,(options.multiple ? ' multiple' : '') 
       ,'>'
     ].join(''))
@@ -134,6 +134,7 @@ layui.define('layer' , function(exports){
       options.elem.next('.'+ ELEM_IFRAME).append(function(){
         var arr = [];
         layui.each(options.data, function(key, value){
+          value = typeof value === 'function' ? value() : value;
           arr.push('<input type="hidden" name="'+ key +'" value="'+ value +'">')
         });
         return arr.join('');
@@ -196,6 +197,7 @@ layui.define('layer' , function(exports){
         
         //追加额外的参数
         layui.each(options.data, function(key, value){
+          value = typeof value === 'function' ? value() : value;
           formData.append(key, value);
         });
         
