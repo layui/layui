@@ -54,7 +54,7 @@ layui.define(['layer', 'form'], function(exports){
     
     var that = this
     ,config = that.config
-    ,ELEM = 'layui-layedit', textArea = $('#'+id)
+    ,ELEM = 'layui-layedit', textArea = $(typeof(id)=='string'?'#'+id:id)
     ,name =  'LAY_layedit_'+ (++that.index)
     ,haveBuild = textArea.next('.'+ELEM)
     
