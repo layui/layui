@@ -526,7 +526,8 @@ describe('laydate', function () {
         laydate.render({
           elem: '#test-div',
           min: '2017-7-7',
-          max: '2017-7-8'
+          max: '2017-7-8',
+          value: '2017-7-8'
         });
 
         $('#test-div').click();
