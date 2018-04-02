@@ -545,7 +545,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 
 /** 页面元素 **/
-.layui-btn, .layui-input, .layui-textarea, .layui-upload-button, .layui-select{outline: none; -webkit-appearance: none; transition: all .3s; -webkit-transition: all .3s; box-sizing: border-box;}
+.layui-btn, .layui-input, .layui-textarea, .layui-upload-button, .layui-select{outline: none; transition: all .3s; -webkit-transition: all .3s; box-sizing: border-box;}
 
 /* 引用 */.layui-elem-quote{margin-bottom: 10px; padding: 15px; line-height: 22px; border-left: 5px solid #009688; border-radius: 0 2px 2px 0; background-color: #f2f2f2;}
 .layui-quote-nm{border-style: solid; border-width: 1px; border-left-width: 5px; background: none;}
