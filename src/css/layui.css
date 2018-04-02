@@ -46,11 +46,11 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /** 图标字体 **/
 @font-face {font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=220');
-  src: url('../font/iconfont.eot?v=220#iefix') format('embedded-opentype'),
-  url('../font/iconfont.svg?v=220#iconfont') format('svg'),
-  url('../font/iconfont.woff?v=220') format('woff'),
-  url('../font/iconfont.ttf?v=220') format('truetype');
+  src: url('../font/iconfont.eot?v=226_rc2');
+  src: url('../font/iconfont.eot?v=226_rc2#iefix') format('embedded-opentype'),
+  url('../font/iconfont.svg?v=226_rc2#iconfont') format('svg'),
+  url('../font/iconfont.woff?v=226_rc2') format('woff'),
+  url('../font/iconfont.ttf?v=226_rc2') format('truetype');
 }
                     
 .layui-icon{
@@ -76,9 +76,9 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-icon-yinqing:before { content: "\e628"; }
 
-.layui-icon-yuejuancuohao:before { content: "\1006"; }
+.layui-icon-close:before { content: "\1006"; }
 
-.layui-icon-cuo:before { content: "\1007"; }
+.layui-icon-close-fill:before { content: "\1007"; }
 
 .layui-icon-baobiao:before { content: "\e629"; }
 
@@ -94,7 +94,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-icon-tubiao:before { content: "\e62c"; }
 
-.layui-icon-right:before { content: "\1005"; }
+.layui-icon-ok-circle:before { content: "\1005"; }
 
 .layui-icon-huanfu2:before { content: "\e61b"; }
 
@@ -102,9 +102,9 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-icon-biaoge:before { content: "\e62d"; }
 
-.layui-icon-youyou:before { content: "\e602"; }
+.layui-icon-right:before { content: "\e602"; }
 
-.layui-icon-zuozuo:before { content: "\e603"; }
+.layui-icon-left:before { content: "\e603"; }
 
 .layui-icon-cart-simple:before { content: "\e698"; }
 
@@ -120,7 +120,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-icon-tianjia:before { content: "\e61f"; }
 
-.layui-icon-xiazai:before { content: "\e601"; }
+.layui-icon-download-circle:before { content: "\e601"; }
 
 .layui-icon-xuanzemoban48:before { content: "\e630"; }
 
@@ -132,7 +132,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-icon-speaker:before { content: "\e645"; }
 
-.layui-icon-xiangxia:before { content: "\e61a"; }
+.layui-icon-down:before { content: "\e61a"; }
 
 .layui-icon-wenjian:before { content: "\e621"; }
 
@@ -156,13 +156,15 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-icon-jinshui:before { content: "\e636"; }
 
+.layui-icon-username:before { content: "\e66f"; }
+
 .layui-icon-find-fill:before { content: "\e670"; }
 
 .layui-icon-about:before { content: "\e60b"; }
 
 .layui-icon-location:before { content: "\e715"; }
 
-.layui-icon-xiangshang:before { content: "\e619"; }
+.layui-icon-up:before { content: "\e619"; }
 
 .layui-icon-pause:before { content: "\e651"; }
 
@@ -177,6 +179,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-top:before { content: "\e604"; }
 
 .layui-icon-haoyouqingqiu:before { content: "\e612"; }
+
+.layui-icon-refresh-3:before { content: "\e9aa"; }
 
 .layui-icon-weibiaoti1:before { content: "\e605"; }
 
@@ -292,9 +296,13 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-icon-notice:before { content: "\e667"; }
 
+.layui-icon-login-weibo:before { content: "\e675"; }
+
 .layui-icon-voice:before { content: "\e688"; }
 
 .layui-icon-download:before { content: "\e681"; }
+
+.layui-icon-login-qq:before { content: "\e676"; }
 
 .layui-icon-snowflake:before { content: "\e6b1"; }
 
@@ -308,15 +316,17 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-icon-app:before { content: "\e653"; }
 
-.layui-icon-xiayiye:before { content: "\e65a"; }
+.layui-icon-prev:before { content: "\e65a"; }
 
 .layui-icon-website:before { content: "\e7ae"; }
 
-.layui-icon-xiayiye1:before { content: "\e65b"; }
+.layui-icon-next:before { content: "\e65b"; }
 
 .layui-icon-component:before { content: "\e857"; }
 
 .layui-icon-more:before { content: "\e65f"; }
+
+.layui-icon-login-wechat:before { content: "\e677"; }
 
 .layui-icon-shrink-right:before { content: "\e668"; }
 
@@ -332,6 +342,8 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-icon-nan:before { content: "\e662"; }
 
+.layui-icon-password:before { content: "\e673"; }
+
 .layui-icon-senior:before { content: "\e674"; }
 
 .layui-icon-theme:before { content: "\e66a"; }
@@ -346,13 +358,18 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-icon-loading-2:before { content: "\e66d"; }
 
+.layui-icon-vercode:before { content: "\e679"; }
+
+.layui-icon-cellphone:before { content: "\e678"; }
+
+
 
 /* 基本布局 */
 .layui-main{position: relative; width: 1140px; margin: 0 auto;}
 .layui-header{position: relative; z-index: 1000; height: 60px;}
 .layui-header a:hover{transition: all .5s; -webkit-transition: all .5s;}
-.layui-side{position: fixed; top: 0; bottom: 0; z-index: 999; width: 200px; overflow-x: hidden;}
-.layui-side-scroll{width: 220px; height: 100%; overflow-x: hidden;}
+.layui-side{position: fixed; left: 0; top: 0; bottom: 0; z-index: 999; width: 200px; overflow-x: hidden;}
+.layui-side-scroll{position: relative; width: 220px; height: 100%; overflow-x: hidden;}
 .layui-body{position: absolute; left: 200px; right: 0; top: 0; bottom: 0; z-index: 998; width: auto; overflow: hidden; overflow-y: auto; box-sizing: border-box;}
 
 /* 后台框架大布局 */.layui-layout-body{overflow: hidden;}
@@ -576,7 +593,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-colla-item,
 .layui-colla-content{border-top-width: 1px; border-top-style: solid;}
 .layui-colla-item:first-child{border-top: none;}
-.layui-colla-title{position: relative; height: 42px; line-height: 42px; padding: 0 15px 0 35px; color: #333; background-color: #f2f2f2; cursor: pointer; font-size: 14px;}
+.layui-colla-title{position: relative; height: 42px; line-height: 42px; padding: 0 15px 0 35px; color: #333; background-color: #f2f2f2; cursor: pointer; font-size: 14px; overflow: hidden;}
 .layui-colla-content{display: none; padding: 10px 15px; line-height: 22px; color: #666;}
 .layui-colla-icon{position: absolute; left: 15px; top: 0; font-size: 14px;}
 
@@ -585,6 +602,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-card:last-child{margin-bottom: 0;}
 .layui-card-header{position: relative; height: 42px; line-height: 42px; padding: 0 15px; border-bottom: 1px solid #f6f6f6; color: #333; border-radius: 2px 2px 0 0; font-size: 14px;}
 .layui-card-body{position: relative; padding: 10px 15px; line-height: 24px;}
+.layui-card-body[pad15]{padding: 15px;}
+.layui-card-body[pad20]{padding: 20px;}
 .layui-card-body .layui-table{margin: 5px 0;}
 .layui-card .layui-tab{margin: 0;}
 
@@ -1049,7 +1068,8 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-nav .layui-nav-more{content:''; width: 0; height: 0; border-style: dashed; border-color: transparent; overflow: hidden; cursor: pointer; transition: all .2s; -webkit-transition: all .2s;}
 .layui-nav .layui-nav-more{position: absolute; top: 50%; right: 3px; margin-top: -3px; border-width: 6px; border-top-style: solid; border-top-color: #fff; border-top-color: rgba(255,255,255,.7);}
 .layui-nav .layui-nav-mored,
-.layui-nav-itemed .layui-nav-more{margin-top: -9px; border-style: dashed; border-color: transparent; border-bottom-style: solid; border-bottom-color: #fff;}
+.layui-nav-itemed > a .layui-nav-more{margin-top: -9px; border-style: dashed; border-color: transparent; border-bottom-style: solid; border-bottom-color: #fff;}
+
 
 .layui-nav-child{display: none; position: absolute; left: 0; top: 65px; min-width: 100%; line-height: 36px; padding: 5px 0;  box-shadow: 0 2px 4px rgba(0,0,0,.12); border: 1px solid #d2d2d2; background-color: #fff; z-index: 100; border-radius: 2px; white-space: nowrap;}
 .layui-nav .layui-nav-child a{color: #333;}
@@ -1061,7 +1081,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 
 /* 垂直导航菜单 */.layui-nav-tree{width: 200px; padding: 0;}
 .layui-nav-tree .layui-nav-item{display: block; width: 100%; line-height: 45px;}
-.layui-nav-tree .layui-nav-item a{height: 45px; line-height: 45px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
+.layui-nav-tree .layui-nav-item a{position: relative; height: 45px; line-height: 45px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .layui-nav-tree .layui-nav-item a:hover{background-color: #4E5465;}
 .layui-nav-tree .layui-nav-bar{width: 5px; height: 0;}
 .layui-nav-tree .layui-this,
@@ -1080,9 +1100,10 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-nav-tree .layui-nav-child a{color: #fff; color: rgba(255,255,255,.7);}
 .layui-nav-tree .layui-nav-child a:hover,
 .layui-nav-tree .layui-nav-child{background: none; color: #fff;}
-.layui-nav-tree .layui-nav-more{top: 20px; right: 10px; margin: 0;}
-.layui-nav-itemed .layui-nav-more{top: 14px;}
-.layui-nav-itemed .layui-nav-child{display: block; padding: 0; background-color: rgba(0,0,0,.3) !important;} 
+.layui-nav-tree .layui-nav-more{right: 10px;}
+
+.layui-nav-itemed>.layui-nav-child{display: block; padding: 0; background-color: rgba(0,0,0,.3) !important;} 
+.layui-nav-itemed>.layui-nav-child>.layui-this>.layui-nav-child{display: block;}
 
 /* 侧边 */.layui-nav-side{position: fixed; top: 0; bottom: 0; left: 0; overflow-x: hidden; z-index: 999;}
 
@@ -1244,6 +1265,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-anim{-webkit-animation-duration: 0.3s; animation-duration: 0.3s; -webkit-animation-fill-mode: both; animation-fill-mode: both;}
 .layui-anim.layui-icon{display: inline-block;}
 .layui-anim-loop{-webkit-animation-iteration-count: infinite; animation-iteration-count: infinite;}
+.layui-trans,.layui-trans a{transition: all .3s; -webkit-transition: all .3s;} /* 过度变换 */
 
 @-webkit-keyframes layui-rotate{ /* 循环旋转 */
   from {-webkit-transform: rotate(0deg);}

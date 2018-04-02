@@ -19,7 +19,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.2.5'; //版本号
+    this.v = '2.2.6'; //版本号
   }
 
   //获取layui所在目录
@@ -330,7 +330,8 @@
     };
     
     if(!/^#\//.test(hash)) return data; //禁止非路由规范
-    data.href = hash = hash.replace(/^#\//, '');
+    hash = hash.replace(/^#\//, '');
+    data.href = '/' + hash;
     hash = hash.replace(/([^#])(#.*$)/, '$1').split('/') || [];
     
     //提取Hash结构

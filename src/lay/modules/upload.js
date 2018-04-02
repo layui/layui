@@ -207,6 +207,7 @@ layui.define('layer' , function(exports){
           ,contentType: false 
           ,processData: false
           ,dataType: 'json'
+          ,headers: options.headers || {}
           ,success: function(res){
             successful++;
             done(index, res);
