@@ -55,7 +55,7 @@ describe('layui', function () {
 
     it('router querystring', function () {
       expect(layui.router('#/a=1/b=2/c=')).to.deep.equal($.extend({}, defaultData, {
-        href: 'a=1/b=2/c=',
+        href: '/a=1/b=2/c=',
         search: {
           a: '1',
           b: '2',
@@ -77,7 +77,7 @@ describe('layui', function () {
       expect(layui.router('#/name#layui')).to.deep.equal($.extend({}, defaultData, {
         hash: '#layui',
         path: ['name'],
-        href: 'name#layui'
+        href: '/name#layui'
       }));
       expect(layui.router('#/name#layui').hash).to.equal('#layui');
       expect(layui.router('#/name#layui=1').hash).to.equal('#layui=1');
@@ -93,7 +93,7 @@ describe('layui', function () {
           c: '2'
         },
         hash: '#hash',
-        href: 'a/b/c=2#hash'
+        href: '/a/b/c=2#hash'
       });
     });
   });
