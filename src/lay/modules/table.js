@@ -440,6 +440,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           that.layMain.html('<div class="'+ NONE +'">数据接口请求异常</div>');
           that.renderForm();
           loadIndex && layer.close(loadIndex);
+          typeof options.done === 'function' && options.done();
         }
       });
     } else if(options.data && options.data.constructor === Array){ //已知数据
