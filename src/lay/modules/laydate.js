@@ -856,11 +856,13 @@
     
     //获得初始化日期值
     ,initDate = function(dateTime, value, index){
-      var startEnd = ['startTime', 'endTime'];
+      var startEnd = ['startTime', 'endTime'],
+          startEndState = ['startState', 'endState'];
       value = (value.match(that.EXP_SPLIT) || []).slice(1);
       index = index || 0;
       if(options.range){
         that[startEnd[index]] = that[startEnd[index]] || {};
+        that[startEndState[index]] = !!that[startEnd[index]];
       }
       lay.each(that.format, function(i, item){
         var thisv = parseFloat(value[i]);
