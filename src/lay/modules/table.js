@@ -489,6 +489,15 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     
     eachArrs();
   };
+
+  var renderTemplet = function(content, templet, tplData) {
+    if(templet) {
+      return typeof templet === 'function' 
+          ? templet(tplData)
+        : laytpl($(templet).html() || String(content)).render(tplData) 
+    }
+    return content;
+  }
   
   //数据渲染
   Class.prototype.renderData = function(res, curr, count, sort){
@@ -560,11 +569,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
               if(item3.toolbar){
                 return laytpl($(item3.toolbar).html()||'').render(tplData);
               }
-              return item3.templet ? function(){
-                return typeof item3.templet === 'function' 
-                  ? item3.templet(tplData)
-                : laytpl($(item3.templet).html() || String(content)).render(tplData) 
-              }() : content;
+              return renderTemplet(content, item3.templet, tplData);
             }()
           ,'</div></td>'].join('');
           
@@ -1042,7 +1047,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         }
       });
       othis.siblings(ELEM_CELL).html(
-        templet ? laytpl($(templet).html() || this.value).render(data) : this.value
+        renderTemplet(this.value, templet, data)
       );
       othis.parent().data('content', this.value);
       othis.remove();
@@ -1134,7 +1139,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
                 }
               });
               td.children(ELEM_CELL).html(
-                templet ? laytpl($(templet).html() || value).render(data) : value
+                renderTemplet(value, templet, data)
               );
               td.data('content', value);
             }
