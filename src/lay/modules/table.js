@@ -1126,7 +1126,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         ,update: function(fields){
           fields = fields || {};
           layui.each(fields, function(key, value){
-            if(key in data){
+            // if(key in data){
+            //  不需要做这个判断，因为可能数据一开始没有这个属性的值
               var templet, td = tr.children('td[data-field="'+ key +'"]');
               data[key] = value;
               that.eachCols(function(i, item2){
@@ -1138,7 +1139,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
                 templet ? laytpl($(templet).html() || value).render(data) : value
               );
               td.data('content', value);
-            }
+            // }
           });
         }
       });
