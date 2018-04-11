@@ -498,7 +498,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     ,trs = []
     ,trs_fixed = []
     ,trs_fixed_r = []
-    
+    ,total = []
     //渲染视图
     ,render = function(){ //后续性能提升的重点
       if(!sort && that.sortKey){
@@ -517,6 +517,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           var field = item3.field || i3, content = item1[field]
           ,cell = that.getColElem(that.layHeader, field);
           
+          //如果本列开启了合计，计算合计数据
+          if(item3.total) total[field]=total[field]?(total[field]+(isNaN(Number(content))?0:Number(content))):(isNaN(Number(content))?0:Number(content));
+         
           if(content === undefined || content === null) content = '';
           if(item3.colspan > 1) return;
           
@@ -593,6 +596,28 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       }, 50);
       that.haveInit = true;
       layer.close(that.tipsIndex);
+      // 如果开启了显示合计行
+      if (options.total) {
+    	   var totalTd = [];
+    	   that.eachCols(function(i3, item3) {
+    		    var field = item3.field || i3;
+    		    var td = '<td '
+    			   + function() {
+					       return (item3.type != 'checkbox' && !item3.show) ? 'style="display:none" ': '';
+				      }() + ' data-field="' + field + '">';
+				     if (i3 == 0)td = '<td style="text-align: center;" data-field="合计">合计';
+				     if(typeof(total[field])!='undefined') td += '<div class="layui-table-cell laytable-cell-1-sales_num"><b><font color="red">' + eval(total[field]+'') + '</font></b></div>';
+				     td += '</td>';
+				     totalTd.push(td);
+    	  });
+    	  var totalTr = that.layMain.find(".totalTr");
+    	  if (totalTr.length == 0) {
+    		   totalTr = $('<tr class="totalTr">'+ totalTd.join("") + '</tr>');
+    		   that.layMain.find("tbody").append(totalTr);
+    		   that.layFixLeft.find("tbody").html(totalTr);
+    		   that.layFixRight.find("tbody").html(totalTr);
+    	  }
+      }
     };
     
     that.key = options.id || options.index;
