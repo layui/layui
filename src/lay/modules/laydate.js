@@ -379,6 +379,8 @@
     ,value: null //默认日期，支持传入new Date()，或者符合format参数设定的日期格式字符
     ,min: '1900-1-1' //有效最小日期，年月日必须用“-”分割，时分秒必须用“:”分割。注意：它并不是遵循 format 设定的格式。
     ,max: '2099-12-31' //有效最大日期，同上
+    ,tMin: '00:00:00' //每天最小时间(只有在type为datetime的时候才有意义)
+    ,tMax: '23:59:59' //每天最大时间(同上)
     ,trigger: 'focus' //呼出控件的事件
     ,show: false //是否直接显示，如果设置true，则默认直接显示控件
     ,showBottom: true //是否显示底部栏
@@ -537,6 +539,16 @@
         ,month: ymd[1] ? (ymd[1] | 0) - 1 : new Date().getMonth()
         ,date: ymd[2] | 0 || new Date().getDate()
         ,hours: hms[0] | 0
+        ,minutes: hms[1] | 0
+        ,seconds: hms[2] | 0
+      };
+    });
+
+    //获取限制内时间点
+    lay.each(['tMin', 'tMax'], function(i, item){
+      var hms = (options[item].match(/\d+:\d+:\d+/) || [''])[0].split(':');
+      options[item] = {
+        hours: hms[0] | 0
         ,minutes: hms[1] | 0
         ,seconds: hms[2] | 0
       };
@@ -968,7 +980,7 @@
   //无效日期范围的标记
   Class.prototype.limit = function(elem, date, index, time){
     var that = this
-    ,options = that.config, timestrap = {}
+    ,options = that.config, timestrap = {}, timestrapT = {}
     ,dateTime = options[index > 41 ? 'endDate' : 'dateTime']
     ,isOut, thisDateTime = lay.extend({}, dateTime, date || {});
     lay.each({
@@ -988,8 +1000,26 @@
         return hms;
       }())).getTime();  //time：是否比较时分秒
     });
+    lay.each({
+      now: thisDateTime
+      ,tMin: options.tMin
+      ,tMax: options.tMax
+    }, function(key, item){
+      timestrapT[key] = that.newDate(lay.extend({},function(){
+        var hms = {};
+        lay.each(time, function(i, keys){
+          hms[keys] = item[keys];
+        });
+        return hms;
+      }(), {
+        year: 1
+        ,month: 0
+        ,date: 1
+      })).getTime();  //time：是否比较时分秒
+    });
     
     isOut = timestrap.now < timestrap.min || timestrap.now > timestrap.max;
+    isOut || (isOut = (options.type === 'datetime') && timestrapT.now < timestrapT.tMin || timestrapT.now > timestrapT.tMax);
     elem && elem[isOut ? 'addClass' : 'removeClass'](DISABLED);
     return isOut;
   };
