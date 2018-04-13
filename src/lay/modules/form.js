@@ -430,7 +430,16 @@ layui.define('layer', function(exports){
         
         //匹配验证规则
         if(verify[thisVer]){
-          var isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
+          // var isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
+          // 其他验证如果值为空的时候不应该验证，除非指定不能为空
+          var isTrue;
+          if (isFn) {
+              isTrue = errorText = verify[thisVer](value, item);
+          } else {
+              if (thisVer === 'required' || (thisVer !== 'required' && value)) {
+                  isTrue = !verify[thisVer][0].test(value);
+              }
+          }
           errorText = errorText || verify[thisVer][1];
           
           //如果是必填项或者非空命中校验，则阻止提交，弹出提示
