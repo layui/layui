@@ -222,7 +222,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     }, options.response);
     
     //如果 page 传入 laypage 对象
-    if(typeof options.page === 'object'){
+    if (!options.page) {
+      options.limit = 0;
+      that.page = 1;
+    } if(typeof options.page === 'object'){
       options.limit = options.page.limit || options.limit;
       options.limits = options.page.limits || options.limits;
       that.page = options.page.curr = options.page.curr || 1;
@@ -274,7 +277,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     }
     
     //请求数据
-    that.pullData(that.page);
+    that.pullData(that.page, that.loading());
     that.events();
   };
   
@@ -447,7 +450,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       var res = {}
       ,startLimit = curr*options.limit - options.limit
       
-      res[response.dataName] = options.data.concat().splice(startLimit, options.limit);
+      res[response.dataName] = options.data.concat().splice(startLimit, options.limit || options.data.length);
       res[response.countName] = options.data.length;
 
       that.renderData(res, curr, options.data.length), sort();
