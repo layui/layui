@@ -585,7 +585,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       //if(data.length === 0) return;
       
       that.layBody.scrollTop(0);
-      that.layMain.find('.'+ NONE).remove();
+      data.length && that.layMain.find('.'+ NONE).remove();
       that.layMain.find('tbody').html(trs.join(''));
       that.layFixLeft.find('tbody').html(trs_fixed.join(''));
       that.layFixRight.find('tbody').html(trs_fixed_r.join(''));
