@@ -637,19 +637,26 @@ Class.pt.callback = function(){
   
   //按钮
   layero.find('.'+ doms[6]).children('a').on('click', function(){
-    var index = $(this).index();
+    // 修改的思路，1.首先跟cancel的统一，默认情况下点击了之后都会关闭，除非明确返回了false（不要关闭）
+    var index = $(this).index(),
+        close;
     if(index === 0){
       if(config.yes){
-        config.yes(that.index, layero)
+        close = config.yes(that.index, layero)
       } else if(config['btn1']){
-        config['btn1'](that.index, layero)
-      } else {
-        layer.close(that.index);
+        close = config['btn1'](that.index, layero)
+      // } else {
+      //   layer.close(that.index);
       }
     } else {
-      var close = config['btn'+(index+1)] && config['btn'+(index+1)](that.index, layero);
-      close === false || layer.close(that.index);
+      close = config['btn'+(index+1)] && config['btn'+(index+1)](that.index, layero);
+      // close === false || layer.close(that.index);
     }
+    // 2. 如果想要关掉，都走cancel验证，即如果设置了cancel那么要执行cancel中的代码（既然叫做关闭回调）
+    close === false || cancel();
+    // 3. 目的是既然叫做cancel关闭回调那么不管是点击取消，点击遮蔽层，还是点击右上角的关闭按钮都必须走cancel回调，方便在里面做一些操作。
+    // 4. layer.close(index)算是一个实际的关闭动作，不走cancel，
+    // 5. 对yes回调的影响比较大，以前yes如果有实现，是不会主动关闭的，但是其他按钮只要不特意的返回false都会关闭，这个有点不协调，比较纠结的点
   });
   
   //取消
@@ -663,9 +670,11 @@ Class.pt.callback = function(){
   
   //点遮罩关闭
   if(config.shadeClose){
-    $('#layui-layer-shade'+ that.index).on('click', function(){
-      layer.close(that.index);
-    });
+    // $('#layui-layer-shade'+ that.index).on('click', function(){
+    //   layer.close(that.index);
+    // });
+    // 遮蔽层的关闭也走cancel回调。
+    $('#layui-layer-shade'+ that.index).on('click', cancel);
   } 
   
   //最小化
