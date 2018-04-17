@@ -1566,7 +1566,7 @@
         );
         
         //判断是否顺时或逆时选择
-        if(that.newDate(YMD).getTime() < that.newDate(that.startYMD).getTime()){
+        if(that.newDate(YMD).getTime() <= that.newDate(that.startYMD).getTime()){
           var startDate = lay.extend({}, that.endDate, {
             hours: that.startDate.hours
             ,minutes: that.startDate.minutes
@@ -1583,6 +1583,11 @@
         options.showBottom || that.done();
         that.stampRange(); //标记范围内的日期
         that.endState = true;
+        if (that.newDate(YMD).getTime() === that.newDate(that.startYMD).getTime()
+            && that.newDate(that.startTime).getTime() > that.newDate(that.endTime).getTime()) {
+          //  如果选择的是同一天并且目前时间的选择开始时间大于结束时间那么结束状态是fasle
+          that.endState = false;
+        }
         that.done(null, 'change');
       } else { //选中开始
         td.addClass(THIS);
