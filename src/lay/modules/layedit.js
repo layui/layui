@@ -114,6 +114,7 @@ layui.define(['layer', 'form'], function(exports){
    * @param {[type]} flag    是否追加模式
    */
   Edit.prototype.setContent = function(index, content, flag){
+    var that = this;
     var iframeWin = getWin(index);
     if(!iframeWin[0]) return;
     if(flag){
@@ -121,7 +122,7 @@ layui.define(['layer', 'form'], function(exports){
     }else{
       $(iframeWin[0].document.body).html(content)
     };
-    layedit.sync(index)
+    that.sync(index)
   };
   //将编辑器内容同步到textarea（一般用于异步提交时）
   Edit.prototype.sync = function(index){
