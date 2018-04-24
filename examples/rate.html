@@ -67,6 +67,11 @@ body{padding:20px;}
 				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
 			</ul>
 		</div>
+
+    <div id="test1"></div>
+    <div id="test2"></div>
+    <div id="test3"></div>
+
 	</div>
 </div>
 
@@ -76,9 +81,21 @@ body{padding:20px;}
 
 layui.use(['rate'], function(){
   var rate = layui.rate;
-  rate.primary(".layui-rate-primary","li"){
-  	
-  }
+
+  //设置全局
+  rate.set({
+    score: 3.5
+  });
+
+
+  var ins = rate.render({
+    elem: '#test1'
+  })
+
+
+  rate.primary(".layui-rate-primary","li");
+  rate.half(".layui-rate-half","li");
+  rate.text(".layui-rate-text","li");
 });
 </script>
 </body>
