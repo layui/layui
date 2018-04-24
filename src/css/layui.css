@@ -363,7 +363,10 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-cellphone:before { content: "\e678"; }
 
 .layui-icon-rate:before { content: "\e67b"; }
+
 .layui-icon-rate-solid:before { content: "\e67a"; }
+
+.layui-icon-rate-half:before { content: "\e6c9"; }
 
 
 
@@ -1032,6 +1035,15 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-upload-iframe{position: absolute; width: 0; height: 0; border: 0; visibility: hidden}
 .layui-upload-wrap{position: relative; display: inline-block; vertical-align: middle;}
 .layui-upload-wrap .layui-upload-file{display: block!important; position: absolute; left: 0; top: 0; z-index: 10; font-size: 100px; width: 100%; height: 100%; opacity: .01; filter: Alpha(opacity=1); cursor: pointer;}
+
+/** 评分组件 **/
+.layui-icon-rate,.layui-icon-rate-solid{font-size: 24px;color: #FF7F00;}
+.layui-rate{height: 120px;border: 1px solid #EEE;border-radius: 5px;padding: 20px;margin-top: 10px;margin-bottom: 10px;transition: 300ms;}
+.layui-rate:hover{box-shadow: 0 0 10px #CCC; transition: 300ms;}
+.layui-rate-primary,.layui-rate-half,.layui-rate-text,.layui-rate-read{display: inline-block;list-style: none;padding: 20px;}
+.layui-rate-primary li,.layui-rate-half li,.layui-rate-text li:hover{cursor: pointer;}
+
+
 
 
 /** 代码修饰器 **/

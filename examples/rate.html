@@ -13,16 +13,72 @@ body{padding:20px;}
 </head>
 <body>
 
+<div class="layui-container">
+	<div class="layui-row">
+		<!-- 基础评分用法 -->
+		<div class="layui-rate layui-col-xm4 layui-col-xm-offset4 ">
+			<h3>基础用法</h3>
+			<hr>
+			<ul class="layui-rate-primary">
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+			</ul>
+		</div>
 
-<i class="layui-icon layui-icon-rate"></i>
+		<!-- 半星评分用法 -->
+		<div class="layui-rate layui-col-xm4 layui-col-xm-offset4 ">
+			<h3>选中半星</h3>
+			<hr>
+			<ul class="layui-rate-half">
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+			</ul>
+		</div>
 
+		<!-- 显示提示文字 -->
+		<div class="layui-rate layui-col-xm4 layui-col-xm-offset4 ">
+			<h3>显示提示文字</h3>
+			<hr>
+			<ul class="layui-rate-text">
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+			</ul>
+			<span></span>
+		</div>
+
+		<!-- 只读 -->
+		<div class="layui-rate layui-col-xm4 layui-col-xm-offset4 ">
+			<h3>只读</h3>
+			<hr>
+			<ul class="layui-rate-read">
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate-solid"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate-solid"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+				<li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
+			</ul>
+		</div>
+	</div>
+</div>
 
 
 <script src="../src/layui.js"></script>
 <script>
 
-layui.use(['element', 'form'], function(){
-  
+layui.use(['rate'], function(){
+  var rate = layui.rate;
+  rate.primary(".layui-rate-primary","li"){
+  	
+  }
 });
 </script>
 </body>
