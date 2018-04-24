@@ -1,1 +1,1 @@
-git is free sofeware
+git is a free sofeware
