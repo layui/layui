@@ -362,6 +362,9 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-icon-cellphone:before { content: "\e678"; }
 
+.layui-icon-rate:before { content: "\e67b"; }
+.layui-icon-rate-solid:before { content: "\e67a"; }
+
 
 
 /* 基本布局 */
