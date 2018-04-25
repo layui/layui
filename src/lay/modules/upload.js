@@ -475,13 +475,13 @@ layui.define('layer' , function(exports){
     options.bindAction.off('upload.action').on('upload.action', function(){
       that.upload();
     });
-    
+
+    that.elemFile.off('change').on('change', function(){
+        $(this).trigger('upload.change');
+    });
+
     //防止事件重复绑定
     if(options.elem.data('haveEvents')) return;
-    
-    that.elemFile.on('change', function(){
-      $(this).trigger('upload.change');
-    });
     
     options.elem.on('click', function(){
       if(that.isFile()) return;
@@ -499,12 +499,11 @@ layui.define('layer' , function(exports){
         $(this).trigger('upload.drop', e);
       });
     }
-    
-    options.bindAction.on('click', function(){
-      $(this).trigger('upload.action');
-    });
-    
     options.elem.data('haveEvents', true);
+
+    options.bindAction.off('click').on('click', function(){
+        $(this).trigger('upload.action');
+    });
   };
   
   //核心入口  
