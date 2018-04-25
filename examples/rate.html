@@ -55,28 +55,38 @@ layui.use(['rate'], function(){
   var rate = layui.rate;
 
   //渲染
+  // var ins1 = rate.render({
+  //   elem: '#test1'
+  //   ,length: 7
+  //   ,value: 4
+  // });
+  // ins1.setValue(5);
+
+
   rate.render({
-    elem: '#test1',
-    length: 7,
-    value: 4
+    elem: '#test1'
+    ,length: 7
+    ,value: 4
+  })
+
+  rate.render({
+    elem: '#test2'
+    ,length: 6
+    ,value: 2
+    ,half: true
   })
   rate.render({
-    elem: '#test2',
-    length: 6,
-    value: 2,
-    half: true
+    elem: '#test3'
+    ,length: 5
+    ,value: 2.5
+    ,text: true
+    ,half: true
   })
   rate.render({
-    elem: '#test3',
-    length: 5,
-    value: 3,
-    text: true
-  })
-  rate.render({
-    elem: '#test4',
-    length: 8,
-    value: 5,
-    reader: true
+    elem: '#test4'
+    ,length: 8
+    ,value: 5
+    ,reader: true
   })
 
 });
