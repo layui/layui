@@ -23,7 +23,8 @@ layui.define('jquery',function(exports){
 	}
 
   //字符常量
-  ,ICON_RATE = 'layui-icon-rate', ICON_RATA_SOLID = 'layui-icon-rate-solid'
+  ,MOD_NAME= 'rate', ICON_RATE = 'layui-icon layui-icon-rate', ICON_RATE_SOLID = 'layui-icon layui-icon-rate-solid', ICON_RATE_HALF = 'layui-icon layui-icon-rate-half'
+
 
 	//构造器
   ,Class = function(options){
@@ -35,12 +36,11 @@ layui.define('jquery',function(exports){
 
   //默认配置
   Class.prototype.config = {
-    limit: 10 //每页显示的数量
-    ,loading: true //请求数据时，是否显示loading
-    ,cellMinWidth: 60 //所有单元格默认最小宽度
-    ,text: {
-      none: '无数据'
-    }
+    length: 5, //初始长度
+    text: false, //是否显示评分等级
+    reader: false, //是否只读
+    half: false, //是否可以半星
+    value: 5, //星星选中个数
   };
 
   //评分渲染
@@ -48,85 +48,80 @@ layui.define('jquery',function(exports){
     var that = this
     ,options = that.config;
 
-    /*
-    
-      div class="layui-rate layui-col-xm4 layui-col-xm-offset4 ">
-        <h3>只读</h3>
-        <hr>
-        <ul class="layui-rate-read">
-          <li class="layui-inline"><i class="layui-icon layui-icon-rate-solid"></i></li>
-          <li class="layui-inline"><i class="layui-icon layui-icon-rate-solid"></i></li>
-          <li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
-          <li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
-          <li class="layui-inline"><i class="layui-icon layui-icon-rate"></i></li>
-        </ul>
-      </div>
+    var temp='<ul class="layui-rate">';
+    for(var i=1;i<=options.length;i++){
+      temp+='<li class="layui-inline"><i class="layui-icon '+(i>options.value?'layui-icon-rate':'layui-icon-rate-solid')+'"></i></li>';   
+    }
+    temp+='</ul><span></span>';
 
-     */
+    $(options.elem).after(temp);
 
-    var obj = {
-      primary:function(e,x){
-        $(e+' > '+x).each(function(index){
-          var ind=index;
-          $(this).mouseover(function(){
-            
-          }),
-          $(this).mouseout(function(){
-            
-          }),
-          $(this).click(function(){
-            $(this).children("i").addClass(ICON_RATA_SOLID).removeClass(ICON_RATE)
-            $(this).prevAll().each(function(){
-              $(this).children("i").addClass(ICON_RATA_SOLID).removeClass(ICON_RATE)
-            })
-            $(this).nextAll().each(function(){
-              $(this).children("i").addClass(ICON_RATE).removeClass(ICON_RATA_SOLID)
-            })
-          })
-        })
-      },
-      half:function(e,x){
-
-      },
-      text:function(e,x){
-        $(e+' > '+x).each(function(index){
-          var ind=index;
-          $(this).click(function(){
-            $(this).children("i").addClass(ICON_RATA_SOLID).removeClass(ICON_RATE)
-            $(this).prevAll().each(function(){
-              $(this).children("i").addClass(ICON_RATA_SOLID).removeClass(ICON_RATE)
-            })
-            $(this).nextAll().each(function(){
-              $(this).children("i").addClass(ICON_RATE).removeClass(ICON_RATA_SOLID)
-            })
-            $(e).next("span").text(ind+1);
-          })
-        })
-      }
-    };
-
+    if(!options.reader) that.draw();    
 
   };
+
+  //li点击事件
+  Class.prototype.draw=function(){
+    var that = this
+    ,options = that.config
+    ,_ul=$(options.elem).next("ul");
+    _ul.children("li").each(function(index){
+      var ind=index+1;
+
+      //点击
+      $(this).click(function(){
+        options.value=ind;
+        
+        if(options.text)  _ul.next("span").text(options.value+"分");
+      })
+
+      //移入
+      $(this).mouseover(function(){
+        _ul.find("i").each(function(){
+            $(this)[0].className=ICON_RATE;
+          })
+        if(options.half){
+          $(this).prevAll("li").children("i").each(function(){
+            $(this)[0].className=ICON_RATE_SOLID;
+          })
+          if(){
+            
+          }
+        }else{
+          _ul.find("i:lt("+ind+")").each(function(){
+            $(this)[0].className=ICON_RATE_SOLID;
+          })
+        }
+         
+      })
+
+      //移出
+      $(this).mouseout(function(){
+        _ul.find("i").each(function(){
+          $(this)[0].className=ICON_RATE;
+        })
+        _ul.find("i:lt("+options.value+")").each(function(){
+          $(this)[0].className=ICON_RATE_SOLID;
+        })
+      })
+    })
+  };
+  
 
 
   //事件处理
   Class.prototype.events = function(){
+     var that = this
+    ,options = that.config;
 
+  };
 
-  }
-
-
-	//核心接口
-	rate.render = function(options){
-    var inst = new Class(options);
-    return thisTable.call(inst);
-	};
 
   //核心入口
   rate.render = function(options){
     var inst = new Class(options);
-    return thisTable.call(inst);
+    return inst;
   };
 	
-	exports('rate', rate);
+	exports(MOD_NAME, rate);
 })
