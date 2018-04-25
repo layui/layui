@@ -55,13 +55,12 @@ layui.use(['rate'], function(){
   var rate = layui.rate;
 
   //渲染
-  // var ins1 = rate.render({
-  //   elem: '#test1'
-  //   ,length: 7
-  //   ,value: 4
-  // });
-  // ins1.setValue(5);
-
+  var ins1 = rate.render({
+    elem: '#test1'
+    ,length: 7
+    ,value: 4
+  });
+  ins1.setvalue(2);
 
   rate.render({
     elem: '#test1'

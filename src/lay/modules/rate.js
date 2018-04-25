@@ -28,11 +28,8 @@ layui.define('jquery',function(exports){
     ,options = that.config;
     
     return {
-      
-       function(value){
-        console.log(options)
-
-        //that.setValue();
+      setvalue: function(value){
+        that.setvalue.call(that, value);
       }
       ,config: options
     }
@@ -97,6 +94,16 @@ layui.define('jquery',function(exports){
     if(!options.reader) that.action(); 
 
   };
+
+
+  //重置value
+  Class.prototype.setvalue = function(value){
+    var that = this
+    ,options = that.config ;
+
+    options.value = value
+
+  }
 
 
   //li触控事件
