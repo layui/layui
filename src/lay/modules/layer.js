@@ -1098,6 +1098,8 @@ layer.photos = function(options, loop, key){
     if (data.length === 0) return;
     
     loop || parent.on('click', options.img, function(){
+      // 如果相册list动态增加图片，则新图片点击时，应该首先重载一遍数据，否则会导致数组越界，报错
+      pushData();
       var othis = $(this), index = othis.attr('layer-index'); 
       layer.photos($.extend(options, {
         photos: {
@@ -1107,7 +1109,6 @@ layer.photos = function(options, loop, key){
         },
         full: options.full
       }), true);
-      pushData();
     })
     
     //不直接弹出
