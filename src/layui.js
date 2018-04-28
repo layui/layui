@@ -59,9 +59,10 @@
     ,tree: 'modules/tree' //树结构
     ,table: 'modules/table' //表格
     ,element: 'modules/element' //常用元素操作
-    ,util: 'modules/util' //工具块
-    ,flow: 'modules/flow' //流加载
+    ,rate: 'modules/rate'  //评分组件
     ,carousel: 'modules/carousel' //轮播
+    ,flow: 'modules/flow' //流加载
+    ,util: 'modules/util' //工具块
     ,code: 'modules/code' //代码修饰器
     ,jquery: 'modules/jquery' //DOM库（第三方）
     
