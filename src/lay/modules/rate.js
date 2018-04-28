@@ -7,15 +7,15 @@
  */
 
 layui.define('jquery',function(exports){
-	"use strict";
-	var $ = layui.jquery
+  "use strict";
+  var $ = layui.jquery
 
-	//外部接口
-	,rate = {
-		config: {}
-		,index: layui.rate ? (layui.rate.index + 10000) : 0
+  //外部接口
+  ,rate = {
+    config: {}
+    ,index: layui.rate ? (layui.rate.index + 10000) : 0
 
-		//设置全局项
+    //设置全局项
     ,set: function(options){
       var that = this;
       that.config = $.extend({}, that.config, options);
@@ -26,7 +26,7 @@ layui.define('jquery',function(exports){
     ,on: function(events, callback){
       return layui.onevent.call(this, MOD_NAME, events, callback);
     }
-	}
+  }
 
   //操作当前实例
   ,thisRate = function(){
@@ -46,7 +46,7 @@ layui.define('jquery',function(exports){
   
   ,ICON_SOLID_HALF = 'layui-icon-rate-solid layui-icon-rate-half',  ICON_SOLID_RATE = 'layui-icon-rate-solid layui-icon-rate',  ICON_HALF_RATE = 'layui-icon-rate layui-icon-rate-half'
 
-	//构造器
+  //构造器
   ,Class = function(options){
     var that = this;
     that.index = ++rate.index;
@@ -209,6 +209,6 @@ layui.define('jquery',function(exports){
     var inst = new Class(options);
     return thisRate.call(inst);
   };
-	
-	exports(MOD_NAME, rate);
+  
+  exports(MOD_NAME, rate);
 })
