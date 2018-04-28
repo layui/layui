@@ -1,4 +1,10 @@
+/**
 
+ @Title: layui.upload 文件上传
+ @Author: star
+ @License：MIT
+
+ */
 
 layui.define('jquery',function(exports){
 	"use strict";
@@ -62,7 +68,7 @@ layui.define('jquery',function(exports){
   Class.prototype.render = function(){
     var that = this
     ,options = that.config
-    ,style = 'style="color: '+ options.theme + ';"';
+    ,style = options.theme ? ('style="color: '+ options.theme + ';"') : '';
 
     options.elem = $(options.elem);
 
@@ -83,7 +89,7 @@ layui.define('jquery',function(exports){
       if(options.half){
         if(parseInt(options.value) !== options.value){
           if(i == Math.ceil(options.value)){
-            temp = temp + '<li class="layui-inline"><i class="layui-icon layui-icon-rate-half" '+ style +'></i></li>';
+            temp = temp + '<li><i class="layui-icon layui-icon-rate-half" '+ style +'></i></li>';
           }else{
             temp = temp + item 
           } 
@@ -94,7 +100,7 @@ layui.define('jquery',function(exports){
         temp = temp +item;
       }
     }
-    temp += '</ul><span>' + (options.text ? options.value + "分" : "") + '</span>';
+    temp += '</ul>' + (options.text ? ('<span class="layui-inline">'+ options.value + '星') : '') + '</span>';
 
     //开始插入替代元素
     var othis = options.elem
@@ -104,6 +110,11 @@ layui.define('jquery',function(exports){
     hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender
 
     that.elemTemp = $(temp);
+    
+    options.span = that.elemTemp.next('span');
+
+    options.setText && options.setText(options.value);
+
     othis.html(that.elemTemp);
 
     othis.addClass("layui-inline");
@@ -126,7 +137,8 @@ layui.define('jquery',function(exports){
   Class.prototype.action = function(){
     var that = this
     ,options = that.config
-    ,_ul = that.elemTemp;
+    ,_ul = that.elemTemp
+    ,wide = _ul.find("i").width();
 
     _ul.children("li").each(function(index){
       var ind = index + 1
@@ -139,12 +151,16 @@ layui.define('jquery',function(exports){
         if(options.half){
           //获取鼠标在li上的位置
           var x = e.pageX - $(this).offset().left;
-          if(x <= 13){
+          if(x <= wide / 2){
             options.value = options.value - 0.5;
           }
         }
-        if(options.text)  _ul.next("span").text(options.value + "分")
-      })
+
+        if(options.text)  _ul.next("span").text(options.value + "星");
+
+        options.choose && options.choose(options.value);
+        options.setText && options.setText(options.value);
+      });
 
       //移入
       othis.on('mousemove', function(e){
@@ -157,14 +173,14 @@ layui.define('jquery',function(exports){
         // 如果设置可选半星，那么判断鼠标相对li的位置
         if(options.half){
           var x = e.pageX - $(this).offset().left;
-          if(x <= 13){
+          if(x <= wide / 2){
             othis.children("i").addClass(ICON_RATE_HALF).removeClass(ICON_RATE_SOLID)
           }
         }         
       })
 
       //移出
-      othis.on('mouseout', function(){
+      othis.on('mouseleave', function(){
         _ul.find("i").each(function(){
           $(this).addClass(ICON_RATE).removeClass(ICON_SOLID_HALF)
         });
