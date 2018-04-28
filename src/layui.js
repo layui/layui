@@ -59,16 +59,15 @@
     ,tree: 'modules/tree' //树结构
     ,table: 'modules/table' //表格
     ,element: 'modules/element' //常用元素操作
-    ,util: 'modules/util' //工具块
-    ,flow: 'modules/flow' //流加载
+    ,rate: 'modules/rate'  //评分组件
     ,carousel: 'modules/carousel' //轮播
+    ,flow: 'modules/flow' //流加载
+    ,util: 'modules/util' //工具块
     ,code: 'modules/code' //代码修饰器
     ,jquery: 'modules/jquery' //DOM库（第三方）
     
     ,mobile: 'modules/mobile' //移动大模块 | 若当前为开发目录，则为移动模块入口，否则为移动模块集合
     ,'layui.all': '../layui.all' //PC模块合并版
-
-    ,rate: 'modules/rate'  //评分组件
   };
 
   //记录基础数据
