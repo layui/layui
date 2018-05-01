@@ -885,7 +885,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     that.layFixRight[outWidth > 0 ? 'removeClass' : 'addClass'](HIDE); 
     
     //操作栏
-    that.layFixRight.css('right', scollWidth - 1); 
+    that.layFixRight.css('right', scollWidth - 1);
+
+    // 同步滚动条位置
+    that.layMain.scroll();
   };
 
   //事件处理
