@@ -1,6 +1,6 @@
 /**
 
- @Title: layui.upload 文件上传
+ @Title: layui.rate 评分评星
  @Author: star
  @License：MIT
 
