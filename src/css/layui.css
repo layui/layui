@@ -46,11 +46,11 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /** 图标字体 **/
 @font-face {font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=226_rc2');
-  src: url('../font/iconfont.eot?v=226_rc2#iefix') format('embedded-opentype'),
-  url('../font/iconfont.svg?v=226_rc2#iconfont') format('svg'),
-  url('../font/iconfont.woff?v=226_rc2') format('woff'),
-  url('../font/iconfont.ttf?v=226_rc2') format('truetype');
+  src: url('../font/iconfont.eot?v=230');
+  src: url('../font/iconfont.eot?v=230#iefix') format('embedded-opentype'),
+  url('../font/iconfont.svg?v=230#iconfont') format('svg'),
+  url('../font/iconfont.woff?v=230') format('woff'),
+  url('../font/iconfont.ttf?v=230') format('truetype');
 }
                     
 .layui-icon{
@@ -61,7 +61,7 @@ a cite{font-style: normal; *cursor:pointer;}
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 临时 */
+/* font-class */
 .layui-icon-duihua:before { content: "\e611"; }
 
 .layui-icon-shezhi:before { content: "\e614"; }
