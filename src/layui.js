@@ -277,11 +277,11 @@
     }
     img.onload = function(){
       img.onload = null;
-      callback(img);
+      typeof callback === 'function' && callback(img);
     };
     img.onerror = function(e){
       img.onerror = null;
-      error(e);
+      typeof error === 'function' && error(e);
     };  
   };
 

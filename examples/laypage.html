@@ -105,7 +105,7 @@ layui.use(['laypage', 'layer'], function(){
     elem: 'demo7'
     ,count: 100
     //,groups: 0
-    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip', ]
     ,jump: function(obj){
       console.log(obj)
     }
@@ -169,6 +169,7 @@ layui.use(['laypage', 'layer'], function(){
   laypage.render({
     elem: 'demo9'
     ,count: data.length
+    ,layout: ['prev', 'page', 'next', 'refresh', 'skip']
     ,jump: function(obj){
       //模拟渲染
       document.getElementById('biuuu_city_list').innerHTML = function(){

@@ -134,8 +134,10 @@ layui.use('laydate', function(){
     elem: '#test2'
     //,format: 'yyyy年MM月dd日'
     //,value: new Date(1989,9,14)
+    ,isInitValue: false
     ,format: 'yyyyMMdd'
     ,value: '20170910'
+   
     //,max: 0
     //,min: '2016-10-14'
     //,max: -1
@@ -237,6 +239,8 @@ layui.use('laydate', function(){
     elem: '#test6-1' //指定元素
     ,type: 'datetime'
     ,theme: 'molv'
+    ,value: 20180115
+    ,isInitValue: true
     //,range: true
     ,trigger: 'click'
   });

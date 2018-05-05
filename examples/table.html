@@ -166,8 +166,8 @@ body{padding: 20px; /*overflow-y: scroll;*/}
 </table>
 
 <script type="text/html" id="toolbarDemo">
-  <i class="layui-icon">&#xe654;</i>
-  <i class="layui-icon">&#xe640;</i>
+  <i class="layui-icon" data-type="add">&#xe654;</i>
+  <i class="layui-icon" data-type="delete">&#xe640;</i>
 </script>
 
 <script src="../src/layui.js" charset="utf-8"></script>
@@ -216,23 +216,34 @@ layui.use('table', function(){
     ,cellMinWidth: 80
     ,cols: [[
       {type:'numbers'}
-      ,{type: 'checkbox'}
+      ,{type: 'radio'}
       ,{field:'id', title:'ID', unresize: true, sort: true}
       ,{field:'username', title:'用户名', templet: '#usernameTpl'}
-      ,{field:'email', title:'邮箱'}
-      ,{field:'sex', title:'性别', templet: '#switchTpl', minWidth: 85, align:'center'}
+      ,{field:'email', title:'邮箱', edit: 'select'}
+      ,{field:'sex', title:'性别', edit: 'switch', templet: '#switchTpl', minWidth: 85, align:'center'}
       ,{field:'lock', title:'是否锁定', templet: '#checkboxTpl', minWidth: 110, align:'center'}
       ,{field:'city', title:'城市'}
     ]]
+  });
+
+
+  //监听表格行点击
+  table.on('tr', function(obj){
+    console.log(obj)
   });
 
   //监听表格复选框选择
   table.on('checkbox(test)', function(obj){
     console.log(obj)
   });
+
+  //监听表格单选框选择
+  table.on('radio(test2)', function(obj){
+    console.log(obj)
+  });
   
   //监听单元格编辑
-  table.on('edit(test)', function(obj){
+  table.on('edit(test2)', function(obj){
     var value = obj.value //得到修改后的值
     ,data = obj.data //得到所在行所有键值
     ,field = obj.field; //得到字段
@@ -414,8 +425,20 @@ layui.use('table', function(){
         limit: 3
       });
     }
+    ,add: function(){
+      table.addRow('test')
+    }
+    ,delete: function(){
+      layer.confirm('确认删除吗？', function(index){
+        table.deleteRow('test')
+        layer.close(index);
+      });
+    }
   };
-  
+  $('i').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
   $('.layui-btn').on('click', function(){
     var type = $(this).data('type');
     active[type] ? active[type].call(this) : '';
