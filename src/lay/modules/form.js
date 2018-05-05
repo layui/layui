@@ -68,6 +68,26 @@ layui.define('layer', function(exports){
   Form.prototype.on = function(events, callback){
     return layui.onevent.call(this, MOD_NAME, events, callback);
   };
+
+  //初始赋值
+  Form.prototype.val = function(filter, object){
+    var that = this
+    ,formElem = $(ELEM + '[lay-filter="' + filter +'"]');
+    formElem.each(function(index, item){
+      var itemFrom = $(this);
+      layui.each(object, function(key, value){
+        var itemElem = itemFrom.find('[name="'+ key +'"]');
+        itemElem.val(value);
+        if(!itemElem[0]) return;
+
+        //如果有 checked 的内置属性，就改变 checked 属性的值
+        if('checked' in itemElem[0]){
+          itemElem[0].checked = value;
+        } 
+      });
+    });
+    form.render(null, filter);
+  };
   
   //表单控件渲染
   Form.prototype.render = function(type, filter){
@@ -96,7 +116,7 @@ layui.define('layer', function(exports){
           ,input = title.find('input')
           ,dl = reElem.find('dl')
           ,dds = dl.children('dd')
-          
+          ,index = Number(select.val()? select.val(): -1) + 1 ;        
           
           if(disabled) return;
           
@@ -106,7 +126,8 @@ layui.define('layer', function(exports){
             ,dlHeight = dl.outerHeight();
             reElem.addClass(CLASS+'ed');
             dds.removeClass(HIDE);
-            
+            //确保没有选择的时候第一个也会有样式
+            dl.children('dd:eq('+index+')').addClass(THIS); 
             //上下定位识别
             if(top + dlHeight > win.height() && top >= dlHeight){
               reElem.addClass(CLASS + 'up');
@@ -153,8 +174,48 @@ layui.define('layer', function(exports){
             //Tab键
             if(keyCode === 9){
               hideDown();
-            } else if(keyCode === 13){ //回车键
+            } 
+            //up 键
+            if(keyCode === 38){ 
               e.preventDefault();
+              index--;
+              // 如果是不可点击状态，则跳过
+              if(dl.children('dd:eq('+index+')').hasClass(DISABLED)) index--;
+              if(index < 0) index = 0;      
+
+              dl.children('dd:eq('+index+')').addClass(THIS).siblings().removeClass(THIS); 
+            }
+            //down 键
+            if(keyCode === 40){ 
+              e.preventDefault();
+              index++;
+              if(dl.children('dd:eq('+index+')').hasClass(DISABLED)) index++;
+              if(index > dds.length - 1) index = dds.length - 1;      
+
+              dl.children('dd:eq('+index+')').addClass(THIS).siblings().removeClass(THIS);
+            }
+            //回车键
+            if(keyCode === 13){ 
+              e.preventDefault();
+              var othis = dl.children('dd:eq('+index+')')
+              ,value = othis.attr('lay-value')
+              ,filter = select.attr('lay-filter'); //获取过滤器
+
+              if(index === 0){
+                input.val('');
+              } else {
+                input.val(othis.text());
+              }
+
+              select.val(value).removeClass('layui-form-danger')
+              layui.event.call(this, MOD_NAME, 'select('+ filter +')', {
+                elem: select[0]
+                ,value: value
+                ,othis: reElem
+              });
+              
+              hideDown(true);
+
             }
           });
           
@@ -212,16 +273,17 @@ layui.define('layer', function(exports){
           dds.on('click', function(){
             var othis = $(this), value = othis.attr('lay-value');
             var filter = select.attr('lay-filter'); //获取过滤器
-
             if(othis.hasClass(DISABLED)) return false;
             
             if(othis.hasClass('layui-select-tips')){
               input.val('');
+              index = 0;
             } else {
               input.val(othis.text());
               othis.addClass(THIS);
+              index = Number(value) + 1;
             }
-            
+
             othis.siblings().removeClass(THIS);
             select.val(value).removeClass('layui-form-danger')
             layui.event.call(this, MOD_NAME, 'select('+ filter +')', {

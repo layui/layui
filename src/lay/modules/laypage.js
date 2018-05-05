@@ -75,7 +75,7 @@ layui.define(function(exports){
       ? Math.ceil( (config.curr + (groups > 1 ? 1 : 0)) / (groups > 0 ? groups : 1) )
     : 1
     
-    //试图片段
+    //视图片段
     ,views = {
       //上一页
       prev: function(){
@@ -162,6 +162,9 @@ layui.define(function(exports){
         return options.join('') +'</select></span>';
       }()
       
+      //刷新
+      ,refresh: '<a href="javascript:;" data-page="'+ config.curr +'" class="layui-laypage-refresh"><i class="layui-icon">&#x1002;</i></a>'
+
       //跳页区域
       ,skip: function(){
         return ['<span class="layui-laypage-skip">&#x5230;&#x7B2C;'
@@ -271,7 +274,7 @@ layui.define(function(exports){
         doc[id](config.elem).innerHTML = view;
       }
     }
-    
+
     config.jump && config.jump(config, load);
     
     var elem = doc[id]('layui-laypage-' + config.index);

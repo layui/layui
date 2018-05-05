@@ -18,11 +18,11 @@ body{padding: 10px;}
 </head>
 <body>
 
-<form class="layui-form layui-form-pane1" action="">
+<form class="layui-form layui-form-pane1" action="" lay-filter="first">
   <div class="layui-form-item">
     <label class="layui-form-label">输入框</label>
     <div class="layui-input-block">
-      <input type="text" name="xxx " autocomplete="off" class="layui-input">
+      <input type="text" name="xxx" autocomplete="off" class="layui-input">
     </div>
   </div>
   <div class="layui-form-item">
@@ -60,7 +60,7 @@ body{padding: 10px;}
   </div>
 </form>
 
-<form class="layui-form layui-form-pane1" action="">
+<form class="layui-form layui-form-pane1" action="" lay-filter="first">
   <div class="layui-form-item">
     <label class="layui-form-label">输入框</label>
     <div class="layui-input-block">
@@ -102,9 +102,9 @@ body{padding: 10px;}
       <div class="layui-input-block">
         <select name="quiz" lay-verify="required" lay-verType="tips">
           <option value="">请选择问题</option>
-          <option value="你工作的第一个城市">你工作的第一个城市</option>
-          <option value="你的工号" disabled>你的工号</option>
-          <option value="你最喜欢的老师">你最喜欢的老师</option>
+          <option value="0">你工作的第一个城市</option>
+          <option value="1" disabled>你的工号</option>
+          <option value="2">你最喜欢的老师</option>
         </select>
       </div>
     </div>
@@ -114,11 +114,11 @@ body{padding: 10px;}
         <select name="quiz" lay-filter="quiz">
           <option value="">请选择问题</option>
           <optgroup label="城市记忆">
-            <option value="你工作的第一个城市">你工作的第一个城市</option>
+            <option value="0">你工作的第一个城市</option>
           </optgroup>
           <optgroup label="学生时代">
-            <option value="你的工号" disabled>你的工号</option>
-            <option value="你最喜欢的老师">你最喜欢的老师</option>
+            <option value="1" disabled>你的工号</option>
+            <option value="2">你最喜欢的老师</option>
           </optgroup>
         </select>
       </div>
@@ -131,7 +131,7 @@ body{padding: 10px;}
       <select name="interest" lay-filter="interest">
         <option value=""></option>
         <option value="0">写作</option>
-        <option value="1" selected>阅读</option>
+        <option value="1">阅读</option>
         <option value="2">游戏</option>
         <option value="3">音乐</option>
         <option value="4">旅行</option>
@@ -201,7 +201,7 @@ body{padding: 10px;}
   <div class="layui-form-item layui-form-text">
     <label class="layui-form-label">请填写描述</label>
     <div class="layui-input-block">
-      <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
+      <textarea placeholder="请输入内容" class="layui-textarea" name="desc"></textarea>
     </div>
   </div>
   <div class="layui-form-item">
@@ -232,6 +232,20 @@ layui.use('form', function(){
     }
     ,pass: [/(.+){6,12}$/, '密码必须6到12位']
   });
+
+  form.val('first',{
+    'xxx': '猪猪猪'
+    ,'title': '测试'
+    ,'phone': 18829264233
+    ,'email': 2321582517
+    ,'password': 123123
+    ,'quiz': 2
+    ,'interest': 3
+    ,'like[write]': true
+    ,'open': false
+    ,'sex': '男'
+    ,'desc': '一二三四一二三四'
+  })
 
   
   //事件监听
