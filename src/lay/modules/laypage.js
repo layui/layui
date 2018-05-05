@@ -18,7 +18,6 @@ layui.define(function(exports){
   
   //构造器
   ,Class = function(options){
-
     var that = this;
     that.config = options || {};
     that.config.index = ++laypage.index;
@@ -164,7 +163,7 @@ layui.define(function(exports){
       }()
       
       //刷新
-      ,refresh: '<span class="layui-laypage-refresh"><i class="layui-icon">&#x1002;</i></span>'
+      ,refresh: '<a href="javascript:;" data-page="'+ config.curr +'" class="layui-laypage-refresh"><i class="layui-icon">&#x1002;</i></a>'
 
       //跳页区域
       ,skip: function(){
@@ -259,24 +258,6 @@ layui.define(function(exports){
     });
   };
 
-  //刷新当前页
-  Class.prototype.update = function(elem){
-    if(!elem) return;
-      var that = this
-      ,config = that.config
-      ,curr = config.curr
-      ,spani = elem[tag]('i')[0];
-
-      if(spani){
-        laypage.on(spani, 'click', function(){
-          config.curr = curr;
-          that.render();
-          console.log(config.curr);
-        });
-      }
-    
-  };
-
   //渲染分页
   Class.prototype.render = function(load){
     var that = this
@@ -304,8 +285,6 @@ layui.define(function(exports){
     }
     
     that.skip(elem);
-
-    that.update(elem);
   };
   
   //外部接口
