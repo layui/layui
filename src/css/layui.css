@@ -62,312 +62,151 @@ a cite{font-style: normal; *cursor:pointer;}
 }
 
 /* font-class */
-.layui-icon-duihua:before { content: "\e611"; }
-
-.layui-icon-shezhi:before { content: "\e614"; }
-
-.layui-icon-yinshenim:before { content: "\e60f"; }
-
-.layui-icon-search:before { content: "\e615"; }
-
-.layui-icon-fenxiang1:before { content: "\e641"; }
-
-.layui-icon-shezhi1:before { content: "\e620"; }
-
-.layui-icon-yinqing:before { content: "\e628"; }
-
-.layui-icon-close:before { content: "\1006"; }
-
-.layui-icon-close-fill:before { content: "\1007"; }
-
-.layui-icon-baobiao:before { content: "\e629"; }
-
-.layui-icon-star:before { content: "\e600"; }
-
-.layui-icon-yuandian:before { content: "\e617"; }
-
-.layui-icon-chat:before { content: "\e606"; }
-
-.layui-icon-logo:before { content: "\e609"; }
-
-.layui-icon-list:before { content: "\e60a"; }
-
-.layui-icon-tubiao:before { content: "\e62c"; }
-
-.layui-icon-ok-circle:before { content: "\1005"; }
-
-.layui-icon-huanfu2:before { content: "\e61b"; }
-
-.layui-icon-On-line:before { content: "\e610"; }
-
-.layui-icon-biaoge:before { content: "\e62d"; }
-
-.layui-icon-right:before { content: "\e602"; }
-
-.layui-icon-left:before { content: "\e603"; }
-
-.layui-icon-cart-simple:before { content: "\e698"; }
-
-.layui-icon-cry:before { content: "\e69c"; }
-
-.layui-icon-smile:before { content: "\e6af"; }
-
-.layui-icon-survey:before { content: "\e6b2"; }
-
-.layui-icon-tree:before { content: "\e62e"; }
-
-.layui-icon-iconfont17:before { content: "\e62f"; }
-
-.layui-icon-tianjia:before { content: "\e61f"; }
-
-.layui-icon-download-circle:before { content: "\e601"; }
-
-.layui-icon-xuanzemoban48:before { content: "\e630"; }
-
-.layui-icon-gongju:before { content: "\e631"; }
-
-.layui-icon-face-surprised:before { content: "\e664"; }
-
-.layui-icon-bianji:before { content: "\e642"; }
-
-.layui-icon-speaker:before { content: "\e645"; }
-
-.layui-icon-down:before { content: "\e61a"; }
-
-.layui-icon-wenjian:before { content: "\e621"; }
-
-.layui-icon-layouts:before { content: "\e632"; }
-
-.layui-icon-duigou:before { content: "\e618"; }
-
-.layui-icon-tianjia1:before { content: "\e608"; }
-
-.layui-icon-yaoyaozhibofanye:before { content: "\e633"; }
-
-.layui-icon-read:before { content: "\e705"; }
-
-.layui-icon-404:before { content: "\e61c"; }
-
-.layui-icon-lunbozutu:before { content: "\e634"; }
-
-.layui-icon-help:before { content: "\e607"; }
-
-.layui-icon-daima1:before { content: "\e635"; }
-
-.layui-icon-jinshui:before { content: "\e636"; }
-
-.layui-icon-username:before { content: "\e66f"; }
-
-.layui-icon-find-fill:before { content: "\e670"; }
-
-.layui-icon-about:before { content: "\e60b"; }
-
-.layui-icon-location:before { content: "\e715"; }
-
-.layui-icon-up:before { content: "\e619"; }
-
-.layui-icon-pause:before { content: "\e651"; }
-
-.layui-icon-riqi:before { content: "\e637"; }
-
-.layui-icon-uploadfile:before { content: "\e61d"; }
-
-.layui-icon-delete:before { content: "\e640"; }
-
-.layui-icon-play:before { content: "\e652"; }
-
-.layui-icon-top:before { content: "\e604"; }
-
-.layui-icon-haoyouqingqiu:before { content: "\e612"; }
-
-.layui-icon-refresh-3:before { content: "\e9aa"; }
-
-.layui-icon-weibiaoti1:before { content: "\e605"; }
-
-.layui-icon-chuangkou:before { content: "\e638"; }
-
-.layui-icon-comiisbiaoqing:before { content: "\e60c"; }
-
-.layui-icon-zhengque:before { content: "\e616"; }
-
-.layui-icon-dollar:before { content: "\e659"; }
-
-.layui-icon-iconfontwodehaoyou:before { content: "\e613"; }
-
-.layui-icon-wenjianxiazai:before { content: "\e61e"; }
-
-.layui-icon-tupian:before { content: "\e60d"; }
-
-.layui-icon-lianjie:before { content: "\e64c"; }
-
-.layui-icon-diamond:before { content: "\e735"; }
-
-.layui-icon-jilu:before { content: "\e60e"; }
-
-.layui-icon-liucheng:before { content: "\e622"; }
-
-.layui-icon-fontstrikethrough:before { content: "\e64f"; }
-
-.layui-icon-unlink:before { content: "\e64d"; }
-
-.layui-icon-bianjiwenzi:before { content: "\e639"; }
-
-.layui-icon-sanjiao:before { content: "\e623"; }
-
-.layui-icon-danxuankuanghouxuan:before { content: "\e63f"; }
-
-.layui-icon-danxuankuangxuanzhong:before { content: "\e643"; }
-
-.layui-icon-juzhongduiqi:before { content: "\e647"; }
-
-.layui-icon-youduiqi:before { content: "\e648"; }
-
-.layui-icon-zuoduiqi:before { content: "\e649"; }
-
-.layui-icon-gongsisvgtubiaozongji22:before { content: "\e626"; }
-
-.layui-icon-gongsisvgtubiaozongji23:before { content: "\e627"; }
-
-.layui-icon-refresh-2:before { content: "\1002"; }
-
-.layui-icon-loading-1:before { content: "\e63e"; }
-
-.layui-icon-return:before { content: "\e65c"; }
-
-.layui-icon-jiacu:before { content: "\e62b"; }
-
-.layui-icon-uploading:before { content: "\e67c"; }
-
-.layui-icon-liaotianduihuaimgoutong:before { content: "\e63a"; }
-
-.layui-icon-video:before { content: "\e6ed"; }
-
-.layui-icon-headset:before { content: "\e6fc"; }
-
-.layui-icon-wenjianjiafan:before { content: "\e624"; }
-
-.layui-icon-shouji:before { content: "\e63b"; }
-
-.layui-icon-tianjia2:before { content: "\e654"; }
-
-.layui-icon-wenjianjia:before { content: "\e7a0"; }
-
-.layui-icon-biaoqing:before { content: "\e650"; }
-
-.layui-icon-html:before { content: "\e64b"; }
-
-.layui-icon-biaodan:before { content: "\e63c"; }
-
-.layui-icon-cart:before { content: "\e657"; }
-
-.layui-icon-camera-fill:before { content: "\e65d"; }
-
-.layui-icon-25:before { content: "\e62a"; }
-
-.layui-icon-emwdaima:before { content: "\e64e"; }
-
-.layui-icon-fire:before { content: "\e756"; }
-
-.layui-icon-set:before { content: "\e716"; }
-
-.layui-icon-zitixiahuaxian:before { content: "\e646"; }
-
-.layui-icon-sanjiao1:before { content: "\e625"; }
-
-.layui-icon-tips:before { content: "\e702"; }
-
-.layui-icon-tupian-copy-copy:before { content: "\e64a"; }
-
-.layui-icon-more-vertical:before { content: "\e671"; }
-
-.layui-icon-zhuti2:before { content: "\e66c"; }
-
-.layui-icon-loading:before { content: "\e63d"; }
-
-.layui-icon-xieti:before { content: "\e644"; }
-
-.layui-icon-refresh-1:before { content: "\e666"; }
-
-.layui-icon-rmb:before { content: "\e65e"; }
-
-.layui-icon-home:before { content: "\e68e"; }
-
-.layui-icon-user:before { content: "\e770"; }
-
-.layui-icon-notice:before { content: "\e667"; }
-
-.layui-icon-login-weibo:before { content: "\e675"; }
-
-.layui-icon-voice:before { content: "\e688"; }
-
-.layui-icon-download:before { content: "\e681"; }
-
-.layui-icon-login-qq:before { content: "\e676"; }
-
-.layui-icon-snowflake:before { content: "\e6b1"; }
-
-.layui-icon-yemian1:before { content: "\e655"; }
-
-.layui-icon-template:before { content: "\e663"; }
-
-.layui-icon-auz:before { content: "\e672"; }
-
-.layui-icon-console:before { content: "\e665"; }
-
-.layui-icon-app:before { content: "\e653"; }
-
-.layui-icon-prev:before { content: "\e65a"; }
-
-.layui-icon-website:before { content: "\e7ae"; }
-
-.layui-icon-next:before { content: "\e65b"; }
-
-.layui-icon-component:before { content: "\e857"; }
-
-.layui-icon-more:before { content: "\e65f"; }
-
-.layui-icon-login-wechat:before { content: "\e677"; }
-
-.layui-icon-shrink-right:before { content: "\e668"; }
-
-.layui-icon-spread-left:before { content: "\e66b"; }
-
-.layui-icon-camera:before { content: "\e660"; }
-
-.layui-icon-note:before { content: "\e66e"; }
-
-.layui-icon-refresh:before { content: "\e669"; }
-
-.layui-icon-nv:before { content: "\e661"; }
-
-.layui-icon-nan:before { content: "\e662"; }
-
-.layui-icon-password:before { content: "\e673"; }
-
-.layui-icon-senior:before { content: "\e674"; }
-
-.layui-icon-theme:before { content: "\e66a"; }
-
-.layui-icon-tread:before { content: "\e6c5"; }
-
-.layui-icon-praise:before { content: "\e6c6"; }
-
-.layui-icon-star-fill:before { content: "\e658"; }
-
-.layui-icon-template-1:before { content: "\e656"; }
-
-.layui-icon-loading-2:before { content: "\e66d"; }
-
-.layui-icon-vercode:before { content: "\e679"; }
-
-.layui-icon-cellphone:before { content: "\e678"; }
-
-.layui-icon-rate:before { content: "\e67b"; }
-
-.layui-icon-rate-solid:before { content: "\e67a"; }
-
-.layui-icon-rate-half:before { content: "\e6c9"; }
-
+.layui-icon-reply-fill:before{content:"\e611"}
+.layui-icon-set-fill:before{content:"\e614"}
+.layui-icon-menu-fill:before{content:"\e60f"}
+.layui-icon-search:before{content:"\e615"}
+.layui-icon-share:before{content:"\e641"}
+.layui-icon-set-sm:before{content:"\e620"}
+.layui-icon-engine:before{content:"\e628"}
+.layui-icon-close:before{content:"\1006"}
+.layui-icon-close-fill:before{content:"\1007"}
+.layui-icon-chart-screen:before{content:"\e629"}
+.layui-icon-star:before{content:"\e600"}
+.layui-icon-circle-dot:before{content:"\e617"}
+.layui-icon-chat:before{content:"\e606"}
+.layui-icon-release:before{content:"\e609"}
+.layui-icon-list:before{content:"\e60a"}
+.layui-icon-chart:before{content:"\e62c"}
+.layui-icon-ok-circle:before{content:"\1005"}
+.layui-icon-layim-theme:before{content:"\e61b"}
+.layui-icon-table:before{content:"\e62d"}
+.layui-icon-right:before{content:"\e602"}
+.layui-icon-left:before{content:"\e603"}
+.layui-icon-cart-simple:before{content:"\e698"}
+.layui-icon-face-cry:before{content:"\e69c"}
+.layui-icon-face-smile:before{content:"\e6af"}
+.layui-icon-survey:before{content:"\e6b2"}
+.layui-icon-tree:before{content:"\e62e"}
+.layui-icon-upload-circle:before{content:"\e62f"}
+.layui-icon-add-circle:before{content:"\e61f"}
+.layui-icon-download-circle:before{content:"\e601"}
+.layui-icon-templeate-1:before{content:"\e630"}
+.layui-icon-util:before{content:"\e631"}
+.layui-icon-face-surprised:before{content:"\e664"}
+.layui-icon-edit:before{content:"\e642"}
+.layui-icon-speaker:before{content:"\e645"}
+.layui-icon-down:before{content:"\e61a"}
+.layui-icon-file:before{content:"\e621"}
+.layui-icon-layouts:before{content:"\e632"}
+.layui-icon-rate-half:before{content:"\e6c9"}
+.layui-icon-layim-add:before{content:"\e608"}
+.layui-icon-prev-circle:before{content:"\e633"}
+.layui-icon-read:before{content:"\e705"}
+.layui-icon-404:before{content:"\e61c"}
+.layui-icon-carousel:before{content:"\e634"}
+.layui-icon-help:before{content:"\e607"}
+.layui-icon-code-circle:before{content:"\e635"}
+.layui-icon-water:before{content:"\e636"}
+.layui-icon-username:before{content:"\e66f"}
+.layui-icon-find-fill:before{content:"\e670"}
+.layui-icon-about:before{content:"\e60b"}
+.layui-icon-location:before{content:"\e715"}
+.layui-icon-up:before{content:"\e619"}
+.layui-icon-pause:before{content:"\e651"}
+.layui-icon-date:before{content:"\e637"}
+.layui-icon-layim-uploadfile:before{content:"\e61d"}
+.layui-icon-delete:before{content:"\e640"}
+.layui-icon-play:before{content:"\e652"}
+.layui-icon-top:before{content:"\e604"}
+.layui-icon-friends:before{content:"\e612"}
+.layui-icon-refresh-3:before{content:"\e9aa"}
+.layui-icon-ok:before{content:"\e605"}
+.layui-icon-layer:before{content:"\e638"}
+.layui-icon-face-smile-fine:before{content:"\e60c"}
+.layui-icon-dollar:before{content:"\e659"}
+.layui-icon-group:before{content:"\e613"}
+.layui-icon-layim-download:before{content:"\e61e"}
+.layui-icon-picture-fine:before{content:"\e60d"}
+.layui-icon-link:before{content:"\e64c"}
+.layui-icon-diamond:before{content:"\e735"}
+.layui-icon-log:before{content:"\e60e"}
+.layui-icon-rate-solid:before{content:"\e67a"}
+.layui-icon-fonts-del:before{content:"\e64f"}
+.layui-icon-unlink:before{content:"\e64d"}
+.layui-icon-fonts-clear:before{content:"\e639"}
+.layui-icon-triangle-r:before{content:"\e623"}
+.layui-icon-circle:before{content:"\e63f"}
+.layui-icon-radio:before{content:"\e643"}
+.layui-icon-align-center:before{content:"\e647"}
+.layui-icon-align-right:before{content:"\e648"}
+.layui-icon-align-left:before{content:"\e649"}
+.layui-icon-refresh-2:before{content:"\1002"}
+.layui-icon-loading-1:before{content:"\e63e"}
+.layui-icon-return:before{content:"\e65c"}
+.layui-icon-fonts-strong:before{content:"\e62b"}
+.layui-icon-upload:before{content:"\e67c"}
+.layui-icon-dialogue:before{content:"\e63a"}
+.layui-icon-video:before{content:"\e6ed"}
+.layui-icon-headset:before{content:"\e6fc"}
+.layui-icon-cellphone-fine:before{content:"\e63b"}
+.layui-icon-add-1:before{content:"\e654"}
+.layui-icon-face-smile-b:before{content:"\e650"}
+.layui-icon-fonts-html:before{content:"\e64b"}
+.layui-icon-form:before{content:"\e63c"}
+.layui-icon-cart:before{content:"\e657"}
+.layui-icon-camera-fill:before{content:"\e65d"}
+.layui-icon-tabs:before{content:"\e62a"}
+.layui-icon-fonts-code:before{content:"\e64e"}
+.layui-icon-fire:before{content:"\e756"}
+.layui-icon-set:before{content:"\e716"}
+.layui-icon-fonts-u:before{content:"\e646"}
+.layui-icon-triangle-d:before{content:"\e625"}
+.layui-icon-tips:before{content:"\e702"}
+.layui-icon-picture:before{content:"\e64a"}
+.layui-icon-more-vertical:before{content:"\e671"}
+.layui-icon-flag:before{content:"\e66c"}
+.layui-icon-loading:before{content:"\e63d"}
+.layui-icon-fonts-i:before{content:"\e644"}
+.layui-icon-refresh-1:before{content:"\e666"}
+.layui-icon-rmb:before{content:"\e65e"}
+.layui-icon-home:before{content:"\e68e"}
+.layui-icon-user:before{content:"\e770"}
+.layui-icon-notice:before{content:"\e667"}
+.layui-icon-login-weibo:before{content:"\e675"}
+.layui-icon-voice:before{content:"\e688"}
+.layui-icon-upload-drag:before{content:"\e681"}
+.layui-icon-login-qq:before{content:"\e676"}
+.layui-icon-snowflake:before{content:"\e6b1"}
+.layui-icon-file-b:before{content:"\e655"}
+.layui-icon-template:before{content:"\e663"}
+.layui-icon-auz:before{content:"\e672"}
+.layui-icon-console:before{content:"\e665"}
+.layui-icon-app:before{content:"\e653"}
+.layui-icon-prev:before{content:"\e65a"}
+.layui-icon-website:before{content:"\e7ae"}
+.layui-icon-next:before{content:"\e65b"}
+.layui-icon-component:before{content:"\e857"}
+.layui-icon-more:before{content:"\e65f"}
+.layui-icon-login-wechat:before{content:"\e677"}
+.layui-icon-shrink-right:before{content:"\e668"}
+.layui-icon-spread-left:before{content:"\e66b"}
+.layui-icon-camera:before{content:"\e660"}
+.layui-icon-note:before{content:"\e66e"}
+.layui-icon-refresh:before{content:"\e669"}
+.layui-icon-female:before{content:"\e661"}
+.layui-icon-male:before{content:"\e662"}
+.layui-icon-password:before{content:"\e673"}
+.layui-icon-senior:before{content:"\e674"}
+.layui-icon-theme:before{content:"\e66a"}
+.layui-icon-tread:before{content:"\e6c5"}
+.layui-icon-praise:before{content:"\e6c6"}
+.layui-icon-star-fill:before{content:"\e658"}
+.layui-icon-rate:before{content:"\e67b"}
+.layui-icon-template-1:before{content:"\e656"}
+.layui-icon-loading-2:before{content:"\e66d"}
+.layui-icon-vercode:before{content:"\e679"}
+.layui-icon-cellphone:before{content:"\e678"}
 
 
 /* 基本布局 */

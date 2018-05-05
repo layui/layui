@@ -163,7 +163,9 @@ layui.define(function(exports){
       }()
       
       //刷新
-      ,refresh: '<a href="javascript:;" data-page="'+ config.curr +'" class="layui-laypage-refresh"><i class="layui-icon">&#x1002;</i></a>'
+      ,refresh: ['<a href="javascript:;" data-page="'+ config.curr +'" class="layui-laypage-refresh">'
+        ,'<i class="layui-icon layui-icon-refresh"></i>'
+      ,'</a>'].join('')
 
       //跳页区域
       ,skip: function(){
