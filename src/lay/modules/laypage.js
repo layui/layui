@@ -18,6 +18,7 @@ layui.define(function(exports){
   
   //构造器
   ,Class = function(options){
+
     var that = this;
     that.config = options || {};
     that.config.index = ++laypage.index;
@@ -75,7 +76,7 @@ layui.define(function(exports){
       ? Math.ceil( (config.curr + (groups > 1 ? 1 : 0)) / (groups > 0 ? groups : 1) )
     : 1
     
-    //试图片段
+    //视图片段
     ,views = {
       //上一页
       prev: function(){
@@ -162,6 +163,9 @@ layui.define(function(exports){
         return options.join('') +'</select></span>';
       }()
       
+      //刷新
+      ,refresh: '<span class="layui-laypage-refresh"><i class="layui-icon">&#x1002;</i></span>'
+
       //跳页区域
       ,skip: function(){
         return ['<span class="layui-laypage-skip">&#x5230;&#x7B2C;'
@@ -255,6 +259,24 @@ layui.define(function(exports){
     });
   };
 
+  //刷新当前页
+  Class.prototype.update = function(elem){
+    if(!elem) return;
+      var that = this
+      ,config = that.config
+      ,curr = config.curr
+      ,spani = elem[tag]('i')[0];
+
+      if(spani){
+        laypage.on(spani, 'click', function(){
+          config.curr = curr;
+          that.render();
+          console.log(config.curr);
+        });
+      }
+    
+  };
+
   //渲染分页
   Class.prototype.render = function(load){
     var that = this
@@ -271,7 +293,7 @@ layui.define(function(exports){
         doc[id](config.elem).innerHTML = view;
       }
     }
-    
+
     config.jump && config.jump(config, load);
     
     var elem = doc[id]('layui-laypage-' + config.index);
@@ -282,6 +304,8 @@ layui.define(function(exports){
     }
     
     that.skip(elem);
+
+    that.update(elem);
   };
   
   //外部接口
