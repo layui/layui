@@ -22,48 +22,6 @@ body{padding: 10px;}
   <div class="layui-form-item">
     <label class="layui-form-label">输入框</label>
     <div class="layui-input-block">
-      <input type="text" name="xxx" autocomplete="off" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">输入框</label>
-    <div class="layui-input-block">
-      <input type="text" name="arr[]" autocomplete="off" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">输入框</label>
-    <div class="layui-input-block">
-      <input type="text" name="arr[]" autocomplete="off" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">输入框</label>
-    <div class="layui-input-block">
-      <input type="text" name="bbb[]" autocomplete="off" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">输入框</label>
-    <div class="layui-input-block">
-      <input type="text" name="bbb[]" autocomplete="off" class="layui-input">
-    </div>
-  </div>
-  <input type="checkbox" name="like1[]" lay-skin="primary" title="写作">
-  <input type="checkbox" name="like1[]" lay-skin="primary" title="写作">
-  <input type="checkbox" name="like1[]" lay-skin="primary" title="写作">
-  <div class="layui-form-item">
-    <div class="layui-input-block">
-      <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
-      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-    </div>
-  </div>
-</form>
-
-<form class="layui-form layui-form-pane1" action="" lay-filter="first">
-  <div class="layui-form-item">
-    <label class="layui-form-label">输入框</label>
-    <div class="layui-input-block">
       <input type="text" name="title" lay-verify="required|title" required placeholder="请输入标题" autocomplete="off" class="layui-input">
     </div>
   </div>
@@ -142,14 +100,14 @@ body{padding: 10px;}
   <div class="layui-form-item">
     <label class="layui-form-label">搜索选择框</label>
     <div class="layui-input-inline">
-      <select name="interest-search" lay-filter="interest-search" lay-search lay-write>
+      <select name="interest-search" lay-filter="interest-search" lay-search>
         <option value=""></option>
-        <option value="0">写作</option>
-        <option value="1">阅读</option>
-        <option value="2">游戏</option>
-        <option value="3">音乐</option>
-        <option value="4">旅行</option>
-        <option value="5">读书</option>
+        <option value="写作">写作</option>
+        <option value="阅读" disabled>阅读</option>
+        <option value="游戏" disabled>游戏</option>
+        <option value="音乐">音乐</option>
+        <option value="旅行">旅行</option>
+        <option value="读书">读书</option>
       </select>
     </div>
   </div>
@@ -173,13 +131,14 @@ body{padding: 10px;}
   <div class="layui-form-item" pane>
     <label class="layui-form-label">开关关</label>
     <div class="layui-input-block">
-      <input type="checkbox" name="close" lay-skin="switch" title="开关"  disabled>
+      <input type="checkbox" name="close" lay-skin="switch" title="开关">
     </div>
   </div>
   <div class="layui-form-item" pane>
     <label class="layui-form-label">开关开</label>
     <div class="layui-input-block">
       <input type="checkbox" checked name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+      <input type="checkbox" name="open2" lay-skin="switch" lay-filter="switchTest" lay-text="已绑定|绑定">
     </div>
   </div>
   <div class="layui-form-item" pane>
@@ -232,20 +191,20 @@ layui.use('form', function(){
     }
     ,pass: [/(.+){6,12}$/, '密码必须6到12位']
   });
-
-  form.val('first',{
-    'xxx': '猪猪猪'
-    ,'title': '测试'
-    ,'phone': 18829264233
-    ,'email': 2321582517
+  
+  //初始赋值
+  form.val('first', {
+    'title': '测试'
+    ,'phone': 11111111111
+    ,'email': 'xu@sentsin.com'
     ,'password': 123123
     ,'quiz': 2
     ,'interest': 3
     ,'like[write]': true
-    ,'open': false
+    //,'open': false
     ,'sex': '男'
-    ,'desc': '一二三四一二三四'
-  })
+    ,'desc': 'form 是我们非常看重的一块'
+  });
 
   
   //事件监听
@@ -278,6 +237,7 @@ layui.use('form', function(){
   //监听提交
   form.on('submit(*)', function(data){
     console.log(data)
+    alert(JSON.stringify(data.field));
     return false;
   });
   

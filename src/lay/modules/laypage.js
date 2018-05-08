@@ -162,7 +162,7 @@ layui.define(function(exports){
         return options.join('') +'</select></span>';
       }()
       
-      //刷新
+      //刷新当前页
       ,refresh: ['<a href="javascript:;" data-page="'+ config.curr +'" class="layui-laypage-refresh">'
         ,'<i class="layui-icon layui-icon-refresh"></i>'
       ,'</a>'].join('')
