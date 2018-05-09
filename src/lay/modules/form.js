@@ -77,13 +77,23 @@ layui.define('layer', function(exports){
       var itemFrom = $(this);
       layui.each(object, function(key, value){
         var itemElem = itemFrom.find('[name="'+ key +'"]');
-        itemElem.val(value);
+       
         if(!itemElem[0]) return;
 
-        //如果有 checked 的内置属性，就改变 checked 属性的值
-        if('checked' in itemElem[0]){
+        //如果为复选框
+        if(itemElem.attr('type') == 'checkbox'){
           itemElem[0].checked = value;
-        } 
+              //如果为单选框
+        }else if(itemElem.attr('type') == 'radio'){
+          itemElem.each(function(index){
+            if($(this).val() == value ){
+              this.checked = true
+            }     
+          })
+        // 输入框，开关，选择框等等
+        }else{
+          itemElem.val(value);
+        }
       });
     });
     form.render(null, filter);
@@ -116,7 +126,7 @@ layui.define('layer', function(exports){
           ,input = title.find('input')
           ,dl = reElem.find('dl')
           ,dds = dl.children('dd')
-          ,index = Number(select.val()? select.val(): -1) + 1 ;        
+          ,index = this.selectedIndex;
           
           if(disabled) return;
           
@@ -281,7 +291,7 @@ layui.define('layer', function(exports){
             } else {
               input.val(othis.text());
               othis.addClass(THIS);
-              index = Number(value) + 1;
+              index = othis.index();
             }
 
             othis.siblings().removeClass(THIS);
@@ -311,6 +321,8 @@ layui.define('layer', function(exports){
           ,value = select.value
           ,selected = $(select.options[select.selectedIndex]) //获取当前选中项
           ,optionsFirst = select.options[0];
+
+          console.log(selected)
           
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
           
