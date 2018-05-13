@@ -768,6 +768,7 @@
     //如果右侧超出边界
     if(left + elemWidth + margin > winArea('width')){
       left = winArea('width') - elemWidth - margin;
+      left = left>0?left:0;
     }
     
     //如果底部超出边界
@@ -776,6 +777,7 @@
         ? rect.top - elemHeight 
       : winArea() - elemHeight;
       top = top - margin*2;
+      top = top>0?top:0;
     }
     
     if(options.position){
