@@ -84,7 +84,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           }()
           ,'<th data-field="{{ item2.field||i2 }}" {{# if(item2.minWidth){ }}data-minwidth="{{item2.minWidth}}"{{# } }} '+ rowCols +' {{# if(item2.unresize){ }}data-unresize="true"{{# } }}>'
             ,'<div class="layui-table-cell laytable-cell-'
-              ,'{{# if(item2.colspan > 1){ }}'
+              ,'{{# if(item2.colspan > 1 || (item2.colspan === 1 && !item2.field)){ }}'
                 ,'group'
               ,'{{# } else { }}'
                 ,'{{d.index}}-{{item2.field || i2}}'
@@ -222,7 +222,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     }, options.response);
     
     //如果 page 传入 laypage 对象
-    if(typeof options.page === 'object'){
+    if (!options.page) {
+      options.limit = 0;
+      that.page = 1;
+    } if(typeof options.page === 'object'){
       options.limit = options.page.limit || options.limit;
       options.limits = options.page.limits || options.limits;
       that.page = options.page.curr = options.page.curr || 1;
@@ -274,7 +277,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     }
     
     //请求数据
-    that.pullData(that.page);
+    that.pullData(that.page, that.loading());
     that.events();
   };
   
@@ -345,7 +348,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         that.initOpts(item2);
         width = item2.width || 0;
         
-        if(item2.colspan > 1) return;
+        if(item2.colspan > 1 || (item2.colspan === 1 && !item2.field)) return;
 
         if(/\d+%$/.test(width)){
           item2.width = width = Math.floor((parseFloat(width) / 100) * cntrWidth);
@@ -368,7 +371,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     layui.each(options.cols, function(i1, item1){
       layui.each(item1, function(i2, item2){
         var minWidth = item2.minWidth || options.cellMinWidth;
-        if(item2.colspan > 1) return;
+        if(item2.colspan > 1 || (item2.colspan === 1 && !item2.field)) return;
         if(item2.width === 0){
           item2.width = Math.floor(autoWidth >= minWidth ? autoWidth : minWidth); //不能低于设定的最小宽度
         }
@@ -440,13 +443,14 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           that.layMain.html('<div class="'+ NONE +'">数据接口请求异常</div>');
           that.renderForm();
           loadIndex && layer.close(loadIndex);
+          typeof options.done === 'function' && options.done();
         }
       });
     } else if(options.data && options.data.constructor === Array){ //已知数据
       var res = {}
       ,startLimit = curr*options.limit - options.limit
       
-      res[response.dataName] = options.data.concat().splice(startLimit, options.limit);
+      res[response.dataName] = options.data.concat().splice(startLimit, options.limit || options.data.length);
       res[response.countName] = options.data.length;
 
       that.renderData(res, curr, options.data.length), sort();
@@ -463,11 +467,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     layui.each(cols, function(i1, item1){
       layui.each(item1, function(i2, item2){
         //如果是组合列，则捕获对应的子列
-        if(item2.colspan > 1){
+        if(item2.colspan > 1 || (item2.colspan === 1 && !item2.field)){
           var childIndex = 0;
           index++
           item2.CHILD_COLS = [];
-          layui.each(cols[i1 + 1], function(i22, item22){
+          layui.each(cols[i1 + (item2.rowspan||1)], function(i22, item22){
             if(item22.PARENT_COL || childIndex == item2.colspan) return;
             item22.PARENT_COL = index;
             item2.CHILD_COLS.push(item22);
@@ -518,7 +522,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           ,cell = that.getColElem(that.layHeader, field);
           
           if(content === undefined || content === null) content = '';
-          if(item3.colspan > 1) return;
+          if(item3.colspan > 1 || (item3.colspan === 1 && !item3.field)) return;
           
           //td内容
           var td = ['<td data-field="'+ field +'" '+ function(){
@@ -581,7 +585,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       //if(data.length === 0) return;
       
       that.layBody.scrollTop(0);
-      that.layMain.find('.'+ NONE).remove();
+      data.length && that.layMain.find('.'+ NONE).remove();
       that.layMain.find('tbody').html(trs.join(''));
       that.layFixLeft.find('tbody').html(trs_fixed.join(''));
       that.layFixRight.find('tbody').html(trs_fixed_r.join(''));
@@ -881,7 +885,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     that.layFixRight[outWidth > 0 ? 'removeClass' : 'addClass'](HIDE); 
     
     //操作栏
-    that.layFixRight.css('right', scollWidth - 1); 
+    that.layFixRight.css('right', scollWidth - 1);
+
+    // 同步滚动条位置
+    that.layMain.scroll();
   };
 
   //事件处理
@@ -1125,7 +1132,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         ,update: function(fields){
           fields = fields || {};
           layui.each(fields, function(key, value){
-            if(key in data){
+            // if(key in data){
+            //  不需要做这个判断，因为可能数据一开始没有这个属性的值
               var templet, td = tr.children('td[data-field="'+ key +'"]');
               data[key] = value;
               that.eachCols(function(i, item2){
@@ -1137,7 +1145,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
                 templet ? laytpl($(templet).html() || value).render(data) : value
               );
               td.data('content', value);
-            }
+            // }
           });
         }
       });
@@ -1204,8 +1212,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
           
           var row = $.extend({
             title: th.text()
-            ,colspan: th.attr('colspan') || 0 //列单元格
-            ,rowspan: th.attr('rowspan') || 0 //行单元格
+            ,colspan: th.attr('colspan') ? parseInt(th.attr('colspan')) : 1 //列单元格
+            ,rowspan: th.attr('rowspan') ? parseInt(th.attr('rowspan')) : 1 //行单元格
           }, itemData);
 
           if(row.colspan < 2) cols.push(row);

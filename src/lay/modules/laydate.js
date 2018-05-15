@@ -380,6 +380,8 @@
     ,isInitValue: false //用于控制是否自动向元素填充初始值（需配合 value 参数使用）
     ,min: '1900-1-1' //有效最小日期，年月日必须用“-”分割，时分秒必须用“:”分割。注意：它并不是遵循 format 设定的格式。
     ,max: '2099-12-31' //有效最大日期，同上
+    ,tMin: '00:00:00' //每天最小时间(只有在type为datetime的时候才有意义)
+    ,tMax: '23:59:59' //每天最大时间(同上)
     ,trigger: 'focus' //呼出控件的事件
     ,show: false //是否直接显示，如果设置true，则默认直接显示控件
     ,showBottom: true //是否显示底部栏
@@ -538,6 +540,16 @@
         ,month: ymd[1] ? (ymd[1] | 0) - 1 : new Date().getMonth()
         ,date: ymd[2] | 0 || new Date().getDate()
         ,hours: hms[0] | 0
+        ,minutes: hms[1] | 0
+        ,seconds: hms[2] | 0
+      };
+    });
+
+    //获取限制内时间点
+    lay.each(['tMin', 'tMax'], function(i, item){
+      var hms = (options[item].match(/\d+:\d+:\d+/) || [''])[0].split(':');
+      options[item] = {
+        hours: hms[0] | 0
         ,minutes: hms[1] | 0
         ,seconds: hms[2] | 0
       };
@@ -857,11 +869,13 @@
     
     //获得初始化日期值
     ,initDate = function(dateTime, value, index){
-      var startEnd = ['startTime', 'endTime'];
+      var startEnd = ['startTime', 'endTime'],
+          startEndState = ['startState', 'endState'];
       value = (value.match(that.EXP_SPLIT) || []).slice(1);
       index = index || 0;
       if(options.range){
         that[startEnd[index]] = that[startEnd[index]] || {};
+        that[startEndState[index]] = !!that[startEnd[index]];
       }
       lay.each(that.format, function(i, item){
         var thisv = parseFloat(value[i]);
@@ -967,7 +981,7 @@
   //无效日期范围的标记
   Class.prototype.limit = function(elem, date, index, time){
     var that = this
-    ,options = that.config, timestrap = {}
+    ,options = that.config, timestrap = {}, timestrapT = {}
     ,dateTime = options[index > 41 ? 'endDate' : 'dateTime']
     ,isOut, thisDateTime = lay.extend({}, dateTime, date || {});
     lay.each({
@@ -987,8 +1001,26 @@
         return hms;
       }())).getTime();  //time：是否比较时分秒
     });
+    lay.each({
+      now: thisDateTime
+      ,tMin: options.tMin
+      ,tMax: options.tMax
+    }, function(key, item){
+      timestrapT[key] = that.newDate(lay.extend({},function(){
+        var hms = {};
+        lay.each(time, function(i, keys){
+          hms[keys] = item[keys];
+        });
+        return hms;
+      }(), {
+        year: 1
+        ,month: 0
+        ,date: 1
+      })).getTime();  //time：是否比较时分秒
+    });
     
     isOut = timestrap.now < timestrap.min || timestrap.now > timestrap.max;
+    isOut || (isOut = (options.type === 'datetime') && timestrapT.now < timestrapT.tMin || timestrapT.now > timestrapT.tMax);
     elem && elem[isOut ? 'addClass' : 'removeClass'](DISABLED);
     return isOut;
   };
@@ -1535,7 +1567,7 @@
         );
         
         //判断是否顺时或逆时选择
-        if(that.newDate(YMD).getTime() < that.newDate(that.startYMD).getTime()){
+        if(that.newDate(YMD).getTime() <= that.newDate(that.startYMD).getTime()){
           var startDate = lay.extend({}, that.endDate, {
             hours: that.startDate.hours
             ,minutes: that.startDate.minutes
@@ -1552,6 +1584,11 @@
         options.showBottom || that.done();
         that.stampRange(); //标记范围内的日期
         that.endState = true;
+        if (that.newDate(YMD).getTime() === that.newDate(that.startYMD).getTime()
+            && that.newDate(that.startTime).getTime() > that.newDate(that.endTime).getTime()) {
+          //  如果选择的是同一天并且目前时间的选择开始时间大于结束时间那么结束状态是fasle
+          that.endState = false;
+        }
         that.done(null, 'change');
       } else { //选中开始
         td.addClass(THIS);
@@ -1632,8 +1669,8 @@
         } else {
           if(lay(btn).hasClass(DISABLED)) return that.hint('不在有效日期或时间范围内');
         }
-        that.done();
         that.setValue(that.parse()).remove()
+        that.done();
       }
     };
     active[type] && active[type]();
