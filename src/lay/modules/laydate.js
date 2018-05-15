@@ -321,7 +321,7 @@
   //设置值
   LAY.prototype.val = function(value){
     return this.each(function(index, item){
-      item.value = value;
+        item.value = value;
     });
   };
   
@@ -377,6 +377,7 @@
     ,range: false //是否开启范围选择，即双控件
     ,format: 'yyyy-MM-dd' //默认日期格式
     ,value: null //默认日期，支持传入new Date()，或者符合format参数设定的日期格式字符
+    ,isInitValue: false //用于控制是否自动向元素填充初始值（需配合 value 参数使用）
     ,min: '1900-1-1' //有效最小日期，年月日必须用“-”分割，时分秒必须用“:”分割。注意：它并不是遵循 format 设定的格式。
     ,max: '2099-12-31' //有效最大日期，同上
     ,tMin: '00:00:00' //每天最小时间(只有在type为datetime的时候才有意义)
@@ -560,7 +561,7 @@
     isStatic || that.events();
     
     //默认赋值
-    if(options.value){
+    if(options.value && options.isInitValue){
       if(options.value.constructor === Date){
         that.setValue(that.parse(0, that.systemDate(options.value))); 
       } else {

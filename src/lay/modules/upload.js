@@ -381,12 +381,9 @@ layui.define('layer' , function(exports){
       layui.each(that.chooseFiles, function(index, file){
         if(file.size > 1024*options.size){
           var size = options.size/1024;
-          size = size >= 1 
-            ? (Math.floor(size) + (size%1 > 0 ? size.toFixed(1) : 0)) + 'MB' 
-          : options.size + 'KB'
+          size = size >= 1 ? (size.toFixed(2) + 'MB') : options.size + 'KB'
           elemFile.value = '';
           limitSize = size;
-          
         }
       });
       if(limitSize) return that.msg('文件不能超过'+ limitSize);

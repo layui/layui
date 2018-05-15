@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>评分 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding:20px;}
+</style>
+</head>
+<body>
+
+<div class="layui-container">
+  <div class="layui-row">
+    <!-- 基础评分用法 -->
+    <div class="layui-rate-div layui-col-xm4 layui-col-xm-offset4 ">
+      <h3>基础用法</h3>
+      <hr>
+      <div id="test1"></div>
+    </div>
+
+    <!-- 半星评分用法 -->
+    <div class="layui-rate-div layui-col-xm4 layui-col-xm-offset4 ">
+      <h3>选中半星</h3>
+      <hr>
+      <div id="test2"></div>
+    </div>
+
+    <!-- 显示提示文字 -->
+    <div class="layui-rate-div layui-col-xm4 layui-col-xm-offset4 ">
+      <h3>显示提示文字</h3>
+      <hr>
+      <div id="test3"></div>
+      <span></span>
+    </div>
+
+    <!-- 只读 -->
+    <div class="layui-rate-div layui-col-xm4 layui-col-xm-offset4 ">
+      <h3>只读</h3>
+      <hr>
+      <div id="test4"></div>
+    </div>
+
+  </div>
+</div>
+
+
+<script src="../src/layui.js"></script>
+<script>
+
+layui.use(['rate'], function(){
+  var rate = layui.rate;
+
+  //渲染
+  
+  // rate.set({
+  //   elem: '#test1'
+  //   ,length: 7
+  //   ,value: 4.7
+  //   ,theme: '#c00'
+  //   ,half: true
+  //   ,text: true
+  //   ,reader: true
+  // })
+  
+  rate.render({
+    elem: '#test1'
+    ,length: 3
+    ,value: 2.2
+    ,text: true
+    ,half: true
+    ,setText: function(value){
+
+      var arrs = {
+        '0.5': '极差'
+        , '1' : '一般'
+        ,'1.5': '满意'
+        ,'2': '极满意'
+      };
+
+      this.span.text(arrs[value] || ( value + "星"));
+    }
+  })
+
+  rate.render({
+    elem: '#test2'
+    ,length: 6
+    ,value: 2
+    ,half: true
+    ,theme: '#5FB878'
+    ,choose: function(value){
+      if( value > 3) alert("111")
+    }
+  })
+
+  rate.render({
+    elem: '#test3'
+    ,length: 3
+    ,value: 2.8
+    ,text: true
+    ,half: true
+    ,theme: '#FF5722'
+  })
+  
+  //只读
+  rate.render({
+    elem: '#test4'
+    ,value: 3.5
+    ,half: true
+    ,readonly: true
+  })
+});
+</script>
+</body>
+</html>

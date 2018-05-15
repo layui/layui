@@ -89,7 +89,7 @@ layui.use('upload', function(){
   var uploadInst = upload.render({
     elem: '#test1'
     ,url: '/upload/'
-    //,size: 60 //限制文件大小，单位 KB
+    ,size: 2000 //限制文件大小，单位 KB
     ,accept: 'file'
     ,fileAccept: 'image/*'
     ,exts: "jpg|png|gif|bmp|jpeg|pdf"
