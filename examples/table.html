@@ -15,8 +15,6 @@ body{padding: 20px; /*overflow-y: scroll;*/}
 </head>
 <body>
 
-<table id="test2" lay-filter="test2"></table>
-
 <div class="layui-btn-group">
   <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
   <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
@@ -46,6 +44,7 @@ body{padding: 20px; /*overflow-y: scroll;*/}
   <span {{# if(!d.activate){ }}style="color:#999"{{# } }}>{{ d.email }}</span>
 </script>
 
+<table id="test2" lay-filter="test2"></table>
 
 <table class="layui-table" lay-data="{width:800, height: 300, url:'json/table/demo2.json', page: true, limit: 6}">
   <thead>
@@ -180,6 +179,7 @@ layui.use('table', function(){
     elem: '#test'
     ,height: 350
     ,url: 'json/table/demo1.json'
+    //,size: 'sm'
     ,page: {
       
     }

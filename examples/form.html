@@ -108,6 +108,14 @@ body{padding: 10px;}
         <option value="音乐">音乐</option>
         <option value="旅行">旅行</option>
         <option value="读书">读书</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
       </select>
     </div>
   </div>
@@ -190,6 +198,10 @@ layui.use('form', function(){
       }
     }
     ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+    ,money: [
+      /^\d+\.\b\d{2}\b$/
+      ,'金额必须为小数保留两位'
+    ]
   });
   
   //初始赋值
@@ -256,6 +268,27 @@ layui.use('form', function(){
     <option disabled value="你工作的第一个城市">你工作的第一个城市</option>
     <option value="你的工号">你的工号</option>
     <option value="你最喜欢的老师">你最喜欢的老师</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号" selected>你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
+    <option value="你的工号">你的工号</option>
   </select>
   <button>Go</button>
 </form>

@@ -46,11 +46,11 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /** 图标字体 **/
 @font-face {font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=230-rc1');
-  src: url('../font/iconfont.eot?v=230-rc1#iefix') format('embedded-opentype'),
-  url('../font/iconfont.svg?v=230-rc1#iconfont') format('svg'),
-  url('../font/iconfont.woff?v=230-rc1') format('woff'),
-  url('../font/iconfont.ttf?v=230-rc1') format('truetype');
+  src: url('../font/iconfont.eot?v=230');
+  src: url('../font/iconfont.eot?v=230#iefix') format('embedded-opentype'),
+  url('../font/iconfont.svg?v=230#iconfont') format('svg'),
+  url('../font/iconfont.woff?v=230') format('woff'),
+  url('../font/iconfont.ttf?v=230') format('truetype');
 }
                     
 .layui-icon{
@@ -205,7 +205,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-template-1:before{content:"\e656"}
 .layui-icon-vercode:before{content:"\e679"}
 .layui-icon-cellphone:before{content:"\e678"}
-
+.layui-icon-screen-full:before{content:"\e622";}
+.layui-icon-screen-restore:before{content:"\e758";}
 
 
 /* 基本布局 */

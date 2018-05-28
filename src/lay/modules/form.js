@@ -144,6 +144,7 @@ layui.define('layer', function(exports){
             index = select[0].selectedIndex; //获取最新的 selectedIndex
             reElem.addClass(CLASS+'ed');
             dds.removeClass(HIDE);
+            nearElem = null;
 
             //初始选中样式
             dds.eq(index).addClass(THIS).siblings().removeClass(THIS);
@@ -231,6 +232,22 @@ layui.define('layer', function(exports){
               
               //标注样式
               nearDd.addClass(THIS).siblings().removeClass(THIS);
+              
+              //定位滚动条
+              var ddThis = dl.children('dd.layui-this')
+              ,posTop = ddThis.position().top
+              ,dlHeight = dl.height()
+              ,ddHeight = ddThis.height();
+              
+              //若选中元素在滚动条不可见底部
+              if(posTop > dlHeight){
+                dl.scrollTop(posTop + dl.scrollTop() - dlHeight + ddHeight - 5);
+              }
+              
+              //若选择玄素在滚动条不可见顶部
+              if(posTop < 0){
+                dl.scrollTop(posTop + dl.scrollTop());
+              }
             };
             
             

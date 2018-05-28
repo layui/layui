@@ -164,6 +164,13 @@ layui.define('jquery', function(exports){
       .replace(/mm/g, hms[1])
       .replace(/ss/g, hms[2]);
     }
+    
+    //防 xss 攻击
+    ,escape: function(html){
+      return String(html || '').replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
+      .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+    }
   };
   
   exports('util', util);
