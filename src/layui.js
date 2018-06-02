@@ -265,7 +265,7 @@
 
   //css内部加载器
   Layui.prototype.addcss = function(firename, fn, cssname){
-    return layui.link(config.dir + 'css/' + firename, fn, cssname);
+    return layui.link((config.dir?config.dir:getPath) + 'css/' + firename, fn, cssname);
   };
 
   //图片预加载
