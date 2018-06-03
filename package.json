@@ -9,6 +9,7 @@
   "main": "layui.js",
   "license": "MIT",
   "scripts": {
+    "start": "http-server",
     "lint": "eslint src/**/*.js test/**/*.js",
     "lint:fix": "eslint src/**/*.js test/**/*.js --fix",
     "test": "karma start karma.conf.unit.js",
@@ -58,6 +59,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.4",
     "gulp-zip": "^4.0.0",
+    "http-server": "^0.11.1",
     "husky": "0.14.3",
     "karma": "^1.5.0",
     "karma-chai": "^0.1.0",
