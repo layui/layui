@@ -26,7 +26,7 @@
 
 ``` bash
 # 基于 http-server 启动本地预览服务
-$ npm run start
+$ npm run dev
 
 # 基于 Karma + PhantomJS 运行单元测试
 $ npm run test

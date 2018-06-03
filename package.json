@@ -9,7 +9,7 @@
   "main": "layui.js",
   "license": "MIT",
   "scripts": {
-    "start": "http-server",
+    "dev": "http-server",
     "lint": "eslint src/**/*.js test/**/*.js",
     "lint:fix": "eslint src/**/*.js test/**/*.js --fix",
     "test": "karma start karma.conf.unit.js",
