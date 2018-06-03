@@ -9,6 +9,8 @@
   "main": "layui.js",
   "license": "MIT",
   "scripts": {
+    "lint": "eslint src/**/*.js test/**/*.js",
+    "lint:fix": "eslint src/**/*.js test/**/*.js --fix",
     "test": "karma start karma.conf.unit.js",
     "test:cov": "npm test -- --reporters mocha,coverage",
     "test:sauce": "karma start karma.conf.sauce.js",
@@ -25,6 +27,11 @@
   "devDependencies": {
     "chai": "^4.1.1",
     "del": "^2.2.2",
+    "eslint": "4.19.1",
+    "eslint-config-airbnb": "16.1.0",
+    "eslint-plugin-import": "2.12.0",
+    "eslint-plugin-jsdoc": "3.7.1",
+    "eslint-plugin-mocha": "5.0.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0 ",
     "gulp-header": "^1.8.8",
