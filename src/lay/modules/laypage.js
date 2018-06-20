@@ -162,8 +162,10 @@ layui.define(function(exports){
         return options.join('') +'</select></span>';
       }()
       
-      //刷新
-      ,refresh: '<a href="javascript:;" data-page="'+ config.curr +'" class="layui-laypage-refresh"><i class="layui-icon">&#x1002;</i></a>'
+      //刷新当前页
+      ,refresh: ['<a href="javascript:;" data-page="'+ config.curr +'" class="layui-laypage-refresh">'
+        ,'<i class="layui-icon layui-icon-refresh"></i>'
+      ,'</a>'].join('')
 
       //跳页区域
       ,skip: function(){

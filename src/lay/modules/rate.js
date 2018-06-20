@@ -1,7 +1,7 @@
 /**
 
  @Title: layui.rate 评分评星
- @Author: star
+ @Author: star1029
  @License：MIT
 
  */
@@ -58,7 +58,7 @@ layui.define('jquery',function(exports){
   Class.prototype.config = {
     length: 5  //初始长度
     ,text: false  //是否显示评分等级
-    ,reader: false  //是否只读
+    ,readonly: false  //是否只读
     ,half: false  //是否可以半星
     ,value: 0 //星星选中个数
     ,theme: ''
@@ -80,7 +80,7 @@ layui.define('jquery',function(exports){
     }
 
     //组件模板
-    var temp = '<ul class="layui-rate">';
+    var temp = '<ul class="layui-rate" '+ (options.readonly ? 'readonly' : '') +'>';
     for(var i = 1;i <= options.length;i++){
       var item = '<li class="layui-inline"><i class="layui-icon '
         + (i>Math.floor(options.value)?ICON_RATE:ICON_RATE_SOLID)
@@ -120,7 +120,7 @@ layui.define('jquery',function(exports){
     othis.addClass("layui-inline");
 
     //如果不是只读，那么进行触控事件
-    if(!options.reader) that.action(); 
+    if(!options.readonly) that.action(); 
 
   };
 

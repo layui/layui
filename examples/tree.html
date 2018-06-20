@@ -22,12 +22,14 @@ body{padding: 50px 100px;}
 
 layui.use('tree', function(){
   var tree = layui.tree({
-    elem: '#demo' //指定元素
-    //,check: 'checkbox' //勾选风格
-    ,skin: 'as' //设定皮肤
-    //,target: '_blank' //是否新选项卡打开（比如节点返回href才有效）
-    ,drag: true
-    ,click: function(item){ //点击节点回调
+    elem: '#demo'   //指定元素
+    ,check: 'checkbox'  //勾选风格
+    //,nodeicon: false  //节点图标
+    //,nodeline: true   //开启连接线
+    ,skin: 'as'   //设定皮肤
+    //,target: '_blank'   //是否新选项卡打开（比如节点返回href才有效）
+    ,drag: true   //拖拽
+    ,click: function(item){   //点击节点回调
       console.log(item)
     }
     ,nodes: [ //节点
@@ -35,11 +37,15 @@ layui.use('tree', function(){
         name: '常用文件夹'
         ,id: 1
         ,alias: 'changyong'
+        ,icon: {
+          "arrow": ['&#xe602;', '&#xe61a;'] //箭头
+          ,"leaf": ['&#xe655;', '&#xe621;'] //叶节点
+        }
         ,children: [
           {
             name: '所有未读'
             ,id: 11
-            //,href: 'http://www.layui.com/'
+            ,href: 'http://www.layui.com/'
             ,alias: 'weidu'
           }, {
             name: '置顶邮件'
@@ -47,6 +53,7 @@ layui.use('tree', function(){
           }, {
             name: '标签邮件'
             ,id: 13
+            ,extend: true
           }
         ]
       }, {
@@ -62,6 +69,10 @@ layui.use('tree', function(){
               {
                 name: '收件箱'
                 ,id: 211
+                ,icon:{
+                  "branch": ['&#xe608;', '&#xe65c;'] //父节点
+                  ,"leaf": '&#xe655;'
+                }
                 ,children: [
                   {
                     name: '所有未读'
@@ -77,9 +88,15 @@ layui.use('tree', function(){
               }, {
                 name: '已发出的邮件'
                 ,id: 212
+                ,icon: {
+                  "leaf": '&#xe6af;'//叶节点
+                }
               }, {
                 name: '垃圾邮件'
                 ,id: 213
+                ,icon: {
+                  "leaf": '&#xe62e;'//叶节点
+                }
               }
             ]
           }, {
@@ -132,6 +149,7 @@ layui.use('tree', function(){
   layui.tree({
     elem: '#demo1' //指定元素
     ,nodes: createTree()
+    ,nodeline: true
   });
   
 });
