@@ -61,6 +61,7 @@
     ,element: 'modules/element' //常用元素操作
     ,rate: 'modules/rate'  //评分组件
     ,carousel: 'modules/carousel' //轮播
+    ,colorpicker: 'modules/colorpicker' //颜色选择器
     ,flow: 'modules/flow' //流加载
     ,util: 'modules/util' //工具块
     ,code: 'modules/code' //代码修饰器

@@ -898,9 +898,11 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 
 /** 树组件（重写中） **/
 .layui-tree{line-height: 26px;}
-.layui-tree li{text-overflow: ellipsis; overflow:hidden; white-space: nowrap;}
+.layui-tree li{text-overflow: ellipsis; white-space: nowrap; position: relative;}
 .layui-tree li a, 
 .layui-tree li .layui-tree-spread{display: inline-block; vertical-align: top; height: 26px; *display: inline; *zoom:1; cursor: pointer;}
+.layui-tree li .layui-tree-span-line{display: inline-block; height: 0; width: 6px; border-top: 1px dotted #000; position: absolute; top: 13px; left: 20px;}
+.layui-tree li .layui-tree-span-bar{display: inline-block; height: 12px; width: 0px; border-left: 1px dotted #000; position: absolute; top: 20px; left: 13px; z-index: 10;}
 .layui-tree li a{font-size: 0;}
 .layui-tree li a i{font-size: 16px;}
 .layui-tree li a cite{padding: 0 6px; font-size: 14px; font-style: normal;}
@@ -1128,6 +1130,37 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-anim-loop{-webkit-animation-iteration-count: infinite; animation-iteration-count: infinite;}
 .layui-trans,
 .layui-trans a{transition: all .3s; -webkit-transition: all .3s;} /* 过度变换 */
+
+/** 颜色拾取器 **/
+.layui-colorpicker{width: 26px; height: 26px; border: 1px solid #EEE; padding: 5px; border-radius: 2px; line-height: 24px; display: inline-block; cursor: pointer;}
+.layui-colorpicker.layui-colorpicker-lg{width: 34px; height: 34px; line-height: 32px;}
+.layui-colorpicker.layui-colorpicker-sm{width: 24px; height: 24px; line-height: 22px;}
+.layui-colorpicker.layui-colorpicker-xs{width: 22px; height: 22px; line-height: 20px;}
+.layui-colorpicker .layui-colorpicker-trigger-bgcolor{display: block; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)}
+.layui-colorpicker .layui-colorpicker-trigger-span{display: block; height: 100%; box-sizing: border-box; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); border-radius: 2px; text-align: center;}
+.layui-colorpicker .layui-colorpicker-trigger-i{display: inline-block; color: #FFF; font-size: 12px;}
+.layui-colorpicker .layui-colorpicker-trigger-i.layui-icon-close{color: #CCC;}
+/* 颜色拾取器主体 */
+.layui-colorpicker-main{width: 280px; padding: 7px; background: #FFF; border: 1px solid #EEE; border-radius: 2px; position: absolute; z-index: 4999;}
+.layui-colorpicker-main-wrapper{height: 180px; position: relative;}
+.layui-colorpicker-main-wrapper .colorpicker-basis{width: 260px; height: 100%; position: relative;}
+.layui-colorpicker-main-wrapper .colorpicker-basis-white{width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: linear-gradient(90deg, #FFF, hsla(0,0%,100%,0));}
+.layui-colorpicker-main-wrapper .colorpicker-basis-black{width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: linear-gradient(0deg, #000, transparent);}
+.layui-colorpicker-main-wrapper .colorpicker-basis-cursor{width: 5px; height: 5px; border: 1px solid #FFF; border-radius: 50%; position: absolute; top: -3px; right: -3px;}
+.layui-colorpicker-main-wrapper .colorpicker-side{position: absolute; top: 0; right: 0; width: 12px; height: 100%; background: linear-gradient(#F00, #FF0, #0F0, #0FF, #00F, #F0F, #F00);}
+.layui-colorpicker-main-wrapper .colorpicker-side-slider{width: 100%; height: 5px; box-shadow: 0 0 1px #888888; box-sizing: border-box; background: #FFF; border-radius: 1px; border: 1px solid #f0f0f0; cursor: pointer; position: absolute; left: 0;}
+.layui-colorpicker-main-alpha{display: none; height: 12px; margin-top: 7px; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)}
+.layui-colorpicker-main-alpha .colorpicker-alpha-bgcolor{height: 100%; position: relative;}
+.layui-colorpicker-main-alpha .colorpicker-alpha-slider{width: 5px; height: 100%; box-shadow: 0 0 1px #888888; box-sizing: border-box; background: #FFF; border-radius: 1px; border: 1px solid #f0f0f0; cursor: pointer; position: absolute; top: 0;}
+.layui-colorpicker-main-pre{padding-top: 7px; font-size: 0;}
+.layui-colorpicker-main-pre .colorpicker-pre{width: 20px; height: 20px;  border-radius: 2px; display: inline-block; margin-left: 6px; margin-bottom: 7px; cursor: pointer;}
+.layui-colorpicker-main-pre .colorpicker-pre:nth-child(11n+1){margin-left: 0;}
+.layui-colorpicker-main-pre .colorpicker-pre.isalpha{background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)}
+.layui-colorpicker-main-pre .colorpicker-pre.selected{box-shadow: 0 0 3px 2px #0ad2c1;}
+.layui-colorpicker-main-pre .colorpicker-pre > div{height: 100%; border-radius: 2px;}
+.layui-colorpicker-main-input{padding-top: 7px;}
+.layui-colorpicker-main-input div.layui-inline{margin-right: 22px; font-size: 12px;}
+.layui-colorpicker-main-input input.layui-input{height: 30px; border-radius: 2px; color: #777;}
 
 @-webkit-keyframes layui-rotate{ /* 循环旋转 */
   from {-webkit-transform: rotate(0deg);}

@@ -20,12 +20,11 @@ layui.define('jquery', function(exports){
   //图标
   var icon = {
     arrow: ['&#xe623;', '&#xe625;'] //箭头
-    ,checkbox: ['&#xe626;', '&#xe627;'] //复选框
-    ,radio: ['&#xe62b;', '&#xe62a;'] //单选框
-    ,branch: ['&#xe622;', '&#xe624;'] //父节点
+    ,checkbox: ['&#xe67b;', '&#xe67a;'] //复选框
+    ,radio: ['&#xe63f;', '&#xe643;'] //单选框
+    ,branch: ['&#xe65f;', '&#xe671;'] //父节点
     ,leaf: '&#xe621;' //叶节点
   };
-  
   //初始化
   Tree.prototype.init = function(elem){
     var that = this;
@@ -41,14 +40,23 @@ layui.define('jquery', function(exports){
   Tree.prototype.tree = function(elem, children){
     var that = this, options = that.options
     var nodes = children || options.nodes;
-    
     layui.each(nodes, function(index, item){
+      if(item.icon){
+        for(var key in item.icon){
+          if( key != 'leaf' && typeof(item.icon[key]) != 'object' ){
+          }else if(key == 'leaf' && typeof(item.icon[key]) == 'object'){
+            icon[key] = item.icon[key][0]
+          }else{
+            icon[key] = item.icon[key]
+          }
+        }
+      }
       var hasChild = item.children && item.children.length > 0;
       var ul = $('<ul class="'+ (item.spread ? "layui-show" : "") +'"></ul>');
       var li = $(['<li '+ (item.spread ? 'data-spread="'+ item.spread +'"' : '') +'>'
         //展开箭头
         ,function(){
-          return hasChild ? '<i class="layui-icon layui-tree-spread">'+ (
+          return ( hasChild || item.extend ) ? '<i class="layui-icon layui-tree-spread">'+ (
             item.spread ? icon.arrow[1] : icon.arrow[0]
           ) +'</i>' : '';
         }()
@@ -69,8 +77,8 @@ layui.define('jquery', function(exports){
           return '<a href="'+ (item.href || 'javascript:;') +'" '+ (
             options.target && item.href ? 'target=\"'+ options.target +'\"' : ''
           ) +'>'
-          + ('<i class="layui-icon layui-tree-'+ (hasChild ? "branch" : "leaf") +'">'+ (
-            hasChild ? (
+          + ('<i class="layui-icon layui-tree-'+ (( hasChild || item.extend ) ? "branch" : "leaf") +'">'+ (
+            ( hasChild || item.extend ) ? (
               item.spread ? icon.branch[1] : icon.branch[0]
             ) : icon.leaf
           ) +'</i>') //节点图标
@@ -78,7 +86,7 @@ layui.define('jquery', function(exports){
         }()
       
       ,'</li>'].join(''));
-      
+
       //如果有子节点，则递归继续生成树
       if(hasChild){
         li.append(ul);
@@ -129,7 +137,7 @@ layui.define('jquery', function(exports){
     };
     
     //如果没有子节点，则不执行
-    if(!ul[0]) return;
+    if(!ul[0] && !item.extend) return;
     
     arrow.on('click', open);
     a.on('dblclick', open);
