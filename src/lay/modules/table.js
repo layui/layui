@@ -1124,6 +1124,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         }
         ,update: function(fields){
           fields = fields || {};
+          table.cache[that.key][index] = fields;
           layui.each(fields, function(key, value){
             if(key in data){
               var templet, td = tr.children('td[data-field="'+ key +'"]');
