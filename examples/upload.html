@@ -93,6 +93,15 @@ layui.use('upload', function(){
     ,accept: 'file'
     ,fileAccept: 'image/*'
     ,exts: "jpg|png|gif|bmp|jpeg|pdf"
+    ,data: { //额外参数
+      a: 1
+      ,b: function(){
+        return 2
+      }
+    }
+    ,choose: function(){
+      console.log(1)
+    }
     ,before: function(obj){
       //预读本地文件示例，不支持ie8
       obj.preview(function(index, file, result){
@@ -248,14 +257,24 @@ layui.use('upload', function(){
   });
   
   
+  //手动上传
   upload.render({
     elem: '#test6'
     ,url: ''
     ,auto: false
     //,multiple: true
     ,bindAction: '#test7'
+    ,choose: function(obj){   
+      var that = this;
+      obj.preview(function(index, file){
+        obj.resetFile(index, file, '123.jpg');
+      });
+    }
+    ,before: function(){
+      console.log(345);
+    }
     ,done: function(res){
-      console.log(res)
+      console.log(res);
     }
   });
   
@@ -263,7 +282,7 @@ layui.use('upload', function(){
     elem: '#test8'
     ,url: ''
     ,done: function(res){
-      console.log(res)
+      console.log(res);
     }
   });
   
@@ -271,7 +290,7 @@ layui.use('upload', function(){
     elem: '#test9'
     ,url: ''
     ,done: function(res){
-      console.log(res)
+      console.log(res);
     }
   });
   

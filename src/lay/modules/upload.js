@@ -127,11 +127,11 @@ layui.define('layer' , function(exports){
     $('#'+ ELEM_IFRAME)[0] || $('body').append(iframe);
 
     //包裹文件域
-    if(!options.elem.next().hasClass(ELEM_IFRAME)){
+    if(!options.elem.next().hasClass(ELEM_FORM)){
       that.elemFile.wrap(elemForm);      
       
       //追加额外的参数
-      options.elem.next('.'+ ELEM_IFRAME).append(function(){
+      options.elem.next('.'+ ELEM_FORM).append(function(){
         var arr = [];
         layui.each(options.data, function(key, value){
           value = typeof value === 'function' ? value() : value;
@@ -288,14 +288,17 @@ layui.define('layer' , function(exports){
     
     //回调返回的参数
     ,args = {
+      //预览
       preview: function(callback){
         that.preview(callback);
       }
+      //上传
       ,upload: function(index, file){
         var thisFile = {};
         thisFile[index] = file;
         that.upload(thisFile);
       }
+      //追加文件到队列
       ,pushFile: function(){
         that.files = that.files || {};
         layui.each(that.chooseFiles, function(index, item){
@@ -303,12 +306,22 @@ layui.define('layer' , function(exports){
         });
         return that.files;
       }
+      //重置文件
+      ,resetFile: function(index, file, filename){
+        var newFile = new File([file], filename);
+        that.files = that.files || {};
+        that.files[index] = newFile;
+      }
     }
     
     //提交上传
-    ,send = function(){
-      if(type === 'choose'){
-        return options.choose && options.choose(args);
+    ,send = function(){      
+      //选择文件的回调      
+      if(type === 'choose' || options.auto){
+        options.choose && options.choose(args);
+        if(type === 'choose'){
+          return;
+        }
       }
       
       //上传前的回调
