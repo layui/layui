@@ -205,6 +205,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-template-1:before{content:"\e656"}
 .layui-icon-vercode:before{content:"\e679"}
 .layui-icon-cellphone:before{content:"\e678"}
+.layui-icon-checkbox:before{content:"\e624"}
+.layui-icon-uncheckbox:before{content:"\e68c"}
 
 
 
