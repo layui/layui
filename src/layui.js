@@ -19,7 +19,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.3.0-rc1'; //版本号
+    this.v = '2.3.0'; //版本号
   }
 
   //获取layui所在目录
@@ -430,7 +430,20 @@
       error: error
     }
   };
+   //判断对象是否相等
+    Layui.prototype.isEqualObj = function(obj1,obj2){
+    		return JSON.stringify(obj1)===JSON.stringify(obj2)
+    }
 
+	 //寻找对象是否存在数组中
+    Layui.prototype.findObj = function(list,obj) {
+    		 var that = this,
+    		 result = -1;
+    		 that.each(list, function(index, item) {
+    		 	if(that.isEqualObj(obj,item))result = index;
+    		 })
+    		 return result;
+    	}
   //遍历
   Layui.prototype.each = function(obj, fn){
     var key

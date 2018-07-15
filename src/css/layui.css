@@ -46,11 +46,11 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /** 图标字体 **/
 @font-face {font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=230-rc1');
-  src: url('../font/iconfont.eot?v=230-rc1#iefix') format('embedded-opentype'),
-  url('../font/iconfont.svg?v=230-rc1#iconfont') format('svg'),
-  url('../font/iconfont.woff?v=230-rc1') format('woff'),
-  url('../font/iconfont.ttf?v=230-rc1') format('truetype');
+  src: url('../font/iconfont.eot?v=230');
+  src: url('../font/iconfont.eot?v=230#iefix') format('embedded-opentype'),
+  url('../font/iconfont.svg?v=230#iconfont') format('svg'),
+  url('../font/iconfont.woff?v=230') format('woff'),
+  url('../font/iconfont.ttf?v=230') format('truetype');
 }
                     
 .layui-icon{
@@ -205,9 +205,10 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-template-1:before{content:"\e656"}
 .layui-icon-vercode:before{content:"\e679"}
 .layui-icon-cellphone:before{content:"\e678"}
+.layui-icon-screen-full:before{content:"\e622";}
+.layui-icon-screen-restore:before{content:"\e758";}
 .layui-icon-checkbox:before{content:"\e624"}
 .layui-icon-uncheckbox:before{content:"\e68c"}
-
 
 
 /* 基本布局 */
@@ -899,7 +900,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 
 /** 树组件（重写中） **/
 .layui-tree{line-height: 26px;}
-.layui-tree li{text-overflow: ellipsis; overflow:hidden; white-space: nowrap;}
+.layui-tree li{position:relative;text-overflow: ellipsis; overflow:hidden; white-space: nowrap;}
 .layui-tree li a, 
 .layui-tree li .layui-tree-spread{display: inline-block; vertical-align: top; height: 26px; *display: inline; *zoom:1; cursor: pointer;}
 .layui-tree li a{font-size: 0;}
@@ -908,11 +909,12 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-tree li i{padding-left: 6px; color: #333; -moz-user-select: none;}
 .layui-tree li .layui-tree-check{font-size: 13px;}
 .layui-tree li .layui-tree-check:hover{color: #009E94;}
-.layui-tree li ul{display: none; margin-left: 20px;}
+.layui-tree li ul{display: none; margin-left: 40px;}
 .layui-tree li .layui-tree-enter{line-height: 24px; border: 1px dotted #000;}
 .layui-tree-drag{display: none; position: absolute; left: -666px; top: -666px; background-color: #f2f2f2; padding: 5px 10px; border: 1px dotted #000; white-space: nowrap}
 .layui-tree-drag i{padding-right: 5px;}
-
+.layui-tree-menu{position: absolute;top:0;right: 0;z-index:1024;}
+.layui-tree-menu span{margin-left: 10px;}
 /** 导航菜单 **/
 .layui-nav{position: relative; padding: 0 20px; background-color: #393D49; color: #fff; border-radius: 2px; font-size: 0; box-sizing: border-box;}
 .layui-nav *{font-size: 14px;}
