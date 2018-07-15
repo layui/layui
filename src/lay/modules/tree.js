@@ -11,12 +11,23 @@ layui.define('jquery', function(exports) {
 
 	var $ = layui.$,
 		hint = layui.hint();
+	//勾选集合
+	var changeList = [];
+	//变量别名
+	var props ={
+		  name: 'name',
+           id: 'id',
+           children:'children'
+	};
+	
 	var enterSkin = 'layui-tree-enter',
 		Tree = function(options) {
 			this.options = options;
+			this.props = this.options.props || props;
+			this.nameKey  = this.props.name || props.name;
+			this.idKey  = this.props.id || props.id;
+			this.childrenKey  = this.props.children || props.children;
 		};
-	//勾选集合
-	var changeList = [];
 	//图标
 	var icon = {
 		arrow: ['&#xe623;', '&#xe625;'] //箭头
@@ -44,13 +55,13 @@ layui.define('jquery', function(exports) {
 		var nodes = children || options.nodes;
 
 		layui.each(nodes, function(index, item) {
-			var hasChild = item.children && item.children.length > 0;
+			var hasChild = item[that.childrenKey] && item[that.childrenKey].length > 0;
 			var ul = $('<ul class="' + (item.spread ? "layui-show" : "") + '"></ul>');
 			var li = that.getNode(item, hasChild);
 			//如果有子节点，则递归继续生成树
 			if(hasChild) {
 				li.append(ul);
-				that.tree(ul, item.children);
+				that.tree(ul, item[that.childrenKey]);
 			}
 			//伸展节点
 			that.spread(li, item);
@@ -60,6 +71,7 @@ layui.define('jquery', function(exports) {
 		});
 	};
 
+//节点dom拼接
 	Tree.prototype.getDom = function() {
 		var that = this,
 			options = that.options
@@ -82,7 +94,7 @@ layui.define('jquery', function(exports) {
 				return '<a href="' + (item.href || 'javascript:;') + '" ' + (
 						options.target && item.href ? 'target=\"' + options.target + '\"' : ''
 					) + '>' +
-					('<cite>' + (item.name || '未命名') + '</cite></a>')
+					('<cite>' + (item[that.nameKey] || '未命名') + '</cite></a>')
 			},
 			menu: function(item) {
 				return '<div class="layui-tree-menu">' +
@@ -98,7 +110,7 @@ layui.define('jquery', function(exports) {
 		var that = this,
 			options = that.options
 		var dom = that.getDom();
-		var li = $(['<li ' + (item.spread ? 'data-spread="' + item.spread + '"' : '') + '>'
+		var li = $(['<li ' + (item.spread ? 'data-spread="' + item.spread + '"' : '') +('data-id=' +  item[that.idKey])+ '>'
 			//展开箭头
 			,
 			dom.spread(item, hasChild)

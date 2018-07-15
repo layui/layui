@@ -33,6 +33,11 @@
                     //,target: '_blank' //是否新选项卡打开（比如节点返回href才有效）
                     ,
                 drag: true,
+                props:{
+                		  name: 'name',
+                      id: 'id',
+                      children:'children'
+                },
                 change:function(val){
                 	 console.group('change event')
                   console.log('Array')
@@ -53,7 +58,7 @@
                   console.log(elem);
                   console.log('dom add event')
                   var item ={
-                     name: '测试节点',
+                     name: '测试节点'+new Date().getTime(),
                      id:-1
                  }
                   add(item)
