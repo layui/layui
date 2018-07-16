@@ -56,6 +56,7 @@
     ,layedit: 'modules/layedit' //富文本编辑器
     ,form: 'modules/form' //表单集
     ,upload: 'modules/upload' //上传
+    ,atree: 'modules/atree' //新树结构
     ,tree: 'modules/tree' //树结构
     ,table: 'modules/table' //表格
     ,element: 'modules/element' //常用元素操作
