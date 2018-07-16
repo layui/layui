@@ -17,16 +17,21 @@ layui.define('jquery', function(exports) {
 	var props ={
 		  name: 'name',
            id: 'id',
-           children:'children'
+           children:'children',
+           checkbox:'checkbox',
+           spread:'spread'
 	};
 	
 	var enterSkin = 'layui-tree-enter',
 		Tree = function(options) {
 			this.options = options;
+			this.nodes = options.nodes || [];
 			this.props = this.options.props || props;
 			this.nameKey  = this.props.name || props.name;
 			this.idKey  = this.props.id || props.id;
 			this.childrenKey  = this.props.children || props.children;
+			this.checkboxKey = this.props.checkbox || props.checkbox;
+			this.spreadKey = this.props.spread || props.spread;
 		};
 	//图标
 	var icon = {
@@ -53,11 +58,17 @@ layui.define('jquery', function(exports) {
 		var that = this,
 			options = that.options
 		var nodes = children || options.nodes;
-
 		layui.each(nodes, function(index, item) {
 			var hasChild = item[that.childrenKey] && item[that.childrenKey].length > 0;
-			var ul = $('<ul class="' + (item.spread ? "layui-show" : "") + '"></ul>');
-			var li = that.getNode(item, hasChild);
+			var dom = that.getDom(item);
+			var ul = $(dom.ul(item));
+			var li = $(that.getNode(item));
+			
+			//如果被选中加入checkbox集合里
+			if(item[that.checkboxKey]){
+				changeList.push(item);
+			}
+			
 			//如果有子节点，则递归继续生成树
 			if(hasChild) {
 				li.append(ul);
@@ -72,31 +83,34 @@ layui.define('jquery', function(exports) {
 	};
 
 //节点dom拼接
-	Tree.prototype.getDom = function() {
+	Tree.prototype.getDom = function(item) {
 		var that = this,
-			options = that.options
+			options = that.options,
+			item = item,
+			hasChild = item[that.childrenKey] && item[that.childrenKey].length > 0;
 		return {
-			spread: function(item, hasChild) {
+			spread: function() {
 				return hasChild ? '<i class="layui-icon layui-tree-spread">' + (
-					item.spread ? icon.arrow[1] : icon.arrow[0]
+					item[that.spreadKey] || options.spreadAll ? icon.arrow[1] : icon.arrow[0]
 				) + '</i>' : '';
 			},
-			checkbox: function(item) {
+			checkbox: function() {
 				return options.check ? (
-					'<i class="layui-icon layui-tree-check">' + (
-						options.check === 'checkbox' ? icon.checkbox[0] : (
-							options.check === 'radio' ? icon.radio[0] : ''
-						)
+					'<i class="layui-icon layui-tree-check'+(item[that.checkboxKey]?' is-checked':'')+'">' + (
+						item[that.checkboxKey]? icon.checkbox[1] : icon.checkbox[0]
 					) + '</i>'
 				) : '';
 			},
-			node: function(item) {
+			ul:function(){
+				return '<ul class="' + (item[that.spreadKey] || options.spreadAll ? "layui-show" : "") + '"></ul>'
+			},
+			node: function() {
 				return '<a href="' + (item.href || 'javascript:;') + '" ' + (
 						options.target && item.href ? 'target=\"' + options.target + '\"' : ''
 					) + '>' +
 					('<cite>' + (item[that.nameKey] || '未命名') + '</cite></a>')
 			},
-			menu: function(item) {
+			menu: function() {
 				return '<div class="layui-tree-menu">' +
 					'<span class="layui-tree-add">Add</span>' +
 					'<span class="layui-tree-delete">Delete</span>' +
@@ -106,28 +120,32 @@ layui.define('jquery', function(exports) {
 
 	}
 	//获取树节点
-	Tree.prototype.getNode = function(item, hasChild) {
+	Tree.prototype.getNode = function(item) {
 		var that = this,
 			options = that.options
-		var dom = that.getDom();
-		var li = $(['<li ' + (item.spread ? 'data-spread="' + item.spread + '"' : '') +('data-id=' +  item[that.idKey])+ '>'
+		var dom = that.getDom(item);
+		var li = ['<li ' 
+		+ (item[that.spreadKey] || options.spreadAll ? 'data-spread="' + (item[that.spreadKey] || true) + '"' : '')
+		+(item[that.checkboxKey] ? 'data-check="' + item[that.checkboxKey] + '"' : '') 
+		+('data-id=' +  item[that.idKey])
+		+ '><div class="layui-tree-node">'
 			//展开箭头
 			,
-			dom.spread(item, hasChild)
+			dom.spread()
 
-			//复选框/单选框
+			//复选框
 			,
-			dom.checkbox(item)
+			dom.checkbox()
 
 			//节点
 			,
-			dom.node(item)
+			dom.node()
 			//菜单
 			,
 			dom.menu()
 			,
-			'</li>'
-		].join(''));
+			'</div></li>'
+		].join('');
 		return li;
 	}
 
@@ -162,27 +180,33 @@ layui.define('jquery', function(exports) {
 		Tree.prototype.add = function(elem, item) {
 			var that = this,
 				options = that.options;
-			var addBtn = elem.children('.layui-tree-menu').children('.layui-tree-add')
-			var arrow = elem.children('.layui-tree-spread')
+			var node =elem.children('.layui-tree-node');
+			var addBtn = node.children('.layui-tree-menu').children('.layui-tree-add')
+			var arrow = node.children('.layui-tree-spread')
 			var ul = elem.children('ul'),
-				a = elem.children('a');
+				a = node.children('a');
 			var addEvent = function(e) {
 				layui.stope(e);
 				var _addEvent = {
 					add: function(itemAddObj) {
+						if(!item[that.childrenKey]){
+							item[that.childrenKey] = [];
+						}
+						item[that.childrenKey].push(itemAddObj);
+						var dom = that.getDom(item);
 						if(!ul[0]) {
-							ul = $('<ul class="layui-show"></ul>');
+							ul = $(dom.ul())
 							elem.append(ul);
 						}
 						if(!arrow[0]) {
-							arrow = $('<i class="layui-icon layui-tree-spread">' + icon.arrow[1] + '</i>');
+							arrow = $(dom.spread());
 							elem.prepend(arrow);
 							that.spread(elem, item);
 						}
 						if(!elem.data('spread')) {
 							that.open(elem, ul, arrow)
 						}
-						var li = that.getNode(itemAddObj, false);
+						var li = $(that.getNode(itemAddObj));
 						that.bindUlEvent(li, itemAddObj);
 						ul.append(li);
 					}
@@ -196,14 +220,20 @@ layui.define('jquery', function(exports) {
 	Tree.prototype.delete = function(elem, item) {
 		var that = this,
 			options = that.options;
-		var deleteBtn = elem.children('.layui-tree-menu').children('.layui-tree-delete')
+		var node =elem.children('.layui-tree-node');
+		var deleteBtn = node.children('.layui-tree-menu').children('.layui-tree-delete')
 		var ul = elem.children('ul'),
 			a = elem.children('a');
 		var deleteEvent = function(e) {
 			layui.stope(e);
 			var _deleteEvent = {
 				done: function() {
-					elem.html('');
+					var parent =elem.parent();
+					var arrow = parent.parent().children('.layui-tree-spread')
+					if(parent.children('li').length===1){
+						arrow.remove();
+					}
+					elem.remove();
 				}
 			}
 			options.deleteClick(item, elem, _deleteEvent.done)
@@ -215,7 +245,8 @@ layui.define('jquery', function(exports) {
 	Tree.prototype.click = function(elem, item) {
 		var that = this,
 			options = that.options;
-		elem.children('a').on('click', function(e) {
+		var node =elem.children('.layui-tree-node');
+		node.children('a').on('click', function(e) {
 			layui.stope(e);
 			options.click(item)
 		});
@@ -225,16 +256,19 @@ layui.define('jquery', function(exports) {
 	Tree.prototype.checkbox = function(elem, item) {
 		var that = this,
 			options = that.options;
-		var checkbox = elem.children('.layui-tree-check')
+		var node =elem.children('.layui-tree-node');
+		var checkbox = node.children('.layui-tree-check')
 		var ul = elem.children('ul'),
-			a = elem.children('a');
+			a = node.children('a');
 		var check = function() {
 			var index = layui.findObj(changeList, item);
 			if(elem.data('check')) {
 				elem.data('check', null)
+				checkbox.removeClass(' is-checked');
 				checkbox.html(icon.checkbox[0]);
 			} else {
 				elem.data('check', true);
+				checkbox.addClass(' is-checked');
 				checkbox.html(icon.checkbox[1]);
 			}
 			if(index === -1) {
@@ -252,9 +286,10 @@ layui.define('jquery', function(exports) {
 	Tree.prototype.spread = function(elem, item) {
 		var that = this,
 			options = that.options;
-		var arrow = elem.children('.layui-tree-spread')
+		var node =elem.children('.layui-tree-node');
+		var arrow = node.children('.layui-tree-spread')
 		var ul = elem.children('ul'),
-			a = elem.children('a');
+			a = node.children('a');
 		//如果没有子节点，则不执行
 		if(!ul[0]) return;
 		arrow.on('click', function() {

@@ -30,11 +30,14 @@
                 skin: 'as' //设定皮肤
                     //,target: '_blank' //是否新选项卡打开（比如节点返回href才有效）
                     ,
-                drag: true,
+//              drag: true,
+                spreadAll:true,
                 props:{
                 		  name: 'name',
                       id: 'id',
-                      children:'children'
+                      children:'children',
+                      checkbox:'checkbox',
+                      spread:'spread'
                 },
                 change:function(val){
                 	 console.group('change event')
@@ -101,8 +104,10 @@
                             children: [{
                                 name: '收件箱',
                                 id: 211,
+                                spread: true,
                                 children: [{
                                     name: '所有未读',
+                    				    checkbox:true,
                                     id: 2111
                                 }, {
                                     name: '置顶邮件',
