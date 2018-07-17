@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>滑块 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding:20px;}
+p{font-size: 18px; margin: 20px 0 50px;}
+</style>
+</head>
+<body>
+
+  <div class="layui-container">
+    <div class="layui-row">
+      <div class="layui-col-xs8">
+        <p>默认滑块</p>
+        <div id="slideTest1"></div>
+      </div>
+    </div>
+  </div>
+
+<script src="../src/layui.js"></script>
+<script>
+
+layui.use('slider', function(){
+  var slider = layui.slider;
+  slider.render({
+    elem: '#slideTest1'
+    // ,min: 0 //最小值
+    // ,max: 100 //最大值
+    // ,value: 40 //初始值
+    // ,step: 10 //间隔值
+    // ,showstep: true //间隔点
+    // ,tips: false //关闭提示文本
+    // ,input: true //输入框
+    // ,range: true //范围选择
+    // ,sliderValue: function(value){ //回调实时显示当前值
+    //   console.log(value)
+    // }
+    // ,setTips: function(value){ //自定义提示文本
+    //   return '离世界末日还有' + value + '天';
+    // }
+    // ,vertical: true //垂直滑块，默认横向
+    // ,height: '400' //配合 vertical 参数使用，默认200px
+    // ,disabled: true //禁用滑块
+    // ,color: '#2F4056' //主题色
+  });
+});
+</script>
+</body>
+</html>

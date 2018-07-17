@@ -243,7 +243,7 @@ layui.define('jquery',function(exports){
     //绑定呼出控件事件
     ,showEvent = function(elem){
       elem.on('click' , function(){
-        event.stopPropagation();
+        //event.stopPropagation();
         that.show();
         if($('.layui-colorpicker-main').length){
           that.val($(this).find('.' + PICKER_TRIG_SPAN)[0]);
@@ -259,7 +259,7 @@ layui.define('jquery',function(exports){
   Class.prototype.val = function(e){
     var that = this
     ,options = that.config
-    ,bgcolor = e.style.background;
+    ,bgcolor = e.style.backgroundColor;
     //判断是否有背景颜色
     if(bgcolor){
       //转化成hsb格式
@@ -436,7 +436,7 @@ layui.define('jquery',function(exports){
     pre.each(function(){
       $(this).on('click', function(){
         $(this).parent('.colorpicker-pre').addClass('selected').siblings().removeClass('selected');
-        var color = this.style.background
+        var color = this.style.backgroundColor
         ,hsb = RGBToHSB(RGBSTo(color))
         ,a = color.slice(color.lastIndexOf(",") + 1, color.length - 1),left;
         _h = hsb.h;
@@ -511,8 +511,9 @@ layui.define('jquery',function(exports){
     //点击页面其他地方
     $(document).off().on('click', function(event){
       var main = $('.' + ELEM_MAIN)
+      ,item = $('.' + ELEM_VIEW)
       ,value = $('.' + PICKER_INPUT).find('input').val();
-      if(!main.is(event.target) && main.has(event.target).length === 0 && main.length){
+      if(!main.is(event.target) && main.has(event.target).length === 0 && main.length && !item.is(event.target) && item.has(event.target).length === 0 && item.length){
         if(!color){ hide(); }
         else{
           var hsb = RGBToHSB(RGBSTo(color));

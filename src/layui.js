@@ -59,6 +59,7 @@
     ,tree: 'modules/tree' //树结构
     ,table: 'modules/table' //表格
     ,element: 'modules/element' //常用元素操作
+    ,slider: 'modules/slider' //滑块
     ,rate: 'modules/rate'  //评分组件
     ,carousel: 'modules/carousel' //轮播
     ,colorpicker: 'modules/colorpicker' //颜色选择器

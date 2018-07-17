@@ -1160,6 +1160,34 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-colorpicker-main-input div.layui-inline{margin-right: 22px; font-size: 12px;}
 .layui-colorpicker-main-input input.layui-input{height: 30px; border-radius: 2px; color: #777;}
 
+/** 滑块 **/
+.layui-slider{height: 4px; background: #e2e2e2; border-radius: 3px; position: relative; z-index: 999;}
+.layui-slider .layui-slider-bar{border-radius: 3px; position: absolute; z-index: 777; height: 100%;}
+.layui-slider .layui-slider-step{width: 4px; height: 4px; border-radius: 50%; background: #FFF; position: absolute; top: 0; -webkit-transform: translateX(-50%); transform: translateX(-50%);}
+.layui-slider .layui-slider-wrap{width: 36px; height: 36px; position: absolute; top: -16px; -webkit-transform: translateX(-50%); transform: translateX(-50%); z-index: 888; text-align: center;}
+.layui-slider .layui-slider-wrap .layui-slider-wrap-btn{width: 12px; height: 12px; border-radius: 50%; background: #FFF; display: inline-block; vertical-align: middle; cursor: pointer; transition: 0.3s;}
+.layui-slider .layui-slider-wrap:after{content: ""; height: 100%; display: inline-block; vertical-align: middle;}
+.layui-slider .layui-slider-wrap .layui-slider-wrap-btn:hover, .layui-slider .layui-slider-wrap .layui-slider-wrap-btn.hover{transform: scale(1.2);}
+.layui-slider .layui-slider-tips{white-space:nowrap; display: none; position: absolute; top: -42px; -webkit-transform: translateX(-50%); transform: translateX(-50%); color: #FFF; background: #000; border-radius: 3px; height: 25px; line-height: 25px; padding: 0 10px;}
+.layui-slider > span{display: none; position: absolute; top: -17px; -webkit-transform: translateX(-50%); transform: translateX(-50%); width: 0; height: 0; border-width: 6px; border-style: solid; border-color: #000 transparent transparent transparent;}
+.layui-slider + .layui-slider-input{width: 70px; height: 32px; border: 1px solid #AAA; border-radius: 3px; font-size: 16px; line-height: 32px; position: absolute; right: 0; top: -15px;}
+.layui-slider + .layui-slider-input .layui-slider-input-btn{display: none; position: absolute; top: 0; right: 0; width: 20px; height: 100%; border-left: 1px solid #AAA;}
+.layui-slider + .layui-slider-input .layui-slider-input-btn i{cursor: pointer; position: absolute; right: 0; width: 20px; height: 50%; font-size: 12px; line-height: 16px; text-align: center; border-bottom: 1px solid #AAA;}
+.layui-slider + .layui-slider-input .layui-slider-input-btn i:nth-child(2){bottom: 0; border: none;}
+.layui-slider + .layui-slider-input .layui-slider-input-txt{height: 100%; font-size: 14px;}
+.layui-slider + .layui-slider-input .layui-slider-input-txt input{height: 100%; border: none;}
+.layui-slider + .layui-slider-input.hover{border-color: #009688;}
+.layui-slider + .layui-slider-input .layui-slider-input-btn i:hover{color: #009688;}
+/*垂直滑块*/
+.layui-slider.layui-slider-vertical{width: 4px; margin-left: 34px;}
+.layui-slider.layui-slider-vertical .layui-slider-bar{width: 4px;}
+.layui-slider.layui-slider-vertical .layui-slider-step{top: auto; left: 0px; -webkit-transform: translateY(50%); transform: translateY(50%);}
+.layui-slider.layui-slider-vertical .layui-slider-wrap{top: auto; left: -16px; -webkit-transform: translateY(50%); transform: translateY(50%);}
+.layui-slider.layui-slider-vertical .layui-slider-tips{top: auto; left: 2px; z-index: 1000;}
+.layui-slider.layui-slider-vertical > span{top: auto; left: 2px; z-index: 1000;}
+.layui-slider.layui-slider-vertical + .layui-slider-input{left: 0; top: auto; bottom: -45px;}
+
+
 @-webkit-keyframes layui-rotate{ /* 循环旋转 */
   from {-webkit-transform: rotate(0deg);}
   to {-webkit-transform: rotate(360deg);}
