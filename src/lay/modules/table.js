@@ -1262,11 +1262,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   
   //表格重载
   thisTable.config = {};
-  table.reload = function(id, options){
+  table.reload = function(id, options, ez){
     var config = thisTable.config[id];
     options = options || {};
     if(!config) return hint.error('The ID option was not found in the table instance');
     if(options.data && options.data.constructor === Array) delete config.data;
+    if(ez) config.where = options.where;
     return table.render($.extend(true, {}, config, options));
   };
  
