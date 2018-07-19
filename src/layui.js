@@ -437,11 +437,11 @@
     }
 
 	 //寻找对象是否存在数组中
-    Layui.prototype.findObj = function(list,obj) {
+    Layui.prototype.findObj = function(list,value,key) {
     		 var that = this,
     		 result = -1;
     		 that.each(list, function(index, item) {
-    		 	if(that.isEqualObj(obj,item))result = index;
+    		 	if(item[key] == value)result = index;
     		 })
     		 return result;
     	}
