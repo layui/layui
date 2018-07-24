@@ -207,8 +207,6 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-cellphone:before{content:"\e678"}
 .layui-icon-screen-full:before{content:"\e622";}
 .layui-icon-screen-restore:before{content:"\e758";}
-.layui-icon-checkbox:before{content:"\e624"}
-.layui-icon-uncheckbox:before{content:"\e68c"}
 
 
 /* 基本布局 */
@@ -900,24 +898,40 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 
 /** 树组件（重写中） **/
 .layui-tree{line-height: 26px;}
-.layui-tree li{position:relative;text-overflow: ellipsis; overflow:hidden; white-space: nowrap;}
+.layui-tree li{text-overflow: ellipsis; overflow:hidden; white-space: nowrap;}
 .layui-tree li a, 
-.layui-tree li .layui-tree-spread{display: inline-block; vertical-align: top;font-size: 12px; height: 26px; *display: inline; *zoom:1; cursor: pointer;color: #c0c4cc}
+.layui-tree li .layui-tree-spread{display: inline-block; vertical-align: top; height: 26px; *display: inline; *zoom:1; cursor: pointer;}
 .layui-tree li a{font-size: 0;}
 .layui-tree li a i{font-size: 16px;}
-.layui-tree li a cite{padding: 0 6px; font-size: 14px; font-style: normal;color: #606266;}
-.layui-tree li i{padding-left: 6px; -moz-user-select: none;}
-.layui-tree li .layui-tree-check{font-size: 16px;color: #dcdfe6}
-.layui-tree li .layui-tree-check:hover{color: #409eff;}
-.layui-tree li .layui-tree-check.is-checked{color: #409eff;}
-.layui-tree li ul{ display:none;margin-left: 40px;}
+.layui-tree li a cite{padding: 0 6px; font-size: 14px; font-style: normal;}
+.layui-tree li i{padding-left: 6px; color: #333; -moz-user-select: none;}
+.layui-tree li .layui-tree-check{font-size: 13px;}
+.layui-tree li .layui-tree-check:hover{color: #009E94;}
+.layui-tree li ul{display: none; margin-left: 20px;}
 .layui-tree li .layui-tree-enter{line-height: 24px; border: 1px dotted #000;}
 .layui-tree-drag{display: none; position: absolute; left: -666px; top: -666px; background-color: #f2f2f2; padding: 5px 10px; border: 1px dotted #000; white-space: nowrap}
 .layui-tree-drag i{padding-right: 5px;}
-.layui-tree-node{position: relative;}
-.layui-tree-node:hover { background-color:#eee;}
-.layui-tree-menu{position: absolute;top:0;right: 0;z-index:1024;}
-.layui-tree-menu span{margin-left: 10px;}
+
+/** atree **/
+.layui-atree{line-height: 26px;}
+.layui-atree li{position:relative;text-overflow: ellipsis; overflow:hidden; white-space: nowrap;}
+.layui-atree li a, 
+.layui-atree li .layui-atree-spread{display: inline-block; vertical-align: top;font-size: 12px; height: 26px; *display: inline; *zoom:1; cursor: pointer;color: #c0c4cc}
+.layui-atree li a{font-size: 0;}
+.layui-atree li a i{font-size: 16px;}
+.layui-atree li a cite{padding: 0 6px; font-size: 14px; font-style: normal;color: #606266;}
+.layui-atree li i{padding-left: 6px; -moz-user-select: none;}
+.layui-atree li .layui-atree-check{font-size: 16px;color: #dcdfe6}
+.layui-atree li .layui-atree-check:hover{color: #409eff;}
+.layui-atree li .layui-atree-check.is-checked{color: #409eff;}
+.layui-atree li ul{ display:none;margin-left: 40px;}
+.layui-atree li .layui-atree-enter{line-height: 24px; border: 1px dotted #000;}
+.layui-atree-drag{display: none; position: absolute; left: -666px; top: -666px; background-color: #f2f2f2; padding: 5px 10px; border: 1px dotted #000; white-space: nowrap}
+.layui-atree-drag i{padding-right: 5px;}
+.layui-atree-node{position: relative;}
+.layui-atree-node:hover { background-color:#eee;}
+.layui-atree-menu{position: absolute;top:0;right: 0;z-index:1024;}
+.layui-atree-menu span{margin-left: 10px;}
 
 /** 导航菜单 **/
 .layui-nav{position: relative; padding: 0 20px; background-color: #393D49; color: #fff; border-radius: 2px; font-size: 0; box-sizing: border-box;}
