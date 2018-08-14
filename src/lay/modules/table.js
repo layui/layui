@@ -392,7 +392,19 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   
   //页码
   Class.prototype.page = 1;
-  
+
+  //从可能的多层key中取出值
+  Class.prototype.getMultiwallData = function(res,key){
+    var keyArr  = key.split('.');
+    var data    = res[key];
+    if(keyArr.length>1){
+        for(var i in keyArr){
+            data = (i>0)?data[ keyArr[i] ]:res[ keyArr[i] ];
+        }
+    }
+    return data;
+  };
+
   //获得数据
   Class.prototype.pullData = function(curr, loadIndex){
     var that = this
@@ -430,7 +442,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
             that.renderForm();
             that.layMain.html('<div class="'+ NONE +'">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');
           } else {
-            that.renderData(res, curr, res[response.countName]), sort();
+            that.renderData(res, curr, that.getMultiwallData(res,options.response.countName)), sort();
             options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
           }
           loadIndex && layer.close(loadIndex);
@@ -492,19 +504,15 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   
   //数据渲染
   Class.prototype.renderData = function(res, curr, count, sort){
-    var that = this,options = that.config,data = res[options.response.dataName] || [];
-
-    // 增加 response.dataName 的多层支持
-    var dataNameArr = options.response.dataName.split('.');
-    if(dataNameArr.length>1){
-      for(var i in dataNameArr){
-        data = (i>0)?data[ dataNameArr[i] ]:res[ dataNameArr[i] ];
-      }
-    }
-    var trs = []
+    var that = this
+    ,options = that.config
+    //,data = res[options.response.dataName] || []
+    // 增加 table 渲染中 response.dataName 的多层支持
+    ,data = that.getMultiwallData(res,options.response.dataName) || []
+    ,trs = []
     ,trs_fixed = []
     ,trs_fixed_r = []
-    
+
     //渲染视图
     ,render = function(){ //后续性能提升的重点
       if(!sort && that.sortKey){
