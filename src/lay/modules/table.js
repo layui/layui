@@ -492,10 +492,16 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
   
   //数据渲染
   Class.prototype.renderData = function(res, curr, count, sort){
-    var that = this
-    ,options = that.config
-    ,data = res[options.response.dataName] || []
-    ,trs = []
+    var that = this,options = that.config,data = res[options.response.dataName] || [];
+
+    // 增加 response.dataName 的多层支持
+    var dataNameArr = options.response.dataName.split('.');
+    if(dataNameArr.length>1){
+      for(var i in dataNameArr){
+        data = (i>0)?data[ dataNameArr[i] ]:res[ dataNameArr[i] ];
+      }
+    }
+    var trs = []
     ,trs_fixed = []
     ,trs_fixed_r = []
     
