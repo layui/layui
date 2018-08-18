@@ -148,12 +148,17 @@ layui.define('layer', function(exports){
 
             //初始选中样式
             dds.eq(index).addClass(THIS).siblings().removeClass(THIS);
-            
+
             //上下定位识别
             if(top + dlHeight > $win.height() && top >= dlHeight){
               reElem.addClass(CLASS + 'up');
             }
-          }, hideDown = function(choose){
+            
+            followScroll();
+          }
+          
+          //隐藏下拉
+          ,hideDown = function(choose){
             reElem.removeClass(CLASS+'ed ' + CLASS+'up');
             input.blur();
             nearElem = null;
@@ -166,6 +171,27 @@ layui.define('layer', function(exports){
                 input && input.val(initValue);
               }
             });
+          }
+          
+          //定位下拉滚动条
+          ,followScroll = function(){  
+            var thisDd = dl.children('dd.'+ THIS);
+            
+            if(!thisDd[0]) return;
+            
+            var posTop = thisDd.position().top
+            ,dlHeight = dl.height()
+            ,ddHeight = thisDd.height();
+            
+            //若选中元素在滚动条不可见底部
+            if(posTop > dlHeight){
+              dl.scrollTop(posTop + dl.scrollTop() - dlHeight + ddHeight - 5);
+            }
+            
+            //若选择玄素在滚动条不可见顶部
+            if(posTop < 0){
+              dl.scrollTop(posTop + dl.scrollTop() - 5);
+            }
           };
           
           //点击标题区域
@@ -194,62 +220,59 @@ layui.define('layer', function(exports){
             }
           }).on('keydown', function(e){ //键盘按下
             var keyCode = e.keyCode;
-            
+
             //Tab键隐藏
             if(keyCode === 9){
               hideDown();
             }
             
             //标注 dd 的选中状态
-            var setThisDd = function(prevNext, thisElem){
-              var nearDd, cacheNearElem;
+            var setThisDd = function(prevNext, thisElem1){
+              var nearDd, cacheNearElem
               e.preventDefault();
-              
+
               //得到当前队列元素  
-              thisElem = function(){
-                if(thisElem && thisElem[0]){
-                  return thisElem;
+              var thisElem = function(){
+                var thisDd = dl.children('dd.'+ THIS);
+                
+                //如果是搜索状态，且按 Down 键，且当前可视 dd 元素在选中元素之前，
+                //则将当前可视 dd 元素的上一个元素作为虚拟的当前选中元素，以保证递归不中断
+                if(dl.children('dd.'+  HIDE)[0] && prevNext === 'next'){
+                  var showDd = dl.children('dd:not(.'+ HIDE +',.'+ DISABLED +')')
+                  ,firstIndex = showDd.eq(0).index();
+                  if(firstIndex >=0 && firstIndex < thisDd.index() && !showDd.hasClass(THIS)){
+                    return showDd.eq(0).prev()[0] ? showDd.eq(0).prev() : dl.children(':last');
+                  }
+                }
+
+                if(thisElem1 && thisElem1[0]){
+                  return thisElem1;
                 }
                 if(nearElem && nearElem[0]){
                   return nearElem;
                 }
-                return dds.eq(index); 
+       
+                return thisDd;
+                //return dds.eq(index);
               }();
               
               cacheNearElem = thisElem[prevNext](); //当前元素的附近元素
-              nearDd =  thisElem[prevNext]('dd'); //当前元素的 dd 元素
-              
-              //如果附近的元素不存在，则停止执行
-              if(!cacheNearElem[0]) return;
+              nearDd =  thisElem[prevNext]('dd:not(.'+ HIDE +')'); //当前可视元素的 dd 元素
+
+              //如果附近的元素不存在，则停止执行，并清空 nearElem
+              if(!cacheNearElem[0]) return nearElem = null;
               
               //记录附近的元素，让其成为下一个当前元素
               nearElem = thisElem[prevNext]();
 
               //如果附近不是 dd ，或者附近的 dd 元素是禁用状态，则进入递归查找
-              if(!nearDd[0] || nearDd.hasClass(DISABLED)){
+              if((!nearDd[0] || nearDd.hasClass(DISABLED)) && nearElem[0]){
                 return setThisDd(prevNext, nearElem);
               }
               
-              //标注样式
-              nearDd.addClass(THIS).siblings().removeClass(THIS);
-              
-              //定位滚动条
-              var ddThis = dl.children('dd.layui-this')
-              ,posTop = ddThis.position().top
-              ,dlHeight = dl.height()
-              ,ddHeight = ddThis.height();
-              
-              //若选中元素在滚动条不可见底部
-              if(posTop > dlHeight){
-                dl.scrollTop(posTop + dl.scrollTop() - dlHeight + ddHeight - 5);
-              }
-              
-              //若选择玄素在滚动条不可见顶部
-              if(posTop < 0){
-                dl.scrollTop(posTop + dl.scrollTop());
-              }
+              nearDd.addClass(THIS).siblings().removeClass(THIS); //标注样式
+              followScroll(); //定位滚动条
             };
-            
             
             if(keyCode === 38) setThisDd('prev'); //Up 键
             if(keyCode === 40) setThisDd('next'); //Down 键
@@ -297,6 +320,8 @@ layui.define('layer', function(exports){
             if(value === ''){
               dl.find('.'+NONE).remove();
             }
+            
+            followScroll(); //定位滚动条
           };
           
           if(isSearch){

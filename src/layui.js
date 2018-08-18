@@ -19,7 +19,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.3.0'; //版本号
+    this.v = '2.4.0'; //版本号
   }
 
   //获取layui所在目录
@@ -60,6 +60,8 @@
     ,table: 'modules/table' //表格
     ,element: 'modules/element' //常用元素操作
     ,rate: 'modules/rate'  //评分组件
+    ,colorpicker: 'modules/colorpicker' //颜色选择器
+    ,slider: 'modules/slider' //滑块
     ,carousel: 'modules/carousel' //轮播
     ,flow: 'modules/flow' //流加载
     ,util: 'modules/util' //工具块
