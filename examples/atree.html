@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>树模块 - layui</title>
+
+    <link rel="stylesheet" href="../src/css/layui.css">
+
+    <style>
+        body {
+            padding: 50px 100px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <ul id="demo"></ul>
+
+    <script src="../src/layui.js"></script>
+    <script>
+        layui.use('atree', function() {
+            var tree = layui.atree({
+                elem: '#demo' //指定元素
+                    ,
+                check: 'checkbox' //勾选风格
+                    ,
+                skin: 'as' //设定皮肤
+                    //,target: '_blank' //是否新选项卡打开（比如节点返回href才有效）
+                    ,
+//              drag: true,
+                spreadAll:true,
+                props:{
+                		  addBtnLabel:'新增',
+                		  deleteBtnLabel:'删除',
+                		  name: 'name',
+                      id: 'id',
+                      children:'children',
+                      checkbox:'checkbox',
+                      spread:'spread'
+                },
+                change:function(val){
+                	 console.group('change event')
+                  console.log('Array')
+                  console.log(val);
+                  console.groupEnd()
+                },
+                click: function(item) { //点击节点回调
+                  console.group('click event')
+                  console.log('Object')
+                  console.log(item);
+                  console.groupEnd()
+                },
+                addClick:function(item,elem,add){
+                	  console.group('append event')
+                  console.log('Object')
+                  console.log(item);
+                  console.log('dom')
+                  console.log(elem);
+                  console.log('dom add event')
+                  var item ={
+                     name: '测试节点'+new Date().getTime(),
+                     id:-1
+                 }
+                  add(item)
+                  console.groupEnd()
+                },
+                deleteClick:function(item,elem,done){
+                	 console.group('delete event')
+                  console.log('Object')
+                  console.log(item);
+                  console.log('dom')
+                  console.log(elem);
+                  console.log('dom delete event')
+                  done();
+                  console.groupEnd()
+                },
+                nodes: [ //节点
+                    {
+                        name: '常用文件夹',
+                        id: 1,
+                        alias: 'changyong',
+                        children: [{
+                            name: '所有未读',
+                            id: 11
+                                //,href: 'http://www.layui.com/'
+                                ,
+                            alias: 'weidu'
+                        }, {
+                            name: '置顶邮件',
+                            id: 12
+                        }, {
+                            name: '标签邮件',
+                            id: 13
+                        }]
+                    }, {
+                        name: '我的邮箱',
+                        id: 2,
+                        spread: true,
+                        children: [{
+                            name: 'QQ邮箱',
+                            id: 21,
+                            spread: true,
+                            children: [{
+                                name: '收件箱',
+                                id: 211,
+                                spread: true,
+                                children: [{
+                                    name: '所有未读',
+                    				    checkbox:true,
+                                    id: 2111
+                                }, {
+                                    name: '置顶邮件',
+                                    id: 2112
+                                }, {
+                                    name: '标签邮件',
+                                    id: 2113
+                                }]
+                            }, {
+                                name: '已发出的邮件',
+                                id: 212
+                            }, {
+                                name: '垃圾邮件',
+                                id: 213
+                            }]
+                        }, {
+                            name: '阿里云邮',
+                            id: 22,
+                            children: [{
+                                name: '收件箱',
+                                id: 221
+                            }, {
+                                name: '已发出的邮件',
+                                id: 222
+                            }, {
+                                name: '垃圾邮件',
+                                id: 223
+                            }]
+                        }]
+                    }
+                ]
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
