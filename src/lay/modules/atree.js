@@ -26,9 +26,17 @@ layui.define('jquery', function(exports) {
 
   var enterSkin = 'layui-atree-enter',
     Atree = function(options) {
-      this.options = options;
-      this.nodes = options.nodes || [];
-      this.props = this.options.props || props;
+
+      //缓冲重要变量
+      this.$vm = this;
+      this.$options = options || {};
+      this.$el = this.utils.isElementNode(this.$options.elem) ? this.$options.elem : $(this.$options.elem);
+
+      //模块的属性
+      this.nodes = this.$options.nodes || [];
+      this.props = this.$options.props || props;
+
+      //模块的别名
       this.nameKey = this.props.name || props.name;
       this.idKey = this.props.id || props.id;
       this.childrenKey = this.props.children || props.children;
@@ -36,7 +44,9 @@ layui.define('jquery', function(exports) {
       this.spreadKey = this.props.spread || props.spread;
       this.addBtnLabelKey = this.props.addBtnLabel || props.addBtnLabel;
       this.deleteBtnLabelKey = this.props.deleteBtnLabel || props.deleteBtnLabel;
+
     };
+
   //图标
   var icon = {
     arrow: ['&#xe623;', '&#xe625;'] //箭头
@@ -46,26 +56,36 @@ layui.define('jquery', function(exports) {
     leaf: '&#xe621;' //叶节点
   };
 
-  //初始化
-  Atree.prototype.init = function(elem) {
-    var that = this;
-    elem.addClass('layui-box layui-atree'); //添加tree样式
-    if(that.options.skin) {
-      elem.addClass('layui-atree-skin-' + that.options.skin);
+  //工具包
+  Atree.prototype.utils = (function() {
+    return {
+      isElementNode: function(node) {
+        return node.nodeType === 1;
+      }
     }
-    that.tree(elem);
-    that.on(elem);
+  })()
+
+  //初始化
+  Atree.prototype.init = function() {
+    var that = this.$vm,
+      options = this.$options
+    that.$el.addClass('layui-box layui-atree'); //添加tree样式
+    if(options.skin) {
+      that.$el.addClass('layui-atree-skin-' + options.skin);
+    }
+    that.tree(that.$el, that.nodes);
+    that.on(that.$el);
   };
 
   //树节点解析
   Atree.prototype.tree = function(elem, children, parent) {
-    var that = this,
-      options = that.options
-    var nodes = children || options.nodes;
+    var that = this.$vm,
+      options = this.$options
+    var nodes = children;
     layui.each(nodes, function(index, item) {
       var hasChild = item[that.childrenKey] && item[that.childrenKey].length > 0;
       var dom = that.getDom(item);
-      if(parent) item.parent = parent;
+      if(parent) item.$parent = parent;
       var ul = $(dom.ul(item));
       var li = $(that.getNode(item));
 
@@ -89,8 +109,8 @@ layui.define('jquery', function(exports) {
 
   //节点dom拼接
   Atree.prototype.getDom = function(item) {
-    var that = this,
-      options = that.options,
+    var that = this.$vm,
+      options = this.$options,
       item = item,
       hasChild = item[that.childrenKey] && item[that.childrenKey].length > 0;
     return {
@@ -126,8 +146,8 @@ layui.define('jquery', function(exports) {
   }
   //获取树节点
   Atree.prototype.getNode = function(item) {
-    var that = this,
-      options = that.options
+    var that = this.$vm,
+      options = this.$options
     var dom = that.getDom(item);
     var li = ['<li ' +
       (item[that.spreadKey] || options.spreadAll ? 'data-spread="' + (item[that.spreadKey] || true) + '"' : '') +
@@ -155,8 +175,8 @@ layui.define('jquery', function(exports) {
 
   //父绑定事件
   Atree.prototype.bindUlEvent = function(li, item) {
-    var that = this,
-      options = that.options
+    var that = this.$vm,
+      options = this.$options
     //触发点击节点回调
     typeof options.click === 'function' && that.click(li, item);
 
@@ -175,15 +195,15 @@ layui.define('jquery', function(exports) {
 
   //选中回调函数
   Atree.prototype.change = function() {
-      var that = this,
-        options = that.options;
+      var that = this.$vm,
+        options = this.$options;
       options.change(changeList);
     },
 
     //新增方法回调
     Atree.prototype.add = function(elem, item) {
-      var that = this,
-        options = that.options;
+      var that = this.$vm,
+        options = this.$options;
       var node = elem.children('.layui-atree-node');
       var addBtn = node.children('.layui-atree-menu').children('.layui-atree-add')
       var arrow = node.children('.layui-atree-spread')
@@ -222,8 +242,8 @@ layui.define('jquery', function(exports) {
 
   //删除方法回调
   Atree.prototype.delete = function(elem, item) {
-    var that = this,
-      options = that.options;
+    var that = this.$vm,
+      options = this.$options;
     var node = elem.children('.layui-atree-node');
     var deleteBtn = node.children('.layui-atree-menu').children('.layui-atree-delete')
     var ul = elem.children('ul'),
@@ -247,8 +267,8 @@ layui.define('jquery', function(exports) {
 
   //点击节点回调
   Atree.prototype.click = function(elem, item) {
-    var that = this,
-      options = that.options;
+    var that = this.$vm,
+      options = this.$options;
     var node = elem.children('.layui-atree-node');
     node.children('a').on('click', function(e) {
       layui.stope(e);
@@ -258,24 +278,26 @@ layui.define('jquery', function(exports) {
 
   //节点选择
   Atree.prototype.checkbox = function(elem, item) {
-    var that = this,
-      options = that.options;
+    var that = this.$vm,
+      options = this.$options;
     var node = elem.children('.layui-atree-node');
     var checkbox = node.children('.layui-atree-check')
     var ul = elem.children('ul'),
       a = node.children('a');
+
     //递归设置子节点
-    var whileAllCheck = function(dom, item, type) {
+    var setAllChildCheck = function(dom, item, type) {
       var list = dom.children('.layui-show').find('li');
       var children = item ? item.children || [] : [];
       for(var i = 0; i < list.length; i++) {
         var li = $(list[i]);
         setCheck(li, children[i], type);
-        whileAllCheck(li, children[i], type);
+        setAllChildCheck(li, children[i], type);
       }
     }
+
     //递归设置父节点
-    var whileAllPatentCheck = function(dom, item, type) {
+    var setAllPatentCheck = function(dom, item, type) {
       var parent = dom.parent().parent();
       var list = parent.children('.layui-show').find('li');
       var isChildrenCheck = true;
@@ -283,9 +305,9 @@ layui.define('jquery', function(exports) {
         var li = $(list[i]);
         if(!li.data('check')) isChildrenCheck = false;
       }
-      if(item.parent &&(isChildrenCheck || !type)) {
-        setCheck(parent, item.parent, type);
-        whileAllPatentCheck(parent, item.parent, type);
+      if(item.$parent && (isChildrenCheck || !type)) {
+        setCheck(parent, item.$parent, type);
+        setAllPatentCheck(parent, item.$parent, type);
       }
     }
 
@@ -294,12 +316,12 @@ layui.define('jquery', function(exports) {
       var checkbox = elem.children('.layui-atree-node').find('.layui-atree-check');
       if(type) {
         elem.data('check', true)
-        elem.attr("data-check",true);
+        elem.attr("data-check", true);
         checkbox.html(icon.checkbox[1])
         checkbox.addClass(' is-checked');
       } else {
         elem.data('check', null);
-        elem.attr("data-check",null);
+        elem.attr("data-check", null);
         checkbox.removeClass(' is-checked');
         checkbox.html(icon.checkbox[0])
       }
@@ -319,11 +341,11 @@ layui.define('jquery', function(exports) {
       } else {
         checkFlag = true;
       }
-      
+
       setCheck(elem, item, checkFlag)
-      whileAllCheck(elem, item, checkFlag);
-      whileAllPatentCheck(elem, item, checkFlag);
-      
+      setAllChildCheck(elem, item, checkFlag);
+      setAllPatentCheck(elem, item, checkFlag);
+
       that.change();
     }
     checkbox.on('click', check);
@@ -332,8 +354,8 @@ layui.define('jquery', function(exports) {
 
   //伸展节点
   Atree.prototype.spread = function(elem, item) {
-    var that = this,
-      options = that.options;
+    var that = this.$vm,
+      options = this.$options;
     var node = elem.children('.layui-atree-node');
     var arrow = node.children('.layui-atree-spread')
     var ul = elem.children('ul'),
@@ -349,20 +371,20 @@ layui.define('jquery', function(exports) {
   Atree.prototype.open = function(elem, ul, arrow) {
     if(elem.data('spread')) {
       elem.data('spread', null)
-      elem.attr("data-spread",null);
+      elem.attr("data-spread", null);
       ul.removeClass('layui-show');
       arrow.html(icon.arrow[0]);
     } else {
       elem.data('spread', true);
-      elem.attr("data-spread",true);
+      elem.attr("data-spread", true);
       ul.addClass('layui-show');
       arrow.html(icon.arrow[1]);
     }
   };
   //通用事件
   Atree.prototype.on = function(elem) {
-    var that = this,
-      options = that.options;
+    var that = this.$vm,
+      options = this.$options;
     var dragStr = 'layui-atree-drag';
 
     //屏蔽选中文字
@@ -401,8 +423,8 @@ layui.define('jquery', function(exports) {
   //拖拽节点
   Atree.prototype.move = {};
   Atree.prototype.drag = function(elem, item) {
-    var that = this,
-      options = that.options;
+    var that = this.$vm,
+      options = this.$options;
     var a = elem.children('a'),
       mouseenter = function() {
         var othis = $(this),

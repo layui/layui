@@ -930,8 +930,9 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-atree-drag i{padding-right: 5px;}
 .layui-atree-node{position: relative;}
 .layui-atree-node:hover { background-color:#eee;}
-.layui-atree-menu{position: absolute;top:0;right: 0;z-index:1024;}
-.layui-atree-menu span{margin-left: 10px;}
+.layui-atree-node:hover .layui-atree-menu{display: block;}
+.layui-atree-menu{position: absolute;top:0;right: 10px;z-index:1024;display: none;}
+.layui-atree-menu span{margin-left: 10px;cursor: pointer;}
 
 /** 导航菜单 **/
 .layui-nav{position: relative; padding: 0 20px; background-color: #393D49; color: #fff; border-radius: 2px; font-size: 0; box-sizing: border-box;}
