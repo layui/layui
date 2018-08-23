@@ -58,13 +58,14 @@ layui.define('jquery', function(exports) {
   };
 
   //树节点解析
-  Atree.prototype.tree = function(elem, children) {
+  Atree.prototype.tree = function(elem, children, parent) {
     var that = this,
       options = that.options
     var nodes = children || options.nodes;
     layui.each(nodes, function(index, item) {
       var hasChild = item[that.childrenKey] && item[that.childrenKey].length > 0;
       var dom = that.getDom(item);
+      if(parent) item.parent = parent;
       var ul = $(dom.ul(item));
       var li = $(that.getNode(item));
 
@@ -76,7 +77,7 @@ layui.define('jquery', function(exports) {
       //如果有子节点，则递归继续生成树
       if(hasChild) {
         li.append(ul);
-        that.tree(ul, item[that.childrenKey]);
+        that.tree(ul, item[that.childrenKey], item);
       }
       //伸展节点
       that.spread(li, item);
@@ -263,6 +264,7 @@ layui.define('jquery', function(exports) {
     var checkbox = node.children('.layui-atree-check')
     var ul = elem.children('ul'),
       a = node.children('a');
+    //递归设置子节点
     var whileAllCheck = function(dom, item, type) {
       var list = dom.children('.layui-show').find('li');
       var children = item ? item.children || [] : [];
@@ -272,6 +274,16 @@ layui.define('jquery', function(exports) {
         whileAllCheck(li, children[i], type);
       }
     }
+    //递归设置父节点
+    var whileAllPatentCheck = function(dom, item, type) {
+      var parent = dom.parent().parent();
+      if(item.parent) {
+        setCheck(parent, item.parent, type);
+        whileAllPatentCheck(parent, item.parent, type);
+      }
+    }
+
+    //设置节点选中状态
     var setCheck = function(elem, item, type) {
       var checkbox = elem.children('.layui-atree-node').find('.layui-atree-check');
       if(type) {
@@ -299,8 +311,10 @@ layui.define('jquery', function(exports) {
       } else {
         checkFlag = true;
       }
-      setCheck(elem, item, checkFlag)
+      whileAllPatentCheck(elem, item, checkFlag);
       whileAllCheck(elem, item, checkFlag);
+      setCheck(elem, item, checkFlag)
+
       that.change();
     }
     checkbox.on('click', check);
