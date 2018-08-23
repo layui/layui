@@ -277,7 +277,13 @@ layui.define('jquery', function(exports) {
     //递归设置父节点
     var whileAllPatentCheck = function(dom, item, type) {
       var parent = dom.parent().parent();
-      if(item.parent) {
+      var list = parent.children('.layui-show').find('li');
+      var isChildrenCheck = true;
+      for(var i = 0; i < list.length; i++) {
+        var li = $(list[i]);
+        if(!li.data('check')) isChildrenCheck = false;
+      }
+      if(item.parent &&(isChildrenCheck || !type)) {
         setCheck(parent, item.parent, type);
         whileAllPatentCheck(parent, item.parent, type);
       }
@@ -288,10 +294,12 @@ layui.define('jquery', function(exports) {
       var checkbox = elem.children('.layui-atree-node').find('.layui-atree-check');
       if(type) {
         elem.data('check', true)
+        elem.attr("data-check",true);
         checkbox.html(icon.checkbox[1])
         checkbox.addClass(' is-checked');
       } else {
         elem.data('check', null);
+        elem.attr("data-check",null);
         checkbox.removeClass(' is-checked');
         checkbox.html(icon.checkbox[0])
       }
@@ -311,10 +319,11 @@ layui.define('jquery', function(exports) {
       } else {
         checkFlag = true;
       }
-      whileAllPatentCheck(elem, item, checkFlag);
-      whileAllCheck(elem, item, checkFlag);
+      
       setCheck(elem, item, checkFlag)
-
+      whileAllCheck(elem, item, checkFlag);
+      whileAllPatentCheck(elem, item, checkFlag);
+      
       that.change();
     }
     checkbox.on('click', check);
@@ -340,10 +349,12 @@ layui.define('jquery', function(exports) {
   Atree.prototype.open = function(elem, ul, arrow) {
     if(elem.data('spread')) {
       elem.data('spread', null)
+      elem.attr("data-spread",null);
       ul.removeClass('layui-show');
       arrow.html(icon.arrow[0]);
     } else {
       elem.data('spread', true);
+      elem.attr("data-spread",true);
       ul.addClass('layui-show');
       arrow.html(icon.arrow[1]);
     }
