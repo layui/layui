@@ -447,26 +447,24 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.autoColNums = autoColNums;
     
     //设置列宽
-    layui.each(options.cols, function(i1, item1){
-      layui.each(item1, function(i2, item2){
-        var minWidth = item2.minWidth || options.cellMinWidth
-        ,field = item2.field;
-        if(item2.colspan > 1) return;
-        
-        //给位分配宽的列平均分配宽
-        if(item2.width === 0){
-          that.getCssRule(field, function(item){
-            item.style.width = Math.floor(autoWidth >= minWidth ? autoWidth : minWidth) + 'px';
-          });
-        }
-        
-        //给设定百分比的列分配列宽
-        else if(/\d+%$/.test(item2.width)){
-          that.getCssRule(field, function(item){
-            item.style.width = Math.floor((parseFloat(item2.width) / 100) * cntrWidth) + 'px';
-          });
-        }
-      });
+    that.eachCols(function(i3, item3){
+      var minWidth = item3.minWidth || options.cellMinWidth
+      ,field = item3.field || i3;
+      if(item3.colspan > 1) return;
+      
+      //给位分配宽的列平均分配宽
+      if(item3.width === 0){
+        that.getCssRule(field, function(item){
+          item.style.width = Math.floor(autoWidth >= minWidth ? autoWidth : minWidth) + 'px';
+        });
+      }
+      
+      //给设定百分比的列分配列宽
+      else if(/\d+%$/.test(item3.width)){
+        that.getCssRule(field, function(item){
+          item.style.width = Math.floor((parseFloat(item3.width) / 100) * cntrWidth) + 'px';
+        });
+      }
     });
     
     //填补 Math.floor 造成的数差
@@ -1115,6 +1113,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
                       item2.hide = !obj.elem.checked;
                       that.elem.find('*[data-field="'+ obj.elem.name +'"]')
                       [obj.elem.checked ? 'removeClass' : 'addClass'](HIDE);
+                      
+                      that.fullSize();
+                      that.scrollPatch();
                       that.setColsWidth();
                     }
                   });

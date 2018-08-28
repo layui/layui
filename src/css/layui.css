@@ -210,6 +210,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-cols:before{content:"\e610";}
 .layui-icon-export:before{content:"\e67d";}
 .layui-icon-print:before {content:"\e66d";}
+.layui-icon-slider:before {content: "\e714";}
 
 /* 基本布局 */
 .layui-main{position: relative; width: 1140px; margin: 0 auto;}
@@ -460,6 +461,8 @@ a cite{font-style: normal; *cursor:pointer;}
 /* 窗口面板 */
 .layui-panel-window{position: relative; padding: 15px; border-radius: 0; border-top: 5px solid #E6E6E6; background-color: #fff;}
 
+/* 其它辅助 */
+.layui-auxiliar-moving{position: fixed; left: 0; right: 0; top: 0; bottom: 0; width: 100%; height: 100%; background: none; z-index: 9999999999;}
 
 
 /* 
@@ -935,10 +938,6 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-tree-drag{display: none; position: absolute; left: -666px; top: -666px; background-color: #f2f2f2; padding: 5px 10px; border: 1px dotted #000; white-space: nowrap}
 .layui-tree-drag i{padding-right: 5px;}
 
-/** 代码修饰器 **/
-.layui-code{position: relative; margin: 10px 0; padding: 15px; line-height: 20px; border: 1px solid #ddd; border-left-width: 6px; background-color: #F2F2F2; color: #333; font-family: Courier New; font-size: 12px;}
-
-
 /** 导航菜单 **/
 .layui-nav{position: relative; padding: 0 20px; background-color: #393D49; color: #fff; border-radius: 2px; font-size: 0; box-sizing: border-box;}
 .layui-nav *{font-size: 14px;}
@@ -1148,7 +1147,8 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-util-face ul li{cursor: pointer; float: left; border: 1px solid #e8e8e8; height: 22px; width: 26px; overflow: hidden; margin: -1px 0 0 -1px; padding: 4px 2px; text-align: center;}
 .layui-util-face ul li:hover{position: relative; z-index: 2; border: 1px solid #eb7350; background: #fff9ec;}
 
-
+/** 代码修饰器 **/
+.layui-code{position: relative; margin: 10px 0; padding: 15px; line-height: 20px; border: 1px solid #ddd; border-left-width: 6px; background-color: #F2F2F2; color: #333; font-family: Courier New; font-size: 12px;}
 
 /** 评分组件 By star1029 **/
 .layui-rate,
@@ -1160,69 +1160,71 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-rate[readonly] li i:hover{cursor: default; transform: scale(1);}
 
 /** 颜色选择器 By star1029 **/
-.layui-colorpicker{width: 26px; height: 26px; border: 1px solid #EEE; padding: 5px; border-radius: 2px; line-height: 24px; display: inline-block; cursor: pointer;}
+.layui-colorpicker{width: 26px; height: 26px; border: 1px solid #e6e6e6; padding: 5px; border-radius: 2px; line-height: 24px; display: inline-block; cursor: pointer; transition: all .3s; -webkit-transition: all .3s;}
+.layui-colorpicker:hover{border-color: #d2d2d2;}
 .layui-colorpicker.layui-colorpicker-lg{width: 34px; height: 34px; line-height: 32px;}
 .layui-colorpicker.layui-colorpicker-sm{width: 24px; height: 24px; line-height: 22px;}
 .layui-colorpicker.layui-colorpicker-xs{width: 22px; height: 22px; line-height: 20px;}
-.layui-colorpicker .layui-colorpicker-trigger-bgcolor{display: block; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)}
-.layui-colorpicker .layui-colorpicker-trigger-span{display: block; height: 100%; box-sizing: border-box; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); border-radius: 2px; text-align: center;}
-.layui-colorpicker .layui-colorpicker-trigger-i{display: inline-block; color: #FFF; font-size: 12px;}
-.layui-colorpicker .layui-colorpicker-trigger-i.layui-icon-close{color: #CCC;}
 
-.layui-colorpicker-main{width: 280px; padding: 7px; background: #FFF; border: 1px solid #EEE; border-radius: 2px; position: absolute; z-index: 4999;}
+.layui-colorpicker-trigger-bgcolor{display: block; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);  border-radius: 2px;}
+.layui-colorpicker-trigger-span{display: block; height: 100%; box-sizing: border-box; border: 1px solid rgba(0,0,0,.15); border-radius: 2px; text-align: center;}
+.layui-colorpicker-trigger-i{display: inline-block; color: #FFF; font-size: 12px;}
+.layui-colorpicker-trigger-i.layui-icon-close{color: #999;}
+
+.layui-colorpicker-main{position: absolute; z-index: 4999; width: 280px; padding: 7px; background: #FFF; border: 1px solid #d2d2d2; border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,.12);}
 .layui-colorpicker-main-wrapper{height: 180px; position: relative;}
-.layui-colorpicker-main-wrapper .colorpicker-basis{width: 260px; height: 100%; position: relative;}
-.layui-colorpicker-main-wrapper .colorpicker-basis-white{width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: linear-gradient(90deg, #FFF, hsla(0,0%,100%,0));}
-.layui-colorpicker-main-wrapper .colorpicker-basis-black{width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: linear-gradient(0deg, #000, transparent);}
-.layui-colorpicker-main-wrapper .colorpicker-basis-cursor{width: 5px; height: 5px; border: 1px solid #FFF; border-radius: 50%; position: absolute; top: -3px; right: -3px;}
-.layui-colorpicker-main-wrapper .colorpicker-side{position: absolute; top: 0; right: 0; width: 12px; height: 100%; background: linear-gradient(#F00, #FF0, #0F0, #0FF, #00F, #F0F, #F00);}
-.layui-colorpicker-main-wrapper .colorpicker-side-slider{width: 100%; height: 5px; box-shadow: 0 0 1px #888888; box-sizing: border-box; background: #FFF; border-radius: 1px; border: 1px solid #f0f0f0; cursor: pointer; position: absolute; left: 0;}
+.layui-colorpicker-basis{width: 260px; height: 100%; position: relative;}
+.layui-colorpicker-basis-white{width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: linear-gradient(90deg, #FFF, hsla(0,0%,100%,0));}
+.layui-colorpicker-basis-black{width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: linear-gradient(0deg, #000, transparent);}
+.layui-colorpicker-basis-cursor{width: 5px; height: 5px; border: 1px solid #FFF; border-radius: 50%; position: absolute; top: -3px; right: -3px;}
+.layui-colorpicker-side{position: absolute; top: 0; right: 0; width: 12px; height: 100%; background: linear-gradient(#F00, #FF0, #0F0, #0FF, #00F, #F0F, #F00);}
+.layui-colorpicker-side-slider{width: 100%; height: 5px; box-shadow: 0 0 1px #888888; box-sizing: border-box; background: #FFF; border-radius: 1px; border: 1px solid #f0f0f0; cursor: pointer; position: absolute; left: 0;}
 .layui-colorpicker-main-alpha{display: none; height: 12px; margin-top: 7px; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)}
-.layui-colorpicker-main-alpha .colorpicker-alpha-bgcolor{height: 100%; position: relative;}
-.layui-colorpicker-main-alpha .colorpicker-alpha-slider{width: 5px; height: 100%; box-shadow: 0 0 1px #888888; box-sizing: border-box; background: #FFF; border-radius: 1px; border: 1px solid #f0f0f0; cursor: pointer; position: absolute; top: 0;}
+.layui-colorpicker-alpha-bgcolor{height: 100%; position: relative;}
+.layui-colorpicker-alpha-slider{width: 5px; height: 100%; box-shadow: 0 0 1px #888888; box-sizing: border-box; background: #FFF; border-radius: 1px; border: 1px solid #f0f0f0; cursor: pointer; position: absolute; top: 0;}
 .layui-colorpicker-main-pre{padding-top: 7px; font-size: 0;}
-.layui-colorpicker-main-pre .colorpicker-pre{width: 20px; height: 20px;  border-radius: 2px; display: inline-block; margin-left: 6px; margin-bottom: 7px; cursor: pointer;}
-.layui-colorpicker-main-pre .colorpicker-pre:nth-child(11n+1){margin-left: 0;}
-.layui-colorpicker-main-pre .colorpicker-pre.isalpha{background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)}
-.layui-colorpicker-main-pre .colorpicker-pre.selected{box-shadow: 0 0 3px 2px #0ad2c1;}
-.layui-colorpicker-main-pre .colorpicker-pre > div{height: 100%; border-radius: 2px;}
-.layui-colorpicker-main-input{padding-top: 7px;}
-.layui-colorpicker-main-input div.layui-inline{margin-right: 22px; font-size: 12px;}
-.layui-colorpicker-main-input input.layui-input{height: 30px; border-radius: 2px; color: #777;}
-
+.layui-colorpicker-pre{width: 20px; height: 20px;  border-radius: 2px; display: inline-block; margin-left: 6px; margin-bottom: 7px; cursor: pointer;}
+.layui-colorpicker-pre:nth-child(11n+1){margin-left: 0;}
+.layui-colorpicker-pre-isalpha{background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)}
+.layui-colorpicker-pre.layui-this{box-shadow: 0 0 3px 2px rgba(0,0,0,.15);}
+.layui-colorpicker-pre > div{height: 100%; border-radius: 2px;}
+.layui-colorpicker-main-input{text-align: right; padding-top: 7px;}
+.layui-colorpicker-main-input .layui-btn-container .layui-btn{margin: 0 0 0 10px;}
+.layui-colorpicker-main-input div.layui-inline{float: left; margin-right: 10px; font-size: 14px;}
+.layui-colorpicker-main-input input.layui-input{width: 150px; height: 30px; color: #666;}
 
 /** 滑块 By star1029 **/
-.layui-slider{height: 4px; background: #e2e2e2; border-radius: 3px; position: relative; z-index: 999;}
-.layui-slider .layui-slider-bar{border-radius: 3px; position: absolute; z-index: 777; height: 100%;}
-.layui-slider .layui-slider-step{width: 4px; height: 4px; border-radius: 50%; background: #FFF; position: absolute; top: 0; -webkit-transform: translateX(-50%); transform: translateX(-50%);}
-.layui-slider .layui-slider-wrap{width: 36px; height: 36px; position: absolute; top: -16px; -webkit-transform: translateX(-50%); transform: translateX(-50%); z-index: 888; text-align: center;}
-.layui-slider .layui-slider-wrap .layui-slider-wrap-btn{width: 12px; height: 12px; border-radius: 50%; background: #FFF; display: inline-block; vertical-align: middle; cursor: pointer; transition: 0.3s;}
-.layui-slider .layui-slider-wrap:after{content: ""; height: 100%; display: inline-block; vertical-align: middle;}
-.layui-slider .layui-slider-wrap .layui-slider-wrap-btn:hover, .layui-slider .layui-slider-wrap .layui-slider-wrap-btn.hover{transform: scale(1.2);}
-.layui-slider .layui-slider-tips{white-space:nowrap; display: none; position: absolute; top: -42px; -webkit-transform: translateX(-50%); transform: translateX(-50%); color: #FFF; background: #000; border-radius: 3px; height: 25px; line-height: 25px; padding: 0 10px;}
+.layui-slider{height: 4px; background: #e2e2e2; border-radius: 3px; position: relative; cursor: pointer;}
+.layui-slider-bar{border-radius: 3px; position: absolute; z-index: 777; height: 100%;}
+.layui-slider-step{position: absolute; top: 0; z-index: 999; width: 4px; height: 4px; border-radius: 50%; background: #FFF; -webkit-transform: translateX(-50%); transform: translateX(-50%);}
+.layui-slider-wrap{width: 36px; height: 36px; position: absolute; top: -16px; -webkit-transform: translateX(-50%); transform: translateX(-50%); z-index: 1000; text-align: center;}
+.layui-slider-wrap-btn{width: 12px; height: 12px; border-radius: 50%; background: #FFF; display: inline-block; vertical-align: middle; cursor: pointer; transition: 0.3s;}
+.layui-slider-wrap:after{content: ""; height: 100%; display: inline-block; vertical-align: middle;}
+.layui-slider-wrap-btn:hover, 
+.layui-slider-wrap-btn.layui-slider-hover{transform: scale(1.2);}
+.layui-slider-wrap-btn.layui-disabled:hover{transform: scale(1) !important;}
+.layui-slider-tips{white-space:nowrap; display: none; position: absolute; top: -42px; -webkit-transform: translateX(-50%); transform: translateX(-50%); color: #FFF; background: #000; border-radius: 3px; height: 25px; line-height: 25px; padding: 0 10px;}
 .layui-slider > span{display: none; position: absolute; top: -17px; margin-left: -6px; width: 0; height: 0; border-width: 6px; border-style: solid; border-color: #000 transparent transparent transparent;}
-.layui-slider-input{width: 70px; height: 32px; border: 1px solid #AAA; border-radius: 3px; font-size: 16px; line-height: 32px; position: absolute; right: 0; top: -15px;}
-.layui-slider-input .layui-slider-input-btn{display: none; position: absolute; top: 0; right: 0; width: 20px; height: 100%; border-left: 1px solid #AAA;}
-.layui-slider-input .layui-slider-input-btn i{cursor: pointer; position: absolute; right: 0; bottom: 0; width: 20px; height: 50%; font-size: 12px; line-height: 16px; text-align: center;}
-.layui-slider-input .layui-slider-input-btn i:first-child{top: 0; border-bottom: 1px solid #AAA;}
-.layui-slider-input .layui-slider-input-txt{height: 100%; font-size: 14px;}
-.layui-slider-input .layui-slider-input-txt input{height: 100%; border: none;}
-.layui-slider-input.hover{border-color: #009688;}
-.layui-slider-input .layui-slider-input-btn i:hover{color: #009688;}
+.layui-slider-input{width: 70px; height: 32px; border: 1px solid #e6e6e6; border-radius: 3px; font-size: 16px; line-height: 32px; position: absolute; right: 0; top: -15px;}
+.layui-slider-input-btn{display: none; position: absolute; top: 0; right: 0; width: 20px; height: 100%; border-left: 1px solid #d2d2d2;}
+.layui-slider-input-btn i{cursor: pointer; position: absolute; right: 0; bottom: 0; width: 20px; height: 50%; font-size: 12px; line-height: 16px; text-align: center; color: #999;}
+.layui-slider-input-btn i:first-child{top: 0; border-bottom: 1px solid #d2d2d2;}
+.layui-slider-input-txt{height: 100%; font-size: 14px;}
+.layui-slider-input-txt input{height: 100%; border: none;}
+.layui-slider-input-btn i:hover{color: #009688;}
 /*垂直滑块*/
-.layui-slider.layui-slider-vertical{width: 4px; margin-left: 34px;}
-.layui-slider.layui-slider-vertical .layui-slider-bar{width: 4px;}
-.layui-slider.layui-slider-vertical .layui-slider-step{top: auto; left: 0px; -webkit-transform: translateY(50%); transform: translateY(50%);}
-.layui-slider.layui-slider-vertical .layui-slider-wrap{top: auto; left: -16px; -webkit-transform: translateY(50%); transform: translateY(50%);}
-.layui-slider.layui-slider-vertical .layui-slider-tips{top: auto; left: 2px; z-index: 1000;}
-.layui-slider.layui-slider-vertical > span{top: auto; left: 2px; z-index: 1000;}
+.layui-slider-vertical{width: 4px; margin-left: 34px;}
+.layui-slider-vertical .layui-slider-bar{width: 4px;}
+.layui-slider-vertical .layui-slider-step{top: auto; left: 0px; -webkit-transform: translateY(50%); transform: translateY(50%);}
+.layui-slider-vertical .layui-slider-wrap{top: auto; left: -16px; -webkit-transform: translateY(50%); transform: translateY(50%);}
+.layui-slider-vertical .layui-slider-tips{top: auto; left: 2px; z-index: 1000;}
+.layui-slider-vertical > span{top: auto; left: 2px; z-index: 1000;}
 @media \0screen{
-  .layui-slider .layui-slider-wrap-btn{margin-left: -20px;}
-  .layui-slider.layui-slider-vertical .layui-slider-wrap-btn{margin-left: 0; margin-bottom: -20px;}
-  .layui-slider.layui-slider-vertical .layui-slider-tips{margin-left: -8px;}
+  .layui-slider-wrap-btn{margin-left: -20px;}
+  .layui-slider-vertical .layui-slider-wrap-btn{margin-left: 0; margin-bottom: -20px;}
+  .layui-slider-vertical .layui-slider-tips{margin-left: -8px;}
   .layui-slider > span{margin-left: 8px;}
 }
-
 
 
 /** 动画 **/

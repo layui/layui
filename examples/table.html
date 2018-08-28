@@ -79,7 +79,7 @@ body{padding: 20px; /*overflow-y: scroll;*/}
         <th lay-data="{field:'province', width:80}" rowspan="2">省</th>
         <th lay-data="{field:'city', width:80}" rowspan="2">市</th>
         <th lay-data="{align:'center'}" colspan="2">详细</th>
-        <th lay-data="{field:'zone', width:80}" rowspan="2">区</th>
+        <th lay-data="{field:'zone'}" rowspan="2">区</th>
         <th lay-data="{field:'province', width:80}" rowspan="2">省</th>
         <th lay-data="{field:'city', width:80}" rowspan="2">市</th>
       </tr>
@@ -264,7 +264,7 @@ layui.use('table', function(){
       ,{field:'id', title:'ID', unresize: true, sort: true}
       ,{field:'username', title:'用户名', templet: '#usernameTpl'}
       ,{field:'email', title:'邮箱'}
-      ,{field:'sex', title:'性别', templet: '#switchTpl', minWidth: 85, align:'center'}
+      ,{xfield:'sex', title:'性别', templet: '#switchTpl', minWidth: 85, align:'center'}
       ,{field:'lock', title:'是否锁定', templet: '#checkboxTpl', minWidth: 110, align:'center'}
       ,{field:'city', title:'城市'}
     ]]

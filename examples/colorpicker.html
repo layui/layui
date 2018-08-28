@@ -3,59 +3,68 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>颜色拾取器 - layui</title>
+<title>颜色选择器 - layui</title>
 
 <link rel="stylesheet" href="../src/css/layui.css">
 
-<style type="text/css">
-  #test1,#test2,#test3,#test4,#test5,#test6{margin-left: 50px; margin-top: 70px;}
-</style>
-
 <style>
 body{padding:20px;}
+.test-box{margin-bottom: 50px;}
 </style>
 </head>
 <body>
 
   <div class="layui-container">
-    <div class="layui-row">
-      <div>
-        <div id="test1"></div>
+    <div class="test-box">
+      <div class="layui-inline">
+        <input class="layui-input" id="LAY-test1">
       </div>
-      <div>
-        <div id="test2"></div>
-      </div>
-      <div>
-        <div id="test3"></div>
-      </div>
-      <div>
-        <div id="test4"></div>
-      </div>
-      <div>
-        <div id="test5"></div>
-      </div>
-      <div>
-        <div id="test6"></div>
-      </div>
+      <div id="test1"></div>
+    </div>
+    
+    <div class="test-box">
+      <div id="test2"></div>
+    </div>
+    
+    <div class="test-box">
+      <div id="test3"></div>
+    </div>
+    
+    <div class="test-box">
+      <div id="test4"></div>
+    </div>
+    
+    <div class="test-box">
+      <div id="test5"></div>
+    </div>
+    
+    <div class="test-box">
+      <div id="test6"></div>
     </div>
   </div>
 
 <script src="../src/layui.js"></script>
 <script>
-  layui.use('colorpicker', function(){
+
+  layui.use(['colorpicker', 'layer'], function(){
     var colorpicker = layui.colorpicker;
 
     colorpicker.render({
       elem: '#test1'
-      ,predefine: true //开启预定义颜色
-      ,prededata: ['#F00','#0F0','#00F','rgb(255, 69, 0)','rgba(255, 69, 0, 0.5)']
+      //,predefine: true //开启预定义颜色
+      //,colors: ['#F00','#0F0','#00F','rgb(255, 69, 0)','rgba(255, 69, 0, 0.5)']
       ,change: function(color){
-        console.log(color)
+        document.body.style.backgroundColor = color;
+      }
+      ,done: function(color){
+        layui.$('#LAY-test1').val(color);
+        document.body.style.backgroundColor = color;
       }
     });
+    
     colorpicker.render({
       elem: '#test2'
-      ,bgcolor: 'rgba(218, 121, 157, 0.5)' //设置默认色
+      ,color: 'rgba(218, 121, 157, 1)' //设置默认色
       ,predefine: true
       ,alpha: true  //开启透明度
       ,format: 'rgb'
@@ -63,29 +72,33 @@ body{padding:20px;}
         console.log(color)
       }
     });
+    
     colorpicker.render({
-      elem: '#test3'
-      ,bgcolor: '#06eaee'
-      ,alpha: true
-      ,format: 'rgb' //设置输入显示格式为rgb
+      elem: '#06eaee'
+      ,color: 'rgba(0,0,0)'
+      //,alpha: true
+      //,format: 'rgb' //设置输入显示格式为rgb
     });
+    
     colorpicker.render({
       elem: '#test4'
-      ,bgcolor: '#06eeb8'
+      ,color: '#06eeb8'
       ,predefine: true //开启预定义色
       ,format: 'rgb'
     });
+    
     colorpicker.render({
       elem: '#test5'
-      ,bgcolor: '#ffd900'
+      ,color: '#ffd900'
       ,predefine: true
-      ,size: 'mini'
+      ,size: 'lg'
     });
+    
     colorpicker.render({
       elem: '#test6'
-      ,bgcolor: '#F00'
+      ,color: '#F00'
       ,predefine: true
-      ,prededata: ['#F00','#0F0','#00F','rgb(255, 69, 0)','rgba(255, 69, 0, 0.5)']
+      ,colors: ['#F00','#0F0','#00F','rgb(255, 69, 0)','rgba(255, 69, 0, 0.5)']
       ,size: 'xs'
     });
   })
