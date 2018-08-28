@@ -46,11 +46,11 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /** 图标字体 **/
 @font-face {font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=230');
-  src: url('../font/iconfont.eot?v=230#iefix') format('embedded-opentype'),
-  url('../font/iconfont.svg?v=230#iconfont') format('svg'),
-  url('../font/iconfont.woff?v=230') format('woff'),
-  url('../font/iconfont.ttf?v=230') format('truetype');
+  src: url('../font/iconfont.eot?v=240');
+  src: url('../font/iconfont.eot?v=240#iefix') format('embedded-opentype'),
+  url('../font/iconfont.svg?v=240#iconfont') format('svg'),
+  url('../font/iconfont.woff?v=240') format('woff'),
+  url('../font/iconfont.ttf?v=240') format('truetype');
 }
                     
 .layui-icon{
