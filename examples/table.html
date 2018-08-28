@@ -176,16 +176,17 @@ layui.use('table', function(){
   //渲染
   window.ins1 = table.render({
     elem: '#test'
-    ,height: 400
+    ,height: 100
     ,title: '用户数据表'
     ,url: 'json/table/demo1.json'
-    //,size: 'sm'
+    //,size: 'lg'
     ,page: {
       
     }
     ,totalRow: true
     ,limit: 30
     ,toolbar: '#toolbarDemo'
+    //,defaultToolbar: ['filter']
     ,cols: [[
       {type: 'radio', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}

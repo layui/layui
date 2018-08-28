@@ -127,16 +127,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 
     ,'{{# if(d.data.toolbar){ }}'
     ,'<div class="layui-table-tool">'
-      ,'<div class="layui-table-tool-temp">'
-        ,'<div class="layui-inline" lay-event="add"><i class="layui-icon layui-icon-add-1"></i></div>'
-        ,'<div class="layui-inline" lay-event="update"><i class="layui-icon layui-icon-edit"></i></div>'
-        ,'<div class="layui-inline" lay-event="delete"><i class="layui-icon layui-icon-delete"></i></div>'
-      ,'</div>'
-      ,'<div class="layui-table-tool-self">'
-        ,'<div class="layui-inline" title="筛选列" lay-event="LAYTABLE_COLS"><i class="layui-icon layui-icon-cols"></i></div>'
-        ,'<div class="layui-inline" title="导出" lay-event="LAYTABLE_EXPORT"><i class="layui-icon layui-icon-export"></i></div>'
-        ,'<div class="layui-inline" title="打印" lay-event="LAYTABLE_PRINT"><i class="layui-icon layui-icon-print"></i></div>'
-      ,'</div>'
+      ,'<div class="layui-table-tool-temp"></div>'
+      ,'<div class="layui-table-tool-self"></div>'
     ,'</div>'
     ,'{{# } }}'
     
@@ -221,6 +213,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     limit: 10 //每页显示的数量
     ,loading: true //请求数据时，是否显示loading
     ,cellMinWidth: 60 //所有单元格默认最小宽度
+    ,defaultToolbar: ['filter', 'exports', 'print'] //工具栏右侧图标
     ,text: {
       none: '无数据'
     }
@@ -267,6 +260,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       options.height = _WIN.height() - that.fullHeightGap;
     }
     
+    //高度不能低于最小值
+    if(options.height && options.height < 248) options.height = 248;
+    
     //初始化一些参数
     that.setInit();
     
@@ -299,13 +295,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.layTotal = reElem.find(ELEM_TOTAL);
     that.layPage = reElem.find(ELEM_PAGE);
     
-    //添加工具栏模板
-    var toolbarHtml = $(options.toolbar).html() || '';
-    if(options.toolbar && toolbarHtml){
-      that.layTool.find('.layui-table-tool-temp').html(
-        laytpl(toolbarHtml).render(options)
-      );
-    }
+    //初始化工具栏
+    that.renderToolbar();
     
     //让表格平铺
     that.fullSize();
@@ -379,6 +370,60 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       });
     });
   };
+  
+  //初始工具栏
+  Class.prototype.renderToolbar = function(){
+    var that = this
+    ,options = that.config
+    
+    //添加工具栏左侧模板
+    var leftDefaultTemp = [
+      '<div class="layui-inline" lay-event="add"><i class="layui-icon layui-icon-add-1"></i></div>'
+      ,'<div class="layui-inline" lay-event="update"><i class="layui-icon layui-icon-edit"></i></div>'
+      ,'<div class="layui-inline" lay-event="delete"><i class="layui-icon layui-icon-delete"></i></div>'
+    ].join('')
+    ,elemToolTemp = that.layTool.find('.layui-table-tool-temp');
+    
+    if(options.toolbar === 'default'){
+      elemToolTemp.html(leftDefaultTemp);
+    } else if(options.toolbar){
+      var toolbarHtml = $(options.toolbar).html() || '';
+      toolbarHtml && elemToolTemp.html(
+        laytpl(toolbarHtml).render(options)
+      );
+    }
+    
+    //添加工具栏右侧面板
+    var layout = {
+      filter: {
+        title: '筛选列'
+        ,layEvent: 'LAYTABLE_COLS'
+        ,icon: 'layui-icon-cols'
+      }
+      ,exports: {
+        title: '导出'
+        ,layEvent: 'LAYTABLE_EXPORT'
+        ,icon: 'layui-icon-export'
+      }
+      ,print: {
+        title: '打印'
+        ,layEvent: 'LAYTABLE_PRINT'
+        ,icon: 'layui-icon-print'
+      }
+    }, iconElem = [];
+    
+    if(typeof options.defaultToolbar === 'object'){
+      layui.each(options.defaultToolbar, function(i, item){
+        var thisItem = layout[item];
+        if(thisItem){
+          iconElem.push('<div class="layui-inline" title="'+ thisItem.title +'" lay-event="'+ thisItem.layEvent +'">'
+            +'<i class="layui-icon '+ thisItem.icon +'"></i>'
+          +'</div>');
+        }
+      });
+    }
+    that.layTool.find('.layui-table-tool-self').html(iconElem.join(''));
+  }
   
   //动态分配列宽
   Class.prototype.setColsWidth = function(){
@@ -984,7 +1029,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     //减去工具栏的高度
     if(options.toolbar){
-      
       bodyHeight = bodyHeight - (that.layTool.outerHeight() || 50);
     }
     

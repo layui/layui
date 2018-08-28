@@ -132,7 +132,7 @@ layui.define('jquery', function(exports){
   //转化成所需rgb格式
   ,RGBSTo = function(rgbs){
     var regexp = /[0-9]{1,3}/g;
-    var re = rgbs.match(regexp);
+    var re = rgbs.match(regexp) || [];
     return {r:re[0], g:re[1], b:re[2]};
   }
   
@@ -177,7 +177,7 @@ layui.define('jquery', function(exports){
             if(options.color){
               bgstr = options.color;
               
-              if(options.color.match(/[0-9]{1,3}/g).length > 3){ //啥意思?
+              if((options.color.match(/[0-9]{1,3}/g) || []).length > 3){ //需要优化
                 if(!(options.alpha && options.format == 'rgb')){
                   bgstr = '#' + HSBToHEX(RGBToHSB(RGBSTo(options.color)))
                 }
@@ -243,7 +243,7 @@ layui.define('jquery', function(exports){
         if(options.predefine){
           var list = ['<div class="layui-colorpicker-main-pre">'];
           layui.each(options.colors, function(i, v){
-            list.push(['<div class="layui-colorpicker-pre'+ (v.match(/[0-9]{1,3}/g).length > 3 
+            list.push(['<div class="layui-colorpicker-pre'+ ((v.match(/[0-9]{1,3}/g) || []).length > 3 
               ? ' layui-colorpicker-pre-isalpha' 
             : '') +'">'
               ,'<div style="background:'+ v +'"></div>'
@@ -367,7 +367,7 @@ layui.define('jquery', function(exports){
         var rgb = RGBSTo(bgcolor);
         
         //如果开启透明度而没有设置，则给默认值
-        if(bgcolor.match(/[0-9]{1,3}/g).length == 3){
+        if((bgcolor.match(/[0-9]{1,3}/g) || []).length == 3){
           elemPickerInput.find('input').val('rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', 1)');
           that.elemPicker.find('.'+ PICKER_ALPHA_SLIDER).css("left", 280);
         } else {
@@ -556,7 +556,7 @@ layui.define('jquery', function(exports){
         _h = hsb.h;
         _s = hsb.s;
         _b = hsb.b;
-        if(color.match(/[0-9]{1,3}/g).length == 3) a = 1;
+        if((color.match(/[0-9]{1,3}/g) || []).length == 3) a = 1;
         _a = a;
         left = a * 280;
         change(hsb.h, hsb.s, hsb.b, a);
@@ -565,7 +565,7 @@ layui.define('jquery', function(exports){
   };
 
   //颜色选择器hsb转换
-  Class.prototype.select = function(h,s,b){
+  Class.prototype.select = function(h, s, b, type){
     var that = this
     ,options = that.config
     ,hex = HSBToHEX({h:h, s:100, b:100})
@@ -574,12 +574,17 @@ layui.define('jquery', function(exports){
     ,top = 180 - b/100*180 - 3
     ,left = s/100*260 - 3;
     
-    //滑块的top
-    that.elemPicker.find('.' + PICKER_SIDE_SLIDER).css("top", sidetop);
-    //颜色选择器的背景
-    that.elemPicker.find('.' + PICKER_BASIS)[0].style.background = '#' + hex;
+    that.elemPicker.find('.' + PICKER_SIDE_SLIDER).css("top", sidetop); //滑块的top
+    that.elemPicker.find('.' + PICKER_BASIS)[0].style.background = '#' + hex; //颜色选择器的背景
+    
     //选择器的top left
-    that.elemPicker.find('.' + PICKER_BASIS).find('.' + PICKER_BASIS_CUR).css({"top": top, "left": left});
+    that.elemPicker.find('.' + PICKER_BASIS_CUR).css({
+      "top": top
+      ,"left": left
+    }); 
+    
+    if(type === 'change') return;
+    
     //选中的颜色
     that.elemPicker.find('.' + PICKER_INPUT).find('input').val('#' + color);
   };
@@ -589,7 +594,7 @@ layui.define('jquery', function(exports){
     ,options = that.config
     
     ,elemColorBoxSpan = that.elemColorBox.find('.' + PICKER_TRIG_SPAN) //颜色盒子
-    ,elemPickerInput = that.elemPicker.find('.' + PICKER_INPUT) //颜色选择器表单
+    ,elemPickerInput = that.elemPicker.find('.' + PICKER_INPUT + ' input') //颜色选择器表单
     
     ,pickerEvents = {
       //清空
@@ -603,28 +608,33 @@ layui.define('jquery', function(exports){
       }
       
       //确认
-      ,confirm: function(othis){
-        var value = elemPickerInput.find('input').val()
+      ,confirm: function(othis, change){
+        var value = elemPickerInput.val()
+        ,colorValue = value
         ,hsb = {};
         
         if(value.indexOf(',') > -1){
           hsb = RGBToHSB(RGBSTo(value));
           that.select(hsb.h, hsb.s, hsb.b);
-          elemPickerInput.find('input').val(value);
-          elemColorBoxSpan[0].style.background = '#' + HSBToHEX(hsb); 
+          elemColorBoxSpan[0].style.background = (colorValue = '#' + HSBToHEX(hsb)); 
           
-          if(value.match(/[0-9]{1,3}/g).length > 3 && elemColorBoxSpan.attr('lay-type') === 'rgba'){
+          if((value.match(/[0-9]{1,3}/g) || []).length > 3 && elemColorBoxSpan.attr('lay-type') === 'rgba'){
             var left = value.slice(value.lastIndexOf(",") + 1, value.length - 1) * 280;
             that.elemPicker.find('.' + PICKER_ALPHA_SLIDER).css("left", left);
             elemColorBoxSpan[0].style.background = value;
+            colorValue = value;
           };
         } else {
           hsb = HEXToHSB(value);
-          that.select(hsb.h, hsb.s, hsb.b);
-          elemColorBoxSpan[0].style.background = '#' + HSBToHEX(hsb); 
+          elemColorBoxSpan[0].style.background = (colorValue = '#' + HSBToHEX(hsb)); 
           that.elemColorBox.find('.' + PICKER_TRIG_I).removeClass(ICON_PICKER_CLOSE).addClass(ICON_PICKER_DOWN);
         };
         
+        if(change === 'change'){
+          that.select(hsb.h, hsb.s, hsb.b, change);
+          options.change && options.change(colorValue);
+          return;
+        }
         that.color = value;
         
         options.done && options.done(value);
@@ -639,6 +649,11 @@ layui.define('jquery', function(exports){
       pickerEvents[attrEvent] && pickerEvents[attrEvent].call(this, othis);
     });
     
+    //输入框事件
+    elemPickerInput.on('keyup', function(e){
+      var othis = $(this)
+      pickerEvents.confirm.call(this, othis, e.keyCode === 13 ?  null : 'change');
+    });
   }
 
   //颜色选择器输入

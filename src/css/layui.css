@@ -804,7 +804,7 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 
 /* 数据表格 */
 .layui-table[lay-data]{display: none;}
-.layui-table-view,
+.layui-table-view{min-height: 248px;}
 .layui-table-box{position: relative; overflow: hidden;}
 .layui-table-view{margin: 10px 0;}
 .layui-table-view .layui-table{position: relative; width: auto; margin: 0;}
@@ -1171,12 +1171,12 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-colorpicker-trigger-i{display: inline-block; color: #FFF; font-size: 12px;}
 .layui-colorpicker-trigger-i.layui-icon-close{color: #999;}
 
-.layui-colorpicker-main{position: absolute; z-index: 4999; width: 280px; padding: 7px; background: #FFF; border: 1px solid #d2d2d2; border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,.12);}
+.layui-colorpicker-main{position: absolute; z-index: 66666666; width: 280px; padding: 7px; background: #FFF; border: 1px solid #d2d2d2; border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,.12);}
 .layui-colorpicker-main-wrapper{height: 180px; position: relative;}
 .layui-colorpicker-basis{width: 260px; height: 100%; position: relative;}
 .layui-colorpicker-basis-white{width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: linear-gradient(90deg, #FFF, hsla(0,0%,100%,0));}
 .layui-colorpicker-basis-black{width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: linear-gradient(0deg, #000, transparent);}
-.layui-colorpicker-basis-cursor{width: 5px; height: 5px; border: 1px solid #FFF; border-radius: 50%; position: absolute; top: -3px; right: -3px;}
+.layui-colorpicker-basis-cursor{width: 10px; height: 10px; border: 1px solid #FFF; border-radius: 50%; position: absolute; top: -3px; right: -3px; cursor: pointer;}
 .layui-colorpicker-side{position: absolute; top: 0; right: 0; width: 12px; height: 100%; background: linear-gradient(#F00, #FF0, #0F0, #0FF, #00F, #F0F, #F00);}
 .layui-colorpicker-side-slider{width: 100%; height: 5px; box-shadow: 0 0 1px #888888; box-sizing: border-box; background: #FFF; border-radius: 1px; border: 1px solid #f0f0f0; cursor: pointer; position: absolute; left: 0;}
 .layui-colorpicker-main-alpha{display: none; height: 12px; margin-top: 7px; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)}
