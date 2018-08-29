@@ -49,7 +49,7 @@ body{padding: 20px; /*overflow-y: scroll;*/}
 <table id="test2" lay-filter="test2"></table>
 
 <div style="display: none1;">
-  <table class="layui-table" lay-data="{width:800, height: 300, url:'json/table/demo2.json', page: true, limit: 6}">
+  <table class="layui-table1" lay-data="{width:800, height: 300, url:'json/table/demo2.json', page: true, limit: 6}">
     <thead>
       <tr>
         <th lay-data="{checkbox:true, fixed:'left'}" rowspan="2"></th>
@@ -66,26 +66,26 @@ body{padding: 20px; /*overflow-y: scroll;*/}
     </thead>
   </table>
 
-  <table class="layui-table" lay-data="{url:'json/table/demo2.json', page: true, limit: 6}">
+  <table class="layui-table" lay-data="{url:'json/table/demo2.json', toolbar: '#toolbarDemo', page: true, limit: 6}">
     <thead>
       <tr>
         <th lay-data="{field:'username'}" rowspan="3">联系人</th>
-        <th lay-data="{field:'amount', width:120}" rowspan="3">金额</th>
+        <th lay-data="{field:'amount', width:120,hide:true}" rowspan="3">金额</th>
         <th lay-data="{align:'center'}" colspan="5">地址1</th>
         <th lay-data="{align:'center'}" colspan="2">地址2</th>
         <th lay-data="{fixed: 'right', width: 120, align: 'center', toolbar: '#barDemo'}" rowspan="3">操作</th>
       </tr>
       <tr>
-        <th lay-data="{field:'province', width:80}" rowspan="2">省</th>
-        <th lay-data="{field:'city', width:80}" rowspan="2">市</th>
+        <th lay-data="{field:'province', width:120,hide:true}" rowspan="2">省</th>
+        <th lay-data="{field:'city', width:80,hide:true}" rowspan="2">市</th>
         <th lay-data="{align:'center'}" colspan="2">详细</th>
         <th lay-data="{field:'zone'}" rowspan="2">区</th>
         <th lay-data="{field:'province', width:80}" rowspan="2">省</th>
         <th lay-data="{field:'city', width:80}" rowspan="2">市</th>
       </tr>
       <tr>
-        <th lay-data="{field:'address', width:120}">小区</th>
-        <th lay-data="{field:'house', width:150}">单元</th>
+        <th lay-data="{field:'address', width:120,hide:true}">小区</th>
+        <th lay-data="{field:'house', width:150,hide:true}">单元</th>
       </tr>
     </thead>
   </table>
@@ -176,7 +176,7 @@ layui.use('table', function(){
   //渲染
   window.ins1 = table.render({
     elem: '#test'
-    ,height: 100
+    ,height: 400
     ,title: '用户数据表'
     ,url: 'json/table/demo1.json'
     //,size: 'lg'
@@ -190,8 +190,8 @@ layui.use('table', function(){
     ,cols: [[
       {type: 'radio', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
-      ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
-      ,{field:'email', title:'邮箱', width:150, edit: 'text', templet: function(x){
+      ,{field:'username', title:'用户名', hide: true, width:120, edit: 'text', templet: '#usernameTpl'}
+      ,{field:'email', title:'邮箱', hide: true, width:150, edit: 'text', templet: function(x){
         return '<em>'+ x.email +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}

@@ -100,7 +100,7 @@ layui.define('jquery', function(exports){
     var theme = options.disabled ? '#c2c2c2' : options.theme;
 
     //滑块
-    var temp = '<div class="layui-slider '+ (options.type === 'vertical' ? 'layui-slider-vertical' : '') +'">'+ (options.tips ? '<div class="layui-slider-tips"></div><span></span>' : '') + 
+    var temp = '<div class="layui-slider '+ (options.type === 'vertical' ? 'layui-slider-vertical' : '') +'">'+ (options.tips ? '<div class="layui-slider-tips"></div>' : '') + 
     '<div class="layui-slider-bar" style="background:'+ theme +'; '+ (options.type === 'vertical' ? 'height' : 'width') +':'+ scale +';'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ (scaleFir || 0) +';"></div><div class="layui-slider-wrap" style="'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ (scaleFir || scale) +';">' +
     '<div class="layui-slider-wrap-btn" style="border: 2px solid '+ theme +';"></div></div>'+ (options.range ? '<div class="layui-slider-wrap" style="'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ scaleSec +';"><div class="layui-slider-wrap-btn" style="border: 2px solid '+ theme +';"></div></div>' : '') +'</div>';
 
@@ -173,14 +173,11 @@ layui.define('jquery', function(exports){
       that.elemTemp.find('.' + SLIDER_TIPS).html(tipsTxt);
       if(options.type === 'vertical'){
         that.elemTemp.find('.' + SLIDER_TIPS).css({"bottom":left + '%', "margin-bottom":"20px", "display":"inline-block"});
-        that.elemTemp.children('span').css({"bottom":left + '%', "margin-bottom":"8px", "display":"inline-block"});
       }else{
         that.elemTemp.find('.' + SLIDER_TIPS).css({"left":left + '%', "display":"inline-block"});
-        that.elemTemp.children('span').css({"left":left + '%', "display":"inline-block"});
       };
     }).on('mouseout', function(){
       that.elemTemp.find('.' + SLIDER_TIPS).css("display", "none");
-      that.elemTemp.children('span').css("display", "none");
     }); 
   };
 
@@ -208,12 +205,10 @@ layui.define('jquery', function(exports){
       ,secLeft = options.range ? valueTo(sliderWrap[1].offsetLeft) : 0;
       if(options.type === 'vertical'){
         sliderAct.find('.' + SLIDER_TIPS).css({"bottom":offsetValue + '%', "margin-bottom":"20px"});
-        sliderAct.children('span').css({"bottom":offsetValue + '%', "margin-bottom":"8px"});
         firLeft = valueTo(sliderWidth() - sliderWrap[0].offsetTop - sliderWrap.height());
         secLeft = options.range ? valueTo(sliderWidth() - sliderWrap[1].offsetTop - sliderWrap.height()) : 0;
       }else{
         sliderAct.find('.' + SLIDER_TIPS).css("left",offsetValue + '%');
-        sliderAct.children('span').css("left",offsetValue + '%');
       };
       firLeft = firLeft > 100 ? 100: firLeft;
       secLeft = secLeft > 100 ? 100: secLeft;
@@ -290,15 +285,13 @@ layui.define('jquery', function(exports){
           change(reaLeft, index);
           othis.addClass(ELEM_HOVER);
           sliderAct.find('.' + SLIDER_TIPS).show();
-          sliderAct.children('span').show();
           e.preventDefault();
         };
         
         var up = function(){
           othis.removeClass(ELEM_HOVER);
           sliderAct.find('.' + SLIDER_TIPS).hide();
-          sliderAct.children('span').hide();
-        }
+        };
         
         createMoveElem(move, up)
       });
