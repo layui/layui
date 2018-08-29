@@ -133,9 +133,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,'{{# } }}'
     
     ,'<div class="layui-table-box">'
+      ,'{{# if(d.loading){ }}'
       ,'<div class="layui-table-init" style="background-color: #fff;">'
         ,'<i class="layui-icon layui-icon-loading layui-icon"></i>'
       ,'</div>'
+      ,'{{# } }}'
       
       ,'{{# var left, right; }}'
       ,'<div class="layui-table-header">'
