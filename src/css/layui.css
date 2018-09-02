@@ -814,7 +814,7 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .layui-table-view .layui-table th.layui-unselect .layui-table-cell span{cursor: pointer;}
 .layui-table-view .layui-table td{cursor: default;}
 .layui-table-view .layui-form-checkbox[lay-skin="primary"] i{width: 18px; height: 18px;}
-.layui-table-view .layui-form-radio{padding: 0;}
+.layui-table-view .layui-form-radio{line-height: 0; padding: 0;}
 .layui-table-view .layui-form-radio>i{margin: 0; font-size: 20px;}
 .layui-table-init{position: absolute; left: 0; top: 0; width: 100%; height: 100%; text-align: center; z-index: 10;}
 .layui-table-init .layui-icon{position: absolute; left: 50%; top: 50%; margin: -15px 0 0 -15px; font-size: 30px; color: #c2c2c2;}
@@ -865,7 +865,7 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .layui-table-mend{position: absolute; right: -49px; top: 0; height: 100%; width: 50px;}
 
 .layui-table-tool{position: relative; z-index: 890; width: 100%; min-height: 50px; line-height: 30px; padding: 10px 15px; border-width: 0; border-bottom-width: 1px;}
-.layui-table-tool .layui-btn-container .layui-btn{margin-bottom: 0;}
+.layui-table-tool .layui-btn-container{margin-bottom: -10px;}
 
 .layui-table-total{margin-bottom: -1px; border-width: 0; border-top-width: 1px; overflow: hidden;}
 
@@ -900,7 +900,8 @@ select.layui-table-edit{padding: 0 0 0 10px; border-color: #C9C9C9;}
 
 /* 展开溢出的单元格 */
 .layui-table-grid .layui-table-cell{overflow: visible;}
-.layui-table-grid-down{position: absolute; top: 0; right: 0; width: 26px; line-height: 28px; height: 100%; padding: 5px 0; border-width: 0; border-left-width: 1px; text-align: center; background-color: #fff; color: #999; cursor: pointer;}
+.layui-table-grid-down{position: absolute; top: 0; right: 0; width: 26px; height: 100%; padding: 5px 0; border-width: 0; border-left-width: 1px; text-align: center; background-color: #fff; color: #999; cursor: pointer;}
+.layui-table-grid-down .layui-icon{position: absolute; top: 50%; left: 50%; margin: -8px 0 0 -8px;}
 .layui-table-grid-down:hover{background-color: #fbfbfb;}
 
 body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-shadow: 0 1px 6px rgba(0,0,0,.12);}

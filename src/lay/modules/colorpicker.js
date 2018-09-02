@@ -476,7 +476,7 @@ layui.define('jquery', function(exports){
       e.preventDefault();
     });
     
-    //中间颜色选择
+    //中间小圆点颜色选择
     choose.on('mousedown', function(e){
       var oldtop = this.offsetTop
       ,oldleft = this.offsetLeft
@@ -498,12 +498,12 @@ layui.define('jquery', function(exports){
         change(_h, s, b, _a); 
         e.preventDefault();
       };
-      
+      layui.stope(e);
       createMoveElem(move);
       e.preventDefault();
     });
     
-    basis.on('click', function(e){
+    basis.on('mousedown', function(e){
       var top = e.clientY - $(this).offset().top - 3 + $win.scrollTop()
       ,left = e.clientX - $(this).offset().left - 3 + $win.scrollLeft()
       if(top < -3)top = -3;
@@ -516,6 +516,7 @@ layui.define('jquery', function(exports){
       _s = s;
       change(_h, s, b, _a); 
       e.preventDefault();
+      choose.trigger(e, 'mousedown');
     });
     
     //底部透明度选择

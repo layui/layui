@@ -70,22 +70,22 @@ body{padding: 20px; /*overflow-y: scroll;*/}
     <thead>
       <tr>
         <th lay-data="{field:'username'}" rowspan="3">联系人</th>
-        <th lay-data="{field:'amount', width:120,hide:true}" rowspan="3">金额</th>
+        <th lay-data="{field:'amount', width:120,hide:1}" rowspan="3">金额</th>
         <th lay-data="{align:'center'}" colspan="5">地址1</th>
         <th lay-data="{align:'center'}" colspan="2">地址2</th>
         <th lay-data="{fixed: 'right', width: 120, align: 'center', toolbar: '#barDemo'}" rowspan="3">操作</th>
       </tr>
       <tr>
-        <th lay-data="{field:'province', width:120,hide:true}" rowspan="2">省</th>
-        <th lay-data="{field:'city', width:80,hide:true}" rowspan="2">市</th>
+        <th lay-data="{field:'province', width:120,hide:1}" rowspan="2">省</th>
+        <th lay-data="{field:'city', width:80,hide:1}" rowspan="2">市</th>
         <th lay-data="{align:'center'}" colspan="2">详细</th>
         <th lay-data="{field:'zone'}" rowspan="2">区</th>
         <th lay-data="{field:'province', width:80}" rowspan="2">省</th>
         <th lay-data="{field:'city', width:80}" rowspan="2">市</th>
       </tr>
       <tr>
-        <th lay-data="{field:'address', width:120,hide:true}">小区</th>
-        <th lay-data="{field:'house', width:150,hide:true}">单元</th>
+        <th lay-data="{field:'address', width:120,hide:1}">小区</th>
+        <th lay-data="{field:'house', width:150,hide:1}">单元</th>
       </tr>
     </thead>
   </table>
@@ -172,11 +172,12 @@ body{padding: 20px; /*overflow-y: scroll;*/}
 <script>
 layui.use('table', function(){
   var table = layui.table;
+  //return;
   
   //渲染
   window.ins1 = table.render({
     elem: '#test'
-    ,height: 300
+    ,height: 400
     ,title: '用户数据表'
     ,url: 'json/table/demo1.json'
     //,size: 'lg'
@@ -261,7 +262,13 @@ layui.use('table', function(){
     //,height: 300
     ,cellMinWidth: 80
     //,skin: 'line'
+    ,toolbar: true
     ,cols: [[
+      {field: 'id', hide: true}
+      ,{field: 'username', title: '用户名'}
+      ,{field: 'email', title: '邮箱'}
+      ,{title:'操作', align:'center', toolbar: '#barDemo'}
+      /*
       {type:'numbers'}
       ,{field:'id', title:'ID', unresize: true, sort: true}
       ,{field:'username', title:'用户名', templet: '#usernameTpl'}
@@ -269,6 +276,7 @@ layui.use('table', function(){
       ,{xfield:'sex', title:'性别', templet: '#switchTpl', minWidth: 85, align:'center'}
       ,{field:'lock', title:'是否锁定', templet: '#checkboxTpl', minWidth: 110, align:'center'}
       ,{field:'city', title:'城市'}
+      */
     ]]
   });
 
