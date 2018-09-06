@@ -63,7 +63,7 @@ layui.define('layer' , function(exports){
     ,bindAction: '' //手动上传触发的元素
     ,url: '' //上传地址
     ,field: 'file' //文件字段名
-    ,method: 'post' //请求上传的http类型
+    ,method: 'post' //请求上传的 http 类型
     ,data: {} //请求上传的额外参数
     ,drag: true //是否允许拖拽上传
     ,size: 0 //文件限制大小，默认不限制
@@ -119,8 +119,7 @@ layui.define('layer' , function(exports){
     var that = this
     ,options = that.config
     ,iframe = $('<iframe id="'+ ELEM_IFRAME +'" class="'+ ELEM_IFRAME +'" name="'+ ELEM_IFRAME +'" frameborder="0"></iframe>')
-    ,elemForm = $(['<form target="'+ ELEM_IFRAME +'" class="'+ ELEM_FORM +'" method="'+ options.method
-      ,'" key="set-mine" enctype="multipart/form-data" action="'+ options.url +'">'
+    ,elemForm = $(['<form target="'+ ELEM_IFRAME +'" class="'+ ELEM_FORM +'" method="post" key="set-mine" enctype="multipart/form-data" action="'+ options.url +'">'
     ,'</form>'].join(''));
     
     //插入iframe    
@@ -204,7 +203,7 @@ layui.define('layer' , function(exports){
         //提交文件
         $.ajax({
           url: options.url
-          ,type: options.method
+          ,type: 'post'
           ,data: formData
           ,contentType: false 
           ,processData: false

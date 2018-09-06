@@ -793,6 +793,8 @@
       'class': ELEM_HINT
     });
     
+    if(!that.elem) return;
+    
     div.innerHTML = content || '';
     lay(that.elem).find('.'+ ELEM_HINT).remove();
     that.elem.appendChild(div);

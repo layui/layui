@@ -88,9 +88,10 @@ layui.use('upload', function(){
 
   var uploadInst = upload.render({
     elem: '#test1'
-    ,url: '/upload/'
+    ,url: 'http://httpbin.org/image'
     ,size: 2000 //限制文件大小，单位 KB
-    ,accept: 'file'
+    //,accept: 'file'
+    ,method: 'get'
     ,fileAccept: 'image/*'
     ,exts: "jpg|png|gif|bmp|jpeg|pdf"
     ,data: { //额外参数

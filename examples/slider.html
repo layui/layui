@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>滑块 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding:100px 0;}
+
+</style>
+</head>
+<body>
+
+  <div class="layui-container">
+    <div id="slideTest1"></div>
+  </div>
+
+<script src="../src/layui.js"></script>
+<script>
+
+layui.use('slider', function(){
+  var slider = layui.slider;
+  
+  slider.render({
+    elem: '#slideTest1'
+    //,type: 'vertical'
+    //,min: 0 //最小值
+    //,max: 100 //最大值
+    //,value: 60 //[40, 60] //初始值
+    //,step: 20 //间隔值
+    //,showstep: true //间隔点
+    //,tips: false //关闭提示文本
+    ,input: true //输入框
+    //,range: true //范围选择
+    ,change: function(value){ //回调实时显示当前值
+      console.log(value)
+    }
+    //,setTips: function(value){ //自定义提示文本
+      //return '离世界末日还有 ' + value + ' 天';
+    //}
+    //,height: '300' //配合 type:'vertical' 参数使用，默认200px
+    //,disabled: true //禁用滑块
+    //,theme: '#c00' //主题色
+  });
+});
+</script>
+</body>
+</html>
