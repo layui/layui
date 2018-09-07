@@ -43,13 +43,23 @@ layui.define('jquery', function(exports){
     var nodes = children || options.nodes;
     
     layui.each(nodes, function(index, item){
+
+      // item icon setting
+      item.iconLeaf = item.iconLeaf ? item.iconLeaf : item.icon;
+      item.iconSpread = item.iconSpread ? item.iconSpread : icon;
+      item.arrow = item.arrow ? item.arrow : icon.arrow[0];
+      item.arrowSpread = item.arrowSpread ? item.arrowSpread : icon.arrow[1];
+      item.icon = item.icon ? item.icon : icon.branch[0];
+      item.iconSpread = item.iconSpread ? item.iconSpread : icon.branch[1];
+      item.iconLeaf = item.iconLeaf ? item.iconLeaf : icon.leaf;
+
       var hasChild = item.children && item.children.length > 0;
       var ul = $('<ul class="'+ (item.spread ? "layui-show" : "") +'"></ul>');
       var li = $(['<li '+ (item.spread ? 'data-spread="'+ item.spread +'"' : '') +'>'
         //展开箭头
         ,function(){
           return hasChild ? '<i class="layui-icon layui-tree-spread">'+ (
-            item.spread ? icon.arrow[1] : icon.arrow[0]
+            item.spread ? item.arrowSpread : item.arrow
           ) +'</i>' : '';
         }()
         
@@ -71,8 +81,8 @@ layui.define('jquery', function(exports){
           ) +'>'
           + ('<i class="layui-icon layui-tree-'+ (hasChild ? "branch" : "leaf") +'">'+ (
             hasChild ? (
-              item.spread ? icon.branch[1] : icon.branch[0]
-            ) : icon.leaf
+              item.spread ? item.iconSpread : item.icon
+            ) : item.iconLeaf
           ) +'</i>') //节点图标
           + ('<cite>'+ (item.name||'未命名') +'</cite></a>');
         }()
@@ -118,13 +128,13 @@ layui.define('jquery', function(exports){
       if(elem.data('spread')){
         elem.data('spread', null)
         ul.removeClass('layui-show');
-        arrow.html(icon.arrow[0]);
-        a.find('.layui-icon').html(icon.branch[0]);
+        arrow.html(item.arrow);
+        a.find('.layui-icon').html(item.icon);
       } else {
         elem.data('spread', true);
         ul.addClass('layui-show');
-        arrow.html(icon.arrow[1]);
-        a.find('.layui-icon').html(icon.branch[1]);
+        arrow.html(item.arrowSpread);
+        a.find('.layui-icon').html(item.iconSpread);
       }
     };
     
