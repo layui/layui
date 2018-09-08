@@ -69,6 +69,7 @@ layui.define('layer' , function(exports){
     ,size: 0 //文件限制大小，默认不限制
     ,number: 0 //允许同时上传的文件数，默认不限制
     ,multiple: false //是否允许多文件上传，不支持ie8-9
+    // ,xhr: function() {} //
   };
 
   //初始渲染
@@ -214,7 +215,7 @@ layui.define('layer' , function(exports){
             // 给xhr的upload添加progress的监听
             newXhr.upload.addEventListener('progress' , function (e) {
               var percent = Math.floor(e.loaded / e.total * 100);
-              typeof options.progress === 'function' && options.progress(e , percent);
+              typeof options.progress === 'function' && options.progress(index, e, percent);
             });
             return newXhr;
           }
