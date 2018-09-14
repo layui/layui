@@ -14,7 +14,8 @@ layui.define(['layer', 'form'], function(exports){
   ,form = layui.form
   ,hint = layui.hint()
   ,device = layui.device()
-  
+  ,beforeChangeHtml = ''
+  ,onChangeTimeoutId = 0
   ,MOD_NAME = 'layedit', THIS = 'layui-this', SHOW = 'layui-show', ABLED = 'layui-disabled'
   
   ,Edit = function(){
@@ -165,7 +166,7 @@ layui.define(['layer', 'form'], function(exports){
       }).html(textArea.value||'');
 
       hotkey.apply(that, [iframeWin, iframe, textArea, set]); //快捷键处理
-      toolActive.call(that, iframeWin, editor, set); //触发工具
+      toolActive.call(that, iframeWin, editor, textArea, set); //触发工具
 
     });
   }
@@ -208,6 +209,19 @@ layui.define(['layer', 'form'], function(exports){
     });
     
     //给textarea同步内容
+    var compositionEnd = true;
+    body.on('compositionstart', function(){
+        // 输入法开始输入
+        compositionEnd = false
+    });
+    body.on('compositionend', function() {
+        // 输入法结束输入
+        compositionEnd = true
+    });
+    body.on('click keyup', function() {
+        // 输入法结束才出发 onchange
+        compositionEnd && change.call(iframeWin, body, textArea);
+    });
     $(textArea).parents('form').on('submit', function(){
       var html = body.html();
       //IE8下将标签处理成小写
@@ -228,7 +242,25 @@ layui.define(['layer', 'form'], function(exports){
       }, 100); 
     });
   }
-  
+  //更新textarea
+  ,change = function(body, textArea){
+      var currentHtml = body.html()
+      if (currentHtml.length === beforeChangeHtml.length) {
+          // 需要比较每一个字符
+          if (currentHtml === beforeChangeHtml) {
+              return
+          }
+      }
+
+      // 执行，使用节流
+      if (onChangeTimeoutId) {
+          clearTimeout(onChangeTimeoutId)
+      }
+      onChangeTimeoutId = setTimeout(function() {
+          textArea.value = currentHtml;
+          beforeChangeHtml = currentHtml;
+      }, 200)
+  }
   //标签过滤
   ,filter = function(body){
     var iframeWin = this
@@ -287,6 +319,7 @@ layui.define(['layer', 'form'], function(exports){
       }
       range.deleteContents();
       range.insertNode(elem);
+      range.collapse();
     }
   }
   
@@ -344,7 +377,7 @@ layui.define(['layer', 'form'], function(exports){
   }
 
   //触发工具
-  ,toolActive = function(iframeWin, editor, set){
+  ,toolActive = function(iframeWin, editor, textArea, set){
     var iframeDOM = iframeWin.document
     ,body = $(iframeDOM.body)
     ,toolEvent = {
@@ -384,13 +417,21 @@ layui.define(['layer', 'form'], function(exports){
       }
       //图片
       ,image: function(range){
-        var that = this;
+        var that = this, index;
         layui.use('upload', function(upload){
           var uploadImage = set.uploadImage || {};
           upload.render({
             url: uploadImage.url
             ,method: uploadImage.type
+            ,multiple: true
+            ,data: set.data
             ,elem: $(that).find('input')[0]
+            ,before: function (input) {
+                index = layer.load(1);
+            }
+            ,allDone: function(obj){
+                layer.close(index);
+            }
             ,done: function(res){
               if(res.code == 0){
                 res.data = res.data || {};
@@ -453,6 +494,8 @@ layui.define(['layer', 'form'], function(exports){
         toolEvent[events] && toolEvent[events].call(this, range);
       }
       toolCheck.call(iframeWin, tools, othis);
+      //更新textarea
+      change.call(iframeWin, body, textArea);
     }
     
     ,isClick = /image/
@@ -637,7 +680,7 @@ layui.define(['layer', 'form'], function(exports){
     ,link: '<i class="layui-icon layedit-tool-link" title="插入链接" layedit-event="link"">&#xe64c;</i>'
     ,unlink: '<i class="layui-icon layedit-tool-unlink layui-disabled" title="清除链接" lay-command="unlink" layedit-event="unlink"">&#xe64d;</i>'
     ,face: '<i class="layui-icon layedit-tool-face" title="表情" layedit-event="face"">&#xe650;</i>'
-    ,image: '<i class="layui-icon layedit-tool-image" title="图片" layedit-event="image">&#xe64a;<input type="file" name="file"></i>'
+    ,image: '<i class="layui-icon layedit-tool-image" title="图片" layedit-event="image">&#xe64a;<input type="file" name="file" multiple></i>'
     ,code: '<i class="layui-icon layedit-tool-code" title="插入代码" layedit-event="code">&#xe64e;</i>'
     
     ,help: '<i class="layui-icon layedit-tool-help" title="帮助" layedit-event="help">&#xe607;</i>'
