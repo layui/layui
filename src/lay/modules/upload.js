@@ -210,10 +210,10 @@ layui.define('layer' , function(exports){
           ,xhr:function (){
             var xhr = $.ajaxSettings.xhr();
             if(typeof options.progress === 'function' && xhr && xhr.upload){
-              xhr.upload.onprogress = function (event) {
+              $(xhr.upload).one('progress', function (event) {
                 var schude = Math.round((event.loaded/event.totle) * 100)  + '%';
                 options.progress(schude);
-              };
+              });
             }
             return xhr;
           }
