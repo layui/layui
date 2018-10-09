@@ -207,6 +207,16 @@ layui.define('layer' , function(exports){
           ,data: formData
           ,contentType: false 
           ,processData: false
+          ,xhr:function (){
+            var xhr = $.ajaxSettings.xhr();
+            if(typeof options.progress === 'function' && xhr && xhr.upload){
+              xhr.upload.onprogress = function (event) {
+                var schude = Math.round((event.loaded/event.totle) * 100)  + '%';
+                options.progress(schude);
+              };
+            }
+            return xhr;
+          }
           ,dataType: 'json'
           ,headers: options.headers || {}
           ,success: function(res){
