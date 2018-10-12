@@ -159,10 +159,15 @@ layui.define('jquery', function(exports){
 
       return format.replace(/yyyy/g, ymd[0])
       .replace(/MM/g, ymd[1])
+      .replace(/M/g, ymd[1]*1)
       .replace(/dd/g, ymd[2])
+      .replace(/d/g, ymd[2]*1)
       .replace(/HH/g, hms[0])
+      .replace(/H/g, hms[0]*1)
       .replace(/mm/g, hms[1])
-      .replace(/ss/g, hms[2]);
+      .replace(/m/g, hms[1]*1)
+      .replace(/ss/g, hms[2])
+      .replace(/s/g, hms[2]*1);
     }
     
     //防 xss 攻击
