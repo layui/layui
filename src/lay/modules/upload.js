@@ -210,7 +210,7 @@ layui.define('layer' , function(exports){
           ,xhr:function (){
             var xhr = $.ajaxSettings.xhr();
             if(typeof options.progress === 'function' && xhr && xhr.upload){
-              $(xhr.upload).one('progress', function (events) {
+              $(xhr.upload).on('progress', function (events) {
                 event = events.currentTarget;
                 var schude = Math.round((event.loaded/event.totle) * 100)  + '%';
                 options.progress(schude, events);
