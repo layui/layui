@@ -184,6 +184,7 @@ layui.use('table', function(){
     ,page: {
       
     }
+    ,autoSort: false
     //,loading: false
     ,totalRow: true
     ,limit: 30
@@ -333,9 +334,10 @@ layui.use('table', function(){
   
   //监听排序
   table.on('sort(test)', function(obj){
-    console.log(this, obj.field, obj.type)
+    console.log(this)
     
-    return;
+    //return;
+    layer.msg('服务端排序。order by '+ obj.field + ' ' + obj.type);
     //服务端排序
     table.reload('test', {
       initSort: obj

@@ -45,8 +45,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     var that = this
     ,options = that.config
     ,id = options.id || options.index;
-
-    id && (thisTable.config[id] = options);
+    
+    if(id){
+      thisTable.that[id] = that; //记录当前实例对象
+      thisTable.config[id] = options; //记录当前实例配置项
+    }
     
     return {
       reload: function(options){
@@ -55,8 +58,18 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       ,setColsWidth: function(){
         that.setColsWidth.call(that);
       }
+      ,resize: function(){ //重置表格尺寸/结构
+        that.resize.call(that);
+      }
       ,config: options
     }
+  }
+  
+  //获取当前实例配置项
+  ,getThisTableConfig = function(id){
+    var config = thisTable.config[id];
+    if(!config) hint.error('The ID option was not found in the table instance');
+    return config || null;
   }
   
   //字符常量
@@ -123,7 +136,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   ,'</table>'].join('')
   
   //主模板
-  ,TPL_MAIN = ['<div class="layui-form layui-border-box {{d.VIEW_CLASS}}" lay-filter="LAY-table-{{d.index}}" style="{{# if(d.data.width){ }}width:{{d.data.width}}px;{{# } }} {{# if(d.data.height){ }}height:{{d.data.height}}px;{{# } }}">'
+  ,TPL_MAIN = ['<div class="layui-form layui-border-box {{d.VIEW_CLASS}}" lay-filter="LAY-table-{{d.index}}" lay-id="{{ d.data.id }}" style="{{# if(d.data.width){ }}width:{{d.data.width}}px;{{# } }} {{# if(d.data.height){ }}height:{{d.data.height}}px;{{# } }}">'
 
     ,'{{# if(d.data.toolbar){ }}'
     ,'<div class="layui-table-tool">'
@@ -216,6 +229,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,loading: true //请求数据时，是否显示loading
     ,cellMinWidth: 60 //所有单元格默认最小宽度
     ,defaultToolbar: ['filter', 'exports', 'print'] //工具栏右侧图标
+    ,autoSort: true //是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
     ,text: {
       none: '无数据'
     }
@@ -228,7 +242,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 
     options.elem = $(options.elem);
     options.where = options.where || {};
-    options.id = options.id || options.elem.attr('id') || options.index;
+    options.id = options.id || options.elem.attr('id') || that.index;
 
     //请求参数的自定义格式
     options.request = $.extend({
@@ -603,7 +617,15 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.loading(!0);
   };
   
-  //表格重载
+  //重置表格尺寸/结构
+  Class.prototype.resize = function(){
+    var that = this;
+    that.fullSize(); //让表格铺满
+    that.scrollPatch(); //滚动条补丁
+    that.setColsWidth(); //自适应列宽
+  };
+  
+  //表格完整重载
   Class.prototype.reload = function(options){
     var that = this;
     if(that.config.data && that.config.data.constructor === Array) delete that.config.data;
@@ -911,7 +933,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           : (str + ' laytable-cell-' + item3.type);
         }() +'">' + function(){
           var text = item3.totalRowText || '';
-          return item3.totalRow ? (totalNums[field] || text) : text;
+          return item3.totalRow ? (parseFloat(totalNums[field]).toFixed(2) || text) : text;
         }()
       ,'</div></td>'].join('');
       
@@ -989,17 +1011,20 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       field: field
       ,sort: type
     };
-
-    if(type === 'asc'){ //升序
-      thisData = layui.sort(data, field);
-    } else if(type === 'desc'){ //降序
-      thisData = layui.sort(data, field, true);
-    } else { //清除排序
-      thisData = layui.sort(data, table.config.indexName);
-      delete that.sortKey;
+    
+    //默认为前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
+    if(options.autoSort){
+      if(type === 'asc'){ //升序
+        thisData = layui.sort(data, field);
+      } else if(type === 'desc'){ //降序
+        thisData = layui.sort(data, field, true);
+      } else { //清除排序
+        thisData = layui.sort(data, table.config.indexName);
+        delete that.sortKey;
+      }
     }
     
-    res[options.response.dataName] = thisData;
+    res[options.response.dataName] = thisData || data;
     that.renderData(res, that.page, that.count, true);
     
     if(formEvent){
@@ -1195,6 +1220,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         ,panel = $('<ul class="layui-table-tool-panel"></ul>');
         
         panel.html(list);
+        
+        //限制最大高度
+        if(options.height){
+          panel.css('max-height', options.height - (that.layTool.outerHeight() || 50))
+        }
+        
+        //插入元素
         othis.find('.layui-table-tool-panel')[0] || othis.append(panel);
         that.renderForm();
         
@@ -1243,10 +1275,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
                         that.setParentCol(!checked, parentKey);
                       }
                       
-                      //适配
-                      that.fullSize();
-                      that.scrollPatch();
-                      that.setColsWidth();
+                      //重新适配尺寸
+                      that.resize();
                     }
                   });
                 });
@@ -1642,9 +1672,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     //自适应
     _WIN.on('resize', function(){
-       that.fullSize();
-       that.scrollPatch();
-       that.setColsWidth();
+      that.resize();
     });
   };
   
@@ -1723,8 +1751,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     return that;
   };
   
-  //记录所有实例配置信息
-  thisTable.config = {};
+  //记录所有实例
+  thisTable.that = {}; //记录所有实例对象
+  thisTable.config = {}; //记录所有实例配置项
   
   //遍历表头
   table.eachCols = function(id, callback, cols){
@@ -1838,11 +1867,29 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     document.body.removeChild(alink); 
   };
   
+  //重置表格尺寸结构
+  table.resize = function(id){
+    //如果指定表格唯一 id，则只执行该 id 对应的表格实例
+    if(id){
+      var config = getThisTableConfig(id); //获取当前实例配置项
+      if(!config) return;
+      
+      thisTable.that[id].resize();
+      
+    } else { //否则重置所有表格实例尺寸
+      layui.each(thisTable.that, function(){
+        this.resize();
+      });
+    }
+  };
+  
   //表格重载
   table.reload = function(id, options){
-    var config = thisTable.config[id];
     options = options || {};
-    if(!config) return hint.error('The ID option was not found in the table instance');
+    
+    var config = getThisTableConfig(id); //获取当前实例配置项
+    if(!config) return;
+    
     if(options.data && options.data.constructor === Array) delete config.data;    
     return table.render($.extend(true, {}, config, options));
   };

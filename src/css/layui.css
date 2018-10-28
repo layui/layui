@@ -826,7 +826,7 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .layui-table-tool-temp{padding-right: 120px;}
 .layui-table-tool-self{position: absolute; right: 17px; top: 10px;}
 .layui-table-tool .layui-table-tool-self .layui-inline[lay-event]{margin: 0 0 0 10px;}
-.layui-table-tool-panel{position: absolute; top: 29px; left: -1px; padding: 5px 0; min-width: 150px; min-height: 40px; border: 1px solid #d2d2d2; text-align: left; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,.12);}
+.layui-table-tool-panel{position: absolute; top: 29px; left: -1px; padding: 5px 0; min-width: 150px; min-height: 40px; border: 1px solid #d2d2d2; text-align: left; overflow-y: auto; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,.12);}
 .layui-table-tool-panel li{padding: 0 10px; line-height: 30px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -webkit-transition: .5s all; transition: .5s all;}
 .layui-table-tool-panel li .layui-form-checkbox[lay-skin="primary"]{width: 100%;}
 .layui-table-tool-panel li:hover{background-color: #f2f2f2;}
