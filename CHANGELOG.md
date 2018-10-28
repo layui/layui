@@ -1,6 +1,6 @@
 
 # 更新日志
-  * [2.4.0](http://www.layui.com/doc/base/changelog.html#2-4-0)
+  * [2.4.x](http://www.layui.com/doc/base/changelog.html#2-4-x)
   * [2.3.0](http://www.layui.com/doc/base/changelog.html#2-3-0)
   * [2.2.6](http://www.layui.com/doc/base/changelog.html#2-2-6)
   * [2.2.5](http://www.layui.com/doc/base/changelog.html#2-2-5)
