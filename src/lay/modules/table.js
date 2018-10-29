@@ -917,16 +917,19 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.eachCols(function(i3, item3){
       var field = item3.field || i3;
       
-      if(item3.hide) return;
-      
       //td内容
-      var td = ['<td data-field="'+ field +'" data-key="'+ item3.key +'" '+ function(){
+      var td = ['<td data-field="'+ field +'" data-key="'+ options.index + '-'+ item3.key +'" '+ function(){
         var attr = [];
         if(item3.align) attr.push('align="'+ item3.align +'"'); //对齐方式
         if(item3.style) attr.push('style="'+ item3.style +'"'); //自定义样式
         if(item3.minWidth) attr.push('data-minwidth="'+ item3.minWidth +'"'); //单元格最小宽度
         return attr.join(' ');
-      }() +'>'
+      }() +' class="'+ function(){ //追加样式
+        var classNames = [];
+        if(item3.hide) classNames.push(HIDE); //插入隐藏列样式
+        if(!item3.field) classNames.push('layui-table-col-special'); //插入特殊列样式
+        return classNames.join(' ');
+      }() +'">'
         ,'<div class="layui-table-cell laytable-cell-'+ function(){ //返回对应的CSS类标识
           var str = (options.index + '-' + item3.key);
           return item3.type === 'normal' ? str 
@@ -1223,7 +1226,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         
         //限制最大高度
         if(options.height){
-          panel.css('max-height', options.height - (that.layTool.outerHeight() || 50))
+          panel.css('max-height', options.height - (that.layTool.outerHeight() || 50));
         }
         
         //插入元素
