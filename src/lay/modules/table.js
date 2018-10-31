@@ -420,7 +420,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     if(options.toolbar === 'default'){
       elemToolTemp.html(leftDefaultTemp);
-    } else if(options.toolbar){
+    } else if(typeof options.toolbar === 'string'){
       var toolbarHtml = $(options.toolbar).html() || '';
       toolbarHtml && elemToolTemp.html(
         laytpl(toolbarHtml).render(options)
@@ -621,8 +621,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   Class.prototype.resize = function(){
     var that = this;
     that.fullSize(); //让表格铺满
-    that.scrollPatch(); //滚动条补丁
     that.setColsWidth(); //自适应列宽
+    that.scrollPatch(); //滚动条补丁
+    
   };
   
   //表格完整重载
@@ -827,13 +828,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       typeof thisCheckedRowIndex === 'number' && that.setThisRowChecked(thisCheckedRowIndex);
       that.syncCheckAll();
       
-      that.scrollPatch();
-      /*
+      //滚动条补丁
       that.haveInit ? that.scrollPatch() : setTimeout(function(){
         that.scrollPatch();
       }, 50);
       that.haveInit = true;
-      */
       
       layer.close(that.tipsIndex);
       
@@ -1194,7 +1193,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     //固定列区域高度
     var mainHeight = that.layMain.height()
     ,fixHeight = mainHeight - scollHeight;
-    that.layFixed.find(ELEM_BODY).css('height', layMainTable.height() > fixHeight ? fixHeight : 'auto');
+    that.layFixed.find(ELEM_BODY).css('height', layMainTable.height() >= fixHeight ? fixHeight : 'auto');
     
     //表格宽度小于容器宽度时，隐藏固定列
     that.layFixRight[outWidth > 0 ? 'removeClass' : 'addClass'](HIDE); 
@@ -1468,7 +1467,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       ,index = checkbox.parents('tr').eq(0).data('index')
       ,checked = checkbox[0].checked
       ,isAll = checkbox.attr('lay-filter') === 'layTableAllChoose';
-      
+
       //全选
       if(isAll){
         childs.each(function(i, item){
@@ -1481,7 +1480,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         that.setCheckData(index, checked);
         that.syncCheckAll();
       }
-      layui.event.call(this, MOD_NAME, 'checkbox('+ filter +')', commonMember.call(this, {
+      
+      layui.event.call(checkbox[0], MOD_NAME, 'checkbox('+ filter +')', commonMember.call(checkbox[0], {
         checked: checked
         ,type: isAll ? 'all' : 'one'
       }));
@@ -1492,7 +1492,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       var radio = $(this).prev()
       ,checked = radio[0].checked
       ,thisData = table.cache[that.key]
-      ,index = radio.parents('tr').eq(0).data('index')
+      ,index = radio.parents('tr').eq(0).data('index');
       
       //重置数据单选属性
       layui.each(thisData, function(i, item){
@@ -1570,7 +1570,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     });
     
     //单元格单击事件
-    that.layBody.on('click', 'td', function(){
+    that.layBody.on('click', 'td', function(e){
       var othis = $(this)
       ,field = othis.data('field')
       ,editType = othis.data('edit')
@@ -1584,6 +1584,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         input[0].value = othis.data('content') || elemCell.text();
         othis.find('.'+ELEM_EDIT)[0] || othis.append(input);
         input.focus();
+        layui.stope(e);
         return;
       }
     }).on('mouseenter', 'td', function(){
@@ -1607,11 +1608,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     };
     
     //单元格展开事件
-    that.layBody.on('click', '.'+ ELEM_GRID_DOWN, function(){
+    that.layBody.on('click', '.'+ ELEM_GRID_DOWN, function(e){
       var othis = $(this)
       ,td = othis.parent()
       ,elemCell = td.children(ELEM_CELL);
-      
+
       that.tipsIndex = layer.tips([
         '<div class="layui-table-tips-main" style="margin-top: -'+ (elemCell.height() + 16) +'px;'+ function(){
           if(options.size === 'sm'){
@@ -1638,6 +1639,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           });
         }
       });
+      
+      layui.stope(e);
     });
     
     //行工具条操作事件

@@ -166,9 +166,10 @@ layui.define('layer', function(exports){
             if(choose) return;
             
             notOption(input.val(), function(none){
+              var selectedIndex = select[0].selectedIndex;
               if(none){
-                initValue = dl.find('.'+THIS).html();
-                input && input.val(initValue);
+                initValue = $(select[0].options[selectedIndex]).html(); //重新获得初始选中值
+                initValue || input.val(''); //none && !initValue
               }
             });
           }
@@ -418,6 +419,7 @@ layui.define('layer', function(exports){
           events.call(this, reElem, disabled, isSearch);
         });
       }
+      
       //复选框/开关
       ,checkbox: function(){
         var CLASS = {
@@ -489,6 +491,7 @@ layui.define('layer', function(exports){
           events.call(this, reElem, RE_CLASS);
         });
       }
+      
       //单选框
       ,radio: function(){
         var CLASS = 'layui-form-radio', ICON = ['&#xe643;', '&#xe63f;']

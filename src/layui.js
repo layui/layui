@@ -19,7 +19,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.4.4'; //版本号
+    this.v = '2.4.5'; //版本号
   }
 
   //获取layui所在目录
@@ -535,7 +535,7 @@
       
       //执行指定事件
       key === '' && layui.each(item, callback);
-      key === filterName && layui.each(item, callback);
+      (filterName && key === filterName) && layui.each(item, callback);
     });
     
     return result;
