@@ -1,6 +1,6 @@
 <p align=center>
   <a href="http://www.layui.com">
-    <img src="https://cdn.layui.com/upload/2018_8/168_1534598268487_58092.png" alt="layui" width="360">
+    <img src="https://sentsin.gitee.io/res/images/layui/layui.png" alt="layui" width="360">
   </a>
 </p>
 <p align=center>
