@@ -167,9 +167,18 @@ layui.define('layer', function(exports){
             
             notOption(input.val(), function(none){
               var selectedIndex = select[0].selectedIndex;
+              
+              //未查询到相关值
               if(none){
                 initValue = $(select[0].options[selectedIndex]).html(); //重新获得初始选中值
-                initValue || input.val(''); //none && !initValue
+                
+                //如果是第一项，且文本值等于 placeholder，则清空初始值
+                if(selectedIndex === 0 && initValue === input.attr('placeholder')){
+                  initValue = '';
+                };
+
+                //如果有选中值，则将输入框纠正为该值。否则清空输入框
+                input.val(initValue || '');
               }
             });
           }
@@ -328,8 +337,15 @@ layui.define('layer', function(exports){
           if(isSearch){
             input.on('keyup', search).on('blur', function(e){
               var selectedIndex = select[0].selectedIndex;
+              
               thatInput = input; //当前的 select 中的 input 元素
               initValue = $(select[0].options[selectedIndex]).html(); //重新获得初始选中值
+              
+              //如果是第一项，且文本值等于 placeholder，则清空初始值
+              if(selectedIndex === 0 && initValue === input.attr('placeholder')){
+                initValue = '';
+              };
+              
               setTimeout(function(){
                 notOption(input.val(), function(none){
                   initValue || input.val(''); //none && !initValue
