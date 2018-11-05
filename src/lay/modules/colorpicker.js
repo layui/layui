@@ -152,6 +152,7 @@ layui.define('jquery', function(exports){
     color: ''  //默认颜色，默认没有
     ,size: null  //选择器大小
     ,alpha: false  //是否开启透明度
+    ,revert:1   //不点击确定按钮，是否还原到原始颜色，默认还原
     ,format: 'hex'  //颜色显示/输入格式，可选 rgb,hex
     ,predefine: false //预定义颜色是否开启
     ,colors: [ //默认预定义颜色列表
@@ -695,8 +696,9 @@ layui.define('jquery', function(exports){
       } else {
         that.elemColorBox.find('.' + PICKER_TRIG_I).removeClass(ICON_PICKER_DOWN).addClass(ICON_PICKER_CLOSE);
       }
-      elemColorBoxSpan[0].style.background = that.color || '';
-      
+      if(that.config.revert){
+        elemColorBoxSpan[0].style.background = that.color || '';
+      }
       that.removePicker();
     });
 
