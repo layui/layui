@@ -17,7 +17,7 @@ class LayuiServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            'dist/' => public_path('vendor/layui/'),
+            __DIR__ . '/../dist/' => public_path('vendor/layui/'),
         ], 'layui');
     }
 }
