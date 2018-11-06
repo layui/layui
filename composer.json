@@ -1,0 +1,40 @@
+{
+    "name": "sentsin/layui",
+    "description": "采用自身模块规范编写的前端 UI 框架，遵循原生 HTML/CSS/JS 的书写形式，极低门槛，拿来即用。",
+    "type": "library",
+    "require": {
+        "laravel/framework": ">5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Layui\\": "laravel/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Layui\\Test\\": "test/"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sentsin",
+            "email": "xu@sentsin.com"
+        },
+        {
+            "name": "Xiaohui Lam",
+            "email": "xiaohui.lam@e.hexdata.cn"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Layui\\LayuiServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}
