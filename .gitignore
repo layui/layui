@@ -30,3 +30,5 @@ build/
 rc/
 
 coverage/
+/vendor/
+composer.lock
