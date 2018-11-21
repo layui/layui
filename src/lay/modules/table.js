@@ -655,6 +655,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       var params = {};
       params[request.pageName] = curr;
       params[request.limitName] = options.limit;
+      if (typeof options.params === 'function') {
+        params = options.params(curr, options.limit);
+      }
       
       //参数
       var data = $.extend(params, options.where);
@@ -689,6 +692,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
         }
         ,error: function(e, m){
+          (typeof options.error === 'function') && options.error(e, m);
           that.layMain.html('<div class="'+ NONE +'">数据接口请求异常：'+ m +'</div>');
           that.renderForm();
           that.setColsWidth();
