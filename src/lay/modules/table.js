@@ -653,9 +653,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         
     if(options.url){ //Ajax请求
       var params = {};
-      params[request.pageName] = curr;
-      params[request.limitName] = options.limit;
-      
+      //当page设为false时 不在请求参数中增加分页参数
+      if(options.page !== false) {
+        params[request.pageName] = curr;
+        params[request.limitName] = options.limit;
+      }
       //参数
       var data = $.extend(params, options.where);
       if(options.contentType && options.contentType.indexOf("application/json") == 0){ //提交 json 格式
