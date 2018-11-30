@@ -88,6 +88,8 @@ layui.define('layer', function(exports){
         if(type === 'checkbox'){
           itemElem[0].checked = value;
         } else if(type === 'radio') { //如果为单选框
+          //将value值为转为字符串,避免number类型无法与字符串匹配的问题
+          value = String(value);
           itemElem.each(function(){
             if(this.value === value ){
               this.checked = true
