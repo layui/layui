@@ -263,7 +263,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     if(typeof options.page === 'object'){
       options.limit = options.page.limit || options.limit;
       options.limits = options.page.limits || options.limits;
-      that.page = options.page.curr = options.page.curr || 1;
+      //修复当curr设为0时起始页依旧为1的问题
+      that.page = options.page.curr = typeof options.page.curr === "number" ? options.page.curr : 1;
       delete options.page.elem;
       delete options.page.jump;
     }
