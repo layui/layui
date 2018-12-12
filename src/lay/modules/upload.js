@@ -323,8 +323,10 @@ layui.define('layer' , function(exports){
         }
       }
       
-      //上传前的回调
-      options.before && options.before(args);
+      //上传前的回调 若返回false不执行上传
+      if(options.before && options.before(args) === false){
+          return;
+      }
 
       //IE兼容处理
       if(device.ie){
