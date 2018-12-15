@@ -47,6 +47,23 @@ layui.define('layer', function(exports){
           /(^\d{15}$)|(^\d{17}(x|X|\d)$)/
           ,'请输入正确的身份证号'
         ]
+        ,length: function(value, item, params){
+          if(value == undefined || value == null || value == '') return false;
+          if(params == undefined || params.length == 0) throw 'length校验规则至少需要1个整型参数';
+          if(params.length == 1 && value.length != params[0]) return '长度只能为' + params[0];
+          if(value.length < params[0]) return '长度不能小于' + params[0];
+          if(value.length > params[1]) return '长度不能大于' + params[1];
+        }
+        ,minlength: function(value, item, params){
+          if(value == undefined || value == null || value == '') return false;
+          if(params == undefined || params.length == 0) throw 'minlength校验规则需要1个整型参数';
+          if(value.length < params[0]) return '长度不能小于' + params[0];
+        }
+        ,maxlength: function(value, item, params){
+          if(value == undefined || value == null || value == '') return false;
+          if(params == undefined || params.length == 0) throw 'maxlength校验规则需要1个整型参数';
+          if(value.length > params[0]) return '长度不能大于' + params[0];
+        }
       }
     };
   };
@@ -598,11 +615,36 @@ layui.define('layer', function(exports){
       layui.each(vers, function(_, thisVer){
         var isTrue //是否命中校验
         ,errorText = '' //错误提示文本
-        ,isFn = typeof verify[thisVer] === 'function';
+        ,isFn //是否为函数
+        ,params = undefined;
         
+        // 参数提取
+        thisVer = thisVer.trim();
+        if(thisVer.length != 0 || thisVer[thisVer.length - 1] == ']'){
+          // 找到'['位置
+          var start = -1;
+          for(var i=0; i<thisVer.length; i++){
+            if(thisVer[i]=='['){
+              start = i;
+              break;
+            }
+          }
+
+          if(start != -1){
+            // 分割参数
+            var params = thisVer.substring(start+1, thisVer.length-1).split(',');
+            for(var i=0; i<params.length; i++){
+              params[i] = params[i].trim();
+            }
+            thisVer = thisVer.substring(0,start);
+          }
+        }
+
+        isFn = typeof verify[thisVer] === 'function';
+
         //匹配验证规则
         if(verify[thisVer]){
-          var isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
+          var isTrue = isFn ? errorText = verify[thisVer](value, item, params) : !verify[thisVer][0].test(value);
           errorText = errorText || verify[thisVer][1];
           
           //如果是必填项或者非空命中校验，则阻止提交，弹出提示

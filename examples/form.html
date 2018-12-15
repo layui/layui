@@ -26,6 +26,18 @@ body{padding: 10px;}
     </div>
   </div>
   <div class="layui-form-item">
+    <label class="layui-form-label">长度限制</label>
+    <div class="layui-input-block">
+      <input type="text" name="rangeLength" lay-verify="length[4,12]" required placeholder="请输入4-12个字符" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">固定输入长度</label>
+    <div class="layui-input-block">
+      <input type="text" name="fixedLength" lay-verify="length[6]" required placeholder="请输入6个字符" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
     <label class="layui-form-label">手机</label>
     <div class="layui-input-block">
       <input type="tel" name="phone" lay-verify="required|number" lay-verType="tips" autocomplete="off" class="layui-input">
