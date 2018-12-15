@@ -48,6 +48,10 @@ layui.define('layer', function(exports){
           ,'请输入正确的身份证号'
         ]
       }
+      ,parse: {
+        int: parseInt,
+        float: parseFloat
+      }
     };
   };
   
@@ -62,6 +66,13 @@ layui.define('layer', function(exports){
   Form.prototype.verify = function(settings){
     var that = this;
     $.extend(true, that.config.verify, settings);
+    return that;
+  };
+
+  //自动转换规则设定
+  Form.prototype.parse = function(settings){
+    var that = this;
+    $.extend(true, that.config.parse, settings);
     return that;
   };
   
@@ -578,7 +589,7 @@ layui.define('layer', function(exports){
   
   //表单提交校验
   var submit = function(){
-    var button = $(this), verify = form.config.verify, stop = null
+    var button = $(this), verify = form.config.verify, parse = form.config.parse, stop = null
     ,DANGER = 'layui-form-danger', field = {} ,elem = button.parents(ELEM)
     
     ,verifyElem = elem.find('*[lay-verify]') //获取需要校验的元素
@@ -646,8 +657,13 @@ layui.define('layer', function(exports){
         item.name = item.name.replace(/^(.*)\[\]$/, '$1['+ (nameIndex[key]++) +']');
       }
       
-      if(/^checkbox|radio$/.test(item.type) && !item.checked) return;      
-      field[item.name] = item.value;
+      if(/^checkbox|radio$/.test(item.type) && !item.checked) return;
+      var type = item.getAttribute('lay-parse');
+      if (typeof parse[type] === 'function') {
+        field[item.name] = parse[type](item.value);
+      } else {
+        field[item.name] = item.value;
+      }
     });
  
     //获取字段
