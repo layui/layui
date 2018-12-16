@@ -620,7 +620,7 @@ layui.define('layer', function(exports){
         
         // 参数提取
         thisVer = thisVer.trim();
-        if(thisVer.length != 0 || thisVer[thisVer.length - 1] == ']'){
+        if(thisVer.length != 0 && thisVer[thisVer.length - 1] == ']'){
           // 找到'['位置
           var start = -1;
           for(var i=0; i<thisVer.length; i++){
