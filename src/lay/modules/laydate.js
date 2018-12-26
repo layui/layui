@@ -878,15 +878,15 @@
           if(thisv < 1) thisv = 1, error = true;
           dateTime.date = thisv;
         } else if(/HH|H/.test(item)){ //时
-          if(thisv < 1) thisv = 0, error = true;
+          if(thisv < 0) thisv = 0, error = true;
           dateTime.hours = thisv;
           options.range && (that[startEnd[index]].hours = thisv);
         } else if(/mm|m/.test(item)){ //分
-          if(thisv < 1) thisv = 0, error = true;
+          if(thisv < 0) thisv = 0, error = true;
           dateTime.minutes = thisv;
           options.range && (that[startEnd[index]].minutes = thisv);
         } else if(/ss|s/.test(item)){ //秒
-          if(thisv < 1) thisv = 0, error = true;
+          if(thisv < 0) thisv = 0, error = true;
           dateTime.seconds = thisv;
           options.range && (that[startEnd[index]].seconds = thisv);
         }
