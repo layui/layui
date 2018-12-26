@@ -1474,8 +1474,16 @@
     });
     
     param = param || [that.parse(), start, end];
-    typeof options[type || 'done'] === 'function' && options[type || 'done'].apply(options, param);
-    
+   
+    that.runRemove = true;
+    type = type || 'done';
+    if(typeof options[type] === 'function'){
+      var b = options[type].apply(options, param);
+      if(type === 'done'){
+        that.runRemove = b !== false;
+      }
+    }
+   
     return that;
   };
   
@@ -1596,6 +1604,10 @@
       
       //清空、重置
       ,clear: function(){
+        that.done(['', {}, {}]);
+        if(that.runRemove === false){
+          return;
+        }
         that.setValue('').remove();
         isStatic && (
           lay.extend(dateTime, that.firstDate)
@@ -1608,7 +1620,6 @@
           ,delete that.startTime
           ,delete that.endTime
         );
-        that.done(['', {}, {}]);
       }
       
       //现在
@@ -1619,9 +1630,12 @@
           ,minutes: thisDate.getMinutes()
           ,seconds: thisDate.getSeconds()
         });
+        that.done();
+        if(that.runRemove === false){
+          return;
+        }
         that.setValue(that.parse()).remove();
         isStatic && that.calendar();
-        that.done();
       }
       
       //确定
@@ -1635,6 +1649,9 @@
           if(lay(btn).hasClass(DISABLED)) return that.hint('不在有效日期或时间范围内');
         }
         that.done();
+        if(that.runRemove === false){
+          return;
+        }
         that.setValue(that.parse()).remove()
       }
     };
