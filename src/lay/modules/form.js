@@ -417,7 +417,8 @@ layui.define('layer', function(exports){
             ,function(options){
               var arr = [];
               layui.each(options, function(index, item){
-                if(index === 0 && !item.value){
+                //修复当第一项就是optgroup时,被替换为<dd><option></option></dd>的结构错误的问题,应该替换为<dt></dt>
+                if(index === 0 && !item.value && item.nodeName.toLowerCase === 'option'){
                   arr.push('<dd lay-value="" class="layui-select-tips">'+ (item.innerHTML || TIPS) +'</dd>');
                 } else if(item.tagName.toLowerCase() === 'optgroup'){
                   arr.push('<dt>'+ item.label +'</dt>'); 
