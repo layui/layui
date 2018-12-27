@@ -415,14 +415,16 @@ layui.define('layer', function(exports){
             ,'<i class="layui-edge"></i></div>'
             ,'<dl class="layui-anim layui-anim-upbit'+ (othis.find('optgroup')[0] ? ' layui-select-group' : '') +'">'
             ,function(options){
-              var arr = [];
+              var arr = [], tips = true;
               layui.each(options, function(index, item){
-                if(index === 0 && !item.value){
-                  arr.push('<dd lay-value="" class="layui-select-tips">'+ (item.innerHTML || TIPS) +'</dd>');
-                } else if(item.tagName.toLowerCase() === 'optgroup'){
-                  arr.push('<dt>'+ item.label +'</dt>'); 
+                if (item.tagName.toLowerCase() === 'optgroup') {
+                  arr.push('<dt>' + item.label + '</dt>');
+                } else if(tips && !item.value){
+                  arr.push('<dd lay-value="" class="layui-select-tips">' + (item.innerHTML || TIPS) + '</dd>');
+                  tips = false;
                 } else {
                   arr.push('<dd lay-value="'+ item.value +'" class="'+ (value === item.value ?  THIS : '') + (item.disabled ? (' '+DISABLED) : '') +'">'+ item.innerHTML +'</dd>');
+                  tips = false;
                 }
               });
               arr.length === 0 && arr.push('<dd lay-value="" class="'+ DISABLED +'">没有选项</dd>');
