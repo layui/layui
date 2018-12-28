@@ -635,6 +635,7 @@ layui.define('layer', function(exports){
     
     var nameIndex = {}; //数组 name 索引
     layui.each(fieldElem, function(_, item){
+      var nameOrigin = item.name;
       item.name = (item.name || '').replace(/^\s*|\s*&/, '');
       
       if(!item.name) return;
@@ -648,6 +649,7 @@ layui.define('layer', function(exports){
       
       if(/^checkbox|radio$/.test(item.type) && !item.checked) return;      
       field[item.name] = item.value;
+      item.name = nameOrigin;
     });
  
     //获取字段
