@@ -222,6 +222,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.config = $.extend({}, that.config, table.config, options);
     that.render();
   };
+
+  // 配置分割符，防止修改源码默认分隔符导致解析出错
+  laytpl.config({
+    open: '{{',
+    close: '}}'
+  });
   
   //默认配置
   Class.prototype.config = {
