@@ -1570,6 +1570,10 @@
     } else if(options.type === 'datetime'){
       setDateTime(true);
       that.calendar().done(null, 'change');
+      var timeBtn = lay(that.footer).find(ELEM_TIME_BTN);
+      if(timeBtn.length){
+         that.tool(timeBtn[0],'datetime');
+      }
     }
   };
   
