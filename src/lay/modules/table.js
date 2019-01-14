@@ -1583,6 +1583,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         var input = $('<input class="layui-input '+ ELEM_EDIT +'">');
         input[0].value = othis.data('content') || elemCell.text();
         othis.find('.'+ELEM_EDIT)[0] || othis.append(input);
+        if (input[0].setSelectionRange) {
+          input[0].setSelectionRange(input[0].value.length, input[0].value.length)
+        }
         input.focus();
         layui.stope(e);
         return;
