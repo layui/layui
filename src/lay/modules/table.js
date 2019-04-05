@@ -795,7 +795,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
                   return numbers;
                 break;
               };
-              
+              // 使用render方法渲染单元格数据
+              if(item3.render && typeof item3.render === 'function') {
+                return item3.render(tplData[item3.field], tplData);
+              }
               //解析工具列模板
               if(item3.toolbar){
                 return laytpl($(item3.toolbar).html()||'').render(tplData);

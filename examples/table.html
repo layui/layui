@@ -198,7 +198,13 @@ layui.use('table', function(){
         return '<em>'+ x.email +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
-      ,{field:'city', title:'城市', width:100}
+      ,{field:'city', title:'城市', width:100, render: function(value, row) {
+        // 性别为男性时，渲染百搭按钮
+        if (row.sex === '男') return `<a class="layui-btn layui-btn-sm layui-btn-normal">${value}</a>`;
+        // 性别为女性时，渲染暖色按钮
+        if (row.sex === '女') return `<a class="layui-btn layui-btn-sm layui-btn-warm">${value}</a>`;
+        return value;
+      }}
       ,{field:'sign', title:'签名'}
       ,{field:'experience', title:'积分', width:80, sort: true, totalRow: true}
       ,{field:'ip', title:'IP', width:120}
