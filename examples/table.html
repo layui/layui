@@ -184,13 +184,14 @@ layui.use('table', function(){
     ,page: {
       
     }
+    ,autoSort: false
     //,loading: false
     ,totalRow: true
     ,limit: 30
     ,toolbar: '#toolbarDemo'
     //,defaultToolbar: ['filter']
     ,cols: [[
-      {type: 'radio', fixed: 'left'}
+      {type: 'checkbox', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', hide: true, width:120, edit: 'text', templet: '#usernameTpl'}
       ,{field:'email', title:'邮箱', hide: true, width:150, edit: 'text', templet: function(x){
@@ -247,6 +248,13 @@ layui.use('table', function(){
       break;
     };
   });
+
+  table.on('row(test)', function(obj){
+    console.log(obj);
+    //layer.closeAll('tips');
+  });
+  
+  
   
   table.render({
     elem: '#test2'
@@ -333,9 +341,10 @@ layui.use('table', function(){
   
   //监听排序
   table.on('sort(test)', function(obj){
-    console.log(this, obj.field, obj.type)
+    console.log(this)
     
-    return;
+    //return;
+    layer.msg('服务端排序。order by '+ obj.field + ' ' + obj.type);
     //服务端排序
     table.reload('test', {
       initSort: obj
