@@ -392,6 +392,7 @@
     ,zIndex: null //控件层叠顺序
     ,done: null //控件选择完毕后的回调，点击清空/现在/确定也均会触发
     ,change: null //日期时间改变后的回调
+    ,selectTime: false
   };
   
   //多语言
@@ -403,6 +404,7 @@
         weeks: ['日', '一', '二', '三', '四', '五', '六']
         ,time: ['时', '分', '秒']
         ,timeTips: '选择时间'
+        ,timeDesc: '时间：'
         ,startTime: '开始时间'
         ,endTime: '结束时间'
         ,dateTips: '返回日期'
@@ -417,6 +419,7 @@
         weeks: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
         ,time: ['Hours', 'Minutes', 'Seconds']
         ,timeTips: 'Select Time'
+        ,timeDesc: 'Time：'
         ,startTime: 'Start Time'
         ,endTime: 'End Time'
         ,dateTips: 'Select Date'
@@ -666,7 +669,56 @@
         'class': 'layui-laydate-main laydate-main-list-'+ i
       });
       
+      if (options.type === 'datetime' && options.selectTime) {
+          var timmerDiv = lay.elem('div', {'class': 'layui-laydate-timmer laydate-timmer-list-' + i})
+          , timmerDesc = lay.elem('span')
+          , startEnd = ['startTime', 'endTime'][i];
+
+          timmerDesc.innerText = that.lang().timeDesc;
+          timmerDiv.appendChild(timmerDesc);
+
+          // 构造时分秒的select
+          lay.each([24, 60, 60], function(j, item) {
+              var dateTime = ['hours', 'minutes', 'seconds'][j],
+              childTmp = lay.elem('select', {'data-datename': dateTime});
+              lay.each(new Array(item), function(k) {
+                  var idx = k
+                  , isSelected = options.range? (that[startEnd] && that[startEnd][dateTime] === idx): (options.dateTime && idx === options.dateTime[dateTime])
+                  , extOption = isSelected? {selected: ''}: {}
+                  , optionData = lay.extend({value: idx}, extOption)
+                  , optionElm = lay.elem('option', optionData);
+
+                  optionElm.innerText = idx < 10? '0' + idx: idx;
+
+                  childTmp.appendChild(optionElm);
+              });
+              timmerDiv.appendChild(childTmp);
+              if (dateTime != 'seconds') {
+                  var splitElem = lay.elem('span', {'class': 'timmer-split'});
+                  splitElem.innerText = ':';
+                  timmerDiv.appendChild(splitElem);
+              }
+          });
+          // 保存时间参数
+          lay(timmerDiv).find('select').on('change', function () {
+              var idx = i
+              , startEnd = ['startTime', 'endTime'][idx]
+              , type = lay(this).attr('data-datename')
+              , value = this.value;
+
+              if (options.range) {
+                  if (! that[startEnd]) {
+                      that[startEnd] = {hours: 0, minutes: 0, seconds: 0};
+                  }
+                  that[startEnd][type] = value;
+              } else {
+                  options.dateTime[type] = value;
+              }
+          });
+      }
+
       elemMain[i].appendChild(divHeader);
+      timmerDiv && elemMain[i].appendChild(timmerDiv);
       elemMain[i].appendChild(divContent);
       
       elemHeader.push(headerChild);
@@ -677,7 +729,7 @@
     //生成底部栏
     lay(divFooter).html(function(){
       var html = [], btns = [];
-      if(options.type === 'datetime'){
+      if(options.type === 'datetime' && !options.selectTime){
         html.push('<span lay-type="datetime" class="laydate-btns-time">'+ lang.timeTips +'</span>');
       }
       lay.each(options.btns, function(i, item){
@@ -1100,6 +1152,15 @@
         year: EYM[0]
         ,month: EYM[1]
       }));
+    }
+
+    // 赋值时间选择器
+    if (options.type === 'datetime' && options.selectTime && options.value) {
+        var timeerElem = lay(that.elemMain[index]).find('.layui-laydate-timmer').find('select');
+        lay.each(timeerElem, function(idx, item) {
+            var dateTime = ['hours', 'minutes', 'seconds'][idx];
+            item.value = options.range? that[['startTime', 'endTime'][index]][dateTime]:options.dateTime[dateTime];
+        });
     }
     
     //通过检测当前有效日期，来设定确定按钮是否可点

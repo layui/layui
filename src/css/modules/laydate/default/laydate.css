@@ -153,3 +153,6 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-theme-grid .laydate-year-list>li{height: 43px; line-height: 43px;}
 .laydate-theme-grid .laydate-month-list>li{height: 71px; line-height: 71px;}
 
+/*时间select选择*/
+.layui-laydate-timmer{margin-top:10px;text-align:center}
+.layui-laydate-timmer .timmer-split{margin:0 5px}
