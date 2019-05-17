@@ -439,7 +439,8 @@
     ,that = this;
     if(typeof fn !== 'function') return that;
     obj = obj || [];
-    if(obj.constructor === Object){
+	// modified by Vinsea@2019/5/17  解决iframe中不能通过constructor判断父窗口对象类型的问题
+    if(obj.constructor === Object || obj.constructor.name === Object.name){
       for(key in obj){
         if(fn.call(obj[key], key, obj[key])) break;
       }
