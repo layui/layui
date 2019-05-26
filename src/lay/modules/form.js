@@ -596,13 +596,19 @@ layui.define('layer', function(exports){
       
       othis.removeClass(DANGER);
       layui.each(vers, function(_, thisVer){
+        var pos = thisVer.indexOf('['), params = [], parmsStr = '';
+        if (pos > 0) {
+          parmsStr = thisVer.substring(pos+1, thisVer.length-1);
+          thisVer = thisVer.substring(0, pos);
+        }
+        params = parmsStr && parmsStr.split(',') || params;
         var isTrue //是否命中校验
         ,errorText = '' //错误提示文本
         ,isFn = typeof verify[thisVer] === 'function';
         
         //匹配验证规则
         if(verify[thisVer]){
-          var isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
+          var isTrue = isFn ? errorText = verify[thisVer](value, item, params) : !verify[thisVer][0].test(value);
           errorText = errorText || verify[thisVer][1];
           
           //如果是必填项或者非空命中校验，则阻止提交，弹出提示
