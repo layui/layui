@@ -101,7 +101,7 @@ layui.use('upload', function(){
       }
     }
     ,choose: function(){
-      console.log(1)
+      
     }
     ,before: function(obj){
       //预读本地文件示例，不支持ie8
@@ -110,6 +110,7 @@ layui.use('upload', function(){
       });
     }
     ,done: function(res){
+    
       //如果上传失败
       if(res.code > 0){
         return layer.msg('上传失败');
@@ -117,6 +118,8 @@ layui.use('upload', function(){
       //上传成功
     }
     ,error: function(){
+      this.item.html('重选上传');
+      
       //演示失败状态，并实现重传
       var demoText = $('#demoText');
       demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
@@ -124,6 +127,13 @@ layui.use('upload', function(){
         uploadInst.upload();
       });
     }
+  });
+  
+  //重置上述 upload 实例
+  uploadInst.reload({
+    name:'avatar'
+    ,acceptMime: 'image/*'
+    //,size: 2
   });
   
   upload.render({

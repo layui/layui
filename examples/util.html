@@ -13,6 +13,12 @@ body{padding: 50px;}
 </head>
 <body>
 
+<button class="layui-btn" lay-active="e1">事件1</button>
+<button class="layui-btn" lay-active="e2">事件2</button>
+<button class="layui-btn" lay-active="e3">事件3</button>
+
+<hr>
+
 <div id="test"></div>
 
 <hr>
@@ -51,6 +57,20 @@ layui.use('util', function(){
   //某个时间在当前时间的多久前
   var str = util.timeAgo(new Date(2017,7,15,2,58,0));
   $('#test1').html('示例写于：'+ str);
+  
+  //处理属性 为 lay-active 的所有元素事件
+  util.event('lay-active', {
+    e1: function(){
+      alert('事件1')
+    }
+    ,e2: function(){
+      alert('事件2')
+    }
+    ,e3: function(){
+      alert('事件3')
+    }
+  });
+  
 });
 </script>
 </body>

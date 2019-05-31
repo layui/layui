@@ -163,6 +163,7 @@ layui.define('jquery', function(exports){
     ,options = that.config;
     
     if(!options.autoplay) return;
+    clearInterval(that.timer);
     
     that.timer = setInterval(function(){
       that.slide();

@@ -89,7 +89,7 @@ layui.define('layer', function(exports){
           itemElem[0].checked = value;
         } else if(type === 'radio') { //如果为单选框
           itemElem.each(function(){
-            if(this.value === value ){
+            if(this.value == value ){
               this.checked = true
             }     
           });
@@ -605,6 +605,10 @@ layui.define('layer', function(exports){
           var isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
           errorText = errorText || verify[thisVer][1];
           
+          if(thisVer === 'required'){
+            errorText = othis.attr('lay-reqText') || errorText;
+          }
+          
           //如果是必填项或者非空命中校验，则阻止提交，弹出提示
           if(isTrue){
             //提示层风格
@@ -622,7 +626,14 @@ layui.define('layer', function(exports){
             } else {
               layer.msg(errorText, {icon: 5, shift: 6});
             }
-            if(!device.android && !device.ios) item.focus(); //非移动设备自动定位焦点
+            
+            //非移动设备自动定位焦点
+            if(!device.android && !device.ios){
+              setTimeout(function(){
+                item.focus(); 
+              }, 7);
+            }
+            
             othis.addClass(DANGER);
             return stop = true;
           }

@@ -38,6 +38,9 @@ layui.define('layer' , function(exports){
       upload: function(files){
         that.upload.call(that, files);
       }
+      ,reload: function(options){
+        that.reload.call(that, options);
+      }
       ,config: that.config
     }
   }
@@ -63,6 +66,7 @@ layui.define('layer' , function(exports){
     ,bindAction: '' //手动上传触发的元素
     ,url: '' //上传地址
     ,field: 'file' //文件字段名
+    ,acceptMime: '' //筛选出的文件类型，默认为所有文件
     ,method: 'post' //请求上传的 http 类型
     ,data: {} //请求上传的额外参数
     ,drag: true //是否允许拖拽上传
@@ -401,6 +405,20 @@ layui.define('layer' , function(exports){
       if(limitSize) return that.msg('文件不能超过'+ limitSize);
     }
     send();
+  };
+  
+  //重置方法
+  Class.prototype.reload = function(options){
+    var that = this
+    ,options = that.config = $.extend({}, that.config, upload.config, options)
+    ,next = options.elem.next();
+    
+    //更新文件域相关属性
+    next.attr({
+      name: options.name
+      ,accept: options.acceptMime
+      ,multiple: options.multiple
+    });
   };
   
   //事件处理

@@ -22,7 +22,7 @@ body{padding: 10px;}
   <div class="layui-form-item">
     <label class="layui-form-label">输入框</label>
     <div class="layui-input-block">
-      <input type="text" name="title" lay-verify="required|title" required placeholder="请输入标题" autocomplete="off" class="layui-input">
+      <input type="text" name="title" lay-verify="required|title" lay-reqText="标题不能为空" required placeholder="请输入标题" autocomplete="off" class="layui-input" >
     </div>
   </div>
   <div class="layui-form-item">
@@ -35,6 +35,12 @@ body{padding: 10px;}
     <label class="layui-form-label">邮箱</label>
     <div class="layui-input-block">
       <input type="email" name="email" lay-verify="email"  lay-verType="alert" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">生日</label>
+    <div class="layui-input-block">
+      <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
     </div>
   </div>
   <div class="layui-form-item">
@@ -187,9 +193,12 @@ body{padding: 10px;}
 
 <script>
 
-layui.use('form', function(){
-  var form = layui.form;
-  
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+
   //自定义验证规则
   form.verify({
     title: function(value){
@@ -202,6 +211,11 @@ layui.use('form', function(){
       /^\d+\.\b\d{2}\b$/
       ,'金额必须为小数保留两位'
     ]
+  });
+  
+  //日期
+  laydate.render({
+    elem: '#date'
   });
   
   //初始赋值

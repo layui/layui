@@ -20,6 +20,7 @@ body{padding: 20px; /*overflow-y: scroll;*/}
     <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
     <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
     <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+    <button class="layui-btn layui-btn-sm" lay-event="reload">无抖重载</button>
   </div>
 </script>
 
@@ -31,11 +32,19 @@ body{padding: 20px; /*overflow-y: scroll;*/}
 </script>
 
 <script type="text/html" id="usernameTpl">
-  <a href="" class="layui-table-link">{{d.username || ''}}</a>
+  <a href="" class="layui-table-link">{{d.username || ''}}1</a>
 </script>
 
 <script type="text/html" id="switchTpl">
   <input type="checkbox" name="yyy" lay-skin="switch" lay-text="女|男">
+</script>
+
+<script type="text/html" id="cityTpl">
+  <select lay-ignore>
+    <option value="浙江杭州">浙江杭州</option>
+    <option value="江西南昌">江西南昌</option>
+    <option value="湖北武汉">湖北武汉</option>
+  </select>
 </script>
 
 <script type="text/html" id="checkboxTpl">
@@ -193,12 +202,12 @@ layui.use('table', function(){
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
-      ,{field:'username', title:'用户名', hide: true, width:120, edit: 'text', templet: '#usernameTpl'}
+      ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
       ,{field:'email', title:'邮箱', hide: true, width:150, edit: 'text', templet: function(x){
         return '<em>'+ x.email +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
-      ,{field:'city', title:'城市', width:100}
+      ,{field:'city', title:'城市', width:120, templet: '#cityTpl1'}
       ,{field:'sign', title:'签名'}
       ,{field:'experience', title:'积分', width:80, sort: true, totalRow: true}
       ,{field:'ip', title:'IP', width:120}
@@ -245,6 +254,12 @@ layui.use('table', function(){
       break;
       case 'isAll':
         layer.msg(checkStatus.isAll ? '全选': '未全选')
+      break;
+      case 'reload':
+        table.reload('test', {
+          page: {curr: 5}
+          //,height: 300
+        }, 'data');
       break;
     };
   });
