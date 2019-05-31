@@ -194,10 +194,10 @@ layui.define('form', function(exports){
       //增删改按钮
       ,function(){
         return options.renderContent ? ['<div class="layui-btn-group layui-tree-btnGroup">'
-          ,'<button class="layui-btn layui-btn-primary layui-btn-sm" data-type="add"><i class="layui-icon layui-icon-add-1"></i></button>'
-          ,'<button class="layui-btn layui-btn-primary layui-btn-sm" data-type="edit"><i class="layui-icon layui-icon-edit"></i></button>'
-          ,'<button class="layui-btn layui-btn-primary layui-btn-sm" data-type="del"><i class="layui-icon layui-icon-delete"></i></button>'         
-        ,'</div>'].join(','): '';
+          ,'<i class="layui-icon layui-icon-add-1"  data-type="add"></i>'
+          ,'<i class="layui-icon layui-icon-edit" data-type="edit"></i>'
+          ,'<i class="layui-icon layui-icon-delete" data-type="del"></i>'         
+        ,'</div>'].join(''): '';
       }()
       ,'</div></div>'].join(''));
       
@@ -353,7 +353,7 @@ layui.define('form', function(exports){
     ,entry = elem.children('.'+ELEM_ENTRY)
     ,elemMain = entry.children('.'+ELEM_MAIN);
 
-    entry.children('.layui-tree-btnGroup').on('click', '.layui-btn', function(e){
+    entry.children('.layui-tree-btnGroup').on('click', '.layui-icon', function(e){
       layui.stope(e);  //阻止节点操作
       var type = $(this).data("type")
       ,packCont = elem.children('.'+ELEM_PACK)
@@ -384,7 +384,7 @@ layui.define('form', function(exports){
         obj.label = 'newElemTree';
         obj[options.key] = key;
         that.tree(elem.children('.'+ELEM_PACK), [obj]);
-
+        
         //放在新增后面，因为要对元素进行操作
         if(options.showLine){
           //节点本身无子节点
@@ -446,7 +446,7 @@ layui.define('form', function(exports){
         var text = elemMain.children('.layui-tree-txt').html();
         elemMain.children('.layui-tree-txt').html('');
         //添加输入框，覆盖在文字上方
-        elemMain.append('<input type="text" class="layui-tree-editInput">');
+        elemMain.append('<input type="text" class="layui-inline layui-tree-editInput">');
         //获取焦点
         elemMain.children('.layui-tree-editInput').val(text).focus();
         //嵌入文字移除输入框
@@ -455,6 +455,9 @@ layui.define('form', function(exports){
           textNew = textNew ? textNew : '未命名';
           input.remove();
           elemMain.children('.layui-tree-txt').html(textNew);
+          
+          //同步数据
+          returnObj.data.label = textNew;
           
           //节点修改的回调
           options.operate && options.operate(returnObj);
@@ -473,8 +476,9 @@ layui.define('form', function(exports){
 
       //删除
       }else{
-        //节点删除的回调
-        options.operate && options.operate(returnObj);
+        options.operate && options.operate(returnObj); //节点删除的回调
+        returnObj.status = 'remove'; //标注节点删除
+        
         //若删除最后一个，显示空数据提示
         if(!elem.prev('.'+ELEM_SET)[0] && !elem.next('.'+ELEM_SET)[0] && !elem.parent('.'+ELEM_PACK)[0]){
           elem.remove();
@@ -581,6 +585,8 @@ layui.define('form', function(exports){
         };
 
         elem.remove();
+        
+        
       };
     });
   };

@@ -1243,7 +1243,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-tree-pack{display: none; padding-left: 20px; position: relative;}
 .layui-tree-line .layui-tree-pack{padding-left: 27px;}
 .layui-tree-line .layui-tree-set .layui-tree-set:after{content: ''; position: absolute; top: 14px; left: -9px; width: 17px; height: 0; border-top: 1px dotted #c0c4cc;}
-.layui-tree-entry{position: relative; padding: 3px 0; height: 20px;}
+.layui-tree-entry{position: relative; padding: 3px 0; height: 20px; white-space: nowrap;}
 .layui-tree-entry:hover{background-color: #eee;}
 .layui-tree-line .layui-tree-entry:hover{background-color: rgba(0,0,0,0);}
 .layui-tree-line .layui-tree-entry:hover .layui-tree-txt{color: #999; text-decoration: underline; transition: 0.3s;}
@@ -1261,14 +1261,11 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-tree-spread>.layui-tree-entry>.layui-tree-iconClick>.layui-tree-iconArrow:after{transform: rotate(90deg) translate(3px, 4px);}
 .layui-tree-txt{display: inline-block; vertical-align: middle; color: #555;}
 .layui-tree-search{margin-bottom: 15px; color: #666;}
-.layui-tree-btnGroup{display: none; position: absolute; top: 0; right: 0;}
-.layui-tree-btnGroup .layui-btn{padding: 0 7px; border: none; background-color: rgba(0,0,0,0);}
-.layui-tree-btnGroup .layui-btn:first-child{border: none;}
-.layui-tree-entry:hover .layui-tree-btnGroup{display: block;}
-.layui-tree-editInput{position: absolute; left: 30px; z-index: 99; height: 20px; line-height: 20px; border: none; background-color: rgba(0,0,0,0);}
-.layui-form .layui-tree-editInput{left: 58px;}
-.layui-tree-line .layui-tree-editInput{left: 38px;}
-.layui-tree-line.layui-form .layui-tree-editInput{left: 66px;} 
+.layui-tree-btnGroup{visibility: hidden; display: inline-block; vertical-align: middle; position: relative; margin-left: 10px;}
+.layui-tree-btnGroup .layui-icon{display: inline-block; vertical-align: middle; padding: 0 2px; cursor: pointer;}
+.layui-tree-btnGroup .layui-icon:hover{color: #999; transition: 0.3s;}
+.layui-tree-entry:hover .layui-tree-btnGroup{visibility: visible;}
+.layui-tree-editInput{position: relative; height: 20px; line-height: 20px; padding: 0 3px; border: none; background-color: rgba(0,0,0,0.05);}
 .layui-tree-emptyText{text-align: center; color: #999;}
 
 
