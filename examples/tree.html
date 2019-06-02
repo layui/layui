@@ -148,7 +148,7 @@
       ,data: data1
       ,click: function(obj){
         layer.msg(JSON.stringify(obj.data));
-        
+        console.log(obj);
         
       }
       ,oncheck: function(obj){
@@ -162,7 +162,7 @@
         if(type == 'add'){
           //ajax操作，返回key值
           return index++;
-        }else if(type == 'edit'){
+        }else if(type == 'update'){
           console.log(obj.elem.find('.layui-tree-txt').html());
         }else if(type == 'del'){
           console.log(obj);
@@ -176,15 +176,17 @@
       ,checked: [6, 7, 9]  //选中节点(依赖于 showCheckbox 以及 key 参数)
       ,spread: [2, 4, 5]  //展开节点(依赖于 key 参数)
       ,accordion: 0  //是否开启手风琴模式
-      ,expandClick: true  //选择在点击节点(true)/箭头图标(false)的时候展开节点
+      
+      ,onlyIconControl: true //是否仅允许节点左侧图标控制展开收缩
       ,isJump: 0  //点击文案跳转地址
-      ,renderContent: true  //增删改
-      ,showSearch: true  //是否打开节点过滤
-      ,draggable: true  //是否开启节点拖拽
+      ,edit: true  //操作节点图标
+      //,defaultNodeName: 'newNode'
+      //,showSearch: true  //是否打开节点过滤
+      //,drag: true  //是否开启节点拖拽
     });
 
-    console.log(tree1.getCheck()); //返回当前勾选节点
-    tree1.setCheck([2, 3]); //设置节点勾选
+    console.log(tree1.getChecked()); //返回当前勾选节点
+    //tree1.setChecked([2, 3]); //设置节点勾选
 
 
 
@@ -195,7 +197,7 @@
       //,expandClick: false
       ,showLine: false //关闭连接线
       ,click: function(obj, state){
-        console.log(obj[0]);
+        console.log(obj);
       }
       ,oncheck: function(obj, checked, child){
         if(checked){

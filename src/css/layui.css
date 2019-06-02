@@ -864,7 +864,6 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .laytable-cell-numbers{padding: 0; text-align: center;}
 
 .layui-table-body{position: relative; overflow: auto; margin-right: -1px; margin-bottom: -1px;}
-.layui-table-body .layui-none{line-height: 26px; padding: 15px; text-align: center; color: #999;}
 .layui-table-fixed{position: absolute; left: 0; top: 0; z-index: 101;}
 .layui-table-fixed .layui-table-body{overflow: hidden;}
 .layui-table-fixed-l{box-shadow: 0 -1px 8px rgba(0,0,0,.08);}
@@ -876,6 +875,12 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .layui-table-tool .layui-btn-container{margin-bottom: -10px;}
 
 .layui-table-total{margin-bottom: -1px; border-width: 0; border-top-width: 1px; overflow: hidden;}
+
+.layui-table-box .layui-none{display: block; line-height: 26px; text-align: center; color: #999;}
+.layui-table-box tr.layui-none{transition: none; -webkit-transition: none;}
+.layui-table-box .layui-none:hover{background: none!important;}
+.layui-table-box .layui-none td{display: block; padding: 0; border: none;}
+.layui-table-none{padding: 15px;}
 
 
 .layui-table-page{position: relative; width: 100%; padding: 7px 7px 0; border-width: 0; border-top-width: 1px; height: 41px; margin-bottom: -1px; font-size: 12px; white-space: nowrap; overflow: hidden;}
@@ -1218,25 +1223,23 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 }
 
 /** 穿梭框 By star1029 **/
-.layui-transfer{display: inline-block; position: relative; width: 480px; height: 360px; background-color: #FFF; text-align: left;}
-.layui-transfer-left,.layui-transfer-right{display: inline-block; vertical-align: middle; position: relative; width: 200px; height: 340px; border: 1px solid #DDD;}
-.layui-transfer-topTitle{padding-left: 12px; height: 36px; border-bottom: 1px solid #DDD; line-height: 36px;}
+.layui-transfer{display: inline-block; position: relative; width: 480px; background-color: #FFF; text-align: left;}
+.layui-transfer-left,.layui-transfer-right{display: inline-block; vertical-align: middle; position: relative; width: 200px; height: 340px; border: 1px solid #e6e6e6;}
+.layui-transfer-topTitle{padding-left: 10px; height: 38px; line-height: 38px; border-bottom: 1px solid #e6e6e6;}
 .layui-transfer-btn{display: inline-block; vertical-align: middle; width: 70px; height: 90px; text-align: center;}
 .layui-transfer-btn .layui-btn{margin-left: 0; padding: 0 10px; height: 30px; line-height: 30px; background-color: #5FB878; border-color: #5FB878;}
 .layui-transfer-btn .layui-btn i{margin-left: 4px; font-size: 14px; color: #FFF;}
-.layui-transfer-btn .layui-btn.layui-btn-disabled{background-color: #FBFBFB; border-color: #DDD;}
+.layui-transfer-btn .layui-btn.layui-btn-disabled{background-color: #FBFBFB; border-color: #e6e6e6;}
 .layui-transfer-btn .layui-btn.layui-btn-disabled i{color: #CCC;}
 .layui-transfer-btnRight{margin-bottom: 30px;}
-.layui-transfer-search{position: relative; height: 36px; line-height: 36px; border-bottom: 1px solid #DDD; text-align: center;}
-.layui-transfer-search .layui-input{display: inline-block; width: 88%; padding-left: 30px; height: 28px; line-height: 28px;}
+.layui-transfer-search{position: relative; height: 46px; line-height: 36px; padding: 5px 10px; border-bottom: 1px solid #e6e6e6; text-align: center;}
+.layui-transfer-search .layui-input{display: inline-block; width: 100%; padding-left: 30px; height: 28px; line-height: 28px;}
 .layui-transfer-searchI{position: absolute; left: 20px;}
-.layui-transfer-data{height: 303px; overflow: auto;}
-.layui-transfer-data.short{height: 266px;}
-.layui-transfer-data li{position: relative; padding-left: 12px; height: 30px; line-height: 30px;}
+.layui-transfer-data{height: 300px; overflow: auto;}
+.layui-transfer-short{height: 216px;}
+.layui-transfer-data li{position: relative; padding-left: 10px; height: 30px; line-height: 30px;}
 .layui-transfer-data .layui-form-checkbox[lay-skin="primary"]{width: 100%;}
 .layui-transfer-data li:hover{background-color: #EEE;}
-.layui-transfer-data::-webkit-scrollbar{width: 5px; background-color: #EEE;} 
-.layui-transfer-data::-webkit-scrollbar-thumb{background-color: #DDD;}
 
 /** 树组件 By star1029 **/
 .layui-tree{line-height: 22px;}

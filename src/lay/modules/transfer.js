@@ -35,15 +35,15 @@ layui.define('form', function(exports){
     ,options = that.config;
     
     return {
-      getValue: function(){
-        return that.getValue();
+      getData: function(){
+        return that.getData();
       }
       ,config: options
     }
   }
 
   //字符常量
-  ,MOD_NAME = 'transfer', ELEM_VIEW = 'layui-transfer', TRAN_LEFT = 'layui-transfer-left', TRAN_RIGHT = 'layui-transfer-right', TRAN_LEFT_LIST = 'layui-transfer-dataLeft'
+  ,MOD_NAME = 'transfer', ELEM_VIEW = 'layui-transfer', ELEM_TOP = 'layui-transfer-topTitle',ELEM_SEARCH = 'layui-transfer-search', ELEM_BOX = 'layui-transfer-box', ELEM_DATA = 'layui-transfer-data', TRAN_LEFT = 'layui-transfer-left', TRAN_RIGHT = 'layui-transfer-right', TRAN_LEFT_LIST = 'layui-transfer-dataLeft'
   ,TRAN_RIGHT_LIST = 'layui-transfer-dataRight' ,TRAN_BTN_LEFT = 'layui-transfer-btnLeft', TRAN_BTN_RIGHT = 'layui-transfer-btnRight', TRAN_BTN_DIS = 'layui-btn-disabled'
 
   //构造器
@@ -57,6 +57,8 @@ layui.define('form', function(exports){
   //默认配置
   Class.prototype.config = {
     title: ['列表一', '列表二']
+    ,width: 200
+    ,height: 340
     ,data: [] //数据源
     ,value: [] //选中的数据
     ,showSearch: false //是否开启搜索
@@ -97,12 +99,12 @@ layui.define('form', function(exports){
       }
     });
 
-    var temp = ['<div class="layui-transfer layui-form" id="transfer-'+ options.id +'" lay-filter="LAY-Transfer-'+ that.index +'">'
-      ,'<div class="layui-transfer-left" data-total="'+ total1 +'">'
-        ,'<div class="layui-transfer-topTitle"><input lay-skin="primary" name="layTranLeftCheck" lay-filter="layTranLeftCheckAll" type="checkbox" class="layui-input" title="'+ options.title[0] +'"></div>'
+    var temp = ['<div class="layui-transfer layui-form layui-border-box" id="transfer-'+ options.id +'" lay-filter="LAY-Transfer-'+ that.index +'">'
+      ,'<div class="layui-transfer-left layui-transfer-box" data-total="'+ total1 +'">'
+        ,'<div class="'+ ELEM_TOP +'"><input lay-skin="primary" name="layTranLeftCheck" lay-filter="layTranLeftCheckAll" type="checkbox" class="layui-input" title="'+ options.title[0] +'"></div>'
         ,function(){
           if(options.showSearch){
-            return '<div class="layui-transfer-search"><input class="layui-input" placeholder="关键字搜索"><i class="layui-icon layui-icon-search layui-transfer-searchI"></i></div><ul class="layui-transfer-data layui-transfer-dataLeft short">';
+            return '<div class="layui-transfer-search"><input class="layui-input" placeholder="关键字搜索"><i class="layui-icon layui-icon-search layui-transfer-searchI"></i></div><ul class="layui-transfer-data layui-transfer-dataLeft layui-transfer-short">';
           }else{
             return '<ul class="layui-transfer-data layui-transfer-dataLeft">';
           };
@@ -113,11 +115,11 @@ layui.define('form', function(exports){
       ,'<div class="layui-transfer-btn">'
         ,'<button type="button" class="layui-btn layui-btn-primary layui-transfer-btnRight layui-btn-disabled"><i class="layui-icon layui-icon-next"></i></button>'
         ,'<button type="button" class="layui-btn layui-btn-primary layui-transfer-btnLeft layui-btn-disabled"><i class="layui-icon layui-icon-prev"></i></button></div>'
-      ,'<div class="layui-transfer-right" data-arr="'+ arr +'" data-total="'+ total2 +'">'
-        ,'<div class="layui-transfer-topTitle"><input lay-skin="primary" name="layTranRightCheck" lay-filter="layTranRightCheckAll" type="checkbox" class="layui-input" title="'+ options.title[1] +'"></div>'
+      ,'<div class="layui-transfer-right layui-transfer-box" data-arr="'+ arr +'" data-total="'+ total2 +'">'
+        ,'<div class="'+ ELEM_TOP +'"><input lay-skin="primary" name="layTranRightCheck" lay-filter="layTranRightCheckAll" type="checkbox" class="layui-input" title="'+ options.title[1] +'"></div>'
         ,function(){
           if(options.showSearch){
-            return '<div class="layui-transfer-search"><input class="layui-input" placeholder="关键字搜索"><i class="layui-icon layui-icon-search layui-transfer-searchI"></i></div><ul class="layui-transfer-data layui-transfer-dataRight short">';
+            return '<div class="layui-transfer-search"><input class="layui-input" placeholder="关键字搜索"><i class="layui-icon layui-icon-search layui-transfer-searchI"></i></div><ul class="layui-transfer-data layui-transfer-dataRight layui-transfer-short">';
           }else{
             return '<ul class="layui-transfer-data layui-transfer-dataRight">';
           };
@@ -134,9 +136,27 @@ layui.define('form', function(exports){
     //生成替代元素
     hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender
 
-    that.elemTemp = $(temp);
-     
-    othis.html(that.elemTemp);
+    that.elem = $(temp);
+    othis.html(that.elem);
+    
+    that.layTop = that.elem.find('.'+ ELEM_TOP)
+    that.layBox = that.elem.find('.'+ ELEM_BOX)
+    that.laySearch = that.elem.find('.'+ ELEM_SEARCH)
+    that.layData = that.elem.find('.'+ ELEM_DATA)
+    
+    //初始化尺寸
+    that.layBox.css({
+      width: options.width
+      ,height: options.height
+    });
+    that.layData.css({
+      height: function(){
+        return options.height - that.layTop.outerHeight() - that.laySearch.outerHeight() - 2
+      }()
+    });
+    
+    
+    
     that.event();
     form.render('checkbox', 'LAY-Transfer-' + that.index);
   };
@@ -144,10 +164,10 @@ layui.define('form', function(exports){
   Class.prototype.event = function(){
     var that = this
     ,options = that.config
-    ,elem = that.elemTemp
+    ,elem = that.elem
     ,listLeft = '', listRight = ''
-    ,checkTopLeft = elem.find('.'+ TRAN_LEFT).find('.layui-transfer-topTitle').find('input[name="layTranLeftCheck"]')
-    ,checkTopRight = elem.find('.'+ TRAN_RIGHT).find('.layui-transfer-topTitle').find('input[name="layTranRightCheck"]')
+    ,checkTopLeft = elem.find('.'+ TRAN_LEFT).find('.'+ ELEM_TOP).find('input[name="layTranLeftCheck"]')
+    ,checkTopRight = elem.find('.'+ TRAN_RIGHT).find('.'+ ELEM_TOP).find('input[name="layTranRightCheck"]')
     ,totalLeft = elem.find('.' + TRAN_LEFT).data('total')
     ,totalRight = elem.find('.' + TRAN_RIGHT).data('total');
 
@@ -350,7 +370,7 @@ layui.define('form', function(exports){
       elem.find('.' + TRAN_RIGHT).data('total', totalLeft);
       elem.find('.' + TRAN_RIGHT).data('arr', arr);
       form.render('checkbox', 'LAY-Transfer-' + that.index);
-      options.onchange && options.onchange(that.getValue());
+      options.onchange && options.onchange(that.getData());
     });
 
     //添加到左边
@@ -389,7 +409,7 @@ layui.define('form', function(exports){
       elem.find('.' + TRAN_RIGHT).data('total', totalLeft);
       elem.find('.' + TRAN_RIGHT).data('arr', arr);
       form.render('checkbox', 'LAY-Transfer-' + that.index);
-      options.onchange && options.onchange(that.getValue());
+      options.onchange && options.onchange(that.getData());
     });
 
     //搜索
@@ -400,10 +420,10 @@ layui.define('form', function(exports){
   };
 
   //得到选中值
-  Class.prototype.getValue = function(){
+  Class.prototype.getData = function(){
     var that = this
     ,options = that.config
-    ,arr = that.elemTemp.find('.' + TRAN_RIGHT).data('arr')
+    ,arr = that.elem.find('.' + TRAN_RIGHT).data('arr')
     ,data = [];
 
     function sortNum(a,b){ return a - b };

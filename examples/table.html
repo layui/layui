@@ -193,6 +193,7 @@ layui.use('table', function(){
     ,page: {
       
     }
+    
     ,autoSort: false
     //,loading: false
     ,totalRow: true
@@ -203,8 +204,8 @@ layui.use('table', function(){
       {type: 'checkbox', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
-      ,{field:'email', title:'邮箱', hide: true, width:150, edit: 'text', templet: function(x){
-        return '<em>'+ x.email +'</em>'
+      ,{field:'email', title:'邮箱', hide: 0, width:150, edit: 'text', templet: function(x){
+        return '<em>123</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
       ,{field:'city', title:'城市', width:120, templet: '#cityTpl1'}
@@ -259,6 +260,7 @@ layui.use('table', function(){
         table.reload('test', {
           page: {curr: 5}
           //,height: 300
+          //,url: 'x'
         }, 'data');
       break;
     };
