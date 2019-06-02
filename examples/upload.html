@@ -132,8 +132,9 @@ layui.use('upload', function(){
   //重置上述 upload 实例
   uploadInst.reload({
     name:'avatar'
-    ,acceptMime: 'image/*'
-    //,size: 2
+    ,accept: 'images' //只允许上传图片
+    ,acceptMime: 'image/*' //只筛选图片
+    ,size: 2
   });
   
   upload.render({

@@ -207,16 +207,17 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-template-1:before{content:"\e656"}
 .layui-icon-vercode:before{content:"\e679"}
 .layui-icon-cellphone:before{content:"\e678"}
+
 .layui-icon-screen-full:before{content:"\e622";}
 .layui-icon-screen-restore:before{content:"\e758";}
 .layui-icon-cols:before{content:"\e610";}
 .layui-icon-export:before{content:"\e67d";}
 .layui-icon-print:before{content:"\e66d";}
 .layui-icon-slider:before{content: "\e714";}
-
 .layui-icon-addition:before{content: "\e624";}
 .layui-icon-subtraction:before{content: "\e67e";}
 .layui-icon-service:before{content: "\e626";}
+.layui-icon-transfer:before{content: "\e691";}
 
 /* 基本布局 */
 .layui-main{position: relative; width: 1140px; margin: 0 auto;}
@@ -1252,7 +1253,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-tree-line .layui-tree-set.layui-tree-setLineShort:before{height: 13px;}
 .layui-tree-line .layui-tree-set.layui-tree-setHide:before{height: 0;}
 .layui-tree-iconClick{display: inline-block; vertical-align: middle; position: relative; height: 20px; line-height: 20px; margin: 0 10px; color: #c0c4cc;}
-.layui-tree-icon{height: 14px; line-height: 14px; width: 14px; text-align: center; border: 1px solid #c0c4cc;}
+.layui-tree-icon{height: 12px; line-height: 12px; width: 12px; text-align: center; border: 1px solid #c0c4cc;}
 .layui-tree-iconClick .layui-icon{font-size: 18px;}
 .layui-tree-icon .layui-icon{font-size: 12px; color: #666;}
 .layui-tree-iconArrow{padding: 0 5px;}

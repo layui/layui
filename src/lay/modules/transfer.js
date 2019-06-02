@@ -111,8 +111,8 @@ layui.define('form', function(exports){
         ,listLeft + '</ul>'
       ,'</div>'
       ,'<div class="layui-transfer-btn">'
-        ,'<button class="layui-btn layui-btn-primary layui-transfer-btnRight layui-btn-disabled"><i class="layui-icon layui-icon-next"></i></button>'
-        ,'<button class="layui-btn layui-btn-primary layui-transfer-btnLeft layui-btn-disabled"><i class="layui-icon layui-icon-prev"></i></button></div>'
+        ,'<button type="button" class="layui-btn layui-btn-primary layui-transfer-btnRight layui-btn-disabled"><i class="layui-icon layui-icon-next"></i></button>'
+        ,'<button type="button" class="layui-btn layui-btn-primary layui-transfer-btnLeft layui-btn-disabled"><i class="layui-icon layui-icon-prev"></i></button></div>'
       ,'<div class="layui-transfer-right" data-arr="'+ arr +'" data-total="'+ total2 +'">'
         ,'<div class="layui-transfer-topTitle"><input lay-skin="primary" name="layTranRightCheck" lay-filter="layTranRightCheckAll" type="checkbox" class="layui-input" title="'+ options.title[1] +'"></div>'
         ,function(){
