@@ -77,9 +77,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     var str = item3.templet ? function(){
       return typeof item3.templet === 'function' 
         ? item3.templet(tplData)
-      : laytpl($(item3.templet).html() || String(content) || '').render(tplData) 
+      : laytpl($(item3.templet).html() || String(content)).render(tplData) 
     }() : content;
-    str = str || '';
     return text ? $('<div>'+ str +'</div>').text() : str;
   }
   
