@@ -52,8 +52,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     }
     
     return {
-      reload: function(options, type){
-        that.reload.call(that, options, type);
+      config: options
+      ,reload: function(options){
+        that.reload.call(that, options);
       }
       ,setColsWidth: function(){
         that.setColsWidth.call(that);
@@ -61,7 +62,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       ,resize: function(){ //重置表格尺寸/结构
         that.resize.call(that);
       }
-      ,config: options
     }
   }
   
@@ -639,30 +639,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   };
   
   //表格重载
-  Class.prototype.reload = function(options, type){
-    var that = this
-     ,optString = typeof options === 'string'
-     ,opts, typs;
+  Class.prototype.reload = function(options){
+    var that = this;
     
-    opts = optString ? type : options;
-    typs = optString ? options : type
+    if(options.data && options.data.constructor === Array) delete that.config.data;
+    that.config = $.extend(true, {}, that.config, options);
     
-    opts = opts || {};
-    
-    if(opts.data && opts.data.constructor === Array) delete that.config.data;
-    that.config = $.extend(true, {}, that.config, opts);
-    
-    typs === 'data' ? that.pullData(that.config.page.curr) : that.render();
-  };
-  
-  //调整视图
-  Class.prototype.adjustView = function(type){
-    var that = this
-    ,isHide = type === 'hide';
-    
-    that.layFixed[isHide ? 'addClass' : 'removeClass'](HIDE);
-    that.layTotal[isHide ? 'addClass' : 'removeClass'](HIDE);
-    that.layPage[isHide ? 'addClass' : 'removeClass'](HIDE);
+    that.render();
   };
   
   //异常提示
@@ -684,7 +667,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.layMain.find('tbody').html(that.layNone = layNone);
     
     table.cache[that.key] = []; //格式化缓存数据
-    that.adjustView('hide'); //隐藏无关视图
   };
   
   //页码
@@ -869,8 +851,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         trs_fixed.push('<tr data-index="'+ i1 +'">'+ tds_fixed.join('') + '</tr>');
         trs_fixed_r.push('<tr data-index="'+ i1 +'">'+ tds_fixed_r.join('') + '</tr>');
       });
-      
-      that.adjustView();
 
       that.layBody.scrollTop(0);
       that.layMain.find('tbody').html(trs.join(''));
@@ -914,7 +894,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 
     //同步分页状态
     if(options.page){
-      console.log(count);
       options.page = $.extend({
         elem: 'layui-table-page' + options.index
         ,count: count
@@ -1949,12 +1928,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   };
   
   //表格重载
-  table.reload = function(id, options, type){
+  table.reload = function(id, options){
     var config = getThisTableConfig(id); //获取当前实例配置项
     if(!config) return;
     
     var that = thisTable.that[id];
-    that.reload(options, type);
+    that.reload(options);
     
     return thisTable.call(that);
   };

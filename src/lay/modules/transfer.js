@@ -1,20 +1,25 @@
 /**
  
  @Name：layui.transfer 穿梭框
- @Author：star1029
+ @Author：贤心
  @License：MIT
 
  */
 
-layui.define('form', function(exports){
+layui.define(['laytpl', 'form'], function(exports){
   "use strict";
-  var form = layui.form
-  ,$ = layui.$
+  
+  var $ = layui.$
+  ,laytpl = layui.laytpl
+  ,form = layui.form
+  
+  //模块名
+  ,MOD_NAME = 'transfer'
 
   //外部接口
   ,transfer = {
     config: {}
-    ,index: layui.transfer ? (layui.transfer.index + 10000) : 0
+    ,index: layui[MOD_NAME] ? (layui[MOD_NAME].index + 10000) : 0
 
     //设置全局项
     ,set: function(options){
@@ -30,21 +35,74 @@ layui.define('form', function(exports){
   }
 
   //操作当前实例
-  ,thisTran = function(){
+  ,thisModule = function(){
     var that = this
-    ,options = that.config;
+    ,options = that.config
+    ,id = options.id || that.index;
+    
+    thisModule.that[id] = that; //记录当前实例对象
+    thisModule.config[id] = options; //记录当前实例配置项
     
     return {
-      getData: function(){
-        return that.getData();
+      config: options
+      //重置实例
+      ,reload: function(options){
+        that.reload.call(that, options);
       }
-      ,config: options
+      //获取右侧数据
+      ,getData: function(){
+        return that.getData.call(that);
+      }
     }
+  }
+  
+  //获取当前实例配置项
+  ,getThisModuleConfig = function(id){
+    var config = thisModule.config[id];
+    if(!config) hint.error('The ID option was not found in the '+ MOD_NAME +' instance');
+    return config || null;
   }
 
   //字符常量
-  ,MOD_NAME = 'transfer', ELEM_VIEW = 'layui-transfer', ELEM_TOP = 'layui-transfer-topTitle',ELEM_SEARCH = 'layui-transfer-search', ELEM_BOX = 'layui-transfer-box', ELEM_DATA = 'layui-transfer-data', TRAN_LEFT = 'layui-transfer-left', TRAN_RIGHT = 'layui-transfer-right', TRAN_LEFT_LIST = 'layui-transfer-dataLeft'
-  ,TRAN_RIGHT_LIST = 'layui-transfer-dataRight' ,TRAN_BTN_LEFT = 'layui-transfer-btnLeft', TRAN_BTN_RIGHT = 'layui-transfer-btnRight', TRAN_BTN_DIS = 'layui-btn-disabled'
+  ,ELEM = 'layui-transfer', HIDE = 'layui-hide', DISABLED = 'layui-btn-disabled', NONE = 'layui-none'
+  ,ELEM_BOX = 'layui-transfer-box', ELEM_HEADER = 'layui-transfer-header', ELEM_SEARCH = 'layui-transfer-search', ELEM_ACTIVE = 'layui-transfer-active', ELEM_DATA = 'layui-transfer-data'
+  
+  //穿梭框模板
+  ,TPL_BOX = function(obj){
+    obj = obj || {};
+    return ['<div class="layui-transfer-box layui-inline" data-index="'+ obj.index +'">'
+      ,'<div class="layui-transfer-header">'
+        ,'<input type="checkbox" name="'+ obj.checkAllName +'" lay-filter="layTransferCheckbox" lay-type="all" lay-skin="primary" title="{{ d.data.title['+ obj.index +'] || \'list'+ (obj.index + 1) +'\' }}">'
+      ,'</div>'
+      ,'{{# if(d.data.showSearch){ }}'
+      ,'<div class="layui-transfer-search">'
+        ,'<i class="layui-icon layui-icon-search"></i>'
+        ,'<input type="input" class="layui-input" placeholder="关键词搜索">'
+      ,'</div>'
+      ,'{{# } }}'
+      ,'<ul class="layui-transfer-data"></ul>'
+    ,'</div>'].join('');
+  }
+  
+  //主模板
+  ,TPL_MAIN = ['<div class="layui-transfer layui-form layui-border-box" lay-filter="LAY-transfer-{{ d.index }}">'
+    ,TPL_BOX({
+      index: 0
+      ,checkAllName: 'layTransferLeftCheckAll'
+    })
+    ,'<div class="layui-transfer-active layui-inline">'
+      ,'<button type="button" class="layui-btn layui-btn-sm layui-btn-primary layui-btn-disabled" data-index="0">'
+        ,'<i class="layui-icon layui-icon-next"></i>'
+      ,'</button>'
+      ,'<button type="button" class="layui-btn layui-btn-sm layui-btn-primary layui-btn-disabled" data-index="1">'
+        ,'<i class="layui-icon layui-icon-prev"></i>'
+      ,'</button>'
+    ,'</div>'
+    ,TPL_BOX({
+      index: 1
+      ,checkAllName: 'layTransferRightCheckAll'
+    })
+  ,'</div>'].join('')
 
   //构造器
   ,Class = function(options){
@@ -58,91 +116,59 @@ layui.define('form', function(exports){
   Class.prototype.config = {
     title: ['列表一', '列表二']
     ,width: 200
-    ,height: 340
+    ,height: 360
     ,data: [] //数据源
     ,value: [] //选中的数据
     ,showSearch: false //是否开启搜索
-    ,id: '' //唯一 ID 标识
+    ,id: '' //唯一索引，默认自增 index
+    ,text: {
+      none: '无数据'
+      ,searchNone: '无匹配数据'
+    }
+  };
+  
+  //重载实例
+  Class.prototype.reload = function(options){
+    var that = this;
+    
+    layui.each(options, function(key, item){
+      if(item.constructor === Array) delete that.config[key];
+    });
+    
+    that.config = $.extend(true, {}, that.config, options);
+    that.render();
   };
 
-  //穿梭框渲染
+  //渲染
   Class.prototype.render = function(){
     var that = this
-    ,options = that.config
-    ,listLeft = '' ,listRight = '' , arr = [];
-
-    //格式转化
-    if(typeof options.parseData == 'function'){
-      layui.each(options.data, function(index, item){
-        options.data[index] = options.parseData(item) || item;
-      });
-    };   
-
-    //循环列表
-    var num = 0 ,li = '',total1 = 0, total2 = 0;
-    layui.each(options.data, function(index1, item1){
-      num = 0;
-      layui.each(options.value, function(index2, item2){
-        if(item1.value == item2){
-          num = 1;
-          return true;
-        };
-      });
-      li = '<li data-title="'+ item1.title +'"><input lay-skin="primary" type="checkbox" data-index="'+ index1 +'" name="'+ (num == 0 ? 'layTranLeftCheck' : 'layTranRightCheck') +'" title="'+ item1.title +'" value="'+ item1.value +'" class="layui-input" '+ (item1.disabled ? 'disabled' : '') +'></li>';
-      if(num == 0){
-        listLeft += li;
-        total1 += item1.disabled ? 0 : 1;
-      }else{
-        listRight += li;
-        total2 += item1.disabled ? 0 : 1;
-        arr.push(index1);
-      }
-    });
-
-    var temp = ['<div class="layui-transfer layui-form layui-border-box" id="transfer-'+ options.id +'" lay-filter="LAY-Transfer-'+ that.index +'">'
-      ,'<div class="layui-transfer-left layui-transfer-box" data-total="'+ total1 +'">'
-        ,'<div class="'+ ELEM_TOP +'"><input lay-skin="primary" name="layTranLeftCheck" lay-filter="layTranLeftCheckAll" type="checkbox" class="layui-input" title="'+ options.title[0] +'"></div>'
-        ,function(){
-          if(options.showSearch){
-            return '<div class="layui-transfer-search"><input class="layui-input" placeholder="关键字搜索"><i class="layui-icon layui-icon-search layui-transfer-searchI"></i></div><ul class="layui-transfer-data layui-transfer-dataLeft layui-transfer-short">';
-          }else{
-            return '<ul class="layui-transfer-data layui-transfer-dataLeft">';
-          };
-          return '';
-        }()
-        ,listLeft + '</ul>'
-      ,'</div>'
-      ,'<div class="layui-transfer-btn">'
-        ,'<button type="button" class="layui-btn layui-btn-primary layui-transfer-btnRight layui-btn-disabled"><i class="layui-icon layui-icon-next"></i></button>'
-        ,'<button type="button" class="layui-btn layui-btn-primary layui-transfer-btnLeft layui-btn-disabled"><i class="layui-icon layui-icon-prev"></i></button></div>'
-      ,'<div class="layui-transfer-right layui-transfer-box" data-arr="'+ arr +'" data-total="'+ total2 +'">'
-        ,'<div class="'+ ELEM_TOP +'"><input lay-skin="primary" name="layTranRightCheck" lay-filter="layTranRightCheckAll" type="checkbox" class="layui-input" title="'+ options.title[1] +'"></div>'
-        ,function(){
-          if(options.showSearch){
-            return '<div class="layui-transfer-search"><input class="layui-input" placeholder="关键字搜索"><i class="layui-icon layui-icon-search layui-transfer-searchI"></i></div><ul class="layui-transfer-data layui-transfer-dataRight layui-transfer-short">';
-          }else{
-            return '<ul class="layui-transfer-data layui-transfer-dataRight">';
-          };
-          return '';
-        }()
-        ,listRight + '</ul>'
-      ,'</div>'
-    ,'</div>'].join('');
-
-    //开始插入替代元素
-    var othis = $(options.elem)
-    ,hasRender = othis.next('.' + ELEM_VIEW);
+    ,options = that.config;
     
-    //生成替代元素
-    hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender
-
-    that.elem = $(temp);
+    //解析模板
+    var thisElem = that.elem = $(laytpl(TPL_MAIN).render({
+      data: options
+      ,index: that.index //索引
+    }));
+    
+    var othis = options.elem = $(options.elem);
+    if(!othis[0]) return;
+    
+    //初始化属性
+    options.data = options.data || [];
+    options.value = options.value || [];
+    
+    //索引
+    that.key = options.id || that.index;
+    
+    //插入组件结构
     othis.html(that.elem);
     
-    that.layTop = that.elem.find('.'+ ELEM_TOP)
+    //各级容器
     that.layBox = that.elem.find('.'+ ELEM_BOX)
+    that.layHeader = that.elem.find('.'+ ELEM_HEADER)
     that.laySearch = that.elem.find('.'+ ELEM_SEARCH)
-    that.layData = that.elem.find('.'+ ELEM_DATA)
+    that.layData = thisElem.find('.'+ ELEM_DATA);
+    that.layBtn = thisElem.find('.'+ ELEM_ACTIVE + ' .layui-btn');
     
     //初始化尺寸
     that.layBox.css({
@@ -151,294 +177,264 @@ layui.define('form', function(exports){
     });
     that.layData.css({
       height: function(){
-        return options.height - that.layTop.outerHeight() - that.laySearch.outerHeight() - 2
+        return options.height - that.layHeader.outerHeight() - that.laySearch.outerHeight() - 2
       }()
     });
     
-    
-    
-    that.event();
-    form.render('checkbox', 'LAY-Transfer-' + that.index);
+    that.renderData(); //渲染数据
+    that.events(); //事件
   };
-
-  Class.prototype.event = function(){
+  
+  //渲染数据
+  Class.prototype.renderData = function(){
+    var that = this
+    ,options = that.config;
+    
+    //左右穿梭框差异数据
+    var arr = [{
+      checkName: 'layTransferLeftCheck'
+      ,views: []
+    }, {
+      checkName: 'layTransferRightCheck'
+      ,views: []
+    }];
+    
+    //解析格式
+    that.parseData(function(item){      
+      //标注为 selected 的为右边的数据
+      var _index = item.selected ? 1 : 0
+      ,listElem = ['<li>'
+        ,'<input type="checkbox" name="'+ arr[_index].checkName +'" lay-skin="primary" lay-filter="layTransferCheckbox" title="'+ item.title +'"'+ (item.disabled ? ' disabled' : '') + (item.checked ? ' checked' : '') +' value="'+ item.value +'">'
+      ,'</li>'].join('');
+      arr[_index].views.push(listElem);
+      delete item.selected;
+    });
+    
+    that.layData.eq(0).html(arr[0].views.join(''));
+    that.layData.eq(1).html(arr[1].views.join(''));
+    
+    that.renderCheckBtn();
+  }
+  
+  //渲染表单
+  Class.prototype.renderForm = function(type){
+    form.render(type, 'LAY-transfer-'+ this.index);
+  };
+  
+  //同步复选框和按钮状态
+  Class.prototype.renderCheckBtn = function(obj){
+    var that = this
+    ,options = that.config;
+    
+    obj = obj || {};
+    
+    that.layBox.each(function(_index){
+      var othis = $(this)
+      ,thisDataElem = othis.find('.'+ ELEM_DATA)
+      ,allElemCheckbox = othis.find('.'+ ELEM_HEADER).find('input[type="checkbox"]')
+      ,listElemCheckbox =  thisDataElem.find('input[type="checkbox"]');
+      
+      //同步复选框和按钮状态
+      var nums = 0
+      ,haveChecked = false;
+      listElemCheckbox.each(function(){
+        var isHide = $(this).data('hide');
+        if(this.checked || this.disabled || isHide){
+          nums++;
+        }
+        if(this.checked && !isHide){
+          haveChecked = true;
+        }
+      });
+      
+      allElemCheckbox.prop('checked', haveChecked && nums === listElemCheckbox.length); //全选复选框状态
+      that.layBtn.eq(_index)[haveChecked ? 'removeClass' : 'addClass'](DISABLED); //对应的按钮状态
+      
+      //无数据视图
+      if(!obj.stopNone){
+        var isNone = thisDataElem.children('li:not(.'+ HIDE +')').length
+        that.noneView(thisDataElem, isNone ? '' : options.text.none);
+      }
+    });
+    
+    that.renderForm('checkbox');
+  };
+  
+  //无数据视图
+  Class.prototype.noneView = function(thisDataElem, text){
+    var createNoneElem = $('<p class="layui-none">'+ (text || '') +'</p>');
+    if(thisDataElem.find('.'+ NONE)[0]){
+      thisDataElem.find('.'+ NONE).remove();
+    }
+    text.replace(/\s/g, '') && thisDataElem.append(createNoneElem);
+  };
+  
+  //同步 value 属性值
+  Class.prototype.setValue = function(){
     var that = this
     ,options = that.config
-    ,elem = that.elem
-    ,listLeft = '', listRight = ''
-    ,checkTopLeft = elem.find('.'+ TRAN_LEFT).find('.'+ ELEM_TOP).find('input[name="layTranLeftCheck"]')
-    ,checkTopRight = elem.find('.'+ TRAN_RIGHT).find('.'+ ELEM_TOP).find('input[name="layTranRightCheck"]')
-    ,totalLeft = elem.find('.' + TRAN_LEFT).data('total')
-    ,totalRight = elem.find('.' + TRAN_RIGHT).data('total');
+    ,arr = [];
+    that.layBox.eq(1).find('.'+ ELEM_DATA +' input[type="checkbox"]').each(function(){
+      var isHide = $(this).data('hide');
+      isHide || arr.push(this.value);
+    });
+    options.value = arr;
+    
+    return that;
+  };
 
-    //左选项
-    elem.on('click', 'input[name="layTranLeftCheck"]+', function(){ 
-      var checkbox = $(this).prev()
-      ,checked = checkbox[0].checked
-      ,childs = elem.find('.'+ TRAN_LEFT_LIST).find('input[name="layTranLeftCheck"]')
-      ,isAll = checkbox.attr('lay-filter') == 'layTranLeftCheckAll';
-
-      if(checkbox[0].disabled) return;
-      //如果是全选/全不选
-      if(isAll){
-        listLeft = '';
-        //如果数据为零，不进行其他操作
-        if(totalLeft == 0){
-          checkbox[0].checked = false;
-        }else{
-          //同步子选项
-          childs.each(function(i, item){
-            if(!item.disabled){
-              item.checked = checked;
-              if(checked){
-                listLeft += ($(childs[i]).data("index")) + ',';
-                $(childs[i]).parent("li").addClass("selected");
-              }else{
-                $(childs[i]).parent("li").removeClass("selected");
-              }
-            };
-          });
-          //同步按钮状态
-          if(checked){
-            elem.find('.' + TRAN_BTN_RIGHT).removeClass(TRAN_BTN_DIS);
-          }else{
-            elem.find('.' + TRAN_BTN_RIGHT).addClass(TRAN_BTN_DIS);
-          };
+  //解析数据
+  Class.prototype.parseData = function(callback){
+    var that = this
+    ,options = that.config
+    ,newData = [];
+    
+    layui.each(options.data, function(index, item){
+      //解析格式
+      item = (typeof options.parseData === 'function' 
+        ? options.parseData(item) 
+      : item) || item;
+      
+      newData.push(item = $.extend({}, item))
+      
+      layui.each(options.value, function(index2, item2){
+        if(item2 == item.value){
+          item.selected = true;
         }
-      }else{
-        var num = 1;
-        //单个勾选
-        if(checked){
-          //判断是否全选
-          childs.each(function(i, item){
-            if(!item.disabled && !item.checked){
-              num = 0;
-            }
-          });
-          //如果全选，勾选全选按钮
-          if(num == 1){
-            checkTopLeft[0].checked = checked;
-          };
-          //加入列表
-          listLeft += checkbox.data("index") + ',';
-          checkbox.parent("li").addClass("selected");
-          elem.find('.' + TRAN_BTN_RIGHT).removeClass(TRAN_BTN_DIS);
-        }else{
-          //如果全选状态，更改全选按钮
-          if(checkTopLeft[0].checked){
-            checkTopLeft[0].checked = false;
-          };
-          //移除
-          checkbox.parent("li").removeClass("selected");
-          listLeft = listLeft.replace(checkbox.data('index'),'');
-          childs.each(function(i, item){
-            if(item.checked){
-              num = 0;
-            }
-          });
-          //如果勾选项，更改按钮状态
-          if(num == 1){
-            elem.find('.' + TRAN_BTN_RIGHT).addClass(TRAN_BTN_DIS);
-          };
-        }
-      };
-      form.render('checkbox', 'LAY-Transfer-' + that.index);
-    }); 
-
-    //右选项
-    elem.on('click', 'input[name="layTranRightCheck"]+', function(){ 
-      var checkbox = $(this).prev()
-      ,checked = checkbox[0].checked
-      ,childs = elem.find('.'+ TRAN_RIGHT_LIST).find('input[name="layTranRightCheck"]')
-      ,isAll = checkbox.attr('lay-filter') === 'layTranRightCheckAll';
-
-      if(checkbox[0].disabled) return;
-      //如果是全选/全不选
-      if(isAll){
-        listRight = '';
-        //如果数据为零，不进行其他操作
-        if(totalRight == 0){
-          checkbox[0].checked = false;
-        }else{
-          childs.each(function(i, item){
-            if(!item.disabled){
-              item.checked = checked;
-              if(checked){
-                listRight += ($(childs[i]).data("index")) + ',';
-                $(childs[i]).parent("li").addClass("selected");
-              }else{
-                $(childs[i]).parent("li").removeClass("selected");
-              }
-            }
-          });
-          if(checked){
-            elem.find('.' + TRAN_BTN_LEFT).removeClass(TRAN_BTN_DIS);
-          }else{
-            elem.find('.' + TRAN_BTN_LEFT).addClass(TRAN_BTN_DIS);
-          }
+      });
+      callback && callback(item);
+    });
+   
+    options.data = newData;
+    return that;
+  };
+  
+  //获得右侧面板数据
+  Class.prototype.getData = function(value){
+    var that = this
+    ,options = that.config
+    ,selectedData = [];
+    layui.each(value || options.value, function(index, item){
+      layui.each(options.data, function(index2, item2){
+        delete item2.selected;
+        if(item == item2.value){
+          selectedData.push(item2);
         };
-        form.render('checkbox', 'LAY-Transfer-' + that.index);
-      }else{
-        var num = 1;
-        //单个勾选
-        if(checked){
-          //判断是否全选
-          childs.each(function(i, item){
-            if(!item.disabled && !item.checked){
-              num = 0;
-            }
-          });
-          //如果全选，勾选全选按钮
-          if(num == 1){
-            checkTopRight[0].checked = checked;
-          };
-          //加入列表
-          listRight += checkbox.data("index") + ',';
-          checkbox.parent("li").addClass("selected");
-          elem.find('.' + TRAN_BTN_LEFT).removeClass(TRAN_BTN_DIS);
-        }else{
-          //如果全选状态，更改全选按钮
-          if(checkTopRight[0].checked){
-            checkTopRight[0].checked = false;
-          };
-          //移除
-          checkbox.parent("li").removeClass("selected");
-          listRight = listRight.replace(checkbox.data('index'),'');
-          childs.each(function(i, item){
-            if(item.checked){
-              num = 0;
-            }
-          });
-          //如果勾选项，更改按钮状态
-          if(num == 1){
-            elem.find('.' + TRAN_BTN_LEFT).addClass(TRAN_BTN_DIS);
-          };
-        }
-      };
-      form.render('checkbox', 'LAY-Transfer-' + that.index);
+      });
     });
-
-    //查找
-    function searchVal(tran){
-      var input = elem.find(tran).find('.layui-transfer-search')
-      ,val = input.children('input').val()
-      ,warp = input.next();
-
-      warp.children("li").each(function(){
-        if($(this).data("title").indexOf(val) == -1){
-          $(this).hide();
-        }else{
-          $(this).show();
-        }
-      });
-    };
-
-    //添加到右边
-    elem.on('click', '.'+TRAN_BTN_RIGHT, function(){
-      var preList = '';
-      //未选中则不操作
-      if($(this).hasClass(TRAN_BTN_DIS)){
-        return ;
-      };
-      //选项移除
-      elem.find("."+ TRAN_LEFT_LIST).find("li").each(function(){
-        if($(this).hasClass("selected")){
-          $(this).remove();
-        }
-      });
-      //选项插入
-      var arr = elem.find('.' + TRAN_RIGHT).data('arr')
-      ,add = 0;
-      layui.each(listLeft.split(','), function(index, num){
-        if(!num) return;
-        var data = options.data[num];
-        preList += '<li data-title="'+ data.title +'"><input lay-skin="primary" type="checkbox" data-index="'+ num +'" name="layTranRightCheck" title="'+ data.title +'" value="'+ data.value +'" class="layui-input" '+ (data.disabled ? 'disabled' : '') +'></li>'
-        arr += ',' + num;
-        add++;
-      });
-      elem.find("."+ TRAN_RIGHT_LIST).append(preList);
-      searchVal('.'+TRAN_RIGHT);
-      //更新状态
-      checkTopLeft[0].checked = false;
-      checkTopRight[0].checked = false;
-      $(this).addClass(TRAN_BTN_DIS);
-      listLeft = '';
-      //更改缓存数据
-      totalRight = totalRight + add;
-      totalLeft = totalLeft - add;
-      elem.find('.' + TRAN_RIGHT).data('total', totalRight);
-      elem.find('.' + TRAN_RIGHT).data('total', totalLeft);
-      elem.find('.' + TRAN_RIGHT).data('arr', arr);
-      form.render('checkbox', 'LAY-Transfer-' + that.index);
-      options.onchange && options.onchange(that.getData());
-    });
-
-    //添加到左边
-    elem.on('click', '.'+TRAN_BTN_LEFT, function(){
-      var preList = '';
-      if($(this).hasClass(TRAN_BTN_DIS)){
-        return ;
-      };
-      //选项移除
-      elem.find("."+ TRAN_RIGHT_LIST).find("li").each(function(){
-        if($(this).hasClass("selected")){
-          $(this).remove();
-        }
-      });
-      //选项插入
-      var arr = elem.find('.' + TRAN_RIGHT).data('arr')
-      ,add = 0;
-      layui.each(listRight.split(','), function(index, num){
-        if(!num) return;
-        var data = options.data[num];
-        preList += '<li data-title="'+ data.title +'"><input lay-skin="primary" type="checkbox" data-index="'+ num +'" name="layTranLeftCheck" title="'+ data.title +'" value="'+ data.value +'" class="layui-input" '+ (data.disabled ? 'disabled' : '') +'></li>'
-        arr = arr.replace(num, '').replace(/(,)+/g,',');
-        add++;
-      });
-      elem.find("."+ TRAN_LEFT_LIST).append(preList);
-      searchVal('.'+TRAN_LEFT);
-      //更新状态
-      checkTopLeft[0].checked = false;
-      checkTopRight[0].checked = false;
-      $(this).addClass(TRAN_BTN_DIS);
-      listRight = '';
-      //更改缓存数据
-      totalRight = totalRight - add;
-      totalLeft = totalLeft + add;
-      elem.find('.' + TRAN_RIGHT).data('total', totalRight);
-      elem.find('.' + TRAN_RIGHT).data('total', totalLeft);
-      elem.find('.' + TRAN_RIGHT).data('arr', arr);
-      form.render('checkbox', 'LAY-Transfer-' + that.index);
-      options.onchange && options.onchange(that.getData());
-    });
-
-    //搜索
-    elem.find('.layui-transfer-search').on('keyup', 'input', function(){
-      var outer = $(this).parent("div").parent("div");
-      searchVal(outer);
-    });   
+    return selectedData;
   };
-
-  //得到选中值
-  Class.prototype.getData = function(){
+  
+  //事件
+  Class.prototype.events = function(){
     var that = this
-    ,options = that.config
-    ,arr = that.elem.find('.' + TRAN_RIGHT).data('arr')
-    ,data = [];
-
-    function sortNum(a,b){ return a - b };
-    layui.each(arr.split(',').sort(sortNum), function(index, num){
-      if(!num) return;
-      data.push(options.data[num]);
+    ,options = that.config;
+    
+    //左右复选框
+    that.elem.on('click', 'input[lay-filter="layTransferCheckbox"]+', function(){ 
+      var thisElemCheckbox = $(this).prev()
+      ,checked = thisElemCheckbox[0].checked
+      ,thisDataElem = thisElemCheckbox.parents('.'+ ELEM_BOX).eq(0).find('.'+ ELEM_DATA);
+      
+      if(thisElemCheckbox[0].disabled) return;
+      
+      //判断是否全选
+      if(thisElemCheckbox.attr('lay-type') === 'all'){
+        thisDataElem.find('input[type="checkbox"]').each(function(){
+          if(this.disabled) return;
+          this.checked = checked;
+        });
+      }
+      
+      that.renderCheckBtn({stopNone: true});
     });
-    return data;
+    
+    //按钮事件
+    that.layBtn.on('click', function(){
+      var othis = $(this)
+      ,_index = othis.data('index')
+      ,thisBoxElem = that.layBox.eq(_index)
+      ,arr = [];
+      if(othis.hasClass(DISABLED)) return;
+      
+      that.layBox.eq(_index).each(function(_index){
+        var othis = $(this)
+        ,thisDataElem = othis.find('.'+ ELEM_DATA);
+        
+        thisDataElem.children('li').each(function(){
+          var thisList = $(this)
+          ,thisElemCheckbox = thisList.find('input[type="checkbox"]')
+          ,isHide = thisElemCheckbox.data('hide');
+          
+          if(thisElemCheckbox[0].checked && !isHide){
+            thisElemCheckbox[0].checked = false;
+            thisBoxElem.siblings('.'+ ELEM_BOX).find('.'+ ELEM_DATA).append(thisList.clone());
+            thisList.remove();
+            
+            //记录当前穿梭的数据
+            arr.push(thisElemCheckbox[0].value);
+          }
+          
+          that.setValue();
+        });
+      });
+      
+      that.renderCheckBtn();
+      
+      //穿梭时，如果另外一个框正在搜索，则触发匹配
+      var siblingInput = thisBoxElem.siblings('.'+ ELEM_BOX).find('.'+ ELEM_SEARCH +' input')
+      siblingInput.val() === '' ||  siblingInput.trigger('keyup');
+      
+      //穿梭时的回调
+      options.onchange && options.onchange(that.getData(arr), _index);
+    });
+    
+    //搜索
+    that.laySearch.find('input').on('keyup', function(){
+      var value = this.value
+      ,thisDataElem = $(this).parents('.'+ ELEM_SEARCH).eq(0).siblings('.'+ ELEM_DATA)
+      ,thisListElem = thisDataElem.children('li');
+
+      thisListElem.each(function(){
+        var thisList = $(this)
+        ,thisElemCheckbox = thisList.find('input[type="checkbox"]')
+        ,isMatch = thisElemCheckbox[0].title.indexOf(value) !== -1;
+
+        thisList[isMatch ? 'removeClass': 'addClass'](HIDE);
+        thisElemCheckbox.data('hide', isMatch ? false : true);
+      });
+
+      that.renderCheckBtn();
+      
+      //无匹配数据视图
+      var isNone = thisListElem.length === thisDataElem.children('li.'+ HIDE).length;
+      that.noneView(thisDataElem, isNone ? options.text.searchNone : '');
+    });
+  };
+  
+  //记录所有实例
+  thisModule.that = {}; //记录所有实例对象
+  thisModule.config = {}; //记录所有实例配置项
+  
+  //重载实例
+  transfer.reload = function(id, options){
+    var that = thisModule.that[id];
+    that.reload(options);
+    
+    return thisModule.call(that);
+  };
+  
+  //获得选中的数据（右侧面板）
+  transfer.getData = function(id){
+    var that = thisModule.that[id];
+    return that.getData();
   };
 
   //核心入口
   transfer.render = function(options){
     var inst = new Class(options);
-    return thisTran.call(inst);
+    return thisModule.call(inst);
   };
 
   exports(MOD_NAME, transfer);
-})
+});

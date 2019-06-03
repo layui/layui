@@ -7,13 +7,16 @@
 
   <link rel="stylesheet" href="../src/css/layui.css">
   <style>
-    body{padding-left: 200px; padding-top: 30px;}
-    #text1,#text2{padding-top: 80px;}
+    body{padding: 100px;}
+    #text1,#text2{padding-top: 60px;}
   </style>
 </head>
 <body>
 
-<button id="btn" class="layui-btn">获取右侧值</button>
+<div class="layui-btn-container">
+  <button type="button" class="layui-btn" lay-demo="getData">获取右侧数据</button>
+  <button type="button" class="layui-btn" lay-demo="reload">重载实例</button>
+</div>
   
 <div id="text1"></div>
 
@@ -24,31 +27,31 @@
 
 <script src="../src/layui.js"></script>
 <script>
-  layui.use('transfer', function(){
-    var transfer = layui.transfer
-    ,$ = layui.$;
+  layui.use(['transfer', 'util'], function(){
+    var $ = layui.$
+    ,transfer = layui.transfer
+    ,util = layui.util;
 
     var ins1 = transfer.render({
       elem: '#text1'
-      ,parseData: function(res){
-        return {
-          "value": res.status
-          ,"title": res.label
-          ,"disabled": res.check
-        }
-      }
-      ,data: [{"status": "1", "label": "瓦罐汤", "check": false}
-        ,{"status": "2", "label": "油酥饼", "check": false}
-        ,{"status": "3", "label": "炸酱面", "check": false}
-        ,{"status": "4", "label": "串串香", "check": true}
-        ,{"status": "5", "label": "豆腐脑", "check": false}
-        ,{"status": "6", "label": "驴打滚", "check": false}]
-      ,value: ["1", "5"]
+      ,title: ['候选文人', '获奖文人']
+      ,data: [
+        {"value": "1", "title": "李白"}
+        ,{"value": "2", "title": "杜甫"}
+        ,{"value": "3", "title": "贤心"}
+        ,{"value": "4", "title": "鲁迅", "disabled": true}
+        ,{"value": "5", "title": "巴金"}
+        ,{"value": "6", "title": "冰心"}
+      ]
+      ,value: ["2", "3"]
       ,showSearch: true
     });
     
-    $("#btn").on('click', function(){
-      alert(JSON.stringify(ins1.getData()))
+    //按钮事件
+    util.event('lay-demo', {
+      getData: function(othis){
+        alert(JSON.stringify(ins1.getData()))
+      }
     });
 
     var ins2 = transfer.render({
@@ -56,22 +59,23 @@
       ,onchange: function(obj){
         console.log(obj)
       }
-      ,data: [{"value": "1", "title": "瓦罐汤", "disabled": false}
-        ,{"value": "2", "title": "油酥饼", "disabled": false}
-        ,{"value": "3", "title": "炸酱面", "disabled": false}
-        ,{"value": "4", "title": "串串香", "disabled": true}
-        ,{"value": "5", "title": "豆腐脑", "disabled": false}
-        ,{"value": "6", "title": "驴打滚", "disabled": false}
-        ,{"value": "7", "title": "北京烤鸭", "disabled": false}
-        ,{"value": "8", "title": "烤冷面", "disabled": false}
-        ,{"value": "9", "title": "毛血旺", "disabled": true}
-        ,{"value": "10", "title": "肉夹馍", "disabled": false}
-        ,{"value": "11", "title": "臊子面", "disabled": false}
-        ,{"value": "12", "title": "凉皮", "disabled": false}
-        ,{"value": "13", "title": "羊肉泡馍", "disabled": false}
-        ,{"value": "14", "title": "冰糖葫芦", "disabled": true}
-        ,{"value": "15", "title": "狼牙土豆", "disabled": false}]
-      ,value: ["1", "3", "5", "7", "9", "11"]
+      ,parseData: function(res){
+        return {
+          "value": res.id
+          ,"title": res.label
+          ,"disabled": res.disabled
+          ,"checked": res.checked
+        }
+      }
+      ,data: [
+        {"id": "1", "label": "瓦罐汤"}
+        ,{"id": "2", "label": "油酥饼"}
+        ,{"id": "3", "label": "炸酱面"}
+        ,{"id": "4", "label": "串串香", "disabled": true}
+        ,{"id": "5", "label": "豆腐脑"}
+        ,{"id": "6", "label": "驴打滚"}
+      ]
+      ,value: ["1", "5"]
     });
   });
 </script>

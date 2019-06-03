@@ -503,7 +503,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-input, .layui-textarea, .layui-select,
 .layui-form-pane .layui-form-label, 
 .layui-form-pane .layui-form-item[pane],
-.layui-layedit, .layui-layedit-tool{border-color: #e6e6e6} 
+.layui-layedit, .layui-layedit-tool{border-color: #e6e6e6}
 
 /* 背景边框 */
 hr, .layui-timeline-item:before{background-color: #e6e6e6;}
@@ -549,6 +549,7 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 /* 百搭 */.layui-btn-normal{background-color: #1E9FFF;}
 /* 暖色 */.layui-btn-warm{background-color: #FFB800;}
 /* 警告 */.layui-btn-danger{background-color: #FF5722;}
+/* 选中 */.layui-btn-checked{background-color: #5FB878;}
 /* 禁用 */.layui-btn-disabled,.layui-btn-disabled:hover,.layui-btn-disabled:active{border: 1px solid #e6e6e6; background-color: #FBFBFB; color: #C9C9C9; cursor: not-allowed; opacity: 1;}
 
 /* 大型 */.layui-btn-lg{height: 44px; line-height: 44px; padding: 0 25px; font-size: 16px;}
@@ -935,6 +936,27 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-upload-wrap{position: relative; display: inline-block; vertical-align: middle;}
 .layui-upload-wrap .layui-upload-file{display: block!important; position: absolute; left: 0; top: 0; z-index: 10; font-size: 100px; width: 100%; height: 100%; opacity: .01; filter: Alpha(opacity=1); cursor: pointer;}
 
+/** 穿梭框 **/
+.layui-transfer-box,
+.layui-transfer-header,
+.layui-transfer-search{border-width: 0; border-style: solid; border-color: #e6e6e6}
+.layui-transfer-box{position: relative; border-width: 1px; width: 200px; height: 360px; border-radius: 2px; background-color:#fff;}
+.layui-transfer-box .layui-form-checkbox{width: 100%;}
+.layui-transfer-header{height: 38px; line-height: 38px; padding: 0 10px; border-bottom-width: 1px;}
+.layui-transfer-search{position:relative; padding: 10px; border-bottom-width: 1px;}
+.layui-transfer-search .layui-input{height: 32px; padding-left: 30px; font-size: 12px;}
+.layui-transfer-search .layui-icon-search{position: absolute; left: 20px; top: 50%; margin-top: -8px; color: #666;}
+.layui-transfer-active{margin: 0 15px;}
+.layui-transfer-active .layui-btn{display: block; margin: 0; padding: 0 15px; background-color: #5FB878; border-color: #5FB878; color: #fff;}
+.layui-transfer-active .layui-btn-disabled{background-color: #FBFBFB; border-color: #e6e6e6; color: #C9C9C9;}
+.layui-transfer-active .layui-btn:first-child{margin-bottom: 15px;}
+.layui-transfer-active .layui-btn .layui-icon{margin: 0; font-size: 14px !important;}
+.layui-transfer-data{padding: 5px 0; overflow: auto;}
+.layui-transfer-data li{height: 32px; line-height: 32px; padding: 0 10px;}
+.layui-transfer-data li:hover{background-color: #f2f2f2; transition: .5s all;}
+.layui-transfer-data .layui-none{padding: 15px 10px; text-align: center; color: #999;}
+
+
 /** 导航菜单 **/
 .layui-nav{position: relative; padding: 0 20px; background-color: #393D49; color: #fff; border-radius: 2px; font-size: 0; box-sizing: border-box;}
 .layui-nav *{font-size: 14px;}
@@ -1221,25 +1243,6 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
   .layui-slider-vertical .layui-slider-tips{margin-left: -8px;}
   .layui-slider > span{margin-left: 8px;}
 }
-
-/** 穿梭框 By star1029 **/
-.layui-transfer{display: inline-block; position: relative; width: 480px; background-color: #FFF; text-align: left;}
-.layui-transfer-left,.layui-transfer-right{display: inline-block; vertical-align: middle; position: relative; width: 200px; height: 340px; border: 1px solid #e6e6e6;}
-.layui-transfer-topTitle{padding-left: 10px; height: 38px; line-height: 38px; border-bottom: 1px solid #e6e6e6;}
-.layui-transfer-btn{display: inline-block; vertical-align: middle; width: 70px; height: 90px; text-align: center;}
-.layui-transfer-btn .layui-btn{margin-left: 0; padding: 0 10px; height: 30px; line-height: 30px; background-color: #5FB878; border-color: #5FB878;}
-.layui-transfer-btn .layui-btn i{margin-left: 4px; font-size: 14px; color: #FFF;}
-.layui-transfer-btn .layui-btn.layui-btn-disabled{background-color: #FBFBFB; border-color: #e6e6e6;}
-.layui-transfer-btn .layui-btn.layui-btn-disabled i{color: #CCC;}
-.layui-transfer-btnRight{margin-bottom: 30px;}
-.layui-transfer-search{position: relative; height: 46px; line-height: 36px; padding: 5px 10px; border-bottom: 1px solid #e6e6e6; text-align: center;}
-.layui-transfer-search .layui-input{display: inline-block; width: 100%; padding-left: 30px; height: 28px; line-height: 28px;}
-.layui-transfer-searchI{position: absolute; left: 20px;}
-.layui-transfer-data{height: 300px; overflow: auto;}
-.layui-transfer-short{height: 216px;}
-.layui-transfer-data li{position: relative; padding-left: 10px; height: 30px; line-height: 30px;}
-.layui-transfer-data .layui-form-checkbox[lay-skin="primary"]{width: 100%;}
-.layui-transfer-data li:hover{background-color: #EEE;}
 
 /** 树组件 By star1029 **/
 .layui-tree{line-height: 22px;}
