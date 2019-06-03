@@ -757,7 +757,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       res[response.dataName] = options.data.concat().splice(startLimit, options.limit);
       res[response.countName] = options.data.length;
 
-      that.renderData(res, curr, (options.page && options.page.count) ? options.page : options.data.length), sort();
+      that.renderData(res, curr, (options.page && options.page.count) ? options.page.count : options.data.length), sort();
       that.setColsWidth();
       typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
     }
@@ -914,6 +914,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 
     //同步分页状态
     if(options.page){
+      console.log(count);
       options.page = $.extend({
         elem: 'layui-table-page' + options.index
         ,count: count
