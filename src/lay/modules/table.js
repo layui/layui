@@ -686,7 +686,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     that.startTime = new Date().getTime(); //渲染开始时间
         
-    if(options.url){ //Ajax请求
+    if(options.url&&!options.localdata){ //Ajax请求,localdata 标识从现有数据载入，将不进行数据请求
       var params = {};
       params[request.pageName] = curr;
       params[request.limitName] = options.limit;
@@ -733,6 +733,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         }
       });
     } else if(options.data && options.data.constructor === Array){ //已知数据
+      if(options.url&&options.localdata)options.localdata=null;//如果url不为空且标识从本地载入数据，则清除标识，避免刷新远程数据失败
       var res = {}
       ,startLimit = curr*options.limit - options.limit
       
