@@ -911,6 +911,7 @@ select.layui-table-edit{padding: 0 0 0 10px; border-color: #C9C9C9;}
 .layui-table-view .layui-form-radio{top: 0; margin: 0; box-sizing: content-box;}
 .layui-table-view .layui-form-checkbox{top: -1px; height: 26px; line-height: 26px;}
 .layui-table-view .layui-form-checkbox i{height: 26px;}
+.layui-table-edit-select{  display: unset !important;}/*显示点击行下拉框编辑的 select (全局默认被隐藏)*/
 
 /* 展开溢出的单元格 */
 .layui-table-grid .layui-table-cell{overflow: visible;}

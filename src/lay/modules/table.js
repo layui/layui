@@ -85,7 +85,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   //字符常量
   ,MOD_NAME = 'table', ELEM = '.layui-table', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'layui-disabled', NONE = 'layui-none'
   
-  ,ELEM_VIEW = 'layui-table-view', ELEM_TOOL = '.layui-table-tool', ELEM_BOX = '.layui-table-box', ELEM_INIT = '.layui-table-init', ELEM_HEADER = '.layui-table-header', ELEM_BODY = '.layui-table-body', ELEM_MAIN = '.layui-table-main', ELEM_FIXED = '.layui-table-fixed', ELEM_FIXL = '.layui-table-fixed-l', ELEM_FIXR = '.layui-table-fixed-r', ELEM_TOTAL = '.layui-table-total', ELEM_PAGE = '.layui-table-page', ELEM_SORT = '.layui-table-sort', ELEM_EDIT = 'layui-table-edit', ELEM_HOVER = 'layui-table-hover'
+  ,ELEM_VIEW = 'layui-table-view', ELEM_TOOL = '.layui-table-tool', ELEM_BOX = '.layui-table-box', ELEM_INIT = '.layui-table-init', ELEM_HEADER = '.layui-table-header', ELEM_BODY = '.layui-table-body', ELEM_MAIN = '.layui-table-main', ELEM_FIXED = '.layui-table-fixed', ELEM_FIXL = '.layui-table-fixed-l', ELEM_FIXR = '.layui-table-fixed-r', ELEM_TOTAL = '.layui-table-total', ELEM_PAGE = '.layui-table-page', ELEM_SORT = '.layui-table-sort', ELEM_EDIT = 'layui-table-edit', ELEM_EDIT_SELECT = 'layui-table-edit-select', ELEM_HOVER = 'layui-table-hover'
   
   //thead区域模板
   ,TPL_HEADER = function(options){
@@ -794,6 +794,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
             if(item3.event) attr.push('lay-event="'+ item3.event +'"'); //自定义事件
             if(item3.style) attr.push('style="'+ item3.style +'"'); //自定义样式
             if(item3.minWidth) attr.push('data-minwidth="'+ item3.minWidth +'"'); //单元格最小宽度
+            if(item3.selecttemplet) attr.push('data-selecttemplet="'+ item3.selecttemplet +'"'); //编辑下拉选择的模板，模板中通过一个隐藏字段保存下拉选中的值，一个显示字段用于显示
+            if(item3.selectvaluefield) attr.push('data-selectvaluefield="'+ item3.selectvaluefield +'"'); //下拉选择值要赋给的字段，
+
             return attr.join(' ');
           }() +' class="'+ function(){ //追加样式
             var classNames = [];
@@ -1576,7 +1579,17 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       ,index = othis.parents('tr').eq(0).data('index')
       ,data = table.cache[that.key][index];
       
-      data[field] = value; //更新缓存中的值
+      
+      if(othis[0].tagName=='SELECT')
+      {
+        //如果是选择列表，显示选中的值，同时将选中的值赋值给真正保存value的字段
+        data[field]=$('option:selected',othis).text();
+        var valuefield = othis.parent().data('selectvaluefield');//获取赋值给的字段名
+        data[valuefield] = othis.val();//更新缓存中的值
+      }
+      else{
+        data[field] = value; //更新缓存中的值
+      }
       
       layui.event.call(this, MOD_NAME, 'edit('+ filter +')', commonMember.call(this, {
         value: value
@@ -1589,6 +1602,16 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       ,field = othis.parent().data('field')
       ,index = othis.parents('tr').eq(0).data('index')
       ,data = table.cache[that.key][index];
+
+      
+      if(othis[0].tagName=='SELECT')
+      {
+        //如果是选择列表，显示选中的值，同时将选中的值赋值给真正保存value的字段
+        data[field]=$('option:selected',othis).text();
+        var valuefield = othis.parent().data('selectvaluefield');//获取赋值给的字段
+        data[valuefield] =  othis.val();
+      }
+
       that.eachCols(function(i, item){
         if(item.field == field && item.templet){
           templet = item.templet;
@@ -1607,8 +1630,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     //单元格单击事件
     that.layBody.on('click', 'td', function(e){
+      
       var othis = $(this)
       ,field = othis.data('field')
+      
+      ,selecttemplet = othis.data('selecttemplet')
       ,editType = othis.data('edit')
       ,elemCell = othis.children(ELEM_CELL);
       
@@ -1616,13 +1642,49 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       
       //显示编辑表单
       if(editType){
-        var input = $('<input class="layui-input '+ ELEM_EDIT +'">');
-        input[0].value = othis.data('content') || elemCell.text();
-        othis.find('.'+ELEM_EDIT)[0] || othis.append(input);
-        input.focus();
-        layui.stope(e);
-        return;
+        if(editType=='select')
+        {
+          //获取当前行数据
+          var editclick=null
+          ,index = othis.parents('tr').eq(0).data('index')
+          ,data = table.cache[that.key][index];
+
+          //获取行 列对应的 编辑控制选项
+          that.eachCols(function(i, item){
+            if(item.field == field && item.editclick&&typeof item.editclick=='function'){
+              editclick = item.editclick;
+            }
+          });
+          //根据传入的可编辑逻辑来确认是否显示编辑按钮
+          if(editclick!=null&&!editclick(data)){
+            layui.stope(e);
+            return;
+          }
+
+          var value = $("input",othis).val();
+          var input = $($(selecttemplet).html());
+          input.addClass(ELEM_EDIT_SELECT)
+          input.addClass(ELEM_EDIT)
+          input.val(value);
+          //var input = $('<select  class=" '+ELEM_EDIT_SELECT+' '+ ELEM_EDIT +'"><option value="name0">name</option><option value="name">name</option><option value="name1">name1</option></select>');
+          othis.find('.'+ELEM_EDIT)[0] || othis.append(input);
+          input.focus();
+          layui.stope(e);
+          return;
+        }
+        else
+        {
+          var input = $('<input class="layui-input '+ ELEM_EDIT +'">');
+          input[0].value = othis.data('content') || elemCell.text();
+          othis.find('.'+ELEM_EDIT)[0] || othis.append(input);
+          input.focus();
+          layui.stope(e);
+          return;
+        }
+        
       }
+
+      
     }).on('mouseenter', 'td', function(){
       gridExpand.call(this)
     }).on('mouseleave', 'td', function(){
