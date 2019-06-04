@@ -409,6 +409,10 @@ layui.define('layer' , function(exports){
   
   //重置方法
   Class.prototype.reload = function(options){
+    options = options || {};
+    delete options.elem;
+    delete options.bindAction;
+    
     var that = this
     ,options = that.config = $.extend({}, that.config, upload.config, options)
     ,next = options.elem.next();

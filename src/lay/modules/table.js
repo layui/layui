@@ -642,6 +642,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   Class.prototype.reload = function(options){
     var that = this;
     
+    options = options || {};
+    
     if(options.data && options.data.constructor === Array) delete that.config.data;
     that.config = $.extend(true, {}, that.config, options);
     
