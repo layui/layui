@@ -1641,27 +1641,28 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       
       if(othis.data('off')) return; //不触发事件
       
+      //获取当前行数据
+      var editclick=null
+      ,index = othis.parents('tr').eq(0).data('index')
+      ,data = table.cache[that.key][index];
+
+      //获取行 列对应的 编辑控制选项
+      that.eachCols(function(i, item){
+        if(item.field == field && item.editclick&&typeof item.editclick=='function'){
+          editclick = item.editclick;
+        }
+      });
+      //根据传入的可编辑逻辑来确认是否显示编辑按钮
+      if(editclick!=null&&!editclick(data)){
+        layui.stope(e);
+        return;
+      }
+
       //显示编辑表单
       if(editType){
         if(editType=='select')
         {
-          //获取当前行数据
-          var editclick=null
-          ,index = othis.parents('tr').eq(0).data('index')
-          ,data = table.cache[that.key][index];
-
-          //获取行 列对应的 编辑控制选项
-          that.eachCols(function(i, item){
-            if(item.field == field && item.editclick&&typeof item.editclick=='function'){
-              editclick = item.editclick;
-            }
-          });
-          //根据传入的可编辑逻辑来确认是否显示编辑按钮
-          if(editclick!=null&&!editclick(data)){
-            layui.stope(e);
-            return;
-          }
-
+          
           var value = $("input",othis).val();
           var input = $($(selecttemplet).html());
           input.addClass(ELEM_EDIT_SELECT)
