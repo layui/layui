@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../src/css/layui.css">
   <style>
     body{padding: 100px;}
-    #text1,#text2{padding-top: 60px;}
+    #text1,#text2{padding-bottom: 60px;}
   </style>
 </head>
 <body>
@@ -17,10 +17,19 @@
   <button type="button" class="layui-btn" lay-demo="getData">获取右侧数据</button>
   <button type="button" class="layui-btn" lay-demo="reload">重载实例</button>
 </div>
-  
+
+
 <div id="text1"></div>
 
-<div id="text2"></div>
+
+<div class="layui-form">
+  <div class="layui-form-item">
+    <label class="layui-form-label">职位</label>
+    <div class="layui-input-block">
+      <div id="text2"></div>
+    </div>
+  </div>
+</div>  
 
 <div id="text3"></div>
 
@@ -43,6 +52,7 @@
         ,{"value": "5", "title": "巴金"}
         ,{"value": "6", "title": "冰心"}
       ]
+      ,id: 'demoId'
       ,value: ["2", "3"]
       ,showSearch: true
     });
@@ -52,10 +62,16 @@
       getData: function(othis){
         alert(JSON.stringify(ins1.getData()))
       }
+      ,reload: function(){
+        transfer.reload('demoId', {
+          value: ["6"]
+        });
+      }
     });
 
     var ins2 = transfer.render({
       elem: '#text2'
+      ,showSearch: true
       ,onchange: function(obj){
         console.log(obj)
       }

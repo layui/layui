@@ -11,11 +11,14 @@ layui.define('form', function(exports){
   
   var $ = layui.$
   ,form = layui.form
+  
+  //模块名
+  ,MOD_NAME = 'tree'
 
   //外部接口
   ,tree = {
     config: {}
-    ,index: layui.atree ? (layui.atree.index + 10000) : 0
+    ,index: layui[MOD_NAME] ? (layui[MOD_NAME].index + 10000) : 0
 
     //设置全局项
     ,set: function(options){
@@ -31,23 +34,40 @@ layui.define('form', function(exports){
   }
 
   //操作当前实例
-  ,thisTree = function(){
+  ,thisModule = function(){
     var that = this
-    ,options = that.config;
+    ,options = that.config
+    ,id = options.id || that.index;
+    
+    thisModule.that[id] = that; //记录当前实例对象
+    thisModule.config[id] = options; //记录当前实例配置项
     
     return {
-      getChecked: function(){
-        return that.getChecked();
+      config: options
+      //重置实例
+      ,reload: function(options){
+        that.reload.call(that, options);
       }
-      ,setChecked: function(key){//设置值
-        return that.setChecked(key);
+      ,getChecked: function(){
+        return that.getChecked.call(that);
       }
-      ,config: options
+      ,setChecked: function(id){//设置值
+        return that.setChecked.call(that, id);
+      }
     }
+  }
+  
+  //获取当前实例配置项
+  ,getThisModuleConfig = function(id){
+    var config = thisModule.config[id];
+    if(!config) hint.error('The ID option was not found in the '+ MOD_NAME +' instance');
+    return config || null;
   }
 
   //字符常量
-  ,MOD_NAME = 'tree', ELEM_VIEW = 'layui-tree', ELEM_SET = 'layui-tree-set', ICON_CLICK = 'layui-tree-iconClick'
+  ,SHOW = 'layui-show', HIDE = 'layui-hide', NONE = 'layui-none', DISABLED = 'layui-disabled'
+  
+  ,ELEM_VIEW = 'layui-tree', ELEM_SET = 'layui-tree-set', ICON_CLICK = 'layui-tree-iconClick'
   ,ICON_ADD = 'layui-icon-addition', ICON_SUB = 'layui-icon-subtraction', ELEM_ENTRY = 'layui-tree-entry', ELEM_MAIN = 'layui-tree-main', ELEM_TEXT = 'layui-tree-txt', ELEM_PACK = 'layui-tree-pack', ELEM_SPREAD = 'layui-tree-spread'
   ,ELEM_LINE_SHORT = 'layui-tree-setLineShort', ELEM_SHOW = 'layui-tree-showLine', ELEM_EXTEND = 'layui-tree-lineExtend'
  
@@ -62,21 +82,32 @@ layui.define('form', function(exports){
   //默认配置
   Class.prototype.config = {
     data: []  //数据
+    
     ,showCheckbox: false  //是否显示复选框
     ,showLine: true  //是否开启连接线
-    ,key: 'id'  //定义索引名称
-    ,checked: []  //选中节点(依赖于 showCheckbox 以及 key 参数)
-    ,spread: []  //展开节点(依赖于 key 参数)
     ,accordion: false  //是否开启手风琴模式
     ,onlyIconControl: false  //是否仅允许节点左侧图标控制展开收缩
     ,isJump: false  //是否允许点击节点时弹出新窗口跳转
     ,edit: false  //是否开启节点的操作图标
+    //,showSearch: false  //是否打开节点过滤
+    //,drag: false  //是否开启节点拖拽
     
-    ,showSearch: false  //是否打开节点过滤
-    ,drag: false  //是否开启节点拖拽
+    ,text: {
+      defaultNodeName: '未命名' //节点默认名称
+      ,none: '无数据'  //数据为空时的文本提示
+    }
+  };
+  
+  //重载实例
+  Class.prototype.reload = function(options){
+    var that = this;
     
-    ,defaultNodeName: '未命名' //节点默认名称
-    ,emptyText: '暂无数据'  //数据为空时的文本提示
+    layui.each(options, function(key, item){
+      if(item.constructor === Array) delete that.config[key];
+    });
+    
+    that.config = $.extend(true, {}, that.config, options);
+    that.render();
   };
 
   //主体渲染
@@ -87,22 +118,25 @@ layui.define('form', function(exports){
     var temp = $('<div class="layui-tree'+ (options.showCheckbox ? " layui-form" : "") + (options.showLine ? " layui-tree-line" : "") +'" lay-filter="LAY-tree-'+ that.index +'"></div>');
     that.tree(temp);
 
-    var othis = $(options.elem)
-    ,hasRender = othis.next('.' + ELEM_VIEW);   
-    //生成替代元素
-    hasRender[0] && hasRender.remove();
+    var othis = options.elem = $(options.elem);
+    if(!othis[0]) return;
 
     if(options.showSearch){
       temp.prepend('<input type="text" class="layui-input layui-tree-search" placeholder="请输入关键字进行过滤">');
     };
-
+    
+    
+    //索引
+    that.key = options.id || that.index;
+    
+    
+    //插入组件结构
     that.elem = temp;
-    that.emptyText = $('<div class="layui-tree-emptyText">'+ options.emptyText +'</div>');
+    that.elemNone = $('<div class="layui-tree-emptyText">'+ options.text.none +'</div>');
     othis.html(that.elem);
 
     if(that.elem.find('.layui-tree-set').length == 0){
-      that.elem.append(that.emptyText);
-      return;
+      return that.elem.append(that.elemNone);
     };
 
     //拖拽事件
@@ -114,80 +148,68 @@ layui.define('form', function(exports){
     };
 
     that.elem.find('.layui-tree-set').each(function(){
+      var othis = $(this);
       //最外层
-      if(!$(this).parent('.layui-tree-pack')[0]){
-        $(this).addClass('layui-tree-setHide');
+      if(!othis.parent('.layui-tree-pack')[0]){
+        othis.addClass('layui-tree-setHide');
       };
-      //没有下一个节点 上级有延伸线 父级没有连接线
-      // if(!$(this).next()[0] && $(this).parents('.layui-tree-lineExtend').length != 0 && !$(this).parent('.layui-tree-pack').hasClass('layui-tree-showLine')){
-      //   $(this).addClass('layui-tree-setLineShort');
-      // };
+
       //没有下一个节点 上一层父级有延伸线
-      if(!$(this).next()[0] && $(this).parents('.layui-tree-pack').eq(1).hasClass('layui-tree-lineExtend')){
-        $(this).addClass(ELEM_LINE_SHORT);
+      if(!othis.next()[0] && othis.parents('.layui-tree-pack').eq(1).hasClass('layui-tree-lineExtend')){
+        othis.addClass(ELEM_LINE_SHORT);
       };
+      
       //没有下一个节点 外层最后一个
-      if(!$(this).next()[0] && !$(this).parents('.layui-tree-set').eq(0).next()[0]){
-        $(this).addClass(ELEM_LINE_SHORT);
+      if(!othis.next()[0] && !othis.parents('.layui-tree-set').eq(0).next()[0]){
+        othis.addClass(ELEM_LINE_SHORT);
       };
     });
 
     that.events();
+  };
+  
+  //渲染表单
+  Class.prototype.renderForm = function(type){
+    form.render(type, 'LAY-tree-'+ this.index);
   };
 
   //节点解析
   Class.prototype.tree = function(elem, children){
     var that = this
     ,options = that.config
-    ,nodes = children || options.data;
-
-    layui.each(nodes, function(index, item){
-      //是否初始展开节点
-      function isOpen(id){
-        if(options.spread.length == 0){
-          return false;
-        }else{
-          return $.inArray(id, options.spread) == -1 ? false : true;
-        };
-      };
-      //初始选中
-      function isCheck(id){
-        if(options.checked.length == 0){
-          return false;
-        }else{
-          return $.inArray(id, options.checked) == -1 ? false : true;
-        };
-      };
-
+    ,data = children || options.data;
+    
+    //遍历数据
+    layui.each(data, function(index, item){
       var hasChild = item.children && item.children.length > 0
-      ,packDiv = $('<div class="layui-tree-pack" style="'+ (isOpen(item[options.key]) ? "display: block;" : "") +'"></div>')
-      ,entryDiv = $(['<div '+ (options.key  ? 'data-key="'+ (item[options.key] || '') +'"' : '') +' class="layui-tree-set'+ (isOpen(item[options.key]) ? " layui-tree-spread" : "") + (isCheck(item[options.key]) ? " layui-tree-checkedFirst" : "") +'">'
+      ,packDiv = $('<div class="layui-tree-pack" '+ (item.spread ? 'style="display: block;"' : '') +'"></div>')
+      ,entryDiv = $(['<div data-id="'+ item.id +'" class="layui-tree-set'+ (item.spread ? " layui-tree-spread" : "") + (item.checked ? " layui-tree-checkedFirst" : "") +'">'
         ,'<div '+ (options.drag && !item.fixed ? 'draggable="true"' : '') +' class="layui-tree-entry">'
-          ,'<div class="layui-tree-main layui-inline">'
+          ,'<div class="layui-tree-main">'
             //箭头
             ,function(){
               if(options.showLine){
                 if(hasChild){
-                  return '<span class="layui-tree-iconClick layui-tree-icon"><i class="layui-icon '+ (isOpen(item[options.key]) ? "layui-icon-subtraction": "layui-icon-addition") +'"></i></span>';
+                  return '<span class="layui-tree-iconClick layui-tree-icon"><i class="layui-icon '+ (item.spread ? "layui-icon-subtraction" : "layui-icon-addition") +'"></i></span>';
                 }else{
                   return '<span class="layui-tree-iconClick"><i class="layui-icon layui-icon-file"></i></span>';
                 };
               }else{
-                return '<span class="layui-tree-iconClick"><i class="layui-tree-iconArrow '+ (hasChild ? "": "hide") +'"></i></span>';
+                return '<span class="layui-tree-iconClick"><i class="layui-tree-iconArrow '+ (hasChild ? "": HIDE) +'"></i></span>';
               };
             }()
             
             //复选框
             ,function(){
-              return options.showCheckbox ? '<input type="checkbox" name="layuiTreeCheck" lay-skin="primary" '+ (item.disabled ? "disabled" : "") +'>' : '';
+              return options.showCheckbox ? '<input type="checkbox" name="layuiTreeCheck" lay-skin="primary" '+ (item.disabled ? "disabled" : "") +'  value="'+ item.id +'">' : '';
             }()
             
             //节点
             ,function(){
               if(options.isJump && item.href){
-                return '<a href="'+ item.href +'" target="_blank" class="'+ ELEM_TEXT +'">'+ (item.label || options.defaultNodeName) +'</a>';
+                return '<a href="'+ item.href +'" target="_blank" class="'+ ELEM_TEXT +'">'+ (item.title || item.label || options.text.defaultNodeName) +'</a>';
               }else{
-                return '<span class="'+ ELEM_TEXT +'">'+ (item.label || options.defaultNodeName) +'</span>';
+                return '<span class="'+ ELEM_TEXT + (item.disabled ? ' '+ DISABLED : '') +'">'+ (item.title || item.label || options.text.defaultNodeName) +'</span>';
               }
             }()
       ,'</div>'
@@ -222,20 +244,24 @@ layui.define('form', function(exports){
       };
 
       elem.append(entryDiv);
+      
       //若有前置节点，前置节点加连接线
       if(entryDiv.prev('.'+ELEM_SET)[0]){
         entryDiv.prev().children('.layui-tree-pack').addClass('layui-tree-showLine');
       };
+      
       //若无子节点，则父节点加延伸线
       if(!hasChild){
         entryDiv.parent('.layui-tree-pack').addClass('layui-tree-lineExtend');
       };
 
-      //展开节点
+      //展开节点操作
       that.spread(entryDiv, item);
       
       //选择框
-      options.showCheckbox && that.checkClick(entryDiv, item);
+      if(options.showCheckbox){
+        that.checkClick(entryDiv, item);
+      }
       
       //操作节点
       options.edit && that.operate(entryDiv, item);
@@ -285,6 +311,12 @@ layui.define('form', function(exports){
     
     //点击回调
     elemText.on('click', function(){
+      var othis = $(this);
+      
+      //判断是否禁用状态
+      if(othis.hasClass(DISABLED)) return;
+      
+      //判断展开收缩状态
       if(elem.hasClass(ELEM_SPREAD)){
         state = options.onlyIconControl ? 'open' : 'close';
       } else {
@@ -300,11 +332,55 @@ layui.define('form', function(exports){
     });
   };
   
-  //渲染表单
-  Class.prototype.renderForm = function(type){
-    form.render(type, 'LAY-tree-'+ this.index);
-  };
+  //计算复选框选中状态
+  Class.prototype.setCheckbox = function(elem, item, elemCheckbox){
+    var that = this
+    ,options = that.config
+    ,checked = elemCheckbox.prop('checked');
 
+    //同步子节点选中状态
+    if(typeof item.children === 'object' || elem.find('.'+ELEM_PACK)[0]){
+      var childs = elem.find('.'+ ELEM_PACK).find('input[name="layuiTreeCheck"]');
+      childs.each(function(){
+        if(this.disabled) return; //不可点击则跳过
+        this.checked = checked;
+      });
+    };
+
+    //同步父选中状态
+    var setParentsChecked = function(thisNodeElem){
+      //若无父节点，则终止递归
+      if(!thisNodeElem.parents('.'+ ELEM_SET)[0]) return;
+      
+      var state
+      ,parentPack = thisNodeElem.parent('.'+ ELEM_PACK)
+      ,parentNodeElem = parentPack.parent()
+      ,parentCheckbox =  parentPack.prev().find('input[name="layuiTreeCheck"]');
+      
+      
+      //如果子节点有任意一条选中，则父节点为选中状态
+      if(checked){
+        parentCheckbox.prop('checked', checked);
+      } else { //如果当前节点取消选中，则根据计算“兄弟和子孙”节点选中状态，来同步父节点选中状态
+        parentPack.find('input[name="layuiTreeCheck"]').each(function(){
+          if(this.checked){
+            state = true;
+          }
+        });
+        
+        //如果兄弟子孙节点全部未选中，则父节点也应为非选中状态
+        state || parentCheckbox.prop('checked', false);
+      }
+      
+      //向父节点递归
+      setParentsChecked(parentNodeElem);
+    };
+    
+    setParentsChecked(elem);
+    
+    that.renderForm('checkbox');
+  };
+  
   //复选框选择
   Class.prototype.checkClick = function(elem, item){
     var that = this
@@ -320,45 +396,7 @@ layui.define('form', function(exports){
       
       if(elemCheckbox.prop('disabled')) return;
       
-      //同步子节点选中状态
-      if(typeof item.children === 'object' || elem.find('.'+ELEM_PACK)[0]){
-        var childs = elem.find('.'+ ELEM_PACK).find('input[name="layuiTreeCheck"]');
-        childs.each(function(){
-          if(this.disabled) return; //不可点击则跳过
-          this.checked = checked;
-        });
-      };
-
-      //同步父选中状态
-      var setParentsChecked = function(thisNodeElem){
-        //若无父节点，则终止递归
-        if(!thisNodeElem.parents('.'+ ELEM_SET)[0]) return;
-        
-        var state
-        ,parentPack = thisNodeElem.parent('.'+ ELEM_PACK)
-        ,parentNodeElem = parentPack.parent()
-        ,parentCheckbox =  parentPack.prev().find('input[name="layuiTreeCheck"]');
-        
-        
-        //如果子节点有任意一条选中，则父节点为选中状态
-        if(checked){
-          parentCheckbox.prop('checked', checked);
-        } else { //如果当前节点取消选中，则根据计算“兄弟和子孙”节点选中状态，来同步父节点选中状态
-          parentPack.find('input[name="layuiTreeCheck"]').each(function(){
-            if(this.checked){
-              state = true;
-            }
-          });
-          
-          //如果兄弟子孙节点全部未选中，则父节点也应为非选中状态
-          state || parentCheckbox.prop('checked', false);
-        }
-        
-        //向父节点递归
-        setParentsChecked(parentNodeElem);
-      };
-      
-      setParentsChecked(elem);
+      that.setCheckbox(elem, item, elemCheckbox);
       
       //复选框点击产生的回调
       options.oncheck && options.oncheck({
@@ -366,8 +404,6 @@ layui.define('form', function(exports){
         ,checked: checked
         ,data: item
       });
-      
-      that.renderForm('checkbox');
     });
   };
 
@@ -398,7 +434,7 @@ layui.define('form', function(exports){
             elemMain.find('.'+ICON_CLICK).children('.layui-icon').addClass(ICON_ADD).removeClass('layui-icon-file');
           //若未开启连接线，显示箭头
           }else{
-            elemMain.find('.layui-tree-iconArrow').removeClass('hide');
+            elemMain.find('.layui-tree-iconArrow').removeClass(HIDE);
           };
           //节点添加子节点容器
           elem.append('<div class="layui-tree-pack"></div>');
@@ -407,8 +443,8 @@ layui.define('form', function(exports){
         //新增节点
         var key = options.operate && options.operate(returnObj)
         ,obj = {};
-        obj.label = options.defaultNodeName;
-        obj[options.key] = key;
+        obj.title = options.text.defaultNodeName;
+        obj.id = key;
         that.tree(elem.children('.'+ELEM_PACK), [obj]);
         
         //放在新增后面，因为要对元素进行操作
@@ -472,18 +508,18 @@ layui.define('form', function(exports){
         var text = elemMain.children('.'+ ELEM_TEXT).html();
         elemMain.children('.'+ ELEM_TEXT).html('');
         //添加输入框，覆盖在文字上方
-        elemMain.append('<input type="text" class="layui-inline layui-tree-editInput">');
+        elemMain.append('<input type="text" class="layui-tree-editInput">');
         //获取焦点
         elemMain.children('.layui-tree-editInput').val(text).focus();
         //嵌入文字移除输入框
         var getVal = function(input){
           var textNew = input.val().trim();
-          textNew = textNew ? textNew : options.defaultNodeName;
+          textNew = textNew ? textNew : options.text.defaultNodeName;
           input.remove();
           elemMain.children('.'+ ELEM_TEXT).html(textNew);
           
           //同步数据
-          returnObj.data.label = textNew;
+          returnObj.data.title = textNew;
           
           //节点修改的回调
           options.operate && options.operate(returnObj);
@@ -508,7 +544,7 @@ layui.define('form', function(exports){
         //若删除最后一个，显示空数据提示
         if(!elem.prev('.'+ELEM_SET)[0] && !elem.next('.'+ELEM_SET)[0] && !elem.parent('.'+ELEM_PACK)[0]){
           elem.remove();
-          that.elem.append(that.emptyText);
+          that.elem.append(that.elemNone);
           return;
         };
         //若有兄弟节点
@@ -602,7 +638,7 @@ layui.define('form', function(exports){
             });
           }else{
           //父节点隐藏箭头
-            prevDiv.find('.layui-tree-iconArrow').addClass('hide');
+            prevDiv.find('.layui-tree-iconArrow').addClass(HIDE);
           };
           //移除展开属性
           elem.parents('.'+ELEM_SET).eq(0).removeClass(ELEM_SPREAD);
@@ -674,7 +710,7 @@ layui.define('form', function(exports){
               $(this).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
             });
           }else{
-            parentSet.find('.layui-tree-iconArrow').addClass('hide');
+            parentSet.find('.layui-tree-iconArrow').addClass(HIDE);
           };
           parentSet.children('.'+ELEM_PACK).remove();
           parentSet.removeClass(ELEM_SPREAD);
@@ -773,7 +809,7 @@ layui.define('form', function(exports){
                 $(this).find('.'+ICON_CLICK).eq(0).addClass('layui-tree-icon');
                 $(this).find('.'+ICON_CLICK).eq(0).children('.layui-icon').addClass(ICON_ADD).removeClass('layui-icon-file');
               }else{
-                $(this).find(".layui-tree-iconArrow").removeClass('hide');
+                $(this).find(".layui-tree-iconArrow").removeClass(HIDE);
               };
               $(this).append('<div class="layui-tree-pack"></div>');
             };
@@ -930,12 +966,12 @@ layui.define('form', function(exports){
     var that = this
     ,options = that.config
     ,checkWarp = that.elem.find('.layui-tree-checkedFirst');
-
-    //初始选中
+    
+     //初始选中
     layui.each(checkWarp, function(i, item){
       $(item).children('.'+ELEM_ENTRY).find('input[name="layuiTreeCheck"]+').trigger('click');
     });
-
+    
     //搜索
     that.elem.find('.layui-tree-search').on('keyup', function(){
       var input = $(this)
@@ -965,11 +1001,11 @@ layui.define('form', function(exports){
       pack.find('.'+ELEM_ENTRY).each(function(){
         var parent = $(this).parent('.'+ELEM_SET);
         if(!parent.hasClass('layui-tree-searchShow')){
-          parent.addClass('layui-hide');
+          parent.addClass(HIDE);
         };
       });
       if(pack.find('.layui-tree-searchShow').length == 0){
-        that.elem.append(that.emptyText);
+        that.elem.append(that.elemNone);
       };
 
       //节点过滤的回调
@@ -982,7 +1018,7 @@ layui.define('form', function(exports){
     that.elem.find('.layui-tree-search').on('keydown', function(){
       $(this).nextAll().find('.'+ELEM_ENTRY).each(function(){
         var parent = $(this).parent('.'+ELEM_SET);
-        parent.removeClass('layui-tree-searchShow layui-hide');
+        parent.removeClass('layui-tree-searchShow '+ HIDE);
       });
       if($('.layui-tree-emptyText')[0]) $('.layui-tree-emptyText').remove();
     });
@@ -992,54 +1028,97 @@ layui.define('form', function(exports){
   Class.prototype.getChecked = function(){
     var that = this
     ,options = that.config
-    ,arr = [];
-
+    ,checkId = []
+    ,checkData = [];
+    
+    //遍历节点找到选中索引
     that.elem.find('.layui-form-checked').each(function(){
-      var elem = $(this).parents('.'+ELEM_SET)[0];
-      if(options.key){
-        arr.push([elem, $(elem).data('key')]);
-      }else{
-        arr.push(elem);
-      };
+      checkId.push($(this).prev()[0].value);
     });
+    
+    //遍历节点
+    var eachNodes = function(data, checkNode){
+      layui.each(data, function(index, item){
+        layui.each(checkId, function(index2, item2){
+          if(item.id == item2){
+            var cloneItem = $.extend({}, item);
+            delete cloneItem.children;
+            
+            checkNode.push(cloneItem);
+            
+            if(item.children){
+              cloneItem.children = [];
+              eachNodes(item.children, cloneItem.children);
+            }
+            return true
+          }
+        });
+      });
+    };
 
-    return arr;
+    eachNodes($.extend({}, options.data), checkData);
+    
+    return checkData;
   };
 
   //设置选中节点
-  Class.prototype.setChecked = function(key){
+  Class.prototype.setChecked = function(checkedId){
     var that = this
     ,options = that.config;
 
     //初始选中
     that.elem.find('.'+ELEM_SET).each(function(i, item){
-      var data = $(this).data('key')
-      ,input = $(item).children('.'+ELEM_ENTRY).find('input[name="layuiTreeCheck"]+');
+      var thisId = $(this).data('id')
+      ,input = $(item).children('.'+ELEM_ENTRY).find('input[name="layuiTreeCheck"]')
+      ,reInput = input.next();
+      
       //若返回数字
-      if(typeof key === 'number'){
-        if(data == key){
+      if(typeof checkedId === 'number'){
+        if(thisId == checkedId){
           if(!input[0].checked){
-            input.click();
+            reInput.click();
           };
           return false;
         };
       }else{
         //若返回数组
-        if($.inArray(data, key) != -1){
+        if($.inArray(thisId, checkedId) != -1){
           if(!input[0].checked){
-            input.click();
+            reInput.click();
           };
         };
       };
     });
   };
 
-
+  //记录所有实例
+  thisModule.that = {}; //记录所有实例对象
+  thisModule.config = {}; //记录所有实例配置项
+  
+  //重载实例
+  tree.reload = function(id, options){
+    var that = thisModule.that[id];
+    that.reload(options);
+    
+    return thisModule.call(that);
+  };
+  
+  //获得选中的节点数据
+  tree.getChecked = function(id){
+    var that = thisModule.that[id];
+    return that.getChecked();
+  };
+  
+  //设置选中节点
+  tree.setChecked = function(id, checkedId){
+    var that = thisModule.that[id];
+    return that.setChecked(checkedId);
+  };
     
   //核心入口
   tree.render = function(options){
     var inst = new Class(options);
-    return thisTree.call(inst);
+    return thisModule.call(inst);
   };
 
   exports(MOD_NAME, tree);

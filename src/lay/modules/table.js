@@ -158,7 +158,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,'<div class="layui-table-box">'
       ,'{{# if(d.data.loading){ }}'
       ,'<div class="layui-table-init" style="background-color: #fff;">'
-        ,'<i class="layui-icon layui-icon-loading layui-icon"></i>'
+        ,'<i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>'
       ,'</div>'
       ,'{{# } }}'
       
@@ -634,8 +634,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.fullSize(); //让表格铺满
     that.setColsWidth(); //自适应列宽
     that.scrollPatch(); //滚动条补丁
-    
-    that.layNone && that.layNone.width(that.elem.width() - 2);
   };
   
   //表格重载
@@ -643,6 +641,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     var that = this;
     
     options = options || {};
+    delete that.haveInit;
     
     if(options.data && options.data.constructor === Array) delete that.config.data;
     that.config = $.extend(true, {}, that.config, options);
@@ -654,19 +653,17 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   Class.prototype.errorView = function(html){
     var that = this
     ,elemNone = that.layMain.find('.'+ NONE)
-    ,layNone = $(['<tr class="'+ NONE +'" data-off="1">'
-      ,'<td data-off="1"><div class="layui-table-none">'+ html +'</div></td>'
-    ,'</tr>'].join(''));
+    ,layNone = $('<div class="'+ NONE +'">'+ (html || 'Error') +'</div>');
     
     if(elemNone[0]){
       that.layNone.remove();
       elemNone.remove();
     }
     
-    if(!html) return;
+    that.layFixed.addClass(HIDE);
+    that.layMain.find('tbody').html('');
     
-    layNone.width(that.elem.width() - 2);
-    that.layMain.find('tbody').html(that.layNone = layNone);
+    that.layMain.append(that.layNone = layNone);
     
     table.cache[that.key] = []; //格式化缓存数据
   };
@@ -741,7 +738,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       res[response.dataName] = options.data.concat().splice(startLimit, options.limit);
       res[response.countName] = options.data.length;
 
-      that.renderData(res, curr, (options.page && options.page.count) ? options.page.count : options.data.length), sort();
+      that.renderData(res, curr, res[response.countName]), sort();
       that.setColsWidth();
       typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
     }
@@ -855,6 +852,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       });
 
       that.layBody.scrollTop(0);
+      that.layMain.find('.'+ NONE).remove();
       that.layMain.find('tbody').html(trs.join(''));
       that.layFixLeft.find('tbody').html(trs_fixed.join(''));
       that.layFixRight.find('tbody').html(trs_fixed_r.join(''));
@@ -889,6 +887,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     if(data.length === 0){
       that.renderForm();
       return that.errorView(options.text.none);
+    } else {
+      that.layFixed.removeClass(HIDE);
     }
     
     render(); //渲染数据
@@ -1078,7 +1078,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         that.layBox.find(ELEM_INIT).remove();
       } else {
         that.layInit = $(['<div class="layui-table-init">'
-          ,'<i class="layui-icon layui-icon-loading layui-icon"></i>'
+          ,'<i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>'
         ,'</div>'].join(''));
         that.layBox.append(that.layInit);
       }
@@ -1224,7 +1224,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     var mainHeight = that.layMain.height()
     ,fixHeight = mainHeight - scollHeight;
     that.layFixed.find(ELEM_BODY).css('height', layMainTable.height() >= fixHeight ? fixHeight : 'auto');
-    
+
     //表格宽度小于容器宽度时，隐藏固定列
     that.layFixRight[outWidth > 0 ? 'removeClass' : 'addClass'](HIDE); 
     

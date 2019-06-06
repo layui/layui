@@ -177,7 +177,7 @@ body{padding: 20px; /*overflow-y: scroll;*/}
   </table>
 </div>
 
-<script src="../src/layui.js" charset="utf-8"></script>
+<script src="../src/layui.js" src="//layui.hcwl520.com.cn/layui-v2.4.5/layui.js" charset="utf-8"></script>
 <script>
 layui.use('table', function(){
   var table = layui.table;
@@ -187,6 +187,7 @@ layui.use('table', function(){
   window.ins1 = table.render({
     elem: '#test'
     ,height: 400
+    //,width: 600
     ,title: '用户数据表'
     ,url: 'json/table/demo1.json'
     //,size: 'lg'

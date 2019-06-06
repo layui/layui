@@ -14,147 +14,165 @@
   <link rel="stylesheet" href="../src/css/layui.css" media="all">
   
   <style>
-    body{padding: 150px;}
+    body{padding: 100px;}
     #test1,#test2{margin-bottom: 100px; width: 400px;}
   </style>
 </head>
 <body>
+
+<div class="layui-btn-container">
+  <button type="button" class="layui-btn" lay-demo="getChecked">获取选中数据</button>
+  <button type="button" class="layui-btn" lay-demo="setChecked">设置节点勾选</button>
+  <button type="button" class="layui-btn" lay-demo="reload">重载实例</button>
+</div>
+
+<div class="layui-form">
+  <div class="layui-form-item">
+    <label class="layui-form-label">表单内</label>
+    <div class="layui-input-block">
+     
+  </div>
+</div>  
 
 <div id="test1"></div>
 <div id="test2"></div>
 
 <script src="../src/layui.js"></script>
 <script>
-  layui.use(['tree', 'layer'], function(){
-    var tree = layui.tree
-    ,$ = layui.$
+  layui.use(['tree', 'layer', 'util'], function(){
+    var $ = layui.$
+    ,tree = layui.tree
     ,layer = layui.layer
+    ,util = layui.util
     ,index = 100;
     
     //数据源
     var data1 = [{
-      label: '一级1'
+      title: '一级1'
       ,id: 1
       ,children: [{
-        label: '二级1-1'
+        title: '二级1-1'
         ,id: 3
         ,href: 'https://www.layui.com/doc/'
         ,children: [{
-          label: '三级1-1-3'
+          title: '三级1-1-3'
           ,id: 23
           ,children: [{
-            label: '四级1-1-3-1'
+            title: '四级1-1-3-1'
             ,id: 24
             ,children: [{
-              label: '五级1-1-3-1-1'
+              title: '五级1-1-3-1-1'
               ,id: 30
             },{
-              label: '五级1-1-3-1-2'
+              title: '五级1-1-3-1-2'
               ,id: 31
             }]
           }]
         },{
-          label: '三级1-1-1'
+          title: '三级1-1-1'
           ,id: 7
+          ,checked: true
           ,children: [{
-            label: '四级1-1-1-1'
+            title: '四级1-1-1-1'
             ,id: 15
             ,href: 'https://www.layui.com/doc/base/infrastructure.html'
           }]
         },{
-          label: '三级1-1-2'
+          title: '三级1-1-2'
           ,id: 8
           ,children: [{
-            label: '四级1-1-2-1'
+            title: '四级1-1-2-1'
             ,id: 32
           }]
         }]
       },{
-        label: '二级1-2'
+        title: '二级1-2'
         ,id: 4
+        ,spread: true
         ,children: [{
-          label: '三级1-2-1'
+          title: '三级1-2-1'
           ,id: 9
+          ,checked: true
           ,disabled: true
         },{
-          label: '三级1-2-2'
+          title: '三级1-2-2'
           ,id: 10
         }]
       },{
-        label: '二级1-3'
+        title: '二级1-3'
         ,id: 20
         ,children: [{
-          label: '三级1-3-1'
+          title: '三级1-3-1'
           ,id: 21
         },{
-          label: '三级1-3-2'
+          title: '三级1-3-2'
           ,id: 22
         }]
       }]
     },{
-      label: '一级2'
+      title: '一级2'
       ,id: 2
+      ,spread: true
       ,children: [{
-        label: '二级2-1'
+        title: '二级2-1'
         ,id: 5
+        ,spread: true
         ,children: [{
-          label: '三级2-1-1'
+          title: '三级2-1-1'
           ,id: 11
         },{
-          label: '三级2-1-2'
+          title: '三级2-1-2'
           ,id: 12
         }]
       },{
-        label: '二级2-2'
+        title: '二级2-2'
         ,id: 6
+        ,checked: true
         ,children: [{
-          label: '三级2-2-1'
+          title: '三级2-2-1'
           ,id: 13
         },{
-          label: '三级2-2-2'
+          title: '三级2-2-2'
           ,id: 14
           ,disabled: true
         }]
       }]
     },{
-      label: '一级3'
+      title: '一级3'
       ,id: 16
       ,children: [{
-        label: '二级3-1'
+        title: '二级3-1'
         ,id: 17
         ,fixed: true
         ,children: [{
-          label: '三级3-1-1'
+          title: '三级3-1-1'
           ,id: 18
         },{
-          label: '三级3-1-2'
+          title: '三级3-1-2'
           ,id: 19
         }]
       },{
-        label: '二级3-2'
+        title: '二级3-2'
         ,id: 27
         ,children: [{
-          label: '三级3-2-1'
+          title: '三级3-2-1'
           ,id: 28
         },{
-          label: '三级3-2-2'
+          title: '三级3-2-2'
           ,id: 29
         }]
       }]
     }];
 
-    var tree1 = tree.render({
+    tree.render({
       elem: '#test1'
       ,data: data1
+      ,id: 'demoId1'
       ,click: function(obj){
         layer.msg(JSON.stringify(obj.data));
         console.log(obj);
-        
       }
       ,oncheck: function(obj){
-        console.log(obj);
-      }
-      ,onsearch:function(obj){
         console.log(obj);
       }
       ,operate: function(obj){
@@ -168,27 +186,30 @@
           console.log(obj);
         };
       }
-      ,dragend: function(state, obj, target){
-        console.log(state, obj, target);
-      }
       ,showCheckbox: true  //是否显示复选框
-      ,key: 'id'  //自定义唯一标识的字段名
-      ,checked: [6, 7, 9]  //选中节点(依赖于 showCheckbox 以及 key 参数)
-      ,spread: [2, 4, 5]  //展开节点(依赖于 key 参数)
       ,accordion: 0  //是否开启手风琴模式
       
       ,onlyIconControl: true //是否仅允许节点左侧图标控制展开收缩
       ,isJump: 0  //点击文案跳转地址
       ,edit: true  //操作节点图标
-      //,defaultNodeName: 'newNode'
-      //,showSearch: true  //是否打开节点过滤
-      //,drag: true  //是否开启节点拖拽
     });
 
-    console.log(tree1.getChecked()); //返回当前勾选节点
-    //tree1.setChecked([2, 3]); //设置节点勾选
-
-
+    //按钮事件
+    util.event('lay-demo', {
+      getChecked: function(othis){
+        var checkedData = tree.getChecked('demoId1');
+        layer.alert(JSON.stringify(checkedData), {shade:0});
+        console.log(checkedData);
+      }
+      ,setChecked: function(){
+        tree.setChecked('demoId1', [12, 16]);
+      }
+      ,reload: function(){
+        tree.reload('demoId1', {
+          
+        });
+      }
+    });
 
     
     tree.render({

@@ -70,7 +70,7 @@ layui.define(['laytpl', 'form'], function(exports){
   //穿梭框模板
   ,TPL_BOX = function(obj){
     obj = obj || {};
-    return ['<div class="layui-transfer-box layui-inline" data-index="'+ obj.index +'">'
+    return ['<div class="layui-transfer-box" data-index="'+ obj.index +'">'
       ,'<div class="layui-transfer-header">'
         ,'<input type="checkbox" name="'+ obj.checkAllName +'" lay-filter="layTransferCheckbox" lay-type="all" lay-skin="primary" title="{{ d.data.title['+ obj.index +'] || \'list'+ (obj.index + 1) +'\' }}">'
       ,'</div>'
@@ -90,7 +90,7 @@ layui.define(['laytpl', 'form'], function(exports){
       index: 0
       ,checkAllName: 'layTransferLeftCheckAll'
     })
-    ,'<div class="layui-transfer-active layui-inline">'
+    ,'<div class="layui-transfer-active">'
       ,'<button type="button" class="layui-btn layui-btn-sm layui-btn-primary layui-btn-disabled" data-index="0">'
         ,'<i class="layui-icon layui-icon-next"></i>'
       ,'</button>'
