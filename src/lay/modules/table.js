@@ -644,7 +644,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     delete that.haveInit;
     
     if(options.data && options.data.constructor === Array) delete that.config.data;
-    that.config = $.extend(true, {}, that.config, options);
+    that.config = $.extend({}, that.config, options);
     
     that.render();
   };
