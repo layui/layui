@@ -688,7 +688,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     // 自定义数据加载函数
     if (typeof options.loadData === 'function') {
       that.loading();
-      options.loadData.call(that, curr, options.limit, function(res){
+      options.loadData.call(that, curr, options.limit, options.where, function(res){
          //检查数据格式是否符合规范
          if(res[response.statusName] != response.statusCode){
           that.renderForm();
