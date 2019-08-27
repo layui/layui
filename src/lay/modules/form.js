@@ -422,7 +422,11 @@ layui.define('layer', function(exports){
                 } else if(item.tagName.toLowerCase() === 'optgroup'){
                   arr.push('<dt>'+ item.label +'</dt>'); 
                 } else {
-                  arr.push('<dd lay-value="'+ item.value +'" class="'+ (value === item.value ?  THIS : '') + (item.disabled ? (' '+DISABLED) : '') +'">'+ item.innerHTML +'</dd>');
+                  var icon = typeof item.getAttribute('icon') === 'undefined' ||
+                              typeof item.getAttribute('icon') === null
+                              ? ''
+                              : '<i class="' + item.getAttribute('icon') + '" style="margin-right: 5px;"></i>';
+                  arr.push('<dd lay-value="' + item.value + '" class="' + (value === item.value ? THIS : '') + (item.disabled ? (' ' + DISABLED) : '') + '">' + icon + item.innerHTML + '</dd>');
                 }
               });
               arr.length === 0 && arr.push('<dd lay-value="" class="'+ DISABLED +'">没有选项</dd>');
