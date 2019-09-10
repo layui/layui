@@ -11,6 +11,7 @@ layui.define('form', function(exports){
   
   var $ = layui.$
   ,form = layui.form
+  ,layer = layui.layer
   
   //模块名
   ,MOD_NAME = 'tree'
@@ -89,8 +90,6 @@ layui.define('form', function(exports){
     ,onlyIconControl: false  //是否仅允许节点左侧图标控制展开收缩
     ,isJump: false  //是否允许点击节点时弹出新窗口跳转
     ,edit: false  //是否开启节点的操作图标
-    //,showSearch: false  //是否打开节点过滤
-    //,drag: false  //是否开启节点拖拽
     
     ,text: {
       defaultNodeName: '未命名' //节点默认名称
@@ -114,6 +113,8 @@ layui.define('form', function(exports){
   Class.prototype.render = function(){
     var that = this
     ,options = that.config;
+    
+    that.checkids = [];
 
     var temp = $('<div class="layui-tree'+ (options.showCheckbox ? " layui-form" : "") + (options.showLine ? " layui-tree-line" : "") +'" lay-filter="LAY-tree-'+ that.index +'"></div>');
     that.tree(temp);
@@ -121,14 +122,8 @@ layui.define('form', function(exports){
     var othis = options.elem = $(options.elem);
     if(!othis[0]) return;
 
-    if(options.showSearch){
-      temp.prepend('<input type="text" class="layui-input layui-tree-search" placeholder="请输入关键字进行过滤">');
-    };
-    
-    
     //索引
     that.key = options.id || that.index;
-    
     
     //插入组件结构
     that.elem = temp;
@@ -138,9 +133,6 @@ layui.define('form', function(exports){
     if(that.elem.find('.layui-tree-set').length == 0){
       return that.elem.append(that.elemNone);
     };
-
-    //拖拽事件
-    options.drag && that.drag();
     
     //复选框渲染
     if(options.showCheckbox){
@@ -178,13 +170,13 @@ layui.define('form', function(exports){
     var that = this
     ,options = that.config
     ,data = children || options.data;
-    
+
     //遍历数据
     layui.each(data, function(index, item){
       var hasChild = item.children && item.children.length > 0
       ,packDiv = $('<div class="layui-tree-pack" '+ (item.spread ? 'style="display: block;"' : '') +'"></div>')
       ,entryDiv = $(['<div data-id="'+ item.id +'" class="layui-tree-set'+ (item.spread ? " layui-tree-spread" : "") + (item.checked ? " layui-tree-checkedFirst" : "") +'">'
-        ,'<div '+ (options.drag && !item.fixed ? 'draggable="true"' : '') +' class="layui-tree-entry">'
+        ,'<div class="layui-tree-entry">'
           ,'<div class="layui-tree-main">'
             //箭头
             ,function(){
@@ -201,7 +193,7 @@ layui.define('form', function(exports){
             
             //复选框
             ,function(){
-              return options.showCheckbox ? '<input type="checkbox" name="layuiTreeCheck" lay-skin="primary" '+ (item.disabled ? "disabled" : "") +'  value="'+ item.id +'">' : '';
+              return options.showCheckbox ? '<input type="checkbox" name="'+ (item.field || ('layuiTreeCheck_'+ item.id)) +'" same="layuiTreeCheck" lay-skin="primary" '+ (item.disabled ? "disabled" : "") +' value="'+ item.id +'">' : '';
             }()
             
             //节点
@@ -236,7 +228,7 @@ layui.define('form', function(exports){
         }
       }()
       ,'</div></div>'].join(''));
-      
+
       //如果有子节点，则递归继续生成树
       if(hasChild){
         entryDiv.append(packDiv);
@@ -260,6 +252,7 @@ layui.define('form', function(exports){
       
       //选择框
       if(options.showCheckbox){
+        item.checked && that.checkids.push(item.id);
         that.checkClick(entryDiv, item);
       }
       
@@ -337,32 +330,33 @@ layui.define('form', function(exports){
     var that = this
     ,options = that.config
     ,checked = elemCheckbox.prop('checked');
+    
+    if(elemCheckbox.prop('disabled')) return;
 
     //同步子节点选中状态
     if(typeof item.children === 'object' || elem.find('.'+ELEM_PACK)[0]){
-      var childs = elem.find('.'+ ELEM_PACK).find('input[name="layuiTreeCheck"]');
+      var childs = elem.find('.'+ ELEM_PACK).find('input[same="layuiTreeCheck"]');
       childs.each(function(){
         if(this.disabled) return; //不可点击则跳过
         this.checked = checked;
       });
     };
 
-    //同步父选中状态
+    //同步父节点选中状态
     var setParentsChecked = function(thisNodeElem){
       //若无父节点，则终止递归
       if(!thisNodeElem.parents('.'+ ELEM_SET)[0]) return;
-      
+
       var state
       ,parentPack = thisNodeElem.parent('.'+ ELEM_PACK)
       ,parentNodeElem = parentPack.parent()
-      ,parentCheckbox =  parentPack.prev().find('input[name="layuiTreeCheck"]');
-      
-      
+      ,parentCheckbox =  parentPack.prev().find('input[same="layuiTreeCheck"]');
+
       //如果子节点有任意一条选中，则父节点为选中状态
       if(checked){
         parentCheckbox.prop('checked', checked);
       } else { //如果当前节点取消选中，则根据计算“兄弟和子孙”节点选中状态，来同步父节点选中状态
-        parentPack.find('input[name="layuiTreeCheck"]').each(function(){
+        parentPack.find('input[same="layuiTreeCheck"]').each(function(){
           if(this.checked){
             state = true;
           }
@@ -377,7 +371,7 @@ layui.define('form', function(exports){
     };
     
     setParentsChecked(elem);
-    
+
     that.renderForm('checkbox');
   };
   
@@ -387,17 +381,20 @@ layui.define('form', function(exports){
     ,options = that.config
     ,entry = elem.children('.'+ ELEM_ENTRY)
     ,elemMain = entry.children('.'+ ELEM_MAIN);
-
-    elemMain.on('click', 'input[name="layuiTreeCheck"]+', function(e){
+    
+    
+    
+    //点击复选框
+    elemMain.on('click', 'input[same="layuiTreeCheck"]+', function(e){
       layui.stope(e); //阻止点击节点事件
-      
+
       var elemCheckbox = $(this).prev()
       ,checked = elemCheckbox.prop('checked');
       
       if(elemCheckbox.prop('disabled')) return;
       
       that.setCheckbox(elem, item, elemCheckbox);
-      
+
       //复选框点击产生的回调
       options.oncheck && options.oncheck({
         elem: elem
@@ -497,9 +494,9 @@ layui.define('form', function(exports){
         };
         if(!options.showCheckbox) return;
         //若开启复选框，同步新增节点状态
-        if(elemMain.find('input[name="layuiTreeCheck"]')[0].checked){
+        if(elemMain.find('input[same="layuiTreeCheck"]')[0].checked){
           var packLast = elem.children('.'+ELEM_PACK).children('.'+ELEM_SET).last();
-          packLast.find('input[name="layuiTreeCheck"]')[0].checked = true;
+          packLast.find('input[same="layuiTreeCheck"]')[0].checked = true;
         };
         that.renderForm('checkbox');
       
@@ -537,427 +534,122 @@ layui.define('form', function(exports){
         });
 
       //删除
-      }else{
-        options.operate && options.operate(returnObj); //节点删除的回调
-        returnObj.status = 'remove'; //标注节点删除
-        
-        //若删除最后一个，显示空数据提示
-        if(!elem.prev('.'+ELEM_SET)[0] && !elem.next('.'+ELEM_SET)[0] && !elem.parent('.'+ELEM_PACK)[0]){
-          elem.remove();
-          that.elem.append(that.elemNone);
-          return;
-        };
-        //若有兄弟节点
-        if(elem.siblings('.'+ELEM_SET).children('.'+ELEM_ENTRY)[0]){
-          //若开启复选框
-          if(options.showCheckbox){
-            //若开启复选框，进行下步操作
-            var elemDel = function(elem){
-              //若无父结点，则不执行
-              if(!elem.parents('.'+ELEM_SET)[0]) return;
-              var siblingTree = elem.siblings('.'+ELEM_SET).children('.'+ELEM_ENTRY)
-              ,parentTree = elem.parent('.'+ELEM_PACK).prev()
-              ,checkState = parentTree.find('input[name="layuiTreeCheck"]')[0]
-              ,state = 1, num = 0;
-              //若父节点未勾选
-              if(checkState.checked == false){
-                //遍历兄弟节点
-                siblingTree.each(function(i, item1){
-                  var input = $(item1).find('input[name="layuiTreeCheck"]')[0]
-                  if(input.checked == false && !input.disabled){
-                    state = 0;
-                  };
-                  //判断是否全为不可勾选框
-                  if(!input.disabled){
-                    num = 1;
-                  };
-                });
-                //若有可勾选选择框并且已勾选
-                if(state == 1 && num == 1){
-                  //勾选父节点
-                  checkState.checked = true;
-                  that.renderForm('checkbox');
-                  //向上遍历祖先节点
-                  elemDel(parentTree.parent('.'+ELEM_SET));
-                };
-              };
-            };
-            elemDel(elem);
+      } else {
+        layer.confirm('确认删除该节点 "<span style="color: #999;">'+ (item.title || '') +'</span>" 吗？', function(index){
+          options.operate && options.operate(returnObj); //节点删除的回调
+          returnObj.status = 'remove'; //标注节点删除
+          
+          layer.close(index);
+          
+          //若删除最后一个，显示空数据提示
+          if(!elem.prev('.'+ELEM_SET)[0] && !elem.next('.'+ELEM_SET)[0] && !elem.parent('.'+ELEM_PACK)[0]){
+            elem.remove();
+            that.elem.append(that.elemNone);
+            return;
           };
-          //若开启连接线
-          if(options.showLine){
-            //遍历兄弟节点，判断兄弟节点是否有子节点
-            var siblings = elem.siblings('.'+ELEM_SET), num = 1
-            ,parentPack = elem.parent('.'+ELEM_PACK);
-            layui.each(siblings, function(index, i){
-              if(!$(i).children('.'+ELEM_PACK)[0]){
-                num = 0;
-              };
-            });
-            //若兄弟节点都有子节点
-            if(num == 1){
-              //若节点本身无子节点
-              if(!packCont[0]){
-                //父级去除延伸线，因为此时子节点里没有空节点
-                parentPack.removeClass(ELEM_EXTEND);
-                siblings.children('.'+ELEM_PACK).addClass(ELEM_SHOW);
-                siblings.children('.'+ELEM_PACK).children('.'+ELEM_SET).removeClass(ELEM_LINE_SHORT);
-              };
-              //若为最后一个节点
-              if(!elem.next()[0]){
-                elem.prev().children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
-              }else{
-                parentPack.children('.'+ELEM_SET).last().children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
-              };
-              //若为最外层最后一个节点，去除前一个结点的连接线
-              if(!elem.next()[0] && !elem.parents('.'+ELEM_SET)[1] && !elem.parents('.'+ELEM_SET).eq(0).next()[0]){
-                elem.prev('.'+ELEM_SET).addClass(ELEM_LINE_SHORT);
-              };
-            }else{
-              //若为最后一个节点且有延伸线
-              if(!elem.next()[0] && elem.hasClass(ELEM_LINE_SHORT)){
-                elem.prev().addClass(ELEM_LINE_SHORT);
-              };
-            };
-          };
-        
-        }else{
-          //若无兄弟节点
-          var prevDiv = elem.parent('.'+ELEM_PACK).prev();
-          //若开启了连接线
-          if(options.showLine){
-            prevDiv.find('.'+ICON_CLICK).removeClass('layui-tree-icon');
-            prevDiv.find('.'+ICON_CLICK).children('.layui-icon').removeClass(ICON_SUB).addClass('layui-icon-file');
-            //父节点所在层添加延伸线
-            var pare = prevDiv.parents('.'+ELEM_PACK).eq(0);
-            pare.addClass(ELEM_EXTEND);
-
-            //兄弟节点最后子节点添加延伸线
-            pare.children('.'+ELEM_SET).each(function(){
-              $(this).children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
-            });
-          }else{
-          //父节点隐藏箭头
-            prevDiv.find('.layui-tree-iconArrow').addClass(HIDE);
-          };
-          //移除展开属性
-          elem.parents('.'+ELEM_SET).eq(0).removeClass(ELEM_SPREAD);
-          //移除节点容器
-          elem.parent('.'+ELEM_PACK).remove();
-        };
-
-        elem.remove();
-        
-        
-      };
-    });
-  };
-
-  //拖拽
-  Class.prototype.drag = function(){
-    var that = this
-    ,options = that.config;
-
-    that.elem.on('dragstart', '.'+ELEM_ENTRY, function(){
-      var parent = $(this).parent('.'+ELEM_SET)
-      ,pares = parent.parents('.'+ELEM_SET)[0] ? parent.parents('.'+ELEM_SET).eq(0) : '未找到父节点';
-      
-      //开始拖拽触发的回调
-      options.dragstart && options.dragstart(parent, pares);
-    });
-
-    that.elem.on('dragend', '.'+ELEM_ENTRY, function(e){
-      var e = e || event
-      ,disY = e.clientY
-      ,olds = $(this)
-      ,setParent = olds.parent('.'+ELEM_SET)
-      ,setHeight = setParent.height()
-      ,setTop = setParent.offset().top
-      ,elemSet = that.elem.find('.'+ELEM_SET)
-      ,elemHeight = that.elem.height()
-      ,elemTop = that.elem.offset().top
-      ,maxTop = elemHeight + elemTop - 13;
-      //原父节点
-      var isTree = setParent.parents('.'+ELEM_SET)[0]
-      ,nextOld = setParent.next()[0];
-      if(isTree){
-        var parentPack = setParent.parent('.'+ELEM_PACK)
-        ,parentSet = setParent.parents('.'+ELEM_SET).eq(0)
-        ,warpPack = parentSet.parent('.'+ELEM_PACK)
-        ,parentTop = parentSet.offset().top
-        ,siblingOld = setParent.siblings()
-        ,num = parentSet.children('.'+ELEM_PACK).children('.'+ELEM_SET).length;
-      };
-      //原节点操作
-      var setDel = function(parentSet){
-        //若为最后一个节点操作
-        if(!isTree && !nextOld){
-          that.elem.children('.'+ELEM_SET).last().children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
-        };
-        //若为最外层节点，不做下列操作
-        if(!isTree){
-          setParent.removeClass('layui-tree-setHide');
-          return;
-        };
-
-        //若为唯一子节点
-        if(num == 1){
-          if(options.showLine){
-            parentSet.find('.'+ICON_CLICK).removeClass('layui-tree-icon');
-            parentSet.find('.'+ICON_CLICK).children('.layui-icon').removeClass(ICON_SUB).addClass('layui-icon-file');
-            warpPack.addClass(ELEM_EXTEND);
-            warpPack.children('.'+ELEM_SET).children('.'+ELEM_PACK).each(function(){
-              $(this).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
-            });
-          }else{
-            parentSet.find('.layui-tree-iconArrow').addClass(HIDE);
-          };
-          parentSet.children('.'+ELEM_PACK).remove();
-          parentSet.removeClass(ELEM_SPREAD);
-        }else{
-          //若开启连接线
-          if(options.showLine){
-            //遍历兄弟节点，判断兄弟节点是否有子节点
-            var number = 1;
-            layui.each(siblingOld, function(index, i){
-              if(!$(i).children('.'+ELEM_PACK)[0]){
-                number = 0;
-              };
-            });
-
-            //若兄弟节点都有子节点
-            if(number == 1){
-              //若节点本身无子节点
-              if(!setParent.children('.'+ELEM_PACK)[0]){
-                //父级去除延伸线，因为此时子节点里没有空节点
-                parentPack.removeClass(ELEM_EXTEND);
-                siblingOld.children('.'+ELEM_PACK).addClass(ELEM_SHOW);
-                siblingOld.children('.'+ELEM_PACK).children('.'+ELEM_SET).removeClass(ELEM_LINE_SHORT);
-              };
-              //若为最后一个节点
-              parentPack.children('.'+ELEM_SET).last().children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
-              //若为最外层最后一个节点，去除前一个结点的连接线
-              if(!nextOld && !parentSet.parents('.'+ELEM_SET)[0] && !parentSet.next()[0]){
-                parentPack.children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
-              };
-            }else{
-              //若为最后一个节点且有延伸线
-              if(!nextOld && setParent.hasClass(ELEM_LINE_SHORT)){
-                parentPack.children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
-              };
-            };
-          };
-          //若开启复选框
-          if(options.showCheckbox){
-            //若开启复选框，进行下步操作
-            var elemRemove = function(elem){
-              //若无父结点，则不执行
-              if(elem){
+          //若有兄弟节点
+          if(elem.siblings('.'+ELEM_SET).children('.'+ELEM_ENTRY)[0]){
+            //若开启复选框
+            if(options.showCheckbox){
+              //若开启复选框，进行下步操作
+              var elemDel = function(elem){
+                //若无父结点，则不执行
                 if(!elem.parents('.'+ELEM_SET)[0]) return;
-              }else{
-                if(!parentSet[0]) return;
-              };
-              var siblingTree = elem ? elem.siblings().children('.'+ELEM_ENTRY) : siblingOld.children('.'+ELEM_ENTRY)
-              ,parentTree = elem ? elem.parent('.'+ELEM_PACK).prev() : parentPack.prev()
-              ,checkState = parentTree.find('input[name="layuiTreeCheck"]')[0]
-              ,state = 1, ndig = 0;
-              //若父节点未勾选
-              if(checkState.checked == false){
-                //遍历兄弟节点
-                siblingTree.each(function(i, item1){
-                  var input = $(item1).find('input[name="layuiTreeCheck"]')[0];
-                  if(input.checked == false && !input.disabled){ state = 0 };
-                  //判断是否全为不可勾选框
-                  if(!input.disabled){ ndig = 1 };
-                });
-                //若有可勾选选择框并且已勾选
-                if(state == 1 && ndig == 1){
-                  //勾选父节点
-                  checkState.checked = true;
-                  that.renderForm('checkbox');
-                  //向上遍历祖先节点
-                  elemRemove(parentTree.parent('.'+ELEM_SET) || parentSet);
+                var siblingTree = elem.siblings('.'+ELEM_SET).children('.'+ELEM_ENTRY)
+                ,parentTree = elem.parent('.'+ELEM_PACK).prev()
+                ,checkState = parentTree.find('input[same="layuiTreeCheck"]')[0]
+                ,state = 1, num = 0;
+                //若父节点未勾选
+                if(checkState.checked == false){
+                  //遍历兄弟节点
+                  siblingTree.each(function(i, item1){
+                    var input = $(item1).find('input[same="layuiTreeCheck"]')[0]
+                    if(input.checked == false && !input.disabled){
+                      state = 0;
+                    };
+                    //判断是否全为不可勾选框
+                    if(!input.disabled){
+                      num = 1;
+                    };
+                  });
+                  //若有可勾选选择框并且已勾选
+                  if(state == 1 && num == 1){
+                    //勾选父节点
+                    checkState.checked = true;
+                    that.renderForm('checkbox');
+                    //向上遍历祖先节点
+                    elemDel(parentTree.parent('.'+ELEM_SET));
+                  };
                 };
               };
+              elemDel(elem);
             };
-            elemRemove();
-          };
-        };
-      };
-
-      //查找
-      elemSet.each(function(){
-        //筛选可插入位置
-        if($(this).height() != 0){
-          //若在本身位置
-          if((disY > setTop && disY < setTop + setHeight)){
-            options.dragend && options.dragend('drag error');
-            return;
-          };
-          //若仅有一个子元素
-          if(num == 1 && disY > parentTop && disY < setTop + setHeight){
-            options.dragend && options.dragend('drag error');
-            return;
-          };
-          var thisTop = $(this).offset().top;
-
-          //若位于元素上
-          if((disY > thisTop) && (disY < thisTop + 15)){
-            //若元素无子节点
-            if(!$(this).children('.'+ELEM_PACK)[0]){
-              if(options.showLine){
-                $(this).find('.'+ICON_CLICK).eq(0).addClass('layui-tree-icon');
-                $(this).find('.'+ICON_CLICK).eq(0).children('.layui-icon').addClass(ICON_ADD).removeClass('layui-icon-file');
-              }else{
-                $(this).find(".layui-tree-iconArrow").removeClass(HIDE);
-              };
-              $(this).append('<div class="layui-tree-pack"></div>');
-            };
-            //插入元素
-            $(this).children('.'+ELEM_PACK).append(setParent);
-            setDel(parentSet);
-            //若开启连接线，更改线状态
+            //若开启连接线
             if(options.showLine){
-              var children = $(this).children('.'+ELEM_PACK).children('.'+ELEM_SET);
-              setParent.children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
-              if(children.length == 1){
-                //遍历兄弟节点，判断兄弟节点是否有子节点
-                var siblings = $(this).siblings('.'+ELEM_SET), ss = 1
-                ,parentPack = $(this).parent('.'+ELEM_PACK);
-                layui.each(siblings, function(index, i){
-                  if(!$(i).children('.'+ELEM_PACK)[0]){
-                    ss = 0;
-                  };
-                });
-                //若兄弟节点都有子节点
-                if(ss == 1){
-                  //兄弟节点添加连接线
+              //遍历兄弟节点，判断兄弟节点是否有子节点
+              var siblings = elem.siblings('.'+ELEM_SET), num = 1
+              ,parentPack = elem.parent('.'+ELEM_PACK);
+              layui.each(siblings, function(index, i){
+                if(!$(i).children('.'+ELEM_PACK)[0]){
+                  num = 0;
+                };
+              });
+              //若兄弟节点都有子节点
+              if(num == 1){
+                //若节点本身无子节点
+                if(!packCont[0]){
+                  //父级去除延伸线，因为此时子节点里没有空节点
+                  parentPack.removeClass(ELEM_EXTEND);
                   siblings.children('.'+ELEM_PACK).addClass(ELEM_SHOW);
                   siblings.children('.'+ELEM_PACK).children('.'+ELEM_SET).removeClass(ELEM_LINE_SHORT);
-                  $(this).children('.'+ELEM_PACK).addClass(ELEM_SHOW);
-                  //父级移除延伸线
-                  parentPack.removeClass(ELEM_EXTEND);
-                  //同层节点最后一个去除连接线
-                  parentPack.children('.'+ELEM_SET).last().children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT).removeClass('layui-tree-setHide');
+                };
+                //若为最后一个节点
+                if(!elem.next()[0]){
+                  elem.prev().children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
                 }else{
-                  $(this).children('.'+ELEM_PACK).children('.'+ELEM_SET).addClass(ELEM_LINE_SHORT).removeClass('layui-tree-setHide');
+                  parentPack.children('.'+ELEM_SET).last().children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
+                };
+                //若为最外层最后一个节点，去除前一个结点的连接线
+                if(!elem.next()[0] && !elem.parents('.'+ELEM_SET)[1] && !elem.parents('.'+ELEM_SET).eq(0).next()[0]){
+                  elem.prev('.'+ELEM_SET).addClass(ELEM_LINE_SHORT);
                 };
               }else{
-                //若原子节点含有延伸线
-                if(setParent.prev('.'+ELEM_SET).hasClass(ELEM_LINE_SHORT)){
-                  setParent.prev('.'+ELEM_SET).removeClass(ELEM_LINE_SHORT);
-                  setParent.addClass(ELEM_LINE_SHORT);
-                }else{
-                //清除之前状态
-                  setParent.removeClass('layui-tree-setLineShort layui-tree-setHide');
-                  //若添加节点无子节点
-                  if(!setParent.children('.'+ELEM_PACK)[0]){
-                    //兄弟节点子节点添加延伸线
-                    setParent.siblings('.'+ELEM_SET).find('.'+ELEM_PACK).each(function(){
-                      $(this).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
-                    });
-                  }else{
-                    setParent.prev('.'+ELEM_SET).children('.'+ELEM_PACK).children('.'+ELEM_SET).last().removeClass(ELEM_LINE_SHORT);
-                  };
-                };
-                //若无下兄弟节点
-                if(!$(this).next()[0]){
-                  setParent.addClass(ELEM_LINE_SHORT);
+                //若为最后一个节点且有延伸线
+                if(!elem.next()[0] && elem.hasClass(ELEM_LINE_SHORT)){
+                  elem.prev().addClass(ELEM_LINE_SHORT);
                 };
               };
             };
-            //若开启复选框，同步新增节点状态
-            if(options.showCheckbox){
-              if($(this).children('.'+ELEM_ENTRY).find('input[name="layuiTreeCheck"]')[0].checked){
-                var packLast = setParent.children('.'+ELEM_ENTRY);
-                packLast.find('input[name="layuiTreeCheck"]+').click();
-              };
-            };
-            options.dragend && options.dragend('drag success', setParent, $(this));
-            return false;
-
-          //若位于元素上方
-          }else if(disY < thisTop){
-            $(this).before(setParent);
-            setDel(parentSet);
-            //若开启连接线，更改线状态
+          
+          }else{
+            //若无兄弟节点
+            var prevDiv = elem.parent('.'+ELEM_PACK).prev();
+            //若开启了连接线
             if(options.showLine){
-              var packCont = setParent.children('.'+ELEM_PACK)
-              ,setFirst = $(this).parents('.'+ELEM_SET).eq(0)
-              ,setPackLast = setFirst.children('.'+ELEM_PACK).children('.'+ELEM_SET).last();
-              if(packCont[0]){
-                setParent.removeClass(ELEM_LINE_SHORT);
-                packCont.children('.'+ELEM_SET).last().removeClass(ELEM_LINE_SHORT);
-                //遍历兄弟节点，判断兄弟节点是否有子节点
-                var siblings = setParent.siblings('.'+ELEM_SET), ss = 1;
-                layui.each(siblings, function(index, i){
-                  if(!$(i).children('.'+ELEM_PACK)[0]){
-                    ss = 0;
-                  };
-                });
-                //若兄弟节点都有子节点
-                if(ss == 1){
-                  if(setFirst[0]){
-                    //兄弟节点添加连接线
-                    siblings.children('.'+ELEM_PACK).addClass(ELEM_SHOW);
-                    siblings.children('.'+ELEM_PACK).children('.'+ELEM_SET).removeClass(ELEM_LINE_SHORT);
-                    //同层节点最后一个添加延伸线
-                    setPackLast.children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT).removeClass(ELEM_SHOW);
-                  };
-                }else{
-                  setParent.children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
-                };
+              prevDiv.find('.'+ICON_CLICK).removeClass('layui-tree-icon');
+              prevDiv.find('.'+ICON_CLICK).children('.layui-icon').removeClass(ICON_SUB).addClass('layui-icon-file');
+              //父节点所在层添加延伸线
+              var pare = prevDiv.parents('.'+ELEM_PACK).eq(0);
+              pare.addClass(ELEM_EXTEND);
 
-                //若是最外层，要始终保持相连的状态
-                if(!setFirst.parent('.'+ELEM_PACK)[0] && setFirst.next()[0]){
-                  setPackLast.removeClass(ELEM_LINE_SHORT);
-                };
-              }else{
-                if(!setFirst.hasClass(ELEM_EXTEND)){
-                  setFirst.addClass(ELEM_EXTEND);
-                };
-                //子节点添加延伸线
-                setFirst.find('.'+ELEM_PACK).each(function(){
-                  $(this).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
-                });
-                //若是最外层，要始终保持相连的状态
-                // if(!setFirst.parent('.'+ELEM_PACK)[0] && setFirst.next()[0]){
-                //   //setFirst.children('.'+ELEM_PACK).children('.'+ELEM_SET).last().removeClass(ELEM_LINE_SHORT);
-                // };
-              };
-              //若移到最外层
-              if(!setFirst[0]){
-                //隐藏前置连接线
-                setParent.addClass('layui-tree-setHide');
-                setParent.children('.'+ELEM_PACK).children('.'+ELEM_SET).last().removeClass(ELEM_LINE_SHORT);
-              };
+              //兄弟节点最后子节点添加延伸线
+              pare.children('.'+ELEM_SET).each(function(){
+                $(this).children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
+              });
+            }else{
+            //父节点隐藏箭头
+              prevDiv.find('.layui-tree-iconArrow').addClass(HIDE);
             };
-            //开启复选框且有父节点，同步新增节点状态
-            if(setFirst[0] && options.showCheckbox){
-              if(setFirst.children('.'+ELEM_ENTRY).find('input[name="layuiTreeCheck"]')[0].checked){
-                var packLast = setParent.children('.'+ELEM_ENTRY);
-                packLast.find('input[name="layuiTreeCheck"]+').click();
-              };
-            };
-            options.dragend && options.dragend('拖拽成功，插入目标节点上方', setParent, $(this));
-            return false;
-
-          //若位于最下方
-          }else if(disY > maxTop){
-            that.elem.children('.'+ELEM_SET).last().children('.'+ELEM_PACK).addClass(ELEM_SHOW);
-            that.elem.append(setParent);
-            setDel(parentSet);
-            //最外层保持连接
-            setParent.prev().children('.'+ELEM_PACK).children('.'+ELEM_SET).last().removeClass(ELEM_LINE_SHORT);
-            //隐藏前置连接线
-            setParent.addClass('layui-tree-setHide');
-            //最后一个子节点加延伸
-            setParent.children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
-            options.dragend && options.dragend('拖拽成功，插入最外层节点', setParent, that.elem);
-            return false;
+            //移除展开属性
+            elem.parents('.'+ELEM_SET).eq(0).removeClass(ELEM_SPREAD);
+            //移除节点容器
+            elem.parent('.'+ELEM_PACK).remove();
           };
-        };
-      });
+
+          elem.remove();
+        });
+        
+      };
     });
   };
 
@@ -967,10 +659,8 @@ layui.define('form', function(exports){
     ,options = that.config
     ,checkWarp = that.elem.find('.layui-tree-checkedFirst');
     
-     //初始选中
-    layui.each(checkWarp, function(i, item){
-      $(item).children('.'+ELEM_ENTRY).find('input[name="layuiTreeCheck"]+').trigger('click');
-    });
+    //初始选中
+    that.setChecked(that.checkids);
     
     //搜索
     that.elem.find('.layui-tree-search').on('keyup', function(){
@@ -1069,7 +759,7 @@ layui.define('form', function(exports){
     //初始选中
     that.elem.find('.'+ELEM_SET).each(function(i, item){
       var thisId = $(this).data('id')
-      ,input = $(item).children('.'+ELEM_ENTRY).find('input[name="layuiTreeCheck"]')
+      ,input = $(item).children('.'+ELEM_ENTRY).find('input[same="layuiTreeCheck"]')
       ,reInput = input.next();
       
       //若返回数字
@@ -1080,13 +770,15 @@ layui.define('form', function(exports){
           };
           return false;
         };
-      }else{
-        //若返回数组
-        if($.inArray(thisId, checkedId) != -1){
-          if(!input[0].checked){
+      } 
+      //若返回数组
+      else if(typeof checkedId === 'object'){
+        layui.each(checkedId, function(index, value){
+          if(value == thisId && !input[0].checked){
             reInput.click();
-          };
-        };
+            return true;
+          }
+        });
       };
     });
   };

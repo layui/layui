@@ -314,6 +314,9 @@ layui.define(['laytpl', 'form'], function(exports){
     var that = this
     ,options = that.config
     ,selectedData = [];
+    
+    that.setValue();
+    
     layui.each(value || options.value, function(index, item){
       layui.each(options.data, function(index2, item2){
         delete item2.selected;

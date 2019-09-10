@@ -24,7 +24,7 @@ body{padding:100px 0;}
 layui.use('slider', function(){
   var slider = layui.slider;
   
-  slider.render({
+  var sliderInst = slider.render({
     elem: '#slideTest1'
     //,type: 'vertical'
     //,min: -20 //最小值
@@ -45,6 +45,8 @@ layui.use('slider', function(){
     //,disabled: true //禁用滑块
     //,theme: '#c00' //主题色
   });
+  
+  sliderInst.setValue(48)
 });
 </script>
 </body>

@@ -1,7 +1,7 @@
 /*!
 
- @Title: Layui
- @Description：经典模块化前端框架
+ @Title: layui
+ @Description：经典模块化前端 UI 框架
  @Site: www.layui.com
  @Author: 贤心
  @License：MIT
@@ -19,7 +19,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.5.4'; //版本号
+    this.v = '2.5.5'; //版本号
   }
 
   //获取layui所在目录
