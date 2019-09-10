@@ -244,7 +244,31 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       none: '无数据'
     }
   };
+    Class.prototype.getFullHeightGap = function () {
 
+        var that = this;
+        if (!that.originalHeight) {
+            return null;
+        }
+
+        var values = that.originalHeight.match(/(?<=full\-|\-)([\'\"][^\'\"]+[\'\"]|\d+)/g);
+        if (!values) {
+            return null;
+        }
+        var fullHeightGap = 0;
+        for (var i = 0; i < values.length; i++) {
+            var nv = values[i];
+            var ev = /^'(.+)'/.exec(values[i]);
+            if (ev) {
+                fullHeightGap += $(ev[1]).outerHeight();
+            }
+            else {
+                fullHeightGap += Number.parseInt(nv);
+            }
+        }
+
+        return fullHeightGap;
+    };
   //表格渲染
   Class.prototype.render = function(){
     var that = this
@@ -255,10 +279,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     options.id = options.id || options.elem.attr('id') || that.index;
 
     //请求参数的自定义格式
-    options.request = $.extend({
-      pageName: 'page'
-      ,limitName: 'limit'
-    }, options.request)
+      options.request = $.extend({
+          pageName: 'page'
+          , limitName: 'limit'
+      }, options.request);
     
     //响应数据的自定义格式
     options.response = $.extend({
@@ -280,10 +304,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     if(!options.elem[0]) return that;
     
+    that.originalHeight=options.height;
     //高度铺满：full-差距值
     if(options.height && /^full-\d+$/.test(options.height)){
-      that.fullHeightGap = options.height.split('-')[1];
-      options.height = _WIN.height() - that.fullHeightGap;
+      //that.getFullHeightGap = options.height.split('-')[1];
+      options.height = _WIN.height() - that.getFullHeightGap();
     }
     
     //初始化一些参数
@@ -1156,8 +1181,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,options = that.config
     ,height = options.height, bodyHeight;
 
-    if(that.fullHeightGap){
-      height = _WIN.height() - that.fullHeightGap;
+    var fullHeightGap=that.getFullHeightGap();
+    if(fullHeightGap){
+      height = _WIN.height() - fullHeightGap;
       if(height < 135) height = 135;
       that.elem.css('height', height);
     }
