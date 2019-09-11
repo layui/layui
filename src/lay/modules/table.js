@@ -245,13 +245,14 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     }
   };
     Class.prototype.getFullHeightGap = function () {
+      var that = this
+        ,options = that.config;
+        
+        // if (!that.originalHeight) {
+        //     return null;
+        // }
 
-        var that = this;
-        if (!that.originalHeight) {
-            return null;
-        }
-
-        var values = that.originalHeight.match(/([\'\"][^\'\"]+[\'\"]|\d+)(?=\-|$)/g);
+        var values = options.height.match(/([\'\"][^\'\"]+[\'\"]|\d+)(?=\-|$)/g);
         if (!values) {
             return null;
         }
@@ -268,6 +269,25 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         }
 
         return fullHeightGap;
+    };
+    Class.prototype.getHeight=function(){
+      var that = this
+        ,options = that.config;
+      if(!options.height){
+        return options.height;
+      }
+      if(typeof(options.height)==="number"){
+        return options.height;
+      }
+
+      //高度铺满：full-差距值
+      if(options.height && /(^full\-|\-)([\'\"][^\'\"]+[\'\"]|\d+)/g.test(options.height)){
+        //that.originalHeight=options.height;
+        //that.getFullHeightGap = options.height.split('-')[1];
+        var height = _WIN.height() - that.getFullHeightGap();
+        if(height < 135) height = 135;
+        return height;
+      }
     };
   //表格渲染
   Class.prototype.render = function(){
@@ -304,12 +324,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     if(!options.elem[0]) return that;
     
-    that.originalHeight=options.height;
     //高度铺满：full-差距值
-    if(options.height && /(^full\-|\-)([\'\"][^\'\"]+[\'\"]|\d+)/g.test(options.height)){
-      //that.getFullHeightGap = options.height.split('-')[1];
-      options.height = _WIN.height() - that.getFullHeightGap();
-    }
+    // if(options.height && /(^full\-|\-)([\'\"][^\'\"]+[\'\"]|\d+)/g.test(options.height)){
+    //   that.originalHeight=options.height;
+    //   //that.getFullHeightGap = options.height.split('-')[1];
+    //   options.height = _WIN.height() - that.getFullHeightGap();
+    // }
     
     //初始化一些参数
     that.setInit();
@@ -1179,15 +1199,19 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   Class.prototype.fullSize = function(){
     var that = this
     ,options = that.config
-    ,height = options.height, bodyHeight;
+    ,height = that.getHeight(), bodyHeight;
 
-    var fullHeightGap=that.getFullHeightGap();
-    if(fullHeightGap){
-      height = _WIN.height() - fullHeightGap;
-      if(height < 135) height = 135;
-      that.elem.css('height', height);
-    }
-    
+    // var fullHeightGap=that.getFullHeightGap();
+    // if(fullHeightGap){
+    //   height = _WIN.height() - fullHeightGap;
+    //   if(height < 135) height = 135;
+    //   that.elem.css('height', height);
+    // }
+    // else{
+
+    // }
+    that.elem.css('height', height);
+
     if(!height) return;
 
     //减去列头区域的高度
@@ -1290,9 +1314,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         
         panel.html(list);
         
+        var height=that.getHeight();
         //限制最大高度
-        if(options.height){
-          panel.css('max-height', options.height - (that.layTool.outerHeight() || 50));
+        if(height){
+          panel.css('max-height', height - (that.layTool.outerHeight() || 50));
         }
         
         //插入元素
