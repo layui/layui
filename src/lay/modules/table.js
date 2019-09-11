@@ -251,7 +251,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
             return null;
         }
 
-        var values = that.originalHeight.match(/(?<=full\-|\-)([\'\"][^\'\"]+[\'\"]|\d+)/g);
+        var values = that.originalHeight.match(/([\'\"][^\'\"]+[\'\"]|\d+)(?=\-|$)/g);
         if (!values) {
             return null;
         }
@@ -263,7 +263,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
                 fullHeightGap += $(ev[1]).outerHeight();
             }
             else {
-                fullHeightGap += Number.parseInt(nv);
+                fullHeightGap += parseInt(nv);
             }
         }
 
@@ -306,7 +306,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     that.originalHeight=options.height;
     //高度铺满：full-差距值
-    if(options.height && /^full-\d+$/.test(options.height)){
+    if(options.height && /(^full\-|\-)([\'\"][^\'\"]+[\'\"]|\d+)/g.test(options.height)){
       //that.getFullHeightGap = options.height.split('-')[1];
       options.height = _WIN.height() - that.getFullHeightGap();
     }
