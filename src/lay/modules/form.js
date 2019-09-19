@@ -70,14 +70,18 @@ layui.define('layer', function(exports){
     return layui.onevent.call(this, MOD_NAME, events, callback);
   };
   
-  //初始赋值
+  //赋值/取值
   Form.prototype.val = function(filter, object){
     var that = this
     ,formElem = $(ELEM + '[lay-filter="' + filter +'"]');
+    
+    //遍历
     formElem.each(function(index, item){
-      var itemFrom = $(this);
+      var itemForm = $(this);
+      
+      //赋值
       layui.each(object, function(key, value){
-        var itemElem = itemFrom.find('[name="'+ key +'"]')
+        var itemElem = itemForm.find('[name="'+ key +'"]')
         ,type;
         
         //如果对应的表单不存在，则不执行
@@ -89,7 +93,7 @@ layui.define('layer', function(exports){
           itemElem[0].checked = value;
         } else if(type === 'radio') { //如果为单选框
           itemElem.each(function(){
-            if(this.value === value ){
+            if(this.value == value ){
               this.checked = true
             }     
           });
@@ -98,7 +102,38 @@ layui.define('layer', function(exports){
         }
       });
     });
+    
     form.render(null, filter);
+    
+    //返回值
+    return that.getValue(filter);
+  };
+  
+  //取值
+  Form.prototype.getValue = function(filter, itemForm){
+    itemForm = itemForm || $(ELEM + '[lay-filter="' + filter +'"]').eq(0);
+        
+    var nameIndex = {} //数组 name 索引
+    ,field = {}
+    ,fieldElem = itemForm.find('input,select,textarea') //获取所有表单域
+    
+    layui.each(fieldElem, function(_, item){
+      item.name = (item.name || '').replace(/^\s*|\s*&/, '');
+      
+      if(!item.name) return;
+      
+      //用于支持数组 name
+      if(/^.*\[\]$/.test(item.name)){
+        var key = item.name.match(/^(.*)\[\]$/g)[0];
+        nameIndex[key] = nameIndex[key] | 0;
+        item.name = item.name.replace(/^(.*)\[\]$/, '$1['+ (nameIndex[key]++) +']');
+      }
+      
+      if(/^checkbox|radio$/.test(item.type) && !item.checked) return;      
+      field[item.name] = item.value;
+    });
+    
+    return field;
   };
   
   //表单控件渲染
@@ -166,9 +201,19 @@ layui.define('layer', function(exports){
             if(choose) return;
             
             notOption(input.val(), function(none){
+              var selectedIndex = select[0].selectedIndex;
+              
+              //未查询到相关值
               if(none){
-                initValue = dl.find('.'+THIS).html();
-                input && input.val(initValue);
+                initValue = $(select[0].options[selectedIndex]).html(); //重新获得初始选中值
+                
+                //如果是第一项，且文本值等于 placeholder，则清空初始值
+                if(selectedIndex === 0 && initValue === input.attr('placeholder')){
+                  initValue = '';
+                };
+
+                //如果有选中值，则将输入框纠正为该值。否则清空输入框
+                input.val(initValue || '');
               }
             });
           }
@@ -327,8 +372,15 @@ layui.define('layer', function(exports){
           if(isSearch){
             input.on('keyup', search).on('blur', function(e){
               var selectedIndex = select[0].selectedIndex;
+              
               thatInput = input; //当前的 select 中的 input 元素
               initValue = $(select[0].options[selectedIndex]).html(); //重新获得初始选中值
+              
+              //如果是第一项，且文本值等于 placeholder，则清空初始值
+              if(selectedIndex === 0 && initValue === input.attr('placeholder')){
+                initValue = '';
+              };
+              
               setTimeout(function(){
                 notOption(input.val(), function(none){
                   initValue || input.val(''); //none && !initValue
@@ -418,6 +470,7 @@ layui.define('layer', function(exports){
           events.call(this, reElem, disabled, isSearch);
         });
       }
+      
       //复选框/开关
       ,checkbox: function(){
         var CLASS = {
@@ -489,6 +542,7 @@ layui.define('layer', function(exports){
           events.call(this, reElem, RE_CLASS);
         });
       }
+      
       //单选框
       ,radio: function(){
         var CLASS = 'layui-form-radio', ICON = ['&#xe643;', '&#xe63f;']
@@ -559,12 +613,14 @@ layui.define('layer', function(exports){
   
   //表单提交校验
   var submit = function(){
-    var button = $(this), verify = form.config.verify, stop = null
-    ,DANGER = 'layui-form-danger', field = {} ,elem = button.parents(ELEM)
-    
+    var stop = null //验证不通过状态
+    ,verify = form.config.verify //验证规则
+    ,DANGER = 'layui-form-danger' //警示样式
+    ,field = {}  //字段集合
+    ,button = $(this) //当前触发的按钮
+    ,elem = button.parents(ELEM) //当前所在表单域
     ,verifyElem = elem.find('*[lay-verify]') //获取需要校验的元素
-    ,formElem = button.parents('form')[0] //获取当前所在的form元素，如果存在的话
-    ,fieldElem = elem.find('input,select,textarea') //获取所有表单域
+    ,formElem = button.parents('form')[0] //获取当前所在的 form 元素，如果存在的话
     ,filter = button.attr('lay-filter'); //获取过滤器
    
     
@@ -575,7 +631,9 @@ layui.define('layer', function(exports){
       ,verType = othis.attr('lay-verType') //提示方式
       ,value = othis.val();
       
-      othis.removeClass(DANGER);
+      othis.removeClass(DANGER); //移除警示样式
+      
+      //遍历元素绑定的验证规则
       layui.each(vers, function(_, thisVer){
         var isTrue //是否命中校验
         ,errorText = '' //错误提示文本
@@ -585,6 +643,10 @@ layui.define('layer', function(exports){
         if(verify[thisVer]){
           var isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
           errorText = errorText || verify[thisVer][1];
+          
+          if(thisVer === 'required'){
+            errorText = othis.attr('lay-reqText') || errorText;
+          }
           
           //如果是必填项或者非空命中校验，则阻止提交，弹出提示
           if(isTrue){
@@ -603,7 +665,14 @@ layui.define('layer', function(exports){
             } else {
               layer.msg(errorText, {icon: 5, shift: 6});
             }
-            if(!device.android && !device.ios) item.focus(); //非移动设备自动定位焦点
+            
+            //非移动设备自动定位焦点
+            if(!device.android && !device.ios){
+              setTimeout(function(){
+                item.focus(); 
+              }, 7);
+            }
+            
             othis.addClass(DANGER);
             return stop = true;
           }
@@ -614,24 +683,10 @@ layui.define('layer', function(exports){
     
     if(stop) return false;
     
-    var nameIndex = {}; //数组 name 索引
-    layui.each(fieldElem, function(_, item){
-      item.name = (item.name || '').replace(/^\s*|\s*&/, '');
-      
-      if(!item.name) return;
-      
-      //用于支持数组 name
-      if(/^.*\[\]$/.test(item.name)){
-        var key = item.name.match(/^(.*)\[\]$/g)[0];
-        nameIndex[key] = nameIndex[key] | 0;
-        item.name = item.name.replace(/^(.*)\[\]$/, '$1['+ (nameIndex[key]++) +']');
-      }
-      
-      if(/^checkbox|radio$/.test(item.type) && !item.checked) return;      
-      field[item.name] = item.value;
-    });
+    //获取当前表单值
+    field = form.getValue(null, elem);
  
-    //获取字段
+    //返回字段
     return layui.event.call(this, MOD_NAME, 'submit('+ filter +')', {
       elem: this
       ,form: formElem

@@ -24,6 +24,11 @@ hr{margin: 30px 0;}
   </div>
 </div>
 
+<div class="layui-progress layui-progress-big" lay-showPercent="yes"  lay-filter="demo">
+  <div class="layui-progress-bar" lay-percent=""></div>
+</div>
+
+
 <hr>
 
 <div class="layui-upload">
@@ -82,14 +87,15 @@ hr{margin: 30px 0;}
 
 <script src="../src/layui.js"></script>
 <script>
-layui.use('upload', function(){
+layui.use(['upload', 'element'], function(){
   var $ = layui.jquery
-  ,upload = layui.upload;
+  ,upload = layui.upload
+  ,element = layui.element;
 
   var uploadInst = upload.render({
     elem: '#test1'
     ,url: 'http://httpbin.org/image'
-    ,size: 2000 //限制文件大小，单位 KB
+    //,size: 2000 //限制文件大小，单位 KB
     //,accept: 'file'
     ,method: 'get'
     ,fileAccept: 'image/*'
@@ -101,7 +107,7 @@ layui.use('upload', function(){
       }
     }
     ,choose: function(){
-      console.log(1)
+      
     }
     ,before: function(obj){
       //预读本地文件示例，不支持ie8
@@ -110,6 +116,7 @@ layui.use('upload', function(){
       });
     }
     ,done: function(res){
+    
       //如果上传失败
       if(res.code > 0){
         return layer.msg('上传失败');
@@ -117,13 +124,29 @@ layui.use('upload', function(){
       //上传成功
     }
     ,error: function(){
+      this.item.html('重选上传');
+      
       //演示失败状态，并实现重传
       var demoText = $('#demoText');
       demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
       demoText.find('.demo-reload').on('click', function(){
         uploadInst.upload();
       });
+      
+      element.progress('demo', '0%');
     }
+    ,progress: function(n){
+      console.log(n + '%'); //获取进度百分比
+      element.progress('demo', n + '%'); //可配合 layui 进度条元素使用
+    }
+  });
+  
+  //重置上述 upload 实例
+  uploadInst.reload({
+    name:'avatar'
+    ,accept: 'images' //只允许上传图片
+    ,acceptMime: 'image/*' //只筛选图片
+    //,size: 2
   });
   
   upload.render({

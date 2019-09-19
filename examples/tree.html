@@ -1,147 +1,262 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>树模块 - layui</title>
+  <meta charset="utf-8">
+  <title>树组件 - layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
 
-<link rel="stylesheet" href="../src/css/layui.css">
-
-<style>
-body{padding: 50px 100px;}
-</style>
+  <link rel="stylesheet" href="../src/css/layui.css" media="all">
+  
+  <style>
+    body{padding: 100px;}
+    #test1,#test2{margin-bottom: 100px; width: 400px;}
+  </style>
 </head>
 <body>
 
-<ul id="demo"></ul>
+<div class="layui-btn-container">
+  <button type="button" class="layui-btn" lay-demo="getChecked">获取选中数据</button>
+  <button type="button" class="layui-btn" lay-demo="setChecked">设置节点勾选</button>
+  <button type="button" class="layui-btn" lay-demo="reload">重载实例</button>
+</div>
 
-<ul id="demo1" style="margin-top: 50px;"></ul>
+<div class="layui-form">
+  <div class="layui-form-item">
+    <label class="layui-form-label">表单内</label>
+    <div class="layui-input-block">
+     
+  </div>
+</div>  
+
+<div id="test1"></div>
+<div id="test2"></div>
 
 <script src="../src/layui.js"></script>
 <script>
-
-layui.use('tree', function(){
-  var tree = layui.tree({
-    elem: '#demo' //指定元素
-    //,check: 'checkbox' //勾选风格
-    ,skin: 'as' //设定皮肤
-    //,target: '_blank' //是否新选项卡打开（比如节点返回href才有效）
-    ,drag: true
-    ,click: function(item){ //点击节点回调
-      console.log(item)
-    }
-    ,nodes: [ //节点
-      {
-        name: '常用文件夹'
-        ,id: 1
-        ,alias: 'changyong'
-        ,children: [
-          {
-            name: '所有未读'
-            ,id: 11
-            //,href: 'http://www.layui.com/'
-            ,alias: 'weidu'
-          }, {
-            name: '置顶邮件'
-            ,id: 12
-          }, {
-            name: '标签邮件'
-            ,id: 13
-          }
-        ]
-      }, {
-        name: '我的邮箱'
-        ,id: 2
+  layui.use(['tree', 'layer', 'util'], function(){
+    var $ = layui.$
+    ,tree = layui.tree
+    ,layer = layui.layer
+    ,util = layui.util
+    ,index = 100;
+    
+    //数据源
+    var data1 = [{
+      title: '一级1'
+      ,id: 1
+      ,children: [{
+        title: '二级1-1'
+        ,id: 3
+        ,href: 'https://www.layui.com/doc/'
+        ,children: [{
+          title: '三级1-1-3'
+          ,id: 23
+          ,children: [{
+            title: '四级1-1-3-1'
+            ,id: 24
+            ,children: [{
+              title: '五级1-1-3-1-1'
+              ,id: 30
+            },{
+              title: '五级1-1-3-1-2'
+              ,id: 31
+            }]
+          }]
+        },{
+          title: '三级1-1-1'
+          ,id: 7
+          ,checked: true
+          ,children: [{
+            title: '四级1-1-1-1'
+            ,id: 15
+            //,checked: true
+            ,href: 'https://www.layui.com/doc/base/infrastructure.html'
+          }]
+        },{
+          title: '三级1-1-2'
+          ,id: 8
+          ,children: [{
+            title: '四级1-1-2-1'
+            ,id: 32
+          }]
+        }]
+      },{
+        title: '二级1-2'
+        ,id: 4
         ,spread: true
-        ,children: [
-          {
-            name: 'QQ邮箱'
-            ,id: 21
-            ,spread: true
-            ,children: [
-              {
-                name: '收件箱'
-                ,id: 211
-                ,children: [
-                  {
-                    name: '所有未读'
-                    ,id: 2111
-                  }, {
-                    name: '置顶邮件'
-                    ,id: 2112
-                  }, {
-                    name: '标签邮件'
-                    ,id: 2113
-                  }
-                ]
-              }, {
-                name: '已发出的邮件'
-                ,id: 212
-              }, {
-                name: '垃圾邮件'
-                ,id: 213
-              }
-            ]
-          }, {
-            name: '阿里云邮'
-            ,id: 22
-            ,children: [
-              {
-                name: '收件箱'
-                ,id: 221
-              }, {
-                name: '已发出的邮件'
-                ,id: 222
-              }, {
-                name: '垃圾邮件'
-                ,id: 223
-              }
-            ]
-          }
-        ]
+        ,children: [{
+          title: '三级1-2-1'
+          ,id: 9
+          ,checked: true
+          ,disabled: true
+        },{
+          title: '三级1-2-2'
+          ,id: 10
+        }]
+      },{
+        title: '二级1-3'
+        ,id: 20
+        ,children: [{
+          title: '三级1-3-1'
+          ,id: 21
+        },{
+          title: '三级1-3-2'
+          ,id: 22
+        }]
+      }]
+    },{
+      title: '一级2'
+      ,id: 2
+      ,spread: true
+      ,children: [{
+        title: '二级2-1'
+        ,id: 5
+        ,spread: true
+        ,children: [{
+          title: '三级2-1-1'
+          ,id: 11
+        },{
+          title: '三级2-1-2'
+          ,id: 12
+        }]
+      },{
+        title: '二级2-2'
+        ,id: 6
+        ,checked: true
+        ,children: [{
+          title: '三级2-2-1'
+          ,id: 13
+        },{
+          title: '三级2-2-2'
+          ,id: 14
+          ,disabled: true
+        }]
+      }]
+    },{
+      title: '一级3'
+      ,id: 16
+      ,children: [{
+        title: '二级3-1'
+        ,id: 17
+        ,fixed: true
+        ,children: [{
+          title: '三级3-1-1'
+          ,id: 18
+        },{
+          title: '三级3-1-2'
+          ,id: 19
+        }]
+      },{
+        title: '二级3-2'
+        ,id: 27
+        ,children: [{
+          title: '三级3-2-1'
+          ,id: 28
+        },{
+          title: '三级3-2-2'
+          ,id: 29
+        }]
+      }]
+    }];
+    
+    //数据源
+    var data2 = [{
+      title: '控制台'
+      ,id: '1000'
+      ,spread: true
+      ,checked: true
+      ,children: [{
+        title: '概览'
+        ,id: '1001'
+        ,spread: true
+        ,checked: true
+      },{
+        title: '域名'
+        ,id: '1002'
+        ,spread: true
+        ,checked: true
+      }]
+    }]
+
+    tree.render({
+      elem: '#test1'
+      ,data: data1
+      ,id: 'demoId1'
+      ,click: function(obj){
+        layer.msg(JSON.stringify(obj.data));
+        console.log(obj);
       }
-    ]
-  });
-  
-  //生成一个模拟树
-  var createTree = function(node, start){
-    node = node || function(){
-      var arr = [];
-      for(var i = 1; i < 10; i++){
-        arr.push({
-          name: i.toString().replace(/(\d)/, '$1$1$1$1$1$1$1$1$1')
+      ,oncheck: function(obj){
+        //console.log(obj);
+      }
+      ,operate: function(obj){
+        var type = obj.type;
+        if(type == 'add'){
+          //ajax操作，返回key值
+          return index++;
+        }else if(type == 'update'){
+          console.log(obj.elem.find('.layui-tree-txt').html());
+        }else if(type == 'del'){
+          console.log(obj);
+        };
+      }
+      ,showCheckbox: true  //是否显示复选框
+      ,accordion: 0  //是否开启手风琴模式
+      
+      ,onlyIconControl: true //是否仅允许节点左侧图标控制展开收缩
+      ,isJump: 0  //点击文案跳转地址
+      ,edit: true  //操作节点图标
+    });
+
+    //按钮事件
+    util.event('lay-demo', {
+      getChecked: function(othis){
+        var checkedData = tree.getChecked('demoId1');
+        layer.alert(JSON.stringify(checkedData), {shade:0});
+        console.log(checkedData);
+      }
+      ,setChecked: function(){
+        tree.setChecked('demoId1', [1000, 1001, 1002]);
+      }
+      ,reload: function(){
+        tree.reload('demoId1', {
+          
         });
       }
-      return arr;
-    }();
-    start = start || 1;  
-    layui.each(node, function(index, item){  
-      if(start < 10 && index < 9){
-        var child = [
-          {
-            name: (1 + index + start).toString().replace(/(\d)/, '$1$1$1$1$1$1$1$1$1')
-          }
-        ];
-        node[index].children = child;
-        createTree(child, index + start + 1);
+    });
+
+    tree.render({
+      elem: '#test2'
+      ,data: data1
+      //,expandClick: false
+      ,showLine: false //关闭连接线
+      ,click: function(obj, state){
+        console.log(obj);
+      }
+      ,oncheck: function(obj, checked, child){
+        if(checked){
+          console.log(obj[0]);
+        }
+      }
+      ,onsearch: function(data, num){
+        console.log(num);
+      }
+      ,dragstart: function(obj, parent){
+        console.log(obj, parent);
+      }
+      ,dragend: function(state, obj, target){
+        console.log(state, obj, target);
       }
     });
-    return node;
-  };
-
-  layui.tree({
-    elem: '#demo1' //指定元素
-    ,nodes: createTree()
+     
   });
-  
-});
 </script>
-
-<pre class="layui-code">
-# layui.tree-v2 备忘
-* check参数 - checkbox、radio的支持
-* 拖拽的支持
-</pre>
 
 </body>
 </html>

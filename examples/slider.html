@@ -24,13 +24,13 @@ body{padding:100px 0;}
 layui.use('slider', function(){
   var slider = layui.slider;
   
-  slider.render({
+  var sliderInst = slider.render({
     elem: '#slideTest1'
     //,type: 'vertical'
-    //,min: 0 //最小值
-    //,max: 100 //最大值
-    //,value: 60 //[40, 60] //初始值
-    //,step: 20 //间隔值
+    //,min: -20 //最小值
+    //,max: 20 //最大值
+    //,value: 10 //[40, 60] //初始值
+    //,step: 10 //间隔值
     //,showstep: true //间隔点
     //,tips: false //关闭提示文本
     ,input: true //输入框
@@ -45,6 +45,8 @@ layui.use('slider', function(){
     //,disabled: true //禁用滑块
     //,theme: '#c00' //主题色
   });
+  
+  sliderInst.setValue(48)
 });
 </script>
 </body>
