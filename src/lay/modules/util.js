@@ -171,6 +171,16 @@ layui.define('jquery', function(exports){
       .replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
     }
+    
+    //批量事件
+    ,event: function(attr, obj, eventType){
+      obj = util.event[attr] = $.extend(true, util.event[attr], obj) || {};
+      $('body').on(eventType || 'click', '*['+ attr +']', function(){
+        var othis = $(this)
+        ,key = othis.attr(attr);
+        obj[key] && obj[key].call(this, othis);
+      });
+    }
   };
   
   //监听 DOM 尺寸变化，该创意来自：http://benalman.com/projects/jquery-resize-plugin/

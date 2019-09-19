@@ -1,7 +1,7 @@
 /*!
 
- @Title: Layui
- @Description：经典模块化前端框架
+ @Title: layui
+ @Description：经典模块化前端 UI 框架
  @Site: www.layui.com
  @Author: 贤心
  @License：MIT
@@ -19,7 +19,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.4.3'; //版本号
+    this.v = '2.5.5'; //版本号
   }
 
   //获取layui所在目录
@@ -56,6 +56,7 @@
     ,layedit: 'modules/layedit' //富文本编辑器
     ,form: 'modules/form' //表单集
     ,upload: 'modules/upload' //上传
+    ,transfer: 'modules/transfer' //上传
     ,tree: 'modules/tree' //树结构
     ,table: 'modules/table' //表格
     ,element: 'modules/element' //常用元素操作
@@ -98,7 +99,7 @@
       deps = []
     );
     
-    if(layui['layui.all'] || (!layui['layui.all'] && layui['layui.mobile'])){
+    if((!layui['layui.all'] && layui['layui.mobile'])){
       return callback.call(that);
     }
 
@@ -154,7 +155,7 @@
       : ( typeof callback === 'function' && callback.apply(layui, exports) );
     }
     
-    //如果使用了 layui.all.js
+    //如果引入了完整库（layui.all.js），内置的模块则不必再加载
     if(apps.length === 0 
     || (layui['layui.all'] && modules[item]) 
     || (!layui['layui.all'] && layui['layui.mobile'] && modules[item])
@@ -535,7 +536,7 @@
       
       //执行指定事件
       key === '' && layui.each(item, callback);
-      key === filterName && layui.each(item, callback);
+      (filterName && key === filterName) && layui.each(item, callback);
     });
     
     return result;

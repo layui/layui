@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>穿梭框</title>
+
+  <link rel="stylesheet" href="../src/css/layui.css">
+  <style>
+    body{padding: 100px;}
+    #text1,#text2{padding-bottom: 60px;}
+  </style>
+</head>
+<body>
+
+<div class="layui-btn-container">
+  <button type="button" class="layui-btn" lay-demo="getData">获取右侧数据</button>
+  <button type="button" class="layui-btn" lay-demo="reload">重载实例</button>
+</div>
+
+
+<div id="text1"></div>
+
+
+<div class="layui-form">
+  <div class="layui-form-item">
+    <label class="layui-form-label">职位</label>
+    <div class="layui-input-block">
+      <div id="text2"></div>
+    </div>
+  </div>
+</div>  
+
+<div id="text3"></div>
+
+
+<script src="../src/layui.js"></script>
+<script>
+  layui.use(['transfer', 'util'], function(){
+    var $ = layui.$
+    ,transfer = layui.transfer
+    ,util = layui.util;
+
+    var ins1 = transfer.render({
+      elem: '#text1'
+      ,title: ['候选文人', '获奖文人']
+      ,data: [
+        {"value": "1", "title": "李白"}
+        ,{"value": "2", "title": "杜甫"}
+        ,{"value": "3", "title": "贤心"}
+        ,{"value": "4", "title": "鲁迅", "disabled": true}
+        ,{"value": "5", "title": "巴金"}
+        ,{"value": "6", "title": "冰心"}
+      ]
+      ,id: 'demoId'
+      ,value: ["2", "3"]
+      ,showSearch: true
+    });
+    
+    //按钮事件
+    util.event('lay-demo', {
+      getData: function(othis){
+        alert(JSON.stringify(ins1.getData()))
+      }
+      ,reload: function(){
+        transfer.reload('demoId', {
+          value: ["6"]
+        });
+      }
+    });
+
+    var ins2 = transfer.render({
+      elem: '#text2'
+      ,showSearch: true
+      ,onchange: function(obj){
+        console.log(obj)
+      }
+      ,parseData: function(res){
+        return {
+          "value": res.id
+          ,"title": res.label
+          ,"disabled": res.disabled
+          ,"checked": res.checked
+        }
+      }
+      ,data: [
+        {"id": "1", "label": "瓦罐汤"}
+        ,{"id": "2", "label": "油酥饼"}
+        ,{"id": "3", "label": "炸酱面"}
+        ,{"id": "4", "label": "串串香", "disabled": true}
+        ,{"id": "5", "label": "豆腐脑"}
+        ,{"id": "6", "label": "驴打滚"}
+      ]
+      ,value: ["1", "5"]
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -38,6 +38,9 @@ layui.define('layer' , function(exports){
       upload: function(files){
         that.upload.call(that, files);
       }
+      ,reload: function(options){
+        that.reload.call(that, options);
+      }
       ,config: that.config
     }
   }
@@ -63,6 +66,7 @@ layui.define('layer' , function(exports){
     ,bindAction: '' //手动上传触发的元素
     ,url: '' //上传地址
     ,field: 'file' //文件字段名
+    ,acceptMime: '' //筛选出的文件类型，默认为所有文件
     ,method: 'post' //请求上传的 http 类型
     ,data: {} //请求上传的额外参数
     ,drag: true //是否允许拖拽上传
@@ -209,18 +213,32 @@ layui.define('layer' , function(exports){
           ,processData: false
           ,dataType: 'json'
           ,headers: options.headers || {}
+          //成功回调
           ,success: function(res){
             successful++;
             done(index, res);
             allDone();
           }
+          //异常回调
           ,error: function(){
             aborted++;
             that.msg('请求上传接口出现异常');
             error(index);
             allDone();
           }
+          ,xhr: function(){
+            var xhr = new XMLHttpRequest();
+            //监听上传进度
+            xhr.upload.addEventListener("progress", function (e) {
+              if(e.lengthComputable) {
+                var percent = Math.floor((e.loaded/e.total)* 100); //百分比
+                typeof options.progress === 'function' && options.progress(percent, e);
+              }
+            });
+            return xhr;
+          }
         });
+        
       });
     }
     
@@ -401,6 +419,24 @@ layui.define('layer' , function(exports){
       if(limitSize) return that.msg('文件不能超过'+ limitSize);
     }
     send();
+  };
+  
+  //重置方法
+  Class.prototype.reload = function(options){
+    options = options || {};
+    delete options.elem;
+    delete options.bindAction;
+    
+    var that = this
+    ,options = that.config = $.extend({}, that.config, upload.config, options)
+    ,next = options.elem.next();
+    
+    //更新文件域相关属性
+    next.attr({
+      name: options.name
+      ,accept: options.acceptMime
+      ,multiple: options.multiple
+    });
   };
   
   //事件处理

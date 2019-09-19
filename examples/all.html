@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>合并版使用 - layui</title>
+<title>完整库使用 - layui</title>
 
 <link rel="stylesheet" href="../build/css/layui.css">
 
@@ -34,6 +34,14 @@ body{padding: 10px;}
     ,count: 100 //总页数
   });
   
+  
+  //测试加载非内置模块
+  layui.config({
+    base: 'extends/'
+  }).extend({
+    mod1: 'mod1'
+    ,mod2: 'mod2'
+  }).use('mod1');
   
   //触发事件
   var active = {

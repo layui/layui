@@ -72,9 +72,14 @@ layui.define('jquery', function(exports){
   Class.prototype.render = function(){
     var that = this
     ,options = that.config;
-
-    //最小值为零
-    options.min = options.min < 0 ? 0 : options.min;
+    
+    //间隔值不能小于 1
+    if(options.step < 1) options.step = 1;
+    
+    //最大值不能小于最小值
+    if(options.max < options.min) options.max = options.min + options.step;
+    
+    
 
     //判断是否开启双滑块
     if(options.range){
@@ -85,16 +90,25 @@ layui.define('jquery', function(exports){
       options.value[1] = maxValue > options.min ? maxValue : options.min;
       options.value[0] = options.value[0] > options.max ? options.max : options.value[0];
       options.value[1] = options.value[1] > options.max ? options.max : options.value[1];
+      
       var scaleFir = Math.floor((options.value[0] - options.min) / (options.max - options.min) * 100)
       ,scaleSec = Math.floor((options.value[1] - options.min) / (options.max - options.min) * 100)
       ,scale = scaleSec - scaleFir + '%';
       scaleFir = scaleFir + '%';
       scaleSec = scaleSec + '%';
-    }else{
-      options.value = typeof(options.value) == 'object' ? Math.min(options.value[0], options.value[1]) : options.value;
-      options.value = options.value > options.min ? options.value : options.min;
+    } else {
+      //如果初始值是一个数组，则获取数组的最小值
+      if(typeof options.value == 'object'){
+        options.value = Math.min.apply(null, options.value);
+      }
+      
+      //初始值不能小于最小值且不能大于最大值
+      if(options.value < options.min) options.value = options.min;
+      if(options.value > options.max) options.value = options.max;
+
       var scale = Math.floor((options.value - options.min) / (options.max - options.min) * 100) + '%';
     };
+    
 
     //如果禁用，颜色为统一的灰色
     var theme = options.disabled ? '#c2c2c2' : options.theme;
@@ -297,6 +311,7 @@ layui.define('jquery', function(exports){
       });
     });
     
+    //点击滑块
     sliderAct.on('click', function(e){
       var main = $('.' + SLIDER_WRAP_BTN);
       if(!main.is(event.target) && main.has(event.target).length === 0 && main.length){
@@ -318,7 +333,7 @@ layui.define('jquery', function(exports){
       }
     });
 
-    //输入框
+    //输入框移入事件
     sliderTxt.hover(function(){
       var othis = $(this);
       othis.children('.' + SLIDER_INPUT_BTN).fadeIn('fast');
@@ -327,12 +342,17 @@ layui.define('jquery', function(exports){
       othis.children('.' + SLIDER_INPUT_BTN).fadeOut('fast');
     });
     
+    //点击加减输入框
     sliderTxt.children('.' + SLIDER_INPUT_BTN).children('i').each(function(index){
       $(this).on('click', function(){
         if(index == 1){
-          inputValue = inputValue - step < options.min ? options.min : inputValue - step;
+          inputValue = inputValue - options.step < options.min 
+            ? options.min 
+          : Number(inputValue) - options.step;
         }else{
-          inputValue = Number(inputValue) + step > options.max ? options.max : Number(inputValue) + step;
+          inputValue = Number(inputValue) + options.step > options.max 
+            ? options.max 
+          : Number(inputValue) + options.step;
         };
         var inputScale =  (inputValue - options.min) / (options.max - options.min) * 100 / step;
         change(inputScale, 0);

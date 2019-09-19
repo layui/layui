@@ -30,7 +30,7 @@ var argv = require('minimist')(process.argv.slice(2), {
 ]
 
 //模块
-,mods = 'laytpl,laypage,laydate,jquery,layer,element,upload,slider,colorpicker,form,tree,table,carousel,rate,util,flow,layedit,code'
+,mods = 'laytpl,laypage,laydate,jquery,layer,element,upload,slider,colorpicker,form,tree,transfer,table,carousel,rate,util,flow,layedit,code'
 
 //发行版本目录
 ,releaseDir = './release/zip/layui-v' + pkg.version
@@ -92,7 +92,7 @@ var argv = require('minimist')(process.argv.slice(2), {
   ,mobile: function(ver){
     ver = ver === 'open';
 
-    var mods = 'layer-mobile,zepto,upload-mobile', src = [
+    var mods = 'layer-mobile,zepto', src = [
       './src/lay/all-mobile.js'
       ,'./src/lay/modules/laytpl.js'
       ,'./src/**/mobile/{'+ mods +'}.js'
