@@ -906,7 +906,7 @@
     
     //如果点击了开始，单未选择结束就关闭，则重新选择开始
     if(that.startState && !that.endState){
-      devare that.startState;
+      delete that.startState;
       that.endState = true;
     };
 
@@ -933,12 +933,12 @@
       options.dateTime = that.systemDate(value);
     } else {
       options.dateTime = that.systemDate();
-      devare that.startState;
-      devare that.endState;
-      devare that.startDate;
-      devare that.endDate;
-      devare that.startTime;
-      devare that.endTime;
+      delete that.startState;
+      delete that.endState;
+      delete that.startDate;
+      delete that.endDate;
+      delete that.startTime;
+      delete that.endTime;
     }
 
     checkValid(dateTime);
@@ -1540,8 +1540,8 @@
       
       if(that.endState){ //重新选择
         setDateTime();
-        devare that.endState;
-        devare that.endDate;
+        delete that.endState;
+        delete that.endDate;
         that.startState = true;
         tds.removeClass(THIS + ' ' + ELEM_SELECTED);
         td.addClass(THIS);
@@ -1618,11 +1618,11 @@
           ,that.calendar()
         )
         options.range && (
-          devare that.startState
-          ,devare that.endState
-          ,devare that.endDate
-          ,devare that.startTime
-          ,devare that.endTime
+          delete that.startState
+          ,delete that.endState
+          ,delete that.endDate
+          ,delete that.startTime
+          ,delete that.endTime
         );
         that.done(['', {}, {}]);
       }
