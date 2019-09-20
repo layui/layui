@@ -392,6 +392,9 @@
     ,zIndex: null //控件层叠顺序
     ,done: null //控件选择完毕后的回调，点击清空/现在/确定也均会触发
     ,change: null //日期时间改变后的回调
+    , hourInterval:null//小时间隔数，整数，如填2，则产生的列表只有：00，02，04，...，24
+    , minuteInterval:null//分钟间隔数，整数，如填30，则产生的列表只有：00，30
+    , secondInterval:null//秒的间隔数，同上
   };
   
   //多语言
@@ -1183,14 +1186,14 @@
         lay(ul).find('ol').each(function(i, ol){
           lay(ol).find('li').each(function(ii, li){
             that.limit(lay(li), [{
-              hours: ii
+              hours: parseInt(li.innerText)
             }, {
               hours: that[startEnd].hours
-              ,minutes: ii
+              ,minutes: parseInt(li.innerText)
             }, {
               hours: that[startEnd].hours
               ,minutes: that[startEnd].minutes
-              ,seconds: ii
+              ,seconds: parseInt(li.innerText)
             }][i], index, [['hours'], ['hours', 'minutes'], ['hours', 'minutes', 'seconds']][i]);
           });
         });
@@ -1205,10 +1208,38 @@
       } else {
         that[startEnd] = dateTime;
       }
-      lay.each([24, 60, 60], function(i, item){
+      let hourArray=[],minuteArray=[],secondArray=[];
+      if(options.hourInterval!=null){
+        for(let i =0; i<=24;i+=options.hourInterval){
+          hourArray.push(i);
+        }
+      }else{
+        for(let i =0; i<=24;i++){
+          hourArray.push(i);
+        }
+      }
+      if(options.minuteInterval!=null){
+        for(let i =0; i<60;i+=options.minuteInterval){
+          minuteArray.push(i);
+        }
+      }else{
+        for(let i =0; i<60;i++){
+          minuteArray.push(i);
+        }
+      }
+      if(options.secondInterval!=null){
+        for(let i =0; i<60;i+=options.secondInterval){
+          secondArray.push(i);
+        }
+      }else{
+        for(let i =0; i<60;i++){
+          secondArray.push(i);
+        }
+      }
+      lay.each([hourArray, minuteArray, secondArray], function(i, item){
         var li = lay.elem('li'), childUL = ['<p>'+ lang.time[i] +'</p><ol>'];
-        lay.each(new Array(item), function(ii){
-          childUL.push('<li'+ (that[startEnd][hms[i]] === ii ? ' class="'+ THIS +'"' : '') +'>'+ lay.digit(ii, 2) +'</li>');
+        lay.each(new Array(item), function(ii,item2){
+          childUL.push('<li'+ (that[startEnd][hms[i]] === item2 ? ' class="'+ THIS +'"' : '') +'>'+ lay.digit(item2, 2) +'</li>');
         });
         li.innerHTML = childUL.join('') + '</ol>';
         ul.appendChild(li);
