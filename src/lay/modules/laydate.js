@@ -392,9 +392,9 @@
     ,zIndex: null //控件层叠顺序
     ,done: null //控件选择完毕后的回调，点击清空/现在/确定也均会触发
     ,change: null //日期时间改变后的回调
-    , hourInterval:null//小时间隔数，整数，如填2，则产生的列表只有：00，02，04，...，24
-    , minuteInterval:null//分钟间隔数，整数，如填30，则产生的列表只有：00，30
-    , secondInterval:null//秒的间隔数，同上
+    , hourInterval:1//小时间隔数，整数，如填2，则产生的列表只有：00，02，04，...，24
+    , minuteInterval:1//分钟间隔数，整数，如填30，则产生的列表只有：00，30
+    , secondInterval:1//秒的间隔数，同上
   };
   
   //多语言
@@ -906,7 +906,7 @@
     
     //如果点击了开始，单未选择结束就关闭，则重新选择开始
     if(that.startState && !that.endState){
-      delete that.startState;
+      devare that.startState;
       that.endState = true;
     };
 
@@ -933,12 +933,12 @@
       options.dateTime = that.systemDate(value);
     } else {
       options.dateTime = that.systemDate();
-      delete that.startState;
-      delete that.endState;
-      delete that.startDate;
-      delete that.endDate;
-      delete that.startTime;
-      delete that.endTime;
+      devare that.startState;
+      devare that.endState;
+      devare that.startDate;
+      devare that.endDate;
+      devare that.startTime;
+      devare that.endTime;
     }
 
     checkValid(dateTime);
@@ -1208,34 +1208,19 @@
       } else {
         that[startEnd] = dateTime;
       }
-      let hourArray=[],minuteArray=[],secondArray=[];
-      if(options.hourInterval!=null){
-        for(let i =0; i<=24;i+=options.hourInterval){
-          hourArray.push(i);
-        }
-      }else{
-        for(let i =0; i<=24;i++){
-          hourArray.push(i);
-        }
+      var hourArray=[],
+          minuteArray=[],
+          secondArray=[];
+      for(var  hour=0; hour<=24;hour+=options.hourInterval){
+          hourArray.push(hour);
       }
-      if(options.minuteInterval!=null){
-        for(let i =0; i<60;i+=options.minuteInterval){
-          minuteArray.push(i);
-        }
-      }else{
-        for(let i =0; i<60;i++){
-          minuteArray.push(i);
-        }
+      for(var minute =0; minute<60;minute+=options.minuteInterval){
+          minuteArray.push(minute);
       }
-      if(options.secondInterval!=null){
-        for(let i =0; i<60;i+=options.secondInterval){
-          secondArray.push(i);
-        }
-      }else{
-        for(let i =0; i<60;i++){
-          secondArray.push(i);
-        }
+      for(var second =0; second<60;second+=options.secondInterval){
+          secondArray.push(second);
       }
+
       lay.each([hourArray, minuteArray, secondArray], function(i, item){
         var li = lay.elem('li'), childUL = ['<p>'+ lang.time[i] +'</p><ol>'];
         lay.each(new Array(item), function(ii,item2){
@@ -1555,8 +1540,8 @@
       
       if(that.endState){ //重新选择
         setDateTime();
-        delete that.endState;
-        delete that.endDate;
+        devare that.endState;
+        devare that.endDate;
         that.startState = true;
         tds.removeClass(THIS + ' ' + ELEM_SELECTED);
         td.addClass(THIS);
@@ -1633,11 +1618,11 @@
           ,that.calendar()
         )
         options.range && (
-          delete that.startState
-          ,delete that.endState
-          ,delete that.endDate
-          ,delete that.startTime
-          ,delete that.endTime
+          devare that.startState
+          ,devare that.endState
+          ,devare that.endDate
+          ,devare that.startTime
+          ,devare that.endTime
         );
         that.done(['', {}, {}]);
       }
