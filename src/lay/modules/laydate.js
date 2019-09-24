@@ -908,7 +908,7 @@
     if(that.startState && !that.endState){
       delete that.startState;
       that.endState = true;
-    };
+    }
 
     if(typeof value === 'string' && value){
       if(that.EXP_IF.test(value)){ //校验日期格式
@@ -1223,7 +1223,7 @@
 
       lay.each([hourArray, minuteArray, secondArray], function(i, item){
         var li = lay.elem('li'), childUL = ['<p>'+ lang.time[i] +'</p><ol>'];
-        lay.each(new Array(item), function(ii,item2){
+        lay.each(item, function(ii,item2){
           childUL.push('<li'+ (that[startEnd][hms[i]] === item2 ? ' class="'+ THIS +'"' : '') +'>'+ lay.digit(item2, 2) +'</li>');
         });
         li.innerHTML = childUL.join('') + '</ol>';
@@ -1289,8 +1289,9 @@
       }), scroll = function(){ //滚动条定位
         lay(ul).find('ol').each(function(i){
           var ol = this
-          ,li = lay(ol).find('li')
-          ol.scrollTop = 30*(that[startEnd][hms[i]] - 2);
+          ,timeInterval = [options.hourInterval,options.minuteInterval,options.secondInterval]
+          ,li = lay(ol).find('li');
+          ol.scrollTop = 30*(that[startEnd][hms[i]]/timeInterval[i] - 2);
           if(ol.scrollTop <= 0){
             li.each(function(ii, item){
               if(!lay(this).hasClass(DISABLED)){
