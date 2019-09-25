@@ -759,7 +759,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,trs = []
     ,trs_fixed = []
     ,trs_fixed_r = []
-    
     //渲染视图
     ,render = function(){ //后续性能提升的重点
       var thisCheckedRowIndex;
@@ -893,7 +892,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     }
     
     render(); //渲染数据
-    that.renderTotal(data); //数据合计
+    that.renderTotal(data, res); //数据合计 增加接口返回整个原生JSON对象作为第二个参数
 
     //同步分页状态
     if(options.page){
@@ -923,24 +922,27 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   };
   
   //数据合计行
-  Class.prototype.renderTotal = function(data){
+  Class.prototype.renderTotal = function(data,res){
     var that = this
     ,options = that.config
-    ,totalNums = {};
-    
+    ,totalNums = {}
+    //检查接口返回中是否有与data平级的totalrow
+    ,totalFromBackend=(typeof(res.totalrow)!='undefined');
+   
     if(!options.totalRow) return;
     
     layui.each(data, function(i1, item1){
       if(item1.length === 0) return;
-      
-      that.eachCols(function(i3, item3){
-        var field = item3.field || i3
-        ,content = item1[field];
+      if(!totalFromBackend){//如果接口不返回totalrow数据时，前端才计算total
+        that.eachCols(function(i3, item3){
+          var field = item3.field || i3
+          ,content = item1[field];
 
-        if(item3.totalRow){ 
-          totalNums[field] = (totalNums[field] || 0) + (parseFloat(content) || 0);
-        }
-      });
+          if(item3.totalRow){ 
+            totalNums[field] = (totalNums[field] || 0) + (parseFloat(content) || 0);
+          }
+        });
+       }
     });
     
     that.dataTotal = {};
@@ -952,7 +954,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       //td内容
       var content = function(){
         var text = item3.totalRowText || ''
-        ,thisTotalNum = parseFloat(totalNums[field]).toFixed(2)
+        ,thisTotalNum = totalFromBackend?(res.totalrow[field]?parseFloat(res.totalrow[field]).toFixed(2):'0.00'):parseFloat(totalNums[field]).toFixed(2)
         ,tplData = {};
         
         tplData[field] = thisTotalNum;
