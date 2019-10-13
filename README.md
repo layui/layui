@@ -18,14 +18,14 @@
 
 ---
 
-layui 是一款采用自身模块规范编写的前端 UI 框架，遵循原生 HTML/CSS/JS 的书写与组织形式，门槛极低，拿来即用。其外在极简，却又不失饱满的内在，体积轻盈，组件丰盈，从核心代码到 API 的每一处细节都经过精心雕琢，非常适合界面的快速开发。layui 首个版本发布于 2016 年金秋，她区别于那些基于 MVVM 底层的 UI 框架，却并非逆道而行，而是信奉返璞归真之道。准确地说，她更多是为服务端程序员量身定做，你无需涉足各种前端工具的复杂配置，只需面对浏览器本身，让一切你所需要的元素与交互，从这里信手拈来。
+Layui is a front-end UI framework written in its own module specification, following the writing and organization of native HTML/CSS/JS, with a very low threshold and ready to use. It's minimalist, yet full of inner strength, light weight, and abundance of components. Every detail from the core code to the API has been carefully crafted, making it ideal for rapid interface development. The first version of layui was released in 2016. It is different from the UI framework based on the underlying MVVM, but it is not the opposite, but the way to return to the truth. To be precise, she is more tailor-made for server programmers. You don't need to get involved in the complicated configuration of various front-end tools. Just face the browser itself and let everything you need and interact with it.
 
-## 返璞归真
+## Back to Basics
 
-layui 定义为“经典模块化”，并非是自吹她自身有多优秀，而是有意避开当下 JS 社区的主流方案，试图以最简单的方式去诠释高效！<em>她的所谓经典，是在于对返璞归真的执念</em>，她以当前浏览器普通认可的方式去组织模块！我们认为，这恰是符合当下国内绝大多数程序员从旧时代过渡到未来新标准的最佳指引。所以 layui 本身也并不是完全遵循于AMD时代，准确地说，她试图建立自己的模式，所以你会看到：
+Defined as “classic modularity”, layui is not a self-promotion of her own excellence, but is intended to avoid the mainstream solution of the current JS community, trying to explain the efficiency in the simplest way! <em> Her so-called classic is based on the obedience to returning to the original</em>, she organizes the module in the way that the current browser is generally recognized! We believe that this is in line with the best guidelines for the vast majority of domestic programmers to transition from the old era to the new standards of the future. So layui itself is not completely in the AMD era. To be precise, she tries to build her own model, so you will see:
 
 ```js
-//layui模块的定义
+//Definition of layui module
 layui.define([mods], function(exports){
   
   //……
@@ -33,7 +33,8 @@ layui.define([mods], function(exports){
   exports('mod', api);
 });  
  
-//layui模块的使用
+//Use of layui module
+
 layui.use(['mod1', 'mod2'], function(args){
   var mod = layui.mod1;
   
@@ -41,21 +42,19 @@ layui.use(['mod1', 'mod2'], function(args){
   
 });    
 ```
-没错，她具备AMD的影子，又并非受限于 commonjs 的那些条条框框，layui 认为这种轻量的组织方式，比 WebPack 更符合绝大多数场景。所以她坚持采用经典模块化，也正是能让人避开工具的复杂配置，回归简单，安静高效地撸一会原生态的HTML、CSS、JavaScript。
+That's right, she has the shadow of AMD, and is not limited by the common frame of commonjs. Laui believes that this lightweight organization is more suitable for most scenarios than WebPack. Therefore, she insists on adopting the classic modularity, which is to enable people to avoid the complicated configuration of the tools, return to the simple, quiet and efficient way to get the original HTML, CSS, JavaScript.
 
-但是 layui 又并非是 Requirejs 那样的模块加载器，而是一款 UI 解决方案，她与 Bootstrap 最大的不同恰恰在于她糅合了自身对经典模块化的理解。
+But layui is not a module loader like Requirejs, but a UI solution. The biggest difference between her and Bootstrap is that she fits her understanding of classic modularity.
 
 
-## 快速上手
+## Quick start
 
-获得 layui 后，将其完整地部署到你的项目目录（或静态资源服务器），你只需要引入下述两个文件：
-
+Once you've got layui and deployed it completely to your project directory (or static resource server), you only need to import the following two files:
 ```
 ./layui/css/layui.css
-./layui/layui.js //提示：如果是采用非模块化方式（最下面有讲解），此处可换成：./layui/layui.all.js
-```
+./layui/layui.js //Tip: If you are using a non-modular approach (the bottom is explained), you can change it here: ./layui/layui.all.js```
 
-不用去管其它任何文件。因为他们（比如各模块）都是在最终使用的时候才会自动加载。这是一个基本的入门页面：
+You don't have to worry about any other files. Because they (such as modules) are automatically loaded when they are finally used. This is a basic getting started page:
 
 ```html
 <!DOCTYPE html>
@@ -63,16 +62,16 @@ layui.use(['mod1', 'mod2'], function(args){
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>开始使用layui</title>
+  <title>Start using layui</title>
   <link rel="stylesheet" href="../layui/css/layui.css">
 </head>
 <body>
  
-<!-- 你的HTML代码 -->
+<!-- Your HTML code -->
  
 <script src="../layui/layui.js"></script>
 <script>
-//一般直接写在一个js文件中
+/ / Generally written directly in a js file
 layui.use(['layer', 'form'], function(){
   var layer = layui.layer
   ,form = layui.form;
@@ -84,7 +83,7 @@ layui.use(['layer', 'form'], function(){
 </html>
 ```
 
-如果你想采用非模块化方式（即所有模块一次性加载，尽管我们并不推荐你这么做），你也可以按照下面的方式使用：
+If you want to use a non-modular approach (that is, all modules are loaded at once, although we don't recommend it), you can use them as follows:
 
 ```html
 <!DOCTYPE html>
@@ -92,16 +91,16 @@ layui.use(['layer', 'form'], function(){
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>非模块化方式使用layui</title>
+  <title>Use in a non-modular way layui</title>
   <link rel="stylesheet" href="../layui/css/layui.css">
 </head>
 <body>
  
-<!-- 你的HTML代码 -->
+<!--- Your HTML code -->
  
 <script src="../layui/layui.all.js"></script>
 <script>
-//由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+//Since the modules are loaded at one time, you don't need to execute layui.use() to load the corresponding module, you can use it directly:
 ;!function(){
   var layer = layui.layer
   ,form = layui.form;
@@ -112,8 +111,8 @@ layui.use(['layer', 'form'], function(){
 </body>
 </html>  
 ```
-## [阅读文档](http://www.layui.com/)
-从现在开始，尽情地拥抱 layui 吧！但愿她能成为你长远的开发伴侣，化作你方寸屏幕前的亿万字节！
+## [Reading the Document] (http://www.layui.com/)
+From now on, embrace layui! I hope she can become your long-term development partner, turning into hundreds of millions of bytes in front of your screen!
 
-## 相关
-[官网](http://www.layui.com/)、[更新日志](http://www.layui.com/doc/base/changelog.html)、[社区交流](http://fly.layui.com)
+## Related
+[Official website] (http://www.layui.com/), [update log] (http://www.layui.com/doc/base/changelog.html), [community exchange] (http://fly .layui.com)
