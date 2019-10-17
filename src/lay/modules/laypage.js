@@ -70,6 +70,12 @@ layui.define(function(exports){
     config.prev = 'prev' in config ? config.prev : '&#x4E0A;&#x4E00;&#x9875;'; //上一页文本
     config.next = 'next' in config ? config.next : '&#x4E0B;&#x4E00;&#x9875;'; //下一页文本
     
+    config.rpptext = 'rpptext' in config ? config.rpptext : '条/页';
+    config.totaltext = 'totaltext' in config ? config.totaltext : '共';
+    config.recordtext = 'recordtext' in config ? config.recordtext : '条';
+    config.gototext = 'gototext' in config ? config.gototext : '&#x5230;&#x7B2C;';
+    config.pagetext = 'pagetext' in config ? config.pagetext : '页';
+    config.oktext = 'oktext' in config ? config.oktext : '&#x786e;&#x5b9a;';
     //计算当前组
     var index = config.pages > groups 
       ? Math.ceil( (config.curr + (groups > 1 ? 1 : 0)) / (groups > 0 ? groups : 1) )
@@ -146,8 +152,8 @@ layui.define(function(exports){
         : '';
       }()
       
-      //数据总数
-      ,count: '<span class="layui-laypage-count">共 '+ config.count +' 条</span>'
+        //数据总数
+        , count: '<span class="layui-laypage-count">' + config.totaltext + ' ' + config.count + ' ' + config.recordtext+ '</span>'
       
       //每页条数
       ,limit: function(){
@@ -156,7 +162,7 @@ layui.define(function(exports){
           options.push(
             '<option value="'+ item +'"'
             +(item === config.limit ? 'selected' : '') 
-            +'>'+ item +' 条/页</option>'
+              + '>' + item + ' ' + config.rpptext+'</option>'
           );
         });
         return options.join('') +'</select></span>';
@@ -168,10 +174,10 @@ layui.define(function(exports){
       ,'</a>'].join('')
 
       //跳页区域
-      ,skip: function(){
-        return ['<span class="layui-laypage-skip">&#x5230;&#x7B2C;'
-          ,'<input type="text" min="1" value="'+ config.curr +'" class="layui-input">'
-          ,'&#x9875;<button type="button" class="layui-laypage-btn">&#x786e;&#x5b9a;</button>'
+        , skip: function () {
+            return ['<span class="layui-laypage-skip">' + config.gototext
+                , '<input type="text" min="1" value="' + config.curr + '" class="layui-input">'
+                , config.pagetext + '<button type="button" class="layui-laypage-btn">' + config.oktext + '</button>'
         ,'</span>'].join('');
       }()
     };
