@@ -1350,7 +1350,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           }
         break;
         case 'LAYTABLE_PRINT': //打印
-          var printWin = window.open('打印窗口', '_blank')
+          var printWin = window.open('about:blank', '打印窗口', '_blank')
           ,style = ['<style>'
             ,'body{font-size: 12px; color: #666;}'
             ,'table{width: 100%; border-collapse: collapse; border-spacing: 0;}'
