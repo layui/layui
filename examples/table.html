@@ -32,7 +32,7 @@ body{padding: 20px; /*overflow-y: scroll;*/}
 </script>
 
 <script type="text/html" id="usernameTpl">
-  <a href="" class="layui-table-link">{{d.username || ''}}1</a>
+  <a href="" class="layui-table-link">{{d.username || ''}}</a>
 </script>
 
 <script type="text/html" id="switchTpl">
@@ -200,18 +200,22 @@ layui.use('table', function(){
     ,totalRow: true
     ,limit: 30
     ,toolbar: '#toolbarDemo'
-    //,defaultToolbar: ['filter']
+    ,defaultToolbar: ['filter', 'exports', 'print', {
+      title: '帮助'
+      ,layEvent: 'LAYTABLE_TIPS'
+      ,icon: 'layui-icon-tips'
+    }]
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
-      ,{field:'email', title:'邮箱', hide: 0, width:150, edit: 'text', templet: function(x){
-        return '<em>123</em>'
+      ,{field:'email', title:'邮箱', hide: 0, width:150, edit: 'text', templet: function(d){
+        return '<em>'+ d.email +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
       ,{field:'city', title:'城市', width:120, templet: '#cityTpl1'}
       ,{field:'sign', title:'签名'}
-      ,{field:'experience', title:'积分', width:80, sort: true, totalRow: true}
+      ,{field:'experience', title:'积分', width:80, sort: true, totalRow: true, templet: '<div>{{ d.experience }} 分</div>'}
       ,{field:'ip', title:'IP', width:120}
       ,{field:'logins', title:'登入次数', width:100, sort: true, totalRow: true}
       ,{field:'joinTime', title:'加入时间', width:120}
@@ -256,6 +260,9 @@ layui.use('table', function(){
       break;
       case 'isAll':
         layer.msg(checkStatus.isAll ? '全选': '未全选')
+      break;
+      case 'LAYTABLE_TIPS':
+        layer.alert('Table for layui-v'+ layui.v);
       break;
       case 'reload':
         table.reload('test', {

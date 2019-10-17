@@ -30,3 +30,4 @@ build/
 rc/
 
 coverage/
+package-lock.json

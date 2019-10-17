@@ -219,7 +219,7 @@ layui.use(['form', 'layedit', 'laydate'], function(){
   });
   
   //初始赋值
-  form.val('first', {
+  var thisValue = form.val('first', {
     'title': '测试'
     ,'phone': 11111111111
     ,'email': 'xu@sentsin.com'
@@ -232,6 +232,7 @@ layui.use(['form', 'layedit', 'laydate'], function(){
     ,'desc': 'form 是我们非常看重的一块'
     ,xxxxxxxxx: 123
   });
+  console.log(thisValue);
 
   
   //事件监听

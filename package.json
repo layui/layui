@@ -1,9 +1,9 @@
 {
   "name": "layui-src",
   "realname": "layui",
-  "version": "2.5.4",
+  "version": "2.5.5",
   "independents": {
-    "layim": "3.9.0"
+    "layim": "3.9.1"
   },
   "description": "Classic modular front-end component library",
   "main": "dist/layui.js",

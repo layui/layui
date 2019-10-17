@@ -24,6 +24,11 @@ hr{margin: 30px 0;}
   </div>
 </div>
 
+<div class="layui-progress layui-progress-big" lay-showPercent="yes"  lay-filter="demo">
+  <div class="layui-progress-bar" lay-percent=""></div>
+</div>
+
+
 <hr>
 
 <div class="layui-upload">
@@ -82,14 +87,15 @@ hr{margin: 30px 0;}
 
 <script src="../src/layui.js"></script>
 <script>
-layui.use('upload', function(){
+layui.use(['upload', 'element'], function(){
   var $ = layui.jquery
-  ,upload = layui.upload;
+  ,upload = layui.upload
+  ,element = layui.element;
 
   var uploadInst = upload.render({
     elem: '#test1'
     ,url: 'http://httpbin.org/image'
-    ,size: 2000 //限制文件大小，单位 KB
+    //,size: 2000 //限制文件大小，单位 KB
     //,accept: 'file'
     ,method: 'get'
     ,fileAccept: 'image/*'
@@ -126,6 +132,12 @@ layui.use('upload', function(){
       demoText.find('.demo-reload').on('click', function(){
         uploadInst.upload();
       });
+      
+      element.progress('demo', '0%');
+    }
+    ,progress: function(n){
+      console.log(n + '%'); //获取进度百分比
+      element.progress('demo', n + '%'); //可配合 layui 进度条元素使用
     }
   });
   
@@ -134,7 +146,7 @@ layui.use('upload', function(){
     name:'avatar'
     ,accept: 'images' //只允许上传图片
     ,acceptMime: 'image/*' //只筛选图片
-    ,size: 2
+    //,size: 2
   });
   
   upload.render({

@@ -75,6 +75,7 @@
           ,children: [{
             title: '四级1-1-1-1'
             ,id: 15
+            //,checked: true
             ,href: 'https://www.layui.com/doc/base/infrastructure.html'
           }]
         },{
@@ -163,6 +164,25 @@
         }]
       }]
     }];
+    
+    //数据源
+    var data2 = [{
+      title: '控制台'
+      ,id: '1000'
+      ,spread: true
+      ,checked: true
+      ,children: [{
+        title: '概览'
+        ,id: '1001'
+        ,spread: true
+        ,checked: true
+      },{
+        title: '域名'
+        ,id: '1002'
+        ,spread: true
+        ,checked: true
+      }]
+    }]
 
     tree.render({
       elem: '#test1'
@@ -173,7 +193,7 @@
         console.log(obj);
       }
       ,oncheck: function(obj){
-        console.log(obj);
+        //console.log(obj);
       }
       ,operate: function(obj){
         var type = obj.type;
@@ -202,7 +222,7 @@
         console.log(checkedData);
       }
       ,setChecked: function(){
-        tree.setChecked('demoId1', [12, 16]);
+        tree.setChecked('demoId1', [1000, 1001, 1002]);
       }
       ,reload: function(){
         tree.reload('demoId1', {
@@ -211,7 +231,6 @@
       }
     });
 
-    
     tree.render({
       elem: '#test2'
       ,data: data1

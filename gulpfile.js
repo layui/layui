@@ -92,7 +92,7 @@ var argv = require('minimist')(process.argv.slice(2), {
   ,mobile: function(ver){
     ver = ver === 'open';
 
-    var mods = 'layer-mobile,zepto,upload-mobile', src = [
+    var mods = 'layer-mobile,zepto', src = [
       './src/lay/all-mobile.js'
       ,'./src/lay/modules/laytpl.js'
       ,'./src/**/mobile/{'+ mods +'}.js'
