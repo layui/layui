@@ -196,14 +196,14 @@ layui.define('layer' , function(exports){
       layui.each(items, function(index, file){
         var formData = new FormData();
         
-        formData.append(options.field, file);
-        
         //追加额外的参数
         layui.each(options.data, function(key, value){
           value = typeof value === 'function' ? value() : value;
           formData.append(key, value);
         });
         
+        formData.append(options.field, file);
+       
         //提交文件
         $.ajax({
           url: options.url
