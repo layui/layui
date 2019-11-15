@@ -392,6 +392,9 @@ layui.define(['layer', 'form'], function(exports){
             ,method: uploadImage.type
             ,elem: $(that).find('input')[0]
             ,done: function(res){
+			  if(typeof uploadImage.parseData === 'function'){
+			  	res = uploadImage.parseData(res) || res;
+			  }
               if(res.code == 0){
                 res.data = res.data || {};
                 insertInline.call(iframeWin, 'img', {
