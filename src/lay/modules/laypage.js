@@ -202,7 +202,7 @@ layui.define(function(exports){
     ,select = elem[tag]('select')[0]
     ,skip = function(){
       var curr = input.value.replace(/\s|\D/g, '')|0;
-      if(curr){
+      if(curr && !config.disabled){
         config.curr = curr;
         that.render();
       }
@@ -216,8 +216,10 @@ layui.define(function(exports){
         laypage.on(childs[i], 'click', function(){
           var curr = this.getAttribute('data-page')|0;
           if(curr < 1 || curr > config.pages) return;
-          config.curr = curr;
-          that.render();
+          if (!config.disabled) {
+            config.curr = curr;
+            that.render();
+          }
         });
       }
     }
@@ -226,11 +228,13 @@ layui.define(function(exports){
     if(select){
       laypage.on(select, 'change', function(){
         var value = this.value;
-        if(config.curr*value > config.count){
-          config.curr = Math.ceil(config.count/value);
+        if (!config.disabled) {
+          if(config.curr*value > config.count){
+            config.curr = Math.ceil(config.count/value);
+          }
+          config.limit = value;
+          that.render();
         }
-        config.limit = value;
-        that.render();
       });
     }
     
