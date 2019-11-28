@@ -771,6 +771,14 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         ,numbers = i1 + options.limit*(curr - 1) + 1; //序号
         
         if(item1.length === 0) return;
+
+        for(var i in item1){
+          // 转义html. 解决table渲染xss安全漏洞问题
+          if(typeof item1[i] == 'string')
+          {
+            item1[i]=util.escape(item1[i]);
+          }
+        }
         
         if(!sort){
           item1[table.config.indexName] = i1;
