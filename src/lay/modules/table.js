@@ -283,7 +283,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     //高度铺满：full-差距值
     if(options.height && /^full-\d+$/.test(options.height)){
       that.fullHeightGap = options.height.split('-')[1];
-      options.height = _WIN.height() - that.fullHeightGap;
+      options.height = options.elem.parent().height() - that.fullHeightGap;
     }
     
     //初始化一些参数
@@ -1157,7 +1157,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,height = options.height, bodyHeight;
 
     if(that.fullHeightGap){
-      height = _WIN.height() - that.fullHeightGap;
+      height = that.elem.parent().height() - that.fullHeightGap;
       if(height < 135) height = 135;
       that.elem.css('height', height);
     }
