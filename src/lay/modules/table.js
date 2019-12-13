@@ -729,6 +729,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 
           that.renderForm();
           that.setColsWidth();
+		  
+		  //错误处理回调
+		  typeof options.error === 'function' && options.error(e,m);
         }
       });
     } else if(options.data && options.data.constructor === Array){ //已知数据
