@@ -160,7 +160,7 @@ layui.define('jquery', function(exports){
         }
         
         //允许关闭
-        if(othis.attr('lay-allowClose')){
+        if(othis.attr('lay-allowClose') === 'true'){
           title.find('li').each(function(){
             var li = $(this);
             if(!li.find('.'+CLOSE)[0]){
