@@ -115,15 +115,16 @@
 
     apps = typeof apps === 'string' ? [apps] : apps;
     
-    //如果页面已经存在jQuery1.7+库且所定义的模块依赖jQuery，则不加载内部jquery模块
-    if(window.jQuery && jQuery.fn.on){
-      that.each(apps, function(index, item){
-        if(item === 'jquery'){
-          apps.splice(index, 1);
-        }
-      });
-      layui.jquery = layui.$ = jQuery;
-    }
+    // layui内部强制使用自带的 jquery, 若外部使用高版本的jquery（3.2.x），Transfer组件将无法正常展示
+    // //如果页面已经存在jQuery1.7+库且所定义的模块依赖jQuery，则不加载内部jquery模块
+    // if(window.jQuery && jQuery.fn.on){
+    //   that.each(apps, function(index, item){
+    //     if(item === 'jquery'){
+    //       apps.splice(index, 1);
+    //     }
+    //   });
+    //   layui.jquery = layui.$ = jQuery;
+    // }
     
     var item = apps[0]
     ,timeout = 0;
