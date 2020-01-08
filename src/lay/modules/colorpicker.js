@@ -478,21 +478,22 @@ layui.define('jquery', function(exports){
     
     //中间小圆点颜色选择
     choose.on('mousedown', function(e){
-      var oldtop = this.offsetTop
+	  var oldtop = this.offsetTop
+	  ,v = 6
       ,oldleft = this.offsetLeft
       ,oldy = e.clientY
       ,oldx = e.clientX;
       var move = function(e){
         var top = oldtop + (e.clientY - oldy)
         ,left = oldleft + (e.clientX - oldx)
-        ,maxh = basis[0].offsetHeight - 3
-        ,maxw = basis[0].offsetWidth - 3;
-        if(top < -3)top = -3;
+        ,maxh = basis[0].offsetHeight - v
+        ,maxw = basis[0].offsetWidth - v;
+        if(top < -v)top = -v;
         if(top > maxh)top = maxh;
-        if(left < -3)left = -3;
+        if(left < -v)left = -v;
         if(left > maxw)left = maxw;
-        var s = (left + 3)/260*100
-        ,b = 100 - (top + 3)/180*100;
+        var s = (left + v)/260*100
+        ,b = 100 - (top + v)/180*100;
         _b = b;
         _s = s;
         change(_h, s, b, _a); 
@@ -504,14 +505,15 @@ layui.define('jquery', function(exports){
     });
     
     basis.on('mousedown', function(e){
-      var top = e.clientY - $(this).offset().top - 3 + $win.scrollTop()
-      ,left = e.clientX - $(this).offset().left - 3 + $win.scrollLeft()
-      if(top < -3)top = -3;
-      if(top > this.offsetHeight - 3)top = this.offsetHeight - 3;
-      if(left < -3)left = -3;
-      if(left > this.offsetWidth - 3)left = this.offsetWidth - 3;
-      var s = (left + 3)/260*100
-      ,b = 100 - (top + 3)/180*100;
+	  var v = 6	
+      ,top = e.clientY - $(this).offset().top - v + $win.scrollTop()
+      ,left = e.clientX - $(this).offset().left - v + $win.scrollLeft()
+      if(top < -v)top = -v;
+      if(top > this.offsetHeight - v)top = this.offsetHeight - v;
+      if(left < -v)left = -v;
+      if(left > this.offsetWidth - v)left = this.offsetWidth - v;
+      var s = (left + v)/260*100
+      ,b = 100 - (top + v)/180*100;
       _b = b;
       _s = s;
       change(_h, s, b, _a); 
@@ -567,13 +569,14 @@ layui.define('jquery', function(exports){
 
   //颜色选择器hsb转换
   Class.prototype.select = function(h, s, b, type){
-    var that = this
+	var that = this
+	,v = 6
     ,options = that.config
     ,hex = HSBToHEX({h:h, s:100, b:100})
     ,color = HSBToHEX({h:h, s:s, b:b})
     ,sidetop = h/360*180
-    ,top = 180 - b/100*180 - 3
-    ,left = s/100*260 - 3;
+    ,top = 180 - b/100*180 - v
+    ,left = s/100*260 - v;
     
     that.elemPicker.find('.' + PICKER_SIDE_SLIDER).css("top", sidetop); //滑块的top
     that.elemPicker.find('.' + PICKER_BASIS)[0].style.background = '#' + hex; //颜色选择器的背景
