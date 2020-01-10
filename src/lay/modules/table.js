@@ -725,6 +725,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
         }
         ,error: function(e, m){
+          // 添加错误处理函数
+          if(that.errorHandler){
+            that.errorHandler(e);
+          }
+         
           that.errorView('数据接口请求异常：'+ m);
 
           that.renderForm();
