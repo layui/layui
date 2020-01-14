@@ -262,10 +262,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     //响应数据的自定义格式
     options.response = $.extend({
-      statusName: 'code'
-      ,statusCode: 0
-      ,msgName: 'msg'
-      ,dataName: 'data'
+      statusName: 'code' //规定数据状态的字段名称
+      ,statusCode: 0 //规定成功的状态码
+      ,msgName: 'msg' //规定状态信息的字段名称
+      ,dataName: 'data' //规定数据总数的字段名称
+      ,totalRowName: 'totalRow' //规定数据统计的字段名称
       ,countName: 'count'
     }, options.response);
     
@@ -737,6 +738,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       
       res[response.dataName] = options.data.concat().splice(startLimit, options.limit);
       res[response.countName] = options.data.length;
+      
+      //记录合计行数据
+      if(typeof options.totalRow === 'object'){
+        res[response.totalRowName] = $.extend({}, options.totalRow);
+      }
 
       that.renderData(res, curr, res[response.countName]), sort();
       that.setColsWidth();
@@ -755,7 +761,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   Class.prototype.renderData = function(res, curr, count, sort){
     var that = this
     ,options = that.config
-    ,data = res[options.response.dataName] || []
+    ,data = res[options.response.dataName] || [] //列表数据
+    ,totalRowData = res[options.response.totalRowName] //合计行数据
     ,trs = []
     ,trs_fixed = []
     ,trs_fixed_r = []
@@ -893,7 +900,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     }
     
     render(); //渲染数据
-    that.renderTotal(data); //数据合计
+    that.renderTotal(data, totalRowData); //数据合计
 
     //同步分页状态
     if(options.page){
@@ -923,7 +930,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   };
   
   //数据合计行
-  Class.prototype.renderTotal = function(data){
+  Class.prototype.renderTotal = function(data, totalRowData){
     var that = this
     ,options = that.config
     ,totalNums = {};
@@ -944,7 +951,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     });
     
     that.dataTotal = {};
-    
+
     var tds = [];
     that.eachCols(function(i3, item3){
       var field = item3.field || i3;
@@ -958,7 +965,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         tplData[field] = thisTotalNum;
         thisTotalNum = parseTempData(item3, thisTotalNum, tplData);
         
-        return item3.totalRow ? (thisTotalNum || text) : text;
+        //如果直接传入了合计行数据，则不输出自动计算的结果
+        if(totalRowData){
+          return totalRowData[item3.field] || text;
+        } else {
+          return item3.totalRow ? (thisTotalNum || text) : text;
+        }
       }()
       ,td = ['<td data-field="'+ field +'" data-key="'+ options.index + '-'+ item3.key +'" '+ function(){
         var attr = [];

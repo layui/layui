@@ -47,12 +47,12 @@ a cite{font-style: normal; *cursor:pointer;}
 /** 图标字体 **/
 @font-face {
   font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=250');
-  src: url('../font/iconfont.eot?v=250#iefix') format('embedded-opentype'),
-       url('../font/iconfont.woff2?v=250') format('woff2'),
-       url('../font/iconfont.woff?v=250') format('woff'),
-       url('../font/iconfont.ttf?v=250') format('truetype'),
-       url('../font/iconfont.svg?v=250#layui-icon') format('svg');
+  src: url('../font/iconfont.eot?v=256');
+  src: url('../font/iconfont.eot?v=256#iefix') format('embedded-opentype'),
+       url('../font/iconfont.woff2?v=256') format('woff2'),
+       url('../font/iconfont.woff?v=256') format('woff'),
+       url('../font/iconfont.ttf?v=256') format('truetype'),
+       url('../font/iconfont.svg?v=256#layui-icon') format('svg');
 }
                     
 .layui-icon{
@@ -90,6 +90,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-face-smile:before{content:"\e6af"}
 .layui-icon-survey:before{content:"\e6b2"}
 .layui-icon-tree:before{content:"\e62e"}
+.layui-icon-ie:before{content:"\e7bb"}
 .layui-icon-upload-circle:before{content:"\e62f"}
 .layui-icon-add-circle:before{content:"\e61f"}
 .layui-icon-download-circle:before{content:"\e601"}
@@ -109,6 +110,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-carousel:before{content:"\e634"}
 .layui-icon-help:before{content:"\e607"}
 .layui-icon-code-circle:before{content:"\e635"}
+.layui-icon-windows:before{content:"\e67f"}
 .layui-icon-water:before{content:"\e636"}
 .layui-icon-username:before{content:"\e66f"}
 .layui-icon-find-fill:before{content:"\e670"}
@@ -121,6 +123,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-delete:before{content:"\e640"}
 .layui-icon-play:before{content:"\e652"}
 .layui-icon-top:before{content:"\e604"}
+.layui-icon-firefox:before{content:"\e686"}
 .layui-icon-friends:before{content:"\e612"}
 .layui-icon-refresh-3:before{content:"\e9aa"}
 .layui-icon-ok:before{content:"\e605"}
@@ -133,6 +136,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-link:before{content:"\e64c"}
 .layui-icon-diamond:before{content:"\e735"}
 .layui-icon-log:before{content:"\e60e"}
+.layui-icon-key:before{content:"\e683"}
 .layui-icon-rate-solid:before{content:"\e67a"}
 .layui-icon-fonts-del:before{content:"\e64f"}
 .layui-icon-unlink:before{content:"\e64d"}
@@ -154,11 +158,15 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-add-1:before{content:"\e654"}
 .layui-icon-face-smile-b:before{content:"\e650"}
 .layui-icon-fonts-html:before{content:"\e64b"}
+.layui-icon-screen-full:before{content:"\e622"}
 .layui-icon-form:before{content:"\e63c"}
 .layui-icon-cart:before{content:"\e657"}
 .layui-icon-camera-fill:before{content:"\e65d"}
 .layui-icon-tabs:before{content:"\e62a"}
+.layui-icon-heart-fill:before{content:"\e68f"}
 .layui-icon-fonts-code:before{content:"\e64e"}
+.layui-icon-ios:before{content:"\e680"}
+.layui-icon-at:before{content:"\e687"}
 .layui-icon-fire:before{content:"\e756"}
 .layui-icon-set:before{content:"\e716"}
 .layui-icon-fonts-u:before{content:"\e646"}
@@ -166,21 +174,29 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-tips:before{content:"\e702"}
 .layui-icon-picture:before{content:"\e64a"}
 .layui-icon-more-vertical:before{content:"\e671"}
+.layui-icon-bluetooth:before{content:"\e689"}
 .layui-icon-flag:before{content:"\e66c"}
 .layui-icon-loading:before{content:"\e63d"}
 .layui-icon-fonts-i:before{content:"\e644"}
 .layui-icon-refresh-1:before{content:"\e666"}
 .layui-icon-rmb:before{content:"\e65e"}
+.layui-icon-addition:before{content:"\e624"}
 .layui-icon-home:before{content:"\e68e"}
+.layui-icon-time:before{content:"\e68d"}
 .layui-icon-user:before{content:"\e770"}
 .layui-icon-notice:before{content:"\e667"}
+.layui-icon-chrome:before{content:"\e68a"}
+.layui-icon-edge:before{content:"\e68b"}
 .layui-icon-login-weibo:before{content:"\e675"}
 .layui-icon-voice:before{content:"\e688"}
 .layui-icon-upload-drag:before{content:"\e681"}
 .layui-icon-login-qq:before{content:"\e676"}
 .layui-icon-snowflake:before{content:"\e6b1"}
+.layui-icon-heart:before{content:"\e68c"}
+.layui-icon-logout:before{content:"\e682"}
 .layui-icon-file-b:before{content:"\e655"}
 .layui-icon-template:before{content:"\e663"}
+.layui-icon-transfer:before{content:"\e691"}
 .layui-icon-auz:before{content:"\e672"}
 .layui-icon-console:before{content:"\e665"}
 .layui-icon-app:before{content:"\e653"}
@@ -188,6 +204,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-website:before{content:"\e7ae"}
 .layui-icon-next:before{content:"\e65b"}
 .layui-icon-component:before{content:"\e857"}
+.layui-icon-android:before{content:"\e684"}
 .layui-icon-more:before{content:"\e65f"}
 .layui-icon-login-wechat:before{content:"\e677"}
 .layui-icon-shrink-right:before{content:"\e668"}
@@ -197,6 +214,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-refresh:before{content:"\e669"}
 .layui-icon-female:before{content:"\e661"}
 .layui-icon-male:before{content:"\e662"}
+.layui-icon-screen-restore:before{content:"\e758"}
 .layui-icon-password:before{content:"\e673"}
 .layui-icon-senior:before{content:"\e674"}
 .layui-icon-theme:before{content:"\e66a"}
@@ -206,18 +224,22 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-rate:before{content:"\e67b"}
 .layui-icon-template-1:before{content:"\e656"}
 .layui-icon-vercode:before{content:"\e679"}
+.layui-icon-service:before{content:"\e626"}
 .layui-icon-cellphone:before{content:"\e678"}
-
-.layui-icon-screen-full:before{content:"\e622";}
-.layui-icon-screen-restore:before{content:"\e758";}
-.layui-icon-cols:before{content:"\e610";}
-.layui-icon-export:before{content:"\e67d";}
-.layui-icon-print:before{content:"\e66d";}
-.layui-icon-slider:before{content: "\e714";}
-.layui-icon-addition:before{content: "\e624";}
-.layui-icon-subtraction:before{content: "\e67e";}
-.layui-icon-service:before{content: "\e626";}
-.layui-icon-transfer:before{content: "\e691";}
+.layui-icon-print:before{content:"\e66d"}
+.layui-icon-cols:before{content:"\e610"}
+.layui-icon-wifi:before{content:"\e7e0"}
+.layui-icon-export:before{content:"\e67d"}
+.layui-icon-rss:before{content:"\e808"}
+.layui-icon-slider:before{content:"\e714"}
+.layui-icon-email:before{content:"\e618"}
+.layui-icon-subtraction:before{content:"\e67e"}
+.layui-icon-mike:before{content:"\e6dc"}
+.layui-icon-light:before{content:"\e748"}
+.layui-icon-gift:before{content:"\e627"}
+.layui-icon-mute:before{content:"\e685"}
+.layui-icon-reduce-circle:before{content:"\e616"}
+.layui-icon-music:before{content:"\e690"}
 
 /* 基本布局 */
 .layui-main{position: relative; width: 1140px; margin: 0 auto;}
@@ -390,28 +412,43 @@ a cite{font-style: normal; *cursor:pointer;}
   .layui-col-lg-offset12{margin-left: 100%;}
 }
 
-/* 列间隔 */.layui-col-space1{margin: -0.5px;}
+/* 列间隔 */
+.layui-col-space1{margin: -0.5px;}
 .layui-col-space1>*{padding: 0.5px;}
-.layui-col-space3{margin: -1.5px;}
-.layui-col-space3>*{padding: 1.5px;}
+.layui-col-space2{margin: -1px;}
+.layui-col-space2>*{padding: 1px;}
+.layui-col-space4{margin: -2px;}
+.layui-col-space4>*{padding: 2px;}
 .layui-col-space5{margin: -2.5px;}
 .layui-col-space5>*{padding: 2.5px;}
-.layui-col-space8{margin: -3.5px;}
-.layui-col-space8>*{padding: 3.5px;}
+.layui-col-space6{margin: -3px;}
+.layui-col-space6>*{padding: 3px;}
+.layui-col-space8{margin: -4px;}
+.layui-col-space8>*{padding: 4px;}
 .layui-col-space10{margin: -5px;}
 .layui-col-space10>*{padding: 5px;}
 .layui-col-space12{margin: -6px;}
 .layui-col-space12>*{padding: 6px;}
+.layui-col-space14{margin: -7px;}
+.layui-col-space14>*{padding: 7px;}
 .layui-col-space15{margin: -7.5px;}
 .layui-col-space15>*{padding: 7.5px;}
+.layui-col-space16{margin: -8px;}
+.layui-col-space16>*{padding: 8px;}
 .layui-col-space18{margin: -9px;}
 .layui-col-space18>*{padding: 9px;}
 .layui-col-space20{margin: -10px;}
 .layui-col-space20>*{padding: 10px;}
 .layui-col-space22{margin: -11px;}
 .layui-col-space22>*{padding: 11px;}
+.layui-col-space24{margin: -12px;}
+.layui-col-space24>*{padding: 12px;}
 .layui-col-space25{margin: -12.5px;}
 .layui-col-space25>*{padding: 12.5px;}
+.layui-col-space26{margin: -13px;}
+.layui-col-space26>*{padding: 13px;}
+.layui-col-space28{margin: -14px;}
+.layui-col-space28>*{padding: 14px;}
 .layui-col-space30{margin: -15px;}
 .layui-col-space30>*{padding: 15px;}
 
