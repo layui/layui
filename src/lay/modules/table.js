@@ -1923,7 +1923,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
               var content = item1[item3.field];
               if(content === undefined || content === null) content = '';
               
-              i1 == 0 && dataTitle.push(item3.title || '');
+              i1 == 0 && dataTitle.push(parseTempData({}, item3.title, item1, 'text'));
               vals.push('"'+ parseTempData(item3, content, item1, 'text') + '"');
             }
           });
