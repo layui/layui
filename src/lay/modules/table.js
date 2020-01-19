@@ -1932,8 +1932,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       });
       
       //表合计
-      layui.each(that.dataTotal, function(key, value){
-        dataTotal.push(value);
+      table.eachCols(id, function(i4, item4){
+        if(item4.field && item4.type == 'normal' && !item4.hide && that.dataTotal){
+          dataTotal.push(parseTempData({}, that.dataTotal[item4.field], {}, 'text'));
+        }
       });
       
       return dataTitle.join(',') + '\r\n' + dataMain.join('\r\n') + '\r\n' + dataTotal.join(',');
