@@ -31,3 +31,4 @@ rc/
 
 coverage/
 package-lock.json
+/.vs
