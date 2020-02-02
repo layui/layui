@@ -89,7 +89,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-hui{min-width:100px;  background-color: #000; filter:alpha(opacity=60); background-color: rgba(0,0,0,0.6); color: #fff; border:none;}
 .layui-layer-hui .layui-layer-content{padding:12px 25px; text-align:center;}
 .layui-layer-dialog .layui-layer-padding{padding: 20px 20px 20px 55px; text-align: left;}
-.layui-layer-page .layui-layer-content{position:relative; overflow:visible;}
+.layui-layer-page .layui-layer-content{position:relative; overflow:auto;}
 .layui-layer-page .layui-layer-btn,.layui-layer-iframe .layui-layer-btn{padding-top:10px;}
 .layui-layer-nobg{background:none;}
 .layui-layer-iframe iframe{display: block; width: 100%;}
