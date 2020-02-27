@@ -99,7 +99,7 @@ layui.define('jquery', function(exports){
     tabClick: function(e, index, liElem, options){
       options = options || {};
       var othis = liElem || $(this)
-      ,index = index || othis.parent().children('li').index(othis)
+      ,index = index === 0 ? index : index || othis.parent().children('li').index(othis)
       ,parents = options.headerElem ? othis.parent() : othis.parents('.layui-tab').eq(0)
       ,item = options.bodyElem ? $(options.bodyElem) : parents.children('.layui-tab-content').children('.layui-tab-item')
       ,elemA = othis.find('a')
