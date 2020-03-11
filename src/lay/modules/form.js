@@ -443,7 +443,7 @@ layui.define('layer', function(exports){
             ,'<div class="'+ TITLE +'">'
               ,('<input type="text" placeholder="'+ placeholder +'" '
                 +('value="'+ (value ? selected.html() : '') +'"') //默认值
-                +(isSearch ? '' : ' readonly') //是否开启搜索
+                +((!disabled && isSearch) ? '' : ' readonly') //是否开启搜索
                 +' class="layui-input'
                 +(isSearch ? '' : ' layui-unselect') 
               + (disabled ? (' ' + DISABLED) : '') +'">') //禁用状态

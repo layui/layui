@@ -100,7 +100,7 @@ layui.define('jquery', function(exports){
       ,stamp = new Date().getTime() - new Date(time).getTime();
       
       //返回具体日期
-      if(stamp > 1000*60*60*24*8){
+      if(stamp > 1000*60*60*24*31){
         stamp =  new Date(time);
         arr[0][0] = that.digit(stamp.getFullYear(), 4);
         arr[0][1] = that.digit(stamp.getMonth() + 1);
@@ -120,7 +120,7 @@ layui.define('jquery', function(exports){
         return ((stamp/1000/60/60/24)|0) + '天前';
       } else if(stamp >= 1000*60*60){
         return ((stamp/1000/60/60)|0) + '小时前';
-      } else if(stamp >= 1000*60*2){ //2分钟以内为：刚刚
+      } else if(stamp >= 1000*60*3){ //3分钟以内为：刚刚
         return ((stamp/1000/60)|0) + '分钟前';
       } else if(stamp < 0){
         return '未来';
@@ -174,12 +174,27 @@ layui.define('jquery', function(exports){
     
     //批量事件
     ,event: function(attr, obj, eventType){
+      var _body = $('body');
+      eventType = eventType || 'click';
+      
+      //记录事件回调集合
       obj = util.event[attr] = $.extend(true, util.event[attr], obj) || {};
-      $('body').on(eventType || 'click', '*['+ attr +']', function(){
+      
+      //清除委托事件
+      util.event.UTIL_EVENT_CALLBACK = util.event.UTIL_EVENT_CALLBACK || {};
+      _body.off(eventType, '*['+ attr +']', util.event.UTIL_EVENT_CALLBACK[attr])
+      
+      //绑定委托事件
+      util.event.UTIL_EVENT_CALLBACK[attr] = function(){
         var othis = $(this)
         ,key = othis.attr(attr);
-        obj[key] && obj[key].call(this, othis);
-      });
+        (typeof obj[key] === 'function') && obj[key].call(this, othis);
+      };
+
+      //清除旧事件，绑定新事件
+      _body.on(eventType, '*['+ attr +']', util.event.UTIL_EVENT_CALLBACK[attr]);
+      
+      return obj;
     }
   };
   
