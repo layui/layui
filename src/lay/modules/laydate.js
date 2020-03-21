@@ -1267,6 +1267,14 @@
         options.range || that.done(null, 'change');
         lay(that.footer).find(ELEM_TIME_BTN).removeClass(DISABLED);
       });
+     
+      if(options.type === 'month'){
+        //双击选中
+        lay(ul).find('li').on('dblclick',function (){
+          $(this).trigger('click');//执行一次click就能达到目的,但是实际会执行3次(没有屏蔽单击事件)
+          that.tool($('span[lay-type="confirm"]').get(0), 'confirm');
+        });
+      }
     } else {
       var span = lay.elem('span', {
         'class': ELEM_TIME_TEXT
