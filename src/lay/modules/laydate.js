@@ -378,6 +378,7 @@
     ,format: 'yyyy-MM-dd' //默认日期格式
     ,value: null //默认日期，支持传入new Date()，或者符合format参数设定的日期格式字符
     ,isInitValue: true //用于控制是否自动向元素填充初始值（需配合 value 参数使用）
+    ,startOfWeek: 'sun' // 一周的第一天，sun 或者 mon
     ,min: '1900-1-1' //有效最小日期，年月日必须用“-”分割，时分秒必须用“:”分割。注意：它并不是遵循 format 设定的格式。
     ,max: '2099-12-31' //有效最大日期，同上
     ,trigger: 'focus' //呼出控件的事件
@@ -653,7 +654,7 @@
         lay.each(new Array(7), function(j){
           if(i === 0){
             var th = lay.elem('th');
-            th.innerHTML = lang.weeks[j];
+            th.innerHTML = options.startOfWeek == 'sun' ? lang.weeks[j] : lang.weeks[(j + 1) % 7];
             theadTr.appendChild(th);
           }
           tr.insertCell(j);
@@ -1019,6 +1020,9 @@
     //计算当前月第一天的星期
     thisDate.setFullYear(dateTime.year, dateTime.month, 1);
     startWeek = thisDate.getDay();
+    if (options.startOfWeek != 'sun') {
+        startWeek = (startWeek + 6) % 7;
+    }
     
     prevMaxDate = laydate.getEndDate(dateTime.month || 12, dateTime.year); //计算上个月的最后一天
     thisMaxDate = laydate.getEndDate(dateTime.month + 1, dateTime.year); //计算当前月的最后一天
