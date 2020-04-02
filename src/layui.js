@@ -27,11 +27,17 @@
     var jsPath = doc.currentScript ? doc.currentScript.src : function(){
       var js = doc.scripts
       ,last = js.length - 1
-      ,src;
-      for(var i = last; i > 0; i--){
-        if(js[i].readyState === 'interactive'){
-          src = js[i].src;
-          break;
+      ,src
+      ,layuiJs = Array.from(js).find(x => x.src.toLowerCase().indexOf("/layui.js") != -1);
+      if(!layuiJs){
+        src = layuiJs.src;
+      }
+      else{
+        for(var i = last; i > 0; i--){
+          if(js[i].readyState === 'interactive'){
+            src = js[i].src;
+            break;
+          }
         }
       }
       return src || js[last].src;
