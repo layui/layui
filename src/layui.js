@@ -29,7 +29,7 @@
       ,last = js.length - 1
       ,src
       ,layuiJs = Array.from(js).find(x => x.src.toLowerCase().indexOf("/layui.js") != -1);
-      if(!layuiJs){
+      if(layuiJs){
         src = layuiJs.src;
       }
       else{
