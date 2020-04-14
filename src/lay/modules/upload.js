@@ -518,12 +518,10 @@ layui.define('layer' , function(exports){
     
     //手动触发上传
     options.bindAction.off('upload.action').on('upload.action', function(){
-      /*修复上传按钮失效等bug-start---by:zYunQiShi(信奉着春风细雨)-2019/11/29*/
       var copyE=that;
-      copyE.chooseFiles=copyE.files;//获取符合条件的files
+      copyE.chooseFiles=copyE.files;//获取非空并符合条件的files
       copyE.upload()  
       // that.upload();
-      /*修复上传按钮失效等bug-end---by:zYunQiShi(信奉着春风细雨)-2019/11/29*/
     });
     
     //防止事件重复绑定
