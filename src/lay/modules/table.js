@@ -1635,7 +1635,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       
       //显示编辑表单
       if(editType){
-        var input = $('<input class="layui-input '+ ELEM_EDIT +'">');
+        var input;
+        if (editType == 'textarea') {
+          input = $('<textarea class="layui-input ' + W + '"></textarea>');
+        } else {
+          input = $('<input class="layui-input '+ ELEM_EDIT +'">');
+        }
         input[0].value = othis.data('content') || elemCell.text();
         othis.find('.'+ELEM_EDIT)[0] || othis.append(input);
         input.focus();
