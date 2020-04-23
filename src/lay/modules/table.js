@@ -1636,8 +1636,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       //显示编辑表单
       if(editType){
         var input;
-        if (editType == 'textarea') {
-          input = $('<textarea class="layui-input ' + W + '"></textarea>');
+        if(editType == 'textarea'){
+          input = $('<textarea class="layui-input ' + ELEM_EDIT + '"></textarea>');
         } else {
           input = $('<input class="layui-input '+ ELEM_EDIT +'">');
         }
