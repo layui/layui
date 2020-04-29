@@ -114,14 +114,15 @@ layui.define(['layer', 'form'], function(exports){
    * @param {[type]} flag    是否追加模式
    */
   Edit.prototype.setContent = function(index, content, flag){
-    var iframeWin = getWin(index);
+    var that = this
+    ,iframeWin = getWin(index);
     if(!iframeWin[0]) return;
     if(flag){
       $(iframeWin[0].document.body).append(content)
     }else{
       $(iframeWin[0].document.body).html(content)
     };
-    layedit.sync(index)
+    that.sync(index)
   };
   //将编辑器内容同步到textarea（一般用于异步提交时）
   Edit.prototype.sync = function(index){
@@ -137,6 +138,16 @@ layui.define(['layer', 'form'], function(exports){
     if(!iframeWin[0]) return;
     var range = Range(iframeWin[0].document);
     return document.selection ? range.text : range.toString();
+  };
+  /**
+   * 设置编辑器是否可编辑
+   * @param {[type]} index   编辑器索引
+   * @param {[type]} flag    是否可编辑
+    */
+  Edit.prototype.setContentEditable = function (index, flag = true) {
+    var iframeWin = getWin(index);
+    if (!iframeWin[0]) return;
+    $(iframeWin[0].document.body).attr("contenteditable", flag);
   };
 
   //iframe初始化
