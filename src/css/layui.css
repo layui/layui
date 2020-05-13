@@ -813,10 +813,11 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .layui-table-total tr,
 .layui-table-patch,
 .layui-table-mend,
-.layui-table[lay-even] tr:nth-child(even),
 .layui-table tbody tr:hover,
 .layui-table-hover,
 .layui-table-click{background-color: #f2f2f2;}
+
+.layui-table[lay-even] tr:nth-child(even){background-color: #f2f2f2;}
 
 .layui-table th,
 .layui-table td,
