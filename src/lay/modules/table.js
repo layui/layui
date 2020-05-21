@@ -424,9 +424,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     //添加工具栏左侧模板
     var leftDefaultTemp = [
-      '<div class="layui-inline" lay-event="add"><i class="layui-icon layui-icon-add-1"></i></div>'
-      ,'<div class="layui-inline" lay-event="update"><i class="layui-icon layui-icon-edit"></i></div>'
-      ,'<div class="layui-inline" lay-event="delete"><i class="layui-icon layui-icon-delete"></i></div>'
+      '<div class="layui-inline" lay-event="add" title="增加"><i class="layui-icon layui-icon-add-1"></i></div>'
+      ,'<div class="layui-inline" lay-event="update" title="更新"><i class="layui-icon layui-icon-edit"></i></div>'
+      ,'<div class="layui-inline" lay-event="delete" title="删除"><i class="layui-icon layui-icon-delete"></i></div>'
     ].join('')
     ,elemToolTemp = that.layTool.find('.layui-table-tool-temp');
     
