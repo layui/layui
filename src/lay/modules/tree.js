@@ -249,7 +249,10 @@ layui.define('form', function(exports){
 
       //展开节点操作
       that.spread(entryDiv, item);
-      
+
+      // 双击事件
+      that.dblclick(entryDiv, item);
+
       //选择框
       if(options.showCheckbox){
         item.checked && that.checkids.push(item.id);
@@ -324,7 +327,39 @@ layui.define('form', function(exports){
       });
     });
   };
-  
+
+  Class.prototype.dblclick = function (elem, item) {
+    var that = this
+      , options = that.config
+      , entry = elem.children('.'+ELEM_ENTRY)
+      , elemText = entry.find('.'+ ELEM_TEXT)
+      , state = '';
+
+    // 点击回调
+    elemText.on('dblclick', function() {
+      var othis = $(this);
+
+      // 判断是否禁用状态
+      if(othis.hasClass(DISABLED)) {
+        return;
+      }
+
+      // 判断展开收缩状态
+      if(elem.hasClass(ELEM_SPREAD)) {
+        state = options.onlyIconControl ? 'open' : 'close';
+      } else {
+        state = options.onlyIconControl ? 'close' : 'open';
+      }
+
+      // 点击产生的回调
+      options.dblclick && options.dblclick({
+        elem: elem,
+        state: state,
+        data: item
+      });
+    });
+  };
+
   //计算复选框选中状态
   Class.prototype.setCheckbox = function(elem, item, elemCheckbox){
     var that = this
