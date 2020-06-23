@@ -16,6 +16,10 @@ layui.define('layer', function(exports){
   
   ,MOD_NAME = 'form', ELEM = '.layui-form', THIS = 'layui-this'
   ,SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'layui-disabled'
+    , VERIFY = 'lay-verify'
+    , VER_TYPE = 'lay-verType'
+    , DANGER = 'layui-form-danger' // 警示样式
+    , REQ_TEXT = 'lay-reqText'
   
   ,Form = function(){
     this.config = {
@@ -610,51 +614,49 @@ layui.define('layer', function(exports){
     });
     return that;
   };
-  
-  //表单提交校验
-  var submit = function(){
-    var stop = null //验证不通过状态
-    ,verify = form.config.verify //验证规则
-    ,DANGER = 'layui-form-danger' //警示样式
-    ,field = {}  //字段集合
-    ,button = $(this) //当前触发的按钮
-    ,elem = button.parents(ELEM) //当前所在表单域
-    ,verifyElem = elem.find('*[lay-verify]') //获取需要校验的元素
-    ,formElem = button.parents('form')[0] //获取当前所在的 form 元素，如果存在的话
-    ,filter = button.attr('lay-filter'); //获取过滤器
-   
-    
-    //开始校验
-    layui.each(verifyElem, function(_, item){
+
+  /**
+   * 表单校验
+   * @return 校验通过返回true
+   */
+  Form.prototype.doVerify = function (filter, elem) {
+    elem = elem || $(ELEM + '[lay-filter="' + filter + '"]').eq(0);
+    var stop = false // 验证不通过状态
+      , verify = form.config.verify // 验证规则
+      , verifyElem = elem.find('*[' + VERIFY + ']'); // 获取需要校验的元素
+
+    // 开始校验
+    layui.each(verifyElem, function(_, item) {
       var othis = $(this)
-      ,vers = othis.attr('lay-verify').split('|')
-      ,verType = othis.attr('lay-verType') //提示方式
-      ,value = othis.val();
-      
-      othis.removeClass(DANGER); //移除警示样式
-      
-      //遍历元素绑定的验证规则
-      layui.each(vers, function(_, thisVer){
-        var isTrue //是否命中校验
-        ,errorText = '' //错误提示文本
-        ,isFn = typeof verify[thisVer] === 'function';
-        
-        //匹配验证规则
-        if(verify[thisVer]){
-          var isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
+        , vers = othis.attr(VERIFY).split('|')
+        , verType = othis.attr(VER_TYPE) // 提示方式
+        , value = othis.val();
+
+      othis.removeClass(DANGER); // 移除警示样式
+
+      // 遍历元素绑定的验证规则
+      layui.each(vers, function(_, thisVer) {
+        var isTrue // 是否命中校验
+          , errorText = '' // 错误提示文本
+          , isFn = typeof verify[thisVer] === 'function';
+
+        // 匹配验证规则
+        if (verify[thisVer]) {
+          isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value);
           errorText = errorText || verify[thisVer][1];
-          
-          if(thisVer === 'required'){
-            errorText = othis.attr('lay-reqText') || errorText;
+
+          // v2.5.0 自定义 required 类型验证的提示文本
+          if(thisVer === 'required') {
+            errorText = othis.attr(REQ_TEXT) || errorText;
           }
-          
-          //如果是必填项或者非空命中校验，则阻止提交，弹出提示
-          if(isTrue){
+
+          // 如果是必填项或者非空命中校验，则阻止提交，弹出提示
+          if(isTrue) {
             //提示层风格
-            if(verType === 'tips'){
-              layer.tips(errorText, function(){
-                if(typeof othis.attr('lay-ignore') !== 'string'){
-                  if(item.tagName.toLowerCase() === 'select' || /^checkbox|radio$/.test(item.type)){
+            if(verType === 'tips') {
+              layer.tips(errorText, function() {
+                if(typeof othis.attr('lay-ignore') !== 'string') {
+                  if(item.tagName.toLowerCase() === 'select' || /^checkbox|radio$/.test(item.type)) {
                     return othis.next();
                   }
                 }
@@ -665,23 +667,39 @@ layui.define('layer', function(exports){
             } else {
               layer.msg(errorText, {icon: 5, shift: 6});
             }
-            
+
             //非移动设备自动定位焦点
-            if(!device.android && !device.ios){
-              setTimeout(function(){
-                item.focus(); 
+            if(!device.android && !device.ios) {
+              setTimeout(function() {
+                item.focus();
               }, 7);
             }
-            
+
             othis.addClass(DANGER);
-            return stop = true;
+            stop = true;
+            return false;
           }
         }
       });
-      if(stop) return stop;
+      if (stop) {
+        return false;
+      }
     });
+    return !stop;
+  };
+
+  //表单提交校验
+  var submit = function(){
+    var field = {}  //字段集合
+    ,button = $(this) //当前触发的按钮
+    ,elem = button.parents(ELEM) //当前所在表单域
+    ,formElem = button.parents('form')[0] //获取当前所在的 form 元素，如果存在的话
+    ,filter = button.attr('lay-filter'); //获取过滤器
     
-    if(stop) return false;
+    //开始校验
+    if (!form.doVerify(null, elem)) {
+      return false;
+    }
     
     //获取当前表单值
     field = form.getValue(null, elem);
