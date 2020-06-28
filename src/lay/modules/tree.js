@@ -90,7 +90,7 @@ layui.define('form', function(exports){
     ,onlyIconControl: false  //是否仅允许节点左侧图标控制展开收缩
     ,isJump: false  //是否允许点击节点时弹出新窗口跳转
     ,edit: false  //是否开启节点的操作图标
-    
+    ,relate: true // 父子节点是否关联
     ,text: {
       defaultNodeName: '未命名' //节点默认名称
       ,none: '无数据'  //数据为空时的文本提示
@@ -334,13 +334,15 @@ layui.define('form', function(exports){
     if(elemCheckbox.prop('disabled')) return;
 
     //同步子节点选中状态
-    if(typeof item.children === 'object' || elem.find('.'+ELEM_PACK)[0]){
-      var childs = elem.find('.'+ ELEM_PACK).find('input[same="layuiTreeCheck"]');
-      childs.each(function(){
-        if(this.disabled) return; //不可点击则跳过
-        this.checked = checked;
-      });
-    };
+    if(options.relate){
+     if(typeof item.children === 'object' || elem.find('.'+ELEM_PACK)[0]){
+       var childs = elem.find('.'+ ELEM_PACK).find('input[same="layuiTreeCheck"]');
+       childs.each(function(){
+         if(this.disabled) return; //不可点击则跳过
+         this.checked = checked;
+       });
+     };
+    }
 
     //同步父节点选中状态
     var setParentsChecked = function(thisNodeElem){
@@ -370,7 +372,9 @@ layui.define('form', function(exports){
       setParentsChecked(parentNodeElem);
     };
     
-    setParentsChecked(elem);
+    if(options.relate){
+     setParentsChecked(elem);
+    }
 
     that.renderForm('checkbox');
   };
