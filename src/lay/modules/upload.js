@@ -205,9 +205,9 @@ layui.define('layer' , function(exports){
         });
         
         //提交文件
-        $.ajax({
+        var opts = {
           url: options.url
-          ,type: 'post'
+          ,type: 'post' //统一采用 post 上传
           ,data: formData
           ,contentType: false 
           ,processData: false
@@ -226,19 +226,22 @@ layui.define('layer' , function(exports){
             error(index);
             allDone();
           }
-          ,xhr: function(){
-            var xhr = new XMLHttpRequest();
+        };
+        //监听进度条
+        if(typeof options.progress === 'function'){
+          opts.xhr = function(){
+            var xhr = $.ajaxSettings.xhr();
             //监听上传进度
             xhr.upload.addEventListener("progress", function (e) {
               if(e.lengthComputable) {
                 var percent = Math.floor((e.loaded/e.total)* 100); //百分比
-                typeof options.progress === 'function' && options.progress(percent, e);
+                options.progress(percent, options.item[0], e);
               }
             });
             return xhr;
           }
-        });
-        
+        }
+        $.ajax(opts);
       });
     }
     
