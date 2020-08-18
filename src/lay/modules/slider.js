@@ -345,6 +345,7 @@ layui.define('jquery', function(exports){
     //点击加减输入框
     sliderTxt.children('.' + SLIDER_INPUT_BTN).children('i').each(function(index){
       $(this).on('click', function(){
+        inputValue = sliderTxt.children('.' + SLIDER_INPUT_TXT).children('input').val();
         if(index == 1){
           inputValue = inputValue - options.step < options.min 
             ? options.min 
