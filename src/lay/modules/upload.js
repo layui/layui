@@ -109,7 +109,7 @@ layui.define('layer' , function(exports){
     
     that.isFile() ? (
       that.elemFile = options.elem
-      ,options.field = options.elem[0].name
+      ,options.field = options.elem[0].name ? options.elem[0].name : options.field
     ) : options.elem.after(elemFile);
     
     //初始化ie8/9的Form域
