@@ -645,6 +645,9 @@ layui.define('layer', function(exports){
           errorText = errorText || verify[thisVer][1];
           
           if(thisVer === 'required'){
+            if(value===null){
+              isTrue=true;
+            }
             errorText = othis.attr('lay-reqText') || errorText;
           }
           
