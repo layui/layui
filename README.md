@@ -67,9 +67,7 @@ layui.use(['mod1', 'mod2'], function(args){
   <link rel="stylesheet" href="../layui/css/layui.css">
 </head>
 <body>
- 
-<!-- 你的HTML代码 -->
- 
+
 <script src="../layui/layui.js"></script>
 <script>
 //一般直接写在一个js文件中
@@ -97,8 +95,7 @@ layui.use(['layer', 'form'], function(){
 </head>
 <body>
  
-<!-- 你的HTML代码 -->
- 
+
 <script src="../layui/layui.all.js"></script>
 <script>
 //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
