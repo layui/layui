@@ -73,20 +73,19 @@ layui.define(function(exports){
     
     //匹配普通字段
     .replace(tool.query(1), function(str){
-      var start = '"); __rhtmlArr.push(';
-      var toEscape=/^=/.test(str);
       if(str.replace(/\s/g, '') === config.open+config.close){
         return '';
-      }
+      }      
+      var start = '"); __rhtmlArr.push(';
       str = str.replace(exp(config.open+'|'+config.close), '');
-      if(toEscape){
+      var toEscape=/^=/.test(str);
+      if(toEscape){        
         str = str.replace(/^=/, '');
       }
       return start + (toEscape?'_escape_(':'') + str.replace(/\\(.)/g, '$1') + (toEscape?')':'') +'); __rhtmlArr.push("';
     });
     
     tpl = '"use strict";var __rhtmlArr = []; __rhtmlArr.push("' + tpl + '");return __rhtmlArr.join("");';
-
     try{
       that.cache = tpl = new Function('d, _escape_', tpl);
       return tpl(data, tool.escape);
