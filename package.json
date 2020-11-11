@@ -1,6 +1,6 @@
 {
   "name": "layui-src",
-  "realname": "layui",
+  "realname": "layui",  
   "version": "2.5.6",
   "independents": {
     "layim": "3.9.1"
@@ -12,7 +12,8 @@
     "test": "karma start karma.conf.unit.js",
     "test:cov": "npm test -- --reporters mocha,coverage",
     "test:sauce": "karma start karma.conf.sauce.js",
-    "test:watch": "npm test -- --auto-watch --no-single-run"
+    "test:watch": "npm test -- --auto-watch --no-single-run",
+    "preinstall": "npx npm-force-resolutions"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,9 @@
   },
   "author": [
     "sentsin <xu@sentsin.com>"
+  ],
+  "contributor": [
+    "Nieg <https://github.com/nieg/layui>"
   ],
   "homepage": "https://www.layui.com",
   "devDependencies": {
@@ -45,6 +49,9 @@
     "mocha": "^3.2.0",
     "sinon": "^3.2.1",
     "sinon-chai": "^2.13.0"
+  },
+  "resolutions": {
+    "graceful-fs": "^4.2.4"
   },
   "bugs": {
     "url": "https://github.com/sentsin/layui/issues"
