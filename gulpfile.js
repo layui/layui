@@ -25,7 +25,7 @@ var argv = require('minimist')(process.argv.slice(2), {
 
 //注释
 ,note = [
-  '/** <%= pkg.realname %>-v<%= pkg.version %> <%= pkg.license %> License By <%= pkg.homepage %> */\n <%= js %>'
+  '/** <%= pkg.realname %>-v<%= pkg.version %> <%= pkg.license %> License */\n <%= js %>'
   ,{pkg: pkg, js: ';'}
 ]
 

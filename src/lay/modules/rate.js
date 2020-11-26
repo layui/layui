@@ -71,6 +71,11 @@ layui.define('jquery',function(exports){
     ,style = options.theme ? ('style="color: '+ options.theme + ';"') : '';
 
     options.elem = $(options.elem);
+    
+    //最大值不能大于总长度
+    if(options.value > options.length){
+      options.value = options.length;
+    }
 
     //如果没有选择半星的属性，却给了小数的数值，统一向上或向下取整
     if(parseInt(options.value) !== options.value){
