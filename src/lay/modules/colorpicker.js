@@ -604,7 +604,7 @@ layui.define('jquery', function(exports){
         that.elemColorBox.find('.' + PICKER_TRIG_I).removeClass(ICON_PICKER_DOWN).addClass(ICON_PICKER_CLOSE);
         that.color = '';
         
-        options.done && options.done('');
+        options.done && options.done.call(that, '');
         that.removePicker();
       }
       
@@ -638,7 +638,7 @@ layui.define('jquery', function(exports){
         }
         that.color = value;
         
-        options.done && options.done(value);
+        options.done && options.done.call(that, value);
         that.removePicker(); 
       }
     };

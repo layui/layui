@@ -240,6 +240,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,cellMinWidth: 60 //所有单元格默认最小宽度
     ,defaultToolbar: ['filter', 'exports', 'print'] //工具栏右侧图标
     ,autoSort: true //是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
+
     ,text: {
       none: '无数据'
     }
@@ -720,10 +721,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
             );
           } else {
             that.renderData(res, curr, res[response.countName]), sort();
-            options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
+            that.time = options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
           }
           that.setColsWidth();
-          typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
+          typeof options.done === 'function' && options.done.call(that, res, curr, res[response.countName]);
         }
         ,error: function(e, m){
           that.errorView('数据接口请求异常：'+ m);
@@ -746,7 +747,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 
       that.renderData(res, curr, res[response.countName]), sort();
       that.setColsWidth();
-      typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
+      typeof options.done === 'function' && options.done.call(that, res, curr, res[response.countName]);
     }
   };
   

@@ -282,7 +282,7 @@ layui.define('layer' , function(exports){
           return that.msg('请对上传接口返回有效JSON');
         }
       }
-      typeof options.done === 'function' && options.done(res, index || 0, function(files){
+      typeof options.done === 'function' && options.done.call(that, res, index || 0, function(files){
         that.upload(files);
       });
     }
