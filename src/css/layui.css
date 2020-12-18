@@ -558,7 +558,7 @@ hr, .layui-timeline-item:before{background-color: #e6e6e6;}
 .layui-text ul{padding: 5px 0 5px 15px;}
 .layui-text ul li{margin-top: 5px; list-style-type: disc;}
 .layui-text em,
-.layui-word-aux{color: #999 !important; padding: 0 5px !important;}
+.layui-word-aux{color: #999 !important; padding-left: 5px !important; padding-right: 5px !important;}
 
 /*
  
@@ -1004,7 +1004,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-nav-img{width: 30px; height: 30px; margin-right: 10px; border-radius: 50%;}
 
 .layui-nav .layui-nav-more{content:''; width: 0; height: 0; border-style: dashed; border-color: transparent; overflow: hidden; cursor: pointer; transition: all .2s; -webkit-transition: all .2s;}
-.layui-nav .layui-nav-more{position: absolute; top: 50%; right: 3px; margin-top: -3px; border-width: 6px; border-top-style: solid; border-top-color: #fff; border-top-color: rgba(255,255,255,.7);}
+.layui-nav .layui-nav-more{position: absolute; top: 50%; right: 3px; margin-top: -4px; border-width: 6px; border-top-style: solid; border-top-color: #fff; border-top-color: rgba(255,255,255,.7);}
 .layui-nav .layui-nav-mored,
 .layui-nav-itemed > a .layui-nav-more{margin-top: -9px; border-style: dashed; border-color: transparent; border-bottom-style: solid; border-bottom-color: #fff;}
 
@@ -1121,7 +1121,8 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-btn .layui-badge,
 .layui-btn .layui-badge-dot{margin-left: 5px;}
 .layui-nav .layui-badge,
-.layui-nav .layui-badge-dot{position: absolute; top: 50%; margin: -8px 6px 0;}
+.layui-nav .layui-badge-dot{position: absolute; top: 50%; margin: -5px 6px 0;}
+.layui-nav .layui-badge{margin-top: -10px;}
 .layui-tab-title .layui-badge,
 .layui-tab-title .layui-badge-dot{left: 5px; top: -2px;}
 
@@ -1256,15 +1257,15 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-slider-wrap-btn.layui-disabled:hover{transform: scale(1) !important;}
 .layui-slider-tips{position: absolute; top: -42px; z-index: 66666666; white-space:nowrap; display: none; -webkit-transform: translateX(-50%); transform: translateX(-50%); color: #FFF; background: #000; border-radius: 3px; height: 25px; line-height: 25px; padding: 0 10px;}
 .layui-slider-tips:after{content: ''; position: absolute; bottom: -12px; left: 50%; margin-left: -6px; width: 0; height: 0; border-width: 6px; border-style: solid; border-color: #000 transparent transparent transparent;}
-.layui-slider-input{width: 70px; height: 32px; border: 1px solid #e6e6e6; border-radius: 3px; font-size: 16px; line-height: 32px; position: absolute; right: 0; top: -15px;}
-.layui-slider-input-btn{display: none; position: absolute; top: 0; right: 0; width: 20px; height: 100%; border-left: 1px solid #d2d2d2;}
+.layui-slider-input{width: 70px; height: 32px; border: 1px solid #e6e6e6; border-radius: 3px; font-size: 16px; line-height: 32px; position: absolute; right: 0; top: -14px;}
+.layui-slider-input-btn{position: absolute; top: 0; right: 0; width: 20px; height: 100%; border-left: 1px solid #d2d2d2;}
 .layui-slider-input-btn i{cursor: pointer; position: absolute; right: 0; bottom: 0; width: 20px; height: 50%; font-size: 12px; line-height: 16px; text-align: center; color: #999;}
 .layui-slider-input-btn i:first-child{top: 0; border-bottom: 1px solid #d2d2d2;}
 .layui-slider-input-txt{height: 100%; font-size: 14px;}
 .layui-slider-input-txt input{height: 100%; border: none;}
 .layui-slider-input-btn i:hover{color: #009688;}
 /*垂直滑块*/
-.layui-slider-vertical{width: 4px; margin-left: 34px;}
+.layui-slider-vertical{width: 4px; margin-left: 33px;}
 .layui-slider-vertical .layui-slider-bar{width: 4px;}
 .layui-slider-vertical .layui-slider-step{top: auto; left: 0px; -webkit-transform: translateY(50%); transform: translateY(50%);}
 .layui-slider-vertical .layui-slider-wrap{top: auto; left: -16px; -webkit-transform: translateY(50%); transform: translateY(50%);}

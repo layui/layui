@@ -2,8 +2,6 @@
 
  @Name: layui
  @Description：经典模块化前端 UI 框架
- @Homepage: www.layui.com
- @Author: 贤心
  @License：MIT
 
  */
@@ -19,7 +17,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.5.6'; //版本号
+    this.v = '2.5.7'; //版本号
   }
 
   //获取layui所在目录
@@ -363,8 +361,8 @@
       pathname: function(){
         var pathname = href
           ? function(){
-            var pathUrl = (href.match(/\.[^.]+?\/.+/) || [])[0] || '';
-            return pathUrl.replace(/^[^\/]+/, '').replace(/\?.+/, '');
+            var str = (href.match(/\.[^.]+?\/.+/) || [])[0] || '';
+            return str.replace(/^[^\/]+/, '').replace(/\?.+/, '');
           }()
         : location.pathname;
         return pathname.replace(/^\//, '').split('/');
@@ -374,7 +372,10 @@
       ,search: function(){
         var obj = {}
         ,search = (href 
-          ? ((href.match(/\?.+/) || [])[0] || '')
+          ? function(){
+            var str = (href.match(/\?.+/) || [])[0] || '';
+            return str.replace(/\#.+/, '');
+          }()
           : location.search
         ).replace(/^\?+/, '').split('&'); //去除 ?，按 & 分割参数
         
@@ -570,13 +571,19 @@
   Layui.prototype.event = Layui.event = function(modName, events, params, fn){
     var that = this
     ,result = null
-    ,filter = events.match(/\((.*)\)$/)||[] //提取事件过滤器字符结构，如：select(xxx)
+    ,filter = (events || '').match(/\((.*)\)$/)||[] //提取事件过滤器字符结构，如：select(xxx)
     ,eventName = (modName + '.'+ events).replace(filter[0], '') //获取事件名称，如：form.select
     ,filterName = filter[1] || '' //获取过滤器名称,，如：xxx
     ,callback = function(_, item){
       var res = item && item.call(that, params);
       res === false && result === null && (result = false);
     };
+    
+    //如果参数传入特定字符，则执行移除事件
+    if(params === 'LAYUI-EVENT-REMOVE'){
+      delete (that.cache.event[eventName] || {})[filterName];
+      return that;
+    }
     
     //添加事件
     if(fn){
@@ -602,6 +609,18 @@
     });
     
     return result;
+  };
+  
+  //新增模块事件
+  Layui.prototype.on = function(events, modName, callback){
+    var that = this;
+    return that.onevent.call(that, modName, events, callback);
+  }
+  
+  //移除模块事件
+  Layui.prototype.off = function(events, modName){
+    var that = this;
+    return that.event.call(that, modName, events, 'LAYUI-EVENT-REMOVE');
   };
 
   win.layui = new Layui();

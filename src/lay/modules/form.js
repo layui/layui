@@ -662,7 +662,9 @@ layui.define('layer', function(exports){
               }(), {tips: 1});
             } else if(verType === 'alert') {
               layer.alert(errorText, {title: '提示', shadeClose: true});
-            } else {
+            } 
+            //如果返回的为字符或数字，则自动弹出默认提示框；否则由 verify 方法中处理提示
+            else if(/\bstring|number\b/.test(typeof errorText)){ 
               layer.msg(errorText, {icon: 5, shift: 6});
             }
             
