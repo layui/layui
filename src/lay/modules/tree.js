@@ -174,7 +174,7 @@ layui.define('form', function(exports){
     //遍历数据
     layui.each(data, function(index, item){
       var hasChild = item.children && item.children.length > 0
-      ,packDiv = $('<div class="layui-tree-pack" '+ (item.spread ? 'style="display: block;"' : '') +'"></div>')
+      ,packDiv = $('<div class="layui-tree-pack" '+ (item.spread ? 'style="display: block;"' : '') +'></div>')
       ,entryDiv = $(['<div data-id="'+ item.id +'" class="layui-tree-set'+ (item.spread ? " layui-tree-spread" : "") + (item.checked ? " layui-tree-checkedFirst" : "") +'">'
         ,'<div class="layui-tree-entry">'
           ,'<div class="layui-tree-main">'

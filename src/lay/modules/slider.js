@@ -35,6 +35,7 @@ layui.define('jquery', function(exports){
 
     return {
       setValue: function(value, index){ //设置值
+        options.value = value;
         return that.slide('set', value, index || 0);
       }
       ,config: options
@@ -234,12 +235,10 @@ layui.define('jquery', function(exports){
         sliderAct.find('.' + SLIDER_BAR).css({"width":wrapWidth + '%', "left":minLeft + '%'});
       };
       var selfValue = options.min + Math.round((options.max - options.min) * offsetValue / 100);
-      
       inputValue = selfValue;
       sliderTxt.children('.' + SLIDER_INPUT_TXT).children('input').val(inputValue);
       sliderWrap.eq(index).data('value', selfValue);
-      selfValue = options.setTips ? options.setTips(selfValue) : selfValue;
-      sliderAct.find('.' + SLIDER_TIPS).html(selfValue);
+      sliderAct.find('.' + SLIDER_TIPS).html(options.setTips ? options.setTips(selfValue) : selfValue);
       
       //如果开启范围选择，则返回数组值
       if(options.range){
@@ -332,20 +331,12 @@ layui.define('jquery', function(exports){
         e.preventDefault();
       }
     });
-
-    //输入框移入事件
-    sliderTxt.hover(function(){
-      var othis = $(this);
-      othis.children('.' + SLIDER_INPUT_BTN).fadeIn('fast');
-    }, function(){
-      var othis = $(this);
-      othis.children('.' + SLIDER_INPUT_BTN).fadeOut('fast');
-    });
     
     //点击加减输入框
     sliderTxt.children('.' + SLIDER_INPUT_BTN).children('i').each(function(index){
       $(this).on('click', function(){
-        if(index == 1){
+        inputValue = sliderTxt.children('.' + SLIDER_INPUT_TXT).children('input').val();
+        if(index == 1){ //减
           inputValue = inputValue - options.step < options.min 
             ? options.min 
           : Number(inputValue) - options.step;

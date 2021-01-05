@@ -221,6 +221,13 @@ layui.use('table', function(){
       ,{field:'joinTime', title:'加入时间', width:120}
       ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
     ]]
+    
+    ,initSort: {
+      field: 'experience' //排序字段，对应 cols 设定的各字段名
+      ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+    }
+
+    
     /*
     ,response: {
       statusName: 'status'

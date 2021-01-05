@@ -450,7 +450,7 @@ layui.define('layer', function(exports){
               ,defaultIconHtml
               ,('<input type="text" placeholder="'+ placeholder +'" '
                 +('value="'+ (value ? selected.html() : '') +'"') //默认值
-                +(isSearch ? '' : ' readonly') //是否开启搜索
+                  + ((!disabled && isSearch) ? '' : ' readonly') //是否开启搜索
                 +(defaultIconHtml===''?'':' style="padding-left:30px;"')
                 +' class="layui-input'
                 +(isSearch ? '' : ' layui-unselect')
@@ -674,7 +674,9 @@ layui.define('layer', function(exports){
               }(), {tips: 1});
             } else if(verType === 'alert') {
               layer.alert(errorText, {title: '提示', shadeClose: true});
-            } else {
+            } 
+            //如果返回的为字符或数字，则自动弹出默认提示框；否则由 verify 方法中处理提示
+            else if(/\bstring|number\b/.test(typeof errorText)){ 
               layer.msg(errorText, {icon: 5, shift: 6});
             }
 

@@ -1,9 +1,7 @@
 /*!
 
- @Title: layui
+ @Name: layui
  @Description：经典模块化前端 UI 框架
- @Site: www.layui.com
- @Author: 贤心
  @License：MIT
 
  */
@@ -19,7 +17,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.5.5'; //版本号
+    this.v = '2.5.7'; //版本号
   }
 
   //获取layui所在目录
@@ -163,20 +161,26 @@
     ){
       return onCallback(), that;
     }
+    
+    //获取加载的模块 URL
+    //如果是内置模块，则按照 dir 参数拼接模块路径
+    //如果是扩展模块，则判断模块路径值是否为 {/} 开头，
+    //如果路径值是 {/} 开头，则模块路径即为后面紧跟的字符。
+    //否则，则按照 base 参数拼接模块路径
+    var url = ( modules[item] ? (dir + 'lay/') 
+      : (/^\{\/\}/.test(that.modules[item]) ? '' : (config.base || ''))
+    ) + (that.modules[item] || item) + '.js';
+    
+    url = url.replace(/^\{\/\}/, '');
+    
+    //如果扩展模块（即：非内置模块）对象已经存在，则不必再加载
+    if(!config.modules[item] && layui[item]){
+      config.modules[item] = url; //并记录起该扩展模块的 url
+    }
 
     //首次加载模块
     if(!config.modules[item]){
-      var node = doc.createElement('script')
-      
-      //如果是内置模块，则按照 dir 参数拼接模块路径
-      //如果是扩展模块，则判断模块路径值是否为 {/} 开头，
-      //如果路径值是 {/} 开头，则模块路径即为后面紧跟的字符。
-      //否则，则按照 base 参数拼接模块路径
-      ,url = ( modules[item] ? (dir + 'lay/') 
-        : (/^\{\/\}/.test(that.modules[item]) ? '' : (config.base || ''))
-      ) + (that.modules[item] || item) + '.js';
-      
-      url = url.replace(/^\{\/\}/, '');
+      var node = doc.createElement('script');
       
       node.async = true;
       node.charset = 'utf-8';
@@ -324,7 +328,7 @@
     return that;
   };
 
-  //路由解析
+  // location.hash 路由解析
   Layui.prototype.router = function(hash){
     var that = this
     ,hash = hash || location.hash
@@ -339,13 +343,71 @@
     data.href = '/' + hash;
     hash = hash.replace(/([^#])(#.*$)/, '$1').split('/') || [];
     
-    //提取Hash结构
+    //提取 Hash 结构
     that.each(hash, function(index, item){
       /^\w+=/.test(item) ? function(){
         item = item.split('=');
         data.search[item[0]] = item[1];
       }() : data.path.push(item);
     });
+    
+    return data;
+  };
+  
+  //URL 解析
+  Layui.prototype.url = function(href){
+    var that = this
+    ,data = {
+      //提取 url 路径
+      pathname: function(){
+        var pathname = href
+          ? function(){
+            var str = (href.match(/\.[^.]+?\/.+/) || [])[0] || '';
+            return str.replace(/^[^\/]+/, '').replace(/\?.+/, '');
+          }()
+        : location.pathname;
+        return pathname.replace(/^\//, '').split('/');
+      }()
+      
+      //提取 url 参数
+      ,search: function(){
+        var obj = {}
+        ,search = (href 
+          ? function(){
+            var str = (href.match(/\?.+/) || [])[0] || '';
+            return str.replace(/\#.+/, '');
+          }()
+          : location.search
+        ).replace(/^\?+/, '').split('&'); //去除 ?，按 & 分割参数
+        
+        //遍历分割后的参数
+        that.each(search, function(index, item){
+          var _index = item.indexOf('=')
+          ,key = function(){ //提取 key
+            if(_index < 0){
+              return item.substr(0, item.length);
+            } else if(_index === 0){
+              return false;
+            } else {
+              return item.substr(0, _index);
+            }
+          }(); 
+          //提取 value
+          if(key){
+            obj[key] = _index > 0 ? item.substr(_index + 1) : null;
+          }
+        });
+        
+        return obj;
+      }()
+      
+      //提取 Hash
+      ,hash: that.router(function(){
+        return href 
+          ? ((href.match(/#.+/) || [])[0] || '')
+        : location.hash;
+      }())
+    };
     
     return data;
   };
@@ -424,6 +486,7 @@
     //移动设备
     result.android = /android/.test(agent);
     result.ios = result.os === 'ios';
+    result.mobile = (result.android || result.ios) ? true : false;
     
     return result;
   };
@@ -509,13 +572,19 @@
   Layui.prototype.event = Layui.event = function(modName, events, params, fn){
     var that = this
     ,result = null
-    ,filter = events.match(/\((.*)\)$/)||[] //提取事件过滤器字符结构，如：select(xxx)
+    ,filter = (events || '').match(/\((.*)\)$/)||[] //提取事件过滤器字符结构，如：select(xxx)
     ,eventName = (modName + '.'+ events).replace(filter[0], '') //获取事件名称，如：form.select
     ,filterName = filter[1] || '' //获取过滤器名称,，如：xxx
     ,callback = function(_, item){
       var res = item && item.call(that, params);
       res === false && result === null && (result = false);
     };
+    
+    //如果参数传入特定字符，则执行移除事件
+    if(params === 'LAYUI-EVENT-REMOVE'){
+      delete (that.cache.event[eventName] || {})[filterName];
+      return that;
+    }
     
     //添加事件
     if(fn){
@@ -541,6 +610,18 @@
     });
     
     return result;
+  };
+  
+  //新增模块事件
+  Layui.prototype.on = function(events, modName, callback){
+    var that = this;
+    return that.onevent.call(that, modName, events, callback);
+  }
+  
+  //移除模块事件
+  Layui.prototype.off = function(events, modName){
+    var that = this;
+    return that.event.call(that, modName, events, 'LAYUI-EVENT-REMOVE');
   };
 
   win.layui = new Layui();

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>完整库使用 - layui</title>
 
-<link rel="stylesheet" href="../build/css/layui.css">
+<link rel="stylesheet" href="../src/css/layui.css">
 
 <style>
 body{padding: 10px;}
@@ -16,6 +16,27 @@ body{padding: 10px;}
 <div id="demo1"></div>
 <button class="layui-btn demo" data-type="test">测试弹出式Form</button>
 
+<div class="layui-tab" lay-filter="tabDemo">
+  <ul class="layui-tab-title">
+    <li class="layui-this" lay-id="1">标题1</li>
+    <li lay-id="2">标题2</li>
+    <li lay-id="3">标题3</li>
+    <li lay-id="4">标题4</li>
+    <li lay-id="5">标题5</li>
+  </ul>
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">
+      内容1
+    </div>
+    <div class="layui-tab-item">
+      <div id="test2" class="demo-transfer"></div>
+    </div>
+    <div class="layui-tab-item">3</div>
+    <div class="layui-tab-item">4</div>
+    <div class="layui-tab-item">5</div>
+  </div>
+</div>
+
 
 <script src="../dist/layui.all.js"></script>
 <script>
@@ -23,7 +44,9 @@ body{padding: 10px;}
   var $ = layui.jquery
   ,layer = layui.layer
   ,form = layui.form
-  ,laypage = layui.laypage;
+  ,laypage = layui.laypage
+  ,element = layui.element
+  ,transfer = layui.transfer;
   
   layer.ready(function(){
     layer.msg('hello');
@@ -42,6 +65,26 @@ body{padding: 10px;}
     mod1: 'mod1'
     ,mod2: 'mod2'
   }).use('mod1');
+  
+  
+  //定义标题及数据源
+  transfer.render({
+    elem: '#test2'
+    ,title: ['候选文人', '获奖文人']  //自定义标题
+    ,data: [
+      {"value": "1", "title": "李白"}
+      ,{"value": "2", "title": "杜甫"}
+      ,{"value": "3", "title": "苏轼"}
+      ,{"value": "4", "title": "李清照"}
+      ,{"value": "5", "title": "鲁迅", "disabled": true}
+      ,{"value": "6", "title": "巴金"}
+      ,{"value": "7", "title": "冰心"}
+      ,{"value": "8", "title": "矛盾"}
+      ,{"value": "9", "title": "贤心"}
+    ]
+    //,width: 150 //定义宽度
+    ,height: 210 //定义高度
+  })
   
   //触发事件
   var active = {
