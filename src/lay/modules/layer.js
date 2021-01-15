@@ -1,6 +1,6 @@
 ﻿/**
 
- @Name：layer v3.1.2 Web弹层组件
+ @Name：layer v3.2.0 Web弹层组件
  @Author：贤心
  @Site：http://layer.layui.com
  @License：MIT
@@ -72,7 +72,7 @@ var isLayui = window.layui && layui.define, $, win, ready = {
 
 //默认内置方法。
 var layer = {
-  v: '3.1.1',
+  v: '3.2.0',
   ie: function(){ //ie版本
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
