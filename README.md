@@ -116,4 +116,4 @@ layui.use(['layer', 'form'], function(){
 从现在开始，尽情地拥抱 layui 吧！但愿她能成为你长远的开发伴侣，化作你方寸屏幕前的亿万字节！
 
 ## 相关
-[官网](http://www.layui.com/)、[更新日志](http://www.layui.com/doc/base/changelog.html)、[社区交流](http://fly.layui.com)
+[官网](http://www.layui.com/)、[更新日志](http://www.layui.com/doc/base/changelog.html)
