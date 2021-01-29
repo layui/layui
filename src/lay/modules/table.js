@@ -1186,7 +1186,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       bodyHeight = bodyHeight - (that.layTool.outerHeight() || 50);
     }
     
-    //减去统计朗的高度
+    //减去统计栏的高度
     if(options.totalRow){
       bodyHeight = bodyHeight - (that.layTotal.outerHeight() || 40);
     }
