@@ -91,8 +91,9 @@ layui.define('layer' , function(exports){
   Class.prototype.file = function(){
     var that = this
     ,options = that.config
+    ,extAccept = options.exts.split('|').map(e => {return '.' + e}).join(',')
     ,elemFile = that.elemFile = $([
-      '<input class="'+ ELEM_FILE +'" type="file" accept="'+ options.acceptMime +'" name="'+ options.field +'"'
+      '<input class="'+ ELEM_FILE +'" type="file" accept="'+ (options.acceptMime ? options.acceptMime + ',' + extAccept : extAccept) +'" name="'+ options.field +'"'
       ,(options.multiple ? ' multiple' : '') 
       ,'>'
     ].join(''))
