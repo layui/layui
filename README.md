@@ -89,6 +89,7 @@ layui.use(['layer', 'form'], function(){
 
 ## 贡献者
 > 大概是因为 layui 让开发者变得更懒，所以贡献者不是很多？好的，姑且就这样认为吧。
+ 
 [![Giteye chart](https://chart.giteye.net/gitee/sentsin/layui/PMFQFJCX.png)](https://giteye.net/chart/PMFQFJCX)
 
 ## 相关
