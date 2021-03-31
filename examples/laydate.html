@@ -108,19 +108,19 @@ body{padding: 50px 100px;}
 <div class="layui-inline" id="test10"></div>
 <div class="layui-inline" id="test11" style="margin-left: 30px;"></div>
 
-<script src="../src/layui.js" charset="utf-8"></script>
+<script src="../src/layui.js" src1="http://local.res.layui.com/layui/release/laydate/dist/laydate.js" charset="utf-8"></script>
 <script>
-layui.use('laydate', function(){
-  var laydate = layui.laydate;
-  
+
+layui.use('laydate', function(laydate){  
+
   //双控件
   laydate.render({
     elem: '#test1' //指定元素
     ,type: 'datetime'
     ,trigger: 'click'
     ,lang: 'en'
-    //,lang: 'en'
     ,range: true //开启日期范围，默认使用“_”分割
+    ,value: '2021-03-27 00:00:00 - 2021-02-27 00:00:00'
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
     }
@@ -133,10 +133,9 @@ layui.use('laydate', function(){
   laydate.render({
     elem: '#test2'
     //,format: 'yyyy年MM月dd日'
-    //,value: new Date(1989,9,14)
+    ,value: new Date(1534766888000)
     ,isInitValue: false
-    ,format: 'yyyyMMdd'
-    ,value: '20170910'
+    ,format: 'yyyy/MM/dd'
    
     //,max: 0
     //,min: '2016-10-14'
@@ -169,8 +168,8 @@ layui.use('laydate', function(){
     elem: '#test4'
     ,type: 'month'
     ,range: true 
-    //,trigger: 'click'
-    ,max: -30
+    ,trigger: 'click'
+    //,max: -30
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
     }
@@ -241,6 +240,7 @@ layui.use('laydate', function(){
     ,theme: 'molv'
     ,value: 20180115
     ,isInitValue: true
+    ,lang: 'en'
     //,range: true
     ,trigger: 'click'
   });
@@ -294,16 +294,16 @@ layui.use('laydate', function(){
     ,position: 'static'
     ,calendar: true //是否开启公历重要节日
     ,mark: { //标记重要日子
-      '2017-8-20': ''
-      ,'2017-8-21': ''
+      '2021-8-20': ''
+      ,'2021-8-21': ''
     } 
     ,done: function(value, date, endDate){
-      if(date.year == 2017 && date.month == 8 && date.date == 20){
-        ins10.hint('XX活动日');
+      if(date.year == 2021 && date.month == 8 && date.date == 20){
+        ins10.hint(value + '，活动日');
       }
     }
     ,change: function(value, date, endDate){
-      console.log(value)
+      console.log(value,date)
     }
   });
   
@@ -320,6 +320,7 @@ layui.use('laydate', function(){
       console.log(value)
     }
   });
+  
 });
 </script>
 </body>

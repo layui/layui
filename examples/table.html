@@ -19,8 +19,10 @@ body{padding: 20px; /*overflow-y: scroll;*/}
   <div class="layui-btn-container">
     <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
     <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+    <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页所有数据</button>
     <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
     <button class="layui-btn layui-btn-sm" lay-event="reload">重载</button>
+    <button class="layui-btn layui-btn-sm" lay-event="reload2">重载2</button>
   </div>
 </script>
 
@@ -177,7 +179,7 @@ body{padding: 20px; /*overflow-y: scroll;*/}
   </table>
 </div>
 
-<script src="../src/layui.js" src="//layui.hcwl520.com.cn/layui-v2.4.5/layui.js" charset="utf-8"></script>
+<script src="../src/layui.js" src="//www.layuicdn.com/layui-v2.0.1/layui.js" charset="utf-8"></script>
 <script>
 layui.use('table', function(){
   var table = layui.table;
@@ -195,7 +197,7 @@ layui.use('table', function(){
       
     }
     
-    ,autoSort: false
+    //,autoSort: false //是否自动排序。如果否，则由服务端排序
     //,loading: false
     ,totalRow: true
     ,limit: 30
@@ -222,7 +224,7 @@ layui.use('table', function(){
       ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
     ]]
     
-    ,initSort: {
+    ,initSort1: {
       field: 'experience' //排序字段，对应 cols 设定的各字段名
       ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
     }
@@ -242,6 +244,23 @@ layui.use('table', function(){
       };
     }
     */
+  });
+  
+  //排序事件
+  table.on('sort(test)', function(obj){
+    console.log(this)
+    
+    return;
+    layer.msg('服务端排序。order by '+ obj.field + ' ' + obj.type);
+    //服务端排序
+    table.reload('test', {
+      initSort: obj
+      //,page: {curr: 1} //重新从第一页开始
+      ,where: { //重新请求服务端
+        key: obj.field //排序字段
+        ,order: obj.type //排序方式
+      }
+    });
   });
   
   //工具栏事件
@@ -265,6 +284,11 @@ layui.use('table', function(){
         var data = checkStatus.data;
         layer.msg('选中了：'+ data.length + ' 个');
       break;
+      case 'getData':
+        var getData = table.getData(obj.config.id);
+        console.log(getData);
+        layer.alert(JSON.stringify(getData));
+      break;
       case 'isAll':
         layer.msg(checkStatus.isAll ? '全选': '未全选')
       break;
@@ -273,10 +297,28 @@ layui.use('table', function(){
       break;
       case 'reload':
         table.reload('test', {
-          page: {curr: 5}
+          page: {curr: 5, limit: 10}
+          ,where: {
+            a: 123
+          }
+          ,cols: ins1.config.cols
           //,height: 300
           //,url: 'x'
-        }, 'data');
+        });
+      break;
+      case 'reload2':
+        table.reload('test', {
+          where: {
+            token: 'sasasas'
+          }
+          ,cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
+            ,{field:'logins', title:'登入次数', width:100, sort: true, totalRow: true}
+            ,{field:'joinTime', title:'加入时间', width:120}
+          ]]
+          //,height: 500
+        });
       break;
     };
   });
@@ -369,23 +411,6 @@ layui.use('table', function(){
         layer.close(index);
       });
     }
-  });
-  
-  //监听排序
-  table.on('sort(test)', function(obj){
-    console.log(this)
-    
-    //return;
-    layer.msg('服务端排序。order by '+ obj.field + ' ' + obj.type);
-    //服务端排序
-    table.reload('test', {
-      initSort: obj
-      //,page: {curr: 1} //重新从第一页开始
-      ,where: { //重新请求服务端
-        key: obj.field //排序字段
-        ,order: obj.type //排序方式
-      }
-    });
   });
   
   //return;

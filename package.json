@@ -1,10 +1,7 @@
 {
   "name": "layui-src",
   "realname": "layui",
-  "version": "2.5.7",
-  "independents": {
-    "layim": "3.9.6"
-  },
+  "version": "2.6.0",
   "description": "Classic modular front-end component library",
   "main": "dist/layui.js",
   "license": "MIT",
@@ -21,9 +18,9 @@
   "author": [
     "sentsin <xu@sentsin.com>"
   ],
-  "homepage": "https://www.layui.com",
+  "homepage": "/",
   "devDependencies": {
-    "chai": "^4.1.1",
+    "chai": "^4.3.4",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0 ",
@@ -31,6 +28,7 @@
     "gulp-if": "^2.0.1",
     "gulp-minify-css": "^1.2.4",
     "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.6.1",
     "gulp-uglify": "^1.5.4",
     "gulp-zip": "^4.0.0",
     "karma": "^1.5.0",
@@ -41,13 +39,13 @@
     "karma-mocha-reporter": "^2.2.3",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sauce-launcher": "^1.1.0",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.5",
     "mocha": "^3.2.0",
     "sinon": "^3.2.1",
     "sinon-chai": "^2.13.0"
   },
   "bugs": {
-    "url": "https://github.com/sentsin/layui/issues"
+    "url": "https://gitee.com/sentsin/layui/issues"
   },
   "directories": {
     "doc": "doc",

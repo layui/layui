@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>layer弹层 - layui</title>
+<title>layer 弹层 - layui</title>
 
 <link rel="stylesheet" href="../src/css/layui.css">
 
@@ -15,15 +15,17 @@ body{padding: 100px;}
 </head>
 <body>
 
-<button class="layui-btn layui-btn-primary demo" data-type="test">Alert</button>
-<button class="layui-btn demo" data-type="test2">Confirm</button>
-<button class="layui-btn demo" data-type="test3">Msg</button>
-<button class="layui-btn demo" data-type="test4">Tips</button>
-<button class="layui-btn demo" data-type="test5">Page</button>
-<button class="layui-btn demo" data-type="test6">Iframe</button>
-<button class="layui-btn demo" data-type="test7">Prompt</button>
-<button class="layui-btn demo" data-type="test8">Tab</button>
-<a href="http://layer.layui.com/" target="_blank" class="layui-btn demo">更多例子</a>
+<div class="layui-btn-container">
+  <button class="layui-btn layui-btn-primary demo" data-type="test">Alert</button>
+  <button class="layui-btn demo" data-type="test2">Confirm</button>
+  <button class="layui-btn demo" data-type="test3">Msg</button>
+  <button class="layui-btn demo" data-type="test4">Tips</button>
+  <button class="layui-btn demo" data-type="test5">Page</button>
+  <button class="layui-btn demo" data-type="test6">Iframe</button>
+  <button class="layui-btn demo" data-type="test7">Prompt</button>
+  <button class="layui-btn demo" data-type="test8">Tab</button>
+  <a href="http://layer.layui.com/" target="_blank" class="layui-btn demo">更多例子</a>
+</div>
 
 <div id="test11111" style="display: none;padding: 20px;">
  123
@@ -34,6 +36,9 @@ body{padding: 100px;}
 <script>
 layui.use('layer', function(){
   var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+  
+  
+  layer.msg('hello');
   
   //触发事件
   var active = {
@@ -63,14 +68,14 @@ layui.use('layer', function(){
         title:'更新论坛信息',
         type: 1,
         skin: 'layui-layer-rim', 
-        area: ['500px', '580px'], 
+        area: ['1000px', '580px'], 
         content: $('#test11111')
       });
     }
     ,test6: function(){
       layer.open({
         type: 2
-        ,content: 'http://fly.layui.com/'
+        ,content: 'https://www.aliyun.com/activity?userCode=ap0255is'
         ,area: ['375px', '500px']
         ,maxmin: true
       });

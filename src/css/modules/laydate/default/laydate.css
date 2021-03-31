@@ -1,7 +1,6 @@
 /**
  
  @Name: laydata
- @Author: 贤心
  
  **/
  
@@ -13,21 +12,19 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 
 /* 主体结构 */
 .layui-laydate, .layui-laydate *{box-sizing: border-box;}
-.layui-laydate{position: absolute; z-index: 66666666; margin: 5px 0; border-radius: 2px; font-size: 14px; -webkit-animation-duration: 0.3s; animation-duration: 0.3s; -webkit-animation-fill-mode: both; animation-fill-mode: both;}
+.layui-laydate{position: absolute; z-index: 66666666; margin: 5px 0; border-radius: 2px; font-size: 14px; -webkit-animation-duration: 0.2s; animation-duration: 0.2s; -webkit-animation-fill-mode: both; animation-fill-mode: both;}
 .layui-laydate-main{width: 272px;}
 .layui-laydate-header *,
 .layui-laydate-content td,
 .layui-laydate-list li{transition-duration: .3s; -webkit-transition-duration: .3s;}
 
-@-webkit-keyframes laydate-upbit{ /* 微微往上滑入 */
-  from {-webkit-transform: translate3d(0, 20px, 0); opacity: 0.3;}
-  to {-webkit-transform: translate3d(0, 0, 0);  opacity: 1;}
+/* 微微往下滑入 */
+@keyframes laydate-downbit {
+  0% {opacity: 0.3; transform: translate3d(0, -5px, 0);}
+  100% {opacity: 1; transform: translate3d(0, 0, 0);}
 }
-@keyframes laydate-upbit{
-  from {transform: translate3d(0, 20px, 0);  opacity: 0.3;}
-  to {transform: translate3d(0, 0, 0);  opacity: 1;}
-}
-.layui-laydate{-webkit-animation-name: laydate-upbit; animation-name: laydate-upbit;}
+
+.layui-laydate{animation-name: laydate-downbit;}
 .layui-laydate-static{ position: relative; z-index: 0; display: inline-block; margin: 0; -webkit-animation: none; animation: none;}
 
 /* 展开年月列表时 */
@@ -89,10 +86,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 /* 双日历 */
 .layui-laydate-range{width: 546px;}
 .layui-laydate-range .layui-laydate-main{display: inline-block; vertical-align: middle;}
-.layui-laydate-range .laydate-main-list-0 .laydate-next-m,
-.layui-laydate-range .laydate-main-list-0 .laydate-next-y,
-.layui-laydate-range .laydate-main-list-1 .laydate-prev-y,
-.layui-laydate-range .laydate-main-list-1 .laydate-prev-m{display: none;}
+.layui-laydate-range .laydate-main-list-1 .layui-laydate-header,
 .layui-laydate-range .laydate-main-list-1 .layui-laydate-content{border-left: 1px solid #e2e2e2;}
 
 

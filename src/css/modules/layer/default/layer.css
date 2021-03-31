@@ -1,7 +1,6 @@
 /**
  
  @Name: layer
- @Author: 贤心
  
  **/
 
@@ -51,8 +50,8 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 @-webkit-keyframes layer-shake{0%,100%{-webkit-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%,90%{-webkit-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%,80%{-webkit-transform:translateX(10px);transform:translateX(10px)}}@keyframes layer-shake{0%,100%{-webkit-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%,90%{-webkit-transform:translateX(-10px);-ms-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%,80%{-webkit-transform:translateX(10px);-ms-transform:translateX(10px);transform:translateX(10px)}}.layer-anim-06{-webkit-animation-name:layer-shake;animation-name:layer-shake}@-webkit-keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 
 /* 标题栏 */
-.layui-layer-title{padding:0 80px 0 20px; height:42px; line-height:42px; border-bottom:1px solid #eee; font-size:14px; color:#333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background-color: #F8F8F8; border-radius: 2px 2px 0 0;}
-.layui-layer-setwin{position:absolute; right:15px; *right:0; top:15px; font-size:0; line-height: initial;}
+.layui-layer-title{padding:0 80px 0 20px; height: 50px; line-height: 50px; border-bottom:1px solid #F0F0F0; font-size: 14px; color:#333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 2px 2px 0 0;}
+.layui-layer-setwin{position:absolute; right: 15px; *right:0; top: 17px; font-size:0; line-height: initial;}
 .layui-layer-setwin a{position:relative; width: 16px; height:16px; margin-left:10px; font-size:12px; _overflow:hidden;}
 .layui-layer-setwin .layui-layer-min cite{position:absolute; width:14px; height:2px; left:0; top:50%; margin-top:-1px; background-color:#2E2D3C; cursor:pointer; _overflow:hidden;}
 .layui-layer-setwin .layui-layer-min:hover cite{background-color:#2D93CA; }
@@ -75,7 +74,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-btn-c{text-align: center;}
 
 /* 定制化 */
-.layui-layer-dialog{min-width:260px;}
+.layui-layer-dialog{min-width: 300px;}
 .layui-layer-dialog .layui-layer-content{position: relative; padding:20px; line-height:24px; word-break: break-all; overflow:hidden; font-size:14px; overflow-x: hidden; overflow-y:auto;}
 .layui-layer-dialog .layui-layer-content .layui-layer-ico{position:absolute; top:16px; left:15px; _left:-40px; width:30px; height:30px;}
 .layui-layer-ico1{background-position:-30px 0 }
@@ -129,7 +128,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-iconext{background:url(icon-ext.png) no-repeat;}
 
 /* prompt模式 */
-.layui-layer-prompt .layui-layer-input{display: block; width: 230px; height: 36px; margin: 0 auto; line-height: 30px; padding-left: 10px; border: 1px solid #e6e6e6; color: #333;}
+.layui-layer-prompt .layui-layer-input{display: block; width: 260px; height: 36px; margin: 0 auto; line-height: 30px; padding-left: 10px; border: 1px solid #e6e6e6; color: #333;}
 .layui-layer-prompt textarea.layui-layer-input{width: 300px; height: 100px; line-height: 20px; padding: 6px 10px;}
 .layui-layer-prompt .layui-layer-content{padding: 20px;}
 .layui-layer-prompt .layui-layer-btn{padding-top: 0;}
@@ -137,8 +136,8 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 /* tab模式 */
 .layui-layer-tab{box-shadow:1px 1px 50px rgba(0,0,0,.4);}
 .layui-layer-tab .layui-layer-title{padding-left:0; overflow: visible;}
-.layui-layer-tab .layui-layer-title span{position:relative; float:left; min-width:80px; max-width:260px; padding:0 20px; text-align:center; cursor:default; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; cursor: pointer;}
-.layui-layer-tab .layui-layer-title span.layui-this{height: 43px; border-left: 1px solid #eee; border-right: 1px solid #eee; background-color: #fff; z-index: 10;}
+.layui-layer-tab .layui-layer-title span{position:relative; float:left; min-width:80px; max-width: 300px; padding:0 20px; text-align:center; cursor:default; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; cursor: pointer;}
+.layui-layer-tab .layui-layer-title span.layui-this{height: 51px; border-left: 1px solid #eee; border-right: 1px solid #eee; background-color: #fff; z-index: 10;}
 .layui-layer-tab .layui-layer-title span:first-child{border-left:none;}
 .layui-layer-tabmain{line-height:24px; clear:both;}
 .layui-layer-tabmain .layui-layer-tabli{display:none;}

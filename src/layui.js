@@ -1,7 +1,7 @@
 /*!
 
  @Name: layui
- @Description：经典模块化前端 UI 框架
+ @Description：Classic modular front-end UI framework
  @License：MIT
 
  */
@@ -17,7 +17,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.5.7'; //版本号
+    this.v = '2.6.0'; //版本号
   }
 
   //获取layui所在目录
@@ -38,37 +38,38 @@
   }()
 
   //异常提示
-  ,error = function(msg){
-    win.console && console.error && console.error('Layui hint: ' + msg);
+  ,error = function(msg, type){
+    type = type || 'log';
+    win.console && console[type] && console[type]('layui error hint: ' + msg);
   }
 
   ,isOpera = typeof opera !== 'undefined' && opera.toString() === '[object Opera]'
 
   //内置模块
   ,modules = {
-    layer: 'modules/layer' //弹层
-    ,laydate: 'modules/laydate' //日期
-    ,laypage: 'modules/laypage' //分页
-    ,laytpl: 'modules/laytpl' //模板引擎
-    ,layim: 'modules/layim' //web通讯
-    ,layedit: 'modules/layedit' //富文本编辑器
-    ,form: 'modules/form' //表单集
-    ,upload: 'modules/upload' //上传
-    ,transfer: 'modules/transfer' //上传
-    ,tree: 'modules/tree' //树结构
-    ,table: 'modules/table' //表格
-    ,element: 'modules/element' //常用元素操作
-    ,rate: 'modules/rate'  //评分组件
-    ,colorpicker: 'modules/colorpicker' //颜色选择器
-    ,slider: 'modules/slider' //滑块
-    ,carousel: 'modules/carousel' //轮播
-    ,flow: 'modules/flow' //流加载
-    ,util: 'modules/util' //工具块
-    ,code: 'modules/code' //代码修饰器
-    ,jquery: 'modules/jquery' //DOM库（第三方）
+    lay: 'lay' //基础 DOM 操作
+    ,layer: 'layer' //弹层
+    ,laydate: 'laydate' //日期
+    ,laypage: 'laypage' //分页
+    ,laytpl: 'laytpl' //模板引擎
+    ,layedit: 'layedit' //富文本编辑器
+    ,form: 'form' //表单集
+    ,upload: 'upload' //上传
+    ,dropdown: 'dropdown' //下拉菜单
+    ,transfer: 'transfer' //穿梭框
+    ,tree: 'tree' //树结构
+    ,table: 'table' //表格
+    ,element: 'element' //常用元素操作
+    ,rate: 'rate'  //评分组件
+    ,colorpicker: 'colorpicker' //颜色选择器
+    ,slider: 'slider' //滑块
+    ,carousel: 'carousel' //轮播
+    ,flow: 'flow' //流加载
+    ,util: 'util' //工具块
+    ,code: 'code' //代码修饰器
+    ,jquery: 'jquery' //DOM 库（第三方）
     
-    ,mobile: 'modules/mobile' //移动大模块 | 若当前为开发目录，则为移动模块入口，否则为移动模块集合
-    ,'layui.all': '../layui.all' //PC模块合并版
+    ,'layui.all': '../layui' //聚合
   };
 
   //记录基础数据
@@ -97,10 +98,6 @@
       deps = []
     );
     
-    if((!layui['layui.all'] && layui['layui.mobile'])){
-      return callback.call(that);
-    }
-
     that.use(deps, callback);
     return that;
   };
@@ -138,7 +135,7 @@
         head.removeChild(node);
         (function poll() {
           if(++timeout > config.timeout * 1000 / 4){
-            return error(item + ' is not a valid module');
+            return error(item + ' is not a valid module', 'error');
           };
           config.status[item] ? onCallback() : setTimeout(poll, 4);
         }());
@@ -153,10 +150,9 @@
       : ( typeof callback === 'function' && callback.apply(layui, exports) );
     }
     
-    //如果引入了完整库（layui.all.js），内置的模块则不必再加载
+    //如果引入了聚合板，内置的模块则不必重复加载
     if(apps.length === 0 
     || (layui['layui.all'] && modules[item]) 
-    || (!layui['layui.all'] && layui['layui.mobile'] && modules[item])
     ){
       return onCallback(), that;
     }
@@ -166,10 +162,10 @@
     //如果是扩展模块，则判断模块路径值是否为 {/} 开头，
     //如果路径值是 {/} 开头，则模块路径即为后面紧跟的字符。
     //否则，则按照 base 参数拼接模块路径
-    var url = ( modules[item] ? (dir + 'lay/') 
+    
+    var url = ( modules[item] ? (dir + 'modules/') 
       : (/^\{\/\}/.test(that.modules[item]) ? '' : (config.base || ''))
     ) + (that.modules[item] || item) + '.js';
-    
     url = url.replace(/^\{\/\}/, '');
     
     //如果扩展模块（即：非内置模块）对象已经存在，则不必再加载
@@ -206,7 +202,7 @@
     } else { //缓存
       (function poll() {
         if(++timeout > config.timeout * 1000 / 4){
-          return error(item + ' is not a valid module');
+          return error(item + ' is not a valid module', 'error');
         };
         (typeof config.modules[item] === 'string' && config.status[item]) 
         ? onCallback() 
@@ -217,7 +213,7 @@
     return that;
   };
 
-  //获取节点的style属性值
+  //获取节点的 style 属性值
   Layui.prototype.getStyle = function(node, name){
     var style = node.currentStyle ? node.currentStyle : win.getComputedStyle(node, null);
     return style[style.getPropertyValue ? 'getPropertyValue' : 'getAttribute'](name);
@@ -232,7 +228,7 @@
     if(typeof fn === 'string') cssname = fn;
     
     var app = (cssname || href).replace(/\.|\//g, '')
-    ,id = link.id = 'layuicss-'+app
+    ,id = link.id = 'layuicss-'+ app
     ,timeout = 0;
     
     link.rel = 'stylesheet';
@@ -318,7 +314,7 @@
     options = options || {};
     for(var o in options){
       if(that[o] || that.modules[o]){
-        error('\u6A21\u5757\u540D '+ o +' \u5DF2\u88AB\u5360\u7528');
+        error(o+ ' Module already exists', 'error');
       } else {
         that.modules[o] = options[o];
       }
