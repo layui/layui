@@ -560,7 +560,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-timeline-item:before{background-color: #eee;}
 
 /* 文本区域 */
-.layui-text{line-height: 1.6; font-size: 14px;}
+.layui-text{line-height: 1.6; font-size: 14px; color: #666;}
 .layui-text h1,
 .layui-text h2,
 .layui-text h3{font-weight: 500; color: #333;}
