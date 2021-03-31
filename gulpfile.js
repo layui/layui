@@ -73,7 +73,7 @@ var argv = require('minimist')(process.argv.slice(2), {
     
     return gulp.src(src).pipe(minify({
       compatibility: 'ie7'
-    })).pipe(header.apply(null, noteNew))
+    })) //.pipe(header.apply(null, noteNew))
     .pipe(gulp.dest('./'+ dir +'/css'));
   }
   
