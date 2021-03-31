@@ -460,6 +460,8 @@
     var that = this
     ,options = that.config
     ,elem = lay('#'+ (prev || that.elemID));
+    if(!elem[0]) return that;
+    
     if(!elem.hasClass(ELEM_STATIC)){
       that.checkDate(function(){
         elem.remove();

@@ -249,15 +249,15 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-header a:hover{transition: all .5s; -webkit-transition: all .5s;}
 .layui-side{position: fixed; left: 0; top: 0; bottom: 0; z-index: 999; width: 200px; overflow-x: hidden;}
 .layui-side-scroll{position: relative; width: 220px; height: 100%; overflow-x: hidden;}
-.layui-body{position: absolute; left: 200px; right: 0; top: 0; bottom: 0; z-index: 998; width: auto; overflow: hidden; overflow-y: auto; box-sizing: border-box;}
+.layui-body{position: absolute; left: 200px; right: 0; top: 0; bottom: 0; z-index: 900; width: auto; overflow: hidden; overflow-y: auto; box-sizing: border-box;}
 
 /* 后台框架大布局 */
-.layui-layout-body{overflow: hidden;}
-.layui-layout-admin .layui-header{background-color: #23262E;}
+.layui-layout-body{overflow-x: hidden;}
+.layui-layout-admin .layui-header{position: fixed; top: 0; left: 0; right: 0; background-color: #23262E;}
 .layui-layout-admin .layui-side{top: 60px; width: 200px; overflow-x: hidden;}
-.layui-layout-admin .layui-body{position: fixed; top: 60px; bottom: 44px;}
+.layui-layout-admin .layui-body{bottom: auto; padding-bottom: 44px;}
 .layui-layout-admin .layui-main{width: auto; margin: 0 15px;}
-.layui-layout-admin .layui-footer{position: fixed; left: 200px; right: 0; bottom: 0; height: 44px; line-height: 44px; padding: 0 15px; background-color: #eee;}
+.layui-layout-admin .layui-footer{position: fixed; left: 200px; right: 0; bottom: 0; z-index: 990; height: 44px; line-height: 44px; padding: 0 15px; background-color: #eee;}
 .layui-layout-admin .layui-logo{position: absolute; left: 0; top: 0; width: 200px; height: 100%; line-height: 60px; text-align: center; color: #009688; font-size: 16px;}
 .layui-layout-admin .layui-header .layui-nav{background: none;}
 .layui-layout-left{position: absolute !important; left: 200px; top: 0;}
@@ -597,7 +597,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 */
 
-.layui-btn{display: inline-block; vertical-align: middle; height: 38px; line-height: 38px; padding: 0 18px; background-color: #009688; color: #fff; white-space: nowrap; text-align: center; font-size: 14px; border: none; border-radius: 2px; cursor: pointer; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;}
+.layui-btn{display: inline-block; vertical-align: middle; height: 38px; line-height: 38px; padding: 0 18px; border: 1px solid transparent; background-color: #009688; color: #fff; white-space: nowrap; text-align: center; font-size: 14px; border-radius: 2px; cursor: pointer; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;}
 .layui-btn:hover{opacity: 0.8; filter:alpha(opacity=80); color: #fff;}
 .layui-btn:active{opacity: 1; filter:alpha(opacity=100);}
 .layui-btn+.layui-btn{margin-left: 10px;}
@@ -612,13 +612,13 @@ a cite{font-style: normal; *cursor:pointer;}
 /* 圆角 */.layui-btn-radius{border-radius: 100px;}
 .layui-btn .layui-icon{padding: 0 2px; vertical-align: middle\0; vertical-align: bottom;}
 
-/* 原始 */.layui-btn-primary{border: 1px solid #d2d2d2; background: none; color: #666;}
+/* 原始 */.layui-btn-primary{border-color: #d2d2d2; background: none; color: #666;}
 .layui-btn-primary:hover{border-color: #009688; color: #333;}
 /* 百搭 */.layui-btn-normal{background-color: #1E9FFF;}
 /* 暖色 */.layui-btn-warm{background-color: #FFB800;}
 /* 警告 */.layui-btn-danger{background-color: #FF5722;}
 /* 选中 */.layui-btn-checked{background-color: #5FB878;}
-/* 禁用 */.layui-btn-disabled,.layui-btn-disabled:hover,.layui-btn-disabled:active{border: 1px solid #eee; background-color: #FBFBFB; color: #d2d2d2; cursor: not-allowed; opacity: 1;}
+/* 禁用 */.layui-btn-disabled,.layui-btn-disabled:hover,.layui-btn-disabled:active{border-color: #eee; background-color: #FBFBFB; color: #d2d2d2; cursor: not-allowed; opacity: 1;}
 
 /* 大型 */.layui-btn-lg{height: 44px; line-height: 44px; padding: 0 25px; font-size: 16px;}
 /* 小型 */.layui-btn-sm{height: 30px; line-height: 30px; padding: 0 10px; font-size: 12px;}
@@ -1200,10 +1200,11 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-timeline-axis{position: absolute; left: -5px; top: 0; z-index: 10; width: 20px; height: 20px; line-height: 20px; background-color: #fff; color: #5FB878; border-radius: 50%; text-align: center; cursor: pointer;}
 .layui-timeline-axis:hover{color: #FF5722;}
 .layui-timeline-item:before{content: ""; position: absolute; left: 5px; top: 0; z-index: 0; width: 1px; height: 100%;}
-.layui-timeline-item:last-child:before{display: none;}
+
 .layui-timeline-item:first-child:before{display: block;}
+.layui-timeline-item:last-child:before{display: none;}
 .layui-timeline-content{padding-left: 25px;;}
-.layui-timeline-title{position: relative; margin-bottom: 10px;}
+.layui-timeline-title{position: relative; margin-bottom: 10px; line-height: 22px;}
 
 /* 小徽章 */
 .layui-badge,

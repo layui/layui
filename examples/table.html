@@ -21,8 +21,8 @@ body{padding: 20px; /*overflow-y: scroll;*/}
     <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
     <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页所有数据</button>
     <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
-    <button class="layui-btn layui-btn-sm" lay-event="reload">重载</button>
-    <button class="layui-btn layui-btn-sm" lay-event="reload2">重载2</button>
+    <button class="layui-btn layui-btn-sm" lay-event="reload">重载（保留初始参数）</button>
+    <button class="layui-btn layui-btn-sm" lay-event="reload2">重载（不保留初始参数）</button>
   </div>
 </script>
 
@@ -179,11 +179,19 @@ body{padding: 20px; /*overflow-y: scroll;*/}
   </table>
 </div>
 
-<script src="../src/layui.js" src="//www.layuicdn.com/layui-v2.0.1/layui.js" charset="utf-8"></script>
+<script src="../src/layui.js" src1="//www.layuicdn.com/layui-v2.0.1/layui.js" charset="utf-8"></script>
 <script>
 layui.use('table', function(){
   var table = layui.table;
   //return;
+  
+  //全局设定某参数
+  table.set({
+    where: {
+      token: '全局 token 参数'
+    }
+    //,height: 300
+  });
   
   //渲染
   window.ins1 = table.render({
@@ -227,6 +235,14 @@ layui.use('table', function(){
     ,initSort1: {
       field: 'experience' //排序字段，对应 cols 设定的各字段名
       ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+    }
+    
+    ,where: {
+      test: '初始 test 参数'
+    }
+    
+    ,error: function(res, msg){
+      console.log(res, msg)
     }
 
     
@@ -299,17 +315,17 @@ layui.use('table', function(){
         table.reload('test', {
           page: {curr: 5, limit: 10}
           ,where: {
-            a: 123
+            abc: 123
           }
           ,cols: ins1.config.cols
           //,height: 300
           //,url: 'x'
-        });
+        }, true);
       break;
       case 'reload2':
         table.reload('test', {
           where: {
-            token: 'sasasas'
+            efg: 'sasasas'
           }
           ,cols: [[
             {type: 'checkbox', fixed: 'left'}

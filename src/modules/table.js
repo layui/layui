@@ -52,8 +52,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     return {
       config: options
-      ,reload: function(options){
-        that.reload.call(that, options);
+      ,reload: function(options, deep){
+        that.reload.call(that, options, deep);
       }
       ,setColsWidth: function(){
         that.setColsWidth.call(that);
@@ -228,8 +228,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   ,Class = function(options){
     var that = this;
     that.index = ++table.index;
-    that.config = $.extend({}, that.config, table.config, options);
+    that.config = $.extend({}, that.config, $.extend(true, {}, table.config, options));
     that.render();
+    
+    if(!that.init_config){
+      that.init_config = $.extend({}, that.config); //记录初始执行的参数
+    }
   };
   
   //默认配置
@@ -637,14 +641,18 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   };
   
   //表格重载
-  Class.prototype.reload = function(options){
+  Class.prototype.reload = function(options, deep){
     var that = this;
     
     options = options || {};
     delete that.haveInit;
     
     if(options.data && options.data.constructor === Array) delete that.config.data;
-    that.config = $.extend({}, that.config, options);
+    
+    that.config = $.extend({}, that.config, function(){
+      return deep ? $.extend(true, {}, that.init_config, table.config, options)
+      : $.extend(true, {}, table.config, options);
+    }());
     
     that.render();
   };
@@ -724,11 +732,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           that.setColsWidth();
           typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
         }
-        ,error: function(e, m){
-          that.errorView('数据接口请求异常：'+ m);
+        ,error: function(e, msg){
+          that.errorView('数据接口请求异常：'+ msg);
 
           that.renderForm();
           that.setColsWidth();
+          
+          typeof options.error === 'function' && options.error(e, msg);
         }
       });
     } else if(options.data && options.data.constructor === Array){ //已知数据
@@ -1976,12 +1986,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   };
   
   //表格重载
-  table.reload = function(id, options){
+  table.reload = function(id, options, deep){
     var config = getThisTableConfig(id); //获取当前实例配置项
     if(!config) return;
     
     var that = thisTable.that[id];
-    that.reload(options);
+    that.reload(options, deep);
     
     return thisTable.call(that);
   };
