@@ -88,7 +88,7 @@ layui.use(['layer', 'form'], function(){
 从现在开始，尽情地拥抱 layui 吧！但愿她能成为你长远的开发伴侣，化作你方寸屏幕前的亿万字节！
 
 ## 贡献者
-> 大概是因为 layui 让开发者变得更懒，所以贡献者不是很多？好的，姑且就这样认为吧。
+> 大概是因为 layui 让开发者变得更懒，所以贡献者这么少？好的，姑且就这样认为吧。
  
 [![Giteye chart](https://chart.giteye.net/gitee/sentsin/layui/PMFQFJCX.png)](https://giteye.net/chart/PMFQFJCX)
 
