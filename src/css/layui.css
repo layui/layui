@@ -249,15 +249,15 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-header a:hover{transition: all .5s; -webkit-transition: all .5s;}
 .layui-side{position: fixed; left: 0; top: 0; bottom: 0; z-index: 999; width: 200px; overflow-x: hidden;}
 .layui-side-scroll{position: relative; width: 220px; height: 100%; overflow-x: hidden;}
-.layui-body{position: absolute; left: 200px; right: 0; top: 0; bottom: 0; z-index: 900; width: auto; overflow: hidden; overflow-y: auto; box-sizing: border-box;}
+.layui-body{position: relative; left: 200px; right: 0; top: 0; bottom: 0; z-index: 900; width: auto; box-sizing: border-box;}
 
 /* 后台框架大布局 */
 .layui-layout-body{overflow-x: hidden;}
 .layui-layout-admin .layui-header{position: fixed; top: 0; left: 0; right: 0; background-color: #23262E;}
 .layui-layout-admin .layui-side{top: 60px; width: 200px; overflow-x: hidden;}
-.layui-layout-admin .layui-body{bottom: auto; padding-bottom: 44px;}
+.layui-layout-admin .layui-body{position: absolute; top: 60px; padding-bottom: 44px;}
 .layui-layout-admin .layui-main{width: auto; margin: 0 15px;}
-.layui-layout-admin .layui-footer{position: fixed; left: 200px; right: 0; bottom: 0; z-index: 990; height: 44px; line-height: 44px; padding: 0 15px; background-color: #eee;}
+.layui-layout-admin .layui-footer{position: fixed; left: 200px; right: 0; bottom: 0; z-index: 990; height: 44px; line-height: 44px; padding: 0 15px; box-shadow: -1px 0 4px rgb(0 0 0 / 12%); background-color: #FAFAFA;}
 .layui-layout-admin .layui-logo{position: absolute; left: 0; top: 0; width: 200px; height: 100%; line-height: 60px; text-align: center; color: #009688; font-size: 16px;}
 .layui-layout-admin .layui-header .layui-nav{background: none;}
 .layui-layout-left{position: absolute !important; left: 200px; top: 0;}

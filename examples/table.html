@@ -188,8 +188,11 @@ layui.use('table', function(){
   //全局设定某参数
   table.set({
     where: {
-      token: '全局 token 参数'
+      token: '默认 token 参数'
     }
+    //,defaultToolbar: ['filter']
+    ,limit: 30
+    //,url: 'list'
     //,height: 300
   });
   
@@ -237,15 +240,18 @@ layui.use('table', function(){
       ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
     }
     
+    ,headers: {headers_token: 'sasasas'}
     ,where: {
       test: '初始 test 参数'
+      ,token: '初始 token'
+      ,key: 'experience'
+      ,order: 'asc'
     }
     
     ,error: function(res, msg){
       console.log(res, msg)
     }
 
-    
     /*
     ,response: {
       statusName: 'status'
@@ -264,8 +270,8 @@ layui.use('table', function(){
   
   //排序事件
   table.on('sort(test)', function(obj){
-    console.log(this)
-    
+    console.log(obj);
+
     return;
     layer.msg('服务端排序。order by '+ obj.field + ' ' + obj.type);
     //服务端排序
@@ -276,7 +282,7 @@ layui.use('table', function(){
         key: obj.field //排序字段
         ,order: obj.type //排序方式
       }
-    });
+    }, true);
   });
   
   //工具栏事件
@@ -312,24 +318,32 @@ layui.use('table', function(){
         layer.alert('Table for layui-v'+ layui.v);
       break;
       case 'reload':
+        //深度重载
         table.reload('test', {
-          page: {curr: 5, limit: 10}
-          ,where: {
+          
+          where: {
             abc: 123
+            ,test: '新的 test1'
           }
+          ,page: {curr: 5, limit: 20}
           ,cols: ins1.config.cols
           //,height: 300
           //,url: 'x'
         }, true);
       break;
       case 'reload2':
+        //浅重载
         table.reload('test', {
           where: {
             efg: 'sasasas'
+            //,test: '新的 test2'
+            //,token: '新的 token2'
           }
           ,cols: [[
             {type: 'checkbox', fixed: 'left'}
             ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
+            ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
+            ,{field:'experience', title:'积分', width:80, sort: true, totalRow: true, templet: '<div>{{ d.experience }} 分</div>'}
             ,{field:'logins', title:'登入次数', width:100, sort: true, totalRow: true}
             ,{field:'joinTime', title:'加入时间', width:120}
           ]]

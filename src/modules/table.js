@@ -228,15 +228,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   ,Class = function(options){
     var that = this;
     that.index = ++table.index;
-    that.config = $.extend({}, that.config, $.extend(true, {}, table.config, options));
+    that.config = $.extend({}, that.config, table.config, options);;
     that.render();
-    
-    if(!that.init_config){
-      that.init_config = $.extend({}, that.config); //记录初始执行的参数
-    }
   };
   
-  //默认配置
+  //初始默认配置
   Class.prototype.config = {
     limit: 10 //每页显示的数量
     ,loading: true //请求数据时，是否显示loading
@@ -647,13 +643,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     options = options || {};
     delete that.haveInit;
     
+    //如果直接传入数组 data，则移除原来的数组，以免数组发生深度拷贝
     if(options.data && options.data.constructor === Array) delete that.config.data;
     
-    that.config = $.extend({}, that.config, function(){
-      return deep ? $.extend(true, {}, that.init_config, table.config, options)
-      : $.extend(true, {}, table.config, options);
-    }());
-    
+    //对参数进行深度或浅扩展
+    that.config = $.extend(deep, {}, that.config, options);
+
+    //执行渲染
     that.render();
   };
   
@@ -1042,6 +1038,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     //字段匹配
     if(typeof th === 'string'){
+      field = th;
       that.layHeader.find('th').each(function(i, item){
         var othis = $(this)
         ,_field = othis.data('field');
@@ -1069,7 +1066,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       elemSort.attr('lay-sort', type || null);
       that.layFixed.find('th')
     } catch(e){
-      return hint.error('Table modules: Did not match to field');
+      hint.error('Table modules: sort field \''+ field +'\' not matched');
     }
     
     //记录排序索引和类型
