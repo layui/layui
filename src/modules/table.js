@@ -1,10 +1,10 @@
 /**
 
- @Name：layui.table 表格操作组件
+ @Name：table 表格操作组件
  @License：MIT
     
  */
- 
+
 layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   "use strict";
   
@@ -963,7 +963,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.eachCols(function(i3, item3){
       var field = item3.field || i3;
       
-      //td内容
+      //td 内容
       var content = function(){
         var text = item3.totalRowText || ''
         ,thisTotalNum = parseFloat(totalNums[field]).toFixed(2)
@@ -995,7 +995,16 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           var str = (options.index + '-' + item3.key);
           return item3.type === 'normal' ? str 
           : (str + ' laytable-cell-' + item3.type);
-        }() +'">' + content
+        }() +'">' + function(){
+          var totalRow = item3.totalRow || options.totalRow;
+          //如果 totalRow 参数为字符类型，则解析为自定义模版
+          if(typeof totalRow === 'string'){
+            return laytpl(totalRow).render($.extend({
+              TOTAL_NUMS: content
+            }, item3))
+          }
+          return content;
+        }()
       ,'</div></td>'].join('');
       
       item3.field && (that.dataTotal[field] = content);

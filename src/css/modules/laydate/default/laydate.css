@@ -98,10 +98,10 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-content{border-top: none 0; border-bottom: none 0;}
 .layui-laydate-content th{color: #333;}
 .layui-laydate-content td{color: #666;}
-.layui-laydate-content td.laydate-selected{background-color: #00F7DE;}
+.layui-laydate-content td.laydate-selected{background-color: #B5FFF8;}
 .laydate-selected:hover{background-color: #00F7DE !important;}
 .layui-laydate-content td:hover,
-.layui-laydate-list li:hover{background-color: #eaeaea; color: #333;}
+.layui-laydate-list li:hover{background-color: #eee; color: #333;}
 .laydate-time-list li ol{margin: 0; padding: 0; border: 1px solid #e2e2e2; border-left-width: 0;}
 .laydate-time-list li:first-child ol{border-left-width: 1px;}
 .laydate-time-list>li:hover{background: none;}

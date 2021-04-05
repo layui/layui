@@ -1,6 +1,6 @@
 /**
 
- @Title: layui.upload 文件上传组件
+ @Title: upload 文件上传组件
  @License：MIT
 
  */

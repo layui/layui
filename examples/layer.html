@@ -38,7 +38,8 @@ layui.use('layer', function(){
   var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
   
   
-  layer.msg('hello');
+  var index = layer.msg('hello');
+  //layer.close(index);
   
   //触发事件
   var active = {

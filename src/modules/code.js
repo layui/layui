@@ -1,6 +1,6 @@
 /**
 
- @Name：layui.code 代码修饰器
+ @Name：code 代码修饰器
  @License：MIT
     
  */

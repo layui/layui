@@ -1,6 +1,6 @@
 /**
 
- @Name：layui.util 工具集组件
+ @Name：util 工具集组件
  @License：MIT
     
 */

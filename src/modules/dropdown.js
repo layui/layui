@@ -1,12 +1,12 @@
 /**
  
- @Name：layui.dropdown 下拉菜单组件
+ @Name：dropdown 下拉菜单组件
  @License：MIT
 
  */
 
 layui.define(['jquery', 'laytpl', 'lay'], function(exports){
-  //"use strict";
+  "use strict";
   
   var $ = layui.$
   ,laytpl = layui.laytpl

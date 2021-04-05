@@ -183,7 +183,6 @@ body{padding: 20px; /*overflow-y: scroll;*/}
 <script>
 layui.use('table', function(){
   var table = layui.table;
-  //return;
   
   //全局设定某参数
   table.set({
@@ -228,7 +227,7 @@ layui.use('table', function(){
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
       ,{field:'city', title:'城市', width:120, templet: '#cityTpl1'}
       ,{field:'sign', title:'签名'}
-      ,{field:'experience', title:'积分', width:80, sort: true, totalRow: true, templet: '<div>{{ d.experience }} 分</div>'}
+      ,{field:'experience', title:'积分', width:80, sort: true, totalRow: '{{ d.TOTAL_NUMS }} 分', templet: '<div>{{ d.experience }} 分</div>'}
       ,{field:'ip', title:'IP', width:120}
       ,{field:'logins', title:'登入次数', width:100, sort: true, totalRow: true}
       ,{field:'joinTime', title:'加入时间', width:120}
@@ -319,7 +318,7 @@ layui.use('table', function(){
       break;
       case 'reload':
         //深度重载
-        table.reload('test', {
+        var instReload = table.reload('test', {
           
           where: {
             abc: 123

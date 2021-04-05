@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>完整库使用 - layui</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>完整库使用 - layui</title>
 
-<link rel="stylesheet" href="../src/css/layui.css">
+  <link rel="stylesheet" href="../src/css/layui.css">
 
-<style>
-body{padding: 10px;}
-</style>
+  <style>
+    body{padding: 10px;}
+  </style>
+  
 </head>
 <body>
 
@@ -25,6 +26,7 @@ resize: none;">
 
 </textarea>
 
+
 <div id="demo1"></div>
 <button class="layui-btn demo" test-active="test-form">测试弹出式 Form</button>
 <button class="layui-btn demo" test-active="test-use">测试是否重复加载内置组件</button>
@@ -39,7 +41,14 @@ resize: none;">
   </ul>
   <div class="layui-tab-content">
     <div class="layui-tab-item layui-show">
-      内容1
+      <div class="layui-form">
+        <select name="city" lay-verify="">
+          <option value="">请选择一个城市</option>
+          <option value="010">北京</option>
+          <option value="021">上海</option>
+          <option value="0571">杭州</option>
+        </select>  
+      </div>
     </div>
     <div class="layui-tab-item">
       <div id="test2" class="demo-transfer"></div>
@@ -53,7 +62,7 @@ resize: none;">
 
 <script src="../dist/layui.js"></script>
 <script>
-;!function(){
+layui.use(function(){
   var $ = layui.jquery
   ,layer = layui.layer
   ,form = layui.form
@@ -62,15 +71,13 @@ resize: none;">
   ,transfer = layui.transfer
   ,util = layui.util;
   
-  layer.ready(function(){
-    layer.msg('hello');
-  });
+  layer.msg('hello');
   
   laypage.render({
     elem: 'demo1'
     ,count: 100 //总页数
   });
-  
+
   
   //测试加载非内置模块
   layui.config({
@@ -143,7 +150,7 @@ resize: none;">
       });
     }
   });
-}();
+});
 </script>
 </body>
 </html>

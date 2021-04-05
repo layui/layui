@@ -1,6 +1,6 @@
 /**
 
- @Name：layui.flow 流加载
+ @Name flow 流加载组件
  @License：MIT
     
  */

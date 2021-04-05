@@ -1,6 +1,6 @@
 /**
  
- @Name : layui.laypage 分页组件
+ @Name : laypage 分页组件
  @License：MIT
  
  */

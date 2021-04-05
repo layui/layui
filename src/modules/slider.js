@@ -1,6 +1,6 @@
 /**
 
- @Title: layui.slider 滑块组件
+ @Title: slider 滑块组件
  @License：MIT
 
  */

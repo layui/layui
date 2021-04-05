@@ -1,13 +1,33 @@
 ﻿/**
 
- @Name：用于打包聚合版，该文件不会存在于构建后的目录
+ @Name：用于加载所有内置模块
+ @License：MIT
     
  */
  
-layui.define(function(exports){
-  var cache = layui.cache;
-  layui.config({
-    dir: cache.dir.replace(/lay\/dest\/$/, '')
+layui.define(function(){
+  var mods = [] 
+  ,builtin = layui.cache.builtin;
+  layui.each(builtin, function(modName){
+    (modName === 'all' || modName === 'layui.all') || mods.push(modName);
   });
-  exports('layui.all', layui.v);
+  layui.cache.startTime = new Date().getTime();
+
+  return mods;
+}(), function(exports){
+  "use strict";
+  
+  var MOD_NAME = 'all'
+  
+  //外部接口
+  ,all = {
+    config: {}
+    ,time: function(){
+      var time = new Date().getTime() - layui.cache.startTime;
+      delete layui.cache.startTime;
+      return time;
+    }()
+  };
+
+  exports(MOD_NAME, all);
 });

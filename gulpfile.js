@@ -50,7 +50,7 @@ var argv = require('minimist')(process.argv.slice(2), {
   //聚合 JS 文件
   alljs: function(ver){
     var src = [
-      './src/**/{layui,all,'+ mods +'}.js'
+      './src/**/{layui,layui.all,'+ mods +'}.js'
     ]
     ,dir = destDir(ver);
     

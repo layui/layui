@@ -1,6 +1,6 @@
 /**
 
- @Name：layui.form 表单组件
+ @Name：form 表单组件
  @License：MIT
     
  */

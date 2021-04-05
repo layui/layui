@@ -1,6 +1,6 @@
 /**
  
- @Name：layui.transfer 穿梭框组件
+ @Name：transfer 穿梭框组件
  @License：MIT
 
  */

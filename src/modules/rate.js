@@ -1,6 +1,6 @@
 /**
 
- @Title: layui.rate 评分评星组件
+ @Title: rate 评分评星组件
  @License：MIT
 
  */

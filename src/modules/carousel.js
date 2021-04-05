@@ -1,6 +1,6 @@
 /**
 
- @Name：layui.carousel 轮播模块
+ @Name：carousel 轮播模块
  @License：MIT
     
  */

@@ -1,6 +1,6 @@
 /**
  
- @Name：layui.MODULE_DEMO_NAME 模块组件通用结构
+ @Name：MODULE_DEMO_NAME 模块组件通用结构
  @License：MIT
 
  */

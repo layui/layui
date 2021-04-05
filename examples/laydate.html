@@ -123,9 +123,10 @@ layui.use('laydate', function(laydate){
     elem: '#test1' //指定元素
     ,type: 'datetime'
     ,trigger: 'click'
-    ,lang: 'en'
+    //,lang: 'en'
+    //,theme: 'grid'
     ,range: true //开启日期范围，默认使用“_”分割
-    ,value: '2021-03-27 00:00:00 - 2021-02-27 00:00:00'
+    //,value: '2021-03-27 00:00:00 - 2021-02-27 00:00:00'
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
     }

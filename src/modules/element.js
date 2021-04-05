@@ -1,6 +1,6 @@
 /**
 
- @Name：layui.element 常用元素操作
+ @Name：element 常用元素操作
  @License：MIT
     
  */

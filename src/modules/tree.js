@@ -1,6 +1,6 @@
 /**
  
- @Name：layui.tree 树组件
+ @Name：tree 树组件
  @License：MIT
 
  */

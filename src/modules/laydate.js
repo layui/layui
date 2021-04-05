@@ -20,7 +20,7 @@
   }
 
   ,laydate = {
-    v: '5.2.0'
+    v: '5.2.1'
     ,config: {} //全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: ready.getPath
@@ -804,6 +804,7 @@
     
     //同步按钮可点状态
     that.setBtnStatus();
+    that.stampRange(index, tds); //标记范围内的日期
     
     return that;
   };
@@ -1116,7 +1117,90 @@
     return this;
   };
   
-  //执行done/change回调
+  //标记范围内的日期
+  Class.prototype.stampRange = function(index, tds){
+    var that = this
+    ,options = that.config
+    ,startTime, endTime;
+
+    if(!options.range) return;
+    
+    startTime = that.newDate(options.dateTime).getTime();
+    endTime = that.newDate(that.endDate).getTime();
+    
+    //标记范围样式
+    lay.each(tds, function(i, item){
+      var ymd = lay(item).attr('lay-ymd').split('-')
+      ,thisTime = that.newDate({
+        year: ymd[0]
+        ,month: ymd[1] - 1
+        ,date: ymd[2]
+      }).getTime();
+
+      if(index == 0){
+        if(thisTime > startTime){
+          lay(item).addClass(ELEM_SELECTED);
+        }
+      } else {
+        if(thisTime < endTime){
+          lay(item).addClass(ELEM_SELECTED);
+        }
+      }
+      
+      return;
+      if(thisTime === startTime || thisTime === endTime){
+        lay(item).addClass(
+          lay(item).hasClass(ELEM_PREV) || lay(item).hasClass(ELEM_NEXT)
+            ? ELEM_SELECTED
+          : THIS
+        );
+      }
+      if(thisTime > startTime && thisTime < endTime){
+        lay(item).addClass(ELEM_SELECTED);
+      }
+    });
+    
+    return;
+    
+    if(options.range && !that.endDate) lay(that.footer).find(ELEM_CONFIRM).addClass(DISABLED);
+    if(!that.endDate) return;
+
+    startTime = that.newDate({
+      year: that.startDate.year
+      ,month: that.startDate.month
+      ,date: that.startDate.date
+    }).getTime();
+    
+    endTime = that.newDate({
+      year: that.endDate.year
+      ,month: that.endDate.month
+      ,date: that.endDate.date
+    }).getTime();
+    
+    if(startTime > endTime) return that.hint(TIPS_OUT);
+    
+    lay.each(tds, function(i, item){
+      var ymd = lay(item).attr('lay-ymd').split('-')
+      ,thisTime = that.newDate({
+        year: ymd[0]
+        ,month: ymd[1] - 1
+        ,date: ymd[2]
+      }).getTime();
+      lay(item).removeClass(ELEM_SELECTED + ' ' + THIS);
+      if(thisTime === startTime || thisTime === endTime){
+        lay(item).addClass(
+          lay(item).hasClass(ELEM_PREV) || lay(item).hasClass(ELEM_NEXT)
+            ? ELEM_SELECTED
+          : THIS
+        );
+      }
+      if(thisTime > startTime && thisTime < endTime){
+        lay(item).addClass(ELEM_SELECTED);
+      }
+    });
+  };
+  
+  //执行 done/change 回调
   Class.prototype.done = function(param, type){
     var that = this
     ,options = that.config

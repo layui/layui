@@ -1,6 +1,6 @@
 /**
 
- @Title: layui.colorpicker 颜色选择器组件
+ @Title: colorpicker 颜色选择器组件
  @License：MIT
 
  */

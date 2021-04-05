@@ -1,6 +1,6 @@
 /**
 
- @Name：layui.layedit 富文本编辑器
+ @Name：layedit 富文本编辑器
  @License：MIT
     
  */
