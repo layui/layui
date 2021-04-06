@@ -1,24 +1,38 @@
-<p align=center>
+
+<p align="center">
   <a href="http://www.layui.com">
     <img src="https://sentsin.gitee.io/res/images/layui/layui.png" alt="layui" width="360">
   </a>
 </p>
-<p align=center>
+<p align="center">
   Classic modular front-end UI framework
 </p>
 
 <p align="center">
+  <!--
   <a href="https://travis-ci.org/sentsin/layui"><img alt="Build Status" src="https://img.shields.io/travis/sentsin/layui/master.svg"></a>
+  -->
+  
+  <a href="https://www.npmjs.com/package/layui-src"><img src="https://img.shields.io/npm/v/layui-src.svg?sanitize=true" alt="Version"></a>
+  <a href="https://www.npmjs.com/package/layui-src"><img src="https://img.shields.io/npm/l/layui-src.svg?sanitize=true" alt="License"></a>
   <a href="https://saucelabs.com/beta/builds/7e6196205e4f492496203388fc003b65"><img src="https://saucelabs.com/buildstatus/layui" alt="Build Status"></a>
+  
+  <a href="https://www.jsdelivr.com/package/npm/layui-src"><img src="https://data.jsdelivr.com/v1/package/npm/layui-src/badge" alt="jsDelivr"></a>
+  
+  <!--
   <a href="https://coveralls.io/r/sentsin/layui?branch=master"><img alt="Test Coverage" src="https://img.shields.io/coveralls/sentsin/layui/master.svg"></a>
+  -->
 </p>
+
+<!--
 <p align="center">
   <a href="https://saucelabs.com/beta/builds/7e6196205e4f492496203388fc003b65"><img src="https://saucelabs.com/browser-matrix/layui.svg" alt="Browser Matrix"></a>
 </p>
+-->
 
 ---
 
-layui 是一款采用自身模块规范编写的前端 UI 框架，遵循原生 HTML/CSS/JS 的书写与组织形式，极易上手，拿来即用。其外在极简，却又不失饱满的内在，体积轻盈，组件丰盈，从核心代码到使用方法的每一处细节都经过精心雕琢，非常适合网页界面的快速开发。layui 区别于那些基于 MVVM 底层的前端框架，却并非逆道而行，而是信奉返璞归真之道。准确地说，她更多是为后端程序员量身定做，你无需涉足各种前端工具的复杂配置，只需面对浏览器本身，让一切你所需要的元素与交互，从这里信手拈来。
+layui 是一款采用自身模块规范编写的前端 UI 框架，遵循原生 HTML/CSS/JS 的开发方式，极易上手，拿来即用。其风格简约轻盈，而组件优雅丰盈，从源代码到使用方法的每一处细节都经过精心雕琢，非常适合网页界面的快速开发。layui 区别于那些基于 MVVM 底层的前端框架，却并非逆道而行，而是信奉返璞归真之道。准确地说，它更多是面向后端开发者，你无需涉足前端各种工具，只需面对浏览器本身，让一切你所需要的元素与交互，从这里信手拈来。
 
 ## 返璞归真
 
