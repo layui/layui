@@ -8,15 +8,16 @@
   Classic modular front-end UI framework
 </p>
 
-<p align="center">
-  <!-- <a href="https://travis-ci.org/sentsin/layui"><img alt="Build Status" src="https://img.shields.io/travis/sentsin/layui/master.svg"></a> -->
-  
+<p align="center">  
   <a href="https://www.npmjs.com/package/layui-src"><img src="https://img.shields.io/npm/v/layui-src.svg?sanitize=true" alt="Version"></a>
   <a href="https://www.npmjs.com/package/layui-src"><img src="https://img.shields.io/npm/l/layui-src.svg?sanitize=true" alt="License"></a>
   <a href="https://saucelabs.com/beta/builds/7e6196205e4f492496203388fc003b65"><img src="https://saucelabs.com/buildstatus/layui" alt="Build Status"></a>
   <a href="https://www.jsdelivr.com/package/npm/layui-src"><img src="https://data.jsdelivr.com/v1/package/npm/layui-src/badge" alt="jsDelivr"></a>
   
-  <!-- <a href="https://coveralls.io/r/sentsin/layui?branch=master"><img alt="Test Coverage" src="https://img.shields.io/coveralls/sentsin/layui/master.svg"></a> -->
+  <!--
+  <a href="https://travis-ci.org/sentsin/layui"><img alt="Build Status" src="https://img.shields.io/travis/sentsin/layui/master.svg"></a>
+  <a href="https://coveralls.io/r/sentsin/layui?branch=master"><img alt="Test Coverage" src="https://img.shields.io/coveralls/sentsin/layui/master.svg"></a>
+  -->
 </p>
 
 <!--
