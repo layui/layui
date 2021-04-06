@@ -1,7 +1,7 @@
 {
   "name": "layui-src",
   "realname": "layui",
-  "version": "2.6.3",
+  "version": "2.6.4",
   "description": "Classic modular front-end component library",
   "main": "dist/layui.js",
   "license": "MIT",
@@ -18,7 +18,7 @@
   "author": [
     "sentsin <xu@sentsin.com>"
   ],
-  "homepage": "/",
+  "homepage": "https://github.com/sentsin/layui/",
   "devDependencies": {
     "chai": "^4.3.4",
     "del": "^2.2.2",

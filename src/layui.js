@@ -17,7 +17,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.6.3'; //版本号
+    this.v = '2.6.4'; //版本号
   }
 
   //获取layui所在目录
@@ -122,7 +122,6 @@
     }();
     
     //如果页面已经存在 jQuery 1.7+ 库且所定义的模块依赖 jQuery，则不加载内部 jquery 模块
-    /*
     if(window.jQuery && jQuery.fn.on){
       that.each(apps, function(index, item){
         if(item === 'jquery'){
@@ -131,7 +130,6 @@
       });
       layui.jquery = layui.$ = jQuery;
     }
-    */
     
     var item = apps[0]
     ,timeout = 0;
