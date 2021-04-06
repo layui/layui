@@ -99,12 +99,12 @@
       deps = []
     );
     
-    that.use(deps, callback);
+    that.use(deps, callback, null, 'define');
     return that;
   };
 
   //使用特定模块
-  Layui.prototype.use = function(apps, callback, exports){
+  Layui.prototype.use = function(apps, callback, exports, from){
     var that = this
     ,dir = config.dir = config.dir ? config.dir : getPath
     ,head = doc.getElementsByTagName('head')[0];
@@ -154,15 +154,15 @@
         }());
       }
     }
-    
+  
     //回调
     function onCallback(){
       exports.push(layui[item]);
       apps.length > 1 ?
-        that.use(apps.slice(1), callback, exports)
+        that.use(apps.slice(1), callback, exports, from)
       : ( typeof callback === 'function' && function(){
         //保证文档加载完毕再执行回调
-        if(layui.jquery && typeof layui.jquery === 'function'){
+        if(layui.jquery && typeof layui.jquery === 'function' && from !== 'define'){
           return layui.jquery(function(){
             callback.apply(layui, exports);
           });

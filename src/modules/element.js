@@ -459,7 +459,10 @@ layui.define('jquery', function(exports){
   Element.prototype.render = Element.prototype.init;
 
   var element = new Element(), dom = $(document);
-  element.render();
+  
+  $(function(){
+    element.render();
+  });
   
   var TITLE = '.layui-tab-title li';
   dom.on('click', TITLE, call.tabClick); //Tab切换

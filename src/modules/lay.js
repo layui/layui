@@ -393,16 +393,21 @@
     });
   };
   
-  //设置HTML内容
+  //设置或获取 HTML 内容
   LAY.prototype.html = function(html){
-    return this.each(function(index, item){
+    var that = this;
+    return html === undefined ? function(){
+      if(that.length > 0) return that[0].innerHTML;
+    }() : this.each(function(index, item){
       item.innerHTML = html;
     });
   };
   
-  //设置值
+  //设置或获取值
   LAY.prototype.val = function(value){
-    return this.each(function(index, item){
+    return value === undefined ? function(){
+      if(that.length > 0) return that[0].value;
+    }() : this.each(function(index, item){
         item.value = value;
     });
   };

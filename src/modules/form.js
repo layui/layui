@@ -699,7 +699,9 @@ layui.define('layer', function(exports){
   var form = new Form()
   ,$dom = $(document), $win = $(window);
   
-  form.render();
+  $(function(){
+    form.render();
+  });
   
   //表单reset重置渲染
   $dom.on('reset', ELEM, function(){

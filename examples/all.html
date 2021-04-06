@@ -62,6 +62,9 @@ resize: none;">
 
 <script src="../dist/layui.js"></script>
 <script>
+console.log(layui.dropdown);
+
+//(function(){
 layui.use(function(){
   var $ = layui.jquery
   ,layer = layui.layer
@@ -77,15 +80,18 @@ layui.use(function(){
     elem: 'demo1'
     ,count: 100 //总页数
   });
-
+  
+  console.log(lay('#footer').html());
   
   //测试加载非内置模块
+  /*
   layui.config({
     base: 'extends/'
   }).extend({
     mod1: 'mod1'
     ,mod2: 'mod2'
   }).use('mod1');
+  */
   
   
   //定义标题及数据源
@@ -150,7 +156,21 @@ layui.use(function(){
       });
     }
   });
+  
 });
+//})();
 </script>
+
+
+
+<span class="layui-breadcrumb" lay-separator="-">
+  <a href="">首页</a>
+  <a href="">国际新闻</a>
+  <a href="">亚太地区</a>
+  <a><cite>正文</cite></a>
+</span>
+
+<div id="footer">© footer</div>
+
 </body>
 </html>

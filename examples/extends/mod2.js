@@ -4,9 +4,7 @@
 
 layui.define(function(exports){
   console.log('mod2.js')
-  
-  layer.alert(1)
-  
+
   exports('mod2', {
     name: 'mod2'
   })
