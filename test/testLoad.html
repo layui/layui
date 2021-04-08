@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>load加载测试(mylayui)</title>
+  <link rel="stylesheet" href="../src/css/layui.css" media="all">
+</head>
+<!--<body class="layui-container">-->
+<body>
+<div class="layui-container">
+  <div class="layui-row layui-col-space10">
+    <div class="layui-col-xs12" style="margin-top: 10px;">
+      <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>使用load引入echarts示例</legend>
+      </fieldset>
+      <div id="chart1" style="height: 400px;">
+
+      </div>
+      <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>使用load引入ztree示例</legend>
+      </fieldset>
+      <input class="layui-input" id="search" placeholder="请输入关键字搜索" autofocus>
+      <div id="tree" class="ztree"></div>
+      <div id="selected"></div>
+    </div>
+  </div>
+</div>
+
+
+<script src="../src/layui.js"></script>
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<script>
+  layui.config({base: 'js/'})
+    .use(['load'], function () {
+      var load = layui.load;
+      load.config({
+        echarts: {
+          path: '{/}https://lib.baomitu.com/echarts/5.0.2/echarts.common.min',
+          then1: function () {
+            // then 回调非必须的，一般用来引入一些对应的css或者用来返回layui[modelName] = 被引入的插件的某些特殊的变量可以在then回调返回相关的值
+            return window.echarts;
+          }
+        },
+        ztree: {
+          // path: '{/}https://cdn.bootcss.com/zTree.v3/3.5.30/js/jquery.ztree.all',
+          path: 'ztree/js/jquery.ztree.all.min',
+          then: function () {
+            layui.link('js/ztree/css/zTreeStyle/zTreeStyle.css', null, 'ztree');
+            // layui.link('ztree/css/zTreeStyle/zTreeStyle.css', null, 'ztree');
+          }
+        },
+        'ztree.exhide': {
+          path: 'ztree/js/jquery.ztree.exhide.min',
+          extend: ['ztree']
+        },
+        fuzzysearch: {
+          path: 'ztree/fuzzysearch'
+        }
+      });
+
+      load('echarts', function () {
+        // var echarts = layui.echarts;
+        console.log('echarts.version', echarts.version, 111);
+        // 引入echarts之后实际会有一个全局变量echarts，后面基本echarts怎么用就怎么用，没啥分别，
+        // 如果在then回调里面返回了对应的变量给了layui.echarts了也可以使用layui.echarts去替换全局变量echarts使用，看个人喜好。
+        var chartIns = echarts.init(document.getElementById('chart1'));
+        chartIns.setOption({
+          xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [{
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            type: 'line'
+          }]
+        });
+      });
+      load('echarts', function () {
+        // var echarts = layui.echarts;
+        console.log('echarts.version', echarts.version, 222);
+      })
+
+      // load(['ztree', 'ztree.exhide'], function () { // 与下面的代码等效
+      load(['ztree.exhide'], function () { // ztree.exhide依赖了ztree所以只要load进来ztree.exhide就可以用ztree的基础功能了
+        var setting = {
+            view: {
+              selectedMulti: false
+            }
+          },
+          zTreeNodes = [
+            {
+              "name": "网站导航", open: true, children: [
+                {"name": "google", "url": "http://g.cn", "target": "_blank"},
+                {"name": "baidu", "url": "http://baidu.com", "target": "_blank"},
+                {"name": "sina", "url": "http://www.sina.com.cn", "target": "_blank"}
+              ]
+            }
+          ];
+        var zTreeObj = $.fn.zTree.init($("#tree"), setting, zTreeNodes);
+        load('fuzzysearch', function () {
+          fuzzySearch('tree', '#search', null, true); //初始化模糊搜索方法
+        })
+      })
+    })
+</script>
+
+</body>
+</html>
