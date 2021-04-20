@@ -1614,7 +1614,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       ,index = othis.parents('tr').eq(0).data('index')
       ,data = table.cache[that.key][index];
       
-      data[field] = value; //更新缓存中的值
+      if (typeof data[field] === 'number') {
+        data[field] = Number(value); 
+      } else if (data[field] && data[field].constructor && data[field].constructor === Date) {
+        data[field] = new Date(value);
+      } else {
+        data[field] = value; //更新缓存中的值
+      }
       
       layui.event.call(this, MOD_NAME, 'edit('+ filter +')', commonMember.call(this, {
         value: value
