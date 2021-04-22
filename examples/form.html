@@ -12,11 +12,31 @@
 
   <link rel="stylesheet" href="../src/css/layui.css">
 
-<style>
-body{padding: 10px;}
-</style>
+  <style>
+  body{padding: 10px;}
+  </style>
 </head>
 <body>
+
+
+<form class="layui-form" method="get">
+  <div class="layui-form-item">
+    <div class="layui-input-inline">
+      <input type="text" name="arr[]" required placeholder="请输入" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-input-inline">
+      <input type="text" name="arr[]" required placeholder="请输入" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-input-inline">
+      <input type="text" name="arr[title]" required placeholder="请输入" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <button class="layui-btn" lay-submit lay-filter="top">立即提交</button>
+  </div>
+</form>
+
+<hr>
 
 <form class="layui-form layui-form-pane1" action="" lay-filter="first">
   <div class="layui-form-item">
@@ -64,7 +84,7 @@ body{padding: 10px;}
     <div class="layui-inline">
       <label class="layui-form-label">行内表单</label>
       <div class="layui-input-block">
-        <select name="quiz" lay-verify="required" lay-verType="tips">
+        <select name="quiz" lay-verify="required" lay-verType="tips"  lay-filter="quiz111">
           <option value="">请选择问题</option>
           <option value="0">你工作的第一个城市</option>
           <option value="1" disabled>你的工号</option>
@@ -214,6 +234,14 @@ layui.use(['form', 'layedit', 'laydate'], function(){
     ]
   });
   
+  form.on('submit(top)', function(data){
+    console.log(data);
+    return false;
+  });
+  
+  
+  
+  
   //日期
   laydate.render({
     elem: '#date'
@@ -225,7 +253,7 @@ layui.use(['form', 'layedit', 'laydate'], function(){
     ,'phone': 11111111111
     ,'email': 'xu@sentsin.com'
     ,'password': 123123
-    //,'quiz': 2
+    ,'quiz': 2
     ,'interest': 3
     ,'like[write]': true
     //,'open': false
@@ -233,11 +261,10 @@ layui.use(['form', 'layedit', 'laydate'], function(){
     ,'desc': 'form 是我们非常看重的一块'
     ,xxxxxxxxx: 123
   });
-  console.log(thisValue);
 
   
   //事件监听
-  form.on('select', function(data){
+  form.on('select(quiz111)', function(data){
     console.log('select: ', this, data);
   });
   

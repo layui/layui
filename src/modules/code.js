@@ -56,5 +56,5 @@ layui.define('jquery', function(exports){
     });
     
   });
-}).addcss('modules/code.css?v=1', 'skincodecss');
+}).addcss('modules/code.css?v=2', 'skincodecss');
 

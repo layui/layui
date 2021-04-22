@@ -39,14 +39,18 @@ var isLayui = window.layui && layui.define, $, win, ready = {
   
   //载入 CSS 依赖
   link: function(href, fn, cssname){
-    
     //未设置路径，则不主动加载css
     if(!layer.path) return;
     
-    var head = document.getElementsByTagName("head")[0], link = document.createElement('link');
+    var head = document.getElementsByTagName("head")[0]
+    ,link = document.createElement('link');
+    
     if(typeof fn === 'string') cssname = fn;
+    
     var app = (cssname || href).replace(/\.|\//g, '');
-    var id = 'layuicss-'+ app, timeout = 0;
+    var id = 'layuicss-'+ app
+    ,STAUTS_NAME = 'creating'
+    ,timeout = 0;
     
     link.rel = 'stylesheet';
     link.href = layer.path + href;
@@ -55,22 +59,41 @@ var isLayui = window.layui && layui.define, $, win, ready = {
     if(!document.getElementById(id)){
       head.appendChild(link);
     }
-    
+
     if(typeof fn !== 'function') return;
-    
-    //轮询css是否加载完毕
-    (function poll() {
-      if(++timeout > 8 * 1000 / 100){
-        return window.console && console.error('layer.css: Invalid');
+
+    //轮询 css 是否加载完毕
+    (function poll(status) {
+      var delay = 100
+      ,getLinkElem = document.getElementById(id); //获取动态插入的 link 元素
+      
+      //如果轮询超过指定秒数，则视为请求文件失败或 css 文件不符合规范
+      if(++timeout > 10 * 1000 / delay){
+        return window.console && console.error(app +'.css: Invalid');
       };
-      parseInt(ready.getStyle(document.getElementById(id), 'width')) === 1989 ? fn() : setTimeout(poll, 100);
+      
+      //css 加载就绪
+      if(parseInt(ready.getStyle(getLinkElem, 'width')) === 1989){
+        //如果参数来自于初始轮询（即未加载就绪时的），则移除 link 标签状态
+        if(status === STAUTS_NAME) getLinkElem.removeAttribute('lay-status');
+        //如果 link 标签的状态仍为「创建中」，则继续进入轮询，直到状态改变，则执行回调
+        getLinkElem.getAttribute('lay-status') === STAUTS_NAME ? setTimeout(poll, delay) : fn();
+      } else {
+        getLinkElem.setAttribute('lay-status', STAUTS_NAME);
+        setTimeout(function(){
+          poll(STAUTS_NAME);
+        }, delay);
+      }
+
+      //parseInt(ready.getStyle(document.getElementById(id), 'width')) === 1989 ? fn() : setTimeout(poll, 1000);
     }());
+
   }
 };
 
 //默认内置方法。
 var layer = {
-  v: '3.3.0',
+  v: '3.4.0',
   ie: function(){ //ie版本
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
@@ -346,7 +369,7 @@ Class.pt.creat = function(){
   }
   
   config.time <= 0 || setTimeout(function(){
-    layer.close(that.index)
+    layer.close(that.index);
   }, config.time);
   that.move().callback();
   
@@ -904,7 +927,7 @@ layer.title = function(name, index){
 };
 
 //关闭layer总方法
-layer.close = function(index){
+layer.close = function(index, callback){
   layer.ready(function(){
     var layero = $('#'+ doms[0] + index), type = layero.attr('type'), closeAnim = 'layer-anim-close';
     if(!layero[0]) return;
@@ -931,6 +954,7 @@ layer.close = function(index){
       }
       typeof ready.end[index] === 'function' && ready.end[index]();
       delete ready.end[index];
+      typeof callback === 'function' && callback();
     };
     
     if(layero.data('isOutAnim')){
@@ -956,20 +980,26 @@ layer.close = function(index){
 };
 
 //关闭所有层
-layer.closeAll = function(type){
+layer.closeAll = function(type, callback){
+  if(typeof type === 'function'){
+    callback = type;
+    type = null;
+  };
   layer.ready(function(){
-    $.each($('.'+doms[0]), function(){
+    var domsElem = $('.'+doms[0]);
+    $.each(domsElem, function(_index){
       var othis = $(this);
       var is = type ? (othis.attr('type') === type) : 1;
-      is && layer.close(othis.attr('times'));
+      is && layer.close(othis.attr('times'), _index === domsElem.length - 1 ? callback : null);
       is = null;
     });
+    if(domsElem.length === 0) typeof callback === 'function' && callback();
   });
 };
 
 /** 
 
-  拓展模块，layui开始合并在一起
+  拓展模块，layui 开始合并在一起
 
  */
 
@@ -1097,7 +1127,7 @@ layer.photos = function(options, loop, key){
           src: othis.attr('layer-src') || othis.attr('src'),
           thumb: othis.attr('src')
         });
-      })
+      });
     };
     
     pushData();
@@ -1105,6 +1135,7 @@ layer.photos = function(options, loop, key){
     if (data.length === 0) return;
     
     loop || parent.on('click', options.img, function(){
+      pushData();
       var othis = $(this), index = othis.attr('layer-index'); 
       layer.photos($.extend(options, {
         photos: {
@@ -1114,8 +1145,7 @@ layer.photos = function(options, loop, key){
         },
         full: options.full
       }), true);
-      pushData();
-    })
+    });
     
     //不直接弹出
     if(!loop) return;
@@ -1171,20 +1201,22 @@ layer.photos = function(options, loop, key){
   
   //一些动作
   dict.event = function(){
+    /*
     dict.bigimg.hover(function(){
       dict.imgsee.show();
     }, function(){
       dict.imgsee.hide();
     });
+    */
     
     dict.bigimg.find('.layui-layer-imgprev').on('click', function(event){
       event.preventDefault();
-      dict.imgprev();
+      dict.imgprev(true);
     });  
     
     dict.bigimg.find('.layui-layer-imgnext').on('click', function(event){     
       event.preventDefault();
-      dict.imgnext();
+      dict.imgnext(true);
     });
     
     $(document).on('keyup', dict.keyup);
@@ -1214,6 +1246,11 @@ layer.photos = function(options, loop, key){
 
   loadImage(data[start].src, function(img){
     layer.close(dict.loadi);
+    
+    //切换图片时不出现动画
+    if(key) options.anim = -1;
+    
+    //弹出图片层
     dict.index = layer.open($.extend({
       type: 1,
       id: 'layui-layer-photos',
@@ -1243,19 +1280,24 @@ layer.photos = function(options, loop, key){
       moveType: 1,
       scrollbar: false,
       moveOut: true,
-      //anim: Math.random()*5|0,
+      anim: 5,
       isOutAnim: false,
       skin: 'layui-layer-photos' + skin('photos'),
       content: '<div class="layui-layer-phimg">'
         +'<img src="'+ data[start].src +'" alt="'+ (data[start].alt||'') +'" layer-pid="'+ data[start].pid +'">'
-        +'<div class="layui-layer-imgsee">'
-          +(data.length > 1 ? '<span class="layui-layer-imguide"><a href="javascript:;" class="layui-layer-iconext layui-layer-imgprev"></a><a href="javascript:;" class="layui-layer-iconext layui-layer-imgnext"></a></span>' : '')
-          +'<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><a href="javascript:;">'+ (data[start].alt||'') +'</a><em>'+ dict.imgIndex +'/'+ data.length +'</em></span></div>'
-        +'</div>'
+        +function(){
+          if(data.length > 1){
+            return '<div class="layui-layer-imgsee">'
+              +'<span class="layui-layer-imguide"><a href="javascript:;" class="layui-layer-iconext layui-layer-imgprev"></a><a href="javascript:;" class="layui-layer-iconext layui-layer-imgnext"></a></span>'
+              +'<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><a href="javascript:;">'+ (data[start].alt || '') +'</a><em>'+ dict.imgIndex +' / '+ data.length +'</em></span></div>'
+            +'</div>'
+          }
+          return '';
+        }()
       +'</div>',
       success: function(layero, index){
         dict.bigimg = layero.find('.layui-layer-phimg');
-        dict.imgsee = layero.find('.layui-layer-imguide,.layui-layer-imgbar');
+        dict.imgsee = layero.find('.layui-layer-imgbar');
         dict.event(layero);
         options.tab && options.tab(data[start], layero);
         typeof success === 'function' && success(layero);
@@ -1290,7 +1332,7 @@ ready.run = function(_$){
 //加载方式
 window.layui && layui.define ? (
   layer.ready()
-  ,layui.define('jquery', function(exports){ //layui加载
+  ,layui.define('jquery', function(exports){ //layui 加载
     layer.path = layui.cache.dir;
     ready.run(layui.$);
 
@@ -1299,13 +1341,16 @@ window.layui && layui.define ? (
     exports('layer', layer);
   })
 ) : (
-  (typeof define === 'function' && define.amd) ? define(['jquery'], function(){ //requirejs加载
+  (typeof define === 'function' && define.amd) ? define(['jquery'], function(){ //requirejs 加载
     ready.run(window.jQuery);
     return layer;
-  }) : function(){ //普通script标签加载
-    ready.run(window.jQuery);
+  }) : function(){ //普通 script 标签加载
     layer.ready();
+    ready.run(window.jQuery);
   }()
 );
 
 }(window);
+
+
+

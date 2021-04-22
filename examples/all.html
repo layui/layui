@@ -28,8 +28,14 @@ resize: none;">
 
 
 <div id="demo1"></div>
-<button class="layui-btn demo" test-active="test-form">测试弹出式 Form</button>
-<button class="layui-btn demo" test-active="test-use">测试是否重复加载内置组件</button>
+
+<div class="layui-btn-container">
+  <button class="layui-btn demo" test-active="test-form">测试弹出式 Form</button>
+  <button class="layui-btn demo" test-active="test-use">测试是否重复加载内置组件</button>
+</div>
+<div class="layui-inline">
+  <input class="layui-input" id="date1" placeholder="日期">
+</div>
 
 <div class="layui-tab" lay-filter="tabDemo">
   <ul class="layui-tab-title">
@@ -72,9 +78,37 @@ layui.use(function(){
   ,laypage = layui.laypage
   ,element = layui.element
   ,transfer = layui.transfer
-  ,util = layui.util;
+  ,util = layui.util
+  ,laydate = layui.laydate;
   
   layer.msg('hello');
+  layer.closeAll();
+  
+  //自动测试
+  (function(run){
+    if(!run) return;
+
+    var timer = setInterval(function(){
+      location.reload();
+    }, 1000);
+    
+    $.ajax({
+      url: './all.html'
+      ,beforeSend: function(){
+        layer.load();
+      }
+      ,success: function(){
+        layer.closeAll('loading', function(){
+          setTimeout(function(){
+            if($('.layui-layer-loading').length){
+              console.error('layer close 异常');
+              clearInterval(timer);
+            }
+          }, 200);
+        });
+      }
+    });
+  })(0);
   
   laypage.render({
     elem: 'demo1'
@@ -82,6 +116,10 @@ layui.use(function(){
   });
   
   console.log(lay('#footer').html());
+  
+  laydate.render({
+    elem: '#date1'
+  })
   
   //测试加载非内置模块
   /*

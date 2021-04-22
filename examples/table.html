@@ -3,15 +3,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-<title>表格操作 - layui</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>表格操作 - layui</title>
 
-<link rel="stylesheet" href="../src/css/layui.css">
+  <link rel="stylesheet" href="../src/css/layui.css">
 
-<style>
-body{padding: 20px; /*overflow-y: scroll;*/}
-</style>
+  <style>
+  body{padding: 20px; /*overflow-y: scroll;*/}
+  </style>
 </head>
 <body>
 
@@ -23,10 +23,27 @@ body{padding: 20px; /*overflow-y: scroll;*/}
     <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
     <button class="layui-btn layui-btn-sm" lay-event="reload">重载（保留初始参数）</button>
     <button class="layui-btn layui-btn-sm" lay-event="reload2">重载（不保留初始参数）</button>
+    <button class="layui-btn layui-btn-sm" id="dropdown">
+      更多菜单 
+      <i class="layui-icon layui-icon-down layui-font-12"></i>
+  </button>
   </div>
 </script>
 
 <table id="test" lay-filter="test"></table>
+
+<div id="appendtest"></div>
+<script type="text/html" id="TPL_appendtest">
+  <table class="layui-table" lay-data="{url:'json/table/demo2.json', page: true, limit: 6}" lay-filter="appendtest">
+    <thead>
+      <tr>
+        <th lay-data="{checkbox:true, fixed:'left'}" rowspan="2"></th>
+        <th lay-data="{field:'username', width:80}" rowspan="2">联系人</th>
+        <th lay-data="{field:'amount', width:120}" rowspan="2">金额</th>
+      </tr>
+    </thead>
+  </table>
+</script>
 
 <script type="text/html" id="barDemo">
   <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
@@ -60,7 +77,7 @@ body{padding: 20px; /*overflow-y: scroll;*/}
 <table id="test2" lay-filter="test2"></table>
 
 <div style="display: none1;">
-  <table class="layui-table1" lay-data="{width:800, height: 300, url:'json/table/demo2.json', page: true, limit: 6}">
+  <table class="layui-table" lay-data="{width:800, height: 300, url:'json/table/demo2.json', page: true, limit: 6}">
     <thead>
       <tr>
         <th lay-data="{checkbox:true, fixed:'left'}" rowspan="2"></th>
@@ -77,7 +94,7 @@ body{padding: 20px; /*overflow-y: scroll;*/}
     </thead>
   </table>
 
-  <table class="layui-table" lay-data="{url:'json/table/demo2.json', toolbar: '#toolbarDemo', page: true, limit: 6}">
+  <table class="layui-table" lay-data="{url:'json/table/demo2.json', page: true, limit: 6}">
     <thead>
       <tr>
         <th lay-data="{field:'username'}" rowspan="3">联系人</th>
@@ -181,8 +198,11 @@ body{padding: 20px; /*overflow-y: scroll;*/}
 
 <script src="../src/layui.js" src1="//www.layuicdn.com/layui-v2.0.1/layui.js" charset="utf-8"></script>
 <script>
-layui.use('table', function(){
-  var table = layui.table;
+layui.use(['table', 'dropdown'], function(){
+  var table = layui.table
+  ,$ = layui.$
+  ,laytpl = layui.laytpl
+  ,dropdown = layui.dropdown;
   
   //全局设定某参数
   table.set({
@@ -194,6 +214,9 @@ layui.use('table', function(){
     //,url: 'list'
     //,height: 300
   });
+  
+  $('#appendtest').append($('#TPL_appendtest').html())
+  table.init('appendtest');
   
   //渲染
   window.ins1 = table.render({
@@ -222,6 +245,7 @@ layui.use('table', function(){
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
       ,{field:'email', title:'邮箱', hide: 0, width:150, edit: 'text', templet: function(d){
+        console.log(d);
         return '<em>'+ d.email +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
@@ -245,6 +269,21 @@ layui.use('table', function(){
       ,token: '初始 token'
       ,key: 'experience'
       ,order: 'asc'
+    }
+    
+    ,done: function(){
+      //下拉菜单
+      dropdown.render({
+        elem: '#dropdown' //可绑定在任意元素中，此处以上述按钮为例
+        ,data: [{
+          id: 0,
+          title: '刷新'
+        }]
+        //菜单被点击的事件
+        ,click: function(obj){
+          table.reload('test');
+        }
+      });
     }
     
     ,error: function(res, msg){

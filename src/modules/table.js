@@ -777,7 +777,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       var thisCheckedRowIndex;
       if(!sort && that.sortKey){
         return that.sort(that.sortKey.field, that.sortKey.sort, true);
-      }      
+      }
       layui.each(data, function(i1, item1){
         var tds = [], tds_fixed = [], tds_fixed_r = []
         ,numbers = i1 + options.limit*(curr - 1) + 1; //序号
@@ -795,7 +795,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           
           if(content === undefined || content === null) content = '';
           if(item3.colGroup) return;
-          
+
           //td内容
           var td = ['<td data-field="'+ field +'" data-key="'+ key +'" '+ function(){ //追加各种属性
             var attr = [];
@@ -967,17 +967,16 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       var content = function(){
         var text = item3.totalRowText || ''
         ,thisTotalNum = parseFloat(totalNums[field]).toFixed(2)
-        ,tplData = {};
+        ,tplData = {}
+        ,getContent;
         
         tplData[field] = thisTotalNum;
-        thisTotalNum = parseTempData(item3, thisTotalNum, tplData);
+        
+        //获取自动计算的合并内容
+        getContent = item3.totalRow ? (parseTempData(item3, thisTotalNum, tplData) || text) : text;
         
         //如果直接传入了合计行数据，则不输出自动计算的结果
-        if(totalRowData){
-          return totalRowData[item3.field] || text;
-        } else {
-          return item3.totalRow ? (thisTotalNum || text) : text;
-        }
+        return totalRowData ? (totalRowData[item3.field] || getContent) : getContent;
       }()
       ,td = ['<td data-field="'+ field +'" data-key="'+ options.index + '-'+ item3.key +'" '+ function(){
         var attr = [];
@@ -2017,7 +2016,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   };
   
   //自动完成渲染
-  table.init();
+  $(function(){
+    table.init();
+  });
   
   exports(MOD_NAME, table);
 });

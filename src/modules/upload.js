@@ -234,7 +234,7 @@ layui.define('layer' , function(exports){
             xhr.upload.addEventListener("progress", function (e) {
               if(e.lengthComputable) {
                 var percent = Math.floor((e.loaded/e.total)* 100); //百分比
-                options.progress(percent, options.item[0], e);
+                options.progress(percent, (options.item ? options.item[0] : options.elem[0]) , e);
               }
             });
             return xhr;

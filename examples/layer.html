@@ -11,6 +11,9 @@
 
 <style>
 body{padding: 100px;}
+
+#photos li{float: left; margin: 0 1px 1px;}
+#photos img{max-height: 38px;}
 </style>
 </head>
 <body>
@@ -31,20 +34,75 @@ body{padding: 100px;}
  123
 </div>
 
+<hr><br>
+
+<div class="layui-list">
+  <ul class="layui-row" id="photos">
+    <li><img src="https://cdn.layui.com/upload/2017_3/168_1488985841996_23077.png"></li>
+    <li><img src="https://res.layui.com/static/images/fly/fly.jpg"></li>
+  </ul>
+</div>
+
 
 <script src="../src/layui.js"></script>
+
+<!-- layer 独立版调试 -->
+<script src1="//cdn.staticfile.org/jquery/1.12.3/jquery.min.js"></script>
+<script src1="../release/layer/src/layer.js"></script>
+
 <script>
-layui.use('layer', function(){
-  var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+var runTest = function(run, $, layer){
+  if(!run) return;
+
+  var timer = setInterval(function(){
+    location.reload();
+  }, 1000);
   
+  $.ajax({
+    url: './all.html'
+    ,beforeSend: function(){
+      layer.load();
+    }
+    ,success: function(){
+      layer.closeAll('loading', function(){
+        setTimeout(function(){
+          if($('.layui-layer-loading').length){
+            console.error('layer close 异常');
+            clearInterval(timer);
+          }
+        }, 200);
+      });
+    }
+  });
+};
+window.jQuery && runTest(1, window.jQuery, window.layer);
+
+layui.use('layer', function(){
+  var $ = layui.jquery, layer = layui.layer;
+  //return
   
   var index = layer.msg('hello');
   //layer.close(index);
+  //runTest(1, $, layer);
+  
   
   //触发事件
   var active = {
     test: function(){
-      layer.alert('你好么，体验者');
+      layer.alert('你好么，体验者。<br>在标题栏显示自动关闭倒计秒数', {
+        time: 5*1000
+        ,success: function(layero, index){
+          var timeNum = this.time/1000, setText = function(start){
+            layer.title((start ? timeNum : --timeNum) + ' 秒后关闭', index);
+          };
+          setText(!0);
+          this.timer = setInterval(setText, 1000);
+          if(timeNum <= 0) clearInterval(this.timer);
+        }
+        ,end: function(){
+          clearInterval(this.timer);
+        }
+      });
     }
     ,test2: function(){
       layer.confirm('您是如何看待前端开发？', {
@@ -107,6 +165,17 @@ layui.use('layer', function(){
     }
     
   };
+  
+  //相册层
+  layer.photos({
+    photos: '#photos'
+  });
+  //动态追加
+  $('#photos').append('<li><img src="https://res.layui.com/static/images/sentsin/night.gif"></li>');
+  
+  //{"status":1,"msg":"","title":"JSON请求的相册","id":8,"start":0,"data":[{"alt":"layer","pid":109,"src":"//cdn.layui.com/upload/2017_3/168_1488985841996_23077.png","thumb":""},{"alt":"说好的，一起 Fly","pid":110,"src":"//res.layui.com/static/images/fly/fly.jpg","thumb":""},{"alt":"星空如此深邃","pid":113,"src":"//res.layui.com/static/images/sentsin/night.gif","thumb":""}]}
+  
+  
   
   $('.demo').on('click', function(){
     var type = $(this).data('type');
