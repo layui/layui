@@ -1,8 +1,7 @@
-/**
 
- @Name：table 表格操作组件
- @License：MIT
-    
+/*!
+ * layui.table 
+ * 数据表格组件
  */
 
 layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
@@ -145,7 +144,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   ,'</table>'].join('')
   
   //主模板
-  ,TPL_MAIN = ['<div class="layui-form layui-border-box {{d.VIEW_CLASS}}" lay-filter="LAY-table-{{d.index}}" lay-id="{{ d.data.id }}" style="{{# if(d.data.width){ }}width:{{d.data.width}}px;{{# } }} {{# if(d.data.height){ }}height:{{d.data.height}}px;{{# } }}">'
+  ,TPL_MAIN = ['<div class="layui-form layui-border-box {{d.VIEW_CLASS}}{{# if(d.data.className){ }} {{ d.data.className }}{{# } }}" lay-filter="LAY-table-{{d.index}}" lay-id="{{ d.data.id }}" style="{{# if(d.data.width){ }}width:{{d.data.width}}px;{{# } }} {{# if(d.data.height){ }}height:{{d.data.height}}px;{{# } }}">'
 
     ,'{{# if(d.data.toolbar){ }}'
     ,'<div class="layui-table-tool">'
@@ -228,14 +227,14 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   ,Class = function(options){
     var that = this;
     that.index = ++table.index;
-    that.config = $.extend({}, that.config, table.config, options);;
+    that.config = $.extend({}, that.config, table.config, options);
     that.render();
   };
   
   //初始默认配置
   Class.prototype.config = {
     limit: 10 //每页显示的数量
-    ,loading: true //请求数据时，是否显示loading
+    ,loading: true //请求数据时，是否显示 loading
     ,cellMinWidth: 60 //所有单元格默认最小宽度
     ,defaultToolbar: ['filter', 'exports', 'print'] //工具栏右侧图标
     ,autoSort: true //是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）

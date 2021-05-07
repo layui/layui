@@ -1,8 +1,7 @@
-/**
 
- @Name：form 表单组件
- @License：MIT
-    
+/*!
+ * form 表单组件
+ * MIT Licensed
  */
  
 layui.define('layer', function(exports){
@@ -32,7 +31,7 @@ layui.define('layer', function(exports){
           ,'邮箱格式不正确'
         ]
         ,url: [
-          /(^#)|(^http(s*):\/\/[^\s]+\.[^\s]+)/
+          /^(#|(http(s?)):\/\/|\/\/)[^\s]+\.[^\s]+$/
           ,'链接格式不正确'
         ]
         ,number: function(value){
@@ -593,7 +592,7 @@ layui.define('layer', function(exports){
             var title = radio.title || '';
             if(typeof othis.next().attr('lay-radio') === 'string'){
               title = othis.next().html();
-              othis.next().remove();
+              //othis.next().remove();
             }
             return title
           }() +'</div>'

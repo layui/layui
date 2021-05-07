@@ -1,4 +1,5 @@
-/** lay 基础 DOM 操作 */
+
+/*! lay 基础 DOM 操作 */
 
 ;!function(){
   "use strict";
@@ -318,7 +319,7 @@
     ,isObject = typeof selector === 'object';
     
     this.each(function(i, item){
-      var nativeDOM = isObject ? [selector] : item.querySelectorAll(selector || null);
+      var nativeDOM = isObject ? item.contains(selector) : item.querySelectorAll(selector || null);
       for(; index < nativeDOM.length; index++){
         arr.push(nativeDOM[index]);
       }
@@ -428,6 +429,7 @@
   
   //设置或获取值
   LAY.prototype.val = function(value){
+    var that = this;
     return value === undefined ? function(){
       if(that.length > 0) return that[0].value;
     }() : this.each(function(index, item){

@@ -1,6 +1,6 @@
 
-/**
- layui Build
+/*!
+ * layui Build
 */
 
 var pkg = require('./package.json');
@@ -27,7 +27,7 @@ var argv = require('minimist')(process.argv.slice(2), {
 
 //注释
 ,note = [
-  '/** <%= pkg.realname %> v<%= pkg.version %> | Released under the <%= pkg.license %> license */\n <%= js %>'
+  '/*! <%= pkg.realname %> v<%= pkg.version %> | Released under the <%= pkg.license %> license */\n <%= js %>'
   ,{pkg: pkg, js: ';'}
 ]
 
@@ -54,7 +54,11 @@ var argv = require('minimist')(process.argv.slice(2), {
     ]
     ,dir = destDir(ver);
     
-    return gulp.src(src).pipe(uglify())
+    return gulp.src(src).pipe(uglify({
+      output: {
+        ascii_only: true //escape Unicode characters in strings and regexps
+      }
+    }))
       .pipe(concat('layui.js', {newLine: ''}))
       .pipe(header.apply(null, note))
     .pipe(gulp.dest('./'+ dir));
@@ -150,7 +154,7 @@ gulp.task('laydate', function(){
   
   //注释
   ,notes = [
-    '/** \n @Name：<%= title %> \n @License: <%= license %> \n */ \n\n'
+    '/*! \n * <%= title %> \n * <%= license %> Licensed \n */ \n\n'
     ,{title: 'layDate 日期与时间组件', license: 'MIT'}
   ];
   

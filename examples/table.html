@@ -207,7 +207,8 @@ layui.use(['table', 'dropdown'], function(){
   //全局设定某参数
   table.set({
     where: {
-      token: '默认 token 参数'
+      token: '全局的 token'
+      ,access: '全局的 access'
     }
     //,defaultToolbar: ['filter']
     ,limit: 30
@@ -264,12 +265,12 @@ layui.use(['table', 'dropdown'], function(){
     }
     
     ,headers: {headers_token: 'sasasas'}
-    ,where: {
-      test: '初始 test 参数'
-      ,token: '初始 token'
+    ,where: $.extend({}, table.config.where, {
+      test: '渲染的 test'
+      ,token: '渲染的 token'
       ,key: 'experience'
       ,order: 'asc'
-    }
+    })
     
     ,done: function(){
       //下拉菜单
@@ -325,7 +326,8 @@ layui.use(['table', 'dropdown'], function(){
   
   //工具栏事件
   table.on('toolbar(test)', function(obj){
-    var checkStatus = table.checkStatus(obj.config.id);
+    var config = obj.config;
+    var checkStatus = table.checkStatus(config.id);
     switch(obj.event){
       case 'add':
         layer.msg('添加');
@@ -353,7 +355,7 @@ layui.use(['table', 'dropdown'], function(){
         layer.msg(checkStatus.isAll ? '全选': '未全选')
       break;
       case 'LAYTABLE_TIPS':
-        layer.alert('Table for layui-v'+ layui.v);
+        layer.alert(config.title || 'Table for layui-v'+ layui.v);
       break;
       case 'reload':
         //深度重载
@@ -361,7 +363,7 @@ layui.use(['table', 'dropdown'], function(){
           
           where: {
             abc: 123
-            ,test: '新的 test1'
+            ,test: '重载的 test'
           }
           ,page: {curr: 5, limit: 20}
           ,cols: ins1.config.cols

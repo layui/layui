@@ -1,8 +1,7 @@
-﻿/**
-
- @Name：layer - Web 弹出层组件
- @License：MIT
-    
+﻿
+/*!
+ * layer - 通用 Web 弹出层组件
+ * MIT Licensed 
  */
 
 ;!function(window, undefined){
@@ -21,8 +20,9 @@ var isLayui = window.layui && layui.define, $, win, ready = {
         }
       }
       return src || js[last].src;
-    }();
-    return jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
+    }()
+    ,GLOBAL = window.LAYUI_GLOBAL || {};
+    return GLOBAL.layer_dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
   }(),
 
   config: {}, end: {}, minIndex: 0, minLeft: [],
@@ -93,7 +93,7 @@ var isLayui = window.layui && layui.define, $, win, ready = {
 
 //默认内置方法。
 var layer = {
-  v: '3.4.0',
+  v: '3.5.0',
   ie: function(){ //ie版本
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
@@ -108,6 +108,7 @@ var layer = {
     layer.path = ready.config.path || layer.path;
     typeof options.extend === 'string' && (options.extend = [options.extend]);
     
+    //如果设置了路径，则加载样式
     if(ready.config.path) layer.ready();
     
     if(!options.extend) return this;
@@ -203,9 +204,7 @@ var layer = {
 
 var Class = function(setings){  
   var that = this, creat = function(){
-    layer.ready(function(){
-      that.creat();
-    });
+    that.creat();
   };
   that.index = ++layer.index;
   that.config.maxWidth = $(win).width() - 15*2; //初始最大宽度：当前屏幕宽，左右留 15px 边距
@@ -221,6 +220,9 @@ Class.pt = Class.prototype;
 var doms = ['layui-layer', '.layui-layer-title', '.layui-layer-main', '.layui-layer-dialog', 'layui-layer-iframe', 'layui-layer-content', 'layui-layer-btn', 'layui-layer-close'];
 doms.anim = ['layer-anim-00', 'layer-anim-01', 'layer-anim-02', 'layer-anim-03', 'layer-anim-04', 'layer-anim-05', 'layer-anim-06'];
 
+doms.SHADE = 'layui-layer-shade';
+doms.MOVE = 'layui-layer-move';
+
 //默认配置
 Class.pt.config = {
   type: 0,
@@ -235,7 +237,8 @@ Class.pt.config = {
   zIndex: 19891014, 
   maxWidth: 360,
   anim: 0,
-  isOutAnim: true,
+  isOutAnim: true, //退出动画
+  minStack: true, //最小化堆叠
   icon: -1,
   moveType: 1,
   resize: true,
@@ -255,10 +258,10 @@ Class.pt.vessel = function(conType, callback){
   config.zIndex = zIndex;
   callback([
     //遮罩
-    config.shade ? ('<div class="layui-layer-shade" id="layui-layer-shade'+ times +'" times="'+ times +'" style="'+ ('z-index:'+ (zIndex-1) +'; ') +'"></div>') : '',
+    config.shade ? ('<div class="'+ doms.SHADE +'" id="'+ doms.SHADE + times +'" times="'+ times +'" style="'+ ('z-index:'+ (zIndex-1) +'; ') +'"></div>') : '',
     
     //主体
-    '<div class="'+ doms[0] + (' layui-layer-'+ready.type[config.type]) + (((config.type == 0 || config.type == 2) && !config.shade) ? ' layui-layer-border' : '') + ' ' + (config.skin||'') +'" id="'+ doms[0] + times +'" type="'+ ready.type[config.type] +'" times="'+ times +'" showtime="'+ config.time +'" conType="'+ (conType ? 'object' : 'string') +'" style="z-index: '+ zIndex +'; width:'+ config.area[0] + ';height:' + config.area[1] + (config.fixed ? '' : ';position:absolute;') +'">'
+    '<div class="'+ doms[0] + (' layui-layer-'+ready.type[config.type]) + (((config.type == 0 || config.type == 2) && !config.shade) ? ' layui-layer-border' : '') + ' ' + (config.skin||'') +'" id="'+ doms[0] + times +'" type="'+ ready.type[config.type] +'" times="'+ times +'" showtime="'+ config.time +'" conType="'+ (conType ? 'object' : 'string') +'" style="z-index: '+ zIndex +'; width:'+ config.area[0] + ';height:' + config.area[1] + ';position:'+ (config.fixed ? 'fixed;' : 'absolute;') +'">'
       + (conType && config.type != 2 ? '' : titleHTML)
       + '<div id="'+ (config.id||'') +'" class="layui-layer-content'+ ((config.type == 0 && config.icon !== -1) ? ' layui-layer-padding' :'') + (config.type == 3 ? ' layui-layer-loading'+config.icon : '') +'">'
         + (config.type == 0 && config.icon !== -1 ? '<i class="layui-layer-ico layui-layer-ico'+ config.icon +'"></i>' : '')
@@ -279,7 +282,7 @@ Class.pt.vessel = function(conType, callback){
       }() : '')
       + (config.resize ? '<span class="layui-layer-resize"></span>' : '')
     + '</div>'
-  ], titleHTML, $('<div class="layui-layer-move"></div>'));
+  ], titleHTML, $('<div class="'+ doms.MOVE +'" id="'+ doms.MOVE +'"></div>'));
   return that;
 };
 
@@ -345,21 +348,36 @@ Class.pt.creat = function(){
         }
       }();
     }() : body.append(html[1]);
-    $('.layui-layer-move')[0] || body.append(ready.moveElem = moveElem);
+    $('#'+ doms.MOVE)[0] || body.append(ready.moveElem = moveElem);
+    
     that.layero = $('#'+ doms[0] + times);
+    that.shadeo = $('#'+ doms.SHADE + times);
+    
     config.scrollbar || doms.html.css('overflow', 'hidden').attr('layer-full', times);
   }).auto(times);
   
   //遮罩
-  $('#layui-layer-shade'+ that.index).css({
+  that.shadeo.css({
     'background-color': config.shade[1] || '#000'
-    ,'opacity': config.shade[0]||config.shade
+    ,'opacity': config.shade[0] || config.shade
   });
 
   config.type == 2 && layer.ie == 6 && that.layero.find('iframe').attr('src', content[0]);
 
   //坐标自适应浏览器窗口尺寸
-  config.type == 4 ? that.tips() : that.offset();
+  config.type == 4 ? that.tips() : function(){
+    that.offset()
+    //首次弹出时，若 css 尚未加载，则等待 css 加载完毕后，重新设定尺寸
+    parseInt(ready.getStyle(document.getElementById(doms.MOVE), 'z-index')) ||  function(){
+      that.layero.css('visibility', 'hidden');
+      layer.ready(function(){
+        that.offset();
+        that.layero.css('visibility', 'visible');
+      });
+    }();
+  }();
+  
+  //如果是固定定位
   if(config.fixed){
     win.on('resize', function(){
       that.offset();
@@ -689,26 +707,26 @@ Class.pt.callback = function(){
   
   //点遮罩关闭
   if(config.shadeClose){
-    $('#layui-layer-shade'+ that.index).on('click', function(){
+    that.shadeo.on('click', function(){
       layer.close(that.index);
     });
   } 
   
   //最小化
   layero.find('.layui-layer-min').on('click', function(){
-    var min = config.min && config.min(layero);
-    min === false || layer.min(that.index, config); 
+    var min = config.min && config.min(layero, that.index);
+    min === false || layer.min(that.index, config);
   });
   
   //全屏/还原
   layero.find('.layui-layer-max').on('click', function(){
     if($(this).hasClass('layui-layer-maxmin')){
       layer.restore(that.index);
-      config.restore && config.restore(layero);
+      config.restore && config.restore(layero, that.index);
     } else {
       layer.full(that.index, config);
       setTimeout(function(){
-        config.full && config.full(layero);
+        config.full && config.full(layero, that.index);
       }, 100);
     }
   });
@@ -755,6 +773,7 @@ Class.pt.openLayer = function(){
   };
 };
 
+//记录宽高坐标，用于还原
 ready.record = function(layero){
   var area = [
     layero.width(),
@@ -849,11 +868,20 @@ layer.style = function(index, options, limit){
 
 //最小化
 layer.min = function(index, options){
+  options = options || {};
   var layero = $('#'+ doms[0] + index)
+  ,shadeo = $('#'+ doms.SHADE + index)
   ,titHeight = layero.find(doms[1]).outerHeight() || 0
   ,left = layero.attr('minLeft') || (181*ready.minIndex)+'px'
-  ,position = layero.css('position');
+  ,position = layero.css('position')
+  ,settings = {
+    width: 180
+    ,height: titHeight
+    ,position: 'fixed'
+    ,overflow: 'hidden'
+  };
   
+  //记录宽高坐标，用于还原
   ready.record(layero);
   
   if(ready.minLeft[0]){
@@ -861,31 +889,33 @@ layer.min = function(index, options){
     ready.minLeft.shift();
   }
   
-  layero.attr('position', position);
+  //是否堆叠在左下角
+  if(options.minStack){
+    settings.left = left;
+    settings.top = win.height() - titHeight;
+    layero.attr('minLeft') || ready.minIndex++; //初次执行，最小化操作索引自增
+    layero.attr('minLeft', left);
+  }
   
-  layer.style(index, {
-    width: 180
-    ,height: titHeight
-    ,left: left
-    ,top: win.height() - titHeight
-    ,position: 'fixed'
-    ,overflow: 'hidden'
-  }, true);
+  layero.attr('position', position);
+  layer.style(index, settings, true);
 
   layero.find('.layui-layer-min').hide();
   layero.attr('type') === 'page' && layero.find(doms[4]).hide();
   ready.rescollbar(index);
-  
-  if(!layero.attr('minLeft')){
-    ready.minIndex++;
-  }
-  layero.attr('minLeft', left);
+
+  //隐藏遮罩
+  shadeo.hide();
 };
 
 //还原
 layer.restore = function(index){
-  var layero = $('#'+ doms[0] + index), area = layero.attr('area').split(',');
-  var type = layero.attr('type');
+  var layero = $('#'+ doms[0] + index)
+  ,shadeo = $('#'+ doms.SHADE + index)
+  ,area = layero.attr('area').split(',')
+  ,type = layero.attr('type');
+  
+  //恢复原来尺寸
   layer.style(index, {
     width: parseFloat(area[0]), 
     height: parseFloat(area[1]), 
@@ -894,10 +924,14 @@ layer.restore = function(index){
     position: layero.attr('position'),
     overflow: 'visible'
   }, true);
+  
   layero.find('.layui-layer-max').removeClass('layui-layer-maxmin');
   layero.find('.layui-layer-min').show();
   layero.attr('type') === 'page' && layero.find(doms[4]).show();
   ready.rescollbar(index);
+  
+  //恢复遮罩
+  shadeo.show();
 };
 
 //全屏
@@ -928,55 +962,53 @@ layer.title = function(name, index){
 
 //关闭layer总方法
 layer.close = function(index, callback){
-  layer.ready(function(){
-    var layero = $('#'+ doms[0] + index), type = layero.attr('type'), closeAnim = 'layer-anim-close';
-    if(!layero[0]) return;
-    var WRAP = 'layui-layer-wrap', remove = function(){
-      if(type === ready.type[1] && layero.attr('conType') === 'object'){
-        layero.children(':not(.'+ doms[5] +')').remove();
-        var wrap = layero.find('.'+WRAP);
-        for(var i = 0; i < 2; i++){
-          wrap.unwrap();
-        }
-        wrap.css('display', wrap.data('display')).removeClass(WRAP);
-      } else {
-        //低版本IE 回收 iframe
-        if(type === ready.type[2]){
-          try {
-            var iframe = $('#'+doms[4]+index)[0];
-            iframe.contentWindow.document.write('');
-            iframe.contentWindow.close();
-            layero.find('.'+doms[5])[0].removeChild(iframe);
-          } catch(e){}
-        }
-        layero[0].innerHTML = '';
-        layero.remove();
+  var layero = $('#'+ doms[0] + index), type = layero.attr('type'), closeAnim = 'layer-anim-close';
+  if(!layero[0]) return;
+  var WRAP = 'layui-layer-wrap', remove = function(){
+    if(type === ready.type[1] && layero.attr('conType') === 'object'){
+      layero.children(':not(.'+ doms[5] +')').remove();
+      var wrap = layero.find('.'+WRAP);
+      for(var i = 0; i < 2; i++){
+        wrap.unwrap();
       }
-      typeof ready.end[index] === 'function' && ready.end[index]();
-      delete ready.end[index];
-      typeof callback === 'function' && callback();
-    };
-    
-    if(layero.data('isOutAnim')){
-      layero.addClass('layer-anim '+ closeAnim);
-    }
-    
-    $('#layui-layer-moves, #layui-layer-shade' + index).remove();
-    layer.ie == 6 && ready.reselect();
-    ready.rescollbar(index); 
-    if(layero.attr('minLeft')){
-      ready.minIndex--;
-      ready.minLeft.push(layero.attr('minLeft'));
-    }
-    
-    if((layer.ie && layer.ie < 10) || !layero.data('isOutAnim')){
-      remove()
+      wrap.css('display', wrap.data('display')).removeClass(WRAP);
     } else {
-      setTimeout(function(){
-        remove();
-      }, 200);
+      //低版本IE 回收 iframe
+      if(type === ready.type[2]){
+        try {
+          var iframe = $('#'+doms[4]+index)[0];
+          iframe.contentWindow.document.write('');
+          iframe.contentWindow.close();
+          layero.find('.'+doms[5])[0].removeChild(iframe);
+        } catch(e){}
+      }
+      layero[0].innerHTML = '';
+      layero.remove();
     }
-  });
+    typeof ready.end[index] === 'function' && ready.end[index]();
+    delete ready.end[index];
+    typeof callback === 'function' && callback();
+  };
+  
+  if(layero.data('isOutAnim')){
+    layero.addClass('layer-anim '+ closeAnim);
+  }
+  
+  $('#layui-layer-moves, #'+ doms.SHADE + index).remove();
+  layer.ie == 6 && ready.reselect();
+  ready.rescollbar(index); 
+  if(layero.attr('minLeft')){
+    ready.minIndex--;
+    ready.minLeft.push(layero.attr('minLeft'));
+  }
+  
+  if((layer.ie && layer.ie < 10) || !layero.data('isOutAnim')){
+    remove()
+  } else {
+    setTimeout(function(){
+      remove();
+    }, 200);
+  }
 };
 
 //关闭所有层
@@ -985,16 +1017,14 @@ layer.closeAll = function(type, callback){
     callback = type;
     type = null;
   };
-  layer.ready(function(){
-    var domsElem = $('.'+doms[0]);
-    $.each(domsElem, function(_index){
-      var othis = $(this);
-      var is = type ? (othis.attr('type') === type) : 1;
-      is && layer.close(othis.attr('times'), _index === domsElem.length - 1 ? callback : null);
-      is = null;
-    });
-    if(domsElem.length === 0) typeof callback === 'function' && callback();
+  var domsElem = $('.'+doms[0]);
+  $.each(domsElem, function(_index){
+    var othis = $(this);
+    var is = type ? (othis.attr('type') === type) : 1;
+    is && layer.close(othis.attr('times'), _index === domsElem.length - 1 ? callback : null);
+    is = null;
   });
+  if(domsElem.length === 0) typeof callback === 'function' && callback();
 };
 
 /** 

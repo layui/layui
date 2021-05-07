@@ -1,8 +1,7 @@
-/**
 
- @Name：code 代码修饰器
- @License：MIT
-    
+/**
+ * code 代码修饰器
+ * MIT Licensed 
  */
  
 layui.define('jquery', function(exports){

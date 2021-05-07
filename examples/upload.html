@@ -45,7 +45,7 @@ hr{margin: 30px 0;}
       <thead>
         <th>文件名</th>
         <th>大小</th>
-        <th>状态</th>
+        <th>上传进度</th>
         <th>操作</th>
       </thead>
       <tbody id="demoList"></tbody>
@@ -56,34 +56,38 @@ hr{margin: 30px 0;}
 
 <hr>
 
-<button type="button" class="layui-btn test333" lay-data="{size:10,url:'a'}" id="test3"><i class="layui-icon">&#xe67c;</i>上传文件</button>
-<button type="button" class="layui-btn layui-btn-primary test333" lay-data="{size:20,url:'b'}" id="test33"><i class="layui-icon">&#xe67c;</i>换个样式</button>
+<div class="layui-btn-container">
+  <button type="button" class="layui-btn test333" lay-data="{size:10,url:'a'}" id="test3"><i class="layui-icon">&#xe67c;</i>上传文件</button>
+  <button type="button" class="layui-btn layui-btn-primary test333" lay-data="{size:20,url:'b'}" id="test33"><i class="layui-icon">&#xe67c;</i>换个样式</button>
 
-<button type="button" class="layui-btn" id="test4"><i class="layui-icon">&#xe67c;</i>上传视频</button>
-<button type="button" class="layui-btn" id="test5"><i class="layui-icon">&#xe67c;</i>上传音频</button>
-
-<hr>
-
-<button class="layui-btn testm" lay-data="{url: '/a/'}">参数设在元素上</button>
-<button class="layui-btn testm" lay-data="{url: '/b/', accept: 'file',size:5}">参数设在元素上</button>
+  <button type="button" class="layui-btn" id="test4"><i class="layui-icon">&#xe67c;</i>上传视频</button>
+  <button type="button" class="layui-btn" id="test5"><i class="layui-icon">&#xe67c;</i>上传音频</button>
+</div>
 
 <hr>
 
-<div class="layui-upload">
+<div class="layui-btn-container">
+  <button class="layui-btn testm" lay-data="{url: '/a/'}">参数设在元素上</button>
+  <button class="layui-btn testm" lay-data="{url: '/b/', accept: 'file',size:5}">参数设在元素上</button>
+</div>
+
+<hr>
+
+<div class="layui-btn-container">
   <button type="button" class="layui-btn layui-btn-normal" id="test6">选择文件</button>
   <button type="button" class="layui-btn" id="test7">开始上传</button>
 </div>
 
 <hr><br>
 
-<div class="layui-upload-drag" id="test9">
+<div class="layui-upload-drag" id="test8">
   <i class="layui-icon">&#xe67c;</i>
   <p>点击上传，或将文件拖拽到此处</p>
 </div>
 
 <hr><br>
 
-绑定原始文件域：<input type="file" name="file" id="test8">
+绑定原始文件域：<input type="file" name="file" id="test9">
 
 <script src="../src/layui.js"></script>
 <script>
@@ -136,8 +140,8 @@ layui.use(['upload', 'element'], function(){
       
       element.progress('demo', '0%');
     }
-    ,progress: function(n, index, e){
-      console.log(n + '%', index, e); //获取进度百分比
+    ,progress: function(n, elem, res, index){
+      console.log(n + '%', elem, res); //获取进度百分比
       element.progress('demo', n + '%'); //可配合 layui 进度条元素使用
     }
   });
@@ -152,7 +156,6 @@ layui.use(['upload', 'element'], function(){
   
   upload.render({
     elem: '#test2'
-    ,url: ''
     ,multiple: true
     ,number: 3
     ,size: 1024
@@ -174,7 +177,7 @@ layui.use(['upload', 'element'], function(){
   var demoListView = $('#demoList');
   var uploadListIns = upload.render({
     elem: '#testList'
-    ,url: ''
+    ,url: 'http://httpbin.org/post'
     ,accept: 'file'
     ,multiple: true
     ,number: 3
@@ -188,10 +191,10 @@ layui.use(['upload', 'element'], function(){
         var tr = $(['<tr id="upload-'+ index +'">'
           ,'<td>'+ file.name +'</td>'
           ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
-          ,'<td>等待上传</td>'
+          ,'<td><div class="layui-progress" lay-filter="progress-'+ index +'"><div class="layui-progress-bar" lay-percent=""></div></div></td>'
           ,'<td>'
-            ,'<button class="layui-btn layui-btn-mini demo-reload layui-hide">重传</button>'
-            ,'<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>'
+            ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+            ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
           ,'</td>'
         ,'</tr>'].join(''));
         
@@ -208,17 +211,18 @@ layui.use(['upload', 'element'], function(){
         });
         
         demoListView.append(tr);
+        
+        element.render('progress');
       });
     }
     ,done: function(res, index, upload){
-      if(res.code == 0){ //上传成功
+      //if(res.code == 0){ //上传成功
         var tr = demoListView.find('tr#upload-'+ index)
         ,tds = tr.children();
-        tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
         tds.eq(3).html(''); //清空操作
         delete this.files[index]; //删除文件队列已经上传成功的文件
         return;
-      }
+      //}
       this.error(index, upload);
     }
     ,allDone: function(obj){
@@ -227,8 +231,11 @@ layui.use(['upload', 'element'], function(){
     ,error: function(index, upload){
       var tr = demoListView.find('tr#upload-'+ index)
       ,tds = tr.children();
-      tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
       tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+    }
+    ,progress: function(n, elem, e, index){
+      console.log(n);
+      element.progress('progress-'+ index, n + '%'); //进度条
     }
   });
   
@@ -289,10 +296,10 @@ layui.use(['upload', 'element'], function(){
     ,auto: false
     //,multiple: true
     ,bindAction: '#test7'
-    ,choose: function(obj){   
+    ,choose1: function(obj){   
       var that = this;
       obj.preview(function(index, file){
-        console.log(file.name)
+        console.log(file.name);
         obj.resetFile(index, file, '123.jpg');
       });
     }
@@ -306,7 +313,7 @@ layui.use(['upload', 'element'], function(){
   
   upload.render({
     elem: '#test8'
-    ,url: ''
+    ,url: 'http://httpbin.org/post'
     ,done: function(res){
       console.log(res);
     }
@@ -314,11 +321,13 @@ layui.use(['upload', 'element'], function(){
   
   upload.render({
     elem: '#test9'
-    ,url: 'http://httpbin.org/post'
+    ,url: ''
     ,done: function(res){
       console.log(res);
     }
   });
+  
+  
   
 });
 </script>

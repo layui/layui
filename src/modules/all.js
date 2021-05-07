@@ -1,8 +1,7 @@
-﻿/**
-
- @Name：用于加载所有内置模块
- @License：MIT
-    
+﻿
+/*!
+ * 用于加载所有内置模块
+ * MIT Licensed  
  */
  
 layui.define(function(){

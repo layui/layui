@@ -48,7 +48,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-header i.laydate-next-y{right: 15px;}
 .layui-laydate-header i.laydate-next-m{right: 45px;}
 .laydate-set-ym{width: 100%; text-align: center; box-sizing: border-box; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
-.laydate-set-ym span{padding: 0 5px; cursor: pointer;}
+.laydate-set-ym span{padding: 0 10px; cursor: pointer;}
 .laydate-time-text{cursor: default !important;}
 
 /* 主体结构 */
@@ -58,15 +58,18 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-content td{width: 36px; height: 30px; padding: 5px; text-align: center;}
 .layui-laydate-content th{font-weight: 400;}
 .layui-laydate-content td{position: relative; cursor: pointer;}
-.laydate-day-mark{position: absolute; left: 0; top: 0; width: 100%; height: 100%; line-height: 30px; font-size: 12px; overflow: hidden;}
+.laydate-day-mark{position: absolute; left: 0; top: 0; width: 100%; line-height: 30px; font-size: 12px; overflow: hidden;}
 .laydate-day-mark::after{position: absolute; content:''; right: 2px; top: 2px; width: 5px; height: 5px; border-radius: 50%;}
 
 /* 底部结构 */
-.layui-laydate-footer{position: relative; height: 46px; line-height: 26px; padding: 10px 20px;}
-.layui-laydate-footer span{margin-right: 15px; display: inline-block; cursor: pointer; font-size: 12px;}
+.layui-laydate-footer{position: relative; height: 46px; line-height: 26px; padding: 10px;}
+.layui-laydate-footer span{display: inline-block;  vertical-align: top; height: 26px; line-height: 24px; padding: 0 10px; border: 1px solid #C9C9C9; border-radius: 2px; background-color: #fff; font-size: 12px; cursor: pointer; white-space: nowrap; transition: all .3s;}
 .layui-laydate-footer span:hover{color: #5FB878;}
+.layui-laydate-footer span.layui-laydate-preview{cursor: default; border-color: transparent !important;}
+.layui-laydate-footer span.layui-laydate-preview:hover{color: #666;}
+.layui-laydate-footer span:first-child.layui-laydate-preview{padding-left: 0;}
 .laydate-footer-btns{position: absolute; right: 10px; top: 10px;}
-.laydate-footer-btns span{height: 26px; line-height: 26px; margin: 0 0 0 -1px; padding: 0 10px; border: 1px solid #C9C9C9; background-color: #fff;  white-space: nowrap; vertical-align: top; border-radius: 2px;}
+.laydate-footer-btns span{margin: 0 0 0 -1px;}
 
 /* 年月列表 */
 .layui-laydate-list{position: absolute; left: 0; top: 0; width: 100%; height: 100%; padding: 10px; box-sizing: border-box; background-color: #fff;}
@@ -77,7 +80,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-time-list p{position: relative; top: -4px; line-height: 29px;}
 .laydate-time-list ol{height: 181px; overflow: hidden;}
 .laydate-time-list>li:hover ol{overflow-y: auto;}
-.laydate-time-list ol li{width: 130%; padding-left: 33px; line-height: 30px; text-align: left; cursor: pointer;}
+.laydate-time-list ol li{width: 130%; padding-left: 33px; height: 30px; line-height: 30px; text-align: left; cursor: pointer;}
 
 /* 提示 */
 .layui-laydate-hint{position: absolute; top: 115px; left: 50%; width: 250px; margin-left: -125px; line-height: 20px; padding: 15px; text-align: center; font-size: 12px; color: #FF5722;}

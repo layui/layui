@@ -1,14 +1,13 @@
-/**
 
- @Name：util 工具集组件
- @License：MIT
-    
+/*!
+ * util 工具组件  
 */
 
 layui.define('jquery', function(exports){
   "use strict";
   
   var $ = layui.$
+  ,hint = layui.hint()
   
   //外部接口
   ,util = {
@@ -141,8 +140,14 @@ layui.define('jquery', function(exports){
     
     //转化为日期格式字符
     ,toDateString: function(time, format){
+      //若 null 或空字符，则返回空字符
+      if(time === null || time === '') return '';
+      
       var that = this
-      ,date = new Date(time || new Date())
+      ,date = new Date(function(){
+        if(!time) return;
+        return isNaN(time) ? time : (typeof time === 'string' ? parseInt(time) : time)
+      }() || new Date())
       ,ymd = [
         that.digit(date.getFullYear(), 4)
         ,that.digit(date.getMonth() + 1)
@@ -153,9 +158,10 @@ layui.define('jquery', function(exports){
         ,that.digit(date.getMinutes())
         ,that.digit(date.getSeconds())
       ];
-
+      
+      if(!date.getDate()) return hint.error('Invalid Msec for "util.toDateString(Msec)"'), '';
+      
       format = format || 'yyyy-MM-dd HH:mm:ss';
-
       return format.replace(/yyyy/g, ymd[0])
       .replace(/MM/g, ymd[1])
       .replace(/dd/g, ymd[2])
@@ -164,17 +170,46 @@ layui.define('jquery', function(exports){
       .replace(/ss/g, hms[2]);
     }
     
-    //防 xss 攻击
+    //转义 html，防 xss 攻击
     ,escape: function(html){
       return String(html || '').replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
       .replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
     }
     
+    //还原转义的 html
     ,unescape: function(str){
       return String(str || '').replace(/\&amp;/g, '&')
       .replace(/\&lt;/g, '<').replace(/\&gt;/g, '>')
       .replace(/\&#39;/, '\'').replace(/\&quot;/, '"');
+    }
+    
+    //让指定的元素保持在可视区域
+    ,toVisibleArea: function(options){
+      options = $.extend({
+        margin: 160 //触发动作的边界值
+        ,duration: 200 //动画持续毫秒数
+        ,type: 'y' //触发方向，x 水平、y 垂直
+      }, options);
+      
+      if(!options.scrollElem[0] || !options.thisElem[0]) return;
+      
+      var scrollElem = options.scrollElem //滚动元素
+      ,thisElem = options.thisElem //目标元素
+      ,vertical = options.type === 'y' //是否垂直方向
+      ,SCROLL_NAME = vertical ? 'scrollTop' : 'scrollLeft' //滚动方法
+      ,OFFSET_NAME = vertical ? 'top' : 'left' //坐标方式
+      ,scrollValue = scrollElem[SCROLL_NAME]() //当前滚动距离
+      ,size = scrollElem[vertical ? 'height' : 'width']() //滚动元素的尺寸
+      ,scrollOffet = scrollElem.offset()[OFFSET_NAME] //滚动元素所处位置
+      ,thisOffset = thisElem.offset()[OFFSET_NAME] - scrollOffet //目标元素当前的所在位置
+      ,obj = {};
+      
+      //边界满足条件
+      if(thisOffset > size - options.margin || thisOffset < options.margin){
+        obj[SCROLL_NAME] = thisOffset - size/2 + scrollValue
+        scrollElem.animate(obj, options.duration);
+      }
     }
     
     //批量事件

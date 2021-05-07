@@ -1,8 +1,7 @@
-/**
 
- @Title: upload 文件上传组件
- @License：MIT
-
+/*!
+ * upload 文件上传组件
+ * MIT Licensed
  */
  
 layui.define('layer' , function(exports){
@@ -45,7 +44,7 @@ layui.define('layer' , function(exports){
   }
   
   //字符常量
-  ,MOD_NAME = 'upload', ELEM = '.layui-upload', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'layui-disabled'
+  ,MOD_NAME = 'upload', ELEM = 'layui-upload', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'layui-disabled'
   
   ,ELEM_FILE = 'layui-upload-file', ELEM_FORM = 'layui-upload-form', ELEM_IFRAME = 'layui-upload-iframe', ELEM_CHOOSE = 'layui-upload-choose', ELEM_DRAG = 'layui-upload-drag'
   
@@ -231,10 +230,10 @@ layui.define('layer' , function(exports){
           opts.xhr = function(){
             var xhr = $.ajaxSettings.xhr();
             //上传进度
-            xhr.upload.addEventListener("progress", function (e) {
-              if(e.lengthComputable) {
-                var percent = Math.floor((e.loaded/e.total)* 100); //百分比
-                options.progress(percent, (options.item ? options.item[0] : options.elem[0]) , e);
+            xhr.upload.addEventListener("progress", function (obj) {
+              if(obj.lengthComputable){
+                var percent = Math.floor((obj.loaded/obj.total)* 100); //百分比
+                options.progress(percent, (options.item ? options.item[0] : options.elem[0]) , obj, index);
               }
             });
             return xhr;
@@ -458,6 +457,7 @@ layui.define('layer' , function(exports){
     //设置选择的文本
     ,setChooseText = function(files, filename){
       var elemFile = that.elemFile
+      ,item = options.item ? options.item : options.elem
       ,value = files.length > 1 
         ? files.length + '个文件' 
       : ((files[0] || {}).name || (elemFile[0].value.match(/[^\/\\]+\..+/g)||[]) || '');

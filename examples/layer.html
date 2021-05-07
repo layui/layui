@@ -44,6 +44,13 @@ body{padding: 100px;}
 </div>
 
 
+<script>
+var LAYUI_GLOBAL = {
+  //path: '../src/'
+  //,layerPath: '../release/layer/src/'
+};
+</script>
+
 <script src="../src/layui.js"></script>
 
 <!-- layer 独立版调试 -->
@@ -55,15 +62,20 @@ var runTest = function(run, $, layer){
   if(!run) return;
 
   var timer = setInterval(function(){
-    location.reload();
+    //location.reload();
   }, 1000);
+  
+  layer.alert(123);
   
   $.ajax({
     url: './all.html'
     ,beforeSend: function(){
-      layer.load();
+      //layer.ready(function(){
+        //layer.load();
+      //});
     }
     ,success: function(){
+      return;
       layer.closeAll('loading', function(){
         setTimeout(function(){
           if($('.layui-layer-loading').length){
@@ -117,18 +129,28 @@ layui.use('layer', function(){
       });
     }
     ,test3: function(){
-      layer.msg('玩命提示中');
+      layer.msg('提示中');
     }
     ,test4: function(){
       layer.tips('Hi，我是一个小提示', this, {tips: 1});
     }
     ,test5: function(){
        layer.open({
-        title:'更新论坛信息',
+        title:'自定义页面层',
         type: 1,
         skin: 'layui-layer-rim', 
         area: ['1000px', '580px'], 
-        content: $('#test11111')
+        content: 'asas',
+        maxmin: true,
+        minStack: false, //最小化不堆叠在左下角
+        id: 'page1', //定义 ID，防止重复弹出
+        min: function(layero, index){
+          
+          layer.msg('阻止了默认的最小化');
+          layer.style(index, {top: 'auto', bottom: 0});
+          
+          return false;
+        }
       });
     }
     ,test6: function(){

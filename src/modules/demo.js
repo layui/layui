@@ -1,8 +1,7 @@
-/**
- 
- @Name：MODULE_DEMO_NAME 模块组件通用结构
- @License：MIT
 
+/*!
+ * MODULE_DEMO_NAME 模块组件通用结构
+ * MIT Licensed
  */
 
 layui.define([''], function(exports){

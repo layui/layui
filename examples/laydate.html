@@ -121,12 +121,14 @@ layui.use('laydate', function(laydate){
   //双控件
   laydate.render({
     elem: '#test1' //指定元素
-    ,type: 'datetime'
+    ,type: 'date'
     ,trigger: 'click'
     //,lang: 'en'
     //,theme: 'grid'
-    ,range: true //开启日期范围，默认使用“_”分割
-    //,value: '2021-03-27 00:00:00 - 2021-02-27 00:00:00'
+    ,range: true //开启日期范围，默认使用“-”分割
+    ,min: 0
+    ,max: 7
+    //,value: '2021-05-08 - 2021-03-27'
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
     }
@@ -140,9 +142,9 @@ layui.use('laydate', function(laydate){
     elem: '#test2'
     //,format: 'yyyy年MM月dd日'
     ,value: new Date(1534766888000)
-    ,isInitValue: false
+    //,isInitValue: false
     ,format: 'yyyy/MM/dd'
-   
+    ,min: 7
     //,max: 0
     //,min: '2016-10-14'
     //,max: -1
@@ -153,12 +155,15 @@ layui.use('laydate', function(laydate){
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
     }
+    ,change: function(value){
+      console.log(value);
+    }
   });
   
   //年选择器
   laydate.render({
     elem: '#test3'
-    ,type: 'year'
+    ,type: 'month'
     //,range: true 
     //,trigger: 'click'
     ,done: function(value, date, endDate){
@@ -172,7 +177,7 @@ layui.use('laydate', function(laydate){
   //年月选择器
   laydate.render({
     elem: '#test4'
-    ,type: 'month'
+    ,type: 'time'
     ,range: true 
     ,trigger: 'click'
     //,max: -30

@@ -1,8 +1,7 @@
-/**
 
- @Name：carousel 轮播模块
- @License：MIT
-    
+/*!
+ * carousel 轮播模块
+ * MIT Licensed  
  */
  
 layui.define('jquery', function(exports){

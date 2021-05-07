@@ -1,9 +1,8 @@
+
 /*!
-
- @Name: layui
- @Description：Classic modular front-end UI framework
- @License：MIT
-
+ * layui
+ * Classic modular front-end ui framework
+ * MIT Licensed
  */
  
 ;!function(win){
@@ -17,10 +16,13 @@
   }
 
   ,Layui = function(){
-    this.v = '2.6.5'; //版本号
+    this.v = '2.6.6'; //版本号
   }
+  
+  //识别预先可能定义的指定全局对象
+  ,GLOBAL = window.LAYUI_GLOBAL || {}
 
-  //获取layui所在目录
+  //获取 layui 所在目录
   ,getPath = function(){
     var jsPath = doc.currentScript ? doc.currentScript.src : function(){
       var js = doc.scripts
@@ -35,7 +37,7 @@
       return src || js[last].src;
     }();
     
-    return config.dir = jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
+    return config.dir = GLOBAL.dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
   }()
 
   //异常提示
@@ -444,7 +446,7 @@
       //提取 Hash
       ,hash: that.router(function(){
         return href 
-          ? ((href.match(/#.+/) || [])[0] || '')
+          ? ((href.match(/#.+/) || [])[0] || '/')
         : location.hash;
       }())
     };
@@ -541,16 +543,21 @@
   //遍历
   Layui.prototype.each = function(obj, fn){
     var key
-    ,that = this;
+    ,that = this
+    ,callFn = function(key, obj){
+      return fn.call(obj[key], key, obj[key])
+    };
+    
     if(typeof fn !== 'function') return that;
     obj = obj || [];
+    
     if(obj.constructor === Object){
       for(key in obj){
-        if(fn.call(obj[key], key, obj[key])) break;
+        if(callFn(key, obj)) break;
       }
     } else {
       for(key = 0; key < obj.length; key++){
-        if(fn.call(obj[key], key, obj[key])) break;
+        if(callFn(key, obj)) break;
       }
     }
     return that;
