@@ -1221,7 +1221,7 @@
     ,elem = that.bindElem || options.elem[0];
     
     //静态展现则不作默认赋值
-    if(options.position === 'static') return;
+    if(options.position === 'static') return this;
     
     value = value || '';
     
