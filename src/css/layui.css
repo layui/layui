@@ -1390,7 +1390,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-tree-icon .layui-icon{font-size: 12px; color: #666;}
 .layui-tree-iconArrow{padding: 0 5px;}
 .layui-tree-iconArrow:after{content: ""; position: absolute; left: 4px; top: 3px; z-index: 100; width: 0; height: 0; border-width: 5px; border-style: solid; border-color: transparent transparent transparent #c0c4cc; transition: 0.5s;}
-.layui-tree-spread>.layui-tree-entry>.layui-tree-iconClick>.layui-tree-iconArrow:after{transform: rotate(90deg) translate(3px, 4px);}
+.layui-tree-spread>.layui-tree-entry .layui-tree-iconClick>.layui-tree-iconArrow:after{transform: rotate(90deg) translate(3px, 4px);}
 .layui-tree-txt{display: inline-block; vertical-align: middle; color: #555;}
 .layui-tree-search{margin-bottom: 15px; color: #666;}
 .layui-tree-btnGroup{visibility: hidden; display: inline-block; vertical-align: middle; position: relative;}
