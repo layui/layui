@@ -30,8 +30,8 @@ body{padding: 100px;}
   <a href="http://layer.layui.com/" target="_blank" class="layui-btn demo">更多例子</a>
 </div>
 
-<div id="test11111" style="display: none;padding: 20px;">
- 123
+<div id="test11111" style="display: none; padding: 20px;">
+  content 指向放置在页面的一段隐藏元素
 </div>
 
 <hr><br>
@@ -140,7 +140,7 @@ layui.use('layer', function(){
         type: 1,
         skin: 'layui-layer-rim', 
         area: ['1000px', '580px'], 
-        content: 'asas',
+        content: $('#test11111'),
         maxmin: true,
         minStack: false, //最小化不堆叠在左下角
         id: 'page1', //定义 ID，防止重复弹出

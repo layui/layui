@@ -1139,7 +1139,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-tab-title{position: relative; left: 0; height: 40px; white-space: nowrap; font-size: 0; border-bottom-width: 1px; border-bottom-style: solid; transition: all .2s; -webkit-transition: all .2s;}
 .layui-tab-title li{display: inline-block; *display: inline; *zoom: 1; vertical-align: middle; font-size: 14px; transition: all .2s; -webkit-transition: all .2s;}
 .layui-tab-title li{position: relative; line-height: 40px; min-width: 65px; padding: 0 15px; text-align: center; cursor: pointer;}
-.layui-tab-title li a{display: block; margin: 0 -15px;}
+.layui-tab-title li a{display: block; padding: 0 15px; margin: 0 -15px;}
 .layui-tab-title .layui-this{color: #000;}
 
 .layui-tab-title .layui-this:after{position: absolute; left:0; top: 0; content: ""; width:100%; height: 41px; border-width: 1px; border-style: solid; border-bottom-color: #fff; border-radius: 2px 2px 0 0; box-sizing: border-box; pointer-events: none;}
