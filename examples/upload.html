@@ -118,6 +118,10 @@ layui.use(['upload', 'element'], function(){
       obj.preview(function(index, file, result){
         $('#demo1').attr('src', result); //图片链接（base64）
       });
+      
+      return;
+      layer.msg('不允许上传')
+      return false;
     }
     ,done: function(res){
     

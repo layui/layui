@@ -342,8 +342,8 @@ layui.define('layer' , function(exports){
         }
       }
       
-      //上传前的回调
-      options.before && options.before(args);
+      //上传前的回调 - 如果回调函数明确返回false，则停止上传(#pulls55)
+      if(options.before && (options.before(args) === false)) return;
 
       //IE兼容处理
       if(device.ie){
