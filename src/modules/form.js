@@ -618,7 +618,7 @@ layui.define('layer', function(exports){
     ,DANGER = 'layui-form-danger' //警示样式
     ,field = {}  //字段集合
     ,button = $(this) //当前触发的按钮
-    ,elem = button.parents(ELEM) //当前所在表单域
+    ,elem = button.parents(ELEM).eq(0) //当前所在表单域
     ,verifyElem = elem.find('*[lay-verify]') //获取需要校验的元素
     ,formElem = button.parents('form')[0] //获取当前所在的 form 元素，如果存在的话
     ,filter = button.attr('lay-filter'); //获取过滤器

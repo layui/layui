@@ -63,10 +63,11 @@
 
 <script src="../src/layui.js" src1="//www.layuicdn.com/layui-v2.5.3/layui.js" charset="utf-8"></script>
 <script>
-layui.use(['table'], function(){
+layui.use(['table', 'dropdown'], function(){
   var table = layui.table
   ,$ = layui.$
-  ,laytpl = layui.laytpl;
+  ,laytpl = layui.laytpl
+  ,dropdown = layui.dropdown;;
   
   //全局设定某参数
   table.set({
@@ -112,10 +113,10 @@ layui.use(['table'], function(){
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
       ,{field:'city', title:'城市', width:120, templet: '#cityTpl'}
       ,{field:'sign', title:'签名'}
-      ,{field:'experience', title:'积分', width:80, sort: true, totalRow: '{{ d.TOTAL_NUMS }}🍉', templet: '<div>{{ d.experience }} 分</div>'}
-      ,{field:'ip', title:'IP', width:120}
-      ,{field:'logins', title:'登入次数', width:100, sort: true, totalRow: '{{ parseInt(d.TOTAL_NUMS) }} 次'}
-      ,{field:'joinTime', title:'加入时间', width:120}
+      ,{field: 'experience', title: '积分', width:80, sort: true, totalRow: '{{ d.TOTAL_NUMS }} 😊', templet: '<div>{{ d.experience }} 分</div>'}
+      ,{field:'ip', title:'IP', width: 120}
+      ,{field:'logins', title:'登入次数', width: 100, sort: true, totalRow: '{{ parseInt(d.TOTAL_NUMS) }} 次'}
+      ,{field:'joinTime', title:'加入时间', width: 120}
       ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
     ]]
     
@@ -133,7 +134,18 @@ layui.use(['table'], function(){
     }
     
     ,done: function(){
-      
+      //下拉菜单
+      dropdown.render({
+        elem: '#dropdown' //可绑定在任意元素中，此处以上述按钮为例
+        ,data: [{
+          id: 0,
+          title: '刷新'
+        }]
+        //菜单被点击的事件
+        ,click: function(obj){
+          table.reload('test');
+        }
+      });
     }
     
     ,error: function(res, msg){
@@ -213,6 +225,7 @@ layui.use(['table'], function(){
             abc: 123
             ,test: '新的 test1'
           }
+          ,defaultToolbar: ['print']
           ,page: {curr: 5, limit: 20}
           ,cols: ins1.config.cols
           //,height: 300

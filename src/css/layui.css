@@ -1072,7 +1072,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-nav .layui-nav-item{position: relative; display: inline-block; *display: inline; *zoom: 1; vertical-align: middle; line-height: 60px;}
 .layui-nav .layui-nav-item a{display: block; padding: 0 20px; color: #fff; color: rgba(255,255,255,.7); transition: all .3s; -webkit-transition: all .3s;}
 .layui-nav-bar,
-.layui-nav .layui-this:after{content: ""; position: absolute; left: 0; top: 0; width: 0; height: 5px; background-color: #5FB878; transition: all .2s; -webkit-transition: all .2s;}
+.layui-nav .layui-this:after{content: ""; position: absolute; left: 0; top: 0; width: 0; height: 5px; background-color: #5FB878; transition: all .2s; -webkit-transition: all .2s; pointer-events: none;}
 .layui-nav-bar{z-index: 1000;}
 .layui-nav[lay-bar="disabled"] .layui-nav-bar{display: none;}
 .layui-nav[lay-bar="disabled"].layui-this:after{}
@@ -1099,7 +1099,8 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-nav-tree .layui-nav-item{display: block; width: 100%; line-height: 40px;}
 .layui-nav-tree .layui-nav-item a{position: relative; height: 40px; line-height: 40px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .layui-nav-tree .layui-nav-item>a{padding-top: 5px; padding-bottom: 5px;}
-.layui-nav-tree .layui-nav-more{right: 15px; padding: 6px 0;}
+.layui-nav-tree .layui-nav-more{right: 15px;}
+.layui-nav-tree .layui-nav-item>a .layui-nav-more{padding: 5px 0;}
 .layui-nav-tree .layui-nav-bar{width: 5px; height: 0;}
 .layui-side .layui-nav-tree .layui-nav-bar{width: 2px;}
 .layui-nav-tree .layui-this,

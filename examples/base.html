@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>基础方法 - layui</title>
+
+  <link rel="stylesheet" href="../src/css/layui.css">
+
+</head>
+<body>
+
+<div class="layui-container" style="padding: 30px 0;">
+
+  <div class="" style="padding: 30px 0;">
+    
+    <blockquote class="layui-elem-quote" style="color: #666;">
+      调试结果查看浏览器控制台
+    </blockquote>
+    
+  </div>
+ 
+</div>
+
+<script src="../src/layui.js"></script>
+<script>
+layui.use('lay', function(){
+  
+  
+  console.log(
+    'layui.sort: ',
+    layui.sort([{a: 3},{a: 0},{a: 0},{a: -1},{a: -5},{a: 6},{a: 9}], 'a')
+  );
+  
+  console.log(
+    'layui._typeof: ',
+    layui._typeof(new RegExp()), layui._typeof(new Date()), layui._typeof([])
+  );
+  
+  console.log(
+    'layui._isArray ',
+    layui._isArray([1,6]), layui._isArray(lay('div')), layui._isArray(document.querySelectorAll('div')),
+    layui._isArray({key: 'value'})
+  );
+  
+  
+});
+</script>
+</body>
+</html>

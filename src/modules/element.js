@@ -100,7 +100,7 @@ layui.define('jquery', function(exports){
   
   //基础事件体
   ,call = {
-    //Tab点击
+    //Tab 点击
     tabClick: function(e, index, liElem, options){
       options = options || {};
       var othis = liElem || $(this)
@@ -108,9 +108,12 @@ layui.define('jquery', function(exports){
       ,parents = options.headerElem ? othis.parent() : othis.parents('.layui-tab').eq(0)
       ,item = options.bodyElem ? $(options.bodyElem) : parents.children('.layui-tab-content').children('.layui-tab-item')
       ,elemA = othis.find('a')
+      ,isJump = elemA.attr('href') !== 'javascript:;' && elemA.attr('target') === '_blank' //是否存在跳转
+      ,unselect = typeof othis.attr('lay-unselect') === 'string' //是否禁用选中
       ,filter = parents.attr('lay-filter');
-
-      if(!(elemA.attr('href') !== 'javascript:;' && elemA.attr('target') === '_blank')){
+      
+      //执行切换
+      if(!(isJump || unselect)){
         othis.addClass(THIS).siblings().removeClass(THIS);
         item.eq(index).addClass(SHOW).siblings().removeClass(SHOW);
       }
@@ -229,7 +232,7 @@ layui.define('jquery', function(exports){
       ,filter = parents.attr('lay-filter')
       ,parent = othis.parent() 
       ,child = othis.siblings('.'+NAV_CHILD)
-      ,unselect = typeof parent.attr('lay-unselect') === 'string';
+      ,unselect = typeof parent.attr('lay-unselect') === 'string'; //是否禁用选中
       
       if(!(othis.attr('href') !== 'javascript:;' && othis.attr('target') === '_blank') && !unselect){
         if(!child[0]){
@@ -310,12 +313,15 @@ layui.define('jquery', function(exports){
         ,follow = function(bar, nav, index){
           var othis = $(this), child = othis.find('.'+NAV_CHILD);
           if(nav.hasClass(NAV_TREE)){
-            var thisA = othis.children('.'+ NAV_TITLE);
-            bar.css({
-              top: othis.offset().top - nav.offset().top
-              ,height: (thisA[0] ? thisA : othis).outerHeight()
-              ,opacity: 1
-            });
+            //无子菜单时跟随
+            if(!child[0]){
+              var thisA = othis.children('.'+ NAV_TITLE);
+              bar.css({
+                top: othis.offset().top - nav.offset().top
+                ,height: (thisA[0] ? thisA : othis).outerHeight()
+                ,opacity: 1
+              });
+            }
           } else {
             child.addClass(NAV_ANIM);
             
@@ -325,7 +331,7 @@ layui.define('jquery', function(exports){
             });
             
             //滑块定位
-            if(child[0]){
+            if(child[0]){ //若有子菜单，则滑块消失
               bar.css({
                 left: bar.position().left + bar.width()/2
                 ,width: 0
@@ -371,13 +377,15 @@ layui.define('jquery', function(exports){
               ? itemElem.find('dd,>.'+ NAV_TITLE) 
             : itemElem).on('mouseenter', function(){
               follow.call(this, bar, othis, index);
-            }).on('mouseleave', function(){
+            }).on('mouseleave', function(){ //鼠标移出
+              //是否为垂直导航
               if(othis.hasClass(NAV_TREE)){
                 bar.css({
                   height: 0
                   ,opacity: 0
                 });
               } else {
+                //隐藏子菜单
                 clearTimeout(timerMore[index]);
                 timerMore[index] = setTimeout(function(){
                   othis.find('.'+NAV_CHILD).removeClass(SHOW);

@@ -258,7 +258,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     
     //阻止全局事件
     that.elemView.find('.layui-menu').on(clickOrMousedown, function(e){
-      lay.stope(e);
+      layui.stope(e);
     });
 
     //触发菜单列表事件

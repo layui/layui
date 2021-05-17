@@ -93,7 +93,7 @@ var isLayui = window.layui && layui.define, $, win, ready = {
 
 //默认内置方法。
 var layer = {
-  v: '3.5.0',
+  v: '3.5.1',
   ie: function(){ //ie版本
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
@@ -1135,17 +1135,21 @@ layer.photos = function(options, loop, key){
   var dict = {};
   options = options || {};
   if(!options.photos) return;
-  var type = options.photos.constructor === Object;
-  var photos = type ? options.photos : {}, data = photos.data || [];
-  var start = photos.start || 0;
-  dict.imgIndex = (start|0) + 1;
   
+  //若 photos 并非选择器或 jQuery 对象，则为普通 object
+  var isObject = !(typeof options.photos === 'string' || options.photos instanceof $)
+  ,photos = isObject ? options.photos : {}
+  ,data = photos.data || []
+  ,start = photos.start || 0;
+  
+  dict.imgIndex = (start|0) + 1;
   options.img = options.img || 'img';
   
   var success = options.success;
   delete options.success;
-
-  if(!type){ //页面直接获取
+  
+  //如果 options.photos 不是一个对象
+  if(!isObject){ //页面直接获取
     var parent = $(options.photos), pushData = function(){
       data = [];
       parent.find(options.img).each(function(index){

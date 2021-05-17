@@ -13,6 +13,7 @@ var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var replace = require('gulp-replace');
 var header = require('gulp-header');
+var footer = require('gulp-footer');
 var del = require('del');
 var gulpif = require('gulp-if');
 var minimist = require('minimist');
@@ -27,7 +28,8 @@ var argv = require('minimist')(process.argv.slice(2), {
 
 //注释
 ,note = [
-  '/*! <%= pkg.realname %> v<%= pkg.version %> | Released under the <%= pkg.license %> license */\n <%= js %>'
+  // '/*! <%= pkg.realname %> v<%= pkg.version %> | Released under the <%= pkg.license %> license */\n <%= js %>'
+  '/*! <%= pkg.license %> Licensed */<%= js %>'
   ,{pkg: pkg, js: ';'}
 ]
 
@@ -135,7 +137,7 @@ gulp.task('rls', ['clearRelease'], function(){ // gulp rls
   }
 });
 
-//打包 layer 独立版
+//打包 layer 单独版
 gulp.task('layer', function(){
   var dir = './release/layer';
   
@@ -147,15 +149,15 @@ gulp.task('layer', function(){
 });
 
 
-//打包 layDate 独立版
+//打包 layDate 单独版
 gulp.task('laydate', function(){
   //发行目录
   var dir = './release/laydate'
   
   //注释
   ,notes = [
-    '/*! \n * <%= title %> \n * <%= license %> Licensed \n */ \n\n'
-    ,{title: 'layDate 日期与时间组件', license: 'MIT'}
+    '\n/*! \n * <%= title %> \n * <%= license %> Licensed \n */ \n\n'
+    ,{title: 'layDate 日期与时间组件（单独版）', license: 'MIT'}
   ];
   
   //合并所依赖的 css 文件
@@ -164,9 +166,13 @@ gulp.task('laydate', function(){
   .pipe(gulp.dest(dir + '/src/theme/default'));
   
   //合并所依赖的 js 文件
-  return gulp.src(['./src/modules/{lay,laydate}.js'])
+  return gulp.src(['./src/layui.js', './src/modules/{lay,laydate}.js'])
+    .pipe(replace('win.layui =', 'var layui =')) //将 layui 替换为局部变量
+    .pipe(replace('}(window); //gulp build: layui-footer', '')) //替换 layui.js 的落脚
+    .pipe(replace(';!function(window){ //gulp build: lay-header', '')) //替换 lay.js 的头部
+    
     .pipe(concat('laydate.js', {newLine: ''}))
-    .pipe(header.apply(null, notes))
+    .pipe(header.apply(null, notes)) //追加头部
   .pipe(gulp.dest(dir + '/src'));
 });
 

@@ -1,7 +1,7 @@
 
-/*! lay 基础 DOM 操作 */
+/*! lay 基础 DOM 操作 | MIT Licensed */
 
-;!function(){
+;!function(window){ //gulp build: lay-header
   "use strict";
   
   var MOD_NAME = 'lay' //模块名
@@ -56,58 +56,36 @@
   };
   
   //lay 模块版本
-  lay.v = '1.0.0';
+  lay.v = '1.0.7';
   
   //ie版本
   lay.ie = function(){
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
-      (agent.match(/msie\s(\d+)/) || [])[1] || '11' //由于ie11并没有msie的标识
+      (agent.match(/msie\s(\d+)/) || [])[1] || '11' //由于 ie11 并没有 msie 的标识
     ) : false;
   }();
   
-  //获取当前 JS 所在目录
-  lay.getPath = function(){
-    var jsPath = document.currentScript ? document.currentScript.src : function(){
-      var js = document.scripts
-      ,last = js.length - 1
-      ,src;
-      for(var i = last; i > 0; i--){
-        if(js[i].readyState === 'interactive'){
-          src = js[i].src;
-          break;
-        }
-      }
-      return src || js[last].src;
-    }();
-    return jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
-  }
   
-  //中止冒泡
-  lay.stope = function(e){
-    e = e || window.event;
-    e.stopPropagation 
-      ? e.stopPropagation() 
-    : e.cancelBubble = true;
+  
+  
+  
+  
+  /** 
+   * 获取 layui 常见方法，以便用于组件单独版
+   */
+  
+  lay.layui = layui;
+  lay.getPath = layui.cache.dir; //获取当前 JS 所在目录
+  lay.stope = layui.stope; //中止冒泡
+  lay.each = function(){ //遍历
+    layui.each.apply(layui, arguments);
+    return this;
   };
   
-  //对象遍历
-  lay.each = function(obj, fn){
-    var key
-    ,that = this;
-    if(typeof fn !== 'function') return that;
-    obj = obj || [];
-    if(obj.constructor === Object){
-      for(key in obj){
-        if(fn.call(obj[key], key, obj[key])) break;
-      }
-    } else {
-      for(key = 0; key < obj.length; key++){
-        if(fn.call(obj[key], key, obj[key])) break;
-      }
-    }
-    return that;
-  };
+  
+  
+  
   
   //数字前置补零
   lay.digit = function(num, length, end){
@@ -128,62 +106,7 @@
     });
     return elem;
   };
-  
-  //获取节点的 style 属性值
-  lay.getStyle = function(node, name){
-    var style = node.currentStyle ? node.currentStyle : window.getComputedStyle(node, null);
-    return style[style.getPropertyValue ? 'getPropertyValue' : 'getAttribute'](name);
-  };
-  
-  //载入 CSS 依赖
-  lay.link = function(href, fn, cssname){
-    var head = document.getElementsByTagName("head")[0]
-    ,link = document.createElement('link');
-    
-    if(typeof fn === 'string') cssname = fn;
-    
-    var app = (cssname || href).replace(/\.|\//g, '');
-    var id = 'layuicss-'+ app
-    ,STAUTS_NAME = 'creating'
-    ,timeout = 0;
-    
-    
-    
-    link.rel = 'stylesheet';
-    link.href = href;
-    link.id = id;
-    
-    if(!document.getElementById(id)){
-      head.appendChild(link);
-    }
 
-    if(typeof fn !== 'function') return;
-
-    //轮询 css 是否加载完毕
-    (function poll(status) {
-      var delay = 100
-      ,getLinkElem = document.getElementById(id); //获取动态插入的 link 元素
-      
-      //如果轮询超过指定秒数，则视为请求文件失败或 css 文件不符合规范
-      if(++timeout > 10 * 1000 / delay){
-        return window.console && console.error(app +'.css: Invalid');
-      };
-      
-      //css 加载就绪
-      if(parseInt(lay.getStyle(getLinkElem, 'width')) === 1989){
-        //如果参数来自于初始轮询（即未加载就绪时的），则移除 link 标签状态
-        if(status === STAUTS_NAME) getLinkElem.removeAttribute('lay-status');
-        //如果 link 标签的状态仍为「创建中」，则继续进入轮询，直到状态改变，则执行回调
-        getLinkElem.getAttribute('lay-status') === STAUTS_NAME ? setTimeout(poll, delay) : fn();
-      } else {
-        getLinkElem.setAttribute('lay-status', STAUTS_NAME);
-        setTimeout(function(){
-          poll(STAUTS_NAME);
-        }, delay);
-      }
-    }());
-  };
-  
   //当前页面是否存在滚动条
   lay.hasScrollbar = function(){
     return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
@@ -482,5 +405,5 @@
     });
   }
   
-}();
+}(window, window.document);
 

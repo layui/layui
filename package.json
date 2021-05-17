@@ -2,7 +2,7 @@
   "name": "layui",
   "realname": "layui",
   "version": "2.6.7",
-  "description": "Classic modular front-end ui component library",
+  "description": "Classic modular Front-End UI library",
   "main": "dist/layui.js",
   "license": "MIT",
   "scripts": {
@@ -24,6 +24,7 @@
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0 ",
+    "gulp-footer": "^2.0.2",
     "gulp-header": "^1.8.8",
     "gulp-if": "^2.0.1",
     "gulp-minify-css": "^1.2.4",

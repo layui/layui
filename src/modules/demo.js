@@ -71,8 +71,9 @@ layui.define([''], function(exports){
   Class.prototype.reload = function(options){
     var that = this;
     
+    //防止数组深度合并
     layui.each(options, function(key, item){
-      if(item.constructor === Array) delete that.config[key];
+      if(layui._typeof(item) === 'array') delete that.config[key];
     });
     
     that.config = $.extend(true, {}, that.config, options);

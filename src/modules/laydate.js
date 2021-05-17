@@ -1,14 +1,11 @@
 
-/*! 
- * layDate 日期与时间控件 
- * MIT Licensed
- */
+/*! layDate 日期与时间控件 | MIT Licensed */
 
-;!function(window){
+;!function(window, document){
   "use strict";
 
   var isLayui = window.layui && layui.define, ready = {
-    getPath: (window.lay && lay.getPath) ? lay.getPath() : ''
+    getPath: (window.lay && lay.getPath) ? lay.getPath : ''
     
     //载入 CSS 依赖
     ,link: function(href, fn, cssname){
@@ -17,8 +14,8 @@
       if(!laydate.path) return;
       
       //加载 css
-      if(window.lay && lay.link){
-        lay.link(laydate.path + href, fn, cssname);
+      if(window.lay && lay.layui){
+        lay.layui.link(laydate.path + href, fn, cssname);
       }
     }
   }
@@ -28,7 +25,7 @@
   
   //外部调用
   ,laydate = {
-    v: '5.3.0'
+    v: '5.3.1'
     ,config: {} //全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: GLOBAL.laydate_dir || ready.getPath
@@ -681,7 +678,7 @@
       }
     };
     getEndDate();
-
+    
     if(typeof value === 'string' && value){
       if(that.EXP_IF.test(value)){ //校验日期格式
         if(options.range){
@@ -1060,13 +1057,7 @@
           //如果为年月选择器，点击了年列表，则切换到月选择器
           if(options.type === 'month' && type === 'year'){
             that.listYM[index][0] = ym;
-            if(isAlone){
-              if(index){
-                dateTime.year = ym;
-              } else {
-                that.endDate.year = ym;
-              }
-            }
+            isAlone && ((index ? that.endDate : dateTime).year = ym);
             that.list('month', index);
           }
         } else {
@@ -1682,5 +1673,5 @@
     }()
   );
 
-}(window);
+}(window, window.document);
 
