@@ -783,7 +783,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         var tds = [], tds_fixed = [], tds_fixed_r = []
         ,numbers = i1 + options.limit*(curr - 1) + 1; //序号
         
-        //若数据项为空数组，则不往下执行
+        //若数据项为空数组，则不往下执行（因为删除数据时，会将原有数据设置为 []）
         if(layui._typeof(item1) === 'array' && item1.length === 0) return;
         
         //记录下标索引，用于恢复排序
