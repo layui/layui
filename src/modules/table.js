@@ -949,7 +949,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     if(!options.totalRow) return;
     
     layui.each(data, function(i1, item1){
-      if(item1.length === 0) return;
+      //若数据项为空数组，则不往下执行（因为删除数据时，会将原有数据设置为 []）
+      if(layui._typeof(item1) === 'array' && item1.length === 0) return;
       
       that.eachCols(function(i3, item3){
         var field = item3.field || i3
