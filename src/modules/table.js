@@ -783,12 +783,15 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         var tds = [], tds_fixed = [], tds_fixed_r = []
         ,numbers = i1 + options.limit*(curr - 1) + 1; //序号
         
-        if(item1.length === 0) return;
+        //若数据项为空数组，则不往下执行
+        if(layui._typeof(item1) === 'array' && item1.length === 0) return;
         
+        //记录下标索引，用于恢复排序
         if(!sort){
           item1[table.config.indexName] = i1;
         }
         
+        //遍历表头
         that.eachCols(function(i3, item3){
           var field = item3.field || i3
           ,key = options.index + '-' + item3.key

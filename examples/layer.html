@@ -38,8 +38,8 @@ body{padding: 100px;}
 
 <div class="layui-list">
   <ul class="layui-row" id="photos">
-    <li><img src="https://cdn.layui.com/upload/2017_3/168_1488985841996_23077.png"></li>
-    <li><img src="https://res.layui.com/static/images/fly/fly.jpg"></li>
+    <li class="list"><img src="https://cdn.layui.com/upload/2017_3/168_1488985841996_23077.png"></li>
+    <li class="list"><img src="https://res.layui.com/static/images/fly/fly.jpg"></li>
   </ul>
 </div>
 
@@ -190,10 +190,18 @@ layui.use('layer', function(){
   
   //相册层
   layer.photos({
-    photos: '#photos'
+    photos: '#photos' //$('#photos')
   });
+  
+  $('#photos li-').each(function(i, e){
+    layer.photos({
+      photos: $(e)
+    });
+  });
+  
+  
   //动态追加
-  $('#photos').append('<li><img src="https://res.layui.com/static/images/sentsin/night.gif"></li>');
+  $('#photos').append('<li class="list"><img src="https://res.layui.com/static/images/sentsin/night.gif"></li>');
   
   //{"status":1,"msg":"","title":"JSON请求的相册","id":8,"start":0,"data":[{"alt":"layer","pid":109,"src":"//cdn.layui.com/upload/2017_3/168_1488985841996_23077.png","thumb":""},{"alt":"说好的，一起 Fly","pid":110,"src":"//res.layui.com/static/images/fly/fly.jpg","thumb":""},{"alt":"星空如此深邃","pid":113,"src":"//res.layui.com/static/images/sentsin/night.gif","thumb":""}]}
   
