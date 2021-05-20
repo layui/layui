@@ -971,7 +971,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       //td 内容
       var content = function(){
         var text = item3.totalRowText || ''
-        ,thisTotalNum = parseFloat(totalNums[field]).toFixed(2)
+        ,fixed = item3.totalRowFixed || 2
+        ,thisTotalNum = parseFloat(totalNums[field]).toFixed(fixed)
         ,tplData = {}
         ,getContent;
         
