@@ -705,10 +705,14 @@ Class.pt.callback = function(){
   //右上角关闭回调
   layero.find('.'+ doms[7]).on('click', cancel);
   
-  //点遮罩关闭
+  //点遮罩关闭/最小化
   if(config.shadeClose){
     that.shadeo.on('click', function(){
-      layer.close(that.index);
+      if (config.shadeClose == 1){
+        layer.close(that.index);
+      } elseif (config.shadeClose == 2){
+        layer.min(that.index);
+      }
     });
   } 
   
