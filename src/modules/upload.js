@@ -502,12 +502,7 @@ layui.define('layer' , function(exports){
         
         othis.removeAttr('lay-over');
         setChooseFile(files);
-        
-        if(options.auto){
-          that.upload(files);
-        } else {
-          setChooseText(files);
-        }
+        options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
       });
     }
     
