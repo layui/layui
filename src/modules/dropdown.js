@@ -304,6 +304,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       position: options.position
       ,e: that.e
       ,clickType: options.trigger === 'contextmenu' ? 'right' : null
+      ,align: options.align || null
     });
   };
   

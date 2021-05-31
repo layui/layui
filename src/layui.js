@@ -16,7 +16,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.6.7'; //版本号
+    this.v = '2.6.8'; // layui 版本号
   }
   
   //识别预先可能定义的指定全局对象
@@ -539,7 +539,6 @@
       error: error
     };
   };
-
   
   //typeof 类型细分 -> string/number/boolean/undefined/null、object/array/function/…
   Layui.prototype._typeof = function(operand){
@@ -608,16 +607,50 @@
     
     //如果是数字，按大小排序；如果是非数字，则按字典序排序
     clone.sort(function(o1, o2){
-      var isNum = /^-?\d+$/
-      ,v1 = o1[key]
-      ,v2 = o2[key];
-      
-      if(isNum.test(v1)) v1 = parseFloat(v1);
-      if(isNum.test(v2)) v2 = parseFloat(v2);
+      var v1 = o1[key]
+      ,v2 = o2[key]
+      ,isNum = [
+        !isNaN(v1)
+        ,!isNaN(v2)
+      ];
 
-      return v1 - v2;
+      
+      //若为数字比较
+      if(isNum[0] && isNum[1]){
+        if(v1 && (!v2 && v2 !== 0)){ //数字 vs 空
+          return 1;
+        } else if((!v1 && v1 !== 0) && v2){ //空 vs 数字
+          return -1;
+        } else { //数字 vs 数字
+          return v1 - v2;
+        }
+      };
+      
+      /**
+       * 字典序排序
+       */
+       
+      //若为非数字比较
+      if(!isNum[0] && !isNum[1]){
+        //字典序比较
+        if(v1 > v2){
+          return 1;
+        } else if (v1 < v2) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+      
+      //若为混合比较
+      if(isNum[0] || !isNum[1]){ //数字 vs 非数字
+        return -1;
+      } else if(!isNum[0] || isNum[1]) { //非数字 vs 数字
+        return 1;
+      }
       
       /*
+      //老版本
       if(v1 && !v2){
         return 1;
       } else if(!v1 && v2){
@@ -680,7 +713,7 @@
     if(fn){
       config.event[eventName] = config.event[eventName] || {};
 
-      //这里不再对多次事件监听做支持，避免更多麻烦
+      //这里不再对重复事件做支持
       //config.event[eventName][filterName] ? config.event[eventName][filterName].push(fn) : 
       config.event[eventName][filterName] = [fn];
       return this;

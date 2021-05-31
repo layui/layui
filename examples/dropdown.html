@@ -42,6 +42,7 @@ layui.use('dropdown', function(){
 
   dropdown.render({
     elem: '#demo1'
+    //,align: 'right'
     ,data: [{
       title: 'menu item 1'
       ,templet: '<i class="layui-icon layui-icon-light"></i> {{d.title}} <span class="layui-badge-dot"></span>'
@@ -183,6 +184,7 @@ layui.use('dropdown', function(){
     elem: '#demo3'
     ,content: '自定义内容  123 '
     ,style: 'background:#666;color:#fff;padding:15px;'
+    ,align: 'center'
     ,trigger: 'hover'
   });
   

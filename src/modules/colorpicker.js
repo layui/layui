@@ -1,14 +1,16 @@
-/**
 
- @Title: colorpicker 颜色选择器组件
- @License：MIT
-
+/*!
+ * colorpicker 
+ * 颜色选择组件
  */
 
-layui.define('jquery', function(exports){
+layui.define(['jquery', 'lay'], function(exports){
   "use strict";
   
   var $ = layui.jquery
+  ,lay = layui.lay
+  ,device = layui.device()
+  ,clickOrMousedown = (device.mobile ? 'click' : 'mousedown')
 
   //外部接口
   ,colorpicker = {
@@ -217,7 +219,7 @@ layui.define('jquery', function(exports){
     ,elemColorBox = that.elemColorBox[0]
     
     //颜色选择器对象
-    ,elemPicker = that.elemPicker = $(['<div id="layui-colorpicker'+ that.index +'" data-index="'+ that.index +'" class="layui-anim layui-anim-upbit layui-colorpicker-main">'
+    ,elemPicker = that.elemPicker = $(['<div id="layui-colorpicker'+ that.index +'" data-index="'+ that.index +'" class="layui-anim layui-anim-downbit layui-colorpicker-main">'
       //颜色面板
       ,'<div class="layui-colorpicker-main-wrapper">'
         ,'<div class="layui-colorpicker-basis">'
@@ -295,45 +297,12 @@ layui.define('jquery', function(exports){
   //定位算法
   Class.prototype.position = function(){
     var that = this
-    ,options = that.config
-    ,elem = that.bindElem || that.elemColorBox[0]
-    ,elemPicker = that.elemPicker[0]
-    ,rect = elem.getBoundingClientRect() //绑定元素的坐标
-    ,elemWidth = elemPicker.offsetWidth //控件的宽度
-    ,elemHeight = elemPicker.offsetHeight //控件的高度
-    
-    //滚动条高度
-    ,scrollArea = function(type){
-      type = type ? 'scrollLeft' : 'scrollTop';
-      return document.body[type] | document.documentElement[type];
-    }
-    ,winArea = function(type){
-      return document.documentElement[type ? 'clientWidth' : 'clientHeight']
-    }, margin = 5, left = rect.left, top = rect.bottom;
-    
-    left = left - (elemWidth - elem.offsetWidth)/2;
-    top = top + margin
-
-    //如果右侧超出边界
-    if(left + elemWidth + margin > winArea('width')){
-      left = winArea('width') - elemWidth - margin;
-    } else if(left < margin){ //如果左侧超出边界
-      left = margin;
-    }
-    
-    //如果底部超出边界
-    if(top + elemHeight + margin > winArea()){
-      top = rect.top > elemHeight //顶部是否有足够区域显示完全
-        ? rect.top - elemHeight 
-      : winArea() - elemHeight;
-      top = top - margin*2;
-    }
-    
-    if(options.position){
-      elemPicker.style.position = options.position;
-    }
-    elemPicker.style.left = left + (options.position === 'fixed' ? 0 : scrollArea(1)) + 'px';
-    elemPicker.style.top = top + (options.position === 'fixed' ? 0 : scrollArea()) + 'px';
+    ,options = that.config;
+    lay.position(that.bindElem || that.elemColorBox[0], that.elemPicker[0], {
+      position: options.position
+      ,align: 'center'
+    });
+    return that;
   };
 
   //颜色选择器赋值
@@ -435,7 +404,7 @@ layui.define('jquery', function(exports){
     }
 
     //拖拽元素
-    ,elemMove = $(['<div class="layui-auxiliar-moving" id="LAY-colorpicker-moving"></div'].join(''))
+    ,elemMove = $(['<div class="layui-auxiliar-moving" id="LAY-colorpicker-moving"></div>'].join(''))
     ,createMoveElem = function(call){
       $('#LAY-colorpicker-moving')[0] || $('body').append(elemMove);
       elemMove.on('mousemove', call);
@@ -457,11 +426,12 @@ layui.define('jquery', function(exports){
         if(top > maxh)top = maxh;
         var h = top/180*360;
         _h = h;
-        change(h, _s, _b, _a);  
+        change(h, _s, _b, _a);
         e.preventDefault();
       };
       
       createMoveElem(move);
+      //layui.stope(e);
       e.preventDefault();
     });
     
@@ -514,6 +484,7 @@ layui.define('jquery', function(exports){
       _b = b;
       _s = s;
       change(_h, s, b, _a); 
+      layui.stope(e);
       e.preventDefault();
       choose.trigger(e, 'mousedown');
     });
@@ -675,7 +646,7 @@ layui.define('jquery', function(exports){
     if(!options.elem[0] || that.elemColorBox[0].eventHandler) return;
     
     //绑定关闭控件事件
-    $doc.on('click', function(e){
+    $doc.on(clickOrMousedown, function(e){
       //如果点击的元素是颜色框
       if($(e.target).hasClass(ELEM) 
         || $(e.target).parents('.'+ELEM)[0]

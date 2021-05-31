@@ -86,9 +86,11 @@
       <div class="layui-input-block">
         <select name="quiz" lay-verify="required" lay-verType="tips"  lay-filter="quiz111">
           <option value="">请选择问题</option>
-          <option value="0">你工作的第一个城市</option>
+          <option value="0">你工作的 第一个城市</option>
           <option value="1" disabled>你的工号</option>
-          <option value="2">你最喜欢的老师</option>
+          <option value="2">
+            你最喜欢的老师
+          </option>
         </select>
       </div>
     </div>
@@ -249,11 +251,12 @@ layui.use(['form', 'layedit', 'laydate'], function(){
   
   //初始赋值
   var thisValue = form.val('first', {
-    'title': '测试'
+    'title': '测试测试测试'
     ,'phone': 11111111111
     ,'email': 'xu@sentsin.com'
+    ,'date': '2021-05-30'
     ,'password': 123123
-    ,'quiz': 2
+    //,'quiz': 2
     ,'interest': 3
     ,'like[write]': true
     //,'open': false

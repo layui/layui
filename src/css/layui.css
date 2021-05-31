@@ -1,9 +1,8 @@
+
 /**
- 
- @Name: layui
- @Description: Classic modular front-end UI framework
- @License: MIT
- 
+ * Layui
+ * Classic modular Front-End UI library
+ * MIT Licensed
  */
 
 
@@ -638,7 +637,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /* 流体 */.layui-btn-fluid{width: 100%;}
 
 /** 表单 **/
-.layui-input, .layui-textarea, .layui-select{height: 38px; line-height: 1.3; line-height: 38px\9; border-width: 1px; border-style: solid; background-color: #fff; border-radius: 2px;}
+.layui-input, .layui-textarea, .layui-select{height: 38px; line-height: 1.3; line-height: 38px\9; border-width: 1px; border-style: solid; background-color: #fff; color: rgba(0,0,0,.85); border-radius: 2px;}
 .layui-input::-webkit-input-placeholder,
 .layui-textarea::-webkit-input-placeholder,
 .layui-select::-webkit-input-placeholder{line-height: 1.3;}
@@ -671,7 +670,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /* 下拉选择 */.layui-form-select{position: relative;}
 .layui-form-select .layui-input{padding-right: 30px; cursor: pointer;}
 .layui-form-select .layui-edge{position: absolute; right: 10px; top: 50%; margin-top: -3px; cursor: pointer; border-width: 6px; border-top-color: #c2c2c2; border-top-style: solid; transition: all .3s; -webkit-transition: all .3s;}
-.layui-form-select dl{display: none; position: absolute; left: 0; top: 42px; padding: 5px 0; z-index: 899; min-width: 100%; border: 1px solid #d2d2d2; max-height: 300px; overflow-y: auto; background-color: #fff; border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,.12); box-sizing: border-box;}
+.layui-form-select dl{display: none; position: absolute; left: 0; top: 42px; padding: 5px 0; z-index: 899; min-width: 100%; border: 1px solid #eee; max-height: 300px; overflow-y: auto; background-color: #fff; border-radius: 2px; box-shadow: 1px 1px 4px rgb(0 0 0 / 8%); box-sizing: border-box;}
 .layui-form-select dl dt,
 .layui-form-select dl dd{padding: 0 10px; line-height: 36px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 .layui-form-select dl dt{font-size: 12px; color: #999;}
@@ -680,6 +679,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-select .layui-select-group dd{padding-left: 20px;}
 .layui-form-select dl dd.layui-select-tips{padding-left: 10px !important; color: #999;}
 .layui-form-select dl dd.layui-this{background-color: #5FB878; color: #fff;}
+/*.layui-form-select dl dd.layui-this{background-color: #F6F6F6; color: #5FB878; font-weight: 700;}*/
 .layui-form-select dl dd.layui-disabled{background-color: #fff;}
 .layui-form-selected dl{display: block;}
 .layui-form-selected .layui-edge{margin-top: -9px; -webkit-transform:rotate(180deg); transform: rotate(180deg);}
@@ -708,8 +708,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-checkbox[lay-skin="primary"] i{right: auto; left: 0; width: 16px; height: 16px; line-height: 16px; border: 1px solid #d2d2d2; font-size: 12px; border-radius: 2px; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
 .layui-form-checkbox[lay-skin="primary"]:hover i{border-color: #5FB878; color: #fff;}
 .layui-form-checked[lay-skin="primary"] i{border-color: #5FB878 !important; background-color: #5FB878; color: #fff;}
-.layui-checkbox-disbaled[lay-skin="primary"] span{background: none!important; color: #c2c2c2!important;}
-.layui-checkbox-disbaled[lay-skin="primary"]:hover i{border-color: #d2d2d2;}
+.layui-checkbox-disabled[lay-skin="primary"] span{background: none!important; color: #c2c2c2!important;}
+.layui-checkbox-disabled[lay-skin="primary"]:hover i{border-color: #d2d2d2;}
 .layui-form-item .layui-form-checkbox[lay-skin="primary"]{margin-top: 10px;}
 
 /* 复选框-开关风格 */.layui-form-switch{position: relative; display: inline-block; vertical-align: middle; height: 22px; line-height: 22px; min-width: 35px; padding: 0 5px; margin-top: 8px; border: 1px solid #d2d2d2; border-radius: 20px; cursor: pointer; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
@@ -719,11 +719,11 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-onswitch i{left: 100%; margin-left: -21px; background-color: #fff;}
 .layui-form-onswitch em{margin-left: 5px; margin-right: 21px; color: #fff!important;}
 
-.layui-checkbox-disbaled{border-color: #eee !important;}
-.layui-checkbox-disbaled span{background-color: #eee !important;}
-.layui-checkbox-disbaled i{border-color: #eee !important;}
-.layui-checkbox-disbaled em{color: #d2d2d2 !important;}
-.layui-checkbox-disbaled:hover i{color: #fff !important;}
+.layui-checkbox-disabled{border-color: #eee !important;}
+.layui-checkbox-disabled span{background-color: #eee !important;}
+.layui-checkbox-disabled i{border-color: #eee !important;}
+.layui-checkbox-disabled em{color: #d2d2d2 !important;}
+.layui-checkbox-disabled:hover i{color: #fff !important;}
 
 /* 单选框 */
 *[lay-radio]{display: none;}
@@ -733,10 +733,10 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-radioed,
 .layui-form-radioed>i,
 .layui-form-radio:hover *{color: #5FB878;}
-.layui-radio-disbaled>i{color: #eee !important;}
-.layui-radio-disbaled *{color: #c2c2c2!important;}
+.layui-radio-disabled>i{color: #eee !important;}
+.layui-radio-disabled *{color: #c2c2c2!important;}
 
-/* 表单方框风格 */.layui-form-pane .layui-form-label{width: 110px; padding: 8px 15px; height: 38px; line-height: 20px; border-width: 1px; border-style: solid; border-radius: 2px 0 0 2px; text-align: center; background-color: #FBFBFB; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; box-sizing: border-box;}
+/* 表单方框风格 */.layui-form-pane .layui-form-label{width: 110px; padding: 8px 15px; height: 38px; line-height: 20px; border-width: 1px; border-style: solid; border-radius: 2px 0 0 2px; text-align: center; background-color: #FAFAFA; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; box-sizing: border-box;}
 .layui-form-pane .layui-input-inline{margin-left: -1px;}
 .layui-form-pane .layui-input-block{margin-left: 110px; left: -1px;}
 .layui-form-pane .layui-input{border-radius: 0 2px 2px 0;}
@@ -941,12 +941,12 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-body .layui-none{line-height: 26px; padding: 30px 15px; text-align: center; color: #999;}
 .layui-table-fixed{position: absolute; left: 0; top: 0; z-index: 101;}
 .layui-table-fixed .layui-table-body{overflow: hidden;}
-.layui-table-fixed-l{box-shadow: 0 -1px 8px rgba(0,0,0,.08);}
+.layui-table-fixed-l{box-shadow: 1px 0 8px rgba(0,0,0,.08);}
 .layui-table-fixed-r{left: auto; right: -1px; border-width: 0; border-left-width: 1px; box-shadow: -1px 0 8px rgba(0,0,0,.08);}
 .layui-table-fixed-r .layui-table-header{position: relative; overflow: visible;}
 .layui-table-mend{position: absolute; right: -49px; top: 0; height: 100%; width: 50px;}
 
-.layui-table-tool{position: relative; z-index: 890; width: 100%; min-height: 50px; line-height: 30px; padding: 10px 15px; border-width: 0; border-bottom-width: 1px;}
+.layui-table-tool{position: relative; z-index: 890; width: 100%; min-height: 50px; line-height: 30px; padding: 10px 15px; border-width: 0; border-bottom-width: 1px; /*box-shadow: 0 1px 8px 0 rgb(0 0 0 / 8%);*/}
 .layui-table-tool .layui-btn-container{margin-bottom: -10px;}
 
 .layui-table-total{margin-bottom: -1px; border-width: 0; border-top-width: 1px; overflow: hidden;}
@@ -1316,7 +1316,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-colorpicker-trigger-i{display: inline-block; color: #FFF; font-size: 12px;}
 .layui-colorpicker-trigger-i.layui-icon-close{color: #999;}
 
-.layui-colorpicker-main{position: absolute; z-index: 66666666; width: 280px; padding: 7px; background: #FFF; border: 1px solid #d2d2d2; border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,.12);}
+.layui-colorpicker-main{position: absolute; left: -999999px; top: -999999px; z-index: 66666666; width: 280px; margin: 5px 0; padding: 7px; background: #FFF; border: 1px solid #d2d2d2; border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,.12);}
 .layui-colorpicker-main-wrapper{height: 180px; position: relative;}
 .layui-colorpicker-basis{width: 260px; height: 100%; position: relative;}
 .layui-colorpicker-basis-white{width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: linear-gradient(90deg, #FFF, hsla(0,0%,100%,0));}
@@ -1338,7 +1338,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-colorpicker-main-input div.layui-inline{float: left; margin-right: 10px; font-size: 14px;}
 .layui-colorpicker-main-input input.layui-input{width: 150px; height: 30px; color: #666;}
 
-/** 滑块 By star1029 **/
+/** 滑块 **/
 .layui-slider{height: 4px; background: #eee; border-radius: 3px; position: relative; cursor: pointer;}
 .layui-slider-bar{border-radius: 3px; position: absolute; height: 100%;}
 .layui-slider-step{position: absolute; top: 0; width: 4px; height: 4px; border-radius: 50%; background: #FFF; -webkit-transform: translateX(-50%); transform: translateX(-50%);}

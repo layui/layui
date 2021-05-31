@@ -107,7 +107,7 @@ layui.use(['table', 'dropdown'], function(){
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
       ,{field:'email', title:'邮箱', hide: 0, width:150, edit: 'text', templet: function(d){
-        console.log(d);
+        console.log(d)
         return '<em>'+ d.email +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}

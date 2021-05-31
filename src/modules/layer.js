@@ -671,10 +671,10 @@ Class.pt.callback = function(){
   if(config.success){
     if(config.type == 2){
       layero.find('iframe').on('load', function(){
-        config.success(layero, that.index);
+        config.success(layero, that.index, that);
       });
     } else {
-      config.success(layero, that.index);
+      config.success(layero, that.index, that);
     }
   }
   layer.ie == 6 && that.IE6(layero);

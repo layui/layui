@@ -15,9 +15,7 @@
 </head>
 <body>
 
-<div>
-  
-</div>
+
 
 <script type="text/html" id="toolbarDemo">
   <div class="layui-btn-container">
@@ -245,16 +243,16 @@ layui.use(['table', 'dropdown'], function(){
       ,layEvent: 'LAYTABLE_TIPS'
       ,icon: 'layui-icon-tips'
     }]
+    ,escape: true
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
       ,{field:'email', title:'邮箱', hide: 0, width:150, edit: 'text', templet: function(d){
-        console.log(d);
         return '<em>'+ d.email +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
-      ,{field:'city', title:'城市', width:120, templet: '#cityTpl1'}
+      ,{field:'city', title:'城市', width:120}
       ,{field:'sign', title:'签名'}
       ,{field:'experience', title:'积分', width:80, sort: true, totalRow: '{{ d.TOTAL_NUMS }} 分', templet: '<div>{{ d.experience }} 分</div>'}
       ,{field:'ip', title:'IP', width:120}

@@ -25,7 +25,7 @@
   
   //外部调用
   ,laydate = {
-    v: '5.3.1'
+    v: '5.3.1' //layDate 版本号
     ,config: {} //全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: GLOBAL.laydate_dir || ready.getPath
@@ -192,7 +192,7 @@
     that.rangeStr =  options.range ? (typeof options.range === 'string' ? options.range : '-') : '';
     
     //若 range 参数为数组，则表示为开始日期和结束日期的 input 对象
-    if(options.range && options.range.constructor === Array){
+    if(layui._typeof(options.range) === 'array'){
       that.rangeElem = [
         lay(options.range[0]),
         lay(options.range[1])
@@ -304,7 +304,7 @@
     
     //默认赋值
     if(options.value && options.isInitValue){
-      if(options.value.constructor === Date){
+      if(layui._typeof(options.value) === 'date'){
         that.setValue(that.parse(0, that.systemDate(options.value))); 
       } else {
         that.setValue(options.value); 
@@ -696,7 +696,7 @@
         ) + lang.formatError[1]);
         error = true;
       }
-    } else if(value && value.constructor === Date){ //如果值为日期对象时
+    } else if(value && layui._typeof(value) === 'date'){ //如果值为日期对象时
       options.dateTime = that.systemDate(value);
     } else {
       //重置开始日期
@@ -1248,12 +1248,10 @@
     //显示预览
     elemPreview.html(value).css({
       'color': '#5FB878'
-      ,'font-size': '14px;'
     });
     setTimeout(function(){
       elemPreview.css({
         'color': '#666'
-        ,'font-size': '12px;'
       });
     }, 300);
   };
@@ -1556,7 +1554,7 @@
   //获取当前实例对象
   thisModule.getThis = function(id){
     var that = thisModule.that[id];
-    if(!that) hint.error(id ? (MOD_NAME +' instance with ID \''+ id +'\' not found') : 'ID argument required');
+    if(!that && isLayui) layui.hint().error(id ? (MOD_NAME +' instance with ID \''+ id +'\' not found') : 'ID argument required');
     return that;
   };
   
