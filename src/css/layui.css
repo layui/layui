@@ -622,6 +622,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /* 禁用 */.layui-btn-disabled, .layui-btn-disabled:hover, .layui-btn-disabled:active{border-color: #eee !important; background-color: #FBFBFB !important; color: #d2d2d2 !important; cursor: not-allowed !important; opacity: 1;}
 
 /* 大型 */.layui-btn-lg{height: 44px; line-height: 44px; padding: 0 25px; font-size: 16px;}
+/* 中型 */.layui-btn-md{height: 36px; line-height: 36px; padding: 0 16px; font-size: 14px;}
 /* 小型 */.layui-btn-sm{height: 30px; line-height: 30px; padding: 0 10px; font-size: 12px;}
 /* 超小 */.layui-btn-xs{height: 22px; line-height: 22px; padding: 0 5px; font-size: 12px;}
 .layui-btn-xs i{font-size: 12px !important;}
