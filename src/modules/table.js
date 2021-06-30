@@ -1969,7 +1969,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
               if(content === undefined || content === null) content = '';
               
               i1 == 0 && dataTitle.push(item3.title || '');
-              vals.push('"'+ parseTempData.call(thatTable, item3, content, item1, 'text') + '"');
+              //当表格项目时自定义模板时 导出cvs 和 excel 时 input 数据为两个空格 判断输出真实数值
+              if(item3.templet && parseTempData.call(thatTable, item3, content, item1, 'text') == '  '){
+                vals.push('"'+ item1[item3.field] + '"');
+              }else{
+                vals.push('"'+ parseTempData.call(thatTable, item3, content, item1, 'text') + '"');
+              }
             }
           });
         }
