@@ -83,7 +83,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         ? item3.templet(tplData)
       : laytpl($(item3.templet).html() || String(content)).render(tplData) 
     }() : content;
-    return text ? $('<div>'+ str +'</div>').text() : str;
+    
+    //自定义模板内容为input的时候 text() 值 为空 导出时没有数据 增加判断 返回真实值
+    if($('<div>'+ str +'</div>').text() == '  ' && str.indexOf("checkbox") > 0 && str.indexOf("checked") > 0 ){
+      return content;
+    }else{
+      return text ? $('<div>'+ str +'</div>').text() : str;
+    }
   }
   
   //字符常量
