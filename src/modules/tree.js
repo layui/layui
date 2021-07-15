@@ -180,13 +180,13 @@ layui.define('form', function(exports){
             //箭头
             ,function(){
               if(options.showLine){
-                if(hasChild){
+                if(hasChild || item.hasChildren){ // hasChildren字段只添加在183行和189行的判断中，是因为懒加载需要显示加载图标按钮（暂时不考虑加载的时候换成loading图标）
                   return '<span class="layui-tree-iconClick layui-tree-icon"><i class="layui-icon '+ (item.spread ? "layui-icon-subtraction" : "layui-icon-addition") +'"></i></span>';
                 }else{
                   return '<span class="layui-tree-iconClick"><i class="layui-icon layui-icon-file"></i></span>';
                 };
               }else{
-                return '<span class="layui-tree-iconClick"><i class="layui-tree-iconArrow '+ (hasChild ? "": HIDE) +'"></i></span>';
+                return '<span class="layui-tree-iconClick"><i class="layui-tree-iconArrow '+ (hasChild || item.hasChildren ? "": HIDE) +'"></i></span>';
               };
             }()
             
@@ -277,8 +277,66 @@ layui.define('form', function(exports){
       var packCont = elem.children('.'+ELEM_PACK)
       ,iconClick = touchOpen.children('.layui-icon')[0] ? touchOpen.children('.layui-icon') : touchOpen.find('.layui-tree-icon').children('.layui-icon');
 
-      //若没有子节点
-      if(!packCont[0]){
+      // 懒加载, hasChildren 为true，且没有children字段或者children为空
+      if (item.hasChildren && (!item.children || !item.children.length)) {
+        var lazy_load = options.lazyLoad || function () {throw new Error('The LAZYLOAD option is not found in the ' + MOD_NAME + ' instance')};
+        //点击产生的回调
+        lazy_load(item.id).then(function(res){
+          //节点添加子节点容器
+          elem.append('<div class="layui-tree-pack"></div>');
+          if(options.showLine){
+            //节点本身无子节点
+            if(!packCont[0]){
+              //遍历兄弟节点，判断兄弟节点是否有子节点
+              var siblings = elem.siblings('.'+ELEM_SET), num = 1
+              ,parentPack = elem.parent('.'+ELEM_PACK);
+              layui.each(siblings, function(index, i){
+                if(!$(i).children('.'+ELEM_PACK)[0]){
+                  num = 0;
+                };
+              });
+              //若兄弟节点都有子节点
+              if(num == 1){
+                //兄弟节点添加连接线
+                siblings.children('.'+ELEM_PACK).addClass(ELEM_SHOW);
+                siblings.children('.'+ELEM_PACK).children('.'+ELEM_SET).removeClass(ELEM_LINE_SHORT);
+                elem.children('.'+ELEM_PACK).addClass(ELEM_SHOW);
+                //父级移除延伸线
+                parentPack.removeClass(ELEM_EXTEND);
+                //同层节点最后一个更改线的状态
+                parentPack.children('.'+ELEM_SET).last().children('.'+ELEM_PACK).children('.'+ELEM_SET).last().addClass(ELEM_LINE_SHORT);
+              }else{
+                elem.children('.'+ELEM_PACK).children('.'+ELEM_SET).addClass(ELEM_LINE_SHORT);
+              };
+            }
+            elemMain.find('.'+ICON_CLICK).addClass('layui-tree-icon');
+            elemMain.find('.'+ICON_CLICK).children('.layui-icon').addClass(ICON_ADD).removeClass('layui-icon-file');
+          //若未开启连接线，显示箭头
+          }else{
+            elemMain.find('.layui-tree-iconArrow').removeClass(HIDE);
+          };
+          // 添加数据
+          item.children = res
+          // 渲染节点
+          that.tree(elem.children('.'+ELEM_PACK), res);
+          if(options.showCheckbox) {
+            //若开启复选框，同步新增节点状态
+            if(elemMain.find('input[same="layuiTreeCheck"]')[0].checked){
+              var packLast = elem.children('.'+ELEM_PACK).children('.'+ELEM_SET).last();
+              packLast.find('input[same="layuiTreeCheck"]')[0].checked = true;
+            };
+            that.renderForm('checkbox');
+          };
+          // 默认展开
+          elem.addClass(ELEM_SPREAD);
+          elem.children('.'+ELEM_PACK).slideDown(200);
+          // 修改图标状态
+          var iconClick = touchOpen.children('.layui-icon')[0] ? touchOpen.children('.layui-icon') : touchOpen.find('.layui-tree-icon').children('.layui-icon');
+          iconClick.addClass(ICON_SUB).removeClass(ICON_ADD);
+        }).catch(function(rej){
+          throw new Error(rej)
+        })
+      } else if(!packCont[0]){ //若没有子节点
         state = 'normal';
       }else{
         if(elem.hasClass(ELEM_SPREAD)){
