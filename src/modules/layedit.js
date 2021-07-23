@@ -454,7 +454,7 @@ layui.define(['layer', 'form'], function(exports){
       toolCheck.call(iframeWin, tools, othis);
     }
     
-    ,isClick = /image/
+    ,isClick = '/image/';
 
     tools.find('>i').on('mousedown', function(){
       var othis = $(this)
