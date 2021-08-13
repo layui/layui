@@ -333,7 +333,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     //如果多级表头，则填补表头高度
     if(options.cols.length > 1){
       //补全高度
-      var th = that.layFixed.find(ELEM_HEADER).find('th');
+      var th = that.layFixed.find(ELEM_HEADER).find('th[rowspan]');
       th.height(that.layHeader.height() - 1 - parseFloat(th.css('padding-top')) - parseFloat(th.css('padding-bottom')));
     }
     
