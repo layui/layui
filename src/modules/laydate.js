@@ -738,8 +738,10 @@
       return that.newDate(obj).getTime();
     };
     
-    //校验主面板是否在可选日期区间
-    if(getDateTime(dateTime) > getDateTime(options.max) || getDateTime(dateTime) < getDateTime(options.min)){
+     //校验主面板是否在可选日期区间
+     if(getDateTime(dateTime) > getDateTime(options.max)){
+      dateTime = options.dateTime = lay.extend({}, options.max);
+    } else if(getDateTime(dateTime) < getDateTime(options.min)){
       dateTime = options.dateTime = lay.extend({}, options.min);
     }
     
