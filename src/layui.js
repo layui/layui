@@ -7,6 +7,7 @@
  
 ;!function(win){
   "use strict";
+
   var doc = win.document, config = {
     modules: {} //记录模块物理路径
     ,status: {} //记录模块加载状态
