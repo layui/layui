@@ -94,10 +94,9 @@ layui.use(['layer', 'form'], function(){
 从现在开始，尽情地拥抱 layui 吧！但愿她能成为你长远的开发伴侣，化作你方寸屏幕前的亿万字节！
 
 ## 贡献者
-> 大概是因为 layui 让开发者变得更懒，所以贡献者才这么少？   
-> 好的，姑且就这样认为吧。
+> 大概是因为 layui 让开发者变得更懒，所以贡献者才如此之少。  
  
-[![Giteye chart](https://chart.giteye.net/gitee/sentsin/layui/PMFQFJCX.png)](https://giteye.net/chart/PMFQFJCX)
+[贡献者列表](https://github.com/sentsin/layui/graphs/contributors)
 
 ## 相关
-[官网](http://www.layui.com/)、[更新日志](http://www.layui.com/doc/base/changelog.html)
+> layui 官网已于2021年10月13日下线。当前，包括新版下载、文档和示例在内的所有日常维护，都以 Github 或 Gitee 项目主页为准。
