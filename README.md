@@ -90,8 +90,10 @@ layui.use(['layer', 'form'], function(){
 </html>
 ```
 
-## [阅读文档](https://gitee.com/layui)
-从现在开始，尽情地拥抱 layui 吧！
+## 阅读文档
+[**最新文档**](https://gitee.com/layui#%E5%BD%93%E5%89%8D)
+ 
+从现在开始，尽情地拥抱 layui 吧！ 
 但愿它能成为你长远的开发伴侣，化作你方寸屏幕前的亿万字节！
 
 ## 贡献者
