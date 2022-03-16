@@ -1,23 +1,15 @@
 {
   "name": "layui",
   "realname": "layui",
-  "version": "2.6.8",
+  "version": "2.7.0-rc6",
   "description": "Classic modular Front-End UI library",
   "main": "dist/layui.js",
   "license": "MIT",
-  "scripts": {
-    "test": "karma start karma.conf.unit.js",
-    "test:cov": "npm test -- --reporters mocha,coverage",
-    "test:sauce": "karma start karma.conf.sauce.js",
-    "test:watch": "npm test -- --auto-watch --no-single-run"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/sentsin/layui.git"
   },
-  "author": [
-    "sentsin <xu@sentsin.com>"
-  ],
   "homepage": "https://github.com/sentsin/layui/",
   "devDependencies": {
     "chai": "^4.3.4",
@@ -32,14 +24,6 @@
     "gulp-replace": "^0.6.1",
     "gulp-uglify": "^1.5.4",
     "gulp-zip": "^4.0.0",
-    "karma": "^1.5.0",
-    "karma-chai": "^0.1.0",
-    "karma-chai-sinon": "^0.1.5",
-    "karma-coverage": "^1.1.1",
-    "karma-mocha": "^1.3.0",
-    "karma-mocha-reporter": "^2.2.3",
-    "karma-phantomjs-launcher": "^1.0.4",
-    "karma-sauce-launcher": "^1.1.0",
     "minimist": "^1.2.5",
     "mocha": "^3.2.0",
     "sinon": "^3.2.1",
@@ -57,7 +41,8 @@
   "keywords": [
     "layui",
     "ui",
-    "JavaScript Framework",
+    "ui library",
+    "javascript framework",
     "toolkit",
     "front-end component library"
   ]
