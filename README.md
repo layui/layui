@@ -100,4 +100,5 @@ layui.use(['layer', 'form'], function(){
 
 ## 相关
 > layui 官网已于2021年10月13日下线。
+
 目前包括新版下载、文档和示例在内的所有日常维护，都以 Github 或 Gitee 项目主页为准。
