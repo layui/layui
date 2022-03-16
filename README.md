@@ -91,7 +91,7 @@ layui.use(['layer', 'form'], function(){
 ```
 
 ## 阅读文档
-[**最新文档**](https://gitee.com/layui#%E5%BD%93%E5%89%8D)
+[**最新文档**](https://gitee.com/layui)
  
 愿 layui 能成为你得心应手的 Web 界面解决方案，化作你方寸屏幕前的亿万字节！
 
