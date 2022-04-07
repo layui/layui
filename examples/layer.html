@@ -5,40 +5,116 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>layer弹层 - layui</title>
+<title>layer 弹层 - layui</title>
 
 <link rel="stylesheet" href="../src/css/layui.css">
 
 <style>
 body{padding: 100px;}
+
+#photos li{float: left; margin: 0 1px 1px;}
+#photos img{max-height: 38px;}
 </style>
 </head>
 <body>
 
-<button class="layui-btn layui-btn-primary demo" data-type="test">Alert</button>
-<button class="layui-btn demo" data-type="test2">Confirm</button>
-<button class="layui-btn demo" data-type="test3">Msg</button>
-<button class="layui-btn demo" data-type="test4">Tips</button>
-<button class="layui-btn demo" data-type="test5">Page</button>
-<button class="layui-btn demo" data-type="test6">Iframe</button>
-<button class="layui-btn demo" data-type="test7">Prompt</button>
-<button class="layui-btn demo" data-type="test8">Tab</button>
-<a href="http://layer.layui.com/" target="_blank" class="layui-btn demo">更多例子</a>
+<div class="layui-btn-container">
+  <button class="layui-btn layui-btn-primary demo" data-type="test">Alert</button>
+  <button class="layui-btn demo" data-type="test2">Confirm</button>
+  <button class="layui-btn demo" data-type="test3">Msg</button>
+  <button class="layui-btn demo" data-type="test4">Tips</button>
+  <button class="layui-btn demo" data-type="test5">Page</button>
+  <button class="layui-btn demo" data-type="test6">Iframe</button>
+  <button class="layui-btn demo" data-type="test7">Prompt</button>
+  <button class="layui-btn demo" data-type="test8">Tab</button>
+  <a href="http://layer.layui.com/" target="_blank" class="layui-btn demo">更多例子</a>
+</div>
 
-<div id="test11111" style="display: none;padding: 20px;">
- 123
+<div id="test11111" style="display: none; padding: 20px;">
+  content 指向放置在页面的一段隐藏元素
+</div>
+
+<hr><br>
+
+<div class="layui-list">
+  <ul class="layui-row" id="photos">
+    <li class="list"><img src="https://cdn.layui.com/upload/2017_3/168_1488985841996_23077.png"></li>
+    <li class="list"><img src="https://res.layui.com/static/images/fly/fly.jpg"></li>
+  </ul>
 </div>
 
 
-<script src="../src/layui.js"></script>
 <script>
+var LAYUI_GLOBAL = {
+  //path: '../src/'
+  //,layerPath: '../release/layer/src/'
+};
+</script>
+
+<script src="../src/layui.js"></script>
+
+<!-- layer 独立版调试 -->
+<script src1="//cdn.staticfile.org/jquery/1.12.3/jquery.min.js"></script>
+<script src1="../release/layer/src/layer.js"></script>
+
+<script>
+var runTest = function(run, $, layer){
+  if(!run) return;
+
+  var timer = setInterval(function(){
+    //location.reload();
+  }, 1000);
+  
+  layer.alert(123);
+  
+  $.ajax({
+    url: './all.html'
+    ,beforeSend: function(){
+      //layer.ready(function(){
+        //layer.load();
+      //});
+    }
+    ,success: function(){
+      return;
+      layer.closeAll('loading', function(){
+        setTimeout(function(){
+          if($('.layui-layer-loading').length){
+            console.error('layer close 异常');
+            clearInterval(timer);
+          }
+        }, 200);
+      });
+    }
+  });
+};
+window.jQuery && runTest(1, window.jQuery, window.layer);
+
 layui.use('layer', function(){
-  var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+  var $ = layui.jquery, layer = layui.layer;
+  //return
+  
+  var index = layer.msg('hello');
+  //layer.close(index);
+  //runTest(1, $, layer);
+  
   
   //触发事件
   var active = {
     test: function(){
-      layer.alert('你好么，体验者');
+      layer.alert('你好么，体验者。<br>在标题栏显示自动关闭倒计秒数', {
+        time: 5*1000
+        ,success: function(layero, index){
+          var timeNum = this.time/1000, setText = function(start){
+            layer.title((start ? timeNum : --timeNum) + ' 秒后关闭', index);
+          };
+          setText(!0);
+          this.timer = setInterval(setText, 1000);
+          if(timeNum <= 0) clearInterval(this.timer);
+        }
+        ,end: function(){
+          clearInterval(this.timer);
+        }
+      });
     }
     ,test2: function(){
       layer.confirm('您是如何看待前端开发？', {
@@ -53,24 +129,34 @@ layui.use('layer', function(){
       });
     }
     ,test3: function(){
-      layer.msg('玩命提示中');
+      layer.msg('提示中');
     }
     ,test4: function(){
       layer.tips('Hi，我是一个小提示', this, {tips: 1});
     }
     ,test5: function(){
        layer.open({
-        title:'更新论坛信息',
+        title:'自定义页面层',
         type: 1,
         skin: 'layui-layer-rim', 
-        area: ['500px', '580px'], 
-        content: $('#test11111')
+        area: ['1000px', '580px'], 
+        content: $('#test11111'),
+        maxmin: true,
+        minStack: false, //最小化不堆叠在左下角
+        id: 'page1', //定义 ID，防止重复弹出
+        min: function(layero, index){
+          
+          layer.msg('阻止了默认的最小化');
+          layer.style(index, {top: 'auto', bottom: 0});
+          
+          return false;
+        }
       });
     }
     ,test6: function(){
       layer.open({
         type: 2
-        ,content: 'http://fly.layui.com/'
+        ,content: 'https://www.aliyun.com/activity?userCode=ap0255is'
         ,area: ['375px', '500px']
         ,maxmin: true
       });
@@ -99,7 +185,28 @@ layui.use('layer', function(){
         }]
       });
     }
+    
   };
+  
+  //相册层
+  layer.photos({
+    photos: '#photos' //$('#photos')
+  });
+  
+  $('#photos li-').each(function(i, e){
+    layer.photos({
+      photos: $(e)
+    });
+  });
+  
+  
+  //动态追加
+  $('#photos').append('<li class="list"><img src="https://res.layui.com/static/images/sentsin/night.gif"></li>');
+  
+  //{"status":1,"msg":"","title":"JSON请求的相册","id":8,"start":0,"data":[{"alt":"layer","pid":109,"src":"//cdn.layui.com/upload/2017_3/168_1488985841996_23077.png","thumb":""},{"alt":"说好的，一起 Fly","pid":110,"src":"//res.layui.com/static/images/fly/fly.jpg","thumb":""},{"alt":"星空如此深邃","pid":113,"src":"//res.layui.com/static/images/sentsin/night.gif","thumb":""}]}
+  
+  
+  
   $('.demo').on('click', function(){
     var type = $(this).data('type');
     active[type] ? active[type].call(this) : '';

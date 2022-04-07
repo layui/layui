@@ -17,6 +17,8 @@ body{padding: 50px;}
 <button class="layui-btn" lay-active="e2">事件2</button>
 <button class="layui-btn" lay-active="e3">事件3</button>
 
+<button class="layui-btn" lay-active2="e4">事件4</button>
+
 <hr>
 
 <div id="test"></div>
@@ -60,14 +62,28 @@ layui.use('util', function(){
   
   //处理属性 为 lay-active 的所有元素事件
   util.event('lay-active', {
-    e1: function(){
-      alert('事件1')
+    e1: function(othis){
+      alert(othis.html())
     }
-    ,e2: function(){
-      alert('事件2')
+    ,e2: function(othis){
+      alert(othis.html())
     }
-    ,e3: function(){
-      alert('事件3')
+    ,e3: function(othis){
+      alert(othis.html())
+    }
+  });
+  
+  //测试是否重复绑定
+  util.event('lay-active', {
+    e1: function(othis){
+      alert(othis.html() + '新事件')
+    }
+  });
+  
+  //测试绑定新事件
+  util.event('lay-active2', {
+    e4: function(othis){
+      alert(othis.html())
     }
   });
   

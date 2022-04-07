@@ -12,11 +12,31 @@
 
   <link rel="stylesheet" href="../src/css/layui.css">
 
-<style>
-body{padding: 10px;}
-</style>
+  <style>
+  body{padding: 10px;}
+  </style>
 </head>
 <body>
+
+
+<form class="layui-form" method="get">
+  <div class="layui-form-item">
+    <div class="layui-input-inline">
+      <input type="text" name="arr[]" required placeholder="请输入" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-input-inline">
+      <input type="text" name="arr[]" required placeholder="请输入" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-input-inline">
+      <input type="text" name="arr[title]" required placeholder="请输入" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <button class="layui-btn" lay-submit lay-filter="top">立即提交</button>
+  </div>
+</form>
+
+<hr>
 
 <form class="layui-form layui-form-pane1" action="" lay-filter="first">
   <div class="layui-form-item">
@@ -64,11 +84,13 @@ body{padding: 10px;}
     <div class="layui-inline">
       <label class="layui-form-label">行内表单</label>
       <div class="layui-input-block">
-        <select name="quiz" lay-verify="required" lay-verType="tips">
+        <select name="quiz" lay-verify="required" lay-verType="tips"  lay-filter="quiz111">
           <option value="">请选择问题</option>
-          <option value="0">你工作的第一个城市</option>
+          <option value="0">你工作的 第一个城市</option>
           <option value="1" disabled>你的工号</option>
-          <option value="2">你最喜欢的老师</option>
+          <option value="2">
+            你最喜欢的老师
+          </option>
         </select>
       </div>
     </div>
@@ -146,6 +168,7 @@ body{padding: 10px;}
     <label class="layui-form-label">开关关</label>
     <div class="layui-input-block">
       <input type="checkbox" name="close" lay-skin="switch" title="开关">
+      <input type="checkbox" name="close2" lay-skin="switch" title="开关" lay-text="ON|OFF" disabled>
     </div>
   </div>
   <div class="layui-form-item" pane>
@@ -213,6 +236,14 @@ layui.use(['form', 'layedit', 'laydate'], function(){
     ]
   });
   
+  form.on('submit(top)', function(data){
+    console.log(data);
+    return false;
+  });
+  
+  
+  
+  
   //日期
   laydate.render({
     elem: '#date'
@@ -220,9 +251,10 @@ layui.use(['form', 'layedit', 'laydate'], function(){
   
   //初始赋值
   var thisValue = form.val('first', {
-    'title': '测试'
+    'title': '测试测试测试'
     ,'phone': 11111111111
     ,'email': 'xu@sentsin.com'
+    ,'date': '2021-05-30'
     ,'password': 123123
     //,'quiz': 2
     ,'interest': 3
@@ -232,11 +264,10 @@ layui.use(['form', 'layedit', 'laydate'], function(){
     ,'desc': 'form 是我们非常看重的一块'
     ,xxxxxxxxx: 123
   });
-  console.log(thisValue);
 
   
   //事件监听
-  form.on('select', function(data){
+  form.on('select(quiz111)', function(data){
     console.log('select: ', this, data);
   });
   
@@ -273,41 +304,24 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 
 </script>
 
-
-<form id="test">
+<form id="test1" action="" target="_blank">
   <input type="radio" value="girl" disabled>
   <input type="checkbox" name="love[a]">
   <input type="checkbox" name="love[b]">
   <input value="1">
+  <input name="as">
+  <input name="=" value="2">
   <select name="quiz">
     <option value="">请选择问题</option>
     <option disabled value="你工作的第一个城市">你工作的第一个城市</option>
     <option value="你的工号">你的工号</option>
     <option value="你最喜欢的老师">你最喜欢的老师</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
     <option value="你的工号" selected>你的工号</option>
     <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
-    <option value="你的工号">你的工号</option>
   </select>
-  <button>Go</button>
+  <button type="submit">原始表单，测试提交</button>
 </form>
+
 <script>
 layui.use('jquery', function(){
   var $ = layui.jquery;
@@ -317,8 +331,9 @@ layui.use('jquery', function(){
   $('#test').on('submit', function(){
      return false
   });
-  $('#test').on('submit', function(){
-     return true
+  $('#test1').on('submit', function(obj){
+    //console.log(obj.field)
+     //return false;
   });
 });
 </script>
