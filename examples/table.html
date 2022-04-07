@@ -3,28 +3,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-<title>表格操作 - layui</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>表格操作 - layui</title>
 
-<link rel="stylesheet" href="../src/css/layui.css">
+  <link rel="stylesheet" href="../src/css/layui.css">
 
-<style>
-body{padding: 20px; /*overflow-y: scroll;*/}
-</style>
+  <style>
+  body{padding: 20px; /*overflow-y: scroll;*/}
+  </style>
 </head>
 <body>
+
+
 
 <script type="text/html" id="toolbarDemo">
   <div class="layui-btn-container">
     <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
     <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+    <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页所有数据</button>
     <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
-    <button class="layui-btn layui-btn-sm" lay-event="reload">重载</button>
+    <button class="layui-btn layui-btn-sm" lay-event="reload">重载（保留初始参数）</button>
+    <button class="layui-btn layui-btn-sm" lay-event="reload2">重载（不保留初始参数）</button>
+    <button class="layui-btn layui-btn-sm" id="dropdown">
+      更多菜单 
+      <i class="layui-icon layui-icon-down layui-font-12"></i>
+  </button>
   </div>
 </script>
 
 <table id="test" lay-filter="test"></table>
+
+<div id="appendtest"></div>
+<script type="text/html" id="TPL_appendtest">
+  <table class="layui-table" lay-data="{url:'json/table/demo2.json', page: true, limit: 6}" lay-filter="appendtest">
+    <thead>
+      <tr>
+        <th lay-data="{checkbox:true, fixed:'left'}" rowspan="2"></th>
+        <th lay-data="{field:'username', width:80}" rowspan="2">联系人</th>
+        <th lay-data="{field:'amount', width:120}" rowspan="2">金额</th>
+      </tr>
+    </thead>
+  </table>
+</script>
 
 <script type="text/html" id="barDemo">
   <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
@@ -58,7 +79,7 @@ body{padding: 20px; /*overflow-y: scroll;*/}
 <table id="test2" lay-filter="test2"></table>
 
 <div style="display: none1;">
-  <table class="layui-table1" lay-data="{width:800, height: 300, url:'json/table/demo2.json', page: true, limit: 6}">
+  <table class="layui-table" lay-data="{width:800, height: 300, url:'json/table/demo2.json', page: true, limit: 6}">
     <thead>
       <tr>
         <th lay-data="{checkbox:true, fixed:'left'}" rowspan="2"></th>
@@ -75,7 +96,7 @@ body{padding: 20px; /*overflow-y: scroll;*/}
     </thead>
   </table>
 
-  <table class="layui-table" lay-data="{url:'json/table/demo2.json', toolbar: '#toolbarDemo', page: true, limit: 6}">
+  <table class="layui-table" lay-data="{url:'json/table/demo2.json', page: true, limit: 6}">
     <thead>
       <tr>
         <th lay-data="{field:'username'}" rowspan="3">联系人</th>
@@ -177,11 +198,28 @@ body{padding: 20px; /*overflow-y: scroll;*/}
   </table>
 </div>
 
-<script src="../src/layui.js" charset="utf-8"></script>
+<script src="../src/layui.js" src1="//www.layuicdn.com/layui-v2.0.1/layui.js" charset="utf-8"></script>
 <script>
-layui.use('table', function(){
-  var table = layui.table;
-  //return;
+layui.use(['table', 'dropdown'], function(){
+  var table = layui.table
+  ,$ = layui.$
+  ,laytpl = layui.laytpl
+  ,dropdown = layui.dropdown;
+  
+  //全局设定某参数
+  table.set({
+    where: {
+      token: '全局的 token'
+      ,access: '全局的 access'
+    }
+    //,defaultToolbar: ['filter']
+    ,limit: 30
+    //,url: 'list'
+    //,height: 300
+  });
+  
+  $('#appendtest').append($('#TPL_appendtest').html())
+  table.init('appendtest');
   
   //渲染
   window.ins1 = table.render({
@@ -195,7 +233,7 @@ layui.use('table', function(){
       
     }
     
-    ,autoSort: false
+    //,autoSort: false //是否自动排序。如果否，则由服务端排序
     //,loading: false
     ,totalRow: true
     ,limit: 30
@@ -205,6 +243,7 @@ layui.use('table', function(){
       ,layEvent: 'LAYTABLE_TIPS'
       ,icon: 'layui-icon-tips'
     }]
+    ,escape: true
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
@@ -213,14 +252,47 @@ layui.use('table', function(){
         return '<em>'+ d.email +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
-      ,{field:'city', title:'城市', width:120, templet: '#cityTpl1'}
+      ,{field:'city', title:'城市', width:120}
       ,{field:'sign', title:'签名'}
-      ,{field:'experience', title:'积分', width:80, sort: true, totalRow: true, templet: '<div>{{ d.experience }} 分</div>'}
+      ,{field:'experience', title:'积分', width:80, sort: true, totalRow: '{{ d.TOTAL_NUMS }} 分', templet: '<div>{{ d.experience }} 分</div>'}
       ,{field:'ip', title:'IP', width:120}
       ,{field:'logins', title:'登入次数', width:100, sort: true, totalRow: true}
       ,{field:'joinTime', title:'加入时间', width:120}
       ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
     ]]
+    
+    ,initSort1: {
+      field: 'experience' //排序字段，对应 cols 设定的各字段名
+      ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+    }
+    
+    ,headers: {headers_token: 'sasasas'}
+    ,where: $.extend({}, table.config.where, {
+      test: '渲染的 test'
+      ,token: '渲染的 token'
+      ,key: 'experience'
+      ,order: 'asc'
+    })
+    
+    ,done: function(){
+      //下拉菜单
+      dropdown.render({
+        elem: '#dropdown' //可绑定在任意元素中，此处以上述按钮为例
+        ,data: [{
+          id: 0,
+          title: '刷新'
+        }]
+        //菜单被点击的事件
+        ,click: function(obj){
+          table.reload('test');
+        }
+      });
+    }
+    
+    ,error: function(res, msg){
+      console.log(res, msg)
+    }
+
     /*
     ,response: {
       statusName: 'status'
@@ -237,9 +309,27 @@ layui.use('table', function(){
     */
   });
   
+  //排序事件
+  table.on('sort(test)', function(obj){
+    console.log(obj);
+
+    return;
+    layer.msg('服务端排序。order by '+ obj.field + ' ' + obj.type);
+    //服务端排序
+    table.reload('test', {
+      initSort: obj
+      //,page: {curr: 1} //重新从第一页开始
+      ,where: { //重新请求服务端
+        key: obj.field //排序字段
+        ,order: obj.type //排序方式
+      }
+    }, true);
+  });
+  
   //工具栏事件
   table.on('toolbar(test)', function(obj){
-    var checkStatus = table.checkStatus(obj.config.id);
+    var config = obj.config;
+    var checkStatus = table.checkStatus(config.id);
     switch(obj.event){
       case 'add':
         layer.msg('添加');
@@ -258,18 +348,49 @@ layui.use('table', function(){
         var data = checkStatus.data;
         layer.msg('选中了：'+ data.length + ' 个');
       break;
+      case 'getData':
+        var getData = table.getData(obj.config.id);
+        console.log(getData);
+        layer.alert(JSON.stringify(getData));
+      break;
       case 'isAll':
         layer.msg(checkStatus.isAll ? '全选': '未全选')
       break;
       case 'LAYTABLE_TIPS':
-        layer.alert('Table for layui-v'+ layui.v);
+        layer.alert(config.title || 'Table for layui-v'+ layui.v);
       break;
       case 'reload':
-        table.reload('test', {
-          page: {curr: 5}
+        //深度重载
+        var instReload = table.reload('test', {
+          
+          where: {
+            abc: 123
+            ,test: '重载的 test'
+          }
+          ,page: {curr: 5, limit: 20}
+          ,cols: ins1.config.cols
           //,height: 300
           //,url: 'x'
-        }, 'data');
+        }, true);
+      break;
+      case 'reload2':
+        //浅重载
+        table.reload('test', {
+          where: {
+            efg: 'sasasas'
+            //,test: '新的 test2'
+            //,token: '新的 token2'
+          }
+          ,cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
+            ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
+            ,{field:'experience', title:'积分', width:80, sort: true, totalRow: true, templet: '<div>{{ d.experience }} 分</div>'}
+            ,{field:'logins', title:'登入次数', width:100, sort: true, totalRow: true}
+            ,{field:'joinTime', title:'加入时间', width:120}
+          ]]
+          //,height: 500
+        });
       break;
     };
   });
@@ -362,23 +483,6 @@ layui.use('table', function(){
         layer.close(index);
       });
     }
-  });
-  
-  //监听排序
-  table.on('sort(test)', function(obj){
-    console.log(this)
-    
-    //return;
-    layer.msg('服务端排序。order by '+ obj.field + ' ' + obj.type);
-    //服务端排序
-    table.reload('test', {
-      initSort: obj
-      //,page: {curr: 1} //重新从第一页开始
-      ,where: { //重新请求服务端
-        key: obj.field //排序字段
-        ,order: obj.type //排序方式
-      }
-    });
   });
   
   //return;

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>选项卡 - 常用元素 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding:20px;}
+</style>
+</head>
+<body>
+
+
+<div class="layui-tab" lay-filter="tabDemo" lay-allowClose="true">
+  <ul class="layui-tab-title">
+    <li class="layui-this" lay-id="1">标题1</li>
+    <li lay-id="2">标题2</li>
+    <li lay-id="3">标题3</li>
+    <li lay-id="4">标题4</li>
+    <li lay-id="5">标题5</li>
+  </ul>
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">1</div>
+    <div class="layui-tab-item">2</div>
+    <div class="layui-tab-item">3</div>
+    <div class="layui-tab-item">4</div>
+    <div class="layui-tab-item">5</div>
+  </div>
+</div>
+
+<button class="layui-btn" onclick="layui.element.tabChange('tabDemo', 3)">手工切换到“标题3”</button>
+<button class="layui-btn" onclick="layui.element.tabAdd('tabDemo', {title:'新标题', content:'新内容', id: +new Date})">添加Tab</button>
+<button class="layui-btn" onclick="layui.element.tabDelete('tabDemo', 4)">删除“标题4”</button>
+
+<div class="layui-tab layui-tab-brief">
+  <ul class="layui-tab-title">
+    <li class="layui-this">标题1</li>
+    <li>标题2</li>
+    <li>标题3</li>
+    <li>标题4</li>
+    <li>标题5</li>
+    <li>标题6</li>
+  </ul>
+</div>
+
+<div class="layui-inline">
+  <div class="layui-tab layui-tab-card">
+    <ul class="layui-tab-title">
+      <li class="layui-this">标题一</li>
+      <li>标题2</li>
+      <li>标题3</li>
+      <li>标题4</li>
+      <li>标题5</li>
+      <li>标题6</li>
+    </ul>
+    <div class="layui-tab-content">
+      <div class="layui-tab-item layui-show">
+        <div class="layui-form">
+          <select>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+          </select>
+        </div>
+      </div>
+      <div class="layui-tab-item">2</div>
+      <div class="layui-tab-item">3</div>
+      <div class="layui-tab-item">4</div>
+      <div class="layui-tab-item">5</div>
+      <div class="layui-tab-item">6</div>
+    </div>
+  </div>
+</div>
+
+<ul class="layui-tab-title">
+  <li class="layui-this"><a href="#1">标题题题题题题1</a></li>
+  <li><a href="#2">标题题题2</a></li>
+  <li><a href="#3">标题3</a></li>
+  <li><a href="#4">标题题题题题题题4</a></li>
+  <li><a href="#5">标题5</a></li>
+  <li><a href="#6">标题6</a></li>
+  <li><a href="#7">标题7</a></li>
+  <li><a href="#8">标题题题题题题题8</a></li>
+</ul>
+
+<div class="layui-tab" lay-filter="test" lay-allowClose="true">
+  <ul class="layui-tab-title">
+    <li class="layui-this">标题1</li>
+    <li>标题2</li>
+    <li>标题3</li>
+    <li>标题4</li>
+    <li>标题5</li>
+    <li>标题6</li>
+    <li>标题7</li>
+    <li>标题8</li>
+  </ul>
+</div>
+
+
+
+<script src="../src/layui.js"></script>
+<script>
+
+layui.use(['element', 'form'], function(){
+  var element = layui.element;
+  
+  element.on('tab(test)', function(data){
+    console.log(this, data);
+  });
+  
+});
+</script>
+</body>
+</html>

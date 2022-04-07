@@ -38,6 +38,9 @@ layui.use('slider', function(){
     ,change: function(value){ //回调实时显示当前值
       console.log(value)
     }
+    ,setTips: function(value){ //自定义提示文本
+      return value + '%';
+    }
     //,setTips: function(value){ //自定义提示文本
       //return '离世界末日还有 ' + value + ' 天';
     //}
@@ -46,7 +49,7 @@ layui.use('slider', function(){
     //,theme: '#c00' //主题色
   });
   
-  sliderInst.setValue(48)
+  sliderInst.setValue(30);
 });
 </script>
 </body>
