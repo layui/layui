@@ -1524,7 +1524,7 @@
   
   //是否输入框
   Class.prototype.isInput = function(elem){
-    return /input|textarea/.test(elem.tagName.toLocaleLowerCase());
+    return /input|textarea/.test(elem.tagName.toLocaleLowerCase()) || /INPUT|TEXTAREA/.test(elem.tagName);
   };
 
   //绑定的元素事件处理
