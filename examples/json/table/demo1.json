@@ -15,7 +15,6 @@
     ,"experience": 7
     ,"ip": "192.168.0.8"
     ,"logins": null
-    ,"joinTime": "2016-10-14"
   }, {
     "id": "10002"
     ,"username": "李白"
@@ -57,7 +56,7 @@
     ,"sex": "女"
     ,"city": "浙江杭州"
     ,"sign": "人生恰似一场修行"
-    ,"experience": 64
+    ,"experience": 4
     ,"ip": "192.168.0.8"
     ,"logins": "106"
     ,"joinTime": "2016-10-14"
@@ -68,7 +67,7 @@
     ,"sex": "男"
     ,"city": "浙江杭州"
     ,"sign": "人生恰似一场修行"
-    ,"experience": 65
+    ,"experience": 5
     ,"ip": "192.168.0.8"
     ,"logins": "106"
     ,"joinTime": "2016-10-14"
@@ -79,7 +78,7 @@
     ,"sex": "男"
     ,"city": "浙江杭州"
     ,"sign": "人生恰似一场修行"
-    ,"experience": 49
+    ,"experience": 9
     ,"ip": "192.168.0.8"
     ,"logins": "106"
     ,"joinTime": "2016-10-14"
@@ -95,4 +94,4 @@
     ,"logins": "106"
     ,"joinTime": "2016-10-14"
   }]
-}  
+}
