@@ -7,6 +7,7 @@
 *.diff
 *.patch
 *.bak
+*.bat
 .DS_Store
 Thumbs.db
 .svn/
@@ -17,12 +18,8 @@ Thumbs.db
 .npmignore
 node_modules/
 _site/
-run.bat
-dir.txt
+.git/
 
 release/
-build/
-rc/
-
-coverage/
+v/
 package-lock.json

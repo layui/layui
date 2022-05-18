@@ -1,8 +1,5 @@
 ﻿/**
- 
- @Name : laytpl 模板引擎
- @License：MIT
- 
+ * laytpl 模板引擎
  */
 
 layui.define(function(exports){
@@ -79,7 +76,7 @@ layui.define(function(exports){
       str = str.replace(exp(config.open+'|'+config.close), '');
       if(/^=/.test(str)){
         str = str.replace(/^=/, '');
-        start = '"+_escape_(';
+        start = '"+laytpl.escape(';
       }
       return start + str.replace(/\\(.)/g, '$1') + ')+"';
     });
@@ -87,8 +84,8 @@ layui.define(function(exports){
     tpl = '"use strict";var view = "' + tpl + '";return view;';
 
     try{
-      that.cache = tpl = new Function('d, _escape_', tpl);
-      return tpl(data, tool.escape);
+      that.cache = tpl = new Function('d, laytpl', tpl);
+      return tpl(data, tool);
     } catch(e){
       delete that.cache;
       return tool.error(e, tplog);
@@ -98,7 +95,7 @@ layui.define(function(exports){
   Tpl.pt.render = function(data, callback){
     var that = this, tpl;
     if(!data) return tool.error('no data');
-    tpl = that.cache ? that.cache(data, tool.escape) : that.parse(that.tpl, data);
+    tpl = that.cache ? that.cache(data, tool) : that.parse(that.tpl, data);
     if(!callback) return tpl;
     callback(tpl);
   };

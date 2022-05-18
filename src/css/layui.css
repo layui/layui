@@ -887,7 +887,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table[lay-data]{display: none;}
 .layui-table-box{position: relative; overflow: hidden;}
 .layui-table-view{margin: 10px 0;}
-.layui-table-view .layui-table{position: relative; width: auto; margin: 0;}
+.layui-table-view .layui-table{position: relative; width: auto; margin: 0; border: 0; border-collapse: separate;}
 .layui-table-view .layui-table[lay-skin="line"]{border-width: 0; border-right-width: 1px;}
 .layui-table-view .layui-table[lay-skin="row"]{border-width: 0; border-bottom-width: 1px;}
 .layui-table-view .layui-table th,

@@ -15,6 +15,12 @@
 </head>
 <body>
 
+<div class="layui-btn-container">
+  <a href="table.html" class="layui-btn">表格综合</a>
+  <a href="table-test.html" class="layui-btn layui-btn-primary">表格测试</a>
+  <a href="table-static.html" class="layui-btn">静态表格</a>
+</div>
+
 <script type="text/html" id="toolbarDemo">
   <div class="layui-btn-container">
     <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
@@ -32,7 +38,9 @@
 
 <script type="text/html" id="barDemo">
   <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  {{# if(d.email.trim()){ }}
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  {{# } }}
 </script>
 
 <script type="text/html" id="usernameTpl">
@@ -44,7 +52,7 @@
 </script>
 
 <script type="text/html" id="cityTpl">
-  <select lay-ignore>
+  <select id="demoCity1" lay-ignore>
     <option value="浙江杭州">浙江杭州</option>
     <option value="江西南昌">江西南昌</option>
     <option value="湖北武汉">湖北武汉</option>
@@ -67,7 +75,8 @@ layui.use(['table', 'dropdown'], function(){
   var table = layui.table
   ,$ = layui.$
   ,laytpl = layui.laytpl
-  ,dropdown = layui.dropdown;;
+  ,dropdown = layui.dropdown
+  ,form = layui.form;
   
   //全局设定某参数
   table.set({
@@ -91,7 +100,7 @@ layui.use(['table', 'dropdown'], function(){
     ,title: '用户数据表'
     ,url: 'json/table/demo1.json'
     //,size: 'lg'
-    
+    //,skin: 'line'
     //,autoSort: false //是否自动排序。如果否，则由服务端排序
     //,loading: false
     ,totalRow: true
@@ -107,13 +116,16 @@ layui.use(['table', 'dropdown'], function(){
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
       ,{field:'email', title:'邮箱', hide: 0, width:150, edit: 'text', templet: function(d){
-        console.log(d)
         return '<em>'+ d.email +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
-      ,{field:'city', title:'城市', width:120, templet: '#cityTpl'}
+      ,{field:'city', title:'城市', width:120, templet: '#cityTpl', exportTemplet: function(d, obj){
+        //console.log(obj)
+        var td = obj.td(this.field); //获取当前 td
+        return td.find('select').val();
+      }}
       ,{field:'sign', title:'签名'}
-      ,{field: 'experience', title: '积分', width:80, sort: true, totalRow: '{{ d.TOTAL_NUMS }} 😊', templet: '<div>{{ d.experience }} 分</div>'}
+      ,{field: 'experience', title: '积分', width:80, sort: true, align:'center', totalRow: '{{ d.TOTAL_NUMS }} 😊', templet: '<div>{{ d.experience }} 分</div>'}
       ,{field:'ip', title:'IP', width: 120}
       ,{field:'logins', title:'登入次数', width: 100, sort: true, totalRow: '{{ parseInt(d.TOTAL_NUMS) }} 次'}
       ,{field:'joinTime', title:'加入时间', width: 120}
@@ -254,12 +266,43 @@ layui.use(['table', 'dropdown'], function(){
     };
   });
 
+  //触发行工具事件
+  table.on('tool(test)', function(obj){
+    var data = obj.data;
+    //console.log(obj)
+    if(obj.event === 'del'){
+      layer.confirm('真的删除行么', function(index){
+        obj.del();
+        layer.close(index);
+      });
+    } else if(obj.event === 'edit'){
+      layer.prompt({
+        formType: 2
+        ,value: data.email
+      }, function(value, index){
+        obj.update({
+          email: value
+        });
+        layer.close(index);
+      });
+    }
+  });
+
+  //触发单元格编辑
+  table.on('edit(test)', function(obj){
+    var field = obj.field //得到字段
+    ,value = obj.value //得到修改后的值
+    ,data = obj.data; //得到所在行所有键值
+
+    var update = {};
+    update[field] = value;
+    obj.update(update);
+  });
+
   table.on('row(test)', function(obj){
-    console.log(obj);
+    //console.log(obj);
     //layer.closeAll('tips');
   });
-  
-  
 });
 </script>
 </body>

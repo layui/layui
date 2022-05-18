@@ -126,12 +126,14 @@ layui.use('laydate', function(laydate){
     //,lang: 'en'
     //,theme: 'grid'
     ,range: true //开启日期范围，默认使用“-”分割
-    //,min: '1949-10-1'
+    //,min: '1970-1-1'
     //,max: '2021-5-9'
     //,value: '2021-05-09 12:06:09'
     //,value: '2021-05-08 - 2021-03-27'
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
+
+      //this.elem.val(123);
     }
     ,change: function(value, date, endDate){
       console.log(value, date, endDate);
@@ -157,6 +159,7 @@ layui.use('laydate', function(laydate){
     }
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
+      //this.elem.val(111111);
     }
     ,change: function(value){
       console.log(value);

@@ -15,7 +15,11 @@
 </head>
 <body>
 
-
+<div class="layui-btn-container">
+  <a href="table.html" class="layui-btn layui-btn-primary">表格综合</a>
+  <a href="table-test.html" class="layui-btn">表格测试</a>
+  <a href="table-static.html" class="layui-btn">静态表格</a>
+</div>
 
 <script type="text/html" id="toolbarDemo">
   <div class="layui-btn-container">
@@ -434,27 +438,27 @@ layui.use(['table', 'dropdown'], function(){
     ]]
   });
 
-  //监听表格行点击
+  //触发表格行点击
   table.on('tr', function(obj){
     console.log(obj)
   });
 
-  //监听表格复选框选择
+  //触发表格复选框选择
   table.on('checkbox(test)', function(obj){
     console.log(obj)
   });
 
-  //监听表格单选框选择
+  //触发表格单选框选择
   table.on('radio(test)', function(obj){
     console.log(obj)
   });
   
-  //监听表格单选框选择
+  //触发表格单选框选择
   table.on('rowDouble(test)', function(obj){
     console.log(obj);
   });
   
-  //监听单元格编辑
+  //触发单元格编辑
   table.on('edit(test)', function(obj){
     var value = obj.value //得到修改后的值
     ,data = obj.data //得到所在行所有键值
@@ -463,7 +467,7 @@ layui.use(['table', 'dropdown'], function(){
     console.log(obj)
   });
   
-  //监听行工具事件
+  //触发行工具事件
   table.on('tool(test)', function(obj){
     var data = obj.data;
     //console.log(obj)

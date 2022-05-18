@@ -1,5 +1,4 @@
-
-/*!
+/**
  * layui.table 
  * 数据表格组件
  */
@@ -71,19 +70,28 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   }
   
   //解析自定义模板数据
-  ,parseTempData = function(item3, content, tplData, text){ //表头数据、原始内容、表体数据、是否只返回文本
-    var options = this.config || {};
+  ,parseTempData = function(obj){
+    obj = obj || {};
+
+    var options = this.config || {}
+    ,item3 = obj.item3 //表头数据
+    ,content = obj.content; //原始内容
     
     //是否防 xss
     if(options.escape) content = util.escape(content);
     
-    //获取内容
-    var str = item3.templet ? function(){
-      return typeof item3.templet === 'function' 
-        ? item3.templet(tplData)
-      : laytpl($(item3.templet).html() || String(content)).render(tplData) 
-    }() : content;
-    return text ? $('<div>'+ str +'</div>').text() : str;
+    //获取模板
+    var templet = obj.text && item3.exportTemplet || (item3.templet || item3.toolbar);
+
+    //获取模板内容
+    if(templet){
+      content = typeof templet === 'function' 
+        ? templet.call(item3, obj.tplData, obj.obj)
+      : laytpl($(templet).html() || String(content)).render(obj.tplData);
+    }
+    
+    //是否只返回文本
+    return obj.text ? $('<div>'+ content +'</div>').text() : content;
   }
   
   //字符常量
@@ -650,7 +658,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     //防止数组深度合并
     layui.each(options, function(key, item){
-      if(layui._typeof(item) === 'array') delete that.config[key];
+      if(layui.type(item) === 'array') delete that.config[key];
     });
     
     //对参数进行深度或浅扩展
@@ -744,7 +752,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           typeof options.error === 'function' && options.error(e, msg);
         }
       });
-    } else if(layui._typeof(options.data) === 'array'){ //已知数据
+    } else if(layui.type(options.data) === 'array'){ //已知数据
       var res = {}
       ,startLimit = curr*options.limit - options.limit
       
@@ -790,7 +798,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         ,numbers = i1 + options.limit*(curr - 1) + 1; //序号
         
         //若数据项为空数组，则不往下执行（因为删除数据时，会将原有数据设置为 []）
-        if(layui._typeof(item1) === 'array' && item1.length === 0) return;
+        if(layui.type(item1) === 'array' && item1.length === 0) return;
         
         //记录下标索引，用于恢复排序
         if(!sort){
@@ -810,7 +818,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           var td = ['<td data-field="'+ field +'" data-key="'+ key +'" '+ function(){ //追加各种属性
             var attr = [];
             if(item3.edit) attr.push('data-edit="'+ item3.edit +'"'); //是否允许单元格编辑
-            if(item3.align) attr.push('align="'+ item3.align +'"'); //对齐方式
             if(item3.templet) attr.push('data-content="'+ content +'"'); //自定义模板
             if(item3.toolbar) attr.push('data-off="true"'); //行工具列关闭单元格事件
             if(item3.event) attr.push('lay-event="'+ item3.event +'"'); //自定义事件
@@ -826,7 +833,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
             ,'<div class="layui-table-cell laytable-cell-'+ function(){ //返回对应的CSS类标识
               return item3.type === 'normal' ? key 
               : (key + ' laytable-cell-' + item3.type);
-            }() +'">' + function(){
+            }() +'"'+ (item3.align ? ' align="'+ item3.align +'"' : '') +'>' + function(){
               var tplData = $.extend(true, {
                 LAY_INDEX: numbers
                 ,LAY_COL: item3
@@ -861,7 +868,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
               if(item3.toolbar){
                 return laytpl($(item3.toolbar).html()||'').render(tplData);
               }
-              return parseTempData.call(that, item3, content, tplData);
+              return parseTempData.call(that, {
+                item3: item3
+                ,content: content
+                ,tplData: tplData
+              });
             }()
           ,'</div></td>'].join('');
           
@@ -957,7 +968,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     layui.each(data, function(i1, item1){
       //若数据项为空数组，则不往下执行（因为删除数据时，会将原有数据设置为 []）
-      if(layui._typeof(item1) === 'array' && item1.length === 0) return;
+      if(layui.type(item1) === 'array' && item1.length === 0) return;
       
       that.eachCols(function(i3, item3){
         var field = item3.field || i3
@@ -985,7 +996,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         tplData[field] = thisTotalNum;
         
         //获取自动计算的合并内容
-        getContent = item3.totalRow ? (parseTempData.call(that, item3, thisTotalNum, tplData) || text) : text;
+        getContent = item3.totalRow ? (parseTempData.call(that, {
+          item3: item3
+          ,content: thisTotalNum
+          ,tplData: tplData
+        }) || text) : text;
         
         //如果直接传入了合计行数据，则不输出自动计算的结果
         return totalRowData ? (totalRowData[item3.field] || getContent) : getContent;
@@ -1142,7 +1157,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,options = that.config
     ,thisData = table.cache[that.key];
     if(!thisData[index]) return;
-    if(layui._typeof(thisData[index]) === 'array') return;
+    if(layui.type(thisData[index]) === 'array') return;
     thisData[index][options.checkName] = checked;
   };
   
@@ -1194,7 +1209,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   Class.prototype.fullSize = function(){
     var that = this
     ,options = that.config
-    ,height = options.height, bodyHeight;
+    ,height = options.height
+    ,bodyHeight;
 
     if(that.fullHeightGap){
       height = _WIN.height() - that.fullHeightGap;
@@ -1209,17 +1225,17 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     //减去工具栏的高度
     if(options.toolbar){
-      bodyHeight = bodyHeight - (that.layTool.outerHeight() || 50);
+      bodyHeight -= (that.layTool.outerHeight() || 50);
     }
     
     //减去统计朗的高度
     if(options.totalRow){
-      bodyHeight = bodyHeight - (that.layTotal.outerHeight() || 40);
+      bodyHeight -= (that.layTotal.outerHeight() || 40);
     }
     
     //减去分页栏的高度
     if(options.page){
-      bodyHeight = bodyHeight - (that.layPage.outerHeight() || 41);
+      bodyHeight -= (that.layPage.outerHeight() || 41);
     }
     
     that.layMain.css('height', bodyHeight - 2);
@@ -1503,7 +1519,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     });
     
     //数据行中的事件返回的公共对象成员
-    var commonMember = function(sets){
+    var commonMember = that.commonMember = function(sets){
       var othis = $(this)
       ,index = othis.parents('tr').eq(0).data('index')
       ,tr = that.layBody.find('tr[data-index="'+ index +'"]')
@@ -1523,19 +1539,34 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         ,update: function(fields){ //修改行数据
           fields = fields || {};
           layui.each(fields, function(key, value){
-            if(key in data){
-              var templet, td = tr.children('td[data-field="'+ key +'"]');
-              data[key] = value;
-              that.eachCols(function(i, item2){
-                if(item2.field == key && item2.templet){
-                  templet = item2.templet;
-                }
-              });
-              td.children(ELEM_CELL).html(parseTempData.call(that, {
-                templet: templet
-              }, value, data));
-              td.data('content', value);
-            }
+            var td = tr.children('td[data-field="'+ key +'"]')
+            ,cell = td.children(ELEM_CELL); //获取当前修改的列
+
+            //更新缓存中的数据
+            if(key in data) data[key] = value;
+            
+            that.eachCols(function(i, item3){
+              var templet = item3.templet || item3.toolbar;
+
+              //更新相应列视图
+              if(item3.field == key && item3.templet){
+                cell.html(parseTempData.call(that, {
+                  item3: {templet: item3.templet}
+                  ,content: value
+                  ,tplData: data
+                }));
+                td.data('content', value);
+              } else if(templet){ //更新所有其他列的模板
+                var thisTd = tr.children('td[data-field="'+ (item3.field || i) +'"]')
+                ,content = data[item3.field];
+                thisTd.children(ELEM_CELL).html(parseTempData.call(that, {
+                  item3: {templet: templet}
+                  ,content: content
+                  ,tplData: data
+                }));
+                thisTd.data('content', content);
+              }
+            });
           });
         }
       }, sets);
@@ -1645,8 +1676,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       });
       othis.siblings(ELEM_CELL).html(function(value){
         return parseTempData.call(that, {
-          templet: templet
-        }, value, data);
+          item3: {templet: templet}
+          ,content: value
+          ,tplData: data
+        });
       }(thisElem.value));
       othis.parent().data('content', thisElem.value);
       othis.remove();
@@ -1904,7 +1937,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,data = table.cache[id] || [];
     //计算全选个数
     layui.each(data, function(i, item){
-      if(layui._typeof(item) === 'array'){
+      if(layui.type(item) === 'array'){
         invalidNum++; //无效数据，或已删除的
         return;
       }
@@ -1924,7 +1957,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     var arr = []
     ,data = table.cache[id] || [];
     layui.each(data, function(i, item){
-      if(layui._typeof(item) === 'array'){
+      if(layui.type(item) === 'array'){
         return;
       };
       arr.push(table.clearCacheKey(item));
@@ -1950,7 +1983,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     if(device.ie) return hint.error('IE_NOT_SUPPORT_EXPORTS');
     
     alink.href = 'data:'+ textType +';charset=utf-8,\ufeff'+ encodeURIComponent(function(){
-      var dataTitle = [], dataMain = [], dataTotal = [];
+      var dataTitle = []
+      ,dataMain = []
+      ,dataTotal = []
+      ,fieldsIsHide = {};
       
       //表头和表体
       layui.each(data, function(i1, item1){
@@ -1964,12 +2000,30 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           });
         } else {
           table.eachCols(id, function(i3, item3){
-            if(item3.field && item3.type == 'normal' && !item3.hide){
-              var content = item1[item3.field];
+            if(item3.field && item3.type == 'normal'){
+              //不导出隐藏列
+              if(item3.hide){
+                if(i1 == 0) fieldsIsHide[item3.field] = true; //记录隐藏列
+                return;
+              }
+
+              var content = item1[item3.field]
+              ,td = that.layBody.find('tr[data-index="'+ i1 +'"]>td');
+              
               if(content === undefined || content === null) content = '';
               
               i1 == 0 && dataTitle.push(item3.title || '');
-              vals.push('"'+ parseTempData.call(thatTable, item3, content, item1, 'text') + '"');
+              vals.push('"'+ parseTempData.call(thatTable, {
+                item3: item3
+                ,content: content
+                ,tplData: item1
+                ,text: 'text'
+                ,obj: thatTable.commonMember.call(td.eq(0), {
+                  td: function(field){
+                    return td.filter('[data-field="'+ field +'"]');
+                  }
+                })
+              }) + '"');
             }
           });
         }
@@ -1978,7 +2032,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       
       //表合计
       layui.each(that.dataTotal, function(key, value){
-        dataTotal.push(value);
+        fieldsIsHide[key] || dataTotal.push(value);
       });
       
       return dataTitle.join(',') + '\r\n' + dataMain.join('\r\n') + '\r\n' + dataTotal.join(',');

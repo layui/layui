@@ -1,8 +1,5 @@
 /**
- 
- @Name : laypage 分页组件
- @License：MIT
- 
+ * laypage 分页组件
  */
 
 layui.define(function(exports){

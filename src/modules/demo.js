@@ -1,5 +1,4 @@
-
-/*!
+/**
  * MODULE_DEMO_NAME 模块组件通用结构
  * MIT Licensed
  */
@@ -73,7 +72,7 @@ layui.define([''], function(exports){
     
     //防止数组深度合并
     layui.each(options, function(key, item){
-      if(layui._typeof(item) === 'array') delete that.config[key];
+      if(layui.type(item) === 'array') delete that.config[key];
     });
     
     that.config = $.extend(true, {}, that.config, options);

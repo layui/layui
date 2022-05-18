@@ -1,5 +1,5 @@
 
-/*! layDate 日期与时间控件 | MIT Licensed */
+/** layDate 日期与时间控件 | MIT Licensed */
 
 ;!function(window, document){
   "use strict";
@@ -192,7 +192,7 @@
     that.rangeStr =  options.range ? (typeof options.range === 'string' ? options.range : '-') : '';
     
     //若 range 参数为数组，则表示为开始日期和结束日期的 input 对象
-    if(layui._typeof(options.range) === 'array'){
+    if(layui.type(options.range) === 'array'){
       that.rangeElem = [
         lay(options.range[0]),
         lay(options.range[1])
@@ -264,7 +264,6 @@
       ,'0-5-4': '青年'
       ,'0-6-1': '儿童'
       ,'0-9-10': '教师'
-      ,'0-9-18': '国耻'
       ,'0-10-1': '国庆'
       ,'0-12-25': '圣诞'
     } : {}, options.mark);
@@ -274,7 +273,15 @@
       var ymd = [], hms = [];
       if(typeof options[item] === 'number'){ //如果为数字
         var day = options[item]
-        ,time = new Date().getTime()
+        ,tDate = new Date()
+        ,time = that.newDate({ //今天的最大毫秒数
+          year: tDate.getFullYear()
+          ,month: tDate.getMonth()
+          ,date: tDate.getDate()
+          ,hours: '23'
+          ,minutes: '59'
+          ,seconds: '59'
+        }).getTime() 
         ,STAMP = 86400000 //代表一天的毫秒数
         ,thisDate = new Date(
           day ? (
@@ -282,7 +289,7 @@
           ) : time
         );
         ymd = [thisDate.getFullYear(), thisDate.getMonth() + 1, thisDate.getDate()];
-        day < STAMP || (hms = [thisDate.getHours(), thisDate.getMinutes(), thisDate.getSeconds()]);
+        hms = [thisDate.getHours(), thisDate.getMinutes(), thisDate.getSeconds()];
       } else {
         ymd = (options[item].match(/\d+-\d+-\d+/) || [''])[0].split('-');
         hms = (options[item].match(/\d+:\d+:\d+/) || [''])[0].split(':');
@@ -304,7 +311,7 @@
     
     //默认赋值
     if(options.value && options.isInitValue){
-      if(layui._typeof(options.value) === 'date'){
+      if(layui.type(options.value) === 'date'){
         that.setValue(that.parse(0, that.systemDate(options.value))); 
       } else {
         that.setValue(options.value); 
@@ -696,7 +703,7 @@
         ) + lang.formatError[1]);
         error = true;
       }
-    } else if(value && layui._typeof(value) === 'date'){ //如果值为日期对象时
+    } else if(value && layui.type(value) === 'date'){ //如果值为日期对象时
       options.dateTime = that.systemDate(value);
     } else {
       //重置开始日期
@@ -739,7 +746,9 @@
     };
     
     //校验主面板是否在可选日期区间
-    if(getDateTime(dateTime) > getDateTime(options.max) || getDateTime(dateTime) < getDateTime(options.min)){
+    if(getDateTime(dateTime) > getDateTime(options.max)){ //若超出最大日期
+      dateTime = options.dateTime = lay.extend({}, options.max);
+    } else if(getDateTime(dateTime) < getDateTime(options.min)){ //若少于最小日期
       dateTime = options.dateTime = lay.extend({}, options.min);
     }
     
@@ -1040,7 +1049,6 @@
       lay(ul).find('li').on('click', function(){
         var ym = lay(this).attr('lay-ym') | 0;
         if(lay(this).hasClass(DISABLED)) return;
-        
         if(index === 0){
           dateTime[type] = ym;
           that.limit(lay(that.footer).find(ELEM_CONFIRM), null, 0);
@@ -1302,9 +1310,9 @@
       //补充时分秒
       lay.each(['startTime', 'endTime'], function(i, item){
         that[item] = that[item] || {
-          hours: 0
-          ,minutes: 0
-          ,seconds: 0
+          hours: i ? 23: 0
+          ,minutes: i ? 59: 0
+          ,seconds: i ? 59: 0
         };
       });
       that.calendar(null, index).done(null, 'change');
@@ -1377,8 +1385,9 @@
         } else {
           if(lay(btn).hasClass(DISABLED)) return that.hint(lang.invalidDate);
         }
+        
+        that.setValue(that.parse()).remove();
         that.done();
-        that.setValue(that.parse()).remove()
       }
     };
     active[type] && active[type]();
