@@ -26,31 +26,6 @@
 
 layui 是一套开源的 Web UI 解决方案，采用自身经典的模块化规范，并遵循原生 HTML/CSS/JS 的开发方式，极易上手，拿来即用。其风格简约轻盈，而组件优雅丰盈，从源代码到使用方法的每一处细节都经过精心雕琢，非常适合网页界面的快速开发。layui 区别于那些基于 MVVM 底层的前端框架，却并非逆道而行，而是信奉返璞归真之道。准确地说，它更多是面向后端开发者，你无需涉足前端的各种工具，只需面对浏览器本身，让一切你所需要的元素与交互，从这里信手拈来。
 
-## 返璞归真
-
-layui 定义为「经典模块化」，并非是自吹她自身有多优秀，而是有意避开当下 JS 社区的主流方案，试图以最简单的方式去诠释高效！<em>她的所谓经典，是在于对返璞归真的执念</em>，她以当前浏览器普通认可的方式去组织模块！我们认为，这恰是符合当下国内绝大多数程序员从旧时代过渡到未来新标准的最佳指引。所以 layui 本身也并不是完全遵循于 AMD 时代，准确地说，她试图建立自己的模式，所以你会看到：
-
-```js
-//layui 模块的定义
-layui.define([mods], function(exports){
-  
-  //……
-  
-  exports('mod', api);
-});  
- 
-//layui模块的使用
-layui.use(['mod1', 'mod2'], function(args){
-  var mod = layui.mod1;
-  
-  //……
-  
-});    
-```
-没错，她具备 AMD 的影子，又并非受限于 CommonJS 的那些条条框框，layui 认为这种轻量的组织方式，比 WebPack 更符合绝大多数场景。所以她坚持采用经典模块化，也正是能让人避开工具的复杂配置，回归简单，安静高效地编织原生态的 HTML/CSS/JS。
-
-但是 layui 又并非是 RequireJS 那样的模块加载器，而是一款 UI 解决方案，她与 Bootstrap 最大的不同恰恰在于她糅合了自身对经典模块化的理解。这使得你可以在 layui 组织的框架之内，以更具可维护性的代码、去更好的编织丰富的用户界面。
-
 
 ## 快速上手
 
@@ -68,7 +43,7 @@ layui.use(['mod1', 'mod2'], function(args){
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>开始使用 layui</title>
   <link rel="stylesheet" href="../layui/css/layui.css">
 </head>
@@ -83,6 +58,7 @@ layui.use(['layer', 'form'], function(){
   var layer = layui.layer
   ,form = layui.form;
   
+  //欢迎语
   layer.msg('Hello World');
 });
 </script> 
