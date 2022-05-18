@@ -1,5 +1,4 @@
-﻿
-/*!
+﻿/**
  * layer - 通用 Web 弹出层组件
  * MIT Licensed 
  */

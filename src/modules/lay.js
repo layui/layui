@@ -1,5 +1,5 @@
 
-/*! lay 基础 DOM 操作 | MIT Licensed */
+/** lay 基础 DOM 操作 | MIT Licensed */
 
 ;!function(window){ //gulp build: lay-header
   "use strict";
@@ -33,9 +33,11 @@
   
   //普通对象深度扩展
   lay.extend = function(){
-    var ai = 1, args = arguments
+    var ai = 1
+    ,length
+    ,args = arguments
     ,clone = function(target, obj){
-      target = target || (layui._typeof(obj) === 'array' ? [] : {}); //目标对象
+      target = target || (layui.type(obj) === 'array' ? [] : {}); //目标对象
       for(var i in obj){
         //如果值为普通对象，则进入递归，继续深度合并
         target[i] = (obj[i] && obj[i].constructor === Object)
@@ -46,8 +48,9 @@
     }
 
     args[0] = typeof args[0] === 'object' ? args[0] : {};
+    length = args.length
 
-    for(; ai < args.length; ai++){
+    for(; ai < length; ai++){
       if(typeof args[ai] === 'object'){
         clone(args[0], args[ai]);
       }

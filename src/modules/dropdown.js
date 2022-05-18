@@ -1,8 +1,6 @@
 /**
- 
- @Name：dropdown 下拉菜单组件
- @License：MIT
-
+ * dropdown 
+ * 下拉菜单组件
  */
 
 layui.define(['jquery', 'laytpl', 'lay'], function(exports){

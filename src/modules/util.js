@@ -1,7 +1,6 @@
-
-/*!
+/**
  * util 工具组件  
-*/
+ */
 
 layui.define('jquery', function(exports){
   "use strict";
@@ -172,14 +171,18 @@ layui.define('jquery', function(exports){
     
     //转义 html，防 xss 攻击
     ,escape: function(html){
-      return String(html || '').replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
+      if(html === undefined || html === null) html = '';
+      html += '';
+      return html.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
       .replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
     }
     
     //还原转义的 html
     ,unescape: function(str){
-      return String(str || '').replace(/\&amp;/g, '&')
+      if(html === undefined || html === null) html = '';
+      html += '';
+      return html.replace(/\&amp;/g, '&')
       .replace(/\&lt;/g, '<').replace(/\&gt;/g, '>')
       .replace(/\&#39;/, '\'').replace(/\&quot;/, '"');
     }
@@ -237,6 +240,8 @@ layui.define('jquery', function(exports){
       return obj;
     }
   };
+
+  util.on = util.event;
   
   // DOM 尺寸变化，该创意来自：http://benalman.com/projects/jquery-resize-plugin/
   /*

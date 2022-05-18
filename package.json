@@ -1,49 +1,39 @@
 {
   "name": "layui",
   "realname": "layui",
-  "version": "2.6.8",
+  "version": "2.6.9",
   "description": "Classic modular Front-End UI library",
   "main": "dist/layui.js",
   "license": "MIT",
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/sentsin/layui.git"
+    "url": "git+ssh://git@github.com/layui/layui.git"
   },
-  "homepage": "https://github.com/sentsin/layui/",
+  "homepage": "https://github.com/layui/layui/",
   "devDependencies": {
-    "chai": "^4.3.4",
+    "gulp": "^4.0.2",
+    "gulp-uglify": "^3.0.2",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-replace": "^1.1.3",
+    "gulp-rename": "^2.0.0",
+    "gulp-header": "^2.0.9",
+    "gulp-footer": "^2.1.0",
     "del": "^2.2.2",
-    "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.0 ",
-    "gulp-footer": "^2.0.2",
-    "gulp-header": "^1.8.8",
-    "gulp-if": "^2.0.1",
-    "gulp-minify-css": "^1.2.4",
-    "gulp-rename": "^1.2.2",
-    "gulp-replace": "^0.6.1",
-    "gulp-uglify": "^1.5.4",
-    "gulp-zip": "^4.0.0",
-    "minimist": "^1.2.5",
-    "mocha": "^3.2.0",
-    "sinon": "^3.2.1",
-    "sinon-chai": "^2.13.0"
+    "minimist": "^1.2.5"
   },
   "bugs": {
     "url": "https://gitee.com/sentsin/layui/issues"
-  },
-  "directories": {
-    "doc": "doc",
-    "example": "examples",
-    "test": "test"
   },
   "dependencies": {},
   "keywords": [
     "layui",
     "ui",
-    "ui library",
-    "javascript framework",
-    "toolkit",
-    "front-end component library"
+    "javascript",
+    "css",
+    "components",
+    "framework",
+    "library"
   ]
 }

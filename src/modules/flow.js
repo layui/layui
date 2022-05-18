@@ -1,8 +1,5 @@
 /**
-
- @Name flow 流加载组件
- @License：MIT
-    
+ * flow 流加载组件 
  */
  
  
