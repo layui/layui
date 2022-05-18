@@ -31,13 +31,6 @@ layui 是一套开源的 Web UI 解决方案，采用自身经典的模块化规
 
 获得 layui 后，将其完整地部署到你的静态资源项目目录，你只需要引入下述两个文件：
 
-```
-./layui/css/layui.css
-./layui/layui.js
-```
-
-这是一个基本的入门页面：
-
 ```html
 <!DOCTYPE html>
 <html>
@@ -45,13 +38,13 @@ layui 是一套开源的 Web UI 解决方案，采用自身经典的模块化规
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>开始使用 layui</title>
-  <link rel="stylesheet" href="../layui/css/layui.css">
+  <link rel="stylesheet" href="./layui/css/layui.css">
 </head>
 <body>
  
 <!-- 你的 HTML 代码 -->
  
-<script src="../layui/layui.js"></script>
+<script src="./layui/layui.js"></script>
 <script>
 //一般直接写在一个 js 文件中
 layui.use(['layer', 'form'], function(){
@@ -72,9 +65,9 @@ layui.use(['layer', 'form'], function(){
 愿 layui 能成为你得心应手的 Web 界面解决方案，化作你方寸屏幕前的亿万字节！
 
 ## 贡献者
-> 大概是因为 layui 让开发者变得更懒，所以贡献者才如此之少。  
- 
 [贡献者列表](https://github.com/sentsin/layui/graphs/contributors)
+
+> 大概是因为 layui 让开发者变得更懒，所以贡献者才如此之少。  
 
 ## 相关
 > layui 官网已于2021年10月13日下线。
