@@ -179,7 +179,7 @@ layui.define('jquery', function(exports){
     }
     
     //还原转义的 html
-    ,unescape: function(str){
+    ,unescape: function(html){
       if(html === undefined || html === null) html = '';
       html += '';
       return html.replace(/\&amp;/g, '&')

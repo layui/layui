@@ -1,4 +1,3 @@
-
 /** layDate 日期与时间控件 | MIT Licensed */
 
 ;!function(window, document){
@@ -189,7 +188,9 @@
     if(!options.elem[0]) return;
     
     //日期范围分隔符
-    that.rangeStr =  options.range ? (typeof options.range === 'string' ? options.range : '-') : '';
+    that.rangeStr =  options.range ? (
+      typeof options.range === 'string' ? options.range : '-'
+    ) : '';
     
     //若 range 参数为数组，则表示为开始日期和结束日期的 input 对象
     if(layui.type(options.range) === 'array'){
@@ -240,7 +241,7 @@
     ) +'$');
     that.EXP_SPLIT = new RegExp('^'+ that.EXP_SPLIT +'$', '');
     
-    //如果不是input|textarea元素，则默认采用click事件
+    //如果不是 input|textarea 元素，则默认采用 click 事件
     if(!that.isInput(options.elem[0])){
       if(options.trigger === 'focus'){
         options.trigger = 'click';
@@ -593,11 +594,14 @@
       //如果传入了开始和结束日期的 input 对象，则将其拼接为日期范围字符
       if(that.rangeElem){
         var vals = [that.rangeElem[0].val(), that.rangeElem[1].val()];
+
         if(vals[0] && vals[1]){
           return vals.join(' ' + that.rangeStr + ' ');
         }
       }
-      return that.isInput(elem) ? elem.value : (options.position === 'static' ? '' : lay(elem).attr('lay-date'));
+      return that.isInput(elem) 
+        ? elem.value 
+      : (options.position === 'static' ? '' : lay(elem).attr('lay-date'));
     }()
     
     //校验日期有效数字
@@ -703,7 +707,7 @@
         ) + lang.formatError[1]);
         error = true;
       }
-    } else if(value && layui.type(value) === 'date'){ //如果值为日期对象时
+    } else if(value && layui.type(value) === 'date'){ //若值为日期对象
       options.dateTime = that.systemDate(value);
     } else {
       //重置开始日期
@@ -1189,14 +1193,18 @@
     ,options = that.config
     ,dateTime = date || (state == 'end'
       ? lay.extend({}, that.endDate, that.endTime)
-    : (options.range ? lay.extend({}, options.dateTime, that.startTime) : options.dateTime))
+    : (
+      options.range 
+        ? lay.extend({}, options.dateTime, that.startTime) 
+      : options.dateTime)
+    )
     ,format = laydate.parse(dateTime, that.format, 1);
     
     //返回日期范围字符
     if(options.range && state === undefined){
       return format + ' '+ that.rangeStr +' ' + that.parse('end');
     }
-    
+
     return format;
   };
   
@@ -1229,9 +1237,13 @@
       lay(elem).val(value);
     } else {
       //如果 range 传入了开始和结束的 input 对象，则分别对其赋值
-      if(that.rangeElem){
-        that.rangeElem[0].val(value ? that.parse('start') : '');
-        that.rangeElem[1].val(value ? that.parse('end') : '');
+      var rangeElem = that.rangeElem;
+      if(rangeElem){
+        if(layui.type(value) !== 'array'){
+          value = value.split(' '+ that.rangeStr +' ');
+        }
+        rangeElem[0].val(value[0] || '');
+        rangeElem[1].val(value[1] || '');
       } else {
         if(lay(elem).find('*').length === 0){
           lay(elem).html(value);

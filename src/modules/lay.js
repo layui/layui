@@ -91,14 +91,16 @@
   
   
   //数字前置补零
-  lay.digit = function(num, length, end){
+  lay.digit = function(num, length){
+    if(!(typeof num === 'string' || typeof num === 'number')) return '';
+
     var str = '';
     num = String(num);
     length = length || 2;
     for(var i = num.length; i < length; i++){
       str += '0';
     }
-    return num < Math.pow(10, length) ? str + (num|0) : num;
+    return num < Math.pow(10, length) ? str + num : num;
   };
   
   //创建元素
