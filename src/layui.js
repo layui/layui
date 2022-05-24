@@ -1,6 +1,6 @@
 /**
  * Layui
- * Classic modular Front-End UI library
+ * Classic modular front-end UI library
  * MIT Licensed
  */
  
