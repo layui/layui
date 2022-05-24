@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Layui - 开源模块化 Web UI 组件库</title>
+      <meta name="viewport" content="width=device-width">
+    <script>
+    ;!function(){self!==parent&&(location.href="//www.baidu.com/")}();
+    </script>
+    <link href="https://cdn.staticfile.org/layui/2.6.10/css/layui.css" rel="stylesheet">
+  </head>
+  <body class="site-home">
+    <div class="layui-container" style="margin-top: 32px;">
+      <div class="layui-btn-container">
+        <a href="https://layui.gitee.io/v2/" class="layui-btn">前往 2.x 版本</a>
+        <a href="https://layui.gitee.io/v2/docs/" class="layui-btn layui-btn-normal">
+          文档
+        </a>
+      </div>
+      <div class="layui-progress" style="margin: 16px 0;">
+        <div class="layui-progress-bar" lay-percent="100%"></div>
+      </div>
+      
+      <blockquote class="layui-elem-quote" style="margin-top: 30px;">
+        <div class="layui-text">
+          <ul>
+            <li>当前版本：v<span id="version"></span></li>
+            <li>Layui 是一套开源的 Web UI（界面）组件库，基于浏览器端原生态 HTML/CSS/JS 开发模式。</li>
+          </ul>
+        </div>
+      </blockquote>
+      
+      <div style="height: 90px; padding: 16px 0; text-align: center;">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6111334333458862"
+          crossorigin="anonymous"></script>
+        <!-- auto -->
+        <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-6111334333458862"
+          data-ad-slot="3935834790"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    </div>
+     
+    <script src="https://cdn.staticfile.org/layui/2.6.10/layui.js"></script>
+     
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f9610283b67e9659e77c0e9a597dfee9";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+    <script>
+    layui.use(function(){
+      var layer = layui.layer;
+      
+      //输出版本号
+      lay('#version').html(layui.v);
+    });
+    </script>
+  </body>
+</html>
