@@ -917,7 +917,9 @@
     }
     
     //通过检测当前有效日期，来设定确定按钮是否可点
-    if(!options.range) that.limit(lay(that.footer).find(ELEM_CONFIRM), null, 0, ['hours', 'minutes', 'seconds']);
+    if(!options.range){
+      that.limit(lay(that.footer).find(ELEM_CONFIRM), null, 0, ['hours', 'minutes', 'seconds']);
+    }
     
     //同步按钮可点状态
     that.setBtnStatus();
@@ -960,10 +962,18 @@
       lay.each(new Array(15), function(i){
         var li = lay.elem('li', {
           'lay-ym': yearNum
-        }), ymd = {year: yearNum};
+        })
+        ,ymd = {
+          year: yearNum
+          ,month: 0
+          ,date: 1
+        };
+
         yearNum == listYM[0] && lay(li).addClass(THIS);
         li.innerHTML = yearNum + text;
         ul.appendChild(li);
+
+        /*
         if(yearNum < that.firstDate.year){
           ymd.month = options.min.month;
           ymd.date = options.min.date;
@@ -971,9 +981,12 @@
           ymd.month = options.max.month;
           ymd.date = options.max.date;
         }
+        */
+
         that.limit(lay(li), ymd, index);
         yearNum++;
       });
+
       lay(elemYM[isCN ? 0 : 1]).attr('lay-ym', (yearNum - 8) + '-' + listYM[1])
       .html((startY + text) + ' - ' + (yearNum - 1 + text));
     }
@@ -983,17 +996,28 @@
       lay.each(new Array(12), function(i){
         var li = lay.elem('li', {
           'lay-ym': i
-        }), ymd = {year: listYM[0], month: i};
+        })
+        ,ymd = {
+          year: listYM[0]
+          ,month: i
+          ,date: 1
+        };
+
         i + 1 == listYM[1] && lay(li).addClass(THIS);
         li.innerHTML = lang.month[i] + (isCN ? '月' : '');
         ul.appendChild(li);
+
+        /*
         if(listYM[0] < that.firstDate.year){
           ymd.date = options.min.date;
         } else if(listYM[0] >= that.firstDate.year){
           ymd.date = options.max.date;
         }
+        */
+
         that.limit(lay(li), ymd, index);
       });
+
       lay(elemYM[isCN ? 0 : 1]).attr('lay-ym', listYM[0] + '-' + listYM[1])
       .html(listYM[0] + text);
     } 
@@ -1016,7 +1040,9 @@
             }][i], index, [['hours'], ['hours', 'minutes'], ['hours', 'minutes', 'seconds']][i]);
           });
         });
-        if(!options.range) that.limit(lay(that.footer).find(ELEM_CONFIRM), that[startEnd], 0, ['hours', 'minutes', 'seconds']);
+        if(!options.range){
+          that.limit(lay(that.footer).find(ELEM_CONFIRM), that[startEnd], 0, ['hours', 'minutes', 'seconds']);
+        }
       };
       
       //初始化时间对象

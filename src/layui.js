@@ -1,6 +1,6 @@
 /**
  * Layui
- * Classic modular Front-End UI library
+ * Classic modular front-end UI library
  * MIT Licensed
  */
  
@@ -15,7 +15,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.6.10'; // layui 版本号
+    this.v = '2.6.11'; // layui 版本号
   }
   
   //识别预先可能定义的指定全局对象

@@ -199,6 +199,8 @@ layui.use('laydate', function(laydate){
     ,type: 'year'
     //,range: true 
     //,trigger: 'click'
+    //,min:'2021-01-01'
+    //,max:'2022-12-31'
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
     }
@@ -213,7 +215,8 @@ layui.use('laydate', function(laydate){
     ,type: 'month'
     ,range: true
     ,trigger: 'click'
-    //,max: -30
+    ,min:'2022-03-01'
+    ,max:'2022-05-31'
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
     }

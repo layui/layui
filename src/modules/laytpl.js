@@ -3,7 +3,6 @@
  */
 
 layui.define(function(exports){
-
   "use strict";
 
   var config = {
@@ -24,8 +23,15 @@ layui.define(function(exports){
       return exp((_||'') + config.open + types + config.close + (__||''));
     },   
     escape: function(html){
-      return String(html||'').replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
-      .replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+      var exp = /[<"'>]|&(?=#[a-zA-Z0-9]+)/g;
+      if(html === undefined || html === null) return '';
+      
+      html += '';
+      if(!exp.test(html)) return html;
+
+      return html.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
+      .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
     },
     error: function(e, tplog){
       var error = 'Laytpl Error: ';
@@ -61,22 +67,24 @@ layui.define(function(exports){
       return str
     })
     
-    //匹配JS规则内容
+    //匹配 JS 语法
     .replace(/(?="|')/g, '\\').replace(tool.query(), function(str){
       str = str.replace(jss, '').replace(jsse, '');
       return '";' + str.replace(/\\(.)/g, '$1') + ';view+="';
     })
     
-    //匹配普通字段
+    //匹配普通输出语句
     .replace(tool.query(1), function(str){
-      var start = '"+(';
+      var start = '"+laytpl.escape(';
       if(str.replace(/\s/g, '') === config.open+config.close){
         return '';
       }
       str = str.replace(exp(config.open+'|'+config.close), '');
       if(/^=/.test(str)){
         str = str.replace(/^=/, '');
-        start = '"+laytpl.escape(';
+      } else if(/^-/.test(str)){
+        str = str.replace(/^-/, '');
+        start = '"+(';
       }
       return start + str.replace(/\\(.)/g, '$1') + ')+"';
     });

@@ -111,12 +111,22 @@ layui.use(['table', 'dropdown'], function(){
       ,layEvent: 'LAYTABLE_TIPS'
       ,icon: 'layui-icon-tips'
     }]
-    ,cols: [[
+    ,cols: !1 ? [[ //仅用于测试
+      {type: 'checkbox', fixed: 'left'}
+      ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
+      ,{field:'username', title:'用户名', width:120, edit: 'text'}
+      ,{field:'email', title:'邮箱', hide: 0, width:150, edit: 'text'}
+      ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
+      ,{field:'city', title:'城市', width:120}
+      ,{field:'sign', title:'签名'}
+      ,{field: 'experience', title: '积分', width:80, sort: true, align:'center', totalRow: '{{ d.TOTAL_NUMS }} 😊'}
+      ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+    ]] : [[
       {type: 'checkbox', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
       ,{field:'email', title:'邮箱', hide: 0, width:150, edit: 'text', templet: function(d){
-        return '<em>'+ d.email +'</em>'
+        return '<em>'+ layui.util.escape(d.email) +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
       ,{field:'city', title:'城市', width:120, templet: '#cityTpl', exportTemplet: function(d, obj){
@@ -212,7 +222,7 @@ layui.use(['table', 'dropdown'], function(){
       break;
       case 'getCheckData':
         var data = checkStatus.data;
-        layer.alert(JSON.stringify(data));
+        layer.alert(layui.util.escape(JSON.stringify(data)));
       break;
       case 'getCheckLength':
         var data = checkStatus.data;

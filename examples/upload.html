@@ -98,7 +98,7 @@ layui.use(['upload', 'element'], function(){
 
   var uploadInst = upload.render({
     elem: '#test1'
-    ,url: 'http://httpbin.org/post'
+    ,url: 'https://httpbin.org/post'
     //,size: 2000 //限制文件大小，单位 KB
     //,accept: 'file'
     ,method: 'get'
@@ -110,8 +110,8 @@ layui.use(['upload', 'element'], function(){
         return 2
       }
     }
-    ,choose: function(){
-      
+    ,choose: function(obj){
+      console.log('choose', obj);
     }
     ,before: function(obj){
       //预读本地文件示例，不支持ie8
