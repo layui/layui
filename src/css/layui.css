@@ -243,7 +243,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-icon-music:before{content:"\e690"}
 
 /* 基本布局 */
-.layui-main{position: relative; width: 1140px; margin: 0 auto;}
+.layui-main{position: relative; width: 1160px; margin: 0 auto;}
 .layui-header{position: relative; z-index: 1000; height: 60px;}
 .layui-header a:hover{transition: all .5s; -webkit-transition: all .5s;}
 .layui-side{position: fixed; left: 0; top: 0; bottom: 0; z-index: 999; width: 200px; overflow-x: hidden;}
@@ -264,7 +264,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 
 /* 栅格布局 */
-.layui-container{position: relative; margin: 0 auto; padding: 0 15px; box-sizing: border-box;}
+.layui-container{position: relative; margin: 0 auto; box-sizing: border-box;}
 .layui-fluid{position: relative; margin: 0 auto; padding: 0 15px;}
 
 .layui-row:before, .layui-row:after{content: ""; display: block; clear: both;}
@@ -302,7 +302,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-col-xs-offset12{margin-left: 100%;}
 
 /* 超小屏幕(手机) */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767.98px) {
+  .layui-container{padding: 0 15px;}
   .layui-hide-xs{display: none!important;}
   .layui-show-xs-block{display: block!important;}
   .layui-show-xs-inline{display: inline!important;}
@@ -311,7 +312,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /* 小型屏幕(平板) */
 @media screen and (min-width: 768px) {
-  .layui-container{width: 750px;}
+  .layui-container{width: 720px;}
   .layui-hide-sm{display: none!important;}
   .layui-show-sm-block{display: block!important;}
   .layui-show-sm-inline{display: inline!important;}
@@ -346,7 +347,7 @@ a cite{font-style: normal; *cursor:pointer;}
 }
 /* 中型屏幕(桌面) */
 @media screen and (min-width: 992px) {
-  .layui-container{width: 970px;}
+  .layui-container{width: 960px;}
   .layui-hide-md{display: none!important;}
   .layui-show-md-block{display: block!important;}
   .layui-show-md-inline{display: inline!important;}
@@ -381,7 +382,7 @@ a cite{font-style: normal; *cursor:pointer;}
 }
 /* 大型屏幕(桌面) */
 @media screen and (min-width: 1200px) {
-  .layui-container{width: 1170px;}
+  .layui-container{width: 1150px;}
   .layui-hide-lg{display: none!important;}
   .layui-show-lg-block{display: block!important;}
   .layui-show-lg-inline{display: inline!important;}

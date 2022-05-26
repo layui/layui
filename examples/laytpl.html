@@ -21,7 +21,9 @@
       <div>模板</div>
       <textarea id="demoTPL1"><h1>{{ d.title }}</h1>
 
-<p>转义 html：{{= d.desc }}</p>
+<p>转义输出(HTML)：{{ d.desc }}</p>
+<p>转义输出(HTML)：{{= d.desc }}</p>
+<p>原始输出(HTML)：{{- d.desc }}</p>
 {{#}}
 
 <div class="layui-section">
@@ -69,7 +71,7 @@
       <textarea id="demoData1">
 {
   "title": "标题",
-  "desc": "<a href=\"\">一段描述</a>",
+  "desc": "<a href=\"\" style=\"color:blue;\">一段描述</a>",
   "items": [
     {
       "title": "list 1",
@@ -121,7 +123,7 @@
 
   <script type="type/html" template id="laytplTestTpl">
     {{# for(var i = 0; i < d.items.length; i++){ }}
-      第{{d.items[i].index}}个，Name: {{d.items[i].name}}   Number: {{d.items[i].number}} 
+      第{{= d.items[i].index }}个，Name: {{- d.items[i].name }}   Number: {{= d.items[i].number }} 
     {{# } }}
   </script>
   

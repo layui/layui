@@ -22,12 +22,6 @@
   </a>
 </p>
 
-<!--
-<p align="center">
-  <a href="https://saucelabs.com/beta/builds/7e6196205e4f492496203388fc003b65"><img src="https://saucelabs.com/browser-matrix/layui.svg" alt="Browser Matrix"></a>
-</p>
--->
-
 ---
 
 layui 是一套开源的 Web UI 组件库，采用自身经典的模块化规范，并遵循原生 HTML/CSS/JS 的开发方式，极易上手，拿来即用。其风格简约轻盈，而组件优雅丰盈，从源代码到使用方法的每一处细节都经过精心雕琢，非常适合网页界面的快速开发。layui 区别于那些基于 MVVM 底层的前端框架，却并非逆道而行，而是信奉返璞归真之道。准确地说，它更多是面向后端开发者，你无需涉足前端的各种工具，只需面对浏览器本身，让一切你所需要的元素与交互，从这里信手拈来。
@@ -66,7 +60,7 @@ layui.use(['layer', 'form'], function(){
 ```
 
 ## 阅读文档
-[**最新文档**](https://layui.gitee.io/)
+[**最新文档**](https://layui.github.io/)
  
 愿 layui 能成为你得心应手的 Web 界面解决方案，化作你方寸屏幕前的亿万字节！
 

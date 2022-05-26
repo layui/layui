@@ -77,7 +77,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,item3 = obj.item3 //表头数据
     ,content = obj.content; //原始内容
     
-    //是否防 xss
+    //是否编码 HTML
     if(options.escape) content = util.escape(content);
     
     //获取模板
@@ -249,6 +249,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   Class.prototype.config = {
     limit: 10 //每页显示的数量
     ,loading: true //请求数据时，是否显示 loading
+    ,escape: true // 是否开启 HTML 编码功能，即转义 html 原文
     ,cellMinWidth: 60 //所有单元格默认最小宽度
     ,defaultToolbar: ['filter', 'exports', 'print'] //工具栏右侧图标
     ,autoSort: true //是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
@@ -1546,21 +1547,19 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
             if(key in data) data[key] = value;
             
             that.eachCols(function(i, item3){
-              var templet = item3.templet || item3.toolbar;
-
               //更新相应列视图
-              if(item3.field == key && item3.templet){
+              if(item3.field == key){
                 cell.html(parseTempData.call(that, {
-                  item3: {templet: item3.templet}
+                  item3: item3
                   ,content: value
                   ,tplData: data
                 }));
                 td.data('content', value);
-              } else if(templet){ //更新所有其他列的模板
+              } else if(item3.templet || item3.toolbar){ //更新所有其他列的模板
                 var thisTd = tr.children('td[data-field="'+ (item3.field || i) +'"]')
                 ,content = data[item3.field];
                 thisTd.children(ELEM_CELL).html(parseTempData.call(that, {
-                  item3: {templet: templet}
+                  item3: item3
                   ,content: content
                   ,tplData: data
                 }));
@@ -1663,7 +1662,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         ,field: field
       }));
     }).on('blur', '.'+ELEM_EDIT, function(){
-      var templet
+      var item3
       ,othis = $(this)
       ,thisElem = this
       ,field = othis.parent().data('field')
@@ -1671,12 +1670,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       ,data = table.cache[that.key][index];
       that.eachCols(function(i, item){
         if(item.field == field && item.templet){
-          templet = item.templet;
+          item3 = item;
         }
       });
       othis.siblings(ELEM_CELL).html(function(value){
         return parseTempData.call(that, {
-          item3: {templet: templet}
+          item3: item3 || {}
           ,content: value
           ,tplData: data
         });
