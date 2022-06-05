@@ -189,7 +189,7 @@ layui.define('jquery', function(exports){
 
       return html.replace(/\&amp;/g, '&')
       .replace(/\&lt;/g, '<').replace(/\&gt;/g, '>')
-      .replace(/\&#39;/, '\'').replace(/\&quot;/, '"');
+      .replace(/\&#39;/g, '\'').replace(/\&quot;/g, '"');
     }
     
     //让指定的元素保持在可视区域

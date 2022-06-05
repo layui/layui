@@ -9,7 +9,7 @@
     "id": "10001"
     ,"username": "杜甫"
     ,"email": "test1@email.com"
-    ,"sex": "男"
+    ,"sex": "<strong>男</strong>"
     ,"city": "浙江杭州"
     ,"sign": "鼠标移动到此处，可以通过点击单元格右侧的下拉图标，查看到被隐藏的全部内容。"
     ,"experience": 7

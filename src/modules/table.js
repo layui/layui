@@ -1,6 +1,6 @@
 /**
  * layui.table 
- * 数据表格组件
+ * 表格组件
  */
 
 layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
@@ -101,11 +101,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   
   //thead区域模板
   ,TPL_HEADER = function(options){
-    var rowCols = '{{#if(item2.colspan){}} colspan="{{item2.colspan}}"{{#} if(item2.rowspan){}} rowspan="{{item2.rowspan}}"{{#}}}';
+    var rowCols = '{{#if(item2.colspan){}} colspan="{{=item2.colspan}}"{{#} if(item2.rowspan){}} rowspan="{{=item2.rowspan}}"{{#}}}';
     
     options = options || {};
     return ['<table cellspacing="0" cellpadding="0" border="0" class="layui-table" '
-      ,'{{# if(d.data.skin){ }}lay-skin="{{d.data.skin}}"{{# } }} {{# if(d.data.size){ }}lay-size="{{d.data.size}}"{{# } }} {{# if(d.data.even){ }}lay-even{{# } }}>'
+      ,'{{# if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{# } }} {{# if(d.data.size){ }}lay-size="{{=d.data.size}}"{{# } }} {{# if(d.data.even){ }}lay-even{{# } }}>'
       ,'<thead>'
       ,'{{# layui.each(d.data.cols, function(i1, item1){ }}'
         ,'<tr>'
@@ -122,21 +122,21 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
             return '';
           }()
           ,'{{# var isSort = !(item2.colGroup) && item2.sort; }}'
-          ,'<th data-field="{{ item2.field||i2 }}" data-key="{{d.index}}-{{i1}}-{{i2}}" {{# if( item2.parentKey){ }}data-parentkey="{{ item2.parentKey }}"{{# } }} {{# if(item2.minWidth){ }}data-minwidth="{{item2.minWidth}}"{{# } }} '+ rowCols +' {{# if(item2.unresize || item2.colGroup){ }}data-unresize="true"{{# } }} class="{{# if(item2.hide){ }}layui-hide{{# } }}{{# if(isSort){ }} layui-unselect{{# } }}{{# if(!item2.field){ }} layui-table-col-special{{# } }}">'
+          ,'<th data-field="{{= item2.field||i2 }}" data-key="{{=d.index}}-{{=i1}}-{{=i2}}" {{# if( item2.parentKey){ }}data-parentkey="{{= item2.parentKey }}"{{# } }} {{# if(item2.minWidth){ }}data-minwidth="{{=item2.minWidth}}"{{# } }} '+ rowCols +' {{# if(item2.unresize || item2.colGroup){ }}data-unresize="true"{{# } }} class="{{# if(item2.hide){ }}layui-hide{{# } }}{{# if(isSort){ }} layui-unselect{{# } }}{{# if(!item2.field){ }} layui-table-col-special{{# } }}">'
             ,'<div class="layui-table-cell laytable-cell-'
               ,'{{# if(item2.colGroup){ }}'
                 ,'group'
               ,'{{# } else { }}'
-                ,'{{d.index}}-{{i1}}-{{i2}}'
+                ,'{{=d.index}}-{{=i1}}-{{=i2}}'
                 ,'{{# if(item2.type !== "normal"){ }}'
-                  ,' laytable-cell-{{ item2.type }}'
+                  ,' laytable-cell-{{= item2.type }}'
                 ,'{{# } }}'
               ,'{{# } }}'
-            ,'" {{#if(item2.align){}}align="{{item2.align}}"{{#}}}>'
+            ,'" {{#if(item2.align){}}align="{{=item2.align}}"{{#}}}>'
               ,'{{# if(item2.type === "checkbox"){ }}' //复选框
                 ,'<input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose" {{# if(item2[d.data.checkName]){ }}checked{{# }; }}>'
               ,'{{# } else { }}'
-                ,'<span>{{item2.title||""}}</span>'
+                ,'<span>{{-item2.title||""}}</span>'
                 ,'{{# if(isSort){ }}'
                   ,'<span class="layui-table-sort layui-inline"><i class="layui-edge layui-table-sort-asc" title="升序"></i><i class="layui-edge layui-table-sort-desc" title="降序"></i></span>'
                 ,'{{# } }}'
@@ -151,14 +151,14 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,'</table>'].join('');
   }
   
-  //tbody区域模板
+  // tbody 区域模板
   ,TPL_BODY = ['<table cellspacing="0" cellpadding="0" border="0" class="layui-table" '
-    ,'{{# if(d.data.skin){ }}lay-skin="{{d.data.skin}}"{{# } }} {{# if(d.data.size){ }}lay-size="{{d.data.size}}"{{# } }} {{# if(d.data.even){ }}lay-even{{# } }}>'
+    ,'{{# if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{# } }} {{# if(d.data.size){ }}lay-size="{{=d.data.size}}"{{# } }} {{# if(d.data.even){ }}lay-even{{# } }}>'
     ,'<tbody></tbody>'
   ,'</table>'].join('')
   
   //主模板
-  ,TPL_MAIN = ['<div class="layui-form layui-border-box {{d.VIEW_CLASS}}{{# if(d.data.className){ }} {{ d.data.className }}{{# } }}" lay-filter="LAY-table-{{d.index}}" lay-id="{{ d.data.id }}" style="{{# if(d.data.width){ }}width:{{d.data.width}}px;{{# } }} {{# if(d.data.height){ }}height:{{d.data.height}}px;{{# } }}">'
+  ,TPL_MAIN = ['<div class="layui-form layui-border-box {{=d.VIEW_CLASS}}{{# if(d.data.className){ }} {{= d.data.className }}{{# } }}" lay-filter="LAY-table-{{=d.index}}" lay-id="{{= d.data.id }}" style="{{# if(d.data.width){ }}width:{{=d.data.width}}px;{{# } }} {{# if(d.data.height){ }}height:{{=d.data.height}}px;{{# } }}">'
 
     ,'{{# if(d.data.toolbar){ }}'
     ,'<div class="layui-table-tool">'
@@ -209,7 +209,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,'{{# if(d.data.totalRow){ }}'
       ,'<div class="layui-table-total">'
         ,'<table cellspacing="0" cellpadding="0" border="0" class="layui-table" '
-        ,'{{# if(d.data.skin){ }}lay-skin="{{d.data.skin}}"{{# } }} {{# if(d.data.size){ }}lay-size="{{d.data.size}}"{{# } }} {{# if(d.data.even){ }}lay-even{{# } }}>'
+        ,'{{# if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{# } }} {{# if(d.data.size){ }}lay-size="{{=d.data.size}}"{{# } }} {{# if(d.data.even){ }}lay-even{{# } }}>'
           ,'<tbody><tr><td><div class="layui-table-cell" style="visibility: hidden;">Total</div></td></tr></tbody>'
       , '</table>'
       ,'</div>'
@@ -217,16 +217,16 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     ,'{{# if(d.data.page){ }}'
     ,'<div class="layui-table-page">'
-      ,'<div id="layui-table-page{{d.index}}"></div>'
+      ,'<div id="layui-table-page{{=d.index}}"></div>'
     ,'</div>'
     ,'{{# } }}'
     
     ,'<style>'
     ,'{{# layui.each(d.data.cols, function(i1, item1){'
       ,'layui.each(item1, function(i2, item2){ }}'
-        ,'.laytable-cell-{{d.index}}-{{i1}}-{{i2}}{ '
+        ,'.laytable-cell-{{=d.index}}-{{=i1}}-{{=i2}}{ '
         ,'{{# if(item2.width){ }}'
-          ,'width: {{item2.width}}px;'
+          ,'width: {{=item2.width}}px;'
         ,'{{# } }}'
         ,' }'
       ,'{{# });'
@@ -1348,7 +1348,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
               var lis = [];
               that.eachCols(function(i, item){ 
                 if(item.field && item.type == 'normal'){
-                  lis.push('<li><input type="checkbox" name="'+ item.field +'" data-key="'+ item.key +'" data-parentkey="'+ (item.parentKey||'') +'" lay-skin="primary" '+ (item.hide ? '' : 'checked') +' title="'+ (item.title || item.field) +'" lay-filter="LAY_TABLE_TOOL_COLS"></li>');
+                  lis.push('<li><input type="checkbox" name="'+ item.field +'" data-key="'+ item.key +'" data-parentkey="'+ (item.parentKey||'') +'" lay-skin="primary" '+ (item.hide ? '' : 'checked') +' title="'+ util.escape(item.title || item.field) +'" lay-filter="LAY_TABLE_TOOL_COLS"></li>');
                 }
               });
               return lis.join('');
@@ -1393,8 +1393,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
             openPanel({
               list: function(){
                 return [
-                  '<li data-type="csv">导出到 Csv 文件</li>'
-                  ,'<li data-type="xls">导出到 Excel 文件</li>'
+                  '<li data-type="csv">导出 csv 格式文件</li>'
+                  ,'<li data-type="xls">导出 xls 格式文件</li>'
                 ].join('')
               }()
               ,done: function(panel, list){
@@ -1555,6 +1555,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
                   ,tplData: data
                 }));
                 td.data('content', value);
+                item3.templet && that.renderForm();
               } else if(item3.templet || item3.toolbar){ //更新所有其他列的模板
                 var thisTd = tr.children('td[data-field="'+ (item3.field || i) +'"]')
                 ,content = data[item3.field];
@@ -1564,6 +1565,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
                   ,tplData: data
                 }));
                 thisTd.data('content', content);
+                that.renderForm();
               }
             });
           });
