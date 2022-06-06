@@ -41,6 +41,7 @@
   {{# if(d.email.trim()){ }}
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
   {{# } }}
+  <input type="checkbox" name="demoTableSwitch" lay-skin="switch" {{ d.demoTableSwitch }}>
 </script>
 
 <script type="text/html" id="usernameTpl">
@@ -111,11 +112,12 @@ layui.use(['table', 'dropdown'], function(){
       ,layEvent: 'LAYTABLE_TIPS'
       ,icon: 'layui-icon-tips'
     }]
+    //,escape: false
     ,cols: !1 ? [[ //仅用于测试
       {type: 'checkbox', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text'}
-      ,{field:'email', title:'邮箱', hide: 0, width:150, edit: 'text'}
+      ,{field:'email', title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, width:150, edit: 'text'}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
       ,{field:'city', title:'城市', width:120}
       ,{field:'sign', title:'签名'}
@@ -125,7 +127,7 @@ layui.use(['table', 'dropdown'], function(){
       {type: 'checkbox', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
-      ,{field:'email', title:'邮箱', hide: 0, width:150, edit: 'text', templet: function(d){
+      ,{field:'email', title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, width:150, edit: 'text', templet: function(d){
         return '<em>'+ layui.util.escape(d.email) +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
@@ -139,7 +141,7 @@ layui.use(['table', 'dropdown'], function(){
       ,{field:'ip', title:'IP', width: 120}
       ,{field:'logins', title:'登入次数', width: 100, sort: true, totalRow: '{{ parseInt(d.TOTAL_NUMS) }} 次'}
       ,{field:'joinTime', title:'加入时间', width: 120}
-      ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+      ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width: 180}
     ]]
     
     ,initSort1: {
@@ -231,7 +233,7 @@ layui.use(['table', 'dropdown'], function(){
       case 'getData':
         var getData = table.getData(obj.config.id);
         console.log(getData);
-        layer.alert(JSON.stringify(getData));
+        layer.alert(layui.util.escape(JSON.stringify(getData)));
       break;
       case 'isAll':
         layer.msg(checkStatus.isAll ? '全选': '未全选')

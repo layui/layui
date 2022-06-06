@@ -517,6 +517,7 @@
         elem.remove();
         //delete options.dateTime;
         //delete that.endDate;
+        delete laydate.thisId;
       });
     }
     return that;
@@ -1628,6 +1629,8 @@
       var that = thisModule.getThis(laydate.thisId);
       if(!that) return;
       
+      // 回车触发确认
+      if(that.config.position === 'static') return;
       if(e.keyCode === 13){
         if(lay('#'+ that.elemID)[0] && that.elemID === Class.thisElemDate){
           e.preventDefault();
