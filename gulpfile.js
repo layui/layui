@@ -2,21 +2,21 @@
  * Building Layui
  */
 
-var pkg = require('./package.json');
-var gulp = require('gulp');
-var uglify = require('gulp-uglify');
-var cleanCSS = require('gulp-clean-css');
-var concat = require('gulp-concat');
-var rename = require('gulp-rename');
-var replace = require('gulp-replace');
-var header = require('gulp-header');
-var footer = require('gulp-footer');
-var del = require('del');
-var minimist = require('minimist');
-var yargs = require('yargs');
+const pkg = require('./package.json');
+const gulp = require('gulp');
+const uglify = require('gulp-uglify');
+const cleanCSS = require('gulp-clean-css');
+const concat = require('gulp-concat');
+const rename = require('gulp-rename');
+const replace = require('gulp-replace');
+const header = require('gulp-header');
+const footer = require('gulp-footer');
+const del = require('del');
+const minimist = require('minimist');
+const yargs = require('yargs');
 
 // 基础配置
-var config = {
+const config = {
   //注释
   comment: [
     '/** <%= pkg.version %> | <%= pkg.license %> Licensed */<%= js %>'
@@ -27,26 +27,26 @@ var config = {
 };
 
 // 获取参数
-var argv = require('minimist')(process.argv.slice(2), {
+const argv = require('minimist')(process.argv.slice(2), {
   default: {
     version: pkg.version 
   }
 });
 
 // 前置目录
-var dir = {
+const dir = {
   rls: './release/zip/layui-v' + pkg.version
 };
 
 // 输出目录
-var dest = ({
+const dest = ({
   dist: './dist'
   ,rls: dir.rls + '/layui'
 }[argv.dest || 'dist'] || argv.dest) + (argv.vs ? '/'+ pkg.version : '');
 
 // js
-var js = function(){
-  var src = [
+const js = () => {
+  let src = [
     './src/**/{layui,layui.all,'+ config.modules +'}.js'
   ];
   return gulp.src(src).pipe(uglify({
@@ -59,11 +59,11 @@ var js = function(){
 };
   
 // css
-var css = function(){
-  var src = [
+const css = () => {
+  let src = [
     './src/css/**/*.css'
     ,'!./src/css/**/font.css'
-  ]
+  ];
   return gulp.src(src).pipe(cleanCSS({
     compatibility: 'ie8'
   }))
@@ -72,20 +72,20 @@ var css = function(){
 };
   
 // files
-var files = function(){
-  var src = ['./src/**/*.{eot,svg,ttf,woff,woff2,html,json,png,jpg,gif}'];
+const files = () => {
+  let src = ['./src/**/*.{eot,svg,ttf,woff,woff2,html,json,png,jpg,gif}'];
   return gulp.src(src)
   .pipe(gulp.dest(dest));
 };
 
 // cp
-var cp = function(){
+const cp = () => {
   return gulp.src('./dist/**/*')
   .pipe(gulp.dest(dest));
 };
   
 // release
-var rls = function(){
+const rls = () => {
   return gulp.src('./release/doc/**/*')
   .pipe(replace(/[^'"]+(\/layui\.css)/, 'layui/css$1')) //替换 css 引入路径中的本地 path
   .pipe(replace(/[^'"]+(\/layui\.js)/, 'layui$1')) //替换 js 引入路径中的本地 path
@@ -93,12 +93,12 @@ var rls = function(){
 };
 
 // clean
-var clean =  function(cb) {
+const clean = cb => {
   return del([dest], {
     force: true
   });
 };
-var cleanRLS = function(cb) {
+const cleanRLS = cb => {
   return del([dir.rls]);
 };
 
@@ -111,8 +111,8 @@ exports.cp = gulp.series(clean, cp);
 exports.rls = gulp.series(cleanRLS, rls); //release task
 
 // layer task
-exports.layer = function(){ // gulp layer
-  var dest = './release/layer';
+exports.layer = () => { // gulp layer
+  let dest = './release/layer';
   
   gulp.src('./src/css/modules/layer/default/*')
   .pipe(gulp.dest(dest + '/src/theme/default'));
@@ -123,9 +123,9 @@ exports.layer = function(){ // gulp layer
 
 
 // laydate task
-exports.laydate = function(){ // gulp laydate
-  var dest = './release/laydate/' // 发行目录
-  ,comment = [ //注释
+exports.laydate = () => { // gulp laydate
+  let dest = './release/laydate/'; // 发行目录
+  let comment = [ //注释
     '\n/*! \n * <%= title %> \n * <%= license %> Licensed \n */ \n\n'
     ,{title: 'layDate 日期与时间组件（单独版）', license: 'MIT'}
   ];
@@ -145,9 +145,9 @@ exports.laydate = function(){ // gulp laydate
 };
 
 // helper
-exports.help = function(){
-  var usage = '\nUsage: gulp [options] tasks'
-  ,parser = yargs.usage(usage, {
+exports.help = () => {
+  let usage = '\nUsage: gulp [options] tasks';
+  let parser = yargs.usage(usage, {
     dest: {
       type: 'string'
       ,desc: '定义输出目录，可选项：dist（默认）、rls、任意路径'
