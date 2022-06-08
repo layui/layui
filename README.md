@@ -1,8 +1,7 @@
 <p align="center">
-  <a href="http://www.layui.com">
-    <img src="https://unpkg.com/outeres/img/layui/logo-1.png" alt="layui" width="360">
-  </a>
+  <img src="https://unpkg.com/outeres@0.0.6/img/layui/icon-1.png" width="81" alt="Layui">
 </p>
+<h1 align="center">Layui</h1>
 <p align="center">
   Classic modular front-end UI library
 </p>
@@ -65,11 +64,10 @@ layui.use(['layer', 'form'], function(){
 愿 layui 能成为你得心应手的 Web 界面解决方案，化作你方寸屏幕前的亿万字节！
 
 ## 贡献者
-[贡献者列表](https://github.com/layui/layui/graphs/contributors)
+[贡献者列表](https://github.com/layui/layui/graphs/contributors) 
 
-> 大概是因为 layui 让开发者变得更懒，所以贡献者才如此之少。  
+## 破旧立新
+layui 原官网已于2021年10月13日下线。详见：
+> 1. <a href="https://unpkg.com/outeres@0.0.7/img/layui/notice-2021.png"  target="_blank">layui 原官网下线公告</a>  2. <a href="https://www.zhihu.com/question/488668647/answer/2159962082"  target="_blank">layui 原官网为什么要下线？</a>
 
-## 相关
-> layui 原官网已于2021年10月13日下线。
-
-目前包括版本更新、文档等在内的所有日常维护，都以 Github 或 Gitee 项目主页为准。
+鉴于 layui 相对庞大的受众群体，从此 Github 和 Gitee 平台将支撑起 layui 的后续，**它将继续陪伴着仍然需要它的人**。
