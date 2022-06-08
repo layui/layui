@@ -480,13 +480,13 @@
       lay(elem).addClass('laydate-theme-molv');
       elem.appendChild(style);
     }
-    
+
+    //移除上一个控件
+    that.remove(Class.thisElemDate);
+
     //记录当前执行的实例索引
     laydate.thisId = options.id;
-    
-    //移除上一个控件
-    that.remove(Class.thisElemDate); 
-    
+
     //如果是静态定位，则插入到指定的容器中，否则，插入到body
     isStatic ? options.elem.append(elem) : (
       document.body.appendChild(elem)
@@ -1583,6 +1583,8 @@
     //绑定呼出控件事件
     ,showEvent = function(elem, bind){
       elem.on(options.trigger, function(){
+        //已经打开的面板避免重新渲染
+        if(laydate.thisId === options.id) return;
         bind && (that.bindElem = this);
         that.render();
       });

@@ -1,4 +1,3 @@
-
 /**
  * Layui
  * Classic modular Front-End UI library
@@ -581,7 +580,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-text ol li{margin-top: 5px; list-style-type: decimal;}
 .layui-text em,
 .layui-word-aux{color: #999 !important; padding-left: 5px !important; padding-right: 5px !important;}
-.layui-text p{margin: 10px 0;}
+.layui-text p{margin: 15px 0;}
 .layui-text p:first-child{margin-top: 0;}
 .layui-text p:last-child{margin-bottom: 0;}
 .layui-text blockquote:not(.layui-elem-quote){padding: 5px 15px; border-left: 5px solid #eee;}

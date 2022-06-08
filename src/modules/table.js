@@ -397,7 +397,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     //初始化列参数
     layui.each(options.cols, function(i1, item1){
       layui.each(item1, function(i2, item2){
-        
+        item2.colspan = item2.colspan || 1;
+        item2.rowspan = item2.rowspan || 1;
+
         //如果列参数为空，则移除
         if(!item2){
           item1.splice(i2, 1);
@@ -411,10 +413,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         //如果是组合列，则捕获对应的子列
         if(item2.colGroup || item2.colspan > 1){
           var childIndex = 0;
-          layui.each(options.cols[i1 + 1], function(i22, item22){
+          layui.each(options.cols[i1 + item2.rowspan], function(i22, item22){
             //如果子列已经被标注为{HAS_PARENT}，或者子列累计 colspan 数等于父列定义的 colspan，则跳出当前子列循环
-            if(item22.HAS_PARENT || (childIndex > 1 && childIndex == item2.colspan)) return;
-            
+            if(item22.HAS_PARENT || (childIndex >= 1 && childIndex == item2.colspan)) return;
+
             item22.HAS_PARENT = true;
             item22.parentKey = i1 + '-' + i2;
 
@@ -1847,8 +1849,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           
           var row = $.extend({
             title: th.text()
-            ,colspan: th.attr('colspan') || 0 //列单元格
-            ,rowspan: th.attr('rowspan') || 0 //行单元格
+            ,colspan: th.attr('colspan') || 1 //列单元格
+            ,rowspan: th.attr('rowspan') || 1 //行单元格
           }, itemData);
 
           if(row.colspan < 2) cols.push(row);
@@ -1902,11 +1904,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           var childIndex = 0;
           index++
           item2.CHILD_COLS = [];
-          
-          layui.each(cols[i1 + 1], function(i22, item22){
+
+          layui.each(cols[i1 + item2.rowspan], function(i22, item22){
             //如果子列已经被标注为{PARENT_COL_INDEX}，或者子列累计 colspan 数等于父列定义的 colspan，则跳出当前子列循环
-            if(item22.PARENT_COL_INDEX || (childIndex > 1 && childIndex == item2.colspan)) return;
-            
+            if(item22.PARENT_COL_INDEX || (childIndex >= 1 && childIndex == item2.colspan)) return;
+
             item22.PARENT_COL_INDEX = index;
             
             item2.CHILD_COLS.push(item22);
