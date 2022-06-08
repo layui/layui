@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="https://unpkg.com/outeres@0.0.6/img/layui/icon-1.png" width="81" alt="Layui">
+  <a href="https://layui.github.io/">
+    <img src="https://unpkg.com/outeres@0.0.6/img/layui/icon-1.png" width="81" alt="Layui">
+  </a>
 </p>
 <h1 align="center">Layui</h1>
 <p align="center">
