@@ -174,6 +174,7 @@ layui.define('layer', function(exports){
           ,input = title.find('input')
           ,dl = reElem.find('dl')
           ,dds = dl.children('dd')
+          ,dts = dl.children('dt') // select分组dt元素
           ,index =  this.selectedIndex //当前选中的索引
           ,nearElem; //select 组件当前选中的附近元素，用于辅助快捷键功能
           
@@ -187,6 +188,7 @@ layui.define('layer', function(exports){
             index = select[0].selectedIndex; //获取最新的 selectedIndex
             reElem.addClass(CLASS+'ed');
             dds.removeClass(HIDE);
+            dts.removeClass(HIDE);
             nearElem = null;
 
             //初始选中样式
@@ -346,6 +348,13 @@ layui.define('layer', function(exports){
               ,not = text.indexOf(value) === -1;
               if(value === '' || (origin === 'blur') ? value !== text : not) num++;
               origin === 'keyup' && othis[not ? 'addClass' : 'removeClass'](HIDE);
+            });
+            // 处理select分组元素
+            origin === 'keyup' && layui.each(dts, function(){
+              var othis = $(this)
+              ,thisDds = othis.nextUntil('dt').filter('dd') // 当前分组下的dd元素
+              ,allHide = thisDds.length == thisDds.filter('.' + HIDE).length; // 当前分组下所有dd元素都隐藏了
+              othis[allHide ? 'addClass' : 'removeClass'](HIDE);
             });
             var none = num === dds.length;
             return callback(none), none;
