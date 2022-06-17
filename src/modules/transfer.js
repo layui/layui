@@ -1,8 +1,5 @@
 /**
- 
- @Name：transfer 穿梭框组件
- @License：MIT
-
+ * transfer 穿梭框组件
  */
 
 layui.define(['laytpl', 'form'], function(exports){
@@ -171,7 +168,11 @@ layui.define(['laytpl', 'form'], function(exports){
     });
     that.layData.css({
       height: function(){
-        return options.height - that.layHeader.outerHeight() - that.laySearch.outerHeight() - 2
+        var height = options.height - that.layHeader.outerHeight();
+        if(options.showSearch){
+          height -= that.laySearch.outerHeight();
+        }
+        return height - 2;
       }()
     });
     

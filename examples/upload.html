@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>文件上传模块 - layui</title>
+<title>上传组件 - layui</title>
 
 <link rel="stylesheet" href="../src/css/layui.css">
 
@@ -89,7 +89,7 @@ hr{margin: 30px 0;}
 
 绑定原始文件域：<input type="file" name="file" id="test9">
 
-<script src="../src/layui.js"></script>
+<script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.6.8/layui.js"></script>
 <script>
 layui.use(['upload', 'element'], function(){
   var $ = layui.jquery
@@ -98,7 +98,7 @@ layui.use(['upload', 'element'], function(){
 
   var uploadInst = upload.render({
     elem: '#test1'
-    ,url: 'http://httpbin.org/post'
+    ,url: 'https://httpbin.org/post'
     //,size: 2000 //限制文件大小，单位 KB
     //,accept: 'file'
     ,method: 'get'
@@ -110,8 +110,8 @@ layui.use(['upload', 'element'], function(){
         return 2
       }
     }
-    ,choose: function(){
-      
+    ,choose: function(obj){
+      console.log('choose', obj);
     }
     ,before: function(obj){
       //预读本地文件示例，不支持ie8
@@ -123,16 +123,16 @@ layui.use(['upload', 'element'], function(){
       layer.msg('不允许上传')
       return false;
     }
-    ,done: function(res){
+    ,done: function(res, index){
     
       //如果上传失败
       if(res.code > 0){
         return layer.msg('上传失败');
       }
       //上传成功
-      console.log(res);
+      console.log(res, index);
     }
-    ,error: function(){
+    ,error: function(index, upload){
       this.item.html('重选上传');
       
       //演示失败状态，并实现重传
@@ -145,7 +145,7 @@ layui.use(['upload', 'element'], function(){
       element.progress('demo', '0%');
     }
     ,progress: function(n, elem, res, index){
-      console.log(n + '%', elem, res); //获取进度百分比
+      console.log(n + '%', elem, res, index); //获取进度百分比
       element.progress('demo', n + '%'); //可配合 layui 进度条元素使用
     }
   });
@@ -158,19 +158,25 @@ layui.use(['upload', 'element'], function(){
     //,size: 2
   });
   
+  // 演示多图片上传
   upload.render({
     elem: '#test2'
+    ,url: 'https://httpbin.org/post'
     ,multiple: true
-    ,number: 3
+    ,accept: 'images'
+    ,number: 3 //同时上传的数量
     ,size: 1024
     ,before: function(obj){
       //预读本地文件示例，不支持ie8
       obj.preview(function(index, file, result){
         $('#demo2').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
       });
+
+      //this.files = obj.pushFile();
     }
-    ,done: function(res){
+    ,done: function(res, index){
       //上传完毕
+      //console.log(this.files)
     }
     ,allDone: function(obj){
       console.log(obj)
@@ -181,7 +187,7 @@ layui.use(['upload', 'element'], function(){
   var demoListView = $('#demoList');
   var uploadListIns = upload.render({
     elem: '#testList'
-    ,url: 'http://httpbin.org/post'
+    ,url: 'https://httpbin.org/post'
     ,accept: 'file'
     ,multiple: true
     ,number: 3
@@ -189,9 +195,8 @@ layui.use(['upload', 'element'], function(){
     ,bindAction: '#testListAction'
     ,choose: function(obj){   
       var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
-
       //读取本地文件
-      obj.preview(function(index, file, result){
+      obj.preview(function(index, file, result){        
         var tr = $(['<tr id="upload-'+ index +'">'
           ,'<td>'+ file.name +'</td>'
           ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
@@ -300,11 +305,11 @@ layui.use(['upload', 'element'], function(){
     ,auto: false
     //,multiple: true
     ,bindAction: '#test7'
-    ,choose1: function(obj){   
+    ,choose: function(obj){   
       var that = this;
       obj.preview(function(index, file){
         console.log(file.name);
-        obj.resetFile(index, file, '123.jpg');
+        //obj.resetFile(index, file, '123.jpg');
       });
     }
     ,before: function(){
@@ -317,7 +322,7 @@ layui.use(['upload', 'element'], function(){
   
   upload.render({
     elem: '#test8'
-    ,url: 'http://httpbin.org/post'
+    ,url: 'https://httpbin.org/post'
     ,done: function(res){
       console.log(res);
     }

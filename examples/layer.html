@@ -89,8 +89,8 @@ var runTest = function(run, $, layer){
 };
 window.jQuery && runTest(1, window.jQuery, window.layer);
 
-layui.use('layer', function(){
-  var $ = layui.jquery, layer = layui.layer;
+layui.use(['layer', 'util'], function(layer, util){
+  var $ = layui.jquery;
   //return
   
   var index = layer.msg('hello');
@@ -166,7 +166,7 @@ layui.use('layer', function(){
         layer.close(index);
         layer.prompt({title: '随便写点啥，并确认', formType: 2}, function(text, index){
           layer.close(index);
-          layer.msg('演示完毕！您的口令：'+ pass +'<br>您最后写下了：'+text);
+          layer.msg('演示完毕！您的口令：'+ util.escape(pass) +'<br>您最后写下了：'+ util.escape(text));
         });
       });
     }

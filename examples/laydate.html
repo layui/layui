@@ -1,5 +1,3 @@
- 
- 
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,12 +16,31 @@ body{padding: 50px 100px;}
 </head>
 <body>
 
-日期时间范围选择：
+范围选择1：
 <div class="layui-inline">
   <input type="text" class="layui-input" id="test1">
 </div>
 
-<br><br><hr><br>
+<br><hr>
+
+<div class="layui-form">
+<div class="layui-form-item">
+  <div class="layui-inline">
+    <label class="layui-form-label">范围选择2</label>
+    <div class="layui-inline" id="test1-2">
+      <div class="layui-input-inline">
+        <input type="text" autocomplete="off" id="test-startDate-1" class="layui-input" placeholder="开始日期">
+      </div>
+      <div class="layui-form-mid">-</div>
+      <div class="layui-input-inline">
+        <input type="text" autocomplete="off" id="test-endDate-1" class="layui-input" placeholder="结束日期">
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<br><hr>
 
 日期选择器：
 <div class="layui-inline">
@@ -97,7 +114,7 @@ body{padding: 50px 100px;}
 <div class="layui-inline">
   <input type="text" class="layui-input" id="test6">
 </div>
-
+<textarea></textarea>
 <button class="layui-btn" id="test9">外部事件触发</button>
 <div class="layui-inline">
   <input type="text" class="layui-input" id="test8">
@@ -118,7 +135,7 @@ layui.use('laydate', function(laydate){
     //trigger: 'focus'
   })
 
-  //双控件
+  //范围选择1
   laydate.render({
     elem: '#test1' //指定元素
     ,type: 'datetime'
@@ -126,12 +143,14 @@ layui.use('laydate', function(laydate){
     //,lang: 'en'
     //,theme: 'grid'
     ,range: true //开启日期范围，默认使用“-”分割
-    //,min: '1949-10-1'
+    //,min: '1970-1-1'
     //,max: '2021-5-9'
     //,value: '2021-05-09 12:06:09'
     //,value: '2021-05-08 - 2021-03-27'
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
+
+      //this.elem.val(123);
     }
     ,change: function(value, date, endDate){
       console.log(value, date, endDate);
@@ -139,6 +158,16 @@ layui.use('laydate', function(laydate){
   });
   
   //return;
+
+  //范围选择2
+  laydate.render({
+    elem: '#test1-2'
+    ,type: 'date'
+    ,range: ['#test-startDate-1', '#test-endDate-1']
+    //,value: ['2022-05-01', '2022-06-01']
+    //,value: '2022-05-01 - 2022-06-01'
+  });
+
   
   //单控件
   laydate.render({
@@ -157,6 +186,7 @@ layui.use('laydate', function(laydate){
     }
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
+      //this.elem.val(111111);
     }
     ,change: function(value){
       console.log(value);
@@ -169,6 +199,8 @@ layui.use('laydate', function(laydate){
     ,type: 'year'
     //,range: true 
     //,trigger: 'click'
+    //,min:'2021-01-01'
+    //,max:'2022-12-31'
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
     }
@@ -183,7 +215,8 @@ layui.use('laydate', function(laydate){
     ,type: 'month'
     ,range: true
     ,trigger: 'click'
-    //,max: -30
+    ,min:'2022-03-01'
+    ,max:'2022-05-31'
     ,done: function(value, date, endDate){
       console.log(value, date, endDate);
     }

@@ -1,8 +1,5 @@
 /**
-
- @Title: slider 滑块组件
- @License：MIT
-
+ * slider 滑块组件
  */
 
 layui.define('jquery', function(exports){

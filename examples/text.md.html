@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>text for markdown - layui</title>
+    <link rel="stylesheet" href="../src/css/layui.css">
+  </head>
+  <body>
+    <div class="layui-container layui-row">
+      <div class="layui-col-md4 layui-text">
+        <h1>标题1</h1>
+        <h2>标题2</h2>
+        <h3>标题3</h3>
+        <h4>标题4</h4>
+        <h5>标题5</h5>
+        <h6>标题6</h6>
+        <p>段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1 <sup class="footnote-ref"><a href="#ref-1">[1]</a></sup></p>
+        <p>段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2</p>
+        <p>段落3段落3段落3段落3段落3段落3段落3段落3段落3段落3段落3段落3 <a href="">链接</a></p>
+        <ul>
+          <li>无序1</li>
+          <li>无序2</li>
+          <li>无序3</li>
+        </ul>
+        <ol>
+          <li>有序1</li>
+          <li>有序2</li>
+          <li>有序3</li>
+        </ol>
+        <br>
+        <blockquote>
+          <p>引用</p>
+          <blockquote>内嵌引用<blockquote>内嵌引用</blockquote></blockquote>
+        </blockquote>
+
+        <br>
+
+        <pre>
+var cp = function(){
+  return gulp.src('./dist/**/*')
+  .pipe(gulp.dest(dest));
+};</pre>
+        
+        <p id="ref-1">REF-1</p>
+
+      </div>
+    </div>
+  </body>
+</html>

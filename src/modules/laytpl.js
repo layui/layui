@@ -1,12 +1,8 @@
 ﻿/**
- 
- @Name : laytpl 模板引擎
- @License：MIT
- 
+ * laytpl 模板引擎
  */
 
 layui.define(function(exports){
-
   "use strict";
 
   var config = {
@@ -27,8 +23,15 @@ layui.define(function(exports){
       return exp((_||'') + config.open + types + config.close + (__||''));
     },   
     escape: function(html){
-      return String(html||'').replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
-      .replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+      var exp = /[<"'>]|&(?=#[a-zA-Z0-9]+)/g;
+      if(html === undefined || html === null) return '';
+      
+      html += '';
+      if(!exp.test(html)) return html;
+
+      return html.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
+      .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
     },
     error: function(e, tplog){
       var error = 'Laytpl Error: ';
@@ -64,22 +67,24 @@ layui.define(function(exports){
       return str
     })
     
-    //匹配JS规则内容
+    //匹配 JS 语法
     .replace(/(?="|')/g, '\\').replace(tool.query(), function(str){
       str = str.replace(jss, '').replace(jsse, '');
       return '";' + str.replace(/\\(.)/g, '$1') + ';view+="';
     })
     
-    //匹配普通字段
+    //匹配普通输出语句
     .replace(tool.query(1), function(str){
-      var start = '"+(';
+      var start = '"+laytpl.escape(';
       if(str.replace(/\s/g, '') === config.open+config.close){
         return '';
       }
       str = str.replace(exp(config.open+'|'+config.close), '');
       if(/^=/.test(str)){
         str = str.replace(/^=/, '');
-        start = '"+_escape_(';
+      } else if(/^-/.test(str)){
+        str = str.replace(/^-/, '');
+        start = '"+(';
       }
       return start + str.replace(/\\(.)/g, '$1') + ')+"';
     });
@@ -87,8 +92,8 @@ layui.define(function(exports){
     tpl = '"use strict";var view = "' + tpl + '";return view;';
 
     try{
-      that.cache = tpl = new Function('d, _escape_', tpl);
-      return tpl(data, tool.escape);
+      that.cache = tpl = new Function('d, laytpl', tpl);
+      return tpl(data, tool);
     } catch(e){
       delete that.cache;
       return tool.error(e, tplog);
@@ -98,7 +103,7 @@ layui.define(function(exports){
   Tpl.pt.render = function(data, callback){
     var that = this, tpl;
     if(!data) return tool.error('no data');
-    tpl = that.cache ? that.cache(data, tool.escape) : that.parse(that.tpl, data);
+    tpl = that.cache ? that.cache(data, tool) : that.parse(that.tpl, data);
     if(!callback) return tpl;
     callback(tpl);
   };
