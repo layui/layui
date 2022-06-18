@@ -53,6 +53,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       ,reload: function(options, deep){
         that.reload.call(that, options, deep);
       }
+      ,reloadData: function(options, deep){
+        table.reloadData(id, options, deep);
+      }
       ,setColsWidth: function(){
         that.setColsWidth.call(that);
       }
@@ -251,6 +254,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,loading: true //请求数据时，是否显示 loading
     ,escape: true // 是否开启 HTML 编码功能，即转义 html 原文
     ,cellMinWidth: 60 //所有单元格默认最小宽度
+    ,editTrigger: 'click' //单元格编辑的触发方式
     ,defaultToolbar: ['filter', 'exports', 'print'] //工具栏右侧图标
     ,autoSort: true //是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
     ,text: {
@@ -694,7 +698,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.layMain.find('tbody').html('');
     
     that.layMain.append(that.layNone = layNone);
-    
+
+    // 异常情况下对page和total的内容处理
+    that.layPage && that.layPage.addClass(HIDE).find('>div').html('');
+    that.layTotal && that.layTotal.addClass(HIDE).find('tbody').html('');
+
     table.cache[that.key] = []; //格式化缓存数据
   };
   
@@ -941,6 +949,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     //正常初始化数据渲染
     render(); //渲染数据
     that.renderTotal(data, totalRowData); //数据合计
+    that.layTotal && that.layTotal.removeClass(HIDE);
 
     //同步分页状态
     if(options.page){
@@ -1697,7 +1706,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     });
     
     //单元格单击事件
-    that.layBody.on('click', 'td', function(e){
+    that.layBody.on(options.editTrigger, 'td', function(e){
       var othis = $(this)
       ,field = othis.data('field')
       ,editType = othis.data('edit')
@@ -1982,8 +1991,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   
   //表格导出
   table.exportFile = function(id, data, type){
-    var that = this;
-    
     data = data || table.clearCacheKey(table.cache[id]);
     type = type || 'csv';
     
@@ -2023,8 +2030,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
               }
 
               var content = item1[item3.field]
-              ,td = that.layBody.find('tr[data-index="'+ i1 +'"]>td');
-              
+              ,td = thatTable.layBody.find('tr[data-index="'+ i1 +'"]>td');
+
               if(content === undefined || content === null) content = '';
               
               i1 == 0 && dataTitle.push(item3.title || '');
@@ -2046,14 +2053,14 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       });
       
       //表合计
-      layui.each(that.dataTotal, function(key, value){
+      thatTable && layui.each(thatTable.dataTotal, function(key, value){
         fieldsIsHide[key] || dataTotal.push(value);
       });
       
       return dataTitle.join(',') + '\r\n' + dataMain.join('\r\n') + '\r\n' + dataTotal.join(',');
     }());
-    
-    alink.download = (config.title || 'table_'+ (config.index || '')) + '.' + type; 
+
+    alink.download = (config.title || 'table_'+ (config.index || new Date().getTime())) + '.' + type;
     document.body.appendChild(alink);
     alink.click();
     document.body.removeChild(alink); 
@@ -2085,7 +2092,51 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     return thisTable.call(that);
   };
- 
+
+  //需要重新render的参数名单
+  var dataParams = ['data', 'url', 'where', 'page', 'request', 'response'];
+  //重载数据 options只允许跟数据请求相关的配置信息
+  table.reloadData = function(id, options, deep){
+    var config = getThisTableConfig(id); //获取当前实例配置项
+    if (!config) return;
+
+    var that = thisTable.that[id];
+    options = options || {};
+
+    if (options.page !== undefined && !!options.page !== !!config.page) {
+      // 如果是否分页发生了改变
+      hint.error('reloadData不允许对是否分页进行切换（从不分页到分页的切换，反之亦然）,如果需要请使用reload重载');
+      delete options.page;
+    }
+    //过滤options只留下跟数据请求相关的参数
+    layui.each(options, function (_key, _value) {
+      if (dataParams.indexOf(_key) === -1) {
+        delete options[_key];
+      }
+    });
+    if (options.page !== undefined) { // 针对page组件的特殊处理
+      if (typeof options.page === 'object') {
+        options.page.curr && (that.page = options.page.curr);
+        delete options.elem;
+        delete options.jump;
+      } else if (options.page) {
+        options.page = {};
+      }
+      $.extend(true, that.config, {page: options.page});
+      delete options.page;
+    }
+
+    if (options.data && options.data.constructor === Array) delete that.config.data;
+    deep ? $.extend(true, that.config, options) : $.extend(that.config, options);
+    if (!that.config.page) {
+      that.page = 1;
+    }
+    that.loading();
+    that.pullData(that.page);
+    return thisTable.call(that);
+  }
+
+
   //核心入口
   table.render = function(options){
     var inst = new Class(options);
