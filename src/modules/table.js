@@ -2094,7 +2094,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   };
 
   //需要重新render的参数名单
-  var dataParams = ['data', 'url', 'where', 'page', 'request', 'response'];
+  var dataParams = ['data', 'url', 'where', 'page', 'request', 'response', 'parseData'];
+  var dataParamsRegExp = new RegExp('^(' + dataParams.join('|') + ')$')
   //重载数据 options只允许跟数据请求相关的配置信息
   table.reloadData = function(id, options, deep){
     var config = getThisTableConfig(id); //获取当前实例配置项
@@ -2110,7 +2111,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     }
     //过滤options只留下跟数据请求相关的参数
     layui.each(options, function (_key, _value) {
-      if (dataParams.indexOf(_key) === -1) {
+      if (!dataParamsRegExp.test(_key)) {
         delete options[_key];
       }
     });
