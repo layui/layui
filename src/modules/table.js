@@ -991,8 +991,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       
       //td 内容
       var content = function(){
+        if( item3.totalRowDecimalScale == null || isNaN(item3.totalRowDecimalScale) || 
+          item3.totalRowDecimalScale < 0  || item3.totalRowDecimalScale > 10 ){
+          // 如果检测到非法值就重设为2。至于非法值的定义这里是我自己定义的。
+          item3.totalRowDecimalScale = 2;
+        }
         var text = item3.totalRowText || ''
-        ,thisTotalNum = parseFloat(totalNums[field]).toFixed(2)
+        ,thisTotalNum = parseFloat(totalNums[field]).toFixed(item3.totalRowDecimalScale)
         ,tplData = {}
         ,getContent;
         
