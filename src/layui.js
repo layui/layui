@@ -232,6 +232,21 @@
     return that;
   };
 
+  Layui.prototype.unuse = function (apps) {
+    var that = this;
+    apps = that.isArray(apps) ? apps : [apps];
+    that.each(apps, function (index, item) {
+      if (!config.status[item]) {
+        return error('module ' + item + ' is not exist');
+      }
+      delete that[item];
+      delete modules[item];
+      delete that.modules[item];
+      delete config.status[item];
+      delete config.modules[item];
+    })
+  }
+
   //获取节点的 style 属性值
   Layui.prototype.getStyle = function(node, name){
     var style = node.currentStyle ? node.currentStyle : win.getComputedStyle(node, null);

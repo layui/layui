@@ -25,7 +25,9 @@
   //外部调用
   ,laydate = {
     v: '5.3.1' //layDate 版本号
-    ,config: {} //全局配置项
+    ,config: {
+      weekStart: 0, // 默认周日一周的开始
+    } //全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: GLOBAL.laydate_dir || ready.getPath
     
@@ -213,7 +215,16 @@
     
     //将日期格式转化成数组
     that.format = thisModule.formatArr(options.format);
-    
+
+    // 设置了一周的开始是周几，此处做一个控制
+    if (options.weekStart) {
+      if (!/^[0-6]$/.test(options.weekStart)) {
+        var lang = that.lang();
+        options.weekStart = lang.weeks.indexOf(options.weekStart);
+        if (options.weekStart === -1) options.weekStart = 0;
+      }
+    }
+
     //生成正则表达式
     that.EXP_IF = ''; 
     that.EXP_SPLIT = ''; 
@@ -415,7 +426,7 @@
         lay.each(new Array(7), function(j){
           if(i === 0){
             var th = lay.elem('th');
-            th.innerHTML = lang.weeks[j];
+            th.innerHTML = lang.weeks[(j + options.weekStart) % 7];
             theadTr.appendChild(th);
           }
           tr.insertCell(j);
@@ -845,8 +856,8 @@
     
     //计算当前月第一天的星期
     thisDate.setFullYear(dateTime.year, dateTime.month, 1);
-    startWeek = thisDate.getDay();
-    
+    startWeek = (thisDate.getDay() + (7 - options.weekStart)) % 7;
+
     prevMaxDate = laydate.getEndDate(dateTime.month || 12, dateTime.year); //计算上个月的最后一天
     thisMaxDate = laydate.getEndDate(dateTime.month + 1, dateTime.year); //计算当前月的最后一天
     
