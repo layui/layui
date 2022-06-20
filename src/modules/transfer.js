@@ -322,7 +322,62 @@ layui.define(['laytpl', 'form'], function(exports){
     });
     return selectedData;
   };
-  
+
+  //执行穿梭
+  Class.prototype.transfer = function (_index, elem) {
+    var that = this
+      ,options = that.config
+      ,thisBoxElem = that.layBox.eq(_index)
+      ,arr = []
+
+    if (!elem) {
+      //通过按钮触发找到选中的进行移动
+      thisBoxElem.each(function(_index){
+        var othis = $(this)
+          ,thisDataElem = othis.find('.'+ ELEM_DATA);
+
+        thisDataElem.children('li').each(function(){
+          var thisList = $(this)
+            ,thisElemCheckbox = thisList.find('input[type="checkbox"]')
+            ,isHide = thisElemCheckbox.data('hide');
+
+          if(thisElemCheckbox[0].checked && !isHide){
+            thisElemCheckbox[0].checked = false;
+            thisBoxElem.siblings('.'+ ELEM_BOX).find('.'+ ELEM_DATA).append(thisList.clone());
+            thisList.remove();
+
+            //记录当前穿梭的数据
+            arr.push(thisElemCheckbox[0].value);
+          }
+
+          that.setValue();
+        });
+      });
+    } else {
+      //双击单条记录移动
+      var thisList = elem
+        ,thisElemCheckbox = thisList.find('input[type="checkbox"]')
+
+      thisElemCheckbox[0].checked = false;
+      thisBoxElem.siblings('.'+ ELEM_BOX).find('.'+ ELEM_DATA).append(thisList.clone());
+      thisList.remove();
+
+      //记录当前穿梭的数据
+      arr.push(thisElemCheckbox[0].value);
+
+      that.setValue();
+    }
+
+    that.renderCheckBtn();
+
+    //穿梭时，如果另外一个框正在搜索，则触发匹配
+    var siblingInput = thisBoxElem.siblings('.'+ ELEM_BOX).find('.'+ ELEM_SEARCH +' input')
+    siblingInput.val() === '' ||  siblingInput.trigger('keyup');
+
+    //穿梭时的回调
+    options.onchange && options.onchange(that.getData(arr), _index);
+  }
+
   //事件
   Class.prototype.events = function(){
     var that = this
@@ -343,48 +398,31 @@ layui.define(['laytpl', 'form'], function(exports){
           this.checked = checked;
         });
       }
-      
-      that.renderCheckBtn({stopNone: true});
+
+      setTimeout(function () {
+        that.renderCheckBtn({stopNone: true});
+      }, 0)
     });
-    
+
+    //双击记录
+    that.elem.on('dblclick', '.' + ELEM_DATA + '>li', function(event){
+      var elemThis = $(this)
+        ,thisElemCheckbox = elemThis.children('input[type="checkbox"]')
+        ,thisDataElem = elemThis.parent()
+        ,thisBoxElem = thisDataElem.parent()
+
+      if(thisElemCheckbox[0].disabled) return;
+
+      that.transfer(thisBoxElem.data('index'), elemThis);
+    })
+
     //按钮事件
     that.layBtn.on('click', function(){
       var othis = $(this)
       ,_index = othis.data('index')
-      ,thisBoxElem = that.layBox.eq(_index)
-      ,arr = [];
       if(othis.hasClass(DISABLED)) return;
-      
-      that.layBox.eq(_index).each(function(_index){
-        var othis = $(this)
-        ,thisDataElem = othis.find('.'+ ELEM_DATA);
-        
-        thisDataElem.children('li').each(function(){
-          var thisList = $(this)
-          ,thisElemCheckbox = thisList.find('input[type="checkbox"]')
-          ,isHide = thisElemCheckbox.data('hide');
-          
-          if(thisElemCheckbox[0].checked && !isHide){
-            thisElemCheckbox[0].checked = false;
-            thisBoxElem.siblings('.'+ ELEM_BOX).find('.'+ ELEM_DATA).append(thisList.clone());
-            thisList.remove();
-            
-            //记录当前穿梭的数据
-            arr.push(thisElemCheckbox[0].value);
-          }
-          
-          that.setValue();
-        });
-      });
-      
-      that.renderCheckBtn();
-      
-      //穿梭时，如果另外一个框正在搜索，则触发匹配
-      var siblingInput = thisBoxElem.siblings('.'+ ELEM_BOX).find('.'+ ELEM_SEARCH +' input')
-      siblingInput.val() === '' ||  siblingInput.trigger('keyup');
-      
-      //穿梭时的回调
-      options.onchange && options.onchange(that.getData(arr), _index);
+
+      that.transfer(_index);
     });
     
     //搜索
