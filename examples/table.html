@@ -182,7 +182,7 @@
   </table>
 </div>
 
-<script src="../src/layui.js" src1="//www.layuicdn.com/layui-v2.0.1/layui.js" charset="utf-8"></script>
+<script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.6.13/layui.js"></script>
 <script>
 layui.use(['table', 'dropdown'], function(){
   var table = layui.table
@@ -303,7 +303,7 @@ layui.use(['table', 'dropdown'], function(){
       ,{field: 'sex', title: '性别', width: 80}
       ,{field: 'city', title: '城市', width: 100}
       // ,{field: 'experience', title: '积分', width: 80, sort: true}
-      ,{field: 'experience', title: '积分', width: 80, sort: true, totalRow: true, totalRowDecimalScale: 20}
+      ,{field: 'experience', title: '积分', width: 80, sort: true, totalRow: true, totalRowDecimals: 3}
     ]]
     ,data: [{
       "id": "10001"

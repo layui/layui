@@ -983,7 +983,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-table-patch .layui-table-cell{padding: 0; width: 30px;}
 
-.layui-table-edit{position: absolute; left: 0; top: 0; width: 100%; height: 100%; padding: 0 14px 1px; border-radius: 0; box-shadow: 1px 1px 20px rgba(0,0,0,.15)}
+.layui-table-edit{position: absolute; left: 0; top: 0; z-index: 900; width: 100%; height: 100%; padding: 0 14px 1px; border-radius: 0; box-shadow: 1px 1px 20px rgba(0,0,0,.15); background-color: #fff;}
 .layui-table-edit:focus{border-color: #5FB878!important;}
 select.layui-table-edit{padding: 0 0 0 10px; border-color: #d2d2d2;}
 .layui-table-view .layui-form-switch,
