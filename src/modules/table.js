@@ -1918,6 +1918,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       // 找到它的子列所在cols的下标
       var i2 = i1 + (parseInt(item2.rowspan) || 1);
       layui.each(cols[i2], function (i22, item22) {
+        if (item22.hide) return;
         //如果子列已经被标注为{PARENT_COL_INDEX}，或者子列累计 colspan 数等于父列定义的 colspan，则跳出当前子列循环
         if (item22.PARENT_COL_INDEX || (childIndex >= 1 && childIndex == (item2.colspan || 1))) return;
         item22.PARENT_COL_INDEX = index;
@@ -2097,8 +2098,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     return thisTable.call(that);
   };
 
-  //需要重新render的参数名单
-  var dataParams = ['data', 'url', 'where', 'page', 'request', 'response', 'parseData'];
+  //reloadData支持的的参数名单
+  var dataParams = ['data', 'url', 'where', 'page', 'request', 'response', 'parseData', 'limit'];
   var dataParamsRegExp = new RegExp('^(' + dataParams.join('|') + ')$')
   //重载数据 options只允许跟数据请求相关的配置信息
   table.reloadData = function(id, options, deep){
