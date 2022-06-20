@@ -2093,8 +2093,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     return thisTable.call(that);
   };
 
-  //需要重新render的参数名单
-  var dataParams = ['data', 'url', 'where', 'page', 'request', 'response', 'parseData'];
+  //reloadData支持的的参数名单
+  var dataParams = ['data', 'url', 'where', 'page', 'request', 'response', 'parseData', 'limit'];
   var dataParamsRegExp = new RegExp('^(' + dataParams.join('|') + ')$')
   //重载数据 options只允许跟数据请求相关的配置信息
   table.reloadData = function(id, options, deep){
