@@ -136,7 +136,7 @@ layui.use(['table', 'dropdown'], function(){
         var td = obj.td(this.field); //获取当前 td
         return td.find('select').val();
       }}
-      ,{field:'sign', title:'签名'}
+      ,{field:'sign', title:'签名', edit: 'textarea'}
       ,{field: 'experience', title: '积分', width:80, sort: true, align:'center', totalRow: '{{ d.TOTAL_NUMS }} 😊', templet: '<div>{{ d.experience }} 分</div>'}
       ,{field:'ip', title:'IP', width: 120}
       ,{field:'logins', title:'登入次数', width: 100, sort: true, totalRow: '{{ parseInt(d.TOTAL_NUMS) }} 次'}

@@ -1409,12 +1409,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           }
         break;
         case 'LAYTABLE_PRINT': //打印
-          var printWin = window.open('打印窗口', '_blank')
+          var printWin = window.open('about:blank', '_blank')
           ,style = ['<style>'
-            ,'body{font-size: 12px; color: #666;}'
+            ,'body{font-size: 12px; color: #5F5F5F;}'
             ,'table{width: 100%; border-collapse: collapse; border-spacing: 0;}'
-            ,'th,td{line-height: 20px; padding: 9px 15px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #666;}'
-            ,'a{color: #666; text-decoration:none;}'
+            ,'th,td{line-height: 20px; padding: 9px 15px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #5F5F5F;}'
+            ,'a{color: #5F5F5F; text-decoration:none;}'
             ,'*.layui-hide{display: none}'
           ,'</style>'].join('')
           ,html = $(that.layHeader.html()); //输出表头
