@@ -232,7 +232,8 @@
     return that;
   };
 
-  Layui.prototype.unuse = function (apps) {
+  // 弃用原有的指定模块，以便重新扩展新的同名模块
+  Layui.prototype.disuse = function(apps){
     var that = this;
     apps = that.isArray(apps) ? apps : [apps];
     that.each(apps, function (index, item) {
@@ -244,8 +245,8 @@
       delete that.modules[item];
       delete config.status[item];
       delete config.modules[item];
-    })
-  }
+    });
+  };
 
   //获取节点的 style 属性值
   Layui.prototype.getStyle = function(node, name){
