@@ -35,28 +35,28 @@ Layui 是一套开源的 Web UI 组件库，采用自身经典的模块化规范
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>开始使用 Layui</title>
-  <link rel="stylesheet" href="./layui/css/layui.css">
-</head>
-<body>
- 
-  <!-- 你的 HTML 代码 -->
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>开始使用 Layui</title>
+    <link rel="stylesheet" href="./layui/css/layui.css">
+  </head>
+  <body>
    
-  <script src="./layui/layui.js"></script>
-  <script>
-  // 使用组件
-  layui.use(['layer', 'form'], function(){
-    var layer = layui.layer;
-    var form = layui.form;
-    
-    // 欢迎语
-    layer.msg('Hello World');
-  });
-  </script> 
-</body>
+    <!-- 你的 HTML 代码 -->
+     
+    <script src="./layui/layui.js"></script>
+    <script>
+    // 使用组件
+    layui.use(['layer', 'form'], function(){
+      var layer = layui.layer;
+      var form = layui.form;
+      
+      // 欢迎语
+      layer.msg('Hello World');
+    });
+    </script> 
+  </body>
 </html>
 ```
 
