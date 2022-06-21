@@ -1,5 +1,3 @@
- 
- 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,16 +6,15 @@
   <title>表格操作 - layui</title>
 
   <link rel="stylesheet" href="../src/css/layui.css">
-
   <style>
-  body{padding: 20px; /*overflow-y: scroll;*/}
+    body {padding: 32px; /*overflow-y: scroll;*/}
   </style>
 </head>
 <body>
 
 <div class="layui-btn-container">
   <a href="table.html" class="layui-btn">表格综合</a>
-  <a href="table-test.html" class="layui-btn layui-btn-primary">表格测试</a>
+  <a href="table-test.html" class="layui-btn layui-btn-primary layui-border-green">表格操作</a>
   <a href="table-static.html" class="layui-btn">静态表格</a>
 </div>
 
@@ -25,14 +22,17 @@
   <div class="layui-btn-container">
     <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
     <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
-    <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页所有数据</button>
-    <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
-    <button class="layui-btn layui-btn-sm" lay-event="reload">重载（保留初始参数）</button>
-    <button class="layui-btn layui-btn-sm" lay-event="reload2">重载（不保留初始参数）</button>
-    <button class="layui-btn layui-btn-sm" id="dropdown">
-      更多菜单 
+    <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页数据</button>
+    <button class="layui-btn layui-btn-sm" lay-event="isAll">是否全选</button>
+
+    <button class="layui-btn layui-btn-sm" id="reloadTest">
+      重载测试 
       <i class="layui-icon layui-icon-down layui-font-12"></i>
-  </button>
+    </button>
+    <button class="layui-btn layui-btn-sm" id="moreTest">
+      更多测试 
+      <i class="layui-icon layui-icon-down layui-font-12"></i>
+    </button>
   </div>
 </script>
 
@@ -73,13 +73,13 @@
 <script src="../src/layui.js" src1="//www.layuicdn.com/layui-v2.5.3/layui.js" charset="utf-8"></script>
 <script>
 layui.use(['table', 'dropdown'], function(){
-  var table = layui.table
-  ,$ = layui.$
-  ,laytpl = layui.laytpl
-  ,dropdown = layui.dropdown
-  ,form = layui.form;
+  var $ = layui.$;
+  var table = layui.table;
+  var laytpl = layui.laytpl;
+  var dropdown = layui.dropdown;
+  var form = layui.form;
   
-  //全局设定某参数
+  // 全局设定某参数
   table.set({
     where: {
       token: '默认 token 参数'
@@ -156,18 +156,134 @@ layui.use(['table', 'dropdown'], function(){
       ,key: 'experience'
       ,order: 'asc'
     }
-    
     ,done: function(){
-      //下拉菜单
+      var id = this.id;
+
+      // 重载测试
       dropdown.render({
-        elem: '#dropdown' //可绑定在任意元素中，此处以上述按钮为例
+        elem: '#reloadTest' //可绑定在任意元素中，此处以上述按钮为例
         ,data: [{
-          id: 0,
-          title: '刷新'
+          id: 'reload',
+          title: '重载 - 默认（参数重置）'
+        },{
+          id: 'reload-deep',
+          title: '重载 - 深度（参数叠加）'
+        },{
+          id: 'reloadData',
+          title: '数据重载 - 默认（参数重置）'
+        },{
+          id: 'reloadData-deep',
+          title: '数据重载 - 深度（参数叠加）'
+        }]
+        // 菜单被点击的事件
+        ,click: function(obj){
+          switch(obj.id){
+            case 'reload':
+              // 重载 - 默认（参数重置）
+              table.reload('test', {
+                where: {
+                  abc: '123456'
+                  //,test: '新的 test2'
+                  //,token: '新的 token2'
+                }
+                ,defaultToolbar: ['print']
+                /*
+                ,cols: [[ // 重置表头
+                  {type: 'checkbox', fixed: 'left'}
+                  ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
+                  ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
+                  ,{field:'experience', title:'积分', width:80, sort: true, totalRow: true, templet: '<div>{{ d.experience }} 分</div>'}
+                  ,{field:'logins', title:'登入次数', width:100, sort: true, totalRow: true}
+                  ,{field:'joinTime', title:'加入时间', width:120}
+                ]]
+                */
+                //,height: 500
+              });
+            break;
+            case 'reload-deep':
+              // 重载 - 深度（参数叠加）
+              table.reload('test', {
+                where: {
+                  abc: 123
+                  ,test: '新的 test1'
+                }
+                ,defaultToolbar: ['print']
+                ,page: {curr: 5, limit: 20}
+                ,cols: ins1.config.cols
+              }, true);
+            break;
+            case 'reloadData':
+              // 数据重载 - 参数重置
+              var isnt3 = table.reloadData('test', {
+                where: {
+                  abc: '123456'
+                  //,test: '新的 test2'
+                  //,token: '新的 token2'
+                }
+                ,height: 2000 // 测试无效参数
+                //,url: '404'
+                ,elem: null
+                ,page: {curr: 5, limit: 20}
+              });
+              console.log(isnt3.config);
+            break;
+            case 'reloadData-deep':
+              // 数据重载 - 参数叠加
+              table.reloadData('test', {
+                where: {
+                  abc: 123
+                  ,test: '新的 test1'
+                }
+              }, true);
+            break;
+          }
+          layer.msg('可观察 Network 请求参数的变化');
+        }
+      });
+
+
+      // 更多测试
+      dropdown.render({
+        elem: '#moreTest' //可绑定在任意元素中，此处以上述按钮为例
+        ,data: [{
+          id: 'add',
+          title: '添加'
+        },{
+          id: 'update',
+          title: '编辑'
+        },{
+          id: 'delete',
+          title: '删除'
         }]
         //菜单被点击的事件
         ,click: function(obj){
-          table.reload('test');
+          var checkStatus = table.checkStatus(id)
+          var data = checkStatus.data; // 获取选中的数据
+
+          switch(obj.id){
+            case 'add':
+              layer.open({
+                title: '添加',
+                type: 1,
+                area: ['80%','80%'],
+                content: '<div style="padding: 16px;">自定义表单元素</div>'
+              });
+            break;
+            case 'update':
+              layer.open({
+                title: '编辑',
+                type: 1,
+                area: ['80%','80%'],
+                content: '<div style="padding: 16px;">自定义表单元素</div>'
+              });
+            break;
+            case 'delete':
+              if(data.length === 0){
+                return layer.msg('请选择一行');
+              }
+              layer.msg('delete event');
+            break;
+          }
         }
       });
     }
@@ -177,11 +293,11 @@ layui.use(['table', 'dropdown'], function(){
     }
 
     /*
-    ,response: {
-      statusName: 'status'
-      ,statusCode: 200
+    ,request: { // 自定义请求参数名称
+      pageName: 'curr' //页码的参数名称，默认：page
+      ,limitName: 'nums' //每页数据量的参数名，默认：limit
     }
-    ,parseData: function(res){
+    ,parseData: function(res){ // 任意数据格式的解析
       return {
         "status": res.status
         ,"msg": res.message
@@ -209,19 +325,12 @@ layui.use(['table', 'dropdown'], function(){
     }, true);
   });
   
-  //工具栏事件
+  // 工具栏事件
   table.on('toolbar(test)', function(obj){
-    var checkStatus = table.checkStatus(obj.config.id);
+    var id = obj.config.id;
+    var checkStatus = table.checkStatus(id);
+
     switch(obj.event){
-      case 'add':
-        layer.msg('添加');
-      break;
-      case 'update':
-        layer.msg('编辑');
-      break;
-      case 'delete':
-        layer.msg('删除');
-      break;
       case 'getCheckData':
         var data = checkStatus.data;
         layer.alert(layui.util.escape(JSON.stringify(data)));
@@ -231,7 +340,7 @@ layui.use(['table', 'dropdown'], function(){
         layer.msg('选中了：'+ data.length + ' 个');
       break;
       case 'getData':
-        var getData = table.getData(obj.config.id);
+        var getData = table.getData(id);
         console.log(getData);
         layer.alert(layui.util.escape(JSON.stringify(getData)));
       break;
@@ -240,40 +349,6 @@ layui.use(['table', 'dropdown'], function(){
       break;
       case 'LAYTABLE_TIPS':
         layer.alert('Table for layui-v'+ layui.v);
-      break;
-      case 'reload':
-        //深度重载
-        var instReload = table.reload('test', {
-          
-          where: {
-            abc: 123
-            ,test: '新的 test1'
-          }
-          ,defaultToolbar: ['print']
-          ,page: {curr: 5, limit: 20}
-          ,cols: ins1.config.cols
-          //,height: 300
-          //,url: 'x'
-        }, true);
-      break;
-      case 'reload2':
-        //浅重载
-        table.reload('test', {
-          where: {
-            efg: 'sasasas'
-            //,test: '新的 test2'
-            //,token: '新的 token2'
-          }
-          ,cols: [[
-            {type: 'checkbox', fixed: 'left'}
-            ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
-            ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
-            ,{field:'experience', title:'积分', width:80, sort: true, totalRow: true, templet: '<div>{{ d.experience }} 分</div>'}
-            ,{field:'logins', title:'登入次数', width:100, sort: true, totalRow: true}
-            ,{field:'joinTime', title:'加入时间', width:120}
-          ]]
-          //,height: 500
-        });
       break;
     };
   });
@@ -300,7 +375,27 @@ layui.use(['table', 'dropdown'], function(){
     }
   });
 
-  //触发单元格编辑
+  //触发表格复选框选择
+  table.on('checkbox(test)', function(obj){
+    console.log(obj)
+  });
+
+  //触发表格单选框选择
+  table.on('radio(test)', function(obj){
+    console.log(obj)
+  });
+  
+  // 行单击事件
+  table.on('row(test)', function(obj){
+    //console.log(obj);
+    //layer.closeAll('tips');
+  });
+  // 行双击事件
+  table.on('rowDouble(test)', function(obj){
+    console.log(obj);
+  });
+
+  // 单元格编辑事件
   table.on('edit(test)', function(obj){
     var field = obj.field //得到字段
     ,value = obj.value //得到修改后的值
@@ -309,11 +404,6 @@ layui.use(['table', 'dropdown'], function(){
     var update = {};
     update[field] = value;
     obj.update(update);
-  });
-
-  table.on('row(test)', function(obj){
-    //console.log(obj);
-    //layer.closeAll('tips');
   });
 });
 </script>

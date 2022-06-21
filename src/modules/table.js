@@ -263,7 +263,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   };
 
   //表格渲染
-  Class.prototype.render = function(){
+  Class.prototype.render = function(type){
     var that = this
     ,options = that.config;
 
@@ -297,6 +297,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     }
     
     if(!options.elem[0]) return that;
+
+    // 仅重载数据
+    if(type === 'reloadData'){
+      return that.pullData(that.page); //请求数据
+    }
     
     //高度铺满：full-差距值
     if(options.height && /^full-\d+$/.test(options.height)){
@@ -665,7 +670,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   };
   
   //表格重载
-  Class.prototype.reload = function(options, deep){
+  Class.prototype.reload = function(options, deep, type){
     var that = this;
     
     options = options || {};
@@ -680,7 +685,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.config = $.extend(deep, {}, that.config, options);
 
     //执行渲染
-    that.render();
+    that.render(type);
   };
   
   //异常提示
@@ -2086,61 +2091,35 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     }
   };
   
-  //表格重载
-  table.reload = function(id, options, deep){
+  // 重载
+  table.reload = function(id, options, deep, type){
     var config = getThisTableConfig(id); //获取当前实例配置项
     if(!config) return;
     
     var that = thisTable.that[id];
-    that.reload(options, deep);
+    that.reload(options, deep, type);
     
     return thisTable.call(that);
   };
 
-  //reloadData支持的的参数名单
-  var dataParams = ['data', 'url', 'where', 'page', 'request', 'response', 'parseData', 'limit'];
-  var dataParamsRegExp = new RegExp('^(' + dataParams.join('|') + ')$')
-  //重载数据 options只允许跟数据请求相关的配置信息
-  table.reloadData = function(id, options, deep){
-    var config = getThisTableConfig(id); //获取当前实例配置项
-    if (!config) return;
+  // 仅重载数据
+  table.reloadData = function(){
+    var args = $.extend([], arguments);
+    args[3] = 'reloadData';
 
-    var that = thisTable.that[id];
-    options = options || {};
-
-    if (options.page !== undefined && !!options.page !== !!config.page) {
-      // 如果是否分页发生了改变
-      hint.error('reloadData不允许对是否分页进行切换（从不分页到分页的切换，反之亦然）,如果需要请使用reload重载');
-      delete options.page;
-    }
-    //过滤options只留下跟数据请求相关的参数
-    layui.each(options, function (_key, _value) {
-      if (!dataParamsRegExp.test(_key)) {
-        delete options[_key];
+    // 过滤与数据无关的参数
+    var dataParams = [
+      'data', 'url', 'where', 'page', 'limit',
+      'request', 'response', 'parseData'
+    ];
+    layui.each(args[1], function (key, value) {
+      if(dataParams.indexOf(key) === -1){
+        delete args[1][key];
       }
     });
-    if (options.page !== undefined) { // 针对page组件的特殊处理
-      if (typeof options.page === 'object') {
-        options.page.curr && (that.page = options.page.curr);
-        delete options.elem;
-        delete options.jump;
-      } else if (options.page) {
-        options.page = {};
-      }
-      $.extend(true, that.config, {page: options.page});
-      delete options.page;
-    }
 
-    if (options.data && options.data.constructor === Array) delete that.config.data;
-    deep ? $.extend(true, that.config, options) : $.extend(that.config, options);
-    if (!that.config.page) {
-      that.page = 1;
-    }
-    that.loading();
-    that.pullData(that.page);
-    return thisTable.call(that);
-  }
-
+    return table.reload.apply(null, args);
+  };
 
   //核心入口
   table.render = function(options){

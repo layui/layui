@@ -620,8 +620,8 @@ layui.define('layer', function(exports){
         });
       }
     };
-    if (layui._typeof(type) === 'object') {
-      // jquery对象
+    if (layui.type(type) === 'object') {
+      // jquery 对象
       type.each(function (index, item) {
         var elem = $(item);
         if (!elem.closest(ELEM).length) {
@@ -650,13 +650,13 @@ layui.define('layer', function(exports){
   };
 
   // verifyElem: 要验证的节点或者范围 返回：验证通过返回true，否则返回false
-  Form.prototype.doVerify = function(verifyElem){
+  Form.prototype.validate = function(verifyElem){
     var stop = null //验证不通过状态
       ,verify = form.config.verify //验证规则
       ,DANGER = 'layui-form-danger' //警示样式
 
     if (layui.type(verifyElem) !== 'object') { // 不符合要求的格式直接判通过
-      hint.error('doVerify: 参数错误');
+      hint.error('validate: 参数错误');
       return true;
     }
     if (!verifyElem.attr('lay-verify')) {
@@ -720,7 +720,7 @@ layui.define('layer', function(exports){
             } else { //移动设备定位
               $dom.scrollTop(function(){
                 try {
-                  return (isForm2Elem ? othis.next() : othis).focus().offset().top - 15
+                  return (isForm2Elem ? othis.next() : othis).offset().top - 15
                 } catch(e){
                   return 0;
                 }
@@ -748,7 +748,7 @@ layui.define('layer', function(exports){
     ,filter = button.attr('lay-filter'); //获取过滤器
 
     //开始校验
-    if(!form.doVerify(verifyElem)) return false;
+    if(!form.validate(verifyElem)) return false;
 
     //获取当前表单值
     field = form.getValue(null, elem);

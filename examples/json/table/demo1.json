@@ -7,14 +7,14 @@
   }
   ,"data": [{
     "id": "10001"
-    ,"username": "杜甫"
+    ,"username": "杜甫123"
     ,"email": "test1@email.com"
     ,"sex": "<strong>男</strong>"
     ,"city": "浙江杭州"
     ,"sign": "鼠标移动到此处，可以通过点击单元格右侧的下拉图标，查看到被隐藏的全部内容。"
     ,"experience": 7
     ,"ip": "192.168.0.8"
-    ,"logins": null
+    ,"logins": 0
     ,"joinTime": "2016-10-14"
   }, {
     "id": "10002"
@@ -34,7 +34,7 @@
     ,"email": "test3@email.com"
     ,"sex": "男"
     ,"city": "浙江杭州"
-    ,"sign": "人生恰似一场修行<br>1<br>1<br>1<br>1<br>1<br>1"
+    ,"sign": "人生恰似一场修行"
     ,"experience": 8
     ,"ip": "192.168.0.8"
     ,"logins": null
