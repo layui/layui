@@ -39,7 +39,7 @@ Layui 是一套开源的 Web UI 组件库，采用自身经典的模块化规范
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>开始使用 Layui</title>
-    <link rel="stylesheet" href="./layui/css/layui.css">
+    <link href="./layui/css/layui.css" rel="stylesheet">
   </head>
   <body>
    
