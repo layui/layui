@@ -254,7 +254,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,loading: true //请求数据时，是否显示 loading
     ,escape: true // 是否开启 HTML 编码功能，即转义 html 原文
     ,cellMinWidth: 60 //所有单元格默认最小宽度
-    ,editTrigger: 'click' //单元格编辑的触发方式
+    ,editTrigger: 'click' //单元格编辑的事件触发方式
     ,defaultToolbar: ['filter', 'exports', 'print'] //工具栏右侧图标
     ,autoSort: true //是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
     ,text: {
@@ -1647,7 +1647,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       }));
     });
     
-    //行事件
+    // 行事件
     that.layBody.on('mouseenter', 'tr', function(){ //鼠标移入行
       var othis = $(this)
       ,index = othis.index();
@@ -1674,7 +1674,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       );
     };
     
-    //单元格编辑
+    // 单元格编辑
     that.layBody.on('change', '.'+ELEM_EDIT, function(){
       var othis = $(this)
       ,value = this.value
@@ -1711,7 +1711,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       othis.remove();
     });
     
-    //单元格单击事件
+    // 单元格事件
     that.layBody.on(options.editTrigger, 'td', function(e){
       var othis = $(this)
       ,field = othis.data('field')
@@ -1790,14 +1790,29 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       layui.stope(e);
     });
     
-    //行工具条操作事件
-    that.layBody.on('click', '*[lay-event]', function(){
-      var othis = $(this)
-      ,index = othis.parents('tr').eq(0).data('index');
-      layui.event.call(this, MOD_NAME, 'tool('+ filter +')', commonMember.call(this, {
-        event: othis.attr('lay-event')
-      }));
+    // 行工具条操作事件
+    var toolFn = function(type){
+      var othis = $(this);
+      var index = othis.parents('tr').eq(0).data('index');
+      
+      layui.event.call(
+        this, 
+        MOD_NAME, 
+        (type || 'tool') + '('+ filter +')', 
+        commonMember.call(this, {
+          event: othis.attr('lay-event')
+        })
+      );
       that.setThisRowChecked(index);
+    };
+
+     // 行工具条单击事件
+    that.layBody.on('click', '*[lay-event]', function(){
+      toolFn.call(this);
+      return false;
+    }).on('dblclick', '*[lay-event]', function(){ //行工具条双击事件
+      toolFn.call(this, 'toolDouble');
+      return false;
     });
     
     //同步滚动条
@@ -1934,7 +1949,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     }
   };
 
-  //遍历表头
+  // 遍历表头
   table.eachCols = function(id, callback, cols){
     var config = thisTable.config[id] || {}
     ,arrs = [], index = 0;
@@ -1962,7 +1977,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     eachArrs();
   };
   
-  //表格选中状态
+  // 表格选中状态
   table.checkStatus = function(id){
     var nums = 0
     ,invalidNum = 0
@@ -1985,7 +2000,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     };
   };
   
-  //获取表格当前页的所有行数据
+  // 获取表格当前页的所有行数据
   table.getData = function(id){
     var arr = []
     ,data = table.cache[id] || [];
@@ -1998,7 +2013,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     return arr;
   };
   
-  //表格导出
+  // 表格导出
   table.exportFile = function(id, data, type){
     data = data || table.clearCacheKey(table.cache[id]);
     type = type || 'csv';
@@ -2075,7 +2090,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     document.body.removeChild(alink); 
   };
   
-  //重置表格尺寸结构
+  // 重置表格尺寸结构
   table.resize = function(id){
     //如果指定表格唯一 id，则只执行该 id 对应的表格实例
     if(id){
@@ -2121,13 +2136,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     return table.reload.apply(null, args);
   };
 
-  //核心入口
+  // 核心入口
   table.render = function(options){
     var inst = new Class(options);
     return thisTable.call(inst);
   };
   
-  //清除临时Key
+  // 清除临时 Key
   table.clearCacheKey = function(data){
     data = $.extend({}, data);
     delete data[table.config.checkName];
@@ -2135,7 +2150,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     return data;
   };
   
-  //自动完成渲染
+  // 自动完成渲染
   $(function(){
     table.init();
   });

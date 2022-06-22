@@ -4,7 +4,7 @@
 
 layui.define('jquery', function(exports){
   "use strict";
-  var $ = layui.jquery
+  var $ = layui.$
 
   //外部接口
   ,slider = {
@@ -111,7 +111,7 @@ layui.define('jquery', function(exports){
     var theme = options.disabled ? '#c2c2c2' : options.theme;
 
     //滑块
-    var temp = '<div class="layui-slider '+ (options.type === 'vertical' ? 'layui-slider-vertical' : '') +'">'+ (options.tips ? '<div class="layui-slider-tips"></div>' : '') + 
+    var temp = '<div class="layui-slider '+ (options.type === 'vertical' ? 'layui-slider-vertical' : '') +'">'+ (options.tips ? '<div class="'+ SLIDER_TIPS +'"></div>' : '') + 
     '<div class="layui-slider-bar" style="background:'+ theme +'; '+ (options.type === 'vertical' ? 'height' : 'width') +':'+ scale +';'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ (scaleFir || 0) +';"></div><div class="layui-slider-wrap" style="'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ (scaleFir || scale) +';">' +
     '<div class="layui-slider-wrap-btn" style="border: 2px solid '+ theme +';"></div></div>'+ (options.range ? '<div class="layui-slider-wrap" style="'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ scaleSec +';"><div class="layui-slider-wrap-btn" style="border: 2px solid '+ theme +';"></div></div>' : '') +'</div>';
 
@@ -174,6 +174,7 @@ layui.define('jquery', function(exports){
     };
 
     //划过滑块显示数值
+    var timer;
     that.elemTemp.find('.' + SLIDER_WRAP_BTN).on('mouseover', function(){
       var sliderWidth = options.type === 'vertical' ? options.height : that.elemTemp[0].offsetWidth
       ,sliderWrap = that.elemTemp.find('.' + SLIDER_WRAP)
@@ -182,12 +183,24 @@ layui.define('jquery', function(exports){
       ,value = $(this).parent().data('value')
       ,tipsTxt = options.setTips ? options.setTips(value) : value;
       that.elemTemp.find('.' + SLIDER_TIPS).html(tipsTxt);
-      if(options.type === 'vertical'){
-        that.elemTemp.find('.' + SLIDER_TIPS).css({"bottom":left + '%', "margin-bottom":"20px", "display":"inline-block"});
-      }else{
-        that.elemTemp.find('.' + SLIDER_TIPS).css({"left":left + '%', "display":"inline-block"});
-      };
+
+      clearTimeout(timer);
+      timer = setTimeout(function(){
+        if(options.type === 'vertical'){
+          that.elemTemp.find('.' + SLIDER_TIPS).css({
+            "bottom": left + '%', 
+            "margin-bottom": "20px", 
+            "display": "inline-block"
+          });
+        } else {
+          that.elemTemp.find('.' + SLIDER_TIPS).css({
+            "left": left + '%', 
+            "display": "inline-block"
+          });
+        };
+      }, 300);
     }).on('mouseout', function(){
+      clearTimeout(timer);
       that.elemTemp.find('.' + SLIDER_TIPS).css("display", "none");
     }); 
   };

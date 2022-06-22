@@ -276,11 +276,15 @@ layui.define('jquery', function(exports){
     
     that.haveSlide = true;
     
-    layui.event.call(this, MOD_NAME, 'change('+ filter +')', {
+    // 回调返回的参数
+    var params = {
       index: options.index
       ,prevIndex: thisIndex
       ,item: elemItem.eq(options.index)
-    });
+    };
+    
+    typeof options.change === 'function' && options.change(params);
+    layui.event.call(this, MOD_NAME, 'change('+ filter +')', params);
   };
   
   //事件处理
@@ -292,10 +296,10 @@ layui.define('jquery', function(exports){
     
     //移入移出容器
     options.elem.on('mouseenter', function(){
-      if (that.config.autoplay === 'always') return;
+      if (options.autoplay === 'always') return;
       clearInterval(that.timer);
     }).on('mouseleave', function(){
-      if (that.config.autoplay === 'always') return;
+      if (options.autoplay === 'always') return;
       that.autoplay();
     });
     

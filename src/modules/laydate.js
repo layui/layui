@@ -341,7 +341,7 @@
     //主面板
     ,elem = that.elem = lay.elem('div', {
       id: that.elemID
-      ,'class': [
+      ,"class": [
         'layui-laydate'
         ,options.range ? ' layui-laydate-range' : ''
         ,isStatic ? (' '+ ELEM_STATIC) : ''
@@ -357,7 +357,7 @@
 
     //底部区域
     ,divFooter = that.footer = lay.elem('div', {
-      'class': ELEM_FOOTER
+      "class": ELEM_FOOTER
     });
     
     if(options.zIndex) elem.style.zIndex = options.zIndex;
@@ -370,38 +370,38 @@
 
       //头部区域
       var divHeader = lay.elem('div', {
-        'class': 'layui-laydate-header'
+        "class": 'layui-laydate-header'
       })
       
       //左右切换
       ,headerChild = [function(){ //上一年
         var elem = lay.elem('i', {
-          'class': 'layui-icon laydate-icon laydate-prev-y'
+          "class": 'layui-icon laydate-icon laydate-prev-y'
         });
         elem.innerHTML = '&#xe65a;';
         return elem;
       }(), function(){ //上一月
         var elem = lay.elem('i', {
-          'class': 'layui-icon laydate-icon laydate-prev-m'
+          "class": 'layui-icon laydate-icon laydate-prev-m'
         });
         elem.innerHTML = '&#xe603;';
         return elem;
       }(), function(){ //年月选择
         var elem = lay.elem('div', {
-          'class': 'laydate-set-ym'
+          "class": 'laydate-set-ym'
         }), spanY = lay.elem('span'), spanM = lay.elem('span');
         elem.appendChild(spanY);
         elem.appendChild(spanM);
         return elem;
       }(), function(){ //下一月
         var elem = lay.elem('i', {
-          'class': 'layui-icon laydate-icon laydate-next-m'
+          "class": 'layui-icon laydate-icon laydate-next-m'
         });
         elem.innerHTML = '&#xe602;';
         return elem;
       }(), function(){ //下一年
         var elem = lay.elem('i', {
-          'class': 'layui-icon laydate-icon laydate-next-y'
+          "class": 'layui-icon laydate-icon laydate-next-y'
         });
         elem.innerHTML = '&#xe65b;';
         return elem;
@@ -409,7 +409,7 @@
       
       //日历内容区域
       ,divContent = lay.elem('div', {
-        'class': 'layui-laydate-content'
+        "class": 'layui-laydate-content'
       })
       ,table = lay.elem('table')
       ,thead = lay.elem('thead'), theadTr = lay.elem('tr');
@@ -436,7 +436,7 @@
       divContent.appendChild(table);
       
       elemMain[i] = lay.elem('div', {
-        'class': 'layui-laydate-main laydate-main-list-'+ i
+        "class": 'layui-laydate-main laydate-main-list-'+ i
       });
       
       elemMain[i].appendChild(divHeader);
@@ -549,7 +549,7 @@
     var that = this
     ,options = that.config
     ,div = lay.elem('div', {
-      'class': ELEM_HINT
+      "class": ELEM_HINT
     });
     
     if(!that.elem) return;
@@ -865,7 +865,7 @@
     lay.each(tds, function(index_, item){
       var YMD = [dateTime.year, dateTime.month], st = 0;
       item = lay(item);
-      item.removeAttr('class');
+      item.removeAttr("class");
       if(index_ < startWeek){
         st = prevMaxDate - startWeek + index_;
         item.addClass('laydate-day-prev');
@@ -948,7 +948,7 @@
     ,isAlone = options.range && options.type !== 'date' && options.type !== 'datetime' //独立范围选择器
     
     ,ul = lay.elem('ul', {
-      'class': ELEM_LIST + ' ' + ({
+      "class": ELEM_LIST + ' ' + ({
         year: 'laydate-year-list'
         ,month: 'laydate-month-list'
         ,time: 'laydate-time-list'
@@ -1131,7 +1131,7 @@
       });
     } else { //时间选择面板 - 选择事件
       var span = lay.elem('span', {
-        'class': ELEM_TIME_TEXT
+        "class": ELEM_TIME_TEXT
       })
       
       //滚动条定位

@@ -179,6 +179,9 @@ layui.define('layer', function(exports){
           ,nearElem; //select 组件当前选中的附近元素，用于辅助快捷键功能
           
           if(disabled) return;
+
+          // 搜索项
+          var laySearch = select.attr('lay-search');
           
           //展开下拉
           var showDown = function(){
@@ -339,13 +342,22 @@ layui.define('layer', function(exports){
             }
           });
           
-          //检测值是否不属于 select 项
+          // 检测值是否不属于 select 项
           var notOption = function(value, callback, origin){
             var num = 0;
             layui.each(dds, function(){
-              var othis = $(this)
-              ,text = othis.text()
-              ,not = text.indexOf(value) === -1;
+              var othis = $(this);
+              var text = othis.text();
+
+              // 是否区分大小写
+              if(laySearch !== 'exact'){
+                text = text.toLowerCase();
+                value = value.toLowerCase();
+              }
+              
+              // 匹配
+              var not = text.indexOf(value) === -1;
+              
               if(value === '' || (origin === 'blur') ? value !== text : not) num++;
               origin === 'keyup' && othis[not ? 'addClass' : 'removeClass'](HIDE);
             });
@@ -649,28 +661,29 @@ layui.define('layer', function(exports){
     return that;
   };
 
-  // verifyElem: 要验证的节点或者范围 返回：验证通过返回true，否则返回false
-  Form.prototype.validate = function(verifyElem){
-    var stop = null //验证不通过状态
-      ,verify = form.config.verify //验证规则
-      ,DANGER = 'layui-form-danger' //警示样式
+  // elem 即要验证的区域表单选择器 -  return true or false
+  Form.prototype.validate = function(elem){
+    var stop = null; //验证不通过状态
+    var verify = form.config.verify; //验证规则
+    var DANGER = 'layui-form-danger'; //警示样式
 
-    if (layui.type(verifyElem) !== 'object') { // 不符合要求的格式直接判通过
-      hint.error('validate: 参数错误');
-      return true;
-    }
-    if (!verifyElem.attr('lay-verify')) {
-      // 验证某个容器内的节点
-      verifyElem = verifyElem.find('*[lay-verify]');
+    elem = $(elem);
+
+    // 节点不存在可视为 true
+    if(!elem[0]) return !0;
+
+    // 若节点不存在特定属性，则查找容器内有待验证的子节点
+    if(!elem.attr('lay-verify')){
+      elem = elem.find('*[lay-verify]');
     }
 
     //开始校验
-    layui.each(verifyElem, function(_, item){
-      var othis = $(this)
-        ,verifyStr = othis.attr('lay-verify') || ''
-        ,vers = verifyStr.split('|')
-        ,verType = othis.attr('lay-verType') //提示方式
-        ,value = othis.val();
+    layui.each(elem, function(_, item){
+      var othis = $(this);
+      var verifyStr = othis.attr('lay-verify') || '';
+      var vers = verifyStr.split('|');
+      var verType = othis.attr('lay-verType'); //提示方式
+      var value = othis.val();
 
       othis.removeClass(DANGER); //移除警示样式
       
@@ -711,21 +724,27 @@ layui.define('layer', function(exports){
             else if(/\bstring|number\b/.test(typeof errorText)){ 
               layer.msg(errorText, {icon: 5, shift: 6});
             }
+
+            setTimeout(function(){
+              (isForm2Elem ? othis.next().find('input') : item).focus();
+            }, 7);
             
-            //非移动设备自动定位焦点
+            /*
+            // 非移动设备自动定位焦点
             if(!device.mobile){
               setTimeout(function(){
                 (isForm2Elem ? othis.next().find('input') : item).focus();
               }, 7);
-            } else { //移动设备定位
+            } else { // 移动设备定位
               $dom.scrollTop(function(){
                 try {
-                  return (isForm2Elem ? othis.next() : othis).offset().top - 15
+                  return (isForm2Elem ? othis.next() : othis).focus().offset().top - 15
                 } catch(e){
                   return 0;
                 }
               }());
             }
+            */
             
             othis.addClass(DANGER);
             return stop = true;

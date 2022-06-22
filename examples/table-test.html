@@ -38,7 +38,7 @@
 
 <script type="text/html" id="barDemo">
   <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-  {{# if(d.email.trim()){ }}
+  {{# if(layui.$.trim(d.email)){ }}
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
   {{# } }}
   <input type="checkbox" name="demoTableSwitch" lay-skin="switch" {{ d.demoTableSwitch }}>
@@ -105,6 +105,7 @@ layui.use(['table', 'dropdown'], function(){
     //,autoSort: false //是否自动排序。如果否，则由服务端排序
     //,loading: false
     ,totalRow: true
+    ,page: true
     ,limit: 30
     ,toolbar: '#toolbarDemo'
     ,defaultToolbar: ['filter', 'exports', 'print', {
@@ -164,16 +165,16 @@ layui.use(['table', 'dropdown'], function(){
         elem: '#reloadTest' //可绑定在任意元素中，此处以上述按钮为例
         ,data: [{
           id: 'reload',
-          title: '重载 - 默认（参数重置）'
+          title: '重载'
         },{
           id: 'reload-deep',
-          title: '重载 - 深度（参数叠加）'
+          title: '重载 - 参数叠加'
         },{
           id: 'reloadData',
-          title: '数据重载 - 默认（参数重置）'
+          title: '仅重载数据'
         },{
           id: 'reloadData-deep',
-          title: '数据重载 - 深度（参数叠加）'
+          title: '仅重载数据 - 参数叠加'
         }]
         // 菜单被点击的事件
         ,click: function(obj){
@@ -186,7 +187,7 @@ layui.use(['table', 'dropdown'], function(){
                   //,test: '新的 test2'
                   //,token: '新的 token2'
                 }
-                ,defaultToolbar: ['print']
+                ,height: 'full-130' // 重载高度
                 /*
                 ,cols: [[ // 重置表头
                   {type: 'checkbox', fixed: 'left'}
@@ -197,7 +198,7 @@ layui.use(['table', 'dropdown'], function(){
                   ,{field:'joinTime', title:'加入时间', width:120}
                 ]]
                 */
-                //,height: 500
+                
               });
             break;
             case 'reload-deep':
@@ -207,9 +208,9 @@ layui.use(['table', 'dropdown'], function(){
                   abc: 123
                   ,test: '新的 test1'
                 }
-                ,defaultToolbar: ['print']
+                //,defaultToolbar: ['print'] // 重载头部工具栏右侧图标
                 ,page: {curr: 5, limit: 20}
-                ,cols: ins1.config.cols
+                //,cols: ins1.config.cols
               }, true);
             break;
             case 'reloadData':
@@ -354,7 +355,7 @@ layui.use(['table', 'dropdown'], function(){
   });
 
   //触发行工具事件
-  table.on('tool(test)', function(obj){
+  table.on('tool(test)', function(obj){ // 双击 toolDouble
     var data = obj.data;
     //console.log(obj)
     if(obj.event === 'del'){

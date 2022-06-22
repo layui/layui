@@ -28,35 +28,43 @@ layui.define(function(exports){
     }
   };
 
-  //分页视图
+  // 分页视图
   Class.prototype.view = function(){
-    var that = this
-    ,config = that.config
-    ,groups = config.groups = 'groups' in config ? (config.groups|0) : 5; //连续页码个数
+    var that = this;
+    var config = that.config;
+
+    // 连续页码个数
+    var groups = config.groups = 'groups' in config 
+      ? (Number(config.groups) || 0)
+    : 5; 
     
-    //排版
+    // 排版
     config.layout = typeof config.layout === 'object' 
       ? config.layout 
     : ['prev', 'page', 'next'];
     
-    config.count = config.count|0; //数据总数
-    config.curr = (config.curr|0) || 1; //当前页
+    config.count = Number(config.count) || 0; // 数据总数
+    config.curr = Number(config.curr) || 1; // 当前页
 
-    //每页条数的选择项
+    // 每页条数的选择项
     config.limits = typeof config.limits === 'object'
       ? config.limits
     : [10, 20, 30, 40, 50];
-    config.limit = (config.limit|0) || 10; //默认条数
+
+     // 默认条数
+    config.limit = Number(config.limit) || 10;
     
     //总页数
     config.pages = Math.ceil(config.count/config.limit) || 1;
     
-    //当前页不能超过总页数
+    // 当前页不能超过总页数
     if(config.curr > config.pages){
       config.curr = config.pages;
+    } else if(config.curr < 1) { // 当前分页不能小于 1
+      config.curr = 1;
     }
     
-    //连续分页个数不能低于0且不能大于总页数
+    //连续分页个数不能低于 0 且不能大于总页数
     if(groups < 0){
       groups = 1;
     } else if (groups > config.pages){
@@ -197,7 +205,7 @@ layui.define(function(exports){
     ,input = elem[tag]('input')[0]
     ,select = elem[tag]('select')[0]
     ,skip = function(){
-      var curr = input.value.replace(/\s|\D/g, '')|0;
+      var curr = Number(input.value.replace(/\s|\D/g, ''));
       if(curr){
         config.curr = curr;
         that.render();
@@ -210,7 +218,7 @@ layui.define(function(exports){
     for(var i = 0, len = childs.length; i < len; i++){
       if(childs[i].nodeName.toLowerCase() === 'a'){
         laypage.on(childs[i], 'click', function(){
-          var curr = this.getAttribute('data-page')|0;
+          var curr = Number(this.getAttribute('data-page'));
           if(curr < 1 || curr > config.pages) return;
           config.curr = curr;
           that.render();

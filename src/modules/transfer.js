@@ -404,7 +404,7 @@ layui.define(['laytpl', 'form'], function(exports){
       }, 0)
     });
 
-    //双击记录
+    // 双击穿梭
     that.elem.on('dblclick', '.' + ELEM_DATA + '>li', function(event){
       var elemThis = $(this)
         ,thisElemCheckbox = elemThis.children('input[type="checkbox"]')
@@ -416,7 +416,7 @@ layui.define(['laytpl', 'form'], function(exports){
       that.transfer(thisBoxElem.data('index'), elemThis);
     })
 
-    //按钮事件
+    // 穿梭按钮事件
     that.layBtn.on('click', function(){
       var othis = $(this)
       ,_index = othis.data('index')
