@@ -292,8 +292,10 @@ layui.define('jquery', function(exports){
     
     //移入移出容器
     options.elem.on('mouseenter', function(){
+      if (that.config.autoplay === 'always') return;
       clearInterval(that.timer);
     }).on('mouseleave', function(){
+      if (that.config.autoplay === 'always') return;
       that.autoplay();
     });
     
