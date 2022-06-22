@@ -28,7 +28,7 @@
 Layui 是一套开源的 Web UI 组件库，采用自身轻量级模块化规范，遵循原生态的 HTML/CSS/JavaScript 开发模式，极易上手，拿来即用。其风格简约，而内在丰盈，利于实现网页界面的快速构建。Layui 区别于一众主流的前端框架，却并非逆道而行，而是信奉返璞归真之道。确切地说，它更多是面向于追求简单的务实主义者，他们无需涉足各类构建工具，只需面向浏览器本身，即可轻松掌握页面所需的元素与交互，进而信手拈来。
 
 
-## ✍ 快速上手
+## 快速上手
 
 使用 Layui 只需在页面中引入核心文件即可：
 
@@ -59,13 +59,13 @@ Layui 是一套开源的 Web UI 组件库，采用自身轻量级模块化规范
 </html>
 ```
 
-## 📄 使用文档
+## 使用文档
 [**最新文档**](https://layui.github.io)
 
-## 🍀 项目参与
+## 项目参与
 [项目参与者](https://github.com/layui/layui/graphs/contributors) 
 
-## 🌱 破旧立新
+## 破旧立新 🌱
 layui 原官网已于2021年10月13日下线。详见：
 > 1. <a href="https://unpkg.com/outeres@0.0.7/img/layui/notice-2021.png"  target="_blank">layui 原官网下线公告</a>  2. <a href="https://www.zhihu.com/question/488668647/answer/2159962082"  target="_blank">layui 原官网为什么要下线？</a>
 
