@@ -17,20 +17,20 @@
   </head>
 <body>
 
-  <form class="layui-form" method="get">
+  <form class="layui-form" method="get" lay-filter="top">
     <div class="layui-form-item">
       <div class="layui-input-inline">
-        <input type="text" name="arr[]" required placeholder="请输入" autocomplete="off" class="layui-input">
+        <input type="text" name="arr[]" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
       </div>
       <div class="layui-input-inline">
-        <input type="text" name="arr[]" required placeholder="请输入" autocomplete="off" class="layui-input">
+        <input type="text" name="arr[]" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
       </div>
       <div class="layui-input-inline">
-        <input type="text" name="arr[title]" required placeholder="请输入" autocomplete="off" class="layui-input">
+        <input type="text" name="arr[title]" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
       </div>
     </div>
     <div class="layui-form-item">
-      <button class="layui-btn" lay-submit lay-filter="top">立即提交</button>
+      <button class="layui-btn" id="testSubmit">立即提交</button>
     </div>
   </form>
 
@@ -270,6 +270,7 @@
   <script>
 
   layui.use(['form', 'util', 'laydate'], function(){
+    var $ = layui.$;
     var form = layui.form;
     var layer = layui.layer;
     var util = layui.util;
@@ -289,12 +290,28 @@
       ]
     });
     
+    /*
     form.on('submit(top)', function(data){
       console.log(data);
       return false;
     });
+    */
     
-    
+    //方法提交
+  $('#testSubmit').on('click', function(){
+    form.submit('top', function(data){
+      layer.confirm('确定提交么？', function(index){
+        layer.close(index);
+
+        // 验证均通过后执行提交
+        setTimeout(function(){
+          alert(JSON.stringify(data.field));
+        })
+        
+      });
+    });
+    return false;
+  });
     
     
     //日期

@@ -62,6 +62,13 @@ layui.define('layer', function(exports){
     $.extend(true, that.config.verify, settings);
     return that;
   };
+
+  //获取指定表单对象
+  Form.prototype.getFormElem = function(filter){
+    return $(ELEM + function(){
+      return filter ? ('[lay-filter="' + filter +'"]') : '';
+    }());
+  };
   
   //表单事件
   Form.prototype.on = function(events, callback){
@@ -71,7 +78,7 @@ layui.define('layer', function(exports){
   //赋值/取值
   Form.prototype.val = function(filter, object){
     var that = this
-    ,formElem = $(ELEM + '[lay-filter="' + filter +'"]');
+    ,formElem = that.getFormElem(filter);
     
     //遍历
     formElem.each(function(index, item){
@@ -109,7 +116,7 @@ layui.define('layer', function(exports){
   
   //取值
   Form.prototype.getValue = function(filter, itemForm){
-    itemForm = itemForm || $(ELEM + '[lay-filter="' + filter +'"]').eq(0);
+    itemForm = itemForm || this.getFormElem(filter);
         
     var nameIndex = {} //数组 name 索引
     ,field = {}
@@ -726,6 +733,7 @@ layui.define('layer', function(exports){
             }
 
             setTimeout(function(){
+              console.log(item);
               (isForm2Elem ? othis.next().find('input') : item).focus();
             }, 7);
             
@@ -757,27 +765,42 @@ layui.define('layer', function(exports){
     return !stop;
   }
 
-  //表单提交校验
-  var submit = function(){
-    var field = {}  //字段集合
-    ,button = $(this) //当前触发的按钮
-    ,elem = button.parents(ELEM).eq(0) //当前所在表单域
-    ,verifyElem = elem.find('*[lay-verify]') //获取需要校验的元素
-    ,formElem = button.parents('form')[0] //获取当前所在的 form 元素，如果存在的话
-    ,filter = button.attr('lay-filter'); //获取过滤器
+  // 提交表单并校验
+  var submit = Form.prototype.submit = function(filter, callback){
+    var field = {};  //字段集合
+    var button = $(this); //当前触发的按钮
+
+    // 表单域 lay-filter 属性值
+    var layFilter = typeof filter === 'string' 
+      ? filter 
+    : button.attr('lay-filter');
+
+    // 当前所在表单域
+    var elem = this.getFormElem 
+      ? this.getFormElem(layFilter) 
+    : button.parents(ELEM).eq(0);
+
+    // 获取需要校验的元素
+    var verifyElem = elem.find('*[lay-verify]');
 
     //开始校验
     if(!form.validate(verifyElem)) return false;
 
     //获取当前表单值
     field = form.getValue(null, elem);
+
+    //返回的参数
+    var params = {
+      elem: this.getFormElem ? (window.event && window.event.target) : this //触发事件的对象
+      ,form: this.getFormElem ? elem[0] : button.parents('form')[0] //当前所在的 form 元素，如果存在的话
+      ,field: field //当前表单数据
+    };
+    
+    //回调
+    typeof callback === 'function' && callback(params);
  
-    //返回字段
-    return layui.event.call(this, MOD_NAME, 'submit('+ filter +')', {
-      elem: this
-      ,form: formElem
-      ,field: field
-    });
+    //事件
+    return layui.event.call(this, MOD_NAME, 'submit('+ layFilter +')', params);
   };
 
   //自动完成渲染

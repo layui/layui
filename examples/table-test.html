@@ -68,9 +68,16 @@
   <span {{# if(!d.activate){ }}style="color:#999"{{# } }}>{{ d.email }}</span>
 </script>
 
+<script type="text/html" id="pagebarDemo">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-event="footerDemoBtn1">底部按钮1</button>
+    <button class="layui-btn layui-btn-sm" lay-event="footerDemoBtn2">底部按钮2</button>
+  </div>
+</script>
+
 <table id="test" lay-filter="test"></table>
 
-<script src="../src/layui.js" src1="//www.layuicdn.com/layui-v2.5.3/layui.js" charset="utf-8"></script>
+<script src="../src/layui.js"></script>
 <script>
 layui.use(['table', 'dropdown'], function(){
   var $ = layui.$;
@@ -96,10 +103,18 @@ layui.use(['table', 'dropdown'], function(){
   //渲染
   window.ins1 = table.render({
     elem: '#test'
-    ,height: 400
+    ,height: 500
     //,width: 600
     ,title: '用户数据表'
     ,url: 'json/table/demo1.json'
+
+    ,pagebar: '#pagebarDemo' // 分页栏模板
+    ,lineStyle: 'height: 100px;' // 行样式
+    ,css: [ // 自定义样式
+      '.layui-table-page{text-align: right;}'
+      ,'.layui-table-pagebar{float: left;}'
+    ].join('')
+
     //,size: 'lg'
     //,skin: 'line'
     //,autoSort: false //是否自动排序。如果否，则由服务端排序
@@ -354,7 +369,7 @@ layui.use(['table', 'dropdown'], function(){
     };
   });
 
-  //触发行工具事件
+  //触发单元格工具事件
   table.on('tool(test)', function(obj){ // 双击 toolDouble
     var data = obj.data;
     //console.log(obj)
@@ -375,6 +390,8 @@ layui.use(['table', 'dropdown'], function(){
       });
     }
   });
+
+
 
   //触发表格复选框选择
   table.on('checkbox(test)', function(obj){

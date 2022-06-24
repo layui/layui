@@ -6,17 +6,17 @@
 layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   "use strict";
   
-  var $ = layui.$
-  ,laytpl = layui.laytpl
-  ,laypage = layui.laypage
-  ,layer = layui.layer
-  ,form = layui.form
-  ,util = layui.util
-  ,hint = layui.hint()
-  ,device = layui.device()
+  var $ = layui.$;
+  var laytpl = layui.laytpl;
+  var laypage = layui.laypage;
+  var layer = layui.layer;
+  var form = layui.form;
+  var util = layui.util;
+  var hint = layui.hint();
+  var device = layui.device();
 
   //外部接口
-  ,table = {
+  var table = {
     config: {
       checkName: 'LAY_CHECKED' //是否选中状态的字段名
       ,indexName: 'LAY_TABLE_INDEX' //初始下标索引名，用于恢复排序
@@ -98,7 +98,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   }
   
   //字符常量
-  ,MOD_NAME = 'table', ELEM = '.layui-table', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'layui-disabled', NONE = 'layui-none'
+  ,MOD_NAME = 'table', ELEM = '.layui-table', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', HIDE_V = 'layui-hide-v', DISABLED = 'layui-disabled', NONE = 'layui-none'
   
   ,ELEM_VIEW = 'layui-table-view', ELEM_TOOL = '.layui-table-tool', ELEM_BOX = '.layui-table-box', ELEM_INIT = '.layui-table-init', ELEM_HEADER = '.layui-table-header', ELEM_BODY = '.layui-table-body', ELEM_MAIN = '.layui-table-main', ELEM_FIXED = '.layui-table-fixed', ELEM_FIXL = '.layui-table-fixed-l', ELEM_FIXR = '.layui-table-fixed-r', ELEM_TOTAL = '.layui-table-total', ELEM_PAGE = '.layui-table-page', ELEM_SORT = '.layui-table-sort', ELEM_EDIT = 'layui-table-edit', ELEM_HOVER = 'layui-table-hover'
   
@@ -161,8 +161,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   ,'</table>'].join('')
   
   //主模板
-  ,TPL_MAIN = ['<div class="layui-form layui-border-box {{=d.VIEW_CLASS}}{{# if(d.data.className){ }} {{= d.data.className }}{{# } }}" lay-filter="LAY-table-{{=d.index}}" lay-id="{{= d.data.id }}" style="{{# if(d.data.width){ }}width:{{=d.data.width}}px;{{# } }} {{# if(d.data.height){ }}height:{{=d.data.height}}px;{{# } }}">'
-
+  ,TPL_MAIN = [
     ,'{{# if(d.data.toolbar){ }}'
     ,'<div class="layui-table-tool">'
       ,'<div class="layui-table-tool-temp"></div>'
@@ -218,9 +217,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       ,'</div>'
     ,'{{# } }}'
     
-    ,'{{# if(d.data.page){ }}'
-    ,'<div class="layui-table-page">'
-      ,'<div id="layui-table-page{{=d.index}}"></div>'
+    ,'{{# if(d.data.page || d.data.pagebar){ }}'
+    ,'<div class="layui-table-column layui-table-page">'
+      ,'<div class="layui-inline layui-table-pageview" id="layui-table-page{{=d.index}}"></div>'
     ,'</div>'
     ,'{{# } }}'
     
@@ -234,8 +233,17 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         ,' }'
       ,'{{# });'
     ,'}); }}'
+    ,'{{# if(d.data.lineStyle){ }}'
+      ,'.layui-table-view-{{= d.index }} .layui-table-body .layui-table .layui-table-cell{'
+        ,' display: -webkit-box; -webkit-box-align: center; display: -moz-box; -moz-box-align: center; white-space: normal; {{- d.data.lineStyle }} '
+      ,'}'
+      ,'.layui-table-view-{{= d.index }} .layui-table-body .layui-table .layui-table-cell:hover{overflow: auto;}'
+    ,'{{# } }}'
+    ,'{{# if(d.data.css){ }}'
+      ,'{{- d.data.css }}'
+    ,'{{# } }}'
     ,'</style>'
-  ,'</div>'].join('')
+  ].join('')
   
   ,_WIN = $(window)
   ,_DOC = $(document)
@@ -317,9 +325,23 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,hasRender = othis.next('.' + ELEM_VIEW)
     
     //主容器
-    ,reElem = that.elem = $(laytpl(TPL_MAIN).render({
-      VIEW_CLASS: ELEM_VIEW
-      ,data: options
+    ,reElem = that.elem = $('<div class="layui-form layui-border-box"></div>');
+
+    reElem.addClass(function(){
+      var arr = [ELEM_VIEW, ELEM_VIEW +'-'+ that.index];
+      if(options.className) arr.push(options.className);
+      return arr.join(' ');
+    }()).attr({
+      'lay-filter': 'LAY-TABLE-FORM-DF-'+ that.index
+      ,'lay-id': options.id
+      ,'style': function(){
+        var arr = [];
+        if(options.width) arr.push('width:'+ options.width + 'px;');
+        if(options.height) arr.push('height:'+ options.height + 'px;');
+        return arr.join('')
+      }()
+    }).html(laytpl(TPL_MAIN).render({
+      data: options
       ,index: that.index //索引
     }));
     
@@ -342,15 +364,18 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.layTotal = reElem.find(ELEM_TOTAL);
     that.layPage = reElem.find(ELEM_PAGE);
     
-    //初始化工具栏
+    // 初始化头部工具栏
     that.renderToolbar();
     
-    //让表格平铺
+    // 初始化底部分页栏
+    that.renderPagebar();
+    
+    // 让表格平铺
     that.fullSize();
     
-    //如果多级表头，则填补表头高度
+    // 如果多级表头，则填补表头高度
     if(options.cols.length > 1){
-      //补全高度
+      // 补全高度
       var th = that.layFixed.find(ELEM_HEADER).find('th');
       th.height(that.layHeader.height() - 1 - parseFloat(th.css('padding-top')) - parseFloat(th.css('padding-bottom')));
     }
@@ -364,8 +389,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     var that = this
     ,options = that.config
     ,initWidth = {
-      checkbox: 48
-      ,radio: 48
+      checkbox: 50
+      ,radio: 50
       ,space: 15
       ,numbers: 40
     };
@@ -402,6 +427,17 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     }();
     
     if(type === 'width') return options.clientWidth;
+
+    // 初始化 css 参数
+    if(options.css){
+      var css = options.css.split('}');
+      layui.each(css, function(index, value){
+        if(value){
+          css[index] = '.'+ ELEM_VIEW + '-'+ that.index + ' ' + value;
+        }
+      });
+      options.css = css.join('}');
+    }
 
     // 封装对col的配置处理
     var initChildCols = function (i1, item1, i2, item2) {
@@ -501,7 +537,22 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       });
     }
     that.layTool.find('.layui-table-tool-self').html(iconElem.join(''));
-  }
+  };
+
+  // 分页栏
+  Class.prototype.renderPagebar = function(){
+    var that = this
+    ,options = that.config
+    
+    ,layPagebar = that.layPagebar = $('<div class="layui-inline layui-table-pagebar"></div>')
+    
+    //开启分页栏自定义模板
+    if(options.pagebar){
+      var pagebarHtml = $(options.pagebar).html() || '';
+      pagebarHtml && layPagebar.append(laytpl(pagebarHtml).render(options));
+      that.layPage.append(layPagebar);
+    }
+  };
   
   //同步表头父列的相关值
   Class.prototype.setParentCol = function(hide, parentKey){
@@ -936,7 +987,19 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     table.cache[that.key] = data; //记录数据
     
     //显示隐藏分页栏
-    that.layPage[(count == 0 || (data.length === 0 && curr == 1)) ? 'addClass' : 'removeClass'](HIDE);
+    //that.layPage[(count == 0 || (data.length === 0 && curr == 1)) ? 'addClass' : 'removeClass'](HIDE);
+
+    //显示隐藏合计栏
+    that.layTotal[data.length == 0 ? 'addClass' : 'removeClass'](HIDE_V);;
+    
+    //显示隐藏分页栏
+    if(!options.pagebar){
+      that.layPage[
+        (count == 0 || (data.length === 0 && curr == 1)) 
+          ? 'addClass' 
+        : 'removeClass'
+      ](HIDE_V);
+    }
     
     //如果无数据
     if(data.length === 0){
@@ -1075,7 +1138,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   
   //渲染表单
   Class.prototype.renderForm = function(type){
-    form.render(type, 'LAY-table-'+ this.index);
+    var that = this
+    ,options = that.config
+    ,filter = that.elem.attr('lay-filter');
+    form.render(type, filter);
   };
   
   //标记当前行选中状态
@@ -1460,6 +1526,17 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         ,config: options
       },{}));
     });
+
+    //分页栏操作事件
+    that.layPagebar.on('click', '*[lay-event]', function(e){
+      var othis = $(this)
+      ,events = othis.attr('lay-event');
+      
+      layui.event.call(this, MOD_NAME, 'pagebar('+ filter +')', $.extend({
+        event: events
+        ,config: options
+      },{}));
+    });
     
     //拖拽调整宽度    
     th.on('mousemove', function(e){
@@ -1722,10 +1799,14 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       
       //显示编辑表单
       if(editType){
-        var input = $('<input class="layui-input '+ ELEM_EDIT +'">');
-        if(editType === 'textarea') {
-          input = $('<textarea class="layui-input ' + ELEM_EDIT + '"></textarea>');
-        }
+        var input = $(function(){
+          var inputElem = '<input class="layui-input '+ ELEM_EDIT +'">';
+          if(editType === 'textarea') {
+            inputElem = '<textarea class="layui-input ' + ELEM_EDIT + '"></textarea>';
+          }
+          return inputElem;
+        }());
+        
         input[0].value = othis.data('content') || elemCell.text();
         othis.find('.'+ELEM_EDIT)[0] || othis.append(input);
         input.focus();
@@ -2014,17 +2095,22 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   };
   
   // 表格导出
-  table.exportFile = function(id, data, type){
+  table.exportFile = function(id, data, options){
     data = data || table.clearCacheKey(table.cache[id]);
-    type = type || 'csv';
-    
-    var thatTable = thisTable.that[id]
-    ,config = thisTable.config[id] || {}
-    ,textType = ({
+    options = typeof options === 'object' ? options : function(){
+      var obj = {};
+      options && (obj.type = options);
+      return obj;
+    }();
+
+    var type = options.type || 'csv';
+    var thatTable = thisTable.that[id];
+    var config = thisTable.config[id] || {};
+    var textType = ({
       csv: 'text/csv'
       ,xls: 'application/vnd.ms-excel'
-    })[type]
-    ,alink = document.createElement("a");
+    })[type];
+    var alink = document.createElement("a");
     
     if(device.ie) return hint.error('IE_NOT_SUPPORT_EXPORTS');
     
@@ -2084,7 +2170,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       return dataTitle.join(',') + '\r\n' + dataMain.join('\r\n') + '\r\n' + dataTotal.join(',');
     }());
 
-    alink.download = (config.title || 'table_'+ (config.index || new Date().getTime())) + '.' + type;
+    alink.download = (options.title || config.title || 'table_'+ (config.index || '')) + '.' + type;
     document.body.appendChild(alink);
     alink.click();
     document.body.removeChild(alink); 
