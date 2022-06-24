@@ -25,7 +25,9 @@
   //外部调用
   ,laydate = {
     v: '5.3.1' //layDate 版本号
-    ,config: {} //全局配置项
+    ,config: {
+      weekStart: 0, // 默认周日一周的开始
+    } //全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: GLOBAL.laydate_dir || ready.getPath
     
@@ -213,7 +215,16 @@
     
     //将日期格式转化成数组
     that.format = thisModule.formatArr(options.format);
-    
+
+    // 设置了一周的开始是周几，此处做一个控制
+    if (options.weekStart) {
+      if (!/^[0-6]$/.test(options.weekStart)) {
+        var lang = that.lang();
+        options.weekStart = lang.weeks.indexOf(options.weekStart);
+        if (options.weekStart === -1) options.weekStart = 0;
+      }
+    }
+
     //生成正则表达式
     that.EXP_IF = ''; 
     that.EXP_SPLIT = ''; 
@@ -330,7 +341,7 @@
     //主面板
     ,elem = that.elem = lay.elem('div', {
       id: that.elemID
-      ,'class': [
+      ,"class": [
         'layui-laydate'
         ,options.range ? ' layui-laydate-range' : ''
         ,isStatic ? (' '+ ELEM_STATIC) : ''
@@ -346,7 +357,7 @@
 
     //底部区域
     ,divFooter = that.footer = lay.elem('div', {
-      'class': ELEM_FOOTER
+      "class": ELEM_FOOTER
     });
     
     if(options.zIndex) elem.style.zIndex = options.zIndex;
@@ -359,38 +370,38 @@
 
       //头部区域
       var divHeader = lay.elem('div', {
-        'class': 'layui-laydate-header'
+        "class": 'layui-laydate-header'
       })
       
       //左右切换
       ,headerChild = [function(){ //上一年
         var elem = lay.elem('i', {
-          'class': 'layui-icon laydate-icon laydate-prev-y'
+          "class": 'layui-icon laydate-icon laydate-prev-y'
         });
         elem.innerHTML = '&#xe65a;';
         return elem;
       }(), function(){ //上一月
         var elem = lay.elem('i', {
-          'class': 'layui-icon laydate-icon laydate-prev-m'
+          "class": 'layui-icon laydate-icon laydate-prev-m'
         });
         elem.innerHTML = '&#xe603;';
         return elem;
       }(), function(){ //年月选择
         var elem = lay.elem('div', {
-          'class': 'laydate-set-ym'
+          "class": 'laydate-set-ym'
         }), spanY = lay.elem('span'), spanM = lay.elem('span');
         elem.appendChild(spanY);
         elem.appendChild(spanM);
         return elem;
       }(), function(){ //下一月
         var elem = lay.elem('i', {
-          'class': 'layui-icon laydate-icon laydate-next-m'
+          "class": 'layui-icon laydate-icon laydate-next-m'
         });
         elem.innerHTML = '&#xe602;';
         return elem;
       }(), function(){ //下一年
         var elem = lay.elem('i', {
-          'class': 'layui-icon laydate-icon laydate-next-y'
+          "class": 'layui-icon laydate-icon laydate-next-y'
         });
         elem.innerHTML = '&#xe65b;';
         return elem;
@@ -398,7 +409,7 @@
       
       //日历内容区域
       ,divContent = lay.elem('div', {
-        'class': 'layui-laydate-content'
+        "class": 'layui-laydate-content'
       })
       ,table = lay.elem('table')
       ,thead = lay.elem('thead'), theadTr = lay.elem('tr');
@@ -415,7 +426,7 @@
         lay.each(new Array(7), function(j){
           if(i === 0){
             var th = lay.elem('th');
-            th.innerHTML = lang.weeks[j];
+            th.innerHTML = lang.weeks[(j + options.weekStart) % 7];
             theadTr.appendChild(th);
           }
           tr.insertCell(j);
@@ -425,7 +436,7 @@
       divContent.appendChild(table);
       
       elemMain[i] = lay.elem('div', {
-        'class': 'layui-laydate-main laydate-main-list-'+ i
+        "class": 'layui-laydate-main laydate-main-list-'+ i
       });
       
       elemMain[i].appendChild(divHeader);
@@ -538,7 +549,7 @@
     var that = this
     ,options = that.config
     ,div = lay.elem('div', {
-      'class': ELEM_HINT
+      "class": ELEM_HINT
     });
     
     if(!that.elem) return;
@@ -845,8 +856,8 @@
     
     //计算当前月第一天的星期
     thisDate.setFullYear(dateTime.year, dateTime.month, 1);
-    startWeek = thisDate.getDay();
-    
+    startWeek = (thisDate.getDay() + (7 - options.weekStart)) % 7;
+
     prevMaxDate = laydate.getEndDate(dateTime.month || 12, dateTime.year); //计算上个月的最后一天
     thisMaxDate = laydate.getEndDate(dateTime.month + 1, dateTime.year); //计算当前月的最后一天
     
@@ -854,7 +865,7 @@
     lay.each(tds, function(index_, item){
       var YMD = [dateTime.year, dateTime.month], st = 0;
       item = lay(item);
-      item.removeAttr('class');
+      item.removeAttr("class");
       if(index_ < startWeek){
         st = prevMaxDate - startWeek + index_;
         item.addClass('laydate-day-prev');
@@ -937,7 +948,7 @@
     ,isAlone = options.range && options.type !== 'date' && options.type !== 'datetime' //独立范围选择器
     
     ,ul = lay.elem('ul', {
-      'class': ELEM_LIST + ' ' + ({
+      "class": ELEM_LIST + ' ' + ({
         year: 'laydate-year-list'
         ,month: 'laydate-month-list'
         ,time: 'laydate-time-list'
@@ -1120,7 +1131,7 @@
       });
     } else { //时间选择面板 - 选择事件
       var span = lay.elem('span', {
-        'class': ELEM_TIME_TEXT
+        "class": ELEM_TIME_TEXT
       })
       
       //滚动条定位
@@ -1572,7 +1583,7 @@
   
   //是否输入框
   Class.prototype.isInput = function(elem){
-    return /input|textarea/.test(elem.tagName.toLocaleLowerCase());
+    return /input|textarea/.test(elem.tagName.toLocaleLowerCase()) || /INPUT|TEXTAREA/.test(elem.tagName);
   };
 
   //绑定的元素事件处理

@@ -52,7 +52,8 @@ const js = () => {
   return gulp.src(src).pipe(uglify({
     output: {
       ascii_only: true //escape Unicode characters in strings and regexps
-    }
+    },
+    ie: true
   })).pipe(concat('layui.js', {newLine: ''}))
   .pipe(header.apply(null, config.comment))
   .pipe(gulp.dest(dest));

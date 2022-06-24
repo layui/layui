@@ -175,6 +175,8 @@
         if(obj.clickType === 'right'){
           top = winArea() - elemHeight - margin*2;
           if(top < 0) top = 0; //不能溢出窗口顶部
+        } else {
+          top = margin; // 位置计算逻辑完备性处理
         }
       }
     }
@@ -420,4 +422,3 @@
   }
   
 }(window, window.document);
-

@@ -15,7 +15,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.6.13'; // layui 版本号
+    this.v = '2.7.0'; // layui 版本号
   }
   
   //识别预先可能定义的指定全局对象
@@ -230,6 +230,22 @@
     }
     
     return that;
+  };
+
+  // 弃用原有的指定模块，以便重新扩展新的同名模块
+  Layui.prototype.disuse = function(apps){
+    var that = this;
+    apps = that.isArray(apps) ? apps : [apps];
+    that.each(apps, function (index, item) {
+      if (!config.status[item]) {
+        return error('module ' + item + ' is not exist');
+      }
+      delete that[item];
+      delete modules[item];
+      delete that.modules[item];
+      delete config.status[item];
+      delete config.modules[item];
+    });
   };
 
   //获取节点的 style 属性值
