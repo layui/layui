@@ -733,7 +733,6 @@ layui.define('layer', function(exports){
             }
 
             setTimeout(function(){
-              console.log(item);
               (isForm2Elem ? othis.next().find('input') : item).focus();
             }, 7);
             
