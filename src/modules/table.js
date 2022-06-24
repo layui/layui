@@ -1829,7 +1829,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       
       if(hide){
         othis.find('.layui-table-grid-down').remove();
-      } else if(elemCell.prop('scrollWidth') > elemCell.outerWidth() || elemCell.find("br").size() > 0){
+      } else if(elemCell.prop('scrollWidth') > elemCell.outerWidth() || elemCell.find("br").length > 0){
         if(elemCell.find('.'+ ELEM_GRID_DOWN)[0]) return;
         othis.append('<div class="'+ ELEM_GRID_DOWN +'"><i class="layui-icon layui-icon-down"></i></div>');
       }
