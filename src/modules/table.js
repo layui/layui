@@ -1829,7 +1829,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       
       if(hide){
         othis.find('.layui-table-grid-down').remove();
-      } else if(elemCell.prop('scrollWidth') > elemCell.outerWidth() || elemCell.find("br").length > 0){
+      } else if((
+        elemCell.prop('scrollWidth') > elemCell.outerWidth() || 
+        elemCell.find("br").length > 0
+      ) && !options.lineStyle){
         if(elemCell.find('.'+ ELEM_GRID_DOWN)[0]) return;
         othis.append('<div class="'+ ELEM_GRID_DOWN +'"><i class="layui-icon layui-icon-down"></i></div>');
       }
@@ -1842,7 +1845,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       ,elemCell = td.children(ELEM_CELL);
 
       that.tipsIndex = layer.tips([
-        '<div class="layui-table-tips-main" style="margin-top: -'+ (elemCell.height() + 16) +'px;'+ function(){
+        '<div class="layui-table-tips-main" style="margin-top: -'+ (elemCell.height() + 23) +'px;'+ function(){
           if(options.size === 'sm'){
             return 'padding: 4px 15px; font-size: 12px;';
           }

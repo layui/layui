@@ -1007,7 +1007,7 @@ select.layui-table-edit{padding: 0 0 0 10px; border-color: #d2d2d2;}
 .layui-table-grid-down:hover{background-color: #fbfbfb;}
 
 body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-shadow: 0 1px 6px rgba(0,0,0,.12);}
-.layui-table-tips-main{margin: -44px 0 0 -1px; max-height: 150px; padding: 8px 15px; font-size: 14px; overflow-y: scroll; background-color: #fff; color: #5F5F5F;}
+.layui-table-tips-main{margin: -49px 0 0 -1px; max-height: 150px; padding: 8px 15px; font-size: 14px; overflow-y: scroll; background-color: #fff; color: #5F5F5F;}
 .layui-table-tips-c{position: absolute; right: -3px; top: -13px; width: 20px; height: 20px; padding: 3px; cursor: pointer; background-color: #5F5F5F; border-radius: 50%; color: #fff;}
 .layui-table-tips-c:hover{background-color: #777;}
 .layui-table-tips-c:before{position: relative; right: -2px;}
