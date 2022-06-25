@@ -893,10 +893,10 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /* 大表格 */.layui-table[lay-size="lg"] th,
 .layui-table[lay-size="lg"] td{padding-top: 15px; padding-right: 30px; padding-bottom: 15px; padding-left: 30px;}
-.layui-table-view .layui-table[lay-size="lg"] .layui-table-cell{height: 40px; line-height: 40px;}  
+.layui-table-view .layui-table[lay-size="lg"] .layui-table-cell{height: 50px; line-height: 40px;}
 /* 小表格 */.layui-table[lay-size="sm"] th,
 .layui-table[lay-size="sm"] td{padding-top: 5px; padding-right: 10px; padding-bottom: 5px; padding-left: 10px; font-size: 12px;}
-.layui-table-view .layui-table[lay-size="sm"] .layui-table-cell{height: 20px; line-height: 20px;} 
+.layui-table-view .layui-table[lay-size="sm"] .layui-table-cell{height: 30px; line-height: 20px;}
 
 /* 数据表格 */
 .layui-table[lay-data]{display: none;}
