@@ -759,8 +759,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.layMain.append(that.layNone = layNone);
 
     // 异常情况下对page和total的内容处理
-    that.layPage && that.layPage.addClass(HIDE).find('>div').html('');
-    that.layTotal && that.layTotal.addClass(HIDE).find('tbody').html('');
+    that.layPage && that.layPage.addClass(HIDE_V).find('>div').html('');
+    that.layTotal && that.layTotal.addClass(HIDE_V).find('tbody').html('');
 
     table.cache[that.key] = []; //格式化缓存数据
   };
@@ -1018,8 +1018,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     //that.layPage[(count == 0 || (data.length === 0 && curr == 1)) ? 'addClass' : 'removeClass'](HIDE);
 
     //显示隐藏合计栏
-    that.layTotal[data.length == 0 ? 'addClass' : 'removeClass'](HIDE_V);;
-    
+    that.layTotal[data.length == 0 ? 'addClass' : 'removeClass'](HIDE_V);
+
     //显示隐藏分页栏
     if(!options.pagebar){
       that.layPage[
