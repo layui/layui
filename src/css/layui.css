@@ -723,6 +723,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-checkbox[lay-skin="primary"]:hover i{border-color: #5FB878; color: #fff;}
 .layui-form-checked[lay-skin="primary"] i{border-color: #5FB878 !important; background-color: #5FB878; color: #fff;}
 .layui-checkbox-disabled[lay-skin="primary"] span{background: none!important; color: #c2c2c2!important;}
+.layui-form-checked.layui-checkbox-disabled[lay-skin="primary"] i{background: #eee!important; border-color: #eee!important;}
 .layui-checkbox-disabled[lay-skin="primary"]:hover i{border-color: #d2d2d2;}
 .layui-form-item .layui-form-checkbox[lay-skin="primary"]{margin-top: 10px;}
 
@@ -950,6 +951,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-cell{height: 38px; line-height: 28px; padding: 6px 15px; position: relative; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-sizing: border-box;}
 .layui-table-cell .layui-form-checkbox[lay-skin="primary"]{top: -1px; padding: 0;}
 .layui-table-cell .layui-table-link{color: #01AAED;}
+.layui-table-cell[align="center"]{-webkit-box-pack: center;}
+.layui-table-cell[align="right"]{-webkit-box-pack: end;}
 
 .laytable-cell-checkbox,
 .laytable-cell-radio,
@@ -991,7 +994,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-view select[lay-ignore]{display: inline-block;}
 .layui-table-patch .layui-table-cell{padding: 0; width: 30px;}
 
-.layui-table-edit{position: absolute; left: 0; top: 0; z-index: 900; min-width: 100%; min-height: 100%; padding: 0 14px 1px; border-radius: 0; box-shadow: 1px 1px 20px rgba(0,0,0,.15); background-color: #fff;}
+.layui-table-edit{position: absolute; left: 0; top: 0; z-index: 900; min-width: 100%; min-height: 100%; padding: 5px 14px; border-radius: 0; box-shadow: 1px 1px 20px rgba(0,0,0,.15); background-color: #fff;}
 .layui-table-edit:focus{border-color: #5FB878!important;}
 select.layui-table-edit{padding: 0 0 0 10px; border-color: #d2d2d2;}
 .layui-table-view .layui-form-switch,

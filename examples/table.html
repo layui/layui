@@ -201,6 +201,7 @@ layui.use('table', function(){
     //,height: 300
     ,cellMinWidth: 80
     //,skin: 'line'
+    //,size: 'lg'
     ,toolbar: true
     ,cols: [[
       {field: 'id', hide: true}
@@ -236,7 +237,7 @@ layui.use('table', function(){
       ,{field: 'sex', title: '性别', width: 80}
       ,{field: 'city', title: '城市', width: 100}
       // ,{field: 'experience', title: '积分', width: 80, sort: true}
-      ,{field: 'experience', title: '积分', width: 80, sort: true, totalRow: true, totalRowDecimals: 3}
+      ,{field: 'experience', title: '积分', width: 80, sort: true, totalRow: '{{= parseInt(d.TOTAL_NUMS) }}'}
     ]]
     ,data: [{
       "id": "10001"

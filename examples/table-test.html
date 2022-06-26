@@ -21,7 +21,6 @@
 <script type="text/html" id="toolbarDemo">
   <div class="layui-btn-container">
     <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-    <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
     <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页数据</button>
     <button class="layui-btn layui-btn-sm" lay-event="isAll">是否全选</button>
 
@@ -85,7 +84,21 @@ layui.use(['table', 'dropdown'], function(){
   var laytpl = layui.laytpl;
   var dropdown = layui.dropdown;
   var form = layui.form;
-  
+
+
+  // 仅用于各类测试的表头
+  var test_cols = [[
+    {type: 'checkbox', fixed: 'left'}
+    ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
+    ,{field:'username', title:'用户名', width:120, edit: 'text'}
+    ,{field:'email', title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, width:150, edit: 'text'}
+    ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
+    ,{field:'city', title:'城市', width: 120}
+    ,{field:'sign', title:'签名'}
+    ,{field: 'experience', title: '积分', width:80, sort: true, align:'center', totalRow: '{{ d.TOTAL_NUMS }} 😊'}
+    ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+  ]];
+
   // 全局设定某参数
   table.set({
     where: {
@@ -97,9 +110,6 @@ layui.use(['table', 'dropdown'], function(){
     //,height: 300
   });
   
-  $('#appendtest').append($('#TPL_appendtest').html())
-  table.init('appendtest');
-  
   //渲染
   window.ins1 = table.render({
     elem: '#test'
@@ -109,7 +119,7 @@ layui.use(['table', 'dropdown'], function(){
     ,url: 'json/table/demo1.json'
 
     ,pagebar: '#pagebarDemo' // 分页栏模板
-    ,lineStyle: 'height: 100px;' // 行样式
+    ,lineStyle: 'height: 95px;' // 行样式
     ,css: [ // 自定义样式
       '.layui-table-page{text-align: right;}'
       ,'.layui-table-pagebar{float: left;}'
@@ -120,7 +130,9 @@ layui.use(['table', 'dropdown'], function(){
     //,autoSort: false //是否自动排序。如果否，则由服务端排序
     //,loading: false
     ,totalRow: true
-    ,page: true
+    ,page: {
+      // curr: layui.data('tableCache').curr || 1 // 读取记录中的页码，赋值给起始页
+    }
     ,limit: 30
     ,toolbar: '#toolbarDemo'
     ,defaultToolbar: ['filter', 'exports', 'print', {
@@ -129,17 +141,7 @@ layui.use(['table', 'dropdown'], function(){
       ,icon: 'layui-icon-tips'
     }]
     //,escape: false
-    ,cols: !1 ? [[ //仅用于测试
-      {type: 'checkbox', fixed: 'left'}
-      ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
-      ,{field:'username', title:'用户名', width:120, edit: 'text'}
-      ,{field:'email', title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, width:150, edit: 'text'}
-      ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
-      ,{field:'city', title:'城市', width:120}
-      ,{field:'sign', title:'签名'}
-      ,{field: 'experience', title: '积分', width:80, sort: true, align:'center', totalRow: '{{ d.TOTAL_NUMS }} 😊'}
-      ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
-    ]] : [[
+    ,cols: !1 ? test_cols : [[
       {type: 'checkbox', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
@@ -152,15 +154,16 @@ layui.use(['table', 'dropdown'], function(){
         var td = obj.td(this.field); //获取当前 td
         return td.find('select').val();
       }}
-      ,{field:'sign', title:'签名', edit: 'textarea'}
-      ,{field: 'experience', title: '积分', width:80, sort: true, align:'center', totalRow: '{{ d.TOTAL_NUMS }} 😊', templet: '<div>{{ d.experience }} 分</div>'}
-      ,{field:'ip', title:'IP', width: 120}
-      ,{field:'logins', title:'登入次数', width: 100, sort: true, totalRow: '{{ parseInt(d.TOTAL_NUMS) }} 次'}
+      ,{field:'sign', title:'签名', minWidth: 200, style:'color: #5FB878', edit: 'textarea'}
+      ,{field: 'experience', title: '积分', width: 100, sort: true, align:'center', totalRow: !1 || '{{= d.TOTAL_NUMS }} 分 😊', templet: '<div><a href="" class="layui-table-link">{{ d.experience }}</a> 分</div>'}
+      ,{field:'ip', title:'IP', width: 120, align: 'right'}
+      ,{field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{= parseInt(d.TOTAL_NUMS) }} 次'}
       ,{field:'joinTime', title:'加入时间', width: 120}
       ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width: 180}
     ]]
     
-    ,initSort1: {
+    //,autoSort: false // 禁用前端自动排序
+    ,initSort11111: { // 初始排序状态
       field: 'experience' //排序字段，对应 cols 设定的各字段名
       ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
     }
@@ -172,8 +175,16 @@ layui.use(['table', 'dropdown'], function(){
       ,key: 'experience'
       ,order: 'asc'
     }
-    ,done: function(){
+    ,done: function(res, curr, count){
       var id = this.id;
+
+      // 记录当前页码
+      /*
+      layui.data('tableCache', {
+        key: 'curr',
+        value: curr
+      });
+      */
 
       // 重载测试
       dropdown.render({
@@ -326,19 +337,20 @@ layui.use(['table', 'dropdown'], function(){
   
   //排序事件
   table.on('sort(test)', function(obj){
-    console.log(obj);
+    //console.log(obj);
 
-    return;
+    //return;
     layer.msg('服务端排序。order by '+ obj.field + ' ' + obj.type);
+
     //服务端排序
-    table.reload('test', {
-      initSort: obj
-      //,page: {curr: 1} //重新从第一页开始
-      ,where: { //重新请求服务端
-        key: obj.field //排序字段
-        ,order: obj.type //排序方式
+    table.reloadData('test', {
+      //initSort: obj,
+      //page: {curr: 1}, //重新从第一页开始
+      where: { // 向服务端传入排序参数
+        key: obj.field, //排序字段
+        order: obj.type //排序方式
       }
-    }, true);
+    });
   });
   
   // 工具栏事件
@@ -350,10 +362,6 @@ layui.use(['table', 'dropdown'], function(){
       case 'getCheckData':
         var data = checkStatus.data;
         layer.alert(layui.util.escape(JSON.stringify(data)));
-      break;
-      case 'getCheckLength':
-        var data = checkStatus.data;
-        layer.msg('选中了：'+ data.length + ' 个');
       break;
       case 'getData':
         var getData = table.getData(id);
