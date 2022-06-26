@@ -1724,8 +1724,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       //全选
       if(isAll){
         childs.each(function(i, item){
-          item.checked = checked;
-          that.setCheckData(i, checked);
+          if (!item.disabled) {
+            item.checked = checked;
+            that.setCheckData(i, checked);
+          }
         });
         that.syncCheckAll();
         that.renderForm('checkbox');
@@ -2113,14 +2115,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 
     //计算全选个数
     layui.each(data, function(i, item){
-      if(layui.type(item) === 'array'){
+      if(layui.type(item) === 'array' || item[table.config.disabledName]){ // 不可操作的节点对于统计来说也属于无效
         invalidNum++; //无效数据，或已删除的
-        return;
       }
       if(item[table.config.checkName]){
-        nums++;
+        arr.push(table.clearCacheKey(item));
         if(!item[table.config.disabledName]){
-          arr.push(table.clearCacheKey(item));
+          nums++;
         }
       }
     });
