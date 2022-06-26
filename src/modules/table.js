@@ -1013,7 +1013,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     };
     
     table.cache[that.key] = data; //记录数据
-    
+    that.totalRowData = totalRowData;// 记录统计信息
+
     //显示隐藏分页栏
     //that.layPage[(count == 0 || (data.length === 0 && curr == 1)) ? 'addClass' : 'removeClass'](HIDE);
 
@@ -1081,7 +1082,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,totalNums = {};
     
     if(!options.totalRow) return;
-    
+    data = data || table.cache[that.key];
+    totalRowData = totalRowData || that.totalRowData;
+
     layui.each(data, function(i1, item1){
       //若数据项为空数组，则不往下执行（因为删除数据时，会将原有数据设置为 []）
       if(layui.type(item1) === 'array' && item1.length === 0) return;
@@ -1352,8 +1355,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     if(options.toolbar){
       bodyHeight -= (that.layTool.outerHeight() || 50);
     }
-    
-    //减去统计朗的高度
+
+    //减去统计栏的高度
     if(options.totalRow){
       bodyHeight -= (that.layTotal.outerHeight() || 40);
     }
@@ -1668,42 +1671,42 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         tr: tr //行元素
         ,data: table.clearCacheKey(data) //当前行数据
         ,del: function(){ //删除行数据
-          table.cache[that.key][index] = []; 
+          table.cache[that.key][index] = [];
+          that.renderTotal();
           tr.remove();
           that.scrollPatch();
         }
         ,update: function(fields){ //修改行数据
           fields = fields || {};
-          layui.each(fields, function(key, value){
-            var td = tr.children('td[data-field="'+ key +'"]')
-            ,cell = td.children(ELEM_CELL); //获取当前修改的列
+          var updateNode = {}; // 记录需要更新的列
+          var updateFlag = false; // 记录是否发生了实质的修改
 
-            //更新缓存中的数据
-            if(key in data) data[key] = value;
-            
-            that.eachCols(function(i, item3){
-              //更新相应列视图
-              if(item3.field == key){
-                cell.html(parseTempData.call(that, {
-                  item3: item3
-                  ,content: value
-                  ,tplData: data
-                }));
-                td.data('content', value);
-                item3.templet && that.renderForm();
-              } else if(item3.templet || item3.toolbar){ //更新所有其他列的模板
-                var thisTd = tr.children('td[data-field="'+ (item3.field || i) +'"]')
-                ,content = data[item3.field];
-                thisTd.children(ELEM_CELL).html(parseTempData.call(that, {
-                  item3: item3
-                  ,content: content
-                  ,tplData: data
-                }));
-                thisTd.data('content', content);
-                that.renderForm();
-              }
-            });
+          that.eachCols(function(i, item3){
+            if(item3.field in fields){ // 修改的数据中包含了表格中的字段
+              updateFlag = true; // 标记为有实质的修改
+              data[item3.field] = fields[item3.field]; // 更新缓存中的数据
+              updateNode[item3.key] = item3;
+            } else if(item3.templet || item3.toolbar){ // 记录其他有模板需要联动更新的字段
+              updateNode[item3.key] = item3;
+            }
           });
+
+          if (!updateFlag) { // 检测到没有实际的变化直接结束不做无谓的渲染
+            return updateFlag; // 返回标记状态以便调用的时候可以根据返回是否===false判断是否真的发生实质的数据以及节点修改
+          }
+          layui.each(updateNode, function (key, item3) {
+            var thisTd = tr.children('td[data-key="' + that.index + '-' + key +'"]')
+              ,content = data[item3.field];
+            thisTd.children(ELEM_CELL).html(parseTempData.call(that, {
+              item3: item3
+              ,content: content
+              ,tplData: data
+            }));
+            thisTd.data('content', content);
+          })
+
+          that.renderTotal();
+          that.renderForm();
         }
       }, sets);
     };
@@ -1800,7 +1803,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       ,data = table.cache[that.key][index];
       
       data[field] = value; //更新缓存中的值
-      
+      that.renderTotal(); // 更新统计栏信息
       layui.event.call(this, MOD_NAME, 'edit('+ filter +')', commonMember.call(this, {
         value: value
         ,field: field
