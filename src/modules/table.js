@@ -997,8 +997,15 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 
       that.renderForm();
       typeof thisCheckedRowIndex === 'number' && that.setThisRowChecked(thisCheckedRowIndex);
-      that.syncCheckAll();
-      
+      if (that.layBody.find('input[name="layTableCheckbox"]:not(:disabled)').length) {
+        // 当前有可操作的单项复选框才需要同步状态
+        that.syncCheckAll();
+      } else {
+        // 没有任何可操作的时候禁止全选框操作并且设置其选中状态 此时不宜用table.checkStatus获取是否全选状态
+        form.render(that.layHeader.find('input[name="layTableCheckbox"]').prop('disabled', true)
+          .prop('checked', !that.layBody.find('input[name="layTableCheckbox"]:not(:checked)').length));
+      }
+
       //滚动条补丁
       that.haveInit ? that.scrollPatch() : setTimeout(function(){
         that.scrollPatch();
