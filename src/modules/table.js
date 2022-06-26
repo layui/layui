@@ -2255,16 +2255,17 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     args[3] = 'reloadData';
 
     // 过滤与数据无关的参数
-    var dataParams = [
+    var dataParams = new RegExp('^('+ [
       'data', 'url', 'where', 'page', 'limit',
       'request', 'response', 'parseData'
-    ];
+    ].join('|') + ')$');
+
     layui.each(args[1], function (key, value) {
-      if(dataParams.indexOf(key) === -1){
+      if(!dataParams.test(key)){
         delete args[1][key];
       }
     });
-
+    
     return table.reload.apply(null, args);
   };
 
