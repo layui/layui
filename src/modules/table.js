@@ -197,7 +197,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       ,'{{# }; }}'
       
       ,'{{# if(right){ }}'
-      ,'<div class="layui-table-fixed layui-table-fixed-r">'
+      ,'<div class="layui-table-fixed layui-table-fixed-r layui-hide">'
         ,'<div class="layui-table-header">'
           ,TPL_HEADER({fixed: 'right'})
           ,'<div class="layui-table-mend"></div>'
@@ -380,7 +380,12 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     if(options.cols.length > 1){
       // 补全高度
       var th = that.layFixed.find(ELEM_HEADER).find('th');
-      th.height(that.layHeader.height() - 1 - parseFloat(th.css('padding-top')) - parseFloat(th.css('padding-bottom')));
+      // 固定列表头同步跟本体th一致高度
+      var headerMain = that.layHeader.first();
+      layui.each(th, function (thIndex, thElem) {
+        thElem = $(thElem);
+        thElem.height(headerMain.find('th[data-key="' + thElem.attr('data-key') + '"]').height() + 'px');
+      })
     }
     
     that.pullData(that.page); //请求数据
@@ -867,6 +872,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     //渲染视图
     ,render = function(){ //后续性能提升的重点
+      //同步表头父列的相关值
+      options.HAS_SET_COLS_PATCH || that.setColsPatch();
+      options.HAS_SET_COLS_PATCH = true;
+
       var thisCheckedRowIndex;
       if(!sort && that.sortKey){
         return that.sort(that.sortKey.field, that.sortKey.sort, true);
@@ -1013,10 +1022,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       that.haveInit = true;
       
       layer.close(that.tipsIndex);
-      
-      //同步表头父列的相关值
-      options.HAS_SET_COLS_PATCH || that.setColsPatch();
-      options.HAS_SET_COLS_PATCH = true;
     };
     
     table.cache[that.key] = data; //记录数据
@@ -1040,7 +1045,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       that.renderForm();
       return that.errorView(options.text.none);
     } else {
-      that.layFixed.removeClass(HIDE);
+      that.layFixLeft.removeClass(HIDE);
     }
     
     //如果执行初始排序
@@ -2116,12 +2121,18 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     var nums = 0
     ,invalidNum = 0
     ,arr = []
+    ,arrDisabled = []
     ,data = table.cache[id] || [];
 
     //计算全选个数
     layui.each(data, function(i, item){
-      if(layui.type(item) === 'array' || item[table.config.disabledName]){ // 不可操作的节点对于统计来说也属于无效
+      if(layui.type(item) === 'array'){
         invalidNum++; //无效数据，或已删除的
+        return;
+      }
+      if (item[table.config.disabledName]) {
+        invalidNum++; //不可操作的数据也不计入内
+        arrDisabled.push(table.clearCacheKey(item));
       }
       if(item[table.config.checkName]){
         arr.push(table.clearCacheKey(item));
@@ -2133,6 +2144,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     return {
       data: arr //选中的数据
       ,isAll: data.length ? (nums === (data.length - invalidNum)) : false //是否全选
+      ,dataDisabled: arrDisabled //不可操作的记录(选中与否的都在内)
     };
   };
   

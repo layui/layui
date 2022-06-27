@@ -989,13 +989,16 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-page .layui-laypage input{width: 40px;}
 .layui-table-page .layui-laypage button{padding: 0 10px;}
 .layui-table-page select{height: 18px;}
-.layui-table-pagebar{float: right; line-height: 32px;}
+.layui-table-pagebar{float: right; line-height: 23px;}
+.layui-table-pagebar .layui-btn-sm{margin-top: -2px;}
+.layui-table-pagebar .layui-btn-xs{margin-top: 2px;}
 
 .layui-table-view select[lay-ignore]{display: inline-block;}
 .layui-table-patch .layui-table-cell{padding: 0; width: 30px;}
 
 .layui-table-edit{position: absolute; left: 0; top: 0; z-index: 900; min-width: 100%; min-height: 100%; padding: 5px 14px; border-radius: 0; box-shadow: 1px 1px 20px rgba(0,0,0,.15); background-color: #fff;}
 .layui-table-edit:focus{border-color: #5FB878!important;}
+input.layui-input.layui-table-edit{height: 100%;}
 select.layui-table-edit{padding: 0 0 0 10px; border-color: #d2d2d2;}
 .layui-table-view .layui-form-switch,
 .layui-table-view .layui-form-checkbox,
