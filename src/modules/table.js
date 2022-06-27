@@ -101,7 +101,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   //字符常量
   ,MOD_NAME = 'table', ELEM = '.layui-table', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', HIDE_V = 'layui-hide-v', DISABLED = 'layui-disabled', NONE = 'layui-none'
   
-  ,ELEM_VIEW = 'layui-table-view', ELEM_TOOL = '.layui-table-tool', ELEM_BOX = '.layui-table-box', ELEM_INIT = '.layui-table-init', ELEM_HEADER = '.layui-table-header', ELEM_BODY = '.layui-table-body', ELEM_MAIN = '.layui-table-main', ELEM_FIXED = '.layui-table-fixed', ELEM_FIXL = '.layui-table-fixed-l', ELEM_FIXR = '.layui-table-fixed-r', ELEM_TOTAL = '.layui-table-total', ELEM_PAGE = '.layui-table-page', ELEM_SORT = '.layui-table-sort', ELEM_EDIT = 'layui-table-edit', ELEM_HOVER = 'layui-table-hover'
+  ,ELEM_VIEW = 'layui-table-view', ELEM_TOOL = '.layui-table-tool', ELEM_BOX = '.layui-table-box', ELEM_INIT = '.layui-table-init', ELEM_HEADER = '.layui-table-header', ELEM_BODY = '.layui-table-body', ELEM_MAIN = '.layui-table-main', ELEM_FIXED = '.layui-table-fixed', ELEM_FIXL = '.layui-table-fixed-l', ELEM_FIXR = '.layui-table-fixed-r', ELEM_TOTAL = '.layui-table-total', ELEM_PAGE = '.layui-table-page', ELEM_PAGE_VIEW = '.layui-table-pageview', ELEM_SORT = '.layui-table-sort', ELEM_EDIT = 'layui-table-edit', ELEM_HOVER = 'layui-table-hover'
   
   //thead区域模板
   ,TPL_HEADER = function(options){
@@ -758,9 +758,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     
     that.layMain.append(that.layNone = layNone);
 
-    // 异常情况下对page和total的内容处理
-    that.layPage && that.layPage.addClass(HIDE_V).find('>div').html('');
-    that.layTotal && that.layTotal.addClass(HIDE_V).find('tbody').html('');
+    // 异常情况下对 page 和 total 的内容处理
+    that.layTotal.addClass(HIDE_V);
+    that.layPage.find(ELEM_PAGE_VIEW).addClass(HIDE_V);
 
     table.cache[that.key] = []; //格式化缓存数据
   };
@@ -1021,13 +1021,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.layTotal[data.length == 0 ? 'addClass' : 'removeClass'](HIDE_V);
 
     //显示隐藏分页栏
-    if(!options.pagebar){
-      that.layPage[
-        (count == 0 || (data.length === 0 && curr == 1)) 
-          ? 'addClass' 
-        : 'removeClass'
-      ](HIDE_V);
-    }
+    that.layPage.find(ELEM_PAGE_VIEW)[
+      (count == 0 || (data.length === 0 && curr == 1)) 
+        ? 'addClass' 
+      : 'removeClass'
+    ](HIDE_V);
     
     //如果无数据
     if(data.length === 0){
