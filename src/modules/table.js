@@ -2077,13 +2077,21 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       // 找到它的子列所在cols的下标
       var i2 = i1 + (parseInt(item2.rowspan) || 1);
       layui.each(cols[i2], function (i22, item22) {
-        //如果子列已经被标注为{PARENT_COL_INDEX}，或者子列累计 colspan 数等于父列定义的 colspan，则跳出当前子列循环
-        if (item22.PARENT_COL_INDEX || (childIndex >= 1 && childIndex == (item2.colspan || 1))) return;
-        item22.PARENT_COL_INDEX = index;
-
-        item2.CHILD_COLS.push(item22);
-        childIndex = childIndex + (item22.hide ? 0 : parseInt(item22.colspan > 1 ? item22.colspan : 1));
-        eachChildCols(index, cols, i2, item22);
+        if (item22.parentKey) { // 如果字段信息中包含了parentKey和key信息
+          if (item22.parentKey === item2.key) {
+            item22.PARENT_COL_INDEX = index;
+            item2.CHILD_COLS.push(item22);
+            eachChildCols(index, cols, i2, item22);
+          }
+        } else {
+          // 没有key信息以colspan数量所谓判断标准
+          //如果子列已经被标注为{PARENT_COL_INDEX}，或者子列累计 colspan 数等于父列定义的 colspan，则跳出当前子列循环
+          if (item22.PARENT_COL_INDEX || (childIndex >= 1 && childIndex == (item2.colspan || 1))) return;
+          item22.PARENT_COL_INDEX = index;
+          item2.CHILD_COLS.push(item22);
+          childIndex = childIndex + (item22.hide ? 0 : parseInt(item22.colspan > 1 ? item22.colspan : 1));
+          eachChildCols(index, cols, i2, item22);
+        }
       });
     }
   };
