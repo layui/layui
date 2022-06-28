@@ -398,7 +398,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       checkbox: 50
       ,radio: 50
       ,space: 15
-      ,numbers: 40
+      ,numbers: 60
     };
     
     //让 type 参数兼容旧版本
