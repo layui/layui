@@ -1709,7 +1709,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     //复选框选择
     that.elem.on('click', 'input[name="layTableCheckbox"]+', function(){ //替代元素的 click 事件
       var checkbox = $(this).prev()
-      ,childs = that.layBody.find('input[name="layTableCheckbox"]')
+      ,children = that.layBody.find('input[name="layTableCheckbox"]')
       ,index = checkbox.parents('tr').eq(0).data('index')
       ,checked = checkbox[0].checked
       ,isAll = checkbox.attr('lay-filter') === 'layTableAllChoose';
@@ -1718,7 +1718,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 
       //全选
       if(isAll){
-        childs.each(function(i, item){
+        children.each(function(i, item){
           item.checked = checked;
           that.setCheckData(i, checked);
         });
@@ -2254,7 +2254,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 
     // 过滤与数据无关的参数
     var dataParams = new RegExp('^('+ [
-      'data', 'url', 'where', 'page', 'limit',
+      'data', 'url', 'method', 'contentType', 
+      'headers', 'where', 'page', 'limit',
       'request', 'response', 'parseData'
     ].join('|') + ')$');
 
