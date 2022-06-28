@@ -990,7 +990,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-page .layui-laypage button{padding: 0 10px;}
 .layui-table-page select{height: 18px;}
 .layui-table-pagebar{float: right; line-height: 23px;}
-.layui-table-pagebar .layui-btn-sm{margin-top: -2px;}
+.layui-table-pagebar .layui-btn-sm{margin-top: -1px;}
 .layui-table-pagebar .layui-btn-xs{margin-top: 2px;}
 
 .layui-table-view select[lay-ignore]{display: inline-block;}

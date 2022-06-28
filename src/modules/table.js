@@ -217,13 +217,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       , '</table>'
       ,'</div>'
     ,'{{# } }}'
-    
-    ,'{{# if(d.data.page || d.data.pagebar){ }}'
-    ,'<div class="layui-table-column layui-table-page">'
+
+    ,'<div class="layui-table-column layui-table-page layui-hide">'
       ,'<div class="layui-inline layui-table-pageview" id="layui-table-page{{=d.index}}"></div>'
     ,'</div>'
-    ,'{{# } }}'
-    
+
     ,'<style>'
     ,'{{# layui.each(d.data.cols, function(i1, item1){'
       ,'layui.each(item1, function(i2, item2){ }}'
@@ -1015,6 +1013,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           .prop('checked', !that.layBody.find('input[name="layTableCheckbox"]:not(:checked)').length));
       }
 
+      // 因为page参数有可能发生变化 先重新铺满
+      that.fullSize();
       //滚动条补丁
       that.haveInit ? that.scrollPatch() : setTimeout(function(){
         that.scrollPatch();
@@ -1034,9 +1034,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     that.layTotal[data.length == 0 ? 'addClass' : 'removeClass'](HIDE_V);
 
     //显示隐藏分页栏
+    that.layPage[(options.page || options.pagebar) ? 'removeClass' : 'addClass'](HIDE);
     that.layPage.find(ELEM_PAGE_VIEW)[
-      (count == 0 || (data.length === 0 && curr == 1)) 
-        ? 'addClass' 
+      (!options.page || count == 0 || (data.length === 0 && curr == 1))
+        ? 'addClass'
       : 'removeClass'
     ](HIDE_V);
     
@@ -1372,11 +1373,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     }
     
     //减去分页栏的高度
-    if(options.page){
-      bodyHeight -= (that.layPage.outerHeight() || 41);
+    if(options.page || options.pagebar){
+      bodyHeight -= (that.layPage.outerHeight() || 43);
     }
-    
-    that.layMain.css('height', bodyHeight - 2);
+
+    that.layMain.outerHeight(bodyHeight);
   };
   
   //获取滚动条宽度
