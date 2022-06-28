@@ -1004,14 +1004,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 
       that.renderForm();
       typeof thisCheckedRowIndex === 'number' && that.setThisRowChecked(thisCheckedRowIndex);
-      if (that.layBody.find('input[name="layTableCheckbox"]:not(:disabled)').length) {
-        // 当前有可操作的单项复选框才需要同步状态
-        that.syncCheckAll();
-      } else {
-        // 没有任何可操作的时候禁止全选框操作并且设置其选中状态 此时不宜用table.checkStatus获取是否全选状态
-        form.render(that.layHeader.find('input[name="layTableCheckbox"]').prop('disabled', true)
-          .prop('checked', !that.layBody.find('input[name="layTableCheckbox"]:not(:checked)').length));
-      }
+      that.syncCheckAll();
 
       // 因为page参数有可能发生变化 先重新铺满
       that.fullSize();
@@ -1025,7 +1018,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     };
     
     table.cache[that.key] = data; //记录数据
-    that.totalRowData = totalRowData;// 记录统计信息
 
     //显示隐藏分页栏
     //that.layPage[(count == 0 || (data.length === 0 && curr == 1)) ? 'addClass' : 'removeClass'](HIDE);
@@ -1093,8 +1085,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     ,totalNums = {};
     
     if(!options.totalRow) return;
-    data = data || table.cache[that.key];
-    totalRowData = totalRowData || that.totalRowData;
 
     layui.each(data, function(i1, item1){
       //若数据项为空数组，则不往下执行（因为删除数据时，会将原有数据设置为 []）
@@ -1683,40 +1673,42 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         ,data: table.clearCacheKey(data) //当前行数据
         ,del: function(){ //删除行数据
           table.cache[that.key][index] = [];
-          that.renderTotal();
           tr.remove();
           that.scrollPatch();
         }
         ,update: function(fields){ //修改行数据
           fields = fields || {};
-          var updateNode = {}; // 记录需要更新的列
-          var updateFlag = false; // 记录是否发生了实质的修改
+          layui.each(fields, function(key, value){
+            var td = tr.children('td[data-field="'+ key +'"]')
+              ,cell = td.children(ELEM_CELL); //获取当前修改的列
 
-          that.eachCols(function(i, item3){
-            if(item3.field in fields){ // 修改的数据中包含了表格中的字段
-              updateFlag = true; // 标记为有实质的修改
-              data[item3.field] = fields[item3.field]; // 更新缓存中的数据
-              updateNode[item3.key] = item3;
-            } else if(item3.templet || item3.toolbar){ // 记录其他有模板需要联动更新的字段
-              updateNode[item3.key] = item3;
-            }
+            //更新缓存中的数据
+            if(key in data) data[key] = value;
+
+            that.eachCols(function(i, item3){
+              //更新相应列视图
+              if(item3.field == key){
+                cell.html(parseTempData.call(that, {
+                  item3: item3
+                  ,content: value
+                  ,tplData: data
+                }));
+                td.data('content', value);
+                item3.templet && that.renderForm();
+              } else if(item3.templet || item3.toolbar){ //更新所有其他列的模板
+                var thisTd = tr.children('td[data-field="'+ (item3.field || i) +'"]')
+                  ,content = data[item3.field];
+                thisTd.children(ELEM_CELL).html(parseTempData.call(that, {
+                  item3: item3
+                  ,content: content
+                  ,tplData: data
+                }));
+                thisTd.data('content', content);
+                that.renderForm();
+              }
+            });
           });
 
-          if (!updateFlag) { // 检测到没有实际的变化直接结束不做无谓的渲染
-            return updateFlag; // 返回标记状态以便调用的时候可以根据返回是否===false判断是否真的发生实质的数据以及节点修改
-          }
-          layui.each(updateNode, function (key, item3) {
-            var thisTd = tr.children('td[data-key="' + that.index + '-' + key +'"]')
-              ,content = data[item3.field];
-            thisTd.children(ELEM_CELL).html(parseTempData.call(that, {
-              item3: item3
-              ,content: content
-              ,tplData: data
-            }));
-            thisTd.data('content', content);
-          })
-
-          that.renderTotal();
           that.renderForm();
         }
       }, sets);
@@ -1735,10 +1727,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       //全选
       if(isAll){
         childs.each(function(i, item){
-          if (!item.disabled) {
-            item.checked = checked;
-            that.setCheckData(i, checked);
-          }
+          item.checked = checked;
+          that.setCheckData(i, checked);
         });
         that.syncCheckAll();
         that.renderForm('checkbox');
@@ -1816,7 +1806,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       ,data = table.cache[that.key][index];
       
       data[field] = value; //更新缓存中的值
-      that.renderTotal(); // 更新统计栏信息
       layui.event.call(this, MOD_NAME, 'edit('+ filter +')', commonMember.call(this, {
         value: value
         ,field: field
@@ -2128,10 +2117,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   // 表格选中状态
   table.checkStatus = function(id){
     var nums = 0
-    ,invalidNum = 0
-    ,arr = []
-    ,arrDisabled = []
-    ,data = table.cache[id] || [];
+      ,invalidNum = 0
+      ,arr = []
+      ,data = table.cache[id] || [];
 
     //计算全选个数
     layui.each(data, function(i, item){
@@ -2139,21 +2127,16 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         invalidNum++; //无效数据，或已删除的
         return;
       }
-      if (item[table.config.disabledName]) {
-        invalidNum++; //不可操作的数据也不计入内
-        arrDisabled.push(table.clearCacheKey(item));
-      }
       if(item[table.config.checkName]){
-        arr.push(table.clearCacheKey(item));
+        nums++;
         if(!item[table.config.disabledName]){
-          nums++;
+          arr.push(table.clearCacheKey(item));
         }
       }
     });
     return {
       data: arr //选中的数据
       ,isAll: data.length ? (nums === (data.length - invalidNum)) : false //是否全选
-      ,dataDisabled: arrDisabled //不可操作的记录(选中与否的都在内)
     };
   };
   
