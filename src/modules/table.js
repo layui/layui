@@ -1139,7 +1139,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         var text = item3.totalRowText || ''
         ,decimals = 'totalRowDecimals' in item3 ? item3.totalRowDecimals : 2
         ,thisTotalNum = parseFloat(totalNums[field]).toFixed(decimals)
-        ,tplData = {}
+        ,tplData = {
+          LAY_COL: item3
+        }
         ,getContent;
         
         tplData[field] = thisTotalNum;
@@ -1180,6 +1182,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           if(typeof totalRow === 'string'){
             return laytpl(totalRow).render($.extend({
               TOTAL_NUMS: totalNums[field]
+              ,LAY_COL: item3
             }, item3));
           }
           return content;
