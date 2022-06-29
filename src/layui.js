@@ -238,7 +238,7 @@
     apps = that.isArray(apps) ? apps : [apps];
     that.each(apps, function (index, item) {
       if (!config.status[item]) {
-        return error('module ' + item + ' is not exist');
+        //return error('module ' + item + ' is not exist');
       }
       delete that[item];
       delete modules[item];
@@ -246,6 +246,7 @@
       delete config.status[item];
       delete config.modules[item];
     });
+    return that;
   };
 
   //获取节点的 style 属性值

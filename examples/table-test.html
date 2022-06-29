@@ -76,8 +76,15 @@
 
 <table id="test" lay-filter="test"></table>
 
-<script src="../src/layui.js"></script>
+<script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.6.13/layui.js"></script>
 <script>
+(function(off){
+  if(!off) return;
+  layui.disuse('table').extend({
+    table: '{/}//ww:5018/layui/2.6.13/src/modules/table'
+  });
+})();
+
 layui.use(['table', 'dropdown'], function(){
   var $ = layui.$;
   var table = layui.table;
@@ -113,26 +120,28 @@ layui.use(['table', 'dropdown'], function(){
   //渲染
   window.ins1 = table.render({
     elem: '#test'
-    ,height: 500
+    ,height: 520
     //,width: 600
     ,title: '用户数据表'
     ,url: 'json/table/demo1.json'
     //,method: 'post'
 
-    ,pagebar: '#pagebarDemo' // 分页栏模板
+    
     //,lineStyle: 'height: 95px;' // 行样式
     ,css: [ // 自定义样式
       '.layui-table-page{text-align: right;}'
       ,'.layui-table-pagebar{float: left;}'
     ].join('')
+    //,className: '.demo-table-view'
 
     //,size: 'sm'
     //,skin: 'line'
-    //,autoSort: false //是否自动排序。如果否，则由服务端排序
     //,loading: false
+
     ,totalRow: true
-    ,page: {
-      // curr: layui.data('tableCache').curr || 1 // 读取记录中的页码，赋值给起始页
+    ,pagebar: '#pagebarDemo' // 分页栏模板
+    ,page: !1 ? false : {
+      //curr: layui.data('tableCache').curr || 1 // 读取记录中的页码，赋值给起始页
     }
     ,limit: 30
     ,toolbar: '#toolbarDemo'
@@ -144,6 +153,7 @@ layui.use(['table', 'dropdown'], function(){
     //,escape: false
     ,cols: !1 ? test_cols : [[
       {type: 'checkbox', fixed: 'left'}
+      //,{type: 'numbers', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
       ,{field:'email', title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, width:150, edit: 'text', templet: function(d){
@@ -163,7 +173,7 @@ layui.use(['table', 'dropdown'], function(){
       ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width: 180}
     ]]
     
-    //,autoSort: false // 禁用前端自动排序
+    //,autoSort: false // 禁用前端自动排序，由服务的完成排序
     ,initSort11111: { // 初始排序状态
       field: 'experience' //排序字段，对应 cols 设定的各字段名
       ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序

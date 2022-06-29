@@ -26,6 +26,9 @@ layui.define(['util'], function(exports){
     layui.each(elems.reverse(), function(index, item){
       var othis = $(item);
       var html = trim(othis.html());
+      var about = othis.attr('lay-about') || options.about || (
+        othis.attr('lay-lang') || options.lang
+      ) || '';
       
       // 转义 HTML 标签
       if(othis.attr('lay-encode') || options.encode){
@@ -35,7 +38,7 @@ layui.define(['util'], function(exports){
       othis.html('<ol class="layui-code-ol"><li>' + html.replace(/[\r\t\n]+/g, '</li><li>') + '</li></ol>')
       
       if(!othis.find('>.layui-code-h3')[0]){
-        othis.prepend('<h3 class="layui-code-h3">'+ (othis.attr('lay-title')||options.title||'&lt;/&gt;') + '<a href="javascript:;">'+ (othis.attr('lay-lang')||options.lang||'') +'</a>' + '</h3>');
+        othis.prepend('<h3 class="layui-code-h3">'+ (othis.attr('lay-title')||options.title||'&lt;/&gt;') + '<a href="javascript:;">'+ about +'</a>' + '</h3>');
       }
       
       var ol = othis.find('>.layui-code-ol');
