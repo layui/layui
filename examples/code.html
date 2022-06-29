@@ -14,7 +14,27 @@ pre{margin-bottom: 20px;}
 </head>
 <body>
 
-<pre class="layui-code" lay-title="JavaScript" lay-height="300px">
+<pre class="layui-code" lay-title="JavaScript" lay-line-no="true" lay-height="300px">
+  //路由
+  LAY.fn.router = function(hash){
+    var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
+    var item, param = {
+      dir: []
+    };
+    for(var i = 0; i < hashs.length; i++){
+      item = hashs[i].split('=');
+      /^\w+=/.test(hashs[i]) ? function(){
+        if(item[0] !== 'dir'){
+          param[item[0]] = item[1];
+        }
+      }() : param.dir.push(hashs[i]);
+      item = null;
+    }
+    return param;
+  };
+</pre>
+
+<pre id="line-no">
 //路由
 LAY.fn.router = function(hash){
   var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
@@ -34,7 +54,7 @@ LAY.fn.router = function(hash){
 };
 </pre>
 
-<pre class="layui-code" lay-skin="notepad">
+<pre class="layui-code" lay-skin="notepad" lay-line-no="true">
 //路由
 LAY.fn.router = function(hash){
   var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
@@ -54,21 +74,28 @@ LAY.fn.router = function(hash){
 };
 </pre>
 
-<pre class="layui-code">
+<pre class="layui-code" lay-line-no="true">
 var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
 var item, param = {
   dir: []
 };
-<pre class="layui-code">
+<pre class="layui-code" lay-title="不显示行号">
 //代码中的代码
 var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
 var item, param = {
   dir: []
 };
+<pre class="layui-code" lay-line-no="true">
+  //代码中的代码
+  var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
+  var item, param = {
+    dir: []
+  };
+  </pre>
 </pre>
 </pre>
 
-<pre class="layui-code" lay-skin="notepad">
+<pre class="layui-code" lay-skin="notepad" lay-line-no="true">
 //路由
 LAY.fn.router = function(hash){
   var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
@@ -86,19 +113,19 @@ LAY.fn.router = function(hash){
   }
   return param;
 };
-<pre class="layui-code" lay-skin="notepad">
+<pre class="layui-code" lay-skin="notepad" lay-line-no="true">
 //代码中的代码
 var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
 var item, param = {
   dir: []
 };
-<pre class="layui-code" lay-skin="notepad">
+<pre class="layui-code" lay-skin="notepad" lay-title="不显示行号">
 //代码中的代码
 var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
 var item, param = {
   dir: []
 };
-<pre class="layui-code" lay-skin="notepad">
+<pre class="layui-code" lay-skin="notepad" lay-line-no="true">
 //代码中的代码
 var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
 var item, param = {
@@ -110,10 +137,15 @@ var item, param = {
 </pre>
 
 
-<pre class="layui-code" lay-encode="true">
+<pre class="layui-code" lay-encode="true" lay-line-no="true">
   <div>
     123
   </div>
+</pre>
+
+
+<pre id="about">
+    about
 </pre>
 
 
@@ -122,6 +154,19 @@ var item, param = {
 
 layui.use('code', function(){
   layui.code();
+
+  layui.code({
+    elem: '#line-no',
+    title: 'JavaScript（不显示行号）',
+    lineNo: false,
+    height: '300px'
+  });
+
+  layui.code({
+    elem: '#about',
+    title: '右侧 About',
+    about: 'code'
+  })
 });
 
 </script>

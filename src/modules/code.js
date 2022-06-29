@@ -17,8 +17,7 @@ layui.define(['util'], function(exports){
 
     options = options || {};
     options.elem = $(options.elem||'.layui-code');
-    options.lang = 'lang' in options ? options.lang : 'code';
-    
+
     options.elem.each(function(){
       elems.push(this);
     });
@@ -26,22 +25,30 @@ layui.define(['util'], function(exports){
     layui.each(elems.reverse(), function(index, item){
       var othis = $(item);
       var html = trim(othis.html());
-      var about = othis.attr('lay-about') || options.about || (
-        othis.attr('lay-lang') || options.lang
-      ) || '';
-      
+      var about = othis.attr('lay-about') || options.about || othis.attr('lay-lang') || options.lang || '';
+
+      //是否显示行号
+      var lineNo;
+      if(othis.attr('lay-line-no'))
+      {
+        lineNo = othis.attr('lay-line-no').toLowerCase() === 'true';
+      }
+      lineNo = options.lineNo === undefined ? lineNo === undefined ? false : lineNo : options.lineNo;
+
       // 转义 HTML 标签
       if(othis.attr('lay-encode') || options.encode){
         html = util.escape(html);
       }
       
-      othis.html('<ol class="layui-code-ol"><li>' + html.replace(/[\r\t\n]+/g, '</li><li>') + '</li></ol>')
+      var list = lineNo ? 'ol' : 'ul';
+      othis.html('<' + list + ' class="layui-code-' + list + '"><li>' + html.replace(/[\r\t\n]+/g, '</li><li>') + '</li></' + list + '>');
       
-      if(!othis.find('>.layui-code-h3')[0]){
-        othis.prepend('<h3 class="layui-code-h3">'+ (othis.attr('lay-title')||options.title||'&lt;/&gt;') + '<a href="javascript:;">'+ about +'</a>' + '</h3>');
+      if(!othis.find('>.layui-code-title')[0]){
+        var aboutWrapper = about === '' ? '' : '<div class="layui-code-about">' + about + '</div>';
+        othis.prepend('<div class="layui-code-title">' + (othis.attr('lay-title') || options.title || '&lt;/&gt;') + aboutWrapper + '</div>');
       }
       
-      var ol = othis.find('>.layui-code-ol');
+      var ol = othis.find('>.layui-code-' + list);
       othis.addClass('layui-box layui-code-view');
       
       //识别皮肤
