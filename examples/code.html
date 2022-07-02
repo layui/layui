@@ -1,129 +1,132 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>代码修饰器 - layui</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Code blocks adorn - Layui</title>
 
-<link rel="stylesheet" href="../src/css/layui.css">
-
-<style>
-body{padding: 50px 100px;}
-pre{margin-bottom: 20px;}
-</style>
+  <link href="../src/css/layui.css" rel="stylesheet">
+  <style>
+    body{padding: 32px;}
+    pre{margin-bottom: 20px;}
+  </style>
 </head>
 <body>
 
-<pre class="layui-code" lay-title="JavaScript" lay-height="300px">
-//路由
-LAY.fn.router = function(hash){
-  var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
-  var item, param = {
-    dir: []
-  };
-  for(var i = 0; i < hashs.length; i++){
-    item = hashs[i].split('=');
-    /^\w+=/.test(hashs[i]) ? function(){
-      if(item[0] !== 'dir'){
-        param[item[0]] = item[1];
-      }
-    }() : param.dir.push(hashs[i]);
-    item = null;
-  }
-  return param;
-};
+<pre class="layui-code" lay-height="300px">
+// 在里面存放任意的文本内容
+code line
+code line
+code line
+code line
+code line
+code line
+code line
+code line
+code line
+code line
+code line
+code line
+code line
+code line
+code line
+code line
+code line
 </pre>
 
-<pre class="layui-code" lay-skin="notepad">
-//路由
-LAY.fn.router = function(hash){
-  var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
-  var item, param = {
-    dir: []
-  };
-  for(var i = 0; i < hashs.length; i++){
-    item = hashs[i].split('=');
-    /^\w+=/.test(hashs[i]) ? function(){
-      if(item[0] !== 'dir'){
-        param[item[0]] = item[1];
-      }
-    }() : param.dir.push(hashs[i]);
-    item = null;
-  }
-  return param;
-};
+<pre class="layui-code" lay-options="{title: '不显示行号', ln: false}">
+code line
+code line
+code line
+code line
+code line
+code line
 </pre>
 
+<pre class="layui-code" lay-options="{title: '深色风格', skin: 'dark'}">
+code line
+code line
+code line
+code line
+code line
+code line
+</pre>
+
+<pre class="layui-code" lay-title="嵌套">
+code line
+code line
+code line
+code line
+<pre class="layui-code" lay-options="{ln: false}">
+code line
+code line
+code line
 <pre class="layui-code">
-var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
-var item, param = {
-  dir: []
-};
-<pre class="layui-code">
-//代码中的代码
-var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
-var item, param = {
-  dir: []
-};
+code line
+code line
+code line
+  </pre>
 </pre>
 </pre>
 
-<pre class="layui-code" lay-skin="notepad">
-//路由
-LAY.fn.router = function(hash){
-  var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
-  var item, param = {
-    dir: []
-  };
-  for(var i = 0; i < hashs.length; i++){
-    item = hashs[i].split('=');
-    /^\w+=/.test(hashs[i]) ? function(){
-      if(item[0] !== 'dir'){
-        param[item[0]] = item[1];
-      }
-    }() : param.dir.push(hashs[i]);
-    item = null;
-  }
-  return param;
-};
-<pre class="layui-code" lay-skin="notepad">
-//代码中的代码
-var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
-var item, param = {
-  dir: []
-};
-<pre class="layui-code" lay-skin="notepad">
-//代码中的代码
-var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
-var item, param = {
-  dir: []
-};
-<pre class="layui-code" lay-skin="notepad">
-//代码中的代码
-var hashs = (hash || location.hash).replace(/^#/, '').split('/') || [];
-var item, param = {
-  dir: []
-};
+<pre class="layui-code" lay-options="{skin: 'dark'}">
+code line
+code line
+code line
+code line
+code line
+code line
+<pre class="layui-code" lay-options="{skin: 'dark'}">
+code line
+code line
+code line
+code line
+code line
+code line
+<pre class="layui-code" lay-options="{skin: 'dark', ln: false}">
+code line
+code line
+code line
+code line
+code line
+code line
 </pre>
 </pre>
 </pre>
 </pre>
 
+<pre class="layui-code" lay-options="{encode: true}">
+<div>
+  123
+</div>
+</pre>
 
-<pre class="layui-code" lay-encode="true">
-  <div>
-    123
-  </div>
+<pre class="layui-code" lay-about="code">
+  About
+</pre>
+
+<pre id="custom1">
+  custom more about
 </pre>
 
 
 <script src="../src/layui.js"></script>
 <script>
-
 layui.use('code', function(){
-  layui.code();
-});
+  // 通用实例，根据元素属性定制化参数
+  layui.code({
+    //about: 'code' // 右上角默认显示 code
+  });
 
+  // custom more about
+  layui.code({
+    elem: '#custom1',
+    about: [
+      '<a href="javascript:;">复制</a>',
+      '<a href="about:blank" target="_blank">跳转</a>'
+    ].join('')
+  })
+});
 </script>
 </body>
 </html>

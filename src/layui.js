@@ -15,7 +15,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.7.1'; // layui 版本号
+    this.v = '2.7.2'; // layui 版本号
   }
   
   //识别预先可能定义的指定全局对象
@@ -238,7 +238,7 @@
     apps = that.isArray(apps) ? apps : [apps];
     that.each(apps, function (index, item) {
       if (!config.status[item]) {
-        return error('module ' + item + ' is not exist');
+        //return error('module ' + item + ' is not exist');
       }
       delete that[item];
       delete modules[item];
@@ -246,6 +246,7 @@
       delete config.status[item];
       delete config.modules[item];
     });
+    return that;
   };
 
   //获取节点的 style 属性值
