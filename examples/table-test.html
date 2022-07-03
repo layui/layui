@@ -63,10 +63,6 @@
   <input type="checkbox" name="" title="锁定" checked>
 </script>
 
-<script type="text/html" id="LAY_table_tpl_email">
-  <span {{# if(!d.activate){ }}style="color:#999"{{# } }}>{{ d.email }}</span>
-</script>
-
 <script type="text/html" id="pagebarDemo">
   <div class="layui-btn-container">
     <button class="layui-btn layui-btn-sm" lay-event="footerDemoBtn1">底部按钮1</button>
@@ -151,13 +147,14 @@ layui.use(['table', 'dropdown'], function(){
       ,icon: 'layui-icon-tips'
     }]
     //,escape: false
+    ,editTrigger: 'dblclick'
     ,cols: !1 ? test_cols : [[
       {type: 'checkbox', fixed: 'left'}
       //,{type: 'numbers', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
       ,{field:'email', title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, width:150, edit: 'text', templet: function(d){
-        return '<em>'+ layui.util.escape(d.email) +'</em>'
+        return '<em>'+ layui.util.escape(d.email) +'</em> <input type="checkbox" title="激活">'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
       ,{field:'city', title:'城市', width:120, templet: '#cityTpl', exportTemplet: function(d, obj){

@@ -1707,17 +1707,18 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
           tr.remove();
           that.scrollPatch();
         }
-        ,update: function(fields){ //修改行数据
+        ,update: function(fields, ){ //修改行数据
           fields = fields || {};
           layui.each(fields, function(key, value){
-            var td = tr.children('td[data-field="'+ key +'"]')
-              ,cell = td.children(ELEM_CELL); //获取当前修改的列
+            var td = tr.children('td[data-field="'+ key +'"]');
+            var cell = td.children(ELEM_CELL); //获取当前修改的列
 
-            //更新缓存中的数据
+            // 更新缓存中的数据
             if(key in data) data[key] = value;
 
+            // 更新相应列视
+            // 若要更新其它列与之有关的动态模板，直接采用 reloadData 方法
             that.eachCols(function(i, item3){
-              //更新相应列视图
               if(item3.field == key){
                 cell.html(parseTempData.call(that, {
                   item3: item3
@@ -1725,21 +1726,9 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
                   ,tplData: data
                 }));
                 td.data('content', value);
-                item3.templet && that.renderForm();
-              } else if(item3.templet || item3.toolbar){ //更新所有其他列的模板
-                var thisTd = tr.children('td[data-field="'+ (item3.field || i) +'"]')
-                  ,content = data[item3.field];
-                thisTd.children(ELEM_CELL).html(parseTempData.call(that, {
-                  item3: item3
-                  ,content: content
-                  ,tplData: data
-                }));
-                thisTd.data('content', content);
-                that.renderForm();
               }
             });
           });
-
           that.renderForm();
         }
       }, sets);
