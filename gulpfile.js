@@ -1,6 +1,4 @@
-/**
- * Building Layui
- */
+'use strict';
 
 const pkg = require('./package.json');
 const gulp = require('gulp');
