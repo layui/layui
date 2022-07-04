@@ -153,7 +153,7 @@ layui.use(['table', 'dropdown'], function(){
       //,{type: 'numbers', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
-      ,{field:'email', title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, width:150, edit: 'text', templet: function(d){
+      ,{field:'email', minWidth: 230, title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, edit: 'text', templet: function(d){
         return '<em>'+ layui.util.escape(d.email) +'</em> <input type="checkbox" title="激活">'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
@@ -249,7 +249,7 @@ layui.use(['table', 'dropdown'], function(){
             break;
             case 'reloadData':
               // 数据重载 - 参数重置
-              var isnt3 = table.reloadData('test', {
+              table.reloadData('test', {
                 where: {
                   abc: '123456'
                   //,test: '新的 test2'
@@ -257,10 +257,10 @@ layui.use(['table', 'dropdown'], function(){
                 }
                 ,height: 2000 // 测试无效参数
                 //,url: '404'
-                ,elem: null
-                ,page: {curr: 5, limit: 20}
+                //,elem: null
+                //,page: {curr: 5, limit: 20}
+                //,scrollPos: 'fixed' // 保持滚动条位置不变
               });
-              console.log(isnt3.config);
             break;
             case 'reloadData-deep':
               // 数据重载 - 参数叠加
@@ -402,6 +402,13 @@ layui.use(['table', 'dropdown'], function(){
         obj.update({
           email: value
         });
+        /*
+        // 上述 obj.update() 只是在前端临时更新数据视图
+        // 在实际业务中，当发送修改请求成功后，可再执行 reloadData 来重载数据
+        table.reloadData('test', {
+          scrollPos: 'fixed' // 保持滚动条位置不变
+        });
+        */
         layer.close(index);
       });
     }

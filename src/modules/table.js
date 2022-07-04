@@ -3,7 +3,7 @@
  * 表格组件
  */
 
-layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
+layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
   "use strict";
   
   var $ = layui.$;
@@ -331,7 +331,10 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 
     // 仅重载数据
     if(type === 'reloadData'){
-      return that.pullData(that.page); //请求数据
+       // 请求数据
+      return that.pullData(that.page, {
+        type: 'reloadData'
+      });
     }
     
     //高度铺满：full-差距值
@@ -798,28 +801,30 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
   // 初始页码
   Class.prototype.page = 1;
   
-  //获得数据
-  Class.prototype.pullData = function(curr){
-    var that = this
-    ,options = that.config
-    ,request = options.request
-    ,response = options.response
-    ,sort = function(){
+  // 获得数据
+  Class.prototype.pullData = function(curr, opts){
+    var that = this;
+    var options = that.config;
+    var request = options.request;
+    var response = options.response;
+    var sort = function(){
       if(typeof options.initSort === 'object'){
         that.sort(options.initSort.field, options.initSort.type);
       }
     };
+
+    opts = opts || {};
     
-    that.startTime = new Date().getTime(); //渲染开始时间
+    that.startTime = new Date().getTime(); // 渲染开始时间
         
-    if(options.url){ //Ajax请求
+    if(options.url){ // Ajax请求
       var params = {};
       params[request.pageName] = curr;
       params[request.limitName] = options.limit;
       
-      //参数
+      // 参数
       var data = $.extend(params, options.where);
-      if(options.contentType && options.contentType.indexOf("application/json") == 0){ //提交 json 格式
+      if(options.contentType && options.contentType.indexOf("application/json") == 0){ // 提交 json 格式
         data = JSON.stringify(data);
       }
       
@@ -833,11 +838,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         ,dataType: 'json'
         ,headers: options.headers || {}
         ,success: function(res){
-          //如果有数据解析的回调，则获得其返回的数据
+          // 若有数据解析的回调，则获得其返回的数据
           if(typeof options.parseData === 'function'){
             res = options.parseData(res) || res;
           }
-          //检查数据格式是否符合规范
+          // 检查数据格式是否符合规范
           if(res[response.statusName] != response.statusCode){
             that.renderForm();
             that.errorView(
@@ -845,11 +850,20 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
               ('返回的数据不符合规范，正确的成功状态码应为："'+ response.statusName +'": '+ response.statusCode)
             );
           } else {
-            that.renderData(res, curr, res[response.countName]), sort();
-            options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
+            that.renderData({
+              res: res, 
+              curr: curr,
+              count: res[response.countName],
+              type: opts.type
+            }), sort();
+
+            //耗时（接口请求+视图渲染）
+            options.time = (new Date().getTime() - that.startTime) + ' ms';
           }
           that.setColsWidth();
-          typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
+          typeof options.done === 'function' && options.done(
+            res, curr, res[response.countName]
+          );
         }
         ,error: function(e, msg){
           that.errorView('请求异常，错误提示：'+ msg);
@@ -872,32 +886,47 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         res[response.totalRowName] = $.extend({}, options.totalRow);
       }
 
-      that.renderData(res, curr, res[response.countName]), sort();
+      that.renderData({
+        res: res, 
+        curr: curr,
+        count: res[response.countName],
+        type: opts.type
+      }), sort();
+
       that.setColsWidth();
-      typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
+
+      typeof options.done === 'function' && options.done(
+        res, curr, res[response.countName]
+      );
     }
   };
   
-  //遍历表头
+  // 遍历表头
   Class.prototype.eachCols = function(callback){
     var that = this;
     table.eachCols(null, callback, that.config.cols);
     return that;
   };
 
-  //数据渲染
-  Class.prototype.renderData = function(res, curr, count, sort){
-    var that = this
-    ,options = that.config
-    ,data = res[options.response.dataName] || [] //列表数据
-    ,totalRowData = res[options.response.totalRowName] //合计行数据
-    ,trs = []
-    ,trs_fixed = []
-    ,trs_fixed_r = []
+  // 数据渲染
+  Class.prototype.renderData = function(opts){
+    var that = this;
+    var options = that.config;
+
+    var res = opts.res;
+    var curr = opts.curr;
+    var count = opts.count;
+    var sort = opts.sort;
+
+    var data = res[options.response.dataName] || []; //列表数据
+    var totalRowData = res[options.response.totalRowName]; //合计行数据
+    var trs = [];
+    var trs_fixed = [];
+    var trs_fixed_r = [];
     
-    //渲染视图
-    ,render = function(){ //后续性能提升的重点
-      //同步表头父列的相关值
+    // 渲染视图
+    var render = function(){ // 后续性能提升的重点
+      // 同步表头父列的相关值
       options.HAS_SET_COLS_PATCH || that.setColsPatch();
       options.HAS_SET_COLS_PATCH = true;
 
@@ -1018,9 +1047,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
         trs_fixed_r.push('<tr data-index="'+ i1 +'">'+ tds_fixed_r.join('') + '</tr>');
       });
 
-      // 容器的滚动条位置复位
-      that.layBody.scrollTop(0);
-      if(options.resetScrollbar){
+      // 容器的滚动条位置
+      if(!(options.scrollPos === 'fixed' && opts.type === 'reloadData')){
+        that.layBody.scrollTop(0);
+      }
+      if(options.scrollPos === 'reset'){
         that.layBody.scrollLeft(0);
       }
 
@@ -1046,9 +1077,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     };
     
     table.cache[that.key] = data; //记录数据
-
-    //显示隐藏分页栏
-    //that.layPage[(count == 0 || (data.length === 0 && curr == 1)) ? 'addClass' : 'removeClass'](HIDE);
 
     //显示隐藏合计栏
     that.layTotal[data.length == 0 ? 'addClass' : 'removeClass'](HIDE_V);
@@ -1282,7 +1310,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     }
     
     res[options.response.dataName] = thisData || data;
-    that.renderData(res, that.page, that.count, true);
+
+    that.renderData({
+      res: res, 
+      curr: that.page, 
+      count: that.count, 
+      sort: true
+    });
     
     if(formEvent){
       options.initSort = {
@@ -2291,7 +2325,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
     var dataParams = new RegExp('^('+ [
       'data', 'url', 'method', 'contentType', 
       'headers', 'where', 'page', 'limit',
-      'request', 'response', 'parseData'
+      'request', 'response', 'parseData',
+      'scrollPos'
     ].join('|') + ')$');
 
     layui.each(args[1], function (key, value) {
