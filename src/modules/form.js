@@ -670,6 +670,7 @@ layui.define('layer', function(exports){
 
   // elem 即要验证的区域表单选择器 -  return true or false
   Form.prototype.validate = function(elem){
+    var that = this;
     var stop = null; //验证不通过状态
     var verify = form.config.verify; //验证规则
     var DANGER = 'layui-form-danger'; //警示样式
@@ -680,8 +681,10 @@ layui.define('layer', function(exports){
     if(!elem[0]) return !0;
 
     // 若节点不存在特定属性，则查找容器内有待验证的子节点
-    if(!elem.attr('lay-verify')){
-      elem = elem.find('*[lay-verify]');
+    if(elem.attr('lay-verify') === undefined){ // 如果校验的是一个不带验证规则的容器，校验内部的verify节点
+      if (that.validate(elem.find('*[lay-verify]')) === false) {
+        return false;
+      }
     }
 
     //开始校验
