@@ -892,12 +892,15 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-table img{max-width:100px;}
 
-/* 大表格 */.layui-table[lay-size="lg"] th,
+/* 大表格 */
+.layui-table[lay-size="lg"] th,
 .layui-table[lay-size="lg"] td{padding-top: 15px; padding-right: 30px; padding-bottom: 15px; padding-left: 30px;}
 .layui-table-view .layui-table[lay-size="lg"] .layui-table-cell{height: 50px; line-height: 40px;}
-/* 小表格 */.layui-table[lay-size="sm"] th,
+
+/* 小表格 */
+.layui-table[lay-size="sm"] th,
 .layui-table[lay-size="sm"] td{padding-top: 5px; padding-right: 10px; padding-bottom: 5px; padding-left: 10px; font-size: 12px;}
-.layui-table-view .layui-table[lay-size="sm"] .layui-table-cell{height: 30px; line-height: 20px;}
+.layui-table-view .layui-table[lay-size="sm"] .layui-table-cell{height: 30px; line-height: 20px; padding-top: 5px; padding-right: 5px;}
 
 /* 数据表格 */
 .layui-table[lay-data]{display: none;}
@@ -951,6 +954,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-cell{height: 38px; line-height: 28px; padding: 6px 15px; position: relative; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-sizing: border-box;}
 .layui-table-cell .layui-form-checkbox[lay-skin="primary"]{top: -1px; padding: 0;}
 .layui-table-cell .layui-table-link{color: #01AAED;}
+.layui-table-cell .layui-btn{vertical-align: inherit;}
 .layui-table-cell[align="center"]{-webkit-box-pack: center;}
 .layui-table-cell[align="right"]{-webkit-box-pack: end;}
 

@@ -1,5 +1,5 @@
 /**
- * layedit 富文本编辑器
+ * layedit 富文本编辑器（该组件已被弃用，为了向下兼容而保留）
  */
  
 layui.define(['layer', 'form'], function(exports){

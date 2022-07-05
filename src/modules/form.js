@@ -681,7 +681,8 @@ layui.define('layer', function(exports){
     if(!elem[0]) return !0;
 
     // 若节点不存在特定属性，则查找容器内有待验证的子节点
-    if(elem.attr('lay-verify') === undefined){ // 如果校验的是一个不带验证规则的容器，校验内部的verify节点
+    if(elem.attr('lay-verify') === undefined){
+      // 若校验的是一个不带验证规则的容器，校验内部的 lay-verify 节点
       if (that.validate(elem.find('*[lay-verify]')) === false) {
         return false;
       }
@@ -706,6 +707,7 @@ layui.define('layer', function(exports){
         //匹配验证规则
         if(verify[thisVer]){
           var isTrue = isFn ? errorText = verify[thisVer](value, item) : !verify[thisVer][0].test(value)
+          
           //是否属于美化替换后的表单元素
           ,isForm2Elem = item.tagName.toLowerCase() === 'select' || /^checkbox|radio$/.test(item.type);
           
