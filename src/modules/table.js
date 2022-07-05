@@ -796,6 +796,8 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     that.layPage.find(ELEM_PAGE_VIEW).addClass(HIDE_V);
 
     table.cache[that.key] = []; //格式化缓存数据
+
+    that.syncCheckAll();
   };
   
   // 初始页码
