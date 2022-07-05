@@ -121,6 +121,8 @@
     ,position: null //控件定位方式定位, 默认absolute，支持：fixed/absolute/static
     ,calendar: false //是否开启公历重要节日，仅支持中文版
     ,mark: {} //日期备注，如重要事件或活动标记
+    ,isWorkrest: false // 是否标注节假日或补假上班, 默认 false
+    ,workrest: [] // 标注法定节假日或补假上班
     ,zIndex: null //控件层叠顺序
     ,done: null //控件选择完毕后的回调，点击清空/现在/确定也均会触发
     ,change: null //日期时间改变后的回调
@@ -279,6 +281,10 @@
       ,'0-10-1': '国庆'
       ,'0-12-25': '圣诞'
     } : {}, options.mark);
+
+    if(options.isWorkrest){
+      options.workrest = lay.extend({}, (options.calendar && options.lang === 'cn') ? [] : [], options.workrest);
+    }
     
     //获取限制内日期
     lay.each(['min', 'max'], function(i, item){
@@ -795,6 +801,22 @@
     
     return that;
   };
+
+  // 标注法定节假日或补假上班
+  Class.prototype.workrest = function(td, YMD) {
+    var that = this,
+      workrest,
+      workclsArr = ['rest', 'work'],
+      options = that.config;
+    lay.each(options.workrest, function(idx, itm) {
+      lay.each(itm, function(i, dayStr) {
+        if(dayStr === td[0].getAttribute('lay-ymd')){
+          td.html('<span class="laydate-day-workrest ' + workclsArr[idx] + '">' + YMD[2] + '</span>');
+        }
+      });
+    });
+    return that;
+  }
   
   //无效日期范围的标记
   Class.prototype.limit = function(elem, date, index, time){
@@ -886,6 +908,14 @@
         ,month: YMD[1] - 1
         ,date: YMD[2]
       }, index_);
+      
+      if(options.isWorkrest){
+        that.workrest(item, YMD).limit(item, {
+          year: YMD[0]
+          ,month: YMD[1] - 1
+          ,date: YMD[2]
+        }, index_);
+      }
     });  
     
     //同步头部年月

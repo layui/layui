@@ -76,6 +76,11 @@ body{padding: 50px 100px;}
   <input type="text" class="layui-input" id="test555">
 </div>
 
+标注法定节假日及补班：
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test5555">
+</div>
+
 <br><br><hr><br>
 
 
@@ -133,6 +138,10 @@ layui.use('laydate', function(laydate){
   //全局配置
   laydate.set({
     //trigger: 'focus'
+    workrest: [
+      ['2022-1-1', '2022-1-2', '2022-1-3', '2022-1-31', '2022-2-1', '2022-2-2', '2022-2-3', '2022-2-4', '2022-2-5', '2022-2-6', '2022-4-3', '2022-4-4', '2022-4-5', '2022-4-30', '2022-5-1', '2022-5-2', '2022-5-3', '2022-5-4', '2022-6-3', '2022-6-4', '2022-6-5', '2022-9-10', '2022-9-11', '2022-9-12', '2022-10-1', '2022-10-2', '2022-10-3', '2022-10-4', '2022-10-5', '2022-10-6', '2022-10-7'],
+      ['2022-1-29', '2022-1-30', '2022-4-2', '2022-4-24', '2022-5-7',  '2022-10-8', '2022-10-9']
+    ]
   })
 
   //范围选择1
@@ -278,6 +287,13 @@ layui.use('laydate', function(laydate){
     ,change: function(value, date, endDate){
       console.log(value)
     }
+  });
+
+  // 标注法定节假日及补班
+  var ins5555 = laydate.render({
+    elem: '#test5555',
+    value: '2022-5-21',
+    isWorkrest: true
   });
   
   //墨绿主题
