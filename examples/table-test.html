@@ -130,7 +130,7 @@ layui.use(['table', 'dropdown'], function(){
     ].join('')
     //,className: '.demo-table-view'
 
-    //,size: 'sm'
+    //,size: 'lg'
     //,skin: 'line'
     //,loading: false
 
@@ -153,8 +153,8 @@ layui.use(['table', 'dropdown'], function(){
       //,{type: 'numbers', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
       ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
-      ,{field:'email', minWidth: 230, title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, edit: 'text', templet: function(d){
-        return '<em>'+ layui.util.escape(d.email) +'</em> <input type="checkbox" title="激活">'
+      ,{field:'email', minWidth: 160, title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, edit: 'text', templet: function(d){
+        return '<em>'+ layui.util.escape(d.email) +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
       ,{field:'city', title:'城市', width:120, templet: '#cityTpl', exportTemplet: function(d, obj){
@@ -182,6 +182,10 @@ layui.use(['table', 'dropdown'], function(){
       ,token: '初始 token'
       ,key: 'experience'
       ,order: 'asc'
+    }
+    ,before: function(options){
+      options.where.AAAAA = 123;
+      //console.log(options)
     }
     ,done: function(res, curr, count){
       var id = this.id;

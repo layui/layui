@@ -60,10 +60,10 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-content td{position: relative; cursor: pointer;}
 .laydate-day-mark{position: absolute; left: 0; top: 0; width: 100%; line-height: 30px; font-size: 12px; overflow: hidden;}
 .laydate-day-mark::after{position: absolute; content:''; right: 2px; top: 2px; width: 5px; height: 5px; border-radius: 50%;}
-.laydate-day-workrest:before{position: absolute; left: 0;top: 3px;font-size: 12px;transform: scale(.7);}
-.laydate-day-workrest.rest:before{content:'假';color: #d11211;}
-.laydate-day-workrest.work:before{content:'班';color: #1589ee;}
-.layui-laydate .layui-this .laydate-day-workrest:before{color: #fff;}
+.laydate-day-holidays:before{position: absolute; left: 0; top: 0; font-size: 12px; transform: scale(.7);}
+.laydate-day-holidays:before{content:'\4F11'; color: #FF5722;}
+.laydate-day-holidays[type="work"]:before{content:'\73ED'; color: inherit;}
+.layui-laydate .layui-this .laydate-day-holidays:before{color: #fff;}
 
 /* 底部结构 */
 .layui-laydate-footer{position: relative; height: 46px; line-height: 26px; padding: 10px;}
