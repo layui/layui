@@ -796,6 +796,8 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     that.layPage.find(ELEM_PAGE_VIEW).addClass(HIDE_V);
 
     table.cache[that.key] = []; //格式化缓存数据
+
+    that.syncCheckAll();
   };
   
   // 初始页码
@@ -835,7 +837,8 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
         ,url: options.url
         ,contentType: options.contentType
         ,data: data
-        ,dataType: 'json'
+        ,dataType:options.dataType || 'json'
+        ,jsonpCallback:options.jsonpCallback
         ,headers: options.headers || {}
         ,success: function(res){
           // 若有数据解析的回调，则获得其返回的数据
@@ -2324,6 +2327,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     // 过滤与数据无关的参数
     var dataParams = new RegExp('^('+ [
       'data', 'url', 'method', 'contentType', 
+      'dataType','jsonpCallback',
       'headers', 'where', 'page', 'limit',
       'request', 'response', 'parseData',
       'scrollPos'
