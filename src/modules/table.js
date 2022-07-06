@@ -124,6 +124,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
   ,ELEM_SORT = '.layui-table-sort'
   ,ELEM_EDIT = 'layui-table-edit'
   ,ELEM_HOVER = 'layui-table-hover'
+  ,ELEM_COL_SPECIAL = 'layui-table-col-special'
 
   ,DATA_MOVE_NAME = 'LAY_TABLE_MOVE_DICT'
   
@@ -976,7 +977,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
           }() +' class="'+ function(){ //追加样式
             var classNames = [];
             if(item3.hide) classNames.push(HIDE); //插入隐藏列样式
-            if(!item3.field) classNames.push('layui-table-col-special'); //插入特殊列样式
+            if(!item3.field) classNames.push(ELEM_COL_SPECIAL); //插入特殊列样式
             return classNames.join(' ');
           }() +'">'
             ,'<div class="layui-table-cell laytable-cell-'+ function(){ //返回对应的CSS类标识
@@ -1201,7 +1202,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
       }() +' class="'+ function(){ //追加样式
         var classNames = [];
         if(item3.hide) classNames.push(HIDE); //插入隐藏列样式
-        if(!item3.field) classNames.push('layui-table-col-special'); //插入特殊列样式
+        if(!item3.field) classNames.push(ELEM_COL_SPECIAL); //插入特殊列样式
         return classNames.join(' ');
       }() +'">'
         ,'<div class="layui-table-cell laytable-cell-'+ function(){ //返回对应的CSS类标识
@@ -1315,6 +1316,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
       } else { //清除排序
         thisData = layui.sort(data, table.config.indexName);
         delete that.sortKey;
+        delete options.initSort;
       }
     }
     
@@ -1624,13 +1626,11 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
           html.append(that.layTotal.find('table').html()) //输出合计行
 
           html.find('th.layui-table-patch').remove(); //移除补丁
-          layui.each(html.find('thead>tr>th.layui-table-col-special'), function (thIndex, thElem) {
-            thElem = $(thElem);
-            if (!thElem.children('.laytable-cell-group').length) { // 表头特殊列中和并列不移除
-              thElem.remove();
-            }
-          })
-          html.find('tbody>tr>td.layui-table-col-special').remove(); // 移除表体特殊列
+          // 移除表头特殊列
+          html.find('thead>tr>th.'+ ELEM_COL_SPECIAL).filter(function(i, thElem){
+            return !$(thElem).children('.laytable-cell-group').length; // 父级表头除外
+          }).remove();
+          html.find('tbody>tr>td.'+ ELEM_COL_SPECIAL).remove(); // 移除表体特殊列
 
           printWin.document.write(style + html.prop('outerHTML'));
           printWin.document.close();
