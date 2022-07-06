@@ -1622,10 +1622,16 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
           
           html.append(that.layMain.find('table').html()); //输出表体
           html.append(that.layTotal.find('table').html()) //输出合计行
-          
+
           html.find('th.layui-table-patch').remove(); //移除补丁
-          html.find('.layui-table-col-special').remove(); //移除特殊列
-          
+          layui.each(html.find('thead>tr>th.layui-table-col-special'), function (thIndex, thElem) {
+            thElem = $(thElem);
+            if (!thElem.children('.laytable-cell-group').length) { // 表头特殊列中和并列不移除
+              thElem.remove();
+            }
+          })
+          html.find('tbody>tr>td.layui-table-col-special').remove(); // 移除表体特殊列
+
           printWin.document.write(style + html.prop('outerHTML'));
           printWin.document.close();
           printWin.print();
