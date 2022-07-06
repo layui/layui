@@ -816,7 +816,7 @@
     });
 
     return that;
-  }
+  };
   
   //无效日期范围的标记
   Class.prototype.limit = function(elem, date, index, time){

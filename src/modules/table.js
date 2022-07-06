@@ -1315,6 +1315,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
       } else { //清除排序
         thisData = layui.sort(data, table.config.indexName);
         delete that.sortKey;
+        delete options.initSort;
       }
     }
     
