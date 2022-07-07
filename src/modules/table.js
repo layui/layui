@@ -1773,7 +1773,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
           tr.remove();
           that.scrollPatch();
         }
-        ,update: function(fields, ){ //修改行数据
+        ,update: function(fields){ //修改行数据
           fields = fields || {};
           layui.each(fields, function(key, value){
             var td = tr.children('td[data-field="'+ key +'"]');
