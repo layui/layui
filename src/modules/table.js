@@ -1773,7 +1773,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
           tr.remove();
           that.scrollPatch();
         }
-        ,update: function(fields){ //修改行数据
+        ,update: function(fields, related){ //修改行数据
           fields = fields || {};
           layui.each(fields, function(key, value){
             var td = tr.children('td[data-field="'+ key +'"]');
@@ -1782,8 +1782,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
             // 更新缓存中的数据
             if(key in data) data[key] = value;
 
-            // 更新相应列视
-            // 若要更新其它列与之有关的动态模板，直接采用 reloadData 方法
+            // 更新相应列视图
             that.eachCols(function(i, item3){
               if(item3.field == key){
                 cell.html(parseTempData.call(that, {
@@ -1792,9 +1791,22 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
                   ,tplData: data
                 }));
                 td.data('content', value);
+              } 
+              // 更新其他包含自定义模板且可能有所关联的列视图
+              else if(related && (item3.templet || item3.toolbar)){
+                var thisTd = tr.children('td[data-field="'+ (item3.field || i) +'"]');
+                var content = data[item3.field];
+
+                thisTd.children(ELEM_CELL).html(parseTempData.call(that, {
+                  item3: item3
+                  ,content: content
+                  ,tplData: data
+                }));
+                thisTd.data('content', content);
               }
             });
           });
+
           that.renderForm();
         }
       }, sets);
