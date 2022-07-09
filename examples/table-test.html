@@ -163,7 +163,7 @@ layui.use(['table', 'dropdown'], function(){
         return td.find('select').val();
       }}
       ,{field:'sign', title:'签名', minWidth: 200, style:'color: #5FB878', edit: 'textarea'}
-      ,{field: 'experience', title: '积分', width: 100, sort: true, align:'center', totalRow: !1 ? '{{=d.LAY_COL.field}}' : '{{= d.TOTAL_NUMS }} 分 😊', templet: '<div><a href="" class="layui-table-link">{{ d.experience }}</a> 分</div>'}
+      ,{field: 'experience', title: '积分', width: 100, sort: true, align:'center', totalRow: !1 ? true : '{{= d.TOTAL_NUMS }} 分 😊', templet: '<div><a href="" class="layui-table-link">{{= d[d.LAY_COL.field] }}</a> 分</div>'}
       ,{field:'ip', title:'IP', width: 120, align: 'right'}
       ,{field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{= parseInt(d.TOTAL_NUMS) }} 次'}
       ,{field:'joinTime', title:'加入时间', width: 120}
@@ -405,7 +405,7 @@ layui.use(['table', 'dropdown'], function(){
       }, function(value, index){
         obj.update({
           email: value
-        });
+        }, true);
         /*
         // 上述 obj.update() 只是在前端临时更新数据视图
         // 在实际业务中，当发送修改请求成功后，可再执行 reloadData 来重载数据
@@ -448,7 +448,7 @@ layui.use(['table', 'dropdown'], function(){
 
     var update = {};
     update[field] = value;
-    obj.update(update);
+    obj.update(update, true);
   });
 });
 </script>

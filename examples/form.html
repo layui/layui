@@ -16,7 +16,6 @@
     </style>
   </head>
 <body>
-
   <form class="layui-form" method="get" lay-filter="top" id="AAA">
     <div class="layui-form-item">
       <div class="layui-input-inline">
@@ -264,9 +263,7 @@
   <br><br><br>
 
 
-  <script src="../src/layui.js"></script>
-  <!-- <script src="../build/lay/dest/layui.all.js"></script> -->
-
+  <script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.6.8/layui.js"></script>
   <script>
 
   layui.use(['form', 'util', 'laydate'], function(){
@@ -288,6 +285,7 @@
         /^\d+\.\b\d{2}\b$/
         ,'金额必须为小数保留两位'
       ]
+      //,n: [/^(\d)+$/, '数字校验']
     });
     
     /*
