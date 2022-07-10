@@ -405,7 +405,8 @@ layui.use(['table', 'dropdown'], function(){
       }, function(value, index){
         obj.update({
           email: value
-        }, true);
+        }, true); // 参数 true 为新版新增功能，详见文档
+
         /*
         // 上述 obj.update() 只是在前端临时更新数据视图
         // 在实际业务中，当发送修改请求成功后，可再执行 reloadData 来重载数据
@@ -448,7 +449,7 @@ layui.use(['table', 'dropdown'], function(){
 
     var update = {};
     update[field] = value;
-    obj.update(update, true);
+    obj.update(update, true); // 参数 true 为新版新增功能，详见文档
   });
 });
 </script>
