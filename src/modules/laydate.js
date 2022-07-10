@@ -530,6 +530,7 @@
         //delete options.dateTime;
         //delete that.endDate;
         delete laydate.thisId;
+        typeof options.close === 'function' && options.close(that);
       });
     }
     return that;
@@ -1738,6 +1739,12 @@
     ,1);
     //减去一天，得到当前月最后一天
     return new Date(thisDate.getTime() - 1000*60*60*24).getDate();
+  };
+
+  // 关闭日期面板
+  laydate.close = function(id){
+    var elem = lay('#'+ (id ? ('layui-laydate'+ id) : Class.thisElemDate));
+    elem.remove();
   };
   
   //加载方式
