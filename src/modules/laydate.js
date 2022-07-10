@@ -621,10 +621,10 @@
     ,checkValid = function(dateTime){
       if(dateTime.year > LIMIT_YEAR[1]) dateTime.year = LIMIT_YEAR[1], error = true; //不能超过20万年
       if(dateTime.month > 11) dateTime.month = 11, error = true;
-      if(dateTime.hours > 23) dateTime.hours = 0, error = true;
-      if(dateTime.minutes > 59) dateTime.minutes = 0, dateTime.hours++, error = true;
       if(dateTime.seconds > 59) dateTime.seconds = 0, dateTime.minutes++, error = true;
-      
+      if(dateTime.minutes > 59) dateTime.minutes = 0, dateTime.hours++, error = true;
+      if(dateTime.hours > 23) dateTime.hours = 0, error = true;
+
       //计算当前月的最后一天
       thisMaxDate = laydate.getEndDate(dateTime.month + 1, dateTime.year);
       if(dateTime.date > thisMaxDate) dateTime.date = thisMaxDate, error = true;
@@ -652,15 +652,18 @@
           if(thisv < 1) thisv = 1, error = true;
           dateTime.date = thisv;
         } else if(/HH|H/.test(item)){ //时
-          if(thisv < 1) thisv = 0, error = true;
+          if (thisv < 0) thisv = 0, error = true;
+          if (thisv > 23) thisv = 23, error = true;
           dateTime.hours = thisv;
           options.range && (that[startEnd[index]].hours = thisv);
         } else if(/mm|m/.test(item)){ //分
-          if(thisv < 1) thisv = 0, error = true;
+          if (thisv < 0) thisv = 0, error = true;
+          if (thisv > 59) thisv = 59, error = true;
           dateTime.minutes = thisv;
           options.range && (that[startEnd[index]].minutes = thisv);
         } else if(/ss|s/.test(item)){ //秒
-          if(thisv < 1) thisv = 0, error = true;
+          if (thisv < 0) thisv = 0, error = true;
+          if (thisv > 59) thisv = 59, error = true;
           dateTime.seconds = thisv;
           options.range && (that[startEnd[index]].seconds = thisv);
         }
