@@ -1144,16 +1144,16 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     }
   };
   
-  //数据合计行
+  // 数据合计行
   Class.prototype.renderTotal = function(data, totalRowData){
-    var that = this
-    ,options = that.config
-    ,totalNums = {};
+    var that = this;
+    var options = that.config;
+    var totalNums = {};
     
     if(!options.totalRow) return;
 
     layui.each(data, function(i1, item1){
-      //若数据项为空数组，则不往下执行（因为删除数据时，会将原有数据设置为 []）
+      // 若数据项为空数组，则不往下执行（因为删除数据时，会将原有数据设置为 []）
       if(layui.type(item1) === 'array' && item1.length === 0) return;
       
       that.eachCols(function(i3, item3){
@@ -1171,56 +1171,60 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     var tds = [];
     that.eachCols(function(i3, item3){
       var field = item3.field || i3;
+
+      // 合计数据的特定字段
+      var TOTAL_NUMS = totalRowData && totalRowData[item3.field];
       
-      //td 内容
+      // td 内容
       var content = function(){
-        var text = item3.totalRowText || ''
-        ,decimals = 'totalRowDecimals' in item3 ? item3.totalRowDecimals : 2
-        ,thisTotalNum = parseFloat(totalNums[field]).toFixed(decimals)
-        ,tplData = {
+        var text = item3.totalRowText || '';
+        var decimals = 'totalRowDecimals' in item3 ? item3.totalRowDecimals : 2;
+        var thisTotalNum = parseFloat(totalNums[field]).toFixed(decimals);
+        var tplData = {
           LAY_COL: item3
-        }
-        ,getContent;
+        };
         
         tplData[field] = thisTotalNum;
         
-        //获取自动计算的合并内容
-        getContent = item3.totalRow ? (parseTempData.call(that, {
+        // 获取自动计算的合并内容
+        var getContent = item3.totalRow ? (parseTempData.call(that, {
           item3: item3
           ,content: thisTotalNum
           ,tplData: tplData
         }) || text) : text;
         
-        //如果直接传入了合计行数据，则不输出自动计算的结果
-        return totalRowData ? (totalRowData[item3.field] || getContent) : getContent;
-      }()
-      ,td = ['<td data-field="'+ field +'" data-key="'+ options.index + '-'+ item3.key +'" '+ function(){
+        // 如果直接传入了合计行数据，则不输出自动计算的结果
+        return TOTAL_NUMS || getContent;
+      }();
+
+      // td 容器
+      var td = ['<td data-field="'+ field +'" data-key="'+ options.index + '-'+ item3.key +'" '+ function(){
         var attr = [];
-        if(item3.align) attr.push('align="'+ item3.align +'"'); //对齐方式
-        if(item3.minWidth) attr.push('data-minwidth="'+ item3.minWidth +'"'); //单元格最小宽度
+        if(item3.align) attr.push('align="'+ item3.align +'"'); // 对齐方式
+        if(item3.minWidth) attr.push('data-minwidth="'+ item3.minWidth +'"'); // 单元格最小宽度
         return attr.join(' ');
-      }() +' class="'+ function(){ //追加样式
+      }() +' class="'+ function(){ // 追加样式
         var classNames = [];
-        if(item3.hide) classNames.push(HIDE); //插入隐藏列样式
-        if(!item3.field) classNames.push(ELEM_COL_SPECIAL); //插入特殊列样式
+        if(item3.hide) classNames.push(HIDE); // 插入隐藏列样式
+        if(!item3.field) classNames.push(ELEM_COL_SPECIAL); // 插入特殊列样式
         return classNames.join(' ');
       }() +'">'
-        ,'<div class="layui-table-cell laytable-cell-'+ function(){ //返回对应的CSS类标识
+        ,'<div class="layui-table-cell laytable-cell-'+ function(){ // 返回对应的CSS类标识
           var str = (options.index + '-' + item3.key);
           return item3.type === 'normal' ? str 
           : (str + ' laytable-cell-' + item3.type);
         }() +'"'+ function(){
         var attr = [];
-        if(item3.style) attr.push('style="'+ item3.style +'"'); //自定义单元格样式
+        if(item3.style) attr.push('style="'+ item3.style +'"'); // 自定义单元格样式
         return attr.join(' ');
       }() +'>' + function(){
           var totalRow = item3.totalRow || options.totalRow;
 
-          //如果 totalRow 参数为字符类型，则解析为自定义模版
+          // 如果 totalRow 参数为字符类型，则解析为自定义模版
           if(typeof totalRow === 'string'){
             return laytpl(totalRow).render($.extend({
-              TOTAL_NUMS: totalNums[field]
-              ,LAY_COL: item3
+              TOTAL_NUMS: TOTAL_NUMS || totalNums[field],
+              LAY_COL: item3
             }, item3));
           }
           return content;
@@ -1773,7 +1777,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
           tr.remove();
           that.scrollPatch();
         }
-        ,update: function(fields, ){ //修改行数据
+        ,update: function(fields, related){ //修改行数据
           fields = fields || {};
           layui.each(fields, function(key, value){
             var td = tr.children('td[data-field="'+ key +'"]');
@@ -1782,8 +1786,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
             // 更新缓存中的数据
             if(key in data) data[key] = value;
 
-            // 更新相应列视
-            // 若要更新其它列与之有关的动态模板，直接采用 reloadData 方法
+            // 更新相应列视图
             that.eachCols(function(i, item3){
               if(item3.field == key){
                 cell.html(parseTempData.call(that, {
@@ -1792,9 +1795,22 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
                   ,tplData: data
                 }));
                 td.data('content', value);
+              } 
+              // 更新其他包含自定义模板且可能有所关联的列视图
+              else if(related && (item3.templet || item3.toolbar)){
+                var thisTd = tr.children('td[data-field="'+ (item3.field || i) +'"]');
+                var content = data[item3.field];
+
+                thisTd.children(ELEM_CELL).html(parseTempData.call(that, {
+                  item3: item3
+                  ,content: content
+                  ,tplData: data
+                }));
+                thisTd.data('content', content);
               }
             });
           });
+
           that.renderForm();
         }
       }, sets);
