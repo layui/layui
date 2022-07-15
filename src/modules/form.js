@@ -122,12 +122,10 @@ layui.define('layer', function(exports){
     ,field = {}
     ,fieldElem = itemForm.find('input,select,textarea') //获取所有表单域
 
-    if ('disabled' === othis.attr('disabled')) return; //忽略含有 disabled 表单域
-    
     layui.each(fieldElem, function(_, item){ 
       var othis = $(this)
       ,init_name; //初始 name
-      
+      if ('disabled' === othis.attr('disabled')) return; //忽略含有 disabled 表单域
       item.name = (item.name || '').replace(/^\s*|\s*&/, '');
       if(!item.name) return;
       
