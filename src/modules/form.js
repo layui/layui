@@ -121,6 +121,8 @@ layui.define('layer', function(exports){
     var nameIndex = {} //数组 name 索引
     ,field = {}
     ,fieldElem = itemForm.find('input,select,textarea') //获取所有表单域
+
+    if ('disabled' === othis.attr('disabled')) return; //忽略含有 disabled 表单域
     
     layui.each(fieldElem, function(_, item){ 
       var othis = $(this)
