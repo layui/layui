@@ -133,7 +133,8 @@ var layer = {
     if(type) yes = options;
     return layer.open($.extend({
       content: content,
-      yes: yes
+      yes: yes,
+      autofocus: true
     }, type ? {} : options));
   }, 
   
@@ -146,6 +147,7 @@ var layer = {
     return layer.open($.extend({
       content: content,
       btn: ready.btn,
+      autofocus: true,
       yes: yes,
       btn2: cancel
     }, type ? {} : options));
@@ -164,6 +166,7 @@ var layer = {
       title: false,
       closeBtn: false,
       btn: false,
+      autofocus: false,
       resize: false,
       end: end
     }, (type && !ready.config.skin) ? {
@@ -179,11 +182,16 @@ var layer = {
   },
   
   load: function(icon, options){
+    var activeElem = document.activeElement; // 记录弹出时的焦点
     return layer.open($.extend({
       type: 3,
       icon: icon || 0,
       resize: false,
-      shade: 0.01
+      shade: 0.01,
+      autofocus: true, // 加载的时候去掉原来的焦点
+      end: function () {
+        activeElem.focus(); // 恢复加载前的焦点
+      }
     }, options));
   }, 
   
@@ -192,6 +200,7 @@ var layer = {
       type: 4,
       content: [content, follow],
       closeBtn: false,
+      autofocus: false,
       time: 3000,
       shade: false,
       resize: false,
@@ -667,6 +676,29 @@ Class.pt.move = function(){
 Class.pt.callback = function(){
   var that = this, layero = that.layero, config = that.config;
   that.openLayer();
+
+  var btnElem = layero.find('.'+ doms[6]).children('a');
+
+  // 根据autofocus设置默认聚焦的按钮
+  var autofocus = config.autofocus;
+  if (autofocus) {
+    document.activeElement.blur();
+    btnElem.attr('href', 'javascript:;');
+    var btnFocus;
+    if (layui.type(autofocus) === 'string') {
+      var btnNum = parseInt(autofocus.substr(3)) || 1;
+      btnFocus = btnElem.filter(function (index, item) {
+        return $(item).hasClass(doms[0] + '-' + autofocus.substr(0, 3) + (btnNum - 1));
+      }).first();
+    } else {
+      btnFocus = btnElem.first();
+    }
+    btnFocus && btnFocus.length && btnFocus.focus();
+    layero.one('click', function (event) {
+      btnElem.attr('href', null);
+    })
+  }
+
   if(config.success){
     if(config.type == 2){
       layero.find('iframe').on('load', function(){
@@ -679,7 +711,7 @@ Class.pt.callback = function(){
   layer.ie == 6 && that.IE6(layero);
   
   //按钮
-  layero.find('.'+ doms[6]).children('a').on('click', function(){
+  btnElem.on('click', function(){
     var index = $(this).index();
     if(index === 0){
       if(config.yes){
@@ -1058,6 +1090,7 @@ layer.prompt = function(options, yes){
   return layer.open($.extend({
     type: 1
     ,btn: ['&#x786E;&#x5B9A;','&#x53D6;&#x6D88;']
+    ,autofocus: false
     ,content: content
     ,skin: 'layui-layer-prompt' + skin('prompt')
     ,maxWidth: win.width()
@@ -1069,9 +1102,10 @@ layer.prompt = function(options, yes){
     ,resize: false
     ,yes: function(index){
       var value = prompt.val();
-      if(value === ''){
-        prompt.focus();
-      } else if(value.length > (options.maxlength||500)) {
+      // if(value === ''){
+      //   prompt.focus();
+      // } else // 允许为空
+      if(value.length > (options.maxlength||500)) {
         layer.tips('&#x6700;&#x591A;&#x8F93;&#x5165;'+ (options.maxlength || 500) +'&#x4E2A;&#x5B57;&#x6570;', prompt, {tips: 1});
       } else {
         yes && yes(value, index, prompt);

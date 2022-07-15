@@ -20,6 +20,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-dialog .layui-layer-ico,
 .layui-layer-setwin a,
 .layui-layer-btn a{display:inline-block; *display:inline; *zoom:1; vertical-align:top;}
+.layui-layer-btn a:focus {border-style: dashed;border-color: rgba(46, 45, 60, 0.84);}
 
 .layui-layer-move{display: none; position: fixed; *position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; cursor: move; opacity: 0; filter:alpha(opacity=0); background-color: #fff; z-index: 2147483647;}
 .layui-layer-resize{position: absolute; width: 15px; height: 15px; right: 0; bottom: 0; cursor: se-resize;}
