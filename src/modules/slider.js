@@ -319,21 +319,26 @@ layui.define('jquery', function(exports){
       });
     });
     
-    //点击滑块
+    // 点击滑块
     sliderAct.on('click', function(e){
       var main = $('.' + SLIDER_WRAP_BTN);
+      var othis = $(this);
       if(!main.is(event.target) && main.has(event.target).length === 0 && main.length){
-        var left = options.type === 'vertical' ? (sliderWidth() - e.clientY + $(this).offset().top):(e.clientX - $(this).offset().left), index;
-        if(left < 0)left = 0;
-        if(left > sliderWidth())left = sliderWidth();
-        var reaLeft = left / sliderWidth() * 100 / step;
+        var index;
+        var offset = options.type === 'vertical' 
+          ? (sliderWidth() - e.clientY + othis.offset().top - $(window).scrollTop())
+        :(e.clientX - othis.offset().left - $(window).scrollLeft());
+
+        if(offset < 0)offset = 0;
+        if(offset > sliderWidth()) offset = sliderWidth();
+        var reaLeft = offset / sliderWidth() * 100 / step;
         if(options.range){
           if(options.type === 'vertical'){
-            index = Math.abs(left - parseInt($(sliderWrap[0]).css('bottom'))) > Math.abs(left -  parseInt($(sliderWrap[1]).css('bottom'))) ? 1 : 0;
-          }else{
-            index = Math.abs(left - sliderWrap[0].offsetLeft) > Math.abs(left - sliderWrap[1].offsetLeft) ? 1 : 0;
+            index = Math.abs(offset - parseInt($(sliderWrap[0]).css('bottom'))) > Math.abs(offset -  parseInt($(sliderWrap[1]).css('bottom'))) ? 1 : 0;
+          } else {
+            index = Math.abs(offset - sliderWrap[0].offsetLeft) > Math.abs(offset - sliderWrap[1].offsetLeft) ? 1 : 0;
           }
-        }else{
+        } else {
           index = 0;
         };
         change(reaLeft, index);
