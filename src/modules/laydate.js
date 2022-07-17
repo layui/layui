@@ -74,6 +74,17 @@
     var that = this;
     that.index = ++laydate.index;
     that.config = lay.extend({}, that.config, laydate.config, options);
+
+    // 若 elem 非唯一，则拆分为多个实例
+    var elem = lay(options.elem || that.config.elem);
+    if(elem.length > 1){
+      layui.each(elem, function(){
+        laydate.render(lay.extend({}, that.config, {
+          elem: this
+        }));
+      });
+      return that;
+    }
     
     //初始化 id 参数
     options = that.config;
@@ -1292,7 +1303,7 @@
     );
   };
 
-  //获得指定日期时间对象时间戳
+  // 获得指定日期时间对象的毫秒数
   Class.prototype.getDateTime = function(obj){
     return this.newDate(obj).getTime();
   }
@@ -1773,8 +1784,9 @@
 
   // 关闭日期面板
   laydate.close = function(id){
-    var elem = lay('#'+ (id ? ('layui-laydate'+ id) : Class.thisElemDate));
-    elem.remove();
+    var that = thisModule.getThis(id || laydate.thisId);
+    if(!that) return;
+    return that.remove();
   };
   
   //加载方式
