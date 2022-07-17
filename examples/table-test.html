@@ -152,11 +152,13 @@ layui.use(['table', 'dropdown'], function(){
       {type: 'checkbox', fixed: 'left'}
       //,{type: 'numbers', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
-      ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
+      ,{field:'username', title:'用户名', width:120, edit: function(d){
+        return !d.LAY_DISABLED;
+      }, templet: '#usernameTpl'}
       ,{field:'email', minWidth: 160, title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, edit: 'text', templet: function(d){
         return '<em>'+ layui.util.escape(d.email) +'</em>'
       }}
-      ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
+      ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true, escape: false}
       ,{field:'city', title:'城市', width:120, templet: '#cityTpl', exportTemplet: function(d, obj){
         //console.log(obj)
         var td = obj.td(this.field); //获取当前 td

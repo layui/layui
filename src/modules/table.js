@@ -77,12 +77,13 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
   ,parseTempData = function(obj){
     obj = obj || {};
 
-    var options = this.config || {}
-    ,item3 = obj.item3 // 表头数据
-    ,content = obj.content; // 原始内容
+    var options = this.config || {};
+    var item3 = obj.item3; // 表头数据
+    var content = obj.content; // 原始内容
     
     // 是否编码 HTML
-    if(options.escape) content = util.escape(content);
+    var escaped = 'escape' in item3 ? item3.escape : options.escape;
+    if(escaped) content = util.escape(content);
     
     // 获取模板
     var templet = obj.text && item3.exportTemplet || (item3.templet || item3.toolbar);
@@ -91,7 +92,9 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     if(templet){
       content = typeof templet === 'function' 
         ? templet.call(item3, obj.tplData, obj.obj)
-      : laytpl($(templet).html() || String(content)).render(obj.tplData);
+      : laytpl($(templet).html() || String(content)).render($.extend({
+        LAY_COL: item3
+      }, obj.tplData));
     }
     
     // 是否只返回文本
@@ -430,7 +433,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     ,initWidth = {
       checkbox: 50
       ,radio: 50
-      ,space: 15
+      ,space: 30
       ,numbers: 60
     };
     
@@ -918,6 +921,18 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     return that;
   };
 
+  // 获取表头参数项
+  Class.prototype.col = function(key){
+    try {
+      key = key.split('-');
+      return this.config.cols[key[1]][key[2]];
+    } catch(e){
+      hint.error(e);
+      return {};
+    }
+  };
+
+
   // 数据渲染
   Class.prototype.renderData = function(opts){
     var that = this;
@@ -965,11 +980,10 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
           if(content === undefined || content === null) content = '';
           if(item3.colGroup) return;
 
-          //td内容
+          // td 内容
           var td = ['<td data-field="'+ field +'" data-key="'+ key +'" '+ function(){ //追加各种属性
             var attr = [];
-            if(item3.edit) attr.push('data-edit="'+ item3.edit +'"'); //是否允许单元格编辑
-            if(item3.templet) attr.push('data-content="'+ content +'"'); //自定义模板
+            if(item3.templet) attr.push('data-content="'+ util.escape(content) +'"'); //自定义模板
             if(item3.toolbar) attr.push('data-off="true"'); //行工具列关闭单元格事件
             if(item3.event) attr.push('lay-event="'+ item3.event +'"'); //自定义事件
             if(item3.minWidth) attr.push('data-minwidth="'+ item3.minWidth +'"'); //单元格最小宽度
@@ -1901,50 +1915,55 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     
     // 单元格编辑
     that.layBody.on('change', '.'+ELEM_EDIT, function(){
-      var othis = $(this)
-      ,value = this.value
-      ,field = othis.parent().data('field')
-      ,index = othis.parents('tr').eq(0).data('index')
-      ,data = table.cache[that.key][index];
+      var othis = $(this);
+      var value = this.value;
+      var field = othis.parent().data('field');
+      var index = othis.parents('tr').eq(0).data('index');
+      var data = table.cache[that.key][index];
       
-      data[field] = value; //更新缓存中的值
+      data[field] = value; // 更新缓存中的值
       layui.event.call(this, MOD_NAME, 'edit('+ filter +')', commonMember.call(this, {
         value: value
         ,field: field
       }));
     }).on('blur', '.'+ELEM_EDIT, function(){
-      var item3
-      ,othis = $(this)
-      ,thisElem = this
-      ,field = othis.parent().data('field')
-      ,index = othis.parents('tr').eq(0).data('index')
-      ,data = table.cache[that.key][index];
-      that.eachCols(function(i, item){
-        if(item.field == field && item.templet){
-          item3 = item;
-        }
-      });
+      var othis = $(this);
+      var td = othis.parent();
+      var key = td.data('key');
+      var index = othis.closest('tr').data('index');
+      var data = table.cache[that.key][index];
+
       othis.siblings(ELEM_CELL).html(function(value){
         return parseTempData.call(that, {
-          item3: item3 || {}
+          item3: that.col(key)
           ,content: value
           ,tplData: data
         });
-      }(thisElem.value));
-      othis.parent().data('content', thisElem.value);
+      }(othis[0].value));
+      td.data('content', othis[0].value);
       othis.remove();
     });
     
     // 单元格事件
     that.layBody.on(options.editTrigger, 'td', function(e){
-      var othis = $(this)
-      ,field = othis.data('field')
-      ,editType = othis.data('edit')
-      ,elemCell = othis.children(ELEM_CELL);
+      var othis = $(this);
+
+      if(othis.data('off')) return; // 不触发事件
+
+      var field = othis.data('field');
+      var key = othis.data('key');
+      var col = that.col(key);
+      var index = othis.closest('tr').data('index');
+      var data = table.cache[that.key][index];
+      var elemCell = othis.children(ELEM_CELL);
+
+      // 是否开启编辑
+      // 若 edit 传入函数，则根据函数的发挥结果判断是否开启编辑
+      var editType = typeof col.edit === 'function' 
+        ? col.edit(data) 
+      : col.edit;
       
-      if(othis.data('off')) return; //不触发事件
-      
-      //显示编辑表单
+      // 显示编辑表单
       if(editType){
         var input = $(function(){
           var inputElem = '<input class="layui-input '+ ELEM_EDIT +'">';
@@ -1954,7 +1973,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
           return inputElem;
         }());
         
-        input[0].value = othis.data('content') || elemCell.text();
+        input[0].value = othis.data('content') || data[field] || elemCell.text();
         othis.find('.'+ELEM_EDIT)[0] || othis.append(input);
         input.focus();
         layui.stope(e);

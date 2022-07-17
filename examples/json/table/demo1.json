@@ -9,7 +9,7 @@
     "id": "10001"
     ,"username": "杜甫123"
     ,"email": "test1@email.com"
-    ,"sex": "<strong>男</strong>"
+    ,"sex": "<strong style=\"color: red\">男</strong>"
     ,"city": "浙江杭州"
     ,"sign": "舍南舍北皆春水，但见群鸥日日来。花径不曾缘客扫，蓬门今始为君开。盘飧市远无兼味，樽酒家贫只旧醅。肯与邻翁相对饮，隔篱呼取尽余杯。"
     ,"experience": 7
