@@ -762,21 +762,28 @@
     }
     
     //如果当前日期不在设定的最大小日期区间，则自动纠正在可选区域
-    var getDateTime = function(obj){
-      return that.newDate(obj).getTime();
-    };
-    
     //校验主面板是否在可选日期区间
-    if(getDateTime(dateTime) > getDateTime(options.max)){ //若超出最大日期
+    if(that.getDateTime(dateTime) > that.getDateTime(options.max)){ //若超出最大日期
       dateTime = options.dateTime = lay.extend({}, options.max);
-    } else if(getDateTime(dateTime) < getDateTime(options.min)){ //若少于最小日期
+    } else if(that.getDateTime(dateTime) < that.getDateTime(options.min)){ //若少于最小日期
       dateTime = options.dateTime = lay.extend({}, options.min);
     }
     
     //校验右侧面板是否在可选日期区间
     if(options.range){
-      if(getDateTime(that.endDate) < getDateTime(options.min) || getDateTime(that.endDate) > getDateTime(options.max)){
+      if(that.getDateTime(that.endDate) < that.getDateTime(options.min) || that.getDateTime(that.endDate) > that.getDateTime(options.max)){
         that.endDate = lay.extend({}, options.max);
+      }
+      // 有时间范围的情况下初始化startTime和endTime
+      that.startTime = {
+        hours: options.dateTime.hours,
+        minutes: options.dateTime.minutes,
+        seconds: options.dateTime.seconds,
+      }
+      that.endTime = {
+        hours: that.endDate.hours,
+        minutes: that.endDate.minutes,
+        seconds: that.endDate.seconds,
       }
     }
     
@@ -826,7 +833,7 @@
   Class.prototype.limit = function(elem, date, index, time){
     var that = this
     ,options = that.config, timestrap = {}
-    ,dateTime = options[index > 41 ? 'endDate' : 'dateTime']
+    ,dateTime = index > (time ? 0 : 41) ? that.endDate : options.dateTime
     ,isOut, thisDateTime = lay.extend({}, dateTime, date || {});
     
     lay.each({
@@ -1284,7 +1291,12 @@
       ,dateTime.seconds || 0
     );
   };
-  
+
+  //获得指定日期时间对象时间戳
+  Class.prototype.getDateTime = function(obj){
+    return this.newDate(obj).getTime();
+  }
+
   //赋值
   Class.prototype.setValue = function(value){
     var that = this
@@ -1390,6 +1402,24 @@
           ,minutes: i ? 59: 0
           ,seconds: i ? 59: 0
         };
+        if (index === i) {
+          // 判断选择之后的是否在范围内，超出则需要调整时分秒
+          if (that.getDateTime(lay.extend({}, dateTime, that[item])) < that.getDateTime(options.min)) {
+            that[item] = {
+              hours: options.min.hours
+              ,minutes: options.min.minutes
+              ,seconds: options.min.seconds
+            };
+            lay.extend(dateTime, that[item]);
+          } else if (that.getDateTime(lay.extend({}, dateTime, that[item])) > that.getDateTime(options.max)) {
+            that[item] = {
+              hours: options.max.hours
+              ,minutes: options.max.minutes
+              ,seconds: options.max.seconds
+            };
+            lay.extend(dateTime, that[item]);
+          }
+        }
       });
       that.calendar(null, index).done(null, 'change');
     } else if(options.position === 'static'){ //直接嵌套的选中
