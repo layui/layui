@@ -228,16 +228,17 @@ layui.use('table', function(){
     //,width: 900
     //,height: 274
     ,cols: [[ //标题栏
-      {type: 'checkbox', LAY_CHECKED: true}
-      ,{field: 'id', title: 'ID', width: 80, sort: true}
-      ,{type: 'space', width: 100} //空列
-      ,{field: 'username', title: '用户名', width: 120}
-      ,{field: 'email', title: '邮箱', width: 150}
-      ,{field: 'sign', title: '签名', width: 150}
-      ,{field: 'sex', title: '性别', width: 80}
-      ,{field: 'city', title: '城市', width: 100}
-      // ,{field: 'experience', title: '积分', width: 80, sort: true}
-      ,{field: 'experience', title: '积分', width: 80, sort: true, totalRow: '{{= parseInt(d.TOTAL_NUMS) }}'}
+      //{type: 'space'},
+      {type: 'checkbox', LAY_CHECKED: true},
+      {field: 'id', title: 'ID', width: 80, sort: true},
+      {type: 'space', width: 100}, //空列
+      {field: 'username', title: '用户名', width: 120},
+      {field: 'email', title: '邮箱', width: 150},
+      {field: 'sign', title: '签名', minWidth: 150},
+      {field: 'sex', title: '性别', width: 80},
+      {field: 'city', title: '城市', width: 100},
+      //{field: 'experience', title: '积分', width: 80, sort: true},
+      {field: 'experience', title: '积分', width: 80, sort: true, totalRow: '{{= parseInt(d.TOTAL_NUMS) }}'}
     ]]
     ,data: [{
       "id": "10001"
