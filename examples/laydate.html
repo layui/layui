@@ -257,13 +257,19 @@ layui.use('laydate', function(laydate){
     }
   });
   
-  //同时绑定多个
+  // 同时绑定多个
+  laydate.render({
+    elem: '.test-item',
+    trigger: 'click'
+  });
+  /*
   lay('.test-item').each(function(){
     laydate.render({
       elem: this
       ,trigger: 'click'
     });
   });
+  */
   
   //自定义重要日
   var ins555 = laydate.render({
