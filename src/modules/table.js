@@ -2057,12 +2057,12 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     };
 
      // 行工具条单击事件
-    that.layBody.on('click', '*[lay-event]', function(){
+    that.layBody.on('click', '*[lay-event]', function(e){
       toolFn.call(this);
-      return false;
-    }).on('dblclick', '*[lay-event]', function(){ //行工具条双击事件
+      layui.stope(e);
+    }).on('dblclick', '*[lay-event]', function(e){ //行工具条双击事件
       toolFn.call(this, 'toolDouble');
-      return false;
+      layui.stope(e);
     });
     
     //同步滚动条
