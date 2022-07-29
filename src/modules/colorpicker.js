@@ -175,6 +175,9 @@ layui.define(['jquery', 'lay'], function(exports){
       });
       return that;
     }
+
+    // 合并 lay-options 属性上的配置信息
+    that.config = $.extend(options, lay.options(elem[0]));
     
     //颜色选择框对象
     var elemColorBox = $(['<div class="layui-unselect layui-colorpicker">'
