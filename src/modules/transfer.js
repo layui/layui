@@ -427,14 +427,22 @@ layui.define(['laytpl', 'form'], function(exports){
     
     //搜索
     that.laySearch.find('input').on('keyup', function(){
-      var value = this.value
-      ,thisDataElem = $(this).parents('.'+ ELEM_SEARCH).eq(0).siblings('.'+ ELEM_DATA)
-      ,thisListElem = thisDataElem.children('li');
+      var value = this.value;
+      var thisDataElem = $(this).parents('.'+ ELEM_SEARCH).eq(0).siblings('.'+ ELEM_DATA);
+      var thisListElem = thisDataElem.children('li');
 
       thisListElem.each(function(){
-        var thisList = $(this)
-        ,thisElemCheckbox = thisList.find('input[type="checkbox"]')
-        ,isMatch = thisElemCheckbox[0].title.indexOf(value) !== -1;
+        var thisList = $(this);
+        var thisElemCheckbox = thisList.find('input[type="checkbox"]');
+        var title = thisElemCheckbox[0].title;
+
+        // 是否区分大小写
+        if(options.showSearch !== 'cs'){
+          title = title.toLowerCase();
+          value = value.toLowerCase();
+        }
+
+        var isMatch = title.indexOf(value) !== -1;
 
         thisList[isMatch ? 'removeClass': 'addClass'](HIDE);
         thisElemCheckbox.data('hide', isMatch ? false : true);
