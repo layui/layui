@@ -162,11 +162,25 @@ layui.define(['jquery', 'lay'], function(exports){
 
   //初始颜色选择框
   Class.prototype.render = function(){
-    var that = this
-    ,options = that.config
+    var that = this;
+    var options = that.config;
+
+    // 若 elem 非唯一，则拆分为多个实例
+    var elem = $(options.elem);
+    if(elem.length > 1){
+      layui.each(elem, function(){
+        colorpicker.render($.extend({}, options, {
+          elem: this
+        }));
+      });
+      return that;
+    }
+
+    // 合并 lay-options 属性上的配置信息
+    $.extend(options, lay.options(elem[0]));
     
     //颜色选择框对象
-    ,elemColorBox = $(['<div class="layui-unselect layui-colorpicker">'
+    var elemColorBox = $(['<div class="layui-unselect layui-colorpicker">'
       ,'<span '+ (options.format == 'rgb' && options.alpha
           ? 'class="layui-colorpicker-trigger-bgcolor"'
         : '') +'>'
@@ -196,7 +210,7 @@ layui.define(['jquery', 'lay'], function(exports){
     ,'</div>'].join(''))
 
     //初始化颜色选择框
-    var othis = $(options.elem);  
+    var othis = options.elem = $(options.elem);  
     options.size && elemColorBox.addClass('layui-colorpicker-'+ options.size); //初始化颜色选择框尺寸
     
     //插入颜色选择框
