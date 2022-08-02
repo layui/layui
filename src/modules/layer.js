@@ -1280,7 +1280,7 @@ layer.photos = function(options, loop, key){
   loadImage(data[start].src, function(img){
     layer.close(dict.loadi);
     
-    let alt = data[start].alt||'';
+    var alt = data[start].alt||'';
 
     //切换图片时不出现动画
     if(key) options.anim = -1;
@@ -1321,7 +1321,7 @@ layer.photos = function(options, loop, key){
       content: '<div class="layui-layer-phimg">'
         +'<img src="'+ data[start].src +'" alt="'+ alt +'" layer-pid="'+ data[start].pid +'">'
         +function(){
-          let tip = '<div class="layui-layer-imgsee">';
+          var tip = '<div class="layui-layer-imgsee">';
 
           if(data.length > 1){
             tip += '<span class="layui-layer-imguide"><a href="javascript:;" class="layui-layer-iconext layui-layer-imgprev"></a><a href="javascript:;" class="layui-layer-iconext layui-layer-imgnext"></a></span>';
