@@ -1327,20 +1327,20 @@ layer.photos = function(options, loop, key){
             tip += '<span class="layui-layer-imguide"><a href="javascript:;" class="layui-layer-iconext layui-layer-imgprev"></a><a href="javascript:;" class="layui-layer-iconext layui-layer-imgnext"></a></span>';
 
             if(alt===''){
-              tip += '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><em>'+ dict.imgIndex +' / '+ data.length +'</em></span></div>';
+              tip += '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><em>'+ dict.imgIndex +' / '+ data.length +'</em><a href="'+data[start].src+'" target="_blank">查看原图</a></span></div>';
             }
             else{
-              tip += '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><span>'+ alt +'</span><em>'+ dict.imgIndex +' / '+ data.length +'</em></span></div>';
+              tip += '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><span>'+ alt +'</span><em>'+ dict.imgIndex +' / '+ data.length +'</em><a href="'+data[start].src+'" target="_blank">查看原图</a></span></div>';
             }
 
             tip += '</div>';
           }
           else if(data.length === 1){
             if(alt===''){
-              tip = '';
+              tip = '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><a href="'+data[start].src+'" target="_blank">查看原图</a></span></div>';
             }
             else{
-              tip += '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><span>'+ alt +'</span></span></div>';
+              tip += '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><span>'+ alt +'</span><a href="'+data[start].src+'" target="_blank">查看原图</a></span></div>';
               tip += '</div>';
             }
           }
