@@ -66,6 +66,12 @@ body{padding:20px;}
         layui.$('#LAY-test1').val(color);
         document.body.style.backgroundColor = color;
       }
+      ,cancel: function(color){
+        console.log('cancel', color);
+      }
+      ,close: function(color){
+        console.log('close', color);
+      }
     });
     
     colorpicker.render({
