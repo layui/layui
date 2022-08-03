@@ -704,6 +704,8 @@ layui.define(['jquery', 'lay'], function(exports){
       }
       elemColorBoxSpan[0].style.background = that.color || '';
       
+      // 取消选择的回调
+      typeof options.cancel === 'function' && options.cancel(that.color);
       that.removePicker();
     });
 
