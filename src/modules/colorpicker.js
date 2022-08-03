@@ -6,13 +6,14 @@
 layui.define(['jquery', 'lay'], function(exports){
   "use strict";
   
-  var $ = layui.jquery
-  ,lay = layui.lay
-  ,device = layui.device()
-  ,clickOrMousedown = (device.mobile ? 'click' : 'mousedown')
+  var $ = layui.$;
+  var lay = layui.lay;
+  var hint = layui.hint();
+  var device = layui.device();
+  var clickOrMousedown = (device.mobile ? 'click' : 'mousedown');
 
   //外部接口
-  ,colorpicker = {
+  var colorpicker = {
     config: {}
     ,index: layui.colorpicker ? (layui.colorpicker.index + 10000) : 0
 
@@ -27,16 +28,19 @@ layui.define(['jquery', 'lay'], function(exports){
     ,on: function(events, callback){
       return layui.onevent.call(this, 'colorpicker', events, callback);
     }
-  }
+  };
   
-  //操作当前实例
-  ,thisColorPicker = function(){
-    var that = this
-    ,options = that.config;
+  // 操作当前实例
+  var thisModule = function(){
+    var that = this;
+    var options = that.config;
+    var id = options.id;
+
+    thisModule.that[id] = that; // 记录当前实例对象
 
     return {
       config: options
-    }
+    };
   }
 
   //字符常量
@@ -213,15 +217,18 @@ layui.define(['jquery', 'lay'], function(exports){
     var othis = options.elem = $(options.elem);  
     options.size && elemColorBox.addClass('layui-colorpicker-'+ options.size); //初始化颜色选择框尺寸
     
-    //插入颜色选择框
+    // 插入颜色选择框
     othis.addClass('layui-inline').html(
       that.elemColorBox = elemColorBox
     );
+
+    //初始化 id 参数
+    options.id = ('id' in options) ? options.id : that.index;
     
-    //获取背景色值
+    // 获取背景色值
     that.color = that.elemColorBox.find('.'+ PICKER_TRIG_SPAN)[0].style.background;
     
-    //相关事件
+    // 相关事件
     that.events();
   };
 
@@ -291,6 +298,9 @@ layui.define(['jquery', 'lay'], function(exports){
       that.removePicker(Class.thisElemInd); 
       $('body').append(elemPicker);
     }
+
+    // 记录当前执行的实例索引
+    colorpicker.thisId = options.id;
     
     Class.thisElemInd = that.index; //记录最新打开的选择器索引
     Class.thisColor =  elemColorBox.style.background //记录最新打开的选择器颜色选中值
@@ -301,9 +311,18 @@ layui.define(['jquery', 'lay'], function(exports){
 
   //颜色选择器移除
   Class.prototype.removePicker = function(index){
-    var that = this
-    ,options = that.config;
-    $('#layui-colorpicker'+ (index || that.index)).remove();
+    var that = this;
+    var options = that.config;
+    var elem = $('#layui-colorpicker'+ (index || that.index));
+
+    if(elem[0]){
+      elem.remove();
+      delete colorpicker.thisId;
+
+      // 面板关闭后的回调
+      typeof options.close === 'function' && options.close(that.color);
+    }
+
     return that;
   };
   
@@ -640,14 +659,12 @@ layui.define(['jquery', 'lay'], function(exports){
     });
   }
 
-  //颜色选择器输入
+  // 颜色选择器输入
   Class.prototype.events = function(){
-    var that = this
-    ,options = that.config
-    
-    ,elemColorBoxSpan = that.elemColorBox.find('.' + PICKER_TRIG_SPAN)
-    
-    //弹出颜色选择器
+    var that = this;
+    var options = that.config;
+
+    // 弹出颜色选择器
     that.elemColorBox.on('click' , function(){
       that.renderPicker();
       if($(ELEM_MAIN)[0]){
@@ -655,11 +672,18 @@ layui.define(['jquery', 'lay'], function(exports){
         that.side();
       };   
     });
-    
-    if(!options.elem[0] || that.elemColorBox[0].eventHandler) return;
-    
+  };
+
+  //全局事件
+  (function(){
     //绑定关闭控件事件
     $doc.on(clickOrMousedown, function(e){
+      if(!colorpicker.thisId) return;
+      var that = thisModule.getThis(colorpicker.thisId);
+      if(!that) return;
+
+      var elemColorBoxSpan = that.elemColorBox.find('.' + PICKER_TRIG_SPAN);
+
       //如果点击的元素是颜色框
       if($(e.target).hasClass(ELEM) 
         || $(e.target).parents('.'+ELEM)[0]
@@ -685,19 +709,31 @@ layui.define(['jquery', 'lay'], function(exports){
 
     //自适应定位
     $win.on('resize', function(){
+      if(!colorpicker.thisId) return;
+      var that = thisModule.getThis(colorpicker.thisId);
+      if(!that) return;
+
       if(!that.elemPicker ||  !$(ELEM_MAIN)[0]){
         return false;
       }
       that.position();
     });
-    
-    that.elemColorBox[0].eventHandler = true;
+  })();
+
+  // 记录所有实例
+  thisModule.that = {}; // 记录所有实例对象
+  
+  // 获取当前实例对象
+  thisModule.getThis = function(id){
+    var that = thisModule.that[id];
+    if(!that) hint.error(id ? (MOD_NAME +' instance with ID \''+ id +'\' not found') : 'ID argument required');
+    return that;
   };
   
   //核心入口
   colorpicker.render = function(options){
     var inst = new Class(options);
-    return thisColorPicker.call(inst);
+    return thisModule.call(inst);
   };
   
   exports(MOD_NAME, colorpicker);
