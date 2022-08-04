@@ -682,6 +682,7 @@ layui.define(['jquery', 'lay'], function(exports){
       var that = thisModule.getThis(colorpicker.thisId);
       if(!that) return;
 
+      var options = that.config;
       var elemColorBoxSpan = that.elemColorBox.find('.' + PICKER_TRIG_SPAN);
 
       //如果点击的元素是颜色框
