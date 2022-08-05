@@ -491,8 +491,8 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
 
       item2.key = i1 + '-' + i2;
       item2.hide = item2.hide || false;
-      item2.colspan = item2.colspan || 1;
-      item2.rowspan = item2.rowspan || 1;
+      item2.colspan = item2.colspan || 0;
+      item2.rowspan = item2.rowspan || 0;
 
       //根据列类型，定制化参数
       that.initOpts(item2);
@@ -2140,8 +2140,8 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
           
           var row = $.extend({
             title: th.text()
-            ,colspan: th.attr('colspan') || 1 //列单元格
-            ,rowspan: th.attr('rowspan') || 1 //行单元格
+            ,colspan: th.attr('colspan') || 0 //列单元格
+            ,rowspan: th.attr('rowspan') || 0 //行单元格
           }, itemData);
 
           if(row.colspan < 2) cols.push(row);
