@@ -644,7 +644,6 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     if (options.cols.length > 1) {
       for (var i = options.cols.length - 1; i >= 0; i--) {
         // 自下向上处理合并表头的宽度
-        debugger;
         layui.each(that.layHeader.first().find('tr').eq(i).find('>th>div.laytable-cell-group'), function (i1, item1) {
           item1 = $(item1);
           var thElem = item1.parent();
