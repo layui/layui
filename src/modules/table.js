@@ -154,7 +154,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
             return '';
           }()
           ,'{{# var isSort = !(item2.colGroup) && item2.sort; }}'
-          ,'<th data-field="{{= item2.field||i2 }}" data-key="{{=d.index}}-{{=i1}}-{{=i2}}" {{# if( item2.parentKey){ }}data-parentkey="{{= item2.parentKey }}"{{# } }} {{# if(item2.minWidth){ }}data-minwidth="{{=item2.minWidth}}"{{# } }} '+ rowCols +' {{# if(item2.unresize || item2.colGroup){ }}data-unresize="true"{{# } }} class="{{# if(item2.hide){ }}layui-hide{{# } }}{{# if(isSort){ }} layui-unselect{{# } }}{{# if(!item2.field){ }} layui-table-col-special{{# } }}">'
+          ,'<th data-field="{{= item2.field||i2 }}" data-key="{{=d.index}}-{{=i1}}-{{=i2}}" {{# if( item2.parentKey){ }}data-parentkey="{{= item2.parentKey }}"{{# } }} {{# if(item2.minWidth){ }}data-minwidth="{{=item2.minWidth}}"{{# } }} '+ rowCols +' {{# if(item2.unresize || item2.colGroup){ }}data-unresize="true"{{# } }} class="{{# if(item2.hide){ }}layui-hide{{# } }}{{# if(isSort){ }} layui-unselect{{# } }}{{# if(!item2.field){ }} layui-table-col-special{{# } }}"{{# if(item2.title){ }} title="{{ layui.$(\'<div>\' + item2.title + \'</div>\').text() }}"{{# } }}>'
             ,'<div class="layui-table-cell laytable-cell-'
               ,'{{# if(item2.colGroup){ }}'
                 ,'group'
@@ -491,8 +491,8 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
 
       item2.key = i1 + '-' + i2;
       item2.hide = item2.hide || false;
-      item2.colspan = item2.colspan || 1;
-      item2.rowspan = item2.rowspan || 1;
+      item2.colspan = item2.colspan || 0;
+      item2.rowspan = item2.rowspan || 0;
 
       //根据列类型，定制化参数
       that.initOpts(item2);
@@ -636,7 +636,35 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
       });
     });
   };
-  
+
+  // 设置合并表头的宽度
+  Class.prototype.setGroupWidth = function (thElem) {
+    var that = this;
+    var options = that.config;
+    var parentKey;
+    if (options.cols.length > 1) {
+      for (var i = thElem ? thElem.closest('tr').index() - 1 : options.cols.length - 1; i >= 0; i--) {
+        // 自下向上处理合并表头的宽度
+        parentKey = thElem ? thElem.attr('data-parentkey') : '';
+        layui.each(that.layHeader.first().find('tr').eq(i).find('>th' + (parentKey && '[data-key="' + that.index + '-' + parentKey + '"]') + '>div.laytable-cell-group'), function (i1, item1) {
+          item1 = $(item1);
+          var width = 0;
+          var key = item1.parent().attr('data-key');
+          layui.each(that.layHeader.first().find('th[data-parentkey="' + key.substr(key.indexOf('-') + 1) + '"]'), function (i2, item2) {
+            item2 = $(item2);
+            if (item2.hasClass(HIDE)) {
+              return;
+            }
+            width += item2.children('div.layui-table-cell').outerWidth();
+          });
+          that.layHeader.find('th[data-key="'+key+'"]').children('div.layui-table-cell').outerWidth(width);
+          thElem && (thElem = item1.parent());
+        })
+      }
+
+    }
+  }
+
   //动态分配列宽
   Class.prototype.setColsWidth = function(){
     var that = this;
@@ -680,6 +708,9 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
             } else if(!width){ // 列宽未填写
               item2.width = width = 0;
               autoColNums++;
+            } else {
+              // 设置了宽度校验是否小于最小宽度，这里是否要判断
+              item2.type === 'normal' && width < minWidth && (item2.width = width = minWidth);
             }
           } else if(autoWidth && autoWidth < minWidth){
             autoColNums--;
@@ -721,6 +752,13 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
           item.style.width = Math.floor((parseFloat(item3.width) / 100) * cntrWidth) + 'px';
         });
       }
+
+      // 因为有可能设置的width小于minWidth被调整过，这里重新设置一遍确保最新
+      else {
+        that.getCssRule(options.index +'-'+ item3.key, function(item){
+          item.style.width = item3.width + 'px';
+        });
+      }
     });
     
     // 填补 Math.floor 造成的数差
@@ -750,7 +788,9 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
         }
       });
     }
-    
+
+    that.setGroupWidth();
+
     that.loading(!0);
   };
   
@@ -1571,7 +1611,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
               var lis = [];
               that.eachCols(function(i, item){ 
                 if(item.field && item.type == 'normal'){
-                  lis.push('<li><input type="checkbox" name="'+ item.field +'" data-key="'+ item.key +'" data-parentkey="'+ (item.parentKey||'') +'" lay-skin="primary" '+ (item.hide ? '' : 'checked') +' title="'+ util.escape(item.title || item.field) +'" lay-filter="LAY_TABLE_TOOL_COLS"></li>');
+                  lis.push('<li><input type="checkbox" name="'+ item.field +'" data-key="'+ item.key +'" data-parentkey="'+ (item.parentKey||'') +'" lay-skin="primary" '+ (item.hide ? '' : 'checked') +' title="'+ util.escape($('<div>' + (item.title || item.field) + '</div>').text()) +'" lay-filter="LAY_TABLE_TOOL_COLS"></li>');
                 }
               });
               return lis.join('');
@@ -1721,6 +1761,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
             var setWidth = dict.ruleWidth + e.clientX - dict.offset[0];
             if(setWidth < dict.minWidth) setWidth = dict.minWidth;
             dict.rule.style.width = setWidth + 'px';
+            thisTable.that[thisTable.eventMoveElem.closest('.' + ELEM_VIEW).attr('lay-id')].setGroupWidth(thisTable.eventMoveElem);
             layer.close(that.tipsIndex);
           }
         }
@@ -1728,7 +1769,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
         if(thisTable.eventMoveElem){
           dict = {};
           _BODY.css('cursor', '');
-          that.scrollPatch();
+          thisTable.that[thisTable.eventMoveElem.closest('.' + ELEM_VIEW).attr('lay-id')].scrollPatch();
 
           // 清除当前拖拽信息
           thisTable.eventMoveElem.removeData(DATA_MOVE_NAME);
@@ -1920,11 +1961,12 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
       var field = othis.parent().data('field');
       var index = othis.parents('tr').eq(0).data('index');
       var data = table.cache[that.key][index];
-      
+      var oldValue = data[field];
       data[field] = value; // 更新缓存中的值
       layui.event.call(this, MOD_NAME, 'edit('+ filter +')', commonMember.call(this, {
         value: value
         ,field: field
+        ,oldValue: oldValue
       }));
     }).on('blur', '.'+ELEM_EDIT, function(){
       var othis = $(this);
@@ -2140,8 +2182,8 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
           
           var row = $.extend({
             title: th.text()
-            ,colspan: th.attr('colspan') || 1 //列单元格
-            ,rowspan: th.attr('rowspan') || 1 //行单元格
+            ,colspan: th.attr('colspan') || 0 //列单元格
+            ,rowspan: th.attr('rowspan') || 0 //行单元格
           }, itemData);
 
           if(row.colspan < 2) cols.push(row);
