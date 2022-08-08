@@ -302,9 +302,9 @@
           year: tDate.getFullYear()
           ,month: tDate.getMonth()
           ,date: tDate.getDate()
-          ,hours: '23'
-          ,minutes: '59'
-          ,seconds: '59'
+          ,hours: i ? 23 : 0
+          ,minutes: i ? 59 : 0
+          ,seconds: i ? 59 : 0
         }).getTime() 
         ,STAMP = 86400000 //代表一天的毫秒数
         ,thisDate = new Date(
@@ -774,16 +774,20 @@
     
     //如果当前日期不在设定的最大小日期区间，则自动纠正在可选区域
     //校验主面板是否在可选日期区间
+    var minMaxError;
     if(that.getDateTime(dateTime) > that.getDateTime(options.max)){ //若超出最大日期
       dateTime = options.dateTime = lay.extend({}, options.max);
+      minMaxError = true;
     } else if(that.getDateTime(dateTime) < that.getDateTime(options.min)){ //若少于最小日期
       dateTime = options.dateTime = lay.extend({}, options.min);
+      minMaxError = true;
     }
     
     //校验右侧面板是否在可选日期区间
     if(options.range){
       if(that.getDateTime(that.endDate) < that.getDateTime(options.min) || that.getDateTime(that.endDate) > that.getDateTime(options.max)){
         that.endDate = lay.extend({}, options.max);
+        minMaxError = true;
       }
       // 有时间范围的情况下初始化startTime和endTime
       that.startTime = {
@@ -797,7 +801,10 @@
         seconds: that.endDate.seconds,
       }
     }
-    
+
+    //初始值不在最大最小范围内
+    minMaxError && that.setValue(that.parse()).hint('初始值' + lang.invalidDate + lang.formatError[1]);
+
     fn && fn();
     return that;
   };
