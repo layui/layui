@@ -36,9 +36,9 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
 
   //操作当前实例
   ,thisModule = function(){
-    var that = this
-    ,options = that.config
-    ,id = options.id;
+    var that = this;
+    var options = that.config;
+    var id = options.id;
 
     thisModule.that[id] = that; //记录当前实例对象
 

@@ -60,11 +60,18 @@ body{padding:20px;}
       //,predefine: true //开启预定义颜色
       //,colors: ['#F00','#0F0','#00F','rgb(255, 69, 0)','rgba(255, 69, 0, 0.5)']
       ,change: function(color){
-        document.body.style.backgroundColor = color;
+        this.done(color);
       }
       ,done: function(color){
         layui.$('#LAY-test1').val(color);
         document.body.style.backgroundColor = color;
+      }
+      ,cancel: function(color){
+        this.done(color);
+        console.log('cancel', color);
+      }
+      ,close: function(color){
+        console.log('close', color);
       }
     });
     
