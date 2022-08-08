@@ -638,17 +638,18 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
   };
 
   // 设置合并表头的宽度
-  Class.prototype.setGroupWidth = function () {
+  Class.prototype.setGroupWidth = function (thElem) {
     var that = this;
     var options = that.config;
+    var parentKey;
     if (options.cols.length > 1) {
-      for (var i = options.cols.length - 1; i >= 0; i--) {
+      for (var i = thElem ? thElem.closest('tr').index() - 1 : options.cols.length - 1; i >= 0; i--) {
         // 自下向上处理合并表头的宽度
-        layui.each(that.layHeader.first().find('tr').eq(i).find('>th>div.laytable-cell-group'), function (i1, item1) {
+        parentKey = thElem ? thElem.attr('data-parentkey') : '';
+        layui.each(that.layHeader.first().find('tr').eq(i).find('>th' + (parentKey && '[data-key="' + that.index + '-' + parentKey + '"]') + '>div.laytable-cell-group'), function (i1, item1) {
           item1 = $(item1);
-          var thElem = item1.parent();
           var width = 0;
-          var key = thElem.attr('data-key');
+          var key = item1.parent().attr('data-key');
           layui.each(that.layHeader.first().find('th[data-parentkey="' + key.substr(key.indexOf('-') + 1) + '"]'), function (i2, item2) {
             item2 = $(item2);
             if (item2.hasClass(HIDE)) {
@@ -656,8 +657,8 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
             }
             width += item2.children('div.layui-table-cell').outerWidth();
           });
-          // item1.outerWidth(width);
           that.layHeader.find('th[data-key="'+key+'"]').children('div.layui-table-cell').outerWidth(width);
+          thElem && (thElem = item1.parent());
         })
       }
 
@@ -1760,7 +1761,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
             var setWidth = dict.ruleWidth + e.clientX - dict.offset[0];
             if(setWidth < dict.minWidth) setWidth = dict.minWidth;
             dict.rule.style.width = setWidth + 'px';
-            thisTable.that[thisTable.eventMoveElem.closest('.' + ELEM_VIEW).attr('lay-id')].setGroupWidth();
+            thisTable.that[thisTable.eventMoveElem.closest('.' + ELEM_VIEW).attr('lay-id')].setGroupWidth(thisTable.eventMoveElem);
             layer.close(that.tipsIndex);
           }
         }
