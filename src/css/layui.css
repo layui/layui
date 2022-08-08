@@ -544,8 +544,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-input, .layui-textarea, .layui-select,
 .layui-form-pane .layui-form-label, 
-.layui-form-pane .layui-form-item[pane],
-.layui-layedit, .layui-layedit-tool{border-color: #eee;}
+.layui-form-pane .layui-form-item[pane]{border-color: #eee;}
 
 .layui-border{border-width: 1px; border-style: solid; color: #5F5F5F!important;}
 .layui-border-red{border-width: 1px; border-style: solid; border-color: #FF5722!important; color: #FF5722!important;}
@@ -775,33 +774,6 @@ a cite{font-style: normal; *cursor:pointer;}
   .layui-form-item .layui-input-inline+.layui-form-mid{margin-left: 110px; top: -5px; padding: 0;}
   .layui-form-item .layui-form-checkbox{margin-right: 5px; margin-bottom: 5px;}
 }
-
-/** 富文本编辑器 **/
-.layui-layedit{border-width: 1px; border-style: solid; border-radius: 2px;}
-.layui-layedit-tool{padding: 3px 5px; border-bottom-width: 1px; border-bottom-style: solid; font-size: 0;}
-.layedit-tool-fixed{position: fixed; top: 0; border-top: 1px solid #eee;}
-.layui-layedit-tool .layedit-tool-mid,
-.layui-layedit-tool .layui-icon{display: inline-block; vertical-align: middle; text-align: center; font-size: 14px;}
-.layui-layedit-tool .layui-icon{position: relative; width: 32px; height: 30px; line-height: 30px; margin: 3px 5px; border-radius: 2px; color: #777; cursor: pointer; border-radius: 2px;}
-.layui-layedit-tool .layui-icon:hover{color: #393D49;}
-.layui-layedit-tool .layui-icon:active{color: #000;}
-.layui-layedit-tool .layedit-tool-active{background-color: #eee; color: #000;}
-.layui-layedit-tool .layui-disabled,
-.layui-layedit-tool .layui-disabled:hover{color: #d2d2d2; cursor: not-allowed;}
-.layui-layedit-tool .layedit-tool-mid{width: 1px; height: 18px; margin: 0 10px; background-color: #d2d2d2;}
-
-.layedit-tool-html{width: 50px !important; font-size: 30px !important;}
-.layedit-tool-b,
-.layedit-tool-code,
-.layedit-tool-help{font-size: 16px !important;}
-.layedit-tool-d,
-.layedit-tool-unlink,
-.layedit-tool-face,
-.layedit-tool-image{font-size: 18px !important;}
-.layedit-tool-image input{position: absolute; font-size: 0; left: 0; top: 0; width: 100%; height: 100%; opacity: 0.01; filter: Alpha(opacity=1); cursor: pointer;}
-
-.layui-layedit-iframe iframe{display: block; width: 100%;}
-#LAY_layedit_code{overflow: hidden;}
 
 /** 分页 **/
 .layui-laypage{display: inline-block; *display: inline; *zoom: 1; vertical-align: middle; margin: 10px 0; font-size: 0;}
