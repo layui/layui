@@ -900,7 +900,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /* 小表格 */
 .layui-table[lay-size="sm"] th,
 .layui-table[lay-size="sm"] td{padding-top: 5px; padding-right: 10px; padding-bottom: 5px; padding-left: 10px; font-size: 12px;}
-.layui-table-view .layui-table[lay-size="sm"] .layui-table-cell{height: 30px; line-height: 20px; padding-top: 5px; padding-right: 5px;}
+.layui-table-view .layui-table[lay-size="sm"] .layui-table-cell{height: 30px; line-height: 20px; padding-top: 5px; padding-left: 5px; padding-right: 5px;}
 
 /* 数据表格 */
 .layui-table[lay-data]{display: none;}
