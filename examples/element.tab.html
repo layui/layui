@@ -113,6 +113,10 @@ layui.use(['element', 'form'], function(){
   element.on('tab(test)', function(data){
     console.log(this, data);
   });
+
+  element.on('tabDelete(tabDemo)', function(data){
+    console.log(this, data);
+  });
   
 });
 </script>
