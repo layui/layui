@@ -54,14 +54,15 @@
     ,id = options.id;
     
     thisModule.that[id] = that; //记录当前实例对象
-    
-    return {
+
+    that.inst = {
       //提示框
       hint: function(content){
         that.hint.call(that, content);
       }
       ,config: that.config
-    };
+    }
+    return that.inst;
   }
 
   //字符常量
@@ -78,8 +79,8 @@
     // 若 elem 非唯一，则拆分为多个实例
     var elem = lay(options.elem || that.config.elem);
     if(elem.length > 1){
-      layui.each(elem, function(){
-        laydate.render(lay.extend({}, that.config, {
+      lay.each(elem, function(){
+        laydate.render(lay.extend({}, that.config, lay.options(this),{
           elem: this
         }));
       });
@@ -197,9 +198,21 @@
     };
     
     options.elem = lay(options.elem);
-    options.eventElem = lay(options.eventElem);
+    // options.eventElem = lay(options.eventElem); // eventElem在文档中没有出现过，目前也没有相关的应用场景
+
     
     if(!options.elem[0]) return;
+    var thatTemp = thisModule.that[options.elem.attr('lay-key')]
+    thatTemp && thatTemp.destroy && thatTemp.destroy(); // 销毁上一个实例以便重新渲染
+
+    layui.type(options.theme) !== 'array' && (options.theme = options.theme.split(','));
+    // 设置了全面版模式
+    if (options.fullPanel) {
+      if (options.type !== 'datetime' || options.range) {
+        // 目前只支持datetime的全面版
+        delete options.fullPanel;
+      }
+    }
     
     //日期范围分隔符
     that.rangeStr =  options.range ? (
@@ -272,10 +285,10 @@
     }
     
     //设置唯一KEY
-    if(!options.elem.attr('lay-key')){
-      options.elem.attr('lay-key', that.index);
-      options.eventElem.attr('lay-key', that.index);
-    }
+    // if(!options.elem.attr('lay-key')){
+    options.elem.attr('lay-key', that.index);
+      // options.eventElem.attr('lay-key', that.index);
+    // }
     
     //记录重要日期
     options.mark = lay.extend({}, (options.calendar && options.lang === 'cn') ? {
@@ -357,7 +370,17 @@
         'layui-laydate'
         ,options.range ? ' layui-laydate-range' : ''
         ,isStatic ? (' '+ ELEM_STATIC) : ''
-        ,options.theme && options.theme !== 'default' && !/^#/.test(options.theme) ? (' laydate-theme-' + options.theme) : ''
+        ,options.fullPanel ? ' laydate-theme-fullpanel' : '' // 全面版
+        // ,options.theme && options.theme !== 'default' && !/^#/.test(options.theme) ? (' laydate-theme-' + options.theme) : ''
+        ,(function () {
+          var themeStr = '';
+          lay.each(options.theme, function (index, theme) {
+            if (theme !== 'default' && !/^#/.test(theme)) {
+              themeStr += ' laydate-theme-' + theme;
+            }
+          })
+          return themeStr;
+        })()
       ].join('')
     })
     
@@ -465,7 +488,7 @@
       if(options.type === 'datetime'){
         html.push('<span lay-type="datetime" class="'+ ELEM_TIME_BTN +'">'+ lang.timeTips +'</span>');
       }
-      if(!(!options.range && options.type === 'datetime')){
+      if(!(!options.range && options.type === 'datetime') || options.fullPanel){
         html.push('<span class="'+ ELEM_PREVIEW +'" title="'+ lang.preview +'"></span>')
       }
       
@@ -486,13 +509,37 @@
     options.showBottom && elem.appendChild(divFooter);
     
     //生成自定义主题
-    if(/^#/.test(options.theme)){
-      var style = lay.elem('style')
-      ,styleText = [
-        '#{{id}} .layui-laydate-header{background-color:{{theme}};}'
-        ,'#{{id}} .layui-this{background-color:{{theme}} !important;}'
-      ].join('').replace(/{{id}}/g, that.elemID).replace(/{{theme}}/g, options.theme);
-      
+    // if(/^#/.test(options.theme)){
+    //   var style = lay.elem('style')
+    //   ,styleText = [
+    //     '#{{id}} .layui-laydate-header{background-color:{{theme}};}'
+    //     ,'#{{id}} .layui-this{background-color:{{theme}} !important;}'
+    //   ].join('').replace(/{{id}}/g, that.elemID).replace(/{{theme}}/g, options.theme);
+    //
+    //   if('styleSheet' in style){
+    //     style.setAttribute('type', 'text/css');
+    //     style.styleSheet.cssText = styleText;
+    //   } else {
+    //     style.innerHTML = styleText;
+    //   }
+    //
+    //   lay(elem).addClass('laydate-theme-molv');
+    //   elem.appendChild(style);
+    // }
+    var style;
+    var styleText = [];
+    lay.each(options.theme, function (index, theme) {
+      if(/^#/.test(theme)){
+        style = style || lay.elem('style');
+        styleText.push([
+          '#{{id}} .layui-laydate-header{background-color:{{theme}};}'
+          ,'#{{id}} li.layui-this,#{{id}} td.layui-this>div{background-color:{{theme}} !important;}'
+          ,options.theme.indexOf('circle') !== -1 ? '' : '#{{id}} .layui-this{background-color:{{theme}} !important;}'
+        ].join('').replace(/{{id}}/g, that.elemID).replace(/{{theme}}/g, theme));
+      }
+    });
+    if (style) {
+      styleText = styleText.join('');
       if('styleSheet' in style){
         style.setAttribute('type', 'text/css');
         style.styleSheet.cssText = styleText;
@@ -521,6 +568,7 @@
     
     Class.thisElemDate = that.elemID;
 
+    that.renderAdditional()
     typeof options.ready === 'function' && options.ready(lay.extend({}, options.dateTime, {
       month: options.dateTime.month + 1
     }));
@@ -821,7 +869,7 @@
         mark = title || YMD[2];
       }
     });
-    mark && td.html('<span class="laydate-day-mark">'+ mark +'</span>');
+    mark && td.find('div').html('<span class="laydate-day-mark">'+ mark +'</span>');
     
     return that;
   };
@@ -837,7 +885,7 @@
     lay.each(options.holidays, function(idx, item) {
       lay.each(item, function(i, dayStr) {
         if(dayStr === td.attr('lay-ymd')){
-          td.html('<span class="laydate-day-holidays"' + (
+          td.find('div').html('<span class="laydate-day-holidays"' + (
             type[idx] ? ('type="'+ type[idx] +'"') : ''
           ) + '>' + YMD[2] + '</span>');
         }
@@ -931,7 +979,7 @@
       }
       YMD[1]++;
       YMD[2] = st + 1;
-      item.attr('lay-ymd', YMD.join('-')).html(YMD[2]);
+      item.attr('lay-ymd', YMD.join('-')).html('<div>' + YMD[2] + '</div>');
       that.mark(item, YMD).holidays(item, YMD).limit(item, {
         year: YMD[0]
         ,month: YMD[1] - 1
@@ -1369,6 +1417,18 @@
       });
     }, 300);
   };
+
+  // 附加的渲染处理，在ready和change的时候调用
+  Class.prototype.renderAdditional = function(){
+    var that = this;
+    var options = that.config;
+
+    // 处理全面板
+    if (options.fullPanel) {
+      that.list('time', 0);
+    }
+
+  };
   
   //执行 done/change 回调
   Class.prototype.done = function(param, type){
@@ -1387,6 +1447,7 @@
     that.preview();
     
     param = param || [that.parse(), start, end];
+    type === 'change' && that.renderAdditional();
     typeof options[type || 'done'] === 'function' && options[type || 'done'].apply(options, param);
     
     return that;
@@ -1663,24 +1724,40 @@
   //绑定的元素事件处理
   Class.prototype.events = function(){
     var that = this
-    ,options = that.config
+    var options = that.config
 
     //绑定呼出控件事件
-    ,showEvent = function(elem, bind){
-      elem.on(options.trigger, function(){
-        //已经打开的面板避免重新渲染
-        if(laydate.thisId === options.id) return;
-        bind && (that.bindElem = this);
-        that.render();
-      });
-    };
+    // var showEvent = function(elem, bind){
+    //   elem.on(options.trigger, function(){
+    //     console.log('showEvent, ' + options.trigger, elem);
+    //     //已经打开的面板避免重新渲染
+    //     if(laydate.thisId === options.id) return;
+    //     bind && (that.bindElem = this);
+    //     that.render();
+    //   });
+    // };
     
     if(!options.elem[0] || options.elem[0].eventHandler) return;
-    
-    showEvent(options.elem, 'bind');
-    showEvent(options.eventElem);
+
+    // showEvent(options.elem, 'bind');
+    // showEvent(options.eventElem);
+
+    var showFn = function(){
+      //已经打开的面板避免重新渲染
+      if(laydate.thisId === options.id) return;
+      that.bindElem = this;
+      that.render();
+    }
+    options.elem.on(options.trigger, showFn);
     
     options.elem[0].eventHandler = true;
+
+    that.destroy = function () {
+      that.remove();
+      options.elem.off(options.trigger, showFn);
+      options.elem[0].eventHandler = false;
+      delete thisModule.that[options.id];
+    }
   };
   
   //记录所有实例
@@ -1705,7 +1782,7 @@
       
       if(
         e.target === options.elem[0] || 
-        e.target === options.eventElem[0] ||
+        // e.target === options.eventElem[0] ||
         e.target === lay(options.closeStop)[0]
       ) return;
       
@@ -1745,6 +1822,14 @@
     var inst = new Class(options);
     return thisModule.call(inst);
   };
+
+  // 获取
+  laydate.getIns = function (key) {
+    var that = thisModule.getThis(key);
+    if (that) {
+      return that.inst;
+    }
+  }
   
   //将指定对象转化为日期值
   laydate.parse = function(dateTime, format, one){
@@ -1794,6 +1879,13 @@
     var that = thisModule.getThis(id || laydate.thisId);
     if(!that) return;
     return that.remove();
+  };
+
+  // 销毁实例
+  laydate.destroy = function(id){
+    var that = thisModule.getThis(id || laydate.thisId);
+    if(!that) return;
+    return that.destroy();
   };
   
   //加载方式
