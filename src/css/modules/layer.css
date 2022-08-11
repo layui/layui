@@ -73,7 +73,8 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 /* 定制化 */
 .layui-layer-dialog{min-width: 300px;}
 .layui-layer-dialog .layui-layer-content{position: relative; padding:20px; line-height:24px; word-break: break-all; overflow:hidden; font-size:14px; overflow-x: hidden; overflow-y:auto;}
-.layui-layer-dialog .layui-layer-content .layui-layer-face{position: absolute; top: 18px; left: 16px; color: #F39B12; font-size: 24px; _left: -40px;}
+.layui-layer-dialog .layui-layer-content .layui-layer-face{position: absolute; top: 18px; left: 16px; color: #959595; font-size: 24px; _left: -40px;}
+.layui-layer-dialog .layui-layer-content .layui-icon-tips{color: #F39B12;}
 .layui-layer-dialog .layui-layer-content .layui-icon-ok{color: #5FB878;}
 .layui-layer-dialog .layui-layer-content .layui-icon-close-fill{color: #FF5722;}
 .layui-layer-dialog .layui-layer-content .layui-icon-password{color: #787878;}
@@ -92,9 +93,15 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-iframe iframe{display: block; width: 100%;}
 
 .layui-layer-loading{border-radius:100%; background:none;  box-shadow:none;  border:none;}
-.layui-layer-loading .layui-layer-content{width:60px; height:24px; background:url(loading-0.gif) no-repeat;}
-.layui-layer-loading .layui-layer-loading1{width:37px; height:37px; background:url(loading-1.gif) no-repeat;}
-.layui-layer-loading .layui-layer-loading2, .layui-layer-ico16{width:32px; height:32px; background:url(loading-2.gif) no-repeat;}
+.layui-layer-loading .layui-layer-content{width: 76px; height: 38px; line-height: 38px; text-align: center;}
+.layui-layer-loading-icon{font-size: 38px; color: #959595;}
+.layui-layer-loading2{text-align: center;}
+.layui-layer-loading-2{position: relative; height: 38px;}
+.layui-layer-loading-2:before,
+.layui-layer-loading-2:after{content: ''; position: absolute; left: 50%; top: 50%; width: 38px; height: 38px; margin: -19px 0 0 -19px; border-radius: 50%; border: 3px solid #d2d2d2; box-sizing: border-box;}
+.layui-layer-loading-2:after{border-color: transparent; border-left-color: #1E9FFF; border-right-color: #1E9FFF;}
+
+
 .layui-layer-tips{background: none; box-shadow:none; border:none;}
 .layui-layer-tips .layui-layer-content{position: relative; line-height: 22px; min-width: 12px; padding: 8px 15px; font-size: 12px; _float:left; border-radius: 2px; box-shadow: 1px 1px 3px rgba(0,0,0,.2); background-color: #000; color: #fff;}
 .layui-layer-tips .layui-layer-close{right:-2px; top:-1px;}
