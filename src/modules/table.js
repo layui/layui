@@ -347,6 +347,11 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     if(options.height && /^full-\d+$/.test(options.height)){
       that.fullHeightGap = options.height.split('-')[1];
       options.height = _WIN.height() - that.fullHeightGap;
+    } else if (options.height && /^#\w+-{1}\d+$/.test(options.height)) {
+      var parentDiv = options.height.split("-");
+      that.parentHeightGap = parentDiv.pop();
+      that.parentDiv = parentDiv.join("-");
+      options.height = $(that.parentDiv).height() - that.parentHeightGap;
     }
     
     //初始化一些参数
@@ -1479,6 +1484,10 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
       height = _WIN.height() - that.fullHeightGap;
       if(height < 135) height = 135;
       that.elem.css('height', height);
+    } else if (that.parentDiv && that.parentHeightGap) {
+      height = $(that.parentDiv).height() - that.parentHeightGap;
+      if (height < 135) height = 135;
+      that.elem.css("height", height);
     }
     
     if(!height) return;
