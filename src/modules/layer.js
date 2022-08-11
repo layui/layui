@@ -1,6 +1,6 @@
 ﻿/**
- * layer - 通用 Web 弹出层组件
- * MIT Licensed 
+ * layer
+ * 通用 Web 弹出层组件
  */
 
 ;!function(window, undefined){
@@ -92,11 +92,11 @@ var isLayui = window.layui && layui.define, $, win, ready = {
 
 //默认内置方法。
 var layer = {
-  v: '3.5.1',
-  ie: function(){ //ie版本
+  v: '3.6.0',
+  ie: function(){ //ie 版本
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
-      (agent.match(/msie\s(\d+)/) || [])[1] || '11' //由于ie11并没有msie的标识
+      (agent.match(/msie\s(\d+)/) || [])[1] || '11' //由于 ie11 并没有 msie 的标识
     ) : false;
   }(),
   index: (window.layer && window.layer.v) ? 100000 : 0,
@@ -112,18 +112,23 @@ var layer = {
     
     if(!options.extend) return this;
     
+    //加载 css
     isLayui 
       ? layui.addcss('modules/layer/' + options.extend)
-    : ready.link('theme/' + options.extend);
+    : ready.link('css/' + options.extend);
     
     return this;
   },
 
-  //主体CSS等待事件
+  //主体 CSS 等待事件
   ready: function(callback){
     var cssname = 'layer', ver = ''
-    ,path = (isLayui ? 'modules/layer/' : 'theme/') + 'default/layer.css?v='+ layer.v + ver;
-    isLayui ? layui.addcss(path, callback, cssname) : ready.link(path, callback, cssname);
+    ,path = (isLayui ? 'modules/' : 'css/') + 'layer.css?v='+ layer.v + ver;
+    isLayui ? (
+      layui['layui.all'] 
+        ? (typeof callback === 'function' && callback()) 
+      : layui.addcss(path, callback, cssname)
+    ) : ready.link(path, callback, cssname);
     return this;
   },
   
@@ -256,21 +261,85 @@ Class.pt.vessel = function(conType, callback){
   
   config.zIndex = zIndex;
   callback([
-    //遮罩
+    // 遮罩
     config.shade ? ('<div class="'+ doms.SHADE +'" id="'+ doms.SHADE + times +'" times="'+ times +'" style="'+ ('z-index:'+ (zIndex-1) +'; ') +'"></div>') : '',
     
-    //主体
+    // 主体
     '<div class="'+ doms[0] + (' layui-layer-'+ready.type[config.type]) + (((config.type == 0 || config.type == 2) && !config.shade) ? ' layui-layer-border' : '') + ' ' + (config.skin||'') +'" id="'+ doms[0] + times +'" type="'+ ready.type[config.type] +'" times="'+ times +'" showtime="'+ config.time +'" conType="'+ (conType ? 'object' : 'string') +'" style="z-index: '+ zIndex +'; width:'+ config.area[0] + ';height:' + config.area[1] + ';position:'+ (config.fixed ? 'fixed;' : 'absolute;') +'">'
       + (conType && config.type != 2 ? '' : titleHTML)
-      + '<div id="'+ (config.id||'') +'" class="layui-layer-content'+ ((config.type == 0 && config.icon !== -1) ? ' layui-layer-padding' :'') + (config.type == 3 ? ' layui-layer-loading'+config.icon : '') +'">'
-        + (config.type == 0 && config.icon !== -1 ? '<i class="layui-layer-ico layui-layer-ico'+ config.icon +'"></i>' : '')
+
+      // 内容区
+      + '<div'+ (config.id ? ' id="'+ config.id +'"' : '') +' class="layui-layer-content'+ ((config.type == 0 && config.icon !== -1) ? ' layui-layer-padding' : '') + (config.type == 3 ? ' layui-layer-loading'+config.icon : '') +'">'
+        // 表情或图标
+        + function(){
+          var face = [
+            'layui-icon-tips',
+            'layui-icon-ok',
+            'layui-icon-close-fill',
+            'layui-icon-help',
+            'layui-icon-password',
+            'layui-icon-face-cry',
+            'layui-icon-face-smile'
+          ];
+
+          var additFaceClass;
+
+          // 动画类
+          var animClass = 'layui-anim layui-anim-rotate layui-anim-loop';
+
+          // 信息框表情
+          if(config.type == 0 && config.icon !== -1){
+            // 加载（加载图标）
+            if(config.icon == 16){
+              additFaceClass = 'layui-icon layui-icon-loading '+ animClass;
+            }
+            return '<i class="layui-layer-face layui-icon '+ (
+              additFaceClass || face[config.icon] || face[0]
+            ) +'"></i>';
+          }
+
+          // 加载层图标
+          if(config.type == 3){
+            var type = [
+              'layui-icon-loading', 
+              'layui-icon-loading-1'
+            ];
+            // 风格 2
+            if(config.icon == 2){
+              return '<div class="layui-layer-loading-2 '+ animClass +'"></div>';
+            }
+            return '<i class="layui-layer-loading-icon layui-icon '+ (
+              type[config.icon] || type[0]
+            )+' '+ animClass +'"></i>'
+          }
+
+          return '';
+        }()
         + (config.type == 1 && conType ? '' : (config.content||''))
       + '</div>'
-      + '<span class="layui-layer-setwin">'+ function(){
-        var closebtn = ismax ? '<a class="layui-layer-min" href="javascript:;"><cite></cite></a><a class="layui-layer-ico layui-layer-max" href="javascript:;"></a>' : '';
-        config.closeBtn && (closebtn += '<a class="layui-layer-ico '+ doms[7] +' '+ doms[7] + (config.title ? config.closeBtn : (config.type == 4 ? '1' : '2')) +'" href="javascript:;"></a>');
-        return closebtn;
-      }() + '</span>'
+
+      // 右上角按钮
+      + '<div class="layui-layer-setwin">'+ function(){
+        var arr = [];
+
+        // 最小化、最大化
+        if(ismax){
+          arr.push('<span class="layui-layer-min"></span>');
+          arr.push('<span class="layui-layer-max"></span>');
+        }
+
+        // 关闭按钮
+        if(config.closeBtn){
+          arr.push('<span class="layui-icon layui-icon-close '+ [
+            doms[7], 
+            doms[7] + (config.title ? config.closeBtn : (config.type == 4 ? '1' : '2'))
+          ].join(' ') +'"></span>')
+        }
+
+        return arr.join('');
+      }() + '</div>'
+
+      // 底部按钮
       + (config.btn ? function(){
         var button = '';
         typeof config.btn === 'string' && (config.btn = [config.btn]);
@@ -294,7 +363,7 @@ Class.pt.creat = function(){
   ,conType = typeof content === 'object'
   ,body = $('body');
   
-  if(config.id && $('#'+config.id)[0])  return;
+  if(config.id && $('.'+ doms[0]).find('#'+ config.id)[0]) return;
 
   if(typeof config.area === 'string'){
     config.area = config.area === 'auto' ? ['', ''] : [config.area, ''];
@@ -575,41 +644,66 @@ Class.pt.move = function(){
   ,config = that.config
   ,_DOC = $(document)
   ,layero = that.layero
+  ,DATA_NAME = ['LAY_MOVE_DICT', 'LAY_RESIZE_DICT']
   ,moveElem = layero.find(config.move)
-  ,resizeElem = layero.find('.layui-layer-resize')
-  ,dict = {};
+  ,resizeElem = layero.find('.layui-layer-resize');
   
-  if(config.move){
-    moveElem.css('cursor', 'move');
-  }
-
+  //给指定元素添加拖动光标
+  if(config.move) moveElem.css('cursor', 'move');
+  
+  //按下拖动元素
   moveElem.on('mousedown', function(e){
-    e.preventDefault();
+    var othis = $(this)
+    ,dict = {};
+    
     if(config.move){
-      dict.moveStart = true;
+      dict.layero = layero;
+      dict.config = config;
       dict.offset = [
         e.clientX - parseFloat(layero.css('left'))
         ,e.clientY - parseFloat(layero.css('top'))
       ];
+      
+      othis.data(DATA_NAME[0], dict);
+      ready.eventMoveElem = othis;
       ready.moveElem.css('cursor', 'move').show();
     }
-  });
-  
-  resizeElem.on('mousedown', function(e){
+    
     e.preventDefault();
-    dict.resizeStart = true;
-    dict.offset = [e.clientX, e.clientY];
-    dict.area = [
-      layero.outerWidth()
-      ,layero.outerHeight()
-    ];
-    ready.moveElem.css('cursor', 'se-resize').show();
   });
   
+  //按下右下角拉伸
+  resizeElem.on('mousedown', function(e){
+    var othis = $(this)
+    ,dict = {};
+    
+    if(config.resize){
+      dict.layero = layero;
+      dict.config = config;
+      dict.offset = [e.clientX, e.clientY];
+      dict.index = that.index;
+      dict.area = [
+        layero.outerWidth()
+        ,layero.outerHeight()
+      ];
+      
+      othis.data(DATA_NAME[1], dict);
+      ready.eventResizeElem = othis;
+      ready.moveElem.css('cursor', 'se-resize').show();
+    }
+    
+    e.preventDefault();
+  });
+  
+  //拖动元素，避免多次调用实例造成事件叠加
+  if(ready.docEvent) return that;
   _DOC.on('mousemove', function(e){
-
     //拖拽移动
-    if(dict.moveStart){
+    if(ready.eventMoveElem){
+      var dict = ready.eventMoveElem.data(DATA_NAME[0]) || {}
+      ,layero = dict.layero
+      ,config = dict.config;
+      
       var X = e.clientX - dict.offset[0]
       ,Y = e.clientY - dict.offset[1]
       ,fixed = layero.css('position') === 'fixed';
@@ -629,6 +723,7 @@ Class.pt.move = function(){
         Y > setBot && (Y = setBot);
       }
       
+      //拖动时跟随鼠标位置
       layero.css({
         left: X
         ,top: Y
@@ -636,31 +731,41 @@ Class.pt.move = function(){
     }
     
     //Resize
-    if(config.resize && dict.resizeStart){
+    if(ready.eventResizeElem){
+      var dict = ready.eventResizeElem.data(DATA_NAME[1]) || {}
+      ,config = dict.config;
+      
       var X = e.clientX - dict.offset[0]
       ,Y = e.clientY - dict.offset[1];
       
       e.preventDefault();
       
-      layer.style(that.index, {
+      //拉伸宽高
+      layer.style(dict.index, {
         width: dict.area[0] + X
         ,height: dict.area[1] + Y
-      })
-      dict.isResize = true;
-      config.resizing && config.resizing(layero);
+      });
+      
+      config.resizing && config.resizing(dict.layero);
     }
   }).on('mouseup', function(e){
-    if(dict.moveStart){
-      delete dict.moveStart;
+    if(ready.eventMoveElem){
+      var dict = ready.eventMoveElem.data(DATA_NAME[0]) || {}
+      ,config = dict.config;
+      
+      ready.eventMoveElem.removeData(DATA_NAME[0]);
+      delete ready.eventMoveElem;
       ready.moveElem.hide();
-      config.moveEnd && config.moveEnd(layero);
+      config.moveEnd && config.moveEnd(dict.layero);
     }
-    if(dict.resizeStart){
-      delete dict.resizeStart;
+    if(ready.eventResizeElem){
+      ready.eventResizeElem.removeData(DATA_NAME[1]);
+      delete ready.eventResizeElem;
       ready.moveElem.hide();
     }
   });
   
+  ready.docEvent = true; //已给 document 执行全局事件
   return that;
 };
 
@@ -683,21 +788,21 @@ Class.pt.callback = function(){
     var index = $(this).index();
     if(index === 0){
       if(config.yes){
-        config.yes(that.index, layero)
+        config.yes(that.index, layero, that);
       } else if(config['btn1']){
-        config['btn1'](that.index, layero)
+        config['btn1'](that.index, layero, that);
       } else {
         layer.close(that.index);
       }
     } else {
-      var close = config['btn'+(index+1)] && config['btn'+(index+1)](that.index, layero);
+      var close = config['btn'+(index+1)] && config['btn'+(index+1)](that.index, layero, that);
       close === false || layer.close(that.index);
     }
   });
   
   //取消
   function cancel(){
-    var close = config.cancel && config.cancel(that.index, layero);
+    var close = config.cancel && config.cancel(that.index, layero, that);
     close === false || layer.close(that.index);
   }
   
@@ -713,7 +818,7 @@ Class.pt.callback = function(){
   
   //最小化
   layero.find('.layui-layer-min').on('click', function(){
-    var min = config.min && config.min(layero, that.index);
+    var min = config.min && config.min(layero, that.index, that);
     min === false || layer.min(that.index, config);
   });
   
@@ -721,11 +826,11 @@ Class.pt.callback = function(){
   layero.find('.layui-layer-max').on('click', function(){
     if($(this).hasClass('layui-layer-maxmin')){
       layer.restore(that.index);
-      config.restore && config.restore(layero, that.index);
+      config.restore && config.restore(layero, that.index, that);
     } else {
       layer.full(that.index, config);
       setTimeout(function(){
-        config.full && config.full(layero, that.index);
+        config.full && config.full(layero, that.index, that);
       }, 100);
     }
   });
@@ -955,14 +1060,24 @@ layer.full = function(index){
 
 //改变title
 layer.title = function(name, index){
-  var title = $('#'+ doms[0] + (index||layer.index)).find(doms[1]);
+  var title = $('#'+ doms[0] + (index || layer.index)).find(doms[1]);
   title.html(name);
 };
 
-//关闭layer总方法
+//关闭 layer 总方法
 layer.close = function(index, callback){
-  var layero = $('#'+ doms[0] + index), type = layero.attr('type'), closeAnim = 'layer-anim-close';
+  var layero = function(){
+    var closest = $('.'+ doms[0]).find('#'+ index).closest('.'+ doms[0]);
+    return closest[0] ? (
+      index = closest.attr('times')
+      ,closest
+    ) : $('#'+ doms[0] + index)
+  }()
+  ,type = layero.attr('type')
+  ,closeAnim = 'layer-anim-close';
+  
   if(!layero[0]) return;
+  
   var WRAP = 'layui-layer-wrap', remove = function(){
     if(type === ready.type[1] && layero.attr('conType') === 'object'){
       layero.children(':not(.'+ doms[5] +')').remove();
@@ -975,7 +1090,7 @@ layer.close = function(index, callback){
       //低版本IE 回收 iframe
       if(type === ready.type[2]){
         try {
-          var iframe = $('#'+doms[4]+index)[0];
+          var iframe = $('#'+ doms[4] + index)[0];
           iframe.contentWindow.document.write('');
           iframe.contentWindow.close();
           layero.find('.'+doms[5])[0].removeChild(iframe);
@@ -996,6 +1111,7 @@ layer.close = function(index, callback){
   $('#layui-layer-moves, #'+ doms.SHADE + index).remove();
   layer.ie == 6 && ready.reselect();
   ready.rescollbar(index); 
+  
   if(layero.attr('minLeft')){
     ready.minIndex--;
     ready.minLeft.push(layero.attr('minLeft'));
@@ -1227,9 +1343,6 @@ layer.photos = function(options, loop, key){
     photos.start = dict.imgIndex - 1;
     layer.close(dict.index);
     return layer.photos(options, true, key);
-    setTimeout(function(){
-      layer.photos(options, true, key);
-    }, 200);
   }
   
   //一些动作
@@ -1321,7 +1434,7 @@ layer.photos = function(options, loop, key){
         +function(){
           if(data.length > 1){
             return '<div class="layui-layer-imgsee">'
-              +'<span class="layui-layer-imguide"><a href="javascript:;" class="layui-layer-iconext layui-layer-imgprev"></a><a href="javascript:;" class="layui-layer-iconext layui-layer-imgnext"></a></span>'
+              +'<div class="layui-layer-imguide"><span class="layui-icon layui-icon-left layui-layer-iconext layui-layer-imgprev"></span><span class="layui-icon layui-icon-right layui-layer-iconext layui-layer-imgnext"></span></div>'
               +'<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><a href="javascript:;">'+ (data[start].alt || '') +'</a><em>'+ dict.imgIndex +' / '+ data.length +'</em></span></div>'
             +'</div>'
           }
@@ -1384,6 +1497,3 @@ window.layui && layui.define ? (
 );
 
 }(window);
-
-
-
