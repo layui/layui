@@ -24,7 +24,7 @@ var isLayui = window.layui && layui.define, $, win, ready = {
     return GLOBAL.layer_dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
   }(),
 
-  config: {}, end: {}, minIndex: 0, minLeft: [],
+  config: {}, end: {}, events: {resize: {}}, minIndex: 0, minLeft: [],
   btn: ['&#x786E;&#x5B9A;', '&#x53D6;&#x6D88;'],
 
   //五种原始层模式
@@ -445,13 +445,15 @@ Class.pt.creat = function(){
     }();
   }();
   
-  //如果是固定定位
+  // 若是固定定位，则跟随 resize 事件来自适应坐标
   if(config.fixed){
-    win.on('resize', function(){
-      that.offset();
-      (/^\d+%$/.test(config.area[0]) || /^\d+%$/.test(config.area[1])) && that.auto(times);
-      config.type == 4 && that.tips();
-    });
+    if(!ready.events.resize[that.index]){
+      ready.events.resize[that.index] = function(){
+        that.resize();
+      };
+      // 此处 resize 事件不会一直叠加，当关闭弹层时会移除该事件
+      win.on('resize', ready.events.resize[that.index]);
+    }
   }
   
   config.time <= 0 || setTimeout(function(){
@@ -471,6 +473,16 @@ Class.pt.creat = function(){
   if(config.isOutAnim){
     that.layero.data('isOutAnim', true);
   }
+};
+
+// 当前实例的 resize 事件
+Class.pt.resize = function(){
+  var that = this;
+  var config = that.config;
+  
+  that.offset();
+  (/^\d+%$/.test(config.area[0]) || /^\d+%$/.test(config.area[1])) && that.auto(times);
+  config.type == 4 && that.tips();
 };
 
 //自适应
@@ -1099,9 +1111,16 @@ layer.close = function(index, callback){
       layero[0].innerHTML = '';
       layero.remove();
     }
+
     typeof ready.end[index] === 'function' && ready.end[index]();
     delete ready.end[index];
     typeof callback === 'function' && callback();
+
+    // 移除 reisze 事件
+    if(ready.events.resize[index]){
+      win.off('resize', ready.events.resize[index]);
+      delete ready.events.resize[index];
+    }
   };
   
   if(layero.data('isOutAnim')){
