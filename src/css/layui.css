@@ -1307,11 +1307,11 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-rate[readonly] li i:hover{cursor: default; transform: scale(1);}
 
 /** 颜色选择器 **/
-.layui-colorpicker{width: 26px; height: 26px; border: 1px solid #eee; padding: 5px; border-radius: 2px; line-height: 24px; display: inline-block; cursor: pointer; transition: all .3s; -webkit-transition: all .3s;}
+.layui-colorpicker{width: 38px; height: 38px; border: 1px solid #eee; padding: 5px; border-radius: 2px; line-height: 24px; display: inline-block; cursor: pointer; transition: all .3s; -webkit-transition: all .3s; box-sizing: border-box;}
 .layui-colorpicker:hover{border-color: #d2d2d2;}
-.layui-colorpicker.layui-colorpicker-lg{width: 34px; height: 34px; line-height: 32px;}
-.layui-colorpicker.layui-colorpicker-sm{width: 24px; height: 24px; line-height: 22px;}
-.layui-colorpicker.layui-colorpicker-xs{width: 22px; height: 22px; line-height: 20px;}
+.layui-colorpicker.layui-colorpicker-lg{width: 44px; height: 44px; line-height: 30px;}
+.layui-colorpicker.layui-colorpicker-sm{width: 30px; height: 30px; line-height: 20px; padding: 3px;}
+.layui-colorpicker.layui-colorpicker-xs{width: 22px; height: 22px; line-height: 16px; padding: 1px;}
 
 .layui-colorpicker-trigger-bgcolor{display: block; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);  border-radius: 2px;}
 .layui-colorpicker-trigger-span{display: block; height: 100%; box-sizing: border-box; border: 1px solid rgba(0,0,0,.15); border-radius: 2px; text-align: center;}
