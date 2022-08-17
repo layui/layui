@@ -790,7 +790,14 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     }
 
     that.setGroupWidth();
-
+    
+    // 如果表格内容为空（无数据 或 请求异常）
+    if (that.layMain.find('tbody').is(":empty")) {
+      // 将表格宽度设置为跟表头一样的宽度，使之可以出现底部滚动条，以便滚动查看所有字段
+      const headerWidth = that.layHeader.first().children('table').width()
+      that.layMain.find('table').width(headerWidth);
+    }
+    
     that.loading(!0);
   };
   
