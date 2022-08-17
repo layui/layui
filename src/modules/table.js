@@ -1013,9 +1013,9 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
         
         //遍历表头
         that.eachCols(function(i3, item3){
-          var field = item3.field || i3
-          ,key = options.index + '-' + item3.key
-          ,content = item1[field];
+          var field = item3.field || i3;
+          var key = options.index + '-' + item3.key;
+          var content = item1[field];
           
           if(content === undefined || content === null) content = '';
           if(item3.colGroup) return;
@@ -1023,6 +1023,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
           // td 内容
           var td = ['<td data-field="'+ field +'" data-key="'+ key +'" '+ function(){ //追加各种属性
             var attr = [];
+            if(item3.edit) attr.push('data-edit="true"'); // 允许单元格编辑
             if(item3.templet) attr.push('data-content="'+ util.escape(content) +'"'); //自定义模板
             if(item3.toolbar) attr.push('data-off="true"'); //行工具列关闭单元格事件
             if(item3.event) attr.push('lay-event="'+ item3.event +'"'); //自定义事件
@@ -1759,17 +1760,23 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
           
           if(dict.rule){
             var setWidth = dict.ruleWidth + e.clientX - dict.offset[0];
+            var id = thisTable.eventMoveElem.closest('.' + ELEM_VIEW).attr('lay-id');
+            var thatTable = thisTable.that[id];
+
             if(setWidth < dict.minWidth) setWidth = dict.minWidth;
             dict.rule.style.width = setWidth + 'px';
-            thisTable.that[thisTable.eventMoveElem.closest('.' + ELEM_VIEW).attr('lay-id')].setGroupWidth(thisTable.eventMoveElem);
+            thatTable.setGroupWidth(thisTable.eventMoveElem);
             layer.close(that.tipsIndex);
           }
         }
       }).on('mouseup', function(e){
         if(thisTable.eventMoveElem){
+          var id = thisTable.eventMoveElem.closest('.' + ELEM_VIEW).attr('lay-id');
+          var thatTable = thisTable.that[id];
+
           dict = {};
           _BODY.css('cursor', '');
-          thisTable.that[thisTable.eventMoveElem.closest('.' + ELEM_VIEW).attr('lay-id')].scrollPatch();
+          thatTable.scrollPatch();
 
           // 清除当前拖拽信息
           thisTable.eventMoveElem.removeData(DATA_MOVE_NAME);
@@ -2000,7 +2007,7 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
       var elemCell = othis.children(ELEM_CELL);
 
       // 是否开启编辑
-      // 若 edit 传入函数，则根据函数的发挥结果判断是否开启编辑
+      // 若 edit 传入函数，则根据函数的返回结果判断是否开启编辑
       var editType = typeof col.edit === 'function' 
         ? col.edit(data) 
       : col.edit;
