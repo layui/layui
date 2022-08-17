@@ -840,7 +840,6 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-hover,
 .layui-table-click{background-color: #FAFAFA;}
 
-.layui-table[lay-even] tr:nth-child(even){background-color: #f2f2f2;}
 
 .layui-table th,
 .layui-table td,
@@ -937,6 +936,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-table-body{position: relative; overflow: auto; margin-right: -1px; margin-bottom: -1px;}
 .layui-table-body .layui-none{line-height: 26px; padding: 30px 15px; text-align: center; color: #999;}
+.layui-table-body .layui-table[lay-even] tr:nth-child(even){background-color: #f2f2f2;}
 .layui-table-fixed{position: absolute; left: 0; top: 0; z-index: 101;}
 .layui-table-fixed .layui-table-body{overflow: hidden;}
 .layui-table-fixed-l{box-shadow: 1px 0 8px rgba(0,0,0,.08);}
