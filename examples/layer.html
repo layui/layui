@@ -28,6 +28,7 @@ body{padding: 100px;}
   <button class="layui-btn" lay-on="test4">Tips</button>
   <button class="layui-btn" lay-on="test7">Prompt</button>
   <button class="layui-btn" lay-on="test8">Tab</button>
+  <button class="layui-btn" lay-on="test9">Photo</button>
   <button class="layui-btn" lay-on="testTime">自动关闭</button>
   <a href="https://layui.gitee.io/v2/demo/layer.html" target="_blank" class="layui-btn">更多例子</a>
 </div>
@@ -40,7 +41,7 @@ body{padding: 100px;}
 
 <div class="layui-list">
   <ul class="layui-row" id="photos">
-    <li class="list"><img src="https://unpkg.com/outeres/demo/1.jpg"></li>
+    <li class="list"><img src="https://unpkg.com/outeres/demo/1.jpg" alt="123"></li>
     <li class="list"><img src="https://unpkg.com/outeres/demo/2.jpg"></li>
   </ul>
 </div>
@@ -129,7 +130,7 @@ layui.use(['layer', 'util'], function(layer, util){
       });
     }
     ,test3: function(){
-      !1 ? layer.msg('一个常用消息框')
+      !0 ? layer.msg('一个常用消息框')
       : layer.msg('一个常用消息框',{closeBtn: 0,time: 0, icon: 16});
     }
     ,test4: function(){
@@ -162,8 +163,8 @@ layui.use(['layer', 'util'], function(layer, util){
       });
     }
     ,testLoading: function(){
-      layer.load(2, {
-        //time: 5*1000
+      layer.load(0, {
+        time: 5*1000
         //content: '123'
       });
     }
@@ -191,6 +192,16 @@ layui.use(['layer', 'util'], function(layer, util){
         }]
       });
     }
+    ,test9: function(){
+      layer.photos({
+        photos: {
+          "data": [{
+            "src": "https://unpkg.com/outeres/demo/layer.png"
+          }]
+        },
+        hideFooter: true  // 是否隐藏图片底部栏（v2.8.0 新增）
+      });
+    }
     ,testTime: function(){
       layer.alert('你好么，体验者。<br>在标题栏显示自动关闭倒计秒数', {
         time: 5*1000
@@ -209,17 +220,10 @@ layui.use(['layer', 'util'], function(layer, util){
     }
   });
   
-  //相册层
+  // 相册层
   layer.photos({
     photos: '#photos' //$('#photos')
   });
-  
-  $('#photos li-').each(function(i, e){
-    layer.photos({
-      photos: $(e)
-    });
-  });
-  
   
   //动态追加
   $('#photos').append('<li class="list"><img src="https://unpkg.com/outeres/demo/3.jpg"></li>');
