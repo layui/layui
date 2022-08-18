@@ -347,6 +347,11 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     if(options.height && /^full-\d+$/.test(options.height)){
       that.fullHeightGap = options.height.split('-')[1];
       options.height = _WIN.height() - that.fullHeightGap;
+    } else if (options.height && /^#\w+-{1}\d+$/.test(options.height)) {
+      var parentDiv = options.height.split("-");
+      that.parentHeightGap = parentDiv.pop();
+      that.parentDiv = parentDiv.join("-");
+      options.height = $(that.parentDiv).height() - that.parentHeightGap;
     }
     
     //初始化一些参数
@@ -790,7 +795,14 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
     }
 
     that.setGroupWidth();
-
+    
+    // 如果表格内容为空（无数据 或 请求异常）
+    if (that.layMain.find('tbody').is(":empty")) {
+      // 将表格宽度设置为跟表头一样的宽度，使之可以出现底部滚动条，以便滚动查看所有字段
+      const headerWidth = that.layHeader.first().children('table').width()
+      that.layMain.find('table').width(headerWidth);
+    }
+    
     that.loading(!0);
   };
   
@@ -1479,6 +1491,10 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
       height = _WIN.height() - that.fullHeightGap;
       if(height < 135) height = 135;
       that.elem.css('height', height);
+    } else if (that.parentDiv && that.parentHeightGap) {
+      height = $(that.parentDiv).height() - that.parentHeightGap;
+      if (height < 135) height = 135;
+      that.elem.css("height", height);
     }
     
     if(!height) return;
