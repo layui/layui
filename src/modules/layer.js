@@ -481,7 +481,7 @@ Class.pt.resize = function(){
   var config = that.config;
   
   that.offset();
-  (/^\d+%$/.test(config.area[0]) || /^\d+%$/.test(config.area[1])) && that.auto(times);
+  (/^\d+%$/.test(config.area[0]) || /^\d+%$/.test(config.area[1])) && that.auto(that.index);
   config.type == 4 && that.tips();
 };
 
