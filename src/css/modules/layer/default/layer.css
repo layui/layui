@@ -157,7 +157,8 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-imgtit *{display:inline-block; *display:inline; *zoom:1; vertical-align:top; font-size:12px;}
 .layui-layer-imgtit a{max-width:65%;  text-overflow: ellipsis; overflow: hidden; white-space: nowrap; color:#fff;}
 .layui-layer-imgtit a:hover{color:#fff; text-decoration:underline;}
-.layui-layer-imgtit em{padding-left:10px; font-style: normal;}
+.layui-layer-imgtit em{padding:0 10px; font-style: normal;}
+.layui-layer-imgtit>span+a{margin-left: 10px;}
 
 /* 关闭动画 */
 @-webkit-keyframes layer-bounceOut {
