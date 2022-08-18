@@ -760,7 +760,7 @@ layui.define('form', function(exports){
       
       //若返回数字
       if(typeof checkedId === 'number'){
-        if(thisId == checkedId){
+        if(thisId.toString() == checkedId.toString()){
           if(!input[0].checked){
             reInput.click();
           };
@@ -770,7 +770,7 @@ layui.define('form', function(exports){
       //若返回数组
       else if(typeof checkedId === 'object'){
         layui.each(checkedId, function(index, value){
-          if(value == thisId && !input[0].checked){
+          if(value.toString() == thisId.toString() && !input[0].checked){
             reInput.click();
             return true;
           }
