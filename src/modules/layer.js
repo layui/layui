@@ -1412,6 +1412,8 @@ layer.photos = function(options, loop, key){
   loadImage(data[start].src, function(img){
     layer.close(dict.loadi);
     
+    var alt = data[start].alt||'';
+
     //切换图片时不出现动画
     if(key) options.anim = -1;
     
@@ -1449,15 +1451,36 @@ layer.photos = function(options, loop, key){
       isOutAnim: false,
       skin: 'layui-layer-photos' + skin('photos'),
       content: '<div class="layui-layer-phimg">'
-        +'<img src="'+ data[start].src +'" alt="'+ (data[start].alt||'') +'" layer-pid="'+ data[start].pid +'">'
+        +'<img src="'+ data[start].src +'" alt="'+ alt +'" layer-pid="'+ data[start].pid +'">'
         +function(){
+          var tip = '<div class="layui-layer-imgsee">';
+
           if(data.length > 1){
-            return '<div class="layui-layer-imgsee">'
-              +'<div class="layui-layer-imguide"><span class="layui-icon layui-icon-left layui-layer-iconext layui-layer-imgprev"></span><span class="layui-icon layui-icon-right layui-layer-iconext layui-layer-imgnext"></span></div>'
-              +'<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><a href="javascript:;">'+ (data[start].alt || '') +'</a><em>'+ dict.imgIndex +' / '+ data.length +'</em></span></div>'
-            +'</div>'
+            tip += '<span class="layui-layer-imguide"><a href="javascript:;" class="layui-layer-iconext layui-layer-imgprev"></a><a href="javascript:;" class="layui-layer-iconext layui-layer-imgnext"></a></span>';
+
+            if(alt===''){
+              tip += '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><em>'+ dict.imgIndex +' / '+ data.length +'</em><a href="'+data[start].src+'" target="_blank">查看原图</a></span></div>';
+            }
+            else{
+              tip += '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><span>'+ alt +'</span><em>'+ dict.imgIndex +' / '+ data.length +'</em><a href="'+data[start].src+'" target="_blank">查看原图</a></span></div>';
+            }
+
+            tip += '</div>';
           }
-          return '';
+          else if(data.length === 1){
+            if(alt===''){
+              tip = '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><a href="'+data[start].src+'" target="_blank">查看原图</a></span></div>';
+            }
+            else{
+              tip += '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><span>'+ alt +'</span><a href="'+data[start].src+'" target="_blank">查看原图</a></span></div>';
+              tip += '</div>';
+            }
+          }
+          else{
+            tip = '';
+          }
+          
+          return tip;
         }()
       +'</div>',
       success: function(layero, index){
