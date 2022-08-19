@@ -481,7 +481,7 @@ Class.pt.resize = function(){
   var config = that.config;
   
   that.offset();
-  (/^\d+%$/.test(config.area[0]) || /^\d+%$/.test(config.area[1])) && that.auto(times);
+  (/^\d+%$/.test(config.area[0]) || /^\d+%$/.test(config.area[1])) && that.auto(that.index);
   config.type == 4 && that.tips();
 };
 
@@ -1412,6 +1412,8 @@ layer.photos = function(options, loop, key){
   loadImage(data[start].src, function(img){
     layer.close(dict.loadi);
     
+    var alt = data[start].alt || '';
+
     //切换图片时不出现动画
     if(key) options.anim = -1;
     
@@ -1449,15 +1451,31 @@ layer.photos = function(options, loop, key){
       isOutAnim: false,
       skin: 'layui-layer-photos' + skin('photos'),
       content: '<div class="layui-layer-phimg">'
-        +'<img src="'+ data[start].src +'" alt="'+ (data[start].alt||'') +'" layer-pid="'+ data[start].pid +'">'
-        +function(){
+        + '<img src="'+ data[start].src +'" alt="'+ alt +'" layer-pid="'+ data[start].pid +'">'
+        + function(){
+          var arr = ['<div class="layui-layer-imgsee">'];
+
+          // 左右箭头翻页
           if(data.length > 1){
-            return '<div class="layui-layer-imgsee">'
-              +'<div class="layui-layer-imguide"><span class="layui-icon layui-icon-left layui-layer-iconext layui-layer-imgprev"></span><span class="layui-icon layui-icon-right layui-layer-iconext layui-layer-imgnext"></span></div>'
-              +'<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><a href="javascript:;">'+ (data[start].alt || '') +'</a><em>'+ dict.imgIndex +' / '+ data.length +'</em></span></div>'
-            +'</div>'
+            arr.push(['<div class="layui-layer-imguide">'
+              ,'<span class="layui-icon layui-icon-left layui-layer-iconext layui-layer-imgprev"></span>'
+              ,'<span class="layui-icon layui-icon-right layui-layer-iconext layui-layer-imgnext"></span>'
+            ,'</div>'].join(''));
           }
-          return '';
+
+          // 底部栏
+          if(!options.hideFooter){
+             arr.push(['<div class="layui-layer-imgbar">'
+              ,'<div class="layui-layer-imgtit">'
+                ,'<h3>'+ alt +'</h3>'
+                ,'<em>'+ dict.imgIndex +' / '+ data.length +'</em>'
+                ,'<a href="'+ data[start].src +'" target="_blank">查看原图</a>'
+              ,'</div>'
+            ,'</div>'].join(''));
+          }
+
+          arr.push('</div>');
+          return arr.join('');
         }()
       +'</div>',
       success: function(layero, index){
