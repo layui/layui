@@ -481,7 +481,7 @@ Class.pt.resize = function(){
   var config = that.config;
   
   that.offset();
-  (/^\d+%$/.test(config.area[0]) || /^\d+%$/.test(config.area[1])) && that.auto(times);
+  (/^\d+%$/.test(config.area[0]) || /^\d+%$/.test(config.area[1])) && that.auto(that.index);
   config.type == 4 && that.tips();
 };
 
@@ -1412,7 +1412,7 @@ layer.photos = function(options, loop, key){
   loadImage(data[start].src, function(img){
     layer.close(dict.loadi);
     
-    var alt = data[start].alt||'';
+    var alt = data[start].alt || '';
 
     //切换图片时不出现动画
     if(key) options.anim = -1;
@@ -1451,36 +1451,31 @@ layer.photos = function(options, loop, key){
       isOutAnim: false,
       skin: 'layui-layer-photos' + skin('photos'),
       content: '<div class="layui-layer-phimg">'
-        +'<img src="'+ data[start].src +'" alt="'+ alt +'" layer-pid="'+ data[start].pid +'">'
-        +function(){
-          var tip = '<div class="layui-layer-imgsee">';
+        + '<img src="'+ data[start].src +'" alt="'+ alt +'" layer-pid="'+ data[start].pid +'">'
+        + function(){
+          var arr = ['<div class="layui-layer-imgsee">'];
 
+          // 左右箭头翻页
           if(data.length > 1){
-            tip += '<span class="layui-layer-imguide"><a href="javascript:;" class="layui-layer-iconext layui-layer-imgprev"></a><a href="javascript:;" class="layui-layer-iconext layui-layer-imgnext"></a></span>';
+            arr.push(['<div class="layui-layer-imguide">'
+              ,'<span class="layui-icon layui-icon-left layui-layer-iconext layui-layer-imgprev"></span>'
+              ,'<span class="layui-icon layui-icon-right layui-layer-iconext layui-layer-imgnext"></span>'
+            ,'</div>'].join(''));
+          }
 
-            if(alt===''){
-              tip += '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><em>'+ dict.imgIndex +' / '+ data.length +'</em><a href="'+data[start].src+'" target="_blank">查看原图</a></span></div>';
-            }
-            else{
-              tip += '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><span>'+ alt +'</span><em>'+ dict.imgIndex +' / '+ data.length +'</em><a href="'+data[start].src+'" target="_blank">查看原图</a></span></div>';
-            }
+          // 底部栏
+          if(!options.hideFooter){
+             arr.push(['<div class="layui-layer-imgbar">'
+              ,'<div class="layui-layer-imgtit">'
+                ,'<h3>'+ alt +'</h3>'
+                ,'<em>'+ dict.imgIndex +' / '+ data.length +'</em>'
+                ,'<a href="'+ data[start].src +'" target="_blank">查看原图</a>'
+              ,'</div>'
+            ,'</div>'].join(''));
+          }
 
-            tip += '</div>';
-          }
-          else if(data.length === 1){
-            if(alt===''){
-              tip = '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><a href="'+data[start].src+'" target="_blank">查看原图</a></span></div>';
-            }
-            else{
-              tip += '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><span>'+ alt +'</span><a href="'+data[start].src+'" target="_blank">查看原图</a></span></div>';
-              tip += '</div>';
-            }
-          }
-          else{
-            tip = '';
-          }
-          
-          return tip;
+          arr.push('</div>');
+          return arr.join('');
         }()
       +'</div>',
       success: function(layero, index){

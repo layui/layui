@@ -99,7 +99,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-loading-2{position: relative; height: 38px;}
 .layui-layer-loading-2:before,
 .layui-layer-loading-2:after{content: ''; position: absolute; left: 50%; top: 50%; width: 38px; height: 38px; margin: -19px 0 0 -19px; border-radius: 50%; border: 3px solid #d2d2d2; box-sizing: border-box;}
-.layui-layer-loading-2:after{border-color: transparent; border-left-color: #1E9FFF; border-right-color: #1E9FFF;}
+.layui-layer-loading-2:after{border-color: transparent; border-left-color: #1E9FFF;}
 
 
 .layui-layer-tips{background: none; box-shadow:none; border:none;}
@@ -157,10 +157,10 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-imgnext:hover{color: #959595;}
 .layui-layer-imgbar{position: fixed; left:0; right: 0; bottom:0; width:100%; height: 40px; line-height: 40px; background-color:#000\9; filter:Alpha(opacity=60); background-color: rgba(2,0,0,.35); color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; font-size:0;}
 .layui-layer-imgtit{/*position:absolute; left:20px;*/}
-.layui-layer-imgtit *{display:inline-block; *display:inline; *zoom:1; vertical-align:top; font-size:12px;}
-.layui-layer-imgtit a{max-width:65%;  text-overflow: ellipsis; overflow: hidden; white-space: nowrap; color:#fff;}
-.layui-layer-imgtit a:hover{color:#fff; text-decoration:underline;}
-.layui-layer-imgtit em{padding-left:10px; font-style: normal;}
+.layui-layer-imgtit *{display:inline-block; *display:inline; *zoom:1; vertical-align:top; padding: 0 5px; font-size:12px; color: #fff;}
+.layui-layer-imgtit h3{max-width:65%; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; font-weight: 300;}
+.layui-layer-imgtit a:hover{color: #fff; text-decoration: underline;}
+.layui-layer-imgtit em{font-style: normal;}
 
 /* 关闭动画 */
 @-webkit-keyframes layer-bounceOut {
