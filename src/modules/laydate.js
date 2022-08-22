@@ -41,7 +41,7 @@
     //主体CSS等待事件
     ,ready: function(fn){
       var cssname = 'laydate', ver = ''
-      ,path = (isLayui ? 'modules/laydate/' : 'theme/') + 'default/laydate.css?v='+ laydate.v + ver;
+      ,path = (isLayui ? 'modules/' : '') + 'laydate.css?v='+ laydate.v + ver;
       isLayui ? layui.addcss(path, fn, cssname) : ready.link(path, fn, cssname);
       return this;
     }
@@ -896,7 +896,7 @@
   };
   
   //无效日期范围的标记
-  Class.prototype.limit = function(elem, date, index, time){
+  Class.prototype.limit = function(elem, date, index, time, type){
     var that = this
     ,options = that.config, timestrap = {}
     ,dateTime = index > (time ? 0 : 41) ? that.endDate : options.dateTime
@@ -1824,7 +1824,7 @@
   };
 
   // 获取
-  laydate.getIns = function (key) {
+  laydate.getInst = function (key) {
     var that = thisModule.getThis(key);
     if (that) {
       return that.inst;
