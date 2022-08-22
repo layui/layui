@@ -909,8 +909,8 @@
     }, function(key, item){
       timestrap[key] = that.newDate(lay.extend({
         year: item.year
-        ,month: item.month
-        ,date: item.date
+        ,month: type === 'year' ? 0 : item.month // 年份的时候只比较年
+        ,date: (type === 'year' || type === 'month') ? 1 : item.date // 年月只比较年月不与最大最小比日期
       }, function(){
         var hms = {};
         lay.each(time, function(i, keys){
@@ -1094,7 +1094,7 @@
         }
         */
 
-        that.limit(lay(li), ymd, index);
+        that.limit(lay(li), ymd, index, null, type);
         yearNum++;
       });
 
@@ -1126,7 +1126,7 @@
         }
         */
 
-        that.limit(lay(li), ymd, index);
+        that.limit(lay(li), ymd, index, null, type);
       });
 
       lay(elemYM[isCN ? 0 : 1]).attr('lay-ym', listYM[0] + '-' + listYM[1])
@@ -1729,7 +1729,6 @@
     //绑定呼出控件事件
     // var showEvent = function(elem, bind){
     //   elem.on(options.trigger, function(){
-    //     console.log('showEvent, ' + options.trigger, elem);
     //     //已经打开的面板避免重新渲染
     //     if(laydate.thisId === options.id) return;
     //     bind && (that.bindElem = this);
@@ -1756,6 +1755,7 @@
       that.remove();
       options.elem.off(options.trigger, showFn);
       options.elem[0].eventHandler = false;
+      options.elem.removeAttr('lay-key');
       delete thisModule.that[options.id];
     }
   };

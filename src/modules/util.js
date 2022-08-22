@@ -13,7 +13,7 @@ layui.define('jquery', function(exports){
     //固定块
     fixbar: function(options){
       var ELEM = 'layui-fixbar', TOP_BAR = 'layui-fixbar-top'
-      ,dom = $(document), body = $('body')
+      ,dom = $(options.elem || document), body = $(options.elem || 'body')
       ,is, timer;
 
       options = $.extend({
@@ -39,7 +39,7 @@ layui.define('jquery', function(exports){
           is && (topBar.hide(), is = 0);
         }
       };
-      if($('.'+ ELEM)[0]) return;
+      if(body.find('.'+ ELEM)[0]) return;
       
       typeof options.css === 'object' && elem.css(options.css);
       body.append(elem), scroll();
@@ -48,7 +48,7 @@ layui.define('jquery', function(exports){
       elem.find('li').on('click', function(){
         var othis = $(this), type = othis.attr('lay-type');
         if(type === 'top'){
-          $('html,body').animate({
+          (options.elem ? $(options.elem) : $('html,body')).animate({
             scrollTop : 0
           }, 200);
         }

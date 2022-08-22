@@ -754,7 +754,8 @@ layui.define(['laytpl', 'laypage', 'form', 'util'], function(exports){
       // 给设定百分比的列分配列宽
       else if(/\d+%$/.test(item3.width)){
         that.getCssRule(options.index +'-'+ item3.key, function(item){
-          item.style.width = Math.floor((parseFloat(item3.width) / 100) * cntrWidth) + 'px';
+          var width = Math.floor((parseFloat(item3.width) / 100) * cntrWidth);
+          item.style.width = (width < minWidth ? minWidth : width) + 'px';
         });
       }
 

@@ -194,6 +194,18 @@ layui.define('jquery', function(exports){
       that.slide(type);
     });
   };
+
+  // 跳转到特定下标
+  Class.prototype.jump = function(index){
+    var that = this;
+    var options = that.config;
+
+    if(index > options.index){
+      that.slide('add', index - options.index);
+    } else if(index < options.index){
+      that.slide('sub', options.index - index);
+    }
+  }
   
   //指示器
   Class.prototype.indicator = function(){
@@ -226,13 +238,7 @@ layui.define('jquery', function(exports){
     
     //事件
     tplInd.find('li').on(options.trigger === 'hover' ? 'mouseover' : options.trigger, function(){
-      var othis = $(this)
-      ,index = othis.index();
-      if(index > options.index){
-        that.slide('add', index - options.index);
-      } else if(index < options.index){
-        that.slide('sub', options.index - index);
-      }
+      that.jump($(this).index());
     });
   };
   
