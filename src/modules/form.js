@@ -786,6 +786,7 @@ layui.define(['layer', 'util'], function(exports){
       elem: this.getFormElem ? (window.event && window.event.target) : this // 触发事件的对象
       ,form: this.getFormElem ? elem[0] : button.parents('form')[0] // 当前所在的 form 元素，如果存在的话
       ,field: field // 当前表单数据
+      ,filter: filter // 当前过滤器
     };
     
     // 回调
