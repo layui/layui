@@ -23,8 +23,8 @@
   <thead>
     <tr>
       <th lay-data="{checkbox:true, fixed:'left'}" rowspan="2"></th>
-      <th lay-data="{field:'username', width:80}" rowspan="2">联系人</th>
-      <th lay-data="{field:'amount', width:120}" rowspan="2">金额</th>
+      <th lay-data="{field:'username', width:100}" rowspan="2">联系人</th>
+      <th lay-data="{field:'amount', width:100}" rowspan="2">金额</th>
     </tr>
   </thead>
 </table>
@@ -61,19 +61,24 @@
 <table id="test2" lay-filter="test2"></table>
 
 <div style="display: none1;">
+
+  <table id="demo"></table>
+
   <table class="layui-table" lay-data="{width:800, height: 300, url:'json/table/demo2.json', page: true, limit: 6, toolbar: true}">
     <thead>
       <tr>
         <th lay-data="{checkbox:true, fixed:'left'}" rowspan="2"></th>
         <th lay-data="{field:'username', width:80}" rowspan="2">联系人</th>
         <th lay-data="{field:'amount', width:120}" rowspan="2">金额</th>
-        <th lay-data="{align:'center'}" colspan="3">地址</th>
+        <th lay-data="{align:'center'}" colspan="5">地址</th>
         <th lay-data="{fixed: 'right', width: 155, align: 'center', toolbar: '#barDemo'}" rowspan="2">操作</th>
       </tr>
       <tr>
         <th lay-data="{field:'province', width:130}">省</th>
         <th lay-data="{field:'city', width:130}">市</th>
         <th lay-data="{field:'zone', width:200}">区</th>
+        <th lay-data="{field:'address', width:120}">小区</th>
+        <th lay-data="{field:'house', width:150}">单元</th>
       </tr>
     </thead>
   </table>
@@ -101,9 +106,6 @@
       </tr>
     </thead>
   </table>
-
-  <table id="demo"></table>
-
 
   <div class="layui-btn-group">
     <button class="layui-btn" data-type="parseTable">转化为数据表格</button>
@@ -180,7 +182,7 @@
   </table>
 </div>
 
-<script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.6.13/layui.js"></script>
+<script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
 <script>
 layui.use('table', function(){
   var $ = layui.$;
@@ -227,6 +229,7 @@ layui.use('table', function(){
     elem: '#demo'
     //,width: 900
     //,height: 274
+    ,toolbar: true
     ,cols: [[ //标题栏
       //{type: 'space'},
       {type: 'checkbox', LAY_CHECKED: true},
@@ -239,6 +242,9 @@ layui.use('table', function(){
       {field: 'city', title: '城市', width: 100},
       //{field: 'experience', title: '积分', width: 80, sort: true},
       {field: 'experience', title: '积分', width: 80, sort: true, totalRow: '{{= parseInt(d.TOTAL_NUMS) }}'}
+      ,{field:'ip', title:'IP', width: 120, align: 'right'}
+      ,{field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{= parseInt(d.TOTAL_NUMS) }} 次'}
+      ,{field:'joinTime', title:'加入时间', width: 120}
     ]]
     ,data: [{
       "id": "10001"
@@ -341,7 +347,6 @@ layui.use('table', function(){
     ,totalRow: true
     //,loading: false //请求数据时，是否显示loading
   });
-  
   
   var $ = layui.jquery, active = {
     parseTable: function(){
