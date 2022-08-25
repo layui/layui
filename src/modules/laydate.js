@@ -38,10 +38,10 @@
       return that;
     }
     
-    //主体CSS等待事件
+    // 主体 CSS 等待事件
     ,ready: function(fn){
       var cssname = 'laydate', ver = ''
-      ,path = (isLayui ? 'modules/laydate/' : 'theme/') + 'default/laydate.css?v='+ laydate.v + ver;
+      ,path = (isLayui ? 'modules/' : 'css/') + 'laydate.css?v='+ laydate.v + ver;
       isLayui ? layui.addcss(path, fn, cssname) : ready.link(path, fn, cssname);
       return this;
     }
