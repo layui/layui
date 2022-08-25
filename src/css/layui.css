@@ -874,7 +874,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-view .layui-table[lay-size="sm"] .layui-table-cell{height: 30px; line-height: 20px; padding-top: 5px; padding-left: 5px; padding-right: 5px;}
 
 /* 数据表格 */
-.layui-table[lay-data]{display: none;}
+.layui-table[lay-data],
+.layui-table[lay-options]{display: none;}
 .layui-table-box{position: relative; overflow: hidden;}
 .layui-table-view{margin: 10px 0;}
 .layui-table-view .layui-table{position: relative; width: auto; margin: 0; border: 0; border-collapse: separate;}
