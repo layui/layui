@@ -70,9 +70,9 @@
   </div>
 </script>
 
-<table id="test" lay-filter="test"></table>
+<table id="test"></table>
 
-<script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.6.13/layui.js"></script>
+<script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
 <script>
 (function(off){
   if(!off) return;
@@ -130,7 +130,7 @@ layui.use(['table', 'dropdown'], function(){
     ].join('')
     //,className: '.demo-table-view'
 
-    //,size: 'lg'
+    //,size: 'sm'
     //,skin: 'line'
     //,loading: false
 
@@ -148,6 +148,7 @@ layui.use(['table', 'dropdown'], function(){
     }]
     //,escape: false
     ,editTrigger: 'dblclick'
+    //,cellMaxWidth: 320
     ,cols: !1 ? test_cols : [[
       {type: 'checkbox', fixed: 'left'}
       //,{type: 'numbers', fixed: 'left'}
@@ -155,7 +156,7 @@ layui.use(['table', 'dropdown'], function(){
       ,{field:'username', title:'用户名', width:120, edit: function(d){
         return !d.LAY_DISABLED;
       }, templet: '#usernameTpl'}
-      ,{field:'email', minWidth: 160, title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, edit: 'text', templet: function(d){
+      ,{field:'email', minWidth: 160, maxWidth: 320, title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, edit: 'text', templet: function(d){
         return '<em>'+ layui.util.escape(d.email) +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true, escape: false}
@@ -445,13 +446,38 @@ layui.use(['table', 'dropdown'], function(){
 
   // 单元格编辑事件
   table.on('edit(test)', function(obj){
-    var field = obj.field //得到字段
-    ,value = obj.value //得到修改后的值
-    ,data = obj.data; //得到所在行所有键值
+    var field = obj.field // 得到字段
+    var value = obj.value // 得到修改后的值
+    var oldValue = obj.oldValue // 得到修改前的值 -- v2.8.0 新增
+    var data = obj.data; // 得到当前编辑所在行的数据
 
+    // 值的校验
+    if(field === 'email'){
+      if(!/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(obj.value)){
+        layer.tips('输入的邮箱格式不正确，请重新编辑', this, {tips: 1});
+        return obj.reedit(); // 重新编辑 -- v2.8.0 新增
+      }
+    }
+    
+    // 编辑后续操作，如提交更新请求，以完成真实的数据更新
+    // …
+    layer.msg('编辑成功', {icon: 1});
+
+    // 其他更新操作
     var update = {};
     update[field] = value;
-    obj.update(update, true); // 参数 true 为新版新增功能，详见文档
+    obj.update(update, true); // 参数 true 为 v2.7.4 新增功能，即同步更新其他包含自定义模板并可能存在关联的列视图
+  });
+
+
+  // 列拖拽宽度后的事件 -- v2.8.0 新增
+  table.on('colResized(test)', function(obj){
+    console.log(obj);
+  });
+
+  // 列拖拽宽度后的事件 -- v2.8.0 新增
+  table.on('colToggled(test)', function(obj){
+    console.log(obj);
   });
 });
 </script>

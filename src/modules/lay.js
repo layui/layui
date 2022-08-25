@@ -202,14 +202,17 @@
     }
   };
   
-  //获取元素上的参数配置上
-  lay.options = function(elem, attr){
-    var othis = lay(elem)
-    ,attrName = attr || 'lay-options';
+  // 获取元素上的属性配置项
+  lay.options = function(elem, opts){
+    opts = typeof opts === 'object' ? opts : {attr: opts};
+
+    var othis = lay(elem);
+    var attrName = opts.attr || 'lay-options';
+
     try {
       return new Function('return '+ (othis.attr(attrName) || '{}'))();
     } catch(ev) {
-      hint.error('parseerror：'+ ev, 'error');
+      hint.error(opts.errorText || 'parseerror: '+ ev, 'error');
       return {};
     }
   };
