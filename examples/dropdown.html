@@ -155,7 +155,10 @@ layui.use('dropdown', function(){
     
     ,id: 'demo1'
     
-    //菜单被点击的事件
+     // 触发点击事件的元素范围 --- default: 仅子菜单触发点击事件（默认，可不填）; all: 所有父子菜单均触发点击事件
+    ,clickScope: 'all'
+
+    // 菜单被点击的事件
     ,click: function(obj){
       console.log(obj);
     }
