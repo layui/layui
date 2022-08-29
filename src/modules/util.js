@@ -5,61 +5,119 @@
 layui.define('jquery', function(exports){
   "use strict";
   
-  var $ = layui.$
-  ,hint = layui.hint()
+  var $ = layui.$;
+  var hint = layui.hint();
   
-  //外部接口
-  ,util = {
-    //固定块
+  // 外部接口
+  var util = {
+    // 固定块
     fixbar: function(options){
-      var ELEM = 'layui-fixbar', TOP_BAR = 'layui-fixbar-top'
-      ,dom = $(document), body = $('body')
-      ,is, timer;
+      var ELEM = 'layui-fixbar';
+      var $doc = $(document);
 
-      options = $.extend({
-        showHeight: 200 //出现TOP的滚动条高度临界值
+      // 默认可选项
+      options = $.extend(true, {
+        target: 'body', // fixbar 的插入目标选择器
+        bars: [], //  bar 信息
+        default: true, // 是否显示默认 bar
+        showHeight: 200 // 出现 top bar 的滚动条高度临界值
       }, options);
-      
-      options.bar1 = options.bar1 === true ? '&#xe606;' : options.bar1;
-      options.bar2 = options.bar2 === true ? '&#xe607;' : options.bar2;
-      options.bgcolor = options.bgcolor ? ('background-color:' + options.bgcolor) : '';
-      
-      var icon = [options.bar1, options.bar2, '&#xe604;'] //图标：信息、问号、TOP
-      ,elem = $(['<ul class="'+ ELEM +'">'
-        ,options.bar1 ? '<li class="layui-icon" lay-type="bar1" style="'+ options.bgcolor +'">'+ icon[0] +'</li>' : ''
-        ,options.bar2 ? '<li class="layui-icon" lay-type="bar2" style="'+ options.bgcolor +'">'+ icon[1] +'</li>' : ''
-        ,'<li class="layui-icon '+ TOP_BAR +'" lay-type="top" style="'+ options.bgcolor +'">'+ icon[2] +'</li>'
-      ,'</ul>'].join(''))
-      ,topBar = elem.find('.'+TOP_BAR)
-      ,scroll = function(){
-        var stop = dom.scrollTop();
-        if(stop >= (options.showHeight)){
-          is || (topBar.show(), is = 1);
-        } else {
-          is && (topBar.hide(), is = 0);
+
+      var $target = $(options.target);
+
+      // 是否提供默认图标
+      if(options.default){
+        // 兼容旧版本的一些属性
+        if(options.bar1){
+          options.bars.push({
+            type: 'bar1',
+            icon: 'layui-icon-chat'
+          });
         }
-      };
-      if($('.'+ ELEM)[0]) return;
-      
-      typeof options.css === 'object' && elem.css(options.css);
-      body.append(elem), scroll();
-      
-      //bar点击事件
-      elem.find('li').on('click', function(){
-        var othis = $(this), type = othis.attr('lay-type');
-        if(type === 'top'){
-          $('html,body').animate({
-            scrollTop : 0
-          }, 200);
+        if(options.bar2){
+          options.bars.push({
+            type: 'bar2',
+            icon: 'layui-icon-help'
+          });
         }
-        options.click && options.click.call(this, type);
+        // 默认 top bar
+        options.bars.push({
+          type: 'top',
+          icon: 'layui-icon-top'
+        });
+      }
+
+      var elem = $('<ul>').addClass(ELEM);
+      var elemTopBar;
+
+      // 遍历生成 bars 节点
+      layui.each(options.bars, function(i, item){
+        var elemBar = $('<li class="layui-icon">');
+
+        // 设置 bar 相关属性
+        elemBar.addClass(item.icon).attr({
+          'lay-type': item.type,
+          'style': item.style || ('background-color: '+ options.bgcolor)
+        }).html(item.content);
+
+        // bar 点击事件
+        elemBar.on('click', function(){
+          var type = $(this).attr('lay-type');
+          if(type === 'top'){
+            $('html,body').animate({
+              scrollTop : 0
+            }, 200);
+          }
+          typeof options.click === 'function' && options.click.call(this, type);
+        });
+
+        // 自定义任意事件
+        if(layui.type(options.on) === 'object'){
+          layui.each(options.on, function(eventName, callback){
+            elemBar.on(eventName, function(){
+              var type = $(this).attr('lay-type');
+              typeof callback === 'function' && callback.call(this, type);
+            });
+          })
+        }
+
+        // 获得 top bar 节点
+        if(item.type === 'top'){
+          elemBar.addClass('layui-fixbar-top');
+          elemTopBar = elemBar;
+        }
+
+        elem.append(elemBar); // 插入 bar 节点
       });
-      
-      //Top显示控制
-      dom.on('scroll', function(){
+
+      // 若目标元素已存在 fixbar，则移除旧的节点
+      $target.find('.'+ ELEM).remove();
+
+      // 向目标元素插入 fixbar 节点
+      typeof options.css === 'object' && elem.css(options.css);
+      $target.append(elem);
+
+      // top bar 的显示隐藏
+      if(elemTopBar){
+        var lock;
+        var setTopBar = (function setTopBar(){
+          var top = $doc.scrollTop();
+          if(top >= options.showHeight){
+            lock || (elemTopBar.show(), lock = 1);
+          } else {
+            lock && (elemTopBar.hide(), lock = 0);
+          }
+          return setTopBar;
+        })();
+      }
+
+      // 根据 scrollbar 设置 fixbar 相关状态
+      var timer;
+      $doc.on('scroll', function(){
+        if(!setTopBar) return;
         clearTimeout(timer);
         timer = setTimeout(function(){
-          scroll();
+          setTopBar();
         }, 100);
       }); 
     }
