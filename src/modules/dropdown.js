@@ -261,13 +261,15 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
 
     //触发菜单列表事件
     that.elemView.find('.layui-menu li').on('click', function(e){
-      var othis = $(this)
-      ,data = othis.data('item') || {}
-      ,isChild = data.child && data.child.length > 0;
+      var othis = $(this);
+      var data = othis.data('item') || {};
+      var isChild = data.child && data.child.length > 0;
+      var isClickAllScope = options.clickScope === 'all'; // 是否所有父子菜单均触发点击事件
       
-      if(!isChild && data.type !== '-'){
-        that.remove();
+      if((!isChild || isClickAllScope) && data.type !== '-'){
+        isChild || that.remove();
         typeof options.click === 'function' && options.click(data, othis);
+        layui.stope(e);
       }
     });
     
