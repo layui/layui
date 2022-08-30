@@ -15,7 +15,7 @@
   }
 
   ,Layui = function(){
-    this.v = '2.7.6'; // layui 版本号
+    this.v = '2.8.0-beta.1'; // Layui 版本号
   }
   
   //识别预先可能定义的指定全局对象
@@ -54,7 +54,6 @@
     ,laydate: 'laydate' //日期
     ,laypage: 'laypage' //分页
     ,laytpl: 'laytpl' //模板引擎
-    ,layedit: 'layedit' //富文本编辑器
     ,form: 'form' //表单集
     ,upload: 'upload' //上传
     ,dropdown: 'dropdown' //下拉菜单

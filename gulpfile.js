@@ -17,11 +17,11 @@ const yargs = require('yargs');
 const config = {
   //注释
   comment: [
-    '/** <%= pkg.version %> | <%= pkg.license %> Licensed */<%= js %>'
+    '/** v<%= pkg.version %> | <%= pkg.license %> Licensed */<%= js %>'
     ,{pkg: pkg, js: ';'}
   ]
   //模块
-  ,modules: 'lay,laytpl,laypage,laydate,jquery,layer,util,dropdown,slider,colorpicker,element,upload,form,table,tree,transfer,carousel,rate,flow,layedit,code'
+  ,modules: 'lay,laytpl,laypage,laydate,jquery,layer,util,dropdown,slider,colorpicker,element,upload,form,table,tree,transfer,carousel,rate,flow,code'
 };
 
 // 获取参数
@@ -60,13 +60,14 @@ const js = () => {
 // css
 const css = () => {
   let src = [
-    './src/css/**/*.css'
-    ,'!./src/css/**/font.css'
+    './src/css/layui.css',
+    './src/css/modules/**/*.css',
+    '!./src/css/**/font.css'
   ];
   return gulp.src(src).pipe(cleanCSS({
     compatibility: 'ie8'
   }))
-  //.pipe(concat('layui.css', {newLine: ''}))
+  .pipe(concat('layui.css', {newLine: ''}))
   .pipe(gulp.dest(dest +'/css'));
 };
   
@@ -113,13 +114,12 @@ exports.rls = gulp.series(cleanRLS, rls); //release task
 exports.layer = () => { // gulp layer
   let dest = './release/layer';
   
-  gulp.src('./src/css/modules/layer/default/*')
-  .pipe(gulp.dest(dest + '/src/theme/default'));
+  gulp.src('./src/css/modules/layer.css')
+  .pipe(gulp.dest(dest + '/src'));
 
   return gulp.src('./src/modules/layer.js')
   .pipe(gulp.dest(dest + '/src'));
 };
-
 
 // laydate task
 exports.laydate = () => { // gulp laydate
@@ -131,7 +131,7 @@ exports.laydate = () => { // gulp laydate
   
   // css
   gulp.src('./src/css/modules/laydate.css')
-  .pipe(gulp.dest(dest + 'src/'));
+  .pipe(gulp.dest(dest + 'src'));
   
   // js
   return gulp.src(['./src/layui.js', './src/modules/{lay,laydate}.js'])

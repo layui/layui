@@ -24,7 +24,7 @@
   
   //外部调用
   ,laydate = {
-    v: '5.3.1' //layDate 版本号
+    v: '5.4.0' //layDate 版本号
     ,config: {
       weekStart: 0, // 默认周日一周的开始
     } //全局配置项
@@ -39,10 +39,17 @@
     }
     
     // 主体 CSS 等待事件
-    ,ready: function(fn){
-      var cssname = 'laydate', ver = ''
-      ,path = (isLayui ? 'modules/' : 'css/') + 'laydate.css?v='+ laydate.v + ver;
-      isLayui ? layui.addcss(path, fn, cssname) : ready.link(path, fn, cssname);
+    ,ready: function(callback){
+      var cssname = 'laydate';
+      var ver = ''
+      var path = (isLayui ? 'modules/' : 'css/') + 'laydate.css?v='+ laydate.v + ver;
+
+      isLayui ? (
+        layui['layui.all'] 
+        ? (typeof callback === 'function' && callback()) 
+      : layui.addcss(path, callback, cssname)
+      ) : ready.link(path, callback, cssname);
+
       return this;
     }
   }
