@@ -551,6 +551,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-tab-card,
 
 .layui-input, .layui-textarea, .layui-select,
+.layui-input-split,
 .layui-form-pane .layui-form-label, 
 .layui-form-pane .layui-form-item[pane]{border-color: #eee;}
 
@@ -687,8 +688,43 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-danger:focus,
 .layui-form-danger+.layui-form-select .layui-input{border-color: #FF5722 !important;}
 
+/* 输入框套件 */
+.layui-input-wrap{position: relative; height: 38px; line-height: 38px;}
+.layui-input-wrap .layui-input{padding-right: 35px; cursor: pointer;}
+.layui-input-wrap .layui-input::-ms-clear,
+.layui-input-wrap .layui-input::-ms-reveal{display: none;}
+.layui-input-wrap-prefix .layui-input{padding-left:35px;}
+
+.layui-input-prefix,
+.layui-input-suffix,
+.layui-input-split{position: absolute; right: 0; top: 0; padding: 0 10px; width: 35px; height: 100%; text-align: center; transition: all .3s; cursor: pointer; pointer-events: none; box-sizing: border-box;}
+.layui-input-prefix{left: 0; border-radius: 2px 0 0 2px;}
+.layui-input-suffix{right: 0; border-radius: 0 2px 2px 0;}
+
+.layui-input-wrap .layui-input:focus + .layui-input-split{border-color: #d2d2d2;}
+.layui-input-prefix .layui-icon,
+.layui-input-suffix .layui-icon,
+.layui-input-split .layui-icon{position: relative; font-size: 16px; color: #5F5F5F; transition: all .3s;}
+.layui-input-wrap .layui-input-prefix.layui-input-split{border-width: 0; border-right-width: 1px;}
+
+.layui-input-wrap-prefix .layui-form-select{position: static;}
+
+.layui-input-affix-event .layui-icon{color: rgba(0,0,0,.8);}
+.layui-input-affix-event .layui-icon-clear{color: rgba(0,0,0,.3);}
+.layui-input-affix-event .layui-icon:hover{color: rgba(0,0,0,.6);}
+
+.layui-input-split{border-width: 1px; border-style: solid;}
+.layui-input-affix-event{pointer-events: auto;}
+
+/* 输入框组 */
+.layui-input-group{position: relative; display: inline-table; cursor: pointer}
+.layui-input-group>*{display: table-cell; vertical-align: middle; position: relative;  cursor: pointer;}
+.layui-input-group .layui-input{padding-right: 15px;}
+.layui-input-group .layui-input-prefix{width: auto; border-right: 0;}
+.layui-input-group .layui-input-suffix{width: auto; border-left: 0;}
+
 /* 下拉选择 */
-.layui-form-select{position: relative;}
+.layui-form-select{position: relative; color: #5F5F5F;}
 .layui-form-select .layui-input{padding-right: 30px; cursor: pointer;}
 .layui-form-select .layui-edge{position: absolute; right: 10px; top: 50%; margin-top: -3px; cursor: pointer; border-width: 6px; border-top-color: #c2c2c2; border-top-style: solid; transition: all .3s; -webkit-transition: all .3s;}
 .layui-form-select dl{display: none; position: absolute; left: 0; top: 42px; padding: 5px 0; z-index: 899; min-width: 100%; border: 1px solid #eee; max-height: 300px; overflow-y: auto; background-color: #fff; border-radius: 2px; box-shadow: 1px 1px 4px rgb(0 0 0 / 8%); box-sizing: border-box;}
@@ -699,7 +735,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-select dl dd:hover{background-color: #F6F6F6; -webkit-transition: .5s all; transition: .5s all;}
 .layui-form-select .layui-select-group dd{padding-left: 20px;}
 .layui-form-select dl dd.layui-select-tips{padding-left: 10px !important; color: #999;}
-.layui-form-select dl dd.layui-this{background-color: #5FB878; color: #fff;}
+.layui-form-select dl dd.layui-this{background-color: #F7F7F7; color: #5FB878; font-weight: 700;}
 /*.layui-form-select dl dd.layui-this{background-color: #F6F6F6; color: #5FB878; font-weight: 700;}*/
 .layui-form-select dl dd.layui-disabled{background-color: #fff;}
 .layui-form-selected dl{display: block;}
