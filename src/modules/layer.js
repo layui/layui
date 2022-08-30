@@ -120,15 +120,18 @@ var layer = {
     return this;
   },
 
-  //主体 CSS 等待事件
+  // 主体 CSS 等待事件
   ready: function(callback){
-    var cssname = 'layer', ver = ''
-    ,path = (isLayui ? 'modules/' : 'css/') + 'layer.css?v='+ layer.v + ver;
+    var cssname = 'layer';
+    var ver = '';
+    var path = (isLayui ? 'modules/' : 'css/') + 'layer.css?v='+ layer.v + ver;
+    
     isLayui ? (
       layui['layui.all'] 
         ? (typeof callback === 'function' && callback()) 
       : layui.addcss(path, callback, cssname)
     ) : ready.link(path, callback, cssname);
+
     return this;
   },
   
