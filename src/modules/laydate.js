@@ -46,8 +46,8 @@
 
       isLayui ? (
         layui['layui.all'] 
-        ? (typeof callback === 'function' && callback()) 
-      : layui.addcss(path, callback, cssname)
+          ? (typeof callback === 'function' && callback()) 
+        : layui.addcss(path, callback, cssname)
       ) : ready.link(path, callback, cssname);
 
       return this;
