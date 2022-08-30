@@ -16,18 +16,88 @@
     </style>
   </head>
 <body>
-  <form class="layui-form" method="get" lay-filter="top" id="AAA">
+  <form class="layui-form" method="get" lay-filter="top">
     <div class="layui-form-item">
-      <div class="layui-input-inline">
-        <input type="text" name="arr[]" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+      <div class="layui-inline layui-input-group">
+        <div class="layui-input-split layui-input-prefix">
+          前置信息
+        </div>
+        <input type="text" name="arr[]" required lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        <div class="layui-input-split layui-input-suffix">
+          后置信息
+        </div>
       </div>
-      <div class="layui-input-inline">
-        <input type="text" name="arr[]" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+      <div class="layui-inline">
+        <div class="layui-input-wrap">
+          <input type="text" name="arr[]" required placeholder="请输入" autocomplete="off" class="layui-input">
+          <div class="layui-input-split">
+            <i class="layui-icon layui-icon-down"></i>
+          </div>
+        </div>
       </div>
-      <div class="layui-input-inline">
-        <input type="text" name="arr[title]" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+    </div>  
+    
+    <div class="layui-form-item">  
+      <div class="layui-inline layui-input-wrap layui-input-wrap-prefix">
+        <div class="layui-input-prefix">
+          <i class="layui-icon layui-icon-username"></i>
+        </div>
+        <input type="text" name="arr[]" value="" required placeholder="请输入" autocomplete="off" class="layui-input" lay-affix="clear">
+      </div>
+      <div class="layui-inline layui-input-wrap layui-input-wrap-prefix">
+        <div class="layui-input-prefix">
+          <i class="layui-icon layui-icon-password"></i>
+        </div>
+        <input type="password" name="arr[]" value="" required placeholder="请输入" autocomplete="off" class="layui-input" lay-affix="eye">
       </div>
     </div>
+    
+    <div class="layui-form-item">
+      <div class="layui-inline layui-input-wrap layui-input-wrap-prefix">
+        <div class="layui-input-prefix layui-input-split">
+          <i class="layui-icon layui-icon-username"></i>
+        </div>
+        <input type="text" name="arr[]" value="" required placeholder="请输入" autocomplete="off" class="layui-input" lay-affix="clear" style="padding-left: 45px;">
+      </div>
+      <div class="layui-inline layui-input-wrap">
+        <input type="text" name="arr[]" value="" required placeholder="请输入" autocomplete="off" class="layui-input" lay-affix="clear">
+      </div>
+    </div>
+    
+    <div class="layui-form-item"> 
+      <div class="layui-inline">
+        <div class="layui-input-wrap layui-input-wrap-prefix">
+          <div class="layui-input-prefix">
+            <i class="layui-icon layui-icon-date"></i>
+          </div>
+          <input type="text" name="arr[]" required placeholder="请输入" autocomplete="off" class="layui-input">
+          <div class="layui-input-suffix">
+            <i class="layui-icon layui-icon-down"></i>
+          </div>
+        </div>
+      </div>
+      <div class="layui-inline"> 
+        <div class="layui-input-wrap">
+          <input type="text" name="arr[]" required placeholder="请输入" autocomplete="off" class="layui-input">
+          <div class="layui-input-suffix">
+            <i class="layui-icon layui-icon-more-vertical"></i>
+          </div>
+        </div>
+      </div>
+      <div class="layui-inline layui-input-wrap layui-input-wrap-prefix">
+        <div class="layui-input-prefix">
+          <i class="layui-icon layui-icon-username"></i>
+        </div>
+        <select name="selectdemo">
+          <option value="">请选择</option>
+          <option value="北京">北京</option>
+          <option value="上海">上海</option>
+          <option value="广州">广州</option>
+          <option value="深圳">深圳</option>
+        </select>
+      </div>
+    </div>
+    
     <div class="layui-form-item">
       <button class="layui-btn" id="testSubmit">立即提交</button>
     </div>
