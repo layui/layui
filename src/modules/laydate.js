@@ -290,11 +290,9 @@
     }
     
     //设置唯一KEY
-    // if(!options.elem.attr('lay-key')){
     options.elem.attr('lay-key', that.index);
     options.eventElem.attr('lay-key', that.index);
-    // }
-    
+
     //记录重要日期
     options.mark = lay.extend({}, (options.calendar && options.lang === 'cn') ? {
       '0-1-1': '元旦'
@@ -514,23 +512,6 @@
     options.showBottom && elem.appendChild(divFooter);
     
     //生成自定义主题
-    // if(/^#/.test(options.theme)){
-    //   var style = lay.elem('style')
-    //   ,styleText = [
-    //     '#{{id}} .layui-laydate-header{background-color:{{theme}};}'
-    //     ,'#{{id}} .layui-this{background-color:{{theme}} !important;}'
-    //   ].join('').replace(/{{id}}/g, that.elemID).replace(/{{theme}}/g, options.theme);
-    //
-    //   if('styleSheet' in style){
-    //     style.setAttribute('type', 'text/css');
-    //     style.styleSheet.cssText = styleText;
-    //   } else {
-    //     style.innerHTML = styleText;
-    //   }
-    //
-    //   lay(elem).addClass('laydate-theme-molv');
-    //   elem.appendChild(style);
-    // }
     var style;
     var styleText = [];
     lay.each(options.theme, function (index, theme) {
@@ -1730,39 +1711,26 @@
     var that = this
     var options = that.config
 
-    //绑定呼出控件事件
-    // var showEvent = function(elem, bind){
-    //   elem.on(options.trigger, function(){
-    //     //已经打开的面板避免重新渲染
-    //     if(laydate.thisId === options.id) return;
-    //     bind && (that.bindElem = this);
-    //     that.render();
-    //   });
-    // };
-
     if(!options.elem[0] || options.elem[0].eventHandler) return;
 
-    // showEvent(options.elem, 'bind');
-    // showEvent(options.eventElem);
-
-    var showFn = function(){
-      //已经打开的面板避免重新渲染
+    var showEvent = function(){
+      // 已经打开的面板避免重新渲染
       if(laydate.thisId === options.id) return;
       that.bindElem = this;
       that.render();
     }
-    options.elem.on(options.trigger, showFn);
+    //绑定呼出控件事件
+    options.elem.on(options.trigger, showEvent);
     options.elem[0].eventHandler = true;
-    options.eventElem.on(options.trigger, showFn);
-    options.eventElem[0].eventHandler = true;
+    options.eventElem.on(options.trigger, showEvent);
 
     that.destroy = function () {
       that.remove();
-      layui.each(['elem', 'eventElem'], function (index, name) {
-        options[name].off(options.trigger, showFn);
-        options[name][0].eventHandler = false;
-        options[name].removeAttr('lay-key');
-      })
+      options.elem.off(options.trigger, showEvent);
+      options.elem.removeAttr('lay-key');
+      options.elem[0].eventHandler = false;
+      options.eventElem.off(options.trigger, showEvent);
+      options.eventElem.removeAttr('lay-key');
 
       delete thisModule.that[options.id];
     }

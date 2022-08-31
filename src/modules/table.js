@@ -786,9 +786,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       
       // 给设定百分比的列分配列宽
       else if(/\d+%$/.test(item3.width)){
-        that.getCssRule(options.index +'-'+ item3.key, function(item){
-          var width = Math.floor((parseFloat(item3.width) / 100) * cntrWidth); // 计算结果有可能大于最大或者小于最小 todo
-          item.style.width = (width < minWidth ? minWidth : width) + 'px';
+        that.getCssRule(item3.key, function(item){
+          var width = Math.floor((parseFloat(item3.width) / 100) * cntrWidth);
+          width < minWidth && (width = minWidth);
+          width > maxWidth && (width = maxWidth);
+          item.style.width = width + 'px';
         });
       }
 
