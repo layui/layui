@@ -21,7 +21,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     config: { // 全局配置项
       checkName: 'LAY_CHECKED' // 是否选中状态的字段名
       ,indexName: 'LAY_TABLE_INDEX' // 初始下标索引名，用于恢复当前页表格排序
-      ,numbersName: 'LAY_INDEX' //序号
+      ,numbersName: 'LAY_INDEX' // 序号
       ,disabledName: 'LAY_DISABLED'
     }
     ,cache: {} // 数据缓存
@@ -1068,7 +1068,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         // 记录下标索引，用于恢复排序
         if(!sort) item1[table.config.indexName] = i1;
         
-        //遍历表头
+        // 遍历表头
         that.eachCols(function(i3, item3){
           var field = item3.field || i3;
           var key = item3.key;
@@ -1106,9 +1106,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
             + function(){
               var tplData = $.extend(true, {
                 LAY_COL: item3
-              }, item1)
-              ,checkName = table.config.checkName
-              ,disabledName = table.config.disabledName;
+              }, item1);
+              var checkName = table.config.checkName;
+              var disabledName = table.config.disabledName;
               
               //渲染不同风格的列
               switch(item3.type){
@@ -1912,11 +1912,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     
     //数据行中的事件返回的公共对象成员
     var commonMember = that.commonMember = function(sets){
-      var othis = $(this)
-      ,index = othis.parents('tr').eq(0).data('index')
-      ,tr = that.layBody.find('tr[data-index="'+ index +'"]')
-      ,data = table.cache[that.key] || [];
-      
+      var othis = $(this);
+      var index = othis.parents('tr').eq(0).data('index');
+      var tr = that.layBody.find('tr[data-index="'+ index +'"]');
+      var data = table.cache[that.key] || [];
 
       data = data[index] || {};
       
@@ -1944,7 +1943,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
                 cell.html(parseTempData.call(that, {
                   item3: item3
                   ,content: value
-                  ,tplData: data
+                  ,tplData: $.extend({
+                    LAY_COL: item3
+                  }, data)
                 }));
                 td.data('content', value);
               } 
@@ -1956,7 +1957,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
                 thisTd.children(ELEM_CELL).html(parseTempData.call(that, {
                   item3: item3
                   ,content: content
-                  ,tplData: data
+                  ,tplData: $.extend({
+                    LAY_COL: item3
+                  }, data)
                 }));
                 thisTd.data('content', content);
               }
