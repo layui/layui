@@ -370,7 +370,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 初始化索引
     options.index = that.index;
     that.key = options.id || options.index;
-    
+
     //初始化一些其他参数
     that.setInit();
     
@@ -403,7 +403,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       data: options
       ,index: that.index //索引
     }));
-    
+
     //生成替代元素
     hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender
     othis.after(reElem);
@@ -665,7 +665,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 获取表头组合
     var groups = that.layHeader.find((
-      // 根据当前活动的表头 parentkey 属性查找其组合表头 
+      // 根据当前活动的表头 parentkey 属性查找其组合表头
       th ? ('th[data-key='+ th.data('parentkey') +']>') : ''
     ) + '.' + ELEM_GROUP).get().reverse(); // 若无指向当前活动表头，则自下而上获取所有组合表头
 
@@ -787,7 +787,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       // 给设定百分比的列分配列宽
       else if(/\d+%$/.test(item3.width)){
         that.getCssRule(item3.key, function(item){
-          item.style.width = Math.floor((parseFloat(item3.width) / 100) * cntrWidth) + 'px';
+          var width = Math.floor((parseFloat(item3.width) / 100) * cntrWidth);
+          width < minWidth && (width = minWidth);
+          width > maxWidth && (width = maxWidth);
+          item.style.width = width + 'px';
         });
       }
 
@@ -1321,7 +1324,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }() +'">'
         ,'<div class="layui-table-cell laytable-cell-'+ function(){ // 返回对应的CSS类标识
           var key = item3.key;
-          return item3.type === 'normal' ? key 
+          return item3.type === 'normal' ? key
           : (key + ' laytable-cell-' + item3.type);
         }() +'"'+ function(){
         var attr = [];
@@ -1695,12 +1698,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
                 that.elem.find('*[data-key="'+ key +'"]')[
                   checked ? 'removeClass' : 'addClass'
                 ](HIDE);
-                
+
                 // 根据列的显示隐藏，同步多级表头的父级相关属性值
                 if(hide != col.hide){
                   that.setParentCol(!checked, parentKey);
                 }
-                
+
                 // 重新适配尺寸
                 that.resize();
 
@@ -2052,7 +2055,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     };
     
     // 渲染单元格编辑状态
-    var renderGridEdit = function(othis, e){ 
+    var renderGridEdit = function(othis, e){
       othis = $(othis);
 
       if(othis.data('off')) return; // 不触发事件
@@ -2114,18 +2117,18 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           });
         }
       });
-      
+
       // 更新缓存中的值
       var obj = {}; //变更的键值
       obj[field] = value;
       params.update(obj);
-      
+
       // 执行 API 编辑事件
       layui.event.call(td[0], MOD_NAME, 'edit('+ filter +')', params);
     }).on('blur', '.'+ ELEM_EDIT, function(){ // 单元格编辑 - 恢复非编辑状态事件
       $(this).remove(); // 移除编辑状态
     });
-    
+
     // 单元格触发编辑的事件
     that.layBody.on(options.editTrigger, 'td', function(e){
       renderGridEdit(this, e)
@@ -2252,8 +2255,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     settings = settings || {};
     var that = this;
     var inst = null;
-    var elemTable = filter 
-      ? $('table[lay-filter="'+ filter +'"]') 
+    var elemTable = filter
+      ? $('table[lay-filter="'+ filter +'"]')
     : $(ELEM + '[lay-data],'+ ELEM + '[lay-options]');
     var errorTips = 'Table element property lay-data configuration item has a syntax error: ';
 
