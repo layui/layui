@@ -1,0 +1,85 @@
+@media only screen and (max-width: 513px) {
+
+      /* Force table to not be like tables anymore */
+      table,
+      tbody,
+      th,
+      td,
+      tr {
+        display: block;
+      }
+
+      /* Hide table headers (but not display: none;, for accessibility) */
+      thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+
+      tr {
+        border-top: 1px solid #eeeeee;
+      }
+
+      .layui-table-main tr+tr {
+        margin-top: 15px;
+      }
+
+      td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        white-space: normal;
+        text-align: left;
+      }
+
+      td:before {
+        position: absolute;
+        top: 9px;
+        left: 6px;
+        width: 30%;
+        padding-right: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+        content: attr(data-title);
+      }
+
+      .layui-table-header {
+        border-width: 0;
+        border-bottom-width: 0;
+        overflow: initial;
+      }
+
+      .layui-table-fixed-l {
+        display: none;
+      }
+
+      .laytable-cell-checkbox {
+        text-align: left;
+      }
+
+      .layui-table-col-special .layui-table-cell {
+        overflow-x: scroll;
+      }
+
+      .layui-table-cell {
+        margin-left: 30%;
+        width: 65% !important;
+      }
+
+      .layui-form-label {
+        display: none;
+      }
+
+      .layui-form-item .layui-input-inline {
+        margin-left: 0px;
+      }
+
+      .layui-table-page {
+        overflow-x: scroll;
+      }
+
+}

@@ -1073,12 +1073,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           var field = item3.field || i3;
           var key = item3.key;
           var content = item1[field];
+          var title = item3.title || '';
           
           if(content === undefined || content === null) content = '';
           if(item3.colGroup) return;
 
           // td 内容
-          var td = ['<td data-field="'+ field +'" data-key="'+ key +'" '+ function(){ //追加各种属性
+          var td = ['<td data-field="'+ field +'" data-title="'+ title +'" data-key="'+ key +'" '+ function(){ //追加各种属性
             var attr = [];
             if(item3.edit) attr.push('data-edit="true"'); // 允许单元格编辑
             if(item3.templet) attr.push('data-content="'+ util.escape(content) +'"'); //自定义模板
