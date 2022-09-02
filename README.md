@@ -66,8 +66,8 @@ Layui 是一套开源的 Web UI 组件库，采用自身轻量级模块化规范
 [项目参与者](https://github.com/layui/layui/graphs/contributors) 
 
 ## 破旧立新 🌱
-layui 原官网已于2021年10月13日下线。详见：
-> 1. <a href="https://unpkg.com/outeres@0.0.7/img/layui/notice-2021.png"  target="_blank">layui 原官网下线公告</a>  2. <a href="https://www.zhihu.com/question/488668647/answer/2159962082"  target="_blank">layui 原官网为什么要下线？</a>
+Layui 原官网已于2021年10月13日下线。详见：
+> 1. <a href="https://unpkg.com/outeres@0.0.7/img/layui/notice-2021.png"  target="_blank">Layui 原官网下线公告</a>  2. <a href="https://www.zhihu.com/question/488668647/answer/2159962082"  target="_blank">Layui 原官网为什么要下线？</a>
 
 ---
 
