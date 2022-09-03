@@ -836,8 +836,11 @@
       }
     }
 
-    //初始值不在最大最小范围内
-    minMaxError && that.setValue(that.parse()).hint('初始值' + lang.invalidDate + lang.formatError[1]);
+    // 初始值不在最大最小范围内
+    if(minMaxError && value){
+      that.setValue(that.parse());
+      that.hint('value ' + lang.invalidDate + lang.formatError[1]);
+    }
 
     fn && fn();
     return that;
