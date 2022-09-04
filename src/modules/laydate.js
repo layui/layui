@@ -900,12 +900,16 @@
     return that;
   };
   
-  //无效日期范围的标记
-  Class.prototype.limit = function(elem, date, index, time, type){
-    var that = this
-    ,options = that.config, timestrap = {}
-    ,dateTime = index > (time ? 0 : 41) ? that.endDate : options.dateTime
-    ,isOut, thisDateTime = lay.extend({}, dateTime, date || {});
+  // 无效日期范围的标记
+  Class.prototype.limit = function(opts){
+    opts = opts || {};
+
+    var that = this;
+    var options = that.config;
+    var timestrap = {}
+    var dateTime = opts.index > (opts.time ? 0 : 41) ? that.endDate : options.dateTime;
+    var isOut;
+    var thisDateTime = lay.extend({}, dateTime, opts.date || {});
     
     lay.each({
       now: thisDateTime
@@ -914,11 +918,11 @@
     }, function(key, item){
       timestrap[key] = that.newDate(lay.extend({
         year: item.year
-        ,month: type === 'year' ? 0 : item.month // 年份的时候只比较年
-        ,date: (type === 'year' || type === 'month') ? 1 : item.date // 年月只比较年月不与最大最小比日期
+        ,month: opts.type === 'year' ? 0 : item.month // 年份的时候只比较年
+        ,date: (opts.type === 'year' || opts.type === 'month') ? 1 : item.date // 年月只比较年月不与最大最小比日期
       }, function(){
         var hms = {};
-        lay.each(time, function(i, keys){
+        lay.each(opts.time, function(i, keys){
           hms[keys] = item[keys];
         });
         return hms;
@@ -926,7 +930,8 @@
     });
     
     isOut = timestrap.now < timestrap.min || timestrap.now > timestrap.max;
-    elem && elem[isOut ? 'addClass' : 'removeClass'](DISABLED);
+    opts.elem && opts.elem[isOut ? 'addClass' : 'removeClass'](DISABLED);
+
     return isOut;
   };
   
@@ -985,11 +990,15 @@
       YMD[1]++;
       YMD[2] = st + 1;
       item.attr('lay-ymd', YMD.join('-')).html('<div>' + YMD[2] + '</div>');
-      that.mark(item, YMD).holidays(item, YMD).limit(item, {
-        year: YMD[0]
-        ,month: YMD[1] - 1
-        ,date: YMD[2]
-      }, index_);
+      that.mark(item, YMD).holidays(item, YMD).limit({
+        elem: item,
+        date: {
+          year: YMD[0],
+          month: YMD[1] - 1,
+          date: YMD[2]
+        },
+        index: index_
+      });
     });  
     
     //同步头部年月
@@ -1034,7 +1043,11 @@
     
     //通过检测当前有效日期，来设定确定按钮是否可点
     if(!options.range){
-      that.limit(lay(that.footer).find(ELEM_CONFIRM), null, 0, ['hours', 'minutes', 'seconds']);
+      that.limit({
+        elem: lay(that.footer).find(ELEM_CONFIRM),
+        index: 0,
+        time: ['hours', 'minutes', 'seconds']
+      });
     }
     
     //同步按钮可点状态
@@ -1099,7 +1112,12 @@
         }
         */
 
-        that.limit(lay(li), ymd, index, null, type);
+        that.limit({
+          elem: lay(li),
+          date: ymd,
+          index: index,
+          type: type
+        });
         yearNum++;
       });
 
@@ -1131,7 +1149,12 @@
         }
         */
 
-        that.limit(lay(li), ymd, index, null, type);
+        that.limit({
+          elem: lay(li),
+          date: ymd,
+          index: index,
+          type: type
+        });
       });
 
       lay(elemYM[isCN ? 0 : 1]).attr('lay-ym', listYM[0] + '-' + listYM[1])
@@ -1144,20 +1167,34 @@
       var setTimeStatus = function(){
         lay(ul).find('ol').each(function(i, ol){
           lay(ol).find('li').each(function(ii, li){
-            that.limit(lay(li), [{
-              hours: ii
-            }, {
-              hours: that[startEnd].hours
-              ,minutes: ii
-            }, {
-              hours: that[startEnd].hours
-              ,minutes: that[startEnd].minutes
-              ,seconds: ii
-            }][i], index, [['hours'], ['hours', 'minutes'], ['hours', 'minutes', 'seconds']][i]);
+            that.limit({
+              elem: lay(li),
+              date: [{
+                hours: ii
+              }, {
+                hours: that[startEnd].hours
+                ,minutes: ii
+              }, {
+                hours: that[startEnd].hours
+                ,minutes: that[startEnd].minutes
+                ,seconds: ii
+              }][i],
+              index: index,
+              time: [
+                ['hours'], 
+                ['hours', 'minutes'], 
+                ['hours', 'minutes', 'seconds']
+              ][i]
+            });
           });
         });
         if(!options.range){
-          that.limit(lay(that.footer).find(ELEM_CONFIRM), that[startEnd], 0, ['hours', 'minutes', 'seconds']);
+          that.limit({
+            elem: lay(that.footer).find(ELEM_CONFIRM),
+            date: that[startEnd],
+            inedx: 0,
+            time: ['hours', 'minutes', 'seconds']
+          });
         }
       };
       
@@ -1197,7 +1234,10 @@
         if(lay(this).hasClass(DISABLED)) return;
         if(index === 0){
           dateTime[type] = ym;
-          that.limit(lay(that.footer).find(ELEM_CONFIRM), null, 0);
+          that.limit({
+            elem: lay(that.footer).find(ELEM_CONFIRM),
+            index: 0
+          });
         } else { //范围选择
           that.endDate[type] = ym;
         }
@@ -1318,7 +1358,11 @@
       isOut = that.newDate(start).getTime() > that.newDate(end).getTime();
       
       //如果不在有效日期内，直接禁用按钮，否则比较开始和结束日期
-      (that.limit(null, start) || that.limit(null, end)) 
+      (that.limit({
+        date: start
+      }) || that.limit({
+        date: end
+      })) 
         ? elemBtn.addClass(DISABLED)
       : elemBtn[isOut ? 'addClass' : 'removeClass'](DISABLED);
       
@@ -1612,8 +1656,11 @@
         });
         if(isAlone) dateTime.year = listYM[0];
         options.range || that.done(null, 'change');     
-        options.range || that.limit(lay(that.footer).find(ELEM_CONFIRM), {
-          year: listYM[0]
+        options.range || that.limit({
+          elem: lay(that.footer).find(ELEM_CONFIRM),
+          date: {
+            year: listYM[0]
+          }
         });
       }
       
