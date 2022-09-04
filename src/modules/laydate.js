@@ -87,6 +87,7 @@
   var ELEM_PREV = 'laydate-day-prev';
   var ELEM_NEXT = 'laydate-day-next';
   var ELEM_FOOTER = 'layui-laydate-footer';
+  var ELEM_NOW = '.laydate-btns-now'
   var ELEM_CONFIRM = '.laydate-btns-confirm';
   var ELEM_TIME_TEXT = 'laydate-time-text';
   var ELEM_TIME_BTN = 'laydate-btns-time';
@@ -1041,12 +1042,22 @@
       that.calendar(that.endDate, 1);
     }
     
-    //通过检测当前有效日期，来设定确定按钮是否可点
+    // 通过检测当前有效日期，来设定底部按钮状态
     if(!options.range){
+      var timeParams = ['hours', 'minutes', 'seconds'];
+
+      // 现在按钮
+      that.limit({
+        elem: lay(that.footer).find(ELEM_NOW),
+        date: that.systemDate(),
+        index: 0,
+        time: timeParams
+      });
+      // 确认按钮
       that.limit({
         elem: lay(that.footer).find(ELEM_CONFIRM),
         index: 0,
-        time: ['hours', 'minutes', 'seconds']
+        time: timeParams
       });
     }
     
@@ -1596,14 +1607,21 @@
         that.done(['', {}, {}]);
       }
       
-      //现在
+      // 现在
       ,now: function(){
         var thisDate = new Date();
+
+        // 当前系统时间未在 min/max 范围内，则不可点击
+        if(lay(btn).hasClass(DISABLED)){
+          return that.hint(lang.tools.now +', '+ lang.invalidDate);
+        }
+
         lay.extend(dateTime, that.systemDate(), {
           hours: thisDate.getHours()
           ,minutes: thisDate.getMinutes()
           ,seconds: thisDate.getSeconds()
         });
+
         that.setValue(that.parse()).remove();
         isStatic && that.calendar();
         that.done();
