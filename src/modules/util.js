@@ -20,10 +20,17 @@ layui.define('jquery', function(exports){
         target: 'body', // fixbar 的插入目标选择器
         bars: [], //  bar 信息
         default: true, // 是否显示默认 bar
-        showHeight: 200 // 出现 top bar 的滚动条高度临界值
+        showHeight: 200, // 出现 top bar 的滚动条高度临界值
+        duration: 200 // top bar 等动画时长（毫秒）
       }, options);
 
+      // 目标元素对象
       var $target = $(options.target);
+
+      // 滚动条所在元素对象
+      var $scroll = options.scroll 
+        ? $(options.scroll) 
+      : $(options.target === 'body' ? $doc : $target)
 
       // 是否提供默认图标
       if(options.default){
@@ -64,9 +71,13 @@ layui.define('jquery', function(exports){
         elemBar.on('click', function(){
           var type = $(this).attr('lay-type');
           if(type === 'top'){
-            $('html,body').animate({
+            (
+              options.target === 'body' 
+                ? $('html,body') 
+              : $scroll
+            ).animate({
               scrollTop : 0
-            }, 200);
+            }, options.duration);
           }
           typeof options.click === 'function' && options.click.call(this, type);
         });
@@ -101,7 +112,7 @@ layui.define('jquery', function(exports){
       if(elemTopBar){
         var lock;
         var setTopBar = (function setTopBar(){
-          var top = $doc.scrollTop();
+          var top = $scroll.scrollTop();
           if(top >= options.showHeight){
             lock || (elemTopBar.show(), lock = 1);
           } else {
@@ -113,7 +124,7 @@ layui.define('jquery', function(exports){
 
       // 根据 scrollbar 设置 fixbar 相关状态
       var timer;
-      $doc.on('scroll', function(){
+      $scroll.on('scroll', function(){
         if(!setTopBar) return;
         clearTimeout(timer);
         timer = setTimeout(function(){
