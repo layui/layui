@@ -6,32 +6,32 @@
   var isLayui = window.layui && layui.define, ready = {
     getPath: (window.lay && lay.getPath) ? lay.getPath : ''
     
-    //载入 CSS 依赖
+    // 载入 CSS 依赖
     ,link: function(href, fn, cssname){
       
-      //未设置路径，则不主动加载 css
+      // 未设置路径，则不主动加载 css
       if(!laydate.path) return;
       
-      //加载 css
+      // 加载 css
       if(window.lay && lay.layui){
         lay.layui.link(laydate.path + href, fn, cssname);
       }
     }
-  }
+  };
   
-  //识别预先可能定义的指定全局对象
-  ,GLOBAL = window.LAYUI_GLOBAL || {}
+  // 识别预先可能定义的指定全局对象
+  var GLOBAL = window.LAYUI_GLOBAL || {};
   
-  //外部调用
-  ,laydate = {
-    v: '5.4.0' //layDate 版本号
+  // 外部调用
+  var laydate = {
+    v: '5.4.0' // layDate 版本号
     ,config: {
       weekStart: 0, // 默认周日一周的开始
-    } //全局配置项
+    } // 全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: GLOBAL.laydate_dir || ready.getPath
     
-    //设置全局项
+    // 设置全局项
     ,set: function(options){
       var that = this;
       that.config = lay.extend({}, that.config, options);
@@ -52,10 +52,10 @@
 
       return this;
     }
-  }
+  };
   
-  //操作当前实例
-  ,thisModule = function(){
+  // 操作当前实例
+  var thisModule = function(){
     var that = this
     ,options = that.config
     ,id = options.id;
@@ -69,15 +69,31 @@
       }
       ,config: that.config
     };
-  }
+  };
 
-  //字符常量
-  ,MOD_NAME = 'laydate', ELEM = '.layui-laydate', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'laydate-disabled', LIMIT_YEAR = [100, 200000]
+  // 字符常量
+  var MOD_NAME = 'laydate';
+  var ELEM = '.layui-laydate';
+  var THIS = 'layui-this';
+  var SHOW = 'layui-show';
+  var HIDE = 'layui-hide';
+  var DISABLED = 'laydate-disabled';
+  var LIMIT_YEAR = [100, 200000];
   
-  ,ELEM_STATIC = 'layui-laydate-static', ELEM_LIST = 'layui-laydate-list', ELEM_SELECTED = 'laydate-selected', ELEM_HINT = 'layui-laydate-hint', ELEM_PREV = 'laydate-day-prev', ELEM_NEXT = 'laydate-day-next', ELEM_FOOTER = 'layui-laydate-footer', ELEM_CONFIRM = '.laydate-btns-confirm', ELEM_TIME_TEXT = 'laydate-time-text', ELEM_TIME_BTN = 'laydate-btns-time', ELEM_PREVIEW = 'layui-laydate-preview'
+  var ELEM_STATIC = 'layui-laydate-static';
+  var ELEM_LIST = 'layui-laydate-list';
+  var ELEM_SELECTED = 'laydate-selected';
+  var ELEM_HINT = 'layui-laydate-hint';
+  var ELEM_PREV = 'laydate-day-prev';
+  var ELEM_NEXT = 'laydate-day-next';
+  var ELEM_FOOTER = 'layui-laydate-footer';
+  var ELEM_CONFIRM = '.laydate-btns-confirm';
+  var ELEM_TIME_TEXT = 'laydate-time-text';
+  var ELEM_TIME_BTN = 'laydate-btns-time';
+  var ELEM_PREVIEW = 'layui-laydate-preview';
   
-  //组件构造器
-  ,Class = function(options){
+  // 组件构造器
+  var Class = function(options){
     var that = this;
     that.index = ++laydate.index;
     that.config = lay.extend({}, that.config, laydate.config, options);
@@ -93,20 +109,20 @@
       return that;
     }
     
-    //初始化 id 参数
+    // 初始化 id 参数
     options = that.config;
     options.id = ('id' in options) ? options.id : that.index;
     
-    //初始化
+    // 初始化
     laydate.ready(function(){
       that.init();
     });
-  }
+  };
   
-  //日期格式字符
-  ,dateType = 'yyyy|y|MM|M|dd|d|HH|H|mm|m|ss|s';
+  // 日期格式字符
+  var dateType = 'yyyy|y|MM|M|dd|d|HH|H|mm|m|ss|s';
   
-  //将日期格式字符转换为数组
+  // 将日期格式字符转换为数组
   thisModule.formatArr = function(format){
     return (format || '').match(new RegExp(dateType + '|.', 'g')) || []
   };
@@ -115,12 +131,12 @@
     组件操作
   */
   
-  //是否闰年
+  // 是否闰年
   Class.isLeapYear = function(year){
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   };
   
-  //默认配置
+  // 默认配置
   Class.prototype.config = {
     type: 'date' //控件类型，支持：year/month/date/time/datetime
     ,range: false //是否开启范围选择，即双控件
