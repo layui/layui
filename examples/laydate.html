@@ -16,12 +16,20 @@ body{padding: 50px 100px;}
 </head>
 <body>
 
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test-first">
+</div>
+
+<br>
+<hr>
+
 范围选择1：
 <div class="layui-inline">
   <input type="text" class="layui-input" id="test1">
 </div>
 
-<br><hr>
+<br>
+<hr>
 
 <div class="layui-form">
 <div class="layui-form-item">
@@ -138,7 +146,15 @@ layui.use('laydate', function(laydate){
   //全局配置
   laydate.set({
     //trigger: 'focus'
-  })
+  });
+
+  // 第一个任意示例
+  laydate.render({
+    elem: '#test-first',
+    min: 0,
+    //max: '2016-12-30'
+  });
+
 
   //范围选择1
   laydate.render({

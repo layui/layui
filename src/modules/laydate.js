@@ -6,32 +6,32 @@
   var isLayui = window.layui && layui.define, ready = {
     getPath: (window.lay && lay.getPath) ? lay.getPath : ''
     
-    //载入 CSS 依赖
+    // 载入 CSS 依赖
     ,link: function(href, fn, cssname){
       
-      //未设置路径，则不主动加载 css
+      // 未设置路径，则不主动加载 css
       if(!laydate.path) return;
       
-      //加载 css
+      // 加载 css
       if(window.lay && lay.layui){
         lay.layui.link(laydate.path + href, fn, cssname);
       }
     }
-  }
+  };
   
-  //识别预先可能定义的指定全局对象
-  ,GLOBAL = window.LAYUI_GLOBAL || {}
+  // 识别预先可能定义的指定全局对象
+  var GLOBAL = window.LAYUI_GLOBAL || {};
   
-  //外部调用
-  ,laydate = {
-    v: '5.4.0' //layDate 版本号
+  // 外部调用
+  var laydate = {
+    v: '5.4.0' // layDate 版本号
     ,config: {
       weekStart: 0, // 默认周日一周的开始
-    } //全局配置项
+    } // 全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: GLOBAL.laydate_dir || ready.getPath
     
-    //设置全局项
+    // 设置全局项
     ,set: function(options){
       var that = this;
       that.config = lay.extend({}, that.config, options);
@@ -52,10 +52,10 @@
 
       return this;
     }
-  }
+  };
   
-  //操作当前实例
-  ,thisModule = function(){
+  // 操作当前实例
+  var thisModule = function(){
     var that = this
     ,options = that.config
     ,id = options.id;
@@ -69,15 +69,32 @@
       }
       ,config: that.config
     };
-  }
+  };
 
-  //字符常量
-  ,MOD_NAME = 'laydate', ELEM = '.layui-laydate', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'laydate-disabled', LIMIT_YEAR = [100, 200000]
+  // 字符常量
+  var MOD_NAME = 'laydate';
+  var ELEM = '.layui-laydate';
+  var THIS = 'layui-this';
+  var SHOW = 'layui-show';
+  var HIDE = 'layui-hide';
+  var DISABLED = 'laydate-disabled';
+  var LIMIT_YEAR = [100, 200000];
   
-  ,ELEM_STATIC = 'layui-laydate-static', ELEM_LIST = 'layui-laydate-list', ELEM_SELECTED = 'laydate-selected', ELEM_HINT = 'layui-laydate-hint', ELEM_PREV = 'laydate-day-prev', ELEM_NEXT = 'laydate-day-next', ELEM_FOOTER = 'layui-laydate-footer', ELEM_CONFIRM = '.laydate-btns-confirm', ELEM_TIME_TEXT = 'laydate-time-text', ELEM_TIME_BTN = 'laydate-btns-time', ELEM_PREVIEW = 'layui-laydate-preview'
+  var ELEM_STATIC = 'layui-laydate-static';
+  var ELEM_LIST = 'layui-laydate-list';
+  var ELEM_SELECTED = 'laydate-selected';
+  var ELEM_HINT = 'layui-laydate-hint';
+  var ELEM_PREV = 'laydate-day-prev';
+  var ELEM_NEXT = 'laydate-day-next';
+  var ELEM_FOOTER = 'layui-laydate-footer';
+  var ELEM_NOW = '.laydate-btns-now'
+  var ELEM_CONFIRM = '.laydate-btns-confirm';
+  var ELEM_TIME_TEXT = 'laydate-time-text';
+  var ELEM_TIME_BTN = 'laydate-btns-time';
+  var ELEM_PREVIEW = 'layui-laydate-preview';
   
-  //组件构造器
-  ,Class = function(options){
+  // 组件构造器
+  var Class = function(options){
     var that = this;
     that.index = ++laydate.index;
     that.config = lay.extend({}, that.config, laydate.config, options);
@@ -93,20 +110,20 @@
       return that;
     }
     
-    //初始化 id 参数
+    // 初始化 id 参数
     options = that.config;
     options.id = ('id' in options) ? options.id : that.index;
     
-    //初始化
+    // 初始化
     laydate.ready(function(){
       that.init();
     });
-  }
+  };
   
-  //日期格式字符
-  ,dateType = 'yyyy|y|MM|M|dd|d|HH|H|mm|m|ss|s';
+  // 日期格式字符
+  var dateType = 'yyyy|y|MM|M|dd|d|HH|H|mm|m|ss|s';
   
-  //将日期格式字符转换为数组
+  // 将日期格式字符转换为数组
   thisModule.formatArr = function(format){
     return (format || '').match(new RegExp(dateType + '|.', 'g')) || []
   };
@@ -115,12 +132,12 @@
     组件操作
   */
   
-  //是否闰年
+  // 是否闰年
   Class.isLeapYear = function(year){
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   };
   
-  //默认配置
+  // 默认配置
   Class.prototype.config = {
     type: 'date' //控件类型，支持：year/month/date/time/datetime
     ,range: false //是否开启范围选择，即双控件
@@ -836,8 +853,11 @@
       }
     }
 
-    //初始值不在最大最小范围内
-    minMaxError && that.setValue(that.parse()).hint('初始值' + lang.invalidDate + lang.formatError[1]);
+    // 初始值不在最大最小范围内
+    if(minMaxError && value){
+      that.setValue(that.parse());
+      that.hint('value ' + lang.invalidDate + lang.formatError[1]);
+    }
 
     fn && fn();
     return that;
@@ -881,12 +901,16 @@
     return that;
   };
   
-  //无效日期范围的标记
-  Class.prototype.limit = function(elem, date, index, time, type){
-    var that = this
-    ,options = that.config, timestrap = {}
-    ,dateTime = index > (time ? 0 : 41) ? that.endDate : options.dateTime
-    ,isOut, thisDateTime = lay.extend({}, dateTime, date || {});
+  // 无效日期范围的标记
+  Class.prototype.limit = function(opts){
+    opts = opts || {};
+
+    var that = this;
+    var options = that.config;
+    var timestrap = {}
+    var dateTime = opts.index > (opts.time ? 0 : 41) ? that.endDate : options.dateTime;
+    var isOut;
+    var thisDateTime = lay.extend({}, dateTime, opts.date || {});
     
     lay.each({
       now: thisDateTime
@@ -895,11 +919,11 @@
     }, function(key, item){
       timestrap[key] = that.newDate(lay.extend({
         year: item.year
-        ,month: type === 'year' ? 0 : item.month // 年份的时候只比较年
-        ,date: (type === 'year' || type === 'month') ? 1 : item.date // 年月只比较年月不与最大最小比日期
+        ,month: opts.type === 'year' ? 0 : item.month // 年份的时候只比较年
+        ,date: (opts.type === 'year' || opts.type === 'month') ? 1 : item.date // 年月只比较年月不与最大最小比日期
       }, function(){
         var hms = {};
-        lay.each(time, function(i, keys){
+        lay.each(opts.time, function(i, keys){
           hms[keys] = item[keys];
         });
         return hms;
@@ -907,7 +931,8 @@
     });
     
     isOut = timestrap.now < timestrap.min || timestrap.now > timestrap.max;
-    elem && elem[isOut ? 'addClass' : 'removeClass'](DISABLED);
+    opts.elem && opts.elem[isOut ? 'addClass' : 'removeClass'](DISABLED);
+
     return isOut;
   };
   
@@ -966,11 +991,15 @@
       YMD[1]++;
       YMD[2] = st + 1;
       item.attr('lay-ymd', YMD.join('-')).html('<div>' + YMD[2] + '</div>');
-      that.mark(item, YMD).holidays(item, YMD).limit(item, {
-        year: YMD[0]
-        ,month: YMD[1] - 1
-        ,date: YMD[2]
-      }, index_);
+      that.mark(item, YMD).holidays(item, YMD).limit({
+        elem: item,
+        date: {
+          year: YMD[0],
+          month: YMD[1] - 1,
+          date: YMD[2]
+        },
+        index: index_
+      });
     });  
     
     //同步头部年月
@@ -1013,9 +1042,23 @@
       that.calendar(that.endDate, 1);
     }
     
-    //通过检测当前有效日期，来设定确定按钮是否可点
+    // 通过检测当前有效日期，来设定底部按钮状态
     if(!options.range){
-      that.limit(lay(that.footer).find(ELEM_CONFIRM), null, 0, ['hours', 'minutes', 'seconds']);
+      var timeParams = ['hours', 'minutes', 'seconds'];
+
+      // 现在按钮
+      that.limit({
+        elem: lay(that.footer).find(ELEM_NOW),
+        date: that.systemDate(),
+        index: 0,
+        time: timeParams
+      });
+      // 确认按钮
+      that.limit({
+        elem: lay(that.footer).find(ELEM_CONFIRM),
+        index: 0,
+        time: timeParams
+      });
     }
     
     //同步按钮可点状态
@@ -1080,7 +1123,12 @@
         }
         */
 
-        that.limit(lay(li), ymd, index, null, type);
+        that.limit({
+          elem: lay(li),
+          date: ymd,
+          index: index,
+          type: type
+        });
         yearNum++;
       });
 
@@ -1112,7 +1160,12 @@
         }
         */
 
-        that.limit(lay(li), ymd, index, null, type);
+        that.limit({
+          elem: lay(li),
+          date: ymd,
+          index: index,
+          type: type
+        });
       });
 
       lay(elemYM[isCN ? 0 : 1]).attr('lay-ym', listYM[0] + '-' + listYM[1])
@@ -1125,20 +1178,34 @@
       var setTimeStatus = function(){
         lay(ul).find('ol').each(function(i, ol){
           lay(ol).find('li').each(function(ii, li){
-            that.limit(lay(li), [{
-              hours: ii
-            }, {
-              hours: that[startEnd].hours
-              ,minutes: ii
-            }, {
-              hours: that[startEnd].hours
-              ,minutes: that[startEnd].minutes
-              ,seconds: ii
-            }][i], index, [['hours'], ['hours', 'minutes'], ['hours', 'minutes', 'seconds']][i]);
+            that.limit({
+              elem: lay(li),
+              date: [{
+                hours: ii
+              }, {
+                hours: that[startEnd].hours
+                ,minutes: ii
+              }, {
+                hours: that[startEnd].hours
+                ,minutes: that[startEnd].minutes
+                ,seconds: ii
+              }][i],
+              index: index,
+              time: [
+                ['hours'], 
+                ['hours', 'minutes'], 
+                ['hours', 'minutes', 'seconds']
+              ][i]
+            });
           });
         });
         if(!options.range){
-          that.limit(lay(that.footer).find(ELEM_CONFIRM), that[startEnd], 0, ['hours', 'minutes', 'seconds']);
+          that.limit({
+            elem: lay(that.footer).find(ELEM_CONFIRM),
+            date: that[startEnd],
+            inedx: 0,
+            time: ['hours', 'minutes', 'seconds']
+          });
         }
       };
       
@@ -1178,7 +1245,10 @@
         if(lay(this).hasClass(DISABLED)) return;
         if(index === 0){
           dateTime[type] = ym;
-          that.limit(lay(that.footer).find(ELEM_CONFIRM), null, 0);
+          that.limit({
+            elem: lay(that.footer).find(ELEM_CONFIRM),
+            index: 0
+          });
         } else { //范围选择
           that.endDate[type] = ym;
         }
@@ -1299,7 +1369,11 @@
       isOut = that.newDate(start).getTime() > that.newDate(end).getTime();
       
       //如果不在有效日期内，直接禁用按钮，否则比较开始和结束日期
-      (that.limit(null, start) || that.limit(null, end)) 
+      (that.limit({
+        date: start
+      }) || that.limit({
+        date: end
+      })) 
         ? elemBtn.addClass(DISABLED)
       : elemBtn[isOut ? 'addClass' : 'removeClass'](DISABLED);
       
@@ -1533,14 +1607,21 @@
         that.done(['', {}, {}]);
       }
       
-      //现在
+      // 现在
       ,now: function(){
         var thisDate = new Date();
+
+        // 当前系统时间未在 min/max 范围内，则不可点击
+        if(lay(btn).hasClass(DISABLED)){
+          return that.hint(lang.tools.now +', '+ lang.invalidDate);
+        }
+
         lay.extend(dateTime, that.systemDate(), {
           hours: thisDate.getHours()
           ,minutes: thisDate.getMinutes()
           ,seconds: thisDate.getSeconds()
         });
+
         that.setValue(that.parse()).remove();
         isStatic && that.calendar();
         that.done();
@@ -1593,8 +1674,11 @@
         });
         if(isAlone) dateTime.year = listYM[0];
         options.range || that.done(null, 'change');     
-        options.range || that.limit(lay(that.footer).find(ELEM_CONFIRM), {
-          year: listYM[0]
+        options.range || that.limit({
+          elem: lay(that.footer).find(ELEM_CONFIRM),
+          date: {
+            year: listYM[0]
+          }
         });
       }
       
