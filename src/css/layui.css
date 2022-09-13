@@ -279,6 +279,7 @@ a cite{font-style: normal; *cursor:pointer;}
 ,.layui-col-sm1, .layui-col-sm2, .layui-col-sm3, .layui-col-sm4, .layui-col-sm5, .layui-col-sm6, .layui-col-sm7, .layui-col-sm8, .layui-col-sm9, .layui-col-sm10, .layui-col-sm11, .layui-col-sm12
 ,.layui-col-md1, .layui-col-md2, .layui-col-md3, .layui-col-md4, .layui-col-md5, .layui-col-md6, .layui-col-md7, .layui-col-md8, .layui-col-md9, .layui-col-md10, .layui-col-md11, .layui-col-md12
 ,.layui-col-lg1, .layui-col-lg2, .layui-col-lg3, .layui-col-lg4, .layui-col-lg5, .layui-col-lg6, .layui-col-lg7, .layui-col-lg8, .layui-col-lg9, .layui-col-lg10, .layui-col-lg11, .layui-col-lg12
+,.layui-col-xl1, .layui-col-xl2, .layui-col-xl3, .layui-col-xl4, .layui-col-xl5, .layui-col-xl6, .layui-col-xl7, .layui-col-xl8, .layui-col-xl9, .layui-col-xl10, .layui-col-xl11, .layui-col-xl12
 {position: relative; display: block; box-sizing: border-box;}
 
 .layui-col-xs1, .layui-col-xs2, .layui-col-xs3, .layui-col-xs4, .layui-col-xs5, .layui-col-xs6, .layui-col-xs7, .layui-col-xs8, .layui-col-xs9, .layui-col-xs10, .layui-col-xs11, .layui-col-xs12{float: left;}
@@ -308,7 +309,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-col-xs-offset11{margin-left: 91.66666667%;}
 .layui-col-xs-offset12{margin-left: 100%;}
 
-/* 超小屏幕(手机) */
+/* 超小屏幕 */
 @media screen and (max-width: 767.98px) {
   .layui-container{padding: 0 15px;}
   .layui-hide-xs{display: none!important;}
@@ -317,7 +318,7 @@ a cite{font-style: normal; *cursor:pointer;}
   .layui-show-xs-inline-block{display: inline-block!important;}
 }
 
-/* 小型屏幕(平板) */
+/* 小型屏幕 */
 @media screen and (min-width: 768px) {
   .layui-container{width: 720px;}
   .layui-hide-sm{display: none!important;}
@@ -352,7 +353,7 @@ a cite{font-style: normal; *cursor:pointer;}
   .layui-col-sm-offset11{margin-left: 91.66666667%;}
   .layui-col-sm-offset12{margin-left: 100%;}
 }
-/* 中型屏幕(桌面) */
+/* 中型屏幕 */
 @media screen and (min-width: 992px) {
   .layui-container{width: 960px;}
   .layui-hide-md{display: none!important;}
@@ -387,7 +388,7 @@ a cite{font-style: normal; *cursor:pointer;}
   .layui-col-md-offset11{margin-left: 91.66666667%;}
   .layui-col-md-offset12{margin-left: 100%;}
 }
-/* 大型屏幕(桌面) */
+/* 大型屏幕 */
 @media screen and (min-width: 1200px) {
   .layui-container{width: 1150px;}
   .layui-hide-lg{display: none!important;}
@@ -421,6 +422,41 @@ a cite{font-style: normal; *cursor:pointer;}
   .layui-col-lg-offset10{margin-left: 83.33333333%;}
   .layui-col-lg-offset11{margin-left: 91.66666667%;}
   .layui-col-lg-offset12{margin-left: 100%;}
+}
+/* 超大屏幕 */
+@media screen and (min-width: 1400px) {
+  .layui-container{width: 1330px;}
+  .layui-hide-xl{display: none!important;}
+  .layui-show-xl-block{display: block!important;}
+  .layui-show-xl-inline{display: inline!important;}
+  .layui-show-xl-inline-block{display: inline-block!important;}
+  
+  .layui-col-xl1, .layui-col-xl2, .layui-col-xl3, .layui-col-xl4, .layui-col-xl5, .layui-col-xl6, .layui-col-xl7, .layui-col-xl8, .layui-col-xl9, .layui-col-xl10, .layui-col-xl11, .layui-col-xl12{float: left;}
+  .layui-col-xl1{width: 8.33333333%;}
+  .layui-col-xl2{width: 16.66666667%;}
+  .layui-col-xl3{width: 25%;}
+  .layui-col-xl4{width: 33.33333333%;}
+  .layui-col-xl5{width: 41.66666667%;}
+  .layui-col-xl6{width: 50%;}
+  .layui-col-xl7{width: 58.33333333%;}
+  .layui-col-xl8{width: 66.66666667%;}
+  .layui-col-xl9{width: 75%;}
+  .layui-col-xl10{width: 83.33333333%;}
+  .layui-col-xl11{width: 91.66666667%;}
+  .layui-col-xl12{width: 100%;}
+  /* 列偏移 */
+  .layui-col-xl-offset1{margin-left: 8.33333333%;}
+  .layui-col-xl-offset2{margin-left: 16.66666667%;}
+  .layui-col-xl-offset3{margin-left: 25%;}
+  .layui-col-xl-offset4{margin-left: 33.33333333%;}
+  .layui-col-xl-offset5{margin-left: 41.66666667%;}
+  .layui-col-xl-offset6{margin-left: 50%;}
+  .layui-col-xl-offset7{margin-left: 58.33333333%;}
+  .layui-col-xl-offset8{margin-left: 66.66666667%;}
+  .layui-col-xl-offset9{margin-left: 75%;}
+  .layui-col-xl-offset10{margin-left: 83.33333333%;}
+  .layui-col-xl-offset11{margin-left: 91.66666667%;}
+  .layui-col-xl-offset12{margin-left: 100%;}
 }
 
 /* 列间隔 */
