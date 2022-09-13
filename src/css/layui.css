@@ -726,7 +726,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /* 输入框套件 */
 .layui-input-wrap{position: relative; height: 38px; line-height: 38px;}
-.layui-input-wrap .layui-input{padding-right: 35px; cursor: pointer;}
+.layui-input-wrap .layui-input{padding-right: 35px;;}
 .layui-input-wrap .layui-input::-ms-clear,
 .layui-input-wrap .layui-input::-ms-reveal{display: none;}
 .layui-input-wrap-prefix .layui-input{padding-left:35px;}
