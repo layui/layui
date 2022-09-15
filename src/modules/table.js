@@ -1567,7 +1567,16 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       bodyHeight -= (that.layPage.outerHeight() || 43);
     }
 
-    that.layMain.outerHeight(bodyHeight);
+    if (options.adaptiveHeight) {
+      layui.each({elem: height, layMain: bodyHeight}, function (elemName, elemHeight) {
+        that[elemName].css({
+          height: 'auto',
+          maxHeight: elemHeight + 'px'
+        });
+      });
+    } else {
+      that.layMain.outerHeight(bodyHeight);
+    }
   };
   
   //获取滚动条宽度

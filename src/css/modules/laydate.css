@@ -121,7 +121,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-day-mark::after{background-color: #5FB878;}
 .layui-laydate-content td.layui-this .laydate-day-mark::after{display: none;}
 .layui-laydate-footer span[lay-type="date"]{color: #5FB878;}
-.layui-laydate .layui-this{background-color: #009688 !important; color: #fff !important;}
+.layui-laydate .layui-this,.layui-laydate .layui-this>div{background-color: #009688 !important; color: #fff !important;}
 .layui-laydate .laydate-disabled,
 .layui-laydate .laydate-disabled:hover{background:none !important; color: #d2d2d2 !important; cursor: not-allowed !important; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;}
 .layui-laydate-content td>div{padding: 7px 0;height: 100%;}
