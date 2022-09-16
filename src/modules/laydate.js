@@ -87,6 +87,7 @@
   var ELEM_PREV = 'laydate-day-prev';
   var ELEM_NEXT = 'laydate-day-next';
   var ELEM_FOOTER = 'layui-laydate-footer';
+  var ELEM_SHORTCUT = 'layui-laydate-shortcut';
   var ELEM_NOW = '.laydate-btns-now'
   var ELEM_CONFIRM = '.laydate-btns-confirm';
   var ELEM_TIME_TEXT = 'laydate-time-text';
@@ -413,6 +414,11 @@
     //底部区域
     ,divFooter = that.footer = lay.elem('div', {
       "class": ELEM_FOOTER
+    })
+
+    //快捷栏
+    ,divShortcut = that.shortcut = lay.elem('ul', {
+      "class": ELEM_SHORTCUT
     });
     
     if(options.zIndex) elem.style.zIndex = options.zIndex;
@@ -521,6 +527,19 @@
       html.push('<div class="laydate-footer-btns">'+ btns.join('') +'</div>');
       return html.join('');
     }());
+
+    //生成快捷键栏
+    elem.appendChild(divShortcut);
+    lay(divShortcut).html(function () {
+      var shortcutBtns = [];
+      lay.each(options.shortcuts, function (i, item) {
+        shortcutBtns.push('<li>'+item.text+'</li>')
+      })
+      return shortcutBtns.join('');
+    }()).find('li').on('click', function (event) {
+      lay(this.parentElement).find('li.layui-this').removeClass(THIS);
+      lay(this).addClass(THIS);
+    })
     
     //插入到主区域
     lay.each(elemMain, function(i, main){
@@ -529,11 +548,12 @@
     options.showBottom && elem.appendChild(divFooter);
     
     //生成自定义主题
-    var style;
+    var style = lay.elem('style');
     var styleText = [];
+    var colorTheme;
     lay.each(options.theme, function (index, theme) {
       if(/^#/.test(theme)){
-        style = style || lay.elem('style');
+        colorTheme = true;
         styleText.push([
           '#{{id}} .layui-laydate-header{background-color:{{theme}};}'
           ,'#{{id}} li.layui-this,#{{id}} td.layui-this>div{background-color:{{theme}} !important;}'
@@ -541,7 +561,11 @@
         ].join('').replace(/{{id}}/g, that.elemID).replace(/{{theme}}/g, theme));
       }
     });
-    if (style) {
+    //快捷栏样式
+    if (options.shortcuts && options.range) {
+      styleText.push('#{{id}}.layui-laydate-range{width: 628px;}'.replace(/{{id}}/g, that.elemID))
+    }
+    if (styleText.length) {
       styleText = styleText.join('');
       if('styleSheet' in style){
         style.setAttribute('type', 'text/css');
@@ -549,8 +573,8 @@
       } else {
         style.innerHTML = styleText;
       }
-      
-      lay(elem).addClass('laydate-theme-molv');
+
+      colorTheme && lay(elem).addClass('laydate-theme-molv');
       elem.appendChild(style);
     }
 
