@@ -528,19 +528,34 @@
       return html.join('');
     }());
 
-    //生成快捷键栏
-    elem.appendChild(divShortcut);
-    lay(divShortcut).html(function () {
-      var shortcutBtns = [];
-      lay.each(options.shortcuts, function (i, item) {
-        shortcutBtns.push('<li>'+item.text+'</li>')
+    // 生成快捷键栏
+    if (options.shortcuts) {
+      elem.appendChild(divShortcut);
+      lay(divShortcut).html(function () {
+        var shortcutBtns = [];
+        lay.each(options.shortcuts, function (i, item) {
+          shortcutBtns.push('<li data-index="' + i + '">'+item.text+'</li>')
+        })
+        return shortcutBtns.join('');
+      }()).find('li').on('click', function (event) {
+        var btnSetting = options.shortcuts[this.dataset['index']] || {};
+        var value = btnSetting.value || [];
+        if (!layui.isArray(value)) {
+          value = [value];
+        }
+        lay.each(value, function (i, item) {
+          lay.extend([options.dateTime, that.endDate][i], that.systemDate(layui.type(item) === 'date' ? item : new Date(item)))
+          that.checkDate('limit').calendar(null,i);
+        });
+        that.closeList();
+        var timeBtn = lay(that.footer).find('.'+ ELEM_TIME_BTN).removeClass(DISABLED);
+        timeBtn.attr('lay-type') === 'date' && timeBtn.click();
+        that.done(null, 'change');
+
+        lay(this).addClass(THIS);
       })
-      return shortcutBtns.join('');
-    }()).find('li').on('click', function (event) {
-      lay(this.parentElement).find('li.layui-this').removeClass(THIS);
-      lay(this).addClass(THIS);
-    })
-    
+    }
+
     //插入到主区域
     lay.each(elemMain, function(i, main){
       elem.appendChild(main);
@@ -1087,6 +1102,9 @@
     
     //同步按钮可点状态
     that.setBtnStatus();
+
+    // 重置快捷栏选中状态
+    lay(that.shortcut).find('li.' + THIS).removeClass(THIS);
     
     return that;
   };

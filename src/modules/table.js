@@ -355,6 +355,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         type: 'reloadData'
       });
     }
+
+    // 初始化索引
+    options.index = that.index;
+    that.key = options.id || options.index;
+
+    //初始化一些其他参数
+    that.setInit();
     
     //高度铺满：full-差距值
     if(options.height && /^full-\d+$/.test(options.height)){
@@ -367,13 +374,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       options.height = $(that.parentDiv).height() - that.parentHeightGap;
     }
 
-    // 初始化索引
-    options.index = that.index;
-    that.key = options.id || options.index;
-
-    //初始化一些其他参数
-    that.setInit();
-    
     //开始插入替代元素
     var othis = options.elem
     ,hasRender = othis.next('.' + ELEM_VIEW)
@@ -488,6 +488,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }();
     
     if(type === 'width') return options.clientWidth;
+    // 初始化高度配置，如果设置了最高高度，以最高高度形式为准
+    options.height = options.maxHeight || options.height;
 
     // 初始化 css 参数
     if(options.css && options.css.indexOf(ELEM_VIEW) === -1){
@@ -1567,7 +1569,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       bodyHeight -= (that.layPage.outerHeight() || 43);
     }
 
-    if (options.adaptiveHeight) {
+    if (options.maxHeight) {
       layui.each({elem: height, layMain: bodyHeight}, function (elemName, elemHeight) {
         that[elemName].css({
           height: 'auto',
