@@ -93,7 +93,8 @@
   var ELEM_TIME_TEXT = 'laydate-time-text';
   var ELEM_TIME_BTN = 'laydate-btns-time';
   var ELEM_PREVIEW = 'layui-laydate-preview';
-  
+  var ELEM_MAIN = 'layui-laydate-main';
+
   // 组件构造器
   var Class = function(options){
     var that = this;
@@ -497,7 +498,7 @@
       divContent.appendChild(table);
       
       elemMain[i] = lay.elem('div', {
-        "class": 'layui-laydate-main laydate-main-list-'+ i
+        "class": ELEM_MAIN + ' laydate-main-list-'+ i
       });
       
       elemMain[i].appendChild(divHeader);
@@ -543,16 +544,50 @@
         if (!layui.isArray(value)) {
           value = [value];
         }
+        var type = options.type;
         lay.each(value, function (i, item) {
-          lay.extend([options.dateTime, that.endDate][i], that.systemDate(layui.type(item) === 'date' ? item : new Date(item)))
-          that.checkDate('limit').calendar(null,i);
+          var dateTime = [options.dateTime, that.endDate][i];
+          if (type === 'time' && layui.type(item) !== 'date') {
+            if (that.EXP_IF.test(item)) {
+              item = (item.match(that.EXP_SPLIT) || []).slice(1);
+              lay.extend(dateTime, {hours: item[0] | 0, minutes: item[2] | 0, seconds: item[4] | 0})
+            }
+          } else {
+            lay.extend(dateTime, that.systemDate(layui.type(item) === 'date' ? item : new Date(item)))
+          }
+
+          if (type === 'time') {
+            that[['startTime', 'endTime'][i]] = {
+              hours: dateTime.hours,
+              minutes: dateTime.minutes,
+              seconds: dateTime.seconds,
+            }
+          }
+          if (type === 'year' || type === 'month' || type === 'time') {
+            that.listYM[i] = [dateTime.year, dateTime.month + 1];
+            that.checkDate('limit').calendar(null,i);
+            that.list(type, i);
+          } else {
+            that.checkDate('limit').calendar(null,i);
+            that.closeList();
+          }
         });
-        that.closeList();
+
         var timeBtn = lay(that.footer).find('.'+ ELEM_TIME_BTN).removeClass(DISABLED);
-        timeBtn.attr('lay-type') === 'date' && timeBtn.click();
+        timeBtn && timeBtn.attr('lay-type') === 'date' && timeBtn[0].click();
         that.done(null, 'change');
 
         lay(this).addClass(THIS);
+
+        if (options.position !== 'static' && !options.range) {
+          if (type === 'date') {
+            that.choose(lay(elem).find('td.layui-this'))
+          } else if (type === 'year' || type === 'month') {
+            if(lay(elemMain[0]).find('.' + ELEM_MAIN + ' li.' + THIS + ':not(.laydate-disabled)')[0]) {
+              that.setValue(that.parse()).remove().done();
+            }
+          }
+        }
       })
     }
 
