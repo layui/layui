@@ -2268,7 +2268,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var inst = null;
     var elemTable = filter
       ? $('table[lay-filter="'+ filter +'"]')
-    : $(ELEM + '[lay-data],'+ ELEM + '[lay-options]');
+    : $(ELEM + '[lay-data], '+ ELEM + '[lay-options]');
     var errorTips = 'Table element property lay-data configuration item has a syntax error: ';
 
     //遍历数据表格
@@ -2280,7 +2280,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         errorText: errorTips + (attrData || othis.attr('lay-options'))
       });
       
-      var cols = [], options = $.extend({
+      var options = $.extend({
         elem: this
         ,cols: []
         ,data: []
@@ -2304,36 +2304,37 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           
           var row = $.extend({
             title: th.text()
-            ,colspan: th.attr('colspan') || 0 //列单元格
-            ,rowspan: th.attr('rowspan') || 0 //行单元格
+            ,colspan: parseInt(th.attr('colspan')) || 0 //列单元格
+            ,rowspan: parseInt(th.attr('rowspan')) || 0 //行单元格
           }, itemData);
 
-          if(row.colspan < 2) cols.push(row);
           options.cols[i].push(row);
         });
       });
 
-      //获取表体数据
-      othis.find('tbody>tr').each(function(i1){
-        var tr = $(this), row = {};
-        //如果定义了字段名
-        tr.children('td').each(function(i2, item2){
-          var td = $(this)
-          ,field = td.data('field');
-          if(field){
-            return row[field] = td.html();
-          }
-        });
-        //如果未定义字段名
-        layui.each(cols, function(i3, item3){
-          var td = tr.children('td').eq(i3);
-          row[item3.field] = td.html();
-        });
-        options.data[i1] = row;
-      });
-      
+      //缓存静态表体数据
+      var trElem = othis.find('tbody>tr');
+
       //执行渲染
-      table.render(options);
+      var tableIns = table.render(options);
+
+      //获取表体数据
+      if (trElem.length && !tableIns.config.url) {
+        var tdIndex = 0;
+        table.eachCols(tableIns.config.id, function (i3, item3) {
+          trElem.each(function(i1){
+            options.data[i1] = options.data[i1] || {};
+            var tr = $(this);
+            var field = item3.field;
+            options.data[i1][field] = tr.children('td').eq(tdIndex).html();
+          });
+          tdIndex++;
+        })
+
+        tableIns.reloadData({
+          data: options.data
+        })
+      }
     });
 
     return that;
@@ -2586,6 +2587,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     delete data[table.config.disabledName];
     return data;
   };
+
+  // 获取表格配置信息
+  table.getOptions = function (id) {
+    return $.extend(true, {}, getThisTableConfig(id));
+  }
   
   // 自动完成渲染
   $(function(){
