@@ -1062,10 +1062,12 @@ layer.restore = function(index){
   layero.find('.layui-layer-max').removeClass('layui-layer-maxmin');
   layero.find('.layui-layer-min').show();
   layero.attr('type') === 'page' && layero.find(doms[4]).show();
+  layero.attr('minLeft', '');
   ready.rescollbar(index);
   
   //恢复遮罩
   shadeo.show();
+  ready.events.resize[index]();
 };
 
 //全屏
@@ -1090,8 +1092,8 @@ layer.full = function(index){
     layer.style(index, {
       top: isfix ? 0 : win.scrollTop(),
       left: isfix ? 0 : win.scrollLeft(),
-      width: win.width(),
-      height: win.height()
+      width: '100%',
+      height: '100%'
     }, true);
     layero.find('.layui-layer-min').hide();
   }, 100);
