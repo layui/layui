@@ -131,6 +131,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   ,ELEM_HOVER = 'layui-table-hover'
   ,ELEM_GROUP = 'laytable-cell-group'
   ,ELEM_COL_SPECIAL = 'layui-table-col-special'
+  ,ELEM_TOOL_PANEL = 'layui-table-tool-panel'
 
   ,DATA_MOVE_NAME = 'LAY_TABLE_MOVE_DICT'
   
@@ -839,6 +840,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       // 将表格宽度设置为跟表头一样的宽度，使之可以出现底部滚动条，以便滚动查看所有字段
       var headerWidth = that.layHeader.first().children('table').width()
       that.layMain.find('table').width(headerWidth);
+    } else {
+      that.layMain.find('table').width('auto');
     }
     
     that.loading(!0);
@@ -1657,7 +1660,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       ,events = othis.attr('lay-event')
       ,openPanel = function(sets){
         var list = $(sets.list)
-        ,panel = $('<ul class="layui-table-tool-panel"></ul>');
+        ,panel = $('<ul class="' + ELEM_TOOL_PANEL + '"></ul>');
         
         panel.html(list);
         
@@ -1667,7 +1670,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         }
         
         // 插入元素
-        othis.find('.layui-table-tool-panel')[0] || othis.append(panel);
+        othis.find('.' + ELEM_TOOL_PANEL)[0] || othis.append(panel);
         that.renderForm();
         
         panel.on('click', function(e){
@@ -2257,7 +2260,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     
     //工具面板移除事件
     _DOC.on('table.remove.tool.panel', function(){
-      $('.layui-table-tool-panel').remove();
+      $('.' + ELEM_TOOL_PANEL).remove();
     });
   })();
   
@@ -2591,6 +2594,32 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   // 获取表格配置信息
   table.getOptions = function (id) {
     return $.extend(true, {}, getThisTableConfig(id));
+  }
+
+  table.hideCol = function (id, cols) {
+    var that = thisTable.that[id];
+    layui.each(cols, function (i1, item1) {
+      that.eachCols(function (i2, item2) {
+        if (item1.field === item2.field) {
+          var key = item2.key;
+          var col = that.col(key);
+          var hide = col.hide;
+          var parentKey = item2.parentKey;
+          // 同步勾选列的 hide 值和隐藏样式
+          if ('hide' in item1 && hide != item1.hide) {
+            col.hide = item1.hide;
+            that.elem.find('*[data-key="'+ key +'"]')[
+              item1.hide ? 'addClass' : 'removeClass'
+            ](HIDE);
+            // 根据列的显示隐藏，同步多级表头的父级相关属性值
+            that.setParentCol(item1.hide, parentKey);
+          }
+        }
+      })
+    });
+    $('.' + ELEM_TOOL_PANEL).remove(); // 关闭字段筛选面板如果打开的话
+    // 重新适配尺寸
+    that.resize();
   }
   
   // 自动完成渲染
