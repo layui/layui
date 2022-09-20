@@ -67,6 +67,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
     }
   }
+
+  // 获取当前实例
+  ,getThisTable = function(id){
+    var that = thisTable.that[id];
+    if(!that) hint.error(id ? ('The table instance with ID \''+ id +'\' not found') : 'ID argument required');
+    return that || null;
+  }
   
   // 获取当前实例配置项
   ,getThisTableConfig = function(id){
@@ -1844,7 +1851,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           if(dict.rule){
             var setWidth = dict.ruleWidth + e.clientX - dict.offset[0];
             var id = thisTable.eventMoveElem.closest('.' + ELEM_VIEW).attr('lay-id');
-            var thatTable = thisTable.that[id];
+            var thatTable = getThisTable(id);
 
             if(!thatTable) return;
 
@@ -1860,7 +1867,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         if(thisTable.eventMoveElem){
           var th = thisTable.eventMoveElem; // 当前触发拖拽的 th 元素
           var id = th.closest('.' + ELEM_VIEW).attr('lay-id');
-          var thatTable = thisTable.that[id];
+          var thatTable = getThisTable(id);
 
           if(!thatTable) return;
 
@@ -2475,7 +2482,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           layui.each(id, function(i, item){
             i1 == 0 && dataTitle.push(item || '');
           });
-          layui.each(table.clearCacheKey(item1), function(i2, item2){
+          layui.each(layui.isArray(item1) ? $.extend([], item1) : table.clearCacheKey(item1), function(i2, item2){
             vals.push('"'+ (item2 || '') +'"');
           });
         } else {
@@ -2531,7 +2538,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var config = getThisTableConfig(id); //获取当前实例配置项
       if(!config) return;
       
-      thisTable.that[id].resize();
+      getThisTable(id).resize();
       
     } else { //否则重置所有表格实例尺寸
       layui.each(thisTable.that, function(){
@@ -2545,7 +2552,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var config = getThisTableConfig(id); //获取当前实例配置项
     if(!config) return;
     
-    var that = thisTable.that[id];
+    var that = getThisTable(id);
     that.reload(options, deep, type);
     
     return thisTable.call(that);
@@ -2597,26 +2604,47 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   }
 
   table.hideCol = function (id, cols) {
-    var that = thisTable.that[id];
-    layui.each(cols, function (i1, item1) {
+    var that = getThisTable(id);
+    if (!that) {
+      return;
+    }
+
+    if (layui.type(cols) === 'boolean') {
+      // 显示全部或者隐藏全部
       that.eachCols(function (i2, item2) {
-        if (item1.field === item2.field) {
-          var key = item2.key;
-          var col = that.col(key);
-          var hide = col.hide;
-          var parentKey = item2.parentKey;
-          // 同步勾选列的 hide 值和隐藏样式
-          if ('hide' in item1 && hide != item1.hide) {
-            col.hide = item1.hide;
-            that.elem.find('*[data-key="'+ key +'"]')[
-              item1.hide ? 'addClass' : 'removeClass'
+        var key = item2.key;
+        var col = that.col(key);
+        var parentKey = item2.parentKey;
+        // 同步勾选列的 hide 值和隐藏样式
+        if (col.hide != cols) {
+          var hide = col.hide = cols;
+          that.elem.find('*[data-key="'+ key +'"]')[
+            hide ? 'addClass' : 'removeClass'
             ](HIDE);
-            // 根据列的显示隐藏，同步多级表头的父级相关属性值
-            that.setParentCol(item1.hide, parentKey);
-          }
+          // 根据列的显示隐藏，同步多级表头的父级相关属性值
+          that.setParentCol(hide, parentKey);
         }
       })
-    });
+    } else {
+      layui.each(cols, function (i1, item1) {
+        that.eachCols(function (i2, item2) {
+          if (item1.field === item2.field) {
+            var key = item2.key;
+            var col = that.col(key);
+            var parentKey = item2.parentKey;
+            // 同步勾选列的 hide 值和隐藏样式
+            if ('hide' in item1 && col.hide != item1.hide) {
+              var hide = col.hide = !!item1.hide;
+              that.elem.find('*[data-key="'+ key +'"]')[
+                hide ? 'addClass' : 'removeClass'
+                ](HIDE);
+              // 根据列的显示隐藏，同步多级表头的父级相关属性值
+              that.setParentCol(hide, parentKey);
+            }
+          }
+        })
+      });
+    }
     $('.' + ELEM_TOOL_PANEL).remove(); // 关闭字段筛选面板如果打开的话
     // 重新适配尺寸
     that.resize();
