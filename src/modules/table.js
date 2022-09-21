@@ -677,9 +677,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var groups = that.layHeader.find((
       // 根据当前活动的表头 parentkey 属性查找其组合表头
       th ? ('th[data-key='+ th.data('parentkey') +']>') : ''
-    ) + '.' + ELEM_GROUP).get().reverse(); // 若无指向当前活动表头，则自下而上获取所有组合表头
+    ) + '.' + ELEM_GROUP); // 若无指向当前活动表头，则自下而上获取所有组合表头
 
-    layui.each(groups, function(){
+    groups.css('width', 0);
+    layui.each(groups.get().reverse(), function(){
       var othis = $(this);
       var key = othis.parent().data('key');
       var maxWidth = 0;
@@ -698,6 +699,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         that.setGroupWidth(othis.parent());
       }
     });
+    groups.css('width', 'auto');
   };
 
   // 动态分配列宽
