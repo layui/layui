@@ -1176,7 +1176,7 @@ var cache = layer.cache||{}, skin = function(type){
  
 //仿系统prompt
 layer.prompt = function(options, yes){
-  var style = '';
+  var style = '', placeholder = '';
   options = options || {};
   
   if(typeof options === 'function') yes = options;
@@ -1186,8 +1186,11 @@ layer.prompt = function(options, yes){
     style = 'style="width: '+ area[0] +'; height: '+ area[1] + ';"';
     delete options.area;
   }
-  var prompt, content = options.formType == 2 ? '<textarea class="layui-layer-input"' + style +'></textarea>' : function(){
-    return '<input type="'+ (options.formType == 1 ? 'password' : 'text') +'" class="layui-layer-input">';
+  if (options.placeholder) {
+    placeholder = ' placeholder="' + options.placeholder + '"';
+  }
+  var prompt, content = options.formType == 2 ? '<textarea class="layui-layer-input"' + style + placeholder + '></textarea>' : function () {
+    return '<input type="' + (options.formType == 1 ? 'password' : 'text') + '" class="layui-layer-input"' + placeholder + '>';
   }();
   
   var success = options.success;
