@@ -69,6 +69,16 @@
     ,util: 'util' //工具块
     ,code: 'code' //代码修饰器
     ,jquery: 'jquery' //DOM 库（第三方）
+
+    /**
+     * 新增，这两个模块里面的内容和layui原有代码风格不符
+     * 为了减少对以前的调用方式的改变，将这个两个模块内置
+     * 用户可以不应该直接的去接触这两个模块里面的内容
+     * 另新增layer里面
+     * layer.wakeUp(option) 来使用windows组件
+     */
+    ,binder: 'layer/binder'  // 用于处理响应式数据和windows组件模版解析的容器
+    ,windows: 'layer/windows' // 弹层管理器,用于维护和管理layer产生的弹层
     
     ,all: 'all'
     ,'layui.all': 'layui.all' //聚合标识（功能性的，非真实模块）

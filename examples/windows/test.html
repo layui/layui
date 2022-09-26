@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>layer 弹层 - layui</title>
+
+  <link rel="stylesheet" href="../../src/css/layui.css">
+
+  <style>
+    /* body{padding: 100px;} */
+
+    #photos li {
+      float: left;
+      margin: 0 1px 1px;
+    }
+
+    #photos img {
+      max-height: 38px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-primary" lay-on="test">Alert</button>
+    <button class="layui-btn" lay-on="test2">Confirm</button>
+    <button class="layui-btn" lay-on="test3">Msg</button>
+    <button class="layui-btn" lay-on="test5">Page</button>
+    <button class="layui-btn" lay-on="test6">Iframe</button>
+    <button class="layui-btn" lay-on="testLoading">Loading</button>
+    <button class="layui-btn" lay-on="test4">Tips</button>
+    <button class="layui-btn" lay-on="test7">Prompt</button>
+    <button class="layui-btn" lay-on="test8">Tab</button>
+    <button class="layui-btn" lay-on="test9">Photo</button>
+    <button class="layui-btn" lay-on="testTime">自动关闭</button>
+    <a href="https://layui.gitee.io/v2/demo/layer.html" target="_blank" class="layui-btn">更多例子</a>
+  </div>
+
+  <div id="test11111" style="display: none; padding: 20px;">
+    content 指向放置在页面的一段隐藏元素
+  </div>
+
+  <hr><br>
+
+  <div class="layui-list">
+    <ul class="layui-row" id="photos">
+      <li class="list"><img src="https://unpkg.com/outeres/demo/1.jpg" alt="123"></li>
+      <li class="list"><img src="https://unpkg.com/outeres/demo/2.jpg"></li>
+    </ul>
+  </div>
+
+  <hr><br>
+
+  <div class="layui-btn-container">
+    <button class="layui-btn" lay-link="test">测试</button>
+    <button class="layui-btn" lay-link="openRepeat">窗口选择</button>
+    <button class="layui-btn" lay-link="setTop">窗口置顶</button>
+    <button class="layui-btn" lay-link="groupBy">窗口沙箱</button>
+    <button class="layui-btn" lay-link="leader">列表展示</button>
+    <button class="layui-btn" lay-link="follower">统计分析</button>
+    <button class="layui-btn" lay-link="shake">窗口抖动</button>
+    <button class="layui-btn" lay-link="layuion">layuion</button>
+    <button class="layui-btn" lay-link="moreOther">layui原生参数</button>
+  </div>
+
+  <script>
+    var LAYUI_GLOBAL = {
+      //path: '../src/'
+      //,layerPath: '../release/layer/src/'
+    };
+  </script>
+
+  <script src="../../src/layui.js"></script>
+
+  <!-- layer 独立版调试 -->
+  <script src1="//cdn.staticfile.org/jquery/1.12.3/jquery.min.js"></script>
+  <script src1="../release/layer/src/layer.js"></script>
+
+  <!-- <script src="./lodash.min.js"></script> -->
+  <script src="./echarts-5.1.1.min.js"></script>
+  <script>
+    var runTest = function (run, $, layer) {
+      if (!run) return;
+
+      var timer = setInterval(function () {
+        //location.reload();
+      }, 1000);
+
+      layer.alert(123);
+
+      $.ajax({
+        url: './all.html'
+        , beforeSend: function () {
+          //layer.ready(function(){
+          //layer.load();
+          //});
+        }
+        , success: function () {
+          return;
+          layer.closeAll('loading', function () {
+            setTimeout(function () {
+              if ($('.layui-layer-loading').length) {
+                console.error('layer close 异常');
+                clearInterval(timer);
+              }
+            }, 200);
+          });
+        }
+      });
+    };
+    window.jQuery && runTest(1, window.jQuery, window.layer);
+
+
+    layui.use(['jquery', 'layer', 'util'], function (layer, util) {
+      var $ = layui.jquery;
+      var util = layui.util;
+      //return
+      var layer = layui.layer;
+      if (!window.$) window.$ = layui.$;
+      // 添加数据来源
+
+      var histogramData = [
+        { name: 'asdfa001', six: '女', count: 9, time: '2022-09-23 10:10:10' },
+        { name: 'asdfa002', six: '女', count: 5, time: '2022-09-23 09:10:10' },
+        { name: 'asdfa003', six: '男', count: 18, time: '2022-09-23 08:10:10' },
+        { name: 'asdfa004', six: '女', count: 19, time: '2022-09-23 07:10:10' },
+        { name: 'asdfa005', six: '女', count: 7, time: '2022-09-23 06:10:10' },
+        { name: 'asdfa006', six: '女', count: 19, time: '2022-09-23 05:10:10' },
+        { name: 'asdfa007', six: '女', count: 3, time: '2022-09-23 04:10:10' },
+        { name: 'asdfa008', six: '男', count: 1, time: '2022-09-23 03:10:10' },
+        { name: 'asdfa009', six: '女', count: 18, time: '2022-09-23 02:10:10' },
+        { name: 'asdfa011', six: '女', count: 4, time: '2022-09-23 01:10:10' },
+        { name: 'asdfa012', six: '女', count: 15, time: '2022-09-23 00:10:10' },
+        { name: 'asdfa013', six: '女', count: 7, time: '2022-09-23 12:10:10' },
+        { name: 'asdfa014', six: '女', count: 16, time: '2022-09-23 11:10:10' },
+        { name: 'asdfa015', six: '男', count: 16, time: '2022-09-23 14:10:10' },
+        { name: 'asdfa016', six: '女', count: 14, time: '2022-09-23 13:10:10' },
+        { name: 'asdfa017', six: '女', count: 14, time: '2022-09-23 16:10:10' },
+        { name: 'asdfa018', six: '女', count: 9, time: '2022-09-23 15:10:10' },
+        { name: 'asdfa019', six: '女', count: 2, time: '2022-09-23 17:10:10' },
+        { name: 'asdfa020', six: '女', count: 6, time: '2022-09-23 19:10:10' },
+        { name: 'asdfa021', six: '男', count: 15, time: '2022-09-23 18:10:10' },
+        { name: 'asdfa022', six: '女', count: 6, time: '2022-09-23 20:10:10' },
+        { name: 'asdfa023', six: '女', count: 2, time: '2022-09-23 21:10:10' },
+        { name: 'asdfa024', six: '女', count: 5, time: '2022-09-23 22:10:10' },
+        { name: 'asdfa010', six: '男', count: 3, time: '2022-09-23 23:10:10' },
+      ];
+
+      var sixMap = {
+        1: '男',
+        2: '女'
+      };
+
+      function getHistogramData(six) {
+        let res = [];
+        _.each(histogramData, (v) => {
+          if (sixMap[six] == v.six) res.push(v);
+        });
+        return res;
+      }
+
+      layui.use(['table','windows','vform']);
+      // layui.use(['table','windows']);
+
+      // 添加监听事件
+      $('body').off('click', '[lay-link]').on('click', '[lay-link]', function () {
+        let link = $(this).attr('lay-link');
+        // layui.layer.open(link);
+        layui.layer.open(mConfig[link]);
+      });
+
+      // 填写配置参数
+      let mConfig = {
+        /**
+         * 菜单一、只需要id或者name
+         * 这里为了显示方便使用的是name
+         * 实际上也可以通过 layui.layer.open(name)
+         */
+        test: {
+          name: "极简配置",
+        },
+        /**
+         * 菜单二、窗口选择
+         */
+        openRepeat: {
+          id: "openRepeat",
+          type: 1,
+          name: "窗口选择",
+          icon: "&#xe705;",
+          content: `
+        <div class="OpenRepeat">
+          <div class="layui-form" >
+            <div class="layui-form-item alarm-title">
+              <fieldset class="layui-elem-field layui-field-title">
+              <legend><span class="field_title">窗口选择</span></legend>
+              </fieldset>
+            </div>
+            <blockquote class="layui-elem-quote">
+              点击窗口，包括窗口上方的标题栏，可以将这个窗口置顶显示
+            </blockquote>
+            <hr class="layui-border-green">
+            <blockquote class="layui-elem-quote">
+              每个窗口在下方的操作栏都会有一个li标签相对应，点击li标签可以实现窗口的显示与隐藏
+            </blockquote>
+            <hr class="layui-border-green">
+            <blockquote class="layui-elem-quote">
+              鼠标移动到li标签上面是会弹出它对应下属的小窗口，通过鼠标悬浮在小窗口可以快速的切换观察这些小窗口代表的窗口
+            </blockquote>
+          </div>
+        </div>`,
+        },
+        // 窗口置顶
+        setTop: {
+          id: "setTop",
+          type: 1,
+          name: "窗口置顶",
+          moudle: "settop",
+          icon: "&#xe656;",
+          content: `
+        <div class="SetTop">
+          <div class="layui-form" >
+            <div class="layui-form-item alarm-title">
+              <fieldset class="layui-elem-field layui-field-title">
+              <legend><span class="field_title">窗口置顶</span></legend>
+              </fieldset>
+            </div>
+            <blockquote class="layui-elem-quote">
+              点击窗口，包括窗口上方的标题栏，可以将这个窗口置顶显示
+            </blockquote>
+            <hr class="layui-border-green">
+            <blockquote class="layui-elem-quote">
+              鼠标移动到li标签上面是会弹出它对应下属的小窗口，通过鼠标点击小窗口可以快速的小窗口代表的窗口置顶
+            </blockquote>
+          </div>
+        </div>`,
+        },
+        // 窗口沙箱
+        groupBy: {
+          id: "groupBy",
+          type: 1,
+          name: "窗口沙箱",
+          moudle: "groupby",
+          porperty: "property",
+          icon: "&#xe630;",
+          content: `
+        <div class="GroupBy">
+          <div class="layui-form" >
+            <div class="layui-form-item alarm-title">
+              <fieldset class="layui-elem-field layui-field-title">
+              <legend><span class="field_title">窗口沙箱</span></legend>
+              </fieldset>
+            </div>
+            <div class="layui-form-item" style="margin-bottom: 0;">
+              <div class="layui-inline">
+                <div class="layui-input-inline">
+                  <input type="text" class="layui-input" name="name" placeholder="请输入" />
+                </div>
+              </div>
+            </div>
+            <blockquote class="layui-elem-quote">
+              同样的配置可以打开多个窗口，每个窗口被称为原配置的沙箱窗口。
+            </blockquote>
+            <hr class="layui-border-green">
+            <blockquote class="layui-elem-quote">
+              每个沙箱窗口互相独立。在上方输入框里面输入是互不干扰的
+            </blockquote>
+          </div>
+        </div>`,
+        },
+        // 列表展示
+        leader: {
+          id: "leader",
+          type: 1,
+          shade: 0,
+          name: "列表展示",
+          /* offset:[87, 300], */
+          area: ['600px', '770px'],
+          icon: "&#xe691;",
+          assign: true,
+          content: `
+        <div class="LinkLeader">
+          <div class="layui-form-pane" :lay-filter="{{page.id}}-form" v-form="form">
+            <div class="layui-form-item alarm-title">
+              <fieldset class="layui-elem-field layui-field-title">
+                <legend><span class="field_title">列表展示</span></legend>
+              </fieldset>
+            </div>
+            <blockquote class="layui-elem-quote">
+              选择下方的条件筛选列表
+            </blockquote>
+            <hr class="layui-border-green">
+            <div class="layui-form-item">
+              <div class="layui-inline">
+                <label class="layui-form-label">性别:</label>
+                <div class="layui-input-inline">
+                  <input type="radio" name="six" value="1" title="男生" checked="" :lay-filter="{{page.id}}-six"
+                    lay-verify="required" lay-verType="tips" lay-reqText="请选择性别!" />
+                  <input type="radio" name="six" value="2" title="女生" :lay-filter="{{page.id}}-six" lay-verify="required"
+                    lay-verType="tips" lay-reqText="请选择性别!" />
+                </div>
+              </div>
+            </div>
+            <table class = "layui-table" :id="{{page.id}}-table" :lay-filter="{{page.id}}-table" style = "margin: 0;"></table>
+          </div>
+        </div>`,
+          success(layero, layerid, id, data, wConfig = {}) {
+            wConfig.VM = layui.binder({
+              el: layero.find('.LinkLeader'),
+              data: {
+                form: {
+                  six: 1,
+                },
+                page: {
+                  id: 'LinkLeader',
+                  index: layerid,
+                }
+              },
+              methods: {
+                reload() {
+                  layui.table.reloadData(this.page.id + '-table', {
+                    data: this.getTableData()
+                  });
+                },
+                getTableData() {
+                  return getHistogramData(this.form.six);
+                },
+              },
+              mounted() {
+                layui.table.render({
+                  elem: '#' + this.page.id + '-table',
+                  height: '480px',
+                  cols: [[{
+                    title: '序号',
+                    width: 60,
+                    align: "center",
+                    type: 'numbers'
+                  }, {
+                    field: 'name',
+                    title: '姓名',
+                    width: 120
+                  },{
+                    field: 'six',
+                    title: '性别',
+                    width: 80
+                  },{
+                    field: 'count',
+                    title: '数量(个)',
+                    width: 100
+                  },{
+                    field: 'time',
+                    title: '更新时间',
+                    width: 200
+                  }]],
+                  limit: 10,
+                  data: [],
+                  page: {
+                    groups: 3,
+                    layout: ['prev', 'page', 'next', 'skip', 'count'],
+                    jump: function jump(obj, first) {
+                      if (!first) { }
+                    }
+                  },
+                });
+                this.$watch("form.six", {
+                  immediate: true,
+                  deep: false,
+                  handler() {
+                    this.reload();
+                  },
+                });
+              },
+            });
+          },
+        },
+        // 统计分析
+        follower: {
+          id: "follower",
+          type: 1,
+          name: "统计分析",
+          area: ['380px', '770px'],
+          icon: "&#xe62c;",
+          shade: 0,
+          assign: true,
+          content: `
+          <div class="LinkFollower">
+            <div class="layui-form-pane" :lay-filter="{{page.id}}-form" v-form="form">
+              <div class="layui-form-item alarm-title">
+                <fieldset class="layui-elem-field layui-field-title">
+                  <legend><span class="field_title">统计分析</span></legend>
+                </fieldset>
+              </div>
+              <blockquote class="layui-elem-quote">
+                选择下方的条件筛选列表
+              </blockquote>
+              <hr class="layui-border-green">
+              <div class="layui-form-item">
+                <div class="layui-inline">
+                  <label class="layui-form-label">性别:</label>
+                  <div class="layui-input-inline">
+                    <input type="radio" name="six" value="1" title="男生" checked="" :lay-filter="{{page.id}}-six"
+                      lay-verify="required" lay-verType="tips" lay-reqText="请选择性别!" />
+                    <input type="radio" name="six" value="2" title="女生" :lay-filter="{{page.id}}-six" lay-verify="required"
+                      lay-verType="tips" lay-reqText="请选择性别!" />
+                  </div>
+                </div>
+              </div>
+              <div style = "width: 100%; height: 300px">
+                <div id = "histogram" style = "width: 100%; height: 300px" ></div>  
+              </div>
+              
+            </div>
+          </div>
+          `,
+          success(layero, layerid, id, data, wConfig = {}) {
+            wConfig.VM = layui.binder({
+              el: layero.find('.LinkFollower'),
+              data: {
+                form: {
+                  six: 1,
+                },
+                page: {
+                  id: 'LinkFollower',
+                  index: layerid,
+                  data: [],
+                }
+              },
+              methods: {
+                parseHourData() {
+                  let tempSource = this.page.data;
+                  let tempObject = {};
+                  let tempValue = [];
+                  _.each(this.hours, function (v) {
+                    let _key = v + "时";
+                    let _value = 0;
+                    _.each(tempSource, function (v1) {
+                      if (v1.time.substring(11, 13) == String(v)) _value += v1.count;
+                    })
+                    tempObject[_key] = _value;
+                    tempValue.push(_value);
+                  });
+                  let tempOption = _.cloneDeep(this.opt);
+                  tempOption.xAxis[0].name = "小时";
+                  tempOption.xAxis[0].data = _.keys(tempObject);
+                  tempOption.series[0].data = tempValue;
+                  return tempOption;
+                },
+              },
+              computeds: {
+                histogramOption() {
+                  if (this.page.data.length == 0) return this.opt;
+                  return this.parseHourData();
+                },
+              },
+              created() {
+                this.hours =
+                  "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23".split(
+                    ","
+                  );
+                this.opt = {
+                  tooltip: {
+                    trigger: "axis",
+                    axisPointer: {
+                      type: "shadow",
+                    },
+                  },
+                  grid: {
+                    left: "7%",
+                    right: "10%",
+                    bottom: "3%",
+                    containLabel: true,
+                  },
+                  xAxis: [
+                    {
+                      type: "category",
+                      data: this.hours,
+                      axisTick: {
+                        alignWithLabel: true,
+                      },
+                    },
+                  ],
+                  yAxis: [
+                    {
+                      type: "value",
+                    },
+                  ],
+                  series: [
+                    {
+                      name: "直方图",
+                      type: "bar",
+                      barWidth: "60%",
+                      data: [
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0,
+                      ],
+                    },
+                  ],
+                }
+              },
+              mounted() {
+                let that = this;
+                that.Histogramecharts = echarts.init(
+                  layero.find("#histogram").get(0)
+                );
+                that.$watch("histogramOption", {
+                  immediate: true,
+                  deep: false,
+                  handler(value) {
+                    if(value){
+                      that.Histogramecharts.setOption(value, true, false);
+                      that.Histogramecharts.resize();
+                    }
+                  },
+                });
+                that.$watch("form.six", {
+                  immediate: true,
+                  deep: false,
+                  handler(value) {
+                    if(value)
+                    this.page.data = getHistogramData(value);
+                  },
+                });
+
+                setTimeout(function(){
+                  that.page.data = getHistogramData(that.form.six);
+                },200)
+              },
+            });
+          },
+        },
+        // 窗口抖动
+        shake: {
+          id: "shake",
+          type: 1,
+          name: "窗口抖动",
+          icon: "&#xe653;",
+          content: `
+        <div class="OpenRepeat">
+          <div class="layui-form" >
+            <div class="layui-form-item alarm-title">
+              <fieldset class="layui-elem-field layui-field-title">
+              <legend><span class="field_title">窗口抖动</span></legend>
+              </fieldset>
+            </div>
+            <blockquote class="layui-elem-quote">
+              按住标题反复上下两次可以最小化其它窗口
+            </blockquote>
+          </div>
+        </div>`,
+        },
+
+        layuion: {
+          id: "layuion",
+          type: 2,
+          icon: "",
+          name: "layui官网",
+          content: 'https://layuion.com/',
+        },
+
+        moreOther: {
+          title: '经典页面层',
+          type: 1,
+          area: ['1000px', '580px'],
+          content: "<div> 使用layui经典参数弹出type = 1的页面层 </div>",
+          maxmin: true,
+          shade: false,
+          id: 'page1', //定义 ID，防止重复弹出
+          min: function (layero, index) {
+            layer.msg('阻止了默认的最小化');
+            layer.style(index, { top: 'auto', bottom: 0 });
+            return false;
+          }
+        }
+      };
+
+      // 添加layui路由
+      layui.config({ base: "./js/" })
+
+
+      layui.layer.wakeUp({
+        TOP_LAYER_ONLY: false,
+      }, mConfig);
+
+
+      var index = layer.msg('Hello World');
+      //layer.close(index);
+      //runTest(1, $, layer);
+
+
+      // 触发事件
+      util.on('lay-on', {
+        test: function () {
+          var icon = -1;
+          (function changeIcon() {
+            var index = layer.alert('Hi，你好！ 点击确认更换图标', {
+              icon: icon,
+              shadeClose: true,
+              title: icon === -1 ? 'Alert' : ('icon: ' + icon)
+            }, changeIcon);
+            if (icon++ > 6) {
+              layer.close(index);
+              icon = -1;
+            }
+          }());
+        }
+        , test2: function () {
+          layer.confirm('一个询问层的测试示例？', {
+            btn: ['确定', '关闭'] //按钮
+          }, function () {
+            layer.msg('第一个回调', { icon: 1 });
+          }, function () {
+            layer.msg('第二个回调', {
+              time: 20000, //20s后自动关闭
+              btn: ['明白了', '知道了']
+            });
+          });
+        }
+        , test3: function () {
+          !0 ? layer.msg('一个常用消息框')
+            : layer.msg('一个常用消息框', { closeBtn: 0, time: 0, icon: 16 });
+        }
+        , test4: function () {
+          layer.tips('Hi，我是一个小提示', this, { tips: 1 });
+        }
+        , test5: function () {
+          layer.open({
+            title: '自定义页面层',
+            type: 1,
+            skin: 'layui-layer-border',
+            area: ['1000px', '580px'],
+            content: $('#test11111'),
+            maxmin: true,
+            shade: false,
+            minStack: false, //最小化不堆叠在左下角
+            id: 'page1', //定义 ID，防止重复弹出
+            min: function (layero, index) {
+              layer.msg('阻止了默认的最小化');
+              layer.style(index, { top: 'auto', bottom: 0 });
+              return false;
+            }
+          });
+        }
+        , test6: function () {
+          layer.open({
+            type: 2
+            , content: 'https://www.aliyun.com/activity?userCode=ap0255is'
+            , area: ['375px', '500px']
+            , maxmin: true
+          });
+        }
+        , testLoading: function () {
+          layer.load(0, {
+            time: 5 * 1000
+            //content: '123'
+          });
+        }
+        , test7: function () {
+          layer.prompt({ title: '输入任何口令，并确认', formType: 1 }, function (pass, index) {
+            layer.close(index);
+            layer.prompt({ title: '随便写点啥，并确认', formType: 2 }, function (text, index) {
+              layer.close(index);
+              layer.msg('演示完毕！您的口令：' + util.escape(pass) + '<br>您最后写下了：' + util.escape(text));
+            });
+          });
+        }
+        , test8: function () {
+          layer.tab({
+            area: ['600px', '300px'],
+            tab: [{
+              title: 'TAB1',
+              content: '内容1'
+            }, {
+              title: 'TAB2',
+              content: '内容2'
+            }, {
+              title: 'TAB3',
+              content: '内容3'
+            }]
+          });
+        }
+        , test9: function () {
+          layer.photos({
+            photos: {
+              "data": [{
+                "src": "https://unpkg.com/outeres/demo/layer.png"
+              }]
+            },
+            hideFooter: true  // 是否隐藏图片底部栏（v2.8.0 新增）
+          });
+        }
+        , testTime: function () {
+          layer.alert('你好么，体验者。<br>在标题栏显示自动关闭倒计秒数', {
+            time: 5 * 1000
+            , success: function (layero, index) {
+              var timeNum = this.time / 1000, setText = function (start) {
+                layer.title((start ? timeNum : --timeNum) + ' 秒后关闭', index);
+              };
+              setText(!0);
+              this.timer = setInterval(setText, 1000);
+              if (timeNum <= 0) clearInterval(this.timer);
+            }
+            , end: function () {
+              clearInterval(this.timer);
+            }
+          });
+        }
+      });
+
+      // 相册层
+      layer.photos({
+        photos: '#photos' //$('#photos')
+      });
+
+      //动态追加
+      $('#photos').append('<li class="list"><img src="https://unpkg.com/outeres/demo/3.jpg"></li>');
+
+    });
+  </script>
+</body>
+
+</html>

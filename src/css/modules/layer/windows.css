@@ -1,0 +1,1009 @@
+@charset "utf-8";
+/* windows组件css样式定义 */
+
+/* 
+  全局样式
+  1. --snapshoot 当前快照
+  2. --windows-main-bgColor  主题背景颜色
+  3. --windows-main-hover-color  主控件左右的两个按钮 鼠标一上去的背景颜色
+  4. --windows-main-lineColor   选项卡下划线的颜色
+  5. --windows-button-color  文本颜色
+  6. --windows-botton-hover-bgColor 选项卡翻页按钮 鼠标一上去的背景颜色
+  7. --windows-li-select-bgColor 选项卡点击选中后的背景颜色
+  8. --windows-li-hover-bgColor  选项卡 鼠标一上去的背景颜色
+  9. --windows-tips-bgColor  预览小窗口背景颜色
+  10.--windows-tips-color    预览小窗口字体颜色
+
+  11.--menu-main-bgColor    窗口卡贴主题颜色
+  12.--menu-title-bgColor   窗口卡贴标题底色
+  13.--menu-main-bgColor    窗口卡贴字体颜色
+  14.--menu-main-lineColor  窗口卡贴线条颜色
+*/
+:root{
+  /* --snapshoot: url(../image/bridge.jpg); */
+  --windows-main-bgColor: #333333;
+  --windows-main-hover-color: #336cd0;
+  --windows-main-lineColor: #87c5ec;
+  --windows-button-color: #fcfcfc;
+  --windows-botton-hover-bgColor: #999999;
+  --windows-li-select-bgColor: #444444;
+  --windows-li-hover-bgColor: #666666;
+  --windows-tips-bgColor: #fcfcfc;
+  --windows-tips-color: #666666;
+
+  --menu-main-bgColor: #333333;
+  --menu-title-bgColor: #666666;
+  --menu-main-color: #FCFCFC;
+  --menu-main-lineColor: #FCFCFC;
+
+}
+
+html,
+body{
+  width: 100%;
+  height: 100%;
+}
+
+/* 非预览窗口变透明 */
+body.layui-windows-preview .layui-layer,
+body.layui-windows-preview .layui-windows-assign-body{
+  opacity: .08;
+}
+
+/* 预览窗口正常显示 */
+body.layui-windows-preview .layui-layer.layui-windows-preview{
+  opacity: 1;
+}
+
+/*  这个是需要单独处理的，窗口最大化和最小化隐藏   */
+.layui-min-header{
+  z-index: 1 !important;
+}
+
+#layui-windows-bottom {
+  position: fixed;
+  bottom: 0;
+  height: 40px;
+  left: 0;
+  right: 0;
+  border: 1px solid rgba(30, 159, 255, 1);
+  z-index: 99999999;
+  background: rgba(30, 159, 255, .8);
+  box-shadow: 0px 9px 8px 2px rgb(255 255 255 / 80%) inset;
+}
+
+#layui-windows-bottom .layui-windows-menu,
+#layui-windows-bottom .layui-windows-notice{
+  position: absolute;
+  height: 40px;
+  line-height: 40px;
+  font-size: 18px;
+  text-align: center;
+  color: var(--windows-button-color);
+  cursor: pointer;
+}
+
+#layui-windows-bottom .layui-windows-menu:hover,
+#layui-windows-bottom .layui-windows-notice:hover {
+  color: var(--windows-main-hover-color);
+}
+
+#layui-windows-bottom .layui-windows-menu {
+  left: 0;
+  width: 60px;
+  font-weight: bold;
+  z-index: 999;
+}
+
+#layui-windows-bottom .layui-windows-notice {
+  right: 0;
+  width: 60px;
+}
+
+#layui-windows-bottom .layui-windows-notice .iconfont::after {
+  content: attr(data-content);
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* 主体样式 */
+#layui-windows-bottom .layui-windows-group {
+  position: absolute;
+  font-size: 18px;
+  color: var(--windows-button-color);
+  text-align: left;
+  height: 40px;
+  line-height: 40px;
+  left: 60px;
+  right: 60px;
+}
+
+#layui-windows-bottom .layui-windows-group .layadmin-tabs-control {
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  cursor: pointer;
+}
+
+#layui-windows-bottom .layui-windows-group .layadmin-tabs-control:hover {
+ /*  background-color: var(--windows-botton-hover-bgColor); */
+  box-shadow: 0px 3px 3px 3px rgba(255,255,255,.5) inset;
+  border: 1px solid rgba(30, 159, 255, 1);
+  border-bottom: 2px solid rgba(255, 255, 255, 1);
+}
+
+#layui-windows-bottom .layui-windows-group .layadmin-tabs-control:nth-child(1) {
+  left: 0;
+}
+
+#layui-windows-bottom .layui-windows-group .layadmin-tabs-control:nth-child(2) {
+  right: 0;
+}
+
+#layui-windows-bottom .layui-windows-group .layui-tab {
+  margin: 0;
+  position: absolute;
+  height: 40px;
+  left: 40px;
+  right: 40px;
+  overflow: hidden;
+}
+
+#layui-windows-bottom .layui-windows-group .layui-tab .layui-tab-title {
+  position: relative;
+  left: 0;
+  height: 40px;
+  white-space: nowrap;
+  border: none;
+  transition: all .2s;
+}
+
+#layui-windows-bottom .layui-windows-group .layui-tab .layui-tab-title li {
+  min-width: 0;
+  line-height: 40px;
+  height: 38px;
+  max-width: 160px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  transition: all .2s;
+  position: relative;
+  padding: 0 15px;
+  text-align: center;
+  margin-right: 5px;
+  cursor: pointer;
+  box-sizing: border-box;
+  border-bottom: 2px solid rgba(255, 255, 255, 1);
+}
+
+#layui-windows-bottom .layui-windows-group .layui-tab .layui-tab-title li i{
+  user-select: none;
+  pointer-events: none;
+}
+
+#layui-windows-bottom .layui-windows-group .layui-tab .layui-tab-title li.li-select-tip{
+  /* background-color: var(--windows-li-select-bgColor); */
+  box-shadow: 0px 3px 3px 3px rgba(255,255,255,.5) inset;
+  border: 1px solid rgba(30, 159, 255, 1);
+  border-bottom: 2px solid rgba(255, 255, 255, 1);
+}
+
+#layui-windows-bottom .layui-windows-group .layui-tab .layui-tab-title li:hover{
+  /* background-color: var(--windows-li-hover-bgColor); */
+  box-shadow: 0px 3px 3px 3px rgba(255,255,255,.5) inset;
+  border: 1px solid rgba(30, 159, 255, 1);
+  border-bottom: 2px solid rgba(255, 255, 255, 1);
+}
+
+#layui-windows-bottom .layui-windows-group .layui-tab .layui-tab-title .layui-tab-title-true{
+  background-color: rgba(30, 159, 255, 1);
+}
+
+#layui-windows-bottom .layui-windows-group .layui-tab-title .layui-this:after{
+  border: none;
+}
+
+#layui-windows-bottom .layui-windows-tip,
+#layui-windows-bottom .layui-windows-group .layui-tab-title li{
+  user-select: none;
+}
+
+/* 小窗口 */
+#layui-windows-bottom .layui-windows-tip{
+  position: absolute;
+  font-size: 18px;
+  color: var(--windows-button-color);
+  text-align: center;
+  line-height: 30px;
+  cursor: default;
+  bottom: 0;
+  opacity: 0;
+  left: 770px;
+  /* background: var(--windows-main-bgColor); */
+  background-image: linear-gradient(to bottom, 
+                    rgba(30, 159, 255, .9), 0px,
+                    rgba(30, 159, 255, .7), 20px,
+                    rgba(255, 255, 255, .8), 95px,
+                    rgba(255, 255, 255, .8),105px,
+                    rgba(30, 159, 255, .7));                
+  height: 125px;
+  display: none;
+  z-index: 99999999;
+  text-align: right;
+  transition: all 0.3s;
+}
+
+#layui-windows-bottom .layui-windows-tip .layui-windows-tips{
+  width: 200px;
+  height: 100%;
+  display: inline-block;
+  cursor: pointer;
+  box-shadow: 0 0 2px 0px #000,0 5px 5px 5px rgba(255,255,255,.3) inset;
+}
+
+#layui-windows-bottom .layui-windows-tip .layui-windows-tips:hover{
+  /* background: var(--windows-li-hover-bgColor); */
+  background-color: rgba(30, 159, 255, 1);
+}
+
+#layui-windows-bottom .layui-windows-tip.select-tip-flag,
+#layui-windows-bottom .layui-windows-tip.select-tip,
+#layui-windows-bottom .layui-windows-tip.select-tip-fixed{
+  bottom: 40px;
+  display: block;
+  opacity: 1;
+}
+
+#layui-windows-bottom .layui-windows-tip .layui-icon{
+  font-size: 18px;
+  position: relative;
+  right: 10px;
+  top: 0px;
+  color: transparent;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#layui-windows-bottom .layui-windows-tip .layui-windows-tips:hover .layui-icon{
+  color: var(--windows-button-color);
+}
+
+#layui-windows-bottom .layui-windows-tip:hover .layui-icon{
+  display: block;
+}
+
+#layui-windows-bottom .layui-windows-tip .layui-icon:hover{
+  color: #f00 !important;
+}
+
+#layui-windows-bottom .layui-windows-tip .layui-windows-tips div{
+  position: relative;
+  width: 90%;
+  height: 80px;
+  margin: 0 5%;
+  text-align: center;
+  font-weight: bold;
+  line-height: 35px;
+  overflow: hidden;
+/*   background-image: var(--snapshoot); */
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-color: var(--windows-tips-bgColor);
+  color: var(--windows-tips-color);
+}
+
+.disappear-part{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width:20px;
+  height:20px; 
+  float: left;
+  background: var(--snapshoot);
+}
+
+.layui-windows-track{
+  position: fixed;
+  margin: auto;
+  user-select: none;
+  pointer-events: none;
+  background-color: rgba(0,0,0,.2);
+  border: 1px solid #fcfcfc;
+}
+
+.layui-windows-assign{
+  z-index: auto;
+}
+
+.layui-windows-assign .layui-windows-assign-body{
+  position: absolute;
+  display: none;
+  border: 1px solid #fcfcfc;
+  border-radius: 6px;
+  background: rgba(30, 159, 255, .8);
+  box-shadow: 2px -2px 6px -5px #000, 0px 9px 8px 2px rgba(255,255,255,.8) inset;
+}
+
+.layui-windows-assign .layui-windows-assign-body-true{
+  display: block;
+}
+
+.layui-windows-assign .layui-windows-assign-title{
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  text-indent: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #000;
+  cursor: move;
+  text-shadow: 1px 1px 1px #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  white-space: nowrap;
+}
+
+.layui-windows-assign-title-min, 
+.layui-windows-assign-title-close{
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  top: 6px;
+  right: 6px;
+  text-align: center;
+  text-indent: 0;
+  line-height: 38px;
+  cursor: pointer;
+}
+
+.layui-windows-assign-title-min{
+  right: 42px;
+}
+
+.layui-windows-assign-title-min:hover, 
+.layui-windows-assign-title-close:hover{
+  color: #f00;
+
+}
+
+.layui-windows-tile{
+  position: absolute;
+  display: none;
+  bottom: 40px;
+  left: 0;
+  width: 370px;
+ /*  cursor: pointer; */
+/*   overflow-x: hidden;
+  overflow-y: auto; */
+  max-height: 800px;
+  z-index: 99999999;
+  animation: animation-layui-menu .3s linear;
+  color: var(--menu-main-color);
+  /* background-color: var(--menu-main-bgColor); */
+  background: rgba(30, 159, 255, .8);
+  box-shadow: 2px -2px 6px -5px #000, 0px 9px 8px 2px rgba(255,255,255,.8) inset;
+}
+
+.layui-windows-tile.layui-windows-tile-true{
+  display: block;
+}
+
+.layui-windows-tile .layui-windows-tile-main-icon{
+  position: absolute;
+  top: -23px;
+  left: 23px;
+  display: block;
+  width: 46px;
+  height: 46px;
+  text-align: center;
+  line-height: 46px;
+  z-index: 9;
+  font-weight: bold;
+  font-size: 23px;
+  border-radius: 6px;
+  text-shadow: 0 0 1px #fff;
+  box-shadow: 0 2px 3px 2px rgb(255 255 255 / 50%) inset;
+  background-image: linear-gradient(to bottom, 
+          rgba(30, 159, 255, 1), 0px,
+          rgba(30, 159, 255, .9), 10px,
+          rgba(30, 159, 255, .8), 20px,
+          rgba(30, 159, 255, .7),35px,
+          rgba(255, 255, 255, .9));
+}
+
+.layui-windows-tile .layui-windows-tile-main-text{
+  position: relative;
+  display: block;
+  height: 46px;
+  text-indent: 100px;
+  line-height: 46px;
+  font-size: 23px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  white-space: nowrap;
+}
+
+.layui-windows-tile .layui-windows-tile-logout-icon{
+  position: absolute;
+  display: block;
+  left: 10px;
+  bottom: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.layui-windows-tile .layui-elem-quote{
+  /* margin-top: 10px; */
+  /* background: var(--menu-title-bgColor); */
+  background-color: transparent;
+  margin-bottom: 0;
+  font-size: 16px;
+  font-weight: bold;
+  border-left: 5px solid rgba(255,255,255,.8);
+  box-shadow: -4px 0 3px 1px #fff;
+}
+
+.layui-windows-tile .layui-tab-title .layui-this,
+.layui-windows-tile .layui-form-pane .layui-form-label{
+  color: var(--menu-main-color);
+  background-color: transparent;
+  border: none;
+}
+
+
+.layui-windows-tile .layui-notice-menu{
+  padding: 10px 30px;
+}
+
+.layui-windows-tile .layui-notice-menu-group{
+  display: inline-block;
+  width: 90px;
+  height: 90px;
+  border: 1px solid var(--menu-main-lineColor);
+  margin: 5px;
+  cursor: pointer;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.layui-windows-tile .layui-notice-menu-text{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  white-space: nowrap;
+}
+
+.layui-windows-tile .layui-notice-menu-title{
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+}
+
+.layui-windows-tile .layui-notice-menu-title .layui-menu-icon{
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.layui-windows-tile .layui-form-item{
+  min-height: 360px;
+  max-height: 460px;
+  overflow: auto;
+}
+
+.layui-windows-tile .layui-form-item::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.layui-windows-tile .layui-form-item::-webkit-scrollbar-track {
+  background-color: #ddd;
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+}
+
+.layui-windows-tile .layui-form-item::-webkit-scrollbar-thumb {
+  background-color: #009587;
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+}
+
+.layui-windows-tile-lively-icon{
+  display: none;
+  position: absolute;
+  width: 75px;
+  height: 75px;
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center;
+  border: 1px solid #fff;
+  background: #666;
+  color: #fff;
+  z-index: 999999999;
+  line-height: 70px;
+}
+
+.layui-windows-tile-lively-icon.layui-windows-tile-lively-icon-true{
+  display: block;
+}
+
+
+
+@keyframes animation-layui-menu {
+  0% {
+    bottom: 0px;
+  }
+
+  100%{
+    bottom: 40px;
+  }
+}
+
+
+
+
+.layui-windows-flip{
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 80%;
+  height: 700px;
+  background: rgba(255, 255, 255, .3);
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px 3px rgba(255,255,255,.5) inset;
+  display: none;
+}
+
+.layui-windows-flip.layui-windows-flip-true{
+  display: block;
+}
+
+.layui-windows-flip .iconfont{
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  cursor: pointer;
+}
+
+.layui-windows-flip .iconfont:hover{
+  color: #f00;
+}
+
+.layui-windows-flip .layui-icon-close,
+.layui-windows-flip .layui-icon-prev,
+.layui-windows-flip .layui-icon-next{
+  position: absolute;
+  font-size: 25px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: rgba(30, 159, 255, .5);
+  box-shadow: 2px -2px 6px -5px #000, 0px 9px 8px 2px rgba(255,255,255,.8) inset;
+}
+
+.layui-windows-flip .layui-icon-close{
+  top: 15px;
+  right: 15px;
+}
+
+.layui-windows-flip .layui-icon-prev{
+  top: 300px;
+  left: 15px;
+}
+
+.layui-windows-flip .layui-icon-next{
+  top: 300px;
+  right: 15px;
+}
+
+.layui-windows-flip-group .flip-part{
+  position: absolute;
+  width: 400px;
+  height: 650px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  user-select: none;
+  cursor: pointer;
+  transition: all 0.5s;
+  background-color: rgba(30, 159, 255, 1);
+  box-shadow: -2px 3px 5px 0px #666, 0px 5px 8px 3px rgba(255,255,255,.6) inset;
+}
+
+.layui-windows-flip-group .flip-part .flip-part-text{
+  width: 90%;
+  height: 80px;
+  line-height: 80px;
+  font-size: 20px;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  white-space: nowrap;
+  text-indent: 30px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.layui-windows-flip-group .flip-part .layui-icon-close{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 25px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.layui-windows-flip-group .flip-part:nth-child(1){
+  transform: scale(1.1) translateX(110px);
+  z-index: 15;
+  animation: flip-left-01 0.5s linear;
+}
+
+.layui-windows-flip-reverse .layui-windows-flip-group .flip-part:nth-child(1){
+  animation: flip-right-01 0.5s linear;
+}
+
+.layui-windows-flip-left-transition .layui-windows-flip-group .flip-part:nth-child(1){
+  animation: flip-left-transition-01 0.5s linear;
+}
+
+
+
+.layui-windows-flip-group .flip-part:nth-child(2){
+  transform: scale(1) translateX(10px);
+  z-index: 14;
+  animation: flip-left-02 0.5s linear;
+}
+
+.layui-windows-flip-reverse .layui-windows-flip-group .flip-part:nth-child(2){
+  animation: flip-right-02 0.5s linear;
+}
+
+.layui-windows-flip-left-transition .layui-windows-flip-group .flip-part:nth-child(2){
+  animation: flip-left-transition-02 0.5s linear;
+}
+
+.layui-windows-flip-group .flip-part:nth-child(3){
+  transform: scale(0.9) translateX(-90px);
+  z-index: 13;
+  animation: flip-left-03 0.5s linear;
+}
+
+.layui-windows-flip-reverse .layui-windows-flip-group .flip-part:nth-child(3){
+  animation: flip-right-03 0.5s linear;
+}
+
+.layui-windows-flip-left-transition .layui-windows-flip-group .flip-part:nth-child(3){
+  animation: flip-left-transition-03 0.5s linear;
+}
+
+.layui-windows-flip-group .flip-part:nth-child(4){
+  transform: scale(0.8) translateX(-190px);
+  z-index: 12;
+  animation: flip-left-04 0.5s linear;
+}
+
+.layui-windows-flip-reverse .layui-windows-flip-group .flip-part:nth-child(4){
+  animation: flip-right-04 0.5s linear;
+}
+
+.layui-windows-flip-left-transition .layui-windows-flip-group .flip-part:nth-child(4){
+  animation: flip-left-transition-04 0.5s linear;
+}
+
+.layui-windows-flip-group .flip-part:nth-child(5){
+  transform: scale(0.7) translateX(-290px);
+  z-index: 11;
+  animation: flip-left-05 0.5s linear;
+}
+
+.layui-windows-flip-reverse .layui-windows-flip-group .flip-part:nth-child(5){
+  animation: flip-right-05 0.5s linear;
+}
+
+.layui-windows-flip-left-transition .layui-windows-flip-group .flip-part:nth-child(5){
+  animation: flip-left-transition-05 0.5s linear;
+}
+
+
+@keyframes flip-left-01 {
+  0% {
+    transform: scale(1) translateX(10px);
+  }
+
+  100% {
+    transform: scale(1.1) translateX(110px);
+  }
+}
+
+@keyframes flip-left-transition-01 {
+  0% {
+    transform: scale(1.1) translateX(110px);
+  }
+
+  100% {
+    transform: scale(1.2) translateX(210px);
+  }
+}
+
+
+@keyframes flip-right-01 {
+  0% {
+    transform: scale(1.2) translateX(210px);
+  }
+
+  100% {
+    transform: scale(1.1) translateX(110px);
+  }
+}
+
+@keyframes flip-left-02 {
+  0% {
+    transform: scale(0.9) translateX(-90px);
+  }
+
+  100% {
+    transform: scale(1) translateX(10px);
+  }
+}
+
+@keyframes flip-left-transition-02 {
+  0% {
+    transform: scale(1) translateX(10px);
+  }
+
+  100% {
+    transform: scale(1.1) translateX(110px);
+  }
+}
+
+@keyframes flip-right-02 {
+  0% {
+    transform: scale(1.1) translateX(110px);
+  }
+
+  100% {
+    transform: scale(1) translateX(10px);
+  }
+}
+
+
+@keyframes flip-left-03 {
+  0% {
+    transform: scale(0.8) translateX(-190px);
+  }
+
+  100% {
+    transform: scale(0.9) translateX(-90px);
+  }
+}
+
+@keyframes flip-left-transition-03 {
+  0% {
+    transform: scale(0.9) translateX(-90px);
+  }
+
+  100% {
+    transform: scale(1) translateX(10px);
+  }
+}
+
+@keyframes flip-right-03 {
+  0% {
+    transform: scale(1) translateX(10px);
+  }
+
+  100% {
+    transform: scale(0.9) translateX(-90px);
+  }
+}
+
+@keyframes flip-left-04 {
+  0% {
+    transform: scale(0.7) translateX(-290px);
+  }
+
+  100% {
+    transform: scale(0.8) translateX(-190px);
+  }
+}
+
+@keyframes flip-left-transition-04 {
+  0% {
+    transform: scale(0.8) translateX(-190px);
+  }
+
+  100% {
+    transform: scale(0.9) translateX(-90px);
+  }
+}
+
+@keyframes flip-right-04 {
+  0% {
+    transform: scale(0.9) translateX(-90px);
+  }
+
+  100% {
+    transform: scale(0.8) translateX(-190px);
+  }
+}
+
+@keyframes flip-left-05 {
+  0% {
+    transform: scale(0.6) translateX(-390px);
+  }
+
+  100% {
+    transform: scale(0.7) translateX(-290px);
+  }
+}
+
+@keyframes flip-left-transition-05 {
+  0% {
+    transform: scale(0.7) translateX(-290px);
+  }
+
+  100% {
+    transform: scale(0.8) translateX(-190px);
+  }
+}
+
+@keyframes flip-left-05 {
+  0% {
+    transform: scale(0.8) translateX(-190px);
+  }
+
+  100% {
+    transform: scale(0.7) translateX(-290px);
+  }
+}
+
+
+/* 窗口主题 */
+body{
+  /* background-color: #1e9fff; */
+}
+
+/* 0px 0px 16px 3px rgb(255 255 255 / 25%) inset, 
+              0px 13px 16px 3px rgb(255 255 255 / 15%) inset, 
+              0px 23px 16px 3px rgb(255 255 255 / 5%) inset,  */
+.layui-layer-windows{
+  border-radius: 4px;
+  background-color: rgba(30,159,255,.5);
+  text-shadow: -1px 1px 1px #fff;
+  box-shadow: 0px 11px 4px 3px rgb(255 255 255) inset,
+              1px 1px 15px rgb(0 0 0 / 30%), 
+              1px 1px 5px rgb(0 0 0 / 60%);
+  background-image: linear-gradient(to bottom, 
+            rgba(30, 159, 255, .5), 0px,
+            rgba(30, 159, 255, .5), 5px,
+            rgba(30, 159, 255, .1), 30px,
+            rgba(30, 159, 255, .1),45px,
+            rgba(30, 159, 255, .5), 50px,
+            rgba(30, 159, 255, .5), 
+            rgba(30, 159, 255, .5));
+}
+
+/* v2.1.0 新增样式 */
+/* .layui-layer-windows:before{
+  content: '';
+  position: absolute;
+  width: 110%;
+  height: 110%;
+  top: -5%;
+  left: -5%;
+  z-index: 2;
+  border-radius: 4px;
+  user-select: none;
+  pointer-events: none;
+  background-color: rgba(255,255,255,.1);
+  box-shadow: -4px 4px 14px 0px rgb(255 255 255) inset, -4px 4px 10px 0px rgb(255 255 255) inset, -4px 4px 5px 0px rgb(255 255 255) inset, -4px 4px 1px 0px rgb(255 255 255) inset;
+} */
+
+.layui-layer-windows .layui-layer-title{
+  border: none;
+  color: rgba(255,255,255);
+  font-size: 20px;
+  text-shadow: 0 0 1px rgba(0,0,0);
+  background-image: linear-gradient(to right, 
+            rgba(30, 159, 255, .5), 0px,
+            rgba(30, 159, 255, .5), 5px,
+            rgba(30, 159, 255, .1), 30px,
+            rgba(30, 159, 255, .1), 45px,
+            rgba(30, 159, 255, .1)),
+                    linear-gradient(to left, 
+            rgba(30, 159, 255, .5), 0px,
+            rgba(30, 159, 255, .5), 5px,
+            rgba(30, 159, 255, .1), 30px,
+            rgba(30, 159, 255, .1), 45px,
+            rgba(30, 159, 255, .1));
+}
+
+.layui-layer-windows .layui-layer-content{
+  position: absolute;
+  top: 52px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  height: auto !important;
+  background-color: rgba(255,255,255,1);
+  box-shadow: 0 1px 2px 1px #666;
+}
+
+/* .layui-layer-windows .layui-layer-setwin span.layui-icon-close:hover{
+  color: #ff0000;
+  font-weight: bold;
+  opacity: 1;
+  box-shadow: 0px -2px 8px 3px #fff, 0px 0px 20px 1px #fff inset;
+} */
+.layui-layer-windows .layui-layer-setwin{
+  top: 12px;
+}
+
+.layui-layer-windows .layui-layer-setwin span{
+  margin-left: 4px;
+}
+
+.layui-layer-windows  .layui-layer-min,
+.layui-layer-windows  .layui-layer-max{
+  padding: 5px;
+  background: rgba(30, 159, 255, 1);
+  border-radius: 5px;
+  box-shadow: 0 0 3px 1px rgb(255 255 255 / 33%), 0px 2px 3px 1px rgb(255 255 255 / 33%) inset, 0px -2px 1px 0px rgb(0 0 0 / 18%) inset;
+}
+
+.layui-layer-windows  .layui-layer-min:hover,
+.layui-layer-windows  .layui-layer-max:hover{
+  background: rgba(30, 159, 255, .5);
+}
+
+.layui-layer-windows  .layui-layer-min::before{
+  height: 2px;
+  background-color: rgba(225,225,225);
+}
+
+.layui-layer-windows  .layui-layer-min:hover::before{
+  height: 2px;
+  background-color: rgba(225,225,225);
+}
+
+.layui-layer-windows  .layui-layer-max::before,
+.layui-layer-windows  .layui-layer-max::after{
+  border-width: 2px;
+  border-color: rgba(225,225,225);
+  margin: -6px 0 0 -6px;
+}
+
+.layui-layer-windows  .layui-layer-max:hover::before,
+.layui-layer-windows  .layui-layer-max:hover::after{
+  border-width: 2px;
+  border-color: rgba(225,225,225);
+}
+
+.layui-layer-windows .layui-layer-setwin span.layui-icon-close{
+  padding: 5px;
+  background-color: rgba(160, 121, 136, 1);
+  border-radius: 5px;
+  font-weight: bold;
+  color: rgba(225,225,225);
+  box-shadow: 0 0 3px 1px rgb(255 255 255 / 33%), 0px 2px 3px 1px rgb(255 255 255 / 33%) inset, 0px -2px 1px 0px rgb(0 0 0 / 18%) inset;
+}
+
+.layui-layer-windows .layui-layer-setwin span.layui-icon-close:hover{
+  background-color: rgba(255, 41, 136, 1);
+}

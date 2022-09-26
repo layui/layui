@@ -1504,12 +1504,42 @@ layer.photos = function(options, loop, key){
   });
 };
 
+/***************************************************************************************************
+ * Method :: wakeUp                                     *
+ *        @Description:  唤醒layer弹层管理器 - windows
+ *                                                      
+ *                                                      *
+ * INPUT:  option  配置参数。详情可以查看windows.wakeUp    *
+ *                                                      *
+ * OUTPUT:  layui.binder instance                       *
+ *                                                      *
+ * WARNINGS:                                            *
+ * HISTORY:                                             *
+ *     @MethodAuthor: Malphite                                 *
+ *     @Date: 2022-08-20         *
+*==================================================================================================*/
+layer.wakeUp = function(option,list){
+  if(!window.layui) return console.warn('不支持在单layer组件下启用windows组件');
+  // layui.use('windows', () => layui.windows.wakeUp(option));
+  layui.use(['windows'], function(){
+    layui.windows.wakeUp(option,list);
+  });
+};
+
 //主入口
 ready.run = function(_$){
   $ = _$;
   win = $(window);
   doms.html = $('html');
   layer.open = function(deliver){
+    // 拦截open方法，预处理参数
+    if(window.layui && layui.windows && layui.windows.notify && layui.windows.notify()){
+      var tempResult = layui.windows.open(deliver);
+      // 判断结果是不是数字 说明返回的就是index，就直接返回
+      if(/^\d+$/.test(String(tempResult))) return tempResult;
+      // 没有就是参数已经被包装过了。直接进行下面的方法
+      deliver = tempResult;
+    }
     var o = new Class(deliver);
     return o.index;
   };
