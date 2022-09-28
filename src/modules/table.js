@@ -2331,7 +2331,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var tableIns = table.render(options);
 
       //获取表体数据
-      if (trElem.length && !tableIns.config.url) {
+      if (trElem.length && !settings.data && !tableIns.config.url) {
         var tdIndex = 0;
         table.eachCols(tableIns.config.id, function (i3, item3) {
           trElem.each(function(i1){

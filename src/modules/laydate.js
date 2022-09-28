@@ -105,7 +105,7 @@
     var elem = lay(options.elem || that.config.elem);
     if(elem.length > 1){
       lay.each(elem, function(){
-        laydate.render(lay.extend({}, that.config, lay.options(this),{
+        laydate.render(lay.extend({}, that.config, {
           elem: this
         }));
       });
@@ -113,7 +113,7 @@
     }
     
     // 初始化 id 参数
-    options = that.config;
+    options = lay.extend(that.config, lay.options(elem[0])); // 继承节点上的属性
     options.id = ('id' in options) ? options.id : that.index;
     
     // 初始化
@@ -162,6 +162,7 @@
     ,zIndex: null //控件层叠顺序
     ,done: null //控件选择完毕后的回调，点击清空/现在/确定也均会触发
     ,change: null //日期时间改变后的回调
+    ,quickConfirm: true //快速确认
   };
   
   //多语言
@@ -579,7 +580,7 @@
 
         lay(this).addClass(THIS);
 
-        if (options.position !== 'static' && !options.range) {
+        if (options.position !== 'static' && !options.range && options.quickConfirm) {
           if (type === 'date') {
             that.choose(lay(elem).find('td.layui-this'))
           } else if (type === 'year' || type === 'month') {
@@ -1352,7 +1353,7 @@
         //若为月选择器，只有当选择月份时才自动关闭；
         //若为年选择器，选择年份即自动关闭
         //且在范围未开启时
-        if(!options.range){
+        if(!options.range && options.quickConfirm){
           if((options.type === 'month' && type === 'month') || (options.type === 'year' && type === 'year')){
             that.setValue(that.parse()).remove().done();
           }
@@ -1640,7 +1641,7 @@
     } else if(options.position === 'static'){ //直接嵌套的选中
       that.calendar().done().done(null, 'change'); //同时执行 done 和 change 回调
     } else if(options.type === 'date'){
-      that.setValue(that.parse()).remove().done();
+      options.quickConfirm ? that.setValue(that.parse()).remove().done() : that.calendar().done(null, 'change');
     } else if(options.type === 'datetime'){
       that.calendar().done(null, 'change');
     }
