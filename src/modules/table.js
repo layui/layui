@@ -309,6 +309,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     ,text: {
       none: '无数据'
     }
+    ,cols: []
   };
 
   // 表格渲染
