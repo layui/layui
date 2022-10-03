@@ -1949,6 +1949,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         ,del: function(){ //删除行数据
           table.cache[that.key][index] = [];
           tr.remove();
+          if (typeof table.cache.length == 'undefined' && that.config.page.pages === 1) {
+            return that.errorView(options.text.none);
+          }
           that.scrollPatch();
         }
         ,update: function(fields, related){ //修改行数据
