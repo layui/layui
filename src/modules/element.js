@@ -1,18 +1,18 @@
 /**
- * element 常用元素操作
- * MIT Licensed 
+ * element
+ * 常用元素操作组件
  */
  
 layui.define('jquery', function(exports){
-  "use strict";
+  'use strict';
   
-  var $ = layui.$
-  ,hint = layui.hint()
-  ,device = layui.device()
+  var $ = layui.$;
+  var hint = layui.hint();
+  var device = layui.device();
   
-  ,MOD_NAME = 'element', THIS = 'layui-this', SHOW = 'layui-show'
+  var MOD_NAME = 'element', THIS = 'layui-this', SHOW = 'layui-show';
   
-  ,Element = function(){
+  var Element = function(){
     this.config = {};
   };
   
@@ -82,23 +82,34 @@ layui.define('jquery', function(exports){
   };
   
   
-  //动态改变进度条
+  // 动态改变进度条
   Element.prototype.progress = function(filter, percent){
-    var ELEM = 'layui-progress'
-    ,elem = $('.'+ ELEM +'[lay-filter='+ filter +']')
-    ,elemBar = elem.find('.'+ ELEM +'-bar')
-    ,text = elemBar.find('.'+ ELEM +'-text');
-    elemBar.css('width', percent).attr('lay-percent', percent);
+    var ELEM = 'layui-progress';
+    var elem = $('.'+ ELEM +'[lay-filter='+ filter +']');
+    var elemBar = elem.find('.'+ ELEM +'-bar');
+    var text = elemBar.find('.'+ ELEM +'-text');
+
+    elemBar.css('width', function(){
+      return /^.+\/.+$/.test(percent) 
+        ? (new Function('return '+ percent)() * 100) + '%'
+     : percent;
+    }).attr('lay-percent', percent);
     text.text(percent);
     return this;
   };
   
-  var NAV_ELEM = '.layui-nav', NAV_ITEM = 'layui-nav-item', NAV_BAR = 'layui-nav-bar'
-  ,NAV_TREE = 'layui-nav-tree', NAV_CHILD = 'layui-nav-child', NAV_CHILD_C = 'layui-nav-child-c'
-  ,NAV_MORE = 'layui-nav-more', NAV_DOWN = 'layui-icon-down', NAV_ANIM = 'layui-anim layui-anim-upbit'
+  var NAV_ELEM = '.layui-nav';
+  var NAV_ITEM = 'layui-nav-item';
+  var NAV_BAR = 'layui-nav-bar';
+  var NAV_TREE = 'layui-nav-tree';
+  var NAV_CHILD = 'layui-nav-child';
+  var NAV_CHILD_C = 'layui-nav-child-c';
+  var NAV_MORE = 'layui-nav-more';
+  var NAV_DOWN = 'layui-icon-down';
+  var NAV_ANIM = 'layui-anim layui-anim-upbit';
   
-  //基础事件体
-  ,call = {
+  // 基础事件体
+  var call = {
     //Tab 点击
     tabClick: function(e, index, liElem, options){
       options = options || {};
@@ -452,7 +463,7 @@ layui.define('jquery', function(exports){
             return /^.+\/.+$/.test(percent) 
               ? (new Function('return '+ percent)() * 100) + '%'
            : percent;
-          }());
+          });
           
           if(othis.attr('lay-showPercent')){
             setTimeout(function(){

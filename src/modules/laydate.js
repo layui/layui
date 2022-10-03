@@ -6,71 +6,97 @@
   var isLayui = window.layui && layui.define, ready = {
     getPath: (window.lay && lay.getPath) ? lay.getPath : ''
     
-    //载入 CSS 依赖
+    // 载入 CSS 依赖
     ,link: function(href, fn, cssname){
       
-      //未设置路径，则不主动加载 css
+      // 未设置路径，则不主动加载 css
       if(!laydate.path) return;
       
-      //加载 css
+      // 加载 css
       if(window.lay && lay.layui){
         lay.layui.link(laydate.path + href, fn, cssname);
       }
     }
-  }
+  };
   
-  //识别预先可能定义的指定全局对象
-  ,GLOBAL = window.LAYUI_GLOBAL || {}
+  // 识别预先可能定义的指定全局对象
+  var GLOBAL = window.LAYUI_GLOBAL || {};
   
-  //外部调用
-  ,laydate = {
-    v: '5.3.1' //layDate 版本号
+  // 外部调用
+  var laydate = {
+    v: '5.4.0' // layDate 版本号
     ,config: {
       weekStart: 0, // 默认周日一周的开始
-    } //全局配置项
+    } // 全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: GLOBAL.laydate_dir || ready.getPath
     
-    //设置全局项
+    // 设置全局项
     ,set: function(options){
       var that = this;
       that.config = lay.extend({}, that.config, options);
       return that;
     }
     
-    //主体CSS等待事件
-    ,ready: function(fn){
-      var cssname = 'laydate', ver = ''
-      ,path = (isLayui ? 'modules/laydate/' : 'theme/') + 'default/laydate.css?v='+ laydate.v + ver;
-      isLayui ? layui.addcss(path, fn, cssname) : ready.link(path, fn, cssname);
+    // 主体 CSS 等待事件
+    ,ready: function(callback){
+      var cssname = 'laydate';
+      var ver = ''
+      var path = (isLayui ? 'modules/' : 'css/') + 'laydate.css?v='+ laydate.v + ver;
+
+      isLayui ? (
+        layui['layui.all'] 
+          ? (typeof callback === 'function' && callback()) 
+        : layui.addcss(path, callback, cssname)
+      ) : ready.link(path, callback, cssname);
+
       return this;
     }
-  }
+  };
   
-  //操作当前实例
-  ,thisModule = function(){
+  // 操作当前实例
+  var thisModule = function(){
     var that = this
     ,options = that.config
     ,id = options.id;
     
     thisModule.that[id] = that; //记录当前实例对象
-    
-    return {
+
+    return that.inst = {
       //提示框
       hint: function(content){
         that.hint.call(that, content);
       }
       ,config: that.config
     };
-  }
+  };
 
-  //字符常量
-  ,MOD_NAME = 'laydate', ELEM = '.layui-laydate', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'laydate-disabled', LIMIT_YEAR = [100, 200000]
+  // 字符常量
+  var MOD_NAME = 'laydate';
+  var ELEM = '.layui-laydate';
+  var THIS = 'layui-this';
+  var SHOW = 'layui-show';
+  var HIDE = 'layui-hide';
+  var DISABLED = 'laydate-disabled';
+  var LIMIT_YEAR = [100, 200000];
   
-  ,ELEM_STATIC = 'layui-laydate-static', ELEM_LIST = 'layui-laydate-list', ELEM_SELECTED = 'laydate-selected', ELEM_HINT = 'layui-laydate-hint', ELEM_PREV = 'laydate-day-prev', ELEM_NEXT = 'laydate-day-next', ELEM_FOOTER = 'layui-laydate-footer', ELEM_CONFIRM = '.laydate-btns-confirm', ELEM_TIME_TEXT = 'laydate-time-text', ELEM_TIME_BTN = 'laydate-btns-time', ELEM_PREVIEW = 'layui-laydate-preview'
-  
-  //组件构造器
-  ,Class = function(options){
+  var ELEM_STATIC = 'layui-laydate-static';
+  var ELEM_LIST = 'layui-laydate-list';
+  var ELEM_SELECTED = 'laydate-selected';
+  var ELEM_HINT = 'layui-laydate-hint';
+  var ELEM_PREV = 'laydate-day-prev';
+  var ELEM_NEXT = 'laydate-day-next';
+  var ELEM_FOOTER = 'layui-laydate-footer';
+  var ELEM_SHORTCUT = 'layui-laydate-shortcut';
+  var ELEM_NOW = '.laydate-btns-now'
+  var ELEM_CONFIRM = '.laydate-btns-confirm';
+  var ELEM_TIME_TEXT = 'laydate-time-text';
+  var ELEM_TIME_BTN = 'laydate-btns-time';
+  var ELEM_PREVIEW = 'layui-laydate-preview';
+  var ELEM_MAIN = 'layui-laydate-main';
+
+  // 组件构造器
+  var Class = function(options){
     var that = this;
     that.index = ++laydate.index;
     that.config = lay.extend({}, that.config, laydate.config, options);
@@ -78,28 +104,28 @@
     // 若 elem 非唯一，则拆分为多个实例
     var elem = lay(options.elem || that.config.elem);
     if(elem.length > 1){
-      layui.each(elem, function(){
-        laydate.render(lay.extend({}, that.config, {
+      lay.each(elem, function(){
+        laydate.render(lay.extend({}, that.config, lay.options(this),{
           elem: this
         }));
       });
       return that;
     }
     
-    //初始化 id 参数
+    // 初始化 id 参数
     options = that.config;
     options.id = ('id' in options) ? options.id : that.index;
     
-    //初始化
+    // 初始化
     laydate.ready(function(){
       that.init();
     });
-  }
+  };
   
-  //日期格式字符
-  ,dateType = 'yyyy|y|MM|M|dd|d|HH|H|mm|m|ss|s';
+  // 日期格式字符
+  var dateType = 'yyyy|y|MM|M|dd|d|HH|H|mm|m|ss|s';
   
-  //将日期格式字符转换为数组
+  // 将日期格式字符转换为数组
   thisModule.formatArr = function(format){
     return (format || '').match(new RegExp(dateType + '|.', 'g')) || []
   };
@@ -108,12 +134,12 @@
     组件操作
   */
   
-  //是否闰年
+  // 是否闰年
   Class.isLeapYear = function(year){
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   };
   
-  //默认配置
+  // 默认配置
   Class.prototype.config = {
     type: 'date' //控件类型，支持：year/month/date/time/datetime
     ,range: false //是否开启范围选择，即双控件
@@ -200,7 +226,18 @@
     options.eventElem = lay(options.eventElem);
     
     if(!options.elem[0]) return;
-    
+    var thatTemp = thisModule.that[options.elem.attr('lay-key')]
+    thatTemp && thatTemp.destroy && thatTemp.destroy(); // 销毁上一个实例以便重新渲染
+
+    layui.type(options.theme) !== 'array' && (options.theme = [options.theme]);
+    // 设置了全面版模式
+    if (options.fullPanel) {
+      if (options.type !== 'datetime' || options.range) {
+        // 目前只支持datetime的全面版
+        delete options.fullPanel;
+      }
+    }
+
     //日期范围分隔符
     that.rangeStr =  options.range ? (
       typeof options.range === 'string' ? options.range : '-'
@@ -272,11 +309,9 @@
     }
     
     //设置唯一KEY
-    if(!options.elem.attr('lay-key')){
-      options.elem.attr('lay-key', that.index);
-      options.eventElem.attr('lay-key', that.index);
-    }
-    
+    options.elem.attr('lay-key', that.index);
+    options.eventElem.attr('lay-key', that.index);
+
     //记录重要日期
     options.mark = lay.extend({}, (options.calendar && options.lang === 'cn') ? {
       '0-1-1': '元旦'
@@ -357,7 +392,17 @@
         'layui-laydate'
         ,options.range ? ' layui-laydate-range' : ''
         ,isStatic ? (' '+ ELEM_STATIC) : ''
-        ,options.theme && options.theme !== 'default' && !/^#/.test(options.theme) ? (' laydate-theme-' + options.theme) : ''
+        ,options.fullPanel ? ' laydate-theme-fullpanel' : '' // 全面版
+        // ,options.theme && options.theme !== 'default' && !/^#/.test(options.theme) ? (' laydate-theme-' + options.theme) : ''
+        ,(function () {
+          var themeStr = '';
+          lay.each(options.theme, function (index, theme) {
+            if (theme !== 'default' && !/^#/.test(theme)) {
+              themeStr += ' laydate-theme-' + theme;
+            }
+          })
+          return themeStr;
+        })()
       ].join('')
     })
     
@@ -370,6 +415,11 @@
     //底部区域
     ,divFooter = that.footer = lay.elem('div', {
       "class": ELEM_FOOTER
+    })
+
+    //快捷栏
+    ,divShortcut = that.shortcut = lay.elem('ul', {
+      "class": ELEM_SHORTCUT
     });
     
     if(options.zIndex) elem.style.zIndex = options.zIndex;
@@ -448,7 +498,7 @@
       divContent.appendChild(table);
       
       elemMain[i] = lay.elem('div', {
-        "class": 'layui-laydate-main laydate-main-list-'+ i
+        "class": ELEM_MAIN + ' laydate-main-list-'+ i
       });
       
       elemMain[i].appendChild(divHeader);
@@ -465,7 +515,7 @@
       if(options.type === 'datetime'){
         html.push('<span lay-type="datetime" class="'+ ELEM_TIME_BTN +'">'+ lang.timeTips +'</span>');
       }
-      if(!(!options.range && options.type === 'datetime')){
+      if(!(!options.range && options.type === 'datetime') || options.fullPanel){
         html.push('<span class="'+ ELEM_PREVIEW +'" title="'+ lang.preview +'"></span>')
       }
       
@@ -478,7 +528,69 @@
       html.push('<div class="laydate-footer-btns">'+ btns.join('') +'</div>');
       return html.join('');
     }());
-    
+
+    // 生成快捷键栏
+    if (options.shortcuts) {
+      elem.appendChild(divShortcut);
+      lay(divShortcut).html(function () {
+        var shortcutBtns = [];
+        lay.each(options.shortcuts, function (i, item) {
+          shortcutBtns.push('<li data-index="' + i + '">'+item.text+'</li>')
+        })
+        return shortcutBtns.join('');
+      }()).find('li').on('click', function (event) {
+        var btnSetting = options.shortcuts[this.dataset['index']] || {};
+        var value = btnSetting.value || [];
+        if (!layui.isArray(value)) {
+          value = [value];
+        }
+        var type = options.type;
+        lay.each(value, function (i, item) {
+          var dateTime = [options.dateTime, that.endDate][i];
+          if (type === 'time' && layui.type(item) !== 'date') {
+            if (that.EXP_IF.test(item)) {
+              item = (item.match(that.EXP_SPLIT) || []).slice(1);
+              lay.extend(dateTime, {hours: item[0] | 0, minutes: item[2] | 0, seconds: item[4] | 0})
+            }
+          } else {
+            lay.extend(dateTime, that.systemDate(layui.type(item) === 'date' ? item : new Date(item)))
+          }
+
+          if (type === 'time') {
+            that[['startTime', 'endTime'][i]] = {
+              hours: dateTime.hours,
+              minutes: dateTime.minutes,
+              seconds: dateTime.seconds,
+            }
+          }
+          if (type === 'year' || type === 'month' || type === 'time') {
+            that.listYM[i] = [dateTime.year, dateTime.month + 1];
+            that.checkDate('limit').calendar(null,i);
+            that.list(type, i);
+          } else {
+            that.checkDate('limit').calendar(null,i);
+            that.closeList();
+          }
+        });
+
+        var timeBtn = lay(that.footer).find('.'+ ELEM_TIME_BTN).removeClass(DISABLED);
+        timeBtn && timeBtn.attr('lay-type') === 'date' && timeBtn[0].click();
+        that.done(null, 'change');
+
+        lay(this).addClass(THIS);
+
+        if (options.position !== 'static' && !options.range) {
+          if (type === 'date') {
+            that.choose(lay(elem).find('td.layui-this'))
+          } else if (type === 'year' || type === 'month') {
+            if(lay(elemMain[0]).find('.' + ELEM_MAIN + ' li.' + THIS + ':not(.laydate-disabled)')[0]) {
+              that.setValue(that.parse()).remove().done();
+            }
+          }
+        }
+      })
+    }
+
     //插入到主区域
     lay.each(elemMain, function(i, main){
       elem.appendChild(main);
@@ -486,21 +598,33 @@
     options.showBottom && elem.appendChild(divFooter);
     
     //生成自定义主题
-    if(/^#/.test(options.theme)){
-      var style = lay.elem('style')
-      ,styleText = [
-        '#{{id}} .layui-laydate-header{background-color:{{theme}};}'
-        ,'#{{id}} .layui-this{background-color:{{theme}} !important;}'
-      ].join('').replace(/{{id}}/g, that.elemID).replace(/{{theme}}/g, options.theme);
-      
+    var style = lay.elem('style');
+    var styleText = [];
+    var colorTheme;
+    lay.each(options.theme, function (index, theme) {
+      if(/^#/.test(theme)){
+        colorTheme = true;
+        styleText.push([
+          '#{{id}} .layui-laydate-header{background-color:{{theme}};}'
+          ,'#{{id}} li.layui-this,#{{id}} td.layui-this>div{background-color:{{theme}} !important;}'
+          ,options.theme.indexOf('circle') !== -1 ? '' : '#{{id}} .layui-this{background-color:{{theme}} !important;}'
+        ].join('').replace(/{{id}}/g, that.elemID).replace(/{{theme}}/g, theme));
+      }
+    });
+    //快捷栏样式
+    if (options.shortcuts && options.range) {
+      styleText.push('#{{id}}.layui-laydate-range{width: 628px;}'.replace(/{{id}}/g, that.elemID))
+    }
+    if (styleText.length) {
+      styleText = styleText.join('');
       if('styleSheet' in style){
         style.setAttribute('type', 'text/css');
         style.styleSheet.cssText = styleText;
       } else {
         style.innerHTML = styleText;
       }
-      
-      lay(elem).addClass('laydate-theme-molv');
+
+      colorTheme && lay(elem).addClass('laydate-theme-molv');
       elem.appendChild(style);
     }
 
@@ -521,6 +645,7 @@
     
     Class.thisElemDate = that.elemID;
 
+    that.renderAdditional()
     typeof options.ready === 'function' && options.ready(lay.extend({}, options.dateTime, {
       month: options.dateTime.month + 1
     }));
@@ -802,8 +927,11 @@
       }
     }
 
-    //初始值不在最大最小范围内
-    minMaxError && that.setValue(that.parse()).hint('初始值' + lang.invalidDate + lang.formatError[1]);
+    // 初始值不在最大最小范围内
+    if(minMaxError && value){
+      that.setValue(that.parse());
+      that.hint('value ' + lang.invalidDate + lang.formatError[1]);
+    }
 
     fn && fn();
     return that;
@@ -821,7 +949,7 @@
         mark = title || YMD[2];
       }
     });
-    mark && td.html('<span class="laydate-day-mark">'+ mark +'</span>');
+    mark && td.find('div').html('<span class="laydate-day-mark">'+ mark +'</span>');
     
     return that;
   };
@@ -837,7 +965,7 @@
     lay.each(options.holidays, function(idx, item) {
       lay.each(item, function(i, dayStr) {
         if(dayStr === td.attr('lay-ymd')){
-          td.html('<span class="laydate-day-holidays"' + (
+          td.find('div').html('<span class="laydate-day-holidays"' + (
             type[idx] ? ('type="'+ type[idx] +'"') : ''
           ) + '>' + YMD[2] + '</span>');
         }
@@ -847,12 +975,16 @@
     return that;
   };
   
-  //无效日期范围的标记
-  Class.prototype.limit = function(elem, date, index, time){
-    var that = this
-    ,options = that.config, timestrap = {}
-    ,dateTime = index > (time ? 0 : 41) ? that.endDate : options.dateTime
-    ,isOut, thisDateTime = lay.extend({}, dateTime, date || {});
+  // 无效日期范围的标记
+  Class.prototype.limit = function(opts){
+    opts = opts || {};
+
+    var that = this;
+    var options = that.config;
+    var timestrap = {}
+    var dateTime = opts.index > (opts.time ? 0 : 41) ? that.endDate : options.dateTime;
+    var isOut;
+    var thisDateTime = lay.extend({}, dateTime, opts.date || {});
     
     lay.each({
       now: thisDateTime
@@ -861,11 +993,11 @@
     }, function(key, item){
       timestrap[key] = that.newDate(lay.extend({
         year: item.year
-        ,month: item.month
-        ,date: item.date
+        ,month: opts.type === 'year' ? 0 : item.month // 年份的时候只比较年
+        ,date: (opts.type === 'year' || opts.type === 'month') ? 1 : item.date // 年月只比较年月不与最大最小比日期
       }, function(){
         var hms = {};
-        lay.each(time, function(i, keys){
+        lay.each(opts.time, function(i, keys){
           hms[keys] = item[keys];
         });
         return hms;
@@ -873,7 +1005,8 @@
     });
     
     isOut = timestrap.now < timestrap.min || timestrap.now > timestrap.max;
-    elem && elem[isOut ? 'addClass' : 'removeClass'](DISABLED);
+    opts.elem && opts.elem[isOut ? 'addClass' : 'removeClass'](DISABLED);
+
     return isOut;
   };
   
@@ -931,12 +1064,16 @@
       }
       YMD[1]++;
       YMD[2] = st + 1;
-      item.attr('lay-ymd', YMD.join('-')).html(YMD[2]);
-      that.mark(item, YMD).holidays(item, YMD).limit(item, {
-        year: YMD[0]
-        ,month: YMD[1] - 1
-        ,date: YMD[2]
-      }, index_);
+      item.attr('lay-ymd', YMD.join('-')).html('<div>' + YMD[2] + '</div>');
+      that.mark(item, YMD).holidays(item, YMD).limit({
+        elem: item,
+        date: {
+          year: YMD[0],
+          month: YMD[1] - 1,
+          date: YMD[2]
+        },
+        index: index_
+      });
     });  
     
     //同步头部年月
@@ -979,13 +1116,30 @@
       that.calendar(that.endDate, 1);
     }
     
-    //通过检测当前有效日期，来设定确定按钮是否可点
+    // 通过检测当前有效日期，来设定底部按钮状态
     if(!options.range){
-      that.limit(lay(that.footer).find(ELEM_CONFIRM), null, 0, ['hours', 'minutes', 'seconds']);
+      var timeParams = ['hours', 'minutes', 'seconds'];
+
+      // 现在按钮
+      that.limit({
+        elem: lay(that.footer).find(ELEM_NOW),
+        date: that.systemDate(),
+        index: 0,
+        time: timeParams
+      });
+      // 确认按钮
+      that.limit({
+        elem: lay(that.footer).find(ELEM_CONFIRM),
+        index: 0,
+        time: timeParams
+      });
     }
     
     //同步按钮可点状态
     that.setBtnStatus();
+
+    // 重置快捷栏选中状态
+    lay(that.shortcut).find('li.' + THIS).removeClass(THIS);
     
     return that;
   };
@@ -1046,7 +1200,12 @@
         }
         */
 
-        that.limit(lay(li), ymd, index);
+        that.limit({
+          elem: lay(li),
+          date: ymd,
+          index: index,
+          type: type
+        });
         yearNum++;
       });
 
@@ -1078,7 +1237,12 @@
         }
         */
 
-        that.limit(lay(li), ymd, index);
+        that.limit({
+          elem: lay(li),
+          date: ymd,
+          index: index,
+          type: type
+        });
       });
 
       lay(elemYM[isCN ? 0 : 1]).attr('lay-ym', listYM[0] + '-' + listYM[1])
@@ -1091,20 +1255,34 @@
       var setTimeStatus = function(){
         lay(ul).find('ol').each(function(i, ol){
           lay(ol).find('li').each(function(ii, li){
-            that.limit(lay(li), [{
-              hours: ii
-            }, {
-              hours: that[startEnd].hours
-              ,minutes: ii
-            }, {
-              hours: that[startEnd].hours
-              ,minutes: that[startEnd].minutes
-              ,seconds: ii
-            }][i], index, [['hours'], ['hours', 'minutes'], ['hours', 'minutes', 'seconds']][i]);
+            that.limit({
+              elem: lay(li),
+              date: [{
+                hours: ii
+              }, {
+                hours: that[startEnd].hours
+                ,minutes: ii
+              }, {
+                hours: that[startEnd].hours
+                ,minutes: that[startEnd].minutes
+                ,seconds: ii
+              }][i],
+              index: index,
+              time: [
+                ['hours'], 
+                ['hours', 'minutes'], 
+                ['hours', 'minutes', 'seconds']
+              ][i]
+            });
           });
         });
         if(!options.range){
-          that.limit(lay(that.footer).find(ELEM_CONFIRM), that[startEnd], 0, ['hours', 'minutes', 'seconds']);
+          that.limit({
+            elem: lay(that.footer).find(ELEM_CONFIRM),
+            date: that[startEnd],
+            inedx: 0,
+            time: ['hours', 'minutes', 'seconds']
+          });
         }
       };
       
@@ -1144,7 +1322,10 @@
         if(lay(this).hasClass(DISABLED)) return;
         if(index === 0){
           dateTime[type] = ym;
-          that.limit(lay(that.footer).find(ELEM_CONFIRM), null, 0);
+          that.limit({
+            elem: lay(that.footer).find(ELEM_CONFIRM),
+            index: 0
+          });
         } else { //范围选择
           that.endDate[type] = ym;
         }
@@ -1265,7 +1446,11 @@
       isOut = that.newDate(start).getTime() > that.newDate(end).getTime();
       
       //如果不在有效日期内，直接禁用按钮，否则比较开始和结束日期
-      (that.limit(null, start) || that.limit(null, end)) 
+      (that.limit({
+        date: start
+      }) || that.limit({
+        date: end
+      })) 
         ? elemBtn.addClass(DISABLED)
       : elemBtn[isOut ? 'addClass' : 'removeClass'](DISABLED);
       
@@ -1369,7 +1554,18 @@
       });
     }, 300);
   };
-  
+
+  // 附加的渲染处理，在ready和change的时候调用
+  Class.prototype.renderAdditional = function(){
+    var that = this;
+    var options = that.config;
+
+    // 处理全面板
+    if (options.fullPanel) {
+      that.list('time', 0);
+    }
+  };
+
   //执行 done/change 回调
   Class.prototype.done = function(param, type){
     var that = this
@@ -1387,6 +1583,7 @@
     that.preview();
     
     param = param || [that.parse(), start, end];
+    type === 'change' && that.renderAdditional();
     typeof options[type || 'done'] === 'function' && options[type || 'done'].apply(options, param);
     
     return that;
@@ -1487,14 +1684,21 @@
         that.done(['', {}, {}]);
       }
       
-      //现在
+      // 现在
       ,now: function(){
         var thisDate = new Date();
+
+        // 当前系统时间未在 min/max 范围内，则不可点击
+        if(lay(btn).hasClass(DISABLED)){
+          return that.hint(lang.tools.now +', '+ lang.invalidDate);
+        }
+
         lay.extend(dateTime, that.systemDate(), {
           hours: thisDate.getHours()
           ,minutes: thisDate.getMinutes()
           ,seconds: thisDate.getSeconds()
         });
+
         that.setValue(that.parse()).remove();
         isStatic && that.calendar();
         that.done();
@@ -1547,8 +1751,11 @@
         });
         if(isAlone) dateTime.year = listYM[0];
         options.range || that.done(null, 'change');     
-        options.range || that.limit(lay(that.footer).find(ELEM_CONFIRM), {
-          year: listYM[0]
+        options.range || that.limit({
+          elem: lay(that.footer).find(ELEM_CONFIRM),
+          date: {
+            year: listYM[0]
+          }
         });
       }
       
@@ -1663,24 +1870,31 @@
   //绑定的元素事件处理
   Class.prototype.events = function(){
     var that = this
-    ,options = that.config
+    var options = that.config
 
-    //绑定呼出控件事件
-    ,showEvent = function(elem, bind){
-      elem.on(options.trigger, function(){
-        //已经打开的面板避免重新渲染
-        if(laydate.thisId === options.id) return;
-        bind && (that.bindElem = this);
-        that.render();
-      });
-    };
-    
     if(!options.elem[0] || options.elem[0].eventHandler) return;
-    
-    showEvent(options.elem, 'bind');
-    showEvent(options.eventElem);
-    
+
+    var showEvent = function(){
+      // 已经打开的面板避免重新渲染
+      if(laydate.thisId === options.id) return;
+      that.bindElem = this;
+      that.render();
+    }
+    //绑定呼出控件事件
+    options.elem.on(options.trigger, showEvent);
     options.elem[0].eventHandler = true;
+    options.eventElem.on(options.trigger, showEvent);
+
+    that.destroy = function () {
+      that.remove();
+      options.elem.off(options.trigger, showEvent);
+      options.elem.removeAttr('lay-key');
+      options.elem[0].eventHandler = false;
+      options.eventElem.off(options.trigger, showEvent);
+      options.eventElem.removeAttr('lay-key');
+
+      delete thisModule.that[options.id];
+    }
   };
   
   //记录所有实例
@@ -1745,7 +1959,15 @@
     var inst = new Class(options);
     return thisModule.call(inst);
   };
-  
+
+  // 获取
+  laydate.getInst = function (key) {
+    var that = thisModule.getThis(key);
+    if (that) {
+      return that.inst;
+    }
+  }
+
   //将指定对象转化为日期值
   laydate.parse = function(dateTime, format, one){
     dateTime = dateTime || {};
@@ -1795,7 +2017,14 @@
     if(!that) return;
     return that.remove();
   };
-  
+
+  // 销毁实例
+  laydate.destroy = function(id){
+    var that = thisModule.getThis(id || laydate.thisId);
+    if(!that) return;
+    return that.destroy();
+  };
+
   //加载方式
   isLayui ? (
     laydate.ready()

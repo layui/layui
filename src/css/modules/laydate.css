@@ -55,7 +55,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-content{position: relative; padding: 10px; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;}
 .layui-laydate-content table{border-collapse: collapse; border-spacing: 0;}
 .layui-laydate-content th,
-.layui-laydate-content td{width: 36px; height: 30px; padding: 5px; text-align: center;}
+.layui-laydate-content td{width: 36px; height: 30px; padding: 0; text-align: center;}
 .layui-laydate-content th{font-weight: 400;}
 .layui-laydate-content td{position: relative; cursor: pointer;}
 .laydate-day-mark{position: absolute; left: 0; top: 0; width: 100%; line-height: 30px; font-size: 12px; overflow: hidden;}
@@ -74,6 +74,11 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-footer span:first-child.layui-laydate-preview{padding-left: 0;}
 .laydate-footer-btns{position: absolute; right: 10px; top: 10px;}
 .laydate-footer-btns span{margin: 0 0 0 -1px;}
+
+/* 快捷栏 */
+.layui-laydate-shortcut{width: 80px;display: inline-block;vertical-align: top;overflow: auto;max-height: 276px;}
+.layui-laydate-shortcut+.layui-laydate-main{display: inline-block;border-left: 1px solid #e2e2e2;}
+.layui-laydate-shortcut>li{padding: 6px;cursor: pointer;line-height: 18px;}
 
 /* 年月列表 */
 .layui-laydate-list{position: absolute; left: 0; top: 0; width: 100%; height: 100%; padding: 10px; box-sizing: border-box; background-color: #fff;}
@@ -107,8 +112,9 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-content td{color: #666;}
 .layui-laydate-content td.laydate-selected{background-color: #B5FFF8;}
 .laydate-selected:hover{background-color: #00F7DE !important;}
-.layui-laydate-content td:hover,
-.layui-laydate-list li:hover{background-color: #eee; color: #333;}
+.layui-laydate-content td>div:hover,
+.layui-laydate-list li:hover,
+.layui-laydate-shortcut>li:hover{background-color: #eee; color: #333;}
 .laydate-time-list li ol{margin: 0; padding: 0; border: 1px solid #e2e2e2; border-left-width: 0;}
 .laydate-time-list li:first-child ol{border-left-width: 1px;}
 .laydate-time-list>li:hover{background: none;}
@@ -121,9 +127,10 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-day-mark::after{background-color: #5FB878;}
 .layui-laydate-content td.layui-this .laydate-day-mark::after{display: none;}
 .layui-laydate-footer span[lay-type="date"]{color: #5FB878;}
-.layui-laydate .layui-this{background-color: #009688 !important; color: #fff !important;}
+.layui-laydate .layui-this,.layui-laydate .layui-this>div{background-color: #009688 !important; color: #fff !important;}
 .layui-laydate .laydate-disabled,
 .layui-laydate .laydate-disabled:hover{background:none !important; color: #d2d2d2 !important; cursor: not-allowed !important; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;}
+.layui-laydate-content td>div{padding: 7px 0;height: 100%;}
 
 /* 墨绿/自定义背景色主题 */
 .laydate-theme-molv{border: none;}
@@ -153,4 +160,19 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-theme-grid .laydate-month-list>li{margin: 0 -1px -1px 0;}
 .laydate-theme-grid .laydate-year-list>li{height: 43px; line-height: 43px;}
 .laydate-theme-grid .laydate-month-list>li{height: 71px; line-height: 71px;}
+.laydate-theme-grid .layui-laydate-content td>div{height: 29px;margin-top: -1px;}
 
+/* 圆圈高亮主题 */
+.laydate-theme-circle .layui-laydate-content td>div,
+.laydate-theme-circle .layui-laydate-content td.layui-this>div{width: 28px;height: 28px;line-height: 28px;border-radius: 14px;margin: 0 4px;padding: 0;}
+.layui-laydate.laydate-theme-circle .layui-laydate-content table td.layui-this{background-color: transparent !important;}
+.laydate-theme-grid.laydate-theme-circle .layui-laydate-content td>div{margin: 0 3.5px;}
+
+/* 全面板 */
+.laydate-theme-fullpanel .layui-laydate-main {width: 526px;}
+.laydate-theme-fullpanel .layui-laydate-list {width: 252px;left: 272px;}
+.laydate-theme-fullpanel .laydate-set-ym span {display: none;}
+.laydate-theme-fullpanel .laydate-time-show .layui-laydate-header .layui-icon,
+.laydate-theme-fullpanel .laydate-time-show .laydate-set-ym span[lay-type="year"],
+.laydate-theme-fullpanel .laydate-time-show .laydate-set-ym span[lay-type="month"] {display: inline-block !important;}
+.laydate-theme-fullpanel .laydate-btns-time{display: none;}

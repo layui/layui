@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>完整库使用 - layui</title>
 
-  <link rel="stylesheet" href="../src/css/layui.css">
+  <link rel="stylesheet" href="../dist/css/layui.css">
 
   <style>
     body{padding: 10px;}
@@ -187,7 +187,7 @@ layui.use(function(){
       });
     }
     ,'test-use': function(othis){
-      layui.use(['laytpl','laypage','laydate','jquery','layer','util','element','upload','slider','colorpicker','form','tree','transfer','table','carousel','rate','flow','layedit','code'], function(){
+      layui.use(['laytpl','laypage','laydate','jquery','layer','util','element','upload','slider','colorpicker','form','tree','transfer','table','carousel','rate','flow','code'], function(){
         layer.tips('请观察 Network 是否有重复加载 js 文件。如果没有任何新的请求，则代表正常。', othis, {
           time: 10*1000
         });
