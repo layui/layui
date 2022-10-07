@@ -107,9 +107,67 @@
  *          3.当前版本 v2.4.0
  *
  *
+ *    @Author: Malphite
+ *    @Date: 2022-09-26
+ *    @description:
+ * 
+ *          1.重构卡片式多任务功能
+ *          2.当前版本 v2.5.0
+ *          3.这个版本可尝试上传github
+ *          4.新增第三方登录名 {@linkplain config.constant.DYNAMIC_OWNER 第三方登录用户名}
+ *          5.新增pageDescribe下属配置项 ignore 用来标志忽略装饰此参数
+ *          6.新增配置项，开启or关闭动画 {@linkplain config.constant.DYNAMIC_STARTER 装载动画}
+ * 
+ * 
+ *    @Author: Malphite
+ *    @Date: 2022-09-28
+ *    @description:
+ * 
+ *          1.操作栏使用文字加图标的模式
+ *          2.当前版本 v2.5.1
+ * 
+ *    @Author: Malphite
+ *    @Date: 2022-10-04
+ *    @description:
+ * 
+ *          1.与layer组件解耦
+ *          2.当前版本 v2.5.2
+ * 
  */
 ("use strict");
-layui.define(["layer", "binder"], function (exports) {
+
+
+
+(function(){
+  var doc = window.document;
+  var jsPath = doc.currentScript ? doc.currentScript.src : function(){
+    var js = doc.scripts
+    ,last = js.length - 1
+    ,src;
+    for(var i = last; i > 0; i--){
+      if(js[i].readyState === 'interactive'){
+        src = js[i].src;
+        break;
+      }
+    }
+    return src || js[last].src;
+  }();
+
+  var basePath = jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
+
+  layui.extend({
+    binder: basePath + 'binder',
+    vform: basePath + 'vform',
+  });
+
+})()
+
+
+
+
+layui.define(['jquery' ,"layer", "binder"], function (exports) {
+
+  var $ = layui.jquery;
 
   /***************************************************************************************************
    * 
@@ -181,6 +239,21 @@ layui.define(["layer", "binder"], function (exports) {
        * 
        */
       ENABLE_FIT_POSITON: true,
+
+      /**
+       * @var {String} 第三方登录用户名
+       * @since v2.5.0
+       * @description 
+       * 
+       *    取代下面的动态用户名
+       */
+      DYNAMIC_OWNER: '',
+
+
+      /**
+       * @var {Boolean} 装载动画
+       */
+      DYNAMIC_STARTER: false,
 
       /**
        * @var {String} 选项卡外层id
@@ -409,8 +482,9 @@ layui.define(["layer", "binder"], function (exports) {
        *
        *  成员:
        *
-       *        @prop {Array}  list                  当前展示的窗口队列
-       *        @prop {Boolean} show                  卡片式多任务窗口展示情况  true 显示
+       *        @prop {Array}  list                  当前展示的窗口队列   v2.5.0 废弃
+       *        @prop {Object}  map                  当前展示的窗口原始信息  v2.5.0 新增
+       *        @prop {Boolean} show                 卡片式多任务窗口展示情况  true 显示
        *        @prop {Number} size                  最大展示窗口数量
        *        @prop {Number} now                   当前读取缓存池的下标
        */
@@ -431,8 +505,34 @@ layui.define(["layer", "binder"], function (exports) {
          *
          *        @prop {String}  id: 对应窗口的id(pageDescribe配置的key) 通过它来操作窗口
          *        @prop {String}  name: 窗口名字，主要用作展示
+         * @deprecated  v2.5.0 移除，接下来由下面的map进行描述即可
          */
         list: [],
+
+        /**
+         * @var {Object} 当前展示的窗口的原始信息
+         * @since v2.5.0
+         * @description
+         * 
+         *    作用:
+         * 
+         *        在窗口动画之前记录下窗口当前的状态以便后面的还原
+         * 
+         *    来源:
+         *    
+         *        在调用 getFlipList 来根据当前的状态获取
+         * 
+         *    成员: (key 为  {@link config.pageDescribe} 的key或者id)
+         * 
+         *         @prop {Number}  offsetTop      窗口距离上的值
+         *         @prop {Number}  offsetLeft     窗口距离左的值
+         *         @prop {Number}  currentWidth   窗口当前宽度
+         *         @prop {Number}  currentHeight  窗口当前高度
+         *         @prop {Number}  zIndex         窗口当前zIndex从pageDescribe里面有
+         *         @prop {Number}  min            窗口当前是否最小化 从pageDescribe里面有   
+         * 
+         */
+        map: {},
 
         /**
          * @prop {Boolean} 窗口展示情况
@@ -452,7 +552,7 @@ layui.define(["layer", "binder"], function (exports) {
          *        1.为了满足html动态加载，防止窗口过多造成页面卡死
          *        2.现有css限制仅有有现个窗口可以交互
          */
-        size: 5,
+        size: 6,
 
         /**
          * @prop {Number} 当前读取缓存池的下标
@@ -643,7 +743,7 @@ layui.define(["layer", "binder"], function (exports) {
      *          assignBy  v2.0.0 新增     assign分组的id 默认是""。另外存在这个值说明已经被合并了，监测时会放过对这个配置项的监测
      *          min       v1.0.0 新增     默认是false，窗口是否处于最小化状态
      *          icon      v1.0.0 新增     窗口小图标 默认是""。拥有小图标会在li标签上使用小图标取代文字，卡贴上也会展示小图标。
-     *
+     *          ignore    v2.5.0 新增     忽略标志  如果值为true 会放弃装饰此参数
      *
      *      ---------------      非配置参数(无须配置的临时参数) ---------------
      *
@@ -714,7 +814,7 @@ layui.define(["layer", "binder"], function (exports) {
      * 
      *    以windows组件为0.0.1计算
      */
-    VERSION: "2.4.0",
+    VERSION: "2.5.1",
 
     /**
      * @member {Boolean} 判断是否是第一次加载 true代表已经加载过了
@@ -1409,7 +1509,7 @@ layui.define(["layer", "binder"], function (exports) {
           <div class="layui-tab">
             <ul class="layui-tab-title" id="${config.constant.HEADERS_ID}" v-each="livelyPool" mark="arr" key = "index" @mousedown = "startFlipEvent">
               <li :class="layui-tab-title-{{{{arr.select}}}}" lay-id="#{arr.id}"  @mouseenter="showWindowTip"  @mouseleave="hideWindowTip"  @click="setGroupTop(#{arr.id})" >
-                <i class="layui-icon">#{arr.icon == "" ? arr.name : arr.icon}</i>
+                <i class="layui-icon">#{arr.icon == "" ? "" : arr.icon}</i> {{{{arr.name}}}}
               </li>
             </ul>
           </div>
@@ -1429,12 +1529,6 @@ layui.define(["layer", "binder"], function (exports) {
           <i class="layui-icon layui-icon-close"   @click = "closeFlip"  title = "关闭"></i>
           <i class="layui-icon layui-icon-prev" @click = "moveFlipRight"></i>
           <i class="layui-icon layui-icon-next" @click = "moveFlipLeft"></i>
-          <div class = "layui-windows-flip-group" v-each = "flip.list" mark = "arr" >
-            <div class = "flip-part" flipid = "#{arr.id}"  @click = "setTopFlip">
-              <div class = "flip-part-text">#{arr.name}</div>
-              <i class="layui-icon layui-icon-close" flipid = "#{arr.id}"  @click = "closeFlipPart"></i>
-            </div>
-          </div>
         </div>
         <!-- 窗口合并 临时跟踪方框 -->
         <div class = "layui-windows-track" :class = "trackClass" :style = "trackStyle"></div>
@@ -1499,7 +1593,10 @@ layui.define(["layer", "binder"], function (exports) {
           $(".layui-windows-preview").removeClass("layui-windows-preview");
         }
       },
+
       livelyPool() {
+        // 如果有关闭窗口，打开窗口，合并窗口等更新操作  有打开3d flip的场合 关闭3d flip
+        if(this.flip.show) this.closeFlip();
         this.parent.find(".select-tip-fixed").removeClass("select-tip-fixed");
       },
 
@@ -1578,6 +1675,10 @@ layui.define(["layer", "binder"], function (exports) {
       setTop(index = config.constant.TOP_INDEX) {
         let that = this;
         if (!index) return;
+
+        // 置顶时，如果有打开3d flip的场合 关闭3d flip
+        if(that.flip.show) that.closeFlip();
+
         /**
          * 获取当前待置顶窗口对应的操作配置项
          */
@@ -1756,6 +1857,8 @@ layui.define(["layer", "binder"], function (exports) {
         if (opt.shade) return opt;
         // 特殊窗口有皮肤的跳过
         if (opt.skin) return opt;
+        // 显式的声明忽略的
+        if (opt.ignore) return opt;
         /**
          * 参数1 opt
          * 
@@ -1843,6 +1946,7 @@ layui.define(["layer", "binder"], function (exports) {
         let position = {} ; 
         // 默认的也不好用
         // if(!wConfig.offset && !wConfig.area && REFLACT.getFitPosition())
+        if(REFLACT.getFitPosition())
           position = this.position(data.area);
 
         /**
@@ -2017,6 +2121,8 @@ layui.define(["layer", "binder"], function (exports) {
          * @param {*} layero  如果是弹出窗口层，就是窗口的jq对象
          */
         option.cancel = function (layerid, layero) {
+          // 有打开3d flip的场合 关闭3d flip
+          if(that.flip.show) that.closeFlip();
           // 阻止事件冒泡
           if (window.event) window.event.stopPropagation();
           /**
@@ -2041,7 +2147,9 @@ layui.define(["layer", "binder"], function (exports) {
         /**
          * 用户点击最大化按钮后触发的事件
          */
-        option.full = function () {
+        option.full = function (index) {
+          // 有打开3d flip的场合 关闭3d flip
+          if(that.flip.show) that.closeFlip();
           /**
            * 窗口最大化了，但是它的层级并不是最高的。
            *    这个时候需要去调整这些区域的zIndex防止它们遮挡窗口
@@ -2050,17 +2158,21 @@ layui.define(["layer", "binder"], function (exports) {
            */
           PROXY.getMarkofMax().removeClass(REFLACT.getMinClass()).addClass(REFLACT.getMinClass());
           // 执行用户自定义的full事件回调
-          wConfig.full && wConfig.full();
+          wConfig.full && wConfig.full(index);
           // 执行窗口resize事件
           if(REFLACT.getResizeFn(wConfig.id)){
             REFLACT.getResizeFn(wConfig.id).call(this);
           }
         };
 
+        // option.min = function(layero, index){
+        //   return false;
+        // };
+
         /**
          * 用户点击恢复窗口按钮后触发的事件
          */
-        option.restore = function () {
+        option.restore = function (index) {
           /**
            * 这个窗口取消最大化状态
            * 
@@ -2068,7 +2180,7 @@ layui.define(["layer", "binder"], function (exports) {
            */
           PROXY.getMarkofMax().removeClass(REFLACT.getMinClass());
           // 执行自定义的回调函数
-          wConfig.restore && wConfig.restore();
+          wConfig.restore && wConfig.restore(index);
           // 执行窗口resize事件
           if(REFLACT.getResizeFn(wConfig.id)){
             REFLACT.getResizeFn(wConfig.id).call(this);
@@ -2078,8 +2190,12 @@ layui.define(["layer", "binder"], function (exports) {
         /**
          * layui.layer原生窗口resize事件回调函数
          */
-        option.resizing = function () {
-          wConfig.resizing && wConfig.resizing();
+        option.resizing = function (layero) {
+
+          // 有打开3d flip的场合 关闭3d flip
+          if(that.flip.show) that.closeFlip();
+
+          wConfig.resizing && wConfig.resizing(layero);
           // 执行窗口resize事件
           if(REFLACT.getResizeFn(wConfig.id)){
             REFLACT.getResizeFn(wConfig.id).call(this);
@@ -2277,6 +2393,8 @@ layui.define(["layer", "binder"], function (exports) {
         layero
           .off("click", ".layui-layer-min")
           .on("click", ".layui-layer-min", function (e) {
+            // 有打开3d flip的场合 关闭3d flip
+            if(that.flip.show) that.closeFlip();
             // 阻止事件冒泡
             // ** 这个如果不设置会和下面的  “窗口点击置顶”  事件冲突
             e.stopPropagation();
@@ -3540,10 +3658,95 @@ layui.define(["layer", "binder"], function (exports) {
             });
           }
         });
-        return res.slice(0, key);
+        res = res.slice(0, key);
+        // v2.5.0 新增，直接操作dom,并完成原数据的保存
+        // 获取高度和宽度
+        let $this = $body.find('.layui-windows-flip');
+        let left = $this.get(0).getBoundingClientRect().left; 
+        let right = $this.get(0).getBoundingClientRect().right; 
+        let top = $this.get(0).getBoundingClientRect().top; 
+        let bottom = $this.get(0).getBoundingClientRect().bottom; 
+
+        // 修正 2  
+        let size = this.flip.size < 8 ? 8 + 2 : this.flip.size + 2;
+        let maxStepX = (right - left) / size;
+        let totalLeft = right;
+        let tempIndex = REFLACT.getMaxIndex();
+        let that = this;
+
+        // 移除上次的影响
+        $body.find('.layui-windows-flip-action').removeClass('layui-windows-flip-action');
+
+        _.each(res, function(v , k){
+          let root = REFLACT.getWindow(v.id);
+          if(!that.flip.map[v.id]){
+            // 最小化恢复
+            if(!!REFLACT.getPageDescribe(v.id).min) that._restore(v.id);
+            // 隐藏恢复
+            if(!REFLACT.getPageDescribe(v.id).show) REFLACT.getWindow(v.id).removeClass(REFLACT.getHideClass());
+            // 缓存原始信息
+            that.flip.map[v.id] = {
+              offsetTop: parseInt(root.css('top')),
+              offsetLeft: parseInt(root.css('left')),
+              currentWidth: parseInt(root.width()),
+              currentHeight: parseInt(root.height()),
+              zIndex: root.css('z-index'),
+              min: REFLACT.getPageDescribe(v.id).min,
+              show: REFLACT.getPageDescribe(v.id).show,
+            }
+          }
+          let scale = 0.8;
+          let width = that.flip.map[v.id].currentWidth;
+          let height = that.flip.map[v.id].currentHeight;
+          let mTop = top;
+          if(height > 700) scale *= parseFloat(700/height);
+          if(mTop + height * scale > bottom) mTop = bottom - (height * scale);
+          let stepX = width > maxStepX ? maxStepX : width;
+          stepX = maxStepX;
+          totalLeft -= stepX;
+          // 调整样式
+          root.removeClass('layui-windows-flip-action')
+              .addClass('layui-windows-flip-action')
+              .css({
+                top: mTop + width * scale * 0.45 + 'px',
+                left: parseFloat(totalLeft) - width * scale * 0.45 - 100 + 'px',
+                zIndex: tempIndex --,
+                transformOrigin: 'left top',
+                transition: 'all 0.3s',
+                transform: `
+                  scale(${scale - k * 0.1}) 
+                  rotateY(48deg) 
+                  skewY(-19deg)
+                `,
+              });
+        });
+        return res;
       },
 
       closeFlip() {
+        // 窗口还原
+        let that = this;
+        _.each(that.flip.map, function(v, k){
+          // 恢复形状
+          let $parent = REFLACT.getWindow(k);
+          if($parent){
+            $parent.css({
+              top: v.offsetTop + 'px',
+              left: v.offsetLeft + 'px',
+              winth: v.currentWidth + 'px',
+              height: v.currentHeight + 'px',
+              zIndex: v.zIndex,
+              transform: 'none',
+              transition: 'none',
+            }).removeClass("layui-windows-flip-action");
+            // 最小化恢复
+            if(v.min) that.min(k);
+            // 隐藏恢复
+            if(!v.show)
+              $parent.removeClass(REFLACT.getHideClass()).addClass(REFLACT.getHideClass());
+          }
+        });
+        this.flip.map = {};
         this.flip.show = false;
         this.flip.list = [];
         this.flip.now = 0;
@@ -3556,8 +3759,10 @@ layui.define(["layer", "binder"], function (exports) {
         $body
           .removeClass("layui-windows-preview")
           .addClass("layui-windows-preview");
+        if(this.flip.list.length == 0) this.closeFlip();
       },
 
+      // v2.5.0 废弃，在窗口事件上面判断
       setTopFlip(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -3568,6 +3773,7 @@ layui.define(["layer", "binder"], function (exports) {
         }
       },
 
+      // v2.5.0 废弃，在窗口事件上面判断
       closeFlipPart(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -3589,6 +3795,7 @@ layui.define(["layer", "binder"], function (exports) {
           .removeClass("layui-windows-flip-reverse");
         this.flip.now++;
         this.flip.list = this.getFlipList();
+        if(this.flip.list.length == 0) this.closeFlip();
       },
 
       moveFlipRight() {
@@ -3598,6 +3805,7 @@ layui.define(["layer", "binder"], function (exports) {
           .addClass("layui-windows-flip-reverse");
         this.flip.now--;
         this.flip.list = this.getFlipList();
+        if(this.flip.list.length == 0) this.closeFlip();
       },
 
       startFlipEvent(e) {
@@ -3713,6 +3921,8 @@ layui.define(["layer", "binder"], function (exports) {
               let [X, Y] = [e.clientX, e.clientY];
               // 移动不用管， 1. 窗口合并  2.半屏  3.窗口磁贴
               if (constant.MOVE_BASE_WINDOW.id) {
+                // 移动时关闭3d flip
+                if(that.flip.show) that.closeFlip();
                 let wConfig = REFLACT.getPageDescribe(constant.MOVE_BASE_WINDOW.id);
                 let $parent = wConfig.parent;
                 let top = parseInt($parent.css("top"));
@@ -4034,6 +4244,8 @@ layui.define(["layer", "binder"], function (exports) {
      */
     initConfig: function (option = {}, list = {}) {
       _.assign(config.constant, option);
+      // 替换第三方登录用户名
+      if(config.constant.DYNAMIC_OWNER) config.base.username = config.constant.DYNAMIC_OWNER;
       _.each(list, (v, k) => (config.pageDescribe[k] = v));
     },
 
@@ -4093,6 +4305,10 @@ layui.define(["layer", "binder"], function (exports) {
           this.windows.sleep = function () {
             the_container.clear();
           };
+          //执行动画
+          if(config.constant.DYNAMIC_STARTER){
+            the_container.animation();
+          }
         },
       });
       // 4.0 关闭当前所有的弹层
@@ -4105,6 +4321,131 @@ layui.define(["layer", "binder"], function (exports) {
     clear: function () {
       if (this.VM && this.VM.isAlive) this.VM.$destroy();
       this.VM = null;
+    },
+
+    /* 动画相关 */
+
+    /**
+     * @method  创建canvas上下文并返回
+     * @returns 
+     */
+    createContext: function(){
+      $body.append($(`<div class = "layui-windows-canvas-border"></div><canvas class = "layui-windows-canvas" id="myCanvas" width="240" height="280"></canvas>`));
+      let canvas = document.getElementById('myCanvas');
+      this.context = canvas.getContext('2d');
+      return this.context;
+    },
+
+    /**
+     * @method  获取canvas上下文并返回
+     * @returns 
+     */
+    getContext: function(){
+      if(!this.context) return this.createContext();
+      return this.context;
+    },
+
+    /**
+     * @method  在canvas上面绘制线段
+     * @param {*} times 
+     */
+    painting: function(times){
+      let ctx = this.getContext();
+      ctx.strokeStyle = "rgba(255,255,255)";
+      ctx.lineWidth = 5;
+      ctx.clearRect(0,0,240,240);
+      let [w,h] = [210, 40];
+      // 绘制第一条线段
+      ctx.beginPath();
+      ctx.moveTo(w, h);
+      if(times > 90){
+         let [_w,_h] = [w - 90 * 1.93,  h + 90 * 1];
+         ctx.lineTo(_w,  _h);
+         let _times = times - 90;
+         ctx.lineTo(_w  + _times * 2.74,  _h + _times * 1);
+      }else{
+         ctx.lineTo(w - times * 1.93,  h + times * 1);
+      }
+      ctx.stroke();
+      ctx.closePath();
+
+      // 绘制第二条线段
+      ctx.beginPath();
+      ctx.moveTo(w, h);
+      if(times > 90){
+         let [_w,_h] = [w - 90 * 1.11,  h + 90 * 1.28];
+         ctx.lineTo(_w,  _h);
+         let _times = times - 90;
+         ctx.lineTo(_w,  _h + _times * 2.3);
+      }else{
+         ctx.lineTo(w - times * 1.11,  h + times * 1.28);
+      }
+      ctx.stroke();
+      ctx.closePath();
+
+      // 绘制第三条线段
+      ctx.beginPath();
+      ctx.moveTo(w, h);
+      if(times > 90){
+         let [_w,_h] = [w - 90 * 0.34,  h + 90 * 1.53];
+         ctx.lineTo(_w,  _h);
+         let _times = times - 90;
+         ctx.lineTo(_w - _times * 2.98,  _h - _times * 0.9);
+      }else{
+         ctx.lineTo(w - times * 0.34,  h + times * 1.53);
+      }
+      ctx.stroke();
+      ctx.closePath();
+    },
+
+    /**
+     * @method  在canvas上面绘制文字
+     */
+    drawing: function(){
+      let ctx = this.getContext();
+      ctx.strokeStyle = "rgba(255,255,255)";
+      ctx.lineWidth = 5;
+      ctx.fillStyle = "rgba(255,255,255)"
+      ctx.font = "24px orbitron";
+      ctx.moveTo(0, 250);
+      ctx.beginPath();
+      ctx.fillText('windows '+ constant.VERSION, 40, 250);
+      ctx.restore();
+      ctx.closePath();
+    },
+
+    /**
+     * @method 反复的绘制小图标
+     * @param {*} i 
+     * @returns 
+     */
+    action: function(i){
+      let that = this;
+      if(!i) i = 0;
+      that.painting(i);
+      i ++;
+      if(i > 110) return;
+      setTimeout(function(){
+         that.action(i)
+      },10)
+    },
+
+    /**
+     * @method 执行启动动画
+     */
+    animation: function(){
+      let that = this;
+      that.action();
+      setTimeout(function(){
+        that.drawing()
+      },1500);
+      setTimeout(function(){
+        that.drawing()
+      },2000);
+      setTimeout(function(){
+        $body.find('.layui-windows-canvas-border').remove();
+        $body.find('.layui-windows-canvas').remove();
+      },2600);
     },
   };
 
@@ -4127,5 +4468,51 @@ layui.define(["layer", "binder"], function (exports) {
       return windowsProxy;
     },
   };
+
+  /**
+   * 
+   * 在此处拦截open方法，不在layer.js里面操作了，减少影响
+   * @since v2.5.1
+   * 
+   */
+  const openForever = layui.layer.open;
+
+  layui.layer.open = function(deliver, args0, args1){
+    // 拦截open方法，预处理参数
+    if(window.layui && layui.windows && layui.windows.notify && layui.windows.notify()){
+      var tempResult = layui.windows.open(deliver, args0, args1);
+      // 判断结果是不是数字 说明返回的就是index，就直接返回
+      if(/^\d+$/.test(String(tempResult))) return tempResult;
+      // 没有就是参数已经被包装过了。直接进行下面的方法
+      deliver = tempResult;
+    }
+    return openForever(deliver);
+  };
+
+
+  /***************************************************************************************************
+   * Method :: wakeUp                                     *
+   *        @Description:  唤醒layer弹层管理器 - windows
+   *                                                      
+   *                                                      *
+   * INPUT:  option  配置参数。详情可以查看windows.wakeUp    *
+   *                                                      *
+   * OUTPUT:  layui.binder instance                       *
+   *                                                      *
+   * WARNINGS:                                            *
+   * HISTORY:                                             *
+   *     @MethodAuthor: Malphite                                 *
+   *     @Date: 2022-10-04
+   *     @since v2.5.2         *
+  *==================================================================================================*/
+  layui.layer.wakeUp = function(option,list){
+    if(!window.layui) return console.warn('不支持在单layer组件下启用windows组件');
+    // layui.use('windows', () => layui.windows.wakeUp(option));
+    // layui.use(['windows'], function(){
+      layui.windows.wakeUp(option,list);
+    // });
+  };
+
+
   exports("windows", handler);
 });
