@@ -48,6 +48,9 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       ,reload: function(options){
         that.reload.call(that, options);
       }
+      ,remove: function () {
+        that.remove()
+      }
     }
   }
 

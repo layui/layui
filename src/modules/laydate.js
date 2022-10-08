@@ -87,12 +87,14 @@
   var ELEM_PREV = 'laydate-day-prev';
   var ELEM_NEXT = 'laydate-day-next';
   var ELEM_FOOTER = 'layui-laydate-footer';
+  var ELEM_SHORTCUT = 'layui-laydate-shortcut';
   var ELEM_NOW = '.laydate-btns-now'
   var ELEM_CONFIRM = '.laydate-btns-confirm';
   var ELEM_TIME_TEXT = 'laydate-time-text';
   var ELEM_TIME_BTN = 'laydate-btns-time';
   var ELEM_PREVIEW = 'layui-laydate-preview';
-  
+  var ELEM_MAIN = 'layui-laydate-main';
+
   // 组件构造器
   var Class = function(options){
     var that = this;
@@ -103,7 +105,7 @@
     var elem = lay(options.elem || that.config.elem);
     if(elem.length > 1){
       lay.each(elem, function(){
-        laydate.render(lay.extend({}, that.config, lay.options(this),{
+        laydate.render(lay.extend({}, that.config, {
           elem: this
         }));
       });
@@ -111,7 +113,7 @@
     }
     
     // 初始化 id 参数
-    options = that.config;
+    options = lay.extend(that.config, lay.options(elem[0])); // 继承节点上的属性
     options.id = ('id' in options) ? options.id : that.index;
     
     // 初始化
@@ -160,6 +162,7 @@
     ,zIndex: null //控件层叠顺序
     ,done: null //控件选择完毕后的回调，点击清空/现在/确定也均会触发
     ,change: null //日期时间改变后的回调
+    ,autoConfirm: true //是否自动确认（日期|年份|月份选择器非range下是否自动确认）
   };
   
   //多语言
@@ -413,6 +416,11 @@
     //底部区域
     ,divFooter = that.footer = lay.elem('div', {
       "class": ELEM_FOOTER
+    })
+
+    //快捷栏
+    ,divShortcut = that.shortcut = lay.elem('ul', {
+      "class": ELEM_SHORTCUT
     });
     
     if(options.zIndex) elem.style.zIndex = options.zIndex;
@@ -491,7 +499,7 @@
       divContent.appendChild(table);
       
       elemMain[i] = lay.elem('div', {
-        "class": 'layui-laydate-main laydate-main-list-'+ i
+        "class": ELEM_MAIN + ' laydate-main-list-'+ i
       });
       
       elemMain[i].appendChild(divHeader);
@@ -521,7 +529,69 @@
       html.push('<div class="laydate-footer-btns">'+ btns.join('') +'</div>');
       return html.join('');
     }());
-    
+
+    // 生成快捷键栏
+    if (options.shortcuts) {
+      elem.appendChild(divShortcut);
+      lay(divShortcut).html(function () {
+        var shortcutBtns = [];
+        lay.each(options.shortcuts, function (i, item) {
+          shortcutBtns.push('<li data-index="' + i + '">'+item.text+'</li>')
+        })
+        return shortcutBtns.join('');
+      }()).find('li').on('click', function (event) {
+        var btnSetting = options.shortcuts[this.dataset['index']] || {};
+        var value = btnSetting.value || [];
+        if (!layui.isArray(value)) {
+          value = [value];
+        }
+        var type = options.type;
+        lay.each(value, function (i, item) {
+          var dateTime = [options.dateTime, that.endDate][i];
+          if (type === 'time' && layui.type(item) !== 'date') {
+            if (that.EXP_IF.test(item)) {
+              item = (item.match(that.EXP_SPLIT) || []).slice(1);
+              lay.extend(dateTime, {hours: item[0] | 0, minutes: item[2] | 0, seconds: item[4] | 0})
+            }
+          } else {
+            lay.extend(dateTime, that.systemDate(layui.type(item) === 'date' ? item : new Date(item)))
+          }
+
+          if (type === 'time') {
+            that[['startTime', 'endTime'][i]] = {
+              hours: dateTime.hours,
+              minutes: dateTime.minutes,
+              seconds: dateTime.seconds,
+            }
+          }
+          if (type === 'year' || type === 'month' || type === 'time') {
+            that.listYM[i] = [dateTime.year, dateTime.month + 1];
+            that.checkDate('limit').calendar(null,i);
+            that.list(type, i);
+          } else {
+            that.checkDate('limit').calendar(null,i);
+            that.closeList();
+          }
+        });
+
+        var timeBtn = lay(that.footer).find('.'+ ELEM_TIME_BTN).removeClass(DISABLED);
+        timeBtn && timeBtn.attr('lay-type') === 'date' && timeBtn[0].click();
+        that.done(null, 'change');
+
+        lay(this).addClass(THIS);
+
+        if (options.position !== 'static' && !options.range && options.autoConfirm) {
+          if (type === 'date') {
+            that.choose(lay(elem).find('td.layui-this'))
+          } else if (type === 'year' || type === 'month') {
+            if(lay(elemMain[0]).find('.' + ELEM_MAIN + ' li.' + THIS + ':not(.laydate-disabled)')[0]) {
+              that.setValue(that.parse()).remove().done();
+            }
+          }
+        }
+      })
+    }
+
     //插入到主区域
     lay.each(elemMain, function(i, main){
       elem.appendChild(main);
@@ -529,11 +599,12 @@
     options.showBottom && elem.appendChild(divFooter);
     
     //生成自定义主题
-    var style;
+    var style = lay.elem('style');
     var styleText = [];
+    var colorTheme;
     lay.each(options.theme, function (index, theme) {
       if(/^#/.test(theme)){
-        style = style || lay.elem('style');
+        colorTheme = true;
         styleText.push([
           '#{{id}} .layui-laydate-header{background-color:{{theme}};}'
           ,'#{{id}} li.layui-this,#{{id}} td.layui-this>div{background-color:{{theme}} !important;}'
@@ -541,7 +612,11 @@
         ].join('').replace(/{{id}}/g, that.elemID).replace(/{{theme}}/g, theme));
       }
     });
-    if (style) {
+    //快捷栏样式
+    if (options.shortcuts && options.range) {
+      styleText.push('#{{id}}.layui-laydate-range{width: 628px;}'.replace(/{{id}}/g, that.elemID))
+    }
+    if (styleText.length) {
       styleText = styleText.join('');
       if('styleSheet' in style){
         style.setAttribute('type', 'text/css');
@@ -549,8 +624,8 @@
       } else {
         style.innerHTML = styleText;
       }
-      
-      lay(elem).addClass('laydate-theme-molv');
+
+      colorTheme && lay(elem).addClass('laydate-theme-molv');
       elem.appendChild(style);
     }
 
@@ -1063,6 +1138,9 @@
     
     //同步按钮可点状态
     that.setBtnStatus();
+
+    // 重置快捷栏选中状态
+    lay(that.shortcut).find('li.' + THIS).removeClass(THIS);
     
     return that;
   };
@@ -1275,7 +1353,7 @@
         //若为月选择器，只有当选择月份时才自动关闭；
         //若为年选择器，选择年份即自动关闭
         //且在范围未开启时
-        if(!options.range){
+        if(!options.range && options.autoConfirm){
           if((options.type === 'month' && type === 'month') || (options.type === 'year' && type === 'year')){
             that.setValue(that.parse()).remove().done();
           }
@@ -1563,7 +1641,7 @@
     } else if(options.position === 'static'){ //直接嵌套的选中
       that.calendar().done().done(null, 'change'); //同时执行 done 和 change 回调
     } else if(options.type === 'date'){
-      that.setValue(that.parse()).remove().done();
+      options.autoConfirm ? that.setValue(that.parse()).remove().done() : that.calendar().done(null, 'change');
     } else if(options.type === 'datetime'){
       that.calendar().done(null, 'change');
     }

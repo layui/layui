@@ -743,9 +743,14 @@
     if(fn){
       config.event[eventName] = config.event[eventName] || {};
 
-      //这里不再对重复事件做支持
-      //config.event[eventName][filterName] ? config.event[eventName][filterName].push(fn) : 
-      config.event[eventName][filterName] = [fn];
+      if (filterName) {
+        // 带filter不支持重复事件
+        config.event[eventName][filterName] = [fn];
+      } else {
+        // 不带filter处理的是所有的同类事件，应该支持重复事件
+        config.event[eventName][filterName] = config.event[eventName][filterName] || [];
+        config.event[eventName][filterName].push(fn);
+      }
       return this;
     }
     
