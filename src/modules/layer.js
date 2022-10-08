@@ -988,18 +988,30 @@ layer.style = function(index, options, limit){
 //最小化
 layer.min = function(index, options){
   options = options || {};
-  var layero = $('#'+ doms[0] + index)
-  ,shadeo = $('#'+ doms.SHADE + index)
-  ,titHeight = layero.find(doms[1]).outerHeight() || 0
-  ,left = layero.attr('minLeft') || (181*ready.minIndex)+'px'
-  ,position = layero.css('position')
-  ,settings = {
+  var layero = $('#'+ doms[0] + index);
+
+  var maxminStatus = layero.data('maxminStatus');
+  // 检查当前的状态是否已经是最小化
+  if (maxminStatus === 'min') {
+    return;
+  }
+  // 当前处于最大化的状态 先恢初始状态再执行最小化
+  if (maxminStatus === 'max') {
+    layer.restore(index);
+  }
+  layero.data('maxminStatus', 'min');
+
+  var shadeo = $('#'+ doms.SHADE + index);
+  var titHeight = layero.find(doms[1]).outerHeight() || 0;
+  var left = layero.attr('minLeft') || (181*ready.minIndex)+'px';
+  var position = layero.css('position')
+  var settings = {
     width: 180
     ,height: titHeight
     ,position: 'fixed'
     ,overflow: 'hidden'
   };
-  
+
   //记录宽高坐标，用于还原
   ready.record(layero);
   
@@ -1029,10 +1041,13 @@ layer.min = function(index, options){
 
 //还原
 layer.restore = function(index){
-  var layero = $('#'+ doms[0] + index)
-  ,shadeo = $('#'+ doms.SHADE + index)
-  ,area = layero.attr('area').split(',')
-  ,type = layero.attr('type');
+  var layero = $('#'+ doms[0] + index);
+  // 恢复最大最小状态
+  layero.data('maxminStatus', '');
+
+  var shadeo = $('#'+ doms.SHADE + index);
+  var area = layero.attr('area').split(',');
+  var type = layero.attr('type');
   
   //恢复原来尺寸
   layer.style(index, {
@@ -1047,15 +1062,26 @@ layer.restore = function(index){
   layero.find('.layui-layer-max').removeClass('layui-layer-maxmin');
   layero.find('.layui-layer-min').show();
   layero.attr('type') === 'page' && layero.find(doms[4]).show();
+  layero.attr('minLeft', '');
   ready.rescollbar(index);
   
   //恢复遮罩
   shadeo.show();
+  ready.events.resize[index]();
 };
 
 //全屏
 layer.full = function(index){
   var layero = $('#'+ doms[0] + index), timer;
+  // 检查当前的状态是否已经是最小化
+  var maxminStatus = layero.data('maxminStatus');
+  if (maxminStatus === 'max') {
+    return;
+  }
+  if (maxminStatus === 'min') {
+    layer.restore(index);
+  }
+  layero.data('maxminStatus', 'max');
   ready.record(layero);
   if(!doms.html.attr('layer-full')){
     doms.html.css('overflow','hidden').attr('layer-full', index);
@@ -1066,8 +1092,8 @@ layer.full = function(index){
     layer.style(index, {
       top: isfix ? 0 : win.scrollTop(),
       left: isfix ? 0 : win.scrollLeft(),
-      width: win.width(),
-      height: win.height()
+      width: '100%',
+      height: '100%'
     }, true);
     layero.find('.layui-layer-min').hide();
   }, 100);
@@ -1176,7 +1202,7 @@ var cache = layer.cache||{}, skin = function(type){
  
 //仿系统prompt
 layer.prompt = function(options, yes){
-  var style = '';
+  var style = '', placeholder = '';
   options = options || {};
   
   if(typeof options === 'function') yes = options;
@@ -1186,8 +1212,11 @@ layer.prompt = function(options, yes){
     style = 'style="width: '+ area[0] +'; height: '+ area[1] + ';"';
     delete options.area;
   }
-  var prompt, content = options.formType == 2 ? '<textarea class="layui-layer-input"' + style +'></textarea>' : function(){
-    return '<input type="'+ (options.formType == 1 ? 'password' : 'text') +'" class="layui-layer-input">';
+  if (options.placeholder) {
+    placeholder = ' placeholder="' + options.placeholder + '"';
+  }
+  var prompt, content = options.formType == 2 ? '<textarea class="layui-layer-input"' + style + placeholder + '></textarea>' : function () {
+    return '<input type="' + (options.formType == 1 ? 'password' : 'text') + '" class="layui-layer-input"' + placeholder + '>';
   }();
   
   var success = options.success;
