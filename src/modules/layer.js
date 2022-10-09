@@ -24,7 +24,7 @@ var isLayui = window.layui && layui.define, $, win, ready = {
     return GLOBAL.layer_dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
   }(),
 
-  config: {}, end: {}, events: {resize: {}}, minIndex: 0, minLeft: [],
+  config: {removeFocus: true}, end: {}, events: {resize: {}}, minIndex: 0, minLeft: [],
   btn: ['&#x786E;&#x5B9A;', '&#x53D6;&#x6D88;'],
 
   //五种原始层模式
@@ -173,7 +173,8 @@ var layer = {
       closeBtn: false,
       btn: false,
       resize: false,
-      end: end
+      end: end,
+      removeFocus: false
     }, (type && !ready.config.skin) ? {
       skin: skin + ' layui-layer-hui',
       anim: anim
@@ -191,7 +192,8 @@ var layer = {
       type: 3,
       icon: icon || 0,
       resize: false,
-      shade: 0.01
+      shade: 0.01,
+      removeFocus: false
     }, options));
   }, 
   
@@ -204,7 +206,8 @@ var layer = {
       shade: false,
       resize: false,
       fixed: false,
-      maxWidth: 260
+      maxWidth: 260,
+      removeFocus: false
     }, options));
   }
 };
@@ -367,6 +370,9 @@ Class.pt.creat = function(){
   ,body = $('body');
   
   if(config.id && $('.'+ doms[0]).find('#'+ config.id)[0]) return;
+  if(config.removeFocus) {
+    document.activeElement.blur(); // 将原始的聚焦节点失焦
+  }
 
   if(typeof config.area === 'string'){
     config.area = config.area === 'auto' ? ['', ''] : [config.area, ''];
