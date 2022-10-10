@@ -59,7 +59,8 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-setwin .layui-layer-maxmin:after{z-index: 0; margin: -5px 0 0 -1px;}
 .layui-layer-setwin .layui-layer-close{cursor: pointer;}
 .layui-layer-setwin .layui-layer-close:hover{opacity:0.7;}
-.layui-layer-setwin .layui-layer-close2{position:absolute; right: -13px; top: -13px; padding: 3px; margin-left:0; color: #777; *right:-18px; _display:none;}
+.layui-layer-setwin .layui-layer-close2{position:absolute; right: -28px; top: -28px; color: #fff; background-color: #787878; padding: 3px; border: 3px solid; width: 18px; height: 18px; font-size: 18px; font-weight: bolder; border-radius: 50%; margin-left: 0; *right:-18px; _display:none;}
+.layui-layer-setwin .layui-layer-close2:hover{opacity: unset; background-color: #3888f6;}
 
 /* 按钮栏 */
 .layui-layer-btn{text-align: right; padding: 0 15px 12px; pointer-events: auto; user-select: none; -webkit-user-select: none;}
