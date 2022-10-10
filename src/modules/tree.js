@@ -86,7 +86,9 @@ layui.define('form', function(exports){
     ,onlyIconControl: false  //是否仅允许节点左侧图标控制展开收缩
     ,isJump: false  //是否允许点击节点时弹出新窗口跳转
     ,edit: false  //是否开启节点的操作图标
-    
+    , checkChirld: true //设置属性可选，当点击父级时ch子级不可选中
+    , checkParent: true //如果子节点有任意一条选中，则父节点为选中状态
+    , selectColor: 'rgba(0,255,0,0.1)' //选中的颜色
     ,text: {
       defaultNodeName: '未命名' //节点默认名称
       ,none: '无数据'  //数据为空时的文本提示
@@ -301,7 +303,11 @@ layui.define('form', function(exports){
     //点击回调
     elemText.on('click', function(){
       var othis = $(this);
-      
+      //layui.$("." + ELEM_ENTRY + ' span').removeClass("custom-tree-item-clicked");
+      layui.$(options.elem).find("." + ELEM_ENTRY + ' span' + '.' + ELEM_TEXT).css({ 'background-color': '' });
+      //注意这里的k 对应着上面的k.on("click",的变量 有可能你的不叫k，修改成自己的变量名称
+      elemText.css({ 'background-color': options['selectColor'] });//style addClass("custom-tree-item-clicked");
+
       //判断是否禁用状态
       if(othis.hasClass(DISABLED)) return;
       
@@ -332,10 +338,17 @@ layui.define('form', function(exports){
     //同步子节点选中状态
     if(typeof item.children === 'object' || elem.find('.'+ELEM_PACK)[0]){
       var childs = elem.find('.'+ ELEM_PACK).find('input[same="layuiTreeCheck"]');
-      childs.each(function(){
+      /*childs.each(function(){
         if(this.disabled) return; //不可点击则跳过
         this.checked = checked;
-      });
+      });*/
+      //设置属性可选，当点击父级时ch子级不可选中
+      if (this.config.checkChirld) {
+        childs.each(function () {
+          if (this.disabled) return; //不可点击则跳过
+          this.checked = checked;
+        });
+      }
     };
 
     //同步父节点选中状态
@@ -366,7 +379,10 @@ layui.define('form', function(exports){
       setParentsChecked(parentNodeElem);
     };
     
-    setParentsChecked(elem);
+    //联动父节点
+    if (that.config.checkParent) {
+      setParentsChecked(elem);
+    }
 
     that.renderForm('checkbox');
   };
@@ -725,11 +741,12 @@ layui.define('form', function(exports){
     //遍历节点
     var eachNodes = function(data, checkNode){
       layui.each(data, function(index, item){
+        var flag = false;
         layui.each(checkId, function(index2, item2){
           if(item.id == item2){
             var cloneItem = $.extend({}, item);
             delete cloneItem.children;
-            
+            flag = true;
             checkNode.push(cloneItem);
             
             if(item.children){
@@ -739,6 +756,17 @@ layui.define('form', function(exports){
             return true
           }
         });
+        //20210416  add start
+        //直接选择某子节点才有效 不联动父节点时候有效
+        if (
+          !that.config.checkParent &&
+          !flag &&
+          item.children &&
+          item.children.length > 0
+        ) {
+          eachNodes(item.children, checkNode);
+        }
+        //20210416  add end
       });
     };
 
@@ -760,7 +788,7 @@ layui.define('form', function(exports){
       
       //若返回数字
       if(typeof checkedId === 'number'){
-        if(thisId.toString() == checkedId.toString()){
+        if(thisId == checkedId){
           if(!input[0].checked){
             reInput.click();
           };
@@ -770,7 +798,7 @@ layui.define('form', function(exports){
       //若返回数组
       else if(typeof checkedId === 'object'){
         layui.each(checkedId, function(index, value){
-          if(value.toString() == thisId.toString() && !input[0].checked){
+          if(value == thisId && !input[0].checked){
             reInput.click();
             return true;
           }
@@ -809,5 +837,45 @@ layui.define('form', function(exports){
     return thisModule.call(inst);
   };
 
+  // treeId: tree所在的容器的id
+  // filter: 对应的搜索框的selector或者dom对象
+  // callback: 回调 参数(树节点jquery对象, 输入框对象, 匹配到的节点数量)
+  tree.syncLayuiTreeFilter = function (treeId, search, callback) {
+    let treeElem = treeId.charAt(0) === '#' ? $(treeId) : $('#' + treeId);
+    // 搜索框的监听事件按实际需求来
+    let that = this; //this;
+    let value = search;
+    let HIDE = 'layui-hide';
+    let hintClass = 'search_hit';
+    // 先恢复现场
+    treeElem.find('.' + HIDE).removeClass(HIDE);
+    treeElem.find('.' + hintClass).removeClass(hintClass)
+    // 如果有值筛选开始
+    if (value) {
+      $.each(treeElem.find('.layui-tree-txt'), function (index, elem) {
+        elem = $(elem);
+        let textTemp = elem.text();
+        if (textTemp.indexOf(value) === -1) {
+          // 不存在就隐藏
+          elem.closest('.layui-tree-set').addClass(HIDE)
+        } else {
+          // 命中就添加一个class
+          elem.addClass(hintClass)
+        }
+      });
+      $.each(treeElem.find('.' + hintClass), function (index, elem) {
+        elem = $(elem);
+        // 取消隐藏所有父节点
+        elem.parents('.layui-tree-set').removeClass(HIDE);
+        // 展开所有父节点
+        elem.parents('.layui-tree-set').each(function (i, item) {
+          if (!$(item).hasClass('layui-tree-spread')) {
+            $(item).find('.layui-tree-iconClick :first').click();
+          }
+        });
+      });
+    }
+    typeof callback === 'function' && callback.call(that, treeElem, treeElem.find('.' + hintClass).length);
+  };
   exports(MOD_NAME, tree);
 })

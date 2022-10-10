@@ -159,18 +159,59 @@ layui.define('layer' , function(exports){
   }
   
   //预读图片信息
+  // Class.prototype.preview = function(callback){
+  //   var that = this;
+  //   if(window.FileReader){
+  //     layui.each(that.chooseFiles, function(index, file){
+  //       var reader = new FileReader();
+  //       reader.readAsDataURL(file);  
+  //       reader.onload = function(){
+  //         callback && callback(index, file, this.result);
+  //       }
+  //     });
+  //   }
+  // };
+
   Class.prototype.preview = function(callback){
     var that = this;
     if(window.FileReader){
       layui.each(that.chooseFiles, function(index, file){
         var reader = new FileReader();
-        reader.readAsDataURL(file);  
-        reader.onload = function(){
-          callback && callback(index, file, this.result);
+        //读取前操作
+        if(callback && typeof callback ==='object' && callback['onbeforloadstart'] ){
+          callback['onbeforloadstart'](index,file);
         }
+
+        //当读取操作开始时调用
+        reader.onloadstart =function(){
+          if(callback && typeof callback ==='object' && callback['onloadstart'] ){
+            callback['onloadstart'](index,file,this.result);
+          }
+        };
+        //在读取数据过程中周期性调用
+        reader.onprogress  =function(readRes){
+          if(callback && typeof callback ==='object' && callback['onprogress'] ){
+            callback['onprogress'](index,file,readRes);
+          }
+        };
+        //当读取操作成功完成时调用
+        reader.onload = function(){
+          if(callback && typeof callback === 'function'){
+            callback(index, file, this.result);
+          }else if(callback && typeof callback ==='object' &&  callback['onload']){
+            callback['onload'](index,file,this.result);
+          }
+        }
+        //这里加个延迟处理layui.render 应该是异步的
+        setTimeout(() => {
+          reader.readAsDataURL(file);  
+        }, 1000);
       });
+
+
     }
   };
+
   
   //执行上传
   Class.prototype.upload = function(files, type){
