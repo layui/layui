@@ -807,6 +807,37 @@ layui.define('form', function(exports){
     });
   };
 
+  /**
+   * 用于初始化的时候设置 选中和禁用的项 by hpy 2022年9月29日 13:52:32
+   * 2022年9月29日 13:51:59
+   * @param {*} data
+   */
+   Class.prototype.setNormalData = function (data) {
+    var that = this,
+      options = that.config;
+    var selectIds = data.selectIds;
+    var disabledIds = data.disabledIds;
+    //初始选中
+    that.elem.find("." + ELEM_SET).each(function (i, item) {
+      var thisId = $(this).data("id"),
+        input = $(item)
+          .children("." + ELEM_ENTRY)
+          .find('input[same="layuiTreeCheck"]'),
+        reInput = input.next();
+
+      if (selectIds.indexOf(+thisId) > -1 && !input[0].checked) {
+        input[0].checked = true;
+      }
+      if (disabledIds.indexOf(+thisId) > -1) {
+        //初始禁用
+        input.attr("disabled", "disabled");
+        reInput.addClass("layui-checkbox-disbaled layui-disabled");
+        reInput.next().addClass("layui-disabled"); //文字也置灰
+      }
+    });
+    that.renderForm("checkbox");
+  };
+
   //记录所有实例
   thisModule.that = {}; //记录所有实例对象
   thisModule.config = {}; //记录所有实例配置项
@@ -829,6 +860,12 @@ layui.define('form', function(exports){
   tree.setChecked = function(id, checkedId){
     var that = thisModule.that[id];
     return that.setChecked(checkedId);
+  };
+
+   //设置初始状态，支持选中和禁用
+   tree.setNormalData = function (id, checkedId) {
+    var that = thisModule.that[id];
+    return that.setNormalData(checkedId);
   };
     
   //核心入口
