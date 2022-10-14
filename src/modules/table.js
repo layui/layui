@@ -1363,7 +1363,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       tds.push(td);
     });
 
-    that.layTotal.find('tbody').html('<tr>' + tds.join('') + '</tr>');
+    var patchElem = that.layTotal.find('.layui-table-patch'); // 可能存在滚动条补丁
+    that.layTotal.find('tbody').html('<tr>' + tds.join('') + (patchElem.length ? patchElem.get(0).outerHTML : '') + '</tr>');
   };
   
   //找到对应的列元素
