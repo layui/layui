@@ -753,8 +753,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-input-affix-event{pointer-events: auto;}
 
 /* 输入框组 */
-.layui-input-group{position: relative; display: inline-table; cursor: pointer}
-.layui-input-group>*{display: table-cell; vertical-align: middle; position: relative;  cursor: pointer;}
+.layui-input-group{position: relative; display: inline-table;}
+.layui-input-group>*{display: table-cell; vertical-align: middle; position: relative;}
 .layui-input-group .layui-input{padding-right: 15px;}
 .layui-input-group .layui-input-prefix{width: auto; border-right: 0;}
 .layui-input-group .layui-input-suffix{width: auto; border-left: 0;}
