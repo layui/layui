@@ -56,7 +56,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
 
   //字符常量
   ,STR_ELEM = 'layui-dropdown', STR_HIDE = 'layui-hide', STR_DISABLED = 'layui-disabled', STR_NONE = 'layui-none'
-  ,STR_ITEM_UP = 'layui-menu-item-up', STR_ITEM_DOWN = 'layui-menu-item-down', STR_MENU_TITLE = 'layui-menu-body-title', STR_ITEM_GROUP = 'layui-menu-item-group', STR_ITEM_PARENT = 'layui-menu-item-parent', STR_ITEM_DIV = 'layui-menu-item-divider', STR_ITEM_CHECKED = 'layui-menu-item-checked', STR_ITEM_CHECKED2 = 'layui-menu-item-checked2', STR_MENU_PANEL = 'layui-menu-body-panel', STR_MENU_PANEL_L = 'layui-menu-body-panel-left'
+  ,STR_ITEM_UP = 'layui-menu-item-up', STR_ITEM_DOWN = 'layui-menu-item-down', STR_MENU_TITLE = 'layui-menu-body-title', STR_ITEM_GROUP = 'layui-menu-item-group', STR_ITEM_PARENT = 'layui-menu-item-parent', STR_ITEM_DIV = 'layui-menu-item-divider', STR_ITEM_CHECKED = 'layui-menu-item-checked', STR_ITEM_CHECKED2 = 'layui-menu-item-checked2', STR_MENU_PANEL = 'layui-menu-body-panel', STR_MENU_PANEL_L = 'layui-menu-body-panel-left', STR_ELEM_SHADE = 'layui-dropdown-shade'
   
   ,STR_GROUP_TITLE = '.'+ STR_ITEM_GROUP + '>.'+ STR_MENU_TITLE
 
@@ -79,6 +79,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     ,isSpreadItem: true //是否初始展开子菜单
     ,data: [] //菜单数据结构
     ,delay: 300 //延迟关闭的毫秒数，若 trigger 为 hover 时才生效
+    ,shade: 0 // 遮罩
   };
   
   //重载实例
@@ -251,6 +252,10 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     that.remove(); //移除非当前绑定元素的面板
     elemBody.append(that.elemView);
     options.elem.data(MOD_INDEX +'_opened', true);
+
+    //遮罩
+    var shade = options.shade ? ('<div class="'+ STR_ELEM_SHADE +'" style="'+ ('z-index:'+ (that.elemView.css('z-index')-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
+    that.elemView.before(shade);
     
     //坐标定位
     that.position();
@@ -324,6 +329,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       );
       elemPrev.remove();
     }
+    lay('.' + STR_ELEM_SHADE).remove();
   };
   
   //延迟删除视图
