@@ -94,6 +94,7 @@
   var ELEM_TIME_BTN = 'laydate-btns-time';
   var ELEM_PREVIEW = 'layui-laydate-preview';
   var ELEM_MAIN = 'layui-laydate-main';
+  var ELEM_SHADE = 'layui-laydate-shade';
 
   // 组件构造器
   var Class = function(options){
@@ -163,6 +164,7 @@
     ,done: null //控件选择完毕后的回调，点击清空/现在/确定也均会触发
     ,change: null //日期时间改变后的回调
     ,autoConfirm: true //是否自动确认（日期|年份|月份选择器非range下是否自动确认）
+    ,shade: 0
   };
   
   //多语言
@@ -641,6 +643,9 @@
       ,that.position() //定位
     );
     
+    var shade = options.shade ? ('<div class="'+ ELEM_SHADE +'" style="'+ ('z-index:'+ (elem.style.zIndex-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
+    elem.insertAdjacentHTML('beforebegin', shade);
+
     that.checkDate().calendar(null, 0, 'init'); //初始校验
     that.changeEvent(); //日期切换
     
@@ -670,6 +675,7 @@
         typeof options.close === 'function' && options.close(that);
       });
     }
+    lay('.' + ELEM_SHADE).remove();
     return that;
   };
   
