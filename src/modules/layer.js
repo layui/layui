@@ -902,8 +902,8 @@ Class.pt.openLayer = function(){
 //记录宽高坐标，用于还原
 ready.record = function(layero){
   var area = [
-    layero.width(),
-    layero.height(),
+    layero[0].style.width || layero.width(),
+    layero[0].style.height || layero.height(),
     layero.position().top, 
     layero.position().left + parseFloat(layero.css('margin-left'))
   ];
@@ -981,11 +981,11 @@ layer.style = function(index, options, limit){
   
   if(type === ready.type[2]){
     layero.find('iframe').css({
-      height: parseFloat(options.height) - titHeight - btnHeight
+      height: (typeof options.height === 'number' ? options.height : layero.height()) - titHeight - btnHeight
     });
   } else {
     contElem.css({
-      height: parseFloat(options.height) - titHeight - btnHeight
+      height: (typeof options.height === 'number' ? options.height : layero.height()) - titHeight - btnHeight
       - parseFloat(contElem.css('padding-top'))
       - parseFloat(contElem.css('padding-bottom'))
     })
@@ -1058,9 +1058,9 @@ layer.restore = function(index){
   
   //恢复原来尺寸
   layer.style(index, {
-    width: parseFloat(area[0]), 
-    height: parseFloat(area[1]), 
-    top: parseFloat(area[2]), 
+    width: area[0], // 数值或百分比
+    height: area[1],
+    top: parseFloat(area[2]),
     left: parseFloat(area[3]),
     position: layero.attr('position'),
     overflow: 'visible'

@@ -1415,7 +1415,7 @@
 
           setTimeStatus();
           scroll();
-          (that.endDate || options.type === 'time') && that.done(null, 'change');
+          (that.endDate || options.type === 'time' || (options.type === 'datetime' && options.fullPanel)) && that.done(null, 'change');
           
           //同步按钮可点状态
           that.setBtnStatus();

@@ -753,8 +753,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-input-affix-event{pointer-events: auto;}
 
 /* 输入框组 */
-.layui-input-group{position: relative; display: inline-table; cursor: pointer}
-.layui-input-group>*{display: table-cell; vertical-align: middle; position: relative;  cursor: pointer;}
+.layui-input-group{position: relative; display: inline-table;}
+.layui-input-group>*{display: table-cell; vertical-align: middle; position: relative;}
 .layui-input-group .layui-input{padding-right: 15px;}
 .layui-input-group .layui-input-prefix{width: auto; border-right: 0;}
 .layui-input-group .layui-input-suffix{width: auto; border-left: 0;}
@@ -897,7 +897,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-laypage button{margin-left: 10px; padding: 0 10px; cursor: pointer;}
 
 /** 流加载 **/
-.layui-flow-more{margin: 10px 0; text-align: center; color: #999; font-size: 14px;}
+.layui-flow-more{margin: 10px 0; text-align: center; color: #999; font-size: 14px; clear: both;}
 .layui-flow-more a{ height: 32px; line-height: 32px;  }
 .layui-flow-more a *{display: inline-block; vertical-align: top;}
 .layui-flow-more a cite{padding: 0 20px; border-radius: 3px; background-color: #eee; color: #333; font-style: normal;}
