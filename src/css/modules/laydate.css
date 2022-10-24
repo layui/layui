@@ -98,7 +98,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 
 /* 双日历 */
 .layui-laydate-range{width: 546px;}
-.layui-laydate-range .layui-laydate-main{display: inline-block; vertical-align: middle;}
+.layui-laydate-range .layui-laydate-main{display: inline-block; vertical-align: middle;width:50%;}
 .layui-laydate-range .laydate-main-list-1 .layui-laydate-header,
 .layui-laydate-range .laydate-main-list-1 .layui-laydate-content{border-left: 1px solid #e2e2e2;}
 
