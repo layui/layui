@@ -522,18 +522,32 @@ layui.define('layer' , function(exports){
         othis.removeAttr('lay-over');
       })
       .off('upload.drop').on('upload.drop', function(e, param){
-        var othis = $(this), files = param.originalEvent.dataTransfer.files || [];
-        
+        var othis = $(this), data = othis.attr('lay-data'), files = param.originalEvent.dataTransfer.files || [];
         othis.removeAttr('lay-over');
+        if(data){
+          try{
+            data = new Function('return '+ data)();
+            that.config = $.extend({}, options, data);
+          } catch(e){
+            hint.error('Upload element property lay-data configuration item has a syntax error: ' + data)
+          }
+        }
         setChooseFile(files);
-
         options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
       });
     }
     
     //文件选择
     that.elemFile.off('upload.change').on('upload.change', function(){
-      var files = this.files || [];
+      var othis = $(this), data = othis.attr('lay-data'), files = this.files || [];
+      if(data){
+        try{
+          data = new Function('return '+ data)();
+          that.config = $.extend({}, options, data);
+        } catch(e){
+          hint.error('Upload element property lay-data configuration item has a syntax error: ' + data)
+        }
+      }
       setChooseFile(files);
       options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
     });
