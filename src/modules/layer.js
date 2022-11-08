@@ -48,7 +48,7 @@ var isLayui = window.layui && layui.define, $, win, ready = {
     
     var app = (cssname || href).replace(/\.|\//g, '');
     var id = 'layuicss-'+ app
-    ,STAUTS_NAME = 'creating'
+    ,STATUS_NAME = 'creating'
     ,timeout = 0;
     
     link.rel = 'stylesheet';
@@ -74,13 +74,13 @@ var isLayui = window.layui && layui.define, $, win, ready = {
       //css 加载就绪
       if(parseInt(ready.getStyle(getLinkElem, 'width')) === 1989){
         //如果参数来自于初始轮询（即未加载就绪时的），则移除 link 标签状态
-        if(status === STAUTS_NAME) getLinkElem.removeAttribute('lay-status');
+        if(status === STATUS_NAME) getLinkElem.removeAttribute('lay-status');
         //如果 link 标签的状态仍为「创建中」，则继续进入轮询，直到状态改变，则执行回调
-        getLinkElem.getAttribute('lay-status') === STAUTS_NAME ? setTimeout(poll, delay) : fn();
+        getLinkElem.getAttribute('lay-status') === STATUS_NAME ? setTimeout(poll, delay) : fn();
       } else {
-        getLinkElem.setAttribute('lay-status', STAUTS_NAME);
+        getLinkElem.setAttribute('lay-status', STATUS_NAME);
         setTimeout(function(){
-          poll(STAUTS_NAME);
+          poll(STATUS_NAME);
         }, delay);
       }
 
