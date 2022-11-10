@@ -98,9 +98,11 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 
 /* 双日历 */
 .layui-laydate-range{width: 546px;}
-.layui-laydate-range .layui-laydate-main{display: inline-block; vertical-align: middle;width:50%;}
+.layui-laydate-range .layui-laydate-main{display: inline-block; vertical-align: middle;max-width: 50%;}
 .layui-laydate-range .laydate-main-list-1 .layui-laydate-header,
 .layui-laydate-range .laydate-main-list-1 .layui-laydate-content{border-left: 1px solid #e2e2e2;}
+.layui-laydate-range.layui-laydate-linkage .laydate-main-list-0 .laydate-next-m, .layui-laydate-range.layui-laydate-linkage .laydate-main-list-0 .laydate-next-y,
+.layui-laydate-range.layui-laydate-linkage .laydate-main-list-1 .laydate-prev-m, .layui-laydate-range.layui-laydate-linkage .laydate-main-list-1 .laydate-prev-y{display: none;}
 
 
 /* 默认简约主题 */
