@@ -252,7 +252,7 @@
     //切换日历联动方式
     that.autoCalendarModel = function () {
       var state = that.calendarLinkage;
-      that.calendarLinkage = that.startDate && that.endDate && that.startDate.year === that.endDate.year && that.startDate.month === that.endDate.month;
+      that.calendarLinkage = (options.range && (options.type === 'date' || options.type === 'datetime')) && that.startDate && that.endDate && that.startDate.year === that.endDate.year && that.startDate.month === that.endDate.month;
       lay(that.elem)[that.calendarLinkage ? 'addClass' : 'removeClass']('layui-laydate-linkage');
       return that.calendarLinkage !== state; // 返回发生了变化
     };
@@ -583,22 +583,15 @@
           }
           if (type === 'year' || type === 'month' || type === 'time') {
             that.listYM[i] = [dateTime.year, dateTime.month + 1];
-            that.checkDate('limit').calendar(null, i);
-            that.list(type, i);
           } else {
-            if (that.calendarLinkage) {
-              if (i === 0) { // 第一个值作为startDate
-                that.startDate = lay.extend({}, dateTime);
-              } else {
-                that.endState = !!(that.startDate && that.endDate);
-                that.checkDate('limit').calendar(null, null, 'init');
-              }
+            if (i === 0) { // 第一个值作为startDate
+              that.startDate = lay.extend({}, dateTime);
             } else {
-              that.checkDate('limit').calendar(null, i);
+              that.autoCalendarModel.auto && that.autoCalendarModel();
             }
-            that.closeList();
           }
         });
+        that.checkDate('limit').calendar(null, null, 'init');
 
         var timeBtn = lay(that.footer).find('.'+ ELEM_TIME_BTN).removeClass(DISABLED);
         timeBtn && timeBtn.attr('lay-type') === 'date' && timeBtn[0].click();
@@ -847,6 +840,7 @@
       if (options.range) {
         checkValid(that.calendarLinkage ? that.startDate : dateTime); // 校验开始时间
         checkValid(that.endDate); // 校验结束时间
+        that.endState = !that.calendarLinkage || !!(that.startDate && that.endDate);
       } else {
         checkValid(dateTime);
       }
@@ -1141,16 +1135,16 @@
     //初始默认选择器
     if(isAlone){ //年、月等独立选择器
       if(options.range){
-        if (that.calendarLinkage) {
-          value ? that.endDate = (that.endDate || {
-            year: dateTime.year + (options.type === 'year' ? 1 : 0)
-            ,month: dateTime.month + (options.type === 'month' ? 0 : -1)
-          }) : (that.startDate = that.startDate || {
-            year: dateTime.year
-            ,month: dateTime.month
-          });
-        }
-        if(value){
+        // if (that.calendarLinkage) {
+        //   value ? that.endDate = (that.endDate || {
+        //     year: dateTime.year + (options.type === 'year' ? 1 : 0)
+        //     ,month: dateTime.month + (options.type === 'month' ? 0 : -1)
+        //   }) : (that.startDate = that.startDate || {
+        //     year: dateTime.year
+        //     ,month: dateTime.month
+        //   });
+        // }
+        if(value || type !== 'init'){ // 判断是否需要显示年月时间列表
           that.listYM = [
             [(that.startDate || options.dateTime).year, (that.startDate || options.dateTime).month + 1]
             ,[that.endDate.year, that.endDate.month + 1]
