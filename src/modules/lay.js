@@ -208,11 +208,15 @@
 
     var othis = lay(elem);
     var attrName = opts.attr || 'lay-options';
+    var attrValue = othis.attr(attrName);
 
     try {
-      return new Function('return '+ (othis.attr(attrName) || '{}'))();
+      return new Function('return '+ (attrValue || '{}'))();
     } catch(ev) {
-      hint.error(opts.errorText || 'parseerror: '+ ev, 'error');
+      layui.hint().error(opts.errorText || [
+        attrName + '="'+ attrValue + '"', 
+        '\n parseerror: '+ ev
+      ].join('\n'), 'error');
       return {};
     }
   };
