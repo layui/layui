@@ -208,13 +208,13 @@ layui.define(['layer', 'util'], function(exports){
             
             // 密码显隐
             ,eye: [function(){ // 渲染
-              renderSuffix('eye');
+              renderSuffix('eye-invisible');
             }, function(){ // 事件
               var SHOW_NAME = 'LAY_FORM_INPUT_AFFIX_SHOW';
               var isShow = othis.data(SHOW_NAME);
               
               othis.attr('type', isShow ? 'password' : 'text').data(SHOW_NAME, !isShow);
-              renderSuffix(isShow ? 'eye' : 'eye-invisible');
+              renderSuffix(isShow ? 'eye-invisible' : 'eye');
             }]
           };
           

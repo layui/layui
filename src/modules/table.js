@@ -376,7 +376,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     if(options.height && /^full-\d+$/.test(options.height)){
       that.fullHeightGap = options.height.split('-')[1];
       options.height = _WIN.height() - that.fullHeightGap;
-    } else if (options.height && /^#\w+-{1}\d+$/.test(options.height)) {
+    } else if (options.height && /^#\w+\S*-\d+$/.test(options.height)) {
       var parentDiv = options.height.split("-");
       that.parentHeightGap = parentDiv.pop();
       that.parentDiv = parentDiv.join("-");
