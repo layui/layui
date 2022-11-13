@@ -3,12 +3,11 @@
  * 上传组件
  */
  
-layui.define('layer' , function(exports){
+layui.define(['lay','layer'], function(exports){
   "use strict";
   
   var $ = layui.$
   ,layer = layui.layer
-  ,hint = layui.hint()
   ,device = layui.device()
 
   //外部接口
@@ -466,20 +465,20 @@ layui.define('layer' , function(exports){
   
   //事件处理
   Class.prototype.events = function(){
-    var that = this
-    ,options = that.config
+    var that = this;
+    var options = that.config;
     
-    //设置当前选择的文件队列
-    ,setChooseFile = function(files){
+    // 设置当前选择的文件队列
+    var setChooseFile = function(files){
       that.chooseFiles = {};
       layui.each(files, function(i, item){
         var time = new Date().getTime();
         that.chooseFiles[time + '-' + i] = item;
       });
-    }
+    };
     
-    //设置选择的文本
-    ,setChooseText = function(files, filename){
+    // 设置选择的文本
+    var setChooseText = function(files, filename){
       var elemFile = that.elemFile
       ,item = options.item ? options.item : options.elem
       ,value = files.length > 1 
@@ -494,19 +493,23 @@ layui.define('layer' , function(exports){
       elemFile.after('<span class="layui-inline '+ ELEM_CHOOSE +'">'+ value +'</span>');
     };
 
+    // 合并 lay-options/lay-data 属性配置项
+    var extendAttrs = function(){
+      var othis = $(this);
+      var data = othis.attr('lay-data') || othis.attr('lay-options'); // 优先兼容旧版本
+
+      if(data){
+        that.config = $.extend({}, options, lay.options(this, {
+          attr: othis.attr('lay-data') ? 'lay-data' : null
+        }));
+      }
+    };
+
     //点击上传容器
     options.elem.off('upload.start').on('upload.start', function(){
-      var othis = $(this), data = othis.attr('lay-data');
-      
-      if(data){
-        try{
-          data = new Function('return '+ data)();
-          that.config = $.extend({}, options, data);
-        } catch(e){
-          hint.error('Upload element property lay-data configuration item has a syntax error: ' + data)
-        }
-      }
-      
+      var othis = $(this);
+
+      extendAttrs.call(this);
       that.config.item = othis;
       that.elemFile[0].click();
     });
@@ -522,9 +525,11 @@ layui.define('layer' , function(exports){
         othis.removeAttr('lay-over');
       })
       .off('upload.drop').on('upload.drop', function(e, param){
-        var othis = $(this), files = param.originalEvent.dataTransfer.files || [];
+        var othis = $(this);
+        var files = param.originalEvent.dataTransfer.files || [];
         
         othis.removeAttr('lay-over');
+        extendAttrs.call(this);
         setChooseFile(files);
 
         options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
@@ -534,6 +539,8 @@ layui.define('layer' , function(exports){
     //文件选择
     that.elemFile.off('upload.change').on('upload.change', function(){
       var files = this.files || [];
+
+      extendAttrs.call(this);
       setChooseFile(files);
       options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
     });
