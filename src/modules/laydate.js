@@ -1210,7 +1210,7 @@
   Class.prototype.list = function(type, index){
     var that = this
     ,options = that.config
-    ,dateTime = options.dateTime
+    ,dateTime = that.calendarLinkage ? options.dateTime : [options.dateTime, that.endDate][index]
     ,lang = that.lang()
     ,isAlone = options.range && options.type !== 'date' && options.type !== 'datetime' //独立范围选择器
     
@@ -1382,24 +1382,13 @@
       lay(ul).find('li').on('click', function(){
         var ym = lay(this).attr('lay-ym') | 0;
         if(lay(this).hasClass(DISABLED)) return;
-        if(index === 0){
-          dateTime[type] = ym;
-          that.limit({
-            elem: lay(that.footer).find(ELEM_CONFIRM),
-            index: 0
+        if (that.calendarLinkage) {
+          lay.extend(dateTime, {
+            year: type === 'year' ? ym : listYM[0]
+            ,month: type === 'year' ? listYM[1] - 1 : ym
           });
-        } else { //范围选择
-          if(isAlone){ //非date/datetime类型
-            that.endDate[type] = ym;
-          } else {
-            var YM = type === 'year'
-              ? that.getAsYM(ym, listYM[1] - 1, 'sub')
-              : that.getAsYM(listYM[0], ym, 'sub');
-            lay.extend(dateTime, {
-              year: YM[0]
-              ,month: YM[1]
-            });
-          }
+        } else {
+          dateTime[type] = ym;
         }
         
         //当为年选择器或者年月选择器
@@ -1415,11 +1404,8 @@
             that.list('month', index);
           }
         } else {
-          if (that.calendarLinkage) {
-            that.checkDate('limit').calendar(null, 0, 'init');
-          } else {
-            that.checkDate('limit').calendar(null, index);
-          }
+          that.checkDate('limit').calendar(dateTime, index, 'init'); // 重新渲染一下两个面板
+          that.calendarLinkage || that.choose(lay(elemCont).find('td.layui-this'), index);
           that.closeList();
         }
 
@@ -1517,7 +1503,7 @@
     ,lang = that.lang()
     ,isOut, elemBtn = lay(that.footer).find(ELEM_CONFIRM);
     if(options.range && options.type !== 'time'){
-      start = start || options.dateTime;
+      start = start || that.startDate || options.dateTime;
       end = end || that.endDate;
       isOut = that.newDate(start).getTime() > that.newDate(end).getTime();
 
@@ -1673,7 +1659,7 @@
         ,month: ymd[1] - 1
         ,date: ymd[2]
       }).getTime();
-      that.calendarLinkage && lay(item).removeClass(ELEM_SELECTED + ' ' + THIS);
+      lay(item).removeClass(ELEM_SELECTED + ' ' + THIS);
       if(thisTime === startTime || thisTime === endTime){
         (that.calendarLinkage || (!that.calendarLinkage && (i < 42 ? thisTime === startTime : thisTime === endTime))) &&
         lay(item).addClass(
