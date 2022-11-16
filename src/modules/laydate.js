@@ -1,6 +1,6 @@
 /** layDate 日期与时间控件 | MIT Licensed */
 
-;!function(window, document){
+;!function(window, document){ //gulp build: laydate-header
   "use strict";
 
   var isLayui = window.layui && layui.define, ready = {
@@ -42,7 +42,7 @@
     ,ready: function(callback){
       var cssname = 'laydate';
       var ver = ''
-      var path = (isLayui ? 'modules/' : 'css/') + 'laydate.css?v='+ laydate.v + ver;
+      var path = (isLayui ? 'modules/' : '') + 'laydate.css?v='+ laydate.v + ver;
 
       isLayui ? (
         layui['layui.all'] 
@@ -1503,7 +1503,7 @@
     ,lang = that.lang()
     ,isOut, elemBtn = lay(that.footer).find(ELEM_CONFIRM);
     if(options.range && options.type !== 'time'){
-      start = start || that.startDate || options.dateTime;
+      start = start || (that.calendarLinkage ? that.startDate : options.dateTime);
       end = end || that.endDate;
       isOut = that.newDate(start).getTime() > that.newDate(end).getTime();
 
@@ -1699,6 +1699,8 @@
   
   //选择日期
   Class.prototype.choose = function(td, index){
+    if(td.hasClass(DISABLED)) return;
+
     var that = this
     ,options = that.config;
 
@@ -1723,9 +1725,7 @@
       ,month: (YMD[1] | 0) - 1
       ,date: YMD[2] | 0
     };
-    
-    if(td.hasClass(DISABLED)) return;
-    
+
     lay.extend(dateTime, YMD); //同步 dateTime
 
     //范围选择
