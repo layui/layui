@@ -149,7 +149,7 @@
         (function poll() {
           if(++timeout > config.timeout * 1000 / 4){
             return error(item + ' is not a valid module', 'error');
-          };
+          }
           config.status[item] ? onCallback() : setTimeout(poll, 4);
         }());
       }
@@ -222,7 +222,7 @@
       (function poll() {
         if(++timeout > config.timeout * 1000 / 4){
           return error(item + ' is not a valid module', 'error');
-        };
+        }
         (typeof config.modules[item] === 'string' && config.status[item]) 
         ? onCallback() 
         : setTimeout(poll, 4);
@@ -286,7 +286,7 @@
       //如果轮询超过指定秒数，则视为请求文件失败或 css 文件不符合规范
       if(++timeout > config.timeout * 1000 / delay){
         return error(href + ' timeout');
-      };
+      }
       
       //css 加载就绪
       if(parseInt(that.getStyle(getLinkElem, 'width')) === 1989){
@@ -672,7 +672,7 @@
         } else { //数字 vs 数字
           return v1 - v2;
         }
-      };
+      }
       
       /**
        * 字典序排序
