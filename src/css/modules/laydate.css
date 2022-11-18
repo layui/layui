@@ -113,8 +113,8 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-content{border-top: none 0; border-bottom: none 0;}
 .layui-laydate-content th{color: #333;}
 .layui-laydate-content td{color: #666;}
-.layui-laydate-content td.laydate-selected{background-color: #B5FFF8;}
-.laydate-selected:hover{background-color: #00F7DE !important;}
+.layui-laydate-content td.laydate-selected>div{background-color: #00F7DE;}
+.laydate-selected:hover>div{background-color: #00F7DE !important;}
 .layui-laydate-content td>div:hover,
 .layui-laydate-list li:hover,
 .layui-laydate-shortcut>li:hover{background-color: #eee; color: #333;}
@@ -123,8 +123,8 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-time-list>li:hover{background: none;}
 .layui-laydate-content .laydate-day-prev,
 .layui-laydate-content .laydate-day-next{color: #d2d2d2;}
-.laydate-selected.laydate-day-prev,
-.laydate-selected.laydate-day-next{background-color: #f8f8f8 !important;}
+.laydate-selected.laydate-day-prev>div,
+.laydate-selected.laydate-day-next>div{background-color: #f8f8f8 !important;}
 .layui-laydate-footer{border-top: 1px solid #e2e2e2;}
 .layui-laydate-hint{color: #FF5722;}
 .laydate-day-mark::after{background-color: #5FB878;}
