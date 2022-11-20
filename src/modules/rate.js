@@ -87,16 +87,8 @@ layui.define('jquery',function(exports){
         + (i>Math.floor(options.value)?ICON_RATE:ICON_RATE_SOLID)
       + '" '+ style +'></i></li>';
 
-      if(options.half){
-        if(parseInt(options.value) !== options.value){
-          if(i == Math.ceil(options.value)){
-            temp = temp + '<li><i class="layui-icon layui-icon-rate-half" '+ style +'></i></li>';
-          }else{
-            temp = temp + item 
-          } 
-        }else{
-          temp = temp + item
-        }
+      if(options.half&&parseInt(options.value) !== options.value&&i == Math.ceil(options.value)){
+        temp = temp + '<li><i class="layui-icon layui-icon-rate-half" '+ style +'></i></li>';
       }else{
         temp = temp +item;
       }
