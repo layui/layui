@@ -629,10 +629,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       hide ? parentColspan-- : parentColspan++;
 
       parentTh.attr('colspan', parentColspan);
-      parentTh[parentColspan < 1 ? 'addClass' : 'removeClass'](HIDE);
-      
+      parentTh[parentColspan >= 1 || !hide ? 'removeClass' : 'addClass'](HIDE); // 如果子列显示，父列必然需要显示
+
       getThisCol.colspan = parentColspan; //同步 colspan 参数
-      getThisCol.hide = parentColspan < 1; //同步 hide 参数
+      getThisCol.hide = parentColspan >= 1 || !hide; //同步 hide 参数
       
       //递归，继续往上查询是否有父列
       var nextParentKey = parentTh.data('parentkey');
@@ -1550,6 +1550,19 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       if (height < 135) height = 135;
       that.elem.css("height", height);
     }
+
+    // debugger;
+    // 如果多级表头，则填补表头高度
+    if(options.cols.length > 1){
+      // 补全高度
+      var th = that.layFixed.find(ELEM_HEADER).find('th');
+      // 固定列表头同步跟本体 th 一致高度
+      var headerMain = that.layHeader.first();
+      layui.each(th, function (thIndex, thElem) {
+        thElem = $(thElem);
+        thElem.height(headerMain.find('th[data-key="' + thElem.attr('data-key') + '"]').height() + 'px');
+      })
+    }
     
     if(!height) return;
 
@@ -1580,18 +1593,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       });
     } else {
       that.layMain.outerHeight(bodyHeight);
-    }
-
-    // 如果多级表头，则填补表头高度
-    if(options.cols.length > 1){
-      // 补全高度
-      var th = that.layFixed.find(ELEM_HEADER).find('th');
-      // 固定列表头同步跟本体 th 一致高度
-      var headerMain = that.layHeader.first();
-      layui.each(th, function (thIndex, thElem) {
-        thElem = $(thElem);
-        thElem.height(headerMain.find('th[data-key="' + thElem.attr('data-key') + '"]').height() + 'px');
-      })
     }
   };
   
@@ -1725,6 +1726,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
                 ](HIDE);
 
                 // 根据列的显示隐藏，同步多级表头的父级相关属性值
+                debugger;
                 if(hide != col.hide){
                   that.setParentCol(!checked, parentKey);
                 }
