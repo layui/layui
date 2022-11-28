@@ -1551,7 +1551,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.elem.css("height", height);
     }
 
-    // debugger;
     // 如果多级表头，则填补表头高度
     if(options.cols.length > 1){
       // 补全高度
@@ -1726,7 +1725,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
                 ](HIDE);
 
                 // 根据列的显示隐藏，同步多级表头的父级相关属性值
-                debugger;
                 if(hide != col.hide){
                   that.setParentCol(!checked, parentKey);
                 }
