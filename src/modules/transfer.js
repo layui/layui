@@ -73,7 +73,7 @@ layui.define(['laytpl', 'form'], function(exports){
       ,'{{# if(d.data.showSearch){ }}'
       ,'<div class="layui-transfer-search">'
         ,'<i class="layui-icon layui-icon-search"></i>'
-        ,'<input type="input" class="layui-input" placeholder="关键词搜索">'
+        ,'<input type="text" class="layui-input" placeholder="关键词搜索">'
       ,'</div>'
       ,'{{# } }}'
       ,'<ul class="layui-transfer-data"></ul>'

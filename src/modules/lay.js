@@ -428,4 +428,4 @@
     });
   }
   
-}(window, window.document);
+}(window, window.document); //gulp build: lay-footer
