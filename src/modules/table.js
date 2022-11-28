@@ -438,18 +438,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 让表格平铺
     that.fullSize();
     
-    // 如果多级表头，则填补表头高度
-    if(options.cols.length > 1){
-      // 补全高度
-      var th = that.layFixed.find(ELEM_HEADER).find('th');
-      // 固定列表头同步跟本体 th 一致高度
-      var headerMain = that.layHeader.first();
-      layui.each(th, function (thIndex, thElem) {
-        thElem = $(thElem);
-        thElem.height(headerMain.find('th[data-key="' + thElem.attr('data-key') + '"]').height() + 'px');
-      })
-    }
-    
     that.pullData(that.page); //请求数据
     that.events(); //事件
   };
@@ -641,10 +629,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       hide ? parentColspan-- : parentColspan++;
 
       parentTh.attr('colspan', parentColspan);
-      parentTh[parentColspan < 1 ? 'addClass' : 'removeClass'](HIDE);
-      
+      parentTh[parentColspan >= 1 || !hide ? 'removeClass' : 'addClass'](HIDE); // 如果子列显示，父列必然需要显示
+
       getThisCol.colspan = parentColspan; //同步 colspan 参数
-      getThisCol.hide = parentColspan < 1; //同步 hide 参数
+      getThisCol.hide = parentColspan >= 1 || !hide; //同步 hide 参数
       
       //递归，继续往上查询是否有父列
       var nextParentKey = parentTh.data('parentkey');
@@ -1562,6 +1550,18 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       if (height < 135) height = 135;
       that.elem.css("height", height);
     }
+
+    // 如果多级表头，则填补表头高度
+    if(options.cols.length > 1){
+      // 补全高度
+      var th = that.layFixed.find(ELEM_HEADER).find('th');
+      // 固定列表头同步跟本体 th 一致高度
+      var headerMain = that.layHeader.first();
+      layui.each(th, function (thIndex, thElem) {
+        thElem = $(thElem);
+        thElem.height(headerMain.find('th[data-key="' + thElem.attr('data-key') + '"]').height() + 'px');
+      })
+    }
     
     if(!height) return;
 
@@ -1702,7 +1702,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
               var lis = [];
               that.eachCols(function(i, item){ 
                 if(item.field && item.type == 'normal'){
-                  lis.push('<li><input type="checkbox" name="'+ item.field +'" data-key="'+ item.key +'" data-parentkey="'+ (item.parentKey||'') +'" lay-skin="primary" '+ (item.hide ? '' : 'checked') +' title="'+ util.escape($('<div>' + (item.title || item.field) + '</div>').text()) +'" lay-filter="LAY_TABLE_TOOL_COLS"></li>');
+                  lis.push('<li><input type="checkbox" name="'+ item.field +'" data-key="'+ item.key +'" data-parentkey="'+ (item.parentKey||'') +'" lay-skin="primary" '+ (item.hide ? '' : 'checked') +' title="'+ util.escape($('<div>' + (item.fieldTitle || item.title || item.field) + '</div>').text()) +'" lay-filter="LAY_TABLE_TOOL_COLS"></li>');
                 }
               });
               return lis.join('');
@@ -2503,7 +2503,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
               if(content === undefined || content === null) content = '';
               
-              i1 == 0 && dataTitle.push(item3.title || '');
+              i1 == 0 && dataTitle.push(item3.fieldTitle || item3.title || item3.field || '');
               vals.push('"'+ parseTempData.call(thatTable, {
                 item3: item3
                 ,content: content
