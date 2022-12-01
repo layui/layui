@@ -259,6 +259,7 @@ layui.define(['layer', 'util'], function(exports){
             ,dlHeight = dl.outerHeight();
             
             index = select[0].selectedIndex; // 获取最新的 selectedIndex
+            index === -1 && (index = 0);
             reElem.addClass(CLASS+'ed');
             dds.removeClass(HIDE);
             dts.removeClass(HIDE);
