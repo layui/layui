@@ -27,7 +27,6 @@
     v: '5.4.0' // layDate 版本号
     ,config: {
       weekStart: 0, // 默认周日一周的开始
-      // rangeLinked: true // 日历面板默认为联动的方式
     } // 全局配置项
     ,index: (window.laydate && window.laydate.v) ? 100000 : 0
     ,path: GLOBAL.laydate_dir || ready.getPath
