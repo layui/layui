@@ -786,6 +786,9 @@
     
     //校验日期有效数字
     ,checkValid = function(dateTime){
+      if (!dateTime) {
+        return;
+      }
       if(dateTime.year > LIMIT_YEAR[1]) dateTime.year = LIMIT_YEAR[1], error = true; //不能超过20万年
       if(dateTime.month > 11) dateTime.month = 11, error = true;
       if(dateTime.seconds > 59) dateTime.seconds = 0, dateTime.minutes++, error = true;
