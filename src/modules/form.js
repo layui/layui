@@ -259,14 +259,14 @@ layui.define(['layer', 'util'], function(exports){
             ,dlHeight = dl.outerHeight();
             
             index = select[0].selectedIndex; // 获取最新的 selectedIndex
-            index === -1 && (index = 0);
             reElem.addClass(CLASS+'ed');
             dds.removeClass(HIDE);
             dts.removeClass(HIDE);
             nearElem = null;
 
             // 初始选中样式
-            dds.eq(index).addClass(THIS).siblings().removeClass(THIS);
+            dds.removeClass(THIS);
+            index >= 0 && dds.eq(index).addClass(THIS);
 
             // 上下定位识别
             if(top + dlHeight > $win.height() && top >= dlHeight){
