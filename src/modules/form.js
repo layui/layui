@@ -265,7 +265,8 @@ layui.define(['layer', 'util'], function(exports){
             nearElem = null;
 
             // 初始选中样式
-            dds.eq(index).addClass(THIS).siblings().removeClass(THIS);
+            dds.removeClass(THIS);
+            index >= 0 && dds.eq(index).addClass(THIS);
 
             // 上下定位识别
             if(top + dlHeight > $win.height() && top >= dlHeight){
