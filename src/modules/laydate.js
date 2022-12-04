@@ -247,19 +247,19 @@
     ) : '';
 
     //日期范围的日历面板是否联动
-    that.calendarLinkage = !!(options.range && options.calendarLinkage && (options.type === 'date' || options.type === 'datetime'))
+    that.rangeLinked = !!(options.range && options.rangeLinked && (options.type === 'date' || options.type === 'datetime'))
 
     //切换日历联动方式
     that.autoCalendarModel = function () {
-      var state = that.calendarLinkage;
-      that.calendarLinkage = (options.range && (options.type === 'date' || options.type === 'datetime'))
-        && that.startDate && that.endDate && that.startDate.year === that.endDate.year && that.startDate.month === that.endDate.month;
-      lay(that.elem)[that.calendarLinkage ? 'addClass' : 'removeClass']('layui-laydate-linkage');
-      return that.calendarLinkage != state; // 返回发生了变化
+      var state = that.rangeLinked;
+      that.rangeLinked = (options.range && (options.type === 'date' || options.type === 'datetime'))
+        && ((!that.startDate || !that.endDate) || (that.startDate && that.endDate && that.startDate.year === that.endDate.year && that.startDate.month === that.endDate.month));
+      lay(that.elem)[that.rangeLinked ? 'addClass' : 'removeClass']('layui-laydate-linkage');
+      return that.rangeLinked != state; // 返回发生了变化
     };
 
     //是否自动切换
-    that.autoCalendarModel.auto = that.calendarLinkage && options.calendarLinkage === 'auto';
+    that.autoCalendarModel.auto = that.rangeLinked && options.rangeLinked === 'auto';
 
     //若 range 参数为数组，则表示为开始日期和结束日期的 input 对象
     if(layui.type(options.range) === 'array'){
@@ -409,7 +409,7 @@
       ,"class": [
         'layui-laydate'
         ,options.range ? ' layui-laydate-range' : ''
-        ,that.calendarLinkage ? ' layui-laydate-linkage' : ''
+        ,that.rangeLinked ? ' layui-laydate-linkage' : ''
         ,isStatic ? (' '+ ELEM_STATIC) : ''
         ,options.fullPanel ? ' laydate-theme-fullpanel' : '' // 全面版
         // ,options.theme && options.theme !== 'default' && !/^#/.test(options.theme) ? (' laydate-theme-' + options.theme) : ''
@@ -582,14 +582,15 @@
               seconds: dateTime.seconds,
             }
           }
+          if (i === 0) { // 第一个值作为startDate
+            that.startDate = lay.extend({}, dateTime);
+          } else {
+            that.endState = true;
+          }
           if (type === 'year' || type === 'month' || type === 'time') {
             that.listYM[i] = [dateTime.year, dateTime.month + 1];
-          } else {
-            if (i === 0) { // 第一个值作为startDate
-              that.startDate = lay.extend({}, dateTime);
-            } else {
-              that.autoCalendarModel.auto && that.autoCalendarModel();
-            }
+          } else if (i) {
+            that.autoCalendarModel.auto && that.autoCalendarModel();
           }
         });
         that.checkDate('limit').calendar(null, null, 'init');
@@ -785,6 +786,9 @@
     
     //校验日期有效数字
     ,checkValid = function(dateTime){
+      if (!dateTime) {
+        return;
+      }
       if(dateTime.year > LIMIT_YEAR[1]) dateTime.year = LIMIT_YEAR[1], error = true; //不能超过20万年
       if(dateTime.month > 11) dateTime.month = 11, error = true;
       if(dateTime.seconds > 59) dateTime.seconds = 0, dateTime.minutes++, error = true;
@@ -839,7 +843,7 @@
     
     if(fn === 'limit') {
       if (options.range) {
-        checkValid(that.calendarLinkage ? that.startDate : dateTime); // 校验开始时间
+        checkValid(that.rangeLinked ? that.startDate : dateTime); // 校验开始时间
         that.endDate && checkValid(that.endDate); // 校验结束时间
       } else {
         checkValid(dateTime);
@@ -970,9 +974,9 @@
       that.hint('value ' + lang.invalidDate + lang.formatError[1]);
     }
 
-    that.startDate = that.startDate || lay.extend({}, options.dateTime);
-    that.endState = !that.calendarLinkage || !!(that.startDate && that.endDate); // 初始化选中范围状态
+    that.startDate = that.startDate || value && lay.extend({}, options.dateTime); // 有默认值才初始化startDate
     that.autoCalendarModel.auto && that.autoCalendarModel();
+    that.endState = !that.rangeLinked || !!(that.startDate && that.endDate); // 初始化选中范围状态
 
     fn && fn();
     return that;
@@ -1096,7 +1100,7 @@
         YMD = that.getAsYM(dateTime.year, dateTime.month, 'sub');
       } else if(index_ >= startWeek && index_ < thisMaxDate + startWeek){
         st = index_ - startWeek;
-        if (!that.calendarLinkage) {
+        if (!that.rangeLinked) {
           st + 1 === dateTime.date && item.addClass(THIS);
         }
       } else {
@@ -1133,15 +1137,6 @@
     //初始默认选择器
     if(isAlone){ //年、月等独立选择器
       if(options.range){
-        // if (that.calendarLinkage) {
-        //   value ? that.endDate = (that.endDate || {
-        //     year: dateTime.year + (options.type === 'year' ? 1 : 0)
-        //     ,month: dateTime.month + (options.type === 'month' ? 0 : -1)
-        //   }) : (that.startDate = that.startDate || {
-        //     year: dateTime.year
-        //     ,month: dateTime.month
-        //   });
-        // }
         if(value || type !== 'init'){ // 判断是否需要显示年月时间列表
           that.listYM = [
             [(that.startDate || options.dateTime).year, (that.startDate || options.dateTime).month + 1]
@@ -1164,7 +1159,7 @@
     //初始赋值双日历
     if(options.range && type === 'init'){
       //执行渲染第二个日历
-      if (that.calendarLinkage) {
+      if (that.rangeLinked) {
         var EYM = that.getAsYM(dateTime.year, dateTime.month, index ? 'sub' : null)
         that.calendar(lay.extend({}, dateTime, {
           year: EYM[0]
@@ -1210,7 +1205,7 @@
   Class.prototype.list = function(type, index){
     var that = this
     ,options = that.config
-    ,dateTime = that.calendarLinkage ? options.dateTime : [options.dateTime, that.endDate][index]
+    ,dateTime = that.rangeLinked ? options.dateTime : [options.dateTime, that.endDate][index]
     ,lang = that.lang()
     ,isAlone = options.range && options.type !== 'date' && options.type !== 'datetime' //独立范围选择器
     
@@ -1382,7 +1377,7 @@
       lay(ul).find('li').on('click', function(){
         var ym = lay(this).attr('lay-ym') | 0;
         if(lay(this).hasClass(DISABLED)) return;
-        if (that.calendarLinkage) {
+        if (that.rangeLinked) {
           lay.extend(dateTime, {
             year: type === 'year' ? ym : listYM[0]
             ,month: type === 'year' ? listYM[1] - 1 : ym
@@ -1405,7 +1400,7 @@
           }
         } else {
           that.checkDate('limit').calendar(dateTime, index, 'init'); // 重新渲染一下两个面板
-          that.calendarLinkage || that.choose(lay(elemCont).find('td.layui-this'), index);
+          that.rangeLinked || that.choose(lay(elemCont).find('td.layui-this'), index);
           that.closeList();
         }
 
@@ -1503,7 +1498,7 @@
     ,lang = that.lang()
     ,isOut, elemBtn = lay(that.footer).find(ELEM_CONFIRM);
     if(options.range && options.type !== 'time'){
-      start = start || (that.calendarLinkage ? that.startDate : options.dateTime);
+      start = start || (that.rangeLinked ? that.startDate : options.dateTime);
       end = end || that.endDate;
       isOut = that.newDate(start).getTime() > that.newDate(end).getTime();
 
@@ -1531,7 +1526,7 @@
       ? lay.extend({}, that.endDate, that.endTime)
     : (
       options.range 
-        ? lay.extend({}, that.calendarLinkage ? that.startDate : options.dateTime, that.startTime)
+        ? lay.extend({}, that.rangeLinked ? that.startDate : options.dateTime, that.startTime)
       : options.dateTime)
     )
     ,format = laydate.parse(dateTime, that.format, 1);
@@ -1604,7 +1599,7 @@
     if(!options.isPreview) return;
     
     var elemPreview =  lay(that.elem).find('.'+ ELEM_PREVIEW)
-    ,value = options.range ? ((that.calendarLinkage ? that.endState : that.endDate) ? that.parse() : '') : that.parse();
+    ,value = options.range ? ((that.rangeLinked ? that.endState : that.endDate) ? that.parse() : '') : that.parse();
     
     //显示预览
     elemPreview.html(value).css({
@@ -1632,7 +1627,7 @@
   Class.prototype.stampRange = function(){
     var that = this
       ,options = that.config
-      ,startTime = that.calendarLinkage ? that.startDate : options.dateTime, endTime
+      ,startTime = that.rangeLinked ? that.startDate : options.dateTime, endTime
       ,tds = lay(that.elem).find('td');
 
     if(options.range && !that.endState) lay(that.footer).find(ELEM_CONFIRM).addClass(DISABLED);
@@ -1661,7 +1656,7 @@
       }).getTime();
       lay(item).removeClass(ELEM_SELECTED + ' ' + THIS);
       if(thisTime === startTime || thisTime === endTime){
-        (that.calendarLinkage || (!that.calendarLinkage && (i < 42 ? thisTime === startTime : thisTime === endTime))) &&
+        (that.rangeLinked || (!that.rangeLinked && (i < 42 ? thisTime === startTime : thisTime === endTime))) &&
         lay(item).addClass(
           lay(item).hasClass(ELEM_PREV) || lay(item).hasClass(ELEM_NEXT)
             ? ELEM_SELECTED
@@ -1704,7 +1699,7 @@
     var that = this
     ,options = that.config;
 
-    if (that.calendarLinkage) {
+    if (that.rangeLinked) {
       if (that.endState || !that.startDate) {
         // 重新选择或者第一次选择
         index = 0;
@@ -1767,8 +1762,8 @@
         if (that.endState && that.autoCalendarModel.auto) {
           isChange = that.autoCalendarModel();
         }
-        var isSameDate = that.startDate.year === that.endDate.year && that.startDate.month === that.endDate.month && that.startDate.date === that.endDate.date;
-        if (that.calendarLinkage && that.endState && that.newDate(that.startDate) > that.newDate(that.endDate)) {
+        if (that.rangeLinked && that.endState && that.newDate(that.startDate) > that.newDate(that.endDate)) {
+          var isSameDate = that.startDate.year === that.endDate.year && that.startDate.month === that.endDate.month && that.startDate.date === that.endDate.date;
           // 判断是否反选
           var startDate = that.startDate;
           that.startDate = lay.extend({}, that.endDate, isSameDate ? {} : that.startTime);
@@ -1782,7 +1777,7 @@
         }
         isChange && (options.dateTime = lay.extend({}, that.startDate));
       }
-      that.calendar(null, that.calendarLinkage ? null : index, isChange || that.calendarLinkage ? 'init' : null).done(null, 'change');
+      that.calendar(null, that.rangeLinked ? null : index, isChange || that.rangeLinked ? 'init' : null).done(null, 'change');
     } else if(options.position === 'static'){ //直接嵌套的选中
       that.calendar().done().done(null, 'change'); //同时执行 done 和 change 回调
     } else if(options.type === 'date'){
@@ -1912,7 +1907,7 @@
     return {
       prevYear: function(){
         if(addSubYeay('sub')) return;
-        if (that.calendarLinkage) {
+        if (that.rangeLinked) {
           options.dateTime.year--;
           that.checkDate('limit').calendar(null, null, 'init');
         } else {
@@ -1923,7 +1918,7 @@
         }
       }
       ,prevMonth: function(){
-        if (that.calendarLinkage) {
+        if (that.rangeLinked) {
           dateTime = options.dateTime;
         }
         var YM = that.getAsYM(dateTime.year, dateTime.month, 'sub');
@@ -1933,13 +1928,13 @@
         });
 
         that.checkDate('limit').calendar(null, null, 'init');
-        if (!that.calendarLinkage) {
+        if (!that.rangeLinked) {
           that.choose(lay(elemCont).find('td.layui-this'), index);
           that.done(null, 'change');
         }
       }
       ,nextMonth: function(){
-        if (that.calendarLinkage) {
+        if (that.rangeLinked) {
           dateTime = options.dateTime;
         }
         var YM = that.getAsYM(dateTime.year, dateTime.month);
@@ -1949,14 +1944,14 @@
         });
 
         that.checkDate('limit').calendar(null, null, 'init');
-        if (!that.calendarLinkage) {
+        if (!that.rangeLinked) {
           that.choose(lay(elemCont).find('td.layui-this'), index);
           that.done(null, 'change');
         }
       }
       ,nextYear: function(){
         if(addSubYeay()) return;
-        if (that.calendarLinkage) {
+        if (that.rangeLinked) {
           options.dateTime.year++;
           that.checkDate('limit').calendar(null, 0, 'init');
         } else {
