@@ -32,6 +32,8 @@ layui.define('jquery', function(exports){
 
     return {
       setValue: function(value, index){ // 设置值
+        value = value > options.max ? options.max : value;
+        value = value < options.min ? options.min : value;
         options.value = value;
         return that.slide('set', value, index || 0);
       }
@@ -235,6 +237,7 @@ layui.define('jquery', function(exports){
         offsetValue = Math.round(offsetValue) * step
       };
       offsetValue = offsetValue > 100 ? 100: offsetValue;
+      offsetValue = offsetValue < 0 ? 0: offsetValue;
       sliderWrap.eq(index).css((options.type === 'vertical' ?'bottom':'left'), offsetValue + '%');
       var firLeft = valueTo(sliderWrap[0].offsetLeft)
       ,secLeft = options.range ? valueTo(sliderWrap[1].offsetLeft) : 0;
