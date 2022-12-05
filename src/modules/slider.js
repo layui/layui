@@ -298,7 +298,7 @@ layui.define('jquery', function(exports){
     };
     
     //动态赋值
-    if(setValue === 'set') return change(value, i, 'done');
+    if(setValue === 'set') return change(value - options.min, i, 'done');
 
     //滑块滑动
     sliderAct.find('.' + SLIDER_WRAP_BTN).each(function(index){
