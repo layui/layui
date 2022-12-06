@@ -1500,7 +1500,7 @@
     if(options.range && options.type !== 'time'){
       start = start || (that.rangeLinked ? that.startDate : options.dateTime);
       end = end || that.endDate;
-      isOut = that.newDate(start).getTime() > that.newDate(end).getTime();
+      isOut = !that.endState || that.newDate(start).getTime() > that.newDate(end).getTime();
 
       //如果不在有效日期内，直接禁用按钮，否则比较开始和结束日期
       (that.limit({
