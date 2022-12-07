@@ -84,6 +84,7 @@
   var ELEM_LIST = 'layui-laydate-list';
   var ELEM_SELECTED = 'laydate-selected';
   var ELEM_HINT = 'layui-laydate-hint';
+  var ELEM_DAY_NOW = 'laydate-day-now';
   var ELEM_PREV = 'laydate-day-prev';
   var ELEM_NEXT = 'laydate-day-next';
   var ELEM_FOOTER = 'layui-laydate-footer';
@@ -1648,13 +1649,30 @@
     // if(startTime > endTime) return that.hint(TIPS_OUT);
 
     lay.each(tds, function(i, item){
-      var ymd = lay(item).attr('lay-ymd').split('-')
-        ,thisTime = that.newDate({
+      var ymd = lay(item).attr('lay-ymd').split('-');
+      var thisTime = that.newDate({
         year: ymd[0]
         ,month: ymd[1] - 1
         ,date: ymd[2]
       }).getTime();
+
+      // 标记当天
+      if(options.rangeLinked && !that.startDate){
+        if(thisTime === that.newDate(that.systemDate()).getTime()){
+          lay(item).addClass(
+            lay(item).hasClass(ELEM_PREV) || lay(item).hasClass(ELEM_NEXT)
+              ? ''
+            : ELEM_DAY_NOW
+          );
+        }
+      }
+      
+      /*
+       * 标注区间
+       */
+
       lay(item).removeClass(ELEM_SELECTED + ' ' + THIS);
+
       if(thisTime === startTime || thisTime === endTime){
         (that.rangeLinked || (!that.rangeLinked && (i < 42 ? thisTime === startTime : thisTime === endTime))) &&
         lay(item).addClass(
