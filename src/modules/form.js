@@ -164,14 +164,19 @@ layui.define(['layer', 'util'], function(exports){
           var affix = othis.attr('lay-affix');
           var CLASS_SUFFIX = 'layui-input-suffix';
           var elemNext = othis.next('.'+ CLASS_SUFFIX);
+          var disabled = othis.is('[disabled]') || othis.is('[readonly]');
           var hideElem = function(elem, value){
             if(!elem) return;
             elem[$.trim(value) ? 'removeClass' : 'addClass'](HIDE);
           };
-          var renderSuffix = function(type){
+          var renderSuffix = function(type, _disabled){
             elemNext.remove();
-            elemNext = $(['<div class="layui-input-suffix layui-input-affix-event">'
-              ,'<i class="layui-icon layui-icon-'+ type +'"></i>'
+            elemNext = $(['<div class="layui-input-suffix layui-input-affix-event"'+ (
+              _disabled ? ' disabled' : ''
+            ) +'>'
+              ,'<i class="layui-icon layui-icon-'+ type + (
+                _disabled ? ' layui-disabled' : ''
+              ) +'"></i>'
             ,'</div>'].join(''));
             
             othis.after(elemNext);
@@ -186,6 +191,7 @@ layui.define(['layer', 'util'], function(exports){
             // 点击后缀套件事件
             elemNext.on('click', function(){
               var filter = othis.attr('lay-filter');
+              if($(this).is('[disabled]')) return;
               obj[affix] && obj[affix][1].call(this);
               
               // 对外事件
@@ -200,7 +206,7 @@ layui.define(['layer', 'util'], function(exports){
           var obj = {
             // 清空
             clear: [function(){ // 渲染
-              renderSuffix('clear');
+              renderSuffix('clear', disabled);
             }, function(){ // 事件
               othis.val('').focus();
               hideElem(elemNext, null);

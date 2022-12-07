@@ -498,6 +498,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-col-space28>*{padding: 14px;}
 .layui-col-space30{margin: -15px;}
 .layui-col-space30>*{padding: 15px;}
+.layui-col-space32{margin: -15px;}
+.layui-col-space32>*{padding: 15px;}
 
 
 /** 页面元素 **/

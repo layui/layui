@@ -55,6 +55,11 @@ body{padding: 50px 100px;}
   <input type="text" class="layui-input" id="test2">
 </div>
 
+开启快捷面板：
+<div class="layui-inline">
+  <input type="text" class="layui-input" id="test2-1">
+</div>
+
 <br><br><hr><br>
 
 年选择器：
@@ -186,12 +191,13 @@ layui.use('laydate', function(laydate){
     elem: '#test1-2'
     ,type: 'date'
     ,range: ['#test-startDate-1', '#test-endDate-1']
+    ,rangeLinked: true // 是否开启日期范围选择时的区间联动标注模式
     //,value: ['2022-05-01', '2022-06-01']
     //,value: '2022-05-01 - 2022-06-01'
   });
 
   
-  //单控件
+  // 日期选择器（单面板）
   laydate.render({
     elem: '#test2'
     //,format: 'yyyy年MM月dd日'
@@ -214,6 +220,54 @@ layui.use('laydate', function(laydate){
       console.log(value);
     }
   });
+
+  // 开启快捷面板
+  laydate.render({
+    elem: '#test2-1',
+    shortcuts: [
+      {
+        text: "昨天",
+        value: (function () {
+          var now = new Date();
+          now.setDate(now.getDate() - 1);
+          return now;
+        })()
+      },
+      { text: "今天", value: Date.now() },
+      {
+        text: "明天",
+        value: (function () {
+          var now = new Date();
+          now.setDate(now.getDate() + 1);
+          return now;
+        })()
+      },
+      {
+        text: "上个月",
+        value: (function () {
+          var now = new Date();
+          // now.setDate(now.getDate() - 1);
+          now.setMonth(now.getMonth() - 1);
+          return [now];
+        })()
+      },
+      {
+        text: "上个月的前一天",
+        value: (function () {
+          var now = new Date();
+          now.setMonth(now.getMonth() - 1);
+          now.setDate(now.getDate() - 1);
+          return [now];
+        })()
+      },
+      {
+        text: "某一天",
+        value: "2020-12-12"
+      }
+    ]
+  })
+
+
   
   //年选择器
   laydate.render({
