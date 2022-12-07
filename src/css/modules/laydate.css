@@ -77,9 +77,9 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-footer-btns span{margin: 0 0 0 -1px;}
 
 /* 快捷栏 */
-.layui-laydate-shortcut{width: 80px;display: inline-block;vertical-align: top;overflow: auto;max-height: 276px;}
+.layui-laydate-shortcut{width: 80px; padding: 6px 0; display: inline-block;vertical-align: top;overflow: auto; max-height: 276px;}
 .layui-laydate-shortcut+.layui-laydate-main{display: inline-block;border-left: 1px solid #e2e2e2;}
-.layui-laydate-shortcut>li{padding: 6px;cursor: pointer;line-height: 18px;}
+.layui-laydate-shortcut>li{padding: 5px 8px; cursor: pointer;line-height: 18px;}
 
 /* 年月列表 */
 .layui-laydate-list{position: absolute; left: 0; top: 0; width: 100%; height: 100%; padding: 10px; box-sizing: border-box; background-color: #fff;}
