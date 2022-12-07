@@ -1697,7 +1697,8 @@
     if(td.hasClass(DISABLED)) return;
 
     var that = this
-    ,options = that.config;
+    ,options = that.config
+    ,panelIndex = index; // 记录点击的是哪一个面板的
 
     if (that.rangeLinked) {
       if (that.endState || !that.startDate) {
@@ -1762,7 +1763,7 @@
         if (that.endState && that.autoCalendarModel.auto) {
           isChange = that.autoCalendarModel();
         }
-        if (that.rangeLinked && that.endState && that.newDate(that.startDate) > that.newDate(that.endDate)) {
+        if ((isChange || that.rangeLinked && that.endState) && that.newDate(that.startDate) > that.newDate(that.endDate)) {
           var isSameDate = that.startDate.year === that.endDate.year && that.startDate.month === that.endDate.month && that.startDate.date === that.endDate.date;
           // 判断是否反选
           var startDate = that.startDate;
@@ -1777,7 +1778,21 @@
         }
         isChange && (options.dateTime = lay.extend({}, that.startDate));
       }
-      that.calendar(null, that.rangeLinked ? null : index, isChange || that.rangeLinked ? 'init' : null).done(null, 'change');
+      if (that.rangeLinked) {
+        var dateTimeTemp = lay.extend({}, dateTime);
+        if (panelIndex && !index && !isChange) { // 处理可能出现的联动面板中点击右面板但是判定为开始日期这个时候点击头部的切换上下月第一次没有反应的问题
+          // 选择了右面板但是判断之后作为开始时间
+          var YM = that.getAsYM(dateTime.year, dateTime.month, 'sub');
+          lay.extend(options.dateTime, {
+            year: YM[0]
+            ,month: YM[1]
+          });
+        }
+        that.calendar(dateTimeTemp, panelIndex, isChange ? 'init' : null);
+      } else {
+        that.calendar(null, index, isChange ? 'init' : null);
+      }
+      that.endState && that.done(null, 'change');
     } else if(options.position === 'static'){ //直接嵌套的选中
       that.calendar().done().done(null, 'change'); //同时执行 done 和 change 回调
     } else if(options.type === 'date'){
