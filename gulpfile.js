@@ -124,9 +124,9 @@ exports.layer = () => { // gulp layer
 // laydate task
 exports.laydate = () => { // gulp laydate
   let dest = './release/laydate/'; // 发行目录
-  let comment = [ //注释
-    '\n/*! \n * <%= title %> \n * <%= license %> Licensed \n */ \n\n'
-    ,{title: 'layDate 日期与时间组件（单独版）', license: 'MIT'}
+  let comment = [ // 注释
+    '\n/** \n * <%= title %> \n * <%= license %> Licensed \n */ \n\n'
+    ,{title: 'laydate 日期与时间组件（单独版）', license: 'MIT'}
   ];
   
   // css
