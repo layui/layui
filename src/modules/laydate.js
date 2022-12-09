@@ -607,7 +607,7 @@
             that.choose(lay(elem).find('td.layui-this'))
           } else if (type === 'year' || type === 'month') {
             if(lay(elemMain[0]).find('.' + ELEM_MAIN + ' li.' + THIS + ':not(.laydate-disabled)')[0]) {
-              that.setValue(that.parse()).remove().done();
+              that.setValue(that.parse()).done().remove();
             }
           }
         }
@@ -1412,7 +1412,7 @@
         //且在范围未开启时
         if(!options.range && options.autoConfirm){
           if((options.type === 'month' && type === 'month') || (options.type === 'year' && type === 'year')){
-            that.setValue(that.parse()).remove().done();
+            that.setValue(that.parse()).done().remove();
           }
         }
         
@@ -1814,7 +1814,7 @@
     } else if(options.position === 'static'){ //直接嵌套的选中
       that.calendar().done().done(null, 'change'); //同时执行 done 和 change 回调
     } else if(options.type === 'date'){
-      options.autoConfirm ? that.setValue(that.parse()).remove().done() : that.calendar().done(null, 'change');
+      options.autoConfirm ? that.setValue(that.parse()).done().remove() : that.calendar().done(null, 'change');
     } else if(options.type === 'datetime'){
       that.calendar().done(null, 'change');
     }
@@ -1854,8 +1854,8 @@
           ,delete that.startTime
           ,delete that.endTime
         );
-        that.setValue('').remove();
-        that.done(['', {}, {}]);
+        that.setValue('');
+        that.done(['', {}, {}]).remove();
       }
       
       // 现在
@@ -1873,9 +1873,9 @@
           ,seconds: thisDate.getSeconds()
         });
 
-        that.setValue(that.parse()).remove();
+        that.setValue(that.parse());
         isStatic && that.calendar();
-        that.done();
+        that.done().remove();
       }
       
       //确定
@@ -1888,8 +1888,8 @@
           if(lay(btn).hasClass(DISABLED)) return that.hint(lang.invalidDate);
         }
         
-        that.setValue(that.parse()).remove();
-        that.done();
+        that.setValue(that.parse());
+        that.done().remove();
       }
     };
     active[type] && active[type]();
