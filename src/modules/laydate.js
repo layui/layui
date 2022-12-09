@@ -1,4 +1,4 @@
-/** layDate 日期与时间控件 | MIT Licensed */
+/** laydate 日期与时间控件 | MIT Licensed */
 
 ;!function(window, document){ //gulp build: laydate-header
   "use strict";
@@ -24,7 +24,7 @@
   
   // 外部调用
   var laydate = {
-    v: '5.4.0' // layDate 版本号
+    v: '5.5.0' // layDate 版本号
     ,config: {
       weekStart: 0, // 默认周日一周的开始
     } // 全局配置项
@@ -1613,7 +1613,7 @@
     }, 300);
   };
 
-  // 附加的渲染处理，在ready和change的时候调用
+  // 附加的渲染处理，在 ready 和 change 的时候调用
   Class.prototype.renderAdditional = function(){
     var that = this;
     var options = that.config;
@@ -1624,7 +1624,7 @@
     }
   };
 
-  //标记范围内的日期
+  // 标记范围内的日期
   Class.prototype.stampRange = function(){
     var that = this
       ,options = that.config
