@@ -1601,16 +1601,17 @@
     var elemPreview =  lay(that.elem).find('.'+ ELEM_PREVIEW)
     ,value = options.range ? ((that.rangeLinked ? that.endState : that.endDate) ? that.parse() : '') : that.parse();
     
-    //显示预览
-    var oldValue = elemPreview.html();
+    // 显示预览
     elemPreview.html(value);
-    oldValue && // 如果一开始有内容的时候才需要有一个变化过程
-    (elemPreview.css({
+    
+    // 预览颜色渐变
+    var oldValue = elemPreview.html();
+    oldValue && (elemPreview.css({
       'color': '#5FB878'
     }),
     setTimeout(function(){
       elemPreview.css({
-        'color': '#666'
+        'color': '#777'
       });
     }, 300));
   };
