@@ -1602,9 +1602,12 @@
     ,value = options.range ? ((that.rangeLinked ? that.endState : that.endDate) ? that.parse() : '') : that.parse();
     
     //显示预览
-    elemPreview.html(value).css({
+    var oldValue = elemPreview.html();
+    elemPreview.html(value);
+    oldValue && // 如果一开始有内容的时候才需要有一个变化过程
+    elemPreview.css({
       'color': '#5FB878'
-    });
+    }),
     setTimeout(function(){
       elemPreview.css({
         'color': '#666'
