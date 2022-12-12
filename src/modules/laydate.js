@@ -1605,14 +1605,14 @@
     var oldValue = elemPreview.html();
     elemPreview.html(value);
     oldValue && // 如果一开始有内容的时候才需要有一个变化过程
-    elemPreview.css({
+    (elemPreview.css({
       'color': '#5FB878'
     }),
     setTimeout(function(){
       elemPreview.css({
         'color': '#666'
       });
-    }, 300);
+    }, 300));
   };
 
   // 附加的渲染处理，在 ready 和 change 的时候调用
