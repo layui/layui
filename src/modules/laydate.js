@@ -977,7 +977,7 @@
 
     that.startDate = that.startDate || value && lay.extend({}, options.dateTime); // 有默认值才初始化startDate
     that.autoCalendarModel.auto && that.autoCalendarModel();
-    that.endState = !that.rangeLinked || !!(that.startDate && that.endDate); // 初始化选中范围状态
+    that.endState = !options.range || !that.rangeLinked || !!(that.startDate && that.endDate); // 初始化选中范围状态
 
     fn && fn();
     return that;
@@ -1401,7 +1401,6 @@
           }
         } else {
           that.checkDate('limit').calendar(dateTime, index, 'init'); // 重新渲染一下两个面板
-          that.rangeLinked || that.choose(lay(elemCont).find('td.layui-this'), index);
           that.closeList();
         }
 
@@ -1415,8 +1414,8 @@
             that.setValue(that.parse()).done().remove();
           }
         }
-        
-        that.done(null, 'change');
+
+        (that.autoCalendarModel.auto && !that.rangeLinked) ? that.choose(lay(elemCont).find('td.layui-this'), index) : (that.endState && that.done(null, 'change'));
         lay(that.footer).find('.'+ ELEM_TIME_BTN).removeClass(DISABLED);
       });
     } else { //时间选择面板 - 选择事件
@@ -1603,14 +1602,17 @@
     ,value = options.range ? ((that.rangeLinked ? that.endState : that.endDate) ? that.parse() : '') : that.parse();
     
     //显示预览
-    elemPreview.html(value).css({
+    var oldValue = elemPreview.html();
+    elemPreview.html(value);
+    oldValue && // 如果一开始有内容的时候才需要有一个变化过程
+    (elemPreview.css({
       'color': '#5FB878'
-    });
+    }),
     setTimeout(function(){
       elemPreview.css({
         'color': '#666'
       });
-    }, 300);
+    }, 300));
   };
 
   // 附加的渲染处理，在 ready 和 change 的时候调用
@@ -1946,8 +1948,8 @@
         } else {
           dateTime.year--;
           that.checkDate('limit').calendar(null, index);
-          that.choose(lay(elemCont).find('td.layui-this'), index);
-          that.done(null, 'change');
+          // 面板自动切换的模式下重新判定是否发生模式转换等细节处理
+          that.autoCalendarModel.auto ? that.choose(lay(elemCont).find('td.layui-this'), index) : that.done(null, 'change');
         }
       }
       ,prevMonth: function(){
@@ -1962,8 +1964,7 @@
 
         that.checkDate('limit').calendar(null, null, 'init');
         if (!that.rangeLinked) {
-          that.choose(lay(elemCont).find('td.layui-this'), index);
-          that.done(null, 'change');
+          that.autoCalendarModel.auto ? that.choose(lay(elemCont).find('td.layui-this'), index) : that.done(null, 'change');
         }
       }
       ,nextMonth: function(){
@@ -1978,8 +1979,7 @@
 
         that.checkDate('limit').calendar(null, null, 'init');
         if (!that.rangeLinked) {
-          that.choose(lay(elemCont).find('td.layui-this'), index);
-          that.done(null, 'change');
+          that.autoCalendarModel.auto ? that.choose(lay(elemCont).find('td.layui-this'), index) : that.done(null, 'change');
         }
       }
       ,nextYear: function(){
@@ -1990,8 +1990,7 @@
         } else {
           dateTime.year++;
           that.checkDate('limit').calendar(null, index);
-          that.choose(lay(elemCont).find('td.layui-this'), index);
-          that.done(null, 'change');
+          that.autoCalendarModel.auto ? that.choose(lay(elemCont).find('td.layui-this'), index) : that.done(null, 'change');
         }
       }
     };
