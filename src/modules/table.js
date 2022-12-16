@@ -2498,9 +2498,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
                 return;
               }
 
-              var content = item1[item3.field]
-              ,td = thatTable.layBody.find('tr[data-index="'+ i1 +'"]>td');
-
+              var content = item1[item3.field];
               if(content === undefined || content === null) content = '';
               
               i1 == 0 && dataTitle.push(item3.fieldTitle || item3.title || item3.field || '');
@@ -2509,11 +2507,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
                 ,content: content
                 ,tplData: item1
                 ,text: 'text'
-                ,obj: thatTable.commonMember.call(td.eq(0), {
+                ,obj: {
                   td: function(field){
+                    var td = thatTable.layBody.find('tr[data-index="'+ i1 +'"]>td');
                     return td.filter('[data-field="'+ field +'"]');
                   }
-                })
+                }
               }) + '"');
             }
           });
