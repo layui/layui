@@ -633,11 +633,18 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-text pre:not(.layui-code){padding: 15px; font-family: Lucida Console,Consolas,Courier New; background-color: #FAFAFA;}
 
 /* 字体大小及颜色 */
-.layui-font-12{font-size: 12px !important;;}
+.layui-font-12{font-size: 12px !important;}
+.layui-font-13{font-size: 13px !important;}
 .layui-font-14{font-size: 14px !important;}
 .layui-font-16{font-size: 16px !important;}
 .layui-font-18{font-size: 18px !important;}
 .layui-font-20{font-size: 20px !important;}
+.layui-font-22{font-size: 22px !important;}
+.layui-font-24{font-size: 24px !important;}
+.layui-font-26{font-size: 26px !important;}
+.layui-font-28{font-size: 28px !important;}
+.layui-font-30{font-size: 30px !important;}
+.layui-font-32{font-size: 32px !important;}
 
 .layui-font-red{color: #FF5722 !important;} /*赤*/
 .layui-font-orange{color: #FFB800!important;} /*橙*/
@@ -918,7 +925,6 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-total tr,
 .layui-table-patch,
 .layui-table-mend,
-.layui-table tbody tr:hover,
 .layui-table-hover,
 .layui-table-click{background-color: #FAFAFA;}
 
