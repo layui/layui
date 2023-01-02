@@ -556,6 +556,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /* 其它辅助 */
 .layui-auxiliar-moving{position: fixed; left: 0; right: 0; top: 0; bottom: 0; width: 100%; height: 100%; background: none; z-index: 9999999999;}
+.layui-scollbar-hide{overflow: hidden !important;}
 
 
 /* 
