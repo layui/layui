@@ -606,13 +606,13 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-timeline-item:before{background-color: #eee;}
 
 /* 文本区域 */
-.layui-text{line-height: 1.6; font-size: 14px; color: #5F5F5F;}
+.layui-text{line-height: 1.8; font-size: 14px;}
 .layui-text h1,
 .layui-text h2,
 .layui-text h3,
 .layui-text h4,
 .layui-text h5,
-.layui-text h6{font-weight: 500; color: #333;}
+.layui-text h6{font-weight: 500; color: #3A3A3A;}
 .layui-text h1{font-size: 32px;}
 .layui-text h2{font-size: 24px;}
 .layui-text h3{font-size: 18px;}
@@ -622,7 +622,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-text a:not(.layui-btn){color: #01AAED;}
 .layui-text a:not(.layui-btn):hover{text-decoration: underline;}
 .layui-text ul,
-.layui-text ol{padding: 5px 0 5px 15px;}
+.layui-text ol{padding-left: 15px;}
 .layui-text ul li{margin-top: 5px; list-style-type: disc;}
 .layui-text ol li{margin-top: 5px; list-style-type: decimal;}
 .layui-text em,
@@ -631,7 +631,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-text p:first-child{margin-top: 0;}
 .layui-text p:last-child{margin-bottom: 0;}
 .layui-text blockquote:not(.layui-elem-quote){padding: 5px 15px; border-left: 5px solid #eee;}
-.layui-text pre:not(.layui-code){padding: 15px; font-family: Lucida Console,Consolas,Courier New; background-color: #FAFAFA;}
+.layui-text pre > code:not(.layui-code){padding: 15px; font-family: Lucida Console,Consolas,Courier New; background-color: #FAFAFA;}
 
 /* 字体大小及颜色 */
 .layui-font-12{font-size: 12px !important;}
