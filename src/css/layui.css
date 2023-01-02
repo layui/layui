@@ -917,7 +917,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /** 表格 **/
 .layui-table{width: 100%; margin: 10px 0; background-color: #fff; color: #5F5F5F;}
 .layui-table tr{transition: all .3s; -webkit-transition: all .3s;}
-.layui-table th{text-align: left; font-weight: 400;}
+.layui-table th{text-align: left; font-weight: 600;}
 
 .layui-table thead tr,
 .layui-table-header,
@@ -925,7 +925,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-total,
 .layui-table-total tr,
 .layui-table-patch,
-.layui-table-mend,
+.layui-table-mend{}
 .layui-table-hover,
 .layui-table-click{background-color: #FAFAFA;}
 
