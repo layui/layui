@@ -766,7 +766,7 @@ layui.define(['layer', 'util'], function(exports){
       var othis = $(this);
       var verifyStr = othis.attr('lay-verify') || '';
       var vers = verifyStr.split('|');
-      var verType = othis.attr('lay-verType'); // 提示方式
+      var verType = othis.attr('lay-vertype'); // 提示方式
       var value = othis.val();
 
       othis.removeClass(DANGER); // 移除警示样式
@@ -791,7 +791,7 @@ layui.define(['layer', 'util'], function(exports){
           errorText = errorText || rule[1];
           
           if(thisVer === 'required'){
-            errorText = othis.attr('lay-reqText') || errorText;
+            errorText = othis.attr('lay-reqtext') || errorText;
           }
           
           // 若为必填项或者非空命中校验，则阻止提交，弹出提示
