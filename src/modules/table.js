@@ -1039,7 +1039,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     var thisCheckedRowIndex;
     if(!sort && that.sortKey){
-      return that.sort(that.sortKey.field, that.sortKey.sort, true);
+      return that.sort(that.sortKey.field, that.sortKey.sort, true, null, type);
     }
     layui.each(data, function(i1, item1){
       var tds = [], tds_fixed = [], tds_fixed_r = []
@@ -1382,7 +1382,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   };
   
   //数据排序
-  Class.prototype.sort = function(th, type, pull, formEvent){
+  Class.prototype.sort = function(th, type, pull, formEvent, reloadType){
     var that = this
     ,field
     ,res = {}
@@ -1449,7 +1449,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       curr: that.page, 
       count: that.count, 
       sort: true,
-      type: formEvent ? '' : 'reloadData' // 通过按钮触发排序会默认回滚到顶部否则根据情况处理
+      type: formEvent ? '' : reloadType // 通过按钮触发排序会默认回滚到顶部否则根据情况处理
     });
     
     if(formEvent){
