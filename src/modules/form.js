@@ -158,73 +158,106 @@ layui.define(['layer', 'util'], function(exports){
         // 初始化全局的 autocomplete
         options.autocomplete && inputs.attr('autocomplete', options.autocomplete);
 
-        // 初始化 input 套件
+        // 初始化输入框动态点缀
         elemForm.find('input[lay-affix],textarea[lay-affix]').each(function(){
           var othis = $(this);
           var affix = othis.attr('lay-affix');
           var CLASS_SUFFIX = 'layui-input-suffix';
-          var elemNext = othis.next('.'+ CLASS_SUFFIX);
+          var CLASS_AFFIX = 'layui-input-affix';
           var disabled = othis.is('[disabled]') || othis.is('[readonly]');
-          var hideElem = function(elem, value){
-            if(!elem) return;
+
+          // 根据是否空值来显示或隐藏元素
+          var showAffix = function(elem, value){
+            elem = $(elem);
+            if(!elem[0]) return;
             elem[$.trim(value) ? 'removeClass' : 'addClass'](HIDE);
           };
-          var renderSuffix = function(type, _disabled){
-            elemNext.remove();
-            elemNext = $(['<div class="layui-input-suffix layui-input-affix-event"'+ (
-              _disabled ? ' disabled' : ''
-            ) +'>'
-              ,'<i class="layui-icon layui-icon-'+ type + (
-                _disabled ? ' layui-disabled' : ''
-              ) +'"></i>'
-            ,'</div>'].join(''));
+
+          // 渲染动态点缀内容
+          var renderAffix = function(){
+            var opts = affixOptions[affix] || {
+              value: affix
+            };
+            var elemAffix = $('<div class="'+ CLASS_AFFIX +'">');
+            var elemIcon = $('<i class="layui-icon layui-icon-'+ opts.value + (
+              opts.disabled ? (' '+ DISABLED) : ''
+            ) +'"></i>');
             
-            othis.after(elemNext);
-            hideElem(elemNext, othis.val());
+            elemAffix.append(elemIcon);
+
+            // 移除旧的元素
+            var hasElemAffix = othis.next('.'+ CLASS_AFFIX);
+            if(hasElemAffix[0]) hasElemAffix.remove();
+
+            // 是否已经存在后缀元素
+            var hasElemSuffix = othis.next('.'+ CLASS_SUFFIX);
+            if(hasElemSuffix[0]){
+              hasElemAffix = hasElemSuffix.find('.'+ CLASS_AFFIX);
+              if(hasElemAffix[0]) hasElemAffix.remove();
+
+              hasElemSuffix.prepend(elemAffix);
+
+              othis.css('padding-right', function(){
+                var paddingRight = othis.closest('.layui-input-group')[0] 
+                  ? 0 
+                : hasElemSuffix.outerWidth();
+                return paddingRight + elemAffix.outerWidth()
+              });
+            } else {
+              elemAffix.addClass(CLASS_SUFFIX);
+              othis.after(elemAffix);
+            }
+
+            opts.show === 'auto' && showAffix(elemAffix, othis.val());
             
             // 输入事件
             othis.on('input propertychange', function(){
               var value = this.value;
-              hideElem(elemNext, value);
+              opts.show === 'auto' && showAffix(elemAffix, value);
             });
             
-            // 点击后缀套件事件
-            elemNext.on('click', function(){
-              var filter = othis.attr('lay-filter');
-              if($(this).is('[disabled]')) return;
-              obj[affix] && obj[affix][1].call(this);
+            // 点击动态后缀事件
+            elemIcon.on('click', function(){
+              var inputFilter = othis.attr('lay-filter');
+              if($(this).hasClass(DISABLED)) return;
+              
+              typeof opts.click === 'function' && opts.click.call(this, othis, opts);
               
               // 对外事件
-              layui.event.call(this, MOD_NAME, 'input-affix('+ filter +')', {
-                elem: othis[0]
-                ,affix: affix
+              layui.event.call(this, MOD_NAME, 'input-affix('+ inputFilter +')', {
+                elem: othis[0],
+                affix: affix,
+                options: opts
               });
             });
           };
           
-          // 渲染内置套件
-          var obj = {
-            // 清空
-            clear: [function(){ // 渲染
-              renderSuffix('clear', disabled);
-            }, function(){ // 事件
-              othis.val('').focus();
-              hideElem(elemNext, null);
-            }]
-            
-            // 密码显隐
-            ,eye: [function(){ // 渲染
-              renderSuffix('eye-invisible');
-            }, function(){ // 事件
-              var SHOW_NAME = 'LAY_FORM_INPUT_AFFIX_SHOW';
-              var isShow = othis.data(SHOW_NAME);
-              
-              othis.attr('type', isShow ? 'password' : 'text').data(SHOW_NAME, !isShow);
-              renderSuffix(isShow ? 'eye-invisible' : 'eye');
-            }]
+          // 动态点缀配置项
+          var affixOptions = {
+            eye: { // 密码显隐
+              value: 'eye-invisible',
+              click: function(elem, opts){ // 事件
+                var SHOW_NAME = 'LAY_FORM_INPUT_AFFIX_SHOW';
+                var isShow = elem.data(SHOW_NAME);
+                
+                elem.attr('type', isShow ? 'password' : 'text').data(SHOW_NAME, !isShow);
+
+                opts.value = isShow ? 'eye-invisible' : 'eye';
+                renderAffix();
+              }
+            },
+            clear: { // 内容清除
+              value: 'clear',
+              click: function(elem){
+                elem.val('').focus();
+                showAffix($(this).parent(), null);
+              },
+              show: 'auto', // 根据输入框值是否来显示或隐藏点缀图标
+              disabled: disabled // 跟随输入框禁用状态
+            }
           };
           
-          obj[affix] && obj[affix][0]();
+          renderAffix();
         });
       }
       
