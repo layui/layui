@@ -745,31 +745,42 @@ layui.define(['layer', 'util'], function(exports){
         });
       }
     };
-    if (layui.type(type) === 'object') {
-      // jquery 对象
-      type.each(function (index, item) {
-        var elem = $(item);
-        if (!elem.closest(ELEM).length) {
-          // 如果不是存在layui-form中的直接跳过
-          return;
-        }
-        if (item.tagName === 'SELECT') {
-          items['select'](elem);
-        } else if (item.tagName === 'INPUT') {
-          var itemType = item.type;
-          if (itemType === 'checkbox' || itemType === 'radio') {
-            items[itemType](elem);
-          } else {
-            items['input'](elem);
-          }
-        }
+
+    // 执行所有渲染项
+    var renderItem = function(){
+      layui.each(items, function(index, item){
+        item();
       });
+    };
+
+    // jquery 对象
+    if (layui.type(type) === 'object') {
+      // 若对象为表单域容器
+      if($(type).is(ELEM)){
+        elemForm = $(type);
+        renderItem();
+      } else { // 对象为表单项
+        type.each(function (index, item) {
+          var elem = $(item);
+          if (!elem.closest(ELEM).length) {
+            return; // 若不在 layui-form 容器中直接跳过
+          }
+          if (item.tagName === 'SELECT') {
+            items['select'](elem);
+          } else if (item.tagName === 'INPUT') {
+            var itemType = item.type;
+            if (itemType === 'checkbox' || itemType === 'radio') {
+              items[itemType](elem);
+            } else {
+              items['input'](elem);
+            }
+          }
+        });
+      }
     } else {
       type ? (
         items[type] ? items[type]() : hint.error('不支持的 "'+ type + '" 表单渲染')
-      ) : layui.each(items, function(index, item){
-        item();
-      });
+      ) : renderItem();
     }
     return that;
   };
