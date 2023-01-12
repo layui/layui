@@ -1957,12 +1957,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         }
         ,update: function(fields, related){ //修改行数据
           fields = fields || {};
+          var trThat = this;
           layui.each(fields, function(key, value){
             var td = tr.children('td[data-field="'+ key +'"]');
             var cell = td.children(ELEM_CELL); //获取当前修改的列
 
             // 更新缓存中的数据
-            if(key in data) data[key] = value;
+            if(key in data) trThat.data[key] = data[key] = value;
 
             // 更新相应列视图
             that.eachCols(function(i, item3){
