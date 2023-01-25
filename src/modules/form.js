@@ -2,7 +2,7 @@
  * form 表单组件
  */
  
-layui.define(['layer', 'util'], function(exports){
+layui.define(['lay', 'layer', 'util'], function(exports){
   "use strict";
   
   var $ = layui.$;
@@ -174,16 +174,17 @@ layui.define(['layer', 'util'], function(exports){
           };
 
           // 渲染动态点缀内容
-          var renderAffix = function(){
-            var opts = affixOptions[affix] || {
+          var renderAffix = function(opts){
+            opts = $.extend({}, (affixOptions[affix] || {
               value: affix
-            };
+            }), opts, lay.options(othis[0]));
             var elemAffix = $('<div class="'+ CLASS_AFFIX +'">');
             var elemIcon = $('<i class="layui-icon layui-icon-'+ opts.value + (
               opts.disabled ? (' '+ DISABLED) : ''
             ) +'"></i>');
             
             elemAffix.append(elemIcon);
+            if(opts.split) elemAffix.addClass('layui-input-split');
 
             // 移除旧的元素
             var hasElemAffix = othis.next('.'+ CLASS_AFFIX);
@@ -242,8 +243,9 @@ layui.define(['layer', 'util'], function(exports){
                 
                 elem.attr('type', isShow ? 'password' : 'text').data(SHOW_NAME, !isShow);
 
-                opts.value = isShow ? 'eye-invisible' : 'eye';
-                renderAffix();
+                renderAffix({
+                  value: isShow ? 'eye-invisible' : 'eye'
+                });
               }
             },
             clear: { // 内容清除
@@ -627,16 +629,16 @@ layui.define(['layer', 'util'], function(exports){
           // 勾选
           reElem.on('click', function(){
             var filter = check.attr('lay-filter') // 获取过滤器
-            ,text = (check.attr('lay-text')||'').split('|');
+            var title = (check.attr('title')||'').split('|');
 
             if(check[0].disabled) return;
             
             check[0].checked ? (
               check[0].checked = false
-              ,reElem.removeClass(RE_CLASS[1]).find('em').text(text[1])
+              ,reElem.removeClass(RE_CLASS[1]).find('em').text(title[1])
             ) : (
               check[0].checked = true
-              ,reElem.addClass(RE_CLASS[1]).find('em').text(text[0])
+              ,reElem.addClass(RE_CLASS[1]).find('em').text(title[0])
             );
             
             layui.event.call(check[0], MOD_NAME, RE_CLASS[2]+'('+ filter +')', {
@@ -648,9 +650,12 @@ layui.define(['layer', 'util'], function(exports){
         }
         
         checks.each(function(index, check){
-          var othis = $(this), skin = othis.attr('lay-skin')
-          ,text = (othis.attr('lay-text') || '').split('|'), disabled = this.disabled;
-          if(skin === 'switch') skin = '_'+skin;
+          var othis = $(this);
+          var skin = othis.attr('lay-skin') || 'primary';
+          var title = (check.title.replace(/\s/g, '') || '').split('|');
+          var disabled = this.disabled;
+
+          if(skin === 'switch') skin = '_'+ skin;
           var RE_CLASS = CLASS[skin] || CLASS.checkbox;
           
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
@@ -664,16 +669,15 @@ layui.define(['layer', 'util'], function(exports){
             ,(skin ? ' lay-skin="'+ skin +'"' : '') // 风格
           ,'>'
           ,function(){ // 不同风格的内容
-            var title = check.title.replace(/\s/g, '')
-            ,type = {
+            var type = {
               // 复选框
               checkbox: [
-                (title ? ('<span>'+ util.escape(check.title) +'</span>') : '')
+                (title[0] ? ('<span>'+ util.escape(title[0]) +'</span>') : '')
                 ,'<i class="layui-icon layui-icon-ok"></i>'
               ].join('')
               
               // 开关
-              ,_switch: '<em>'+ ((check.checked ? text[0] : text[1]) || '') +'</em><i></i>'
+              ,_switch: '<em>'+ ((check.checked ? title[0] : title[1]) || '') +'</em><i></i>'
             };
             return type[skin] || type['checkbox'];
           }()
