@@ -1340,6 +1340,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           if(typeof totalRow === 'string'){
             return laytpl(totalRow).render($.extend({
               TOTAL_NUMS: TOTAL_NUMS || totalNums[field],
+              TOTAL_ROW: totalRowData || {},
               LAY_COL: item3
             }, item3));
           }
@@ -2275,7 +2276,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     });
   })();
   
-  //初始化
+  // 初始化
   table.init = function(filter, settings){
     settings = settings || {};
     var that = this;
@@ -2347,7 +2348,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
         tableIns.reloadData({
           data: options.data
-        })
+        });
       }
     });
 
