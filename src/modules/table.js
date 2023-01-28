@@ -2530,15 +2530,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     if(device.ie) return hint.error('IE_NOT_SUPPORT_EXPORTS');
     
     alink.href = 'data:'+ textType +';charset=utf-8,\ufeff'+ encodeURIComponent(function(){
-      var dataTitle = []
-      ,dataMain = []
-      ,dataTotal = []
-      ,fieldsIsHide = {};
+      var dataTitle = [];
+      var dataMain = [];
+      var dataTotal = [];
+      var fieldsIsHide = {};
       
-      //表头和表体
+      // 表头和表体
       layui.each(data, function(i1, item1){
         var vals = [];
-        if(typeof id === 'object'){ //如果 id 参数直接为表头数据
+        if(typeof id === 'object'){ // 若 id 参数直接为表头数据
           layui.each(id, function(i, item){
             i1 == 0 && dataTitle.push(item || '');
           });
@@ -2548,9 +2548,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         } else {
           table.eachCols(id, function(i3, item3){
             if(item3.field && item3.type == 'normal'){
-              //不导出隐藏列
+              // 不导出隐藏列
               if(item3.hide){
-                if(i1 == 0) fieldsIsHide[item3.field] = true; //记录隐藏列
+                if(i1 == 0) fieldsIsHide[item3.field] = true; // 记录隐藏列
                 return;
               }
 
@@ -2558,7 +2558,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
               if(content === undefined || content === null) content = '';
               
               i1 == 0 && dataTitle.push(item3.fieldTitle || item3.title || item3.field || '');
-              vals.push('"'+ parseTempData.call(thatTable, {
+
+              // 解析内容
+              content = parseTempData.call(thatTable, {
                 item3: item3
                 ,content: content
                 ,tplData: item1
@@ -2569,7 +2571,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
                     return td.filter('[data-field="'+ field +'"]');
                   }
                 }
-              }) + '"');
+              });
+
+              // 异常处理
+              content = content.replace(/"/g, '""'); // 避免内容存在「双引号」导致异常分隔
+              content += '\t'; // 加「水平制表符」 避免内容被转换格式
+              content = '"'+ content +'"'; // 避免内容存在「逗号」导致异常分隔
+
+              // 插入内容
+              vals.push(content);
             }
           });
         }
@@ -2583,7 +2593,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       
       return dataTitle.join(',') + '\r\n' + dataMain.join('\r\n') + '\r\n' + dataTotal.join(',');
     }());
-
+    //return;
     alink.download = (options.title || config.title || 'table_'+ (config.index || '')) + '.' + type;
     document.body.appendChild(alink);
     alink.click();
@@ -2592,14 +2602,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   
   // 重置表格尺寸结构
   table.resize = function(id){
-    //如果指定表格唯一 id，则只执行该 id 对应的表格实例
+    // 若指定表格唯一 id，则只执行该 id 对应的表格实例
     if(id){
-      var config = getThisTableConfig(id); //获取当前实例配置项
+      var config = getThisTableConfig(id); // 获取当前实例配置项
       if(!config) return;
       
       getThisTable(id).resize();
       
-    } else { //否则重置所有表格实例尺寸
+    } else { // 否则重置所有表格实例尺寸
       layui.each(thisTable.that, function(){
         this.resize();
       });
