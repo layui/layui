@@ -1837,8 +1837,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 分页栏操作事件
     that.layPagebar.on('click', '*[lay-event]', function(e){
-      var othis = $(this)
-      ,events = othis.attr('lay-event');
+      var othis = $(this);
+      var events = othis.attr('lay-event');
       
       layui.event.call(this, MOD_NAME, 'pagebar('+ filter +')', $.extend({
         event: events
@@ -1993,24 +1993,26 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var data = table.cache[that.key] || [];
 
       data = data[index] || {};
-      
-      return $.extend({
+
+      // 事件返回的公共成员
+      var obj = {
         tr: tr //行元素
         ,config: options
         ,data: table.clearCacheKey(data) //当前行数据
+        ,index: index
         ,del: function(){ //删除行数据
           table.cache[that.key][index] = [];
           tr.remove();
           that.scrollPatch();
         }
-        ,update: function(fields, related){ //修改行数据
+        ,update: function(fields, related){ // 修改行数据
           fields = fields || {};
           layui.each(fields, function(key, value){
             var td = tr.children('td[data-field="'+ key +'"]');
             var cell = td.children(ELEM_CELL); //获取当前修改的列
 
             // 更新缓存中的数据
-            if(key in data) data[key] = value;
+            if(key in data) data[key] = obj.data[key] = value;
 
             // 更新相应列视图
             that.eachCols(function(i, item3){
@@ -2043,7 +2045,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
           that.renderForm();
         }
-      }, sets);
+        // 设置行选中状态
+        ,setRowChecked: function(checked){
+          that.setThisRowChecked(index, true);
+        }
+        // 获取当前列
+      };
+      
+      return $.extend(obj, sets);
     };
     
     // 复选框选择（替代元素的 click 事件）
@@ -2080,23 +2089,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       );
     });
     
-    //单选框选择
+    // 单选框选择
     that.elem.on('click', 'input[lay-type="layTableRadio"]+', function(){
-      var radio = $(this).prev()
-      ,checked = radio[0].checked
-      ,thisData = table.cache[that.key]
-      ,index = radio.parents('tr').eq(0).data('index');
-      
-      //重置数据单选属性
-      layui.each(thisData, function(i, item){
-        if(index === i){
-          item[options.checkName] = true;
-        } else {
-          delete item[options.checkName];
-        }
-      });
-      that.setThisRowChecked(index);
-      
+      var radio = $(this).prev();
+      var checked = radio[0].checked;
+      var index = radio.parents('tr').eq(0).data('index');
+
+      // 单选框选中状态
+      that.setThisRowChecked(index, true);
+      // 事件
       layui.event.call(this, MOD_NAME, 'radio('+ filter +')', commonMember.call(this, {
         checked: checked
       }));
@@ -2104,13 +2105,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     
     // 行事件
     that.layBody.on('mouseenter', 'tr', function(){ //鼠标移入行
-      var othis = $(this)
-      ,index = othis.index();
+      var othis = $(this);
+      var index = othis.index();
       if(othis.data('off')) return; //不触发事件
       that.layBody.find('tr:eq('+ index +')').addClass(ELEM_HOVER)
     }).on('mouseleave', 'tr', function(){ //鼠标移出行
-      var othis = $(this)
-      ,index = othis.index();
+      var othis = $(this);
+      var index = othis.index();
       if(othis.data('off')) return; //不触发事件
       that.layBody.find('tr:eq('+ index +')').removeClass(ELEM_HOVER)
     }).on('click', 'tr', function(){ //单击行
@@ -2124,8 +2125,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var othis = $(this);
       if(othis.data('off')) return; //不触发事件
       layui.event.call(this,
-        MOD_NAME, eventType + '('+ filter +')'
-        ,commonMember.call(othis.children('td')[0])
+        MOD_NAME, eventType + '('+ filter +')',
+        commonMember.call(othis.children('td')[0])
       );
     };
     
@@ -2176,11 +2177,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       //事件回调的参数对象
       var params = commonMember.call(td[0], {
-        value: value
-        ,field: field
-        ,oldValue: data[field] // 编辑前的值
-        ,td: td
-        ,reedit: function(){ // 重新编辑
+        value: value,
+        field: field,
+        oldValue: data[field], // 编辑前的值
+        td: td,
+        reedit: function(){ // 重新编辑
           setTimeout(function(){
             // 重新渲染为编辑状态
             renderGridEdit(params.td);
@@ -2330,9 +2331,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     settings = settings || {};
     var that = this;
     var inst = null;
-    var elemTable = filter
-      ? $('table[lay-filter="'+ filter +'"]')
-    : $(ELEM + '[lay-data], '+ ELEM + '[lay-options]');
+    var elemTable = typeof filter === 'object' ? filter : (
+      typeof filter === 'string'
+        ? $('table[lay-filter="'+ filter +'"]')
+      : $(ELEM + '[lay-data], '+ ELEM + '[lay-options]')
+    );
     var errorTips = 'Table element property lay-data configuration item has a syntax error: ';
 
     //遍历数据表格
