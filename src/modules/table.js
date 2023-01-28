@@ -19,10 +19,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   // api
   var table = {
     config: { // 全局配置项
-      checkName: 'LAY_CHECKED' // 是否选中状态的字段名
+      checkName: 'LAY_CHECKED' // 是否选中状态的特定字段名
       ,indexName: 'LAY_TABLE_INDEX' // 初始下标索引名，用于恢复当前页表格排序
       ,numbersName: 'LAY_INDEX' // 序号
-      ,disabledName: 'LAY_DISABLED'
+      ,disabledName: 'LAY_DISABLED' // 禁用状态的特定字段名
     }
     ,cache: {} // 数据缓存
     ,index: layui.table ? (layui.table.index + 10000) : 0
@@ -908,7 +908,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var response = options.response;
     var sort = function(){
       if(typeof options.initSort === 'object'){
-        that.sort(options.initSort.field, options.initSort.type);
+        that.sort({
+          field: options.initSort.field, 
+          type: options.initSort.type,
+          reloadType: opts.type
+        });
       }
     };
 
@@ -1048,7 +1052,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       var thisCheckedRowIndex;
       if(!sort && that.sortKey){
-        return that.sort(that.sortKey.field, that.sortKey.sort, true);
+        return that.sort({
+          field: that.sortKey.field, 
+          type: that.sortKey.sort, 
+          pull: true,
+          reloadType: opts.type
+        });
       }
       layui.each(data, function(i1, item1){
         var tds = [], tds_fixed = [], tds_fixed_r = []
@@ -1371,33 +1380,54 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     form.render(type, filter);
   };
   
-  //标记当前行选中状态
-  Class.prototype.setThisRowChecked = function(index){
-    var that = this
-    ,options = that.config
-    ,ELEM_CLICK = 'layui-table-click'
-    ,tr = that.layBody.find('tr[data-index="'+ index +'"]');
+  // 标记当前行选中状态
+  Class.prototype.setThisRowChecked = function(index, dataChecked){
+    var that = this;
+    var options = that.config;
+    var ELEM_CLICK = 'layui-table-click';
+    var tr = that.layBody.find('tr[data-index="'+ index +'"]');
+
+    // 同步数据选中属性值
+    if(dataChecked){
+      var thisData = table.cache[that.key];
+      
+      // 重置数据单选选中属性
+      layui.each(thisData, function(i, item){
+        if(index === i){
+          item[options.checkName] = true;
+        } else {
+          delete item[options.checkName];
+        }
+      });
+
+      // 若存在单选框，则标注单选框选中样式
+      tr.find('input[lay-type="layTableRadio"]').prop('checked', true);
+      that.renderForm('radio');
+    }
     
+    // 选中样式
     tr.addClass(ELEM_CLICK).siblings('tr').removeClass(ELEM_CLICK);
   };
   
-  //数据排序
-  Class.prototype.sort = function(th, type, pull, formEvent){
-    var that = this
-    ,field
-    ,res = {}
-    ,options = that.config
-    ,filter = options.elem.attr('lay-filter')
-    ,data = table.cache[that.key], thisData;
+  // 数据排序
+  Class.prototype.sort = function(opts){ // field, type, pull, fromEvent
+    var that = this;
+    var field;
+    var res = {};
+    var options = that.config;
+    var filter = options.elem.attr('lay-filter');
+    var data = table.cache[that.key], thisData;
+
+    opts = opts || {};
     
-    //字段匹配
-    if(typeof th === 'string'){
-      field = th;
+    // 字段匹配
+    if(typeof opts.field === 'string'){
+      field = opts.field;
       that.layHeader.find('th').each(function(i, item){
         var othis = $(this)
         ,_field = othis.data('field');
-        if(_field === th){
-          th = othis;
+        if(_field === opts.field){
+          opts.field = othis;
           field = _field;
           return false;
         }
@@ -1405,37 +1435,37 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }
 
     try {
-      var field = field || th.data('field')
-      ,key = th.data('key');
+      var field = field || opts.field.data('field')
+      ,key = opts.field.data('key');
       
-      //如果欲执行的排序已在状态中，则不执行渲染
-      if(that.sortKey && !pull){
-        if(field === that.sortKey.field && type === that.sortKey.sort){
+      // 如果欲执行的排序已在状态中，则不执行渲染
+      if(that.sortKey && !opts.pull){
+        if(field === that.sortKey.field && opts.type === that.sortKey.sort){
           return;
         }
       }
 
       var elemSort = that.layHeader.find('th .laytable-cell-'+ key).find(ELEM_SORT);
-      that.layHeader.find('th').find(ELEM_SORT).removeAttr('lay-sort'); //清除其它标题排序状态
-      elemSort.attr('lay-sort', type || null);
+      that.layHeader.find('th').find(ELEM_SORT).removeAttr('lay-sort'); // 清除其它标题排序状态
+      elemSort.attr('lay-sort', opts.type || null);
       that.layFixed.find('th')
     } catch(e){
       hint.error('Table modules: sort field \''+ field +'\' not matched');
     }
     
-    //记录排序索引和类型
+    // 记录排序索引和类型
     that.sortKey = {
       field: field
-      ,sort: type
+      ,sort: opts.type
     };
     
-    //默认为前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
+    // 默认为前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
     if(options.autoSort){
-      if(type === 'asc'){ //升序
+      if(opts.type === 'asc'){ //升序
         thisData = layui.sort(data, field);
-      } else if(type === 'desc'){ //降序
+      } else if(opts.type === 'desc'){ //降序
         thisData = layui.sort(data, field, true);
-      } else { //清除排序
+      } else { // 清除排序
         thisData = layui.sort(data, table.config.indexName);
         delete that.sortKey;
         delete options.initSort;
@@ -1444,19 +1474,22 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     
     res[options.response.dataName] = thisData || data;
 
+    // 重载数据
     that.renderData({
       res: res, 
       curr: that.page, 
       count: that.count, 
-      sort: true
+      sort: true,
+      type: opts.reloadType
     });
     
-    if(formEvent){
+    // 排序是否来自于点击表头事件触发
+    if(opts.fromEvent){
       options.initSort = {
         field: field
-        ,type: type
+        ,type: opts.type
       };
-      layui.event.call(th, MOD_NAME, 'sort('+ filter +')', $.extend({
+      layui.event.call(opts.field, MOD_NAME, 'sort('+ filter +')', $.extend({
         config: options
       }, options.initSort));
     }
@@ -1923,16 +1956,28 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       } else {
         type = 'asc';
       }
-      that.sort(othis, type, null, true);
+      that.sort({
+        field: othis, 
+        type: type, 
+        fromEvent: true
+      });
     }).find(ELEM_SORT+' .layui-edge ').on('click', function(e){
       var othis = $(this)
       ,index = othis.index()
       ,field = othis.parents('th').eq(0).data('field')
       layui.stope(e);
       if(index === 0){
-        that.sort(field, 'asc', null, true);
+        that.sort({
+          field: field, 
+          type: 'asc', 
+          fromEvent: true
+        });
       } else {
-        that.sort(field, 'desc', null, true);
+        that.sort({
+          field: field, 
+          type: 'desc', 
+          fromEvent: true
+        });
       }
     });
     
