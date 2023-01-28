@@ -915,16 +915,17 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     // 事件
     return layui.event.call(this, MOD_NAME, 'submit('+ layFilter +')', params);
   };
-
-  // 自动完成渲染
-  var form = new Form()
-  ,$dom = $(document), $win = $(window);
   
+  var form = new Form();
+  var $dom = $(document);
+  var $win = $(window);
+  
+  // 初始自动完成渲染
   $(function(){
     form.render();
   });
   
-  // 表单reset重置渲染
+  // 表单 reset 重置渲染
   $dom.on('reset', ELEM, function(){
     var filter = $(this).attr('lay-filter');
     setTimeout(function(){
