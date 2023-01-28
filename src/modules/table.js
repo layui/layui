@@ -305,6 +305,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     ,cellMaxWidth: Number.MAX_VALUE // 所有单元格默认最大宽度
     ,editTrigger: 'click' // 单元格编辑的事件触发方式
     ,defaultToolbar: ['filter', 'exports', 'print'] // 工具栏右侧图标
+    ,defaultContextmenu: true // 显示默认上下文菜单
     ,autoSort: true // 是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
     ,text: {
       none: '无数据'
@@ -2118,9 +2119,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       setRowEvent.call(this, 'row');
     }).on('dblclick', 'tr', function(){ //双击行
       setRowEvent.call(this, 'rowDouble');
-    });
+    }).on('contextmenu', 'tr', function(e){ //菜单
+      if (!options.defaultContextmenu) e.preventDefault();
+      setRowEvent.call(this, 'contextmenu');
+    });;
     
-    // 创建行单击、双击事件
+    // 创建行单击、双击、菜单事件
     var setRowEvent = function(eventType){
       var othis = $(this);
       if(othis.data('off')) return; //不触发事件
