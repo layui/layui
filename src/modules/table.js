@@ -2191,6 +2191,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
             obj[field] = params.oldValue;
             params.update(obj);
           });
+        },
+        getCol: function(){ // 获取当前列的表头配置信息
+          return that.col(td.data('key'));
         }
       });
 
