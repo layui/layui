@@ -1090,9 +1090,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           if(item3.colGroup) return;
 
           // td 内容
-          var td = ['<td data-field="'+ field +'" data-key="'+ key +'" '+ function(){ //追加各种属性
+          var td = ['<td data-field="'+ field +'" data-key="'+ key +'" '+ function(){ 
+            //追加各种属性
             var attr = [];
-            if(item3.edit) attr.push('data-edit="true"'); // 允许单元格编辑
+            // 是否开启编辑。若 edit 传入函数，则根据函数的返回结果判断是否开启编辑
+            (function(edit){
+              if(edit) attr.push('data-edit="'+ edit +'"'); // 添加单元格编辑属性标识
+            })(typeof item3.edit === 'function' ? item3.edit(item1) : item3.edit);
             if(item3.templet) attr.push('data-content="'+ util.escape(content) +'"'); //自定义模板
             if(item3.toolbar) attr.push('data-off="true"'); //行工具列关闭单元格事件
             if(item3.event) attr.push('lay-event="'+ item3.event +'"'); //自定义事件
