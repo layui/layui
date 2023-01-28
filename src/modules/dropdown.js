@@ -10,7 +10,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
   ,laytpl = layui.laytpl
   ,hint = layui.hint()
   ,device = layui.device()
-  ,clickOrMousedown = (device.mobile ? 'click' : 'mousedown')
+  ,clickOrMousedown = (device.mobile ? 'touchstart' : 'mousedown')
   
   //模块名
   ,MOD_NAME = 'dropdown'
