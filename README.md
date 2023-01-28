@@ -16,10 +16,10 @@
     <img src="https://img.shields.io/github/license/layui/layui" alt="License">
   </a>
   <a href="https://github.com/layui/layui/blob/master/dist/css/layui.css">
-    <img src="https://img.badgesize.io/layui/layui/master/dist/css/layui.css?compression=brotli&label=CSS Brotli size" alt="CSS Brotli size">
+    <img src="https://img.badgesize.io/layui/layui/master/dist/css/layui.css?compression=brotli&label=CSS%20Brotli%20size" alt="CSS Brotli size">
   </a>
   <a href="https://github.com/layui/layui/blob/master/dist/layui.js">
-    <img src="https://img.badgesize.io/layui/layui/master/dist/layui.js?compression=brotli&label=JS Brotli size" alt="JS Brotli size">
+    <img src="https://img.badgesize.io/layui/layui/master/dist/layui.js?compression=brotli&label=JS%20Brotli%20size" alt="JS Brotli size">
   </a>
 </p>
 
