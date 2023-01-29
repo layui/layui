@@ -1,5 +1,5 @@
 
-/** lay 基础 DOM 操作 | MIT Licensed */
+/** lay 基础模块 | MIT Licensed */
 
 ;!function(window){ //gulp build: lay-header
   "use strict";

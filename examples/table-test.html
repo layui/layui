@@ -156,12 +156,13 @@ layui.use(['table', 'dropdown'], function(){
       ,{field:'username', title:'用户名', width:120, edit: function(d){
         return !d.LAY_DISABLED;
       }, templet: '#usernameTpl'}
-      ,{field:'email', minWidth: 160, maxWidth: 320, title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, edit: 'text', templet: function(d){
+      ,{field:'email', minWidth: 160, maxWidth: 320, title:'邮箱 <i class="layui-icon layui-icon-email"></i>', fieldTitle: '邮箱', hide: 0, edit: 'text', templet: function(d){
         return '<em>'+ layui.util.escape(d.email) +'</em>'
       }}
       ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true, escape: false}
       ,{field:'city', title:'城市', width:120, templet: '#cityTpl', exportTemplet: function(d, obj){
-        //console.log(obj)
+        // return '=HYPERLINK("https://abc.com/a.jpg","截图")'; // 测试内容存在特殊符
+        // console.log(obj)
         var td = obj.td(this.field); //获取当前 td
         return td.find('select').val();
       }}
@@ -450,11 +451,12 @@ layui.use(['table', 'dropdown'], function(){
     var value = obj.value // 得到修改后的值
     var oldValue = obj.oldValue // 得到修改前的值 -- v2.8.0 新增
     var data = obj.data; // 得到当前编辑所在行的数据
+    var col = obj.getCol(); // 得到当前列的表头配置属性
 
     // 值的校验
     if(field === 'email'){
       if(!/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(obj.value)){
-        layer.tips('输入的邮箱格式不正确，请重新编辑', this, {tips: 1});
+        layer.tips('输入的'+ col.fieldTitle +'格式不正确，请重新编辑', this, {tips: 1});
         return obj.reedit(); // 重新编辑 -- v2.8.0 新增
       }
     }

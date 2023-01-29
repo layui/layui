@@ -260,6 +260,17 @@ layui.define('jquery', function(exports){
       .replace(/\&lt;/g, '<').replace(/\&gt;/g, '>')
       .replace(/\&#39;/g, '\'').replace(/\&quot;/g, '"');
     }
+
+    // 打开新窗口
+    ,openWin: function(options){
+      var win;
+      options = options || {};
+      win = options.window || window.open((options.url || ''), options.target, options.specs);
+      if(options.url) return;
+      win.document.open('text/html', 'replace');
+      win.document.write(options.content || '');
+      win.document.close();
+    }
     
     //让指定的元素保持在可视区域
     ,toVisibleArea: function(options){
