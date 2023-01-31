@@ -652,10 +652,15 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         checks.each(function(index, check){
           var othis = $(this);
           var skin = othis.attr('lay-skin') || 'primary';
+          check.title || (check.title = othis.attr('lay-text') || ''); // 向下兼容将以前设置在lay-text的值赋给title
           var title = (check.title.replace(/\s/g, '') || '').split('|');
           var disabled = this.disabled;
 
-          if(skin === 'switch') skin = '_'+ skin;
+          if(skin === 'switch') {
+            skin = '_'+ skin;
+          } else if (skin !== 'tag') {
+            skin = 'primary';
+          }
           var RE_CLASS = CLASS[skin] || CLASS.checkbox;
           
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
