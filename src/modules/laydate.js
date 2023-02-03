@@ -967,6 +967,11 @@
         minutes: that.endDate.minutes,
         seconds: that.endDate.seconds,
       }
+      // 如果是年月范围，将对应的日期统一成当月的1日进行比较，避免出现同一个月但是开始日期大于结束日期的情况
+      if (options.type === 'month') {
+        options.dateTime.date = 1;
+        that.endDate.date = 1;
+      }
     }
 
     // 初始值不在最大最小范围内
