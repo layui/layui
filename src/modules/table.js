@@ -1145,7 +1145,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
                     if(tplData[disabledName]) arr.push('disabled');
 
                     return arr.join(' ');
-                  }() +'>';
+                  }() +' lay-type="layTableCheckbox">';
                 break;
                 case 'radio': // 单选
                   if(tplData[checkName]){
@@ -1200,7 +1200,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.layFixRight.find('tbody').html(trs_fixed_r.join(''));
 
       that.renderForm();
-      typeof thisCheckedRowIndex === 'number' && that.setThisRowChecked(thisCheckedRowIndex);
+
+      // 标注选中行样式
+      typeof thisCheckedRowIndex === 'number' && that.setRowChecked({
+        type: 'radio',
+        index: thisCheckedRowIndex
+      }, true);
+
       that.syncCheckAll();
 
       // 因为 page 参数有可能发生变化 先重新铺满
@@ -1385,33 +1391,48 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     form.render(type, filter);
   };
   
-  // 标记当前行选中状态
-  Class.prototype.setThisRowChecked = function(index, dataChecked){
+  // 标记行选中状态
+  Class.prototype.setRowChecked = function(opts, onlyStyle){
     var that = this;
     var options = that.config;
     var ELEM_CLICK = 'layui-table-click';
-    var tr = that.layBody.find('tr[data-index="'+ index +'"]');
+    var tr = that.layBody.find('tr'+ (
+      opts.index === 'all' ? '' : '[data-index="'+ opts.index +'"]'
+    ));
+
+    opts = $.extend({
+      type: 'checkbox', // 选中方式
+      checked: true // 选中状态
+    }, opts);
+    
+    // 标注当前行选中样式
+    if(opts.type !== 'checkbox' && !opts.isAll){
+      tr.addClass(ELEM_CLICK).siblings('tr').removeClass(ELEM_CLICK);
+    }
+
+    // 仅设置样式状态
+    if(onlyStyle) return;
 
     // 同步数据选中属性值
-    if(dataChecked){
-      var thisData = table.cache[that.key];
+    var thisData = table.cache[that.key];
       
-      // 重置数据单选选中属性
-      layui.each(thisData, function(i, item){
-        if(index === i){
-          item[options.checkName] = true;
-        } else {
-          delete item[options.checkName];
-        }
-      });
+    // 设置数据选中属性
+    layui.each(thisData, function(i, item){
+      if(opts.index === i || opts.index === 'all'){
+        item[options.checkName] = opts.checked;
+      } else if(opts.type === 'radio') {
+        delete item[options.checkName];
+      }
+    });
 
-      // 若存在单选框，则标注单选框选中样式
-      tr.find('input[lay-type="layTableRadio"]').prop('checked', true);
-      that.renderForm('radio');
-    }
-    
-    // 选中样式
-    tr.addClass(ELEM_CLICK).siblings('tr').removeClass(ELEM_CLICK);
+    // 若存在复选框或单选框，则标注选中样式
+    tr.find('input[lay-type="'+ ({
+      radio: 'layTableRadio',
+      checkbox: 'layTableCheckbox'
+    }[opts.type] || 'checkbox') +'"]').prop('checked', opts.checked);
+
+    that.syncCheckAll();
+    that.renderForm(opts.type);
   };
   
   // 数据排序
@@ -2047,8 +2068,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           that.renderForm();
         }
         // 设置行选中状态
-        ,setRowChecked: function(checked){
-          that.setThisRowChecked(index, true);
+        ,setRowChecked: function(opts){
+          that.setRowChecked($.extend({
+            type: 'radio',
+            index: index
+          }, opts));
         }
         // 获取当前列
       };
@@ -2097,7 +2121,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var index = radio.parents('tr').eq(0).data('index');
 
       // 单选框选中状态
-      that.setThisRowChecked(index, true);
+      that.setRowChecked({
+        type: 'radio',
+        index: index
+      });
+
       // 事件
       layui.event.call(this, MOD_NAME, 'radio('+ filter +')', commonMember.call(this, {
         checked: checked
@@ -2289,7 +2317,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           event: othis.attr('lay-event')
         })
       );
-      that.setThisRowChecked(index);
+      // 设置当前行选中样式
+      that.setRowChecked({
+        type: 'radio',
+        index: index
+      }, true);
     };
 
      // 行工具条单击事件
@@ -2474,7 +2506,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     eachArrs();
   };
   
-  // 表格选中状态
+  // 获取表格选中状态
   table.checkStatus = function(id){
     var nums = 0
       ,invalidNum = 0
@@ -2499,6 +2531,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       ,isAll: data.length ? (nums === (data.length - invalidNum)) : false //是否全选
     };
   };
+
+  // 设置行选中状态
+  table.setRowChecked = function(id, opts){
+    var that = getThisTable(id);
+    if(!that) return;
+    that.setRowChecked(opts);
+  };
   
   // 获取表格当前页的所有行数据
   table.getData = function(id){
@@ -2512,17 +2551,33 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     });
     return arr;
   };
+
+  // 重置表格尺寸结构
+  table.resize = function(id){
+    // 若指定表格唯一 id，则只执行该 id 对应的表格实例
+    if(id){
+      var config = getThisTableConfig(id); // 获取当前实例配置项
+      if(!config) return;
+      
+      getThisTable(id).resize();
+      
+    } else { // 否则重置所有表格实例尺寸
+      layui.each(thisTable.that, function(){
+        this.resize();
+      });
+    }
+  };
   
   // 表格导出
-  table.exportFile = function(id, data, options){
+  table.exportFile = function(id, data, opts){
     data = data || table.clearCacheKey(table.cache[id]);
-    options = typeof options === 'object' ? options : function(){
+    opts = typeof opts === 'object' ? opts : function(){
       var obj = {};
-      options && (obj.type = options);
+      opts && (obj.type = opts);
       return obj;
     }();
 
-    var type = options.type || 'csv';
+    var type = opts.type || 'csv';
     var thatTable = thisTable.that[id];
     var config = thisTable.config[id] || {};
     var textType = ({
@@ -2598,27 +2653,64 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       return dataTitle.join(',') + '\r\n' + dataMain.join('\r\n') + '\r\n' + dataTotal.join(',');
     }());
     //return;
-    alink.download = (options.title || config.title || 'table_'+ (config.index || '')) + '.' + type;
+    alink.download = (opts.title || config.title || 'table_'+ (config.index || '')) + '.' + type;
     document.body.appendChild(alink);
     alink.click();
     document.body.removeChild(alink); 
   };
-  
-  // 重置表格尺寸结构
-  table.resize = function(id){
-    // 若指定表格唯一 id，则只执行该 id 对应的表格实例
-    if(id){
-      var config = getThisTableConfig(id); // 获取当前实例配置项
-      if(!config) return;
-      
-      getThisTable(id).resize();
-      
-    } else { // 否则重置所有表格实例尺寸
-      layui.each(thisTable.that, function(){
-        this.resize();
+
+  // 获取表格配置信息
+  table.getOptions = function (id) {
+    return $.extend(true, {}, getThisTableConfig(id));
+  }
+
+  // 显示或隐藏列
+  table.hideCol = function (id, cols) {
+    var that = getThisTable(id);
+    if (!that) {
+      return;
+    }
+
+    if (layui.type(cols) === 'boolean') {
+      // 显示全部或者隐藏全部
+      that.eachCols(function (i2, item2) {
+        var key = item2.key;
+        var col = that.col(key);
+        var parentKey = item2.parentKey;
+        // 同步勾选列的 hide 值和隐藏样式
+        if (col.hide != cols) {
+          var hide = col.hide = cols;
+          that.elem.find('*[data-key="'+ key +'"]')[
+            hide ? 'addClass' : 'removeClass'
+            ](HIDE);
+          // 根据列的显示隐藏，同步多级表头的父级相关属性值
+          that.setParentCol(hide, parentKey);
+        }
+      })
+    } else {
+      layui.each(cols, function (i1, item1) {
+        that.eachCols(function (i2, item2) {
+          if (item1.field === item2.field) {
+            var key = item2.key;
+            var col = that.col(key);
+            var parentKey = item2.parentKey;
+            // 同步勾选列的 hide 值和隐藏样式
+            if ('hide' in item1 && col.hide != item1.hide) {
+              var hide = col.hide = !!item1.hide;
+              that.elem.find('*[data-key="'+ key +'"]')[
+                hide ? 'addClass' : 'removeClass'
+                ](HIDE);
+              // 根据列的显示隐藏，同步多级表头的父级相关属性值
+              that.setParentCol(hide, parentKey);
+            }
+          }
+        })
       });
     }
-  };
+    $('.' + ELEM_TOOL_PANEL).remove(); // 关闭字段筛选面板如果打开的话
+    // 重新适配尺寸
+    that.resize();
+  }
   
   // 重载
   table.reload = function(id, options, deep, type){
@@ -2670,58 +2762,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     delete data[table.config.disabledName];
     return data;
   };
-
-  // 获取表格配置信息
-  table.getOptions = function (id) {
-    return $.extend(true, {}, getThisTableConfig(id));
-  }
-
-  table.hideCol = function (id, cols) {
-    var that = getThisTable(id);
-    if (!that) {
-      return;
-    }
-
-    if (layui.type(cols) === 'boolean') {
-      // 显示全部或者隐藏全部
-      that.eachCols(function (i2, item2) {
-        var key = item2.key;
-        var col = that.col(key);
-        var parentKey = item2.parentKey;
-        // 同步勾选列的 hide 值和隐藏样式
-        if (col.hide != cols) {
-          var hide = col.hide = cols;
-          that.elem.find('*[data-key="'+ key +'"]')[
-            hide ? 'addClass' : 'removeClass'
-            ](HIDE);
-          // 根据列的显示隐藏，同步多级表头的父级相关属性值
-          that.setParentCol(hide, parentKey);
-        }
-      })
-    } else {
-      layui.each(cols, function (i1, item1) {
-        that.eachCols(function (i2, item2) {
-          if (item1.field === item2.field) {
-            var key = item2.key;
-            var col = that.col(key);
-            var parentKey = item2.parentKey;
-            // 同步勾选列的 hide 值和隐藏样式
-            if ('hide' in item1 && col.hide != item1.hide) {
-              var hide = col.hide = !!item1.hide;
-              that.elem.find('*[data-key="'+ key +'"]')[
-                hide ? 'addClass' : 'removeClass'
-                ](HIDE);
-              // 根据列的显示隐藏，同步多级表头的父级相关属性值
-              that.setParentCol(hide, parentKey);
-            }
-          }
-        })
-      });
-    }
-    $('.' + ELEM_TOOL_PANEL).remove(); // 关闭字段筛选面板如果打开的话
-    // 重新适配尺寸
-    that.resize();
-  }
   
   // 自动完成渲染
   $(function(){
