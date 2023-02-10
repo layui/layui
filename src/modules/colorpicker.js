@@ -57,25 +57,25 @@ layui.define(['jquery', 'lay'], function(exports){
     var max = Math.max(rgb.r, rgb.g, rgb.b);
     var delta = max - min;
     hsb.b = max;
-    hsb.s = max != 0 ? 255*delta/max : 0;
-    if(hsb.s != 0){
-      if(rgb.r == max){
+    hsb.s = max !== 0 ? 255*delta/max : 0;
+    if(hsb.s !== 0){
+      if(rgb.r === max){
         hsb.h = (rgb.g - rgb.b) / delta;
-      }else if(rgb.g == max){
+      }else if(rgb.g === max){
         hsb.h = 2 + (rgb.b - rgb.r) / delta;
       }else{
         hsb.h = 4 + (rgb.r - rgb.g) / delta;
       }
     }else{
       hsb.h = -1;
-    };
-    if(max == min){ 
+    }
+    if(max === min){
       hsb.h = 0;
-    };
+    }
     hsb.h *= 60;
     if(hsb.h < 0) {
       hsb.h += 360;
-    };
+    }
     hsb.s *= 100/255;
     hsb.b *= 100/255;
     return hsb;  
@@ -83,11 +83,11 @@ layui.define(['jquery', 'lay'], function(exports){
 
   //HEX转HSB
   ,HEXToHSB = function(hex){
-    var hex = hex.indexOf('#') > -1 ? hex.substring(1) : hex;
-    if(hex.length == 3){
+    hex = hex.indexOf('#') > -1 ? hex.substring(1) : hex;
+    if(hex.length === 3){
       var num = hex.split("");
       hex = num[0]+num[0]+num[1]+num[1]+num[2]+num[2]
-    };
+    }
     hex = parseInt(hex, 16);
     var rgb = {r:hex >> 16, g:(hex & 0x00FF00) >> 8, b:(hex & 0x0000FF)};
     return RGBToHSB(rgb);
@@ -99,13 +99,13 @@ layui.define(['jquery', 'lay'], function(exports){
     var h = hsb.h;
     var s = hsb.s*255/100;
     var b = hsb.b*255/100;
-    if(s == 0){
+    if(s === 0){
       rgb.r = rgb.g = rgb.b = b;
     }else{
       var t1 = b;
       var t2 = (255 - s) * b /255;
       var t3 = (t1 - t2) * (h % 60) /60;
-      if(h == 360) h = 0;
+      if(h === 360) h = 0;
       if(h < 60) {rgb.r=t1; rgb.b=t2; rgb.g=t2+t3}
       else if(h < 120) {rgb.g=t1; rgb.b=t2; rgb.r=t1-t3}
       else if(h < 180) {rgb.g=t1; rgb.r=t2; rgb.b=t2+t3}
@@ -126,7 +126,7 @@ layui.define(['jquery', 'lay'], function(exports){
       ,rgb.b.toString(16)
     ];
     $.each(hex, function(nr, val){
-      if(val.length == 1){
+      if(val.length === 1){
         hex[nr] = '0' + val;
       }
     });
@@ -360,25 +360,25 @@ layui.define(['jquery', 'lay'], function(exports){
       //如果格式要求为rgb
       if(type === 'torgb'){
         elemPickerInput.find('input').val(bgcolor);
-      };
+      }
       
       //如果格式要求为rgba
       if(type === 'rgba'){
         var rgb = RGBSTo(bgcolor);
         
         //如果开启透明度而没有设置，则给默认值
-        if((bgcolor.match(/[0-9]{1,3}/g) || []).length == 3){
+        if((bgcolor.match(/[0-9]{1,3}/g) || []).length === 3){
           elemPickerInput.find('input').val('rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', 1)');
           that.elemPicker.find('.'+ PICKER_ALPHA_SLIDER).css("left", 280);
         } else {
           elemPickerInput.find('input').val(bgcolor);
           var left = bgcolor.slice(bgcolor.lastIndexOf(",") + 1, bgcolor.length - 1) * 280;
           that.elemPicker.find('.'+ PICKER_ALPHA_SLIDER).css("left", left);
-        };
+        }
         
         //设置span背景色
         that.elemPicker.find('.'+ PICKER_ALPHA_BG)[0].style.background = 'linear-gradient(to right, rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', 0), rgb('+ rgb.r +', '+ rgb.g +', '+ rgb.b +'))';    
-      };
+      }
 
     }else{
       //如果没有背景颜色则默认到最初始的状态
@@ -424,15 +424,14 @@ layui.define(['jquery', 'lay'], function(exports){
       if(type === 'torgb'){
         elemInput.val('rgb('+ rgb.r +', '+ rgb.g +', '+ rgb.b +')');
       } else if(type  === 'rgba'){
-        var left = 0;
-        left = a * 280;
+        var left = a * 280;
         alphaslider.css("left", left);
         elemInput.val('rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', '+ a +')');
         span[0].style.background = 'rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', '+ a +')';
         alphacolor[0].style.background = 'linear-gradient(to right, rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', 0), rgb('+ rgb.r +', '+ rgb.g +', '+ rgb.b +'))'
       } else {
         elemInput.val('#'+ color);
-      };
+      }
       
       //回调更改的颜色
       options.change && options.change(that.elemPicker.find('.' + PICKER_INPUT).find('input').val());
@@ -562,7 +561,7 @@ layui.define(['jquery', 'lay'], function(exports){
         _h = hsb.h;
         _s = hsb.s;
         _b = hsb.b;
-        if((color.match(/[0-9]{1,3}/g) || []).length == 3) a = 1;
+        if((color.match(/[0-9]{1,3}/g) || []).length === 3) a = 1;
         _a = a;
         left = a * 280;
         change(hsb.h, hsb.s, hsb.b, a);
@@ -589,7 +588,7 @@ layui.define(['jquery', 'lay'], function(exports){
       ,"left": left
     });
     
-    if(type === 'change') return;
+    // if(type === 'change') return;
 
     // 选中的颜色
     // that.elemPicker.find('.' + PICKER_INPUT).find('input').val('#'+ color);
@@ -616,8 +615,8 @@ layui.define(['jquery', 'lay'], function(exports){
       //确认
       ,confirm: function(othis, change){
         var value = elemPickerInput.val()
-        ,colorValue = value
-        ,hsb = {};
+        ,colorValue
+        ,hsb;
         
         if(value.indexOf(',') > -1){
           hsb = RGBToHSB(RGBSTo(value));
@@ -629,12 +628,12 @@ layui.define(['jquery', 'lay'], function(exports){
             that.elemPicker.find('.' + PICKER_ALPHA_SLIDER).css("left", left);
             elemColorBoxSpan[0].style.background = value;
             colorValue = value;
-          };
+          }
         } else {
           hsb = HEXToHSB(value);
           elemColorBoxSpan[0].style.background = (colorValue = '#' + HSBToHEX(hsb)); 
           that.elemColorBox.find('.' + PICKER_TRIG_I).removeClass(ICON_PICKER_CLOSE).addClass(ICON_PICKER_DOWN);
-        };
+        }
         
         if(change === 'change'){
           that.select(hsb.h, hsb.s, hsb.b, change);
@@ -673,7 +672,7 @@ layui.define(['jquery', 'lay'], function(exports){
       if($(ELEM_MAIN)[0]){
         that.val();
         that.side();
-      };   
+      }
     });
   };
 
