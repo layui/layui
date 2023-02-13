@@ -59,9 +59,9 @@ layui.define(['jquery', 'lay'], function(exports){
     hsb.b = max;
     hsb.s = max !== 0 ? 255*delta/max : 0;
     if(hsb.s !== 0){
-      if(rgb.r === max){
+      if(rgb.r == max){ // 因 rgb 中返回的数字为 string 类型
         hsb.h = (rgb.g - rgb.b) / delta;
-      }else if(rgb.g === max){
+      }else if(rgb.g == max){
         hsb.h = 2 + (rgb.b - rgb.r) / delta;
       }else{
         hsb.h = 4 + (rgb.r - rgb.g) / delta;
