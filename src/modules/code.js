@@ -230,7 +230,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
             run(thisItemBody);
           }
         });
-      };
+      }
 
 
       // 有序或无序列表
