@@ -22,8 +22,11 @@
   <div class="layui-btn-container">
     <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
     <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页数据</button>
-    <button class="layui-btn layui-btn-sm" lay-event="isAll">是否全选</button>
 
+    <button class="layui-btn layui-btn-sm" id="setRowChecked">
+      设置行选中状态
+      <i class="layui-icon layui-icon-down layui-font-12"></i>
+    </button>
     <button class="layui-btn layui-btn-sm" id="reloadTest">
       重载测试 
       <i class="layui-icon layui-icon-down layui-font-12"></i>
@@ -132,6 +135,7 @@ layui.use(['table', 'dropdown'], function(){
 
     //,size: 'sm'
     //,skin: 'line'
+    //,even: true
     //,loading: false
 
     ,totalRow: true
@@ -201,6 +205,52 @@ layui.use(['table', 'dropdown'], function(){
         value: curr
       });
       */
+
+      // 设置选中行状态
+      dropdown.render({
+        elem: '#setRowChecked' //可绑定在任意元素中，此处以上述按钮为例
+        ,data: [{
+          id: 'checked',
+          title: '选中某行'
+        },{
+          id: 'unchecked',
+          title: '取消选中某行'
+        },{
+          id: 'reset-checked',
+          title: '给选中行取消选中状态'
+        }]
+        //菜单被点击的事件
+        ,click: function(obj){
+          if(obj.id === 'reset-checked'){
+            // 给选中行取消选中状态
+            table.setRowChecked(id, {
+              index: 'all',
+              checked: false
+            });
+          } else {
+            layer.prompt({
+              title: '请输入表格行号',
+              value: 1,
+              shade: false
+            }, function(value, i){
+              switch(obj.id){
+                case 'checked':
+                  table.setRowChecked(id, {
+                    index: value
+                  });
+                break;
+                case 'unchecked':
+                  table.setRowChecked(id, {
+                    index: value,
+                    checked: false
+                  });
+                break;
+              }
+              layer.close(i);
+            });
+          }
+        }
+      });
 
       // 重载测试
       dropdown.render({

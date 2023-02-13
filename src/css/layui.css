@@ -541,7 +541,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /* 卡片面板 */
 .layui-card{margin-bottom: 15px; border-radius: 2px; background-color: #fff; box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);}
 .layui-card:last-child{margin-bottom: 0;}
-.layui-card-header{position: relative; height: 42px; line-height: 42px; padding: 0 15px; border-bottom: 1px solid #f6f6f6; color: #333; border-radius: 2px 2px 0 0; font-size: 14px;}
+.layui-card-header{position: relative; height: 42px; line-height: 42px; padding: 0 15px; border-bottom: 1px solid #f8f8f8; color: #333; border-radius: 2px 2px 0 0; font-size: 14px;}
 .layui-card-body{position: relative; padding: 10px 15px; line-height: 24px;}
 .layui-card-body[pad15]{padding: 15px;}
 .layui-card-body[pad20]{padding: 20px;}
@@ -629,7 +629,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-text p:first-child{margin-top: 0;}
 .layui-text p:last-child{margin-bottom: 0;}
 .layui-text blockquote:not(.layui-elem-quote){padding: 5px 15px; border-left: 5px solid #eee;}
-.layui-text pre > code:not(.layui-code){padding: 15px; font-family: Lucida Console,Consolas,Courier New; background-color: #FAFAFA;}
+.layui-text pre > code:not(.layui-code){padding: 15px; font-family: Courier New,Lucida Console,Consolas; background-color: #FAFAFA;}
 
 /* 字体大小及颜色 */
 .layui-font-12{font-size: 12px !important;}
@@ -787,11 +787,11 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-select dl dd{padding: 0 10px; line-height: 36px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 .layui-form-select dl dt{font-size: 12px; color: #999;}
 .layui-form-select dl dd{cursor: pointer;}
-.layui-form-select dl dd:hover{background-color: #F6F6F6; -webkit-transition: .5s all; transition: .5s all;}
+.layui-form-select dl dd:hover{background-color: #f8f8f8; -webkit-transition: .5s all; transition: .5s all;}
 .layui-form-select .layui-select-group dd{padding-left: 20px;}
 .layui-form-select dl dd.layui-select-tips{padding-left: 10px !important; color: #999;}
-.layui-form-select dl dd.layui-this{background-color: #F7F7F7; color: #5FB878; font-weight: 700;}
-/*.layui-form-select dl dd.layui-this{background-color: #F6F6F6; color: #5FB878; font-weight: 700;}*/
+.layui-form-select dl dd.layui-this{background-color: #f8f8f8; color: #5FB878; font-weight: 700;}
+/*.layui-form-select dl dd.layui-this{background-color: #f8f8f8; color: #5FB878; font-weight: 700;}*/
 .layui-form-select dl dd.layui-disabled{background-color: #fff;}
 .layui-form-selected dl{display: block;}
 .layui-form-selected .layui-edge{margin-top: -9px; -webkit-transform:rotate(180deg); transform: rotate(180deg);}
@@ -936,9 +936,10 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-patch{}
 .layui-table-mend{background-color: #fff;}
 .layui-table-hover,
-.layui-table-click{background-color: #FAFAFA;}
+.layui-table-click,
+.layui-table[lay-even] tbody tr:nth-child(even){background-color: #f8f8f8;}
 
-.layui-table[lay-even] tr:nth-child(even){background-color: #f2f2f2;}
+
 
 .layui-table th,
 .layui-table td,
@@ -1008,7 +1009,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-tool-panel{position: absolute; top: 29px; left: -1px; z-index: 399; padding: 5px 0 !important; min-width: 150px; min-height: 40px; border: 1px solid #d2d2d2; text-align: left; overflow-y: auto; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,.12);}
 .layui-table-tool-panel li{padding: 0 10px; margin: 0 !important; line-height: 30px; list-style-type: none !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -webkit-transition: .5s all; transition: .5s all;}
 .layui-table-tool-panel li .layui-form-checkbox[lay-skin="primary"]{width: 100%;}
-.layui-table-tool-panel li:hover{background-color: #F6F6F6;}
+.layui-table-tool-panel li:hover{background-color: #f8f8f8;}
 .layui-table-tool-panel li .layui-form-checkbox[lay-skin="primary"]{padding-left: 28px;}
 .layui-table-tool-panel li .layui-form-checkbox[lay-skin="primary"] i{position: absolute; left: 0; top: 0;}
 .layui-table-tool-panel li .layui-form-checkbox[lay-skin="primary"] span{padding: 0;}
@@ -1040,7 +1041,6 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-table-body{position: relative; overflow: auto; margin-right: -1px; margin-bottom: -1px;}
 .layui-table-body .layui-none{line-height: 26px; padding: 30px 15px; text-align: center; color: #999;}
-.layui-table-body .layui-table[lay-even] tr:nth-child(even){background-color: #f2f2f2;}
 .layui-table-fixed{position: absolute; left: 0; top: 0; z-index: 101;}
 .layui-table-fixed .layui-table-body{overflow: hidden;}
 .layui-table-fixed-l{box-shadow: 1px 0 8px rgba(0,0,0,.08);}
@@ -1118,7 +1118,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-menu li,
 .layui-menu-body-title a{padding: 5px 15px; color: initial}
 .layui-menu li{position: relative; margin: 1px 0; width: calc(100% + 1px); line-height: 26px; color: rgba(0,0,0,.8); font-size: 14px; white-space: nowrap; cursor: pointer; transition: all .3s;}
-.layui-menu li:hover{background-color: #F6F6F6; }
+.layui-menu li:hover{background-color: #f8f8f8; }
 
 .layui-menu-item-parent:hover>.layui-menu-body-panel{display: block; animation-name: layui-fadein; animation-duration: 0.3s; animation-fill-mode: both; animation-delay:.2s;}
 .layui-menu-item-parent .layui-menu-body-title,
@@ -1143,7 +1143,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-menu .layui-menu-item-down>ul{visibility: visible; height: auto;}
 
 .layui-menu .layui-menu-item-checked,
-.layui-menu .layui-menu-item-checked2{background-color: #F6F6F6!important; color: #5FB878;}
+.layui-menu .layui-menu-item-checked2{background-color: #f8f8f8!important; color: #5FB878;}
 .layui-menu .layui-menu-item-checked a,
 .layui-menu .layui-menu-item-checked2 a{color: #5FB878;}
 .layui-menu .layui-menu-item-checked:after{position: absolute; right: 0; top: 0; bottom: 0; border-right: 3px solid #5FB878; content: "";}
@@ -1193,9 +1193,9 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 
 .layui-nav-child{display: none; position: absolute; left: 0; top: 65px; min-width: 100%; line-height: 36px; padding: 5px 0;  box-shadow: 0 2px 4px rgba(0,0,0,.12); border: 1px solid #eee; background-color: #fff; z-index: 100; border-radius: 2px; white-space: nowrap; box-sizing: border-box;}
 .layui-nav .layui-nav-child a{color: #5F5F5F; color: rgba(0,0,0,.8);}
-.layui-nav .layui-nav-child a:hover{background-color: #F6F6F6; color: rgba(0,0,0,.8);}
+.layui-nav .layui-nav-child a:hover{background-color: #f8f8f8; color: rgba(0,0,0,.8);}
 .layui-nav-child dd{margin: 1px 0; position: relative;}
-.layui-nav-child dd.layui-this{background-color: #F6F6F6; color: #000;}
+.layui-nav-child dd.layui-this{background-color: #f8f8f8; color: #000;}
 .layui-nav-child dd.layui-this:after{display: none;}
 .layui-nav-child-r{left: auto; right: 0;}
 .layui-nav-child-c{text-align: center;}
@@ -1393,7 +1393,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-util-face ul li:hover{position: relative; z-index: 2; border: 1px solid #eb7350; background: #fff9ec;}
 
 /** 代码文本修饰 **/
-.layui-code{position: relative; margin: 10px 0; padding: 15px; line-height: 20px; border: 1px solid #eee; border-left-width: 6px; background-color: #FAFAFA; color: #333; font-family: Courier New; font-size: 12px;}
+.layui-code{position: relative; margin: 10px 0; padding: 15px; line-height: 20px; border: 1px solid #eee; border-left-width: 6px; background-color: #FAFAFA; color: #333; font-family: Courier New,Lucida Console,Consolas; font-size: 12px;}
 
 /** 穿梭框 **/
 .layui-transfer-box,
@@ -1412,7 +1412,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-transfer-active .layui-btn .layui-icon{margin: 0; font-size: 14px !important;}
 .layui-transfer-data{padding: 5px 0; overflow: auto;}
 .layui-transfer-data li{height: 32px; line-height: 32px; padding: 0 10px;}
-.layui-transfer-data li:hover{background-color: #F6F6F6; transition: .5s all;}
+.layui-transfer-data li:hover{background-color: #f8f8f8; transition: .5s all;}
 .layui-transfer-data .layui-none{padding: 15px 10px; text-align: center; color: #999;}
 
 /** 评分组件 **/

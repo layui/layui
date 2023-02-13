@@ -618,12 +618,18 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       // 复选框/开关
       ,checkbox: function(elem){
         var CLASS = {
-          checkbox: ['layui-form-checkbox', 'layui-form-checked', 'checkbox']
-          ,_switch: ['layui-form-switch', 'layui-form-onswitch', 'switch']
-        }
-        ,checks = elem || elemForm.find('input[type=checkbox]')
-
-        ,events = function(reElem, RE_CLASS){
+          "checkbox": ['layui-form-checkbox', 'layui-form-checked', 'checkbox'],
+          "switch": ['layui-form-switch', 'layui-form-onswitch', 'switch']
+        };
+        var checks = elem || elemForm.find('input[type=checkbox]');
+        // 风格
+        var skins = {
+          "primary": true, // 默认风格
+          "tag": true, // 标签风格
+          "switch": true // 开关风格
+        };
+        // 事件
+        var events = function(reElem, RE_CLASS){
           var check = $(this);
           
           // 勾选
@@ -647,20 +653,19 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               ,othis: reElem
             });
           });
-        }
+        };
         
+        // 遍历复选框
         checks.each(function(index, check){
           var othis = $(this);
           var skin = othis.attr('lay-skin') || 'primary';
-          check.title || (check.title = othis.attr('lay-text') || ''); // 向下兼容将以前设置在lay-text的值赋给title
-          var title = (check.title.replace(/\s/g, '') || '').split('|');
+          var title = (function(title){
+            // 向下兼容 lay-text 属性
+            return title || othis.attr('lay-text') || '';
+          })(check.title).replace(/\s/g, '').split('|');
           var disabled = this.disabled;
 
-          if(skin === 'switch') {
-            skin = '_'+ skin;
-          } else if (skin !== 'tag') {
-            skin = 'primary';
-          }
+          if(!skins[skin]) skin = 'primary'; // 若非内置风格，则强制为默认风格
           var RE_CLASS = CLASS[skin] || CLASS.checkbox;
           
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
@@ -676,13 +681,13 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           ,function(){ // 不同风格的内容
             var type = {
               // 复选框
-              checkbox: [
+              "checkbox": [
                 (title[0] ? ('<span>'+ util.escape(title[0]) +'</span>') : '')
                 ,'<i class="layui-icon layui-icon-ok"></i>'
-              ].join('')
+              ].join(''),
               
               // 开关
-              ,_switch: '<em>'+ ((check.checked ? title[0] : title[1]) || '') +'</em><i></i>'
+              "switch": '<em>'+ ((check.checked ? title[0] : title[1]) || '') +'</em><i></i>'
             };
             return type[skin] || type['checkbox'];
           }()
