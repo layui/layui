@@ -659,10 +659,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         checks.each(function(index, check){
           var othis = $(this);
           var skin = othis.attr('lay-skin') || 'primary';
-          var title = (function(title){
-            // 向下兼容 lay-text 属性
-            return title || othis.attr('lay-text') || '';
-          })(check.title).replace(/\s/g, '').split('|');
+          var title = $.trim(check.title || function(){ // 向下兼容 lay-text 属性
+            return check.title = othis.attr('lay-text') || '';
+          }()).split('|');
           var disabled = this.disabled;
 
           if(!skins[skin]) skin = 'primary'; // 若非内置风格，则强制为默认风格
