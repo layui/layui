@@ -473,7 +473,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               if(value === '' || (origin === 'blur') ? value !== text : not) num++;
               origin === 'keyup' && othis[not ? 'addClass' : 'removeClass'](HIDE);
             });
-            // 处理select分组元素
+            // 处理 select 分组元素
             origin === 'keyup' && layui.each(dts, function(){
               var othis = $(this)
               ,thisDds = othis.nextUntil('dt').filter('dd') // 当前分组下的dd元素
@@ -511,7 +511,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           };
           
           if(isSearch){
-            input.on('keyup', search).on('blur', function(e){
+            input.on('input propertychange', search).on('blur', function(e){
               var selectedIndex = select[0].selectedIndex;
               
               thatInput = input; // 当前的 select 中的 input 元素
