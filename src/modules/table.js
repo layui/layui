@@ -1301,7 +1301,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       });
     });
     
-    that.dataTotal = {};
+    that.dataTotal = []; // 记录合计行结果
 
     var tds = [];
     that.eachCols(function(i3, item3){
@@ -1309,12 +1309,16 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       // 合计数据的特定字段
       var TOTAL_NUMS = totalRowData && totalRowData[item3.field];
+
+      // 合计数据的小数点位数处理
+      var decimals = 'totalRowDecimals' in item3 ? item3.totalRowDecimals : 2;
+      var thisTotalNum = totalNums[field] 
+        ? parseFloat(totalNums[field] || 0).toFixed(decimals)
+      : '';
       
-      // td 内容
+      // td 显示内容
       var content = function(){
         var text = item3.totalRowText || '';
-        var decimals = 'totalRowDecimals' in item3 ? item3.totalRowDecimals : 2;
-        var thisTotalNum = parseFloat(totalNums[field]).toFixed(decimals);
         var tplData = {
           LAY_COL: item3
         };
@@ -1331,6 +1335,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         // 如果直接传入了合计行数据，则不输出自动计算的结果
         return TOTAL_NUMS || getContent;
       }();
+
+      // 合计原始结果
+      var total = TOTAL_NUMS || thisTotalNum || '';
+      item3.field && that.dataTotal.push({
+        field: item3.field,
+        total: $('<div>'+ content +'</div>').text()
+      });
 
       // td 容器
       var td = ['<td data-field="'+ field +'" data-key="'+ item3.key +'" '+ function(){
@@ -1368,7 +1379,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         }()
       ,'</div></td>'].join('');
       
-      item3.field && (that.dataTotal[field] = content);
       tds.push(td);
     });
 
@@ -2645,14 +2655,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         dataMain.push(vals.join(','));
       });
       
-      //表合计
-      thatTable && layui.each(thatTable.dataTotal, function(key, value){
-        fieldsIsHide[key] || dataTotal.push(value);
+      // 表合计
+      thatTable && layui.each(thatTable.dataTotal, function(i, o){
+        fieldsIsHide[o.field] || dataTotal.push(o.total + '\t');
       });
       
       return dataTitle.join(',') + '\r\n' + dataMain.join('\r\n') + '\r\n' + dataTotal.join(',');
     }());
-    //return;
+    
     alink.download = (opts.title || config.title || 'table_'+ (config.index || '')) + '.' + type;
     document.body.appendChild(alink);
     alink.click();
