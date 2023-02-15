@@ -160,6 +160,7 @@ layui.use(['table', 'dropdown'], function(){
       ,{field:'username', title:'用户名', width:120, edit: function(d){
         return !d.LAY_DISABLED;
       }, templet: '#usernameTpl'}
+      ,{field:'xxx', title:'测试', edit: 'text'}
       ,{field:'email', minWidth: 160, maxWidth: 320, title:'邮箱 <i class="layui-icon layui-icon-email"></i>', fieldTitle: '邮箱', hide: 0, edit: 'text', templet: function(d){
         return '<em>'+ layui.util.escape(d.email) +'</em>'
       }}
