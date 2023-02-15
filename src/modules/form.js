@@ -503,8 +503,13 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               }
             }, 'keyup');
             
+            // 当搜索值清空时
             if(value === ''){
-              dl.find('.'+NONE).remove();
+              // 取消选中项
+              select.val('');
+              dl.find('.'+ THIS).removeClass(THIS);
+              (select[0].options[0] || {}).value || dl.children('dd:eq(0)').addClass(THIS);
+              dl.find('.'+ NONE).remove();
             }
             
             followScroll(); // 定位滚动条
@@ -564,6 +569,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           $(document).off('click', hide).on('click', hide); // 点击其它元素关闭 select
         }
         
+        // 初始渲染 select 组件选项
         selects.each(function(index, select){
           var othis = $(this)
           ,hasRender = othis.next('.'+CLASS)
