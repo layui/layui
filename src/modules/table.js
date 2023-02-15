@@ -2034,7 +2034,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
             var cell = td.children(ELEM_CELL); //获取当前修改的列
 
             // 更新缓存中的数据
-            if(key in data) data[key] = obj.data[key] = value;
+            data[key] = obj.data[key] = value;
 
             // 更新相应列视图
             that.eachCols(function(i, item3){
