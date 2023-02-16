@@ -1863,7 +1863,7 @@
           ,delete that.endTime
         );
         that.setValue('');
-        that.done(['', {}, {}]).remove();
+        that.done(null, 'onClear').done(['', {}, {}]).remove();
       }
       
       // 现在
@@ -1883,7 +1883,7 @@
 
         that.setValue(that.parse());
         isStatic && that.calendar();
-        that.done().remove();
+        that.done(null, 'onNow').done().remove();
       }
       
       //确定
@@ -1897,7 +1897,7 @@
         }
         
         that.setValue(that.parse());
-        that.done().remove();
+        that.done(null, 'onConfirm').done().remove();
       }
     };
     active[type] && active[type]();
