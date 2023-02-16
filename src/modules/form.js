@@ -473,7 +473,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               if(value === '' || (origin === 'blur') ? value !== text : not) num++;
               origin === 'keyup' && othis[not ? 'addClass' : 'removeClass'](HIDE);
             });
-            // 处理select分组元素
+            // 处理 select 分组元素
             origin === 'keyup' && layui.each(dts, function(){
               var othis = $(this)
               ,thisDds = othis.nextUntil('dt').filter('dd') // 当前分组下的dd元素
@@ -503,15 +503,20 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               }
             }, 'keyup');
             
+            // 当搜索值清空时
             if(value === ''){
-              dl.find('.'+NONE).remove();
+              // 取消选中项
+              select.val('');
+              dl.find('.'+ THIS).removeClass(THIS);
+              (select[0].options[0] || {}).value || dl.children('dd:eq(0)').addClass(THIS);
+              dl.find('.'+ NONE).remove();
             }
             
             followScroll(); // 定位滚动条
           };
           
           if(isSearch){
-            input.on('keyup', search).on('blur', function(e){
+            input.on('input propertychange', search).on('blur', function(e){
               var selectedIndex = select[0].selectedIndex;
               
               thatInput = input; // 当前的 select 中的 input 元素
@@ -564,6 +569,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           $(document).off('click', hide).on('click', hide); // 点击其它元素关闭 select
         }
         
+        // 初始渲染 select 组件选项
         selects.each(function(index, select){
           var othis = $(this)
           ,hasRender = othis.next('.'+CLASS)
@@ -659,10 +665,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         checks.each(function(index, check){
           var othis = $(this);
           var skin = othis.attr('lay-skin') || 'primary';
-          var title = (function(title){
-            // 向下兼容 lay-text 属性
-            return title || othis.attr('lay-text') || '';
-          })(check.title).replace(/\s/g, '').split('|');
+          var title = $.trim(check.title || function(){ // 向下兼容 lay-text 属性
+            return check.title = othis.attr('lay-text') || '';
+          }()).split('|');
           var disabled = this.disabled;
 
           if(!skins[skin]) skin = 'primary'; // 若非内置风格，则强制为默认风格

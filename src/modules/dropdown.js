@@ -275,8 +275,8 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       var isClickAllScope = options.clickScope === 'all'; // 是否所有父子菜单均触发点击事件
       
       if((!isChild || isClickAllScope) && data.type !== '-'){
-        isChild || that.remove();
-        typeof options.click === 'function' && options.click(data, othis);
+        var ret = typeof options.click === 'function' && options.click(data, othis);
+        ret === false || (isChild || that.remove());
         layui.stope(e);
       }
     });

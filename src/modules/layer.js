@@ -1197,6 +1197,12 @@ layer.closeAll = function(type, callback){
   if(domsElem.length === 0) typeof callback === 'function' && callback();
 };
 
+// 根据弹层类型关闭最近打开的层
+layer.closeLast = function(type){
+  type = type || 'page';
+  layer.close($('.layui-layer-'+ type +':last').attr("times"));
+};
+
 /** 
 
   拓展模块，layui 开始合并在一起
