@@ -172,14 +172,18 @@ layui.use('dropdown', function(){
       title: 'menu item 1'
       ,href: '#1'
     },{
-      title: 'menu item 2'
+      title: 'menu item 2(点击不关闭)'
       ,href: '#2'
+      ,id: 'bbb'
     },{
       title: 'menu item 3'
       ,href: '#3'
     }]
-    ,click: function(){
-    
+    ,click: function(data, othis){
+      console.log(data);
+      if(data.id === 'bbb'){
+        return false;
+      }
     }
   });
 
