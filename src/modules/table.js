@@ -1402,7 +1402,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   };
   
   // 标记行选中状态
-  Class.prototype.setRowChecked = function(opts, onlyStyle){
+  Class.prototype.setRowChecked = function(opts, selectedStyle){
     var that = this;
     var options = that.config;
     var ELEM_CLICK = 'layui-table-click';
@@ -1416,12 +1416,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }, opts);
     
     // 标注当前行选中样式
-    if(opts.type !== 'checkbox' && !opts.isAll){
+    if(opts.type !== 'checkbox' && opts.index !== 'all'){
       tr.addClass(ELEM_CLICK).siblings('tr').removeClass(ELEM_CLICK);
     }
 
     // 仅设置样式状态
-    if(onlyStyle) return;
+    if(opts.selectedStyle || selectedStyle) return;
 
     // 同步数据选中属性值
     var thisData = table.cache[that.key];
