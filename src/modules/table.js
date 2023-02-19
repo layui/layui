@@ -2159,7 +2159,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       setRowEvent.call(this, 'rowDouble');
     }).on('contextmenu', 'tr', function(e){ //菜单
       if (!options.defaultContextmenu) e.preventDefault();
-      setRowEvent.call(this, 'contextmenu');
+      setRowEvent.call(this, 'rowContextmenu');
     });;
     
     // 创建行单击、双击、菜单事件
