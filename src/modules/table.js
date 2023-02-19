@@ -20,8 +20,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   var table = {
     config: { // 全局配置项
       checkName: 'LAY_CHECKED' // 是否选中状态的特定字段名
-      ,indexName: 'LAY_TABLE_INDEX' // 初始下标索引名，用于恢复当前页表格排序
-      ,numbersName: 'LAY_INDEX' // 序号
+      ,indexName: 'LAY_INDEX' // 初始下标索引名，用于恢复当前页表格排序
+      ,numbersName: 'LAY_NUM' // 序号
       ,disabledName: 'LAY_DISABLED' // 禁用状态的特定字段名
     }
     ,cache: {} // 数据缓存
