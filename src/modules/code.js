@@ -106,6 +106,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         var elemPreviewViewHas = othis.next('.' + CONST.ELEM_ITEM +'-preview');
 
         if(options.id) elemView.attr('id', options.id);
+        elemView.addClass(options.className);
         elemTabView.attr('lay-filter', FILTER_VALUE);
 
         // 标签头
