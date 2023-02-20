@@ -84,7 +84,7 @@ layui.define(function(exports){
       //上一页
       prev: function(){
         return config.prev 
-          ? '<a href="javascript:;" class="layui-laypage-prev'+ (config.curr == 1 ? (' ' + DISABLED) : '') +'" data-page="'+ (config.curr - 1) +'">'+ config.prev +'</a>'
+          ? '<a class="layui-laypage-prev'+ (config.curr == 1 ? (' ' + DISABLED) : '') +'" data-page="'+ (config.curr - 1) +'">'+ config.prev +'</a>'
         : '';
       }()
       
@@ -99,7 +99,7 @@ layui.define(function(exports){
         
         //首页
         if(index > 1 && config.first !== false && groups !== 0){
-          pager.push('<a href="javascript:;" class="layui-laypage-first" data-page="1"  title="&#x9996;&#x9875;">'+ (config.first || 1) +'</a>');
+          pager.push('<a class="layui-laypage-first" data-page="1"  title="&#x9996;&#x9875;">'+ (config.first || 1) +'</a>');
         }
 
         //计算当前页码组的起始页
@@ -126,7 +126,7 @@ layui.define(function(exports){
             //当前页
             pager.push('<span class="layui-laypage-curr"><em class="layui-laypage-em" '+ (/^#/.test(config.theme) ? 'style="background-color:'+ config.theme +';"' : '') +'></em><em>'+ start +'</em></span>');
           } else {
-            pager.push('<a href="javascript:;" data-page="'+ start +'">'+ start +'</a>');
+            pager.push('<a data-page="'+ start +'">'+ start +'</a>');
           }
         }
         
@@ -136,7 +136,7 @@ layui.define(function(exports){
             pager.push('<span class="layui-laypage-spr">&#x2026;</span>');
           }
           if(groups !== 0){
-            pager.push('<a href="javascript:;" class="layui-laypage-last" title="&#x5C3E;&#x9875;"  data-page="'+ config.pages +'">'+ (config.last || config.pages) +'</a>');
+            pager.push('<a class="layui-laypage-last" title="&#x5C3E;&#x9875;"  data-page="'+ config.pages +'">'+ (config.last || config.pages) +'</a>');
           }
         }
 
@@ -146,7 +146,7 @@ layui.define(function(exports){
       //下一页
       ,next: function(){
         return config.next 
-          ? '<a href="javascript:;" class="layui-laypage-next'+ (config.curr == config.pages ? (' ' + DISABLED) : '') +'" data-page="'+ (config.curr + 1) +'">'+ config.next +'</a>'
+          ? '<a class="layui-laypage-next'+ (config.curr == config.pages ? (' ' + DISABLED) : '') +'" data-page="'+ (config.curr + 1) +'">'+ config.next +'</a>'
         : '';
       }()
       
@@ -167,7 +167,7 @@ layui.define(function(exports){
       }()
       
       //刷新当前页
-      ,refresh: ['<a href="javascript:;" data-page="'+ config.curr +'" class="layui-laypage-refresh">'
+      ,refresh: ['<a data-page="'+ config.curr +'" class="layui-laypage-refresh">'
         ,'<i class="layui-icon layui-icon-refresh"></i>'
       ,'</a>'].join('')
 

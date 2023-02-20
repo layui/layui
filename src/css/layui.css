@@ -889,8 +889,9 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-laypage select{border: 1px solid #eee;}
 .layui-laypage a,
 .layui-laypage span{display: inline-block; *display: inline; *zoom: 1; vertical-align: middle; padding: 0 15px; height: 28px; line-height: 28px; margin: 0 -1px 5px 0; background-color: #fff; color: #333; font-size: 12px;}
-.layui-laypage a{color: #333 !important; text-decoration: none !important;}
-.layui-laypage a:hover{color: #009688 !important;}
+.layui-laypage a[data-page]{color: #333;}
+.layui-laypage a{text-decoration: none !important; cursor: pointer;}
+.layui-laypage a:hover{color: #009688;}
 .layui-laypage em{font-style: normal;}
 .layui-laypage .layui-laypage-spr{color:#999; font-weight: 700;}
 .layui-laypage .layui-laypage-curr{position: relative;}
