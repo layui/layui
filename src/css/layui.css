@@ -617,8 +617,6 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-text h4{font-size: 16px;}
 .layui-text h5{font-size: 14px;}
 .layui-text h6{font-size: 13px;}
-.layui-text a:not(.layui-btn){color: #01AAED;}
-.layui-text a:not(.layui-btn):hover{text-decoration: underline;}
 .layui-text ul,
 .layui-text ol{padding-left: 15px;}
 .layui-text ul li{margin-top: 5px; list-style-type: disc;}
@@ -628,6 +626,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-text p{margin: 15px 0;}
 .layui-text p:first-child{margin-top: 0;}
 .layui-text p:last-child{margin-bottom: 0;}
+.layui-text a:not(.layui-btn){color: #01AAED;}
+.layui-text a:not(.layui-btn):hover{text-decoration: underline;}
 .layui-text blockquote:not(.layui-elem-quote){padding: 5px 15px; border-left: 5px solid #eee;}
 .layui-text pre > code:not(.layui-code){padding: 15px; font-family: Courier New,Lucida Console,Consolas; background-color: #FAFAFA;}
 
