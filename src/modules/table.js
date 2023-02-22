@@ -2137,9 +2137,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       });
 
       // 事件
-      layui.event.call(this, MOD_NAME, 'radio('+ filter +')', commonMember.call(this, {
-        checked: checked
-      }));
+      layui.event.call(
+        radio[0], MOD_NAME, 'radio('+ filter +')', 
+        commonMember.call(radio[0], {
+          checked: checked
+        })
+      );
     });
     
     // 行事件
