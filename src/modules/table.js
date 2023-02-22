@@ -343,7 +343,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }, options.response);
     
     //如果 page 传入 laypage 对象
-    if(typeof options.page === 'object'){
+    if(options.page !== null && typeof options.page === 'object'){
       options.limit = options.page.limit || options.limit;
       options.limits = options.page.limits || options.limits;
       that.page = options.page.curr = options.page.curr || 1;
@@ -927,8 +927,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         
     if(options.url){ // Ajax请求
       var params = {};
-      params[request.pageName] = curr;
-      params[request.limitName] = options.limit;
+      // 当 page 开启，默认自动传递 page、limit 参数
+      if(options.page){
+        params[request.pageName] = curr;
+        params[request.limitName] = options.limit;
+      }
       
       // 参数
       var data = $.extend(params, options.where);
