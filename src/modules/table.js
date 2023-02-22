@@ -2130,6 +2130,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var checked = radio[0].checked;
       var index = radio.parents('tr').eq(0).data('index');
 
+      if(radio[0].disabled) return;
+
       // 单选框选中状态
       that.setRowChecked({
         type: 'radio',
@@ -2138,7 +2140,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       // 事件
       layui.event.call(
-        radio[0], MOD_NAME, 'radio('+ filter +')', 
+        radio[0], 
+        MOD_NAME, 'radio('+ filter +')', 
         commonMember.call(radio[0], {
           checked: checked
         })
