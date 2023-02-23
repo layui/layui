@@ -20,8 +20,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   var table = {
     config: { // 全局配置项
       checkName: 'LAY_CHECKED' // 是否选中状态的特定字段名
-      ,indexName: 'LAY_TABLE_INDEX' // 初始下标索引名，用于恢复当前页表格排序
-      ,numbersName: 'LAY_INDEX' // 序号
+      ,indexName: 'LAY_INDEX' // 初始下标索引名，用于恢复当前页表格排序
+      ,numbersName: 'LAY_NUM' // 序号
       ,disabledName: 'LAY_DISABLED' // 禁用状态的特定字段名
     }
     ,cache: {} // 数据缓存
@@ -343,7 +343,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }, options.response);
     
     //如果 page 传入 laypage 对象
-    if(typeof options.page === 'object'){
+    if(options.page !== null && typeof options.page === 'object'){
       options.limit = options.page.limit || options.limit;
       options.limits = options.page.limits || options.limits;
       that.page = options.page.curr = options.page.curr || 1;
@@ -927,8 +927,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         
     if(options.url){ // Ajax请求
       var params = {};
-      params[request.pageName] = curr;
-      params[request.limitName] = options.limit;
+      // 当 page 开启，默认自动传递 page、limit 参数
+      if(options.page){
+        params[request.pageName] = curr;
+        params[request.limitName] = options.limit;
+      }
       
       // 参数
       var data = $.extend(params, options.where);
@@ -1402,7 +1405,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   };
   
   // 标记行选中状态
-  Class.prototype.setRowChecked = function(opts, onlyStyle){
+  Class.prototype.setRowChecked = function(opts, selectedStyle){
     var that = this;
     var options = that.config;
     var ELEM_CLICK = 'layui-table-click';
@@ -1416,12 +1419,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }, opts);
     
     // 标注当前行选中样式
-    if(opts.type !== 'checkbox' && !opts.isAll){
+    if(opts.type !== 'checkbox' && opts.index !== 'all'){
       tr.addClass(ELEM_CLICK).siblings('tr').removeClass(ELEM_CLICK);
     }
 
     // 仅设置样式状态
-    if(onlyStyle) return;
+    if(opts.selectedStyle || selectedStyle) return;
 
     // 同步数据选中属性值
     var thisData = table.cache[that.key];
@@ -2130,6 +2133,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var checked = radio[0].checked;
       var index = radio.parents('tr').eq(0).data('index');
 
+      if(radio[0].disabled) return;
+
       // 单选框选中状态
       that.setRowChecked({
         type: 'radio',
@@ -2137,9 +2142,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       });
 
       // 事件
-      layui.event.call(this, MOD_NAME, 'radio('+ filter +')', commonMember.call(this, {
-        checked: checked
-      }));
+      layui.event.call(
+        radio[0], 
+        MOD_NAME, 'radio('+ filter +')', 
+        commonMember.call(radio[0], {
+          checked: checked
+        })
+      );
     });
     
     // 行事件
@@ -2159,7 +2168,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       setRowEvent.call(this, 'rowDouble');
     }).on('contextmenu', 'tr', function(e){ //菜单
       if (!options.defaultContextmenu) e.preventDefault();
-      setRowEvent.call(this, 'contextmenu');
+      setRowEvent.call(this, 'rowContextmenu');
     });;
     
     // 创建行单击、双击、菜单事件

@@ -23,8 +23,13 @@ var isLayui = window.layui && layui.define, $, win, ready = {
     ,GLOBAL = window.LAYUI_GLOBAL || {};
     return GLOBAL.layer_dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
   }(),
-
-  config: {removeFocus: true}, end: {}, events: {resize: {}}, minIndex: 0, minLeft: [],
+  config: {
+    removeFocus: true
+  }, 
+  end: {}, 
+  events: {resize: {}}, 
+  minStackIndex: 0,
+  minStackArr: [],
   btn: ['&#x786E;&#x5B9A;', '&#x53D6;&#x6D88;'],
 
   //五种原始层模式
@@ -586,12 +591,17 @@ Class.pt.offset = function(){
     that.offsetLeft += win.scrollLeft();
   }
   
-  if(layero.attr('minLeft')){
+  // 最小化窗口时的自适应
+  if(layero.data('maxminStatus') === 'min'){
     that.offsetTop = win.height() - (layero.find(doms[1]).outerHeight() || 0);
     that.offsetLeft = layero.css('left');
   }
 
-  layero.css({top: that.offsetTop, left: that.offsetLeft});
+  // 设置坐标
+  layero.css({
+    top: that.offsetTop, 
+    left: that.offsetLeft
+  });
 };
 
 //Tips
@@ -899,8 +909,9 @@ Class.pt.openLayer = function(){
   };
 };
 
-//记录宽高坐标，用于还原
+// 记录宽高坐标，用于还原
 ready.record = function(layero){
+  if(!layero[0]) return window.console && console.error('index error');
   var area = [
     layero[0].style.width || layero.width(),
     layero[0].style.height || layero.height(),
@@ -953,15 +964,16 @@ layer.iframeSrc = function(index, url){
   $('#'+ doms[0] + index).find('iframe').attr('src', url);
 };
 
-//设定层的样式
+// 设定层的样式
 layer.style = function(index, options, limit){
-  var layero = $('#'+ doms[0] + index)
-  ,contElem = layero.find('.layui-layer-content')
-  ,type = layero.attr('type')
-  ,titHeight = layero.find(doms[1]).outerHeight() || 0
-  ,btnHeight = layero.find('.'+doms[6]).outerHeight() || 0
-  ,minLeft = layero.attr('minLeft');
+  var layero = $('#'+ doms[0] + index);
+  var contElem = layero.find('.layui-layer-content');
+  var type = layero.attr('type');
+  var titHeight = layero.find(doms[1]).outerHeight() || 0;
+  var btnHeight = layero.find('.'+doms[6]).outerHeight() || 0;
+  var minLeft = layero.attr('minLeft');
   
+  // loading 和 tips 层不允许更改
   if(type === ready.type[3] || type === ready.type[4]){
     return;
   }
@@ -975,7 +987,6 @@ layer.style = function(index, options, limit){
       options.height = 64 + titHeight + btnHeight;
     };
   }
-  
   layero.css(options);
   btnHeight = layero.find('.'+doms[6]).outerHeight() || 0;
   
@@ -992,46 +1003,54 @@ layer.style = function(index, options, limit){
   }
 };
 
-//最小化
+// 最小化
 layer.min = function(index, options){
   options = options || {};
-  var layero = $('#'+ doms[0] + index);
 
+  var layero = $('#'+ doms[0] + index);
   var maxminStatus = layero.data('maxminStatus');
-  // 检查当前的状态是否已经是最小化
-  if (maxminStatus === 'min') {
-    return;
-  }
-  // 当前处于最大化的状态 先恢初始状态再执行最小化
-  if (maxminStatus === 'max') {
-    layer.restore(index);
-  }
+
+  if(maxminStatus === 'min') return; // 当前的状态是否已经是最小化
+  if(maxminStatus === 'max') layer.restore(index); // 若当前为最大化，则先还原后再最小化
+
   layero.data('maxminStatus', 'min');
 
   var shadeo = $('#'+ doms.SHADE + index);
   var titHeight = layero.find(doms[1]).outerHeight() || 0;
-  var left = layero.attr('minLeft') || (181*ready.minIndex)+'px';
-  var position = layero.css('position')
+  var minLeft = layero.attr('minLeft'); // 最小化时的横坐标
+  var hasMinLeft = typeof minLeft === 'string'; // 是否已经赋值过最小化坐标
+  var left = hasMinLeft ? minLeft : (181*ready.minStackIndex)+'px';
+  var position = layero.css('position');
+  var minWidth = 180; // 最小化时的宽度
   var settings = {
-    width: 180
+    width: minWidth
     ,height: titHeight
     ,position: 'fixed'
     ,overflow: 'hidden'
   };
 
-  //记录宽高坐标，用于还原
-  ready.record(layero);
-  
-  if(ready.minLeft[0]){
-    left = ready.minLeft[0];
-    ready.minLeft.shift();
+  ready.record(layero);  // 记录当前尺寸、坐标，用于还原
+
+  // 简易最小化补位
+  if(ready.minStackArr.length > 0){
+    left = ready.minStackArr[0];
+    ready.minStackArr.shift();
+  }
+
+  // left 是否超出边界
+  if(parseFloat(left) + minWidth  > win.width()){
+    left = win.width() - minWidth - function(){
+      ready.minStackArr.edgeIndex = ready.minStackArr.edgeIndex || 0;
+      return ready.minStackArr.edgeIndex += 3;
+    }();
+    if(left < 0) left = 0;
   }
   
-  //是否堆叠在左下角
+  // 是否堆叠在左下角
   if(options.minStack){
     settings.left = left;
     settings.top = win.height() - titHeight;
-    layero.attr('minLeft') || ready.minIndex++; //初次执行，最小化操作索引自增
+    hasMinLeft || ready.minStackIndex++; // 若未赋值过最小化坐标，则最小化操作索引自增
     layero.attr('minLeft', left);
   }
   
@@ -1042,21 +1061,20 @@ layer.min = function(index, options){
   layero.attr('type') === 'page' && layero.find(doms[4]).hide();
   ready.rescollbar(index);
 
-  //隐藏遮罩
+  // 隐藏遮罩
   shadeo.hide();
 };
 
-//还原
+// 还原
 layer.restore = function(index){
   var layero = $('#'+ doms[0] + index);
-  // 恢复最大最小状态
-  layero.data('maxminStatus', '');
-
   var shadeo = $('#'+ doms.SHADE + index);
   var area = layero.attr('area').split(',');
   var type = layero.attr('type');
+
+  layero.removeData('maxminStatus'); // 移除最大最小状态
   
-  //恢复原来尺寸
+  // 恢复原来尺寸
   layer.style(index, {
     width: area[0], // 数值或百分比
     height: area[1],
@@ -1068,28 +1086,25 @@ layer.restore = function(index){
   
   layero.find('.layui-layer-max').removeClass('layui-layer-maxmin');
   layero.find('.layui-layer-min').show();
-  layero.attr('type') === 'page' && layero.find(doms[4]).show();
-  layero.attr('minLeft', '');
+  type === 'page' && layero.find(doms[4]).show();
   ready.rescollbar(index);
   
-  //恢复遮罩
+  // 恢复遮罩
   shadeo.show();
-  ready.events.resize[index]();
+  // ready.events.resize[index](); // ?
 };
 
-//全屏
+// 全屏（最大化）
 layer.full = function(index){
   var layero = $('#'+ doms[0] + index), timer;
-  // 检查当前的状态是否已经是最小化
   var maxminStatus = layero.data('maxminStatus');
-  if (maxminStatus === 'max') {
-    return;
-  }
-  if (maxminStatus === 'min') {
-    layer.restore(index);
-  }
+
+  if(maxminStatus === 'max') return // 检查当前的状态是否已经是最大化
+  if(maxminStatus === 'min') layer.restore(index); // 若当前为最小化，则先还原后再最大化
+
   layero.data('maxminStatus', 'max');
-  ready.record(layero);
+  ready.record(layero); // 记录当前尺寸、坐标
+
   if(!doms.html.attr('layer-full')){
     doms.html.css('overflow','hidden').attr('layer-full', index);
   }
@@ -1167,9 +1182,10 @@ layer.close = function(index, callback){
   layer.ie == 6 && ready.reselect();
   ready.rescollbar(index); 
   
-  if(layero.attr('minLeft')){
-    ready.minIndex--;
-    ready.minLeft.push(layero.attr('minLeft'));
+  // 记住被关闭层的最小化堆叠坐标
+  if(typeof layero.attr('minLeft') === 'string'){
+    ready.minStackIndex--;
+    ready.minStackArr.push(layero.attr('minLeft'));
   }
   
   if((layer.ie && layer.ie < 10) || !layero.data('isOutAnim')){

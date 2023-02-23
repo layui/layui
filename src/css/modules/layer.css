@@ -77,7 +77,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-dialog .layui-layer-content .layui-layer-face{position: absolute; top: 18px; left: 16px; color: #959595; font-size: 24px; _left: -40px;}
 .layui-layer-dialog .layui-layer-content .layui-icon-tips{color: #F39B12;}
 .layui-layer-dialog .layui-layer-content .layui-icon-ok{color: #5FB878;}
-.layui-layer-dialog .layui-layer-content .layui-icon-close-fill{color: #FF5722;}
+.layui-layer-dialog .layui-layer-content .layui-icon-close-fill{top: 19px; font-size: 28px; color: #FF5722;}
 .layui-layer-dialog .layui-layer-content .layui-icon-password{color: #787878;}
 .layui-layer-dialog .layui-layer-content .layui-icon-face-cry{color: #FF5722;}
 .layui-layer-dialog .layui-layer-content .layui-icon-face-smile{color: #5FB878;}

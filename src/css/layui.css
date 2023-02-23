@@ -617,8 +617,6 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-text h4{font-size: 16px;}
 .layui-text h5{font-size: 14px;}
 .layui-text h6{font-size: 13px;}
-.layui-text a:not(.layui-btn){color: #01AAED;}
-.layui-text a:not(.layui-btn):hover{text-decoration: underline;}
 .layui-text ul,
 .layui-text ol{padding-left: 15px;}
 .layui-text ul li{margin-top: 5px; list-style-type: disc;}
@@ -628,6 +626,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-text p{margin: 15px 0;}
 .layui-text p:first-child{margin-top: 0;}
 .layui-text p:last-child{margin-bottom: 0;}
+.layui-text a:not(.layui-btn){color: #01AAED;}
+.layui-text a:not(.layui-btn):hover{text-decoration: underline;}
 .layui-text blockquote:not(.layui-elem-quote){padding: 5px 15px; border-left: 5px solid #eee;}
 .layui-text pre > code:not(.layui-code){padding: 15px; font-family: Courier New,Lucida Console,Consolas; background-color: #FAFAFA;}
 
@@ -889,8 +889,9 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-laypage select{border: 1px solid #eee;}
 .layui-laypage a,
 .layui-laypage span{display: inline-block; *display: inline; *zoom: 1; vertical-align: middle; padding: 0 15px; height: 28px; line-height: 28px; margin: 0 -1px 5px 0; background-color: #fff; color: #333; font-size: 12px;}
-.layui-laypage a{color: #333 !important; text-decoration: none !important;}
-.layui-laypage a:hover{color: #009688 !important;}
+.layui-laypage a[data-page]{color: #333;}
+.layui-laypage a{text-decoration: none !important; cursor: pointer;}
+.layui-laypage a:hover{color: #009688;}
 .layui-laypage em{font-style: normal;}
 .layui-laypage .layui-laypage-spr{color:#999; font-weight: 700;}
 .layui-laypage .layui-laypage-curr{position: relative;}
@@ -1172,17 +1173,17 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-dropdown-shade{top: 0; left: 0; width: 100%; height: 100%; _height: expression(document.body.offsetHeight+"px"); position: fixed; _position: absolute; pointer-events: auto;}
 
 /** 导航菜单 **/
-.layui-nav{position: relative; padding: 0 20px; background-color: #393D49; color: #fff; border-radius: 2px; font-size: 0; box-sizing: border-box;}
+.layui-nav{position: relative; padding: 0 15px; background-color: #393D49; color: #fff; border-radius: 2px; font-size: 0; box-sizing: border-box;}
 .layui-nav *{font-size: 14px;}
-.layui-nav .layui-nav-item{position: relative; display: inline-block; *display: inline; *zoom: 1; vertical-align: middle; line-height: 60px;}
+.layui-nav .layui-nav-item{position: relative; display: inline-block; *display: inline; *zoom: 1; margin-top: 0; list-style: none; vertical-align: middle; line-height: 60px;}
 .layui-nav .layui-nav-item a{display: block; padding: 0 20px; color: #fff; color: rgba(255,255,255,.7); transition: all .3s; -webkit-transition: all .3s;}
 .layui-nav-bar,
 .layui-nav .layui-this:after{content: ""; position: absolute; left: 0; top: 0; width: 0; height: 5px; background-color: #5FB878; transition: all .2s; -webkit-transition: all .2s; pointer-events: none;}
 .layui-nav-bar{z-index: 1000;}
 .layui-nav[lay-bar="disabled"] .layui-nav-bar{display: none;}
 .layui-nav[lay-bar="disabled"].layui-this:after{}
-.layui-nav .layui-this a
-,.layui-nav .layui-nav-item a:hover{color: #fff;}
+.layui-nav .layui-this a,
+.layui-nav .layui-nav-item a:hover{color: #fff; text-decoration: none;}
 .layui-nav .layui-this:after{top: auto; bottom: 0; width: 100%;}
 .layui-nav-img{width: 30px; height: 30px; margin-right: 10px; border-radius: 50%;}
 
@@ -1200,7 +1201,8 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-nav-child-r{left: auto; right: 0;}
 .layui-nav-child-c{text-align: center;}
 
-/* 垂直导航菜单 */.layui-nav-tree{width: 200px; padding: 0;}
+/* 垂直导航菜单 */
+.layui-nav.layui-nav-tree{width: 200px; padding: 0;}
 .layui-nav-tree .layui-nav-item{display: block; width: 100%; line-height: 40px;}
 .layui-nav-tree .layui-nav-item a{position: relative; height: 40px; line-height: 40px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .layui-nav-tree .layui-nav-item>a{padding-top: 5px; padding-bottom: 5px;}
