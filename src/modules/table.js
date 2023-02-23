@@ -987,10 +987,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         }
       });
     } else if(layui.type(options.data) === 'array'){ //已知数据
-      var res = {}
-      ,startLimit = curr*options.limit - options.limit
+      var res = {};
       
-      res[response.dataName] = options.data.concat().splice(startLimit, options.limit);
+      res[response.dataName] = options.page ? options.data.concat().splice(curr*options.limit - options.limit, options.limit) : options.data.concat();
       res[response.countName] = options.data.length;
       
       //记录合计行数据
@@ -1719,8 +1718,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     ,fixHeight = mainHeight - scollHeight;
     that.layFixed.find(ELEM_BODY).css('height', layMainTable.height() >= fixHeight ? fixHeight : 'auto');
 
-    //表格宽度小于容器宽度时，隐藏固定列
-    that.layFixRight[outWidth > 0 ? 'removeClass' : 'addClass'](HIDE); 
+    //表格宽度小于容器宽度时或者数据异常（包括无数据），隐藏固定列
+    that.layFixRight[table.cache[that.key].length && outWidth > 0 ? 'removeClass' : 'addClass'](HIDE);
     
     //操作栏
     that.layFixRight.css('right', scollWidth - 1); 
