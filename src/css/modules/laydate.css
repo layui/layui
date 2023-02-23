@@ -75,8 +75,8 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-footer span:first-child.layui-laydate-preview{padding-left: 0;}
 .laydate-footer-btns {position: absolute; right: 10px; top: 10px; }
 .laydate-footer-btns span{margin: 0 0 0 -1px; border-radius: 0px; }
-.laydate-footer-btns span:first-child { border-top-left-radius: 2px; border-bottom-left-radius: 2px;}
-.laydate-footer-btns span:last-child { border-top-right-radius: 2px; border-bottom-right-radius: 2px;}
+.laydate-footer-btns span:first-child { border-radius: 2px 0px 0px 2px;}
+.laydate-footer-btns span:last-child { border-radius: 0px 2px 2px 0px;}
 
 /* 快捷栏 */
 .layui-laydate-shortcut{width: 80px; padding: 6px 0; display: inline-block;vertical-align: top;overflow: auto; max-height: 276px;}
