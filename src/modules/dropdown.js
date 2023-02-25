@@ -468,6 +468,8 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
         parent.find('.'+ STR_ITEM_CHECKED2).removeClass(STR_ITEM_CHECKED2); //清除父级菜单选中样式
         othis.addClass(STR_ITEM_CHECKED); //添加选中样式
         othis.parents('.'+ STR_ITEM_PARENT).addClass(STR_ITEM_CHECKED2); //添加父级菜单选中样式
+
+        options.title = options.title || $.trim(othis.children('.'+ STR_MENU_TITLE).text());
         
         //触发事件
         layui.event.call(this, MOD_NAME, 'click('+ filter +')', options);
