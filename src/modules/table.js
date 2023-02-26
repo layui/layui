@@ -2083,7 +2083,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         // 设置行选中状态
         ,setRowChecked: function(opts){
           that.setRowChecked($.extend({
-            type: 'radio',
             index: index
           }, opts));
         }
