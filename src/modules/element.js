@@ -110,19 +110,25 @@ layui.define('jquery', function(exports){
   
   // 基础事件体
   var call = {
-    //Tab 点击
+    // Tab 点击
     tabClick: function(e, index, liElem, options){
       options = options || {};
-      index = index === undefined 
-        ? othis.parent().children('li').index(othis)
-      : index;
       var othis = liElem || $(this);
-      var parents = options.headerElem ? othis.parent() : othis.parents('.layui-tab').eq(0);
-      var item = options.bodyElem ? $(options.bodyElem) : parents.children('.layui-tab-content').children('.layui-tab-item');
+      var parents = options.headerElem 
+        ? othis.parent() 
+      : othis.parents('.layui-tab').eq(0);
+      var item = options.bodyElem 
+        ? $(options.bodyElem) 
+      : parents.children('.layui-tab-content').children('.layui-tab-item');
       var elemA = othis.find('a');
       var isJump = elemA.attr('href') !== 'javascript:;' && elemA.attr('target') === '_blank'; //是否存在跳转
       var unselect = typeof othis.attr('lay-unselect') === 'string'; //是否禁用选中
       var filter = parents.attr('lay-filter');
+
+      // 下标
+      index = index === undefined 
+        ? othis.parent().children('li').index(othis)
+      : index;
       
       //执行切换
       if(!(isJump || unselect)){
