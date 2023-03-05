@@ -11,8 +11,8 @@ a:active,a:hover{outline:0}
 img{display: inline-block; border: none; vertical-align: middle;}
 li{list-style:none;}
 table{border-collapse: collapse; border-spacing: 0;}
-h1,h2,h3{font-weight: 400;}
-h4, h5, h6{font-size: 100%; font-weight: 400;}
+h1,h2,h3{font-weight: 700;}
+h4,h5,h6{font-weight: 500; font-size: 100%;}
 button,input,select,textarea{font-size: 100%; }
 input,button,textarea,select,optgroup,option{font-family: inherit; font-size: inherit; font-style: inherit; font-weight: inherit; outline: 0;}
 pre{white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;}
@@ -610,7 +610,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-text h3,
 .layui-text h4,
 .layui-text h5,
-.layui-text h6{font-weight: 500; color: #3A3A3A;}
+.layui-text h6{color: #3A3A3A;}
 .layui-text h1{font-size: 32px;}
 .layui-text h2{font-size: 24px;}
 .layui-text h3{font-size: 18px;}
