@@ -1154,8 +1154,8 @@ layer.close = function(index, callback){
       if(type === ready.type[2]){
         try {
           var iframe = $('#'+ doms[4] + index)[0];
-          iframe.contentWindow.document.write('');
           iframe.contentWindow.close();
+          iframe.contentWindow.document.write('');
           layero.find('.'+doms[5])[0].removeChild(iframe);
         } catch(e){}
       }
