@@ -1169,7 +1169,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
               
               //解析工具列模板
               if(item3.toolbar){
-                return laytpl($(item3.toolbar).html()||'').render(tplData);
+                if (typeof item3.toolbar === 'function') {
+                  return laytpl(item3.toolbar.apply(null, [item1])).render(tplData);
+
+                } else if (typeof item3.toolbar === 'string') {
+                  return laytpl($(item3.toolbar).html() || '').render(tplData);
+                }
               }
               return parseTempData.call(that, {
                 item3: item3
