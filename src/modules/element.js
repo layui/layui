@@ -473,7 +473,7 @@ layui.define('jquery', function(exports){
            : percent;
           });
           
-          if(othis.attr('lay-showPercent')){
+          if(othis.attr('lay-showpercent')){
             setTimeout(function(){
               elemBar.html('<span class="'+ ELEM +'-text">'+ percent +'</span>');
             },350);
