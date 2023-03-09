@@ -1950,6 +1950,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
           var key = th.data('key');
           var col = thatTable.col(key);
+          var filter = thatTable.config.elem.attr('lay-filter');
 
           // 重置过度信息
           dict = {};
