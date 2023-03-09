@@ -113,7 +113,7 @@ layui.define('jquery', function(exports){
         var lock;
         var setTopBar = (function setTopBar(){
           var top = $scroll.scrollTop();
-          if(top >= options.showHeight){
+          if(top >= options.margin){
             lock || (elemTopBar.show(), lock = 1);
           } else {
             lock && (elemTopBar.hide(), lock = 0);
