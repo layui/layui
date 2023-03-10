@@ -1120,6 +1120,8 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-menu-body-title a{padding: 5px 15px; color: initial}
 .layui-menu li{position: relative; margin: 1px 0; width: calc(100% + 1px); line-height: 26px; color: rgba(0,0,0,.8); font-size: 14px; white-space: nowrap; cursor: pointer; transition: all .3s;}
 .layui-menu li:hover{background-color: #f8f8f8; }
+.layui-menu li.layui-disabled,
+.layui-menu li.layui-disabled *{background: none !important; color: #d2d2d2 !important; cursor: not-allowed !important;}
 
 .layui-menu-item-parent:hover>.layui-menu-body-panel{display: block; animation-name: layui-fadein; animation-duration: 0.3s; animation-fill-mode: both; animation-delay:.2s;}
 .layui-menu-item-parent .layui-menu-body-title,

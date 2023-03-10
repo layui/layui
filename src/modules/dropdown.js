@@ -179,7 +179,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
           if(isChild || type){
             return ' class="'+ className[type] +'"';
           }
-          return '';
+          return item.disabled ? ' class="'+ STR_DISABLED +'"' : '';
         }() +'>'
         
           //标题区
@@ -273,7 +273,10 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       var data = othis.data('item') || {};
       var isChild = data.child && data.child.length > 0;
       var isClickAllScope = options.clickScope === 'all'; // 是否所有父子菜单均触发点击事件
+
+      if(data.disabled) return; // 菜单项禁用状态
       
+      // 普通菜单项点击后的回调及关闭面板
       if((!isChild || isClickAllScope) && data.type !== '-'){
         var ret = typeof options.click === 'function' && options.click(data, othis);
         ret === false || (isChild || that.remove());
