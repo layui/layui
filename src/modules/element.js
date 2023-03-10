@@ -110,17 +110,25 @@ layui.define('jquery', function(exports){
   
   // 基础事件体
   var call = {
-    //Tab 点击
+    // Tab 点击
     tabClick: function(e, index, liElem, options){
       options = options || {};
-      var othis = liElem || $(this)
-      ,index = index || othis.parent().children('li').index(othis)
-      ,parents = options.headerElem ? othis.parent() : othis.parents('.layui-tab').eq(0)
-      ,item = options.bodyElem ? $(options.bodyElem) : parents.children('.layui-tab-content').children('.layui-tab-item')
-      ,elemA = othis.find('a')
-      ,isJump = elemA.attr('href') !== 'javascript:;' && elemA.attr('target') === '_blank' //是否存在跳转
-      ,unselect = typeof othis.attr('lay-unselect') === 'string' //是否禁用选中
-      ,filter = parents.attr('lay-filter');
+      var othis = liElem || $(this);
+      var parents = options.headerElem 
+        ? othis.parent() 
+      : othis.parents('.layui-tab').eq(0);
+      var item = options.bodyElem 
+        ? $(options.bodyElem) 
+      : parents.children('.layui-tab-content').children('.layui-tab-item');
+      var elemA = othis.find('a');
+      var isJump = elemA.attr('href') !== 'javascript:;' && elemA.attr('target') === '_blank'; //是否存在跳转
+      var unselect = typeof othis.attr('lay-unselect') === 'string'; //是否禁用选中
+      var filter = parents.attr('lay-filter');
+
+      // 下标
+      index = index === undefined 
+        ? othis.parent().children('li').index(othis)
+      : index;
       
       //执行切换
       if(!(isJump || unselect)){
@@ -177,8 +185,8 @@ layui.define('jquery', function(exports){
           call.hideTabMore(true)
         }
         
-        //允许关闭
-        if(othis.attr('lay-allowClose')){
+        // 开启关闭图标
+        if(othis.attr('lay-allowclose')){
           title.find('li').each(function(){
             var li = $(this);
             if(!li.find('.'+CLOSE)[0]){
@@ -465,7 +473,7 @@ layui.define('jquery', function(exports){
            : percent;
           });
           
-          if(othis.attr('lay-showPercent')){
+          if(othis.attr('lay-showpercent')){
             setTimeout(function(){
               elemBar.html('<span class="'+ ELEM +'-text">'+ percent +'</span>');
             },350);

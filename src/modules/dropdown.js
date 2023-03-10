@@ -48,9 +48,6 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       ,reload: function(options){
         that.reload.call(that, options);
       }
-      ,reloadData: function(options){
-        dropdown.reloadData(id, options);
-      }
       ,close: function () {
         that.remove()
       }
@@ -86,14 +83,14 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
   };
   
   //重载实例
-  Class.prototype.reload = function(options, type){
+  Class.prototype.reload = function(options){
     var that = this;
     that.config = $.extend({}, that.config, options);
-    that.init(true, type);
+    that.init(true);
   };
 
   //初始化准备
-  Class.prototype.init = function(rerender, type){
+  Class.prototype.init = function(rerender){
     var that = this
     ,options = that.config
     ,elem = options.elem = $(options.elem);
@@ -113,18 +110,18 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       var newThat = thisModule.getThis(elem.data(MOD_INDEX));
       if(!newThat) return;
 
-      return newThat.reload(options, type);
+      return newThat.reload(options);
     }
     
     //初始化 id 参数
     options.id = ('id' in options) ? options.id : that.index;
     
-    if(options.show) that.render(rerender, type); //初始即显示
+    if(options.show) that.render(rerender); //初始即显示
     that.events(); //事件
   };
   
   //渲染
-  Class.prototype.render = function(rerender, type){
+  Class.prototype.render = function(rerender){
     var that = this
     ,options = that.config
     ,elemBody = $('body')
@@ -239,41 +236,27 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     //判断是否已经打开了下拉菜单面板
     if(!rerender && options.elem.data(MOD_INDEX +'_opened')) return;
 
+    //记录模板对象
+    that.elemView = $(TPL_MAIN);
+    that.elemView.append(options.content || getDefaultView());
+    
+    //初始化某些属性
+    if(options.className) that.elemView.addClass(options.className);
+    if(options.style) that.elemView.attr('style', options.style);
+    
+    
     //记录当前执行的实例索引
     dropdown.thisId = options.id;
+    
+    //插入视图
+    that.remove(); //移除非当前绑定元素的面板
+    elemBody.append(that.elemView);
+    options.elem.data(MOD_INDEX +'_opened', true);
 
-    //记录模板对象
-    that.elemView = $('.' + STR_ELEM + '[lay-id="' + options.id + '"]');
-    if (type === 'reloadData' && that.elemView.length) {
-      that.elemView.html(options.content || getDefaultView());
-    } else {
-      that.elemView = $(TPL_MAIN).attr('lay-id', options.id);
-      that.elemView.append(options.content || getDefaultView());
-
-      //初始化某些属性
-      if(options.className) that.elemView.addClass(options.className);
-      if(options.style) that.elemView.attr('style', options.style);
-
-      //插入视图
-      that.remove(); //移除非当前绑定元素的面板
-      elemBody.append(that.elemView);
-
-      options.elem.data(MOD_INDEX +'_opened', true);
-
-      //遮罩
-      var shade = options.shade ? ('<div class="'+ STR_ELEM_SHADE +'" style="'+ ('z-index:'+ (that.elemView.css('z-index')-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
-      that.elemView.before(shade);
-
-      //如果是鼠标移入事件，则鼠标移出时自动关闭
-      if(options.trigger === 'mouseenter'){
-        that.elemView.on('mouseenter', function(){
-          clearTimeout(thisModule.timer);
-        }).on('mouseleave', function(){
-          that.delayRemove();
-        });
-      }
-    }
-
+    //遮罩
+    var shade = options.shade ? ('<div class="'+ STR_ELEM_SHADE +'" style="'+ ('z-index:'+ (that.elemView.css('z-index')-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
+    that.elemView.before(shade);
+    
     //坐标定位
     that.position();
     thisModule.prevElem = that.elemView; //记录当前打开的元素，以便在下次关闭
@@ -290,8 +273,11 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       var data = othis.data('item') || {};
       var isChild = data.child && data.child.length > 0;
       var isClickAllScope = options.clickScope === 'all'; // 是否所有父子菜单均触发点击事件
+
+      if(data.disabled) return; // 菜单项禁用状态
       
-      if((!isChild || isClickAllScope) && data.type !== '-' && !data.disabled){
+      // 普通菜单项点击后的回调及关闭面板
+      if((!isChild || isClickAllScope) && data.type !== '-'){
         var ret = typeof options.click === 'function' && options.click(data, othis);
         ret === false || (isChild || that.remove());
         layui.stope(e);
@@ -308,9 +294,21 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
         thisModule.spread(elemGroup);
       }
     });
+    
+    //如果是鼠标移入事件，则鼠标移出时自动关闭
+    if(options.trigger === 'mouseenter'){
+      that.elemView.on('mouseenter', function(){
+        clearTimeout(thisModule.timer);
+      }).on('mouseleave', function(){
+        that.delayRemove();
+      });
+    }
 
-    //组件打开完毕的事件
-    typeof options.ready === 'function' && options.ready(that.elemView, options.elem);
+    // 组件打开完毕的事件
+    typeof options.ready === 'function' && options.ready(
+      that.elemView, 
+      options.elem
+    );
   };
   
   //位置定位
@@ -475,6 +473,8 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
         parent.find('.'+ STR_ITEM_CHECKED2).removeClass(STR_ITEM_CHECKED2); //清除父级菜单选中样式
         othis.addClass(STR_ITEM_CHECKED); //添加选中样式
         othis.parents('.'+ STR_ITEM_PARENT).addClass(STR_ITEM_CHECKED2); //添加父级菜单选中样式
+
+        options.title = options.title || $.trim(othis.children('.'+ STR_MENU_TITLE).text());
         
         //触发事件
         layui.event.call(this, MOD_NAME, 'click('+ filter +')', options);
@@ -526,32 +526,12 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
   }();
   
   //重载实例
-  dropdown.reload = function(id, options, type){
+  dropdown.reload = function(id, options){
     var that = thisModule.getThis(id);
     if(!that) return this;
 
-    that.reload(options, type);
+    that.reload(options);
     return thisModule.call(that);
-  };
-
-  // 仅重载数据
-  dropdown.reloadData = function(){
-    var args = $.extend([], arguments);
-    args[2] = 'reloadData';
-
-    // 重载时，与数据相关的参数
-    var dataParams = new RegExp('^('+ [
-      'data', 'templet', 'content', 'show'
-    ].join('|') + ')$');
-
-    // 过滤与数据无关的参数
-    layui.each(args[1], function (key, value) {
-      if(!dataParams.test(key)){
-        delete args[1][key];
-      }
-    });
-
-    return dropdown.reload.apply(null, args);
   };
 
   //核心入口
