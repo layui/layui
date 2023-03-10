@@ -987,10 +987,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         }
       });
     } else if(layui.type(options.data) === 'array'){ //已知数据
-      var res = {}
-      ,startLimit = curr*options.limit - options.limit
+      var res = {};
+      var startLimit = curr*options.limit - options.limit;
+      var newData = options.data.concat();
       
-      res[response.dataName] = options.data.concat().splice(startLimit, options.limit);
+      res[response.dataName] = options.page 
+        ? newData.splice(startLimit, options.limit)
+      : newData;
       res[response.countName] = options.data.length;
       
       //记录合计行数据
@@ -1349,7 +1352,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       // td 容器
       var td = ['<td data-field="'+ field +'" data-key="'+ item3.key +'" '+ function(){
         var attr = [];
-        if(item3.align) attr.push('align="'+ item3.align +'"'); // 对齐方式
         if(item3.minWidth) attr.push('data-minwidth="'+ item3.minWidth +'"'); // 单元格最小宽度
         if(item3.maxWidth) attr.push('data-maxwidth="'+ item3.maxWidth +'"'); // 单元格最小宽度
         return attr.join(' ');
@@ -1365,6 +1367,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           : (key + ' laytable-cell-' + item3.type);
         }() +'"'+ function(){
         var attr = [];
+        if(item3.align) attr.push('align="'+ item3.align +'"'); // 对齐方式
         if(item3.style) attr.push('style="'+ item3.style +'"'); // 自定义单元格样式
         return attr.join(' ');
       }() +'>' + function(){
@@ -1950,6 +1953,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
           var key = th.data('key');
           var col = thatTable.col(key);
+          var filter = thatTable.config.elem.attr('lay-filter');
 
           // 重置过度信息
           dict = {};
@@ -2083,7 +2087,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         // 设置行选中状态
         ,setRowChecked: function(opts){
           that.setRowChecked($.extend({
-            type: 'radio',
             index: index
           }, opts));
         }

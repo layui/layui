@@ -179,7 +179,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
           if(isChild || type){
             return ' class="'+ className[type] +'"';
           }
-          return '';
+          return item.disabled ? ' class="'+ STR_DISABLED +'"' : '';
         }() +'>'
         
           //标题区
@@ -273,7 +273,10 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       var data = othis.data('item') || {};
       var isChild = data.child && data.child.length > 0;
       var isClickAllScope = options.clickScope === 'all'; // 是否所有父子菜单均触发点击事件
+
+      if(data.disabled) return; // 菜单项禁用状态
       
+      // 普通菜单项点击后的回调及关闭面板
       if((!isChild || isClickAllScope) && data.type !== '-'){
         var ret = typeof options.click === 'function' && options.click(data, othis);
         ret === false || (isChild || that.remove());
@@ -301,6 +304,11 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       });
     }
 
+    // 组件打开完毕的事件
+    typeof options.ready === 'function' && options.ready(
+      that.elemView, 
+      options.elem
+    );
   };
   
   //位置定位
@@ -361,9 +369,6 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       that.e = e;
       that.render();
       e.preventDefault();
-      
-      //组件打开完毕的时间
-      typeof options.ready === 'function' && options.ready(that.elemView, options.elem, that.e.target);
     };
 
     //触发元素事件
@@ -468,6 +473,8 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
         parent.find('.'+ STR_ITEM_CHECKED2).removeClass(STR_ITEM_CHECKED2); //清除父级菜单选中样式
         othis.addClass(STR_ITEM_CHECKED); //添加选中样式
         othis.parents('.'+ STR_ITEM_PARENT).addClass(STR_ITEM_CHECKED2); //添加父级菜单选中样式
+
+        options.title = options.title || $.trim(othis.children('.'+ STR_MENU_TITLE).text());
         
         //触发事件
         layui.event.call(this, MOD_NAME, 'click('+ filter +')', options);

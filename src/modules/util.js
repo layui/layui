@@ -20,8 +20,8 @@ layui.define('jquery', function(exports){
         target: 'body', // fixbar 的插入目标选择器
         bars: [], //  bar 信息
         default: true, // 是否显示默认 bar
-        showHeight: 200, // 出现 top bar 的滚动条高度临界值
-        duration: 200 // top bar 等动画时长（毫秒）
+        margin: 160, // 出现 top bar 的滚动条高度临界值
+        duration: 320 // top bar 等动画时长（毫秒）
       }, options);
 
       // 目标元素对象
@@ -113,7 +113,7 @@ layui.define('jquery', function(exports){
         var lock;
         var setTopBar = (function setTopBar(){
           var top = $scroll.scrollTop();
-          if(top >= options.showHeight){
+          if(top >= options.margin){
             lock || (elemTopBar.show(), lock = 1);
           } else {
             lock && (elemTopBar.hide(), lock = 0);
