@@ -167,7 +167,7 @@ layui.use('dropdown', function(){
   
   var inst = dropdown.render({
     elem: '#demo2'
-    //,show: true
+    // ,show: true
     ,data: [{
       title: 'menu item 1'
       ,href: '#1'
@@ -184,6 +184,9 @@ layui.use('dropdown', function(){
       if(data.id === 'bbb'){
         return false;
       }
+    }
+    ,ready: function(){
+      console.log(arguments);
     }
   });
 
