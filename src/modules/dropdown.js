@@ -301,6 +301,11 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       });
     }
 
+    // 组件打开完毕的事件
+    typeof options.ready === 'function' && options.ready(
+      that.elemView, 
+      options.elem
+    );
   };
   
   //位置定位
@@ -361,9 +366,6 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       that.e = e;
       that.render();
       e.preventDefault();
-      
-      //组件打开完毕的时间
-      typeof options.ready === 'function' && options.ready(that.elemView, options.elem, that.e.target);
     };
 
     //触发元素事件
