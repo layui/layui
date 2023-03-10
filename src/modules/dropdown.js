@@ -48,6 +48,9 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       ,reload: function(options){
         that.reload.call(that, options);
       }
+      ,reloadData: function(options){
+        dropdown.reloadData(id, options);
+      }
       ,close: function () {
         that.remove()
       }
@@ -83,14 +86,14 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
   };
   
   //重载实例
-  Class.prototype.reload = function(options){
+  Class.prototype.reload = function(options, type){
     var that = this;
     that.config = $.extend({}, that.config, options);
-    that.init(true);
+    that.init(true, type);
   };
 
   //初始化准备
-  Class.prototype.init = function(rerender){
+  Class.prototype.init = function(rerender, type){
     var that = this
     ,options = that.config
     ,elem = options.elem = $(options.elem);
@@ -110,18 +113,18 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       var newThat = thisModule.getThis(elem.data(MOD_INDEX));
       if(!newThat) return;
 
-      return newThat.reload(options);
+      return newThat.reload(options, type);
     }
     
     //初始化 id 参数
     options.id = ('id' in options) ? options.id : that.index;
     
-    if(options.show) that.render(rerender); //初始即显示
+    if(options.show) that.render(rerender, type); //初始即显示
     that.events(); //事件
   };
   
   //渲染
-  Class.prototype.render = function(rerender){
+  Class.prototype.render = function(rerender, type){
     var that = this
     ,options = that.config
     ,elemBody = $('body')
@@ -177,9 +180,9 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
             ,'-': 'layui-menu-item-divider'
           };
           if(isChild || type){
-            return ' class="'+ className[type] +  + '"';
+            return ' class="'+ className[type] +'"';
           }
-          return item.disabled ? ' class="'+STR_DISABLED+'"' : '';
+          return item.disabled ? ' class="'+ STR_DISABLED +'"' : '';
         }() +'>'
         
           //标题区
@@ -241,7 +244,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
 
     //记录模板对象
     that.elemView = $('.' + STR_ELEM + '[lay-id="' + options.id + '"]');
-    if (that.elemView.length) {
+    if ('reloadData' === type && that.elemView.length) {
       that.elemView.html(options.content || getDefaultView());
     } else {
       that.elemView = $(TPL_MAIN).attr('lay-id', options.id);
@@ -523,12 +526,32 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
   }();
   
   //重载实例
-  dropdown.reload = function(id, options){
+  dropdown.reload = function(id, options, type){
     var that = thisModule.getThis(id);
     if(!that) return this;
 
-    that.reload(options);
+    that.reload(options, type);
     return thisModule.call(that);
+  };
+
+  // 仅重载数据
+  dropdown.reloadData = function(){
+    var args = $.extend([], arguments);
+    args[2] = 'reloadData';
+
+    // 重载时，与数据相关的参数
+    var dataParams = new RegExp('^('+ [
+      'data', 'templet', 'content'
+    ].join('|') + ')$');
+
+    // 过滤与数据无关的参数
+    layui.each(args[1], function (key, value) {
+      if(!dataParams.test(key)){
+        delete args[1][key];
+      }
+    });
+
+    return dropdown.reload.apply(null, args);
   };
 
   //核心入口
