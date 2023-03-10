@@ -1349,7 +1349,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       // td 容器
       var td = ['<td data-field="'+ field +'" data-key="'+ item3.key +'" '+ function(){
         var attr = [];
-        if(item3.align) attr.push('align="'+ item3.align +'"'); // 对齐方式
         if(item3.minWidth) attr.push('data-minwidth="'+ item3.minWidth +'"'); // 单元格最小宽度
         if(item3.maxWidth) attr.push('data-maxwidth="'+ item3.maxWidth +'"'); // 单元格最小宽度
         return attr.join(' ');
@@ -1365,6 +1364,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           : (key + ' laytable-cell-' + item3.type);
         }() +'"'+ function(){
         var attr = [];
+        if(item3.align) attr.push('align="'+ item3.align +'"'); // 对齐方式
         if(item3.style) attr.push('style="'+ item3.style +'"'); // 自定义单元格样式
         return attr.join(' ');
       }() +'>' + function(){
