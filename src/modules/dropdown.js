@@ -244,7 +244,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
 
     //记录模板对象
     that.elemView = $('.' + STR_ELEM + '[lay-id="' + options.id + '"]');
-    if ('reloadData' === type && that.elemView.length) {
+    if (type === 'reloadData' && that.elemView.length) {
       that.elemView.html(options.content || getDefaultView());
     } else {
       that.elemView = $(TPL_MAIN).attr('lay-id', options.id);
@@ -541,7 +541,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
 
     // 重载时，与数据相关的参数
     var dataParams = new RegExp('^('+ [
-      'data', 'templet', 'content'
+      'data', 'templet', 'content', 'show'
     ].join('|') + ')$');
 
     // 过滤与数据无关的参数
