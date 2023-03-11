@@ -29,6 +29,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /* 消除第三方ui可能造成的冲突 */.layui-box, .layui-box *{box-sizing: content-box;}
 .layui-clear{clear: both; *zoom: 1;}
 .layui-clear:after{content:'\20'; clear:both; *zoom:1; display:block; height:0;}
+.layui-clear-space{word-spacing: -5px;}
 .layui-inline{position: relative; display: inline-block; *display:inline; *zoom:1; vertical-align: middle;}
 /* 三角形 */.layui-edge{position: relative; display: inline-block; vertical-align: middle; width: 0; height: 0; border-width: 6px; border-style: dashed; border-color: transparent; overflow: hidden;}
 .layui-edge-top{top: -4px; border-bottom-color: #999; border-bottom-style: solid;}
@@ -1016,7 +1017,6 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-tool-panel li .layui-form-checkbox[lay-skin="primary"] span{padding: 0;}
 .layui-table-tool .layui-table-tool-self .layui-table-tool-panel{left: auto; right: -1px;}
 
-.layui-table-col-special{word-spacing: -5px;}
 .layui-table-col-set{position: absolute; right: 0; top: 0; width: 20px; height: 100%; border-width: 0; border-left-width: 1px; background-color: #fff;}
 
 .layui-table-sort{width: 10px; height: 20px; margin-left: 5px; cursor: pointer!important;}
