@@ -1344,9 +1344,9 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-carousel[lay-indicator="outside"] .layui-carousel-ind ul{background-color: rgba(0,0,0,.5);}
 .layui-carousel[lay-indicator="none"] .layui-carousel-ind{display: none;}
 .layui-carousel-ind ul{display: inline-block; padding: 5px; background-color: rgba(0,0,0,.2); border-radius: 10px; -webkit-transition-duration: .3s; transition-duration: .3s;}
-.layui-carousel-ind li{display: inline-block; width: 10px; height: 10px; margin: 0 3px; font-size: 14px; background-color: #eee; background-color: rgba(255,255,255,.5); border-radius: 50%; cursor: pointer; -webkit-transition-duration: .3s; transition-duration: .3s;}
-.layui-carousel-ind li:hover{background-color: rgba(255,255,255,.7);}
-.layui-carousel-ind li.layui-this{background-color: #fff;}
+.layui-carousel-ind ul li{display: inline-block; width: 10px; height: 10px; margin: 0 3px; font-size: 14px; background-color: #eee; background-color: rgba(255,255,255,.5); border-radius: 50%; cursor: pointer; -webkit-transition-duration: .3s; transition-duration: .3s;}
+.layui-carousel-ind ul li:hover{background-color: rgba(255,255,255,.7);}
+.layui-carousel-ind ul li.layui-this{background-color: #fff;}
 .layui-carousel>*[carousel-item]>.layui-this,
 .layui-carousel>*[carousel-item]>.layui-carousel-prev,
 .layui-carousel>*[carousel-item]>.layui-carousel-next{display: block}
