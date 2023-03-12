@@ -1691,19 +1691,19 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   
   //滚动条补丁
   Class.prototype.scrollPatch = function(){
-    var that = this
-    ,layMainTable = that.layMain.children('table')
-    ,scollWidth = that.layMain.width() - that.layMain.prop('clientWidth') //纵向滚动条宽度
-    ,scollHeight = that.layMain.height() - that.layMain.prop('clientHeight') //横向滚动条高度
-    ,getScrollWidth = that.getScrollWidth(that.layMain[0]) //获取主容器滚动条宽度，如果有的话
-    ,outWidth = layMainTable.outerWidth() - that.layMain.width() //表格内容器的超出宽度
+    var that = this;
+    var layMainTable = that.layMain.children('table');
+    var scollWidth = that.layMain.width() - that.layMain.prop('clientWidth'); // 纵向滚动条宽度
+    var scollHeight = that.layMain.height() - that.layMain.prop('clientHeight'); // 横向滚动条高度
+    var getScrollWidth = that.getScrollWidth(that.layMain[0]); // 获取主容器滚动条宽度，如果有的话
+    var outWidth = layMainTable.outerWidth() - that.layMain.width(); // 表格内容器的超出宽度
     
-    //添加补丁
-    ,addPatch = function(elem){
+    // 添加补丁
+    var addPatch = function(elem){
       if(scollWidth && scollHeight){
         elem = elem.eq(0);
         if(!elem.find('.layui-table-patch')[0]){
-          var patchElem = $('<th class="layui-table-patch"><div class="layui-table-cell"></div></th>'); //补丁元素
+          var patchElem = $('<th class="layui-table-patch"><div class="layui-table-cell"></div></th>'); // 补丁元素
           patchElem.find('div').css({
             width: scollWidth
           });
@@ -1712,20 +1712,28 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       } else {
         elem.find('.layui-table-patch').remove();
       }
-    }
+    };
     
     addPatch(that.layHeader);
     addPatch(that.layTotal);
     
-    //固定列区域高度
-    var mainHeight = that.layMain.height()
-    ,fixHeight = mainHeight - scollHeight;
-    that.layFixed.find(ELEM_BODY).css('height', layMainTable.height() >= fixHeight ? fixHeight : 'auto');
-
-    //表格宽度小于容器宽度时，隐藏固定列
-    that.layFixRight[outWidth > 0 ? 'removeClass' : 'addClass'](HIDE); 
+    // 固定列区域高度
+    var mainHeight = that.layMain.height();
+    var fixHeight = mainHeight - scollHeight;
     
-    //操作栏
+    that.layFixed.find(ELEM_BODY).css(
+      'height', 
+      layMainTable.height() >= fixHeight ? fixHeight : 'auto'
+    );
+
+    // 表格宽度小于容器宽度时，隐藏固定列
+    that.layFixRight[
+      table.cache[that.key].length && outWidth > 0 
+        ? 'removeClass' 
+      : 'addClass'
+    ](HIDE);
+    
+    // 操作栏
     that.layFixRight.css('right', scollWidth - 1); 
   };
 
