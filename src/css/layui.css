@@ -29,6 +29,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /* 消除第三方ui可能造成的冲突 */.layui-box, .layui-box *{box-sizing: content-box;}
 .layui-clear{clear: both; *zoom: 1;}
 .layui-clear:after{content:'\20'; clear:both; *zoom:1; display:block; height:0;}
+.layui-clear-space{word-spacing: -5px;}
 .layui-inline{position: relative; display: inline-block; *display:inline; *zoom:1; vertical-align: middle;}
 /* 三角形 */.layui-edge{position: relative; display: inline-block; vertical-align: middle; width: 0; height: 0; border-width: 6px; border-style: dashed; border-color: transparent; overflow: hidden;}
 .layui-edge-top{top: -4px; border-bottom-color: #999; border-bottom-style: solid;}
@@ -47,12 +48,12 @@ a cite{font-style: normal; *cursor:pointer;}
 /** 图标字体 **/
 @font-face {
   font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=256');
-  src: url('../font/iconfont.eot?v=256#iefix') format('embedded-opentype'),
-       url('../font/iconfont.woff2?v=256') format('woff2'),
-       url('../font/iconfont.woff?v=256') format('woff'),
-       url('../font/iconfont.ttf?v=256') format('truetype'),
-       url('../font/iconfont.svg?v=256#layui-icon') format('svg');
+  src: url('../font/iconfont.eot?v=280');
+  src: url('../font/iconfont.eot?v=280#iefix') format('embedded-opentype'),
+       url('../font/iconfont.woff2?v=280') format('woff2'),
+       url('../font/iconfont.woff?v=280') format('woff'),
+       url('../font/iconfont.ttf?v=280') format('truetype'),
+       url('../font/iconfont.svg?v=280#layui-icon') format('svg');
 }
                     
 .layui-icon{
@@ -1016,7 +1017,6 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-tool-panel li .layui-form-checkbox[lay-skin="primary"] span{padding: 0;}
 .layui-table-tool .layui-table-tool-self .layui-table-tool-panel{left: auto; right: -1px;}
 
-.layui-table-col-special{word-spacing: -5px;}
 .layui-table-col-set{position: absolute; right: 0; top: 0; width: 20px; height: 100%; border-width: 0; border-left-width: 1px; background-color: #fff;}
 
 .layui-table-sort{width: 10px; height: 20px; margin-left: 5px; cursor: pointer!important;}
@@ -1344,9 +1344,9 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-carousel[lay-indicator="outside"] .layui-carousel-ind ul{background-color: rgba(0,0,0,.5);}
 .layui-carousel[lay-indicator="none"] .layui-carousel-ind{display: none;}
 .layui-carousel-ind ul{display: inline-block; padding: 5px; background-color: rgba(0,0,0,.2); border-radius: 10px; -webkit-transition-duration: .3s; transition-duration: .3s;}
-.layui-carousel-ind li{display: inline-block; width: 10px; height: 10px; margin: 0 3px; font-size: 14px; background-color: #eee; background-color: rgba(255,255,255,.5); border-radius: 50%; cursor: pointer; -webkit-transition-duration: .3s; transition-duration: .3s;}
-.layui-carousel-ind li:hover{background-color: rgba(255,255,255,.7);}
-.layui-carousel-ind li.layui-this{background-color: #fff;}
+.layui-carousel-ind ul li{display: inline-block; width: 10px; height: 10px; margin: 0 3px; font-size: 14px; background-color: #eee; background-color: rgba(255,255,255,.5); border-radius: 50%; cursor: pointer; -webkit-transition-duration: .3s; transition-duration: .3s;}
+.layui-carousel-ind ul li:hover{background-color: rgba(255,255,255,.7);}
+.layui-carousel-ind ul li.layui-this{background-color: #fff;}
 .layui-carousel>*[carousel-item]>.layui-this,
 .layui-carousel>*[carousel-item]>.layui-carousel-prev,
 .layui-carousel>*[carousel-item]>.layui-carousel-next{display: block}
