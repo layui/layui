@@ -153,9 +153,9 @@ layui.define('jquery', function(exports){
     ,tabDelete: function(e, othis){
       var li = othis || $(this).parent();
       var index = li.index();
-      var parents = li.parents('.layui-tab').eq(0);
-      var item = parents.children('.layui-tab-content>.layui-tab-item');
-      var filter = parents.attr('lay-filter');
+      var tabElem = li.closest('.layui-tab');
+      var item = tabElem.children('.layui-tab-content').children('.layui-tab-item');
+      var filter = tabElem.attr('lay-filter');
       
       if(li.hasClass(THIS)){
         if (li.next()[0] && li.next().is('li')){
@@ -174,7 +174,7 @@ layui.define('jquery', function(exports){
       }, 50);
       
       layui.event.call(this, MOD_NAME, 'tabDelete('+ filter +')', {
-        elem: parents,
+        elem: tabElem,
         index: index
       });
     }
