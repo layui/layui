@@ -991,7 +991,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var startLimit = curr*options.limit - options.limit;
       var newData = options.data.concat();
       
-      res[response.dataName] = options.page
+      res[response.dataName] = options.page 
         ? newData.splice(startLimit, options.limit)
       : newData;
       res[response.countName] = options.data.length;
@@ -1352,7 +1352,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       // td 容器
       var td = ['<td data-field="'+ field +'" data-key="'+ item3.key +'" '+ function(){
         var attr = [];
-        if(item3.align) attr.push('align="'+ item3.align +'"'); // 对齐方式
         if(item3.minWidth) attr.push('data-minwidth="'+ item3.minWidth +'"'); // 单元格最小宽度
         if(item3.maxWidth) attr.push('data-maxwidth="'+ item3.maxWidth +'"'); // 单元格最小宽度
         return attr.join(' ');
@@ -1368,6 +1367,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           : (key + ' laytable-cell-' + item3.type);
         }() +'"'+ function(){
         var attr = [];
+        if(item3.align) attr.push('align="'+ item3.align +'"'); // 对齐方式
         if(item3.style) attr.push('style="'+ item3.style +'"'); // 自定义单元格样式
         return attr.join(' ');
       }() +'>' + function(){
@@ -1691,19 +1691,19 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   
   //滚动条补丁
   Class.prototype.scrollPatch = function(){
-    var that = this
-    ,layMainTable = that.layMain.children('table')
-    ,scollWidth = that.layMain.width() - that.layMain.prop('clientWidth') //纵向滚动条宽度
-    ,scollHeight = that.layMain.height() - that.layMain.prop('clientHeight') //横向滚动条高度
-    ,getScrollWidth = that.getScrollWidth(that.layMain[0]) //获取主容器滚动条宽度，如果有的话
-    ,outWidth = layMainTable.outerWidth() - that.layMain.width() //表格内容器的超出宽度
+    var that = this;
+    var layMainTable = that.layMain.children('table');
+    var scollWidth = that.layMain.width() - that.layMain.prop('clientWidth'); // 纵向滚动条宽度
+    var scollHeight = that.layMain.height() - that.layMain.prop('clientHeight'); // 横向滚动条高度
+    var getScrollWidth = that.getScrollWidth(that.layMain[0]); // 获取主容器滚动条宽度，如果有的话
+    var outWidth = layMainTable.outerWidth() - that.layMain.width(); // 表格内容器的超出宽度
     
-    //添加补丁
-    ,addPatch = function(elem){
+    // 添加补丁
+    var addPatch = function(elem){
       if(scollWidth && scollHeight){
         elem = elem.eq(0);
         if(!elem.find('.layui-table-patch')[0]){
-          var patchElem = $('<th class="layui-table-patch"><div class="layui-table-cell"></div></th>'); //补丁元素
+          var patchElem = $('<th class="layui-table-patch"><div class="layui-table-cell"></div></th>'); // 补丁元素
           patchElem.find('div').css({
             width: scollWidth
           });
@@ -1712,20 +1712,28 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       } else {
         elem.find('.layui-table-patch').remove();
       }
-    }
+    };
     
     addPatch(that.layHeader);
     addPatch(that.layTotal);
     
-    //固定列区域高度
-    var mainHeight = that.layMain.height()
-    ,fixHeight = mainHeight - scollHeight;
-    that.layFixed.find(ELEM_BODY).css('height', layMainTable.height() >= fixHeight ? fixHeight : 'auto');
+    // 固定列区域高度
+    var mainHeight = that.layMain.height();
+    var fixHeight = mainHeight - scollHeight;
 
-    //表格宽度小于容器宽度时或者数据异常（包括无数据），隐藏固定列
-    that.layFixRight[table.cache[that.key].length && outWidth > 0 ? 'removeClass' : 'addClass'](HIDE);
+    that.layFixed.find(ELEM_BODY).css(
+      'height',
+      layMainTable.height() >= fixHeight ? fixHeight : 'auto'
+    );
+
+    // 表格宽度小于容器宽度时，隐藏固定列
+    that.layFixRight[
+      table.cache[that.key].length && outWidth > 0
+        ? 'removeClass'
+      : 'addClass'
+    ](HIDE);
     
-    //操作栏
+    // 操作栏
     that.layFixRight.css('right', scollWidth - 1); 
   };
 
@@ -1953,6 +1961,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
           var key = th.data('key');
           var col = thatTable.col(key);
+          var filter = thatTable.config.elem.attr('lay-filter');
 
           // 重置过度信息
           dict = {};
@@ -2086,7 +2095,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         // 设置行选中状态
         ,setRowChecked: function(opts){
           that.setRowChecked($.extend({
-            type: 'radio',
             index: index
           }, opts));
         }
