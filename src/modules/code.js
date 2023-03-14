@@ -14,6 +14,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
   // 常量
   var CONST = {
     ELEM_VIEW: 'layui-code-view',
+    ELEM_TAB: 'layui-tab',
     ELEM_TITLE: 'layui-code-title',
     ELEM_FULL: 'layui-code-full',
     ELEM_PREVIEW: 'layui-code-preview',
@@ -24,11 +25,11 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
   // 默认参数项
   var config = {
     elem: '.layui-code', // 元素选择器
-    title: '&lt;/&gt;', // 标题
-    about: '', // 右上角信息
-    ln: true, // 是否显示行号
-    header: false, // 是否显示头部区域
-
+    title: '&lt;/&gt;', // 代码栏标题
+    about: '', // 代码栏右上角信息
+    ln: true, // 代码区域是否显示行号
+    header: false, // 是否显示代码栏头部区域
+    // 默认文本
     text: {
       code: util.escape('</>'),
       preview: 'Preview'
@@ -50,7 +51,6 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
     // 从内至外渲染
     layui.each(options.elem.get().reverse(), function(index, item){
       var othis = $(item);
-      var html = trim(othis.html());
 
       // 合并属性上的参数，并兼容旧版本属性写法 lay-*
       var options = $.extend(true, {}, opts, lay.options(item), function(obj){
@@ -65,7 +65,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       }({}));
 
       // 获得代码
-      var codes = function(){
+      var codes = othis.data('code') || function(){
         var arr = [];
         var textarea = othis.children('textarea');
         
@@ -73,10 +73,6 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         textarea.each(function(){
           arr.push(trim(this.value));
         });
-
-        if(textarea[0]){
-          html = util.escape(arr.join(''));
-        }
         
         // 内容直接放置在元素外层
         if(arr.length === 0){
@@ -85,6 +81,8 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         
         return arr;
       }();
+
+      othis.data('code', codes);
 
       // 是否开启预览
       if(options.preview){
@@ -102,7 +100,8 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           'layui-border'
         ].join(' ') +'">');
         var elemToolbar = $('<div class="layui-code-tools"></div>');
-        var elemViewHas = othis.prev('.' + CONST.ELEM_PREVIEW);
+        var elemViewHas = othis.parent('.' + CONST.ELEM_PREVIEW);
+        var elemTabHas = othis.prev('.'+ CONST.ELEM_TAB);
         var elemPreviewViewHas = othis.next('.' + CONST.ELEM_ITEM +'-preview');
 
         if(options.id) elemView.attr('id', options.id);
@@ -168,8 +167,9 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         });
 
         // 移除旧结构
-        if(elemViewHas[0]) elemViewHas.remove();
-        if(elemPreviewViewHas[0]) elemPreviewViewHas.remove();
+        if(elemTabHas[0]) elemTabHas.remove(); // 移除 tab
+        if(elemPreviewViewHas[0]) elemPreviewViewHas.remove(); // 移除预览区域
+        if(elemViewHas[0]) othis.unwrap(); // 移除外层容器
 
         elemTabView.append(elemHeaderView); // 追加标签头
         options.tools && elemTabView.append(elemToolbar); // 追加工具栏
@@ -247,8 +247,13 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       // 自定义风格
       if(options.skin){
         if(options.skin === 'notepad') options.skin = 'dark';
+        othis.removeClass('layui-code-dark layui-code-light');
         othis.addClass('layui-code-'+ options.skin);
       } 
+
+      
+      // code
+      var html = util.escape(codes.join(''));
 
       // 转义 HTML 标签
       if(options.encode) html = util.escape(html);
