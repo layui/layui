@@ -196,7 +196,7 @@ layui.define('jquery', function(exports){
   };
 
   // 跳转到特定下标
-  Class.prototype.jump = function(index){
+  Class.prototype.goto = function(index){
     var that = this;
     var options = that.config;
 
@@ -236,9 +236,9 @@ layui.define('jquery', function(exports){
       tplInd.css('margin-top', -(tplInd.height()/2));
     }
     
-    //事件
+    // 事件
     tplInd.find('li').on(options.trigger === 'hover' ? 'mouseover' : options.trigger, function(){
-      that.jump($(this).index());
+      that.goto($(this).index());
     });
   };
   
