@@ -1423,6 +1423,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-rate,
 .layui-rate *{display: inline-block; vertical-align: middle;}
 .layui-rate{padding: 10px 5px 10px 0; font-size: 0;}
+.layui-rate li{margin-top: 0 !important;}
 .layui-rate li i.layui-icon{ font-size: 20px; color: #FFB800;}
 .layui-rate li i.layui-icon{margin-right: 5px; transition: all .3s; -webkit-transition: all .3s;}
 .layui-rate li i:hover{cursor: pointer; transform: scale(1.12); -webkit-transform: scale(1.12);}
