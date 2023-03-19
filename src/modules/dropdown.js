@@ -105,6 +105,9 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       return that;
     }
 
+    // 合并 lay-options 属性上的配置信息
+    $.extend(options, lay.options(elem[0]));
+
     // 若重复执行 render，则视为 reload 处理
     if(!rerender && elem[0] && elem.data(MOD_INDEX)){
       var newThat = thisModule.getThis(elem.data(MOD_INDEX));
