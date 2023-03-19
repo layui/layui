@@ -3,15 +3,17 @@
  * MIT Licensed  
  */
  
-layui.define('jquery', function(exports){
+layui.define(['jquery', 'lay'], function(exports){
   "use strict";
   
-  var $ = layui.$
-  ,hint = layui.hint()
-  ,device = layui.device()
+  var $ = layui.$;
+  var lay = layui.lay;
+
+  var hint = layui.hint();
+  var device = layui.device();
 
   //外部接口
-  ,carousel = {
+  var carousel = {
     config: {} //全局配置项
 
     //设置全局项
@@ -55,8 +57,22 @@ layui.define('jquery', function(exports){
   
   //轮播渲染
   Class.prototype.render = function(){
-    var that = this
-    ,options = that.config;
+    var that = this;
+    var options = that.config;
+
+    // 若 elem 非唯一，则拆分为多个实例
+    var elem = $(options.elem);
+    if(elem.length > 1){
+      layui.each(elem, function(){
+        carousel.render($.extend({}, options, {
+          elem: this
+        }));
+      });
+      return that;
+    }
+
+    // 合并 lay-options 属性上的配置信息
+    $.extend(options, lay.options(elem[0]));
 
     options.elem = $(options.elem);
     if(!options.elem[0]) return;
