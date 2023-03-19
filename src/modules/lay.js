@@ -206,6 +206,8 @@
   lay.options = function(elem, opts){
     opts = typeof opts === 'object' ? opts : {attr: opts};
 
+    if(elem === document) return {};
+
     var othis = lay(elem);
     var attrName = opts.attr || 'lay-options';
     var attrValue = othis.attr(attrName);
