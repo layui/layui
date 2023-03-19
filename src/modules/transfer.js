@@ -148,8 +148,11 @@ layui.define(['laytpl', 'form'], function(exports){
     options.data = options.data || [];
     options.value = options.value || [];
     
-    //索引
-    that.key = options.id || that.index;
+    // 初始化 id 属性 - 优先取 options > 元素 id > 自增索引
+    options.id = 'id' in options ? options.id : (
+      elem.attr('id') || that.index
+    );
+    that.key = options.id;
     
     //插入组件结构
     othis.html(that.elem);
