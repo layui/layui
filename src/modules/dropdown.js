@@ -93,9 +93,9 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
   Class.prototype.init = function(rerender){
     var that = this;
     var options = that.config;
-    var elem = options.elem = $(options.elem);
     
     // 若 elem 非唯一
+    var elem = $(options.elem);
     if(elem.length > 1){
       layui.each(elem, function(){
         dropdown.render($.extend({}, options, {
@@ -115,6 +115,8 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
 
       return newThat.reload(options);
     }
+
+    options.elem = $(options.elem);
     
     // 初始化 id 属性 - 优先取 options > 元素 id > 自增索引
     options.id = 'id' in options ? options.id : (
