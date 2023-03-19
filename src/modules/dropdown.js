@@ -113,8 +113,10 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       return newThat.reload(options);
     }
     
-    //初始化 id 参数
-    options.id = ('id' in options) ? options.id : that.index;
+    // 初始化 id 属性 - 优先取 options > 元素 id > 自增索引
+    options.id = 'id' in options ? options.id : (
+      options.elem.attr('id') || that.index
+    );
     
     if(options.show) that.render(rerender); //初始即显示
     that.events(); //事件
