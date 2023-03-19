@@ -222,8 +222,10 @@ layui.define(['jquery', 'lay'], function(exports){
       that.elemColorBox = elemColorBox
     );
 
-    //初始化 id 参数
-    options.id = ('id' in options) ? options.id : that.index;
+    // 初始化 id 属性 - 优先取 options > 元素 id > 自增索引
+    options.id = 'id' in options ? options.id : (
+      elem.attr('id') || that.index
+    );
     
     // 获取背景色值
     that.color = that.elemColorBox.find('.'+ PICKER_TRIG_SPAN)[0].style.background;
