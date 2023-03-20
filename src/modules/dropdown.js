@@ -453,7 +453,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
         if(
           e.target === options.elem[0] || 
           options.elem.find(e.target)[0] ||
-          e.target === that.elemView[0] ||
+          (that.elemView && e.target === that.elemView[0]) ||
           (that.elemView && that.elemView.find(e.target)[0])
         ) return;
       }
