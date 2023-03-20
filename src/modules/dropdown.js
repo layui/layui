@@ -531,8 +531,17 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     });
     
   }();
+
+  // 关闭面板
+  dropdown.close = function(id){
+    var that = thisModule.getThis(id);
+    if(!that) return this;
+    
+    that.remove();
+    return thisModule.call(that);
+  };
   
-  //重载实例
+  // 重载实例
   dropdown.reload = function(id, options){
     var that = thisModule.getThis(id);
     if(!that) return this;
@@ -541,7 +550,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     return thisModule.call(that);
   };
 
-  //核心入口
+  // 核心入口
   dropdown.render = function(options){
     var inst = new Class(options);
     return thisModule.call(inst);
