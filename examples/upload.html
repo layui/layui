@@ -193,6 +193,7 @@ layui.use(['upload', 'element'], function(){
     ,number: 3
     ,auto: false
     ,bindAction: '#testListAction'
+    ,size: 30
     ,choose: function(obj){   
       var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
       //读取本地文件
@@ -213,7 +214,9 @@ layui.use(['upload', 'element'], function(){
         });
         
         //删除
+        var that = this;
         tr.find('.demo-delete').on('click', function(){
+          console.log(files, index);
           delete files[index]; //删除对应的文件
           tr.remove();
           uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
@@ -308,6 +311,7 @@ layui.use(['upload', 'element'], function(){
     ,choose: function(obj){   
       var that = this;
       obj.preview(function(index, file){
+        that.elem.after('<span class="layui-inline layui-upload-choose">'+ file.name +'</span>');
         console.log(file.name);
         //obj.resetFile(index, file, '123.jpg');
       });
