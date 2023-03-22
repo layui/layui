@@ -171,17 +171,23 @@ layui.define(['lay','layer'], function(exports){
     }
   };
   
-  //执行上传
+  // 执行上传
   Class.prototype.upload = function(files, type){
-    var that = this
-    ,options = that.config
-    ,elemFile = that.elemFile[0]
+    var that = this;
+    var options = that.config;
+    var elemFile = that.elemFile[0];
+
+    // 获取文件队列
+    var getFiles = function(){
+      return files || that.files || that.chooseFiles || elemFile.files;
+    };
     
     //高级浏览器处理方式，支持跨域
-    ,ajaxSend = function(){
-      var successful = 0, failed = 0
-      ,items = files || that.files || that.chooseFiles || elemFile.files
-      ,allDone = function(){ //多文件全部上传完毕的回调
+    var ajaxSend = function(){
+      var successful = 0;
+      var failed = 0
+      var items = getFiles();
+      var allDone = function(){ // 多文件全部上传完毕的回调
         if(options.multiple && successful + failed === that.fileLength){
           typeof options.allDone === 'function' && options.allDone({
             total: that.fileLength
@@ -412,8 +418,8 @@ layui.define(['lay','layer'], function(exports){
     
     //检验文件数量
     that.fileLength = function(){
-      var length = 0
-      ,items = files || that.files || that.chooseFiles || elemFile.files;
+      var length = 0;
+      var items = getFiles();
       layui.each(items, function(){
         length++;
       });
@@ -427,11 +433,11 @@ layui.define(['lay','layer'], function(exports){
       );
     }
     
-    //检验文件大小
+    // 检验文件大小
     if(options.size > 0 && !(device.ie && device.ie < 10)){
       var limitSize;
       
-      layui.each(that.chooseFiles, function(index, file){
+      layui.each(getFiles(), function(index, file){
         if(file.size > 1024*options.size){
           var size = options.size/1024;
           size = size >= 1 ? (size.toFixed(2) + 'MB') : options.size + 'KB'

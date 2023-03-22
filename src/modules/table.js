@@ -1722,14 +1722,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var fixHeight = mainHeight - scollHeight;
 
     that.layFixed.find(ELEM_BODY).css(
-      'height',
+      'height', 
       layMainTable.height() >= fixHeight ? fixHeight : 'auto'
     );
 
     // 表格宽度小于容器宽度时，隐藏固定列
     that.layFixRight[
-      table.cache[that.key].length && outWidth > 0
-        ? 'removeClass'
+      (table.cache[that.key] && table.cache[that.key].length) && outWidth > 0
+        ? 'removeClass' 
       : 'addClass'
     ](HIDE);
     

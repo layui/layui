@@ -183,11 +183,11 @@ layui.define('jquery', function(exports){
       
       //30天以内，返回“多久前”
       if(stamp >= 1000*60*60*24){
-        return ((stamp/1000/60/60/24)|0) + '天前';
+        return ((stamp/1000/60/60/24)|0) + ' 天前';
       } else if(stamp >= 1000*60*60){
-        return ((stamp/1000/60/60)|0) + '小时前';
+        return ((stamp/1000/60/60)|0) + ' 小时前';
       } else if(stamp >= 1000*60*3){ //3分钟以内为：刚刚
-        return ((stamp/1000/60)|0) + '分钟前';
+        return ((stamp/1000/60)|0) + ' 分钟前';
       } else if(stamp < 0){
         return '未来';
       } else {

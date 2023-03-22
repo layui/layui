@@ -2,10 +2,11 @@
  * slider 滑块组件
  */
 
-layui.define('jquery', function(exports){
+layui.define(['jquery', 'lay'], function(exports){
   'use strict';
 
-  var $ = layui.$
+  var $ = layui.$;
+  var lay = layui.lay;
 
   // 外部接口
   var slider = {
@@ -80,8 +81,22 @@ layui.define('jquery', function(exports){
 
   //滑块渲染
   Class.prototype.render = function(){
-    var that = this
-    ,options = that.config;
+    var that = this;
+    var options = that.config;
+
+    // 若 elem 非唯一，则拆分为多个实例
+    var elem = $(options.elem);
+    if(elem.length > 1){
+      layui.each(elem, function(){
+        slider.render($.extend({}, options, {
+          elem: this
+        }));
+      });
+      return that;
+    }
+
+    // 合并 lay-options 属性上的配置信息
+    $.extend(options, lay.options(elem[0]));
     
     //间隔值不能小于 1
     if(options.step < 1) options.step = 1;

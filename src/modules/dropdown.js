@@ -89,13 +89,13 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     that.init(true);
   };
 
-  //初始化准备
+  // 初始化准备
   Class.prototype.init = function(rerender){
-    var that = this
-    ,options = that.config
-    ,elem = options.elem = $(options.elem);
+    var that = this;
+    var options = that.config;
     
-    //若 elem 非唯一
+    // 若 elem 非唯一
+    var elem = $(options.elem);
     if(elem.length > 1){
       layui.each(elem, function(){
         dropdown.render($.extend({}, options, {
@@ -105,19 +105,26 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       return that;
     }
 
-    //若重复执行 render，则视为 reload 处理
+    // 合并 lay-options 属性上的配置信息
+    $.extend(options, lay.options(elem[0]));
+
+    // 若重复执行 render，则视为 reload 处理
     if(!rerender && elem[0] && elem.data(MOD_INDEX)){
       var newThat = thisModule.getThis(elem.data(MOD_INDEX));
       if(!newThat) return;
 
       return newThat.reload(options);
     }
+
+    options.elem = $(options.elem);
     
-    //初始化 id 参数
-    options.id = ('id' in options) ? options.id : that.index;
+    // 初始化 id 属性 - 优先取 options > 元素 id > 自增索引
+    options.id = 'id' in options ? options.id : (
+      elem.attr('id') || that.index
+    );
     
-    if(options.show) that.render(rerender); //初始即显示
-    that.events(); //事件
+    if(options.show) that.render(rerender); // 初始即显示
+    that.events(); // 事件
   };
   
   //渲染
@@ -446,7 +453,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
         if(
           e.target === options.elem[0] || 
           options.elem.find(e.target)[0] ||
-          e.target === that.elemView[0] ||
+          (that.elemView && e.target === that.elemView[0]) ||
           (that.elemView && that.elemView.find(e.target)[0])
         ) return;
       }
@@ -524,8 +531,17 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     });
     
   }();
+
+  // 关闭面板
+  dropdown.close = function(id){
+    var that = thisModule.getThis(id);
+    if(!that) return this;
+    
+    that.remove();
+    return thisModule.call(that);
+  };
   
-  //重载实例
+  // 重载实例
   dropdown.reload = function(id, options){
     var that = thisModule.getThis(id);
     if(!that) return this;
@@ -534,7 +550,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     return thisModule.call(that);
   };
 
-  //核心入口
+  // 核心入口
   dropdown.render = function(options){
     var inst = new Class(options);
     return thisModule.call(inst);
