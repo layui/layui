@@ -1101,7 +1101,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 
 /** 文件上传 **/
 .layui-upload-file{display: none!important; opacity: .01; filter: Alpha(opacity=1);}
-.layui-upload-list{margin: 10px 0;}
+.layui-upload-list{margin: 11px 0;}
 .layui-upload-choose{max-width: 200px; padding: 0 10px; color: #999; font-size: 14px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .layui-upload-drag{position: relative; display: inline-block; padding: 30px; border: 1px dashed #e2e2e2; background-color: #fff; text-align: center; cursor: pointer; color: #999;}
 .layui-upload-drag .layui-icon{font-size: 50px; color: #009688;}
