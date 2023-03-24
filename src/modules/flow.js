@@ -22,7 +22,7 @@ layui.define('jquery', function(exports){
     var end = options.end || '没有更多了'; //“末页”显示文案
     
     //滚动条所在元素是否为document
-    var notDocment = options.scrollElem && options.scrollElem !== document;
+    var notDocument = options.scrollElem && options.scrollElem !== document;
     
     //加载更多
     var ELEM_TEXT = '<cite>加载更多</cite>'
@@ -77,10 +77,10 @@ layui.define('jquery', function(exports){
       
       timer = setTimeout(function(){
         //计算滚动所在容器的可视高度
-        var height = notDocment ? othis.height() : $(window).height();
+        var height = notDocument ? othis.height() : $(window).height();
         
         //计算滚动所在容器的实际高度
-        var scrollHeight = notDocment
+        var scrollHeight = notDocument
           ? othis.prop('scrollHeight')
         : document.documentElement.scrollHeight;
 
@@ -103,12 +103,12 @@ layui.define('jquery', function(exports){
     var elem = options.elem || 'img';
     
     //滚动条所在元素是否为document
-    var notDocment = options.scrollElem && options.scrollElem !== document;
+    var notDocument = options.scrollElem && options.scrollElem !== document;
     
     //显示图片
     var show = function(item, height){
       var start = scrollElem.scrollTop(), end = start + height;
-      var elemTop = notDocment ? function(){
+      var elemTop = notDocument ? function(){
         return item.offset().top - scrollElem.offset().top + start;
       }() : item.offset().top;
 
@@ -132,7 +132,7 @@ layui.define('jquery', function(exports){
     }, render = function(othis, scroll){
       
       //计算滚动所在容器的可视高度
-      var height = notDocment ? (scroll||scrollElem).height() : $(window).height();
+      var height = notDocument ? (scroll||scrollElem).height() : $(window).height();
       var start = scrollElem.scrollTop(), end = start + height;
 
       that.lazyimg.elem = $(elem);
@@ -142,7 +142,7 @@ layui.define('jquery', function(exports){
       } else {
         //计算未加载过的图片
         for(var i = 0; i < that.lazyimg.elem.length; i++){
-          var item = that.lazyimg.elem.eq(i), elemTop = notDocment ? function(){
+          var item = that.lazyimg.elem.eq(i), elemTop = notDocument ? function(){
             return item.offset().top - scrollElem.offset().top + start;
           }() : item.offset().top;
           
