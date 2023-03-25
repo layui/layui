@@ -707,7 +707,7 @@
   Class.prototype.position = function(){
     var that = this
     ,options = that.config;
-    lay.position(that.bindElem || options.elem[0], that.elem, {
+    lay.position(options.elem[0], that.elem, {
       position: options.position
     });
     return that;
@@ -769,7 +769,7 @@
     ,dateTime = options.dateTime = options.dateTime || that.systemDate()
     ,thisMaxDate, error
     
-    ,elem = that.bindElem || options.elem[0]
+    ,elem = options.elem[0]
     ,valType = that.isInput(elem) ? 'val' : 'html'
     ,value = function(){
       //如果传入了开始和结束日期的 input 对象，则将其拼接为日期范围字符
@@ -1566,7 +1566,7 @@
   Class.prototype.setValue = function(value){
     var that = this
     ,options = that.config
-    ,elem = that.bindElem || options.elem[0];
+    ,elem = options.elem[0];
     
     //静态展现则不作默认赋值
     if(options.position === 'static') return that;
@@ -2082,9 +2082,9 @@
     var showEvent = function(){
       // 已经打开的面板避免重新渲染
       if(laydate.thisId === options.id) return;
-      that.bindElem = this;
       that.render();
-    }
+    };
+
     //绑定呼出控件事件
     options.elem.on(options.trigger, showEvent);
     options.elem[0].eventHandler = true;
