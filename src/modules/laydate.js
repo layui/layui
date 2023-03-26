@@ -116,7 +116,9 @@
     
     // 初始化 id 参数
     options = lay.extend(that.config, lay.options(elem[0])); // 继承节点上的属性
-    options.id = ('id' in options) ? options.id : that.index;
+    options.id = 'id' in options ? options.id : (
+      elem.attr('id') || that.index
+    );
     
     // 初始化
     laydate.ready(function(){
