@@ -715,24 +715,33 @@
     return that;
   };
   
-  //提示
-  Class.prototype.hint = function(content){
-    var that = this
-    ,options = that.config
-    ,div = lay.elem('div', {
+  // 提示
+  Class.prototype.hint = function(opts){
+    var that = this;
+    var options = that.config;
+    var div = lay.elem('div', {
       "class": ELEM_HINT
     });
     
     if(!that.elem) return;
+
+    // 兼容旧版参数
+    if(typeof opts === 'object'){
+      opts = opts || {};
+    } else {
+      opts = {
+        content: opts
+      }
+    }
     
-    div.innerHTML = content || '';
+    div.innerHTML = opts.content || '';
     lay(that.elem).find('.'+ ELEM_HINT).remove();
     that.elem.appendChild(div);
 
     clearTimeout(that.hinTimer);
     that.hinTimer = setTimeout(function(){
       lay(that.elem).find('.'+ ELEM_HINT).remove();
-    }, 3000);
+    }, 'ms' in opts ? opts.ms : 3000);
   };
   
   //获取递增/减后的年月
@@ -2167,13 +2176,20 @@
     return thisModule.call(inst);
   };
 
-  // 获取
-  laydate.getInst = function (key) {
-    var that = thisModule.getThis(key);
-    if (that) {
+  // 获取对应 ID 的实例
+  laydate.getInst = function (id) {
+    var that = thisModule.getThis(id);
+    if(that){
       return that.inst;
     }
-  }
+  };
+
+  // 面板提示
+  laydate.hint = function(id, opts){
+    var that = thisModule.getThis(id);
+    if(!that) return;
+    return that.hint(opts);
+  };
 
   //将指定对象转化为日期值
   laydate.parse = function(dateTime, format, one){
