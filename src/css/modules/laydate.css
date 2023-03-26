@@ -71,7 +71,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-footer span{display: inline-block;  vertical-align: top; height: 26px; line-height: 24px; padding: 0 10px; border: 1px solid #C9C9C9; border-radius: 2px; background-color: #fff; font-size: 12px; cursor: pointer; white-space: nowrap; transition: all .3s;}
 .layui-laydate-footer span:hover{color: #5FB878;}
 .layui-laydate-footer span.layui-laydate-preview{cursor: default; border-color: transparent !important;}
-.layui-laydate-footer span.layui-laydate-preview:hover{color: #666;}
+.layui-laydate-footer span.layui-laydate-preview:hover{color: #777;}
 .layui-laydate-footer span:first-child.layui-laydate-preview{padding-left: 0;}
 .laydate-footer-btns {position: absolute; right: 10px; top: 10px; }
 .laydate-footer-btns span{margin: 0 0 0 -1px; border-radius: 0px; }
@@ -79,9 +79,9 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-footer-btns span:last-child { border-radius: 0px 2px 2px 0px;}
 
 /* 快捷栏 */
-.layui-laydate-shortcut{width: 80px; padding: 6px 0; display: inline-block;vertical-align: top;overflow: auto; max-height: 276px;}
+.layui-laydate-shortcut{width: 80px; padding: 6px 0; display: inline-block;vertical-align: top; overflow: auto; max-height: 276px; text-align: center;}
 .layui-laydate-shortcut+.layui-laydate-main{display: inline-block;border-left: 1px solid #e2e2e2;}
-.layui-laydate-shortcut>li{padding: 5px 8px; cursor: pointer;line-height: 18px;}
+.layui-laydate-shortcut>li{padding: 5px 8px; cursor: pointer; line-height: 18px;}
 
 /* 年月列表 */
 .layui-laydate .layui-laydate-list{position: absolute; left: 0; top: 0; width: 100%; height: 100%; padding: 10px; box-sizing: border-box; background-color: #fff;}
