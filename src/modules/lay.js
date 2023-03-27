@@ -12,12 +12,15 @@
     return new LAY(selector);
   }
   
-  //DOM构造器
+  // DOM 构造器
   ,LAY = function(selector){
-    var index = 0
-    ,nativeDOM = typeof selector === 'object' ? [selector] : (
-      this.selector = selector
-      ,document.querySelectorAll(selector || null)
+    var index = 0;
+    var nativeDOM = typeof selector === 'object' ? function(){
+      // 仅适配简单元素对象
+      return layui.isArray(selector) ? selector : [selector];
+    }() : (
+      this.selector = selector,
+      document.querySelectorAll(selector || null)
     );
     for(; index < nativeDOM.length; index++){
       this.push(nativeDOM[index]);
