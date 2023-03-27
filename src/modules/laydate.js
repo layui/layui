@@ -21,6 +21,10 @@
   
   // 识别预先可能定义的指定全局对象
   var GLOBAL = window.LAYUI_GLOBAL || {};
+
+  // 模块名
+  var MOD_NAME = 'laydate';
+  var MOD_ID = 'layui-'+ MOD_NAME +'-id' // 已渲染过的索引标记名
   
   // 外部调用
   var laydate = {
@@ -118,9 +122,23 @@
       return that;
     }
     
-    // 初始化 id 参数
+    // 初始化属性
     options = lay.extend(that.config, lay.options(elem[0])); // 继承节点上的属性
-    options.id = 'id' in options ? options.id : that.index;
+
+    // 若重复执行 render，则视为 reload 处理
+    if(elem[0] && elem.attr(MOD_ID)){
+      var newThat = thisModule.getThis(elem.attr(MOD_ID));
+      if(!newThat) return;
+      return newThat.reload(options);
+    }
+
+    // 初始化 id 属性 - 优先取 options > 元素 id > 自增索引
+    options.id = 'id' in options ? options.id : (
+      elem.attr('id') || that.index
+    );
+
+    // 自增索引
+    options.index = that.index;
     
     // 初始化
     laydate.ready(function(){
@@ -241,8 +259,6 @@
     options.eventElem = lay(options.eventElem);
     
     if(!options.elem[0]) return;
-    var thatTemp = thisModule.that[options.elem.attr('lay-key')]
-    thatTemp && thatTemp.destroy && thatTemp.destroy(); // 销毁上一个实例以便重新渲染
 
     layui.type(options.theme) !== 'array' && (options.theme = [options.theme]);
     // 设置了全面版模式
@@ -338,9 +354,10 @@
       }
     }
     
-    //设置唯一KEY
+    // 设置唯一 KEY
     options.elem.attr('lay-key', that.index);
     options.eventElem.attr('lay-key', that.index);
+    options.elem.attr(MOD_ID, options.id); // 渲染过的标记
 
     //记录重要日期
     options.mark = lay.extend({}, (options.calendar && options.lang === 'cn') ? {
