@@ -56,18 +56,22 @@
   
   // 操作当前实例
   var thisModule = function(){
-    var that = this
-    ,options = that.config
-    ,id = options.id;
+    var that = this;
+    var options = that.config;
+    var id = options.id;
     
-    thisModule.that[id] = that; //记录当前实例对象
+    thisModule.that[id] = that; // 记录当前实例对象
 
     return that.inst = {
-      //提示框
+      // 提示框
       hint: function(content){
         that.hint.call(that, content);
-      }
-      ,config: that.config
+      },
+      // 重载实例
+      reload: function(options){
+        that.reload.call(that, options);
+      },
+      config: that.config
     };
   };
 
@@ -212,6 +216,13 @@
     };
     return text[options.lang] || text['cn'];
   };
+
+  // 重载实例
+  Class.prototype.reload = function(options){
+    var that = this;
+    that.config = lay.extend({}, that.config, options);
+    that.init();
+  };
   
   //初始准备
   Class.prototype.init = function(){
@@ -348,7 +359,8 @@
     
     //获取限制内日期
     lay.each(['min', 'max'], function(i, item){
-      var ymd = [], hms = [];
+      var ymd = [];
+      var hms = [];
       if(typeof options[item] === 'number'){ //如果为数字
         var day = options[item]
         ,tDate = new Date()
@@ -368,9 +380,11 @@
         );
         ymd = [thisDate.getFullYear(), thisDate.getMonth() + 1, thisDate.getDate()];
         hms = [thisDate.getHours(), thisDate.getMinutes(), thisDate.getSeconds()];
-      } else {
+      } else if(typeof options[item] === 'string') {
         ymd = (options[item].match(/\d+-\d+-\d+/) || [''])[0].split('-');
         hms = (options[item].match(/\d+:\d+:\d+/) || [''])[0].split(':');
+      } else if(typeof options[item] === 'object'){
+        return options[item];
       }
       options[item] = {
         year: ymd[0] | 0 || new Date().getFullYear()
@@ -2169,10 +2183,17 @@
     });
   };
   
-  //核心接口
+  // 渲染 - 核心接口
   laydate.render = function(options){
     var inst = new Class(options);
     return thisModule.call(inst);
+  };
+
+  // 重载
+  laydate.reload = function (id, options) {
+    var that = thisModule.getThis(id);
+    if(!that) return;
+    return that.reload(options);
   };
 
   // 获取对应 ID 的实例
