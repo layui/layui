@@ -2099,16 +2099,17 @@
     options.elem[0].eventHandler = true;
     options.eventElem.on(options.trigger, showEvent);
 
-    that.destroy = function () {
+    // 元素解绑
+    that.unbind = function () {
       that.remove();
       options.elem.off(options.trigger, showEvent);
       options.elem.removeAttr('lay-key');
+      options.elem.removeAttr(MOD_ID);
       options.elem[0].eventHandler = false;
       options.eventElem.off(options.trigger, showEvent);
       options.eventElem.removeAttr('lay-key');
-
       delete thisModule.that[options.id];
-    }
+    };
   };
   
   //记录所有实例
@@ -2232,6 +2233,13 @@
     return new Date(thisDate.getTime() - 1000*60*60*24).getDate();
   };
 
+  // 解绑实例
+  laydate.unbind = function(id){
+    var that = thisModule.getThis(id || laydate.thisId);
+    if(!that) return;
+    return that.unbind();
+  };
+
   // 关闭日期面板
   laydate.close = function(id){
     var that = thisModule.getThis(id || laydate.thisId);
@@ -2239,12 +2247,7 @@
     return that.remove();
   };
 
-  // 销毁实例
-  laydate.destroy = function(id){
-    var that = thisModule.getThis(id || laydate.thisId);
-    if(!that) return;
-    return that.destroy();
-  };
+  
 
   //加载方式
   isLayui ? (
