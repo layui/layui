@@ -2228,7 +2228,21 @@
     return that.hint(opts);
   };
 
-  //将指定对象转化为日期值
+  // 解绑实例
+  laydate.unbind = function(id){
+    var that = thisModule.getThis(id);
+    if(!that) return;
+    return that.unbind();
+  };
+
+  // 关闭日期面板
+  laydate.close = function(id){
+    var that = thisModule.getThis(id || laydate.thisId);
+    if(!that) return;
+    return that.remove();
+  };
+
+  // 将指定对象转化为日期值
   laydate.parse = function(dateTime, format, one){
     dateTime = dateTime || {};
     
@@ -2259,7 +2273,7 @@
     return format.join('');
   };
   
-  //得到某月的最后一天
+  // 得到某月的最后一天
   laydate.getEndDate = function(month, year){
     var thisDate = new Date();
     //设置日期为下个月的第一天
@@ -2270,22 +2284,6 @@
     //减去一天，得到当前月最后一天
     return new Date(thisDate.getTime() - 1000*60*60*24).getDate();
   };
-
-  // 解绑实例
-  laydate.unbind = function(id){
-    var that = thisModule.getThis(id || laydate.thisId);
-    if(!that) return;
-    return that.unbind();
-  };
-
-  // 关闭日期面板
-  laydate.close = function(id){
-    var that = thisModule.getThis(id || laydate.thisId);
-    if(!that) return;
-    return that.remove();
-  };
-
-  
 
   //加载方式
   isLayui ? (
