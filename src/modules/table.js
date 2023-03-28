@@ -811,15 +811,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     if(that.autoColNums > 0 && patchNums >= -colNums && patchNums <= colNums){
       var getEndTh = function(th){
         var field;
-        th = th || that.layHeader.eq(0).find('thead th:last-child')
+        th = th || that.layHeader.eq(0).find('thead > tr:first-child > th:last-child')
         field = th.data('field');
         if(!field && th.prev()[0]){
           return getEndTh(th.prev())
         }
         return th
-      }
-      ,th = getEndTh()
-      ,key = th.data('key');
+      };
+      var th = getEndTh();
+      var key = th.data('key');
 
       that.getCssRule(key, function(item){
         var width = item.style.width || th.outerWidth();
