@@ -141,7 +141,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   var ELEM_TOOL_PANEL = 'layui-table-tool-panel';
 
   var DATA_MOVE_NAME = 'LAY_TABLE_MOVE_DICT';
-  
+
   // thead 区域模板
   var TPL_HEADER = function(options){
     var rowCols = '{{#if(item2.colspan){}} colspan="{{=item2.colspan}}"{{#} if(item2.rowspan){}} rowspan="{{=item2.rowspan}}"{{#}}}';
@@ -409,7 +409,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         if(options.height) arr.push('height:'+ options.height + 'px;');
         return arr.join('')
       }()
-    }).html(laytpl(TPL_MAIN).render({
+    }).html(laytpl(TPL_MAIN, {
+      open: '{{', // 标签符前缀
+      close: '}}' // 标签符后缀
+    }).render({
       data: options
       ,index: that.index //索引
     }));
