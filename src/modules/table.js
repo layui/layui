@@ -2667,7 +2667,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
               // 异常处理
               content = content.replace(/"/g, '""'); // 避免内容存在「双引号」导致异常分隔
-              content += '\t'; // 加「水平制表符」 避免内容被转换格式
+              // content += '\t'; // 加「水平制表符」 避免内容被转换格式
               content = '"'+ content +'"'; // 避免内容存在「逗号」导致异常分隔
 
               // 插入内容
