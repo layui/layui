@@ -1351,7 +1351,7 @@ layer.photos = function(options, loop, key){
         data.push({
           alt: othis.attr('alt'),
           pid: othis.attr('layer-pid'),
-          src: othis.attr('layer-src') || othis.attr('src'),
+          src: othis.attr('lay-src') || othis.attr('layer-src') || othis.attr('src'),
           thumb: othis.attr('src')
         });
       });
