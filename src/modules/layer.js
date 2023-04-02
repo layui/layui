@@ -285,10 +285,10 @@ Class.pt.vessel = function(conType, callback){
         + function(){
           var face = [
             'layui-icon-tips',
-            'layui-icon-ok',
-            'layui-icon-close-fill',
-            'layui-icon-help',
-            'layui-icon-password',
+            'layui-icon-success',
+            'layui-icon-error',
+            'layui-icon-question',
+            'layui-icon-lock',
             'layui-icon-face-cry',
             'layui-icon-face-smile'
           ];

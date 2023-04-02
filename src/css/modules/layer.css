@@ -74,20 +74,21 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 /* 定制化 */
 .layui-layer-dialog{min-width: 300px;}
 .layui-layer-dialog .layui-layer-content{position: relative; padding:20px; line-height:24px; word-break: break-all; overflow:hidden; font-size:14px; overflow-x: hidden; overflow-y:auto;}
-.layui-layer-dialog .layui-layer-content .layui-layer-face{position: absolute; top: 18px; left: 16px; color: #959595; font-size: 24px; _left: -40px;}
+.layui-layer-dialog .layui-layer-content .layui-layer-face{position: absolute; top: 18px; left: 16px; color: #959595; font-size: 32px; _left: -40px;}
 .layui-layer-dialog .layui-layer-content .layui-icon-tips{color: #F39B12;}
-.layui-layer-dialog .layui-layer-content .layui-icon-ok{color: #5FB878;}
-.layui-layer-dialog .layui-layer-content .layui-icon-close-fill{top: 19px; font-size: 28px; color: #FF5722;}
-.layui-layer-dialog .layui-layer-content .layui-icon-password{color: #787878;}
+.layui-layer-dialog .layui-layer-content .layui-icon-success{color: #16b777;}
+.layui-layer-dialog .layui-layer-content .layui-icon-error{top: 19px; color: #FF5722;}
+.layui-layer-dialog .layui-layer-content .layui-icon-question{color: #FFB800;}
+.layui-layer-dialog .layui-layer-content .layui-icon-lock{color: #787878;}
 .layui-layer-dialog .layui-layer-content .layui-icon-face-cry{color: #FF5722;}
-.layui-layer-dialog .layui-layer-content .layui-icon-face-smile{color: #5FB878;}
+.layui-layer-dialog .layui-layer-content .layui-icon-face-smile{color: #16b777;}
 
 .layui-layer-rim{border:6px solid #8D8D8D; border:6px solid rgba(0,0,0,.3); border-radius:5px; box-shadow: none;}
 .layui-layer-msg{min-width:180px; border:1px solid #D3D4D3; box-shadow: none;}
 .layui-layer-hui{min-width:100px;  background-color: #000; filter:alpha(opacity=60); background-color: rgba(0,0,0,0.6); color: #fff; border:none;}
 .layui-layer-hui .layui-layer-close{color: #fff;}
 .layui-layer-hui .layui-layer-content{padding: 11px 24px; text-align: center;}
-.layui-layer-dialog .layui-layer-padding{padding: 18px 24px 18px 52px; text-align: left;}
+.layui-layer-dialog .layui-layer-padding{padding: 18px 24px 18px 58px; text-align: left;}
 .layui-layer-page .layui-layer-content{position:relative; overflow:auto;}
 .layui-layer-page .layui-layer-btn,.layui-layer-iframe .layui-layer-btn{padding-top:10px;}
 .layui-layer-nobg{background:none;}
