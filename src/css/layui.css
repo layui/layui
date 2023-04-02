@@ -65,10 +65,16 @@ a cite{font-style: normal; *cursor:pointer;}
 }
 
 /* font-class */
+.layui-icon-github:before{content:"\e6a7"}
+.layui-icon-disabled:before{content:"\e6cc"}
+.layui-icon-moon:before{content:"\e6c2"}
+.layui-icon-error:before{content:"\e693"}
+.layui-icon-success:before{content:"\e697"}
+.layui-icon-question:before{content:"\e699"}
+.layui-icon-lock:before{content:"\e69a"}
 .layui-icon-eye:before{content:"\e695"}
 .layui-icon-eye-invisible:before{content:"\e696"}
 .layui-icon-backspace:before{content:"\e694"}
-.layui-icon-help-circle:before{content:"\e77c"}
 .layui-icon-tips-fill:before{content:"\eb2e"}
 .layui-icon-test:before{content:"\e692"}
 .layui-icon-clear:before{content:"\e788"}
