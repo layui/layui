@@ -60,6 +60,7 @@
     ,transfer: 'transfer' //穿梭框
     ,tree: 'tree' //树结构
     ,table: 'table' //表格
+    ,treeTable: 'treeTable' //树表
     ,element: 'element' //常用元素操作
     ,rate: 'rate'  //评分组件
     ,colorpicker: 'colorpicker' //颜色选择器

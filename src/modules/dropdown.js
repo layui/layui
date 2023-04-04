@@ -48,6 +48,9 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       ,reload: function(options){
         that.reload.call(that, options);
       }
+      ,reloadData: function(options){
+        dropdown.reloadData(id, options);
+      }
       ,close: function () {
         that.remove()
       }
@@ -83,14 +86,14 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
   };
   
   //重载实例
-  Class.prototype.reload = function(options){
+  Class.prototype.reload = function(options, type){
     var that = this;
     that.config = $.extend({}, that.config, options);
-    that.init(true);
+    that.init(true, type);
   };
 
   // 初始化准备
-  Class.prototype.init = function(rerender){
+  Class.prototype.init = function(rerender, type){
     var that = this;
     var options = that.config;
     
@@ -113,7 +116,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       var newThat = thisModule.getThis(elem.data(MOD_INDEX));
       if(!newThat) return;
 
-      return newThat.reload(options);
+      return newThat.reload(options, type);
     }
 
     options.elem = $(options.elem);
@@ -122,13 +125,13 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     options.id = 'id' in options ? options.id : (
       elem.attr('id') || that.index
     );
-    
-    if(options.show) that.render(rerender); // 初始即显示
+
+    if(options.show || (type === 'reloadData' && that.elemView && $('body').find(that.elemView.get(0)).length)) that.render(rerender, type); //初始即显示或者面板弹出之后执行了刷新数据
     that.events(); // 事件
   };
   
   //渲染
-  Class.prototype.render = function(rerender){
+  Class.prototype.render = function(rerender, type){
     var that = this
     ,options = that.config
     ,elemBody = $('body')
@@ -234,7 +237,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     }
     
     //主模板
-    ,TPL_MAIN = ['<div class="layui-dropdown layui-border-box layui-panel layui-anim layui-anim-downbit">'
+    ,TPL_MAIN = ['<div class="layui-dropdown layui-border-box layui-panel layui-anim layui-anim-downbit" lay-id="' + options.id + '">'
     ,'</div>'].join('');
     
     //如果是右键事件，则每次触发事件时，将允许重新渲染
@@ -244,26 +247,39 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     if(!rerender && options.elem.data(MOD_INDEX +'_opened')) return;
 
     //记录模板对象
-    that.elemView = $(TPL_MAIN);
-    that.elemView.append(options.content || getDefaultView());
-    
-    //初始化某些属性
-    if(options.className) that.elemView.addClass(options.className);
-    if(options.style) that.elemView.attr('style', options.style);
-    
-    
-    //记录当前执行的实例索引
-    dropdown.thisId = options.id;
-    
-    //插入视图
-    that.remove(); //移除非当前绑定元素的面板
-    elemBody.append(that.elemView);
-    options.elem.data(MOD_INDEX +'_opened', true);
+    that.elemView = $('.' + STR_ELEM + '[lay-id="' + options.id + '"]');
+    if (type === 'reloadData' && that.elemView.length) {
+      that.elemView.html(options.content || getDefaultView());
+    } else {
+      that.elemView = $(TPL_MAIN);
+      that.elemView.append(options.content || getDefaultView());
 
-    //遮罩
-    var shade = options.shade ? ('<div class="'+ STR_ELEM_SHADE +'" style="'+ ('z-index:'+ (that.elemView.css('z-index')-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
-    that.elemView.before(shade);
-    
+      //初始化某些属性
+      if(options.className) that.elemView.addClass(options.className);
+      if(options.style) that.elemView.attr('style', options.style);
+
+      //记录当前执行的实例索引
+      dropdown.thisId = options.id;
+
+      //插入视图
+      that.remove(); //移除非当前绑定元素的面板
+      elemBody.append(that.elemView);
+      options.elem.data(MOD_INDEX +'_opened', true);
+
+      //遮罩
+      var shade = options.shade ? ('<div class="'+ STR_ELEM_SHADE +'" style="'+ ('z-index:'+ (that.elemView.css('z-index')-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
+      that.elemView.before(shade);
+
+      //如果是鼠标移入事件，则鼠标移出时自动关闭
+      if(options.trigger === 'mouseenter'){
+        that.elemView.on('mouseenter', function(){
+          clearTimeout(thisModule.timer);
+        }).on('mouseleave', function(){
+          that.delayRemove();
+        });
+      }
+    }
+
     //坐标定位
     that.position();
     thisModule.prevElem = that.elemView; //记录当前打开的元素，以便在下次关闭
@@ -301,15 +317,6 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
         thisModule.spread(elemGroup);
       }
     });
-    
-    //如果是鼠标移入事件，则鼠标移出时自动关闭
-    if(options.trigger === 'mouseenter'){
-      that.elemView.on('mouseenter', function(){
-        clearTimeout(thisModule.timer);
-      }).on('mouseleave', function(){
-        that.delayRemove();
-      });
-    }
 
     // 组件打开完毕的事件
     typeof options.ready === 'function' && options.ready(
@@ -542,12 +549,32 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
   };
   
   // 重载实例
-  dropdown.reload = function(id, options){
+  dropdown.reload = function(id, options, type){
     var that = thisModule.getThis(id);
     if(!that) return this;
 
-    that.reload(options);
+    that.reload(options, type);
     return thisModule.call(that);
+  };
+
+  // 仅重载数据
+  dropdown.reloadData = function(){
+    var args = $.extend([], arguments);
+    args[2] = 'reloadData';
+
+    // 重载时，与数据相关的参数
+    var dataParams = new RegExp('^('+ [
+      'data', 'templet', 'content'
+    ].join('|') + ')$');
+
+    // 过滤与数据无关的参数
+    layui.each(args[1], function (key, value) {
+      if(!dataParams.test(key)){
+        delete args[1][key];
+      }
+    });
+
+    return dropdown.reload.apply(null, args);
   };
 
   // 核心入口
