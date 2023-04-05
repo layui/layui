@@ -233,7 +233,24 @@ Class.pt = Class.prototype;
 
 //缓存常用字符
 var doms = ['layui-layer', '.layui-layer-title', '.layui-layer-main', '.layui-layer-dialog', 'layui-layer-iframe', 'layui-layer-content', 'layui-layer-btn', 'layui-layer-close'];
-doms.anim = ['layer-anim-00', 'layer-anim-01', 'layer-anim-02', 'layer-anim-03', 'layer-anim-04', 'layer-anim-05', 'layer-anim-06'];
+
+// 内置动画类
+doms.anim = {
+  // 旧版动画
+  0: 'layer-anim-00', 
+  1: 'layer-anim-01', 
+  2: 'layer-anim-02', 
+  3: 'layer-anim-03', 
+  4: 'layer-anim-04', 
+  5: 'layer-anim-05', 
+  6: 'layer-anim-06',
+
+  // 滑出方向
+  slideDown: 'layer-anim-slide-down',
+  slideLeft: 'layer-anim-slide-left',
+  slideUp: 'layer-anim-slide-up',
+  slideRight: 'layer-anim-slide-right'
+};
 
 doms.SHADE = 'layui-layer-shade';
 doms.MOVE = 'layui-layer-move';
@@ -475,7 +492,7 @@ Class.pt.creat = function(){
   }, config.time);
   that.move().callback();
   
-  //为兼容jQuery3.0的css动画影响元素尺寸计算
+  // 为兼容 jQuery3.0 的 css 动画影响元素尺寸计算
   if(doms.anim[config.anim]){
     var animClass = 'layer-anim '+ doms.anim[config.anim];
     that.layero.addClass(animClass).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
@@ -483,9 +500,12 @@ Class.pt.creat = function(){
     });
   };
   
-  //记录关闭动画
+  // 记录关闭动画
   if(config.isOutAnim){
-    that.layero.data('isOutAnim', true);
+    that.layero.data({
+      isOutAnim: true,
+      anim: config.anim
+    });
   }
 };
 
@@ -1135,9 +1155,17 @@ layer.close = function(index, callback){
       index = closest.attr('times')
       ,closest
     ) : $('#'+ doms[0] + index)
-  }()
-  ,type = layero.attr('type')
-  ,closeAnim = 'layer-anim-close';
+  }();
+  var type = layero.attr('type');
+  var data = layero.data() || {};
+
+  // 关闭动画
+  var closeAnim = ({
+    slideDown: 'layer-anim-slide-down-out',
+    slideLeft: 'layer-anim-slide-left-out',
+    slideUp: 'layer-anim-slide-up-out',
+    slideRight: 'layer-anim-slide-right-out'
+  })[data.anim] || 'layer-anim-close';
   
   if(!layero[0]) return;
   
@@ -1174,7 +1202,8 @@ layer.close = function(index, callback){
     }
   };
   
-  if(layero.data('isOutAnim')){
+  // 是否允许关闭动画
+  if(data.isOutAnim){
     layero.addClass('layer-anim '+ closeAnim);
   }
   
