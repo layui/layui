@@ -99,9 +99,6 @@ layui.define(['table'], function (exports) {
     var tableIns = table.render($.extend({}, options, {
       data: [],
       url: '',
-      text: {
-        none: ' '
-      },
       done: null
     }))
     var id = tableIns.config.id;
@@ -208,13 +205,14 @@ layui.define(['table'], function (exports) {
         beforeExpand: null, // 展开前的回调 return false 可以阻止展开的动作
         onExpand: null, // 展开之后的回调
       }
-    }
+    },
+    autoSort: false
   };
 
   Class.prototype.getOptions = function () {
     var that = this;
     if (that.tableIns) {
-      return that.tableIns.config
+      return table.getOptions(that.tableIns.config.id); // 获取表格的实时配置信息
     } else {
       return that.config;
     }
@@ -392,9 +390,7 @@ layui.define(['table'], function (exports) {
     if (LAY_EXPAND) {
       // 展开
       if (LAY_HAS_EXPANDED) { // 已经展开过
-        if (LAY_EXPAND == trData['LAY_EXPAND']) {
-          // 需要更新的状态已经跟节点上的状态一致，则为无效的操作，直接返回避免做一些无意义的操作
-          return retValue;
+        if (LAY_EXPAND == trData['LAY_EXPAND']) { // 已经和当前的状态一样，是否有优化的空间，要注意直接方法调用级联展开和触发和不是级联的情况下的区别
         }
         trData['LAY_EXPAND'] = LAY_EXPAND;
 
@@ -521,19 +517,23 @@ layui.define(['table'], function (exports) {
         }
       }
     } else {
-      if (LAY_EXPAND == trData['LAY_EXPAND']) {
-        // 需要更新的状态已经跟节点上的状态一致，则为无效的操作，直接返回避免做一些无意义的操作
-        return retValue;
-      }
+      if (LAY_EXPAND == trData['LAY_EXPAND']) {}
       trData['LAY_EXPAND'] = LAY_EXPAND;
       // 折叠
-      var childNodesFlat = treeTableThat.treeToFlat(childNodes, trData[treeOptions.data.simpleData.idKey], trIndex);
-      tableViewElem.find(childNodesFlat.map(function (value, index, array) {
-        if (sonSign && !isToggle) { // 非状态切换的情况下
-          treeTableThat.getNodeDataByIndex(value['LAY_DATA_INDEX'])['LAY_EXPAND'] = false;
-        }
-        return 'tr[data-index="' + value[LAY_DATA_INDEX] + '"]'
-      }).join(',')).addClass('layui-hide');
+      if (sonSign && !isToggle) { // 非状态切换的情况下
+        layui.each(childNodes, function (i1, item1) {
+          expandNode({trElem: tableViewElem.find('tr[data-index="' + item1.LAY_DATA_INDEX + '"]').first()}, expandFlag, sonSign, focus, callbackFlag);
+        });
+        tableViewElem.find(childNodes.map(function (value, index, array) { // 只隐藏直接子节点，其他由递归的处理
+          return 'tr[data-index="' + value[LAY_DATA_INDEX] + '"]'
+        }).join(',')).addClass('layui-hide');
+      } else {
+        var childNodesFlat = treeTableThat.treeToFlat(childNodes, trData[treeOptions.data.simpleData.idKey], trIndex);
+        tableViewElem.find(childNodesFlat.map(function (value, index, array) {
+          return 'tr[data-index="' + value[LAY_DATA_INDEX] + '"]'
+        }).join(',')).addClass('layui-hide');
+      }
+
     }
     table.resize(tableId);
 
@@ -756,6 +756,7 @@ layui.define(['table'], function (exports) {
       } else {
         options.data = layui.sort(options.data, table.config.indexName);
       }
+      that.initData(options.data);
       treeTable.reloadData(id);
     } else {
       // url异步取数的表格一般需要自己添加监听之后进行reloadData并且把排序参数加入到where中
@@ -1016,6 +1017,7 @@ layui.define(['table'], function (exports) {
 
   // 重载
   treeTable.reload = function (id, options, deep, type) {
+    deep = deep !== false; // 默认采用深拷贝
     var config = getThisTableConfig(id); //获取当前实例配置项
     if (!config) return;
 

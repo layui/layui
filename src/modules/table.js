@@ -2722,7 +2722,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   // 获取表格配置信息
   table.getOptions = function (id) {
-    return $.extend(true, {}, getThisTableConfig(id));
+    return getThisTableConfig(id);
   }
 
   // 显示或隐藏列
@@ -2789,22 +2789,20 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var args = $.extend([], arguments);
     args[3] = 'reloadData';
 
-    // 重载时，与数据相关的参数
+    // 重载时，影响整个结构的参数，不适合更新的参数
     var dataParams = new RegExp('^('+ [
-      'data', 'url', 'method', 'contentType', 
-      'dataType','jsonpCallback',
-      'headers', 'where', 'page', 'limit',
-      'request', 'response', 'parseData',
-      'scrollPos'
+      'elem', 'id', 'cols', 'width', 'height', 'maxHeight',
+      'toolbar', 'defaultToolbar',
+      'className', 'css', 'totalRow', 'page', 'pagebar'
     ].join('|') + ')$');
 
     // 过滤与数据无关的参数
     layui.each(args[1], function (key, value) {
-      if(!dataParams.test(key)){
+      if(dataParams.test(key)){
         delete args[1][key];
       }
     });
-    
+
     return table.reload.apply(null, args);
   };
 

@@ -1099,6 +1099,10 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-table-tips-c:hover{background-color: #777;}
 .layui-table-tips-c:before{position: relative; right: -2px;}
 
+/** 树表 **/
+.layui-table-tree-nodeIcon {padding-right: 2px;width: 20px;}
+.layui-table-tree-nodeIcon > * {width: 100%;}
+
 /** 文件上传 **/
 .layui-upload-file{display: none!important; opacity: .01; filter: Alpha(opacity=1);}
 .layui-upload-list{margin: 10px 0;}
