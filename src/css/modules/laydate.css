@@ -69,7 +69,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 /* 底部结构 */
 .layui-laydate-footer{position: relative; height: 46px; line-height: 26px; padding: 10px;}
 .layui-laydate-footer span{display: inline-block;  vertical-align: top; height: 26px; line-height: 24px; padding: 0 10px; border: 1px solid #C9C9C9; border-radius: 2px; background-color: #fff; font-size: 12px; cursor: pointer; white-space: nowrap; transition: all .3s;}
-.layui-laydate-footer span:hover{color: #5FB878;}
+.layui-laydate-footer span:hover{color: #16b777;}
 .layui-laydate-footer span.layui-laydate-preview{cursor: default; border-color: transparent !important;}
 .layui-laydate-footer span.layui-laydate-preview:hover{color: #777;}
 .layui-laydate-footer span:first-child.layui-laydate-preview{padding-left: 0;}
@@ -111,12 +111,12 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate, .layui-laydate-hint{border: 1px solid #d2d2d2; box-shadow: 0 2px 4px rgba(0,0,0,.12); background-color: #fff; color: #777;}
 .layui-laydate-header{border-bottom: 1px solid #e2e2e2;}
 .layui-laydate-header i:hover,
-.layui-laydate-header span:hover{color: #5FB878;}
+.layui-laydate-header span:hover{color: #16b777;}
 .layui-laydate-content{border-top: none 0; border-bottom: none 0;}
 .layui-laydate-content th{color: #333;}
 .layui-laydate-content td{color: #777;}
-.layui-laydate-content td.laydate-day-now{color: #5FB878;}
-.layui-laydate-content td.laydate-day-now:after{content: ''; position: absolute; width: 100%; height: 30px; left: 0; top: 0; border: 1px solid #5FB878; box-sizing: border-box;}
+.layui-laydate-content td.laydate-day-now{color: #16b777;}
+.layui-laydate-content td.laydate-day-now:after{content: ''; position: absolute; width: 100%; height: 30px; left: 0; top: 0; border: 1px solid #16b777; box-sizing: border-box;}
 .layui-laydate-linkage .layui-laydate-content td.laydate-selected>div{background-color: #00F7DE;}
 .layui-laydate-linkage .laydate-selected:hover>div{background-color: #00F7DE !important;}
 .layui-laydate-content td:hover:after,
@@ -133,10 +133,10 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-linkage .laydate-selected.laydate-day-next>div{background-color: #f8f8f8 !important;}
 .layui-laydate-footer{border-top: 1px solid #e2e2e2;}
 .layui-laydate-hint{color: #FF5722;}
-.laydate-day-mark::after{background-color: #5FB878;}
+.laydate-day-mark::after{background-color: #16b777;}
 .layui-laydate-content td.layui-this .laydate-day-mark::after{display: none;}
-.layui-laydate-footer span[lay-type="date"]{color: #5FB878;}
-.layui-laydate .layui-this,.layui-laydate .layui-this>div{background-color: #009688 !important; color: #fff !important;}
+.layui-laydate-footer span[lay-type="date"]{color: #16b777;}
+.layui-laydate .layui-this,.layui-laydate .layui-this>div{background-color: #16baaa !important; color: #fff !important;}
 .layui-laydate .laydate-disabled,
 .layui-laydate .laydate-disabled:hover{background:none !important; color: #d2d2d2 !important; cursor: not-allowed !important; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;}
 .layui-laydate-content td>div{padding: 7px 0;height: 100%;}
@@ -145,7 +145,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-theme-molv{border: none;}
 .laydate-theme-molv.layui-laydate-range{width: 548px}
 .laydate-theme-molv .layui-laydate-main{width: 274px;}
-.laydate-theme-molv .layui-laydate-header{border: none; background-color: #009688;}
+.laydate-theme-molv .layui-laydate-header{border: none; background-color: #16baaa;}
 .laydate-theme-molv .layui-laydate-header i,
 .laydate-theme-molv .layui-laydate-header span{color: #f6f6f6;}
 .laydate-theme-molv .layui-laydate-header i:hover,
@@ -160,7 +160,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-theme-grid .laydate-year-list>li,
 .laydate-theme-grid .laydate-month-list>li{border: 1px solid #e2e2e2;}
 .layui-laydate-linkage.laydate-theme-grid .laydate-selected,
-.layui-laydate-linkage.laydate-theme-grid .laydate-selected:hover{background-color: #f2f2f2 !important; color: #009688 !important;}
+.layui-laydate-linkage.laydate-theme-grid .laydate-selected:hover{background-color: #f2f2f2 !important; color: #16baaa !important;}
 .layui-laydate-linkage.laydate-theme-grid .laydate-selected.laydate-day-prev,
 .layui-laydate-linkage.laydate-theme-grid .laydate-selected.laydate-day-next{color: #d2d2d2 !important;}
 .laydate-theme-grid .laydate-year-list,
