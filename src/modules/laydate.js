@@ -1072,7 +1072,7 @@
 
     var that = this;
     var options = that.config;
-    var timestrap = {}
+    var timestamp = {}
     var dateTime = opts.index > (opts.time ? 0 : 41) ? that.endDate : options.dateTime;
     var isOut;
 
@@ -1081,7 +1081,7 @@
       ,min: options.min
       ,max: options.max
     }, function(key, item){
-      timestrap[key] = that.newDate(lay.extend({
+      timestamp[key] = that.newDate(lay.extend({
         year: item.year
         ,month: opts.type === 'year' ? 0 : item.month // 年份的时候只比较年
         ,date: (opts.type === 'year' || opts.type === 'month') ? 1 : item.date // 年月只比较年月不与最大最小比日期
@@ -1094,7 +1094,7 @@
       }())).getTime();  //time：是否比较时分秒
     });
     
-    isOut = timestrap.now < timestrap.min || timestrap.now > timestrap.max;
+    isOut = timestamp.now < timestamp.min || timestamp.now > timestamp.max;
     opts.elem && opts.elem[isOut ? 'addClass' : 'removeClass'](DISABLED);
 
     return isOut;
