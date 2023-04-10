@@ -43,8 +43,82 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 
 @-webkit-keyframes layer-shake{0%,100%{-webkit-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%,90%{-webkit-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%,80%{-webkit-transform:translateX(10px);transform:translateX(10px)}}@keyframes layer-shake{0%,100%{-webkit-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0)}10%,30%,50%,70%,90%{-webkit-transform:translateX(-10px);-ms-transform:translateX(-10px);transform:translateX(-10px)}20%,40%,60%,80%{-webkit-transform:translateX(10px);-ms-transform:translateX(10px);transform:translateX(10px)}}.layer-anim-06{-webkit-animation-name:layer-shake;animation-name:layer-shake}@-webkit-keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 
+/* 从上往下 */
+@keyframes layer-slide-down {
+  from {
+    transform: translate3d(0,-100%,0);
+  } to {
+    transform: translate3d(0,0,0);
+  }
+}
+@keyframes layer-slide-down-out {
+  from {
+    transform: translate3d(0,0,0);
+  } to {
+    transform: translate3d(0,-100%,0);
+  }
+}
+.layer-anim-slide-down{animation-name: layer-slide-down}
+.layer-anim-slide-down-out{animation-name: layer-slide-down-out}
+
+/* 从右往左 */
+@keyframes layer-slide-left {
+  from {
+    transform: translate3d(100%,0,0);
+  } to {
+    transform: translate3d(0,0,0);
+  }
+}
+@keyframes layer-slide-left-out {
+  from {
+    transform: translate3d(0,0,0);
+  } to {
+    transform: translate3d(100%,0,0);
+  }
+}
+.layer-anim-slide-left{animation-name: layer-slide-left}
+.layer-anim-slide-left-out{animation-name: layer-slide-left-out}
+
+/* 从下往上 */
+@keyframes layer-slide-up {
+  from {
+    transform: translate3d(0,100%,0);
+  } to {
+    transform: translate3d(0,0,0);
+  }
+}
+@keyframes layer-slide-up-out {
+  from {
+    transform: translate3d(0,0,0);
+  } to {
+    transform: translate3d(0,100%,0);
+  }
+}
+.layer-anim-slide-up{animation-name: layer-slide-up}
+.layer-anim-slide-up-out{animation-name: layer-slide-up-out}
+
+/* 从左往右 */
+@keyframes layer-slide-right {
+  from {
+    transform: translate3d(-100%,0,0);
+  } to {
+    transform: translate3d(0,0,0);
+  }
+}
+@keyframes layer-slide-right-out {
+  from {
+    transform: translate3d(0,0,0);
+  } to {
+    transform: translate3d(-100%,0,0);
+  }
+}
+.layer-anim-slide-right{animation-name: layer-slide-right;}
+.layer-anim-slide-right-out{animation-name: layer-slide-right-out;}
+
+
+
 /* 标题栏 */
-.layui-layer-title{padding:0 80px 0 20px; height: 50px; line-height: 50px; border-bottom:1px solid #F0F0F0; font-size: 14px; color:#333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 2px 2px 0 0;}
+.layui-layer-title{padding: 0 81px 0 16px; height: 50px; line-height: 50px; border-bottom:1px solid #F0F0F0; font-size: 14px; color:#333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 2px 2px 0 0;}
 .layui-layer-setwin{position:absolute; right: 15px; *right:0; top: 16px; font-size:0; line-height: initial;}
 .layui-layer-setwin span{position:relative; width: 16px; height: 16px; line-height: 18px; margin-left: 10px; text-align: center; font-size: 16px; cursor: pointer; color: #000; _overflow:hidden;}
 .layui-layer-setwin .layui-layer-min:before{content: ''; position: absolute; width: 12px; height: 1px; left: 50%; top: 50%; margin: -0.5px 0 0 -6px; background-color: #2E2D3C; cursor: pointer; _overflow:hidden;}
@@ -72,22 +146,23 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-btn-c{text-align: center;}
 
 /* 定制化 */
-.layui-layer-dialog{min-width: 300px;}
-.layui-layer-dialog .layui-layer-content{position: relative; padding:20px; line-height:24px; word-break: break-all; overflow:hidden; font-size:14px; overflow-x: hidden; overflow-y:auto;}
-.layui-layer-dialog .layui-layer-content .layui-layer-face{position: absolute; top: 18px; left: 16px; color: #959595; font-size: 24px; _left: -40px;}
+.layui-layer-dialog{min-width: 240px;}
+.layui-layer-dialog .layui-layer-content{position: relative; padding: 16px; line-height: 24px; word-break: break-all; overflow:hidden; font-size:14px; overflow-x: hidden; overflow-y:auto;}
+.layui-layer-dialog .layui-layer-content .layui-layer-face{position: absolute; top: 18px; left: 16px; color: #959595; font-size: 32px; _left: -40px;}
 .layui-layer-dialog .layui-layer-content .layui-icon-tips{color: #F39B12;}
-.layui-layer-dialog .layui-layer-content .layui-icon-ok{color: #5FB878;}
-.layui-layer-dialog .layui-layer-content .layui-icon-close-fill{top: 19px; font-size: 28px; color: #FF5722;}
-.layui-layer-dialog .layui-layer-content .layui-icon-password{color: #787878;}
+.layui-layer-dialog .layui-layer-content .layui-icon-success{color: #16b777;}
+.layui-layer-dialog .layui-layer-content .layui-icon-error{top: 19px; color: #FF5722;}
+.layui-layer-dialog .layui-layer-content .layui-icon-question{color: #FFB800;}
+.layui-layer-dialog .layui-layer-content .layui-icon-lock{color: #787878;}
 .layui-layer-dialog .layui-layer-content .layui-icon-face-cry{color: #FF5722;}
-.layui-layer-dialog .layui-layer-content .layui-icon-face-smile{color: #5FB878;}
+.layui-layer-dialog .layui-layer-content .layui-icon-face-smile{color: #16b777;}
 
 .layui-layer-rim{border:6px solid #8D8D8D; border:6px solid rgba(0,0,0,.3); border-radius:5px; box-shadow: none;}
 .layui-layer-msg{min-width:180px; border:1px solid #D3D4D3; box-shadow: none;}
 .layui-layer-hui{min-width:100px;  background-color: #000; filter:alpha(opacity=60); background-color: rgba(0,0,0,0.6); color: #fff; border:none;}
 .layui-layer-hui .layui-layer-close{color: #fff;}
 .layui-layer-hui .layui-layer-content{padding: 11px 24px; text-align: center;}
-.layui-layer-dialog .layui-layer-padding{padding: 18px 24px 18px 52px; text-align: left;}
+.layui-layer-dialog .layui-layer-padding{padding: 18px 24px 18px 58px; text-align: left;}
 .layui-layer-page .layui-layer-content{position:relative; overflow:auto;}
 .layui-layer-page .layui-layer-btn,.layui-layer-iframe .layui-layer-btn{padding-top:10px;}
 .layui-layer-nobg{background:none;}
@@ -114,8 +189,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-tips i.layui-layer-TipsR{left:-8px;}
 .layui-layer-tips i.layui-layer-TipsL{right:-8px;}
 
-/* skin */
-.layui-layer-lan[type="dialog"]{min-width:280px;}
+/* 内置 skin */
 .layui-layer-lan .layui-layer-title{background:#4476A7; color:#fff; border: none;}
 .layui-layer-lan .layui-layer-btn{padding: 5px 10px 10px; text-align: right; border-top:1px solid #E9E7E7}
 .layui-layer-lan .layui-layer-btn a{background: #fff; border-color: #E9E7E7; color: #333;}
@@ -123,6 +197,22 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-molv .layui-layer-title{background: #009f95; color:#fff; border: none;}
 .layui-layer-molv .layui-layer-btn a{background: #009f95; border-color: #009f95;}
 .layui-layer-molv .layui-layer-btn .layui-layer-btn1{background:#92B8B1;}
+.layui-layer-lan .layui-layer-setwin .layui-icon,
+.layui-layer-molv .layui-layer-setwin .layui-icon{color: #fff;}
+
+/* Windows 10 风格主题  */
+.layui-layer-win10{border: 1px solid #aaa; box-shadow: 1px 1px 6px rgba(0,0,0,.3); border-radius: none;}
+.layui-layer-win10 .layui-layer-title{height: 32px; line-height: 32px; padding-left: 8px; border-bottom: none; font-size: 12px;}
+.layui-layer-win10 .layui-layer-setwin{right: 0; top: 0;}
+.layui-layer-win10 .layui-layer-setwin span{margin-left: 0; padding: 8px;}
+.layui-layer-win10.layui-layer-page .layui-layer-setwin span{padding: 8px 11px;}
+.layui-layer-win10 .layui-layer-setwin span:hover{background-color: #E5E5E5;}
+.layui-layer-win10 .layui-layer-setwin span.layui-icon-close:hover{background-color: #E81123; color: #fff;}
+.layui-layer-win10.layui-layer-dialog .layui-layer-content{padding: 8px 16px 32px; color: #0033BC;}
+.layui-layer-win10 .layui-layer-btn{padding: 5px 5px 10px; border-top:1px solid #DFDFDF; background-color: #F0F0F0;}
+.layui-layer-win10 .layui-layer-btn a{height: 18px; line-height: 18px; background-color: #E1E1E1; border-color: #ADADAD; color: #000; font-size: 12px; transition: all .3s;}
+.layui-layer-win10 .layui-layer-btn a:hover{border-color: #2A8EDD; background-color: #E5F1FB;}
+.layui-layer-win10 .layui-layer-btn .layui-layer-btn0{border-color: #0078D7;}
 
 
 /**
@@ -134,13 +224,13 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 /* prompt模式 */
 .layui-layer-prompt .layui-layer-input{display: block; width: 260px; height: 36px; margin: 0 auto; line-height: 30px; padding-left: 10px; border: 1px solid #e6e6e6; color: #333;}
 .layui-layer-prompt textarea.layui-layer-input{width: 300px; height: 100px; line-height: 20px; padding: 6px 10px;}
-.layui-layer-prompt .layui-layer-content{padding: 20px;}
+.layui-layer-prompt .layui-layer-content{padding: 16px;}
 .layui-layer-prompt .layui-layer-btn{padding-top: 0;}
 
 /* tab模式 */
 .layui-layer-tab{box-shadow:1px 1px 50px rgba(0,0,0,.4);}
 .layui-layer-tab .layui-layer-title{padding-left:0; overflow: visible;}
-.layui-layer-tab .layui-layer-title span{position:relative; float:left; min-width:80px; max-width: 300px; padding:0 20px; text-align:center; cursor:default; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; cursor: pointer;}
+.layui-layer-tab .layui-layer-title span{position:relative; float:left; min-width:80px; max-width: 300px; padding:0 16px; text-align:center; cursor:default; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; cursor: pointer;}
 .layui-layer-tab .layui-layer-title span.layui-this{height: 51px; border-left: 1px solid #eee; border-right: 1px solid #eee; background-color: #fff; z-index: 10;}
 .layui-layer-tab .layui-layer-title span:first-child{border-left:none;}
 .layui-layer-tabmain{line-height:24px; clear:both;}

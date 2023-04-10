@@ -21,6 +21,10 @@
   
   // 识别预先可能定义的指定全局对象
   var GLOBAL = window.LAYUI_GLOBAL || {};
+
+  // 模块名
+  var MOD_NAME = 'laydate';
+  var MOD_ID = 'layui-'+ MOD_NAME +'-id' // 已渲染过的索引标记名
   
   // 外部调用
   var laydate = {
@@ -56,18 +60,22 @@
   
   // 操作当前实例
   var thisModule = function(){
-    var that = this
-    ,options = that.config
-    ,id = options.id;
+    var that = this;
+    var options = that.config;
+    var id = options.id;
     
-    thisModule.that[id] = that; //记录当前实例对象
+    thisModule.that[id] = that; // 记录当前实例对象
 
     return that.inst = {
-      //提示框
+      // 提示框
       hint: function(content){
         that.hint.call(that, content);
-      }
-      ,config: that.config
+      },
+      // 重载实例
+      reload: function(options){
+        that.reload.call(that, options);
+      },
+      config: that.config
     };
   };
 
@@ -114,9 +122,23 @@
       return that;
     }
     
-    // 初始化 id 参数
+    // 初始化属性
     options = lay.extend(that.config, lay.options(elem[0])); // 继承节点上的属性
-    options.id = ('id' in options) ? options.id : that.index;
+
+    // 若重复执行 render，则视为 reload 处理
+    if(elem[0] && elem.attr(MOD_ID)){
+      var newThat = thisModule.getThis(elem.attr(MOD_ID));
+      if(!newThat) return;
+      return newThat.reload(options);
+    }
+
+    // 初始化 id 属性 - 优先取 options > 元素 id > 自增索引
+    options.id = 'id' in options ? options.id : (
+      elem.attr('id') || that.index
+    );
+
+    // 自增索引
+    options.index = that.index;
     
     // 初始化
     laydate.ready(function(){
@@ -212,6 +234,13 @@
     };
     return text[options.lang] || text['cn'];
   };
+
+  // 重载实例
+  Class.prototype.reload = function(options){
+    var that = this;
+    that.config = lay.extend({}, that.config, options);
+    that.init();
+  };
   
   //初始准备
   Class.prototype.init = function(){
@@ -230,8 +259,6 @@
     options.eventElem = lay(options.eventElem);
     
     if(!options.elem[0]) return;
-    var thatTemp = thisModule.that[options.elem.attr('lay-key')]
-    thatTemp && thatTemp.destroy && thatTemp.destroy(); // 销毁上一个实例以便重新渲染
 
     layui.type(options.theme) !== 'array' && (options.theme = [options.theme]);
     // 设置了全面版模式
@@ -327,9 +354,10 @@
       }
     }
     
-    //设置唯一KEY
+    // 设置唯一 KEY
     options.elem.attr('lay-key', that.index);
     options.eventElem.attr('lay-key', that.index);
+    options.elem.attr(MOD_ID, options.id); // 渲染过的标记
 
     //记录重要日期
     options.mark = lay.extend({}, (options.calendar && options.lang === 'cn') ? {
@@ -348,7 +376,8 @@
     
     //获取限制内日期
     lay.each(['min', 'max'], function(i, item){
-      var ymd = [], hms = [];
+      var ymd = [];
+      var hms = [];
       if(typeof options[item] === 'number'){ //如果为数字
         var day = options[item]
         ,tDate = new Date()
@@ -368,9 +397,11 @@
         );
         ymd = [thisDate.getFullYear(), thisDate.getMonth() + 1, thisDate.getDate()];
         hms = [thisDate.getHours(), thisDate.getMinutes(), thisDate.getSeconds()];
-      } else {
+      } else if(typeof options[item] === 'string') {
         ymd = (options[item].match(/\d+-\d+-\d+/) || [''])[0].split('-');
         hms = (options[item].match(/\d+:\d+:\d+/) || [''])[0].split(':');
+      } else if(typeof options[item] === 'object'){
+        return options[item];
       }
       options[item] = {
         year: ymd[0] | 0 || new Date().getFullYear()
@@ -663,7 +694,7 @@
       ,that.position() //定位
     );
     
-    var shade = options.shade ? ('<div class="'+ ELEM_SHADE +'" style="'+ ('z-index:'+ (elem.style.zIndex-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
+    var shade = options.shade ? ('<div class="'+ ELEM_SHADE +'" style="'+ ('z-index:'+ (parseInt(layui.getStyle(elem, 'z-index'))-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
     elem.insertAdjacentHTML('beforebegin', shade);
 
     that.checkDate().calendar(null, 0, 'init'); //初始校验
@@ -707,30 +738,39 @@
   Class.prototype.position = function(){
     var that = this
     ,options = that.config;
-    lay.position(that.bindElem || options.elem[0], that.elem, {
+    lay.position(options.elem[0], that.elem, {
       position: options.position
     });
     return that;
   };
   
-  //提示
-  Class.prototype.hint = function(content){
-    var that = this
-    ,options = that.config
-    ,div = lay.elem('div', {
+  // 提示
+  Class.prototype.hint = function(opts){
+    var that = this;
+    var options = that.config;
+    var div = lay.elem('div', {
       "class": ELEM_HINT
     });
     
     if(!that.elem) return;
+
+    // 兼容旧版参数
+    if(typeof opts === 'object'){
+      opts = opts || {};
+    } else {
+      opts = {
+        content: opts
+      }
+    }
     
-    div.innerHTML = content || '';
+    div.innerHTML = opts.content || '';
     lay(that.elem).find('.'+ ELEM_HINT).remove();
     that.elem.appendChild(div);
 
     clearTimeout(that.hinTimer);
     that.hinTimer = setTimeout(function(){
       lay(that.elem).find('.'+ ELEM_HINT).remove();
-    }, 3000);
+    }, 'ms' in opts ? opts.ms : 3000);
   };
   
   //获取递增/减后的年月
@@ -769,7 +809,7 @@
     ,dateTime = options.dateTime = options.dateTime || that.systemDate()
     ,thisMaxDate, error
     
-    ,elem = that.bindElem || options.elem[0]
+    ,elem = options.elem[0]
     ,valType = that.isInput(elem) ? 'val' : 'html'
     ,value = function(){
       //如果传入了开始和结束日期的 input 对象，则将其拼接为日期范围字符
@@ -1566,7 +1606,7 @@
   Class.prototype.setValue = function(value){
     var that = this
     ,options = that.config
-    ,elem = that.bindElem || options.elem[0];
+    ,elem = options.elem[0];
     
     //静态展现则不作默认赋值
     if(options.position === 'static') return that;
@@ -1612,7 +1652,7 @@
     // 预览颜色渐变
     var oldValue = elemPreview.html();
     oldValue && (elemPreview.css({
-      'color': '#5FB878'
+      'color': '#16b777'
     }),
     setTimeout(function(){
       elemPreview.css({
@@ -2082,24 +2122,25 @@
     var showEvent = function(){
       // 已经打开的面板避免重新渲染
       if(laydate.thisId === options.id) return;
-      that.bindElem = this;
       that.render();
-    }
+    };
+
     //绑定呼出控件事件
     options.elem.on(options.trigger, showEvent);
     options.elem[0].eventHandler = true;
     options.eventElem.on(options.trigger, showEvent);
 
-    that.destroy = function () {
+    // 元素解绑
+    that.unbind = function () {
       that.remove();
       options.elem.off(options.trigger, showEvent);
       options.elem.removeAttr('lay-key');
+      options.elem.removeAttr(MOD_ID);
       options.elem[0].eventHandler = false;
       options.eventElem.off(options.trigger, showEvent);
       options.eventElem.removeAttr('lay-key');
-
       delete thisModule.that[options.id];
-    }
+    };
   };
   
   //记录所有实例
@@ -2159,21 +2200,49 @@
     });
   };
   
-  //核心接口
+  // 渲染 - 核心接口
   laydate.render = function(options){
     var inst = new Class(options);
     return thisModule.call(inst);
   };
 
-  // 获取
-  laydate.getInst = function (key) {
-    var that = thisModule.getThis(key);
-    if (that) {
+  // 重载
+  laydate.reload = function (id, options) {
+    var that = thisModule.getThis(id);
+    if(!that) return;
+    return that.reload(options);
+  };
+
+  // 获取对应 ID 的实例
+  laydate.getInst = function (id) {
+    var that = thisModule.getThis(id);
+    if(that){
       return that.inst;
     }
-  }
+  };
 
-  //将指定对象转化为日期值
+  // 面板提示
+  laydate.hint = function(id, opts){
+    var that = thisModule.getThis(id);
+    if(!that) return;
+    return that.hint(opts);
+  };
+
+  // 解绑实例
+  laydate.unbind = function(id){
+    var that = thisModule.getThis(id);
+    if(!that) return;
+    return that.unbind();
+  };
+
+  // 关闭日期面板
+  laydate.close = function(id){
+    var that = thisModule.getThis(id || laydate.thisId);
+    if(!that) return;
+    return that.remove();
+  };
+
+  // 将指定对象转化为日期值
   laydate.parse = function(dateTime, format, one){
     dateTime = dateTime || {};
     
@@ -2204,7 +2273,7 @@
     return format.join('');
   };
   
-  //得到某月的最后一天
+  // 得到某月的最后一天
   laydate.getEndDate = function(month, year){
     var thisDate = new Date();
     //设置日期为下个月的第一天
@@ -2214,20 +2283,6 @@
     ,1);
     //减去一天，得到当前月最后一天
     return new Date(thisDate.getTime() - 1000*60*60*24).getDate();
-  };
-
-  // 关闭日期面板
-  laydate.close = function(id){
-    var that = thisModule.getThis(id || laydate.thisId);
-    if(!that) return;
-    return that.remove();
-  };
-
-  // 销毁实例
-  laydate.destroy = function(id){
-    var that = thisModule.getThis(id || laydate.thisId);
-    if(!that) return;
-    return that.destroy();
   };
 
   //加载方式

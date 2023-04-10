@@ -301,7 +301,10 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       
       // 普通菜单项点击后的回调及关闭面板
       if((!isChild || isClickAllScope) && data.type !== '-'){
-        var ret = typeof options.click === 'function' && options.click(data, othis);
+        var ret = typeof options.click === 'function' 
+          ? options.click(data, othis) 
+        : null;
+        
         ret === false || (isChild || that.remove());
         layui.stope(e);
       }

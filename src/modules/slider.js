@@ -76,7 +76,7 @@ layui.define(['jquery', 'lay'], function(exports){
     ,range: false //范围选择，与输入框不能同时开启，默认关闭
     ,height: 200 //配合 type:"vertical" 使用，默认200px
     ,disabled: false //滑块禁用，默认关闭
-    ,theme: '#009688' //主题颜色
+    ,theme: '#16baaa' //主题颜色
   };
 
   //滑块渲染
