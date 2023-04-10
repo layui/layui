@@ -811,13 +811,20 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     if(that.autoColNums > 0 && patchNums >= -colNums && patchNums <= colNums){
       var getEndTh = function(th){
-        var field;
-        th = th || that.layHeader.eq(0).find('thead > tr:first-child > th:last-child')
-        field = th.data('field');
+        var field, thRet;
+        th = th || that.layHeader.eq(0).find('thead th:last-child')
+        layui.each(th, function (thIndex, thElem) {
+          thElem = $(thElem);
+          if (!thElem.children('.'+ELEM_GROUP).length) { // 排除合并表头
+            field = thElem.attr('data-field');
+            thRet = thElem;
+          }
+        })
+
         if(!field && th.prev()[0]){
           return getEndTh(th.prev())
         }
-        return th
+        return thRet
       };
       var th = getEndTh();
       var key = th.data('key');
@@ -897,6 +904,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     table.cache[that.key] = []; //格式化缓存数据
 
     that.syncCheckAll();
+    that.renderForm();
+    that.setColsWidth();
   };
 
   // 初始页码
@@ -957,7 +966,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           }
           // 检查数据格式是否符合规范
           if(res[response.statusName] != response.statusCode){
-            that.renderForm();
             that.errorView(
               res[response.msgName] ||
               ('返回的数据不符合规范，正确的成功状态码应为："'+ response.statusName +'": '+ response.statusCode)
@@ -980,10 +988,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         }
         ,error: function(e, msg){
           that.errorView('请求异常，错误提示：'+ msg);
-
-          that.renderForm();
-          that.setColsWidth();
-
           typeof options.error === 'function' && options.error(e, msg);
         }
       });
@@ -1269,7 +1273,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     //如果无数据
     if(data.length === 0){
-      that.renderForm();
       return that.errorView(options.text.none);
     } else {
       that.layFixLeft.removeClass(HIDE);

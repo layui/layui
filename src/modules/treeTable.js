@@ -19,6 +19,11 @@ layui.define(['table'], function (exports) {
     // 遍历字段
     eachCols: table.eachCols,
     index: table.index,
+    set: function(options){
+      var that = this;
+      that.config = $.extend({}, that.config, options);
+      return that;
+    },
   };
 
   // 操作当前实例
