@@ -5,66 +5,73 @@
 layui.define(['laytpl', 'form'], function(exports){
   "use strict";
   
-  var $ = layui.$
-  ,laytpl = layui.laytpl
-  ,form = layui.form
+  var $ = layui.$;
+  var laytpl = layui.laytpl;
+  var form = layui.form;
   
-  //模块名
-  ,MOD_NAME = 'transfer'
+  // 模块名
+  var MOD_NAME = 'transfer';
 
-  //外部接口
-  ,transfer = {
-    config: {}
-    ,index: layui[MOD_NAME] ? (layui[MOD_NAME].index + 10000) : 0
+  // 外部接口
+  var transfer = {
+    config: {},
+    index: layui[MOD_NAME] ? (layui[MOD_NAME].index + 10000) : 0,
 
-    //设置全局项
-    ,set: function(options){
+    // 设置全局项
+    set: function(options){
       var that = this;
       that.config = $.extend({}, that.config, options);
       return that;
-    }
+    },
     
-    //事件
-    ,on: function(events, callback){
+    // 事件
+    on: function(events, callback){
       return layui.onevent.call(this, MOD_NAME, events, callback);
     }
-  }
+  };
 
-  //操作当前实例
-  ,thisModule = function(){
-    var that = this
-    ,options = that.config
-    ,id = options.id || that.index;
+  // 操作当前实例
+  var thisModule = function(){
+    var that = this;
+    var options = that.config;
+    var id = options.id || that.index;
     
-    thisModule.that[id] = that; //记录当前实例对象
-    thisModule.config[id] = options; //记录当前实例配置项
+    thisModule.that[id] = that; // 记录当前实例对象
+    thisModule.config[id] = options; // 记录当前实例配置项
     
     return {
-      config: options
-      //重置实例
-      ,reload: function(options){
+      config: options,
+      // 重置实例
+      reload: function(options){
         that.reload.call(that, options);
-      }
-      //获取右侧数据
-      ,getData: function(){
+      },
+      // 获取右侧数据
+      getData: function(){
         return that.getData.call(that);
       }
     }
-  }
+  };
   
-  //获取当前实例配置项
-  ,getThisModuleConfig = function(id){
+  // 获取当前实例配置项
+  var getThisModuleConfig = function(id){
     var config = thisModule.config[id];
     if(!config) hint.error('The ID option was not found in the '+ MOD_NAME +' instance');
-    return config || null;
-  }
+    return; config || null;
+  };
 
-  //字符常量
-  ,ELEM = 'layui-transfer', HIDE = 'layui-hide', DISABLED = 'layui-btn-disabled', NONE = 'layui-none'
-  ,ELEM_BOX = 'layui-transfer-box', ELEM_HEADER = 'layui-transfer-header', ELEM_SEARCH = 'layui-transfer-search', ELEM_ACTIVE = 'layui-transfer-active', ELEM_DATA = 'layui-transfer-data'
+  // 字符常量
+  var ELEM = 'layui-transfer';
+  var HIDE = 'layui-hide'; 
+  var DISABLED = 'layui-btn-disabled';
+  var NONE = 'layui-none';
+  var ELEM_BOX = 'layui-transfer-box';
+  var ELEM_HEADER = 'layui-transfer-header';
+  var ELEM_SEARCH = 'layui-transfer-search';
+  var ELEM_ACTIVE = 'layui-transfer-active';
+  var ELEM_DATA = 'layui-transfer-data';
   
-  //穿梭框模板
-  ,TPL_BOX = function(obj){
+  // 穿梭框模板
+  var TPL_BOX = function(obj){
     obj = obj || {};
     return ['<div class="layui-transfer-box" data-index="'+ obj.index +'">'
       ,'<div class="layui-transfer-header">'
@@ -78,10 +85,10 @@ layui.define(['laytpl', 'form'], function(exports){
       ,'{{# } }}'
       ,'<ul class="layui-transfer-data"></ul>'
     ,'</div>'].join('');
-  }
+  };
   
-  //主模板
-  ,TPL_MAIN = ['<div class="layui-transfer layui-form layui-border-box" lay-filter="LAY-transfer-{{ d.index }}">'
+  // 主模板
+  var TPL_MAIN = ['<div class="layui-transfer layui-form layui-border-box" lay-filter="LAY-transfer-{{ d.index }}">'
     ,TPL_BOX({
       index: 0
       ,checkAllName: 'layTransferLeftCheckAll'
@@ -98,10 +105,10 @@ layui.define(['laytpl', 'form'], function(exports){
       index: 1
       ,checkAllName: 'layTransferRightCheckAll'
     })
-  ,'</div>'].join('')
+  ,'</div>'].join('');
 
-  //构造器
-  ,Class = function(options){
+  // 构造器
+  var Class = function(options){
     var that = this;
     that.index = ++transfer.index;
     that.config = $.extend({}, that.config, transfer.config, options);
@@ -110,16 +117,16 @@ layui.define(['laytpl', 'form'], function(exports){
 
   //默认配置
   Class.prototype.config = {
-    title: ['列表一', '列表二']
-    ,width: 200
-    ,height: 360
-    ,data: [] //数据源
-    ,value: [] //选中的数据
-    ,showSearch: false //是否开启搜索
-    ,id: '' //唯一索引，默认自增 index
-    ,text: {
-      none: '无数据'
-      ,searchNone: '无匹配数据'
+    title: ['列表一', '列表二'],
+    width: 200,
+    height: 360,
+    data: [], // 数据源
+    value: [], // 选中的数据
+    showSearch: false, // 是否开启搜索
+    id: '', // 唯一索引，默认自增 index
+    text: {
+      none: '无数据',
+      searchNone: '无匹配数据'
     }
   };
   
@@ -132,8 +139,8 @@ layui.define(['laytpl', 'form'], function(exports){
 
   //渲染
   Class.prototype.render = function(){
-    var that = this
-    ,options = that.config;
+    var that = this;
+    var options = that.config;
     
     //解析模板
     var thisElem = that.elem = $(laytpl(TPL_MAIN).render({
