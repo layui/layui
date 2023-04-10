@@ -143,7 +143,10 @@ layui.define(['laytpl', 'form'], function(exports){
     var options = that.config;
     
     //解析模板
-    var thisElem = that.elem = $(laytpl(TPL_MAIN).render({
+    var thisElem = that.elem = $(laytpl(TPL_MAIN, {
+      open: '{{', // 标签符前缀
+      close: '}}' // 标签符后缀
+    }).render({
       data: options
       ,index: that.index //索引
     }));
