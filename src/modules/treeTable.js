@@ -174,7 +174,7 @@ layui.define(['table'], function (exports) {
         flexIconOpen: '<i class="layui-icon layui-icon-triangle-d"></i>', // 打开时候的折叠图标
         showIcon: true, // 是否显示图标(节点类型图标)
         icon: '', // 节点图标，如果设置了这个属性或者数据中有这个字段信息，不管打开还是关闭都以这个图标的值为准
-        iconClose: '<i class="layui-icon layui-icon-file"></i>', // 打开时候的图标 todo 需要补充一下图标库
+        iconClose: '<i class="layui-icon layui-icon-file"></i>', // 打开时候的图标
         iconOpen: '<i class="layui-icon layui-icon-layer"></i>', // 关闭时候的图标
         iconLeaf: '<i class="layui-icon layui-icon-star"></i>', // 叶子节点的图标
         showFlexIconIfNotParent: false, // 当节点不是父节点的时候是否显示折叠图标
@@ -284,6 +284,11 @@ layui.define(['table'], function (exports) {
     var treeOptions = options.tree;
     var tableId = options.id;
 
+    var dataCache = table.cache[tableId][index];
+    if (newValue !== 'delete' && dataCache) {
+      return clone ? $.extend({}, dataCache) : dataCache;
+    }
+
     var tableData = that.getTableData();
     index += '';
     var indexArr = index.split('-');
@@ -342,9 +347,10 @@ layui.define(['table'], function (exports) {
         item1[isParentKey] = !!(item1[childrenKey] && item1[childrenKey].length);
       }
       item1[LAY_DATA_INDEX_HISTORY] = item1[LAY_DATA_INDEX];
-      item1[LAY_PARENT_INDEX] = parentIndex || ''
-      item1[LAY_DATA_INDEX] = (item1[LAY_PARENT_INDEX] ? item1[LAY_PARENT_INDEX] + '-' : '') + i1;
-      that.initData(item1[childrenKey] || [], item1[LAY_DATA_INDEX]);
+      item1[LAY_PARENT_INDEX] = parentIndex = parentIndex || '';
+      var dataIndex = item1[LAY_DATA_INDEX] = (parentIndex ? parentIndex + '-' : '') + i1;
+      dataIndex.indexOf('-') !== -1 && (table.cache[tableId][dataIndex] = item1);
+      that.initData(item1[childrenKey] || [], dataIndex);
     });
 
     return data;
@@ -1035,7 +1041,7 @@ layui.define(['table'], function (exports) {
     }
   })
 
-  // 带lay-event节点点击
+  // tr中带lay-event节点点击
   treeTable.on('tool', function (obj) {
     var options = obj.config;
     var tableView = options.elem.next();
@@ -1046,6 +1052,23 @@ layui.define(['table'], function (exports) {
     }
   })
 
+  // 行内编辑
+  treeTable.on('edit', function (obj) {
+    // 如果编辑涉及到关键的name字段需要重新更新一下tr节点
+    var options = obj.config;
+    var tableView = options.elem.next();
+    var tableId = options.id;
+
+    if (tableView.hasClass('layui-table-tree')) {
+      updateObjParams(obj);
+      if (obj.field === options.tree.data.key.name) {
+        obj.tr.find('td[data-field="'+obj.field+'"]').children('div.layui-table-cell').removeClass('layui-table-tree-item')
+        obj.update({}); // 通过update调用执行tr节点的更新
+      }
+    }
+  });
+
+
   /**
    * 获得数据
    * @param {String} id 表格id
@@ -1053,7 +1076,11 @@ layui.define(['table'], function (exports) {
    * @return {Array} 表格数据
    * */
   treeTable.getData = function (id, simpleData) {
-    var tableData = $.extend(true, [], table.cache[id] || []);
+    var tableData = [];
+    layui.each($.extend(true, [], table.cache[id] || []), function (index, item) {
+      // 遍历排除掉临时的数据
+      tableData.push(item);
+    })
     return simpleData ? getThisTable(id).treeToFlat(tableData) : tableData;
   }
 
