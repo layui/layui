@@ -19,7 +19,7 @@ layui.define(['table'], function (exports) {
     // 遍历字段
     eachCols: table.eachCols,
     index: table.index,
-    set: function(options){
+    set: function (options) {
       var that = this;
       that.config = $.extend({}, that.config, options);
       return that;
@@ -540,7 +540,8 @@ layui.define(['table'], function (exports) {
         }
       }
     } else {
-      if (LAY_EXPAND == trData['LAY_EXPAND']) {}
+      if (LAY_EXPAND == trData['LAY_EXPAND']) {
+      }
       trData['LAY_EXPAND'] = LAY_EXPAND;
       // 折叠
       if (sonSign && !isToggle) { // 非状态切换的情况下
@@ -605,9 +606,9 @@ layui.define(['table'], function (exports) {
       // 初始化的表格里面没有level信息，可以作为顶层节点的判断
       tableViewElem.find('.layui-table-body tr:not([data-level])').attr('data-level', level);
       layui.each(table.cache[tableId], function (dataIndex, dataItem) {
-        tableViewElem.find('.layui-table-main tbody tr[data-level="0"]:eq('+dataIndex+')').attr('data-index', dataItem[LAY_DATA_INDEX]);
-        tableViewElem.find('.layui-table-fixed-l tbody tr[data-level="0"]:eq('+dataIndex+')').attr('data-index', dataItem[LAY_DATA_INDEX]);
-        tableViewElem.find('.layui-table-fixed-r tbody tr[data-level="0"]:eq('+dataIndex+')').attr('data-index', dataItem[LAY_DATA_INDEX]);
+        tableViewElem.find('.layui-table-main tbody tr[data-level="0"]:eq(' + dataIndex + ')').attr('data-index', dataItem[LAY_DATA_INDEX]);
+        tableViewElem.find('.layui-table-fixed-l tbody tr[data-level="0"]:eq(' + dataIndex + ')').attr('data-index', dataItem[LAY_DATA_INDEX]);
+        tableViewElem.find('.layui-table-fixed-r tbody tr[data-level="0"]:eq(' + dataIndex + ')').attr('data-index', dataItem[LAY_DATA_INDEX]);
       })
     }
 
@@ -696,20 +697,8 @@ layui.define(['table'], function (exports) {
   // 树表渲染
   Class.prototype.render = function (type) {
     var that = this;
-    var options = that.config;
-    if (that.tableIns) {
-      // 已经在init的时候render一个表格实例了，理论上到这里都必然存在
-      // 处理树节点状态
-      that.tableIns = table[type === 'reloadData' ? 'reloadData' : 'reload'](that.tableIns.config.id, $.extend(true, {}, options));
-      that.config = that.tableIns.config;
-    } else {
-      // console.log('真的会进去这个地方吗？2222');
-      // var tableIns = table.render(options);
-      // options = that.config = tableIns.config;
-      // var id = options.id;
-      // thisTreeTable.that[id] = that; // 记录当前实例对象
-      // that.tableIns = tableIns; // 记录关联的表格实例
-    }
+    that.tableIns = table[type === 'reloadData' ? 'reloadData' : 'reload'](that.tableIns.config.id, $.extend(true, {}, that.config));
+    that.config = that.tableIns.config;
   };
 
   // 表格重载
@@ -740,14 +729,17 @@ layui.define(['table'], function (exports) {
   };
 
   var updateStatus = function (data, statusObj, childrenKey) {
+    var dataUpdated = [];
     layui.each(data, function (i1, item1) {
       if (layui.type(statusObj) === 'function') {
         statusObj(item1);
       } else {
         $.extend(item1, statusObj);
       }
-      updateStatus(item1[childrenKey], statusObj, childrenKey);
-    })
+      dataUpdated.push($.extend({}, item1));
+      dataUpdated = dataUpdated.concat(updateStatus(item1[childrenKey], statusObj, childrenKey));
+    });
+    return dataUpdated;
   }
 
   Class.prototype.updateStatus = function (data, statusObj) {
@@ -775,8 +767,7 @@ layui.define(['table'], function (exports) {
         data = options.data;
       }
     }
-    that.updateStatus(data, statusObj);
-    return options;
+    return that.updateStatus(data, statusObj);
   }
 
   treeTable.sort = function (id) {
@@ -1004,6 +995,29 @@ layui.define(['table'], function (exports) {
     return newNodes;
   }
 
+  treeTable.checkStatus = function (id) {
+    var that = getThisTable(id);
+
+    // 需要区分单双选
+    var tableData = treeTable.getData(id, true);
+    var checkedData = tableData.filter(function (value, index, array) {
+      return value[table.config.checkName];
+    });
+
+    var isAll = true;
+    layui.each(table.cache[id], function (i1, item1) {
+      if (!item1[table.config.checkName]) {
+        isAll = false;
+        return true;
+      }
+    })
+
+    return {
+      data: checkedData,
+      isAll: isAll
+    }
+  }
+
   // 排序之后重新渲染成树表
   treeTable.on('sort', function (obj) {
     var options = obj.config;
@@ -1062,11 +1076,105 @@ layui.define(['table'], function (exports) {
     if (tableView.hasClass('layui-table-tree')) {
       updateObjParams(obj);
       if (obj.field === options.tree.data.key.name) {
-        obj.tr.find('td[data-field="'+obj.field+'"]').children('div.layui-table-cell').removeClass('layui-table-tree-item')
+        obj.tr.find('td[data-field="' + obj.field + '"]').children('div.layui-table-cell').removeClass('layui-table-tree-item')
         obj.update({}); // 通过update调用执行tr节点的更新
       }
     }
   });
+
+  // 单选
+  treeTable.on('radio', function (obj) {
+    var options = obj.config;
+    var tableView = options.elem.next();
+    var tableId = options.id;
+    var that = getThisTable(tableId);
+
+    if (tableView.hasClass('layui-table-tree')) {
+      updateObjParams(obj);
+      var trIndex = obj.index;
+      var statusChecked = {};
+      statusChecked[table.config.checkName] = false;
+      that.updateStatus(null, statusChecked); // 取消其他的选中状态
+      table.cache[tableId][trIndex][table.config.checkName] = obj.checked;
+    }
+  })
+
+  Class.prototype.updateParentCheckStatus = function (dataP, checked) {
+    var that = this;
+    var options = that.getOptions();
+    var treeOptions = options.tree;
+    var tableId = options.id;
+
+    var dataRet = [];
+    if (checked) {
+      // 为真需要判断子节点的情况
+      var childrenKey = treeOptions.data.key.children;
+      layui.each(dataP[childrenKey], function (index, item) {
+        if (!item[table.config.checkName]) { // 只要有一个子节点为false
+          checked = false;
+          return true; // 跳出循环
+        }
+      });
+    }
+    dataP[table.config.checkName] = checked;
+    dataRet.push($.extend({}, dataP));
+    if (dataP[LAY_PARENT_INDEX]) {
+      dataRet = dataRet.concat(that.updateParentCheckStatus(table.cache[tableId][dataP[LAY_PARENT_INDEX]], checked));
+    }
+    return dataRet
+  }
+
+  // 多选
+  treeTable.on('checkbox', function (obj) {
+    var options = obj.config;
+    var tableView = options.elem.next();
+    var tableId = options.id;
+    var that = getThisTable(tableId);
+
+    if (tableView.hasClass('layui-table-tree')) {
+      updateObjParams(obj);
+      var checked = obj.checked;
+      var treeOptions = options.tree;
+      var isParentKey = treeOptions.data.key.isParent;
+      var childrenKey = treeOptions.data.key.children;
+      var trIndex = obj.index;
+      // 修改当前节点的信息
+      var trData = table.cache[tableId][trIndex];
+      // trData[table.config.checkName] = checked;
+      // tableView.find('tr[data-index="' + trIndex + '"] input[name="layTableCheckbox"]').prop('checked', checked);
+      // 如果是一个父节点，将子节点的状态同步为当前节点的状态，并且注意更深层次的
+      if (obj.type === 'all' || trData[isParentKey]) {
+        var checkedStatus = {};
+        checkedStatus[table.config.checkName] = checked;
+        var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatus);
+        form.render(tableView.find(trs.map(function (value) {
+          return 'tr[data-index="' + value[LAY_DATA_INDEX] + '"] input[name="layTableCheckbox"]';
+        }).join(',')).prop('checked', checked));
+      }
+
+      // 更新父节点以及更上层节点的状态
+      if (trData && trData[LAY_PARENT_INDEX]) {
+        // 找到父节点，然后判断父节点的子节点是否全部选中
+        var trDataP = table.cache[tableId][trData[LAY_PARENT_INDEX]];
+        var trsP = that.updateParentCheckStatus(trDataP, checked);
+        layui.each(trsP, function (indexP, itemP) {
+          form.render(tableView.find('tr[data-index="' + itemP[LAY_DATA_INDEX] + '"]  input[name="layTableCheckbox"]').prop('checked', itemP[table.config.checkName]))
+        })
+      }
+
+      // 半选复选框的图标处理 todo
+
+      // 全选图标的状态更新
+      obj.isAll = true;
+      layui.each(table.cache[tableId], function (i1, item1) {
+        if (!item1[table.config.checkName]) {
+          obj.isAll = false;
+          return true;
+        }
+      })
+      form.render(tableView.find('input[name="layTableCheckbox"][lay-filter="layTableAllChoose"]').prop('checked', obj.isAll));
+    }
+  })
 
 
   /**
