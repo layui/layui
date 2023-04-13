@@ -2308,7 +2308,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
     };
     
-    //单元格展开事件
+    //合计行单元格展开事件
     that.layTotal.on('click', '.'+ ELEM_GRID_DOWN, function(e){
       var othis = $(this)
       ,td = othis.parent()
@@ -2344,7 +2344,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       layui.stope(e);
     });
 
-    //合并行单元格展开事件
+    //单元格展开事件
     that.layBody.on('click', '.'+ ELEM_GRID_DOWN, function(e){
       var othis = $(this)
       ,td = othis.parent()
