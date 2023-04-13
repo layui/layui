@@ -2281,6 +2281,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }).on('mouseleave', 'td', function(){
        gridExpand.call(this, 'hide');
     });
+
+    // 合计行单元格触发鼠标移入移出事件
+    that.layTotal.on('mouseenter', 'td', function(){
+      gridExpand.call(this)
+    }).on('mouseleave', 'td', function(){
+       gridExpand.call(this, 'hide');
+    });
     
     //单元格展开图标
     var ELEM_GRID = 'layui-table-grid', ELEM_GRID_DOWN = 'layui-table-grid-down', ELEM_GRID_PANEL = 'layui-table-grid-panel'
@@ -2302,6 +2309,42 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     };
     
     //单元格展开事件
+    that.layTotal.on('click', '.'+ ELEM_GRID_DOWN, function(e){
+      var othis = $(this)
+      ,td = othis.parent()
+      ,elemCell = td.children(ELEM_CELL);
+
+      that.tipsIndex = layer.tips([
+        '<div class="layui-table-tips-main" style="margin-top: -'+ (elemCell.height() + 23) +'px;'+ function(){
+          if(options.size === 'sm'){
+            return 'padding: 4px 15px; font-size: 12px;';
+          }
+          if(options.size === 'lg'){
+            return 'padding: 14px 15px;';
+          }
+          return '';
+        }() +'">'
+          ,elemCell.html()
+        ,'</div>'
+        ,'<i class="layui-icon layui-table-tips-c layui-icon-close"></i>'
+      ].join(''), elemCell[0], {
+        tips: [3, '']
+        ,time: -1
+        ,anim: -1
+        ,maxWidth: (device.ios || device.android) ? 300 : that.elem.width()/2
+        ,isOutAnim: false
+        ,skin: 'layui-table-tips'
+        ,success: function(layero, index){
+          layero.find('.layui-table-tips-c').on('click', function(){
+            layer.close(index);
+          });
+        }
+      });
+      
+      layui.stope(e);
+    });
+
+    //合并行单元格展开事件
     that.layBody.on('click', '.'+ ELEM_GRID_DOWN, function(e){
       var othis = $(this)
       ,td = othis.parent()
