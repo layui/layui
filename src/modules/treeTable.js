@@ -171,6 +171,15 @@ layui.define(['table'], function (exports) {
       });
       // 更新cache中的内容 将子节点也存到cache中
       updateCache();
+      // 更新全选框的状态
+      var layTableAllChooseElem = tableView.find('[name="layTableCheckbox"][lay-filter="layTableAllChoose"]');
+      if (layTableAllChooseElem.length) {
+        var checkStatus = treeTable.checkStatus(id);
+        layTableAllChooseElem.prop({
+          checked: checkStatus.isAll && checkStatus.data.length,
+          indeterminate: !checkStatus.isAll && checkStatus.data.length
+        })
+      }
 
       that.renderTreeTable(tableView);
 
@@ -661,7 +670,7 @@ layui.define(['table'], function (exports) {
         .html(['<div class="layui-inline layui-table-tree-flexIcon" ',
           'style="',
           'margin-left: ' + (indent * level) + 'px;',
-          trData[isParentKey] || treeOptionsView.showFlexIconIfNotParent || 'visibility: hidden;',
+          (trData[isParentKey] || treeOptionsView.showFlexIconIfNotParent) ? '' : ' visibility: hidden;',
           '">',
           treeOptions.view.flexIconClose, // 折叠图标
           '</div>',
@@ -814,6 +823,7 @@ layui.define(['table'], function (exports) {
     var tableThat = getThisTable(tableId);
     var trData = obj.data = treeTable.getNodeDataByIndex(tableId, obj.index); // 克隆的
     var trIndex = trData[LAY_DATA_INDEX];
+    obj.dataIndex = trIndex;
 
     // 处理update方法
     var updateFn = obj.update;
@@ -827,17 +837,9 @@ layui.define(['table'], function (exports) {
     }
 
     // 处理del方法
-    var delFn = obj.del;
     obj.del = function () {
-      var updateThat = this;
-      var args = arguments;
-      // 原始的方法是讲对应下标的元素换成空数组，并删除相关节点，已经由
-      // var ret = delFn.apply(updateThat, args);
-      // delete table.cache[tableId][trIndex];
       treeTable.removeNode(tableId, trIndex);
-      // return ret;
     }
-
   }
 
   // 更新数据
@@ -857,7 +859,6 @@ layui.define(['table'], function (exports) {
     var newNodeTemp = that.getNodeDataByIndex(index, false, newNode);
     // 获取新的tr替换
     var trNew = table.getTrHtml(id, [newNodeTemp]);
-    debugger;
     // 重新渲染tr
     layui.each(['main', 'fixed-l', 'fixed-r'], function (i, item) {
       tableView.find('.layui-table-' + item + ' tbody tr[lay-data-index="' + index + '"]').replaceWith($(trNew[['trs', 'trs_fixed', 'trs_fixed_r'][i]].join('')).attr({
@@ -881,6 +882,8 @@ layui.define(['table'], function (exports) {
     var indexArr = [];
     layui.each(index, function (index, indexValue) {
       delNode = that.getNodeDataByIndex(indexValue, false, 'delete');
+      var nodeP = that.getNodeDataByIndex(delNode[LAY_PARENT_INDEX]);
+      that.updateCheckStatus(nodeP, true);// 删除节点接近取消选择 todo
       var delNodesFlat = that.treeToFlat([delNode], delNode[treeOptions.data.simpleData.pIdKey], delNode[LAY_PARENT_INDEX]);
       layui.each(delNodesFlat, function (i2, item2) {
         indexArr.push('tr[lay-data-index="' + item2[LAY_DATA_INDEX] + '"]');
@@ -1137,6 +1140,47 @@ layui.define(['table'], function (exports) {
     }
   })
 
+  // 更新表格的复选框状态
+  Class.prototype.updateCheckStatus = function (dataP, checked) {
+    var that = this;
+    var options = that.getOptions();
+    var treeOptions = options.tree;
+    var tableId = options.id;
+    var tableView = options.elem.next();
+
+    var checkName = table.config.checkName;
+
+    // 如有必要更新父节点们的状态
+    if (dataP) {
+      var trsP = that.updateParentCheckStatus(dataP, checked);
+      layui.each(trsP, function (indexP, itemP) {
+        form.render(tableView.find('tr[lay-data-index="' + itemP[LAY_DATA_INDEX] + '"]  input[name="layTableCheckbox"]:not(:disabled)').prop({
+          checked: itemP[checkName],
+          indeterminate: itemP[LAY_CHECKBOX_HALF]
+        }))
+      })
+    }
+
+    // 更新全选的状态
+    var isAll = true;
+    var isIndeterminate = false;
+    layui.each(table.cache[tableId], function (i1, item1) {
+      if (item1[checkName] || item1[LAY_CHECKBOX_HALF]) {
+        isIndeterminate = true;
+      }
+      if (!item1[checkName]) {
+        isAll = false;
+      }
+    })
+    isIndeterminate = isIndeterminate && !isAll;
+    form.render(tableView.find('input[name="layTableCheckbox"][lay-filter="layTableAllChoose"]').prop({
+      'checked': isAll,
+      indeterminate: isIndeterminate
+    }));
+
+    return isAll
+  }
+
   // 更新父节点的选中状态
   Class.prototype.updateParentCheckStatus = function (dataP, checked) {
     var that = this;
@@ -1197,42 +1241,53 @@ layui.define(['table'], function (exports) {
         var checkedStatus = {};
         checkedStatus[checkName] = checked;
         checkedStatus[LAY_CHECKBOX_HALF] = false;
-        var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatus);
+
+        // 处理不可操作的信息
+        var checkedStatusFn = function (d) {
+          if (!d[table.config.disabledName]) { // 节点不可操作的不处理
+            d[checkName] = checked;
+            d[LAY_CHECKBOX_HALF] = false;
+          }
+        }
+
+        // var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatus);
+        var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatusFn);
         form.render(tableView.find(trs.map(function (value) {
-          return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"] input[name="layTableCheckbox"]';
+          return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"] input[name="layTableCheckbox"]:not(:disabled)';
         }).join(',')).prop({checked: checked, indeterminate: false}));
       }
-
+      var trDataP;
       // 更新父节点以及更上层节点的状态
       if (trData && trData[LAY_PARENT_INDEX]) {
         // 找到父节点，然后判断父节点的子节点是否全部选中
-        var trDataP = that.getNodeDataByIndex(trData[LAY_PARENT_INDEX]);
-        var trsP = that.updateParentCheckStatus(trDataP, checked);
-        layui.each(trsP, function (indexP, itemP) {
-          form.render(tableView.find('tr[lay-data-index="' + itemP[LAY_DATA_INDEX] + '"]  input[name="layTableCheckbox"]').prop({
-            checked: itemP[checkName],
-            indeterminate: itemP[LAY_CHECKBOX_HALF]
-          }))
-        })
+        trDataP = that.getNodeDataByIndex(trData[LAY_PARENT_INDEX]);
+        // var trsP = that.updateParentCheckStatus(trDataP, checked);
+        // layui.each(trsP, function (indexP, itemP) {
+        //   form.render(tableView.find('tr[lay-data-index="' + itemP[LAY_DATA_INDEX] + '"]  input[name="layTableCheckbox"]:not(:disabled)').prop({
+        //     checked: itemP[checkName],
+        //     indeterminate: itemP[LAY_CHECKBOX_HALF]
+        //   }))
+        // })
       }
 
+      obj.isAll = that.updateCheckStatus(trDataP, checked);
+
       // 全选图标的状态更新
-      obj.isAll = true;
-      var isIndeterminate = false;
-      layui.each(table.cache[tableId], function (i1, item1) {
-        if (item1[checkName] || item1[LAY_CHECKBOX_HALF]) {
-          isIndeterminate = true;
-        }
-        if (!item1[checkName]) {
-          obj.isAll = false;
-          return true;
-        }
-      })
-      isIndeterminate = isIndeterminate && !obj.isAll;
-      form.render(tableView.find('input[name="layTableCheckbox"][lay-filter="layTableAllChoose"]').prop({
-        'checked': obj.isAll,
-        indeterminate: isIndeterminate
-      }));
+      // obj.isAll = true;
+      // var isIndeterminate = false;
+      // layui.each(table.cache[tableId], function (i1, item1) {
+      //   if (item1[checkName] || item1[LAY_CHECKBOX_HALF]) {
+      //     isIndeterminate = true;
+      //   }
+      //   if (!item1[checkName]) {
+      //     obj.isAll = false;
+      //   }
+      // })
+      // isIndeterminate = isIndeterminate && !obj.isAll;
+      // form.render(tableView.find('input[name="layTableCheckbox"][lay-filter="layTableAllChoose"]').prop({
+      //   'checked': obj.isAll,
+      //   indeterminate: isIndeterminate
+      // }));
     }
   })
 
