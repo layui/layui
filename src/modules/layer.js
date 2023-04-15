@@ -275,7 +275,8 @@ Class.pt.config = {
   moveType: 1,
   resize: true,
   scrollbar: true, //是否允许浏览器滚动条
-  tips: 2
+  tips: 2,
+  iconTitle: false
 };
 
 //容器
@@ -341,6 +342,23 @@ Class.pt.vessel = function(conType, callback){
             )+' '+ animClass +'"></i>'
           }
 
+          return '';
+        }()
+        + function () {
+          var face_text = [
+            '提示',
+            '成功',
+            '错误',
+            '疑问',
+            '锁定',
+            '错误',
+            '成功'
+          ];
+          
+          if (config.type == 0 && config.icon !== -1 && config.iconTitle) {
+              let icon_title = (typeof config.iconTitle === 'boolean') ? (face_text[config.icon] || face_text[0]) : config.iconTitle;
+              return '<div class="icon-title">' + icon_title + '</div>';
+          }
           return '';
         }()
         + (config.type == 1 && conType ? '' : (config.content||''))
