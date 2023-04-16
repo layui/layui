@@ -1108,7 +1108,6 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-table-tips-c:before{position: relative; right: -2px;}
 
 /** 树表 **/
-.layui-table-tree .layui-table-cell {display: inline-flex; align-items: center;}
 .layui-table-tree-nodeIcon {width: 20px;}
 .layui-table-tree-nodeIcon > * {width: 100%;}
 .layui-table-tree-flexIcon,.layui-table-tree-nodeIcon {margin-right: 2px;}
