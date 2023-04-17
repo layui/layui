@@ -329,9 +329,15 @@ layui.define(['table'], function (exports) {
           // 删除
           if (tableCache) {
             // 同步cache
-            tableCache.splice(tableCache.findIndex(function (value) {
-              return value[LAY_DATA_INDEX] === index;
-            }), 1)
+            // tableCache.splice(tableCache.findIndex(function (value) {
+            //   return value[LAY_DATA_INDEX] === index;
+            // }), 1);
+            layui.each(tableCache, function (i1, item1) {
+              if (item1[LAY_DATA_INDEX] === index) {
+                tableCache.splice(i1, 1);
+                return true;
+              }
+            })
           }
           return (i ? dataRet[childrenKey] : dataRet).splice(indexArr[i], 1)[0];
         } else {
@@ -435,10 +441,7 @@ layui.define(['table'], function (exports) {
     if (trExpand) {
       // 展开
       if (trExpanded) { // 已经展开过
-        if (trExpand == trData[LAY_EXPAND]) { // 已经和当前的状态一样，是否有优化的空间，要注意直接方法调用级联展开和触发和不是级联的情况下的区别
-        }
         trData[LAY_EXPAND] = trExpand;
-
         tableViewElem.find(childNodes.map(function (value, index, array) {
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]'
         }).join(',')).removeClass('layui-hide');
@@ -573,8 +576,6 @@ layui.define(['table'], function (exports) {
         }
       }
     } else {
-      if (trExpand == trData[LAY_EXPAND]) {
-      }
       trData[LAY_EXPAND] = trExpand;
       // 折叠
       if (sonSign && !isToggle) { // 非状态切换的情况下
@@ -621,26 +622,59 @@ layui.define(['table'], function (exports) {
     var that = getThisTable(id);
     var options = that.getOptions();
     var treeOptions = options.tree;
+    var tableView = options.elem.next();
 
     if (!expandFlag) {
       // 关闭所有
       // 将所有已经打开的节点的状态设置为关闭，
       that.updateStatus(null, {LAY_EXPAND: false}); // 只处理当前页，如果需要处理全部表格，需要用treeTable.updateStatus
       // 隐藏所有非顶层的节点
-      options.elem.next().find('tbody tr[data-level!="0"]').addClass('layui-hide');
+      tableView.find('tbody tr[data-level!="0"]').addClass('layui-hide');
       // 处理顶层节点的图标
-      var trLevel0 = options.elem.next().find('tbody tr[data-level="0"]');
+      var trLevel0 = tableView.find('tbody tr[data-level="0"]');
       trLevel0.find('.layui-table-tree-flexIcon').html(treeOptions.view.flexIconClose);
       trLevel0.find('.layui-table-tree-nodeIcon').html(treeOptions.view.iconClose);
 
       treeTable.resize();
     } else {
       // 展开所有
-      // 先判断是否全部打开过了
+      if (treeOptions.async.enable) {
+        // 存在异步加载
+
+      } else {
+        // 先判断是否全部打开过了
+        var tableDataFlat = treeTable.getData(id, true);
+        var isAllExpanded = true;
+        layui.each(tableDataFlat, function (i1, item1) {
+          if (!item1[LAY_HAS_EXPANDED]) {
+            isAllExpanded = false;
+            return true;
+          }
+        })
+        // 如果全部节点已经都打开过，就可以简单处理跟隐藏所有节点反操作
+        if (isAllExpanded) {
+          that.updateStatus(null, {LAY_EXPAND: true}); // 只处理当前页，如果需要处理全部表格，需要用treeTable.updateStatus
+          // 隐藏所有非顶层的节点
+          tableView.find('tbody tr[data-level!="0"]').removeClass('layui-hide');
+          // 处理顶层节点的图标
+          // var trLevel0 = tableView.find('tbody tr[data-level="0"]');
+          tableView.find('.layui-table-tree-flexIcon').html(treeOptions.view.flexIconOpen);
+          tableView.find('.layui-table-tree-nodeIcon').html(treeOptions.view.iconOpen);
+
+          treeTable.resize();
+        } else {
+          debugger;
+          // 如果有未打开过的父节点，将内容全部生成
+          that.updateStatus(null, {LAY_EXPAND: true, LAY_HAS_EXPANDED: true});
+          var trsAll = table.getTrHtml(id, tableDataFlat);
+
+        }
+
+      }
+
 
       // 如果是异步加载子节点模式 如何处理
       // 如果有部分节点未打开过，也需要重新
-      // 如果全部节点已经都打开过，就可以简单处理跟隐藏所有节点反操作
     }
 
   }
@@ -674,7 +708,6 @@ layui.define(['table'], function (exports) {
     var dataExpand = {}; // 记录需要展开的数据
     var nameKey = treeOptions.data.key.name;
     var indent = treeOptions.view.indent || 14;
-    // 后期需要添加一个配置来决定展开的图标放在哪个字段
     layui.each(tableView.find('td[data-field="' + nameKey + '"]'), function (index, item) {
       item = $(item);
       var trElem = item.closest('tr');
@@ -1063,7 +1096,7 @@ layui.define(['table'], function (exports) {
     treeTable.resize(id);
     if (focus) {
       // 滚动到第一个新增的节点
-      tableViewElem.find(ELEM_MAIN).find('tr[lay-data-index="'+newNodes[0][LAY_DATA_INDEX]+'"]').get(0).scrollIntoViewIfNeeded();
+      tableViewElem.find(ELEM_MAIN).find('tr[lay-data-index="' + newNodes[0][LAY_DATA_INDEX] + '"]').get(0).scrollIntoViewIfNeeded();
     }
     return newNodes;
   }
