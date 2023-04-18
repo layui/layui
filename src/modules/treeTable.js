@@ -639,7 +639,7 @@ layui.define(['table'], function (exports) {
       treeTable.resize();
     } else {
       console.log('目前暂时不支持展开全部');
-      return ;
+      return;
       // 展开所有
       if (treeOptions.async.enable) {
         // 存在异步加载
@@ -904,6 +904,11 @@ layui.define(['table'], function (exports) {
     // 处理del方法
     obj.del = function () {
       treeTable.removeNode(tableId, trData);
+    }
+
+    // 处理setRowChecked
+    obj.setRowChecked = function (checked) {
+      treeTable.checkNode(tableId, trData, checked);
     }
   }
 
@@ -1295,21 +1300,29 @@ layui.define(['table'], function (exports) {
     var isRadio = inputElem.attr('type') === 'radio';
 
     if (callbackFlag) {
+      var triggerEvent = function () {
+        var fn = function (event) {
+          layui.stope(event);
+        }
+        inputElem.parent().on('click', fn); // 添加临时的阻止冒泡事件
+        inputElem.next().click();
+        inputElem.parent().off('click', fn);
+      }
       // 如果需要触发事件可以简单的触发对应节点的click事件
       if (isRadio) {
         // 单选只能选中或者切换其他的不能取消选中 后续看是否有支持的必要 todo
         if (checked && !inputElem.prop('checked')) {
-          inputElem.next().click();
+          triggerEvent()
         }
       } else {
         if (layui.type(checked) === 'boolean') {
           if (inputElem.prop('checked') !== checked) {
             // 如果当前已经是想要修改的状态则不做处理
-            inputElem.next().click();
+            triggerEvent()
           }
         } else {
           // 切换
-          inputElem.next().click();
+          triggerEvent()
         }
       }
     } else {
@@ -1337,20 +1350,20 @@ layui.define(['table'], function (exports) {
         // 切换只能用到单条，全选到这一步的时候应该是一个确定的状态
         checked = layui.type(checked) === 'boolean' ? checked : !trData[checkName]; // 状态切换，如果遇到不可操作的节点待处理 todo
         // 全选或者是一个父节点，将子节点的状态同步为当前节点的状态
-        if (!trData || trData[isParentKey]) {
-          // 处理不可操作的信息
-          var checkedStatusFn = function (d) {
-            if (!d[table.config.disabledName]) { // 节点不可操作的不处理
-              d[checkName] = checked;
-              d[LAY_CHECKBOX_HALF] = false;
-            }
+        // if (!trData || trData[isParentKey]) {
+        // 处理不可操作的信息
+        var checkedStatusFn = function (d) {
+          if (!d[table.config.disabledName]) { // 节点不可操作的不处理
+            d[checkName] = checked;
+            d[LAY_CHECKBOX_HALF] = false;
           }
-
-          var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatusFn);
-          form.render(tableView.find(trs.map(function (value) {
-            return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"] input[name="layTableCheckbox"]:not(:disabled)';
-          }).join(',')).prop({checked: checked, indeterminate: false}));
         }
+
+        var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatusFn);
+        form.render(tableView.find(trs.map(function (value) {
+          return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"] input[name="layTableCheckbox"]:not(:disabled)';
+        }).join(',')).prop({checked: checked, indeterminate: false}));
+        // }
         var trDataP;
         // 更新父节点以及更上层节点的状态
         if (trData && trData[LAY_PARENT_INDEX]) {
@@ -1383,7 +1396,7 @@ layui.define(['table'], function (exports) {
    * @param {String} id 树表id
    * @param {Object|String} node 节点
    * @param {Boolean} checked 选中或取消
-   * @param {Boolean} callbackFlag 是否触发事件回调
+   * @param {Boolean} [callbackFlag] 是否触发事件回调
    * */
   treeTable.checkNode = function (id, node, checked, callbackFlag) {
     var that = getThisTable(id);
