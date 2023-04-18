@@ -100,6 +100,17 @@ layui.define(['table'], function (exports) {
     that.render();
   };
 
+  var updateCache = function (id, childrenKey, data) {
+    var tableCache = table.cache[id];
+    layui.each(data || tableCache, function (index, item) {
+      var itemDataIndex = item[LAY_DATA_INDEX];
+      if (itemDataIndex.indexOf('-') !== -1) {
+        tableCache[itemDataIndex] = item
+      }
+      item[childrenKey] && updateCache(id, childrenKey, item[childrenKey]);
+    })
+  }
+
   Class.prototype.init = function () {
     var that = this;
     var options = that.config;
@@ -153,17 +164,6 @@ layui.define(['table'], function (exports) {
       that.initData(options.data);
     }
 
-    var updateCache = function (data) {
-      var tableCache = table.cache[id];
-      layui.each(data || tableCache, function (index, item) {
-        var itemDataIndex = item[LAY_DATA_INDEX];
-        if (itemDataIndex.indexOf('-') !== -1) {
-          tableCache[itemDataIndex] = item
-        }
-        item[childrenKey] && updateCache(item[childrenKey]);
-      })
-    }
-
     options.done = function () {
       var args = arguments;
       var doneThat = this;
@@ -173,7 +173,7 @@ layui.define(['table'], function (exports) {
         LAY_HAS_EXPANDED: false // 去除已经打开过的状态
       });
       // 更新cache中的内容 将子节点也存到cache中
-      updateCache();
+      updateCache(id, childrenKey);
       // 更新全选框的状态
       var layTableAllChooseElem = tableView.find('[name="layTableCheckbox"][lay-filter="layTableAllChoose"]');
       if (layTableAllChooseElem.length) {
@@ -383,9 +383,10 @@ layui.define(['table'], function (exports) {
       item1[LAY_DATA_INDEX_HISTORY] = item1[LAY_DATA_INDEX];
       item1[LAY_PARENT_INDEX] = parentIndex = parentIndex || '';
       var dataIndex = item1[LAY_DATA_INDEX] = (parentIndex ? parentIndex + '-' : '') + i1;
-      dataIndex.indexOf('-') !== -1 && (table.cache[tableId][dataIndex] = item1);
       that.initData(item1[childrenKey] || [], dataIndex);
     });
+
+    parentIndex || updateCache(tableId, childrenKey);
 
     return data;
   }
@@ -637,6 +638,8 @@ layui.define(['table'], function (exports) {
 
       treeTable.resize();
     } else {
+      console.log('目前暂时不支持展开全部');
+      return ;
       // 展开所有
       if (treeOptions.async.enable) {
         // 存在异步加载
@@ -663,7 +666,6 @@ layui.define(['table'], function (exports) {
 
           treeTable.resize();
         } else {
-          debugger;
           // 如果有未打开过的父节点，将内容全部生成
           that.updateStatus(null, {LAY_EXPAND: true, LAY_HAS_EXPANDED: true});
           var trsAll = table.getTrHtml(id, tableDataFlat);
@@ -1197,12 +1199,7 @@ layui.define(['table'], function (exports) {
 
     if (tableView.hasClass('layui-table-tree')) {
       updateObjParams(obj);
-      var trIndex = obj.index;
-      var statusChecked = {};
-      statusChecked[table.config.checkName] = false;
-      that.updateStatus(null, statusChecked); // 取消其他的选中状态
-      // treeTable.updateStatus(tableId, statusChecked);
-      table.cache[tableId][trIndex][table.config.checkName] = obj.checked;
+      checkNode.call(that, obj.tr, obj.checked)
     }
   })
 
@@ -1288,6 +1285,84 @@ layui.define(['table'], function (exports) {
     return dataRet
   }
 
+  var checkNode = function (trElem, checked, callbackFlag) {
+    var that = this;
+    var options = that.getOptions();
+    var tableId = options.id;
+    var tableView = options.elem.next();
+    var inputElem = (trElem.length ? trElem : tableView).find('.laytable-cell-radio, .laytable-cell-checkbox').children('input').last();
+    // 判断是单选还是多选 不应该同时存在radio列和checkbox列
+    var isRadio = inputElem.attr('type') === 'radio';
+
+    if (callbackFlag) {
+      // 如果需要触发事件可以简单的触发对应节点的click事件
+      if (isRadio) {
+        // 单选只能选中或者切换其他的不能取消选中 后续看是否有支持的必要 todo
+        if (checked && !inputElem.prop('checked')) {
+          inputElem.next().click();
+        }
+      } else {
+        if (layui.type(checked) === 'boolean') {
+          if (inputElem.prop('checked') !== checked) {
+            // 如果当前已经是想要修改的状态则不做处理
+            inputElem.next().click();
+          }
+        } else {
+          // 切换
+          inputElem.next().click();
+        }
+      }
+    } else {
+      var trData = that.getNodeDataByIndex(trElem.attr('data-index'));
+      var checkName = table.config.checkName;
+      // 如果不触发事件应该有一个方法可以更新数据以及页面的节点
+      if (isRadio) {
+        if (!trData) {
+          // 单选必须是一个存在的行
+          return;
+        }
+        var statusChecked = {};
+        statusChecked[checkName] = false;
+        // that.updateStatus(null, statusChecked); // 取消其他的选中状态
+        that.updateStatus(null, function (d) {
+          if (d[checkName]) {
+            d[checkName] = false;
+            form.render(tableView.find('tr[lay-data-index="' + d[LAY_DATA_INDEX] + '"] input[type="radio"][lay-type="layTableRadio"]').prop('checked', false));
+          }
+        }); // 取消其他的选中状态
+        trData[checkName] = checked;
+        form.render(trElem.find('input[type="radio"][lay-type="layTableRadio"]').prop('checked', checked));
+      } else {
+        var isParentKey = options.tree.data.key.isParent;
+        // 切换只能用到单条，全选到这一步的时候应该是一个确定的状态
+        checked = layui.type(checked) === 'boolean' ? checked : !trData[checkName]; // 状态切换，如果遇到不可操作的节点待处理 todo
+        // 全选或者是一个父节点，将子节点的状态同步为当前节点的状态
+        if (!trData || trData[isParentKey]) {
+          // 处理不可操作的信息
+          var checkedStatusFn = function (d) {
+            if (!d[table.config.disabledName]) { // 节点不可操作的不处理
+              d[checkName] = checked;
+              d[LAY_CHECKBOX_HALF] = false;
+            }
+          }
+
+          var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatusFn);
+          form.render(tableView.find(trs.map(function (value) {
+            return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"] input[name="layTableCheckbox"]:not(:disabled)';
+          }).join(',')).prop({checked: checked, indeterminate: false}));
+        }
+        var trDataP;
+        // 更新父节点以及更上层节点的状态
+        if (trData && trData[LAY_PARENT_INDEX]) {
+          // 找到父节点，然后判断父节点的子节点是否全部选中
+          trDataP = that.getNodeDataByIndex(trData[LAY_PARENT_INDEX]);
+        }
+
+        return that.updateCheckStatus(trDataP, checked);
+      }
+    }
+  }
+
   // 多选
   treeTable.on('checkbox', function (obj) {
     var options = obj.config;
@@ -1298,69 +1373,47 @@ layui.define(['table'], function (exports) {
     if (tableView.hasClass('layui-table-tree')) {
       updateObjParams(obj);
       var checked = obj.checked;
-      var treeOptions = options.tree;
-      var isParentKey = treeOptions.data.key.isParent;
-      var childrenKey = treeOptions.data.key.children;
-      var trIndex = obj.index;
-      var checkName = table.config.checkName;
-      // 修改当前节点的信息
-      var trData = that.getNodeDataByIndex(trIndex);
-      // trData[checkName] = checked;
-      // 如果是一个父节点，将子节点的状态同步为当前节点的状态，并且注意更深层次的
-      if (obj.type === 'all' || trData[isParentKey]) {
-        var checkedStatus = {};
-        checkedStatus[checkName] = checked;
-        checkedStatus[LAY_CHECKBOX_HALF] = false;
-
-        // 处理不可操作的信息
-        var checkedStatusFn = function (d) {
-          if (!d[table.config.disabledName]) { // 节点不可操作的不处理
-            d[checkName] = checked;
-            d[LAY_CHECKBOX_HALF] = false;
-          }
-        }
-
-        // var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatus);
-        var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatusFn);
-        form.render(tableView.find(trs.map(function (value) {
-          return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"] input[name="layTableCheckbox"]:not(:disabled)';
-        }).join(',')).prop({checked: checked, indeterminate: false}));
-      }
-      var trDataP;
-      // 更新父节点以及更上层节点的状态
-      if (trData && trData[LAY_PARENT_INDEX]) {
-        // 找到父节点，然后判断父节点的子节点是否全部选中
-        trDataP = that.getNodeDataByIndex(trData[LAY_PARENT_INDEX]);
-        // var trsP = that.updateParentCheckStatus(trDataP, checked);
-        // layui.each(trsP, function (indexP, itemP) {
-        //   form.render(tableView.find('tr[lay-data-index="' + itemP[LAY_DATA_INDEX] + '"]  input[name="layTableCheckbox"]:not(:disabled)').prop({
-        //     checked: itemP[checkName],
-        //     indeterminate: itemP[LAY_CHECKBOX_HALF]
-        //   }))
-        // })
-      }
-
-      obj.isAll = that.updateCheckStatus(trDataP, checked);
-
-      // 全选图标的状态更新
-      // obj.isAll = true;
-      // var isIndeterminate = false;
-      // layui.each(table.cache[tableId], function (i1, item1) {
-      //   if (item1[checkName] || item1[LAY_CHECKBOX_HALF]) {
-      //     isIndeterminate = true;
-      //   }
-      //   if (!item1[checkName]) {
-      //     obj.isAll = false;
-      //   }
-      // })
-      // isIndeterminate = isIndeterminate && !obj.isAll;
-      // form.render(tableView.find('input[name="layTableCheckbox"][lay-filter="layTableAllChoose"]').prop({
-      //   'checked': obj.isAll,
-      //   indeterminate: isIndeterminate
-      // }));
+      obj.isAll = checkNode.call(that, obj.tr, checked);
     }
   })
 
+
+  /**
+   * 勾选或取消勾选单个节点
+   * @param {String} id 树表id
+   * @param {Object|String} node 节点
+   * @param {Boolean} checked 选中或取消
+   * @param {Boolean} callbackFlag 是否触发事件回调
+   * */
+  treeTable.checkNode = function (id, node, checked, callbackFlag) {
+    var that = getThisTable(id);
+    var options = that.getOptions();
+    var tableView = options.elem.next();
+
+    var dataIndex = layui.type(node) === 'string' ? node : node[LAY_DATA_INDEX];
+    // 判断是否在当前页面中
+    var nodeData = that.getNodeDataByIndex(dataIndex);
+    if (!nodeData) {
+      // 目前只能处理当前页的数据
+      return;
+    }
+    // 判断是否展开过
+    var trElem = tableView.find('tr[lay-data-index="' + dataIndex + '"]');
+    if (!trElem.length) {
+      // 如果还没有展开没有渲染的要先渲染出来
+      treeTable.expandNode(id, nodeData[LAY_PARENT_INDEX], true);
+      trElem = tableView.find('tr[lay-data-index="' + dataIndex + '"]');
+    }
+    checkNode.call(that, trElem, checked, callbackFlag);
+  }
+
+  treeTable.checkAllNodes = function (id, checked) {
+    var that = getThisTable(id);
+    var options = that.getOptions();
+    var tableView = options.elem.next();
+
+    checkNode.call(that, tableView.find('tr[data-index="NONE"]'), !!checked)
+  }
 
   /**
    * 获得数据
