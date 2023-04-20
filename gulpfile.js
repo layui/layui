@@ -21,7 +21,7 @@ const config = {
     ,{pkg: pkg, js: ';'}
   ]
   //模块
-  ,modules: 'lay,laytpl,laypage,laydate,jquery,layer,util,dropdown,slider,colorpicker,element,upload,form,table,tree,transfer,carousel,rate,flow,code'
+  ,modules: 'lay,laytpl,laypage,laydate,jquery,layer,util,dropdown,slider,colorpicker,element,upload,form,table,treeTable,tree,transfer,carousel,rate,flow,code'
 };
 
 // 获取参数
