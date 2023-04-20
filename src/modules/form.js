@@ -98,9 +98,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           itemElem[0].checked = value;
         } else if(type === 'radio') { // 如果为单选框
           itemElem.each(function(){
-            if(this.value == value ){
-              this.checked = true
-            }     
+            this.checked = this.value == value;
           });
         } else { // 其它类型的表单
           itemElem.val(value);
@@ -644,7 +642,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             var title = (check.attr('title')||'').split('|');
 
             if(check[0].disabled) return;
-            
+            if (check[0].indeterminate) {
+              check[0].indeterminate = false;
+              reElem.find('.layui-icon-subtraction').removeClass('layui-icon-subtraction').addClass('layui-icon-ok')
+            }
+
+
             check[0].checked ? (
               check[0].checked = false
               ,reElem.removeClass(RE_CLASS[1]).find('em').text(title[1])
@@ -688,7 +691,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               // 复选框
               "checkbox": [
                 (title[0] ? ('<span>'+ util.escape(title[0]) +'</span>') : '')
-                ,'<i class="layui-icon layui-icon-ok"></i>'
+                ,'<i class="layui-icon '+(skin === 'primary' && !check.checked && othis.get(0).indeterminate ? 'layui-icon-subtraction' : 'layui-icon-ok')+'"></i>'
               ].join(''),
               
               // 开关
