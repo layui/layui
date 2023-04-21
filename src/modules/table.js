@@ -537,11 +537,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
     };
 
-    //初始化列参数
+    // 初始化列参数
     layui.each(options.cols, function(i1, item1){
-      if (i1) return true;
       layui.each(item1, function(i2, item2){
-        initChildCols(i1, item1, i2, item2);
+        if (i1) {
+          delete item2.HAS_PARENT; // 去掉临时的计数排除标识，避免有新字段插入的时候重新计算被跳过导致下标出错的问题
+        } else {
+          initChildCols(i1, item1, i2, item2); // 只解析顶层节点由递归完成解析
+        }
       });
     });
 
