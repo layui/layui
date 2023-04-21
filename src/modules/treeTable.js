@@ -993,11 +993,20 @@ layui.define(['table'], function (exports) {
    * @param {Boolean} focus 新增的节点，单个或者多个
    * @return {Array} 新增的节点
    * */
-  treeTable.addNodes = function (id, parentIndex, index, newNodes, focus) {
+  treeTable.addNodes = function (id, opts) {
     var that = getThisTable(id);
+    if(!that) return;
+
     var options = that.getOptions();
     var treeOptions = options.tree;
     var tableViewElem = options.elem.next();
+
+    opts = opts || {};
+    
+    var parentIndex = opts.parentIndex;
+    var index = opts.index;
+    var newNodes = opts.newNodes;
+    var focus = opts.focus;
 
     parentIndex = layui.type(parentIndex) === 'number' ? parentIndex.toString() : parentIndex;
     var parentNode = parentIndex ? that.getNodeDataByIndex(parentIndex) : null;
