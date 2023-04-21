@@ -65,6 +65,10 @@ a cite{font-style: normal; *cursor:pointer;}
 }
 
 /* font-class */
+.layui-icon-leaf:before{content: "\e701";}
+.layui-icon-folder:before{content: "\eabe";}
+.layui-icon-folder-open:before{content: "\eac1";}
+.layui-icon-gitee:before{content: "\e69b";}
 .layui-icon-github:before{content:"\e6a7"}
 .layui-icon-disabled:before{content:"\e6cc"}
 .layui-icon-moon:before{content:"\e6c2"}
