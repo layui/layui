@@ -15,12 +15,12 @@ const yargs = require('yargs');
 
 // 基础配置
 const config = {
-  //注释
+  // 注释
   comment: [
     '/** v<%= pkg.version %> | <%= pkg.license %> Licensed */<%= js %>'
     ,{pkg: pkg, js: ';'}
   ]
-  //模块
+  // 模块
   ,modules: 'lay,laytpl,laypage,laydate,jquery,layer,util,dropdown,slider,colorpicker,element,upload,form,table,treeTable,tree,transfer,carousel,rate,flow,code'
 };
 
@@ -49,7 +49,7 @@ const js = () => {
   ];
   return gulp.src(src).pipe(uglify({
     output: {
-      ascii_only: true //escape Unicode characters in strings and regexps
+      ascii_only: true // escape Unicode characters in strings and regexps
     },
     ie: true
   })).pipe(concat('layui.js', {newLine: ''}))
@@ -87,8 +87,8 @@ const cp = () => {
 // release
 const rls = () => {
   return gulp.src('./release/doc/**/*')
-  .pipe(replace(/[^'"]+(\/layui\.css)/, 'layui/css$1')) //替换 css 引入路径中的本地 path
-  .pipe(replace(/[^'"]+(\/layui\.js)/, 'layui$1')) //替换 js 引入路径中的本地 path
+  .pipe(replace(/[^'"]+(\/layui\.css)/, 'layui/css$1')) // 替换 css 引入路径中的本地 path
+  .pipe(replace(/[^'"]+(\/layui\.js)/, 'layui$1')) // 替换 js 引入路径中的本地 path
   .pipe(gulp.dest(dir.rls));
 };
 
@@ -106,9 +106,9 @@ const cleanRLS = cb => {
 exports.js = js;
 exports.css = css;
 exports.files = files;
-exports.default = gulp.series(clean, gulp.parallel(js, css, files)); //default task
+exports.default = gulp.series(clean, gulp.parallel(js, css, files)); // default task
 exports.cp = gulp.series(clean, cp);
-exports.rls = gulp.series(cleanRLS, rls); //release task
+exports.rls = gulp.series(cleanRLS, rls); // release task
 
 // layer task
 exports.layer = () => { // gulp layer
@@ -141,7 +141,7 @@ exports.laydate = () => { // gulp laydate
   .pipe(replace('}(window, window.document); //gulp build: lay-footer', '')) // 替换 lay.js 的落脚
   .pipe(concat('laydate.js', {newLine: ''}))
   .pipe(replace(';!function(window, document){ //gulp build: laydate-header', '')) // 替换 laydate.js 的头部
-  .pipe(header.apply(null, comment)) //追加头部
+  .pipe(header.apply(null, comment)) // 追加头部
   .pipe(gulp.dest(dest + 'src'));
 };
 
