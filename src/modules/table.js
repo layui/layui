@@ -537,11 +537,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
     };
 
-    //初始化列参数
+    // 初始化列参数
     layui.each(options.cols, function(i1, item1){
-      if (i1) return true;
       layui.each(item1, function(i2, item2){
-        initChildCols(i1, item1, i2, item2);
+        if (i1) {
+          delete item2.HAS_PARENT; // 去掉临时的计数排除标识，避免有新字段插入的时候重新计算被跳过导致下标出错的问题
+        } else {
+          initChildCols(i1, item1, i2, item2); // 只解析顶层节点由递归完成解析
+        }
       });
     });
 
@@ -811,20 +814,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     if(that.autoColNums > 0 && patchNums >= -colNums && patchNums <= colNums){
       var getEndTh = function(th){
-        var field, thRet;
-        th = th || that.layHeader.eq(0).find('thead th:last-child')
-        layui.each(th, function (thIndex, thElem) {
-          thElem = $(thElem);
-          if (!thElem.children('.'+ELEM_GROUP).length) { // 排除合并表头
-            field = thElem.attr('data-field');
-            thRet = thElem;
-          }
-        })
-
+        var field;
+        th = th || that.layHeader.eq(0).find('thead > tr:first-child > th:last-child')
+        field = th.data('field');
         if(!field && th.prev()[0]){
           return getEndTh(th.prev())
         }
-        return thRet
+        return th;
       };
       var th = getEndTh();
       var key = th.data('key');
