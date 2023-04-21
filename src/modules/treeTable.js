@@ -1445,7 +1445,10 @@ layui.define(['table'], function (exports) {
     var trElem = tableView.find('tr[lay-data-index="' + dataIndex + '"]');
     if (!trElem.length) {
       // 如果还没有展开没有渲染的要先渲染出来
-      treeTable.expandNode(id, nodeData[LAY_PARENT_INDEX], true);
+      treeTable.expandNode(id, {
+        index: nodeData[LAY_PARENT_INDEX], 
+        expandFlag: true
+      });
       trElem = tableView.find('tr[lay-data-index="' + dataIndex + '"]');
     }
     checkNode.call(that, trElem, checked, callbackFlag);
