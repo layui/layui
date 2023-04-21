@@ -922,7 +922,10 @@ layui.define(['table'], function (exports) {
 
     // 处理setRowChecked
     obj.setRowChecked = function (checked) {
-      treeTable.checkNode(tableId, trData, checked);
+      treeTable.checkNode(tableId, {
+        node: trData, 
+        checked: checked
+      });
     }
   }
 
@@ -1427,12 +1430,18 @@ layui.define(['table'], function (exports) {
    * @param {Boolean} checked 选中或取消
    * @param {Boolean} [callbackFlag] 是否触发事件回调
    * */
-  treeTable.checkNode = function (id, node, checked, callbackFlag) {
+  treeTable.checkNode = function (id, opts) {
     var that = getThisTable(id);
     if(!that) return;
 
     var options = that.getOptions();
     var tableView = options.elem.next();
+
+    opts = opts || {};
+
+    var node = opts.node;
+    var checked = opts.checked;
+    var callbackFlag = opts.callbackFlag;
 
     var dataIndex = layui.type(node) === 'string' ? node : node[LAY_DATA_INDEX];
     // 判断是否在当前页面中
