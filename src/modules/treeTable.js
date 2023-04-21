@@ -352,6 +352,7 @@ layui.define(['table'], function (exports) {
 
   treeTable.getNodeDataByIndex = function (id, index) {
     var that = getThisTable(id);
+    if(!that) return;
     return that.getNodeDataByIndex(index, true);
   }
 
@@ -782,6 +783,8 @@ layui.define(['table'], function (exports) {
    * */
   treeTable.formatNumber = function (id) {
     var that = getThisTable(id);
+    if(!that) return;
+
     var options = that.getOptions();
     var tableViewElem = options.elem.next();
 
@@ -875,6 +878,8 @@ layui.define(['table'], function (exports) {
 
   treeTable.sort = function (id) {
     var that = getThisTable(id);
+    if(!that) return;
+
     var options = that.getOptions();
     var initSort = options.initSort;
 
@@ -924,6 +929,8 @@ layui.define(['table'], function (exports) {
   // 更新数据
   treeTable.updateNode = function (id, index, newNode) {
     var that = getThisTable(id);
+    if(!that) return;
+
     var options = that.getOptions();
     var treeOptions = options.tree;
     var tableView = options.elem.next();
@@ -951,6 +958,8 @@ layui.define(['table'], function (exports) {
   // 删除数据
   treeTable.removeNode = function (id, node) {
     var that = getThisTable(id);
+    if(!that) return;
+
     var options = that.getOptions();
     var treeOptions = options.tree;
     var tableView = options.elem.next();
@@ -1126,8 +1135,10 @@ layui.define(['table'], function (exports) {
     return newNodes;
   }
 
+  // 获取表格选中状态
   treeTable.checkStatus = function (id) {
     var that = getThisTable(id);
+    if(!that) return;
 
     // 需要区分单双选
     var tableData = treeTable.getData(id, true);
@@ -1418,6 +1429,8 @@ layui.define(['table'], function (exports) {
    * */
   treeTable.checkNode = function (id, node, checked, callbackFlag) {
     var that = getThisTable(id);
+    if(!that) return;
+
     var options = that.getOptions();
     var tableView = options.elem.next();
 
@@ -1440,6 +1453,8 @@ layui.define(['table'], function (exports) {
 
   treeTable.checkAllNodes = function (id, checked) {
     var that = getThisTable(id);
+    if(!that) return;
+
     var options = that.getOptions();
     var tableView = options.elem.next();
 
