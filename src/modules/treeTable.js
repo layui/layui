@@ -1443,14 +1443,14 @@ layui.define(['table'], function (exports) {
     return simpleData ? getThisTable(id).treeToFlat(tableData) : tableData;
   }
 
-  //记录所有实例
-  thisTreeTable.that = {}; //记录所有实例对象
-  // thisTreeTable.config = {}; //记录所有实例配置项
+  // 记录所有实例
+  thisTreeTable.that = {}; // 记录所有实例对象
+  // thisTreeTable.config = {}; // 记录所有实例配置项
 
   // 重载
   treeTable.reload = function (id, options, deep, type) {
     deep = deep !== false; // 默认采用深拷贝
-    var config = getThisTableConfig(id); //获取当前实例配置项
+    var config = getThisTableConfig(id); // 获取当前实例配置项
     if (!config) return;
 
     var that = getThisTable(id);
