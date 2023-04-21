@@ -604,23 +604,32 @@ layui.define(['table'], function (exports) {
     return retValue;
   }
 
-  treeTable.expandNode = function (id, index, expandFlag, sonSign, callbackFlag) {
+  treeTable.expandNode = function (id, opts) {
     var that = getThisTable(id);
+    if(!that) return;
+
+    opts = opts || {};
+
+    var index = opts.index;
+    var expandFlag = opts.expandFlag;
+    var sonSign = opts.sonSign;
+    var callbackFlag = opts.callbackFlag;
+
+
     var options = that.getOptions();
     var tableViewElem = options.elem.next();
     return expandNode({trElem: tableViewElem.find('tr[lay-data-index="' + index + '"]').first()}, expandFlag, sonSign, null, callbackFlag)
-  }
+  };
 
   // 目前还有性能问题特别是在data模式需要优化暂时不能使用 todo
   treeTable.expandAll = function (id, expandFlag) {
     if (layui.type(expandFlag) !== 'boolean') {
       return hint.error('expandAll的展开状态参数只接收true/false')
     }
-    // 调用expandNode一个个去处理会有性能问题重新实现该方法
-    // layui.each(table.cache[id], function (i1, item1) {
-    //   treeTable.expandNode(id, item1['LAY_DATA_INDEX'], expandFlag, true);
-    // })
+    
     var that = getThisTable(id);
+    if(!that) return;
+
     var options = that.getOptions();
     var treeOptions = options.tree;
     var tableView = options.elem.next();
