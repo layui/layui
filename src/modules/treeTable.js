@@ -648,8 +648,8 @@ layui.define(['table'], function (exports) {
 
       treeTable.resize();
     } else {
-      console.log('目前暂时不支持展开全部');
-      return;
+      return hint.error('暂不支持展开全部');
+      
       // 展开所有
       if (treeOptions.async.enable) {
         // 存在异步加载
