@@ -359,16 +359,13 @@ layui.define(['jquery', 'lay'], function(exports){
       //同步滑块的位置及颜色选择器的选择
       that.select(hsb.h, hsb.s, hsb.b);
       
-      //如果格式要求为rgb
+      // 若格式要求为rgb
       if(type === 'torgb'){
         elemPickerInput.find('input').val(bgcolor);
-      }
-      
-      //如果格式要求为rgba
-      if(type === 'rgba'){
+      } else if(type === 'rgba'){ // 若格式要求为 rgba
         var rgb = RGBSTo(bgcolor);
         
-        //如果开启透明度而没有设置，则给默认值
+        // 若开启透明度而没有设置，则给默认值
         if((bgcolor.match(/[0-9]{1,3}/g) || []).length === 3){
           elemPickerInput.find('input').val('rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', 1)');
           that.elemPicker.find('.'+ PICKER_ALPHA_SLIDER).css("left", 280);
@@ -378,12 +375,13 @@ layui.define(['jquery', 'lay'], function(exports){
           that.elemPicker.find('.'+ PICKER_ALPHA_SLIDER).css("left", left);
         }
         
-        //设置span背景色
+        // 设置 span 背景色
         that.elemPicker.find('.'+ PICKER_ALPHA_BG)[0].style.background = 'linear-gradient(to right, rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', 0), rgb('+ rgb.r +', '+ rgb.g +', '+ rgb.b +'))';    
+      } else {
+        elemPickerInput.find('input').val('#'+ HSBToHEX(hsb));
       }
-
-    }else{
-      //如果没有背景颜色则默认到最初始的状态
+    } else {
+      // 若没有背景颜色则默认到最初始的状态
       that.select(0,100,100);
       elemPickerInput.find('input').val("");
       that.elemPicker.find('.'+ PICKER_ALPHA_BG)[0].style.background = '';
