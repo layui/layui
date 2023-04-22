@@ -624,7 +624,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         var CLASS = {
           "checkbox": ['layui-form-checkbox', 'layui-form-checked', 'checkbox'],
           "switch": ['layui-form-switch', 'layui-form-onswitch', 'switch'],
-          SUBTRA: 'layui-icon-subtraction'
+          SUBTRA: 'layui-icon-indeterminate'
         };
         var checks = elem || elemForm.find('input[type=checkbox]');
         // 风格
@@ -643,6 +643,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             var title = (check.attr('title')||'').split('|');
 
             if(check[0].disabled) return;
+            
             if (check[0].indeterminate) {
               check[0].indeterminate = false;
               reElem.find(CLASS.SUBTRA).removeClass(CLASS.SUBTRA).addClass('layui-icon-ok')
