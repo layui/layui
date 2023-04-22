@@ -623,7 +623,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       ,checkbox: function(elem){
         var CLASS = {
           "checkbox": ['layui-form-checkbox', 'layui-form-checked', 'checkbox'],
-          "switch": ['layui-form-switch', 'layui-form-onswitch', 'switch']
+          "switch": ['layui-form-switch', 'layui-form-onswitch', 'switch'],
+          SUBTRA: 'layui-icon-subtraction'
         };
         var checks = elem || elemForm.find('input[type=checkbox]');
         // 风格
@@ -644,7 +645,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             if(check[0].disabled) return;
             if (check[0].indeterminate) {
               check[0].indeterminate = false;
-              reElem.find('.layui-icon-subtraction').removeClass('layui-icon-subtraction').addClass('layui-icon-ok')
+              reElem.find(CLASS.SUBTRA).removeClass(CLASS.SUBTRA).addClass('layui-icon-ok')
             }
 
 
@@ -691,7 +692,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               // 复选框
               "checkbox": [
                 (title[0] ? ('<span>'+ util.escape(title[0]) +'</span>') : '')
-                ,'<i class="layui-icon '+(skin === 'primary' && !check.checked && othis.get(0).indeterminate ? 'layui-icon-subtraction' : 'layui-icon-ok')+'"></i>'
+                ,'<i class="layui-icon '+(skin === 'primary' && !check.checked && othis.get(0).indeterminate ? CLASS.SUBTRA : 'layui-icon-ok')+'"></i>'
               ].join(''),
               
               // 开关
