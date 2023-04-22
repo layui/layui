@@ -130,36 +130,42 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     that.events(); // 事件
   };
   
-  //渲染
+  // 渲染
   Class.prototype.render = function(rerender, type){
-    var that = this
-    ,options = that.config
-    ,elemBody = $('body')
+    var that = this;
+    var options = that.config;
+    var elemBody = $('body');
     
-    //默认菜单内容
-    ,getDefaultView = function(){
+    // 默认菜单内容
+    var getDefaultView = function(){
       var elemUl = $('<ul class="layui-menu layui-dropdown-menu"></ul>');
       if(options.data.length > 0 ){
         eachItemView(elemUl, options.data)
       } else {
-        elemUl.html('<li class="layui-menu-item-none">no menu</li>');
+        elemUl.html('<li class="layui-menu-item-none">No data</li>');
       }
       return elemUl;
-    }
+    };
     
-    //遍历菜单项
-    ,eachItemView = function(views, data){
-      //var views = [];
+    // 遍历菜单项
+    var eachItemView = function(views, data){
+      // var views = [];
       layui.each(data, function(index, item){
-        //是否存在子级
-        var isChild = item.child && item.child.length > 0
-        ,isSpreadItem = ('isSpreadItem' in item) ? item.isSpreadItem : options.isSpreadItem
-        ,title = item.templet 
-          ? laytpl(item.templet).render(item) 
-        : (options.templet ? laytpl(options.templet).render(item) : item.title)
+        // 是否存在子级
+        var isChild = item.child && item.child.length > 0;
+        var isSpreadItem = ('isSpreadItem' in item) ? item.isSpreadItem : options.isSpreadItem
+        var title = function(title){
+          var templet = item.templet || options.templet;
+          if(templet){
+            title = typeof templet === 'function' 
+              ? templet(item)
+            : laytpl(templet).render(item);
+          }
+          return title;
+        }(item.title);
         
-        //初始类型
-        ,type = function(){
+        // 初始类型
+        var type = function(){
           if(isChild){
             item.type = item.type || 'parent';
           }
