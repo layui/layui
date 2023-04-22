@@ -613,7 +613,7 @@ layui.define(['table'], function (exports) {
 
     var index = opts.index;
     var expandFlag = opts.expandFlag;
-    var sonSign = opts.sonSign;
+    var sonSign = opts.inherit;
     var callbackFlag = opts.callbackFlag;
 
 
@@ -1001,7 +1001,7 @@ layui.define(['table'], function (exports) {
    * @param {String} id 树表id
    * @param {String|Number} parentIndex 指定的父节点，如果增加根节点，请设置 parentIndex 为 null 即可
    * @param {Number} index:Number 新节点插入的位置（从 0 开始）index = -1(默认) 时，插入到最后
-   * @param {Object|Array} newNodes 新增的节点，单个或者多个
+   * @param {Object|Array} data 新增的节点，单个或者多个
    * @param {Boolean} focus 新增的节点，单个或者多个
    * @return {Array} 新增的节点
    * */
@@ -1017,7 +1017,7 @@ layui.define(['table'], function (exports) {
     
     var parentIndex = opts.parentIndex;
     var index = opts.index;
-    var newNodes = opts.newNodes;
+    var newNodes = opts.data;
     var focus = opts.focus;
 
     parentIndex = layui.type(parentIndex) === 'number' ? parentIndex.toString() : parentIndex;
