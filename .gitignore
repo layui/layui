@@ -20,6 +20,6 @@ node_modules/
 _site/
 .git/
 
-/release/
-/v/
+release/
+v/
 package-lock.json
