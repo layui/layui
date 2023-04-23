@@ -25,8 +25,7 @@
 
 ---
 
-Layui 是一套开源的 Web UI 组件库，采用自身轻量级模块化规范，遵循原生态的 HTML/CSS/JavaScript 开发模式，极易上手，拿来即用。其风格简约轻盈，而内在雅致丰盈，甚至包括文档在内的每一处细节都经过精心雕琢，非常适合网页界面的快速构建。Layui 区别于一众主流的前端框架，却并非逆道而行，而是信奉返璞归真之道。确切地说，它更多是面向于追求简单的务实主义者，即无需涉足各类构建工具，只需面向浏览器本身，便可将页面所需呈现的元素与交互信手拈来。
-
+Layui 是一套开源的 Web UI 组件库，采用自身轻量级模块化规范，遵循原生态的 `HTML/CSS/JavaScript` 开发模式，极易上手，拿来即用。其风格简约轻盈，而内在雅致丰盈，甚至包括文档在内的每一处细节都经过精心雕琢，非常适合网页界面的快速构建。Layui 区别于一众主流的前端框架，却并非逆道而行，而是信奉返璞归真之道。确切地说，它更多是面向于追求简单的务实主义者，即无需涉足各类构建工具，只需面向浏览器本身，便可将页面所需呈现的元素与交互信手拈来。
 
 ## 快速上手
 
@@ -38,21 +37,18 @@ Layui 是一套开源的 Web UI 组件库，采用自身轻量级模块化规范
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>开始使用 Layui</title>
+    <title>Quick Start - Layui</title>
     <link href="./layui/css/layui.css" rel="stylesheet">
   </head>
   <body>
-    <!-- HTML -->
-     
+    <!-- HTML Content -->
     <script src="./layui/layui.js"></script>
     <script>
-    // 使用组件
-    layui.use(['layer', 'form'], function(){
+    // Usage
+    layui.use(function(){
       var layer = layui.layer;
-      var form = layui.form;
-      
-      // 欢迎语
-      layer.msg('Hello World');
+      // Welcome
+      layer.msg('Hello World', {icon: 6});
     });
     </script> 
   </body>
@@ -60,16 +56,23 @@ Layui 是一套开源的 Web UI 组件库，采用自身轻量级模块化规范
 ```
 
 ## 使用文档
-[**最新文档**](https://layui.github.io)
+
+[**最新文档**](https://layui.dev)
 
 ## 项目参与
+
 [项目参与者](https://github.com/layui/layui/graphs/contributors) 
 
 ## 破旧立新 🌱
-Layui 原官网已于2021年10月13日下线。详见：
-> 1. <a href="https://unpkg.com/outeres@0.0.7/img/layui/notice-2021.png"  target="_blank">Layui 原官网下线公告</a>  2. <a href="https://www.zhihu.com/question/488668647/answer/2159962082"  target="_blank">Layui 原官网为什么要下线？</a>
 
----
+2016年10月14日，Layui 发布了 `1.0.0` 首版，此后多年被广泛应用在不计其数的 Web 平台。
 
-鉴于 Layui 相对庞大的受众群体，从此 Github 和 Gitee 平台将支撑起 Layui 的后续。<br>
-**Layui 将继续陪伴着所有为之热爱的人们，共同去探索和论证「Layui 开发模式的可行性」**
+2021年10月13日，Layui 发布了原官网下线的公告（<a href="https://unpkg.com/outeres@0.0.7/img/layui/notice-2021.png"  target="_blank">导读</a>），并将文档站点切换到了 Gitee Pages，社区及日常维护亦全面转移到了 Gitee 和 Github 平台，并顺带呼吁大家拥抱其他更好的主流框架，导致大家误以为 Layui 停更了。事实上，自那以后，Layui 仍然在 Github 和 Gitee 保持活跃，并不存在所谓的停止更新，从当时的 `2.6.8` 一直连续迭代到如今的最新版本。
+
+2023年4月24日，Layui 发布了 `2.8.0` 正式版，并上线了[新的文档站点](https://layui.dev)，这是一次朴实的回归，更是情怀的延续。 但我们仍然坚持两年前那则公告中的观点， _即仍然推荐大家去拥抱主流，始终保持对前沿技术的无限热爱，是开发者们都应具备的思维属性_。 **而 Layui 所做的，是为填补主流之外的那些略显狭小的空隙**。Layui 虽不是前端主流，但也早已不是作者个人的 Layui，而是所有仍在坚持使用它的人的 Layui，它仍然支撑着许多项目，也代表着许多人的工作。作为开源创作者，应该要为这些坚持者而守望。
+
+未来，Layui 会持续陪伴着所有为之热爱的人们，共同去探索和论证 Layui 开发模式的可行性。
+
+## 开源许可
+
+Layui 在 [MIT license](https://opensource.org/licenses/MIT) 许可下发布。其他相关协议亦可参考《[免责声明](https://gitee.com/layui/layui/blob/main/DISCLAIMER.md)》。
