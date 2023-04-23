@@ -922,8 +922,8 @@ layui.define(['table'], function (exports) {
 
     // 处理setRowChecked
     obj.setRowChecked = function (checked) {
-      treeTable.checkNode(tableId, {
-        node: trData, 
+      treeTable.setRowChecked(tableId, {
+        index: trData, 
         checked: checked
       });
     }
@@ -1424,13 +1424,13 @@ layui.define(['table'], function (exports) {
 
 
   /**
-   * 勾选或取消勾选单个节点
+   * 设置行选中状态
    * @param {String} id 树表id
-   * @param {Object|String} node 节点
+   * @param {Object|String} index 节点下标
    * @param {Boolean} checked 选中或取消
    * @param {Boolean} [callbackFlag] 是否触发事件回调
    * */
-  treeTable.checkNode = function (id, opts) {
+  treeTable.setRowChecked = function (id, opts) {
     var that = getThisTable(id);
     if(!that) return;
 
@@ -1439,7 +1439,7 @@ layui.define(['table'], function (exports) {
 
     opts = opts || {};
 
-    var node = opts.node;
+    var node = opts.index;
     var checked = opts.checked;
     var callbackFlag = opts.callbackFlag;
 
