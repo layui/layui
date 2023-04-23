@@ -197,12 +197,9 @@ layui.define(['table'], function (exports) {
   Class.prototype.config = {
     tree: {
       customName: {
-        checked: 'LAY_CHECKED', // 节点数据中保存 check 状态的属性名称
         children: "children", // 节点数据中保存子节点数据的属性名称
         isParent: "isParent", // 节点数据保存节点是否为父节点的属性名称
-        isHidden: "hidden", // 节点数据保存节点是否隐藏的属性名称
         name: "name", // 节点数据保存节点名称的属性名称
-        url: "url", // 节点数据保存节点链接的目标 URL 的属性名称
         id: "id", //  唯一标识的属性名称
         pid: "parentId",
         rootId: null
