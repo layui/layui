@@ -672,8 +672,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var skin = othis.attr('lay-skin') || 'primary';
           var title = $.trim(check.title || function(){ // 向下兼容 lay-text 属性
             return check.title = othis.attr('lay-text') || '';
-          }()).split('|');
+          }());
           var disabled = this.disabled;
+
+          // 若为开关，则对 title 进行分隔解析
+          title = skin === 'switch' ? title.split('|') : [title];
 
           if(!skins[skin]) skin = 'primary'; // 若非内置风格，则强制为默认风格
           var RE_CLASS = CLASS[skin] || CLASS.checkbox;
