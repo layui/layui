@@ -11,7 +11,7 @@ toc: true
 </h2>
 
 从 `2.8.0-beta.1` 到 `rc.16`，经二十个预览版的持续迭代，Layui 终于迎来了：`2.8.0` 正式版。
-<br>同时，新域名下的 [新官网](https://layui.dev) 也正式上线（导读：[Layui 新版文档站上线初衷](https://gitee.com/layui/layui/issues/)），新版文档亦开源在 [Github](https://github.com/layui/layui/tree/main/docs) 以供协同维护。
+<br>同时，新域名下的 [新文档站](https://layui.dev) 也正式上线（导读：[Layui 新版文档站上线初衷](https://gitee.com/layui/layui/issues/I6Y8EN)），新版文档亦开源在 [Github](https://github.com/layui/layui/tree/main/docs) 以供协同维护。
 
 正是开发者们依然坚持的热爱，促使了 `Layui` 这一朴实的归来。
 
@@ -183,7 +183,11 @@ toc: true
     - **调整** `showHeight` 属性名称为 `margin`
   - 新增 `util.openWin(options)` 方法，用于打开浏览器新标签页
 
-### 下载： [layui-v2.8.0.zip](https://gitee.com/layui/layui/attach_files/)
+### 下载： [layui-v2.8.0.zip](https://gitee.com/layui/layui/attach_files/1385823/download)
+
+---
+
+历史：[2.8.0 预览版更新日志](https://gitee.com/layui/layui/issues/I6FHNK)
 
 ---
 
