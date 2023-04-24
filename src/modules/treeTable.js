@@ -126,8 +126,9 @@ layui.define(['table'], function (exports) {
     that.tableIns = tableIns;
 
     var treeOptions = options.tree;
-    var isParentKey = treeOptions.data.key.isParent;
-    var childrenKey = treeOptions.data.key.children;
+    var customName = treeOptions.customName;
+    var isParentKey = customName.isParent;
+    var childrenKey = customName.children;
 
     // 处理属性
     var parseData = options.parseData;
@@ -143,8 +144,8 @@ layui.define(['table'], function (exports) {
           retData = parseData.apply(parseDataThat, args) || args[0];
         }
         var dataName = parseDataThat.response.dataName;
-        // 处理simpleData
-        if (treeOptions.data.simpleData.enable && !treeOptions.async.enable) { // 异步加载和simpleData不应该一起使用
+        // 处理 isSimpleData
+        if (treeOptions.data.isSimpleData && !treeOptions.async.enable) { // 异步加载和 isSimpleData 不应该一起使用
           retData[dataName] = that.flatToTree(retData[dataName]);
         }
 
@@ -154,8 +155,8 @@ layui.define(['table'], function (exports) {
       }
     } else {
       options.data = options.data || [];
-      // 处理simpleData
-      if (treeOptions.data.simpleData.enable) {
+      // 处理 isSimpleData
+      if (treeOptions.data.isSimpleData) {
         options.data = that.flatToTree(options.data);
       }
       if (options.initSort && options.initSort.type) {
@@ -195,6 +196,14 @@ layui.define(['table'], function (exports) {
   // 初始默认配置
   Class.prototype.config = {
     tree: {
+      customName: {
+        children: "children", // 节点数据中保存子节点数据的属性名称
+        isParent: "isParent", // 节点数据保存节点是否为父节点的属性名称
+        name: "name", // 节点数据保存节点名称的属性名称
+        id: "id", //  唯一标识的属性名称
+        pid: "parentId",
+        rootId: null
+      },
       view: {
         indent: 14, // 层级缩进量
         flexIconClose: '<i class="layui-icon layui-icon-triangle-r"></i>', // 关闭时候的折叠图标
@@ -208,21 +217,7 @@ layui.define(['table'], function (exports) {
         dblClickExpand: true, // 双击节点时，是否自动展开父节点的标识
       },
       data: {
-        key: {
-          checked: 'LAY_CHECKED', // 节点数据中保存 check 状态的属性名称
-          children: "children", // 节点数据中保存子节点数据的属性名称
-          isParent: "isParent", // 节点数据保存节点是否为父节点的属性名称
-          isHidden: "hidden", // 节点数据保存节点是否隐藏的属性名称
-          name: "name", // 节点数据保存节点名称的属性名称
-          title: "", // 节点数据保存节点提示信息的属性名称
-          url: "url", // 节点数据保存节点链接的目标 URL 的属性名称
-        },
-        simpleData: {
-          enable: false, // 是否简单数据模式
-          idKey: "id", // 唯一标识的属性名称
-          pIdKey: "parentId",
-          rootPId: null
-        }
+        isSimpleData: false // 是否简单数据模式
       },
       async: {
         enable: false, // 是否开启异步加载模式，只有开启的时候其他参数才起作用
@@ -277,20 +272,21 @@ layui.define(['table'], function (exports) {
     var that = this;
     var options = that.getOptions();
     var treeOptions = options.tree;
-    var simpleDataOptions = treeOptions.data.simpleData;
+    var customName = treeOptions.customName;
     var tableId = options.id;
 
     tableData = tableData || table.cache[tableId];
 
-    return flatToTree(tableData, simpleDataOptions.idKey, simpleDataOptions.pIdKey, treeOptions.data.key.children, simpleDataOptions.rootPId)
+    return flatToTree(tableData, customName.id, customName.pid, customName.children, customName.rootId)
   }
 
   Class.prototype.treeToFlat = function (tableData, parentId, parentIndex) {
     var that = this;
     var options = that.getOptions();
     var treeOptions = options.tree;
-    var childrenKey = treeOptions.data.key.children;
-    var pIdKey = treeOptions.data.simpleData.pIdKey;
+    var customName = treeOptions.customName;
+    var childrenKey = customName.children;
+    var pIdKey = customName.pid;
 
     var flat = [];
     layui.each(tableData, function (i1, item1) {
@@ -299,7 +295,7 @@ layui.define(['table'], function (exports) {
       dataNew[childrenKey] = null;
       dataNew[pIdKey] = item1[pIdKey] || parentId;
       flat.push(dataNew);
-      flat = flat.concat(that.treeToFlat(item1[childrenKey], item1[treeOptions.data.simpleData.idKey], dataIndex));
+      flat = flat.concat(that.treeToFlat(item1[childrenKey], item1[customName.id], dataIndex));
     });
 
     return flat;
@@ -323,7 +319,7 @@ layui.define(['table'], function (exports) {
 
     var dataRet = tableData;
     var tableCache = (options.url || indexArr.length > 1) ? null : table.cache[tableId]; // 只有在删除根节点的时候才需要处理
-    for (var i = 0, childrenKey = treeOptions.data.key.children; i < indexArr.length; i++) {
+    for (var i = 0, childrenKey = treeOptions.customName.children; i < indexArr.length; i++) {
       if (newValue && i === indexArr.length - 1) {
         if (newValue === 'delete') {
           // 删除
@@ -373,9 +369,12 @@ layui.define(['table'], function (exports) {
     var options = that.getOptions();
     var treeOptions = options.tree;
     var tableId = options.id;
+
     data = data || that.getTableData();
-    var isParentKey = treeOptions.data.key.isParent;
-    var childrenKey = treeOptions.data.key.children;
+
+    var customName = treeOptions.customName;
+    var isParentKey = customName.isParent;
+    var childrenKey = customName.children;
 
     layui.each(data, function (i1, item1) {
       if (!(isParentKey in item1)) {
@@ -400,7 +399,8 @@ layui.define(['table'], function (exports) {
     var tableId = tableViewElem.attr('lay-id');
     var options = table.getOptions(tableId);
     var treeOptions = options.tree || {};
-    var isParentKey = treeOptions.data.key.isParent;
+    var customName = treeOptions.customName || {};
+    var isParentKey = customName.isParent;
     var trIndex = trElem.attr('lay-data-index'); // 可能出现多层
     var treeTableThat = getThisTable(tableId);
     var tableData = treeTableThat.getTableData();
@@ -438,7 +438,7 @@ layui.define(['table'], function (exports) {
       nodeIconElem.html(trExpand ? treeOptions.view.iconOpen : treeOptions.view.iconClose);
     }
 
-    var childNodes = trData[treeOptions.data.key.children] || []; // 测试用后续需要改成子节点的字段名称
+    var childNodes = trData[customName.children] || []; // 测试用后续需要改成子节点的字段名称
     // 处理子节点展示与否
     if (trExpand) {
       // 展开
@@ -506,8 +506,8 @@ layui.define(['table'], function (exports) {
                 flexIconElem.html('<i class="layui-icon layui-icon-refresh"></i>');
                 // 事件
               } else {
-                trData[treeOptions.data.key.children] = res[asyncResponse.dataName];
-                treeTableThat.initData(trData[treeOptions.data.key.children], trData[LAY_DATA_INDEX])
+                trData[customName.children] = res[asyncResponse.dataName];
+                treeTableThat.initData(trData[customName.children], trData[LAY_DATA_INDEX])
                 // 正常返回
                 expandNode(treeNode, true, isToggle ? false : sonSign, focus, callbackFlag);
               }
@@ -527,13 +527,13 @@ layui.define(['table'], function (exports) {
           if (options.initSort && !options.url) {
             var initSort = options.initSort;
             if (initSort.type) {
-              childNodes = trData[treeOptions.data.key.children] = layui.sort(childNodes, initSort.field, initSort.type === 'desc');
+              childNodes = trData[customName.children] = layui.sort(childNodes, initSort.field, initSort.type === 'desc');
             } else {
               // 恢复默认
-              childNodes = trData[treeOptions.data.key.children] = layui.sort(childNodes, table.config.indexName);
+              childNodes = trData[customName.children] = layui.sort(childNodes, table.config.indexName);
             }
           }
-          treeTableThat.initData(trData[treeOptions.data.key.children], trData[LAY_DATA_INDEX]);
+          treeTableThat.initData(trData[customName.children], trData[LAY_DATA_INDEX]);
           // 将数据通过模板得出节点的html代码
           var str2 = table.getTrHtml(tableId, childNodes, null, null, trIndex);
 
@@ -588,7 +588,7 @@ layui.define(['table'], function (exports) {
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]'
         }).join(',')).addClass('layui-hide');
       } else {
-        var childNodesFlat = treeTableThat.treeToFlat(childNodes, trData[treeOptions.data.simpleData.idKey], trIndex);
+        var childNodesFlat = treeTableThat.treeToFlat(childNodes, trData[customName.id], trIndex);
         tableViewElem.find(childNodesFlat.map(function (value, index, array) {
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]'
         }).join(',')).addClass('layui-hide');
@@ -613,7 +613,7 @@ layui.define(['table'], function (exports) {
 
     var index = opts.index;
     var expandFlag = opts.expandFlag;
-    var sonSign = opts.sonSign;
+    var sonSign = opts.inherit;
     var callbackFlag = opts.callbackFlag;
 
 
@@ -700,7 +700,8 @@ layui.define(['table'], function (exports) {
     var treeOptions = options.tree || {};
     var treeOptionsData = treeOptions.data || {};
     var treeOptionsView = treeOptions.view || {};
-    var isParentKey = treeOptionsData.key.isParent;
+    var customName = treeOptions.customName || {};
+    var isParentKey = customName.isParent;
     var tableFilterId = tableViewElem.attr('lay-filter');
     var treeTableThat = that;
     // var tableData = treeTableThat.getTableData();
@@ -718,7 +719,7 @@ layui.define(['table'], function (exports) {
     }
 
     var dataExpand = {}; // 记录需要展开的数据
-    var nameKey = treeOptions.data.key.name;
+    var nameKey = customName.name;
     var indent = treeOptions.view.indent || 14;
     layui.each(tableView.find('td[data-field="' + nameKey + '"]'), function (index, item) {
       item = $(item);
@@ -854,7 +855,7 @@ layui.define(['table'], function (exports) {
     var treeOptions = options.tree;
     data = data || table.cache[options.id];
 
-    return updateStatus(data, statusObj, treeOptions.data.key.children);
+    return updateStatus(data, statusObj, treeOptions.customName.children);
   }
 
   Class.prototype.getTableData = function () {
@@ -922,8 +923,8 @@ layui.define(['table'], function (exports) {
 
     // 处理setRowChecked
     obj.setRowChecked = function (checked) {
-      treeTable.checkNode(tableId, {
-        node: trData, 
+      treeTable.setRowChecked(tableId, {
+        index: trData, 
         checked: checked
       });
     }
@@ -971,7 +972,7 @@ layui.define(['table'], function (exports) {
     delNode = that.getNodeDataByIndex(layui.type(node) === 'string' ? node : node[LAY_DATA_INDEX], false, 'delete');
     var nodeP = that.getNodeDataByIndex(delNode[LAY_PARENT_INDEX]);
     that.updateCheckStatus(nodeP, true);
-    var delNodesFlat = that.treeToFlat([delNode], delNode[treeOptions.data.simpleData.pIdKey], delNode[LAY_PARENT_INDEX]);
+    var delNodesFlat = that.treeToFlat([delNode], delNode[treeOptions.customName.pid], delNode[LAY_PARENT_INDEX]);
     layui.each(delNodesFlat, function (i2, item2) {
       indexArr.push('tr[lay-data-index="' + item2[LAY_DATA_INDEX] + '"]');
     })
@@ -1001,7 +1002,7 @@ layui.define(['table'], function (exports) {
    * @param {String} id 树表id
    * @param {String|Number} parentIndex 指定的父节点，如果增加根节点，请设置 parentIndex 为 null 即可
    * @param {Number} index:Number 新节点插入的位置（从 0 开始）index = -1(默认) 时，插入到最后
-   * @param {Object|Array} newNodes 新增的节点，单个或者多个
+   * @param {Object|Array} data 新增的节点，单个或者多个
    * @param {Boolean} focus 新增的节点，单个或者多个
    * @return {Array} 新增的节点
    * */
@@ -1017,7 +1018,7 @@ layui.define(['table'], function (exports) {
     
     var parentIndex = opts.parentIndex;
     var index = opts.index;
-    var newNodes = opts.newNodes;
+    var newNodes = opts.data;
     var focus = opts.focus;
 
     parentIndex = layui.type(parentIndex) === 'number' ? parentIndex.toString() : parentIndex;
@@ -1101,8 +1102,8 @@ layui.define(['table'], function (exports) {
         return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]'
       }).join(',')));
     } else {
-      var isParentKey = treeOptions.data.key.isParent;
-      var childKey = treeOptions.data.key.children;
+      var isParentKey = treeOptions.customName.isParent;
+      var childKey = treeOptions.customName.children;
 
       parentNode[isParentKey] = true;
       var childrenNodes = parentNode[childKey];
@@ -1220,7 +1221,7 @@ layui.define(['table'], function (exports) {
 
     if (tableView.hasClass('layui-table-tree')) {
       updateObjParams(obj);
-      if (obj.field === options.tree.data.key.name) {
+      if (obj.field === options.tree.customName.name) {
         obj.tr.find('td[data-field="' + obj.field + '"]').children('div.layui-table-cell').removeClass('layui-table-tree-item')
         obj.update({}); // 通过update调用执行tr节点的更新
       }
@@ -1288,7 +1289,7 @@ layui.define(['table'], function (exports) {
     var treeOptions = options.tree;
     var tableId = options.id;
     var checkName = table.config.checkName;
-    var childrenKey = treeOptions.data.key.children;
+    var childrenKey = treeOptions.customName.children;
 
     var dataRet = [];
     dataP[LAY_CHECKBOX_HALF] = false; // 先设置为非半选，是否为半选又下面逻辑判断
@@ -1378,7 +1379,7 @@ layui.define(['table'], function (exports) {
         trData[checkName] = checked;
         form.render(trElem.find('input[type="radio"][lay-type="layTableRadio"]').prop('checked', checked));
       } else {
-        var isParentKey = options.tree.data.key.isParent;
+        var isParentKey = options.tree.customName.isParent;
         // 切换只能用到单条，全选到这一步的时候应该是一个确定的状态
         checked = layui.type(checked) === 'boolean' ? checked : !trData[checkName]; // 状态切换，如果遇到不可操作的节点待处理 todo
         // 全选或者是一个父节点，将子节点的状态同步为当前节点的状态
@@ -1424,13 +1425,13 @@ layui.define(['table'], function (exports) {
 
 
   /**
-   * 勾选或取消勾选单个节点
+   * 设置行选中状态
    * @param {String} id 树表id
-   * @param {Object|String} node 节点
+   * @param {Object|String} index 节点下标
    * @param {Boolean} checked 选中或取消
    * @param {Boolean} [callbackFlag] 是否触发事件回调
    * */
-  treeTable.checkNode = function (id, opts) {
+  treeTable.setRowChecked = function (id, opts) {
     var that = getThisTable(id);
     if(!that) return;
 
@@ -1439,7 +1440,7 @@ layui.define(['table'], function (exports) {
 
     opts = opts || {};
 
-    var node = opts.node;
+    var node = opts.index;
     var checked = opts.checked;
     var callbackFlag = opts.callbackFlag;
 
@@ -1476,16 +1477,16 @@ layui.define(['table'], function (exports) {
   /**
    * 获得数据
    * @param {String} id 表格id
-   * @param {Boolean} simpleData 是否返回平铺结构的数据
+   * @param {Boolean} isSimpleData 是否返回平铺结构的数据
    * @return {Array} 表格数据
    * */
-  treeTable.getData = function (id, simpleData) {
+  treeTable.getData = function (id, isSimpleData) {
     var tableData = [];
     layui.each($.extend(true, [], table.cache[id] || []), function (index, item) {
       // 遍历排除掉临时的数据
       tableData.push(item);
     })
-    return simpleData ? getThisTable(id).treeToFlat(tableData) : tableData;
+    return isSimpleData ? getThisTable(id).treeToFlat(tableData) : tableData;
   }
 
   // 记录所有实例

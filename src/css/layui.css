@@ -11,8 +11,8 @@ a:active,a:hover{outline:0}
 img{display: inline-block; border: none; vertical-align: middle;}
 li{list-style:none;}
 table{border-collapse: collapse; border-spacing: 0;}
-h1,h2,h3{font-weight: 700;}
-h4,h5,h6{font-weight: 500; font-size: 100%;}
+h1,h2,h3,h4{font-weight: 700;}
+h5,h6{font-weight: 500; font-size: 100%;}
 button,input,select,textarea{font-size: 100%; }
 input,button,textarea,select,optgroup,option{font-family: inherit; font-size: inherit; font-style: inherit; font-weight: inherit; outline: 0;}
 pre{white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;}
@@ -838,8 +838,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-checked.layui-checkbox-disabled[lay-skin="primary"] i{background: #eee!important; border-color: #eee!important;}
 .layui-checkbox-disabled[lay-skin="primary"]:hover i{border-color: #d2d2d2;}
 .layui-form-item .layui-form-checkbox[lay-skin="primary"]{margin-top: 10px;}
-.layui-form-checkbox[lay-skin="primary"] > i.layui-icon-subtraction,
-.layui-form-checkbox[lay-skin="primary"]:hover i.layui-icon-subtraction {color: darkgray;}
+.layui-form-checkbox[lay-skin="primary"] .layui-icon-indeterminate:before{content: ''; display: inline-block; vertical-align: middle; position: relative; width: 50%; height: 1px; margin: -1px auto 0; background-color: #d2d2d2;}
+.layui-form-checkbox[lay-skin="primary"]:hover .layui-icon-indeterminate:before{background-color: #16b777;}
 
 /* 复选框-开关风格 */.layui-form-switch{position: relative; display: inline-block; vertical-align: middle; height: 22px; line-height: 22px; min-width: 35px; padding: 0 5px; margin-top: 8px; border: 1px solid #d2d2d2; border-radius: 20px; cursor: pointer; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
 .layui-form-switch i{position: absolute; left: 5px; top: 3px; width: 16px; height: 16px; border-radius: 20px; background-color: #d2d2d2; -webkit-transition: .1s linear; transition: .1s linear;}
