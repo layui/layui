@@ -233,7 +233,6 @@ layui.define(['table'], function (exports) {
         onExpand: null, // 展开之后的回调
       }
     },
-    autoSort: false
   };
 
   Class.prototype.getOptions = function () {
@@ -821,7 +820,7 @@ layui.define(['table'], function (exports) {
     });
 
     // 对参数进行深度或浅扩展
-    that.config = $.extend(deep, {}, that.config, options, {autoSort: false});
+    that.config = $.extend(deep, {}, that.config, options);
 
     // 执行渲染
     that.render(type);
@@ -894,6 +893,14 @@ layui.define(['table'], function (exports) {
       treeTable.reloadData(id);
     } else {
       // url异步取数的表格一般需要自己添加监听之后进行reloadData并且把排序参数加入到where中
+      if (options.autoSort) {
+        var tableData = that.initData();
+        var res = {};
+        res[options.response.dataName] = tableData;
+        typeof options.done === 'function' && options.done(
+          res, that.page, that.count
+        );
+      }
     }
   }
 
