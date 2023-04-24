@@ -75,4 +75,4 @@ Layui 是一套开源的 Web UI 组件库，采用自身轻量级模块化规范
 
 ## 开源许可
 
-Layui 在 [MIT license](https://opensource.org/licenses/MIT) 许可下发布。其他相关协议亦可参考《[免责声明](https://gitee.com/layui/layui/blob/main/DISCLAIMER.md)》。
+Layui 采用 [MIT](https://opensource.org/licenses/MIT) 许可发布。其他相关协议亦可参考《[免责声明](https://gitee.com/layui/layui/blob/main/DISCLAIMER.md)》。
