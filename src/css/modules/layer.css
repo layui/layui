@@ -209,6 +209,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-win10 .layui-layer-setwin span:hover{background-color: #E5E5E5;}
 .layui-layer-win10 .layui-layer-setwin span.layui-icon-close:hover{background-color: #E81123; color: #fff;}
 .layui-layer-win10.layui-layer-dialog .layui-layer-content{padding: 8px 16px 32px; color: #0033BC;}
+.layui-layer-win10.layui-layer-dialog .layui-layer-padding{padding-top: 18px; padding-left: 58px;}
 .layui-layer-win10 .layui-layer-btn{padding: 5px 5px 10px; border-top:1px solid #DFDFDF; background-color: #F0F0F0;}
 .layui-layer-win10 .layui-layer-btn a{height: 18px; line-height: 18px; background-color: #E1E1E1; border-color: #ADADAD; color: #000; font-size: 12px; transition: all .3s;}
 .layui-layer-win10 .layui-layer-btn a:hover{border-color: #2A8EDD; background-color: #E5F1FB;}

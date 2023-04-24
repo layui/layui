@@ -2788,7 +2788,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var dataParams = new RegExp('^('+ [
       'elem', 'id', 'cols', 'width', 'height', 'maxHeight',
       'toolbar', 'defaultToolbar',
-      'className', 'css', 'totalRow', 'page', 'pagebar'
+      'className', 'css', 'totalRow', 'pagebar'
     ].join('|') + ')$');
 
     // 过滤与数据无关的参数

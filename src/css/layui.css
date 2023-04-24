@@ -846,7 +846,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-switch em{position: relative; top: 0; width: 25px; margin-left: 21px; padding: 0!important; text-align: center!important; color: #999!important; font-style: normal!important; font-size: 12px;}
 .layui-form-onswitch{border-color: #16b777; background-color: #16b777;}
 .layui-form-onswitch i{left: 100%; margin-left: -21px; background-color: #fff;}
-.layui-form-onswitch em{margin-left: 5px; margin-right: 21px; color: #fff!important;}
+.layui-form-onswitch em{margin-left: 0; margin-right: 21px; color: #fff!important;}
 
 .layui-checkbox-disabled{border-color: #eee !important;}
 .layui-checkbox-disabled span{background-color: #eee !important;}

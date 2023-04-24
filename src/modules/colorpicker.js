@@ -470,9 +470,9 @@ layui.define(['jquery', 'lay'], function(exports){
     });
     
     side.on('click', function(e){
-      var top = e.clientY - $(this).offset().top;
+      var top = e.clientY - $(this).offset().top + $win.scrollTop();
       if(top < 0)top = 0;
-      if(top > this.offsetHeight)top = this.offsetHeight;     
+      if(top > this.offsetHeight) top = this.offsetHeight;     
       var h = top/180*360;
       _h = h;
       change(h, _s, _b, _a); 

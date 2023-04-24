@@ -213,6 +213,7 @@ layer.tips('显示在目标元素上方', '#id', {
 | formType | 输入框类型。支持以下可选值：<ul><li> `0` 文本输入框 </li><li> `1` 密令输入框 </li><li> `2` 多行文本输入框 </li></ul> | number | `0` |
 | value | 输入框初始值 | string | - |
 | maxlength | 可输入的最大字符长度 | number | `500` |
+| placeholder | 输入框内容为空时的占位符 | string | - |
 
 
 - 参数 `yes` : 点击确定后的回调函数
