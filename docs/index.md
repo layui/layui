@@ -5,7 +5,7 @@ toc: true
  
 <h1 id="introduce" lay-toc="{title: '简介'}">开始使用</h1>
 
-> Layui 是一套开源的 Web UI 组件库，采用自身轻量级模块化规范，遵循原生态的 HTML/CSS/JavaScript 开发模式，极易上手，拿来即用。其风格简约轻盈，而内在雅致丰盈，甚至包括文档在内的每一处细节都经过精心雕琢，非常适合网页界面的快速构建。Layui 区别于一众主流的前端框架，却并非逆道而行，而是信奉返璞归真之道。确切地说，它更多是面向于追求简单的务实主义者，即无需涉足各类构建工具，只需面向浏览器本身，便可将页面所需呈现的元素与交互信手拈来。
+> Layui 是一套开源免费的 Web UI 组件库，采用自身轻量级模块化规范，遵循原生态的 HTML/CSS/JavaScript 开发模式，极易上手，拿来即用。其风格简约轻盈，而内在雅致丰盈，甚至包括文档在内的每一处细节都经过精心雕琢，非常适合网页界面的快速构建。Layui 区别于一众主流的前端框架，却并非逆道而行，而是信奉返璞归真之道。确切地说，它更多是面向于追求简单的务实主义者，即无需涉足各类构建工具，只需面向浏览器本身，便可将页面所需呈现的元素与交互信手拈来。
 
 <p style="font-size: 68px; text-align: center; color: #16baaa;">
   Layui
@@ -110,8 +110,8 @@ npm i layui
 
 <h2 id="help" lay-toc="{}">其他帮助</h2>
 
-- 在线测试：<a href="https://codepen.io/layui/pen/bGxZXrd" target="_blank">https://codepen.io/layui/pen/bGxZXrd</a>
-- 深色主题：<a href="https://github.com/Sight-wcg/layui-theme-dark" target="_blank">https://github.com/Sight-wcg/layui-theme-dark</a>
+- <a href="https://codepen.io/layui/pen/bGxZXrd" target="_blank" rel="nofollow">在线测试</a>
+- <a href="https://github.com/Sight-wcg/layui-theme-dark" target="_blank">深色主题</a> (社区贡献)
 
 
 ## 初识寄语
