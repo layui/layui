@@ -5,7 +5,22 @@ toc: true
  
 # 更新日志
 
-<h2 id="2.8.0" lay-toc="{title: '2.8.0'}">
+<h2 id="2.8.1" lay-toc="{title: '2.8.1'}">
+  2.8.1 
+  <span class="layui-badge-rim">2023-04-25</span>
+</h2>
+
+- 修复 `table.reloadData()` 未支持 `page` 属性的问题
+- 修复 `treeTable` 点击排序后导致树形结构功能异常的问题 # 1232/I6YGU6
+- 修复 `layer` 的 win10 风格并开启 `icon` 属性时信息框显示异常问题
+- 优化 `switch` 在选中前后的尺寸差异 # I6YJO4
+- 优化 `colorpicker` 点击颜色滑块时跳动到顶部的问题
+
+### 下载： [layui-v2.8.1.zip](https://gitee.com/layui/layui/attach_files/1387965/download)
+
+---
+
+<h2 id="2.8.0" lay-toc="{title: '2.8.0', hot: true}">
   2.8.0 
   <span class="layui-badge-rim">2023-04-24</span>
 </h2>
@@ -16,7 +31,7 @@ toc: true
 正是开发者们依然坚持的热爱，促使了 `Layui` 这一朴实的归来。
 
 - #### 基础
-  - 优化 css 的构建，将原先 layer/laydate/code 的 css 统一构建到 layui.css，以尽量减少请求
+  - 优化 css 的构建，将原先 layer/laydate/code 的 css 统一构建到 `layui.css`，以尽量减少请求
   - 变更*主色调*为：`#16baaa` <i style="display:inline-block; vertical-align: middle; width: 16px; height: 16px; padding: 3px; margin-right: 16px; border-radius: 2px; background-color: #16baaa;"></i>*在原有的墨绿基础上赋予了清新*
   - 新增 `18` 个字体图标
   - 新增 grid 布局的超大屏 `xl` 响应式支持
