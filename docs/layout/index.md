@@ -131,7 +131,7 @@ layui.use(['element', 'layer', 'util'], function(){
         ,content: '<div style="padding: 15px;">处理右侧面板的操作</div>'
         ,area: ['260px', '100%']
         ,offset: 'rt' //右上角
-        ,anim: 5
+        ,anim: 'slideLeft'
         ,shadeClose: true
         ,scrollbar: false
       });
