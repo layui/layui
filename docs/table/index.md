@@ -458,6 +458,21 @@ table.hideCol('test', {
   field: 'title', // 对应表头的 field 属性值
   hide: true // `true` or `false`
 });
+
+// 同时设置多列的显示或隐藏
+table.hideCol('test', [{
+  field: 'title1',
+  hide: true
+}, {
+  field: 'title2',
+  hide: false
+}, {
+  field: 'title3',
+  hide: false
+}]);
+
+// 显示或隐藏全部
+table.hideCol('test', false); // `true` or `false` `true` 则隐藏全部一般没有实质的用处，通常会用到的场景是隐藏部分列之后想要重新恢复显示所有的时候会用到这种方式传参 `false`
 ```
 
 <h2 id="table.on" lay-toc="{hot: true}">事件</h2>
