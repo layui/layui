@@ -12,24 +12,24 @@ layui.use(function(){
 
   // 创建表格实例
   table.render({
-    elem: '#ID-table-demo-editable'
-    ,url: '{{d.root}}/static/json/table/edit.json' // 此处为静态模拟数据，实际使用时需换成真实接口
-    ,page: true
+    elem: '#ID-table-demo-editable',
+    url: '{{d.root}}/static/json/table/edit.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    page: true,
     //,editTrigger: 'dblclick' // 触发编辑的事件类型（默认 click ）。 v2.7.0 新增，之前版本固定为单击触发
-    ,css: [
+    css: [
       // 对开启了编辑的单元格追加样式
       '.layui-table-view td[data-edit]{color: #16B777;}'
-    ].join('')
-    ,cols: [[
-      {checkbox: true, fixed: true}
-      ,{field:'id', title: 'ID', width:80, sort: true, fixed: true}
-      ,{field:'username', title: '用户名', width:80, edit: editable}
-      ,{field:'sex', title: '性别', width:80, sort: true, edit: editable}
-      ,{field:'city', title: '城市', width:80, edit: editable}
-      ,{field:'sign', title: '签名', edit: editable}
-      ,{field:'experience', title: '积分', sort: true, width:80, edit: editable}
-    ]]
-    ,height: 310
+    ].join(''),
+    cols: [[
+      {checkbox: true, fixed: true},
+      {field:'id', title: 'ID', width:80, sort: true, fixed: true},
+      {field:'username', title: '用户名', width:80, edit: editable},
+      {field:'sex', title: '性别', width:80, sort: true, edit: editable},
+      {field:'city', title: '城市', width:80, edit: editable},
+      {field:'sign', title: '签名', edit: editable},
+      {field:'experience', title: '积分', sort: true, width:80, edit: editable}
+    ]],
+    height: 310
   });
 
   // 单元格编辑后的事件
