@@ -1421,11 +1421,11 @@ layui.define(['table'], function (exports) {
     var options = obj.config;
     var tableView = options.elem.next();
     var tableId = options.id;
-    var that = getThisTable(tableId);
 
     if (tableView.hasClass('layui-table-tree')) {
-      updateObjParams(obj);
+      var that = getThisTable(tableId);
       var checked = obj.checked;
+      updateObjParams(obj)
       obj.isAll = checkNode.call(that, obj.tr, checked);
     }
   })
