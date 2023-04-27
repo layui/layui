@@ -63,47 +63,47 @@ layui.use(['table', 'dropdown'], function(){
   
   // 创建渲染实例
   table.render({
-    elem: '#test'
-    ,url:'{{d.root}}/static/json/table/demo1.json' // 此处为静态模拟数据，实际使用时需换成真实接口
-    ,toolbar: '#toolbarDemo'
-    ,defaultToolbar: ['filter', 'exports', 'print', {
-      title: '提示'
-      ,layEvent: 'LAYTABLE_TIPS'
-      ,icon: 'layui-icon-tips'
-    }]
-    ,height: 'full-35' // 最大高度减去其他容器已占有的高度差
-    ,css: [ // 重设当前表格样式
+    elem: '#test',
+    url:'{{d.root}}/static/json/table/demo1.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    toolbar: '#toolbarDemo',
+    defaultToolbar: ['filter', 'exports', 'print', {
+      title: '提示',
+      layEvent: 'LAYTABLE_TIPS',
+      icon: 'layui-icon-tips'
+    }],
+    height: 'full-35', // 最大高度减去其他容器已占有的高度差
+    css: [ // 重设当前表格样式
       '.layui-table-tool-temp{padding-right: 145px;}'
-    ].join('')
-    ,cellMinWidth: 80
-    ,totalRow: true // 开启合计行
-    ,page: true
-    ,cols: [[
-      {type: 'checkbox', fixed: 'left'}
-      ,{field:'id', fixed: 'left', width:80, title: 'ID', sort: true, totalRowText: '合计：'}
-      ,{field:'username', width:80, title: '用户'}
-      ,{field:'email', title:'邮箱 <i class="layui-icon layui-icon-tips layui-font-14" title="该字段开启了编辑功能" style="margin-left: 5px;"></i>', fieldTitle: '邮箱', hide: 0, width:150, edit: 'text'}
-      ,{field:'sex', width:80, title: '性别', sort: true}
-      ,{field:'city', width:115, title: '城市', minWidth:115, templet: '#cityTpl', exportTemplet: function(d, obj){
+    ].join(''),
+    cellMinWidth: 80,
+    totalRow: true, // 开启合计行
+    page: true,
+    cols: [[
+      {type: 'checkbox', fixed: 'left'},
+      {field:'id', fixed: 'left', width:80, title: 'ID', sort: true, totalRowText: '合计：'},
+      {field:'username', width:80, title: '用户'},
+      {field:'email', title:'邮箱 <i class="layui-icon layui-icon-tips layui-font-14" title="该字段开启了编辑功能" style="margin-left: 5px;"></i>', fieldTitle: '邮箱', hide: 0, width:150, edit: 'text'},
+      {field:'sex', width:80, title: '性别', sort: true},
+      {field:'city', width:115, title: '城市', minWidth:115, templet: '#cityTpl', exportTemplet: function(d, obj){
         // console.log(obj)
         // 处理该字段的导出数据
         var td = obj.td(this.field); // 获取当前 td
         return td.find('select').val();
-      }}
-      ,{field:'sign', title: '签名', edit: 'textarea', minWidth: 260, style: '-moz-box-align: start;', totalRow: '{{!人物：<span class="layui-badge-rim">唐代：{{= d.TOTAL_ROW.era.tang }} </span> <span class="layui-badge-rim">宋代：{{= d.TOTAL_ROW.era.song }}</span> <span class="layui-badge-rim">现代：{{= d.TOTAL_ROW.era.xian }}</span>!}}'}
-      ,{field:'experience', width: 100, title: '积分', sort: true, totalRow: '{{!{{= d.TOTAL_NUMS }} 😊!}}'} 
-      ,{field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{!{{= parseInt(d.TOTAL_NUMS) }} 次!}}'}
-      ,{field:'ip', title:'IP', width: 120}
-      ,{field:'joinTime', title:'加入时间', width: 120}
-      ,{fixed: 'right', title:'操作', width: 134, minWidth: 125, toolbar: '#barDemo'}
-    ]]
-    ,done: function(){
+      }},
+      {field:'sign', title: '签名', edit: 'textarea', minWidth: 260, style: '-moz-box-align: start;', totalRow: '{{!人物：<span class="layui-badge-rim">唐代：{{= d.TOTAL_ROW.era.tang }} </span> <span class="layui-badge-rim">宋代：{{= d.TOTAL_ROW.era.song }}</span> <span class="layui-badge-rim">现代：{{= d.TOTAL_ROW.era.xian }}</span>!}}'},
+      {field:'experience', width: 100, title: '积分', sort: true, totalRow: '{{!{{= d.TOTAL_NUMS }} 😊!}}'}, 
+      {field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{!{{= parseInt(d.TOTAL_NUMS) }} 次!}}'},
+      {field:'ip', title:'IP', width: 120},
+      {field:'joinTime', title:'加入时间', width: 120},
+      {fixed: 'right', title:'操作', width: 134, minWidth: 125, toolbar: '#barDemo'}
+    ]],
+    done: function(){
       var id = this.id;
 
       // 下拉按钮测试
       dropdown.render({
-        elem: '#dropdownButton' // 可绑定在任意元素中，此处以上述按钮为例
-        ,data: [{
+        elem: '#dropdownButton', // 可绑定在任意元素中，此处以上述按钮为例
+        data: [{
           id: 'add',
           title: '添加'
         },{
@@ -112,9 +112,9 @@ layui.use(['table', 'dropdown'], function(){
         },{
           id: 'delete',
           title: '删除'
-        }]
+        }],
         // 菜单被点击的事件
-        ,click: function(obj){
+        click: function(obj){
           var checkStatus = table.checkStatus(id)
           var data = checkStatus.data; // 获取选中的数据
 
@@ -148,8 +148,8 @@ layui.use(['table', 'dropdown'], function(){
  
       // 重载测试
       dropdown.render({
-        elem: '#reloadTest' // 可绑定在任意元素中，此处以上述按钮为例
-        ,data: [{
+        elem: '#reloadTest', // 可绑定在任意元素中，此处以上述按钮为例
+        data: [{
           id: 'reload',
           title: '重载'
         },{
@@ -161,26 +161,26 @@ layui.use(['table', 'dropdown'], function(){
         },{
           id: 'reloadData-deep',
           title: '仅重载数据 - 参数叠加'
-        }]
+        }],
         // 菜单被点击的事件
-        ,click: function(obj){
+        click: function(obj){
           switch(obj.id){
             case 'reload':
               // 重载 - 默认（参数重置）
               table.reload('test', {
                 where: {
-                  abc: '123456'
-                  //,test: '新的 test2'
-                  //,token: '新的 token2'
-                }
+                  abc: '123456',
+                  //test: '新的 test2',
+                  //token: '新的 token2'
+                },
                 /*{{!
-                ,cols: [[ // 重置表头
-                  {type: 'checkbox', fixed: 'left'}
-                  ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
-                  ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
-                  ,{field:'experience', title:'积分', width:80, sort: true, totalRow: true, templet: '<div>{{= d.experience }} 分</div>'}
-                  ,{field:'logins', title:'登入次数', width:100, sort: true, totalRow: true}
-                  ,{field:'joinTime', title:'加入时间', width:120}
+                cols: [[ // 重置表头
+                  {type: 'checkbox', fixed: 'left'},
+                  {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'},
+                  {field:'sex', title:'性别', width:80, edit: 'text', sort: true},
+                  {field:'experience', title:'积分', width:80, sort: true, totalRow: true, templet: '<div>{{= d.experience }} 分</div>'},
+                  {field:'logins', title:'登入次数', width:100, sort: true, totalRow: true},
+                  {field:'joinTime', title:'加入时间', width:120}
                 ]]
                 !}}*/
               });
@@ -189,33 +189,33 @@ layui.use(['table', 'dropdown'], function(){
               // 重载 - 深度（参数叠加）
               table.reload('test', {
                 where: {
-                  abc: 123
-                  ,test: '新的 test1'
-                }
-                //,defaultToolbar: ['print'] // 重载头部工具栏右侧图标
-                //,cols: ins1.config.cols
+                  abc: 123,
+                  test: '新的 test1'
+                },
+                //defaultToolbar: ['print'], // 重载头部工具栏右侧图标
+                //cols: ins1.config.cols
               }, true);
             break;
             case 'reloadData':
               // 数据重载 - 参数重置
               table.reloadData('test', {
                 where: {
-                  abc: '123456'
-                  //,test: '新的 test2'
-                  //,token: '新的 token2'
-                }
-                ,scrollPos: 'fixed'  // 保持滚动条位置不变 - v2.7.3 新增
-                ,height: 2000 // 测试无效参数（即与数据无关的参数设置无效，此处以 height 设置无效为例）
-                //,url: '404'
-                //,page: {curr: 1, limit: 30} // 重新指向分页
+                  abc: '123456',
+                  //test: '新的 test2',
+                  //token: '新的 token2'
+                },
+                scrollPos: 'fixed',  // 保持滚动条位置不变 - v2.7.3 新增
+                height: 2000, // 测试无效参数（即与数据无关的参数设置无效，此处以 height 设置无效为例）
+                //url: '404',
+                //page: {curr: 1, limit: 30} // 重新指向分页
               });
             break;
             case 'reloadData-deep':
               // 数据重载 - 参数叠加
               table.reloadData('test', {
                 where: {
-                  abc: 123
-                  ,test: '新的 test1'
+                  abc: 123,
+                  test: '新的 test1'
                 }
               }, true);
             break;
@@ -226,16 +226,16 @@ layui.use(['table', 'dropdown'], function(){
  
       // 行模式
       dropdown.render({
-        elem: '#rowMode'
-        ,data: [{
+        elem: '#rowMode',
+        data: [{
           id: 'default-row',
           title: '单行模式（默认）'
         },{
           id: 'multi-row',
           title: '多行模式'
-        }]
+        }],
         // 菜单被点击的事件
-        ,click: function(obj){
+        click: function(obj){
           var checkStatus = table.checkStatus(id)
           var data = checkStatus.data; // 获取选中的数据
 
@@ -258,8 +258,8 @@ layui.use(['table', 'dropdown'], function(){
 
         }
       });
-    }
-    ,error: function(res, msg){
+    },
+    error: function(res, msg){
       console.log(res, msg)
     }
   });
