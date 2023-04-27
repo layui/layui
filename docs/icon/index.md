@@ -1173,6 +1173,12 @@ toc: true
 
 由于浏览器存在同源策略，若 Layui 文件地址与你当前的页面地址*不在同一个域下*，即会出现图标跨域问题。因此，要么将 Layui 文件与网站放在同一服务器，要么对 Layui 文件所在的静态资源服务器的 `Response Headers` 添加：`Access-Control-Allow-Origin: *` 或对跨资源共享指定域名，即可解决图标跨域问题。
 
+<style>
+#ID-icon-copy{display: none;}
+</style>
+
+<pre class="layui-code" lay-options="{preview: true, layout: ['preview'], id: 'ID-icon-copy'}">
+  <textarea>
 <script>
   layui.use(function(){
     var $ = layui.jquery;
@@ -1182,7 +1188,7 @@ toc: true
       var iconclass = $(this).find('.docs-icon-fontclass').text();
       var copied = copy(iconclass);
       if(copied){
-        layer.msg(iconclass, {
+        layer.msg('已复制 '+ iconclass, {
           icon: 1,
           offset: '5%',
           anim: 'slideDown',
@@ -1209,3 +1215,5 @@ toc: true
     }
   });
 </script>
+  </textarea>
+</pre>
