@@ -181,9 +181,9 @@ onchange: function(data, index){
 transfer.render({
   elem: '',
   data: [ // 任意数据
-    {"id": "1", "name": "李白"}
-    ,{"id": "2", "name": "杜甫"}
-    ,{"id": "3", "name": "贤心"}
+    {"id": "1", "name": "李白"},
+    {"id": "2", "name": "杜甫"},
+    {"id": "3", "name": "贤心"}
   ],
   parseData: function(res){ // 解析成规定的 data 格式
     return {

@@ -48,20 +48,20 @@
     
     // 创建渲染实例
     table.render({
-      elem: '#ID-table-demo-css'
-      ,url:'{{d.root}}/static/json/table/demo1.json' // 此处为静态模拟数据，实际使用时需换成真实接口
-      ,page: true
-      ,height: 'full-35'
-      ,lineStyle: 'height: 151px;' // 定义表格的多行样式
-      ,css: [ // 直接给当前表格主容器重置 css 样式
+      elem: '#ID-table-demo-css',
+      url:'{{d.root}}/static/json/table/demo1.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+      page: true,
+      height: 'full-35',
+      lineStyle: 'height: 151px;', // 定义表格的多行样式
+      css: [ // 直接给当前表格主容器重置 css 样式
         '.layui-table-page{text-align: center;}' // 让分页栏居中
-      ].join('')
-      ,className: 'layui-table-testcss' // 用于给表格主容器追加 css 类名
-      ,cols: [[
-        {field:'username', width:160, title: '用户', templet: '#ID-table-demo-css-user'}
+      ].join(''),
+      className: 'layui-table-testcss', // 用于给表格主容器追加 css 类名
+      cols: [[
+        {field:'username', width:160, title: '用户', templet: '#ID-table-demo-css-user'},
         // 设置单元格样式
-        ,{field:'sign', minWidth:100, title: '签名', style:'color: #000;'}
-        ,{width:160, title: '操作', templet: '#ID-table-demo-css-tool'}
+        {field:'sign', minWidth:100, title: '签名', style:'color: #000;'},
+        {width:160, title: '操作', templet: '#ID-table-demo-css-tool'}
       ]]
     });
 

@@ -25,29 +25,29 @@ layui.use(['table'], function(){
   
   // 创建渲染实例
   table.render({
-    elem: '#ID-table-demo-templet'
-    ,url:'{{d.root}}/static/json/table/user.json' // 此处为静态模拟数据，实际使用时需换成真实接口
-    ,page: true
-    ,height: '315px'
-    ,cols: [[
-      {type: 'checkbox', fixed: 'left'}
+    elem: '#ID-table-demo-templet',
+    url:'{{d.root}}/static/json/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    page: true,
+    height: '315px',
+    cols: [[
+      {type: 'checkbox', fixed: 'left'},
       // 未自定义模板的普通列
-      ,{field:'id', fixed: 'left', width:80, title: 'ID', sort: true}
+      {field:'id', fixed: 'left', width:80, title: 'ID', sort: true},
       // 模板 - 选择器写法
-      ,{field:'username', width:80, title: '用户', templet: '#ID-table-demo-templet-user'}
+      {field:'username', width:80, title: '用户', templet: '#ID-table-demo-templet-user'},
       // 模板 - 函数写法
-      ,{field:'sex', width:60, title: '性别', templet: function(d){
+      {field:'sex', width:60, title: '性别', templet: function(d){
         if(d.sex === '男'){
           return '<span style="color: blue">♂</span>';
         } else {
           return '<span style="color: pink">♀</span>';
         }
-      }}
+      }},
       // 模板 - 普通字符写法
-      ,{field:'city', width:115, title: '城市', templet: '<div><i class="layui-icon layui-icon-location"></i> {{!{{= d.city }}!}}</div>'}
+      {field:'city', width:115, title: '城市', templet: '<div><i class="layui-icon layui-icon-location"></i> {{!{{= d.city }}!}}</div>'},
       // 模板中可包含任意字段、任意内容（如表单等）
-      ,{title: '状态', width:85, templet: '#ID-table-demo-templet-switch'}
-      ,{title: '其他', minWidth:200, templet: '#ID-table-demo-templet-other'}
+      {title: '状态', width:85, templet: '#ID-table-demo-templet-switch'},
+      {title: '其他', minWidth:200, templet: '#ID-table-demo-templet-other'}
     ]]
   });
   

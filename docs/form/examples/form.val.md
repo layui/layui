@@ -79,13 +79,13 @@ layui.use(function(){
   // 表单赋值
   $('#LAY-component-form-setval').on('click', function(){
     form.val('demo-val-filter', {
-      "username": "贤心" // "name": "value"
-      ,"password": "AAAAAA"
-      ,"interest": 1
-      ,"like[write]": true // 复选框选中状态
-      ,"close": true // 开关状态
-      ,"sex": "女"
-      ,"desc": "Layui 用于更简单快速地构建网页界面"
+      "username": "贤心", // "name": "value"
+      "password": "AAAAAA",
+      "interest": 1,
+      "like[write]": true, // 复选框选中状态
+      "close": true, // 开关状态
+      "sex": "女",
+      "desc": "Layui 用于更简单快速地构建网页界面"
     });
   });
   // 表单取值
