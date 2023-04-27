@@ -73,7 +73,7 @@ layui.use(function(){
       var that = this;
       // if(res.code == 0){ // 上传成功
         var tr = that.elemList.find('tr#upload-'+ index)
-        ,tds = tr.children();
+        var tds = tr.children();
         tds.eq(3).html(''); // 清空操作
         delete this.files[index]; // 删除文件队列已经上传成功的文件
         return;

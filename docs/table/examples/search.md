@@ -36,19 +36,19 @@ layui.use(function(){
 
   // 创建表格实例
   table.render({
-    elem: '#ID-table-demo-search'
-    ,url: '{{d.root}}/static/json/table/user.json' // 此处为静态模拟数据，实际使用时需换成真实接口
-    ,cols: [[
-      {checkbox: true, fixed: true}
-      ,{field:'id', title: 'ID', width:80, sort: true, fixed: true}
-      ,{field:'username', title: '用户名', width:80}
-      ,{field:'sex', title: '性别', width:80, sort: true}
-      ,{field:'city', title: '城市', width:80}
-      ,{field:'sign', title: '签名'}
-      ,{field:'experience', title: '积分', sort: true, width:80}
-    ]]
-    ,page: true
-    ,height: 310
+    elem: '#ID-table-demo-search',
+    url: '{{d.root}}/static/json/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    cols: [[
+      {checkbox: true, fixed: true},
+      {field:'id', title: 'ID', width:80, sort: true, fixed: true},
+      {field:'username', title: '用户名', width:80},
+      {field:'sex', title: '性别', width:80, sort: true},
+      {field:'city', title: '城市', width:80},
+      {field:'sign', title: '签名'},
+      {field:'experience', title: '积分', sort: true, width:80}
+    ]],
+    page: true,
+    height: 310
   });
 
   // 日期
@@ -64,8 +64,8 @@ layui.use(function(){
     table.reload('ID-table-demo-search', {
       page: {
         curr: 1 // 重新从第 1 页开始
-      }
-      ,where: field // 搜索的字段
+      },
+      where: field // 搜索的字段
     });
 
     layer.msg('搜索成功<br>此处为静态模拟数据，实际使用时换成真实接口即可');

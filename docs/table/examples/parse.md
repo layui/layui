@@ -9,31 +9,31 @@ layui.use('table', function(){
   
   // 渲染
   table.render({
-    elem: '#ID-table-demo-parse'
-    ,url:'{{d.root}}/static/json/table/demo3.json'
-    ,page: true
-    ,response: {
+    elem: '#ID-table-demo-parse',
+    url:'{{d.root}}/static/json/table/demo3.json',
+    page: true,
+    response: {
       statusCode: 200 // 重新规定成功的状态码为 200，table 组件默认为 0
-    }
+    },
     // 将原始数据解析成 table 组件所规定的数据格式
-    ,parseData: function(res){
+    parseData: function(res){
       return {
         "code": res.status, //解析接口状态
         "msg": res.message, //解析提示文本
         "count": res.total, //解析数据长度
         "data": res.rows.item //解析数据列表
       };
-    }
-    ,cols: [[
-      {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
-      ,{field:'username', title:'用户名', width:120}
-      ,{field:'email', title:'邮箱', width:150}
-      ,{field:'experience', title:'积分', width:100, sort: true}
-      ,{field:'sex', title:'性别', width:80, sort: true}
-      ,{field:'sign', title:'签名'}
-      ,{field:'joinTime', title:'加入时间', width:120}
-    ]]
-    ,height: 315
+    },
+    cols: [[
+      {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true},
+      {field:'username', title:'用户名', width:120},
+      {field:'email', title:'邮箱', width:150},
+      {field:'experience', title:'积分', width:100, sort: true},
+      {field:'sex', title:'性别', width:80, sort: true},
+      {field:'sign', title:'签名'},
+      {field:'joinTime', title:'加入时间', width:120}
+    ]],
+    height: 315
   });
 });
 </script>

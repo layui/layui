@@ -1172,3 +1172,48 @@ toc: true
 <h2 id="cors" lay-toc="">跨域处理</h2>
 
 由于浏览器存在同源策略，若 Layui 文件地址与你当前的页面地址*不在同一个域下*，即会出现图标跨域问题。因此，要么将 Layui 文件与网站放在同一服务器，要么对 Layui 文件所在的静态资源服务器的 `Response Headers` 添加：`Access-Control-Allow-Origin: *` 或对跨资源共享指定域名，即可解决图标跨域问题。
+
+<style>
+#ID-icon-copy{display: none;}
+</style>
+
+<pre class="layui-code" lay-options="{preview: true, layout: ['preview'], id: 'ID-icon-copy'}">
+  <textarea>
+<script>
+  layui.use(function(){
+    var $ = layui.jquery;
+    var layer = layui.layer;
+
+    $('.ws-docs-icon > div').on('click', function(){
+      var iconclass = $(this).find('.docs-icon-fontclass').text();
+      var copied = copy(iconclass);
+      if(copied){
+        layer.msg('已复制 '+ iconclass, {
+          icon: 1,
+          offset: '5%',
+          anim: 'slideDown',
+          isOutAnim: false
+        });
+      }
+    });
+
+    function copy(text){
+      var textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'absolute';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      var copied = false;
+      try{
+        copied = document.execCommand('copy');
+      }catch(err){
+        console.log('error', err);
+      }
+      textarea.remove();
+      return copied;
+    }
+  });
+</script>
+  </textarea>
+</pre>

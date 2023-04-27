@@ -471,8 +471,8 @@ table.hideCol('test', [{
   hide: false
 }]);
 
-// 显示或隐藏全部
-table.hideCol('test', false); // `true` or `false` `true` 则隐藏全部一般没有实质的用处，通常会用到的场景是隐藏部分列之后想要重新恢复显示所有的时候会用到这种方式传参 `false`
+// 显示或隐藏全部列
+table.hideCol('test', false); // `true` or `false`
 ```
 
 <h2 id="table.on" lay-toc="{hot: true}">事件</h2>

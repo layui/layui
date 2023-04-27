@@ -240,7 +240,7 @@ toc: true
     <div class="grid-demo grid-demo-bg1">偏移3列</div>
   </div>
   <div class="layui-col-md3">
-    <div class="grid-demo">不便宜</div>
+    <div class="grid-demo">不偏移</div>
   </div>
 </div>
   </textarea>

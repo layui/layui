@@ -12,23 +12,23 @@ layui.use('table', function(){
   
   // 创建渲染实例
   table.render({
-    elem: '#ID-table-demo-page'
-    ,url:'{{d.root}}/static/json/table/user.json' // 此处为静态模拟数据，实际使用时需换成真实接口
-    ,page: { // 支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
-      layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
-      //,curr: 5 //设定初始在第 5 页
-      ,groups: 1 //只显示 1 个连续页码
-      ,first: false //不显示首页
-      ,last: false //不显示尾页
-    }
-    ,pagebar: '#ID-table-demo-page-pagebar' // 分页栏模板
-    ,cols: [[
-      {field:'id', width:80, title: 'ID', sort: true}
-      ,{field:'username', width:80, title: '用户名'}
-      ,{field:'sex', width:80, title: '性别', sort: true}
-      ,{field:'city', width:80, title: '城市'}
-      ,{field:'sign', title: '签名', minWidth: 150}
-      ,{field:'experience', width:80, title: '积分', sort: true}
+    elem: '#ID-table-demo-page',
+    url:'{{d.root}}/static/json/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    page: { // 支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+      layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'], //自定义分页布局
+      //curr: 5, //设定初始在第 5 页
+      groups: 1, //只显示 1 个连续页码
+      first: false, //不显示首页
+      last: false //不显示尾页
+    },
+    pagebar: '#ID-table-demo-page-pagebar', // 分页栏模板
+    cols: [[
+      {field:'id', width:80, title: 'ID', sort: true},
+      {field:'username', width:80, title: '用户名'},
+      {field:'sex', width:80, title: '性别', sort: true},
+      {field:'city', width:80, title: '城市'},
+      {field:'sign', title: '签名', minWidth: 150},
+      {field:'experience', width:80, title: '积分', sort: true}
     ]]
   });
 
