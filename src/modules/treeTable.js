@@ -937,6 +937,7 @@ layui.define(['table'], function (exports) {
       var args = arguments;
       $.extend(tableThat.getNodeDataByIndex(trIndex), args[0]);
       var ret = updateFn.apply(updateThat, args); // 主要负责更新节点内容
+      obj.tr.find('td[data-field="' + obj.config.tree.customName.name + '"]').children('div.layui-table-cell').removeClass('layui-table-tree-item');
       tableThat.renderTreeTable(obj.tr, obj.tr.attr('data-level'), false);
       return ret;
     }
@@ -1248,7 +1249,6 @@ layui.define(['table'], function (exports) {
     if (tableView.hasClass('layui-table-tree')) {
       updateObjParams(obj);
       if (obj.field === options.tree.customName.name) {
-        obj.tr.find('td[data-field="' + obj.field + '"]').children('div.layui-table-cell').removeClass('layui-table-tree-item')
         obj.update({}); // 通过update调用执行tr节点的更新
       }
     }
