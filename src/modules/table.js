@@ -139,7 +139,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   // thead 区域模板
   var TPL_HEADER = function(options){
-    var rowCols = '{{#if(item2.colspan){}} colspan="{{=item2.colspan}}"{{#} if(item2.rowspan){}} rowspan="{{=item2.rowspan}}"{{#}}}';
+    var rowCols = '{{#var colspan = layui.type(item2.colspan2) === \'number\' ? item2.colspan2 : item2.colspan; if(colspan){}} colspan="{{=colspan}}"{{#} if(item2.rowspan){}} rowspan="{{=item2.rowspan}}"{{#}}}';
 
     options = options || {};
     return ['<table cellspacing="0" cellpadding="0" border="0" class="layui-table" '
@@ -510,7 +510,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
 
       item2.key = [options.index, i1, i2].join('-');
-      item2.hide = item2.hide || false;
       item2.colspan = item2.colspan || 0;
       item2.rowspan = item2.rowspan || 0;
 
@@ -535,6 +534,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       } else {
         item2.colGroup = false;
       }
+      item2.hide = item2.hide && !item2.colGroup || false; // 初始化中中间节点的hide信息不做处理，否则会出错，如果需要必须将其子节点也都同步成hide
     };
 
     // 初始化列参数
@@ -634,10 +634,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       hide ? parentColspan-- : parentColspan++;
 
       parentTh.attr('colspan', parentColspan);
-      parentTh[parentColspan >= 1 || !hide ? 'removeClass' : 'addClass'](HIDE); // 如果子列显示，父列必然需要显示
+      parentTh[parentColspan ? 'removeClass' : 'addClass'](HIDE); // 如果子列显示，父列必然需要显示
 
-      getThisCol.colspan = parentColspan; //同步 colspan 参数
-      getThisCol.hide = parentColspan >= 1 || !hide; //同步 hide 参数
+      getThisCol.colspan2 = parentColspan; // 更新实际的 colspan 数
+      getThisCol.hide = parentColspan < 1; // 同步 hide 参数
 
       //递归，继续往上查询是否有父列
       var nextParentKey = parentTh.data('parentkey');
@@ -2527,7 +2527,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           if (item22.PARENT_COL_INDEX || (childIndex >= 1 && childIndex == (item2.colspan || 1))) return;
           item22.PARENT_COL_INDEX = index;
           item2.CHILD_COLS.push(item22);
-          childIndex = childIndex + (item22.hide ? 0 : parseInt(item22.colspan > 1 ? item22.colspan : 1));
+          childIndex = childIndex + (parseInt(item22.colspan > 1 ? item22.colspan : 1));
           eachChildCols(index, cols, i2, item22);
         }
       });
