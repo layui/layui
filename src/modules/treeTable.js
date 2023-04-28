@@ -111,34 +111,21 @@ layui.define(['table'], function (exports) {
     })
   }
 
-  Class.prototype.init = function () {
-    var that = this;
-    var options = that.config;
-
-    // 先初始一个空的表格以便拿到对应的表格实例信息
-    var tableIns = table.render($.extend({}, options, {
-      data: [],
-      url: '',
-      done: null
-    }))
-    var id = tableIns.config.id;
-    thisTreeTable.that[id] = that; // 记录当前实例对象
-    that.tableIns = tableIns;
-
-    var treeOptions = options.tree;
-    var customName = treeOptions.customName;
-    var isParentKey = customName.isParent;
-    var childrenKey = customName.children;
-
+  var updateOptions = function (id, options, reload) {
+    var that = getThisTable(id);
+    var thatOptionsTemp = $.extend(true, {} , that.getOptions(), options);
+    var treeOptions = thatOptionsTemp.tree;
+    var childrenKey = treeOptions.customName.children;
     // 处理属性
     var parseData = options.parseData;
     var done = options.done;
 
-    if (options.url) {
+    if (thatOptionsTemp.url) {
       // 异步加载的时候需要处理parseData进行转换
-      options.parseData = function () {
-        var parseDataThat = this;
-        var args = arguments;
+      if (!reload || (reload && parseData && !parseData.mod)) {
+        options.parseData = function () {
+          var parseDataThat = this;
+          var args = arguments;
         var retData = args[0];
         if (layui.type(parseData) === 'function') {
           retData = parseData.apply(parseDataThat, args) || args[0];
@@ -151,7 +138,9 @@ layui.define(['table'], function (exports) {
 
         that.initData(retData[dataName]);
 
-        return retData;
+          return retData;
+        }
+        options.parseData.mod = true
       }
     } else {
       options.data = options.data || [];
@@ -165,9 +154,10 @@ layui.define(['table'], function (exports) {
       that.initData(options.data);
     }
 
-    options.done = function () {
-      var args = arguments;
-      var doneThat = this;
+    if (!reload || (reload && done && !done.mod)) {
+      options.done = function () {
+        var args = arguments;
+        var doneThat = this;
 
       var tableView = this.elem.next();
       that.updateStatus(null, {
@@ -188,9 +178,33 @@ layui.define(['table'], function (exports) {
       that.renderTreeTable(tableView);
 
       if (layui.type(done) === 'function') {
-        return done.apply(doneThat, args);
+          return done.apply(doneThat, args);
+        }
       }
+      options.done.mod = true;
     }
+  }
+
+  Class.prototype.init = function () {
+    var that = this;
+    var options = that.config;
+
+    // 先初始一个空的表格以便拿到对应的表格实例信息
+    var tableIns = table.render($.extend({}, options, {
+      data: [],
+      url: '',
+      done: null
+    }))
+    var id = tableIns.config.id;
+    thisTreeTable.that[id] = that; // 记录当前实例对象
+    that.tableIns = tableIns;
+
+    // var treeOptions = options.tree;
+    // var customName = treeOptions.customName;
+    // var isParentKey = customName.isParent;
+    // var childrenKey = customName.children;
+
+    updateOptions(id, options);
   }
 
   // 初始默认配置
@@ -818,6 +832,9 @@ layui.define(['table'], function (exports) {
     layui.each(options, function (key, item) {
       if (layui.type(item) === 'array') delete that.config[key];
     });
+
+    // 根据需要处理options中的一些参数
+    updateOptions(that.config.id, options, true);
 
     // 对参数进行深度或浅扩展
     that.config = $.extend(deep, {}, that.config, options);
