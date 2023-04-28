@@ -1530,11 +1530,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 默认为前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
     if(options.autoSort){
       if(opts.type === 'asc'){ //升序
-        thisData = layui.sort(data, field);
+        thisData = layui.sort(data, field, null, true);
       } else if(opts.type === 'desc'){ //降序
-        thisData = layui.sort(data, field, true);
+        thisData = layui.sort(data, field, true, true);
       } else { // 清除排序
-        thisData = layui.sort(data, table.config.indexName);
+        thisData = layui.sort(data, table.config.indexName, null, true);
         delete that.sortKey;
         delete options.initSort;
       }
