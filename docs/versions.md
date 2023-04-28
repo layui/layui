@@ -5,6 +5,9 @@ toc: true
  
 # 更新日志
 
+> 导读：📑 <a href="https://gitee.com/layui/layui/issues/I6Z07Z" target="_blank">Layui 2.8 《升级指南》</a> · 📑 <a href="https://gitee.com/layui/layui/issues/I6Y8EN" target="_blank">Layui 新版文档站上线初衷</a>
+
+
 <h2 id="2.8.1" lay-toc="{title: '2.8.1'}">
   2.8.1 
   <span class="layui-badge-rim">2023-04-25</span>
