@@ -323,6 +323,7 @@ layui.define(['table'], function (exports) {
 
     var dataCache = table.cache[tableId][index];
     if (newValue !== 'delete' && dataCache) {
+      $.extend(dataCache, newValue);
       return clone ? $.extend({}, dataCache) : dataCache;
     }
 
@@ -978,6 +979,7 @@ layui.define(['table'], function (exports) {
       tableView.find('.layui-table-' + item + ' tbody tr[lay-data-index="' + index + '"]').replaceWith($(trNew[['trs', 'trs_fixed', 'trs_fixed_r'][i]].join('')).attr({
         'data-index': trIndex,
         'lay-data-index': index,
+        'data-level': trLevel
       }));
     });
     that.renderTreeTable(tableView.find('tr[lay-data-index="' + index + '"]'), trLevel);
