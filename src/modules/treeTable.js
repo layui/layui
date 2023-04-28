@@ -654,16 +654,16 @@ layui.define(['table'], function (exports) {
       // 将所有已经打开的节点的状态设置为关闭，
       that.updateStatus(null, {LAY_EXPAND: false}); // 只处理当前页，如果需要处理全部表格，需要用treeTable.updateStatus
       // 隐藏所有非顶层的节点
-      tableView.find('tbody tr[data-level!="0"]').addClass('layui-hide');
+      tableView.find('.layui-table-box tbody tr[data-level!="0"]').addClass('layui-hide');
       // 处理顶层节点的图标
       var trLevel0 = tableView.find('tbody tr[data-level="0"]');
       trLevel0.find('.layui-table-tree-flexIcon').html(treeOptions.view.flexIconClose);
-      trLevel0.find('.layui-table-tree-nodeIcon').html(treeOptions.view.iconClose);
+      treeOptions.view.showIcon && trLevel0.find('.layui-table-tree-nodeIcon').html(treeOptions.view.iconClose);
 
-      treeTable.resize();
+      treeTable.resize(id);
     } else {
       return hint.error('暂不支持展开全部');
-      
+
       // 展开所有
       if (treeOptions.async.enable) {
         // 存在异步加载
