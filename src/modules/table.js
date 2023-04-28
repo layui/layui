@@ -872,7 +872,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 对参数进行深度或浅扩展
     that.config = $.extend(deep, {}, that.config, options);
-
+    if (type !== 'reloadData') {
+      layui.each(that.config.cols, function (i1, item1) {
+        layui.each(item1, function (i2, item2) {
+          delete item2.colspan2;
+        })
+      })
+      delete that.config.HAS_SET_COLS_PATCH;
+    }
     // 执行渲染
     that.render(type);
   };
