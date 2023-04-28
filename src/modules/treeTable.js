@@ -126,17 +126,17 @@ layui.define(['table'], function (exports) {
         options.parseData = function () {
           var parseDataThat = this;
           var args = arguments;
-        var retData = args[0];
-        if (layui.type(parseData) === 'function') {
-          retData = parseData.apply(parseDataThat, args) || args[0];
-        }
-        var dataName = parseDataThat.response.dataName;
-        // 处理 isSimpleData
-        if (treeOptions.data.isSimpleData && !treeOptions.async.enable) { // 异步加载和 isSimpleData 不应该一起使用
-          retData[dataName] = that.flatToTree(retData[dataName]);
-        }
+          var retData = args[0];
+          if (layui.type(parseData) === 'function') {
+            retData = parseData.apply(parseDataThat, args) || args[0];
+          }
+          var dataName = parseDataThat.response.dataName;
+          // 处理 isSimpleData
+          if (treeOptions.data.isSimpleData && !treeOptions.async.enable) { // 异步加载和 isSimpleData 不应该一起使用
+            retData[dataName] = that.flatToTree(retData[dataName]);
+          }
 
-        that.initData(retData[dataName]);
+          that.initData(retData[dataName]);
 
           return retData;
         }
@@ -159,25 +159,25 @@ layui.define(['table'], function (exports) {
         var args = arguments;
         var doneThat = this;
 
-      var tableView = this.elem.next();
-      that.updateStatus(null, {
-        LAY_HAS_EXPANDED: false // 去除已经打开过的状态
-      });
-      // 更新cache中的内容 将子节点也存到cache中
-      updateCache(id, childrenKey);
-      // 更新全选框的状态
-      var layTableAllChooseElem = tableView.find('[name="layTableCheckbox"][lay-filter="layTableAllChoose"]');
-      if (layTableAllChooseElem.length) {
-        var checkStatus = treeTable.checkStatus(id);
-        layTableAllChooseElem.prop({
-          checked: checkStatus.isAll && checkStatus.data.length,
-          indeterminate: !checkStatus.isAll && checkStatus.data.length
-        })
-      }
+        var tableView = this.elem.next();
+        that.updateStatus(null, {
+          LAY_HAS_EXPANDED: false // 去除已经打开过的状态
+        });
+        // 更新cache中的内容 将子节点也存到cache中
+        updateCache(id, childrenKey);
+        // 更新全选框的状态
+        var layTableAllChooseElem = tableView.find('[name="layTableCheckbox"][lay-filter="layTableAllChoose"]');
+        if (layTableAllChooseElem.length) {
+          var checkStatus = treeTable.checkStatus(id);
+          layTableAllChooseElem.prop({
+            checked: checkStatus.isAll && checkStatus.data.length,
+            indeterminate: !checkStatus.isAll && checkStatus.data.length
+          })
+        }
 
-      that.renderTreeTable(tableView);
+        that.renderTreeTable(tableView);
 
-      if (layui.type(done) === 'function') {
+        if (layui.type(done) === 'function') {
           return done.apply(doneThat, args);
         }
       }
@@ -641,7 +641,7 @@ layui.define(['table'], function (exports) {
     if (layui.type(expandFlag) !== 'boolean') {
       return hint.error('expandAll的展开状态参数只接收true/false')
     }
-    
+
     var that = getThisTable(id);
     if(!that) return;
 
@@ -950,7 +950,7 @@ layui.define(['table'], function (exports) {
     // 处理setRowChecked
     obj.setRowChecked = function (checked) {
       treeTable.setRowChecked(tableId, {
-        index: trData, 
+        index: trData,
         checked: checked
       });
     }
@@ -1042,7 +1042,7 @@ layui.define(['table'], function (exports) {
     var tableViewElem = options.elem.next();
 
     opts = opts || {};
-    
+
     var parentIndex = opts.parentIndex;
     var index = opts.index;
     var newNodes = opts.data;
@@ -1259,9 +1259,9 @@ layui.define(['table'], function (exports) {
     var options = obj.config;
     var tableView = options.elem.next();
     var tableId = options.id;
-    var that = getThisTable(tableId);
 
     if (tableView.hasClass('layui-table-tree')) {
+      var that = getThisTable(tableId);
       updateObjParams(obj);
       checkNode.call(that, obj.tr, obj.checked)
     }
@@ -1482,7 +1482,7 @@ layui.define(['table'], function (exports) {
     if (!trElem.length) {
       // 如果还没有展开没有渲染的要先渲染出来
       treeTable.expandNode(id, {
-        index: nodeData[LAY_PARENT_INDEX], 
+        index: nodeData[LAY_PARENT_INDEX],
         expandFlag: true
       });
       trElem = tableView.find('tr[lay-data-index="' + dataIndex + '"]');
