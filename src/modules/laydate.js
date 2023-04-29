@@ -1,6 +1,6 @@
 /** laydate 日期与时间控件 | MIT Licensed */
 
-;!function(window, document){ //gulp build: laydate-header
+;!function(window, document){ // gulp build: laydate-header
   "use strict";
 
   var isLayui = window.layui && layui.define, ready = {
