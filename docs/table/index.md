@@ -105,7 +105,7 @@ layui.use(function(){
 - 参数 `filter` :  `<table>` 元素对应的 `lay-filter` 属性值
 - 参数 `options` : 基础属性配置项。[#详见属性](#options)
 
-该方法用于将已输出在页面中的静态表格内容转换为动态 table 组件。[#参考相关示例](demo-init)
+该方法用于将已输出在页面中的静态表格内容转换为动态 table 组件。[#参考相关示例](#demo-init)
 
 ```
 <table lay-filter="test">
