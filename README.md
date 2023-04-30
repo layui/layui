@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://layui.github.io/">
+  <a href="https://layui.dev">
     <img src="https://unpkg.com/outeres@0.1.0/img/layui/logo-icon.png" width="81" alt="Layui">
   </a>
 </p>
