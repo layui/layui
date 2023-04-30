@@ -682,7 +682,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /* 按钮容器 */
 .layui-btn-container{word-spacing: -5px;}
-.layui-btn-container .layui-btn{margin-right: 10px; margin-bottom: 10px;}
+.layui-btn-container .layui-btn{margin-right: 10px; margin-bottom: 10px; word-spacing: normal;}
 .layui-btn-container .layui-btn+.layui-btn{margin-left: 0;}
 .layui-table .layui-btn-container .layui-btn{margin-bottom: 9px;}
 
