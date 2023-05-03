@@ -58,7 +58,7 @@ layui.use(function(){
 
   // 圆圈高亮主题
   laydate.render({
-    elem: 'ID-laydate-theme-circle',
+    elem: '#ID-laydate-theme-circle',
     theme: 'circle' // 2.8+新增主题
   });
 
