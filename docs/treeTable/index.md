@@ -36,7 +36,7 @@ toc: true
 | [treeTable.expandAll(id, expandFlag)](#expandAll)  | 展开或关闭全部节点（目前只支持关闭全部）。 |
 | [treeTable.setRowChecked(id, opts)](#setRowChecked) | 设置行选中状态 |
 | [treeTable.checkAllNodes(id, checked)](#checkAllNodes) | 全选或取消全选 |
-| [treeTable.on('event(filter)', callback)](#on) | treeTable 相关事件 |
+| [treeTable.on(\'event(filter)\', callback)](#on) | treeTable 相关事件 |
 
 <h3 id="render" lay-toc="{level: 2}">渲染</h3>
 
