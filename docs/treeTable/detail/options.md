@@ -59,7 +59,6 @@ treeTable.render({
 | name | 自定义「节点」属性名 | string | `name` |
 | id | 自定义「节点索引」属性名 | string | `id` |
 | pid | 自定义「父节点索引」属性名 | string | `parentId` |
-| rootId | 自定义「根节点索引」属性名 | string | - |
 
 </td>
     </tr>
@@ -101,6 +100,7 @@ treeTable.render({
 | 属性 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | isSimpleData | 是否简单数据模式 | boolean | `false` |
+| rootPid | 用于设置根节点的 `pid` 属性值 | string | `null` |
 
 </td>
     </tr>
