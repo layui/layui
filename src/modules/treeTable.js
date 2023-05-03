@@ -216,9 +216,8 @@ layui.define(['table'], function (exports) {
         children: "children", // 节点数据中保存子节点数据的属性名称
         isParent: "isParent", // 节点数据保存节点是否为父节点的属性名称
         name: "name", // 节点数据保存节点名称的属性名称
-        id: "id", //  唯一标识的属性名称
-        pid: "parentId",
-        rootId: null
+        id: "id", // 唯一标识的属性名称
+        pid: "parentId", // 父节点唯一标识的属性名称
       },
       view: {
         indent: 14, // 层级缩进量
@@ -233,7 +232,8 @@ layui.define(['table'], function (exports) {
         dblClickExpand: true, // 双击节点时，是否自动展开父节点的标识
       },
       data: {
-        isSimpleData: false // 是否简单数据模式
+        isSimpleData: false, // 是否简单数据模式
+        rootPId: null // 根节点的父 ID 值
       },
       async: {
         enable: false, // 是否开启异步加载模式，只有开启的时候其他参数才起作用
