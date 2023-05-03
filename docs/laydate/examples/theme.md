@@ -18,12 +18,12 @@
         <input type="text" class="layui-input" id="ID-laydate-theme-grid" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
+    <!--<div class="layui-inline">
       <label class="layui-form-label">圆圈高亮主题</label>
       <div class="layui-input-inline">
         <input type="text" class="layui-input" id="ID-laydate-theme-circle" placeholder="yyyy-MM-dd">
       </div>
-    </div>
+    </div>-->
     <div class="layui-inline">
       <label class="layui-form-label">混合主题</label>
       <div class="layui-input-inline">
@@ -57,10 +57,12 @@ layui.use(function(){
   });
 
   // 圆圈高亮主题
+  /*
   laydate.render({
     elem: '#ID-laydate-theme-circle',
     theme: 'circle' // 2.8+新增主题
   });
+  */
 
   // 混合主题
   laydate.render({
