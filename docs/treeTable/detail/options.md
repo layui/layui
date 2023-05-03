@@ -59,7 +59,7 @@ treeTable.render({
 | name | 自定义「节点」属性名 | string | `name` |
 | id | 自定义「节点索引」属性名 | string | `id` |
 | pid | 自定义「父节点索引」属性名 | string | `pid` |
-| rootIid | 自定义「根节点索引」属性名 | string | - |
+| rootId | 自定义「根节点索引」属性名 | string | - |
 
 </td>
     </tr>
