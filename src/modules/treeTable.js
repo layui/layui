@@ -1284,13 +1284,24 @@ layui.define(['table'], function (exports) {
     }
   })
 
+  // 菜单
+  treeTable.on('rowContextmenu', function (obj) {
+    var options = obj.config;
+    var tableView = options.elem.next();
+    var tableId = options.id;
+
+    if (tableView.hasClass(TABLE_TREE)) {
+      updateObjParams(obj);
+    }
+  })
+
   // tr中带lay-event节点点击
   treeTable.on('tool', function (obj) {
     var options = obj.config;
     var tableView = options.elem.next();
     var tableId = options.id;
 
-    if (tableView.hasClass('layui-table-tree')) {
+    if (tableView.hasClass(TABLE_TREE)) {
       updateObjParams(obj);
     }
   })
