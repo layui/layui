@@ -18,11 +18,11 @@ treeTable 组件的特定属性集，包含以下「子成员集」：
 
 | 属性 | 描述 |
 | --- | --- |
-| [customName](#options.tree.customName) | AAA |
-| [view](#options.tree.view) | AAA |
-| [data](#options.tree.data) | AAA |
-| [async](#options.tree.async) | AAA |
-| [callback](#options.tree.callback) | AAA |
+| [customName](#options.tree.customName) | 自定义属性名的集合 |
+| [view](#options.tree.view) | 视图相关的属性集合 |
+| [data](#options.tree.data) | 数据相关的属性集合 |
+| [async](#options.tree.async) | 异步相关的属性集合 |
+| [callback](#options.tree.callback) | 事件回调相关的属性集合 |
 
 用法如下：
 
