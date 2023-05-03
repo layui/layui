@@ -83,6 +83,8 @@ toc: true
     </div>
   </div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -122,6 +124,8 @@ toc: true
     </div>
   </div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>    
 
@@ -201,6 +205,8 @@ toc: true
     </div>
   </div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 

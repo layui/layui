@@ -18,6 +18,8 @@ toc: true
   <input type="radio" name="AAA" value="2" title="选中" checked> 
   <input type="radio" name="AAA" value="3" title="禁用" disabled> 
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -44,6 +46,8 @@ toc: true
     <span style="color: pink;">自定义模板 ♀</span>
   </div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 

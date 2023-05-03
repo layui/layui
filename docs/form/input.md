@@ -134,6 +134,8 @@ input 放在前后缀容器中：
     <input type="password" lay-affix="eye" placeholder="请输入" class="layui-input">
   </div>
 </div> 
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -159,7 +161,9 @@ input 放在前后缀容器中：
   <div class="layui-input-wrap">
     <input type="text" value="只读状态时" lay-affix="clear" readonly class="layui-input">
   </div>
-</div> 
+</div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 

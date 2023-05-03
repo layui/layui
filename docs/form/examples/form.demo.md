@@ -195,7 +195,7 @@
   </div>
 </form>
 
-<!-- @import layui -->
+<!-- import layui -->
 <script>
 layui.use(['form', 'laydate', 'util'], function(){
   var form = layui.form;

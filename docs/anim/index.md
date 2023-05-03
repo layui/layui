@@ -27,7 +27,7 @@ toc: true
   <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>
 </button>
 
-<!-- @import layui -->
+<!-- import layui -->
 <script>
 layui.use(function(){
   var $ = layui.$;

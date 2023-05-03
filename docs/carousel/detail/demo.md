@@ -127,7 +127,7 @@ layui.use(function(){
   </div>
 </div> 
 
-<!-- @import layui -->
+<!-- import layui -->
 <script>
 layui.use(function(){
   var carousel = layui.carousel;
@@ -200,7 +200,7 @@ layui.use(function(){
   </div>
 </div>
 
-<!-- @import layui -->
+<!-- import layui -->
 <script>
 layui.use(function(){
   var carousel = layui.carousel;
