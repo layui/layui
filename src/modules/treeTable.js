@@ -60,38 +60,28 @@ layui.define(['table'], function (exports) {
   }
 
   // 字符
-  var MOD_NAME = 'treeTable'
-    , ELEMTREE = '.layui-table-tree'
-    , THIS = 'layui-this'
-    , SHOW = 'layui-show'
-    , HIDE = 'layui-hide'
-    , HIDE_V = 'layui-hide-v'
-    , DISABLED = 'layui-disabled'
-    , NONE = 'layui-none'
+  var MOD_NAME = 'treeTable';
+  var HIDE = 'layui-hide';
 
-    , ELEM_VIEW = '.layui-table-view'
-    , ELEM_TOOL = '.layui-table-tool'
-    , ELEM_BOX = '.layui-table-box'
-    , ELEM_INIT = '.layui-table-init'
-    , ELEM_HEADER = '.layui-table-header'
-    , ELEM_BODY = '.layui-table-body'
-    , ELEM_MAIN = '.layui-table-main'
-    , ELEM_FIXED = '.layui-table-fixed'
-    , ELEM_FIXL = '.layui-table-fixed-l'
-    , ELEM_FIXR = '.layui-table-fixed-r'
-    , ELEM_TOTAL = '.layui-table-total'
-    , ELEM_PAGE = '.layui-table-page'
-    , ELEM_SORT = '.layui-table-sort'
-    , ELEM_EDIT = 'layui-table-edit'
-    , ELEM_HOVER = 'layui-table-hover'
-    , ELEM_GROUP = 'laytable-cell-group'
+  var ELEM_VIEW = '.layui-table-view';
+  var ELEM_TREE = '.layui-table-tree';
+  var ELEM_TOOL = '.layui-table-tool';
+  var ELEM_BOX = '.layui-table-box';
+  var ELEM_HEADER = '.layui-table-header';
+  var ELEM_BODY = '.layui-table-body';
+  var ELEM_MAIN = '.layui-table-main';
+  var ELEM_FIXED = '.layui-table-fixed';
+  var ELEM_FIXL = '.layui-table-fixed-l';
+  var ELEM_FIXR = '.layui-table-fixed-r';
 
+  var TABLE_TREE = 'layui-table-tree';
   var LAY_DATA_INDEX = 'LAY_DATA_INDEX';
   var LAY_DATA_INDEX_HISTORY = 'LAY_DATA_INDEX_HISTORY';
   var LAY_PARENT_INDEX = 'LAY_PARENT_INDEX';
   var LAY_CHECKBOX_HALF = 'LAY_CHECKBOX_HALF';
   var LAY_EXPAND = 'LAY_EXPAND';
   var LAY_HAS_EXPANDED = 'LAY_HAS_EXPANDED';
+  var LAY_ASYNC_STATUS = 'LAY_ASYNC_STATUS';
 
   // 构造器
   var Class = function (options) {
@@ -215,11 +205,6 @@ layui.define(['table'], function (exports) {
     thisTreeTable.that[id] = that; // 记录当前实例对象
     that.tableIns = tableIns;
 
-    // var treeOptions = options.tree;
-    // var customName = treeOptions.customName;
-    // var isParentKey = customName.isParent;
-    // var childrenKey = customName.children;
-
     updateOptions(id, options);
   }
 
@@ -306,7 +291,7 @@ layui.define(['table'], function (exports) {
 
     tableData = tableData || table.cache[tableId];
 
-    return flatToTree(tableData, customName.id, customName.pid, customName.children, customName.rootId)
+    return flatToTree(tableData, customName.id, customName.pid, customName.children, treeOptions.data.rootPId)
   }
 
   Class.prototype.treeToFlat = function (tableData, parentId, parentIndex) {
@@ -445,7 +430,7 @@ layui.define(['table'], function (exports) {
     var trExpand = isToggle ? !trData[LAY_EXPAND] : expandFlag;
     var retValue = trData[isParentKey] ? trExpand : null;
 
-    if (callbackFlag && trExpand != trData[LAY_EXPAND] && (!trData['LAY_ASYNC_STATUS'] || trData['LAY_ASYNC_STATUS'] === 'local')) {
+    if (callbackFlag && trExpand != trData[LAY_EXPAND] && (!trData[LAY_ASYNC_STATUS] || trData[LAY_ASYNC_STATUS] === 'local')) {
       var beforeExpand = treeOptions.callback.beforeExpand;
       if (layui.type(beforeExpand) === 'function') {
         if (beforeExpand(tableId, trData, expandFlag) === false) {
@@ -476,22 +461,22 @@ layui.define(['table'], function (exports) {
         trData[LAY_EXPAND] = trExpand;
         tableViewElem.find(childNodes.map(function (value, index, array) {
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]'
-        }).join(',')).removeClass('layui-hide');
+        }).join(',')).removeClass(HIDE);
         layui.each(childNodes, function (i1, item1) {
           if (sonSign && !isToggle) { // 非状态切换的情况下
             // 级联展开子节点
-            expandNode({trElem: tableViewElem.find('tr[lay-data-index="' + item1.LAY_DATA_INDEX + '"]').first()}, expandFlag, sonSign, focus, callbackFlag);
+            expandNode({trElem: tableViewElem.find('tr[lay-data-index="' + item1[LAY_DATA_INDEX] + '"]').first()}, expandFlag, sonSign, focus, callbackFlag);
           } else if (item1[LAY_EXPAND]) {
             // 级联展开
-            expandNode({trElem: tableViewElem.find('tr[lay-data-index="' + item1.LAY_DATA_INDEX + '"]').first()}, true);
+            expandNode({trElem: tableViewElem.find('tr[lay-data-index="' + item1[LAY_DATA_INDEX] + '"]').first()}, true);
           }
         })
       } else {
         var asyncSetting = treeOptions.async || {};
         var asyncUrl = asyncSetting.url || options.url;
         // 提供一个能支持用户在获取子数据转换调用的回调，这样让子节点数据获取更加灵活 todo
-        if (asyncSetting.enable && asyncUrl && !trData['LAY_ASYNC_STATUS']) {
-          trData['LAY_ASYNC_STATUS'] = 'loading';
+        if (asyncSetting.enable && trData[isParentKey] && asyncUrl && !trData[LAY_ASYNC_STATUS]) {
+          trData[LAY_ASYNC_STATUS] = 'loading';
           var params = {};
           // 参数
           var data = $.extend(params, asyncSetting.where || options.where);
@@ -516,22 +501,22 @@ layui.define(['table'], function (exports) {
           // that.loading();
           flexIconElem.html('<i class="layui-icon layui-icon-loading layui-anim layui-anim-loop layui-anim-rotate"></i>')
           $.ajax({
-            type: asyncType || 'get'
-            , url: asyncUrl
-            , contentType: asyncContentType
-            , data: data
-            , dataType: asyncDataType || 'json'
-            , jsonpCallback: asyncJsonpCallback
-            , headers: asyncHeaders || {}
-            , success: function (res) {
-              trData['LAY_ASYNC_STATUS'] = 'success';
+            type: asyncType || 'get',
+            url: asyncUrl,
+            contentType: asyncContentType,
+            data: data,
+            dataType: asyncDataType || 'json',
+            jsonpCallback: asyncJsonpCallback,
+            headers: asyncHeaders || {},
+            success: function (res) {
+              trData[LAY_ASYNC_STATUS] = 'success';
               // 若有数据解析的回调，则获得其返回的数据
               if (typeof asyncParseData === 'function') {
                 res = asyncParseData.call(options, res) || res;
               }
               // 检查数据格式是否符合规范
               if (res[asyncResponse.statusName] != asyncResponse.statusCode) {
-                trData['LAY_ASYNC_STATUS'] = 'error';
+                trData[LAY_ASYNC_STATUS] = 'error';
                 // 异常处理 todo
                 flexIconElem.html('<i class="layui-icon layui-icon-refresh"></i>');
                 // 事件
@@ -541,9 +526,9 @@ layui.define(['table'], function (exports) {
                 // 正常返回
                 expandNode(treeNode, true, isToggle ? false : sonSign, focus, callbackFlag);
               }
-            }
-            , error: function (e, msg) {
-              trData['LAY_ASYNC_STATUS'] = 'error';
+            },
+            error: function (e, msg) {
+              trData[LAY_ASYNC_STATUS] = 'error';
               // 异常处理 todo
               typeof options.error === 'function' && options.error(e, msg);
             }
@@ -602,7 +587,7 @@ layui.define(['table'], function (exports) {
           if (sonSign && !isToggle) { // 非状态切换的情况下
             // 级联展开/关闭子节点
             layui.each(childNodes, function (i1, item1) {
-              expandNode({trElem: tableViewElem.find('tr[lay-data-index="' + item1.LAY_DATA_INDEX + '"]').first()}, expandFlag, sonSign, focus, callbackFlag);
+              expandNode({trElem: tableViewElem.find('tr[lay-data-index="' + item1[LAY_DATA_INDEX] + '"]').first()}, expandFlag, sonSign, focus, callbackFlag);
             })
           }
         }
@@ -612,22 +597,22 @@ layui.define(['table'], function (exports) {
       // 折叠
       if (sonSign && !isToggle) { // 非状态切换的情况下
         layui.each(childNodes, function (i1, item1) {
-          expandNode({trElem: tableViewElem.find('tr[lay-data-index="' + item1.LAY_DATA_INDEX + '"]').first()}, expandFlag, sonSign, focus, callbackFlag);
+          expandNode({trElem: tableViewElem.find('tr[lay-data-index="' + item1[LAY_DATA_INDEX] + '"]').first()}, expandFlag, sonSign, focus, callbackFlag);
         });
         tableViewElem.find(childNodes.map(function (value, index, array) { // 只隐藏直接子节点，其他由递归的处理
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]'
-        }).join(',')).addClass('layui-hide');
+        }).join(',')).addClass(HIDE);
       } else {
         var childNodesFlat = treeTableThat.treeToFlat(childNodes, trData[customName.id], trIndex);
         tableViewElem.find(childNodesFlat.map(function (value, index, array) {
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]'
-        }).join(',')).addClass('layui-hide');
+        }).join(',')).addClass(HIDE);
       }
 
     }
     table.resize(tableId);
 
-    if (callbackFlag && trData['LAY_ASYNC_STATUS'] !== 'loading') {
+    if (callbackFlag && trData[LAY_ASYNC_STATUS] !== 'loading') {
       var onExpand = treeOptions.callback.onExpand;
       layui.type(onExpand) === 'function' && onExpand(tableId, trData, expandFlag);
     }
@@ -635,9 +620,19 @@ layui.define(['table'], function (exports) {
     return retValue;
   }
 
+  /**
+   * 展开或关闭一个节点
+   * @param {String} id 树表id
+   * @param {Object} opts
+   * @param {Number|String} opts.index 展开行的数据下标
+   * @param {Boolean} [opts.expandFlag] 展开、关闭、切换
+   * @param {Boolean} [opts.inherit] 是否级联子节点
+   * @param {Boolean} [opts.callbackFlag] 是否触发事件
+   * @return [{Boolean}] 状态结果
+   * */
   treeTable.expandNode = function (id, opts) {
     var that = getThisTable(id);
-    if(!that) return;
+    if (!that) return;
 
     opts = opts || {};
 
@@ -1210,7 +1205,7 @@ layui.define(['table'], function (exports) {
       tableData = that.initData();
       // 去掉父节点的已经展开过的状态，重新执行一次展开的方法
       parentNode[LAY_HAS_EXPANDED] = false;
-      parentNode['LAY_ASYNC_STATUS'] = 'local'; // 转为本地数据，应该规定异步加载子节点的时候addNodes的规则
+      parentNode[LAY_ASYNC_STATUS] = 'local'; // 转为本地数据，应该规定异步加载子节点的时候addNodes的规则
       expandNode({trElem: tableViewElem.find('tr[lay-data-index="' + parentIndex + '"]')}, true)
     }
     that.updateCheckStatus(parentNode, true);
@@ -1253,7 +1248,7 @@ layui.define(['table'], function (exports) {
     var tableView = options.elem.next();
     var tableId = options.id;
 
-    if (tableView.hasClass('layui-table-tree')) {
+    if (tableView.hasClass(TABLE_TREE)) {
       treeTable.sort(tableId);
     }
   });
@@ -1263,7 +1258,7 @@ layui.define(['table'], function (exports) {
     var options = obj.config;
     var tableView = options.elem.next();
 
-    if (tableView.hasClass('layui-table-tree')) {
+    if (tableView.hasClass(TABLE_TREE)) {
       updateObjParams(obj);
     }
   })
@@ -1274,7 +1269,7 @@ layui.define(['table'], function (exports) {
     var tableView = options.elem.next();
     var tableId = options.id;
 
-    if (tableView.hasClass('layui-table-tree')) {
+    if (tableView.hasClass(TABLE_TREE)) {
       updateObjParams(obj);
 
       var treeOptions = options.tree || {};
@@ -1313,7 +1308,7 @@ layui.define(['table'], function (exports) {
     var tableView = options.elem.next();
     var tableId = options.id;
 
-    if (tableView.hasClass('layui-table-tree')) {
+    if (tableView.hasClass(TABLE_TREE)) {
       updateObjParams(obj);
       if (obj.field === options.tree.customName.name) {
         obj.update({}); // 通过update调用执行tr节点的更新
@@ -1327,7 +1322,7 @@ layui.define(['table'], function (exports) {
     var tableView = options.elem.next();
     var tableId = options.id;
 
-    if (tableView.hasClass('layui-table-tree')) {
+    if (tableView.hasClass(TABLE_TREE)) {
       var that = getThisTable(tableId);
       updateObjParams(obj);
       checkNode.call(that, obj.tr, obj.checked)
@@ -1508,7 +1503,7 @@ layui.define(['table'], function (exports) {
     var tableView = options.elem.next();
     var tableId = options.id;
 
-    if (tableView.hasClass('layui-table-tree')) {
+    if (tableView.hasClass(TABLE_TREE)) {
       var that = getThisTable(tableId);
       var checked = obj.checked;
       updateObjParams(obj)
@@ -1570,7 +1565,7 @@ layui.define(['table'], function (exports) {
   /**
    * 获得数据
    * @param {String} id 表格id
-   * @param {Boolean} isSimpleData 是否返回平铺结构的数据
+   * @param {Boolean} [isSimpleData] 是否返回平铺结构的数据
    * @return {Array} 表格数据
    * */
   treeTable.getData = function (id, isSimpleData) {
