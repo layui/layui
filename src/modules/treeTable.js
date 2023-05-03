@@ -24,14 +24,16 @@ layui.define(['table'], function (exports) {
       that.config = $.extend({}, that.config, options);
       return that;
     },
-    resize: table.resize
+    resize: table.resize,
+    getOptions: table.getOptions,
+    hideCol: table.hideCol
   };
 
   // 操作当前实例
   var thisTreeTable = function () {
-    var that = this
-      , options = that.config
-      , id = options.id || options.index;
+    var that = this;
+    var options = that.config
+    var id = options.id || options.index;
 
     return {
       config: options,
