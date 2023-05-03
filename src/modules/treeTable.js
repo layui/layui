@@ -646,16 +646,19 @@ layui.define(['table'], function (exports) {
     var sonSign = opts.inherit;
     var callbackFlag = opts.callbackFlag;
 
-
     var options = that.getOptions();
     var tableViewElem = options.elem.next();
     return expandNode({trElem: tableViewElem.find('tr[lay-data-index="' + index + '"]').first()}, expandFlag, sonSign, null, callbackFlag)
   };
 
-  // 目前还有性能问题特别是在data模式需要优化暂时不能使用 todo
+  /**
+   * 展开或关闭全部节点
+   * @param {String} id 树表id
+   * @param {Boolean} expandFlag 展开或关闭
+   * */
   treeTable.expandAll = function (id, expandFlag) {
     if (layui.type(expandFlag) !== 'boolean') {
-      return hint.error('expandAll的展开状态参数只接收true/false')
+      return hint.error('expandAll 的展开状态参数只接收true/false')
     }
 
     var that = getThisTable(id);
@@ -670,62 +673,100 @@ layui.define(['table'], function (exports) {
       // 将所有已经打开的节点的状态设置为关闭，
       that.updateStatus(null, {LAY_EXPAND: false}); // 只处理当前页，如果需要处理全部表格，需要用treeTable.updateStatus
       // 隐藏所有非顶层的节点
-      tableView.find('.layui-table-box tbody tr[data-level!="0"]').addClass('layui-hide');
+      tableView.find('.layui-table-box tbody tr[data-level!="0"]').addClass(HIDE);
       // 处理顶层节点的图标
       var trLevel0 = tableView.find('tbody tr[data-level="0"]');
       trLevel0.find('.layui-table-tree-flexIcon').html(treeOptions.view.flexIconClose);
       treeOptions.view.showIcon && trLevel0.find('.layui-table-tree-nodeIcon').html(treeOptions.view.iconClose);
 
-      treeTable.resize(id);
     } else {
-      return hint.error('暂不支持展开全部');
-
+      var tableDataFlat = treeTable.getData(id, true);
       // 展开所有
+      // 存在异步加载
       if (treeOptions.async.enable) {
-        // 存在异步加载
-
-      } else {
-        // 先判断是否全部打开过了
-        var tableDataFlat = treeTable.getData(id, true);
-        var isAllExpanded = true;
+        // 判断是否有未加载过的节点
+        var isAllAsyncDone = true;
+        var isParentKey = treeOptions.customName.isParent;
         layui.each(tableDataFlat, function (i1, item1) {
-          if (!item1[LAY_HAS_EXPANDED]) {
-            isAllExpanded = false;
+          if (item1[isParentKey] && !item1[LAY_ASYNC_STATUS]) {
+            isAllAsyncDone = false;
             return true;
           }
         })
-        // 如果全部节点已经都打开过，就可以简单处理跟隐藏所有节点反操作
-        if (isAllExpanded) {
-          that.updateStatus(null, {LAY_EXPAND: true}); // 只处理当前页，如果需要处理全部表格，需要用treeTable.updateStatus
-          // 隐藏所有非顶层的节点
-          tableView.find('tbody tr[data-level!="0"]').removeClass('layui-hide');
-          // 处理顶层节点的图标
-          // var trLevel0 = tableView.find('tbody tr[data-level="0"]');
-          tableView.find('.layui-table-tree-flexIcon').html(treeOptions.view.flexIconOpen);
-          tableView.find('.layui-table-tree-nodeIcon').html(treeOptions.view.iconOpen);
-
-          treeTable.resize();
-        } else {
-          // 如果有未打开过的父节点，将内容全部生成
-          that.updateStatus(null, {LAY_EXPAND: true, LAY_HAS_EXPANDED: true});
-          var trsAll = table.getTrHtml(id, tableDataFlat);
-
+        // 有未加载过的节点
+        if (!isAllAsyncDone) {
+          // 逐个展开
+          layui.each(treeTable.getData(id), function (i1, item1) {
+            treeTable.expandNode(id, {
+              index: item1[LAY_DATA_INDEX],
+              expandFlag: true,
+              inherit: true
+            })
+          })
+          return;
         }
-
       }
 
+      // 先判断是否全部打开过了
+      var isAllExpanded = true;
+      layui.each(tableDataFlat, function (i1, item1) {
+        if (!item1[LAY_HAS_EXPANDED]) {
+            isAllExpanded = false;
+            return true;
+          }
+      })
+      // 如果全部节点已经都打开过，就可以简单处理跟隐藏所有节点反操作
+      if (isAllExpanded) {
+        that.updateStatus(null, {LAY_EXPAND: true});
+        // 隐藏所有非顶层的节点
+        tableView.find('tbody tr[data-level!="0"]').removeClass(HIDE);
+        // 处理顶层节点的图标
+        // var trLevel0 = tableView.find('tbody tr[data-level="0"]');
+        tableView.find('.layui-table-tree-flexIcon').html(treeOptions.view.flexIconOpen);
+        tableView.find('.layui-table-tree-nodeIcon').html(treeOptions.view.iconOpen);
+      } else {
+        // 如果有未打开过的父节点，将内容全部生成
+        that.updateStatus(null, {LAY_EXPAND: true, LAY_HAS_EXPANDED: true});
+        var trAll = table.getTrHtml(id, tableDataFlat);
 
-      // 如果是异步加载子节点模式 如何处理
-      // 如果有部分节点未打开过，也需要重新
+        var trAllObj = {
+          trs: $(trAll.trs.join('')),
+          trs_fixed: $(trAll.trs_fixed.join('')),
+          trs_fixed_r: $(trAll.trs_fixed_r.join(''))
+        }
+        layui.each(tableDataFlat, function (dataIndex, dataItem) {
+          // debugger;
+          var dataLevel = dataItem[LAY_DATA_INDEX].split('-').length - 1;
+          trAllObj.trs.eq(dataIndex).attr({
+            'data-index': dataItem[LAY_DATA_INDEX],
+            'lay-data-index': dataItem[LAY_DATA_INDEX],
+            'data-level': dataLevel
+          })
+          trAllObj.trs_fixed.eq(dataIndex).attr({
+            'data-index': dataItem[LAY_DATA_INDEX],
+            'lay-data-index': dataItem[LAY_DATA_INDEX],
+            'data-level': dataLevel
+          })
+          trAllObj.trs_fixed_r.eq(dataIndex).attr({
+            'data-index': dataItem[LAY_DATA_INDEX],
+            'lay-data-index': dataItem[LAY_DATA_INDEX],
+            'data-level': dataLevel
+          })
+        })
+        layui.each(['main', 'fixed-l', 'fixed-r'], function (i, item) {
+          tableView.find('.layui-table-' + item + ' tbody').html(trAllObj[['trs', 'trs_fixed', 'trs_fixed_r'][i]]);
+        });
+        that.renderTreeTable(tableView, 0, false);
+      }
     }
-
+    treeTable.resize(id);
   }
 
   Class.prototype.renderTreeTable = function (tableView, level, sonSign) {
     var that = this;
     var options = that.getOptions();
     var tableViewElem = options.elem.next();
-    tableViewElem.addClass('layui-table-tree');
+    tableViewElem.addClass(TABLE_TREE);
     var tableId = options.id;
     var treeOptions = options.tree || {};
     var treeOptionsData = treeOptions.data || {};
@@ -775,10 +816,10 @@ layui.define(['table'], function (exports) {
       var flexIconElem = item.find('div.layui-table-cell')
         .html(['<div class="layui-inline layui-table-tree-flexIcon" ',
           'style="',
-          'margin-left: ' + (indent * level) + 'px;',
+          'margin-left: ' + (indent * trElem.attr('data-level')) + 'px;',
           (trData[isParentKey] || treeOptionsView.showFlexIconIfNotParent) ? '' : ' visibility: hidden;',
           '">',
-          treeOptions.view.flexIconClose, // 折叠图标
+          trData[LAY_EXPAND] ? treeOptions.view.flexIconOpen : treeOptions.view.flexIconClose, // 折叠图标
           '</div>',
           '<div class="layui-inline layui-table-tree-nodeIcon">',
           treeOptions.view.showIcon ? (trData.icon || treeOptions.view.icon || (trData[isParentKey] ? treeOptions.view.iconClose : treeOptions.view.iconLeaf) || '') : '',
