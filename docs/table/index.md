@@ -493,7 +493,7 @@ table.hideCol('test', false); // `true` or `false`
 | [row / rowDouble](#on-row) | 行单击和双击事件 |
 | [rowContextmenu](#on-rowContextmenu) <sup>2.8+</sup> | 行右键菜单事件 |
 | [edit](#on-edit) | 单元格编辑事件 |
-| [tool](#on-tool) 🔥 | 单元格工具事件。可在该事件中实现行的更新与删除操作。 |
+| [tool / toolDouble](#on-tool) 🔥 | 单元格工具事件。可在该事件中实现行的更新与删除操作。 |
 | [checkbox](#on-checkbox) | 复选框事件 |
 | [radio](#on-radio) | 单选框事件 |
 | [pagebar](#on-pagebar) <sup>2.7+</sup> | 尾部分页栏事件 |

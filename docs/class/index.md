@@ -75,7 +75,7 @@ toc: true
 | layui-bg-orange | 橙 | <div class="layui-bg-orange">&nbsp;</div> |
 | layui-bg-green |  绿 | <div class="layui-bg-green">&nbsp;</div> |
 | layui-bg-blue |  蓝 | <div class="layui-bg-blue">&nbsp;</div> |
-| layui-bg-purple | 紫 | <div class="layui-bg-purple">&nbsp;</div> |
+| layui-bg-purple <sup>2.8+</sup> | 紫 | <div class="layui-bg-purple">&nbsp;</div> |
 | layui-bg-black | 深 | <div class="layui-bg-black">&nbsp;</div> |
 | layui-bg-gray |  浅 | <div class="layui-bg-gray">&nbsp;</div> |
 
@@ -104,7 +104,7 @@ toc: true
 | layui-font-orange | <span class="layui-font-orange">橙</span> |
 | layui-font-green | <span class="layui-font-green">绿</span> |
 | layui-font-blue | <span class="layui-font-blue">蓝</span> |
-| layui-font-purple | <span class="layui-font-purple">紫</span> |
+| layui-font-purple <sup>2.8+</sup> | <span class="layui-font-purple">紫</span> |
 | layui-font-black | <span class="layui-font-black">深</span> |
 | layui-font-gray | <span class="layui-font-gray">浅</span> |
 

@@ -181,12 +181,14 @@ toc: true
   - 优化 部分代码存在的冗余逻辑 # 1169
 - #### code
   - 新增 `preview` 属性，用于开启 Code 预览功能
-  - 新增 `previewStyle/codeStyle` 属性，用于设 Code 区域、预览区域的样式
+  - 新增 `style/previewStyle/codeStyle` 属性，用于设 Code 区域、预览区域的样式
   - 新增 `text` 属性，用于自定义默认文本
   - 新增 `header` 属性，用于是否开启 Code 区域的头部栏
   - 新增 `layout` 属性，用于设定开启预览时的标签排列方式
   - 新增 `tools` 属性，用于开启头部右侧区域工具栏（内置：全屏）
   - 新增 `toolsEvent` 属性，用于自定义工具栏事件
+  - 新增 `id` 属性，设置实例的唯一索引，以便用于其他操作
+  - 新增 `className` 属性，追加实例面板的 className，以便对其自定义样式
   - 新增 `done` 属性，即执行 Code 预览后的回调函数
 - #### laytpl
   - 新增 模板局部自定义标签符功能，可在 `laytpl(str, options)` 的第二个参数中设置
