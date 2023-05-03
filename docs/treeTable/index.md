@@ -200,7 +200,7 @@ treeTable.addNodes('test', {
 | inherit | 子节点是否继承父节点的展开或关闭状态，`expandFlag` 属性必须为 `boolean` 型时才有效。 | boolean | `false` |
 | callbackFlag | 是否触发事件（`beforeExpand,onExpand`） | boolean | `false` |
 
-若操作的节点不是一个父节点，则返回 `null` ，否则返回操作之后的折叠状态。
+若操作的节点不是一个父节点，则返回 `null`，否则返回操作之后的折叠状态。
 
 ```js
 // 渲染
