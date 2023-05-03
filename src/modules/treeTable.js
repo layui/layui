@@ -232,7 +232,7 @@ layui.define(['table'], function (exports) {
       },
       data: {
         isSimpleData: false, // 是否简单数据模式
-        rootPId: null // 根节点的父 ID 值
+        rootPid: null // 根节点的父 ID 值
       },
       async: {
         enable: false, // 是否开启异步加载模式，只有开启的时候其他参数才起作用
@@ -259,7 +259,7 @@ layui.define(['table'], function (exports) {
     }
   };
 
-  function flatToTree(flatArr, idKey, pIdKey, childrenKey, rootPId) {
+  function flatToTree(flatArr, idKey, pIdKey, childrenKey, rootPid) {
     idKey = idKey || 'id';
     pIdKey = pIdKey || 'parentId';
     childrenKey = childrenKey || 'children';
@@ -278,7 +278,7 @@ layui.define(['table'], function (exports) {
     })
     // 返回顶层节点
     return Object.values(nodes).filter(function (item) {
-      return rootPId ? item[pIdKey] === rootPId : !item[pIdKey];
+      return rootPid ? item[pIdKey] === rootPid : !item[pIdKey];
     })
   }
 
@@ -291,7 +291,7 @@ layui.define(['table'], function (exports) {
 
     tableData = tableData || table.cache[tableId];
 
-    return flatToTree(tableData, customName.id, customName.pid, customName.children, treeOptions.data.rootPId)
+    return flatToTree(tableData, customName.id, customName.pid, customName.children, treeOptions.data.rootPid)
   }
 
   Class.prototype.treeToFlat = function (tableData, parentId, parentIndex) {
