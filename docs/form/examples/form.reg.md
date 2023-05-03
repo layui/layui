@@ -73,7 +73,8 @@
     </div>
   </div>
 </form>
- 
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var $ = layui.$;

@@ -140,6 +140,8 @@ tab 组件提供了三种 UI 风格，分别为：
     <div class="layui-tab-item">内容-5</div>
   </div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -154,6 +156,8 @@ tab 组件会在元素加载完毕后，自动对 tab 元素完成一次渲染�
 
 ```
 <div id="test"></div>
+ 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var element = layui.element;
@@ -240,6 +244,7 @@ layui.use(function(){
   <div>内容-3</div>
 </div>
 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var element = layui.element;

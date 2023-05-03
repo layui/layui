@@ -138,6 +138,8 @@ toc: true
 
 ```
 <div id="test"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var element = layui.element;
@@ -186,7 +188,8 @@ layui.use(function(){
   <button class="layui-btn" lay-on="setPercent">设置 50%</button>
   <button class="layui-btn" lay-on="loading">模拟 loading</button>
 </div>
- 
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var element = layui.element;

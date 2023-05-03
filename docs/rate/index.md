@@ -34,6 +34,7 @@ toc: true
 <div class="class-test-rate" lay-options="{value: 3}"></div>
 <div class="class-test-rate" lay-options="{value: 5}"></div>
  
+<!-- import layui -->
 <script>
 layui.use(function(){
   var rate = layui.rate;

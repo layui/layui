@@ -11,6 +11,7 @@
  
 <div id="ID-tree-demo"></div>
 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var tree = layui.tree;
@@ -59,6 +60,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-tree-demo-showLine"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var tree = layui.tree;
@@ -82,6 +85,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-tree-demo-onlyIconControl"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var tree = layui.tree;
@@ -110,6 +115,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-tree-demo-accordion"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var tree = layui.tree;
@@ -149,6 +156,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-tree-demo-showCheckbox"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var tree = layui.tree;

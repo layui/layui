@@ -6,6 +6,7 @@
   开启全局右键菜单
 </button>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var dropdown = layui.dropdown;

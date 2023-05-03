@@ -5,6 +5,7 @@
   <button type="button" class="layui-btn layui-btn-primary" lay-on="test-load-4">风格4</button>
 </div>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var layer = layui.layer;

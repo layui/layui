@@ -1,5 +1,6 @@
 <input type="file" name="file" id="ID-upload-demo-form-files">
- 
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var upload = layui.upload;

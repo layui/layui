@@ -27,7 +27,8 @@
 </form>
 
 <table class="layui-hide" id="ID-table-demo-search"></table>
- 
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var table = layui.table;

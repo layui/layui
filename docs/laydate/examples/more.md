@@ -93,6 +93,7 @@
   </div>
 </div>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var laydate = layui.laydate;

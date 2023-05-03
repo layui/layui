@@ -2,6 +2,8 @@
   <textarea>
 <div id="demo-laypage-normal-1"></div>
 <div id="demo-laypage-normal-2"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var laypage = layui.laypage;
@@ -27,6 +29,8 @@ layui.use(function(){
 <div id="demo-laypage-theme-1"></div>
 <div id="demo-laypage-theme-2"></div>
 <div id="demo-laypage-theme-3"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var laypage = layui.laypage;
@@ -57,6 +61,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-text"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var laypage = layui.laypage;
@@ -80,6 +86,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-pn-hide"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var laypage = layui.laypage;
@@ -101,6 +109,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-pn-show"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var laypage = layui.laypage;
@@ -133,6 +143,8 @@ layui.use(function(){
 <div id="demo-laypage-layout-1"></div>
 <div id="demo-laypage-layout-2"></div>
 <div id="demo-laypage-layout-3"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var laypage = layui.laypage;
@@ -163,6 +175,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-limits"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var laypage = layui.laypage;
@@ -185,6 +199,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-all"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var laypage = layui.laypage;
@@ -208,6 +224,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-hash"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var laypage = layui.laypage;
@@ -230,6 +248,8 @@ layui.use(function(){
   <textarea>
 <div id="demo-laypage-data"></div>
 <div id="demo-laypage-data-view"></div> 
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var laypage = layui.laypage;

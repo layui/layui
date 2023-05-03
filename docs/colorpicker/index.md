@@ -34,7 +34,8 @@ toc: true
 <div id="ID-test-colorpicker"></div>
 <div class="class-test-colorpicker" lay-options="{color: '#333'}"></div>
 <div class="class-test-colorpicker" lay-options="{color: '#777'}"></div>
- 
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var colorpicker = layui.colorpicker;

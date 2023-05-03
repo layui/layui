@@ -8,6 +8,7 @@
   <button type="button" class="layui-btn layui-btn-primary" lay-on="test-iframe-curl">弹出任意 URL 页面</button>
 </div>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var $ = layui.$;

@@ -5,7 +5,8 @@
     <button class="layui-btn layui-btn-sm" lay-event="footerDemoBtn2">底部按钮2</button>
   </div>
 </script>
- 
+
+<!-- import layui -->
 <script>
 layui.use('table', function(){
   var table = layui.table;

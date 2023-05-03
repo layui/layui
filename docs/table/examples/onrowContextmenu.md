@@ -1,5 +1,6 @@
 <table class="layui-hide" id="ID-table-onrowContextmenu"></table>
 
+<!-- import layui -->
 <script>
 layui.use(['table', 'dropdown', 'util'], function(){
   var table = layui.table;

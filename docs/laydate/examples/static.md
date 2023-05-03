@@ -5,6 +5,7 @@
   <div class="layui-inline" id="ID-laydate-static-4"></div>
 </div>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var laydate = layui.laydate;

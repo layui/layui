@@ -3,6 +3,7 @@
 
 <table class="layui-hide" id="ID-table-demo-parse"></table>
 
+<!-- import layui -->
 <script>
 layui.use('table', function(){
   var table = layui.table;

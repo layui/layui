@@ -1,6 +1,8 @@
 <pre class="layui-code" lay-options="{preview: true, text: {preview: '基础用法'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var slider = layui.slider;
@@ -19,6 +21,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo-value"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var slider = layui.slider;
@@ -38,6 +42,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo-maxmin"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var slider = layui.slider;
@@ -60,6 +66,8 @@ layui.use(function(){
 <div id="ID-slider-demo-step-1"></div>
 <hr class="ws-space-16">
 <div id="ID-slider-demo-step-2"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var slider = layui.slider;
@@ -88,6 +96,8 @@ layui.use(function(){
 <hr class="ws-space-16">
 <div id="ID-slider-demo-setTips-2"></div>
 <div id="ID-slider-demo-setTips-result"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var slider = layui.slider;
@@ -119,6 +129,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo-input"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var slider = layui.slider;
@@ -140,6 +152,8 @@ layui.use(function(){
 <div id="ID-slider-demo-range-1"></div>
 <hr class="ws-space-16">
 <div id="ID-slider-demo-range-2"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var slider = layui.slider;
@@ -173,6 +187,8 @@ layui.use(function(){
 <div class="layui-inline" style="margin-right: 32px;" id="ID-slider-demo-vertical-2"></div>
 <div class="layui-inline" style="margin-right: 32px;" id="ID-slider-demo-vertical-3"></div>
 <div class="layui-inline" id="ID-slider-demo-vertical-4"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var slider = layui.slider;
@@ -213,6 +229,8 @@ layui.use(function(){
 <div id="ID-slider-demo-theme-2"></div>
 <hr class="ws-space-16">
 <div id="ID-slider-demo-theme-3"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var slider = layui.slider;
@@ -243,6 +261,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo-disabled"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var slider = layui.slider;

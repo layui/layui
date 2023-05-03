@@ -50,6 +50,7 @@ toc: true
 <input type="text" class="class-test-laydate" lay-options="{value: '2016-10-14'}">
 <input type="text" class="class-test-laydate" lay-options="{value: '2017-08-21'}">
  
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var laydate = layui.laydate;

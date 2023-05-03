@@ -40,7 +40,8 @@ toc: true
 <button class="layui-btn class-test-dropdown" lay-options="{
   data: [{title: 'item A', id: 'a'}, {title: 'item B', id: 'b'}]
 }">下拉菜单</button>
- 
+  
+<!-- import layui -->  
 <script>
 layui.use(function(){
   var dropdown = layui.dropdown;

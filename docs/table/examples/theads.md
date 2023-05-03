@@ -49,3 +49,5 @@
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">按钮2</a>
   </div>
 </script>
+
+<!-- import layui -->

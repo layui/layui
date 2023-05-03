@@ -221,6 +221,8 @@ toc: true
 
 ```
 <div id="test"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var element = layui.element;
@@ -269,6 +271,8 @@ layui.use(function(){
   <li class="layui-nav-item"><a href="javascript:;">菜单1</a></li>
   <li class="layui-nav-item"><a href="javascript:;">菜单2</a></li>
 </div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var element = layui.element;

@@ -1,9 +1,9 @@
 ---
-title: Layui 2.8 《升级指南》
+title: 📑 Layui 2.8 《升级指南》
 toc: false
 ---
  
-# Layui 2.8 《升级指南》
+# 📑 Layui 2.8 《升级指南》
 
 Layui `2.8` 总体向下兼容，但仍有以下变更需要注意：
 
@@ -42,3 +42,13 @@ Layui `2.8` 总体向下兼容，但仍有以下变更需要注意：
 https://layui.dev/docs/versions.html
 
 或新建 `Issue` 进行详细反馈。
+
+---
+
+<div class="layui-btn-container">
+  <a class="layui-btn" href="https://gitee.com/layui/layui/issues/" target="_blank" style="word-spacing: normal;">前往 Issues</a>
+  <a class="layui-btn layui-btn-primary" href="../../versions.html#2.8.x">
+    <i class="layui-icon layui-icon-left"></i> 更新日志
+  </a>
+</div>
+

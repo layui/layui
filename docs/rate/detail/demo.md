@@ -1,6 +1,8 @@
 <pre class="layui-code" lay-options="{preview: true, text: {preview: '基础用法'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-rate-demo"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var rate = layui.rate;
@@ -19,6 +21,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-rate-demo-text"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var rate = layui.rate;
@@ -42,6 +46,7 @@ layui.use(function(){
 <hr>
 <div id="ID-rate-demo-half-2"></div>
 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var rate = layui.rate;
@@ -70,6 +75,8 @@ layui.use(function(){
 <div id="ID-rate-demo-setText-1"></div>
 <hr>
 <div id="ID-rate-demo-setText-2"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var rate = layui.rate;
@@ -111,6 +118,8 @@ layui.use(function(){
 <div id="ID-rate-demo-length-1"></div>
 <hr>
 <div id="ID-rate-demo-length-2"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var rate = layui.rate;
@@ -135,6 +144,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-rate-demo-readonly"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var rate = layui.rate;
@@ -159,6 +170,8 @@ layui.use(function(){
 <div class="class-rate-demo-theme" lay-options="{value: 3, theme: '#FE0000'}"></div>
 <hr>
 <div class="class-rate-demo-theme" lay-options="{value: 2.5, theme: '#1E9FFF', half: true}"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var rate = layui.rate;

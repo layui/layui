@@ -14,6 +14,7 @@
   </div>
 </script>
 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var treeTable = layui.treeTable;
