@@ -3,6 +3,8 @@
 <pre class="layui-code" lay-options="{preview: true, text: {preview: '滚动加载'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div class="flow-demo" id="ID-flow-demo"></div>
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var flow = layui.flow;
@@ -35,6 +37,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div class="flow-demo" id="ID-flow-demo-manual"></div>
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var flow = layui.flow;

@@ -7,6 +7,7 @@
   <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-photos">photos - 多张相册层</button>
 </div>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var layer = layui.layer;

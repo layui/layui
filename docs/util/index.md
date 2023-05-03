@@ -156,7 +156,8 @@ util.openWin({
   <button class="layui-btn" lay-on="e2">事件 2</button>
   <button class="layui-btn" lay-on="e3">事件 3</button>
 </div>
- 
+
+<!-- import layui -->
 <script>
 layui.use('util', function(){
   var util = layui.util;

@@ -1,5 +1,6 @@
 <table class="layui-hide" id="ID-table-demo-data"></table>
- 
+
+<!-- import layui -->
 <script>
 layui.use('table', function(){
   var table = layui.table;

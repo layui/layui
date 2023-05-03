@@ -41,7 +41,8 @@
   <button class="layui-btn" lay-on="escape">转义</button>
   <button class="layui-btn" lay-on="unescape">还原</button>
 </div>
-  
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var util = layui.util;

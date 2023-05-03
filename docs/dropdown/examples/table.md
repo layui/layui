@@ -5,6 +5,7 @@
   <a class="layui-btn layui-btn-xs" lay-event="more">更多 <i class="layui-icon layui-icon-down"></i></a>
 </script>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var table = layui.table;

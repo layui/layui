@@ -63,6 +63,7 @@ layui.use('laytpl', function(){
  
 <div id="view"></div>
  
+<!-- import layui -->
 <script>
 layui.use(function(){
   var laytpl = layui.laytpl;

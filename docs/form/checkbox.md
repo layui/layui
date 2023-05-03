@@ -87,6 +87,7 @@ toc: true
   </div>
 </div>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var form = layui.form;

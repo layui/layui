@@ -23,7 +23,8 @@ toc: true
 test
 test
 </pre>
-  
+
+<!-- import layui -->  
 <script>
 layui.use(function(){
   // code

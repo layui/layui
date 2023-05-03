@@ -6,7 +6,8 @@
 <style>
 .demo-dropdown-tabs{padding: 0 16px;}
 </style>
- 
+
+<!-- import layui -->  
 <script>
 layui.use(function(){
   var dropdown = layui.dropdown;

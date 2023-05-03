@@ -35,7 +35,8 @@
   {{# var color = d.color || ['#16baaa','#16b777','#1E9FFF','#FF5722','#FFB800','#393D49'][Math.round(Math.random()*5)]; }}
   <div class="colorpicker-demo" lay-options="{color: '{{= color }}'}"></div>
 </script>!}}
- 
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var $ = layui.$;

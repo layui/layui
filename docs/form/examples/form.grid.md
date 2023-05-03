@@ -66,7 +66,8 @@
     <button type="reset" class="layui-btn layui-btn-primary">Reset</button>
   </div>
 </form>
- 
+
+<!-- import layui -->  
 <script>
 layui.use(function(){
   var form = layui.form;

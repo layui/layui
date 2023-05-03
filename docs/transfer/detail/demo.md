@@ -1,6 +1,8 @@
 <pre class="layui-code" lay-options="{preview: true, text: {preview: '基础效果'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-transfer-demo"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var transfer = layui.transfer;
@@ -33,6 +35,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-transfer-demo-title"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var transfer = layui.transfer;
@@ -68,6 +72,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-transfer-demo-value"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var transfer = layui.transfer;
@@ -107,6 +113,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-transfer-demo-showSearch"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var transfer = layui.transfer;
@@ -141,6 +149,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-transfer-demo-parseData"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var transfer = layui.transfer;
@@ -173,6 +183,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-transfer-demo-onchange"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var transfer = layui.transfer;
@@ -215,6 +227,8 @@ layui.use(function(){
   <button type="button" class="layui-btn" lay-on="reload">重载实例</button>
 </div>
 <div id="ID-transfer-demo-inst"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var transfer = layui.transfer;

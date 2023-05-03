@@ -5,6 +5,7 @@
   </div>
 </script>
 
+<!-- import layui -->
 <script>
 layui.use('table', function(){
   var table = layui.table;

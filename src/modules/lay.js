@@ -1,7 +1,7 @@
 
 /** lay 基础模块 | MIT Licensed */
 
-;!function(window){ //gulp build: lay-header
+;!function(window){ // gulp build: lay-header
   "use strict";
   
   var MOD_NAME = 'lay' //模块名
@@ -433,4 +433,4 @@
     });
   }
   
-}(window, window.document); //gulp build: lay-footer
+}(window, window.document); // gulp build: lay-footer

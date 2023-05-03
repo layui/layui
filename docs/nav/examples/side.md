@@ -30,6 +30,7 @@
   <li class="layui-nav-item"><a href="javascript:;">菜单2</a></li>
   <li class="layui-nav-item"><a href="javascript:;">菜单3</a></li>
 </ul>
+
 <script src="{{= d.layui.cdn.js }}"></script>
 <script>
 layui.use(function(){

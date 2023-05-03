@@ -20,7 +20,8 @@
     </div>
   </div>
 </div>
- 
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var $ = layui.$;

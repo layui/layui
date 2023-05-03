@@ -7,6 +7,7 @@
   <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-more">允许多个 tips</button>
 </div>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var layer = layui.layer;

@@ -25,6 +25,7 @@
 .class-demo-layer-lockscreen .layui-input-suffix .layui-icon-right{cursor: pointer; color: #fff;}
 </style>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var layer = layui.layer;

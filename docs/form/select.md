@@ -184,6 +184,7 @@ toc: true
   </select>
 </div>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var form = layui.form;

@@ -73,6 +73,8 @@ toc: true
   <img lay-src="https://unpkg.com/outeres@0.0.11/demo/wallpaper.jpg">
   <img lay-src="https://unpkg.com/outeres@0.0.11/demo/wallpaper.jpg">
 </div>
+
+<!-- import layui --> 
 <script>
 layui.use('flow', function(){
   var flow = layui.flow;
