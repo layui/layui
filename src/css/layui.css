@@ -1138,15 +1138,16 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-menu{position: relative; margin: 5px 0; background-color: #fff; box-sizing: border-box;}
 .layui-menu *{box-sizing: border-box;}
 .layui-menu li,
+.layui-menu-body-title,
 .layui-menu-body-title a{padding: 5px 15px; color: initial}
-.layui-menu li{position: relative; margin: 1px 0; width: calc(100% + 1px); line-height: 26px; color: rgba(0,0,0,.8); font-size: 14px; white-space: nowrap; cursor: pointer; transition: all .3s;}
+.layui-menu li{position: relative; margin: 1px 0; line-height: 26px; color: rgba(0,0,0,.8); font-size: 14px; white-space: nowrap; cursor: pointer; transition: all .3s;}
 .layui-menu li:hover{background-color: #f8f8f8; }
 .layui-menu li.layui-disabled,
 .layui-menu li.layui-disabled *{background: none !important; color: #d2d2d2 !important; cursor: not-allowed !important;}
 
 .layui-menu-item-parent:hover>.layui-menu-body-panel{display: block; animation-name: layui-fadein; animation-duration: 0.3s; animation-fill-mode: both; animation-delay:.2s;}
-.layui-menu-item-parent .layui-menu-body-title,
-.layui-menu-item-group .layui-menu-body-title{padding-right: 25px;}
+.layui-menu-item-parent>.layui-menu-body-title,
+.layui-menu-item-group>.layui-menu-body-title{padding-right: 38px;}
 
 .layui-menu .layui-menu-item-group:hover,
 .layui-menu .layui-menu-item-none:hover,
@@ -1170,14 +1171,14 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-menu .layui-menu-item-checked2{background-color: #f8f8f8!important; color: #16b777;}
 .layui-menu .layui-menu-item-checked a,
 .layui-menu .layui-menu-item-checked2 a{color: #16b777;}
-.layui-menu .layui-menu-item-checked:after{position: absolute; right: 0; top: 0; bottom: 0; border-right: 3px solid #16b777; content: "";}
+.layui-menu .layui-menu-item-checked:after{position: absolute; right: -1px; top: 0; bottom: 0; border-right: 3px solid #16b777; content: "";}
 
-.layui-menu-body-title{position: relative; overflow: hidden; text-overflow: ellipsis;}
+.layui-menu-body-title{position: relative; margin: -5px -15px; overflow: hidden; text-overflow: ellipsis;}
 .layui-menu-body-title a{display: block; margin: -5px -15px; color: rgba(0,0,0,.8);}
 .layui-menu-body-title a:hover{transition: all .3s;}
-.layui-menu-body-title>.layui-icon{position: absolute; right: 0; top: 0; font-size: 14px;}
+.layui-menu-body-title>.layui-icon{position: absolute; right: 15px; top: 50%; margin-top: -6px; line-height: normal; font-size: 14px;}
 .layui-menu-body-title>.layui-icon:hover{transition: all .3s;}
-.layui-menu-body-title>.layui-icon-right{right: -1px;}
+.layui-menu-body-title>.layui-icon-right{right: 14px;}
 .layui-menu-body-panel{display: none; position: absolute; top: -7px; left: 100%; z-index: 1000; margin-left: 13px; padding: 5px 0;}
 .layui-menu-body-panel:before{content: ""; position: absolute; width: 20px; left: -16px; top: 0; bottom: 0;}
 .layui-menu-body-panel-left{left: auto; right: 100%; margin: 0 13px 0;}
