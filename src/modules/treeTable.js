@@ -10,6 +10,7 @@ layui.define(['table'], function (exports) {
   var form = layui.form;
   var table = layui.table;
   var hint = layui.hint();
+  var timer = {}; // 记录定时器 index
 
   // api
   var treeTable = {
@@ -119,6 +120,19 @@ layui.define(['table'], function (exports) {
     var treeOptions = thatOptionsTemp.tree;
     var childrenKey = treeOptions.customName.children;
     // 处理属性
+    delete options.hasNumberCol;
+    delete options.hasChecboxCol;
+    delete options.hasRadioCol;
+    table.eachCols(null, function (i1, item1) {
+      if (item1.type === 'numbers') {
+        options.hasNumberCol = true;
+      } else if (item1.type === 'checkbox') {
+        options.hasChecboxCol = true;
+      } else if (item1.type === 'radio') {
+        options.hasRadioCol = true;
+      }
+    }, thatOptionsTemp.cols)
+
     var parseData = options.parseData;
     var done = options.done;
 
@@ -788,33 +802,31 @@ layui.define(['table'], function (exports) {
       expandNode({trElem: trDefaultExpand.first()}, true);
     });
 
-    treeTable.formatNumber(tableId);
+    options.hasNumberCol && that.formatNumber(tableId);
     form.render(null, tableFilterId);
   }
 
-
-  /**
-   * 重新编号
-   * @param {String} id 表格id
-   * @return {Object} layui.treeTable
-   * */
-  treeTable.formatNumber = function (id) {
-    var that = getThisTable(id);
-    if(!that) return;
-
+  var formatNumber = function (that) {
     var options = that.getOptions();
     var tableViewElem = options.elem.next();
 
     var num = 0;
-    layui.each(that.treeToFlat(table.cache[id]), function (i1, item1) {
+    layui.each(that.treeToFlat(table.cache[options.id]), function (i1, item1) {
       if (layui.isArray(item1)) {
         return;
       }
-      var itemData = that.getNodeDataByIndex(item1.LAY_DATA_INDEX);
+      var itemData = that.getNodeDataByIndex(item1[LAY_DATA_INDEX]);
       itemData['LAY_NUM'] = ++num;
-      tableViewElem.find('tr[lay-data-index="' + item1.LAY_DATA_INDEX + '"] .laytable-cell-numbers').html(itemData['LAY_NUM']);
+      tableViewElem.find('tr[lay-data-index="' + item1[LAY_DATA_INDEX] + '"] .laytable-cell-numbers').html(itemData['LAY_NUM']);
     })
-    return treeTable;
+  }
+
+  Class.prototype.formatNumber = function (id) {
+    var that = this;
+    clearTimeout(id);
+    timer[id] = setTimeout(function () {
+      formatNumber(that);
+    }, 10)
   }
 
   // 树表渲染
@@ -1023,16 +1035,17 @@ layui.define(['table'], function (exports) {
     layui.each(table.cache[id], function (i4, item4) {
       tableView.find('tr[data-level="0"][lay-data-index="' + item4[LAY_DATA_INDEX] + '"]').attr('data-index', i4);
     })
-    treeTable.formatNumber(id);
+    options.hasNumberCol && that.formatNumber(id);
   }
 
   /**
    * 新增数据节点
    * @param {String} id 树表id
-   * @param {String|Number} parentIndex 指定的父节点，如果增加根节点，请设置 parentIndex 为 null 即可
-   * @param {Number} index:Number 新节点插入的位置（从 0 开始）index = -1(默认) 时，插入到最后
-   * @param {Object|Array} data 新增的节点，单个或者多个
-   * @param {Boolean} focus 新增的节点，单个或者多个
+   * @param {Object} opts
+   * @param {String|Number} opts.parentIndex 指定的父节点，如果增加根节点，请设置 parentIndex 为 null 即可
+   * @param {Number} opts.index 新节点插入的位置（从 0 开始）index = -1(默认) 时，插入到最后
+   * @param {Object|Array} opts.data 新增的节点，单个或者多个
+   * @param {Boolean} opts.focus 新增的节点，单个或者多个
    * @return {Array} 新增的节点
    * */
   treeTable.addNodes = function (id, opts) {
