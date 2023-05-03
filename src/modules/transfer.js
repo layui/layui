@@ -214,7 +214,14 @@ layui.define(['laytpl', 'form'], function(exports){
       ,listElem = ['<li>'
         ,'<input type="checkbox" name="'+ arr[_index].checkName +'" lay-skin="primary" lay-filter="layTransferCheckbox" title="'+ item.title +'"'+ (item.disabled ? ' disabled' : '') + (item.checked ? ' checked' : '') +' value="'+ item.value +'">'
       ,'</li>'].join('');
-      arr[_index].views.push(listElem);
+      //按照options.value顺序排列右侧数据
+      if(_index){
+        for(let key in options.value) {
+          if(options.value[key] == item.value && item.selected) arr[_index].views[key] = listElem;
+        }
+      }else{
+        arr[_index].views.push(listElem);
+      }
       delete item.selected;
     });
     
