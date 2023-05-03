@@ -43,7 +43,7 @@ toc: true
 | 属性 | 描述 |
 | --- | --- |
 | title | 设置菜单标题。默认读取标题容器内容中的文本。 |
-| type | 设置菜单类型。可选值如下：<ul><li>若不设定，则表示为常规菜单项</li><li>`type:'group` 菜单组，子菜单为纵向层级</li><li>`type:'parent'` 父级菜单，子菜单为横向层级</li></ul> |
+| type | 设置菜单类型。可选值如下：<ul><li>若不设定，则表示为常规菜单项</li><li>`type:'group'` 菜单组，子菜单为纵向层级</li><li>`type:'parent'` 父级菜单，子菜单为横向层级</li></ul> |
 | isAllowSpread | 子菜单是否允许展开收缩操作。默认 `true` |
 
 <h3 id="on" lay-toc="{}" class="ws-bold">事件</h3>

@@ -58,8 +58,8 @@ treeTable.render({
 | isParent | 自定义「是否属于父节点」的属性名 | string | `isParent` |
 | name | 自定义「节点」属性名 | string | `name` |
 | id | 自定义「节点索引」属性名 | string | `id` |
-| pid | 自定义「父节点索引」属性名 | string | `pid` |
-| rootIid | 自定义「根节点索引」属性名 | string | - |
+| pid | 自定义「父节点索引」属性名 | string | `parentId` |
+| rootId | 自定义「根节点索引」属性名 | string | - |
 
 </td>
     </tr>
@@ -121,8 +121,8 @@ treeTable.render({
 | type | 请求的接口类型，设置可缺省同上 | string | - |
 | contentType | 提交参数的数据类型，设置可缺省同上 | string | - |
 | headers | 提交请求头，设置可缺省同上 | object | - |
-| where | 提交参数的数据，设置可缺省同 | object | - |
-| autoParam | 自动参数，可以根据配置项以及当前节点的数据传参，如： `['type', 'age=age', 'pId=id']` ，那么其请求参数将包含: `{type: '父节点 type', age: '父节点 age', pId: '父节点 id'}` | array | - | 
+| where | 提交参数的数据，设置可缺省同上 | object | - |
+| autoParam | 自动参数，可以根据配置项以及当前节点的数据传参，如： `['type', 'age=age', 'parentId=id']` ，那么其请求参数将包含: `{type: '父节点 type', age: '父节点 age', parentId: '父节点 id'}` | array | - |
 
 </td>
     </tr>
