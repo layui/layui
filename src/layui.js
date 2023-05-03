@@ -616,12 +616,12 @@
   };
 
   // 将数组中的成员对象按照某个 key 的 value 值进行排序
-  Layui.prototype.sort = function(arr, key, desc){
+  Layui.prototype.sort = function(arr, key, desc, notClone){
     var that = this
-    ,clone = JSON.parse(
+    ,clone = notClone ? (arr || []) : JSON.parse(
       JSON.stringify(arr || [])
     );
-    
+
     // 若未传入 key，则直接返回原对象
     if(that.type(arr) === 'object' && !key){
       return clone;
