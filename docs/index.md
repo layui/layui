@@ -70,11 +70,11 @@ npm i layui
 
 ```
 <!-- 引入 layui.css -->
-<link href="//unpkg.com/layui@{{= d.layui._v }}/dist/css/layui.css" rel="stylesheet">
+<link href="//unpkg.com/layui@{{= d.layui.v }}/dist/css/layui.css" rel="stylesheet">
 ```
 ```
 <!-- 引入 layui.js -->
-<script src="//unpkg.com/layui@{{= d.layui._v }}/dist/layui.js">
+<script src="//unpkg.com/layui@{{= d.layui.v }}/dist/layui.js">
 ```
 
 <h2 id="quickstart" lay-toc="{}">快速上手</h2>
