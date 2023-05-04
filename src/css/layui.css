@@ -719,7 +719,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-textarea::-webkit-input-placeholder,
 .layui-select::-webkit-input-placeholder{line-height: 1.3;}
 .layui-input, .layui-textarea{display: block; width: 100%; padding-left: 10px;}
-.layui-input:hover, .layui-textarea:hover{border-color: #eee !important;}
+.layui-input:hover, .layui-textarea:hover{border-color: #d2d2d2 !important;}
 .layui-input:focus, .layui-textarea:focus{border-color: #d2d2d2 !important;}
 .layui-textarea{position: relative; min-height: 100px; height: auto; line-height: 20px; padding: 6px 10px; resize: vertical;}
 .layui-select{padding: 0 10px;}
