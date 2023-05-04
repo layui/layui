@@ -33,7 +33,7 @@ toc: true
 | [treeTable.removeNode(id, index)](#removeNode)  | 删除行记录。 |
 | [treeTable.addNodes(id, opts)](#addNodes) | 新增行记录。 |
 | [treeTable.expandNode(id, opts)](#expandNode) | 展开或关闭节点。 |
-| [treeTable.expandAll(id, expandFlag)](#expandAll)  | 展开或关闭全部节点（目前只支持关闭全部）。 |
+| [treeTable.expandAll(id, expandFlag)](#expandAll)  | 展开或关闭全部节点。 |
 | [treeTable.setRowChecked(id, opts)](#setRowChecked) | 设置行选中状态 |
 | [treeTable.checkAllNodes(id, checked)](#checkAllNodes) | 全选或取消全选 |
 | [treeTable.on(\'event(filter)\', callback)](#on) | treeTable 相关事件 |
@@ -222,8 +222,6 @@ treeTable.expandNode('test', {
 
 - 参数 `id` : treeTable 渲染时的 `id` 属性值
 - 参数 `expandFlag` : 折叠状态。 `true` 展开；`false` 关闭
-
-目前只支持关闭全部节点
 
 ```js
 // 渲染
