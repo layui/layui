@@ -98,7 +98,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           event: function(el, type){
             typeof options.onCopy === 'function' ? options.onCopy(finalCode) : function(){
               try {
-                navigator.clipboard.writeText(finalCode).then(function(){
+                navigator.clipboard.writeText(util.unescape(finalCode)).then(function(){
                   layer.msg('已复制', {
                     icon: 1
                   });
