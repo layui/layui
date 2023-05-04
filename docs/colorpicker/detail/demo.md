@@ -2,6 +2,8 @@
   <textarea>
 <div id="ID-colorpicker-demo-1"></div>
 <div id="ID-colorpicker-demo-2" style="margin-left: 16px;"></div>
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var colorpicker = layui.colorpicker;
@@ -42,6 +44,8 @@ layui.use(function(){
     </div>
   </div>
 </form>
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var colorpicker = layui.colorpicker;
@@ -66,6 +70,8 @@ layui.use(function(){
   <textarea>
 <div id="ID-colorpicker-demo-rgb"></div>
 <div id="ID-colorpicker-demo-rgba" style="margin-left: 16px;"></div>
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var colorpicker = layui.colorpicker;
@@ -94,6 +100,8 @@ layui.use(function(){
 <div id="ID-colorpicker-demo-alpha-1"></div>
 <div id="ID-colorpicker-demo-alpha-2" style="margin-left: 16px;"></div>
 <div id="ID-colorpicker-demo-alpha-3" style="margin-left: 16px;"></div>
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var colorpicker = layui.colorpicker;
@@ -127,6 +135,8 @@ layui.use(function(){
   <textarea>
 <div id="ID-colorpicker-demo-predefine-1"></div>
 <div id="ID-colorpicker-demo-predefine-2" style="margin-left: 16px;"></div>
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var colorpicker = layui.colorpicker;
@@ -156,6 +166,8 @@ layui.use(function(){
 <hr>
 <div id="ID-colorpicker-demo-all"></div> 
 <span style="padding-left: 6px;">演示：选择颜色并确定，改变上方按钮背景色</span>
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var colorpicker = layui.colorpicker;
@@ -194,6 +206,8 @@ layui.use(function(){
 <div id="ID-colorpicker-demo-size-lg"></div>
 <div id="ID-colorpicker-demo-size-sm" style="margin-left: 16px;"></div>
 <div id="ID-colorpicker-demo-size-xs" style="margin-left: 16px;"></div>
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var colorpicker = layui.colorpicker;
@@ -223,6 +237,8 @@ layui.use(function(){
 <div class="demo-class-colorpicker" lay-options="{color: '#FF0000'}"></div>
 <div class="demo-class-colorpicker" lay-options="{color: '#008000'}"></div>
 <div class="demo-class-colorpicker" lay-options="{color: '#0000FF'}"></div>
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var colorpicker = layui.colorpicker;

@@ -137,6 +137,7 @@ form 还可以借助*栅格*实现更灵活的响应式布局。
   动态插入的表单域
 </form>
   
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var form = layui.form;
@@ -167,6 +168,7 @@ layui.use(function(){
   <!-- 其他表单元素 -->
 </div>
  
+<!-- import layui --> 
 <script> 
 layui.use('form', function(){
   var $ = layui.$;
@@ -290,6 +292,7 @@ Layui 对表单做了相对巧妙的支持，只需在表单元素上设置 `lay
   <button class="layui-btn" id="test-btn-other">普通按钮</button>
 </form>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var $ = layui.$;
@@ -344,6 +347,7 @@ layui.use(function(){
 
 <button class="layui-btn" id="test-btn-submit">任意位置按钮</button>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var $ = layui.$;

@@ -292,6 +292,7 @@ layer.photos({
   <img src="https://unpkg.com/outeres/demo/outer-space.jpg" layer-src="https://unpkg.com/outeres/demo/outer-space.jpg" layer-pid="" alt="星空如此深邃">  
 </div>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var layer = layui.layer;

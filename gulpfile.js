@@ -136,11 +136,11 @@ exports.laydate = () => { // gulp laydate
   // js
   return gulp.src(['./src/layui.js', './src/modules/{lay,laydate}.js'])
   .pipe(replace('win.layui =', 'var layui =')) // 将 layui 替换为局部变量
-  .pipe(replace('}(window); //gulp build: layui-footer', '')) // 替换 layui.js 的落脚
-  .pipe(replace(';!function(window){ //gulp build: lay-header', '')) // 替换 lay.js 的头部
-  .pipe(replace('}(window, window.document); //gulp build: lay-footer', '')) // 替换 lay.js 的落脚
+  .pipe(replace('}(window); // gulp build: layui-footer', '')) // 替换 layui.js 的落脚
+  .pipe(replace(';!function(window){ // gulp build: lay-header', '')) // 替换 lay.js 的头部
+  .pipe(replace('}(window, window.document); // gulp build: lay-footer', '')) // 替换 lay.js 的落脚
   .pipe(concat('laydate.js', {newLine: ''}))
-  .pipe(replace(';!function(window, document){ //gulp build: laydate-header', '')) // 替换 laydate.js 的头部
+  .pipe(replace(';!function(window, document){ // gulp build: laydate-header', '')) // 替换 laydate.js 的头部
   .pipe(header.apply(null, comment)) // 追加头部
   .pipe(gulp.dest(dest + 'src'));
 };

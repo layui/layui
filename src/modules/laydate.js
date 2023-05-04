@@ -1,6 +1,6 @@
 /** laydate 日期与时间控件 | MIT Licensed */
 
-;!function(window, document){ //gulp build: laydate-header
+;!function(window, document){ // gulp build: laydate-header
   "use strict";
 
   var isLayui = window.layui && layui.define, ready = {
@@ -633,6 +633,11 @@
 
         lay(this).addClass(THIS);
 
+        // 自动确认
+        if(options.position !== 'static'){
+          that.setValue(that.parse()).done().remove();
+        }
+        /*
         if (options.position !== 'static' && !options.range && options.autoConfirm) {
           if (type === 'date') {
             that.choose(lay(elem).find('td.layui-this'))
@@ -642,6 +647,7 @@
             }
           }
         }
+        */
       })
     }
 

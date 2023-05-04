@@ -3,6 +3,7 @@
   <i class="layui-icon layui-icon-down layui-font-12"></i>
 </button>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var dropdown = layui.dropdown;

@@ -39,6 +39,7 @@ toc: true
 <button type="button" class="layui-btn test-class-upload" lay-options="{}">上传</button>
 <button type="button" class="layui-btn test-class-upload" lay-options="{}">上传</button>
   
+<!-- import layui -->
 <script>
 layui.use(function(){
   var upload = layui.upload;

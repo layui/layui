@@ -1,6 +1,8 @@
 <pre class="layui-code" lay-options="{preview: true, text: {preview: '综合用法'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 AAA
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var MOD_NAME = layui.MOD_NAME;
@@ -16,6 +18,8 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 AAA
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var MOD_NAME = layui.MOD_NAME;

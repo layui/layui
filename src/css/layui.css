@@ -48,12 +48,12 @@ a cite{font-style: normal; *cursor:pointer;}
 /** 图标字体 **/
 @font-face {
   font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=280');
-  src: url('../font/iconfont.eot?v=280#iefix') format('embedded-opentype'),
-       url('../font/iconfont.woff2?v=280') format('woff2'),
-       url('../font/iconfont.woff?v=280') format('woff'),
-       url('../font/iconfont.ttf?v=280') format('truetype'),
-       url('../font/iconfont.svg?v=280#layui-icon') format('svg');
+  src: url('../font/iconfont.eot?v=282');
+  src: url('../font/iconfont.eot?v=282#iefix') format('embedded-opentype'),
+       url('../font/iconfont.woff2?v=282') format('woff2'),
+       url('../font/iconfont.woff?v=282') format('woff'),
+       url('../font/iconfont.ttf?v=282') format('truetype'),
+       url('../font/iconfont.svg?v=282#layui-icon') format('svg');
 }
 
 .layui-icon{
@@ -682,7 +682,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /* 按钮容器 */
 .layui-btn-container{word-spacing: -5px;}
-.layui-btn-container .layui-btn{margin-right: 10px; margin-bottom: 10px;}
+.layui-btn-container .layui-btn{margin-right: 10px; margin-bottom: 10px; word-spacing: normal;}
 .layui-btn-container .layui-btn+.layui-btn{margin-left: 0;}
 .layui-table .layui-btn-container .layui-btn{margin-bottom: 9px;}
 
@@ -719,7 +719,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-textarea::-webkit-input-placeholder,
 .layui-select::-webkit-input-placeholder{line-height: 1.3;}
 .layui-input, .layui-textarea{display: block; width: 100%; padding-left: 10px;}
-.layui-input:hover, .layui-textarea:hover{border-color: #eee !important;}
+.layui-input:hover, .layui-textarea:hover{border-color: #d2d2d2 !important;}
 .layui-input:focus, .layui-textarea:focus{border-color: #d2d2d2 !important;}
 .layui-textarea{position: relative; min-height: 100px; height: auto; line-height: 20px; padding: 6px 10px; resize: vertical;}
 .layui-select{padding: 0 10px;}
@@ -838,8 +838,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-checked.layui-checkbox-disabled[lay-skin="primary"] i{background: #eee!important; border-color: #eee!important;}
 .layui-checkbox-disabled[lay-skin="primary"]:hover i{border-color: #d2d2d2;}
 .layui-form-item .layui-form-checkbox[lay-skin="primary"]{margin-top: 10px;}
-.layui-form-checkbox[lay-skin="primary"] .layui-icon-indeterminate:before{content: ''; display: inline-block; vertical-align: middle; position: relative; width: 50%; height: 1px; margin: -1px auto 0; background-color: #d2d2d2;}
-.layui-form-checkbox[lay-skin="primary"]:hover .layui-icon-indeterminate:before{background-color: #16b777;}
+.layui-form-checkbox[lay-skin="primary"] .layui-icon-indeterminate{border-color: #16b777;}
+.layui-form-checkbox[lay-skin="primary"] .layui-icon-indeterminate:before{content: ''; display: inline-block; vertical-align: middle; position: relative; width: 50%; height: 1px; margin: -1px auto 0; background-color: #16b777;}
 
 /* 复选框-开关风格 */.layui-form-switch{position: relative; display: inline-block; vertical-align: middle; height: 22px; line-height: 22px; min-width: 35px; padding: 0 5px; margin-top: 8px; border: 1px solid #d2d2d2; border-radius: 20px; cursor: pointer; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
 .layui-form-switch i{position: absolute; left: 5px; top: 3px; width: 16px; height: 16px; border-radius: 20px; background-color: #d2d2d2; -webkit-transition: .1s linear; transition: .1s linear;}
@@ -1138,15 +1138,16 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-menu{position: relative; margin: 5px 0; background-color: #fff; box-sizing: border-box;}
 .layui-menu *{box-sizing: border-box;}
 .layui-menu li,
+.layui-menu-body-title,
 .layui-menu-body-title a{padding: 5px 15px; color: initial}
-.layui-menu li{position: relative; margin: 1px 0; width: calc(100% + 1px); line-height: 26px; color: rgba(0,0,0,.8); font-size: 14px; white-space: nowrap; cursor: pointer; transition: all .3s;}
+.layui-menu li{position: relative; margin: 1px 0; line-height: 26px; color: rgba(0,0,0,.8); font-size: 14px; white-space: nowrap; cursor: pointer; transition: all .3s;}
 .layui-menu li:hover{background-color: #f8f8f8; }
 .layui-menu li.layui-disabled,
 .layui-menu li.layui-disabled *{background: none !important; color: #d2d2d2 !important; cursor: not-allowed !important;}
 
 .layui-menu-item-parent:hover>.layui-menu-body-panel{display: block; animation-name: layui-fadein; animation-duration: 0.3s; animation-fill-mode: both; animation-delay:.2s;}
-.layui-menu-item-parent .layui-menu-body-title,
-.layui-menu-item-group .layui-menu-body-title{padding-right: 25px;}
+.layui-menu-item-parent>.layui-menu-body-title,
+.layui-menu-item-group>.layui-menu-body-title{padding-right: 38px;}
 
 .layui-menu .layui-menu-item-group:hover,
 .layui-menu .layui-menu-item-none:hover,
@@ -1170,14 +1171,14 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-menu .layui-menu-item-checked2{background-color: #f8f8f8!important; color: #16b777;}
 .layui-menu .layui-menu-item-checked a,
 .layui-menu .layui-menu-item-checked2 a{color: #16b777;}
-.layui-menu .layui-menu-item-checked:after{position: absolute; right: 0; top: 0; bottom: 0; border-right: 3px solid #16b777; content: "";}
+.layui-menu .layui-menu-item-checked:after{position: absolute; right: -1px; top: 0; bottom: 0; border-right: 3px solid #16b777; content: "";}
 
-.layui-menu-body-title{position: relative; overflow: hidden; text-overflow: ellipsis;}
+.layui-menu-body-title{position: relative; margin: -5px -15px; overflow: hidden; text-overflow: ellipsis;}
 .layui-menu-body-title a{display: block; margin: -5px -15px; color: rgba(0,0,0,.8);}
 .layui-menu-body-title a:hover{transition: all .3s;}
-.layui-menu-body-title>.layui-icon{position: absolute; right: 0; top: 0; font-size: 14px;}
+.layui-menu-body-title>.layui-icon{position: absolute; right: 15px; top: 50%; margin-top: -6px; line-height: normal; font-size: 14px;}
 .layui-menu-body-title>.layui-icon:hover{transition: all .3s;}
-.layui-menu-body-title>.layui-icon-right{right: -1px;}
+.layui-menu-body-title>.layui-icon-right{right: 14px;}
 .layui-menu-body-panel{display: none; position: absolute; top: -7px; left: 100%; z-index: 1000; margin-left: 13px; padding: 5px 0;}
 .layui-menu-body-panel:before{content: ""; position: absolute; width: 20px; left: -16px; top: 0; bottom: 0;}
 .layui-menu-body-panel-left{left: auto; right: 100%; margin: 0 13px 0;}

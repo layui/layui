@@ -19,7 +19,8 @@
   </div>
   <button type="button" class="layui-btn" id="ID-upload-demo-files-action">开始上传</button>
 </div>
- 
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var upload = layui.upload;

@@ -48,6 +48,8 @@ toc: true
   </li>
   <li class="layui-nav-item"><a href="">演示</a></li>
 </ul>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -78,6 +80,8 @@ toc: true
     </dl>
   </li>
 </ul>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -154,6 +158,8 @@ toc: true
   </li>
   <li class="layui-nav-item"><a href="">菜单3</a></li>
 </ul>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -192,6 +198,8 @@ toc: true
   <li class="layui-nav-item"><a href="javascript:;">菜单2</a></li>
   <li class="layui-nav-item"><a href="javascript:;">菜单3</a></li>
 </ul>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -221,6 +229,8 @@ toc: true
 
 ```
 <div id="test"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var element = layui.element;
@@ -269,6 +279,8 @@ layui.use(function(){
   <li class="layui-nav-item"><a href="javascript:;">菜单1</a></li>
   <li class="layui-nav-item"><a href="javascript:;">菜单2</a></li>
 </div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var element = layui.element;
@@ -320,6 +332,8 @@ layui.use(function(){
   <a href="">游戏</a>
   <a href="">综艺</a>
 </span>
+
+<!-- import layui -->
   </textarea>
 </pre>
 

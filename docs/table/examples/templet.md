@@ -17,7 +17,8 @@
   <span class="layui-badge-rim">序号：{{= d.LAY_NUM }}</span>
   -->
 !}}</script>
- 
+
+<!-- import layui -->
 <script>
 layui.use(['table'], function(){
   var table = layui.table;

@@ -24,6 +24,8 @@ toc: true
     <div class="layui-progress-bar" lay-percent="50%"></div>
   </div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -63,6 +65,8 @@ toc: true
 <div class="layui-progress">
   <div class="layui-progress-bar" lay-percent="70%"></div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -90,6 +94,8 @@ toc: true
 <div class="layui-progress layui-progress-big">
   <div class="layui-progress-bar layui-bg-blue" lay-percent="75%"></div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -115,6 +121,8 @@ toc: true
 <div class="layui-progress layui-progress-big" lay-showpercent="true">
   <div class="layui-progress-bar" lay-percent="70%"></div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -138,6 +146,8 @@ toc: true
 
 ```
 <div id="test"></div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var element = layui.element;
@@ -186,7 +196,8 @@ layui.use(function(){
   <button class="layui-btn" lay-on="setPercent">设置 50%</button>
   <button class="layui-btn" lay-on="loading">模拟 loading</button>
 </div>
- 
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var element = layui.element;

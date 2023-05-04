@@ -5,7 +5,8 @@
   <hr>
   <button class="layui-btn" lay-submit lay-filter="demo-verify">提交</button>
 </form>
- 
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var form = layui.form;

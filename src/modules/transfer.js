@@ -193,33 +193,35 @@ layui.define(['laytpl', 'form'], function(exports){
     that.events(); //事件
   };
   
-  //渲染数据
+  // 渲染数据
   Class.prototype.renderData = function(){
-    var that = this
-    ,options = that.config;
+    var that = this;
+    var options = that.config;
     
-    //左右穿梭框差异数据
+    // 左右穿梭框差异数据
     var arr = [{
-      checkName: 'layTransferLeftCheck'
-      ,views: []
+      checkName: 'layTransferLeftCheck',
+      views: []
     }, {
-      checkName: 'layTransferRightCheck'
-      ,views: []
+      checkName: 'layTransferRightCheck',
+      views: []
     }];
     
-    //解析格式
+    // 解析格式
     that.parseData(function(item){      
-      //标注为 selected 的为右边的数据
+      // 标注为 selected 的为右边的数据
       var _index = item.selected ? 1 : 0
-      ,listElem = ['<li>'
-        ,'<input type="checkbox" name="'+ arr[_index].checkName +'" lay-skin="primary" lay-filter="layTransferCheckbox" title="'+ item.title +'"'+ (item.disabled ? ' disabled' : '') + (item.checked ? ' checked' : '') +' value="'+ item.value +'">'
-      ,'</li>'].join('');
-      //按照options.value顺序排列右侧数据
+      var listElem = ['<li>',
+        '<input type="checkbox" name="'+ arr[_index].checkName +'" lay-skin="primary" lay-filter="layTransferCheckbox" title="'+ item.title +'"'+ (item.disabled ? ' disabled' : '') + (item.checked ? ' checked' : '') +' value="'+ item.value +'">',
+      '</li>'].join('');
+      // 按照 options.value 顺序排列右侧数据
       if(_index){
-        for(let key in options.value) {
-          if(options.value[key] == item.value && item.selected) arr[_index].views[key] = listElem;
-        }
-      }else{
+        layui.each(options.value, function(i, v){
+          if(v == item.value && item.selected){
+            arr[_index].views[i] = listElem;
+          }
+        });
+      } else {
         arr[_index].views.push(listElem);
       }
       delete item.selected;
@@ -229,7 +231,7 @@ layui.define(['laytpl', 'form'], function(exports){
     that.layData.eq(1).html(arr[1].views.join(''));
     
     that.renderCheckBtn();
-  }
+  };
   
   //渲染表单
   Class.prototype.renderForm = function(type){

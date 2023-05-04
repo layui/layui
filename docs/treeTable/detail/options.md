@@ -18,11 +18,11 @@ treeTable 组件的特定属性集，包含以下「子成员集」：
 
 | 属性 | 描述 |
 | --- | --- |
-| [customName](#options.tree.customName) | AAA |
-| [view](#options.tree.view) | AAA |
-| [data](#options.tree.data) | AAA |
-| [async](#options.tree.async) | AAA |
-| [callback](#options.tree.callback) | AAA |
+| [customName](#options.tree.customName) | 自定义属性名的集合 |
+| [view](#options.tree.view) | 视图相关的属性集合 |
+| [data](#options.tree.data) | 数据相关的属性集合 |
+| [async](#options.tree.async) | 异步相关的属性集合 |
+| [callback](#options.tree.callback) | 事件回调相关的属性集合 |
 
 用法如下：
 
@@ -58,8 +58,7 @@ treeTable.render({
 | isParent | 自定义「是否属于父节点」的属性名 | string | `isParent` |
 | name | 自定义「节点」属性名 | string | `name` |
 | id | 自定义「节点索引」属性名 | string | `id` |
-| pid | 自定义「父节点索引」属性名 | string | `pid` |
-| rootIid | 自定义「根节点索引」属性名 | string | - |
+| pid | 自定义「父节点索引」属性名 | string | `parentId` |
 
 </td>
     </tr>
@@ -101,6 +100,7 @@ treeTable.render({
 | 属性 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | isSimpleData | 是否简单数据模式 | boolean | `false` |
+| rootPid | 用于设置根节点的 `pid` 属性值 | string | `null` |
 
 </td>
     </tr>
@@ -121,8 +121,8 @@ treeTable.render({
 | type | 请求的接口类型，设置可缺省同上 | string | - |
 | contentType | 提交参数的数据类型，设置可缺省同上 | string | - |
 | headers | 提交请求头，设置可缺省同上 | object | - |
-| where | 提交参数的数据，设置可缺省同 | object | - |
-| autoParam | 自动参数，可以根据配置项以及当前节点的数据传参，如： `['type', 'age=age', 'pId=id']` ，那么其请求参数将包含: `{type: '父节点 type', age: '父节点 age', pId: '父节点 id'}` | array | - | 
+| where | 提交参数的数据，设置可缺省同上 | object | - |
+| autoParam | 自动参数，可以根据配置项以及当前节点的数据传参，如： `['type', 'age=age', 'parentId=id']` ，那么其请求参数将包含: `{type: '父节点 type', age: '父节点 age', parentId: '父节点 id'}` | array | - |
 
 </td>
     </tr>

@@ -36,7 +36,7 @@ toc: true
 | [laydate.getInst(id)](#getInst) <sup>2.8+</sup> | 获取组件对应的渲染实例。 |
 | [laydate.unbind(id)](#close) <sup>2.8+</sup> | 对目标元素解除当前实例的绑定。 |
 | [laydate.close(id)](#close) <sup>2.7+</sup> | 关闭日期面板。 |
-| [laydate.getEndDate(month, year)](#getEndDate) | 获取某月的最后一天 |
+| [laydate.getEndDate(month, year)](#getEndDate) | 获取某月的最后一天。 |
 
 <h3 id="render" lay-toc="{level: 2}">渲染</h3>
 
@@ -50,6 +50,7 @@ toc: true
 <input type="text" class="class-test-laydate" lay-options="{value: '2016-10-14'}">
 <input type="text" class="class-test-laydate" lay-options="{value: '2017-08-21'}">
  
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var laydate = layui.laydate;
@@ -105,7 +106,7 @@ laydate.hint('test', {
 
 - 参数 `id` : 组件渲染时定义的 `id` 属性值
 
-该方法用于在获取 laydate 对应 id 的渲染实例，以获得该实例对应的成员属性。
+该方法用于获取 laydate 对应 id 的渲染实例，以获得该实例对应的成员属性。
 
 ```
 var laydate = layui.laydate;
@@ -127,7 +128,7 @@ console.log(inst); // 实例对象
 
 - 参数 `id` : 组件渲染时定义的 `id` 属性值
 
-该方法用于对目标元素对应的实例的完全解除，即触发元素事件时，不再执行组件渲染。
+该方法用于对目标元素对应的实例的绑定完全解除，即触发元素事件时，不再执行组件渲染。
 
 ```
 var laydate = layui.laydate;

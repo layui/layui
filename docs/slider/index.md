@@ -38,6 +38,7 @@ toc: true
 <div class="class-test-slider" lay-options="{value: 50}"></div>
 <div class="class-test-slider" lay-options="{value: 80}"></div>
  
+<!-- import layui -->
 <script>
 layui.use(function(){
   var slider = layui.slider;

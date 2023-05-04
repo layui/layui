@@ -64,7 +64,7 @@ inst.reload(options); // 轮播重载
 </div>
 
 
-<h3 id="goto" lay-toc="{level: 2}">切换</h3>
+<h3 id="goto" lay-toc="{level: 2}">切换 <sup>2.8+</sup></h3>
 
 `inst.goto(index);`
 

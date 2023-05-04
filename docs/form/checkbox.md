@@ -43,6 +43,8 @@ toc: true
   <input type="checkbox" name="BBB" title="选中" lay-skin="tag" checked> 
   <input type="checkbox" name="CCC" title="禁用" lay-skin="tag" disabled> 
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -59,6 +61,8 @@ toc: true
   <input type="checkbox" name="CCC" title="开启|关闭" lay-skin="switch"> 
   <input type="checkbox" name="DDD" lay-skin="switch" disabled>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -87,6 +91,7 @@ toc: true
   </div>
 </div>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var form = layui.form;

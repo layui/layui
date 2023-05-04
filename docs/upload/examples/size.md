@@ -5,6 +5,7 @@
   这里以限制 60KB 为例
 </div>
 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var upload = layui.upload;

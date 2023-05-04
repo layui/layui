@@ -143,7 +143,9 @@ acceptMime: 'image/jpeg, image/png` // 只筛选 jpg,png 格式图片
 <td>
 
 <div id="options.exts" class="ws-anchor">
+
 允许上传的文件后缀。一般结合 `accept` 属性来设定。
+
 </div>  
 
 - 假设 `accept: 'file'` 类型时，那么设置 `exts: 'zip|rar|7z'` 即代表只允许上传压缩格式的文件。
@@ -188,7 +190,7 @@ acceptMime: 'image/jpeg, image/png` // 只筛选 jpg,png 格式图片
   
 规定强制返回的数据格式。
 
-- 若值为 'json'，则强制校验 JSON 数据格式
+- 若值为 `'json'`，则强制校验 JSON 数据格式
 
 </td>
 <td>string</td>

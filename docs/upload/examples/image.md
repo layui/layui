@@ -20,7 +20,8 @@
     <div class="layui-upload-list" id="upload-demo-preview"></div>
  </blockquote>
 </div>
- 
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var upload = layui.upload;

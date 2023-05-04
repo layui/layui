@@ -83,6 +83,8 @@ toc: true
     </div>
   </div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -122,6 +124,8 @@ toc: true
     </div>
   </div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>    
 
@@ -201,6 +205,8 @@ toc: true
     </div>
   </div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -259,6 +265,7 @@ toc: true
   </div>
 </div>
 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var element = layui.element;

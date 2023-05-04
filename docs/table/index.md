@@ -54,9 +54,10 @@ table 提供了以下三种渲染模式，在实际使用时，一般按情况�
 
 该方法返回当前实例对象，包含可操作当前表格的一些成员方法。
 
-```
+```html
 <table id="test"></table>
  
+<!-- import layui -->
 <script>
 layui.use(function(){
   var table = layui.table;
@@ -107,11 +108,12 @@ layui.use(function(){
 
 该方法用于将已输出在页面中的静态表格内容转换为动态 table 组件。[#参考相关示例](#demo-init)
 
-```
+```html
 <table lay-filter="test">
   表格内容
 </table>
  
+<!-- import layui -->
 <script>
 layui.use(function(){
   var table = layui.table;
@@ -491,7 +493,7 @@ table.hideCol('test', false); // `true` or `false`
 | [row / rowDouble](#on-row) | 行单击和双击事件 |
 | [rowContextmenu](#on-rowContextmenu) <sup>2.8+</sup> | 行右键菜单事件 |
 | [edit](#on-edit) | 单元格编辑事件 |
-| [tool](#on-tool) 🔥 | 单元格工具事件。可在该事件中实现行的更新与删除操作。 |
+| [tool / toolDouble](#on-tool) 🔥 | 单元格工具事件。可在该事件中实现行的更新与删除操作。 |
 | [checkbox](#on-checkbox) | 复选框事件 |
 | [radio](#on-radio) | 单选框事件 |
 | [pagebar](#on-pagebar) <sup>2.7+</sup> | 尾部分页栏事件 |
@@ -516,6 +518,7 @@ table.hideCol('test', false); // `true` or `false`
   </div>
 </script>
  
+<!-- import layui -->
 <script>
 layui.use(function(){
   var table = layui.table;
@@ -738,6 +741,7 @@ table.on('edit(test)', function(obj){
  
 <table id="test" lay-filter="test"></table> 
  
+<!-- import layui -->
 <script>
 layui.use(function(){
   var table = layui.table;

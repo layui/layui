@@ -71,7 +71,8 @@ npm i layui
 ```
 <!-- 引入 layui.css -->
 <link href="//unpkg.com/layui@{{= d.layui._v }}/dist/css/layui.css" rel="stylesheet">
- 
+```
+```
 <!-- 引入 layui.js -->
 <script src="//unpkg.com/layui@{{= d.layui._v }}/dist/layui.js">
 ```

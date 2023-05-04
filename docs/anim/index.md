@@ -16,7 +16,7 @@ toc: true
 
 <h2 id="usage" lay-toc="">示例</h2>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'max-height: 350px;'}">
+<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'height: 535px;'}">
   <textarea>
 <div class="layui-anim" id="example-anim-element" style="padding: 16px 0;">
   目标元素
@@ -26,6 +26,8 @@ toc: true
 <button class="layui-btn">
   <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>
 </button>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var $ = layui.$;

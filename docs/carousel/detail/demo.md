@@ -20,7 +20,8 @@
     <div>条目2</div>
   </div>
 </div>
- 
+
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var carousel = layui.carousel;
@@ -126,6 +127,7 @@ layui.use(function(){
   </div>
 </div> 
 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var carousel = layui.carousel;
@@ -198,6 +200,7 @@ layui.use(function(){
   </div>
 </div>
 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var carousel = layui.carousel;

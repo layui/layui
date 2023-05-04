@@ -28,7 +28,8 @@
     </tr>
   </tbody>
 </table>
- 
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var table = layui.table;

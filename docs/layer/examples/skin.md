@@ -19,6 +19,7 @@
 .class-layer-demo-custom .layui-layer-btn .layui-layer-btn0{border-color: #FA584D; background-color: #FA584D; color: #fff;}
 </style>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var layer = layui.layer;

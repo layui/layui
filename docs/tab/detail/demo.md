@@ -1,4 +1,4 @@
-<pre class="layui-code" lay-options="{preview: true, text: {preview: '动态操作'}, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="layui-code" lay-options="{preview: true, text: {preview: '动态操作'}, codeStyle: 'height: 535px', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div class="layui-tab" lay-filter="test-handle" lay-allowclose="true">
   <ul class="layui-tab-title">
@@ -22,6 +22,8 @@
   <button class="layui-btn" lay-on="tabDelete">删除「标签4」</button>
   <button class="layui-btn" lay-on="tabChange">切换到「标签3」</button>
 </div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var element = layui.element;
@@ -57,7 +59,7 @@ layui.use(function(){
 
 切换 tab 标签项后，地址栏同步 `hash` 值，当页面刷新时，tab 仍保持对应的切换状态。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'height: 535px', tools: ['full']}">
   <textarea>
 <div class="layui-tab" lay-filter="test-hash">
   <ul class="layui-tab-title">
@@ -75,6 +77,8 @@ layui.use(function(){
     <div class="layui-tab-item">内容-5</div>
   </div>
 </div>
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var element = layui.element;

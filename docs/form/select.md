@@ -48,6 +48,8 @@ toc: true
     </select>
   </div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -79,6 +81,8 @@ toc: true
     </optgroup>
   </select>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -158,6 +162,8 @@ toc: true
     </select>
   </div>
 </div>
+
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -184,6 +190,7 @@ toc: true
   </select>
 </div>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var form = layui.form;

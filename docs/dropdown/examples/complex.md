@@ -2,6 +2,7 @@
   无限层级 + 跳转 + 事件 + 自定义模板
 </button>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var dropdown = layui.dropdown;

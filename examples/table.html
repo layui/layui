@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../src/css/layui.css">
   <style>
     body{padding: 32px; /*overflow-y: scroll;*/}
+    .layui-table-view{margin: 8px 0;}
   </style>
 </head>
 <body>
@@ -157,14 +158,14 @@ layui.use('table', function(){
     elem: '#test'
     ,url: 'json/table/demo1.json'
     //,contentType: 'application/json' // 参数为 json 格式传递
-    ,page: !0 || { //详细参数可参考 laypage 组件文档
+    ,page: !1 ? false : { // 详细参数可参考 laypage 组件文档
       curr: 5
       ,groups: 1
       ,first: false
       ,last: false
       ,layout: ['limit', 'prev', 'page', 'next', 'count'] //自定义分页布局
     }
-    //,height: 300
+    ,height: 300
     ,cellMinWidth: 80
     //,skin: 'line'
     //,size: 'lg'
