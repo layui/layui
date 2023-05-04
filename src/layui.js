@@ -7,26 +7,27 @@
 ;!function(win){
   "use strict";
 
-  var doc = win.document, config = {
-    modules: {} // 模块物理路径
-    ,status: {} // 模块加载状态
-    ,timeout: 10 // 符合规范的模块请求最长等待秒数
-    ,event: {} // 模块自定义事件
-  }
+  var doc = win.document;
+  var config = {
+    modules: {}, // 模块物理路径
+    status: {}, // 模块加载状态
+    timeout: 10, // 符合规范的模块请求最长等待秒数
+    event: {} // 模块自定义事件
+  };
 
-  ,Layui = function(){
+  var Layui = function(){
     this.v = '2.8.1'; // Layui 版本号
-  }
+  };
   
   // 识别预先可能定义的指定全局对象
-  ,GLOBAL = win.LAYUI_GLOBAL || {}
+  var GLOBAL = win.LAYUI_GLOBAL || {};
 
   // 获取 layui 所在目录
-  ,getPath = function(){
+  var getPath = function(){
     var jsPath = doc.currentScript ? doc.currentScript.src : function(){
-      var js = doc.scripts
-      ,last = js.length - 1
-      ,src;
+      var js = doc.scripts;
+      var last = js.length - 1;
+      var src;
       for(var i = last; i > 0; i--){
         if(js[i].readyState === 'interactive'){
           src = js[i].src;
@@ -37,42 +38,42 @@
     }();
     
     return config.dir = GLOBAL.dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
-  }()
+  }();
 
   // 异常提示
-  ,error = function(msg, type){
+  var error = function(msg, type){
     type = type || 'log';
     win.console && console[type] && console[type]('layui error hint: ' + msg);
-  }
+  };
 
-  ,isOpera = typeof opera !== 'undefined' && opera.toString() === '[object Opera]'
+  var isOpera = typeof opera !== 'undefined' && opera.toString() === '[object Opera]';
 
   // 内置模块
-  ,modules = config.builtin = {
-    lay: 'lay' // 基础 DOM 操作
-    ,layer: 'layer' // 弹层
-    ,laydate: 'laydate' // 日期
-    ,laypage: 'laypage' // 分页
-    ,laytpl: 'laytpl' // 模板引擎
-    ,form: 'form' // 表单集
-    ,upload: 'upload' // 上传
-    ,dropdown: 'dropdown' // 下拉菜单
-    ,transfer: 'transfer' // 穿梭框
-    ,tree: 'tree' // 树结构
-    ,table: 'table' // 表格
-    ,treeTable: 'treeTable' // 树表
-    ,element: 'element' // 常用元素操作
-    ,rate: 'rate'  // 评分组件
-    ,colorpicker: 'colorpicker' // 颜色选择器
-    ,slider: 'slider' // 滑块
-    ,carousel: 'carousel' // 轮播
-    ,flow: 'flow' // 流加载
-    ,util: 'util' // 工具块
-    ,code: 'code' // 代码修饰器
-    ,jquery: 'jquery' // DOM 库（第三方）
+  var modules = config.builtin = {
+    lay: 'lay', // 基础 DOM 操作
+    layer: 'layer', // 弹层
+    laydate: 'laydate', // 日期
+    laypage: 'laypage', // 分页
+    laytpl: 'laytpl', // 模板引擎
+    form: 'form', // 表单集
+    upload: 'upload', // 上传
+    dropdown: 'dropdown', // 下拉菜单
+    transfer: 'transfer', // 穿梭框
+    tree: 'tree', // 树结构
+    table: 'table', // 表格
+    treeTable: 'treeTable', // 树表
+    element: 'element', // 常用元素操作
+    rate: 'rate',  // 评分组件
+    colorpicker: 'colorpicker', // 颜色选择器
+    slider: 'slider', // 滑块
+    carousel: 'carousel', // 轮播
+    flow: 'flow', // 流加载
+    util: 'util', // 工具块
+    code: 'code', // 代码修饰器
+    jquery: 'jquery', // DOM 库（第三方）
     
-    ,all: 'all'
-    ,'layui.all': 'layui.all' // 聚合标识（功能性的，非真实模块）
+    all: 'all',
+    'layui.all': 'layui.all' // 聚合标识（功能性的，非真实模块）
   };
 
   // 记录基础数据
@@ -80,9 +81,9 @@
 
   // 定义模块
   Layui.prototype.define = function(deps, factory){
-    var that = this
-    ,type = typeof deps === 'function'
-    ,callback = function(){
+    var that = this;
+    var type = typeof deps === 'function';
+    var callback = function(){
       var setApp = function(app, exports){
         layui[app] = exports;
         config.status[app] = true;
@@ -107,9 +108,9 @@
 
   // 使用特定模块
   Layui.prototype.use = function(apps, callback, exports, from){
-    var that = this
-    ,dir = config.dir = config.dir ? config.dir : getPath
-    ,head = doc.getElementsByTagName('head')[0];
+    var that = this;
+    var dir = config.dir = config.dir ? config.dir : getPath;
+    var head = doc.getElementsByTagName('head')[0];
 
     apps = function(){
       if(typeof apps === 'string'){
@@ -133,8 +134,9 @@
       layui.jquery = layui.$ = jQuery;
     }
     
-    var item = apps[0]
-    ,timeout = 0;
+    var item = apps[0];
+    var timeout = 0;
+
     exports = exports || [];
 
     // 静态资源host
@@ -259,16 +261,16 @@
 
   // css 外部加载器
   Layui.prototype.link = function(href, fn, cssname){
-    var that = this
-    ,head = doc.getElementsByTagName('head')[0]
-    ,link = doc.createElement('link');
+    var that = this;
+    var head = doc.getElementsByTagName('head')[0];
+    var link = doc.createElement('link');
     
     if(typeof fn === 'string') cssname = fn;
     
-    var app = (cssname || href).replace(/\.|\//g, '')
-    ,id = link.id = 'layuicss-'+ app
-    ,STAUTS_NAME = 'creating'
-    ,timeout = 0;
+    var app = (cssname || href).replace(/\.|\//g, '');
+    var id = link.id = 'layuicss-'+ app;
+    var STAUTS_NAME = 'creating';
+    var timeout = 0;
     
     link.rel = 'stylesheet';
     link.href = href + (config.debug ? '?v='+new Date().getTime() : '');
@@ -282,8 +284,8 @@
     
     // 轮询 css 是否加载完毕
     (function poll(status) {
-      var delay = 100
-      ,getLinkElem = doc.getElementById(id); // 获取动态插入的 link 元素
+      var delay = 100;
+      var getLinkElem = doc.getElementById(id); // 获取动态插入的 link 元素
       
       // 如果轮询超过指定秒数，则视为请求文件失败或 css 文件不符合规范
       if(++timeout > config.timeout * 1000 / delay){
@@ -390,15 +392,16 @@
 
   // location.hash 路由解析
   Layui.prototype.router = Layui.prototype.hash = function(hash){
-    var that = this
-    ,hash = hash || location.hash
-    ,data = {
-      path: []
-      ,search: {}
-      ,hash: (hash.match(/[^#](#.*$)/) || [])[1] || ''
+    var that = this;
+    var hash = hash || location.hash;
+    var data = {
+      path: [],
+      search: {},
+      hash: (hash.match(/[^#](#.*$)/) || [])[1] || ''
     };
     
     if(!/^#\//.test(hash)) return data; // 禁止非路由规范
+
     hash = hash.replace(/^#\//, '');
     data.href = '/' + hash;
     hash = hash.replace(/([^#])(#.*$)/, '$1').split('/') || [];
@@ -416,8 +419,8 @@
   
   // URL 解析
   Layui.prototype.url = function(href){
-    var that = this
-    ,data = {
+    var that = this;
+    var data = {
       // 提取 url 路径
       pathname: function(){
         var pathname = href
@@ -427,12 +430,12 @@
           }()
         : location.pathname;
         return pathname.replace(/^\//, '').split('/');
-      }()
+      }(),
       
       // 提取 url 参数
-      ,search: function(){
-        var obj = {}
-        ,search = (href 
+      search: function(){
+        var obj = {};
+        var search = (href 
           ? function(){
             var str = (href.match(/\?.+/) || [])[0] || '';
             return str.replace(/\#.+/, '');
@@ -459,10 +462,10 @@
         });
         
         return obj;
-      }()
+      }(),
       
       // 提取 Hash
-      ,hash: that.router(function(){
+      hash: that.router(function(){
         return href 
           ? ((href.match(/#.+/) || [])[0] || '/')
         : location.hash;
@@ -488,9 +491,9 @@
       ? settings 
     : {key: settings};
     
-    try{
+    try {
       var data = JSON.parse(storage[table]);
-    } catch(e){
+    } catch(e) {
       var data = {};
     }
     
@@ -508,17 +511,17 @@
 
   // 设备信息
   Layui.prototype.device = function(key){
-    var agent = navigator.userAgent.toLowerCase()
+    var agent = navigator.userAgent.toLowerCase();
 
     // 获取版本号
-    ,getVersion = function(label){
+    var getVersion = function(label){
       var exp = new RegExp(label + '/([^\\s\\_\\-]+)');
       label = (agent.match(exp)||[])[1];
       return label || false;
-    }
+    };
     
     // 返回结果集
-    ,result = {
+    var result = {
       os: function(){ // 底层操作系统
         if(/windows/.test(agent)){
           return 'windows';
@@ -529,13 +532,13 @@
         } else if(/mac/.test(agent)){
           return 'mac';
         } 
-      }()
-      ,ie: function(){ // ie 版本
+      }(),
+      ie: function(){ // ie 版本
         return (!!win.ActiveXObject || "ActiveXObject" in win) ? (
           (agent.match(/msie\s(\d+)/) || [])[1] || '11' // 由于 ie11 并没有 msie 的标识
         ) : false;
-      }()
-      ,weixin: getVersion('micromessenger')  // 是否微信
+      }(),
+      weixin: getVersion('micromessenger')  // 是否微信
     };
     
     // 任意的 key
@@ -564,8 +567,8 @@
     
     // 细分引用类型
     return (typeof operand === 'object' || typeof operand === 'function') ? function(){
-      var type = Object.prototype.toString.call(operand).match(/\s(.+)\]$/) || [] // 匹配类型字符
-      ,classType = 'Function|Array|Date|RegExp|Object|Error|Symbol'; // 常见类型字符
+      var type = Object.prototype.toString.call(operand).match(/\s(.+)\]$/) || []; // 匹配类型字符
+      var classType = 'Function|Array|Date|RegExp|Object|Error|Symbol'; // 常见类型字符
       
       type = type[1] || 'Object';
       
@@ -578,9 +581,9 @@
   
   // 对象是否具备数组结构（此处为兼容 jQuery 对象）
   Layui.prototype._isArray = Layui.prototype.isArray = function(obj){
-    var that = this
-    ,len
-    ,type = that.type(obj);
+    var that = this;
+    var len;
+    var type = that.type(obj);
     
     if(!obj || (typeof obj !== 'object') || obj === win) return false;
     
@@ -592,9 +595,9 @@
 
   // 遍历
   Layui.prototype.each = function(obj, fn){
-    var key
-    ,that = this
-    ,callFn = function(key, obj){ // 回调
+    var key;
+    var that = this;
+    var callFn = function(key, obj){ // 回调
       return fn.call(obj[key], key, obj[key])
     };
     
@@ -617,8 +620,8 @@
 
   // 将数组中的成员对象按照某个 key 的 value 值进行排序
   Layui.prototype.sort = function(arr, key, desc, notClone){
-    var that = this
-    ,clone = notClone ? (arr || []) : JSON.parse(
+    var that = this;
+    var clone = notClone ? (arr || []) : JSON.parse(
       JSON.stringify(arr || [])
     );
 
@@ -631,8 +634,8 @@
     
     // 开始排序
     clone.sort(function(o1, o2){
-      var v1 = o1[key]
-      ,v2 = o2[key];
+      var v1 = o1[key];
+      var v2 = o2[key];
       
       /*
        * 特殊数据
@@ -726,12 +729,12 @@
 
   // 执行自定义模块事件
   Layui.prototype.event = Layui.event = function(modName, events, params, fn){
-    var that = this
-    ,result = null
-    ,filter = (events || '').match(/\((.*)\)$/)||[] // 提取事件过滤器字符结构，如：select(xxx)
-    ,eventName = (modName + '.'+ events).replace(filter[0], '') // 获取事件名称，如：form.select
-    ,filterName = filter[1] || '' // 获取过滤器名称,，如：xxx
-    ,callback = function(_, item){
+    var that = this;
+    var result = null;
+    var filter = (events || '').match(/\((.*)\)$/)||[]; // 提取事件过滤器字符结构，如：select(xxx)
+    var eventName = (modName + '.'+ events).replace(filter[0], ''); // 获取事件名称，如：form.select
+    var filterName = filter[1] || ''; // 获取过滤器名称,，如：xxx
+    var callback = function(_, item){
       var res = item && item.call(that, params);
       res === false && result === null && (result = false);
     };
