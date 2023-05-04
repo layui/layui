@@ -448,7 +448,7 @@ layui.define(['table'], function (exports) {
     flexIconElem.html(trExpand ? treeOptions.view.flexIconOpen : treeOptions.view.flexIconClose)
     trData[isParentKey] && flexIconElem.css('visibility', 'visible');
     // 处理节点图标
-    treeOptions.view.showIcon && trsElem.find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom)')
+    treeOptions.view.showIcon && trsElem.find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom,.layui-table-tree-iconLeaf)')
       .html(trExpand ? treeOptions.view.iconOpen : treeOptions.view.iconClose);
 
     var childNodes = trData[customName.children] || []; // 测试用后续需要改成子节点的字段名称
@@ -669,7 +669,7 @@ layui.define(['table'], function (exports) {
       tableView.find('.layui-table-box tbody tr[data-level!="0"]').addClass(HIDE);
 
       tableView.find('.layui-table-tree-flexIcon').html(treeOptions.view.flexIconClose);
-      treeOptions.view.showIcon && tableView.find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom)').html(treeOptions.view.iconClose);
+      treeOptions.view.showIcon && tableView.find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom,.layui-table-tree-iconLeaf)').html(treeOptions.view.iconClose);
     } else {
       var tableDataFlat = treeTable.getData(id, true);
       // 展开所有
@@ -713,7 +713,7 @@ layui.define(['table'], function (exports) {
         tableView.find('tbody tr[data-level!="0"]').removeClass(HIDE);
         // 处理节点的图标
         tableView.find('.layui-table-tree-flexIcon').html(treeOptions.view.flexIconOpen);
-        treeOptions.view.showIcon && tableView.find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom)').html(treeOptions.view.iconOpen);
+        treeOptions.view.showIcon && tableView.find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom,.layui-table-tree-iconLeaf)').html(treeOptions.view.iconOpen);
       } else {
         // 如果有未打开过的父节点，将内容全部生成
         that.updateStatus(null, {LAY_EXPAND: true, LAY_HAS_EXPANDED: true});
@@ -780,7 +780,7 @@ layui.define(['table'], function (exports) {
 
     var dataExpand = {}; // 记录需要展开的数据
     var nameKey = customName.name;
-    var indent = treeOptions.view.indent || 14;
+    var indent = treeOptionsView.indent || 14;
     layui.each(tableView.find('td[data-field="' + nameKey + '"]'), function (index, item) {
       item = $(item);
       var trElem = item.closest('tr');
@@ -808,10 +808,17 @@ layui.define(['table'], function (exports) {
           'margin-left: ' + (indent * trElem.attr('data-level')) + 'px;',
           (trData[isParentKey] || treeOptionsView.showFlexIconIfNotParent) ? '' : ' visibility: hidden;',
           '">',
-          trData[LAY_EXPAND] ? treeOptions.view.flexIconOpen : treeOptions.view.flexIconClose, // 折叠图标
+          trData[LAY_EXPAND] ? treeOptionsView.flexIconOpen : treeOptionsView.flexIconClose, // 折叠图标
           '</div>',
-          treeOptions.view.showIcon ? '<div class="layui-inline layui-table-tree-nodeIcon' + ((trData.icon || treeOptions.view.icon) ? ' layui-table-tree-iconCustom' : '') + '">' +
-            (trData.icon || treeOptions.view.icon || (trData[isParentKey] ? treeOptions.view.iconClose : treeOptions.view.iconLeaf) || '') + '</div>' : '', // 区分父子节点
+          treeOptionsView.showIcon ? '<div class="layui-inline layui-table-tree-nodeIcon' +
+            ((trData.icon || treeOptionsView.icon) ? ' layui-table-tree-iconCustom' : '') +
+            (trData[isParentKey] ? '' : ' layui-table-tree-iconLeaf') +
+            '">' +
+            (trData.icon || treeOptionsView.icon ||
+              (trData[isParentKey] ?
+                (trData[LAY_EXPAND] ? treeOptionsView.iconOpen : treeOptionsView.iconClose) :
+                treeOptionsView.iconLeaf) ||
+              '') + '</div>' : '', // 区分父子节点
           htmlTemp].join('')) // 图标要可定制
         .find('.layui-table-tree-flexIcon');
 
@@ -827,7 +834,7 @@ layui.define(['table'], function (exports) {
     // 当前层的数据看看是否需要展开
     sonSign !== false && layui.each(dataExpand, function (index, item) {
       var trDefaultExpand = tableViewElem.find('tr[lay-data-index="' + index + '"]');
-      trDefaultExpand.find('.layui-table-tree-flexIcon').html(treeOptions.view.flexIconOpen);
+      trDefaultExpand.find('.layui-table-tree-flexIcon').html(treeOptionsView.flexIconOpen);
       expandNode({trElem: trDefaultExpand.first()}, true);
     });
 
