@@ -1881,20 +1881,21 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           }
         break;
         case 'LAYTABLE_PRINT': // 打印
-          var printWin = window.open('about:blank', '_blank')
-          ,style = ['<style>'
-            ,'body{font-size: 12px; color: #5F5F5F;}'
-            ,'table{width: 100%; border-collapse: collapse; border-spacing: 0;}'
-            ,'th,td{line-height: 20px; padding: 9px 15px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #5F5F5F;}'
-            ,'a{color: #5F5F5F; text-decoration:none;}'
-            ,'*.layui-hide{display: none}'
-          ,'</style>'].join('')
-          ,html = $(that.layHeader.html()); //输出表头
+          var printWin = window.open('about:blank', '_blank');
+          var style = ['<style>',
+            'body{font-size: 12px; color: #5F5F5F;}',
+            'table{width: 100%; border-collapse: collapse; border-spacing: 0;}',
+            'th,td{line-height: 20px; padding: 9px 15px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #5F5F5F;}',
+            'a{color: #5F5F5F; text-decoration:none;}',
+            'img{max-height: 100%;}',
+            '*.layui-hide{display: none}',
+          '</style>'].join('')
+          var html = $(that.layHeader.html()); // 输出表头
 
-          html.append(that.layMain.find('table').html()); //输出表体
-          html.append(that.layTotal.find('table').html()) //输出合计行
+          html.append(that.layMain.find('table').html()); // 输出表体
+          html.append(that.layTotal.find('table').html()) // 输出合计行
 
-          html.find('th.layui-table-patch').remove(); //移除补丁
+          html.find('th.layui-table-patch').remove(); // 移除补丁
           // 移除表头特殊列
           html.find('thead>tr>th.'+ ELEM_COL_SPECIAL).filter(function(i, thElem){
             return !$(thElem).children('.'+ ELEM_GROUP).length; // 父级表头除外
