@@ -10,10 +10,12 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
   var util = layui.util;
   var element = layui.element;
   var form = layui.form;
+  var layer = layui.layer;
 
   // 常量
   var CONST = {
     ELEM_VIEW: 'layui-code-view',
+    ELEM_COPY: 'layui-code-copy',
     ELEM_TAB: 'layui-tab',
     ELEM_TITLE: 'layui-code-title',
     ELEM_FULL: 'layui-code-full',
@@ -25,10 +27,11 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
   // 默认参数项
   var config = {
     elem: '.layui-code', // 元素选择器
-    title: '&lt;/&gt;', // 代码栏标题
     about: '', // 代码栏右上角信息
     ln: true, // 代码区域是否显示行号
     header: false, // 是否显示代码栏头部区域
+    encode: true, // 是否对 code 进行编码（若开启预览，则强制开启）
+    copy: true, // 是否开启代码区域复制功能图标
     // 默认文本
     text: {
       code: util.escape('</>'),
@@ -64,7 +67,10 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         return obj;
       }({}));
 
-      // 获得代码
+      // 最终显示的代码
+      var finalCode;
+
+      // 获得初始代码
       var codes = othis.data('code') || function(){
         var arr = [];
         var textarea = othis.children('textarea');
@@ -83,6 +89,29 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       }();
 
       othis.data('code', codes);
+
+      // 工具栏
+      var tools = {
+        copy: {
+          className: 'file-b',
+          title: ['复制代码'],
+          event: function(el, type){
+            typeof options.onCopy === 'function' ? options.onCopy(finalCode) : function(){
+              try {
+                navigator.clipboard.writeText(finalCode).then(function(){
+                  layer.msg('已复制', {
+                    icon: 1
+                  });
+                });
+              } catch(e) {
+                layer.msg('复制失败', {
+                  icon: 2
+                });
+              }
+            }();
+          }
+        }
+      };
 
       // 是否开启预览
       if(options.preview){
@@ -108,6 +137,9 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         elemView.addClass(options.className);
         elemTabView.attr('lay-filter', FILTER_VALUE);
 
+        // 若开启预览，则强制对 code 进行编码
+        options.encode = true;
+
         // 标签头
         layui.each(layout, function(i, v){
           var li = $('<li lay-id="'+ v +'">');
@@ -117,7 +149,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         });
 
         // 工具栏
-        var tools = {
+        $.extend(tools, {
           'full': {
             className: 'screen-full',
             title: ['最大化显示', '还原显示'],
@@ -147,12 +179,19 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
             title: ['在新窗口预览'],
             event: function(el, type){
               util.openWin({
-                content: codes.join('')
+                content: finalCode
               });
             }
           }
-        };
-        elemToolbar.on('click', '>i', function(){ // 工具栏事件
+        });
+
+        // copy
+        if(options.copy && layui.type(options.tools) === 'array'){
+          options.tools.unshift('copy');
+        }
+
+        // 工具栏事件
+        elemToolbar.on('click', '>i', function(){
           var oi = $(this);
           var type = oi.data('type');
           typeof tools[type].event === 'function' && tools[type].event(oi, type);
@@ -233,7 +272,6 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         });
       }
 
-
       // 有序或无序列表
       var listTag = options.ln ? 'ol' : 'ul';
       var listElem = $('<'+ listTag +' class="layui-code-'+ listTag +'">');
@@ -253,10 +291,15 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
 
       
       // code
-      var html = util.escape(codes.join(''));
+      var html = finalCode = codes.join('');
+
+      // 外部重新解析 code
+      if(typeof options.codeParse === 'function'){
+        html = finalCode = options.codeParse(html);
+      }
 
       // 转义 HTML 标签
-      if(options.encode) html = util.escape(html);
+      if(options.encode) html = util.escape(html); // 编码
       html = html.replace(/[\r\t\n]+/g, '</li><li>'); // 转义换行符
       
       // 生成列表
@@ -264,7 +307,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       
       // 创建 header
       if(options.header && !othis.children('.'+ CONST.ELEM_TITLE)[0]){
-        headerElem.html(options.title + (
+        headerElem.html((options.title || options.text.code) + (
           options.about 
             ? '<div class="layui-code-about">' + options.about + '</div>'
           : ''
@@ -290,6 +333,24 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       }
       // Code 内容区域样式
       listElem.attr('style', options.codeStyle);
+
+      // 是否开启代码复制
+      if(options.copy && !options.preview){
+        var elemCopy = $(['<span class="'+ CONST.ELEM_COPY +'">',
+          '<i class="layui-icon layui-icon-file-b" title="复制"></i>',
+        '</span>'].join(''));
+        var elemCopyHas = othis.children('.'+ CONST.ELEM_COPY);
+        var isHeight = listElem[0].style.height || listElem[0].style.maxHeight;
+
+        if(isHeight) elemCopy.addClass(CONST.ELEM_COPY + '-offset'); // 偏移
+        if(elemCopyHas[0]) elemCopyHas.remove(); // 移除旧的复制元素
+        othis.append(elemCopy);
+
+        // 点击复制
+        elemCopy.on('click', function(){
+          tools.copy.event();
+        });
+      }
 
     });
     
