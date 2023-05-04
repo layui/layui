@@ -252,7 +252,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 elem.val('').focus();
                 showAffix($(this).parent(), null);
               },
-              show: 'auto', // 根据输入框值是否来显示或隐藏点缀图标
+              show: 'auto', // 根据输入框值是否存在来显示或隐藏点缀图标
               disabled: disabled // 跟随输入框禁用状态
             }
           };
