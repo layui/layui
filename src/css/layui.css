@@ -48,12 +48,12 @@ a cite{font-style: normal; *cursor:pointer;}
 /** 图标字体 **/
 @font-face {
   font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=280');
-  src: url('../font/iconfont.eot?v=280#iefix') format('embedded-opentype'),
-       url('../font/iconfont.woff2?v=280') format('woff2'),
-       url('../font/iconfont.woff?v=280') format('woff'),
-       url('../font/iconfont.ttf?v=280') format('truetype'),
-       url('../font/iconfont.svg?v=280#layui-icon') format('svg');
+  src: url('../font/iconfont.eot?v=282');
+  src: url('../font/iconfont.eot?v=282#iefix') format('embedded-opentype'),
+       url('../font/iconfont.woff2?v=282') format('woff2'),
+       url('../font/iconfont.woff?v=282') format('woff'),
+       url('../font/iconfont.ttf?v=282') format('truetype'),
+       url('../font/iconfont.svg?v=282#layui-icon') format('svg');
 }
 
 .layui-icon{
