@@ -224,8 +224,8 @@ layui.define(['table'], function (exports) {
         flexIconOpen: '<i class="layui-icon layui-icon-triangle-d"></i>', // 打开时候的折叠图标
         showIcon: true, // 是否显示图标(节点类型图标)
         icon: '', // 节点图标，如果设置了这个属性或者数据中有这个字段信息，不管打开还是关闭都以这个图标的值为准
-        iconClose: '<i class="layui-icon layui-icon-folder-open"></i>', // 打开时候的图标
-        iconOpen: '<i class="layui-icon layui-icon-folder"></i>', // 关闭时候的图标
+        iconClose: '<i class="layui-icon layui-icon-folder"></i>', // 关闭时候的图标
+        iconOpen: '<i class="layui-icon layui-icon-folder-open"></i>', // 打开时候的图标
         iconLeaf: '<i class="layui-icon layui-icon-leaf"></i>', // 叶子节点的图标
         showFlexIconIfNotParent: false, // 当节点不是父节点的时候是否显示折叠图标
         dblClickExpand: true, // 双击节点时，是否自动展开父节点的标识
