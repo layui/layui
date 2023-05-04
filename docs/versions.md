@@ -8,6 +8,46 @@ toc: true
 > 导读：📑 [Layui 2.8 《升级指南》](./@note/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](./@note/2.8/news.html)
 
 
+<h2 id="2.8.2" lay-toc="{title: '2.8.2'}">
+  2.8.2 
+  <span class="layui-badge-rim">2023-05-04</span>
+</h2>
+
+- #### table
+  - 修复 `autoSort: true` 时，更改 `table.cache` 未同步到 `data` 属性的问题 # 1247
+  - 修复 多级表头存在 `hide` 表头属性时，执行完整重载可能出现的错位问题 # 1247/I6WX8Y
+  - 修复 未开启 `page` 属性时底边框缺失问题 # 1228
+  - 优化 打印内容中包含过大图片时的显示问题
+- #### treeTable
+  - 修复 `checkbox,radio` 事件导致 table 组件不必要的异常提示问题 # I6Z5W5
+  - 修复 执行重载并携带 `parseData` 和 `done` 属性导致的渲染异常问题 # 1247
+  - 修复 `treeTable.updateNode()` 方法执行无效的问题 # 1247
+  - 修复 `treeTable.expandAll()` 方法隐藏所有节点导致统计栏消失的问题 # 1247
+  - 修复 单元格事件中执行 `obj.update()` 方法导致树节点特征丢失的问题 # 1247/I6ZW2R
+  - 优化 `treeTable expandAll()` 方法，支持展开所有节点 # 1247
+  - 优化 内部代码的若干细节 # 1247
+  - **调整** `customName.rootId` 属性为 `data.rootPid`
+- #### layer
+  - 修复 `tab` 层的样式异常问题 # I6YS0F
+- #### form
+  - 优化 `checkbox` 半选状态的样式 # I6YXVV
+- #### laydate
+  - 优化 `shortcuts` 属性机制，当点击快捷选项时自动确认 #I6YQU6
+- #### menu
+  - 优化 菜单项样式，以解决当点击菜单边缘时，未点击到 `<a>` 标签的问题
+- #### transfer
+  - 优化 `value` 属性，按其顺序渲染初始值列表 # 1235
+- #### icon
+  - 更新 `Edge` 图标
+- #### code
+  - 新增 `copy` 属性，用于开启代码复制功能图标
+  - 新增 `onCopy` 回调函数，用于自定义复制事件，而不触发内置的复制操作
+  - **调整** `encode` 属性，默认 `true`，即开启对 code 的编码，且预览时强制开启
+
+### 下载： [layui-v2.8.2.zip](https://gitee.com/layui/layui/attach_files/1396155/download)
+
+---
+
 <h2 id="2.8.1" lay-toc="{title: '2.8.1'}">
   2.8.1 
   <span class="layui-badge-rim">2023-04-25</span>
