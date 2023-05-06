@@ -21,7 +21,7 @@ Layui 虽不是前端主流，但也早已不是作者个人的 Layui，而是�
 
 此次上线的新版文档站，旨在为朴实归来的 Layui 提供一个新的精神「基站」，它基于 laytpl 和 markdown 驱动，在版面上进行了大量优化，内容重新编写、力求精简，以辅助大家更好地使用 Layui。 同时，Layui 文档也已和 Layui 本身一同开源在项目中，以供大家在线和离线都能阅读以及协同维护。
 
-- **文档协作:** https://github.com/layui/layui/tree/main/docs
+- **文档协作:** https://github.com/layui/layui/tree/2.x/docs
 - **文档阅读:** https://layui.dev
 
 ---
