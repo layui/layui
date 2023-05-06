@@ -787,9 +787,38 @@
     var that = this;
     return that.event.call(that, modName, events, EV_REMOVE);
   };
-  
+
+  // 防抖
+  Layui.prototype.debounce = function (func, wait) {
+    var timeout;
+    return function () {
+      var context = this;
+      var args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(function () {
+        func.apply(context, args);
+      }, wait);
+    }
+  };
+
+  // 节流
+  Layui.prototype.throttle = function (func, wait) {
+    var cooldown = false;
+    return function () {
+      var context = this;
+      var args = arguments;
+      if (!cooldown) {
+        func.apply(context, args);
+        cooldown = true;
+        setTimeout(function () {
+          cooldown = false;
+        }, wait);
+      }
+    }
+  };
+
   // exports layui
   win.layui = new Layui();
-  
+
 }(window); // gulp build: layui-footer
 
