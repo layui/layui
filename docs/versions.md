@@ -5,7 +5,7 @@ toc: true
  
 # 更新日志
 
-> 导读：📑 [Layui 2.8 《升级指南》](./@note/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](./@note/2.8/news.html)
+> 导读：📑 [Layui 2.8 《升级指南》](/docs/@note/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/docs/@note/2.8/news.html)
 
 
 <h2 id="2.8.2" lay-toc="{title: '2.8.2'}">
