@@ -87,7 +87,7 @@ toc: true
 
 <h3 id="align-theme" lay-toc="{level: 2}" class="ws-bold">导航主题</h3>
 
-给导航容器追加任意背景色 `class`，内置背景色参考：[#背景色公共类](../class.html)
+给导航容器追加任意背景色 `class`，内置背景色参考：[#背景色公共类](../class/#bg)
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
