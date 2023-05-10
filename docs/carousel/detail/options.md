@@ -187,7 +187,7 @@
 <td colspan="4" style="text-align: center"> 
 
 
-<div id="options.callback" class="ws-anchor" style="pointer-events: auto;">
+<div id="options.callback" class="ws-anchor">
 
 [回调函数](#options.callback)
 
@@ -199,7 +199,7 @@
 <td>change <sup>2.7+</sup></td>
 <td colspan="3">
 
-<div id="options.change", class="ws-anchor">  
+<div id="options.change" lay-pid="options" class="ws-anchor">  
 轮播切换后的回调函数，返回一个对象参数。
 </div>
 

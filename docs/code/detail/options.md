@@ -266,7 +266,7 @@ Code 容器的风格，可选值有：
 </td>
 <td colspan="3">
 
-<div id="options.done" class="ws-anchor">  
+<div id="options.done" lay-pid="options" class="ws-anchor">  
 组件渲染完毕的回调函数，函数返回一个 object 类型参数
 </div>
 
@@ -287,7 +287,7 @@ done: function(obj){
 </td>
 <td colspan="3">
 
-<div id="options.onCopy" class="ws-anchor">  
+<div id="options.onCopy" lay-pid="options" class="ws-anchor">  
 点击复制图标时的回调函数。 该回调一旦设定，则不再执行内置的复制操作。
 </div>
 

@@ -136,7 +136,7 @@ text: {
 <td colspan="4" style="text-align: center"> 
 
 
-<div id="options.callback" class="ws-anchor" style="pointer-events: auto;">
+<div id="options.callback" lay-pid="options" class="ws-anchor">
 
 [回调函数](#options.callback)
 
@@ -173,8 +173,8 @@ onchange: function(data, index){
 </td>
 <td colspan="3">
   
-<div id="options.parseData" class="ws-anchor">
-数据格式解析的回调函数，用于将返回的任意数据格式解析成 transfer 组件规定的 <a href="#options.data" style="pointer-events: auto;">data 格式</a>
+<div id="options.parseData" lay-pid="options" class="ws-anchor">
+数据格式解析的回调函数，用于将返回的任意数据格式解析成 transfer 组件规定的 <a href="#options.data">data 格式</a>
 </div>
 
 ```

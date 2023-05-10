@@ -153,7 +153,7 @@ text: {
 <td colspan="4" style="text-align: center"> 
 
 
-<div id="options.callback" class="ws-anchor" style="pointer-events: auto;">
+<div id="options.callback" lay-pid="options" class="ws-anchor">
 
 [回调函数](#options.callback)
 
@@ -165,7 +165,7 @@ text: {
 <td>click</td>
 <td colspan="3">
   
-<div id="options.click" class="ws-anchor">
+<div id="options.click" lay-pid="options" class="ws-anchor">
   节点被点击的回调函数。返回的参数如下：
 </div>
 
@@ -185,7 +185,7 @@ click: function(obj){
 <td>oncheck</td>
 <td colspan="3">
 
-<div id="options.oncheck" class="ws-anchor">  
+<div id="options.oncheck" lay-pid="options" class="ws-anchor">  
   点击复选框时的回调函数，返回的参数如下：
 </div>
 
@@ -203,7 +203,7 @@ oncheck: function(obj){
 <td>operate</td>
 <td colspan="3">
 
-<div id="options.operate" class="ws-anchor">  
+<div id="options.operate" lay-pid="options" class="ws-anchor">  
   点击节点的右侧操作图标的回调函数，返回的参数如下：
 </div>
 
