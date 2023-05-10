@@ -11,7 +11,7 @@ toc: true
 <h2 id="examples" lay-toc="{hot: true}" style="margin-bottom: 0;">示例</h2>
 
 <div class="ws-detail">
-{{- d.include("docs/tab/detail/demo.md") }}
+{{- d.include("/tab/detail/demo.md") }}
 </div>
 
 <h2 id="skin" lay-toc="{hot: true}">风格</h2>

@@ -2,7 +2,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, text: {preview: '基础用法'}, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/dropdown/examples/base.md") }}
+{{- d.include("/dropdown/examples/base.md") }}
   </textarea>
 </pre>
 
@@ -10,7 +10,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/dropdown/examples/complex.md") }}
+{{- d.include("/dropdown/examples/complex.md") }}
   </textarea>
 </pre>
 
@@ -18,7 +18,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/dropdown/examples/table.md") }}
+{{- d.include("/dropdown/examples/table.md") }}
   </textarea>
 </pre>
 
@@ -26,7 +26,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/dropdown/examples/on.md") }}
+{{- d.include("/dropdown/examples/on.md") }}
   </textarea>
 </pre>
 
@@ -34,7 +34,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/dropdown/examples/contextmenu.md") }}
+{{- d.include("/dropdown/examples/contextmenu.md") }}
   </textarea>
 </pre>
 
@@ -42,7 +42,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/dropdown/examples/align.md") }}
+{{- d.include("/dropdown/examples/align.md") }}
   </textarea>
 </pre>
 
@@ -52,6 +52,6 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/dropdown/examples/content.md") }}
+{{- d.include("/dropdown/examples/content.md") }}
   </textarea>
 </pre>

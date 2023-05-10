@@ -66,7 +66,7 @@ toc: true
   obj.render();
 }}">
   <textarea>
-{{- d.include('docs/form/examples/input.group.md') }} 
+{{- d.include("/form/examples/input.group.md") }} 
   </textarea>
 </pre>
 
@@ -91,7 +91,7 @@ toc: true
   obj.render();
 }}">
   <textarea>
-{{- d.include('docs/form/examples/input.pre.suf.md') }} 
+{{- d.include("/form/examples/input.pre.suf.md") }} 
   </textarea>
 </pre>
 
@@ -175,7 +175,7 @@ input 放在前后缀容器中：
   obj.render();
 }}">
   <textarea>
-{{- d.include('docs/form/examples/input.affix.custom.md') }} 
+{{- d.include("/form/examples/input.affix.custom.md") }} 
   </textarea>
 </pre>
 

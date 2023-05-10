@@ -12,7 +12,7 @@ toc: true
 以下所有示例中演示的数据均为「静态模拟数据」，实际使用时换成您的真实接口即可。
 
 <div>
-{{- d.include("docs/table/detail/demo.md") }}
+{{- d.include("/table/detail/demo.md") }}
 </div>
 
 <h2 id="api" lay-toc="{bold: true, hot: true}">API</h2>
@@ -160,7 +160,7 @@ table 的属性众多，我们大致分为以下几种：
 <h3 id="options" lay-toc="{level: 3, hot: true}" class="ws-bold">基础属性</h3>
 
 <div>
-{{- d.include("docs/table/detail/options.md") }}
+{{- d.include("/table/detail/options.md") }}
 </div>
 
 <h3 id="options.ajax" lay-toc="{level: 3, hot: true}" class="ws-bold">异步属性</h3>
@@ -168,7 +168,7 @@ table 的属性众多，我们大致分为以下几种：
 异步属性本质也是基础属性，当开启 `url` 属性时才有效，由于相关属性成员较多，所以单独提取介绍。
 
 <div>
-{{- d.include("docs/table/detail/options.ajax.md") }}
+{{- d.include("/table/detail/options.ajax.md") }}
 </div>
 
 <h3 id="options.cols" lay-toc="{level: 3, hot: true}" class="ws-bold">表头属性</h3>
@@ -176,7 +176,7 @@ table 的属性众多，我们大致分为以下几种：
 表头属性是基础属性 `cols` 的子集，其使用频率甚至超过基础属性本身。
 
 <div>
-{{- d.include("docs/table/detail/options.cols.md") }}
+{{- d.include("/table/detail/options.cols.md") }}
 </div>
 
 <h3 id="reload" lay-toc="{level: 2}" class="ws-anchor ws-bold">重载</h3>
@@ -677,7 +677,7 @@ table.on('row(test)', function(obj){
   }
 }}">
   <textarea>
-{{- d.include('docs/table/examples/onrowContextmenu.md') }}
+{{- d.include("/table/examples/onrowContextmenu.md") }}
   </textarea>
 </pre>
 

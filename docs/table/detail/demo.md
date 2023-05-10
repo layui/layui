@@ -15,7 +15,7 @@
   }
 }}">
   <textarea>
-{{- d.include('docs/table/examples/demo.md') }}
+{{- d.include("/table/examples/demo.md") }}
   </textarea>
 </pre>
 
@@ -25,7 +25,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, style: 'height: 335px; overflow: auto;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include('docs/table/examples/static.md') }}
+{{- d.include("/table/examples/static.md") }}
   </textarea>
 </pre>
 
@@ -41,7 +41,7 @@
   }
 }}">
   <textarea>
-{{- d.include('docs/table/examples/autoRender.md') }}
+{{- d.include("/table/examples/autoRender.md") }}
   </textarea>
 </pre>
 
@@ -49,7 +49,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include('docs/table/examples/init.md') }}
+{{- d.include("/table/examples/init.md") }}
   </textarea>
 </pre>
 
@@ -63,7 +63,7 @@
   }
 }}">
   <textarea>
-{{- d.include('docs/table/examples/data.md') }}
+{{- d.include("/table/examples/data.md") }}
   </textarea>
 </pre>
 
@@ -77,7 +77,7 @@
   }
 }}">
   <textarea>
-{{- d.include('docs/table/examples/templet.md') }}
+{{- d.include("/table/examples/templet.md") }}
   </textarea>
 </pre>
 
@@ -85,7 +85,7 @@
 
 <pre class="layui-code" lay-options="{preview: 'iframe', style: 'height: 538px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include('docs/table/examples/css.md') }}
+{{- d.include("/table/examples/css.md") }}
   </textarea>
 </pre>
 
@@ -99,7 +99,7 @@
   }
 }}">
   <textarea>
-{{- d.include('docs/table/examples/page.md') }}
+{{- d.include("/table/examples/page.md") }}
   </textarea>
 </pre>
 
@@ -114,7 +114,7 @@
   }
 }}">
   <textarea>
-{{- d.include('docs/table/examples/search.md') }}
+{{- d.include("/table/examples/search.md") }}
   </textarea>
 </pre>
 
@@ -124,7 +124,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include('docs/table/examples/editable.md') }}
+{{- d.include("/table/examples/editable.md") }}
   </textarea>
 </pre>
 
@@ -136,7 +136,7 @@
   }
 }}">
   <textarea>
-{{- d.include('docs/table/examples/editModes.md') }}
+{{- d.include("/table/examples/editModes.md") }}
   </textarea>
 </pre>
 
@@ -148,7 +148,7 @@
   }
 }}">
   <textarea>
-{{- d.include('docs/table/examples/parse.md') }}
+{{- d.include("/table/examples/parse.md") }}
   </textarea>
 </pre>
 
@@ -162,7 +162,7 @@
   }
 }}">
   <textarea>
-{{- d.include('docs/table/examples/filter.md') }}
+{{- d.include("/table/examples/filter.md") }}
   </textarea>
 </pre>
 
@@ -174,7 +174,7 @@
   }
 }}">
   <textarea>
-{{- d.include('docs/table/examples/setRowChecked.md') }}
+{{- d.include("/table/examples/setRowChecked.md") }}
   </textarea>
 </pre>
 
@@ -189,7 +189,7 @@
   }
 }}">
   <textarea>
-{{- d.include('docs/table/examples/theads.md') }}
+{{- d.include("/table/examples/theads.md") }}
   </textarea>
 </pre>
 

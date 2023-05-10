@@ -39,5 +39,5 @@ layui.use(function(){
 <h2 id="options" lay-toc="{hot: true}">属性</h2>
 
 <div>
-{{- d.include("docs/code/detail/options.md") }}
+{{- d.include("/code/detail/options.md") }}
 </div>
