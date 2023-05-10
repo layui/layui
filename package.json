@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git+ssh://git@github.com/layui/layui.git"
   },
-  "homepage": "https://github.com/layui/layui/",
+  "homepage": "https://layui.dev",
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-uglify": "^3.0.2",
