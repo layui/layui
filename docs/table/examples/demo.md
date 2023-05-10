@@ -64,7 +64,7 @@ layui.use(['table', 'dropdown'], function(){
   // 创建渲染实例
   table.render({
     elem: '#test',
-    url:'{{d.root}}/static/json/table/demo1.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    url:'/static/2.8/json/table/demo1.json', // 此处为静态模拟数据，实际使用时需换成真实接口
     toolbar: '#toolbarDemo',
     defaultToolbar: ['filter', 'exports', 'print', {
       title: '提示',

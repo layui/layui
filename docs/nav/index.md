@@ -307,8 +307,8 @@ layui.use(function(){
 <h3>默认面包屑</h3>
 
 <span class="layui-breadcrumb">
-  <a href="{{d.root}}/">首页</a>
-  <a href="{{d.root}}/demo/">演示</a>
+  <a href="">首页</a>
+  <a href="">演示</a>
   <a><cite>导航元素</cite></a>
 </span>
 

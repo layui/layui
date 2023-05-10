@@ -14,7 +14,7 @@ layui.use(function(){
   // dropdown 在表格中的应用
   table.render({
     elem: '#ID-dropdown-demo-table',
-    url: '{{d.root}}/static/json/table/demo5.json',
+    url: '/static/2.8/json/table/demo5.json',
     title: '用户数据表',
     cols: [[
       {type: 'checkbox', fixed: 'left'},

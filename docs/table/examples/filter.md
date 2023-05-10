@@ -9,7 +9,7 @@ layui.use(function(){
   // 渲染
   table.render({
     elem: '#ID-table-demo-filter',
-    url:'{{d.root}}/static/json/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    url:'/static/2.8/json/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
     toolbar: 'default',
     height: 315,
     cols: [function(){

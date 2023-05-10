@@ -1,4 +1,4 @@
-> 假设这是一段数据源：<a href="{{d.root}}/static/json/table/demo3.json" target="_blank">{{d.root}}/static/json/table/demo3.json</a><br>
+> 假设这是一段数据源：<a href="/static/2.8/json/table/demo3.json" target="_blank">/static/2.8/json/table/demo3.json</a><br>
   尽管它并不符合 table 组件默认规定的数据格式（[#详见](#options-async-data)），但可以通过 parseData 回调将其进行转换。
 
 <table class="layui-hide" id="ID-table-demo-parse"></table>
@@ -11,7 +11,7 @@ layui.use('table', function(){
   // 渲染
   table.render({
     elem: '#ID-table-demo-parse',
-    url:'{{d.root}}/static/json/table/demo3.json',
+    url:'/static/2.8/json/table/demo3.json',
     page: true,
     response: {
       statusCode: 200 // 重新规定成功的状态码为 200，table 组件默认为 0
