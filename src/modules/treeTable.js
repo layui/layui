@@ -142,6 +142,10 @@ layui.define(['table'], function (exports) {
             retData[dataName] = that.flatToTree(retData[dataName]);
           }
 
+          if (parseDataThat.autoSort && parseDataThat.initSort && parseDataThat.initSort.type) {
+            layui.sort(retData[dataName], parseDataThat.initSort.field, parseDataThat.initSort.type === 'desc', true)
+          }
+
           that.initData(retData[dataName]);
 
           return retData;
@@ -155,7 +159,7 @@ layui.define(['table'], function (exports) {
         options.data = that.flatToTree(options.data);
       }
       if (options.initSort && options.initSort.type) {
-        options.data = layui.sort(options.data, options.initSort.field, options.initSort.type === 'desc')
+        layui.sort(options.data, options.initSort.field, options.initSort.type === 'desc', true)
       }
       that.initData(options.data);
     }
@@ -401,7 +405,7 @@ layui.define(['table'], function (exports) {
       that.initData(item1[childrenKey] || [], dataIndex);
     });
 
-    parentIndex || updateCache(tableId, childrenKey);
+    updateCache(tableId, childrenKey, data);
 
     return data;
   }
@@ -561,13 +565,13 @@ layui.define(['table'], function (exports) {
         trExpanded = trData[LAY_HAS_EXPANDED] = true;
         if (childNodes.length) {
           // 判断是否需要排序
-          if (options.initSort && !options.url) {
+          if (options.initSort && (!options.url || options.autoSort)) {
             var initSort = options.initSort;
             if (initSort.type) {
-              childNodes = trData[customName.children] = layui.sort(childNodes, initSort.field, initSort.type === 'desc');
+              layui.sort(childNodes, initSort.field, initSort.type === 'desc', true);
             } else {
               // 恢复默认
-              childNodes = trData[customName.children] = layui.sort(childNodes, table.config.indexName);
+              layui.sort(childNodes, table.config.indexName, null, true);
             }
           }
           treeTableThat.initData(trData[customName.children], trData[LAY_DATA_INDEX]);
@@ -1007,9 +1011,9 @@ layui.define(['table'], function (exports) {
 
     if (!options.url) {
       if (initSort.type) {
-        options.data = layui.sort(options.data, initSort.field, initSort.type === 'desc');
+        layui.sort(options.data, initSort.field, initSort.type === 'desc', true);
       } else {
-        options.data = layui.sort(options.data, table.config.indexName);
+        layui.sort(options.data, table.config.indexName, null, true);
       }
       that.initData(options.data);
       treeTable.reloadData(id);
