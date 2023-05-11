@@ -1,6 +1,6 @@
 常用两级表头：
  
-<table class="layui-table" lay-data="{url:'{{d.root}}/static/json/table/demo2.json?v=2', page: true, limit: 6, limits:[6]}" id="ID-table-demo-theads-1">
+<table class="layui-table" lay-data="{url:'/static/2.8/json/table/demo2.json?v=2', page: true, limit: 6, limits:[6]}" id="ID-table-demo-theads-1">
   <thead>
     <tr>
       <th lay-data="{checkbox:true}" rowspan="2"></th>
@@ -19,7 +19,7 @@
 
 更多级表头（支持无限极）：
 
-<table class="layui-table" lay-data="{url:'{{d.root}}/static/json/table/demo2.json?v=3', cellMinWidth: 80, page: true}" id="ID-table-demo-theads-2">
+<table class="layui-table" lay-data="{url:'/static/2.8/json/table/demo2.json?v=3', cellMinWidth: 80, page: true}" id="ID-table-demo-theads-2">
   <thead>
     <tr>
       <th lay-data="{field:'username', fixed:'left', width:80}" rowspan="3">联系人</th>

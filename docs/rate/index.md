@@ -10,7 +10,7 @@ toc: true
 <h2 id="examples" lay-toc="{hot: true}" style="margin-bottom: 0;">示例</h2>
 
 <div>
-{{- d.include("docs/rate/detail/demo.md") }}
+{{- d.include("/rate/detail/demo.md") }}
 </div>
 
 <p></p>
@@ -53,5 +53,5 @@ layui.use(function(){
 <h2 id="options" lay-toc="{level: 2, hot: true}">属性</h2>
 
 <div>
-{{- d.include("docs/rate/detail/options.md") }}
+{{- d.include("/rate/detail/options.md") }}
 </div>

@@ -13,7 +13,7 @@ toc: true
 点击下述按钮，查看每个示例对应的弹层效果。
 
 <div>
-{{- d.include("docs/layer/detail/demo.md") }}
+{{- d.include("/layer/detail/demo.md") }}
 </div>
 
 <h2 id="api" lay-toc="{hot: true, bold: true}">API</h2>
@@ -71,7 +71,7 @@ var index = layer.open({
 <h2 id="options" lay-toc="{level: 2, hot: true}">基础属性</h2>
 
 <div>
-{{- d.include("docs/layer/detail/options.md") }}
+{{- d.include("/layer/detail/options.md") }}
 </div>
 
 <h2 id="alert" lay-pid="api" class="ws-anchor ws-bold">弹出信息框</h2>

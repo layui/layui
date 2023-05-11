@@ -76,7 +76,7 @@ title: false // 不显示标题栏
 </td>
 <td colspan="3">
   
-<div id="options.content" class="ws-anchor">
+<div id="options.content" lay-pid="options" class="ws-anchor">
 
 弹层内容。 可传入的值比较灵活，支持以下使用场景：
 
@@ -129,7 +129,7 @@ layer.open({
 </td>
 <td>
 
-<div id="options.area" class="ws-anchor">  
+<div id="options.area" lay-pid="options" class="ws-anchor">  
 设置弹层的宽高，其值支持以下可选类型：
 </div>
 
@@ -181,7 +181,7 @@ layer.open({
 </td>
 <td>
  
-<div id="options.offset" class="ws-anchor">  
+<div id="options.offset" lay-pid="options" class="ws-anchor">  
 弹层的偏移坐标。 支持以下可选值：
 </div>  
 
@@ -215,7 +215,7 @@ layer.open({
 </td>
 <td>
   
-<div id="options.anim" class="ws-anchor">
+<div id="options.anim" lay-pid="options" class="ws-anchor">
 弹层的出场动画。支持以下可选值：
 </div>
 
@@ -281,7 +281,7 @@ layer.open({
 </td>
 <td>
 
-<div id="options.closeBtn" class="ws-anchor">   
+<div id="options.closeBtn" lay-pid="options" class="ws-anchor">   
 是否开启标题栏的关闭图标，或设置关闭图标风格。
 </div>
 
@@ -305,7 +305,7 @@ layer.open({
 </td>
 <td>
 
-<div id="options.icon" class="ws-anchor">
+<div id="options.icon" lay-pid="options" class="ws-anchor">
 提示图标。 信息框和加载层的私有参数。
 </div>
 
@@ -339,7 +339,7 @@ layer.load(1); // 加载层风格一
 </td>
 <td>
   
-<div id="options.btn" class="ws-anchor">
+<div id="options.btn" lay-pid="options" class="ws-anchor">
 自定义按钮。 页面层默认不开启。 按钮可无限数量，每一个按钮均会按照数组顺序生成对应的回调函数，如：
 </div>
 
@@ -377,7 +377,7 @@ layer.open({
 </td>
 <td>
   
-<div id="options.btnAlign" class="ws-anchor">
+<div id="options.btnAlign" lay-pid="options" class="ws-anchor">
 按钮水平对其方式。支持以下可选值：
 </div>
 
@@ -402,7 +402,7 @@ layer.open({
 </td>
 <td>
   
-<div id="options.skin" class="ws-anchor">
+<div id="options.skin" lay-pid="options" class="ws-anchor">
 弹层的主题风格。通过赋值对应的 className，实现对主题样式的定制。除了默认主题风格，还支持以下可选主题：
 </div>
 
@@ -425,7 +425,7 @@ layer.open({
 </td>
 <td>
   
-<div id="options.shade" class="ws-anchor">
+<div id="options.shade" lay-pid="options" class="ws-anchor">
 弹层的遮罩。 支持以下写法：
 </div>
 
@@ -627,7 +627,7 @@ tips: [1, '#000'] // 吸附在上的深色贴士层
 <td colspan="4" style="text-align: center"> 
 
 
-<div id="options.callback" class="ws-anchor" style="pointer-events: auto;">
+<div id="options.callback" lay-pid="options" class="ws-anchor">
 
 [回调函数](#options.callback)
 
@@ -672,7 +672,7 @@ layer.open({
 </td>
 <td colspan="3">
   
-<div id="options.yes" class="ws-anchor">
+<div id="options.yes" lay-pid="options" class="ws-anchor">
 
 点击「确定」按钮的回调函数。返回的参数同 `success`
 
@@ -698,7 +698,7 @@ layer.open({
 </td>
 <td colspan="3">
   
-<div id="options.cancel" class="ws-anchor">
+<div id="options.cancel" lay-pid="options" class="ws-anchor">
 点击标题栏关闭按钮的回调函数。返回的参数同 `success`
 </div>
 
@@ -724,7 +724,7 @@ layer.open({
 </td>
 <td colspan="3">
   
-<div id="options.end" class="ws-anchor">
+<div id="options.end" lay-pid="options" class="ws-anchor">
 弹层被关闭且销毁后的回调函数。
 </div>
 
@@ -747,7 +747,7 @@ layer.open({
 </td>
 <td colspan="3">
   
-<div id="options.moveEnd" class="ws-anchor">
+<div id="options.moveEnd" lay-pid="options" class="ws-anchor">
 弹层拖拽完毕后的回调函数。
 </div>
 
@@ -771,7 +771,7 @@ layer.open({
 </td>
 <td colspan="3">
 
-<div id="options.resizing" class="ws-anchor">
+<div id="options.resizing" lay-pid="options" class="ws-anchor">
 弹层拉伸过程中的回调函数
 </div>
 
@@ -795,7 +795,7 @@ layer.open({
 </td>
 <td colspan="3">
   
-<div id="options.full" class="ws-anchor">
+<div id="options.full" lay-pid="options" class="ws-anchor">
 
 弹层最大化后的回调函数。返回的参数同 `success`
 
@@ -821,7 +821,7 @@ layer.open({
 </td>
 <td colspan="3">
   
-<div id="options.min" class="ws-anchor">
+<div id="options.min" lay-pid="options" class="ws-anchor">
 
 弹层最小化后的回调函数。返回的参数同 `success`
 
@@ -848,7 +848,7 @@ layer.open({
 </td>
 <td colspan="3">
   
-<div id="options.restore" class="ws-anchor">
+<div id="options.restore" lay-pid="options" class="ws-anchor">
 弹层被还原后的回调函数。返回的参数同 `success`
 </div>
 

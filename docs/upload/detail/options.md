@@ -56,7 +56,7 @@
 </td>
 <td>
 
-<div id="options.data" class="ws-anchor">  
+<div id="options.data" lay-pid="options" class="ws-anchor">  
 传递给上传接口的额外参数，支持静态赋值和动态赋值两种写法。
 </div>
 
@@ -100,7 +100,7 @@ data: {
 </td>
 <td>
 
-<div id="options.accept" class="ws-anchor">
+<div id="options.accept" lay-pid="options" class="ws-anchor">
 指定允许上传时校验的文件类型。可选值有：
 </div>  
 
@@ -142,7 +142,7 @@ acceptMime: 'image/jpeg, image/png` // 只筛选 jpg,png 格式图片
 </td>
 <td>
 
-<div id="options.exts" class="ws-anchor">
+<div id="options.exts" lay-pid="options" class="ws-anchor">
 
 允许上传的文件后缀。一般结合 `accept` 属性来设定。
 
@@ -257,7 +257,7 @@ acceptMime: 'image/jpeg, image/png` // 只筛选 jpg,png 格式图片
 <td colspan="4" style="text-align: center"> 
 
 
-<div id="options.callback" class="ws-anchor" style="pointer-events: auto;">
+<div id="options.callback" lay-pid="options" class="ws-anchor">
 
 [回调函数](#options.callback)
 
@@ -273,7 +273,7 @@ acceptMime: 'image/jpeg, image/png` // 只筛选 jpg,png 格式图片
 </td>
 <td colspan="3">
   
-<div id="option.choose" class="ws-anchor">
+<div id="options.choose" lay-pid="options" class="ws-anchor">
 选择文件后的回调函数。返回的参数如下
 </div>
 
@@ -310,7 +310,7 @@ choose: function(obj){
 </td>
 <td colspan="3">
   
-<div id="option.before" class="ws-anchor">
+<div id="options.before" lay-pid="options" class="ws-anchor">
 文件提交上传前的回调函数。返回的参数同 choose
 </div>
 
@@ -332,12 +332,12 @@ before: function(obj){ // obj 参数同 choose
     <tr>
 <td>
   
-[progress](#option.progress)
+[progress](#options.progress)
 
 </td>
 <td colspan="3">
   
-<div id="option.progress" class="ws-anchor">
+<div id="options.progress" lay-pid="options" class="ws-anchor">
 执行上传请求后的回调函数。返回的参数如下：
 </div>
 
@@ -361,12 +361,12 @@ progress: progress: function(n, elem, res, index){
     <tr>
 <td>
   
-[done](#option.done)
+[done](#options.done)
 
 </td>
 <td colspan="3">
   
-<div id="option.done" class="ws-anchor">
+<div id="options.done" lay-pid="options" class="ws-anchor">
 执行单次文件上传请求后的回调函数。返回的参数如下：
 </div>
 
@@ -392,12 +392,12 @@ done: function(res, index, upload){
     <tr>
 <td>
   
-[allDone](#option.allDone)
+[allDone](#options.allDone)
 
 </td>
 <td colspan="3">
   
-<div id="option.allDone" class="ws-anchor">
+<div id="options.allDone" lay-pid="options" class="ws-anchor">
 
 当开启多文件 (`multiple: true` ) 且所有文件均上传完毕后的状态回调函数。
 

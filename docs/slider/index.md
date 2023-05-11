@@ -14,7 +14,7 @@ toc: true
 .demo-slider-container .layui-code-item-preview > div{margin: 24px 0;}
 </style>
 <div class="demo-slider-container">
-{{- d.include("docs/slider/detail/demo.md") }}
+{{- d.include("/slider/detail/demo.md") }}
 </div>
 
 <h2 id="api" lay-toc="{}">API</h2>
@@ -89,5 +89,5 @@ ins1.setValue(60, 1) // 设置结尾值
 <h2 id="options" lay-toc="{level: 2, hot: true}">属性</h2>
 
 <div>
-{{- d.include("docs/slider/detail/options.md") }}
+{{- d.include("/slider/detail/options.md") }}
 </div>

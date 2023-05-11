@@ -18,7 +18,7 @@ toc: true
 </style>
 
 <div>
-{{- d.include("docs/flow/detail/demo.md") }}
+{{- d.include("/flow/detail/demo.md") }}
 </div>
 
 <h2 id="api" lay-toc="{}">API</h2>
@@ -40,7 +40,7 @@ toc: true
 <h2 id="options" lay-toc="{level: 2, hot: true}">属性</h2>
 
 <div>
-{{- d.include("docs/flow/detail/options.md") }}
+{{- d.include("/flow/detail/options.md") }}
 </div>
 
 <h2 id="lazyimg" lay-toc="{level: 2}">图片懒加载</h2>

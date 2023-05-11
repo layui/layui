@@ -12,7 +12,7 @@ toc: true
 在以下*模板*或*数据*中进行编辑，下方*视图*将呈现对应结果。
 
 <div>
-{{- d.include("docs/laytpl/detail/demo.md") }}
+{{- d.include("/laytpl/detail/demo.md") }}
 </div>
 
 <h2 id="api" lay-toc="{}">API</h2>
@@ -95,7 +95,7 @@ compile.render(data, callback); // 模板渲染
 <h2 id="grammar" lay-toc="{level: 2, hot: true}">标签语法</h2>
 
 <div>
-{{- d.include("docs/laytpl/detail/options.md") }}
+{{- d.include("/laytpl/detail/options.md") }}
 </div>
 
 

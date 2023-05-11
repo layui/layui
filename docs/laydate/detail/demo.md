@@ -2,7 +2,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', text: {preview: '常规用法'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/laydate/examples/normal.md") }}
+{{- d.include("/laydate/examples/normal.md") }}
   </textarea>
 </pre>
 
@@ -12,7 +12,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/laydate/examples/type.md") }}
+{{- d.include("/laydate/examples/type.md") }}
   </textarea>
 </pre>
 
@@ -20,7 +20,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/laydate/examples/range.md") }}
+{{- d.include("/laydate/examples/range.md") }}
   </textarea>
 </pre>
 
@@ -28,7 +28,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/laydate/examples/shortcut.md") }}
+{{- d.include("/laydate/examples/shortcut.md") }}
   </textarea>
 </pre>
 
@@ -37,7 +37,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/laydate/examples/format.md") }}
+{{- d.include("/laydate/examples/format.md") }}
   </textarea>
 </pre>
 
@@ -46,7 +46,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/laydate/examples/mark.md") }}
+{{- d.include("/laydate/examples/mark.md") }}
   </textarea>
 </pre>
 
@@ -55,7 +55,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/laydate/examples/limit.md") }}
+{{- d.include("/laydate/examples/limit.md") }}
   </textarea>
 </pre>
 
@@ -64,7 +64,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/laydate/examples/elem.md") }}
+{{- d.include("/laydate/examples/elem.md") }}
   </textarea>
 </pre>
 
@@ -75,7 +75,7 @@
   obj.render();
 }}">
   <textarea>
-{{- d.include("docs/laydate/examples/more.md") }}
+{{- d.include("/laydate/examples/more.md") }}
   </textarea>
 </pre>
 
@@ -84,7 +84,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/laydate/examples/theme.md") }}
+{{- d.include("/laydate/examples/theme.md") }}
   </textarea>
 </pre>
 
@@ -92,6 +92,6 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/laydate/examples/static.md") }}
+{{- d.include("/laydate/examples/static.md") }}
   </textarea>
 </pre>

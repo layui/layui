@@ -15,7 +15,7 @@ toc: true
   obj.render()
 }}">
   <textarea>
-{{- d.include('docs/form/examples/form.demo.md') }}
+{{- d.include("/form/examples/form.demo.md") }}
   </textarea>
 </pre>
 
@@ -25,7 +25,7 @@ toc: true
   obj.render()
 }}">
   <textarea>
-{{- d.include('docs/form/examples/form.pane.md') }}
+{{- d.include("/form/examples/form.pane.md") }}
   </textarea>
 </pre>
 
@@ -35,7 +35,7 @@ toc: true
   obj.render()
 }}">
   <textarea>
-{{- d.include('docs/form/examples/form.login.md') }}
+{{- d.include("/form/examples/form.login.md") }}
   </textarea>
 </pre>
 
@@ -45,7 +45,7 @@ toc: true
   obj.render()
 }}">
   <textarea>
-{{- d.include('docs/form/examples/form.reg.md') }}
+{{- d.include("/form/examples/form.reg.md") }}
   </textarea>
 </pre>
 
@@ -74,7 +74,7 @@ form 还可以借助*栅格*实现更灵活的响应式布局。
   obj.render()
 }}">
   <textarea>
-{{- d.include('docs/form/examples/form.grid.md') }}
+{{- d.include("/form/examples/form.grid.md") }}
   </textarea>
 </pre>
 
@@ -232,7 +232,7 @@ Layui 对表单做了相对巧妙的支持，只需在表单元素上设置 `lay
   obj.render()
 }}">
   <textarea>
-{{- d.include('docs/form/examples/form.verify.md') }}  
+{{- d.include("/form/examples/form.verify.md") }}  
   </textarea>
 </pre>
 
@@ -252,7 +252,7 @@ Layui 对表单做了相对巧妙的支持，只需在表单元素上设置 `lay
   obj.render()
 }}">
   <textarea>
-{{- d.include('docs/form/examples/form.validate.md') }}  
+{{- d.include("/form/examples/form.validate.md") }}  
   </textarea>
 </pre>
 
@@ -268,7 +268,7 @@ Layui 对表单做了相对巧妙的支持，只需在表单元素上设置 `lay
   obj.render()
 }}">
   <textarea>
-{{- d.include('docs/form/examples/form.val.md') }}
+{{- d.include("/form/examples/form.val.md") }}
   </textarea>
 </pre>
 

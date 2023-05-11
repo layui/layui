@@ -201,7 +201,7 @@
 <td colspan="4" style="text-align: center"> 
 
 
-<div id="options.callback" class="ws-anchor" style="pointer-events: auto;">
+<div id="options.callback" lay-pid="options" class="ws-anchor">
 
 [回调函数](#options.callback)
 
@@ -217,7 +217,7 @@
 </td>
 <td colspan="3">
   
-<div id="options.jump" class="ws-anchor">分页跳转后的回调函数。函数返回两个参数：</div>
+<div id="options.jump" lay-pid="options" class="ws-anchor">分页跳转后的回调函数。函数返回两个参数：</div>
 
 - 参数 `obj` : 当前分页相关的所有选项值
 - 参数 `first` : 是否首次渲染，一般用于初始加载的判断

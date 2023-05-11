@@ -12,7 +12,7 @@ toc: true
 以下所有示例中演示的数据均为「静态模拟数据」，实际使用时换成您的真实接口即可。
 
 <div>
-{{- d.include("docs/treeTable/detail/demo.md") }}
+{{- d.include("/treeTable/detail/demo.md") }}
 </div>
 
 <p></p>
@@ -51,7 +51,7 @@ toc: true
 `table` 组件的所有基础属性均适用于 `treeTable` 组件。在此基础上，`treeTable` 还专门提供了 `tree` 属性集： 
 
 <div>
-{{- d.include("docs/treeTable/detail/options.md") }}
+{{- d.include("/treeTable/detail/options.md") }}
 </div>
 
 <h3 id="reload" lay-toc="{level: 2}">重载</h3>

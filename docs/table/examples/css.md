@@ -49,7 +49,7 @@
     // 创建渲染实例
     table.render({
       elem: '#ID-table-demo-css',
-      url:'{{d.root}}/static/json/table/demo1.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+      url:'/static/2.8/json/table/demo1.json', // 此处为静态模拟数据，实际使用时需换成真实接口
       page: true,
       height: 'full-35',
       lineStyle: 'height: 151px;', // 定义表格的多行样式

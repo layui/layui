@@ -1,4 +1,4 @@
-<table class="layui-table" lay-data="{height:315, url:'{{d.root}}/static/json/table/user.json', page:true}" id="ID-table-demo-init">
+<table class="layui-table" lay-data="{height:315, url:'/static/2.8/json/table/user.json', page:true}" id="ID-table-demo-init">
   <thead>
     <tr>
       <th lay-data="{field:'id', width:80, sort: true}">ID</th>

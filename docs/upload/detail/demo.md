@@ -4,7 +4,7 @@
   obj.render();
 }}">
   <textarea>
-{{- d.include("docs/upload/examples/image.md") }}
+{{- d.include("/upload/examples/image.md") }}
 </script>
   </textarea>
 </pre>
@@ -13,7 +13,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/upload/examples/files.table.md") }}
+{{- d.include("/upload/examples/files.table.md") }}
   </textarea>
 </pre>
 
@@ -22,7 +22,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/upload/examples/accept.md") }}
+{{- d.include("/upload/examples/accept.md") }}
   </textarea>
 </pre>
 
@@ -31,7 +31,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/upload/examples/size.md") }}
+{{- d.include("/upload/examples/size.md") }}
   </textarea>
 </pre>
 
@@ -39,7 +39,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/upload/examples/auto.md") }}
+{{- d.include("/upload/examples/auto.md") }}
   </textarea>
 </pre>
 
@@ -48,7 +48,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/upload/examples/drag.md") }}
+{{- d.include("/upload/examples/drag.md") }}
   </textarea>
 </pre>
 
@@ -57,6 +57,6 @@
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/upload/examples/form.file.md") }}
+{{- d.include("/upload/examples/form.file.md") }}
   </textarea>
 </pre>

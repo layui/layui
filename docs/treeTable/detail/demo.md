@@ -8,7 +8,7 @@
   }
 }}">
   <textarea>
-{{- d.include('docs/treeTable/examples/demo.md') }}
+{{- d.include("/treeTable/examples/demo.md") }}
   </textarea>
 </pre>
 

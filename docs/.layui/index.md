@@ -10,7 +10,7 @@ toc: true
 <h2 id="examples" lay-toc="{hot: true}" style="margin-bottom: 0;">示例</h2>
 
 <div>
-{{- d.include("docs/MOD_NAME/detail/demo.md") }}
+{{- d.include("/MOD_NAME/detail/demo.md") }}
 </div>
 
 <h2 id="api" lay-toc="{}">API</h2>
@@ -30,5 +30,5 @@ toc: true
 <h2 id="options" lay-toc="{level: 2, hot: true}">属性</h2>
 
 <div>
-{{- d.include("docs/MOD_NAME/detail/options.md") }}
+{{- d.include("/MOD_NAME/detail/options.md") }}
 </div>
