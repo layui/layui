@@ -2214,7 +2214,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }).on('contextmenu', 'tr', function(e){ //菜单
       if (!options.defaultContextmenu) e.preventDefault();
       setRowEvent.call(this, 'rowContextmenu');
-    });;
+    });
 
     // 创建行单击、双击、菜单事件
     var setRowEvent = function(eventType){
@@ -2672,7 +2672,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           table.eachCols(id, function(i3, item3){
             if(item3.field && item3.type == 'normal'){
               // 不导出隐藏列
-              if(item3.hide){
+              if(item3.hide || item3.doNotExport){
                 if(i1 == 0) fieldsIsHide[item3.field] = true; // 记录隐藏列
                 return;
               }
