@@ -24,7 +24,7 @@ toc: true
   </div>
   <div class="layui-col-sm4">
     <div class="layui-bg-blue">
-      <p>#1e9fff<p>
+      <p>#1e9fff</p>
       <p>经典蓝</p>
     </div>
   </div>
@@ -38,7 +38,7 @@ Layui 选取以象征清新与包容的「蓝绿色」作为主色调，它介�
 <div class="layui-row layui-col-space15 ws-docs-color">
   <div class="layui-col-sm3">
     <div class="layui-bg-red">
-      <p>#ff5722<p>
+      <p>#ff5722</p>
       <p>错误 - Danger</p>
     </div>
   </div>
@@ -70,7 +70,7 @@ Layui 选取以象征清新与包容的「蓝绿色」作为主色调，它介�
 <div class="layui-row ws-docs-color ws-docs-necolor">
   <div class="layui-col-md6">
     <div style="background-color: #FAFAFA;">
-      <p>#fafafa<p>
+      <p>#fafafa</p>
     </div>
   </div>
   <div class="layui-col-md6">
