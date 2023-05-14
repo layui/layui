@@ -715,11 +715,14 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       
       // 单选框
       ,radio: function(elem){
-        var CLASS = 'layui-form-radio', ICON = ['&#xe643;', '&#xe63f;']
-        ,radios = elem || elemForm.find('input[type=radio]')
+        var CLASS = 'layui-form-radio';
+        var ICON = ['layui-icon-radio', 'layui-icon-circle'];
+        var radios = elem || elemForm.find('input[type=radio]');
 
-        ,events = function(reElem){
-          var radio = $(this), ANIM = 'layui-anim-scaleSpring';
+        // 事件
+        var events = function(reElem){
+          var radio = $(this);
+          var ANIM = 'layui-anim-scaleSpring';
           
           reElem.on('click', function(){
             var name = radio[0].name, forms = radio.parents(ELEM);
