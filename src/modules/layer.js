@@ -255,7 +255,7 @@ doms.anim = {
 doms.SHADE = 'layui-layer-shade';
 doms.MOVE = 'layui-layer-move';
 
-//默认配置
+// 默认配置
 Class.pt.config = {
   type: 0,
   shade: 0.3,
@@ -265,16 +265,16 @@ Class.pt.config = {
   offset: 'auto',
   area: 'auto',
   closeBtn: 1,
-  time: 0, //0表示不自动关闭
+  icon: -1,
+  time: 0, // 0 表示不自动关闭
   zIndex: 19891014, 
   maxWidth: 360,
   anim: 0,
-  isOutAnim: true, //退出动画
-  minStack: true, //最小化堆叠
-  icon: -1,
+  isOutAnim: true, // 退出动画
+  minStack: true, // 最小化堆叠
   moveType: 1,
   resize: true,
-  scrollbar: true, //是否允许浏览器滚动条
+  scrollbar: true, // 是否允许浏览器滚动条
   tips: 2
 };
 
@@ -382,25 +382,45 @@ Class.pt.vessel = function(conType, callback){
   return that;
 };
 
-//创建骨架
+// 创建骨架
 Class.pt.creat = function(){
-  var that = this
-  ,config = that.config
-  ,times = that.index, nodeIndex
-  ,content = config.content
-  ,conType = typeof content === 'object'
-  ,body = $('body');
+  var that = this;
+  var config = that.config;
+  var times = that.index, nodeIndex;
+  var content = config.content;
+  var conType = typeof content === 'object';
+  var body = $('body');
   
-  if(config.id && $('.'+ doms[0]).find('#'+ config.id)[0]) return;
+  // 若 id 对应的弹层已经存在，则不重新创建
+  if(config.id && $('.'+ doms[0]).find('#'+ config.id)[0]){
+    return (function(){
+      var layero = $('#'+ config.id).closest('.'+ doms[0]);
+      var index = layero.attr('times');
+      var options = layero.data('config');
+      var elemShade = $('#'+ doms.SHADE + index);
+      
+      var maxminStatus = layero.data('maxminStatus') || {};
+      // 若弹层为最小化状态，则点击目标元素时，自动还原
+      if(maxminStatus === 'min'){
+        layer.restore(index);
+      } else if(options.hideOnClose){
+        elemShade.show();
+        layero.show();
+      };
+    })();
+  };
+
+  // 是否移除活动元素的焦点
   if(config.removeFocus) {
     document.activeElement.blur(); // 将原始的聚焦节点失焦
   }
 
+  // 初始化 area 属性
   if(typeof config.area === 'string'){
     config.area = config.area === 'auto' ? ['', ''] : [config.area, ''];
   }
   
-  //anim兼容旧版shift
+  // anim 兼容旧版 shift
   if(config.shift){
     config.anim = config.shift;
   }
@@ -1153,6 +1173,9 @@ layer.close = function(index, callback){
   }();
   var type = layero.attr('type');
   var options = layero.data('config') || {};
+  var hideOnClose = options.id && options.hideOnClose; // 是否关闭时移除弹层容器
+
+  if(!layero[0]) return;
 
   // 关闭动画
   var closeAnim = ({
@@ -1161,10 +1184,18 @@ layer.close = function(index, callback){
     slideUp: 'layer-anim-slide-up-out',
     slideRight: 'layer-anim-slide-right-out'
   })[options.anim] || 'layer-anim-close';
-  
-  if(!layero[0]) return;
-  
-  var WRAP = 'layui-layer-wrap', remove = function(){
+
+  // 移除主容器
+  var remove = function(){
+    var WRAP = 'layui-layer-wrap';
+
+    // 是否关闭时隐藏弹层容器
+    if(hideOnClose){
+      layero.removeClass('layer-anim '+ closeAnim);
+      return layero.hide();
+    }
+
+    // 是否为页面捕获层
     if(type === ready.type[1] && layero.attr('conType') === 'object'){
       layero.children(':not(.'+ doms[5] +')').remove();
       var wrap = layero.find('.'+WRAP);
@@ -1173,7 +1204,7 @@ layer.close = function(index, callback){
       }
       wrap.css('display', wrap.data('display')).removeClass(WRAP);
     } else {
-      //低版本IE 回收 iframe
+      // 低版本 IE 回收 iframe
       if(type === ready.type[2]){
         try {
           var iframe = $('#'+ doms[4] + index)[0];
@@ -1196,13 +1227,18 @@ layer.close = function(index, callback){
       delete ready.events.resize[index];
     }
   };
+  // 移除遮罩
+  var removeShade = (function fn(){
+    $('#'+ doms.SHADE + index)[
+      hideOnClose ? 'hide' : 'remove'
+    ]();
+  })();
   
   // 是否允许关闭动画
   if(options.isOutAnim){
     layero.addClass('layer-anim '+ closeAnim);
   }
   
-  $('#layui-layer-moves, #'+ doms.SHADE + index).remove();
   layer.ie == 6 && ready.reselect();
   ready.rescollbar(index); 
   
