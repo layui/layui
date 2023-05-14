@@ -35,7 +35,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           '链接格式不正确'
         ],
         number: function(value){
-          if(!value || isNaN(value)) return '只能填写数字'
+          if(isNaN(value)) return '只能填写数字';
         },
         date: [
           /^(\d{4})[-\/](\d{1}|0\d{1}|1[0-2])([-\/](\d{1}|0\d{1}|[1-2][0-9]|3[0-1]))*$/,
@@ -861,7 +861,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       var verifyStr = othis.attr('lay-verify') || '';
       var vers = verifyStr.split('|');
       var verType = othis.attr('lay-vertype'); // 提示方式
-      var value = othis.val();
+      var value = $.trim(othis.val());
 
       othis.removeClass(DANGER); // 移除警示样式
       
@@ -884,12 +884,13 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           
           errorText = errorText || rule[1];
           
+          // 获取自定义必填项提示文本
           if(thisVer === 'required'){
             errorText = othis.attr('lay-reqtext') || errorText;
           }
           
           // 若为必填项或者非空命中校验，则阻止提交，弹出提示
-          if(isTrue){
+          if(isTrue && (thisVer === 'required' || (value && thisVer !== 'required'))){
             // 提示层风格
             if(verType === 'tips'){
               layer.tips(errorText, function(){
@@ -904,7 +905,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               layer.alert(errorText, {title: '提示', shadeClose: true});
             } 
             // 若返回的为字符或数字，则自动弹出默认提示框；否则由 verify 方法中处理提示
-            else if(/\bstring|number\b/.test(typeof errorText)){ 
+            else if(/\b(string|number)\b/.test(typeof errorText)){ 
               layer.msg(errorText, {icon: 5, shift: 6});
             }
 
