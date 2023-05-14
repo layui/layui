@@ -640,29 +640,43 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           
           // 勾选
           reElem.on('click', function(){
+            var othis = $(this);
             var filter = check.attr('lay-filter') // 获取过滤器
-            var title = (check.attr('title')||'').split('|');
+            var title = (
+              othis.next('*[lay-checkbox]')[0] 
+                ? othis.next().html()
+              : check.attr('title') || ''
+            );
+            var skin = check.attr('lay-skin') || 'primary';
 
+            // 开关
+            title = skin === 'switch' ? title.split('|') : [title];
+
+            // 禁用
             if(check[0].disabled) return;
             
+            // 半选
             if (check[0].indeterminate) {
               check[0].indeterminate = false;
               reElem.find(CLASS.SUBTRA).removeClass(CLASS.SUBTRA).addClass('layui-icon-ok')
             }
 
-
+            // 开关
             check[0].checked ? (
-              check[0].checked = false
-              ,reElem.removeClass(RE_CLASS[1]).find('em').text(title[1])
+              check[0].checked = false,
+              reElem.removeClass(RE_CLASS[1]),
+              skin === 'switch' && reElem.children('div').html(title[1])
             ) : (
-              check[0].checked = true
-              ,reElem.addClass(RE_CLASS[1]).find('em').text(title[0])
+              check[0].checked = true,
+              reElem.addClass(RE_CLASS[1]),
+              skin === 'switch' && reElem.children('div').html(title[0])
             );
             
+            // 事件
             layui.event.call(check[0], MOD_NAME, RE_CLASS[2]+'('+ filter +')', {
-              elem: check[0]
-              ,value: check[0].value
-              ,othis: reElem
+              elem: check[0],
+              value: check[0].value,
+              othis: reElem
             });
           });
         };
@@ -671,10 +685,15 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         checks.each(function(index, check){
           var othis = $(this);
           var skin = othis.attr('lay-skin') || 'primary';
-          var title = $.trim(check.title || function(){ // 向下兼容 lay-text 属性
+          var title = util.escape($.trim(check.title || function(){ // 向下兼容 lay-text 属性
             return check.title = othis.attr('lay-text') || '';
-          }());
+          }()));
           var disabled = this.disabled;
+
+          // 若存在标题模板，则优先读取标题模板
+          if(othis.next('[lay-checkbox]')[0]){
+            title = othis.next().html() || '';
+          }
 
           // 若为开关，则对 title 进行分隔解析
           title = skin === 'switch' ? title.split('|') : [title];
@@ -685,27 +704,26 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
           
           // 替代元素
-          var hasRender = othis.next('.' + RE_CLASS[0])
-          ,reElem = $(['<div class="layui-unselect '+ RE_CLASS[0]
-            ,(check.checked ? (' '+ RE_CLASS[1]) : '') // 选中状态
-            ,(disabled ? ' layui-checkbox-disabled '+ DISABLED : '') // 禁用状态
-            ,'"'
-            ,(skin ? ' lay-skin="'+ skin +'"' : '') // 风格
-          ,'>'
-          ,function(){ // 不同风格的内容
+          var hasRender = othis.next('.' + RE_CLASS[0]);
+          var reElem = $(['<div class="layui-unselect '+ RE_CLASS[0],
+            (check.checked ? (' '+ RE_CLASS[1]) : ''), // 选中状态
+            (disabled ? ' layui-checkbox-disabled '+ DISABLED : ''), // 禁用状态
+            '"',
+            (skin ? ' lay-skin="'+ skin +'"' : ''), // 风格
+          '>',
+          function(){ // 不同风格的内容
             var type = {
               // 复选框
               "checkbox": [
-                (title[0] ? ('<span>'+ util.escape(title[0]) +'</span>') : '')
-                ,'<i class="layui-icon '+(skin === 'primary' && !check.checked && othis.get(0).indeterminate ? CLASS.SUBTRA : 'layui-icon-ok')+'"></i>'
+                (title[0] ? ('<div>'+ title[0] +'</div>') : (skin === 'primary' ? '' : '<div></div>')),
+                '<i class="layui-icon '+(skin === 'primary' && !check.checked && othis.get(0).indeterminate ? CLASS.SUBTRA : 'layui-icon-ok')+'"></i>'
               ].join(''),
-              
               // 开关
-              "switch": '<em>'+ ((check.checked ? title[0] : title[1]) || '') +'</em><i></i>'
+              "switch": '<div>'+ ((check.checked ? title[0] : title[1]) || '') +'</div><i></i>'
             };
             return type[skin] || type['checkbox'];
-          }()
-          ,'</div>'].join(''));
+          }(),
+          '</div>'].join(''));
 
           hasRender[0] && hasRender.remove(); // 如果已经渲染，则Rerender
           othis.after(reElem);
@@ -732,44 +750,45 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             if(radio[0].disabled) return;
             
             layui.each(sameRadio, function(){
-              var next = $(this).next('.'+CLASS);
+              var next = $(this).next('.' + CLASS);
               this.checked = false;
-              next.removeClass(CLASS+'ed');
-              next.find('.layui-icon').removeClass(ANIM).html(ICON[1]);
+              next.removeClass(CLASS + 'ed');
+              next.find('.layui-icon').removeClass(ANIM + ' ' + ICON[0]).addClass(ICON[1]);
             });
             
             radio[0].checked = true;
-            reElem.addClass(CLASS+'ed');
-            reElem.find('.layui-icon').addClass(ANIM).html(ICON[0]);
+            reElem.addClass(CLASS + 'ed');
+            reElem.find('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
             
             layui.event.call(radio[0], MOD_NAME, 'radio('+ filter +')', {
-              elem: radio[0]
-              ,value: radio[0].value
-              ,othis: reElem
+              elem: radio[0],
+              value: radio[0].value,
+              othis: reElem
             });
           });
         };
         
+        // 初始渲染
         radios.each(function(index, radio){
-          var othis = $(this), hasRender = othis.next('.' + CLASS), disabled = this.disabled;
+          var othis = $(this), hasRender = othis.next('.' + CLASS);
+          var disabled = this.disabled;
           
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
           hasRender[0] && hasRender.remove(); // 如果已经渲染，则Rerender
           
           // 替代元素
-          var reElem = $(['<div class="layui-unselect '+ CLASS 
-            ,(radio.checked ? (' '+CLASS+'ed') : '') // 选中状态
-          ,(disabled ? ' layui-radio-disabled '+DISABLED : '') +'">' // 禁用状态
-          ,'<i class="layui-anim layui-icon">'+ ICON[radio.checked ? 0 : 1] +'</i>'
-          ,'<div>'+ function(){
+          var reElem = $(['<div class="layui-unselect '+ CLASS, 
+            (radio.checked ? (' '+ CLASS +'ed') : ''), // 选中状态
+          (disabled ? ' layui-radio-disabled '+DISABLED : '') +'">', // 禁用状态
+          '<i class="layui-anim layui-icon '+ ICON[radio.checked ? 0 : 1] +'"></i>',
+          '<div>'+ function(){
             var title = util.escape(radio.title || '');
-            if(typeof othis.next().attr('lay-radio') === 'string'){
+            if(othis.next('[lay-radio]')[0]){
               title = othis.next().html();
-              // othis.next().remove();
             }
-            return title
-          }() +'</div>'
-          ,'</div>'].join(''));
+            return title;
+          }() +'</div>',
+          '</div>'].join(''));
 
           othis.after(reElem);
           events.call(this, reElem);
