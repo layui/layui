@@ -500,13 +500,8 @@ Class.pt.creat = function(){
     });
   };
   
-  // 记录关闭动画
-  if(config.isOutAnim){
-    that.layero.data({
-      isOutAnim: true,
-      anim: config.anim
-    });
-  }
+  // 记录配置信息
+  that.layero.data('config', config);
 };
 
 // 当前实例的 resize 事件
@@ -1157,7 +1152,7 @@ layer.close = function(index, callback){
     ) : $('#'+ doms[0] + index)
   }();
   var type = layero.attr('type');
-  var data = layero.data() || {};
+  var options = layero.data('config') || {};
 
   // 关闭动画
   var closeAnim = ({
@@ -1165,7 +1160,7 @@ layer.close = function(index, callback){
     slideLeft: 'layer-anim-slide-left-out',
     slideUp: 'layer-anim-slide-up-out',
     slideRight: 'layer-anim-slide-right-out'
-  })[data.anim] || 'layer-anim-close';
+  })[options.anim] || 'layer-anim-close';
   
   if(!layero[0]) return;
   
@@ -1203,7 +1198,7 @@ layer.close = function(index, callback){
   };
   
   // 是否允许关闭动画
-  if(data.isOutAnim){
+  if(options.isOutAnim){
     layero.addClass('layer-anim '+ closeAnim);
   }
   
@@ -1217,7 +1212,7 @@ layer.close = function(index, callback){
     ready.minStackArr.push(layero.attr('minLeft'));
   }
   
-  if((layer.ie && layer.ie < 10) || !layero.data('isOutAnim')){
+  if((layer.ie && layer.ie < 10) || !options.isOutAnim){
     remove()
   } else {
     setTimeout(function(){
