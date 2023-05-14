@@ -2209,24 +2209,24 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     });
 
     // 行事件
-    that.layBody.on('mouseenter', 'tr', function(){ //鼠标移入行
+    that.layBody.on('mouseenter', 'tr', function(){ // 鼠标移入行
       var othis = $(this);
       var index = othis.index();
-      if(othis.data('off')) return; //不触发事件
+      if(othis.data('off')) return; // 不触发事件
       that.layBody.find('tr:eq('+ index +')').addClass(ELEM_HOVER)
-    }).on('mouseleave', 'tr', function(){ //鼠标移出行
+    }).on('mouseleave', 'tr', function(){ // 鼠标移出行
       var othis = $(this);
       var index = othis.index();
-      if(othis.data('off')) return; //不触发事件
+      if(othis.data('off')) return; // 不触发事件
       that.layBody.find('tr:eq('+ index +')').removeClass(ELEM_HOVER)
-    }).on('click', 'tr', function(){ //单击行
+    }).on('click', 'tr', function(){ // 单击行
       setRowEvent.call(this, 'row');
-    }).on('dblclick', 'tr', function(){ //双击行
+    }).on('dblclick', 'tr', function(){ // 双击行
       setRowEvent.call(this, 'rowDouble');
-    }).on('contextmenu', 'tr', function(e){ //菜单
+    }).on('contextmenu', 'tr', function(e){ // 菜单
       if (!options.defaultContextmenu) e.preventDefault();
       setRowEvent.call(this, 'rowContextmenu');
-    });;
+    });
 
     // 创建行单击、双击、菜单事件
     var setRowEvent = function(eventType){
