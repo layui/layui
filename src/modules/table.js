@@ -2142,11 +2142,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 复选框选择（替代元素的 click 事件）
     that.elem.on('click', 'input[name="layTableCheckbox"]+', function(){
-      var checkbox = $(this).prev()
-      ,children = that.layBody.find('input[name="layTableCheckbox"]')
-      ,index = checkbox.parents('tr').eq(0).data('index')
-      ,checked = checkbox[0].checked
-      ,isAll = checkbox.attr('lay-filter') === 'layTableAllChoose';
+      var othis = $(this);
+      var td = othis.closest('td');
+      var checkbox = othis.prev();
+      var children = that.layBody.find('input[name="layTableCheckbox"]');
+      var index = checkbox.parents('tr').eq(0).data('index');
+      var checked = checkbox[0].checked;
+      var isAll = checkbox.attr('lay-filter') === 'layTableAllChoose';
 
       if(checkbox[0].disabled) return;
 
@@ -2169,14 +2171,19 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         MOD_NAME, 'checkbox('+ filter +')',
         commonMember.call(checkbox[0], {
           checked: checked,
-          type: isAll ? 'all' : 'one'
+          type: isAll ? 'all' : 'one',
+          getCol: function(){ // 获取当前列的表头配置信息
+            return that.col(td.data('key'));
+          }
         })
       );
     });
 
     // 单选框选择
     that.elem.on('click', 'input[lay-type="layTableRadio"]+', function(){
-      var radio = $(this).prev();
+      var othis = $(this);
+      var td = othis.closest('td');
+      var radio = othis.prev();
       var checked = radio[0].checked;
       var index = radio.parents('tr').eq(0).data('index');
 
@@ -2193,7 +2200,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         radio[0],
         MOD_NAME, 'radio('+ filter +')',
         commonMember.call(radio[0], {
-          checked: checked
+          checked: checked,
+          getCol: function(){ // 获取当前列的表头配置信息
+            return that.col(td.data('key'));
+          }
         })
       );
     });
@@ -2373,6 +2383,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 行工具条操作事件
     var toolFn = function(type){
       var othis = $(this);
+      var td = othis.closest('td');
       var index = othis.parents('tr').eq(0).data('index');
 
       layui.event.call(
@@ -2380,7 +2391,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         MOD_NAME,
         (type || 'tool') + '('+ filter +')',
         commonMember.call(this, {
-          event: othis.attr('lay-event')
+          event: othis.attr('lay-event'),
+          getCol: function(){ // 获取当前列的表头配置信息
+            return that.col(td.data('key'));
+          }
         })
       );
       // 设置当前行选中样式
