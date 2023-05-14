@@ -1025,8 +1025,6 @@ layer.style = function(index, options, limit){
 
 // 最小化
 layer.min = function(index, options){
-  options = options || {};
-
   var layero = $('#'+ doms[0] + index);
   var maxminStatus = layero.data('maxminStatus');
 
@@ -1034,8 +1032,10 @@ layer.min = function(index, options){
   if(maxminStatus === 'max') layer.restore(index); // 若当前为最大化，则先还原后再最小化
 
   layero.data('maxminStatus', 'min');
+  options = options || layero.data('config') || {};
 
   var shadeo = $('#'+ doms.SHADE + index);
+  var elemMin = layero.find('.layui-layer-min');
   var titHeight = layero.find(doms[1]).outerHeight() || 0;
   var minLeft = layero.attr('minLeft'); // 最小化时的横坐标
   var hasMinLeft = typeof minLeft === 'string'; // 是否已经赋值过最小化坐标
@@ -1077,7 +1077,7 @@ layer.min = function(index, options){
   layero.attr('position', position);
   layer.style(index, settings, true);
 
-  layero.find('.layui-layer-min').hide();
+  elemMin.hide();
   layero.attr('type') === 'page' && layero.find(doms[4]).hide();
   ready.rescollbar(index);
 
