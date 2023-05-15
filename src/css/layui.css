@@ -838,7 +838,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /* 复选框-默认风格 */
 .layui-form-checkbox[lay-skin="primary"]{height: auto!important; line-height: normal!important; min-width: 18px; min-height: 18px; border: none!important; margin-right: 0; padding-left: 24px; padding-right: 0; background: none;}
 .layui-form-checkbox[lay-skin="primary"] > div{margin-top: -1px; padding-left: 0; padding-right: 15px; line-height: 18px; background: none; color: #5F5F5F;}
-.layui-form-checkbox[lay-skin="primary"] > i{right: auto; left: 0; width: 16px; height: 16px; line-height: 16px; border: 1px solid #d2d2d2; font-size: 12px; border-radius: 2px; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
+.layui-form-checkbox[lay-skin="primary"] > i{right: auto; left: 0; width: 16px; height: 16px; line-height: 14px; border: 1px solid #d2d2d2; font-size: 12px; border-radius: 2px; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
 .layui-form-checkbox[lay-skin="primary"]:hover > i{border-color: #16b777; color: #fff;}
 .layui-form-checked[lay-skin="primary"] > i{border-color: #16b777 !important; background-color: #16b777; color: #fff;}
 .layui-checkbox-disabled[lay-skin="primary"] > div{background: none!important;}
