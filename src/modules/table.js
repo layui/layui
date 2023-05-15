@@ -1674,10 +1674,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     if(!height) return;
 
-    // 减去列头区域的高度 --- 此处的数字常量是为了防止容器处在隐藏区域无法获得高度的问题，暂时只对默认尺寸的表格做支持。
-    bodyHeight = parseFloat(height) - (that.layHeader.outerHeight() || 38) - (
-      options.page ? 1 : 0
-    );
+    // 减去列头区域的高度
+    bodyHeight = parseFloat(height) - (that.layHeader.outerHeight() || 39) - 1; //此处的数字常量是为了防止容器处在隐藏区域无法获得高度的问题，暂时只对默认尺寸的表格做支持。
 
     // 减去工具栏的高度
     if(options.toolbar){
@@ -1686,12 +1684,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 减去统计栏的高度
     if(options.totalRow){
-      bodyHeight -= (that.layTotal.outerHeight() || 40);
+      bodyHeight -= (that.layTotal.outerHeight() || 40) - 1; // 减掉一个共用的 border width
     }
 
     // 减去分页栏的高度
     if(options.page || options.pagebar){
-      bodyHeight -= (that.layPage.outerHeight() || 43);
+      bodyHeight -= (that.layPage.outerHeight() || 43) - 1;
     }
 
     if (options.maxHeight) {
@@ -2226,7 +2224,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }).on('contextmenu', 'tr', function(e){ //菜单
       if (!options.defaultContextmenu) e.preventDefault();
       setRowEvent.call(this, 'rowContextmenu');
-    });;
+    });
 
     // 创建行单击、双击、菜单事件
     var setRowEvent = function(eventType){
@@ -2688,7 +2686,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           table.eachCols(id, function(i3, item3){
             if(item3.field && item3.type == 'normal'){
               // 不导出隐藏列
-              if(item3.hide){
+              if(item3.hide || item3.doNotExport){
                 if(i1 == 0) fieldsIsHide[item3.field] = true; // 记录隐藏列
                 return;
               }
