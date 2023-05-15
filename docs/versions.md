@@ -5,10 +5,50 @@ toc: true
  
 # 更新日志
 
+<h2 class="layui-hide" lay-toc="{href: '/docs/2.8/versions.html', title: '2.8.x', hot: true}">
+  2.8.x
+</h2>
+
 > 导读：📑 [Layui 2.8 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
 
-<h2 id="2.8.2" lay-toc="{title: '2.8.2'}">
+<h2 id="2.8.3" class="ws-anchor">
+  2.8.3 
+  <span class="layui-badge-rim">2023-05-15</span>
+</h2>
+
+- #### 基础
+  - 新增 `layui.debounce()` 和 `layui.throttle()`，分别用于防抖和节流 # 1252
+- #### form
+  - 新增 `checkbox` 的标题模板支持，可在下一个兄弟元素中加上 `lay-checkbox` 绑定 # I72HSK/I6YDGT
+  - 修复 `radio` 经浏览器翻译成别的语言后出现的显示异常问题 # I6ZA12
+  - 优化 `checkbox` 的边距细节 
+  - 优化 `checkbox` 标签风格的边框瑕疵 # I70OFE
+  - **调整** 内置校验规则，仅当非空时进行校验，避免强制携带必填(`required`)的校验规则 # I72CTI
+- #### table
+  - 新增 `tool,checkbox,radio` 事件的 `obj.getCol()` 方法，用于获取当前列的配置信息 # I72D2C
+  - 新增 `ignoreExport` 表头属性，用于在表格导出时对该列进行忽略 # 1252
+  - 修复 某些特殊情况，表格页脚出现双底线的问题 # I70BDR
+  - 优化 合计行内数据超过单元格长度时，无法查看全部的问题 # I6TOP8
+- #### treeTable
+  - 修复 默认的节点 icon 图标用错问题 # 1252
+  - 修复 `showIcon` 为 `false` 在某些操作之后出现图标的问题 # 1252
+  - 修复 展开全部之后再展开单个节点出现卡顿问题 # 1252
+  - 修复 更新节点导致的图标重复及数据未正常更新的问题 # 1252
+  - 修复 开启了 `sort` 属性后出现的一些异常问题 # 1252
+- #### layer
+  - 新增 `hideOnClose` 属性，用于关闭弹层时设置为隐藏，默认 `false`。须与 `id` 属性并用 # I72L74
+  - 修复 `layer.min(index)` 方法与最小化按钮事件效果不一致的问题 # I6ZD3R
+  - 优化 基础配置信息的记录，统一记录在 layer 容器的 `.data('config')` 中
+  - 优化 当弹层设置 `id` 并最小化后，再次点击事件时，重新还原弹层 # I5N0QP
+- #### laydate
+  - 修复 点击限制范围外的标注日期仍然可点的问题，# I71D9C
+
+### 下载： [layui-v2.8.3.zip](https://gitee.com/layui/layui/attach_files/1408565/download)
+
+---
+
+<h2 id="2.8.2" class="ws-anchor">
   2.8.2 
   <span class="layui-badge-rim">2023-05-04</span>
 </h2>
@@ -48,7 +88,7 @@ toc: true
 
 ---
 
-<h2 id="2.8.1" lay-toc="{title: '2.8.1'}">
+<h2 id="2.8.1" class="ws-anchor">
   2.8.1 
   <span class="layui-badge-rim">2023-04-25</span>
 </h2>
