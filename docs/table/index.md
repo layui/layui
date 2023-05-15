@@ -748,8 +748,8 @@ layui.use(function(){
 
   // 渲染
   table.render({
-    elem: '#test'
-    ,cols: [[
+    elem: '#test',
+    cols: [[
       {title: '操作', width: 200, templet: '#toolEventDemo'}
     ]]
     // … // 其他属性
@@ -762,6 +762,7 @@ layui.use(function(){
     var layEvent = obj.event; // 获得元素对应的 lay-event 属性值
     var tr = obj.tr; // 得到当前行 <tr> 元素的 jQuery 对象
     var options = obj.config; // 获取当前表格基础属性配置项
+    var col = obj.getCol(); // 得到当前列的表头配置属性 -- v2.8.3 新增
     console.log(obj); // 查看对象所有成员
     
     // 根据 lay-event 的值执行不同操作

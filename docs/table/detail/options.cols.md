@@ -331,6 +331,20 @@ edit: function(d){
 </td>
     </tr>
     <tr>
+<td>ignoreExport <sup>2.8.3+</sup></td>
+<td>
+
+是否导出时忽略该列
+
+</td>
+<td>boolean</td>
+<td>
+  
+`false`
+
+</td>
+    </tr>
+    <tr>
 <td>escape</td>
 <td>
 
