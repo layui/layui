@@ -1674,8 +1674,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     if(!height) return;
 
-    // 减去列头区域的高度
-    bodyHeight = parseFloat(height) - (that.layHeader.outerHeight() || 39) - 1; //此处的数字常量是为了防止容器处在隐藏区域无法获得高度的问题，暂时只对默认尺寸的表格做支持。
+    // 减去列头区域的高度 --- 此处的数字常量是为了防止容器处在隐藏区域无法获得高度的问题，暂时只对默认尺寸表格做支持
+    bodyHeight = parseFloat(height) - (that.layHeader.outerHeight() || 39) - 1;
 
     // 减去工具栏的高度
     if(options.toolbar){
@@ -2703,7 +2703,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           table.eachCols(id, function(i3, item3){
             if(item3.field && item3.type == 'normal'){
               // 不导出隐藏列
-              if(item3.hide || item3.doNotExport){
+              if(item3.hide || item3.ignoreExport){
                 if(i1 == 0) fieldsIsHide[item3.field] = true; // 记录隐藏列
                 return;
               }
