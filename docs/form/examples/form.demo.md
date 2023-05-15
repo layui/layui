@@ -42,7 +42,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label">自定义验证</label>
     <div class="layui-input-inline layui-input-wrap">
-      <input type="password" name="password" lay-verify="pass" placeholder="请输入" autocomplete="off" lay-affix="eye" class="layui-input">
+      <input type="password" name="password" lay-verify="required|pass" placeholder="请输入" autocomplete="off" lay-affix="eye" class="layui-input">
     </div>
     <div class="layui-form-mid layui-text-em">6 到 12 位字符</div>
   </div>
