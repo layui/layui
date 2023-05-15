@@ -127,8 +127,9 @@ layout: ['code', 'preview']
   
 用于开启 `preview` 属性后的面板头部右侧区域工具栏图标，值为一个数组，内置成员：
 
-- `full` 最大化显示
-- `window` 在新窗口预览。一般当 `layout: 'iframe'` 时开启，且 code 中须包含完整的 HTML 方可在新窗口正常预览。
+- `copy` <sup>2.8.2+</sup> : 代码复制
+- `full` : 最大化显示
+- `window` : 在新窗口预览。一般当 `layout: 'iframe'` 时开启，且 code 中须包含完整的 HTML 方可在新窗口正常预览。
 
 工具图标将根据数组的排列顺序来显示，如：
 
@@ -160,6 +161,20 @@ toolsEvent: function(othis, type){
 </td>
 <td>function</td>
 <td>-</td>
+    </tr>
+    <tr>
+<td>copy <sup>2.8.2+</sup></td>
+<td>
+  
+用于开启代码复制功能图标。若开启 `priview`，则自动放置在 `tools` 属性中，复制图标将显示在容器右上角工具栏；若未开启 `priview`，则显示在 code 区域右上角。
+
+</td>
+<td>boolean</td>
+<td>
+
+`true`
+
+</td>
     </tr>
     <tr>
 <td>text <sup>2.8+</sup></td>
@@ -233,13 +248,13 @@ Code 容器的风格，可选值有：
 <td>encode</td>
 <td>
   
-是否对 Code 区域自动转义 html 标签
+是否对 code 中的 html 进行编码（转义）。
 
 </td>
 <td>boolean</td>
 <td>
 
-`false`
+`true`
 
 </td>
     </tr>
@@ -251,7 +266,7 @@ Code 容器的风格，可选值有：
 </td>
 <td colspan="3">
 
-<div id="options.done" class="ws-anchor">  
+<div id="options.done" lay-pid="options" class="ws-anchor">  
 组件渲染完毕的回调函数，函数返回一个 object 类型参数
 </div>
 
@@ -259,6 +274,26 @@ Code 容器的风格，可选值有：
 done: function(obj){
   var container = obj.container; // 当前面板的容器对象
   obj.render(); // 对预览中的 `element,form` 等组件进行渲染
+}
+```
+
+</td>
+    </tr>
+    <tr>
+<td>
+
+[onCopy](#options.onCopy) <sup>2.8.2+</sup>
+
+</td>
+<td colspan="3">
+
+<div id="options.onCopy" lay-pid="options" class="ws-anchor">  
+点击复制图标时的回调函数。 该回调一旦设定，则不再执行内置的复制操作。
+</div>
+
+```
+onCopy: function(code){
+  console.log(code); // 得到当前 code 内容
 }
 ```
 

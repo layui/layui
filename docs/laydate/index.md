@@ -21,7 +21,7 @@ toc: true
 </style>
 
 <div class="ws-demo-laydate">
-{{- d.include("docs/laydate/detail/demo.md") }}
+{{- d.include("/laydate/detail/demo.md") }}
 </div>
 
 <p></p>
@@ -69,7 +69,7 @@ layui.use(function(){
 <h3 id="options" lay-toc="{level: 2, hot: true}">属性</h3>
 
 <div>
-{{- d.include("docs/laydate/detail/options.md") }}
+{{- d.include("/laydate/detail/options.md") }}
 </div>
 
 <h3 id="hint" lay-pid="api" class="ws-anchor ws-bold">弹出提示 <sup>2.8+</sup></h3>

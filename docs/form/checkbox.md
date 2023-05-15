@@ -57,8 +57,11 @@ toc: true
   <textarea>
 <div class="layui-form">
   <input type="checkbox" name="AAA" lay-skin="switch">
+  <br>
   <input type="checkbox" name="BBB" title="ON|OFF" lay-skin="switch" checked> 
-  <input type="checkbox" name="CCC" title="开启|关闭" lay-skin="switch"> 
+  <br>
+  <input type="checkbox" name="CCC" title="开启|关闭" lay-skin="switch">
+  <br>
   <input type="checkbox" name="DDD" lay-skin="switch" disabled>
 </div>
 
@@ -67,6 +70,41 @@ toc: true
 </pre>
 
 在 `title` 属性中通过 `|` 分隔符可设置两种状态下的不同标题
+
+
+<h2 id="title" lay-toc="{hot: true}">标题模板 <sup>2.8.3+</sup></h2>
+
+在 `checkbox` 元素后的相邻元素设置特定属性 `lay-checkbox`，可以与 `checkbox` 标题进行绑定。
+
+<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+  obj.render();
+}}">
+  <textarea>
+<div class="layui-form">
+  <div class="layui-form-item">
+    <input type="checkbox" name="AAA" value="0">
+    <div lay-checkbox>
+      自定义<a href="#target-url"><ins>标题模板</ins></a>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <input type="checkbox" name="BBB" value="1" lay-skin="tag">
+    <div lay-checkbox>
+      <i class="layui-icon layui-icon-heart"></i> 标题模板</span>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <input type="checkbox" name="CCC" value="2" lay-skin="switch">
+    <div lay-checkbox>
+      <i class="layui-icon layui-icon-moon"></i> | 
+      <i class="layui-icon layui-icon-light"></i>
+    </div>
+  </div>
+</div>
+
+<!-- import layui -->
+  </textarea>
+</pre>
 
 
 <h2 id="on" lay-toc="{hot: true}">复选框事件</h2>

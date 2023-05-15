@@ -10,7 +10,7 @@ toc: true
 <h2 id="examples" lay-toc="{hot: true}" style="margin-bottom: 0;">示例</h2>
 
 <div>
-{{- d.include("docs/transfer/detail/demo.md") }}
+{{- d.include("/transfer/detail/demo.md") }}
 </div>
 
 <h2 id="api" lay-toc="{hot: true}">API</h2>
@@ -32,13 +32,13 @@ toc: true
 <h3 id="options" lay-toc="{level: 2, hot: true}">属性</h3>
 
 <div>
-{{- d.include("docs/transfer/detail/options.md") }}
+{{- d.include("/transfer/detail/options.md") }}
 </div>
 
 <h3 id="options.data" lay-toc="{level: 3, hot: true}">data 格式</h3>
 
 <div>
-{{- d.include("docs/transfer/detail/options.data.md") }}
+{{- d.include("/transfer/detail/options.data.md") }}
 </div>
 
 <h3 id="reload" lay-toc="{level: 2}">重载</h3>

@@ -30,7 +30,7 @@ toc: true
 
 ### 🌕 官网下载
 
-您可以在我们的 [官网首页](/) 下载到 Layui 当前版本，它经过了自动化构建，更适合用于生产环境。目录结构如下：
+您可以在 [官网首页](/) 或 [更新日志](./versions.html) 页面下载到 Layui，它经过了自动化构建，更适合用于生产环境。目录结构如下：
 
 ```
 layui/
@@ -70,11 +70,11 @@ npm i layui
 
 ```
 <!-- 引入 layui.css -->
-<link href="//unpkg.com/layui@{{= d.layui._v }}/dist/css/layui.css" rel="stylesheet">
+<link href="//unpkg.com/layui@{{= d.layui.v }}/dist/css/layui.css" rel="stylesheet">
 ```
 ```
 <!-- 引入 layui.js -->
-<script src="//unpkg.com/layui@{{= d.layui._v }}/dist/layui.js">
+<script src="//unpkg.com/layui@{{= d.layui.v }}/dist/layui.js">
 ```
 
 <h2 id="quickstart" lay-toc="{}">快速上手</h2>

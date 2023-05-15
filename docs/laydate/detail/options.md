@@ -32,7 +32,7 @@
 </td>
 <td>
   
-<div id="options.type" class="ws-anchor">
+<div id="options.type" lay-pid="options" class="ws-anchor">
   组件面板选择类型。支持以下可选值：
 </div>
 
@@ -60,7 +60,7 @@
 </td>
 <td>
 
-<div id="options.range" class="ws-anchor">
+<div id="options.range" lay-pid="options" class="ws-anchor">
 
 开启左右面板的范围选择，将会根据 `type` 类型呈现对应的范围选择面板。该属性值支持以下类型：
 
@@ -123,7 +123,7 @@ range: ['#start', '#end']
 </td>
 <td colspan="3">
   
-<div id="options.format" class="ws-anchor">
+<div id="options.format" lay-pid="options" class="ws-anchor">
 
 自定义日期和时间值的返回格式,默认值： `yyyy-MM-dd`。 其格式符规则如下：
 
@@ -167,7 +167,7 @@ format: '北京时间 H 点 m 分'
 </td>
 <td>
   
-<div id="options.value" class="ws-anchor">
+<div id="options.value" lay-pid="options" class="ws-anchor">
 初始值。值支持以下类型：
 </div> 
 
@@ -213,7 +213,7 @@ value: new Date(1534766888000) // 参数即为：2018-08-20 20:08:08 的毫秒�
 </td>
 <td>
 
-<div id="options.shortcuts" class="ws-anchor">
+<div id="options.shortcuts" lay-pid="options" class="ws-anchor">
 用于开启面板左侧的快捷选择栏。其值配置规则如下：
 </div> 
 
@@ -279,7 +279,7 @@ weekStart: 1 // 设置周一为起始周
 </td>
 <td colspan="3">
 
-<div id="options.min" class="ws-anchor">
+<div id="options.min" lay-pid="options" class="ws-anchor">
 
 限制可供选择的最小或最大日期时间值。默认值： 
 
@@ -373,7 +373,7 @@ max: 7 // 最大日期为 7 天后
 
 <td>
 
-<div id="options.shade" class="ws-anchor"> 
+<div id="options.shade" lay-pid="options" class="ws-anchor"> 
 用于开启弹出日期面板时的遮罩。值支持以下可选类型：
 </div>
 
@@ -463,7 +463,7 @@ btns: ['clear', 'confirm']
 </td>
 <td>
 
-<div id="options.theme" class="ws-anchor">
+<div id="options.theme" lay-pid="options" class="ws-anchor">
 
 设置组件面板主题。除了默认主题，还内置主题： `molv` `grid` `circle`<sup>2.8+</sup> ，且支持直接传入自定义的主题色。
 
@@ -507,7 +507,7 @@ theme: ['grid', '#FF5722']
 </td>
 <td>
   
-<div id="options.mark" class="ws-anchor">
+<div id="options.mark" lay-pid="options" class="ws-anchor">
 
 自定义日期标记。该属性是对 `calendar` 属性的进一步延伸，灵活度更高。属性可批量设置多个日期标记，如：
 
@@ -563,7 +563,7 @@ holidays: [
     <td colspan="4" style="text-align: center"> 
 
 
-<div id="options.callback" class="ws-anchor" style="pointer-events: auto;">
+<div id="options.callback" lay-pid="options" class="ws-anchor">
 
 [回调函数](#options.callback)
 
@@ -579,7 +579,7 @@ holidays: [
 </td>
 <td colspan="3">
   
-<div id="options.ready" class="ws-anchor">
+<div id="options.ready" lay-pid="options" class="ws-anchor">
 组件面板初始打开的回调函数。返回的参数如下：
 </div>
 
@@ -609,7 +609,7 @@ ready: function(date){
 </td>
 <td colspan="3">
   
-<div id="options.change" class="ws-anchor">
+<div id="options.change" lay-pid="options" class="ws-anchor">
 日期时间被切换后的回调函数。返回的参数如下：
 </div>
 
@@ -631,7 +631,7 @@ change: function(value, date, endDate){
 </td>
 <td colspan="3">
   
-<div id="options.done" class="ws-anchor">
+<div id="options.done" lay-pid="options" class="ws-anchor">
 日期时间选择完毕的回调函数，点击清空、现在、确定也均会触发。返回的参数如下：
 </div>
 

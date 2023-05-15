@@ -145,8 +145,8 @@ layui.use(['layer', 'util'], function(layer, util){
         content: $('#test11111'),
         maxmin: true,
         shade: false,
-        minStack: false, //最小化不堆叠在左下角
-        id: 'page1', //定义 ID，防止重复弹出
+        minStack: false, // 最小化不堆叠在左下角
+        id: 'page-1', // 定义 ID，防止重复弹出
         min: function(layero, index){
           layer.msg('阻止了默认的最小化');
           layer.style(index, {top: 'auto', bottom: 0});
@@ -156,10 +156,12 @@ layui.use(['layer', 'util'], function(layer, util){
     }
     ,test6: function(){
       layer.open({
-        type: 2
-        ,content: 'https://www.aliyun.com/activity?userCode=ap0255is'
-        ,area: ['375px', '500px']
-        ,maxmin: true
+        type: 2,
+        content: 'https://www.aliyun.com/activity?userCode=ap0255is',
+        area: ['375px', '500px'],
+        id: 'iframe-1',
+        hideOnClose: true, // 关闭时是否隐藏弹层容器，下次打开时直接显示原来的弹层
+        maxmin: true
       });
     }
     ,testLoading: function(){

@@ -10,7 +10,7 @@ toc: true
 <h2 id="examples" lay-toc="{anchor: null}" style="margin-bottom: 0;">示例</h2>
 
 <div>
-{{- d.include("docs/dropdown/detail/demo.md") }}
+{{- d.include("/dropdown/detail/demo.md") }}
 </div>
 
 在 `content` 属性中传入任意的 html 内容，可替代默认的下拉菜单结构，从而实现更丰富的弹出内容。
@@ -62,13 +62,13 @@ layui.use(function(){
 <h3 id="options" lay-toc="{level: 2, hot: true}">属性</h3>
 
 <div>
-{{- d.include("docs/dropdown/detail/options.md") }}
+{{- d.include("/dropdown/detail/options.md") }}
 </div>
 
 <h3 id="options.data" lay-toc="{level: 3, hot: true}">data 格式</h3>
 
 <div>
-{{- d.include("docs/dropdown/detail/options.data.md") }}
+{{- d.include("/dropdown/detail/options.data.md") }}
 </div>
 
 
@@ -95,7 +95,7 @@ layui.use(function(){
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/dropdown/examples/reload.md") }}
+{{- d.include("/dropdown/examples/reload.md") }}
   </textarea>
 </pre>
 
@@ -109,7 +109,7 @@ layui.use(function(){
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/dropdown/examples/reloadData.md") }}
+{{- d.include("/dropdown/examples/reloadData.md") }}
   </textarea>
 </pre>
 

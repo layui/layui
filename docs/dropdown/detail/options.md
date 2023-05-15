@@ -211,7 +211,7 @@ templet: function(d){
 <td colspan="4" style="text-align: center"> 
 
 
-<div id="options.callback" class="ws-anchor" style="pointer-events: auto;">
+<div id="options.callback" lay-pid="options" class="ws-anchor">
 
 [回调函数](#options.callback)
 
@@ -242,7 +242,7 @@ ready: function(elemPanel, elem){
 </td>
 <td colspan="3">
   
-<div id="options.click" class="ws-anchor">
+<div id="options.click" lay-pid="options" class="ws-anchor">
 菜单项被点击时的回调函数。返回的参数如下：
 </div>
 

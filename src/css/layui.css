@@ -817,55 +817,63 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-select-disabled .layui-disabled{border-color: #eee !important;}
 .layui-select-disabled .layui-edge{border-top-color: #d2d2d2}
 
-/* 复选框 */.layui-form-checkbox{position: relative; display: inline-block; vertical-align: middle; height: 30px; line-height: 30px; margin-right: 10px; padding-right: 30px; background-color: #fff; cursor: pointer; font-size: 0;  -webkit-transition: .1s linear; transition: .1s linear; box-sizing: border-box;}
+/* 复选框 */
+.layui-form-checkbox{position: relative; display: inline-block; vertical-align: middle; height: 30px; line-height: 30px; margin-right: 10px; padding-right: 30px; background-color: #fff; cursor: pointer; font-size: 0;  -webkit-transition: .1s linear; transition: .1s linear; box-sizing: border-box;}
 .layui-form-checkbox:hover{}
-.layui-form-checkbox *{display: inline-block; vertical-align: middle;}
-.layui-form-checkbox span{padding: 0 10px; height: 100%; font-size: 14px; border-radius: 2px 0 0 2px; background-color: #d2d2d2; color: #fff; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
-.layui-form-checkbox:hover span{background-color: #c2c2c2;}
-.layui-form-checkbox i{position: absolute; right: 0; top: 0; width: 30px; height: 28px; border: 1px solid #d2d2d2; border-left: none; border-radius: 0 2px 2px 0; color: #fff; color: rgba(255,255,255,0); font-size: 20px; text-align: center;}
-.layui-form-checkbox:hover i{border-color: #c2c2c2; color: #c2c2c2;}
-.layui-form-checked, .layui-form-checked:hover{border-color: #16b777;}
-.layui-form-checked span, .layui-form-checked:hover span{background-color: #16b777;}
-.layui-form-checked i, .layui-form-checked:hover i{color: #16b777;}
+.layui-form-checkbox > *{display: inline-block; vertical-align: middle;}
+.layui-form-checkbox > div{padding: 0 11px; height: 100%; font-size: 14px; border-radius: 2px 0 0 2px; background-color: #d2d2d2; color: #fff; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.layui-form-checkbox:hover > div{background-color: #c2c2c2;}
+.layui-form-checkbox > i{position: absolute; right: 0; top: 0; width: 30px; height: 100%; border: 1px solid #d2d2d2; border-left: none; border-radius: 0 2px 2px 0; color: #fff; color: rgba(255,255,255,0); font-size: 20px; text-align: center; box-sizing: border-box;}
+.layui-form-checkbox:hover > i{border-color: #c2c2c2; color: #c2c2c2;}
+.layui-form-checked, 
+.layui-form-checked:hover{border-color: #16b777;}
+.layui-form-checked > div, 
+.layui-form-checked:hover > div{background-color: #16b777;}
+.layui-form-checked > i, 
+.layui-form-checked:hover > i{color: #16b777;}
 .layui-form-item .layui-form-checkbox{margin-top: 4px;}
+.layui-form-checkbox.layui-checkbox-disabled > div{background-color: #eee !important;}
+.layui-form *[lay-checkbox]{display: none;}
 
-/* 复选框-默认风格 */.layui-form-checkbox[lay-skin="primary"]{height: auto!important; line-height: normal!important; min-width: 18px; min-height: 18px; border: none!important; margin-right: 0; padding-left: 28px; padding-right: 0; background: none;}
-.layui-form-checkbox[lay-skin="primary"] span{padding-left: 0; padding-right: 15px; line-height: 18px; background: none; color: #5F5F5F;}
-.layui-form-checkbox[lay-skin="primary"] i{right: auto; left: 0; width: 16px; height: 16px; line-height: 16px; border: 1px solid #d2d2d2; font-size: 12px; border-radius: 2px; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
-.layui-form-checkbox[lay-skin="primary"]:hover i{border-color: #16b777; color: #fff;}
-.layui-form-checked[lay-skin="primary"] i{border-color: #16b777 !important; background-color: #16b777; color: #fff;}
-.layui-checkbox-disabled[lay-skin="primary"] span{background: none!important; color: #c2c2c2!important;}
-.layui-form-checked.layui-checkbox-disabled[lay-skin="primary"] i{background: #eee!important; border-color: #eee!important;}
-.layui-checkbox-disabled[lay-skin="primary"]:hover i{border-color: #d2d2d2;}
+/* 复选框-默认风格 */
+.layui-form-checkbox[lay-skin="primary"]{height: auto!important; line-height: normal!important; min-width: 18px; min-height: 18px; border: none!important; margin-right: 0; padding-left: 24px; padding-right: 0; background: none;}
+.layui-form-checkbox[lay-skin="primary"] > div{margin-top: -1px; padding-left: 0; padding-right: 15px; line-height: 18px; background: none; color: #5F5F5F;}
+.layui-form-checkbox[lay-skin="primary"] > i{right: auto; left: 0; width: 16px; height: 16px; line-height: 16px; border: 1px solid #d2d2d2; font-size: 12px; border-radius: 2px; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
+.layui-form-checkbox[lay-skin="primary"]:hover > i{border-color: #16b777; color: #fff;}
+.layui-form-checked[lay-skin="primary"] > i{border-color: #16b777 !important; background-color: #16b777; color: #fff;}
+.layui-checkbox-disabled[lay-skin="primary"] > div{background: none!important;}
+.layui-form-checked.layui-checkbox-disabled[lay-skin="primary"] > i{background: #eee!important; border-color: #eee!important;}
+.layui-checkbox-disabled[lay-skin="primary"]:hover > i{border-color: #d2d2d2;}
 .layui-form-item .layui-form-checkbox[lay-skin="primary"]{margin-top: 10px;}
-.layui-form-checkbox[lay-skin="primary"] .layui-icon-indeterminate{border-color: #16b777;}
-.layui-form-checkbox[lay-skin="primary"] .layui-icon-indeterminate:before{content: ''; display: inline-block; vertical-align: middle; position: relative; width: 50%; height: 1px; margin: -1px auto 0; background-color: #16b777;}
+.layui-form-checkbox[lay-skin="primary"] > .layui-icon-indeterminate{border-color: #16b777;}
+.layui-form-checkbox[lay-skin="primary"] > .layui-icon-indeterminate:before{content: ''; display: inline-block; vertical-align: middle; position: relative; width: 50%; height: 1px; margin: -1px auto 0; background-color: #16b777;}
 
-/* 复选框-开关风格 */.layui-form-switch{position: relative; display: inline-block; vertical-align: middle; height: 22px; line-height: 22px; min-width: 35px; padding: 0 5px; margin-top: 8px; border: 1px solid #d2d2d2; border-radius: 20px; cursor: pointer; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
-.layui-form-switch i{position: absolute; left: 5px; top: 3px; width: 16px; height: 16px; border-radius: 20px; background-color: #d2d2d2; -webkit-transition: .1s linear; transition: .1s linear;}
-.layui-form-switch em{position: relative; top: 0; width: 25px; margin-left: 21px; padding: 0!important; text-align: center!important; color: #999!important; font-style: normal!important; font-size: 12px;}
+/* 复选框-开关风格 */
+.layui-form-switch{position: relative; display: inline-block; vertical-align: middle; height: 22px; line-height: 22px; min-width: 35px; padding: 0 5px; margin-top: 8px; border: 1px solid #d2d2d2; border-radius: 20px; cursor: pointer; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
+.layui-form-switch > i{position: absolute; left: 5px; top: 3px; width: 16px; height: 16px; border-radius: 20px; background-color: #d2d2d2; -webkit-transition: .1s linear; transition: .1s linear;}
+.layui-form-switch > div{position: relative; top: 0; margin-left: 21px; padding: 0!important; text-align: center!important; color: #999!important; font-style: normal!important; font-size: 12px;}
 .layui-form-onswitch{border-color: #16b777; background-color: #16b777;}
-.layui-form-onswitch i{left: 100%; margin-left: -21px; background-color: #fff;}
-.layui-form-onswitch em{margin-left: 0; margin-right: 21px; color: #fff!important;}
+.layui-form-onswitch > i{left: 100%; margin-left: -21px; background-color: #fff;}
+.layui-form-onswitch > div{margin-left: 0; margin-right: 21px; color: #fff!important;}
 
 .layui-checkbox-disabled{border-color: #eee !important;}
-.layui-checkbox-disabled span{background-color: #eee !important;}
-.layui-checkbox-disabled i{border-color: #eee !important;}
-.layui-checkbox-disabled em{color: #d2d2d2 !important;}
-.layui-checkbox-disabled:hover i{color: #fff !important;}
+.layui-checkbox-disabled > div{color: #c2c2c2!important;}
+.layui-checkbox-disabled > i{border-color: #eee !important;}
+.layui-checkbox-disabled:hover > i{color: #fff !important;}
 
 /* 单选框 */
-*[lay-radio]{display: none;}
 .layui-form-radio{display: inline-block; vertical-align: middle; line-height: 28px; margin: 6px 10px 0 0; padding-right: 10px; cursor: pointer; font-size: 0;}
-.layui-form-radio *{display: inline-block; vertical-align: middle; font-size: 14px;}
-.layui-form-radio>i{margin-right: 8px; font-size: 22px; color: #c2c2c2;}
+.layui-form-radio > *{display: inline-block; vertical-align: middle; font-size: 14px;}
+.layui-form-radio > i{margin-right: 8px; font-size: 22px; color: #c2c2c2;}
 .layui-form-radioed,
-.layui-form-radioed>i,
-.layui-form-radio:hover *{color: #16b777;}
-.layui-radio-disabled>i{color: #eee !important;}
-.layui-radio-disabled *{color: #c2c2c2!important;}
+.layui-form-radioed > i,
+.layui-form-radio:hover > *{color: #16b777;}
+.layui-radio-disabled > i{color: #eee !important;}
+.layui-radio-disabled > *{color: #c2c2c2!important;}
+.layui-form *[lay-radio]{display: none;}
 
-/* 表单方框风格 */.layui-form-pane .layui-form-label{width: 110px; padding: 8px 15px; height: 38px; line-height: 20px; border-width: 1px; border-style: solid; border-radius: 2px 0 0 2px; text-align: center; background-color: #fafafa; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; box-sizing: border-box;}
+/* 表单方框风格 */
+.layui-form-pane .layui-form-label{width: 110px; padding: 8px 15px; height: 38px; line-height: 20px; border-width: 1px; border-style: solid; border-radius: 2px 0 0 2px; text-align: center; background-color: #fafafa; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; box-sizing: border-box;}
 .layui-form-pane .layui-input-inline{margin-left: -1px;}
 .layui-form-pane .layui-input-block{margin-left: 110px; left: -1px;}
 .layui-form-pane .layui-input{border-radius: 0 2px 2px 0;}

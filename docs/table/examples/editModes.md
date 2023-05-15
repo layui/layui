@@ -49,7 +49,7 @@ layui.use(function(){
   // 渲染
   table.render({
     elem: '#ID-table-demo-editmodes',
-    url: '{{d.root}}/static/json/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    url: '/static/2.8/json/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
     page: true,
     css: [ // 设置单元格样式
       // 取消默认的溢出隐藏，并设置适当高度
@@ -68,7 +68,7 @@ layui.use(function(){
     ]],
     done: function(res, curr, count){
       var options = this;
-
+      
       // 获取当前行数据
       table.getRowData = function(elem){
         var index = $(elem).closest('tr').data('index');
@@ -80,6 +80,9 @@ layui.use(function(){
         var value = this.value; // 获取选中项 value
         var data = table.getRowData(this); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
 
+        // 更新数据中对应的字段
+        data.city = value;
+
         // 显示 - 仅用于演示
         layer.msg('选中值: '+ value +'<br>当前行数据：'+ JSON.stringify(data));
       });
@@ -90,6 +93,9 @@ layui.use(function(){
         
         // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
         var data = table.getRowData(obj.elem);
+
+        // 更新数据中对应的字段
+        data.city = value;
         console.log(data);
       });
       
@@ -113,6 +119,9 @@ layui.use(function(){
           
           this.elem.find('span').html(obj.title);
 
+          // 更新数据中对应的字段
+          data.sex = obj.title;
+
           // 显示 - 仅用于演示
           layer.msg('选中值: '+ obj.title +'<br>当前行数据：'+ JSON.stringify(data));
         }
@@ -123,6 +132,9 @@ layui.use(function(){
         elem: '.laydate-demo',
         done: function(value, date, endDate){
           var data = table.getRowData(this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
+
+          // 更新数据中对应的字段
+          data.date = value;
           
           // 显示 - 仅用于演示
           layer.msg('选中值: '+ value +'<br>当前行数据：'+ JSON.stringify(data));
@@ -134,21 +146,29 @@ layui.use(function(){
         elem: '.colorpicker-demo',
         done: function(value){
           var data = table.getRowData(this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
+
+          // 更新数据中对应的字段
+          data.color = value;
           
           // 显示 - 仅用于演示
           layer.msg('选中值: '+ value +'<br>当前行数据：'+ JSON.stringify(data));
         }
       });
-
+      
       // 单元格普通编辑事件
       table.on('edit(ID-table-demo-editmodes)', function(obj){
         var value = obj.value // 得到修改后的值
         var data = obj.data // 得到所在行所有键值
         var field = obj.field; // 得到字段
         
+        // 更新数据中对应的字段
+        var update = {};
+        update[field] = value;
+        obj.update(update);
+        
         // 编辑后续操作，如提交更新请求，以完成真实的数据更新
         // …
-
+        
         // 显示 - 仅用于演示
         layer.msg('编辑值: '+ value +'<br>当前行数据：'+ JSON.stringify(data));
       });

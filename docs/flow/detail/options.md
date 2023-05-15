@@ -106,7 +106,7 @@ layui.each(data, function(index, item){
 <td>done</td>
 <td colspan="3">
 
-<div id="options.done" class="ws-anchor">  
+<div id="options.done" lay-pid="options" class="ws-anchor">  
 滚动条到达临界点触发加载的回调函数。函数返回的参数如下：
 </div>
 

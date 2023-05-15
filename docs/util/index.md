@@ -10,7 +10,7 @@ toc: true
 <h2 id="examples" lay-toc="{hot: true}" style="margin-bottom: 0;">示例</h2>
 
 <div>
-{{- d.include("docs/util/detail/demo.md") }}
+{{- d.include("/util/detail/demo.md") }}
 </div>
 
 <p></p>

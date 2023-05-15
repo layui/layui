@@ -2,7 +2,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, text: {preview: '在线测试'}, layout: ['preview']}">
   <textarea>
-{{- d.include("docs/layer/detail/run.md") }}
+{{- d.include("/layer/detail/run.md") }}
   </textarea>
 </pre>
 
@@ -10,7 +10,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', text: {preview: '弹层类型'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/layer/examples/type.md") }}
+{{- d.include("/layer/examples/type.md") }}
   </textarea>
 </pre>
 
@@ -18,7 +18,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/layer/examples/alert.md") }}
+{{- d.include("/layer/examples/alert.md") }}
   </textarea>
 </pre>
 
@@ -26,7 +26,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/layer/examples/page.md") }}
+{{- d.include("/layer/examples/page.md") }}
   </textarea>
 </pre>
 
@@ -34,7 +34,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/layer/examples/iframe.md") }}
+{{- d.include("/layer/examples/iframe.md") }}
   </textarea>
 </pre>
 
@@ -44,7 +44,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/layer/examples/load.md") }}
+{{- d.include("/layer/examples/load.md") }}
   </textarea>
 </pre>
 
@@ -52,7 +52,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/layer/examples/tips.md") }}
+{{- d.include("/layer/examples/tips.md") }}
   </textarea>
 </pre>
 
@@ -60,7 +60,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/layer/examples/other.md") }}
+{{- d.include("/layer/examples/other.md") }}
   </textarea>
 </pre>
 
@@ -68,19 +68,19 @@
 
 <pre class="layui-code" lay-options="{preview: true, text: {preview: '弹出位置'}, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/layer/examples/offset.md") }}
+{{- d.include("/layer/examples/offset.md") }}
   </textarea>
 </pre>
 
 <pre class="layui-code" lay-options="{preview: true, text: {preview: '弹出方向 <sup>2.8+</sup>'}, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/layer/examples/direction.md") }}
+{{- d.include("/layer/examples/direction.md") }}
   </textarea>
 </pre>
 
 <pre class="layui-code" lay-options="{preview: true, text: {preview: '其他演示'}, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/layer/examples/more.md") }}
+{{- d.include("/layer/examples/more.md") }}
   </textarea>
 </pre>
 
@@ -89,7 +89,7 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-{{- d.include("docs/layer/examples/skin.md") }}
+{{- d.include("/layer/examples/skin.md") }}
 </script>
   </textarea>
 </pre>

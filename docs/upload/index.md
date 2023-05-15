@@ -12,7 +12,7 @@ toc: true
 以下示例的部分上传接口由第三方网站 `https://httpbin.org` 提供，它可以模拟各类 HTTP 请求。若未配置上传接口的，每次上传都会报「请求上传接口出现异常」的提示，这属于正常现象。
 
 <div>
-{{- d.include("docs/upload/detail/demo.md") }}
+{{- d.include("/upload/detail/demo.md") }}
 </div>
 
 <p></p>
@@ -88,7 +88,7 @@ var inst = upload.render({
 }); 
 ```
 
-<h3 id="render" lay-toc="{level: 2}">重载</h3>
+<h3 id="reload" lay-toc="{level: 2}">重载</h3>
 
 `inst.reload(options);`
 
@@ -113,10 +113,10 @@ inst.reload({
 <h3 id="options" lay-toc="{level: 2, hot: true}">属性</h3>
 
 <div>
-{{- d.include("docs/upload/detail/options.md") }}
+{{- d.include("/upload/detail/options.md") }}
 </div>
 
-<h2 id="options" lay-toc="{}">跨域方案</h2>
+<h2 id="cors-upload" lay-toc="{}">跨域方案</h2>
 
 `upload` 组件支持跨域上传，一般有以下两种场景
 

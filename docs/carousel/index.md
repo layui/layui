@@ -17,7 +17,7 @@ div[carousel-item]>*:nth-child(2n+1){background-color: #16baaa;}
 </style>
 
 <div>
-{{- d.include("docs/carousel/detail/demo.md") }}
+{{- d.include("/carousel/detail/demo.md") }}
 </div>
 
 <h2 id="api" lay-toc="{}">API</h2>
@@ -60,7 +60,7 @@ inst.reload(options); // 轮播重载
 <h2 id="options" lay-toc="{level: 2, hot: true}">属性</h2>
 
 <div>
-{{- d.include("docs/carousel/detail/options.md") }}
+{{- d.include("/carousel/detail/options.md") }}
 </div>
 
 

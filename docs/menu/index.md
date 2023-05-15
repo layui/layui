@@ -11,7 +11,7 @@ toc: true
 
 <pre class="layui-code" lay-options="{preview: 'iframe', style: 'height: 535px;', layout: ['preview', 'code'], tools: ['full', 'window']}">
   <textarea>
-{{- d.include("docs/menu/examples/demo.md") }}
+{{- d.include("/menu/examples/demo.md") }}
   </textarea>
 </pre>
 

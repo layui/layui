@@ -46,7 +46,7 @@ treeTable.render({
 <td>tree.customName</td>
 <td>
 
-<div id="options.tree.customName" class="ws-anchor">
+<div id="options.tree.customName" lay-pid="options" class="ws-anchor">
 
 自定义属性名的集合，包含以下成员：
 
@@ -66,7 +66,7 @@ treeTable.render({
 <td>tree.view</td>
 <td>
 
-<div id="options.tree.view" class="ws-anchor">
+<div id="options.tree.view" lay-pid="options" class="ws-anchor">
 
 视图相关的属性集合，包含以下成员：
 
@@ -91,7 +91,7 @@ treeTable.render({
 <td>tree.data</td>
 <td>
 
-<div id="options.tree.data" class="ws-anchor">
+<div id="options.tree.data" lay-pid="options" class="ws-anchor">
 
 数据相关的属性集合，包含以下成员：
 
@@ -108,7 +108,7 @@ treeTable.render({
 <td>tree.async</td>
 <td>
 
-<div id="options.tree.async" class="ws-anchor">
+<div id="options.tree.async" lay-pid="options" class="ws-anchor">
 
 异步相关的属性集合，包含以下成员：
 
@@ -130,7 +130,7 @@ treeTable.render({
 <td>tree.callback</td>
 <td>
 
-<div id="options.tree.callback" class="ws-anchor">
+<div id="options.tree.callback" lay-pid="options" class="ws-anchor">
 
 事件回调相关的属性集合，包含以下成员：
 

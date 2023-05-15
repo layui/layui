@@ -157,6 +157,8 @@ if(device.MYAPP){
 | layui.onevent(modName, events, callback) | 增加自定义模块事件，一般在内置组件中使用。 |
 | layui.event(modName, events, params) | 执行自定义模块事件，搭配 onevent 使用。注<sup>2.8+</sup>：当 events 参数中未设定 filter 时则可重复执行该事件，否则只会执行一次最新添加的事件。 |
 | layui.off(events, modName) <sup>2.5.7+</sup> | 用于移除模块相关事件，如：`layui.off('select(filter)', 'form')`，那么`form.on('select(filter)', callback)`事件将会被移除 |
+| layui.debounce(fn, wait) <sup>2.8.3+</sup> | 防抖，函数按指定毫秒延时执行 |
+| layui.throttle(fn, wait) <sup>2.8.3+</sup> | 节流，限制函数在指定毫秒内不重复执行 |
 | layui.factory(modName) | 用于获取模块对应的 `layui.define()` 的回调函数 |
 | var lay = layui.lay | 基础模块，提供了更多基础 API，一般供 Layui 内置组件中使用 |
 
