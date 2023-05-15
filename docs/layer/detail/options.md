@@ -266,7 +266,7 @@ layer.open({
 是否开启标题栏的最大化和最小化图标。
 
 </td>
-<td>array</td>
+<td>boolean</td>
 <td>
 
 `false`
@@ -456,6 +456,30 @@ layer.open({
 </td>
     </tr>
     <tr>
+<td>id</td>
+<td>
+  
+弹层的唯一索引值。 一般用于页面层或 iframe 层弹出时的状态识别，设置该属性可防止弹层的重复弹出。
+
+</td>
+<td>string</td>
+<td>-</td>
+    </tr>
+    <tr>
+<td>hideOnClose <sup>2.8.3+</sup></td>
+<td>
+  
+关闭弹层时，是否将弹层设置为隐藏状态（而非移除），当再次打开，直接显示原来的弹层。 若设为 `true`，则必须同时设置 `id` 属性方可有效。
+
+</td>
+<td>boolean</td>
+<td>
+
+`false`
+
+</td>
+    </tr>
+    <tr>
 <td>time</td>
 <td>
   
@@ -468,16 +492,6 @@ layer.open({
 `0`
 
 </td>
-    </tr>
-    <tr>
-<td>id</td>
-<td>
-  
-弹层的 ID 值。一般用于防止页面层或 iframe 层的重复弹出。
-
-</td>
-<td>string</td>
-<td>-</td>
     </tr>
     <tr>
 <td>fixed</td>
