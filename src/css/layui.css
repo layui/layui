@@ -851,7 +851,7 @@ a cite{font-style: normal; *cursor:pointer;}
 /* 复选框-开关风格 */
 .layui-form-switch{position: relative; display: inline-block; vertical-align: middle; height: 22px; line-height: 22px; min-width: 35px; padding: 0 5px; margin-top: 8px; border: 1px solid #d2d2d2; border-radius: 20px; cursor: pointer; background-color: #fff; -webkit-transition: .1s linear; transition: .1s linear;}
 .layui-form-switch > i{position: absolute; left: 5px; top: 3px; width: 16px; height: 16px; border-radius: 20px; background-color: #d2d2d2; -webkit-transition: .1s linear; transition: .1s linear;}
-.layui-form-switch > div{position: relative; top: 0; margin-left: 21px; padding: 0!important; text-align: center!important; color: #999!important; font-style: normal!important; font-size: 12px;}
+.layui-form-switch > div{display: inline-block; position: relative; top: 0; margin-left: 21px; padding: 0!important; text-align: center!important; color: #999!important; font-style: normal!important; font-size: 12px;}
 .layui-form-onswitch{border-color: #16b777; background-color: #16b777;}
 .layui-form-onswitch > i{left: 100%; margin-left: -21px; background-color: #fff;}
 .layui-form-onswitch > div{margin-left: 0; margin-right: 21px; color: #fff!important;}
