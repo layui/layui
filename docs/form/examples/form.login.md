@@ -51,7 +51,7 @@
         <a href="javascript:;"><i class="layui-icon layui-icon-login-wechat" style="color: #4daf29;"></i></a>
         <a href="javascript:;"><i class="layui-icon layui-icon-login-weibo" style="color: #cf1900;"></i></a>
       </span>
-      或 <a href="#reg">注册帐号</a></span>
+      或 <a href="#reg">注册帐号</a>
     </div>
   </div>
 </form>
