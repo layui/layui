@@ -226,7 +226,11 @@ layui.define(['lay','layer'], function(exports){
           //异常回调
           ,error: function(e){
             failed++;
-            that.msg('Request URL is abnormal: '+ (e.statusText || 'error'));
+            that.msg([
+              'Upload failed, please try again.',
+              'status: '+ (e.status || '') +' - '+ (e.statusText || 'error')
+            ].join('<br>'));
+            console.log(e)
             error(index);
             allDone();
           }
