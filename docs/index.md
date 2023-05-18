@@ -81,7 +81,7 @@ npm i layui
 
 现在，让我们以一个最简单的示例开始入门：
 
-<pre class="layui-code" lay-options="{preview: 'iframe', previewStyle: 'height: 210px;'}">
+<pre class="layui-code" lay-options="{preview: 'iframe', previewStyle: 'height: 210px;', copy: true, tools: []}">
   <textarea>
 <!DOCTYPE html>
 <html>
