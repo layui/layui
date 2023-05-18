@@ -268,12 +268,13 @@
     if(typeof fn === 'string') cssname = fn;
     
     var app = (cssname || href).replace(/\.|\//g, '');
-    var id = link.id = 'layuicss-'+ app;
+    var id = 'layuicss-'+ app;
     var STAUTS_NAME = 'creating';
     var timeout = 0;
     
-    link.rel = 'stylesheet';
     link.href = href + (config.debug ? '?v='+new Date().getTime() : '');
+    link.rel = 'stylesheet';
+    link.id = id;
     link.media = 'all';
     
     if(!doc.getElementById(id)){
