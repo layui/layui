@@ -342,7 +342,7 @@ before: function(obj){ // obj 参数同 choose
 </div>
 
 ```
-progress: progress: function(n, elem, res, index){
+progress: function(n, elem, res, index){
   var percent = n + '%' // 获取进度百分比
   element.progress('demo', percent); // 可配合 layui 进度条元素使用
   
