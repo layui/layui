@@ -474,8 +474,14 @@ layui.define(['table'], function (exports) {
     flexIconElem.html(trExpand ? treeOptions.view.flexIconOpen : treeOptions.view.flexIconClose)
     trData[isParentKey] && flexIconElem.css('visibility', 'visible');
     // 处理节点图标
-    treeOptions.view.showIcon && trsElem.find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom,.layui-table-tree-iconLeaf)')
+    treeOptions.view.showIcon && trsElem
+      .find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom,.layui-table-tree-iconLeaf)')
       .html(trExpand ? treeOptions.view.iconOpen : treeOptions.view.iconClose);
+
+    treeTableThat.status.expand[trData[customName.id]] = trData[LAY_EXPAND] = trExpand;
+    if (retValue === null) {
+      return retValue;
+    }
 
     var childNodes = trData[customName.children] || [];
     // 处理子节点展示与否
@@ -485,7 +491,6 @@ layui.define(['table'], function (exports) {
         trsElem.nextAll(childNodes.map(function (value, index, array) {
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]'
         }).join(',')).removeClass(HIDE);
-        trData[LAY_EXPAND] = trExpand;
         layui.each(childNodes, function (i1, item1) {
           if (!item1[isParentKey]) {
             return;
