@@ -279,14 +279,18 @@ layui.define(['table'], function (exports) {
     // 创建一个空的 nodes 对象，用于保存所有的节点
     var nodes = {};
     // 遍历所有节点，将其加入 nodes 对象中
+    var idTemp = '';
     layui.each(flatArr, function (index, item) {
-      nodes[item[idKey]] = $.extend({}, item);
-      nodes[item[idKey]][childrenKey] = [];
+      idTemp = idKey + item[idKey];
+      nodes[idTemp] = $.extend({}, item);
+      nodes[idTemp][childrenKey] = [];
     })
     // 遍历所有节点，将其父子关系加入 nodes 对象
+    var pidTemp = '';
     layui.each(nodes, function (index, item) {
-      if (item[pIdKey] && nodes[item[pIdKey]]) {
-        nodes[item[pIdKey]][childrenKey].push(item);
+      pidTemp = idKey + item[pIdKey];
+      if (pidTemp && nodes[pidTemp]) {
+        nodes[pidTemp][childrenKey].push(item);
       }
     })
     // 返回顶层节点
