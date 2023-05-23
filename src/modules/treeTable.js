@@ -1290,19 +1290,20 @@ layui.define(['table'], function (exports) {
   }
 
   // 获取表格选中状态
-  treeTable.checkStatus = function (id) {
+  treeTable.checkStatus = function (id, includeHalfCheck) {
     var that = getThisTable(id);
-    if(!that) return;
+    if (!that) return;
+    var checkName = table.config.checkName;
 
     // 需要区分单双选
     var tableData = treeTable.getData(id, true);
     var checkedData = tableData.filter(function (value, index, array) {
-      return value[table.config.checkName];
+      return value[checkName] || (includeHalfCheck && value[LAY_CHECKBOX_HALF]);
     });
 
     var isAll = true;
     layui.each(table.cache[id], function (i1, item1) {
-      if (!item1[table.config.checkName]) {
+      if (!item1[checkName]) {
         isAll = false;
         return true;
       }
