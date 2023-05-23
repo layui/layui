@@ -229,6 +229,7 @@ layui.define(['table'], function (exports) {
         name: "name", // 节点数据保存节点名称的属性名称
         id: "id", // 唯一标识的属性名称
         pid: "parentId", // 父节点唯一标识的属性名称
+        icon: "icon", // 图标的属性名称
       },
       view: {
         indent: 14, // 层级缩进量
