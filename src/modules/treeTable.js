@@ -106,9 +106,13 @@ layui.define(['table'], function (exports) {
 
   var updateOptions = function (id, options, reload) {
     var that = getThisTable(id);
-    var thatOptionsTemp = $.extend(true, {} , that.getOptions(), options);
+    reload === 'reloadData' || (that.status = { // 用于记录一些状态信息
+      expand: {} // 折叠状态
+    });
+    var thatOptionsTemp = $.extend(true, {}, that.getOptions(), options);
     var treeOptions = thatOptionsTemp.tree;
     var childrenKey = treeOptions.customName.children;
+    var idKey = treeOptions.customName.id;
     // 处理属性
     delete options.hasNumberCol;
     delete options.hasChecboxCol;
@@ -141,6 +145,10 @@ layui.define(['table'], function (exports) {
           if (treeOptions.data.isSimpleData && !treeOptions.async.enable) { // 异步加载和 isSimpleData 不应该一起使用
             retData[dataName] = that.flatToTree(retData[dataName]);
           }
+          // 处理节点状态
+          updateStatus(retData[dataName], function (item) {
+            item[LAY_EXPAND] = that.status.expand[item[idKey]]
+          }, childrenKey);
 
           if (parseDataThat.autoSort && parseDataThat.initSort && parseDataThat.initSort.type) {
             layui.sort(retData[dataName], parseDataThat.initSort.field, parseDataThat.initSort.type === 'desc', true)
@@ -943,7 +951,7 @@ layui.define(['table'], function (exports) {
     });
 
     // 根据需要处理options中的一些参数
-    updateOptions(that.config.id, options, true);
+    updateOptions(that.config.id, options, type || true);
 
     // 对参数进行深度或浅扩展
     that.config = $.extend(deep, {}, that.config, options);
