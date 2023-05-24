@@ -10,7 +10,6 @@ layui.define(['table'], function (exports) {
   var form = layui.form;
   var table = layui.table;
   var hint = layui.hint();
-  var timer = {}; // 记录定时器 index
 
   // api
   var treeTable = {
@@ -427,7 +426,9 @@ layui.define(['table'], function (exports) {
   var debounceFn = (function () {
     var fn = {};
     return function (tableId, func, wait) {
-      fn[tableId] = fn[tableId] || layui.debounce(func, wait);
+      if (!fn[tableId]) {
+        fn[tableId] = layui.debounce(func, wait);
+      }
       return fn[tableId];
     }
   })()
@@ -667,13 +668,15 @@ layui.define(['table'], function (exports) {
         }).join(',')).addClass(HIDE);
       }
     }
-    debounceFn(tableId, function () {
+
+
+    debounceFn('resize-' + tableId, function () {
       treeTable.resize(tableId);
-    }, 25)();
+    }, 0)();
 
     if (callbackFlag && trData[LAY_ASYNC_STATUS] !== 'loading') {
       var onExpand = treeOptions.callback.onExpand;
-      layui.type(onExpand) === 'function' && onExpand(tableId, trData, expandFlag);
+      layui.type(onExpand) === 'function' && onExpand(tableId, trData, trExpand);
     }
 
     return retValue;
@@ -908,14 +911,18 @@ layui.define(['table'], function (exports) {
     });
 
     // 当前层的数据看看是否需要展开
-    sonSign !== false && layui.each(dataExpand, function (index, item) {
-      var trDefaultExpand = tableViewElem.find('tr[lay-data-index="' + index + '"]');
-      trDefaultExpand.find('.layui-table-tree-flexIcon').html(treeOptionsView.flexIconOpen);
-      expandNode({trElem: trDefaultExpand.first()}, true);
-    });
-
-    options.hasNumberCol && that.formatNumber(tableId);
-    form.render(null, tableFilterId);
+    if (sonSign !== false && dataExpand) {
+      layui.each(dataExpand, function (index, item) {
+        var trDefaultExpand = tableViewElem.find('tr[lay-data-index="' + index + '"]');
+        trDefaultExpand.find('.layui-table-tree-flexIcon').html(treeOptionsView.flexIconOpen);
+        expandNode({trElem: trDefaultExpand.first()}, true);
+      });
+    } else {
+      debounceFn('renderTreeTable-' + tableId, function () {
+        options.hasNumberCol && formatNumber(that);
+        form.render(null, tableFilterId);
+      }, 0)();
+    }
   }
 
   var formatNumber = function (that) {
@@ -923,22 +930,16 @@ layui.define(['table'], function (exports) {
     var tableViewElem = options.elem.next();
 
     var num = 0;
+    var trMain = tableViewElem.find('.layui-table-main tbody tr');
+    var trFixedL = tableViewElem.find('.layui-table-fixed-l tbody tr');
+    var trFixedR = tableViewElem.find('.layui-table-fixed-r tbody tr');
     layui.each(that.treeToFlat(table.cache[options.id]), function (i1, item1) {
-      if (layui.isArray(item1)) {
-        return;
-      }
       var itemData = that.getNodeDataByIndex(item1[LAY_DATA_INDEX]);
       itemData['LAY_NUM'] = ++num;
-      tableViewElem.find('tr[lay-data-index="' + item1[LAY_DATA_INDEX] + '"] .laytable-cell-numbers').html(itemData['LAY_NUM']);
+      trMain.eq(i1).find('.laytable-cell-numbers').html(num);
+      trFixedL.eq(i1).find('.laytable-cell-numbers').html(num);
+      trFixedR.eq(i1).find('.laytable-cell-numbers').html(num);
     })
-  }
-
-  Class.prototype.formatNumber = function (id) {
-    var that = this;
-    clearTimeout(id);
-    timer[id] = setTimeout(function () {
-      formatNumber(that);
-    }, 10)
   }
 
   // 树表渲染
