@@ -453,9 +453,6 @@ layui.define(['table'], function (exports) {
     var isToggle = layui.type(expandFlag) !== 'boolean';
     var trExpand = isToggle ? !trData[LAY_EXPAND] : expandFlag;
     var retValue = trData[isParentKey] ? trExpand : null;
-    if (retValue === null) {
-      return retValue;
-    }
 
     if (callbackFlag && trExpand != trData[LAY_EXPAND] && (!trData[LAY_ASYNC_STATUS] || trData[LAY_ASYNC_STATUS] === 'local')) {
       var beforeExpand = treeOptions.callback.beforeExpand;
@@ -580,7 +577,6 @@ layui.define(['table'], function (exports) {
           });
           return retValue;
         }
-        trData[LAY_EXPAND] = trExpand;
         trExpanded = trData[LAY_HAS_EXPANDED] = true;
         if (childNodes.length) {
           // 判断是否需要排序
@@ -646,7 +642,6 @@ layui.define(['table'], function (exports) {
         }
       }
     } else {
-      trData[LAY_EXPAND] = trExpand;
       // 关闭
       if (sonSign && !isToggle) { // 非状态切换的情况下
         layui.each(childNodes, function (i1, item1) {
@@ -740,7 +735,9 @@ layui.define(['table'], function (exports) {
       tableView.find('.layui-table-box tbody tr[data-level!="0"]').addClass(HIDE);
 
       tableView.find('.layui-table-tree-flexIcon').html(treeOptions.view.flexIconClose);
-      treeOptions.view.showIcon && tableView.find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom,.layui-table-tree-iconLeaf)').html(treeOptions.view.iconClose);
+      treeOptions.view.showIcon && tableView
+        .find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom,.layui-table-tree-iconLeaf)')
+        .html(treeOptions.view.iconClose);
     } else {
       var tableDataFlat = treeTable.getData(id, true);
       // 展开所有
