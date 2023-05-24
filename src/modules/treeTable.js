@@ -1125,7 +1125,7 @@ layui.define(['table'], function (exports) {
     var indexArr = [];
     delNode = that.getNodeDataByIndex(layui.type(node) === 'string' ? node : node[LAY_DATA_INDEX], false, 'delete');
     var nodeP = that.getNodeDataByIndex(delNode[LAY_PARENT_INDEX]);
-    that.updateCheckStatus(nodeP, true);
+    that.updateCheckStatus(nodeP);
     var delNodesFlat = that.treeToFlat([delNode], delNode[treeOptions.customName.pid], delNode[LAY_PARENT_INDEX]);
     layui.each(delNodesFlat, function (i2, item2) {
       indexArr.push('tr[lay-data-index="' + item2[LAY_DATA_INDEX] + '"]');
@@ -1148,7 +1148,7 @@ layui.define(['table'], function (exports) {
     layui.each(table.cache[id], function (i4, item4) {
       tableView.find('tr[data-level="0"][lay-data-index="' + item4[LAY_DATA_INDEX] + '"]').attr('data-index', i4);
     })
-    options.hasNumberCol && that.formatNumber(id);
+    options.hasNumberCol && formatNumber(that);
   }
 
   /**
@@ -1279,7 +1279,7 @@ layui.define(['table'], function (exports) {
       parentNode[LAY_ASYNC_STATUS] = 'local'; // 转为本地数据，应该规定异步加载子节点的时候addNodes的规则
       expandNode({trElem: tableViewElem.find('tr[lay-data-index="' + parentIndex + '"]')}, true)
     }
-    that.updateCheckStatus(parentNode, true);
+    that.updateCheckStatus(parentNode);
     treeTable.resize(id);
     if (focus) {
       // 滚动到第一个新增的节点
@@ -1415,7 +1415,7 @@ layui.define(['table'], function (exports) {
 
     // 如有必要更新父节点们的状态
     if (dataP) {
-      var trsP = that.updateParentCheckStatus(dataP, checked);
+      var trsP = that.updateParentCheckStatus(dataP, layui.type(checked) === 'boolean' ? checked : null);
       layui.each(trsP, function (indexP, itemP) {
         form.render(tableView.find('tr[lay-data-index="' + itemP[LAY_DATA_INDEX] + '"]  input[name="layTableCheckbox"]:not(:disabled)').prop({
           checked: itemP[checkName],
@@ -1455,7 +1455,7 @@ layui.define(['table'], function (exports) {
 
     var dataRet = [];
     dataP[LAY_CHECKBOX_HALF] = false; // 先设置为非半选，是否为半选又下面逻辑判断
-    if (checked) {
+    if (checked === true) {
       // 为真需要判断子节点的情况
       if (!dataP[childrenKey].length) {
         checked = false;
@@ -1468,7 +1468,7 @@ layui.define(['table'], function (exports) {
           }
         });
       }
-    } else {
+    } else if (checked === false) {
       // 判断是否为半选
       layui.each(dataP[childrenKey], function (index, item) {
         if (item[checkName] || item[LAY_CHECKBOX_HALF]) { // 只要有一个子节点为选中或者半选状态
@@ -1476,6 +1476,17 @@ layui.define(['table'], function (exports) {
           return true;
         }
       });
+    } else {
+      // 状态不确定的情况下根据子节点的信息
+      checked = false;
+      var checkedNum = 0;
+      layui.each(dataP[childrenKey], function (index, item) {
+        if (item[checkName]) {
+          checkedNum++;
+        }
+      });
+      checked = dataP[childrenKey].length ? dataP[childrenKey].length === checkedNum : dataP[checkName]; // 如果没有子节点保留原来的状态;
+      dataP[LAY_CHECKBOX_HALF] = checked ? false : checkedNum > 0;
     }
     dataP[checkName] = checked;
     dataRet.push($.extend({}, dataP));
@@ -1585,13 +1596,13 @@ layui.define(['table'], function (exports) {
     }
   })
 
-
   /**
    * 设置行选中状态
    * @param {String} id 树表id
-   * @param {Object|String} index 节点下标
-   * @param {Boolean} checked 选中或取消
-   * @param {Boolean} [callbackFlag] 是否触发事件回调
+   * @param {Object} opts
+   * @param {Object|String} opts.index 节点下标
+   * @param {Boolean} opts.checked 选中或取消
+   * @param {Boolean} [opts.callbackFlag] 是否触发事件回调
    * */
   treeTable.setRowChecked = function (id, opts) {
     var that = getThisTable(id);
