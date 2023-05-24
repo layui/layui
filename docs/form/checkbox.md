@@ -109,9 +109,12 @@ toc: true
 
 <h2 id="on" lay-toc="{hot: true}">复选框事件</h2>
 
-`form.on('checkbox(filter)', callback);`
+| 风格 | 事件 |
+| --- | --- |
+| 默认风格 / 标签风格 | `form.on('checkbox(filter)', callback);` |
+| 开关风格 | `form.on('switch(filter)', callback);` |
 
-- `checkbox` 为复选框事件固定名称
+- `checkbox` 和 `switch` 为复选框事件固定名称
 - `filter` 为复选框元素对应的 `lay-filter` 属性值
 
 该事件在复选框选中或取消选中时触发。
