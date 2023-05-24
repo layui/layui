@@ -690,6 +690,13 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           }()));
           var disabled = this.disabled;
 
+          if(!skins[skin]) skin = 'primary'; // 若非内置风格，则强制为默认风格
+          var RE_CLASS = CLASS[skin] || CLASS.checkbox;
+
+          // 替代元素
+          var hasRender = othis.next('.' + RE_CLASS[0]);
+          hasRender[0] && hasRender.remove(); // 如果已经渲染，则Rerender
+         
           // 若存在标题模板，则优先读取标题模板
           if(othis.next('[lay-checkbox]')[0]){
             title = othis.next().html() || '';
@@ -697,14 +704,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
           // 若为开关，则对 title 进行分隔解析
           title = skin === 'switch' ? title.split('|') : [title];
-
-          if(!skins[skin]) skin = 'primary'; // 若非内置风格，则强制为默认风格
-          var RE_CLASS = CLASS[skin] || CLASS.checkbox;
           
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
           
           // 替代元素
-          var hasRender = othis.next('.' + RE_CLASS[0]);
           var reElem = $(['<div class="layui-unselect '+ RE_CLASS[0],
             (check.checked ? (' '+ RE_CLASS[1]) : ''), // 选中状态
             (disabled ? ' layui-checkbox-disabled '+ DISABLED : ''), // 禁用状态
@@ -725,7 +728,6 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           }(),
           '</div>'].join(''));
 
-          hasRender[0] && hasRender.remove(); // 如果已经渲染，则Rerender
           othis.after(reElem);
           events.call(this, reElem, RE_CLASS);
         });
