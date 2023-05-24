@@ -784,15 +784,20 @@ layui.define(['table'], function (exports) {
         tableView.find('tbody tr[data-level!="0"]').removeClass(HIDE);
         // 处理节点的图标
         tableView.find('.layui-table-tree-flexIcon').html(treeOptions.view.flexIconOpen);
-        treeOptions.view.showIcon && tableView.find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom,.layui-table-tree-iconLeaf)').html(treeOptions.view.iconOpen);
+        treeOptions.view.showIcon && tableView
+          .find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom,.layui-table-tree-iconLeaf)')
+          .html(treeOptions.view.iconOpen);
       } else {
-        // 如果有未打开过的父节点，将内容全部生成
+        // 如果有未打开过的父节点，将 tr 内容全部重新生成
         that.updateStatus(null, function (d) {
           if (d[isParentKey]) {
             d[LAY_EXPAND] = true;
             d[LAY_HAS_EXPANDED] = true;
           }
-        }); // {LAY_EXPAND: true, LAY_HAS_EXPANDED: true});
+        });
+        if (options.initSort && options.initSort.type && (!options.url || options.autoSort)) {
+          return treeTable.sort(id);
+        }
         var trAll = table.getTrHtml(id, tableDataFlat);
 
         var trAllObj = {
@@ -800,23 +805,17 @@ layui.define(['table'], function (exports) {
           trs_fixed: $(trAll.trs_fixed.join('')),
           trs_fixed_r: $(trAll.trs_fixed_r.join(''))
         }
+        var props;
         layui.each(tableDataFlat, function (dataIndex, dataItem) {
           var dataLevel = dataItem[LAY_DATA_INDEX].split('-').length - 1;
-          trAllObj.trs.eq(dataIndex).attr({
+          props = {
             'data-index': dataItem[LAY_DATA_INDEX],
             'lay-data-index': dataItem[LAY_DATA_INDEX],
             'data-level': dataLevel
-          })
-          trAllObj.trs_fixed.eq(dataIndex).attr({
-            'data-index': dataItem[LAY_DATA_INDEX],
-            'lay-data-index': dataItem[LAY_DATA_INDEX],
-            'data-level': dataLevel
-          })
-          trAllObj.trs_fixed_r.eq(dataIndex).attr({
-            'data-index': dataItem[LAY_DATA_INDEX],
-            'lay-data-index': dataItem[LAY_DATA_INDEX],
-            'data-level': dataLevel
-          })
+          };
+          trAllObj.trs.eq(dataIndex).attr(props)
+          trAllObj.trs_fixed.eq(dataIndex).attr(props)
+          trAllObj.trs_fixed_r.eq(dataIndex).attr(props)
         })
         layui.each(['main', 'fixed-l', 'fixed-r'], function (i, item) {
           tableView.find('.layui-table-' + item + ' tbody').html(trAllObj[['trs', 'trs_fixed', 'trs_fixed_r'][i]]);
