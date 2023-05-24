@@ -623,9 +623,7 @@ layui.define(['table'], function (exports) {
           tableViewElem.find(ELEM_FIXR).find('tbody tr[lay-data-index="' + dataIndex + '"]').after(str2Obj.trs_fixed_r);
 
           // 初始化新增的节点中的内容
-          layui.each(str2Obj, function (key, item) {
-            treeTableThat.renderTreeTable(item, dataLevelNew);
-          })
+          treeTableThat.renderTreeTable(str2Obj.trs, dataLevelNew);
 
           if (sonSign && !isToggle) { // 非状态切换的情况下
             // 级联展开/关闭子节点
@@ -830,7 +828,7 @@ layui.define(['table'], function (exports) {
     var that = this;
     var options = that.getOptions();
     var tableViewElem = options.elem.next();
-    tableViewElem.addClass(TABLE_TREE);
+    !tableViewElem.hasClass(TABLE_TREE) && tableViewElem.addClass(TABLE_TREE);
     var tableId = options.id;
     var treeOptions = options.tree || {};
     var treeOptionsData = treeOptions.data || {};
@@ -853,7 +851,7 @@ layui.define(['table'], function (exports) {
       })
     }
 
-    var dataExpand = {}; // 记录需要展开的数据
+    var dataExpand = null; // 记录需要展开的数据
     var nameKey = customName.name;
     var indent = treeOptionsView.indent || 14;
     layui.each(tableView.find('td[data-field="' + nameKey + '"]'), function (index, item) {
@@ -863,21 +861,26 @@ layui.define(['table'], function (exports) {
       if (itemCell.hasClass('layui-table-tree-item')) {
         return;
       }
-      itemCell.addClass('layui-table-tree-item');
       var trIndex = trElem.attr('lay-data-index');
       if (!trIndex) { // 排除在统计行中的节点
         return;
       }
+      trElem = tableViewElem.find('tr[lay-data-index="' + trIndex + '"]');
       var trData = treeTableThat.getNodeDataByIndex(trIndex);
+
       if (trData[LAY_EXPAND]) {
         // 需要展开
+        dataExpand = dataExpand || {};
         dataExpand[trIndex] = true;
       }
+      if (trData[LAY_CHECKBOX_HALF]) {
+        trElem.find('input[type="checkbox"][name="layTableCheckbox"]').prop('indeterminate', true);
+      }
 
-      var tableCellElem = item.find('div.layui-table-cell');
-      var htmlTemp = tableCellElem.html();
-
-      var flexIconElem = item.find('div.layui-table-cell')
+      var htmlTemp = itemCell.html();
+      itemCell = trElem.find('td[data-field="' + nameKey + '"]>div.layui-table-cell');
+      itemCell.addClass('layui-table-tree-item');
+      var flexIconElem = itemCell
         .html(['<div class="layui-inline layui-table-tree-flexIcon" ',
           'style="',
           'margin-left: ' + (indent * trElem.attr('data-level')) + 'px;',
@@ -886,10 +889,10 @@ layui.define(['table'], function (exports) {
           trData[LAY_EXPAND] ? treeOptionsView.flexIconOpen : treeOptionsView.flexIconClose, // 折叠图标
           '</div>',
           treeOptionsView.showIcon ? '<div class="layui-inline layui-table-tree-nodeIcon' +
-            ((trData.icon || treeOptionsView.icon) ? ' layui-table-tree-iconCustom' : '') +
+            ((trData[customName.icon] || treeOptionsView.icon) ? ' layui-table-tree-iconCustom' : '') +
             (trData[isParentKey] ? '' : ' layui-table-tree-iconLeaf') +
             '">' +
-            (trData.icon || treeOptionsView.icon ||
+            (trData[customName.icon] || treeOptionsView.icon ||
               (trData[isParentKey] ?
                 (trData[LAY_EXPAND] ? treeOptionsView.iconOpen : treeOptionsView.iconClose) :
                 treeOptionsView.iconLeaf) ||
@@ -1204,22 +1207,16 @@ layui.define(['table'], function (exports) {
         trs_fixed_r: $(newNodesHtml.trs_fixed_r.join(''))
       }
 
+      var attrs = {};
       layui.each(newNodes, function (newNodeIndex, newNodeItem) {
-        newNodesHtmlObj.trs.eq(newNodeIndex).attr({
+        attrs = {
           'data-index': newNodeItem[LAY_DATA_INDEX],
           'lay-data-index': newNodeItem[LAY_DATA_INDEX],
           'data-level': '0'
-        })
-        newNodesHtmlObj.trs_fixed.eq(newNodeIndex).attr({
-          'data-index': newNodeItem[LAY_DATA_INDEX],
-          'lay-data-index': newNodeItem[LAY_DATA_INDEX],
-          'data-level': '0'
-        })
-        newNodesHtmlObj.trs_fixed_r.eq(newNodeIndex).attr({
-          'data-index': newNodeItem[LAY_DATA_INDEX],
-          'lay-data-index': newNodeItem[LAY_DATA_INDEX],
-          'data-level': '0'
-        })
+        };
+        newNodesHtmlObj.trs.eq(newNodeIndex).attr(attrs)
+        newNodesHtmlObj.trs_fixed.eq(newNodeIndex).attr(attrs)
+        newNodesHtmlObj.trs_fixed_r.eq(newNodeIndex).attr(attrs)
       })
       var trIndexPrev = parseInt(newNodes[0][LAY_DATA_INDEX]) - 1;
       var tableViewElemMAIN = tableViewElem.find(ELEM_MAIN);
