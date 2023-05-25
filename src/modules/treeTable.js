@@ -331,6 +331,79 @@ layui.define(['table'], function (exports) {
     return flat;
   }
 
+  // 通过当前行数据返回 treeNode 信息
+  Class.prototype.getTreeNode = function (data) {
+    var that = this;
+    if (!data) {
+      return hint.error('找不到节点数据');
+    }
+    var options = that.getOptions();
+    var treeOptions = options.tree;
+    var tableId = options.id;
+    var customName = treeOptions.customName;
+
+    var treeNode = {
+      data: data,
+      dataIndex: data[LAY_DATA_INDEX],
+      getParentNode: function () {
+        return that.getNodeByIndex(data[LAY_PARENT_INDEX])
+      },
+    }
+    // 带上一些常用的方法
+
+    return treeNode;
+  }
+
+  // 通过 index 返回节点信息
+  Class.prototype.getNodeByIndex = function (index) {
+    var that = this;
+    var treeNodeData = that.getNodeDataByIndex(index);
+    if (!treeNodeData) {
+      return hint.error('找不到节点数据');
+    }
+    var options = that.getOptions();
+    var treeOptions = options.tree;
+    var customName = treeOptions.customName;
+    var parentKey = customName.parent;
+    var tableId = options.id;
+
+    var treeNode = {
+      data: treeNodeData,
+      dataIndex: treeNodeData[LAY_DATA_INDEX],
+      getParentNode: function () {
+        return that.getNodeByIndex(treeNodeData[LAY_PARENT_INDEX])
+      }
+    };
+
+    treeNode.dataIndex = index;
+    return treeNode;
+  }
+
+  // 通过 id 获取节点信息
+  Class.prototype.getNodeById = function (id) {
+    var that = this;
+    var options = that.getOptions();
+    var treeOptions = options.tree;
+    var customName = treeOptions.customName;
+    var idKey = customName.id;
+
+    // 通过 id 拿到数据的 dataIndex
+    var dataIndex = '';
+    var tableDataFlat = treeTable.getData(options.id, true);
+    layui.each(tableDataFlat, function (i1, item1) {
+      if (item1[idKey] === id) {
+        dataIndex = item1[LAY_DATA_INDEX];
+        return true;
+      }
+    })
+    if (!dataIndex) {
+      return;
+    }
+
+    // 用index
+    return that.getNodeByIndex(dataIndex);
+  }
+
   // 通过index获取节点数据
   Class.prototype.getNodeDataByIndex = function (index, clone, newValue) {
     var that = this;
@@ -356,9 +429,6 @@ layui.define(['table'], function (exports) {
           // 删除
           if (tableCache) {
             // 同步cache
-            // tableCache.splice(tableCache.findIndex(function (value) {
-            //   return value[LAY_DATA_INDEX] === index;
-            // }), 1);
             layui.each(tableCache, function (i1, item1) {
               if (item1[LAY_DATA_INDEX] === index) {
                 tableCache.splice(i1, 1);
@@ -1664,12 +1734,15 @@ layui.define(['table'], function (exports) {
    * @return {Array} 表格数据
    * */
   treeTable.getData = function (id, isSimpleData) {
+    var that = getThisTable(id);
+    if (!that) return;
+
     var tableData = [];
     layui.each($.extend(true, [], table.cache[id] || []), function (index, item) {
       // 遍历排除掉临时的数据
       tableData.push(item);
     })
-    return isSimpleData ? getThisTable(id).treeToFlat(tableData) : tableData;
+    return isSimpleData ? that.treeToFlat(tableData) : tableData;
   }
 
   /**
@@ -1704,6 +1777,47 @@ layui.define(['table'], function (exports) {
       expandFlag: true,
       callbackFlag: true,
     })
+  }
+
+  /**
+   * 通过数据id获取节点对象
+   * */
+  treeTable.getNodeById = function (id, dataId) {
+    var that = getThisTable(id);
+    if (!that) return;
+
+    return that.getNodeById(dataId);
+  }
+
+  /**
+   * 根据自定义规则搜索节点数据
+   * @param {String} id 树表id
+   * @param {Function} filter 自定义过滤器函数
+   * @param {Object} [opts]
+   * @param {Boolean} [opts.isSingle] 是否只找到第一个
+   * @param {Object} [opts.parentNode] 在指定在某个父节点下的子节点中搜索
+   * @return {Object} 节点对象
+   * */
+  treeTable.getNodesByFilter = function (id, filter, opts) {
+    var that = getThisTable(id);
+    if (!that) return;
+    var options = that.getOptions();
+
+    opts = opts || {};
+    var isSingle = opts.isSingle;
+    var parentNode = opts.parentNode;
+    var dataP = parentNode && parentNode.data;
+    // dataP = dataP || table.cache[id];
+    var nodes = that.treeToFlat(dataP ? (dataP[options.tree.customName.children] || []) : table.cache[id]).filter(filter);
+    var nodesResult = [];
+    layui.each(nodes, function (i1, item1) {
+      nodesResult.push(that.getNodeByIndex(item1[LAY_DATA_INDEX]));
+      if (isSingle) {
+        return true;
+      }
+    });
+
+    return nodesResult;
   }
 
 
