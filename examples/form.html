@@ -293,6 +293,7 @@
         <input type="checkbox" name="like[write]" title="写作">
         <input type="checkbox" name="like[read]" title="阅读">
         <input type="checkbox" name="like[game]" title="游戏" disabled>
+        <input type="checkbox" name="like[indeterminate]" id="ID-indeterminate" lay-filter="filter-indeterminate" title="半选">
       </div>
     </div>
     <div class="layui-form-item" pane>
@@ -457,6 +458,10 @@
       alert(JSON.stringify(data.field));
       return false;
     });
+
+    // 设置半选
+    $('#ID-indeterminate').prop('indeterminate', true);
+    form.render('checkbox');
 
     // 普通事件
     util.on('lay-on', {

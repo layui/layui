@@ -658,7 +658,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             // 半选
             if (check[0].indeterminate) {
               check[0].indeterminate = false;
-              reElem.find(CLASS.SUBTRA).removeClass(CLASS.SUBTRA).addClass('layui-icon-ok')
+              reElem.find('.'+ CLASS.SUBTRA).removeClass(CLASS.SUBTRA).addClass('layui-icon-ok');
             }
 
             // 开关
