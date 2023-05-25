@@ -1662,6 +1662,41 @@ layui.define(['table'], function (exports) {
     return isSimpleData ? getThisTable(id).treeToFlat(tableData) : tableData;
   }
 
+  /**
+   * 重新加载子节点
+   * @param {String} id 表格id
+   * @param {String} dataIndex 父节点的dataIndex
+   * */
+  treeTable.reAsync = function (id, dataIndex) {
+    var that = getThisTable(id);
+    if (!that) {
+      return;
+    }
+
+    var options = that.getOptions();
+    var treeOptions = options.tree;
+    if (!treeOptions.async || !treeOptions.async.enable) {
+      return;
+    }
+    var dataP = that.getNodeDataByIndex(dataIndex);
+    if (!dataP) {
+      return;
+    }
+    dataP[LAY_HAS_EXPANDED] = false;
+    dataP[LAY_EXPAND] = false;
+    dataP[LAY_ASYNC_STATUS] = false;
+    layui.each(that.treeToFlat(dataP[treeOptions.customName.children]).reverse(), function (i1, item1) {
+      treeTable.removeNode(id, item1[LAY_DATA_INDEX]);
+    })
+    // 重新展开
+    treeTable.expandNode(id, {
+      index: dataIndex,
+      expandFlag: true,
+      callbackFlag: true,
+    })
+  }
+
+
   // 记录所有实例
   thisTreeTable.that = {}; // 记录所有实例对象
   // thisTreeTable.config = {}; // 记录所有实例配置项
