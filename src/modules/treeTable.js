@@ -516,9 +516,24 @@ layui.define(['table'], function (exports) {
       } else {
         var asyncSetting = treeOptions.async || {};
         var asyncUrl = asyncSetting.url || options.url;
-        // 提供一个能支持用户在获取子数据转换调用的回调，这样让子节点数据获取更加灵活 todo
-        if (asyncSetting.enable && trData[isParentKey] && asyncUrl && !trData[LAY_ASYNC_STATUS]) {
+        if (asyncSetting.enable && trData[isParentKey] && !trData[LAY_ASYNC_STATUS]) {
           trData[LAY_ASYNC_STATUS] = 'loading';
+          flexIconElem.html('<i class="layui-icon layui-icon-loading layui-anim layui-anim-loop layui-anim-rotate"></i>');
+
+          // 异步获取子节点数据成功之后处理方法
+          var asyncSuccessFn = function (data) {
+            trData[LAY_ASYNC_STATUS] = 'success';
+            trData[customName.children] = data;
+            treeTableThat.initData(trData[customName.children], trData[LAY_DATA_INDEX])
+            expandNode(treeNode, true, isToggle ? false : sonSign, focus, callbackFlag);
+          }
+
+          var format = asyncSetting.format; // 自定义数据返回方法
+          if (layui.type(format) === 'function') {
+            format(trData, options, asyncSuccessFn);
+            return retValue;
+          }
+
           var params = {};
           // 参数
           var data = $.extend(params, asyncSetting.where || options.where);
@@ -540,8 +555,6 @@ layui.define(['table'], function (exports) {
           var asyncParseData = asyncSetting.parseData || options.parseData;
           var asyncResponse = asyncSetting.response || options.response;
 
-          // that.loading();
-          flexIconElem.html('<i class="layui-icon layui-icon-loading layui-anim layui-anim-loop layui-anim-rotate"></i>')
           $.ajax({
             type: asyncType || 'get',
             url: asyncUrl,
@@ -551,7 +564,6 @@ layui.define(['table'], function (exports) {
             jsonpCallback: asyncJsonpCallback,
             headers: asyncHeaders || {},
             success: function (res) {
-              trData[LAY_ASYNC_STATUS] = 'success';
               // 若有数据解析的回调，则获得其返回的数据
               if (typeof asyncParseData === 'function') {
                 res = asyncParseData.call(options, res) || res;
@@ -563,10 +575,8 @@ layui.define(['table'], function (exports) {
                 flexIconElem.html('<i class="layui-icon layui-icon-refresh"></i>');
                 // 事件
               } else {
-                trData[customName.children] = res[asyncResponse.dataName];
-                treeTableThat.initData(trData[customName.children], trData[LAY_DATA_INDEX])
                 // 正常返回
-                expandNode(treeNode, true, isToggle ? false : sonSign, focus, callbackFlag);
+                asyncSuccessFn(res[asyncResponse.dataName]);
               }
             },
             error: function (e, msg) {
