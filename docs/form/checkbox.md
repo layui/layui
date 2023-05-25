@@ -18,7 +18,20 @@ toc: true
   <input type="checkbox" name="AAA" title="默认">
   <input type="checkbox" name="BBB" lay-text="选中" checked> 
   <input type="checkbox" name="CCC" title="禁用" disabled> 
+  <input type="checkbox" name="DDD" title="半选" id="ID-checkbox-ind"> 
 </div>
+
+<!-- import layui -->
+<script>
+layui.use(function(){
+  var form = layui.form;
+  var $ = layui.$;
+
+  // 初始设置半选
+  $('#ID-checkbox-ind').prop('indeterminate', true); // 半选属性只能动态设置
+  form.render('checkbox');
+});
+</script>
   </textarea>
 </pre>
 
@@ -41,7 +54,7 @@ toc: true
 <div class="layui-form">
   <input type="checkbox" name="AAA" title="默认" lay-skin="tag">
   <input type="checkbox" name="BBB" title="选中" lay-skin="tag" checked> 
-  <input type="checkbox" name="CCC" title="禁用" lay-skin="tag" disabled> 
+  <input type="checkbox" name="CCC" title="禁用" lay-skin="tag" disabled>
 </div>
 
 <!-- import layui -->
