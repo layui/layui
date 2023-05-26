@@ -372,6 +372,22 @@ layui.define(['table'], function (exports) {
       dataIndex: treeNodeData[LAY_DATA_INDEX],
       getParentNode: function () {
         return that.getNodeByIndex(treeNodeData[LAY_PARENT_INDEX])
+      },
+      update: function (data) {
+        return treeTable.updateNode(tableId, index, data)
+      },
+      remove: function () {
+        return treeTable.removeNode(tableId, index)
+      },
+      expand: function (opts) {
+        return treeTable.expandNode(tableId, $.extend({}, opts, {
+          index: index
+        }))
+      },
+      setChecked: function (opts) {
+        return treeTable.setRowChecked(tableId, $.extend({}, opts, {
+          index: index
+        }))
       }
     };
 
