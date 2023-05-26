@@ -690,12 +690,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           }()));
           var disabled = this.disabled;
 
-          if(!skins[skin]) skin = 'primary'; // 若非内置风格，则强制为默认风格
+          // if(!skins[skin]) skin = 'primary'; // 若非内置风格，则强制为默认风格
           var RE_CLASS = CLASS[skin] || CLASS.checkbox;
 
           // 替代元素
           var hasRender = othis.next('.' + RE_CLASS[0]);
-          hasRender[0] && hasRender.remove(); // 如果已经渲染，则Rerender
+          hasRender[0] && hasRender.remove(); // 若已经渲染，则 Rerender
          
           // 若存在标题模板，则优先读取标题模板
           if(othis.next('[lay-checkbox]')[0]){
