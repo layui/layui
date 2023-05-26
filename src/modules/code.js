@@ -217,7 +217,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         
         // 追加预览
         if(isIframePreview){
-          elemPreviewView.html('<iframe></iframe>');
+          elemPreviewView.html('<iframe allowtransparency="true" frameborder="0"></iframe>');
         }
 
         // 执行预览
