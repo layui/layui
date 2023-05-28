@@ -672,7 +672,7 @@
           '#{{id}} li.layui-this,#{{id}} td.layui-this>div{background-color:{{theme}} !important;}',
           options.theme.indexOf('circle') !== -1 ? '' : '#{{id}} .layui-this{background-color:{{theme}} !important;}',
           '#{{id}} .laydate-day-now{color:{{theme}} !important;}',
-          '#{{id}} .laydate-day-now:after{border-color:{{theme}} !important;}',
+          '#{{id}} .laydate-day-now:after{border-color:{{theme}} !important;}'
         ].join('').replace(/{{id}}/g, that.elemID).replace(/{{theme}}/g, theme));
         return;
       }
@@ -680,7 +680,7 @@
       if(!isPrimaryColor && /^#/.test(theme)){
         styleText.push([
           '#{{id}} .laydate-selected>div{background-color:{{theme}} !important;}',
-          '#{{id}} .laydate-selected:hover>div{background-color:{{theme}} !important;}',
+          '#{{id}} .laydate-selected:hover>div{background-color:{{theme}} !important;}'
         ].join('').replace(/{{id}}/g, that.elemID).replace(/{{theme}}/g, theme));
       }
     });
