@@ -1916,8 +1916,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
           printWin.document.write(style + html.prop('outerHTML'));
           printWin.document.close();
-          printWin.print();
-          printWin.close();
+          
+          if(layui.device('edg').edg){
+            printWin.onafterprint = printWin.close;
+            printWin.print();
+          }else{
+            printWin.print();
+            printWin.close();
+          }
         break;
       }
 
