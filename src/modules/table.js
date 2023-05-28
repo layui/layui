@@ -1459,9 +1459,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       tr.addClass(ELEM_CLICK).siblings('tr').removeClass(ELEM_CLICK);
     }
 
-    // 仅设置样式状态
-    if(opts.selectedStyle || selectedStyle) return;
-
     // 同步数据选中属性值
     var thisData = table.cache[that.key];
 
@@ -1475,13 +1472,28 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     });
 
     // 若存在复选框或单选框，则标注选中样式
-    tr.find('input[lay-type="'+ ({
+    var checkedElem = tr.find('input[lay-type="'+ ({
       radio: 'layTableRadio',
       checkbox: 'layTableCheckbox'
     }[opts.type] || 'checkbox') +'"]').prop('checked', opts.checked);
 
     that.syncCheckAll();
     that.renderForm(opts.type);
+
+    // 仅设置样式状态
+    if(opts.selectedStyle || selectedStyle) return;
+
+    layui.event.call(
+      checkedElem[0],
+      MOD_NAME, opts.type + '('+ options.elem.attr('lay-filter') +')',
+      that.commonMember.call(checkedElem[0], {
+        checked: opts.checked,
+        type: opts.index === 'all' ? 'all' : 'one',
+        getCol: function(){ // 获取当前列的表头配置信息
+          return that.col(checkedElem.closest('td').data('key'));
+        }
+      })
+    );
   };
 
   // 数据排序
