@@ -404,7 +404,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       ,'style': function(){
         var arr = [];
         if(options.width) arr.push('width:'+ options.width + 'px;');
-        if(options.height) arr.push('height:'+ options.height + 'px;');
+        // if(options.height) arr.push('height:'+ options.height + 'px;');
         return arr.join('')
       }()
     }).html(laytpl(TPL_MAIN, {
@@ -1653,11 +1653,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     if(that.fullHeightGap){
       height = _WIN.height() - that.fullHeightGap;
       if(height < 135) height = 135;
-      that.elem.css('height', height);
+      // that.elem.css('height', height);
     } else if (that.parentDiv && that.parentHeightGap) {
       height = $(that.parentDiv).height() - that.parentHeightGap;
       if (height < 135) height = 135;
-      that.elem.css("height", height);
+      // that.elem.css("height", height);
     }
 
     // 如果多级表头，则填补表头高度
