@@ -46,6 +46,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           '请输入正确的身份证号'
         ]
       },
+      verIncludelRequired: false, // 验证规则是否包含必填 --- 为兼容旧版的验证机制
       autocomplete: null // 全局 autocomplete 状态。 null 表示不干预
     };
   };
@@ -841,7 +842,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   Form.prototype.validate = function(elem){
     var that = this;
     var stop = null; // 验证不通过状态
-    var verify = form.config.verify; // 验证规则
+    var options = that.config; // 获取全局配置项
+    var verify = options.verify; // 验证规则
     var DANGER = 'layui-form-danger'; // 警示样式
 
     elem = $(elem);
@@ -892,7 +894,13 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           }
           
           // 若为必填项或者非空命中校验，则阻止提交，弹出提示
-          if(isTrue && (thisVer === 'required' || (value && thisVer !== 'required'))){
+          if(isTrue && (
+            options.verIncludelRequired || (
+              thisVer === 'required' || (
+                value && thisVer !== 'required'
+              )
+            )
+          )){
             // 提示层风格
             if(verType === 'tips'){
               layer.tips(errorText, function(){
