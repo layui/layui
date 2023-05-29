@@ -1674,22 +1674,22 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     if(!height) return;
 
-    // 减去列头区域的高度 --- 此处的数字常量是为了防止容器处在隐藏区域无法获得高度的问题，暂时只对默认尺寸表格做支持
-    bodyHeight = parseFloat(height) - (that.layHeader.outerHeight() || 39) - 1;
+    // 减去列头区域的高度 --- 此处的数字常量是为了防止容器处在隐藏区域无法获得高度的问题，只对默认尺寸表格做支持
+    bodyHeight = parseFloat(height) - (that.layHeader.outerHeight() || 39)
 
     // 减去工具栏的高度
     if(options.toolbar){
-      bodyHeight -= (that.layTool.outerHeight() || 50);
+      bodyHeight -= (that.layTool.outerHeight() || 51);
     }
 
     // 减去统计栏的高度
     if(options.totalRow){
-      bodyHeight -= (that.layTotal.outerHeight() || 40) - 1; // 减掉一个共用的 border width
+      bodyHeight -= (that.layTotal.outerHeight() || 40);
     }
 
     // 减去分页栏的高度
     if(options.page || options.pagebar){
-      bodyHeight -= (that.layPage.outerHeight() || 43) - 1;
+      bodyHeight -= (that.layPage.outerHeight() || 43);
     }
 
     if (options.maxHeight) {

@@ -1106,7 +1106,7 @@ input.layui-input.layui-table-edit{height: 100%;}
 select.layui-table-edit{padding: 0 0 0 10px; border-color: #d2d2d2;}
 .layui-table-view .layui-form-switch,
 .layui-table-view .layui-form-checkbox,
-.layui-table-view .layui-form-radio{top: 0; margin: 0; box-sizing: content-box;}
+.layui-table-view .layui-form-radio{top: 0; margin: 0;}
 .layui-table-view .layui-form-checkbox{top: -1px; height: 26px; line-height: 26px;}
 .layui-table-view .layui-form-checkbox i{height: 26px;}
 
