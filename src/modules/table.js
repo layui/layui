@@ -2159,7 +2159,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     };
 
     // 复选框选择（替代元素的 click 事件）
-    that.elem.on('click', 'input[name="layTableCheckbox"]+', function(){
+    that.elem.on('click', 'input[name="layTableCheckbox"]+', function(e){
       var othis = $(this);
       var td = othis.closest('td');
       var checkbox = othis.prev();
@@ -2181,6 +2181,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       } else {
         that.setCheckData(index, checked);
         that.syncCheckAll();
+        layui.stope(e);
       }
 
       // 事件
@@ -2198,20 +2199,24 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     });
 
     // 单选框选择
-    that.elem.on('click', 'input[lay-type="layTableRadio"]+', function(){
+    that.elem.on('click', 'input[lay-type="layTableRadio"]+', function(e){
       var othis = $(this);
       var td = othis.closest('td');
       var radio = othis.prev();
       var checked = radio[0].checked;
       var index = radio.parents('tr').eq(0).data('index');
 
-      if(radio[0].disabled) return;
+      layui.stope(e);
+      if(radio[0].disabled) return false;
 
-      // 单选框选中状态
+      // 标注数据中的选中属性
+      that.setCheckData(index, checked, 'radio');
+
+      // 标注选中样式
       that.setRowChecked({
         type: 'radio',
         index: index
-      });
+      }, true);
 
       // 事件
       layui.event.call(
@@ -2237,7 +2242,16 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var index = othis.index();
       if(othis.data('off')) return; // 不触发事件
       that.layBody.find('tr:eq('+ index +')').removeClass(ELEM_HOVER)
-    }).on('click', 'tr', function(){ // 单击行
+    }).on('click', 'tr', function(e){ // 单击行
+      // 不支持行单击事件的元素
+      var UNROW = '.layui-form-checkbox,.layui-form-radio,[lay-unrow]';
+      var container = $(this).find(UNROW);
+      if(
+        $(e.target).is(UNROW) || 
+        container[0] && $.contains(container[0], e.target)
+      ){
+        return;
+      };
       setRowEvent.call(this, 'row');
     }).on('dblclick', 'tr', function(){ // 双击行
       setRowEvent.call(this, 'rowDouble');
