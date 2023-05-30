@@ -230,7 +230,6 @@ layui.define(['lay','layer'], function(exports){
               'Upload failed, please try again.',
               'status: '+ (e.status || '') +' - '+ (e.statusText || 'error')
             ].join('<br>'));
-            console.log(e)
             error(index);
             allDone();
           }
