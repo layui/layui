@@ -191,7 +191,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 
 /* 内置 skin */
 .layui-layer-lan .layui-layer-title{background:#4476A7; color:#fff; border: none;}
-.layui-layer-lan .layui-layer-btn{padding: 5px 10px 10px; text-align: right; border-top:1px solid #E9E7E7}
+.layui-layer-lan .layui-layer-btn{padding: 5px 10px 10px; border-top:1px solid #E9E7E7}
 .layui-layer-lan .layui-layer-btn a{background: #fff; border-color: #E9E7E7; color: #333;}
 .layui-layer-lan .layui-layer-btn .layui-layer-btn1{background:#C9C5C5;}
 .layui-layer-molv .layui-layer-title{background: #009f95; color:#fff; border: none;}

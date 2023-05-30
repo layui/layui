@@ -7,13 +7,13 @@ body:
     id: related-problem
     attributes:
       label: 建议内容
-      description: 阐述提出该建议的出发点。
+      placeholder: 阐述提出该建议的出发点。
     validations:
       required: true
   - type: textarea
     id: desired-solution
     attributes:
       label: 解决方案
-      description: 您希望看到什么样的解决方案？
+      placeholder: 您希望看到什么样的解决方案？
     validations:
       required: true

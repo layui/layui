@@ -657,17 +657,30 @@
     });
     options.showBottom && elem.appendChild(divFooter);
     
-    //生成自定义主题
+    // 生成自定义主题
     var style = lay.elem('style');
     var styleText = [];
     var colorTheme;
+    var isPrimaryColor = true;
     lay.each(options.theme, function (index, theme) {
-      if(/^#/.test(theme)){
+      // 主色
+      if(isPrimaryColor && /^#/.test(theme)){
         colorTheme = true;
+        isPrimaryColor = false;
         styleText.push([
-          '#{{id}} .layui-laydate-header{background-color:{{theme}};}'
-          ,'#{{id}} li.layui-this,#{{id}} td.layui-this>div{background-color:{{theme}} !important;}'
-          ,options.theme.indexOf('circle') !== -1 ? '' : '#{{id}} .layui-this{background-color:{{theme}} !important;}'
+          '#{{id}} .layui-laydate-header{background-color:{{theme}};}',
+          '#{{id}} li.layui-this,#{{id}} td.layui-this>div{background-color:{{theme}} !important;}',
+          options.theme.indexOf('circle') !== -1 ? '' : '#{{id}} .layui-this{background-color:{{theme}} !important;}',
+          '#{{id}} .laydate-day-now{color:{{theme}} !important;}',
+          '#{{id}} .laydate-day-now:after{border-color:{{theme}} !important;}'
+        ].join('').replace(/{{id}}/g, that.elemID).replace(/{{theme}}/g, theme));
+        return;
+      }
+      // 第二个自定义颜色作为辅色
+      if(!isPrimaryColor && /^#/.test(theme)){
+        styleText.push([
+          '#{{id}} .laydate-selected>div{background-color:{{theme}} !important;}',
+          '#{{id}} .laydate-selected:hover>div{background-color:{{theme}} !important;}'
         ].join('').replace(/{{id}}/g, that.elemID).replace(/{{theme}}/g, theme));
       }
     });

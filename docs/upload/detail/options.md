@@ -149,7 +149,7 @@ acceptMime: 'image/jpeg, image/png` // 只筛选 jpg,png 格式图片
 </div>  
 
 - 假设 `accept: 'file'` 类型时，那么设置 `exts: 'zip|rar|7z'` 即代表只允许上传压缩格式的文件。
-- 默认为常见图片后缀，即 `exts: 'jpg|png|gif|bmp|jpeg'`
+- 默认为常见图片后缀，即 `jpg|png|gif|bmp|jpeg|svg`
 
 </td>
 <td>string</td>
@@ -342,7 +342,7 @@ before: function(obj){ // obj 参数同 choose
 </div>
 
 ```
-progress: progress: function(n, elem, res, index){
+progress: function(n, elem, res, index){
   var percent = n + '%' // 获取进度百分比
   element.progress('demo', percent); // 可配合 layui 进度条元素使用
   

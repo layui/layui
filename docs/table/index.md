@@ -298,7 +298,7 @@ console.log(checkStatus.isAll ) // 表格是否全选
 | --- | --- | --- | --- |
 | type | 选中方式。可选值: `checkbox,radio`  | string | `checkbox` |
 | index | 选中行的下标。即数据的所在数组下标（`0` 开头）。<br>可设置 `all` 表示全选。 | number<br>string | - |
-| checked | 选中状态值。 若为 `false` 可取消选中。 | boolean | `true` |
+| checked | 选中状态值。 <ul><li>若传递该属性，则赋值固定值。</li><li>若不传递该属性（默认），则 `checkbox` 将在 `true\|false` 中自动切换值，而 `radio` 将赋值 `true` 固定值。<sup>2.8.4+</sup></li></ul> | boolean | - |
 | selectedStyle | 是否仅设置样式状态。若为 `true` 则只标注选中样式，不对数据中的 `LAY_CHECKED` 属性赋值。 | boolean | `false` |
 
 该方法用于设置行的选中样式及相关的特定属性值 `LAY_CHECKED`。
@@ -640,7 +640,8 @@ table.on('colToggled(test)', function(obj){
 - 行单击事件：`table.on('row(filter)', callback);`
 - 行双击事件：`table.on('rowDouble(filter)', callback);`
 
-单击或双击 table 行任意区域触发，两者用法相同。
+单击或双击 table 行任意区域触发，两者用法相同。<br>
+注<sup>2.8.4+</sup>：在 table 模板中或任意内部元素中设置 `lay-unrow` 属性，可阻止该元素执行 `row` 事件
 
 ```js
 var table = layui.table;

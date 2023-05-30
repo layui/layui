@@ -27,7 +27,10 @@ toc: true
 | [treeTable.render(options)](#render) | treeTable 组件渲染，核心方法。 |
 | [treeTable.reload(id, options)](#reload) | 树表完整重载。 |
 | [treeTable.reloadData(id, options)](#reload) | 树表数据重载。 |
+| [treeTable.reloadAsyncNode(id, index)](#reloadAsyncNode) | 重载异步子节点 |
 | [treeTable.getData(id, isSimpleData)](#getData) | 获取树表数据。 |
+| [treeTable.getNodeById(id)](#getNodeById) | 获取节点信息集 |
+| [treeTable.getNodesByFilter(id, filter, opts)](#getNodesByFilter) | 获取符合过滤规则的节点信息集 |
 | [treeTable.getNodeDataByIndex(id, index)](#getNodeDataByIndex)  | 通过行元素对应的 `data-index` 属性获取对应行数据。 |
 | [treeTable.updateNode(id, index, data)](#updateNode) | 更新行数据。 |
 | [treeTable.removeNode(id, index)](#removeNode)  | 删除行记录。 |
@@ -69,6 +72,30 @@ toc: true
 使用方式与 `table` 组件完全相同，具体用法可参考：[table 重载](../table/#reload)
 
 
+<h3 id="reloadAsyncNode" class="ws-anchor ws-bold">重载异步子节点</h3>
+
+`treeTable.reloadAsyncNode(id, index)`
+
+- 参数 `id` : treeTable 渲染时的 id 属性值
+- 参数 `index` : 节点对应的行下标，一般可通过 `<tr>` 元素的 `data-index` 属性获得
+
+该方法用于在异步模式下，对节点进行重载。
+
+```js
+// 渲染
+treeTable.render({
+  elem: '', // 绑定元素选择器
+  id: 'test', // 自定义 id 索引
+  async: {
+    enable: true // 开启异步加载模式
+  }
+  // 其他属性 …
+});
+// 重载子节点
+treeTable.reloadAsyncNode('test', 0); // 第一行
+```
+
+
 <h3 id="getData" lay-pid="api" class="ws-anchor ws-bold">获取树表数据</h3>
 
 `treeTable.getData(id, isSimpleData);`
@@ -90,6 +117,52 @@ var data = treeTable.getData('test'); // 获取第一行的数据
 console.log(data);
 ```
 
+<h3 id="getNodeById" lay-pid="api" class="ws-anchor ws-bold">获取节点信息集</h3>
+
+`treeTable.getNodeById(id)`
+
+- 参数 `id` : treeTable 渲染时的 `id` 属性值
+
+```js
+// 渲染
+treeTable.render({
+  elem: '', // 绑定元素选择器
+  id: 'test', // 自定义 id 索引
+  // 其他属性 …
+});
+// 获取节点信息集
+var obj = treeTable.getNodeById('test');
+console.log(obj);
+```
+
+<h3 id="getNodesByFilter" lay-pid="api" class="ws-anchor ws-bold">获取符合过滤规则的节点信息集</h3>
+
+`treeTable.getNodesByFilter(id, filter, opts)`
+
+- 参数 `id` : treeTable 渲染时的 `id` 属性值
+- 参数 `filter` : 过滤函数
+- 参数 `opts` : 该方法的属性可选项，详见下表：
+
+| 属性名 | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| isSingle | 是否只找到第一个 | boolean | `false` |
+| parentNode | 在指定在某个父节点下的子节点中搜索 | object | - |
+
+```js
+// 渲染
+treeTable.render({
+  elem: '', // 绑定元素选择器
+  id: 'test', // 自定义 id 索引
+  // 其他属性 …
+});
+// 获取节点信息集
+var obj = treeTable.getNodesByFilter('test', function(item){
+  // 自定义过滤条件
+  return item.id > 1000;
+});
+console.log(obj);
+```
+
 
 <h3 id="getNodeDataByIndex" lay-pid="api" class="ws-anchor ws-bold">获取树表对应下标的数据</h3>
 
@@ -107,9 +180,9 @@ treeTable.render({
   id: 'test', // 自定义 id 索引
   // 其他属性 …
 });
-// 获取当前页接口数据
-var data = treeTable.getNodeDataByIndex('test', 0); // 获取第一行的数据
-console.log(data);
+// 获取树表对应下标的数据
+var obj = treeTable.getNodeDataByIndex('test', 0); // 获取第一行的数据
+console.log(obj);
 ```
 
 <h3 id="updateNode" lay-pid="api" class="ws-anchor ws-bold">更新行数据</h3>
@@ -244,8 +317,8 @@ treeTable.expandAll('test', false); // 关闭全部节点
 | opts | 描述 | 类型 | 默认值 |
 | --- | --- | -- | --- |
 | index | 要设置选中状态的行下标或行数据 | number/object | - |
-| checked | 选中状态。`true` 选中；`false` 取消选中；`null` 切换。 其中，所为 `radio` 框，则不支持 `null`(切换)。 | boolean | DDD |
-| callbackFlag | 是否触发事件，若为 `true`，则 `checked: false` 无效。其对应的事件跟 `table` 的 `radio,checkbox` 事件用法一样 | boolean | DDD |
+| checked | 选中状态。`true` 选中；`false` 取消选中；`null` 切换。 其中，所为 `radio` 框，则不支持 `null`(切换)。 | boolean | - |
+| callbackFlag | 是否触发事件，若为 `true`，则 `checked: false` 无效。其对应的事件跟 `table` 的 `radio,checkbox` 事件用法一样 | boolean | `false` |
 
 ```js
 // 渲染

@@ -69,7 +69,7 @@
         <a href="javascript:;"><i class="layui-icon layui-icon-login-wechat" style="color: #4daf29;"></i></a>
         <a href="javascript:;"><i class="layui-icon layui-icon-login-weibo" style="color: #cf1900;"></i></a>
       </span>
-      <a href="#login">登录已有帐号</a></span>
+      <a href="#login">登录已有帐号</a>
     </div>
   </div>
 </form>
