@@ -237,7 +237,8 @@ layui.use(['table', 'dropdown'], function(){
               switch(obj.id){
                 case 'checked':
                   table.setRowChecked(id, {
-                    index: value
+                    index: value,
+                    checked: true
                   });
                 break;
                 case 'unchecked':
