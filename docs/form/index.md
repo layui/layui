@@ -89,8 +89,8 @@ form 还可以借助*栅格*实现更灵活的响应式布局。
 | [form.val(filter, obj)](#val) | 表单赋值或取值。 [#用法](#val) |
 | [form.submit(filter, callback)](#submit) <sup>2.7+</sup> | 用于主动执行指定表单的提交。[#用法](#submit) |
 | [form.on(\'event(filter)\', callback)](#on) | 事件。[#用法](#on) |
+| [form.set(options)](#set) | 设置 form 组件全局配置项。 |
 | form.config | 获取 form 组件全局配置项。 |
-| form.set(options) | 设置 form 组件全局配置项。 |
 
 <h2 id="attr" lay-toc="{level: 2}">属性</h2>
 
@@ -228,7 +228,7 @@ Layui 对表单做了相对巧妙的支持，只需在表单元素上设置 `lay
 
 当内置的验证规则无法满足业务需求时，我们可以通过该方法自定义验证规则。如：
 
-<pre class="layui-code" lay-options="{preview: true, done: function(obj){
+<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', done: function(obj){
   obj.render()
 }}">
   <textarea>
@@ -248,7 +248,7 @@ Layui 对表单做了相对巧妙的支持，只需在表单元素上设置 `lay
 
 - 参数 `elem` 为元素选择器或 jQuery 对象； 若验证通过，该方法将返回 true，否则返回 false
 
-<pre class="layui-code" lay-options="{preview: true, done: function(obj){
+<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', done: function(obj){
   obj.render()
 }}">
   <textarea>
@@ -281,7 +281,7 @@ Layui 对表单做了相对巧妙的支持，只需在表单元素上设置 `lay
 
 在表单域中，对指定按钮设置 `lay-submit` 属性，即意味着点击该按钮时，将触发提交事件。如：
 
-<pre class="layui-code" lay-options="{preview: true, done: function(obj){
+<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', done: function(obj){
   obj.render()
 }}">
   <textarea>
@@ -332,7 +332,7 @@ layui.use(function(){
 
 使用该方法可以实现在任意位置对指定表单的主动提交，相比上述的提交事件更加灵活。
 
-<pre class="layui-code" lay-options="{preview: true, done: function(obj){
+<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', done: function(obj){
   obj.render()
 }}">
   <textarea>
@@ -396,5 +396,24 @@ form.on('select', function(data){
 // 指向元素为 `<select lay-filter="test"></select>` 的选择事件
 form.on('select(test)', function(data){
   console.log(data);
+});
+```
+
+<h2 id="set" class="ws-anchor">全局设置</h2>
+
+`form.set(options);`
+
+- 参数 `options` : 全局属性配置项。详见下表：
+
+| 属性名 | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| autocomplete | 设置 input 框的 `autocomplete` 属性初始值 | string | - |
+| verIncludelRequired <sup>2.8.4+</sup> | 验证规则中是否同时包含必填。 form 组件在 `2.8.3` 版本中调整了内置校验规则，即：仅当非空时进行校验，避免强制携带必填的校验规则。如需保留之前的验证规则（即同时校验必填）,可将该属性设置为 `true`。但一般还是建议将必填项放置在 `lay-verify` 属性上，如： `lay-verify="required\|number"` | boolean | `false` |
+
+该方法用于对 form 组件进行全局设置。
+
+```
+form.set({
+  autocomplete: 'off' // 阻止 input 框默认的自动输入完成功能
 });
 ```
