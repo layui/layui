@@ -817,15 +817,18 @@ layui.define(['table'], function (exports) {
     var treeOptions = options.tree;
     var tableView = options.elem.next();
     var isParentKey = treeOptions.customName.isParent;
+    var idKey = treeOptions.customName.id;
+    var showFlexIconIfNotParent = treeOptions.view.showFlexIconIfNotParent;
 
     if (!expandFlag) {
       // 关闭所有
       // 将所有已经打开的节点的状态设置为关闭，
       that.updateStatus(null, function (d) {
-        if (d[isParentKey]) {
+        if (d[isParentKey] || showFlexIconIfNotParent) {
           d[LAY_EXPAND] = false;
+          d[idKey] !== undefined && (that.status.expand[d[idKey]] = false);
         }
-      }) // {LAY_EXPAND: false}); // 只处理当前页，如果需要处理全部表格，需要用treeTable.updateStatus
+      }) // 只处理当前页，如果需要处理全部表格，需要用treeTable.updateStatus
       // 隐藏所有非顶层的节点
       tableView.find('.layui-table-box tbody tr[data-level!="0"]').addClass(HIDE);
 
@@ -863,7 +866,7 @@ layui.define(['table'], function (exports) {
       // 先判断是否全部打开过了
       var isAllExpanded = true;
       layui.each(tableDataFlat, function (i1, item1) {
-        if (!item1[LAY_HAS_EXPANDED]) {
+        if (item1[isParentKey] && !item1[LAY_HAS_EXPANDED]) {
             isAllExpanded = false;
             return true;
           }
@@ -871,8 +874,9 @@ layui.define(['table'], function (exports) {
       // 如果全部节点已经都打开过，就可以简单处理跟隐藏所有节点反操作
       if (isAllExpanded) {
         that.updateStatus(null, function (d) {
-          if (d[isParentKey]) {
+          if (d[isParentKey] || showFlexIconIfNotParent) {
             d[LAY_EXPAND] = true;
+            d[idKey] !== undefined && (that.status.expand[d[idKey]] = true);
           }
         });
         // 显示所有子节点
@@ -885,9 +889,10 @@ layui.define(['table'], function (exports) {
       } else {
         // 如果有未打开过的父节点，将 tr 内容全部重新生成
         that.updateStatus(null, function (d) {
-          if (d[isParentKey]) {
+          if (d[isParentKey] || showFlexIconIfNotParent) {
             d[LAY_EXPAND] = true;
             d[LAY_HAS_EXPANDED] = true;
+            d[idKey] !== undefined && (that.status.expand[d[idKey]] = true);
           }
         });
         if (options.initSort && options.initSort.type && (!options.url || options.autoSort)) {
