@@ -1450,8 +1450,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     ));
 
     opts = $.extend({
-      type: 'checkbox', // 选中方式
-      checked: true // 选中状态
+      type: 'checkbox' // 选中方式
     }, opts);
 
     // 标注当前行选中样式
@@ -1459,41 +1458,36 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       tr.addClass(ELEM_CLICK).siblings('tr').removeClass(ELEM_CLICK);
     }
 
+    // 仅设置样式状态，不设置数据中的选中属性
+    if(opts.selectedStyle || selectedStyle) return;
+
     // 同步数据选中属性值
     var thisData = table.cache[that.key];
+    var existChecked = 'checked' in opts;
+    var getChecked = function(value){
+      // 若为单选框，则单向选中；若为复选框，则切换选中。
+      return opts.type === 'radio' ? true : (existChecked ? opts.checked : !value)
+    };
 
     // 设置数据选中属性
     layui.each(thisData, function(i, item){
       if(opts.index === i || opts.index === 'all'){
-        item[options.checkName] = opts.checked;
+        item[options.checkName] = getChecked(item[options.checkName]);
       } else if(opts.type === 'radio') {
         delete item[options.checkName];
       }
     });
 
-    // 若存在复选框或单选框，则标注选中样式
+    // 若存在复选框或单选框，则标注选中状态样式
     var checkedElem = tr.find('input[lay-type="'+ ({
       radio: 'layTableRadio',
       checkbox: 'layTableCheckbox'
-    }[opts.type] || 'checkbox') +'"]').prop('checked', opts.checked);
+    }[opts.type] || 'checkbox') +'"]');
+
+    checkedElem.prop('checked', getChecked(checkedElem.last().prop('checked')));
 
     that.syncCheckAll();
     that.renderForm(opts.type);
-
-    // 仅设置样式状态
-    if(opts.selectedStyle || selectedStyle) return;
-
-    layui.event.call(
-      checkedElem[0],
-      MOD_NAME, opts.type + '('+ options.elem.attr('lay-filter') +')',
-      that.commonMember.call(checkedElem[0], {
-        checked: opts.checked,
-        type: opts.index === 'all' ? 'all' : 'one',
-        getCol: function(){ // 获取当前列的表头配置信息
-          return that.col(checkedElem.closest('td').data('key'));
-        }
-      })
-    );
   };
 
   // 数据排序
