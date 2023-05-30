@@ -59,6 +59,7 @@ treeTable.render({
 | name | 自定义「节点」属性名 | string | `name` |
 | id | 自定义「节点索引」属性名 | string | `id` |
 | pid | 自定义「父节点索引」属性名 | string | `parentId` |
+| icon | 自定义图标的属性名称 | string | `icon` |
 
 </td>
     </tr>
@@ -118,11 +119,39 @@ treeTable.render({
 | --- | --- | --- | --- |
 | enable | 是否开启异步加载模式。只有开启时 `async` 的其他属性配置才有效。 **注意：** 异步加载子节点不应跟 `simpleData` 同时开启，可以是 `url+simpleData` 的方式，获取完整的简单数据进行转换。若开启异步加载模式，即表示按需异步加载子节点。 | boolean | `false` |
 | url | 异步加载的接口，可以根据需要设置与顶层接口不同的接口，若相同可不设置该属性 | string | - |
+| [format](#options.tree.async.format) | 用于处理异步子节点数据的回调函数，该属性优先级高于 `async.url` 属性。用法详见下文。 | function | - |
 | type | 请求的接口类型，设置可缺省同上 | string | - |
 | contentType | 提交参数的数据类型，设置可缺省同上 | string | - |
 | headers | 提交请求头，设置可缺省同上 | object | - |
 | where | 提交参数的数据，设置可缺省同上 | object | - |
 | autoParam | 自动参数，可以根据配置项以及当前节点的数据传参，如： `['type', 'age=age', 'parentId=id']` ，那么其请求参数将包含: `{type: '父节点 type', age: '父节点 age', parentId: '父节点 id'}` | array | - |
+
+<div id="options.tree.async.format" class="ws-anchor">
+
+**format 示例** ：
+
+</div>
+
+```
+treeTable.render({
+  elem: '',
+  treee: {
+    enable: true,
+    async: {
+      format: function(trData, options, callback){
+        // trData 为行数据、options 为 treeTable 属性配置项
+        // callbacck 为子节点的渲染函数
+        // 可利用该函数对子节点数据进行异步请求或其他格式化处理
+        var nodeList = [
+          {id: 111, name: '子节点1'},
+          {id: 333, name: '子节点3'}
+        ];
+        callback(nodeList);
+      }
+    }
+  }
+})
+```
 
 </td>
     </tr>
