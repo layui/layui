@@ -11,6 +11,53 @@ toc: true
 
 > 导读：📑 [Layui 2.8 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
+<h2 id="2.8.4" class="ws-anchor">
+  2.8.4 
+  <span class="layui-badge-rim">2023-05-30</span>
+</h2>
+
+- #### form
+  - 新增 `verIncludelRequired` 全局属性，用于设置验证规则中是否同时包含必填 # I737EW
+  - 修复 checkbox 开关标题和半选图标未垂直居中的问题 # 1255
+  - 修复 checkbox 在初始设置半选时，点击复选框时图标未恢复成非半选状态的问题
+  - 修复 checkbox 被重新渲染时，标题模版未正确获取的问题 # 1257
+  - 修复 select 经浏览器翻译成别的语言后，点击选项出现的显示异常问题 # 1256
+  - 优化 checkbox 元素的 `lay-skin` ，当设置非内置风格时，不再强制显示为默认风格
+- #### table
+  - 新增 对 table 内元素的 `lay-unrow` 属性的识别，点击该元素时，可阻止执行 `row` 行单击事件
+  - 修复 `table.setRowChecked()` 方法导致 `checkbox,radio` 事件失效的问题 # I73MLV/I76KBX/I78VI3
+  - 修复 打印功能在 Edge 中可能出现的闪退问题 # 1264
+  - 优化 `table.setRowChecked()` 方法，若未传 `checked` 属性，则自动对 `checkbox` 进行选中状态值切换
+  - 优化 `row` 事件机制，若目标元素为 `checkbox,radio`，则不触发 `row` 事件
+  - 优化 外层容器的高度，不再设置一个固定值，内部元素将根据 `height` 属性值自动撑满
+  - 优化 底部边框问题
+- #### treeTable 
+  - 新增 节点折叠状态记忆功能 # 1260/I777CJ
+  - 新增 `customName.icon` 属性，用于自定义图标的属性名称 # 1260/I73BQU
+  - 新增 `async.format` 回调函数，用于处理异步子节点数据，优先级高于 `async.url` # 1260
+  - 新增 `treeTable.reloadAsyncNode(id, index)` 方法，用于重载异步子节点 # 1260
+  - 新增 `treeTable.getNodeById(id)` 方法，用于获取节点信息集 # 1260
+  - 新增 `treeTable.getNodesByFilter(id, filter, opts)` 方法，用于获取符合过滤规则的节点信息集 # 1260
+  - 修复 `isSimpleData` 模式渲染后的默认数据排序异常问题 # 1260
+  - 修复 展开全部节点排序失效的问题 # 1260/I73M2K
+  - 修复 折叠叶子节点时，图标没有变化的问题 # 1260
+  - 修复 节点选中状态判断异常问题 # 1260
+  - 优化 `treeTable.checkStatus()` 方法，可通过设置第二个参数，用于是否返回半选状态的数据 # 1260/I73JAW
+  - 优化 重新排序和视图内表单初始化的调用逻辑 # 1260
+  - 优化 节点渲染方法 # 1260
+- #### layer
+  - 修复 `skin:'layui-layer-lan'` 时，导致 `btnAlign` 属性无效的问题 # I73PD1
+- #### laydate
+  - 优化 `theme` 属性，当其为数组格式，且第一个成员为 `hex` 格式主色值，则第二个成员为辅色值 # 1265
+- #### upload
+  - 新增 `exts` 属性对于图片类型时的 `.svg` 扩展名支持
+- #### code
+  - 优化 `copy` 属性开启时, 对 `tools` 属性的初始化配置 # I72QGO
+  - 优化 `preview: 'iframe'` 时的 `<iframe>` 容器，以支持背景透明
+
+### 下载： [layui-v2.8.4.zip](https://gitee.com/layui/layui/attach_files/1422378/download)
+
+---
 
 <h2 id="2.8.3" class="ws-anchor">
   2.8.3 
