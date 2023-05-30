@@ -146,7 +146,7 @@ layui.define(['table'], function (exports) {
           }
           // 处理节点状态
           updateStatus(retData[dataName], function (item) {
-            item[LAY_EXPAND] = that.status.expand[item[idKey]]
+            item[LAY_EXPAND] = LAY_EXPAND in item ? item[LAY_EXPAND] : (item[idKey] !== undefined && that.status.expand[item[idKey]])
           }, childrenKey);
 
           if (parseDataThat.autoSort && parseDataThat.initSort && parseDataThat.initSort.type) {
@@ -561,8 +561,9 @@ layui.define(['table'], function (exports) {
     treeOptions.view.showIcon && trsElem
       .find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom,.layui-table-tree-iconLeaf)')
       .html(trExpand ? treeOptions.view.iconOpen : treeOptions.view.iconClose);
-
-    treeTableThat.status.expand[trData[customName.id]] = trData[LAY_EXPAND] = trExpand;
+    trData[LAY_EXPAND] = trExpand;
+    var trDataId = trData[customName.id];
+    trDataId !== undefined && (treeTableThat.status.expand[trDataId] = trExpand);
     if (retValue === null) {
       return retValue;
     }
@@ -964,7 +965,7 @@ layui.define(['table'], function (exports) {
       trElem = tableViewElem.find('tr[lay-data-index="' + trIndex + '"]');
       var trData = treeTableThat.getNodeDataByIndex(trIndex);
 
-      if (trData[LAY_EXPAND]) {
+      if (trData[LAY_EXPAND] && trData[isParentKey]) {
         // 需要展开
         dataExpand = dataExpand || {};
         dataExpand[trIndex] = true;
@@ -1360,7 +1361,7 @@ layui.define(['table'], function (exports) {
       }
       // 删除已经存在的同级节点以及他们的子节点，并且把中间节点的已展开过的状态设置为false
       that.updateStatus(childrenNodes, function (d) {
-        if (d[isParentKey]) {
+        if (d[isParentKey] || treeOptions.view.showFlexIconIfNotParent) {
           d[LAY_HAS_EXPANDED] = false;
         }
       });
