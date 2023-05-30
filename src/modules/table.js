@@ -1576,10 +1576,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }
   };
 
-  //请求loading
+  // 请求 loading
   Class.prototype.loading = function(hide){
-    var that = this
-    ,options = that.config;
+    var that = this;
+    var options = that.config;
     if(options.loading){
       if(hide){
         that.layInit && that.layInit.remove();
@@ -1594,14 +1594,22 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }
   };
 
-  //同步选中值状态
-  Class.prototype.setCheckData = function(index, checked){
-    var that = this
-    ,options = that.config
-    ,thisData = table.cache[that.key];
+  // 同步选中值状态
+  Class.prototype.setCheckData = function(index, checked, radio){
+    var that = this;
+    var options = that.config;
+    var thisData = table.cache[that.key];
+
     if(!thisData[index]) return;
     if(layui.type(thisData[index]) === 'array') return;
-    thisData[index][options.checkName] = checked;
+    
+    layui.each(thisData, function(i, item){
+      if(index === i){
+        item[options.checkName] = checked;
+      } else if(radio) { // 是否单选
+        delete item[options.checkName];
+      }
+    });
   };
 
   // 同步全选按钮状态
