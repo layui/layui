@@ -37,7 +37,9 @@ layui.use('table', function(){
     var data = obj.data; // 获取当前行数据
     
     // 显示 - 仅用于演示
-    layer.msg('当前行数据：<br>'+ JSON.stringify(data));
+    layer.msg('当前行数据：<br>'+ JSON.stringify(data), {
+      offset: '65px'
+    });
 
     // 标注当前点击行的选中状态
     obj.setRowChecked({
