@@ -226,7 +226,10 @@ layui.define(['lay','layer'], function(exports){
           //异常回调
           ,error: function(e){
             failed++;
-            that.msg('Request URL is abnormal: '+ (e.statusText || 'error'));
+            that.msg([
+              'Upload failed, please try again.',
+              'status: '+ (e.status || '') +' - '+ (e.statusText || 'error')
+            ].join('<br>'));
             error(index);
             allDone();
           }
@@ -395,7 +398,7 @@ layui.define(['lay','layer'], function(exports){
       break;
       default: //图片文件
         layui.each(value, function(i, item){
-          if(!RegExp('.\\.('+ (exts || 'jpg|png|gif|bmp|jpeg') +')$', 'i').test(escape(item))){
+          if(!RegExp('.\\.('+ (exts || 'jpg|png|gif|bmp|jpeg|svg') +')$', 'i').test(escape(item))){
             return check = true;
           }
         });

@@ -1,13 +1,12 @@
+<pre class="layui-code" lay-options="{preview: true, layout: ['preview'], tools: ['full']}">
+  <textarea>
+{{!
 <style>
 .laytpl-demo{border: 1px solid #eee;}
 .laytpl-demo:first-child{border-right: none;}
 .laytpl-demo>textarea{position: relative; display: block; width:100%; height: 300px; padding: 11px; border: 0; box-sizing: border-box; resize: none; background-color: #fff; font-family: Courier New; font-size: 13px;}
 .laytpl-demo>div:first-child{height: 32px; line-height: 32px; padding: 6px 11px; border-bottom: 1px solid #eee; background-color: #F8F9FA;}
 </style>
-
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview'], tools: ['full']}">
-  <textarea>
-{{!
 <div class="layui-row">
   <div class="layui-col-xs6 laytpl-demo">
     <div>模板</div>
@@ -72,6 +71,7 @@
 </div>
 <div class="layui-clear"></div>
 
+<!-- import layui --> 
 <script>
 layui.use(function(){
   var laytpl = layui.laytpl;

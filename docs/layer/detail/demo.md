@@ -16,6 +16,8 @@
 
 <h3 id="demo-alert" lay-toc="{level: 3}">信息框</h3>
 
+信息框即 `dialog` 类型层，对应默认的 `type: 0`，该类型的弹层同时只能存在一个。更多说明详见：[#type](#options)
+
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 {{- d.include("/layer/examples/alert.md") }}

@@ -18,7 +18,20 @@ toc: true
   <input type="checkbox" name="AAA" title="默认">
   <input type="checkbox" name="BBB" lay-text="选中" checked> 
   <input type="checkbox" name="CCC" title="禁用" disabled> 
+  <input type="checkbox" name="DDD" title="半选" id="ID-checkbox-ind"> 
 </div>
+
+<!-- import layui -->
+<script>
+layui.use(function(){
+  var form = layui.form;
+  var $ = layui.$;
+
+  // 初始设置半选
+  $('#ID-checkbox-ind').prop('indeterminate', true); // 半选属性只能动态设置
+  form.render('checkbox');
+});
+</script>
   </textarea>
 </pre>
 
@@ -41,7 +54,7 @@ toc: true
 <div class="layui-form">
   <input type="checkbox" name="AAA" title="默认" lay-skin="tag">
   <input type="checkbox" name="BBB" title="选中" lay-skin="tag" checked> 
-  <input type="checkbox" name="CCC" title="禁用" lay-skin="tag" disabled> 
+  <input type="checkbox" name="CCC" title="禁用" lay-skin="tag" disabled>
 </div>
 
 <!-- import layui -->
@@ -109,9 +122,12 @@ toc: true
 
 <h2 id="on" lay-toc="{hot: true}">复选框事件</h2>
 
-`form.on('checkbox(filter)', callback);`
+| 风格 | 事件 |
+| --- | --- |
+| 默认风格 / 标签风格 | `form.on('checkbox(filter)', callback);` |
+| 开关风格 | `form.on('switch(filter)', callback);` |
 
-- `checkbox` 为复选框事件固定名称
+- `checkbox` 和 `switch` 为复选框事件固定名称
 - `filter` 为复选框元素对应的 `lay-filter` 属性值
 
 该事件在复选框选中或取消选中时触发。

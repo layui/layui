@@ -166,7 +166,9 @@
   </textarea>
 </pre>
 
-<h3 id="demo-setRowChecked" lay-toc="{level: 2}" class="ws-bold">选中行操作</h3>
+<h3 id="demo-setRowChecked" lay-toc="{level: 2, hot: true}" class="ws-bold">选中行操作</h3>
+
+点击行任意处，通过行事件中执行相关选中方法，实现对整行的状态选中。
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], toolsEvent: function(oi, type){
   if(type === 'full'){

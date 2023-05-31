@@ -186,8 +186,15 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         });
 
         // copy
-        if(options.copy && layui.type(options.tools) === 'array'){
-          options.tools.unshift('copy');
+        if(options.copy){
+          if(layui.type(options.tools) === 'array'){
+            // 若 copy 未存在于 tools 中，则追加到最前
+            if(options.tools.indexOf('copy') === -1){
+              options.tools.unshift('copy');
+            }
+          } else {
+            options.tools = ['copy'];
+          }
         }
 
         // 工具栏事件
@@ -217,7 +224,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         
         // 追加预览
         if(isIframePreview){
-          elemPreviewView.html('<iframe></iframe>');
+          elemPreviewView.html('<iframe allowtransparency="true" frameborder="0"></iframe>');
         }
 
         // 执行预览
