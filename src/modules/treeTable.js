@@ -1772,7 +1772,7 @@ layui.define(['table'], function (exports) {
    * @param {String} id 表格id
    * @param {String} dataIndex 父节点的dataIndex
    * */
-  treeTable.reAsync = function (id, dataIndex) {
+  treeTable.reloadAsyncNode = function (id, dataIndex) {
     var that = getThisTable(id);
     if (!that) {
       return;

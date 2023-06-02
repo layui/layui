@@ -20,6 +20,7 @@ toc: true
 | API | 描述 |
 | --- | --- |
 | var table = layui.table | 获得 `table` 模块。 |
+| [table.set(options)](#set) | 设定全局默认属性项 |
 | [table.render(options)](#render) | table 组件渲染，核心方法。 |
 | [table.init(filter, options)](#table.init) | 初始化渲染静态表格。 |
 | [table.reload(id, options, deep)](#table.reload) | 表格完整重载。  |
@@ -33,6 +34,25 @@ toc: true
 | [table.getOptions(id)](#table.getOptions) <sup>2.8+</sup> | 获取表格实例配置项。 |
 | [table.hideCol(id, cols)](#table.hideCol) <sup>2.8+</sup> | 设置表格列的显示隐藏属性。 |
 | [table.on(\'event(filter)\', callback)](#table.on) | table 相关事件。 |
+
+
+<h3 id="set" class="ws-anchor ws-bold">全局设置</h3>
+
+- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+
+该方法主要用于初始化设置属性默认值。实际应用时，必须先设置该方法，再执行渲染、重载等操作。
+
+```js
+layui.use(function(){
+  var table = layui.table;
+  // 全局设置
+  table.set({
+    headers: {token: '123'}
+  });
+  // 渲染
+  table.render(options);
+});
+```
 
 
 <h3 id="render" lay-toc="{level: 2}" class="ws-anchor ws-bold">渲染</h3>
