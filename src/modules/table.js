@@ -686,7 +686,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       });
 
       // 给组合表头赋值最大宽度
-      if(maxWidth) othis.css('max-width', maxWidth);
+      if(maxWidth) othis.css('max-width', maxWidth - 1);
 
       // 若当前活动的组合表头仍存在上级，则继续向上设置
       if(th && othis.parent().data('parentkey')){
