@@ -1048,7 +1048,14 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-menu .layui-menu-item-none:hover,
 .layui-menu .layui-menu-item-divider:hover{background: none; cursor: default;}
 .layui-menu .layui-menu-item-group>ul{margin: 5px 0 -5px;}
-.layui-menu .layui-menu-item-group>.layui-menu-body-title{color: rgba(0,0,0,.35); user-select: none;}
+.layui-menu .layui-menu-item-group>.layui-menu-body-title
+{
+  color: rgba(0,0,0,.35);
+  -webkit-user-select: none; /* Safari 3+, Safari on iOS 3+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* Internet Explorer 10+ */
+   user-select: none;
+}
 .layui-menu .layui-menu-item-none{color: rgba(0,0,0,.35); cursor: default;}
 
 .layui-menu .layui-menu-item-none{text-align: center;}
