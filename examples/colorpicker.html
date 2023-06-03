@@ -41,6 +41,12 @@ body{padding:20px;}
     <div class="test-box">
       <div id="test6"></div>
     </div>
+
+    <div class="test-box">
+      <div class="test-more" lay-options="{color: '#FF0000'}"></div>
+      <div class="test-more" lay-options="{color: '#008000'}"></div>
+      <div class="test-more" lay-options="{color: '#0000FF'}"></div>
+    </div>
   </div>
 
 <script src="../src/layui.js"></script>
@@ -54,11 +60,18 @@ body{padding:20px;}
       //,predefine: true //开启预定义颜色
       //,colors: ['#F00','#0F0','#00F','rgb(255, 69, 0)','rgba(255, 69, 0, 0.5)']
       ,change: function(color){
-        document.body.style.backgroundColor = color;
+        this.done(color);
       }
       ,done: function(color){
         layui.$('#LAY-test1').val(color);
         document.body.style.backgroundColor = color;
+      }
+      ,cancel: function(color){
+        this.done(color);
+        console.log('cancel', color);
+      }
+      ,close: function(color){
+        console.log('close', color);
       }
     });
     
@@ -75,7 +88,7 @@ body{padding:20px;}
     
     colorpicker.render({
       elem: '#test3'
-      ,color: 'rgba(0,0,0)'
+      ,color: '#000'
       //,alpha: true
       //,format: 'rgb' //设置输入显示格式为rgb
     });
@@ -100,6 +113,14 @@ body{padding:20px;}
       ,predefine: true
       ,colors: ['#F00','#0F0','#00F','rgb(255, 69, 0)','rgba(255, 69, 0, 0.5)']
       ,size: 'xs'
+    });
+
+    // 同时绑定多个
+    colorpicker.render({
+      elem: '.test-more',
+      done: function(color){
+        console.log(this.elem, color);
+      }
     });
   })
 </script>

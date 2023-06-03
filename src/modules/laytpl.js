@@ -1,27 +1,18 @@
 ﻿/**
- * laytpl 模板引擎
+ * laytpl 轻量模板引擎
  */
 
 layui.define(function(exports){
   "use strict";
 
+  // 默认属性
   var config = {
-    open: '{{',
-    close: '}}'
+    open: '{{', // 标签符前缀
+    close: '}}' // 标签符后缀
   };
 
-  var tool = {
-    exp: function(str){
-      return new RegExp(str, 'g');
-    },
-    //匹配满足规则内容
-    query: function(type, _, __){
-      var types = [
-        '#([\\s\\S])+?',   //js语句
-        '([^{#}])*?' //普通字段
-      ][type || 0];
-      return exp((_||'') + config.open + types + config.close + (__||''));
-    },   
+  // 模板工具
+  var tool = {  
     escape: function(html){
       var exp = /[<"'>]|&(?=#[a-zA-Z0-9]+)/g;
       if(html === undefined || html === null) return '';
@@ -32,54 +23,89 @@ layui.define(function(exports){
       return html.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
       .replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+    }
+  };
+
+  // 内部方法
+  var inner = {
+    exp: function(str){
+      return new RegExp(str, 'g');
     },
-    error: function(e, tplog){
+    // 错误提示
+    error: function(e, source){
       var error = 'Laytpl Error: ';
-      typeof console === 'object' && console.error(error + e + '\n'+ (tplog || ''));
+      typeof console === 'object' && console.error(error + e + '\n'+ (source || ''));
       return error + e;
     }
   };
 
-  var exp = tool.exp, Tpl = function(tpl){
-    this.tpl = tpl;
+  // constructor
+  var Class = function(template, options){
+    var that = this;
+    that.config = that.config || {};
+    that.template = template;
+
+    // 简单属性合并
+    var extend = function(obj){
+      for(var i in obj){
+        that.config[i] = obj[i];
+      }
+    };
+
+    extend(config);
+    extend(options);
   };
 
-  Tpl.pt = Tpl.prototype;
+  // 标签正则
+  Class.prototype.tagExp = function(type, _, __){
+    var options = this.config;
+    var types = [
+      '#([\\s\\S])+?',   // js 语句
+      '([^{#}])*?' // 普通字段
+    ][type || 0];
 
-  window.errors = 0;
+    return inner.exp((_||'') + options.open + types + options.close + (__||''));
+  };
 
-  //编译模版
-  Tpl.pt.parse = function(tpl, data){
-    var that = this, tplog = tpl;
-    var jss = exp('^'+config.open+'#', ''), jsse = exp(config.close+'$', '');
+  // 模版解析
+  Class.prototype.parse = function(template, data){
+    var that = this;
+    var options = that.config;
+    var source = template;
+    var jss = inner.exp('^'+ options.open +'#', '');
+    var jsse = inner.exp(options.close +'$', '');
+
+    // 模板必须为 string 类型
+    if(typeof template !== 'string') return template;
     
-    tpl = tpl.replace(/\s+|\r|\t|\n/g, ' ')
-    .replace(exp(config.open+'#'), config.open+'# ')
-    .replace(exp(config.close+'}'), '} '+config.close).replace(/\\/g, '\\\\')
+    // 正则解析
+    template = template.replace(/\s+|\r|\t|\n/g, ' ')
+    .replace(inner.exp(options.open +'#'), options.open +'# ')
+    .replace(inner.exp(options.close +'}'), '} '+ options.close).replace(/\\/g, '\\\\')
     
-    //不匹配指定区域的内容
-    .replace(exp(config.open + '!(.+?)!' + config.close), function(str){
-      str = str.replace(exp('^'+ config.open + '!'), '')
-      .replace(exp('!'+ config.close), '')
-      .replace(exp(config.open + '|' + config.close), function(tag){
+    // 不匹配指定区域的内容
+    .replace(inner.exp(options.open + '!(.+?)!' + options.close), function(str){
+      str = str.replace(inner.exp('^'+ options.open + '!'), '')
+      .replace(inner.exp('!'+ options.close), '')
+      .replace(inner.exp(options.open + '|' + options.close), function(tag){
         return tag.replace(/(.)/g, '\\$1')
       });
       return str
     })
     
-    //匹配 JS 语法
-    .replace(/(?="|')/g, '\\').replace(tool.query(), function(str){
+    // 匹配 JS 语法
+    .replace(/(?="|')/g, '\\').replace(that.tagExp(), function(str){
       str = str.replace(jss, '').replace(jsse, '');
       return '";' + str.replace(/\\(.)/g, '$1') + ';view+="';
     })
     
-    //匹配普通输出语句
-    .replace(tool.query(1), function(str){
+    // 匹配普通输出语句
+    .replace(that.tagExp(1), function(str){
       var start = '"+laytpl.escape(';
-      if(str.replace(/\s/g, '') === config.open+config.close){
+      if(str.replace(/\s/g, '') === options.open + options.close){
         return '';
       }
-      str = str.replace(exp(config.open+'|'+config.close), '');
+      str = str.replace(inner.exp(options.open + '|' + options.close), '');
       if(/^=/.test(str)){
         str = str.replace(/^=/, '');
       } else if(/^-/.test(str)){
@@ -89,30 +115,35 @@ layui.define(function(exports){
       return start + str.replace(/\\(.)/g, '$1') + ')+"';
     });
     
-    tpl = '"use strict";var view = "' + tpl + '";return view;';
+    template = '"use strict";var view = "' + template + '";return view;';
 
-    try{
-      that.cache = tpl = new Function('d, laytpl', tpl);
-      return tpl(data, tool);
-    } catch(e){
+    try {
+      that.cache = template = new Function('d, laytpl', template);
+      return template(data, tool);
+    } catch(e) {
       delete that.cache;
-      return tool.error(e, tplog);
+      return inner.error(e, source);
     }
   };
 
-  Tpl.pt.render = function(data, callback){
-    var that = this, tpl;
-    if(!data) return tool.error('no data');
-    tpl = that.cache ? that.cache(data, tool) : that.parse(that.tpl, data);
-    if(!callback) return tpl;
-    callback(tpl);
+  // 数据渲染
+  Class.prototype.render = function(data, callback){
+    data = data || {};
+
+    var that = this;
+    var result = that.cache ? that.cache(data, tool) : that.parse(that.template, data);
+    
+    // 返回渲染结果
+    typeof callback === 'function' && callback(result);
+    return result;
   };
 
-  var laytpl = function(tpl){
-    if(typeof tpl !== 'string') return tool.error('Template not found');
-    return new Tpl(tpl);
+  // 创建实例
+  var laytpl = function(template, options){
+    return new Class(template, options);
   };
 
+  // 配置全局属性
   laytpl.config = function(options){
     options = options || {};
     for(var i in options){
@@ -120,8 +151,8 @@ layui.define(function(exports){
     }
   };
 
-  laytpl.v = '1.2.0';
+  laytpl.v = '2.0.0';
   
+  // export
   exports('laytpl', laytpl);
-
 });

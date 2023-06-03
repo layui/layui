@@ -6,18 +6,18 @@
 html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 
 /* 默认风格 */
-.layui-code-view{display: block; position: relative; margin: 10px 0; padding: 0; border: 1px solid #eee; border-left-width: 6px; background-color: #FAFAFA; color: #333; font-family: Courier New; font-size: 13px;}
+.layui-code-view{display: block; position: relative; margin: 11px 0; padding: 0; border: 1px solid #eee; border-left-width: 6px; background-color: #FAFAFA; color: #333; font-family: Courier New; font-size: 13px;}
 .layui-code-title{position: relative; padding: 0 10px; height: 40px; line-height: 40px; border-bottom: 1px solid #eee; font-size: 12px;}
 .layui-code-title > .layui-code-about{position: absolute; right: 10px; top: 0; color: #B7B7B7;}
 .layui-code-about > a{padding-left: 10px;}
 .layui-code-view > .layui-code-ol, 
-.layui-code-view > .layui-code-ul{position: relative; overflow: auto;}
-.layui-code-view > .layui-code-ol > li{position: relative; margin-left: 45px; line-height: 20px; padding: 0 10px; border-left: 1px solid #e2e2e2; list-style-type: decimal-leading-zero; *list-style-type: decimal; background-color: #fff;}
+.layui-code-view > .layui-code-ul{max-height: 100%; padding: 0 !important; position: relative; overflow: auto;}
+.layui-code-view > .layui-code-ol > li{position: relative; margin-top: 0  !important; margin-left: 45px  !important; line-height: 20px; padding: 0 10px  !important; border-left: 1px solid #e2e2e2; list-style-type: decimal-leading-zero; *list-style-type: decimal; background-color: #fff;}
 .layui-code-view > .layui-code-ol > li:first-child, 
-.layui-code-view > .layui-code-ul > li:first-child{padding-top: 10px;}
+.layui-code-view > .layui-code-ul > li:first-child{padding-top: 10px  !important;}
 .layui-code-view > .layui-code-ol > li:last-child, 
-.layui-code-view > .layui-code-ul > li:last-child{padding-bottom: 10px;}
-.layui-code-view > .layui-code-ul > li{position: relative; line-height: 20px; padding: 0 10px; list-style-type: none; *list-style-type: none; background-color: #fff;}
+.layui-code-view > .layui-code-ul > li:last-child{padding-bottom: 10px  !important;}
+.layui-code-view > .layui-code-ul > li{position: relative; line-height: 20px; padding: 0 10px  !important; list-style-type: none; *list-style-type: none; background-color: #fff;}
 .layui-code-view pre{margin: 0;}
 
 /* 深色风格 */
@@ -28,5 +28,33 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 .layui-code-dark > .layui-code-ul > li{margin-left: 6px;}
 
 /* 代码预览 */
-.layui-code-demo .layui-code{visibility: visible !important; margin: -15px; border-top: none; border-right: none; border-bottom: none;}
-.layui-code-demo .layui-tab-content{padding: 15px; border-top: none}
+.layui-code textarea{display: none;}
+.layui-code-preview > .layui-code{margin: 0;}
+.layui-code-preview > .layui-tab{position: relative; z-index: 1; margin-bottom: 0;}
+.layui-code-preview > .layui-tab > .layui-tab-title{border-bottom: none;}
+.layui-code-preview > .layui-code > .layui-code-title{display: none;}
+.layui-code-preview .layui-code-item{display: none;}
+.layui-code-preview .layui-code-view > .layui-code-ol > li{}
+.layui-code-item-preview{position: relative; padding: 16px;}
+.layui-code-item-preview > iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;}
+
+/* 工具栏  */
+.layui-code-tools{position: absolute; right: 11px; top: 3px;}
+.layui-code-tools > i{display: inline-block; margin-left: 6px; padding: 3px; cursor: pointer;}
+.layui-code-tools > i.layui-icon-file-b{color: #999;}
+.layui-code-tools > i:hover{color: #16b777;}
+
+/* 复制  */
+.layui-code-copy{position: absolute; right: 6px; top: 6px; cursor: pointer; display: none;}
+.layui-code-copy .layui-icon{color: #777; transition: all .3s;}
+.layui-code-copy:hover .layui-icon{color: #16b777;}
+.layui-code-view:hover > .layui-code-copy{display: block;}
+.layui-code-copy-offset{margin-right: 17px;}
+.layui-code-preview > .layui-code-view > .layui-code-copy{display: none !important;}
+
+/* 全屏风格  */
+.layui-code-full{position: fixed; left: 0; top: 0; z-index: 1111111; width: 100%; height: 100%; background-color: #fff;}
+.layui-code-full .layui-code-item{width: 100% !important; border-width: 0 !important; border-top-width: 1px !important;}
+.layui-code-full .layui-code-item,
+.layui-code-full .layui-code-ol,
+.layui-code-full .layui-code-ul{height: calc(100vh - 51px) !important; box-sizing: border-box;}

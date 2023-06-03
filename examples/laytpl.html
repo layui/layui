@@ -132,9 +132,9 @@
 <script src="../src/layui.js"></script>
 <script>
 layui.use(['laytpl', 'util'], function(){
-  var laytpl = layui.laytpl
-  ,util = layui.util
-  ,$ = layui.$;
+  var laytpl = layui.laytpl;
+  var util = layui.util;
+  var $ = layui.$;
   
   //获取模板和数据
   var get = function(type){
@@ -219,6 +219,20 @@ layui.use(['laytpl', 'util'], function(){
       $('#demoView1').html(html);
       
     }
+  });
+
+  // 自定义标签符
+  laytpl(`
+    <%# var job = ["前端工程师"]; %>
+    <%= d.name %>是一名<%= job[d.type] %>。
+  `, {
+    open: '<%',
+    close: '%>'
+  }).render({
+    name: '张三',
+    type: 0
+  }, function(str){
+    console.log(str); // 张三是一名前端工程师。
   });
 });
 </script>

@@ -2,12 +2,14 @@
  * rate 评分评星组件
  */
 
-layui.define('jquery',function(exports){
+layui.define(['jquery', 'lay'],function(exports){
   "use strict";
-  var $ = layui.jquery
 
-  //外部接口
-  ,rate = {
+  var $ = layui.jquery;
+  var lay = layui.lay;
+
+  // 外部接口
+  var rate = {
     config: {}
     ,index: layui.rate ? (layui.rate.index + 10000) : 0
 
@@ -24,7 +26,7 @@ layui.define('jquery',function(exports){
     }
   }
 
-  //操作当前实例
+  // 操作当前实例
   ,thisRate = function(){
     var that = this
     ,options = that.config;
@@ -62,10 +64,26 @@ layui.define('jquery',function(exports){
 
   //评分渲染
   Class.prototype.render = function(){
-    var that = this
-    ,options = that.config
-    ,style = options.theme ? ('style="color: '+ options.theme + ';"') : '';
+    var that = this;
+    var options = that.config;
+    
+    // 若 elem 非唯一，则拆分为多个实例
+    var elem = $(options.elem);
+    if(elem.length > 1){
+      layui.each(elem, function(){
+        rate.render($.extend({}, options, {
+          elem: this
+        }));
+      });
+      return that;
+    }
 
+    // 合并 lay-options 属性上的配置信息
+    $.extend(options, lay.options(elem[0]));
+
+    // 自定义主题
+    var style = options.theme ? ('style="color: '+ options.theme + ';"') : '';
+    
     options.elem = $(options.elem);
     
     //最大值不能大于总长度
@@ -87,16 +105,8 @@ layui.define('jquery',function(exports){
         + (i>Math.floor(options.value)?ICON_RATE:ICON_RATE_SOLID)
       + '" '+ style +'></i></li>';
 
-      if(options.half){
-        if(parseInt(options.value) !== options.value){
-          if(i == Math.ceil(options.value)){
-            temp = temp + '<li><i class="layui-icon layui-icon-rate-half" '+ style +'></i></li>';
-          }else{
-            temp = temp + item 
-          } 
-        }else{
-          temp = temp + item
-        }
+      if(options.half&&parseInt(options.value) !== options.value&&i == Math.ceil(options.value)){
+        temp = temp + '<li><i class="layui-icon layui-icon-rate-half" '+ style +'></i></li>';
       }else{
         temp = temp +item;
       }

@@ -1,51 +1,55 @@
 
-/** lay 基础 DOM 操作 | MIT Licensed */
+/** lay 基础模块 | MIT Licensed */
 
-;!function(window){ //gulp build: lay-header
+;!function(window){ // gulp build: lay-header
   "use strict";
   
-  var MOD_NAME = 'lay' //模块名
-  ,document = window.document
+  var MOD_NAME = 'lay'; // 模块名
+  var document = window.document;
   
-  //DOM查找
-  ,lay = function(selector){   
-    return new LAY(selector);
-  }
+  // 元素查找
+  var lay = function(selector){   
+    return new Class(selector);
+  };
   
-  //DOM构造器
-  ,LAY = function(selector){
-    var index = 0
-    ,nativeDOM = typeof selector === 'object' ? [selector] : (
-      this.selector = selector
-      ,document.querySelectorAll(selector || null)
+  // 构造器
+  var Class = function(selector){
+    var that = this;
+    var elem = typeof selector === 'object' ? function(){
+      // 仅适配简单元素对象
+      return layui.isArray(selector) ? selector : [selector];
+    }() : (
+      this.selector = selector,
+      document.querySelectorAll(selector || null)
     );
-    for(; index < nativeDOM.length; index++){
-      this.push(nativeDOM[index]);
-    }
+
+    lay.each(elem, function(index, item){
+      that.push(elem[index]);
+    });
   };
   
   /*
     lay 对象操作
   */
   
-  LAY.prototype = [];
-  LAY.prototype.constructor = LAY;
+  Class.fn = Class.prototype = [];
+  Class.fn.constructor = Class;
   
-  //普通对象深度扩展
+  // 普通对象深度扩展
   lay.extend = function(){
-    var ai = 1
-    ,length
-    ,args = arguments
-    ,clone = function(target, obj){
-      target = target || (layui.type(obj) === 'array' ? [] : {}); //目标对象
+    var ai = 1;
+    var length;
+    var args = arguments;
+    var clone = function(target, obj){
+      target = target || (layui.type(obj) === 'array' ? [] : {}); // 目标对象
       for(var i in obj){
-        //如果值为普通对象，则进入递归，继续深度合并
+        // 若值为普通对象，则进入递归，继续深度合并
         target[i] = (obj[i] && obj[i].constructor === Object)
           ? clone(target[i], obj[i])
         : obj[i];
       }
       return target;
-    }
+    };
 
     args[0] = typeof args[0] === 'object' ? args[0] : {};
     length = args.length
@@ -58,20 +62,13 @@
     return args[0];
   };
   
-  //lay 模块版本
-  lay.v = '1.0.8';
-  
-  //ie版本
+  // ie 版本
   lay.ie = function(){
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
-      (agent.match(/msie\s(\d+)/) || [])[1] || '11' //由于 ie11 并没有 msie 的标识
+      (agent.match(/msie\s(\d+)/) || [])[1] || '11' // 由于 ie11 并没有 msie 的标识
     ) : false;
   }();
-  
-  
-  
-  
   
   
   /** 
@@ -79,18 +76,15 @@
    */
   
   lay.layui = layui || {};
-  lay.getPath = layui.cache.dir; //获取当前 JS 所在目录
-  lay.stope = layui.stope; //中止冒泡
-  lay.each = function(){ //遍历
+  lay.getPath = layui.cache.dir; // 获取当前 JS 所在目录
+  lay.stope = layui.stope; // 中止冒泡
+  lay.each = function(){ // 遍历
     layui.each.apply(layui, arguments);
     return this;
   };
+
   
-  
-  
-  
-  
-  //数字前置补零
+  // 数字前置补零
   lay.digit = function(num, length){
     if(!(typeof num === 'string' || typeof num === 'number')) return '';
 
@@ -103,7 +97,7 @@
     return num < Math.pow(10, length) ? str + num : num;
   };
   
-  //创建元素
+  // 创建元素
   lay.elem = function(elemName, attr){
     var elem = document.createElement(elemName);
     lay.each(attr || {}, function(key, value){
@@ -112,22 +106,22 @@
     return elem;
   };
 
-  //当前页面是否存在滚动条
+  // 当前页面是否存在滚动条
   lay.hasScrollbar = function(){
     return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
   };
   
-  //元素定位
+  // 元素定位
   lay.position = function(elem, elemView, obj){
     if(!elemView) return;
     obj = obj || {};
     
-    //如果绑定的是 document 或 body 元素，则直接获取鼠标坐标
+    // 如果绑定的是 document 或 body 元素，则直接获取鼠标坐标
     if(elem === document || elem === lay('body')[0]){
       obj.clickType = 'right';
     }
 
-    //绑定绑定元素的坐标
+    // 绑定绑定元素的坐标
     var rect = obj.clickType === 'right' ? function(){
       var e = obj.e || window.event || {};
       return {
@@ -137,62 +131,62 @@
         ,bottom: e.clientY
       }
     }() : elem.getBoundingClientRect()
-    ,elemWidth = elemView.offsetWidth //控件的宽度
-    ,elemHeight = elemView.offsetHeight //控件的高度
+    ,elemWidth = elemView.offsetWidth // 控件的宽度
+    ,elemHeight = elemView.offsetHeight // 控件的高度
     
-    //滚动条高度
+    // 滚动条高度
     ,scrollArea = function(type){
       type = type ? 'scrollLeft' : 'scrollTop';
       return document.body[type] | document.documentElement[type];
     }
     
-    //窗口宽高
+    // 窗口宽高
     ,winArea = function(type){
       return document.documentElement[type ? 'clientWidth' : 'clientHeight']
     }, margin = 5, left = rect.left, top = rect.bottom;
     
-    //相对元素居中
+    // 相对元素居中
     if(obj.align === 'center'){
       left = left - (elemWidth - elem.offsetWidth)/2;
     } else if(obj.align === 'right'){
       left = left - elemWidth + elem.offsetWidth;
     }
 
-    //判断右侧是否超出边界
+    // 判断右侧是否超出边界
     if(left + elemWidth + margin > winArea('width')){
-      left = winArea('width') - elemWidth - margin; //如果超出右侧，则将面板向右靠齐
+      left = winArea('width') - elemWidth - margin; // 如果超出右侧，则将面板向右靠齐
     }
-    //左侧是否超出边界
+    // 左侧是否超出边界
     if(left < margin) left = margin;
     
-    //判断底部和顶部是否超出边界
+    // 判断底部和顶部是否超出边界
     if(top + elemHeight + margin > winArea()){
-      //优先顶部是否有足够区域显示完全
+      // 优先顶部是否有足够区域显示完全
       if(rect.top > elemHeight + margin){
-        top = rect.top - elemHeight - margin*2; //顶部有足够的区域显示
+        top = rect.top - elemHeight - margin*2; // 顶部有足够的区域显示
       } else {
-        //如果面板是鼠标右键弹出，且顶部没有足够区域显示，则将面板向底部靠齐
+        // 如果面板是鼠标右键弹出，且顶部没有足够区域显示，则将面板向底部靠齐
         if(obj.clickType === 'right'){
           top = winArea() - elemHeight - margin*2;
-          if(top < 0) top = 0; //不能溢出窗口顶部
+          if(top < 0) top = 0; // 不能溢出窗口顶部
         } else {
           top = margin; // 位置计算逻辑完备性处理
         }
       }
     }
     
-    //定位类型
+    // 定位类型
     var position = obj.position;
     if(position) elemView.style.position = position;
     
-    //设置坐标
+    // 设置坐标
     elemView.style.left = left + (position === 'fixed' ? 0 : scrollArea(1)) + 'px';
     elemView.style.top = top + (position === 'fixed' ? 0 : scrollArea()) + 'px';
 
-    //防止页面无滚动条时，又因为弹出面板而出现滚动条导致的坐标计算偏差
+    // 防止页面无滚动条时，又因为弹出面板而出现滚动条导致的坐标计算偏差
     if(!lay.hasScrollbar()){
       var rect1 = elemView.getBoundingClientRect();
-      //如果弹出面板的溢出窗口底部，则表示将出现滚动条，此时需要重新计算坐标
+      // 如果弹出面板的溢出窗口底部，则表示将出现滚动条，此时需要重新计算坐标
       if(!obj.SYSTEM_RELOAD && (rect1.bottom + margin) > winArea()){
         obj.SYSTEM_RELOAD = true;
         setTimeout(function(){
@@ -202,19 +196,28 @@
     }
   };
   
-  //获取元素上的参数配置上
-  lay.options = function(elem, attr){
-    var othis = lay(elem)
-    ,attrName = attr || 'lay-options';
+  // 获取元素上的属性配置项
+  lay.options = function(elem, opts){
+    opts = typeof opts === 'object' ? opts : {attr: opts};
+
+    if(elem === document) return {};
+
+    var othis = lay(elem);
+    var attrName = opts.attr || 'lay-options';
+    var attrValue = othis.attr(attrName);
+
     try {
-      return new Function('return '+ (othis.attr(attrName) || '{}'))();
+      return new Function('return '+ (attrValue || '{}'))();
     } catch(ev) {
-      hint.error('parseerror：'+ ev, 'error');
+      layui.hint().error(opts.errorText || [
+        attrName + '="'+ attrValue + '"', 
+        '\n parseerror: '+ ev
+      ].join('\n'), 'error');
       return {};
     }
   };
   
-  //元素是否属于顶级元素（document 或 body）
+  // 元素是否属于顶级元素（document 或 body）
   lay.isTopElem = function(elem){
     var topElems = [document, lay('body')[0]]
     ,matched = false;
@@ -225,9 +228,15 @@
     });
     return matched;
   };
+
+
+  /*
+   * lay 元素操作
+   */
   
-  //追加字符
-  LAY.addStr = function(str, new_str){
+
+  // 追加字符
+  Class.addStr = function(str, new_str){
     str = str.replace(/\s+/, ' ');
     new_str = new_str.replace(/\s+/, ' ').split(' ');
     lay.each(new_str, function(ii, item){
@@ -238,8 +247,8 @@
     return str.replace(/^\s|\s$/, '');
   };
   
-  //移除值
-  LAY.removeStr = function(str, new_str){
+  // 移除值
+  Class.removeStr = function(str, new_str){
     str = str.replace(/\s+/, ' ');
     new_str = new_str.replace(/\s+/, ' ').split(' ');
     lay.each(new_str, function(ii, item){
@@ -251,50 +260,44 @@
     return str.replace(/\s+/, ' ').replace(/^\s|\s$/, '');
   };
   
-  //查找子元素
-  LAY.prototype.find = function(selector){
+  // 查找子元素
+  Class.fn.find = function(selector){
     var that = this;
-    var index = 0, arr = []
-    ,isObject = typeof selector === 'object';
-    
+    var elem = [];
+    var isObject = typeof selector === 'object';
+
     this.each(function(i, item){
-      var nativeDOM = isObject ? item.contains(selector) : item.querySelectorAll(selector || null);
-      for(; index < nativeDOM.length; index++){
-        arr.push(nativeDOM[index]);
-      }
-      that.shift();
+      var children = isObject && item.contains(selector) 
+        ? selector
+      : item.querySelectorAll(selector || null);
+
+      lay.each(children, function(index, child){
+        elem.push(child);
+      });
     });
-    
-    if(!isObject){
-      that.selector =  (that.selector ? that.selector + ' ' : '') + selector
-    }
-    
-    lay.each(arr, function(i, item){
-      that.push(item);
-    });
-    
-    return that;
+
+    return lay(elem);
   };
   
-  //DOM遍历
-  LAY.prototype.each = function(fn){
+  // 元素遍历
+  Class.fn.each = function(fn){
     return lay.each.call(this, this, fn);
   };
   
-  //添加css类
-  LAY.prototype.addClass = function(className, type){
+  // 添加 className
+  Class.fn.addClass = function(className, type){
     return this.each(function(index, item){
-      item.className = LAY[type ? 'removeStr' : 'addStr'](item.className, className)
+      item.className = Class[type ? 'removeStr' : 'addStr'](item.className, className)
     });
   };
   
-  //移除 css 类
-  LAY.prototype.removeClass = function(className){
+  // 移除 className
+  Class.fn.removeClass = function(className){
     return this.addClass(className, true);
   };
   
-  //是否包含 css 类
-  LAY.prototype.hasClass = function(className){
+  // 是否包含 css 类
+  Class.fn.hasClass = function(className){
     var has = false;
     this.each(function(index, item){
       if(new RegExp('\\b'+ className +'\\b').test(item.className)){
@@ -304,10 +307,10 @@
     return has;
   };
   
-  //添加或获取 css style
-  LAY.prototype.css = function(key, value){
-    var that = this
-    ,parseValue = function(v){
+  // 添加或获取 css style
+  Class.fn.css = function(key, value){
+    var that = this;
+    var parseValue = function(v){
       return isNaN(v) ? v : (v +'px');
     };
     return (typeof key === 'string' && value === undefined) ? function(){
@@ -319,28 +322,28 @@
     });   
   };
   
-  //添加或获取宽度
-  LAY.prototype.width = function(value){
+  // 添加或获取宽度
+  Class.fn.width = function(value){
     var that = this;
     return value === undefined ? function(){
-      if(that.length > 0) return that[0].offsetWidth; //此处还需做兼容
+      if(that.length > 0) return that[0].offsetWidth; // 此处还需做兼容
     }() : that.each(function(index, item){
       that.css('width', value);
     });   
   };
   
-  //添加或获取高度
-  LAY.prototype.height = function(value){
+  // 添加或获取高度
+  Class.fn.height = function(value){
     var that = this;
     return value === undefined ? function(){
-      if(that.length > 0) return that[0].offsetHeight; //此处还需做兼容
+      if(that.length > 0) return that[0].offsetHeight; // 此处还需做兼容
     }() : that.each(function(index, item){
       that.css('height', value);
     });   
   };
   
-  //添加或获取属性
-  LAY.prototype.attr = function(key, value){
+  // 添加或获取属性
+  Class.fn.attr = function(key, value){
     var that = this;
     return value === undefined ? function(){
       if(that.length > 0) return that[0].getAttribute(key);
@@ -349,15 +352,15 @@
     });   
   };
   
-  //移除属性
-  LAY.prototype.removeAttr = function(key){
+  // 移除属性
+  Class.fn.removeAttr = function(key){
     return this.each(function(index, item){
       item.removeAttribute(key);
     });
   };
   
-  //设置或获取 HTML 内容
-  LAY.prototype.html = function(html){
+  // 设置或获取 HTML 内容
+  Class.fn.html = function(html){
     var that = this;
     return html === undefined ? function(){
       if(that.length > 0) return that[0].innerHTML;
@@ -366,8 +369,8 @@
     });
   };
   
-  //设置或获取值
-  LAY.prototype.val = function(value){
+  // 设置或获取值
+  Class.fn.val = function(value){
     var that = this;
     return value === undefined ? function(){
       if(that.length > 0) return that[0].value;
@@ -376,8 +379,8 @@
     });
   };
   
-  //追加内容
-  LAY.prototype.append = function(elem){
+  // 追加内容
+  Class.fn.append = function(elem){
     return this.each(function(index, item){
       typeof elem === 'object' 
         ? item.appendChild(elem)
@@ -385,15 +388,15 @@
     });
   };
   
-  //移除内容
-  LAY.prototype.remove = function(elem){
+  // 移除内容
+  Class.fn.remove = function(elem){
     return this.each(function(index, item){
       elem ? item.removeChild(elem) : item.parentNode.removeChild(item);
     });
   };
   
-  //事件绑定
-  LAY.prototype.on = function(eventName, fn){
+  // 事件绑定
+  Class.fn.on = function(eventName, fn){
     return this.each(function(index, item){
       item.attachEvent ? item.attachEvent('on' + eventName, function(e){
         e.target = e.srcElement;
@@ -402,8 +405,8 @@
     });
   };
   
-  //解除事件
-  LAY.prototype.off = function(eventName, fn){
+  // 解除事件
+  Class.fn.off = function(eventName, fn){
     return this.each(function(index, item){
       item.detachEvent 
         ? item.detachEvent('on'+ eventName, fn)  
@@ -411,14 +414,14 @@
     });
   };
   
-  //暴露 lay 到全局作用域
+  // export
   window.lay = lay;
   
-  //如果在 layui 体系中
+  // 输出为 layui 模块
   if(window.layui && layui.define){
-    layui.define(function(exports){ //layui 加载
+    layui.define(function(exports){
       exports(MOD_NAME, lay);
     });
   }
   
-}(window, window.document);
+}(window, window.document); // gulp build: lay-footer

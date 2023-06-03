@@ -2,54 +2,68 @@
  * slider 滑块组件
  */
 
-layui.define('jquery', function(exports){
-  "use strict";
-  var $ = layui.$
+layui.define(['jquery', 'lay'], function(exports){
+  'use strict';
 
-  //外部接口
-  ,slider = {
+  var $ = layui.$;
+  var lay = layui.lay;
+
+  // 外部接口
+  var slider = {
     config: {}
     ,index: layui.slider ? (layui.slider.index + 10000) : 0
 
-    //设置全局项
+    // 设置全局项
     ,set: function(options){
       var that = this;
       that.config = $.extend({}, that.config, options);
       return that;
     }
     
-    //事件
+    // 事件
     ,on: function(events, callback){
       return layui.onevent.call(this, MOD_NAME, events, callback);
     }
-  }
+  };
   
-  //操作当前实例
-  ,thisSlider = function(){
+  // 操作当前实例
+  var thisSlider = function(){
     var that = this
     ,options = that.config;
 
     return {
-      setValue: function(value, index){ //设置值
+      setValue: function(value, index){ // 设置值
+        value = value > options.max ? options.max : value;
+        value = value < options.min ? options.min : value;
         options.value = value;
         return that.slide('set', value, index || 0);
       }
       ,config: options
     }
-  }
+  };
 
-  //字符常量
-  ,MOD_NAME = 'slider', DISABLED = 'layui-disabled', ELEM_VIEW = 'layui-slider', SLIDER_BAR = 'layui-slider-bar', SLIDER_WRAP = 'layui-slider-wrap', SLIDER_WRAP_BTN = 'layui-slider-wrap-btn', SLIDER_TIPS = 'layui-slider-tips', SLIDER_INPUT = 'layui-slider-input', SLIDER_INPUT_TXT = 'layui-slider-input-txt', SLIDER_INPUT_BTN = 'layui-slider-input-btn', ELEM_HOVER = 'layui-slider-hover'
+  // 字符常量
+  var MOD_NAME = 'slider';
+  var DISABLED = 'layui-disabled';
+  var ELEM_VIEW = 'layui-slider';
+  var SLIDER_BAR = 'layui-slider-bar';
+  var SLIDER_WRAP = 'layui-slider-wrap';
+  var SLIDER_WRAP_BTN = 'layui-slider-wrap-btn';
+  var SLIDER_TIPS = 'layui-slider-tips';
+  var SLIDER_INPUT = 'layui-slider-input';
+  var SLIDER_INPUT_TXT = 'layui-slider-input-txt';
+  var SLIDER_INPUT_BTN = 'layui-slider-input-btn';
+  var ELEM_HOVER = 'layui-slider-hover';
 
-  //构造器
-  ,Class = function(options){
+  // 构造器
+  var Class = function(options){
     var that = this;
     that.index = ++slider.index;
     that.config = $.extend({}, that.config, slider.config, options);
     that.render();
   };
 
-  //默认配置
+  // 默认配置
   Class.prototype.config = {
     type: 'default' //滑块类型，垂直：vertical
     ,min: 0 //最小值
@@ -62,13 +76,27 @@ layui.define('jquery', function(exports){
     ,range: false //范围选择，与输入框不能同时开启，默认关闭
     ,height: 200 //配合 type:"vertical" 使用，默认200px
     ,disabled: false //滑块禁用，默认关闭
-    ,theme: '#009688' //主题颜色
+    ,theme: '#16baaa' //主题颜色
   };
 
   //滑块渲染
   Class.prototype.render = function(){
-    var that = this
-    ,options = that.config;
+    var that = this;
+    var options = that.config;
+
+    // 若 elem 非唯一，则拆分为多个实例
+    var elem = $(options.elem);
+    if(elem.length > 1){
+      layui.each(elem, function(){
+        slider.render($.extend({}, options, {
+          elem: this
+        }));
+      });
+      return that;
+    }
+
+    // 合并 lay-options 属性上的配置信息
+    $.extend(options, lay.options(elem[0]));
     
     //间隔值不能小于 1
     if(options.step < 1) options.step = 1;
@@ -217,13 +245,14 @@ layui.define('jquery', function(exports){
     ,sliderTxt = sliderAct.next('.' + SLIDER_INPUT)
     ,inputValue = sliderTxt.children('.' + SLIDER_INPUT_TXT).children('input').val()
     ,step = 100 / ((options.max - options.min) / Math.ceil(options.step))
-    ,change = function(offsetValue, index){
+    ,change = function(offsetValue, index, from){
       if(Math.ceil(offsetValue) * step > 100){
         offsetValue = Math.ceil(offsetValue) * step
       }else{
         offsetValue = Math.round(offsetValue) * step
       };
       offsetValue = offsetValue > 100 ? 100: offsetValue;
+      offsetValue = offsetValue < 0 ? 0: offsetValue;
       sliderWrap.eq(index).css((options.type === 'vertical' ?'bottom':'left'), offsetValue + '%');
       var firLeft = valueTo(sliderWrap[0].offsetLeft)
       ,secLeft = options.range ? valueTo(sliderWrap[1].offsetLeft) : 0;
@@ -257,9 +286,12 @@ layui.define('jquery', function(exports){
         ];
         if(arrValue[0] > arrValue[1]) arrValue.reverse(); //如果前面的圆点超过了后面的圆点值，则调换顺序
       }
-      
-       //回调
-      options.change && options.change(options.range ? arrValue : selfValue);
+
+      that.value = options.range ? arrValue : selfValue; // 最新值
+      options.change && options.change(that.value); // change 回调
+
+      // 值完成选中的事件
+      if(from === 'done') options.done && options.done(that.value);
     }
     ,valueTo = function(value){
       var oldLeft = value / sliderWidth() * 100 / step
@@ -276,6 +308,7 @@ layui.define('jquery', function(exports){
       var upCall = function(){
         up && up();
         elemMove.remove();
+        options.done && options.done(that.value);
       };
       $('#LAY-slider-moving')[0] || $('body').append(elemMove);
       elemMove.on('mousemove', move);
@@ -283,7 +316,7 @@ layui.define('jquery', function(exports){
     };
     
     //动态赋值
-    if(setValue === 'set') return change(value, i);
+    if(setValue === 'set') return change(value - options.min, i, 'done');
 
     //滑块滑动
     sliderAct.find('.' + SLIDER_WRAP_BTN).each(function(index){
@@ -319,24 +352,29 @@ layui.define('jquery', function(exports){
       });
     });
     
-    //点击滑块
+    // 点击滑块
     sliderAct.on('click', function(e){
       var main = $('.' + SLIDER_WRAP_BTN);
+      var othis = $(this);
       if(!main.is(event.target) && main.has(event.target).length === 0 && main.length){
-        var left = options.type === 'vertical' ? (sliderWidth() - e.clientY + $(this).offset().top):(e.clientX - $(this).offset().left), index;
-        if(left < 0)left = 0;
-        if(left > sliderWidth())left = sliderWidth();
-        var reaLeft = left / sliderWidth() * 100 / step;
+        var index;
+        var offset = options.type === 'vertical' 
+          ? (sliderWidth() - e.clientY + othis.offset().top - $(window).scrollTop())
+        :(e.clientX - othis.offset().left - $(window).scrollLeft());
+
+        if(offset < 0)offset = 0;
+        if(offset > sliderWidth()) offset = sliderWidth();
+        var reaLeft = offset / sliderWidth() * 100 / step;
         if(options.range){
           if(options.type === 'vertical'){
-            index = Math.abs(left - parseInt($(sliderWrap[0]).css('bottom'))) > Math.abs(left -  parseInt($(sliderWrap[1]).css('bottom'))) ? 1 : 0;
-          }else{
-            index = Math.abs(left - sliderWrap[0].offsetLeft) > Math.abs(left - sliderWrap[1].offsetLeft) ? 1 : 0;
+            index = Math.abs(offset - parseInt($(sliderWrap[0]).css('bottom'))) > Math.abs(offset -  parseInt($(sliderWrap[1]).css('bottom'))) ? 1 : 0;
+          } else {
+            index = Math.abs(offset - sliderWrap[0].offsetLeft) > Math.abs(offset - sliderWrap[1].offsetLeft) ? 1 : 0;
           }
-        }else{
+        } else {
           index = 0;
         };
-        change(reaLeft, index);
+        change(reaLeft, index, 'done');
         e.preventDefault();
       }
     });
@@ -355,7 +393,7 @@ layui.define('jquery', function(exports){
           : Number(inputValue) + options.step;
         };
         var inputScale =  (inputValue - options.min) / (options.max - options.min) * 100 / step;
-        change(inputScale, 0);
+        change(inputScale, 0, 'done');
       });
     });
     
@@ -367,7 +405,7 @@ layui.define('jquery', function(exports){
       realValue = realValue > options.max ? options.max : realValue;
       this.value = realValue;
       var inputScale =  (realValue - options.min) / (options.max - options.min) * 100 / step;
-      change(inputScale, 0);
+      change(inputScale, 0, 'done');
     };
     sliderTxt.children('.' + SLIDER_INPUT_TXT).children('input').on('keydown', function(e){
       if(e.keyCode === 13){

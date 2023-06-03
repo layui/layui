@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>表格操作 - layui</title>
 
   <link rel="stylesheet" href="../src/css/layui.css">
@@ -22,8 +22,11 @@
   <div class="layui-btn-container">
     <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
     <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页数据</button>
-    <button class="layui-btn layui-btn-sm" lay-event="isAll">是否全选</button>
 
+    <button class="layui-btn layui-btn-sm" id="setRowChecked">
+      设置行选中状态
+      <i class="layui-icon layui-icon-down layui-font-12"></i>
+    </button>
     <button class="layui-btn layui-btn-sm" id="reloadTest">
       重载测试 
       <i class="layui-icon layui-icon-down layui-font-12"></i>
@@ -63,10 +66,6 @@
   <input type="checkbox" name="" title="锁定" checked>
 </script>
 
-<script type="text/html" id="LAY_table_tpl_email">
-  <span {{# if(!d.activate){ }}style="color:#999"{{# } }}>{{ d.email }}</span>
-</script>
-
 <script type="text/html" id="pagebarDemo">
   <div class="layui-btn-container">
     <button class="layui-btn layui-btn-sm" lay-event="footerDemoBtn1">底部按钮1</button>
@@ -74,9 +73,9 @@
   </div>
 </script>
 
-<table id="test" lay-filter="test"></table>
+<table id="test"></table>
 
-<script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.6.13/layui.js"></script>
+<script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
 <script>
 (function(off){
   if(!off) return;
@@ -136,6 +135,7 @@ layui.use(['table', 'dropdown'], function(){
 
     //,size: 'sm'
     //,skin: 'line'
+    //,even: true
     //,loading: false
 
     ,totalRow: true
@@ -151,22 +151,28 @@ layui.use(['table', 'dropdown'], function(){
       ,icon: 'layui-icon-tips'
     }]
     //,escape: false
+    ,editTrigger: 'dblclick'
+    //,cellMaxWidth: 320
     ,cols: !1 ? test_cols : [[
       {type: 'checkbox', fixed: 'left'}
       //,{type: 'numbers', fixed: 'left'}
       ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
-      ,{field:'username', title:'用户名', width:120, edit: 'text', templet: '#usernameTpl'}
-      ,{field:'email', title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, width:150, edit: 'text', templet: function(d){
+      ,{field:'username', title:'用户名', width:120, edit: function(d){
+        return !d.LAY_DISABLED;
+      }, templet: '#usernameTpl'}
+      ,{field:'xxx', title:'测试', edit: 'text'}
+      ,{field:'email', minWidth: 160, maxWidth: 320, title:'邮箱 <i class="layui-icon layui-icon-email"></i>', fieldTitle: '邮箱', hide: 0, edit: 'text', templet: function(d){
         return '<em>'+ layui.util.escape(d.email) +'</em>'
       }}
-      ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
+      ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true, escape: false}
       ,{field:'city', title:'城市', width:120, templet: '#cityTpl', exportTemplet: function(d, obj){
-        //console.log(obj)
+        // return '=HYPERLINK("https://abc.com/a.jpg","截图")'; // 测试内容存在特殊符
+        // console.log(obj)
         var td = obj.td(this.field); //获取当前 td
         return td.find('select').val();
       }}
       ,{field:'sign', title:'签名', minWidth: 200, style:'color: #5FB878', edit: 'textarea'}
-      ,{field: 'experience', title: '积分', width: 100, sort: true, align:'center', totalRow: !1 ? '{{=d.LAY_COL.field}}' : '{{= d.TOTAL_NUMS }} 分 😊', templet: '<div><a href="" class="layui-table-link">{{ d.experience }}</a> 分</div>'}
+      ,{field: 'experience', title: '积分', width: 100, sort: true, align:'center', totalRow: !1 ? true : '{{= d.TOTAL_NUMS }} 分 😊', templet: '<div><a href="" class="layui-table-link">{{= d[d.LAY_COL.field] }}</a> 分</div>'}
       ,{field:'ip', title:'IP', width: 120, align: 'right'}
       ,{field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{= parseInt(d.TOTAL_NUMS) }} 次'}
       ,{field:'joinTime', title:'加入时间', width: 120}
@@ -174,7 +180,7 @@ layui.use(['table', 'dropdown'], function(){
     ]]
     
     //,autoSort: false // 禁用前端自动排序，由服务的完成排序
-    ,initSort11111: { // 初始排序状态
+    ,initSort111: { // 初始排序状态
       field: 'experience' //排序字段，对应 cols 设定的各字段名
       ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
     }
@@ -186,6 +192,10 @@ layui.use(['table', 'dropdown'], function(){
       ,key: 'experience'
       ,order: 'asc'
     }
+    ,before: function(options){
+      options.where.AAAAA = 123;
+      //console.log(options)
+    }
     ,done: function(res, curr, count){
       var id = this.id;
 
@@ -196,6 +206,53 @@ layui.use(['table', 'dropdown'], function(){
         value: curr
       });
       */
+
+      // 设置选中行状态
+      dropdown.render({
+        elem: '#setRowChecked' //可绑定在任意元素中，此处以上述按钮为例
+        ,data: [{
+          id: 'checked',
+          title: '选中某行'
+        },{
+          id: 'unchecked',
+          title: '取消选中某行'
+        },{
+          id: 'reset-checked',
+          title: '给选中行取消选中状态'
+        }]
+        //菜单被点击的事件
+        ,click: function(obj){
+          if(obj.id === 'reset-checked'){
+            // 给选中行取消选中状态
+            table.setRowChecked(id, {
+              index: 'all',
+              checked: false
+            });
+          } else {
+            layer.prompt({
+              title: '请输入表格行号',
+              value: 1,
+              shade: false
+            }, function(value, i){
+              switch(obj.id){
+                case 'checked':
+                  table.setRowChecked(id, {
+                    index: value,
+                    checked: true
+                  });
+                break;
+                case 'unchecked':
+                  table.setRowChecked(id, {
+                    index: value,
+                    checked: false
+                  });
+                break;
+              }
+              layer.close(i);
+            });
+          }
+        }
+      });
 
       // 重载测试
       dropdown.render({
@@ -252,7 +309,7 @@ layui.use(['table', 'dropdown'], function(){
             break;
             case 'reloadData':
               // 数据重载 - 参数重置
-              var isnt3 = table.reloadData('test', {
+              table.reloadData('test', {
                 where: {
                   abc: '123456'
                   //,test: '新的 test2'
@@ -260,10 +317,10 @@ layui.use(['table', 'dropdown'], function(){
                 }
                 ,height: 2000 // 测试无效参数
                 //,url: '404'
-                ,elem: null
-                ,page: {curr: 5, limit: 20}
+                //,elem: null
+                //,page: {curr: 5, limit: 20}
+                ,scrollPos: 'fixed' // 保持滚动条位置不变
               });
-              console.log(isnt3.config);
             break;
             case 'reloadData-deep':
               // 数据重载 - 参数叠加
@@ -404,7 +461,15 @@ layui.use(['table', 'dropdown'], function(){
       }, function(value, index){
         obj.update({
           email: value
+        }, true); // 参数 true 为新版新增功能，详见文档
+
+        /*
+        // 上述 obj.update() 只是在前端临时更新数据视图
+        // 在实际业务中，当发送修改请求成功后，可再执行 reloadData 来重载数据
+        table.reloadData('test', {
+          scrollPos: 'fixed' // 保持滚动条位置不变
         });
+        */
         layer.close(index);
       });
     }
@@ -434,13 +499,39 @@ layui.use(['table', 'dropdown'], function(){
 
   // 单元格编辑事件
   table.on('edit(test)', function(obj){
-    var field = obj.field //得到字段
-    ,value = obj.value //得到修改后的值
-    ,data = obj.data; //得到所在行所有键值
+    var field = obj.field // 得到字段
+    var value = obj.value // 得到修改后的值
+    var oldValue = obj.oldValue // 得到修改前的值 -- v2.8.0 新增
+    var data = obj.data; // 得到当前编辑所在行的数据
+    var col = obj.getCol(); // 得到当前列的表头配置属性
 
+    // 值的校验
+    if(field === 'email'){
+      if(!/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(obj.value)){
+        layer.tips('输入的'+ col.fieldTitle +'格式不正确，请重新编辑', this, {tips: 1});
+        return obj.reedit(); // 重新编辑 -- v2.8.0 新增
+      }
+    }
+    
+    // 编辑后续操作，如提交更新请求，以完成真实的数据更新
+    // …
+    layer.msg('编辑成功', {icon: 1});
+
+    // 其他更新操作
     var update = {};
     update[field] = value;
-    obj.update(update);
+    obj.update(update, true); // 参数 true 为 v2.7.4 新增功能，即同步更新其他包含自定义模板并可能存在关联的列视图
+  });
+
+
+  // 列拖拽宽度后的事件 -- v2.8.0 新增
+  table.on('colResized(test)', function(obj){
+    console.log(obj);
+  });
+
+  // 列拖拽宽度后的事件 -- v2.8.0 新增
+  table.on('colToggled(test)', function(obj){
+    console.log(obj);
   });
 });
 </script>

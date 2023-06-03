@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>工具集 - layui</title>
+<title>util 组件 - layui</title>
 
 <link rel="stylesheet" href="../src/css/layui.css">
 
@@ -29,21 +29,56 @@ body{padding: 50px;}
 
 <hr>
 
-1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>
+<div id="target-test" style1="position: relative; height: 300px; overflow: auto;">
+  1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>
+</div>
 
 <script src="../src/layui.js"></script>
 <script>
-layui.use('util', function(){
-  var util = layui.util
-  ,$ = layui.$;
+layui.use(['util', 'layer'], function(){
+  var $ = layui.$;
+  var util = layui.util;
+  var layer = layui.layer;
 
-  //固定块
+  // 固定块
   util.fixbar({
-    bar1: true
-    ,bar2: true
-    //,css: {right: 100, bottom: 100}
-    ,click: function(type){
+    bars: [{ // 定义可显示的 bar 列表信息 -- v2.8.0 新增
+      type: 'share',
+      icon: 'layui-icon-share'
+    }, {
+      type: 'help',
+      icon: 'layui-icon-help'
+    }, { 
+      type: 'cart',
+      icon: 'layui-icon-cart',
+      style: 'background-color: #FF5722;'
+    }, {
+      type: 'groups',
+      content: '群',
+      style: 'font-size: 21px;'
+    }],
+    // bar1: true,
+    // bar2: true,
+    // default: false, 是否显示默认的 bar 列表 --  v2.8.0 新增
+    // bgcolor: '#393D52', // bar 的默认背景色
+    // css: {right: 100, bottom: 100},
+    // target: '#target-test', // 插入 fixbar 节点的目标元素选择器
+    // duration: 300, // top bar 等动画时长（毫秒）
+    on: { // 任意事件 --  v2.8.0 新增
+      mouseenter: function(type){
+        layer.tips(type, this, {
+          tips: 4, 
+          fixed: true
+        });
+      },
+      mouseleave: function(type){
+        layer.closeAll('tips');
+      }
+    },
+    // 点击事件
+    click: function(type){
       console.log(this, type);
+      // layer.msg(type);
     }
   });
   

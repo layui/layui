@@ -3,12 +3,11 @@
  * 上传组件
  */
  
-layui.define('layer' , function(exports){
+layui.define(['lay','layer'], function(exports){
   "use strict";
   
   var $ = layui.$
   ,layer = layui.layer
-  ,hint = layui.hint()
   ,device = layui.device()
 
   //外部接口
@@ -172,17 +171,23 @@ layui.define('layer' , function(exports){
     }
   };
   
-  //执行上传
+  // 执行上传
   Class.prototype.upload = function(files, type){
-    var that = this
-    ,options = that.config
-    ,elemFile = that.elemFile[0]
+    var that = this;
+    var options = that.config;
+    var elemFile = that.elemFile[0];
+
+    // 获取文件队列
+    var getFiles = function(){
+      return files || that.files || that.chooseFiles || elemFile.files;
+    };
     
     //高级浏览器处理方式，支持跨域
-    ,ajaxSend = function(){
-      var successful = 0, failed = 0
-      ,items = files || that.files || that.chooseFiles || elemFile.files
-      ,allDone = function(){ //多文件全部上传完毕的回调
+    var ajaxSend = function(){
+      var successful = 0;
+      var failed = 0
+      var items = getFiles();
+      var allDone = function(){ // 多文件全部上传完毕的回调
         if(options.multiple && successful + failed === that.fileLength){
           typeof options.allDone === 'function' && options.allDone({
             total: that.fileLength
@@ -194,13 +199,14 @@ layui.define('layer' , function(exports){
       layui.each(items, function(index, file){
         var formData = new FormData();
         
-        formData.append(options.field, file);
-        
         //追加额外的参数
         layui.each(options.data, function(key, value){
           value = typeof value === 'function' ? value() : value;
           formData.append(key, value);
         });
+        
+        //最后添加 file 到表单域
+        formData.append(options.field, file);
         
         //提交文件
         var opts = {
@@ -220,7 +226,10 @@ layui.define('layer' , function(exports){
           //异常回调
           ,error: function(e){
             failed++;
-            that.msg('Request URL is abnormal: '+ (e.statusText || 'error'));
+            that.msg([
+              'Upload failed, please try again.',
+              'status: '+ (e.status || '') +' - '+ (e.statusText || 'error')
+            ].join('<br>'));
             error(index);
             allDone();
           }
@@ -389,7 +398,7 @@ layui.define('layer' , function(exports){
       break;
       default: //图片文件
         layui.each(value, function(i, item){
-          if(!RegExp('.\\.('+ (exts || 'jpg|png|gif|bmp|jpeg') +')$', 'i').test(escape(item))){
+          if(!RegExp('.\\.('+ (exts || 'jpg|png|gif|bmp|jpeg|svg') +')$', 'i').test(escape(item))){
             return check = true;
           }
         });
@@ -412,8 +421,8 @@ layui.define('layer' , function(exports){
     
     //检验文件数量
     that.fileLength = function(){
-      var length = 0
-      ,items = files || that.files || that.chooseFiles || elemFile.files;
+      var length = 0;
+      var items = getFiles();
       layui.each(items, function(){
         length++;
       });
@@ -427,11 +436,11 @@ layui.define('layer' , function(exports){
       );
     }
     
-    //检验文件大小
+    // 检验文件大小
     if(options.size > 0 && !(device.ie && device.ie < 10)){
       var limitSize;
       
-      layui.each(that.chooseFiles, function(index, file){
+      layui.each(getFiles(), function(index, file){
         if(file.size > 1024*options.size){
           var size = options.size/1024;
           size = size >= 1 ? (size.toFixed(2) + 'MB') : options.size + 'KB'
@@ -465,20 +474,20 @@ layui.define('layer' , function(exports){
   
   //事件处理
   Class.prototype.events = function(){
-    var that = this
-    ,options = that.config
+    var that = this;
+    var options = that.config;
     
-    //设置当前选择的文件队列
-    ,setChooseFile = function(files){
+    // 设置当前选择的文件队列
+    var setChooseFile = function(files){
       that.chooseFiles = {};
       layui.each(files, function(i, item){
         var time = new Date().getTime();
         that.chooseFiles[time + '-' + i] = item;
       });
-    }
+    };
     
-    //设置选择的文本
-    ,setChooseText = function(files, filename){
+    // 设置选择的文本
+    var setChooseText = function(files, filename){
       var elemFile = that.elemFile
       ,item = options.item ? options.item : options.elem
       ,value = files.length > 1 
@@ -493,19 +502,23 @@ layui.define('layer' , function(exports){
       elemFile.after('<span class="layui-inline '+ ELEM_CHOOSE +'">'+ value +'</span>');
     };
 
+    // 合并 lay-options/lay-data 属性配置项
+    var extendAttrs = function(){
+      var othis = $(this);
+      var data = othis.attr('lay-data') || othis.attr('lay-options'); // 优先兼容旧版本
+
+      if(data){
+        that.config = $.extend({}, options, lay.options(this, {
+          attr: othis.attr('lay-data') ? 'lay-data' : null
+        }));
+      }
+    };
+
     //点击上传容器
     options.elem.off('upload.start').on('upload.start', function(){
-      var othis = $(this), data = othis.attr('lay-data');
-      
-      if(data){
-        try{
-          data = new Function('return '+ data)();
-          that.config = $.extend({}, options, data);
-        } catch(e){
-          hint.error('Upload element property lay-data configuration item has a syntax error: ' + data)
-        }
-      }
-      
+      var othis = $(this);
+
+      extendAttrs.call(this);
       that.config.item = othis;
       that.elemFile[0].click();
     });
@@ -521,9 +534,11 @@ layui.define('layer' , function(exports){
         othis.removeAttr('lay-over');
       })
       .off('upload.drop').on('upload.drop', function(e, param){
-        var othis = $(this), files = param.originalEvent.dataTransfer.files || [];
+        var othis = $(this);
+        var files = param.originalEvent.dataTransfer.files || [];
         
         othis.removeAttr('lay-over');
+        extendAttrs.call(this);
         setChooseFile(files);
 
         options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
@@ -533,6 +548,8 @@ layui.define('layer' , function(exports){
     //文件选择
     that.elemFile.off('upload.change').on('upload.change', function(){
       var files = this.files || [];
+
+      extendAttrs.call(this);
       setChooseFile(files);
       options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
     });

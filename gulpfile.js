@@ -15,13 +15,13 @@ const yargs = require('yargs');
 
 // 基础配置
 const config = {
-  //注释
+  // 注释
   comment: [
-    '/** <%= pkg.version %> | <%= pkg.license %> Licensed */<%= js %>'
+    '/** v<%= pkg.version %> | <%= pkg.license %> Licensed */<%= js %>'
     ,{pkg: pkg, js: ';'}
   ]
-  //模块
-  ,modules: 'lay,laytpl,laypage,laydate,jquery,layer,util,dropdown,slider,colorpicker,element,upload,form,table,tree,transfer,carousel,rate,flow,layedit,code'
+  // 模块
+  ,modules: 'lay,laytpl,laypage,laydate,jquery,layer,util,dropdown,slider,colorpicker,element,upload,form,table,treeTable,tree,transfer,carousel,rate,flow,code'
 };
 
 // 获取参数
@@ -49,7 +49,7 @@ const js = () => {
   ];
   return gulp.src(src).pipe(uglify({
     output: {
-      ascii_only: true //escape Unicode characters in strings and regexps
+      ascii_only: true // escape Unicode characters in strings and regexps
     },
     ie: true
   })).pipe(concat('layui.js', {newLine: ''}))
@@ -60,13 +60,14 @@ const js = () => {
 // css
 const css = () => {
   let src = [
-    './src/css/**/*.css'
-    ,'!./src/css/**/font.css'
+    './src/css/layui.css',
+    './src/css/modules/**/*.css',
+    '!./src/css/**/font.css'
   ];
   return gulp.src(src).pipe(cleanCSS({
     compatibility: 'ie8'
   }))
-  //.pipe(concat('layui.css', {newLine: ''}))
+  .pipe(concat('layui.css', {newLine: ''}))
   .pipe(gulp.dest(dest +'/css'));
 };
   
@@ -86,8 +87,8 @@ const cp = () => {
 // release
 const rls = () => {
   return gulp.src('./release/doc/**/*')
-  .pipe(replace(/[^'"]+(\/layui\.css)/, 'layui/css$1')) //替换 css 引入路径中的本地 path
-  .pipe(replace(/[^'"]+(\/layui\.js)/, 'layui$1')) //替换 js 引入路径中的本地 path
+  .pipe(replace(/[^'"]+(\/layui\.css)/, 'layui/css$1')) // 替换 css 引入路径中的本地 path
+  .pipe(replace(/[^'"]+(\/layui\.js)/, 'layui$1')) // 替换 js 引入路径中的本地 path
   .pipe(gulp.dest(dir.rls));
 };
 
@@ -105,41 +106,42 @@ const cleanRLS = cb => {
 exports.js = js;
 exports.css = css;
 exports.files = files;
-exports.default = gulp.series(clean, gulp.parallel(js, css, files)); //default task
+exports.default = gulp.series(clean, gulp.parallel(js, css, files)); // default task
 exports.cp = gulp.series(clean, cp);
-exports.rls = gulp.series(cleanRLS, rls); //release task
+exports.rls = gulp.series(cleanRLS, rls); // release task
 
 // layer task
 exports.layer = () => { // gulp layer
   let dest = './release/layer';
   
-  gulp.src('./src/css/modules/layer/default/*')
-  .pipe(gulp.dest(dest + '/src/theme/default'));
+  gulp.src('./src/css/modules/layer.css')
+  .pipe(gulp.dest(dest + '/src'));
 
   return gulp.src('./src/modules/layer.js')
   .pipe(gulp.dest(dest + '/src'));
 };
 
-
 // laydate task
 exports.laydate = () => { // gulp laydate
   let dest = './release/laydate/'; // 发行目录
-  let comment = [ //注释
-    '\n/*! \n * <%= title %> \n * <%= license %> Licensed \n */ \n\n'
-    ,{title: 'layDate 日期与时间组件（单独版）', license: 'MIT'}
+  let comment = [ // 注释
+    '\n/** \n * <%= title %> \n * <%= license %> Licensed \n */ \n\n'
+    ,{title: 'laydate 日期与时间组件（单独版）', license: 'MIT'}
   ];
   
   // css
   gulp.src('./src/css/modules/laydate.css')
-  .pipe(gulp.dest(dest + 'src/'));
+  .pipe(gulp.dest(dest + 'src'));
   
   // js
   return gulp.src(['./src/layui.js', './src/modules/{lay,laydate}.js'])
   .pipe(replace('win.layui =', 'var layui =')) // 将 layui 替换为局部变量
-  .pipe(replace('})(window); //gulp build: layui-footer', '')) // 替换 layui.js 的落脚
-  .pipe(replace('(function(window){ //gulp build: lay-header', '')) // 替换 lay.js 的头部
+  .pipe(replace('}(window); // gulp build: layui-footer', '')) // 替换 layui.js 的落脚
+  .pipe(replace(';!function(window){ // gulp build: lay-header', '')) // 替换 lay.js 的头部
+  .pipe(replace('}(window, window.document); // gulp build: lay-footer', '')) // 替换 lay.js 的落脚
   .pipe(concat('laydate.js', {newLine: ''}))
-  .pipe(header.apply(null, comment)) //追加头部
+  .pipe(replace(';!function(window, document){ // gulp build: laydate-header', '')) // 替换 laydate.js 的头部
+  .pipe(header.apply(null, comment)) // 追加头部
   .pipe(gulp.dest(dest + 'src'));
 };
 
