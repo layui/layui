@@ -1,64 +1,38 @@
 {
   "name": "layui",
-  "realname": "layui",
-  "version": "2.6.8",
+  "version": "2.8.4",
   "description": "Classic modular Front-End UI library",
   "main": "dist/layui.js",
   "license": "MIT",
-  "scripts": {
-    "test": "karma start karma.conf.unit.js",
-    "test:cov": "npm test -- --reporters mocha,coverage",
-    "test:sauce": "karma start karma.conf.sauce.js",
-    "test:watch": "npm test -- --auto-watch --no-single-run"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/sentsin/layui.git"
+    "url": "git+ssh://git@github.com/layui/layui.git"
   },
-  "author": [
-    "sentsin <xu@sentsin.com>"
-  ],
-  "homepage": "https://github.com/sentsin/layui/",
+  "homepage": "https://layui.dev",
   "devDependencies": {
-    "chai": "^4.3.4",
+    "gulp": "^4.0.2",
+    "gulp-uglify": "^3.0.2",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-replace": "^1.1.3",
+    "gulp-rename": "^2.0.0",
+    "gulp-header": "^2.0.9",
+    "gulp-footer": "^2.1.0",
     "del": "^2.2.2",
-    "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.0 ",
-    "gulp-footer": "^2.0.2",
-    "gulp-header": "^1.8.8",
-    "gulp-if": "^2.0.1",
-    "gulp-minify-css": "^1.2.4",
-    "gulp-rename": "^1.2.2",
-    "gulp-replace": "^0.6.1",
-    "gulp-uglify": "^1.5.4",
-    "gulp-zip": "^4.0.0",
-    "karma": "^1.5.0",
-    "karma-chai": "^0.1.0",
-    "karma-chai-sinon": "^0.1.5",
-    "karma-coverage": "^1.1.1",
-    "karma-mocha": "^1.3.0",
-    "karma-mocha-reporter": "^2.2.3",
-    "karma-phantomjs-launcher": "^1.0.4",
-    "karma-sauce-launcher": "^1.1.0",
-    "minimist": "^1.2.5",
-    "mocha": "^3.2.0",
-    "sinon": "^3.2.1",
-    "sinon-chai": "^2.13.0"
+    "minimist": "^1.2.5"
   },
   "bugs": {
-    "url": "https://gitee.com/sentsin/layui/issues"
-  },
-  "directories": {
-    "doc": "doc",
-    "example": "examples",
-    "test": "test"
+    "url": "https://gitee.com/layui/layui/issues"
   },
   "dependencies": {},
   "keywords": [
     "layui",
     "ui",
-    "JavaScript Framework",
-    "toolkit",
-    "front-end component library"
+    "javascript",
+    "css",
+    "components",
+    "framework",
+    "library"
   ]
 }

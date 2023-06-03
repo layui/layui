@@ -42,6 +42,7 @@ layui.use('dropdown', function(){
 
   dropdown.render({
     elem: '#demo1'
+    ,shade: [0.1, '#ddd']
     //,align: 'right'
     ,data: [{
       title: 'menu item 1'
@@ -155,7 +156,10 @@ layui.use('dropdown', function(){
     
     ,id: 'demo1'
     
-    //菜单被点击的事件
+     // 触发点击事件的元素范围 --- default: 仅子菜单触发点击事件（默认，可不填）; all: 所有父子菜单均触发点击事件
+    ,clickScope: 'all'
+
+    // 菜单被点击的事件
     ,click: function(obj){
       console.log(obj);
     }
@@ -163,19 +167,27 @@ layui.use('dropdown', function(){
   
   var inst = dropdown.render({
     elem: '#demo2'
-    //,show: true
+    // ,show: true
     ,data: [{
       title: 'menu item 1'
       ,href: '#1'
+      ,disabled: true
     },{
-      title: 'menu item 2'
+      title: 'menu item 2(点击不关闭)'
       ,href: '#2'
+      ,id: 'bbb'
     },{
       title: 'menu item 3'
       ,href: '#3'
     }]
-    ,click: function(){
-    
+    ,click: function(data, othis){
+      console.log(data);
+      if(data.id === 'bbb'){
+        return false;
+      }
+    }
+    ,ready: function(){
+      console.log(arguments);
     }
   });
 

@@ -1,15 +1,13 @@
-
-/*!
- * upload 文件上传组件
- * MIT Licensed
+/**
+ * upload
+ * 上传组件
  */
  
-layui.define('layer' , function(exports){
+layui.define(['lay','layer'], function(exports){
   "use strict";
   
   var $ = layui.$
   ,layer = layui.layer
-  ,hint = layui.hint()
   ,device = layui.device()
 
   //外部接口
@@ -63,6 +61,7 @@ layui.define('layer' , function(exports){
     ,auto: true //是否选完文件后自动上传
     ,bindAction: '' //手动上传触发的元素
     ,url: '' //上传地址
+    ,force: '' //强制规定返回的数据格式，目前只支持是否强制 json
     ,field: 'file' //文件字段名
     ,acceptMime: '' //筛选出的文件类型，默认为所有文件
     ,method: 'post' //请求上传的 http 类型
@@ -172,35 +171,42 @@ layui.define('layer' , function(exports){
     }
   };
   
-  //执行上传
+  // 执行上传
   Class.prototype.upload = function(files, type){
-    var that = this
-    ,options = that.config
-    ,elemFile = that.elemFile[0]
+    var that = this;
+    var options = that.config;
+    var elemFile = that.elemFile[0];
+
+    // 获取文件队列
+    var getFiles = function(){
+      return files || that.files || that.chooseFiles || elemFile.files;
+    };
     
     //高级浏览器处理方式，支持跨域
-    ,ajaxSend = function(){
-      var successful = 0, aborted = 0
-      ,items = files || that.files || that.chooseFiles || elemFile.files
-      ,allDone = function(){ //多文件全部上传完毕的回调
-        if(options.multiple && successful + aborted === that.fileLength){
+    var ajaxSend = function(){
+      var successful = 0;
+      var failed = 0
+      var items = getFiles();
+      var allDone = function(){ // 多文件全部上传完毕的回调
+        if(options.multiple && successful + failed === that.fileLength){
           typeof options.allDone === 'function' && options.allDone({
             total: that.fileLength
             ,successful: successful
-            ,aborted: aborted
+            ,failed: failed
           });
         }
       };
       layui.each(items, function(index, file){
         var formData = new FormData();
         
-        formData.append(options.field, file);
-        
         //追加额外的参数
         layui.each(options.data, function(key, value){
           value = typeof value === 'function' ? value() : value;
           formData.append(key, value);
         });
+        
+        //最后添加 file 到表单域
+        formData.append(options.field, file);
         
         //提交文件
         var opts = {
@@ -218,9 +224,12 @@ layui.define('layer' , function(exports){
             allDone();
           }
           //异常回调
-          ,error: function(){
-            aborted++;
-            that.msg('请求上传接口出现异常');
+          ,error: function(e){
+            failed++;
+            that.msg([
+              'Upload failed, please try again.',
+              'status: '+ (e.status || '') +' - '+ (e.statusText || 'error')
+            ].join('<br>'));
             error(index);
             allDone();
           }
@@ -243,7 +252,7 @@ layui.define('layer' , function(exports){
       });
     }
     
-    //低版本IE处理方式，不支持跨域
+    //低版本 IE 处理方式，不支持跨域
     ,iframeSend = function(){
       var iframe = $('#'+ ELEM_IFRAME);
     
@@ -256,7 +265,7 @@ layui.define('layer' , function(exports){
         try {
           res = iframeBody.text();
         } catch(e) {
-          that.msg('获取上传后的响应信息出现异常');
+          that.msg('Cross-domain requests are not supported');
           clearInterval(Class.timer);
           error();
         }
@@ -272,14 +281,18 @@ layui.define('layer' , function(exports){
     ,done = function(index, res){
       that.elemFile.next('.'+ ELEM_CHOOSE).remove();
       elemFile.value = '';
-      if(typeof res !== 'object'){
-        try {
-          res = JSON.parse(res);
-        } catch(e){
-          res = {};
-          return that.msg('请对上传接口返回有效JSON');
+      
+      if(options.force === 'json'){
+        if(typeof res !== 'object'){
+          try {
+            res = JSON.parse(res);
+          } catch(e){
+            res = {};
+            return that.msg('Please return JSON data format');
+          }
         }
       }
+      
       typeof options.done === 'function' && options.done(res, index || 0, function(files){
         that.upload(files);
       });
@@ -334,14 +347,6 @@ layui.define('layer' , function(exports){
     
     //提交上传
     ,send = function(){      
-      //选择文件的回调      
-      if(type === 'choose' || options.auto){
-        options.choose && options.choose(args);
-        if(type === 'choose'){
-          return;
-        }
-      }
-      
       //上传前的回调 - 如果回调函数明确返回false，则停止上传(#pulls55)
       if(options.before && (options.before(args) === false)) return;
 
@@ -352,6 +357,14 @@ layui.define('layer' , function(exports){
       
       ajaxSend();
     }
+    
+    //文件类型名称
+    ,typeName = ({
+      file: '文件'
+      ,images: '图片'
+      ,video: '视频'
+      ,audio: '音频'
+    })[options.accept] || '文件';
 
     //校验文件格式
     value = value.length === 0 
@@ -359,57 +372,75 @@ layui.define('layer' , function(exports){
     : value;
     
     if(value.length === 0) return;
-
+    
+    //根据文件类型校验
     switch(options.accept){
       case 'file': //一般文件
-        if(exts && !RegExp('\\w\\.('+ exts +')$', 'i').test(escape(value))){
-          that.msg('选择的文件中包含不支持的格式');
-          return elemFile.value = '';
-        }
+        layui.each(value, function(i, item){
+          if(exts && !RegExp('.\\.('+ exts +')$', 'i').test(escape(item))){
+            return check = true;
+          }
+        });
       break;
       case 'video': //视频文件
-        if(!RegExp('\\w\\.('+ (exts || 'avi|mp4|wma|rmvb|rm|flash|3gp|flv') +')$', 'i').test(escape(value))){
-          that.msg('选择的视频中包含不支持的格式');
-          return elemFile.value = '';
-        }
+        layui.each(value, function(i, item){
+          if(!RegExp('.\\.('+ (exts || 'avi|mp4|wma|rmvb|rm|flash|3gp|flv') +')$', 'i').test(escape(item))){
+            return check = true;
+          }
+        });
       break;
       case 'audio': //音频文件
-        if(!RegExp('\\w\\.('+ (exts || 'mp3|wav|mid') +')$', 'i').test(escape(value))){
-          that.msg('选择的音频中包含不支持的格式');
-          return elemFile.value = '';
-        }
+        layui.each(value, function(i, item){
+          if(!RegExp('.\\.('+ (exts || 'mp3|wav|mid') +')$', 'i').test(escape(item))){
+            return check = true;
+          }
+        });
       break;
       default: //图片文件
         layui.each(value, function(i, item){
-          if(!RegExp('\\w\\.('+ (exts || 'jpg|png|gif|bmp|jpeg$') +')', 'i').test(escape(item))){
-            check = true;
+          if(!RegExp('.\\.('+ (exts || 'jpg|png|gif|bmp|jpeg|svg') +')$', 'i').test(escape(item))){
+            return check = true;
           }
         });
-        if(check){
-          that.msg('选择的图片中包含不支持的格式');
-          return elemFile.value = '';
-        }
       break;
+    }
+    
+    //校验失败提示
+    if(check){
+      that.msg('选择的'+ typeName +'中包含不支持的格式');
+      return elemFile.value = '';
+    }
+
+    //选择文件的回调      
+    if(type === 'choose' || options.auto){
+      options.choose && options.choose(args);
+      if(type === 'choose'){
+        return;
+      }
     }
     
     //检验文件数量
     that.fileLength = function(){
-      var length = 0
-      ,items = files || that.files || that.chooseFiles || elemFile.files;
+      var length = 0;
+      var items = getFiles();
       layui.each(items, function(){
         length++;
       });
       return length;
     }();
+    
     if(options.number && that.fileLength > options.number){
-      return that.msg('同时最多只能上传的数量为：'+ options.number);
+      return that.msg(
+        '同时最多只能上传: '+ options.number + ' 个文件'
+        +'<br>您当前已经选择了: '+ that.fileLength +' 个文件'
+      );
     }
     
-    //检验文件大小
+    // 检验文件大小
     if(options.size > 0 && !(device.ie && device.ie < 10)){
       var limitSize;
       
-      layui.each(that.chooseFiles, function(index, file){
+      layui.each(getFiles(), function(index, file){
         if(file.size > 1024*options.size){
           var size = options.size/1024;
           size = size >= 1 ? (size.toFixed(2) + 'MB') : options.size + 'KB'
@@ -417,8 +448,9 @@ layui.define('layer' , function(exports){
           limitSize = size;
         }
       });
-      if(limitSize) return that.msg('文件不能超过'+ limitSize);
+      if(limitSize) return that.msg('文件大小不能超过 '+ limitSize);
     }
+
     send();
   };
   
@@ -442,20 +474,20 @@ layui.define('layer' , function(exports){
   
   //事件处理
   Class.prototype.events = function(){
-    var that = this
-    ,options = that.config
+    var that = this;
+    var options = that.config;
     
-    //设置当前选择的文件队列
-    ,setChooseFile = function(files){
+    // 设置当前选择的文件队列
+    var setChooseFile = function(files){
       that.chooseFiles = {};
       layui.each(files, function(i, item){
         var time = new Date().getTime();
         that.chooseFiles[time + '-' + i] = item;
       });
-    }
+    };
     
-    //设置选择的文本
-    ,setChooseText = function(files, filename){
+    // 设置选择的文本
+    var setChooseText = function(files, filename){
       var elemFile = that.elemFile
       ,item = options.item ? options.item : options.elem
       ,value = files.length > 1 
@@ -470,19 +502,23 @@ layui.define('layer' , function(exports){
       elemFile.after('<span class="layui-inline '+ ELEM_CHOOSE +'">'+ value +'</span>');
     };
 
+    // 合并 lay-options/lay-data 属性配置项
+    var extendAttrs = function(){
+      var othis = $(this);
+      var data = othis.attr('lay-data') || othis.attr('lay-options'); // 优先兼容旧版本
+
+      if(data){
+        that.config = $.extend({}, options, lay.options(this, {
+          attr: othis.attr('lay-data') ? 'lay-data' : null
+        }));
+      }
+    };
+
     //点击上传容器
     options.elem.off('upload.start').on('upload.start', function(){
-      var othis = $(this), data = othis.attr('lay-data');
-      
-      if(data){
-        try{
-          data = new Function('return '+ data)();
-          that.config = $.extend({}, options, data);
-        } catch(e){
-          hint.error('Upload element property lay-data configuration item has a syntax error: ' + data)
-        }
-      }
-      
+      var othis = $(this);
+
+      extendAttrs.call(this);
       that.config.item = othis;
       that.elemFile[0].click();
     });
@@ -498,22 +534,22 @@ layui.define('layer' , function(exports){
         othis.removeAttr('lay-over');
       })
       .off('upload.drop').on('upload.drop', function(e, param){
-        var othis = $(this), files = param.originalEvent.dataTransfer.files || [];
+        var othis = $(this);
+        var files = param.originalEvent.dataTransfer.files || [];
         
         othis.removeAttr('lay-over');
+        extendAttrs.call(this);
         setChooseFile(files);
-        
-        if(options.auto){
-          that.upload(files);
-        } else {
-          setChooseText(files);
-        }
+
+        options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
       });
     }
     
     //文件选择
     that.elemFile.off('upload.change').on('upload.change', function(){
       var files = this.files || [];
+
+      extendAttrs.call(this);
       setChooseFile(files);
       options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
     });

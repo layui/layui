@@ -1,8 +1,6 @@
 /**
- 
- @Name：dropdown 下拉菜单组件
- @License：MIT
-
+ * dropdown 
+ * 下拉菜单组件
  */
 
 layui.define(['jquery', 'laytpl', 'lay'], function(exports){
@@ -12,7 +10,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
   ,laytpl = layui.laytpl
   ,hint = layui.hint()
   ,device = layui.device()
-  ,clickOrMousedown = (device.mobile ? 'click' : 'mousedown')
+  ,clickOrMousedown = (device.mobile ? 'touchstart' : 'mousedown')
   
   //模块名
   ,MOD_NAME = 'dropdown'
@@ -38,9 +36,9 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
 
   //操作当前实例
   ,thisModule = function(){
-    var that = this
-    ,options = that.config
-    ,id = options.id;
+    var that = this;
+    var options = that.config;
+    var id = options.id;
 
     thisModule.that[id] = that; //记录当前实例对象
 
@@ -50,12 +48,18 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       ,reload: function(options){
         that.reload.call(that, options);
       }
+      ,reloadData: function(options){
+        dropdown.reloadData(id, options);
+      }
+      ,close: function () {
+        that.remove()
+      }
     }
   }
 
   //字符常量
   ,STR_ELEM = 'layui-dropdown', STR_HIDE = 'layui-hide', STR_DISABLED = 'layui-disabled', STR_NONE = 'layui-none'
-  ,STR_ITEM_UP = 'layui-menu-item-up', STR_ITEM_DOWN = 'layui-menu-item-down', STR_MENU_TITLE = 'layui-menu-body-title', STR_ITEM_GROUP = 'layui-menu-item-group', STR_ITEM_PARENT = 'layui-menu-item-parent', STR_ITEM_DIV = 'layui-menu-item-divider', STR_ITEM_CHECKED = 'layui-menu-item-checked', STR_ITEM_CHECKED2 = 'layui-menu-item-checked2', STR_MENU_PANEL = 'layui-menu-body-panel', STR_MENU_PANEL_L = 'layui-menu-body-panel-left'
+  ,STR_ITEM_UP = 'layui-menu-item-up', STR_ITEM_DOWN = 'layui-menu-item-down', STR_MENU_TITLE = 'layui-menu-body-title', STR_ITEM_GROUP = 'layui-menu-item-group', STR_ITEM_PARENT = 'layui-menu-item-parent', STR_ITEM_DIV = 'layui-menu-item-divider', STR_ITEM_CHECKED = 'layui-menu-item-checked', STR_ITEM_CHECKED2 = 'layui-menu-item-checked2', STR_MENU_PANEL = 'layui-menu-body-panel', STR_MENU_PANEL_L = 'layui-menu-body-panel-left', STR_ELEM_SHADE = 'layui-dropdown-shade'
   
   ,STR_GROUP_TITLE = '.'+ STR_ITEM_GROUP + '>.'+ STR_MENU_TITLE
 
@@ -78,22 +82,23 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     ,isSpreadItem: true //是否初始展开子菜单
     ,data: [] //菜单数据结构
     ,delay: 300 //延迟关闭的毫秒数，若 trigger 为 hover 时才生效
+    ,shade: 0 // 遮罩
   };
   
   //重载实例
-  Class.prototype.reload = function(options){
+  Class.prototype.reload = function(options, type){
     var that = this;
     that.config = $.extend({}, that.config, options);
-    that.init(true);
+    that.init(true, type);
   };
 
-  //初始化准备
-  Class.prototype.init = function(rerender){
-    var that = this
-    ,options = that.config
-    ,elem = options.elem = $(options.elem);
+  // 初始化准备
+  Class.prototype.init = function(rerender, type){
+    var that = this;
+    var options = that.config;
     
-    //若 elem 非唯一
+    // 若 elem 非唯一
+    var elem = $(options.elem);
     if(elem.length > 1){
       layui.each(elem, function(){
         dropdown.render($.extend({}, options, {
@@ -103,51 +108,64 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       return that;
     }
 
-    //若重复执行 render，则视为 reload 处理
-    if(!rerender && elem[0] && elem.data(MOD_INDEX)){;
+    // 合并 lay-options 属性上的配置信息
+    $.extend(options, lay.options(elem[0]));
+
+    // 若重复执行 render，则视为 reload 处理
+    if(!rerender && elem[0] && elem.data(MOD_INDEX)){
       var newThat = thisModule.getThis(elem.data(MOD_INDEX));
       if(!newThat) return;
 
-      return newThat.reload(options);
-    };
+      return newThat.reload(options, type);
+    }
+
+    options.elem = $(options.elem);
     
-    //初始化 id 参数
-    options.id = ('id' in options) ? options.id : that.index;
-    
-    if(options.show) that.render(rerender); //初始即显示
-    that.events(); //事件
+    // 初始化 id 属性 - 优先取 options > 元素 id > 自增索引
+    options.id = 'id' in options ? options.id : (
+      elem.attr('id') || that.index
+    );
+
+    if(options.show || (type === 'reloadData' && that.elemView && $('body').find(that.elemView.get(0)).length)) that.render(rerender, type); //初始即显示或者面板弹出之后执行了刷新数据
+    that.events(); // 事件
   };
   
-  //渲染
-  Class.prototype.render = function(rerender){
-    var that = this
-    ,options = that.config
-    ,elemBody = $('body')
+  // 渲染
+  Class.prototype.render = function(rerender, type){
+    var that = this;
+    var options = that.config;
+    var elemBody = $('body');
     
-    //默认菜单内容
-    ,getDefaultView = function(){
+    // 默认菜单内容
+    var getDefaultView = function(){
       var elemUl = $('<ul class="layui-menu layui-dropdown-menu"></ul>');
       if(options.data.length > 0 ){
         eachItemView(elemUl, options.data)
       } else {
-        elemUl.html('<li class="layui-menu-item-none">no menu</li>');
+        elemUl.html('<li class="layui-menu-item-none">No data</li>');
       }
       return elemUl;
-    }
+    };
     
-    //遍历菜单项
-    ,eachItemView = function(views, data){
-      //var views = [];
+    // 遍历菜单项
+    var eachItemView = function(views, data){
+      // var views = [];
       layui.each(data, function(index, item){
-        //是否存在子级
-        var isChild = item.child && item.child.length > 0
-        ,isSpreadItem = ('isSpreadItem' in item) ? item.isSpreadItem : options.isSpreadItem
-        ,title = item.templet 
-          ? laytpl(item.templet).render(item) 
-        : (options.templet ? laytpl(options.templet).render(item) : item.title)
+        // 是否存在子级
+        var isChild = item.child && item.child.length > 0;
+        var isSpreadItem = ('isSpreadItem' in item) ? item.isSpreadItem : options.isSpreadItem
+        var title = function(title){
+          var templet = item.templet || options.templet;
+          if(templet){
+            title = typeof templet === 'function' 
+              ? templet(item)
+            : laytpl(templet).render(item);
+          }
+          return title;
+        }(item.title);
         
-        //初始类型
-        ,type = function(){
+        // 初始类型
+        var type = function(){
           if(isChild){
             item.type = item.type || 'parent';
           }
@@ -177,7 +195,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
           if(isChild || type){
             return ' class="'+ className[type] +'"';
           }
-          return '';
+          return item.disabled ? ' class="'+ STR_DISABLED +'"' : '';
         }() +'>'
         
           //标题区
@@ -225,7 +243,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     }
     
     //主模板
-    ,TPL_MAIN = ['<div class="layui-dropdown layui-border-box layui-panel layui-anim layui-anim-downbit">'
+    ,TPL_MAIN = ['<div class="layui-dropdown layui-border-box layui-panel layui-anim layui-anim-downbit" lay-id="' + options.id + '">'
     ,'</div>'].join('');
     
     //如果是右键事件，则每次触发事件时，将允许重新渲染
@@ -235,22 +253,39 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     if(!rerender && options.elem.data(MOD_INDEX +'_opened')) return;
 
     //记录模板对象
-    that.elemView = $(TPL_MAIN);
-    that.elemView.append(options.content || getDefaultView());
-    
-    //初始化某些属性
-    if(options.className) that.elemView.addClass(options.className);
-    if(options.style) that.elemView.attr('style', options.style);
-    
-    
-    //记录当前执行的实例索引
-    dropdown.thisId = options.id;
-    
-    //插入视图
-    that.remove(); //移除非当前绑定元素的面板
-    elemBody.append(that.elemView);
-    options.elem.data(MOD_INDEX +'_opened', true);
-    
+    that.elemView = $('.' + STR_ELEM + '[lay-id="' + options.id + '"]');
+    if (type === 'reloadData' && that.elemView.length) {
+      that.elemView.html(options.content || getDefaultView());
+    } else {
+      that.elemView = $(TPL_MAIN);
+      that.elemView.append(options.content || getDefaultView());
+
+      //初始化某些属性
+      if(options.className) that.elemView.addClass(options.className);
+      if(options.style) that.elemView.attr('style', options.style);
+
+      //记录当前执行的实例索引
+      dropdown.thisId = options.id;
+
+      //插入视图
+      that.remove(); //移除非当前绑定元素的面板
+      elemBody.append(that.elemView);
+      options.elem.data(MOD_INDEX +'_opened', true);
+
+      //遮罩
+      var shade = options.shade ? ('<div class="'+ STR_ELEM_SHADE +'" style="'+ ('z-index:'+ (that.elemView.css('z-index')-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
+      that.elemView.before(shade);
+
+      //如果是鼠标移入事件，则鼠标移出时自动关闭
+      if(options.trigger === 'mouseenter'){
+        that.elemView.on('mouseenter', function(){
+          clearTimeout(thisModule.timer);
+        }).on('mouseleave', function(){
+          that.delayRemove();
+        });
+      }
+    }
+
     //坐标定位
     that.position();
     thisModule.prevElem = that.elemView; //记录当前打开的元素，以便在下次关闭
@@ -263,13 +298,21 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
 
     //触发菜单列表事件
     that.elemView.find('.layui-menu li').on('click', function(e){
-      var othis = $(this)
-      ,data = othis.data('item') || {}
-      ,isChild = data.child && data.child.length > 0;
+      var othis = $(this);
+      var data = othis.data('item') || {};
+      var isChild = data.child && data.child.length > 0;
+      var isClickAllScope = options.clickScope === 'all'; // 是否所有父子菜单均触发点击事件
+
+      if(data.disabled) return; // 菜单项禁用状态
       
-      if(!isChild && data.type !== '-'){
-        that.remove();
-        typeof options.click === 'function' && options.click(data, othis);
+      // 普通菜单项点击后的回调及关闭面板
+      if((!isChild || isClickAllScope) && data.type !== '-'){
+        var ret = typeof options.click === 'function' 
+          ? options.click(data, othis) 
+        : null;
+        
+        ret === false || (isChild || that.remove());
+        layui.stope(e);
       }
     });
     
@@ -283,16 +326,12 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
         thisModule.spread(elemGroup);
       }
     });
-    
-    //如果是鼠标移入事件，则鼠标移出时自动关闭
-    if(options.trigger === 'mouseenter'){
-      that.elemView.on('mouseenter', function(){
-        clearTimeout(thisModule.timer);
-      }).on('mouseleave', function(){
-        that.delayRemove();
-      });
-    }
 
+    // 组件打开完毕的事件
+    typeof options.ready === 'function' && options.ready(
+      that.elemView, 
+      options.elem
+    );
   };
   
   //位置定位
@@ -321,6 +360,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       );
       elemPrev.remove();
     }
+    lay('.' + STR_ELEM_SHADE).remove();
   };
   
   //延迟删除视图
@@ -352,9 +392,6 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       that.e = e;
       that.render();
       e.preventDefault();
-      
-      //组件打开完毕的时间
-      typeof options.ready === 'function' && options.ready(that.elemView, options.elem, that.e.target);
     };
 
     //触发元素事件
@@ -432,7 +469,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
         if(
           e.target === options.elem[0] || 
           options.elem.find(e.target)[0] ||
-          e.target === that.elemView[0] ||
+          (that.elemView && e.target === that.elemView[0]) ||
           (that.elemView && that.elemView.find(e.target)[0])
         ) return;
       }
@@ -459,6 +496,8 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
         parent.find('.'+ STR_ITEM_CHECKED2).removeClass(STR_ITEM_CHECKED2); //清除父级菜单选中样式
         othis.addClass(STR_ITEM_CHECKED); //添加选中样式
         othis.parents('.'+ STR_ITEM_PARENT).addClass(STR_ITEM_CHECKED2); //添加父级菜单选中样式
+
+        options.title = options.title || $.trim(othis.children('.'+ STR_MENU_TITLE).text());
         
         //触发事件
         layui.event.call(this, MOD_NAME, 'click('+ filter +')', options);
@@ -473,7 +512,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
 
       if(('isAllowSpread' in options) ? options.isAllowSpread : true){
         thisModule.spread(elemGroup);
-      };
+      }
     });
     
     //判断子级菜单是否超出屏幕
@@ -497,8 +536,8 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
       
       //是否超出底部屏幕
       if(rect.bottom > _WIN.height()){
-        elemPanel.eq(0).css('margin-top', -(rect.bottom - _WIN.height()));
-      };
+        elemPanel.eq(0).css('margin-top', -(rect.bottom - _WIN.height() + 5));
+      }
     }).on('mouseleave', ELEM_LI_PAR, function(e){
       var othis = $(this)
       ,elemPanel = othis.children('.'+ STR_MENU_PANEL);
@@ -508,17 +547,46 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
     });
     
   }();
+
+  // 关闭面板
+  dropdown.close = function(id){
+    var that = thisModule.getThis(id);
+    if(!that) return this;
+    
+    that.remove();
+    return thisModule.call(that);
+  };
   
-  //重载实例
-  dropdown.reload = function(id, options){
+  // 重载实例
+  dropdown.reload = function(id, options, type){
     var that = thisModule.getThis(id);
     if(!that) return this;
 
-    that.reload(options);
+    that.reload(options, type);
     return thisModule.call(that);
   };
 
-  //核心入口
+  // 仅重载数据
+  dropdown.reloadData = function(){
+    var args = $.extend([], arguments);
+    args[2] = 'reloadData';
+
+    // 重载时，与数据相关的参数
+    var dataParams = new RegExp('^('+ [
+      'data', 'templet', 'content'
+    ].join('|') + ')$');
+
+    // 过滤与数据无关的参数
+    layui.each(args[1], function (key, value) {
+      if(!dataParams.test(key)){
+        delete args[1][key];
+      }
+    });
+
+    return dropdown.reload.apply(null, args);
+  };
+
+  // 核心入口
   dropdown.render = function(options){
     var inst = new Class(options);
     return thisModule.call(inst);

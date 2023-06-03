@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>树形表格 - layui</title>
+  <link rel="stylesheet" href="../src/css/layui.css">
+  <style>
+    body {padding: 32px;}
+  </style>
+</head>
+<body>
+
+<table class="layui-hide" id="test"></table>
+
+<script src="../src/layui.js"></script>
+<script>
+layui.use(['treeTable'], function(){
+  var treeTable = layui.treeTable;
+
+  // 渲染
+  treeTable.render({
+    elem: '#test',
+    url: './json/treeTable/demo-1.json',
+    maxHeight: 'full-32',
+    cols: [[
+      {type: 'numbers', fixed: 'left'},
+      {field: 'id', title: 'ID', width: 145, sort: true, fixed: 'left', totalRow: '合计：'},
+      {field: 'name', title: '用户名', width: 180, fixed: 'left'},
+      {field: 'experience', title: '积分', width: 90, sort: true},
+      {field: 'sex', title: '性别', width: 80, sort: true},
+      {field: 'score', title: '评分', width: 80, sort: true},
+      {field: 'city', title: '城市', width: 150},
+      {field: 'description', title: '描述', minWidth: 200},
+      {field: 'createTime', title: '创建时间', width: 170},
+    ]],
+    page: true
+  });
+});
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Mock.js/1.0.0/mock-min.js"></script>
+<script>
+// 生成模拟数据
+const createData = () => {
+  // 生成随机 ID 函数
+  const createId = (() => {
+    let nextId = 1
+    return () => nextId++
+  })()
+  // 生成节点函数
+  const createNode = (parentId = null, level = 0) => {
+    const id = createId()
+    const children = level < 3 ? Mock.mock({
+      'array|0-5': [
+        createNode.bind(null, id, level + 1)
+      ]
+    }).array : []
+    return {
+      id,
+      name: `User-${id}`,
+      type: Mock.mock('@d6'),
+      status: Mock.Random.d4(),
+      score: Mock.Random.d100(),
+      experience: Mock.Random.integer(1000, 99999),
+      sex: Mock.Random.cword('男女', 1),
+      city: Mock.Random.city(),
+      description: '-',
+      createTime: Mock.mock('@datetime'),
+      parentId,
+      children,
+      isParent: !!children.length
+    }
+  }
+  // 生成树
+  const rootNodes = Mock.mock({
+    'array|10-20': [
+      createNode
+    ]
+  }).array
+  const getTreeData = function (nodes) {
+    let result = []
+    nodes.forEach(node => {
+      result.push({...node, parentId: null, children: getTreeData(node.children)});
+    })
+    return result
+  };
+  return getTreeData(rootNodes);
+};
+</script>
+</body>
+</html>
