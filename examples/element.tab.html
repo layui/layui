@@ -32,7 +32,7 @@ body{padding:20px;}
 </div>
 
 <button class="layui-btn" onclick="layui.element.tabChange('tabDemo', 3)">手工切换到“标题3”</button>
-<button class="layui-btn" onclick="layui.element.tabAdd('tabDemo', {title:'新标题', content:'新内容', id: +new Date})">添加Tab</button>
+<button class="layui-btn" onclick="layui.element.tabAdd('tabDemo', {title:'新标题', content:'新内容', id: +new Date, change: true})">添加Tab</button>
 <button class="layui-btn" onclick="layui.element.tabDelete('tabDemo', 4)">删除“标题4”</button>
 
 <div class="layui-tab layui-tab-brief">
@@ -78,16 +78,18 @@ body{padding:20px;}
   </div>
 </div>
 
-<ul class="layui-tab-title">
-  <li class="layui-this"><a href="#1">标题题题题题题1</a></li>
-  <li><a href="#2">标题题题2</a></li>
-  <li><a href="#3">标题3</a></li>
-  <li><a href="#4">标题题题题题题题4</a></li>
-  <li><a href="#5">标题5</a></li>
-  <li><a href="#6">标题6</a></li>
-  <li><a href="#7">标题7</a></li>
-  <li><a href="#8">标题题题题题题题8</a></li>
-</ul>
+<div class="layui-tab">
+  <ul class="layui-tab-title">
+    <li class="layui-this"><a href="#1">标题题题题题题1</a></li>
+    <li><a href="#2">标题题题2</a></li>
+    <li><a href="#3">标题3</a></li>
+    <li><a href="#4">标题题题题题题题4</a></li>
+    <li><a href="#5">标题5</a></li>
+    <li><a href="#6">标题6</a></li>
+    <li><a href="#7">标题7</a></li>
+    <li><a href="#8">标题题题题题题题8</a></li>
+  </ul>
+</div>
 
 <div class="layui-tab" lay-filter="test" lay-allowClose="true">
   <ul class="layui-tab-title">
