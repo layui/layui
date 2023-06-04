@@ -152,7 +152,7 @@ layui.define('jquery', function(exports){
     // Tab 删除
     ,tabDelete: function(e, othis){
       var li = othis || $(this).parent();
-      var index = li.index();
+      var index = li.index('li[lay-id]');
       var tabElem = li.closest('.layui-tab');
       var item = tabElem.children('.layui-tab-content').children('.layui-tab-item');
       var filter = tabElem.attr('lay-filter');
