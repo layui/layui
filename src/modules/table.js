@@ -2817,6 +2817,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         }
       })
     } else {
+      cols = layui.isArray(cols) ? cols : [cols];
       layui.each(cols, function (i1, item1) {
         that.eachCols(function (i2, item2) {
           if (item1.field === item2.field) {
