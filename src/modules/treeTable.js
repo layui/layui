@@ -1021,7 +1021,7 @@ layui.define(['table'], function (exports) {
     } else {
       debounceFn('renderTreeTable-' + tableId, function () {
         options.hasNumberCol && formatNumber(that);
-        form.render(null, tableFilterId);
+        form.render(options.elem.next());
       }, 0)();
     }
   }
