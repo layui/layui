@@ -1454,7 +1454,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }, opts);
 
     // 标注当前行选中样式
-    if(opts.type !== 'checkbox' && opts.index !== 'all'){
+    if(opts.index !== 'all'){
       tr.addClass(ELEM_CLICK).siblings('tr').removeClass(ELEM_CLICK);
     }
 
