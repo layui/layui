@@ -1303,6 +1303,11 @@ layui.define(['table'], function (exports) {
       // 将新节点添加到页面
       tableData = that.initData();
 
+      if (tableViewElem.find('.layui-none').length) {
+        table.renderData(id);
+        return newNodes;
+      }
+
       var newNodesHtml = table.getTrHtml(id, newNodes);
       var newNodesHtmlObj = {
         trs: $(newNodesHtml.trs.join('')),
