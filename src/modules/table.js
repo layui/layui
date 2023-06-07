@@ -1186,7 +1186,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   // 返回行节点代码
   table.getTrHtml = function (id, data) {
     var that = getThisTable(id);
-    return that.getTrHtml(data);
+    return that.getTrHtml(data, null, that.page);
   }
 
   // 数据渲染
