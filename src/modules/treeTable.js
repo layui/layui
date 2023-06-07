@@ -26,7 +26,8 @@ layui.define(['table'], function (exports) {
     },
     resize: table.resize,
     getOptions: table.getOptions,
-    hideCol: table.hideCol
+    hideCol: table.hideCol,
+    renderData: table.renderData
   };
 
   // 操作当前实例

@@ -938,7 +938,29 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     );
     that.startTime = new Date().getTime(); // 渲染开始时间
 
-    if(options.url){ // Ajax请求
+    if (opts.renderData) { // 将 cache 信息重新渲染
+      var res = {};
+      res[response.dataName] = table.cache[that.key];
+      res[response.countName] = options.url ? (layui.type(options.page) === 'object' ? options.page.count : res[response.dataName].length) : options.data.length;
+
+      //记录合计行数据
+      if(typeof options.totalRow === 'object'){
+        res[response.totalRowName] = $.extend({}, that.totalRow);
+      }
+
+      that.renderData({
+        res: res,
+        curr: curr,
+        count: res[response.countName],
+        type: opts.type,
+      }), sort();
+
+      that.setColsWidth();
+
+      typeof options.done === 'function' && options.done(
+        res, curr, res[response.countName]
+      );
+    } else if(options.url){ // Ajax请求
       var params = {};
       // 当 page 开启，默认自动传递 page、limit 参数
       if(options.page){
@@ -974,6 +996,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
               ('返回的数据不符合规范，正确的成功状态码应为："'+ response.statusName +'": '+ response.statusCode)
             );
           } else {
+            that.totalRow = res[response.totalRowName];
             that.renderData({
               res: res,
               curr: curr,
@@ -1008,6 +1031,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       if(typeof options.totalRow === 'object'){
         res[response.totalRowName] = $.extend({}, options.totalRow);
       }
+      that.totalRow = res[response.totalRowName];
 
       that.renderData({
         res: res,
@@ -1196,7 +1220,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     var res = opts.res;
     var curr = opts.curr;
-    var count = opts.count;
+    var count = that.count = opts.count;
     var sort = opts.sort;
 
     var data = res[options.response.dataName] || []; //列表数据
@@ -1317,6 +1341,19 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       laypage.render(options.page);
     }
   };
+
+  // 重新渲染数据
+  table.renderData = function (id) {
+    var that = getThisTable(id);
+    if (!that) {
+      return;
+    }
+
+    that.pullData(that.page, {
+      renderData: true,
+      type: 'reloadData'
+    });
+  }
 
   // 数据合计行
   Class.prototype.renderTotal = function(data, totalRowData){
