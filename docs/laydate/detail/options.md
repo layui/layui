@@ -53,6 +53,16 @@
 </td>
     </tr>
     <tr>
+      <td>id</td>
+<td>
+  
+设定实例唯一索引，以便用于其他方法对例进行相关操作。若该属性未设置，则默认从 `elem` 属性绑定的元素中的 `id` 属性值中获取。
+
+</td>
+<td>string</td>
+<td>-</td>
+    </tr>
+    <tr>
 <td>
 
 [range](#options.range)
