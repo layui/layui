@@ -24,13 +24,14 @@ body:
   - type: textarea
     attributes:
       label: 业务代码
-      placeholder: 提供与该问题对应的业务代码片段，以便我们更好地排查问题。
+      placeholder: 请提供与该问题对应的业务代码片段，以便我们更好地排查问题。
+      render: html
     validations:
       required: true
   - type: textarea
     attributes:
-      label: 其他补充
-      placeholder: 如截图等补充信息。
+      label: 截图补充
+      placeholder: 若上述无法准确地表述问题，可提供必要的截图（支持粘贴上传）
   - type: checkboxes
     attributes:
       label: 友好承诺
