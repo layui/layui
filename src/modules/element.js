@@ -52,7 +52,8 @@ layui.define('jquery', function(exports){
     // call.hideTabMore(true);
     // 是否添加即切换
     options.change && this.tabChange(filter, options.id);
-    call.tabAuto(options.change);
+    titElem.data('LAY_TAB_CHANGE', options.change);
+    call.tabAuto(options.change ? 'change' : null);
     return this;
   };
   
@@ -217,10 +218,14 @@ layui.define('jquery', function(exports){
         // 响应式
         if(
           title.prop('scrollWidth') > title.outerWidth() + 1 || 
-          title.height() > title.find('li').eq(0).height()
+          title.height() > function(height){
+            return height + height/2;
+          }(title.find('li').eq(0).height())
         ){
           // 若执行是来自于切换，则自动展开
-          spread && title.addClass(MORE);
+          (
+            spread === 'change' && title.data('LAY_TAB_CHANGE')
+          ) && title.addClass(MORE);
           
           if(title.find('.'+BAR)[0]) return;
           title.append(span);
