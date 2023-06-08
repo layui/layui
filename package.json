@@ -1,6 +1,6 @@
 {
   "name": "layui",
-  "version": "2.8.5",
+  "version": "2.8.6",
   "description": "Classic modular Front-End UI library",
   "main": "dist/layui.js",
   "license": "MIT",
