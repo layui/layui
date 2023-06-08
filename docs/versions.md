@@ -11,6 +11,33 @@ toc: true
 
 > 导读：📑 [Layui 2.8 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
+<h2 id="2.8.5" class="ws-anchor">
+  2.8.5 
+  <span class="layui-badge-rim">2023-06-08</span>
+</h2>
+
+- #### table
+  - 新增 `table.renderData(id)` 方法，用于重新渲染数据，可搭配 `table.cache` 使用 # 1273
+  - 修复 `table.hideCol(id, cols)` 第二个参数为普通对象时的异常问题 # 1270/I7AAUN
+  - 修复 多级表头在某些缩放比例的情况下出现表头跟表体错位问题 # 1273/I7A33T
+  - 修复 `table.getTrHtml()` 方法 `tr` 节点代码中的 `numbers` 列信息错误问题
+  - 优化 `table setRowChecked()` 方法中标注当前选中行样式的判断逻辑 # 1273
+- #### treeTable
+  - 修复 `treeTable.expandAll()` 展开全部之后节点的折叠状态没有记忆的问题 # 1273
+  - 修复 无主键的树表 reloadData 之后节点被展开的问题 # 1273
+  - 修复 部分情况下父节点展开之后子节点中的单选复选列和其他表单元素没有渲染的问题 1273/I7AWNV
+  - 修复 初始化无数据时出现的数据报错的问题 # 1273
+- #### tab
+  - 修复 删除选项卡时，若标题栏存在其他元素，下标获取异常的问题 # 1271/I7AO7F
+  - 优化 `element.tabAdd()` 方法，第二个参数中新增 `change` 属性支持，以支持添加即自动切换功能
+  - 优化 折叠功能，切换选项时不自动折叠选项卡，且添加选项时若处于折叠状态则自动展开 # I79HUD
+- #### util
+  - 修复 fixbar 中添加了无效样式问题 # I79JTH
+
+### 下载： [layui-v2.8.5.zip](https://gitee.com/layui/layui/attach_files/1432345/download)
+
+---
+
 <h2 id="2.8.4" class="ws-anchor">
   2.8.4 
   <span class="layui-badge-rim">2023-05-30</span>
