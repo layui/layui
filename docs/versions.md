@@ -11,8 +11,8 @@ toc: true
 
 > 导读：📑 [Layui 2.8 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
-<h2 id="2.8.5" class="ws-anchor">
-  2.8.5 
+<h2 id="2.8.6" class="ws-anchor">
+  2.8.6 
   <span class="layui-badge-rim">2023-06-08</span>
 </h2>
 
@@ -34,7 +34,11 @@ toc: true
 - #### util
   - 修复 fixbar 中添加了无效样式问题 # I79JTH
 
-### 下载： [layui-v2.8.5.zip](https://gitee.com/layui/layui/attach_files/1432345/download)
+### 下载： [layui-v2.8.6.zip](https://gitee.com/layui/layui/attach_files/1432770/download)
+
+---
+
+因 `2.8.5` 版本中存在一个 tab 删除时下标的异常问题，因此 `2.8.5` 已被跳过。
 
 ---
 
