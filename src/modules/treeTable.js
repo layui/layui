@@ -1022,7 +1022,7 @@ layui.define(['table'], function (exports) {
     } else {
       debounceFn('renderTreeTable-' + tableId, function () {
         options.hasNumberCol && formatNumber(that);
-        form.render(options.elem.next());
+        form.render($('.layui-table-tree[lay-id="' + tableId + '"]'));
       }, 0)();
     }
   }
