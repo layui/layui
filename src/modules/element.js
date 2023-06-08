@@ -155,7 +155,7 @@ layui.define('jquery', function(exports){
     // Tab 删除
     ,tabDelete: function(e, othis){
       var li = othis || $(this).parent();
-      var index = li.index('li');
+      var index = li.parent().children('li').index(li);
       var tabElem = li.closest('.layui-tab');
       var item = tabElem.children('.layui-tab-content').children('.layui-tab-item');
       var filter = tabElem.attr('lay-filter');
@@ -217,10 +217,11 @@ layui.define('jquery', function(exports){
         
         // 响应式
         if(
-          title.prop('scrollWidth') > title.outerWidth() + 1 || 
-          title.height() > function(height){
-            return height + height/2;
-          }(title.find('li').eq(0).height())
+          title.prop('scrollWidth') > title.outerWidth() + 1 || (
+            title.find('li').length && title.height() > function(height){
+              return height + height/2;
+            }(title.find('li').eq(0).height())
+          )
         ){
           // 若执行是来自于切换，则自动展开
           (
