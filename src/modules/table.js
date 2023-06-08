@@ -929,6 +929,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         });
       }
     };
+    var done = function(res){
+      that.setColsWidth();
+      typeof options.done === 'function' && options.done(
+        res, curr, res[response.countName]
+      );
+    };
 
     opts = opts || {};
 
@@ -943,7 +949,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       res[response.dataName] = table.cache[that.key];
       res[response.countName] = options.url ? (layui.type(options.page) === 'object' ? options.page.count : res[response.dataName].length) : options.data.length;
 
-      //记录合计行数据
+      // 记录合计行数据
       if(typeof options.totalRow === 'object'){
         res[response.totalRowName] = $.extend({}, that.totalRow);
       }
@@ -953,13 +959,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         curr: curr,
         count: res[response.countName],
         type: opts.type,
-      }), sort();
-
-      that.setColsWidth();
-
-      typeof options.done === 'function' && options.done(
-        res, curr, res[response.countName]
-      );
+      }), sort(), done(res);
     } else if(options.url){ // Ajax请求
       var params = {};
       // 当 page 开启，默认自动传递 page、limit 参数
@@ -977,14 +977,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.loading();
 
       $.ajax({
-        type: options.method || 'get'
-        ,url: options.url
-        ,contentType: options.contentType
-        ,data: data
-        ,dataType: options.dataType || 'json'
-        ,jsonpCallback: options.jsonpCallback
-        ,headers: options.headers || {}
-        ,success: function(res){
+        type: options.method || 'get',
+        url: options.url,
+        contentType: options.contentType,
+        data: data,
+        dataType: options.dataType || 'json',
+        jsonpCallback: options.jsonpCallback,
+        headers: options.headers || {},
+        success: function(res){
           // 若有数据解析的回调，则获得其返回的数据
           if(typeof options.parseData === 'function'){
             res = options.parseData(res) || res;
@@ -1004,15 +1004,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
               type: opts.type
             }), sort();
 
-            //耗时（接口请求+视图渲染）
+            // 耗时（接口请求+视图渲染）
             options.time = (new Date().getTime() - that.startTime) + ' ms';
           }
-          that.setColsWidth();
-          typeof options.done === 'function' && options.done(
-            res, curr, res[response.countName]
-          );
-        }
-        ,error: function(e, msg){
+          done(res);
+        },
+        error: function(e, msg){
           that.errorView('请求异常，错误提示：'+ msg);
           typeof options.error === 'function' && options.error(e, msg);
         }
@@ -1027,7 +1024,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       : newData;
       res[response.countName] = options.data.length;
 
-      //记录合计行数据
+      // 记录合计行数据
       if(typeof options.totalRow === 'object'){
         res[response.totalRowName] = $.extend({}, options.totalRow);
       }
@@ -1040,11 +1037,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         type: opts.type
       }), sort();
 
-      that.setColsWidth();
-
-      typeof options.done === 'function' && options.done(
-        res, curr, res[response.countName]
-      );
+      done(res);
     }
   };
 
