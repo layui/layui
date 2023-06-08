@@ -26,7 +26,8 @@ layui.define(['table'], function (exports) {
     },
     resize: table.resize,
     getOptions: table.getOptions,
-    hideCol: table.hideCol
+    hideCol: table.hideCol,
+    renderData: table.renderData
   };
 
   // 操作当前实例
@@ -146,7 +147,7 @@ layui.define(['table'], function (exports) {
           }
           // 处理节点状态
           updateStatus(retData[dataName], function (item) {
-            item[LAY_EXPAND] = that.status.expand[item[idKey]]
+            item[LAY_EXPAND] = LAY_EXPAND in item ? item[LAY_EXPAND] : (item[idKey] !== undefined && that.status.expand[item[idKey]])
           }, childrenKey);
 
           if (parseDataThat.autoSort && parseDataThat.initSort && parseDataThat.initSort.type) {
@@ -561,8 +562,9 @@ layui.define(['table'], function (exports) {
     treeOptions.view.showIcon && trsElem
       .find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom,.layui-table-tree-iconLeaf)')
       .html(trExpand ? treeOptions.view.iconOpen : treeOptions.view.iconClose);
-
-    treeTableThat.status.expand[trData[customName.id]] = trData[LAY_EXPAND] = trExpand;
+    trData[LAY_EXPAND] = trExpand;
+    var trDataId = trData[customName.id];
+    trDataId !== undefined && (treeTableThat.status.expand[trDataId] = trExpand);
     if (retValue === null) {
       return retValue;
     }
@@ -816,15 +818,18 @@ layui.define(['table'], function (exports) {
     var treeOptions = options.tree;
     var tableView = options.elem.next();
     var isParentKey = treeOptions.customName.isParent;
+    var idKey = treeOptions.customName.id;
+    var showFlexIconIfNotParent = treeOptions.view.showFlexIconIfNotParent;
 
     if (!expandFlag) {
       // 关闭所有
       // 将所有已经打开的节点的状态设置为关闭，
       that.updateStatus(null, function (d) {
-        if (d[isParentKey]) {
+        if (d[isParentKey] || showFlexIconIfNotParent) {
           d[LAY_EXPAND] = false;
+          d[idKey] !== undefined && (that.status.expand[d[idKey]] = false);
         }
-      }) // {LAY_EXPAND: false}); // 只处理当前页，如果需要处理全部表格，需要用treeTable.updateStatus
+      }) // 只处理当前页，如果需要处理全部表格，需要用treeTable.updateStatus
       // 隐藏所有非顶层的节点
       tableView.find('.layui-table-box tbody tr[data-level!="0"]').addClass(HIDE);
 
@@ -862,7 +867,7 @@ layui.define(['table'], function (exports) {
       // 先判断是否全部打开过了
       var isAllExpanded = true;
       layui.each(tableDataFlat, function (i1, item1) {
-        if (!item1[LAY_HAS_EXPANDED]) {
+        if (item1[isParentKey] && !item1[LAY_HAS_EXPANDED]) {
             isAllExpanded = false;
             return true;
           }
@@ -870,8 +875,9 @@ layui.define(['table'], function (exports) {
       // 如果全部节点已经都打开过，就可以简单处理跟隐藏所有节点反操作
       if (isAllExpanded) {
         that.updateStatus(null, function (d) {
-          if (d[isParentKey]) {
+          if (d[isParentKey] || showFlexIconIfNotParent) {
             d[LAY_EXPAND] = true;
+            d[idKey] !== undefined && (that.status.expand[d[idKey]] = true);
           }
         });
         // 显示所有子节点
@@ -884,9 +890,10 @@ layui.define(['table'], function (exports) {
       } else {
         // 如果有未打开过的父节点，将 tr 内容全部重新生成
         that.updateStatus(null, function (d) {
-          if (d[isParentKey]) {
+          if (d[isParentKey] || showFlexIconIfNotParent) {
             d[LAY_EXPAND] = true;
             d[LAY_HAS_EXPANDED] = true;
+            d[idKey] !== undefined && (that.status.expand[d[idKey]] = true);
           }
         });
         if (options.initSort && options.initSort.type && (!options.url || options.autoSort)) {
@@ -964,7 +971,7 @@ layui.define(['table'], function (exports) {
       trElem = tableViewElem.find('tr[lay-data-index="' + trIndex + '"]');
       var trData = treeTableThat.getNodeDataByIndex(trIndex);
 
-      if (trData[LAY_EXPAND]) {
+      if (trData[LAY_EXPAND] && trData[isParentKey]) {
         // 需要展开
         dataExpand = dataExpand || {};
         dataExpand[trIndex] = true;
@@ -1015,7 +1022,7 @@ layui.define(['table'], function (exports) {
     } else {
       debounceFn('renderTreeTable-' + tableId, function () {
         options.hasNumberCol && formatNumber(that);
-        form.render(null, tableFilterId);
+        form.render(options.elem.next());
       }, 0)();
     }
   }
@@ -1296,6 +1303,11 @@ layui.define(['table'], function (exports) {
       // 将新节点添加到页面
       tableData = that.initData();
 
+      if (tableViewElem.find('.layui-none').length) {
+        table.renderData(id);
+        return newNodes;
+      }
+
       var newNodesHtml = table.getTrHtml(id, newNodes);
       var newNodesHtmlObj = {
         trs: $(newNodesHtml.trs.join('')),
@@ -1360,7 +1372,7 @@ layui.define(['table'], function (exports) {
       }
       // 删除已经存在的同级节点以及他们的子节点，并且把中间节点的已展开过的状态设置为false
       that.updateStatus(childrenNodes, function (d) {
-        if (d[isParentKey]) {
+        if (d[isParentKey] || treeOptions.view.showFlexIconIfNotParent) {
           d[LAY_HAS_EXPANDED] = false;
         }
       });
@@ -1766,7 +1778,7 @@ layui.define(['table'], function (exports) {
    * @param {String} id 表格id
    * @param {String} dataIndex 父节点的dataIndex
    * */
-  treeTable.reAsync = function (id, dataIndex) {
+  treeTable.reloadAsyncNode = function (id, dataIndex) {
     var that = getThisTable(id);
     if (!that) {
       return;

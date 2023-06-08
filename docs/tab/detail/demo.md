@@ -37,7 +37,8 @@ layui.use(function(){
       element.tabAdd('test-handle', {
         title: '新选项'+ label,
         content: '内容-'+ label,
-        id: new Date().getTime() // 实际使用一般是规定好的id，这里以时间戳模拟下
+        id: new Date().getTime(), // 实际使用一般是规定好的id，这里以毫秒数模拟
+        change: true // 是否添加完毕后即自动切换
       })
     },
     tabDelete: function(othis){
