@@ -64,7 +64,7 @@ layui.define('jquery', function(exports){
         // 设置 bar 相关属性
         elemBar.addClass(item.icon).attr({
           'lay-type': item.type,
-          'style': item.style || ('background-color: '+ options.bgcolor || '')
+          'style': item.style || (options.bgcolor ? 'background-color: '+ options.bgcolor : '')
         }).html(item.content);
 
         // bar 点击事件

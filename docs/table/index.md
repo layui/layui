@@ -20,10 +20,12 @@ toc: true
 | API | 描述 |
 | --- | --- |
 | var table = layui.table | 获得 `table` 模块。 |
+| [table.set(options)](#set) | 设定全局默认属性项。 |
 | [table.render(options)](#render) | table 组件渲染，核心方法。 |
 | [table.init(filter, options)](#table.init) | 初始化渲染静态表格。 |
 | [table.reload(id, options, deep)](#table.reload) | 表格完整重载。  |
 | [table.reloadData(id, options, deep)](#table.reloadData) <sup>2.7+</sup> | 表格数据重载。 |
+| [table.renderData(id)](#table.renderData) <sup>2.8.5+</sup> | 重新渲染数据。 |
 | [table.checkStatus(id)](#table.checkStatus) | 获取选中行相关数据。  |
 | [table.setRowChecked(id, opts)](#table.setRowChecked) <sup>2.8+</sup> | 设置行选中状态。 |
 | [table.getData(id)](#table.getData) | 获取当前页所有行表格数据。 |
@@ -33,6 +35,25 @@ toc: true
 | [table.getOptions(id)](#table.getOptions) <sup>2.8+</sup> | 获取表格实例配置项。 |
 | [table.hideCol(id, cols)](#table.hideCol) <sup>2.8+</sup> | 设置表格列的显示隐藏属性。 |
 | [table.on(\'event(filter)\', callback)](#table.on) | table 相关事件。 |
+
+
+<h3 id="set" class="ws-anchor ws-bold">全局设置</h3>
+
+- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+
+该方法主要用于初始化设置属性默认值。实际应用时，必须先设置该方法，再执行渲染、重载等操作。
+
+```js
+layui.use(function(){
+  var table = layui.table;
+  // 全局设置
+  table.set({
+    headers: {token: '123'}
+  });
+  // 渲染
+  table.render(options);
+});
+```
 
 
 <h3 id="render" lay-toc="{level: 2}" class="ws-anchor ws-bold">渲染</h3>
@@ -265,6 +286,31 @@ table.reloadData('test', {
   height: 2000 // 高度  --- 属性设置无效，因不属于数据相关属性
 });
 ```
+
+<h3 id="table.renderData" lay-pid="api" class="ws-anchor ws-bold">重新渲染数据 <sup>2.8.5+</sup></h3>
+
+`table.renderData(id);`
+- 参数 `id` : table 渲染时的 `id` 属性值
+
+该方法用于重新渲染数据，一般在修改 `table.cache` 后使用。
+
+```js
+// 渲染
+table.render({
+  elem: '', // 绑定元素选择器
+  id: 'test', // 自定义 id 索引
+  // 其他属性 …
+});
+// 获取当前实例的数据缓存
+var data = table.cache['test'];
+// 获取某行数据，并从 data 中移除该行
+var item = data.splice(index, 1) // index 为当前行下标，一般可在事件中通过 obj.index 得到
+// 将某行数据移动到另外某行
+data.splice(newIndex, 0, item[0]);
+// 根据 table.cache 重新渲染数据
+table.renderData('test');
+```
+
 
 <h3 id="table.checkStatus" lay-pid="api" class="ws-anchor ws-bold">获取选中行</h3>
 
