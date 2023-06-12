@@ -2127,20 +2127,20 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       // 事件返回的公共成员
       var obj = {
-        tr: tr //行元素
-        ,config: options
-        ,data: table.clearCacheKey(data) //当前行数据
-        ,index: index
-        ,del: function(){ //删除行数据
+        tr: tr, // 行元素
+        config: options,
+        data: table.clearCacheKey(data), // 当前行数据
+        index: index,
+        del: function(){ // 删除行数据
           table.cache[that.key][index] = [];
           tr.remove();
           that.scrollPatch();
-        }
-        ,update: function(fields, related){ // 修改行数据
+        },
+        update: function(fields, related){ // 修改行数据
           fields = fields || {};
           layui.each(fields, function(key, value){
             var td = tr.children('td[data-field="'+ key +'"]');
-            var cell = td.children(ELEM_CELL); //获取当前修改的列
+            var cell = td.children(ELEM_CELL); // 获取当前修改的列
 
             // 更新缓存中的数据
             data[key] = obj.data[key] = value;
