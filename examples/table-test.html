@@ -489,9 +489,14 @@ layui.use(['table', 'dropdown'], function(){
   
   // 行单击事件
   table.on('row(test)', function(obj){
-    //console.log(obj);
-    //layer.closeAll('tips');
+    // console.log(obj);
+    // layer.closeAll('tips');
+    obj.setRowChecked({
+      // type: 'radio'
+    });
+    // layer.msg('row 事件')
   });
+
   // 行双击事件
   table.on('rowDouble(test)', function(obj){
     console.log(obj);
