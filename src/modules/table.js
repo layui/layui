@@ -919,6 +919,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   Class.prototype.pullData = function(curr, opts){
     var that = this;
     var options = that.config;
+    // 同步表头父列的相关值
+    options.HAS_SET_COLS_PATCH || that.setColsPatch();
+    options.HAS_SET_COLS_PATCH = true;
     var request = options.request;
     var response = options.response;
     var sort = function(){
@@ -1229,10 +1232,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 渲染视图
     var render = function(){ // 后续性能提升的重点
-      // 同步表头父列的相关值
-      options.HAS_SET_COLS_PATCH || that.setColsPatch();
-      options.HAS_SET_COLS_PATCH = true;
-
       if(!sort && that.sortKey){
         return that.sort({
           field: that.sortKey.field,
