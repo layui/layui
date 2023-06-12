@@ -2274,12 +2274,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.layBody.find('tr:eq('+ index +')').removeClass(ELEM_HOVER)
     }).on('click', 'tr', function(e){ // 单击行
       // 不支持行单击事件的元素
-      var UNROW = '.layui-form-checkbox,.layui-form-radio,[lay-unrow]';
-      var container = $(this).find(UNROW);
-      if(
-        $(e.target).is(UNROW) || 
-        container[0] && $.contains(container[0], e.target)
-      ){
+      var UNROW = '.layui-form-checkbox,.layui-form-switch,.layui-form-radio,[lay-unrow]';
+      if( $(e.target).is(UNROW) || $(e.target).closest(UNROW)[0]){
         return;
       };
       setRowEvent.call(this, 'row');
