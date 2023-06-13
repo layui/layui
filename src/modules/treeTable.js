@@ -54,11 +54,6 @@ layui.define(['table'], function (exports) {
     return that || null;
   }
 
-  // 获取当前实例配置项
-  var getThisTableConfig = function (id) {
-    return getThisTable(id).config;
-  }
-
   // 字符
   var MOD_NAME = 'treeTable';
   var HIDE = 'layui-hide';
@@ -1856,12 +1851,9 @@ layui.define(['table'], function (exports) {
   // 重载
   treeTable.reload = function (id, options, deep, type) {
     deep = deep !== false; // 默认采用深拷贝
-    var config = getThisTableConfig(id); // 获取当前实例配置项
-    if (!config) return;
-
     var that = getThisTable(id);
+    if (!that) return;
     that.reload(options, deep, type);
-
     return thisTreeTable.call(that);
   };
 
