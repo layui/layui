@@ -2444,6 +2444,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var othis = $(this);
       var td = othis.closest('td');
       var index = othis.parents('tr').eq(0).data('index');
+      // 标记当前活动行
+      that.setRowActive(index);
+
       // 执行事件
       layui.event.call(
         this,
@@ -2456,8 +2459,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           }
         })
       );
-      // 标记当前活动行
-      that.setRowActive(index);
     };
 
      // 行工具条单击事件
