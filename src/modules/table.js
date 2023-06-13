@@ -84,6 +84,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var options = this.config || {};
     var item3 = obj.item3; // 表头数据
     var content = obj.content; // 原始内容
+    if (item3.type === 'numbers') content = obj.tplData[table.config.numbersName];
 
     // 是否编码 HTML
     var escaped = 'escape' in item3 ? item3.escape : options.escape;
@@ -2741,7 +2742,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           });
         } else {
           table.eachCols(id, function(i3, item3){
-            if(item3.field && item3.type == 'normal'){
+            if(item3.ignoreExport === false || item3.field && item3.type == 'normal'){
               // 不导出隐藏列
               if(item3.hide || item3.ignoreExport){
                 if(i1 == 0) fieldsIsHide[item3.field] = true; // 记录隐藏列
