@@ -934,10 +934,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         });
       }
     };
-    var done = function(res){
+    var done = function(res, isRenderData){
       that.setColsWidth();
       typeof options.done === 'function' && options.done(
-        res, curr, res[response.countName]
+        res, curr, res[response.countName], isRenderData
       );
     };
 
@@ -964,7 +964,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         curr: curr,
         count: res[response.countName],
         type: opts.type,
-      }), sort(), done(res);
+      }), sort(), done(res, true);
     } else if(options.url){ // Ajax请求
       var params = {};
       // 当 page 开启，默认自动传递 page、limit 参数
