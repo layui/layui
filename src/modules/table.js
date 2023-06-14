@@ -2665,12 +2665,39 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     eachArrs();
   };
 
-  // 获取表格选中状态
-  table.checkStatus = function(id){
-    var nums = 0
-      ,invalidNum = 0
-      ,arr = []
-      ,data = table.cache[id] || [];
+        /**
+     * 动态批量删除行
+     * @param id tableID
+     * @param cache checkStatus 返回的cache数组
+     */
+    table.deleteItem = function (id,cache) {
+        var that = thisTable.that[id];
+        layui.each(cache, function (i, item) {
+            var index =  item[that.config.indexName];
+            var tr = that.layBody.find('tr[data-index="'+ index +'"]');
+            table.cache[that.key][index] = [];
+            tr.remove();
+        });
+        that.scrollPatch();
+        that.syncCheckAll();//重设CheckBox状态
+    }
+
+    /**
+     * 获取表格选中状态
+     * @param id 表格ID
+     * @param type layui=返回默认数据
+     * @param filed type != layui时候field and cache数据增加返回
+     * @return {any|jQuery}
+     */
+  table.checkStatus = function(id, type, filed){
+    var nums = 0;
+    var invalidNum = 0;
+    var arr = [];
+    var ids = [];
+    var cache = [];
+    var data = table.cache[id] || [];
+    var resultMember = {};
+    var resultType = type || 'layui';
 
     //计算全选个数
     layui.each(data, function(i, item){
@@ -2679,16 +2706,26 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         return;
       }
       if(item[table.config.checkName]){
-        nums++;
-        if(!item[table.config.disabledName]){
-          arr.push(table.clearCacheKey(item));
-        }
+          var clearItem = table.clearCacheKey(item);
+          arr.push(clearItem);
+          if (resultType !== 'layui'){
+            ids.push(clearItem[(filed || 'id')]);
+            cache.push(item);
+         }
       }
     });
-    return {
-      data: arr //选中的数据
-      ,isAll: data.length ? (nums === (data.length - invalidNum)) : false //是否全选
-    };
+    
+    if (resultType !== 'layui'){
+        resultMember = {
+            field : ids, //为批量操作ID集合
+            cache : cache // 为动态删除行数据集合
+        }
+    }
+    return $.extend({
+        data: arr //选中的数据
+        //不加arr.length， 全选状态删除行后syncCheckAll还是顶部checkbox true 状态
+        ,isAll: arr.length && data.length ? (nums === (data.length - invalidNum)) : false //是否全选
+    },resultMember);
   };
 
   // 设置行选中状态
