@@ -171,6 +171,11 @@ layui.define(['table'], function (exports) {
       options.done = function () {
         var args = arguments;
         var doneThat = this;
+        that.initSort = doneThat.initSort;
+        var isRenderData = args[3]; // 是否是 renderData
+        if (!isRenderData) {
+          delete that.isExpandAll;
+        }
 
         var tableView = this.elem.next();
         that.updateStatus(null, {
@@ -891,7 +896,9 @@ layui.define(['table'], function (exports) {
             d[idKey] !== undefined && (that.status.expand[d[idKey]] = true);
           }
         });
-        if (options.initSort && options.initSort.type && (!options.url || options.autoSort)) {
+        if (options.initSort && options.initSort.type &&
+          (!that.initSort || options.initSort.type !== that.initSort.type && options.initSort.field !== that.initSort.field) &&
+          (!options.url || options.autoSort)) {
           return treeTable.sort(id);
         }
         var trAll = table.getTrHtml(id, tableDataFlat);
