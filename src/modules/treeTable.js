@@ -161,9 +161,6 @@ layui.define(['table'], function (exports) {
       if (treeOptions.data.isSimpleData) {
         options.data = that.flatToTree(options.data);
       }
-      if (options.initSort && options.initSort.type) {
-        layui.sort(options.data, options.initSort.field, options.initSort.type === 'desc', true)
-      }
       that.initData(options.data);
     }
 
@@ -171,7 +168,6 @@ layui.define(['table'], function (exports) {
       options.done = function () {
         var args = arguments;
         var doneThat = this;
-        that.initSort = doneThat.initSort;
         var isRenderData = args[3]; // 是否是 renderData
         if (!isRenderData) {
           delete that.isExpandAll;
@@ -899,9 +895,7 @@ layui.define(['table'], function (exports) {
             d[idKey] !== undefined && (that.status.expand[d[idKey]] = true);
           }
         });
-        if (options.initSort && options.initSort.type &&
-          (!that.initSort || options.initSort.type !== that.initSort.type && options.initSort.field !== that.initSort.field) &&
-          (!options.url || options.autoSort)) {
+        if (options.initSort && options.initSort.type && (!options.url || options.autoSort)) {
           return treeTable.sort(id);
         }
         var trAll = table.getTrHtml(id, tableDataFlat);
@@ -1073,7 +1067,7 @@ layui.define(['table'], function (exports) {
     });
 
     // 根据需要处理options中的一些参数
-    updateOptions(that.config.id, options, type || true);
+    updateOptions(that.getOptions().id, options, type || true);
 
     // 对参数进行深度或浅扩展
     that.config = $.extend(deep, {}, that.config, options);
@@ -1137,26 +1131,9 @@ layui.define(['table'], function (exports) {
     if(!that) return;
 
     var options = that.getOptions();
-    var initSort = options.initSort;
-
-    if (!options.url) {
-      if (initSort.type) {
-        layui.sort(options.data, initSort.field, initSort.type === 'desc', true);
-      } else {
-        layui.sort(options.data, table.config.indexName, null, true);
-      }
-      that.initData(options.data);
-      treeTable.reloadData(id);
-    } else {
-      // url异步取数的表格一般需要自己添加监听之后进行reloadData并且把排序参数加入到where中
-      if (options.autoSort) {
-        var tableData = that.initData();
-        var res = {};
-        res[options.response.dataName] = tableData;
-        typeof options.done === 'function' && options.done(
-          res, that.page, that.count
-        );
-      }
+    if (!options.url || options.autoSort) {
+      that.initData();
+      treeTable.renderData(id);
     }
   }
 
