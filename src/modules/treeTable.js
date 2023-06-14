@@ -230,6 +230,7 @@ layui.define(['table'], function (exports) {
         id: "id", // 唯一标识的属性名称
         pid: "parentId", // 父节点唯一标识的属性名称
         icon: "icon", // 图标的属性名称
+        expandAllDefault: false, // 默认展开所有节点
       },
       view: {
         indent: 14, // 层级缩进量
@@ -738,6 +739,7 @@ layui.define(['table'], function (exports) {
         }
       }
     } else {
+      treeTableThat.isExpandAll = false;
       // 关闭
       if (sonSign && !isToggle) { // 非状态切换的情况下
         layui.each(childNodes, function (i1, item1) {
@@ -812,8 +814,9 @@ layui.define(['table'], function (exports) {
     }
 
     var that = getThisTable(id);
-    if(!that) return;
+    if (!that) return;
 
+    that.isExpandAll = expandFlag;
     var options = that.getOptions();
     var treeOptions = options.tree;
     var tableView = options.elem.next();
@@ -1013,6 +1016,10 @@ layui.define(['table'], function (exports) {
         expandNode({trElem}, null, null, null, true);
       });
     });
+
+    if (!level && treeOptions.view.expandAllDefault && that.isExpandAll === undefined) {
+      return treeTable.expandAll(tableId, true); // 默认展开全部
+    }
 
     // 当前层的数据看看是否需要展开
     if (sonSign !== false && dataExpand) {
