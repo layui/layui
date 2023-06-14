@@ -314,6 +314,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               reElem.addClass(CLASS + 'up');
             }
             
+            // 删除input已有文本并放入 placeholder，方便输入
+            input.attr('placeholder', input.val());      
+            input.val(''); // 清空输入框的值
+
             followScroll();
           }
           
