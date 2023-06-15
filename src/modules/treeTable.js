@@ -225,8 +225,7 @@ layui.define(['table'], function (exports) {
         name: "name", // 节点数据保存节点名称的属性名称
         id: "id", // 唯一标识的属性名称
         pid: "parentId", // 父节点唯一标识的属性名称
-        icon: "icon", // 图标的属性名称
-        expandAllDefault: false, // 默认展开所有节点
+        icon: "icon" // 图标的属性名称
       },
       view: {
         indent: 14, // 层级缩进量
@@ -239,6 +238,7 @@ layui.define(['table'], function (exports) {
         iconLeaf: '<i class="layui-icon layui-icon-leaf"></i>', // 叶子节点的图标
         showFlexIconIfNotParent: false, // 当节点不是父节点的时候是否显示折叠图标
         dblClickExpand: true, // 双击节点时，是否自动展开父节点的标识
+        expandAllDefault: false // 默认展开所有节点
       },
       data: {
         isSimpleData: false, // 是否简单数据模式
@@ -251,11 +251,11 @@ layui.define(['table'], function (exports) {
         contentType: null, // 提交参数的数据类型，设置可缺省同上
         headers: null, // 设置可缺省同上
         where: null, // 设置可缺省同上
-        autoParam: [], // 自动参数
+        autoParam: [] // 自动参数
       },
       callback: {
         beforeExpand: null, // 展开前的回调 return false 可以阻止展开的动作
-        onExpand: null, // 展开之后的回调
+        onExpand: null // 展开之后的回调
       }
     },
   };
