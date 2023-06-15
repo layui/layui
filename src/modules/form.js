@@ -315,9 +315,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             }
             
             // 删除input已有文本并放入 placeholder，方便输入
-            input.attr('placeholder', input.val());      
-            input.val(''); // 清空输入框的值
-
+            if (input.val()) {
+              // 有值时才删除并替换placeholder
+              input.attr('placeholder', input.val());
+              input.val(''); // 清空输入框的值
+            }
             followScroll();
           }
           
