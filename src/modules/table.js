@@ -84,6 +84,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var options = this.config || {};
     var item3 = obj.item3; // 表头数据
     var content = obj.content; // 原始内容
+    if (item3.type === 'numbers') content = obj.tplData[table.config.numbersName];
 
     // 是否编码 HTML
     var escaped = 'escape' in item3 ? item3.escape : options.escape;
@@ -919,6 +920,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   Class.prototype.pullData = function(curr, opts){
     var that = this;
     var options = that.config;
+    // 同步表头父列的相关值
+    options.HAS_SET_COLS_PATCH || that.setColsPatch();
+    options.HAS_SET_COLS_PATCH = true;
     var request = options.request;
     var response = options.response;
     var sort = function(){
@@ -930,10 +934,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         });
       }
     };
-    var done = function(res){
+    var done = function(res, isRenderData){
       that.setColsWidth();
       typeof options.done === 'function' && options.done(
-        res, curr, res[response.countName]
+        res, curr, res[response.countName], isRenderData
       );
     };
 
@@ -960,7 +964,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         curr: curr,
         count: res[response.countName],
         type: opts.type,
-      }), sort(), done(res);
+      }), sort(), done(res, true);
     } else if(options.url){ // Ajax请求
       var params = {};
       // 当 page 开启，默认自动传递 page、limit 参数
@@ -1229,10 +1233,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 渲染视图
     var render = function(){ // 后续性能提升的重点
-      // 同步表头父列的相关值
-      options.HAS_SET_COLS_PATCH || that.setColsPatch();
-      options.HAS_SET_COLS_PATCH = true;
-
       if(!sort && that.sortKey){
         return that.sort({
           field: that.sortKey.field,
@@ -2444,6 +2444,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var othis = $(this);
       var td = othis.closest('td');
       var index = othis.parents('tr').eq(0).data('index');
+      // 标记当前活动行
+      that.setRowActive(index);
+
       // 执行事件
       layui.event.call(
         this,
@@ -2456,8 +2459,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           }
         })
       );
-      // 标记当前活动行
-      that.setRowActive(index);
     };
 
      // 行工具条单击事件
@@ -2742,7 +2743,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           });
         } else {
           table.eachCols(id, function(i3, item3){
-            if(item3.field && item3.type == 'normal'){
+            if(item3.ignoreExport === false || item3.field && item3.type == 'normal'){
               // 不导出隐藏列
               if(item3.hide || item3.ignoreExport){
                 if(i1 == 0) fieldsIsHide[item3.field] = true; // 记录隐藏列
