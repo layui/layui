@@ -265,29 +265,33 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       
       // 下拉选择框
       ,select: function(elem){
-        var TIPS = '请选择', CLASS = 'layui-form-select', TITLE = 'layui-select-title'
-        ,NONE = 'layui-select-none', initValue = '', thatInput
-        ,selects = elem || elemForm.find('select')
+        var TIPS = '请选择';
+        var CLASS = 'layui-form-select';
+        var TITLE = 'layui-select-title';
+        var NONE = 'layui-select-none';
+        var initValue = '';
+        var thatInput;
+        var selects = elem || elemForm.find('select');
 
         // 隐藏 select
-        ,hide = function(e, clear){
+        var hide = function(e, clear){
           if(!$(e.target).parent().hasClass(TITLE) || clear){
             $('.'+CLASS).removeClass(CLASS+'ed ' + CLASS+'up');
             thatInput && initValue && thatInput.val(initValue);
           }
           thatInput = null;
-        }
+        };
         
         // 各种事件
-        ,events = function(reElem, disabled, isSearch){
-          var select = $(this)
-          ,title = reElem.find('.' + TITLE)
-          ,input = title.find('input')
-          ,dl = reElem.find('dl')
-          ,dds = dl.children('dd')
-          ,dts = dl.children('dt') // select分组dt元素
-          ,index =  this.selectedIndex // 当前选中的索引
-          ,nearElem; // select 组件当前选中的附近元素，用于辅助快捷键功能
+        var events = function(reElem, disabled, isSearch){
+          var select = $(this);
+          var title = reElem.find('.' + TITLE);
+          var input = title.find('input');
+          var dl = reElem.find('dl');
+          var dds = dl.children('dd');
+          var dts = dl.children('dt'); // select 分组dt元素
+          var index =  this.selectedIndex; // 当前选中的索引
+          var nearElem; // select 组件当前选中的附近元素，用于辅助快捷键功能
           
           if(disabled) return;
 
@@ -296,8 +300,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           
           // 展开下拉
           var showDown = function(){
-            var top = reElem.offset().top + reElem.outerHeight() + 5 - $win.scrollTop()
-            ,dlHeight = dl.outerHeight();
+            var top = reElem.offset().top + reElem.outerHeight() + 5 - $win.scrollTop();
+            var dlHeight = dl.outerHeight();
             
             index = select[0].selectedIndex; // 获取最新的 selectedIndex
             reElem.addClass(CLASS+'ed');
@@ -314,17 +318,19 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               reElem.addClass(CLASS + 'up');
             }
             
-            // 删除input已有文本并放入 placeholder，方便输入
-            if (input.val()) {
-              // 有值时才删除并替换placeholder
-              input.attr('placeholder', input.val());
+            // 删除 input 已有文本并放入 placeholder，方便输入
+            var inputValue = $.trim(input.val());
+            // 有值时才删除并替换 placeholder
+            if(inputValue){
+              input.attr('placeholder', inputValue);
               input.val(''); // 清空输入框的值
             }
+
             followScroll();
-          }
+          };
           
           // 隐藏下拉
-          ,hideDown = function(choose){
+          var hideDown = function(choose){
             reElem.removeClass(CLASS+'ed ' + CLASS+'up');
             input.blur();
             nearElem = null;
@@ -347,17 +353,17 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 input.val(initValue || '');
               }
             });
-          }
+          };
           
           // 定位下拉滚动条
-          ,followScroll = function(){  
+          var followScroll = function(){  
             var thisDd = dl.children('dd.'+ THIS);
             
             if(!thisDd[0]) return;
             
-            var posTop = thisDd.position().top
-            ,dlHeight = dl.height()
-            ,ddHeight = thisDd.height();
+            var posTop = thisDd.position().top;
+            var dlHeight = dl.height();
+            var ddHeight = thisDd.height();
             
             // 若选中元素在滚动条不可见底部
             if(posTop > dlHeight){
