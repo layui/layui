@@ -85,6 +85,7 @@ treeTable.render({
 | iconLeaf | 叶子节点的图标 | string | - |
 | showFlexIconIfNotParent | 若非父节点时，是否显示折叠图标 | boolean | `false` |
 | dblClickExpand | 双击节点时，是否自动展开父节点 | boolean | `true` |
+| expandAllDefault <sup>2.8.7+</sup> | 是否默认展开全部节点 | boolean | `false` |
 
 </td>
     </tr>
