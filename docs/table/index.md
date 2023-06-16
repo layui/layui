@@ -345,7 +345,6 @@ console.log(checkStatus.isAll ) // 表格是否全选
 | type | 选中方式。可选值: `checkbox,radio`  | string | `checkbox` |
 | index | 选中行的下标。即数据的所在数组下标（`0` 开头）。<br>可设置 `all` 表示全选。 | number<br>string | - |
 | checked | 选中状态值。 <ul><li>若传递该属性，则赋值固定值。</li><li>若不传递该属性（默认），则 `checkbox` 将在 `true\|false` 中自动切换值，而 `radio` 将赋值 `true` 固定值。<sup>2.8.4+</sup></li></ul> | boolean | - |
-| selectedStyle | 是否仅设置样式状态。若为 `true` 则只标注选中样式，不对数据中的 `LAY_CHECKED` 属性赋值。 | boolean | `false` |
 
 该方法用于设置行的选中样式及相关的特定属性值 `LAY_CHECKED`。
 
