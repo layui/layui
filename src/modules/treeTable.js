@@ -54,11 +54,6 @@ layui.define(['table'], function (exports) {
     return that || null;
   }
 
-  // 获取当前实例配置项
-  var getThisTableConfig = function (id) {
-    return getThisTable(id).config;
-  }
-
   // 字符
   var MOD_NAME = 'treeTable';
   var HIDE = 'layui-hide';
@@ -166,9 +161,6 @@ layui.define(['table'], function (exports) {
       if (treeOptions.data.isSimpleData) {
         options.data = that.flatToTree(options.data);
       }
-      if (options.initSort && options.initSort.type) {
-        layui.sort(options.data, options.initSort.field, options.initSort.type === 'desc', true)
-      }
       that.initData(options.data);
     }
 
@@ -176,6 +168,10 @@ layui.define(['table'], function (exports) {
       options.done = function () {
         var args = arguments;
         var doneThat = this;
+        var isRenderData = args[3]; // 是否是 renderData
+        if (!isRenderData) {
+          delete that.isExpandAll;
+        }
 
         var tableView = this.elem.next();
         that.updateStatus(null, {
@@ -229,7 +225,7 @@ layui.define(['table'], function (exports) {
         name: "name", // 节点数据保存节点名称的属性名称
         id: "id", // 唯一标识的属性名称
         pid: "parentId", // 父节点唯一标识的属性名称
-        icon: "icon", // 图标的属性名称
+        icon: "icon" // 图标的属性名称
       },
       view: {
         indent: 14, // 层级缩进量
@@ -242,6 +238,7 @@ layui.define(['table'], function (exports) {
         iconLeaf: '<i class="layui-icon layui-icon-leaf"></i>', // 叶子节点的图标
         showFlexIconIfNotParent: false, // 当节点不是父节点的时候是否显示折叠图标
         dblClickExpand: true, // 双击节点时，是否自动展开父节点的标识
+        expandAllDefault: false // 默认展开所有节点
       },
       data: {
         isSimpleData: false, // 是否简单数据模式
@@ -254,11 +251,11 @@ layui.define(['table'], function (exports) {
         contentType: null, // 提交参数的数据类型，设置可缺省同上
         headers: null, // 设置可缺省同上
         where: null, // 设置可缺省同上
-        autoParam: [], // 自动参数
+        autoParam: [] // 自动参数
       },
       callback: {
         beforeExpand: null, // 展开前的回调 return false 可以阻止展开的动作
-        onExpand: null, // 展开之后的回调
+        onExpand: null // 展开之后的回调
       }
     },
   };
@@ -738,6 +735,7 @@ layui.define(['table'], function (exports) {
         }
       }
     } else {
+      treeTableThat.isExpandAll = false;
       // 关闭
       if (sonSign && !isToggle) { // 非状态切换的情况下
         layui.each(childNodes, function (i1, item1) {
@@ -812,8 +810,9 @@ layui.define(['table'], function (exports) {
     }
 
     var that = getThisTable(id);
-    if(!that) return;
+    if (!that) return;
 
+    that.isExpandAll = expandFlag;
     var options = that.getOptions();
     var treeOptions = options.tree;
     var tableView = options.elem.next();
@@ -1012,6 +1011,10 @@ layui.define(['table'], function (exports) {
       });
     });
 
+    if (!level && treeOptions.view.expandAllDefault && that.isExpandAll === undefined) {
+      return treeTable.expandAll(tableId, true); // 默认展开全部
+    }
+
     // 当前层的数据看看是否需要展开
     if (sonSign !== false && dataExpand) {
       layui.each(dataExpand, function (index, item) {
@@ -1064,7 +1067,7 @@ layui.define(['table'], function (exports) {
     });
 
     // 根据需要处理options中的一些参数
-    updateOptions(that.config.id, options, type || true);
+    updateOptions(that.getOptions().id, options, type || true);
 
     // 对参数进行深度或浅扩展
     that.config = $.extend(deep, {}, that.config, options);
@@ -1128,26 +1131,9 @@ layui.define(['table'], function (exports) {
     if(!that) return;
 
     var options = that.getOptions();
-    var initSort = options.initSort;
-
-    if (!options.url) {
-      if (initSort.type) {
-        layui.sort(options.data, initSort.field, initSort.type === 'desc', true);
-      } else {
-        layui.sort(options.data, table.config.indexName, null, true);
-      }
-      that.initData(options.data);
-      treeTable.reloadData(id);
-    } else {
-      // url异步取数的表格一般需要自己添加监听之后进行reloadData并且把排序参数加入到where中
-      if (options.autoSort) {
-        var tableData = that.initData();
-        var res = {};
-        res[options.response.dataName] = tableData;
-        typeof options.done === 'function' && options.done(
-          res, that.page, that.count
-        );
-      }
+    if (!options.url || options.autoSort) {
+      that.initData();
+      treeTable.renderData(id);
     }
   }
 
@@ -1856,12 +1842,9 @@ layui.define(['table'], function (exports) {
   // 重载
   treeTable.reload = function (id, options, deep, type) {
     deep = deep !== false; // 默认采用深拷贝
-    var config = getThisTableConfig(id); // 获取当前实例配置项
-    if (!config) return;
-
     var that = getThisTable(id);
+    if (!that) return;
     that.reload(options, deep, type);
-
     return thisTreeTable.call(that);
   };
 
