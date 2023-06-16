@@ -84,6 +84,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var options = this.config || {};
     var item3 = obj.item3; // 表头数据
     var content = obj.content; // 原始内容
+    if (item3.type === 'numbers') content = obj.tplData[table.config.numbersName];
 
     // 是否编码 HTML
     var escaped = 'escape' in item3 ? item3.escape : options.escape;
@@ -129,6 +130,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   var ELEM_PAGE = '.layui-table-page';
   var ELEM_PAGE_VIEW = '.layui-table-pageview';
   var ELEM_SORT = '.layui-table-sort';
+  var ELEM_CHECKED = 'layui-table-checked';
   var ELEM_EDIT = 'layui-table-edit';
   var ELEM_HOVER = 'layui-table-hover';
   var ELEM_GROUP = 'laytable-cell-group';
@@ -918,6 +920,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   Class.prototype.pullData = function(curr, opts){
     var that = this;
     var options = that.config;
+    // 同步表头父列的相关值
+    options.HAS_SET_COLS_PATCH || that.setColsPatch();
+    options.HAS_SET_COLS_PATCH = true;
     var request = options.request;
     var response = options.response;
     var sort = function(){
@@ -929,10 +934,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         });
       }
     };
-    var done = function(res){
+    var done = function(res, origin){
       that.setColsWidth();
       typeof options.done === 'function' && options.done(
-        res, curr, res[response.countName]
+        res, curr, res[response.countName], origin
       );
     };
 
@@ -959,7 +964,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         curr: curr,
         count: res[response.countName],
         type: opts.type,
-      }), sort(), done(res);
+      }), sort(), done(res, 'renderData');
     } else if(options.url){ // Ajax请求
       var params = {};
       // 当 page 开启，默认自动传递 page、limit 参数
@@ -1155,9 +1160,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
                 }() +' lay-type="layTableCheckbox">';
                 break;
               case 'radio': // 单选
-                if(tplData[checkName]){
-                  that.thisCheckedRowIndex = i1;
-                }
                 return '<input type="radio" name="layTableRadio_'+ options.index +'" '
                   + function(){
                     var arr = [];
@@ -1188,9 +1190,16 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         if(item3.fixed === 'right') tds_fixed_r.push(td);
       });
 
-      trs.push('<tr data-index="'+ i1 +'">'+ tds.join('') + '</tr>');
-      trs_fixed.push('<tr data-index="'+ i1 +'">'+ tds_fixed.join('') + '</tr>');
-      trs_fixed_r.push('<tr data-index="'+ i1 +'">'+ tds_fixed_r.join('') + '</tr>');
+      // 添加 tr 属性
+      var trAttr = function(){
+        var arr = ['data-index="'+ i1 +'"'];
+        if(item1[table.config.checkName]) arr.push('class="'+ ELEM_CHECKED +'"');
+        return arr.join(' ');
+      }();
+
+      trs.push('<tr '+ trAttr +'>'+ tds.join('') + '</tr>');
+      trs_fixed.push('<tr '+ trAttr +'>'+ tds_fixed.join('') + '</tr>');
+      trs_fixed_r.push('<tr '+ trAttr +'>'+ tds_fixed_r.join('') + '</tr>');
     });
 
     return {
@@ -1224,11 +1233,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 渲染视图
     var render = function(){ // 后续性能提升的重点
-      // 同步表头父列的相关值
-      options.HAS_SET_COLS_PATCH || that.setColsPatch();
-      options.HAS_SET_COLS_PATCH = true;
-
-      that.thisCheckedRowIndex = '';
       if(!sort && that.sortKey){
         return that.sort({
           field: that.sortKey.field,
@@ -1256,15 +1260,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.layFixLeft.find('tbody').html(trs_fixed.join(''));
       that.layFixRight.find('tbody').html(trs_fixed_r.join(''));
 
-      that.renderForm();
-
-      // 标注选中行样式
-      typeof that.thisCheckedRowIndex === 'number' && that.setRowChecked({
-        type: 'radio',
-        index: that.thisCheckedRowIndex
-      }, true);
-
+      // 渲染表单
       that.syncCheckAll();
+      that.renderForm();
 
       // 因为 page 参数有可能发生变化 先重新铺满
       that.fullSize();
@@ -1462,34 +1460,62 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     return parent.eq(0).find('.laytable-cell-'+ key + ':eq(0)');
   };
 
-  //渲染表单
+  // 渲染表单
   Class.prototype.renderForm = function(type){
-    var that = this
-    ,options = that.config
-    ,filter = that.elem.attr('lay-filter');
+    var that = this;
+    var options = that.config;
+    var filter = that.elem.attr('lay-filter');
     form.render(type, filter);
   };
 
-  // 标记行选中状态
-  Class.prototype.setRowChecked = function(opts, selectedStyle){
+  // 同步全选按钮状态
+  Class.prototype.syncCheckAll = function(){
     var that = this;
     var options = that.config;
-    var ELEM_CLICK = 'layui-table-click';
+    var checkAllElem = that.layHeader.find('input[name="layTableCheckbox"]');
+    var syncColsCheck = function(checked){
+      that.eachCols(function(i, item){
+        if(item.type === 'checkbox'){
+          item[options.checkName] = checked;
+        }
+      });
+      return checked;
+    };
+    var checkStatus = table.checkStatus(that.key);
+
+    if(!checkAllElem[0]) return;
+
+    // 选中状态
+    syncColsCheck(checkStatus.isAll);
+    checkAllElem.prop({
+      checked: checkStatus.isAll,
+      indeterminate: !checkStatus.isAll && checkStatus.data.length // 半选
+    });
+    form.render(checkAllElem);
+  };
+
+  // 标记当前活动行背景色
+  Class.prototype.setRowActive = function(index, className){
+    var that = this;
+    var options = that.config;
+    var tr = that.layBody.find('tr[data-index="'+ index +'"]');
+    className = className || 'layui-table-click';
+    tr.addClass(className)
+    .siblings('tr').removeClass(className);
+  };
+
+  // 设置行选中状态
+  Class.prototype.setRowChecked = function(opts){
+    var that = this;
+    var options = that.config;
     var tr = that.layBody.find('tr'+ (
       opts.index === 'all' ? '' : '[data-index="'+ opts.index +'"]'
     ));
 
+    // 默认属性
     opts = $.extend({
       type: 'checkbox' // 选中方式
     }, opts);
-
-    // 标注当前行选中样式
-    if(opts.index !== 'all'){
-      tr.addClass(ELEM_CLICK).siblings('tr').removeClass(ELEM_CLICK);
-    }
-
-    // 仅设置样式状态，不设置数据中的选中属性
-    if(opts.selectedStyle || selectedStyle) return;
 
     // 同步数据选中属性值
     var thisData = table.cache[that.key];
@@ -1501,8 +1527,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 设置数据选中属性
     layui.each(thisData, function(i, item){
-      if(opts.index === i || opts.index === 'all'){
-        item[options.checkName] = getChecked(item[options.checkName]);
+      if(layui.type(item) === 'array') return; // 空项
+      if(Number(opts.index) === i || opts.index === 'all'){
+        var checked = item[options.checkName] = getChecked(item[options.checkName]);
+        tr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 标记当前选中行背景色
+        // 若为 radio 类型，则取消其他行选中背景色
+        if(opts.type === 'radio'){
+          tr.siblings().removeClass(ELEM_CHECKED);
+        }
       } else if(opts.type === 'radio') {
         delete item[options.checkName];
       }
@@ -1621,55 +1653,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         ,'</div>'].join(''));
         that.layBox.append(that.layInit);
       }
-    }
-  };
-
-  // 同步选中值状态
-  Class.prototype.setCheckData = function(index, checked, radio){
-    var that = this;
-    var options = that.config;
-    var thisData = table.cache[that.key];
-
-    if(!thisData[index]) return;
-    if(layui.type(thisData[index]) === 'array') return;
-    
-    layui.each(thisData, function(i, item){
-      if(index === i){
-        item[options.checkName] = checked;
-      } else if(radio) { // 是否单选
-        delete item[options.checkName];
-      }
-    });
-  };
-
-  // 同步全选按钮状态
-  Class.prototype.syncCheckAll = function(){
-    var that = this
-    ,options = that.config
-    ,checkAllElem = that.layHeader.find('input[name="layTableCheckbox"]')
-    ,syncColsCheck = function(checked){
-      that.eachCols(function(i, item){
-        if(item.type === 'checkbox'){
-          item[options.checkName] = checked;
-        }
-      });
-      return checked;
-    };
-
-    if(!checkAllElem[0]) return;
-
-    if(table.checkStatus(that.key).isAll){
-      if(!checkAllElem[0].checked){
-        checkAllElem.prop('checked', true);
-        that.renderForm('checkbox');
-      }
-      syncColsCheck(true);
-    } else {
-      if(checkAllElem[0].checked){
-        checkAllElem.prop('checked', false);
-        that.renderForm('checkbox');
-      }
-      syncColsCheck(false);
     }
   };
 
@@ -2127,20 +2110,20 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       // 事件返回的公共成员
       var obj = {
-        tr: tr //行元素
-        ,config: options
-        ,data: table.clearCacheKey(data) //当前行数据
-        ,index: index
-        ,del: function(){ //删除行数据
+        tr: tr, // 行元素
+        config: options,
+        data: table.clearCacheKey(data), // 当前行数据
+        index: index,
+        del: function(){ // 删除行数据
           table.cache[that.key][index] = [];
           tr.remove();
           that.scrollPatch();
-        }
-        ,update: function(fields, related){ // 修改行数据
+        },
+        update: function(fields, related){ // 修改行数据
           fields = fields || {};
           layui.each(fields, function(key, value){
             var td = tr.children('td[data-field="'+ key +'"]');
-            var cell = td.children(ELEM_CELL); //获取当前修改的列
+            var cell = td.children(ELEM_CELL); // 获取当前修改的列
 
             // 更新缓存中的数据
             data[key] = obj.data[key] = value;
@@ -2175,9 +2158,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           });
 
           that.renderForm();
-        }
+        },
         // 设置行选中状态
-        ,setRowChecked: function(opts){
+        setRowChecked: function(opts){
           that.setRowChecked($.extend({
             index: index
           }, opts));
@@ -2200,17 +2183,17 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       if(checkbox[0].disabled) return;
 
-      //全选
+      // 全选
       if(isAll){
-        children.each(function(i, item){
-          item.checked = checked;
-          that.setCheckData(i, checked);
+        that.setRowChecked({
+          index: 'all',
+          checked: checked
         });
-        that.syncCheckAll();
-        that.renderForm('checkbox');
       } else {
-        that.setCheckData(index, checked);
-        that.syncCheckAll();
+        that.setRowChecked({
+          index: index,
+          checked: checked
+        });
         layui.stope(e);
       }
 
@@ -2239,14 +2222,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       layui.stope(e);
       if(radio[0].disabled) return false;
 
-      // 标注数据中的选中属性
-      that.setCheckData(index, checked, 'radio');
-
       // 标注选中样式
       that.setRowChecked({
         type: 'radio',
         index: index
-      }, true);
+      });
 
       // 事件
       layui.event.call(
@@ -2274,12 +2254,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.layBody.find('tr:eq('+ index +')').removeClass(ELEM_HOVER)
     }).on('click', 'tr', function(e){ // 单击行
       // 不支持行单击事件的元素
-      var UNROW = '.layui-form-checkbox,.layui-form-radio,[lay-unrow]';
-      var container = $(this).find(UNROW);
-      if(
-        $(e.target).is(UNROW) || 
-        container[0] && $.contains(container[0], e.target)
-      ){
+      var UNROW = '.layui-form-checkbox,.layui-form-switch,.layui-form-radio,[lay-unrow]';
+      if( $(e.target).is(UNROW) || $(e.target).closest(UNROW)[0]){
         return;
       };
       setRowEvent.call(this, 'row');
@@ -2464,7 +2440,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var othis = $(this);
       var td = othis.closest('td');
       var index = othis.parents('tr').eq(0).data('index');
+      // 标记当前活动行
+      that.setRowActive(index);
 
+      // 执行事件
       layui.event.call(
         this,
         MOD_NAME,
@@ -2476,11 +2455,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           }
         })
       );
-      // 设置当前行选中样式
-      that.setRowChecked({
-        type: 'radio',
-        index: index
-      }, true);
     };
 
      // 行工具条单击事件
@@ -2667,15 +2641,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   // 获取表格选中状态
   table.checkStatus = function(id){
-    var nums = 0
-      ,invalidNum = 0
-      ,arr = []
-      ,data = table.cache[id] || [];
+    var nums = 0;
+    var invalidNum = 0;
+    var arr = [];
+    var data = table.cache[id] || [];
 
     //计算全选个数
     layui.each(data, function(i, item){
       if(layui.type(item) === 'array'){
-        invalidNum++; //无效数据，或已删除的
+        invalidNum++; // 无效数据，或已删除的
         return;
       }
       if(item[table.config.checkName]){
@@ -2686,8 +2660,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
     });
     return {
-      data: arr //选中的数据
-      ,isAll: data.length ? (nums === (data.length - invalidNum)) : false //是否全选
+      data: arr, // 选中的数据
+      isAll: data.length ? (nums === (data.length - invalidNum)) : false // 是否全选
     };
   };
 
@@ -2765,7 +2739,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           });
         } else {
           table.eachCols(id, function(i3, item3){
-            if(item3.field && item3.type == 'normal'){
+            if(item3.ignoreExport === false || item3.field && item3.type == 'normal'){
               // 不导出隐藏列
               if(item3.hide || item3.ignoreExport){
                 if(i1 == 0) fieldsIsHide[item3.field] = true; // 记录隐藏列
@@ -2806,7 +2780,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       // 表合计
       thatTable && layui.each(thatTable.dataTotal, function(i, o){
-        fieldsIsHide[o.field] || dataTotal.push(o.total + '\t');
+        fieldsIsHide[o.field] || dataTotal.push(o.total);
       });
 
       return dataTitle.join(',') + '\r\n' + dataMain.join('\r\n') + '\r\n' + dataTotal.join(',');

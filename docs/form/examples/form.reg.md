@@ -11,7 +11,7 @@
             <div class="layui-input-prefix">
               <i class="layui-icon layui-icon-cellphone"></i>
             </div>
-            <input type="text" name="cellphone" value="" lay-verify="phone" placeholder="手机号" lay-reqtext="请填写手机号" autocomplete="off" class="layui-input" id="reg-cellphone">
+            <input type="text" name="cellphone" value="" lay-verify="required|phone" placeholder="手机号" lay-reqtext="请填写手机号" autocomplete="off" class="layui-input" id="reg-cellphone">
           </div>
         </div>
         <div class="layui-col-xs5">

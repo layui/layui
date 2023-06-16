@@ -409,10 +409,11 @@ initSort: {
 
 ```
 table.render({
-  done: function(res, curr, count){
+  done: function(res, curr, count, origin){
     console.log(res); // 得到当前渲染的数据
     console.log(curr);  // 得到当前页码
     console.log(count); // 得到数据总量
+    console.log(origin); // 回调函数所执行的来源 --- 2.8.7+
   }
   // …  // 其它属性
 });

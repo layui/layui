@@ -269,7 +269,10 @@ totalRow: true // 开启合计行，并默认对当前所有行数据进行前�
 
 {{!
 ```
+// 获取前端统计的动态字段
 totalRow: '{{= d.TOTAL_NUMS }} 单位' // 还比如只取整：'{{= parseInt(d.TOTAL_NUMS) }}'
+// 获取返回数据中的统计字段
+totalRow: '分数：{{= d.TOTAL_ROW.score }}' // TOTAL_ROW 即对应返回据中的 totalRow
 ```
 !}}
 
@@ -334,13 +337,17 @@ edit: function(d){
 <td>ignoreExport <sup>2.8.3+</sup></td>
 <td>
 
-是否导出时忽略该列
+是否导出时忽略该列。支持以下可选值：
+
+- `true` : 忽略导出
+- `false` : 强制导出，对所有列适用
+- `null` : 只对常规列导出（默认）
 
 </td>
 <td>boolean</td>
 <td>
   
-`false`
+-
 
 </td>
     </tr>
