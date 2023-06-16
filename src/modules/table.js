@@ -934,10 +934,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         });
       }
     };
-    var done = function(res, isRenderData){
+    var done = function(res, origin){
       that.setColsWidth();
       typeof options.done === 'function' && options.done(
-        res, curr, res[response.countName], isRenderData
+        res, curr, res[response.countName], origin
       );
     };
 
@@ -964,7 +964,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         curr: curr,
         count: res[response.countName],
         type: opts.type,
-      }), sort(), done(res, true);
+      }), sort(), done(res, 'renderData');
     } else if(options.url){ // Ajax请求
       var params = {};
       // 当 page 开启，默认自动传递 page、limit 参数
@@ -1470,9 +1470,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   // 同步全选按钮状态
   Class.prototype.syncCheckAll = function(){
-    var that = this
-    var options = that.config
-    var checkAllElem = that.layHeader.find('input[name="layTableCheckbox"]')
+    var that = this;
+    var options = that.config;
+    var checkAllElem = that.layHeader.find('input[name="layTableCheckbox"]');
     var syncColsCheck = function(checked){
       that.eachCols(function(i, item){
         if(item.type === 'checkbox'){
@@ -1481,22 +1481,17 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       });
       return checked;
     };
+    var checkStatus = table.checkStatus(that.key);
 
     if(!checkAllElem[0]) return;
 
-    if(table.checkStatus(that.key).isAll){
-      if(!checkAllElem[0].checked){
-        checkAllElem.prop('checked', true);
-        that.renderForm('checkbox');
-      }
-      syncColsCheck(true);
-    } else {
-      if(checkAllElem[0].checked){
-        checkAllElem.prop('checked', false);
-        that.renderForm('checkbox');
-      }
-      syncColsCheck(false);
-    }
+    // 选中状态
+    syncColsCheck(checkStatus.isAll);
+    checkAllElem.prop({
+      checked: checkStatus.isAll,
+      indeterminate: !checkStatus.isAll && checkStatus.data.length // 半选
+    });
+    form.render(checkAllElem);
   };
 
   // 标记当前活动行背景色
@@ -1505,7 +1500,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var options = that.config;
     var tr = that.layBody.find('tr[data-index="'+ index +'"]');
     className = className || 'layui-table-click';
-    tr.addClass(className).siblings('tr').removeClass(className);
+    tr.addClass(className)
+    .siblings('tr').removeClass(className);
   };
 
   // 设置行选中状态
@@ -1532,7 +1528,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 设置数据选中属性
     layui.each(thisData, function(i, item){
       if(layui.type(item) === 'array') return; // 空项
-      if(opts.index === i || opts.index === 'all'){
+      if(Number(opts.index) === i || opts.index === 'all'){
         var checked = item[options.checkName] = getChecked(item[options.checkName]);
         tr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 标记当前选中行背景色
         // 若为 radio 类型，则取消其他行选中背景色
@@ -2645,15 +2641,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   // 获取表格选中状态
   table.checkStatus = function(id){
-    var nums = 0
-      ,invalidNum = 0
-      ,arr = []
-      ,data = table.cache[id] || [];
+    var nums = 0;
+    var invalidNum = 0;
+    var arr = [];
+    var data = table.cache[id] || [];
 
     //计算全选个数
     layui.each(data, function(i, item){
       if(layui.type(item) === 'array'){
-        invalidNum++; //无效数据，或已删除的
+        invalidNum++; // 无效数据，或已删除的
         return;
       }
       if(item[table.config.checkName]){
@@ -2664,8 +2660,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
     });
     return {
-      data: arr //选中的数据
-      ,isAll: data.length ? (nums === (data.length - invalidNum)) : false //是否全选
+      data: arr, // 选中的数据
+      isAll: data.length ? (nums === (data.length - invalidNum)) : false // 是否全选
     };
   };
 
