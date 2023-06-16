@@ -347,7 +347,7 @@ edit: function(d){
 <td>boolean</td>
 <td>
   
-`-`
+-
 
 </td>
     </tr>
