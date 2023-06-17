@@ -74,7 +74,7 @@ var isLayui = window.layui && layui.define, $, win, ready = {
       //如果轮询超过指定秒数，则视为请求文件失败或 css 文件不符合规范
       if(++timeout > 10 * 1000 / delay){
         return window.console && console.error(app +'.css: Invalid');
-      };
+      }
       
       //css 加载就绪
       if(parseInt(ready.getStyle(getLinkElem, 'width')) === 1989){
@@ -406,9 +406,9 @@ Class.pt.creat = function(){
       } else if(options.hideOnClose){
         elemShade.show();
         layero.show();
-      };
+      }
     })();
-  };
+  }
 
   // 是否移除活动元素的焦点
   if(config.removeFocus) {
@@ -518,7 +518,7 @@ Class.pt.creat = function(){
     that.layero.addClass(animClass).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
       $(this).removeClass(animClass);
     });
-  };
+  }
   
   // 记录配置信息
   that.layero.data('config', config);
@@ -571,7 +571,7 @@ Class.pt.auto = function(index){
         setHeight('.'+doms[5]);
       }
     break;
-  };
+  }
   
   return that;
 };
@@ -660,7 +660,7 @@ Class.pt.tips = function(){
       tipsG.css({right: 12, left: 'auto'});
     } else {
       goal.tipLeft = goal.left;
-    };
+    }
   };
   
   //辨别tips的方位
@@ -1016,11 +1016,11 @@ layer.style = function(index, options, limit){
   if(!limit){
     if(parseFloat(options.width) <= 260){
       options.width = 260;
-    };
+    }
     
     if(parseFloat(options.height) - titHeight - btnHeight <= 64){
       options.height = 64 + titHeight + btnHeight;
-    };
+    }
   }
   layero.css(options);
   btnHeight = layero.find('.'+doms[6]).outerHeight() || 0;
@@ -1131,7 +1131,7 @@ layer.restore = function(index){
 
 // 全屏（最大化）
 layer.full = function(index){
-  var layero = $('#'+ doms[0] + index), timer;
+  var layero = $('#'+ doms[0] + index);
   var maxminStatus = layero.data('maxminStatus');
 
   if(maxminStatus === 'max') return // 检查当前的状态是否已经是最大化
@@ -1143,8 +1143,8 @@ layer.full = function(index){
   if(!doms.html.attr('layer-full')){
     doms.html.css('overflow','hidden').attr('layer-full', index);
   }
-  clearTimeout(timer);
-  timer = setTimeout(function(){
+
+  setTimeout(function(){
     var isfix = layero.css('position') === 'fixed';
     layer.style(index, {
       top: isfix ? 0 : win.scrollTop(),
@@ -1262,7 +1262,7 @@ layer.closeAll = function(type, callback){
   if(typeof type === 'function'){
     callback = type;
     type = null;
-  };
+  }
   var domsElem = $('.'+doms[0]);
   $.each(domsElem, function(_index){
     var othis = $(this);
@@ -1455,7 +1455,7 @@ layer.photos = function(options, loop, key){
     dict.imgIndex++;
     if(dict.imgIndex > data.length){
       dict.imgIndex = 1;
-      if (errorMsg) {return};
+      if (errorMsg) {return}
     }
     dict.tabimg(key)
   };
@@ -1521,7 +1521,7 @@ layer.photos = function(options, loop, key){
       img.onerror = null;
       error(e);
     };  
-  };
+  }
   
   dict.loadi = layer.load(1, {
     shade: 'shade' in options ? false : 0.9,
