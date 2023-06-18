@@ -1809,13 +1809,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var _BODY = $('body');
     var dict = {};
 
-    // 工具栏操作事件
+    // 头部工具栏操作事件
     that.layTool.on('click', '*[lay-event]', function(e){
-      var othis = $(this)
-      ,events = othis.attr('lay-event')
-      ,openPanel = function(sets){
-        var list = $(sets.list)
-        ,panel = $('<ul class="' + ELEM_TOOL_PANEL + '"></ul>');
+      var othis = $(this);
+      var events = othis.attr('lay-event');
+      var openPanel = function(sets){
+        var list = $(sets.list);
+        var panel = $('<ul class="' + ELEM_TOOL_PANEL + '"></ul>');
 
         panel.html(list);
 
