@@ -17,23 +17,24 @@ toc: true
   <span class="layui-badge-rim">2023-06-16</span>
 </h2>
 
-#### form
-  - 优化 `select` 开启搜索时输入状态，将值转义到 `placeholder`，便于输入 # 1280
-#### table
+- #### form
+  - ~~优化 `select` 开启搜索时输入状态，将值转移到 `placeholder`，便于输入~~ # 1280
+    <br>*注：由于存在若干影响，该项功能已在 `2.8.8` 中取消*
+- #### table
   - 新增 表头复选框的半选效果，当数据项部分选中且未全选时显示
   - 优化 `table.setRowChecked()` 方法，新增当前行选中背景色，便于与 hover 等活动背景色区分
   - 剔除 `table.setRowChecked()` 方法中的 `selectedStyle` 属性，因为没有实质意义
   - 优化 表头部分字段为 `hide` 在数据异常的情况下可能出现的表头错位的问题 # 1281
   - 优化 `done` 回调函数，新增参数 `origin` 用于区分重载和重新渲染数据 # 1281
   - 加强 `ignoreExport` 表头属性，允许指定不排除哪些字段 # 1281
-#### treeTable
+- #### treeTable
   - 新增 `view.expandAllDefault` 属性，用于设置是否默认展开全部节点 # 1281
   - 修复 开启排序且在 `done` 回调中执行了 `expandAll` 展开全部导致死循环问题 # 1281
   - 修复 执行 `treeTable.reload(id)` 若 `id` 未匹配到对应实例时出现的报错问题 # 1281/I7CXLN
-#### grid
+- #### grid
   - 修复 space30 和 space32 边距相同的问题 # I7D7YP
 
-### 下载： [layui-v2.8.7.zip](https://gitee.com/layui/layui/attach_files/1441026/download)
+- ### 下载： [layui-v2.8.7.zip](https://gitee.com/layui/layui/attach_files/1441026/download)
 
 ---
 
