@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -118,10 +118,6 @@ layui.use(['upload', 'element'], function(){
       obj.preview(function(index, file, result){
         $('#demo1').attr('src', result); //图片链接（base64）
       });
-      
-      return;
-      layer.msg('不允许上传')
-      return false;
     }
     ,done: function(res, index){
     
@@ -233,9 +229,6 @@ layui.use(['upload', 'element'], function(){
         ,tds = tr.children();
         tds.eq(3).html(''); //清空操作
         delete this.files[index]; //删除文件队列已经上传成功的文件
-        return;
-      //}
-      this.error(index, upload);
     }
     ,allDone: function(obj){
       console.log(obj)

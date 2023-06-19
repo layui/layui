@@ -1,7 +1,5 @@
- 
- 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -77,15 +75,15 @@ var runTest = function(run, $, layer){
       //});
     }
     ,success: function(){
-      return;
-      layer.closeAll('loading', function(){
-        setTimeout(function(){
-          if($('.layui-layer-loading').length){
-            console.error('layer close 异常');
-            clearInterval(timer);
-          }
-        }, 200);
-      });
+      // return;
+      // layer.closeAll('loading', function(){
+      //   setTimeout(function(){
+      //     if($('.layui-layer-loading').length){
+      //       console.error('layer close 异常');
+      //       clearInterval(timer);
+      //     }
+      //   }, 200);
+      // });
     }
   });
 };
