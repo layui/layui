@@ -82,7 +82,7 @@ layui.use(['table', 'dropdown'], function(){
       {type: 'checkbox', fixed: 'left'},
       {field:'id', fixed: 'left', width:80, title: 'ID', sort: true, totalRowText: '合计：'},
       {field:'username', width:80, title: '用户'},
-      {field:'email', title:'邮箱 <i class="layui-icon layui-icon-tips layui-font-14" title="该字段开启了编辑功能" style="margin-left: 5px;"></i>', fieldTitle: '邮箱', hide: 0, width:150, edit: 'text'},
+      {field:'email', title:'邮箱 <i class="layui-icon layui-icon-tips layui-font-14" lay-event="email-tips" title="该字段开启了编辑功能" style="margin-left: 5px;"></i>', fieldTitle: '邮箱', hide: 0, width:150, edit: 'text'},
       {field:'sex', width:80, title: '性别', sort: true},
       {field:'city', width:115, title: '城市', minWidth:115, templet: '#cityTpl', exportTemplet: function(d, obj){
         // console.log(obj)
@@ -285,7 +285,18 @@ layui.use(['table', 'dropdown'], function(){
       break;
     };
   });
- 
+
+  // 表头自定义元素工具事件 --- 2.8.8+
+  table.on('colTool(test)', function(obj){
+    var event = obj.event;
+    console.log(obj);
+    if(event === 'email-tips'){
+      layer.alert(layui.util.escape(JSON.stringify(obj.col)), {
+        title: '当前列属性配置项'
+      });
+    }
+  });
+  
   // 触发单元格工具事件
   table.on('tool(test)', function(obj){ // 双击 toolDouble
     var data = obj.data; // 获得当前行数据
