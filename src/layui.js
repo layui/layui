@@ -550,7 +550,7 @@
     // 移动设备
     result.android = /android/.test(agent);
     result.ios = result.os === 'ios';
-    result.mobile = (result.android || result.ios) ? true : false;
+    result.mobile = (result.android || result.ios);
     
     return result;
   };
