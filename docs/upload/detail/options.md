@@ -230,6 +230,20 @@ acceptMime: 'image/jpeg, image/png` // 只筛选 jpg,png 格式图片
 </td>
     </tr>
     <tr>
+<td>unified <sup>2.8.8+</sup></td>
+<td>
+  
+选择多文件时，是否统一上传，即只发送一次请求。
+
+</td>
+<td>boolean</td>
+<td>
+
+`false`
+
+</td>
+    </tr>
+    <tr>
 <td>number</td>
 <td>
   
