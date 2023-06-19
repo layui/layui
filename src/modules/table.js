@@ -2113,6 +2113,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         tr: tr, // 行元素
         config: options,
         data: table.clearCacheKey(data), // 当前行数据
+        dataCache: data, // 当前行缓存中的数据
         index: index,
         del: function(){ // 删除行数据
           table.cache[that.key][index] = [];
