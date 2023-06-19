@@ -1948,6 +1948,21 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       },{}));
     });
 
+    // 表头自定义元素事件
+    that.layHeader.on('click', '*[lay-event]', function(e){
+      var othis = $(this);
+      var events = othis.attr('lay-event');
+      var th = othis.closest('th');
+      var key = th.data('key');
+      var col = that.col(key);
+
+      layui.event.call(this, MOD_NAME, 'colTool('+ filter +')', $.extend({
+        event: events,
+        config: options,
+        col: col
+      },{}));
+    });
+
     // 分页栏操作事件
     that.layPagebar.on('click', '*[lay-event]', function(e){
       var othis = $(this);

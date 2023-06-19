@@ -1011,7 +1011,9 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-view .layui-table[lay-skin="row"]{border-width: 0; border-bottom-width: 1px;}
 .layui-table-view .layui-table th,
 .layui-table-view .layui-table td{padding: 0; border-top: none; border-left: none;}
+.layui-table-view .layui-table th [lay-event],
 .layui-table-view .layui-table th.layui-unselect .layui-table-cell span{cursor: pointer;}
+.layui-table-view .layui-table th span,
 .layui-table-view .layui-table td{cursor: default;}
 .layui-table-view .layui-table td[data-edit]{cursor: text;}
 .layui-table-view .layui-table td[data-edit]:hover:after{position: absolute; left: 0; top: 0; width: 100%; height: 100%; box-sizing: border-box; border: 1px solid #16B777; pointer-events: none; content: "";}
