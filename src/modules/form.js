@@ -317,6 +317,14 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             if(top + dlHeight > $win.height() && top >= dlHeight){
               reElem.addClass(CLASS + 'up');
             }
+            
+            // 删除 input 已有文本并放入 placeholder，方便输入
+            var inputValue = $.trim(input.val());
+            // 有值时才删除并替换 placeholder
+            if(inputValue){
+              input.attr('placeholder', inputValue);
+              input.val(''); // 清空输入框的值
+            }
 
             followScroll();
           };
