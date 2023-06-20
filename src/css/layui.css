@@ -720,7 +720,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-select::-webkit-input-placeholder{line-height: 1.3;}
 .layui-input, .layui-textarea{display: block; width: 100%; padding-left: 10px;}
 .layui-input:hover, .layui-textarea:hover{border-color: #d2d2d2 !important;}
-.layui-input:focus, .layui-textarea:focus{border-color: #d2d2d2 !important;}
+.layui-input:focus, .layui-textarea:focus{border-color: #16b777 !important; box-shadow: 0 0 0 3px rgba(22,183,119,0.08);}
 .layui-textarea{position: relative; min-height: 100px; height: auto; line-height: 20px; padding: 6px 10px; resize: vertical;}
 .layui-select{padding: 0 10px;}
 .layui-form select,
@@ -744,7 +744,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 /* 警告条 */
 .layui-form-danger:focus,
-.layui-form-danger+.layui-form-select .layui-input{border-color: #ff5722 !important;}
+.layui-form-danger+.layui-form-select .layui-input{border-color: #ff5722 !important; box-shadow: 0 0 0 3px rgba(255,87,34,0.08);}
 
 
 /* 输入框点缀  */
@@ -780,7 +780,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-input-wrap .layui-input-prefix,
 .layui-input-wrap .layui-input-suffix,
 .layui-input-wrap .layui-input-split{pointer-events: none;}
-.layui-input-wrap .layui-input:focus + .layui-input-split{border-color: #d2d2d2;}
+.layui-input-wrap .layui-input:focus + .layui-input-split{border-color: #16b777;}
 .layui-input-wrap .layui-input-prefix.layui-input-split{border-width: 0; border-right-width: 1px;}
 
 /* 输入框动态点缀  */
@@ -1011,7 +1011,9 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-table-view .layui-table[lay-skin="row"]{border-width: 0; border-bottom-width: 1px;}
 .layui-table-view .layui-table th,
 .layui-table-view .layui-table td{padding: 0; border-top: none; border-left: none;}
+.layui-table-view .layui-table th [lay-event],
 .layui-table-view .layui-table th.layui-unselect .layui-table-cell span{cursor: pointer;}
+.layui-table-view .layui-table th span,
 .layui-table-view .layui-table td{cursor: default;}
 .layui-table-view .layui-table td[data-edit]{cursor: text;}
 .layui-table-view .layui-table td[data-edit]:hover:after{position: absolute; left: 0; top: 0; width: 100%; height: 100%; box-sizing: border-box; border: 1px solid #16B777; pointer-events: none; content: "";}
