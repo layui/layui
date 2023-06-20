@@ -17,11 +17,11 @@ const yargs = require('yargs');
 const config = {
   // 注释
   comment: [
-    '/** v<%= pkg.version %> | <%= pkg.license %> Licensed */<%= js %>'
-    ,{pkg: pkg, js: ';'}
-  ]
+    '/** v<%= pkg.version %> | <%= pkg.license %> Licensed */<%= js %>',
+    {pkg: pkg, js: ';'}
+  ],
   // 模块
-  ,modules: 'lay,laytpl,laypage,laydate,jquery,layer,util,dropdown,slider,colorpicker,element,upload,form,table,treeTable,tree,transfer,carousel,rate,flow,code'
+  modules: 'lay,laytpl,laypage,laydate,jquery,layer,util,dropdown,slider,colorpicker,element,upload,form,table,treeTable,tree,transfer,carousel,rate,flow,code'
 };
 
 // 获取参数
@@ -38,8 +38,8 @@ const dir = {
 
 // 输出目录
 const dest = ({
-  dist: './dist'
-  ,rls: dir.rls + '/layui'
+  dist: './dist',
+  rls: dir.rls + '/layui'
 }[argv.dest || 'dist'] || argv.dest) + (argv.vs ? '/'+ pkg.version : '');
 
 // js
@@ -150,21 +150,21 @@ exports.help = () => {
   let usage = '\nUsage: gulp [options] tasks';
   let parser = yargs.usage(usage, {
     dest: {
-      type: 'string'
-      ,desc: '定义输出目录，可选项：dist（默认）、rls、任意路径'
-    }
-    ,vs: {
-      type: 'boolean'
-      ,desc: '生成一个带版本号的文件夹'
+      type: 'string',
+      desc: '定义输出目录，可选项：dist（默认）、rls、任意路径'
+    },
+    vs: {
+      type: 'boolean',
+      desc: '生成一个带版本号的文件夹'
     }
   });
   
   parser.showHelp(console.log);
   console.log([
-    'Tasks:'
-    ,'  default  默认任务'
-    ,'  rls  发行任务'
-    ,'  cp  将 dist 目录复制一份到参数 --dest 指向的目录'
+    'Tasks:',
+    '  default  默认任务',
+    '  rls  发行任务',
+    '  cp  将 dist 目录复制一份到参数 --dest 指向的目录'
   ].join('\n'), '\n\nExamples:\n  gulp cp --dest ./v --vs', '\n');
   return gulp.src('./');
 };
