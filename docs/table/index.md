@@ -532,8 +532,7 @@ table.hideCol('test', false); // `true` or `false`
 |  event | 描述 |
 | --- | --- |
 | [toolbar](#on-toolbar) | 头部工具栏事件 |
-| [sort](#on-sort) | 表头排序切换事件 |
-| [colTool](#on-colTool) <sup>2.8.8+</sup> | 表头自定义元素工具事件 |
+| [sort](#on-sort) | 排序切换事件 |
 | [colResized](#on-colResized) <sup>2.8+</sup> | 列拖拽宽度后的事件 |
 | [colToggled](#on-colToggled) <sup>2.8+</sup> | 列筛选（显示或隐藏）后的事件 |
 | [row / rowDouble](#on-row) | 行单击和双击事件 |
@@ -633,32 +632,6 @@ table.on('sort(test)', function(obj){
 });
 ```
 
-<h3 id="on-colTool" lay-pid="table.on" class="ws-anchor ws-bold">表头自定义元素工具事件 <sup>2.8.8+</sup></h3>
-
-`table.on('colTool(filter)', callback);`
-
-点击表头单元格中带有 `lay-event` 属性的自定义元素触发，可充分借助该事件扩展 table 更多的操作空间。
-
-```js
-var table = layui.table;
- 
-// 渲染
-table.render({
-  elem: '#test',
-  cols: [[
-    {field:'username', title:'用户名 <i class="layui-icon layui-icon-username" lay-event="username"></i>'
-  ]]
-  // … // 其他属性
-});
- 
-// 列拖拽宽度后的事件
-table.on('colTool(test)', function(obj){
-  var col = obj.col; // 获取当前列属性配置项
-  var options = obj.config; // 获取当前表格基础属性配置项
-  var layEvent = obj.event; // 获得自定义元素对应的 lay-event 属性值
-  console.log(obj); // 查看对象所有成员
-});
-```
 
 <h3 id="on-colResized" lay-pid="table.on" class="ws-anchor ws-bold">列拖拽宽度后的事件 <sup>2.8+</sup></h3>
 
@@ -727,7 +700,6 @@ table.render({
 // 行单击事件
 table.on('row(test)', function(obj){
   var data = obj.data; // 得到当前行数据
-  var dataCache = obj.dataCache; // 得到当前行缓存数据，包含特定字段 --- 2.8.8+
   var index = obj.index; // 得到当前行索引
   var tr = obj.tr; // 得到当前行 <tr> 元素的 jQuery 对象
   var options = obj.config; // 获取当前表格基础属性配置项
@@ -832,7 +804,6 @@ layui.use(function(){
   // 单元格工具事件
   table.on('tool(test)', function(obj){
     var data = obj.data; // 得到当前行数据
-    var dataCache = obj.dataCache; // 得到当前行缓存数据，包含特定字段 --- 2.8.8+
     var index = obj.index; // 得到当前行索引
     var layEvent = obj.event; // 获得元素对应的 lay-event 属性值
     var tr = obj.tr; // 得到当前行 <tr> 元素的 jQuery 对象

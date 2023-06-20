@@ -92,9 +92,9 @@ hr{margin: 30px 0;}
 <script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.6.8/layui.js"></script>
 <script>
 layui.use(['upload', 'element'], function(){
-  var $ = layui.$;
-  var upload = layui.upload;
-  var element = layui.element;
+  var $ = layui.jquery
+  ,upload = layui.upload
+  ,element = layui.element;
 
   var uploadInst = upload.render({
     elem: '#test1'
@@ -103,7 +103,7 @@ layui.use(['upload', 'element'], function(){
     //,accept: 'file'
     ,method: 'get'
     ,fileAccept: 'image/*'
-    ,exts: 'jpg|png|gif|bmp|jpeg|pdf'
+    ,exts: "jpg|png|gif|bmp|jpeg|pdf"
     ,data: { //额外参数
       a: 1
       ,b: function(){
@@ -162,8 +162,7 @@ layui.use(['upload', 'element'], function(){
   upload.render({
     elem: '#test2'
     ,url: 'https://httpbin.org/post'
-    ,multiple: true // 多文件
-    ,unified: true // 一起上传 ---  2.8.8+
+    ,multiple: true
     ,accept: 'images'
     ,number: 3 //同时上传的数量
     ,size: 1024
@@ -173,18 +172,18 @@ layui.use(['upload', 'element'], function(){
         $('#demo2').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
       });
 
-      // this.files = obj.pushFile();
+      //this.files = obj.pushFile();
     }
     ,done: function(res, index){
-      // 上传完毕
-      console.log(res, index)
+      //上传完毕
+      //console.log(this.files)
     }
     ,allDone: function(obj){
       console.log(obj)
     }
   });
   
-  // 演示多文件列表 ---  本示例仅演示未开启 unified 属性的情况
+  //演示多文件列表
   var demoListView = $('#demoList');
   var uploadListIns = upload.render({
     elem: '#testList'
@@ -248,7 +247,6 @@ layui.use(['upload', 'element'], function(){
     }
     ,progress: function(n, elem, e, index){
       console.log(n);
-      console.log(index);
       element.progress('progress-'+ index, n + '%'); //进度条
     }
   });
