@@ -182,78 +182,97 @@ layui.define(['lay','layer'], function(exports){
       return files || that.files || that.chooseFiles || elemFile.files;
     };
     
-    //高级浏览器处理方式，支持跨域
+    // 高级浏览器处理方式，支持跨域
     var ajaxSend = function(){
       var successful = 0;
-      var failed = 0
+      var failed = 0;
       var items = getFiles();
-      var allDone = function(){ // 多文件全部上传完毕的回调
+
+      // 多文件全部上传完毕的回调
+      var allDone = function(){
         if(options.multiple && successful + failed === that.fileLength){
           typeof options.allDone === 'function' && options.allDone({
-            total: that.fileLength
-            ,successful: successful
-            ,failed: failed
+            total: that.fileLength,
+            successful: successful,
+            failed: failed
           });
         }
       };
-      layui.each(items, function(index, file){
+
+      // 发送请求
+      var request = function(sets){
         var formData = new FormData();
-        
-        //追加额外的参数
+
+        // 追加额外的参数
         layui.each(options.data, function(key, value){
           value = typeof value === 'function' ? value() : value;
           formData.append(key, value);
         });
-        
-        //最后添加 file 到表单域
-        formData.append(options.field, file);
-        
-        //提交文件
+
+        // 添加 file 到表单域
+        sets.unified ? layui.each(items, function(index, file){
+          formData.append(options.field, file);
+        }) : formData.append(options.field, sets.file);
+
+        // ajax 参数
         var opts = {
-          url: options.url
-          ,type: 'post' //统一采用 post 上传
-          ,data: formData
-          ,contentType: false 
-          ,processData: false
-          ,dataType: 'json'
-          ,headers: options.headers || {}
-          //成功回调
-          ,success: function(res){
-            successful++;
-            done(index, res);
+          url: options.url,
+          type: 'post', // 统一采用 post 上传
+          data: formData,
+          contentType: false,
+          processData: false,
+          dataType: 'json',
+          headers: options.headers || {},
+          success: function(res){ // 成功回调
+            options.unified ? (successful += that.fileLength) : successful++;
+            done(sets.index, res);
             allDone();
-          }
-          //异常回调
-          ,error: function(e){
-            failed++;
+          },
+          error: function(e){ // 异常回调
+            options.unified ? (failed += that.fileLength) : failed++;
             that.msg([
               'Upload failed, please try again.',
               'status: '+ (e.status || '') +' - '+ (e.statusText || 'error')
             ].join('<br>'));
-            error(index);
+            error(sets.index);
             allDone();
           }
         };
-        //进度条
+        // 进度条
         if(typeof options.progress === 'function'){
           opts.xhr = function(){
             var xhr = $.ajaxSettings.xhr();
-            //上传进度
+            // 上传进度
             xhr.upload.addEventListener("progress", function (obj) {
               if(obj.lengthComputable){
-                var percent = Math.floor((obj.loaded/obj.total)* 100); //百分比
-                options.progress(percent, (options.item ? options.item[0] : options.elem[0]) , obj, index);
+                var percent = Math.floor((obj.loaded/obj.total)* 100); // 百分比
+                options.progress(percent, (options.item ? options.item[0] : options.elem[0]) , obj, sets.index);
               }
             });
             return xhr;
           }
         }
         $.ajax(opts);
-      });
-    }
+      };
+
+      // 多文件是否一起上传
+      if(options.unified){
+        request({
+          unified: true,
+          index: 0
+        });
+      } else {
+        layui.each(items, function(index, file){
+          request({
+            index: index,
+            file: file
+          });
+        });
+      }
+    };
     
-    //低版本 IE 处理方式，不支持跨域
-    ,iframeSend = function(){
+    // 低版本 IE 处理方式，不支持跨域
+    var iframeSend = function(){
       var iframe = $('#'+ ELEM_IFRAME);
     
       that.elemFile.parent().submit();
@@ -275,10 +294,10 @@ layui.define(['lay','layer'], function(exports){
           done(0, res);
         }
       }, 30); 
-    }
+    };
     
-    //统一回调
-    ,done = function(index, res){
+    // 统一回调
+    var done = function(index, res){
       that.elemFile.next('.'+ ELEM_CHOOSE).remove();
       elemFile.value = '';
       
@@ -296,74 +315,75 @@ layui.define(['lay','layer'], function(exports){
       typeof options.done === 'function' && options.done(res, index || 0, function(files){
         that.upload(files);
       });
-    }
+    };
     
-    //统一网络异常回调
-    ,error = function(index){
+    // 统一网络异常回调
+   var error = function(index){
       if(options.auto){
         elemFile.value = '';
       }
       typeof options.error === 'function' && options.error(index || 0, function(files){
         that.upload(files);
       });
-    }
+    };
     
-    ,exts = options.exts
-    ,check ,value = function(){
+    var check;
+    var exts = options.exts;
+    var value = function(){
       var arr = [];
       layui.each(files || that.chooseFiles, function(i, item){
         arr.push(item.name);
       });
       return arr;
-    }()
+    }();
     
-    //回调返回的参数
-    ,args = {
-      //预览
+    // 回调函数返回的参数
+    var args = {
+      // 预览
       preview: function(callback){
         that.preview(callback);
-      }
-      //上传
-      ,upload: function(index, file){
+      },
+      // 上传
+      upload: function(index, file){
         var thisFile = {};
         thisFile[index] = file;
         that.upload(thisFile);
-      }
-      //追加文件到队列
-      ,pushFile: function(){
+      },
+      // 追加文件到队列
+      pushFile: function(){
         that.files = that.files || {};
         layui.each(that.chooseFiles, function(index, item){
           that.files[index] = item;
         });
         return that.files;
-      }
-      //重置文件
-      ,resetFile: function(index, file, filename){
+      },
+      // 重置文件
+      resetFile: function(index, file, filename){
         var newFile = new File([file], filename);
         that.files = that.files || {};
         that.files[index] = newFile;
       }
-    }
+    };
     
-    //提交上传
-    ,send = function(){      
-      //上传前的回调 - 如果回调函数明确返回false，则停止上传(#pulls55)
+    // 提交上传
+    var send = function(){      
+      // 上传前的回调 - 如果回调函数明确返回 false，则停止上传
       if(options.before && (options.before(args) === false)) return;
 
-      //IE兼容处理
+      // IE兼容处理
       if(device.ie){
         return device.ie > 9 ? ajaxSend() : iframeSend();
       }
       
       ajaxSend();
-    }
+    };
     
-    //文件类型名称
-    ,typeName = ({
-      file: '文件'
-      ,images: '图片'
-      ,video: '视频'
-      ,audio: '音频'
+    // 文件类型名称
+    var typeName = ({
+      file: '文件',
+      images: '图片',
+      video: '视频',
+      audio: '音频'
     })[options.accept] || '文件';
 
     //校验文件格式
