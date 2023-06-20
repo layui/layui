@@ -16,7 +16,7 @@
   };
 
   var Layui = function(){
-    this.v = '2.8.7'; // Layui 版本号
+    this.v = '2.8.8'; // Layui 版本号
   };
   
   // 识别预先可能定义的指定全局对象
@@ -550,7 +550,7 @@
     // 移动设备
     result.android = /android/.test(agent);
     result.ios = result.os === 'ios';
-    result.mobile = (result.android || result.ios) ? true : false;
+    result.mobile = (result.android || result.ios);
     
     return result;
   };

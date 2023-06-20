@@ -1809,13 +1809,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var _BODY = $('body');
     var dict = {};
 
-    // 工具栏操作事件
+    // 头部工具栏操作事件
     that.layTool.on('click', '*[lay-event]', function(e){
-      var othis = $(this)
-      ,events = othis.attr('lay-event')
-      ,openPanel = function(sets){
-        var list = $(sets.list)
-        ,panel = $('<ul class="' + ELEM_TOOL_PANEL + '"></ul>');
+      var othis = $(this);
+      var events = othis.attr('lay-event');
+      var openPanel = function(sets){
+        var list = $(sets.list);
+        var panel = $('<ul class="' + ELEM_TOOL_PANEL + '"></ul>');
 
         panel.html(list);
 
@@ -1945,6 +1945,21 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       layui.event.call(this, MOD_NAME, 'toolbar('+ filter +')', $.extend({
         event: events
         ,config: options
+      },{}));
+    });
+
+    // 表头自定义元素事件
+    that.layHeader.on('click', '*[lay-event]', function(e){
+      var othis = $(this);
+      var events = othis.attr('lay-event');
+      var th = othis.closest('th');
+      var key = th.data('key');
+      var col = that.col(key);
+
+      layui.event.call(this, MOD_NAME, 'colTool('+ filter +')', $.extend({
+        event: events,
+        config: options,
+        col: col
       },{}));
     });
 
@@ -2113,6 +2128,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         tr: tr, // 行元素
         config: options,
         data: table.clearCacheKey(data), // 当前行数据
+        dataCache: data, // 当前行缓存中的数据
         index: index,
         del: function(){ // 删除行数据
           table.cache[that.key][index] = [];

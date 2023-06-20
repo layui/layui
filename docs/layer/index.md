@@ -248,6 +248,7 @@ layer.prompt({
 | 私有属性 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | photos | 图片层的数据源，格式详见下述示例。 | object | - |
+| hideFooter <sup>2.8+</sup> | 是否隐藏底部栏 | boolean | `false` |
 | tab | 图片层切换后的回调函数，返回的参数见下述示例 | function | - |
 
 该方法用于弹出图片层，基于 `type: 1`（即 `page` 层）的自定义内容。 
