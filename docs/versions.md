@@ -12,25 +12,46 @@ toc: true
 > 导读：📑 [Layui 2.8 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
 
+<h2 id="2.8.8" class="ws-anchor">
+  2.8.8 
+  <span class="layui-badge-rim">2023-06-20</span>
+</h2>
+
+- #### form
+  - 新增 `input` 获取焦点时的光环效果，以提升当前活动输入框的辨别度
+  - 取消 上个版本对 `select` 开启搜索时 `value` 的改动，由于存在若干不可控的影响
+- #### table
+  - 新增 `colTool` 事件，点击表头自定义元素触发，并返回当前列的相关信息，提升 table 的可玩性
+  - 新增 `row,tool,checkbox,radio` 事件返回的 `dataCache` 属性，可获得当前行缓存数据，包含特定字段
+- #### upload
+  - 新增 `unified` 属性，用于选择多文件时是否统一上传，即只发送一次请求 # I6Z171
+- #### 其他
+  - 优化 `layui.js,layer.js` 部分代码细节 # 1285
+
+### 下载： [layui-v2.8.8.zip](https://gitee.com/layui/layui/attach_files/1444527/download)
+
+---
+
 <h2 id="2.8.7" class="ws-anchor">
   2.8.7 
   <span class="layui-badge-rim">2023-06-16</span>
 </h2>
 
-#### form
-  - 优化 `select` 开启搜索时输入状态，将值转义到 `placeholder`，便于输入 # 1280
-#### table
+- #### form
+  - ~~优化 `select` 开启搜索时输入状态，将值转移到 `placeholder`，便于输入~~ # 1280
+    <br>*注：由于存在若干影响，该项功能已在 `2.8.8` 中取消*
+- #### table
   - 新增 表头复选框的半选效果，当数据项部分选中且未全选时显示
   - 优化 `table.setRowChecked()` 方法，新增当前行选中背景色，便于与 hover 等活动背景色区分
   - 剔除 `table.setRowChecked()` 方法中的 `selectedStyle` 属性，因为没有实质意义
   - 优化 表头部分字段为 `hide` 在数据异常的情况下可能出现的表头错位的问题 # 1281
   - 优化 `done` 回调函数，新增参数 `origin` 用于区分重载和重新渲染数据 # 1281
   - 加强 `ignoreExport` 表头属性，允许指定不排除哪些字段 # 1281
-#### treeTable
+- #### treeTable
   - 新增 `view.expandAllDefault` 属性，用于设置是否默认展开全部节点 # 1281
   - 修复 开启排序且在 `done` 回调中执行了 `expandAll` 展开全部导致死循环问题 # 1281
   - 修复 执行 `treeTable.reload(id)` 若 `id` 未匹配到对应实例时出现的报错问题 # 1281/I7CXLN
-#### grid
+- #### grid
   - 修复 space30 和 space32 边距相同的问题 # I7D7YP
 
 ### 下载： [layui-v2.8.7.zip](https://gitee.com/layui/layui/attach_files/1441026/download)
