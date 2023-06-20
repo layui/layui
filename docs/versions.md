@@ -28,7 +28,7 @@ toc: true
 - #### 其他
   - 优化 `layui.js,layer.js` 部分代码细节 # 1285
 
-### 下载： [layui-v2.8.8.zip](https://gitee.com/layui/layui/attach_files/1444527/download)
+### 下载： [layui-v2.8.8.zip](https://gitee.com/layui/layui/attach_files/1444541/download)
 
 ---
 
