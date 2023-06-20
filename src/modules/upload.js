@@ -6,76 +6,83 @@
 layui.define(['lay','layer'], function(exports){
   "use strict";
   
-  var $ = layui.$
-  ,layer = layui.layer
-  ,device = layui.device()
+  var $ = layui.$;
+  var layer = layui.layer;
+  var device = layui.device();
 
-  //外部接口
-  ,upload = {
-    config: {} //全局配置项
-
-    //设置全局项
-    ,set: function(options){
+  // 外部接口
+  var upload = {
+    config: {}, // 全局配置项
+    // 设置全局项
+    set: function(options){
       var that = this;
       that.config = $.extend({}, that.config, options);
       return that;
-    }
-    
-    //事件
-    ,on: function(events, callback){
+    },
+    // 事件
+    on: function(events, callback){
       return layui.onevent.call(this, MOD_NAME, events, callback);
     }
-  }
+  };
   
-  //操作当前实例
-  ,thisUpload = function(){
+  // 操作当前实例
+  var thisUpload = function(){
     var that = this;
     return {
       upload: function(files){
         that.upload.call(that, files);
-      }
-      ,reload: function(options){
+      },
+      reload: function(options){
         that.reload.call(that, options);
-      }
-      ,config: that.config
+      },
+      config: that.config
     }
-  }
+  };
   
-  //字符常量
-  ,MOD_NAME = 'upload', ELEM = 'layui-upload', THIS = 'layui-this', SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'layui-disabled'
+  // 字符常量
+  var MOD_NAME = 'upload';
+  var ELEM = 'layui-upload';
+  var THIS = 'layui-this';
+  var SHOW = 'layui-show';
+  var HIDE = 'layui-hide';
+  var DISABLED = 'layui-disabled';
   
-  ,ELEM_FILE = 'layui-upload-file', ELEM_FORM = 'layui-upload-form', ELEM_IFRAME = 'layui-upload-iframe', ELEM_CHOOSE = 'layui-upload-choose', ELEM_DRAG = 'layui-upload-drag'
+  var ELEM_FILE = 'layui-upload-file';
+  var ELEM_FORM = 'layui-upload-form';
+  var ELEM_IFRAME = 'layui-upload-iframe';
+  var ELEM_CHOOSE = 'layui-upload-choose';
+  var ELEM_DRAG = 'layui-upload-drag';
   
   
-  //构造器
-  ,Class = function(options){
+  // 构造器
+  var Class = function(options){
     var that = this;
     that.config = $.extend({}, that.config, upload.config, options);
     that.render();
   };
   
-  //默认配置
+  // 默认配置
   Class.prototype.config = {
-    accept: 'images' //允许上传的文件类型：images/file/video/audio
-    ,exts: '' //允许上传的文件后缀名
-    ,auto: true //是否选完文件后自动上传
-    ,bindAction: '' //手动上传触发的元素
-    ,url: '' //上传地址
-    ,force: '' //强制规定返回的数据格式，目前只支持是否强制 json
-    ,field: 'file' //文件字段名
-    ,acceptMime: '' //筛选出的文件类型，默认为所有文件
-    ,method: 'post' //请求上传的 http 类型
-    ,data: {} //请求上传的额外参数
-    ,drag: true //是否允许拖拽上传
-    ,size: 0 //文件限制大小，默认不限制
-    ,number: 0 //允许同时上传的文件数，默认不限制
-    ,multiple: false //是否允许多文件上传，不支持ie8-9
+    accept: 'images', // 允许上传的文件类型：images/file/video/audio
+    exts: '', // 允许上传的文件后缀名
+    auto: true, // 是否选完文件后自动上传
+    bindAction: '', // 手动上传触发的元素
+    url: '', // 上传地址
+    force: '', // 强制规定返回的数据格式，目前只支持是否强制 json
+    field: 'file', // 文件字段名
+    acceptMime: '', // 筛选出的文件类型，默认为所有文件
+    method: 'post', // 请求上传的 http 类型
+    data: {}, // 请求上传的额外参数
+    drag: true, // 是否允许拖拽上传
+    size: 0, // 文件限制大小，默认不限制
+    number: 0, // 允许同时上传的文件数，默认不限制
+    multiple: false // 是否允许多文件上传，不支持ie8-9
   };
   
-  //初始渲染
+  // 初始渲染
   Class.prototype.render = function(options){
-    var that = this
-    ,options = that.config;
+    var that = this;
+    var options = that.config;
 
     options.elem = $(options.elem);
     options.bindAction = $(options.bindAction);
@@ -86,14 +93,14 @@ layui.define(['lay','layer'], function(exports){
   
   //追加文件域
   Class.prototype.file = function(){
-    var that = this
-    ,options = that.config
-    ,elemFile = that.elemFile = $([
+    var that = this;
+    var options = that.config;
+    var elemFile = that.elemFile = $([
       '<input class="'+ ELEM_FILE +'" type="file" accept="'+ options.acceptMime +'" name="'+ options.field +'"'
       ,(options.multiple ? ' multiple' : '') 
       ,'>'
-    ].join(''))
-    ,next = options.elem.next();
+    ].join(''));
+    var next = options.elem.next();
     
     if(next.hasClass(ELEM_FILE) || next.hasClass(ELEM_FORM)){
       next.remove();
@@ -105,8 +112,8 @@ layui.define(['lay','layer'], function(exports){
     }
     
     that.isFile() ? (
-      that.elemFile = options.elem
-      ,options.field = options.elem[0].name
+      that.elemFile = options.elem,
+      options.field = options.elem[0].name
     ) : options.elem.after(elemFile);
     
     //初始化ie8/9的Form域
@@ -117,10 +124,10 @@ layui.define(['lay','layer'], function(exports){
   
   //ie8-9初始化
   Class.prototype.initIE = function(){
-    var that = this
-    ,options = that.config
-    ,iframe = $('<iframe id="'+ ELEM_IFRAME +'" class="'+ ELEM_IFRAME +'" name="'+ ELEM_IFRAME +'" frameborder="0"></iframe>')
-    ,elemForm = $(['<form target="'+ ELEM_IFRAME +'" class="'+ ELEM_FORM +'" method="post" key="set-mine" enctype="multipart/form-data" action="'+ options.url +'">'
+    var that = this;
+    var options = that.config;
+    var iframe = $('<iframe id="'+ ELEM_IFRAME +'" class="'+ ELEM_IFRAME +'" name="'+ ELEM_IFRAME +'" frameborder="0"></iframe>');
+    var elemForm = $(['<form target="'+ ELEM_IFRAME +'" class="'+ ELEM_FORM +'" method="post" key="set-mine" enctype="multipart/form-data" action="'+ options.url +'">'
     ,'</form>'].join(''));
     
     //插入iframe    
@@ -480,15 +487,15 @@ layui.define(['lay','layer'], function(exports){
     delete options.elem;
     delete options.bindAction;
     
-    var that = this
-    ,options = that.config = $.extend({}, that.config, upload.config, options)
-    ,next = options.elem.next();
+    var that = this;
+    var options = that.config = $.extend({}, that.config, upload.config, options);
+    var next = options.elem.next();
     
     //更新文件域相关属性
     next.attr({
-      name: options.name
-      ,accept: options.acceptMime
-      ,multiple: options.multiple
+      name: options.name,
+      accept: options.acceptMime,
+      multiple: options.multiple
     });
   };
   
@@ -508,9 +515,9 @@ layui.define(['lay','layer'], function(exports){
     
     // 设置选择的文本
     var setChooseText = function(files, filename){
-      var elemFile = that.elemFile
-      ,item = options.item ? options.item : options.elem
-      ,value = files.length > 1 
+      var elemFile = that.elemFile;
+      var item = options.item ? options.item : options.elem;
+      var value = files.length > 1 
         ? files.length + '个文件' 
       : ((files[0] || {}).name || (elemFile[0].value.match(/[^\/\\]+\..+/g)||[]) || '');
       
@@ -534,7 +541,7 @@ layui.define(['lay','layer'], function(exports){
       }
     };
 
-    //点击上传容器
+    // 点击上传容器
     options.elem.off('upload.start').on('upload.start', function(){
       var othis = $(this);
 
@@ -543,7 +550,7 @@ layui.define(['lay','layer'], function(exports){
       that.elemFile[0].click();
     });
     
-    //拖拽上传
+    // 拖拽上传
     if(!(device.ie && device.ie < 10)){
       options.elem.off('upload.over').on('upload.over', function(){
         var othis = $(this)
@@ -561,25 +568,25 @@ layui.define(['lay','layer'], function(exports){
         extendAttrs.call(this);
         setChooseFile(files);
 
-        options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
+        options.auto ? that.upload() : setChooseText(files); // 是否自动触发上传
       });
     }
     
-    //文件选择
+    // 文件选择
     that.elemFile.off('upload.change').on('upload.change', function(){
       var files = this.files || [];
 
       extendAttrs.call(this);
       setChooseFile(files);
-      options.auto ? that.upload() : setChooseText(files); //是否自动触发上传
+      options.auto ? that.upload() : setChooseText(files); // 是否自动触发上传
     });
     
-    //手动触发上传
+    // 手动触发上传
     options.bindAction.off('upload.action').on('upload.action', function(){
       that.upload();
     });
     
-    //防止事件重复绑定
+    // 防止事件重复绑定
     if(options.elem.data('haveEvents')) return;
     
     that.elemFile.on('change', function(){
@@ -610,7 +617,7 @@ layui.define(['lay','layer'], function(exports){
     options.elem.data('haveEvents', true);
   };
   
-  //核心入口  
+  // 核心入口  
   upload.render = function(options){
     var inst = new Class(options);
     return thisUpload.call(inst);
