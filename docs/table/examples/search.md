@@ -40,7 +40,7 @@ layui.use(function(){
     elem: '#ID-table-demo-search',
     url: '/static/2.8/json/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
     cols: [[
-      {checkbox: true, fixed: true},
+      {type: 'radio', title: '😊', fixed: true}, // 单选框
       {field:'id', title: 'ID', width:80, sort: true, fixed: true},
       {field:'username', title: '用户名', width:80},
       {field:'sex', title: '性别', width:80, sort: true},

@@ -16,7 +16,7 @@ layui.use('table', function(){
     url: '/static/2.8/json/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
     page: true,
     cols: [[
-      {type: 'radio', fixed: 'left'},
+      // {type: 'radio', fixed: 'left'},
       {field:'id', title:'ID', width:80, fixed: 'left', unresize: true},
       {field:'username', title:'用户', width:120},
       {field:'sex', title:'性别', width:80},
@@ -43,7 +43,7 @@ layui.use('table', function(){
 
     // 标注当前点击行的选中状态
     obj.setRowChecked({
-      type: 'radio' // 单选模式
+      type: 'radio' // radio 单选模式；checkbox 复选模式
     });
   });
 

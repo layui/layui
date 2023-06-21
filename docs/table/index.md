@@ -651,7 +651,7 @@ table.render({
   // … // 其他属性
 });
  
-// 列拖拽宽度后的事件
+// 表头自定义元素工具事件
 table.on('colTool(test)', function(obj){
   var col = obj.col; // 获取当前列属性配置项
   var options = obj.config; // 获取当前表格基础属性配置项

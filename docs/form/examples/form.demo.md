@@ -164,7 +164,7 @@
     <div class="layui-input-block">
       <input type="checkbox" name="arr1[0]" lay-skin="tag" title="选项1" checked>
       <input type="checkbox" name="arr1[1]" lay-skin="tag" title="选项2">
-      <input type="checkbox" name="arr1[2]" lay-skin="tag" title="选项3" disabled>
+      <input type="checkbox" name="arr1[2]" lay-skin="tag" title="选项3">
     </div>
   </div>
   <div class="layui-form-item">
