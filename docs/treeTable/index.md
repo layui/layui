@@ -113,25 +113,27 @@ treeTable.render({
   // 其他属性 …
 });
 // 获取当前页接口的树表数据
-var data = treeTable.getData('test'); // 获取第一行的数据
+var data = treeTable.getData('test');
 console.log(data);
 ```
 
 <h3 id="getNodeById" lay-pid="api" class="ws-anchor ws-bold">获取节点信息集</h3>
 
-`treeTable.getNodeById(id)`
+`treeTable.getNodeById(id, dataId)`
 
 - 参数 `id` : treeTable 渲染时的 `id` 属性值
+- 参数 `dataId` : 数据项的 `id` 属性值
 
 ```js
 // 渲染
 treeTable.render({
   elem: '', // 绑定元素选择器
   id: 'test', // 自定义 id 索引
+  data: [{id: 1, name: 'user1'}]
   // 其他属性 …
 });
 // 获取节点信息集
-var obj = treeTable.getNodeById('test');
+var obj = treeTable.getNodeById('test', 1);
 console.log(obj);
 ```
 
@@ -316,7 +318,7 @@ treeTable.expandAll('test', false); // 关闭全部节点
 
 | opts | 描述 | 类型 | 默认值 |
 | --- | --- | -- | --- |
-| index | 要设置选中状态的行下标或行数据 | number/object | - |
+| index | 要设置选中状态的行下标或行数据 | string/object | - |
 | checked | 选中状态。`true` 选中；`false` 取消选中；`null` 切换。 其中，所为 `radio` 框，则不支持 `null`(切换)。 | boolean | - |
 | callbackFlag | 是否触发事件，若为 `true`，则 `checked: false` 无效。其对应的事件跟 `table` 的 `radio,checkbox` 事件用法一样 | boolean | `false` |
 
