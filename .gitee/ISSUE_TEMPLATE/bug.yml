@@ -1,37 +1,57 @@
-name: 问题反馈
-description: 使用 Layui 过程中遇到的 Bug、异常或其他困惑。😇 -
+name: 😇 问题反馈
+description: 使用 Layui 过程中遇到的 Bug、异常或其他困惑。
 title: ""
-labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
         在反馈问题之前，请确保：
-        - 您已查看官方使用文档：**https://layui.dev** ，但没有找到相关解决方案。 
-        - 您已在 Issues 中搜索过类似的问题，但没有找到相关解决方案。
+        - 已查看官方使用文档：**https://layui.dev** ，但没有找到相关解决方案。 
+        - 已在 **Issues** 中搜索过类似的问题，但没有找到相关解决方案。
   - type: input
     attributes:
-        label: 版本号
-        placeholder: 请提供您所使用的 Layui 版本号
+      label: 版本号
+      placeholder: 请提供您所使用的 Layui 版本号
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: 浏览器
+      placeholder: 如：Chrome 115.0.5735.91（正式版本） （64 位）
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: 问题类型
+      options:
+        - 疑是 BUG
+        - 报错提示
+        - 功能困惑
     validations:
       required: true
   - type: textarea
     attributes:
       label: 问题描述
-      placeholder: 请提供尽可能详细的问题描述和具体操作步骤等信息，以便我们也能够更轻松地将问题复现。
+      placeholder: 请提供详细的问题描述和操作步骤等信息，以便我们也能够更轻松地将问题复现。
     validations:
       required: true
   - type: textarea
     attributes:
       label: 业务代码
+      description: 直接粘贴问题对应的 `HTML,CSS,JavaScript` 等代码到下面的文本框，无需书写 `Markdown`
       placeholder: 请提供与该问题对应的业务代码片段，以便我们更好地排查问题。
-      render: html
+      render: auto
     validations:
       required: true
   - type: textarea
     attributes:
       label: 截图补充
-      placeholder: 若上述无法准确地表述问题，可提供必要的截图（支持粘贴上传）
+      placeholder: 如上述仍然无法准确地表述问题，可提供必要的截图（可直接粘贴上传）
+  - type: input
+    attributes:
+      label: 演示地址
+      placeholder: 若能提供 CodePen、Stackblitz 或自主搭建的页面演示地址，将更有助于解决问题
   - type: checkboxes
     attributes:
       label: 友好承诺

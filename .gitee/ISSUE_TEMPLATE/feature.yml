@@ -1,19 +1,26 @@
-name: 功能建议
-description: 对 Layui 提出您的宝贵建议。😄 - 
+name: 😄 功能建议
+description: 对 Layui 提出合理且有效的建议。
 title: ""
-labels: ["enhancement"]
-body:
+labels: ["建议"]
+body: 
   - type: textarea
     id: related-problem
     attributes:
       label: 建议内容
-      placeholder: 阐述提出该建议的出发点。
+      placeholder: 阐述提出该建议的出发点，请认真填写。
     validations:
       required: true
   - type: textarea
     id: desired-solution
     attributes:
       label: 解决方案
-      placeholder: 您希望看到什么样的解决方案？
+      placeholder: 你希望得到什么样的解决方案？
     validations:
       required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 截图说明
+      placeholder: 在此处添加有关功能请求的相关截图（支持粘贴上传）。
+    validations:
+      required: false
