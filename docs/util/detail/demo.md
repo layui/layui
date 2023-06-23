@@ -1,4 +1,4 @@
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
+<pre class="layui-code" lay-options="{preview: 'iframe', codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <h3 class="ws-anchor ws-bold">倒计时</h3>
 
