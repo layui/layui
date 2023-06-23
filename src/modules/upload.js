@@ -53,7 +53,6 @@ layui.define(['lay','layer'], function(exports){
   var ELEM_CHOOSE = 'layui-upload-choose';
   var ELEM_DRAG = 'layui-upload-drag';
   
-  
   // 构造器
   var Class = function(options){
     var that = this;
@@ -152,8 +151,8 @@ layui.define(['lay','layer'], function(exports){
   //异常提示
   Class.prototype.msg = function(content){
     return layer.msg(content, {
-      icon: 2
-      ,shift: 6
+      icon: 2,
+      shift: 6
     });
   };
   
