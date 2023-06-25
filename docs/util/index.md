@@ -20,8 +20,8 @@ toc: true
 | API | 描述 |
 | --- | --- |
 | var util = layui.util | 获得 `util` 模块。 |
-| util.fixbar(options) | `fixbar` 固定条组件，用法：[#详见](../fixbar/) |
-| [util.countdown(endTime, serverTime, callback)](#countdown) | 倒计时 |
+| [util.fixbar(options)](../fixbar/) | 固定条组件 |
+| [util.countdown(options)](#countdown) | 倒计时组件 |
 | [util.timeAgo(time, onlyDate)](#timeAgo) | 某个时间在多久前 |
 | [util.toDateString(time, format)](#toDateString) | 将毫秒数或日期对象转换成日期格式字符 |
 | [util.digit(num, length)](#digit) | 数字前置补零 |
@@ -32,26 +32,45 @@ toc: true
 
 <h3 id="countdown" class="ws-anchor ws-bold">倒计时</h3>
 
-`util.countdown(endTime, serverTime, callback);`
+`util.countdown(options);`
 
-- 参数 `endTime` : 结束时间毫秒数或 `Date` 对象
-- 参数 `serverTime` : 服务器当前时间毫秒数 或 `Date` 对象
-- 参数 `callback` : 倒计时回调函数。若倒计时正在运行，则每一秒都会执行一次。并且返回以下三个参数。
-  - `date` 包含天/时/分/秒的对象
-  - `serverTime` 当前服务器时间毫秒数或 `Date` 对象
-  - `timer` 计时器返回的索引，用于 `clearTimeout` 
+- 参数 `options` <sup>2.8.9+</sup>: 属性配置项。可选项详见下表：
 
-该方法并不负责视图的呈现，而仅返回倒计时数值。 相关用法见：[#示例](#examples)
+| 属性 | 描述 |
+| --- | --- |
+| date | 目标时间值。值可以为毫秒数或 `Date` 对象 |
+| now | 当前时间值，一般为当前服务器时间。值可以为毫秒数或 `Date` 对象  |
+| ready | 倒计时初始时的回调函数。 |
+| clock | 倒计时计时中的回调函数，每秒触发一次，直到计时完成。 |
+| done | 倒计时计时完成的回调函数，即到达目标时间值时触发 |
 
+- 注： <sup>2.8.9</sup> 之前的版本写法为：`util.countdown(date, now, clock);`
+
+该方法返回的实例对象成员如下 <sup>2.8.9+</sup>：
+
+```js
+var countdown = util.countdown(options);
+countdown.clear(); // 清除当前倒计时
+countdown.reload(options); // 重载当前倒计时。
+countdown.timer; // 当前倒计时计时器 ID
 ```
+
+相关用法可参考：[#示例](#examples)
+
+```js
 layui.use('util', function(){
   var util = layui.util;
   // 示例
-  var endTime = new Date(2099,1,1).getTime() // 假设为结束日期
-  var serverTime = new Date().getTime(); // 这里采用的是本地时间，实际使用一般是取服务端时间
-
-  util.countdown(endTime, serverTime, function(date, serverTime, timer){
-    console.log(date, serverTime, timer)
+  util.countdown({
+    date: '2099-1-1', // 目标时间值
+    now: new Date(), // 当前时间，一般为服务器时间，此处以本地时间为例
+    clock: function(obj, countdown){ // 计时中
+      console.log(obj); // 得到当前计时器的「天、时、分、秒」值
+      console.log(countdown); // 得到当前实例对象
+    },
+    done: function(obj, countdown){ // 计时完成
+      console.log('time is up');
+    }
   });
 });
 ```
