@@ -2314,9 +2314,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       // 显示编辑表单
       if(editType){
         var input = $(function(){
-          var inputElem = '<input class="layui-input '+ ELEM_EDIT +'">';
+          var inputElem = '<input class="layui-input '+ ELEM_EDIT +'" lay-unrow>';
           if(editType === 'textarea') {
-            inputElem = '<textarea class="layui-input ' + ELEM_EDIT + '"></textarea>';
+            inputElem = '<textarea class="layui-input ' + ELEM_EDIT + '" lay-unrow></textarea>';
           }
           return inputElem;
         }());
