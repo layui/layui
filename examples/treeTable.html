@@ -24,6 +24,7 @@ layui.use(['treeTable'], function(){
     url: './json/treeTable/demo-1.json',
     maxHeight: 'full-32',
     cols: [[
+      {type: 'checkbox', fixed: 'left'},
       {type: 'numbers', fixed: 'left'},
       {field: 'id', title: 'ID', width: 145, sort: true, fixed: 'left', totalRow: '合计：'},
       {field: 'name', title: '用户名', width: 180, fixed: 'left'},
