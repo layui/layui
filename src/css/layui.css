@@ -822,6 +822,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-form-checkbox:hover{}
 .layui-form-checkbox > *{display: inline-block; vertical-align: middle;}
 .layui-form-checkbox > div{padding: 0 11px; font-size: 14px; border-radius: 2px 0 0 2px; background-color: #d2d2d2; color: #fff; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.layui-form-checkbox > div > .layui-icon{line-height: normal}
 .layui-form-checkbox:hover > div{background-color: #c2c2c2;}
 .layui-form-checkbox > i{position: absolute; right: 0; top: 0; width: 30px; height: 100%; border: 1px solid #d2d2d2; border-left: none; border-radius: 0 2px 2px 0; color: #fff; color: rgba(255,255,255,0); font-size: 20px; text-align: center; box-sizing: border-box;}
 .layui-form-checkbox:hover > i{border-color: #c2c2c2; color: #c2c2c2;}
