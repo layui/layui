@@ -722,6 +722,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-input:hover, .layui-textarea:hover{border-color: #d2d2d2 !important;}
 .layui-input:focus, .layui-textarea:focus{border-color: #16b777 !important; box-shadow: 0 0 0 3px rgba(22,183,119,0.08);}
 .layui-textarea{position: relative; min-height: 100px; height: auto; line-height: 20px; padding: 6px 10px; resize: vertical;}
+.layui-input[disabled], .layui-textarea[disabled]{background-color: #fafafa;}
 .layui-select{padding: 0 10px;}
 .layui-form select,
 .layui-form input[type=checkbox],
