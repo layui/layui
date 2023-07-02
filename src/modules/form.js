@@ -312,7 +312,17 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             // 初始选中样式
             dds.removeClass(THIS);
             index >= 0 && dds.eq(index).addClass(THIS);
-
+           
+            //判断是否在layer页面层
+            var layerContent = reElem.parents('.layui-layer-content');
+            if (layerContent.length){
+               //layer页面层上下定位识别
+               var reElemTop = reElem.offset().top - layerContent.offset().top + reElem.outerHeight() + 5 - $win.scrollTop();
+               if (reElemTop + dlHeight > layerContent.height() && top >= dlHeight){
+                   reElem.addClass(CLASS + 'up');
+               }
+            }
+           
             // 上下定位识别
             if(top + dlHeight > $win.height() && top >= dlHeight){
               reElem.addClass(CLASS + 'up');
