@@ -293,10 +293,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 if(value < min) value = min;
                 if(value > max) value = max;
 
-                // 保留位数
-                value = value.toFixed(function(step){
+                // 小数点后保留位数
+                var fixed = function(step){
                   return (step.match(/(?<=\.)[\d]+$/) || [''])[0].length;
-                }(step.toString()));
+                }(step.toString());
+                if(fixed) value = value.toFixed(fixed);
 
                 elem.val(value);
               }
