@@ -296,7 +296,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
                 // 小数点后保留位数
                 var fixed = function(step){
-                  return (step.match(/(?<=\.)[\d]+$/) || [''])[0].length;
+                  var decimals = (step.match(/\.(\d+$)/) || [])[1] || '';
+                  return decimals.length;
                 }(step.toString());
                 if(fixed) value = value.toFixed(fixed);
 

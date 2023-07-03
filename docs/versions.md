@@ -11,6 +11,16 @@ toc: true
 
 > 导读：📑 [Layui 2.8 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
+<h2 id="2.8.10" class="ws-anchor">
+  2.8.10 
+  <span class="layui-badge-rim">2023-07-03</span>
+</h2>
+
+- 修复 `layui.js` 在 IE 和 Safari 等「古董浏览器」存在一个正则零宽断言报错的问题 # I7HZCZ/I7I0TO
+
+### 下载： [layui-v2.8.10.zip](https://gitee.com/layui/layui/attach_files/1455365/download)
+
+---
 
 <h2 id="2.8.9" class="ws-anchor">
   2.8.9 
@@ -31,7 +41,7 @@ toc: true
   - 新增 `countdown` 的 `date,now,clock,done` 等属性
   - 新增 `countdown` 的 `clear,reload` 等实例方法，用于清除和重置倒计时等操作
 
-### 下载： [layui-v2.8.9.zip](https://gitee.com/layui/layui/attach_files/1454465/download)
+### 下载： [~~layui-v2.8.9.zip~~](https://gitee.com/layui/layui/attach_files/1454465/download)
 
 ---
 
