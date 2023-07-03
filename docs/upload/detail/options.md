@@ -268,6 +268,33 @@ acceptMime: 'image/jpeg, image/png` // 只筛选 jpg,png 格式图片
 </td>
     </tr>
     <tr>
+<td>
+  
+[text](#options.text) <sup>2.8.9+</sup>
+
+</td>
+<td colspan="4">
+
+<div id="options.text" lay-pid="options" class="ws-anchor">  
+
+自定义内部各类场景下的提示文本
+
+</div>
+
+```
+text: { // 自定义提示文本
+  "data-format-error": "", // 数据格式错误的提示
+  "check-error": "", // 文件格式校验失败的提示
+  "error": "", // 上传失败的提示
+  "limit-number": null, // 限制 number 属性的提示。若设置，需为函数写法
+  "limit-size": null, // 限制 size 属性的提示。若设置，需为函数写法
+  "cross-domain": "", // IE 下跨域的提示
+}
+```
+
+</td>
+    </tr>
+    <tr>
 <td colspan="4" style="text-align: center"> 
 
 
