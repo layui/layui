@@ -29,7 +29,7 @@ toc: true
 | [treeTable.reloadData(id, options)](#reload) | 树表数据重载。 |
 | [treeTable.reloadAsyncNode(id, index)](#reloadAsyncNode) | 重载异步子节点 |
 | [treeTable.getData(id, isSimpleData)](#getData) | 获取树表数据。 |
-| [treeTable.getNodeById(id)](#getNodeById) | 获取节点信息集 |
+| [treeTable.getNodeById(id, dataId)](#getNodeById) | 获取节点信息集 |
 | [treeTable.getNodesByFilter(id, filter, opts)](#getNodesByFilter) | 获取符合过滤规则的节点信息集 |
 | [treeTable.getNodeDataByIndex(id, index)](#getNodeDataByIndex)  | 通过行元素对应的 `data-index` 属性获取对应行数据。 |
 | [treeTable.updateNode(id, index, data)](#updateNode) | 更新行数据。 |
@@ -119,9 +119,10 @@ console.log(data);
 
 <h3 id="getNodeById" lay-pid="api" class="ws-anchor ws-bold">获取节点信息集</h3>
 
-`treeTable.getNodeById(id)`
+`treeTable.getNodeById(id, dataId)`
 
 - 参数 `id` : treeTable 渲染时的 `id` 属性值
+- 参数 `dataId` : 数据项的 `id` 属性值
 
 ```js
 // 渲染
@@ -131,7 +132,7 @@ treeTable.render({
   // 其他属性 …
 });
 // 获取节点信息集
-var obj = treeTable.getNodeById('test');
+var obj = treeTable.getNodeById('test', 1);
 console.log(obj);
 ```
 
