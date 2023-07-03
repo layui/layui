@@ -6,11 +6,8 @@
 <div class="layui-inline">
   <input type="text" readonly class="layui-input" id="test1" value="2099-12-31 00:00:00">
 </div>
+<span class="layui-word-aux layui-font-green" id="test2"></span>
 
-<blockquote class="layui-elem-quote" style="margin-top: 10px;">
-  <div id="test2"></div>
-</blockquote>
- 
 <h3 class="ws-anchor ws-bold">某个时间在多久前</h3>
 
 请选择要计算的日期：
@@ -59,7 +56,7 @@ layui.use(function(){
     },
     clock: function(obj, inst){  // 计时中
       var str = [obj.d,'天',obj.h,'时',obj.m,'分',obj.s,'秒'].join(' ');
-      lay('#test2').html('距离上述日期还有：'+ str);
+      lay('#test2').html(str);
       util.countdown.timer = inst.timer; // 记录当前定时器，以便在重复渲染时清除。实际使用时不常用
     },
     done: function(obj, inst){ // 计时完成
