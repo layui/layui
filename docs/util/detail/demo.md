@@ -1,4 +1,4 @@
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
+<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], allowParse: true, tools: ['full']}">
   <textarea>
 <h3 class="ws-anchor ws-bold">倒计时</h3>
 
@@ -6,11 +6,8 @@
 <div class="layui-inline">
   <input type="text" readonly class="layui-input" id="test1" value="2099-12-31 00:00:00">
 </div>
+<span class="layui-word-aux layui-font-green" id="test2"></span>
 
-<blockquote class="layui-elem-quote" style="margin-top: 10px;">
-  <div id="test2"></div>
-</blockquote>
- 
 <h3 class="ws-anchor ws-bold">某个时间在多久前</h3>
 
 请选择要计算的日期：
@@ -51,26 +48,29 @@ layui.use(function(){
   var $ = layui.$;
 
   // 倒计时
-  var thisTimer;
-  var setCountdown = function(value){
-    var endTime = new Date(value); // 结束日期
-    var serverTime = new Date(); // 假设为当前服务器时间，这里采用的是本地时间，实际使用一般是取服务端的
-     
-    clearTimeout(thisTimer);
-    util.countdown(endTime, serverTime, function(date, serverTime, timer){
-      var str = date[0] + ' 天 ' + date[1] + ' 时 ' +  date[2] + ' 分 ' + date[3] + ' 秒';
-      lay('#test2').html('距离上述日期还有：'+ str);
-      thisTimer = timer;
-    });
-  };
-
-  setCountdown('2099-12-31 00:00:00');
-  
+  var countdown = util.countdown({
+    date: '2099-12-31 00:00:00', // 目标时间值
+    now: new Date(), // 当前时间，一般为服务器时间，此处以本地时间为例
+    ready: function(){ // 初始操作
+      clearTimeout(util.countdown.timer); // 清除旧定时器，防止多次渲染时重复执行。实际使用时不常用
+    },
+    clock: function(obj, inst){  // 计时中
+      var str = [obj.d,'天',obj.h,'时',obj.m,'分',obj.s,'秒'].join(' ');
+      lay('#test2').html(str);
+      util.countdown.timer = inst.timer; // 记录当前定时器，以便在重复渲染时清除。实际使用时不常用
+    },
+    done: function(obj, inst){ // 计时完成
+      layer.msg('Time is up');
+    }
+  });
+  // 重置倒计时
   laydate.render({
     elem: '#test1',
     type: 'datetime',
-    done: function(value, date){
-      setCountdown(value);
+    done: function(value){
+      countdown.reload({
+        date: value
+      });
     }
   });
   

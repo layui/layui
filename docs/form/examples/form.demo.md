@@ -48,13 +48,13 @@
   </div>
   <div class="layui-form-item">
     <div class="layui-inline">
-      <label class="layui-form-label">范围</label>
+      <label class="layui-form-label">数字输入框</label>
       <div class="layui-input-inline" style="width: 100px;">
-        <input type="text" name="price_min" placeholder="￥" autocomplete="off" class="layui-input">
+        <input type="number" name="price_min" placeholder="" autocomplete="off" class="layui-input" min="0" step="1" lay-affix="number">
       </div>
       <div class="layui-form-mid">-</div>
       <div class="layui-input-inline" style="width: 100px;">
-        <input type="text" name="price_max" placeholder="￥" autocomplete="off" class="layui-input">
+        <input type="number" name="price_max" placeholder="" autocomplete="off" class="layui-input" min="0" step="1" lay-affix="number">
       </div>
     </div>
   </div>

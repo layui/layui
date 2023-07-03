@@ -149,6 +149,6 @@ layui.use(['element', 'layer', 'util'], function(){
 
 > 小贴士：以上是一个基础的框体布局方案，若要实现诸如 `iframe` 跳转、侧边菜单收缩等功能，还需按照实际的业务需求自主实现。当然，也可以采用社区已有的 AdminUI 主题方案，如：layuiAdmin 等。
 
-<h2 id="adminui" lay-toc="">Admin UI</h2>
+<h2 id="adminui" lay-toc="{}">Admin UI</h2>
 
 <a href="https://dev.layuion.com/themes/layuiadmin/" target="_blank">layuiAdmin</a> 是一套用于开发通用型管理系统的纯静态的 `HTML` 网页界面主题，基于开源的 Layui Web 组件库制作而成，没有任何后端程序及数据库存储等服务端代码。开发者使用该网页模板，可省去前端的大量工作，从而更高效地开发 Web 应用系统。

@@ -23,7 +23,7 @@
           <div class="layui-input-split layui-input-prefix">
             前置信息
           </div>
-          <input type="text" name="arr[]" required lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+          <input type="text" name="arr[]" required lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input" lay-affix="clear">
           <div class="layui-input-split layui-input-suffix">
             后置信息
           </div>
@@ -108,6 +108,26 @@
             <option value="深圳">深圳</option>
           </select>
         </div>
+      </div>
+      <div class="layui-col-md3">
+        <div class="layui-input-wrap">
+          <div class="layui-input-prefix">
+            <i class="layui-icon layui-icon-date"></i>
+          </div>
+          <input type="text" name="arr[]" required placeholder="前缀和后缀+动态点缀" autocomplete="off" class="layui-input" lay-affix="clear">
+          <div class="layui-input-suffix">
+            <i class="layui-icon layui-icon-down"></i>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-md3">
+        <input type="number" step="0.01" min="0" max="10" name="arr[]" required placeholder="数字输入框" lay-affix="number" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-col-md3">
+        <input type="number" step="0.01" min="0" max="10" name="arr[]" required placeholder="系统自带数字输入框" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-col-md3">
+        <input type="number" disabled name="arr[]" required placeholder="数字输入框 禁用状态" lay-affix="number" autocomplete="off" class="layui-input">
       </div>
       <div class="layui-col-md12">
         <div class="layui-input-wrap">

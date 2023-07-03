@@ -162,6 +162,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         elemForm.find('input[lay-affix],textarea[lay-affix]').each(function(){
           var othis = $(this);
           var affix = othis.attr('lay-affix');
+          var CLASS_WRAP = 'layui-input-wrap';
           var CLASS_SUFFIX = 'layui-input-suffix';
           var CLASS_AFFIX = 'layui-input-affix';
           var disabled = othis.is('[disabled]') || othis.is('[readonly]');
@@ -179,16 +180,31 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               value: affix
             }), opts, lay.options(othis[0]));
             var elemAffix = $('<div class="'+ CLASS_AFFIX +'">');
-            var elemIcon = $('<i class="layui-icon layui-icon-'+ opts.value + (
-              opts.disabled ? (' '+ DISABLED) : ''
-            ) +'"></i>');
+            var value = layui.isArray(opts.value) ? opts.value : [opts.value];
+            var elemIcon = $(function(){
+              var arr = [];
+              layui.each(value, function(i, item){
+                arr.push('<i class="layui-icon layui-icon-'+ item + (
+                  opts.disabled ? (' '+ DISABLED) : ''
+                ) +'"></i>');
+              });
+              return arr.join('');
+            }());
             
-            elemAffix.append(elemIcon);
+            elemAffix.append(elemIcon); // 插入图标元素
+
+            // 追加 className
             if(opts.split) elemAffix.addClass('layui-input-split');
+            if(opts.className) elemAffix.addClass(opts.className);
 
             // 移除旧的元素
             var hasElemAffix = othis.next('.'+ CLASS_AFFIX);
             if(hasElemAffix[0]) hasElemAffix.remove();
+
+            // 是否在规定的容器中
+            if(!othis.parent().hasClass(CLASS_WRAP)){
+              othis.wrap('<div class="'+ CLASS_WRAP +'"></div>');
+            }
 
             // 是否已经存在后缀元素
             var hasElemSuffix = othis.next('.'+ CLASS_SUFFIX);
@@ -256,6 +272,36 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               },
               show: 'auto', // 根据输入框值是否存在来显示或隐藏点缀图标
               disabled: disabled // 跟随输入框禁用状态
+            },
+            number: { // 数字输入框
+              value: ['up', 'down'],
+              split: true,
+              className: 'layui-input-number',
+              disabled: disabled, // 跟随输入框禁用状态
+              click: function(elem){
+                var index = $(this).index();
+                var value = elem.val();
+                var step = Number(elem.attr('step')) || 1; // 加减的数字间隔
+                var min = Number(elem.attr('min'));
+                var max = Number(elem.attr('max'));
+
+                if(isNaN(value)) return; // 若非数字，则不作处理
+
+                value = Number(value);
+                value = index ? value - step : value + step;
+
+                // min max
+                if(value < min) value = min;
+                if(value > max) value = max;
+
+                // 小数点后保留位数
+                var fixed = function(step){
+                  return (step.match(/(?<=\.)[\d]+$/) || [''])[0].length;
+                }(step.toString());
+                if(fixed) value = value.toFixed(fixed);
+
+                elem.val(value);
+              }
             }
           };
           

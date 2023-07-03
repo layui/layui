@@ -100,30 +100,50 @@ toc: true
 
 <h2 id="affix" lay-toc="{hot: true}">动态点缀 <sup>2.8+</sup></h2>
 
-该功能允许对输入框内容进行相关动态操作。通过对输入框元素设置 `lay-affix` 属性来开启动态点缀，且输入框元素必须放置在一个具有输入框点缀结构的容器中（上文有讲解）。如：
+该功能允许对输入框内容进行相关动态操作。通过对输入框元素设置 `lay-affix` 属性来开启动态点缀。
 
-```
-input 放在前后置容器中：
-<div class="layui-input-group">
-  <input type="text" lay-affix="clear">
-</div>
- 
-input 放在前后缀容器中：
-<div class="layui-input-wrap">
-  <input type="text" lay-affix="clear">
-</div>
-```
-
-`lay-affix` 属性支持设置内置属性值和自定义值
-
-| 值 | 描述 |
+| 点缀 | 属性值 |
 | --- | --- |
-| `lay-affix="eye"` | 密码框显隐 |
-| `lay-affix="clear"` | 内容清除 |
-| `lay-affix="自定义图标值"` | 值对应图标类`layui-icon-`后面的名称（[#详见图标列表](../icon/#list)）。<br>可通过「[点缀事件](#affix-event)」完成自定义操作 |
+| [数字输入框](#affix-number) <sup>2.8.9+</sup> | `lay-affix="number"` |
+| [密码框显隐](#affix-eye) | `lay-affix="eye"` |
+| [内容清除](#affix-clear) | `lay-affix="clear"` |
+| [自定义动态点缀](#affix-custom) | `lay-affix="customName"` |
+
+
+<h3 id="affix-number" lay-toc="{level: 2, hot: true}" class="ws-bold">
+  数字输入框 <sup>2.8.9+</sup>
+</h3>
+
+一般搭配 `<input type="number">` 使用，用于替代原生输入框，可继承 `step,min,max` 等原生属性。
+
+<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
+  obj.render();
+}}">
+  <textarea>
+<div class="layui-form">
+  <input type="number" lay-affix="number" placeholder="" value="0" class="layui-input">
+  <hr class="ws-space-16">
+  <div class="layui-row layui-col-space16">
+    <div class="layui-col-xs6">
+      <input type="number" lay-affix="number" placeholder="设置 step 为 0.01" step="0.01" class="layui-input">
+    </div>
+    <div class="layui-col-xs6">
+      <input type="number" lay-affix="number" placeholder="设置 step,min,max" step="10" min="0" max="100" class="layui-input">
+    </div>
+     <div class="layui-col-xs12">
+      <input type="number" lay-affix="number" disabled placeholder="禁用状态" value="0" class="layui-input">
+     </div>
+  </div>
+</div> 
+
+<!-- import layui -->
+  </textarea>
+</pre>
 
 
 <h3 id="affix-eye" lay-toc="{level: 2}" class="ws-bold">密码显隐</h3>
+
+一般搭配 `<input type="password">` 使用，用于控制输入框内容的显示和隐藏。
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
   obj.render();
@@ -140,6 +160,8 @@ input 放在前后缀容器中：
 </pre>
 
 <h3 id="affix-clear" lay-toc="{level: 2}" class="ws-bold">内容清除</h3>
+
+一般搭配 `<input type="text">` 使用，用于清除输入框的内容。
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
   obj.render();
@@ -169,7 +191,7 @@ input 放在前后缀容器中：
 
 <h3 id="affix-custom" lay-toc="{level: 2}" class="ws-bold">自定义动态点缀</h3>
 
-我们还可以对 `lay-affix` 属性设置任意图标值，从而实现自定义动态点缀功能。
+我们还可以对 `lay-affix` 属性设置任意图标值，从而实现自定义动态点缀功能。 其中 `lay-affix="customName"` 值对应图标类`layui-icon-`后面的名称（[#详见图标列表](../icon/#list)）。且可通过「[点缀事件](#affix-event)」完成自定义操作。
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
   obj.render();
@@ -195,6 +217,7 @@ input 放在前后缀容器中：
 form.on('input-affix(filter)', function(data){
   var elem = data.elem; // 获取输入框 DOM 对象
   var affix = data.affix; // 获取输入框 lay-affix 属性值
+  console.log(this); // 当前触发点缀事件的图标元素
 });
 ```
 

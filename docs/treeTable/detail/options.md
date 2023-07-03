@@ -136,7 +136,7 @@ treeTable.render({
 ```
 treeTable.render({
   elem: '',
-  treee: {
+  tree: {
     enable: true,
     async: {
       format: function(trData, options, callback){

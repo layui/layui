@@ -179,7 +179,7 @@ layui.define(['jquery', 'lay'], function(exports){
 
     //插入输入框
     if(options.input && !options.range){
-      var elemInput = $('<div class="layui-slider-input layui-input"><div class="layui-slider-input-txt"><input type="text" class="layui-input"></div><div class="layui-slider-input-btn"><i class="layui-icon layui-icon-up"></i><i class="layui-icon layui-icon-down"></i></div></div>');
+      var elemInput = $('<div class="layui-slider-input"><div class="layui-slider-input-txt"><input type="text" class="layui-input"></div><div class="layui-slider-input-btn"><i class="layui-icon layui-icon-up"></i><i class="layui-icon layui-icon-down"></i></div></div>');
       othis.css("position","relative");
       othis.append(elemInput);
       othis.find('.' + SLIDER_INPUT_TXT).children('input').val(options.value);

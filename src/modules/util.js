@@ -131,48 +131,95 @@ layui.define('jquery', function(exports){
           setTopBar();
         }, 100);
       }); 
-    }
+    },
     
-    //倒计时
-    ,countdown: function(endTime, serverTime, callback){
-      var that = this
-      ,type = typeof serverTime === 'function'
-      ,end = new Date(endTime).getTime()
-      ,now = new Date((!serverTime || type) ? new Date().getTime() : serverTime).getTime()
-      ,count = end - now
-      ,time = [
-        Math.floor(count/(1000*60*60*24)) //天
-        ,Math.floor(count/(1000*60*60)) % 24 //时
-        ,Math.floor(count/(1000*60)) % 60 //分
-        ,Math.floor(count/1000) % 60 //秒
-      ];
+    // 倒计时
+    countdown: function(options){
+      var that = this;
+
+      // 默认可选项
+      options = $.extend(true, {
+        date: new Date(),
+        now: new Date()
+      }, options);
+
+      // 兼容旧版参数
+      var args = arguments;
+      if(args.length > 1){
+        options.date = new Date(args[0]);
+        options.now = new Date(args[1]);
+        options.clock = args[2];
+      }
+
+      // 实例对象
+      var inst = {
+        options: options,
+        clear: function(){ // 清除计时器
+          clearTimeout(inst.timer);
+        },
+        reload: function(opts){ // 重置倒计时
+          this.clear();
+          $.extend(true, this.options, {
+            now: new Date()
+          }, opts);
+          count();
+        }
+      };
+
+      typeof options.ready === 'function' && options.ready();
+
+      // 计算倒计时
+      var count = (function fn(){
+        var date = new Date(options.date);
+        var now = new Date(options.now);
+        var countTime = function(time){
+          return time > 0 ? time : 0;
+        }(date.getTime() - now.getTime());
+        var result = {
+          d: Math.floor(countTime/(1000*60*60*24)), // 天
+          h: Math.floor(countTime/(1000*60*60)) % 24, // 时
+          m: Math.floor(countTime/(1000*60)) % 60, // 分
+          s: Math.floor(countTime/1000) % 60 // 秒
+        };
+        var next = function(){
+          now.setTime(now.getTime() + 1000);
+          options.now = now;
+          count();
+        };
+
+        // 兼容旧版返回值
+        if(args.length > 1) result = [result.d,result.h,result.m,result.s]
+
+        // 计时 - 以秒间隔
+        inst.timer = setTimeout(next, 1000);
+        typeof options.clock === 'function' && options.clock(result, inst);
+
+        // 计时完成
+        if(countTime <= 0){
+          clearTimeout(inst.timer);
+          typeof options.done === 'function' && options.done(result, inst);
+        };
+
+        return fn;
+      })();
       
-      if(type) callback = serverTime;
-       
-      var timer = setTimeout(function(){
-        that.countdown(endTime, now + 1000, callback);
-      }, 1000);
-      
-      callback && callback(count > 0 ? time : [0,0,0,0], serverTime, timer);
-      
-      if(count <= 0) clearTimeout(timer);
-      return timer;
-    }
+      return inst;
+    },
     
-    //某个时间在当前时间的多久前
-    ,timeAgo: function(time, onlyDate){
-      var that = this
-      ,arr = [[], []]
-      ,stamp = new Date().getTime() - new Date(time).getTime();
+    // 某个时间在当前时间的多久前
+    timeAgo: function(time, onlyDate){
+      var that = this;
+      var arr = [[], []];
+      var stamp = new Date().getTime() - new Date(time).getTime();
       
-      //返回具体日期
+      // 返回具体日期
       if(stamp > 1000*60*60*24*31){
         stamp =  new Date(time);
         arr[0][0] = that.digit(stamp.getFullYear(), 4);
         arr[0][1] = that.digit(stamp.getMonth() + 1);
         arr[0][2] = that.digit(stamp.getDate());
         
-        //是否输出时间
+        // 是否输出时间
         if(!onlyDate){
           arr[1][0] = that.digit(stamp.getHours());
           arr[1][1] = that.digit(stamp.getMinutes());
@@ -181,22 +228,22 @@ layui.define('jquery', function(exports){
         return arr[0].join('-') + ' ' + arr[1].join(':');
       }
       
-      //30天以内，返回“多久前”
+      // 30 天以内，返回「多久前」
       if(stamp >= 1000*60*60*24){
         return ((stamp/1000/60/60/24)|0) + ' 天前';
       } else if(stamp >= 1000*60*60){
         return ((stamp/1000/60/60)|0) + ' 小时前';
-      } else if(stamp >= 1000*60*3){ //3分钟以内为：刚刚
+      } else if(stamp >= 1000*60*3){ // 3 分钟以内为：刚刚
         return ((stamp/1000/60)|0) + ' 分钟前';
       } else if(stamp < 0){
         return '未来';
       } else {
         return '刚刚';
       }
-    }
+    },
     
-    //数字前置补零
-    ,digit: function(num, length){
+    // 数字前置补零
+    digit: function(num, length){
       var str = '';
       num = String(num);
       length = length || 2;
@@ -204,10 +251,10 @@ layui.define('jquery', function(exports){
         str += '0';
       }
       return num < Math.pow(10, length) ? str + (num|0) : num;
-    }
+    },
     
-    //转化为日期格式字符
-    ,toDateString: function(time, format){
+    // 转化为日期格式字符
+    toDateString: function(time, format){
       //若 null 或空字符，则返回空字符
       if(time === null || time === '') return '';
       
@@ -236,10 +283,10 @@ layui.define('jquery', function(exports){
       .replace(/HH/g, hms[0])
       .replace(/mm/g, hms[1])
       .replace(/ss/g, hms[2]);
-    }
+    },
     
-    //转义 html
-    ,escape: function(html){
+    // 转义 html
+    escape: function(html){
       var exp = /[<"'>]|&(?=#[a-zA-Z0-9]+)/g;
       if(html === undefined || html === null) return '';
 
@@ -249,20 +296,20 @@ layui.define('jquery', function(exports){
       return html.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
       .replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
-    }
+    },
     
-    //还原转义的 html
-    ,unescape: function(html){
+    // 还原转义的 html
+    unescape: function(html){
       if(html === undefined || html === null) html = '';
       html += '';
 
       return html.replace(/\&amp;/g, '&')
       .replace(/\&lt;/g, '<').replace(/\&gt;/g, '>')
       .replace(/\&#39;/g, '\'').replace(/\&quot;/g, '"');
-    }
+    },
 
     // 打开新窗口
-    ,openWin: function(options){
+    openWin: function(options){
       var win;
       options = options || {};
       win = options.window || window.open((options.url || ''), options.target, options.specs);
@@ -270,10 +317,10 @@ layui.define('jquery', function(exports){
       win.document.open('text/html', 'replace');
       win.document.write(options.content || '');
       win.document.close();
-    }
+    },
     
-    //让指定的元素保持在可视区域
-    ,toVisibleArea: function(options){
+    // 让指定的元素保持在可视区域
+    toVisibleArea: function(options){
       options = $.extend({
         margin: 160 //触发动作的边界值
         ,duration: 200 //动画持续毫秒数
@@ -298,10 +345,10 @@ layui.define('jquery', function(exports){
         obj[SCROLL_NAME] = thisOffset - size/2 + scrollValue
         scrollElem.animate(obj, options.duration);
       }
-    }
+    },
     
     //批量事件
-    ,event: function(attr, obj, eventType){
+    event: function(attr, obj, eventType){
       var _body = $('body');
       eventType = eventType || 'click';
       

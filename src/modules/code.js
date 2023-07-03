@@ -90,6 +90,14 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
 
       othis.data('code', codes);
 
+      // code
+      var html = finalCode = codes.join('');
+
+      // 外部重新解析 code
+      if(typeof options.codeParse === 'function'){
+        html = finalCode = options.codeParse(html);
+      }
+
       // 工具栏
       var tools = {
         copy: {
@@ -231,7 +239,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         var run = function(thisItemBody){
           var iframe = thisItemBody.children('iframe')[0];
           if(isIframePreview && iframe){
-            iframe.srcdoc = codes.join('');
+            iframe.srcdoc = finalCode;
           } else {
             thisItemBody.html(codes.join(''));
           }
@@ -297,13 +305,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       } 
 
       
-      // code
-      var html = finalCode = codes.join('');
-
-      // 外部重新解析 code
-      if(typeof options.codeParse === 'function'){
-        html = finalCode = options.codeParse(html);
-      }
+      
 
       // 转义 HTML 标签
       if(options.encode) html = util.escape(html); // 编码
