@@ -277,6 +277,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               value: ['up', 'down'],
               split: true,
               className: 'layui-input-number',
+              disabled: disabled, // 跟随输入框禁用状态
               click: function(elem){
                 var index = $(this).index();
                 var value = elem.val();
