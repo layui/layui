@@ -321,7 +321,6 @@ layui.define(['table'], function (exports) {
     layui.each(tableData, function (i1, item1) {
       var dataIndex = (parentIndex ? parentIndex + '-' : '') + i1;
       var dataNew = $.extend({}, item1);
-      dataNew[childrenKey] = null;
       dataNew[pIdKey] = item1[pIdKey] || parentId;
       flat.push(dataNew);
       flat = flat.concat(that.treeToFlat(item1[childrenKey], item1[customName.id], dataIndex));
