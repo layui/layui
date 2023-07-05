@@ -114,7 +114,7 @@ toc: true
   数字输入框 <sup>2.8.9+</sup>
 </h3>
 
-一般搭配 `<input type="number">` 使用，用于替代原生输入框，可继承 `step,min,max` 等原生属性。
+一般搭配 `<input type="number">` 使用，用于替代原生数字输入框，可继承 `step,min,max` 等原生属性。
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
   obj.render();
