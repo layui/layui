@@ -714,21 +714,25 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             }
 
             // 开关
-            check[0].checked ? (
-              check[0].checked = false,
-              reElem.removeClass(RE_CLASS[1]),
-              skin === 'switch' && reElem.children('div').html(title[1])
-            ) : (
-              check[0].checked = true,
-              reElem.addClass(RE_CLASS[1]),
-              skin === 'switch' && reElem.children('div').html(title[0])
-            );
+            var setChecked = function (checked) {
+                checked ? (
+                      check[0].checked = false,
+                       reElem.removeClass(RE_CLASS[1]),
+                       skin === 'switch' && reElem.children('div').html(title[1])
+                       ) : (
+                      check[0].checked = true,
+                      reElem.addClass(RE_CLASS[1]),
+                      skin === 'switch' && reElem.children('div').html(title[0])
+                );
+            }
+            setChecked(check[0].checked);
             
             // 事件
             layui.event.call(check[0], MOD_NAME, RE_CLASS[2]+'('+ filter +')', {
               elem: check[0],
               value: check[0].value,
-              othis: reElem
+              othis: reElem,
+              setChecked: setChecked
             });
           });
         };
