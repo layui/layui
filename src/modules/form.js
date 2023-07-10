@@ -46,7 +46,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           '请输入正确的身份证号'
         ]
       },
-      verIncludelRequired: false, // 验证规则是否包含必填 --- 为兼容旧版的验证机制
+      verIncludeRequired: false, // 验证规则是否包含必填 --- 为兼容旧版的验证机制
       autocomplete: null // 全局 autocomplete 状态。 null 表示不干预
     };
   };
@@ -386,7 +386,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 // 如果是第一项，且文本值等于 placeholder，则清空初始值
                 if(selectedIndex === 0 && initValue === input.attr('placeholder')){
                   initValue = '';
-                };
+                }
 
                 // 如果有选中值，则将输入框纠正为该值。否则清空输入框
                 input.val(initValue || '');
@@ -576,7 +576,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               // 如果是第一项，且文本值等于 placeholder，则清空初始值
               if(selectedIndex === 0 && initValue === input.attr('placeholder')){
                 initValue = '';
-              };
+              }
               
               setTimeout(function(){
                 notOption(input.val(), function(none){
@@ -928,7 +928,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         
         // 匹配验证规则
         if(rule){
-          var isTrue = typeof rule === 'function' 
+          isTrue = typeof rule === 'function'
             ? errorText = rule(value, item) 
           : !rule[0].test(value);
           
@@ -946,7 +946,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           
           // 若为必填项或者非空命中校验，则阻止提交，弹出提示
           if(isTrue && (
-            options.verIncludelRequired || (
+            options.verIncludeRequired || (
               thisVer === 'required' || (
                 value && thisVer !== 'required'
               )
