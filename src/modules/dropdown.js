@@ -419,13 +419,14 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
   //设置菜单组展开和收缩状态
   thisModule.spread = function(othis){
     //菜单组展开和收缩
-    var elemIcon = othis.children('.'+ STR_MENU_TITLE).find('.layui-icon');
-    if(othis.hasClass(STR_ITEM_UP)){
+    var needSpread = othis.hasClass(STR_ITEM_UP);
+    var elemIcon = othis.children('.'+ STR_MENU_TITLE).find('.layui-icon-' + (needSpread ? 'down' : 'up'));
+    if(needSpread){
       othis.removeClass(STR_ITEM_UP).addClass(STR_ITEM_DOWN);
       elemIcon.removeClass('layui-icon-down').addClass('layui-icon-up');
     } else {
       othis.removeClass(STR_ITEM_DOWN).addClass(STR_ITEM_UP);
-      elemIcon.removeClass('layui-icon-up').addClass('layui-icon-down')
+      elemIcon.removeClass('layui-icon-up').addClass('layui-icon-down');
     }
   };
   
