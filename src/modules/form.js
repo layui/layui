@@ -807,12 +807,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               var next = $(this).next('.' + CLASS);
               this.checked = false;
               next.removeClass(CLASS + 'ed');
-              next.find('.layui-icon').removeClass(ANIM + ' ' + ICON[0]).addClass(ICON[1]);
+              next.children('.layui-icon').removeClass(ANIM + ' ' + ICON[0]).addClass(ICON[1]);
             });
             
             radio[0].checked = true;
             reElem.addClass(CLASS + 'ed');
-            reElem.find('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
+            reElem.children('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
             
             layui.event.call(radio[0], MOD_NAME, 'radio('+ filter +')', {
               elem: radio[0],
