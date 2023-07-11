@@ -61,8 +61,8 @@ toc: true
 - 通过 `class="layui-form"` 定义一个表单域，通常设置在`<form>`标签上， 或普通`<div>` 标签亦可。
 - 通过 `class="layui-form-item"` 定义一个块级元素的表单项容器
 - 通过 `class="layui-form-label"` 定义标签
-- 通过 `class="layui-form-block"` 定义表单项父容器为块级元素
-- 通过 `class="layui-form-inline"` 或 `class="layui-inline"` 定义表单项父容器为行内块元素
+- 通过 `class="layui-input-block"` 定义表单项父容器为块级元素
+- 通过 `class="layui-input-inline"` 或 `class="layui-inline"` 定义表单项父容器为行内块元素
 
 即必须按照规定的层级定义相应的 `class`。
 
