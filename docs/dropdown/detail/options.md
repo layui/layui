@@ -266,6 +266,7 @@ click: function(data, othis){
   /*
   return false;
   */
+}
 ```
 
 用法详见：[#示例](#examples)
