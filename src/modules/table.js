@@ -2796,7 +2796,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       // 表合计
       thatTable && layui.each(thatTable.dataTotal, function(i, o){
-        fieldsIsHide[o.field] || dataTotal.push(o.total);
+        fieldsIsHide[o.field] || dataTotal.push('"' + (o.total || '') + '"');
       });
 
       return dataTitle.join(',') + '\r\n' + dataMain.join('\r\n') + '\r\n' + dataTotal.join(',');
