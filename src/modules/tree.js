@@ -277,6 +277,7 @@ layui.define('form', function(exports){
     var options = that.config;
     var entry = elem.children('.'+ELEM_ENTRY);
     var elemMain = entry.children('.'+ ELEM_MAIN);
+    var elemCheckbox = elemMain.find('input[same="layuiTreeCheck"]');
     var elemIcon = entry.find('.'+ ICON_CLICK);
     var elemText = entry.find('.'+ ELEM_TEXT);
     var touchOpen = options.onlyIconControl ? elemIcon : elemMain; // 判断展开通过节点还是箭头图标
@@ -324,12 +325,17 @@ layui.define('form', function(exports){
       } else {
         state = options.onlyIconControl ? 'close' : 'open';
       }
+
+      // 获取选中状态
+      if(elemCheckbox[0]){
+        item['checked'] = elemCheckbox.prop('checked');
+      }
       
       // 点击产生的回调
       options.click && options.click({
-        elem: elem
-        ,state: state
-        ,data: item
+        elem: elem,
+        state: state,
+        data: item
       });
     });
   };
@@ -344,9 +350,10 @@ layui.define('form', function(exports){
 
     // 同步子节点选中状态
     if(typeof item.children === 'object' || elem.find('.'+ELEM_PACK)[0]){
-      var childs = elem.find('.'+ ELEM_PACK).find('input[same="layuiTreeCheck"]');
-      childs.each(function(){
+      var elemCheckboxs = elem.find('.'+ ELEM_PACK).find('input[same="layuiTreeCheck"]');
+      elemCheckboxs.each(function(index){
         if(this.disabled) return; // 不可点击则跳过
+        if(item.children[index]) item.children[index]['checked'] = checked;
         this.checked = checked;
       });
     };
@@ -403,6 +410,7 @@ layui.define('form', function(exports){
       if(elemCheckbox.prop('disabled')) return;
       
       that.setCheckbox(elem, item, elemCheckbox);
+      item.checked = checked;
 
       // 复选框点击产生的回调
       options.oncheck && options.oncheck({
@@ -747,9 +755,10 @@ layui.define('form', function(exports){
       layui.each(data, function(index, item){
         layui.each(checkId, function(index2, item2){
           if(item.id == item2){
+            item['checked'] = true;
             var cloneItem = $.extend({}, item);
             delete cloneItem.children;
-            
+
             checkNode.push(cloneItem);
             
             if(item.children){
