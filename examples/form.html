@@ -121,6 +121,9 @@
         </div>
       </div>
       <div class="layui-col-md3">
+        <input type="number" value="1.1" name="arr[]" required placeholder="数字输入框" lay-affix="number" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-col-md3">
         <input type="number" step="0.01" min="0" max="10" name="arr[]" required placeholder="数字输入框" lay-affix="number" autocomplete="off" class="layui-input">
       </div>
       <div class="layui-col-md3">
@@ -341,17 +344,13 @@
     <div class="layui-form-item" pane>
       <label class="layui-form-label">单选框</label>
       <div class="layui-input-block">
-        <input type="radio" name="sex" value="男" title="男">
-        <input type="radio" name="sex" value="女" title="女" checked>
-        <input type="radio" name="sex" value="中型" title="中" disabled>
-      </div>
-    </div>
-    <div class="layui-form-item" pane>
-      <label class="layui-form-label">单选框</label>
-      <div class="layui-input-block">
-        <input type="radio" name="sex.id" value="男" title="男">
-        <input type="radio" name="sex.id" value="女" title="女" checked>
-        <input type="radio" name="sex.id" value="中型" title="中">
+        <input type="radio" name="sex" value="1" title="男">
+        <input type="radio" name="sex" value="0" title="女" checked>
+        <input type="radio" name="sex" value="-1">
+        <div lay-radio>
+          保密 <i class="layui-icon layui-icon-user"></i>
+        </div>
+        <input type="radio" name="sex" value="" title="禁用" disabled>
       </div>
     </div>
     <div class="layui-form-item layui-form-text">
@@ -436,7 +435,7 @@
       ,'interest': 3
       ,'like[write]': true
       //,'open': false
-      ,'sex': '男'
+      ,'sex': '0'
       ,'desc': 'form 是我们非常看重的一块'
       ,xxxxxxxxx: 123
     });

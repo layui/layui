@@ -1008,7 +1008,7 @@ layui.define(['table'], function (exports) {
         layui.stope(event);
         // 处理数据
         // var trElem = item.closest('tr');
-        expandNode({trElem}, null, null, null, true);
+        expandNode({trElem: trElem}, null, null, null, true);
       });
     });
 

@@ -11,6 +11,28 @@ toc: true
 
 > 导读：📑 [Layui 2.8 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
+
+<h2 id="2.8.11" class="ws-anchor">
+  2.8.11 
+  <span class="layui-badge-rim">2023-07-13</span>
+</h2>
+
+- #### form
+  - 修复 `radio` 标题模板中若存在图标，选中时该图标被强制更改的问题 # I7IERB
+  - 优化 `input` 数字输入框的精度问题 # I7I7J2
+  - 修正 `verIncludelRequired` 属性名为 `verIncludeRequired` # 1305
+- #### table
+  - 修复 导出统计行中若存在逗号出现的内容分隔异常问题 # I7IDA3
+  - 修复 当点击筛选显示隐藏固定列时出现的未对齐的问题 # I7KQ0O
+- #### menu
+  - 修复 `menu` 标题项自定义图标在展开收缩后被强制更改的问题 # 1303/I7JAPU
+- #### tree
+  - 修复 点击复选框时未将对应的数据中的 `checked` 属性值进行同步的问题
+
+### 下载： [layui-v2.8.11.zip](https://gitee.com/layui/layui/attach_files/1464525/download)
+
+---
+
 <h2 id="2.8.10" class="ws-anchor">
   2.8.10 
   <span class="layui-badge-rim">2023-07-03</span>

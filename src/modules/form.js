@@ -277,10 +277,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               value: ['up', 'down'],
               split: true,
               className: 'layui-input-number',
-              disabled: disabled, // 跟随输入框禁用状态
+              disabled: othis.is('[disabled]'), // 跟随输入框禁用状态
               click: function(elem){
                 var index = $(this).index();
                 var value = elem.val();
+                var rawValue = value;
                 var step = Number(elem.attr('step')) || 1; // 加减的数字间隔
                 var min = Number(elem.attr('min'));
                 var max = Number(elem.attr('max'));
@@ -294,11 +295,15 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 if(value < min) value = min;
                 if(value > max) value = max;
 
-                // 小数点后保留位数
-                var fixed = function(step){
-                  var decimals = (step.match(/\.(\d+$)/) || [])[1] || '';
+                // 获取小数点后位数
+                var decimals = function(step){
+                  var decimals = (step.toString().match(/\.(\d+$)/) || [])[1] || '';
                   return decimals.length;
-                }(step.toString());
+                };
+
+                // 位数比较
+                var fixed = Math.max(decimals(step), decimals(rawValue));
+
                 if(fixed) value = value.toFixed(fixed);
 
                 elem.val(value);
@@ -807,12 +812,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               var next = $(this).next('.' + CLASS);
               this.checked = false;
               next.removeClass(CLASS + 'ed');
-              next.find('.layui-icon').removeClass(ANIM + ' ' + ICON[0]).addClass(ICON[1]);
+              next.children('.layui-icon').removeClass(ANIM + ' ' + ICON[0]).addClass(ICON[1]);
             });
             
             radio[0].checked = true;
             reElem.addClass(CLASS + 'ed');
-            reElem.find('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
+            reElem.children('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
             
             layui.event.call(radio[0], MOD_NAME, 'radio('+ filter +')', {
               elem: radio[0],

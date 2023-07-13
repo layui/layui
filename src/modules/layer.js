@@ -6,12 +6,15 @@
 ;!function(window, undefined){
 "use strict";
 
-var isLayui = window.layui && layui.define, $, win, ready = {
+var isLayui = window.layui && layui.define;
+var $;
+var win;
+var ready = {
   getPath: function(){
     var jsPath = document.currentScript ? document.currentScript.src : function(){
-      var js = document.scripts
-      ,last = js.length - 1
-      ,src;
+      var js = document.scripts;
+      var last = js.length - 1;
+      var src;
       for(var i = last; i > 0; i--){
         if(js[i].readyState === 'interactive'){
           src = js[i].src;
@@ -19,8 +22,8 @@ var isLayui = window.layui && layui.define, $, win, ready = {
         }
       }
       return src || js[last].src;
-    }()
-    ,GLOBAL = window.LAYUI_GLOBAL || {};
+    }();
+    var GLOBAL = window.LAYUI_GLOBAL || {};
     return GLOBAL.layer_dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
   }(),
   config: {
@@ -32,29 +35,29 @@ var isLayui = window.layui && layui.define, $, win, ready = {
   minStackArr: [],
   btn: ['&#x786E;&#x5B9A;', '&#x53D6;&#x6D88;'],
 
-  //五种原始层模式
+  // 五种原始层模式
   type: ['dialog', 'page', 'iframe', 'loading', 'tips'],
   
-  //获取节点的style属性值
+  // 获取节点的 style 属性值
   getStyle: function(node, name){
     var style = node.currentStyle ? node.currentStyle : window.getComputedStyle(node, null);
     return style[style.getPropertyValue ? 'getPropertyValue' : 'getAttribute'](name);
   },
   
-  //载入 CSS 依赖
+  // 载入 CSS 依赖
   link: function(href, fn, cssname){
-    //未设置路径，则不主动加载css
+    // 未设置路径，则不主动加载 css
     if(!layer.path) return;
     
-    var head = document.getElementsByTagName("head")[0]
-    ,link = document.createElement('link');
+    var head = document.getElementsByTagName("head")[0];
+    var link = document.createElement('link');
     
     if(typeof fn === 'string') cssname = fn;
     
     var app = (cssname || href).replace(/\.|\//g, '');
-    var id = 'layuicss-'+ app
-    ,STATUS_NAME = 'creating'
-    ,timeout = 0;
+    var id = 'layuicss-'+ app;
+    var STATUS_NAME = 'creating'
+    var timeout = 0;
     
     link.rel = 'stylesheet';
     link.href = layer.path + href;
@@ -66,21 +69,21 @@ var isLayui = window.layui && layui.define, $, win, ready = {
 
     if(typeof fn !== 'function') return;
 
-    //轮询 css 是否加载完毕
+    // 轮询 css 是否加载完毕
     (function poll(status) {
-      var delay = 100
-      ,getLinkElem = document.getElementById(id); //获取动态插入的 link 元素
+      var delay = 100;
+      var getLinkElem = document.getElementById(id); // 获取动态插入的 link 元素
       
-      //如果轮询超过指定秒数，则视为请求文件失败或 css 文件不符合规范
+      // 如果轮询超过指定秒数，则视为请求文件失败或 css 文件不符合规范
       if(++timeout > 10 * 1000 / delay){
         return window.console && console.error(app +'.css: Invalid');
       }
       
-      //css 加载就绪
+      // css 加载就绪
       if(parseInt(ready.getStyle(getLinkElem, 'width')) === 1989){
-        //如果参数来自于初始轮询（即未加载就绪时的），则移除 link 标签状态
+        // 如果参数来自于初始轮询（即未加载就绪时的），则移除 link 标签状态
         if(status === STATUS_NAME) getLinkElem.removeAttribute('lay-status');
-        //如果 link 标签的状态仍为「创建中」，则继续进入轮询，直到状态改变，则执行回调
+        // 如果 link 标签的状态仍为「创建中」，则继续进入轮询，直到状态改变，则执行回调
         getLinkElem.getAttribute('lay-status') === STATUS_NAME ? setTimeout(poll, delay) : fn();
       } else {
         getLinkElem.setAttribute('lay-status', STATUS_NAME);
@@ -89,19 +92,19 @@ var isLayui = window.layui && layui.define, $, win, ready = {
         }, delay);
       }
 
-      //parseInt(ready.getStyle(document.getElementById(id), 'width')) === 1989 ? fn() : setTimeout(poll, 1000);
+      // parseInt(ready.getStyle(document.getElementById(id), 'width')) === 1989 ? fn() : setTimeout(poll, 1000);
     }());
 
   }
 };
 
-//默认内置方法。
+// 默认内置方法。
 var layer = {
-  v: '3.6.0',
-  ie: function(){ //ie 版本
+  v: '3.7.0',
+  ie: function(){ // ie 版本
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
-      (agent.match(/msie\s(\d+)/) || [])[1] || '11' //由于 ie11 并没有 msie 的标识
+      (agent.match(/msie\s(\d+)/) || [])[1] || '11' // 由于 ie11 并没有 msie 的标识
     ) : false;
   }(),
   index: (window.layer && window.layer.v) ? 100000 : 0,
@@ -112,12 +115,12 @@ var layer = {
     layer.path = ready.config.path || layer.path;
     typeof options.extend === 'string' && (options.extend = [options.extend]);
     
-    //如果设置了路径，则加载样式
+    // 如果设置了路径，则加载样式
     if(ready.config.path) layer.ready();
     
     if(!options.extend) return this;
     
-    //加载 css
+    // 加载 css
     isLayui 
       ? layui.addcss('modules/layer/' + options.extend)
     : ready.link('css/' + options.extend);
@@ -140,7 +143,7 @@ var layer = {
     return this;
   },
   
-  //各种快捷引用
+  // 各种快捷引用
   alert: function(content, options, yes){
     var type = typeof options === 'function';
     if(type) yes = options;
@@ -164,7 +167,7 @@ var layer = {
     }, type ? {} : options));
   },
   
-  msg: function(content, options, end){ //最常用提示层
+  msg: function(content, options, end){ // 最常用提示层
     var type = typeof options === 'function', rskin = ready.config.skin;
     var skin = (rskin ? rskin + ' ' + rskin + '-msg' : '')||'layui-layer-msg';
     var anim = doms.anim.length - 1;
@@ -222,7 +225,7 @@ var Class = function(setings){
     that.creat();
   };
   that.index = ++layer.index;
-  that.config.maxWidth = $(win).width() - 15*2; //初始最大宽度：当前屏幕宽，左右留 15px 边距
+  that.config.maxWidth = $(win).width() - 15*2; // 初始最大宽度：当前屏幕宽，左右留 15px 边距
   that.config = $.extend({}, that.config, ready.config, setings);
   document.body ? creat() : setTimeout(function(){
     creat();
@@ -231,7 +234,7 @@ var Class = function(setings){
 
 Class.pt = Class.prototype;
 
-//缓存常用字符
+// 缓存常用字符
 var doms = ['layui-layer', '.layui-layer-title', '.layui-layer-main', '.layui-layer-dialog', 'layui-layer-iframe', 'layui-layer-content', 'layui-layer-btn', 'layui-layer-close'];
 
 // 内置动画类
@@ -278,7 +281,7 @@ Class.pt.config = {
   tips: 2
 };
 
-//容器
+// 容器
 Class.pt.vessel = function(conType, callback){
   var that = this, times = that.index, config = that.config;
   var zIndex = config.zIndex + times, titype = typeof config.title === 'object';
@@ -454,7 +457,7 @@ Class.pt.creat = function(){
     break;
   }
   
-  //建立容器
+  // 建立容器
   that.vessel(conType, function(html, titleHTML, moveElem){
     body.append(html[0]);
     conType ? function(){
@@ -475,7 +478,7 @@ Class.pt.creat = function(){
     config.scrollbar || doms.html.css('overflow', 'hidden').attr('layer-full', times);
   }).auto(times);
   
-  //遮罩
+  // 遮罩
   that.shadeo.css({
     'background-color': config.shade[1] || '#000'
     ,'opacity': config.shade[0] || config.shade
@@ -483,10 +486,10 @@ Class.pt.creat = function(){
 
   config.type == 2 && layer.ie == 6 && that.layero.find('iframe').attr('src', content[0]);
 
-  //坐标自适应浏览器窗口尺寸
+  // 坐标自适应浏览器窗口尺寸
   config.type == 4 ? that.tips() : function(){
     that.offset()
-    //首次弹出时，若 css 尚未加载，则等待 css 加载完毕后，重新设定尺寸
+    // 首次弹出时，若 css 尚未加载，则等待 css 加载完毕后，重新设定尺寸
     parseInt(ready.getStyle(document.getElementById(doms.MOVE), 'z-index')) ||  function(){
       that.layero.css('visibility', 'hidden');
       layer.ready(function(){
@@ -534,22 +537,22 @@ Class.pt.resize = function(){
   config.type == 4 && that.tips();
 };
 
-//自适应
+// 自适应
 Class.pt.auto = function(index){
   var that = this, config = that.config, layero = $('#'+ doms[0] + index);
   
   if(config.area[0] === '' && config.maxWidth > 0){
-    //为了修复IE7下一个让人难以理解的bug
+    // 适配 ie7
     if(layer.ie && layer.ie < 8 && config.btn){
       layero.width(layero.innerWidth());
     }
     layero.outerWidth() > config.maxWidth && layero.width(config.maxWidth);
   }
   
-  var area = [layero.innerWidth(), layero.innerHeight()]
-  ,titHeight = layero.find(doms[1]).outerHeight() || 0
-  ,btnHeight = layero.find('.'+doms[6]).outerHeight() || 0
-  ,setHeight = function(elem){
+  var area = [layero.innerWidth(), layero.innerHeight()];
+  var titHeight = layero.find(doms[1]).outerHeight() || 0;
+  var btnHeight = layero.find('.'+doms[6]).outerHeight() || 0;
+  var setHeight = function(elem){
     elem = layero.find(elem);
     elem.height(area[1] - titHeight - btnHeight - 2*(parseFloat(elem.css('padding-top'))|0));
   };
@@ -576,7 +579,7 @@ Class.pt.auto = function(index){
   return that;
 };
 
-//计算坐标
+// 计算坐标
 Class.pt.offset = function(){
   var that = this, config = that.config, layero = that.layero;
   var area = [layero.outerWidth(), layero.outerHeight()];
@@ -589,24 +592,24 @@ Class.pt.offset = function(){
     that.offsetLeft = config.offset[1]||that.offsetLeft;
   } else if(config.offset !== 'auto'){
     
-    if(config.offset === 't'){ //上
+    if(config.offset === 't'){ // 上
       that.offsetTop = 0;
-    } else if(config.offset === 'r'){ //右
+    } else if(config.offset === 'r'){ // 右
       that.offsetLeft = win.width() - area[0];
-    } else if(config.offset === 'b'){ //下
+    } else if(config.offset === 'b'){ // 下
       that.offsetTop = win.height() - area[1];
-    } else if(config.offset === 'l'){ //左
+    } else if(config.offset === 'l'){ // 左
       that.offsetLeft = 0;
-    } else if(config.offset === 'lt'){ //左上角
+    } else if(config.offset === 'lt'){ // 左上
       that.offsetTop = 0;
       that.offsetLeft = 0;
-    } else if(config.offset === 'lb'){ //左下角
+    } else if(config.offset === 'lb'){ // 左下
       that.offsetTop = win.height() - area[1];
       that.offsetLeft = 0;
-    } else if(config.offset === 'rt'){ //右上角
+    } else if(config.offset === 'rt'){ // 右上
       that.offsetTop = 0;
       that.offsetLeft = win.width() - area[0];
-    } else if(config.offset === 'rb'){ //右下角
+    } else if(config.offset === 'rb'){ // 右下
       that.offsetTop = win.height() - area[1];
       that.offsetLeft = win.width() - area[0];
     } else {
@@ -639,7 +642,7 @@ Class.pt.offset = function(){
   });
 };
 
-//Tips
+// Tips
 Class.pt.tips = function(){
   var that = this, config = that.config, layero = that.layero;
   var layArea = [layero.outerWidth(), layero.outerHeight()], follow = $(config.follow);
@@ -663,20 +666,20 @@ Class.pt.tips = function(){
     }
   };
   
-  //辨别tips的方位
-  goal.where = [function(){ //上        
+  // 辨别 tips 的方位
+  goal.where = [function(){ // 上        
     goal.autoLeft();
     goal.tipTop = goal.top - layArea[1] - 10;
     tipsG.removeClass('layui-layer-TipsB').addClass('layui-layer-TipsT').css('border-right-color', config.tips[1]);
-  }, function(){ //右
+  }, function(){ // 右
     goal.tipLeft = goal.left + goal.width + 10;
     goal.tipTop = goal.top;
     tipsG.removeClass('layui-layer-TipsL').addClass('layui-layer-TipsR').css('border-bottom-color', config.tips[1]); 
-  }, function(){ //下
+  }, function(){ // 下
     goal.autoLeft();
     goal.tipTop = goal.top + goal.height + 10;
     tipsG.removeClass('layui-layer-TipsT').addClass('layui-layer-TipsB').css('border-right-color', config.tips[1]);
-  }, function(){ //左
+  }, function(){ // 左
     goal.tipLeft = goal.left - layArea[0] - 10;
     goal.tipTop = goal.top;
     tipsG.removeClass('layui-layer-TipsR').addClass('layui-layer-TipsL').css('border-bottom-color', config.tips[1]);
@@ -704,31 +707,31 @@ Class.pt.tips = function(){
   });
 }
 
-//拖拽层
+// 拖拽层
 Class.pt.move = function(){
-  var that = this
-  ,config = that.config
-  ,_DOC = $(document)
-  ,layero = that.layero
-  ,DATA_NAME = ['LAY_MOVE_DICT', 'LAY_RESIZE_DICT']
-  ,moveElem = layero.find(config.move)
-  ,resizeElem = layero.find('.layui-layer-resize');
+  var that = this;
+  var config = that.config;
+  var _DOC = $(document);
+  var layero = that.layero;
+  var DATA_NAME = ['LAY_MOVE_DICT', 'LAY_RESIZE_DICT'];
+  var moveElem = layero.find(config.move);
+  var resizeElem = layero.find('.layui-layer-resize');
   
-  //给指定元素添加拖动光标
+  // 给指定元素添加拖动光标
   if(config.move) moveElem.css('cursor', 'move');
   
-  //按下拖动元素
+  // 按下拖动元素
   moveElem.on('mousedown', function(e){
     if (e.button) {return;} // 不是左键不处理
-    var othis = $(this)
-    ,dict = {};
+    var othis = $(this);
+    var dict = {};
     
     if(config.move){
       dict.layero = layero;
       dict.config = config;
       dict.offset = [
-        e.clientX - parseFloat(layero.css('left'))
-        ,e.clientY - parseFloat(layero.css('top'))
+        e.clientX - parseFloat(layero.css('left')),
+        e.clientY - parseFloat(layero.css('top'))
       ];
       
       othis.data(DATA_NAME[0], dict);
@@ -739,10 +742,10 @@ Class.pt.move = function(){
     e.preventDefault();
   });
   
-  //按下右下角拉伸
+  // 按下右下角拉伸
   resizeElem.on('mousedown', function(e){
-    var othis = $(this)
-    ,dict = {};
+    var othis = $(this);
+    var dict = {};
     
     if(config.resize){
       dict.layero = layero;
@@ -762,52 +765,52 @@ Class.pt.move = function(){
     e.preventDefault();
   });
   
-  //拖动元素，避免多次调用实例造成事件叠加
+  // 拖动元素，避免多次调用实例造成事件叠加
   if(ready.docEvent) return that;
   _DOC.on('mousemove', function(e){
-    //拖拽移动
+    // 拖拽移动
     if(ready.eventMoveElem){
       var dict = ready.eventMoveElem.data(DATA_NAME[0]) || {}
       ,layero = dict.layero
       ,config = dict.config;
       
-      var X = e.clientX - dict.offset[0]
-      ,Y = e.clientY - dict.offset[1]
-      ,fixed = layero.css('position') === 'fixed';
+      var X = e.clientX - dict.offset[0];
+      var Y = e.clientY - dict.offset[1];
+      var fixed = layero.css('position') === 'fixed';
       
       e.preventDefault();
       
       dict.stX = fixed ? 0 : win.scrollLeft();
       dict.stY = fixed ? 0 : win.scrollTop();
 
-      //控制元素不被拖出窗口外
+      // 控制元素不被拖出窗口外
       if(!config.moveOut){
-        var setRig = win.width() - layero.outerWidth() + dict.stX
-        ,setBot = win.height() - layero.outerHeight() + dict.stY;  
+        var setRig = win.width() - layero.outerWidth() + dict.stX;
+        var setBot = win.height() - layero.outerHeight() + dict.stY;  
         X < dict.stX && (X = dict.stX);
         X > setRig && (X = setRig); 
         Y < dict.stY && (Y = dict.stY);
         Y > setBot && (Y = setBot);
       }
       
-      //拖动时跟随鼠标位置
+      // 拖动时跟随鼠标位置
       layero.css({
-        left: X
-        ,top: Y
+        left: X,
+        top: Y
       });
     }
     
-    //Resize
+    // Resize
     if(ready.eventResizeElem){
-      var dict = ready.eventResizeElem.data(DATA_NAME[1]) || {}
-      ,config = dict.config;
+      var dict = ready.eventResizeElem.data(DATA_NAME[1]) || {};
+      var config = dict.config;
       
-      var X = e.clientX - dict.offset[0]
-      ,Y = e.clientY - dict.offset[1];
+      var X = e.clientX - dict.offset[0];
+      var Y = e.clientY - dict.offset[1];
       
       e.preventDefault();
       
-      //拉伸宽高
+      // 拉伸宽高
       layer.style(dict.index, {
         width: dict.area[0] + X
         ,height: dict.area[1] + Y
@@ -817,8 +820,8 @@ Class.pt.move = function(){
     }
   }).on('mouseup', function(e){
     if(ready.eventMoveElem){
-      var dict = ready.eventMoveElem.data(DATA_NAME[0]) || {}
-      ,config = dict.config;
+      var dict = ready.eventMoveElem.data(DATA_NAME[0]) || {};
+      var config = dict.config;
       
       ready.eventMoveElem.removeData(DATA_NAME[0]);
       delete ready.eventMoveElem;
@@ -832,7 +835,7 @@ Class.pt.move = function(){
     }
   });
   
-  ready.docEvent = true; //已给 document 执行全局事件
+  ready.docEvent = true; // 已给 document 执行全局事件
   return that;
 };
 
@@ -850,7 +853,7 @@ Class.pt.callback = function(){
   }
   layer.ie == 6 && that.IE6(layero);
   
-  //按钮
+  // 按钮
   layero.find('.'+ doms[6]).children('a').on('click', function(){
     var index = $(this).index();
     if(index === 0){
@@ -867,29 +870,29 @@ Class.pt.callback = function(){
     }
   });
   
-  //取消
+  // 取消
   function cancel(){
     var close = config.cancel && config.cancel(that.index, layero, that);
     close === false || layer.close(that.index);
   }
   
-  //右上角关闭回调
+  // 右上角关闭回调
   layero.find('.'+ doms[7]).on('click', cancel);
   
-  //点遮罩关闭
+  // 点遮罩关闭
   if(config.shadeClose){
     that.shadeo.on('click', function(){
       layer.close(that.index);
     });
   } 
   
-  //最小化
+  // 最小化
   layero.find('.layui-layer-min').on('click', function(){
     var min = config.min && config.min(layero, that.index, that);
     min === false || layer.min(that.index, config);
   });
   
-  //全屏/还原
+  // 全屏/还原
   layero.find('.layui-layer-max').on('click', function(){
     if($(this).hasClass('layui-layer-maxmin')){
       layer.restore(that.index);
@@ -905,7 +908,7 @@ Class.pt.callback = function(){
   config.end && (ready.end[that.index] = config.end);
 };
 
-//for ie6 恢复select
+// for ie6 恢复 select
 ready.reselect = function(){
   $.each($('select'), function(index , value){
     var sthis = $(this);
@@ -917,7 +920,7 @@ ready.reselect = function(){
 }; 
 
 Class.pt.IE6 = function(layero){
-  //隐藏select
+  // 隐藏select
   $('select').each(function(index , value){
     var sthis = $(this);
     if(!sthis.parents('.'+doms[0])[0]){
@@ -927,11 +930,11 @@ Class.pt.IE6 = function(layero){
   });
 };
 
-//需依赖原型的对外方法
+// 需依赖原型的对外方法
 Class.pt.openLayer = function(){
   var that = this;
   
-  //置顶当前窗口
+  // 置顶当前窗口
   layer.zIndex = that.config.zIndex;
   layer.setTop = function(layero){
     var setZindex = function(){
@@ -972,18 +975,18 @@ ready.rescollbar = function(index){
 
 window.layer = layer;
 
-//获取子iframe的DOM
+// 获取子 iframe 的 DOM
 layer.getChildFrame = function(selector, index){
   index = index || $('.'+doms[4]).attr('times');
   return $('#'+ doms[0] + index).find('iframe').contents().find(selector);  
 };
 
-//得到当前iframe层的索引，子iframe时使用
+// 得到当前 iframe 层的索引，子 iframe 时使用
 layer.getFrameIndex = function(name){
   return $('#'+ name).parents('.'+doms[4]).attr('times');
 };
 
-//iframe层自适应宽高
+// iframe 层自适应宽高
 layer.iframeAuto = function(index){
   if(!index) return;
   var heg = layer.getChildFrame('html', index).outerHeight();
@@ -994,7 +997,7 @@ layer.iframeAuto = function(index){
   layero.find('iframe').css({height: heg});
 };
 
-//重置iframe url
+// 重置 iframe url
 layer.iframeSrc = function(index, url){
   $('#'+ doms[0] + index).find('iframe').attr('src', url);
 };
@@ -1156,13 +1159,13 @@ layer.full = function(index){
   }, 100);
 };
 
-//改变title
+// 改变 title
 layer.title = function(name, index){
   var title = $('#'+ doms[0] + (index || layer.index)).find(doms[1]);
   title.html(name);
 };
 
-//关闭 layer 总方法
+// 关闭 layer 总方法
 layer.close = function(index, callback){
   var layero = function(){
     var closest = $('.'+ doms[0]).find('#'+ index).closest('.'+ doms[0]);
@@ -1257,7 +1260,7 @@ layer.close = function(index, callback){
   }
 };
 
-//关闭所有层
+// 关闭所有层
 layer.closeAll = function(type, callback){
   if(typeof type === 'function'){
     callback = type;
@@ -1279,17 +1282,18 @@ layer.closeLast = function(type){
   layer.close($('.layui-layer-'+ type +':last').attr("times"));
 };
 
-/** 
 
-  拓展模块，layui 开始合并在一起
-
+/*
+ * 拓展模块，layui 开始合并在一起
  */
 
-var cache = layer.cache||{}, skin = function(type){
+
+var cache = layer.cache || {};
+var skin = function(type){
   return (cache.skin ? (' ' + cache.skin + ' ' + cache.skin + '-'+type) : '');
 }; 
  
-//仿系统prompt
+// 仿系统 prompt
 layer.prompt = function(options, yes){
   var style = '', placeholder = '';
   options = options || {};
@@ -1312,18 +1316,18 @@ layer.prompt = function(options, yes){
   delete options.success;
   
   return layer.open($.extend({
-    type: 1
-    ,btn: ['&#x786E;&#x5B9A;','&#x53D6;&#x6D88;']
-    ,content: content
-    ,skin: 'layui-layer-prompt' + skin('prompt')
-    ,maxWidth: win.width()
-    ,success: function(layero){
+    type: 1,
+    btn: ['&#x786E;&#x5B9A;','&#x53D6;&#x6D88;'],
+    content: content,
+    skin: 'layui-layer-prompt' + skin('prompt'),
+    maxWidth: win.width(),
+    success: function(layero){
       prompt = layero.find('.layui-layer-input');
       prompt.val(options.value || '').focus();
       typeof success === 'function' && success(layero);
-    }
-    ,resize: false
-    ,yes: function(index){
+    },
+    resize: false,
+    yes: function(index){
       var value = prompt.val();
       if(value.length > (options.maxlength||500)) {
         layer.tips('&#x6700;&#x591A;&#x8F93;&#x5165;'+ (options.maxlength || 500) +'&#x4E2A;&#x5B57;&#x6570;', prompt, {tips: 1});
@@ -1334,7 +1338,7 @@ layer.prompt = function(options, yes){
   }, options));
 };
 
-//tab层
+// tab 层
 layer.tab = function(options){
   options = options || {};
   
@@ -1383,17 +1387,17 @@ layer.tab = function(options){
   }, options));
 };
 
-//相册层
+// 相册层
 layer.photos = function(options, loop, key){
   var dict = {};
   options = options || {};
   if(!options.photos) return;
   
-  //若 photos 并非选择器或 jQuery 对象，则为普通 object
-  var isObject = !(typeof options.photos === 'string' || options.photos instanceof $)
-  ,photos = isObject ? options.photos : {}
-  ,data = photos.data || []
-  ,start = photos.start || 0;
+  // 若 photos 并非选择器或 jQuery 对象，则为普通 object
+  var isObject = !(typeof options.photos === 'string' || options.photos instanceof $);
+  var photos = isObject ? options.photos : {};
+  var data = photos.data || [];
+  var start = photos.start || 0;
   
   dict.imgIndex = (start|0) + 1;
   options.img = options.img || 'img';
@@ -1401,8 +1405,8 @@ layer.photos = function(options, loop, key){
   var success = options.success;
   delete options.success;
   
-  //如果 options.photos 不是一个对象
-  if(!isObject){ //页面直接获取
+  // 若 options.photos 不是一个对象
+  if(!isObject){ // 页面直接获取
     var parent = $(options.photos), pushData = function(){
       data = [];
       parent.find(options.img).each(function(index){
@@ -1434,14 +1438,14 @@ layer.photos = function(options, loop, key){
       }), true);
     });
     
-    //不直接弹出
+    // 不直接弹出
     if(!loop) return;
     
   } else if (data.length === 0){
     return layer.msg('&#x6CA1;&#x6709;&#x56FE;&#x7247;');
   }
   
-  //上一张
+  // 上一张
   dict.imgprev = function(key){
     dict.imgIndex--;
     if(dict.imgIndex < 1){
@@ -1450,7 +1454,7 @@ layer.photos = function(options, loop, key){
     dict.tabimg(key);
   };
   
-  //下一张
+  // 下一张
   dict.imgnext = function(key,errorMsg){
     dict.imgIndex++;
     if(dict.imgIndex > data.length){
@@ -1460,7 +1464,7 @@ layer.photos = function(options, loop, key){
     dict.tabimg(key)
   };
   
-  //方向键
+  // 方向键
   dict.keyup = function(event){
     if(!dict.end){
       var code = event.keyCode;
@@ -1475,7 +1479,7 @@ layer.photos = function(options, loop, key){
     }
   }
   
-  //切换
+  // 切换
   dict.tabimg = function(key){
     if(data.length <= 1) return;
     photos.start = dict.imgIndex - 1;
@@ -1483,7 +1487,7 @@ layer.photos = function(options, loop, key){
     return layer.photos(options, true, key);
   }
   
-  //一些动作
+  // 一些动作
   dict.event = function(){
     /*
     dict.bigimg.hover(function(){
@@ -1506,7 +1510,7 @@ layer.photos = function(options, loop, key){
     $(document).on('keyup', dict.keyup);
   };
   
-  //图片预加载
+  // 图片预加载
   function loadImage(url, callback, error) {   
     var img = new Image();
     img.src = url; 
@@ -1533,10 +1537,10 @@ layer.photos = function(options, loop, key){
     
     var alt = data[start].alt || '';
 
-    //切换图片时不出现动画
+    // 切换图片时不出现动画
     if(key) options.anim = -1;
     
-    //弹出图片层
+    // 弹出图片层
     dict.index = layer.open($.extend({
       type: 1,
       id: 'layui-layer-photos',
@@ -1544,10 +1548,10 @@ layer.photos = function(options, loop, key){
         var imgarea = [img.width, img.height];
         var winarea = [$(window).width() - 100, $(window).height() - 100];
         
-        //如果 实际图片的宽或者高比 屏幕大（那么进行缩放）
+        // 若实际图片的宽或者高比 屏幕大（那么进行缩放）
         if(!options.full && (imgarea[0]>winarea[0]||imgarea[1]>winarea[1])){
-          var wh = [imgarea[0]/winarea[0],imgarea[1]/winarea[1]];//取宽度缩放比例、高度缩放比例
-          if(wh[0] > wh[1]){//取缩放比例最大的进行缩放
+          var wh = [imgarea[0]/winarea[0],imgarea[1]/winarea[1]];// 取宽度缩放比例、高度缩放比例
+          if(wh[0] > wh[1]){// 取缩放比例最大的进行缩放
             imgarea[0] = imgarea[0]/wh[0];
             imgarea[1] = imgarea[1]/wh[0];
           } else if(wh[0] < wh[1]){
@@ -1620,7 +1624,7 @@ layer.photos = function(options, loop, key){
   });
 };
 
-//主入口
+// 主入口
 ready.run = function(_$){
   $ = _$;
   win = $(window);
@@ -1631,22 +1635,22 @@ ready.run = function(_$){
   };
 };
 
-//加载方式
+// 加载方式
 window.layui && layui.define ? (
-  layer.ready()
-  ,layui.define('jquery', function(exports){ //layui 加载
+  layer.ready(),
+  layui.define('jquery', function(exports){ // layui
     layer.path = layui.cache.dir;
     ready.run(layui.$);
 
-    //暴露模块
+    // export api
     window.layer = layer;
     exports('layer', layer);
   })
 ) : (
-  (typeof define === 'function' && define.amd) ? define(['jquery'], function(){ //requirejs 加载
+  (typeof define === 'function' && define.amd) ? define(['jquery'], function(){ // requirejs
     ready.run(window.jQuery);
     return layer;
-  }) : function(){ //普通 script 标签加载
+  }) : function(){ // 普通 script 标签引入
     layer.ready();
     ready.run(window.jQuery);
   }()
