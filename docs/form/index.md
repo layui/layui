@@ -408,7 +408,7 @@ form.on('select(test)', function(data){
 | 属性名 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | autocomplete | 设置 input 框的 `autocomplete` 属性初始值 | string | - |
-| verIncludelRequired <sup>2.8.4+</sup> | 验证规则中是否同时包含必填。 form 组件在 `2.8.3` 版本中调整了内置校验规则，即：仅当非空时进行校验，避免强制携带必填的校验规则。如需保留之前的验证规则（即同时校验必填）,可将该属性设置为 `true`。但一般还是建议将必填项放置在 `lay-verify` 属性上，如： `lay-verify="required\|number"` | boolean | `false` |
+| verIncludeRequired <sup>2.8.4+</sup> | 验证规则中是否同时包含必填。 form 组件在 `2.8.3` 版本中调整了内置校验规则，即：仅当非空时进行校验，避免强制携带必填的校验规则。如需保留之前的验证规则（即同时校验必填）,可将该属性设置为 `true`。但一般还是建议将必填项放置在 `lay-verify` 属性上，如： `lay-verify="required\|number"` | boolean | `false` |
 
 该方法用于对 form 组件进行全局设置。
 
