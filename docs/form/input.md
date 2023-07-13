@@ -130,9 +130,12 @@ toc: true
     <div class="layui-col-xs6">
       <input type="number" lay-affix="number" placeholder="设置 step,min,max" step="10" min="0" max="100" class="layui-input">
     </div>
-     <div class="layui-col-xs12">
-      <input type="number" lay-affix="number" disabled placeholder="禁用状态" value="0" class="layui-input">
-     </div>
+    <div class="layui-col-xs6">
+      <input type="number" lay-affix="number" readonly placeholder="不允许输入状态" class="layui-input">
+    </div>
+    <div class="layui-col-xs6">
+      <input type="number" lay-affix="number" disabled placeholder="禁用状态" class="layui-input">
+    </div>
   </div>
 </div> 
 
