@@ -552,18 +552,18 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   };
 
-  //初始工具栏
+  // 初始工具栏
   Class.prototype.renderToolbar = function(){
     var that = this
-    ,options = that.config
+    var options = that.config
 
-    //添加工具栏左侧模板
+    // 添加工具栏左侧模板
     var leftDefaultTemp = [
-      '<div class="layui-inline" lay-event="add"><i class="layui-icon layui-icon-add-1"></i></div>'
-      ,'<div class="layui-inline" lay-event="update"><i class="layui-icon layui-icon-edit"></i></div>'
-      ,'<div class="layui-inline" lay-event="delete"><i class="layui-icon layui-icon-delete"></i></div>'
-    ].join('')
-    ,elemToolTemp = that.layTool.find('.layui-table-tool-temp');
+      '<div class="layui-inline" lay-event="add"><i class="layui-icon layui-icon-add-1"></i></div>',
+      '<div class="layui-inline" lay-event="update"><i class="layui-icon layui-icon-edit"></i></div>',
+      '<div class="layui-inline" lay-event="delete"><i class="layui-icon layui-icon-delete"></i></div>'
+    ].join('');
+    var elemToolTemp = that.layTool.find('.layui-table-tool-temp');
 
     if(options.toolbar === 'default'){
       elemToolTemp.html(leftDefaultTemp);
@@ -574,22 +574,22 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       );
     }
 
-    //添加工具栏右侧面板
+    // 添加工具栏右侧面板
     var layout = {
       filter: {
-        title: '筛选列'
-        ,layEvent: 'LAYTABLE_COLS'
-        ,icon: 'layui-icon-cols'
-      }
-      ,exports: {
-        title: '导出'
-        ,layEvent: 'LAYTABLE_EXPORT'
-        ,icon: 'layui-icon-export'
-      }
-      ,print: {
-        title: '打印'
-        ,layEvent: 'LAYTABLE_PRINT'
-        ,icon: 'layui-icon-print'
+        title: '筛选列',
+        layEvent: 'LAYTABLE_COLS',
+        icon: 'layui-icon-cols'
+      },
+      exports: {
+        title: '导出',
+        layEvent: 'LAYTABLE_EXPORT',
+        icon: 'layui-icon-export'
+      },
+      print: {
+        title: '打印',
+        layEvent: 'LAYTABLE_PRINT',
+        icon: 'layui-icon-print'
       }
     }, iconElem = [];
 
@@ -608,12 +608,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   // 分页栏
   Class.prototype.renderPagebar = function(){
-    var that = this
-    ,options = that.config
+    var that = this;
+    var options = that.config;
 
-    ,layPagebar = that.layPagebar = $('<div class="layui-inline layui-table-pagebar"></div>')
+    var layPagebar = that.layPagebar = $('<div class="layui-inline layui-table-pagebar"></div>');
 
-    //开启分页栏自定义模板
+    // 开启分页栏自定义模板
     if(options.pagebar){
       var pagebarHtml = $(options.pagebar).html() || '';
       pagebarHtml && layPagebar.append(laytpl(pagebarHtml).render(options));
@@ -621,17 +621,17 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }
   };
 
-  //同步表头父列的相关值
+  // 同步表头父列的相关值
   Class.prototype.setParentCol = function(hide, parentKey){
-    var that = this
-    ,options = that.config
+    var that = this;
+    var options = that.config;
 
-    ,parentTh = that.layHeader.find('th[data-key="'+ parentKey +'"]') //获取父列元素
-    ,parentColspan = parseInt(parentTh.attr('colspan')) || 0;
+    var parentTh = that.layHeader.find('th[data-key="'+ parentKey +'"]'); // 获取父列元素
+    var parentColspan = parseInt(parentTh.attr('colspan')) || 0;
 
     if(parentTh[0]){
-      var arrParentKey = parentKey.split('-')
-      ,getThisCol = options.cols[arrParentKey[1]][arrParentKey[2]];
+      var arrParentKey = parentKey.split('-');
+      var getThisCol = options.cols[arrParentKey[1]][arrParentKey[2]];
 
       hide ? parentColspan-- : parentColspan++;
 
@@ -641,7 +641,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       getThisCol.colspan2 = parentColspan; // 更新实际的 colspan 数
       getThisCol.hide = parentColspan < 1; // 同步 hide 参数
 
-      //递归，继续往上查询是否有父列
+      // 递归，继续往上查询是否有父列
       var nextParentKey = parentTh.data('parentkey');
       nextParentKey && that.setParentCol(hide, nextParentKey);
     }
@@ -855,9 +855,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   // 重置表格尺寸/结构
   Class.prototype.resize = function(){
     var that = this;
-    that.fullSize(); //让表格铺满
-    that.setColsWidth(); //自适应列宽
-    that.scrollPatch(); //滚动条补丁
+    that.fullSize(); // 让表格铺满
+    that.setColsWidth(); // 自适应列宽
+    that.scrollPatch(); // 滚动条补丁
   };
 
   // 表格重载
@@ -1749,7 +1749,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     return width;
   };
 
-  //滚动条补丁
+  // 滚动条补丁
   Class.prototype.scrollPatch = function(){
     var that = this;
     var layMainTable = that.layMain.children('table');
@@ -1784,7 +1784,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     that.layFixed.find(ELEM_BODY).css(
       'height',
       layMainTable.height() >= fixHeight ? fixHeight : 'auto'
-    );
+    ).scrollTop(that.layMain.scrollTop()); // 固定列滚动条高度
 
     // 表格宽度小于容器宽度时，隐藏固定列
     that.layFixRight[
@@ -2482,11 +2482,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       layui.stope(e);
     });
 
-    //同步滚动条
+    // 同步滚动条
     that.layMain.on('scroll', function(){
-      var othis = $(this)
-      ,scrollLeft = othis.scrollLeft()
-      ,scrollTop = othis.scrollTop();
+      var othis = $(this);
+      var scrollLeft = othis.scrollLeft();
+      var scrollTop = othis.scrollTop();
 
       that.layHeader.scrollLeft(scrollLeft);
       that.layTotal.scrollLeft(scrollLeft);
@@ -2495,7 +2495,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       layer.close(that.tipsIndex);
     });
 
-    //自适应
+    // 适应
     _WIN.on('resize', function(){
       that.resize();
     });
@@ -2796,7 +2796,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       // 表合计
       thatTable && layui.each(thatTable.dataTotal, function(i, o){
-        fieldsIsHide[o.field] || dataTotal.push(o.total);
+        fieldsIsHide[o.field] || dataTotal.push('"' + (o.total || '') + '"');
       });
 
       return dataTitle.join(',') + '\r\n' + dataMain.join('\r\n') + '\r\n' + dataTotal.join(',');
