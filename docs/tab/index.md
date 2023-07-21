@@ -46,6 +46,7 @@ tab 组件提供了三种 UI 风格，分别为：
     <div class="layui-tab-item">内容-5</div>
   </div>
 </div>
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -71,6 +72,7 @@ tab 组件提供了三种 UI 风格，分别为：
     <div class="layui-tab-item">内容-5</div>
   </div>
 </div>
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -96,6 +98,7 @@ tab 组件提供了三种 UI 风格，分别为：
     <div class="layui-tab-item">内容-5</div>
   </div>
 </div>
+<!-- import layui -->
   </textarea>
 </pre>
 
