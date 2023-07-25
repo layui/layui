@@ -5,7 +5,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        在反馈问题之前，请确保：
+        **请注意**：此处只接受 Layui 相关技术问题，其他如 layuiAdmin 或 layim 等主题相关问题请勿在此反馈。
+        <br><br>
+        同时，在反馈问题之前，请确保：
         - 已查看官方使用文档：**https://layui.dev** ，但没有找到相关解决方案。 
         - 已在 **Issues** 中搜索过类似的问题，但没有找到相关解决方案。
   - type: input
