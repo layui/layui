@@ -1854,7 +1854,7 @@ layui.define(['table'], function (exports) {
 
   // 重载
   treeTable.reload = function (id, options, deep, type) {
-    deep = deep !== false; // 默认采用深拷贝
+    // deep = deep !== false; // 默认采用深拷贝
     var that = getThisTable(id);
     if (!that) return;
     that.reload(options, deep, type);
