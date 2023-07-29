@@ -203,9 +203,9 @@ layui.define(['table'], function (exports) {
   Class.prototype.init = function () {
     var that = this;
     var options = that.config;
-    var cascade = options.tree.check.cascade;
-    if (cascade !== 'parent' || cascade !== 'children') {
-      options.tree.check.cascade = 'all'; // 超出范围的都重置为全联动
+    var cascade = options.tree.data.cascade;
+    if (cascade !== 'parent' && cascade !== 'children') {
+      options.tree.data.cascade = 'all'; // 超出范围的都重置为全联动
     }
 
     // 先初始一个空的表格以便拿到对应的表格实例信息
@@ -247,7 +247,8 @@ layui.define(['table'], function (exports) {
       },
       data: {
         isSimpleData: false, // 是否简单数据模式
-        rootPid: null // 根节点的父 ID 值
+        rootPid: null, // 根节点的父 ID 值
+        cascade: 'all' // 级联方式 默认全部级联：all 可选 级联父 parent 级联子 children
       },
       async: {
         enable: false, // 是否开启异步加载模式，只有开启的时候其他参数才起作用
@@ -261,9 +262,6 @@ layui.define(['table'], function (exports) {
       callback: {
         beforeExpand: null, // 展开前的回调 return false 可以阻止展开的动作
         onExpand: null // 展开之后的回调
-      },
-      check: {
-        cascade: 'all' // 级联方式 默认全部级联：all 可选 级联父 parent 级联子 children
       }
     },
   };
@@ -1404,7 +1402,7 @@ layui.define(['table'], function (exports) {
     });
 
     var isAll = true;
-    layui.each(treeOptions.check.cascade === 'all' ? table.cache[id] : treeTable.getData(id, true), function (i1, item1) {
+    layui.each(treeOptions.data.cascade === 'all' ? table.cache[id] : treeTable.getData(id, true), function (i1, item1) {
       if (!item1[checkName]) {
         isAll = false;
         return true;
@@ -1516,7 +1514,7 @@ layui.define(['table'], function (exports) {
 
     var checkName = table.config.checkName;
 
-    var cascade = treeOptions.check.cascade;
+    var cascade = treeOptions.data.cascade;
     var isCascadeParent = cascade === 'all' || cascade === 'parent';
 
     // 如有必要更新父节点们的状态
@@ -1540,7 +1538,7 @@ layui.define(['table'], function (exports) {
     // 更新全选的状态
     var isAll = true;
     var isIndeterminate = false;
-    layui.each(treeOptions.check.cascade === 'all' ? table.cache[tableId] : treeTable.getData(tableId, true), function (i1, item1) {
+    layui.each(treeOptions.data.cascade === 'all' ? table.cache[tableId] : treeTable.getData(tableId, true), function (i1, item1) {
       if (item1[checkName] || item1[LAY_CHECKBOX_HALF]) {
         isIndeterminate = true;
       }
@@ -1684,7 +1682,7 @@ layui.define(['table'], function (exports) {
           }
         }
 
-        var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatusFn, trData && treeOptions.check.cascade === 'parent');
+        var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatusFn, trData && treeOptions.data.cascade === 'parent');
         var checkboxElem = tableView.find(trs.map(function (value) {
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"] input[name="layTableCheckbox"]:not(:disabled)';
         }).join(','));
