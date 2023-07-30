@@ -960,7 +960,7 @@ ready.record = function(layero){
   layero.attr({area: area});
 };
 
-ready.rescollbar = function(index){
+ready.rescrollbar = function(index){
   if(doms.html.attr('layer-full') == index){
     if(doms.html[0].style.removeProperty){
       doms.html[0].style.removeProperty('overflow');
@@ -1097,7 +1097,7 @@ layer.min = function(index, options){
 
   elemMin.hide();
   layero.attr('type') === 'page' && layero.find(doms[4]).hide();
-  ready.rescollbar(index);
+  ready.rescrollbar(index);
 
   // 隐藏遮罩
   shadeo.hide();
@@ -1125,7 +1125,7 @@ layer.restore = function(index){
   layero.find('.layui-layer-max').removeClass('layui-layer-maxmin');
   layero.find('.layui-layer-min').show();
   type === 'page' && layero.find(doms[4]).show();
-  ready.rescollbar(index);
+  ready.rescrollbar(index);
   
   // 恢复遮罩
   shadeo.show();
@@ -1243,7 +1243,7 @@ layer.close = function(index, callback){
   }
   
   layer.ie == 6 && ready.reselect();
-  ready.rescollbar(index); 
+  ready.rescrollbar(index); 
   
   // 记住被关闭层的最小化堆叠坐标
   if(typeof layero.attr('minLeft') === 'string'){

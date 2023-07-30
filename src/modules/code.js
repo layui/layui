@@ -167,18 +167,18 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
               var classNameRestore = 'layui-icon-screen-restore';
               var title = this.title;
               var html = $('html,body');
-              var ELEM_SCOLLBAR_HIDE = 'layui-scollbar-hide';
+              var ELEM_SCROLLBAR_HIDE = 'layui-scrollbar-hide';
 
               if(el.hasClass(classNameFull)){
                 elemView.addClass(CONST.ELEM_FULL);
                 el.removeClass(classNameFull).addClass(classNameRestore);
                 el.attr('title', title[1]);
-                html.addClass(ELEM_SCOLLBAR_HIDE);
+                html.addClass(ELEM_SCROLLBAR_HIDE);
               } else {
                 elemView.removeClass(CONST.ELEM_FULL);
                 el.removeClass(classNameRestore).addClass(classNameFull);
                 el.attr('title', title[0]);
-                html.removeClass(ELEM_SCOLLBAR_HIDE);
+                html.removeClass(ELEM_SCROLLBAR_HIDE);
               }
             }
           },
