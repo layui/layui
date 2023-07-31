@@ -328,7 +328,7 @@ layui.define('form', function(exports){
 
       // 获取选中状态
       if(elemCheckbox[0]){
-        item['checked'] = elemCheckbox.prop('checked');
+        that.setCheckValue(item, elemCheckbox.prop('checked'));
       }
       
       // 点击产生的回调
@@ -338,6 +338,13 @@ layui.define('form', function(exports){
         data: item
       });
     });
+  };
+
+  // 设置数据源 checked 字段值
+  Class.prototype.setCheckValue = function(obj, checked){
+    if('checked' in obj){
+      obj.checked = checked;
+    }
   };
   
   // 计算复选框选中状态
@@ -353,8 +360,9 @@ layui.define('form', function(exports){
       var elemCheckboxs = elem.find('.'+ ELEM_PACK).find('input[same="layuiTreeCheck"]');
       elemCheckboxs.each(function(index){
         if(this.disabled) return; // 不可点击则跳过
-        if(item.children[index]) item.children[index]['checked'] = checked;
-        this.checked = checked;
+        var children = item.children[index];
+        if(children) that.setCheckValue(children, checked);
+        that.setCheckValue(this, checked);
       });
     };
 
@@ -410,7 +418,7 @@ layui.define('form', function(exports){
       if(elemCheckbox.prop('disabled')) return;
       
       that.setCheckbox(elem, item, elemCheckbox);
-      item.checked = checked;
+      that.setCheckValue(item, checked);
 
       // 复选框点击产生的回调
       options.oncheck && options.oncheck({
@@ -755,7 +763,8 @@ layui.define('form', function(exports){
       layui.each(data, function(index, item){
         layui.each(checkId, function(index2, item2){
           if(item.id == item2){
-            item['checked'] = true;
+            that.setCheckValue(item, true);
+
             var cloneItem = $.extend({}, item);
             delete cloneItem.children;
 
