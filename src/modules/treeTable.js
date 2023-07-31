@@ -1504,6 +1504,24 @@ layui.define(['table'], function (exports) {
     }
   })
 
+  // 设置或取消行选中样式
+  Class.prototype.setRowCheckedClass = function(tr, checked){
+    var that = this;
+    var options = that.getOptions();
+
+    var index = tr.data('index');
+    var tableViewElem = options.elem.next();
+
+    tr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 主体行
+
+    // 右侧固定行
+    tr.each(function(){
+      var index = $(this).data('index');
+      var trFixedR = tableViewElem.find('.layui-table-fixed-r tbody tr[data-index="'+ index +'"]');
+      trFixedR[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED);
+    });
+  };
+
   // 更新表格的复选框状态
   Class.prototype.updateCheckStatus = function (dataP, checked) {
     var that = this;
@@ -1524,8 +1542,8 @@ layui.define(['table'], function (exports) {
         var checkboxElem = tableView.find('tr[lay-data-index="' + itemP[LAY_DATA_INDEX] + '"]  input[name="layTableCheckbox"]:not(:disabled)');
         var checked = itemP[checkName];
 
-         // 标记父节点行背景色
-        checkboxElem.closest('tr')[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED);
+        // 标记父节点行背景色
+        that.setRowCheckedClass(checkboxElem.closest('tr'), checked);
         
         // 设置原始复选框 checked 属性值并渲染
         form.render(checkboxElem.prop({
@@ -1662,13 +1680,17 @@ layui.define(['table'], function (exports) {
           if (d[checkName]) {
             var radioElem = tableView.find('tr[lay-data-index="' + d[LAY_DATA_INDEX] + '"] input[type="radio"][lay-type="layTableRadio"]');
             d[checkName] = false;
-            radioElem.closest('tr').removeClass(ELEM_CHECKED); // 取消当前选中行背景色
+
+            // 取消当前选中行背景色
+            that.setRowCheckedClass(radioElem.closest('tr'), false);
             form.render(radioElem.prop('checked', false));
           }
         }); // 取消其他的选中状态
         trData[checkName] = checked;
-        trElem[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 标记当前选中行背景色
-        trElem.siblings().removeClass(ELEM_CHECKED); // 取消其他行背景色
+
+        that.setRowCheckedClass(trElem, checked);  // 标记当前选中行背景色
+        that.setRowCheckedClass(trElem.siblings(), false); // 取消其他行背景色
+
         form.render(trElem.find('input[type="radio"][lay-type="layTableRadio"]').prop('checked', checked));
       } else {
         // 切换只能用到单条，全选到这一步的时候应该是一个确定的状态
@@ -1686,9 +1708,12 @@ layui.define(['table'], function (exports) {
         var checkboxElem = tableView.find(trs.map(function (value) {
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"] input[name="layTableCheckbox"]:not(:disabled)';
         }).join(','));
-        checkboxElem.closest('tr')[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 标记当前选中行背景色
+
+        that.setRowCheckedClass(checkboxElem.closest('tr'), checked);  // 标记当前选中行背景色
         form.render(checkboxElem.prop({checked: checked, indeterminate: false}));
+
         var trDataP;
+
         // 更新父节点以及更上层节点的状态
         if (trData && trData[LAY_PARENT_INDEX]) {
           // 找到父节点，然后判断父节点的子节点是否全部选中
