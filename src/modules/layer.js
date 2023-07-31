@@ -475,7 +475,7 @@ Class.pt.creat = function(){
     that.layero = $('#'+ doms[0] + times);
     that.shadeo = $('#'+ doms.SHADE + times);
     
-    config.scrollbar || doms.html.css('overflow', 'hidden').attr('layer-full', times);
+    config.scrollbar || ready.setScrollbar(times);
   }).auto(times);
   
   // 遮罩
@@ -960,13 +960,17 @@ ready.record = function(layero){
   layero.attr({area: area});
 };
 
-ready.rescrollbar = function(index){
+// 设置页面滚动条
+ready.setScrollbar = function(index){
+  doms.html.css('overflow', 'hidden').attr('layer-full', index);
+};
+
+// 恢复页面滚动条
+ready.restScrollbar = function(index){
   if(doms.html.attr('layer-full') == index){
-    if(doms.html[0].style.removeProperty){
-      doms.html[0].style.removeProperty('overflow');
-    } else {
-      doms.html[0].style.removeAttribute('overflow');
-    }
+    doms.html[0].style[doms.html[0].style.removeProperty 
+      ? 'removeProperty' 
+    : 'removeAttribute']('overflow');
     doms.html.removeAttr('layer-full');
   }
 };
@@ -1097,7 +1101,7 @@ layer.min = function(index, options){
 
   elemMin.hide();
   layero.attr('type') === 'page' && layero.find(doms[4]).hide();
-  ready.rescrollbar(index);
+  ready.restScrollbar(index);
 
   // 隐藏遮罩
   shadeo.hide();
@@ -1109,6 +1113,7 @@ layer.restore = function(index){
   var shadeo = $('#'+ doms.SHADE + index);
   var area = layero.attr('area').split(',');
   var type = layero.attr('type');
+  var options = layero.data('config') || {};
 
   layero.removeData('maxminStatus'); // 移除最大最小状态
   
@@ -1125,7 +1130,9 @@ layer.restore = function(index){
   layero.find('.layui-layer-max').removeClass('layui-layer-maxmin');
   layero.find('.layui-layer-min').show();
   type === 'page' && layero.find(doms[4]).show();
-  ready.rescrollbar(index);
+
+  // 恢复页面滚动条弹层打开时的状态
+  options.scrollbar ? ready.restScrollbar(index) : ready.setScrollbar(index);
   
   // 恢复遮罩
   shadeo.show();
@@ -1144,7 +1151,7 @@ layer.full = function(index){
   ready.record(layero); // 记录当前尺寸、坐标
 
   if(!doms.html.attr('layer-full')){
-    doms.html.css('overflow','hidden').attr('layer-full', index);
+    ready.setScrollbar(index);
   }
 
   setTimeout(function(){
@@ -1243,7 +1250,7 @@ layer.close = function(index, callback){
   }
   
   layer.ie == 6 && ready.reselect();
-  ready.rescrollbar(index); 
+  ready.restScrollbar(index); 
   
   // 记住被关闭层的最小化堆叠坐标
   if(typeof layero.attr('minLeft') === 'string'){
