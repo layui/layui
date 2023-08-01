@@ -1175,10 +1175,10 @@ layer.title = function(name, index){
 // 关闭 layer 总方法
 layer.close = function(index, callback){
   var layero = function(){
-    var closest = $('.'+ doms[0]).find('#'+ index).closest('.'+ doms[0]);
+    var closest = $('.'+ doms[0]).children('#'+ index).closest('.'+ doms[0]);
     return closest[0] ? (
-      index = closest.attr('times')
-      ,closest
+      index = closest.attr('times'),
+      closest
     ) : $('#'+ doms[0] + index)
   }();
   var type = layero.attr('type');
