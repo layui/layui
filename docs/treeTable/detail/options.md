@@ -103,6 +103,7 @@ treeTable.render({
 | --- | --- | --- | --- |
 | isSimpleData | 是否简单数据模式 | boolean | `false` |
 | rootPid | 用于设置根节点的 `pid` 属性值 | string | `null` |
+| cascade | 用于设置复选的级联方式。支持以下可选值：<ul><li><code>all</code> : 所有节点联动</li><li><code>parent</code> : 仅对父节点联动</li><li><code>children</code> : 仅对子节点联动</li></ul> | string | `all` |
 
 </td>
     </tr>
