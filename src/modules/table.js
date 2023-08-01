@@ -2559,8 +2559,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
           var row = $.extend({
             title: th.text()
-            ,colspan: parseInt(th.attr('colspan')) || 0 //列单元格
-            ,rowspan: parseInt(th.attr('rowspan')) || 0 //行单元格
+            ,colspan: parseInt(th.attr('colspan')) || 1 //列单元格
+            ,rowspan: parseInt(th.attr('rowspan')) || 1 //行单元格
           }, itemData);
 
           options.cols[i].push(row);

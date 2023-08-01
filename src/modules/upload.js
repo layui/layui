@@ -588,8 +588,11 @@ layui.define(['lay','layer'], function(exports){
     that.elemFile.off('upload.change').on('upload.change', function(){
       var files = this.files || [];
 
+      if(files.length === 0) return;
+
       extendAttrs.call(this);
       setChooseFile(files);
+
       options.auto ? that.upload() : setChooseText(files); // 是否自动触发上传
     });
     

@@ -296,10 +296,12 @@ layui.define('form', function(exports){
           elem.removeClass(ELEM_SPREAD);
           packCont.slideUp(200);
           iconClick.removeClass(ICON_SUB).addClass(ICON_ADD); 
+          that.updateFieldValue(item, 'spread', false);
         }else{
           elem.addClass(ELEM_SPREAD);
           packCont.slideDown(200);
           iconClick.addClass(ICON_SUB).removeClass(ICON_ADD);
+          that.updateFieldValue(item, 'spread', true);
 
           // 是否手风琴
           if(options.accordion){
@@ -328,7 +330,7 @@ layui.define('form', function(exports){
 
       // 获取选中状态
       if(elemCheckbox[0]){
-        item['checked'] = elemCheckbox.prop('checked');
+        that.updateFieldValue(item, 'checked', elemCheckbox.prop('checked'));
       }
       
       // 点击产生的回调
@@ -338,6 +340,11 @@ layui.define('form', function(exports){
         data: item
       });
     });
+  };
+
+  // 更新数据源 checked,spread 字段值
+  Class.prototype.updateFieldValue = function(obj, field, value){
+    if(field in obj) obj[field] = value;
   };
   
   // 计算复选框选中状态
@@ -353,8 +360,9 @@ layui.define('form', function(exports){
       var elemCheckboxs = elem.find('.'+ ELEM_PACK).find('input[same="layuiTreeCheck"]');
       elemCheckboxs.each(function(index){
         if(this.disabled) return; // 不可点击则跳过
-        if(item.children[index]) item.children[index]['checked'] = checked;
-        this.checked = checked;
+        var children = item.children[index];
+        if(children) that.updateFieldValue(children, 'checked', checked);
+        that.updateFieldValue(this, 'checked', checked);
       });
     };
 
@@ -410,7 +418,7 @@ layui.define('form', function(exports){
       if(elemCheckbox.prop('disabled')) return;
       
       that.setCheckbox(elem, item, elemCheckbox);
-      item.checked = checked;
+      that.updateFieldValue(item, 'checked', checked);
 
       // 复选框点击产生的回调
       options.oncheck && options.oncheck({
@@ -755,7 +763,8 @@ layui.define('form', function(exports){
       layui.each(data, function(index, item){
         layui.each(checkId, function(index2, item2){
           if(item.id == item2){
-            item['checked'] = true;
+            that.updateFieldValue(item, 'checked', true);
+
             var cloneItem = $.extend({}, item);
             delete cloneItem.children;
 
