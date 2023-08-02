@@ -1526,6 +1526,9 @@ layui.define(['table'], function (exports) {
   Class.prototype.updateCheckStatus = function (dataP, checked) {
     var that = this;
     var options = that.getOptions();
+    if (!options.hasChecboxCol) {
+      return false; // 如果没有复选列则不需要更新状态
+    }
     var treeOptions = options.tree;
     var tableId = options.id;
     var tableView = options.elem.next();
