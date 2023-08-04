@@ -109,7 +109,7 @@ npm i layui
 
 点击上方 `Preview` 标签可进行效果预览。
 
-<h2 id="help" lay-toc="{}">其他帮助</h2>
+<h2 id="help">其他帮助</h2>
 
 - <a href="https://codepen.io/layui/pen/bGxZXrd" target="_blank" rel="nofollow">在线测试</a>
 - <a href="https://github.com/Sight-wcg/layui-theme-dark" target="_blank">深色主题</a> (社区贡献)
