@@ -255,9 +255,11 @@ layui.define('jquery', function(exports){
     
     // 转化为日期格式字符
     toDateString: function(time, format){
-      //若 null 或空字符，则返回空字符
+      // 若 null 或空字符，则返回空字符
       if(time === null || time === '') return '';
-      
+
+      // 引用自 dayjs 
+      // https://github.com/iamkun/dayjs/blob/v1.11.9/src/constant.js#L30
       var REGEX_FORMAT = /\[([^\]]+)]|y{1,4}|M{1,2}|d{1,2}|H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS/g;
       var that = this;
       var date = new Date(function(){
