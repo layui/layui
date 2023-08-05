@@ -205,7 +205,7 @@ table.render({
     </tr>
     <tr>
 <td>exportTemplet <sup>2.6.9+</sup></td>
-<td>
+<td colspan="3">
 
 <div class="ws-anchor" id="cols.exportTemplet">
 
@@ -223,8 +223,6 @@ exportTemplet: function(d, obj){
 ```
 
 </td>
-<td>string<br>function</td>
-<td>-</td>
     </tr>
     <tr>
 <td>
@@ -232,21 +230,31 @@ exportTemplet: function(d, obj){
   [totalRow](#cols.totalRow)
 
 </td>
-<td>
+<td colspan="3">
 
 <div class="ws-anchor" id="cols.totalRow">
-  是否开启该列的自动合计功能。 
+  是否开启该列的自动合计功能，默认不开启。
 </div>
 
-- 前端合计
+- **采用前端合计**
 
+{{!
 ```
-totalRow: true // 开启合计行，并默认对当前所有行数据进行前端合计
+// 开启并输出合计行前端合计结果
+totalRow: true
+
+// 开启并输出合计行自定义模板。此处 TOTAL_NUMS 即为合计结果的固定特定字段
+totalRow: '{{= d.TOTAL_NUMS }} 单位' 
+// 取整或其他运算
+totalRow: '{{= parseInt(d.TOTAL_NUMS) }}'
 ```
+!}}
 
-- 后端合计
+注意：*合计行模板仅支持字符写法，不支持函数写法，请勿与 `templet` 用法混淆。*
 
-前端合计的数据有限，因此常常需要后端直接返回合计行结果，此时将优先读取后端的合计行返回结果，其格式如下：
+- **采用后端合计**
+
+前端合计的数据有限，因此常需要后端直接返回合计结果，组件将优先读取。数据格式如下：
 
 ```
 {
@@ -261,26 +269,18 @@ totalRow: true // 开启合计行，并默认对当前所有行数据进行前�
 }
 ```
 
-如上，在 `totalRow` 中返回所需统计的列字段名和值即可。
-<br>`totalRow` 字段同样可以通过 `parseData` 回调来解析成为 table 组件所规定的数据格式。
-
-
-- 合计行模板
+在合计行自定义模板中输出后端返回的合计数据
 
 {{!
 ```
-// 获取前端统计的动态字段
-totalRow: '{{= d.TOTAL_NUMS }} 单位' // 还比如只取整：'{{= parseInt(d.TOTAL_NUMS) }}'
-// 获取返回数据中的统计字段
-totalRow: '分数：{{= d.TOTAL_ROW.score }}' // TOTAL_ROW 即对应返回据中的 totalRow
+// 获取后端接口返回数据中的统计字段。此处 TOTAL_ROW 即对应返回据中的 totalRow
+totalRow: '分数：{{= d.TOTAL_ROW.score }}'
 ```
 !}}
 
-</td>
-<td>boolean<br>string</td>
-<td>
-  
-`false`
+如上，在 `totalRow` 中返回所需统计的列字段名和值即可。
+`totalRow` 字段同样可以通过 `parseData` 回调来解析成为 table 组件所规定的数据格式。
+
 
 </td>
     </tr>
