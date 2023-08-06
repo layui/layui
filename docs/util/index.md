@@ -100,11 +100,34 @@ var result = util.timeAgo(1672531200000); // 2023-01-01 00:00:00
 `var result = util.toDateString(time, format);`
 
 - 参数 `time` : 毫秒数或日期对象
-- 参数 `format` : 日期字符格式。默认格式：`yyyy-MM-dd HH:mm:ss` 。可自定义，如： `yyyy年MM月dd日`
+- 参数 `format` : 日期字符格式。默认格式：`yyyy-MM-dd HH:mm:ss` 。可自定义，如： `yyyy年MM月dd日`。
 
 ```
 var result = util.toDateString(1672531200000, 'yyyy-MM-dd'); // 2023-01-01
+
+// 中括号中的字符会原样保留 2.8.13+
+var result2 = util.toDateString(new Date('2023-01-01 11:35:25'), 'ss[s]'); // 25s
 ```
+
+所有可用格式列表
+
+| 格式 | 示例 | 描述 |
+| --- | --- | --- |
+| yy <sup>2.8.13+</sup> | 23 | 年，两位数 |
+| yyyy | 2023 | 年，四位数 |
+| M <sup>2.8.13+</sup> | 1-12 | 月 |
+| MM | 01-12 | 月，两位数 |
+| d <sup>2.8.13+</sup> | 1-31 | 日 |
+| dd | 01-31 | 日，两位数 |
+| H <sup>2.8.13+</sup> | 0-23 | 小时 |
+| HH | 00-23 | 小时，两位数 |
+| h <sup>2.8.13+</sup> | 1-12 | 小时，12 小时制 |
+| hh <sup>2.8.13+</sup> | 01-12 | 小时，12 小时制，两位数 |
+| m <sup>2.8.13+</sup> | 0-59 | 分钟 |
+| mm | 00-59 | 分钟，两位数 |
+| s <sup>2.8.13+</sup> | 0-59 | 秒 |
+| ss | 00-59 | 秒，两位数 |
+| SSS <sup>2.8.13+</sup> | 000-999 | 毫秒，三位数 |
 
 <h3 id="digit" class="ws-anchor ws-bold">数字前置补零</h3>
 
