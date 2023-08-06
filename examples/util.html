@@ -134,11 +134,7 @@ layui.use(['util', 'layer'], function(){
   var timer = null
   if (timer) clearInterval(timer)
   var toDateString = function (format) {
-    var dateString = util.toDateString(new Date(), format, {customMeridiem: function(hours, minutes){
-      return (hours < 12 ? 'AM' : 'PM')
-        //.split('').join('.') // 有句点 '.'
-        //.toLowerCase() // 小写
-    }});
+    var dateString = util.toDateString(new Date(), format);
     $('#test3').html(dateString)
   }
   timer = setInterval(() => {

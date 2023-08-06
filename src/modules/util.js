@@ -293,7 +293,7 @@ layui.define('jquery', function(exports){
           return '晚上';
       };
 
-      var meridiem = options.customMeridiem || defaultMeridiem;
+      var meridiem = (options && options.customMeridiem) || defaultMeridiem;
 
       var matches = {
         yy: function(){return String(years).slice(-2);},
