@@ -100,7 +100,7 @@ var result = util.timeAgo(1672531200000); // 2023-01-01 00:00:00
 `var result = util.toDateString(time, format);`
 
 - 参数 `time` : 毫秒数或日期对象
-- 参数 `format` : 日期字符格式。默认格式：`yyyy-MM-dd HH:mm:ss` 。可自定义，如： `yyyy年MM月dd日`。
+- 参数 `format` : 日期字符格式。默认格式：`yyyy-MM-dd HH:mm:ss` 。可自定义，如： `yyyy年MM月dd日`
 
 ```
 var result = util.toDateString(1672531200000, 'yyyy-MM-dd'); // 2023-01-01
@@ -123,6 +123,7 @@ var result2 = util.toDateString(new Date('2023-01-01 11:35:25'), 'ss[s]'); // 25
 | HH | 00-23 | 小时，两位数 |
 | h <sup>2.8.13+</sup> | 1-12 | 小时，12 小时制 |
 | hh <sup>2.8.13+</sup> | 01-12 | 小时，12 小时制，两位数 |
+| A <sup>2.8.13+</sup> | 凌晨/早上/上午/中午/下午/晚上 | 时段 |
 | m <sup>2.8.13+</sup> | 0-59 | 分钟 |
 | mm | 00-59 | 分钟，两位数 |
 | s <sup>2.8.13+</sup> | 0-59 | 秒 |

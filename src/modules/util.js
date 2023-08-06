@@ -260,7 +260,7 @@ layui.define('jquery', function(exports){
 
       // 引用自 dayjs 
       // https://github.com/iamkun/dayjs/blob/v1.11.9/src/constant.js#L30
-      var REGEX_FORMAT = /\[([^\]]+)]|y{1,4}|M{1,2}|d{1,2}|H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS/g;
+      var REGEX_FORMAT = /\[([^\]]+)]|y{1,4}|M{1,2}|d{1,2}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|SSS/g;
       var that = this;
       var date = new Date(function(){
         if(!time) return;
@@ -277,6 +277,22 @@ layui.define('jquery', function(exports){
       var seconds = date.getSeconds();
       var milliseconds = date.getMilliseconds();
 
+      var meridiem = function(hour, minute){
+          var hm = hour * 100 + minute;
+          if (hm < 600) {
+            return '凌晨';
+          } else if (hm < 900) {
+            return '早上';
+          } else if (hm < 1100) {
+            return '上午';
+          } else if (hm < 1300) {
+            return '中午';
+          } else if (hm < 1800) {
+            return '下午';
+          }
+          return '晚上';
+      };
+
       var matches = {
         yy: function(){return String(years).slice(-2);},
         yyyy: function(){return that.digit(years, 4);},
@@ -288,6 +304,7 @@ layui.define('jquery', function(exports){
         HH: function(){return that.digit(hours);},
         h: function(){return String(hours % 12 || 12);},
         hh: function(){return that.digit(hours % 12 || 12);},
+        A: function(){return meridiem(hours, minutes);},
         m: function(){return String(minutes);},
         mm: function(){return that.digit(minutes);},
         s: function(){return String(seconds);},
