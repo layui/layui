@@ -97,19 +97,36 @@ var result = util.timeAgo(1672531200000); // 2023-01-01 00:00:00
 
 <h3 id="toDateString" class="ws-anchor ws-bold">转换日期格式字符</h3>
 
-`var result = util.toDateString(time, format);`
+`var result = util.toDateString(time, format, options);`
 
 - 参数 `time` : 毫秒数或日期对象
 - 参数 `format` : 日期字符格式。默认格式：`yyyy-MM-dd HH:mm:ss` 。可自定义，如： `yyyy年MM月dd日`
+- 参数 `options` <sup>2.8.13+</sup> : 该方法的属性可选项，详见下表：
+
+| 属性名 | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| customMeridiem | 自定义 meridiem 格式 | Function | - |
 
 ```
 var result = util.toDateString(1672531200000, 'yyyy-MM-dd'); // 2023-01-01
 
 // 中括号中的字符会原样保留 2.8.13+
 var result2 = util.toDateString(new Date('2023-01-01 11:35:25'), 'ss[s]'); // 25s
+
+// 自定义 meridiem
+var result3 = util.toDateString(
+  '2023-01-01 11:35:25', 
+  'hh:mm:ss A'
+  {
+    customMeridiem: function(hours, minutes){
+      return (hours < 12 ? 'AM' : 'PM')
+        //.split('').join('.') // 有句点，A.M.
+        //.toLowerCase() // 小写，a.m.
+    }
+); // 11:35:25 AM
 ```
 
-所有可用格式列表
+所有可用的格式列表
 
 | 格式 | 示例 | 描述 |
 | --- | --- | --- |
@@ -123,7 +140,7 @@ var result2 = util.toDateString(new Date('2023-01-01 11:35:25'), 'ss[s]'); // 25
 | HH | 00-23 | 小时，两位数 |
 | h <sup>2.8.13+</sup> | 1-12 | 小时，12 小时制 |
 | hh <sup>2.8.13+</sup> | 01-12 | 小时，12 小时制，两位数 |
-| A <sup>2.8.13+</sup> | 凌晨/早上/上午/中午/下午/晚上 | 时段 |
+| A <sup>2.8.13+</sup> | 凌晨/早上/上午/中午/下午/晚上 | meridiem |
 | m <sup>2.8.13+</sup> | 0-59 | 分钟 |
 | mm | 00-59 | 分钟，两位数 |
 | s <sup>2.8.13+</sup> | 0-59 | 秒 |

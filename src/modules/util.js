@@ -254,7 +254,7 @@ layui.define('jquery', function(exports){
     },
     
     // 转化为日期格式字符
-    toDateString: function(time, format){
+    toDateString: function(time, format, options){
       // 若 null 或空字符，则返回空字符
       if(time === null || time === '') return '';
 
@@ -277,8 +277,8 @@ layui.define('jquery', function(exports){
       var seconds = date.getSeconds();
       var milliseconds = date.getMilliseconds();
 
-      var meridiem = function(hour, minute){
-          var hm = hour * 100 + minute;
+      var defaultMeridiem = function(hours, minutes){
+          var hm = hours * 100 + minutes;
           if (hm < 600) {
             return '凌晨';
           } else if (hm < 900) {
@@ -292,6 +292,8 @@ layui.define('jquery', function(exports){
           }
           return '晚上';
       };
+
+      var meridiem = options.customMeridiem || defaultMeridiem;
 
       var matches = {
         yy: function(){return String(years).slice(-2);},
