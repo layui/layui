@@ -132,7 +132,6 @@ layui.use(['util', 'layer'], function(){
 
   // 转换日期格式
   var timer = null
-  if (timer) clearInterval(timer)
   var toDateString = function (format) {
     var dateString = util.toDateString(new Date(), format);
     $('#test3').html(dateString)
