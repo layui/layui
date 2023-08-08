@@ -11,6 +11,31 @@ toc: true
 
 > 导读：📑 [Layui 2.8 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
+
+<h2 id="2.8.13" class="ws-anchor">
+  2.8.13
+  <span class="layui-badge-rim">2023-08-08</span>
+</h2>
+
+- #### table
+  - 优化 在自定义模板中放置 `checkbox` 时对应的文字显示异常问题 # I7LQNO
+  - 调整 `totalRow` 属性在 `table.reloadData()` 数据重载时的支持 # I7R6VY
+- #### treeTable
+  - 修复 执行 `treeTable.addNodes()` 增加节点导致当前节点选中状态丢失的问题 # I7Q6IP
+  - 优化 增加和删除节点时，对容器尺寸重新进行自动适配
+- #### tree
+  - 优化 容器样式，以解决用于其他组件内部可能造成的样式异常问题 # I7QAO3
+- #### dropdown
+  - **调整** `data.title` 属性对 HTML 的转义处理。若不转义，可通过 `templet` 属性实现 # I7Q6IV
+- #### util
+  - 重构 `util.toDateString()` 转换日期格式字符组件，以提供更强大的占位符支持 # 1314
+  - 修复 `util.fixbar()` 组件因 `default` 属性在 IE8 出现的保留字报错问题
+
+### 下载： [layui-v2.8.13.zip](https://gitee.com/layui/layui/attach_files/1490273/download)
+
+---
+
+
 <h2 id="2.8.12" class="ws-anchor">
   2.8.12
   <span class="layui-badge-rim">2023-08-01</span>
