@@ -125,7 +125,7 @@ layui.define('form', function(exports){
     
     that.checkids = [];
 
-    var temp = $('<div class="layui-tree'+ (options.showCheckbox ? " layui-form" : "") + (options.showLine ? " layui-tree-line" : "") +'" lay-filter="LAY-tree-'+ that.index +'"></div>');
+    var temp = $('<div class="layui-tree layui-border-box'+ (options.showCheckbox ? " layui-form" : "") + (options.showLine ? " layui-tree-line" : "") +'" lay-filter="LAY-tree-'+ that.index +'"></div>');
     that.tree(temp);
 
     var othis = options.elem = $(options.elem);

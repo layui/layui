@@ -5,7 +5,8 @@
  
 layui.define(function(){
   var mods = [] 
-  ,builtin = layui.cache.builtin;
+  var builtin = layui.cache.builtin;
+
   layui.each(builtin, function(modName){
     (modName === 'all' || modName === 'layui.all') || mods.push(modName);
   });
@@ -15,12 +16,12 @@ layui.define(function(){
 }(), function(exports){
   "use strict";
   
-  var MOD_NAME = 'all'
+  var MOD_NAME = 'all';
   
-  //外部接口
-  ,all = {
-    config: {}
-    ,time: function(){
+  // 外部接口
+  var all = {
+    config: {},
+    time: function(){
       var time = new Date().getTime() - layui.cache.startTime;
       delete layui.cache.startTime;
       return time;

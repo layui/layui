@@ -6,6 +6,7 @@ toc: true
 # 树表组件 <sup title="指在该版本新增的组件">2.8+</sup>
 
 > 树表组件 `treeTable` 是基于 `table` 组件延伸的树形表格组件，支持常见的树组件功能。
+> 注意：*该组件不支持 IE8*
 
 <h2 id="examples" lay-toc="{anchor: null}" style="margin-bottom: 0;">示例</h2>
 

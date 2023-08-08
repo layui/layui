@@ -26,6 +26,7 @@ layui.use(function(){
     elem: '#ID-tree-demo',
     data: data,
     showCheckbox: true,  // 是否显示复选框
+    onlyIconControl: true,  // 是否仅允许节点左侧图标控制展开收缩
     id: 'demo-id-1',
     isJump: true, // 是否允许点击节点时弹出新窗口跳转
     click: function(obj){
