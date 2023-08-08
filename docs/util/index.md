@@ -23,7 +23,7 @@ toc: true
 | [util.fixbar(options)](../fixbar/) | 固定条组件 |
 | [util.countdown(options)](#countdown) | 倒计时组件 |
 | [util.timeAgo(time, onlyDate)](#timeAgo) | 某个时间在多久前 |
-| [util.toDateString(time, format)](#toDateString) | 将毫秒数或日期对象转换成日期格式字符 |
+| [util.toDateString(time, format, options)](#toDateString) | 将毫秒数或日期对象转换成日期格式字符 |
 | [util.digit(num, length)](#digit) | 数字前置补零 |
 | [util.escape(str)](#escape) | 转义 HTML 字符 |
 | [util.unescape(str)](#escape) | 还原 HTML 字符 |
@@ -97,14 +97,56 @@ var result = util.timeAgo(1672531200000); // 2023-01-01 00:00:00
 
 <h3 id="toDateString" class="ws-anchor ws-bold">转换日期格式字符</h3>
 
-`var result = util.toDateString(time, format);`
+`var result = util.toDateString(time, format, options);`
 
 - 参数 `time` : 毫秒数或日期对象
 - 参数 `format` : 日期字符格式。默认格式：`yyyy-MM-dd HH:mm:ss` 。可自定义，如： `yyyy年MM月dd日`
+- 参数 `options` <sup>2.8.13+</sup> : 该方法的属性可选项，详见下表：
+
+| 属性名 | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| customMeridiem | 自定义 meridiem 格式 | Function | - |
 
 ```
 var result = util.toDateString(1672531200000, 'yyyy-MM-dd'); // 2023-01-01
+
+// 中括号中的字符会原样保留 2.8.13+
+var result2 = util.toDateString(new Date('2023-01-01 11:35:25'), 'ss[s]'); // 25s
+
+// 自定义 meridiem
+var result3 = util.toDateString(
+  '2023-01-01 11:35:25', 
+  'hh:mm:ss A',
+  {
+    customMeridiem: function(hours, minutes){
+      return (hours < 12 ? 'AM' : 'PM')
+        //.split('').join('.') // 有句点，A.M.
+        //.toLowerCase() // 小写，a.m.
+    }
+  }
+); // 11:35:25 AM
 ```
+
+参数 `format` 所有可用的格式列表 : 
+
+| 格式 | 示例 | 描述 |
+| --- | --- | --- |
+| yy <sup>2.8.13+</sup> | 23 | 年，两位数 |
+| yyyy | 2023 | 年，四位数 |
+| M <sup>2.8.13+</sup> | 1-12 | 月 |
+| MM | 01-12 | 月，两位数 |
+| d <sup>2.8.13+</sup> | 1-31 | 日 |
+| dd | 01-31 | 日，两位数 |
+| H <sup>2.8.13+</sup> | 0-23 | 小时 |
+| HH | 00-23 | 小时，两位数 |
+| h <sup>2.8.13+</sup> | 1-12 | 小时，12 小时制 |
+| hh <sup>2.8.13+</sup> | 01-12 | 小时，12 小时制，两位数 |
+| A <sup>2.8.13+</sup> | 凌晨/早上/上午/中午/下午/晚上 | meridiem |
+| m <sup>2.8.13+</sup> | 0-59 | 分钟 |
+| mm | 00-59 | 分钟，两位数 |
+| s <sup>2.8.13+</sup> | 0-59 | 秒 |
+| ss | 00-59 | 秒，两位数 |
+| SSS <sup>2.8.13+</sup> | 000-999 | 毫秒，三位数 |
 
 <h3 id="digit" class="ws-anchor ws-bold">数字前置补零</h3>
 

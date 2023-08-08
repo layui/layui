@@ -46,18 +46,18 @@ layui.use('dropdown', function(){
     //,align: 'right'
     ,data: [{
       title: 'menu item 1'
-      ,templet: '<i class="layui-icon layui-icon-light"></i> {{d.title}} <span class="layui-badge-dot"></span>'
+      ,templet: '<i class="layui-icon layui-icon-light"></i> {{= d.title }} <span class="layui-badge-dot"></span>'
       ,id: ''
       ,href: ''
       ,type: '' //菜单类型，支持：normal/group/parent
     },{
-      title: 'menu item 2'
-      ,templet: '<img src="//cdn.layui.com/avatar/168.jpg?t=123" style="width: 16px;"> {{d.title}}'
+      title: 'menu item <strong>2</strong>'
+      ,templet: '<img src="https://unpkg.com/outeres@0.1.1/demo/avatar/0.png" style="width: 16px;"> {{- d.title }}'
       ,id: ''
       ,href: 'https://www.layui.com/'
       ,target: '_blank'
     },{type: '-'},{},{
-      title: 'menu item 3'
+      title: 'menu item 3 <hello>'
       ,id: ''
       ,type: 'group'
       ,child: [{
