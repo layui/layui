@@ -116,17 +116,18 @@ var result2 = util.toDateString(new Date('2023-01-01 11:35:25'), 'ss[s]'); // 25
 // 自定义 meridiem
 var result3 = util.toDateString(
   '2023-01-01 11:35:25', 
-  'hh:mm:ss A'
+  'hh:mm:ss A',
   {
     customMeridiem: function(hours, minutes){
       return (hours < 12 ? 'AM' : 'PM')
         //.split('').join('.') // 有句点，A.M.
         //.toLowerCase() // 小写，a.m.
     }
+  }
 ); // 11:35:25 AM
 ```
 
-所有可用的格式列表
+参数 `format` 所有可用的格式列表 : 
 
 | 格式 | 示例 | 描述 |
 | --- | --- | --- |
