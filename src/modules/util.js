@@ -358,51 +358,51 @@ layui.define('jquery', function(exports){
     // 让指定的元素保持在可视区域
     toVisibleArea: function(options){
       options = $.extend({
-        margin: 160 //触发动作的边界值
-        ,duration: 200 //动画持续毫秒数
-        ,type: 'y' //触发方向，x 水平、y 垂直
+        margin: 160, // 触发动作的边界值
+        duration: 200, // 动画持续毫秒数
+        type: 'y' // 触发方向，x 水平、y 垂直
       }, options);
       
       if(!options.scrollElem[0] || !options.thisElem[0]) return;
       
-      var scrollElem = options.scrollElem //滚动元素
-      ,thisElem = options.thisElem //目标元素
-      ,vertical = options.type === 'y' //是否垂直方向
-      ,SCROLL_NAME = vertical ? 'scrollTop' : 'scrollLeft' //滚动方法
-      ,OFFSET_NAME = vertical ? 'top' : 'left' //坐标方式
-      ,scrollValue = scrollElem[SCROLL_NAME]() //当前滚动距离
-      ,size = scrollElem[vertical ? 'height' : 'width']() //滚动元素的尺寸
-      ,scrollOffet = scrollElem.offset()[OFFSET_NAME] //滚动元素所处位置
-      ,thisOffset = thisElem.offset()[OFFSET_NAME] - scrollOffet //目标元素当前的所在位置
-      ,obj = {};
+      var scrollElem = options.scrollElem // 滚动元素
+      var thisElem = options.thisElem // 目标元素
+      var vertical = options.type === 'y' // 是否垂直方向
+      var SCROLL_NAME = vertical ? 'scrollTop' : 'scrollLeft' // 滚动方法
+      var OFFSET_NAME = vertical ? 'top' : 'left' // 坐标方式
+      var scrollValue = scrollElem[SCROLL_NAME]() // 当前滚动距离
+      var size = scrollElem[vertical ? 'height' : 'width']() // 滚动元素的尺寸
+      var scrollOffet = scrollElem.offset()[OFFSET_NAME] // 滚动元素所处位置
+      var thisOffset = thisElem.offset()[OFFSET_NAME] - scrollOffet // 目标元素当前的所在位置
+      var obj = {};
       
-      //边界满足条件
+      // 边界满足条件
       if(thisOffset > size - options.margin || thisOffset < options.margin){
         obj[SCROLL_NAME] = thisOffset - size/2 + scrollValue
         scrollElem.animate(obj, options.duration);
       }
     },
     
-    //批量事件
+    // 批量事件
     event: function(attr, obj, eventType){
       var _body = $('body');
       eventType = eventType || 'click';
       
-      //记录事件回调集合
+      // 记录事件回调集合
       obj = util.event[attr] = $.extend(true, util.event[attr], obj) || {};
       
-      //清除委托事件
+      // 清除委托事件
       util.event.UTIL_EVENT_CALLBACK = util.event.UTIL_EVENT_CALLBACK || {};
       _body.off(eventType, '*['+ attr +']', util.event.UTIL_EVENT_CALLBACK[attr])
       
-      //绑定委托事件
+      // 绑定委托事件
       util.event.UTIL_EVENT_CALLBACK[attr] = function(){
-        var othis = $(this)
-        ,key = othis.attr(attr);
+        var othis = $(this);
+        var key = othis.attr(attr);
         (typeof obj[key] === 'function') && obj[key].call(this, othis);
       };
 
-      //清除旧事件，绑定新事件
+      // 清除旧事件，绑定新事件
       _body.on(eventType, '*['+ attr +']', util.event.UTIL_EVENT_CALLBACK[attr]);
       
       return obj;
@@ -410,11 +410,6 @@ layui.define('jquery', function(exports){
   };
 
   util.on = util.event;
-  
-  // DOM 尺寸变化，该创意来自：http://benalman.com/projects/jquery-resize-plugin/
-  /*
-  !function(a,b,c){"$:nomunge";function l(){f=b[g](function(){d.each(function(){var b=a(this),c=b.width(),d=b.height(),e=a.data(this,i);(c!==e.w||d!==e.h)&&b.trigger(h,[e.w=c,e.h=d])}),l()},e[j])}var f,d=a([]),e=a.resize=a.extend(a.resize,{}),g="setTimeout",h="resize",i=h+"-special-event",j="delay",k="throttleWindow";e[j]=250,e[k]=!0,a.event.special[h]={setup:function(){if(!e[k]&&this[g])return!1;var b=a(this);d=d.add(b),a.data(this,i,{w:b.width(),h:b.height()}),1===d.length&&l()},teardown:function(){if(!e[k]&&this[g])return!1;var b=a(this);d=d.not(b),b.removeData(i),d.length||clearTimeout(f)},add:function(b){function f(b,e,f){var g=a(this),h=a.data(this,i)||{};h.w=e!==c?e:g.width(),h.h=f!==c?f:g.height(),d.apply(this,arguments)}if(!e[k]&&this[g])return!1;var d;return a.isFunction(b)?(d=b,f):(d=b.handler,b.handler=f,void 0)}}}($,window);
-  */
   
   // 输出接口
   exports('util', util);
