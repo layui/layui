@@ -254,35 +254,71 @@ layui.define('jquery', function(exports){
     },
     
     // 转化为日期格式字符
-    toDateString: function(time, format){
-      //若 null 或空字符，则返回空字符
+    toDateString: function(time, format, options){
+      // 若 null 或空字符，则返回空字符
       if(time === null || time === '') return '';
-      
-      var that = this
-      ,date = new Date(function(){
+
+      // 引用自 dayjs 
+      // https://github.com/iamkun/dayjs/blob/v1.11.9/src/constant.js#L30
+      var REGEX_FORMAT = /\[([^\]]+)]|y{1,4}|M{1,2}|d{1,2}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|SSS/g;
+      var that = this;
+      var date = new Date(function(){
         if(!time) return;
         return isNaN(time) ? time : (typeof time === 'string' ? parseInt(time) : time)
       }() || new Date())
-      ,ymd = [
-        that.digit(date.getFullYear(), 4)
-        ,that.digit(date.getMonth() + 1)
-        ,that.digit(date.getDate())
-      ]
-      ,hms = [
-        that.digit(date.getHours())
-        ,that.digit(date.getMinutes())
-        ,that.digit(date.getSeconds())
-      ];
-      
+
       if(!date.getDate()) return hint.error('Invalid Msec for "util.toDateString(Msec)"'), '';
+
+      var years = date.getFullYear();
+      var month = date.getMonth();
+      var days = date.getDate();
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var seconds = date.getSeconds();
+      var milliseconds = date.getMilliseconds();
+
+      var defaultMeridiem = function(hours, minutes){
+          var hm = hours * 100 + minutes;
+          if (hm < 600) {
+            return '凌晨';
+          } else if (hm < 900) {
+            return '早上';
+          } else if (hm < 1100) {
+            return '上午';
+          } else if (hm < 1300) {
+            return '中午';
+          } else if (hm < 1800) {
+            return '下午';
+          }
+          return '晚上';
+      };
+
+      var meridiem = (options && options.customMeridiem) || defaultMeridiem;
+
+      var matches = {
+        yy: function(){return String(years).slice(-2);},
+        yyyy: function(){return that.digit(years, 4);},
+        M: function(){return String(month + 1);},
+        MM: function(){return that.digit(month + 1);},
+        d: function(){return String(days);},
+        dd: function(){return that.digit(days);},
+        H: function(){return String(hours);},
+        HH: function(){return that.digit(hours);},
+        h: function(){return String(hours % 12 || 12);},
+        hh: function(){return that.digit(hours % 12 || 12);},
+        A: function(){return meridiem(hours, minutes);},
+        m: function(){return String(minutes);},
+        mm: function(){return that.digit(minutes);},
+        s: function(){return String(seconds);},
+        ss: function(){return that.digit(seconds);},
+        SSS: function(){return that.digit(milliseconds, 3);}
+      }
       
       format = format || 'yyyy-MM-dd HH:mm:ss';
-      return format.replace(/yyyy/g, ymd[0])
-      .replace(/MM/g, ymd[1])
-      .replace(/dd/g, ymd[2])
-      .replace(/HH/g, hms[0])
-      .replace(/mm/g, hms[1])
-      .replace(/ss/g, hms[2]);
+
+      return format.replace(REGEX_FORMAT, function(match, $1) {
+        return $1 || (matches[match] && matches[match]()) || match;
+      });
     },
     
     // 转义 html

@@ -29,6 +29,14 @@ body{padding: 50px;}
 
 <hr>
 
+请编辑格式：
+<div class="layui-inline">
+  <input type="text" value="yyyy-MM-dd HH:mm:ss" class="layui-input" id="test2"/>
+</div>
+<span class="layui-word-aux" id="test3"></span>
+
+<hr>
+
 <div id="target-test" style1="position: relative; height: 300px; overflow: auto;">
   1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>
 </div>
@@ -121,6 +129,16 @@ layui.use(['util', 'layer'], function(){
       alert(othis.html())
     }
   });
+
+  // 转换日期格式
+  var timer = null
+  var toDateString = function (format) {
+    var dateString = util.toDateString(new Date(), format);
+    $('#test3').html(dateString)
+  }
+  timer = setInterval(() => {
+    toDateString($('#test2').val())
+  }, 50)
   
 });
 </script>
