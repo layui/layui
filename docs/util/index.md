@@ -23,7 +23,7 @@ toc: true
 | [util.fixbar(options)](../fixbar/) | 固定条组件 |
 | [util.countdown(options)](#countdown) | 倒计时组件 |
 | [util.timeAgo(time, onlyDate)](#timeAgo) | 某个时间在多久前 |
-| [util.toDateString(time, format)](#toDateString) | 将毫秒数或日期对象转换成日期格式字符 |
+| [util.toDateString(time, format, options)](#toDateString) | 将毫秒数或日期对象转换成日期格式字符 |
 | [util.digit(num, length)](#digit) | 数字前置补零 |
 | [util.escape(str)](#escape) | 转义 HTML 字符 |
 | [util.unescape(str)](#escape) | 还原 HTML 字符 |
