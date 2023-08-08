@@ -1265,6 +1265,7 @@ layui.define(['table'], function (exports) {
     var options = that.getOptions();
     var treeOptions = options.tree;
     var tableViewElem = options.elem.next();
+    var checkName = table.config.checkName;
 
     opts = opts || {};
 
@@ -1279,6 +1280,13 @@ layui.define(['table'], function (exports) {
 
     // 添加数据
     newNodes = $.extend(true, [], (layui.isArray(newNodes) ? newNodes : [newNodes]));
+
+    // 若未传入 LAY_CHECKED 属性，则继承父节点的 checked 状态
+    layui.each(newNodes, function(i, item){
+      if(!(checkName in item)){
+        item[checkName] = parentNode[checkName];
+      }
+    })
 
     var tableData = that.getTableData(), dataAfter;
     if (!parentNode) {
