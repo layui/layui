@@ -1071,6 +1071,7 @@ a cite{font-style: normal; *cursor:pointer;}
 
 .layui-table-cell{height: 38px; line-height: 28px; padding: 6px 15px; position: relative; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-sizing: border-box;}
 .layui-table-cell .layui-form-checkbox[lay-skin="primary"]{top: -1px; padding: 0;}
+.layui-table-cell .layui-form-checkbox[lay-skin="primary"] > div{padding-left: 24px;}
 .layui-table-cell .layui-table-link{color: #01AAED;}
 .layui-table-cell .layui-btn{vertical-align: inherit;}
 .layui-table-cell[align="center"]{-webkit-box-pack: center;}
