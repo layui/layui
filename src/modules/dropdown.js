@@ -3,11 +3,12 @@
  * 下拉菜单组件
  */
 
-layui.define(['jquery', 'laytpl', 'lay'], function(exports){
+layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   "use strict";
   
   var $ = layui.$;
   var laytpl = layui.laytpl;
+  var util = layui.util;
   var hint = layui.hint();
   var device = layui.device();
   var clickOrMousedown = (device.mobile ? 'touchstart' : 'mousedown');
@@ -175,7 +176,7 @@ layui.define(['jquery', 'laytpl', 'lay'], function(exports){
             : laytpl(templet).render(item);
           }
           return title;
-        }(item.title);
+        }(util.escape(item.title));
         
         // 初始类型
         var type = function(){
