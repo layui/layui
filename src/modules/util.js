@@ -19,7 +19,7 @@ layui.define('jquery', function(exports){
       options = $.extend(true, {
         target: 'body', // fixbar 的插入目标选择器
         bars: [], //  bar 信息
-        default: true, // 是否显示默认 bar
+        "default": true, // 是否显示默认 bar
         margin: 160, // 出现 top bar 的滚动条高度临界值
         duration: 320 // top bar 等动画时长（毫秒）
       }, options);
@@ -33,7 +33,7 @@ layui.define('jquery', function(exports){
       : $(options.target === 'body' ? $doc : $target)
 
       // 是否提供默认图标
-      if(options.default){
+      if(options['default']){
         // 兼容旧版本的一些属性
         if(options.bar1){
           options.bars.push({
