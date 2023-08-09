@@ -1245,7 +1245,7 @@ layui.define(['table'], function (exports) {
     options.hasNumberCol && formatNumber(that);
 
     // 重新适配尺寸
-    table.resize(id);
+    treeTable.resize(id);
   }
 
   /**
@@ -1395,9 +1395,6 @@ layui.define(['table'], function (exports) {
       // 滚动到第一个新增的节点
       tableViewElem.find(ELEM_MAIN).find('tr[lay-data-index="' + newNodes[0][LAY_DATA_INDEX] + '"]').get(0).scrollIntoViewIfNeeded();
     }
-
-    // 重新适配尺寸
-    table.resize(id);
 
     return newNodes;
   }
