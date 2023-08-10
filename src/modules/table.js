@@ -2494,21 +2494,23 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       layer.close(that.tipsIndex);
     });
-
-    // 适应
-    _WIN.on('resize', function(){
-      that.resize();
-    });
   };
 
-  //一次性事件
-  ;(function(){
-    //全局点击
+  // 全局事件
+  (function(){
+    // 自适应尺寸
+    _WIN.on('resize', function(){
+      layui.each(thisTable.that, function(){
+        this.resize();
+      });
+    });
+
+    // 全局点击
     _DOC.on('click', function(){
       _DOC.trigger('table.remove.tool.panel');
     });
 
-    //工具面板移除事件
+    // 工具面板移除事件
     _DOC.on('table.remove.tool.panel', function(){
       $('.' + ELEM_TOOL_PANEL).remove();
     });
