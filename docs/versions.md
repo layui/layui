@@ -19,7 +19,7 @@ toc: true
 
 - #### table
   - 优化 在自定义模板中放置 `checkbox` 时对应的文字显示异常问题 # I7LQNO
-  - 调整 `totalRow` 属性在 `table.reloadData()` 数据重载时的支持 # I7R6VY
+  - 优化 `totalRow` 属性在 `table.reloadData()` 数据重载时的支持 # I7R6VY
 - #### treeTable
   - 修复 执行 `treeTable.addNodes()` 增加节点导致当前节点选中状态丢失的问题 # I7Q6IP
   - 优化 增加和删除节点时，对容器尺寸重新进行自动适配
@@ -334,7 +334,7 @@ toc: true
 
 ---
 
-<h2 id="2.8.0" lay-toc="{title: '2.8.0', hot: true}">
+<h2 id="2.8.0" class="ws-anchor">
   2.8.0 
   <span class="layui-badge-rim">2023-04-24</span>
 </h2>
