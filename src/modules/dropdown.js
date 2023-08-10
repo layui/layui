@@ -455,7 +455,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       var that = thisModule.getThis(dropdown.thisId);
       if(!that) return;
       
-      if(!that.elemView[0] || !$('.'+ STR_ELEM)[0]){
+      if((that.elemView && !that.elemView[0]) || !$('.'+ STR_ELEM)[0]){
         return false;
       }
       
