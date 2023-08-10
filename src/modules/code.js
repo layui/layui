@@ -294,7 +294,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       // header
       var headerElem = $('<div class="'+ CONST.ELEM_TITLE +'">');
 
-      // 添加组件 clasName
+      // 添加组件 className
       othis.addClass('layui-code-view layui-box');
 
       // 自定义风格
