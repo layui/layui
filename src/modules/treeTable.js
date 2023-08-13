@@ -78,6 +78,7 @@ layui.define(['table'], function (exports) {
   var LAY_EXPAND = 'LAY_EXPAND';
   var LAY_HAS_EXPANDED = 'LAY_HAS_EXPANDED';
   var LAY_ASYNC_STATUS = 'LAY_ASYNC_STATUS';
+  var LAY_CASCADE = ['all', 'parent', 'children', 'none'];
 
   // 构造器
   var Class = function (options) {
@@ -204,7 +205,7 @@ layui.define(['table'], function (exports) {
     var that = this;
     var options = that.config;
     var cascade = options.tree.data.cascade;
-    if (cascade !== 'parent' && cascade !== 'children') {
+    if (LAY_CASCADE.indexOf(cascade) === -1) {
       options.tree.data.cascade = 'all'; // 超出范围的都重置为全联动
     }
 
@@ -1722,7 +1723,7 @@ layui.define(['table'], function (exports) {
           }
         }
 
-        var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatusFn, trData && treeOptions.data.cascade === 'parent');
+        var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatusFn, trData && ['parent', 'none'].indexOf(treeOptions.data.cascade) !== -1);
         var checkboxElem = tableView.find(trs.map(function (value) {
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"] input[name="layTableCheckbox"]:not(:disabled)';
         }).join(','));
