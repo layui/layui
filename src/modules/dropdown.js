@@ -96,7 +96,12 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     isSpreadItem: true, // 是否初始展开子菜单
     data: [], // 菜单数据结构
     delay: 300, // 延迟关闭的毫秒数，若 trigger 为 hover 时才生效
-    shade: 0 // 遮罩
+    shade: 0, // 遮罩
+    field:{ //自定义data字段
+      id: 'id',
+      title: 'title',
+      child: 'child',
+    }
   };
   
   // 重载实例
@@ -166,7 +171,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       // var views = [];
       layui.each(data, function(index, item){
         // 是否存在子级
-        var isChild = item.child && item.child.length > 0;
+        var isChild = item[options.field.child] && item[options.field.child].length > 0;
         var isSpreadItem = ('isSpreadItem' in item) ? item.isSpreadItem : options.isSpreadItem
         var title = function(title){
           var templet = item.templet || options.templet;
@@ -176,7 +181,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
             : laytpl(templet).render(item);
           }
           return title;
-        }(util.escape(item.title));
+        }(util.escape(item[options.field.title]));
         
         // 初始类型
         var type = function(){
@@ -193,7 +198,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
           return '';
         }();
 
-        if(type !== '-' && (!item.title && !item.id && !isChild)) return;
+        if (type !== '-' && (!item[options.field.title] && !item[options.field.id] && !isChild)) return;
         
         //列表元素
         var viewLi = $(['<li'+ function(){
@@ -240,14 +245,14 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
         
         //子级区
         if(isChild){
-          var elemPanel = $('<div class="layui-panel layui-menu-body-panel"></div>')
-          ,elemUl = $('<ul></ul>');
+          var elemPanel = $('<div class="layui-panel layui-menu-body-panel"></div>');
+          var elemUl = $('<ul></ul>');
 
           if(type === 'parent'){
-            elemPanel.append(eachItemView(elemUl, item.child));
+            elemPanel.append(eachItemView(elemUl, item[options.field.child]));
             viewLi.append(elemPanel);
           } else {
-            viewLi.append(eachItemView(elemUl, item.child));
+            viewLi.append(eachItemView(elemUl, item[options.field.child]));
           }
         }
 
