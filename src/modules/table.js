@@ -1121,10 +1121,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           if(item3.hide) classNames.push(HIDE); //插入隐藏列样式
           if(!item3.field) classNames.push(ELEM_COL_SPECIAL); //插入特殊列样式
           return classNames.join(' ');
-        }() +'">'
-          ,'<div class="layui-table-cell laytable-cell-'+ function(){ //返回对应的CSS类标识
-            return item3.type === 'normal' ? key
-              : (key + ' laytable-cell-' + item3.type);
+        }() +'">',
+            '<div class="layui-table-cell laytable-cell-'+ function(){ //返回对应的CSS类标识
+              var classStr = item3.type === 'normal' ? key
+                : (key + ' laytable-cell-' + item3.type);
+              if(item3.className) classStr += ' ' + item3.className;
+              return classStr;
           }() +'"'
           + (item3.align ? ' align="'+ item3.align +'"' : '')
           + function(){
