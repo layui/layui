@@ -23,6 +23,14 @@ layui.use(['treeTable'], function(){
     elem: '#test',
     url: './json/treeTable/demo-1.json',
     maxHeight: 'full-32',
+    tree: {
+      customName: {
+        name: 'name'
+      },
+      view: {
+        iconLeaf: ''
+      }
+    },
     cols: [[
       {type: 'checkbox', fixed: 'left'},
       {type: 'numbers', fixed: 'left'},
@@ -33,7 +41,7 @@ layui.use(['treeTable'], function(){
       {field: 'score', title: '评分', width: 80, sort: true},
       {field: 'city', title: '城市', width: 150},
       {field: 'description', title: '描述', minWidth: 200},
-      {field: 'createTime', title: '创建时间', width: 170, fixed: 'right'},
+      {field: 'createTime', title: '创建时间', width: 170, fixed: 'right'}
     ]],
     page: true
   });
