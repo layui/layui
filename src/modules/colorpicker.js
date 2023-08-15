@@ -214,7 +214,7 @@ layui.define(['jquery', 'lay'], function(exports){
     ,'</div>'].join(''))
 
     //初始化颜色选择框
-    var elem = options.elem = $(options.elem);  
+    elem = options.elem = $(options.elem);
     options.size && elemColorBox.addClass('layui-colorpicker-'+ options.size); //初始化颜色选择框尺寸
     
     // 插入颜色选择框
