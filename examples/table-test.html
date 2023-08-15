@@ -94,109 +94,109 @@ layui.use(['table', 'dropdown'], function(){
 
   // 仅用于各类测试的表头
   var test_cols = [[
-    {type: 'checkbox', fixed: 'left'}
-    ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
-    ,{field:'username', title:'用户名', width:120, edit: 'text'}
-    ,{field:'email', title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, width:150, edit: 'text'}
-    ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
-    ,{field:'city', title:'城市', width: 120}
-    ,{field:'sign', title:'签名'}
-    ,{field: 'experience', title: '积分', width:80, sort: true, align:'center', totalRow: '{{ d.TOTAL_NUMS }} 😊'}
-    ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+    {type: 'checkbox', fixed: 'left'},
+    {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'},
+    {field:'username', title:'用户名', width:120, edit: 'text'},
+    {field:'email', title:'邮箱 <i class="layui-icon layui-icon-email"></i>', hide: 0, width:150, edit: 'text'},
+    {field:'sex', title:'性别', width:80, edit: 'text', sort: true},
+    {field:'city', title:'城市', width: 120},
+    {field:'sign', title:'签名'},
+    {field: 'experience', title: '积分', width:80, sort: true, align:'center', totalRow: '{{ d.TOTAL_NUMS }} 😊'},
+    {fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
   ]];
 
   // 全局设定某参数
   table.set({
     where: {
       token: '默认 token 参数'
-    }
-    //,defaultToolbar: ['filter']
-    ,limit: 30
-    //,url: 'list'
-    //,height: 300
+    },
+    // defaultToolbar: ['filter'],
+    limit: 30,
+    // url: 'list',
+    // height: 300
   });
   
   //渲染
   window.ins1 = table.render({
-    elem: '#test'
-    ,height: 520
-    //,width: 600
-    ,title: '用户数据表'
-    ,url: 'json/table/demo1.json'
-    //,method: 'post'
+    elem: '#test',
+    height: 520,
+    // width: 600,
+    title: '用户数据表',
+    url: 'json/table/demo1.json',
+    // method: 'post',
 
     
-    //,lineStyle: 'height: 95px;' // 行样式
-    ,css: [ // 自定义样式
-      '.layui-table-page{text-align: right;}'
-      ,'.layui-table-pagebar{float: left;}'
-    ].join('')
-    //,className: '.demo-table-view'
+    // lineStyle: 'height: 95px;', // 行样式
+    css: [ // 自定义样式
+      '.layui-table-page{text-align: right;}',
+      '.layui-table-pagebar{float: left;}'
+    ].join(''),
+    // className: '.demo-table-view',
 
-    //,size: 'sm'
-    //,skin: 'line'
-    //,even: true
-    //,loading: false
+    // size: 'sm',
+    // skin: 'line',
+    // even: true,
+    // loading: false,
 
-    ,totalRow: true
-    ,pagebar: '#pagebarDemo' // 分页栏模板
-    ,page: !1 ? false : {
-      //curr: layui.data('tableCache').curr || 1 // 读取记录中的页码，赋值给起始页
-    }
-    ,limit: 30
-    ,toolbar: '#toolbarDemo'
-    ,defaultToolbar: ['filter', 'exports', 'print', {
-      title: '帮助'
-      ,layEvent: 'LAYTABLE_TIPS'
-      ,icon: 'layui-icon-tips'
-    }]
-    //,escape: false
-    ,editTrigger: 'dblclick'
-    //,cellMaxWidth: 320
-    ,cols: !1 ? test_cols : [[
-      {type: 'checkbox', fixed: 'left'}
+    totalRow: true,
+    pagebar: '#pagebarDemo', // 分页栏模板
+    page: !1 ? false : {
+      // curr: layui.data('tableCache').curr || 1 // 读取记录中的页码，赋值给起始页
+    },
+    limit: 30,
+    toolbar: '#toolbarDemo',
+    defaultToolbar: ['filter', 'exports', 'print', {
+      title: '帮助',
+      layEvent: 'LAYTABLE_TIPS',
+      icon: 'layui-icon-tips'
+    }],
+    // escape: false,
+    editTrigger: 'dblclick',
+    // cellMaxWidth: 320
+    cols: !1 ? test_cols : [[
+      {type: 'checkbox', fixed: 'left'},
       //,{type: 'numbers', fixed: 'left'}
-      ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
-      ,{field:'username', title:'用户名 <i class="layui-icon layui-icon-username" lay-event="username"></i>', width:120, edit: function(d){
+      {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'},
+      {field:'username', title:'用户名 <i class="layui-icon layui-icon-username" lay-event="username"></i>', width:120, edit: function(d){
         return !d.LAY_DISABLED;
-      }, templet: '#usernameTpl'}
-      ,{field:'xxx', title:'测试', edit: 'text'}
-      ,{field:'email', minWidth: 160, maxWidth: 320, title:'邮箱 <i class="layui-icon layui-icon-email" lay-event="email"></i>', fieldTitle: '邮箱', hide: 0, edit: 'text', templet: function(d){
+      }, templet: '#usernameTpl'},
+      {field:'xxx', title:'测试', edit: 'text'},
+      {field:'email', minWidth: 160, maxWidth: 320, title:'邮箱 <i class="layui-icon layui-icon-email" lay-event="email"></i>', fieldTitle: '邮箱', hide: 0, edit: 'text', templet: function(d){
         return '<em>'+ layui.util.escape(d.email) +'</em>'
-      }}
-      ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true, escape: false}
-      ,{field:'city', title:'城市', width:120, templet: '#cityTpl', exportTemplet: function(d, obj){
+      }},
+      {field:'sex', title:'性别', width:80, edit: 'text', sort: true, escape: false},
+      {field:'city', title:'城市', width:120, templet: '#cityTpl', exportTemplet: function(d, obj){
         // return '=HYPERLINK("https://abc.com/a.jpg","截图")'; // 测试内容存在特殊符
         // console.log(obj)
         var td = obj.td(this.field); //获取当前 td
         return td.find('select').val();
-      }}
-      ,{field:'sign', title:'签名', minWidth: 200, style:'color: #5FB878', edit: 'textarea'}
-      ,{field: 'experience', title: '积分', width: 100, sort: true, align:'center', totalRow: !1 ? true : '{{= d.TOTAL_NUMS }} 分 😊', templet: '<div><a href="" class="layui-table-link">{{= d[d.LAY_COL.field] }}</a> 分</div>'}
-      ,{field:'ip', title:'IP', width: 120, align: 'right'}
-      ,{field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{= d.TOTAL_ROW.checkin }} 次'}
-      ,{field:'joinTime', title:'加入时间', width: 120}
-      ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width: 180}
-    ]]
+      }},
+      {field:'sign', title:'签名', minWidth: 200, expandedWidth: 350, style:'color: #5FB878', edit: 'textarea'},
+      {field: 'experience', title: '积分', width: 100, sort: true, align:'center', totalRow: !1 ? true : '{{= d.TOTAL_NUMS }} 分 😊', templet: '<div><a href="" class="layui-table-link">{{= d[d.LAY_COL.field] }}</a> 分</div>'},
+      {field:'ip', title:'IP', width: 120, align: 'right'},
+      {field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{= d.TOTAL_ROW.checkin }} 次'},
+      {field:'joinTime', title:'加入时间', width: 120},
+      {fixed: 'right', title:'操作', toolbar: '#barDemo', width: 180}
+    ]],
     
-    //,autoSort: false // 禁用前端自动排序，由服务的完成排序
-    ,initSort111: { // 初始排序状态
-      field: 'experience' //排序字段，对应 cols 设定的各字段名
-      ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
-    }
+    // autoSort: false // 禁用前端自动排序，由服务的完成排序
+    initSort111: { // 初始排序状态
+      field: 'experience', // 排序字段，对应 cols 设定的各字段名
+      type: 'desc' // 排序方式  asc: 升序、desc: 降序、null: 默认排序
+    },
     
-    ,headers: {headers_token: 'sasasas'}
-    ,where: {
-      test: '初始 test 参数'
-      ,token: '初始 token'
-      ,key: 'experience'
-      ,order: 'asc'
-    }
-    ,before: function(options){
+    headers: {headers_token: 'sasasas'},
+    where: {
+      test: '初始 test 参数',
+      token: '初始 token',
+      key: 'experience',
+      order: 'asc'
+    },
+    before: function(options){
       options.where.AAAAA = 123;
-      //console.log(options)
-    }
-    ,done: function(res, curr, count){
+      // console.log(options)
+    },
+    done: function(res, curr, count){
       var id = this.id;
 
       // 记录当前页码
@@ -209,8 +209,8 @@ layui.use(['table', 'dropdown'], function(){
 
       // 设置选中行状态
       dropdown.render({
-        elem: '#setRowChecked' //可绑定在任意元素中，此处以上述按钮为例
-        ,data: [{
+        elem: '#setRowChecked', // 可绑定在任意元素中，此处以上述按钮为例
+        data: [{
           id: 'checked',
           title: '选中某行'
         },{
@@ -219,9 +219,9 @@ layui.use(['table', 'dropdown'], function(){
         },{
           id: 'reset-checked',
           title: '给选中行取消选中状态'
-        }]
-        //菜单被点击的事件
-        ,click: function(obj){
+        }],
+        // 菜单被点击的事件
+        click: function(obj){
           if(obj.id === 'reset-checked'){
             // 给选中行取消选中状态
             table.setRowChecked(id, {
@@ -256,8 +256,8 @@ layui.use(['table', 'dropdown'], function(){
 
       // 重载测试
       dropdown.render({
-        elem: '#reloadTest' //可绑定在任意元素中，此处以上述按钮为例
-        ,data: [{
+        elem: '#reloadTest', //可绑定在任意元素中，此处以上述按钮为例
+        data: [{
           id: 'reload',
           title: '重载'
         },{
@@ -269,27 +269,27 @@ layui.use(['table', 'dropdown'], function(){
         },{
           id: 'reloadData-deep',
           title: '仅重载数据 - 参数叠加'
-        }]
+        }],
         // 菜单被点击的事件
-        ,click: function(obj){
+        click: function(obj){
           switch(obj.id){
             case 'reload':
               // 重载 - 默认（参数重置）
               table.reload('test', {
                 where: {
-                  abc: '123456'
-                  //,test: '新的 test2'
-                  //,token: '新的 token2'
-                }
-                ,height: 'full-130' // 重载高度
+                  abc: '123456',
+                  // test: '新的 test2',
+                  // token: '新的 token2'
+                },
+                height: 'full-130', // 重载高度
                 /*
-                ,cols: [[ // 重置表头
-                  {type: 'checkbox', fixed: 'left'}
-                  ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'}
-                  ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
-                  ,{field:'experience', title:'积分', width:80, sort: true, totalRow: true, templet: '<div>{{ d.experience }} 分</div>'}
-                  ,{field:'logins', title:'登入次数', width:100, sort: true, totalRow: true}
-                  ,{field:'joinTime', title:'加入时间', width:120}
+                cols: [[ // 重置表头
+                  {type: 'checkbox', fixed: 'left'},
+                  {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'},
+                  {field:'sex', title:'性别', width:80, edit: 'text', sort: true},
+                  {field:'experience', title:'积分', width:80, sort: true, totalRow: true, templet: '<div>{{ d.experience }} 分</div>'},
+                  {field:'logins', title:'登入次数', width:100, sort: true, totalRow: true},
+                  {field:'joinTime', title:'加入时间', width:120}
                 ]]
                 */
                 
@@ -299,11 +299,11 @@ layui.use(['table', 'dropdown'], function(){
               // 重载 - 深度（参数叠加）
               table.reload('test', {
                 where: {
-                  abc: 123
-                  ,test: '新的 test1'
-                }
+                  abc: 123,
+                  test: '新的 test1'
+                },
                 //,defaultToolbar: ['print'] // 重载头部工具栏右侧图标
-                ,page: {curr: 5, limit: 20}
+                page: {curr: 5, limit: 20}
                 //,cols: ins1.config.cols
               }, true);
             break;
@@ -311,23 +311,23 @@ layui.use(['table', 'dropdown'], function(){
               // 数据重载 - 参数重置
               table.reloadData('test', {
                 where: {
-                  abc: '123456'
-                  //,test: '新的 test2'
-                  //,token: '新的 token2'
-                }
-                ,height: 2000 // 测试无效参数
-                //,url: '404'
-                //,elem: null
-                //,page: {curr: 5, limit: 20}
-                ,scrollPos: 'fixed' // 保持滚动条位置不变
+                  abc: '123456',
+                  // test: '新的 test2',
+                  // token: '新的 token2'
+                },
+                height: 2000, // 测试无效参数
+                // url: '404',
+                // elem: null,
+                // page: {curr: 5, limit: 20},
+                scrollPos: 'fixed' // 保持滚动条位置不变
               });
             break;
             case 'reloadData-deep':
               // 数据重载 - 参数叠加
               table.reloadData('test', {
                 where: {
-                  abc: 123
-                  ,test: '新的 test1'
+                  abc: 123,
+                  test: '新的 test1'
                 }
               }, true);
             break;
@@ -339,8 +339,8 @@ layui.use(['table', 'dropdown'], function(){
 
       // 更多测试
       dropdown.render({
-        elem: '#moreTest' //可绑定在任意元素中，此处以上述按钮为例
-        ,data: [{
+        elem: '#moreTest', //可绑定在任意元素中，此处以上述按钮为例
+        data: [{
           id: 'add',
           title: '添加'
         },{
@@ -349,9 +349,9 @@ layui.use(['table', 'dropdown'], function(){
         },{
           id: 'delete',
           title: '删除'
-        }]
-        //菜单被点击的事件
-        ,click: function(obj){
+        }],
+        // 菜单被点击的事件
+        click: function(obj){
           var checkStatus = table.checkStatus(id)
           var data = checkStatus.data; // 获取选中的数据
 
@@ -381,26 +381,26 @@ layui.use(['table', 'dropdown'], function(){
           }
         }
       });
-    }
-    
-    ,error: function(res, msg){
-      console.log(res, msg)
-    }
+    },
 
     /*
-    ,request: { // 自定义请求参数名称
-      pageName: 'curr' //页码的参数名称，默认：page
-      ,limitName: 'nums' //每页数据量的参数名，默认：limit
-    }
-    ,parseData: function(res){ // 任意数据格式的解析
+    request: { // 自定义请求参数名称
+      pageName: 'curr', //页码的参数名称，默认：page
+      limitName: 'nums' //每页数据量的参数名，默认：limit
+    },
+    parseData: function(res){ // 任意数据格式的解析
       return {
-        "status": res.status
-        ,"msg": res.message
-        ,"count": res.total
-        ,"data": res.data.list
+        "status": res.status,
+        "msg": res.message,
+        "count": res.total,
+        "data": res.data.list
       };
-    }
+    },
     */
+
+    error: function(res, msg){
+      console.log(res, msg)
+    }
   });
   
   //排序事件
