@@ -1523,11 +1523,11 @@ layui.define(['table'], function (exports) {
 
     var index = tr.data('index');
     var tableViewElem = options.elem.next();
-
+    
     tr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 主体行
 
     // 右侧固定行
-    tr.each(function(){
+    tr.eq(0).each(function(){
       var index = $(this).data('index');
       var trFixedR = tableViewElem.find('.layui-table-fixed-r tbody tr[data-index="'+ index +'"]');
       trFixedR[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED);
