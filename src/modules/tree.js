@@ -14,7 +14,13 @@ layui.define('form', function(exports){
 
   // 外部接口
   var tree = {
-    config: {},
+    config: {
+      customName: { // 自定义 data 字段名
+        id: 'id',
+        title: 'title',
+        children: 'children'
+      }
+    },
     index: layui[MOD_NAME] ? (layui[MOD_NAME].index + 10000) : 0,
 
     // 设置全局项
@@ -122,6 +128,9 @@ layui.define('form', function(exports){
   Class.prototype.render = function(){
     var that = this;
     var options = that.config;
+
+    // 初始化自定义字段名
+    options.customName = $.extend({}, tree.config.customName, options.customName);
     
     that.checkids = [];
 
@@ -178,13 +187,14 @@ layui.define('form', function(exports){
   Class.prototype.tree = function(elem, children){
     var that = this;
     var options = that.config;
+    var customName = options.customName;
     var data = children || options.data;
 
     // 遍历数据
     layui.each(data, function(index, item){
-      var hasChild = item.children && item.children.length > 0;
+      var hasChild = item[customName.children] && item[customName.children].length > 0;
       var packDiv = $('<div class="layui-tree-pack" '+ (item.spread ? 'style="display: block;"' : '') +'></div>');
-      var entryDiv = $(['<div data-id="'+ item.id +'" class="layui-tree-set'+ (item.spread ? " layui-tree-spread" : "") + (item.checked ? " layui-tree-checkedFirst" : "") +'">'
+      var entryDiv = $(['<div data-id="'+ item[customName.id] +'" class="layui-tree-set'+ (item.spread ? " layui-tree-spread" : "") + (item.checked ? " layui-tree-checkedFirst" : "") +'">'
         ,'<div class="layui-tree-entry">'
           ,'<div class="layui-tree-main">'
             // 箭头
@@ -202,15 +212,15 @@ layui.define('form', function(exports){
             
             // 复选框
             ,function(){
-              return options.showCheckbox ? '<input type="checkbox" name="'+ (item.field || ('layuiTreeCheck_'+ item.id)) +'" same="layuiTreeCheck" lay-skin="primary" '+ (item.disabled ? "disabled" : "") +' value="'+ item.id +'">' : '';
+              return options.showCheckbox ? '<input type="checkbox" name="'+ (item.field || ('layuiTreeCheck_'+ item[customName.id])) +'" same="layuiTreeCheck" lay-skin="primary" '+ (item.disabled ? "disabled" : "") +' value="'+ item[customName.id] +'">' : '';
             }()
             
             // 节点
             ,function(){
               if(options.isJump && item.href){
-                return '<a href="'+ item.href +'" target="_blank" class="'+ ELEM_TEXT +'">'+ (item.title || item.label || options.text.defaultNodeName) +'</a>';
+                return '<a href="'+ item.href +'" target="_blank" class="'+ ELEM_TEXT +'">'+ (item[customName.title] || item.label || options.text.defaultNodeName) +'</a>';
               }else{
-                return '<span class="'+ ELEM_TEXT + (item.disabled ? ' '+ DISABLED : '') +'">'+ (item.title || item.label || options.text.defaultNodeName) +'</span>';
+                return '<span class="'+ ELEM_TEXT + (item.disabled ? ' '+ DISABLED : '') +'">'+ (item[customName.title] || item.label || options.text.defaultNodeName) +'</span>';
               }
             }()
       ,'</div>'
@@ -241,7 +251,7 @@ layui.define('form', function(exports){
       // 如果有子节点，则递归继续生成树
       if(hasChild){
         entryDiv.append(packDiv);
-        that.tree(packDiv, item.children);
+        that.tree(packDiv, item[customName.children]);
       };
 
       elem.append(entryDiv);
@@ -261,7 +271,7 @@ layui.define('form', function(exports){
       
       // 选择框
       if(options.showCheckbox){
-        item.checked && that.checkids.push(item.id);
+        item.checked && that.checkids.push(item[customName.id]);
         that.checkClick(entryDiv, item);
       }
       
@@ -351,16 +361,17 @@ layui.define('form', function(exports){
   Class.prototype.setCheckbox = function(elem, item, elemCheckbox){
     var that = this;
     var options = that.config;
+    var customName = options.customName;
     var checked = elemCheckbox.prop('checked');
     
     if(elemCheckbox.prop('disabled')) return;
 
     // 同步子节点选中状态
-    if(typeof item.children === 'object' || elem.find('.'+ELEM_PACK)[0]){
+    if(typeof item[customName.children] === 'object' || elem.find('.'+ELEM_PACK)[0]){
       var elemCheckboxs = elem.find('.'+ ELEM_PACK).find('input[same="layuiTreeCheck"]');
       elemCheckboxs.each(function(index){
         if(this.disabled) return; // 不可点击则跳过
-        var children = item.children[index];
+        var children = item[customName.children][index];
         if(children) that.updateFieldValue(children, 'checked', checked);
         that.updateFieldValue(this, 'checked', checked);
       });
@@ -433,6 +444,7 @@ layui.define('form', function(exports){
   Class.prototype.operate = function(elem, item){
     var that = this;
     var options = that.config;
+    var customName = options.customName;
     var entry = elem.children('.'+ ELEM_ENTRY);
     var elemMain = entry.children('.'+ ELEM_MAIN);
 
@@ -466,8 +478,8 @@ layui.define('form', function(exports){
         var key = options.operate && options.operate(returnObj);
         var obj = {};
 
-        obj.title = options.text.defaultNodeName;
-        obj.id = key;
+        obj[customName.title] = options.text.defaultNodeName;
+        obj[customName.id] = key;
         that.tree(elem.children('.'+ELEM_PACK), [obj]);
         
         // 放在新增后面，因为要对元素进行操作
@@ -544,7 +556,7 @@ layui.define('form', function(exports){
           elemMain.children('.'+ ELEM_TEXT).html(textNew);
           
           // 同步数据
-          returnObj.data.title = textNew;
+          returnObj.data[customName.title] = textNew;
           
           // 节点修改的回调
           options.operate && options.operate(returnObj);
@@ -563,7 +575,7 @@ layui.define('form', function(exports){
 
       // 删除
       } else {
-        layer.confirm('确认删除该节点 "<span style="color: #999;">'+ (item.title || '') +'</span>" 吗？', function(index){
+        layer.confirm('确认删除该节点 "<span style="color: #999;">'+ (item[customName.title] || '') +'</span>" 吗？', function(index){
           options.operate && options.operate(returnObj); // 节点删除的回调
           returnObj.status = 'remove'; // 标注节点删除
           
@@ -750,6 +762,7 @@ layui.define('form', function(exports){
   Class.prototype.getChecked = function(){
     var that = this;
     var options = that.config;
+    var customName = options.customName;
     var checkId = [];
     var checkData = [];
     
@@ -762,17 +775,17 @@ layui.define('form', function(exports){
     var eachNodes = function(data, checkNode){
       layui.each(data, function(index, item){
         layui.each(checkId, function(index2, item2){
-          if(item.id == item2){
+          if(item[customName.id] == item2){
             that.updateFieldValue(item, 'checked', true);
 
             var cloneItem = $.extend({}, item);
-            delete cloneItem.children;
+            delete cloneItem[customName.children];
 
             checkNode.push(cloneItem);
             
-            if(item.children){
-              cloneItem.children = [];
-              eachNodes(item.children, cloneItem.children);
+            if(item[customName.children]){
+              cloneItem[customName.children] = [];
+              eachNodes(item[customName.children], cloneItem[customName.children]);
             }
             return true
           }
