@@ -136,6 +136,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   var ELEM_GROUP = 'laytable-cell-group';
   var ELEM_COL_SPECIAL = 'layui-table-col-special';
   var ELEM_TOOL_PANEL = 'layui-table-tool-panel';
+  var ELEM_EXPAND = 'layui-table-expanded'
 
   var DATA_MOVE_NAME = 'LAY_TABLE_MOVE_DICT';
 
@@ -1273,7 +1274,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }, 50);
       that.haveInit = true;
 
-      layer.close(that.tipsIndex);
     };
 
     table.cache[that.key] = data; //记录数据
@@ -1495,13 +1495,16 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   };
 
   // 标记当前活动行背景色
-  Class.prototype.setRowActive = function(index, className){
+  Class.prototype.setRowActive = function(index, className, removeClass){
     var that = this;
     var options = that.config;
     var tr = that.layBody.find('tr[data-index="'+ index +'"]');
     className = className || 'layui-table-click';
-    tr.addClass(className)
-    .siblings('tr').removeClass(className);
+
+    if(removeClass) return tr.removeClass(className);
+
+    tr.addClass(className);
+    tr.siblings('tr').removeClass(className);
   };
 
   // 设置行选中状态
@@ -1659,10 +1662,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   // 获取 cssRule
   Class.prototype.getCssRule = function(key, callback){
     var that = this;
-    var style = that.elem.find('style')[0];
+    var style = that.elem.children('style')[0];
     var sheet = style.sheet || style.styleSheet || {};
     var rules = sheet.cssRules || sheet.rules;
-
     layui.each(rules, function(i, item){
       if(item.selectorText === ('.laytable-cell-'+ key)){
         return callback(item), true;
@@ -1837,7 +1839,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       layui.stope(e);
       _DOC.trigger('table.tool.panel.remove');
-      layer.close(that.tipsIndex);
 
       switch(events){
         case 'LAYTABLE_COLS': // 筛选列
@@ -2030,7 +2031,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
             dict.rule.style.width = setWidth + 'px';
             thatTable.setGroupWidth(thisTable.eventMoveElem);
-            layer.close(that.tipsIndex);
           }
         }
       }).on('mouseup', function(e){
@@ -2270,7 +2270,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.layBody.find('tr:eq('+ index +')').removeClass(ELEM_HOVER)
     }).on('click', 'tr', function(e){ // 单击行
       // 不支持行单击事件的元素
-      var UNROW = '.layui-form-checkbox,.layui-form-switch,.layui-form-radio,[lay-unrow]';
+      var UNROW = [
+        '.layui-form-checkbox',
+        '.layui-form-switch',
+        '.layui-form-radio',
+        '[lay-unrow]'
+      ].join(',');
       if( $(e.target).is(UNROW) || $(e.target).closest(UNROW)[0]){
         return;
       };
@@ -2394,7 +2399,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var othis = $(this);
       var elemCell = othis.children(ELEM_CELL);
 
-      if(othis.data('off')) return; //不触发事件
+      if(othis.data('off')) return; // 不触发事件
+      if(othis.parent().hasClass(ELEM_EXPAND)) return; // 是否已为展开状态
 
       if(hide){
         othis.find('.layui-table-grid-down').remove();
@@ -2406,39 +2412,54 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         othis.append('<div class="'+ ELEM_GRID_DOWN +'"><i class="layui-icon layui-icon-down"></i></div>');
       }
     };
-    // 单元格内容展开
+    // 展开单元格内容
     var gridExpand = function(e){
       var othis = $(this);
       var td = othis.parent();
+      var key = td.data('key');
+      var col = that.col(key);
+      var index = td.parent().data('index');
       var elemCell = td.children(ELEM_CELL);
+      var ELEM_CELL_C = 'layui-table-cell-c';
+      var elemCellClose = $('<i class="layui-icon layui-icon-up '+ ELEM_CELL_C +'">');
 
-      that.tipsIndex = layer.tips([
-        '<div class="layui-table-tips-main" style="margin-top: -'+ (elemCell.height() + 23) +'px;'+ function(){
-          if(options.size === 'sm'){
-            return 'padding: 4px 15px; font-size: 12px;';
-          }
-          if(options.size === 'lg'){
-            return 'padding: 14px 15px;';
-          }
-          return '';
-        }() +'">',
-          elemCell.html(),
-        '</div>',
-        '<i class="layui-icon layui-table-tips-c layui-icon-close"></i>'
-      ].join(''), elemCell[0], {
-        tips: [3, ''],
-        time: -1,
-        anim: -1,
-        maxWidth: (device.ios || device.android) ? 300 : that.elem.width()/2,
-        isOutAnim: false,
-        skin: 'layui-table-tips',
-        success: function(layero, index){
-          layero.find('.layui-table-tips-c').on('click', function(){
-            layer.close(index);
-          });
-        }
+      // 恢复其他已经展开的单元格
+      that.elem.find('.'+ ELEM_CELL_C).trigger('click');
+
+      // 设置当前单元格展开宽度
+      that.getCssRule(key, function(item){
+        var width = item.style.width;
+        var expandedWidth = col.expandedWidth || (that.elem.width() / 3);
+
+        // 展开后的宽度不能小于当前宽度
+        if(expandedWidth < parseFloat(width)) expandedWidth = parseFloat(width);
+
+        elemCellClose.data('cell-width', width);
+        item.style.width = expandedWidth + 'px';
+
+        that.scrollPatch(); // 滚动条补丁
       });
 
+      // 设置当前单元格展开样式
+      that.setRowActive(index, ELEM_EXPAND);
+
+      // 插入关闭按钮
+      if(!elemCell.next('.'+ ELEM_CELL_C)[0]){
+        elemCell.after(elemCellClose);
+      }
+
+      // 关闭展开状态
+      elemCellClose.on('click', function(){
+        var $this = $(this);
+        that.setRowActive(index, ELEM_EXPAND, true); // 移除单元格展开样式
+        that.getCssRule(key, function(item){
+          item.style.width =  $this.data('cell-width'); // 恢复单元格展开前的宽度
+          that.resize(); // 滚动条补丁
+        });
+        $this.remove();
+      });
+
+      othis.remove();
       layui.stope(e);
     };
 
