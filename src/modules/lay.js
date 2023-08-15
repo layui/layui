@@ -174,7 +174,7 @@
     };
     var margin = 'margin' in opts ? opts.margin : 5;
     var left = rect.left;
-    var top = rect.bottom - 39;
+    var top = rect.bottom;
     
     // 相对元素居中
     if(opts.align === 'center'){
