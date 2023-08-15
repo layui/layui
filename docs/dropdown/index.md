@@ -71,6 +71,27 @@ layui.use(function(){
 {{- d.include("/dropdown/detail/options.data.md") }}
 </div>
 
+<div id="options.customName" class="ws-anchor">
+
+您可以对上述 `data` 中常用的字段进行自定义名称 <sup>2.8.14+</sup> :
+
+</div>
+
+```
+var dropdown = layui.dropdown;
+// 渲染
+dropdown.render({
+  elem: '', // 绑定元素选择器
+  data: [], // 数据源
+  customName: { // 自定义 data 字段名 --- 2.8.14+
+    id: 'id',
+    title: 'title',
+    children: 'child'
+  },
+  // 其他属性 …
+});
+```
+
 
 <h3 id="reload" lay-toc="{level: 2, hot: true}">重载</h3>
 

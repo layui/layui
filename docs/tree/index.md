@@ -41,6 +41,27 @@ toc: true
 {{- d.include("/tree/detail/options.data.md") }}
 </div>
 
+<div id="options.customName" class="ws-anchor">
+
+您可以对上述 `data` 中常用的字段进行自定义名称 <sup>2.8.14+</sup> :
+
+</div>
+
+```
+var tree = layui.tree;
+// 渲染
+tree.render({
+  elem: '', // 绑定元素选择器
+  id: 'test', // 自定义 id 索引
+  data: [], // 数据源
+  customName: { // 自定义 data 字段名 --- 2.8.14+
+    id: 'id',
+    title: 'title',
+    children: 'children'
+  },
+  // 其他属性 …
+});
+```
 
 <h3 id="getChecked" lay-pid="api" class="ws-anchor">获取选中的节点数据</h3>
 
