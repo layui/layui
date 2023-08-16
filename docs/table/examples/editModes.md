@@ -3,7 +3,7 @@
 <script type="text/html" id="TPL-select-primary">
   {{# var cityList = d.cityList || ["北京","上海","广州","城市-1"]; }}
   <select name="city" class="layui-border select-demo-primary" lay-ignore>
-    <option value="">原生 select 框</option>
+    <option value="">原生 select</option>
     {{# layui.each(cityList, function(i, v){ }}
     <option value="{{= v }}" {{= v === d.city ? 'selected' : '' }}>{{= v }}</option>
     {{# }); }}
@@ -53,17 +53,17 @@ layui.use(function(){
     page: true,
     css: [ // 设置单元格样式
       // 取消默认的溢出隐藏，并设置适当高度
-      '.layui-table-cell{height: 50px; line-height: 40px; overflow: visible;}',
+      '.layui-table-cell{height: 50px; line-height: 40px;}',
       '.layui-table-cell .layui-colorpicker{width: 38px; height: 38px;}',
       '.layui-table-cell select{height: 36px; padding: 0 5px;}'
     ].join(''),
     cols: [[ // 表头
       {field: 'id', title: 'ID', width:80, align: 'center', fixed: 'left'},
-      {field: 'city', title: '原生 select', width:150, templet: '#TPL-select-primary'}, 
+      {field: 'city', title: '原生 select', width:135, unresize: true, templet: '#TPL-select-primary'}, 
       //{field: 'city', title: 'layui select', width:150, templet: '#TPL-select-city'}, 
-      {field: 'sex', title: 'dropdown', width:115, align: 'center', templet: '#TPL-dropdpwn-demo'}, 
+      {field: 'sex', title: 'dropdown', width:115, unresize: true, align: 'center', templet: '#TPL-dropdpwn-demo'}, 
       {field: 'date', title: 'laydate', width:150, templet: '#TPL-laydate-demo'}, 
-      {field: 'color', title: 'colorpicker', width:100, align: 'center', templet: '#TPL-colorpicker-demo'},
+      {field: 'color', title: 'color', width:80, unresize: true, align: 'center', templet: '#TPL-colorpicker-demo'},
       {field: 'sign', title: '文本', edit: 'textarea'}
     ]],
     done: function(res, curr, count){

@@ -110,46 +110,77 @@
   lay.hasScrollbar = function(){
     return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
   };
+
+  // 创建 style 样式
+  lay.style = function(options){
+    options = options || {};
+
+    var style = lay.elem('style');
+    var styleText = options.text || '';
+    var target = options.target || lay('body')[0];
+    
+    if(!styleText) return;
+    
+    // 添加样式
+    if('styleSheet' in style){
+      style.setAttribute('type', 'text/css');
+      style.styleSheet.cssText = styleText;
+    } else {
+      style.innerHTML = styleText;
+    }
+    
+    lay.style.index = lay.style.index || 0;
+    lay.style.index++;
+    
+    var id = style.id = 'LAY-STYLE-'+ (options.id || 'DF-'+ lay.style.index)
+    var styleElem = lay(target).find('#'+ id);
+    
+    styleElem[0] && styleElem.remove();
+    lay(target).append(style);
+  };
   
   // 元素定位
-  lay.position = function(elem, elemView, obj){
-    if(!elemView) return;
-    obj = obj || {};
+  lay.position = function(target, elem, opts){
+    if(!elem) return;
+    opts = opts || {};
     
     // 如果绑定的是 document 或 body 元素，则直接获取鼠标坐标
-    if(elem === document || elem === lay('body')[0]){
-      obj.clickType = 'right';
+    if(target === document || target === lay('body')[0]){
+      opts.clickType = 'right';
     }
 
     // 绑定绑定元素的坐标
-    var rect = obj.clickType === 'right' ? function(){
-      var e = obj.e || window.event || {};
+    var rect = opts.clickType === 'right' ? function(){
+      var e = opts.e || window.event || {};
       return {
-        left: e.clientX
-        ,top: e.clientY
-        ,right: e.clientX
-        ,bottom: e.clientY
+        left: e.clientX,
+        top: e.clientY,
+        right: e.clientX,
+        bottom: e.clientY
       }
-    }() : elem.getBoundingClientRect()
-    ,elemWidth = elemView.offsetWidth // 控件的宽度
-    ,elemHeight = elemView.offsetHeight // 控件的高度
+    }() : target.getBoundingClientRect();
+    var elemWidth = elem.offsetWidth; // 控件的宽度
+    var elemHeight = elem.offsetHeight; // 控件的高度
     
     // 滚动条高度
-    ,scrollArea = function(type){
+    var scrollArea = function(type){
       type = type ? 'scrollLeft' : 'scrollTop';
       return document.body[type] | document.documentElement[type];
-    }
+    };
     
     // 窗口宽高
-    ,winArea = function(type){
+    var winArea = function(type){
       return document.documentElement[type ? 'clientWidth' : 'clientHeight']
-    }, margin = 5, left = rect.left, top = rect.bottom;
+    };
+    var margin = 'margin' in opts ? opts.margin : 5;
+    var left = rect.left;
+    var top = rect.bottom;
     
     // 相对元素居中
-    if(obj.align === 'center'){
-      left = left - (elemWidth - elem.offsetWidth)/2;
-    } else if(obj.align === 'right'){
-      left = left - elemWidth + elem.offsetWidth;
+    if(opts.align === 'center'){
+      left = left - (elemWidth - target.offsetWidth) / 2;
+    } else if(opts.align === 'right'){
+      left = left - elemWidth + target.offsetWidth;
     }
 
     // 判断右侧是否超出边界
@@ -159,7 +190,18 @@
     // 左侧是否超出边界
     if(left < margin) left = margin;
     
+
     // 判断底部和顶部是否超出边界
+    if(rect.bottom + elemHeight + margin > winArea()){ // 底部超出边界
+      // 优先判断顶部是否有足够区域显示完全，且底部不能超出边界
+      if(rect.top > elemHeight + margin && rect.top <= winArea() ){
+        top = rect.top - elemHeight - margin*2; // 顶部有足够的区域显示
+      } else if(!opts.allowBottomOut){ // 顶部没有足够区域显示时，是否允许底部溢出
+        top = winArea() - elemHeight - margin*2; // 面板向底部靠齐
+        if(top < 0) top = 0; // 如果面板底部靠齐时，又溢出窗口顶部，则只能将顶部靠齐
+      }
+    }
+    /*
     if(top + elemHeight + margin > winArea()){
       // 优先顶部是否有足够区域显示完全
       if(rect.top > elemHeight + margin){
@@ -174,23 +216,24 @@
         }
       }
     }
+    */
     
     // 定位类型
-    var position = obj.position;
-    if(position) elemView.style.position = position;
+    var position = opts.position;
+    if(position) elem.style.position = position;
     
     // 设置坐标
-    elemView.style.left = left + (position === 'fixed' ? 0 : scrollArea(1)) + 'px';
-    elemView.style.top = top + (position === 'fixed' ? 0 : scrollArea()) + 'px';
+    elem.style.left = left + (position === 'fixed' ? 0 : scrollArea(1)) + 'px';
+    elem.style.top = top + (position === 'fixed' ? 0 : scrollArea()) + 'px';
 
     // 防止页面无滚动条时，又因为弹出面板而出现滚动条导致的坐标计算偏差
     if(!lay.hasScrollbar()){
-      var rect1 = elemView.getBoundingClientRect();
+      var rect1 = elem.getBoundingClientRect();
       // 如果弹出面板的溢出窗口底部，则表示将出现滚动条，此时需要重新计算坐标
-      if(!obj.SYSTEM_RELOAD && (rect1.bottom + margin) > winArea()){
-        obj.SYSTEM_RELOAD = true;
+      if(!opts.SYSTEM_RELOAD && (rect1.bottom + margin) > winArea()){
+        opts.SYSTEM_RELOAD = true;
         setTimeout(function(){
-          lay.position(elem, elemView, obj);
+          lay.position(target, elem, opts);
         }, 50);
       }
     }

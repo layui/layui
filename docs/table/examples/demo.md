@@ -90,7 +90,7 @@ layui.use(['table', 'dropdown'], function(){
         var td = obj.td(this.field); // 获取当前 td
         return td.find('select').val();
       }},
-      {field:'sign', title: '签名', edit: 'textarea', minWidth: 260, style: '-moz-box-align: start;', totalRow: '{{!人物：<span class="layui-badge-rim">唐代：{{= d.TOTAL_ROW.era.tang }} </span> <span class="layui-badge-rim">宋代：{{= d.TOTAL_ROW.era.song }}</span> <span class="layui-badge-rim">现代：{{= d.TOTAL_ROW.era.xian }}</span>!}}'},
+      {field:'sign', title: '签名', edit: 'textarea', minWidth: 260, expandedWidth: 320, style: '-moz-box-align: start;', totalRow: '{{!人物：<span class="layui-badge-rim">唐代：{{= d.TOTAL_ROW.era.tang }} </span> <span class="layui-badge-rim">宋代：{{= d.TOTAL_ROW.era.song }}</span> <span class="layui-badge-rim">现代：{{= d.TOTAL_ROW.era.xian }}</span>!}}'},
       {field:'experience', width: 100, title: '积分', sort: true, totalRow: '{{!{{= d.TOTAL_NUMS }} 😊!}}'}, 
       {field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{!{{= parseInt(d.TOTAL_NUMS) }} 次!}}'},
       {field:'ip', title:'IP', width: 120},

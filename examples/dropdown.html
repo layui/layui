@@ -207,6 +207,9 @@ layui.use('dropdown', function(){
     ,trigger: 'contextmenu' //contextmenu
     ,isAllowSpread: false
     //,style: 'width: 200px'
+    ,customName: {
+      children: 'children'
+    }
     ,data: [{
       title: 'menu item 1'
       ,id: '#1'
@@ -216,7 +219,7 @@ layui.use('dropdown', function(){
     },{type:'-'},{
       title: 'menu item 3'
       ,id: '#3'
-      ,child: [{
+      ,children: [{
         title: 'menu item 3-1'
         ,id: '#1'
       },{

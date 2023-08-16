@@ -135,6 +135,20 @@
 </td>
     </tr>
     <tr>
+<td>
+
+[customName](#options.customName) <sup>2.8.14+</sup>
+
+</td>
+<td>
+
+自定义 `data` 数据源中常用的字段名称。
+
+</td>
+<td>object</td>
+<td>-</td>
+    </tr>
+    <tr>
 <td>text</td>
 <td colspan="3">
   
