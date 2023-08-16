@@ -273,7 +273,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       ,'var cellClassName = ".layui-table-view-"+ d.index +" .layui-table-body .layui-table .layui-table-cell";'
     ,'}}'
       ,'{{= cellClassName }}{'
-        ,'display: -webkit-box; -webkit-box-align: center; white-space: normal; {{- d.data.lineStyle }} '
+        ,'display: -webkit-box; -webkit-box-align: center; -moz-box-align: start; white-space: normal; {{- d.data.lineStyle }} '
       ,'}'
       ,'{{= cellClassName }}:hover{overflow: auto;}'
     ,'{{# } }}'
