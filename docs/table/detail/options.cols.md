@@ -80,6 +80,16 @@
 <td>-</td>
     </tr>
     <tr>
+<td>expandedWidth <sup>2.8.14+</sup></td>
+<td>
+
+设置单元格被展开后的宽度，默认取表格容器的三分之一宽度。若设置的值的小于当前列宽，则展开后的列宽保持不变。
+
+</td>
+<td>number</td>
+<td>-</td>
+    </tr>
+    <tr>
 <td>type</td>
 <td>
 
