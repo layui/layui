@@ -249,11 +249,12 @@ shortcuts: [
 - 若为 `string` 类型，必须和 `format` 设置的格式对应；
 - 若为 `date` 对象类型，则可通过操作 `new Date()` 来对选项值进行相应的返回计算；
 - 若为 `array` 类型，则数组成员可填写开始日期和结束日期。
+- 若为 `function` 类型，返回值同上。<sup>2.8.16+</sup>
 
 详细用法可参考： [#示例](#demo-shortcut)
 
 </td>
-<td>string<br>date<br>array</td>
+<td>string<br>date<br>array<br>function</td>
 <td>-</td>
     </tr>
     <tr>
