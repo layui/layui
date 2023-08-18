@@ -45,6 +45,11 @@ layui.use(['treeTable'], function(){
     ]],
     page: true
   });
+
+  // 单元格工具事件
+  treeTable.on('row(test)', function (obj) {
+    console.log(obj);
+  });
 });
 </script>
 
