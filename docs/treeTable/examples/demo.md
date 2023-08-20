@@ -41,11 +41,10 @@ layui.use(function(){
       {type: 'checkbox', fixed: 'left'},
       {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'},
       {field: 'name', title: '用户名', width: 180, fixed: 'left'},
-      {field: 'experience', title: '积分', width: 90, sort: true},
       {field: 'sex', title: '性别', width: 80, sort: true},
-      {field: 'score', title: '评分', width: 80, sort: true},
-      {field: 'city', title: '城市'},
-      { fixed: "right", title: "操作", width: 181, align: "center", toolbar: "#TPL-treeTable-demo-tools"} 
+      {field: 'experience', title: '积分', width: 90, sort: true},
+      {field: 'city', title: '城市', width: 100},
+      { fixed: "right", title: "操作", width: 190, align: "center", toolbar: "#TPL-treeTable-demo-tools"} 
     ]],
     page: true
   });

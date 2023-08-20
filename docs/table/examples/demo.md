@@ -36,15 +36,6 @@
   </div>
 !}}</script>
  
-<script type="text/html" id="cityTpl">
-  <select id="demoCity1" class="layui-border" lay-ignore>
-    <option value="浙江杭州">浙江杭州</option>
-    <option value="江西南昌">江西南昌</option>
-    <option value="湖北武汉">湖北武汉</option>
-    <option value="湖南长沙">湖南长沙</option>
-  </select>
-</script>
- 
 <script type="text/html" id="barDemo">
   <div class="layui-clear-space">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
@@ -84,13 +75,7 @@ layui.use(['table', 'dropdown'], function(){
       {field:'username', width:80, title: '用户'},
       {field:'email', title:'邮箱 <i class="layui-icon layui-icon-tips layui-font-14" lay-event="email-tips" title="该字段开启了编辑功能" style="margin-left: 5px;"></i>', fieldTitle: '邮箱', hide: 0, width:150, edit: 'text'},
       {field:'sex', width:80, title: '性别', sort: true},
-      {field:'city', width:115, title: '城市', minWidth:115, templet: '#cityTpl', exportTemplet: function(d, obj){
-        // console.log(obj)
-        // 处理该字段的导出数据
-        var td = obj.td(this.field); // 获取当前 td
-        return td.find('select').val();
-      }},
-      {field:'sign', title: '签名', edit: 'textarea', minWidth: 260, style: '-moz-box-align: start;', totalRow: '{{!人物：<span class="layui-badge-rim">唐代：{{= d.TOTAL_ROW.era.tang }} </span> <span class="layui-badge-rim">宋代：{{= d.TOTAL_ROW.era.song }}</span> <span class="layui-badge-rim">现代：{{= d.TOTAL_ROW.era.xian }}</span>!}}'},
+      {field:'sign', title: '签名', edit: 'textarea', minWidth: 260, expandedWidth: 260, style: '-moz-box-align: start;', totalRow: '{{!人物：<span class="layui-badge-rim">唐代：{{= d.TOTAL_ROW.era.tang }} </span> <span class="layui-badge-rim">宋代：{{= d.TOTAL_ROW.era.song }}</span> <span class="layui-badge-rim">现代：{{= d.TOTAL_ROW.era.xian }}</span>!}}'},
       {field:'experience', width: 100, title: '积分', sort: true, totalRow: '{{!{{= d.TOTAL_NUMS }} 😊!}}'}, 
       {field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{!{{= parseInt(d.TOTAL_NUMS) }} 次!}}'},
       {field:'ip', title:'IP', width: 120},

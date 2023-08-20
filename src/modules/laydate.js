@@ -591,7 +591,9 @@
         return shortcutBtns.join('');
       }()).find('li').on('click', function (event) {
         var btnSetting = options.shortcuts[this.dataset['index']] || {};
-        var value = btnSetting.value || [];
+        var value = (typeof btnSetting.value === 'function'
+          ? btnSetting.value() 
+          : btnSetting.value) || [];
         if (!layui.isArray(value)) {
           value = [value];
         }
@@ -1128,9 +1130,9 @@
   
   //日历表
   Class.prototype.calendar = function(value, index, type){
+    index = index ? 1 : 0;
     var that = this
     ,options = that.config
-    ,index = index ? 1 : 0
     ,dateTime = value || that.thisDateTime(index)
     ,thisDate = new Date(), startWeek, prevMaxDate, thisMaxDate
     ,lang = that.lang()
@@ -1156,7 +1158,7 @@
     
     //赋值日
     lay.each(tds, function(index_, item){
-      var YMD = [dateTime.year, dateTime.month], st = 0;
+      var YMD = [dateTime.year, dateTime.month], st;
       item = lay(item);
       item.removeAttr("class");
       if(index_ < startWeek){
@@ -1971,7 +1973,7 @@
     
     ,elemCont = that.elemCont[index || 0]
     ,listYM = that.listYM[index]
-    ,addSubYeay = function(type){
+    ,addSubYear = function(type){
       var isYear = lay(elemCont).find('.laydate-year-list')[0]
       ,isMonth = lay(elemCont).find('.laydate-month-list')[0];
       
@@ -2006,7 +2008,7 @@
     
     return {
       prevYear: function(){
-        if(addSubYeay('sub')) return;
+        if(addSubYear('sub')) return;
         if (that.rangeLinked) {
           options.dateTime.year--;
           that.checkDate('limit').calendar(null, null, 'init');
@@ -2048,7 +2050,7 @@
         }
       }
       ,nextYear: function(){
-        if(addSubYeay()) return;
+        if(addSubYear()) return;
         if (that.rangeLinked) {
           options.dateTime.year++;
           that.checkDate('limit').calendar(null, 0, 'init');

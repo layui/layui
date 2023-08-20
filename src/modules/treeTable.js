@@ -1246,7 +1246,7 @@ layui.define(['table'], function (exports) {
     options.hasNumberCol && formatNumber(that);
 
     // 重新适配尺寸
-    table.resize(id);
+    treeTable.resize(id);
   }
 
   /**
@@ -1397,9 +1397,6 @@ layui.define(['table'], function (exports) {
       tableViewElem.find(ELEM_MAIN).find('tr[lay-data-index="' + newNodes[0][LAY_DATA_INDEX] + '"]').get(0).scrollIntoViewIfNeeded();
     }
 
-    // 重新适配尺寸
-    table.resize(id);
-
     return newNodes;
   }
 
@@ -1527,7 +1524,7 @@ layui.define(['table'], function (exports) {
 
     var index = tr.data('index');
     var tableViewElem = options.elem.next();
-
+    
     tr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 主体行
 
     // 右侧固定行

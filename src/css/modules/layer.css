@@ -13,7 +13,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-content{position:relative;}
 .layui-layer-border{border: 1px solid #B2B2B2; border: 1px solid rgba(0,0,0,.1); box-shadow: 1px 1px 5px rgba(0,0,0,.2);}
 .layui-layer-setwin span,
-.layui-layer-btn a{display:inline-block; *display:inline; *zoom:1; vertical-align:top;}
+.layui-layer-btn a{display: inline-block; vertical-align: middle; *display: inline; *zoom:1; }
 
 .layui-layer-move{display: none; position: fixed; *position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; cursor: move; opacity: 0; filter:alpha(opacity=0); background-color: #fff; z-index: 2147483647;}
 .layui-layer-resize{position: absolute; width: 15px; height: 15px; right: 0; bottom: 0; cursor: se-resize;}
@@ -120,8 +120,8 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 /* 标题栏 */
 .layui-layer-title{padding: 0 81px 0 16px; height: 50px; line-height: 50px; border-bottom:1px solid #F0F0F0; font-size: 14px; color:#333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 2px 2px 0 0;}
 .layui-layer-setwin{position:absolute; right: 15px; *right:0; top: 16px; font-size:0; line-height: initial;}
-.layui-layer-setwin span{position:relative; width: 16px; height: 16px; line-height: 18px; margin-left: 10px; text-align: center; font-size: 16px; cursor: pointer; color: #000; _overflow:hidden;}
-.layui-layer-setwin .layui-layer-min:before{content: ''; position: absolute; width: 12px; height: 1px; left: 50%; top: 50%; margin: -0.5px 0 0 -6px; background-color: #2E2D3C; cursor: pointer; _overflow:hidden;}
+.layui-layer-setwin span{position:relative; width: 16px; height: 16px; line-height: 18px; margin-left: 10px; text-align: center; font-size: 16px; cursor: pointer; color: #000; _overflow: hidden; box-sizing: border-box;}
+.layui-layer-setwin .layui-layer-min:before{content: ''; position: absolute; width: 12px; border-bottom: 1px solid #2E2D3C; left: 50%; top: 50%; margin: -0.5px 0 0 -6px; cursor: pointer; _overflow:hidden;}
 .layui-layer-setwin .layui-layer-min:hover:before{background-color: #2D93CA}
 .layui-layer-setwin .layui-layer-max:before,
 .layui-layer-setwin .layui-layer-max:after{content: ''; position: absolute; left: 50%; top: 50%; z-index: 1; width: 9px; height: 9px; margin: -5px 0 0 -5px; border: 1px solid #2E2D3C;}
@@ -133,15 +133,15 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-setwin .layui-layer-maxmin:after{z-index: 0; margin: -5px 0 0 -1px;}
 .layui-layer-setwin .layui-layer-close{cursor: pointer;}
 .layui-layer-setwin .layui-layer-close:hover{opacity:0.7;}
-.layui-layer-setwin .layui-layer-close2{position:absolute; right: -28px; top: -28px; color: #fff; background-color: #787878; padding: 3px; border: 3px solid; width: 18px; height: 18px; font-size: 18px; font-weight: bolder; border-radius: 50%; margin-left: 0; *right:-18px; _display:none;}
+.layui-layer-setwin .layui-layer-close2{position:absolute; right: -28px; top: -28px; color: #fff; background-color: #787878; padding: 3px; border: 3px solid; width: 28px; height: 28px; font-size: 16px; font-weight: bolder; border-radius: 50%; margin-left: 0; *right:-18px; _display:none;}
 .layui-layer-setwin .layui-layer-close2:hover{opacity: unset; background-color: #3888f6;}
 
 /* 按钮栏 */
 .layui-layer-btn{text-align: right; padding: 0 15px 12px; pointer-events: auto; user-select: none; -webkit-user-select: none;}
-.layui-layer-btn a{height: 28px; line-height: 28px; margin: 5px 5px 0; padding: 0 15px; border: 1px solid #dedede; background-color:#fff; color: #333; border-radius: 2px; font-weight:400; cursor:pointer; text-decoration: none;}
+.layui-layer-btn a{height: 30px; line-height: 30px; margin: 5px 5px 0; padding: 0 16px; border: 1px solid #dedede; background-color: #fff; color: #333; border-radius: 2px; font-weight: 400; cursor: pointer; text-decoration: none; box-sizing: border-box;}
 .layui-layer-btn a:hover{opacity: 0.9; text-decoration: none;}
 .layui-layer-btn a:active{opacity: 0.8;}
-.layui-layer-btn .layui-layer-btn0{border-color: #1E9FFF; background-color: #1E9FFF; color:#fff;}
+.layui-layer-btn .layui-layer-btn0{border-color: transparent; background-color: #1E9FFF; color:#fff;}
 .layui-layer-btn-l{text-align: left;}
 .layui-layer-btn-c{text-align: center;}
 
@@ -204,14 +204,14 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-win10{border: 1px solid #aaa; box-shadow: 1px 1px 6px rgba(0,0,0,.3); border-radius: none;}
 .layui-layer-win10 .layui-layer-title{height: 32px; line-height: 32px; padding-left: 8px; border-bottom: none; font-size: 12px;}
 .layui-layer-win10 .layui-layer-setwin{right: 0; top: 0;}
-.layui-layer-win10 .layui-layer-setwin span{margin-left: 0; padding: 8px;}
-.layui-layer-win10.layui-layer-page .layui-layer-setwin span{padding: 8px 11px;}
+.layui-layer-win10 .layui-layer-setwin span{margin-left: 0; width: 32px; height: 32px; padding: 8px;}
+.layui-layer-win10.layui-layer-page .layui-layer-setwin span{width: 38px;}
 .layui-layer-win10 .layui-layer-setwin span:hover{background-color: #E5E5E5;}
 .layui-layer-win10 .layui-layer-setwin span.layui-icon-close:hover{background-color: #E81123; color: #fff;}
 .layui-layer-win10.layui-layer-dialog .layui-layer-content{padding: 8px 16px 32px; color: #0033BC;}
 .layui-layer-win10.layui-layer-dialog .layui-layer-padding{padding-top: 18px; padding-left: 58px;}
 .layui-layer-win10 .layui-layer-btn{padding: 5px 5px 10px; border-top:1px solid #DFDFDF; background-color: #F0F0F0;}
-.layui-layer-win10 .layui-layer-btn a{height: 18px; line-height: 18px; background-color: #E1E1E1; border-color: #ADADAD; color: #000; font-size: 12px; transition: all .3s;}
+.layui-layer-win10 .layui-layer-btn a{height: 20px; line-height: 18px; background-color: #E1E1E1; border-color: #ADADAD; color: #000; font-size: 12px; transition: all .3s;}
 .layui-layer-win10 .layui-layer-btn a:hover{border-color: #2A8EDD; background-color: #E5F1FB;}
 .layui-layer-win10 .layui-layer-btn .layui-layer-btn0{border-color: #0078D7;}
 

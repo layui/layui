@@ -11,6 +11,35 @@ toc: true
 
 > 导读：📑 [Layui 2.8 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
+<h2 id="2.8.15" class="ws-anchor">
+  2.8.15
+  <span class="layui-badge-rim">2023-08-16</span>
+</h2>
+
+- #### table
+  - 新增 `expandedWidth` 表头属性，用于设置单元格被展开后的宽度
+  - 优化 单元格内容下拉展开状态面板，以解决此前因展开后内容不可操作等问题 # I7RS8S
+  - 优化 `table.reload()` 造成 `window resize` 事件重复绑定的问题 # I7RJWY
+  - 优化 多行模式在 Firefox 的内容显示问题
+- #### layer
+  - 优化 开启默认动画弹出层后，鼠标移入按钮出现往上偏移的问题 # I7QVVP
+  - 优化 弹层右上角关闭按钮因上个版本更新导致的主题样式异常问题 # I7TP11
+- #### dropdown
+  - 新增 `customName` 属性，用于自定义 `data` 属性中常用的字段名称
+  - 修复 在某些特殊情况下调整浏览器窗口尺寸时出现的 `resize` 事件报错问题
+- #### tree
+  - 新增 `customName` 属性，用于自定义 `data` 中常用的字段名称
+- #### lay
+  - 新增 `lay.style()` 方法，用于向页面创建 style 样式
+  - 优化 `lay.position()` 方法，可让下拉弹出元素的定位更智能
+
+### 下载： [layui-v2.8.15.zip](https://gitee.com/layui/layui/attach_files/1499232/download)
+
+---
+
+因 `2.8.14` 版本存在 layer 主题样式异常问题，`2.8.14` 已被跳过。
+
+---
 
 <h2 id="2.8.13" class="ws-anchor">
   2.8.13
@@ -19,10 +48,10 @@ toc: true
 
 - #### table
   - 优化 在自定义模板中放置 `checkbox` 时对应的文字显示异常问题 # I7LQNO
-  - 调整 `totalRow` 属性在 `table.reloadData()` 数据重载时的支持 # I7R6VY
+  - 优化 `totalRow` 属性在 `table.reloadData()` 数据重载时的支持 # I7R6VY
 - #### treeTable
   - 修复 执行 `treeTable.addNodes()` 增加节点导致当前节点选中状态丢失的问题 # I7Q6IP
-  - 优化 增加和删除节点时，对容器尺寸重新进行自动适配
+  - 优化 删除节点时，对容器尺寸重新进行自动适配
 - #### tree
   - 优化 容器样式，以解决用于其他组件内部可能造成的样式异常问题 # I7QAO3
 - #### dropdown
@@ -334,7 +363,7 @@ toc: true
 
 ---
 
-<h2 id="2.8.0" lay-toc="{title: '2.8.0', hot: true}">
+<h2 id="2.8.0" class="ws-anchor">
   2.8.0 
   <span class="layui-badge-rim">2023-04-24</span>
 </h2>
