@@ -345,16 +345,14 @@ layui.define(['table'], function (exports) {
     var tableId = options.id;
     var customName = treeOptions.customName;
 
-    var treeNode = {
+    // 带上一些常用的方法
+    return {
       data: data,
       dataIndex: data[LAY_DATA_INDEX],
       getParentNode: function () {
         return that.getNodeByIndex(data[LAY_PARENT_INDEX])
       },
-    }
-    // 带上一些常用的方法
-
-    return treeNode;
+    };
   }
 
   // 通过 index 返回节点信息
@@ -1568,7 +1566,11 @@ layui.define(['table'], function (exports) {
     // 更新全选的状态
     var isAll = true;
     var isIndeterminate = false;
-    layui.each(treeOptions.data.cascade === 'all' ? table.cache[tableId] : treeTable.getData(tableId, true), function (i1, item1) {
+    var data = treeOptions.data.cascade === 'all' ? table.cache[tableId] : treeTable.getData(tableId, true);
+    data = data.filter(function (item) {
+        return !item[options.disabledName];
+    });
+    layui.each(data, function (i1, item1) {
       if (item1[checkName] || item1[LAY_CHECKBOX_HALF]) {
         isIndeterminate = true;
       }
