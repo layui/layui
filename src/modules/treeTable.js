@@ -576,6 +576,7 @@ layui.define(['table'], function (exports) {
     if (trExpand) {
       // 展开
       if (trExpanded) { // 已经展开过
+        if (!childNodes.length) return ;//异步如果子节点没有数据情况下双点行展开所有已展开的节点问题解决
         trsElem.nextAll(childNodes.map(function (value, index, array) {
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]'
         }).join(',')).removeClass(HIDE);
