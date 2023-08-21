@@ -980,8 +980,14 @@ layui.define(['table'], function (exports) {
         dataExpand = dataExpand || {};
         dataExpand[trIndex] = true;
       }
-      if (trData[LAY_CHECKBOX_HALF]) {
+      if (trData[LAY_CHECKBOX_HALF] && !trData[options.disabledName] && !trData[options.checkName]) {
         trElem.find('input[type="checkbox"][name="layTableCheckbox"]').prop('indeterminate', true);
+      }
+
+      if (trData[options.disabledName]){
+        trElem.find('input[type="checkbox"][name="layTableCheckbox"]')
+          .prop('disabled', trData[options.disabledName])
+          .prop('checked', trData[options.checkName]);
       }
 
       var htmlTemp = itemCell.html();
@@ -1414,7 +1420,11 @@ layui.define(['table'], function (exports) {
     });
 
     var isAll = true;
-    layui.each(treeOptions.data.cascade === 'all' ? table.cache[id] : treeTable.getData(id, true), function (i1, item1) {
+    var data = treeOptions.data.cascade === 'all' ? table.cache[id] : treeTable.getData(id, true);
+    data = data.filter(function (item){
+      return !item[options.disabledName];
+    });
+    layui.each(data, function (i1, item1) {
       if (!item1[checkName]) {
         isAll = false;
         return true;
