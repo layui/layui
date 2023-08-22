@@ -1533,7 +1533,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 设置数据选中属性
     layui.each(thisData, function(i, item){
-      if(layui.type(item) === 'array') return; // 空项
+      if(layui.type(item) === 'array' || item[options.disabledName]) return; // 空项
       if(Number(opts.index) === i || opts.index === 'all'){
         var checked = item[options.checkName] = getChecked(item[options.checkName]);
         tr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 标记当前选中行背景色
@@ -1550,7 +1550,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var checkedElem = tr.find('input[lay-type="'+ ({
       radio: 'layTableRadio',
       checkbox: 'layTableCheckbox'
-    }[opts.type] || 'checkbox') +'"]');
+    }[opts.type] || 'checkbox') +'"]:not(:disabled)');
 
     checkedElem.prop('checked', getChecked(checkedElem.last().prop('checked')));
 
@@ -2690,7 +2690,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     //计算全选个数
     layui.each(data, function(i, item){
-      if(layui.type(item) === 'array'){
+      if(layui.type(item) === 'array' || item[table.config.disabledName]){
         invalidNum++; // 无效数据，或已删除的
         return;
       }
