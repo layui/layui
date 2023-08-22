@@ -602,7 +602,11 @@ layui.define(['table'], function (exports) {
               options: options,
             }, true);
           }
-        })
+        });
+        treeTableThat.updateStatus(childNodes, function (d) {
+          d['LAY_HIDE'] = false;
+        });
+        options.hasNumberCol && formatNumber(tableId);
       } else {
         var asyncSetting = treeOptions.async || {};
         var asyncUrl = asyncSetting.url || options.url;
@@ -760,6 +764,11 @@ layui.define(['table'], function (exports) {
         tableViewElem.find(childNodesFlat.map(function (value, index, array) {
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]'
         }).join(',')).addClass(HIDE);
+        
+        treeTableThat.updateStatus(childNodes, function (d) {
+          d['LAY_HIDE'] = true;
+        });
+        options.hasNumberCol && formatNumber(tableId);
       }
     }
 
@@ -1029,13 +1038,14 @@ layui.define(['table'], function (exports) {
       });
     } else {
       debounceFn('renderTreeTable-' + tableId, function () {
-        options.hasNumberCol && formatNumber(that);
+        options.hasNumberCol && formatNumber(tableId);
         form.render($('.layui-table-tree[lay-id="' + tableId + '"]'));
       }, 0)();
     }
   }
 
-  var formatNumber = function (that) {
+  var formatNumber = function (id) {
+    var that = getThisTable(id);
     var options = that.getOptions();
     var tableViewElem = options.elem.next();
 
@@ -1044,6 +1054,7 @@ layui.define(['table'], function (exports) {
     var trFixedL = tableViewElem.find('.layui-table-fixed-l tbody tr');
     var trFixedR = tableViewElem.find('.layui-table-fixed-r tbody tr');
     layui.each(that.treeToFlat(table.cache[options.id]), function (i1, item1) {
+      if (item1['LAY_HIDE']) return;
       var itemData = that.getNodeDataByIndex(item1[LAY_DATA_INDEX]);
       itemData['LAY_NUM'] = ++num;
       trMain.eq(i1).find('.laytable-cell-numbers').html(num);
@@ -1242,7 +1253,7 @@ layui.define(['table'], function (exports) {
     layui.each(table.cache[id], function (i4, item4) {
       tableView.find('tr[data-level="0"][lay-data-index="' + item4[LAY_DATA_INDEX] + '"]').attr('data-index', i4);
     })
-    options.hasNumberCol && formatNumber(that);
+    options.hasNumberCol && formatNumber(id);
 
     // 重新适配尺寸
     treeTable.resize(id);
