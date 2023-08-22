@@ -2296,14 +2296,14 @@
   
   // 得到某月的最后一天
   laydate.getEndDate = function(month, year){
-    var thisDate = new Date();
+    var thisDate = new Date(year,month,0);
     //设置日期为下个月的第一天
     thisDate.setFullYear(
       year || thisDate.getFullYear()
       ,month || (thisDate.getMonth() + 1)
     ,1);
     //减去一天，得到当前月最后一天
-    return new Date(thisDate.getTime() - 1000*60*60*24).getDate();
+    return new Date(thisDate.getTime()).getDate();
   };
 
   //加载方式
