@@ -1497,9 +1497,29 @@ layer.photos = function(options, loop, key){
     layer.close(dict.index);
     return layer.photos(options, true, key);
   }
+
+  dict.isNumber = function (n) {
+		return typeof n === 'number' && !isNaN(n);
+	}
+	
+	dict.getTransform = function(options){
+		var transforms = [];
+		var rotate = options.rotate;
+		var scaleX = options.scaleX;
+	
+		if (dict.isNumber(rotate) && rotate !== 0) {
+			transforms.push('rotate(' + rotate + 'deg)');
+		}
+	
+		if (dict.isNumber(scaleX) && scaleX !== 1) {
+			transforms.push('scaleX(' + scaleX + ')');
+		}
+	
+		return transforms.length ? transforms.join(' ') : 'none';
+	}
   
   // 一些动作
-  dict.event = function(){
+  dict.event = function(layero, index){
     /*
     dict.bigimg.hover(function(){
       dict.imgsee.show();
@@ -1519,6 +1539,64 @@ layer.photos = function(options, loop, key){
     });
     
     $(document).on('keyup', dict.keyup);
+
+    var scalexFlag = true;
+		//工具栏事件
+		layero.off('click').on('click','*[toolbar-event]', function () {
+			var othis = $(this), event = othis.attr('toolbar-event');
+			switch (event) {
+				case 'rotate':
+					dict.image.rotate = ((dict.image.rotate || 0) + Number(othis.attr('data-option'))) % 360;
+					dict.imgElem.css({
+						transform: dict.getTransform(dict.image)
+					});
+					break;
+				case 'scalex':
+					if (scalexFlag){
+						dict.image.scaleX = -1;
+						scalexFlag = false;
+					}else {
+						dict.image.scaleX = 1;
+						scalexFlag = true;
+					}
+					scalexFlag !== scalexFlag;
+					dict.imgElem.css({
+						transform: dict.getTransform(dict.image)
+					});
+					break;
+				case 'zoom':
+					var ratio = Number(othis.attr('data-option'));
+					if (ratio < 0) {
+						ratio = 1 / (1 - ratio);
+					} else {
+						ratio = 1 + ratio;
+					}
+					dict.image.width = dict.image.width * ratio;
+					dict.image.height = dict.image.height * ratio;
+					dict.imgElem.css({
+						width: dict.image.width,
+						height: dict.image.height,
+						transform: dict.getTransform(dict.image)
+					});
+					break;
+				case 'reset':
+					scalexFlag = true;
+					dict.image.scaleX = 1;
+					dict.image.rotate = 0;
+					dict.image.width = dict.image.oldWidth;
+					dict.image.height = dict.image.oldHeight;
+					dict.imgElem.css({
+						width: dict.image.oldWidth,
+						height: dict.image.oldHeight,
+						transform: 'none'
+					});
+					break;
+				case 'close':
+					layer.close(index);
+					break;
+			}
+		});
+    
   };
   
   // 图片预加载
@@ -1570,7 +1648,12 @@ layer.photos = function(options, loop, key){
             imgarea[1] = imgarea[1]/wh[1];
           }
         }
-        
+        dict.image = {
+          oldWidth : imgarea[0],
+          oldHeight : imgarea[1],
+          width : imgarea[0],
+          height : imgarea[1],
+        };
         return [imgarea[0]+'px', imgarea[1]+'px']; 
       }(),
       title: false,
@@ -1607,6 +1690,22 @@ layer.photos = function(options, loop, key){
               ,'</div>'
             ,'</div>'].join(''));
           }
+          //工具栏
+          if (options.toolbar){
+            arr.push([
+              '<div class="layui-layer-images-toolbar">',
+                '<div class="layer-images-tool-item">',
+                  '<span toolbar-event="rotate" data-option="-15" title="向左旋转15°" style="transform: scaleX(-1);"><i class="layui-icon layui-icon-refresh rotate"></i></span>',
+                  '<span toolbar-event="rotate" data-option="15" title="向右旋转15°"><i class="layui-icon layui-icon-refresh"></i></span>',
+                  '<span toolbar-event="scalex" title="翻转"><i class="layui-icon layui-icon-slider"></i></span>',
+                  '<span toolbar-event="zoom" data-option="0.1" title="放大图片"><i class="layui-icon layui-icon-add-circle"></i></span>',
+                  '<span toolbar-event="zoom" data-option="-0.1" title="缩小图片"><i class="layui-icon layui-icon-reduce-circle"></i></span>',
+                  '<span toolbar-event="reset" title="重置图片"><i class="layui-icon layui-icon-refresh-1"></i></span>',
+                  '<span toolbar-event="close" title="关闭"><i class="layui-icon layui-icon-close"></i></span>',
+                '</div>',
+              '</div>'
+              ].join(''));
+          }
 
           arr.push('</div>');
           return arr.join('');
@@ -1615,7 +1714,15 @@ layer.photos = function(options, loop, key){
       success: function(layero, index){
         dict.bigimg = layero.find('.layui-layer-phimg');
         dict.imgsee = layero.find('.layui-layer-imgbar');
-        dict.event(layero);
+        if (options.toolbar){
+          layero.find('.layui-layer-content').addClass('layui-layer-images-toolbar-mode');
+          dict.imgElem = dict.bigimg.find('img');
+          dict.imgElem.css({
+            width : dict.image.width,
+            height : dict.image.height
+          });
+        }
+        dict.event(layero, index);
         options.tab && options.tab(data[start], layero);
         typeof success === 'function' && success(layero);
       }, end: function(){
