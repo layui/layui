@@ -1845,6 +1845,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       switch(events){
         case 'LAYTABLE_COLS': // 筛选列
+          if (!table.cache[options.id].length) return layer.msg('暂时没有数据，不能使用筛选列功能！', {icon: 5});
           openPanel({
             list: function(){
               var lis = [];
@@ -1890,6 +1891,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           });
         break;
         case 'LAYTABLE_EXPORT': // 导出
+          if (!table.cache[options.id].length) return layer.msg('暂时没有数据，不能使用导出功能！', {icon: 5});
           if(device.ie){
             layer.tips('导出功能不支持 IE，请用 Chrome 等高级浏览器导出', this, {
               tips: 3
@@ -1912,6 +1914,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           }
         break;
         case 'LAYTABLE_PRINT': // 打印
+          if (!table.cache[options.id].length) return layer.msg('暂时没有数据，不能使用打印功能！', {icon: 5});
           var printWin = window.open('about:blank', '_blank');
           var style = ['<style>',
             'body{font-size: 12px; color: #5F5F5F;}',
