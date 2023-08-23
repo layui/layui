@@ -209,12 +209,12 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         elemToolbar.on('click', '>i', function(){
           var oi = $(this);
           var type = oi.data('type');
-          typeof tools[type].event === 'function' && tools[type].event(oi, type);
+          tools[type] && typeof tools[type].event === 'function' && tools[type].event(oi, type);
           typeof options.toolsEvent === 'function' && options.toolsEvent(oi, type);
         });
         layui.each(options.tools, function(i, v){
           var className = (tools[v] && tools[v].className) || v;
-          var title = tools[v].title || [''];
+          var title = (tools[v] && tools[v].title) || [''];
           elemToolbar.append(
             '<i class="layui-icon layui-icon-'+ className +'" data-type="'+ v +'" title="'+ title[0] +'"></i>'
           );
