@@ -254,6 +254,14 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-imgtit a:hover{color: #fff; text-decoration: underline;}
 .layui-layer-imgtit em{font-style: normal;}
 
+/*photo工具栏*/
+.layui-layer-images-toolbar{position: fixed;top: 0;left: 0;right: 0;height: 40px;background-color: #000\9;filter: Alpha(opacity=60);background-color: rgba(2,0,0,.35);display: flex;align-items: center;justify-content: center;color: white;}
+.layui-layer-images-toolbar .layer-images-tool-item{position: relative;width: auto;height: 100%;display: flex;align-items: center;}
+.layui-layer-images-toolbar .layer-images-tool-item span{padding: 8px 10px; transition: all .4s;cursor: pointer;}
+.layui-layer-images-toolbar .layer-images-tool-item span:hover{background-color: rgba(64, 64, 64, 0.67);}
+.layui-layer-images-toolbar .layer-images-tool-item span i{font-size: 22px;}
+.layui-layer-photos .layui-layer-content.layui-layer-images-toolbar-mode{overflow: visible !important;}
+
 /* 关闭动画 */
 @-webkit-keyframes layer-bounceOut {
   100% {opacity: 0; -webkit-transform: scale(.7); transform: scale(.7)}
