@@ -1,20 +1,15 @@
- 
- 
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>layer 弹层 - layui</title>
-
-<link rel="stylesheet" href="../src/css/layui.css">
-
-<style>
-body{padding: 100px;}
-
-#photos li{float: left; margin: 0 1px 1px;}
-#photos img{max-height: 38px;}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>layer 弹层 - layui</title>
+  <link rel="stylesheet" href="../src/css/layui.css">
+  <style>
+  body{padding: 100px;}
+  #photos li{float: left; margin: 0 1px 1px;}
+  #photos img{max-height: 38px;}
+  </style>
 </head>
 <body>
 
@@ -224,7 +219,9 @@ layui.use(['layer', 'util'], function(layer, util){
   
   // 相册层
   layer.photos({
-    photos: '#photos' //$('#photos')
+    photos: '#photos', // $('#photos')
+    // toolbar: false,
+    // footer: false
   });
   
   //动态追加
