@@ -837,6 +837,7 @@ layui.define(['table'], function (exports) {
     var isParentKey = treeOptions.customName.isParent;
     var idKey = treeOptions.customName.id;
     var showFlexIconIfNotParent = treeOptions.view.showFlexIconIfNotParent;
+    isOneExpand = isOneExpand || false;
 
     if (!expandFlag) {
       // 关闭所有
