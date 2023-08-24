@@ -243,7 +243,8 @@ layui.define(['table'], function (exports) {
         iconLeaf: '<i class="layui-icon layui-icon-leaf"></i>', // 叶子节点的图标
         showFlexIconIfNotParent: false, // 当节点不是父节点的时候是否显示折叠图标
         dblClickExpand: true, // 双击节点时，是否自动展开父节点的标识
-        expandAllDefault: false // 默认展开所有节点
+        expandAllDefault: false, // 默认展开所有节点
+        enableDisabledNodeExpand : true //字节状态禁止时是否允许展开
       },
       data: {
         isSimpleData: false, // 是否简单数据模式
@@ -536,6 +537,9 @@ layui.define(['table'], function (exports) {
 
     var trData = treeTableThat.getNodeDataByIndex(dataIndex);
 
+    //不允许禁止节点展开
+    if (!options.view.enableDisabledNodeExpand && trData[options.disabledName]) return;
+    
     // 后续调优：对已经展开的节点进行展开和已经关闭的节点进行关闭应该做优化减少不必要的代码执行 todo
     var isToggle = layui.type(expandFlag) !== 'boolean';
     var trExpand = isToggle ? !trData[LAY_EXPAND] : expandFlag;
@@ -816,8 +820,9 @@ layui.define(['table'], function (exports) {
    * 展开或关闭全部节点
    * @param {String} id 树表id
    * @param {Boolean} expandFlag 展开或关闭
+   * * @param isOneExpand false展开所有节点，true展开一次
    * */
-  treeTable.expandAll = function (id, expandFlag) {
+  treeTable.expandAll = function (id, expandFlag, isOneExpand) {
     if (layui.type(expandFlag) !== 'boolean') {
       return hint.error('expandAll 的展开状态参数只接收true/false')
     }
@@ -832,6 +837,7 @@ layui.define(['table'], function (exports) {
     var isParentKey = treeOptions.customName.isParent;
     var idKey = treeOptions.customName.id;
     var showFlexIconIfNotParent = treeOptions.view.showFlexIconIfNotParent;
+    isOneExpand = isOneExpand || false;
 
     if (!expandFlag) {
       // 关闭所有
@@ -851,6 +857,15 @@ layui.define(['table'], function (exports) {
         .html(treeOptions.view.iconClose);
     } else {
       var tableDataFlat = treeTable.getData(id, true);
+      
+      //展开一个子点
+      if (isOneExpand){
+        tableView.find('.layui-table-main tbody tr .layui-table-tree-flexIcon:not(.layui-disabled) .layui-icon-triangle-r').each(function () {
+          $(this).click();
+        });
+        return ;
+      }
+      
       // 展开所有
       // 存在异步加载
       if (treeOptions.async.enable) {
@@ -982,21 +997,33 @@ layui.define(['table'], function (exports) {
       }
       trElem = tableViewElem.find('tr[lay-data-index="' + trIndex + '"]');
       var trData = treeTableThat.getNodeDataByIndex(trIndex);
-
+      
+      //父点状态禁止时状态同步子点
+      if (options.view.enableDisabledNodeExpand && trData[LAY_PARENT_INDEX] !== ''){
+        var nodeData = treeTableThat.getNodeDataByIndex(trData[LAY_PARENT_INDEX]);
+        if (nodeData[options.disabledName]) trData[options.disabledName] = nodeData[options.disabledName];
+      }
+      
       if (trData[LAY_EXPAND] && trData[isParentKey]) {
         // 需要展开
         dataExpand = dataExpand || {};
         dataExpand[trIndex] = true;
       }
-      if (trData[LAY_CHECKBOX_HALF]) {
+      if (trData[LAY_CHECKBOX_HALF] && !trData[options.disabledName] && !trData[options.checkName]) {
         trElem.find('input[type="checkbox"][name="layTableCheckbox"]').prop('indeterminate', true);
+      }
+
+      if (trData[options.disabledName]){
+        trElem.find('input[type="checkbox"][name="layTableCheckbox"]')
+          .prop('disabled', trData[options.disabledName])
+          .prop('checked', trData[options.checkName]);
       }
 
       var htmlTemp = itemCell.html();
       itemCell = trElem.find('td[data-field="' + nameKey + '"]>div.layui-table-cell');
       itemCell.addClass('layui-table-tree-item');
       var flexIconElem = itemCell
-        .html(['<div class="layui-inline layui-table-tree-flexIcon" ',
+        .html(['<div class="layui-inline layui-table-tree-flexIcon'+(!options.view.enableDisabledNodeExpand && trData[options.disabledName] ? ' layui-disabled' : '')+'" ',
           'style="',
           'margin-left: ' + (indent * trElem.attr('data-level')) + 'px;',
           (trData[isParentKey] || treeOptionsView.showFlexIconIfNotParent) ? '' : ' visibility: hidden;',
@@ -1424,7 +1451,11 @@ layui.define(['table'], function (exports) {
     });
 
     var isAll = true;
-    layui.each(treeOptions.data.cascade === 'all' ? table.cache[id] : treeTable.getData(id, true), function (i1, item1) {
+    var data = treeOptions.data.cascade === 'all' ? table.cache[id] : treeTable.getData(id, true);
+    data = data.filter(function (item){
+      return !item[options.disabledName];
+    });
+    layui.each(data, function (i1, item1) {
       if (!item1[checkName]) {
         isAll = false;
         return true;
