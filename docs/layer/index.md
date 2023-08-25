@@ -250,6 +250,9 @@ layer.prompt({
 | photos | 图片层的数据源，格式详见下述示例。 | object | - |
 | toolbar <sup>2.8.16+</sup> | 是否显示顶部工具栏 | boolean | `true` |
 | footer <sup>2.8.16+</sup> | 是否隐藏底部栏 | boolean | `true` |
+| thumbBar <sup>2.8.16+</sup> | 是否显示缩略图栏 | boolean | `false` |
+| pullSwitch <sup>2.8.16+</sup> | 是否启用拖拽控制功能 | boolean | `false` |
+| srcUseThumb <sup>2.8.16+</sup> | 是否src地址同用thumb  | boolean | `false` |
 | tab | 图片层切换后的回调函数，返回的参数见下述示例 | function | - |
 
 该方法用于弹出图片层，基于 `type: 1`（即 `page` 层）的自定义内容。 
