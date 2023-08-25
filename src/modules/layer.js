@@ -283,8 +283,11 @@ Class.pt.config = {
 
 // 容器
 Class.pt.vessel = function(conType, callback){
-  var that = this, times = that.index, config = that.config;
-  var zIndex = config.zIndex + times, titype = typeof config.title === 'object';
+  var that = this;
+  var times = that.index;
+  var config = that.config;
+  var zIndex = config.zIndex + times;
+  var titype = typeof config.title === 'object';
   var ismax = config.maxmin && (config.type === 1 || config.type === 2);
   var titleHTML = (config.title ? '<div class="layui-layer-title" style="'+ (titype ? config.title[1] : '') +'">' 
     + (titype ? config.title[0] : config.title) 
