@@ -304,15 +304,17 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         othis.addClass('layui-code-'+ options.skin);
       } 
 
-      
-      
-
       // 转义 HTML 标签
       if(options.encode) html = util.escape(html); // 编码
-      html = html.replace(/[\r\t\n]+/g, '</li><li>'); // 转义换行符
-      
+      // code 转 html
+      html = options.codeRender 
+        ? options.codeRender(html)
+        : (function(){
+          return '<li>' + html.replace(/[\r\t\n]+/g, '</li><li>') + '</li>'; // 转义换行符
+        })()
+
       // 生成列表
-      othis.html(listElem.html('<li>' + html + '</li>'));
+      othis.html(listElem.html(html));
       
       // 创建 header
       if(options.header && !othis.children('.'+ CONST.ELEM_TITLE)[0]){
