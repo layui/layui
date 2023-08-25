@@ -260,6 +260,13 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-photos-footer a:hover{text-decoration: underline;}
 .layui-layer-photos-footer em{font-style: normal;}
 
+.layui-layer-images-thumb{position: fixed;left: 0;right: 0;bottom: 0;height: 70px;overflow-x: auto;white-space: nowrap; transition: scroll 0.4s;}
+.layui-layer-images-thumb::-webkit-scrollbar{display: none;}
+.layui-layer-images-thumb.onshow-footer{bottom: 40px;}
+.layui-layer-images-thumb .layui-layer-images-thumb-list{margin: 0 auto;display: inline-block;position: relative;}
+.layui-layer-images-thumb .layui-layer-images-thumb-item{width: 60px;height: 60px;margin: 5px;cursor: pointer;background-repeat: no-repeat;background-size: cover;background-position: center;display: inline-block;border-radius: 4px;overflow: hidden;}
+.layui-layer-images-thumb .layui-layer-images-thumb-item.active{outline: 2px #e42e00 solid;}
+.layui-layer-images-thumb .layui-layer-images-thumb-item:hover{outline: 2px #eb5833 solid;}
 
 /* 关闭动画 */
 @-webkit-keyframes layer-bounceOut {
