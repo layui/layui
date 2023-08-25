@@ -168,8 +168,9 @@ var layer = {
   },
   
   msg: function(content, options, end){ // 最常用提示层
-    var type = typeof options === 'function', rskin = ready.config.skin;
-    var skin = (rskin ? rskin + ' ' + rskin + '-msg' : '')||'layui-layer-msg';
+    var type = typeof options === 'function';
+    var rskin = ready.config.skin;
+    var skin = (rskin ? rskin + ' ' + rskin + '-msg' : '') || 'layui-layer-msg';
     var anim = doms.anim.length - 1;
     if(type) end = options;
     return layer.open($.extend({
@@ -221,11 +222,12 @@ var layer = {
 };
 
 var Class = function(setings){  
-  var that = this, creat = function(){
+  var that = this;
+  var creat = function(){
     that.creat();
   };
   that.index = ++layer.index;
-  that.config.maxWidth = $(win).width() - 15*2; // 初始最大宽度：当前屏幕宽，左右留 15px 边距
+  that.config.maxWidth = $(win).width() - 15 * 2; // 初始最大宽度：当前屏幕宽，左右留 15px 边距
   that.config = $.extend({}, that.config, ready.config, setings);
   document.body ? creat() : setTimeout(function(){
     creat();
@@ -396,7 +398,8 @@ Class.pt.vessel = function(conType, callback){
 Class.pt.creat = function(){
   var that = this;
   var config = that.config;
-  var times = that.index, nodeIndex;
+  var times = that.index
+  var nodeIndex;
   var content = config.content;
   var conType = typeof content === 'object';
   var body = $('body');
@@ -546,7 +549,9 @@ Class.pt.resize = function(){
 
 // 自适应
 Class.pt.auto = function(index){
-  var that = this, config = that.config, layero = $('#'+ doms[0] + index);
+  var that = this;
+  var config = that.config;
+  var layero = $('#'+ doms[0] + index);
   
   if(config.area[0] === '' && config.maxWidth > 0){
     // 适配 ie7
@@ -588,7 +593,9 @@ Class.pt.auto = function(index){
 
 // 计算坐标
 Class.pt.offset = function(){
-  var that = this, config = that.config, layero = that.layero;
+  var that = this;
+  var config = that.config;
+  var layero = that.layero;
   var area = [layero.outerWidth(), layero.outerHeight()];
   var type = typeof config.offset === 'object';
   that.offsetTop = (win.height() - area[1])/2;
@@ -651,15 +658,19 @@ Class.pt.offset = function(){
 
 // Tips
 Class.pt.tips = function(){
-  var that = this, config = that.config, layero = that.layero;
-  var layArea = [layero.outerWidth(), layero.outerHeight()], follow = $(config.follow);
+  var that = this;
+  var config = that.config;
+  var layero = that.layero;
+  var layArea = [layero.outerWidth(), layero.outerHeight()];
+  var follow = $(config.follow);
   if(!follow[0]) follow = $('body');
   var goal = {
     width: follow.outerWidth(),
     height: follow.outerHeight(),
     top: follow.offset().top,
     left: follow.offset().left
-  }, tipsG = layero.find('.layui-layer-TipsG');
+  };
+  var tipsG = layero.find('.layui-layer-TipsG');
   
   var guide = config.tips[0];
   config.tips[1] || tipsG.remove();
@@ -745,7 +756,7 @@ Class.pt.move = function(){
       ready.eventMoveElem = othis;
       ready.moveElem.css('cursor', 'move').show();
     }
-    
+    config.moveStart && typeof config.moveStart === 'function' && config.moveStart(layero,e);
     e.preventDefault();
   });
   
@@ -777,9 +788,9 @@ Class.pt.move = function(){
   _DOC.on('mousemove', function(e){
     // 拖拽移动
     if(ready.eventMoveElem){
-      var dict = ready.eventMoveElem.data(DATA_NAME[0]) || {}
-      ,layero = dict.layero
-      ,config = dict.config;
+      var dict = ready.eventMoveElem.data(DATA_NAME[0]) || {};
+      var layero = dict.layero;
+      var config = dict.config;
       
       var X = e.clientX - dict.offset[0];
       var Y = e.clientY - dict.offset[1];
@@ -800,6 +811,10 @@ Class.pt.move = function(){
         Y > setBot && (Y = setBot);
       }
       
+      if (config.pullSwitch && config.moving && typeof config.moving === 'function') {
+        config.moving({layero, rect: {left: X, top: Y}, event: e, config: config});
+        return false;
+      }
       // 拖动时跟随鼠标位置
       layero.css({
         left: X,
@@ -809,18 +824,18 @@ Class.pt.move = function(){
     
     // Resize
     if(ready.eventResizeElem){
-      var dict = ready.eventResizeElem.data(DATA_NAME[1]) || {};
-      var config = dict.config;
+      dict = ready.eventResizeElem.data(DATA_NAME[1]) || {};
+      config = dict.config;
       
-      var X = e.clientX - dict.offset[0];
-      var Y = e.clientY - dict.offset[1];
+      X = e.clientX - dict.offset[0];
+      Y = e.clientY - dict.offset[1];
       
       e.preventDefault();
       
       // 拉伸宽高
       layer.style(dict.index, {
-        width: dict.area[0] + X
-        ,height: dict.area[1] + Y
+        width: dict.area[0] + X,
+        height: dict.area[1] + Y
       });
       
       config.resizing && config.resizing(dict.layero);
@@ -847,7 +862,9 @@ Class.pt.move = function(){
 };
 
 Class.pt.callback = function(){
-  var that = this, layero = that.layero, config = that.config;
+  var that = this;
+  var layero = that.layero;
+  var config = that.config;
   that.openLayer();
   if(config.success){
     if(config.type == 2){
@@ -1402,319 +1419,530 @@ layer.tab = function(options){
 };
 
 // 图片层
-layer.photos = function(options, loop, key){
+layer.photos = function (options, loop) {
   var dict = {};
-
-  // 默认属性
-  options = $.extend(true, {
-    toolbar: true,
-    footer: true
-  }, options);
-
-  if(!options.photos) return;
+  options = options || {};
+  if (!options.photos) return;
   
   // 若 photos 并非选择器或 jQuery 对象，则为普通 object
   var isObject = !(typeof options.photos === 'string' || options.photos instanceof $);
   var photos = isObject ? options.photos : {};
   var data = photos.data || [];
   var start = photos.start || 0;
-  var success = options.success;
   
-  dict.imgIndex = (start|0) + 1;
+  dict.imgIndex = (start | 0) + 1;
+  dict.images = {};
+  dict.distance = 140;
   options.img = options.img || 'img';
-  delete options.success;
+  options.thumbBar = options.thumbBar || false;
+  options.srcUseThumb = options.srcUseThumb || false;
   
   // 若 options.photos 不是一个对象
-  if(!isObject){ // 页面直接获取
-    var parent = $(options.photos), pushData = function(){
+  if (!isObject) { // 页面直接获取
+    var parent = $(options.photos);
+    var pushData = function () {
       data = [];
-      parent.find(options.img).each(function(index){
+      parent.find(options.img).each(function (index) {
         var othis = $(this);
         othis.attr('layer-index', index);
         data.push({
           alt: othis.attr('alt'),
           pid: othis.attr('layer-pid'),
-          src: othis.attr('lay-src') || othis.attr('layer-src') || othis.attr('src'),
+          src: othis.attr('lay-src') || othis.attr('src'),
           thumb: othis.attr('src')
         });
       });
     };
-    
+  
     pushData();
-    
+  
     if (data.length === 0) return;
-    
-    loop || parent.on('click', options.img, function(){
-      pushData();
-      var othis = $(this), index = othis.attr('layer-index'); 
+  
+    parent.on('click', options.img, function () {
+      var othis = $(this), index = othis.attr('layer-index');
       layer.photos($.extend(options, {
         photos: {
           start: index,
           data: data,
           tab: options.tab
-        },
-        full: options.full
-      }), true);
+        }
+      }));
     });
-    
+  
     // 不直接弹出
     if (!loop) return;
-  } else if (data.length === 0){
+  
+  } else if (data.length === 0) {
     return layer.msg('&#x6CA1;&#x6709;&#x56FE;&#x7247;');
   }
   
   // 上一张
-  dict.imgprev = function(key){
+  dict.imgprev = function (key) {
     dict.imgIndex--;
-    if(dict.imgIndex < 1){
+    if (dict.imgIndex < 1) {
       dict.imgIndex = data.length;
     }
-    dict.tabimg(key);
+    dict.switchImage(key);
+    //dict.restImageAttr(dict.imgIndex + 1);
+    if (options.thumbBar){
+      dict.setListScroll(dict.layero.find('.layui-layer-images-thumb-item[data-index="'+ (dict.imgIndex - 1) +'"]'));
+    }
   };
   
   // 下一张
-  dict.imgnext = function(key,errorMsg){
+  dict.imgnext = function (key, errorMsg) {
     dict.imgIndex++;
-    if(dict.imgIndex > data.length){
+    if (dict.imgIndex > data.length) {
       dict.imgIndex = 1;
-      if (errorMsg) {return}
+      if (errorMsg) {
+        return
+      }
     }
-    dict.tabimg(key)
+    dict.switchImage(key);
+  
+    if (options.thumbBar){
+      dict.setListScroll(dict.layero.find('.layui-layer-images-thumb-item[data-index="'+ (dict.imgIndex - 1) +'"]'));
+    }
+    //dict.restImageAttr(dict.imgIndex - 1);
   };
   
+  // 设置thumb位置
+  dict.setListScroll = function (elem) {
+    var listElem = elem.parents('.layui-layer-images-thumb');
+    var autoLeft = elem.outerWidth() * dict.imgIndex - 1;
+    listElem.animate({
+      scrollLeft: autoLeft - listElem.width() / 3
+    }, 200);
+    elem.addClass('active').siblings().removeClass('active');
+  }
+  
+  // 还原图片属性
+  dict.restImageAttr = function (index) {
+    var img = dict.layero.find('.layer-photos-pictures img[data-index="'+ index +'"]');
+    if (img[0]){
+      var image = dict.images[index];
+      image.scaleX = 1;
+      image.rotate = 0;
+      image.width = image.oldWidth;
+      image.height = image.oldHeight;
+      img.css({
+        width: image.oldWidth,
+        height: image.oldHeight,
+        transform: 'none'
+      });
+    }
+  }
+  
   // 方向键
-  dict.keyup = function(event){
-    if(!dict.end){
+  dict.keyup = function (event) {
+    if (!dict.end) {
       var code = event.keyCode;
       event.preventDefault();
-      if(code === 37){
+      if (code === 37) {
         dict.imgprev(true);
-      } else if(code === 39) {
+      } else if (code === 39) {
         dict.imgnext(true);
-      } else if(code === 27) {
+      } else if (code === 27) {
         layer.close(dict.index);
       }
     }
   }
   
-  // 切换
-  dict.tabimg = function(key){
-    if(data.length <= 1) return;
-    photos.start = dict.imgIndex - 1;
-    layer.close(dict.index);
-    return layer.photos(options, true, key);
-  }
-
+  // 判断数字
   dict.isNumber = function (n) {
     return typeof n === 'number' && !isNaN(n);
   }
-
-  dict.image = {};
-
-  dict.getTransform = function(opts){
+  
+  // 图片css样式
+  dict.getTransform = function (options) {
     var transforms = [];
-    var rotate = opts.rotate;
-    var scaleX = opts.scaleX;
-    var scale = opts.scale;
-
+    var rotate = options.rotate;
+    var scaleX = options.scaleX;
+  
     if (dict.isNumber(rotate) && rotate !== 0) {
       transforms.push('rotate(' + rotate + 'deg)');
     }
-
+  
     if (dict.isNumber(scaleX) && scaleX !== 1) {
       transforms.push('scaleX(' + scaleX + ')');
     }
-
-    if (dict.isNumber(scale)) {
-      transforms.push('scale(' + scale + ')');
-    }
-
+  
     return transforms.length ? transforms.join(' ') : 'none';
   }
   
-  // 一些动作
-  dict.event = function(layero, index, that){
-    dict.main.find('.layui-layer-photos-prev').on('click', function(event){
+  // 重设窗口位置和大小
+  dict.setArea = function (image) {
+    var offsetTop = (win.height() - image.height) / 2;
+    var offsetLeft = (win.width() - image.width) / 2;
+    if (dict.isMove){
+      offsetLeft = offsetLeft + (dict.layero.offset().left - offsetLeft);
+      offsetTop = offsetTop + (dict.layero.offset().top - offsetTop);
+    }
+    // 设置坐标
+    dict.layero.css({
+      top: offsetTop,
+      left: offsetLeft,
+      width: dict.images[dict.imgIndex].width,
+      height : dict.images[dict.imgIndex].height,
+    });
+  }
+  
+  //切换图片
+  dict.switchImage = function () {
+    if (data.length <= 1) return;
+    var imgBox = dict.layero.find('.layer-photos-pictures');
+    var isImage = imgBox.find('img[data-index="'+dict.imgIndex +'"]');
+    dict.refreshImgaeInfo();
+    if (isImage.length){
+      isImage.removeClass('layui-hide').css({
+        transform: 'none',
+        width: dict.images[dict.imgIndex].oldWidth,
+        height: dict.images[dict.imgIndex].oldHeight
+      }).siblings().addClass('layui-hide');
+      dict.getWinArea(isImage[0]);
+      dict.setArea(isImage[0]);
+    }else {
+      imgBox.find('img').addClass('layui-hide');
+      var image = data[dict.imgIndex - 1];
+      dict.isMove = false;
+      dict.loading();
+      dict.loadImage(image.src, function (img) {
+        dict.getWinArea(img);
+        dict.setArea(img);
+        imgBox.append('<img style="width: '+img.width+'px;height: '+img.height+'px;cursor: move;" data-index="'+dict.imgIndex+'" src="' + image.src + '" alt="' + (image.alt || '') + '" layer-pid="' + (image.pid || '') + '"/>');
+        layer.close(dict.loadi);
+      });
+    }
+    options.tab && typeof options.tab === 'function' && options.tab(data[dict.imgIndex], dict.layero);
+  }
+  
+  //更新底部图片信息
+  dict.refreshImgaeInfo = function () {
+    var img = data[dict.imgIndex - 1];
+    var html = [
+      '<h3>'+ (img.alt || '') +'</h3>',
+      '<em>'+ dict.imgIndex +' / '+ data.length +'</em>',
+      '<a href="'+ img.src +'" target="_blank">查看原图</a>'
+    ].join('');
+    dict.layero.find('.layui-layer-imgtit').html(html);
+  }
+  
+  // 事件
+  dict.event = function () {
+    /*
+    dict.bigimg.hover(function(){
+      dict.imgsee.show();
+    }, function(){
+      dict.imgsee.hide();
+    });
+    */
+    dict.bigimg.find('.layui-layer-imgprev').on('click', function (event) {
       event.preventDefault();
       dict.imgprev(true);
-    });  
-    
-    dict.main.find('.layui-layer-photos-next').on('click', function(event){
+    });
+  
+    dict.bigimg.find('.layui-layer-imgnext').on('click', function (event) {
       event.preventDefault();
       dict.imgnext(true);
     });
-    
+  
     $(document).on('keyup', dict.keyup);
-
-    // 头部工具栏事件
-    layero.off('click').on('click','*[toolbar-event]', function () {
+  
+    var scalexFlag = true;
+    //工具栏事件
+    dict.layero.off('click').on('click', '*[toolbar-event]', function () {
       var othis = $(this), event = othis.attr('toolbar-event');
+      var img = dict.layero.find('.layer-photos-pictures img[data-index="'+dict.imgIndex +'"]');
+      var image = dict.images[dict.imgIndex];
       switch (event) {
         case 'rotate':
-          dict.image.rotate = ((dict.image.rotate || 0) + Number(othis.attr('data-option'))) % 360;
-          dict.imgElem.css({
-            transform: dict.getTransform(dict.image)
+          image.rotate = ((image.rotate || 0) + Number(othis.attr('data-option'))) % 360;
+          img.css({
+            transform: dict.getTransform(image)
           });
           break;
         case 'scalex':
-          dict.image.scaleX = dict.image.scaleX === -1 ? 1 : -1;
-          dict.imgElem.css({
-            transform: dict.getTransform(dict.image)
+          if (scalexFlag) {
+            image.scaleX = -1;
+            scalexFlag = false;
+          } else {
+            image.scaleX = 1;
+            scalexFlag = true;
+          }
+          scalexFlag !== scalexFlag;
+          img.css({
+            transform: dict.getTransform(image)
           });
           break;
         case 'zoom':
           var ratio = Number(othis.attr('data-option'));
-          dict.image.scale = (dict.image.scale || 1) + ratio;
-          // 缩小状态最小值
-          if (ratio < 0 && dict.image.scale < 0 - ratio) {
-            dict.image.scale = 0 - ratio;
+          if (ratio < 0) {
+            ratio = 1 / (1 - ratio);
+          } else {
+            ratio = 1 + ratio;
           }
-          dict.imgElem.css({
-            transform: dict.getTransform(dict.image)
+          image.width = image.width * ratio;
+          image.height = image.height * ratio;
+          img.css({
+            width: image.width,
+            height: image.height,
+            transform: dict.getTransform(image)
           });
+          dict.setArea(image);
           break;
         case 'reset':
-          dict.image.scaleX = 1;
-          dict.image.scale = 1;
-          dict.image.rotate = 0;
-          dict.imgElem.css({
+          scalexFlag = true;
+          dict.isMove = false;
+          image.scaleX = 1;
+          image.rotate = 0;
+          image.width = image.oldWidth;
+          image.height = image.oldHeight;
+          img.css({
+            width: image.oldWidth,
+            height: image.oldHeight,
             transform: 'none'
           });
+          dict.setArea(image);
           break;
         case 'close':
-          layer.close(index);
+          layer.close(dict.index);
           break;
       }
-      that.offset();
-      that.auto(index);
     });
-    
+  
+    // 缩略图点击事件
+    dict.layero.on('click', '.layui-layer-images-thumb-item', function () {
+      var othis = $(this);
+      var index = parseInt(othis.attr('data-index'));
+      if (index === dict.imgIndex - 1) return;
+      dict.imgIndex = index + 1;
+      dict.setListScroll(othis);
+      dict.switchImage();
+      //dict.restImageAttr(index > dict.imgIndex ? index - 1 : index + 1);
+    })
   };
   
-  // 图片预加载
-  function loadImage(url, callback, error) {   
+  // 加载动画
+  dict.loading = function () {
+    dict.loadi =  layer.load(1, {
+      shade: dict.index ? 0 : ('shade' in options ? false : 0.9),
+      scrollbar: false
+    });
+  }
+  
+  // 加载图片
+  dict.loadImage = function (url, callback) {
     var img = new Image();
-    img.src = url; 
-    if(img.complete){
+    img.src = url;
+    if (img.complete) {
       return callback(img);
     }
-    img.onload = function(){
+    img.onload = function () {
       img.onload = null;
       callback(img);
     };
-    img.onerror = function(e){
+    img.onerror = function (e) {
       img.onerror = null;
-      error(e);
-    };  
+      dict.error(e);
+    };
   }
   
-  dict.loadi = layer.load(1, {
-    shade: 'shade' in options ? false : 0.9,
-    scrollbar: false
-  });
-
-  loadImage(data[start].src, function(img){
+  //若实际图片的宽或者高比
+  dict.getWinArea = function (img) {
+    var imgarea = [img.width, img.height];
+    var winarea = [win.width() - 100, win.height() - 100];
+  
+    // 若实际图片的宽或者高比 屏幕大（那么进行缩放）
+    if (!options.full && (imgarea[0] > winarea[0] || imgarea[1] > winarea[1])) {
+      var wh = [imgarea[0] / winarea[0], imgarea[1] / winarea[1]];// 取宽度缩放比例、高度缩放比例
+      if (wh[0] > wh[1]) {// 取缩放比例最大的进行缩放
+        imgarea[0] = imgarea[0] / wh[0];
+        imgarea[1] = imgarea[1] / wh[0];
+      } else if (wh[0] < wh[1]) {
+        imgarea[0] = imgarea[0] / wh[1];
+        imgarea[1] = imgarea[1] / wh[1];
+      }
+    }
+  
+    dict.images[dict.imgIndex] = {
+      oldWidth: imgarea[0],
+      oldHeight: imgarea[1],
+      width: imgarea[0],
+      height: imgarea[1],
+    };
+  
+    return [imgarea[0] + 'px', imgarea[1] + 'px'];
+  }
+  
+  // 错误信息
+  dict.error = function (e) {
     layer.close(dict.loadi);
-    
-    var alt = data[start].alt || '';
-
-    // 切换图片时不出现动画
-    if(key) options.anim = -1;
-    
+    layer.msg('&#x5F53;&#x524D;&#x56FE;&#x7247;&#x5730;&#x5740;&#x5F02;&#x5E38;<br>&#x662F;&#x5426;&#x7EE7;&#x7EED;&#x67E5;&#x770B;&#x4E0B;&#x4E00;&#x5F20;&#xFF1F;', {
+      time: 30000,
+      btn: ['&#x4E0B;&#x4E00;&#x5F20;', '&#x4E0D;&#x770B;&#x4E86;'],
+      yes: function () {
+        data.length > 1 && dict.imgnext(true, true);
+      }
+    });
+  }
+  //获取移动方向
+  dict.getMoveDirection = function (x1, x2, y1, y2) {
+    return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? (x1 - x2 > 0 ? 'Left' : 'Right') : (y1 - y2 > 0 ? 'Up' : 'Down');
+  }
+  
+  // 首次打开相册
+  dict.loading();
+  dict.loadImage(data[start].src, function (img) {
+    layer.close(dict.loadi);
     // 弹出图片层
     dict.index = layer.open($.extend({
       type: 1,
       id: 'layui-layer-photos',
-      area: function(){
-        var imgarea = [img.width, img.height];
-        var winarea = [$(window).width() - 100, $(window).height() - 100];
-        
-        // 若实际图片的宽或者高比 屏幕大（那么进行缩放）
-        if(!options.full && (imgarea[0]>winarea[0]||imgarea[1]>winarea[1])){
-          var wh = [imgarea[0]/winarea[0],imgarea[1]/winarea[1]];// 取宽度缩放比例、高度缩放比例
-          if(wh[0] > wh[1]){// 取缩放比例最大的进行缩放
-            imgarea[0] = imgarea[0]/wh[0];
-            imgarea[1] = imgarea[1]/wh[0];
-          } else if(wh[0] < wh[1]){
-            imgarea[0] = imgarea[0]/wh[1];
-            imgarea[1] = imgarea[1]/wh[1];
-          }
-        }
-
-        return [imgarea[0]+'px', imgarea[1]+'px']; 
-      }(),
+      area: dict.getWinArea(img),
       title: false,
       shade: 0.9,
       shadeClose: true,
       closeBtn: false,
-      move: '.layer-layer-photos-main img',
+      move: '.layui-layer-phimg .layer-photos-pictures',
       moveType: 1,
       scrollbar: false,
       moveOut: true,
       anim: 5,
       isOutAnim: false,
       skin: 'layui-layer-photos' + skin('photos'),
-      content: '<div class="layer-layer-photos-main">'
-        + '<img src="'+ data[start].src +'" alt="'+ alt +'" layer-pid="'+ (data[start].pid || '') +'">'
-        + function(){
-          var arr = ['<div class="layui-layer-photos-pointer">'];
-
+      content: '<div class="layui-layer-phimg">'
+        + '<div class="layer-photos-pictures"><img data-index="'+dict.imgIndex+'" src="' + (data[start].src) + '" alt="' + (data[start].alt || '') + '" layer-pid="' + (data[start].pid || '') + '" /></div>'
+        + function () {
+          var arr = ['<div class="layui-layer-imgsee">'];
+  
           // 左右箭头翻页
           if (data.length > 1) {
-            arr.push(['<div class="layer-layer-photos-page">',
-              '<span class="layui-icon layui-icon-left layui-layer-photos-prev"></span>',
-              '<span class="layui-icon layui-icon-right layui-layer-photos-next"></span>',
-            '</div>'].join(''));
+            arr.push(['<div class="layui-layer-imguide">',
+              '<span class="layui-icon layui-icon-left layui-layer-iconext layui-layer-imgprev"></span>',
+              '<span class="layui-icon layui-icon-right layui-layer-iconext layui-layer-imgnext"></span>',
+              '</div>'].join(''));
           }
-
-          // 头部工具栏
-          if (options.toolbar) {
+  
+          // 底部栏
+          if (!options.hideFooter) {
+            arr.push(['<div class="layui-layer-imgbar">',
+              '<div class="layui-layer-imgtit">',
+              '<h3>' + (data[start].alt || '') + '</h3>',
+              '<em>' + dict.imgIndex + ' / ' + data.length + '</em>',
+              '<a href="' + data[start].src + '" target="_blank">查看原图</a>',
+              '</div>',
+              '</div>'].join(''));
+          }
+  
+          //缩略图栏
+          if (options.thumbBar){
             arr.push([
-              '<div class="layui-layer-photos-toolbar layui-layer-photos-header">',
-                '<span toolbar-event="rotate" data-option="90" title="旋转"><i class="layui-icon layui-icon-refresh"></i></span>',
-                '<span toolbar-event="scalex" title="变换"><i class="layui-icon layui-icon-slider"></i></span>',
-                '<span toolbar-event="zoom" data-option="0.1" title="放大"><i class="layui-icon layui-icon-add-circle"></i></span>',
-                '<span toolbar-event="zoom" data-option="-0.1" title="缩小"><i class="layui-icon layui-icon-reduce-circle"></i></span>',
-                '<span toolbar-event="reset" title="还原"><i class="layui-icon layui-icon-refresh-1"></i></span>',
-                '<span toolbar-event="close" title="关闭"><i class="layui-icon layui-icon-close"></i></span>',
+              '<div class="layui-layer-images-thumb '+(!options.hideFooter ? 'onshow-footer' : '')+'">',
+              '<div class="layui-layer-images-thumb-list">',
+              (function () {
+                var items = [];
+                layui.each(data, function (index, item){
+                  if (!options.srcUseThumb && !item.thumb) return;
+                  items.push('<div data-index="'+index+'" class="layui-layer-images-thumb-item '+(dict.imgIndex -1 === index ? 'active' : '')+'" style="background-image: url('+( item.thumb || item.src )+')" />');
+                });
+                return items.join('');
+              })(),
+              '</div>',
               '</div>'
             ].join(''));
           }
-
-          // 底部栏
-          if (options.footer) {
-            arr.push(['<div class="layui-layer-photos-toolbar layui-layer-photos-footer">',
-              '<h3>'+ alt +'</h3>',
-              '<em>'+ dict.imgIndex +' / '+ data.length +'</em>',
-              '<a href="'+ data[start].src +'" target="_blank">查看原图</a>',
-            '</div>'].join(''));
+  
+          //工具栏
+          if (options.toolbar) {
+            arr.push([
+              '<div class="layui-layer-images-toolbar">',
+              '<div class="layer-images-tool-item">',
+              '<span toolbar-event="rotate" data-option="-15" title="向左旋转15°" style="transform: scaleX(-1);"><i class="layui-icon layui-icon-refresh rotate"></i></span>',
+              '<span toolbar-event="rotate" data-option="15" title="向右旋转15°"><i class="layui-icon layui-icon-refresh"></i></span>',
+              '<span toolbar-event="scalex" title="翻转"><i class="layui-icon layui-icon-slider"></i></span>',
+              '<span toolbar-event="zoom" data-option="0.1" title="放大图片"><i class="layui-icon layui-icon-add-circle"></i></span>',
+              '<span toolbar-event="zoom" data-option="-0.1" title="缩小图片"><i class="layui-icon layui-icon-reduce-circle"></i></span>',
+              '<span toolbar-event="reset" title="重置图片"><i class="layui-icon layui-icon-refresh-1"></i></span>',
+              '<span toolbar-event="close" title="关闭"><i class="layui-icon layui-icon-close"></i></span>',
+              '</div>',
+              '</div>'
+            ].join(''));
           }
-
+  
           arr.push('</div>');
           return arr.join('');
         }()
-      +'</div>',
-      success: function(layero, index, that){
-        dict.main = layero.find('.layer-layer-photos-main');
-        dict.footer = layero.find('.layui-layer-photos-footer');
-        dict.imgElem = dict.main.children('img');
-        dict.event(layero, index, that);
-        options.tab && options.tab(data[start], layero);
-        typeof success === 'function' && success(layero);
-      }, end: function(){
+        + '</div>',
+      success: function (layero) {
+        dict.layero = layero;
+        dict.bigimg = layero.find('.layui-layer-phimg');
+        dict.imgsee = layero.find('.layui-layer-imgbar');
+        dict.isMove = false;
+        if (options.toolbar) {
+          layero.find('.layui-layer-content').addClass('layui-layer-images-toolbar-mode');
+          dict.bigimg.find('img[data-index="'+dict.imgIndex+'"]').css({
+            width: dict.images[dict.imgIndex].width,
+            height: dict.images[dict.imgIndex].height
+          });
+        }
+        dict.event();
+        options.success && typeof options.success === 'function' && options.success(layero);
+      },
+      end: function () {
         dict.end = true;
         $(document).off('keyup', dict.keyup);
+      },
+      moveEnd: function(layero){
+        dict.isMove = true;
+        dict.isMoveX = dict.isMoveY = false;
+        if (options.pullSwitch){
+          dict.isMove = false;
+          layero.css({top: dict.layeroOffsetTop, left: dict.layeroOffsetLeft });
+        }
+      },
+      moveStart: function (layero, event) {
+        if (!options.pullSwitch) return;
+        dict.startPoints = {x: event.pageX, y: event.pageY};
+        dict.layeroOffsetTop = layero[0].offsetTop;
+        dict.layeroOffsetLeft = layero[0].offsetLeft;
+      },
+      moving: function (obj) {
+        if (!options.pullSwitch) return;
+        dict.direction = dict.getMoveDirection(dict.startPoints.x, obj.event.pageX, dict.startPoints.y, obj.event.pageY);
+        if (dict.direction === 'Up' || dict.direction === 'Down'){
+          if (dict.isMoveX) return;
+          dict.isMoveY = true;
+          obj.layero.css({top: obj.rect.top });
+          if (Math.abs(obj.layero[0].offsetTop - dict.layeroOffsetTop) >= dict.distance){
+            obj.config.anim = 0;
+            obj.config.isOutAnim = true;
+            layer.close(dict.index);
+            return false;
+          }
+        }else {
+          if (dict.isMoveY) return;
+          dict.isMoveX = true;
+          obj.layero.css({left: obj.rect.left });
+          var moveDistance = Math.abs(obj.layero[0].offsetLeft - dict.layeroOffsetLeft);
+          if (moveDistance > dict.images[dict.imgIndex].oldWidth / 3){
+            var img = dict.layero.find('.layer-photos-pictures img[data-index="'+dict.imgIndex+'"]');
+            var index = parseInt(img.attr('data-index')) - 1;
+            if (dict.direction === 'Right' && data[index + 1]){
+              img.addClass('layui-hide');
+              dict.imgnext(true);
+              $(document).mouseup();
+              return false;
+            }
+            if (dict.direction === 'Left' && data[index - 1]){
+              img.addClass('layui-hide');
+              dict.imgprev(true);
+              $(document).mouseup();
+              return false;
+            }
+          }
+        }
       }
     }, options));
-  }, function(){
-    layer.close(dict.loadi);
-    layer.msg('&#x5F53;&#x524D;&#x56FE;&#x7247;&#x5730;&#x5740;&#x5F02;&#x5E38;<br>&#x662F;&#x5426;&#x7EE7;&#x7EED;&#x67E5;&#x770B;&#x4E0B;&#x4E00;&#x5F20;&#xFF1F;', {
-      time: 30000, 
-      btn: ['&#x4E0B;&#x4E00;&#x5F20;', '&#x4E0D;&#x770B;&#x4E86;'], 
-      yes: function(){
-        data.length > 1 && dict.imgnext(true,true);
-      }
-    });
   });
 };
 
