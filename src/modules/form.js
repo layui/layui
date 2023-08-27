@@ -159,104 +159,121 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         options.autocomplete && inputs.attr('autocomplete', options.autocomplete);
 
         // 初始化输入框动态点缀
-        elemForm.find('input[lay-affix],textarea[lay-affix]').each(function(){
+        elemForm.find('input[lay-affix],textarea[lay-affix],textarea[show-count]').each(function () {
           var othis = $(this);
           var affix = othis.attr('lay-affix');
+          var showCout = othis.attr('show-count');
           var CLASS_WRAP = 'layui-input-wrap';
           var CLASS_SUFFIX = 'layui-input-suffix';
           var CLASS_AFFIX = 'layui-input-affix';
+          var CLASS_SHOW_COUNT = 'layui-textarea-count';
           var disabled = othis.is('[disabled]') || othis.is('[readonly]');
 
           // 根据是否空值来显示或隐藏元素
-          var showAffix = function(elem, value){
+          var showAffix = function (elem, value) {
             elem = $(elem);
-            if(!elem[0]) return;
+            if (!elem[0]) return;
             elem[$.trim(value) ? 'removeClass' : 'addClass'](HIDE);
           };
 
           // 渲染动态点缀内容
-          var renderAffix = function(opts){
+          var renderAffix = function (opts) {
             opts = $.extend({}, (affixOptions[affix] || {
               value: affix
             }), opts, lay.options(othis[0]));
-            var elemAffix = $('<div class="'+ CLASS_AFFIX +'">');
-            var value = layui.isArray(opts.value) ? opts.value : [opts.value];
-            var elemIcon = $(function(){
-              var arr = [];
-              layui.each(value, function(i, item){
-                arr.push('<i class="layui-icon layui-icon-'+ item + (
-                  opts.disabled ? (' '+ DISABLED) : ''
-                ) +'"></i>');
+            var elemAffix = $('<div class="' + CLASS_AFFIX + '">');
+
+            if (affix) {
+              var value = layui.isArray(opts.value) ? opts.value : [opts.value];
+              var elemIcon = $(function () {
+                var arr = [];
+                layui.each(value, function (i, item) {
+                  arr.push('<i class="layui-icon layui-icon-' + item + (
+                    opts.disabled ? (' ' + DISABLED) : ''
+                  ) + '"></i>');
+                });
+                return arr.join('');
+              }());
+
+              elemAffix.append(elemIcon); // 插入图标元素
+              // 追加 className
+              if (opts.split) elemAffix.addClass('layui-input-split');
+              if (opts.className) elemAffix.addClass(opts.className);
+
+              // 移除旧的元素
+              var hasElemAffix = othis.next('.' + CLASS_AFFIX);
+              if (hasElemAffix[0]) hasElemAffix.remove();
+
+              // 是否在规定的容器中
+              if (!othis.parent().hasClass(CLASS_WRAP)) {
+                othis.wrap('<div class="' + CLASS_WRAP + '"></div>');
+              }
+
+              // 是否已经存在后缀元素
+              var hasElemSuffix = othis.next('.' + CLASS_SUFFIX);
+              if (hasElemSuffix[0]) {
+                hasElemAffix = hasElemSuffix.find('.' + CLASS_AFFIX);
+                if (hasElemAffix[0]) hasElemAffix.remove();
+
+                hasElemSuffix.prepend(elemAffix);
+
+                othis.css('padding-right', function () {
+                  var paddingRight = othis.closest('.layui-input-group')[0]
+                    ? 0
+                    : hasElemSuffix.outerWidth();
+                  return paddingRight + elemAffix.outerWidth()
+                });
+              } else {
+                elemAffix.addClass(CLASS_SUFFIX);
+                othis.after(elemAffix);
+              }
+
+              opts.show === 'auto' && showAffix(elemAffix, othis.val());
+
+              // 点击动态后缀事件
+              elemIcon.on('click', function () {
+                var inputFilter = othis.attr('lay-filter');
+                if ($(this).hasClass(DISABLED)) return;
+
+                typeof opts.click === 'function' && opts.click.call(this, othis, opts);
+
+                // 对外事件
+                layui.event.call(this, MOD_NAME, 'input-affix(' + inputFilter + ')', {
+                  elem: othis[0],
+                  affix: affix,
+                  options: opts
+                });
               });
-              return arr.join('');
-            }());
-            
-            elemAffix.append(elemIcon); // 插入图标元素
-
-            // 追加 className
-            if(opts.split) elemAffix.addClass('layui-input-split');
-            if(opts.className) elemAffix.addClass(opts.className);
-
-            // 移除旧的元素
-            var hasElemAffix = othis.next('.'+ CLASS_AFFIX);
-            if(hasElemAffix[0]) hasElemAffix.remove();
-
-            // 是否在规定的容器中
-            if(!othis.parent().hasClass(CLASS_WRAP)){
-              othis.wrap('<div class="'+ CLASS_WRAP +'"></div>');
             }
 
-            // 是否已经存在后缀元素
-            var hasElemSuffix = othis.next('.'+ CLASS_SUFFIX);
-            if(hasElemSuffix[0]){
-              hasElemAffix = hasElemSuffix.find('.'+ CLASS_AFFIX);
-              if(hasElemAffix[0]) hasElemAffix.remove();
-
-              hasElemSuffix.prepend(elemAffix);
-
-              othis.css('padding-right', function(){
-                var paddingRight = othis.closest('.layui-input-group')[0] 
-                  ? 0 
-                : hasElemSuffix.outerWidth();
-                return paddingRight + elemAffix.outerWidth()
-              });
-            } else {
-              elemAffix.addClass(CLASS_SUFFIX);
-              othis.after(elemAffix);
+            if (showCout !== undefined && othis.is('textarea')) {
+              var length = othis.val().length;
+              othis.after('<div class="' + CLASS_SHOW_COUNT + '">' + function () {
+                return othis.attr('maxlength') ? length + '/' + othis.attr('maxlength') : length;
+              }() + '</div>');
             }
 
-            opts.show === 'auto' && showAffix(elemAffix, othis.val());
-            
             // 输入事件
-            othis.on('input propertychange', function(){
+            othis.on('input propertychange', function () {
               var value = this.value;
-              opts.show === 'auto' && showAffix(elemAffix, value);
+
+              opts.show === 'auto' && affix && showAffix(elemAffix, value);
+              if (showCout !== undefined) {
+                var txter = $(this);
+                txter.next().text(txter.attr('maxlength') ? value.length + '/' + txter.attr('maxlength') : value.length);
+              }
             });
-            
-            // 点击动态后缀事件
-            elemIcon.on('click', function(){
-              var inputFilter = othis.attr('lay-filter');
-              if($(this).hasClass(DISABLED)) return;
-              
-              typeof opts.click === 'function' && opts.click.call(this, othis, opts);
-              
-              // 对外事件
-              layui.event.call(this, MOD_NAME, 'input-affix('+ inputFilter +')', {
-                elem: othis[0],
-                affix: affix,
-                options: opts
-              });
-            });
+
           };
-          
+
           // 动态点缀配置项
           var affixOptions = {
             eye: { // 密码显隐
               value: 'eye-invisible',
-              click: function(elem, opts){ // 事件
+              click: function (elem, opts) { // 事件
                 var SHOW_NAME = 'LAY_FORM_INPUT_AFFIX_SHOW';
                 var isShow = elem.data(SHOW_NAME);
-                
+
                 elem.attr('type', isShow ? 'password' : 'text').data(SHOW_NAME, !isShow);
 
                 renderAffix({
@@ -266,9 +283,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             },
             clear: { // 内容清除
               value: 'clear',
-              click: function(elem){
+              click: function (elem) {
                 elem.val('').focus();
                 showAffix($(this).parent(), null);
+                if (elem.attr('show-count') !== undefined) {
+                  elem.next().text(elem.attr('maxlength') ? elem.val().length + '/' + elem.attr('maxlength') : elem.val().length);
+                }
               },
               show: 'auto', // 根据输入框值是否存在来显示或隐藏点缀图标
               disabled: disabled // 跟随输入框禁用状态
@@ -278,7 +298,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               split: true,
               className: 'layui-input-number',
               disabled: othis.is('[disabled]'), // 跟随输入框禁用状态
-              click: function(elem){
+              click: function (elem) {
                 var index = $(this).index();
                 var value = elem.val();
                 var rawValue = value;
@@ -286,17 +306,17 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 var min = Number(elem.attr('min'));
                 var max = Number(elem.attr('max'));
 
-                if(isNaN(value)) return; // 若非数字，则不作处理
+                if (isNaN(value)) return; // 若非数字，则不作处理
 
                 value = Number(value);
                 value = index ? value - step : value + step;
 
                 // min max
-                if(value < min) value = min;
-                if(value > max) value = max;
+                if (value < min) value = min;
+                if (value > max) value = max;
 
                 // 获取小数点后位数
-                var decimals = function(step){
+                var decimals = function (step) {
                   var decimals = (step.toString().match(/\.(\d+$)/) || [])[1] || '';
                   return decimals.length;
                 };
@@ -304,13 +324,13 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 // 位数比较
                 var fixed = Math.max(decimals(step), decimals(rawValue));
 
-                if(fixed) value = value.toFixed(fixed);
+                if (fixed) value = value.toFixed(fixed);
 
                 elem.val(value);
               }
             }
           };
-          
+
           renderAffix();
         });
       }
