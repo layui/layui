@@ -1001,7 +1001,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         curr: curr,
         count: res[response.countName],
         type: opts.type,
-      }), sort(), done(res, 'renderData');
+        sort: true,
+      }), done(res, 'renderData');
     } else if(options.url){ // Ajax请求
       var params = {};
       // 当 page 开启，默认自动传递 page、limit 参数
