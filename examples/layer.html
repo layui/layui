@@ -1,20 +1,15 @@
- 
- 
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>layer 弹层 - layui</title>
-
-<link rel="stylesheet" href="../src/css/layui.css">
-
-<style>
-body{padding: 100px;}
-
-#photos li{float: left; margin: 0 1px 1px;}
-#photos img{max-height: 38px;}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>layer 弹层 - layui</title>
+  <link rel="stylesheet" href="../src/css/layui.css">
+  <style>
+  body{padding: 100px;}
+  #photos li{float: left; margin: 0 1px 1px;}
+  #photos img{max-height: 38px;}
+  </style>
 </head>
 <body>
 
@@ -30,10 +25,10 @@ body{padding: 100px;}
   <button class="layui-btn" lay-on="test8">Tab</button>
   <button class="layui-btn" lay-on="test9">Photo</button>
   <button class="layui-btn" lay-on="testTime">自动关闭</button>
-  <a href="https://layui.gitee.io/v2/demo/layer.html" target="_blank" class="layui-btn">更多例子</a>
+  <a href="https://layui.dev/docs/2.8/layer/" target="_blank" class="layui-btn">更多例子</a>
 </div>
 
-<div id="test11111" style="display: none; padding: 20px;">
+<div id="test11111" style="display: none; padding: 16px;">
   content 指向放置在页面的一段隐藏元素
 </div>
 
@@ -48,8 +43,8 @@ body{padding: 100px;}
 
 <script>
 var LAYUI_GLOBAL = {
-  //path: '../src/'
-  //,layerPath: '../release/layer/src/'
+  // path: '../src/',
+  // layerPath: '../release/layer/src/'
 };
 </script>
 
@@ -224,7 +219,9 @@ layui.use(['layer', 'util'], function(layer, util){
   
   // 相册层
   layer.photos({
-    photos: '#photos' //$('#photos')
+    photos: '#photos', // $('#photos')
+    // toolbar: false,
+    // footer: false
   });
   
   //动态追加

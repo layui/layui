@@ -111,32 +111,54 @@
     return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
   };
 
+  // 获取 style rules
+  lay.getStyleRules = function(style, callback) {
+    if (!style) return;
+
+    var sheet = style.sheet || style.styleSheet || {};
+    var rules = sheet.cssRules || sheet.rules;
+
+    if (typeof callback === 'function') {
+      layui.each(rules, function(i, item){
+        if (callback(item)) return true;
+      });
+    }
+
+    return rules;
+  };
+
   // 创建 style 样式
   lay.style = function(options){
     options = options || {};
 
     var style = lay.elem('style');
     var styleText = options.text || '';
-    var target = options.target || lay('body')[0];
+    var target = options.target;
     
-    if(!styleText) return;
+    if (!styleText) return;
     
     // 添加样式
-    if('styleSheet' in style){
+    if ('styleSheet' in style) {
       style.setAttribute('type', 'text/css');
       style.styleSheet.cssText = styleText;
     } else {
       style.innerHTML = styleText;
     }
     
-    lay.style.index = lay.style.index || 0;
-    lay.style.index++;
-    
-    var id = style.id = 'LAY-STYLE-'+ (options.id || 'DF-'+ lay.style.index)
-    var styleElem = lay(target).find('#'+ id);
-    
-    styleElem[0] && styleElem.remove();
-    lay(target).append(style);
+    // ID
+    style.id = 'LAY-STYLE-'+ (options.id || function(index) {
+      lay.style.index++;
+      return 'DF-'+ index;
+    }(lay.style.index || 0));
+
+    // 是否向目标容器中追加 style 元素
+    if (target) {
+      var styleElem = lay(target).find('#'+ style.id);
+      styleElem[0] && styleElem.remove();
+      lay(target).append(style);
+    }
+
+    return style;
   };
   
   // 元素定位

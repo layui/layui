@@ -198,5 +198,4 @@
 
 <h3 id="more-examples" class="ws-anchor ws-bold">更多示例</h3>
 
-> - [🎉 分享：在 table 组件中使用 select/dropdown/laydate 等组件实现多样化编辑](https://gitee.com/layui/layui/issues/I5JBUE)
-> - 不定期分享在 [Gitee Issues](https://gitee.com/layui/layui/issues)
+> - 🎉 不定期分享在 [Gitee Issues](https://gitee.com/layui/layui/issues)
