@@ -190,6 +190,9 @@ layui.define(['table'], function (exports) {
             indeterminate: !checkStatus.isAll && checkStatus.data.length
           })
         }
+        if (!isRenderData && thatOptionsTemp.autoSort && thatOptionsTemp.initSort && thatOptionsTemp.initSort.type) {
+          treeTable.sort(id);
+        }
 
         that.renderTreeTable(tableView);
 
@@ -909,7 +912,7 @@ layui.define(['table'], function (exports) {
             d[idKey] !== undefined && (that.status.expand[d[idKey]] = true);
           }
         });
-        if (options.initSort && options.initSort.type && (!options.url || options.autoSort)) {
+        if (options.initSort && options.initSort.type && options.autoSort) {
           return treeTable.sort(id);
         }
         var trAll = table.getTrHtml(id, tableDataFlat);
@@ -1126,7 +1129,8 @@ layui.define(['table'], function (exports) {
   Class.prototype.getTableData = function () {
     var that = this;
     var options = that.getOptions();
-    return options.url ? table.cache[options.id] : options.data;
+    // return options.url ? table.cache[options.id] : options.data;
+    return table.cache[options.id];
   }
 
   treeTable.updateStatus = function (id, statusObj, data) {
@@ -1147,7 +1151,7 @@ layui.define(['table'], function (exports) {
     if(!that) return;
 
     var options = that.getOptions();
-    if (!options.url || options.autoSort) {
+    if (options.autoSort) {
       that.initData();
       treeTable.renderData(id);
     }
