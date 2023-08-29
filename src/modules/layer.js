@@ -1500,13 +1500,16 @@ layer.photos = function(options, loop, key){
     }
   };
 
-  // 设置thumb位置
+  // 缩略图滚动
   dict.setListScroll = function (elem) {
-    var listElem = elem.parents('.layui-layer-photos-thumb');
-    var autoLeft = elem.outerWidth() * dict.imgIndex - 1;
-    listElem.animate({
-      scrollLeft: autoLeft - listElem.width() / 3
-    }, 200);
+    var listElem = elem.parent();
+    var isOuter = (listElem.children().length - 1) * elem.outerWidth() > win.width();
+    if (isOuter){
+      var autoLeft = elem.outerWidth() * dict.imgIndex - 1;
+      listElem.animate({
+        scrollLeft: autoLeft - listElem.width() / 3
+      }, 200);
+    }
     elem.addClass('active').siblings().removeClass('active');
   }
 
