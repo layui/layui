@@ -105,19 +105,27 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           className: 'file-b',
           title: ['复制代码'],
           event: function(el, type){
-            typeof options.onCopy === 'function' ? options.onCopy(finalCode) : function(){
+            var text = util.unescape(finalCode);
+            try {
+              navigator.clipboard.writeText(text).then(function(){
+                layer.msg('已复制', {icon: 1});
+              });
+            } catch(e) {
+              var textarea = document.createElement('textarea');
+              textarea.value = text;
+              textarea.style.position = 'absolute';
+              textarea.style.opacity = '0';
+              document.body.appendChild(textarea);
+              textarea.select();
               try {
-                navigator.clipboard.writeText(util.unescape(finalCode)).then(function(){
-                  layer.msg('已复制', {
-                    icon: 1
-                  });
-                });
-              } catch(e) {
-                layer.msg('复制失败', {
-                  icon: 2
-                });
+                document.execCommand('copy');
+                layer.msg('已复制', {icon: 1});
+              } catch(err) {
+                layer.msg('复制失败', {icon: 2});
               }
-            }();
+              textarea.remove();
+            }
+            typeof options.onCopy === 'function' && options.onCopy(text);
           }
         }
       };
@@ -308,7 +316,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         if(options.skin === 'notepad') options.skin = 'dark';
         othis.removeClass('layui-code-dark layui-code-light');
         othis.addClass('layui-code-'+ options.skin);
-      } 
+      }
 
       if(options.highlighter){
         othis.addClass([options.highlighter, 'language-' + (options.lang || 'html')].join(' '));

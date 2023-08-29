@@ -238,21 +238,28 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-tabmain .layui-layer-tabli{display:none;}
 .layui-layer-tabmain .layui-layer-tabli.layui-this{display: block;}
 
-/* photo模式 */
+/* photos */
 .layui-layer-photos{background: none; box-shadow: none;}
-.layui-layer-photos .layui-layer-content{overflow:hidden; text-align: center;}
-.layui-layer-photos .layui-layer-phimg img{position: relative; width:100%; display: inline-block; *display:inline; *zoom:1; vertical-align:top;}
-.layui-layer-imgprev, .layui-layer-imgnext{position: fixed; top: 50%; width: 52px; height: 52px; line-height: 52px; margin-top: -26px; cursor: pointer; font-size: 52px; color: #717171;}
-.layui-layer-imgprev{left: 32px;}
-.layui-layer-imgnext{right: 32px;}
-.layui-layer-imgprev:hover,
-.layui-layer-imgnext:hover{color: #959595;}
-.layui-layer-imgbar{position: fixed; left:0; right: 0; bottom:0; width:100%; height: 40px; line-height: 40px; background-color:#000\9; filter:Alpha(opacity=60); background-color: rgba(2,0,0,.35); color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; font-size:0;}
-.layui-layer-imgtit{/*position:absolute; left:20px;*/}
-.layui-layer-imgtit *{display:inline-block; *display:inline; *zoom:1; vertical-align:top; padding: 0 5px; font-size:12px; color: #fff;}
-.layui-layer-imgtit h3{max-width:65%; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; font-weight: 300;}
-.layui-layer-imgtit a:hover{color: #fff; text-decoration: underline;}
-.layui-layer-imgtit em{font-style: normal;}
+.layui-layer-photos .layui-layer-content{overflow: visible; text-align: center;}
+.layui-layer-photos .layer-layer-photos-main img{position: relative; width:100%; display: inline-block; *display:inline; *zoom:1; vertical-align:top;}
+.layui-layer-photos-prev,
+.layui-layer-photos-next{position: fixed; top: 50%; width: 52px; height: 52px; line-height: 52px; margin-top: -26px; cursor: pointer; font-size: 52px; color: #717171;}
+.layui-layer-photos-prev{left: 32px;}
+.layui-layer-photos-next{right: 32px;}
+.layui-layer-photos-prev:hover,
+.layui-layer-photos-next:hover{color: #959595;}
+
+.layui-layer-photos-toolbar{position: fixed; left: 0; right: 0; bottom: 0; width: 100%; height: 52px; line-height: 52px; background-color: #000\9; filter: Alpha(opacity=60); background-color: rgba(0,0,0,.32); color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; font-size:0;}
+.layui-layer-photos-toolbar > *{display:inline-block; vertical-align: top; padding: 0 16px; font-size: 12px; color: #fff; *display:inline; *zoom: 1;}
+.layui-layer-photos-toolbar *{font-size: 12px;}
+.layui-layer-photos-header{top: 0; bottom: auto;}
+.layui-layer-photos-header > span{cursor: pointer;}
+.layui-layer-photos-header > span:hover{background-color: rgba(51,51,51,.32);}
+.layui-layer-photos-header .layui-icon{font-size: 18px;}
+.layui-layer-photos-footer > h3{max-width: 65%; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
+.layui-layer-photos-footer a:hover{text-decoration: underline;}
+.layui-layer-photos-footer em{font-style: normal;}
+
 
 /* 关闭动画 */
 @-webkit-keyframes layer-bounceOut {

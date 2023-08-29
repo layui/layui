@@ -75,7 +75,7 @@ layui.use(['table', 'dropdown'], function(){
       {field:'username', width:80, title: '用户'},
       {field:'email', title:'邮箱 <i class="layui-icon layui-icon-tips layui-font-14" lay-event="email-tips" title="该字段开启了编辑功能" style="margin-left: 5px;"></i>', fieldTitle: '邮箱', hide: 0, width:150, edit: 'text'},
       {field:'sex', width:80, title: '性别', sort: true},
-      {field:'sign', title: '签名', edit: 'textarea', minWidth: 260, expandedWidth: 260, style: '-moz-box-align: start;', totalRow: '{{!人物：<span class="layui-badge-rim">唐代：{{= d.TOTAL_ROW.era.tang }} </span> <span class="layui-badge-rim">宋代：{{= d.TOTAL_ROW.era.song }}</span> <span class="layui-badge-rim">现代：{{= d.TOTAL_ROW.era.xian }}</span>!}}'},
+      {field:'sign', title: '签名', edit: 'textarea', minWidth: 260, expandedWidth: 260, totalRow: '{{!人物：<span class="layui-badge-rim">唐代：{{= d.TOTAL_ROW.era.tang }} </span> <span class="layui-badge-rim">宋代：{{= d.TOTAL_ROW.era.song }}</span> <span class="layui-badge-rim">现代：{{= d.TOTAL_ROW.era.xian }}</span>!}}'},
       {field:'experience', width: 100, title: '积分', sort: true, totalRow: '{{!{{= d.TOTAL_NUMS }} 😊!}}'}, 
       {field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{!{{= parseInt(d.TOTAL_NUMS) }} 次!}}'},
       {field:'ip', title:'IP', width: 120},

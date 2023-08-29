@@ -68,7 +68,7 @@ layui.use(function(){
             }
           ]
         },
-        hideFooter: true // 是否隐藏底部栏 --- 2.8+
+        footer: false // 是否显示底部栏 --- 2.8.16+
       });
     },
     'test-tips-photos': function(){
