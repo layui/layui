@@ -240,7 +240,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 
 /* photos */
 .layui-layer-photos{background: none; box-shadow: none;}
-.layui-layer-photos .layui-layer-content{overflow: visible; text-align: center;}
+.layui-layer-photos .layui-layer-content{overflow:visible; text-align: center;-moz-user-select: none;  -webkit-user-select: none;  -ms-user-select: none;  -khtml-user-select: none;  user-select: none;}
 .layui-layer-photos .layer-layer-photos-main img{position: relative; width:100%; display: inline-block; *display:inline; *zoom:1; vertical-align:top;}
 .layui-layer-photos-prev,
 .layui-layer-photos-next{position: fixed; top: 50%; width: 52px; height: 52px; line-height: 52px; margin-top: -26px; cursor: pointer; font-size: 52px; color: #717171;}
