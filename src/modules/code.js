@@ -104,27 +104,27 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           className: 'file-b',
           title: ['复制代码'],
           event: function(el, type){
-            typeof options.onCopy === 'function' ? options.onCopy(finalCode) : function(){
+            var text = util.unescape(finalCode);
+            try {
+              navigator.clipboard.writeText(text).then(function(){
+                layer.msg('已复制', {icon: 1});
+              });
+            } catch(e) {
+              var textarea = document.createElement('textarea');
+              textarea.value = text;
+              textarea.style.position = 'absolute';
+              textarea.style.opacity = '0';
+              document.body.appendChild(textarea);
+              textarea.select();
               try {
-                navigator.clipboard.writeText(util.unescape(finalCode)).then(function(){
-                  layer.msg('已复制', {
-                    icon: 1
-                  });
-                });
-              } catch(e) {
-                var text = document.createElement("textarea");
-                text.setAttribute("readonly", "readonly");
-                text.value = util.unescape(finalCode);
-                document.body.appendChild(text);
-                text.select();
-                if (document.execCommand("copy")){
-                  layer.msg('已复制', {icon: 1});
-                }else {
-                  layer.msg('复制失败', {icon: 2});
-                }
-                document.body.removeChild(text);
+                document.execCommand('copy');
+                layer.msg('已复制', {icon: 1});
+              } catch(err) {
+                layer.msg('复制失败', {icon: 2});
               }
-            }();
+              textarea.remove();
+            }
+            typeof options.onCopy === 'function' && options.onCopy(text);
           }
         }
       };
