@@ -1568,7 +1568,9 @@ layer.photos = function(options, loop, key){
       left: offsetLeft,
       width: image.width,
       height : image.height,
-    });
+    }).find('.layui-layer-content').css({
+        height: image.height
+      });
   }
 
   //切换图片
