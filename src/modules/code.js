@@ -302,10 +302,9 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         if(options.skin === 'notepad') options.skin = 'dark';
         othis.removeClass('layui-code-dark layui-code-light');
         othis.addClass('layui-code-'+ options.skin);
-      } 
+      }
 
-      
-      
+
 
       // 转义 HTML 标签
       if(options.encode) html = util.escape(html); // 编码
