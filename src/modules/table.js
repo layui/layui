@@ -1001,7 +1001,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         curr: curr,
         count: res[response.countName],
         type: opts.type,
-        sort: true,
+        sort: true
       }), done(res, 'renderData');
     } else if(options.url){ // Ajax请求
       var params = {};
