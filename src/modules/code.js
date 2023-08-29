@@ -36,7 +36,8 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
     text: {
       code: util.escape('</>'),
       preview: 'Preview'
-    }
+    },
+    lang: 'html'
   };
 
   var trim = function(str){
@@ -288,8 +289,13 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       }
 
       // 有序或无序列表
-      var listTag = options.ln ? 'ol' : 'ul';
-      var listElem = $('<'+ listTag +' class="layui-code-'+ listTag +'">');
+      var listTag = options.ln 
+        ? function(){
+          othis.addClass('layui-code-line-numbers')
+          return 'ol'
+        }()
+        : 'ul';
+      var listElem = $('<'+ listTag +' class="layui-code-lines">');
 
       // header
       var headerElem = $('<div class="'+ CONST.ELEM_TITLE +'">');
@@ -304,15 +310,19 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         othis.addClass('layui-code-'+ options.skin);
       } 
 
-      // 转义 HTML 标签
-      if(options.encode) html = util.escape(html); // 编码
-      // code 转 html
-      html = options.codeRender 
-        ? options.codeRender(html)
-        : (function(){
-          return '<li>' + html.replace(/[\r\t\n]+/g, '</li><li>') + '</li>'; // 转义换行符
-        })()
+      if(options.highlighter){
+        othis.addClass([options.highlighter, 'language-' + (options.lang || 'html')].join(' '));
+      }
 
+      // 转义 HTML 标签
+      if(options.encode && !options.codeRender) html = util.escape(html); // 编码
+      // code 转 html
+      html = (options.codeRender && !options.highlighter)
+        ? options.codeRender(html, options.lang)
+        : function(){
+            if(options.codeRender) html = options.codeRender(html, options.lang);
+            return '<li class="layui-code-line">' + html.replace(/[\r\t\n]+/g, '</li><li class="layui-code-line">') + '</li>'; // 转义换行符
+        }();
       // 生成列表
       othis.html(listElem.html(html));
       

@@ -10,31 +10,31 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 .layui-code-title{position: relative; padding: 0 10px; height: 40px; line-height: 40px; border-bottom: 1px solid #eee; font-size: 12px;}
 .layui-code-title > .layui-code-about{position: absolute; right: 10px; top: 0; color: #B7B7B7;}
 .layui-code-about > a{padding-left: 10px;}
-.layui-code-view > .layui-code-ol, 
-.layui-code-view > .layui-code-ul{max-height: 100%; padding: 0 !important; position: relative; overflow: auto;}
-.layui-code-view > .layui-code-ol > li{position: relative; margin-top: 0  !important; margin-left: 45px  !important; line-height: 20px; padding: 0 10px  !important; border-left: 1px solid #e2e2e2; list-style-type: decimal-leading-zero; *list-style-type: decimal; background-color: #fff;}
-.layui-code-view > .layui-code-ol > li:first-child, 
-.layui-code-view > .layui-code-ul > li:first-child{padding-top: 10px  !important;}
-.layui-code-view > .layui-code-ol > li:last-child, 
-.layui-code-view > .layui-code-ul > li:last-child{padding-bottom: 10px  !important;}
-.layui-code-view > .layui-code-ul > li{position: relative; line-height: 20px; padding: 0 10px  !important; list-style-type: none; *list-style-type: none; background-color: #fff;}
+.layui-code-view > .layui-code-lines{max-height: 100%; padding: 0 !important; position: relative; overflow: auto;}
+.layui-code-view.layui-code-line-numbers > .layui-code-lines > .layui-code-line{position: relative; margin-top: 0  !important; margin-left: 45px  !important; line-height: 20px; padding: 0 10px  !important; border-left: 1px solid #e2e2e2; list-style-type: decimal-leading-zero; *list-style-type: decimal; background-color: #fff;}
+.layui-code-view > .layui-code-lines > .layui-code-line:first-child{padding-top: 10px  !important;}
+.layui-code-view > .layui-code-lines > .layui-code-line:last-child{padding-bottom: 10px  !important;}
+.layui-code-view > .layui-code-lines > .layui-code-line{position: relative; line-height: 20px; padding: 0 10px  !important; list-style-type: none; *list-style-type: none; background-color: #fff;}
 .layui-code-view pre{margin: 0;}
+.layui-code-view.prism > .layui-code-lines > .layui-code-line,
+.layui-code-view.hljs > .layui-code-lines > .layui-code-line,
+.layui-code-view.shiki > .layui-code-lines > .layui-code-line{background-color: unset !important;}
 
 /* 深色风格 */
 .layui-code-dark{border: 1px solid #0C0C0C; border-left-color: #3F3F3F; background-color: #0C0C0C; color: #C2BE9E}
 .layui-code-dark > .layui-code-title{border-bottom: none;}
-.layui-code-dark > .layui-code-ol > li, 
-.layui-code-dark > .layui-code-ul > li{background-color: #3F3F3F; border-left: none;}
-.layui-code-dark > .layui-code-ul > li{margin-left: 6px;}
+.layui-code-dark > .layui-code-lines > .layui-code-line{background-color: #3F3F3F !important; border-left: none !important;}
+.layui-code-dark > .layui-code-lines > li{margin-left: 6px;}
 
 /* 代码预览 */
 .layui-code textarea{display: none;}
-.layui-code-preview > .layui-code{margin: 0;}
+.layui-code-preview > .layui-code,
+.layui-code-preview > .layui-code-view{margin: 0;}
 .layui-code-preview > .layui-tab{position: relative; z-index: 1; margin-bottom: 0;}
 .layui-code-preview > .layui-tab > .layui-tab-title{border-bottom: none;}
 .layui-code-preview > .layui-code > .layui-code-title{display: none;}
 .layui-code-preview .layui-code-item{display: none;}
-.layui-code-preview .layui-code-view > .layui-code-ol > li{}
+.layui-code-preview .layui-code-view > .layui-code-lines > .layui-code-line{}
 .layui-code-item-preview{position: relative; padding: 16px;}
 .layui-code-item-preview > iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;}
 
@@ -56,5 +56,4 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 .layui-code-full{position: fixed; left: 0; top: 0; z-index: 1111111; width: 100%; height: 100%; background-color: #fff;}
 .layui-code-full .layui-code-item{width: 100% !important; border-width: 0 !important; border-top-width: 1px !important;}
 .layui-code-full .layui-code-item,
-.layui-code-full .layui-code-ol,
-.layui-code-full .layui-code-ul{height: calc(100vh - 51px) !important; box-sizing: border-box;}
+.layui-code-full .layui-code-lines{height: calc(100vh - 51px) !important; box-sizing: border-box;}
