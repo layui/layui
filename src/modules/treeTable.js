@@ -78,6 +78,7 @@ layui.define(['table'], function (exports) {
   var LAY_EXPAND = 'LAY_EXPAND';
   var LAY_HAS_EXPANDED = 'LAY_HAS_EXPANDED';
   var LAY_ASYNC_STATUS = 'LAY_ASYNC_STATUS';
+  var LAY_CASCADE = ['all', 'parent', 'children', 'none'];
 
   // 构造器
   var Class = function (options) {
@@ -189,6 +190,9 @@ layui.define(['table'], function (exports) {
             indeterminate: !checkStatus.isAll && checkStatus.data.length
           })
         }
+        if (!isRenderData && thatOptionsTemp.autoSort && thatOptionsTemp.initSort && thatOptionsTemp.initSort.type) {
+          treeTable.sort(id);
+        }
 
         that.renderTreeTable(tableView);
 
@@ -204,7 +208,7 @@ layui.define(['table'], function (exports) {
     var that = this;
     var options = that.config;
     var cascade = options.tree.data.cascade;
-    if (cascade !== 'parent' && cascade !== 'children') {
+    if (LAY_CASCADE.indexOf(cascade) === -1) {
       options.tree.data.cascade = 'all'; // 超出范围的都重置为全联动
     }
 
@@ -908,7 +912,7 @@ layui.define(['table'], function (exports) {
             d[idKey] !== undefined && (that.status.expand[d[idKey]] = true);
           }
         });
-        if (options.initSort && options.initSort.type && (!options.url || options.autoSort)) {
+        if (options.initSort && options.initSort.type && options.autoSort) {
           return treeTable.sort(id);
         }
         var trAll = table.getTrHtml(id, tableDataFlat);
@@ -1125,7 +1129,8 @@ layui.define(['table'], function (exports) {
   Class.prototype.getTableData = function () {
     var that = this;
     var options = that.getOptions();
-    return options.url ? table.cache[options.id] : options.data;
+    // return options.url ? table.cache[options.id] : options.data;
+    return table.cache[options.id];
   }
 
   treeTable.updateStatus = function (id, statusObj, data) {
@@ -1146,7 +1151,7 @@ layui.define(['table'], function (exports) {
     if(!that) return;
 
     var options = that.getOptions();
-    if (!options.url || options.autoSort) {
+    if (options.autoSort) {
       that.initData();
       treeTable.renderData(id);
     }
@@ -1548,6 +1553,9 @@ layui.define(['table'], function (exports) {
   Class.prototype.updateCheckStatus = function (dataP, checked) {
     var that = this;
     var options = that.getOptions();
+    if (!options.hasChecboxCol) {
+      return false; // 如果没有复选列则不需要更新状态
+    }
     var treeOptions = options.tree;
     var tableId = options.id;
     var tableView = options.elem.next();
@@ -1730,7 +1738,7 @@ layui.define(['table'], function (exports) {
           }
         }
 
-        var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatusFn, trData && treeOptions.data.cascade === 'parent');
+        var trs = that.updateStatus(trData ? [trData] : table.cache[tableId], checkedStatusFn, trData && ['parent', 'none'].indexOf(treeOptions.data.cascade) !== -1);
         var checkboxElem = tableView.find(trs.map(function (value) {
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"] input[name="layTableCheckbox"]:not(:disabled)';
         }).join(','));
