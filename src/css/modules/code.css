@@ -35,7 +35,7 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 .layui-code-preview > .layui-code > .layui-code-title{display: none;}
 .layui-code-preview .layui-code-item{display: none;}
 .layui-code-preview .layui-code-view > .layui-code-lines > .layui-code-line{}
-.layui-code-item-preview{position: relative; padding: 16px;}
+.layui-code-item-preview{position: relative; padding: 16px; overflow: auto;}
 .layui-code-item-preview > iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;}
 
 /* 工具栏  */
@@ -56,4 +56,5 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 .layui-code-full{position: fixed; left: 0; top: 0; z-index: 1111111; width: 100%; height: 100%; background-color: #fff;}
 .layui-code-full .layui-code-item{width: 100% !important; border-width: 0 !important; border-top-width: 1px !important;}
 .layui-code-full .layui-code-item,
-.layui-code-full .layui-code-lines{height: calc(100vh - 51px) !important; box-sizing: border-box;}
+.layui-code-full .layui-code-ol,
+.layui-code-full .layui-code-ul{height: calc(100vh - 51px) !important; box-sizing: border-box;}
