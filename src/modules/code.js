@@ -329,7 +329,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         ? options.codeRender(html, options.lang)
         : function(){
             if(options.codeRender) html = options.codeRender(html, options.lang);
-            return '<li class="layui-code-line">' + html.replace(/[\r\t\n]+/g, '</li><li class="layui-code-line">') + '</li>'; // 转义换行符
+            return '<li class="layui-code-line">' + html.replace(/\r?\n/g, '</li><li class="layui-code-line">') + '</li>'; // 转义换行符
         }();
       // 生成列表
       othis.html(listElem.html(html));
