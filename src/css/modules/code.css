@@ -35,7 +35,7 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 .layui-code-preview > .layui-code > .layui-code-title{display: none;}
 .layui-code-preview .layui-code-item{display: none;}
 .layui-code-preview .layui-code-view > .layui-code-ol > li{}
-.layui-code-item-preview{position: relative; padding: 16px;}
+.layui-code-item-preview{position: relative; padding: 16px;overflow-y: auto;}
 .layui-code-item-preview > iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;}
 
 /* 工具栏  */
