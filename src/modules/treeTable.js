@@ -606,10 +606,6 @@ layui.define(['table'], function (exports) {
             }, true);
           }
         });
-        treeTableThat.updateStatus(childNodes, function (d) {
-          d['LAY_HIDE'] = false;
-        });
-        options.hasNumberCol && formatNumber(tableId);
       } else {
         var asyncSetting = treeOptions.async || {};
         var asyncUrl = asyncSetting.url || options.url;
@@ -767,11 +763,6 @@ layui.define(['table'], function (exports) {
         tableViewElem.find(childNodesFlat.map(function (value, index, array) {
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]'
         }).join(',')).addClass(HIDE);
-        
-        treeTableThat.updateStatus(childNodes, function (d) {
-          d['LAY_HIDE'] = true;
-        });
-        options.hasNumberCol && formatNumber(tableId);
       }
     }
 
@@ -1041,14 +1032,13 @@ layui.define(['table'], function (exports) {
       });
     } else {
       debounceFn('renderTreeTable-' + tableId, function () {
-        options.hasNumberCol && formatNumber(tableId);
+        options.hasNumberCol && formatNumber(that);
         form.render($('.layui-table-tree[lay-id="' + tableId + '"]'));
       }, 0)();
     }
   }
 
-  var formatNumber = function (id) {
-    var that = getThisTable(id);
+  var formatNumber = function (that) {
     var options = that.getOptions();
     var tableViewElem = options.elem.next();
 
@@ -1257,7 +1247,7 @@ layui.define(['table'], function (exports) {
     layui.each(table.cache[id], function (i4, item4) {
       tableView.find('tr[data-level="0"][lay-data-index="' + item4[LAY_DATA_INDEX] + '"]').attr('data-index', i4);
     })
-    options.hasNumberCol && formatNumber(id);
+    options.hasNumberCol && formatNumber(that);
 
     // 重新适配尺寸
     treeTable.resize(id);
