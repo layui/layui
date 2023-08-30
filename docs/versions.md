@@ -11,6 +11,40 @@ toc: true
 
 > 导读：📑 [Layui 2.8 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
+
+<h2 id="2.8.16" class="ws-anchor">
+  2.8.16
+  <span class="layui-badge-rim">2023-08-30</span>
+</h2>
+
+- #### layer
+  - 新增 `photos` 的 `toolbar` 属性，用于开启图片旋转 放大 缩小 还原等头部工具栏 # 1339
+  - 调整 `photos` 的 属性名： `hideFooter → footer`，用于是否开启底部栏
+- #### table
+  - 优化 初始化时的样式渲染及多行模式的内容结构
+  - 优化 `size` 为 `sm` / `lg` 时的展开状态
+  - 优化 无数据时的导出和打印功能提示 # 1337
+  - 优化 数据项为禁用状态的选中状态 # 1328
+  - 优化 `table.renderData()` 方法执行了多余排序的问题 # 1358
+- #### treeTable
+  - 修复 部分操作之后 `radio` 列选中状态丢失的问题 # 1358
+  - 修复 `data` 模式下排序之后出现节点结构错乱的问题 # 1358/I7TXXL
+  - 优化 `data.cascade` 属性，新增 `none` 可选值，即操作节点时不做任何联动 # 1358
+  - 优化 数据项为禁用状态时的全选复选框的状态 # 1329
+  - 优化 异步加载字节点为空时的展开状态 # 1326
+- #### laydate
+  - 优化 `shortcuts.value` 快捷选项的赋值属性，支持函数类型 # 1324
+- #### rate
+  - 优化 代码书写格式 # 1343
+- #### code
+  - 修复 自定义工具栏出现的报错问题 # 1342
+  - 优化 复制功能，以兼容非安全域下复制失败的问题 #1356
+  - 优化 预览区未能显示滚动条的问题 # 1359
+
+### 下载： [layui-v2.8.16.zip](https://gitee.com/layui/layui/attach_files/1511975/download)
+
+---
+
 <h2 id="2.8.15" class="ws-anchor">
   2.8.15
   <span class="layui-badge-rim">2023-08-16</span>
