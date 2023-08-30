@@ -236,7 +236,7 @@ layui.define(['lay','layer'], function(exports){
           data: formData,
           contentType: false,
           processData: false,
-          dataType: 'json',
+          // dataType: 'json',
           headers: options.headers || {},
           success: function(res){ // 成功回调
             options.unified ? (successful += that.fileLength) : successful++;

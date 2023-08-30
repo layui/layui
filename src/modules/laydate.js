@@ -591,7 +591,9 @@
         return shortcutBtns.join('');
       }()).find('li').on('click', function (event) {
         var btnSetting = options.shortcuts[this.dataset['index']] || {};
-        var value = btnSetting.value || [];
+        var value = (typeof btnSetting.value === 'function'
+          ? btnSetting.value() 
+          : btnSetting.value) || [];
         if (!layui.isArray(value)) {
           value = [value];
         }

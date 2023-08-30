@@ -90,16 +90,21 @@ layui.use(function(){
           var now = new Date();
           now.setDate(now.getDate() - 1);
           return now;
-        }()
+        }
       },
-      { text: "今天", value: Date.now() },
+      { 
+        text: "今天", 
+        value: function(){
+          return Date.now();
+        } 
+      },
       {
         text: "明天",
         value: function(){
           var now = new Date();
           now.setDate(now.getDate() + 1);
           return now;
-        }()
+        }
       },
       {
         text: "上个月",
@@ -108,7 +113,7 @@ layui.use(function(){
           // now.setDate(now.getDate() - 1);
           now.setMonth(now.getMonth() - 1);
           return [now];
-        }()
+        }
       },
       {
         text: "上个月的前一天",
@@ -117,7 +122,7 @@ layui.use(function(){
           now.setMonth(now.getMonth() - 1);
           now.setDate(now.getDate() - 1);
           return [now];
-        }()
+        }
       },
       {
         text: "某一天",
@@ -137,7 +142,7 @@ layui.use(function(){
           var now = new Date();
           now.setFullYear(now.getFullYear() - 1);
           return now;
-        }()
+        }
       },
       {
         text: "明年",
@@ -145,7 +150,7 @@ layui.use(function(){
           var now = new Date();
           now.setFullYear(now.getFullYear() + 1);
           return now;
-        }()
+        }
       }
     ]
   });
@@ -161,7 +166,7 @@ layui.use(function(){
           var now = new Date();
           now.setMonth(now.getMonth() - 1);
           return now;
-        }()
+        }
       },
       {
         text: "下个月",
@@ -169,7 +174,7 @@ layui.use(function(){
           var now = new Date();
           now.setMonth(now.getMonth() + 1);
           return now;
-        }()
+        }
       },
       {
         text: "去年12月",
@@ -178,7 +183,7 @@ layui.use(function(){
           now.setMonth(11);
           now.setFullYear(now.getFullYear() - 1);
           return now;
-        }()
+        }
       }
     ]
   });
@@ -214,16 +219,21 @@ layui.use(function(){
           var now = new Date();
           now.setDate(now.getDate() - 1);
           return now;
-        }()
+        }
       },
-      { text: "今天", value: Date.now() },
+      { 
+        text: "今天", 
+        value: function(){
+          return Date.now();
+        }
+      },
       {
         text: "明天",
         value: function(){
           var now = new Date();
           now.setDate(now.getDate() + 1);
           return now;
-        }()
+        }
       },
       {
         text: "上个月",
@@ -232,7 +242,7 @@ layui.use(function(){
           // now.setDate(now.getDate() - 1);
           now.setMonth(now.getMonth() - 1);
           return [now];
-        }()
+        }
       },
       {
         text: "上个月的前一天",
@@ -241,7 +251,7 @@ layui.use(function(){
           now.setMonth(now.getMonth() - 1);
           now.setDate(now.getDate() - 1);
           return [now];
-        }()
+        }
       },
       {
         text: "某一天",
@@ -263,7 +273,7 @@ layui.use(function(){
           var now = new Date();
           now.setDate(now.getDate() - 1);
           return now;
-        }()
+        }
       },
       { text: "今天", value: Date.now() },
       {
@@ -272,7 +282,7 @@ layui.use(function(){
           var now = new Date();
           now.setDate(now.getDate() + 1);
           return now;
-        }()
+        }
       },
       {
         text: "上个月",
@@ -281,7 +291,7 @@ layui.use(function(){
           // now.setDate(now.getDate() - 1);
           now.setMonth(now.getMonth() - 1);
           return [now];
-        }()
+        }
       },
       {
         text: "上个月的前一天",
@@ -290,7 +300,7 @@ layui.use(function(){
           now.setMonth(now.getMonth() - 1);
           now.setDate(now.getDate() - 1);
           return [now];
-        }()
+        }
       },
       {
         text: "某一天",
@@ -323,7 +333,7 @@ layui.use(function(){
           value.push(new Date(date2));
 
           return value;
-        }()
+        }
       },
       {
         text: "这个月",
@@ -344,7 +354,7 @@ layui.use(function(){
           value.push(new Date(date2));
 
           return value;
-        }()
+        }
       },
       {
         text: "下个月",
@@ -365,7 +375,7 @@ layui.use(function(){
           value.push(new Date(date2));
 
           return value;
-        }()
+        }
       }
     ]
   });
@@ -383,7 +393,7 @@ layui.use(function(){
           var now = new Date();
           now.setFullYear(now.getFullYear() - 1);
           return [now, new Date()];
-        }()
+        }
       },
       {
         text: "未来一年",
@@ -391,7 +401,7 @@ layui.use(function(){
           var now = new Date();
           now.setFullYear(now.getFullYear() + 1);
           return [new Date(), now];
-        }()
+        }
       },
       {
         text: "近三年",
@@ -399,7 +409,7 @@ layui.use(function(){
           var now = new Date();
           now.setFullYear(now.getFullYear() - 3);
           return [now, new Date()];
-        }()
+        }
       }
     ]
   });
@@ -420,7 +430,7 @@ layui.use(function(){
           date2.setMonth(0, 1);
           date2.setHours(0, 0, 0, 0);
           return [date1, date2.getTime() - 1];
-        }()
+        }
       },
       {
         text: "明年",
@@ -428,7 +438,7 @@ layui.use(function(){
           var now = new Date();
           now.setFullYear(now.getFullYear() + 1);
           return [now, now];
-        }()
+        }
       },
       {
         text: "近三年",
@@ -436,7 +446,7 @@ layui.use(function(){
           var now = new Date();
           now.setFullYear(now.getFullYear() - 3);
           return [now, new Date()];
-        }()
+        }
       }
     ]
   });
@@ -457,7 +467,7 @@ layui.use(function(){
           date2.setHours(11, 30, 0, 0);
 
           return [date1, date2];
-        })()
+        })
       },
       {
         text: '13:00 <p style="text-align: center;">到</p> 15:00',
@@ -469,7 +479,7 @@ layui.use(function(){
           date2.setHours(15, 0, 0, 0);
 
           return [date1, date2];
-        })()
+        })
       }
     ]
   });
@@ -498,7 +508,7 @@ layui.use(function(){
           value.push(new Date(date2));
 
           return value;
-        }()
+        }
       },
       {
         text: "这个月",
@@ -519,7 +529,7 @@ layui.use(function(){
           value.push(new Date(date2));
 
           return value;
-        }()
+        }
       },
       {
         text: "下个月",
@@ -540,7 +550,7 @@ layui.use(function(){
           value.push(new Date(date2));
 
           return value;
-        }()
+        }
       }
     ]
   });

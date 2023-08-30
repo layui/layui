@@ -104,19 +104,27 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           className: 'file-b',
           title: ['复制代码'],
           event: function(el, type){
-            typeof options.onCopy === 'function' ? options.onCopy(finalCode) : function(){
+            var text = util.unescape(finalCode);
+            try {
+              navigator.clipboard.writeText(text).then(function(){
+                layer.msg('已复制', {icon: 1});
+              });
+            } catch(e) {
+              var textarea = document.createElement('textarea');
+              textarea.value = text;
+              textarea.style.position = 'absolute';
+              textarea.style.opacity = '0';
+              document.body.appendChild(textarea);
+              textarea.select();
               try {
-                navigator.clipboard.writeText(util.unescape(finalCode)).then(function(){
-                  layer.msg('已复制', {
-                    icon: 1
-                  });
-                });
-              } catch(e) {
-                layer.msg('复制失败', {
-                  icon: 2
-                });
+                document.execCommand('copy');
+                layer.msg('已复制', {icon: 1});
+              } catch(err) {
+                layer.msg('复制失败', {icon: 2});
               }
-            }();
+              textarea.remove();
+            }
+            typeof options.onCopy === 'function' && options.onCopy(text);
           }
         }
       };
@@ -209,12 +217,12 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         elemToolbar.on('click', '>i', function(){
           var oi = $(this);
           var type = oi.data('type');
-          typeof tools[type].event === 'function' && tools[type].event(oi, type);
+          tools[type] && typeof tools[type].event === 'function' && tools[type].event(oi, type);
           typeof options.toolsEvent === 'function' && options.toolsEvent(oi, type);
         });
         layui.each(options.tools, function(i, v){
           var className = (tools[v] && tools[v].className) || v;
-          var title = tools[v].title || [''];
+          var title = (tools[v] && tools[v].title) || [''];
           elemToolbar.append(
             '<i class="layui-icon layui-icon-'+ className +'" data-type="'+ v +'" title="'+ title[0] +'"></i>'
           );
@@ -302,10 +310,9 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         if(options.skin === 'notepad') options.skin = 'dark';
         othis.removeClass('layui-code-dark layui-code-light');
         othis.addClass('layui-code-'+ options.skin);
-      } 
+      }
 
-      
-      
+
 
       // 转义 HTML 标签
       if(options.encode) html = util.escape(html); // 编码

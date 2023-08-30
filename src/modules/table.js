@@ -258,29 +258,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     ,'<div class="layui-table-column layui-table-page layui-hide">'
       ,'<div class="layui-inline layui-table-pageview" id="layui-table-page{{=d.index}}"></div>'
     ,'</div>'
-
-    ,'<style>'
-    ,'{{# layui.each(d.data.cols, function(i1, item1){'
-      ,'layui.each(item1, function(i2, item2){ }}'
-        ,'.laytable-cell-{{=d.index}}-{{=i1}}-{{=i2}}{ '
-        ,'{{# if(item2.width){ }}'
-          ,'width: {{=item2.width}}px;'
-        ,'{{# } }}'
-        ,' }'
-      ,'{{# });'
-    ,'}); }}'
-    ,'{{# if(d.data.lineStyle){'
-      ,'var cellClassName = ".layui-table-view-"+ d.index +" .layui-table-body .layui-table .layui-table-cell";'
-    ,'}}'
-      ,'{{= cellClassName }}{'
-        ,'display: -webkit-box; -webkit-box-align: center; -moz-box-align: start; white-space: normal; {{- d.data.lineStyle }} '
-      ,'}'
-      ,'{{= cellClassName }}:hover{overflow: auto;}'
-    ,'{{# } }}'
-    ,'{{# if(d.data.css){ }}'
-      ,'{{- d.data.css }}'
-    ,'{{# } }}'
-    ,'</style>'
   ].join('');
 
   var _WIN = $(window);
@@ -385,13 +362,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       options.height = $(that.parentDiv).height() - that.parentHeightGap;
     }
 
-    //开始插入替代元素
+    // 开始插入替代元素
     var othis = options.elem;
     var hasRender = othis.next('.' + ELEM_VIEW);
 
-    //主容器
+    // 主容器
     var reElem = that.elem = $('<div></div>');
 
+    // 添加 className
     reElem.addClass(function(){
       var arr = [
         ELEM_VIEW,
@@ -418,11 +396,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       index: that.index //索引
     }));
 
-    //生成替代元素
-    hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender
+    // 初始化样式
+    that.renderStyle();
+
+    // 生成替代元素
+    hasRender[0] && hasRender.remove(); // 如果已经渲染，则 Rerender
     othis.after(reElem);
 
-    //各级容器
+    // 各级容器
     that.layTool = reElem.find(ELEM_TOOL);
     that.layBox = reElem.find(ELEM_BOX);
     that.layHeader = reElem.find(ELEM_HEADER);
@@ -443,11 +424,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 让表格平铺
     that.fullSize();
 
-    that.pullData(that.page); //请求数据
-    that.events(); //事件
+    that.pullData(that.page); // 请求数据
+    that.events(); // 事件
   };
 
-  //根据列类型，定制化参数
+  // 根据列类型，定制化参数
   Class.prototype.initOpts = function(item){
     var that = this
     var options = that.config;
@@ -458,7 +439,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       numbers: 60
     };
 
-    //让 type 参数兼容旧版本
+    // 让 type 参数兼容旧版本
     if(item.checkbox) item.type = "checkbox";
     if(item.space) item.type = "space";
     if(!item.type) item.type = "normal";
@@ -551,6 +532,60 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       });
     });
 
+  };
+
+  // 初始化样式
+  Class.prototype.renderStyle = function() {
+    var that = this;
+    var options = that.config;
+    var index = that.index;
+    var text = [];
+
+    // 单元格宽度
+    layui.each(options.cols, function(i1, item1) {
+      layui.each(item1, function(i2, item2) {
+        var key = [index, i1, i2].join('-');
+        var val = item2.width ? ['width: ', item2.width, 'px'].join('') : '';
+        text.push('.laytable-cell-'+ key +'{'+ val +'}');
+      });
+    });
+
+    // 自定义行样式
+    (function (lineStyle) {
+      if (!lineStyle) return;
+      var trClassName = '.layui-table-view-'+ index +' .layui-table-body .layui-table tr';
+      var rules = lineStyle.split(';');
+      var cellMaxHeight = 'none';
+
+      // 计算单元格最大高度
+      layui.each(rules, function(i, rule) {
+        rule = rule.split(':');
+        if (rule[0] === 'height') {
+          var val = parseFloat(rule[1]);
+          if (!isNaN(val)) cellMaxHeight = (val - 1) + 'px';
+          return true;
+        }
+      });
+
+      // 多行相关样式
+      layui.each([
+        '{'+ lineStyle +'}',
+        '.layui-table-cell{height: auto; max-height: '+ cellMaxHeight +'; white-space: normal; text-overflow: clip;}',
+        '> td:hover > .layui-table-cell{overflow: auto;}'
+      ], function(i, val) {
+        text.push(trClassName + ' ' + val);
+      });
+    })(options.lineStyle);
+
+    // 自定义 css 属性
+    if (options.css) text.push(options.css);
+
+    // 生成 style
+    lay.style({
+      target: that.elem[0],
+      text: text.join(''),
+      id: 'DF-'+ index
+    });
   };
 
   // 初始工具栏
@@ -784,7 +819,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       // 给未分配宽的列平均分配宽
       if(item3.width === 0){
-        that.getCssRule(item3.key, function(item){
+        that.cssRules(item3.key, function(item){
           item.style.width = Math.floor(function(){
             if(autoWidth < minWidth) return minWidth;
             if(autoWidth > maxWidth) return maxWidth;
@@ -795,7 +830,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       // 给设定百分比的列分配列宽
       else if(/\d+%$/.test(item3.width)){
-        that.getCssRule(item3.key, function(item){
+        that.cssRules(item3.key, function(item){
           var width = Math.floor((parseFloat(item3.width) / 100) * cntrWidth);
           width < minWidth && (width = minWidth);
           width > maxWidth && (width = maxWidth);
@@ -805,7 +840,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       // 给拥有普通 width 值的列分配最新列宽
       else {
-        that.getCssRule(item3.key, function(item){
+        that.cssRules(item3.key, function(item){
           item.style.width = item3.width + 'px';
         });
       }
@@ -828,7 +863,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var th = getEndTh();
       var key = th.data('key');
 
-      that.getCssRule(key, function(item){
+      that.cssRules(key, function(item){
         var width = item.style.width || th.outerWidth();
         item.style.width = (parseFloat(width) + patchNums) + 'px';
 
@@ -966,7 +1001,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         curr: curr,
         count: res[response.countName],
         type: opts.type,
-      }), sort(), done(res, 'renderData');
+        sort: true
+      }), done(res, 'renderData');
     } else if(options.url){ // Ajax请求
       var params = {};
       // 当 page 开启，默认自动传递 page、limit 参数
@@ -1662,20 +1698,19 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }
   };
 
-  // 获取 cssRule
-  Class.prototype.getCssRule = function(key, callback){
+  // 获取对应单元格的 cssRules
+  Class.prototype.cssRules = function(key, callback){
     var that = this;
     var style = that.elem.children('style')[0];
-    var sheet = style.sheet || style.styleSheet || {};
-    var rules = sheet.cssRules || sheet.rules;
-    layui.each(rules, function(i, item){
-      if(item.selectorText === ('.laytable-cell-'+ key)){
+
+    lay.getStyleRules(style, function(item){
+      if (item.selectorText === ('.laytable-cell-'+ key)) {
         return callback(item), true;
       }
     });
   };
 
-  //让表格铺满
+  // 让表格铺满
   Class.prototype.fullSize = function(){
     var that = this;
     var options = that.config;
@@ -1818,6 +1853,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     that.layTool.on('click', '*[lay-event]', function(e){
       var othis = $(this);
       var events = othis.attr('lay-event');
+      var data = table.cache[options.id];
       var openPanel = function(sets){
         var list = $(sets.list);
         var panel = $('<ul class="' + ELEM_TOOL_PANEL + '"></ul>');
@@ -1845,7 +1881,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       switch(events){
         case 'LAYTABLE_COLS': // 筛选列
-          if (!table.cache[options.id].length) return layer.msg('暂时没有数据，不能使用筛选列功能！', {icon: 5});
           openPanel({
             list: function(){
               var lis = [];
@@ -1891,11 +1926,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           });
         break;
         case 'LAYTABLE_EXPORT': // 导出
-          if (!table.cache[options.id].length) return layer.msg('暂时没有数据，不能使用导出功能！', {icon: 5});
+          if (!data.length) return layer.tips('当前表格无数据', this, {tips: 3});
           if(device.ie){
             layer.tips('导出功能不支持 IE，请用 Chrome 等高级浏览器导出', this, {
               tips: 3
-            })
+            });
           } else {
             openPanel({
               list: function(){
@@ -1914,7 +1949,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           }
         break;
         case 'LAYTABLE_PRINT': // 打印
-          if (!table.cache[options.id].length) return layer.msg('暂时没有数据，不能使用打印功能！', {icon: 5});
+          if (!data.length) return layer.tips('当前表格无数据', this, {tips: 3});
           var printWin = window.open('about:blank', '_blank');
           var style = ['<style>',
             'body{font-size: 12px; color: #5F5F5F;}',
@@ -2002,7 +2037,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         e.preventDefault();
         dict.offset = [e.clientX, e.clientY]; //记录初始坐标
 
-        that.getCssRule(key, function(item){
+        that.cssRules(key, function(item){
           var width = item.style.width || othis.outerWidth();
           dict.rule = item;
           dict.ruleWidth = parseFloat(width);
@@ -2061,7 +2096,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           delete thisTable.eventMoveElem;
 
           // 列拖拽宽度后的事件
-          thatTable.getCssRule(key, function(item){
+          thatTable.cssRules(key, function(item){
             col.width = parseFloat(item.style.width);
             layui.event.call(th[0], MOD_NAME, 'colResized('+ filter +')', {
               col: col,
@@ -2433,7 +2468,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.elem.find('.'+ ELEM_CELL_C).trigger('click');
 
       // 设置当前单元格展开宽度
-      that.getCssRule(key, function(item){
+      that.cssRules(key, function(item){
         var width = item.style.width;
         var expandedWidth = col.expandedWidth || (that.elem.width() / 3);
 
@@ -2443,7 +2478,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         elemCellClose.data('cell-width', width);
         item.style.width = expandedWidth + 'px';
 
-        that.scrollPatch(); // 滚动条补丁
+        setTimeout(function(){
+          that.scrollPatch(); // 滚动条补丁
+        });
       });
 
       // 设置当前单元格展开样式
@@ -2458,7 +2495,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       elemCellClose.on('click', function(){
         var $this = $(this);
         that.setRowActive(index, ELEM_EXPAND, true); // 移除单元格展开样式
-        that.getCssRule(key, function(item){
+        that.cssRules(key, function(item){
           item.style.width =  $this.data('cell-width'); // 恢复单元格展开前的宽度
           that.resize(); // 滚动条补丁
         });
