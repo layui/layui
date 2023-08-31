@@ -31,6 +31,10 @@
       重载测试 
       <i class="layui-icon layui-icon-down layui-font-12"></i>
     </button>
+    <button class="layui-btn layui-btn-sm layui-btn-primary" id="rowMode">
+      <span>{{= d.lineStyle ? '多行' : '单行' }}模式</span>
+      <i class="layui-icon layui-icon-down layui-font-12"></i>
+    </button>
     <button class="layui-btn layui-btn-sm" id="moreTest">
       更多测试 
       <i class="layui-icon layui-icon-down layui-font-12"></i>
@@ -116,7 +120,7 @@ layui.use(['table', 'dropdown'], function(){
     // height: 300
   });
   
-  //渲染
+  // 渲染
   window.ins1 = table.render({
     elem: '#test',
     height: 520,
@@ -155,13 +159,13 @@ layui.use(['table', 'dropdown'], function(){
     // cellMaxWidth: 320
     cols: !1 ? test_cols : [[
       {type: 'checkbox', fixed: 'left'},
-      //,{type: 'numbers', fixed: 'left'}
+      // {type: 'numbers', fixed: 'left'},
       {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'},
       {field:'username', title:'用户名 <i class="layui-icon layui-icon-username" lay-event="username"></i>', width:120, edit: function(d){
         return !d.LAY_DISABLED;
       }, templet: '#usernameTpl'},
       {field:'xxx', title:'测试', edit: 'text'},
-      {field:'email', minWidth: 160, maxWidth: 320, title:'邮箱 <i class="layui-icon layui-icon-email" lay-event="email"></i>', fieldTitle: '邮箱', hide: 0, edit: 'text', templet: function(d){
+      {field:'email', minWidth: 160, maxWidth: 320, title:'邮箱 <i class="layui-icon layui-icon-email" lay-event="email"></i>', fieldTitle: '邮箱', hide: 0, edit: 'text', style: 'background-color: #fafafa; color: red;', templet: function(d){
         return '<em>'+ layui.util.escape(d.email) +'</em>'
       }},
       {field:'sex', title:'性别', width:80, edit: 'text', sort: true, escape: false},
@@ -336,6 +340,37 @@ layui.use(['table', 'dropdown'], function(){
         }
       });
 
+      // 行模式
+      dropdown.render({
+        elem: '#rowMode',
+        data: [{
+          id: 'default-row',
+          title: '单行模式（默认）'
+        },{
+          id: 'multi-row',
+          title: '多行模式'
+        }],
+        // 菜单被点击的事件
+        click: function(obj){
+          var checkStatus = table.checkStatus(id)
+          var data = checkStatus.data; // 获取选中的数据
+          switch(obj.id){
+            case 'default-row':
+              table.reload('test', {
+                lineStyle: null // 恢复单行
+              });
+              layer.msg('已设为单行');
+            break;
+            case 'multi-row':
+              table.reload('test', {
+                // 设置行样式，此处以设置多行高度为例。若为单行，则没必要设置改参数 - 注：v2.7.0 新增
+                lineStyle: 'height: 95px;'
+              });
+              layer.msg('即通过设置 lineStyle 参数可开启多行');
+            break;
+          }
+        }
+      });
 
       // 更多测试
       dropdown.render({
