@@ -309,6 +309,37 @@
     return matched;
   };
 
+  // 剪切板
+  lay.clipboard = {
+    // 写入文本
+    writeText: function(options) {
+      var text = String(options.text);
+
+      try {
+        navigator.clipboard.writeText(text).then(
+          options.done
+        ).catch(options.error);
+      } catch(e) {
+        var elem = document.createElement('textarea');
+
+        elem.value = text;
+        elem.style.position = 'absolute';
+        elem.style.opacity = '0';
+        document.body.appendChild(elem);
+        elem.select();
+
+        try {
+          document.execCommand('copy');
+          typeof options.done === 'function' && options.done();
+        } catch(err) {
+          typeof options.error === 'function' && options.error(err);
+        }
+
+        elem.remove();
+      }
+    }
+  };
+
 
   /*
    * lay 元素操作
