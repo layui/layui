@@ -27,6 +27,21 @@
       that.push(elem[index]);
     });
   };
+
+  /*
+   * API 兼容
+   */
+  Array.prototype.indexOf = Array.prototype.indexOf || function(searchElement, fromIndex) {
+    var rst = -1;
+    fromIndex = fromIndex || 0;
+    layui.each(this, function(index, val){
+      if (searchElement === val && index >= fromIndex) {
+        rst = index;
+        return !0;
+      }
+    });
+    return rst;
+  };
   
   /*
     lay 对象操作
