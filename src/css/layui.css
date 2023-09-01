@@ -796,8 +796,8 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-input-wrap .layui-input-number{width: 24px; padding: 0;}
 .layui-input-wrap .layui-input-number .layui-icon{position: absolute; right: 0; width: 100%; height: 50%; line-height: normal; font-size: 12px;}
 .layui-input-wrap .layui-input-number .layui-icon:before{position: absolute; left: 50%; top: 50%; margin-top: -6px; margin-left: -6px;}
-.layui-input-wrap .layui-input-number .layui-icon:first-child{top: 0; border-bottom: 1px solid #eee;}
-.layui-input-wrap .layui-input-number .layui-icon:last-child{bottom: 0;}
+.layui-input-wrap .layui-input-number .layui-icon-up{top: 0; border-bottom: 1px solid #eee;}
+.layui-input-wrap .layui-input-number .layui-icon-down{bottom: 0;}
 .layui-input-wrap .layui-input-number .layui-icon:hover{font-weight: 700;}
 .layui-input-wrap .layui-input[type="number"]::-webkit-outer-spin-button,
 .layui-input-wrap .layui-input[type="number"]::-webkit-inner-spin-button{-webkit-appearance: none !important;}
@@ -1287,7 +1287,7 @@ select.layui-table-edit{padding: 0 0 0 10px; border-color: #d2d2d2;}
 
 /* 导航浅色背景 */
 .layui-nav.layui-bg-gray .layui-nav-item a,
-.layui-nav-tree.layui-bg-gray a{color: rgba(0,0,0,.8);}
+.layui-nav-tree.layui-bg-gray a{color: #373737; color: rgba(0,0,0,.8);}
 .layui-nav-tree.layui-bg-gray{padding: 6px 0;}
 .layui-nav-tree.layui-bg-gray .layui-nav-itemed>a{color: #000 !important;}
 .layui-nav.layui-bg-gray .layui-this a{color: #16b777;}
