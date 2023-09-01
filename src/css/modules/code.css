@@ -6,25 +6,25 @@
 html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 
 /* 默认风格 */
-.layui-code-view{display: block; position: relative; margin: 11px 0; padding: 0; border: 1px solid #eee; border-left-width: 6px; background-color: #FAFAFA; color: #333; font-family: Courier New; font-size: 13px;}
+.layui-code-view{display: block; position: relative; margin: 11px 0; padding: 0 !important; border: 1px solid #eee; border-left-width: 6px; background-color: #FAFAFA; color: #333; font-family: 'Courier New'; font-size: 13px; white-space: pre; overflow: auto;}
+.layui-code-view.layui-code-line-numbers-mode{padding-left: 45px !important;}
 .layui-code-title{position: relative; padding: 0 10px; height: 40px; line-height: 40px; border-bottom: 1px solid #eee; font-size: 12px;}
 .layui-code-title > .layui-code-about{position: absolute; right: 10px; top: 0; color: #B7B7B7;}
 .layui-code-about > a{padding-left: 10px;}
-.layui-code-view > .layui-code-lines{max-height: 100%; padding: 0 !important; position: relative; overflow: auto;}
-.layui-code-view.layui-code-line-numbers > .layui-code-lines > .layui-code-line{position: relative; margin-top: 0  !important; margin-left: 45px  !important; line-height: 20px; padding: 0 10px  !important; border-left: 1px solid #e2e2e2; list-style-type: decimal-leading-zero; *list-style-type: decimal; background-color: #fff;}
-.layui-code-view > .layui-code-lines > .layui-code-line:first-child{padding-top: 10px  !important;}
-.layui-code-view > .layui-code-lines > .layui-code-line:last-child{padding-bottom: 10px  !important;}
-.layui-code-view > .layui-code-lines > .layui-code-line{position: relative; line-height: 20px; padding: 0 10px  !important; list-style-type: none; *list-style-type: none; background-color: #fff;}
+.layui-code-view > .layui-code-lines{display:block; max-height: 100%; padding: 10px !important; position: relative;background-color: #fff;}
+.layui-code-view.layui-code-line-numbers-mode > .layui-code-lines{border-left: 1px solid #e2e2e2;}
+.layui-code-view > .layui-code-lines > .layui-code-line{position: relative; display: block; line-height: 20px;}
 .layui-code-view pre{margin: 0;}
-.layui-code-view.prism > .layui-code-lines > .layui-code-line,
-.layui-code-view.hljs > .layui-code-lines > .layui-code-line,
-.layui-code-view.shiki > .layui-code-lines > .layui-code-line{background-color: unset !important;}
+.layui-code-line-numbers{position: absolute;top: 0;bottom: 0;left: 0;width: 45px; text-align: center; padding: 10px 0; line-height: 20px; max-height: 100%; user-select: none;}
+.layui-code-line-number{display: block;}
+.layui-code-lang-marker{position: absolute; top: 3px; right: 11px; color: currentColor;}
+.layui-code-view:hover > .layui-code-lang-marker{display: none;}
 
 /* 深色风格 */
 .layui-code-dark{border: 1px solid #0C0C0C; border-left-color: #3F3F3F; background-color: #0C0C0C; color: #C2BE9E}
 .layui-code-dark > .layui-code-title{border-bottom: none;}
-.layui-code-dark > .layui-code-lines > .layui-code-line{background-color: #3F3F3F !important; border-left: none !important;}
-.layui-code-dark > .layui-code-lines > li{margin-left: 6px;}
+.layui-code-dark > .layui-code-lines{background-color: #3F3F3F !important; border-left: none !important;}
+.layui-code-dark:not(.layui-code-line-numbers-mode) > .layui-code-lines{margin-left: 6px;}
 
 /* 代码预览 */
 .layui-code textarea{display: none;}
@@ -56,5 +56,14 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 .layui-code-full{position: fixed; left: 0; top: 0; z-index: 1111111; width: 100%; height: 100%; background-color: #fff;}
 .layui-code-full .layui-code-item{width: 100% !important; border-width: 0 !important; border-top-width: 1px !important;}
 .layui-code-full .layui-code-item,
-.layui-code-full .layui-code-ol,
-.layui-code-full .layui-code-ul{height: calc(100vh - 51px) !important; box-sizing: border-box;}
+.layui-code-full .layui-code-lines{height: calc(100vh - 51px) !important; box-sizing: border-box;}
+
+/* 代码高亮重置 */
+.layui-code-view[class*=language-]{
+  font-size: 13px !important;
+  line-height: 20px !important;
+}
+.layui-code-view[class*=language-] > .layui-code-lines,
+.layui-code-view[class*=language-] > .layui-code-line-numbers{
+  background-color: transparent; font-family: 'Courier New';
+}
