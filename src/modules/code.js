@@ -104,27 +104,20 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           className: 'file-b',
           title: ['复制代码'],
           event: function(el, type){
-            var text = util.unescape(finalCode);
-            try {
-              navigator.clipboard.writeText(text).then(function(){
+            var code = util.unescape(finalCode);
+
+            // 写入剪切板
+            lay.clipboard.writeText({
+              text: code,
+              done: function() {
                 layer.msg('已复制', {icon: 1});
-              });
-            } catch(e) {
-              var textarea = document.createElement('textarea');
-              textarea.value = text;
-              textarea.style.position = 'absolute';
-              textarea.style.opacity = '0';
-              document.body.appendChild(textarea);
-              textarea.select();
-              try {
-                document.execCommand('copy');
-                layer.msg('已复制', {icon: 1});
-              } catch(err) {
+              },
+              error: function() {
                 layer.msg('复制失败', {icon: 2});
               }
-              textarea.remove();
-            }
-            typeof options.onCopy === 'function' && options.onCopy(text);
+            });
+
+            typeof options.onCopy === 'function' && options.onCopy(code);
           }
         }
       };
