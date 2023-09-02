@@ -26,7 +26,8 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 .layui-code-dark{border: 1px solid #0C0C0C; border-left-color: #3F3F3F; background-color: #0C0C0C; color: #C2BE9E}
 .layui-code-dark > .layui-code-title{border-bottom: none;}
 .layui-code-dark > .layui-code-lines{background-color: #3F3F3F !important; border-left: none !important;}
-.layui-code-dark:not(.layui-code-line-numbers-mode) > .layui-code-lines{margin-left: 6px;}
+.layui-code-dark > .layui-code-lines{margin-left: 6px;}
+.layui-code-dark.layui-code-line-numbers-mode > .layui-code-lines{margin-left: 0;}
 
 /* 代码预览 */
 .layui-code textarea{display: none;}
