@@ -513,12 +513,37 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-col-space32>*{padding: 16px;}
 
 
-/** 页面元素 **/
-.layui-btn, .layui-input, .layui-textarea, .layui-upload-button, .layui-select{outline: none; -webkit-appearance: none; transition: all .3s; -webkit-transition: all .3s; box-sizing: border-box;}
+/* 内边距  */
+.layui-padding-1{padding: 4px !important;}
+.layui-padding-2{padding: 8px !important;}
+.layui-padding-3{padding: 16px !important;}
+.layui-padding-4{padding: 32px !important;}
+.layui-padding-5{padding: 48px !important;}
 
-/* 引用 */.layui-elem-quote{margin-bottom: 10px; padding: 15px; line-height: 1.8; border-left: 5px solid #16b777; border-radius: 0 2px 2px 0; background-color: #fafafa;}
+/* 外边距  */
+.layui-margin-1{margin: 4px !important;}
+.layui-margin-2{margin: 8px !important;}
+.layui-margin-3{margin: 16px !important;}
+.layui-margin-4{margin: 32px !important;}
+.layui-margin-5{margin: 48px !important;}
+
+
+/*
+ * 页面元素
+ */
+
+.layui-btn,
+.layui-input,
+.layui-select,
+.layui-textarea,
+.layui-upload-button{outline: none; -webkit-appearance: none; transition: all .3s; -webkit-transition: all .3s; box-sizing: border-box;}
+
+/* 引用 */
+.layui-elem-quote{margin-bottom: 10px; padding: 15px; line-height: 1.8; border-left: 5px solid #16b777; border-radius: 0 2px 2px 0; background-color: #fafafa;}
 .layui-quote-nm{border-style: solid; border-width: 1px; border-left-width: 5px; background: none;}
-/* 字段集合 */.layui-elem-field{margin-bottom: 10px; padding: 0; border-width: 1px; border-style: solid;}
+
+/* 字段集合 */
+.layui-elem-field{margin-bottom: 10px; padding: 0; border-width: 1px; border-style: solid;}
 .layui-elem-field legend{margin-left: 20px; padding: 0 10px; font-size: 20px;}
 .layui-field-title{margin: 16px 0; border-width: 0; border-top-width: 1px;}
 .layui-field-box{padding: 15px;}
@@ -534,10 +559,8 @@ a cite{font-style: normal; *cursor:pointer;}
 
 
 /*
-
-  面板
-
-*/
+ * 面板
+ */
 
 
 /* 折叠面板 */
@@ -644,7 +667,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-text blockquote:not(.layui-elem-quote){padding: 5px 15px; border-left: 5px solid #eee;}
 .layui-text pre > code:not(.layui-code){padding: 15px; font-family: Courier New,Lucida Console,Consolas; background-color: #fafafa;}
 
-/* 字体大小及颜色 */
+/* 字体大小 */
 .layui-font-12{font-size: 12px !important;}
 .layui-font-13{font-size: 13px !important;}
 .layui-font-14{font-size: 14px !important;}
@@ -658,6 +681,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-font-30{font-size: 30px !important;}
 .layui-font-32{font-size: 32px !important;}
 
+/* 字体颜色 */
 .layui-font-red{color: #ff5722 !important;} /*赤*/
 .layui-font-orange{color: #ffb800!important;} /*橙*/
 .layui-font-green{color: #16baaa!important;} /*绿*/
@@ -670,10 +694,8 @@ a cite{font-style: normal; *cursor:pointer;}
 
 
 /*
-
-  按钮
-
-*/
+ * 按钮
+ */
 
 .layui-btn{display: inline-block; vertical-align: middle; height: 38px; line-height: 38px; border: 1px solid transparent; padding: 0 18px; background-color: #16baaa; color: #fff; white-space: nowrap; text-align: center; font-size: 14px; border-radius: 2px; cursor: pointer; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;}
 .layui-btn:hover{opacity: 0.8; filter:alpha(opacity=80); color: #fff;}
