@@ -327,13 +327,13 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         othis.addClass('layui-code-'+ options.skin);
       }
 
+      var language = getLanguage(othis[0], options);
+
       // 高亮
       if(options.highlighter){
         othis.addClass(options.highlighter);
+        setLanguage(othis[0], language);
       }
-
-      var language = getLanguage(othis[0], options)
-      setLanguage(othis[0], language)
 
       // 转义 HTML 标签
       if(options.encode) html = util.escape(html); // 编码
@@ -389,7 +389,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       }
       // Code 内容区域样式
       othis.attr('style', function(_, origVal){
-        return origVal + options.codeStyle;
+        return (origVal || '') + options.codeStyle;
       });
 
       // 是否开启代码复制
