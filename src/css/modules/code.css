@@ -10,6 +10,8 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 .layui-code-view.layui-code-line-numbers-mode{padding-left: 45px !important;}
 .layui-code-title{position: relative; padding: 0 10px; height: 40px; line-height: 40px; border-bottom: 1px solid #eee; font-size: 12px;}
 .layui-code-title > .layui-code-about{position: absolute; right: 10px; top: 0; color: #B7B7B7;}
+.layui-code-line-numbers-mode .layui-code-title{margin-left: -45px;}
+.layui-code-title ~ .layui-code-line-numbers{margin-top: 40px;}
 .layui-code-about > a{padding-left: 10px;}
 .layui-code-view > .layui-code-lines{display:block; max-height: 100%; padding: 15px 10px !important; position: relative;background-color: #fff;font-family: 'Courier New'}
 .layui-code-view.layui-code-line-numbers-mode > .layui-code-lines{border-left: 1px solid #e2e2e2;}
