@@ -388,9 +388,11 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         othis.css('max-height', options.height);
       }
       // Code 内容区域样式
-      othis.attr('style', function(_, origVal){
-        return (origVal || '') + options.codeStyle;
-      });
+      if(options.codeStyle){
+        othis.attr('style', function(_, origVal){
+          return (origVal || '') + options.codeStyle;
+        });
+      }
 
       // 是否开启代码复制
       if(options.copy && !options.preview){
