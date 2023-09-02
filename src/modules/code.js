@@ -1,11 +1,11 @@
 /**
- * code 
+ * code
  * Code 预览组件
  */
- 
+
 layui.define(['lay', 'util', 'element', 'form'], function(exports){
   "use strict";
-  
+
   var $ = layui.$;
   var util = layui.util;
   var element = layui.element;
@@ -51,21 +51,11 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
   var trimEnd = function(str){
       return String(str).replace(/\s+$/, '');
   }
-  // 保留 code 开头的空格
+  // 保留首行缩进
   var trim = function(str){
     return trimEnd(str).replace(/^\n|\n$/, '');
   };
 
-  var getLanguage = function(elem, options){
-    var matched = CONST.LANG_RE.exec(elem.className);
-    return matched ? matched[1].toLowerCase() : options.lang;
-  }
-
-  var setLanguage = function(elem, language){
-    elem.className = elem.className.replace(RegExp(CONST.LANG_RE, 'gi'), '');
-    elem.classList.add("language-" + language);
-  }
-  
   // export api
   exports('code', function(options){
     var opts = options = $.extend(true, {}, config, options);
@@ -85,7 +75,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           var value = othis.attr('lay-'+ attr);
           if(typeof value === 'string'){
             obj[attr] = value;
-          }  
+          }
         })
         return obj;
       }({}));
@@ -101,17 +91,17 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       var rawCode = othis.data('code') || function(){
         var arr = [];
         var textarea = othis.children('textarea');
-        
+
         // 若内容放置在 textarea 中
         textarea.each(function(){
           arr.push(trim(this.value));
         });
-        
+
         // 内容直接放置在元素外层
         if(arr.length === 0){
           arr.push(trim(othis.html()));
         }
-        
+
         return arr;
       }();
 
@@ -154,13 +144,13 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         var FILTER_VALUE = 'LAY-CODE-DF-'+ index;
         var layout = options.layout || ['code', 'preview'];
         var isIframePreview = options.preview === 'iframe';
-        
+
         // 追加 Tab 组件
         var elemView = $('<div class="'+ CONST.ELEM_PREVIEW +'">');
         var elemTabView = $('<div class="layui-tab layui-tab-brief">');
         var elemHeaderView = $('<div class="layui-tab-title">');
         var elemPreviewView = $('<div class="'+ [
-          CONST.ELEM_ITEM, 
+          CONST.ELEM_ITEM,
           CONST.ELEM_ITEM +'-preview',
           'layui-border'
         ].join(' ') +'">');
@@ -242,7 +232,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           typeof options.toolsEvent === 'function' && options.toolsEvent({
             elem: oi,
             type: type,
-            rawCode: codes.join(''), // 原始 code
+            rawCode: rawCode.join(''), // 原始 code
             finalCode: util.unescape(finalCode) // 最终 code
           });
         });
@@ -277,7 +267,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         options.tools && elemTabView.append(elemToolbar); // 追加工具栏
         othis.wrap(elemView).addClass(CONST.ELEM_ITEM).before(elemTabView); // 追加标签结构
 
-        
+
         // 追加预览
         if(isIframePreview){
           elemPreviewView.html('<iframe allowtransparency="true" frameborder="0"></iframe>');
@@ -325,7 +315,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           var thisElem = $(data.elem).closest('.'+ CONST.ELEM_PREVIEW);
           var elemItemBody = thisElem.find('.'+ CONST.ELEM_ITEM);
           var thisItemBody = elemItemBody.eq(data.index);
-          
+
           elemItemBody.removeClass(CONST.ELEM_SHOW);
           thisItemBody.addClass(CONST.ELEM_SHOW);
 
@@ -335,7 +325,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         });
       }
 
-      var listElem = $('<code class="'+ CONST.ELEM_LINES +'">');
+      var listElem = $('<code class="'+ CONST.ELEM_LINES +'"></code>'); // 此处的闭合标签是为了兼容 IE8
 
       // header
       var headerElem = $('<div class="'+ CONST.ELEM_TITLE +'">');
@@ -350,19 +340,14 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         othis.addClass('layui-code-'+ options.skin);
       }
 
-      var language = getLanguage(othis[0], options);
-
       // 高亮
-      if(options.highlighter){
-        othis.addClass(options.highlighter);
-        setLanguage(othis[0], language);
-      }
+      if(options.highlighter) othis.addClass(options.highlighter + ' language-' + options.lang);
 
       // 转义 HTML 标签
       if(options.encode) html = util.escape(html); // 编码
 
       // code 转 html
-      if(options.codeRender) html = options.codeRender(html, language);
+      if(typeof options.codeRender === 'function') html = options.codeRender(html, options);
       var lines = html.split(/\r?\n/g);
       html = (options.codeRender && !options.highlighter)
         ? html
@@ -375,7 +360,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
 
       // 创建行号
       if(options.ln) {
-        var lineNumbersCode = ['<div class="' + CONST.ELEM_LINE_NUMBERS + '">'] 
+        var lineNumbersCode = ['<div class="' + CONST.ELEM_LINE_NUMBERS + '">']
         layui.each(lines, function(index){
           lineNumbersCode.push('<span class="' + CONST.ELEM_LINE_NUMBER + '">' + util.digit(index + 1) +'.</span>')
         });
@@ -383,11 +368,11 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         othis.addClass(CONST.ELEM_LINE_NUMBERS_MODE);
         othis.append(lineNumbersCode.join(''));
       }
-      
+
       // 创建 header
       if(options.header && !othis.children('.'+ CONST.ELEM_TITLE)[0]){
         headerElem.html((options.title || options.text.code) + (
-          options.about 
+          options.about
             ? '<div class="layui-code-about">' + options.about + '</div>'
           : ''
         ));
@@ -437,7 +422,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
 
       // language marker
       if(options.langMarker){
-        var elemMarker = $('<span class="layui-code-lang-marker">' + language + '</span>')
+        var elemMarker = $('<span class="layui-code-lang-marker">' + options.lang + '</span>')
         var isHeight = othis[0].style.height || othis[0].style.maxHeight;
         var elemMarkerHas = othis.children("." + CONST.ELEM_MARKER);
         if(isHeight) elemMarker.css('margin-right', '17px')
@@ -446,7 +431,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       }
 
     });
-    
+
   });
 });
 
