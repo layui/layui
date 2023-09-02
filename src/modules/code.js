@@ -210,14 +210,37 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         elemToolbar.on('click', '>i', function(){
           var oi = $(this);
           var type = oi.data('type');
+
+          // 内部 tools event
           tools[type] && typeof tools[type].event === 'function' && tools[type].event(oi, type);
-          typeof options.toolsEvent === 'function' && options.toolsEvent(oi, type);
+
+          // 外部 tools event
+          typeof options.toolsEvent === 'function' && options.toolsEvent({
+            elem: oi,
+            type: type,
+            rawCode: codes.join(''), // 原始 code
+            finalCode: util.unescape(finalCode) // 最终 code
+          });
         });
+
+        // 渲染工具栏
         layui.each(options.tools, function(i, v){
-          var className = (tools[v] && tools[v].className) || v;
-          var title = (tools[v] && tools[v].title) || [''];
+          var viso = typeof v === 'object'; // 若为 object 值，则可自定义更多属性
+          var tool = viso ? v : (
+            tools[v] || {
+              className: v,
+              title: [v]
+            }
+          );
+
+          var className = tool.className || tool.type;
+          var title = tool.title || [''];
+          var type = viso ? ( tool.type || className ) : v;
+
+          if (!type) return;
+
           elemToolbar.append(
-            '<i class="layui-icon layui-icon-'+ className +'" data-type="'+ v +'" title="'+ title[0] +'"></i>'
+            '<i class="layui-icon layui-icon-'+ className +'" data-type="'+ type +'" title="'+ title[0] +'"></i>'
           );
         });
 
