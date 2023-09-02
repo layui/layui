@@ -44,8 +44,8 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       preview: 'Preview',
     },
     lang: 'text', // 指定语言类型
-    highlighter: false, // 指定语法高亮器，'prism','hljs','shiki'
-    langMarker: true, // 代码区域是否显示语言类型标记
+    highlighter: false, // 是否开启语法高亮，'prism','hljs','shiki'
+    langMarker: false, // 代码区域是否显示语言类型标记
   };
 
   var trimEnd = function(str){
