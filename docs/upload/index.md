@@ -11,6 +11,8 @@ toc: true
 
 以下示例的部分上传接口由第三方网站 `https://httpbin.org` 提供，它可以模拟各类 HTTP 请求。若未配置上传接口的，每次上传都会报「请求上传接口出现异常」的提示，这属于正常现象。
 
+<div class="ws-docs-showcase"></div>
+
 <div>
 {{- d.include("/upload/detail/demo.md") }}
 </div>
