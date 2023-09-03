@@ -1,11 +1,11 @@
 /**
- * code 
+ * code
  * Code 预览组件
  */
- 
+
 layui.define(['lay', 'util', 'element', 'form'], function(exports){
   "use strict";
-  
+
   var $ = layui.$;
   var util = layui.util;
   var element = layui.element;
@@ -21,7 +21,10 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
     ELEM_FULL: 'layui-code-full',
     ELEM_PREVIEW: 'layui-code-preview',
     ELEM_ITEM: 'layui-code-item',
-    ELEM_SHOW: 'layui-show'
+    ELEM_SHOW: 'layui-show',
+    ELEM_LINE: 'layui-code-line',
+    ELEM_LINES: 'layui-code-lines',
+    ELEM_LINE_NUMBERS_MODE: 'layui-code-line-numbers-mode',
   };
 
   // 默认参数项
@@ -35,14 +38,21 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
     // 默认文本
     text: {
       code: util.escape('</>'),
-      preview: 'Preview'
-    }
+      preview: 'Preview',
+    },
+    lang: 'text', // 指定语言类型
+    highlighter: false, // 是否开启语法高亮，'prism','hljs','shiki'
+    langMarker: false, // 代码区域是否显示语言类型标记
   };
 
+  var trimEnd = function(str){
+      return String(str).replace(/\s+$/, '');
+  }
+  // 保留首行缩进
   var trim = function(str){
-    return $.trim(str).replace(/^\n|\n$/, '');
+    return trimEnd(str).replace(/^\n|\n$/, '');
   };
-  
+
   // export api
   exports('code', function(options){
     var opts = options = $.extend(true, {}, config, options);
@@ -62,36 +72,40 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           var value = othis.attr('lay-'+ attr);
           if(typeof value === 'string'){
             obj[attr] = value;
-          }  
+          }
         })
         return obj;
       }({}));
+
+      // codeRender 需要关闭编码
+      // 未使用 codeRender 时若开启了预览，则强制开启编码
+      options.encode = (options.encode || options.preview) && !options.codeRender;
 
       // 最终显示的代码
       var finalCode;
 
       // 获得初始代码
-      var codes = othis.data('code') || function(){
+      var rawCode = othis.data('code') || function(){
         var arr = [];
         var textarea = othis.children('textarea');
-        
+
         // 若内容放置在 textarea 中
         textarea.each(function(){
           arr.push(trim(this.value));
         });
-        
+
         // 内容直接放置在元素外层
         if(arr.length === 0){
           arr.push(trim(othis.html()));
         }
-        
+
         return arr;
       }();
 
-      othis.data('code', codes);
+      othis.data('code', rawCode);
 
       // code
-      var html = finalCode = codes.join('');
+      var html = finalCode = rawCode.join('');
 
       // 外部重新解析 code
       if(typeof options.codeParse === 'function'){
@@ -127,13 +141,13 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         var FILTER_VALUE = 'LAY-CODE-DF-'+ index;
         var layout = options.layout || ['code', 'preview'];
         var isIframePreview = options.preview === 'iframe';
-        
+
         // 追加 Tab 组件
         var elemView = $('<div class="'+ CONST.ELEM_PREVIEW +'">');
         var elemTabView = $('<div class="layui-tab layui-tab-brief">');
         var elemHeaderView = $('<div class="layui-tab-title">');
         var elemPreviewView = $('<div class="'+ [
-          CONST.ELEM_ITEM, 
+          CONST.ELEM_ITEM,
           CONST.ELEM_ITEM +'-preview',
           'layui-border'
         ].join(' ') +'">');
@@ -145,9 +159,6 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         if(options.id) elemView.attr('id', options.id);
         elemView.addClass(options.className);
         elemTabView.attr('lay-filter', FILTER_VALUE);
-
-        // 若开启预览，则强制对 code 进行编码
-        options.encode = true;
 
         // 标签头
         layui.each(layout, function(i, v){
@@ -218,7 +229,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           typeof options.toolsEvent === 'function' && options.toolsEvent({
             elem: oi,
             type: type,
-            rawCode: codes.join(''), // 原始 code
+            rawCode: rawCode.join(''), // 原始 code
             finalCode: util.unescape(finalCode) // 最终 code
           });
         });
@@ -253,7 +264,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         options.tools && elemTabView.append(elemToolbar); // 追加工具栏
         othis.wrap(elemView).addClass(CONST.ELEM_ITEM).before(elemTabView); // 追加标签结构
 
-        
+
         // 追加预览
         if(isIframePreview){
           elemPreviewView.html('<iframe allowtransparency="true" frameborder="0"></iframe>');
@@ -265,7 +276,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           if(isIframePreview && iframe){
             iframe.srcdoc = finalCode;
           } else {
-            thisItemBody.html(codes.join(''));
+            thisItemBody.html(rawCode.join(''));
           }
           // 回调的返回参数
           var params = {
@@ -301,7 +312,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           var thisElem = $(data.elem).closest('.'+ CONST.ELEM_PREVIEW);
           var elemItemBody = thisElem.find('.'+ CONST.ELEM_ITEM);
           var thisItemBody = elemItemBody.eq(data.index);
-          
+
           elemItemBody.removeClass(CONST.ELEM_SHOW);
           thisItemBody.addClass(CONST.ELEM_SHOW);
 
@@ -311,9 +322,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         });
       }
 
-      // 有序或无序列表
-      var listTag = options.ln ? 'ol' : 'ul';
-      var listElem = $('<'+ listTag +' class="layui-code-'+ listTag +'">');
+      var listElem = $('<code class="'+ CONST.ELEM_LINES +'"></code>'); // 此处的闭合标签是为了兼容 IE8
 
       // header
       var headerElem = $('<div class="'+ CONST.ELEM_TITLE +'">');
@@ -328,19 +337,42 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         othis.addClass('layui-code-'+ options.skin);
       }
 
-
+      // 高亮
+      if(options.highlighter) othis.addClass(options.highlighter + ' language-' + options.lang);
 
       // 转义 HTML 标签
       if(options.encode) html = util.escape(html); // 编码
-      html = html.replace(/[\r\t\n]+/g, '</li><li>'); // 转义换行符
-      
+
+      // code 转 html
+      if(typeof options.codeRender === 'function') html = options.codeRender(html, options);
+      var lines = html.split(/\r?\n/g);
+      html = (options.codeRender && !options.highlighter)
+        ? html
+        : $.map(lines, function(line){
+          return ['<div class="', CONST.ELEM_LINE, '">', (line || ' '), '</div>'].join(''); // 空行填充空格，以保证换行效果
+        }).join('')
+
       // 生成列表
-      othis.html(listElem.html('<li>' + html + '</li>'));
-      
+      othis.html(listElem.html(html));
+
+      // 创建行号
+      if(options.ln) {
+        var lineNumbersCode = ['<div class="layui-code-line-numbers">']
+        layui.each(lines, function(index){
+          lineNumbersCode.push('<span class="layui-code-line-number">' + util.digit(index + 1) +'.</span>')
+        });
+        lineNumbersCode.push('</div>');
+        othis.addClass(CONST.ELEM_LINE_NUMBERS_MODE);
+        othis.append(lineNumbersCode.join(''));
+        othis.children('.layui-code-line-numbers').css({
+          height: listElem.height(),
+        })
+      }
+
       // 创建 header
       if(options.header && !othis.children('.'+ CONST.ELEM_TITLE)[0]){
         headerElem.html((options.title || options.text.code) + (
-          options.about 
+          options.about
             ? '<div class="layui-code-about">' + options.about + '</div>'
           : ''
         ));
@@ -355,16 +387,20 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       // 按行数适配左边距
       (function(autoIncNums){
         if(autoIncNums > 0){
-          listElem.css('margin-left', autoIncNums + 'px');
+          othis.css('margin-left', autoIncNums + 'px');
         }
-      })(Math.floor(listElem.find('li').length/100));
+      })(Math.floor(listElem.find('.' + CONST.ELEM_LINE).length/100));
 
       // 限制 Code 最大高度
       if(options.height){ // 兼容旧版本
-        listElem.css('max-height', options.height);
+        othis.css('max-height', options.height);
       }
       // Code 内容区域样式
-      listElem.attr('style', options.codeStyle);
+      if(options.codeStyle){
+        othis.attr('style', function(_, origVal){
+          return (origVal || '') + options.codeStyle;
+        });
+      }
 
       // 是否开启代码复制
       if(options.copy && !options.preview){
@@ -372,7 +408,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
           '<i class="layui-icon layui-icon-file-b" title="复制"></i>',
         '</span>'].join(''));
         var elemCopyHas = othis.children('.'+ CONST.ELEM_COPY);
-        var isHeight = listElem[0].style.height || listElem[0].style.maxHeight;
+        var isHeight = othis[0].style.height || othis[0].style.maxHeight;
 
         if(isHeight) elemCopy.addClass(CONST.ELEM_COPY + '-offset'); // 偏移
         if(elemCopyHas[0]) elemCopyHas.remove(); // 移除旧的复制元素
@@ -384,8 +420,18 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         });
       }
 
+      // language marker
+      if(options.langMarker){
+        var elemMarker = $('<span class="layui-code-lang-marker">' + options.lang + '</span>')
+        var isHeight = othis[0].style.height || othis[0].style.maxHeight;
+        var elemMarkerHas = othis.children("." + CONST.ELEM_MARKER);
+        if(isHeight) elemMarker.css('margin-right', '17px')
+        if(elemMarkerHas) elemMarkerHas.remove();
+        othis.append(elemMarker);
+      }
+
     });
-    
+
   });
 });
 

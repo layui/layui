@@ -6,35 +6,37 @@
 html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 
 /* 默认风格 */
-.layui-code-view{display: block; position: relative; margin: 11px 0; padding: 0; border: 1px solid #eee; border-left-width: 6px; background-color: #FAFAFA; color: #333; font-family: Courier New; font-size: 13px;}
+.layui-code-view{display: block; position: relative; margin: 11px 0; padding: 0 !important; border: 1px solid #eee; border-left-width: 6px; background-color: #FAFAFA; color: #333; font-family: 'Courier New'; font-size: 13px; white-space: pre; overflow: auto;}
+.layui-code-view.layui-code-line-numbers-mode{padding-left: 45px !important;}
 .layui-code-title{position: relative; padding: 0 10px; height: 40px; line-height: 40px; border-bottom: 1px solid #eee; font-size: 12px;}
 .layui-code-title > .layui-code-about{position: absolute; right: 10px; top: 0; color: #B7B7B7;}
+.layui-code-line-numbers-mode .layui-code-title{margin-left: -45px;}
+.layui-code-title ~ .layui-code-line-numbers{margin-top: 40px;}
 .layui-code-about > a{padding-left: 10px;}
-.layui-code-view > .layui-code-ol, 
-.layui-code-view > .layui-code-ul{max-height: 100%; padding: 0 !important; position: relative; overflow: auto;}
-.layui-code-view > .layui-code-ol > li{position: relative; margin-top: 0  !important; margin-left: 45px  !important; line-height: 20px; padding: 0 10px  !important; border-left: 1px solid #e2e2e2; list-style-type: decimal-leading-zero; *list-style-type: decimal; background-color: #fff;}
-.layui-code-view > .layui-code-ol > li:first-child, 
-.layui-code-view > .layui-code-ul > li:first-child{padding-top: 10px  !important;}
-.layui-code-view > .layui-code-ol > li:last-child, 
-.layui-code-view > .layui-code-ul > li:last-child{padding-bottom: 10px  !important;}
-.layui-code-view > .layui-code-ul > li{position: relative; line-height: 20px; padding: 0 10px  !important; list-style-type: none; *list-style-type: none; background-color: #fff;}
+.layui-code-view > .layui-code-lines{display:block; max-height: 100%; padding: 15px 10px !important; position: relative;background-color: #fff;font-family: 'Courier New'}
+.layui-code-view > .layui-code-lines > .layui-code-line{position: relative; display: block; line-height: 20px;}
 .layui-code-view pre{margin: 0;}
+.layui-code-line-numbers{position: absolute;top: 0;bottom: 0;left: 0;width: 45px; border-right: 1px solid #e2e2e2; text-align: center; padding: 15px 0; line-height: 20px; user-select: none;}
+.layui-code-line-number{display: block;}
+.layui-code-lang-marker{position: absolute; top: 2px; right: 11px; color: currentColor;}
+.layui-code-view:hover > .layui-code-lang-marker{display: none;}
 
 /* 深色风格 */
 .layui-code-dark{border: 1px solid #0C0C0C; border-left-color: #3F3F3F; background-color: #0C0C0C; color: #C2BE9E}
 .layui-code-dark > .layui-code-title{border-bottom: none;}
-.layui-code-dark > .layui-code-ol > li, 
-.layui-code-dark > .layui-code-ul > li{background-color: #3F3F3F; border-left: none;}
-.layui-code-dark > .layui-code-ul > li{margin-left: 6px;}
+.layui-code-dark > .layui-code-lines{background-color: #3F3F3F !important; border-left: none !important;}
+.layui-code-dark > .layui-code-lines{margin-left: 6px;}
+.layui-code-dark.layui-code-line-numbers-mode > .layui-code-lines{margin-left: 0;}
 
 /* 代码预览 */
 .layui-code textarea{display: none;}
-.layui-code-preview > .layui-code{margin: 0;}
+.layui-code-preview > .layui-code,
+.layui-code-preview > .layui-code-view{margin: 0;}
 .layui-code-preview > .layui-tab{position: relative; z-index: 1; margin-bottom: 0;}
 .layui-code-preview > .layui-tab > .layui-tab-title{border-bottom: none;}
 .layui-code-preview > .layui-code > .layui-code-title{display: none;}
 .layui-code-preview .layui-code-item{display: none;}
-.layui-code-preview .layui-code-view > .layui-code-ol > li{}
+.layui-code-preview .layui-code-view > .layui-code-lines > .layui-code-line{}
 .layui-code-item-preview{position: relative; padding: 16px; overflow: auto;}
 .layui-code-item-preview > iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;}
 
@@ -56,5 +58,14 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 .layui-code-full{position: fixed; left: 0; top: 0; z-index: 1111111; width: 100%; height: 100%; background-color: #fff;}
 .layui-code-full .layui-code-item{width: 100% !important; border-width: 0 !important; border-top-width: 1px !important;}
 .layui-code-full .layui-code-item,
-.layui-code-full .layui-code-ol,
-.layui-code-full .layui-code-ul{height: calc(100vh - 51px) !important; box-sizing: border-box;}
+.layui-code-full .layui-code-view{max-height: calc(100vh - 51px) !important; box-sizing: border-box;}
+
+/* 代码高亮重置 */
+.layui-code-view[class*=language-]{
+  font-size: 13px !important;
+  line-height: 20px !important;
+}
+.layui-code-view[class*=language-] > .layui-code-lines,
+.layui-code-view[class*=language-] > .layui-code-line-numbers{
+  background-color: transparent;
+}
