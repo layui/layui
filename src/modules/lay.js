@@ -318,7 +318,7 @@
       try {
         navigator.clipboard.writeText(text).then(
           options.done
-        ).catch(options.error);
+        ).['catch'](options.error);
       } catch(e) {
         var elem = document.createElement('textarea');
 
