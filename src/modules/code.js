@@ -27,7 +27,6 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
     ELEM_LINE_NUMBER: 'layui-code-line-number',
     ELEM_LINE_NUMBERS: 'layui-code-line-numbers',
     ELEM_LINE_NUMBERS_MODE: 'layui-code-line-numbers-mode',
-    LANG_RE: /(?:^|\s)lang(?:uage)?-([\w-]+)(?=\s|$)/i
   };
 
   // 默认参数项
