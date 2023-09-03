@@ -364,6 +364,9 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         lineNumbersCode.push('</div>');
         othis.addClass(CONST.ELEM_LINE_NUMBERS_MODE);
         othis.append(lineNumbersCode.join(''));
+        othis.children('.layui-code-line-numbers').css({
+          height: listElem.height(),
+        })
       }
 
       // 创建 header

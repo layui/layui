@@ -14,10 +14,9 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 .layui-code-title ~ .layui-code-line-numbers{margin-top: 40px;}
 .layui-code-about > a{padding-left: 10px;}
 .layui-code-view > .layui-code-lines{display:block; max-height: 100%; padding: 15px 10px !important; position: relative;background-color: #fff;font-family: 'Courier New'}
-.layui-code-view.layui-code-line-numbers-mode > .layui-code-lines{border-left: 1px solid #e2e2e2;}
 .layui-code-view > .layui-code-lines > .layui-code-line{position: relative; display: block; line-height: 20px;}
 .layui-code-view pre{margin: 0;}
-.layui-code-line-numbers{position: absolute;top: 0;bottom: 0;left: 0;width: 45px; text-align: center; padding-top: 15px; line-height: 20px; user-select: none;}
+.layui-code-line-numbers{position: absolute;top: 0;bottom: 0;left: 0;width: 45px; border-right: 1px solid #e2e2e2; text-align: center; padding: 15px 0; line-height: 20px; user-select: none;}
 .layui-code-line-number{display: block;}
 .layui-code-lang-marker{position: absolute; top: 2px; right: 11px; color: currentColor;}
 .layui-code-view:hover > .layui-code-lang-marker{display: none;}
