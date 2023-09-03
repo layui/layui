@@ -87,7 +87,7 @@ layui.define(['lay','layer'], function(exports){
   };
   
   // 初始渲染
-  Class.prototype.render = function(options){
+  Class.prototype.render = function(){
     var that = this;
     var options = that.config;
 
@@ -494,13 +494,13 @@ layui.define(['lay','layer'], function(exports){
   };
   
   //重置方法
-  Class.prototype.reload = function(options){
+  Class.prototype.reload = function(opts){
     options = options || {};
     delete options.elem;
     delete options.bindAction;
     
     var that = this;
-    var options = that.config = $.extend({}, that.config, upload.config, options);
+    var options = that.config = $.extend({}, that.config, upload.config, opts);
     var next = options.elem.next();
     
     //更新文件域相关属性
