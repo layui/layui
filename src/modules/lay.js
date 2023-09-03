@@ -318,13 +318,16 @@
       try {
         navigator.clipboard.writeText(text).then(
           options.done
-        ).catch(options.error);
+        )['catch'](options.error);
       } catch(e) {
         var elem = document.createElement('textarea');
 
         elem.value = text;
-        elem.style.position = 'absolute';
+        elem.style.position = 'fixed';
         elem.style.opacity = '0';
+        elem.style.top = '0px';
+        elem.style.left = '0px';
+        
         document.body.appendChild(elem);
         elem.select();
 
@@ -333,9 +336,9 @@
           typeof options.done === 'function' && options.done();
         } catch(err) {
           typeof options.error === 'function' && options.error(err);
+        } finally {
+          elem.remove ? elem.remove() : document.body.removeChild(elem);
         }
-
-        elem.remove();
       }
     }
   };
