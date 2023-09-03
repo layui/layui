@@ -24,8 +24,6 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
     ELEM_SHOW: 'layui-show',
     ELEM_LINE: 'layui-code-line',
     ELEM_LINES: 'layui-code-lines',
-    ELEM_LINE_NUMBER: 'layui-code-line-number',
-    ELEM_LINE_NUMBERS: 'layui-code-line-numbers',
     ELEM_LINE_NUMBERS_MODE: 'layui-code-line-numbers-mode',
   };
 
@@ -359,9 +357,9 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
 
       // 创建行号
       if(options.ln) {
-        var lineNumbersCode = ['<div class="' + CONST.ELEM_LINE_NUMBERS + '">']
+        var lineNumbersCode = ['<div class="layui-code-line-numbers">']
         layui.each(lines, function(index){
-          lineNumbersCode.push('<span class="' + CONST.ELEM_LINE_NUMBER + '">' + util.digit(index + 1) +'.</span>')
+          lineNumbersCode.push('<span class="layui-code-line-number">' + util.digit(index + 1) +'.</span>')
         });
         lineNumbersCode.push('</div>');
         othis.addClass(CONST.ELEM_LINE_NUMBERS_MODE);
