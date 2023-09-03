@@ -6,6 +6,8 @@
   </textarea>
 </pre>
 
+<div class="ws-docs-showcase" style="margin-top: 16px;"></div>
+
 <h3 id="type" lay-toc="{level: 2, hot: true}">弹层类型</h3>
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', text: {preview: '弹层类型'}, layout: ['preview', 'code'], tools: ['full']}">
