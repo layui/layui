@@ -31,10 +31,8 @@
       重载测试 
       <i class="layui-icon layui-icon-down layui-font-12"></i>
     </button>
-    <button class="layui-btn layui-btn-sm layui-btn-primary" id="rowMode">
-      <span>{{= d.lineStyle ? '多行' : '单行' }}模式</span>
-      <i class="layui-icon layui-icon-down layui-font-12"></i>
-    </button>
+    <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="multi-row"> 多行 </button>
+    <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="default-row"> 单行 </button>
     <button class="layui-btn layui-btn-sm" id="moreTest">
       更多测试 
       <i class="layui-icon layui-icon-down layui-font-12"></i>
@@ -79,12 +77,12 @@
 
 <table id="test"></table>
 
-<script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
+<script src="../src/layui.js"></script>
 <script>
 (function(off){
   if(!off) return;
   layui.disuse('table').extend({
-    table: '{/}//ww:5018/layui/2.6.13/src/modules/table'
+    table: '{/}https://cdn.staticfile.org/layui/2.7.6/layui.js'
   });
 })();
 
@@ -260,7 +258,7 @@ layui.use(['table', 'dropdown'], function(){
 
       // 重载测试
       dropdown.render({
-        elem: '#reloadTest', //可绑定在任意元素中，此处以上述按钮为例
+        elem: '#reloadTest', // 可绑定在任意元素中，此处以上述按钮为例
         data: [{
           id: 'reload',
           title: '重载'
@@ -340,41 +338,9 @@ layui.use(['table', 'dropdown'], function(){
         }
       });
 
-      // 行模式
-      dropdown.render({
-        elem: '#rowMode',
-        data: [{
-          id: 'default-row',
-          title: '单行模式（默认）'
-        },{
-          id: 'multi-row',
-          title: '多行模式'
-        }],
-        // 菜单被点击的事件
-        click: function(obj){
-          var checkStatus = table.checkStatus(id)
-          var data = checkStatus.data; // 获取选中的数据
-          switch(obj.id){
-            case 'default-row':
-              table.reload('test', {
-                lineStyle: null // 恢复单行
-              });
-              layer.msg('已设为单行');
-            break;
-            case 'multi-row':
-              table.reload('test', {
-                // 设置行样式，此处以设置多行高度为例。若为单行，则没必要设置改参数 - 注：v2.7.0 新增
-                lineStyle: 'height: 95px;'
-              });
-              layer.msg('即通过设置 lineStyle 参数可开启多行');
-            break;
-          }
-        }
-      });
-
       // 更多测试
       dropdown.render({
-        elem: '#moreTest', //可绑定在任意元素中，此处以上述按钮为例
+        elem: '#moreTest', // 可绑定在任意元素中，此处以上述按钮为例
         data: [{
           id: 'add',
           title: '添加'
@@ -420,8 +386,8 @@ layui.use(['table', 'dropdown'], function(){
 
     /*
     request: { // 自定义请求参数名称
-      pageName: 'curr', //页码的参数名称，默认：page
-      limitName: 'nums' //每页数据量的参数名，默认：limit
+      pageName: 'curr', // 页码的参数名称，默认：page
+      limitName: 'nums' // 每页数据量的参数名，默认：limit
     },
     parseData: function(res){ // 任意数据格式的解析
       return {
@@ -438,20 +404,20 @@ layui.use(['table', 'dropdown'], function(){
     }
   });
   
-  //排序事件
+  // 排序事件
   table.on('sort(test)', function(obj){
-    //console.log(obj);
+    // console.log(obj);
 
-    //return;
+    // return;
     layer.msg('服务端排序。order by '+ obj.field + ' ' + obj.type);
 
-    //服务端排序
+    // 服务端排序
     table.reloadData('test', {
-      //initSort: obj,
-      //page: {curr: 1}, //重新从第一页开始
+      // initSort: obj,
+      // page: {curr: 1}, // 重新从第一页开始
       where: { // 向服务端传入排序参数
-        key: obj.field, //排序字段
-        order: obj.type //排序方式
+        key: obj.field, // 排序字段
+        order: obj.type // 排序方式
       }
     });
   });
@@ -465,18 +431,31 @@ layui.use(['table', 'dropdown'], function(){
       case 'getCheckData':
         var data = checkStatus.data;
         layer.alert(layui.util.escape(JSON.stringify(data)));
-      break;
+        break;
       case 'getData':
         var getData = table.getData(id);
         console.log(getData);
         layer.alert(layui.util.escape(JSON.stringify(getData)));
-      break;
+        break;
       case 'isAll':
         layer.msg(checkStatus.isAll ? '全选': '未全选')
-      break;
+        break;
+      case 'multi-row':
+        table.reload('test', {
+          // 设置行样式，此处以设置多行高度为例。若为单行，则没必要设置改参数 - 注：v2.7.0 新增
+          lineStyle: 'height: 95px;'
+        });
+        layer.msg('即通过设置 lineStyle 参数可开启多行');
+        break;
+      case 'default-row':
+        table.reload('test', {
+          lineStyle: null // 恢复单行
+        });
+        layer.msg('已设为单行');
+        break;
       case 'LAYTABLE_TIPS':
         layer.alert('Table for layui-v'+ layui.v);
-      break;
+        break;
     };
   });
 
@@ -485,16 +464,11 @@ layui.use(['table', 'dropdown'], function(){
     console.log(obj);
   });
 
-  //触发单元格工具事件
+  // 触发单元格工具事件
   table.on('tool(test)', function(obj){ // 双击 toolDouble
     var data = obj.data;
-    //console.log(obj)
-    if(obj.event === 'del'){
-      layer.confirm('真的删除行么', function(index){
-        obj.del();
-        layer.close(index);
-      });
-    } else if(obj.event === 'edit'){
+    // console.log(obj)
+    if (obj.event === 'edit') {
       layer.prompt({
         formType: 2
         ,value: data.email
@@ -512,17 +486,20 @@ layui.use(['table', 'dropdown'], function(){
         */
         layer.close(index);
       });
+    } else if (obj.event === 'del') {
+      layer.confirm('真的删除行么', function(index){
+        obj.del();
+        layer.close(index);
+      });
     }
   });
 
-
-
-  //触发表格复选框选择
+  // 触发表格复选框选择
   table.on('checkbox(test)', function(obj){
     console.log(obj)
   });
 
-  //触发表格单选框选择
+  // 触发表格单选框选择
   table.on('radio(test)', function(obj){
     console.log(obj)
   });
