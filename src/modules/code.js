@@ -11,6 +11,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
   var element = layui.element;
   var form = layui.form;
   var layer = layui.layer;
+  var lay = layui.lay;
 
   // 常量
   var CONST = {
@@ -26,6 +27,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
     ELEM_LINES: 'layui-code-lines',
     ELEM_LINE_NUMS: 'layui-code-line-numbers',
     ELEM_LINE_NUMBERS_MODE: 'layui-code-line-numbers-mode',
+    ELEM_MARKER: 'layui-code-lang-marker'
   };
 
   // 默认参数项
@@ -44,6 +46,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
     lang: 'text', // 指定语言类型
     highlighter: false, // 是否开启语法高亮，'prism','hljs','shiki'
     langMarker: false, // 代码区域是否显示语言类型标记
+    wrapLines: false, // 是否开启换行
   };
 
   // 初始索引
@@ -57,6 +60,28 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
   var trim = function(str){
     return trimEnd(str).replace(/^\n|\n$/, '');
   };
+
+  var resizeLineNumbers = function(elem){
+    var elems = $(elem).filter(function(){
+      var whiteSpace = layui.getStyle(this, 'white-space')
+      return (whiteSpace === 'pre-wrap' || whiteSpace === 'pre-line') && $(this).hasClass(CONST.ELEM_LINE_NUMBERS_MODE);
+    })
+
+    if(elems.length === 0) return;
+
+    layui.each(elems, function(_, el){
+      var othis = $(el);
+      var lineNumbersElem = othis.children('.' + CONST.ELEM_LINE_NUMS);
+      var linesElem = othis.children('.' + CONST.ELEM_LINES);
+
+      layui.each(linesElem.children(), function(index, line){
+        var rect = line.getBoundingClientRect()
+        lineNumbersElem[0].children[index].style.height = (rect.height || rect.bottom - rect.top) + 'px';
+      })
+
+      lineNumbersElem.height(linesElem.height());
+    })
+  }
 
   // export api
   exports('code', function(options){
@@ -373,6 +398,9 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       ].join(' '));
     }
 
+    // 换行模式
+    if(options.wrapLines) othis.addClass('layui-code-wrap-lines-mode');
+
     // 转义 HTML 标签
     if(options.encode) html = util.escape(html); // 编码
 
@@ -386,8 +414,8 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
     html = (options.codeRender && !options.highlighter)
       ? html
       : $.map(lines, function(line){
-        return ['<div class="', CONST.ELEM_LINE, '">', (line || ' '), '</div>'].join(''); // 空行填充空格，以保证换行效果
-      }).join('')
+          return ['<div class="' + CONST.ELEM_LINE + '">', (line || ' '), '</div>'].join(''); // 空行填充空格，以保证换行效果
+        }).join('')
 
     // 插入 code
     othis.html(codeElem.html(html));
@@ -465,7 +493,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
 
     // language marker
     if(options.langMarker){
-      var elemMarker = $('<span class="layui-code-lang-marker">' + options.lang + '</span>')
+      var elemMarker = $(['<span class="'+ CONST.ELEM_MARKER +'">', options.lang, '</span>'].join('') )
       var elemMarkerHas = othis.children("." + CONST.ELEM_MARKER);
       if(elemMarkerHas[0]) elemMarkerHas.remove();
       othis.append(elemMarker);

@@ -12,6 +12,7 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 /* 基础结构 */
 .layui-code-view{display: block; position: relative; margin: 11px 0; padding: 0; border: 1px solid #eee; border-left-width: 6px; background-color: #fff; color: #333; white-space: pre; overflow: auto;}
 .layui-code-view.layui-code-line-numbers-mode{padding-left: 45px;}
+.layui-code-view.layui-code-wrap-lines-mode{white-space: pre-wrap;}
 .layui-code-title{position: relative; padding: 0 10px; height: 40px; line-height: 40px; border-bottom: 1px solid #eee; font-size: 12px;}
 .layui-code-title > .layui-code-about{position: absolute; right: 10px; top: 0; color: #B7B7B7;}
 .layui-code-line-numbers-mode .layui-code-title{margin-left: -45px;}
@@ -74,4 +75,7 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 }
 .layui-code-view.layui-code-hl.layui-code-line-numbers-mode{
   padding-left: 45px !important;
+}
+.layui-code-view.layui-code-hl.layui-code-wrap-lines-mode{
+  white-space: pre-wrap !important;
 }
