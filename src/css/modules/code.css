@@ -66,8 +66,12 @@ html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
 /* 代码高亮重置 */
 .layui-code-view.layui-code-hl{
   line-height: 20px !important;
+  padding: 0 !important;
 }
 .layui-code-view.layui-code-hl > .layui-code-lines,
 .layui-code-view.layui-code-hl > .layui-code-line-numbers{
   background-color: transparent;
+}
+.layui-code-view.layui-code-hl.layui-code-line-numbers-mode{
+  padding-left: 45px !important;
 }
