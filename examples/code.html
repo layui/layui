@@ -13,26 +13,57 @@
 </head>
 <body>
 
-<pre class="layui-code" lay-height="300px">
-// 在里面存放任意的文本内容
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
+<pre id="test">
+  <textarea class="layui-hide">
+<div class="layui-btn-container">
+  <button type="button" class="layui-btn">默认按钮</button>
+</div>
+
+<div class="layui-btn-container">
+  <button class="layui-btn layui-btn-primary layui-border-green">主色按钮</button>
+</div>
+<script type="text/html">
+<h3>{{= d.title }}</h3>
+<ul>
+{{#  layui.each(d.list, function(index, item){ }}
+  <li>
+    <span>{{= item.modname }}</span>
+    <span>{{= item.alias }}：</span>
+    <span>{{= item.site || '' }}</span>
+  </li>
+{{#  }); }}
+<p>{{#  if(d.list.length === 0){ }}
+无数据
+{{#  } }}</p>
+</ul>
+</script>
+<script>
+  layui.use(function () {
+    var layer = layui.layer;
+    const a = '1'
+    function aa(a, b) {
+      return '11'
+    }
+    layer.msg(layui.v)
+  })
+</script>
+  </textarea>
 </pre>
+
+<pre><code class="layui-code">
+code line
+code line
+code line
+</code></pre>
+
+<pre class="layui-code" lay-options="{height: 300}" id="ID-multi-line"></pre>
+<script type="module">
+  // 生成批量行，测试行结构
+  const elem = document.getElementById('ID-multi-line');
+  elem.innerHTML = Array(1001).fill().map(v => {
+    return Math.random().toString(32).substring(2).toUpperCase();
+  }).join('\n');
+</script>
 
 <pre class="layui-code" lay-options="{title: '不显示行号', ln: false}">
 code line
@@ -105,29 +136,37 @@ code line
   About
 </pre>
 
-<pre id="custom1">
-  custom more about
-</pre>
-
-
 <script src="../src/layui.js"></script>
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
 <script>
 layui.use('code', function(){
+  // return;
+  layui.link('https://cdn.staticfile.org/highlight.js/11.8.0/styles/vs.min.css');
+  var codeInst = layui.code({
+    elem: '#test',
+    preview: true,
+    codeStyle: 'height: 700px;',
+    // theme: 'dark',
+    // header: true,
+    lang: 'html',
+    highlighter: "hljs",
+    codeRender: function (code, opts) {
+      return hljs.highlight(code, {language: opts.lang}).value;
+    }
+  });
+  // 重载
+  /*codeInst.reload({
+    codeRender: function () {
+      return hljs.highlight(code, {language: opts.lang}).value;
+    }
+  });*/
+
   // 通用实例，根据元素属性定制化参数
   layui.code({
-    //about: 'code' // 右上角默认显示 code
     tools: ['tips'],
-    preview: true
+    langMarker: true,
+    // preview: true
   });
-
-  // custom more about
-  layui.code({
-    elem: '#custom1',
-    about: [
-      '<a href="javascript:;">复制</a>',
-      '<a href="about:blank" target="_blank">跳转</a>'
-    ].join('')
-  })
 });
 </script>
 </body>
