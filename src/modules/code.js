@@ -11,26 +11,28 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
   var element = layui.element;
   var form = layui.form;
   var layer = layui.layer;
+  var hint = layui.hint();
 
   // 常量
   var CONST = {
     ELEM_VIEW: 'layui-code-view',
-    ELEM_COPY: 'layui-code-copy',
     ELEM_TAB: 'layui-tab',
-    ELEM_TITLE: 'layui-code-title',
+    ELEM_HEADER: 'layui-code-header',
     ELEM_FULL: 'layui-code-full',
     ELEM_PREVIEW: 'layui-code-preview',
     ELEM_ITEM: 'layui-code-item',
     ELEM_SHOW: 'layui-show',
     ELEM_LINE: 'layui-code-line',
-    ELEM_LINES: 'layui-code-lines',
-    ELEM_LINE_NUMS: 'layui-code-line-numbers',
-    ELEM_LINE_NUMBERS_MODE: 'layui-code-line-numbers-mode',
+    ELEM_LINE_NUM: 'layui-code-line-number',
+    ELEM_LN_MODE: 'layui-code-ln-mode',
+    CDDE_DATA_CODE: 'LayuiCodeDataCode',
+    CDDE_DATA_CLASS: 'LayuiCodeDataClass',
+    LINE_RAW_WIDTH: 45, // 行号初始宽度，需与 css 保持一致
   };
 
   // 默认参数项
   var config = {
-    elem: '.layui-code', // 元素选择器
+    elem: '', // 元素选择器
     about: '', // 代码栏右上角信息
     ln: true, // 代码区域是否显示行号
     header: false, // 是否显示代码栏头部区域
@@ -41,8 +43,9 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       code: util.escape('</>'),
       preview: 'Preview',
     },
+    wordWrap: true, // 是否自动换行
     lang: 'text', // 指定语言类型
-    highlighter: false, // 是否开启语法高亮，'prism','hljs','shiki'
+    highlighter: false, // 是否开启语法高亮，'hljs','prism','shiki'
     langMarker: false, // 代码区域是否显示语言类型标记
   };
 
@@ -59,16 +62,22 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
   };
 
   // export api
-  exports('code', function(options){
-    var opts = options = $.extend(true, {}, config, options);
+  exports('code', function(options, mode){
+    options = $.extend(true, {}, config, options);
 
-    // 实例对象
-    var inst = {
-      reload: function(sets) { // 重载
-        sets = sets || {};
-        delete sets.elem;
-        sets = $.extend(true, options, sets);
-        layui.code(sets);
+    // 返回对象
+    var ret = {
+      config: options,
+      reload: function(opts) { // 重载
+        layui.code(this.updateOptions(opts));
+      },
+      updateOptions: function(opts) { // 更新属性（选项）
+        opts = opts || {};
+        delete opts.elem;
+        return $.extend(true, options, opts);
+      },
+      reloadCode: function(opts) { // 仅重载 code
+        layui.code(this.updateOptions(opts), 'reloadCode');
       }
     };
 
@@ -79,18 +88,17 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       layui.each(options.obverse ? elem : elem.get().reverse(), function(){
         layui.code($.extend({}, options, {
           elem: this
-        }));
+        }), mode);
       });
-      return inst;
+      return ret;
     }
 
     // 目标元素是否存在
     var othis = options.elem = $(options.elem);
-    var item = othis[0];
-    if(!othis[0]) return inst;
+    if(!othis[0]) return ret;
 
     // 合并属性上的参数，并兼容旧版本属性写法 lay-*
-    var options = $.extend(true, {}, opts, lay.options(item), function(obj){
+    $.extend(true, options, lay.options(othis[0]), function(obj){
       var attrs = ['title', 'height', 'encode', 'skin', 'about'];
       layui.each(attrs, function(i, attr){
         var value = othis.attr('lay-'+ attr);
@@ -101,8 +109,6 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       return obj;
     }({}));
 
-    var index = layui.code.index = ++codeIndex;
-
     // codeRender 需要关闭编码
     // 未使用 codeRender 时若开启了预览，则强制开启编码
     options.encode = (options.encode || options.preview) && !options.codeRender;
@@ -110,8 +116,8 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
     // 最终显示的代码
     var finalCode;
 
-    // 获得初始代码
-    var rawCode = othis.data('code') || function(){
+    // 获得初始 code
+    var rawCode = othis.data(CONST.CDDE_DATA_CODE) || function(){
       var arr = [];
       var textarea = othis.children('textarea');
 
@@ -128,7 +134,66 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       return arr;
     }();
 
-    othis.data('code', rawCode);
+    // 记录初始 code
+    othis.data(CONST.CDDE_DATA_CODE, rawCode);
+
+    // 创建 code 行结构
+    var createCode = function(html) {
+      // codeRender
+      if(typeof options.codeRender === 'function') {
+        html = options.codeRender(String(html), options);
+      }
+
+      // code 行
+      var lines = String(html).split(/\r?\n/g);
+
+      // 包裹 code 行结构
+      html = $.map(lines, function(line, num) {
+        return [
+          '<div class="'+ CONST.ELEM_LINE +'">',
+            (
+              options.ln ? [
+                '<div class="'+ CONST.ELEM_LINE_NUM +'">',
+                  (util.digit(num + 1) + '.'),
+                '</div>',
+              ].join('') : ''
+            ),
+            '<div class="layui-code-line-content">',
+              (line || ' '),
+            '</div>',
+          '</div>'
+        ].join('');
+      });
+
+      return {
+        lines: lines,
+        html: html
+      };
+    };
+
+    // 仅重载 code
+    if (mode === 'reloadCode') {
+      (function(html) {
+        var rst = createCode(html);
+        othis.children('.layui-code-wrap').html(rst.html);
+      })(rawCode.join(''))
+      return ret;
+    }
+
+    // 自增索引
+    var index = layui.code.index = ++codeIndex;
+    othis.attr('lay-code-index', index);
+
+    // 初始化 className
+    var hasDataClass = CONST.CDDE_DATA_CLASS in othis.data();
+    if (hasDataClass) {
+      othis.attr('class', othis.data(CONST.CDDE_DATA_CLASS) || '');
+    }
+
+    // 记录初始 className
+    if (!hasDataClass) {
+      othis.data(CONST.CDDE_DATA_CLASS, othis.attr('class'));
+    }
 
     // code
     var html = finalCode = rawCode.join('');
@@ -143,7 +208,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       copy: {
         className: 'file-b',
         title: ['复制代码'],
-        event: function(el, type){
+        event: function(obj){
           var code = util.unescape(finalCode);
 
           // 写入剪切板
@@ -162,6 +227,20 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       }
     };
 
+    // 移除包裹结构
+    var unwrap = (function fn() {
+      var elemViewHas = othis.parent('.' + CONST.ELEM_PREVIEW);
+      var elemTabHas = elemViewHas.children('.'+ CONST.ELEM_TAB);
+      var elemPreviewViewHas = elemViewHas.children('.' + CONST.ELEM_ITEM +'-preview');
+
+      // 移除旧结构
+      elemTabHas.remove(); // 移除 tab
+      elemPreviewViewHas.remove(); // 移除预览区域
+      if (elemViewHas[0]) othis.unwrap(); // 移除外层容器
+
+      return fn;
+    })();
+
     // 是否开启预览
     if(options.preview){
       var FILTER_VALUE = 'LAY-CODE-DF-'+ index;
@@ -178,9 +257,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         'layui-border'
       ].join(' ') +'">');
       var elemToolbar = $('<div class="layui-code-tools"></div>');
-      var elemViewHas = othis.parent('.' + CONST.ELEM_PREVIEW);
-      var elemTabHas = othis.prev('.'+ CONST.ELEM_TAB);
-      var elemPreviewViewHas = othis.next('.' + CONST.ELEM_ITEM +'-preview');
+
 
       if(options.id) elemView.attr('id', options.id);
       elemView.addClass(options.className);
@@ -199,7 +276,8 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         'full': {
           className: 'screen-full',
           title: ['最大化显示', '还原显示'],
-          event: function(el, type){
+          event: function(obj){
+            var el = obj.elem;
             var elemView = el.closest('.'+ CONST.ELEM_PREVIEW);
             var classNameFull = 'layui-icon-'+ this.className;
             var classNameRestore = 'layui-icon-screen-restore';
@@ -223,7 +301,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         'window': {
           className: 'release',
           title: ['在新窗口预览'],
-          event: function(el, type){
+          event: function(obj){
             util.openWin({
               content: finalCode
             });
@@ -247,18 +325,24 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       elemToolbar.on('click', '>i', function(){
         var oi = $(this);
         var type = oi.data('type');
-
-        // 内部 tools event
-        tools[type] && typeof tools[type].event === 'function' && tools[type].event(oi, type);
-
-        // 外部 tools event
-        typeof options.toolsEvent === 'function' && options.toolsEvent({
+        var parameters = {
           elem: oi,
           type: type,
           rawCode: rawCode.join(''), // 原始 code
           finalCode: util.unescape(finalCode) // 最终 code
-        });
+        };
+
+        // 内部 tools event
+        tools[type] && typeof tools[type].event === 'function' && tools[type].event(parameters);
+
+        // 外部 tools event
+        typeof options.toolsEvent === 'function' && options.toolsEvent(parameters);
       });
+
+      // 增加工具栏
+      if (options.addTools) {
+        options.tools = [].concat(options.tools || [], options.addTools);
+      }
 
       // 渲染工具栏
       layui.each(options.tools, function(i, v){
@@ -276,20 +360,22 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
 
         if (!type) return;
 
+        // 若非内置 tool，则合并到 tools 中
+        if (!tools[type]) {
+          var obj = {};
+          obj[type] = tool;
+          $.extend(tools, obj);
+        }
+
         elemToolbar.append(
           '<i class="layui-icon layui-icon-'+ className +'" data-type="'+ type +'" title="'+ title[0] +'"></i>'
         );
       });
 
-      // 移除旧结构
-      if(elemTabHas[0]) elemTabHas.remove(); // 移除 tab
-      if(elemPreviewViewHas[0]) elemPreviewViewHas.remove(); // 移除预览区域
-      if(elemViewHas[0]) othis.unwrap(); // 移除外层容器
-
+      othis.addClass(CONST.ELEM_ITEM).wrap(elemView); // 包裹外层容器
       elemTabView.append(elemHeaderView); // 追加标签头
       options.tools && elemTabView.append(elemToolbar); // 追加工具栏
-      othis.wrap(elemView).addClass(CONST.ELEM_ITEM).before(elemTabView); // 追加标签结构
-
+      othis.before(elemTabView); // 追加标签结构
 
       // 追加预览
       if(isIframePreview){
@@ -328,9 +414,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       }
 
       // 内容项初始化样式
-      options.codeStyle = [options.style, options.codeStyle].join('');
       options.previewStyle = [options.style, options.previewStyle].join('');
-      // othis.attr('style', options.codeStyle);
       elemPreviewView.attr('style', options.previewStyle);
 
       // tab change
@@ -352,10 +436,13 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
     }
 
     // 创建 code 容器
-    var codeElem = $('<code class="'+ CONST.ELEM_LINES +'"></code>'); // 此处的闭合标签是为了兼容 IE8
+    var codeElem = $('<code class="layui-code-wrap"></code>'); // 此处的闭合标签是为了兼容 IE8
 
     // 添加主容器 className
-    othis.addClass('layui-code-view layui-border-box');
+    othis.addClass(function(arr) {
+      if (!options.wordWrap) arr.push('layui-code-nowrap');
+      return arr.join(' ')
+    }(['layui-code-view layui-border-box']));
 
     // code 主题风格
     var theme = options.theme || options.skin;
@@ -376,100 +463,121 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
     // 转义 HTML 标签
     if(options.encode) html = util.escape(html); // 编码
 
-    // codeRender
-    if(typeof options.codeRender === 'function') html = options.codeRender(html, options);
-
-    // code 行
-    var lines = String(html).split(/\r?\n/g);
-
-    // 包裹 code 行元素
-    html = (options.codeRender && !options.highlighter)
-      ? html
-      : $.map(lines, function(line){
-        return ['<div class="', CONST.ELEM_LINE, '">', (line || ' '), '</div>'].join(''); // 空行填充空格，以保证换行效果
-      }).join('')
+    var createCodeRst = createCode(html);
+    var lines = createCodeRst.lines;
 
     // 插入 code
-    othis.html(codeElem.html(html));
+    othis.html(codeElem.html(createCodeRst.html));
+
+    // 插入行号边栏
+    if (options.ln) {
+      othis.append('<div class="layui-code-ln-side"></div>');
+    }
+
+    // 兼容旧版本 height 属性
+    if (options.height) {
+      codeElem.css('max-height', options.height);
+    }
 
     // code 区域样式
+    options.codeStyle = [options.style, options.codeStyle].join('');
     if (options.codeStyle) {
-      othis.attr('style', function(i, val) {
+      codeElem.attr('style', function(i, val) {
         return (val || '') + options.codeStyle;
       });
     }
 
-    // 兼容旧版本 height 属性
-    if (options.height) othis.css('max-height', options.height);
-
-    // 创建行号
-    var lineNumsElem = function() {
-      if (options.ln) {
-        var lineNumbersCode = ['<div class="'+ CONST.ELEM_LINE_NUMS +'">']
-        layui.each(lines, function(index){
-          lineNumbersCode.push('<span class="layui-code-line-number">' + util.digit(index + 1) +'.</span>')
-        });
-        lineNumbersCode.push('</div>');
-        othis.addClass(CONST.ELEM_LINE_NUMBERS_MODE);
-        othis.prepend(lineNumbersCode.join(''));
+    // 动态设置样式
+    var cssRules = [
+      {
+        selector: '>.layui-code-wrap>.layui-code-line{}',
+        setValue: function(item, value) {
+          item.style['padding-left'] = value + 'px';
+        }
+      },
+      {
+        selector: '>.layui-code-wrap>.layui-code-line>.layui-code-line-number{}',
+        setValue: function(item, value) {
+         item.style.width = value + 'px';
+        }
+      },
+      {
+        selector: '>.layui-code-ln-side{}',
+        setValue: function(item, value) {
+          item.style.width = value + 'px';
+        }
       }
-      return othis.children('.'+ CONST.ELEM_LINE_NUMS);
-    }()
+    ];
 
-    // 设置 code 布局
+    // 生成初始 style 元素
+    var styleElem = lay.style({
+      target: othis[0],
+      id: 'DF-code-'+ index,
+      text: $.map($.map(cssRules, function(val){
+        return val.selector;
+      }), function(val, i) {
+        return ['.layui-code-view[lay-code-index="'+ index + '"]', val].join(' ');
+      }).join('')
+    })
+
+    // 动态设置 code 布局
     var setCodeLayout = (function fn() {
-      lineNumsElem.css({
-        height: othis.prop('scrollHeight') // 与外容器高度保持一致
-      });
+      if (options.ln) {
+        var multiLine = Math.floor(lines.length / 100);
+        var lineElem = codeElem.children('.'+ CONST.ELEM_LINE);
+        var width = lineElem.last().children('.'+ CONST.ELEM_LINE_NUM).outerWidth();
 
-      // 根据行号容器宽度，适配 code 容器左内边距
-      othis.css('padding-left', function(multiLine) {
-        var width = lineNumsElem.outerWidth();
-        return multiLine && width > 45 ? width : null;
-      }(Math.floor(lines.length / 100) && options.ln));
+        othis.addClass(CONST.ELEM_LN_MODE);
+
+        // 若超出 100 行
+        if (multiLine && width > CONST.LINE_RAW_WIDTH) {
+          lay.getStyleRules(styleElem, function(item, i) {
+            try {
+              cssRules[i].setValue(item, width);
+            } catch(e) { }
+          });
+        }
+      }
 
       return fn;
     })();
 
-    // 创建 header --- 后续版本将废弃该属性
-    if(options.header && !othis.children('.'+ CONST.ELEM_TITLE)[0]){
-      var headerElem = $('<div class="'+ CONST.ELEM_TITLE +'">');
-      headerElem.html((options.title || options.text.code) + (
-        options.about
-          ? '<div class="layui-code-about">' + options.about + '</div>'
-        : ''
-      ));
+    // 创建 code header
+    if (options.header) {
+      var headerElem = $('<div class="'+ CONST.ELEM_HEADER +'"></div>');
+      headerElem.html(options.title || options.text.code);
       othis.prepend(headerElem);
     }
 
-    // 所有实例渲染完毕后的回调
-    if(options.elem.length === index + 1){
-      typeof options.allDone === 'function' && options.allDone();
-    }
+    // 创建 code 区域固定条
+    var elemFixbar = $('<div class="layui-code-fixbar"></div>');
 
-    // 若开启复制，且未开启预览时，单独生成复制图标
+    // 若开启复制，且未开启预览，则单独生成复制图标
     if(options.copy && !options.preview){
-      var elemCopy = $(['<span class="'+ CONST.ELEM_COPY +'">',
+      var copyElem = $(['<span class="layui-code-copy">',
         '<i class="layui-icon layui-icon-file-b" title="复制"></i>',
       '</span>'].join(''));
-      var elemCopyHas = othis.children('.'+ CONST.ELEM_COPY);
-
-      if(elemCopyHas[0]) elemCopyHas.remove(); // 移除旧的复制元素
-      othis.append(elemCopy);
 
       // 点击复制
-      elemCopy.on('click', function(){
+      copyElem.on('click', function(){
         tools.copy.event();
       });
+
+      elemFixbar.append(copyElem);
     }
 
-    // language marker
-    if(options.langMarker){
-      var elemMarker = $('<span class="layui-code-lang-marker">' + options.lang + '</span>')
-      var elemMarkerHas = othis.children("." + CONST.ELEM_MARKER);
-      if(elemMarkerHas[0]) elemMarkerHas.remove();
-      othis.append(elemMarker);
+    // 创建 language marker
+    if (options.langMarker) {
+      elemFixbar.append('<span class="layui-code-lang-marker">' + options.lang + '</span>');
     }
+
+    // 创建 about 自定义内容
+    if (options.about) {
+      elemFixbar.append(options.about);
+    }
+
+    // 生成 code fixbar
+    othis.append(elemFixbar);
 
     // code 渲染完毕后的回调
     if (!options.preview) {
@@ -478,7 +586,12 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       },3);
     }
 
-    return inst;
+    // 所有实例渲染完毕后的回调
+    if(options.elem.length === index + 1){
+      typeof options.allDone === 'function' && options.allDone();
+    }
+
+    return ret;
   });
 });
 
