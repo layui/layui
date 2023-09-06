@@ -135,7 +135,7 @@
 
     if (typeof callback === 'function') {
       layui.each(rules, function(i, item){
-        if (callback(item)) return true;
+        if (callback(item, i)) return true;
       });
     }
 
