@@ -584,7 +584,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     lay.style({
       target: that.elem[0],
       text: text.join(''),
-      id: 'DF-'+ index
+      id: 'DF-table-'+ index
     });
   };
 
