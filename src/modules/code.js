@@ -597,5 +597,5 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
 
 // 若为源码版，则自动加载该组件依赖的 css 文件
 if(!layui['layui.all']){
-  layui.addcss('modules/code.css?v=3', 'skincodecss');
+  layui.addcss('modules/code.css?v=6', 'skincodecss');
 }
