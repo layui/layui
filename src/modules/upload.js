@@ -236,7 +236,6 @@ layui.define(['lay','layer'], function(exports){
           data: formData,
           contentType: false,
           processData: false,
-          // dataType: 'json',
           headers: options.headers || {},
           success: function(res){ // 成功回调
             options.unified ? (successful += that.fileLength) : successful++;
@@ -253,6 +252,12 @@ layui.define(['lay','layer'], function(exports){
             allDone();
           }
         };
+        // dataType
+        if (options.dataType) {
+          opts.dataType = options.dataType;
+        } else if (options.force === 'json') {
+          opts.dataType = options.force;
+        }
         // 进度条
         if(typeof options.progress === 'function'){
           opts.xhr = function(){
