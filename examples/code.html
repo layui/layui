@@ -191,63 +191,61 @@ layui.use(['code', 'dropdown'], function(){
       'full',
       {
         title: ['文字换行'],
-        type: 'form'
+        type: 'form',
+        event: function(obj) {
+          dropdown.render({
+            elem: obj.elem,
+            data: [{title: '自动换行', wordWrap: true}, {title: '不自动换行', wordWrap: false}],
+            show: true,
+            click: function(data, othis) {
+              codeInst.reload({
+                wordWrap: data.wordWrap
+              });
+            }
+          });
+        }
       },
       {
         title: ['切换高亮主题'],
-        type: 'theme'
-      }
-    ],
-    toolsEvent: function(obj) {
-      if (obj.type === 'form') {
-        dropdown.render({
-          elem: obj.elem,
-          data: [{title: '自动换行', wordWrap: true}, {title: '不自动换行', wordWrap: false}],
-          show: true,
-          click: function(data, othis) {
-            codeInst.reload({
-              wordWrap: data.wordWrap,
-              content: [+new Date()]
-            });
-          }
-        });
-      } else if (obj.type === 'theme') {
-        dropdown.render({
-          elem: obj.elem,
-          data: themeData,
-          show: true,
-          click: function(data, othis) {
-            $('#layuicss-layui-code-theme').remove();
-            layui.link(data.link, 'layui-code-theme');
+        type: 'theme',
+        event: function(obj) {
+          dropdown.render({
+            elem: obj.elem,
+            data: themeData,
+            show: true,
+            click: function(data, othis) {
+              $('#layuicss-layui-code-theme').remove();
+              layui.link(data.link, 'layui-code-theme');
 
-            // 若高亮器有变化，则重载
-            if (data.highlighter !== codeInst.config.highlighter) {
-              var highlighter = {
-                hljs: function(code, opts) {
-                  return hljs.highlight(code, {
-                    language: opts.lang
-                  }).value;
-                },
-                prism: function(code, opts) {
-                  return Prism.highlight(
-                    code,
-                    Prism.languages[opts.lang],
-                    opts.lang
-                  );
-                }
-              };
-              // 重载
-              codeInst.reload({
-                highlighter: data.highlighter,
-                codeRender: function (code, opts) {
-                  return highlighter[data.highlighter](code, opts);
-                }
-              });
+              // 若高亮器有变化，则重载
+              if (data.highlighter !== codeInst.config.highlighter) {
+                var highlighter = {
+                  hljs: function(code, opts) {
+                    return hljs.highlight(code, {
+                      language: opts.lang
+                    }).value;
+                  },
+                  prism: function(code, opts) {
+                    return Prism.highlight(
+                      code,
+                      Prism.languages[opts.lang],
+                      opts.lang
+                    );
+                  }
+                };
+                // 重载
+                codeInst.reload({
+                  highlighter: data.highlighter,
+                  codeRender: function (code, opts) {
+                    return highlighter[data.highlighter](code, opts);
+                  }
+                });
+              }
             }
-          }
-        });
+          });
+        }
       }
-    }
+    ]
   });
 
   // 仅重载 code
