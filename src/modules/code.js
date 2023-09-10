@@ -328,6 +328,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         var parameters = {
           elem: oi,
           type: type,
+          options: options, // 当前属性选项
           rawCode: rawCode.join(''), // 原始 code
           finalCode: util.unescape(finalCode) // 最终 code
         };
