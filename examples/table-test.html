@@ -155,11 +155,13 @@ layui.use(['table', 'dropdown'], function(){
     // escape: false,
     editTrigger: 'dblclick',
     // cellMaxWidth: 320
+    // cellExpandedWidth: 160, // 单元格默认展开后的宽度
+    // cellExpandedStyle: 'tips', // 单元格默认展开风格
     cols: !1 ? test_cols : [[
       {type: 'checkbox', fixed: 'left'},
       // {type: 'numbers', fixed: 'left'},
       {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'},
-      {field:'username', title:'用户名 <i class="layui-icon layui-icon-username" lay-event="username"></i>', width:120, edit: function(d){
+      {field:'username', expandedStyle: 'tips', title:'用户名 <i class="layui-icon layui-icon-username" lay-event="username"></i>', width:120, edit: function(d){
         return !d.LAY_DISABLED;
       }, templet: '#usernameTpl'},
       {field:'xxx', title:'测试', edit: 'text'},
@@ -173,7 +175,7 @@ layui.use(['table', 'dropdown'], function(){
         var td = obj.td(this.field); //获取当前 td
         return td.find('select').val();
       }},
-      {field:'sign', title:'签名', minWidth: 200, expandedWidth: 350, style:'color: #5FB878', edit: 'textarea'},
+      {field:'sign', title:'签名', minWidth: 200, style:'color: #5FB878', edit: 'textarea'},
       {field: 'experience', title: '积分', width: 100, sort: true, align:'center', totalRow: !1 ? true : '{{= d.TOTAL_NUMS }} 分 😊', templet: '<div><a href="" class="layui-table-link">{{= d[d.LAY_COL.field] }}</a> 分</div>'},
       {field:'ip', title:'IP', width: 120, align: 'right'},
       {field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{= d.TOTAL_ROW.checkin }} 次'},
