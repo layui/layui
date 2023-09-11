@@ -2192,7 +2192,7 @@
         e.target === options.elem[0] || 
         e.target === options.eventElem[0] ||
         e.target === lay(options.closeStop)[0] ||
-        (options.rangeLinked && lay(options.elem.find(options.range.join(','))).contains(e.target) )
+        (options.rangeLinked && options.elem.contains(e.target) )
       ) return;
       
       that.remove();
