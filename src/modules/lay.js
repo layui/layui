@@ -527,6 +527,18 @@
       : item.removeEventListener(eventName, fn, false);
     });
   };
+
+  //Contains
+  Class.fn.contains = function (elem) {
+    var has = false;
+    this.each(function (index, item) {
+      if (item === elem){
+        has = true;
+        return true;
+      }
+    });
+    return has;
+  }
   
   // export
   window.lay = lay;
