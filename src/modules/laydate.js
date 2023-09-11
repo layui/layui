@@ -2191,7 +2191,8 @@
       if(
         e.target === options.elem[0] || 
         e.target === options.eventElem[0] ||
-        e.target === lay(options.closeStop)[0]
+        e.target === lay(options.closeStop)[0] ||
+        (options.rangeLinked && lay(options.elem.find(options.range.join(','))).contains(e.target) )
       ) return;
       
       that.remove();
