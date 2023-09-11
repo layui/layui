@@ -31,7 +31,7 @@ toc: true
 | layui-hide-v | 设置元素为 `visibility: hidden` 不可见状态，且依旧占用空间 |
 
 
-<h2 id="edge" lay-toc="{}">三角实体</h2>
+<h2 id="triangle" lay-toc="{}">三角实体</h2>
 
 | className | 描述 |
 | --- | --- |
@@ -65,6 +65,21 @@ toc: true
 <i class="layui-edge layui-edge-left" style="border-right-color: black;"></i>
   </textarea>
 </pre>
+
+<h2 id="edge-distance" lay-toc="{}">内外边距</h2>
+
+| className | 描述 |
+| --- | --- |
+| layui-padding-1 | 4px 内边距 |
+| layui-padding-2 | 8px 内边距 |
+| layui-padding-3 | 16px 内边距 |
+| layui-padding-4 | 32px 内边距 |
+| layui-padding-5 | 48px 内边距 |
+| layui-margin-1 | 4px 外边距 |
+| layui-margin-2 | 8px 外边距 |
+| layui-margin-3 | 16px 外边距 |
+| layui-margin-4 | 32px 外边距 |
+| layui-margin-5 | 48px 外边距 |
 
 
 <h2 id="bg" lay-toc="{hot: true}">背景颜色</h2>
