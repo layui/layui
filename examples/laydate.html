@@ -174,38 +174,44 @@ layui.use('laydate', function(laydate){
   });
 
 
-  //范围选择1
+  // 范围选择1
   laydate.render({
-    elem: '#test1' //指定元素
-    ,type: 'datetime'
-    ,trigger: 'click'
-    //,lang: 'en'
-    //,theme: 'grid'
-    ,range: true //开启日期范围，默认使用“-”分割
-    //,min: '1970-1-1'
-    //,max: '2021-5-9'
-    //,value: '2021-05-09 12:06:09'
-    //,value: '2021-05-08 - 2021-03-27'
-    ,done: function(value, date, endDate){
+    elem: '#test1', // 指定元素
+    type: 'datetime',
+    trigger: 'click',
+    // lang: 'en',
+    // theme: 'grid',
+    range: true, // 开启日期范围，默认使用“-”分割
+    // rangeLinked: true,
+    // min: '1970-1-1',
+    // max: '2021-5-9',
+    // value: '2021-05-09 12:06:09',
+    // value: '2021-05-08 - 2021-03-27',
+    done: function(value, date, endDate){
       console.log(value, date, endDate);
 
       //this.elem.val(123);
-    }
-    ,change: function(value, date, endDate){
+    },
+    change: function(value, date, endDate){
       console.log(value, date, endDate);
     }
   });
   
-  //return;
+  // return;
 
-  //范围选择2
+  // 范围选择2
   laydate.render({
-    elem: '#test1-2'
-    ,type: 'date'
-    ,range: ['#test-startDate-1', '#test-endDate-1']
-    ,rangeLinked: true // 是否开启日期范围选择时的区间联动标注模式
-    //,value: ['2022-05-01', '2022-06-01']
-    //,value: '2022-05-01 - 2022-06-01'
+    elem: '#test1-2',
+    type: 'date',
+    range: ['#test-startDate-1', '#test-endDate-1'],
+    rangeLinked: true, // 是否开启日期范围选择时的区间联动标注模式
+    // value: ['2022-05-01', '2022-10-01'],
+    // value: '2022-05-01 - 2022-06-01',
+    done: function (value, date, endDate) {
+      console.log(value);
+      console.log(date);
+      console.log(endDate);
+     }
   });
 
   

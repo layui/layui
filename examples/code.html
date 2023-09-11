@@ -8,31 +8,66 @@
   <link href="../src/css/layui.css" rel="stylesheet">
   <style>
     body{padding: 32px;}
-    pre{margin-bottom: 20px;}
+    pre{margin: 16px 0;}
   </style>
 </head>
 <body>
 
-<pre class="layui-code" lay-height="300px">
-// 在里面存放任意的文本内容
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
-code line
+<pre id="test" class="layui-test">
+  <textarea class="layui-hide">
+<div class="layui-btn-container">
+  <button type="button" class="layui-btn">默认按钮</button>
+</div>
+
+<p class="layui-padding-3">
+AaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaA
+</p>
+
+<div class="layui-btn-container">
+  <button class="layui-btn layui-btn-primary layui-border-green">主色按钮</button>
+</div>
+<script type="text/html">
+<h3>{{= d.title }}</h3>
+<ul>
+{{#  layui.each(d.list, function(index, item){ }}
+  <li>
+    <span>{{= item.modname }}</span>
+    <span>{{= item.alias }}：</span>
+    <span>{{= item.site || '' }}</span>
+  </li>
+{{#  }); }}
+<p>{{#  if(d.list.length === 0){ }}
+无数据
+{{#  } }}</p>
+</ul>
+</script>
+<script>
+  layui.use(function () {
+    var layer = layui.layer;
+    const a = '1'
+    function aa(a, b) {
+      return '11'
+    }
+    layer.msg(layui.v)
+  })
+</script>
+  </textarea>
 </pre>
+
+<pre><code class="layui-code" lay-options="{header: true}">
+code line
+code line
+code line
+</code></pre>
+
+<pre class="layui-code" lay-options="{style: 'height: 300px'}" id="ID-multi-line"></pre>
+<script type="module">
+  // 生成批量行，测试行结构
+  const elem = document.getElementById('ID-multi-line');
+  elem.innerHTML = Array(1001).fill().map(v => {
+    return Math.random().toString(32).substring(2).toUpperCase();
+  }).join('\n');
+</script>
 
 <pre class="layui-code" lay-options="{title: '不显示行号', ln: false}">
 code line
@@ -101,33 +136,137 @@ code line
 </div>
 </pre>
 
-<pre class="layui-code" lay-about="code">
+<pre class="layui-code" lay-options="{about: 'About info'}">
   About
 </pre>
 
-<pre id="custom1">
-  custom more about
-</pre>
-
-
 <script src="../src/layui.js"></script>
+<script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.staticfile.org/prism/1.29.0/prism.min.js"></script>
 <script>
-layui.use('code', function(){
-  // 通用实例，根据元素属性定制化参数
-  layui.code({
-    //about: 'code' // 右上角默认显示 code
-    tools: ['tips'],
-    preview: true
+layui.use(['code', 'dropdown'], function(){
+  var dropdown = layui.dropdown;
+  var $ = layui.$;
+
+  // return;
+
+  // 高亮主题 css 库
+  var themeData = $.map([
+    // hljs 主题库
+    'https://cdn.staticfile.org/highlight.js/11.8.0/styles/vs2015.min.css',
+    'https://cdn.staticfile.org/highlight.js/11.8.0/styles/vs.min.css',
+    'https://cdn.staticfile.org/highlight.js/11.8.0/styles/github-dark.min.css',
+    'https://cdn.staticfile.org/highlight.js/11.8.0/styles/github.min.css',
+    'https://cdn.staticfile.org/highlight.js/11.8.0/styles/base16/google-dark.min.css',
+    'https://cdn.staticfile.org/highlight.js/11.8.0/styles/base16/google-light.min.css',
+    'https://cdn.staticfile.org/highlight.js/11.8.0/styles/monokai-sublime.min.css',
+    '-',
+    // prism 主题库
+    'https://cdn.staticfile.org/prism/1.29.0/themes/prism-dark.min.css',
+    'https://cdn.staticfile.org/prism/1.29.0/themes/prism.min.css'
+  ], function(v, index) {
+    return {
+      title: v,
+      link: v,
+      highlighter: v.indexOf('prism') === -1 ? 'hljs' : 'prism',
+      type: v === '-' ? '-' : 'normal'
+    };
   });
 
-  // custom more about
+  var codeInst = layui.code({
+    elem: '#test',
+    preview: true,
+    codeStyle: 'height: 510px;',
+    previewStyle: 'word-wrap: break-word;',
+    // theme: 'dark',
+    // header: true,
+    // wordWrap: false, // 是否自动换行
+    lang: 'html',
+    highlighter: "hljs",
+    /*codeRender: function (code, opts) {
+      layui.link(themeData[1].link, 'layui-code-theme');
+      return hljs.highlight(code, {language: opts.lang}).value;
+    },*/
+    tools: [
+      'full',
+      {
+        title: ['文字换行'],
+        type: 'form',
+        event: function(obj) {
+          dropdown.render({
+            elem: obj.elem,
+            data: [{title: '自动换行', wordWrap: true}, {title: '不自动换行', wordWrap: false}],
+            show: true,
+            click: function(data, othis) {
+              codeInst.reload({
+                wordWrap: data.wordWrap
+              });
+            }
+          });
+        }
+      },
+      {
+        title: ['切换高亮主题'],
+        type: 'theme',
+        event: function(obj) {
+          dropdown.render({
+            elem: obj.elem,
+            data: themeData,
+            show: true,
+            click: function(data, othis) {
+              $('#layuicss-layui-code-theme').remove();
+              layui.link(data.link, 'layui-code-theme');
+
+              // 若高亮器有变化，则重载
+              if (data.highlighter !== codeInst.config.highlighter) {
+                var highlighter = {
+                  hljs: function(code, opts) {
+                    return hljs.highlight(code, {
+                      language: opts.lang
+                    }).value;
+                  },
+                  prism: function(code, opts) {
+                    return Prism.highlight(
+                      code,
+                      Prism.languages[opts.lang],
+                      opts.lang
+                    );
+                  }
+                };
+                // 重载
+                codeInst.reload({
+                  highlighter: data.highlighter,
+                  codeRender: function (code, opts) {
+                    return highlighter[data.highlighter](code, opts);
+                  }
+                });
+              }
+            }
+          });
+        }
+      }
+    ]
+  });
+
+  // 仅重载 code
+  layui.debounce(function() {
+    codeInst.reloadCode({
+      codeRender: function(code, opts) {
+        layui.link(themeData[1].link, 'layui-code-theme');
+        return hljs.highlight(code, {language: opts.lang}).value;
+      }
+    });
+  }, 300)();
+
+
+  // 通用实例，根据元素属性定制化参数
   layui.code({
-    elem: '#custom1',
-    about: [
-      '<a href="javascript:;">复制</a>',
-      '<a href="about:blank" target="_blank">跳转</a>'
-    ].join('')
-  })
+    elem: '.layui-code',
+    tools: ['tips'],
+    langMarker: true,
+    lang: 'html',
+    // preview: true
+  });
 });
 </script>
 </body>

@@ -55,7 +55,7 @@ layui.use(['table', 'dropdown'], function(){
   // 创建渲染实例
   table.render({
     elem: '#test',
-    url:'/static/2.8/json/table/demo1.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    url: '/static/2.8/json/table/demo1.json', // 此处为静态模拟数据，实际使用时需换成真实接口
     toolbar: '#toolbarDemo',
     defaultToolbar: ['filter', 'exports', 'print', {
       title: '提示',
@@ -73,7 +73,7 @@ layui.use(['table', 'dropdown'], function(){
       {type: 'checkbox', fixed: 'left'},
       {field:'id', fixed: 'left', width:80, title: 'ID', sort: true, totalRowText: '合计：'},
       {field:'username', width:80, title: '用户'},
-      {field:'email', title:'邮箱 <i class="layui-icon layui-icon-tips layui-font-14" lay-event="email-tips" title="该字段开启了编辑功能" style="margin-left: 5px;"></i>', fieldTitle: '邮箱', hide: 0, width:150, edit: 'text'},
+      {field:'email', title:'邮箱 <i class="layui-icon layui-icon-tips layui-font-14" lay-event="email-tips" title="该字段开启了编辑功能" style="margin-left: 5px;"></i>', fieldTitle: '邮箱', hide: 0, width:150, expandedMode: 'tips', edit: 'text'},
       {field:'sex', width:80, title: '性别', sort: true},
       {field:'sign', title: '签名', edit: 'textarea', minWidth: 260, expandedWidth: 260, totalRow: '{{!人物：<span class="layui-badge-rim">唐代：{{= d.TOTAL_ROW.era.tang }} </span> <span class="layui-badge-rim">宋代：{{= d.TOTAL_ROW.era.song }}</span> <span class="layui-badge-rim">现代：{{= d.TOTAL_ROW.era.xian }}</span>!}}'},
       {field:'experience', width: 100, title: '积分', sort: true, totalRow: '{{!{{= d.TOTAL_NUMS }} 😊!}}'}, 

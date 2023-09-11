@@ -191,10 +191,10 @@ layui.use(['upload', 'element'], function(){
     url: 'https://httpbin.org/post',
     accept: 'file',
     multiple: true,
-    number: 3,
+    number: 5,
     auto: false,
     bindAction: '#testListAction',
-    size: 30,
+    // size: 30,
     choose: function(obj){   
       var files = this.files = obj.pushFile(); // 将每次选择的文件追加到文件队列
       //读取本地文件

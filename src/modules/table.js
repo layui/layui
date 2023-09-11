@@ -163,7 +163,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
             return '';
           }()
           ,'{{# var isSort = !(item2.colGroup) && item2.sort; }}'
-          ,'<th data-field="{{= item2.field||i2 }}" data-key="{{=d.index}}-{{=i1}}-{{=i2}}" {{# if( item2.parentKey){ }}data-parentkey="{{= item2.parentKey }}"{{# } }} {{# if(item2.minWidth){ }}data-minwidth="{{=item2.minWidth}}"{{# } }} {{# if(item2.maxWidth){ }}data-maxwidth="{{=item2.maxWidth}}"{{# } }} '+ rowCols +' {{# if(item2.unresize || item2.colGroup){ }}data-unresize="true"{{# } }} class="{{# if(item2.hide){ }}layui-hide{{# } }}{{# if(isSort){ }} layui-unselect{{# } }}{{# if(!item2.field){ }} layui-table-col-special{{# } }}"{{# if(item2.title){ }} title="{{ layui.$(\'<div>\' + item2.title + \'</div>\').text() }}"{{# } }}>'
+          ,'<th data-field="{{= item2.field||i2 }}" data-key="{{=d.index}}-{{=i1}}-{{=i2}}" {{# if( item2.parentKey){ }}data-parentkey="{{= item2.parentKey }}"{{# } }} {{# if(item2.minWidth){ }}data-minwidth="{{=item2.minWidth}}"{{# } }} {{# if(item2.maxWidth){ }}data-maxwidth="{{=item2.maxWidth}}"{{# } }} {{# if(item2.style){ }}style="{{=item2.style}}"{{# } }} '+ rowCols +' {{# if(item2.unresize || item2.colGroup){ }}data-unresize="true"{{# } }} class="{{# if(item2.hide){ }}layui-hide{{# } }}{{# if(isSort){ }} layui-unselect{{# } }}{{# if(!item2.field){ }} layui-table-col-special{{# } }}"{{# if(item2.title){ }} title="{{ layui.$(\'<div>\' + item2.title + \'</div>\').text() }}"{{# } }}>'
             ,'<div class="layui-table-cell laytable-cell-'
               ,'{{# if(item2.colGroup){ }}'
                 ,'group'
@@ -584,7 +584,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     lay.style({
       target: that.elem[0],
       text: text.join(''),
-      id: 'DF-'+ index
+      id: 'DF-table-'+ index
     });
   };
 
@@ -1111,7 +1111,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     curr = curr || 1
 
     layui.each(data, function(i1, item1){
-      var tds = []; 
+      var tds = [];
       var tds_fixed = [];
       var tds_fixed_r = [];
       var numbers = i1 + options.limit*(curr - 1) + 1; // 序号
@@ -1144,34 +1144,31 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
         // td 内容
         var td = ['<td data-field="'+ field +'" data-key="'+ key +'" '+ function(){
-          //追加各种属性
+          // 追加各种属性
           var attr = [];
           // 是否开启编辑。若 edit 传入函数，则根据函数的返回结果判断是否开启编辑
           (function(edit){
             if(edit) attr.push('data-edit="'+ edit +'"'); // 添加单元格编辑属性标识
           })(typeof item3.edit === 'function' ? item3.edit(item1) : item3.edit);
-          if(item3.templet) attr.push('data-content="'+ util.escape(content) +'"'); //自定义模板
-          if(item3.toolbar) attr.push('data-off="true"'); //行工具列关闭单元格事件
+          if(item3.templet) attr.push('data-content="'+ util.escape(content) +'"'); // 自定义模板
+          if(item3.toolbar) attr.push('data-off="true"'); // 行工具列关闭单元格事件
           if(item3.event) attr.push('lay-event="'+ item3.event +'"'); //自定义事件
-          if(item3.minWidth) attr.push('data-minwidth="'+ item3.minWidth +'"'); //单元格最小宽度
-          if(item3.maxWidth) attr.push('data-maxwidth="'+ item3.maxWidth +'"'); //单元格最大宽度
+          if(item3.minWidth) attr.push('data-minwidth="'+ item3.minWidth +'"'); // 单元格最小宽度
+          if(item3.maxWidth) attr.push('data-maxwidth="'+ item3.maxWidth +'"'); // 单元格最大宽度
+          if(item3.style) attr.push('style="'+ item3.style +'"'); // 自定义单元格样式
           return attr.join(' ');
-        }() +' class="'+ function(){ //追加样式
+        }() +' class="'+ function(){ // 追加样式
           var classNames = [];
-          if(item3.hide) classNames.push(HIDE); //插入隐藏列样式
-          if(!item3.field) classNames.push(ELEM_COL_SPECIAL); //插入特殊列样式
+          if(item3.hide) classNames.push(HIDE); // 插入隐藏列样式
+          if(!item3.field) classNames.push(ELEM_COL_SPECIAL); // 插入特殊列样式
           return classNames.join(' ');
         }() +'">'
-          ,'<div class="layui-table-cell laytable-cell-'+ function(){ //返回对应的CSS类标识
+          ,'<div class="layui-table-cell laytable-cell-'+ function(){ // 返回对应的CSS类标识
             return item3.type === 'normal' ? key
               : (key + ' laytable-cell-' + item3.type);
           }() +'"'
           + (item3.align ? ' align="'+ item3.align +'"' : '')
-          + function(){
-            var attr = [];
-            if(item3.style) attr.push('style="'+ item3.style +'"'); //自定义单元格样式
-            return attr.join(' ');
-          }() +'>'
+          +'>'
           + function(){
             var tplData = $.extend(true, {
               LAY_COL: item3
@@ -1179,7 +1176,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
             var checkName = table.config.checkName;
             var disabledName = table.config.disabledName;
 
-            //渲染不同风格的列
+            // 渲染不同风格的列
             switch(item3.type){
               case 'checkbox': // 复选
                 return '<input type="checkbox" name="layTableCheckbox" lay-skin="primary" '+ function(){
@@ -1211,7 +1208,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
               case 'numbers':
                 return numbers;
                 //break;
-            };
+            }
 
             //解析工具列模板
             if(item3.toolbar){
@@ -1313,6 +1310,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }, 50);
       that.haveInit = true;
 
+      layer.close(that.tipsIndex);
     };
 
     table.cache[that.key] = data; //记录数据
@@ -1454,6 +1452,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         var attr = [];
         if(item3.minWidth) attr.push('data-minwidth="'+ item3.minWidth +'"'); // 单元格最小宽度
         if(item3.maxWidth) attr.push('data-maxwidth="'+ item3.maxWidth +'"'); // 单元格最小宽度
+        if(item3.style) attr.push('style="'+ item3.style +'"'); // 自定义单元格样式
         return attr.join(' ');
       }() +' class="'+ function(){ // 追加样式
         var classNames = [];
@@ -1468,7 +1467,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         }() +'"'+ function(){
         var attr = [];
         if(item3.align) attr.push('align="'+ item3.align +'"'); // 对齐方式
-        if(item3.style) attr.push('style="'+ item3.style +'"'); // 自定义单元格样式
         return attr.join(' ');
       }() +'>' + function(){
           var totalRow = item3.totalRow || options.totalRow;
@@ -1773,7 +1771,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   //获取滚动条宽度
   Class.prototype.getScrollWidth = function(elem){
-    var width = 0;
+    var width;
     if(elem){
       width = elem.offsetWidth - elem.clientWidth;
     } else {
@@ -1793,19 +1791,19 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   Class.prototype.scrollPatch = function(){
     var that = this;
     var layMainTable = that.layMain.children('table');
-    var scollWidth = that.layMain.width() - that.layMain.prop('clientWidth'); // 纵向滚动条宽度
-    var scollHeight = that.layMain.height() - that.layMain.prop('clientHeight'); // 横向滚动条高度
+    var scrollWidth = that.layMain.width() - that.layMain.prop('clientWidth'); // 纵向滚动条宽度
+    var scrollHeight = that.layMain.height() - that.layMain.prop('clientHeight'); // 横向滚动条高度
     var getScrollWidth = that.getScrollWidth(that.layMain[0]); // 获取主容器滚动条宽度，如果有的话
     var outWidth = layMainTable.outerWidth() - that.layMain.width(); // 表格内容器的超出宽度
 
     // 添加补丁
     var addPatch = function(elem){
-      if(scollWidth && scollHeight){
+      if(scrollWidth && scrollHeight){
         elem = elem.eq(0);
         if(!elem.find('.layui-table-patch')[0]){
           var patchElem = $('<th class="layui-table-patch"><div class="layui-table-cell"></div></th>'); // 补丁元素
           patchElem.find('div').css({
-            width: scollWidth
+            width: scrollWidth
           });
           elem.find('tr').append(patchElem);
         }
@@ -1819,7 +1817,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 固定列区域高度
     var mainHeight = that.layMain.height();
-    var fixHeight = mainHeight - scollHeight;
+    var fixHeight = mainHeight - scrollHeight;
 
     that.layFixed.find(ELEM_BODY).css(
       'height',
@@ -1834,7 +1832,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     ](HIDE);
 
     // 操作栏
-    that.layFixRight.css('right', scollWidth - 1);
+    that.layFixRight.css('right', scrollWidth - 1);
   };
 
   // 事件处理
@@ -1878,6 +1876,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       layui.stope(e);
       _DOC.trigger('table.tool.panel.remove');
+      layer.close(that.tipsIndex);
 
       switch(events){
         case 'LAYTABLE_COLS': // 筛选列
@@ -1973,7 +1972,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
           printWin.document.write(style + html.prop('outerHTML'));
           printWin.document.close();
-          
+
           if(layui.device('edg').edg){
             printWin.onafterprint = printWin.close;
             printWin.print();
@@ -2072,6 +2071,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
             dict.rule.style.width = setWidth + 'px';
             thatTable.setGroupWidth(thisTable.eventMoveElem);
+            layer.close(that.tipsIndex);
           }
         }
       }).on('mouseup', function(e){
@@ -2319,7 +2319,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       ].join(',');
       if( $(e.target).is(UNROW) || $(e.target).closest(UNROW)[0]){
         return;
-      };
+      }
       setRowEvent.call(this, 'row');
     }).on('dblclick', 'tr', function(){ // 双击行
       setRowEvent.call(this, 'rowDouble');
@@ -2463,44 +2463,75 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var elemCell = td.children(ELEM_CELL);
       var ELEM_CELL_C = 'layui-table-cell-c';
       var elemCellClose = $('<i class="layui-icon layui-icon-up '+ ELEM_CELL_C +'">');
+      var expandedMode = col.expandedMode || options.cellExpandedMode;
 
-      // 恢复其他已经展开的单元格
-      that.elem.find('.'+ ELEM_CELL_C).trigger('click');
-
-      // 设置当前单元格展开宽度
-      that.cssRules(key, function(item){
-        var width = item.style.width;
-        var expandedWidth = col.expandedWidth || (that.elem.width() / 3);
-
-        // 展开后的宽度不能小于当前宽度
-        if(expandedWidth < parseFloat(width)) expandedWidth = parseFloat(width);
-
-        elemCellClose.data('cell-width', width);
-        item.style.width = expandedWidth + 'px';
-
-        setTimeout(function(){
-          that.scrollPatch(); // 滚动条补丁
+      // 展开风格
+      if (expandedMode === 'tips') { // TIPS 展开风格
+        that.tipsIndex = layer.tips([
+          '<div class="layui-table-tips-main" style="margin-top: -'+ (elemCell.height() + 23) +'px;'+ function(){
+            if(options.size === 'sm'){
+              return 'padding: 4px 15px; font-size: 12px;';
+            }
+            if(options.size === 'lg'){
+              return 'padding: 14px 15px;';
+            }
+            return '';
+          }() +'">',
+            elemCell.html(),
+          '</div>',
+          '<i class="layui-icon layui-table-tips-c layui-icon-close"></i>'
+        ].join(''), elemCell[0], {
+          tips: [3, ''],
+          time: -1,
+          anim: -1,
+          maxWidth: (device.ios || device.android) ? 300 : that.elem.width()/2,
+          isOutAnim: false,
+          skin: 'layui-table-tips',
+          success: function(layero, index){
+            layero.find('.layui-table-tips-c').on('click', function(){
+              layer.close(index);
+            });
+          }
         });
-      });
+      } else { // 多行展开风格
+        // 恢复其他已经展开的单元格
+        that.elem.find('.'+ ELEM_CELL_C).trigger('click');
 
-      // 设置当前单元格展开样式
-      that.setRowActive(index, ELEM_EXPAND);
-
-      // 插入关闭按钮
-      if(!elemCell.next('.'+ ELEM_CELL_C)[0]){
-        elemCell.after(elemCellClose);
-      }
-
-      // 关闭展开状态
-      elemCellClose.on('click', function(){
-        var $this = $(this);
-        that.setRowActive(index, ELEM_EXPAND, true); // 移除单元格展开样式
+        // 设置当前单元格展开宽度
         that.cssRules(key, function(item){
-          item.style.width =  $this.data('cell-width'); // 恢复单元格展开前的宽度
-          that.resize(); // 滚动条补丁
+          var width = item.style.width;
+          var expandedWidth = col.expandedWidth || options.cellExpandedWidth;
+
+          // 展开后的宽度不能小于当前宽度
+          if(expandedWidth < parseFloat(width)) expandedWidth = parseFloat(width);
+
+          elemCellClose.data('cell-width', width);
+          item.style.width = expandedWidth + 'px';
+
+          setTimeout(function(){
+            that.scrollPatch(); // 滚动条补丁
+          });
         });
-        $this.remove();
-      });
+
+        // 设置当前单元格展开样式
+        that.setRowActive(index, ELEM_EXPAND);
+
+        // 插入关闭按钮
+        if(!elemCell.next('.'+ ELEM_CELL_C)[0]){
+          elemCell.after(elemCellClose);
+        }
+
+        // 关闭展开状态
+        elemCellClose.on('click', function(){
+          var $this = $(this);
+          that.setRowActive(index, ELEM_EXPAND, true); // 移除单元格展开样式
+          that.cssRules(key, function(item){
+            item.style.width =  $this.data('cell-width'); // 恢复单元格展开前的宽度
+            that.resize(); // 滚动条补丁
+          });
+          $this.remove();
+        });
+      }
 
       othis.remove();
       layui.stope(e);
@@ -2803,6 +2834,20 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     if(device.ie) return hint.error('IE_NOT_SUPPORT_EXPORTS');
 
+    // 处理 treeTable 数据
+    if (config.tree && config.tree.view) {
+      try {
+        data = $.extend(true, [], table.cache[id]);
+        data = (function fn(data) {
+          return data.reduce(function (acc, obj){
+            var children = obj.children || [];
+            delete obj.children;
+            return acc.concat(obj, fn(children));
+          }, []);
+        })(Array.from(data));
+      } catch (e) {}
+    }
+
     alink.href = 'data:'+ textType +';charset=utf-8,\ufeff'+ encodeURIComponent(function(){
       var dataTitle = [];
       var dataMain = [];
@@ -2984,5 +3029,3 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   exports(MOD_NAME, table);
 });
-
-

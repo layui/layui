@@ -80,13 +80,28 @@
 <td>-</td>
     </tr>
     <tr>
-<td>expandedWidth <sup>2.8.14+</sup></td>
+<td>expandedWidth <sup>2.8.15+</sup></td>
 <td>
 
-设置单元格被展开后的宽度，默认取表格容器的三分之一宽度。若设置的值的小于当前列宽，则展开后的列宽保持不变。
+设置单元格被展开后的宽度。若设置的值的小于当前列宽，则展开后的列宽保持不变。注：当 `expandedMode` 属性为默认值时有效。
 
 </td>
 <td>number</td>
+<td>-</td>
+    </tr>
+    <tr>
+<td>expandedMode <sup>2.8.17+</sup></td>
+<td>
+
+用于设置所有单元格默认展开方式，可选值有：
+
+- `tips` 悬浮展开方式
+- `default` 多行展开方式（默认）
+
+优先级高于 `cellExpandedMode` 基础属性
+
+</td>
+<td>string</td>
 <td>-</td>
     </tr>
     <tr>

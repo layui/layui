@@ -52,6 +52,7 @@ layui.define(['lay','layer'], function(exports){
   var ELEM_IFRAME = 'layui-upload-iframe';
   var ELEM_CHOOSE = 'layui-upload-choose';
   var ELEM_DRAG = 'layui-upload-drag';
+  var UPLOADING = 'UPLOADING';
   
   // 构造器
   var Class = function(options){
@@ -87,7 +88,7 @@ layui.define(['lay','layer'], function(exports){
   };
   
   // 初始渲染
-  Class.prototype.render = function(options){
+  Class.prototype.render = function(){
     var that = this;
     var options = that.config;
 
@@ -218,16 +219,37 @@ layui.define(['lay','layer'], function(exports){
       var request = function(sets){
         var formData = new FormData();
 
+        // 删除正在上传中的文件队列
+        var removeUploaded = function(index, file) {
+          if (file[UPLOADING]) {
+            delete items[index];
+            return true;
+          }
+        };
+
         // 追加额外的参数
         layui.each(options.data, function(key, value){
           value = typeof value === 'function' ? value() : value;
           formData.append(key, value);
         });
 
-        // 添加 file 到表单域
-        sets.unified ? layui.each(items, function(index, file){
-          formData.append(options.field, file);
-        }) : formData.append(options.field, sets.file);
+        /*
+         *添加 file 到表单域
+         */
+
+        // 是否统一上传
+        if (sets.unified) {
+          layui.each(items, function(index, file){
+            if (removeUploaded(index, file)) return;
+            file[UPLOADING] = true;
+            formData.append(options.field, file);
+          });
+        } else { // 逐一上传
+          if (removeUploaded(sets.index, sets.file)) return;
+          formData.append(options.field, sets.file);
+        }
+
+        sets.file[UPLOADING] = true; // 上传中的标记
 
         // ajax 参数
         var opts = {
@@ -236,7 +258,6 @@ layui.define(['lay','layer'], function(exports){
           data: formData,
           contentType: false,
           processData: false,
-          // dataType: 'json',
           headers: options.headers || {},
           success: function(res){ // 成功回调
             options.unified ? (successful += that.fileLength) : successful++;
@@ -253,6 +274,12 @@ layui.define(['lay','layer'], function(exports){
             allDone();
           }
         };
+        // dataType
+        if (options.dataType) {
+          opts.dataType = options.dataType;
+        } else if (options.force === 'json') {
+          opts.dataType = options.force;
+        }
         // 进度条
         if(typeof options.progress === 'function'){
           opts.xhr = function(){
@@ -493,17 +520,17 @@ layui.define(['lay','layer'], function(exports){
     send();
   };
   
-  //重置方法
-  Class.prototype.reload = function(options){
-    options = options || {};
-    delete options.elem;
-    delete options.bindAction;
+  // 重置方法
+  Class.prototype.reload = function(opts){
+    opts = opts || {};
+    delete opts.elem;
+    delete opts.bindAction;
     
     var that = this;
-    var options = that.config = $.extend({}, that.config, upload.config, options);
+    var options = that.config = $.extend({}, that.config, upload.config, opts);
     var next = options.elem.next();
     
-    //更新文件域相关属性
+    // 更新文件域相关属性
     next.attr({
       name: options.name,
       accept: options.acceptMime,

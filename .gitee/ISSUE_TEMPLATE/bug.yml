@@ -5,11 +5,15 @@ body:
   - type: markdown
     attributes:
       value: |
-        **请注意**：此处只接受 Layui 相关技术问题，其他如 layuiAdmin 或 layim 等主题相关问题请勿在此反馈。
-        <br><br>
-        同时，在反馈问题之前，请确保：
-        - 已查看官方使用文档：**https://layui.dev** ，但没有找到相关解决方案。 
-        - 已在 **Issues** 中搜索过类似的问题，但没有找到相关解决方案。
+        **系统提示**：此处只接受 Layui 相关技术问题，其他如 layuiAdmin 或 LayIM 等主题相关问题请勿在此反馈。
+  - type: checkboxes
+    attributes:
+      label: 议题条件
+      options:
+        - label: 我确认已查看官方使用文档：**https://layui.dev** ，但没有找到相关解决方案。
+          required: true
+        - label: 我确认已在 **Issues** 中搜索过类似的问题，但没有找到相关解决方案。
+          required: true
   - type: input
     attributes:
       label: 版本号
@@ -19,7 +23,7 @@ body:
   - type: input
     attributes:
       label: 浏览器
-      placeholder: 如：Chrome 115.0.5735.91（正式版本） （64 位）
+      placeholder: 如：Chrome 116.0.5845.111（正式版本） （64 位）
     validations:
       required: true
   - type: dropdown
@@ -53,7 +57,8 @@ body:
   - type: input
     attributes:
       label: 演示地址
-      placeholder: 若能提供 CodePen、Stackblitz 或自主搭建的页面演示地址，将更有助于解决问题
+      description: 若能提供 Stackblitz, CodePen 或自主搭建的页面演示地址，将更有助于解决问题
+      placeholder: URL
   - type: checkboxes
     attributes:
       label: 友好承诺

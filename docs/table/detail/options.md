@@ -188,6 +188,33 @@
 <td>-</td>
     </tr>
     <tr>
+<td>cellExpandedMode <sup>2.8.17+</sup></td>
+<td>
+
+用于设置所有单元格默认展开方式，可选值有：
+
+- `tips` 悬浮展开方式
+- `default` 多行展开方式（默认）
+
+</td>
+<td>string</td>
+<td>-</td>
+    </tr>
+    <tr>
+<td>cellExpandedWidth <sup>2.8.17+</sup></td>
+<td>
+
+用于设置所有单元格默认展开后的宽度。当 `cellExpandedMode` 属性为默认值时有效。
+
+</td>
+<td>number</td>
+<td>
+
+`60`
+
+</td>
+    </tr>
+    <tr>
 <td>escape <sup>2.6+</sup></td>
 <td>是否开启对内容的编码（转义 html）</td>
 <td>boolean</td>
@@ -390,10 +417,28 @@ initSort: {
 </td>
     </tr>
     <tr>
-<td>before <sup>2.7+</sup></td>
-<td>数据渲染之前的回调函数。</td>
-<td>function</td>
-<td>-</td>
+<td>
+
+[before](#options.before) <sup>2.7+</sup>
+
+</td>
+<td colspan="3">
+
+<div class="ws-anchor" id="options.before">
+数据渲染之前的回调函数。
+</div>
+
+```
+table.render({
+  before: function(options){
+    console.log(options); // 当前实例属性配置项
+    options.where.abc = 123; // 修改或额外追加 where 属性
+  },
+  // …  // 其它属性
+});
+```
+
+</td>
     </tr>
     <tr>
 <td>
@@ -401,7 +446,7 @@ initSort: {
 [done](#options.done)
 
 </td>
-<td>
+<td colspan="3">
 
 <div class="ws-anchor" id="options.done">
   数据渲染完毕的回调函数。返回的参数如下：
@@ -414,20 +459,26 @@ table.render({
     console.log(curr);  // 得到当前页码
     console.log(count); // 得到数据总量
     console.log(origin); // 回调函数所执行的来源 --- 2.8.7+
-  }
+  },
   // …  // 其它属性
 });
 ```
 
 </td>
-<td>function</td>
-<td>-</td>
     </tr>
     <tr>
 <td>error <sup>2.6+</sup></td>
-<td> 数据请求失败的回调函数。返回两个参数：错误对象、内容。</td>
-<td>function</td>
-<td>-</td>
+<td colspan="3">
+
+数据请求失败的回调函数。返回两个参数：错误对象、内容。
+
+```
+error: function(e, msg) {
+  console.log(e, msg)
+}
+```
+
+</td>
     </tr>
   </tbody>
 </table>
