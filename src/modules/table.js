@@ -1882,10 +1882,44 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         case 'LAYTABLE_COLS': // 筛选列
           openPanel({
             list: function(){
+              var cols = [];
+              layui.each(that.config.cols, function (i1, row) {
+                layui.each(row, function (i2, col) {
+                  cols.push(col);
+                });
+              });
+
+              var findColParents = function (parentKey) {
+                var list = [];
+                var parentTitle = null;
+
+                if (!parentKey) return [];
+
+                while (true) {
+                  parentTitle = null;
+
+                  layui.each(cols, function (i, item) {
+                    if (item.key === parentKey) {
+                      parentTitle = util.escape($('<div>' + (item.fieldTitle || item.title || item.field) + '</div>').text());
+                      parentKey = item.parentKey || null;
+                      return false;
+                    }
+                  })
+
+                  if (null === parentTitle) break;
+                  list.push(parentTitle);
+                  if (null === parentKey) break;
+                }
+
+                return list.reverse();
+              }
+
               var lis = [];
               that.eachCols(function(i, item){
                 if(item.field && item.type == 'normal'){
-                  lis.push('<li><input type="checkbox" name="'+ item.field +'" data-key="'+ item.key +'" data-parentkey="'+ (item.parentKey||'') +'" lay-skin="primary" '+ (item.hide ? '' : 'checked') +' title="'+ util.escape($('<div>' + (item.fieldTitle || item.title || item.field) + '</div>').text()) +'" lay-filter="LAY_TABLE_TOOL_COLS"></li>');
+                  var colTitle = findColParents(item.parentKey);
+                  colTitle.push(util.escape($('<div>' + (item.fieldTitle || item.title || item.field) + '</div>').text()));
+                  lis.push('<li><input type="checkbox" name="'+ item.field +'" data-key="'+ item.key +'" data-parentkey="'+ (item.parentKey||'') +'" lay-skin="primary" '+ (item.hide ? '' : 'checked') +' title="'+ colTitle.join(' - ') +'" lay-filter="LAY_TABLE_TOOL_COLS"></li>');
                 }
               });
               return lis.join('');
