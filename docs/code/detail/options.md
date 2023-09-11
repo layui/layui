@@ -134,10 +134,22 @@ layout: ['code', 'preview']
 工具图标将根据数组的排列顺序来显示，如：
 
 ```
-tools: ['full', 'window']
+tools: [
+  'full',
+  'window',
+  // 自定义扩展工具 --- 2.8.17+
+  {
+    title: ['切换高亮主题'],
+    type: 'theme',
+    event: function(obj) {
+      console.log(obj); // 当前实例相关信息
+      // do something
+    }
+  }
+]
 ```
 
-亦可自定义值，值对应[图标](../icon/) `className` 的 `layui-icon-` 后的名称，并通过 `toolsEvent` 回调函数中处理事件。
+`type` 值对应[图标](../icon/) `className` 的 `layui-icon-` 后的名称。如图标：`layui-icon-theme`，那么 `type` 设置 `theme` 即可。
 
 </td>
 <td>array</td>
@@ -147,12 +159,12 @@ tools: ['full', 'window']
 <td>toolsEvent <sup>2.8+</sup></td>
 <td>
   
-点击工具栏的回调函数，函数返回 `tools` 设置的名称，如：
+点击工具栏的回调函数，功能同 `tools` 中的 `event`，只是需通过 `type` 属性来区分是哪个工具菜单。
 
 ```
-toolsEvent: function(othis, type){
-  console.log(othis); // 当前图标元素对象
-  console.log(type); // tools 中设置的对应值
+toolsEvent: function(obj){
+  console.log(obj); // 当前实例相关信息
+  console.log(obj.type); // 当前实例相关信息
 }
 ```
 
@@ -197,7 +209,7 @@ text: {
 <td>header <sup>2.8+</sup></td>
 <td>
   
-是否开启 Code 栏头部区域
+是否开启 Code 栏头部区域。
 
 </td>
 <td>boolean</td>
@@ -206,16 +218,6 @@ text: {
 `false`
 
 </td>
-    </tr>
-    <tr>
-<td>about</td>
-<td>
-  
-设置 Code 栏头部右上角信息。必须开启 `header` 属性后有效。
-
-</td>
-<td>string</td>
-<td>-</td>
     </tr>
     <tr>
 <td>ln</td>
@@ -232,10 +234,10 @@ text: {
 </td>
     </tr>
     <tr>
-<td>skin</td>
+<td>theme <sup>2.8.17+</sup></td>
 <td>
   
-Code 容器的风格，可选值有：
+Code 容器的主题风格，可选值有：
 
 - `light` 浅色模式（默认）
 - `dark` 深色模式
@@ -255,6 +257,84 @@ Code 容器的风格，可选值有：
 <td>
 
 `true`
+
+</td>
+    </tr>
+    <tr>
+<td>lang <sup>2.8.17+</sup></td>
+<td>
+
+指定语言类型。如：`lang: 'html'`
+
+</td>
+<td>string</td>
+<td>-</td>
+    </tr>
+    <tr>
+<td>langMarker <sup>2.8.17+</sup></td>
+<td>
+
+是否在代码区域右上角显示语言类型
+
+</td>
+<td>boolean</td>
+<td>
+
+`false`
+
+</td>
+    </tr>
+    <tr>
+<td>wordWrap <sup>2.8.17+</sup></td>
+<td>
+
+Code 文字是否自动换行
+
+</td>
+<td>boolean</td>
+<td>
+
+`true`
+
+</td>
+    </tr>
+    <tr>
+<td>highlighter <sup>2.8.17+</sup></td>
+<td>
+
+指定语法高亮器，可选值：
+
+- `hljs` : 指定 `highlight.js` 库
+- `prism` : 指定 `prism.js` 库
+- `shiki` : 指定 `shiki.js` 库
+
+</td>
+<td>string</td>
+<td>-</td>
+    </tr>
+    <tr>
+<td>
+
+[codeRender](#options.codeRender) <sup>2.8+</sup>
+
+</td>
+<td colspan="3">
+
+<div id="options.codeRender" lay-pid="options" class="ws-anchor">
+用于重新渲染 code，譬如代码高亮处理。
+</div>
+
+```
+codeRender: function(code, opts){
+  // 此处以 highlight.js 为例
+  return hljs.highlight(code, {language: opts.lang}).value;
+}
+```
+
+code 组件语法高亮相关示例：
+
+- <a href="https://stackblitz.com/edit/web-platform-hhftb4?file=index.html" rel="nofollow" target="_blank">highlight 和 prism 语法高亮示例</a>
+- <a href="https://codepen.io/Sight-wcg/pen/GRPjQyG" rel="nofollow" target="_blank">shiki 语法高亮示例</a>
 
 </td>
     </tr>
@@ -288,7 +368,7 @@ done: function(obj){
 <td colspan="3">
 
 <div id="options.onCopy" lay-pid="options" class="ws-anchor">  
-点击复制图标时的回调函数。 该回调一旦设定，则不再执行内置的复制操作。
+点击复制图标时的回调函数。
 </div>
 
 ```
