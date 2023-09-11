@@ -37,7 +37,9 @@ html #layuicss-skincodecss{display: none; position: absolute; width: 1989px;}
 .layui-code-view:hover > .layui-code-fixbar .layui-code-lang-marker{display: none;}
 
 /* 深色主题 */
-.layui-code-theme-dark{border-width: 1px; border-color: rgb(126 122 122 / 15%); background-color: #1f1f1f; color: #ccc;}
+.layui-code-theme-dark,
+.layui-code-theme-dark > .layui-code-header{border-color: rgb(126 122 122 / 15%); background-color: #1f1f1f;}
+.layui-code-theme-dark{border-width: 1px; color: #ccc;}
 .layui-code-theme-dark > .layui-code-ln-side{border-right-color: #2a2a2a; background: none; color: #6e7681;}
 
 
