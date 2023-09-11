@@ -989,11 +989,11 @@
       }
     })();
     
-    //校验日期有效数字
+    // 校验日期有效数字
     checkValid(dateTime);
     if(options.range) checkValid(that.endDate);
 
-    //如果初始值格式错误，则纠正初始值
+    // 如果初始值格式错误，则纠正初始值
     if(error && value){
       that.setValue(
         options.range ? (that.endDate ? that.parse() : '') : that.parse()
@@ -1041,6 +1041,7 @@
       that.hint('value ' + lang.invalidDate + lang.formatError[1]);
     }
 
+    // 初始赋值 startDate,endState
     that.startDate = that.startDate || value && lay.extend({}, options.dateTime); // 有默认值才初始化startDate
     that.autoCalendarModel.auto && that.autoCalendarModel();
     that.endState = !options.range || !that.rangeLinked || !!(that.startDate && that.endDate); // 初始化选中范围状态
@@ -1584,21 +1585,22 @@
     }
   };
   
-  //转义为规定格式的日期字符
-  Class.prototype.parse = function(state, date){
-    var that = this
-    ,options = that.config
-    ,dateTime = date || (state == 'end'
-      ? lay.extend({}, that.endDate, that.endTime)
-    : (
-      options.range 
-        ? lay.extend({}, that.rangeLinked ? that.startDate : options.dateTime, that.startTime)
-      : options.dateTime)
-    )
-    ,format = laydate.parse(dateTime, that.format, 1);
-    
-    //返回日期范围字符
-    if(options.range && state === undefined){
+  // 转义为规定格式的日期字符
+  Class.prototype.parse = function(state, date) {
+    var that = this;
+    var options = that.config;
+    var startDate = (that.rangeLinked ? that.startDate : options.dateTime)
+    var dateTime = date || (
+      state == 'end' ? lay.extend({}, that.endDate, that.endTime) : (
+        options.range
+          ? lay.extend({}, startDate || options.dateTime, that.startTime)
+        : options.dateTime
+      )
+    );
+    var format = laydate.parse(dateTime, that.format, 1);
+
+    // 返回日期范围字符
+    if (options.range && state === undefined) {
       return format + ' '+ that.rangeStr +' ' + that.parse('end');
     }
 
@@ -1756,12 +1758,14 @@
     });
   };
 
-  //执行 done/change 回调
+  // 执行 done/change 回调
   Class.prototype.done = function(param, type){
-    var that = this
-    ,options = that.config
-    ,start = lay.extend({}, lay.extend(options.dateTime, that.startTime))
-    ,end = lay.extend({}, lay.extend(that.endDate, that.endTime))
+    var that = this;
+    var options = that.config;
+    var start = lay.extend({},
+      lay.extend(that.rangeLinked ? that.startDate : options.dateTime, that.startTime)
+    );
+    var end = lay.extend({}, lay.extend(that.endDate, that.endTime));
     
     lay.each([start, end], function(i, item){
       if(!('month' in item)) return;
