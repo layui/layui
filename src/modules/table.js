@@ -2834,6 +2834,20 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     if(device.ie) return hint.error('IE_NOT_SUPPORT_EXPORTS');
 
+    // 处理 treeTable 数据
+    if (config.tree && config.tree.view) {
+      try {
+        data = $.extend(true, [], table.cache[id]);
+        data = (function fn(data) {
+          return data.reduce(function (acc, obj){
+            var children = obj.children || [];
+            delete obj.children;
+            return acc.concat(obj, fn(children));
+          }, []);
+        })(Array.from(data));
+      } catch (e) {}
+    }
+
     alink.href = 'data:'+ textType +';charset=utf-8,\ufeff'+ encodeURIComponent(function(){
       var dataTitle = [];
       var dataMain = [];
