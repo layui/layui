@@ -531,14 +531,20 @@
   //Contains
   Class.fn.contains = function (elem) {
     var has = false;
+    if(!elem) return has;
     this.each(function (index, item) {
-      if (item === elem){
-        has = true;
-        return true;
+      if (item.tagName === elem.tagName && item === elem){
+        return has = true;
+      }else {
+        lay(item).find(elem.tagName).each(function (index2, item2) {
+          if (item2 === elem){
+            return has = true;
+          }
+        });
       }
     });
     return has;
-  }
+  };
   
   // export
   window.lay = lay;
