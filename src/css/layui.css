@@ -805,6 +805,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-input-wrap .layui-input-split{pointer-events: none;}
 .layui-input-wrap .layui-input:hover + .layui-input-split{border-color: #d2d2d2;}
 .layui-input-wrap .layui-input:focus + .layui-input-split{border-color: #16b777;}
+.layui-input-wrap .layui-input.layui-form-danger:focus + .layui-input-split{border-color: #ff5722;}
 .layui-input-wrap .layui-input-prefix.layui-input-split{border-width: 0; border-right-width: 1px;}
 
 /* 输入框动态点缀  */
