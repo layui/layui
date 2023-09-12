@@ -341,8 +341,8 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
       });
 
       // 增加工具栏
-      if (options.addTools) {
-        options.tools = [].concat(options.tools || [], options.addTools);
+      if (options.addTools && options.tools) {
+        options.tools = [].concat(options.tools, options.addTools);
       }
 
       // 渲染工具栏
