@@ -32,7 +32,7 @@ toc: true
 | [layer.photos(options)](#photos) | 弹出 `page` 类型图片层。 |
 | [layer.tab(options)](#tab) | 弹出 `page` 类型标签页层。 |
 | 关闭 : | - |
-| [layer.close(index)](#close) | 关闭对应的层，核心方法。 |
+| [layer.close(index, callback)](#close) | 关闭对应的层，核心方法。 |
 | [layer.closeAll(type)](#closeAll) | 关闭所有对应类型的层。 |
 | [layer.closeLast(type)](#closeLast) <sup>2.8+</sup> | 关闭最近打开的对应类型的层。 |
 | 其他 : | - |
@@ -339,9 +339,10 @@ layer.tab({
 
 <h2 id="close" lay-toc="{level: 2}">关闭弹层</h2>
 
-`layer.close(index);`
+`layer.close(index, callback);`
 
 - 参数 `index` : 打开弹层时返回的唯一索引
+- 参数 `callback` : 关闭弹层后调用函
 
 该方法用于关闭对应的弹层。
 
