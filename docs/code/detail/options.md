@@ -302,11 +302,13 @@ Code 文字是否自动换行
 <td>highlighter <sup>2.8.17+</sup></td>
 <td>
 
-指定语法高亮器，可选值：
+设置语法高亮器，可选值：
 
 - `hljs` : 指定 `highlight.js` 库
 - `prism` : 指定 `prism.js` 库
 - `shiki` : 指定 `shiki.js` 库
+
+注：语法高亮 JS 库和相关主题 CSS 需自主引入，该属性仅作为内部适配用途。
 
 </td>
 <td>string</td>
