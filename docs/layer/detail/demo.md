@@ -1,6 +1,6 @@
 <h2 lay-toc="{id: 'examples', level: 2, hot: true}" class="layui-hide">在线测试</h2>
 
-<pre class="layui-code" lay-options="{preview: true, text: {preview: '在线测试'}, layout: ['preview']}">
+<pre class="layui-code" lay-options="{preview: true, text: {preview: '在线测试'}, copy: false, layout: ['preview']}">
   <textarea>
 {{- d.include("/layer/detail/run.md") }}
   </textarea>
