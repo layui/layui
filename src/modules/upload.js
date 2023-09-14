@@ -256,6 +256,7 @@ layui.define(['lay','layer'], function(exports){
           url: options.url,
           type: 'post', // 统一采用 post 上传
           data: formData,
+          dataType: options.dataType || 'json',
           contentType: false,
           processData: false,
           headers: options.headers || {},
@@ -274,12 +275,7 @@ layui.define(['lay','layer'], function(exports){
             allDone();
           }
         };
-        // dataType
-        if (options.dataType) {
-          opts.dataType = options.dataType;
-        } else if (options.force === 'json') {
-          opts.dataType = options.force;
-        }
+
         // 进度条
         if(typeof options.progress === 'function'){
           opts.xhr = function(){
