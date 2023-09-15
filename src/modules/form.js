@@ -11,42 +11,58 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   var hint = layui.hint();
   var device = layui.device();
   
-  var MOD_NAME = 'form', ELEM = '.layui-form', THIS = 'layui-this';
-  var SHOW = 'layui-show', HIDE = 'layui-hide', DISABLED = 'layui-disabled';
+  var MOD_NAME = 'form';
+  var ELEM = '.layui-form';
+  var THIS = 'layui-this';
+  var SHOW = 'layui-show';
+  var HIDE = 'layui-hide';
+  var DISABLED = 'layui-disabled';
   
   var Form = function(){
     this.config = {
       // 内置的验证规则
       verify: {
-        required: [
-          /[\S]+/,
-          '必填项不能为空'
-        ],
-        phone: [
-          /^1\d{10}$/,
-          '请输入正确的手机号'
-        ],
-        email: [
-          /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-          '邮箱格式不正确'
-        ],
-        url: [
-          /^(#|(http(s?)):\/\/|\/\/)[^\s]+\.[^\s]+$/,
-          '链接格式不正确'
-        ],
-        number: function(value){
-          if(isNaN(value)) return '只能填写数字';
+        required: function(value) {
+          if (!/[\S]+/.test(value)) {
+            return '必填项不能为空';
+          }
         },
-        date: [
-          /^(\d{4})[-\/](\d{1}|0\d{1}|1[0-2])([-\/](\d{1}|0\d{1}|[1-2][0-9]|3[0-1]))*$/,
-          '日期格式不正确'
-        ],
-        identity: [
-          /(^\d{15}$)|(^\d{17}(x|X|\d)$)/,
-          '请输入正确的身份证号'
-        ]
+        phone: function(value) {
+          var EXP = /^1\d{10}$/;
+          if (value && !EXP.test(value)) {
+            return '手机号格式不正确';
+          }
+        },
+        email: function(value) {
+          var EXP = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+          if (value && !EXP.test(value)) {
+            return '邮箱格式不正确';
+          }
+        },
+        url: function(value) {
+          var EXP = /^(#|(http(s?)):\/\/|\/\/)[^\s]+\.[^\s]+$/;
+          if (value && !EXP.test(value)) {
+            return '链接格式不正确';
+          }
+        },
+        number: function(value){
+          if (value && isNaN(value)) {
+            return '只能填写数字';
+          }
+        },
+        date: function(value){
+          var EXP = /^(\d{4})[-\/](\d{1}|0\d{1}|1[0-2])([-\/](\d{1}|0\d{1}|[1-2][0-9]|3[0-1]))*$/;
+          if (value && !EXP.test(value)) {
+            return '日期格式不正确';
+          }
+        },
+        identity: function(value) {
+          var EXP = /(^\d{15}$)|(^\d{17}(x|X|\d)$)/;
+          if (value && !EXP.test(value)) {
+            return '身份证号格式不正确';
+          }
+        }
       },
-      verIncludeRequired: false, // 验证规则是否包含必填 --- 为兼容旧版的验证机制
       autocomplete: null // 全局 autocomplete 状态。 null 表示不干预
     };
   };
@@ -894,10 +910,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     return that;
   };
 
-  // 主动触发验证 -- elem 即要验证的区域表单选择器 / return true or false
-  Form.prototype.validate = function(elem){
+  // 主动触发验证 --- elem 即要验证的区域表单选择器 / return true or false
+  Form.prototype.validate = function(elem) {
     var that = this;
-    var stop = null; // 验证不通过状态
+    var intercept; // 拦截标识
     var options = that.config; // 获取全局配置项
     var verify = options.verify; // 验证规则
     var DANGER = 'layui-form-danger'; // 警示样式
@@ -905,10 +921,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     elem = $(elem);
 
     // 节点不存在可视为 true
-    if(!elem[0]) return !0;
+    if (!elem[0]) return !0;
 
     // 若节点不存在特定属性，则查找容器内有待验证的子节点
-    if(elem.attr('lay-verify') === undefined){
+    if (elem.attr('lay-verify') === undefined) {
       // 若校验的是一个不带验证规则的容器，校验内部的 lay-verify 节点
       if (that.validate(elem.find('*[lay-verify]')) === false) {
         return false;
@@ -916,7 +932,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     }
 
     // 开始校验
-    layui.each(elem, function(_, item){
+    layui.each(elem, function(_, item) {
       var othis = $(this);
       var verifyStr = othis.attr('lay-verify') || '';
       var vers = verifyStr.split('|');
@@ -926,16 +942,16 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       othis.removeClass(DANGER); // 移除警示样式
       
       // 遍历元素绑定的验证规则
-      layui.each(vers, function(_, thisVer){
-        var isTrue; // 是否命中校验
+      layui.each(vers, function(_, thisVer) {
+        var verst; // 校验结果
         var errorText = ''; // 错误提示文本
         var rule = verify[thisVer]; // 获取校验规则
         
         // 匹配验证规则
-        if(rule){
-          isTrue = typeof rule === 'function'
+        if (rule) {
+          verst = typeof rule === 'function'
             ? errorText = rule(value, item) 
-          : !rule[0].test(value);
+          : !rule[0].test(value); // 兼容早期数组中的正则写法
           
           // 是否属于美化替换后的表单元素
           var isForm2Elem = item.tagName.toLowerCase() === 'select' || (
@@ -945,20 +961,14 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           errorText = errorText || rule[1];
           
           // 获取自定义必填项提示文本
-          if(thisVer === 'required'){
+          if (thisVer === 'required') {
             errorText = othis.attr('lay-reqtext') || errorText;
           }
           
-          // 若为必填项或者非空命中校验，则阻止提交，弹出提示
-          if(isTrue && (
-            options.verIncludeRequired || (
-              thisVer === 'required' || (
-                value && thisVer !== 'required'
-              )
-            )
-          )){
+          // 若命中校验规则
+          if (verst) {
             // 提示层风格
-            if(verType === 'tips'){
+            if (verType === 'tips') {
               layer.tips(errorText, function(){
                 if(typeof othis.attr('lay-ignore') !== 'string'){
                   if(isForm2Elem){
@@ -971,24 +981,24 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               layer.alert(errorText, {title: '提示', shadeClose: true});
             } 
             // 若返回的为字符或数字，则自动弹出默认提示框；否则由 verify 方法中处理提示
-            else if(/\b(string|number)\b/.test(typeof errorText)){ 
+            else if(/\b(string|number)\b/.test(typeof errorText)) {
               layer.msg(errorText, {icon: 5, shift: 6});
             }
 
-            setTimeout(function(){
+            setTimeout(function() {
               (isForm2Elem ? othis.next().find('input') : item).focus();
             }, 7);
             
             othis.addClass(DANGER);
-            return stop = true;
+            return intercept = true;
           }
         }
       });
 
-      if(stop) return stop;
+      if (intercept) return intercept;
     });
 
-    return !stop;
+    return !intercept;
   };
 
   // 提交表单并校验

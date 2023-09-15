@@ -111,7 +111,7 @@ form 还可以借助*栅格*实现更灵活的响应式布局。
 | --- | --- | --- |
 | title | 自定义 | 设置表单元素标题，一般用于 `checkbox,radio` 元素 |
 | lay-filter | 自定义 | 设置表单元素的过滤器，以便用于执行相关方法时的参数匹配 |
-| lay-verify | `required`必填项 <br>`phone`手机号 <br>`email`邮箱 <br>`url`网址<br>`number`数字<br>`date`日期<br>`identity`身份证<hr>`自定义规则值` | 设置表单项的验证规则，支持单条或多条规则（多条用`\|`分隔），如：<br>`lay-verify="required"` <br>`lay-verify="required\|email"`<br>`lay-verify="其他自定义规则值"` <hr>自定义规则的用法：[#详见](#verify) |
+| lay-verify | `required`必填项 <br>`phone`手机号 <br>`email`邮箱 <br>`url`网址<br>`number`数字<br>`date`日期<br>`identity`身份证<hr>`自定义规则值` | 设置表单项的验证规则，支持单条或多条规则（多条用`\|`分隔），如：<br>`lay-verify="required"` <br>`lay-verify="required\|email"`<br>`lay-verify="其他自定义规则值"` <hr>自定义规则的用法：[#详见](#verify)<hr>注：<sup>2.8.3</sup> 版本中调整了内置规则，不再强制必填。<br>如需保留必填，可叠加 `required` 规则，如： <br> `lay-verify="required\|number"` |
 | lay-vertype | `tips`吸附层<br>`alert` 对话框<br>`msg` 默认 | 设置验证异常时的提示层模式 |
 | lay-reqtext | 自定义 | 设置*必填项*（`lay-verify="required"`）的默认提示文本 |
 | lay-affix | [#详见](input.html#affix) | 输入框动态点缀，`<input type="text">`元素 **私有属性** |
@@ -408,7 +408,6 @@ form.on('select(test)', function(data){
 | 属性名 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | autocomplete | 设置 input 框的 `autocomplete` 属性初始值 | string | - |
-| verIncludeRequired <sup>2.8.4+</sup> | 验证规则中是否同时包含必填。 form 组件在 `2.8.3` 版本中调整了内置校验规则，即：仅当非空时进行校验，避免强制携带必填的校验规则。如需保留之前的验证规则（即同时校验必填）,可将该属性设置为 `true`。但一般还是建议将必填项放置在 `lay-verify` 属性上，如： `lay-verify="required\|number"` | boolean | `false` |
 
 该方法用于对 form 组件进行全局设置。
 

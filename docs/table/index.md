@@ -11,6 +11,8 @@ toc: true
 
 以下所有示例中演示的数据均为「静态模拟数据」，实际使用时换成您的真实接口即可。
 
+<div class="ws-docs-showcase"></div>
+
 <div>
 {{- d.include("/table/detail/demo.md") }}
 </div>

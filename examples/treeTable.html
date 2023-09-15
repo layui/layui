@@ -13,6 +13,12 @@
 
 <table class="layui-hide" id="test"></table>
 
+<script type="text/html" id="TPL-treeTable-demo">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-event="getChecked">获取选中数据</button>
+  </div>
+</script>
+
 <script src="../src/layui.js"></script>
 <script>
 layui.use(['treeTable'], function(){
@@ -23,6 +29,7 @@ layui.use(['treeTable'], function(){
     elem: '#test',
     url: './json/treeTable/demo-1.json',
     maxHeight: 'full-32',
+    toolbar: '#TPL-treeTable-demo',
     tree: {
       customName: {
         name: 'name'
