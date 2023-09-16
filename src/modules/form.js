@@ -248,6 +248,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               var value = this.value;
               opts.show === 'auto' && showAffix(elemAffix, value);
             });
+
+            // 失去焦点事件
+            othis.on('blur', function(){
+              typeof opts.blur === 'function' && opts.blur.call(this, othis, opts);
+            });
             
             // 点击动态后缀事件
             elemIcon.on('click', function(){
@@ -295,21 +300,32 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               className: 'layui-input-number',
               disabled: othis.is('[disabled]'), // 跟随输入框禁用状态
               click: function(elem){
-                var index = $(this).index();
+                var isSub = $(this).index();
                 var value = elem.val();
                 var rawValue = value;
                 var step = Number(elem.attr('step')) || 1; // 加减的数字间隔
                 var min = Number(elem.attr('min'));
                 var max = Number(elem.attr('max'));
+                var precision = Number(elem.attr('lay-precision'));
+                var btn = {
+                  add: elem.next().children('.layui-icon-up'),
+                  sub: elem.next().children('.layui-icon-down')
+                }
 
                 if(isNaN(value)) return; // 若非数字，则不作处理
 
                 value = Number(value);
-                value = index ? value - step : value + step;
+                value = isSub ? value - step : value + step;
 
                 // min max
-                if(value < min) value = min;
-                if(value > max) value = max;
+                if(value <= min){
+                  value = min;
+                  btn.sub.addClass(DISABLED);
+                }
+                if(value >= max){
+                  value = max;
+                  btn.add.addClass(DISABLED);
+                }
 
                 // 获取小数点后位数
                 var decimals = function(step){
@@ -317,13 +333,43 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                   return decimals.length;
                 };
 
-                // 位数比较
-                var fixed = Math.max(decimals(step), decimals(rawValue));
+                var fixed = isNaN(precision) ? Math.max(decimals(step), decimals(rawValue)) : precision;
 
                 if(fixed) value = value.toFixed(fixed);
 
                 elem.val(value);
-              }
+
+                btn[isSub ? 'add' : 'sub'].removeClass(DISABLED)
+              },
+              blur: function(elem){
+                var value = elem.val();
+                var min = Number(elem.attr('min'));
+                var max = Number(elem.attr('max'));
+                var precision = Number(elem.attr('lay-precision'));
+                var btn = {
+                  add: elem.next().children('.layui-icon-up'),
+                  sub: elem.next().children('.layui-icon-down')
+                }
+
+                if(isNaN(value)) return; // 若非数字，则不作处理
+
+                value = Number(value);
+
+                if(value <= min){
+                  value = min;
+                  btn.sub.addClass(DISABLED)
+                  btn.add.removeClass(DISABLED)
+                }
+                if(value >= max){
+                  value = max;
+                  btn.add.addClass(DISABLED)
+                  btn.sub.removeClass(DISABLED)
+                }
+
+                if(!isNaN(precision)) value = value.toFixed(precision);
+
+                elem.val(value);
+              },
             }
           };
           
