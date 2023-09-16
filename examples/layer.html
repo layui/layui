@@ -24,6 +24,7 @@
   <button class="layui-btn" lay-on="test7">Prompt</button>
   <button class="layui-btn" lay-on="test8">Tab</button>
   <button class="layui-btn" lay-on="test9">Photo</button>
+  <button class="layui-btn" lay-on="test10">Drawer</button>
   <button class="layui-btn" lay-on="testTime">自动关闭</button>
   <a href="https://layui.dev/docs/2.8/layer/" target="_blank" class="layui-btn">更多例子</a>
 </div>
@@ -213,6 +214,19 @@ layui.use(['layer', 'util'], function(layer, util){
         ,end: function(){
           clearInterval(this.timer);
         }
+      });
+    }
+    ,test10: function(){
+      layer.open({
+        title:'drawer',
+        type: 1,
+        offset: 'b',
+        anim: 'slideUp', // 从下往上
+        area: ['100%', '160px'],
+        shade: 0.1,
+        shadeClose: true,
+        content: $('#test11111'),
+        maxmin: true,
       });
     }
   });
