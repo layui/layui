@@ -1727,15 +1727,12 @@ ready.run = function(_$){
   var isMobile = /android|iphone|ipod|ipad|ios/.test(agent)
   var _win = $(window);
   if(isMobile){
-    $.each({Height: "height", Width: "width"}, function(k, v){
-      var nativeProp = 'inner' + k;
-      var jQFunc = v;
-      win[jQFunc] = function(val){
-        return val
-          ? _win[jQFunc](val) 
-          : nativeProp in window 
-          ? window[nativeProp]
-          : _win[jQFunc]()
+    $.each({Height: "height", Width: "width"}, function(propSuffix, funcName){
+      var propName = 'inner' + propSuffix;
+      win[funcName] = function(){
+        return propName in window 
+          ? window[propName]
+          : _win[funcName]()
       }
     })
   }
