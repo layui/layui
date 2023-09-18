@@ -342,7 +342,7 @@ layer.tab({
 `layer.close(index, callback);`
 
 - 参数 `index` : 打开弹层时返回的唯一索引
-- 参数 `callback` : 关闭弹层后调用函
+- 参数 `callback` : 关闭弹层后的回调函数
 
 该方法用于关闭对应的弹层。
 
@@ -370,7 +370,7 @@ parent.layer.close(index); // 再执行关闭
 `layer.closeAll(type, callback);`
 
 - 参数 `type` : 弹层的类型。可选值：`dialog,page,iframe,loading,tips`
-- 参数 `callback` : 关闭弹层后调用函
+- 参数 `callback` : 关闭弹层后的回调函数
 
 该方法用于关闭所有同类型的弹层。
 
