@@ -359,10 +359,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                   value = min;
                   btn.sub.addClass(DISABLED)
                   btn.add.removeClass(DISABLED)
-                }
-                if(value >= max){
+                }else if(value >= max){
                   value = max;
                   btn.add.addClass(DISABLED)
+                  btn.sub.removeClass(DISABLED)
+                }else{
+                  btn.add.removeClass(DISABLED)
                   btn.sub.removeClass(DISABLED)
                 }
 
