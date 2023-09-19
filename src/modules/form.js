@@ -174,6 +174,48 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         // 初始化全局的 autocomplete
         options.autocomplete && inputs.attr('autocomplete', options.autocomplete);
 
+        var handleInputNumberEvents = function(elem, eventType){
+          var that = this;
+          var rawValue = elem.val();
+          var value = Number(rawValue);
+          var step = Number(elem.attr('step')) || 1; // 加减的数字间隔
+          var min = Number(elem.attr('min'));
+          var max = Number(elem.attr('max'));
+          var precision = Number(elem.attr('lay-precision'));
+          var noAction = eventType === 'blur' && rawValue === '' // 失焦时空值不作处理
+
+          if(isNaN(value)) return; // 若非数字，则不作处理
+
+          if(eventType === 'click'){
+            var isDecrement = !!$(that).index() // 0: icon-up, 1: icon-down
+            value = isDecrement ? value - step : value + step;
+          }
+
+          // 获取小数点后位数
+          var decimals = function(step){
+            var decimals = (step.toString().match(/\.(\d+$)/) || [])[1] || '';
+            return decimals.length;
+          };
+
+          precision = precision >= 0 ? precision : Math.max(decimals(step), decimals(rawValue));
+
+          if(!noAction){
+            if(value <= min) value = min;
+            if(value >= max) value = max;
+            if(precision) value = value.toFixed(precision);
+  
+            elem.val(value) 
+          }
+
+          // 更新按钮状态
+          var controlBtn = {
+            increment: elem.next().find('.layui-icon-up'),
+            decrement: elem.next().find('.layui-icon-down')
+          }
+          controlBtn.increment[(value >= max && !noAction) ? 'addClass' : 'removeClass'](DISABLED)
+          controlBtn.decrement[(value <= min && !noAction) ? 'addClass' : 'removeClass'](DISABLED)
+        }
+
         // 初始化输入框动态点缀
         elemForm.find('input[lay-affix],textarea[lay-affix]').each(function(){
           var othis = $(this);
@@ -300,77 +342,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               className: 'layui-input-number',
               disabled: othis.is('[disabled]'), // 跟随输入框禁用状态
               click: function(elem){
-                var isSub = $(this).index();
-                var value = elem.val();
-                var rawValue = value;
-                var step = Number(elem.attr('step')) || 1; // 加减的数字间隔
-                var min = Number(elem.attr('min'));
-                var max = Number(elem.attr('max'));
-                var precision = Number(elem.attr('lay-precision'));
-                var btn = {
-                  add: elem.next().children('.layui-icon-up'),
-                  sub: elem.next().children('.layui-icon-down')
-                }
-
-                if(isNaN(value)) return; // 若非数字，则不作处理
-
-                value = Number(value);
-                value = isSub ? value - step : value + step;
-
-                // min max
-                if(value <= min){
-                  value = min;
-                  btn.sub.addClass(DISABLED);
-                }
-                if(value >= max){
-                  value = max;
-                  btn.add.addClass(DISABLED);
-                }
-
-                // 获取小数点后位数
-                var decimals = function(step){
-                  var decimals = (step.toString().match(/\.(\d+$)/) || [])[1] || '';
-                  return decimals.length;
-                };
-
-                var fixed = isNaN(precision) ? Math.max(decimals(step), decimals(rawValue)) : precision;
-
-                if(fixed) value = value.toFixed(fixed);
-
-                elem.val(value);
-
-                btn[isSub ? 'add' : 'sub'].removeClass(DISABLED)
+                handleInputNumberEvents.call(this, elem, 'click')
               },
               blur: function(elem){
-                var value = elem.val();
-                var min = Number(elem.attr('min'));
-                var max = Number(elem.attr('max'));
-                var precision = Number(elem.attr('lay-precision'));
-                var btn = {
-                  add: elem.next().children('.layui-icon-up'),
-                  sub: elem.next().children('.layui-icon-down')
-                }
-
-                if(isNaN(value)) return; // 若非数字，则不作处理
-
-                value = Number(value);
-
-                if(value <= min){
-                  value = min;
-                  btn.sub.addClass(DISABLED)
-                  btn.add.removeClass(DISABLED)
-                }else if(value >= max){
-                  value = max;
-                  btn.add.addClass(DISABLED)
-                  btn.sub.removeClass(DISABLED)
-                }else{
-                  btn.add.removeClass(DISABLED)
-                  btn.sub.removeClass(DISABLED)
-                }
-
-                if(!isNaN(precision)) value = value.toFixed(precision);
-
-                elem.val(value);
+                handleInputNumberEvents.call(this, elem, 'blur')
               },
             }
           };
