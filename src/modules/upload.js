@@ -247,9 +247,10 @@ layui.define(['lay','layer'], function(exports){
         } else { // 逐一上传
           if (removeUploaded(sets.index, sets.file)) return;
           formData.append(options.field, sets.file);
+          sets.file[UPLOADING] = true; // 上传中的标记
         }
 
-        sets.file[UPLOADING] = true; // 上传中的标记
+
 
         // ajax 参数
         var opts = {
