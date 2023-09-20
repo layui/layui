@@ -299,12 +299,12 @@ layui.define(['jquery', 'lay'], function(exports){
       }, 50);  
     }
     
-    // 移除过度类
+    // 移除过渡类
     setTimeout(function(){
       elemItem.removeClass(THIS + ' ' + ELEM_PREV + ' ' + ELEM_NEXT + ' ' + ELEM_LEFT + ' ' + ELEM_RIGHT);
       elemItem.eq(options.index).addClass(THIS);
       that.haveSlide = false; // 解锁
-    }, 300);
+    }, 350);
     
     // 指示器焦点
     that.elemInd.find('li').eq(options.index).addClass(THIS)
