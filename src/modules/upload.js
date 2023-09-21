@@ -624,12 +624,12 @@ layui.define(['lay','layer'], function(exports){
       that.upload();
     });
     
-    // 防止事件重复绑定
-    if(options.elem.data('haveEvents')) return;
-    
-    that.elemFile.on('change', function(){
+    that.elemFile.off('change').on('change', function(){
       $(this).trigger('upload.change');
     });
+    
+    // 防止事件重复绑定
+    if(options.elem.data('haveEvents')) return;
     
     options.elem.on('click', function(){
       if(that.isFile()) return;
