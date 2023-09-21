@@ -1027,6 +1027,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         dataType: options.dataType || 'json',
         jsonpCallback: options.jsonpCallback,
         headers: options.headers || {},
+        complete: function(xhr,ts){
+          typeof options.complete === 'function' && options.complete(xhr, ts);
+        },
         success: function(res){
           // 若有数据解析的回调，则获得其返回的数据
           if(typeof options.parseData === 'function'){
