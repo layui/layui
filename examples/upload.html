@@ -98,7 +98,7 @@ layui.use(['upload', 'element'], function(){
 
   var uploadInst = upload.render({
     elem: '#test1',
-    url: 'https://httpbin.org/post',
+    url: '',
     // size: 2000, //限制文件大小，单位 KB
     // accept: 'file',
     method: 'get',
@@ -161,7 +161,7 @@ layui.use(['upload', 'element'], function(){
   // 演示多图片上传
   upload.render({
     elem: '#test2',
-    url: 'https://httpbin.org/post',
+    url: '',
     multiple: true, // 多文件
     unified: true, // 一起上传 ---  2.8.8+
     accept: 'images',
@@ -188,7 +188,7 @@ layui.use(['upload', 'element'], function(){
   var demoListView = $('#demoList');
   var uploadListIns = upload.render({
     elem: '#testList',
-    url: 'https://httpbin.org/post',
+    url: '',
     accept: 'file',
     multiple: true,
     number: 5,
@@ -328,7 +328,7 @@ layui.use(['upload', 'element'], function(){
   
   upload.render({
     elem: '#test8',
-    url: 'https://httpbin.org/post',
+    url: '',
     done: function(res){
       console.log(res);
     }
