@@ -1027,7 +1027,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         dataType: options.dataType || 'json',
         jsonpCallback: options.jsonpCallback,
         headers: options.headers || {},
-        complete:function(xhr,ts){
+        complete: function(xhr,ts){
           typeof options.complete === 'function' && options.complete(xhr, ts);
         },
         success: function(res){
