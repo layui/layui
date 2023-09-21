@@ -31,7 +31,7 @@ layui.use(function(){
   var uploadListIns = upload.render({
     elem: '#ID-upload-demo-files',
     elemList: $('#ID-upload-demo-files-list'), // 列表元素对象
-    url: 'https://httpbin.org/post', // 此处用的是第三方的 http 请求演示，实际使用时改成您自己的上传接口即可。
+    url: '', // 实际使用时改成您自己的上传接口即可。
     accept: 'file',
     multiple: true,
     number: 3,
