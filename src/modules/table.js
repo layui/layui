@@ -1137,7 +1137,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.eachCols(function(i3, item3){
         var field = item3.field || i3;
         var key = item3.key;
-        var content = item1[field];
+        var content = '';
+
+        try {
+          content = eval('item1.'+field);
+        } catch (error) {
+          
+        }
 
         if(content === undefined || content === null) content = '';
         if(item3.colGroup) return;
