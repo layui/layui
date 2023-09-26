@@ -294,10 +294,25 @@ layui.define('jquery', function(exports){
         
         //如果有子菜单，则展开
         if(child[0]){
-          parent[child.css('display') === 'none' ? 'addClass': 'removeClass'](NAV_ITEM+'ed');
-          if(parents.attr('lay-shrink') === 'all'){
-            parent.siblings().removeClass(NAV_ITEM + 'ed');
-          }
+          
+          // 手风琴
+            if(parents.attr('lay-shrink') === 'all'){
+              parent.siblings().each(function(){
+                if ($(this).hasClass(NAV_ITEM+'ed')) {
+                  $(this).find('.layui-nav-more').css({transform: 'rotate(0deg)'});
+                  $(this).children('dl.'+NAV_CHILD).slideToggle(200, function() {
+                    $(this).parent().removeClass(NAV_ITEM+'ed');
+                    $(this).css('display', 'none');
+                  });
+                }
+              });
+            }
+            
+            othis.find('.layui-nav-more').css({transform: parent.hasClass(NAV_ITEM+'ed') ? 'rotate(0deg)' : 'rotate(180deg)'});
+            child.css({display: parent.hasClass(NAV_ITEM+'ed') ? 'block' : 'none', backgroundColor: 'rgba(0,0,0,.3)'})
+              .slideToggle(200, function(){
+                parent[child.css('display') === 'none' ? 'removeClass': 'addClass'](NAV_ITEM+'ed');
+              });
         }
       }
       
