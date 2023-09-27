@@ -1791,14 +1791,30 @@ layui.define(['table'], function (exports) {
       // 目前只能处理当前页的数据
       return;
     }
+
+    var collectNeedExpandNodeIndex = function(index){
+      needExpandIndex.push(index);
+      var trElem = tableView.find('tr[lay-data-index="' + index + '"]');
+      if (!trElem.length) {
+        var nodeData = that.getNodeDataByIndex(index);
+        var parentIndex = nodeData[LAY_PARENT_INDEX];
+        parentIndex && collectNeedExpandNodeIndex(parentIndex);
+      }
+    }
+
     // 判断是否展开过
     var trElem = tableView.find('tr[lay-data-index="' + dataIndex + '"]');
     if (!trElem.length) {
+      var parentIndex = nodeData[LAY_PARENT_INDEX];
+      var needExpandIndex = [];
+      collectNeedExpandNodeIndex(parentIndex);
       // 如果还没有展开没有渲染的要先渲染出来
-      treeTable.expandNode(id, {
-        index: nodeData[LAY_PARENT_INDEX],
-        expandFlag: true
-      });
+      layui.each(needExpandIndex.reverse(),function(_, nodeIndex){
+        treeTable.expandNode(id, {
+          index: nodeIndex,
+          expandFlag: true
+        });
+      })
       trElem = tableView.find('tr[lay-data-index="' + dataIndex + '"]');
     }
     checkNode.call(that, trElem, checked, callbackFlag);
