@@ -1809,7 +1809,7 @@ layui.define(['table'], function (exports) {
       var needExpandIndex = [];
       collectNeedExpandNodeIndex(parentIndex);
       // 如果还没有展开没有渲染的要先渲染出来
-      layui.each(needExpandIndex.reverse(),function(_, nodeIndex){
+      layui.each(needExpandIndex.reverse(),function(index, nodeIndex){
         treeTable.expandNode(id, {
           index: nodeIndex,
           expandFlag: true
