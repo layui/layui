@@ -25,6 +25,16 @@
 <td>-</td>
     </tr>
     <tr>
+<td>code  <sup>2.8.18+</sup></td>
+<td>
+
+设置原始 code 值，默认取目标元素中的内容
+
+</td>
+<td>string</td>
+<td>-</td>
+    </tr>
+    <tr>
 <td>preview <sup>2.8+</sup></td>
 <td>
   
