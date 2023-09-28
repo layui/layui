@@ -272,14 +272,14 @@ layui.define('jquery', function(exports){
     )
     */
     
-    //点击菜单 - a标签触发
+    // 点击菜单 - a 标签触发
     ,clickThis: function(){
-      var othis = $(this)
-      ,parents = othis.parents(NAV_ELEM)
-      ,filter = parents.attr('lay-filter')
-      ,parent = othis.parent() 
-      ,child = othis.siblings('.'+NAV_CHILD)
-      ,unselect = typeof parent.attr('lay-unselect') === 'string'; //是否禁用选中
+      var othis = $(this);
+      var parents = othis.parents(NAV_ELEM);
+      var filter = parents.attr('lay-filter');
+      var parent = othis.parent() ;
+      var child = othis.siblings('.'+NAV_CHILD);
+      var unselect = typeof parent.attr('lay-unselect') === 'string'; // 是否禁用选中
       
       if(!(othis.attr('href') !== 'javascript:;' && othis.attr('target') === '_blank') && !unselect){
         if(!child[0]){
@@ -288,31 +288,35 @@ layui.define('jquery', function(exports){
         }
       }
       
-      //如果是垂直菜单
+      // 若为垂直菜单
       if(parents.hasClass(NAV_TREE)){
         child.removeClass(NAV_ANIM);
         
-        //如果有子菜单，则展开
+        // 若有子菜单，则展开
         if(child[0]){
-          
           // 手风琴
-            if(parents.attr('lay-shrink') === 'all'){
-              parent.siblings().each(function(){
-                if ($(this).hasClass(NAV_ITEM+'ed')) {
-                  $(this).find('.layui-nav-more').css({transform: 'rotate(0deg)'});
-                  $(this).children('dl.'+NAV_CHILD).slideToggle(200, function() {
-                    $(this).parent().removeClass(NAV_ITEM+'ed');
-                    $(this).css('display', 'none');
-                  });
-                }
-              });
-            }
+          if(parents.attr('lay-shrink') === 'all'){
+            parent.siblings().each(function(){
+              var elem = $(this);
+              if (elem.hasClass(NAV_ITEM+'ed')) {
+                elem.find('.layui-nav-more').css({transform: 'rotate(0deg)'});
+                elem.children('dl.'+NAV_CHILD).slideToggle(200, function() {
+                  elem.parent().removeClass(NAV_ITEM+'ed');
+                  elem.css('display', 'none');
+                });
+              }
+            });
+          }
             
-            othis.find('.layui-nav-more').css({transform: parent.hasClass(NAV_ITEM+'ed') ? 'rotate(0deg)' : 'rotate(180deg)'});
-            child.css({display: parent.hasClass(NAV_ITEM+'ed') ? 'block' : 'none', backgroundColor: 'rgba(0,0,0,.3)'})
-              .slideToggle(200, function(){
-                parent[child.css('display') === 'none' ? 'removeClass': 'addClass'](NAV_ITEM+'ed');
-              });
+          othis.find('.layui-nav-more').css({
+            transform: parent.hasClass(NAV_ITEM+'ed') ? 'rotate(0deg)' : 'rotate(180deg)'
+          });
+          child.css({
+            display: parent.hasClass(NAV_ITEM+'ed') ? 'block' : 'none',
+            backgroundColor: 'rgba(0,0,0,.3)'
+          }).slideToggle(200, function(){
+            parent[child.css('display') === 'none' ? 'removeClass': 'addClass'](NAV_ITEM+'ed');
+          });
         }
       }
       
