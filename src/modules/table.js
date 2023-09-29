@@ -568,10 +568,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       });
 
       // 多行相关样式
+      // IE - https://gitee.com/layui/layui/issues/I853YX
       layui.each([
         '{'+ lineStyle +'}',
         '.layui-table-cell{height: auto; max-height: '+ cellMaxHeight +'; white-space: normal; text-overflow: clip;}',
-        '> td:hover > .layui-table-cell{overflow: auto;}'
+        '> td:hover > .layui-table-cell{overflow: auto;}',
+        device.ie ? '.layui-table-edit{height:'+ cellMaxHeight +' }' : '',
+        device.ie ? 'td[data-edit]:hover:after{height:'+ cellMaxHeight +' }': '',
       ], function(i, val) {
         text.push(trClassName + ' ' + val);
       });
