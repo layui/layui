@@ -575,7 +575,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         device.ie ? '.layui-table-edit{height:'+ cellMaxHeight +' }' : '',
         device.ie ? 'td[data-edit]:hover:after{height:'+ cellMaxHeight +' }': ''
       ], function(i, val) {
-        text.push(trClassName + ' ' + val);
+        val && text.push(trClassName + ' ' + val);
       });
     })(options.lineStyle);
 
