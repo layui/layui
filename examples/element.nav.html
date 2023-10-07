@@ -6,12 +6,10 @@
   <title>导航 - 常用元素 - layui</title>
   <link rel="stylesheet" href="../src/css/layui.css">
   <style>
-    body{padding: 16px;}
     .demo-nav-tree>.layui-inline{vertical-align: top;}
   </style>
 </head>
-<body>
-
+<body class="layui-padding-3">
 
 <ul class="layui-nav">
   <li class="layui-nav-item"><a href="">最新活动</a></li>
@@ -130,7 +128,7 @@
 <div class="demo-nav-tree">
   <div class="layui-inline">
 
-    <ul class="layui-nav layui-nav-tree" lay-filter="test">
+    <ul class="layui-nav layui-nav-tree" lay-accordion lay-filter="test">
       <li class="layui-nav-item">
         <a class="" href="javascript:;">产品</a>
         <dl class="layui-nav-child">
