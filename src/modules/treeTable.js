@@ -1288,7 +1288,7 @@ layui.define(['table'], function (exports) {
 
     // 若未传入 LAY_CHECKED 属性，则继承父节点的 checked 状态
     layui.each(newNodes, function(i, item){
-      if(!(checkName in item)){
+      if(!(checkName in item) && parentNode){
         item[checkName] = parentNode[checkName];
       }
     })
