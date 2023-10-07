@@ -26,7 +26,7 @@
     <div class="layui-inline">
       <label class="layui-form-label">验证邮箱</label>
       <div class="layui-input-inline">
-        <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+        <input type="text" name="email" lay-verify="email" placeholder="有值时才校验" autocomplete="off" class="layui-input">
       </div>
     </div>
     <div class="layui-inline">
@@ -205,10 +205,11 @@ layui.use(['form', 'laydate', 'util'], function(){
   
   // 自定义验证规则
   form.verify({
-    pass: [
-      /^[\S]{6,12}$/,
-      '密码必须6到12位，且不能出现空格'
-    ]
+    pass: function(value) {
+      if (!/(.+){6,12}$/.test(value)) {
+        return '密码必须 6 到 12 位';
+      }
+    }
   });
   
   // 指定开关事件

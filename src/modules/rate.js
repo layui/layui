@@ -19,7 +19,7 @@ layui.define(['jquery', 'lay'],function(exports){
       that.config = $.extend({}, that.config, options);
       return that;
     },
-    
+
     //事件
     on: function(events, callback){
       return layui.onevent.call(this, MOD_NAME, events, callback);
@@ -64,14 +64,14 @@ layui.define(['jquery', 'lay'],function(exports){
     readonly: false,  //是否只读
     half: false,  //是否可以半星
     value: 0, //星星选中个数
-    theme: ''
+    theme: '' //主题颜色
   };
 
   //评分渲染
   Class.prototype.render = function(){
     var that = this;
     var options = that.config;
-    
+
     // 若 elem 非唯一，则拆分为多个实例
     var elem = $(options.elem);
     if(elem.length > 1){
@@ -88,9 +88,9 @@ layui.define(['jquery', 'lay'],function(exports){
 
     // 自定义主题
     var style = options.theme ? ('style="color: '+ options.theme + ';"') : '';
-    
+
     options.elem = $(options.elem);
-    
+
     //最大值不能大于总长度
     if(options.value > options.length){
       options.value = options.length;
@@ -121,12 +121,12 @@ layui.define(['jquery', 'lay'],function(exports){
     //开始插入替代元素
     var othis = options.elem;
     var hasRender = othis.next('.' + ELEM_VIEW);
-    
+
     //生成替代元素
     hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender
 
     that.elemTemp = $(temp);
-    
+
     options.span = that.elemTemp.next('span');
 
     options.setText && options.setText(options.value);
@@ -136,7 +136,7 @@ layui.define(['jquery', 'lay'],function(exports){
     othis.addClass("layui-inline");
 
     //如果不是只读，那么进行触控事件
-    if(!options.readonly) that.action(); 
+    if(!options.readonly) that.action();
 
   };
 
@@ -180,7 +180,7 @@ layui.define(['jquery', 'lay'],function(exports){
 
       //移入
       othis.on('mousemove', function(e){
-        _ul.find("i").each(function(){      
+        _ul.find("i").each(function(){
           $(this).addClass(ICON_RATE).removeClass(ICON_SOLID_HALF)
         });
         _ul.find("i:lt(" + ind + ")").each(function(){
@@ -192,7 +192,7 @@ layui.define(['jquery', 'lay'],function(exports){
           if(x <= wide / 2){
             othis.children("i").addClass(ICON_RATE_HALF).removeClass(ICON_RATE_SOLID)
           }
-        }         
+        }
       })
 
       //移出
@@ -206,14 +206,14 @@ layui.define(['jquery', 'lay'],function(exports){
         //如果设置可选半星，根据分数判断是否有半星
         if(options.half){
           if(parseInt(options.value) !== options.value){
-            _ul.children("li:eq(" + Math.floor(options.value) + ")").children("i").addClass(ICON_RATE_HALF).removeClass(ICON_SOLID_RATE)             
+            _ul.children("li:eq(" + Math.floor(options.value) + ")").children("i").addClass(ICON_RATE_HALF).removeClass(ICON_SOLID_RATE)
           }
-        } 
+        }
       })
 
     })
   };
-  
+
   //事件处理
   Class.prototype.events = function () {
     var that = this;
@@ -225,6 +225,6 @@ layui.define(['jquery', 'lay'],function(exports){
     var inst = new Class(options);
     return thisRate.call(inst);
   };
-  
+
   exports(MOD_NAME, rate);
 })

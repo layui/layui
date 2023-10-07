@@ -12,6 +12,80 @@ toc: true
 > 导读：📑 [Layui 2.8 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
 
+<h2 id="2.8.18" class="ws-anchor">
+  2.8.18-beta
+  <span class="layui-badge-rim">2023-10-07</span>
+</h2>
+
+- #### form
+  - 新增 `input` 数字输入框组件的特定属性 `lay-precision`，用于设置数值精度 # 1375/I81SY4
+  - 优化 `input` 数字输入框组件的失去焦点对值的有效范围约束 # 1375/I7KU6V
+  - 优化 `input` 数字输入框组件当值达到临界点时加减按钮的禁用视觉效果 # 1375
+  - 优化 `input` 数字输入框当表单验证失败时的边框颜色 # 1371
+- #### nav
+  - 新增 垂直导航菜单展开和收缩时的过渡动画 # 1384
+- #### layer
+  - 优化 移动端定位 # 1376
+- #### table
+  - 新增 `complete` 属性，当数据接口请求完成后执行，无论成功还是失败均会触发 # 1379
+- #### treeTable
+  - 修复 treeTable 组件 treeTable.setRowChecked 未逐层展开上级节点的问题 # 1385/I84RUT
+- #### upload
+  - 修复 `unified: true` 时的报错问题
+  - 优化 渲染入口逻辑，以解决因重复渲染导致的若干问题
+  - 优化 实例的 `reload` 方法，可更好地进行完整重载
+- #### laydate
+  - 优化 开启 `rangeLinked` 属性后，点击目标元素可重新渲染的问题
+- #### carousel
+  - 优化 轮播切换时的动画效果 # 1378/I82STP
+- #### rate / slider
+  - 优化 代码细节 # 1374
+- #### code
+  - 新增 `code` 属性，用于设置原始 code 值，优先级高于目标元素中的内容
+  - 优化 若干小问题
+
+### 下载： [layui-v2.8.18-beta.zip](https://gitee.com/layui/layui/attach_files/1545385/download)
+
+---
+
+<h2 id="2.8.17" class="ws-anchor">
+  2.8.17
+  <span class="layui-badge-rim">2023-09-11</span>
+</h2>
+
+- #### table
+  - 新增 `cellExpandedMode` 基础属性，用于设置所有单元格默认展开方式 # I7XW28 [8bd8415]
+  - 新增 `cellExpandedWidth` 基础属性，用于设置所有单元格默认展开后的宽度 [8bd8415]
+  - 新增 `expandedMode` 表头属性，用于设置当前表头单元格展开方式，优先级高于 `cellExpandedMode` [8bd8415]
+  - 修复 导出来自 treeTable 数据的顺序错乱问题 # I7YOXZ [3123adf]
+- #### form
+  - 优化 验证机制，以确保自定义验证规则的灵活性，内置规则若为必填项，依旧需叠加 `required` 规则 [a00ecf2]
+  - 剔除 `verIncludeRequired` 全局属性，因为会造成不必要的歧义 [a00ecf2]
+- #### laydate
+  - 修复 开启 `rangeLinked` 属性后，done 函数第二个参数未能正确返回开始日期的问题 #I7XBOA/I7YCHW [4d9365e]
+  - 修复 开启 `rangeLinked` 且 `range` 为数组时，当初始值格式不符而自动校正导致的开始日期表单赋值异常问题 [4d9365e]
+- #### upload
+  - 新增 `dataType` 属性，用于定义服务端返回的数据类型 [58e675c]
+  - 优化 多文件模式中，正在上传中的文件会被再次触发上传的问题 # I7XXTW/I4C6XE [9a6b85f]
+- #### code
+  - 重构 主体结构，以更好地适配第三方语法高亮库 # 1352 [ad5935c]
+  - 新增 实例返回的对象，包含对当前实例进行重载等方法成员 [ad5935c]
+  - 新增 `codeRender` 函数，用于重新渲染 code，譬如代码高亮处理 # 1352
+  - 新增 `highlighter` 属性，用于指定语法高亮器，支持 `hljs,prism,shiki` 等流行库 # 1352
+  - 新增 `lang` 属性，用于指定语言类型 # 1352
+  - 新增 `langMarker` 属性，用于是否在代码域右上角显示语言类型 # 1352
+  - 新增 `wordWrap` 属性，用于设置文字是否自动换行 [ad5935c]
+  - 加强 `tools` 属性，进一步提升可扩展性 [ad5935c]
+  - 优化 `dark` 模式主题，与 vscode 保持一致 [ad5935c]
+- #### lay
+  - 新增 `lay.clipboard.writeText(options)` 方法，用于写入剪切板（复制） [5a00d0a]
+- #### 公共类
+  - 新增 `layui-padding-*` 和 `layui-margin-*` 内外边距样式类名 [5e0d71d]
+
+### 下载： [layui-v2.8.17.zip](https://gitee.com/layui/layui/attach_files/1523966/download)
+
+---
+
 <h2 id="2.8.16" class="ws-anchor">
   2.8.16
   <span class="layui-badge-rim">2023-08-30</span>
@@ -31,7 +105,7 @@ toc: true
   - 修复 `data` 模式下排序之后出现节点结构错乱的问题 # 1358/I7TXXL
   - 优化 `data.cascade` 属性，新增 `none` 可选值，即操作节点时不做任何联动 # 1358
   - 优化 数据项为禁用状态时的全选复选框的状态 # 1329
-  - 优化 异步加载字节点为空时的展开状态 # 1326
+  - 优化 异步加载子节点为空时的展开状态 # 1326
 - #### laydate
   - 优化 `shortcuts.value` 快捷选项的赋值属性，支持函数类型 # 1324
 - #### rate

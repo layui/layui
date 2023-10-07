@@ -93,6 +93,16 @@ data: {
 <td>-</td>
     </tr>
     <tr>
+<td>dataType <sup>2.8.17+</sup></td>
+<td>
+
+服务端返回的数据类型，如：`text,json,xml` 等
+
+</td>
+<td>string</td>
+<td>-</td>
+    </tr>
+    <tr>
 <td>
   
 [accept](#options.accept)

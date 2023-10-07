@@ -27,6 +27,21 @@
       that.push(elem[index]);
     });
   };
+
+  /*
+   * API 兼容
+   */
+  Array.prototype.indexOf = Array.prototype.indexOf || function(searchElement, fromIndex) {
+    var rst = -1;
+    fromIndex = fromIndex || 0;
+    layui.each(this, function(index, val){
+      if (searchElement === val && index >= fromIndex) {
+        rst = index;
+        return !0;
+      }
+    });
+    return rst;
+  };
   
   /*
     lay 对象操作
@@ -120,7 +135,7 @@
 
     if (typeof callback === 'function') {
       layui.each(rules, function(i, item){
-        if (callback(item)) return true;
+        if (callback(item, i)) return true;
       });
     }
 
@@ -292,6 +307,40 @@
       }
     });
     return matched;
+  };
+
+  // 剪切板
+  lay.clipboard = {
+    // 写入文本
+    writeText: function(options) {
+      var text = String(options.text);
+
+      try {
+        navigator.clipboard.writeText(text).then(
+          options.done
+        )['catch'](options.error);
+      } catch(e) {
+        var elem = document.createElement('textarea');
+
+        elem.value = text;
+        elem.style.position = 'fixed';
+        elem.style.opacity = '0';
+        elem.style.top = '0px';
+        elem.style.left = '0px';
+        
+        document.body.appendChild(elem);
+        elem.select();
+
+        try {
+          document.execCommand('copy');
+          typeof options.done === 'function' && options.done();
+        } catch(err) {
+          typeof options.error === 'function' && options.error(err);
+        } finally {
+          elem.remove ? elem.remove() : document.body.removeChild(elem);
+        }
+      }
+    }
   };
 
 

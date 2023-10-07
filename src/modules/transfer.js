@@ -56,7 +56,7 @@ layui.define(['laytpl', 'form'], function(exports){
   var getThisModuleConfig = function(id){
     var config = thisModule.config[id];
     if(!config) hint.error('The ID option was not found in the '+ MOD_NAME +' instance');
-    return; config || null;
+    return config || null;
   };
 
   // 字符常量

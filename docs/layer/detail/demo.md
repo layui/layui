@@ -1,10 +1,12 @@
 <h2 lay-toc="{id: 'examples', level: 2, hot: true}" class="layui-hide">在线测试</h2>
 
-<pre class="layui-code" lay-options="{preview: true, text: {preview: '在线测试'}, layout: ['preview']}">
+<pre class="layui-code" lay-options="{preview: true, text: {preview: '在线测试'}, copy: false, layout: ['preview']}">
   <textarea>
 {{- d.include("/layer/detail/run.md") }}
   </textarea>
 </pre>
+
+<div class="ws-docs-showcase" style="margin-top: 16px;"></div>
 
 <h3 id="type" lay-toc="{level: 2, hot: true}">弹层类型</h3>
 

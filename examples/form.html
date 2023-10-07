@@ -170,7 +170,7 @@
     <div class="layui-form-item">
       <label class="layui-form-label">邮箱</label>
       <div class="layui-input-block">
-        <input type="email" name="email" lay-verify="email"  lay-verType="alert" autocomplete="off" class="layui-input">
+        <input type="email" name="email" lay-verify="email"  lay-vertype="alert" autocomplete="off" class="layui-input">
       </div>
     </div>
     <div class="layui-form-item">
@@ -200,7 +200,7 @@
       <div class="layui-inline">
         <label class="layui-form-label">行内表单</label>
         <div class="layui-input-block">
-          <select name="quiz" lay-verify="required" lay-verType="tips"  lay-filter="quiz111">
+          <select name="quiz" lay-verify="required" lay-vertype="tips"  lay-filter="quiz111">
             <option value="">请"选择"问题</option>
             <option value="0">你工"作"的 第一个城市</option>
             <option value="1" disabled>你的工号</option>
@@ -380,19 +380,23 @@
     var util = layui.util;
     var laydate = layui.laydate;
 
-    //自定义验证规则
+    // 自定义验证规则
     form.verify({
       title: function(value){
-        if(value.length < 5){
+        if(value && value.length < 5){ // 值若填写时才校验
           return '标题也太短了吧';
         }
+      },
+      pass: function(value) {
+        if (!/(.+){6,12}$/.test(value)) {
+          return '密码必须 6 到 12 位';
+        }
+      },
+      amount: function(value) {
+        if (value && !/^\d+\.\b\d{2}\b$/.test(value)) { // 值若填写时才校验
+          return '金额必须为小数保留两位';
+        }
       }
-      ,pass: [/(.+){6,12}$/, '密码必须6到12位']
-      ,money: [
-        /^\d+\.\b\d{2}\b$/
-        ,'金额必须为小数保留两位'
-      ]
-      //,n: [/^(\d)+$/, '数字校验']
     });
     
     /*
