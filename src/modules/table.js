@@ -572,8 +572,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         '{'+ lineStyle +'}',
         '.layui-table-cell{height: auto; max-height: '+ cellMaxHeight +'; white-space: normal; text-overflow: clip;}',
         '> td:hover > .layui-table-cell{overflow: auto;}'
-      ], function(i, val) {
-        text.push(trClassName + ' ' + val);
+      ].concat(
+        device.ie ? [
+          '.layui-table-edit{height: '+ cellMaxHeight +';}',
+          'td[data-edit]:hover:after{height: '+ cellMaxHeight +';}'
+        ] : []
+      ), function(i, val) {
+        val && text.push(trClassName + ' ' + val);
       });
     })(options.lineStyle);
 
