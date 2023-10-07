@@ -3,16 +3,22 @@
  * 上传组件
  */
  
-layui.define(['lay','layer'], function(exports){
+layui.define(['lay', 'layer'], function(exports){
   "use strict";
   
   var $ = layui.$;
+  var lay = layui.lay;
   var layer = layui.layer;
   var device = layui.device();
+
+  // 模块名
+  var MOD_NAME = 'upload';
+  var MOD_INDEX = 'layui_'+ MOD_NAME +'_index'; // 模块索引名
 
   // 外部接口
   var upload = {
     config: {}, // 全局配置项
+    index: layui[MOD_NAME] ? (layui[MOD_NAME].index + 10000) : 0, // 索引
     // 设置全局项
     set: function(options){
       var that = this;
@@ -26,8 +32,13 @@ layui.define(['lay','layer'], function(exports){
   };
   
   // 操作当前实例
-  var thisUpload = function(){
+  var thisModule = function(){
     var that = this;
+    var options = that.config;
+    var id = options.id;
+
+    thisModule.that[id] = that; // 记录当前实例对象
+
     return {
       upload: function(files){
         that.upload.call(that, files);
@@ -40,7 +51,6 @@ layui.define(['lay','layer'], function(exports){
   };
   
   // 字符常量
-  var MOD_NAME = 'upload';
   var ELEM = 'layui-upload';
   var THIS = 'layui-this';
   var SHOW = 'layui-show';
@@ -57,6 +67,7 @@ layui.define(['lay','layer'], function(exports){
   // 构造器
   var Class = function(options){
     var that = this;
+    that.index = ++upload.index;
     that.config = $.extend({}, that.config, upload.config, options);
     that.render();
   };
@@ -86,14 +97,50 @@ layui.define(['lay','layer'], function(exports){
       "limit-size": null // 限制 size 属性的提示 --- function
     }
   };
+
+  // 重载实例
+  Class.prototype.reload = function(options){
+    var that = this;
+    that.config = $.extend({}, that.config, options);
+    that.render(true);
+  };
   
   // 初始渲染
-  Class.prototype.render = function(){
+  Class.prototype.render = function(rerender){
     var that = this;
     var options = that.config;
 
+    // 若 elem 非唯一
+    var elem = $(options.elem);
+    if (elem.length > 1) {
+      layui.each(elem, function() {
+        upload.render($.extend({}, options, {
+          elem: this
+        }));
+      });
+      return that;
+    }
+
+    // 合并 lay-options 属性上的配置信息
+    $.extend(options, lay.options(elem[0], {
+      attr: elem.attr('lay-data') ? 'lay-data' : null // 兼容旧版的 lay-data 属性
+    }));
+
+    // 若重复执行 render，则视为 reload 处理
+    if (!rerender && elem[0] && elem.data(MOD_INDEX)) {
+      var newThat = thisModule.getThis(elem.data(MOD_INDEX));
+      if(!newThat) return;
+
+      return newThat.reload(options);
+    }
+
     options.elem = $(options.elem);
     options.bindAction = $(options.bindAction);
+
+    // 初始化 id 属性 - 优先取 options > 元素 id > 自增索引
+    options.id = 'id' in options ? options.id : (
+      elem.attr('id') || that.index
+    );
 
     that.file();
     that.events();
@@ -219,11 +266,14 @@ layui.define(['lay','layer'], function(exports){
       var request = function(sets){
         var formData = new FormData();
 
-        // 删除正在上传中的文件队列
-        var removeUploaded = function(index, file) {
-          if (file[UPLOADING]) {
-            delete items[index];
-            return true;
+        // 恢复文件状态
+        var resetFileState = function(file) {
+          if (sets.unified) {
+            layui.each(items, function(index, file){
+              delete file[UPLOADING];
+            });
+          } else {
+            delete file[UPLOADING];
           }
         };
 
@@ -234,35 +284,36 @@ layui.define(['lay','layer'], function(exports){
         });
 
         /*
-         *添加 file 到表单域
+         * 添加 file 到表单域
          */
 
         // 是否统一上传
         if (sets.unified) {
           layui.each(items, function(index, file){
-            if (removeUploaded(index, file)) return;
-            file[UPLOADING] = true;
+            if (file[UPLOADING]) return;
+            file[UPLOADING] = true; // 上传中的标记
             formData.append(options.field, file);
           });
         } else { // 逐一上传
-          if (removeUploaded(sets.index, sets.file)) return;
+          if (sets.file[UPLOADING]) return;
           formData.append(options.field, sets.file);
+          sets.file[UPLOADING] = true; // 上传中的标记
         }
-
-        sets.file[UPLOADING] = true; // 上传中的标记
 
         // ajax 参数
         var opts = {
           url: options.url,
           type: 'post', // 统一采用 post 上传
           data: formData,
+          dataType: options.dataType || 'json',
           contentType: false,
           processData: false,
           headers: options.headers || {},
           success: function(res){ // 成功回调
             options.unified ? (successful += that.fileLength) : successful++;
             done(sets.index, res);
-            allDone();
+            allDone(sets.index);
+            resetFileState(sets.file);
           },
           error: function(e){ // 异常回调
             options.unified ? (failed += that.fileLength) : failed++;
@@ -271,15 +322,11 @@ layui.define(['lay','layer'], function(exports){
               'status: '+ (e.status || '') +' - '+ (e.statusText || 'error')
             ].join('<br>'));
             error(sets.index);
-            allDone();
+            allDone(sets.index);
+            resetFileState(sets.file);
           }
         };
-        // dataType
-        if (options.dataType) {
-          opts.dataType = options.dataType;
-        } else if (options.force === 'json') {
-          opts.dataType = options.force;
-        }
+
         // 进度条
         if(typeof options.progress === 'function'){
           opts.xhr = function(){
@@ -360,7 +407,7 @@ layui.define(['lay','layer'], function(exports){
     };
     
     // 统一网络异常回调
-   var error = function(index){
+    var error = function(index){
       if(options.auto){
         elemFile.value = '';
       }
@@ -408,7 +455,7 @@ layui.define(['lay','layer'], function(exports){
     };
     
     // 提交上传
-    var send = function(){      
+    var send = function(){
       // 上传前的回调 - 如果回调函数明确返回 false，则停止上传
       if(options.before && (options.before(args) === false)) return;
 
@@ -433,7 +480,8 @@ layui.define(['lay','layer'], function(exports){
       ? ((elemFile.value.match(/[^\/\\]+\..+/g)||[]) || '')
     : value;
     
-    if(value.length === 0) return;
+    // 若文件域值为空
+    if (value.length === 0) return;
     
     // 根据文件类型校验
     switch(options.accept){
@@ -520,24 +568,6 @@ layui.define(['lay','layer'], function(exports){
     send();
   };
   
-  // 重置方法
-  Class.prototype.reload = function(opts){
-    opts = opts || {};
-    delete opts.elem;
-    delete opts.bindAction;
-    
-    var that = this;
-    var options = that.config = $.extend({}, that.config, upload.config, opts);
-    var next = options.elem.next();
-    
-    // 更新文件域相关属性
-    next.attr({
-      name: options.name,
-      accept: options.acceptMime,
-      multiple: options.multiple
-    });
-  };
-  
   //事件处理
   Class.prototype.events = function(){
     var that = this;
@@ -568,23 +598,10 @@ layui.define(['lay','layer'], function(exports){
       elemFile.after('<span class="layui-inline '+ ELEM_CHOOSE +'">'+ value +'</span>');
     };
 
-    // 合并 lay-options/lay-data 属性配置项
-    var extendAttrs = function(){
-      var othis = $(this);
-      var data = othis.attr('lay-data') || othis.attr('lay-options'); // 优先兼容旧版本
-
-      if(data){
-        that.config = $.extend({}, options, lay.options(this, {
-          attr: othis.attr('lay-data') ? 'lay-data' : null
-        }));
-      }
-    };
-
     // 点击上传容器
     options.elem.off('upload.start').on('upload.start', function(){
       var othis = $(this);
 
-      extendAttrs.call(this);
       that.config.item = othis;
       that.elemFile[0].click();
     });
@@ -604,7 +621,6 @@ layui.define(['lay','layer'], function(exports){
         var files = param.originalEvent.dataTransfer.files || [];
         
         othis.removeAttr('lay-over');
-        extendAttrs.call(this);
         setChooseFile(files);
 
         options.auto ? that.upload() : setChooseText(files); // 是否自动触发上传
@@ -612,12 +628,11 @@ layui.define(['lay','layer'], function(exports){
     }
     
     // 文件选择
-    that.elemFile.off('upload.change').on('upload.change', function(){
+    that.elemFile.on('change', function(){
       var files = this.files || [];
 
       if(files.length === 0) return;
 
-      extendAttrs.call(this);
       setChooseFile(files);
 
       options.auto ? that.upload() : setChooseText(files); // 是否自动触发上传
@@ -627,19 +642,19 @@ layui.define(['lay','layer'], function(exports){
     options.bindAction.off('upload.action').on('upload.action', function(){
       that.upload();
     });
-    
+
+
     // 防止事件重复绑定
-    if(options.elem.data('haveEvents')) return;
-    
-    that.elemFile.on('change', function(){
-      $(this).trigger('upload.change');
-    });
-    
+    if(options.elem.data(MOD_INDEX)) return;
+
+
+    // 目标元素 click 事件
     options.elem.on('click', function(){
       if(that.isFile()) return;
       $(this).trigger('upload.start');
     });
     
+    // 目标元素 drop 事件
     if(options.drag){
       options.elem.on('dragover', function(e){
         e.preventDefault();
@@ -652,17 +667,29 @@ layui.define(['lay','layer'], function(exports){
       });
     }
     
+    // 手动上传时触发上传的元素 click 事件
     options.bindAction.on('click', function(){
       $(this).trigger('upload.action');
     });
     
-    options.elem.data('haveEvents', true);
+    // 绑定元素索引
+    options.elem.data(MOD_INDEX, options.id);
+  };
+
+  // 记录所有实例
+  thisModule.that = {}; // 记录所有实例对象
+
+  // 获取当前实例对象
+  thisModule.getThis = function(id){
+    var that = thisModule.that[id];
+    if(!that) hint.error(id ? (MOD_NAME +' instance with ID \''+ id +'\' not found') : 'ID argument required');
+    return that;
   };
   
   // 核心入口  
   upload.render = function(options){
     var inst = new Class(options);
-    return thisUpload.call(inst);
+    return thisModule.call(inst);
   };
   
   exports(MOD_NAME, upload);

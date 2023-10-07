@@ -1,4 +1,4 @@
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview'], tools: ['full']}">
+<pre class="layui-code" lay-options="{preview: true, layout: ['preview'], copy: false, tools: ['full'], addTools: null}">
   <textarea>
 {{!
 <style>

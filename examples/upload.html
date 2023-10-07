@@ -8,12 +8,11 @@
 <link rel="stylesheet" href="../src/css/layui.css">
 
 <style>
-body{padding: 50px 100px;}
 .layui-upload-img{width: 92px; height: 92px; margin: 0 10px 10px 0;}
-hr{margin: 30px 0;}
+hr{margin: 32px 0;}
 </style>
 </head>
-<body>
+<body class="layui-padding-5">
 
 <div class="layui-upload">
   <button type="button" class="layui-btn" id="test1" name="123">上传图片</button>
@@ -89,16 +88,20 @@ hr{margin: 30px 0;}
 
 绑定原始文件域：<input type="file" name="file" id="test9">
 
-<script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.6.8/layui.js"></script>
+<script src="../src/layui.js" src1="https://cdn.staticfile.org/layui/2.7.6/layui.js"></script>
 <script>
-layui.use(['upload', 'element'], function(){
+layui.use(['upload', 'element', 'form'], function(){
   var $ = layui.$;
   var upload = layui.upload;
   var element = layui.element;
 
+  // 模拟接口
+  var url = '' // 'https://httpbin.org/post';
+
+  // 创建实例
   var uploadInst = upload.render({
     elem: '#test1',
-    url: 'https://httpbin.org/post',
+    url: url, // 若需模拟上传过程，而不真实上传文件，可使用开源的 HTTP 模拟接口: httpbin
     // size: 2000, //限制文件大小，单位 KB
     // accept: 'file',
     method: 'get',
@@ -149,19 +152,19 @@ layui.use(['upload', 'element'], function(){
       element.progress('demo', n + '%'); //可配合 layui 进度条元素使用
     }
   });
-  
-  // 重置上述 upload 实例
+
+  // 重载上述实例
   uploadInst.reload({
-    name:'avatar',
+    field: 'avatar',
     accept: 'images', // 只允许上传图片
     acceptMime: 'image/*', // 只筛选图片
-    //,size: 2
+    // size: 2,
   });
   
   // 演示多图片上传
   upload.render({
     elem: '#test2',
-    url: 'https://httpbin.org/post',
+    url: url, // 实际使用时改成您自己的上传接口即可
     multiple: true, // 多文件
     unified: true, // 一起上传 ---  2.8.8+
     accept: 'images',
@@ -188,7 +191,7 @@ layui.use(['upload', 'element'], function(){
   var demoListView = $('#demoList');
   var uploadListIns = upload.render({
     elem: '#testList',
-    url: 'https://httpbin.org/post',
+    url: url, // 实际使用时改成您自己的上传接口即可
     accept: 'file',
     multiple: true,
     number: 5,
@@ -252,17 +255,16 @@ layui.use(['upload', 'element'], function(){
       element.progress('progress-'+ index, n + '%'); //进度条
     }
   });
-  
 
   upload.render({
     elem: '.test333',
-    url: 'a',
+    url: url,
     accept: 'file',
-    before: function(obj){
-      console.log(this.item);
+    choose: function(obj){
+      console.log(this.elem);
     },
     done: function(res){
-      console.log(res)
+      console.log(res);
     }
   });
   
@@ -271,6 +273,7 @@ layui.use(['upload', 'element'], function(){
     done: function(res, index, upload){
       //获取当前触发上传的元素，一般用于 elem 绑定 class 的情况，注意：此乃 layui 2.1.0 新增
       var item = this.item;
+
     }
   })
   
@@ -286,7 +289,7 @@ layui.use(['upload', 'element'], function(){
   
   upload.render({
     elem: '#test4',
-    url: '',
+    url: url, // 实际使用时改成您自己的上传接口即可
     accept: 'video',
     done: function(res){
       console.log(res)
@@ -306,7 +309,7 @@ layui.use(['upload', 'element'], function(){
   //手动上传
   upload.render({
     elem: '#test6',
-    url: '',
+    url: url, // 实际使用时改成您自己的上传接口即可
     auto: false,
     // multiple: true,
     bindAction: '#test7',
@@ -328,7 +331,7 @@ layui.use(['upload', 'element'], function(){
   
   upload.render({
     elem: '#test8',
-    url: 'https://httpbin.org/post',
+    url: url, // 实际使用时改成您自己的上传接口即可
     done: function(res){
       console.log(res);
     }
@@ -336,7 +339,7 @@ layui.use(['upload', 'element'], function(){
   
   upload.render({
     elem: '#test9',
-    url: '',
+    url: url, // 实际使用时改成您自己的上传接口即可
     done: function(res){
       console.log(res);
     }

@@ -1,13 +1,13 @@
 /**
- * util 工具组件  
+ * util 工具组件
  */
 
 layui.define('jquery', function(exports){
   "use strict";
-  
+
   var $ = layui.$;
   var hint = layui.hint();
-  
+
   // 外部接口
   var util = {
     // 固定块
@@ -28,8 +28,8 @@ layui.define('jquery', function(exports){
       var $target = $(options.target);
 
       // 滚动条所在元素对象
-      var $scroll = options.scroll 
-        ? $(options.scroll) 
+      var $scroll = options.scroll
+        ? $(options.scroll)
       : $(options.target === 'body' ? $doc : $target)
 
       // 是否提供默认图标
@@ -72,8 +72,8 @@ layui.define('jquery', function(exports){
           var type = $(this).attr('lay-type');
           if(type === 'top'){
             (
-              options.target === 'body' 
-                ? $('html,body') 
+              options.target === 'body'
+                ? $('html,body')
               : $scroll
             ).animate({
               scrollTop : 0
@@ -130,9 +130,9 @@ layui.define('jquery', function(exports){
         timer = setTimeout(function(){
           setTopBar();
         }, 100);
-      }); 
+      });
     },
-    
+
     // 倒计时
     countdown: function(options){
       var that = this;
@@ -198,27 +198,27 @@ layui.define('jquery', function(exports){
         if(countTime <= 0){
           clearTimeout(inst.timer);
           typeof options.done === 'function' && options.done(result, inst);
-        };
+        }
 
         return fn;
       })();
-      
+
       return inst;
     },
-    
+
     // 某个时间在当前时间的多久前
     timeAgo: function(time, onlyDate){
       var that = this;
       var arr = [[], []];
       var stamp = new Date().getTime() - new Date(time).getTime();
-      
+
       // 返回具体日期
       if(stamp > 1000*60*60*24*31){
         stamp =  new Date(time);
         arr[0][0] = that.digit(stamp.getFullYear(), 4);
         arr[0][1] = that.digit(stamp.getMonth() + 1);
         arr[0][2] = that.digit(stamp.getDate());
-        
+
         // 是否输出时间
         if(!onlyDate){
           arr[1][0] = that.digit(stamp.getHours());
@@ -227,7 +227,7 @@ layui.define('jquery', function(exports){
         }
         return arr[0].join('-') + ' ' + arr[1].join(':');
       }
-      
+
       // 30 天以内，返回「多久前」
       if(stamp >= 1000*60*60*24){
         return ((stamp/1000/60/60/24)|0) + ' 天前';
@@ -241,7 +241,7 @@ layui.define('jquery', function(exports){
         return '刚刚';
       }
     },
-    
+
     // 数字前置补零
     digit: function(num, length){
       var str = '';
@@ -252,13 +252,13 @@ layui.define('jquery', function(exports){
       }
       return num < Math.pow(10, length) ? str + (num|0) : num;
     },
-    
+
     // 转化为日期格式字符
     toDateString: function(time, format, options){
       // 若 null 或空字符，则返回空字符
       if(time === null || time === '') return '';
 
-      // 引用自 dayjs 
+      // 引用自 dayjs
       // https://github.com/iamkun/dayjs/blob/v1.11.9/src/constant.js#L30
       var REGEX_FORMAT = /\[([^\]]+)]|y{1,4}|M{1,2}|d{1,2}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|SSS/g;
       var that = this;
@@ -267,7 +267,7 @@ layui.define('jquery', function(exports){
         return isNaN(time) ? time : (typeof time === 'string' ? parseInt(time) : time)
       }() || new Date())
 
-      if(!date.getDate()) return hint.error('Invalid Msec for "util.toDateString(Msec)"'), '';
+      if(!date.getDate()) return hint.error('Invalid millisecond for "util.toDateString(millisecond)"'), '';
 
       var years = date.getFullYear();
       var month = date.getMonth();
@@ -313,14 +313,14 @@ layui.define('jquery', function(exports){
         ss: function(){return that.digit(seconds);},
         SSS: function(){return that.digit(milliseconds, 3);}
       }
-      
+
       format = format || 'yyyy-MM-dd HH:mm:ss';
 
       return format.replace(REGEX_FORMAT, function(match, $1) {
         return $1 || (matches[match] && matches[match]()) || match;
       });
     },
-    
+
     // 转义 html
     escape: function(html){
       var exp = /[<"'>]|&(?=#[a-zA-Z0-9]+)/g;
@@ -333,7 +333,7 @@ layui.define('jquery', function(exports){
       .replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
     },
-    
+
     // 还原转义的 html
     unescape: function(html){
       if(html === undefined || html === null) html = '';
@@ -354,7 +354,7 @@ layui.define('jquery', function(exports){
       win.document.write(options.content || '');
       win.document.close();
     },
-    
+
     // 让指定的元素保持在可视区域
     toVisibleArea: function(options){
       options = $.extend({
@@ -362,9 +362,9 @@ layui.define('jquery', function(exports){
         duration: 200, // 动画持续毫秒数
         type: 'y' // 触发方向，x 水平、y 垂直
       }, options);
-      
+
       if(!options.scrollElem[0] || !options.thisElem[0]) return;
-      
+
       var scrollElem = options.scrollElem // 滚动元素
       var thisElem = options.thisElem // 目标元素
       var vertical = options.type === 'y' // 是否垂直方向
@@ -372,29 +372,29 @@ layui.define('jquery', function(exports){
       var OFFSET_NAME = vertical ? 'top' : 'left' // 坐标方式
       var scrollValue = scrollElem[SCROLL_NAME]() // 当前滚动距离
       var size = scrollElem[vertical ? 'height' : 'width']() // 滚动元素的尺寸
-      var scrollOffet = scrollElem.offset()[OFFSET_NAME] // 滚动元素所处位置
-      var thisOffset = thisElem.offset()[OFFSET_NAME] - scrollOffet // 目标元素当前的所在位置
+      var scrollOffset = scrollElem.offset()[OFFSET_NAME] // 滚动元素所处位置
+      var thisOffset = thisElem.offset()[OFFSET_NAME] - scrollOffset // 目标元素当前的所在位置
       var obj = {};
-      
+
       // 边界满足条件
       if(thisOffset > size - options.margin || thisOffset < options.margin){
         obj[SCROLL_NAME] = thisOffset - size/2 + scrollValue
         scrollElem.animate(obj, options.duration);
       }
     },
-    
+
     // 批量事件
     event: function(attr, obj, eventType){
       var _body = $('body');
       eventType = eventType || 'click';
-      
+
       // 记录事件回调集合
       obj = util.event[attr] = $.extend(true, util.event[attr], obj) || {};
-      
+
       // 清除委托事件
       util.event.UTIL_EVENT_CALLBACK = util.event.UTIL_EVENT_CALLBACK || {};
       _body.off(eventType, '*['+ attr +']', util.event.UTIL_EVENT_CALLBACK[attr])
-      
+
       // 绑定委托事件
       util.event.UTIL_EVENT_CALLBACK[attr] = function(){
         var othis = $(this);
@@ -404,13 +404,13 @@ layui.define('jquery', function(exports){
 
       // 清除旧事件，绑定新事件
       _body.on(eventType, '*['+ attr +']', util.event.UTIL_EVENT_CALLBACK[attr]);
-      
+
       return obj;
     }
   };
 
   util.on = util.event;
-  
+
   // 输出接口
   exports('util', util);
 });

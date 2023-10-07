@@ -319,7 +319,7 @@ treeTable.expandAll('test', false); // 关闭全部节点
 | opts | 描述 | 类型 | 默认值 |
 | --- | --- | -- | --- |
 | index | 要设置选中状态的行下标或行数据 | number/object | - |
-| checked | 选中状态。`true` 选中；`false` 取消选中；`null` 切换。 其中，所为 `radio` 框，则不支持 `null`(切换)。 | boolean | - |
+| checked | 选中状态。`true` 选中；`false` 取消选中；`null` 切换。 其中，若为 `radio` 框，则不支持 `null`(切换)。 | boolean | - |
 | callbackFlag | 是否触发事件，若为 `true`，则 `checked: false` 无效。其对应的事件跟 `table` 的 `radio,checkbox` 事件用法一样 | boolean | `false` |
 
 ```js

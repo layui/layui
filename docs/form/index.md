@@ -207,18 +207,18 @@ layui.use('form', function(){
 
 <h2 id="lay-verify" lay-toc="{hot: true, level: 2}">验证</h2>
 
-Layui 对表单做了相对巧妙的支持，只需在表单元素上设置 `lay-verify=""` 属性值即可指定验证规则，如：
+Layui 对表单验证做了巧妙的支持，只需在表单元素上设置 `lay-verify=""` 属性值即可指定验证规则，如：
 
 ```
 <div class="layui-form">
-  <input type="text" lay-verify="required">
-  <input type="text" lay-verify="email">
-  <input type="text" lay-verify="required|phone|number">
+  <input type="text" lay-verify="required" placeholder="必填项">
+  <input type="text" lay-verify="email" placeholder="非必填项，但若有值则验证邮箱格式">
+  <input type="text" lay-verify="required|number" placeholder="必填项，并验证数字格式">
   <button class="layui-btn" lay-submit>提交</button>
 </div>
 ```
 
-其中，`lay-verify` 属性的内置规则值可参考上文的：[#属性介绍](#attr)。 当表单提交时，会自动触发验证。
+注：上述代码指定的均为内置的验证规则，具体可参考：[#属性介绍](#attr)
 
 <h3 id="verify" lay-toc="{level: 3, title: '定义验证规则'}" class="ws-bold">自定义验证规则</h3>
 
@@ -226,7 +226,50 @@ Layui 对表单做了相对巧妙的支持，只需在表单元素上设置 `lay
 
 - 参数 `obj` 是一个对象，用于定义验证规则的集合。
 
-当内置的验证规则无法满足业务需求时，我们可以通过该方法自定义验证规则。如：
+除了内置的验证规则外，form 还允许自定义验证规则，规则以函数命名，返回的参数如下：
+
+```
+// 自定义验证规则
+form.verify({
+  rule: function(value, elem) {
+    console.log(value); // 当前进入验证的表单项的值
+    console.log(elem); // 当前进入验证的表单项的 DOM 元素
+  }
+});
+```
+
+在自定义规则中，可根据规则函数返回的 value 自行判断是否必填，如：
+
+```
+form.verify({
+  // 必填项
+  rule1: function(value, elem) {
+    // 自定义规则
+    if (value.length < 6) {
+      return '不能小于 6 个字符';
+    }
+  },
+  // 非必填项，只有当值填写时才验证自定义规则
+  rule2: function(value, elem) {
+    if (!value) return; // 若值未填写，不进行后续规则验证
+
+    // 自定义规则
+    if (/^[A-Z]/.test(value)) {
+      return '必须用大写字符开头';
+    }
+  },
+  // 自定义提示方式
+  rule3: function(value, elem) {
+    // 自定义规则和自定义提示方式
+    if(value === 'xxx'){
+      alert('用户名不能为敏感词'); // 此处以系统自带的 alert 提示方式为例
+      return true; // 返回 true 即可阻止 form 默认的提示风格
+    }
+  }
+});
+```
+
+以下是一个自定义验证规则的示例：
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', done: function(obj){
   obj.render()
@@ -239,7 +282,6 @@ Layui 对表单做了相对巧妙的支持，只需在表单元素上设置 `lay
 更多「自定义验证规则」示例参考：
 
 > - <a href="https://gitee.com/layui/layui/issues/I5HC2L#note_11673264_link" target="_blank">将 form 提示语显示在表单项旁边，并在提交时批量触发验证</a>
-> - <a href="https://gitee.com/layui/layui/issues/I42C7I#note_12020414_link" target="_blank">重置 form 内置验证规则，让其：当非空值才进行验证；加了 required 时才验证非空</a>
 
 
 <h3 id="validate" lay-toc="{level: 3}" class="ws-bold">主动触发验证  <sup>2.7+</sup></h3>

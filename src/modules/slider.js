@@ -19,13 +19,13 @@ layui.define(['jquery', 'lay'], function(exports){
       that.config = $.extend({}, that.config, options);
       return that;
     }
-    
+
     // 事件
     ,on: function(events, callback){
       return layui.onevent.call(this, MOD_NAME, events, callback);
     }
   };
-  
+
   // 操作当前实例
   var thisSlider = function(){
     var that = this
@@ -97,25 +97,25 @@ layui.define(['jquery', 'lay'], function(exports){
 
     // 合并 lay-options 属性上的配置信息
     $.extend(options, lay.options(elem[0]));
-    
+
     //间隔值不能小于 1
     if(options.step < 1) options.step = 1;
-    
+
     //最大值不能小于最小值
     if(options.max < options.min) options.max = options.min + options.step;
-    
-    
+
+
 
     //判断是否开启双滑块
     if(options.range){
       options.value = typeof(options.value) == 'object' ? options.value : [options.min, options.value];
       var minValue = Math.min(options.value[0], options.value[1])
       ,maxValue = Math.max(options.value[0], options.value[1]);
-      options.value[0] = minValue > options.min ? minValue : options.min;
-      options.value[1] = maxValue > options.min ? maxValue : options.min;
-      options.value[0] = options.value[0] > options.max ? options.max : options.value[0];
-      options.value[1] = options.value[1] > options.max ? options.max : options.value[1];
-      
+      options.value[0] = Math.max(minValue,options.min);
+      options.value[1] = Math.max(maxValue,options.min);
+      options.value[0] = Math.min(options.value[0],options.max);
+      options.value[1] = Math.min(options.value[1],options.max);
+
       var scaleFir = Math.floor((options.value[0] - options.min) / (options.max - options.min) * 100)
       ,scaleSec = Math.floor((options.value[1] - options.min) / (options.max - options.min) * 100)
       ,scale = scaleSec - scaleFir + '%';
@@ -126,44 +126,44 @@ layui.define(['jquery', 'lay'], function(exports){
       if(typeof options.value == 'object'){
         options.value = Math.min.apply(null, options.value);
       }
-      
+
       //初始值不能小于最小值且不能大于最大值
       if(options.value < options.min) options.value = options.min;
       if(options.value > options.max) options.value = options.max;
 
       var scale = Math.floor((options.value - options.min) / (options.max - options.min) * 100) + '%';
-    };
-    
+    }
+
 
     //如果禁用，颜色为统一的灰色
     var theme = options.disabled ? '#c2c2c2' : options.theme;
 
     //滑块
-    var temp = '<div class="layui-slider '+ (options.type === 'vertical' ? 'layui-slider-vertical' : '') +'">'+ (options.tips ? '<div class="'+ SLIDER_TIPS +'"></div>' : '') + 
+    var temp = '<div class="layui-slider '+ (options.type === 'vertical' ? 'layui-slider-vertical' : '') +'">'+ (options.tips ? '<div class="'+ SLIDER_TIPS +'"></div>' : '') +
     '<div class="layui-slider-bar" style="background:'+ theme +'; '+ (options.type === 'vertical' ? 'height' : 'width') +':'+ scale +';'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ (scaleFir || 0) +';"></div><div class="layui-slider-wrap" style="'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ (scaleFir || scale) +';">' +
     '<div class="layui-slider-wrap-btn" style="border: 2px solid '+ theme +';"></div></div>'+ (options.range ? '<div class="layui-slider-wrap" style="'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ scaleSec +';"><div class="layui-slider-wrap-btn" style="border: 2px solid '+ theme +';"></div></div>' : '') +'</div>';
 
     var othis = $(options.elem)
     ,hasRender = othis.next('.' + ELEM_VIEW);
     //生成替代元素
-    hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender  
+    hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender
     that.elemTemp = $(temp);
 
     //把数据缓存到滑块上
     if(options.range){
       that.elemTemp.find('.' + SLIDER_WRAP).eq(0).data('value', options.value[0]);
-      that.elemTemp.find('.' + SLIDER_WRAP).eq(1).data('value', options.value[1]); 
+      that.elemTemp.find('.' + SLIDER_WRAP).eq(1).data('value', options.value[1]);
     }else{
       that.elemTemp.find('.' + SLIDER_WRAP).data('value', options.value);
-    };
-    
+    }
+
     //插入替代元素
-    othis.html(that.elemTemp); 
+    othis.html(that.elemTemp);
 
     //垂直滑块
     if(options.type === 'vertical'){
       that.elemTemp.height(options.height + 'px');
-    };
+    }
 
     //显示间断点
     if(options.showstep){
@@ -173,9 +173,9 @@ layui.define(['jquery', 'lay'], function(exports){
         if(step < 100){
           item += '<div class="layui-slider-step" style="'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ step +'%"></div>'
         }
-      };
+      }
       that.elemTemp.append(item);
-    };
+    }
 
     //插入输入框
     if(options.input && !options.range){
@@ -191,7 +191,7 @@ layui.define(['jquery', 'lay'], function(exports){
       } else {
         that.elemTemp.css("margin-right", elemInput.outerWidth() + 15);
       }
-    };  
+    }
 
     //给未禁止的滑块滑动事件
     if(!options.disabled){
@@ -199,7 +199,7 @@ layui.define(['jquery', 'lay'], function(exports){
     }else{
       that.elemTemp.addClass(DISABLED);
       that.elemTemp.find('.' + SLIDER_WRAP_BTN).addClass(DISABLED);
-    };
+    }
 
     //划过滑块显示数值
     var timer;
@@ -216,21 +216,21 @@ layui.define(['jquery', 'lay'], function(exports){
       timer = setTimeout(function(){
         if(options.type === 'vertical'){
           that.elemTemp.find('.' + SLIDER_TIPS).css({
-            "bottom": left + '%', 
-            "margin-bottom": "20px", 
+            "bottom": left + '%',
+            "margin-bottom": "20px",
             "display": "inline-block"
           });
         } else {
           that.elemTemp.find('.' + SLIDER_TIPS).css({
-            "left": left + '%', 
+            "left": left + '%',
             "display": "inline-block"
           });
-        };
+        }
       }, 300);
     }).on('mouseout', function(){
       clearTimeout(timer);
       that.elemTemp.find('.' + SLIDER_TIPS).css("display", "none");
-    }); 
+    });
   };
 
   //滑块滑动
@@ -250,7 +250,7 @@ layui.define(['jquery', 'lay'], function(exports){
         offsetValue = Math.ceil(offsetValue) * step
       }else{
         offsetValue = Math.round(offsetValue) * step
-      };
+      }
       offsetValue = offsetValue > 100 ? 100: offsetValue;
       offsetValue = offsetValue < 0 ? 0: offsetValue;
       sliderWrap.eq(index).css((options.type === 'vertical' ?'bottom':'left'), offsetValue + '%');
@@ -262,7 +262,7 @@ layui.define(['jquery', 'lay'], function(exports){
         secLeft = options.range ? valueTo(sliderWidth() - sliderWrap[1].offsetTop - sliderWrap.height()) : 0;
       }else{
         sliderAct.find('.' + SLIDER_TIPS).css("left",offsetValue + '%');
-      };
+      }
       firLeft = firLeft > 100 ? 100: firLeft;
       secLeft = secLeft > 100 ? 100: secLeft;
       var minLeft = Math.min(firLeft, secLeft)
@@ -271,13 +271,13 @@ layui.define(['jquery', 'lay'], function(exports){
         sliderAct.find('.' + SLIDER_BAR).css({"height":wrapWidth + '%', "bottom":minLeft + '%'});
       }else{
         sliderAct.find('.' + SLIDER_BAR).css({"width":wrapWidth + '%', "left":minLeft + '%'});
-      };
+      }
       var selfValue = options.min + Math.round((options.max - options.min) * offsetValue / 100);
       inputValue = selfValue;
       sliderTxt.children('.' + SLIDER_INPUT_TXT).children('input').val(inputValue);
       sliderWrap.eq(index).data('value', selfValue);
       sliderAct.find('.' + SLIDER_TIPS).html(options.setTips ? options.setTips(selfValue) : selfValue);
-      
+
       //如果开启范围选择，则返回数组值
       if(options.range){
         var arrValue = [
@@ -298,10 +298,10 @@ layui.define(['jquery', 'lay'], function(exports){
       ,left =  Math.round(oldLeft) * step;
       if(value == sliderWidth()){
         left =  Math.ceil(oldLeft) * step;
-      };
+      }
       return left;
     }
-    
+
     //拖拽元素
     ,elemMove = $(['<div class="layui-auxiliar-moving" id="LAY-slider-moving"></div'].join(''))
     ,createMoveElem = function(move, up){
@@ -314,7 +314,7 @@ layui.define(['jquery', 'lay'], function(exports){
       elemMove.on('mousemove', move);
       elemMove.on('mouseup', upCall).on('mouseleave', upCall);
     };
-    
+
     //动态赋值
     if(setValue === 'set') return change(value - options.min, i, 'done');
 
@@ -323,14 +323,14 @@ layui.define(['jquery', 'lay'], function(exports){
       var othis = $(this);
       othis.on('mousedown', function(e){
         e = e || window.event;
-        
+
         var oldleft = othis.parent()[0].offsetLeft
         ,oldx = e.clientX;
         if(options.type === 'vertical'){
           oldleft = sliderWidth() - othis.parent()[0].offsetTop - sliderWrap.height()
           oldx = e.clientY;
-        };
-        
+        }
+
         var move = function(e){
           e = e || window.event;
           var left = oldleft + (options.type === 'vertical' ? (oldx - e.clientY) : (e.clientX - oldx));
@@ -342,23 +342,23 @@ layui.define(['jquery', 'lay'], function(exports){
           sliderAct.find('.' + SLIDER_TIPS).show();
           e.preventDefault();
         };
-        
+
         var up = function(){
           othis.removeClass(ELEM_HOVER);
           sliderAct.find('.' + SLIDER_TIPS).hide();
         };
-        
+
         createMoveElem(move, up)
       });
     });
-    
+
     // 点击滑块
     sliderAct.on('click', function(e){
       var main = $('.' + SLIDER_WRAP_BTN);
       var othis = $(this);
       if(!main.is(event.target) && main.has(event.target).length === 0 && main.length){
         var index;
-        var offset = options.type === 'vertical' 
+        var offset = options.type === 'vertical'
           ? (sliderWidth() - e.clientY + othis.offset().top - $(window).scrollTop())
         :(e.clientX - othis.offset().left - $(window).scrollLeft());
 
@@ -373,30 +373,30 @@ layui.define(['jquery', 'lay'], function(exports){
           }
         } else {
           index = 0;
-        };
+        }
         change(reaLeft, index, 'done');
         e.preventDefault();
       }
     });
-    
+
     //点击加减输入框
     sliderTxt.children('.' + SLIDER_INPUT_BTN).children('i').each(function(index){
       $(this).on('click', function(){
         inputValue = sliderTxt.children('.' + SLIDER_INPUT_TXT).children('input').val();
         if(index == 1){ //减
-          inputValue = inputValue - options.step < options.min 
-            ? options.min 
+          inputValue = inputValue - options.step < options.min
+            ? options.min
           : Number(inputValue) - options.step;
         }else{
-          inputValue = Number(inputValue) + options.step > options.max 
-            ? options.max 
+          inputValue = Number(inputValue) + options.step > options.max
+            ? options.max
           : Number(inputValue) + options.step;
-        };
+        }
         var inputScale =  (inputValue - options.min) / (options.max - options.min) * 100 / step;
         change(inputScale, 0, 'done');
       });
     });
-    
+
     //获取输入框值
     var getInputValue = function(){
       var realValue = this.value;
@@ -412,7 +412,7 @@ layui.define(['jquery', 'lay'], function(exports){
         e.preventDefault();
         getInputValue.call(this);
       }
-    }).on('change', getInputValue);     
+    }).on('change', getInputValue);
   };
 
   //事件处理
@@ -423,9 +423,9 @@ layui.define(['jquery', 'lay'], function(exports){
 
   //核心入口
   slider.render = function(options){
-    var inst = new Class(options); 
+    var inst = new Class(options);
     return thisSlider.call(inst);
   };
-  
+
   exports(MOD_NAME, slider);
 })

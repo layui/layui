@@ -136,16 +136,20 @@ code line
 </div>
 </pre>
 
-<pre class="layui-code" lay-options="{about: 'About info'}">
+<pre class="layui-code" lay-options="{about: 'AboutInfo'}">
   About
 </pre>
 
-<script src="../src/layui.js"></script>
+<!-- 第三方语法高亮库 -->
 <script src="https://cdn.staticfile.org/highlight.js/11.8.0/highlight.min.js"></script>
 <script src="https://cdn.staticfile.org/prism/1.29.0/prism.min.js"></script>
+
+<!-- layui -->
+<script src="../src/layui.js"></script>
 <script>
 layui.use(['code', 'dropdown'], function(){
   var dropdown = layui.dropdown;
+  var layer = layui.layer;
   var $ = layui.$;
 
   // return;
@@ -173,6 +177,7 @@ layui.use(['code', 'dropdown'], function(){
     };
   });
 
+  // 创建实例
   var codeInst = layui.code({
     elem: '#test',
     preview: true,
@@ -183,12 +188,14 @@ layui.use(['code', 'dropdown'], function(){
     // wordWrap: false, // 是否自动换行
     lang: 'html',
     highlighter: "hljs",
-    /*codeRender: function (code, opts) {
+    // code: '<div class="layui-btn">初始按钮</div>',
+    /*codeRender: function (code, opts) { // 初始高亮
       layui.link(themeData[1].link, 'layui-code-theme');
       return hljs.highlight(code, {language: opts.lang}).value;
     },*/
     tools: [
       'full',
+      'window',
       {
         title: ['文字换行'],
         type: 'form',
@@ -244,19 +251,36 @@ layui.use(['code', 'dropdown'], function(){
             }
           });
         }
+      },
+      {
+        title: ['编辑'],
+        type: 'edit',
+        event: function(obj) {
+          layer.prompt({
+            formType: 2,
+            value: obj.rawCode,
+            title: '编辑代码',
+            area: ['800px', '500px'],
+            maxlength: 9999999999
+          }, function(value, index) {
+            layer.close(index);
+            // 重载 code
+            codeInst.reloadCode({
+              code: value
+            });
+          });
+        }
       }
     ]
   });
 
-  // 仅重载 code
-  layui.debounce(function() {
-    codeInst.reloadCode({
-      codeRender: function(code, opts) {
-        layui.link(themeData[1].link, 'layui-code-theme');
-        return hljs.highlight(code, {language: opts.lang}).value;
-      }
-    });
-  }, 300)();
+  // 语法高亮重载
+  codeInst.reloadCode({
+    codeRender: function(code, opts) {
+      layui.link(themeData[1].link, 'layui-code-theme');
+      return hljs.highlight(code, {language: opts.lang}).value;
+    }
+  });
 
 
   // 通用实例，根据元素属性定制化参数

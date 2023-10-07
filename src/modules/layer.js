@@ -1719,6 +1719,23 @@ layer.photos = function(options, loop, key){
 ready.run = function(_$){
   $ = _$;
   win = $(window);
+  
+  // 移动端兼容性处理
+  // https://gitee.com/layui/layui/issues/I81WGC
+  // https://github.com/jquery/jquery/issues/1729
+  var agent = navigator.userAgent.toLowerCase();
+  var isMobile = /android|iphone|ipod|ipad|ios/.test(agent)
+  var _win = $(window);
+  if(isMobile){
+    $.each({Height: "height", Width: "width"}, function(propSuffix, funcName){
+      var propName = 'inner' + propSuffix;
+      win[funcName] = function(){
+        return propName in window 
+          ? window[propName]
+          : _win[funcName]()
+      }
+    })
+  }
   doms.html = $('html');
   layer.open = function(deliver){
     var o = new Class(deliver);

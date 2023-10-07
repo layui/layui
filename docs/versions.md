@@ -11,6 +11,43 @@ toc: true
 
 > 导读：📑 [Layui 2.8 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
+
+<h2 id="2.8.18" class="ws-anchor">
+  2.8.18-beta
+  <span class="layui-badge-rim">2023-10-07</span>
+</h2>
+
+- #### form
+  - 新增 `input` 数字输入框组件的特定属性 `lay-precision`，用于设置数值精度 # 1375/I81SY4
+  - 优化 `input` 数字输入框组件的失去焦点对值的有效范围约束 # 1375/I7KU6V
+  - 优化 `input` 数字输入框组件当值达到临界点时加减按钮的禁用视觉效果 # 1375
+  - 优化 `input` 数字输入框当表单验证失败时的边框颜色 # 1371
+- #### nav
+  - 新增 垂直导航菜单展开和收缩时的过渡动画 # 1384
+- #### layer
+  - 优化 移动端定位 # 1376
+- #### table
+  - 新增 `complete` 属性，当数据接口请求完成后执行，无论成功还是失败均会触发 # 1379
+- #### treeTable
+  - 修复 treeTable 组件 treeTable.setRowChecked 未逐层展开上级节点的问题 # 1385/I84RUT
+- #### upload
+  - 修复 `unified: true` 时的报错问题
+  - 优化 渲染入口逻辑，以解决因重复渲染导致的若干问题
+  - 优化 实例的 `reload` 方法，可更好地进行完整重载
+- #### laydate
+  - 优化 开启 `rangeLinked` 属性后，点击目标元素可重新渲染的问题
+- #### carousel
+  - 优化 轮播切换时的动画效果 # 1378/I82STP
+- #### rate / slider
+  - 优化 代码细节 # 1374
+- #### code
+  - 新增 `code` 属性，用于设置原始 code 值，优先级高于目标元素中的内容
+  - 优化 若干小问题
+
+### 下载： [layui-v2.8.18-beta.zip](https://gitee.com/layui/layui/attach_files/1545385/download)
+
+---
+
 <h2 id="2.8.17" class="ws-anchor">
   2.8.17
   <span class="layui-badge-rim">2023-09-11</span>

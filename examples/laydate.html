@@ -17,7 +17,7 @@ body{padding: 50px 100px;}
 <body>
 
 <div class="layui-inline">
-  <input type="text" class="layui-input" id="test-first">
+  <input type="text" class="layui-input" id="test-first" placeholder="带遮罩">
 </div>
 
 <br>
@@ -157,7 +157,7 @@ layui.use('laydate', function(laydate){
   laydate.render({
     elem: '#test-first',
     min: 0,
-    shade: [0.1, '#ddd'],
+    shade: [0.1, '#000'],
     //max: '2016-12-30',
     done: function(){
       console.log('done',arguments);

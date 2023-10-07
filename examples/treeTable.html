@@ -5,11 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>树形表格 - layui</title>
   <link rel="stylesheet" href="../src/css/layui.css">
-  <style>
-    body {padding: 32px;}
-  </style>
 </head>
-<body>
+<body class="layui-padding-5">
 
 <table class="layui-hide" id="test"></table>
 
@@ -19,15 +16,26 @@
   </div>
 </script>
 
+<script type="text/html" id="TPL-treeTable-demo-tools">
+  <div class="layui-btn-container">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="addChild">新增</a>
+    <a class="layui-btn layui-btn-xs" lay-event="more">更多 <i class="layui-icon layui-icon-down"></i></a>
+  </div>
+</script>
+
 <script src="../src/layui.js"></script>
 <script>
-layui.use(['treeTable'], function(){
+layui.use(['treeTable', 'dropdown', 'layer'], function(){
   var treeTable = layui.treeTable;
+  var dropdown = layui.dropdown;
+  var layer = layui.layer;
 
   // 渲染
-  treeTable.render({
+  var inst = treeTable.render({
     elem: '#test',
     url: './json/treeTable/demo-1.json',
+    // data: createData(!0),
     maxHeight: 'full-32',
     toolbar: '#TPL-treeTable-demo',
     tree: {
@@ -48,7 +56,8 @@ layui.use(['treeTable'], function(){
       {field: 'score', title: '评分', width: 80, sort: true},
       {field: 'city', title: '城市', width: 150},
       {field: 'description', title: '描述', minWidth: 200},
-      {field: 'createTime', title: '创建时间', width: 170, fixed: 'right'}
+      {field: 'createTime', title: '创建时间', width: 170},
+      { fixed: "right", title: "操作", width: 190, align: "center", toolbar: "#TPL-treeTable-demo-tools"}
     ]],
     page: true
   });
@@ -57,14 +66,82 @@ layui.use(['treeTable'], function(){
   treeTable.on('row(test)', function (obj) {
     console.log(obj);
   });
+
+  // 表头工具栏工具事件
+  treeTable.on('toolbar('+ inst.config.id +')', function (obj) {
+    var config = obj.config;
+    var tableId = config.id;
+    var status = treeTable.checkStatus(tableId);
+    // 获取选中行
+    if (obj.event === "getChecked") {
+      if(!status.data.length) return layer.msg('无选中数据');
+      console.log(status);
+      layer.alert("当前数据选中已经输出到控制台，<br>您可按 F12 从控制台中查看结果。");
+    }
+  });
+
+  // 单元格工具事件
+  treeTable.on('tool('+ inst.config.id +')', function (obj) {
+    var layEvent = obj.event; // 获得 lay-event 对应的值
+    var trElem = obj.tr;
+    var trData = obj.data;
+    var tableId = obj.config.id;
+    if (layEvent === "detail") {
+      layer.msg("查看操作：" + trData.name);
+    } else if (layEvent === "addChild") {
+      var data = { id: Date.now(), name: "新节点" };
+      var newNode2 = treeTable.addNodes(tableId, {
+        parentIndex: trData["LAY_DATA_INDEX"],
+        index: -1,
+        data: data
+      });
+    } else if (layEvent === "more") {
+      // 下拉菜单
+      dropdown.render({
+        elem: this, // 触发事件的 DOM 对象
+        show: true, // 外部事件触发即显示
+        align: "right", // 右对齐弹出
+        data: [
+          {
+            title: "修改积分",
+            id: "edit"
+          },
+          {
+            title: "删除",
+            id: "del"
+          }
+        ],
+        click: function (menudata) {
+          if (menudata.id === "del") {
+            console.log(trData);
+            layer.confirm("真的删除行么", function (index) {
+              obj.del(); // 等效如下
+              // treeTable.removeNode(tableId, trElem.attr('data-index'))
+              layer.close(index);
+            });
+          } else if (menudata.id === "edit") {
+            layer.prompt({
+                value: trData.experience,
+                title: "输入新的积分"
+            }, function (value, index) {
+              obj.update({ experience: value }); // 等效如下
+              // treeTable.updateNode(tableId, trElem.attr('data-index'), {experience: value});
+              layer.close(index);
+            });
+          }
+        }
+      });
+    }
+  });
+
 });
 </script>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Mock.js/1.0.0/mock-min.js"></script>
+<script src="https://cdn.staticfile.org/Mock.js/1.0.0/mock-min.js"></script>
 <script>
 // 生成模拟数据
-const createData = () => {
+const createData = (flat) => {
   // 生成随机 ID 函数
   const createId = (() => {
     let nextId = 1
@@ -78,6 +155,7 @@ const createData = () => {
         createNode.bind(null, id, level + 1)
       ]
     }).array : []
+    const isParent = 'isParent';
     return {
       id,
       name: `User-${id}`,
@@ -89,17 +167,22 @@ const createData = () => {
       city: Mock.Random.city(),
       description: '-',
       createTime: Mock.mock('@datetime'),
-      parentId,
-      children,
-      isParent: !!children.length
+      [flat || 'parentId']: parentId,
+      [flat || 'children']: children,
+      [flat || isParent]: !!children.length
     }
   }
-  // 生成树
+
+  // 根节点
   const rootNodes = Mock.mock({
     'array|10-20': [
       createNode
     ]
-  }).array
+  }).array;
+
+  if (flat) return rootNodes
+
+  // 生成树
   const getTreeData = function (nodes) {
     let result = []
     nodes.forEach(node => {

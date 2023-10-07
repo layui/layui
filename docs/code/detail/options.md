@@ -25,6 +25,16 @@
 <td>-</td>
     </tr>
     <tr>
+<td>code  <sup>2.8.18+</sup></td>
+<td>
+
+设置原始 code 值，默认取目标元素中的内容
+
+</td>
+<td>string</td>
+<td>-</td>
+    </tr>
+    <tr>
 <td>preview <sup>2.8+</sup></td>
 <td>
   
@@ -302,11 +312,13 @@ Code 文字是否自动换行
 <td>highlighter <sup>2.8.17+</sup></td>
 <td>
 
-指定语法高亮器，可选值：
+设置语法高亮器，可选值：
 
 - `hljs` : 指定 `highlight.js` 库
 - `prism` : 指定 `prism.js` 库
 - `shiki` : 指定 `shiki.js` 库
+
+注：对应的语法高亮器 JS 库和相关主题 CSS 需自主引入，该属性仅用于内部适配。
 
 </td>
 <td>string</td>

@@ -9,7 +9,7 @@ toc: true
 
 <h2 id="examples" lay-toc="{hot: true, anchor: null}" style="margin-bottom: 0;">示例</h2>
 
-以下示例的部分上传接口由第三方网站 `https://httpbin.org` 提供，它可以模拟各类 HTTP 请求。若未配置上传接口的，每次上传都会报「请求上传接口出现异常」的提示，这属于正常现象。
+以下示例均没有设置上传接口，因此每次上传都会报异常提示，这属于正常现象。实际使用时设置成您的真实上传接口即可。
 
 <div class="ws-docs-showcase"></div>
 
