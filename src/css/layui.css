@@ -1274,6 +1274,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 
 .layui-nav .layui-nav-more{position: absolute; top: 0; right: 3px; left: auto !important; margin-top: 0; font-size: 12px; cursor: pointer; transition: all .2s; -webkit-transition: all .2s;}
 .layui-nav .layui-nav-mored,
+.layui-nav-expand > a .layui-nav-more,
 .layui-nav-itemed > a .layui-nav-more{transform: rotate(180deg);}
 
 
@@ -1306,16 +1307,17 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-nav-itemed>a{color: #fff !important;}
 .layui-nav-tree .layui-nav-bar{background-color: #16baaa;}
 
-.layui-nav-tree .layui-nav-child{position: relative; z-index: 0; top: 0; border: none; box-shadow: none;}
+.layui-nav-tree .layui-nav-child{position: relative; z-index: 0; top: 0; border: none; background-color: rgba(0,0,0,.3); box-shadow: none;}
 .layui-nav-tree .layui-nav-child dd{margin: 0;}
 .layui-nav-tree .layui-nav-child a{color: #fff; color: rgba(255,255,255,.7);}
-.layui-nav-tree .layui-nav-child a:hover,
-.layui-nav-tree .layui-nav-child{background: none; color: #fff;}
+.layui-nav-tree .layui-nav-child a:hover{background: none; color: #fff;}
 
-.layui-nav-itemed>.layui-nav-child{display: block; background-color: rgba(0,0,0,.3) !important;}
+/* 垂直导航 - 展开状态 */
+.layui-nav-itemed>.layui-nav-child,
 .layui-nav-itemed>.layui-nav-child>.layui-this>.layui-nav-child{display: block;}
 
-/* 侧边 */.layui-nav-side{position: fixed; top: 0; bottom: 0; left: 0; overflow-x: hidden; z-index: 999;}
+/* 垂直导航 - 侧边 */
+.layui-nav-side{position: fixed; top: 0; bottom: 0; left: 0; overflow-x: hidden; z-index: 999;}
 
 /* 导航浅色背景 */
 .layui-nav.layui-bg-gray .layui-nav-item a,
@@ -1323,7 +1325,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-nav-tree.layui-bg-gray{padding: 6px 0;}
 .layui-nav-tree.layui-bg-gray .layui-nav-itemed>a{color: #000 !important;}
 .layui-nav.layui-bg-gray .layui-this a{color: #16b777;}
-.layui-nav-tree.layui-bg-gray .layui-nav-itemed>.layui-nav-child{padding-left: 11px; background: none!important;}
+.layui-nav-tree.layui-bg-gray .layui-nav-child{padding-left: 11px; background: none;}
 .layui-nav-tree.layui-bg-gray .layui-nav-item>a{padding-top: 0; padding-bottom: 0;}
 .layui-nav-tree.layui-bg-gray .layui-nav-item>a .layui-nav-more{padding: 0;}
 .layui-nav-tree.layui-bg-gray .layui-this,

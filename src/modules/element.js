@@ -272,14 +272,14 @@ layui.define('jquery', function(exports){
     )
     */
     
-    //点击菜单 - a标签触发
+    // 点击菜单 - a 标签触发
     ,clickThis: function(){
-      var othis = $(this)
-      ,parents = othis.parents(NAV_ELEM)
-      ,filter = parents.attr('lay-filter')
-      ,parent = othis.parent() 
-      ,child = othis.siblings('.'+NAV_CHILD)
-      ,unselect = typeof parent.attr('lay-unselect') === 'string'; //是否禁用选中
+      var othis = $(this);
+      var parents = othis.parents(NAV_ELEM);
+      var filter = parents.attr('lay-filter');
+      var parent = othis.parent() ;
+      var child = othis.siblings('.'+NAV_CHILD);
+      var unselect = typeof parent.attr('lay-unselect') === 'string'; // 是否禁用选中
       
       if(!(othis.attr('href') !== 'javascript:;' && othis.attr('target') === '_blank') && !unselect){
         if(!child[0]){
@@ -288,15 +288,27 @@ layui.define('jquery', function(exports){
         }
       }
       
-      //如果是垂直菜单
+      // 若为垂直菜单
       if(parents.hasClass(NAV_TREE)){
+        var NAV_ITEMED = NAV_ITEM + 'ed';
+        var NAV_EXPAND = 'layui-nav-expand';
+        var isNone = child.css('display') === 'none';
+
         child.removeClass(NAV_ANIM);
         
-        //如果有子菜单，则展开
+        // 若有子菜单，则展开
         if(child[0]){
-          parent[child.css('display') === 'none' ? 'addClass': 'removeClass'](NAV_ITEM+'ed');
-          if(parents.attr('lay-shrink') === 'all'){
-            parent.siblings().removeClass(NAV_ITEM + 'ed');
+          child.slideToggle(200, function() {
+            isNone || parent.removeClass(NAV_ITEMED);
+          });
+          parent[isNone ? 'addClass': 'removeClass'](NAV_EXPAND);
+          // 手风琴
+          if(typeof parents.attr('lay-accordion') === 'string' || parents.attr('lay-shrink') === 'all'){
+            // 收缩兄弟项
+            parent.siblings().removeClass([
+              NAV_ITEMED,
+              NAV_EXPAND
+            ].join(' ')).children('.'+NAV_CHILD).slideUp(200);
           }
         }
       }
@@ -304,26 +316,16 @@ layui.define('jquery', function(exports){
       layui.event.call(this, MOD_NAME, 'nav('+ filter +')', othis);
     }
     
-    //点击子菜单选中
-    /*
-    ,clickChild: function(){
-      var othis = $(this), parents = othis.parents(NAV_ELEM)
-      ,filter = parents.attr('lay-filter');
-      parents.find('.'+THIS).removeClass(THIS);
-      othis.addClass(THIS);
-      layui.event.call(this, MOD_NAME, 'nav('+ filter +')', othis);
-    }
-    */
-    
-    //折叠面板
+    // 折叠面板
     ,collapse: function(){
-      var othis = $(this), icon = othis.find('.layui-colla-icon')
-      ,elemCont = othis.siblings('.layui-colla-content')
-      ,parents = othis.parents('.layui-collapse').eq(0)
-      ,filter = parents.attr('lay-filter')
-      ,isNone = elemCont.css('display') === 'none';
+      var othis = $(this);
+      var icon = othis.find('.layui-colla-icon');
+      var elemCont = othis.siblings('.layui-colla-content');
+      var parents = othis.parents('.layui-collapse').eq(0);
+      var filter = parents.attr('lay-filter');
+      var isNone = elemCont.css('display') === 'none';
       
-      //是否手风琴
+      // 是否手风琴
       if(typeof parents.attr('lay-accordion') === 'string'){
         var show = parents.children('.layui-colla-item').children('.'+SHOW);
         show.siblings('.layui-colla-title').children('.layui-colla-icon').html('&#xe602;');
