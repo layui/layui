@@ -290,59 +290,42 @@ layui.define('jquery', function(exports){
       
       // 若为垂直菜单
       if(parents.hasClass(NAV_TREE)){
+        var NAV_ITEMED = NAV_ITEM + 'ed';
+        var NAV_EXPAND = 'layui-nav-expand';
+        var isNone = child.css('display') === 'none';
+
         child.removeClass(NAV_ANIM);
         
         // 若有子菜单，则展开
         if(child[0]){
+          child.slideToggle(200, function() {
+            isNone || parent.removeClass(NAV_ITEMED);
+          });
+          parent[isNone ? 'addClass': 'removeClass'](NAV_EXPAND);
           // 手风琴
-          if(parents.attr('lay-shrink') === 'all'){
-            parent.siblings().each(function(){
-              var elem = $(this);
-              if (elem.hasClass(NAV_ITEM+'ed')) {
-                elem.find('.layui-nav-more').css({transform: 'rotate(0deg)'});
-                elem.children('dl.'+NAV_CHILD).slideToggle(200, function() {
-                  elem.parent().removeClass(NAV_ITEM+'ed');
-                  elem.css('display', 'none');
-                });
-              }
-            });
+          if(typeof parents.attr('lay-accordion') === 'string' || parents.attr('lay-shrink') === 'all'){
+            // 收缩兄弟项
+            parent.siblings().removeClass([
+              NAV_ITEMED,
+              NAV_EXPAND
+            ].join(' ')).children('.'+NAV_CHILD).slideUp(200);
           }
-            
-          othis.find('.layui-nav-more').css({
-            transform: parent.hasClass(NAV_ITEM+'ed') ? 'rotate(0deg)' : 'rotate(180deg)'
-          });
-          child.css({
-            display: parent.hasClass(NAV_ITEM+'ed') ? 'block' : 'none',
-            backgroundColor: 'rgba(0,0,0,.3)'
-          }).slideToggle(200, function(){
-            parent[child.css('display') === 'none' ? 'removeClass': 'addClass'](NAV_ITEM+'ed');
-          });
         }
       }
       
       layui.event.call(this, MOD_NAME, 'nav('+ filter +')', othis);
     }
     
-    //点击子菜单选中
-    /*
-    ,clickChild: function(){
-      var othis = $(this), parents = othis.parents(NAV_ELEM)
-      ,filter = parents.attr('lay-filter');
-      parents.find('.'+THIS).removeClass(THIS);
-      othis.addClass(THIS);
-      layui.event.call(this, MOD_NAME, 'nav('+ filter +')', othis);
-    }
-    */
-    
-    //折叠面板
+    // 折叠面板
     ,collapse: function(){
-      var othis = $(this), icon = othis.find('.layui-colla-icon')
-      ,elemCont = othis.siblings('.layui-colla-content')
-      ,parents = othis.parents('.layui-collapse').eq(0)
-      ,filter = parents.attr('lay-filter')
-      ,isNone = elemCont.css('display') === 'none';
+      var othis = $(this);
+      var icon = othis.find('.layui-colla-icon');
+      var elemCont = othis.siblings('.layui-colla-content');
+      var parents = othis.parents('.layui-collapse').eq(0);
+      var filter = parents.attr('lay-filter');
+      var isNone = elemCont.css('display') === 'none';
       
-      //是否手风琴
+      // 是否手风琴
       if(typeof parents.attr('lay-accordion') === 'string'){
         var show = parents.children('.layui-colla-item').children('.'+SHOW);
         show.siblings('.layui-colla-title').children('.layui-colla-icon').html('&#xe602;');
