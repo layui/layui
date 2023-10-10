@@ -255,7 +255,7 @@ layui.use(function(){
 
 | 属性 | 描述 |
 | --- | --- |
-| lay-shrink | 导航容器属性。展开子菜单时，是否收缩兄弟节点已展开的子菜单。可选值：<ul><li>`lay-shrink=""` 不收缩兄弟菜单子菜单，默认; </li><li>`lay-shrink="all"` 收缩全部兄弟菜单子菜单</li></ul> |
+| lay-accordion <sup>2.8.18+</sup> | 导航容器属性。用于开启垂直导航菜单展开时的手风琴效果。如：<br>`<div class="layui-nav layui-nav-tree" lay-accordion>…</div>` |
 | lay-bar | 导航容器属性。用于禁用滑块跟随功能。如：<br>`<div class="layui-nav" lay-bar="disabled">…</div>` |
 | lay-unselect | 导航菜单项属性。 设置后，点击对应菜单项时，不会出现选中效果。 |
 
