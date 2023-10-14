@@ -161,7 +161,7 @@ layui.use(['table', 'dropdown'], function(){
       {type: 'checkbox', fixed: 'left'},
       // {type: 'numbers', fixed: 'left'},
       {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'},
-      {field:'username', expandedStyle: 'tips', title:'用户名 <i class="layui-icon layui-icon-username" lay-event="username"></i>', width:120, edit: function(d){
+      {field:'username', ignoreExport: false, expandedStyle: 'tips', title:'用户名 <i class="layui-icon layui-icon-username" lay-event="username"></i>', width:120, edit: function(d){
         return !d.LAY_DISABLED;
       }, templet: '#usernameTpl'},
       {field:'xxx', title:'测试', edit: 'text'},
