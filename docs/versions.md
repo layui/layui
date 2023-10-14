@@ -29,7 +29,7 @@ toc: true
   - 优化 移动端定位 # 1376
 - #### table
   - 新增 `complete` 属性，当数据接口请求完成后执行，无论成功还是失败均会触发 # 1379
-- #### treeTable
+  - 修复 `ignoreExport` 表头属性值效果与文档不符的问题 # I86DBY
   - 修复 treeTable 组件 treeTable.setRowChecked 未逐层展开上级节点的问题 # 1385/I84RUT
 - #### upload
   - 修复 `unified: true` 时的报错问题
@@ -44,8 +44,10 @@ toc: true
 - #### code
   - 新增 `code` 属性，用于设置原始 code 值，优先级高于目标元素中的内容
   - 优化 若干小问题
+- #### 其他
+  - 优化 `<hr>` 全局样式优先级 # I86R6G
 
-### 下载： [layui-v2.8.18-beta.zip](https://gitee.com/layui/layui/attach_files/1545385/download)
+### 下载： [layui-v2.8.18.1-beta.zip](https://gitee.com/layui/layui/attach_files/1553466/download)
 
 ---
 
