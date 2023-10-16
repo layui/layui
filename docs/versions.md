@@ -13,8 +13,8 @@ toc: true
 
 
 <h2 id="2.8.18" class="ws-anchor">
-  2.8.18-beta
-  <span class="layui-badge-rim">2023-10-07</span>
+  2.8.18-beta.1
+  <span class="layui-badge-rim">2023-10-14</span>
 </h2>
 
 - #### form
@@ -30,7 +30,8 @@ toc: true
 - #### table
   - 新增 `complete` 属性，当数据接口请求完成后执行，无论成功还是失败均会触发 # 1379
   - 修复 `ignoreExport` 表头属性值效果与文档不符的问题 # I86DBY
-  - 修复 treeTable 组件 treeTable.setRowChecked 未逐层展开上级节点的问题 # 1385/I84RUT
+- #### treeTable
+  - 修复 `treeTable.setRowChecked()` 方法未逐层展开上级节点的问题 # 1385/I84RUT
 - #### upload
   - 修复 `unified: true` 时的报错问题
   - 优化 渲染入口逻辑，以解决因重复渲染导致的若干问题
