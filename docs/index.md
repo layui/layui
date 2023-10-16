@@ -74,7 +74,7 @@ npm i layui
 ```
 ```
 <!-- 引入 layui.js -->
-<script src="//unpkg.com/layui@{{= d.layui.v }}/dist/layui.js">
+<script src="//unpkg.com/layui@{{= d.layui.v }}/dist/layui.js"></script>
 ```
 
 <h2 id="quickstart" lay-toc="{}">快速上手</h2>

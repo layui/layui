@@ -114,7 +114,16 @@ toc: true
   数字输入框 <sup>2.8.9+</sup>
 </h3>
 
-一般搭配 `<input type="number">` 使用，用于替代原生数字输入框，可继承 `step,min,max` 等原生属性。
+一般搭配 `<input type="number">` 使用，用于替代原生数字输入框，支持的属性如下：
+
+| 属性 | 描述 |
+| --- | --- |
+| step | 设置数字的加减间隔 |
+| min | 设置数字的最小值 |
+| max | 设置数字的最大值 |
+| lay-precision <sup>2.8.18+</sup> | 设置数字的小数位精度 |
+
+### 示例
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
   obj.render();
@@ -130,10 +139,13 @@ toc: true
     <div class="layui-col-xs6">
       <input type="number" lay-affix="number" placeholder="设置 step,min,max" step="10" min="0" max="100" class="layui-input">
     </div>
-    <div class="layui-col-xs6">
+    <div class="layui-col-xs4">
+      <input type="number" lay-affix="number" placeholder="设置小数位精度为 2" step="0.1" lay-precision="2" class="layui-input">
+    </div>
+    <div class="layui-col-xs4">
       <input type="number" lay-affix="number" readonly placeholder="不允许输入状态" class="layui-input">
     </div>
-    <div class="layui-col-xs6">
+    <div class="layui-col-xs4">
       <input type="number" lay-affix="number" disabled placeholder="禁用状态" class="layui-input">
     </div>
   </div>

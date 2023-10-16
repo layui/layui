@@ -298,7 +298,7 @@ layui.define('jquery', function(exports){
         
         // 若有子菜单，则展开
         if(child[0]){
-          child.slideToggle(200, function() {
+          child.stop().slideToggle(200, function() {
             isNone || parent.removeClass(NAV_ITEMED);
           });
           parent[isNone ? 'addClass': 'removeClass'](NAV_EXPAND);
@@ -308,7 +308,7 @@ layui.define('jquery', function(exports){
             parent.siblings().removeClass([
               NAV_ITEMED,
               NAV_EXPAND
-            ].join(' ')).children('.'+NAV_CHILD).slideUp(200);
+            ].join(' ')).children('.'+NAV_CHILD).stop().slideUp(200);
           }
         }
       }
