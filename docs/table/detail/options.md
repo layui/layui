@@ -480,5 +480,19 @@ error: function(e, msg) {
 
 </td>
     </tr>
+    <tr>
+<td>complete <sup>2.8.18+</sup></td>
+<td colspan="3">
+
+数据接口请求完成后执行，无论成功还是失败均会触发
+
+```
+complete: function(xhr, ts) {
+  console.log(xhr, ts)
+}
+```
+
+</td>
+    </tr>
   </tbody>
 </table>

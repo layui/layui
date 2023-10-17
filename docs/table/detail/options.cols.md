@@ -370,11 +370,7 @@ edit: function(d){
 
 </td>
 <td>boolean</td>
-<td>
-  
--
-
-</td>
+<td>-</td>
     </tr>
     <tr>
 <td>escape</td>
