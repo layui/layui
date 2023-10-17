@@ -1,19 +1,6 @@
 <h3 lay-toc="{level: 2, id: 'examples'}" class="layui-hide">综合演示 🔥</h3>
 
-<pre class="layui-code" lay-options="{preview: 'iframe', id: 'table-demo-1', text: {preview: '综合演示 🔥'}, style: 'height: 506px;', layout: ['preview', 'code'], tools: ['full','window'], done: function(obj){
-  setTimeout(function(){
-    layer.tipsIndex = layer.tips(
-      '点击该图标可最大化查看效果', 
-      layui.$('#table-demo-1 .layui-icon-screen-full'), {
-      tips: 4,
-      time: 30*1000
-    })
-  });
-}, toolsEvent: function(oi, type){
-  if(type === 'full'){
-    layer.close(layer.tipsIndex);
-  }
-}}">
+<pre class="layui-code" lay-options="{preview: 'iframe', id: 'table-demo-1', text: {preview: '综合演示 🔥'}, style: 'height: 506px;', layout: ['preview', 'code'], tools: ['full','window']}">
   <textarea>
 {{- d.include("/table/examples/demo.md") }}
   </textarea>
