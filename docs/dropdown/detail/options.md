@@ -123,6 +123,20 @@
 </td>
     </tr>
     <tr>
+<td>accordion <sup>2.8.18+</sup></td>
+<td>
+  
+是否开启手风琴效果
+
+</td>
+<td>boolean</td>
+<td>
+
+`false`
+
+</td>
+    </tr>
+    <tr>
 <td>delay</td>
 <td>
   

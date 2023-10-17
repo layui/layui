@@ -21,6 +21,7 @@ toc: true
 
 - 通过 `<ul class="layui-menu"></ul>` 命名基础菜单容器
   - 追加 `className` 为 `layui-menu-lg` 可设置基础菜单的大尺寸风格
+  - 追加 `lay-accordion` 属性可设置手风琴效果 <sup>2.8.18+</sup>
   - 通过 `<li></li>` 放置菜单列表项
     - 属性：
       - 追加 `className` 为　`layui-menu-item-group` 可设置当前菜单为菜单组，即子菜单为纵向层级。
