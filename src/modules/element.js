@@ -289,18 +289,22 @@ layui.define('jquery', function(exports){
       }
       
       // 若为垂直菜单
-      if(parents.hasClass(NAV_TREE)){
+      if (parents.hasClass(NAV_TREE)) {
         var NAV_ITEMED = NAV_ITEM + 'ed';
         var NAV_EXPAND = 'layui-nav-expand';
         var needExpand = !(parent.hasClass(NAV_EXPAND) || parent.hasClass(NAV_ITEMED));
+        var NAV_DATA_LOCKED = 'LayuiNavDataLocked';
+
+        // 是否正处于临时锁定状态
+        if (child.data(NAV_DATA_LOCKED)) return;
 
         child.removeClass(NAV_ANIM);
-        
+
         // 若有子菜单，则展开
-        if(child[0]){
+        if (child[0]) {
           child.stop().slideToggle(200, function() {
             needExpand || parent.removeClass(NAV_ITEMED);
-            child.css('height', '');
+            child.removeData(NAV_DATA_LOCKED);
           });
           parent[needExpand ? 'addClass': 'removeClass'](NAV_EXPAND);
           // 手风琴
@@ -312,6 +316,9 @@ layui.define('jquery', function(exports){
             ].join(' ')).children('.'+NAV_CHILD).stop().slideUp(200);
           }
         }
+
+        // 临时锁定状态
+        child.data(NAV_DATA_LOCKED, true);
       }
       
       layui.event.call(this, MOD_NAME, 'nav('+ filter +')', othis);
