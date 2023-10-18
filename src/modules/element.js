@@ -292,8 +292,8 @@ layui.define('jquery', function(exports){
       if (parents.hasClass(NAV_TREE)) {
         var NAV_ITEMED = NAV_ITEM + 'ed';
         var NAV_EXPAND = 'layui-nav-expand';
-        var needExpand = !(parent.hasClass(NAV_EXPAND) || parent.hasClass(NAV_ITEMED));
         var NAV_DATA_LOCKED = 'LayuiNavDataLocked';
+        var needExpand = !(parent.hasClass(NAV_EXPAND) || parent.hasClass(NAV_ITEMED));
 
         // 是否正处于临时锁定状态
         if (child.data(NAV_DATA_LOCKED)) return;
