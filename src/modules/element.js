@@ -292,16 +292,17 @@ layui.define('jquery', function(exports){
       if(parents.hasClass(NAV_TREE)){
         var NAV_ITEMED = NAV_ITEM + 'ed';
         var NAV_EXPAND = 'layui-nav-expand';
-        var isNone = child.css('display') === 'none';
+        var needExpand = !(parent.hasClass(NAV_EXPAND) || parent.hasClass(NAV_ITEMED));
 
         child.removeClass(NAV_ANIM);
         
         // 若有子菜单，则展开
         if(child[0]){
           child.stop().slideToggle(200, function() {
-            isNone || parent.removeClass(NAV_ITEMED);
+            needExpand || parent.removeClass(NAV_ITEMED);
+            child.css('height', '');
           });
-          parent[isNone ? 'addClass': 'removeClass'](NAV_EXPAND);
+          parent[needExpand ? 'addClass': 'removeClass'](NAV_EXPAND);
           // 手风琴
           if(typeof parents.attr('lay-accordion') === 'string' || parents.attr('lay-shrink') === 'all'){
             // 收缩兄弟项
