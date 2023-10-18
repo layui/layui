@@ -453,6 +453,8 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       var contentElem = groupElem.children('ul');
       var contentHeight = contentElem[0].scrollHeight;
 
+      if(contentElem.is(':animated')) return;
+
       groupElem.removeClass(isOpen ? STR_ITEM_UP : STR_ITEM_DOWN).addClass(isOpen ? STR_ITEM_DOWN : STR_ITEM_UP);
       contentElem.height(isOpen ? 0 : contentHeight)
         .stop()
@@ -468,7 +470,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
 
     if (!needSpread || !accordion) return;
     othis.siblings('.' + STR_ITEM_GROUP).each(function (index, item) {
-      var itemElem = $(item)
+      var itemElem = $(item);
       if(!itemElem.hasClass(STR_ITEM_UP)){
         toggle(itemElem, false);
       }
