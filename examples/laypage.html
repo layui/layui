@@ -106,6 +106,10 @@ layui.use(['laypage', 'layer'], function(){
     ,count: 100
     //,groups: 0
     ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip', ]
+    /*,limitTemplet: function(item) {
+      return item + ' / page';
+    }*/
+    // ,skipText: ['Go to', '', 'Confirm']
     ,jump: function(obj){
       console.log(obj)
     }
