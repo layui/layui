@@ -156,15 +156,24 @@ layui.define(function(exports){
       
       // 每页条数
       limit: function(){
-        var options = ['<span class="layui-laypage-limits"><select lay-ignore>'];
+        var elemArr = ['<span class="layui-laypage-limits"><select lay-ignore>'];
+        var template = function(item) {
+          var def = item +' 条/页';
+          return typeof config.limitTemplet === 'function'
+            ? (config.limitTemplet(item) || def)
+          : def;
+        };
+
+        // 条目选项列表
         layui.each(config.limits, function(index, item){
-          options.push(
-            '<option value="'+ item +'"'
-            +(item === config.limit ? 'selected' : '') 
-            +'>'+ item +' 条/页</option>'
+          elemArr.push(
+            '<option value="'+ item +'"'+ (item === config.limit ? ' selected' : '') +'>'
+              + template(item)
+            + '</option>'
           );
         });
-        return options.join('') +'</select></span>';
+
+        return elemArr.join('') +'</select></span>';
       }(),
       
       // 刷新当前页
