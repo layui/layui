@@ -185,10 +185,15 @@ layui.define(function(exports){
 
       // 跳页区域
       skip: function(){
+        var skipText = typeof config.skipText === 'object' ? config.skipText : [
+          '&#x5230;&#x7B2C;',
+          '&#x9875;',
+          '&#x786e;&#x5b9a;'
+        ];
         return [
-          '<span class="layui-laypage-skip">&#x5230;&#x7B2C;',
+          '<span class="layui-laypage-skip">'+ skipText[0],
             '<input type="text" min="1" value="'+ config.curr +'" class="layui-input">',
-            '&#x9875;<button type="button" class="layui-laypage-btn">&#x786e;&#x5b9a;</button>',
+            skipText[1]+ '<button type="button" class="layui-laypage-btn">'+ skipText[2] +'</button>',
           '</span>'
         ].join('');
       }()
