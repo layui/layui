@@ -349,7 +349,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       var data = elemGroup.data('item') || {};
       
       if(data.type === 'group' && options.isAllowSpread){
-        thisModule.spread(elemGroup, options);
+        thisModule.spread(elemGroup, options.accordion);
       }
     });
 
@@ -443,11 +443,8 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   };
   
   // 设置菜单组展开和收缩状态
-  thisModule.spread = function(othis, options){
+  thisModule.spread = function(othis, isAccordion){
     var needSpread = othis.hasClass(STR_ITEM_UP);
-    var accordion = options
-      ? options.accordion
-      : typeof othis.parents('.layui-menu').eq(0).attr('lay-accordion') === 'string';
 
     var toggle = function (groupElem, isOpen) {
       var contentElem = groupElem.children('ul');
@@ -468,12 +465,9 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
 
     toggle(othis, needSpread);
 
-    if (!needSpread || !accordion) return;
-    othis.siblings('.' + STR_ITEM_GROUP).each(function (index, item) {
-      var itemElem = $(item);
-      if(!itemElem.hasClass(STR_ITEM_UP)){
-        toggle(itemElem, false);
-      }
+    if (!needSpread || !isAccordion) return;
+    layui.each(othis.siblings('.' + STR_ITEM_DOWN), function(index, item){
+      toggle($(item), false);
     })
   };
   
@@ -557,9 +551,10 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       var othis = $(this);
       var elemGroup = othis.parents('.'+ STR_ITEM_GROUP +':eq(0)');
       var options = lay.options(elemGroup[0]);
+      var isAccordion = typeof othis.parents('.layui-menu').eq(0).attr('lay-accordion') === 'string';
 
       if(('isAllowSpread' in options) ? options.isAllowSpread : true){
-        thisModule.spread(elemGroup);
+        thisModule.spread(elemGroup, isAccordion);
       }
     });
     
