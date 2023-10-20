@@ -14,7 +14,7 @@ layui.use(function(){
   // 创建表格实例
   table.render({
     elem: '#ID-table-demo-editable',
-    url: '/static/2.8/json/table/edit.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    url: '/static/json/2/table/edit.json', // 此处为静态模拟数据，实际使用时需换成真实接口
     page: true,
     //,editTrigger: 'dblclick' // 触发编辑的事件类型（默认 click ）。 v2.7.0 新增，之前版本固定为单击触发
     css: [

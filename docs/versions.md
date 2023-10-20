@@ -5,7 +5,7 @@ toc: true
  
 # 更新日志
 
-<h2 class="layui-hide" lay-toc="{href: '/docs/2.8/versions.html', title: '2.8.x', hot: true}">
+<h2 class="layui-hide" lay-toc="{href: '/docs/2/versions.html', title: '2.8.x', hot: true}">
   2.8.x
 </h2>
 
@@ -488,7 +488,7 @@ toc: true
 </h2>
 
 从 `2.8.0-beta.1` 到 `rc.16`，经二十个预览版的持续迭代，Layui 终于迎来了：`2.8.0` 正式版。
-<br>同时，新域名下的 [新文档站](https://layui.dev) 也正式上线（导读：[Layui 新版文档站上线初衷](./@note/2.8/news.html)），新版文档亦开源在 [Github](https://github.com/layui/layui/tree/main/docs) 以供协同维护。
+<br>同时，新域名下的 [新文档站](https://layui.dev) 也正式上线（导读：[Layui 新版文档站上线初衷](/notes/2.8/news.html)），新版文档亦开源在 [Github](https://github.com/layui/layui/tree/main/docs) 以供协同维护。
 
 正是开发者们依然坚持的热爱，促使了 `Layui` 这一朴实的归来。
 
