@@ -5,7 +5,7 @@ toc: true
  
 # 更新日志
 
-<h2 class="layui-hide" lay-toc="{href: '/docs/2.8/versions.html', title: '2.8.x', hot: true}">
+<h2 class="layui-hide" lay-toc="{href: '/docs/2/versions.html', title: '2.8.x', hot: true}">
   2.8.x
 </h2>
 
@@ -13,8 +13,8 @@ toc: true
 
 
 <h2 id="2.8.18" class="ws-anchor">
-  2.8.18-beta
-  <span class="layui-badge-rim">2023-10-07</span>
+  2.8.18-rc.1
+  <span class="layui-badge-rim">2023-10-19</span>
 </h2>
 
 - #### form
@@ -30,24 +30,32 @@ toc: true
 - #### table
   - 新增 `complete` 属性，当数据接口请求完成后执行，无论成功还是失败均会触发 # 1379
   - 修复 `ignoreExport` 表头属性值效果与文档不符的问题 # I86DBY
-  - 修复 treeTable 组件 treeTable.setRowChecked 未逐层展开上级节点的问题 # 1385/I84RUT
+- #### treeTable
+  - 修复 `treeTable.setRowChecked()` 方法未逐层展开上级节点的问题 # 1385/I84RUT
 - #### upload
-  - 修复 `unified: true` 时的报错问题
-  - 优化 渲染入口逻辑，以解决因重复渲染导致的若干问题
-  - 优化 实例的 `reload` 方法，可更好地进行完整重载
+  - 修复 `unified: true` 时的报错问题 # 1391
+  - 优化 渲染入口逻辑，以解决因重复渲染导致的若干问题 # 1391
+  - 优化 实例的 `reload` 方法，可更好地进行完整重载 # 1391
+- #### dropdown / menu
+  - 新增 `accordion` 属性，开启手风琴效果（menu: 主容器设置 `lay-accordion` 属性） # 1397
+  - 新增 折叠展开动画效果 # 1397
 - #### laydate
-  - 优化 开启 `rangeLinked` 属性后，点击目标元素可重新渲染的问题
+  - 优化 开启 `rangeLinked` 属性后，点击目标元素可重新渲染的问题 # 1391
+- #### laypage
+  - 新增 `limitTemplet` 属性，用于自定义条目模板 # I80AHZ
+  - 新增 `skipText` 属性，用于自定义跳页区域文本 # I80AHZ
 - #### carousel
   - 优化 轮播切换时的动画效果 # 1378/I82STP
 - #### rate / slider
   - 优化 代码细节 # 1374
 - #### code
-  - 新增 `code` 属性，用于设置原始 code 值，优先级高于目标元素中的内容
-  - 优化 若干小问题
+  - 新增 `code` 属性，用于设置原始 code 值，优先级高于目标元素中的内容 # 1391
+  - 优化 预览区域显示效果 # 1398
+  - 优化 其他若干小问题 # 1391
 - #### 其他
   - 优化 `<hr>` 全局样式优先级 # I86R6G
 
-### 下载： [layui-v2.8.18.1-beta.zip](https://gitee.com/layui/layui/attach_files/1553466/download)
+### 下载： [layui-v2.8.18.rc.1.zip](https://gitee.com/layui/layui/attach_files/1558085/download)
 
 ---
 
@@ -480,7 +488,7 @@ toc: true
 </h2>
 
 从 `2.8.0-beta.1` 到 `rc.16`，经二十个预览版的持续迭代，Layui 终于迎来了：`2.8.0` 正式版。
-<br>同时，新域名下的 [新文档站](https://layui.dev) 也正式上线（导读：[Layui 新版文档站上线初衷](./@note/2.8/news.html)），新版文档亦开源在 [Github](https://github.com/layui/layui/tree/main/docs) 以供协同维护。
+<br>同时，新域名下的 [新文档站](https://layui.dev) 也正式上线（导读：[Layui 新版文档站上线初衷](/notes/2.8/news.html)），新版文档亦开源在 [Github](https://github.com/layui/layui/tree/main/docs) 以供协同维护。
 
 正是开发者们依然坚持的热爱，促使了 `Layui` 这一朴实的归来。
 

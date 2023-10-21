@@ -175,6 +175,36 @@
 </td>
     </tr>
     <tr>
+<td>limitTemplet <sup>2.8.18+</sup></td>
+<td>
+
+用于自定义条目模板，如：
+
+```
+limitTemplet: function(item) {
+  return item + ' / page';
+}
+```
+
+</td>
+<td>function</td>
+<td>-</td>
+    </tr>
+    <tr>
+<td>skipText <sup>2.8.18+</sup></td>
+<td>
+
+用于自定义跳页区域文本，如：
+
+```
+skipText: ['Go to', '', 'Confirm']
+```
+
+</td>
+<td>array</td>
+<td>-</td>
+    </tr>
+    <tr>
 <td>theme</td>
 <td>
   

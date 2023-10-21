@@ -1201,7 +1201,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-menu li,
 .layui-menu-body-title,
 .layui-menu-body-title a{padding: 5px 15px; color: initial}
-.layui-menu li{position: relative; margin: 1px 0; line-height: 26px; color: rgba(0,0,0,.8); font-size: 14px; white-space: nowrap; cursor: pointer; transition: all .3s;}
+.layui-menu li{position: relative; margin: 0 0 1px; line-height: 26px; color: rgba(0,0,0,.8); font-size: 14px; white-space: nowrap; cursor: pointer; transition: all .3s;}
 .layui-menu li:hover{background-color: #f8f8f8; }
 .layui-menu li.layui-disabled,
 .layui-menu li.layui-disabled *{background: none !important; color: #d2d2d2 !important; cursor: not-allowed !important;}
@@ -1224,6 +1224,8 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-menu .layui-menu-item-down:hover{cursor: pointer;}
 .layui-menu .layui-menu-item-up>.layui-menu-body-title{ color: rgba(0,0,0,.8);}
 .layui-menu .layui-menu-item-up>ul{visibility: hidden; height: 0; overflow: hidden;}
+.layui-menu .layui-menu-item-down>.layui-menu-body-title>.layui-icon-down{transform: rotate(180deg);}
+.layui-menu .layui-menu-item-up>.layui-menu-body-title>.layui-icon-up{transform: rotate(-180deg);}
 .layui-menu .layui-menu-item-up>.layui-menu-body-title:hover>.layui-icon,
 .layui-menu .layui-menu-item-down:hover>.layui-menu-body-title>.layui-icon{color: rgba(0,0,0,1);}
 .layui-menu .layui-menu-item-down>ul{visibility: visible; height: auto;}
@@ -1237,7 +1239,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-menu-body-title{position: relative; margin: -5px -15px; overflow: hidden; text-overflow: ellipsis;}
 .layui-menu-body-title a{display: block; margin: -5px -15px; color: rgba(0,0,0,.8);}
 .layui-menu-body-title a:hover{transition: all .3s;}
-.layui-menu-body-title>.layui-icon{position: absolute; right: 15px; top: 50%; margin-top: -6px; line-height: normal; font-size: 14px;}
+.layui-menu-body-title>.layui-icon{position: absolute; right: 15px; top: 50%; margin-top: -6px; line-height: normal; font-size: 14px; transition: all .2s; -webkit-transition: all .2s;}
 .layui-menu-body-title>.layui-icon:hover{transition: all .3s;}
 .layui-menu-body-title>.layui-icon-right{right: 14px;}
 .layui-menu-body-panel{display: none; position: absolute; top: -7px; left: 100%; z-index: 1000; margin-left: 13px; padding: 5px 0;}

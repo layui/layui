@@ -102,7 +102,8 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     isSpreadItem: true, // 是否初始展开子菜单
     data: [], // 菜单数据结构
     delay: 300, // 延迟关闭的毫秒数，若 trigger 为 hover 时才生效
-    shade: 0 // 遮罩
+    shade: 0, // 遮罩
+    accordion: false // 手风琴效果，仅菜单组生效。基础菜单需要在容器上追加 'lay-accordion' 属性。
   };
   
   // 重载实例
@@ -343,12 +344,12 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     
     // 触发菜单组展开收缩
     that.elemView.find(STR_GROUP_TITLE).on('click', function(e){
-      var othis = $(this)
-      ,elemGroup = othis.parent()
-      ,data = elemGroup.data('item') || {}
+      var othis = $(this);
+      var elemGroup = othis.parent();
+      var data = elemGroup.data('item') || {};
       
       if(data.type === 'group' && options.isAllowSpread){
-        thisModule.spread(elemGroup);
+        thisModule.spread(elemGroup, options.accordion);
       }
     });
 
@@ -442,17 +443,32 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   };
   
   // 设置菜单组展开和收缩状态
-  thisModule.spread = function(othis){
-    // 菜单组展开和收缩
+  thisModule.spread = function(othis, isAccordion){
     var needSpread = othis.hasClass(STR_ITEM_UP);
-    var elemIcon = othis.children('.'+ STR_MENU_TITLE).find('.layui-icon-' + (needSpread ? 'down' : 'up'));
-    if(needSpread){
-      othis.removeClass(STR_ITEM_UP).addClass(STR_ITEM_DOWN);
-      elemIcon.removeClass('layui-icon-down').addClass('layui-icon-up');
-    } else {
-      othis.removeClass(STR_ITEM_DOWN).addClass(STR_ITEM_UP);
-      elemIcon.removeClass('layui-icon-up').addClass('layui-icon-down');
+
+    var toggle = function (groupElem, isOpen) {
+      var contentElem = groupElem.children('ul');
+      var contentHeight = contentElem[0].scrollHeight;
+
+      if(contentElem.is(':animated')) return;
+
+      groupElem.removeClass(isOpen ? STR_ITEM_UP : STR_ITEM_DOWN).addClass(isOpen ? STR_ITEM_DOWN : STR_ITEM_UP);
+      contentElem.height(isOpen ? 0 : contentHeight)
+        .stop()
+        .animate({
+          opacity: isOpen ? 1 : 0, 
+          height: isOpen ? contentHeight : 0
+        }, 200, function(){
+          contentElem.css({ height: '', opacity: '' })
+        })
     }
+
+    toggle(othis, needSpread);
+
+    if (!needSpread || !isAccordion) return;
+    layui.each(othis.siblings('.' + STR_ITEM_DOWN), function(index, item){
+      toggle($(item), false);
+    })
   };
   
   // 全局事件
@@ -535,9 +551,10 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       var othis = $(this);
       var elemGroup = othis.parents('.'+ STR_ITEM_GROUP +':eq(0)');
       var options = lay.options(elemGroup[0]);
+      var isAccordion = typeof othis.parents('.layui-menu').eq(0).attr('lay-accordion') === 'string';
 
       if(('isAllowSpread' in options) ? options.isAllowSpread : true){
-        thisModule.spread(elemGroup);
+        thisModule.spread(elemGroup, isAccordion);
       }
     });
     
