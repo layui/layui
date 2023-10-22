@@ -307,11 +307,14 @@ layui.define('jquery', function(exports){
           parent[needExpand ? 'addClass': 'removeClass'](NAV_EXPAND);
           // 手风琴
           if(typeof parents.attr('lay-accordion') === 'string' || parents.attr('lay-shrink') === 'all'){
-            // 收缩兄弟项
-            parent.siblings().removeClass([
+            // 收缩展开的兄弟项
+            parent.siblings([
+              '.' + NAV_ITEMED,
+              '.' + NAV_EXPAND
+            ].join(',')).removeClass([
               NAV_ITEMED,
               NAV_EXPAND
-            ].join(' ')).children('.'+NAV_CHILD).stop().slideUp(200);
+            ].join(' ')).children('.'+NAV_CHILD).css('display', 'block').stop().slideUp(200);
           }
         }
       }
