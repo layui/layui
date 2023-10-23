@@ -1306,7 +1306,7 @@ var skin = function(type){
  
 // 仿系统 prompt
 layer.prompt = function(options, yes){
-  var style = '', placeholder = '';
+  var style = '', placeholder = '', autocomplete = '';
   options = options || {};
   
   if(typeof options === 'function') yes = options;
@@ -1319,8 +1319,12 @@ layer.prompt = function(options, yes){
   if (options.placeholder) {
     placeholder = ' placeholder="' + options.placeholder + '"';
   }
-  var prompt, content = options.formType == 2 ? '<textarea class="layui-layer-input"' + style + placeholder + '></textarea>' : function () {
-    return '<input type="' + (options.formType == 1 ? 'password' : 'text') + '" class="layui-layer-input"' + placeholder + '>';
+  // 自动完成
+  if (options.autocomplete) {
+    autocomplete = ' autocomplete="' + options.autocomplete + '"';
+  }
+  var prompt, content = options.formType == 2 ? '<textarea class="layui-layer-input"' + style + placeholder + autocomplete + '></textarea>' : function () {
+    return '<input type="' + (options.formType == 1 ? 'password' : 'text') + '" class="layui-layer-input"' + placeholder + autocomplete + '>';
   }();
   
   var success = options.success;
