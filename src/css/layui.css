@@ -636,6 +636,15 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-border-purple{border-width: 1px; border-style: solid; border-color: #a233c6!important; color: #a233c6!important;}
 .layui-border-black{border-width: 1px; border-style: solid; border-color: #2f363c!important; color: #2f363c!important;}
 
+/* 分割线边框 */
+hr.layui-border-red,
+hr.layui-border-orange,
+hr.layui-border-green,
+hr.layui-border-cyan,
+hr.layui-border-blue,
+hr.layui-border-purple,
+hr.layui-border-black{border-width: 0 0 1px;}
+
 /* 背景边框 */
 .layui-timeline-item:before{background-color: #eee;}
 
