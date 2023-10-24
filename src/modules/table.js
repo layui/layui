@@ -1594,7 +1594,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       checkbox: 'layTableCheckbox'
     }[opts.type] || 'checkbox') +'"]:not(:disabled)');
 
-    checkedElem.prop('checked', getChecked(checkedElem.last().prop('checked')));
+    var checkedSameElem = checkedElem.last();
+    if (opts.type === 'radio' && checkedSameElem.parents(ELEM_FIXR)[0]) {
+      if (checkedSameElem.parents(ELEM_FIXR).hasClass('layui-hide')) {
+        checkedSameElem = checkedElem.first();
+      }
+      checkedSameElem.prop('checked', true);
+    } else {
+      checkedElem.prop('checked', getChecked(checkedSameElem.prop('checked')));
+    }
 
     that.syncCheckAll();
     that.renderForm(opts.type);
