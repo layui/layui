@@ -273,45 +273,62 @@ layui.define('jquery', function(exports){
     */
     
     // 点击菜单 - a 标签触发
-    ,clickThis: function(){
+    ,clickThis: function() {
       var othis = $(this);
-      var parents = othis.parents(NAV_ELEM);
+      var parents = othis.closest(NAV_ELEM);
       var filter = parents.attr('lay-filter');
       var parent = othis.parent() ;
-      var child = othis.siblings('.'+NAV_CHILD);
+      var child = othis.siblings('.'+ NAV_CHILD);
       var unselect = typeof parent.attr('lay-unselect') === 'string'; // 是否禁用选中
       
-      if(!(othis.attr('href') !== 'javascript:;' && othis.attr('target') === '_blank') && !unselect){
-        if(!child[0]){
-          parents.find('.'+THIS).removeClass(THIS);
+      // 满足点击选中的条件
+      if (!(othis.attr('href') !== 'javascript:;' && othis.attr('target') === '_blank') && !unselect) {
+        if (!child[0]) {
+          parents.find('.'+ THIS).removeClass(THIS);
           parent.addClass(THIS);
         }
       }
       
       // 若为垂直菜单
       if (parents.hasClass(NAV_TREE)) {
-        var NAV_ITEMED = NAV_ITEM + 'ed';
-        var NAV_EXPAND = 'layui-nav-expand';
-        var needExpand = !(parent.hasClass(NAV_EXPAND) || parent.hasClass(NAV_ITEMED));
+        var NAV_ITEMED = NAV_ITEM + 'ed'; // 用于标注展开状态
+        var needExpand = !parent.hasClass(NAV_ITEMED); // 是否执行展开
+        var ANIM_MS = 200; // 动画过渡毫秒数
+
+        // 动画执行完成后的操作
+        var complete = function() {
+          $(this).css({
+            "display": "" // 剔除动画生成的 style display，以适配外部样式的状态重置
+          });
+          // 避免导航滑块错位
+          parents.children('.'+ NAV_BAR).css({
+            opacity: 0
+          })
+        };
 
         // 是否正处于动画中的状态
         if (child.is(':animated')) return;
 
+        // 剔除可能存在的 CSS3 动画类
         child.removeClass(NAV_ANIM);
 
-        // 若有子菜单，则展开
+        // 若有子菜单，则对其执行展开或收缩
         if (child[0]) {
-          child.stop().slideToggle(200, function() {
-            needExpand || parent.removeClass(NAV_ITEMED);
-          });
-          parent[needExpand ? 'addClass': 'removeClass'](NAV_EXPAND);
-          // 手风琴
-          if(typeof parents.attr('lay-accordion') === 'string' || parents.attr('lay-shrink') === 'all'){
-            // 收缩兄弟项
-            parent.siblings().removeClass([
-              NAV_ITEMED,
-              NAV_EXPAND
-            ].join(' ')).children('.'+NAV_CHILD).stop().slideUp(200);
+          if (needExpand) {
+            // 先执行 slideDown 动画，再标注展开状态样式，避免元素 `block` 状态导致动画无效
+            child.slideDown(ANIM_MS, complete);
+            parent.addClass(NAV_ITEMED);
+          } else {
+            // 先取消展开状态样式，再将元素临时显示，避免 `none` 状态导致 slideUp 动画无效
+            parent.removeClass(NAV_ITEMED);
+            child.show().slideUp(ANIM_MS, complete);
+          }
+
+          // 手风琴 --- 收缩兄弟展开项
+          if (typeof parents.attr('lay-accordion') === 'string' || parents.attr('lay-shrink') === 'all') {
+            var parentSibs = parent.siblings('.'+ NAV_ITEMED);
+            parentSibs.removeClass(NAV_ITEMED);
+            parentSibs.children('.'+ NAV_CHILD).show().stop().slideUp(ANIM_MS, complete);
           }
         }
       }
