@@ -357,56 +357,65 @@ layui.define('jquery', function(exports){
         call.tabAuto.call({});
       }
       
-      //导航菜单
+      // 导航菜单
       ,nav: function(){
-        var TIME = 200, timer = {}, timerMore = {}, timeEnd = {}, NAV_TITLE = 'layui-nav-title'
+        var TIME = 200;
+        var timer = {};
+        var timerMore = {};
+        var timeEnd = {};
+        var NAV_TITLE = 'layui-nav-title';
         
-        //滑块跟随
-        ,follow = function(bar, nav, index){
-          var othis = $(this), child = othis.find('.'+NAV_CHILD);
-          if(nav.hasClass(NAV_TREE)){
-            //无子菜单时跟随
-            if(!child[0]){
+        // 滑块跟随
+        var follow = function(bar, nav, index) {
+          var othis = $(this);
+          var child = othis.find('.'+NAV_CHILD);
+
+          // 是否垂直导航菜单
+          if (nav.hasClass(NAV_TREE)) {
+            // 无子菜单时跟随
+            if (!child[0]) {
               var thisA = othis.children('.'+ NAV_TITLE);
               bar.css({
-                top: othis.offset().top - nav.offset().top
-                ,height: (thisA[0] ? thisA : othis).outerHeight()
-                ,opacity: 1
+                top: othis.offset().top - nav.offset().top,
+                height: (thisA[0] ? thisA : othis).outerHeight(),
+                opacity: 1
               });
             }
           } else {
             child.addClass(NAV_ANIM);
             
-            //若居中对齐
-            if(child.hasClass(NAV_CHILD_C)) child.css({
-              left: -(child.outerWidth() - othis.width())/2
-            });
-            
-            //滑块定位
-            if(child[0]){ //若有子菜单，则滑块消失
-              bar.css({
-                left: bar.position().left + bar.width()/2
-                ,width: 0
-                ,opacity: 0
-              });
-            } else { //bar 跟随
-              bar.css({
-                left: othis.position().left + parseFloat(othis.css('marginLeft'))
-                ,top: othis.position().top + othis.height() - bar.height()
+            // 若居中对齐
+            if (child.hasClass(NAV_CHILD_C)) {
+              child.css({
+                left: -(child.outerWidth() - othis.width()) / 2
               });
             }
             
-            //渐显滑块并适配宽度
-            timer[index] = setTimeout(function(){
+            // 滑块定位
+            if (child[0]) { // 若有子菜单，则滑块消失
               bar.css({
-                width: child[0] ? 0 : othis.width()
-                ,opacity: child[0] ? 0 : 1
+                left: bar.position().left + bar.width() / 2,
+                width: 0,
+                opacity: 0
+              });
+            } else { // bar 跟随
+              bar.css({
+                left: othis.position().left + parseFloat(othis.css('marginLeft')),
+                top: othis.position().top + othis.height() - bar.height()
+              });
+            }
+            
+            // 渐显滑块并适配宽度
+            timer[index] = setTimeout(function() {
+              bar.css({
+                width: child[0] ? 0 : othis.width(),
+                opacity: child[0] ? 0 : 1
               });
             }, device.ie && device.ie < 10 ? 0 : TIME);
             
-            //显示子菜单
+            // 显示子菜单
             clearTimeout(timeEnd[index]);
-            if(child.css('display') === 'block'){
+            if (child.css('display') === 'block') {
               clearTimeout(timerMore[index]);
             }
             timerMore[index] = setTimeout(function(){
@@ -416,61 +425,64 @@ layui.define('jquery', function(exports){
           }
         };
         
-        //遍历导航
-        $(NAV_ELEM + elemFilter).each(function(index){
-          var othis = $(this)
-          ,bar = $('<span class="'+ NAV_BAR +'"></span>')
-          ,itemElem = othis.find('.'+NAV_ITEM);
+        // 遍历导航
+        $(NAV_ELEM + elemFilter).each(function(index) {
+          var othis = $(this);
+          var bar = $('<span class="'+ NAV_BAR +'"></span>');
+          var itemElem = othis.find('.'+NAV_ITEM);
           
-          //hover 滑动效果
-          if(!othis.find('.'+NAV_BAR)[0]){
+          // hover 滑动效果
+          if (!othis.find('.'+NAV_BAR)[0]) {
             othis.append(bar);
-            (othis.hasClass(NAV_TREE) 
+            ( othis.hasClass(NAV_TREE)
               ? itemElem.find('dd,>.'+ NAV_TITLE) 
-            : itemElem).on('mouseenter', function(){
+              : itemElem
+            ).on('mouseenter', function() {
               follow.call(this, bar, othis, index);
-            }).on('mouseleave', function(){ //鼠标移出
-              //是否为垂直导航
-              if(othis.hasClass(NAV_TREE)){
+            }).on('mouseleave', function() { // 鼠标移出
+              // 是否为垂直导航
+              if (othis.hasClass(NAV_TREE)) {
                 bar.css({
-                  height: 0
-                  ,opacity: 0
+                  height: 0,
+                  opacity: 0
                 });
               } else {
-                //隐藏子菜单
+                // 隐藏子菜单
                 clearTimeout(timerMore[index]);
                 timerMore[index] = setTimeout(function(){
-                  othis.find('.'+NAV_CHILD).removeClass(SHOW);
-                  othis.find('.'+NAV_MORE).removeClass(NAV_MORE+'d');
+                  othis.find('.'+ NAV_CHILD).removeClass(SHOW);
+                  othis.find('.'+ NAV_MORE).removeClass(NAV_MORE +'d');
                 }, 300);
               }
             });
-            othis.on('mouseleave', function(){
+
+            // 鼠标离开当前菜单时
+            othis.on('mouseleave', function() {
               clearTimeout(timer[index])
-              timeEnd[index] = setTimeout(function(){
-                if(!othis.hasClass(NAV_TREE)){
+              timeEnd[index] = setTimeout(function() {
+                if (!othis.hasClass(NAV_TREE)) {
                   bar.css({
-                    width: 0
-                    ,left: bar.position().left + bar.width()/2
-                    ,opacity: 0
+                    width: 0,
+                    left: bar.position().left + bar.width() / 2,
+                    opacity: 0
                   });
                 }
               }, TIME);
             });
           }
           
-          //展开子菜单
-          itemElem.find('a').each(function(){
-            var thisA = $(this)
-            ,parent = thisA.parent()
-            ,child = thisA.siblings('.'+NAV_CHILD);
+          // 展开子菜单
+          itemElem.find('a').each(function() {
+            var thisA = $(this);
+            var parent = thisA.parent();
+            var child = thisA.siblings('.'+ NAV_CHILD);
             
-            //输出小箭头
-            if(child[0] && !thisA.children('.'+NAV_MORE)[0]){
+            // 输出小箭头
+            if (child[0] && !thisA.children('.'+ NAV_MORE)[0]) {
               thisA.append('<i class="layui-icon '+ NAV_DOWN +' '+ NAV_MORE +'"></i>');
             }
             
-            thisA.off('click', call.clickThis).on('click', call.clickThis); //点击菜单
+            thisA.off('click', call.clickThis).on('click', call.clickThis); // 点击菜单
           });
         });
       }
