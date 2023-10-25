@@ -38,7 +38,7 @@ layui.use(function(){
   // 创建表格实例
   table.render({
     elem: '#ID-table-demo-search',
-    url: '/static/2.8/json/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    url: '/static/json/2/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
     cols: [[
       {type: 'radio', title: '😊', fixed: true}, // 单选框
       {field:'id', title: 'ID', width:80, sort: true, fixed: true},
