@@ -13,8 +13,8 @@ toc: true
 
 
 <h2 id="2.8.18" class="ws-anchor">
-  2.8.18-rc.1
-  <span class="layui-badge-rim">2023-10-19</span>
+  2.8.18-rc.2
+  <span class="layui-badge-rim">2023-10-25</span>
 </h2>
 
 - #### form
@@ -31,6 +31,7 @@ toc: true
   - 新增 `complete` 属性，当数据接口请求完成后执行，无论成功还是失败均会触发 # 1379
   - 修复 `ignoreExport` 表头属性值效果与文档不符的问题 # I86DBY
 - #### treeTable
+  - 修复 `treeTable.removeNode()` 在开启 `data` 模式时删除异常问题 # I7Z0A/I82E2S
   - 修复 `treeTable.setRowChecked()` 方法未逐层展开上级节点的问题 # 1385/I84RUT
 - #### upload
   - 修复 `unified: true` 时的报错问题 # 1391
@@ -53,9 +54,11 @@ toc: true
   - 优化 预览区域显示效果 # 1398
   - 优化 其他若干小问题 # 1391
 - #### 其他
+  - 新增 Source Maps 支持  # 1404/I89W5P
+  - 新增 lay 模块部分函数 JSDoc 注释和示例 #1401
   - 优化 `<hr>` 全局样式优先级 # I86R6G
 
-### 下载： [layui-v2.8.18.rc.1.zip](https://gitee.com/layui/layui/attach_files/1558085/download)
+### 下载： [layui-v2.8.18.rc.2.zip](https://gitee.com/layui/layui/attach_files/1563717/download)
 
 ---
 
