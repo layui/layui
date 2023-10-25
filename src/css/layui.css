@@ -1285,7 +1285,6 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 
 .layui-nav .layui-nav-more{position: absolute; top: 0; right: 3px; left: auto !important; margin-top: 0; font-size: 12px; cursor: pointer; transition: all .2s; -webkit-transition: all .2s;}
 .layui-nav .layui-nav-mored,
-.layui-nav-expand > a .layui-nav-more,
 .layui-nav-itemed > a .layui-nav-more{transform: rotate(180deg);}
 
 
@@ -1333,12 +1332,9 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 /* 导航浅色背景 */
 .layui-nav.layui-bg-gray .layui-nav-item a,
 .layui-nav-tree.layui-bg-gray a{color: #373737; color: rgba(0,0,0,.8);}
-.layui-nav-tree.layui-bg-gray{padding: 6px 0;}
 .layui-nav-tree.layui-bg-gray .layui-nav-itemed>a{color: #000 !important;}
 .layui-nav.layui-bg-gray .layui-this a{color: #16b777;}
 .layui-nav-tree.layui-bg-gray .layui-nav-child{padding-left: 11px; background: none;}
-.layui-nav-tree.layui-bg-gray .layui-nav-item>a{padding-top: 0; padding-bottom: 0;}
-.layui-nav-tree.layui-bg-gray .layui-nav-item>a .layui-nav-more{padding: 0;}
 .layui-nav-tree.layui-bg-gray .layui-this,
 .layui-nav-tree.layui-bg-gray .layui-this>a,
 .layui-nav-tree.layui-bg-gray .layui-nav-child dd.layui-this,
