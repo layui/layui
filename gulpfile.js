@@ -63,8 +63,7 @@ const js = () => {
 // css
 const css = () => {
   let src = [
-    './src/css/layui.css',
-    './src/css/modules/**/*.css',
+    './src/css/**/{layui,*}.css'
   ];
   return gulp.src(src)
   .pipe(sourcemaps.init())
@@ -85,7 +84,19 @@ const files = () => {
 
 // cp
 const cp = () => {
-  return gulp.src('./dist/**/*')
+  const basePath = './dist/**/*';
+
+  // 复制 css js
+  gulp.src(`${basePath}.{css,js}`)
+  .pipe(replace(/\n\/(\*|\/)\#[\s\S]+$/, '')) // 过滤 css 和 js 的 map 特定注释
+  .pipe(gulp.dest(dest));
+
+  // 复制其他文件
+  return gulp.src([
+    basePath,
+    `!${basePath}.{css,js,map}` // 过滤 map 文件
+  ])
+  .pipe(replace(/\n\/(\*|\/)\#[\s\S]+$/, '')) // 过滤 css 和 js 的 map 特定注释
   .pipe(gulp.dest(dest));
 };
   
