@@ -17,6 +17,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   var SHOW = 'layui-show';
   var HIDE = 'layui-hide';
   var DISABLED = 'layui-disabled';
+  var OUT_OF_RANGE = 'layui-input-out-of-range';
   
   var Form = function(){
     this.config = {
@@ -174,7 +175,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         // 初始化全局的 autocomplete
         options.autocomplete && inputs.attr('autocomplete', options.autocomplete);
 
-        var handleInputNumberEvents = function(elem, eventType){
+        var handleInputNumber = function(elem, eventType){
           var that = this;
           var rawValue = elem.val();
           var value = Number(rawValue);
@@ -182,7 +183,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var min = Number(elem.attr('min'));
           var max = Number(elem.attr('max'));
           var precision = Number(elem.attr('lay-precision'));
-          var noAction = eventType === 'blur' && rawValue === '' // 失焦时空值不作处理
+          var noAction = eventType !== 'click' && rawValue === ''; // 初始渲染和失焦时空值不作处理
 
           if(isNaN(value)) return; // 若非数字，则不作处理
 
@@ -200,12 +201,18 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           precision = precision >= 0 ? precision : Math.max(decimals(step), decimals(rawValue));
 
           if(!noAction){
-            if(value <= min) value = min;
-            if(value >= max) value = max;
+            // 初始渲染时只处理数字精度
+            if(eventType !== 'init'){
+              if(value <= min) value = min;
+              if(value >= max) value = max;
+            }
             if(precision) value = value.toFixed(precision);
-  
-            elem.val(value) 
+            elem.val(value);
           }
+
+          // 超出范围的样式
+          var outOfRange = value < min || value > max;
+          elem[outOfRange && !noAction ? 'addClass' : 'removeClass'](OUT_OF_RANGE);
 
           // 更新按钮状态
           var controlBtn = {
@@ -285,6 +292,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
             opts.show === 'auto' && showAffix(elemAffix, othis.val());
             
+            typeof opts.init === 'function' && opts.init.call(this, othis, opts);
+            
             // 输入事件
             othis.on('input propertychange', function(){
               var value = this.value;
@@ -341,11 +350,14 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               split: true,
               className: 'layui-input-number',
               disabled: othis.is('[disabled]'), // 跟随输入框禁用状态
+              init: function(elem){
+                handleInputNumber.call(this, elem, 'init')
+              },
               click: function(elem){
-                handleInputNumberEvents.call(this, elem, 'click')
+                handleInputNumber.call(this, elem, 'click')
               },
               blur: function(elem){
-                handleInputNumberEvents.call(this, elem, 'blur')
+                handleInputNumber.call(this, elem, 'blur')
               },
             }
           };
