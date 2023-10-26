@@ -406,7 +406,208 @@ layui.define('jquery', function(exports){
       _body.on(eventType, '*['+ attr +']', util.event.UTIL_EVENT_CALLBACK[attr]);
 
       return obj;
-    }
+    },
+
+    // 类型判断： 判断传入的参数是不是数组类型
+    isArray: function(o){
+      return Object.prototype.toString.call(o) === "[object Array]";
+    },
+
+    // 类型判断： 判断传入的参数是不是String类型
+    isString: function(o){ 
+      return Object.prototype.toString.call(o) === "[object String]";
+    },
+
+    // 类型判断： 判断传入的参数是不是Function类型
+    isFunction: function(o){
+      return Object.prototype.toString.call(o) === "[object Function]";
+    },
+
+    // 类型判断： 判断传入的参数是不是Date类型
+    isDate: function(o) { 
+      return Object.prototype.toString.call(o) === "[object Date]";
+    },
+
+    // 类型判断： 判断传入的参数是不是Object类型
+    isObject: function(o){ 
+      return Object.prototype.toString.call(o) === "[object Object]";
+    },
+    
+    // 类型判断： 判断传入的参数是不是RegExp类型
+    isRegExp: function(o){ 
+      return Object.prototype.toString.call(o) === "[object RegExp]";
+    },
+
+    /**
+     * 遍历数组 or 对象 (这个回调函数的返回值对遍历没得影响)
+     * @param {*} o  Object   数组 or 对象
+     * @param {*} cb CallBack 回调函数
+     * @desc
+     * 
+     *    - 这个方法类似于{@linkplain layui.each 遍历},只是习惯了使用这个each方法
+     *    - 回调函数的第一个参数是遍历的值 value; 第二个参数是遍历的下标或key key; 第三个参数是遍历的原始对象 o
+     */
+    each: function(o, cb){
+      let key;
+      //优先处理数组结构
+      if (util.isArray(o)) {
+        for (key = 0; key < o.length; key++) {
+          cb && util.isFunction(cb) && cb(o[key], key, o);
+        }
+      } else {
+        /**
+         * for ...  in...
+         * 遍历顺序不是从左到右的,数字key优先于字符串key
+         * -- 来自知识星球球友的提醒
+         */
+        for (key in o) {
+          cb && util.isFunction(cb) && cb(o[key], key, o);
+        }
+      }
+    },
+
+    /**
+     * 用标点符号将数组拼接起来
+     * @param {*} a Array  需要被遍历的数组
+     * @param {*} m Mark   起连接作用的标点符号
+     * @returns    拼接起来的字符串结果
+     */
+    join: function(a, m){
+      var res = "";
+      util.each(a, function(v){
+        res += String(v) + m;
+      });
+      // 去掉末尾的标点
+      if (res != "") res = res.substring(0, res.length - m.length);
+      return res;
+    },
+
+    /**
+     * 数组转换，返回回调值的数组。 返回的是一个全新的数组
+     * @param {*} a   Array  需要被遍历的数组
+     * @param {*} cb  CallBack 回调函数
+     * @returns  新的数组
+     * @desc 
+     *    返回的是新的数组,数组的元素是回调函数的返回值
+     */
+    map: function(a, cb){
+      var res = [];
+      util.each(a, function (v, k) {
+        if (cb && util.isFunction(cb)) {
+          res.push(cb(v, k, a));
+        }
+      });
+      return res;
+    },
+
+    /**
+     * 遍历数组 or 对象 直到迭代回调函数返回false 或者 迭代结束
+     * 与上面的遍历不同
+     * @param {*} o   Object   数组 or 对象
+     * @param {*} cb  CallBack 回调函数
+     * @returns
+     * @desc
+     *    回调函数返回false,遍历结束
+     */
+    every: function(o, cb) {
+      let key;
+      //优先处理数组结构
+      if (util.isArray(o)) {
+        for (key = 0; key < o.length; key++) {
+          if (cb && util.isFunction(cb)) {
+            if (cb(o[key], key, o) === false) break;
+          }
+        }
+      } else {
+        for (key in o) {
+          if (cb && util.isFunction(cb)) {
+            if (cb(o[key], key, o) === false) break;
+          }
+        }
+      }
+    },
+
+    /**
+     *  数组过滤，返回回调为true的数组。 返回的是一个全新的数组
+     * @param {*} o   数组对象
+     * @param {*} cb  回调函数
+     * @returns
+     */
+    filter: function(o, cb){
+      var res = [];
+      util.each(o, function (v, k) {
+        if (cb && util.isFunction(cb)) {
+          if (cb(v, k, o)) res.push(v);
+        }
+      });
+      return res;
+    },
+
+    /**
+     * 返回 值位于 数组 or 字符串 的下标
+     * @param {*} a  数组 or 字符串
+     * @param {*} v  待判断的值, 可以是单个字符，也可以是一个字符串
+     * @returns      下标
+     */
+    indexOf: function(a, v){
+      let index = -1;
+      util.every(a, (a1, i) => {
+        if (a1 == v) {
+          index = i;
+          return false;
+        }
+      });
+      return index;
+    },
+
+    /**
+     * @method  深拷贝
+     * @param {*} o
+     */
+    cloneDeep: function (o) {
+      var res;
+      switch (typeof o) {
+        case "undefined":
+          break;
+        case "string":
+          res = o + "";
+          break;
+        case "boolean":
+          res = !!o;
+          break;
+        case "number":
+          res = o + 0;
+          break;
+        case "object":
+          if (o == null) {
+            res = null;
+          } else {
+            if (util.isArray(o)) {
+              res = [];
+              util.each(o, (v) => res.push(util.cloneDeep(v)));
+            } else if (util.isDate(o)) {
+              res = new Date();
+              res.setTime(o.getTime());
+            } else if (util.isObject(o)) {
+              res = {};
+              util.each(o, (v, k) => {
+                res[k] = util.cloneDeep(v);
+              });
+            } else if (util.isRegExp(o)) {
+              res = new RegExp(o);
+            } else {
+              res = o;
+            }
+          }
+          break;
+        default:
+          res = o;
+          break;
+      }
+      return res;
+    },
+
+
   };
 
   util.on = util.event;

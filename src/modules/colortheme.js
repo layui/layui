@@ -1,10 +1,22 @@
-layui.define(["jquery", "layer"],function (exports) {
+layui.define(["jquery", "util", "layer"],function (exports) {
 
   // 初始化jQuery
   if (!window.$) window.$ = layui.$;
 
   /**
+   * 初始化 colortheme 使用 layui.data 存储时的key值
+   * 后期可以通过
+   * layui.config({themeKey:'XXX'});layui.config({themeConfigKey:'XXX'});
+   * 进行自定义,这里就不执行了,防止覆盖用户自定义的配置
+   */
+  // layui.config({themeKey:'layui-framework-theme'});
+  // layui.config({themeConfigKey:'layui-framework-theme-config'});
+
+  /**
    * 颜色配置项,生成弹层的时候调用展示颜色的名称
+   * key - 是css变量的名称
+   * name - 是这个颜色的名称,作为表单的label
+   * desc - 详细信息,展示在每个表单行上面,作为名称的补充说明
    */
   const COLOR_OPTION = {
     "--lay-framework-main-bgColor": {
@@ -271,7 +283,7 @@ layui.define(["jquery", "layer"],function (exports) {
   };
 
   /**
-   * 主题色集合
+   * 主题色集合(classicBlackHeader 黑色的主题重新配置了layui默认的颜色,其它的会保留 {@linkplain LAYUI_DEFAULT_COLOR 默认配置})
    */
   const themeConfig = {
     default: {
@@ -362,92 +374,12 @@ layui.define(["jquery", "layer"],function (exports) {
   };
 
   /**
-   * @global
-   * @description
-   *
-   *    如果没有监测到引入了lodash，但是实际需要使用它里面的好些方法。这里将这些方法补全，防止报错。
-   *    但是会覆盖 _ 这个命名,这里使用_lodash这个命名来替换
+   * 创建最后exports到layui中的对象
    */
-  function buildLodash() {
-    const handler = {
-      /**
-       * @method  类型判断： 判断传入的参数是不是数组类型
-       * @param {*} o    待判断的对象
-       * @returns  true  是数组对象   false  不是数组对象
-       */
-      isArray: (o) => Object.prototype.toString.call(o) === "[object Array]",
-      /**
-       * @method  类型判断： 判断传入的参数是不是Function类型
-       * @param {*} o 待判断的对象
-       * @returns  true  是Function对象   false  不是Function对象
-       */
-      isFunction: (o) =>
-        Object.prototype.toString.call(o) === "[object Function]",
-      /**
-       * 遍历数组 or 对象(这个回调函数的返回值对遍历没得影响)
-       * @param {*} o   数组 or 对象
-       * @param {*} cb  回调函数
-       *   arg0   遍历值
-       *   arg1   下标
-       *   arg2   数组or对象
-       */
-      each: (o, cb) => {
-        let key;
-        //优先处理数组结构
-        if (handler.isArray(o)) {
-          for (key = 0; key < o.length; key++) {
-            cb && handler.isFunction(cb) && cb(o[key], key, o);
-          }
-        } else {
-          /**
-           * for ...  in...
-           * 遍历顺序不是从左到右的,数字key优先与字符串key
-           * -- 来自知识星球球友的提醒
-           */
-          for (key in o) {
-            cb && handler.isFunction(cb) && cb(o[key], key, o);
-          }
-        }
-      },
-      /**
-       * 用标点符号将数组拼接起来
-       * @param {*} a  数组
-       * @param {*} m  拼接字符
-       * @returns
-       */
-      join: (a, m) => {
-        var res = "";
-        handler.each(a, (v) => {
-          res += String(v) + m;
-        });
-        if (res != "") res = res.substring(0, res.length - m.length);
-        return res;
-      },
-      /**
-       *  数组转换，返回回调值的数组。 返回的是一个全新的数组
-       * @param {*} o   数组对象
-       * @param {*} cb  回调函数
-       * @returns
-       */
-      map: (o, cb) => {
-        var res = [];
-        _lodash.each(o, function (v, k) {
-          if (cb && handler.isFunction(cb)) {
-            res.push(cb(v, k, o));
-          }
-        });
-        return res;
-      },
-    };
-    return handler;
-  }
-  // 引入自定义的lodash
-  if (!window._lodash) window._lodash = buildLodash();
-
   let handler = {
     // 缓存layui.data的key值
-    cacheKey: "layui-framework-theme",
-    configKey: "layui-framework-theme-config",
+    cacheKey: layui.cache.themeKey || "layui-framework-theme",
+    configKey: layui.cache.themeConfigKey || "layui-framework-theme-config",
     /**
      * 获取缓存配置信息
      */
@@ -473,9 +405,9 @@ layui.define(["jquery", "layer"],function (exports) {
      */
     initConfig: function () {
       handler.themeConfig = handler.getConfig() || themeConfig;
-      // bu全和替换成layui默认的颜色配置
-      _lodash.each(handler.themeConfig, (v) => {
-        _lodash.each(LAYUI_DEFAULT_COLOR, (value, key) => {
+      // 补全和替换成layui默认的颜色配置
+      layui.util.each(handler.themeConfig, (v) => {
+        layui.util.each(LAYUI_DEFAULT_COLOR, (value, key) => {
           if (v[key] == undefined) v[key] = value;
         });
       });
@@ -494,9 +426,11 @@ layui.define(["jquery", "layer"],function (exports) {
      */
     setTheme: function (key) {
       let _config = handler.themeConfig[key || handler.getTheme()];
-      _lodash.each(_config, (v, k) => {
+      layui.util.each(_config, (v, k) => {
+        // 遍历时 alias 属性不能用来设置css变量,简单判断下
         if (k != "alias") document.documentElement.style.setProperty(k, v);
       });
+      // 如果是设置主题,将这个设置的key缓存起来
       if (key)
         layui.data(handler.cacheKey, {
           key: "key",
@@ -525,7 +459,7 @@ layui.define(["jquery", "layer"],function (exports) {
       handler.initConfig();
     },
     /**
-     * 启用主题设置的入口方法
+     * 启用主题设置的入口方法(这个需要手动开启)
      */
     run: function(){
       // 引入css
@@ -537,17 +471,18 @@ layui.define(["jquery", "layer"],function (exports) {
       handler.setTheme();
     },
     /**
-     * 弹出选择面板
+     * 弹出选择主题的面板
      */
     popup: function () {
+      // 获取当前选中的主题key值
       let selectKey = handler.getTheme();
       let htmlStr = `
       <div class = "layui-fluid">
         <div class="layui-card-header">配色方案</div>
         <div class="layui-card-body layui-framework-setTheme">
           <ul class="layui-framework-setTheme-color">
-          ${_lodash.join(
-            _lodash.map(
+          ${layui.util.join(
+            layui.util.map(
               handler.themeConfig,
               (v, k) => `
             <li class="layui-framework-setTheme-color-li${
@@ -614,11 +549,12 @@ layui.define(["jquery", "layer"],function (exports) {
             handler.setTheme(_themekey);
             // 修改样式
             layero.find("*[themekey]").removeClass("layui-this");
+            // 当前选中的主题项选中展示
             layero
               .find('[themekey="' + _themekey + '"]')
               .addClass("layui-this");
           });
-
+          // 点击添加按钮弹出编辑面板
           layero.on("click", "#layui-framework-setTheme-add", function () {
             handler.popupEdit();
           });
@@ -632,6 +568,7 @@ layui.define(["jquery", "layer"],function (exports) {
      * 如果修改了名字就创建新的主题,否则是修改当前的主题
      */
     popupEdit: function () {
+      // 获取当前选中的主题key和主题配置项
       let selectKey = handler.getTheme();
       let selectConfig = handler.themeConfig[selectKey];
       let htmlStr = `
@@ -655,8 +592,8 @@ layui.define(["jquery", "layer"],function (exports) {
                 </div>
               </div>
             </div>
-            ${_lodash.join(
-              _lodash.map(
+            ${layui.util.join(
+              layui.util.map(
                 COLOR_OPTION,
                 (v, k) => `
             <blockquote class="layui-elem-quote">${v.desc}</blockquote>
@@ -699,15 +636,17 @@ layui.define(["jquery", "layer"],function (exports) {
         content: htmlStr,
         success: function (layero, index) {
           layui.use(["form", "colorpicker"], function () {
+            // 将当前主题配置项反填入表单中,方便修改
             layui.form.val("layui-framework-theme-form", selectConfig);
             layui.form.render(null, "layui-framework-theme-form");
-
-            _lodash.each(COLOR_OPTION, (v, k) => {
+            // 初始化各个颜色选择器
+            layui.util.each(COLOR_OPTION, (v, k) => {
               layui.colorpicker.render({
                 elem: "#theme-" + k,
                 color: "rgb(" + selectConfig[k] + ")",
                 format: "rgb",
                 done: function (color) {
+                  // 选择颜色后将值反填到输入框中,因为最后上传的是表单中输入框里面的信息
                   $("#form-" + k).val(color.substring(4, color.length - 1));
                 },
               });
