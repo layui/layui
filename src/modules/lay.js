@@ -7,7 +7,10 @@
   var MOD_NAME = 'lay'; // 模块名
   var document = window.document;
   
-  // 元素查找
+  /**
+   * 元素查找
+   * @param {string | HTMLElement | JQuery} selector 
+   */
   var lay = function(selector){   
     return new Class(selector);
   };
@@ -49,8 +52,15 @@
   
   Class.fn = Class.prototype = [];
   Class.fn.constructor = Class;
-  
-  // 普通对象深度扩展
+
+  /**
+   * 将两个或多个对象的内容深度合并到第一个对象中
+   * @callback ExtendFunc
+   * @param {*} target - 一个对象
+   * @param {...*} objectN - 包含额外的属性合并到第一个参数
+   * @returns {*} 返回合并后的对象
+   */
+  /** @type ExtendFunc*/
   lay.extend = function(){
     var ai = 1;
     var length;
@@ -77,7 +87,10 @@
     return args[0];
   };
   
-  // ie 版本
+  /**
+   * IE 版本
+   * @type {string | boolean} - 如果是 IE 返回版本字符串，否则返回 false
+   */
   lay.ie = function(){
     var agent = navigator.userAgent.toLowerCase();
     return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
@@ -98,8 +111,18 @@
     return this;
   };
 
-  
-  // 数字前置补零
+
+  /**
+   * 数字前置补零
+   * @param {number | string} num - 原始数字
+   * @param {number} [length=2] - 数字长度，如果原始数字长度小于 length，则前面补零
+   * @returns {string} 返回补 0 后的数字
+   * @example
+   * ```js
+   * lay.digit(6, 2); // "06"
+   * lay.digit('7', 3); // "007"
+   * ```
+   */
   lay.digit = function(num, length){
     if(!(typeof num === 'string' || typeof num === 'number')) return '';
 
@@ -112,7 +135,16 @@
     return num < Math.pow(10, length) ? str + num : num;
   };
   
-  // 创建元素
+  /**
+   * 创建元素
+   * @param {string} elemName - 元素的标签名
+   * @param {{attrName: string, attrValue:string}} [attr] - 添加到元素上的属性
+   * @returns {HTMLElement} 返回创建的 HTML 元素
+   * @example
+   * ```js
+   * lay.elem('div', {id: 'test'}) // <div id="test"></div>
+   * ```
+   */
   lay.elem = function(elemName, attr){
     var elem = document.createElement(elemName);
     lay.each(attr || {}, function(key, value){
@@ -121,12 +153,43 @@
     return elem;
   };
 
-  // 当前页面是否存在滚动条
+  /**
+   * 当前页面是否存在滚动条
+   * @returns {boolean} 是否存在滚动条
+   * @example 
+   * ```
+   * lay.hasScrollbar() // true 或 false
+   * ```
+   */
   lay.hasScrollbar = function(){
     return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
   };
 
-  // 获取 style rules
+  /**
+   * 获取 style rules
+   * @param {HTMLStyleElement} style - HTMLStyle 元素
+   * @param {(ruleItem: CSSStyleRule, index: number) => boolean} [callback] - 用来返回 style 元素中的每个 `style rule` 的函数，返回 true 终止遍历
+   * @returns {CSSRuleList } 返回 `style rules`
+   * @example
+   * ```
+   * <style id="test">
+   *   .lay-card{
+   *     color: #000;
+   *   }
+   *   .lay-btn-success{
+   *     color: green;
+   *   }
+   * </style>
+   * 
+   * lay.getStyleRules($('#test')[0], function(rule, index){
+   *   if(rule.selectorText === '.lay-card'){
+   *     console.log(index, rule.cssText) // 0 '.lay-card{color: #000}'
+   *     rule.style.color = '#EEE';
+   *     return true; // 终止遍历
+   *   }
+   * }) // RuleList
+   * ```
+   */
   lay.getStyleRules = function(style, callback) {
     if (!style) return;
 
@@ -142,7 +205,26 @@
     return rules;
   };
 
-  // 创建 style 样式
+  /**
+   * 创建 style 样式
+   * @param {Object} options - 可配置的选项
+   * @param {string | HTMLElement | JQuery} [options.target] - 目标容器，指定后会将样式追加到目标容器
+   * @param {string} [options.id] - 样式元素的 id，默认自增
+   * @param {string} options.text - 样式内容
+   * @returns {HTMLStyleElement} 返回创建的样式元素 
+   * @example
+   * ```html
+   * <div id="targetEl">
+   *   <!-- 样式追加到目标容器 -->
+   *   <style id="LAY-STYLE-DF-0">.card{color: #000}</style>
+   * </div>
+   * 
+   * lay.style({
+   *   target: '#targetEl',
+   *   text: '.card{color: #000}'
+   * }) // <style id="LAY-STYLE-DF-0">.card{color: #000}</style>
+   * ```
+   */
   lay.style = function(options){
     options = options || {};
 
@@ -176,7 +258,37 @@
     return style;
   };
   
-  // 元素定位
+  /**
+   * 将元素定位到指定目标元素附近
+   * @param {HTMLElement} target - 目标元素
+   * @param {HTMLElement} elem - 定位元素
+   * @param {Object} [opts] - 可配置的选项
+   * @param {'absolute' | 'fixed'} [opts.position] - 元素的定位类型
+   * @param {'left' | 'right'} [opts.clickType="left"] - 点击类型，默认为 'left'，如果 {@link target} 是 document 或 body 元素，则为 'right'
+   * @param {'left' | 'right' | 'center'} [opts.align="left"] - 对齐方式
+   * @param {boolean} [opts.allowBottomOut=false] - 顶部没有足够区域显示时，是否允许底部溢出
+   * @param {string | number} [opts.margin=5] - 边距
+   * @param {Event} [opts.e] - 事件对象，仅右键生效
+   * @param {boolean} [opts.SYSTEM_RELOAD] - 是否重载，用于出现滚动条时重新计算位置
+   * @example
+   * ```js
+   * <button id="targetEl">dropdown</button>
+   * <ul id="contentEl" class="dropdown-menu">
+   *   <li>菜单1</li>
+   *   <li>菜单2</li>
+   * </ul>
+   * 
+   * // 下拉菜单将被定位到按钮附近
+   * lay.position(
+   *   $('#targetEl')[0], 
+   *   $('#contentEl')[0], 
+   *   {
+   *     position: 'fixed', 
+   *     align: 'center'
+   *   }
+   * )
+   * ```
+   */
   lay.position = function(target, elem, opts){
     if(!elem) return;
     opts = opts || {};
@@ -276,7 +388,25 @@
     }
   };
   
-  // 获取元素上的属性配置项
+  /**
+   * 获取元素上的属性配置项
+   * @param {string | HTMLElement | JQuery} elem - HTML 元素
+   * @param {{attr: string} | string} [opts="lay-options"] - 可配置的选项，string 类型指定属性名
+   * @returns {*} 返回元素上的属性配置项
+   * @example
+   * ```js
+   * <div id="testEl" lay-options="{color:red}" lay-toc="{hot: true}"></div>
+   * 
+   * var elem = $('#testEl')
+   * lay.options(elem) // {color:red}
+   * lay.options(elem[0]) // {color:red}
+   * lay.options('#testEl') // {color:red}
+   * lay.options('#testEl', {attr: 'lay-toc'}) // {hot: true}
+   * lay.options('#testEl', 'lay-toc') // {hot: true}
+   * 
+   * $('#testEl').attr('lay-toc') // '{hot: true}'
+   * ```
+   */
   lay.options = function(elem, opts){
     opts = typeof opts === 'object' ? opts : {attr: opts};
 
@@ -297,7 +427,16 @@
     }
   };
   
-  // 元素是否属于顶级元素（document 或 body）
+
+  /**
+   * 元素是否属于顶级元素（document 或 body）
+   * @param {HTMLElement} elem - HTML 元素
+   * @returns {boolean} 是否属于顶级元素
+   * @example
+   * ```js
+   * lay.isTopElem(document) // true
+   * ```
+   */
   lay.isTopElem = function(elem){
     var topElems = [document, lay('body')[0]]
     ,matched = false;
@@ -311,7 +450,21 @@
 
   // 剪切板
   lay.clipboard = {
-    // 写入文本
+    /**
+     * 写入文本
+     * @param {Object} options - 可配置的选项
+     * @param {string} options.text - 写入剪贴板的文本
+     * @param {() => void} [options.done] - 写入成功/完成回调
+     * @param {(err?: any) => void} [options.error] - 写入失败回调
+     * @example
+     * ```js
+     * lay.clipboard.writeText({
+     *   text: '测试文本',
+     *   done: function(){ layer.msg('copied')},
+     *   error: function(){ layer.msg('error')}
+     * })
+     * ```
+     */
     writeText: function(options) {
       var text = String(options.text);
 

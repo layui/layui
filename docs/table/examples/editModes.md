@@ -49,7 +49,7 @@ layui.use(function(){
   // 渲染
   table.render({
     elem: '#ID-table-demo-editmodes',
-    url: '/static/2.8/json/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    url: '/static/json/2/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
     page: true,
     css: [ // 设置单元格样式
       // 取消默认的溢出隐藏，并设置适当高度
