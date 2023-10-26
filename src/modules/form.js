@@ -184,6 +184,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var max = Number(elem.attr('max'));
           var precision = Number(elem.attr('lay-precision'));
           var noAction = eventType !== 'click' && rawValue === ''; // 初始渲染和失焦时空值不作处理
+          var isInit = eventType === 'init';
 
           if(isNaN(value)) return; // 若非数字，则不作处理
 
@@ -202,7 +203,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
           if(!noAction){
             // 初始渲染时只处理数字精度
-            if(eventType !== 'init'){
+            if(!isInit){
               if(value <= min) value = min;
               if(value >= max) value = max;
             }
@@ -213,6 +214,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           // 超出范围的样式
           var outOfRange = value < min || value > max;
           elem[outOfRange && !noAction ? 'addClass' : 'removeClass'](OUT_OF_RANGE);
+
+          if(isInit) return;
 
           // 更新按钮状态
           var controlBtn = {
