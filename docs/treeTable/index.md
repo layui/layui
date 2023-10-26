@@ -6,7 +6,7 @@ toc: true
 # 树表组件 <sup title="指在该版本新增的组件">2.8+</sup>
 
 > 树表组件 `treeTable` 是基于 `table` 组件延伸的树形表格组件，支持常见的树组件功能。
-> 注意：*该组件不支持 IE8*
+> 注意：*该组件在 IE8 中使用需自行添加* <em class="layui-text-em"><a href="https://github.com/inexorabletash/polyfill/blob/716a3f36ca10fad032083014faf1a47c638e2502/es5.js#L300-L345" rel="nofollow" target="_blank">polyfill</a></em>
 
 <h2 id="examples" lay-toc="{anchor: null}" style="margin-bottom: 0;">示例</h2>
 
