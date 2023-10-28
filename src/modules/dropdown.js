@@ -453,16 +453,20 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       $(this).css({'display': ''}); // 剔除临时 style，以适配外部样式的状态重置;
     };
 
-    if(contentElem.is(':animated')) return;
+    // 动画是否正在执行
+    if (contentElem.is(':animated')) return;
 
+    // 展开
     if (needSpread) {
       othis.removeClass(STR_ITEM_UP).addClass(STR_ITEM_DOWN);
       contentElem.hide().stop().slideDown(ANIM_MS, complete);
-    }else{
+    } else { // 收缩
       contentElem.stop().slideUp(ANIM_MS, complete);
       othis.removeClass(STR_ITEM_DOWN).addClass(STR_ITEM_UP);
     }
-    if (needSpread && isAccordion){
+
+    // 手风琴
+    if (needSpread && isAccordion) {
       var groupSibs = othis.siblings('.' + STR_ITEM_DOWN);
       groupSibs.children('ul').stop().slideUp(ANIM_MS, complete);
       groupSibs.removeClass(STR_ITEM_DOWN).addClass(STR_ITEM_UP);
