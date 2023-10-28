@@ -23,7 +23,7 @@ toc: true
   - 优化 `input` 数字输入框组件当值达到临界点时加减按钮的禁用视觉效果 # 1375
   - 优化 `input` 数字输入框当表单验证失败时的边框颜色 # 1371
 - #### nav
-  - 新增 垂直导航菜单展开和收缩时的过渡动画 # 1384
+  - 新增 垂直导航菜单展开和收缩时的过渡动画 # 1407
   - 新增 `lay-accordion` 属性支持，用于开启手风琴，兼容旧版 `lay-shrink="all"` # 1384
 - #### layer
   - 优化 移动端定位 # 1376
@@ -31,7 +31,7 @@ toc: true
   - 新增 `complete` 属性，当数据接口请求完成后执行，无论成功还是失败均会触发 # 1379
   - 修复 `ignoreExport` 表头属性值效果与文档不符的问题 # I86DBY
 - #### treeTable
-  - 修复 `treeTable.removeNode()` 在开启 `data` 模式时删除异常问题 # I7Z0A/I82E2S
+  - 修复 `treeTable.removeNode()` 在开启 `data` 模式时删除异常问题 # I7Z0AB/I82E2S
   - 修复 `treeTable.setRowChecked()` 方法未逐层展开上级节点的问题 # 1385/I84RUT
 - #### upload
   - 修复 `unified: true` 时的报错问题 # 1391
