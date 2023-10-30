@@ -17,7 +17,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   var SHOW = 'layui-show';
   var HIDE = 'layui-hide';
   var DISABLED = 'layui-disabled';
-  var OUT_OF_RANGE = 'layui-input-out-of-range';
+  var OUT_OF_RANGE = 'layui-input-number-out-of-range';
   
   var Form = function(){
     this.config = {
