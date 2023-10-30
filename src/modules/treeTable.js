@@ -421,45 +421,48 @@ layui.define(['table'], function (exports) {
       return;
     }
 
-    // 用index
+    // 用 index
     return that.getNodeByIndex(dataIndex);
   }
 
-  // 通过index获取节点数据
+  // 通过 index 获取节点数据
   Class.prototype.getNodeDataByIndex = function (index, clone, newValue) {
     var that = this;
     var options = that.getOptions();
     var treeOptions = options.tree;
     var tableId = options.id;
+    var tableCache = table.cache[tableId];
 
-    var dataCache = table.cache[tableId][index];
+    // 获取当前行中的数据
+    var dataCache = tableCache[index];
+
+    // 若非删除操作，则返回合并后的数据
     if (newValue !== 'delete' && dataCache) {
       $.extend(dataCache, newValue);
       return clone ? $.extend({}, dataCache) : dataCache;
     }
 
-    var tableData = that.getTableData();
-    index += '';
-    var indexArr = index.split('-');
+    // 删除操作
+    var dataRet = tableCache;
+    var indexArr = String(index).split('-');
 
-    var dataRet = tableData;
-    var tableCache = (options.url || indexArr.length > 1) ? null : table.cache[tableId]; // 只有在删除根节点的时候才需要处理
+    // if (options.url || indexArr.length > 1) tableCache = null // 只有在删除根节点的时候才需要处理
+
+    // 根据 index 进行数据处理
     for (var i = 0, childrenKey = treeOptions.customName.children; i < indexArr.length; i++) {
       if (newValue && i === indexArr.length - 1) {
-        if (newValue === 'delete') {
-          // 删除
-          if (tableCache) {
-            // 同步cache
+        if (newValue === 'delete') { // 删除并返回当前数据
+          // 同步 cache --- 此段代码注释缘由：data 属性模式造成数据重复执行 splice (@Gitee: #I7Z0A/I82E2S)
+          /*if (tableCache) {
             layui.each(tableCache, function (i1, item1) {
               if (item1[LAY_DATA_INDEX] === index) {
                 tableCache.splice(i1, 1);
                 return true;
               }
             })
-          }
+          }*/
           return (i ? dataRet[childrenKey] : dataRet).splice(indexArr[i], 1)[0];
-        } else {
-          // 更新值
+        } else { // 更新值
           $.extend((i ? dataRet[childrenKey] : dataRet)[indexArr[i]], newValue);
         }
       }

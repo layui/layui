@@ -1,5 +1,3 @@
-'use strict';
-
 const pkg = require('./package.json');
 const gulp = require('gulp');
 const uglify = require('gulp-uglify');
@@ -9,6 +7,7 @@ const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 const header = require('gulp-header');
 const footer = require('gulp-footer');
+const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
 const minimist = require('minimist');
 const yargs = require('yargs');
@@ -27,7 +26,7 @@ const config = {
 // 获取参数
 const argv = require('minimist')(process.argv.slice(2), {
   default: {
-    version: pkg.version 
+    version: pkg.version
   }
 });
 
@@ -47,27 +46,32 @@ const js = () => {
   let src = [
     './src/**/{layui,layui.all,'+ config.modules +'}.js'
   ];
-  return gulp.src(src).pipe(uglify({
+  return gulp.src(src)
+  .pipe(sourcemaps.init())
+  .pipe(uglify({
     output: {
       ascii_only: true // escape Unicode characters in strings and regexps
     },
     ie: true
-  })).pipe(concat('layui.js', {newLine: ''}))
+  }))
+  .pipe(concat('layui.js', {newLine: ''}))
   .pipe(header.apply(null, config.comment))
+  .pipe(sourcemaps.write(''))
   .pipe(gulp.dest(dest));
 };
-  
+
 // css
 const css = () => {
   let src = [
-    './src/css/layui.css',
-    './src/css/modules/**/*.css',
-    '!./src/css/**/font.css'
+    './src/css/**/{layui,*}.css'
   ];
-  return gulp.src(src).pipe(cleanCSS({
+  return gulp.src(src)
+  .pipe(sourcemaps.init())
+  .pipe(cleanCSS({
     compatibility: 'ie8'
   }))
   .pipe(concat('layui.css', {newLine: ''}))
+  .pipe(sourcemaps.write(''))
   .pipe(gulp.dest(dest +'/css'));
 };
   
@@ -80,7 +84,19 @@ const files = () => {
 
 // cp
 const cp = () => {
-  return gulp.src('./dist/**/*')
+  const basePath = './dist/**/*';
+
+  // 复制 css js
+  gulp.src(`${basePath}.{css,js}`)
+  .pipe(replace(/\n\/(\*|\/)\#[\s\S]+$/, '')) // 过滤 css 和 js 的 map 特定注释
+  .pipe(gulp.dest(dest));
+
+  // 复制其他文件
+  return gulp.src([
+    basePath,
+    `!${basePath}.{css,js,map}` // 过滤 map 文件
+  ])
+  .pipe(replace(/\n\/(\*|\/)\#[\s\S]+$/, '')) // 过滤 css 和 js 的 map 特定注释
   .pipe(gulp.dest(dest));
 };
   
