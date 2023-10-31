@@ -2604,6 +2604,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       layer.close(that.tipsIndex);
     });
+
+    // 固定列滚轮事件 - 临时兼容方案
+    that.layFixed.find(ELEM_BODY).on('mousewheel DOMMouseScroll', function(e) {
+      var delta = e.originalEvent.wheelDelta || -e.originalEvent.detail;
+      var scrollTop = that.layMain.scrollTop();
+      var step = 30;
+
+      that.layMain.scrollTop(scrollTop + (delta > 0 ? -step : step));
+    });
   };
 
   // 全局事件

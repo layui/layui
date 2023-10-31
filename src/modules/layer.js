@@ -1590,7 +1590,7 @@ layer.photos = function(options, loop, key){
     });
     
     // 鼠标滚轮缩放图片事件
-    dict.main.children('img').on('mousewheel DOMMouseScroll', function(e) {
+    dict.main.on('mousewheel DOMMouseScroll', function(e) {
       var delta = e.originalEvent.wheelDelta || -e.originalEvent.detail;
       var zoomElem = dict.main.find('[toolbar-event="zoom"]');
       if (delta > 0) {
