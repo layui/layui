@@ -2611,6 +2611,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var scrollTop = that.layMain.scrollTop();
       var step = 30;
 
+      e.preventDefault();
       that.layMain.scrollTop(scrollTop + (delta > 0 ? -step : step));
     });
   };

@@ -13,7 +13,7 @@ toc: true
 
 
 <h2 id="2.8.18" class="ws-anchor">
-  2.8.18-rc.5
+  2.8.18
   <span class="layui-badge-rim">2023-10-31</span>
 </h2>
 
@@ -65,7 +65,7 @@ toc: true
   - 新增 lay 模块部分函数 JSDoc 注释和示例 #1401
   - 优化 `<hr>` 全局样式优先级 # I86R6G
 
-### 下载： [layui-v2.8.18.rc.5.zip](https://gitee.com/layui/layui/attach_files/1570260/download)
+### 下载： [layui-v2.8.18.zip](https://gitee.com/layui/layui/attach_files/1570299/download)
 
 ---
 
