@@ -13,8 +13,8 @@ toc: true
 
 
 <h2 id="2.8.18" class="ws-anchor">
-  2.8.18-rc.2
-  <span class="layui-badge-rim">2023-10-25</span>
+  2.8.18-rc.3
+  <span class="layui-badge-rim">2023-10-31</span>
 </h2>
 
 - #### form
@@ -26,10 +26,12 @@ toc: true
   - 新增 垂直导航菜单展开和收缩时的过渡动画 # 1407
   - 新增 `lay-accordion` 属性支持，用于开启手风琴，兼容旧版 `lay-shrink="all"` # 1384
 - #### layer
+  - 新增 `photos` 层的鼠标滚轮缩放功能 # I7ZAE8
   - 优化 移动端定位 # 1376
 - #### table
   - 新增 `complete` 属性，当数据接口请求完成后执行，无论成功还是失败均会触发 # 1379
   - 修复 `ignoreExport` 表头属性值效果与文档不符的问题 # I86DBY
+  - 修复 `type:'radio'` 且为右侧固定列时，选择效果无效的问题 # 1406
 - #### treeTable
   - 修复 `treeTable.removeNode()` 在开启 `data` 模式时删除异常问题 # I7Z0AB/I82E2S
   - 修复 `treeTable.setRowChecked()` 方法未逐层展开上级节点的问题 # 1385/I84RUT
@@ -41,7 +43,8 @@ toc: true
   - 新增 `accordion` 属性，开启手风琴效果（menu: 主容器设置 `lay-accordion` 属性） # 1397
   - 新增 折叠展开动画效果 # 1397
 - #### laydate
-  - 优化 开启 `rangeLinked` 属性后，点击目标元素可重新渲染的问题 # 1391
+  - 优化 `rangeLinked` 属性开启时，点击目标元素可重新渲染的问题 # 1391
+  - 优化 `type` 为 `time,datetime` 选择器时，「现在」按钮的禁用状态判断条件 # I828CD
 - #### laypage
   - 新增 `limitTemplet` 属性，用于自定义条目模板 # I80AHZ
   - 新增 `skipText` 属性，用于自定义跳页区域文本 # I80AHZ
@@ -58,7 +61,7 @@ toc: true
   - 新增 lay 模块部分函数 JSDoc 注释和示例 #1401
   - 优化 `<hr>` 全局样式优先级 # I86R6G
 
-### 下载： [layui-v2.8.18.rc.2.zip](https://gitee.com/layui/layui/attach_files/1563717/download)
+### 下载： [layui-v2.8.18.rc.3.zip](https://gitee.com/layui/layui/attach_files/1569050/download)
 
 ---
 
