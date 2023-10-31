@@ -444,31 +444,33 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   
   // 设置菜单组展开和收缩状态
   thisModule.spread = function(othis, isAccordion){
+    var contentElem = othis.children('ul');
     var needSpread = othis.hasClass(STR_ITEM_UP);
+    var ANIM_MS = 200;
 
-    var toggle = function (groupElem, isOpen) {
-      var contentElem = groupElem.children('ul');
-      var contentHeight = contentElem[0].scrollHeight;
+    // 动画执行完成后的操作
+    var complete = function() {
+      $(this).css({'display': ''}); // 剔除临时 style，以适配外部样式的状态重置;
+    };
 
-      if(contentElem.is(':animated')) return;
+    // 动画是否正在执行
+    if (contentElem.is(':animated')) return;
 
-      groupElem.removeClass(isOpen ? STR_ITEM_UP : STR_ITEM_DOWN).addClass(isOpen ? STR_ITEM_DOWN : STR_ITEM_UP);
-      contentElem.height(isOpen ? 0 : contentHeight)
-        .stop()
-        .animate({
-          opacity: isOpen ? 1 : 0, 
-          height: isOpen ? contentHeight : 0
-        }, 200, function(){
-          contentElem.css({ height: '', opacity: '' })
-        })
+    // 展开
+    if (needSpread) {
+      othis.removeClass(STR_ITEM_UP).addClass(STR_ITEM_DOWN);
+      contentElem.hide().stop().slideDown(ANIM_MS, complete);
+    } else { // 收缩
+      contentElem.stop().slideUp(ANIM_MS, complete);
+      othis.removeClass(STR_ITEM_DOWN).addClass(STR_ITEM_UP);
     }
 
-    toggle(othis, needSpread);
-
-    if (!needSpread || !isAccordion) return;
-    layui.each(othis.siblings('.' + STR_ITEM_DOWN), function(index, item){
-      toggle($(item), false);
-    })
+    // 手风琴
+    if (needSpread && isAccordion) {
+      var groupSibs = othis.siblings('.' + STR_ITEM_DOWN);
+      groupSibs.children('ul').stop().slideUp(ANIM_MS, complete);
+      groupSibs.removeClass(STR_ITEM_DOWN).addClass(STR_ITEM_UP);
+    }
   };
   
   // 全局事件

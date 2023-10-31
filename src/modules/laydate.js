@@ -1245,7 +1245,7 @@
       // 现在按钮
       that.limit({
         elem: lay(that.footer).find(ELEM_NOW),
-        date: that.systemDate(),
+        date: that.systemDate(/^(datetime|time)$/.test(options.type) ? new Date() : null),
         index: 0,
         time: timeParams
       });
