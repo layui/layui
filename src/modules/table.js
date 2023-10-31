@@ -1596,8 +1596,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       radio: 'layTableRadio',
       checkbox: 'layTableCheckbox'
     }[opts.type] || 'checkbox') +'"]:not(:disabled)');
+    var checkedSameElem = checkedElem.last();
+    var fixRElem = checkedSameElem.closest(ELEM_FIXR);
 
-    checkedElem.prop('checked', getChecked(checkedElem.last().prop('checked')));
+    ( opts.type === 'radio' && fixRElem.hasClass(HIDE)
+      ?  checkedElem.first()
+    : checkedElem ).prop('checked', getChecked(checkedSameElem.prop('checked')));
 
     that.syncCheckAll();
     that.renderForm(opts.type);
