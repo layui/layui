@@ -13,7 +13,7 @@ toc: true
 
 
 <h2 id="2.8.18" class="ws-anchor">
-  2.8.18-rc.4
+  2.8.18-rc.5
   <span class="layui-badge-rim">2023-10-31</span>
 </h2>
 
@@ -32,6 +32,7 @@ toc: true
   - 新增 `complete` 属性，当数据接口请求完成后执行，无论成功还是失败均会触发 # 1379
   - 修复 `ignoreExport` 表头属性值效果与文档不符的问题 # I86DBY
   - 修复 `type: 'radio'` 且为右侧固定列时，选择效果无效的问题 # 1406
+  - 优化 鼠标在固定列滚轮时无法触发滚动条的问题 # I8CGZH
   - 优化 某些情况在 Firefox 的报错问题
 - #### treeTable
   - 修复 `treeTable.removeNode()` 在开启 `data` 模式时删除异常问题 # I7Z0AB/I82E2S
@@ -64,7 +65,7 @@ toc: true
   - 新增 lay 模块部分函数 JSDoc 注释和示例 #1401
   - 优化 `<hr>` 全局样式优先级 # I86R6G
 
-### 下载： [layui-v2.8.18.rc.4.zip](https://gitee.com/layui/layui/attach_files/1569887/download)
+### 下载： [layui-v2.8.18.rc.5.zip](https://gitee.com/layui/layui/attach_files/1570260/download)
 
 ---
 
