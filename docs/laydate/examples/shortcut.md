@@ -110,17 +110,31 @@ layui.use(function(){
         text: "上个月",
         value: function(){
           var now = new Date();
-          // now.setDate(now.getDate() - 1);
-          now.setMonth(now.getMonth() - 1);
+          var month = now.getMonth() - 1;
+
+          now.setMonth(month);
+
+          // 若上个月数不匹配，则表示天数溢出
+          if (now.getMonth() !== month) {
+            now.setDate(0); // 重置天数
+          }
+
           return [now];
         }
       },
       {
-        text: "上个月的前一天",
+        text: "下个月",
         value: function(){
           var now = new Date();
-          now.setMonth(now.getMonth() - 1);
-          now.setDate(now.getDate() - 1);
+          var month = now.getMonth() + 1;
+
+          now.setMonth(month);
+
+          // 若下个月数不匹配，则表示天数溢出
+          if (now.getMonth() !== month) {
+            now.setDate(0); // 重置天数
+          }
+
           return [now];
         }
       },
@@ -164,7 +178,7 @@ layui.use(function(){
         text: "上个月",
         value: function(){
           var now = new Date();
-          now.setMonth(now.getMonth() - 1);
+          now.setMonth(now.getMonth() - 1, 1);
           return now;
         }
       },
@@ -172,15 +186,14 @@ layui.use(function(){
         text: "下个月",
         value: function(){
           var now = new Date();
-          now.setMonth(now.getMonth() + 1);
+          now.setMonth(now.getMonth() + 1, 1);
           return now;
         }
       },
       {
-        text: "去年12月",
+        text: "去年本月",
         value: function(){
           var now = new Date();
-          now.setMonth(11);
           now.setFullYear(now.getFullYear() - 1);
           return now;
         }
@@ -239,23 +252,37 @@ layui.use(function(){
         text: "上个月",
         value: function(){
           var now = new Date();
-          // now.setDate(now.getDate() - 1);
-          now.setMonth(now.getMonth() - 1);
+          var month = now.getMonth() - 1;
+
+          now.setMonth(month);
+
+          // 若上个月数不匹配，则表示天数溢出
+          if (now.getMonth() !== month) {
+            now.setDate(0); // 重置天数
+          }
+
           return [now];
         }
       },
       {
-        text: "上个月的前一天",
+        text: "下个月",
         value: function(){
           var now = new Date();
-          now.setMonth(now.getMonth() - 1);
-          now.setDate(now.getDate() - 1);
+          var month = now.getMonth() + 1;
+
+          now.setMonth(month);
+
+          // 若上个月数不匹配，则表示天数溢出
+          if (now.getMonth() !== month) {
+            now.setDate(0); // 重置天数
+          }
+
           return [now];
         }
       },
       {
         text: "某一天",
-        value: "2016-10-14 00:00:00"
+        value: "2016-10-14 10:00:00"
       }
     ]
   }); 
@@ -288,23 +315,37 @@ layui.use(function(){
         text: "上个月",
         value: function(){
           var now = new Date();
-          // now.setDate(now.getDate() - 1);
-          now.setMonth(now.getMonth() - 1);
+          var month = now.getMonth() - 1;
+
+          now.setMonth(month);
+
+          // 若上个月数不匹配，则表示天数溢出
+          if (now.getMonth() !== month) {
+            now.setDate(0); // 重置天数
+          }
+
           return [now];
         }
       },
       {
-        text: "上个月的前一天",
+        text: "下个月",
         value: function(){
           var now = new Date();
-          now.setMonth(now.getMonth() - 1);
-          now.setDate(now.getDate() - 1);
+          var month = now.getMonth() + 1;
+
+          now.setMonth(month);
+
+          // 若上个月数不匹配，则表示天数溢出
+          if (now.getMonth() !== month) {
+            now.setDate(0); // 重置天数
+          }
+
           return [now];
         }
       },
       {
         text: "某一天",
-        value: "2016-10-14 11:32:32"
+        value: "2016-10-14 09:30:00"
       }
     ]
   });
@@ -318,63 +359,40 @@ layui.use(function(){
       {
         text: "上个月",
         value: function(){
-          var value = [];
+          var date = new Date();
+          var year = date.getFullYear();
+          var month = date.getMonth();
 
-          var date1 = new Date();
-          date1.setMonth(date1.getMonth() - 1);
-          date1.setDate(1);
-          date1.setHours(0, 0, 0, 0);
-          value.push(date1);
-
-          var date2 = new Date();
-          date2.setDate(1);
-          date2.setHours(0, 0, 0, 0);
-          date2 = date2.getTime() - 1;
-          value.push(new Date(date2));
-
-          return value;
+          return [
+            new Date(year, month - 1, 1),
+            new Date(year, month, 0)
+          ];
         }
       },
       {
         text: "这个月",
         value: function(){
-          var value = [];
+          var date = new Date();
+          var year = date.getFullYear();
+          var month = date.getMonth();
 
-          var date1 = new Date();
-          // date1.setMonth(date1.getMonth() - 1);
-          date1.setDate(1);
-          date1.setHours(0, 0, 0, 0);
-          value.push(date1);
-
-          var date2 = new Date();
-          date2.setMonth(date2.getMonth() + 1);
-          date2.setDate(1);
-          date2.setHours(0, 0, 0, 0);
-          date2 = date2.getTime() - 1;
-          value.push(new Date(date2));
-
-          return value;
+          return [
+            new Date(year, month, 1),
+            new Date(year, month + 1, 0)
+          ];
         }
       },
       {
         text: "下个月",
         value: function(){
-          var value = [];
+          var date = new Date();
+          var year = date.getFullYear();
+          var month = date.getMonth();
 
-          var date1 = new Date();
-          date1.setMonth(date1.getMonth() + 1);
-          date1.setDate(1);
-          date1.setHours(0, 0, 0, 0);
-          value.push(date1);
-
-          var date2 = new Date();
-          date2.setMonth(date2.getMonth() + 2);
-          date2.setDate(1);
-          date2.setHours(0, 0, 0, 0);
-          date2 = date2.getTime() - 1;
-          value.push(new Date(date2));
-
-          return value;
+          return [
+            new Date(year, month + 1, 1),
+            new Date(year, month + 2, 0)
+          ];
         }
       }
     ]
@@ -423,21 +441,25 @@ layui.use(function(){
       {
         text: "去年",
         value: function(){
-          var date1 = new Date();
-          date1.setFullYear(date1.getFullYear() - 1, 0, 1);
-          date1.setHours(0, 0, 0, 0);
-          var date2 = new Date();
-          date2.setMonth(0, 1);
-          date2.setHours(0, 0, 0, 0);
-          return [date1, date2.getTime() - 1];
+          var now = new Date();
+          var year = now.getFullYear() - 1;
+
+          return [
+            new Date(year, 0),
+            new Date(year, 11)
+          ];
         }
       },
       {
         text: "明年",
         value: function(){
           var now = new Date();
-          now.setFullYear(now.getFullYear() + 1);
-          return [now, now];
+          var year = now.getFullYear() + 1;
+
+          return [
+            new Date(year, 0),
+            new Date(year, 11)
+          ];
         }
       },
       {
@@ -493,63 +515,40 @@ layui.use(function(){
       {
         text: "上个月",
         value: function(){
-          var value = [];
+          var date = new Date();
+          var year = date.getFullYear();
+          var month = date.getMonth();
 
-          var date1 = new Date();
-          date1.setMonth(date1.getMonth() - 1);
-          date1.setDate(1);
-          date1.setHours(0, 0, 0, 0);
-          value.push(date1);
-
-          var date2 = new Date();
-          date2.setDate(1);
-          date2.setHours(0, 0, 0, 0);
-          date2 = date2.getTime() - 1;
-          value.push(new Date(date2));
-
-          return value;
+          return [
+            new Date(year, month - 1, 1),
+            new Date(year, month, 0, 23, 59, 59)
+          ];
         }
       },
       {
         text: "这个月",
         value: function(){
-          var value = [];
+          var date = new Date();
+          var year = date.getFullYear();
+          var month = date.getMonth();
 
-          var date1 = new Date();
-          // date1.setMonth(date1.getMonth() - 1);
-          date1.setDate(1);
-          date1.setHours(0, 0, 0, 0);
-          value.push(date1);
-
-          var date2 = new Date();
-          date2.setMonth(date2.getMonth() + 1);
-          date2.setDate(1);
-          date2.setHours(0, 0, 0, 0);
-          date2 = date2.getTime() - 1;
-          value.push(new Date(date2));
-
-          return value;
+          return [
+            new Date(year, month, 1),
+            new Date(year, month + 1, 0, 23, 59, 59)
+          ];
         }
       },
       {
         text: "下个月",
         value: function(){
-          var value = [];
+          var date = new Date();
+          var year = date.getFullYear();
+          var month = date.getMonth();
 
-          var date1 = new Date();
-          date1.setMonth(date1.getMonth() + 1);
-          date1.setDate(1);
-          date1.setHours(0, 0, 0, 0);
-          value.push(date1);
-
-          var date2 = new Date();
-          date2.setMonth(date2.getMonth() + 2);
-          date2.setDate(1);
-          date2.setHours(0, 0, 0, 0);
-          date2 = date2.getTime() - 1;
-          value.push(new Date(date2));
-
-          return value;
+          return [
+            new Date(year, month + 1, 1),
+            new Date(year, month + 2, 0, 23, 59, 59)
+          ];
         }
       }
     ]
