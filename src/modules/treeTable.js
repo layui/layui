@@ -301,9 +301,13 @@ layui.define(['table'], function (exports) {
       }
     })
     // 返回顶层节点
-    return Object.values(nodes).filter(function (item) {
-      return rootPid ? item[pIdKey] === rootPid : !item[pIdKey];
-    })
+    return Object.keys(nodes)
+      .map(function(k) {
+        return nodes[k];
+      })
+      .filter(function (item) {
+        return rootPid ? item[pIdKey] === rootPid : !item[pIdKey];
+      })
   }
 
   Class.prototype.flatToTree = function (tableData) {
