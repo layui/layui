@@ -13,7 +13,7 @@ toc: true
 
 
 <h2 id="2.8.18" class="ws-anchor">
-  2.8.18-rc.3
+  2.8.18-rc.4
   <span class="layui-badge-rim">2023-10-31</span>
 </h2>
 
@@ -31,10 +31,13 @@ toc: true
 - #### table
   - 新增 `complete` 属性，当数据接口请求完成后执行，无论成功还是失败均会触发 # 1379
   - 修复 `ignoreExport` 表头属性值效果与文档不符的问题 # I86DBY
-  - 修复 `type:'radio'` 且为右侧固定列时，选择效果无效的问题 # 1406
+  - 修复 `type: 'radio'` 且为右侧固定列时，选择效果无效的问题 # 1406
+  - 优化 某些情况在 Firefox 的报错问题
 - #### treeTable
   - 修复 `treeTable.removeNode()` 在开启 `data` 模式时删除异常问题 # I7Z0AB/I82E2S
   - 修复 `treeTable.setRowChecked()` 方法未逐层展开上级节点的问题 # 1385/I84RUT
+  - 修复 `treeTable.addNodes()` 新增根节点时出现的报错问题 # 1414
+  - 修复 数据格式为简单类型时 IE9+ 兼容问题 # 1415/I8C04Y
 - #### upload
   - 修复 `unified: true` 时的报错问题 # 1391
   - 优化 渲染入口逻辑，以解决因重复渲染导致的若干问题 # 1391
@@ -61,7 +64,7 @@ toc: true
   - 新增 lay 模块部分函数 JSDoc 注释和示例 #1401
   - 优化 `<hr>` 全局样式优先级 # I86R6G
 
-### 下载： [layui-v2.8.18.rc.3.zip](https://gitee.com/layui/layui/attach_files/1569050/download)
+### 下载： [layui-v2.8.18.rc.4.zip](https://gitee.com/layui/layui/attach_files/1569887/download)
 
 ---
 
