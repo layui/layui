@@ -1531,11 +1531,13 @@ layer.photos = function(options, loop, key){
   
   // 一些动作
   dict.event = function(layero, index, that){
+    // 上一张
     dict.main.find('.layui-layer-photos-prev').on('click', function(event){
       event.preventDefault();
       dict.imgprev(true);
     });  
     
+    // 下一张
     dict.main.find('.layui-layer-photos-next').on('click', function(event){
       event.preventDefault();
       dict.imgnext(true);
@@ -1545,7 +1547,8 @@ layer.photos = function(options, loop, key){
 
     // 头部工具栏事件
     layero.off('click').on('click','*[toolbar-event]', function () {
-      var othis = $(this), event = othis.attr('toolbar-event');
+      var othis = $(this);
+      var event = othis.attr('toolbar-event');
       switch (event) {
         case 'rotate':
           dict.image.rotate = ((dict.image.rotate || 0) + Number(othis.attr('data-option'))) % 360;
@@ -1586,6 +1589,17 @@ layer.photos = function(options, loop, key){
       that.auto(index);
     });
     
+    // 鼠标滚轮缩放图片事件
+    dict.main.children('img').on('mousewheel DOMMouseScroll', function(e) {
+      var delta = e.originalEvent.wheelDelta || -e.originalEvent.detail;
+      var zoomElem = dict.main.find('[toolbar-event="zoom"]');
+      if (delta > 0) {
+        zoomElem.eq(0).trigger('click');
+      } else {
+        zoomElem.eq(1).trigger('click');
+      }
+    });
+
   };
   
   // 图片预加载

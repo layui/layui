@@ -896,6 +896,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   // 重置表格尺寸/结构
   Class.prototype.resize = function(){
     var that = this;
+
+    if (!that.layMain) return;
+
     that.fullSize(); // 让表格铺满
     that.setColsWidth(); // 自适应列宽
     that.scrollPatch(); // 滚动条补丁
@@ -1593,8 +1596,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       radio: 'layTableRadio',
       checkbox: 'layTableCheckbox'
     }[opts.type] || 'checkbox') +'"]:not(:disabled)');
+    var checkedSameElem = checkedElem.last();
+    var fixRElem = checkedSameElem.closest(ELEM_FIXR);
 
-    checkedElem.prop('checked', getChecked(checkedElem.last().prop('checked')));
+    ( opts.type === 'radio' && fixRElem.hasClass(HIDE)
+      ?  checkedElem.first()
+    : checkedElem ).prop('checked', getChecked(checkedSameElem.prop('checked')));
 
     that.syncCheckAll();
     that.renderForm(opts.type);
