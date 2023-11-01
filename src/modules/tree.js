@@ -18,8 +18,13 @@ layui.define('form', function(exports){
       customName: { // 自定义 data 字段名
         id: 'id',
         title: 'title',
-        children: 'children'
-      }
+        children: 'children',
+        // 2023/10/31 添加  编辑parentid
+        parentid: 'parentid'
+      },
+      // 2023/10/31 添加  排序搜索配置项
+      sort: false,
+      search: '',
     },
     index: layui[MOD_NAME] ? (layui[MOD_NAME].index + 10000) : 0,
 
@@ -188,7 +193,14 @@ layui.define('form', function(exports){
     var that = this;
     var options = that.config;
     var customName = options.customName;
-    var data = children || options.data;
+    // var data = children || options.data;
+    // 2023/10/31 修改,添加一步解析数据源的操作,解析this.config.data，并将解析的结果覆盖源数据
+    var data = children || this.baseDataFilter();
+    // 2023/10/31 新增数据排序
+    if(options.sort){
+      var idKey = options.customName.id;
+      data.sort((a, b) => that._tempSortJson[b[idKey]] - that._tempSortJson[a[idKey]]);
+    }
 
     // 遍历数据
     layui.each(data, function(index, item){
@@ -218,9 +230,9 @@ layui.define('form', function(exports){
             // 节点
             ,function(){
               if(options.isJump && item.href){
-                return '<a href="'+ item.href +'" target="_blank" class="'+ ELEM_TEXT +'">'+ (item[customName.title] || item.label || options.text.defaultNodeName) +'</a>';
+                return '<a href="'+ item.href +'" target="_blank" class="'+ ELEM_TEXT +'">'+ (/* 2023/10/31 添加搜索值高亮 */ options.search ? item['*' + customName.title] : item[customName.title] || item.label || options.text.defaultNodeName) +'</a>';
               }else{
-                return '<span class="'+ ELEM_TEXT + (item.disabled ? ' '+ DISABLED : '') +'">'+ (item[customName.title] || item.label || options.text.defaultNodeName) +'</span>';
+                return '<span class="'+ ELEM_TEXT + (item.disabled ? ' '+ DISABLED : '') +'">'+ (/* 2023/10/31 添加搜索值高亮 */options.search ? item['*' + customName.title] : item[customName.title] || item.label || options.text.defaultNodeName) +'</span>';
               }
             }()
       ,'</div>'
@@ -828,6 +840,179 @@ layui.define('form', function(exports){
         });
       };
     });
+  };
+
+  /**
+   * @method 对配置项里面的数据源进行处理
+   * @returns 解析后的数据
+   * @desc
+   *    1. 调用{@linkplain Class.parseData } 解析配置项里面的数据源
+   *    2. 调用{@linkplain Class.sortData }  配置项里面的数据源排序
+   */
+  Class.prototype.baseDataFilter = function(){
+    this.parseData();
+    this.sortData();
+    return this.config.data;
+  };
+
+  /**
+   * @method 解析配置项里面的数据源
+   * @desc
+   *    判断源数据中第一项是否带有parentid属性,如果有就解析并覆盖
+   */
+  Class.prototype.parseData = function(){
+    if(this.config.data.length == 0) return;
+    if(this.config.data[0].parentid === undefined) return;
+    return this.doParseData(this.config.data);
+  };
+
+  /**
+   * @method 实现解析配置项里面的数据源
+   * @param {*} list  数据源列表
+   * @desc
+   *    解析数据源列表,这个列表是根据id和parentid将父子节点联系上的,比较符合数据库保存的风格;
+   * 但是tree组件里面实际使用的不是这种数据,所以在这里将数据进行转换 
+   */
+  Class.prototype.doParseData = function(list){
+    let that = this;
+    let parentidKey = that.config.customName.parentid;
+    // 数据保存至hash表中,保证后面通过key查询信息比较方便
+    that._tempJson = {};
+    // 创建一个临时的list保存信息,最后将它赋给 this.config.data
+    that._tempList = [];
+    layui.each(list, function(key, value){
+      value[parentidKey] && value[parentidKey] != "0" ? that.createSubTreeNode(value) : that.createTopTreeNode(value);
+    });
+    that.config.data = that._tempList;
+  };
+
+  /**
+   * @method 解析顶层节点数据源信息
+   * @param {*} value 
+   */
+  Class.prototype.createTopTreeNode = function(value){
+    let node = value;
+    let that = this;
+    let idKey = that.config.customName.id;
+    if(that._tempJson[node[idKey]]){
+      // 如果已经声明过这个节点 (- 由子节点创建的),那就将它的信息补全
+      layui.each(value, function(k, o){
+        that._tempJson[node[idKey]][k] = o[k];
+      });
+    }else{
+      // 如果没有声明过这个节点,就将它放入hash表
+      that._tempJson[node[idKey]] = node;
+    }
+    // 将它的信息从hash表上面添加到临时的list中 
+    that._tempList.push(that._tempJson[node[idKey]]);
+  };
+
+  /**
+   * @method 解析普通节点数据源信息
+   * @param {*} value 
+   */
+  Class.prototype.createSubTreeNode = function(value){
+    let node = value;
+    let that = this;
+    let idKey = that.config.customName.id;
+    let parentidKey = that.config.customName.parentid;
+    let childrenKey = that.config.customName.children;
+    if(that._tempJson[node[idKey]]){
+      // 如果已经声明过这个节点 (- 由子节点创建的),那就将它的信息补全 
+      layui.each(node, function(k, o){
+        that._tempJson[node[idKey]][k] = o[k];
+      });
+    }else{
+      // 如果没有声明过这个节点,就将它放入hash表并且添加到临时的list中 
+      that._tempJson[node[idKey]] = node;
+    }
+    // 接下来需要将它放入父节点里面
+    if(that._tempJson[node[parentidKey]]){
+      // 如果存在父节点就直接初始化它的children配置项
+      if(!that._tempJson[node[parentidKey]][childrenKey]) that._tempJson[node[parentidKey]][childrenKey] = [];
+    }else{
+      // 如果不存在就先创建父节点,放入hash中
+      let parentNode = {
+        id: node[parentidKey]
+      };
+      parentNode[childrenKey] = [];
+      that._tempJson[node[parentidKey]] = parentNode;
+    }
+    // 将该节点放入hash的父节点的children里面
+    that._tempJson[node[parentidKey]][childrenKey].push(node);
+  };
+
+  /**
+   * @method 解析配置项里面的数据源
+   * @desc
+   *    判断源数据中第一项是否带有parentid属性,如果有就解析并覆盖
+   */
+  Class.prototype.sortData = function(){
+    if(!this.config.sort) return;
+    this.doSortData();
+  };
+
+  Class.prototype.doSortData = function(){
+    let that = this;
+    let idKey = that.config.customName.id;
+    let titleKey = that.config.customName.title;
+    let childrenKey = that.config.customName.children;
+    // 数据保存至hash表中,保证后面通过key查询信息比较方便
+    that._tempSortJson = {};
+    layui.each(that.config.data, function(key, value){
+      that._tempSortJson[value[idKey]] = that.config.search ? that.doSortDataByContent(value[childrenKey]) : that.doSortDataByLength(value[childrenKey]);
+      // 添加,对顶部节点也处理
+      if(that.config.search){
+        value['*' + titleKey] = String(value[titleKey]).replace(
+          new RegExp(that.config.search, "gim"),
+          function (str) {
+            that._tempSortJson[value[idKey]]++;
+            return "<span style = 'color:red'>" + str + "</span>";
+          }
+        );
+        value.spread = that._tempSortJson[value[idKey]] > 0;
+      }
+    });
+  };
+
+  Class.prototype.doSortDataByLength = function(list){
+    let that = this;
+    let idKey = that.config.customName.id;
+    let titleKey = that.config.customName.title;
+    let childrenKey = that.config.customName.children;
+    let res = 1;
+    layui.each(list, function(key, value){
+      let subRes = 1;
+      if(value[childrenKey] && value[childrenKey].length > 0)
+        subRes += that.doSortDataByLength(value[childrenKey]);
+      that._tempSortJson[value[idKey]] = subRes;
+      res += subRes;
+    });
+    return res;
+  };
+
+  Class.prototype.doSortDataByContent = function(list){
+    let that = this;
+    let idKey = that.config.customName.id;
+    let childrenKey = that.config.customName.children;
+    let titleKey = that.config.customName.title;
+    let res = 0;
+    layui.each(list, function(key, value){
+      let subRes = 0;
+      if(value[childrenKey] && value[childrenKey].length > 0)
+        subRes += that.doSortDataByContent(value[childrenKey]);
+      value['*' + titleKey] = String(value[titleKey]).replace(
+        new RegExp(that.config.search, "gim"),
+        function (str) {
+          subRes++;
+          return "<span style = 'color:red'>" + str + "</span>";
+        }
+      );
+      value.spread = subRes > 0;
+      that._tempSortJson[value[idKey]] = subRes;
+      res += subRes;
+    });
+    return res;
   };
 
   // 记录所有实例
