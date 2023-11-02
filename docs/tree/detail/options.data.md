@@ -106,5 +106,13 @@
 
 </td>
     </tr>
+    <tr>
+      <td>parentid<br/><sup>2.8.18+</sup></td>
+      <td>
+        (数组型数据源特有属性,可以通过customName.parentid自定义名称)这个节点父节点的id(顶层节点为0),会根据这个信息组装带有children的json数组
+      </td>
+      <td>string</td>
+      <td>-</td>
+    </tr>
   </tbody>
 </table>

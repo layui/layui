@@ -57,7 +57,8 @@ tree.render({
   customName: { // 自定义 data 字段名 --- 2.8.14+
     id: 'id',
     title: 'title',
-    children: 'children'
+    children: 'children',
+    parentid: 'parentid' // --- 2.8.18+
   },
   // 其他属性 …
 });

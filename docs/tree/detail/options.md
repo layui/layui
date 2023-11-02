@@ -164,6 +164,18 @@ text: {
 </td>
     </tr>
     <tr>
+      <td>sort<br/><sup>2.8.18+</sup></td>
+      <td colspan="3">
+        是否进行节点排序,若设置为true,子节点越多的节点越靠上;若设置为false,就不处理按照数据源顺序。默认为false
+      </td>
+    </tr>
+    <tr>
+      <td>search<br/><sup>2.8.18+</sup></td>
+      <td colspan="3">
+        进行节点搜索,当sort属性设置为true,并且search设置为一个非空字符串,会根据这个传入的字符串对整个树进行检索排序,子节点的title被匹配上的次数越多,这个节点的顺序越靠上;此外,被匹配上的内容会以红色高亮显示。
+      </td>
+    </tr>
+    <tr>
 <td colspan="4" style="text-align: center"> 
 
 
