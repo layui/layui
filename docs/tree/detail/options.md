@@ -11,13 +11,13 @@
       <th>描述</th>
       <th>类型</th>
       <th>默认值</th>
-    </tr> 
+    </tr>
   </thead>
   <tbody>
     <tr>
 <td>elem</td>
 <td>
-  
+
 绑定元素选择器
 
 </td>
@@ -27,7 +27,7 @@
     <tr>
 <td>data</td>
 <td>
-  
+
 `tree` 的数据源。其格式详见：[#data 格式](#options.data)
 
 </td>
@@ -37,7 +37,7 @@
     <tr>
 <td>id</td>
 <td>
-  
+
 设置实例唯一索引，用于其他方法传参使用。
 
 </td>
@@ -47,7 +47,7 @@
     <tr>
 <td>showCheckbox</td>
 <td>
-  
+
 是否显示复选框
 
 </td>
@@ -61,7 +61,7 @@
     <tr>
 <td>edit</td>
 <td>
-  
+
 是否开启节点的右侧操作图标。支持以下可选值：
 
 - 若为 `true`，则默认显示「改删」图标
@@ -78,7 +78,7 @@
     <tr>
 <td>accordion</td>
 <td>
-  
+
 是否开启手风琴模式
 
 </td>
@@ -92,8 +92,8 @@
     <tr>
 <td>onlyIconControl</td>
 <td>
-  
-是否仅允许节点左侧图标控制展开伸缩。 
+
+是否仅允许节点左侧图标控制展开伸缩。
 
 - 默认为 `false`，即点击节点本身也可控制伸缩
 - 若值为 `true`，则只能通过节点左侧图标来展开收缩
@@ -109,7 +109,7 @@
     <tr>
 <td>isJump</td>
 <td>
-  
+
 是否允许点击节点时弹出新窗口跳转。若为 `true`，则需在对应的 data 中设定 href 属性（url 格式）
 
 </td>
@@ -123,7 +123,7 @@
     <tr>
 <td>showLine</td>
 <td>
-  
+
 是否开启节点连接线。若设为 `false`，则节点左侧出现三角图标。
 
 </td>
@@ -151,32 +151,32 @@
     <tr>
 <td>text</td>
 <td colspan="3">
-  
+
 自定义默认文本，`object` 类型。支持以下属性：
 
 ```
 text: {
   defaultNodeName: '未命名', // 节点默认名称
   none: '无数据' // 数据为空时的提示文本
-}  
+}
 ```
 
 </td>
     </tr>
     <tr>
-      <td>sort<br/><sup>2.8.18+</sup></td>
+      <td>sort<br/><sup>2.9.0+</sup></td>
       <td colspan="3">
         是否进行节点排序,若设置为true,子节点越多的节点越靠上;若设置为false,就不处理按照数据源顺序。默认为false
       </td>
     </tr>
     <tr>
-      <td>search<br/><sup>2.8.18+</sup></td>
+      <td>search<br/><sup>2.9.0+</sup></td>
       <td colspan="3">
         进行节点搜索,当sort属性设置为true,并且search设置为一个非空字符串,会根据这个传入的字符串对整个树进行检索排序,子节点的title被匹配上的次数越多,这个节点的顺序越靠上;此外,被匹配上的内容会以红色高亮显示。
       </td>
     </tr>
     <tr>
-<td colspan="4" style="text-align: center"> 
+<td colspan="4" style="text-align: center">
 
 
 <div id="options.callback" lay-pid="options" class="ws-anchor">
@@ -190,7 +190,7 @@ text: {
     <tr>
 <td>click</td>
 <td colspan="3">
-  
+
 <div id="options.click" lay-pid="options" class="ws-anchor">
   节点被点击的回调函数。返回的参数如下：
 </div>
@@ -200,7 +200,7 @@ click: function(obj){
   console.log(obj.data); // 得到当前点击的节点数据
   console.log(obj.state); // 得到当前节点的展开状态：open、close、normal
   console.log(obj.elem); // 得到当前节点元素
-  
+
   console.log(obj.data.children); // 当前节点下是否有子节点
 }
 ```
@@ -211,7 +211,7 @@ click: function(obj){
 <td>oncheck</td>
 <td colspan="3">
 
-<div id="options.oncheck" lay-pid="options" class="ws-anchor">  
+<div id="options.oncheck" lay-pid="options" class="ws-anchor">
   点击复选框时的回调函数，返回的参数如下：
 </div>
 
@@ -229,16 +229,16 @@ oncheck: function(obj){
 <td>operate</td>
 <td colspan="3">
 
-<div id="options.operate" lay-pid="options" class="ws-anchor">  
+<div id="options.operate" lay-pid="options" class="ws-anchor">
   点击节点的右侧操作图标的回调函数，返回的参数如下：
 </div>
 
-```  
+```
 operate: function(obj){
   var type = obj.type; // 得到操作类型：add、edit、del
   var data = obj.data; // 得到当前节点的数据
   var elem = obj.elem; // 得到当前节点元素
-  
+
   // Ajax 操作
   var id = data.id; // 得到节点索引
   if(type === 'add'){ // 增加节点
