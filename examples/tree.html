@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>树组件 - layui</title>
-  <link rel="stylesheet" href="../src/css/layui.css" media="all">  
+  <link rel="stylesheet" href="../src/css/layui.css" media="all">
   <style>
     body{padding: 100px;}
-    #test1,#test2{margin-bottom: 100px; width: 400px;}
+    #test1,#test2,#test3{margin-bottom: 100px; width: 400px;}
   </style>
 </head>
 <body>
@@ -22,12 +22,14 @@
   <div class="layui-form-item">
     <label class="layui-form-label">表单内</label>
     <div class="layui-input-block">
-     
+
   </div>
-</div>  
+</div>
 
 <div id="test1"></div>
 <div id="test2"></div>
+<div id="test3"></div>
+<div id="test4"></div>
 
 <script src="../src/layui.js"></script>
 <script>
@@ -37,7 +39,7 @@
     ,layer = layui.layer
     ,util = layui.util
     ,index = 100;
-    
+
     //数据源
     var data1 = [{
       title: 'A-1'
@@ -156,7 +158,7 @@
         }]
       }]
     }];
-    
+
     //数据源
     var data2 = [{
       title: '控制台'
@@ -175,6 +177,99 @@
         ,checked: true
       }]
     }]
+
+    // 数据源
+    var data3 = [
+      {
+        "id": 1,
+        "menuName": "系统管理",
+        "path": "regionalregulation",
+        "orderNum": 1,
+        "icon": "icon-quyujianguan",
+        "menuType": "M",
+        "perms": "regionalregulation",
+        "parentid": 0,
+        "createtime": "2023-10-23 16:21:28"
+      },
+      {
+        "id": 113,
+        "menuName": "系统日志",
+        "path": "systemLog",
+        "orderNum": 1,
+        "icon": "icon-yonghurizhi",
+        "menuType": "C",
+        "perms": "systemLog",
+        "parentid": 1,
+        "createtime": "2023-10-26 17:54:18"
+      },
+      {
+        "id": 114,
+        "menuName": "用户管理",
+        "path": "userManagement",
+        "orderNum": 2,
+        "icon": "icon-yonghuguanli",
+        "menuType": "C",
+        "perms": "userManagement",
+        "parentid": 1,
+        "createtime": "2023-10-26 17:54:18"
+      },
+      {
+        "id": 115,
+        "menuName": "角色管理",
+        "path": "roleManagement",
+        "orderNum": 3,
+        "icon": "icon-jiaoseguanli",
+        "menuType": "C",
+        "perms": "roleManagement",
+        "parentid": 1,
+        "createtime": "2023-10-26 17:54:18"
+      },
+      {
+        "id": 116,
+        "menuName": "添加",
+        "path": "",
+        "orderNum": 0,
+        "icon": "",
+        "menuType": "F",
+        "perms": "keyShip:add",
+        "parentid": 114,
+        "createtime": "2023-10-26 17:54:18"
+      },
+      {
+        "id": 117,
+        "menuName": "编辑",
+        "path": "",
+        "componentLink": "",
+        "orderNum": 0,
+        "icon": "",
+        "menuType": "F",
+        "perms": "keyShip:edit",
+        "parentid": 104,
+        "createtime": "2023-10-26 17:54:18"
+      },
+      {
+        "id": 118,
+        "menuName": "删除",
+        "path": "",
+        "orderNum": 0,
+        "icon": "",
+        "menuType": "F",
+        "perms": "keyShip:delete",
+        "parentid": 114,
+        "createtime": "2023-10-26 17:54:18"
+      },
+      {
+        "id": 134,
+        "menuName": "权限配置",
+        "path": "",
+        "orderNum": 0,
+        "icon": "",
+        "menuType": "F",
+        "perms": "role:permission",
+        "parentid": 115,
+        "createtime": "2023-10-26 17:54:18"
+      }
+    ];
 
     tree.render({
       elem: '#test1'
@@ -200,7 +295,7 @@
       }
       ,showCheckbox: true  //是否显示复选框
       ,accordion: 0  //是否开启手风琴模式
-      
+
       ,onlyIconControl: true //是否仅允许节点左侧图标控制展开收缩
       ,isJump: 0  //点击文案跳转地址
       ,edit: true  //操作节点图标
@@ -218,7 +313,7 @@
       }
       ,reload: function(){
         tree.reload('demoId1', {
-          
+
         });
       }
     });
@@ -246,7 +341,31 @@
         console.log(state, obj, target);
       }
     });
-     
+
+    tree.render({
+      elem: '#test3'
+      ,data: data3
+      ,customName: {
+        id: "id",
+        title: "menuName",
+        children: "children"
+      },
+      sort: true,
+      search: '',
+    });
+
+    tree.render({
+      elem: '#test4'
+      ,data: data3
+      ,customName: {
+        id: "id",
+        title: "menuName",
+        children: "children"
+      },
+      sort: true,
+      search: '角色',
+    });
+
   });
 </script>
 
