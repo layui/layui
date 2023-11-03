@@ -2,7 +2,7 @@
 title: 树组件 tree
 toc: true
 ---
- 
+
 # 树组件
 
 > 树组件 `tree` 是以树形为结构的菜单伸缩型组件，*当前版本中，`tree`主要用于树菜单展示，交互性相对较弱。*
@@ -58,7 +58,7 @@ tree.render({
     id: 'id',
     title: 'title',
     children: 'children',
-    parentid: 'parentid' // --- 2.8.18+
+    parentid: 'parentid' // --- 2.9.0+
   },
   // 其他属性 …
 });
