@@ -14,6 +14,7 @@ toc: true
 
 <h2 id="2.8.18" class="ws-anchor">
   2.8.18
+  <span class="layui-badge-rim" style="color: #18b777;">稳定版</span>
   <span class="layui-badge-rim">2023-10-31</span>
 </h2>
 
