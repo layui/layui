@@ -468,11 +468,16 @@
     writeText: function(options) {
       var text = String(options.text);
 
-      try {
-        navigator.clipboard.writeText(text).then(
-          options.done
-        )['catch'](options.error);
-      } catch(e) {
+      if(navigator && 'clipboard' in navigator){
+        navigator.clipboard.writeText(text)
+          .then(options.done, function(){
+            legacyCopy();
+        });
+      }else{
+        legacyCopy();
+      }
+
+      function legacyCopy(){
         var elem = document.createElement('textarea');
 
         elem.value = text;
