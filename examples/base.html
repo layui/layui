@@ -27,7 +27,7 @@
 layui.use(['lay', 'util'], function(){
   var lay = layui.lay
   ,util = layui.util;
-  
+
   //事件
   var style = 'color: orange; font-size: 16px;';
   util.event('lay-on', {
@@ -78,11 +78,11 @@ layui.use(['lay', 'util'], function(){
         ], 'a')
       );
       console.log(
-        '数组成员全为数字', 
+        '数组成员全为数字',
         layui.sort([1, 20.5, 19.5, 52, 4.5])
       );
       console.log(
-        '数组成员为混合型', 
+        '数组成员为混合型',
         layui.sort([1, {a: 32}, 20.5, {a: 6}, 52, 5.5], 'a') //按成员对象的 key 为 a 进行比较
       );
     }
@@ -90,8 +90,8 @@ layui.use(['lay', 'util'], function(){
     ,type: function(){
       console.log('%c> layui.type: ', style);
       console.log(
-        'new RegExp()：', layui.type(new RegExp()), 
-        '\nnew Date()：', layui.type(new Date()), 
+        'new RegExp()：', layui.type(new RegExp()),
+        '\nnew Date()：', layui.type(new Date()),
         '\n[]：', layui.type([])
       );
     }
@@ -99,8 +99,8 @@ layui.use(['lay', 'util'], function(){
     ,isArray: function(){
       console.log('%c> layui.isArray: ', style);
       console.log(
-        '[1,6]：', layui.isArray([1,6]), 
-        '\nlay("div")：', layui.isArray(lay('div')), 
+        '[1,6]：', layui.isArray([1,6]),
+        '\nlay("div")：', layui.isArray(lay('div')),
         '\ndocument.querySelectorAll("div")：', layui.isArray(document.querySelectorAll('div')),
         '\n{"key": "value"}：', layui.isArray({key: 'value'})
       );
@@ -110,9 +110,9 @@ layui.use(['lay', 'util'], function(){
       console.log('%c> lay.extend: ', style);
       console.log(
         lay.extend(
-          {}, 
-          {a: 123, c: {ccc: 'ccc'}, arr: [1,3]}, 
-          {a: 111, b: 1, c: {bbb: 'bbb'}}, 
+          {},
+          {a: 123, c: {ccc: 'ccc'}, arr: [1,3]},
+          {a: 111, b: 1, c: {bbb: 'bbb'}},
           {a: 222222, arr: [5]}
         )
       );
@@ -121,7 +121,7 @@ layui.use(['lay', 'util'], function(){
       );
     }
   })
-  
+
 });
 </script>
 </body>

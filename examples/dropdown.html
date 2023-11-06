@@ -18,17 +18,17 @@
       <i class="layui-icon layui-icon-down layui-font-12"></i>
     </button>
     <button class="layui-btn layui-btn-primary" id="demo2">
-      
+
       按钮下拉
       <i class="layui-icon layui-icon-down layui-font-12"></i>
     </button>
-    
+
   </div>
-  
+
   <div class="layui-text">
     <a href="javascript:;" id="demo3">文字下拉 <i class="layui-icon layui-icon-down"></i></a>
   </div>
-  
+
   <div class="layui-bg-gray" style="margin-top: 30px; width: 100%; height: 300px; text-align: center;" id="demo20">
     <span class="layui-font-gray" style="position: relative; top:50%;">鼠标右键菜单</span>
   </div>
@@ -153,9 +153,9 @@ layui.use('dropdown', function(){
         ,id: ''
       }]
     }]
-    
+
     ,id: 'demo1'
-    
+
      // 触发点击事件的元素范围 --- default: 仅子菜单触发点击事件（默认，可不填）; all: 所有父子菜单均触发点击事件
     ,clickScope: 'all'
 
@@ -164,7 +164,7 @@ layui.use('dropdown', function(){
       console.log(obj);
     }
   });
-  
+
   var inst = dropdown.render({
     elem: '#demo2'
     // ,show: true
@@ -191,7 +191,7 @@ layui.use('dropdown', function(){
     }
   });
 
-  
+
   dropdown.render({
     elem: '#demo3'
     ,content: '自定义内容  123 '
@@ -199,8 +199,8 @@ layui.use('dropdown', function(){
     ,align: 'center'
     ,trigger: 'hover'
   });
-  
-  
+
+
   //右键
   dropdown.render({
     elem: document//'#demo20' //也可绑定到 document，从而重置整个右键
@@ -245,12 +245,12 @@ layui.use('dropdown', function(){
       }
     }
   });
-  
-  
-  
-  
+
+
+
+
   return;
-  
+
   dropdown.render({
     elem: document
     ,content: '123'
