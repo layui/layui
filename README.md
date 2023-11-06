@@ -15,11 +15,11 @@
   <a href="https://www.npmjs.com/package/layui">
     <img src="https://img.shields.io/github/license/layui/layui" alt="License">
   </a>
-  <a href="https://github.com/layui/layui/blob/master/dist/css/layui.css">
-    <img src="https://img.badgesize.io/layui/layui/master/dist/css/layui.css?compression=brotli&label=CSS%20Brotli%20size" alt="CSS Brotli size">
+  <a href="https://github.com/layui/layui/blob/2.x/dist/css/layui.css">
+    <img src="https://img.badgesize.io/layui/layui/2.x/dist/css/layui.css?compression=brotli&label=CSS%20Brotli%20size" alt="CSS Brotli size">
   </a>
-  <a href="https://github.com/layui/layui/blob/master/dist/layui.js">
-    <img src="https://img.badgesize.io/layui/layui/master/dist/layui.js?compression=brotli&label=JS%20Brotli%20size" alt="JS Brotli size">
+  <a href="https://github.com/layui/layui/blob/2.x/dist/layui.js">
+    <img src="https://img.badgesize.io/layui/layui/2.x/dist/layui.js?compression=brotli&label=JS%20Brotli%20size" alt="JS Brotli size">
   </a>
 </p>
 
@@ -57,7 +57,7 @@ Layui 是一套开源免费的 Web UI 组件库，采用自身轻量级模块化
 
 ## 使用文档
 
-[**最新文档**](https://layui.dev)
+[**当前版本文档**](https://layui.dev/docs/2/)
 
 ## 项目参与
 
