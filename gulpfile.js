@@ -56,7 +56,7 @@ const js = () => {
   }))
   .pipe(concat('layui.js', {newLine: ''}))
   .pipe(header.apply(null, config.comment))
-  .pipe(sourcemaps.write(''))
+  .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest(dest));
 };
 
@@ -71,10 +71,10 @@ const css = () => {
     compatibility: 'ie8'
   }))
   .pipe(concat('layui.css', {newLine: ''}))
-  .pipe(sourcemaps.write(''))
+  .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest(dest +'/css'));
 };
-  
+
 // files
 const files = () => {
   let src = ['./src/**/*.{eot,svg,ttf,woff,woff2,html,json,png,jpg,gif}'];
@@ -99,7 +99,7 @@ const cp = () => {
   .pipe(replace(/\n\/(\*|\/)\#[\s\S]+$/, '')) // 过滤 css 和 js 的 map 特定注释
   .pipe(gulp.dest(dest));
 };
-  
+
 // release
 const rls = () => {
   return gulp.src('./release/doc/**/*')
@@ -129,7 +129,7 @@ exports.rls = gulp.series(cleanRLS, rls); // release task
 // layer task
 exports.layer = () => { // gulp layer
   let dest = './release/layer';
-  
+
   gulp.src('./src/css/modules/layer.css')
   .pipe(gulp.dest(dest + '/src'));
 
@@ -144,11 +144,11 @@ exports.laydate = () => { // gulp laydate
     '\n/** \n * <%= title %> \n * <%= license %> Licensed \n */ \n\n'
     ,{title: 'laydate 日期与时间组件（单独版）', license: 'MIT'}
   ];
-  
+
   // css
   gulp.src('./src/css/modules/laydate.css')
   .pipe(gulp.dest(dest + 'src'));
-  
+
   // js
   return gulp.src(['./src/layui.js', './src/modules/{lay,laydate}.js'])
   .pipe(replace('win.layui =', 'var layui =')) // 将 layui 替换为局部变量
@@ -174,7 +174,7 @@ exports.help = () => {
       desc: '生成一个带版本号的文件夹'
     }
   });
-  
+
   parser.showHelp(console.log);
   console.log([
     'Tasks:',
