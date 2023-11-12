@@ -2,14 +2,29 @@
   "name": "layui",
   "version": "2.8.18",
   "description": "Classic modular Front-End UI library",
-  "main": "dist/layui.js",
+  "keywords": [
+    "layui",
+    "components",
+    "front-end",
+    "framework",
+    "library",
+    "ui",
+    "web"
+  ],
+  "homepage": "https://layui.dev",
   "license": "MIT",
-  "scripts": {},
+  "bugs": {
+    "url": "https://github.com/layui/layui/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/layui/layui.git"
   },
-  "homepage": "https://layui.dev",
+  "main": "dist/layui.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {},
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-uglify": "^3.0.2",
@@ -23,17 +38,5 @@
     "del": "^2.2.2",
     "minimist": "^1.2.8"
   },
-  "bugs": {
-    "url": "https://gitee.com/layui/layui/issues"
-  },
-  "dependencies": {},
-  "keywords": [
-    "layui",
-    "ui",
-    "javascript",
-    "css",
-    "components",
-    "framework",
-    "library"
-  ]
+  "dependencies": {}
 }
