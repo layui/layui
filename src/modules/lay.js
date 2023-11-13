@@ -138,7 +138,7 @@
   /**
    * 创建元素
    * @param {string} elemName - 元素的标签名
-   * @param {{attrName: string, attrValue:string}} [attr] - 添加到元素上的属性
+   * @param {Object.<string, string>} [attr] - 添加到元素上的属性
    * @returns {HTMLElement} 返回创建的 HTML 元素
    * @example
    * ```js
@@ -392,7 +392,7 @@
    * 获取元素上的属性配置项
    * @param {string | HTMLElement | JQuery} elem - HTML 元素
    * @param {{attr: string} | string} [opts="lay-options"] - 可配置的选项，string 类型指定属性名
-   * @returns {*} 返回元素上的属性配置项
+   * @returns {Object.<string, any>} 返回元素上的属性配置项
    * @example
    * ```js
    * <div id="testEl" lay-options="{color:red}" lay-toc="{hot: true}"></div>
