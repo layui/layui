@@ -26,8 +26,8 @@
   ],
   "scripts": {
     "build": "gulp",
-    "release": "npm-run-all --sequential build release-zip",
-    "release-zip": "gulp release --dest rls"
+    "release": "npm run build && npm rum release-zip",
+    "release-zip": "gulp release"
   },
   "devDependencies": {
     "gulp": "^4.0.2",
