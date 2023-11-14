@@ -1,6 +1,6 @@
 {
   "name": "layui",
-  "version": "2.8.18",
+  "version": "2.9.0-beta.1",
   "description": "Classic modular Front-End UI library",
   "keywords": [
     "layui",
@@ -24,18 +24,21 @@
   "files": [
     "dist"
   ],
-  "scripts": {},
+  "scripts": {
+    "build": "gulp",
+    "release": "npm-run-all --sequential build release-zip",
+    "release-zip": "gulp release --dest rls"
+  },
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-uglify": "^3.0.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-replace": "^1.1.4",
-    "gulp-rename": "^2.0.0",
     "gulp-header": "^2.0.9",
-    "gulp-footer": "^2.1.0",
     "gulp-sourcemaps": "^3.0.0",
-    "del": "^2.2.2",
+    "gulp-zip": "^5.1.0",
+    "del": "^6.1.1",
     "minimist": "^1.2.8"
   },
   "dependencies": {}
