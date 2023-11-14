@@ -18,7 +18,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   var HIDE = 'layui-hide';
   var DISABLED = 'layui-disabled';
   var OUT_OF_RANGE = 'layui-input-number-out-of-range';
-  
+  // select tree 实例计数
+  var INTERVAL_INDEX = 0;
+  // 有无绑定windows事件
+  var SELECT_TREE_EVENT = false;
+
   var Form = function(){
     this.config = {
       // 内置的验证规则
@@ -367,6 +371,216 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           
           renderAffix();
         });
+
+        /**
+         * @method  展开select-tree的树下拉区域 
+         * @param {*} ele  
+         * @desc 
+         *   2023/11/09 添加下拉树功能时新增
+         */
+        var openSelectTree = function(ele){
+          // 模拟下拉列表的下拉显隐的原理
+          $(".layui-form-select").not(ele.parents(".layui-form-select")).removeClass("layui-form-selected");
+          ele.parents(".layui-form-select").toggleClass("layui-form-selected");
+          // 将滚动条调整到最上面
+          ele.parents(".layui-form-select").find("dl").scrollTop(0);
+        }
+
+        /**
+         * @method  点击select-tree的选择框事件
+         * @param {*} e 
+         * @desc 
+         *   2023/11/09 添加下拉树功能时新增
+         */
+        var onClickTreeInput = function(e){
+          // 展开下拉选项
+          openSelectTree($(e.target));
+          // 阻止事件
+          layui.stope(e);
+        }
+
+        /**
+         * @method  模拟在下拉选择框 隐藏 之后的回调
+         * @param {*} e 
+         * @param {*} clear 
+         * @desc 
+         *   2023/11/09 添加下拉树功能时新增
+         */
+        var hide = function(e, clear){
+          if(!$(e.target).parent().hasClass("layui-select-title") || clear){
+            // 添加上settimeout让下面的select的事件先触发
+            setTimeout(fixValue, 200);
+          }
+        };
+
+        /**
+         * @method 让下拉树的 layui-select-tree-value 和 layui-select-tree-title 值保持一致的做法
+         * @param {*} dom 
+         * @desc 
+         *   2023/11/09 添加下拉树功能时新增
+         */
+        var fixValue = function(dom){
+          var $dom = dom || $('.layui-form-select');
+          if(!$dom.get(0)) return;
+          // 判断下拉的部分已经收起,并且是渲染出了layui-select-tree-value这个输入框的
+          if(!$dom.hasClass('layui-form-selected') && !$dom.hasClass('layui-form-selectup') && $dom.find('.layui-select-tree-value').get(0)){
+            // 获取值,并以这个值为准查找出匹配的文字 newValue
+            var oldValue = $dom.find('.layui-select-tree-value').val();
+            var node = $dom.find('[data-id="'+oldValue+'"] .layui-tree-txt').get(0);
+            var newValue = node ? node.textContent : '';
+            // 设置匹配的文字 newValue
+            $dom.find('.layui-select-tree-title').val(newValue);
+            // 查询树的id
+            var treeDom = $dom.find('[lay-tree-id]');
+            if(treeDom)
+              layui.use('tree', function(){
+                // 重载树
+                layui.tree.reload(treeDom.attr('lay-tree-id'), {
+                  search: newValue,
+                });
+              });
+          }
+        };
+
+        // 2023/11/09 重新渲染下拉树,将值同步
+        elemForm.find('.layui-select-tree-value').each(function(){
+          var othis = $(this);
+          var oparent = othis.parent();
+          var oroot = othis.parent().parent();
+          if(oparent.hasClass("layui-select-title") && oroot.hasClass("layui-form-select")){
+            fixValue(oroot);
+          }
+        });
+
+        // 2023/11/09 初始化下拉树
+        elemForm.find('input[lay-options]').each(function(){
+          var CLASS = 'layui-form-select';
+          var othis = $(this);
+          // 表单的name属性应该存在
+          var name = othis.attr('name');
+          // 表单的lay-filter属性用来绑定事件
+          var filter = othis.attr('lay-filter');
+          var oparent = othis.parent();
+          var oroot = othis.parent().parent();
+          /**
+           * 为了下面的功能保障(其实是在模拟下拉框被渲染后的dom),这个选择框的格式如下:
+           *       <div class="layui-unselect layui-form-select">
+           *          <div class="layui-select-title"  >
+           *              <input type="text" placeholder="placeholder" name="name" class="layui-input" />
+           *          </div>
+           *       </div>
+           */
+          if(oparent.hasClass("layui-select-title") && oroot.hasClass("layui-form-select")){
+            // 隐藏当前的input表单元素,这个元素记录的应该是类似id的信息，前端展示的是名称信息,这两个是分开的dom
+            othis.addClass('layui-hide');
+            // 区分当前保存值的class
+            othis.addClass('layui-select-tree-value');
+            // 创建一个 * + name 的输入框,作为后面展示的输入框,单独将它拎出来方便后面绑定事件
+            let nameDom = $('<input type = "text" class="layui-input layui-unselect layui-input-name layui-select-tree-title"  name = "*'+name+'"  placeholder = "'+othis.attr("placeholder")+'">');
+            oparent.append(nameDom).append('<i class="layui-edge"></i>');
+            oparent.on('click', function(e){
+              // 点击parent节点调用方法展开树
+              onClickTreeInput(e);
+            });
+            // dl dd节点模拟select下拉节点
+            var dlDom = $('<dl class="layui-anim layui-anim-upbit" ></dl>');
+            var ddDom = $('<dd ></dd>');
+            dlDom.append(ddDom);
+            oroot.append(dlDom);
+            // 添加一个隐藏的空的下拉框
+            var selectContainer = $('<div class = "layui-hide" style = "display:none" ></div>');
+            var selectDom = $('<select></select>');
+            selectContainer.append(selectDom);
+            oroot.append(selectContainer);
+            /**
+             * 使用定向渲染渲染一个空的下拉框出来,这里很多的事件是依赖下拉框事件的,所以这里添加一个空的下拉框来初始化这些事件
+             */
+            layui.form.render(selectDom);
+            dlDom.on('click',function(e){
+              // 去掉默认的事件，点击这里只来触发点击树的事件
+              layui.stope(e);
+            });
+            // 树的渲染,这里是使用option里面的异步属性来ajax数据,然后再通过配置项渲染树
+            let optionsAttr = othis.attr("lay-options");
+            let options = optionsAttr
+            ? JSON.parse(String(optionsAttr).replace(/\'/g, () => '"'))
+            : {};
+            if(!options.customName) options.customName = {};
+            if(!options.customName.id) options.customName.id = 'id';
+            if(!options.customName.title) options.customName.title = 'title';
+            // 初始化一个树的id
+            var treeId = name + '-' + INTERVAL_INDEX ++;
+            layui.use('tree', function(){
+              // 根据配置项渲染树
+              layui.tree.render({
+                elem: ddDom,
+                id: treeId,
+                onlyIconControl: options.onlyIconControl || true, // 节点只用来触发点击事件
+                data: options.data || [],
+                customName: options.customName,
+                sort: true,
+                click: function(obj){
+                  // 点击事件时回去触发 layui.form.on('selectTree(filter)', fn) 事件,事件返回false时不会触发下面的赋值操作,返回不是false触发赋值操作
+                  if(layui.event.call(this, MOD_NAME, 'selectTree('+ filter +')', { elem: othis.get(0) ,value: obj.data ,othis: oroot }) !== false){
+                    // 赋值
+                    othis.val(obj.data[options.customName.id]);
+                    nameDom.val(obj.data[options.customName.title]);
+                    // 重载树
+                    layui.tree.reload(treeId, {
+                      search: obj.data[options.customName.title],
+                    });
+                    // 隐藏下拉选择框
+                    oroot.removeClass(CLASS+'ed ' + CLASS+'up');
+                  }
+                },
+              });
+              // dom上面添加tree的id属性方便查找调用
+              ddDom.attr('lay-tree-id',treeId);
+              // 添加搜索
+              nameDom.on("input propertychange", function(){
+                // 展开
+                if(!oroot.hasClass('layui-form-selected') && !oroot.hasClass('layui-form-selectup')){
+                  nameDom.trigger('click');
+                }
+                // 重载树
+                layui.tree.reload(treeId, {
+                  search: $(this).val(),
+                });
+              });
+              othis.on("input propertychange", function(){
+                // 对当前属性赋值时，同步显示
+                fixValue(oroot);
+              });
+              // 在配置项上面添加了数据源时,使用ajax请求更新树的数据源
+              if(options.url){
+                var param = options.where || {};
+                $.ajax({
+                  url: options.url,
+                  type: options.type || 'GET',
+                  headers: options.headers || {},
+                  data: options.dataType != 'json' ? param : JSON.stringify(param),
+                  success: function (res) {
+                    if (res[options.statusName || 'code'] == (options.statusCode || 200)) {
+                      let list = res[options.dataName || 'data'];
+                      // 重载树
+                      layui.tree.reload(treeId, {
+                        data: list,
+                      });
+                    }
+                  },
+                });
+              }
+            });
+            // 绑定windows事件
+            if(!SELECT_TREE_EVENT){
+              SELECT_TREE_EVENT = true;
+              $(document).on('click', hide);
+            }
+          }
+          // 去掉lay-options属性,防止重复绑定
+          othis.removeAttr('lay-options');
+        });
+
       }
       
       // 下拉选择框
