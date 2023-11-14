@@ -862,7 +862,9 @@ layui.define('form', function(exports){
    */
   Class.prototype.parseData = function(){
     if(this.config.data.length == 0) return;
-    if(this.config.data[0].parentid === undefined) return;
+    let parentidKey = this.config.customName.parentid;
+    let childrenKey = this.config.customName.children;
+    if(this.config.data[0][parentidKey] === undefined || this.config.data[0][childrenKey] !== undefined) return;
     return this.doParseData(this.config.data);
   };
 
