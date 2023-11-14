@@ -1,16 +1,16 @@
 /**
  * form 表单组件
  */
- 
+
 layui.define(['lay', 'layer', 'util'], function(exports){
   "use strict";
-  
+
   var $ = layui.$;
   var layer = layui.layer;
   var util = layui.util;
   var hint = layui.hint();
   var device = layui.device();
-  
+
   var MOD_NAME = 'form';
   var ELEM = '.layui-form';
   var THIS = 'layui-this';
@@ -18,10 +18,6 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   var HIDE = 'layui-hide';
   var DISABLED = 'layui-disabled';
   var OUT_OF_RANGE = 'layui-input-number-out-of-range';
-  // select tree 实例计数
-  var INTERVAL_INDEX = 0;
-  // 有无绑定windows事件
-  var SELECT_TREE_EVENT = false;
 
   var Form = function(){
     this.config = {
@@ -71,14 +67,14 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       autocomplete: null // 全局 autocomplete 状态。 null 表示不干预
     };
   };
-  
+
   // 全局设置
   Form.prototype.set = function(options){
     var that = this;
     $.extend(true, that.config, options);
     return that;
   };
-  
+
   // 验证规则设定
   Form.prototype.verify = function(settings){
     var that = this;
@@ -92,30 +88,30 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       return filter ? ('[lay-filter="' + filter +'"]') : '';
     }());
   };
-  
+
   // 表单事件
   Form.prototype.on = function(events, callback){
     return layui.onevent.call(this, MOD_NAME, events, callback);
   };
-  
+
   // 赋值/取值
   Form.prototype.val = function(filter, object){
     var that = this
-    ,formElem = that.getFormElem(filter);
-    
+      ,formElem = that.getFormElem(filter);
+
     // 遍历
     formElem.each(function(index, item){
       var itemForm = $(this);
-      
+
       // 赋值
       layui.each(object, function(key, value){
         var itemElem = itemForm.find('[name="'+ key +'"]')
-        ,type;
-        
+          ,type;
+
         // 如果对应的表单不存在，则不执行
         if(!itemElem[0]) return;
         type = itemElem[0].type;
-        
+
         // 如果为复选框
         if(type === 'checkbox'){
           itemElem[0].checked = value;
@@ -128,42 +124,42 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         }
       });
     });
-    
+
     form.render(null, filter);
-    
+
     // 返回值
     return that.getValue(filter);
   };
-  
+
   // 取值
   Form.prototype.getValue = function(filter, itemForm){
     itemForm = itemForm || this.getFormElem(filter);
-        
+
     var nameIndex = {} // 数组 name 索引
-    ,field = {}
-    ,fieldElem = itemForm.find('input,select,textarea') // 获取所有表单域
-    
-    layui.each(fieldElem, function(_, item){ 
+      ,field = {}
+      ,fieldElem = itemForm.find('input,select,textarea') // 获取所有表单域
+
+    layui.each(fieldElem, function(_, item){
       var othis = $(this)
-      ,init_name; // 初始 name
-      
+        ,init_name; // 初始 name
+
       item.name = (item.name || '').replace(/^\s*|\s*&/, '');
       if(!item.name) return;
-      
+
       // 用于支持数组 name
       if(/^.*\[\]$/.test(item.name)){
         var key = item.name.match(/^(.*)\[\]$/g)[0];
         nameIndex[key] = nameIndex[key] | 0;
         init_name = item.name.replace(/^(.*)\[\]$/, '$1['+ (nameIndex[key]++) +']');
       }
-      
-      if(/^(checkbox|radio)$/.test(item.type) && !item.checked) return;  // 复选框和单选框未选中，不记录字段     
+
+      if(/^(checkbox|radio)$/.test(item.type) && !item.checked) return;  // 复选框和单选框未选中，不记录字段
       field[init_name || item.name] = item.value;
     });
-    
+
     return field;
   };
-  
+
   // 表单控件渲染
   Form.prototype.render = function(type, filter){
     var that = this;
@@ -262,7 +258,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               });
               return arr.join('');
             }());
-            
+
             elemAffix.append(elemIcon); // 插入图标元素
 
             // 追加 className
@@ -287,9 +283,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               hasElemSuffix.prepend(elemAffix);
 
               othis.css('padding-right', function(){
-                var paddingRight = othis.closest('.layui-input-group')[0] 
-                  ? 0 
-                : hasElemSuffix.outerWidth();
+                var paddingRight = othis.closest('.layui-input-group')[0]
+                  ? 0
+                  : hasElemSuffix.outerWidth();
                 return paddingRight + elemAffix.outerWidth()
               });
             } else {
@@ -298,9 +294,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             }
 
             opts.show === 'auto' && showAffix(elemAffix, othis.val());
-            
+
             typeof opts.init === 'function' && opts.init.call(this, othis, opts);
-            
+
             // 输入事件
             othis.on('input propertychange', function(){
               var value = this.value;
@@ -311,14 +307,14 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             othis.on('blur', function(){
               typeof opts.blur === 'function' && opts.blur.call(this, othis, opts);
             });
-            
+
             // 点击动态后缀事件
             elemIcon.on('click', function(){
               var inputFilter = othis.attr('lay-filter');
               if($(this).hasClass(DISABLED)) return;
-              
+
               typeof opts.click === 'function' && opts.click.call(this, othis, opts);
-              
+
               // 对外事件
               layui.event.call(this, MOD_NAME, 'input-affix('+ inputFilter +')', {
                 elem: othis[0],
@@ -327,7 +323,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               });
             });
           };
-          
+
           // 动态点缀配置项
           var affixOptions = {
             eye: { // 密码显隐
@@ -335,7 +331,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               click: function(elem, opts){ // 事件
                 var SHOW_NAME = 'LAY_FORM_INPUT_AFFIX_SHOW';
                 var isShow = elem.data(SHOW_NAME);
-                
+
                 elem.attr('type', isShow ? 'password' : 'text').data(SHOW_NAME, !isShow);
 
                 renderAffix({
@@ -368,221 +364,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               },
             }
           };
-          
+
           renderAffix();
         });
-
-        /**
-         * @method  展开select-tree的树下拉区域 
-         * @param {*} ele  
-         * @desc 
-         *   2023/11/09 添加下拉树功能时新增
-         */
-        var openSelectTree = function(ele){
-          // 模拟下拉列表的下拉显隐的原理
-          $(".layui-form-select").not(ele.parents(".layui-form-select")).removeClass("layui-form-selected");
-          ele.parents(".layui-form-select").toggleClass("layui-form-selected");
-          // 将滚动条调整到最上面
-          ele.parents(".layui-form-select").find("dl").scrollTop(0);
-        }
-
-        /**
-         * @method  点击select-tree的选择框事件
-         * @param {*} e 
-         * @desc 
-         *   2023/11/09 添加下拉树功能时新增
-         */
-        var onClickTreeInput = function(e){
-          // 展开下拉选项
-          openSelectTree($(e.target));
-          // 阻止事件
-          layui.stope(e);
-        }
-
-        /**
-         * @method  模拟在下拉选择框 隐藏 之后的回调
-         * @param {*} e 
-         * @param {*} clear 
-         * @desc 
-         *   2023/11/09 添加下拉树功能时新增
-         */
-        var hide = function(e, clear){
-          if(!$(e.target).parent().hasClass("layui-select-title") || clear){
-            // 添加上settimeout让下面的select的事件先触发
-            setTimeout(fixValue, 200);
-          }
-        };
-
-        /**
-         * @method 让下拉树的 layui-select-tree-value 和 layui-select-tree-title 值保持一致的做法
-         * @param {*} dom 
-         * @desc 
-         *   2023/11/09 添加下拉树功能时新增
-         */
-        var fixValue = function(dom){
-          var $dom = dom || $('.layui-form-select');
-          if(!$dom.get(0)) return;
-          // 判断下拉的部分已经收起,并且是渲染出了layui-select-tree-value这个输入框的
-          if(!$dom.hasClass('layui-form-selected') && !$dom.hasClass('layui-form-selectup') && $dom.find('.layui-select-tree-value').get(0)){
-            // 获取值,并以这个值为准查找出匹配的文字 newValue
-            var oldValue = $dom.find('.layui-select-tree-value').val();
-            var node = $dom.find('[data-id="'+oldValue+'"] .layui-tree-txt').get(0);
-            var newValue = node ? node.textContent : '';
-            // 设置匹配的文字 newValue
-            $dom.find('.layui-select-tree-title').val(newValue);
-            // 查询树的id
-            var treeDom = $dom.find('[lay-tree-id]');
-            if(treeDom)
-              layui.use('tree', function(){
-                // 重载树
-                layui.tree.reload(treeDom.attr('lay-tree-id'), {
-                  search: newValue,
-                });
-              });
-          }
-        };
-
-        // 2023/11/09 重新渲染下拉树,将值同步
-        elemForm.find('.layui-select-tree-value').each(function(){
-          var othis = $(this);
-          var oparent = othis.parent();
-          var oroot = othis.parent().parent();
-          if(oparent.hasClass("layui-select-title") && oroot.hasClass("layui-form-select")){
-            fixValue(oroot);
-          }
-        });
-
-        // 2023/11/09 初始化下拉树
-        elemForm.find('input[lay-options]').each(function(){
-          var CLASS = 'layui-form-select';
-          var othis = $(this);
-          // 表单的name属性应该存在
-          var name = othis.attr('name');
-          // 表单的lay-filter属性用来绑定事件
-          var filter = othis.attr('lay-filter');
-          var oparent = othis.parent();
-          var oroot = othis.parent().parent();
-          /**
-           * 为了下面的功能保障(其实是在模拟下拉框被渲染后的dom),这个选择框的格式如下:
-           *       <div class="layui-unselect layui-form-select">
-           *          <div class="layui-select-title"  >
-           *              <input type="text" placeholder="placeholder" name="name" class="layui-input" />
-           *          </div>
-           *       </div>
-           */
-          if(oparent.hasClass("layui-select-title") && oroot.hasClass("layui-form-select")){
-            // 隐藏当前的input表单元素,这个元素记录的应该是类似id的信息，前端展示的是名称信息,这两个是分开的dom
-            othis.addClass('layui-hide');
-            // 区分当前保存值的class
-            othis.addClass('layui-select-tree-value');
-            // 创建一个 * + name 的输入框,作为后面展示的输入框,单独将它拎出来方便后面绑定事件
-            let nameDom = $('<input type = "text" class="layui-input layui-unselect layui-input-name layui-select-tree-title"  name = "*'+name+'"  placeholder = "'+othis.attr("placeholder")+'">');
-            oparent.append(nameDom).append('<i class="layui-edge"></i>');
-            oparent.on('click', function(e){
-              // 点击parent节点调用方法展开树
-              onClickTreeInput(e);
-            });
-            // dl dd节点模拟select下拉节点
-            var dlDom = $('<dl class="layui-anim layui-anim-upbit" ></dl>');
-            var ddDom = $('<dd ></dd>');
-            dlDom.append(ddDom);
-            oroot.append(dlDom);
-            // 添加一个隐藏的空的下拉框
-            var selectContainer = $('<div class = "layui-hide" style = "display:none" ></div>');
-            var selectDom = $('<select></select>');
-            selectContainer.append(selectDom);
-            oroot.append(selectContainer);
-            /**
-             * 使用定向渲染渲染一个空的下拉框出来,这里很多的事件是依赖下拉框事件的,所以这里添加一个空的下拉框来初始化这些事件
-             */
-            layui.form.render(selectDom);
-            dlDom.on('click',function(e){
-              // 去掉默认的事件，点击这里只来触发点击树的事件
-              layui.stope(e);
-            });
-            // 树的渲染,这里是使用option里面的异步属性来ajax数据,然后再通过配置项渲染树
-            let optionsAttr = othis.attr("lay-options");
-            let options = optionsAttr
-            ? JSON.parse(String(optionsAttr).replace(/\'/g, () => '"'))
-            : {};
-            if(!options.customName) options.customName = {};
-            if(!options.customName.id) options.customName.id = 'id';
-            if(!options.customName.title) options.customName.title = 'title';
-            // 初始化一个树的id
-            var treeId = name + '-' + INTERVAL_INDEX ++;
-            layui.use('tree', function(){
-              // 根据配置项渲染树
-              layui.tree.render({
-                elem: ddDom,
-                id: treeId,
-                onlyIconControl: options.onlyIconControl || true, // 节点只用来触发点击事件
-                data: options.data || [],
-                customName: options.customName,
-                sort: true,
-                click: function(obj){
-                  // 点击事件时回去触发 layui.form.on('selectTree(filter)', fn) 事件,事件返回false时不会触发下面的赋值操作,返回不是false触发赋值操作
-                  if(layui.event.call(this, MOD_NAME, 'selectTree('+ filter +')', { elem: othis.get(0) ,value: obj.data ,othis: oroot }) !== false){
-                    // 赋值
-                    othis.val(obj.data[options.customName.id]);
-                    nameDom.val(obj.data[options.customName.title]);
-                    // 重载树
-                    layui.tree.reload(treeId, {
-                      search: obj.data[options.customName.title],
-                    });
-                    // 隐藏下拉选择框
-                    oroot.removeClass(CLASS+'ed ' + CLASS+'up');
-                  }
-                },
-              });
-              // dom上面添加tree的id属性方便查找调用
-              ddDom.attr('lay-tree-id',treeId);
-              // 添加搜索
-              nameDom.on("input propertychange", function(){
-                // 展开
-                if(!oroot.hasClass('layui-form-selected') && !oroot.hasClass('layui-form-selectup')){
-                  nameDom.trigger('click');
-                }
-                // 重载树
-                layui.tree.reload(treeId, {
-                  search: $(this).val(),
-                });
-              });
-              othis.on("input propertychange", function(){
-                // 对当前属性赋值时，同步显示
-                fixValue(oroot);
-              });
-              // 在配置项上面添加了数据源时,使用ajax请求更新树的数据源
-              if(options.url){
-                var param = options.where || {};
-                $.ajax({
-                  url: options.url,
-                  type: options.type || 'GET',
-                  headers: options.headers || {},
-                  data: options.dataType != 'json' ? param : JSON.stringify(param),
-                  success: function (res) {
-                    if (res[options.statusName || 'code'] == (options.statusCode || 200)) {
-                      let list = res[options.dataName || 'data'];
-                      // 重载树
-                      layui.tree.reload(treeId, {
-                        data: list,
-                      });
-                    }
-                  },
-                });
-              }
-            });
-            // 绑定windows事件
-            if(!SELECT_TREE_EVENT){
-              SELECT_TREE_EVENT = true;
-              $(document).on('click', hide);
-            }
-          }
-          // 去掉lay-options属性,防止重复绑定
-          othis.removeAttr('lay-options');
-        });
-
       }
-      
+
       // 下拉选择框
       ,select: function(elem){
         var TIPS = '请选择';
@@ -601,7 +387,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           }
           thatInput = null;
         };
-        
+
         // 各种事件
         var events = function(reElem, disabled, isSearch){
           var select = $(this);
@@ -612,17 +398,17 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var dts = dl.children('dt'); // select 分组dt元素
           var index =  this.selectedIndex; // 当前选中的索引
           var nearElem; // select 组件当前选中的附近元素，用于辅助快捷键功能
-          
+
           if(disabled) return;
 
           // 搜索项
           var laySearch = select.attr('lay-search');
-          
+
           // 展开下拉
           var showDown = function(){
             var top = reElem.offset().top + reElem.outerHeight() + 5 - $win.scrollTop();
             var dlHeight = dl.outerHeight();
-            
+
             index = select[0].selectedIndex; // 获取最新的 selectedIndex
             reElem.addClass(CLASS+'ed');
             dds.removeClass(HIDE);
@@ -640,22 +426,22 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
             followScroll();
           };
-          
+
           // 隐藏下拉
           var hideDown = function(choose){
             reElem.removeClass(CLASS+'ed ' + CLASS+'up');
             input.blur();
             nearElem = null;
-            
+
             if(choose) return;
-            
+
             notOption(input.val(), function(none){
               var selectedIndex = select[0].selectedIndex;
-              
+
               // 未查询到相关值
               if(none){
                 initValue = $(select[0].options[selectedIndex]).html(); // 重新获得初始选中值
-                
+
                 // 如果是第一项，且文本值等于 placeholder，则清空初始值
                 if(selectedIndex === 0 && initValue === input.attr('placeholder')){
                   initValue = '';
@@ -666,48 +452,48 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               }
             });
           };
-          
+
           // 定位下拉滚动条
-          var followScroll = function(){  
+          var followScroll = function(){
             var thisDd = dl.children('dd.'+ THIS);
-            
+
             if(!thisDd[0]) return;
-            
+
             var posTop = thisDd.position().top;
             var dlHeight = dl.height();
             var ddHeight = thisDd.height();
-            
+
             // 若选中元素在滚动条不可见底部
             if(posTop > dlHeight){
               dl.scrollTop(posTop + dl.scrollTop() - dlHeight + ddHeight - 5);
             }
-            
+
             // 若选择玄素在滚动条不可见顶部
             if(posTop < 0){
               dl.scrollTop(posTop + dl.scrollTop() - 5);
             }
           };
-          
+
           // 点击标题区域
           title.on('click', function(e){
             reElem.hasClass(CLASS+'ed') ? (
               hideDown()
             ) : (
-              hide(e, true), 
-              showDown()
+              hide(e, true),
+                showDown()
             );
             dl.find('.'+NONE).remove();
-          }); 
-          
+          });
+
           // 点击箭头获取焦点
           title.find('.layui-edge').on('click', function(){
             input.focus();
           });
-          
+
           // select 中 input 键盘事件
           input.on('keyup', function(e){ // 键盘松开
             var keyCode = e.keyCode;
-            
+
             // Tab键展开
             if(keyCode === 9){
               showDown();
@@ -719,21 +505,21 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             if(keyCode === 9){
               hideDown();
             }
-            
+
             // 标注 dd 的选中状态
             var setThisDd = function(prevNext, thisElem1){
               var nearDd, cacheNearElem
               e.preventDefault();
 
-              // 得到当前队列元素  
+              // 得到当前队列元素
               var thisElem = function(){
                 var thisDd = dl.children('dd.'+ THIS);
-                
+
                 // 如果是搜索状态，且按 Down 键，且当前可视 dd 元素在选中元素之前，
                 // 则将当前可视 dd 元素的上一个元素作为虚拟的当前选中元素，以保证递归不中断
                 if(dl.children('dd.'+  HIDE)[0] && prevNext === 'next'){
                   var showDd = dl.children('dd:not(.'+ HIDE +',.'+ DISABLED +')')
-                  ,firstIndex = showDd.eq(0).index();
+                    ,firstIndex = showDd.eq(0).index();
                   if(firstIndex >=0 && firstIndex < thisDd.index() && !showDd.hasClass(THIS)){
                     return showDd.eq(0).prev()[0] ? showDd.eq(0).prev() : dl.children(':last');
                   }
@@ -745,17 +531,17 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 if(nearElem && nearElem[0]){
                   return nearElem;
                 }
-       
+
                 return thisDd;
                 // return dds.eq(index);
               }();
-              
+
               cacheNearElem = thisElem[prevNext](); // 当前元素的附近元素
               nearDd =  thisElem[prevNext]('dd:not(.'+ HIDE +')'); // 当前可视元素的 dd 元素
 
               // 如果附近的元素不存在，则停止执行，并清空 nearElem
               if(!cacheNearElem[0]) return nearElem = null;
-              
+
               // 记录附近的元素，让其成为下一个当前元素
               nearElem = thisElem[prevNext]();
 
@@ -763,21 +549,21 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               if((!nearDd[0] || nearDd.hasClass(DISABLED)) && nearElem[0]){
                 return setThisDd(prevNext, nearElem);
               }
-              
+
               nearDd.addClass(THIS).siblings().removeClass(THIS); // 标注样式
               followScroll(); // 定位滚动条
             };
-            
+
             if(keyCode === 38) setThisDd('prev'); // Up 键
             if(keyCode === 40) setThisDd('next'); // Down 键
-            
+
             // Enter 键
-            if(keyCode === 13){ 
+            if(keyCode === 13){
               e.preventDefault();
               dl.children('dd.'+THIS).trigger('click');
             }
           });
-          
+
           // 检测值是否不属于 select 项
           var notOption = function(value, callback, origin){
             var num = 0;
@@ -790,35 +576,35 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 text = text.toLowerCase();
                 value = value.toLowerCase();
               }
-              
+
               // 匹配
               var not = text.indexOf(value) === -1;
-              
+
               if(value === '' || (origin === 'blur') ? value !== text : not) num++;
               origin === 'keyup' && othis[not ? 'addClass' : 'removeClass'](HIDE);
             });
             // 处理 select 分组元素
             origin === 'keyup' && layui.each(dts, function(){
               var othis = $(this)
-              ,thisDds = othis.nextUntil('dt').filter('dd') // 当前分组下的dd元素
-              ,allHide = thisDds.length == thisDds.filter('.' + HIDE).length; // 当前分组下所有dd元素都隐藏了
+                ,thisDds = othis.nextUntil('dt').filter('dd') // 当前分组下的dd元素
+                ,allHide = thisDds.length == thisDds.filter('.' + HIDE).length; // 当前分组下所有dd元素都隐藏了
               othis[allHide ? 'addClass' : 'removeClass'](HIDE);
             });
             var none = num === dds.length;
             return callback(none), none;
           };
-          
+
           // 搜索匹配
           var search = function(e){
             var value = this.value, keyCode = e.keyCode;
-            
-            if(keyCode === 9 || keyCode === 13 
-              || keyCode === 37 || keyCode === 38 
+
+            if(keyCode === 9 || keyCode === 13
+              || keyCode === 37 || keyCode === 38
               || keyCode === 39 || keyCode === 40
             ){
               return false;
             }
-            
+
             notOption(value, function(none){
               if(none){
                 dl.find('.'+NONE)[0] || dl.append('<p class="'+ NONE +'">无匹配项</p>');
@@ -826,7 +612,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 dl.find('.'+NONE).remove();
               }
             }, 'keyup');
-            
+
             // 当搜索值清空时
             if(value === ''){
               // 取消选中项
@@ -835,22 +621,22 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               (select[0].options[0] || {}).value || dl.children('dd:eq(0)').addClass(THIS);
               dl.find('.'+ NONE).remove();
             }
-            
+
             followScroll(); // 定位滚动条
           };
-          
+
           if(isSearch){
             input.on('input propertychange', search).on('blur', function(e){
               var selectedIndex = select[0].selectedIndex;
-              
+
               thatInput = input; // 当前的 select 中的 input 元素
               initValue = $(select[0].options[selectedIndex]).text(); // 重新获得初始选中值
-              
+
               // 如果是第一项，且文本值等于 placeholder，则清空初始值
               if(selectedIndex === 0 && initValue === input.attr('placeholder')){
                 initValue = '';
               }
-              
+
               setTimeout(function(){
                 notOption(input.val(), function(none){
                   initValue || input.val(''); // none && !initValue
@@ -863,9 +649,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           dds.on('click', function(){
             var othis = $(this), value = othis.attr('lay-value');
             var filter = select.attr('lay-filter'); // 获取过滤器
-            
+
             if(othis.hasClass(DISABLED)) return false;
-            
+
             if(othis.hasClass('layui-select-tips')){
               input.val('');
             } else {
@@ -885,39 +671,39 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             hideDown(true);
             return false;
           });
-          
+
           reElem.find('dl>dt').on('click', function(e){
             return false;
           });
-          
+
           $(document).off('click', hide).on('click', hide); // 点击其它元素关闭 select
         }
-        
+
         // 初始渲染 select 组件选项
         selects.each(function(index, select){
           var othis = $(this)
-          ,hasRender = othis.next('.'+CLASS)
-          ,disabled = this.disabled
-          ,value = select.value
-          ,selected = $(select.options[select.selectedIndex]) // 获取当前选中项
-          ,optionsFirst = select.options[0];
-          
+            ,hasRender = othis.next('.'+CLASS)
+            ,disabled = this.disabled
+            ,value = select.value
+            ,selected = $(select.options[select.selectedIndex]) // 获取当前选中项
+            ,optionsFirst = select.options[0];
+
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
-          
+
           var isSearch = typeof othis.attr('lay-search') === 'string'
-          ,placeholder = optionsFirst ? (
+            ,placeholder = optionsFirst ? (
             optionsFirst.value ? TIPS : (optionsFirst.innerHTML || TIPS)
           ) : TIPS;
 
           // 替代元素
-          var reElem = $(['<div class="'+ (isSearch ? '' : 'layui-unselect ') + CLASS 
-          ,(disabled ? ' layui-select-disabled' : '') +'">'
+          var reElem = $(['<div class="'+ (isSearch ? '' : 'layui-unselect ') + CLASS
+            ,(disabled ? ' layui-select-disabled' : '') +'">'
             ,'<div class="'+ TITLE +'">'
-              ,('<input type="text" placeholder="'+ util.escape($.trim(placeholder)) +'" '
-                +('value="'+ util.escape($.trim(value ? selected.html() : '')) +'"') // 默认值
-                +((!disabled && isSearch) ? '' : ' readonly') // 是否开启搜索
-                +' class="layui-input'
-                +(isSearch ? '' : ' layui-unselect') 
+            ,('<input type="text" placeholder="'+ util.escape($.trim(placeholder)) +'" '
+              +('value="'+ util.escape($.trim(value ? selected.html() : '')) +'"') // 默认值
+              +((!disabled && isSearch) ? '' : ' readonly') // 是否开启搜索
+              +' class="layui-input'
+              +(isSearch ? '' : ' layui-unselect')
               + (disabled ? (' ' + DISABLED) : '') +'">') // 禁用状态
             ,'<i class="layui-edge"></i></div>'
             ,'<dl class="layui-anim layui-anim-upbit'+ (othis.find('optgroup')[0] ? ' layui-select-group' : '') +'">'
@@ -929,7 +715,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 if(index === 0 && !item.value && tagName !== 'optgroup'){
                   arr.push('<dd lay-value="" class="layui-select-tips">'+ $.trim(item.innerHTML || TIPS) +'</dd>');
                 } else if(tagName === 'optgroup'){
-                  arr.push('<dt>'+ item.label +'</dt>'); 
+                  arr.push('<dt>'+ item.label +'</dt>');
                 } else {
                   arr.push('<dd lay-value="'+ util.escape(item.value) +'" class="'+ (value === item.value ?  THIS : '') + (item.disabled ? (' '+DISABLED) : '') +'">'+ $.trim(item.innerHTML) +'</dd>');
                 }
@@ -937,14 +723,14 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               arr.length === 0 && arr.push('<dd lay-value="" class="'+ DISABLED +'">没有选项</dd>');
               return arr.join('');
             }(othis.find('*')) +'</dl>'
-          ,'</div>'].join(''));
-          
+            ,'</div>'].join(''));
+
           hasRender[0] && hasRender.remove(); // 如果已经渲染，则Rerender
-          othis.after(reElem);          
+          othis.after(reElem);
           events.call(this, reElem, disabled, isSearch);
         });
       }
-      
+
       // 复选框/开关
       ,checkbox: function(elem){
         var CLASS = {
@@ -962,15 +748,15 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         // 事件
         var events = function(reElem, RE_CLASS){
           var check = $(this);
-          
+
           // 勾选
           reElem.on('click', function(){
             var othis = $(this);
             var filter = check.attr('lay-filter') // 获取过滤器
             var title = (
-              othis.next('*[lay-checkbox]')[0] 
+              othis.next('*[lay-checkbox]')[0]
                 ? othis.next().html()
-              : check.attr('title') || ''
+                : check.attr('title') || ''
             );
             var skin = check.attr('lay-skin') || 'primary';
 
@@ -979,7 +765,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
             // 禁用
             if(check[0].disabled) return;
-            
+
             // 半选
             if (check[0].indeterminate) {
               check[0].indeterminate = false;
@@ -989,14 +775,14 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             // 开关
             check[0].checked ? (
               check[0].checked = false,
-              reElem.removeClass(RE_CLASS[1]),
+                reElem.removeClass(RE_CLASS[1]),
               skin === 'switch' && reElem.children('div').html(title[1])
             ) : (
               check[0].checked = true,
-              reElem.addClass(RE_CLASS[1]),
+                reElem.addClass(RE_CLASS[1]),
               skin === 'switch' && reElem.children('div').html(title[0])
             );
-            
+
             // 事件
             layui.event.call(check[0], MOD_NAME, RE_CLASS[2]+'('+ filter +')', {
               elem: check[0],
@@ -1005,7 +791,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             });
           });
         };
-        
+
         // 遍历复选框
         checks.each(function(index, check){
           var othis = $(this);
@@ -1021,7 +807,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           // 替代元素
           var hasRender = othis.next('.' + RE_CLASS[0]);
           hasRender[0] && hasRender.remove(); // 若已经渲染，则 Rerender
-         
+
           // 若存在标题模板，则优先读取标题模板
           if(othis.next('[lay-checkbox]')[0]){
             title = othis.next().html() || '';
@@ -1029,35 +815,35 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
           // 若为开关，则对 title 进行分隔解析
           title = skin === 'switch' ? title.split('|') : [title];
-          
+
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
-          
+
           // 替代元素
           var reElem = $(['<div class="layui-unselect '+ RE_CLASS[0],
             (check.checked ? (' '+ RE_CLASS[1]) : ''), // 选中状态
             (disabled ? ' layui-checkbox-disabled '+ DISABLED : ''), // 禁用状态
             '"',
             (skin ? ' lay-skin="'+ skin +'"' : ''), // 风格
-          '>',
-          function(){ // 不同风格的内容
-            var type = {
-              // 复选框
-              "checkbox": [
-                (title[0] ? ('<div>'+ title[0] +'</div>') : (skin === 'primary' ? '' : '<div></div>')),
-                '<i class="layui-icon '+(skin === 'primary' && !check.checked && othis.get(0).indeterminate ? CLASS.SUBTRA : 'layui-icon-ok')+'"></i>'
-              ].join(''),
-              // 开关
-              "switch": '<div>'+ ((check.checked ? title[0] : title[1]) || '') +'</div><i></i>'
-            };
-            return type[skin] || type['checkbox'];
-          }(),
-          '</div>'].join(''));
+            '>',
+            function(){ // 不同风格的内容
+              var type = {
+                // 复选框
+                "checkbox": [
+                  (title[0] ? ('<div>'+ title[0] +'</div>') : (skin === 'primary' ? '' : '<div></div>')),
+                  '<i class="layui-icon '+(skin === 'primary' && !check.checked && othis.get(0).indeterminate ? CLASS.SUBTRA : 'layui-icon-ok')+'"></i>'
+                ].join(''),
+                // 开关
+                "switch": '<div>'+ ((check.checked ? title[0] : title[1]) || '') +'</div><i></i>'
+              };
+              return type[skin] || type['checkbox'];
+            }(),
+            '</div>'].join(''));
 
           othis.after(reElem);
           events.call(this, reElem, RE_CLASS);
         });
       }
-      
+
       // 单选框
       ,radio: function(elem){
         var CLASS = 'layui-form-radio';
@@ -1068,25 +854,25 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         var events = function(reElem){
           var radio = $(this);
           var ANIM = 'layui-anim-scaleSpring';
-          
+
           reElem.on('click', function(){
             var name = radio[0].name, forms = radio.parents(ELEM);
             var filter = radio.attr('lay-filter'); // 获取过滤器
             var sameRadio = forms.find('input[name='+ name.replace(/(\.|#|\[|\])/g, '\\$1') +']'); // 找到相同name的兄弟
-            
+
             if(radio[0].disabled) return;
-            
+
             layui.each(sameRadio, function(){
               var next = $(this).next('.' + CLASS);
               this.checked = false;
               next.removeClass(CLASS + 'ed');
               next.children('.layui-icon').removeClass(ANIM + ' ' + ICON[0]).addClass(ICON[1]);
             });
-            
+
             radio[0].checked = true;
             reElem.addClass(CLASS + 'ed');
             reElem.children('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
-            
+
             layui.event.call(radio[0], MOD_NAME, 'radio('+ filter +')', {
               elem: radio[0],
               value: radio[0].value,
@@ -1094,28 +880,28 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             });
           });
         };
-        
+
         // 初始渲染
         radios.each(function(index, radio){
           var othis = $(this), hasRender = othis.next('.' + CLASS);
           var disabled = this.disabled;
-          
+
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
           hasRender[0] && hasRender.remove(); // 如果已经渲染，则Rerender
-          
+
           // 替代元素
-          var reElem = $(['<div class="layui-unselect '+ CLASS, 
+          var reElem = $(['<div class="layui-unselect '+ CLASS,
             (radio.checked ? (' '+ CLASS +'ed') : ''), // 选中状态
-          (disabled ? ' layui-radio-disabled '+DISABLED : '') +'">', // 禁用状态
-          '<i class="layui-anim layui-icon '+ ICON[radio.checked ? 0 : 1] +'"></i>',
-          '<div>'+ function(){
-            var title = util.escape(radio.title || '');
-            if(othis.next('[lay-radio]')[0]){
-              title = othis.next().html();
-            }
-            return title;
-          }() +'</div>',
-          '</div>'].join(''));
+            (disabled ? ' layui-radio-disabled '+DISABLED : '') +'">', // 禁用状态
+            '<i class="layui-anim layui-icon '+ ICON[radio.checked ? 0 : 1] +'"></i>',
+            '<div>'+ function(){
+              var title = util.escape(radio.title || '');
+              if(othis.next('[lay-radio]')[0]){
+                title = othis.next().html();
+              }
+              return title;
+            }() +'</div>',
+            '</div>'].join(''));
 
           othis.after(reElem);
           events.call(this, reElem);
@@ -1192,31 +978,31 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       var value = $.trim(othis.val());
 
       othis.removeClass(DANGER); // 移除警示样式
-      
+
       // 遍历元素绑定的验证规则
       layui.each(vers, function(_, thisVer) {
         var verst; // 校验结果
         var errorText = ''; // 错误提示文本
         var rule = verify[thisVer]; // 获取校验规则
-        
+
         // 匹配验证规则
         if (rule) {
           verst = typeof rule === 'function'
-            ? errorText = rule(value, item) 
-          : !rule[0].test(value); // 兼容早期数组中的正则写法
-          
+            ? errorText = rule(value, item)
+            : !rule[0].test(value); // 兼容早期数组中的正则写法
+
           // 是否属于美化替换后的表单元素
           var isForm2Elem = item.tagName.toLowerCase() === 'select' || (
             /^(checkbox|radio)$/.test(item.type)
           );
-          
+
           errorText = errorText || rule[1];
-          
+
           // 获取自定义必填项提示文本
           if (thisVer === 'required') {
             errorText = othis.attr('lay-reqtext') || errorText;
           }
-          
+
           // 若命中校验规则
           if (verst) {
             // 提示层风格
@@ -1231,7 +1017,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               }(), {tips: 1});
             } else if(verType === 'alert') {
               layer.alert(errorText, {title: '提示', shadeClose: true});
-            } 
+            }
             // 若返回的为字符或数字，则自动弹出默认提示框；否则由 verify 方法中处理提示
             else if(/\b(string|number)\b/.test(typeof errorText)) {
               layer.msg(errorText, {icon: 5, shift: 6});
@@ -1240,7 +1026,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             setTimeout(function() {
               (isForm2Elem ? othis.next().find('input') : item).focus();
             }, 7);
-            
+
             othis.addClass(DANGER);
             return intercept = true;
           }
@@ -1259,14 +1045,14 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     var button = $(this); // 当前触发的按钮
 
     // 表单域 lay-filter 属性值
-    var layFilter = typeof filter === 'string' 
-      ? filter 
-    : button.attr('lay-filter');
+    var layFilter = typeof filter === 'string'
+      ? filter
+      : button.attr('lay-filter');
 
     // 当前所在表单域
-    var elem = this.getFormElem 
-      ? this.getFormElem(layFilter) 
-    : button.parents(ELEM).eq(0);
+    var elem = this.getFormElem
+      ? this.getFormElem(layFilter)
+      : button.parents(ELEM).eq(0);
 
     // 获取需要校验的元素
     var verifyElem = elem.find('*[lay-verify]');
@@ -1283,23 +1069,23 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       ,form: this.getFormElem ? elem[0] : button.parents('form')[0] // 当前所在的 form 元素，如果存在的话
       ,field: field // 当前表单数据
     };
-    
+
     // 回调
     typeof callback === 'function' && callback(params);
- 
+
     // 事件
     return layui.event.call(this, MOD_NAME, 'submit('+ layFilter +')', params);
   };
-  
+
   var form = new Form();
   var $dom = $(document);
   var $win = $(window);
-  
+
   // 初始自动完成渲染
   $(function(){
     form.render();
   });
-  
+
   // 表单 reset 重置渲染
   $dom.on('reset', ELEM, function(){
     var filter = $(this).attr('lay-filter');
@@ -1307,12 +1093,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       form.render(null, filter);
     }, 50);
   });
-  
+
   // 表单提交事件
   $dom.on('submit', ELEM, submit)
-  .on('click', '*[lay-submit]', submit);
-  
+    .on('click', '*[lay-submit]', submit);
+
   exports(MOD_NAME, form);
 });
 
- 
+
