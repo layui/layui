@@ -70,15 +70,16 @@ layui.use(function(){
       var options = this;
       
       // 获取当前行数据
-      table.getRowData = function(elem){
+      table.getRowData = function(tableId, elem){
         var index = $(elem).closest('tr').data('index');
-        return table.cache[options.id][index] || {};
+        return table.cache[tableId][index] || {};
       };
       
       // 原生 select 事件
-      $('.select-demo-primary').on('change', function(){
+      var tableViewElem = this.elem.next();
+      tableViewElem.off('change').on('change', '.select-demo-primary', function(){
         var value = this.value; // 获取选中项 value
-        var data = table.getRowData(this); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
+        var data = table.getRowData(options.id, this); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
 
         // 更新数据中对应的字段
         data.city = value;
@@ -92,7 +93,7 @@ layui.use(function(){
         console.log(obj); // 获取选中项数据
         
         // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
-        var data = table.getRowData(obj.elem);
+        var data = table.getRowData(options.id, obj.elem);
 
         // 更新数据中对应的字段
         data.city = value;
@@ -115,7 +116,7 @@ layui.use(function(){
           id: 102
         }],
         click: function(obj){
-          var data = table.getRowData(this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
+          var data = table.getRowData(options.id, this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
           
           this.elem.find('span').html(obj.title);
 
@@ -131,7 +132,7 @@ layui.use(function(){
       laydate.render({
         elem: '.laydate-demo',
         done: function(value, date, endDate){
-          var data = table.getRowData(this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
+          var data = table.getRowData(options.id, this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
 
           // 更新数据中对应的字段
           data.date = value;
@@ -145,7 +146,7 @@ layui.use(function(){
       colorpicker.render({
         elem: '.colorpicker-demo',
         done: function(value){
-          var data = table.getRowData(this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
+          var data = table.getRowData(options.id, this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
 
           // 更新数据中对应的字段
           data.color = value;
