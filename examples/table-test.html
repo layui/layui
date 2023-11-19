@@ -28,13 +28,13 @@
       <i class="layui-icon layui-icon-down layui-font-12"></i>
     </button>
     <button class="layui-btn layui-btn-sm" id="reloadTest">
-      重载测试 
+      重载测试
       <i class="layui-icon layui-icon-down layui-font-12"></i>
     </button>
     <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="multi-row"> 多行 </button>
     <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="default-row"> 单行 </button>
     <button class="layui-btn layui-btn-sm" id="moreTest">
-      更多测试 
+      更多测试
       <i class="layui-icon layui-icon-down layui-font-12"></i>
     </button>
   </div>
@@ -117,7 +117,7 @@ layui.use(['table', 'dropdown'], function(){
     // url: 'list',
     // height: 300
   });
-  
+
   // 渲染
   window.ins1 = table.render({
     elem: '#test',
@@ -127,7 +127,7 @@ layui.use(['table', 'dropdown'], function(){
     url: 'json/table/demo1.json',
     // method: 'post',
 
-    
+
     // lineStyle: 'height: 95px;', // 行样式
     css: [ // 自定义样式
       '.layui-table-page{text-align: right;}',
@@ -182,13 +182,13 @@ layui.use(['table', 'dropdown'], function(){
       {field:'joinTime', title:'加入时间', width: 120},
       {fixed: 'right', title:'操作', toolbar: '#barDemo', width: 180}
     ]],
-    
+
     // autoSort: false // 禁用前端自动排序，由服务的完成排序
     initSort111: { // 初始排序状态
       field: 'experience', // 排序字段，对应 cols 设定的各字段名
       type: 'desc' // 排序方式  asc: 升序、desc: 降序、null: 默认排序
     },
-    
+
     headers: {headers_token: 'sasasas'},
     where: {
       test: '初始 test 参数',
@@ -296,7 +296,7 @@ layui.use(['table', 'dropdown'], function(){
                   {field:'joinTime', title:'加入时间', width:120}
                 ]]
                 */
-                
+
               });
             break;
             case 'reload-deep':
@@ -405,7 +405,7 @@ layui.use(['table', 'dropdown'], function(){
       console.log(res, msg)
     }
   });
-  
+
   // 排序事件
   table.on('sort(test)', function(obj){
     // console.log(obj);
@@ -423,7 +423,7 @@ layui.use(['table', 'dropdown'], function(){
       }
     });
   });
-  
+
   // 头部工具栏事件
   table.on('toolbar(test)', function(obj){
     var id = obj.config.id;
@@ -505,7 +505,7 @@ layui.use(['table', 'dropdown'], function(){
   table.on('radio(test)', function(obj){
     console.log(obj)
   });
-  
+
   // 行单击事件
   table.on('row(test)', function(obj){
     console.log(obj);
@@ -536,7 +536,7 @@ layui.use(['table', 'dropdown'], function(){
         return obj.reedit(); // 重新编辑 -- v2.8.0 新增
       }
     }
-    
+
     // 编辑后续操作，如提交更新请求，以完成真实的数据更新
     // …
     layer.msg('编辑成功', {icon: 1});
