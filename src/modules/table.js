@@ -2541,7 +2541,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           that.setRowActive(index, [ELEM_EXPAND, ELEM_HOVER].join(' '), true); // 移除单元格展开样式
           that.cssRules(key, function(item){
             item.style.width =  $this.data('cell-width'); // 恢复单元格展开前的宽度
-            that.resize(); // 滚动条补丁
+            setTimeout(function(){
+              that.resize(); // 滚动条补丁
+            });
           });
           $this.remove();
         });
