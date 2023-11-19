@@ -2467,7 +2467,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
     };
     // 展开单元格内容
-    var gridExpand = function(e){
+    var gridExpand = function(e, expandedMode){
       var othis = $(this);
       var td = othis.parent();
       var key = td.data('key');
@@ -2476,7 +2476,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var elemCell = td.children(ELEM_CELL);
       var ELEM_CELL_C = 'layui-table-cell-c';
       var elemCellClose = $('<i class="layui-icon layui-icon-up '+ ELEM_CELL_C +'">');
-      var expandedMode = col.expandedMode || options.cellExpandedMode;
+
+      expandedMode = expandedMode || col.expandedMode || options.cellExpandedMode;
 
       // 展开风格
       if (expandedMode === 'tips') { // TIPS 展开风格
@@ -2556,7 +2557,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     });
     // 表格合计栏单元格展开事件
     that.layTotal.on('click', '.'+ ELEM_GRID_DOWN, function(e){
-      gridExpand.call(this, e);
+      gridExpand.call(this, e, 'tips'); // 强制采用 tips 风格
     });
 
     // 行工具条操作事件
