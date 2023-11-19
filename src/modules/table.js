@@ -348,16 +348,16 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     options.index = that.index;
     that.key = options.id || options.index;
 
-    //初始化一些其他参数
+    // 初始化一些其他参数
     that.setInit();
 
-    //高度铺满：full-差距值
-    if(options.height && /^full-\d+$/.test(options.height)){
-      that.fullHeightGap = options.height.split('-')[1];
+    // 高度铺满：full-差距值
+    if(options.height && /^full-.+$/.test(options.height)){
+      that.fullHeightGap = parseFloat(options.height.split('-')[1]) || 0;
       options.height = _WIN.height() - that.fullHeightGap;
-    } else if (options.height && /^#\w+\S*-\d+$/.test(options.height)) {
+    } else if (options.height && /^#\w+\S*-.+$/.test(options.height)) {
       var parentDiv = options.height.split("-");
-      that.parentHeightGap = parentDiv.pop();
+      that.parentHeightGap = parseFloat(parentDiv.pop()) || 0;
       that.parentDiv = parentDiv.join("-");
       options.height = $(that.parentDiv).height() - that.parentHeightGap;
     }
