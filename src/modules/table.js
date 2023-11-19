@@ -2537,7 +2537,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         // 关闭展开状态
         elemCellClose.on('click', function(){
           var $this = $(this);
-          that.setRowActive(index, ELEM_EXPAND, true); // 移除单元格展开样式
+          that.setRowActive(index, [ELEM_EXPAND, ELEM_HOVER].join(' '), true); // 移除单元格展开样式
           that.cssRules(key, function(item){
             item.style.width =  $this.data('cell-width'); // 恢复单元格展开前的宽度
             that.resize(); // 滚动条补丁
