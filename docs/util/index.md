@@ -2,7 +2,7 @@
 title: 工具模块 util
 toc: true
 ---
- 
+
 # 工具模块
 
 > 工具模块 `util` 是由工具类方法和小组件组成的集合。
@@ -115,7 +115,7 @@ var result2 = util.toDateString(new Date('2023-01-01 11:35:25'), 'ss[s]'); // 25
 
 // 自定义 meridiem
 var result3 = util.toDateString(
-  '2023-01-01 11:35:25', 
+  '2023-01-01 11:35:25',
   'hh:mm:ss A',
   {
     customMeridiem: function(hours, minutes){
@@ -127,7 +127,7 @@ var result3 = util.toDateString(
 ); // 11:35:25 AM
 ```
 
-参数 `format` 所有可用的格式列表 : 
+参数 `format` 所有可用的格式列表 :
 
 | 格式 | 示例 | 描述 |
 | --- | --- | --- |
@@ -177,7 +177,7 @@ var str2 = util.unescape('&lt;div&gt;123&lt;/div&gt;'); // 返回： <div>123</d
 
 <h3 id="openWin" class="ws-anchor ws-bold">打开浏览器新标签页 <sup>2.8+</sup></h3>
 
-`util.openWin(options);` 
+`util.openWin(options);`
 
 - 参数 `options` : 属性配置项。可选项详见下表
 
@@ -204,37 +204,53 @@ util.openWin({
 
 <h3 id="on" class="ws-anchor ws-bold">批量事件处理</h3>
 
-`util.on(attr, obj, eventType);`
+`util.on(attr, events, options);`
 
-- 参数 `attr` : 触发事件的元素属性名
-- 参数 `obj` : 事件回调函数集合
-- 参数 `eventType` : 事件类型。默认 `click`
+| 参数 | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| attr | 触发事件的元素属性名。可省略<sup>2.9+</sup> | `string` | `lay-on` |
+| events | 事件集合。包含 `attr` 对应的属性值和事件回调函数的键值对 | `object` | - |
+| options <sup>2.9+</sup> | 参数的更多选项。详见下表。 | `object` | - |
+
+参数 `options` 可选项:
+
+| options | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| elem | 触发事件的委托元素 | string \| HTMLElement \| jQuery | - |
+| trigger | 事件触发的方式 | string | `click` |
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['code', 'preview'], tools: ['full']}">
   <textarea>
 <div class="layui-btn-container">
   <button class="layui-btn" lay-on="e1">事件 1</button>
   <button class="layui-btn" lay-on="e2">事件 2</button>
-  <button class="layui-btn" lay-on="e3">事件 3</button>
+  <button class="layui-btn" lay-active="e3">事件 3</button>
 </div>
 
 <!-- import layui -->
 <script>
 layui.use('util', function(){
   var util = layui.util;
-  
-  // 处理属性 为 lay-on 的所有元素事件
-  util.on('lay-on', {
+
+  //  2.9+ 版本可省略 attr 参数，默认读取 lay-on
+  util.on({
     e1: function(){
-      console.log(this); // 当前触发事件的 DOM 对象
+      console.log(this); // 当前触发事件的 DOM 元素
       layer.msg('触发了事件 1');
     },
     e2: function(){
       layer.msg('触发了事件 2');
-    },
-    e3: function(){
-      layer.msg('触发了事件 3');
     }
+  });
+
+   // 自定义：触发事件的元素属性名、触发事件的方式
+  util.on('lay-active', {
+    e3: layui.throttle(function(othis) {
+      console.log(this);
+      layer.tips(othis.html(), this);
+    }, 3000) // 3s 内不重复执行
+  }, {
+    trigger: 'mouseenter' // 鼠标移入时触发事件
   });
 });
 </script>
