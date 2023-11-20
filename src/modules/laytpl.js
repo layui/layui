@@ -12,11 +12,11 @@ layui.define(function(exports){
   };
 
   // 模板工具
-  var tool = {  
+  var tool = {
     escape: function(html){
       var exp = /[<"'>]|&(?=#[a-zA-Z0-9]+)/g;
       if(html === undefined || html === null) return '';
-      
+
       html += '';
       if(!exp.test(html)) return html;
 
@@ -77,12 +77,12 @@ layui.define(function(exports){
 
     // 模板必须为 string 类型
     if(typeof template !== 'string') return template;
-    
+
     // 正则解析
     template = template.replace(/\s+|\r|\t|\n/g, ' ')
     .replace(inner.exp(options.open +'#'), options.open +'# ')
     .replace(inner.exp(options.close +'}'), '} '+ options.close).replace(/\\/g, '\\\\')
-    
+
     // 不匹配指定区域的内容
     .replace(inner.exp(options.open + '!(.+?)!' + options.close), function(str){
       str = str.replace(inner.exp('^'+ options.open + '!'), '')
@@ -92,13 +92,13 @@ layui.define(function(exports){
       });
       return str
     })
-    
+
     // 匹配 JS 语法
     .replace(/(?="|')/g, '\\').replace(that.tagExp(), function(str){
       str = str.replace(jss, '').replace(jsse, '');
       return '";' + str.replace(/\\(.)/g, '$1') + ';view+="';
     })
-    
+
     // 匹配普通输出语句
     .replace(that.tagExp(1), function(str){
       var start = '"+laytpl.escape(';
@@ -114,10 +114,14 @@ layui.define(function(exports){
       }
       return start + str.replace(/\\(.)/g, '$1') + ')+"';
     });
-    
+
     template = '"use strict";var view = "' + template + '";return view;';
 
     try {
+      /**
+       * 请注意: 开发者在使用模板语法时，需确保模板中的 JS 语句不来自于页面用户输入。
+       * 即模板中的 JS 语句必须在页面开发者自身的可控范围内，否则请避免使用该模板解析。
+       */
       that.cache = template = new Function('d, laytpl', template);
       return template(data, tool);
     } catch(e) {
@@ -132,7 +136,7 @@ layui.define(function(exports){
 
     var that = this;
     var result = that.cache ? that.cache(data, tool) : that.parse(that.template, data);
-    
+
     // 返回渲染结果
     typeof callback === 'function' && callback(result);
     return result;
@@ -152,7 +156,7 @@ layui.define(function(exports){
   };
 
   laytpl.v = '2.0.0';
-  
+
   // export
   exports('laytpl', laytpl);
 });

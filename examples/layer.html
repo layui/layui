@@ -62,9 +62,9 @@ var runTest = function(run, $, layer){
   var timer = setInterval(function(){
     //location.reload();
   }, 1000);
-  
+
   layer.alert(123);
-  
+
   $.ajax({
     url: './all.html'
     ,beforeSend: function(){
@@ -91,12 +91,12 @@ layui.use(['layer', 'util'], function(layer, util){
   var $ = layui.jquery;
   var util = layui.util;
   //return
-  
+
   var index = layer.msg('Hello World');
   //layer.close(index);
   //runTest(1, $, layer);
-  
-  
+
+
   // 触发事件
   util.on('lay-on', {
     test: function(){
@@ -136,8 +136,8 @@ layui.use(['layer', 'util'], function(layer, util){
       layer.open({
         title:'自定义页面层',
         type: 1,
-        skin: 'layui-layer-border', 
-        area: ['1000px', '580px'], 
+        skin: 'layui-layer-border',
+        area: ['1000px', '580px'],
         content: $('#test11111'),
         maxmin: true,
         shade: false,
@@ -179,13 +179,13 @@ layui.use(['layer', 'util'], function(layer, util){
       layer.tab({
         area: ['600px', '300px'],
         tab: [{
-          title: 'TAB1', 
+          title: 'TAB1',
           content: '内容1'
         }, {
-          title: 'TAB2', 
+          title: 'TAB2',
           content: '内容2'
         }, {
-          title: 'TAB3', 
+          title: 'TAB3',
           content: '内容3'
         }]
       });
@@ -230,17 +230,17 @@ layui.use(['layer', 'util'], function(layer, util){
       });
     }
   });
-  
+
   // 相册层
   layer.photos({
     photos: '#photos', // $('#photos')
     // toolbar: false,
     // footer: false
   });
-  
+
   //动态追加
   $('#photos').append('<li class="list"><img src="https://unpkg.com/outeres/demo/3.jpg"></li>');
- 
+
 });
 </script>
 </body>
