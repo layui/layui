@@ -77,7 +77,7 @@ layui.use(function(){
       
       // 原生 select 事件
       var tableViewElem = this.elem.next();
-      tableViewElem.off('change').on('change', '.select-demo-primary', function(){
+      tableViewElem.find('.select-demo-primary').on('change', function(){
         var value = this.value; // 获取选中项 value
         var data = table.getRowData(options.id, this); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
 
