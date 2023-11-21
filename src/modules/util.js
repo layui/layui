@@ -414,7 +414,7 @@ layui.define('jquery', function(exports){
 
       if (!elem[0]) return; // 若委托元素不存在
 
-      // 初始化 data 默认值
+      // 初始化 data 默认值，以委托元素为存储单元
       if (!elem.data(DATANAME)) {
         elem.data(DATANAME, {
           events: {},
@@ -422,7 +422,7 @@ layui.define('jquery', function(exports){
         });
       }
 
-      // 读取 data 缓存，以委托元素为存储单元
+      // 读取 data 缓存
       var dataCache = elem.data(DATANAME);
       var callbacks = dataCache.callbacks;
 
