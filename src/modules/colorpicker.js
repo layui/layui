@@ -434,7 +434,7 @@ layui.define(['jquery', 'lay'], function(exports){
       }
       
       //回调更改的颜色
-      options.change && options.change(that.elemPicker.find('.' + PICKER_INPUT).find('input').val());
+      options.change && options.change($.trim(that.elemPicker.find('.' + PICKER_INPUT).find('input').val()));
     }
 
     //拖拽元素
@@ -614,7 +614,7 @@ layui.define(['jquery', 'lay'], function(exports){
       
       //确认
       ,confirm: function(othis, change){
-        var value = elemPickerInput.val()
+        var value =  $.trim(elemPickerInput.val())
         ,colorValue
         ,hsb;
         

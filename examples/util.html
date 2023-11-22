@@ -18,6 +18,13 @@ body{padding: 50px;}
 <button class="layui-btn" lay-on="e3">事件3</button>
 <button class="layui-btn" lay-active="e4">事件4</button>
 
+<br><br>
+
+<div id="ID-util-on-test">
+  <button class="layui-btn" lay-on="e1">新的容器 - 事件1</button>
+  <button class="layui-btn" lay-on="e5">新的容器 - 事件5</button>
+</div>
+
 <hr>
 
 <div id="test"></div>
@@ -118,6 +125,20 @@ layui.use(['lay', 'util', 'layer'], function(){
     }, 3000) // 3s 内不重复执行
   }, {
     trigger: 'mouseenter'
+  });
+
+  // 自定义触发事件的委托元素
+  util.on({
+    // 此处与委托在 body 上的事件共用了 e1 名称，以测试事件冒泡
+    e1: function(othis, e){
+      this.innerHTML = 'click: '+ (Math.random()*100000 | 0);
+      layui.stope(e); // 阻止事件冒泡
+    },
+    e5: function(othis) {
+      this.innerHTML = 'click: '+ (Math.random()*100000 | 0);
+    }
+  }, {
+    elem: '#ID-util-on-test'
   });
 
 

@@ -410,25 +410,36 @@ layui.define('jquery', function(exports){
 
       var elem = options.elem = $(options.elem);
       var attrSelector = '['+ attr +']';
-      var CALLBACK = 'UTIL_ON_CALLBACK';
+      var DATANAME = 'UTIL_ON_DATA'; // 缓存在委托元素上的 data-* 属性名
 
       if (!elem[0]) return; // 若委托元素不存在
 
-      // 根据 attr 记录事件集合
-      events = util.on[attr] = $.extend(true, util.on[attr], events) || {};
+      // 初始化 data 默认值，以委托元素为存储单元
+      if (!elem.data(DATANAME)) {
+        elem.data(DATANAME, {
+          events: {},
+          callbacks: {}
+        });
+      }
 
-      // 清除事件委托
-      util.on[CALLBACK] = util.on[CALLBACK] || {};
-      elem.off(options.trigger, attrSelector, util.on[CALLBACK][attr]);
+      // 读取 data 缓存
+      var dataCache = elem.data(DATANAME);
+      var callbacks = dataCache.callbacks;
+
+      // 根据 attr 记录事件集合
+      events = $.extend(true, dataCache.events, events) || {};
+
+      // 清除事件委托，避免重复绑定
+      elem.off(options.trigger, attrSelector, callbacks[attr]);
 
       // 绑定事件委托
       elem.on(
         options.trigger,
         attrSelector,
-        util.on[CALLBACK][attr] = function() {
+        callbacks[attr] = function(e) {
           var othis = $(this);
           var key = othis.attr(attr);
-          typeof events[key] === 'function' && events[key].call(this, othis);
+          typeof events[key] === 'function' && events[key].call(this, othis, e);
         }
       );
 
