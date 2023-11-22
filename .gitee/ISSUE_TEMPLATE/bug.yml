@@ -16,7 +16,8 @@ body:
   - type: input
     attributes:
       label: 版本号
-      placeholder: 请提供您所使用的 Layui 版本号
+      placeholder: 请提供您当前使用的 Layui 版本号
+      description: 若不清楚，可打开 `layui.js`，头部注释有对应的版本号
     validations:
       required: true
   - type: input
