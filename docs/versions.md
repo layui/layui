@@ -27,11 +27,11 @@ toc: true
 - #### util
   - 优化 `util.on()` 方法，提升参数的灵活性和代码的可读性 [d74abb4](https://github.com/layui/layui/commit/d74abb453cb45ea5d2eb69f0ed7250caf0ab0088) / [92c8580](https://github.com/layui/layui/commit/92c85805c2558bf384292d7adf783d8453cd895a)
 - #### colorpicker
-  - 优化 colorpicker 内部输入框取值，移除字符串两侧的空白字符 [#1427](https://github.com/layui/layui/pull/1427)
+  - 优化 内部输入框取值，移除字符串两侧的空白字符 [#1427](https://github.com/layui/layui/pull/1427) [@Sight-wcg](https://github.com/Sight-wcg)
 - #### 其他
   - 优化 `lay.clipboard.writeText()` 逻辑，以适配无写入权限时的场景 [#1421](https://github.com/layui/layui/pull/1421) [@Sight-wcg](https://github.com/Sight-wcg)
 
-### 下载： [layui-v2.9.0-beta.1.zip](https://gitee.com/layui/layui/attach_files/1589824/download)
+### 下载： [layui-v2.9.0-rc.1.zip](https://gitee.com/layui/layui/attach_files/1589824/download)
 
 ---
 
