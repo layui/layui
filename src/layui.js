@@ -16,7 +16,7 @@
   };
 
   var Layui = function(){
-    this.v = '2.9.0-rc.1'; // Layui 版本号
+    this.v = '2.9.0-rc.2'; // Layui 版本号
   };
 
   // 识别预先可能定义的指定全局对象
