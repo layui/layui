@@ -75,7 +75,9 @@
   </div>
 </script>
 
-<table id="test"></table>
+<div id="parent" style="height: 520px;">
+  <table id="test"></table>
+</div>
 
 <script src="../src/layui.js"></script>
 <script>
@@ -121,7 +123,7 @@ layui.use(['table', 'dropdown'], function(){
   // 渲染
   window.ins1 = table.render({
     elem: '#test',
-    height: 520,
+    height: '#parent-0',
     // width: 600,
     title: '用户数据表',
     url: 'json/table/demo1.json',
