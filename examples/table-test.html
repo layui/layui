@@ -49,7 +49,7 @@
 </script>
 
 <script type="text/html" id="usernameTpl">
-  <a href="" class="layui-table-link">{{d.username || ''}}</a>
+  <a href="" class="layui-table-link">{{= d.username }}</a>
 </script>
 
 <script type="text/html" id="switchTpl">
@@ -166,7 +166,7 @@ layui.use(['table', 'dropdown'], function(){
       }, templet: '#usernameTpl'},
       {field:'xxx', title:'测试', edit: 'text'},
       {field:'email', minWidth: 160, maxWidth: 320, title:'邮箱 <i class="layui-icon layui-icon-email" lay-event="email"></i>', fieldTitle: '邮箱', hide: 0, edit: 'text', style: 'background-color: #fafafa; color: red;', templet: function(d){
-        return '<em>'+ layui.util.escape(d.email) +'</em>'
+        return '<em>'+ layui.util.escape(d.email) +'</em> 份'
       }},
       {field:'sex', title:'性别', width:80, edit: 'text', sort: true, escape: false},
       {field:'city', title:'城市', width:120, templet: '#cityTpl', exportTemplet: function(d, obj){
