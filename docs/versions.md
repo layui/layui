@@ -10,28 +10,31 @@ toc: true
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
 <h2 id="2.9.0" class="ws-anchor">
-  2.9.0-rc.1
+  2.9.0-rc.2
   <span class="layui-badge-rim">预览版</span>
-  <span class="layui-badge-rim">2023-11-22</span>
+  <span class="layui-badge-rim">2023-11-28</span>
 </h2>
 
 `2.9.x` 对 `2.8.18` 向下兼容，可覆盖升级。
 
 - #### table
-  - 修复 `complete` 属性导致 `$.ajaxSetup()` 的 `complete` 失效的问题 [#1423](https://github.com/layui/layui/pull/1423) [@Sight-wcg](https://github.com/Sight-wcg)
-  - 修复 单元格展开再收缩后，当列通过拖拽改变过宽度，列存在概率性错位的问题 [28347fc](https://github.com/layui/layui/commit/28347fcf8f97912d6c90d81931f9ed5527dc3627)
-  - 修复 合计行单元格展开异常的问题 [#I8FH3K](https://gitee.com/layui/layui/issues/I8FH3K)
-  - 优化 `height` 属性高度铺满语法中不支持浮点型数值的问题 [#I8DSPH](https://gitee.com/layui/layui/issues/I8DSPH)
-  - 优化 关闭单元格多行展开状态后，悬停状态样式未移除的问题 [#1425](https://github.com/layui/layui/pull/1425) [@Sight-wcg](https://github.com/Sight-wcg)
-  - 优化 在末行展开单元格后，出现的固定列水平未对其的问题 [#85add62](https://github.com/layui/layui/commit/85add6230c73c72d1a03de2564cab12c98db57f6)
+  - 修复 `complete` 属性导致 `$.ajaxSetup()` 的 `complete` 失效的问题 #1423
+  - 修复 单元格展开再收缩后，当列通过拖拽改变过宽度，列存在概率性错位的问题 [28347fc]
+  - 修复 合计行单元格展开异常的问题 #gitee-I8FH3K
+  - 优化 `height` 属性高度铺满语法中不支持浮点型数值的问题 #gitee-I8DSPH
+  - 优化 关闭单元格多行展开状态后，悬停状态样式未移除的问题 #1425 @Sight-wcg
+  - 优化 在末行展开单元格后，出现的固定列水平未对其的问题 [85add62]
+  - 优化 当数据值为 `0,undefined,null` 且开启列模板，编辑单元格会带入模板字符的问题 [1d408f0]
 - #### util
-  - 优化 `util.on()` 方法，提升参数的灵活性和代码的可读性 [d74abb4](https://github.com/layui/layui/commit/d74abb453cb45ea5d2eb69f0ed7250caf0ab0088) / [92c8580](https://github.com/layui/layui/commit/92c85805c2558bf384292d7adf783d8453cd895a)
+  - 优化 `util.on()` 方法，提升参数的灵活性和代码的可读性 [d74abb4]
+- #### layer
+  - 优化 `layer.closeLast()` 方法，给第二个参数增加回调 [ab4ded2]
 - #### colorpicker
-  - 优化 colorpicker 内部输入框取值，移除字符串两侧的空白字符 [#1427](https://github.com/layui/layui/pull/1427)
+  - 优化 colorpicker 内部输入框取值，移除字符串两侧的空白字符 #1427 @Sight-wcg
 - #### 其他
-  - 优化 `lay.clipboard.writeText()` 逻辑，以适配无写入权限时的场景 [#1421](https://github.com/layui/layui/pull/1421) [@Sight-wcg](https://github.com/Sight-wcg)
+  - 优化 `lay.clipboard.writeText()` 逻辑，以适配无写入权限时的场景 #1421 @Sight-wcg
 
-### 下载： [layui-v2.9.0-beta.1.zip](https://gitee.com/layui/layui/attach_files/1589824/download)
+### 下载： [layui-v2.9.0-rc.2.zip](https://gitee.com/layui/layui/attach_files/1595924/download)
 
 ---
 

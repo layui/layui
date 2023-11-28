@@ -353,13 +353,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 高度铺满：full-差距值
     if(options.height && /^full-.+$/.test(options.height)){
-      that.fullHeightGap = parseFloat(options.height.split('-')[1]) || 0;
-      options.height = _WIN.height() - that.fullHeightGap;
+      that.fullHeightGap = options.height.split('-')[1];
+      options.height = _WIN.height() - (parseFloat(that.fullHeightGap) || 0);
     } else if (options.height && /^#\w+\S*-.+$/.test(options.height)) {
       var parentDiv = options.height.split("-");
-      that.parentHeightGap = parseFloat(parentDiv.pop()) || 0;
+      that.parentHeightGap = parentDiv.pop();
       that.parentDiv = parentDiv.join("-");
-      options.height = $(that.parentDiv).height() - that.parentHeightGap;
+      options.height = $(that.parentDiv).height() - (parseFloat(that.parentHeightGap) || 0);
     }
 
     // 开始插入替代元素
@@ -2379,8 +2379,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           }
           return inputElem;
         }());
-
-        input[0].value = othis.data('content') || data[field] || elemCell.text();
+        input[0].value = function(val) {
+          return (val === undefined || val === null) ? '' : val;
+        }(othis.data('content') || data[field]);
         othis.find('.'+ELEM_EDIT)[0] || othis.append(input);
         input.focus();
         e && layui.stope(e);

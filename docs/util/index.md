@@ -28,7 +28,7 @@ toc: true
 | [util.escape(str)](#escape) | 转义 HTML 字符 |
 | [util.unescape(str)](#escape) | 还原 HTML 字符 |
 | [util.openWin(options)](#openWin) <sup>2.8+</sup> | 打开浏览器新标签页 |
-| [util.on(attr, obj, eventType)](#on) | 批量事件处理 |
+| [util.on(attr, events, options)](#on) | 批量事件处理 |
 
 <h3 id="countdown" class="ws-anchor ws-bold">倒计时</h3>
 
@@ -250,8 +250,8 @@ layui.use('util', function(){
       layer.tips(othis.html(), this);
     }, 3000) // 3s 内不重复执行
   }, {
-    trigger: 'mouseenter' // 鼠标移入时触发事件
-  });
+    trigger: 'mouseenter' // 鼠标移入时触发事件);
+  })
 });
 </script>
   </textarea>
