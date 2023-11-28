@@ -386,9 +386,9 @@ layui.define('jquery', function(exports){
     /**
      * 批量事件
      * @param {string} [attr="lay-on"] - 触发事件的元素属性名
-     * @param {Object.<string, Function} events - 事件集合
+     * @param {Object.<string, Function>} events - 事件集合
      * @param {Object} [options] - 参数的更多选项
-     * @param {(string|HTMLElement|jQuery)} [options.elem="body"] - 触发事件的委托元素
+     * @param {(string|HTMLElement|JQuery)} [options.elem="body"] - 触发事件的委托元素
      * @param {string} [options.trigger="click"] - 事件触发的方式
      * @returns {Object} 返回当前 events 参数设置的事件集合
      */

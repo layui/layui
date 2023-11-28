@@ -136,7 +136,7 @@ layui.use(function(){
   transfer.render({
     elem: '#ID-transfer-demo-showSearch',
     data: data,
-    title: ['文本墨客', '获奖文人'],
+    title: ['文人墨客', '获奖文人'],
     showSearch: true
   });
 });

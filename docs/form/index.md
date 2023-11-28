@@ -142,7 +142,7 @@ form 还可以借助*栅格*实现更灵活的响应式布局。
 layui.use(function(){
   var form = layui.form;
   
-  // 当表单元素被插入插入时，需进行组件渲染才能显示
+  // 当表单元素被动态插入时，需主动进行组件渲染才能显示
   form.render(); // 渲染全部表单
   form.render('select'); // 仅渲染 select 元素
   form.render(null, 'test'); // 仅渲染 lay-filter="test" 的容器内的全部表单
