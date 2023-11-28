@@ -100,7 +100,11 @@ data: {
 
 </td>
 <td>string</td>
-<td>-</td>
+<td>
+
+`json`
+
+</td>
     </tr>
     <tr>
 <td>
