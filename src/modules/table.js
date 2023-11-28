@@ -2379,8 +2379,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           }
           return inputElem;
         }());
-
-        input[0].value = othis.data('content') || data[field] || elemCell.text();
+        input[0].value = function(val) {
+          return (val === undefined || val === null) ? '' : val;
+        }(othis.data('content') || data[field]);
         othis.find('.'+ELEM_EDIT)[0] || othis.append(input);
         input.focus();
         e && layui.stope(e);
