@@ -10,9 +10,9 @@ toc: true
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
 <h2 id="2.9.0" class="ws-anchor">
-  2.9.0-rc.2
-  <span class="layui-badge-rim">预览版</span>
-  <span class="layui-badge-rim">2023-11-28</span>
+  2.9.0
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+  <span class="layui-badge-rim">2023-11-29</span>
 </h2>
 
 `2.9.x` 对 `2.8.18` 向下兼容，可覆盖升级。
@@ -36,7 +36,7 @@ toc: true
 - #### 其他
   - 优化 `lay.clipboard.writeText()` 逻辑，以适配无写入权限时的场景 #1421 @Sight-wcg
 
-### 下载： [layui-v2.9.0-rc.3.zip](https://gitee.com/layui/layui/attach_files/1597292/download)
+### 下载： [layui-v2.9.0.zip](https://gitee.com/layui/layui/attach_files/1597365/download)
 
 <script>
 (function(){
