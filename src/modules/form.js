@@ -468,7 +468,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               dl.scrollTop(posTop + dl.scrollTop() - dlHeight + ddHeight - 5);
             }
             
-            // 若选择玄素在滚动条不可见顶部
+            // 若选择元素在滚动条不可见顶部
             if(posTop < 0){
               dl.scrollTop(posTop + dl.scrollTop() - 5);
             }
