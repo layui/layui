@@ -2,12 +2,13 @@
  * tree 树组件
  */
 
-layui.define('form', function(exports){
+layui.define(['form','util'], function(exports){
   "use strict";
   
   var $ = layui.$;
   var form = layui.form;
   var layer = layui.layer;
+  var util = layui.util;
   
   // 模块名
   var MOD_NAME = 'tree';
@@ -547,7 +548,7 @@ layui.define('form', function(exports){
         // 添加输入框，覆盖在文字上方
         elemMain.append('<input type="text" class="layui-tree-editInput">');
         // 获取焦点
-        elemMain.children('.layui-tree-editInput').val(text).focus();
+        elemMain.children('.layui-tree-editInput').val(util.unescape(text)).focus();
         // 嵌入文字移除输入框
         var getVal = function(input){
           var textNew = input.val().trim();
