@@ -70,11 +70,11 @@ npm i layui
 
 ```
 <!-- 引入 layui.css -->
-<link href="//unpkg.com/layui@{{= d.layui.v }}/dist/css/layui.css" rel="stylesheet">
+<link href="//unpkg.com/layui@{{= d.layui[2].v }}/dist/css/layui.css" rel="stylesheet">
 ```
 ```
 <!-- 引入 layui.js -->
-<script src="//unpkg.com/layui@{{= d.layui.v }}/dist/layui.js"></script>
+<script src="//unpkg.com/layui@{{= d.layui[2].v }}/dist/layui.js"></script>
 ```
 
 <h2 id="quickstart" lay-toc="{}">快速上手</h2>
@@ -89,11 +89,11 @@ npm i layui
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Quick Start - Layui</title>
-  <link href="{{= d.layui.cdn.css }}" rel="stylesheet">
+  <link href="{{= d.layui[2].cdn.css }}" rel="stylesheet">
 </head>
 <body>
   <!-- HTML Content -->
-  <script src="{{= d.layui.cdn.js }}"></script>
+  <script src="{{= d.layui[2].cdn.js }}"></script>
   <script>
   // Usage
   layui.use(function(){

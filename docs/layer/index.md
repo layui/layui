@@ -34,7 +34,7 @@ toc: true
 | 关闭 : | - |
 | [layer.close(index, callback)](#close) | 关闭对应的层，核心方法。 |
 | [layer.closeAll(type, callback)](#closeAll) | 关闭所有对应类型的层。 |
-| [layer.closeLast(type)](#closeLast) <sup>2.8+</sup> | 关闭最近打开的对应类型的层。 |
+| [layer.closeLast(type, callback)](#closeLast) <sup>2.8+</sup> | 关闭最近打开的对应类型的层。 |
 | 其他 : | - |
 | [layer.config(options)](#config) | 全局配置默认属性。 |
 | [layer.ready(callback)](#ready) | 样式初始化就绪。 |
@@ -385,9 +385,10 @@ layer.closeAll('tips'); // 关闭所有的 tips 层
 
 <h2 id="closeLast" lay-pid="api" class="ws-anchor ws-bold">关闭最近一次打开的层 <sup>2.8+</sup></h2>
 
-`layer.closeLast(type);`
+`layer.closeLast(type, callback);`
 
 - 参数 `type` : 弹层的类型。可选值：`dialog,page,iframe,loading,tips`
+- 参数 `callback` : 关闭弹层后的回调函数
 
 该方法用于关闭最近一次打开的对应类型的层。
 
