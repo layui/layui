@@ -250,8 +250,8 @@ layui.use('util', function(){
       layer.tips(othis.html(), this);
     }, 3000) // 3s 内不重复执行
   }, {
-    trigger: 'mouseenter' // 鼠标移入时触发事件);
-  })
+    trigger: 'mouseenter' // 鼠标移入时触发事件
+  });
 });
 </script>
   </textarea>
