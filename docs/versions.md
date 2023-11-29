@@ -29,12 +29,14 @@ toc: true
   - 优化 `util.on()` 方法，提升参数的灵活性和代码的可读性 [d74abb4] [92c8580]
 - #### layer
   - 优化 `layer.closeLast()` 方法，给第二个参数增加回调函数 [ab4ded2]
+- #### tree
+  - 修复 `title` 有特殊字符时点击编辑的显示问题 #1432 @Sight-wcg
 - #### colorpicker
   - 优化 内部输入框取值，移除字符串两侧的空白字符 #1427 @Sight-wcg
 - #### 其他
   - 优化 `lay.clipboard.writeText()` 逻辑，以适配无写入权限时的场景 #1421 @Sight-wcg
 
-### 下载： [layui-v2.9.0-rc.2.zip](https://gitee.com/layui/layui/attach_files/1595924/download)
+### 下载： [layui-v2.9.0-rc.3.zip](https://gitee.com/layui/layui/attach_files/1597292/download)
 
 <script>
 (function(){
