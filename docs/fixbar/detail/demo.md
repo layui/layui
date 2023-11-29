@@ -8,14 +8,14 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="{{= d.layui.cdn.css }}" rel="stylesheet">
+  <link href="{{= d.layui[2].cdn.css }}" rel="stylesheet">
 </head>
 <body>
 <div id="target-test" style="position: relative; padding: 16px;">
   页<br>面<br>内<br>容<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。<br>。
 </div>
 
-<script src="{{= d.layui.cdn.js }}"></script>
+<script src="{{= d.layui[2].cdn.js }}"></script>
 <script>
 layui.use(function(){
   var util = layui.util;
