@@ -1579,7 +1579,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       if(layui.type(item) === 'array' || item[options.disabledName]) return; // 空项
       if(Number(opts.index) === i || opts.index === 'all'){
         var checked = item[options.checkName] = getChecked(item[options.checkName]);
-        tr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 标记当前选中行背景色
+        tr.filter('[data-index="'+ i +'"]')[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 标记当前选中行背景色
         // 若为 radio 类型，则取消其他行选中背景色
         if(opts.type === 'radio'){
           tr.siblings().removeClass(ELEM_CHECKED);
