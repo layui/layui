@@ -216,7 +216,7 @@ util.openWin({
 
 | options | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| elem | 触发事件的委托元素 | string \| HTMLElement \| jQuery | - |
+| elem | 触发事件的委托元素 | string \| HTMLElement \| JQuery | - |
 | trigger | 事件触发的方式 | string | `click` |
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['code', 'preview'], tools: ['full']}">
