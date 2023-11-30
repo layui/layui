@@ -15,7 +15,7 @@ toc: true
   <span class="layui-badge-rim">2023-11-29</span>
 </h2>
 
-`2.9.x` 对 `2.8.18` 向下兼容，可覆盖升级。
+`2.9.x` 是对 `2.8.18` 的进一步完善，旨在提供一个可长期用于生产环境的稳定版本。对 `2.8.x` 向下兼容，可覆盖升级。
 
 - #### table
   - 修复 `complete` 属性导致 `$.ajaxSetup()` 的 `complete` 失效的问题 #1423 @Sight-wcg
@@ -71,11 +71,14 @@ toc: true
             nodeValue = nodeValue.replace(types[i].rule, function(s, s1, s2) {
               return '<a href="'+ types[i].href + s2 +'" target="_blank">'+ s1 + s2 +'</a>';
             });
+            node.matched = true;
           }
         }
-        sNode.innerHTML = nodeValue;
-        node.parentNode.insertBefore(sNode, node);
-        node.parentNode.removeChild(node);
+        if (node.matched) {
+          sNode.innerHTML = nodeValue;
+          node.parentNode.insertBefore(sNode, node);
+          node.parentNode.removeChild(node);
+        }
       }
     });
   });
