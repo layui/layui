@@ -388,7 +388,7 @@ layer.closeAll('tips'); // 关闭所有的 tips 层
 `layer.closeLast(type, callback);`
 
 - 参数 `type` : 弹层的类型。可选值：`dialog,page,iframe,loading,tips`
-- 参数 `callback` : 关闭弹层后的回调函数
+- 参数 `callback` <sup>2.9+</sup>: 关闭弹层后的回调函数
 
 该方法用于关闭最近一次打开的对应类型的层。
 
