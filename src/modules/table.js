@@ -97,7 +97,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     if(templet){
       content = typeof templet === 'function'
         ? templet.call(item3, obj.tplData, obj.obj)
-      : laytpl($(templet).html() || String(content)).render($.extend({
+      : laytpl((templet[0] === '#' ? $(templet).html() : templet) || String(content)).render($.extend({
         LAY_COL: item3
       }, obj.tplData));
     }
