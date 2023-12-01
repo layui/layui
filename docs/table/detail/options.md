@@ -123,6 +123,17 @@
 - `height: 'full-30'` 设置相对可视屏幕的高度铺满。这是一个特定的语法格式：`full` 表示铺满；后面的数字表示当前 table 之外的元素占用的高度，如：表格头部到页面最顶部*加*表格底部距离页面最底部的“距离和”
 - `height: '#id-30'` 设置相对父元素的高度铺满，其中 `#id` 即父元素的 ID 选择器，其计算原理和上述 `full` 相同。
 
+**函数写法** <sup>2.9.1+</sup>
+
+当需要动态改变表格高度时建议使用，如下以等效 `full-xx` 的写法为例：
+
+```
+height: function(){
+  var otherHeight = $('#search-content').outerHeight(); // 自定义其他区域的高度
+  return $(window).height() - otherHeight; // 返回 number 类型
+}
+```
+
 </td>
 <td>number<br>string</td>
 <td>-</td>
