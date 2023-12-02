@@ -9,7 +9,7 @@
 
   /**
    * 元素查找
-   * @param {string | HTMLElement | JQuery} selector
+   * @param {string | HTMLElement | jQuery} selector
    */
   var lay = function(selector){
     return new Class(selector);
@@ -191,7 +191,7 @@
    * ```
    */
   lay.getStyleRules = function(style, callback) {
-    if (!style) return;
+    if (!style) return null;
 
     var sheet = style.sheet || style.styleSheet || {};
     var rules = sheet.cssRules || sheet.rules;
@@ -208,7 +208,7 @@
   /**
    * 创建 style 样式
    * @param {Object} options - 可配置的选项
-   * @param {string | HTMLElement | JQuery} [options.target] - 目标容器，指定后会将样式追加到目标容器
+   * @param {string | HTMLElement | jQuery} [options.target] - 目标容器，指定后会将样式追加到目标容器
    * @param {string} [options.id] - 样式元素的 id，默认自增
    * @param {string} options.text - 样式内容
    * @returns {HTMLStyleElement} 返回创建的样式元素
@@ -390,7 +390,7 @@
 
   /**
    * 获取元素上的属性配置项
-   * @param {string | HTMLElement | JQuery} elem - HTML 元素
+   * @param {string | HTMLElement | jQuery} elem - HTML 元素
    * @param {{attr: string} | string} [opts="lay-options"] - 可配置的选项，string 类型指定属性名
    * @returns {Object.<string, any>} 返回元素上的属性配置项
    * @example
