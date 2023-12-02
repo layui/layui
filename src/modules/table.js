@@ -105,12 +105,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 获取模板内容
     if(templet){
-      if(typeof templet === 'function'){
-        templet = templet.call(item3, obj.tplData, obj.obj);
-      }
-      content = laytpl(resolveTplStr(templet) || String(content)).render($.extend({
-        LAY_COL: item3
-      }, obj.tplData));
+      content = typeof templet === 'function'
+        ? templet.call(item3, obj.tplData, obj.obj)
+        : laytpl(resolveTplStr(templet) || String(content)).render($.extend({
+            LAY_COL: item3
+          }, obj.tplData));
     }
 
     // 是否只返回文本
