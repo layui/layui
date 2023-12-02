@@ -1557,8 +1557,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   Class.prototype.setRowChecked = function(opts){
     var that = this;
     var options = that.config;
+    var isCheckAll = opts.index === 'all';
     var tr = that.layBody.find('tr'+ (
-      opts.index === 'all' ? '' : '[data-index="'+ opts.index +'"]'
+      isCheckAll ? '' : '[data-index="'+ opts.index +'"]'
     ));
 
     // 默认属性
@@ -1577,12 +1578,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 设置数据选中属性
     layui.each(thisData, function(i, item){
       if(layui.type(item) === 'array' || item[options.disabledName]) return; // 空项
-      if(Number(opts.index) === i || opts.index === 'all'){
+      if(Number(opts.index) === i || isCheckAll){
         var checked = item[options.checkName] = getChecked(item[options.checkName]);
-        tr.filter('[data-index="'+ i +'"]')[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 标记当前选中行背景色
+        var currTr = isCheckAll ? tr.filter('[data-index="'+ i +'"]') : tr;
+        currTr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 标记当前选中行背景色
         // 若为 radio 类型，则取消其他行选中背景色
         if(opts.type === 'radio'){
-          tr.siblings().removeClass(ELEM_CHECKED);
+          currTr.siblings().removeClass(ELEM_CHECKED);
         }
       } else if(opts.type === 'radio') {
         delete item[options.checkName];
