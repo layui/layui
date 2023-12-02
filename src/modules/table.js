@@ -360,6 +360,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.parentHeightGap = parentDiv.pop();
       that.parentDiv = parentDiv.join("-");
       options.height = $(that.parentDiv).height() - (parseFloat(that.parentHeightGap) || 0);
+    } else if (typeof options.height === "function"){
+      that.customHeightFunc = options.height;
+      options.height = that.customHeightFunc();
     }
 
     // 开始插入替代元素
@@ -1727,15 +1730,19 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var options = that.config;
     var height = options.height;
     var bodyHeight;
+    var MIN_HEIGHT = 135;
 
     if(that.fullHeightGap){
       height = _WIN.height() - that.fullHeightGap;
-      if(height < 135) height = 135;
+      if(height < MIN_HEIGHT) height = MIN_HEIGHT;
       // that.elem.css('height', height);
     } else if (that.parentDiv && that.parentHeightGap) {
       height = $(that.parentDiv).height() - that.parentHeightGap;
-      if (height < 135) height = 135;
+      if(height < MIN_HEIGHT) height = MIN_HEIGHT;
       // that.elem.css("height", height);
+    } else if (that.customHeightFunc) {
+      height = that.customHeightFunc();
+      if(height < MIN_HEIGHT) height = MIN_HEIGHT;
     }
 
     // 如果多级表头，则填补表头高度
