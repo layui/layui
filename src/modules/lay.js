@@ -191,7 +191,7 @@
    * ```
    */
   lay.getStyleRules = function(style, callback) {
-    if (!style) return;
+    if (!style) return null;
 
     var sheet = style.sheet || style.styleSheet || {};
     var rules = sheet.cssRules || sheet.rules;
