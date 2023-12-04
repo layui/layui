@@ -23,9 +23,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     this.config = {
       // 内置的验证规则
       verify: {
-        required: function(value) {
+        required: function(value, item) {
+          let elem = $(item);
+          let errorText = elem.attr('lay-reqtext') || '必填项不能为空';
           if (!/[\S]+/.test(value)) {
-            return '必填项不能为空';
+            return errorText;
           }
         },
         phone: function(value) {
@@ -948,18 +950,21 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     return that;
   };
 
-  // 主动触发验证 --- elem 即要验证的区域表单选择器 / return true or false
-  Form.prototype.validate = function(elem) {
+  /** 主动触发验证
+   * @param {String|HTMLElement} elem 要验证的区域表单选择器
+   * @return {Boolean} 返回 true 表示验证通过，返回 false 表示验证未通过, 将会阻止提交 
+   */
+  Form.prototype.validate = function (elem) {
     var that = this;
-    var intercept; // 拦截标识
+    var intercept; // 拦截标识, 一般是此函数的返回值
     var options = that.config; // 获取全局配置项
-    var verify = options.verify; // 验证规则
+    var verifyFuntionList = options.verify; // 验证规则
     var DANGER = 'layui-form-danger'; // 警示样式
 
     elem = $(elem);
 
-    // 节点不存在可视为 true
-    if (!elem[0]) return !0;
+    // 节点不存在直接通过校验
+    if (!elem[0]) return true;
 
     // 若节点不存在特定属性，则查找容器内有待验证的子节点
     if (elem.attr('lay-verify') === undefined) {
@@ -969,68 +974,88 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       }
     }
 
-    // 开始校验
-    layui.each(elem, function(_, item) {
-      var othis = $(this);
-      var verifyStr = othis.attr('lay-verify') || '';
-      var vers = verifyStr.split('|');
-      var verType = othis.attr('lay-vertype'); // 提示方式
-      var value = $.trim(othis.val());
+    // 遍历表单内的元素进行校验
+    layui.each(elem, function (_, item) {
+      var thisElement = $(this); // notes: 这个 this和item是同一个对象
+      var verifyStr = thisElement.attr('lay-verify') || '';
+      var verifyNameList = verifyStr.split('|');
+      var verTipType = thisElement.attr('lay-vertype'); // 提示方式
+      var thisElementValue = $.trim(thisElement.val());
 
-      othis.removeClass(DANGER); // 移除警示样式
+      thisElement.removeClass(DANGER); // 移除警示样式
       
       // 遍历元素绑定的验证规则
-      layui.each(vers, function(_, thisVer) {
-        var verst; // 校验结果
+      layui.each(verifyNameList, function (_, verifyName) {
+        var verifyResult; // 校验结果
         var errorText = ''; // 错误提示文本
-        var rule = verify[thisVer]; // 获取校验规则
-        
-        // 匹配验证规则
-        if (rule) {
-          verst = typeof rule === 'function'
-            ? errorText = rule(value, item) 
-          : !rule[0].test(value); // 兼容早期数组中的正则写法
+        var verifyMethod = verifyFuntionList[verifyName]; // 校验规则(function|Array[regexp, errorText])
+
+        if (verifyMethod === undefined || verifyMethod === null) {
+          console.error('找不到名为 "' + verifyName + '" 的验证规则');
+          return false;
+        }
+
+        var errorText = "输入的格式不正确"; // 错误提示文本
+        if (verifyMethod instanceof Array) {
+          var regexpVerify = verifyMethod[0];
+          if (!(regexpVerify instanceof RegExp)) {
+            console.error('非法的验证规则类型"' + verifyName + '"预期的类型为RegExp');
+            return false;
+          }
+          var verifyResult = regexpVerify.test(thisElementValue);
+          if (verifyResult === true) {
+            return false;
+          }
+          errorText = verifyMethod[1] || errorText;
+        }
+        else if (verifyMethod instanceof Function) {
+          var verifyResult = verifyMethod(thisElementValue, item);
+          // 当返回值为true时, 将跳过后续的校验规则
+          if (verifyResult === true) {
+            return true;
+          }
+          // 如果函数没有返回值, 则认为校验通过
+          if (verifyResult === undefined) {
+            return false;
+          }
+          errorText = verifyResult;
+        }
+        else{
+          console.error('非法的验证规则类型 "' + verifyName + '"');
+          return false;
+        }
           
           // 是否属于美化替换后的表单元素
           var isForm2Elem = item.tagName.toLowerCase() === 'select' || (
             /^(checkbox|radio)$/.test(item.type)
           );
           
-          errorText = errorText || rule[1];
-          
-          // 获取自定义必填项提示文本
-          if (thisVer === 'required') {
-            errorText = othis.attr('lay-reqtext') || errorText;
-          }
-          
-          // 若命中校验规则
-          if (verst) {
             // 提示层风格
-            if (verType === 'tips') {
-              layer.tips(errorText, function(){
-                if(typeof othis.attr('lay-ignore') !== 'string'){
-                  if(isForm2Elem){
-                    return othis.next();
+        if (verTipType === 'tips') {
+          layer.tips(errorText, function () {
+            if (typeof thisElement.attr('lay-ignore') !== 'string') {
+              if (isForm2Elem) {
+                return thisElement.next();
                   }
                 }
-                return othis;
-              }(), {tips: 1});
-            } else if(verType === 'alert') {
-              layer.alert(errorText, {title: '提示', shadeClose: true});
+            return thisElement;
+          }(), { tips: 1 });
+        } else if (verTipType === 'alert') {
+          layer.alert(errorText, { title: '提示', shadeClose: true });
             } 
             // 若返回的为字符或数字，则自动弹出默认提示框；否则由 verify 方法中处理提示
-            else if(/\b(string|number)\b/.test(typeof errorText)) {
-              layer.msg(errorText, {icon: 5, shift: 6});
+        else if (/\b(string|number)\b/.test(typeof errorText)) {
+          layer.msg(errorText, { icon: 5, shift: 6 });
             }
 
-            setTimeout(function() {
-              (isForm2Elem ? othis.next().find('input') : item).focus();
+        setTimeout(function () {
+          (isForm2Elem ? thisElement.next().find('input') : item).focus();
             }, 7);
             
-            othis.addClass(DANGER);
+        thisElement.addClass(DANGER);
             return intercept = true;
-          }
-        }
+
+
       });
 
       if (intercept) return intercept;
