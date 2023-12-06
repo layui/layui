@@ -205,6 +205,20 @@ skipText: ['Go to', '', 'Confirm']
 <td>-</td>
     </tr>
     <tr>
+<td>countText <sup>2.9.1+</sup></td>
+<td>
+
+用于自定义总数区域文本，如：
+
+```
+countText: ['Total ','']
+```
+
+</td>
+<td>array</td>
+<td>-</td>
+    </tr>
+    <tr>
 <td>theme</td>
 <td>
   
