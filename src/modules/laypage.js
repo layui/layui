@@ -152,7 +152,10 @@ layui.define(function(exports){
       }(),
       
       // 数据总数
-      count: '<span class="layui-laypage-count">共 '+ config.count +' 条</span>',
+      count: function(){
+        var countText = typeof config.countText === 'object' ? config.countText : ['共 ', ' 条'];
+        return '<span class="layui-laypage-count">'+ countText[0] + config.count + countText[1] +'</span>'
+      }(),
       
       // 每页条数
       limit: function(){
