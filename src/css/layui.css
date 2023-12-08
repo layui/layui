@@ -1319,7 +1319,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-nav-itemed>a{color: #fff !important;}
 .layui-nav-tree .layui-nav-bar{background-color: #16baaa;}
 
-.layui-nav-tree .layui-nav-child{position: relative; z-index: 0; top: 0; border: none; background-color: rgba(0,0,0,.3); box-shadow: none;}
+.layui-nav-tree .layui-nav-child{position: relative; z-index: 0; top: 0; border: none; background: none; background-color: rgba(0,0,0,.3); box-shadow: none;}
 .layui-nav-tree .layui-nav-child dd{margin: 0;}
 .layui-nav-tree .layui-nav-child a{color: #fff; color: rgba(255,255,255,.7);}
 .layui-nav-tree .layui-nav-child a:hover{background: none; color: #fff;}
