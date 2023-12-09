@@ -1560,10 +1560,16 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   Class.prototype.setRowChecked = function(opts){
     var that = this;
     var options = that.config;
-    var isCheckAll = opts.index === 'all';
-    var tr = that.layBody.find('tr'+ (
-      isCheckAll ? '' : '[data-index="'+ opts.index +'"]'
-    ));
+    var isCheckAll = opts.index === 'all'; // 是否操作全部
+    var isCheckMult = layui.type(opts.index) === 'array'; // 是否操作多个
+
+    // 匹配行元素
+    var tr = function(tr) {
+      return isCheckAll ? tr : tr.filter(isCheckMult ? function() {
+        var dataIndex = $(this).data('index');
+        return opts.index.indexOf(dataIndex) !== -1;
+      } : '[data-index="'+ opts.index +'"]');
+    }(that.layBody.find('tr'));
 
     // 默认属性
     opts = $.extend({
@@ -1573,18 +1579,31 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 同步数据选中属性值
     var thisData = table.cache[that.key];
     var existChecked = 'checked' in opts;
+
+    // 若为单选框，则单向选中；若为复选框，则切换选中。
     var getChecked = function(value){
-      // 若为单选框，则单向选中；若为复选框，则切换选中。
       return opts.type === 'radio' ? true : (existChecked ? opts.checked : !value)
     };
 
-    // 设置数据选中属性
+    // 设置选中状态
     layui.each(thisData, function(i, item){
-      if(layui.type(item) === 'array' || item[options.disabledName]) return; // 空项
-      if(Number(opts.index) === i || isCheckAll){
+      // 绕过空项和禁用项
+      if(layui.type(item) === 'array' || item[options.disabledName]) return;
+
+      // 匹配条件
+      var matched = isCheckAll || (
+        isCheckMult ? opts.index.indexOf(i) !== -1 : Number(opts.index) === i
+      );
+
+      // 设置匹配项的选中值
+      if(matched){
+        // 标记数据选中状态
         var checked = item[options.checkName] = getChecked(item[options.checkName]);
-        var currTr = isCheckAll ? tr.filter('[data-index="'+ i +'"]') : tr;
-        currTr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 标记当前选中行背景色
+
+        // 标记当前行背景色
+        var currTr = tr.filter('[data-index="'+ i +'"]');
+        currTr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED);
+
         // 若为 radio 类型，则取消其他行选中背景色
         if(opts.type === 'radio'){
           currTr.siblings().removeClass(ELEM_CHECKED);
