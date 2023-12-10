@@ -427,7 +427,7 @@ layui.define('jquery', function(exports){
       var callbacks = dataCache.callbacks;
 
       // 根据 attr 记录事件集合
-      events = $.extend(true, dataCache.events, events) || {};
+      events = dataCache.events[attr] = $.extend(true, dataCache.events[attr], events);
 
       // 清除事件委托，避免重复绑定
       elem.off(options.trigger, attrSelector, callbacks[attr]);
