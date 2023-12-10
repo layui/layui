@@ -223,12 +223,21 @@ layui.use(['table', 'dropdown'], function(){
           id: 'unchecked',
           title: '取消选中某行'
         },{
+          id: 'mult-checked',
+          title: '同时选中多个'
+        },{
           id: 'reset-checked',
           title: '给选中行取消选中状态'
         }],
         // 菜单被点击的事件
-        click: function(obj){
-          if(obj.id === 'reset-checked'){
+        click: function(obj) {
+          if (obj.id === 'mult-checked') {
+            // 同时选中多个
+            table.setRowChecked(id, {
+              index: [3, 4, 5], // 2.9.1+
+              checked: true
+            });
+          } else if(obj.id === 'reset-checked') {
             // 给选中行取消选中状态
             table.setRowChecked(id, {
               index: 'all',

@@ -370,6 +370,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.parentHeightGap = parentDiv.pop();
       that.parentDiv = parentDiv.join("-");
       options.height = $(that.parentDiv).height() - (parseFloat(that.parentHeightGap) || 0);
+    } else if (typeof options.height === "function"){
+      that.customHeightFunc = options.height;
+      options.height = that.customHeightFunc();
     }
 
     // 开始插入替代元素
@@ -1567,9 +1570,16 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   Class.prototype.setRowChecked = function(opts){
     var that = this;
     var options = that.config;
-    var tr = that.layBody.find('tr'+ (
-      opts.index === 'all' ? '' : '[data-index="'+ opts.index +'"]'
-    ));
+    var isCheckAll = opts.index === 'all'; // 是否操作全部
+    var isCheckMult = layui.type(opts.index) === 'array'; // 是否操作多个
+
+    // 匹配行元素
+    var tr = function(tr) {
+      return isCheckAll ? tr : tr.filter(isCheckMult ? function() {
+        var dataIndex = $(this).data('index');
+        return opts.index.indexOf(dataIndex) !== -1;
+      } : '[data-index="'+ opts.index +'"]');
+    }(that.layBody.find('tr'));
 
     // 默认属性
     opts = $.extend({
@@ -1579,20 +1589,34 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 同步数据选中属性值
     var thisData = table.cache[that.key];
     var existChecked = 'checked' in opts;
+
+    // 若为单选框，则单向选中；若为复选框，则切换选中。
     var getChecked = function(value){
-      // 若为单选框，则单向选中；若为复选框，则切换选中。
       return opts.type === 'radio' ? true : (existChecked ? opts.checked : !value)
     };
 
-    // 设置数据选中属性
+    // 设置选中状态
     layui.each(thisData, function(i, item){
-      if(layui.type(item) === 'array' || item[options.disabledName]) return; // 空项
-      if(Number(opts.index) === i || opts.index === 'all'){
+      // 绕过空项和禁用项
+      if(layui.type(item) === 'array' || item[options.disabledName]) return;
+
+      // 匹配条件
+      var matched = isCheckAll || (
+        isCheckMult ? opts.index.indexOf(i) !== -1 : Number(opts.index) === i
+      );
+
+      // 设置匹配项的选中值
+      if(matched){
+        // 标记数据选中状态
         var checked = item[options.checkName] = getChecked(item[options.checkName]);
-        tr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 标记当前选中行背景色
+
+        // 标记当前行背景色
+        var currTr = tr.filter('[data-index="'+ i +'"]');
+        currTr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED);
+
         // 若为 radio 类型，则取消其他行选中背景色
         if(opts.type === 'radio'){
-          tr.siblings().removeClass(ELEM_CHECKED);
+          currTr.siblings().removeClass(ELEM_CHECKED);
         }
       } else if(opts.type === 'radio') {
         delete item[options.checkName];
@@ -1737,15 +1761,19 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var options = that.config;
     var height = options.height;
     var bodyHeight;
+    var MIN_HEIGHT = 135;
 
     if(that.fullHeightGap){
       height = _WIN.height() - that.fullHeightGap;
-      if(height < 135) height = 135;
+      if(height < MIN_HEIGHT) height = MIN_HEIGHT;
       // that.elem.css('height', height);
     } else if (that.parentDiv && that.parentHeightGap) {
       height = $(that.parentDiv).height() - that.parentHeightGap;
-      if (height < 135) height = 135;
+      if(height < MIN_HEIGHT) height = MIN_HEIGHT;
       // that.elem.css("height", height);
+    } else if (that.customHeightFunc) {
+      height = that.customHeightFunc();
+      if(height < MIN_HEIGHT) height = MIN_HEIGHT;
     }
 
     // 如果多级表头，则填补表头高度

@@ -93,7 +93,7 @@ layui.define(['table'], function (exports) {
   var updateCache = function (id, childrenKey, data) {
     var tableCache = table.cache[id];
     layui.each(data || tableCache, function (index, item) {
-      var itemDataIndex = item[LAY_DATA_INDEX];
+      var itemDataIndex = item[LAY_DATA_INDEX] || '';
       if (itemDataIndex.indexOf('-') !== -1) {
         tableCache[itemDataIndex] = item
       }

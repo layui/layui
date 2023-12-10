@@ -260,7 +260,6 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-photos-footer a:hover{text-decoration: underline;}
 .layui-layer-photos-footer em{font-style: normal;}
 
-
 /* 关闭动画 */
 @-webkit-keyframes layer-bounceOut {
   100% {opacity: 0; -webkit-transform: scale(.7); transform: scale(.7)}
@@ -273,9 +272,3 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
   0% {-webkit-transform: scale(1); -ms-transform: scale(1);transform: scale(1);}
 }
 .layer-anim-close{-webkit-animation-name: layer-bounceOut; animation-name: layer-bounceOut; -webkit-animation-fill-mode: both; animation-fill-mode: both; -webkit-animation-duration:.2s; animation-duration:.2s;}
-
-@media screen and (max-width: 1100px) {
-  .layui-layer-iframe{overflow-y: auto; -webkit-overflow-scrolling: touch;}
-}
-
-

@@ -16,7 +16,8 @@ body{padding: 50px;}
 <button class="layui-btn" lay-on="e1">事件1</button>
 <button class="layui-btn" lay-on="e2">事件2</button>
 <button class="layui-btn" lay-on="e3">事件3</button>
-<button class="layui-btn" lay-active="e4">事件4</button>
+<button class="layui-btn" lay-active="e4">hover: active - 事件4</button>
+<button class="layui-btn" lay-active1="e4">hover: active1 - 事件4</button>
 
 <br><br>
 
@@ -108,7 +109,7 @@ layui.use(['lay', 'util', 'layer'], function(){
     }
   });
 
-  // 事件集的替换和增加
+  // Test: 事件集的替换和增加
   util.on({
     e1: function(othis){ // 重置事件 e1
       alert(othis.html() + ' - replace')
@@ -121,8 +122,19 @@ layui.use(['lay', 'util', 'layer'], function(){
   // 自定义触发事件的元素属性名、自定义触发事件的方式
   util.on('lay-active', {
     e4: layui.throttle(function(othis) {
-      layer.tips(othis.html(), this);
-    }, 3000) // 3s 内不重复执行
+      layer.tips(othis.html(), this, { tips: 3 });
+    }, 3000), // 3s 内不重复执行
+    e5: function() {
+      console.log(111);
+    }
+  }, {
+    trigger: 'mouseenter'
+  });
+  // Test: 不同属性、相同值
+  util.on('lay-active1', {
+    e4: function(othis) {
+      this.innerHTML = 'hover: '+ (Math.random()*100000 | 0);
+    }
   }, {
     trigger: 'mouseenter'
   });

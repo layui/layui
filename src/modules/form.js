@@ -948,7 +948,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     return that;
   };
 
-  // 主动触发验证 --- elem 即要验证的区域表单选择器 / return true or false
+  /**
+   * 主动触发验证
+   * @param  {(string|HTMLElement|JQuery)} elem - 要验证的区域表单元素
+   * @return {boolean} 返回结果。若验证通过，返回 `true`, 否则返回 `false`
+   */
   Form.prototype.validate = function(elem) {
     var that = this;
     var intercept; // 拦截标识
