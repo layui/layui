@@ -9,13 +9,41 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
-<h2 id="2.9.0" class="ws-anchor">
-  2.9.0
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
-  <span class="layui-badge-rim">2023-11-29</span>
+<h2 id="2.9.1" class="ws-anchor">
+  2.9.1
+  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
+  <span class="layui-badge-rim">2023-12-11</span>
 </h2>
 
-`2.9.x` 对 `2.8.18` 向下兼容，可覆盖升级。
+`2.9.x` 是对 `2.8.18` 的进一步完善，旨在打造一个可长期用于生产环境的稳定版本。对 `2.8.x` 向下兼容，可覆盖升级。
+
+- #### table
+  - 增强 `height` 选项，支持函数 #1437  @Sight-wcg
+  - 增强 `table.setRowChecked()` 方法，支持批量选中 [7c12ddf]
+  - 修复 全选时，禁用行仍有选中样式的问题 #1436 @Sight-wcg
+  - 修复 `templet` 模板字符中的一些特殊 laytpl 界定符被转义的问题 #1438 @Sight-wcg
+- #### layer
+  - 修复 `iframe` 层在某些情况出现异常纵向滚动条的问题 [8f0c87f]
+  - 优化 `layer.tips` 在触发元素高度较小时的定位 #1439 @Sight-wcg
+- #### treeTable
+  - 修复 `treeTable.reloadData()` 在某些情况下报错的问题 [3f148a9]
+- #### laydate
+  - 清除 内部 `MODE_NAME` 变量重复声明 #1441 @mek1986
+- #### laypage
+  - 新增 `countText` 选项，用于自定义数据总数区域文本 #1444 @Sight-wcg
+- #### nav
+  - 修复 IE8 下子菜单背景色问题 #1445 @Sight-wcg
+- #### util
+  - 优化 `util.on()` 在特殊情况下的用法问题 [3b78139]
+
+### 下载： [layui-v2.9.1.zip](https://gitee.com/layui/layui/attach_files/1608279/download)
+
+---
+
+<h2 id="2.9.0" class="ws-anchor">
+  2.9.0
+  <span class="layui-badge-rim">2023-11-29</span>
+</h2>
 
 - #### table
   - 修复 `complete` 属性导致 `$.ajaxSetup()` 的 `complete` 失效的问题 #1423 @Sight-wcg
@@ -23,7 +51,7 @@ toc: true
   - 修复 合计行单元格展开异常的问题 #Gitee-I8FH3K
   - 优化 `height` 属性高度铺满语法中不支持浮点型数值的问题 #Gitee-I8DSPH
   - 优化 关闭单元格多行展开状态后，悬停状态样式未移除的问题 #1425 @Sight-wcg
-  - 优化 在末行展开单元格后，出现的固定列水平未对其的问题 [85add62]
+  - 优化 在末行展开单元格后，出现的固定列水平未对齐的问题 [85add62]
   - 优化 当数据值为 `0,undefined,null` 且开启列模板，编辑单元格会带入模板字符的问题 [1d408f0]
 - #### util
   - 优化 `util.on()` 方法，提升参数的灵活性和代码的可读性 [d74abb4] [92c8580]
@@ -71,11 +99,14 @@ toc: true
             nodeValue = nodeValue.replace(types[i].rule, function(s, s1, s2) {
               return '<a href="'+ types[i].href + s2 +'" target="_blank">'+ s1 + s2 +'</a>';
             });
+            node.matched = true;
           }
         }
-        sNode.innerHTML = nodeValue;
-        node.parentNode.insertBefore(sNode, node);
-        node.parentNode.removeChild(node);
+        if (node.matched) {
+          sNode.innerHTML = nodeValue;
+          node.parentNode.insertBefore(sNode, node);
+          node.parentNode.removeChild(node);
+        }
       }
     });
   });
