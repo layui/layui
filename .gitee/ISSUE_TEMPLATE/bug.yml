@@ -23,7 +23,7 @@ body:
   - type: input
     attributes:
       label: 浏览器
-      placeholder: 如：Chrome 116.0.5845.111（正式版本） （64 位）
+      placeholder: 如：Chrome x.x.x.x（正式版本）（64 位）
     validations:
       required: true
   - type: dropdown
