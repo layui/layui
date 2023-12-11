@@ -345,7 +345,7 @@ console.log(checkStatus.isAll ) // 表格是否全选
 | opts | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | type | 选中方式。可选值: `checkbox,radio`  | string | `checkbox` |
-| index | 选中行的下标。即数据的所在数组下标（`0` 开头）。<br>可设置 `all` 表示全选。 | number<br>string | - |
+| index | 选中行的下标。支持以下几种情况：<ul><li>若值为 `number` 类型，则表示行所在的数组下标（`0` 开头）</li><li>若值为 `array` 类型 <sup>2.9.1+</sup>，则表示批量下标。</li><li>若值为 `string` 类型，则可设置 `all` 操作全选。</li></ul> | number<br>array<br>string | - |
 | checked | 选中状态值。 <ul><li>若传递该属性，则赋值固定值。</li><li>若不传递该属性（默认），则 `checkbox` 将在 `true\|false` 中自动切换值，而 `radio` 将赋值 `true` 固定值。<sup>2.8.4+</sup></li></ul> | boolean | - |
 
 该方法用于设置行的选中样式及相关的特定属性值 `LAY_CHECKED`。
@@ -363,10 +363,15 @@ table.setRowChecked('test', {
   index: 0, // 选中行的下标。 0 表示第一行
 });
 
+// 批量选中行
+table.setRowChecked('test', {
+  index: [1,3,5] // 2.9.1+
+});
+
 // 取消选中行
 table.setRowChecked('test', {
   index: 'all', // 所有行
-  checked: false
+  checked: false // 此处若设置 true，则表示全选
 });
 ```
 
