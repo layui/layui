@@ -77,6 +77,16 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     return config || null;
   };
 
+  // lay 函数可以处理 Selector，HTMLElement，JQuery 类型
+  // 无效的 CSS 选择器字符串，会抛出 SyntaxError 异常，此时直接返回 laytpl 模板字符串
+  var resolveTplStr = function(templet){
+    try{ 
+      return lay(templet).html();
+    }catch{
+      return templet;
+    }
+  }
+
   // 解析自定义模板数据
   var parseTempData = function(obj){
     obj = obj || {};
@@ -97,9 +107,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     if(templet){
       content = typeof templet === 'function'
         ? templet.call(item3, obj.tplData, obj.obj)
-      : laytpl($(templet).html() || String(content)).render($.extend({
-        LAY_COL: item3
-      }, obj.tplData));
+        : laytpl(resolveTplStr(templet) || String(content)).render($.extend({
+            LAY_COL: item3
+          }, obj.tplData));
     }
 
     // 是否只返回文本
