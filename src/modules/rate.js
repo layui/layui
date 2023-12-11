@@ -155,8 +155,9 @@ layui.define(['jquery', 'lay'],function(exports){
     var options = that.config;
     var _ul = that.elemTemp;
     var wide = _ul.find("i").width();
+    var liElems =  _ul.children("li");
 
-    _ul.children("li").each(function(index){
+    liElems.each(function(index){
       var ind = index + 1;
       var othis = $(this);
 
@@ -212,6 +213,55 @@ layui.define(['jquery', 'lay'],function(exports){
       })
 
     })
+
+    lay.touchSwipe(_ul, {
+      onTouchMove: function(e, state){
+        if(Date.now() - state.timeStart <= 200) return;
+        var pageX = e.touches[0].pageX;
+        var rateElemWidth = _ul.width();
+        var itemElemWidth = rateElemWidth / options.length; // 单颗星的宽度
+        var offsetX = pageX - _ul.offset().left;
+        var num = offsetX / itemElemWidth; // 原始值
+        var remainder = num % 1;
+        var integer = num - remainder;
+
+        // 最终值
+        var score = remainder <= 0.5 && options.half ? integer + 0.5 : Math.ceil(num);
+        if(score > options.length) score = options.length;
+        if(score < 0) score = 0;
+
+        liElems.each(function(index){
+          var iconElem = $(this).children('i');
+          var isActiveIcon = (Math.ceil(score) - index === 1);
+          var needSelect = Math.ceil(score) > index;
+          var shouldHalfIcon = (score - index === 0.5);
+
+          if(needSelect){
+            // 设置选中样式
+            iconElem.addClass(ICON_RATE_SOLID).removeClass(ICON_HALF_RATE);
+            if(options.half && shouldHalfIcon){
+              iconElem.addClass(ICON_RATE_HALF).removeClass(ICON_RATE_SOLID);
+            }
+          }else{
+            // 恢复初始样式
+            iconElem.addClass(ICON_RATE).removeClass(ICON_SOLID_HALF);
+          }
+
+          // 设置缩放样式
+          iconElem.toggleClass('layui-rate-hover', isActiveIcon);
+        });
+
+        // 更新最终值
+        options.value = score;
+        options.setText && options.setText(options.value);
+      },
+      onTouchEnd: function(e, state){
+        if(Date.now() - state.timeStart <= 200) return;
+        _ul.find('i').removeClass('layui-rate-hover');
+        options.choose && options.choose(options.value);
+        options.setText && options.setText(options.value);
+      }
+    });
   };
 
   //事件处理
