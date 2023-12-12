@@ -1608,8 +1608,10 @@ layer.photos = function(options, loop, key){
     if(window.layui || window.lay){
       var lay = window.layui.lay || window.lay;
       var touchEndCallback = function(e, state){
-        var threshold = 40;
-        var shouldSwipe = Math.abs(state.deltaX) > threshold;
+        var duration = Date.now() - state.timeStart;
+        var speed = state.deltaX / duration;
+        var threshold = win.width() / 3;
+        var shouldSwipe = Math.abs(speed) > 0.25 || Math.abs(state.deltaX) > threshold;
         if(!shouldSwipe) return;
         if(state.direction === 'left'){
           dict.imgnext(true);
