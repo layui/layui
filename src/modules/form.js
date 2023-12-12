@@ -626,7 +626,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           };
           
           if(isSearch){
-            input.on('input propertychange', search).on('blur', function(e){
+            // #1449: IE10 和 11 中，带有占位符的 input 元素获得/失去焦点时，会触发 input 事件
+            var eventsType = 'input propertychange';
+            if(lay.ie && lay.ie !== '9' && input.attr('placeholder')){
+              eventsType = 'keyup';
+            }
+            input.on(eventsType, search).on('blur', function(e){
               var selectedIndex = select[0].selectedIndex;
               
               thatInput = input; // 当前的 select 中的 input 元素
