@@ -628,7 +628,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           if(isSearch){
             // #1449: IE10 和 11 中，带有占位符的 input 元素获得/失去焦点时，会触发 input 事件
             var eventsType = 'input propertychange';
-            if(lay.ie && lay.ie !== '9' && input.attr('placeholder')){
+            if(lay.ie && (lay.ie === '10' || lay.ie === '11') && input.attr('placeholder')){
               eventsType = 'keyup';
             }
             input.on(eventsType, search).on('blur', function(e){
