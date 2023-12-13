@@ -142,11 +142,13 @@
   
 延迟关闭的毫秒数。当 `trigger: 'hover'` 时才生效
 
+<sup>2.9.2+</sup> 延时显示或隐藏的毫秒数，[showDelay, hideDelay]。若为 number 类型，则表示显示和隐藏的延迟时间相同，例如 300 或者 [200, 300]。当 `trigger: 'hover'` 时才生效
+
 </td>
-<td>number</td>
+<td>number/array</td>
 <td>
 
-`300`
+`[200, 300]`
 
 </td>
     </tr>
