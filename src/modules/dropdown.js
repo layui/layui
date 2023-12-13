@@ -421,15 +421,22 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
 
     // 解除上一个事件
     if(that.prevElem) that.prevElem.off(options.trigger, that.prevElemCallback);
+
+    // 是否鼠标移入时触发
+    var isMouseEnter = options.trigger === 'mouseenter';
     
     // 记录被绑定的元素及回调
     that.prevElem = options.elem;
     that.prevElemCallback = function(e){
       clearTimeout(thisModule.timer);
       that.e = e;
-      thisModule.timer = setTimeout(function(){
-        that.render();
-      }, that.normalizedDelay().show);
+
+      // 若为鼠标移入事件，则延迟触发
+      isMouseEnter ? (
+        thisModule.timer = setTimeout(function(){
+          that.render();
+        }, that.normalizedDelay().show)
+      ) : that.render();
       
       e.preventDefault();
     };
@@ -438,7 +445,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     options.elem.on(options.trigger, that.prevElemCallback);
     
     // 如果是鼠标移入事件
-    if(options.trigger === 'mouseenter'){
+    if (isMouseEnter) {
       // 执行鼠标移出事件
       options.elem.on('mouseleave', function(){
         that.delayRemove();
