@@ -82,7 +82,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   var resolveTplStr = function(templet){
     try{ 
       return lay(templet).html();
-    }catch{
+    }catch(err){
       return templet;
     }
   }
