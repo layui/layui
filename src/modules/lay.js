@@ -533,10 +533,10 @@
 
   /**
    * @typedef touchSwipeState
-   * @prop {{x: number,y: number}} coordsStart - 初始坐标
-   * @prop {{x: number,y: number}} coordsEnd - 结束坐标
-   * @prop {number} deltaX - X 轴变化量
-   * @prop {number} deltaY - Y 轴变化量
+   * @prop {{x: number,y: number}} pointerStart - 初始坐标
+   * @prop {{x: number,y: number}} pointerEnd - 结束坐标
+   * @prop {number} distanceX - X 轴移动距离
+   * @prop {number} distanceY - Y 轴移动距离
    * @prop {'none'|'right'|'left'|'up'|'down'} direction - 滑动方向
    * @prop {Date} timeStart 开始时间
    */
@@ -557,10 +557,10 @@
     if(!targetElem || !lay.touchEventsSupported()) return;
 
     var state = {
-      coordsStart: {x:0, y:0},
-      coordsEnd: {x:0, y:0},
-      deltaX: 0,
-      deltaY: 0,
+      pointerStart: {x:0, y:0},
+      pointerEnd: {x:0, y:0},
+      distanceX: 0,
+      distanceY: 0,
       direction:'none', // 'up','down','left','right','none
       timeStart: null
     }
@@ -569,22 +569,22 @@
       if(e.touches.length !== 1) return;
       bindEvents();
       state.timeStart = Date.now();
-      state.coordsStart.x = state.coordsEnd.x = e.touches[0].clientX;
-      state.coordsStart.y = state.coordsEnd.y = e.touches[0].clientY;
+      state.pointerStart.x = state.pointerEnd.x = e.touches[0].clientX;
+      state.pointerStart.y = state.pointerEnd.y = e.touches[0].clientY;
 
       options.onTouchStart && options.onTouchStart(e, state);
     }
 
     var onMove = function(e){
       e.preventDefault();
-      state.coordsEnd.x = e.touches[0].clientX;
-      state.coordsEnd.y = e.touches[0].clientY;
-      state.deltaX = state.coordsStart.x - state.coordsEnd.x;
-      state.deltaY = state.coordsStart.y - state.coordsEnd.y;
-      if(Math.abs(state.deltaX) > Math.abs(state.deltaY)){
-        state.direction = state.deltaX > 0 ? 'left' : 'right';
+      state.pointerEnd.x = e.touches[0].clientX;
+      state.pointerEnd.y = e.touches[0].clientY;
+      state.distanceX = state.pointerStart.x - state.pointerEnd.x;
+      state.distanceY = state.pointerStart.y - state.pointerEnd.y;
+      if(Math.abs(state.distanceX) > Math.abs(state.distanceY)){
+        state.direction = state.distanceX > 0 ? 'left' : 'right';
       }else{
-        state.direction = state.deltaY > 0 ? 'up' : 'down';
+        state.direction = state.distanceY > 0 ? 'up' : 'down';
       }
       options.onTouchMove && options.onTouchMove(e, state);
     }
@@ -606,6 +606,11 @@
       targetElem.removeEventListener('touchcancel', onEnd);
     }
 
+    // 防止事件重复绑定
+    if(targetElem.__lay_touchswipe_cb_){
+      targetElem.removeEventListener('touchstart', targetElem.__lay_touchswipe_cb_);
+    }
+    targetElem.__lay_touchswipe_cb_ = onStart;
     targetElem.addEventListener('touchstart', onStart);
   }
 

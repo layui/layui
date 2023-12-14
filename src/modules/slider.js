@@ -335,10 +335,10 @@ layui.define(['jquery', 'lay'], function(exports){
     sliderAct.find('.' + SLIDER_WRAP_BTN).each(function(index){
       var othis = $(this);
       othis.on('mousedown touchstart', function(e){
-        e = e.originalEvent || window.event;
+        e = e || window.event;
         if(e.type === 'touchstart'){
-          e.clientX = e.touches[0].clientX;
-          e.clientY = e.touches[0].clientY;
+          e.clientX = e.originalEvent.touches[0].clientX;
+          e.clientY = e.originalEvent.touches[0].clientY;
         }
 
         var oldleft = othis.parent()[0].offsetLeft;

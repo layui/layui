@@ -344,11 +344,11 @@ layui.define(['jquery', 'lay'], function(exports){
     lay.touchSwipe(touchEl, {
       onTouchEnd: function(e, state){
         var duration = Date.now() - state.timeStart;
-        var delta = isVertical ? state.deltaY : state.deltaX;
-        var speed = delta / duration;
-        var shouldSwipe = Math.abs(speed) > 0.25 || Math.abs(delta) > touchEl[isVertical ? 'height' : 'width']() / 3;
+        var distance = isVertical ? state.distanceY : state.distanceX;
+        var speed = distance / duration;
+        var shouldSwipe = Math.abs(speed) > 0.25 || Math.abs(distance) > touchEl[isVertical ? 'height' : 'width']() / 3;
         if(shouldSwipe){
-          that.slide(delta > 0 ? '' : 'sub');
+          that.slide(distance > 0 ? '' : 'sub');
         }
       }
     })
