@@ -567,6 +567,32 @@ layui.define(['jquery', 'lay'], function(exports){
         change(hsb.h, hsb.s, hsb.b, a);
       })
     });
+
+    if(!lay.touchEventsSupported()) return;
+    // 触摸事件模拟
+    layui.each([
+      {elem: side, eventType: 'click'},
+      {elem: alphacolor, eventType: 'click'},
+      {elem: basis, eventType: 'mousedown'}
+    ], function(i, obj){
+      lay.touchSwipe(obj.elem, {
+        onTouchMove: function(e){
+          touchHandler(e, obj.eventType)
+        }
+      })
+    })
+
+    function touchHandler(event, eventType) {
+      var pointer = event.touches[0];
+      var simulatedEvent = document.createEvent("MouseEvent");
+
+      simulatedEvent.initMouseEvent(eventType, 
+        true, true, window, 1, 
+        pointer.screenX, pointer.screenY,pointer.clientX, pointer.clientY, 
+        false, false, false, false, 0, null
+      );
+      pointer.target.dispatchEvent(simulatedEvent);
+    }
   };
 
   //颜色选择器hsb转换
