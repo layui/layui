@@ -32,7 +32,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             @${{ github.event.issue.user.login }}  很棒 👋
-            我们有意愿采纳这项议题，欢迎您创建 [Pull Request](https://github.com/layui/layui/pulls) 来协助实现，若变更内容涉及到 API 新增和改动，除了提交核心代码外，还需包含：[文档](https://github.com/layui/layui/tree/main/docs)、测试用例等，以便我们更好地进行 Review。期待您的贡献!
+            我们有意愿采纳这项议题，欢迎您创建 [Pull Request](https://github.com/layui/layui/pulls) 来协助实现，若变更内容涉及到 API 新增和改动，除了提交核心代码外，还需包含：[文档](https://github.com/layui/layui/tree/main/docs)、测试用例等相关文件，以便我们更好地进行 Review。期待您的贡献!
 
       - name: invalid
         if: github.event.label.name == 'invalid'
@@ -43,6 +43,7 @@ jobs:
           body: |
             @${{ github.event.issue.user.login }} 你好，为了提升沟通效率，我们对 Issue 制定了规范要求，你的 Issue 因不符合规范而被自动关闭。
             建议您在下次创建 Issue 时，遵循表单模板规范填写。谢谢。
+            > 相关延伸：👉 [**提问的智慧**](https://github.com/tvvocold/How-To-Ask-Questions-The-Smart-Way)
       
       - name: need reproduce
         if: github.event.label.name == 'need reproduce'
@@ -79,4 +80,3 @@ jobs:
             @${{ github.event.issue.user.login }} 经过确认，您提出的问题与 Layui 不存在相关联。建议通过以下方式寻求解决方案：
             - 搜索相关技术资料或咨询人工智能大模型
             - [Discussions](https://github.com/layui/layui/discussions)
-      
