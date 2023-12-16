@@ -505,6 +505,115 @@
     }
   };
 
+  /**
+   * 检测是否支持 Passive Event Listeners
+   * 引用自 https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
+   * @type {boolean}
+   */
+  lay.passiveSupported = function(){
+    var passiveSupported = false;
+    try {
+      var opts = Object.defineProperty({}, 'passive', {
+        get: function() {
+          passiveSupported = true;
+        }
+      });
+      window.addEventListener('test', null, opts);
+      window.removeEventListener('test', null, opts);
+    } catch (err) {}
+    return passiveSupported;
+  }();
+
+  /**
+   * 是否支持 touch 事件
+   */
+  lay.touchEventsSupported = function(){
+    return 'ontouchstart' in window;
+  };
+
+  /**
+   * @typedef touchSwipeState
+   * @prop {{x: number,y: number}} pointerStart - 初始坐标
+   * @prop {{x: number,y: number}} pointerEnd - 结束坐标
+   * @prop {number} distanceX - X 轴移动距离
+   * @prop {number} distanceY - Y 轴移动距离
+   * @prop {'none'|'right'|'left'|'up'|'down'} direction - 滑动方向
+   * @prop {Date} timeStart 开始时间
+   */
+  /**
+   * @callback touchSwipeCallback
+   * @param {TouchEvent} e 滑动事件
+   * @param {touchSwipeState} state 滑动相关的状态
+   */
+  /**
+   * 基于 touch 事件的触摸滑动
+   * @param {string | HTMLElement | JQuery} elem - HTML 元素
+   * @param {{onTouchStart?: touchSwipeCallback, onTouchMove?: touchSwipeCallback, onTouchEnd?: touchSwipeCallback}} opts - 配置项
+   */
+  lay.touchSwipe = function(elem, opts){
+    var options = opts
+    var targetElem = lay(elem)[0];
+
+    if(!targetElem || !lay.touchEventsSupported()) return;
+
+    var state = {
+      pointerStart: {x:0, y:0},
+      pointerEnd: {x:0, y:0},
+      distanceX: 0,
+      distanceY: 0,
+      direction:'none', // 'up','down','left','right','none
+      timeStart: null
+    }
+
+    var onStart = function(e){
+      if(e.touches.length !== 1) return;
+      bindEvents();
+      state.timeStart = Date.now();
+      state.pointerStart.x = state.pointerEnd.x = e.touches[0].clientX;
+      state.pointerStart.y = state.pointerEnd.y = e.touches[0].clientY;
+
+      options.onTouchStart && options.onTouchStart(e, state);
+    }
+
+    var onMove = function(e){
+      e.preventDefault();
+      state.pointerEnd.x = e.touches[0].clientX;
+      state.pointerEnd.y = e.touches[0].clientY;
+      state.distanceX = state.pointerStart.x - state.pointerEnd.x;
+      state.distanceY = state.pointerStart.y - state.pointerEnd.y;
+      if(Math.abs(state.distanceX) > Math.abs(state.distanceY)){
+        state.direction = state.distanceX > 0 ? 'left' : 'right';
+      }else{
+        state.direction = state.distanceY > 0 ? 'up' : 'down';
+      }
+      options.onTouchMove && options.onTouchMove(e, state);
+    }
+
+    var onEnd = function(e){
+      options.onTouchEnd && options.onTouchEnd(e, state);
+      unbindEvents();
+    }
+    
+    var bindEvents = function(){
+      targetElem.addEventListener('touchmove', onMove, lay.passiveSupported ? { passive: false} : false);
+      targetElem.addEventListener('touchend', onEnd);
+      targetElem.addEventListener('touchcancel', onEnd);
+    }
+
+    var unbindEvents = function(){
+      targetElem.removeEventListener('touchmove', onMove);
+      targetElem.removeEventListener('touchend', onEnd, lay.passiveSupported ? { passive: false} : false);
+      targetElem.removeEventListener('touchcancel', onEnd);
+    }
+
+    // 防止事件重复绑定
+    if(targetElem.__lay_touchswipe_cb_){
+      targetElem.removeEventListener('touchstart', targetElem.__lay_touchswipe_cb_);
+    }
+    targetElem.__lay_touchswipe_cb_ = onStart;
+    targetElem.addEventListener('touchstart', onStart);
+  }
+
 
   /*
    * lay 元素操作

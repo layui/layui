@@ -331,13 +331,27 @@ layui.define(['jquery', 'lay'], function(exports){
     if(options.elem.data('haveEvents')) return;
     
     // 移入移出容器
-    options.elem.on('mouseenter', function(){
+    options.elem.on('mouseenter touchstart', function(){
       if (that.config.autoplay === 'always') return;
       clearInterval(that.timer);
-    }).on('mouseleave', function(){
+    }).on('mouseleave touchend', function(){
       if (that.config.autoplay === 'always') return;
       that.autoplay();
     });
+
+    var touchEl = options.elem;
+    var isVertical = options.anim === 'updown';
+    lay.touchSwipe(touchEl, {
+      onTouchEnd: function(e, state){
+        var duration = Date.now() - state.timeStart;
+        var distance = isVertical ? state.distanceY : state.distanceX;
+        var speed = distance / duration;
+        var shouldSwipe = Math.abs(speed) > 0.25 || Math.abs(distance) > touchEl[isVertical ? 'height' : 'width']() / 3;
+        if(shouldSwipe){
+          that.slide(distance > 0 ? '' : 'sub');
+        }
+      }
+    })
     
     options.elem.data('haveEvents', true);
   };

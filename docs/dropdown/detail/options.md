@@ -140,13 +140,16 @@
 <td>delay</td>
 <td>
   
-延迟关闭的毫秒数。当 `trigger: 'hover'` 时才生效
+延迟触发的毫秒数。当 `trigger: 'hover'` 时才生效。示例：
+
+- `delay: 300` : 表示显示与隐藏的延迟时间均为 300 毫秒
+- `delay: [200, 300]` <sup>2.9.2+</sup> : 数组成员值分别表示显示延迟时间和隐藏延迟时间
 
 </td>
-<td>number</td>
+<td>number/array</td>
 <td>
 
-`300`
+`[200, 300]`
 
 </td>
     </tr>

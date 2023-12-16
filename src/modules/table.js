@@ -82,7 +82,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   var resolveTplStr = function(templet){
     try{ 
       return lay(templet).html();
-    }catch{
+    }catch(err){
       return templet;
     }
   }
@@ -558,7 +558,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     layui.each(options.cols, function(i1, item1) {
       layui.each(item1, function(i2, item2) {
         var key = [index, i1, i2].join('-');
-        var val = item2.width ? ['width: ', item2.width, 'px'].join('') : '';
+        var val = ['width: ', (item2.width || options.cellMinWidth), 'px'].join('');
         text.push('.laytable-cell-'+ key +'{'+ val +'}');
       });
     });

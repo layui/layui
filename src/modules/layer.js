@@ -1604,6 +1604,28 @@ layer.photos = function(options, loop, key){
       e.preventDefault();
     });
 
+    // 滑动切换图片事件，仅限 layui 中 
+    if(window.layui || window.lay){
+      var lay = window.layui.lay || window.lay;
+      var touchEndCallback = function(e, state){
+        var duration = Date.now() - state.timeStart;
+        var speed = state.distanceX / duration;
+        var threshold = win.width() / 3;
+        var shouldSwipe = Math.abs(speed) > 0.25 || Math.abs(state.distanceX) > threshold;
+        if(!shouldSwipe) return;
+        if(state.direction === 'left'){
+          dict.imgnext(true);
+        }else if(state.direction === 'right'){
+          dict.imgprev(true);
+        }
+      }
+
+      $.each([that.shadeo, dict.main], function(i, elem){
+        lay.touchSwipe(elem, {
+          onTouchEnd: touchEndCallback
+        })
+      })
+    }
   };
   
   // 图片预加载
@@ -1764,7 +1786,7 @@ ready.run = function(_$){
 // 加载方式
 window.layui && layui.define ? (
   layer.ready(),
-  layui.define('jquery', function(exports){ // layui
+  layui.define(['jquery','lay'], function(exports){ // layui
     layer.path = layui.cache.dir;
     ready.run(layui.$);
 

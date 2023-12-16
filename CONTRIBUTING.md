@@ -13,6 +13,7 @@
 其中，标题应尽量言简意赅（一句话概括议题），其他表单项则尽量将您所遇到的问题描述详细。
 
 > **若 Issue 未遵循模板规范仔细填写，可能将无法获得相关回答，敬请知晓和理解**
+> 更多细节可参考：1. [**提问的智慧**](https://github.com/tvvocold/How-To-Ask-Questions-The-Smart-Way)、2. [**请提供最小重现**](https://antfu.me/posts/why-reproductions-are-required-zh)
 
 ## 对接
 

@@ -101,7 +101,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     isAllowSpread: true, // 是否允许菜单组展开收缩
     isSpreadItem: true, // 是否初始展开子菜单
     data: [], // 菜单数据结构
-    delay: 300, // 延迟关闭的毫秒数，若 trigger 为 hover 时才生效
+    delay: [200, 300], // 延时显示或隐藏的毫秒数，若为 number 类型，则表示显示和隐藏的延迟时间相同，trigger 为 hover 时才生效
     shade: 0, // 遮罩
     accordion: false // 手风琴效果，仅菜单组生效。基础菜单需要在容器上追加 'lay-accordion' 属性。
   };
@@ -388,6 +388,17 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     }
     lay('.' + STR_ELEM_SHADE).remove();
   };
+
+  Class.prototype.normalizedDelay = function(){
+    var that = this;
+    var options = that.config;
+    var delay = [].concat(options.delay);
+    
+    return {
+      show: delay[0],
+      hide: delay[1] !== undefined ? delay[1] : delay[0]  
+    }
+  }
   
   // 延迟删除视图
   Class.prototype.delayRemove = function(){
@@ -397,7 +408,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
 
     thisModule.timer = setTimeout(function(){
       that.remove();
-    }, options.delay);
+    }, that.normalizedDelay().hide);
   };
   
   // 事件
@@ -410,13 +421,23 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
 
     // 解除上一个事件
     if(that.prevElem) that.prevElem.off(options.trigger, that.prevElemCallback);
+
+    // 是否鼠标移入时触发
+    var isMouseEnter = options.trigger === 'mouseenter';
     
     // 记录被绑定的元素及回调
     that.prevElem = options.elem;
     that.prevElemCallback = function(e){
       clearTimeout(thisModule.timer);
       that.e = e;
-      that.render();
+
+      // 若为鼠标移入事件，则延迟触发
+      isMouseEnter ? (
+        thisModule.timer = setTimeout(function(){
+          that.render();
+        }, that.normalizedDelay().show)
+      ) : that.render();
+      
       e.preventDefault();
     };
 
@@ -424,8 +445,8 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     options.elem.on(options.trigger, that.prevElemCallback);
     
     // 如果是鼠标移入事件
-    if(options.trigger === 'mouseenter'){
-      // 直行鼠标移出事件
+    if (isMouseEnter) {
+      // 执行鼠标移出事件
       options.elem.on('mouseleave', function(){
         that.delayRemove();
       });
