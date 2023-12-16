@@ -1,0 +1,82 @@
+name: Issue Labeled
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: read
+
+jobs:
+  issue-labeled:
+    permissions:
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: bug
+        if: github.event.label.name == 'bug'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            @${{ github.event.issue.user.login }} 你好。团队已初步确认该 Bug，我们将在后续版本进行详细的排查和修复，感谢您的积极反馈 👍
+  
+      - name: help wanted
+        if: github.event.label.name == 'help wanted'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            @${{ github.event.issue.user.login }}  很棒 👋
+            我们有意愿采纳这项议题，欢迎您创建 [Pull Request](https://github.com/layui/layui/pulls) 来协助实现，若变更内容涉及到 API 新增和改动，除了提交核心代码外，还需包含：[文档](https://github.com/layui/layui/tree/main/docs)、测试用例等，以便我们更好地进行 Review。期待您的贡献!
+
+      - name: invalid
+        if: github.event.label.name == 'invalid'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment,close-issue'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            @${{ github.event.issue.user.login }} 你好，为了提升沟通效率，我们对 Issue 制定了规范要求，你的 Issue 因不符合规范而被自动关闭。
+            建议您在下次创建 Issue 时，遵循表单模板规范填写。谢谢。
+      
+      - name: need reproduce
+        if: github.event.label.name == 'need reproduce'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            @${{ github.event.issue.user.login }} 您好，请提供一个最小化的重现，以便我们为您协助排查问题。良好的重现应当包括但不仅限于：
+            - 产生问题的详细步骤
+            - 与问题相关的完整代码
+            - 在线 Demo (推荐通过 [stackblitz](https://stackblitz.com/) 或 [codepen](https://codepen.io/) 创建)
+            > 相关延伸：👉 [为什么要提供最小化重现？](https://antfu.me/posts/why-reproductions-are-required-zh)
+
+      - name: usage
+        if: github.event.label.name == 'usage'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment,close-issue'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            @${{ github.event.issue.user.login }} 你好，Issue 一般只接受「Bug 报告」和「新功能请求」，而您的议题涉及到基础用法和功能疑惑等业务相关，这并不适合作为 Issue 讨论。建议您通过以下方式寻求解决方案：
+            - 仔细查阅 Layui 官方文档：https://layui.dev
+            - 搜索相关技术资料或咨询人工智能大模型
+            - [Discussions](https://github.com/layui/layui/discussions)
+            
+      - name: unrelated
+        if: github.event.label.name == 'unrelated'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment,close-issue'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            @${{ github.event.issue.user.login }} 经过确认，您提出的问题与 Layui 不存在相关联。建议通过以下方式寻求解决方案：
+            - 搜索相关技术资料或咨询人工智能大模型
+            - [Discussions](https://github.com/layui/layui/discussions)
+      
