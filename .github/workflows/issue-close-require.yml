@@ -1,0 +1,30 @@
+name: Issue Close Require
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  issue-close-require:
+    permissions:
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: need reproduce
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issues'
+          labels: 'need reproduce'
+          inactive-day: 5
+          body: |
+            由于超过 5 天仍未收到相关重现，该 issue 已被自动关闭。
+      - name: resolved
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issues'
+          labels: 'resolved'
+          inactive-day: 3
