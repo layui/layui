@@ -9,8 +9,8 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
-<h2 id="v2.9.2-rc.1" class="ws-anchor">
-  v2.9.2-rc.1
+<h2 id="v2.9.2-rc.2" class="ws-anchor">
+  v2.9.2-rc.2
   <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
   <span class="layui-badge-rim">2023-12-16</span>
 </h2>
@@ -24,7 +24,7 @@ toc: true
 - #### dropdown
   - 增强 `delay` 选项，支持设置 显示/隐藏 的延迟时间 #1454 @Sight-wcg
 
-### 下载： [layui-v2.9.2-rc.1.zip](https://gitee.com/layui/layui/attach_files/1615403/download)
+### 下载： [layui-v2.9.2-rc.2.zip](https://gitee.com/layui/layui/attach_files/1615403/download)
 
 ---
 
