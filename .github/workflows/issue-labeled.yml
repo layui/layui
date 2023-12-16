@@ -57,14 +57,14 @@ jobs:
             - 在线 Demo (推荐通过 [stackblitz](https://stackblitz.com/) 或 [codepen](https://codepen.io/) 创建)
             > 相关延伸：👉 [为什么要提供最小化重现？](https://antfu.me/posts/why-reproductions-are-required-zh)
 
-      - name: usage
-        if: github.event.label.name == 'usage'
+      - name: discussion
+        if: github.event.label.name == 'discussion'
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'create-comment,close-issue'
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            @${{ github.event.issue.user.login }} 你好，Issue 一般只接受「Bug 报告」和「新功能请求」，而您的议题涉及到基础用法和功能疑惑等业务相关，这并不适合作为 Issue 讨论。建议您通过以下方式寻求解决方案：
+            @${{ github.event.issue.user.login }} 你好，Issue 一般只接受「Bug 报告」和「新功能请求」，而您的议题涉及到基础用法和功能疑惑等业务相关的讨论，这并不适合作为 Issue 讨论。建议您通过以下方式寻求解决方案：
             - 仔细查阅 Layui 官方文档：https://layui.dev
             - 搜索相关技术资料或咨询人工智能大模型
             - [Discussions](https://github.com/layui/layui/discussions)
