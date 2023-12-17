@@ -1,59 +1,56 @@
-name: 😇 问题反馈
-description: 使用 Layui 过程中遇到的 Bug、异常或其他困惑。
+name: 😄 创建议题
+description: 此处只受理 Bug 报告、功能请求。若是其他业务相关的问题建议在 Discussions 寻求社区帮助。
 body:
-  - type: markdown
-    attributes:
-      value: |
-        **系统提示**：此处只接受 Layui 相关技术问题，其他如 layuiAdmin 或 LayIM 等主题相关问题请勿在此反馈。
   - type: checkboxes
     attributes:
       label: 议题条件
+      description: 在你开始之前，请花几分钟时间确保你已如实完成以下工作，以便让我们更高效地沟通。
       options:
-        - label: 我确认已查看官方使用文档：**https://layui.dev** ，但没有找到相关解决方案。
+        - label: 我确认已查看官方使用文档：https://layui.dev ，但没有找到相关解决方案。
           required: true
-        - label: 我确认已在 **Issues** 中搜索过类似的问题，但没有找到相关解决方案。
+        - label: 我确认已在 [Issues](https://github.com/layui/layui/issues?q=is%3Aissue ) 中搜索过类似的问题，但没有找到相关解决方案。
           required: true
-  - type: input
-    attributes:
-      label: 版本号
-      placeholder: 请提供您当前使用的 Layui 版本号
-      description: 若不清楚，可打开 `layui.js`，头部注释有对应的版本号
-    validations:
-      required: true
-  - type: input
-    attributes:
-      label: 浏览器
-      placeholder: 如：Chrome x.x.x.x（正式版本）（64 位）
-    validations:
-      required: true
+        - label: 我已仔细阅读： 🍀[ Layui Issue 规范指南](https://github.com/layui/layui/blob/main/CONTRIBUTING.md)
+          required: true
   - type: dropdown
     id: type
     attributes:
-      label: 问题类型
+      label: 议题类型
       options:
         - 疑是 BUG
-        - 报错提示
-        - 功能困惑
+        - 功能请求
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: 使用版本
+      description: 请提供您当前使用的 Layui 版本号。若不清楚，可打开 `layui.js` 查看头部注释。
+      placeholder: 如：v2.8.18
     validations:
       required: true
   - type: textarea
     attributes:
       label: 问题描述
-      placeholder: 请提供详细的问题描述和操作步骤等信息，以便我们也能够更轻松地将问题复现。
+      description: 请提供详细的问题描述和操作步骤等信息，以便我们也能够更轻松地将问题复现。
     validations:
       required: true
   - type: textarea
     attributes:
       label: 业务代码
-      description: 直接粘贴问题对应的 `HTML,CSS,JavaScript` 等代码到下面的文本框，无需书写 `Markdown`
-      placeholder: 请提供与该问题对应的业务代码片段，以便我们更好地排查问题。
+      description: 请提供与该问题对应的业务代码片段，以便我们更好地排查问题。此处直接粘贴代码到文本框即可，无需书写 `Markdown`
       render: auto
     validations:
       required: true
   - type: textarea
     attributes:
       label: 截图补充
-      placeholder: 如上述仍然无法准确地表述问题，可提供必要的截图（可直接粘贴上传）
+      description: 如上述仍然无法准确地表述问题，可提供必要的截图（可直接粘贴上传）
+  - type: input
+    attributes:
+      label: 浏览器
+      placeholder: 如：Chrome x.x.x.x（正式版本）（64 位）
+    validations:
+      required: true
   - type: input
     attributes:
       label: 演示地址

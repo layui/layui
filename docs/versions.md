@@ -9,14 +9,17 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
-<h2 id="v2.9.2-rc.2" class="ws-anchor">
-  v2.9.2-rc.2
+<h2 id="v2.9.2" class="ws-anchor">
+  v2.9.2
   <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
-  <span class="layui-badge-rim">2023-12-16</span>
+  <span class="layui-badge-rim">2023-12-18</span>
 </h2>
 
+`2.9.x` 是对 `2.8.18` 的进一步完善，旨在打造一个可长期用于生产环境的稳定版本。对 `2.8.x` 向下兼容，可覆盖升级。
+
 - #### 移动端的改进
-  - 新增 slider, layer, carousel, laydate, rate, colorpicker 手势操作支持 #1446 @Sight-wcg
+  - 新增 `slider,layer,carousel,laydate,rate,colorpicker` 手势操作支持 #1446 @Sight-wcg
+  - 新增 `lay` 模块中针对手势操作的多个基础方法 #1446 @Sight-wcg
 - #### table
   - 修复 IE 下的报错问题 #1453 @Sight-wcg
 - #### form
@@ -24,7 +27,7 @@ toc: true
 - #### dropdown
   - 增强 `delay` 选项，支持设置 显示/隐藏 的延迟时间 #1454 @Sight-wcg
 
-### 下载： [layui-v2.9.2-rc.2.zip](https://gitee.com/layui/layui/attach_files/1615403/download)
+### 下载： [layui-v2.9.2.zip](https://gitee.com/layui/layui/attach_files/1615568/download)
 
 ---
 
@@ -32,8 +35,6 @@ toc: true
   2.9.1
   <span class="layui-badge-rim">2023-12-11</span>
 </h2>
-
-`2.9.x` 是对 `2.8.18` 的进一步完善，旨在打造一个可长期用于生产环境的稳定版本。对 `2.8.x` 向下兼容，可覆盖升级。
 
 - #### table
   - 增强 `height` 选项，支持函数 #1437  @Sight-wcg
