@@ -14,16 +14,6 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - name: bug
-        if: github.event.label.name == 'bug'
-        uses: actions-cool/issues-helper@v3
-        with:
-          actions: 'create-comment'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            @${{ github.event.issue.user.login }} 你好。团队已初步确认该 Bug，我们将在后续版本进行详细的排查和修复，感谢您的积极反馈 👍
-  
       - name: help wanted
         if: github.event.label.name == 'help wanted'
         uses: actions-cool/issues-helper@v3
