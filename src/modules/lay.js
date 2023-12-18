@@ -568,9 +568,12 @@
     var onStart = function(e){
       if(e.touches.length !== 1) return;
       bindEvents();
+      // 重置状态
       state.timeStart = Date.now();
       state.pointerStart.x = state.pointerEnd.x = e.touches[0].clientX;
       state.pointerStart.y = state.pointerEnd.y = e.touches[0].clientY;
+      state.distanceX = state.distanceY = 0;
+      state.direction = 'none'
 
       options.onTouchStart && options.onTouchStart(e, state);
     }
