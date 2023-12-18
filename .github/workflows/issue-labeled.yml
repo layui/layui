@@ -17,7 +17,7 @@ jobs:
       - name: content template
         id: template
         run: |
-          DIR_NAME="详见：🍀 [Layui Issue 贡献指南](https://github.com/layui/layui/blob/main/.github/CONTRIBUTING.md)"
+          DIR_NAME="详见：🍀 [Layui Issue 贡献指南](https://github.com/layui/layui/blob/main/CONTRIBUTING.md)"
           echo "CONTRIBUTING=$DIR_NAME" >> $GITHUB_OUTPUT
 
       - name: help wanted
