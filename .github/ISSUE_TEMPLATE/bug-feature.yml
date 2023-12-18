@@ -10,7 +10,7 @@ body:
           required: true
         - label: 我确认已在 [Issues](https://github.com/layui/layui/issues?q=is%3Aissue ) 中搜索过类似的问题，但没有找到相关解决方案。
           required: true
-        - label: 我已仔细阅读： 🍀[ Layui Issue 规范指南](https://github.com/layui/layui/blob/main/CONTRIBUTING.md)
+        - label: 我已仔细阅读： 🍀[ Layui Issue 贡献指南](https://github.com/layui/layui/blob/main/.github/CONTRIBUTING.md)
           required: true
   - type: dropdown
     id: type
