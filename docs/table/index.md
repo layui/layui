@@ -331,9 +331,9 @@ table.render({
 
 // 获取选中行相关数据
 var tableStatus = table.checkStatus('test');
-console.log(checkStatus.data) // 选中行的数据
-console.log(checkStatus.data.length) // 选中行数量，可作为是否有选中行的条件
-console.log(checkStatus.isAll ) // 表格是否全选
+console.log(tableStatus.data) // 选中行的数据
+console.log(tableStatus.data.length) // 选中行数量，可作为是否有选中行的条件
+console.log(tableStatus.isAll ) // 表格是否全选
 ```
 
 <h3 id="table.setRowChecked" lay-pid="api" class="ws-anchor ws-bold">设置行选中状态 <sup>2.8+</sup></h3>
