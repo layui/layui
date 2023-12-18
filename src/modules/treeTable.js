@@ -1037,6 +1037,10 @@ layui.define(['table'], function (exports) {
         trDefaultExpand.find('.layui-table-tree-flexIcon').html(treeOptionsView.flexIconOpen);
         expandNode({trElem: trDefaultExpand.first()}, true);
       });
+      // #1463 expandNode 中已经展开过的节点不会重新渲染
+      debounceFn('renderTreeTable2-' + tableId, function () {
+        form.render($('.layui-table-tree[lay-id="' + tableId + '"]'));
+      }, 0)();
     } else {
       debounceFn('renderTreeTable-' + tableId, function () {
         options.hasNumberCol && formatNumber(that);
