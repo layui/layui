@@ -22,9 +22,9 @@ jobs:
           inactive-day: 3
           body: |
             由于超过 3 天仍未收到相关重现或其他更多信息，该 issue 已被自动关闭。
-      - name: Close inactive issues within 7 days
+      - name: Close issues with inactive days of 7
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'close-issues'
-          labels: 'compatibility,discussion,resolved,unrelated,usage'
+          labels: 'compatibility,resolved,unrelated,usage'
           inactive-day: 7
