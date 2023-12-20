@@ -60,5 +60,5 @@ body:
     attributes:
       label: 友好承诺
       options:
-        - label: 我承诺将本着相互尊重、理解和友善的态度进行交流，共同维护 Layui 良好的社区氛围。
+        - label: 我承诺将本着相互尊重、理解和友善的态度进行交流，共同维护 Layui 良好的社区氛围。 <!-- layui-issue-template 请务必严格遵循模板规范 -->
           required: true
