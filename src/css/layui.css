@@ -816,6 +816,7 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-input-wrap .layui-input:focus + .layui-input-split{border-color: #16b777;}
 .layui-input-wrap .layui-input.layui-form-danger:focus + .layui-input-split{border-color: #ff5722;}
 .layui-input-wrap .layui-input-prefix.layui-input-split{border-width: 0; border-right-width: 1px;}
+.layui-input-wrap .layui-input-suffix.layui-input-split{border-width: 0; border-left-width: 1px;}
 
 /* 输入框动态点缀  */
 .layui-input-affix{line-height: 38px;}
