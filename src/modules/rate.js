@@ -253,6 +253,7 @@ layui.define(['jquery', 'lay'],function(exports){
 
         // 更新最终值
         options.value = score;
+        if(options.text)  _ul.next("span").text(options.value + "星");
         options.setText && options.setText(options.value);
       },
       onTouchEnd: function(e, state){
