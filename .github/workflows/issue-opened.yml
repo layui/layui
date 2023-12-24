@@ -34,7 +34,7 @@ jobs:
             const payload = context.payload;
             const isCreatedByBot = payload.sender.type === 'Bot';
             const issue = payload.issue;
-            const isValid = issue.body && issue.body.includes('layui-issue-template');
+            const isValid = issue.body?.includes('layui-issue-template');
 
             // 跳过 closed 状态的 issues
             if (issue.state === 'closed') {
