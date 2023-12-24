@@ -562,6 +562,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               e.preventDefault();
               dl.children('dd.'+THIS).trigger('click');
             }
+          }).on('paste', function(){
+            showDown();
           });
           
           // 检测值是否不属于 select 项
