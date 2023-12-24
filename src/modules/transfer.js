@@ -432,10 +432,17 @@ layui.define(['laytpl', 'form'], function(exports){
         ,thisElemCheckbox = elemThis.children('input[type="checkbox"]')
         ,thisDataElem = elemThis.parent()
         ,thisBoxElem = thisDataElem.parent()
+        ,index = thisBoxElem.data('index')
 
       if(thisElemCheckbox[0].disabled) return;
 
-      that.transfer(thisBoxElem.data('index'), elemThis);
+      var ret = typeof options.dblclick === 'function' 
+        ? options.dblclick({elem: elemThis, data: that.getData([thisElemCheckbox[0].value])[0], index: index}) 
+      : null;
+
+      if(ret === false) return;
+
+      that.transfer(index, elemThis);
     })
 
     // 穿梭按钮事件
