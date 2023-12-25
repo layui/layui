@@ -279,7 +279,9 @@ layui.define(['lay', 'layer'], function(exports){
 
         // 追加额外的参数
         layui.each(options.data, function(key, value){
-          value = typeof value === 'function' ? value() : value;
+          value = typeof value === 'function' 
+            ? sets.unified ? value() : value(sets.index, sets.file)
+            : value;
           formData.append(key, value);
         });
 
