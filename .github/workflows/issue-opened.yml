@@ -1,4 +1,4 @@
-name: Issue opened
+name: Issue Opened
 
 on:
   issues:
@@ -31,24 +31,33 @@ jobs:
               issue_number: context.issue.number,
             };
 
-            const issue = context.payload.issue;
-            const issueBody = issue.body;
-            const requiredString = "layui-issue-template";
-            const isCreatedByBot = context.payload.sender.type === 'Bot';
-            const isValid = issueBody.includes(requiredString);
+            const payload = context.payload;
+            const isCreatedByBot = payload.sender.type === 'Bot';
+            const issue = payload.issue;
+            const isValid = issue.body?.includes('layui-issue-template');
 
             // 跳过 closed 状态的 issues
             if (issue.state === 'closed') {
               return console.log('Issue is closed.');
             }
 
+            // 若修改的不是内容，则不必校验
+            if (payload.action === 'edited') {
+              if (payload.changes && !payload.changes.body.from) {
+                return console.log('Edited fields exclude "body".');
+              }
+            }
+
             // 不符合规则或由机器人创建
-            if (!isValid || isCreatedByBot) {
-              github.rest.issues.createComment({
-                ...config,
-                body: `@${context.payload.sender.login} 你好，为了提升沟通效率，我们对 Issue 制定了严格的要求，你的 Issue 因不符合规定而被自动关闭。
-            建议您在下次创建 Issue 时，遵循相应规范和社区行为准则。谢谢。\n > ${process.env.CONTRIBUTING}`
-              });
+            if (isCreatedByBot || !isValid) {
+              if (!isCreatedByBot) {
+                github.rest.issues.createComment({
+                  ...config,
+                  body: `@${payload.sender.login} 你好，为了提升沟通效率，我们对 Issue 制定了严格的要求，你的 Issue 因不符合规定而被自动关闭。
+              建议您在下次创建 Issue 时，遵循相应规范和社区行为准则。谢谢。\n > ${process.env.CONTRIBUTING}`
+                });
+              }
+              // 给 issue 添加指定标签和关闭
               github.rest.issues.addLabels({
                 ...config,
                 labels: ['invalid']

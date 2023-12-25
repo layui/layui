@@ -63,7 +63,7 @@ jobs:
           actions: 'create-comment,close-issue'
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            @${{ github.event.issue.user.login }} 你好，Issue 一般只接受「Bug 报告」和「功能请求」，而您的议题涉及到如何使用、功能疑惑或其他业务相关的问题，这并不适合作为 Issue 讨论。建议您通过以下方式寻求解决方案：
+            @${{ github.event.issue.user.login }} 你好，Issue 只接受「Bug 报告」和「功能请求」，而您的议题涉及到如何使用、功能疑惑或其他业务相关的问题，这并不适合作为 Issue 讨论。建议您通过以下方式寻求解决方案：
             - 仔细查阅 Layui 官方文档：https://layui.dev
             - 通过其他技术社区搜索相关资料、或充分利用当前主流的人工智能大模型
             - [Discussions](https://github.com/layui/layui/discussions)
