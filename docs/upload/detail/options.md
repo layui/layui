@@ -74,6 +74,11 @@ data: {
 data: {
   id: function(){
     return $('#id').val();
+  },
+  id2: function(index, file){ // 参数支持。2.9.3+ 
+    // 注：当 unified:true 和 ie8/9 下，参数无效
+    console.log(index); // 得到文件索引
+    console.log(file); // 得到文件对象
   }
 }
 ```
