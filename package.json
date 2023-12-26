@@ -27,7 +27,9 @@
   "scripts": {
     "build": "gulp",
     "release": "npm run build && npm rum release-zip",
-    "release-zip": "gulp release"
+    "release-zip": "gulp release",
+    "lint": "npx eslint src --cache",
+    "lint:fix": "npx eslint src --fix"
   },
   "devDependencies": {
     "gulp": "^4.0.2",
@@ -39,7 +41,9 @@
     "gulp-sourcemaps": "^3.0.0",
     "gulp-zip": "^5.1.0",
     "del": "^6.1.1",
-    "minimist": "^1.2.8"
+    "minimist": "^1.2.8",
+    "eslint": "^8.56.0",
+    "@stylistic/eslint-plugin": "^1.5.1"
   },
   "dependencies": {}
 }

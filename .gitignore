@@ -19,6 +19,7 @@ node_modules/
 _site/
 .git/
 package-lock.json
+.eslintcache
 
 # Published folders
 release/

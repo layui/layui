@@ -43,6 +43,7 @@
   // 异常提示
   var error = function(msg, type){
     type = type || 'log';
+    /* eslint-disable-next-line no-console */
     win.console && console[type] && console[type]('layui error hint: ' + msg);
   };
 
