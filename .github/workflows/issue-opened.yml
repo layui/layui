@@ -54,7 +54,7 @@ jobs:
                 github.rest.issues.createComment({
                   ...config,
                   body: `@${payload.sender.login} 你好，为了提升沟通效率，我们对 Issue 制定了严格的要求，你的 Issue 因不符合规定而被自动关闭。
-              建议您在下次创建 Issue 时，遵循相应规范和社区行为准则。谢谢。\n > ${process.env.CONTRIBUTING}`
+              建议你在下次创建 Issue 时，遵循相应规范和社区行为准则。谢谢。\n > ${process.env.CONTRIBUTING}`
                 });
               }
               // 给 issue 添加指定标签和关闭
