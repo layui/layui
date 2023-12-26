@@ -39,7 +39,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             @${{ github.event.issue.user.login }} 你好，为了提升沟通效率，我们对 Issue 制定了严格的要求，你的 Issue 因不符合规定而被自动关闭。
-            建议您在下次创建 Issue 时，遵循相应规范和社区行为准则。谢谢。
+            建议你在下次创建 Issue 时，遵循相应规范和社区行为准则。谢谢。
             > ${{ steps.template.outputs.CONTRIBUTING }}
       
       - name: need reproduce
@@ -49,7 +49,7 @@ jobs:
           actions: 'create-comment'
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            @${{ github.event.issue.user.login }} 您好，请提供一个最小化的重现，以便我们为您协助排查问题。良好的重现应当包括但不仅限于：
+            @${{ github.event.issue.user.login }} 你好，请提供一个最小化的重现，以便我们为你协助排查问题。良好的重现应当包括但不仅限于：
             - 产生问题的详细步骤
             - 与问题相关的完整代码
             - 在线 Demo (推荐通过 [stackblitz](https://stackblitz.com/) 或 [codepen](https://codepen.io/) 创建)
@@ -63,7 +63,7 @@ jobs:
           actions: 'create-comment,close-issue'
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            @${{ github.event.issue.user.login }} 你好，Issue 只接受「Bug 报告」和「功能请求」，而您的议题涉及到如何使用、功能疑惑或其他业务相关的问题，这并不适合作为 Issue 讨论。建议您通过以下方式寻求解决方案：
+            @${{ github.event.issue.user.login }} 你好，Issue 只接受「Bug 报告」和「功能请求」，而你的议题涉及到如何使用、功能疑惑或其他业务相关的问题，这并不适合作为 Issue 讨论。建议你通过以下方式寻求解决方案：
             - 仔细查阅 Layui 官方文档：https://layui.dev
             - 通过其他技术社区搜索相关资料、或充分利用当前主流的人工智能大模型
             - [Discussions](https://github.com/layui/layui/discussions)
@@ -76,7 +76,7 @@ jobs:
           actions: 'create-comment,close-issue'
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            @${{ github.event.issue.user.login }} 您提出的问题与 Layui 可能不存在相关联。建议通过以下方式寻求解决方案：
+            @${{ github.event.issue.user.login }} 你提出的问题与 Layui 可能不存在相关联。建议通过以下方式寻求解决方案：
             - 通过其他技术社区搜索相关资料、或充分利用当前主流的人工智能大模型
             - [Discussions](https://github.com/layui/layui/discussions)
             > ${{ steps.template.outputs.CONTRIBUTING }}
