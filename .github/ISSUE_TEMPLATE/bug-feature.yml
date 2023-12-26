@@ -37,7 +37,7 @@ body:
   - type: textarea
     attributes:
       label: 业务代码
-      description: 请提供与该问题对应的业务代码片段，以便我们更好地排查问题。此处直接粘贴代码到文本框即可，无需书写 `Markdown`
+      description: 即你在调用组件时编写的代码片段。直接将你的代码粘贴到文本框即可，此处无需书写 `Markdown`
       render: auto
     validations:
       required: true
