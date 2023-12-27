@@ -478,7 +478,11 @@ Class.pt.creat = function(){
     
     that.layero = $('#'+ doms[0] + times);
     that.shadeo = $('#'+ doms.SHADE + times);
-    
+
+    // #1471，仅在内置动画非 anim:5 时添加 will-change，以避免对 layer.photos 或使用类似方法扩展的程序的布局造成影响
+    if(doms.anim[config.anim] && config.anim !== 5){
+      that.layero.css({willChange: 'transform, top, left'})
+    }
     config.scrollbar || ready.setScrollbar(times);
   }).auto(times);
   
@@ -522,12 +526,6 @@ Class.pt.creat = function(){
   // 为兼容 jQuery3.0 的 css 动画影响元素尺寸计算
   if(doms.anim[config.anim]){
     var animClass = 'layer-anim '+ doms.anim[config.anim];
-    // #1471，仅在内置动画非 anim:5 时添加 will-change，以避免对 layer.photos 或使用类似方法扩展的程序的布局造成影响
-    if(config.anim !== 5){
-      that.layero.css({
-        willChange: 'transform, top, left'
-      })
-    }
     that.layero.addClass(animClass).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
       $(this).removeClass(animClass);
     });
