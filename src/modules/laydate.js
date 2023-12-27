@@ -1802,7 +1802,6 @@
         // 重新选择或者第一次选择
         index = 0;
         that.endState = false;
-        that.endDate = {};
       } else {
         index = 1;
         that.endState = true;
