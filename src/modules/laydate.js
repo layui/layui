@@ -1862,15 +1862,17 @@
         if ((isChange || that.rangeLinked && that.endState) && that.newDate(that.startDate) > that.newDate(that.endDate)) {
           var isSameDate = that.startDate.year === that.endDate.year && that.startDate.month === that.endDate.month && that.startDate.date === that.endDate.date;
           // 判断是否反选
-          var startDate = that.startDate;
-          that.startDate = lay.extend({}, that.endDate, isSameDate ? {} : that.startTime);
+          var startDate;
+          // 如果是同一天并且出现了反选证明是时分秒出现开始时间大于结束时间的现象
+          if(isSameDate){
+            startDate = that.startTime;
+            that.startTime = that.endTime;
+            that.endTime = startDate;
+          }
+          startDate = that.startDate;
+          that.startDate = lay.extend({}, that.endDate, that.startTime);
           options.dateTime = lay.extend({}, that.startDate);
-          that.endDate = lay.extend({}, startDate, isSameDate ? {} : that.endTime);
-          isSameDate && ( // 如果是同一天并且出现了反选证明是时分秒出现开始时间大于结束时间的现象
-            startDate = that.startTime,
-              that.startTime = that.endTime,
-              that.endTime = startDate
-          )
+          that.endDate = lay.extend({}, startDate, that.endTime);
         }
         isChange && (options.dateTime = lay.extend({}, that.startDate));
       }
