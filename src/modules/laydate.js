@@ -1860,7 +1860,8 @@
           isChange = that.autoCalendarModel();
         }
         // 判断是否反选
-        if ((isChange || that.rangeLinked && that.endState) && that.newDate(that.startDate) > that.newDate(that.endDate)) {
+        var needSwapDate = (isChange || that.rangeLinked && that.endState) && that.newDate(that.startDate) > that.newDate(that.endDate);
+        if (needSwapDate){
           var isSameDate = that.startDate.year === that.endDate.year && that.startDate.month === that.endDate.month && that.startDate.date === that.endDate.date;
           var startDate;
           // 如果是同一天并且出现了反选证明是时分秒出现开始时间大于结束时间的现象
