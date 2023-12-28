@@ -1859,9 +1859,9 @@
         if (that.endState && that.autoCalendarModel.auto) {
           isChange = that.autoCalendarModel();
         }
+        // 判断是否反选
         if ((isChange || that.rangeLinked && that.endState) && that.newDate(that.startDate) > that.newDate(that.endDate)) {
           var isSameDate = that.startDate.year === that.endDate.year && that.startDate.month === that.endDate.month && that.startDate.date === that.endDate.date;
-          // 判断是否反选
           var startDate;
           // 如果是同一天并且出现了反选证明是时分秒出现开始时间大于结束时间的现象
           if(isSameDate){
@@ -1869,6 +1869,7 @@
             that.startTime = that.endTime;
             that.endTime = startDate;
           }
+          // 当出现反向选择时（即“后点击”的日期比“先点击”的日期小），重新提取区间
           startDate = that.startDate;
           that.startDate = lay.extend({}, that.endDate, that.startTime);
           options.dateTime = lay.extend({}, that.startDate);
