@@ -77,7 +77,7 @@ layui.use(function(){
     elem: '#ID-slider-demo-step-1',
     step: 10 // 步长
   });
-  
+
   slider.render({
     elem: '#ID-slider-demo-step-2',
     step: 10, // 步长
@@ -96,6 +96,9 @@ layui.use(function(){
 <hr class="ws-space-16">
 <div id="ID-slider-demo-setTips-2"></div>
 <div id="ID-slider-demo-setTips-result"></div>
+<hr class="ws-space-16">
+<hr class="ws-space-16">
+<div id="ID-slider-demo-setTips-tipsAlways"></div>
 
 <!-- import layui -->
 <script>
@@ -118,6 +121,11 @@ layui.use(function(){
     change: function(value){
       $('#ID-slider-demo-setTips-result').html('当前数值：'+ value);
     }
+  });
+  slider.render({
+    elem: '#ID-slider-demo-setTips-tipsAlways',
+    tips: true, // 开启提示文本
+    tipsAlways: true // 开启始终显示提示文本
   });
 });
 </script>
@@ -182,7 +190,7 @@ layui.use(function(){
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-<br><br>    
+<br><br>
 <div class="layui-inline" style="margin-right: 32px;" id="ID-slider-demo-vertical-1"></div>
 <div class="layui-inline" style="margin-right: 32px;" id="ID-slider-demo-vertical-2"></div>
 <div class="layui-inline" style="margin-right: 32px;" id="ID-slider-demo-vertical-3"></div>
