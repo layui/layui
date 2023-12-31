@@ -145,9 +145,7 @@ body{padding: 50px 100px;}
 
 <script src="../src/layui.js" src1="http://local.res.layui.com/layui/release/laydate/dist/laydate.js" charset="utf-8"></script>
 <script>
-
-layui.use('laydate', function(laydate){  
-  
+layui.use('laydate', function (laydate) {
   //全局配置
   laydate.set({
     //trigger: 'focus'
@@ -159,20 +157,19 @@ layui.use('laydate', function(laydate){
     min: 0,
     shade: [0.1, '#000'],
     //max: '2016-12-30',
-    done: function(){
-      console.log('done',arguments);
+    done: function () {
+      console.log('done', arguments);
     },
-    onConfirm: function(){
-      console.log('confirm',arguments);
+    onConfirm: function () {
+      console.log('confirm', arguments);
     },
-    onNow: function(){
-      console.log('now',arguments);
+    onNow: function () {
+      console.log('now', arguments);
     },
-    onClear: function(){
-      console.log('clear',arguments);
+    onClear: function () {
+      console.log('clear', arguments);
     }
   });
-
 
   // 范围选择1
   laydate.render({
@@ -187,22 +184,22 @@ layui.use('laydate', function(laydate){
     // max: '2021-5-9',
     // value: '2021-05-09 12:06:09',
     // value: '2021-05-08 - 2021-03-27',
-    done: function(value, date, endDate){
+    done: function (value, date, endDate) {
       console.log(value, date, endDate);
 
       //this.elem.val(123);
     },
-    change: function(value, date, endDate){
+    change: function (value, date, endDate) {
       console.log(value, date, endDate);
     }
   });
-  
+
   // return;
 
   // 范围选择2
   laydate.render({
     elem: '#test1-2',
-    type: 'date',
+    type: 'datetime',
     range: ['#test-startDate-1', '#test-endDate-1'],
     rangeLinked: true, // 是否开启日期范围选择时的区间联动标注模式
     // value: ['2022-05-01', '2022-10-01'],
@@ -211,30 +208,29 @@ layui.use('laydate', function(laydate){
       console.log(value);
       console.log(date);
       console.log(endDate);
-     }
+    }
   });
 
-  
   // 日期选择器（单面板）
   laydate.render({
-    elem: '#test2'
+    elem: '#test2',
     //,format: 'yyyy年MM月dd日'
-    ,value: new Date(1534766888000)
+    value: new Date(1534766888000),
     //,isInitValue: false
-    ,format: 'yyyy/MM/dd'
-    ,min: 7
+    format: 'yyyy/MM/dd',
+    min: 7,
     //,max: 0
     //,min: '2016-10-14'
     //,max: -1
     //,value: '1989年10月14日'
-    ,ready: function(date){
+    ready: function (date) {
       console.log(date);
-    }
-    ,done: function(value, date, endDate){
+    },
+    done: function (value, date, endDate) {
       console.log(value, date, endDate);
       //this.elem.val(111111);
-    }
-    ,change: function(value){
+    },
+    change: function (value) {
       console.log(value);
     }
   });
@@ -244,16 +240,16 @@ layui.use('laydate', function(laydate){
     elem: '#test2-1',
     shortcuts: [
       {
-        text: "昨天",
+        text: '昨天',
         value: (function () {
           var now = new Date();
           now.setDate(now.getDate() - 1);
           return now;
         })()
       },
-      { text: "今天", value: Date.now() },
+      { text: '今天', value: Date.now() },
       {
-        text: "明天",
+        text: '明天',
         value: (function () {
           var now = new Date();
           now.setDate(now.getDate() + 1);
@@ -261,7 +257,7 @@ layui.use('laydate', function(laydate){
         })()
       },
       {
-        text: "上个月",
+        text: '上个月',
         value: (function () {
           var now = new Date();
           // now.setDate(now.getDate() - 1);
@@ -270,7 +266,7 @@ layui.use('laydate', function(laydate){
         })()
       },
       {
-        text: "上个月的前一天",
+        text: '上个月的前一天',
         value: (function () {
           var now = new Date();
           now.setMonth(now.getMonth() - 1);
@@ -279,73 +275,71 @@ layui.use('laydate', function(laydate){
         })()
       },
       {
-        text: "某一天",
-        value: "2020-12-12"
+        text: '某一天',
+        value: '2020-12-12'
       }
     ]
-  })
+  });
 
-
-  
   //年选择器
   laydate.render({
-    elem: '#test3'
-    ,type: 'year'
-    //,range: true 
+    elem: '#test3',
+    type: 'year',
+    //,range: true
     //,trigger: 'click'
     //,min:'2021-01-01'
     //,max:'2022-12-31'
-    ,done: function(value, date, endDate){
+    done: function (value, date, endDate) {
       console.log(value, date, endDate);
-    }
-    ,change: function(value, date, endDate){
+    },
+    change: function (value, date, endDate) {
       //this.elem.val(value)
     }
   });
-  
+
   //年月选择器
   laydate.render({
-    elem: '#test4'
-    ,type: 'month'
-    ,range: true
-    ,trigger: 'click'
-    ,min:'2022-03-01'
-    ,max:'2022-05-31'
-    ,done: function(value, date, endDate){
+    elem: '#test4',
+    type: 'month',
+    range: true,
+    trigger: 'click',
+    min: '2022-03-01',
+    max: '2022-05-31',
+    done: function (value, date, endDate) {
       console.log(value, date, endDate);
-    }
-    ,change: function(value, date, endDate){
-      this.elem.val(value)
+    },
+    change: function (value, date, endDate) {
+      this.elem.val(value);
     }
   });
-  
+
   //时间选择器
   laydate.render({
-    elem: '#test5'
-    ,type: 'time'
+    elem: '#test5',
+    type: 'time',
     //,range: true
     //,trigger: 'click'
-    ,min: '09:30:00'
-    ,max: '17:30:00'
-    ,done: function(value, date, endDate){
+    min: '09:30:00',
+    max: '17:30:00',
+    done: function (value, date, endDate) {
       console.log(value, date, endDate);
-    }
-    ,change: function(value, date, endDate){
+    },
+    change: function (value, date, endDate) {
       //this.elem.val(value)
     }
   });
-  
+
   //时间范围选择器
   laydate.render({
-    elem: '#test55'
-    ,type: 'time'
-    ,range: true
+    elem: '#test55',
+    type: 'time',
+    range: true,
     //,trigger: 'click'
-    ,done: function(value, date, endDate){
+    done: function (value, date, endDate) {
       console.log(value, date, endDate);
     }
   });
-  
+
   // 同时绑定多个
   laydate.render({
     elem: '.test-item',
@@ -359,24 +353,25 @@ layui.use('laydate', function(laydate){
     });
   });
   */
-  
+
   //自定义重要日
   var ins555 = laydate.render({
-    elem: '#test555'
+    elem: '#test555',
     //,calendar: true //是否开启公历重要节日
-    ,mark: { //标记重要日子
-      '0-10-14': '生日' //0代表：每年
-      ,'0-0-15': '中旬'
-      ,'2017-8-20': 'v2'
-      ,'2017-8-31': '月底'
-    } 
-    ,done: function(value, date, endDate){
-      if(date.year == 2016 && date.month == 10 && date.date == 14){
+    mark: {
+      //标记重要日子
+      '0-10-14': '生日', //0代表：每年
+      '0-0-15': '中旬',
+      '2017-8-20': 'v2',
+      '2017-8-31': '月底'
+    },
+    done: function (value, date, endDate) {
+      if (date.year == 2016 && date.month == 10 && date.date == 14) {
         //console.log('Layui 诞生日');
       }
-    }
-    ,change: function(value, date, endDate){
-      console.log(value)
+    },
+    change: function (value, date, endDate) {
+      console.log(value);
     }
   });
 
@@ -385,101 +380,142 @@ layui.use('laydate', function(laydate){
     elem: '#test5555',
     value: '2022-5-21',
     holidays: [
-      ['2022-1-1', '2022-1-2', '2022-1-3', '2022-1-31', '2022-2-1', '2022-2-2', '2022-2-3', '2022-2-4', '2022-2-5', '2022-2-6', '2022-4-3', '2022-4-4', '2022-4-5', '2022-4-30', '2022-5-1', '2022-5-2', '2022-5-3', '2022-5-4', '2022-6-3', '2022-6-4', '2022-6-5', '2022-9-10', '2022-9-11', '2022-9-12', '2022-10-1', '2022-10-2', '2022-10-3', '2022-10-4', '2022-10-5', '2022-10-6', '2022-10-7'],
-      
-      ['2022-1-29', '2022-1-30', '2022-4-2', '2022-4-24', '2022-5-7',  '2022-10-8', '2022-10-9']
+      [
+        '2022-1-1',
+        '2022-1-2',
+        '2022-1-3',
+        '2022-1-31',
+        '2022-2-1',
+        '2022-2-2',
+        '2022-2-3',
+        '2022-2-4',
+        '2022-2-5',
+        '2022-2-6',
+        '2022-4-3',
+        '2022-4-4',
+        '2022-4-5',
+        '2022-4-30',
+        '2022-5-1',
+        '2022-5-2',
+        '2022-5-3',
+        '2022-5-4',
+        '2022-6-3',
+        '2022-6-4',
+        '2022-6-5',
+        '2022-9-10',
+        '2022-9-11',
+        '2022-9-12',
+        '2022-10-1',
+        '2022-10-2',
+        '2022-10-3',
+        '2022-10-4',
+        '2022-10-5',
+        '2022-10-6',
+        '2022-10-7'
+      ],
+
+      [
+        '2022-1-29',
+        '2022-1-30',
+        '2022-4-2',
+        '2022-4-24',
+        '2022-5-7',
+        '2022-10-8',
+        '2022-10-9'
+      ]
     ]
   });
-  
+
   //墨绿主题
   laydate.render({
-    elem: '#test6-1' //指定元素
-    ,type: 'datetime'
-    ,theme: 'molv'
-    ,value: 20180115
-    ,isInitValue: true
-    ,lang: 'en'
+    elem: '#test6-1', //指定元素
+    type: 'datetime',
+    theme: 'molv',
+    value: 20180115,
+    isInitValue: true,
+    lang: 'en',
     //,range: true
-    ,trigger: 'click'
+    trigger: 'click'
   });
-  
+
   //自定义背景色主题
   laydate.render({
-    elem: '#test6-2' //指定元素
-    ,type: 'datetime'
-    ,theme: '#393D49'
+    elem: '#test6-2', //指定元素
+    type: 'datetime',
+    theme: '#393D49',
     //,range: true
-    ,trigger: 'click'
+    trigger: 'click'
   });
-  
+
   //格子主题
   laydate.render({
-    elem: '#test6-3' //指定元素
+    elem: '#test6-3', //指定元素
     //,type: 'datetime'
-    ,theme: 'grid'
+    theme: 'grid',
     //,range: true
-    ,trigger: 'click'
+    trigger: 'click'
   });
-  
+
   //其它元素触发
   laydate.render({
-    elem: '#test6' //指定元素
-    ,eventElem: '#test7' //绑定执行事件的元素
-    ,lang: 'en'
+    elem: '#test6', //指定元素
+    eventElem: '#test7', //绑定执行事件的元素
+    lang: 'en'
   });
-  
+
   //外部事件
-  lay('#test9').on('click', function(e){
+  lay('#test9').on('click', function (e) {
     laydate.render({
-      elem: '#test8'
-      ,type: 'datetime'
-      ,show: true
+      elem: '#test8',
+      type: 'datetime',
+      show: true,
       //,min: '2017-08-12 00:10:00'
       //,max: '2017-08-12 23:10:10'
-      ,closeStop: '#test9' //点击 #test6 所在元素区域不关闭控件
-      ,change: function(value, date){
-        console.log(value, date)
-      }
-      ,done: function(value, date){
-        console.log(value, date)
+      closeStop: '#test9', //点击 #test6 所在元素区域不关闭控件
+      change: function (value, date) {
+        console.log(value, date);
+      },
+      done: function (value, date) {
+        console.log(value, date);
       }
     });
   });
-  
+
   //直接嵌套在指定容器中
   var ins10 = laydate.render({
-    elem: '#test10'
-    ,position: 'static'
-    ,calendar: true //是否开启公历重要节日
-    ,mark: { //标记重要日子
-      '2021-8-20': ''
-      ,'2021-8-21': ''
-    } 
-    ,done: function(value, date, endDate){
-      if(date.year == 2021 && date.month == 8 && date.date == 20){
+    elem: '#test10',
+    position: 'static',
+    calendar: true, //是否开启公历重要节日
+    mark: {
+      //标记重要日子
+      '2021-8-20': '',
+      '2021-8-21': ''
+    },
+    done: function (value, date, endDate) {
+      if (date.year == 2021 && date.month == 8 && date.date == 20) {
         ins10.hint(value + '，活动日');
       }
-    }
-    ,change: function(value, date, endDate){
-      console.log(value,date)
+    },
+    change: function (value, date, endDate) {
+      console.log(value, date);
     }
   });
-  
+
   laydate.render({
-    elem: '#test11'
-    ,position: 'static'
-    ,lang: 'en'
-    ,type: 'datetime'
-    ,calendar: true //是否开启公历重要节日
-    ,done: function(value, date, endDate){
+    elem: '#test11',
+    position: 'static',
+    lang: 'en',
+    type: 'datetime',
+    calendar: true, //是否开启公历重要节日
+    done: function (value, date, endDate) {
       //console.log(value, date, endDate);
-    }
-    ,change: function(value, date, endDate){
-      console.log(value)
+    },
+    change: function (value, date, endDate) {
+      console.log(value);
     }
   });
-  
 });
+
 </script>
 </body>
 </html>
