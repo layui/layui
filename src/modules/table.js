@@ -2967,6 +2967,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
               // 插入内容
               vals.push(content);
+            }else if(item3.field && item3.type !== 'normal'){
+              // https://gitee.com/layui/layui/issues/I8PHCR
+              if(i1 == 0) fieldsIsHide[item3.field] = true;
             }
           });
         }
