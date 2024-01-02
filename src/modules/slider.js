@@ -202,23 +202,32 @@ layui.define(['jquery', 'lay'], function(exports){
       that.elemTemp.find('.' + SLIDER_WRAP_BTN).addClass(DISABLED);
     }
 
-    //设置提示文本内容
-    function setSliderTipsTxt(_this) {
-      var value = _this.parent().data('value');
+    /**
+     * @description 设置提示文本内容
+     * @param {Element} sliderWrapBtnElem 提示文本节点元素
+     */
+    function setSliderTipsTxt(sliderWrapBtnElem) {
+      var value = sliderWrapBtnElem.parent().data('value');
       var tipsTxt = options.setTips ? options.setTips(value) : value;
       that.elemTemp.find('.' + SLIDER_TIPS).html(tipsTxt);
     }
 
-    //计算提示文本元素的 position left
-    function calcSliderTipsLeft(_this){
+    /**
+     * @description 计算提示文本元素的 position left
+     * @param {Element} sliderWrapBtnElem 提示文本节点元素
+     */
+    function calcSliderTipsLeft(sliderWrapBtnElem){
       var sliderWidth = options.type === 'vertical' ? options.height : that.elemTemp[0].offsetWidth;
       var sliderWrap = that.elemTemp.find('.' + SLIDER_WRAP);
-      var tipsLeft = options.type === 'vertical' ? (sliderWidth - _this.parent()[0].offsetTop - sliderWrap.height()) : _this.parent()[0].offsetLeft;
+      var tipsLeft = options.type === 'vertical' ? (sliderWidth - sliderWrapBtnElem.parent()[0].offsetTop - sliderWrap.height()) : sliderWrapBtnElem.parent()[0].offsetLeft;
       var left = tipsLeft / sliderWidth * 100;
       return left
     }
 
-    //设置提示文本元素的 position left
+    /**
+     * @description 设置提示文本元素的 position left
+     * @param {number} left 要设置的 left 的大小
+     */
     function setSliderTipsLeft(left) {
       if(options.type === 'vertical'){
         that.elemTemp.find('.' + SLIDER_TIPS).css({
@@ -237,9 +246,9 @@ layui.define(['jquery', 'lay'], function(exports){
     //判断是否要始终显示提示文本
     if(options.tips){
       if(options.tipsAlways){
-        var _this = that.elemTemp.find('.' + SLIDER_WRAP_BTN);
-        setSliderTipsTxt(_this)
-        var left = calcSliderTipsLeft(_this);
+        var sliderWrapBtnElem = that.elemTemp.find('.' + SLIDER_WRAP_BTN);
+        setSliderTipsTxt(sliderWrapBtnElem)
+        var left = calcSliderTipsLeft(sliderWrapBtnElem);
         setSliderTipsLeft(left)
       }else{
         //划过滑块显示数值
