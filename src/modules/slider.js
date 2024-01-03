@@ -72,6 +72,7 @@ layui.define(['jquery', 'lay'], function(exports){
     step: 1, //间隔值
     showstep: false, //间隔点开启
     tips: true, //文字提示，开启
+    tipsAlways: false, //文字提示，始终开启
     input: false, //输入框，关闭
     range: false, //范围选择，与输入框不能同时开启，默认关闭
     height: 200, //配合 type:"vertical" 使用，默认200px
@@ -139,7 +140,7 @@ layui.define(['jquery', 'lay'], function(exports){
     var theme = options.disabled ? '#c2c2c2' : options.theme;
 
     //滑块
-    var temp = '<div class="layui-slider '+ (options.type === 'vertical' ? 'layui-slider-vertical' : '') +'">'+ (options.tips ? '<div class="'+ SLIDER_TIPS +'"></div>' : '') +
+    var temp = '<div class="layui-slider '+ (options.type === 'vertical' ? 'layui-slider-vertical' : '') +'">'+ (options.tips ? '<div class="'+ SLIDER_TIPS +'" '+ (options.tipsAlways ? '' : 'style="display:none;"') +'></div>' : '') +
     '<div class="layui-slider-bar" style="background:'+ theme +'; '+ (options.type === 'vertical' ? 'height' : 'width') +':'+ scale +';'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ (scaleFir || 0) +';"></div><div class="layui-slider-wrap" style="'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ (scaleFir || scale) +';">' +
     '<div class="layui-slider-wrap-btn" style="border: 2px solid '+ theme +';"></div></div>'+ (options.range ? '<div class="layui-slider-wrap" style="'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ scaleSec +';"><div class="layui-slider-wrap-btn" style="border: 2px solid '+ theme +';"></div></div>' : '') +'</div>';
 
@@ -201,36 +202,72 @@ layui.define(['jquery', 'lay'], function(exports){
       that.elemTemp.find('.' + SLIDER_WRAP_BTN).addClass(DISABLED);
     }
 
-    //划过滑块显示数值
-    var timer;
-    that.elemTemp.find('.' + SLIDER_WRAP_BTN).on('mouseover', function(){
-      var sliderWidth = options.type === 'vertical' ? options.height : that.elemTemp[0].offsetWidth;
-      var sliderWrap = that.elemTemp.find('.' + SLIDER_WRAP);
-      var tipsLeft = options.type === 'vertical' ? (sliderWidth - $(this).parent()[0].offsetTop - sliderWrap.height()) : $(this).parent()[0].offsetLeft;
-      var left = tipsLeft / sliderWidth * 100;
-      var value = $(this).parent().data('value');
+    /**
+     * @description 设置提示文本内容
+     * @param {Element} sliderWrapBtnElem 提示文本节点元素
+     */
+    function setSliderTipsTxt(sliderWrapBtnElem) {
+      var value = sliderWrapBtnElem.parent().data('value');
       var tipsTxt = options.setTips ? options.setTips(value) : value;
       that.elemTemp.find('.' + SLIDER_TIPS).html(tipsTxt);
+    }
 
-      clearTimeout(timer);
-      timer = setTimeout(function(){
-        if(options.type === 'vertical'){
-          that.elemTemp.find('.' + SLIDER_TIPS).css({
-            "bottom": left + '%',
-            "margin-bottom": "20px",
-            "display": "inline-block"
-          });
-        } else {
-          that.elemTemp.find('.' + SLIDER_TIPS).css({
-            "left": left + '%',
-            "display": "inline-block"
-          });
-        }
-      }, 300);
-    }).on('mouseout', function(){
-      clearTimeout(timer);
-      that.elemTemp.find('.' + SLIDER_TIPS).css("display", "none");
-    });
+    /**
+     * @description 计算提示文本元素的 position left
+     * @param {Element} sliderWrapBtnElem 提示文本节点元素
+     */
+    function calcSliderTipsLeft(sliderWrapBtnElem){
+      var sliderWidth = options.type === 'vertical' ? options.height : that.elemTemp[0].offsetWidth;
+      var sliderWrap = that.elemTemp.find('.' + SLIDER_WRAP);
+      var tipsLeft = options.type === 'vertical' ? (sliderWidth - sliderWrapBtnElem.parent()[0].offsetTop - sliderWrap.height()) : sliderWrapBtnElem.parent()[0].offsetLeft;
+      var left = tipsLeft / sliderWidth * 100;
+      return left
+    }
+
+    /**
+     * @description 设置提示文本元素的 position left
+     * @param {number} left 要设置的 left 的大小
+     */
+    function setSliderTipsLeft(left) {
+      if(options.type === 'vertical'){
+        that.elemTemp.find('.' + SLIDER_TIPS).css({
+          "bottom": left + '%',
+          "margin-bottom": "20px",
+          "display": "inline-block"
+        });
+      } else {
+        that.elemTemp.find('.' + SLIDER_TIPS).css({
+          "left": left + '%',
+          "display": "inline-block"
+        });
+      }
+    }
+
+    //判断是否要始终显示提示文本
+    if(options.tips){
+      if(options.tipsAlways){
+        var sliderWrapBtnElem = that.elemTemp.find('.' + SLIDER_WRAP_BTN);
+        setSliderTipsTxt(sliderWrapBtnElem)
+        var left = calcSliderTipsLeft(sliderWrapBtnElem);
+        setSliderTipsLeft(left)
+      }else{
+        //划过滑块显示数值
+        var timer;
+        that.elemTemp.find('.' + SLIDER_WRAP_BTN).on('mouseover', function(){
+          setSliderTipsTxt($(this))
+          var left = calcSliderTipsLeft($(this));
+          clearTimeout(timer);
+          timer = setTimeout(function(){
+            setSliderTipsLeft(left)
+          }, 300);
+        }).on('mouseout', function(){
+          clearTimeout(timer);
+          if(!options.tipsAlways){
+            that.elemTemp.find('.' + SLIDER_TIPS).css("display", "none");
+          }
+        });
+      }
+    }
   };
 
   //滑块滑动
@@ -366,9 +403,11 @@ layui.define(['jquery', 'lay'], function(exports){
 
         var up = function(delay){
           othis.removeClass(ELEM_HOVER);
-          setTimeout(function(){
-            sliderAct.find('.' + SLIDER_TIPS).hide();
-          }, delay);
+          if(!options.tipsAlways){
+            setTimeout(function(){
+              sliderAct.find('.' + SLIDER_TIPS).hide();
+            }, delay);
+          }
         };
 
         createMoveElem(othis, move, up)
