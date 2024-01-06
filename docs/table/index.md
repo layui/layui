@@ -28,6 +28,7 @@ toc: true
 | [table.reload(id, options, deep)](#table.reload) | 表格完整重载。  |
 | [table.reloadData(id, options, deep)](#table.reloadData) <sup>2.7+</sup> | 表格数据重载。 |
 | [table.renderData(id)](#table.renderData) <sup>2.8.5+</sup> | 重新渲染数据。 |
+| [table.updateRow(id, opts)](#table.updateRow) <sup>2.9.4+</sup> | 更新指定行数据。 |
 | [table.checkStatus(id)](#table.checkStatus) | 获取选中行相关数据。  |
 | [table.setRowChecked(id, opts)](#table.setRowChecked) <sup>2.8+</sup> | 设置行选中状态。 |
 | [table.getData(id)](#table.getData) | 获取当前页所有行表格数据。 |
@@ -313,6 +314,63 @@ data.splice(newIndex, 0, item[0]);
 table.renderData('test');
 ```
 
+<h3 id="table.updateRow" lay-pid="api" class="ws-anchor ws-bold">更新指定行数据 <sup>2.9.4+</sup></h3>
+
+`table.updateRow(id, opts);`
+- 参数 `id` : table 渲染时的 `id` 属性值
+- 参数 `opts` : 更新指定行时的可选属性，详见下表
+
+| opts | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| index | 行下标 | number | - |
+| row | 行数据 | object | - |
+| related | 是否更新其他包含自定义模板且可能有所关联的列视图 | boolean | - |
+
+该方法用于更新指定行数据。
+
+```js
+// 渲染
+table.render({
+  elem: '', // 绑定元素选择器
+  id: 'test', // 自定义 id 索引
+  // 其他属性 …
+});
+
+// 更新单行
+table.updateRow('test', {
+  index: 0,
+  row: {
+    id: 1,
+    username: 'name',
+  }
+});
+
+// 更新多行
+table.updateRow('test', [
+  {
+    index: 0,
+    row: {
+      id: 1,
+      username: 'name1'
+    }
+  },
+  {
+    index: 1,
+    row: {
+      id: 2,
+      username: 'name2'
+    }
+  }
+]);
+
+// 更新单元格
+table.updateRow('test', {
+  index: 0,
+  row: {
+    username: 'name',
+  }
+})
+```
 
 <h3 id="table.checkStatus" lay-pid="api" class="ws-anchor ws-bold">获取选中行</h3>
 
