@@ -1527,6 +1527,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     form.render(type, filter);
   };
 
+  // 定向渲染表单
+  Class.prototype.renderFormByElem = function(elem){
+    layui.each(['input', 'select'], function(i, formType){
+      form.render(elem.find(formType));
+    })
+  };
+
   // 同步全选按钮状态
   Class.prototype.syncCheckAll = function(){
     var that = this;
@@ -1895,24 +1902,20 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   /**
    * 更新指定行
    * @param {updateRowOptions | updateRowOptions[]} opts 
+   * @param {(field: string, value: any) => void} [callback] - 更新每个字段时的回调函数
    */
-  Class.prototype.updateRow = function(opts){
+  Class.prototype.updateRow = function(opts, callback){
     var that = this;
     var ELEM_CELL = '.layui-table-cell';
     var opts = layui.type(opts) === 'array' ? opts : [opts];
-
-    var renderFormByElem = function(elem){
-      layui.each(['input', 'select'], function(i, formType){
-        form.render(elem.find(formType));
-      })
-    }
 
     var update = function(opt){
       var index = opt.index;
       var row = opt.row;
       var related = opt.related;
 
-      var data = table.cache[that.key][index];
+      var dataCache = table.cache[that.key] || [];
+      var data = dataCache[index] || {};
       var tr = that.layBody.find('tr[data-index="' + index + '"]');
       layui.each(row, function (key, value) {
         var td = tr.children('td[data-field="' + key + '"]');
@@ -1920,6 +1923,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
         // 更新缓存中的数据
         data[key] = value;
+        callback && callback(key, value);
 
         // 更新相应列视图
         that.eachCols(function (i, item3) {
@@ -1951,7 +1955,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         });
       });
 
-      renderFormByElem(tr);
+      that.renderFormByElem(tr);
     }
 
     layui.each(opts, function(i, opt){
@@ -2312,43 +2316,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         },
         update: function(fields, related){ // 修改行数据
           fields = fields || {};
-          layui.each(fields, function(key, value){
-            var td = tr.children('td[data-field="'+ key +'"]');
-            var cell = td.children(ELEM_CELL); // 获取当前修改的列
-
-            // 更新缓存中的数据
-            data[key] = obj.data[key] = value;
-
-            // 更新相应列视图
-            that.eachCols(function(i, item3){
-              if(item3.field == key){
-                cell.html(parseTempData.call(that, {
-                  item3: item3
-                  ,content: value
-                  ,tplData: $.extend({
-                    LAY_COL: item3
-                  }, data)
-                }));
-                td.data('content', value);
-              }
-              // 更新其他包含自定义模板且可能有所关联的列视图
-              else if(related && (item3.templet || item3.toolbar)){
-                var thisTd = tr.children('td[data-field="'+ (item3.field || i) +'"]');
-                var content = data[item3.field];
-
-                thisTd.children(ELEM_CELL).html(parseTempData.call(that, {
-                  item3: item3
-                  ,content: content
-                  ,tplData: $.extend({
-                    LAY_COL: item3
-                  }, data)
-                }));
-                thisTd.data('content', content);
-              }
-            });
+          that.updateRow({
+            index: index,
+            row: fields,
+            related: related
+          }, function(key,value){
+            obj.data[key] = value;
           });
-
-          that.renderForm();
         },
         // 设置行选中状态
         setRowChecked: function(opts){
