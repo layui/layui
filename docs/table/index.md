@@ -341,7 +341,7 @@ table.updateRow('test', {
   index: 0,
   row: {
     id: 1,
-    username: 'name',
+    username: 'name'
   }
 });
 
@@ -367,7 +367,7 @@ table.updateRow('test', [
 table.updateRow('test', {
   index: 0,
   row: {
-    username: 'name',
+    username: 'name'
   }
 })
 ```
