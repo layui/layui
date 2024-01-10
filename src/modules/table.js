@@ -1908,13 +1908,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var that = this;
     var ELEM_CELL = '.layui-table-cell';
     var opts = layui.type(opts) === 'array' ? opts : [opts];
+    var dataCache = table.cache[that.key] || [];
 
     var update = function(opt){
       var index = opt.index;
       var row = opt.row;
       var related = opt.related;
 
-      var dataCache = table.cache[that.key] || [];
       var data = dataCache[index] || {};
       var tr = that.layBody.find('tr[data-index="' + index + '"]');
       layui.each(row, function (key, value) {
@@ -1933,7 +1933,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
                 content: value,
                 tplData: $.extend({
                   LAY_COL: item3,
-                },data)
+                }, data)
             }));
             td.data("content", value);
           }
@@ -1948,7 +1948,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
               content: content,
               tplData: $.extend({
                 LAY_COL: item3,
-              },data)
+              }, data)
             }));
             thisTd.data("content", content);
           }
@@ -1959,12 +1959,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }
 
     layui.each(opts, function(i, opt){
-      update(opt)
+      update(opt);
     });
   };
 
   /**
-   * 更新行
+   * 更新指定行
    * @param {string} id - table ID
    * @param {updateRowOptions | updateRowOptions[]} options 
    */
@@ -2320,7 +2320,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
             index: index,
             row: fields,
             related: related
-          }, function(key,value){
+          }, function(key, value){
             obj.data[key] = value;
           });
         },
