@@ -1539,9 +1539,10 @@
         });
       });
 
-      if(lay.touchEventsSupported()){
-        olElem.on('touchstart', function(){
-          this.style['overflow-y'] = 'auto';
+      if(layui.device().mobile){
+        olElem.css({
+          overflowY: 'auto',
+          touchAction: 'pan-y'
         })
       }
     }
