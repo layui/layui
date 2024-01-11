@@ -1569,7 +1569,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-slider-wrap-btn:hover,
 .layui-slider-wrap-btn.layui-slider-hover{transform: scale(1.2);}
 .layui-slider-wrap-btn.layui-disabled:hover{transform: scale(1) !important;}
-.layui-slider-tips{position: absolute; top: -42px; z-index: 77777777; white-space:nowrap; display: none; -webkit-transform: translateX(-50%); transform: translateX(-50%); color: #FFF; background: #000; border-radius: 3px; height: 25px; line-height: 25px; padding: 0 10px;}
+.layui-slider-tips{position: absolute; top: -42px; z-index: 77777777; white-space:nowrap; -webkit-transform: translateX(-50%); transform: translateX(-50%); color: #FFF; background: #000; border-radius: 3px; height: 25px; line-height: 25px; padding: 0 10px;}
 .layui-slider-tips:after{content: ""; position: absolute; bottom: -12px; left: 50%; margin-left: -6px; width: 0; height: 0; border-width: 6px; border-style: solid; border-color: #000 transparent transparent transparent;}
 .layui-slider-input{width: 70px; height: 32px; border: 1px solid #eee; border-radius: 3px; font-size: 16px; line-height: 32px; position: absolute; right: 0; top: -14px; box-sizing: border-box;}
 .layui-slider-input-btn{position: absolute; top: 0; right: 0; width: 20px; height: 100%; border-left: 1px solid #eee;}

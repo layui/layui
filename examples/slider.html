@@ -23,7 +23,7 @@
 
 layui.use('slider', function(){
   var slider = layui.slider;
-  
+
   var sliderInst = slider.render({
     elem: '#slideTest1'
     //,type: 'vertical'
@@ -32,7 +32,8 @@ layui.use('slider', function(){
     //,value: 11 //[40, 60] //初始值
     //,step: 1 //间隔值
     //,showstep: true //间隔点
-    //,tips: false //关闭提示文本
+    ,tips: true //开启提示文本
+    ,tipsAlways: true //开启提示文本始终显示
     ,input: true //输入框
     //,range: true //范围选择
     //,theme: '#FF5722'
@@ -52,7 +53,7 @@ layui.use('slider', function(){
     //,disabled: true //禁用滑块
     //,theme: '#c00' //主题色
   });
-  
+
   //sliderInst.setValue(30);
 
 

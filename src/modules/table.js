@@ -2585,6 +2585,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
             });
           });
           $this.remove();
+          // 重置单元格滚动条位置
+          elemCell.scrollTop(0);
+          elemCell.scrollLeft(0); 
         });
       }
 
