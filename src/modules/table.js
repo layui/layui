@@ -1966,44 +1966,31 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       var data = dataCache[index] || {};
       var tr = that.layBody.find('tr[data-index="' + index + '"]');
-      layui.each(row, function (key, value) {
-        var td = tr.children('td[data-field="' + key + '"]');
-        var cell = td.children(ELEM_CELL);
 
-        // 更新缓存中的数据
+      // 更新缓存中的数据
+      layui.each(row, function (key, value) {
         data[key] = value;
         callback && callback(key, value);
+      });
 
-        // 更新相应列视图
-        that.eachCols(function (i, item3) {
-          if (item3.field == key) {
-            cell.html(parseTempData.call(that, {
-                item3: item3,
-                content: value,
-                tplData: $.extend({
-                  LAY_COL: item3,
-                }, data)
-            }));
-            td.data("content", value);
-            that.renderFormByElem(cell);
-          }
-          // 更新其他包含自定义模板且可能有所关联的列视图
-          else if ((typeof related === 'function' ? related(String(item3.field || i), i) : related) && (item3.templet || item3.toolbar)) {
-            var thisTd = tr.children('td[data-field="' + (item3.field || i) + '"]');
-            var content = data[item3.field];
-            var thisCell = thisTd.children(ELEM_CELL);
-
-            thisCell.html(parseTempData.call(that, {
-              item3: item3,
-              content: content,
-              tplData: $.extend({
-                LAY_COL: item3,
-              }, data)
-            }));
-            thisTd.data("content", content);
-            that.renderFormByElem(thisCell);
-          }
-        });
+      // 更新单元格
+      that.eachCols(function (i, item3) {
+        var field = String(item3.field || i);
+        var shouldUpdate = field in row || ((typeof related === 'function' ? related(field, i) : related) && (item3.templet || item3.toolbar));
+        if(shouldUpdate){
+          var td = tr.children('td[data-field="' + field + '"]');
+          var cell = td.children(ELEM_CELL);
+          var content = data[item3.field];
+          cell.html(parseTempData.call(that, {
+            item3: item3,
+            content: content,
+            tplData: $.extend({
+              LAY_COL: item3,
+            }, data)
+          }));
+          td.data("content", content);
+          that.renderFormByElem(cell);
+        }
       });
     }
 
