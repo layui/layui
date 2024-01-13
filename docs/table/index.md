@@ -30,6 +30,7 @@ toc: true
 | [table.renderData(id)](#table.renderData) <sup>2.8.5+</sup> | 重新渲染数据。 |
 | [table.updateRow(id, opts)](#table.updateRow) <sup>2.9.4+</sup> | 更新指定行数据。 |
 | [table.updateTotalRow(id, totalRowData)](#table.updateTotalRow) <sup>2.9.4+</sup> | 更新合计行。 |
+| [table.getTotalRow(id)](#table.getTotalRow) <sup>2.9.4+</sup> | 获取合计行数据。 |
 | [table.checkStatus(id)](#table.checkStatus) | 获取选中行相关数据。  |
 | [table.setRowChecked(id, opts)](#table.setRowChecked) <sup>2.8+</sup> | 设置行选中状态。 |
 | [table.getData(id)](#table.getData) | 获取当前页所有行表格数据。 |
@@ -313,6 +314,21 @@ var item = data.splice(index, 1) // index 为当前行下标，一般可在事�
 data.splice(newIndex, 0, item[0]);
 // 根据 table.cache 重新渲染数据
 table.renderData('test');
+```
+
+<h3 id="table.getTotalRow" lay-pid="api" class="ws-anchor ws-bold">获取合计行数据 <sup>2.9.4+</sup></h3>
+`table.getTotalRow(id);`
+- 参数 `id` : table 渲染时的 `id` 属性值
+
+```js
+// 渲染
+table.render({
+  elem: '', // 绑定元素选择器
+  id: 'test', // 自定义 id 索引
+  // 其他属性 …
+});
+
+table.getTotalRow('test');
 ```
 
 <h3 id="table.updateTotalRow" lay-pid="api" class="ws-anchor ws-bold">更新合计行 <sup>2.9.4+</sup></h3>

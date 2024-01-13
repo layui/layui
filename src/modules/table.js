@@ -1482,7 +1482,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var total = TOTAL_NUMS || thisTotalNum || '';
       item3.field && that.dataTotal.push({
         field: item3.field,
-        total: $('<div>'+ content +'</div>').text()
+        total: $('<div>'+ content +'</div>').text(),
+        raw: total
       });
 
       // td 容器
