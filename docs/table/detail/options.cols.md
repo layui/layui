@@ -275,7 +275,28 @@ totalRow: '{{= parseInt(d.TOTAL_NUMS) }}'
 ```
 !}}
 
-注意：*合计行模板仅支持字符写法，不支持函数写法，请勿与 `templet` 用法混淆。*
+// 函数写法(2.9.4+)
+totalRow: function(obj){
+  // 内置用于快速实现合计
+  // obj.field - 当前列字段值
+  // obj.totalValue - 当前列合计值
+  // obj.totalData - 所有列合计数据
+
+  // 用于自定义列计算
+  // obj.columnValues - 当前列值的数组
+  // obj.columnData - 所有列值的数据
+  // obj.tableData - 当前页所有数据
+
+  // 合计格式化
+  return '合计：' + obj.totalValue + '🥇'
+
+  // 平均
+  return '平均分：' + obj.totalValue / obj.columnValues.length
+}
+
+注意：*合计行模板函数写法，与 `templet` 用法不同，请勿混淆。*
+
+
 
 - **采用后端合计**
 

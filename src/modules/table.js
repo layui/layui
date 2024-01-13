@@ -1436,9 +1436,17 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var tds = [];
     that.eachCols(function(i3, item3){
       var field = item3.field || i3;
+      var totalRowOpts = {
+        field: field,
+        totalData: totalNums,
+        totalValue: totalNums[field],
+        columnData: columnValues,
+        columnValues: columnValues[field],
+        tableData: data
+      }
       // 合计数据的特定字段
       var TOTAL_NUMS = (typeof totalRowData === 'function' && item3.totalRow)
-        ? totalRowData(field, columnValues[field], data)
+        ? totalRowData(totalRowOpts)
         : totalRowData && totalRowData[item3.field];
 
       // 合计数据的小数点位数处理
@@ -1458,12 +1466,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         tplData[field] = thisTotalNum;
 
         // 获取自动计算的合并内容
-        var getContent = item3.totalRow ? (parseTempData.call(that, {
-          item3: item3,
-          content: thisTotalNum,
-          tplData: tplData
-        }) || text) : text;
-
+        var getContent = typeof item3.totalRow === 'function'
+          ? item3.totalRow(totalRowOpts)
+          : item3.totalRow
+          ? (parseTempData.call(that, {
+              item3: item3,
+              content: thisTotalNum,
+              tplData: tplData
+            }) || text)
+          : text;
         return getContent;
       }();
 
@@ -1517,10 +1528,21 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     that.layTotal.find('tbody').html('<tr>' + tds.join('') + (patchElem.length ? patchElem.get(0).outerHTML : '') + '</tr>');
   };
 
+
+  /**
+   * @typedef totalRowCallbackParams
+   * @prop {string} field - 当前列字段值
+   * @prop {number} totalValue - 当前列合计值
+   * @prop {Object.<string, number>} totalData - 所有列合计数据
+   * @prop {Array<string | number>} columnValues - 当前列值的数组
+   * @prop {Object.<string, Array<string | number>>} columnData - 所有列值的数据
+   * @prop {Array<object>} tableData - 当前页所有数据
+   * 
+   */
   /**
    * 更新合计行数据，未传入合计行数据时，将使用内置的自动合计
    * @param {string} id 表格 ID
-   * @param {Object.<string, any> | ((field: string, columnValues: Array<any>, tableData: Array<any>) => string | number)} [totalRowData] - 合计行数据。若为函数，则为计算每一列合计数据的回调
+   * @param {Object.<string, any> | ((params: totalRowCallbackParams) => string | number)} [totalRowData] - 合计行数据。若为函数，则为计算每一列合计数据的回调
    */
   table.updateTotalRow = function(id, totalRowData){
     var that = getThisTable(id);

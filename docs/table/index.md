@@ -338,11 +338,26 @@ table.updateTotalRow('test', {
 });
 
 // 自定义合计行计算，建议采用前端合计时使用
-table.updateTotalRow('test', function(field, columnValues, tableData){
-  if(field === 'score') {
-    return columnValues.reduce(function(accumulator, currentValue){
+table.updateTotalRow('test', function(obj){
+  // 内置用于快速实现合计
+  // obj.field - 当前列字段值
+  // obj.totalValue - 当前列合计值
+  // obj.totalData - 所有列合计数据
+
+  // 用于自定义列计算
+  // obj.columnValues - 当前列值的数组
+  // obj.columnData - 所有列值的数据
+  // obj.tableData - 当前页所有数据
+
+  // 合计
+  if(obj.field === 'count'){
+    return obj.columnValues.reduce(function(accumulator, currentValue){
       return accumulator + currentValue;
     });
+  }
+  // 平均
+  if(obj.field === 'score'){
+    return obj.totalValue / obj.columnValues.length + '分'
   }
 });
 ```
