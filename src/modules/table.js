@@ -1410,6 +1410,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var that = this;
     var options = that.config;
     var totalNums = {};
+    var columnValues = {};
 
     if(!options.totalRow) return;
 
@@ -1423,6 +1424,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
         if(item3.totalRow){
           totalNums[field] = (totalNums[field] || 0) + (parseFloat(content) || 0);
+          // 收集合计列的值
+          if(!columnValues[field]) columnValues[field] = [];
+          columnValues[field].push(content);
         }
       });
     });
@@ -1432,18 +1436,20 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var tds = [];
     that.eachCols(function(i3, item3){
       var field = item3.field || i3;
-
       // 合计数据的特定字段
-      var TOTAL_NUMS = totalRowData && totalRowData[item3.field];
+      var TOTAL_NUMS = (typeof totalRowData === 'function' && item3.totalRow)
+        ? totalRowData(field, columnValues[field], data)
+        : totalRowData && totalRowData[item3.field];
 
       // 合计数据的小数点位数处理
       var decimals = 'totalRowDecimals' in item3 ? item3.totalRowDecimals : 2;
       var thisTotalNum = totalNums[field]
         ? parseFloat(totalNums[field] || 0).toFixed(decimals)
-      : '';
+        : '';
 
       // td 显示内容
-      var content = function(){
+      // 如果直接传入了合计行数据，则不输出自动计算的结果
+      var content = TOTAL_NUMS ? TOTAL_NUMS : function(){
         var text = item3.totalRowText || '';
         var tplData = {
           LAY_COL: item3
@@ -1458,8 +1464,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           tplData: tplData
         }) || text) : text;
 
-        // 如果直接传入了合计行数据，则不输出自动计算的结果
-        return TOTAL_NUMS || getContent;
+        return getContent;
       }();
 
       // 合计原始结果
@@ -1511,6 +1516,18 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var patchElem = that.layTotal.find('.layui-table-patch'); // 可能存在滚动条补丁
     that.layTotal.find('tbody').html('<tr>' + tds.join('') + (patchElem.length ? patchElem.get(0).outerHTML : '') + '</tr>');
   };
+
+  /**
+   * 更新合计行数据，未传入合计行数据时，将使用内置的自动合计
+   * @param {string} id 表格 ID
+   * @param {Object.<string, any> | ((field: string, columnValues: Array<any>, tableData: Array<any>) => string | number)} [totalRowData] - 合计行数据。若为函数，则为计算每一列合计数据的回调
+   */
+  table.updateTotalRow = function(id, totalRowData){
+    var that = getThisTable(id);
+
+    var data = table.cache[that.key] || []; //列表数据
+    that.renderTotal(data, totalRowData)
+  }
 
   //找到对应的列元素
   Class.prototype.getColElem = function(parent, key){

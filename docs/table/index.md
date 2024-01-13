@@ -314,6 +314,38 @@ data.splice(newIndex, 0, item[0]);
 table.renderData('test');
 ```
 
+<h3 id="table.updateTotalRow" lay-pid="api" class="ws-anchor ws-bold">更新合计行 <sup>2.9.4+</sup></h3>
+`table.updateTotalRow(id, totalRowData);`
+- 参数 `id` : table 渲染时的 `id` 属性值
+- 参数 `totalRowData` : 合计行数据，未传入时，将使用内置的前端自动合计。若为函数，则为计算每一列数据的回调
+
+```js
+// 渲染
+table.render({
+  elem: '', // 绑定元素选择器
+  id: 'test', // 自定义 id 索引
+  // 其他属性 …
+});
+
+// 内置前端自动合计
+table.updateTotalRow('test');
+
+// 传入合计行数据，建议采用后端合计时使用
+table.updateTotalRow('test', {
+  score: 100,
+  count: 20
+});
+
+// 自定义合计行计算，建议采用前端合计时使用
+table.updateTotalRow('test', function(field, columnValues, tableData){
+  if(field === 'score') {
+    return columnValues.reduce(function(accumulator, currentValue){
+      return accumulator + currentValue;
+    });
+  }
+});
+```
+
 <h3 id="table.updateRow" lay-pid="api" class="ws-anchor ws-bold">更新指定行数据 <sup>2.9.4+</sup></h3>
 
 `table.updateRow(id, opts);`
@@ -336,7 +368,7 @@ table.render({
   // 其他属性 …
 });
 
-// 更新单行
+// 更新指定行数据
 table.updateRow('test', {
   index: 0,
   row: {
@@ -344,32 +376,6 @@ table.updateRow('test', {
     username: 'name'
   }
 });
-
-// 更新多行
-table.updateRow('test', [
-  {
-    index: 0,
-    row: {
-      id: 1,
-      username: 'name1'
-    }
-  },
-  {
-    index: 1,
-    row: {
-      id: 2,
-      username: 'name2'
-    }
-  }
-]);
-
-// 更新单元格
-table.updateRow('test', {
-  index: 0,
-  row: {
-    username: 'name'
-  }
-})
 ```
 
 <h3 id="table.checkStatus" lay-pid="api" class="ws-anchor ws-bold">获取选中行</h3>
