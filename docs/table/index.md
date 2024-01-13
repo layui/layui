@@ -29,6 +29,7 @@ toc: true
 | [table.reloadData(id, options, deep)](#table.reloadData) <sup>2.7+</sup> | 表格数据重载。 |
 | [table.renderData(id)](#table.renderData) <sup>2.8.5+</sup> | 重新渲染数据。 |
 | [table.updateRow(id, opts)](#table.updateRow) <sup>2.9.4+</sup> | 更新指定行数据。 |
+| [table.updateTotalRow(id, totalRowData)](#table.updateTotalRow) <sup>2.9.4+</sup> | 更新合计行。 |
 | [table.checkStatus(id)](#table.checkStatus) | 获取选中行相关数据。  |
 | [table.setRowChecked(id, opts)](#table.setRowChecked) <sup>2.8+</sup> | 设置行选中状态。 |
 | [table.getData(id)](#table.getData) | 获取当前页所有行表格数据。 |
@@ -356,7 +357,7 @@ table.updateTotalRow('test', function(field, columnValues, tableData){
 | --- | --- | --- | --- |
 | index | 行下标 | number | - |
 | row | 行数据 | object | - |
-| related | 是否更新其他包含自定义模板且可能有所关联的列视图 | boolean | - |
+| related | 是否更新其他包含自定义模板且可能有所关联的列视图 | boolean/function | - |
 
 该方法用于更新指定行数据。
 
@@ -374,6 +375,10 @@ table.updateRow('test', {
   row: {
     id: 1,
     username: 'name'
+  }
+  // 是否更新关联的列视图
+  related: function(field, index){
+    return ['score', '5'].indexOf(field) !== -1;
   }
 });
 ```

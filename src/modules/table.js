@@ -1914,7 +1914,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
    * @typedef updateRowOptions
    * @prop {number} index - 行索引
    * @prop {Object.<string, any>} row - 行数据
-   * @prop {boolean} [related] - 更新其他包含自定义模板且可能有所关联的列视图
+   * @prop {boolean | ((field, index) => boolean)} [related] - 更新其他包含自定义模板且可能有所关联的列视图
    */
   /**
    * 更新指定行
@@ -1953,9 +1953,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
                 }, data)
             }));
             td.data("content", value);
+            that.renderFormByElem(cell);
           }
           // 更新其他包含自定义模板且可能有所关联的列视图
-          else if (related && (item3.templet || item3.toolbar)) {
+          else if ((typeof related === 'function' ? related(String(item3.field || i), i) : related) && (item3.templet || item3.toolbar)) {
             var thisTd = tr.children('td[data-field="' + (item3.field || i) + '"]');
             var content = data[item3.field];
             var thisCell = thisTd.children(ELEM_CELL);
@@ -1968,11 +1969,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
               }, data)
             }));
             thisTd.data("content", content);
+            that.renderFormByElem(thisCell);
           }
         });
       });
-
-      that.renderFormByElem(tr);
     }
 
     layui.each(opts, function(i, opt){
