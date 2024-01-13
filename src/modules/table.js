@@ -1551,6 +1551,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     that.renderTotal(data, totalRowData)
   }
 
+  /**
+   * 获取合计行数据
+   * @param {string} id 表格 ID
+   */
+  table.getTotalRow = function(id){
+    var that = getThisTable(id);
+    return that.dataTotal;
+  }
+
   //找到对应的列元素
   Class.prototype.getColElem = function(parent, key){
     var that = this;
