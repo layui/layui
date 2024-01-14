@@ -1410,10 +1410,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var that = this;
     var options = that.config;
     var totalNums = {};
-    var columnValues = {};
-    var isExist = function(obj){
-      return obj || obj === 0;
-    }
 
     if(!options.totalRow) return;
 
@@ -1427,9 +1423,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
         if(item3.totalRow){
           totalNums[field] = (totalNums[field] || 0) + (parseFloat(content) || 0);
-          // 收集合计列的值
-          if(!columnValues[field]) columnValues[field] = [];
-          columnValues[field].push(content);
         }
       });
     });
@@ -1439,28 +1432,18 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var tds = [];
     that.eachCols(function(i3, item3){
       var field = item3.field || i3;
-      var totalRowOpts = {
-        field: field,
-        totalData: totalNums,
-        totalValue: totalNums[field],
-        columnData: columnValues,
-        columnValues: columnValues[field],
-        tableData: data
-      }
+
       // 合计数据的特定字段
-      var TOTAL_NUMS = (typeof totalRowData === 'function' && item3.totalRow)
-        ? totalRowData(totalRowOpts)
-        : totalRowData && totalRowData[item3.field];
+      var TOTAL_NUMS = totalRowData && totalRowData[item3.field];
 
       // 合计数据的小数点位数处理
       var decimals = 'totalRowDecimals' in item3 ? item3.totalRowDecimals : 2;
       var thisTotalNum = totalNums[field]
         ? parseFloat(totalNums[field] || 0).toFixed(decimals)
-        : '';
+      : '';
 
       // td 显示内容
-      // 如果直接传入了合计行数据，则不输出自动计算的结果
-      var content = isExist(TOTAL_NUMS) ? TOTAL_NUMS : function(){
+      var content = function(){
         var text = item3.totalRowText || '';
         var tplData = {
           LAY_COL: item3
@@ -1469,28 +1452,21 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         tplData[field] = thisTotalNum;
 
         // 获取自动计算的合并内容
-        var getContent = typeof item3.totalRow === 'function'
-          ? item3.totalRow(totalRowOpts)
-          : isExist(item3.totalRow)
-          ? (parseTempData.call(that, {
-              item3: item3,
-              content: thisTotalNum,
-              tplData: tplData
-            }) || text)
-          : text;
-        return getContent;
+        var getContent = item3.totalRow ? (parseTempData.call(that, {
+          item3: item3,
+          content: thisTotalNum,
+          tplData: tplData
+        }) || text) : text;
+
+        // 如果直接传入了合计行数据，则不输出自动计算的结果
+        return TOTAL_NUMS || getContent;
       }();
 
       // 合计原始结果
-      var total = isExist(TOTAL_NUMS)
-        ? TOTAL_NUMS
-        : isExist(thisTotalNum)
-        ? thisTotalNum
-        : '';
+      var total = TOTAL_NUMS || thisTotalNum || '';
       item3.field && that.dataTotal.push({
         field: item3.field,
-        total: $('<div>'+ content +'</div>').text(),
-        raw: total
+        total: $('<div>'+ content +'</div>').text()
       });
 
       // td 容器
@@ -1520,8 +1496,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           // 如果 totalRow 参数为字符类型，则解析为自定义模版
           if(typeof totalRow === 'string'){
             return laytpl(totalRow).render($.extend({
-              TOTAL_NUMS: isExist(TOTAL_NUMS) ? TOTAL_NUMS : totalNums[field],
-              TOTAL_ROW: (typeof totalRowData === 'function' || !isExist(totalRowData)) ? {} : totalRowData,
+              TOTAL_NUMS: TOTAL_NUMS || totalNums[field],
+              TOTAL_ROW: totalRowData || {},
               LAY_COL: item3
             }, item3));
           }
@@ -1535,38 +1511,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var patchElem = that.layTotal.find('.layui-table-patch'); // 可能存在滚动条补丁
     that.layTotal.find('tbody').html('<tr>' + tds.join('') + (patchElem.length ? patchElem.get(0).outerHTML : '') + '</tr>');
   };
-
-
-  /**
-   * @typedef totalRowCallbackParams
-   * @prop {string} field - 当前列字段值
-   * @prop {number} totalValue - 当前列合计值
-   * @prop {Object.<string, number>} totalData - 所有列合计数据
-   * @prop {Array<string | number>} columnValues - 当前列值的数组
-   * @prop {Object.<string, Array<string | number>>} columnData - 所有列值的数据
-   * @prop {Array<object>} tableData - 当前页所有数据
-   * 
-   */
-  /**
-   * 更新合计行数据，未传入合计行数据时，将使用内置的自动合计
-   * @param {string} id 表格 ID
-   * @param {Object.<string, any> | ((params: totalRowCallbackParams) => string | number)} [totalRowData] - 合计行数据。若为函数，则为计算每一列合计数据的回调
-   */
-  table.updateTotalRow = function(id, totalRowData){
-    var that = getThisTable(id);
-
-    var data = table.cache[that.key] || []; //列表数据
-    that.renderTotal(data, totalRowData)
-  }
-
-  /**
-   * 获取合计行数据
-   * @param {string} id 表格 ID
-   */
-  table.getTotalRow = function(id){
-    var that = getThisTable(id);
-    return that.dataTotal;
-  }
 
   //找到对应的列元素
   Class.prototype.getColElem = function(parent, key){

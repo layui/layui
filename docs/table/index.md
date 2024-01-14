@@ -29,8 +29,6 @@ toc: true
 | [table.reloadData(id, options, deep)](#table.reloadData) <sup>2.7+</sup> | 表格数据重载。 |
 | [table.renderData(id)](#table.renderData) <sup>2.8.5+</sup> | 重新渲染数据。 |
 | [table.updateRow(id, opts)](#table.updateRow) <sup>2.9.4+</sup> | 更新指定行数据。 |
-| [table.updateTotalRow(id, totalRowData)](#table.updateTotalRow) <sup>2.9.4+</sup> | 更新合计行。 |
-| [table.getTotalRow(id)](#table.getTotalRow) <sup>2.9.4+</sup> | 获取合计行数据。 |
 | [table.checkStatus(id)](#table.checkStatus) | 获取选中行相关数据。  |
 | [table.setRowChecked(id, opts)](#table.setRowChecked) <sup>2.8+</sup> | 设置行选中状态。 |
 | [table.getData(id)](#table.getData) | 获取当前页所有行表格数据。 |
@@ -314,68 +312,6 @@ var item = data.splice(index, 1) // index 为当前行下标，一般可在事�
 data.splice(newIndex, 0, item[0]);
 // 根据 table.cache 重新渲染数据
 table.renderData('test');
-```
-
-<h3 id="table.getTotalRow" lay-pid="api" class="ws-anchor ws-bold">获取合计行数据 <sup>2.9.4+</sup></h3>
-`table.getTotalRow(id);`
-- 参数 `id` : table 渲染时的 `id` 属性值
-
-```js
-// 渲染
-table.render({
-  elem: '', // 绑定元素选择器
-  id: 'test', // 自定义 id 索引
-  // 其他属性 …
-});
-
-table.getTotalRow('test');
-```
-
-<h3 id="table.updateTotalRow" lay-pid="api" class="ws-anchor ws-bold">更新合计行 <sup>2.9.4+</sup></h3>
-`table.updateTotalRow(id, totalRowData);`
-- 参数 `id` : table 渲染时的 `id` 属性值
-- 参数 `totalRowData` : 合计行数据，未传入时，将使用内置的前端自动合计。若为函数，则为计算每一列数据的回调
-
-```js
-// 渲染
-table.render({
-  elem: '', // 绑定元素选择器
-  id: 'test', // 自定义 id 索引
-  // 其他属性 …
-});
-
-// 内置前端自动合计
-table.updateTotalRow('test');
-
-// 传入合计行数据，建议采用后端合计时使用
-table.updateTotalRow('test', {
-  score: 100,
-  count: 20
-});
-
-// 自定义合计行计算，建议采用前端合计时使用
-table.updateTotalRow('test', function(obj){
-  // 内置用于快速实现合计
-  // obj.field - 当前列字段值
-  // obj.totalValue - 当前列合计值
-  // obj.totalData - 所有列合计数据
-
-  // 用于自定义列计算
-  // obj.columnValues - 当前列值的数组
-  // obj.columnData - 所有列值的数据
-  // obj.tableData - 当前页所有数据
-
-  // 合计
-  if(obj.field === 'count'){
-    return obj.columnValues.reduce(function(accumulator, currentValue){
-      return accumulator + currentValue;
-    });
-  }
-  // 平均
-  if(obj.field === 'score'){
-    return obj.totalValue / obj.columnValues.length + '分'
-  }
-});
 ```
 
 <h3 id="table.updateRow" lay-pid="api" class="ws-anchor ws-bold">更新指定行数据 <sup>2.9.4+</sup></h3>
