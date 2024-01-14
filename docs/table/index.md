@@ -322,8 +322,8 @@ table.renderData('test');
 
 | opts | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| index | 行下标 | number | - |
-| row | 行数据 | object | - |
+| index | 行索引 | number | - |
+| data | 行数据 | object | - |
 | related | 是否更新其他包含自定义模板且可能有所关联的列视图 | boolean/function | - |
 
 该方法用于更新指定行数据。
@@ -339,7 +339,7 @@ table.render({
 // 更新指定行数据
 table.updateRow('test', {
   index: 0,
-  row: {
+  data: {
     id: 1,
     username: 'name'
   }

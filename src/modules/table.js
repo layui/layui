@@ -1896,7 +1896,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   /**
    * @typedef updateRowOptions
    * @prop {number} index - 行索引
-   * @prop {Object.<string, any>} row - 行数据
+   * @prop {Object.<string, any>} data - 行数据
    * @prop {boolean | ((field, index) => boolean)} [related] - 更新其他包含自定义模板且可能有所关联的列视图
    */
   /**
@@ -1912,7 +1912,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     var update = function(opt){
       var index = opt.index;
-      var row = opt.row;
+      var row = opt.data;
       var related = opt.related;
 
       var data = dataCache[index] || {};
@@ -2305,7 +2305,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           fields = fields || {};
           that.updateRow({
             index: index,
-            row: fields,
+            data: fields,
             related: related
           }, function(key, value){
             obj.data[key] = value;
