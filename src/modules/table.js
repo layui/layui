@@ -1411,6 +1411,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var options = that.config;
     var totalNums = {};
     var columnValues = {};
+    var isExist = function(obj){
+      return obj || obj === 0;
+    }
 
     if(!options.totalRow) return;
 
@@ -1457,7 +1460,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       // td 显示内容
       // 如果直接传入了合计行数据，则不输出自动计算的结果
-      var content = TOTAL_NUMS ? TOTAL_NUMS : function(){
+      var content = isExist(TOTAL_NUMS) ? TOTAL_NUMS : function(){
         var text = item3.totalRowText || '';
         var tplData = {
           LAY_COL: item3
@@ -1468,7 +1471,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         // 获取自动计算的合并内容
         var getContent = typeof item3.totalRow === 'function'
           ? item3.totalRow(totalRowOpts)
-          : item3.totalRow
+          : isExist(item3.totalRow)
           ? (parseTempData.call(that, {
               item3: item3,
               content: thisTotalNum,
@@ -1479,7 +1482,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }();
 
       // 合计原始结果
-      var total = TOTAL_NUMS || thisTotalNum || '';
+      var total = isExist(TOTAL_NUMS)
+        ? TOTAL_NUMS
+        : isExist(thisTotalNum)
+        ? thisTotalNum
+        : '';
       item3.field && that.dataTotal.push({
         field: item3.field,
         total: $('<div>'+ content +'</div>').text(),
@@ -1513,8 +1520,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           // 如果 totalRow 参数为字符类型，则解析为自定义模版
           if(typeof totalRow === 'string'){
             return laytpl(totalRow).render($.extend({
-              TOTAL_NUMS: TOTAL_NUMS || totalNums[field],
-              TOTAL_ROW: totalRowData || {},
+              TOTAL_NUMS: isExist(TOTAL_NUMS) ? TOTAL_NUMS : totalNums[field],
+              TOTAL_ROW: (typeof totalRowData === 'function' || !isExist(totalRowData)) ? {} : totalRowData,
               LAY_COL: item3
             }, item3));
           }
