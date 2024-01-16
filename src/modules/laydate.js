@@ -1,5 +1,5 @@
-/** laydate 日期与时间控件 | MIT Licensed */
-
+/** laydate 日期与时间控件 | MIT Licensed */ 
+// @ts-expect-error
 ;!function(window, document){ // gulp build: laydate-header
   "use strict";
 
@@ -1087,7 +1087,71 @@
     return that;
   };
 
-  // 无效日期范围的标记
+  /**
+   * @typedef limitOptions
+   * @prop {JQuery} [elem] - 检测的元素, 例如面板中年月日时分秒元素，“现在”，“确认” 按钮等
+   * @prop {number} [index] - 元素集合中，当前检测元素的索引，years:0,month:0,data: 0-41 ,hms:0 
+   * @prop {['hours', 'minutes', 'seconds'] | ['hours', 'minutes'] | ['hours']} [time] - 是否比较时分秒
+   * @prop {'year'|'month'|string} [type] - 面板类型?
+   * @prop {0 | 1} [rangeType] - 面板索引, 0 表示 start, 1 表示 end
+   * @prop {Partial<{year:number,month: number,date:number,hours:number,minutes:number,seconds:number}>} [date] - 检测的日期时间对象
+   * @prop {'date' | 'time' | 'datetime'} disabledType - 禁用类型，按钮应使用 datetime
+   */
+  /**
+   * 不可选取的日期时间
+   * @param {limitOptions} opts 
+   * @param {number} currentDataTime 当前检测的日期的时间戳
+   * @returns 
+   */
+  Class.prototype.disabledDateTime = function(opts, currentDataTime){
+    opts = opts || {};
+
+    var that = this;
+    var options = that.config;
+    var position = options.range ? (opts.rangeType === 0 ? 'start' : 'end') : 'start'
+
+    var isDisabledDate = function(date){
+      if(!options.disabledDate) return;
+      if(options.type === 'time')return;
+      if(!(opts.disabledType === 'date' || opts.disabledType === 'datetime'))return;
+      // 切换到年月面板时不检测(更好的方案是检测面板年/月中所有的日期，以判断是否禁用当前的年/月)
+      if(!(options.type === 'year' || options.type === 'month') && (opts.type === 'year' || opts.type === 'month'))return;
+      if(options.type === 'month' && opts.type === 'year')return;
+     
+      return options.disabledDate.call(options, that.newDate({year: date.year, month: date.month, date: date.date}), position);
+    }
+
+    var isDisabledItem = function(val, rangeFn){
+      return (rangeFn && rangeFn() || []).indexOf(val) !== -1;
+    }
+
+    var isDisabledTime = function(date){
+      if(!options.disabledTime) return;
+      if(!(options.type === "time" || options.type === "datetime")) return;
+      if(!(opts.disabledType === 'time' || opts.disabledType === 'datetime'))return;
+      var disabledTime = options.disabledTime.length <= 2 
+        ? options.disabledTime.call(options, that.newDate(date), position)
+        : options.disabledTime.call(options, date.hours, date.minutes, date.seconds, position);
+
+      return opts.disabledType === 'datetime'
+        ? isDisabledItem(date.hours, disabledTime.disabledHours)
+            || isDisabledItem(date.minutes, disabledTime.disabledMinutes)
+            || isDisabledItem(date.seconds, disabledTime.disabledSeconds)
+        : [isDisabledItem(date.hours, disabledTime.disabledHours),
+            isDisabledItem(date.minutes, disabledTime.disabledMinutes),
+            isDisabledItem(date.seconds, disabledTime.disabledSeconds)][opts.time.length - 1];
+    }
+
+    var datetimeObj = that.systemDate(new Date(currentDataTime))
+    return isDisabledDate(datetimeObj) || isDisabledTime(datetimeObj);
+  }
+
+
+  /**
+   * 无效日期范围的标记
+   * @param {limitOptions} opts 
+   * 
+   */
   Class.prototype.limit = function(opts){
     opts = opts || {};
 
@@ -1115,7 +1179,7 @@
       }())).getTime();  //time：是否比较时分秒
     });
 
-    isOut = timestamp.now < timestamp.min || timestamp.now > timestamp.max;
+    isOut = timestamp.now < timestamp.min || timestamp.now > timestamp.max || that.disabledDateTime(opts, timestamp.now);
     opts.elem && opts.elem[isOut ? 'addClass' : 'removeClass'](DISABLED);
 
     return isOut;
@@ -1185,7 +1249,9 @@
           month: YMD[1] - 1,
           date: YMD[2]
         },
-        index: index_
+        index: index_,
+        rangeType: index,
+        disabledType: 'date'
       });
     });
 
@@ -1246,13 +1312,15 @@
         elem: lay(that.footer).find(ELEM_NOW),
         date: that.systemDate(/^(datetime|time)$/.test(options.type) ? new Date() : null),
         index: 0,
-        time: timeParams
+        time: timeParams,
+        disabledType: 'datetime'
       });
       // 确认按钮
       that.limit({
         elem: lay(that.footer).find(ELEM_CONFIRM),
         index: 0,
-        time: timeParams
+        time: timeParams,
+        disabledType: 'datetime'
       });
     }
 
@@ -1328,7 +1396,9 @@
           elem: lay(li),
           date: ymd,
           index: index,
-          type: type
+          type: type,
+          rangeType: index,
+          disabledType: 'date'
         });
         yearNum++;
       });
@@ -1365,7 +1435,9 @@
           elem: lay(li),
           date: ymd,
           index: index,
-          type: type
+          type: type,
+          rangeType: index,
+          disabledType: 'date'
         });
       });
 
@@ -1392,6 +1464,8 @@
                 ,seconds: ii
               }][i],
               index: index,
+              rangeType: index,
+              disabledType: 'time',
               time: [
                 ['hours'],
                 ['hours', 'minutes'],
@@ -1405,7 +1479,9 @@
             elem: lay(that.footer).find(ELEM_CONFIRM),
             date: that[startEnd],
             index: 0,
-            time: ['hours', 'minutes', 'seconds']
+            time: ['hours', 'minutes', 'seconds'],
+            rangeType: index,
+            disabledType: 'datetime'
           });
         }
       };
@@ -1570,17 +1646,25 @@
     var that = this
     ,options = that.config
     ,lang = that.lang()
-    ,isOut, elemBtn = lay(that.footer).find(ELEM_CONFIRM);
-    if(options.range && options.type !== 'time'){
+    ,isOut
+    ,elemBtn = lay(that.footer).find(ELEM_CONFIRM)
+    ,timeParams = options.type === 'datetime' || options.type === 'time' ? ['hours', 'minutes', 'seconds'] : undefined;
+    if(options.range){
       start = start || (that.rangeLinked ? that.startDate : options.dateTime);
       end = end || that.endDate;
       isOut = !that.endState || that.newDate(start).getTime() > that.newDate(end).getTime();
 
       //如果不在有效日期内，直接禁用按钮，否则比较开始和结束日期
       (that.limit({
-        date: start
+        date: start,
+        disabledType: 'datetime',
+        time: timeParams,
+        rangeType: 0
       }) || that.limit({
-        date: end
+        date: end,
+        disabledType: 'datetime',
+        time: timeParams,
+        rangeType: 1
       }))
         ? elemBtn.addClass(DISABLED)
       : elemBtn[isOut ? 'addClass' : 'removeClass'](DISABLED);
@@ -1854,7 +1938,7 @@
         that.startDate = lay.extend({}, dateTime); // 同步startDate
       }
       // 校验另外一个日期是否在有效的范围内
-      if (that.endState && !that.limit({date: that.thisDateTime(1 - index)})) {
+      if (that.endState && !that.limit({date: that.thisDateTime(1 - index), disabledType:'datetime'})) {
         // 根据选择之后判断是否需要切换模式
         var isChange;
         if (that.endState && that.autoCalendarModel.auto) {
@@ -2012,7 +2096,9 @@
           elem: lay(that.footer).find(ELEM_CONFIRM),
           date: {
             year: listYM[0]
-          }
+          },
+          rangeType: index,
+          disabledType: 'datetime'
         });
       }
 

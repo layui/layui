@@ -137,6 +137,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate .layui-this,.layui-laydate .layui-this>div{background-color: #16baaa !important; color: #fff !important;}
 .layui-laydate .laydate-disabled,
 .layui-laydate .laydate-disabled:hover{background:none !important; color: #d2d2d2 !important; cursor: not-allowed !important; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;}
+.layui-laydate .layui-this.laydate-disabled,.layui-laydate .layui-this.laydate-disabled>div{background-color: #eee !important}
 .layui-laydate-content td>div{padding: 7px 0;height: 100%;}
 
 /* 墨绿/自定义背景色主题 */
