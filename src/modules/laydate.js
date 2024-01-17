@@ -1108,17 +1108,31 @@
 
     var that = this;
     var options = that.config;
-    var position = options.range ? (opts.rangeType === 0 ? 'start' : 'end') : 'start'
+    var position = options.range ? (opts.rangeType === 0 ? 'start' : 'end') : 'start';
+    var ONE_DAY = 24 * 60 * 60 * 1000;
+
+    var isDisabledYearOrMonth = function(date, type){
+      var startDay = type === 'year' ? new Date(date.year, 0, 1) : new Date(date.year, date.month, 1); // startOfYear/startOfMonth
+      var endDay = type === 'year' ? new Date(date.year, 11, 31) : new Date(date.year, date.month + 1, 0); // endOfYear/endOfMonth
+      var numOfDays = Math.floor((endDay.getTime() - startDay.getTime()) / ONE_DAY) + 1;
+      var disabledDays = 0;
+      for(var i = 0; i < numOfDays; i++){
+        if(options.disabledDate.call(options, getFutureDate(startDay, i), position)){
+          disabledDays++;
+        }
+      }
+
+      return disabledDays === numOfDays;
+    }
 
     var isDisabledDate = function(date){
       if(!options.disabledDate) return;
       if(options.type === 'time')return;
       if(!(opts.disabledType === 'date' || opts.disabledType === 'datetime'))return;
-      // 切换到年月面板时不检测(更好的方案是检测面板年/月中所有的日期，以判断是否禁用当前的年/月)
-      if(!(options.type === 'year' || options.type === 'month') && (opts.type === 'year' || opts.type === 'month'))return;
-      if(options.type === 'month' && opts.type === 'year')return;
      
-      return options.disabledDate.call(options, that.newDate({year: date.year, month: date.month, date: date.date}), position);
+      return opts.type === 'year' || opts.type === 'month'
+        ? isDisabledYearOrMonth(date, opts.type)
+        : options.disabledDate.call(options, that.newDate({year: date.year, month: date.month, date: date.date}), position);
     }
 
     var isDisabledItem = function(val, rangeFn){
@@ -1129,9 +1143,7 @@
       if(!options.disabledTime) return;
       if(!(options.type === "time" || options.type === "datetime")) return;
       if(!(opts.disabledType === 'time' || opts.disabledType === 'datetime'))return;
-      var disabledTime = options.disabledTime.length <= 2 
-        ? options.disabledTime.call(options, that.newDate(date), position)
-        : options.disabledTime.call(options, date.hours, date.minutes, date.seconds, position);
+      var disabledTime = options.disabledTime.call(options, that.newDate(date), position);
 
       return opts.disabledType === 'datetime'
         ? isDisabledItem(date.hours, disabledTime.disabledHours)
@@ -1140,6 +1152,12 @@
         : [isDisabledItem(date.hours, disabledTime.disabledHours),
             isDisabledItem(date.minutes, disabledTime.disabledMinutes),
             isDisabledItem(date.seconds, disabledTime.disabledSeconds)][opts.time.length - 1];
+    }
+
+    function getFutureDate(date, days){
+      var futureDate = new Date(date);
+      futureDate.setDate(futureDate.getDate() + days);
+      return futureDate;
     }
 
     var datetimeObj = that.systemDate(new Date(currentDataTime))
