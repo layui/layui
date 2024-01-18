@@ -1527,6 +1527,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     form.render(type, filter);
   };
 
+  // 定向渲染表单
+  Class.prototype.renderFormByElem = function(elem){
+    layui.each(['input', 'select'], function(i, formType){
+      form.render(elem.find(formType));
+    })
+  };
+
   // 同步全选按钮状态
   Class.prototype.syncCheckAll = function(){
     var that = this;
@@ -1886,6 +1893,73 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     that.layFixRight.css('right', scrollWidth - 1);
   };
 
+  /**
+   * @typedef updateRowOptions
+   * @prop {number} index - 行索引
+   * @prop {Object.<string, any>} data - 行数据
+   * @prop {boolean | ((field, index) => boolean)} [related] - 更新其他包含自定义模板且可能有所关联的列视图
+   */
+  /**
+   * 更新指定行
+   * @param {updateRowOptions | updateRowOptions[]} opts 
+   * @param {(field: string, value: any) => void} [callback] - 更新每个字段时的回调函数
+   */
+  Class.prototype.updateRow = function(opts, callback){
+    var that = this;
+    var ELEM_CELL = '.layui-table-cell';
+    var opts = layui.type(opts) === 'array' ? opts : [opts];
+    var dataCache = table.cache[that.key] || [];
+
+    var update = function(opt){
+      var index = opt.index;
+      var row = opt.data;
+      var related = opt.related;
+
+      var data = dataCache[index] || {};
+      var tr = that.layBody.find('tr[data-index="' + index + '"]');
+
+      // 更新缓存中的数据
+      layui.each(row, function (key, value) {
+        data[key] = value;
+        callback && callback(key, value);
+      });
+
+      // 更新单元格
+      that.eachCols(function (i, item3) {
+        var field = String(item3.field || i);
+        var shouldUpdate = field in row || ((typeof related === 'function' ? related(field, i) : related) && (item3.templet || item3.toolbar));
+        if(shouldUpdate){
+          var td = tr.children('td[data-field="' + field + '"]');
+          var cell = td.children(ELEM_CELL);
+          var content = data[item3.field];
+          cell.html(parseTempData.call(that, {
+            item3: item3,
+            content: content,
+            tplData: $.extend({
+              LAY_COL: item3,
+            }, data)
+          }));
+          td.data("content", content);
+          that.renderFormByElem(cell);
+        }
+      });
+    }
+
+    layui.each(opts, function(i, opt){
+      update(opt);
+    });
+  };
+
+  /**
+   * 更新指定行
+   * @param {string} id - table ID
+   * @param {updateRowOptions | updateRowOptions[]} options 
+   */
+  table.updateRow = function (id, options){
+    var that = getThisTable(id);
+    return that.updateRow(options);
+  }
+
   // 事件处理
   Class.prototype.events = function(){
     var that = this;
@@ -2229,43 +2303,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         },
         update: function(fields, related){ // 修改行数据
           fields = fields || {};
-          layui.each(fields, function(key, value){
-            var td = tr.children('td[data-field="'+ key +'"]');
-            var cell = td.children(ELEM_CELL); // 获取当前修改的列
-
-            // 更新缓存中的数据
-            data[key] = obj.data[key] = value;
-
-            // 更新相应列视图
-            that.eachCols(function(i, item3){
-              if(item3.field == key){
-                cell.html(parseTempData.call(that, {
-                  item3: item3
-                  ,content: value
-                  ,tplData: $.extend({
-                    LAY_COL: item3
-                  }, data)
-                }));
-                td.data('content', value);
-              }
-              // 更新其他包含自定义模板且可能有所关联的列视图
-              else if(related && (item3.templet || item3.toolbar)){
-                var thisTd = tr.children('td[data-field="'+ (item3.field || i) +'"]');
-                var content = data[item3.field];
-
-                thisTd.children(ELEM_CELL).html(parseTempData.call(that, {
-                  item3: item3
-                  ,content: content
-                  ,tplData: $.extend({
-                    LAY_COL: item3
-                  }, data)
-                }));
-                thisTd.data('content', content);
-              }
-            });
+          that.updateRow({
+            index: index,
+            data: fields,
+            related: related
+          }, function(key, value){
+            obj.data[key] = value;
           });
-
-          that.renderForm();
         },
         // 设置行选中状态
         setRowChecked: function(opts){
