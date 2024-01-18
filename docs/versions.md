@@ -9,9 +9,27 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+<h2 id="v2.9.4" class="ws-anchor">
+  v2.9.4
+  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
+  <span class="layui-badge-rim">2024-01-18</span>
+</h2>
+
+- #### table
+  - 新增 `table.updateRow` 方法 #1540 @Sight-wcg
+  - 修复 关闭展开状态时，未重置单元格滚动条位置的问题 #1536 @Sight-wcg
+  - 修复 Chrome DevTools 审查 iframe srcdoc 中的 table 元素时导致页面崩溃的问题 #1571
+- #### laydate
+  - 优化 时间选择器在 Safari on iOS, Firefox for Android 中的滑动操作 #1550 @Sight-wcg
+- #### slider
+  - 新增 `tipsAlways` 选项，用于设置提示文本是否始终显示 #1520 @yxb94616
+
+### 下载： [layui-v2.9.4.zip](https://gitee.com/layui/layui/attach_files/1652197/download)
+
+---
+
 <h2 id="v2.9.3" class="ws-anchor">
   v2.9.3
-  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
   <span class="layui-badge-rim">2023-12-31</span>
 </h2>
 
@@ -39,7 +57,6 @@ toc: true
 
 <h2 id="v2.9.2" class="ws-anchor">
   v2.9.2
-  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
   <span class="layui-badge-rim">2023-12-18</span>
 </h2>
 
