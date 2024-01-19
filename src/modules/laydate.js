@@ -1088,6 +1088,64 @@
   };
 
   /**
+   * 给定年份的开始日期
+   * @param {Date} date 
+   */
+  Class.prototype.startOfYear = function(date){
+    var newDate = new Date(date);
+    newDate.setFullYear(newDate.getFullYear(), 0, 1);
+    newDate.setHours(0, 0, 0, 0);
+    return newDate;
+  }
+
+  /**
+   * 给定年份的结束日期
+   * @param {Date} date
+   */
+  Class.prototype.endOfYear = function(date){
+    var newDate = new Date(date);
+    var year = newDate.getFullYear();
+    newDate.setFullYear(year + 1, 0, 0);
+    newDate.setHours(23, 59, 59, 999);
+    return newDate;
+  }
+
+  /**
+   * 给定月份的开始日期
+   * @param {Date} date 
+   */
+  Class.prototype.startOfMonth = function(date){
+    var newDate =  new Date(date);
+    newDate.setDate(1);
+    newDate.setHours(0, 0, 0, 0);
+    return newDate;
+  }
+
+  /**
+   * 给定月份的结束日期
+   * @param {Date} date 
+   */
+  Class.prototype.endOfMonth = function(date){
+    var newDate = new Date(date);
+    var month = newDate.getMonth();
+    newDate.setFullYear(newDate.getFullYear(), month + 1, 0);
+    newDate.setHours(23, 59, 59, 999);
+    return newDate;
+  }
+
+  /**
+   * 将指定的天数添加到给定日期
+   * @param {Date} date 要更改的日期
+   * @param {number} amount 天数
+   */
+  Class.prototype.addDays = function(date, amount){
+    var newDate = new Date(date);
+    if(!amount) return newDate;
+    newDate.setDate(newDate.getDate() + amount);
+    return newDate;
+  }
+
+  /**
    * @typedef limitOptions
    * @prop {JQuery} [elem] - 检测的元素, 例如面板中年月日时分秒元素，“现在”，“确认” 按钮等
    * @prop {number} [index] - 元素集合中，当前检测元素的索引，years:0,month:0,data: 0-41 ,hms:0 
@@ -1112,12 +1170,13 @@
     var ONE_DAY = 24 * 60 * 60 * 1000;
 
     var isDisabledYearOrMonth = function(date, type){
-      var startDay = type === 'year' ? new Date(date.year, 0, 1) : new Date(date.year, date.month, 1); // startOfYear/startOfMonth
-      var endDay = type === 'year' ? new Date(date.year, 11, 31) : new Date(date.year, date.month + 1, 0); // endOfYear/endOfMonth
+      var startDay = type === 'year' ? that.startOfYear(date) : that.startOfMonth(date);
+      var endDay = type === 'year' ? that.endOfYear(date) : that.endOfMonth(date);
+
       var numOfDays = Math.floor((endDay.getTime() - startDay.getTime()) / ONE_DAY) + 1;
       var disabledDays = 0;
       for(var i = 0; i < numOfDays; i++){
-        if(options.disabledDate.call(options, getFutureDate(startDay, i), position)){
+        if(options.disabledDate.call(options, that.addDays(startDay, i), position)){
           disabledDays++;
         }
       }
@@ -1132,7 +1191,7 @@
      
       return opts.type === 'year' || opts.type === 'month'
         ? isDisabledYearOrMonth(date, opts.type)
-        : options.disabledDate.call(options, that.newDate({year: date.year, month: date.month, date: date.date}), position);
+        : options.disabledDate.call(options, new Date(date), position);
     }
 
     var isDisabledItem = function(val, rangeFn){
@@ -1143,6 +1202,8 @@
       if(!options.disabledTime) return;
       if(!(options.type === "time" || options.type === "datetime")) return;
       if(!(opts.disabledType === 'time' || opts.disabledType === 'datetime'))return;
+
+      var date = that.systemDate(new Date(date));
       var disabledTime = options.disabledTime.call(options, that.newDate(date), position);
 
       return opts.disabledType === 'datetime'
@@ -1154,14 +1215,7 @@
             isDisabledItem(date.seconds, disabledTime.disabledSeconds)][opts.time.length - 1];
     }
 
-    function getFutureDate(date, days){
-      var futureDate = new Date(date);
-      futureDate.setDate(futureDate.getDate() + days);
-      return futureDate;
-    }
-
-    var datetimeObj = that.systemDate(new Date(currentDataTime))
-    return isDisabledDate(datetimeObj) || isDisabledTime(datetimeObj);
+    return isDisabledDate(currentDataTime) || isDisabledTime(currentDataTime);
   }
 
 
