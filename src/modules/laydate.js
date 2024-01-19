@@ -1188,10 +1188,12 @@
       if(!options.disabledDate) return;
       if(options.type === 'time')return;
       if(!(opts.disabledType === 'date' || opts.disabledType === 'datetime'))return;
+      var normalizedDate = new Date(date);
+      normalizedDate.setHours(0, 0, 0, 0);
      
       return opts.type === 'year' || opts.type === 'month'
-        ? isDisabledYearOrMonth(date, opts.type)
-        : options.disabledDate.call(options, new Date(date), position);
+        ? isDisabledYearOrMonth(normalizedDate, opts.type)
+        : options.disabledDate.call(options, normalizedDate, position);
     }
 
     var isDisabledItem = function(val, rangeFn){
