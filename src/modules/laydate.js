@@ -2142,9 +2142,15 @@
       //确定
       ,confirm: function(){
         if(options.range){
-          if(lay(btn).hasClass(DISABLED)) return that.hint(
-            options.type === 'time' ? lang.timeout.replace(/日期/g, '时间') : lang.timeout
-          );
+          if(lay(btn).hasClass(DISABLED)){
+            var isTimeout = options.type === 'time'
+              ? that.startTime && that.endTime && that.newDate(that.startTime) > that.newDate(that.endTime)
+              : that.startDate && that.endDate && that.newDate(that.startDate) > that.newDate(that.endDate);
+
+            return isTimeout 
+              ? that.hint(options.type === 'time' ? lang.timeout.replace(/日期/g, '时间') : lang.timeout)
+              : that.hint(lang.invalidDate);
+          }
         } else {
           if(lay(btn).hasClass(DISABLED)) return that.hint(lang.invalidDate);
         }
