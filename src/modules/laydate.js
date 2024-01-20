@@ -2012,7 +2012,7 @@
         that.startDate = lay.extend({}, dateTime); // 同步startDate
       }
       // 校验另外一个日期是否在有效的范围内
-      if (that.endState && !that.limit({date: that.thisDateTime(1 - index), disabledType:'datetime'})) {
+      if (that.endState && !that.limit({date: that.rangeLinked ? that.startDate : that.thisDateTime(1 - index), disabledType:'datetime'})) {
         // 根据选择之后判断是否需要切换模式
         var isChange;
         if (that.endState && that.autoCalendarModel.auto) {
