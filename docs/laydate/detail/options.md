@@ -324,6 +324,60 @@ max: 7 // 最大日期为 7 天后
 
 </td>
     </tr>
+<td>disabledDate <sup>2.9.5+</sup> </td>
+<td>
+
+不可选取的日期。
+
+```js
+disabledDate: function(date, type){
+  // date - 当前的日期对象
+  // type - 面板类型，'start'/'end'
+
+  // 返回值为 true 的日期会被禁用
+  return date < new Date(2024, 1); // 2024-02-01
+}
+
+```
+
+</td>
+<td>function</td>
+<td> - </td>
+    </tr>
+    <tr>
+<td>disabledTime <sup>2.9.5+</sup> </td>
+<td>
+
+不可选取的时间。
+
+```js
+disabledTime: function(date, type){
+  // date - 当前的日期对象
+  // type - 面板类型，'start'/'end'
+
+  // 数组中指定的时间会被禁用
+  return {
+    hours: type === "start" ? [0, 1] : range(0, 10),
+    minutes: range(0, 20),
+    seconds: range(0, 2)
+  };
+}
+
+function range(start, end) {
+  var result = [];
+  for (var i = start; i < end; i++) {
+    result.push(i);
+  }
+  return result;
+}
+
+```
+
+</td>
+<td>function</td>
+<td> - </td>
+    </tr>
+    <tr>
     <tr>
 <td>trigger</td>
 <td>
