@@ -1554,8 +1554,7 @@
             date: that[startEnd],
             index: 0,
             time: ['hours', 'minutes', 'seconds'],
-            rangeType: index,
-            disabledType: 'datetime'
+            disabledType: 'time'
           });
         }
       };
@@ -1731,12 +1730,12 @@
       //如果不在有效日期内，直接禁用按钮，否则比较开始和结束日期
       (that.limit({
         date: start,
-        disabledType: 'datetime',
+        disabledType: options.type === 'time' ? 'time' : 'datetime',
         time: timeParams,
         rangeType: 0
       }) || that.limit({
         date: end,
-        disabledType: 'datetime',
+        disabledType: options.type === 'time' ? 'time' : 'datetime',
         time: timeParams,
         rangeType: 1
       }))
@@ -2030,7 +2029,7 @@
         that.startDate = lay.extend({}, dateTime); // 同步startDate
       }
       // 校验另外一个日期是否在有效的范围内
-      if (that.endState && !that.limit({date: that.rangeLinked ? that.startDate : that.thisDateTime(1 - index), disabledType:'datetime'})) {
+      if (that.endState && !that.limit({date: that.rangeLinked ? that.startDate : that.thisDateTime(1 - index), disabledType:'date'})) {
         // 根据选择之后判断是否需要切换模式
         var isChange;
         if (that.endState && that.autoCalendarModel.auto) {
@@ -2197,7 +2196,6 @@
           date: {
             year: listYM[0]
           },
-          rangeType: index,
           disabledType: 'datetime'
         });
       }
