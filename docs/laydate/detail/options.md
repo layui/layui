@@ -324,6 +324,7 @@ max: 7 // 最大日期为 7 天后
 
 </td>
     </tr>
+    <tr>
 <td>disabledDate <sup>2.9.5+</sup> </td>
 <td>
 
@@ -377,7 +378,6 @@ function range(start, end) {
 <td>function</td>
 <td> - </td>
     </tr>
-    <tr>
     <tr>
 <td>trigger</td>
 <td>
