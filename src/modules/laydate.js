@@ -1196,8 +1196,8 @@
         : options.disabledDate.call(options, normalizedDate, position);
     }
 
-    var isDisabledItem = function(val, rangeFn){
-      return (rangeFn && rangeFn() || []).indexOf(val) !== -1;
+    var isDisabledItem = function(val, disabledRange){
+      return (disabledRange && disabledRange.length) ? disabledRange.indexOf(val) !== -1 : false;
     }
 
     var isDisabledTime = function(date){
@@ -1209,12 +1209,12 @@
       var disabledTime = options.disabledTime.call(options, that.newDate(date), position);
 
       return opts.disabledType === 'datetime'
-        ? isDisabledItem(date.hours, disabledTime.disabledHours)
-            || isDisabledItem(date.minutes, disabledTime.disabledMinutes)
-            || isDisabledItem(date.seconds, disabledTime.disabledSeconds)
-        : [isDisabledItem(date.hours, disabledTime.disabledHours),
-            isDisabledItem(date.minutes, disabledTime.disabledMinutes),
-            isDisabledItem(date.seconds, disabledTime.disabledSeconds)][opts.time.length - 1];
+        ? isDisabledItem(date.hours, disabledTime.hours)
+            || isDisabledItem(date.minutes, disabledTime.minutes)
+            || isDisabledItem(date.seconds, disabledTime.seconds)
+        : [isDisabledItem(date.hours, disabledTime.hours),
+            isDisabledItem(date.minutes, disabledTime.minutes),
+            isDisabledItem(date.seconds, disabledTime.seconds)][opts.time.length - 1];
     }
 
     return isDisabledDate(currentDataTime) || isDisabledTime(currentDataTime);
