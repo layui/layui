@@ -1188,10 +1188,12 @@
       if(!options.disabledDate) return;
       if(options.type === 'time')return;
       if(!(opts.disabledType === 'date' || opts.disabledType === 'datetime'))return;
+      var normalizedDate = new Date(date);
+      normalizedDate.setHours(0, 0, 0, 0);
      
       return opts.type === 'year' || opts.type === 'month'
-        ? isDisabledYearOrMonth(date, opts.type)
-        : options.disabledDate.call(options, new Date(date), position);
+        ? isDisabledYearOrMonth(normalizedDate, opts.type)
+        : options.disabledDate.call(options, normalizedDate, position);
     }
 
     var isDisabledItem = function(val, rangeFn){
@@ -1362,7 +1364,7 @@
     }
 
     //初始赋值双日历
-    if(options.range && type === 'init'){
+    if(options.range && type === 'init' || type === 'all'){
       //执行渲染第二个日历
       if (that.rangeLinked) {
         var EYM = that.getAsYM(dateTime.year, dateTime.month, index ? 'sub' : null)
@@ -1921,6 +1923,23 @@
     });
   };
 
+  Class.prototype.beforeChange = function(datetime, index){
+    var that = this
+    ,options = that.config
+    ,start = lay.extend({}, lay.extend(options.dateTime, that.startTime))
+    ,end = lay.extend({}, lay.extend(that.endDate, that.endTime))
+    ,position = options.range ? (index === 0 ? 'start' : 'end') : 'start';
+
+    // 左右面板独立选择模式
+    if(!options.rangeLinked){
+      typeof options['beforeChange'] === 'function' && options.beforeChange.call(options, that.newDate(datetime), position);
+    }else{
+      typeof options['beforeChange'] === 'function' && options.beforeChange.call(options, that.newDate(datetime), position, that.endState);
+    }
+
+    return that;
+  }
+
   // 执行 done/change 回调
   Class.prototype.done = function(param, type){
     var that = this;
@@ -1977,6 +1996,7 @@
     };
 
     lay.extend(dateTime, YMD); //同步 dateTime
+    var currentSelectedDatetime = lay.extend({},dateTime);
 
     //范围选择
     if(options.range){
@@ -2045,9 +2065,11 @@
             ,month: YM[1]
           });
         }
-        that.calendar(dateTimeTemp, panelIndex, isChange ? 'init' : null);
+        var renderMode =  isChange ? 'init' : ((options.disabledDate || options.disabledTime) ? 'all' : null);
+        that.beforeChange(dateTimeTemp, panelIndex).calendar(null, panelIndex, renderMode);
       } else {
-        that.calendar(null, index, isChange ? 'init' : null);
+        var renderMode =  isChange ? 'init' : ((options.disabledDate || options.disabledTime) ? 'all' : null);
+        that.beforeChange(currentSelectedDatetime, index).calendar(null, index, renderMode);
       }
       that.endState && that.done(null, 'change');
     } else if(options.position === 'static'){ //直接嵌套的选中
