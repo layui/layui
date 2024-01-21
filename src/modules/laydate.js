@@ -2144,7 +2144,7 @@
           if(lay(btn).hasClass(DISABLED)){
             var isTimeout = options.type === 'time'
               ? that.startTime && that.endTime && that.newDate(that.startTime) > that.newDate(that.endTime)
-              : that.startDate && that.endDate && that.newDate(that.startDate) > that.newDate(that.endDate);
+              : that.startDate && that.endDate && that.newDate(lay.extend({},that.startDate, that.startTime || {})) > that.newDate(lay.extend({},that.endDate, that.endTime || {}));
 
             return isTimeout 
               ? that.hint(options.type === 'time' ? lang.timeout.replace(/日期/g, '时间') : lang.timeout)
