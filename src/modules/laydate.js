@@ -1174,14 +1174,14 @@
       var endDay = type === 'year' ? that.endOfYear(date) : that.endOfMonth(date);
 
       var numOfDays = Math.floor((endDay.getTime() - startDay.getTime()) / ONE_DAY) + 1;
-      var disabledDays = 0;
       for(var i = 0; i < numOfDays; i++){
-        if(options.disabledDate.call(options, that.addDays(startDay, i), position)){
-          disabledDays++;
+        var day = that.addDays(startDay, i);
+        if(!options.disabledDate.call(options, day, position)){
+          return false;
         }
       }
 
-      return disabledDays === numOfDays;
+      return true;
     }
 
     var isDisabledDate = function(date){
@@ -1554,7 +1554,7 @@
             date: that[startEnd],
             index: 0,
             time: ['hours', 'minutes', 'seconds'],
-            disabledType: 'time'
+            disabledType: 'datetime'
           });
         }
       };
@@ -1730,12 +1730,12 @@
       //如果不在有效日期内，直接禁用按钮，否则比较开始和结束日期
       (that.limit({
         date: start,
-        disabledType: options.type === 'time' ? 'time' : 'datetime',
+        disabledType: 'datetime',
         time: timeParams,
         rangeType: 0
       }) || that.limit({
         date: end,
-        disabledType: options.type === 'time' ? 'time' : 'datetime',
+        disabledType: 'datetime',
         time: timeParams,
         rangeType: 1
       }))
