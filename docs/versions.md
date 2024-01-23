@@ -16,7 +16,7 @@ toc: true
 </h2>
 
 - #### table
-  - 新增 `table.updateRow` 方法 #1540 @Sight-wcg
+  - 新增 `table.updateRow` 方法，用于更新指定行 #1540 @Sight-wcg
   - 修复 关闭展开状态时，未重置单元格滚动条位置的问题 #1536 @Sight-wcg
   - 修复 Chrome DevTools 审查 iframe srcdoc 中的 table 元素时导致页面崩溃的问题 #1571
 - #### laydate
