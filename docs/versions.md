@@ -25,7 +25,7 @@ toc: true
 - #### slider
   - 新增 `tipsAlways` 选项，用于设置提示文本是否始终显示 #1520 @yxb94616
 
-### 下载： [layui-v2.9.5.zip](https://gitee.com/layui/layui/attach_files/1660301/download)
+### 下载： [layui-v2.9.6.zip](https://gitee.com/layui/layui/attach_files/1660301/download)
 
 ---
 
