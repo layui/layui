@@ -1758,22 +1758,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     lay.getStyleRules(style, function(item){
       if (item.selectorText === ('.laytable-cell-'+ key)) {
         callback(item);
-
-        /* 以下代码为防止 Chrome DevTools 审查 iframe 中的 table 元素时出现的页面崩溃
-         * closes https://gitee.com/layui/layui/issues/I8N08M
-         * 具体原因不明，可能是初始操作 cssRules 触发了 DevTools inspect 的解析报错
-         * 后续若浏览器本身修复了该问题，下述补丁也将会剔除
-         */
-        (function PatcheToCssRulesInDevTools(){
-          if (self === parent) return;
-          var input = lay.elem('input', {
-            style: 'position: absolute; left: 0; top: 0; opacity: 0.01;'
-          });
-          document.body.appendChild(input);
-          input.focus();
-          document.body.removeChild(input);
-        })();
-
         return true;
       }
     });
