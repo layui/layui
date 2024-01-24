@@ -19,7 +19,7 @@ toc: true
   - 新增 `table.updateRow` 方法，用于更新指定行 #1540 @Sight-wcg
   - 修复 关闭展开状态时，未重置单元格滚动条位置的问题 #1536 @Sight-wcg
   - ~~修复 Chrome DevTools 审查 iframe srcdoc 中的 table 元素时导致页面崩溃的问题~~ #1571
-    <br> Chrome 121.0.x 版本自身已修复 DevTools 导致的网页崩溃问题，因此上述补丁已在 v2.9.5 中移除
+    <br> Chrome 121.0.x 版本自身已修复 DevTools 导致的网页崩溃问题，因此上述补丁已在 v2.9.5 中移除 #1584
 - #### laydate
   - 优化 时间选择器在 Safari on iOS, Firefox for Android 中的滑动操作 #1550 @Sight-wcg
 - #### slider
