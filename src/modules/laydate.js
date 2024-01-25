@@ -1148,7 +1148,7 @@
   /**
    * @typedef limitOptions
    * @prop {JQuery} [elem] - 检测的元素, 例如面板中年月日时分秒元素，“现在”，“确认” 按钮等
-   * @prop {number} [index] - 元素集合中，当前检测元素的索引，years:0,month:0,data: 0-41 ,hms:0 
+   * @prop {number} [index] - 元素集合中，当前检测元素的索引，years:0,month:0,date:0-41,hms:0
    * @prop {['hours', 'minutes', 'seconds'] | ['hours', 'minutes'] | ['hours']} [time] - 是否比较时分秒
    * @prop {'year'|'month'|string} [type] - 面板类型?
    * @prop {0 | 1} [rangeType] - 面板索引, 0 表示 start, 1 表示 end
