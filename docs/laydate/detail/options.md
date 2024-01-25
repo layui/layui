@@ -325,7 +325,7 @@ max: 7 // 最大日期为 7 天后
 </td>
     </tr>
     <tr>
-<td>disabledDate <sup>2.9.5+</sup> </td>
+<td>disabledDate <sup>2.9.7+</sup> </td>
 <td>
 
 不可选取的日期。
@@ -346,7 +346,7 @@ disabledDate: function(date, type){
 <td> - </td>
     </tr>
     <tr>
-<td>disabledTime <sup>2.9.5+</sup> </td>
+<td>disabledTime <sup>2.9.7+</sup> </td>
 <td>
 
 不可选取的时间。
