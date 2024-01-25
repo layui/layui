@@ -2154,6 +2154,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }).on('mouseleave', function(){
       var othis = $(this);
       if(thisTable.eventMoveElem) return;
+      dict.allowResize = false;
       _BODY.css('cursor', '');
     }).on('mousedown', function(e){
       var othis = $(this);
