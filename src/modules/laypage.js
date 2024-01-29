@@ -72,8 +72,8 @@ layui.define(function(exports){
       groups = config.pages;
     }
     
-    config.prev = 'prev' in config ? config.prev : '&#x4E0A;&#x4E00;&#x9875;'; // 上一页文本
-    config.next = 'next' in config ? config.next : '&#x4E0B;&#x4E00;&#x9875;'; // 下一页文本
+    config.prev = 'prev' in config ? config.prev : '上一页'; // 上一页文本
+    config.next = 'next' in config ? config.next : '下一页'; // 下一页文本
     
     // 计算当前组
     var index = config.pages > groups 
@@ -100,7 +100,7 @@ layui.define(function(exports){
         
         // 首页
         if(index > 1 && config.first !== false && groups !== 0){
-          pager.push('<a class="layui-laypage-first" data-page="1"  title="&#x9996;&#x9875;">'+ (config.first || 1) +'</a>');
+          pager.push('<a class="layui-laypage-first" data-page="1"  title="首页">'+ (config.first || 1) +'</a>');
         }
 
         // 计算当前页码组的起始页
@@ -118,7 +118,7 @@ layui.define(function(exports){
 
         // 输出左分割符
         if(config.first !== false && start > 2){
-          pager.push('<span class="layui-laypage-spr">&#x2026;</span>')
+          pager.push('<span class="layui-laypage-spr">...</span>')
         }
         
         // 输出连续页码
@@ -134,10 +134,10 @@ layui.define(function(exports){
         // 输出输出右分隔符 & 末页
         if(config.pages > groups && config.pages > end && config.last !== false){
           if(end + 1 < config.pages){
-            pager.push('<span class="layui-laypage-spr">&#x2026;</span>');
+            pager.push('<span class="layui-laypage-spr">...</span>');
           }
           if(groups !== 0){
-            pager.push('<a class="layui-laypage-last" title="&#x5C3E;&#x9875;"  data-page="'+ config.pages +'">'+ (config.last || config.pages) +'</a>');
+            pager.push('<a class="layui-laypage-last" title="尾页"  data-page="'+ config.pages +'">'+ (config.last || config.pages) +'</a>');
           }
         }
 
@@ -189,9 +189,9 @@ layui.define(function(exports){
       // 跳页区域
       skip: function(){
         var skipText = typeof config.skipText === 'object' ? config.skipText : [
-          '&#x5230;&#x7B2C;',
-          '&#x9875;',
-          '&#x786e;&#x5b9a;'
+          '到第',
+          '页',
+          '确定'
         ];
         return [
           '<span class="layui-laypage-skip">'+ skipText[0],
