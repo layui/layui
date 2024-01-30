@@ -1331,7 +1331,7 @@ layer.prompt = function(options, yes){
   
   return layer.open($.extend({
     type: 1,
-    btn: ['确定;','取消'],
+    btn: ['确定','取消'],
     content: content,
     skin: 'layui-layer-prompt' + skin('prompt'),
     maxWidth: win.width(),
