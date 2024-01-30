@@ -297,6 +297,9 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       that.remove(); // 移除非当前绑定元素的面板
       elemBody.append(that.elemView);
       options.elem.data(MOD_INDEX +'_opened', true);
+      if(typeof options.close === 'function'){
+        options.elem.data(MOD_INDEX +'_on_close', options);
+      }
 
       // 遮罩
       var shade = options.shade ? ('<div class="'+ STR_ELEM_SHADE +'" style="'+ ('z-index:'+ (that.elemView.css('z-index')-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
@@ -381,9 +384,12 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     
     // 若存在已打开的面板元素，则移除
     if(elemPrev){
-      elemPrev.data('prevElem') && (
-        elemPrev.data('prevElem').data(MOD_INDEX +'_opened', false)
-      );
+      var prevElem = elemPrev.data('prevElem');
+      if(prevElem){
+        prevElem.data(MOD_INDEX +'_opened', false);
+        var prevOpt = prevElem.data(MOD_INDEX +'_on_close');
+        typeof prevOpt.close === 'function' && prevOpt.close(prevElem);
+      }
       elemPrev.remove();
     }
     lay('.' + STR_ELEM_SHADE).remove();
