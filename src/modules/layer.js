@@ -957,6 +957,8 @@ Class.pt.openLayer = function(){
 // 记录宽高坐标，用于还原
 ready.record = function(layero){
   if(!layero[0]) return window.console && console.error('index error');
+  var type = layero.attr('type');
+  var contElem = type === ready.type[2] ? layero.find('.layui-layer-content').children('iframe') : layero.find('.layui-layer-content');
   var area = [
     layero[0].style.width || layero.width(),
     layero[0].style.height || layero.height(),
@@ -965,6 +967,7 @@ ready.record = function(layero){
   ];
   layero.find('.layui-layer-max').addClass('layui-layer-maxmin');
   layero.attr({area: area});
+  contElem.data('LAYUI_LAYER_CONTENT_RECORD_HEIGHT', contElem.height());
 };
 
 // 设置页面滚动条
@@ -1021,6 +1024,8 @@ layer.style = function(index, options, limit){
   var titHeight = layero.find(doms[1]).outerHeight() || 0;
   var btnHeight = layero.find('.'+doms[6]).outerHeight() || 0;
   var minLeft = layero.attr('minLeft');
+  var contRecordElem = type === ready.type[2] ? contElem.children('iframe') : contElem;
+  var contRecordHeight = contRecordElem.data('LAYUI_LAYER_CONTENT_RECORD_HEIGHT');
   
   // loading 和 tips 层不允许更改
   if(type === ready.type[3] || type === ready.type[4]){
@@ -1041,11 +1046,11 @@ layer.style = function(index, options, limit){
   
   if(type === ready.type[2]){
     layero.find('iframe').css({
-      height: (typeof options.height === 'number' ? options.height : layero.height()) - titHeight - btnHeight
+      height: contRecordHeight ? contRecordHeight : (typeof options.height === 'number' ? options.height : layero.height()) - titHeight - btnHeight
     });
   } else {
     contElem.css({
-      height: (typeof options.height === 'number' ? options.height : layero.height()) - titHeight - btnHeight
+      height: contRecordHeight ? contRecordHeight : (typeof options.height === 'number' ? options.height : layero.height()) - titHeight - btnHeight
       - parseFloat(contElem.css('padding-top'))
       - parseFloat(contElem.css('padding-bottom'))
     })
