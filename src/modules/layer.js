@@ -405,7 +405,7 @@ Class.pt.creat = function(){
       config.anim = config.shift;
     }
 
-  // 为兼容 jQuery3.0 的 css 动画影响元素尺寸计算
+    // 为兼容 jQuery3.0 的 css 动画影响元素尺寸计算
     if(doms.anim[config.anim]){
       var animClass = 'layer-anim '+ doms.anim[config.anim];
       layero.addClass(animClass).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
