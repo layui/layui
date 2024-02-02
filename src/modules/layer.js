@@ -257,25 +257,7 @@ doms.anim = {
 
 doms.SHADE = 'layui-layer-shade';
 doms.MOVE = 'layui-layer-move';
-doms.SHADE_KEY = 'LAYUI-LAYER-SHADE-KEY'
-
-var shadeToggle = function(shadeElem, isShow, callback){
-  if(layer.ie && layer.ie < 10){
-    callback();
-  }else{
-    if(isShow){
-      callback();
-      setTimeout(function(){
-        shadeElem.css({opacity: shadeElem.data(doms.SHADE_KEY)});
-      }, 10);
-    }else{
-      shadeElem.css({opacity: 0});
-      setTimeout(function(){
-        callback();
-      }, 350);
-    }
-  }
-}
+doms.SHADE_KEY = 'LAYUI-LAYER-SHADE-KEY';
 
 // 默认配置
 Class.pt.config = {
@@ -417,6 +399,21 @@ Class.pt.creat = function(){
   var conType = typeof content === 'object';
   var body = $('body');
 
+  var setAnim = function(layero){
+    // anim 兼容旧版 shift
+    if(config.shift){
+      config.anim = config.shift;
+    }
+
+  // 为兼容 jQuery3.0 的 css 动画影响元素尺寸计算
+    if(doms.anim[config.anim]){
+      var animClass = 'layer-anim '+ doms.anim[config.anim];
+      layero.addClass(animClass).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+        $(this).removeClass(animClass);
+      });
+    }
+  }
+
   // 若 id 对应的弹层已经存在，则不重新创建
   if(config.id && $('.'+ doms[0]).find('#'+ config.id)[0]){
     return (function(){
@@ -430,16 +427,12 @@ Class.pt.creat = function(){
       if(maxminStatus === 'min'){
         layer.restore(index);
       } else if(options.hideOnClose){
-        shadeToggle(elemShade, true, function(){
-          elemShade.show();
-          layero.show();
-          if(doms.anim[config.anim]){
-            var animClass = 'layer-anim '+ doms.anim[config.anim];
-            layero.addClass(animClass).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-              $(this).removeClass(animClass);
-            });
-          }
-        });
+        elemShade.show();
+        layero.show();
+        setAnim(layero);
+        setTimeout(function(){
+          elemShade.css({opacity: elemShade.data(doms.SHADE_KEY)});
+        }, 10);
       }
     })();
   }
@@ -452,11 +445,6 @@ Class.pt.creat = function(){
   // 初始化 area 属性
   if(typeof config.area === 'string'){
     config.area = config.area === 'auto' ? ['', ''] : [config.area, ''];
-  }
-  
-  // anim 兼容旧版 shift
-  if(config.shift){
-    config.anim = config.shift;
   }
   
   if(layer.ie == 6){
@@ -547,14 +535,7 @@ Class.pt.creat = function(){
     layer.close(that.index);
   }, config.time);
   that.move().callback();
-  
-  // 为兼容 jQuery3.0 的 css 动画影响元素尺寸计算
-  if(doms.anim[config.anim]){
-    var animClass = 'layer-anim '+ doms.anim[config.anim];
-    that.layero.addClass(animClass).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-      $(this).removeClass(animClass);
-    });
-  }
+  setAnim(that.layero);
   
   // 记录配置信息
   that.layero.data('config', config);
@@ -1140,9 +1121,7 @@ layer.min = function(index, options){
   ready.restScrollbar(index);
 
   // 隐藏遮罩
-  shadeToggle(shadeo, false, function(){
-    shadeo.hide();
-  });
+  shadeo.hide();
 };
 
 // 还原
@@ -1173,9 +1152,7 @@ layer.restore = function(index){
   options.scrollbar ? ready.restScrollbar(index) : ready.setScrollbar(index);
   
   // 恢复遮罩
-  shadeToggle(shadeo, true, function(){
-    shadeo.show();
-  });
+  shadeo.show();
   // ready.events.resize[index](); // ?
 };
 
@@ -1279,9 +1256,14 @@ layer.close = function(index, callback){
   };
   // 移除遮罩
   var shadeo = $('#'+ doms.SHADE + index);
-  shadeToggle(shadeo, false, function(){
+  if((layer.ie && layer.ie < 10) || !options.isOutAnim){
     shadeo[hideOnClose ? 'hide' : 'remove']();
-  })
+  }else{
+    shadeo.css({opacity: 0});
+    setTimeout(function(){
+      shadeo[hideOnClose ? 'hide' : 'remove']();
+    }, 350);
+  }
   
   // 是否允许关闭动画
   if(options.isOutAnim){
