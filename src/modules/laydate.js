@@ -1679,7 +1679,13 @@
           lay(ol).find('.'+ THIS).removeClass(THIS);
           lay(this).addClass(THIS);
 
+          // FIXME rangeLinked 时间
+          if(options.range){
+            that.beforeChange(lay.extend({}, dateTime, that[startEnd]), index);
+          }
+
           setTimeStatus();
+          options.range && that.list('time', 1 - index);
           scroll();
           (that.endDate || options.type === 'time' || (options.type === 'datetime' && options.fullPanel)) && that.done(null, 'change');
 
@@ -1925,15 +1931,10 @@
   Class.prototype.beforeChange = function(datetime, index){
     var that = this
     ,options = that.config
-    ,start = lay.extend({}, lay.extend(options.dateTime, that.startTime))
-    ,end = lay.extend({}, lay.extend(that.endDate, that.endTime))
     ,position = options.range ? (index === 0 ? 'start' : 'end') : 'start';
 
-    // 左右面板独立选择模式
-    if(!options.rangeLinked){
-      typeof options['beforeChange'] === 'function' && options.beforeChange.call(options, that.newDate(datetime), position);
-    }else{
-      typeof options['beforeChange'] === 'function' && options.beforeChange.call(options, that.newDate(datetime), position, that.endState);
+    if(typeof options['beforeChange'] === 'function'){
+      options.beforeChange.call(options, that.newDate(datetime), position, options.rangeLinked ? that.endState : undefined);
     }
 
     return that;
