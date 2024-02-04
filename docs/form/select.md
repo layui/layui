@@ -161,6 +161,18 @@ toc: true
       </optgroup>
     </select>
   </div>
+  <div class="layui-col-md6">
+    <select lay-search="" lay-creatable="">
+      <option value="">可创建新的 option</option>
+      <option value="1">AAA</option>
+      <option value="2">aaa</option>
+      <option value="3">BBB</option>
+      <option value="4">bbb</option>
+      <option value="5">ABC</option>
+      <option value="6">abc</option>
+      <option value="7">AbC</option>
+    </select>
+  </div>
 </div>
 
 <!-- import layui -->
