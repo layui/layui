@@ -624,12 +624,13 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 if(hasEquals){
                   dl.children('.' + CREATE_OPTION).remove();
                 }else{
+                  var val = util.escape(value)
                   var createOptionElem = dl.children('.' + CREATE_OPTION);
                   if(createOptionElem[0]){
-                    createOptionElem.attr('lay-value', value);
-                    createOptionElem.text(value);
+                    createOptionElem.attr('lay-value', val);
+                    createOptionElem.text(val);
                   }else{
-                    dl.append('<dd class="' + CREATE_OPTION + '" lay-value="'+ value +'">' + value + '</dd>');
+                    dl.append('<dd class="' + CREATE_OPTION + '" lay-value="'+ val +'">' + val + '</dd>');
                   }
                 }
               }else{
