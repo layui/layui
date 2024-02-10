@@ -577,12 +577,15 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             var num = 0;
             var dds = dl.children('dd');
             var hasEquals = false;
+            var rawValue = value;
             layui.each(dds, function(){
               var othis = $(this);
               var text = othis.text();
 
               // 需要区分大小写
-              if(text === value) hasEquals = true;
+              if(text === rawValue){
+                hasEquals = true;
+              }
 
               // 是否区分大小写
               if(laySearch !== 'cs'){
