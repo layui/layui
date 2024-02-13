@@ -1040,7 +1040,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       that.loading();
 
-      $.ajax({
+      var ajax = $.ajax;
+      if(typeof options.ajax === 'function'){
+        ajax = options.ajax
+      }
+      ajax({
         type: options.method || 'get',
         url: options.url,
         contentType: options.contentType,
