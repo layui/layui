@@ -1478,7 +1478,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         var attr = [];
         if(item3.minWidth) attr.push('data-minwidth="'+ item3.minWidth +'"'); // 单元格最小宽度
         if(item3.maxWidth) attr.push('data-maxwidth="'+ item3.maxWidth +'"'); // 单元格最小宽度
-        if(item3.style) attr.push('style="'+ item3.style +'"'); // 自定义单元格样式
+        if(item3.style || options.lineStyle) attr.push('style="'+ (item3.style ? item3.style : '') + (options.lineStyle ? options.lineStyle : '') + '"'); // 自定义单元格样式
         return attr.join(' ');
       }() +' class="'+ function(){ // 追加样式
         var classNames = [];
@@ -1494,7 +1494,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         var attr = [];
         if(item3.align) attr.push('align="'+ item3.align +'"'); // 对齐方式
         return attr.join(' ');
-      }() +'>' + function(){
+      }() + ((item3.style || options.lineStyle) ? ('style="'+ (item3.style ? item3.style : '') + (options.lineStyle ? options.lineStyle : '') + '"') : '') +'>' + function(){
           var totalRow = item3.totalRow || options.totalRow;
 
           // 如果 totalRow 参数为字符类型，则解析为自定义模版
