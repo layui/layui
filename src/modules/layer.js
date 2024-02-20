@@ -1128,7 +1128,6 @@ layer.restore = function(index){
   var options = layero.data('config') || {};
   var contentRecordHeight = contentElem.data('LAYUI_LAYER_CONTENT_RECORD_HEIGHT');
 
-  contentElem.removeData("LAYUI_LAYER_CONTENT_RECORD_HEIGHT");
   layero.removeData('maxminStatus'); // 移除最大最小状态
   
   // 恢复原来尺寸
@@ -1150,6 +1149,7 @@ layer.restore = function(index){
 
   // #1604
   if(contentRecordHeight !== undefined){
+    contentElem.removeData("LAYUI_LAYER_CONTENT_RECORD_HEIGHT");
     var contentRecordHeightElem = type === ready.type[2] ? contentElem.children('iframe') : contentElem;
     contentRecordHeightElem.css({height: contentRecordHeight});
   }
