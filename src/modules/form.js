@@ -385,14 +385,16 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           if(!$(e.target).parent().hasClass(TITLE) || clear){
             var elem = $('.' + CLASS);
             elem.removeClass(CLASS+'ed ' + CLASS+'up');
-            elem.children('dl').children('.' + CREATE_OPTION).remove();
+            if(elem.hasClass('layui-select-creatable')){
+              elem.children('dl').children('.' + CREATE_OPTION).remove();
+            }
             thatInput && initValue && thatInput.val(initValue);
           }
           thatInput = null;
         };
         
         // 各种事件
-        var events = function(reElem, disabled, isSearch){
+        var events = function(reElem, disabled, isSearch, isCreatable){
           var select = $(this);
           var title = reElem.find('.' + TITLE);
           var input = title.find('input');
@@ -406,7 +408,6 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
           // 搜索项
           var laySearch = select.attr('lay-search');
-          var isCreatable = typeof select.attr('lay-creatable') === 'string' && typeof laySearch === 'string';
           
           // 展开下拉
           var showDown = function(){
@@ -583,7 +584,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               var text = othis.text();
 
               // 需要区分大小写
-              if(text === rawValue){
+              if(isCreatable && text === rawValue){
                 hasEquals = true;
               }
 
@@ -734,13 +735,15 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
           
           var isSearch = typeof othis.attr('lay-search') === 'string'
+          ,isCreatable = typeof othis.attr('lay-creatable') === 'string' && isSearch
           ,placeholder = optionsFirst ? (
             optionsFirst.value ? TIPS : (optionsFirst.innerHTML || TIPS)
           ) : TIPS;
 
           // 替代元素
           var reElem = $(['<div class="'+ (isSearch ? '' : 'layui-unselect ') + CLASS 
-          ,(disabled ? ' layui-select-disabled' : '') +'">'
+          ,(disabled ? ' layui-select-disabled' : '')
+          ,(isCreatable ? ' layui-select-creatable' : '') + '">'
             ,'<div class="'+ TITLE +'">'
               ,('<input type="text" placeholder="'+ util.escape($.trim(placeholder)) +'" '
                 +('value="'+ util.escape($.trim(value ? selected.html() : '')) +'"') // 默认值
@@ -770,7 +773,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           
           hasRender[0] && hasRender.remove(); // 如果已经渲染，则Rerender
           othis.after(reElem);          
-          events.call(this, reElem, disabled, isSearch);
+          events.call(this, reElem, disabled, isSearch, isCreatable);
         });
       }
       
