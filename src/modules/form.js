@@ -628,13 +628,14 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 if(hasEquals){
                   dl.children('.' + CREATE_OPTION).remove();
                 }else{
-                  var val = util.escape(value)
+                  // 和初始渲染保持行为一致
+                  var textVal = $('<div>' + value +'</div>').text();
                   var createOptionElem = dl.children('.' + CREATE_OPTION);
                   if(createOptionElem[0]){
-                    createOptionElem.attr('lay-value', val);
-                    createOptionElem.text(val);
+                    createOptionElem.attr('lay-value', value);
+                    createOptionElem.text(textVal);
                   }else{
-                    dl.append('<dd class="' + CREATE_OPTION + '" lay-value="'+ val +'">' + val + '</dd>');
+                    dl.append('<dd class="' + CREATE_OPTION + '" lay-value="'+ value +'">' + textVal + '</dd>');
                   }
                 }
               }else{
