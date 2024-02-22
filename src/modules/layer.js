@@ -258,6 +258,8 @@ doms.anim = {
 doms.SHADE = 'layui-layer-shade';
 doms.MOVE = 'layui-layer-move';
 
+var RECORD_HEIGHT = 'LAYUI_LAYER_CONTENT_RECORD_HEIGHT';
+
 // 默认配置
 Class.pt.config = {
   type: 0,
@@ -968,7 +970,7 @@ ready.record = function(layero){
   ];
   layero.find('.layui-layer-max').addClass('layui-layer-maxmin');
   layero.attr({area: area});
-  contentElem.data('LAYUI_LAYER_CONTENT_RECORD_HEIGHT', contentRecordHeightElem.height());
+  contentElem.data(RECORD_HEIGHT, contentRecordHeightElem.height());
 };
 
 // 设置页面滚动条
@@ -1126,7 +1128,7 @@ layer.restore = function(index){
   var area = layero.attr('area').split(',');
   var type = layero.attr('type');
   var options = layero.data('config') || {};
-  var contentRecordHeight = contentElem.data('LAYUI_LAYER_CONTENT_RECORD_HEIGHT');
+  var contentRecordHeight = contentElem.data(RECORD_HEIGHT);
 
   layero.removeData('maxminStatus'); // 移除最大最小状态
   
@@ -1149,7 +1151,7 @@ layer.restore = function(index){
 
   // #1604
   if(contentRecordHeight !== undefined){
-    contentElem.removeData("LAYUI_LAYER_CONTENT_RECORD_HEIGHT");
+    contentElem.removeData(RECORD_HEIGHT);
     var contentRecordHeightElem = type === ready.type[2] ? contentElem.children('iframe') : contentElem;
     contentRecordHeightElem.css({height: contentRecordHeight});
   }
