@@ -700,7 +700,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
             if(isCreatable && othis.hasClass(CREATE_OPTION)){
               othis.removeClass(CREATE_OPTION);
-              select.append('<option value="' + value + '">' + value + '<option>')
+              select.append('<option value="' + value + '">' + value + '</option>');
             }
 
             othis.siblings().removeClass(THIS);
