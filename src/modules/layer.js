@@ -1321,8 +1321,17 @@ layer.closeAll = function(type, callback){
 
 // 根据弹层类型关闭最近打开的层
 layer.closeLast = function(type, callback){
-  type = type || 'page';
-  layer.close($('.layui-layer-'+ type +':last').attr("times"), callback);
+  var builtinType = ready.type;
+  var isBuiltinType = builtinType.indexOf(type) > -1;
+  var layerIndexList = [];
+  $(isBuiltinType ? '.layui-layer-'+ type : '.layui-layer').each(function(i, el){
+    var layerIndex = $(el).attr('times');
+    layerIndexList.push(Number(layerIndex));
+  })
+  if(layerIndexList.length > 0){
+    var layerIndexMax = Math.max.apply(null, layerIndexList);
+    layer.close(layerIndexMax, callback);
+  }
 };
 
 
