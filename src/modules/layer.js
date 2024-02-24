@@ -1325,15 +1325,9 @@ layer.closeLast = function(type, callback){
   var isArrayType = $.isArray(type);
   $(typeof type === 'string' ? '.layui-layer-' + type : '.layui-layer').each(function(i, el){
     var layero = $(el);
-    var layerIndex = layero.attr('times');
-    if(isArrayType){
-      var layerType = layero.attr('type');
-      if(type.indexOf(layerType) > -1){
-        layerIndexList.push(Number(layerIndex));
-      }
-    }else{
-      layerIndexList.push(Number(layerIndex));
-    }
+    var shouldSkip = (isArrayType && type.indexOf(layero.attr('type')) === -1) || layero.css('display') === 'none';
+    if(shouldSkip) return true;
+    layerIndexList.push(Number(layero.attr('times')));
   });
   if(layerIndexList.length > 0){
     var layerIndexMax = Math.max.apply(null, layerIndexList);
