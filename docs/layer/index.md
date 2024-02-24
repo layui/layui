@@ -398,6 +398,7 @@ layer.closeLast('page'); // 关闭最近一次打开的页面层
 layer.closeLast('iframe'); // 关闭最近一次打开的 iframe 层
 layer.closeLast('loading'); // 关闭最近一次打开的加载层
 layer.closeLast('tips'); // 关闭最近一次打开的 tips 层
+layer.closeLast(['dialog', 'page']); // 关闭最近一次打开的信息框或页面层，2.9.7+
 ```
 
 <h2 id="config" lay-pid="api" class="ws-anchor ws-bold">全局配置默认属性</h2>
