@@ -257,9 +257,9 @@ doms.anim = {
 
 doms.SHADE = 'layui-layer-shade';
 doms.MOVE = 'layui-layer-move';
-doms.SHADE_KEY = 'LAYUI-LAYER-SHADE-KEY';
 
-var RECORD_HEIGHT = 'LAYUI_LAYER_CONTENT_RECORD_HEIGHT';
+var SHADE_KEY = 'LAYUI-LAYER-SHADE-KEY';
+var RECORD_HEIGHT_KEY = 'LAYUI_LAYER_CONTENT_RECORD_HEIGHT';
 
 // 默认配置
 Class.pt.config = {
@@ -433,7 +433,7 @@ Class.pt.creat = function(){
         layero.show();
         setAnim(layero);
         setTimeout(function(){
-          elemShade.css({opacity: elemShade.data(doms.SHADE_KEY)});
+          elemShade.css({opacity: elemShade.data(SHADE_KEY)});
         }, 10);
       }
     })();
@@ -505,7 +505,7 @@ Class.pt.creat = function(){
     ,'opacity': config.shade[0] || config.shade
     ,'transition': config.shade[2] || ''
   });
-  that.shadeo.data(doms.SHADE_KEY, config.shade[0] || config.shade);
+  that.shadeo.data(SHADE_KEY, config.shade[0] || config.shade);
 
   config.type == 2 && layer.ie == 6 && that.layero.find('iframe').attr('src', content[0]);
 
@@ -973,14 +973,14 @@ ready.record = function(layero){
   var contentElem = layero.find('.layui-layer-content');
   var contentRecordHeightElem = type === ready.type[2] ? contentElem.children('iframe') : contentElem;
   var area = [
-    layero[0].style.width || layero.width(),
-    layero[0].style.height || layero.height(),
+    layero[0].style.width || ready.getStyle(layero[0], 'width'),
+    layero[0].style.height || ready.getStyle(layero[0], 'height'),
     layero.position().top, 
     layero.position().left + parseFloat(layero.css('margin-left'))
   ];
   layero.find('.layui-layer-max').addClass('layui-layer-maxmin');
   layero.attr({area: area});
-  contentElem.data(RECORD_HEIGHT, contentRecordHeightElem.height());
+  contentElem.data(RECORD_HEIGHT_KEY, ready.getStyle(contentRecordHeightElem[0], 'height'));
 };
 
 // 设置页面滚动条
@@ -1138,7 +1138,7 @@ layer.restore = function(index){
   var area = layero.attr('area').split(',');
   var type = layero.attr('type');
   var options = layero.data('config') || {};
-  var contentRecordHeight = contentElem.data(RECORD_HEIGHT);
+  var contentRecordHeight = contentElem.data(RECORD_HEIGHT_KEY);
 
   layero.removeData('maxminStatus'); // 移除最大最小状态
   
@@ -1161,7 +1161,7 @@ layer.restore = function(index){
 
   // #1604
   if(contentRecordHeight !== undefined){
-    contentElem.removeData(RECORD_HEIGHT);
+    contentElem.removeData(RECORD_HEIGHT_KEY);
     var contentRecordHeightElem = type === ready.type[2] ? contentElem.children('iframe') : contentElem;
     contentRecordHeightElem.css({height: contentRecordHeight});
   }
