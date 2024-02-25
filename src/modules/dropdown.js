@@ -298,7 +298,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       elemBody.append(that.elemView);
       options.elem.data(MOD_INDEX +'_opened', true);
       if(typeof options.close === 'function'){
-        options.elem.data(MOD_INDEX +'_on_close', options);
+        options.elem.data(MOD_INDEX +'_on_close', options.close.bind(options));
       }
 
       // 遮罩
@@ -380,17 +380,19 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   Class.prototype.remove = function(){
     var that = this;
     var options = that.config;
-    var elemPrev = thisModule.prevElem;
+    var prevContentElem = thisModule.prevElem;
     
     // 若存在已打开的面板元素，则移除
-    if(elemPrev){
-      var prevElem = elemPrev.data('prevElem');
-      if(prevElem){
-        prevElem.data(MOD_INDEX +'_opened', false);
-        var prevOpt = prevElem.data(MOD_INDEX +'_on_close');
-        typeof prevOpt.close === 'function' && prevOpt.close(prevElem);
+    if(prevContentElem){
+      var prevTriggerElem = prevContentElem.data('prevElem');
+      
+      if(prevTriggerElem){
+        prevTriggerElem.data(MOD_INDEX +'_opened', false);
+        var prevOnCloseEvent = prevTriggerElem.data(MOD_INDEX +'_on_close');
+        typeof prevOnCloseEvent === 'function' && prevOnCloseEvent(prevTriggerElem);
       }
-      elemPrev.remove();
+      prevContentElem.remove();
+      delete thisModule.prevElem;
     }
     lay('.' + STR_ELEM_SHADE).remove();
   };

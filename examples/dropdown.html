@@ -189,6 +189,9 @@ layui.use('dropdown', function(){
     ,ready: function(){
       console.log(arguments);
     }
+    ,close: function(){
+      console.log('demo2', this.elem);
+    }
   });
 
 
@@ -198,6 +201,9 @@ layui.use('dropdown', function(){
     ,style: 'background:#666;color:#fff;padding:15px;'
     ,align: 'center'
     ,trigger: 'hover'
+    ,close: function(){
+      console.log('demo3', this.elem);
+    }
   });
 
 
