@@ -305,7 +305,7 @@ click: function(data, othis){
 </td>
     </tr>
     <tr>
-<td>close</td>
+<td>close <sup>2.9.7+</sup></td>
 <td colspan="3">
   
 面板关闭后的回调函数。返回的参数如下：
