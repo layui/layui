@@ -386,9 +386,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       var prevInstance = thisModule.getThis(prevId);
       var prevOnClose = prevInstance.config.close;
       
-      if(prevTriggerElem){
-        prevTriggerElem.data(MOD_INDEX +'_opened', false);
-      }
+      prevTriggerElem && prevTriggerElem.data(MOD_INDEX +'_opened', false);
       prevContentElem.remove();
       delete thisModule.prevElem;
       typeof prevOnClose === 'function' && prevOnClose.call(prevInstance.config, prevTriggerElem);
