@@ -1584,7 +1584,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-slider-vertical .layui-slider-step{top: auto; left: 0px; -webkit-transform: translateY(50%); transform: translateY(50%);}
 .layui-slider-vertical .layui-slider-wrap{top: auto; left: -16px; -webkit-transform: translateY(50%); transform: translateY(50%);}
 .layui-slider-vertical .layui-slider-tips{top: auto; left: 2px;}
-@media \0screen{
+@media screen {
   .layui-slider-wrap-btn{margin-left: -20px;}
   .layui-slider-vertical .layui-slider-wrap-btn{margin-left: 0; margin-bottom: -20px;}
   .layui-slider-vertical .layui-slider-tips{margin-left: -8px;}
