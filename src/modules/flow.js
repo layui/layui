@@ -16,10 +16,10 @@ layui.define('jquery', function(exports){
     options = options || {};
 
     var elem = $(options.elem); if(!elem[0]) return;
-    var scrollElem = $(options.scrollElem || document); //滚动条所在元素
-    var threshold = 'mb' in options ? options.mb : 50; //与底部的临界距离
-    var isAuto = 'isAuto' in options ? options.isAuto : true; //是否自动滚动加载
-    var end = options.end || '没有更多了'; //“末页”显示文案
+    var scrollElem = $(options.scrollElem || document); // 滚动条所在元素
+    var threshold = 'mb' in options ? options.mb : 50; // 临界距离
+    var isAuto = 'isAuto' in options ? options.isAuto : true; // 否自动滚动加载
+    var end = options.end || '没有更多了'; // “末页”显示文案
     var direction = options.direction || 'bottom';
     var isTop = direction === 'top';
 
