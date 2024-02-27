@@ -304,5 +304,19 @@ click: function(data, othis){
 
 </td>
     </tr>
+    <tr>
+<td>close <sup>2.9.7+</sup></td>
+<td colspan="3">
+  
+面板关闭后的回调函数。返回的参数如下：
+
+```
+close: function(elem){
+  console.log(elem); // 当前组件绑定的目标元素对象
+}   
+```
+
+</td>
+    </tr>
   </tbody>
 </table>
