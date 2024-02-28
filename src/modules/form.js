@@ -375,6 +375,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         var CLASS = 'layui-form-select';
         var TITLE = 'layui-select-title';
         var NONE = 'layui-select-none';
+        var CREATE_OPTION = 'layui-select-create-option';
         var initValue = '';
         var thatInput;
         var selects = elem || elemForm.find('select');
@@ -382,14 +383,18 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         // 隐藏 select
         var hide = function(e, clear){
           if(!$(e.target).parent().hasClass(TITLE) || clear){
-            $('.'+CLASS).removeClass(CLASS+'ed ' + CLASS+'up');
+            var elem = $('.' + CLASS);
+            elem.removeClass(CLASS+'ed ' + CLASS+'up');
+            if(elem.hasClass('layui-select-creatable')){
+              elem.children('dl').children('.' + CREATE_OPTION).remove();
+            }
             thatInput && initValue && thatInput.val(initValue);
           }
           thatInput = null;
         };
         
         // 各种事件
-        var events = function(reElem, disabled, isSearch){
+        var events = function(reElem, disabled, isSearch, isCreatable){
           var select = $(this);
           var title = reElem.find('.' + TITLE);
           var input = title.find('input');
@@ -408,6 +413,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var showDown = function(){
             var top = reElem.offset().top + reElem.outerHeight() + 5 - $win.scrollTop();
             var dlHeight = dl.outerHeight();
+            var dds = dl.children('dd');
             
             index = select[0].selectedIndex; // 获取最新的 selectedIndex
             reElem.addClass(CLASS+'ed');
@@ -432,6 +438,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             reElem.removeClass(CLASS+'ed ' + CLASS+'up');
             input.blur();
             nearElem = null;
+            isCreatable && dl.children('.' + CREATE_OPTION).remove();
             
             if(choose) return;
             
@@ -569,9 +576,17 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           // 检测值是否不属于 select 项
           var notOption = function(value, callback, origin){
             var num = 0;
+            var dds = dl.children('dd');
+            var hasEquals = false;
+            var rawValue = value;
             layui.each(dds, function(){
               var othis = $(this);
               var text = othis.text();
+
+              // 需要区分大小写
+              if(isCreatable && text === rawValue){
+                hasEquals = true;
+              }
 
               // 是否区分大小写
               if(laySearch !== 'cs'){
@@ -583,17 +598,18 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               var not = text.indexOf(value) === -1;
               
               if(value === '' || (origin === 'blur') ? value !== text : not) num++;
-              origin === 'keyup' && othis[not ? 'addClass' : 'removeClass'](HIDE);
+              origin === 'keyup' && othis[(not && (isCreatable ? !othis.hasClass(CREATE_OPTION) : true)) ? 'addClass' : 'removeClass'](HIDE);
             });
             // 处理 select 分组元素
             origin === 'keyup' && layui.each(dts, function(){
-              var othis = $(this)
-              ,thisDds = othis.nextUntil('dt').filter('dd') // 当前分组下的dd元素
-              ,allHide = thisDds.length == thisDds.filter('.' + HIDE).length; // 当前分组下所有dd元素都隐藏了
+              var othis = $(this);
+              var thisDds = othis.nextUntil('dt').filter('dd'); // 当前分组下的dd元素
+              if(isCreatable) thisDds = thisDds.not('.' + CREATE_OPTION);
+              var allHide = thisDds.length == thisDds.filter('.' + HIDE).length; // 当前分组下所有dd元素都隐藏了
               othis[allHide ? 'addClass' : 'removeClass'](HIDE);
             });
             var none = num === dds.length;
-            return callback(none), none;
+            return callback(none, hasEquals), none;
           };
           
           // 搜索匹配
@@ -607,11 +623,27 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               return false;
             }
             
-            notOption(value, function(none){
-              if(none){
-                dl.find('.'+NONE)[0] || dl.append('<p class="'+ NONE +'">无匹配项</p>');
-              } else {
-                dl.find('.'+NONE).remove();
+            notOption(value, function(none, hasEquals){
+              if(isCreatable){
+                if(hasEquals){
+                  dl.children('.' + CREATE_OPTION).remove();
+                }else{
+                  // 和初始渲染保持行为一致
+                  var textVal = $('<div>' + value +'</div>').text();
+                  var createOptionElem = dl.children('.' + CREATE_OPTION);
+                  if(createOptionElem[0]){
+                    createOptionElem.attr('lay-value', value);
+                    createOptionElem.text(textVal);
+                  }else{
+                    dl.append('<dd class="' + CREATE_OPTION + '" lay-value="'+ value +'">' + textVal + '</dd>');
+                  }
+                }
+              }else{
+                if(none){
+                  dl.find('.'+NONE)[0] || dl.append('<p class="'+ NONE +'">无匹配项</p>');
+                } else {
+                  dl.find('.'+NONE).remove();
+                }
               }
             }, 'keyup');
             
@@ -622,6 +654,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               dl.find('.'+ THIS).removeClass(THIS);
               (select[0].options[0] || {}).value || dl.children('dd:eq(0)').addClass(THIS);
               dl.find('.'+ NONE).remove();
+              isCreatable && dl.children('.' + CREATE_OPTION).remove();
             }
             
             followScroll(); // 定位滚动条
@@ -653,7 +686,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           }
 
           // 选择
-          dds.on('click', function(){
+          dl.on('click', 'dd', function(){
             var othis = $(this), value = othis.attr('lay-value');
             var filter = select.attr('lay-filter'); // 获取过滤器
             
@@ -664,6 +697,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             } else {
               input.val(othis.text());
               othis.addClass(THIS);
+            }
+
+            if(isCreatable && othis.hasClass(CREATE_OPTION)){
+              othis.removeClass(CREATE_OPTION);
+              select.append('<option value="' + value + '">' + value + '</option>');
             }
 
             othis.siblings().removeClass(THIS);
@@ -698,13 +736,15 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
           
           var isSearch = typeof othis.attr('lay-search') === 'string'
+          ,isCreatable = typeof othis.attr('lay-creatable') === 'string' && isSearch
           ,placeholder = optionsFirst ? (
             optionsFirst.value ? TIPS : (optionsFirst.innerHTML || TIPS)
           ) : TIPS;
 
           // 替代元素
           var reElem = $(['<div class="'+ (isSearch ? '' : 'layui-unselect ') + CLASS 
-          ,(disabled ? ' layui-select-disabled' : '') +'">'
+          ,(disabled ? ' layui-select-disabled' : '')
+          ,(isCreatable ? ' layui-select-creatable' : '') + '">'
             ,'<div class="'+ TITLE +'">'
               ,('<input type="text" placeholder="'+ util.escape($.trim(placeholder)) +'" '
                 +('value="'+ util.escape($.trim(value ? selected.html() : '')) +'"') // 默认值
@@ -734,7 +774,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           
           hasRender[0] && hasRender.remove(); // 如果已经渲染，则Rerender
           othis.after(reElem);          
-          events.call(this, reElem, disabled, isSearch);
+          events.call(this, reElem, disabled, isSearch, isCreatable);
         });
       }
       
