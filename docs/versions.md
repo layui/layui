@@ -9,9 +9,36 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+
+<h2 id="v2.9.7" class="ws-anchor">
+  v2.9.7
+  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
+  <span class="layui-badge-rim">2024-02-28</span>
+</h2>
+
+- #### select
+  - 新增 `lay-creatable` 属性，用于在开启搜索时允许创建新选项 #1618 @Sight-wcg
+- #### table
+  - 修复 禁止拖拽列宽后仍可拖拽的问题 #1591 @Sight-wcg
+- #### layer
+  - 新增 遮罩层添加过渡效果 #1616 @Sight-wcg
+  - 修复 弹出高度设置为 `auto` 时，恢复大小时内容区高度错误 #1617 @Sight-wcg
+  - 优化 最大/小化再恢复大小后宽高偶现细微差异的问题 #1653 @Sight-wcg
+- #### laydate
+  - 新增时间选择器根据 `format` 格式进行显隐支持 #1656 @Sight-wcg
+- #### dropdown
+  - 新增 close 选项，用于下拉面板被关闭后触发的回调函数 #1605 @Sight-wcg
+- #### flow
+  - 新增 direction 选项，用于设置触发加载的方向 #1638 @Sight-wcg
+- #### 其他
+  - 修改 源码 Unicode 编码转换为中文字符 #1600 @Sight-wcg
+
+### 下载： [layui-v2.9.7.zip](https://gitee.com/layui/layui/attach_files/1685481/download)
+
+---
+
 <h2 id="v2.9.6" class="ws-anchor">
   v2.9.6
-  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
   <span class="layui-badge-rim">2024-01-24</span>
 </h2>
 
