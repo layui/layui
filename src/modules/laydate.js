@@ -1410,6 +1410,22 @@
         }
       };
 
+      var setTimeListVisibility = function(){
+        var showHour = options.format.indexOf('H') !== -1;
+        var showMinute = options.format.indexOf('m') !== -1;
+        var showSecond = options.format.indexOf('s') !== -1;
+        var liElem = ul.children;
+        var hideCount = 0;
+
+        lay.each([showHour, showMinute, showSecond], function(i, isShow){
+          if(!isShow){
+            liElem[i].className += ' layui-hide';
+            hideCount++;
+          }
+        })
+        ul.className += (' laydate-time-list-hide-' + hideCount);
+      }
+
       //初始化时间对象
       if(options.range){
         if(!that[startEnd]){
@@ -1429,6 +1445,7 @@
         ul.appendChild(li);
       });
       setTimeStatus();
+      setTimeListVisibility();
     }
 
     //插入容器
