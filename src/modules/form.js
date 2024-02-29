@@ -666,7 +666,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             if(lay.ie && (lay.ie === '10' || lay.ie === '11') && input.attr('placeholder')){
               eventsType = 'keyup';
             }
-            input.on(eventsType, search).on('blur', function(e){
+            input.on(eventsType, layui.throttle(search, 50)).on('blur', function(e){
               var selectedIndex = select[0].selectedIndex;
               
               thatInput = input; // 当前的 select 中的 input 元素
