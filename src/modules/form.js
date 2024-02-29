@@ -408,6 +408,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
           // 搜索项
           var laySearch = select.attr('lay-search');
+
+           // #1449
+           // IE10 和 11 中，带有占位符的 input 元素获得/失去焦点时，会触发 input 事件
+           // 当鼠标按下时，根据 input 元素上的 __ieph 标识忽略 input 事件
+          var needPlaceholderPatch = !!(lay.ie && (lay.ie === '10' || lay.ie === '11') && input.attr('placeholder'));
           
           // 展开下拉
           var showDown = function(){
@@ -431,6 +436,15 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             }
 
             followScroll();
+
+            if(needPlaceholderPatch){
+              dl.off('mousedown.select.ieph').on('mousedown.select.ieph', function(){
+                input[0].__ieph = true;
+                setTimeout(function(){
+                  input[0].__ieph = false;
+                }, 10)
+              });
+            }
           };
           
           // 隐藏下拉
@@ -623,6 +637,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               return false;
             }
             
+            if(needPlaceholderPatch && e.target.__ieph){
+              e.target.__ieph = false;
+              return false;
+            }
+            
             notOption(value, function(none, hasEquals){
               if(isCreatable){
                 if(hasEquals){
@@ -661,12 +680,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           };
           
           if(isSearch){
-            // #1449: IE10 和 11 中，带有占位符的 input 元素获得/失去焦点时，会触发 input 事件
-            var eventsType = 'input propertychange';
-            if(lay.ie && (lay.ie === '10' || lay.ie === '11') && input.attr('placeholder')){
-              eventsType = 'keyup';
-            }
-            input.on(eventsType, layui.throttle(search, 50)).on('blur', function(e){
+            input.on('input propertychange', layui.throttle(search, 50)).on('blur', function(e){
               var selectedIndex = select[0].selectedIndex;
               
               thatInput = input; // 当前的 select 中的 input 元素
