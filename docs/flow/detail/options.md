@@ -103,6 +103,18 @@ layui.each(data, function(index, item){
 </td>
     </tr>
     <tr>
+<td>direction <sup>2.9.7+</sup></td>
+<td>
+  
+指定触发加载的方向，可选值：
+- `bottom` 滚动容器底部触发加载
+- `top` 滚动容器顶部触发加载
+
+</td>
+<td>string</td>
+<td>'bottom'</td>
+    </tr>
+    <tr>
 <td>done</td>
 <td colspan="3">
 

@@ -377,14 +377,19 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   Class.prototype.remove = function(){
     var that = this;
     var options = that.config;
-    var elemPrev = thisModule.prevElem;
+    var prevContentElem = thisModule.prevElem;
     
     // 若存在已打开的面板元素，则移除
-    if(elemPrev){
-      elemPrev.data('prevElem') && (
-        elemPrev.data('prevElem').data(MOD_INDEX +'_opened', false)
-      );
-      elemPrev.remove();
+    if(prevContentElem){
+      var prevId = prevContentElem.attr('lay-id');
+      var prevTriggerElem = prevContentElem.data('prevElem');
+      var prevInstance = thisModule.getThis(prevId);
+      var prevOnClose = prevInstance.config.close;
+      
+      prevTriggerElem && prevTriggerElem.data(MOD_INDEX +'_opened', false);
+      prevContentElem.remove();
+      delete thisModule.prevElem;
+      typeof prevOnClose === 'function' && prevOnClose.call(prevInstance.config, prevTriggerElem);
     }
     lay('.' + STR_ELEM_SHADE).remove();
   };
