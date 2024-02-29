@@ -409,9 +409,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           // 搜索项
           var laySearch = select.attr('lay-search');
 
-           // #1449
-           // IE10 和 11 中，带有占位符的 input 元素获得/失去焦点时，会触发 input 事件
-           // 当鼠标按下时，根据 input 元素上的 __ieph 标识忽略 input 事件
+          // #1449
+          // IE10 和 11 中，带有占位符的 input 元素获得/失去焦点时，会触发 input 事件
+          // 当鼠标按下时，根据 input 元素上的 __ieph 标识忽略 input 事件
           var needPlaceholderPatch = !!(lay.ie && (lay.ie === '10' || lay.ie === '11') && input.attr('placeholder'));
           
           // 展开下拉
