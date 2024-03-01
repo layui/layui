@@ -442,7 +442,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 input[0].__ieph = true;
                 setTimeout(function(){
                   input[0].__ieph = false;
-                }, 10)
+                }, 60)
               });
             }
           };
@@ -680,7 +680,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           };
           
           if(isSearch){
-            input.on('input propertychange', layui.throttle(search, 50)).on('blur', function(e){
+            input.on('input propertychange', layui.debounce(search, 50)).on('blur', function(e){
               var selectedIndex = select[0].selectedIndex;
               
               thatInput = input; // 当前的 select 中的 input 元素
