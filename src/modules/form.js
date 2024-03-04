@@ -596,9 +596,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             layui.each(dds, function(){
               var othis = $(this);
               var text = othis.text();
+              var isCreateOption = isCreatable && othis.hasClass(CREATE_OPTION);
 
               // 需要区分大小写
-              if(isCreatable && text === rawValue){
+              if(!isCreateOption && text === rawValue){
                 hasEquals = true;
               }
 
@@ -612,7 +613,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               var not = text.indexOf(value) === -1;
               
               if(value === '' || (origin === 'blur') ? value !== text : not) num++;
-              origin === 'keyup' && othis[(not && (isCreatable ? !othis.hasClass(CREATE_OPTION) : true)) ? 'addClass' : 'removeClass'](HIDE);
+              origin === 'keyup' && othis[(isCreatable ? (not && !isCreateOption) : not) ? 'addClass' : 'removeClass'](HIDE);
             });
             // 处理 select 分组元素
             origin === 'keyup' && layui.each(dts, function(){
