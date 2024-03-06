@@ -599,7 +599,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               var isCreateOption = isCreatable && othis.hasClass(CREATE_OPTION);
 
               // 需要区分大小写
-              if(!isCreateOption && text === rawValue){
+              if(isCreatable && !isCreateOption && text === rawValue){
                 hasEquals = true;
               }
 
