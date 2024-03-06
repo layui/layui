@@ -80,6 +80,17 @@ layui.define(['jquery', 'lay'], function(exports){
     theme: '#16baaa' //主题颜色
   };
 
+  // 数值精度
+  Class.prototype.precision = function(){
+    var that = this;
+    var options = that.config;
+    var precisions = $.map([options.min, options.max, options.step], function(v, i){
+      var decimalArr = String(v).split('.');
+      return decimalArr[1] ? decimalArr[1].length : 0;
+    })
+    return Math.max.apply(null, precisions);
+  }
+
   //滑块渲染
   Class.prototype.render = function(){
     var that = this;
@@ -99,8 +110,8 @@ layui.define(['jquery', 'lay'], function(exports){
     // 合并 lay-options 属性上的配置信息
     $.extend(options, lay.options(elem[0]));
 
-    //间隔值不能小于 1
-    if(options.step < 1) options.step = 1;
+    //间隔值不能小于等于 0
+    if(options.step <= 0) options.step = 1;
 
     //最大值不能小于最小值
     if(options.max < options.min) options.max = options.min + options.step;
@@ -117,8 +128,8 @@ layui.define(['jquery', 'lay'], function(exports){
       options.value[0] = Math.min(options.value[0],options.max);
       options.value[1] = Math.min(options.value[1],options.max);
 
-      var scaleFir = Math.floor((options.value[0] - options.min) / (options.max - options.min) * 100);
-      var scaleSec = Math.floor((options.value[1] - options.min) / (options.max - options.min) * 100);
+      var scaleFir = (options.value[0] - options.min) / (options.max - options.min) * 100;
+      var scaleSec = (options.value[1] - options.min) / (options.max - options.min) * 100;
       var scale = scaleSec - scaleFir + '%';
       scaleFir = scaleFir + '%';
       scaleSec = scaleSec + '%';
@@ -132,7 +143,7 @@ layui.define(['jquery', 'lay'], function(exports){
       if(options.value < options.min) options.value = options.min;
       if(options.value > options.max) options.value = options.max;
 
-      var scale = Math.floor((options.value - options.min) / (options.max - options.min) * 100) + '%';
+      var scale = (options.value - options.min) / (options.max - options.min) * 100 + '%';
     }
 
 
@@ -281,7 +292,8 @@ layui.define(['jquery', 'lay'], function(exports){
     var sliderWrap = sliderAct.find('.' + SLIDER_WRAP);
     var sliderTxt = sliderAct.next('.' + SLIDER_INPUT);
     var inputValue = sliderTxt.children('.' + SLIDER_INPUT_TXT).children('input').val();
-    var step = 100 / ((options.max - options.min) / Math.ceil(options.step));
+    var step = 100 / ((options.max - options.min) / options.step);
+    var precision = that.precision();
     var change = function(offsetValue, index, from){
       if(Math.ceil(offsetValue) * step > 100){
         offsetValue = Math.ceil(offsetValue) * step
@@ -309,7 +321,8 @@ layui.define(['jquery', 'lay'], function(exports){
       }else{
         sliderAct.find('.' + SLIDER_BAR).css({"width":wrapWidth + '%', "left":minLeft + '%'});
       }
-      var selfValue = options.min + Math.round((options.max - options.min) * offsetValue / 100);
+      var selfValue = options.min + (options.max - options.min) * offsetValue / 100;
+      selfValue = Number(parseFloat(selfValue).toFixed(precision));
       inputValue = selfValue;
       sliderTxt.children('.' + SLIDER_INPUT_TXT).children('input').val(inputValue);
       sliderWrap.eq(index).data('value', selfValue);
@@ -366,7 +379,9 @@ layui.define(['jquery', 'lay'], function(exports){
     };
 
     //动态赋值
-    if(setValue === 'set') return change(value - options.min, i, 'done');
+    if(setValue === 'set'){
+      return change((value - options.min) / (options.max - options.min) * 100 / step, i, 'done');
+    } 
 
     //滑块滑动
     sliderAct.find('.' + SLIDER_WRAP_BTN).each(function(index){
