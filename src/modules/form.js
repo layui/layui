@@ -942,22 +942,34 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         radios.each(function(index, radio){
           var othis = $(this), hasRender = othis.next('.' + CLASS);
           var disabled = this.disabled;
+          var skin = othis.attr('lay-skin');
           
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
           hasRender[0] && hasRender.remove(); // 如果已经渲染，则Rerender
+
+          var title = util.escape(radio.title || '');
+          var titleTplAttrs = [];
+          if(othis.next('[lay-radio]')[0]){
+            var titleTplElem = othis.next();
+            title = titleTplElem.html() || '';
+            if(titleTplElem[0].attributes.length > 1){
+              layui.each(titleTplElem[0].attributes, function(i, attr){
+                if(attr.name !== 'lay-radio'){
+                  titleTplAttrs.push(attr.name + '="' + attr.value + '"')
+                }
+              })
+            }
+          }
+          titleTplAttrs = titleTplAttrs.join(' ');
           
           // 替代元素
           var reElem = $(['<div class="layui-unselect '+ CLASS, 
             (radio.checked ? (' '+ CLASS +'ed') : ''), // 选中状态
-          (disabled ? ' layui-radio-disabled '+DISABLED : '') +'">', // 禁用状态
+          (disabled ? ' layui-radio-disabled '+DISABLED : '') +'"',
+          (skin ? ' lay-skin="'+ skin +'"' : ''),
+          '>', // 禁用状态
           '<i class="layui-anim layui-icon '+ ICON[radio.checked ? 0 : 1] +'"></i>',
-          '<div>'+ function(){
-            var title = util.escape(radio.title || '');
-            if(othis.next('[lay-radio]')[0]){
-              title = othis.next().html();
-            }
-            return title;
-          }() +'</div>',
+          '<div ' + titleTplAttrs +'>'+ title +'</div>',
           '</div>'].join(''));
 
           othis.after(reElem);
