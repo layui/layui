@@ -1146,6 +1146,32 @@
   }
 
   /**
+   * 不可选取的年或月。年或月中的所有日期都禁用时，才判定为不可选取。
+   * @param {Date} date 要检测的年/月
+   * @param {'year' | 'month'} type 面板类型
+   * @param {'start' | 'end'} position 面板位置
+   */
+  Class.prototype.isDisabledYearOrMonth = function(date, type, position){
+    var that = this;
+    var options = that.config;
+    var millisecondsInDay = 24 * 60 * 60 * 1000;
+
+    var startDay = type === 'year' ? that.startOfYear(date) : that.startOfMonth(date);
+    var endDay = type === 'year' ? that.endOfYear(date) : that.endOfMonth(date);
+    var numOfDays = Math.floor((endDay.getTime() - startDay.getTime()) / millisecondsInDay) + 1;
+    var disabledCount = 0;
+      
+    for(var i = 0; i < numOfDays; i++){
+      var day = that.addDays(startDay, i);
+      if(options.disabledDate.call(options, day, position)){
+        disabledCount++;
+      }
+    }
+
+    return disabledCount === numOfDays;
+  }
+
+  /**
    * @typedef limitOptions
    * @prop {JQuery} [elem] - 检测的元素, 例如面板中年月日时分秒元素，“现在”，“确认” 按钮等
    * @prop {number} [index] - 元素集合中，当前检测元素的索引，years:0,month:0,date:0-41,hms:0
@@ -1156,68 +1182,79 @@
    * @prop {'date' | 'time' | 'datetime'} disabledType - 禁用类型，按钮应使用 datetime
    */
   /**
-   * 不可选取的日期时间
-   * @param {limitOptions} opts 
-   * @param {number} currentDataTime 当前检测的日期的时间戳
-   * @returns 
+   * 不可选取的日期
+   * @param {number} date 当前检测的日期的时间戳
+   * @param {limitOptions} opts
+   * @returns {boolean}
    */
-  Class.prototype.disabledDateTime = function(opts, currentDataTime){
+  Class.prototype.isDisabledDate = function(date, opts){
     opts = opts || {};
 
     var that = this;
     var options = that.config;
     var position = options.range ? (opts.rangeType === 0 ? 'start' : 'end') : 'start';
-    var ONE_DAY = 24 * 60 * 60 * 1000;
+    
+    if(!options.disabledDate) return false;
+    if(options.type === 'time')return false;
+    if(!(opts.disabledType === 'date' || opts.disabledType === 'datetime'))return false;
 
-    var isDisabledYearOrMonth = function(date, type){
-      var startDay = type === 'year' ? that.startOfYear(date) : that.startOfMonth(date);
-      var endDay = type === 'year' ? that.endOfYear(date) : that.endOfMonth(date);
-
-      var numOfDays = Math.floor((endDay.getTime() - startDay.getTime()) / ONE_DAY) + 1;
-      for(var i = 0; i < numOfDays; i++){
-        var day = that.addDays(startDay, i);
-        if(!options.disabledDate.call(options, day, position)){
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    var isDisabledDate = function(date){
-      if(!options.disabledDate) return;
-      if(options.type === 'time')return;
-      if(!(opts.disabledType === 'date' || opts.disabledType === 'datetime'))return;
-      var normalizedDate = new Date(date);
-      normalizedDate.setHours(0, 0, 0, 0);
+    // 不需要时分秒
+    var normalizedDate = new Date(date);
+    normalizedDate.setHours(0, 0, 0, 0);
      
-      return opts.type === 'year' || opts.type === 'month'
-        ? isDisabledYearOrMonth(normalizedDate, opts.type)
-        : options.disabledDate.call(options, normalizedDate, position);
-    }
+    return opts.type === 'year' || opts.type === 'month'
+      ? that.isDisabledYearOrMonth(normalizedDate, opts.type, position)
+      : options.disabledDate.call(options, normalizedDate, position);
+  }
+
+  /**
+   * 不可选取的时间
+   * @param {number} date 当前检测的日期的时间戳
+   * @param {limitOptions} opts
+   * @returns {boolean}
+   */
+  Class.prototype.isDisabledTime = function(date, opts){
+    opts = opts || {};
+
+    var that = this;
+    var options = that.config;
+    var position = options.range ? (opts.rangeType === 0 ? 'start' : 'end') : 'start';
+ 
+    if(!options.disabledTime) return false;
+    if(!(options.type === "time" || options.type === "datetime")) return false;
+    if(!(opts.disabledType === 'time' || opts.disabledType === 'datetime'))return false;
 
     var isDisabledItem = function(val, disabledRange){
       return (disabledRange && disabledRange.length) ? disabledRange.indexOf(val) !== -1 : false;
     }
 
-    var isDisabledTime = function(date){
-      if(!options.disabledTime) return;
-      if(!(options.type === "time" || options.type === "datetime")) return;
-      if(!(opts.disabledType === 'time' || opts.disabledType === 'datetime'))return;
+    var dateObj = that.systemDate(new Date(date));
+    var disabledTime = options.disabledTime.call(options, that.newDate(date), position);
 
-      var date = that.systemDate(new Date(date));
-      var disabledTime = options.disabledTime.call(options, that.newDate(date), position);
+    // 面板中的时分秒 HTML 元素需要分别检测是否禁用
+    // 按钮检测任意一项是否禁用即可
+    return opts.disabledType === 'datetime'
+      ? isDisabledItem(dateObj.hours, disabledTime.hours)
+          || isDisabledItem(dateObj.minutes, disabledTime.minutes)
+          || isDisabledItem(dateObj.seconds, disabledTime.seconds)
+      : [isDisabledItem(dateObj.hours, disabledTime.hours),
+          isDisabledItem(dateObj.minutes, disabledTime.minutes),
+          isDisabledItem(dateObj.seconds, disabledTime.seconds)][opts.time.length - 1];
+  }
 
-      return opts.disabledType === 'datetime'
-        ? isDisabledItem(date.hours, disabledTime.hours)
-            || isDisabledItem(date.minutes, disabledTime.minutes)
-            || isDisabledItem(date.seconds, disabledTime.seconds)
-        : [isDisabledItem(date.hours, disabledTime.hours),
-            isDisabledItem(date.minutes, disabledTime.minutes),
-            isDisabledItem(date.seconds, disabledTime.seconds)][opts.time.length - 1];
-    }
+  /**
+   * 不可选取的日期时间
+   * @param {number} timestamp 当前检测的日期的时间戳
+   * @param {limitOptions} opts 
+   * @returns 
+   */
+  Class.prototype.disabledDateTime = function(timestamp, opts){
+    opts = opts || {};
 
-    return isDisabledDate(currentDataTime) || isDisabledTime(currentDataTime);
+    var that = this;
+    var options = that.config;
+
+    return that.isDisabledDate(timestamp, opts) || that.isDisabledTime(timestamp, opts);
   }
 
 
@@ -1253,7 +1290,7 @@
       }())).getTime();  //time：是否比较时分秒
     });
 
-    isOut = timestamp.now < timestamp.min || timestamp.now > timestamp.max || that.disabledDateTime(opts, timestamp.now);
+    isOut = timestamp.now < timestamp.min || timestamp.now > timestamp.max || that.disabledDateTime(timestamp.now, opts);
     opts.elem && opts.elem[isOut ? 'addClass' : 'removeClass'](DISABLED);
 
     return isOut;
@@ -1325,7 +1362,7 @@
         },
         index: index_,
         rangeType: index,
-        disabledType: 'date'
+        disabledType: 'date' // 日面板，检测当前日期是否禁用
       });
     });
 
@@ -1387,14 +1424,14 @@
         date: that.systemDate(/^(datetime|time)$/.test(options.type) ? new Date() : null),
         index: 0,
         time: timeParams,
-        disabledType: 'datetime'
+        disabledType: 'datetime' // 按钮，检测日期和时间
       });
       // 确认按钮
       that.limit({
         elem: lay(that.footer).find(ELEM_CONFIRM),
         index: 0,
         time: timeParams,
-        disabledType: 'datetime'
+        disabledType: 'datetime' // 按钮，检测日期和时间
       });
     }
 
@@ -1472,7 +1509,7 @@
           index: index,
           type: type,
           rangeType: index,
-          disabledType: 'date'
+          disabledType: 'date' // 年面板，检测当前年份中的所有日期是否禁用
         });
         yearNum++;
       });
@@ -1511,7 +1548,7 @@
           index: index,
           type: type,
           rangeType: index,
-          disabledType: 'date'
+          disabledType: 'date' // 月面板，检测当前月份中的所有日期是否禁用
         });
       });
 
@@ -1539,7 +1576,7 @@
               }][i],
               index: index,
               rangeType: index,
-              disabledType: 'time',
+              disabledType: 'time', // 时间面板，分别检测时分秒列表是否禁用
               time: [
                 ['hours'],
                 ['hours', 'minutes'],
@@ -1554,7 +1591,7 @@
             date: that[startEnd],
             index: 0,
             time: ['hours', 'minutes', 'seconds'],
-            disabledType: 'datetime'
+            disabledType: 'datetime' // 确认按钮，检测时分秒列表任意一项是否禁用
           });
         }
       };
@@ -1747,12 +1784,12 @@
       //如果不在有效日期内，直接禁用按钮，否则比较开始和结束日期
       (that.limit({
         date: start,
-        disabledType: 'datetime',
+        disabledType: 'datetime', // 按钮，检测日期和时间
         time: timeParams,
         rangeType: 0
       }) || that.limit({
         date: end,
-        disabledType: 'datetime',
+        disabledType: 'datetime', // 按钮，检测日期和时间
         time: timeParams,
         rangeType: 1
       }))
@@ -2028,6 +2065,7 @@
         that.startDate = lay.extend({}, dateTime); // 同步startDate
       }
       // 校验另外一个日期是否在有效的范围内
+      // 此处为范围选择的日期面板点击选中处理，所以 disabledType 为 date
       if (that.endState && !that.limit({date: that.rangeLinked ? that.startDate : that.thisDateTime(1 - index), disabledType:'date'})) {
         // 根据选择之后判断是否需要切换模式
         var isChange;
@@ -2193,7 +2231,7 @@
           date: {
             year: listYM[0]
           },
-          disabledType: 'datetime'
+          disabledType: 'datetime' // 按钮，检测日期和时间
         });
       }
 
