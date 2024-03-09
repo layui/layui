@@ -79,7 +79,7 @@
 开启表格头部工具栏。支持以下几种值写法：
 
 - `toolbar: '#template-id'`  自定义工具栏模板选择器
-- `toolbar: '<div>xxx</div>` 直接传入模板字符
+- `toolbar: '<div>xxx</div>'` 直接传入模板字符
 - `toolbar: true` 仅开启工具栏右侧，不显示左侧模板
 - `toolbar: 'default'` 开启工具栏并显示默认模板
 

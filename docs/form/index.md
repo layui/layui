@@ -117,6 +117,7 @@ form 还可以借助*栅格*实现更灵活的响应式布局。
 | lay-affix | [#详见](input.html#affix) | 输入框动态点缀，`<input type="text">`元素 **私有属性** |
 | lay-skin | [#详见](checkbox.html#default) | 设置 UI 风格。 `<input type="checkbox">` 元素 **私有属性** |
 | lay-search | 默认不区分大小写;<br>设置`cs`区分大小写 | 给 `select` 组件开启搜索功能。`<select>` 元素 **私有属性** |
+| lay-creatable <sup>2.9.7+</sup> | 无需值 | 是否允许创建新条目，需要配合 `lay-search` 使用。`<select>` 元素 **私有属性** } |
 | lay-submit | 无需值 | 设置元素（一般为`<button>` 标签）触发 `submit` 提交事件 |
 | lay-ignore | 无需值 | 设置表单元素忽略渲染，即让元素保留系统原始 UI 风格 |
 
