@@ -913,8 +913,8 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-form-radio[lay-skin="none"]>div{position: relative; top: 0; left: 0; cursor: pointer; z-index: 10; color: inherit; background-color: inherit;}
 .layui-form-checkbox[lay-skin="none"]>i,
 .layui-form-radio[lay-skin="none"]>i{display: none;}
-.layui-form-checkbox[lay-skin="none"].layui-checkbox-disabled > div,
-.layui-form-radio[lay-skin="none"].layui-radio-disabled{cursor: not-allowed;}
+.layui-form-checkbox[lay-skin="none"].layui-checkbox-disabled>div,
+.layui-form-radio[lay-skin="none"].layui-radio-disabled>div{cursor: not-allowed;}
 
 .layui-checkbox-disabled{border-color: #eee !important;}
 .layui-checkbox-disabled > div{color: #c2c2c2!important;}
