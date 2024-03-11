@@ -3,6 +3,7 @@
   /* 主体 */
   .layui-form-checkbox>.lay-skin-checkcard,
   .layui-form-radio>.lay-skin-checkcard {
+    display: table;
     display: flex;
     padding: 12px;
     white-space: normal;
@@ -14,6 +15,7 @@
 
   .layui-form-checkbox>.lay-skin-checkcard>*,
   .layui-form-radio>.lay-skin-checkcard>* {
+    /* display: table-cell; */  /* IE */
     vertical-align: top;
   }
 
