@@ -39,7 +39,7 @@ layui.use(function(){
 - 属性 `checked` 可设置默认选中
 - 属性 `disabled` 可设置禁用状态
 - 属性 `value` 可设置值，否则选中时返回的默认值为 `on`（浏览器默认机制）
-- 属性 `lay-skin` 可设置复选框风格，可选值：`tag`<sup>2.8+</sup>,`switch`，默认风格可不填
+- 属性 `lay-skin` 可设置复选框风格，可选值：`tag`<sup>2.8+</sup>,`switch`，`none`(无样式)<sup>2.9.8+</sup> 默认风格可不填
 
 特别地，当表单提交时，只有选中状态的复选框才能获取到 `value`，这点和浏览器原有的复选框机制相同。 
 
@@ -116,6 +116,19 @@ layui.use(function(){
 </div>
 
 <!-- import layui -->
+  </textarea>
+</pre>
+
+
+<h2 id="custom-skin" lay-toc="{}">模板自定义风格 <sup>2.9.8+</sup></h2>
+
+在 `checkbox` 元素上设置 `lay-skin="none"` 启用无样式风格，然后就可以用模板自定义样式。
+
+<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+  obj.render();
+}}">
+  <textarea>
+{{- d.include("/form/examples/checkbox.skin.md") }} 
   </textarea>
 </pre>
 
