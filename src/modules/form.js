@@ -965,9 +965,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           // 替代元素
           var reElem = $(['<div class="layui-unselect '+ CLASS, 
             (radio.checked ? (' '+ CLASS +'ed') : ''), // 选中状态
-          (disabled ? ' layui-radio-disabled '+DISABLED : '') +'"',
+          (disabled ? ' layui-radio-disabled '+DISABLED : '') +'"', // 禁用状态
           (skin ? ' lay-skin="'+ skin +'"' : ''),
-          '>', // 禁用状态
+          '>',
           '<i class="layui-anim layui-icon '+ ICON[radio.checked ? 0 : 1] +'"></i>',
           '<div ' + titleTplAttrs +'>'+ title +'</div>',
           '</div>'].join(''));
