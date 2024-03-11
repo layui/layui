@@ -24,6 +24,7 @@ toc: true
 | [dropdown.reload(id, options)](#reload) | 完整重载 |
 | [dropdown.reloadData(id, options)](#reload) <sup>2.8+</sup> | 仅重载数据或内容 |
 | [dropdown.close(id)](#close) | 关闭对应的组件面板 |
+| [dropdown.open(id)](#open) <sup>2.9.8+</sup> | 打开对应的组件面板 |
 
 <h3 id="render" lay-toc="{level: 2}">渲染</h3>
 
@@ -154,4 +155,26 @@ dropdown.render({
 });
 // 关闭对应的组件面板
 dropdown.close('test');
+```
+
+
+<h3 id="open" lay-pid="api" class="ws-anchor ws-bold">打开面板 <sup>2.9.8+</sup></h3>
+
+`dropdown.open(id);`
+
+- 参数 `id` : 组件渲染时定义的 `id` 属性值
+
+该方法用于打开对应的 `dropdown` 组件面板。
+
+```
+var dropdown = layui.dropdown;
+
+// 渲染
+dropdown.render({
+  elem: '', // 绑定元素选择器
+  id: 'test', // 自定义 id 
+  // 其他属性 …
+});
+// 打开对应的组件面板
+dropdown.open('test');
 ```
