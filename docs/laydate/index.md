@@ -34,7 +34,7 @@ toc: true
 | [laydate.render(options)](#render) | laydate 组件渲染，核心方法。 |
 | [laydate.hint(id, opts)](#hint) <sup>2.8+</sup> | 在对应的 laydate 组件面板上弹出提示层。 |
 | [laydate.getInst(id)](#getInst) <sup>2.8+</sup> | 获取组件对应的渲染实例。 |
-| [laydate.unbind(id)](#close) <sup>2.8+</sup> | 对目标元素解除当前实例的绑定。 |
+| [laydate.unbind(id)](#unbind) <sup>2.8+</sup> | 对目标元素解除当前实例的绑定。 |
 | [laydate.close(id)](#close) <sup>2.7+</sup> | 关闭日期面板。 |
 | [laydate.getEndDate(month, year)](#getEndDate) | 获取某月的最后一天。 |
 
@@ -160,7 +160,7 @@ laydate.render({
   // 其他属性 …
 });
 // 关闭对应的日期面板
-laydate.cllose('test');
+laydate.close('test');
 ```
 
 <h3 id="getEndDate" lay-pid="api" class="ws-anchor ws-bold">获取某月的最后一天</h3>

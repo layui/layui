@@ -13,11 +13,18 @@ body{padding: 50px;}
 </head>
 <body>
 
-<button class="layui-btn" lay-active="e1">事件1</button>
-<button class="layui-btn" lay-active="e2">事件2</button>
-<button class="layui-btn" lay-active="e3">事件3</button>
+<button class="layui-btn" lay-on="e1">事件1</button>
+<button class="layui-btn" lay-on="e2">事件2</button>
+<button class="layui-btn" lay-on="e3">事件3</button>
+<button class="layui-btn" lay-active="e4">hover: active - 事件4</button>
+<button class="layui-btn" lay-active1="e4">hover: active1 - 事件4</button>
 
-<button class="layui-btn" lay-active2="e4">事件4</button>
+<br><br>
+
+<div id="ID-util-on-test">
+  <button class="layui-btn" lay-on="e1">新的容器 - 事件1</button>
+  <button class="layui-btn" lay-on="e5">新的容器 - 事件5</button>
+</div>
 
 <hr>
 
@@ -29,16 +36,25 @@ body{padding: 50px;}
 
 <hr>
 
+请编辑格式：
+<div class="layui-inline">
+  <input type="text" value="yyyy-MM-dd HH:mm:ss" class="layui-input" id="test2"/>
+</div>
+<span class="layui-word-aux" id="test3"></span>
+
+<hr>
+
 <div id="target-test" style1="position: relative; height: 300px; overflow: auto;">
   1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>1<br>
 </div>
 
 <script src="../src/layui.js"></script>
 <script>
-layui.use(['util', 'layer'], function(){
+layui.use(['lay', 'util', 'layer'], function(){
   var $ = layui.$;
   var util = layui.util;
   var layer = layui.layer;
+  var lay = layui.lay;
 
   // 固定块
   util.fixbar({
@@ -48,7 +64,7 @@ layui.use(['util', 'layer'], function(){
     }, {
       type: 'help',
       icon: 'layui-icon-help'
-    }, { 
+    }, {
       type: 'cart',
       icon: 'layui-icon-cart',
       style: 'background-color: #FF5722;'
@@ -67,7 +83,7 @@ layui.use(['util', 'layer'], function(){
     on: { // 任意事件 --  v2.8.0 新增
       mouseenter: function(type){
         layer.tips(type, this, {
-          tips: 4, 
+          tips: 4,
           fixed: true
         });
       },
@@ -81,47 +97,94 @@ layui.use(['util', 'layer'], function(){
       // layer.msg(type);
     }
   });
-  
-  //倒计时
-  var endTime = new Date(2099,1,1).getTime() //假设为结束日期
-  ,serverTime = new Date().getTime(); //假设为当前服务器时间，这里采用的是本地时间，实际使用一般是取服务端的
-   
-  util.countdown(endTime, serverTime, function(date, serverTime, timer){
-    var str = date[0] + '天' + date[1] + '时' +  date[2] + '分' + date[3] + '秒';
-    $('#test').html('距离2099年1月1日还有：'+ str);
+
+
+  // 批量处理事件
+  util.on({
+    e1: function(othis){
+      alert(othis.html())
+    },
+    e2: function(othis){
+      alert(othis.html())
+    }
   });
-  
-  //某个时间在当前时间的多久前
+
+  // Test: 事件集的替换和增加
+  util.on({
+    e1: function(othis){ // 重置事件 e1
+      alert(othis.html() + ' - replace')
+    },
+    e3: function(othis){ // 增加事件 e3
+      alert(othis.html())
+    }
+  });
+
+  // 自定义触发事件的元素属性名、自定义触发事件的方式
+  util.on('lay-active', {
+    e4: layui.throttle(function(othis) {
+      layer.tips(othis.html(), this, { tips: 3 });
+    }, 3000), // 3s 内不重复执行
+    e5: function() {
+      console.log(111);
+    }
+  }, {
+    trigger: 'mouseenter'
+  });
+  // Test: 不同属性、相同值
+  util.on('lay-active1', {
+    e4: function(othis) {
+      this.innerHTML = 'hover: '+ (Math.random()*100000 | 0);
+    }
+  }, {
+    trigger: 'mouseenter'
+  });
+
+  // 自定义触发事件的委托元素
+  util.on({
+    // 此处与委托在 body 上的事件共用了 e1 名称，以测试事件冒泡
+    e1: function(othis, e){
+      this.innerHTML = 'click: '+ (Math.random()*100000 | 0);
+      layui.stope(e); // 阻止事件冒泡
+    },
+    e5: function(othis) {
+      this.innerHTML = 'click: '+ (Math.random()*100000 | 0);
+    }
+  }, {
+    elem: '#ID-util-on-test'
+  });
+
+
+  // 倒计时
+  var countdown = util.countdown({
+    date: '2099-12-31 00:00:00', // 目标时间值
+    now: new Date(), // 当前时间，一般为服务器时间，此处以本地时间为例
+    ready: function(){ // 初始操作
+      clearTimeout(util.countdown.timer); // 清除旧定时器，防止多次渲染时重复执行。实际使用时不常用
+    },
+    clock: function(obj, inst){  // 计时中
+      var str = [obj.d,'天',obj.h,'时',obj.m,'分',obj.s,'秒'].join(' ');
+      lay('#test').html(str);
+      util.countdown.timer = inst.timer; // 记录当前定时器，以便在重复渲染时清除。实际使用时不常用
+    },
+    done: function(obj, inst){ // 计时完成
+      layer.msg('Time is up');
+    }
+  });
+
+  // 某个时间在当前时间的多久前
   var str = util.timeAgo(new Date(2017,7,15,2,58,0));
   $('#test1').html('示例写于：'+ str);
-  
-  //处理属性 为 lay-active 的所有元素事件
-  util.event('lay-active', {
-    e1: function(othis){
-      alert(othis.html())
-    }
-    ,e2: function(othis){
-      alert(othis.html())
-    }
-    ,e3: function(othis){
-      alert(othis.html())
-    }
-  });
-  
-  //测试是否重复绑定
-  util.event('lay-active', {
-    e1: function(othis){
-      alert(othis.html() + '新事件')
-    }
-  });
-  
-  //测试绑定新事件
-  util.event('lay-active2', {
-    e4: function(othis){
-      alert(othis.html())
-    }
-  });
-  
+
+  // 转换日期格式
+  var timer = null
+  var toDateString = function (format) {
+    var dateString = util.toDateString(new Date(), format);
+    $('#test3').html(dateString)
+  }
+  timer = setInterval(() => {
+    toDateString($('#test2').val())
+  }, 50)
+
 });
 </script>
 </body>

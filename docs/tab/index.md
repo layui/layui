@@ -46,6 +46,7 @@ tab 组件提供了三种 UI 风格，分别为：
     <div class="layui-tab-item">内容-5</div>
   </div>
 </div>
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -71,6 +72,7 @@ tab 组件提供了三种 UI 风格，分别为：
     <div class="layui-tab-item">内容-5</div>
   </div>
 </div>
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -96,6 +98,7 @@ tab 组件提供了三种 UI 风格，分别为：
     <div class="layui-tab-item">内容-5</div>
   </div>
 </div>
+<!-- import layui -->
   </textarea>
 </pre>
 
@@ -182,11 +185,12 @@ layui.use(function(){
 - 参数 `filter` : tab 容器（`class="layui-tab"`）的 `lay-filter` 属性值
 - 参数 `options` : 添加 tab 时的属性可选项，见下表：
 
-| options | 描述 | 类型 |
-| --- | --- | --- |
-| title | 选项卡的标题 | string |
-| content | 选项卡的内容，支持传入 `html` | string |
-| id | 选项卡标题元素的 `lay-id` 属性值 | string |
+| options | 描述 | 类型 | 默认 |
+| --- | --- | --- | --- |
+| title | 选项卡的标题 | string | - |
+| content | 选项卡的内容，支持传入 `html` | string | - |
+| id | 选项卡标题元素的 `lay-id` 属性值 | string | - |
+| change | 是否添加 tab 完毕后即自动切换 | boolean | `false` |
 
 该方法用于添加 tab 选项。用法详见 : [#示例](#examples)
 

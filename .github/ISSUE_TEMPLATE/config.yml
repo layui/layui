@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📄 官方文档
+    url: https://layui.dev/
+    about: 在创建 Issue 之前，请仔细查阅 Layui 开发文档，以便对其有更深入的了解，和更好地分析问题。
+  - name: 🔎 Gitee Issues
+    url: https://gitee.com/layui/layui/issues
+    about: 从 Gitee 平台的 6000+ Issues 中搜索相似议题，找到可供参考的解决方案。适用于 2.x 版本。

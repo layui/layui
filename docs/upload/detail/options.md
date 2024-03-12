@@ -74,6 +74,11 @@ data: {
 data: {
   id: function(){
     return $('#id').val();
+  },
+  id2: function(index, file){ // 参数支持。2.9.3+ 
+    // 注：当 unified:true 和 ie8/9 下，参数无效
+    console.log(index); // 得到文件索引
+    console.log(file); // 得到文件对象
   }
 }
 ```
@@ -91,6 +96,20 @@ data: {
 </td>
 <td>object</td>
 <td>-</td>
+    </tr>
+    <tr>
+<td>dataType <sup>2.8.17+</sup></td>
+<td>
+
+服务端返回的数据类型，如：`text,json,xml` 等
+
+</td>
+<td>string</td>
+<td>
+
+`json`
+
+</td>
     </tr>
     <tr>
 <td>
@@ -230,6 +249,20 @@ acceptMime: 'image/jpeg, image/png` // 只筛选 jpg,png 格式图片
 </td>
     </tr>
     <tr>
+<td>unified <sup>2.8.8+</sup></td>
+<td>
+  
+选择多文件时，是否统一上传，即只发送一次请求。
+
+</td>
+<td>boolean</td>
+<td>
+
+`false`
+
+</td>
+    </tr>
+    <tr>
 <td>number</td>
 <td>
   
@@ -250,6 +283,33 @@ acceptMime: 'image/jpeg, image/png` // 只筛选 jpg,png 格式图片
 <td>
 
 `true`
+
+</td>
+    </tr>
+    <tr>
+<td>
+  
+[text](#options.text) <sup>2.8.9+</sup>
+
+</td>
+<td colspan="4">
+
+<div id="options.text" lay-pid="options" class="ws-anchor">  
+
+自定义内部各类场景下的提示文本
+
+</div>
+
+```
+text: { // 自定义提示文本
+  "data-format-error": "", // 数据格式错误的提示
+  "check-error": "", // 文件格式校验失败的提示
+  "error": "", // 上传失败的提示
+  "limit-number": null, // 限制 number 属性的提示。若设置，需为函数写法
+  "limit-size": null, // 限制 size 属性的提示。若设置，需为函数写法
+  "cross-domain": "", // IE 下跨域的提示
+}
+```
 
 </td>
     </tr>

@@ -2,7 +2,7 @@
 
 ## 文档预览
 
-- [最新文档](https://layui.dev)
+- [当前版本文档](https://layui.dev/docs/2/)
 - [2.7 文档](https://layui.dev/2.7/)
 
 ## 目录规范

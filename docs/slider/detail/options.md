@@ -11,13 +11,13 @@
       <th>描述</th>
       <th>类型</th>
       <th>默认值</th>
-    </tr> 
+    </tr>
   </thead>
   <tbody>
     <tr>
 <td>elem</td>
 <td>
-  
+
 绑定元素选择器或 DOM 对象
 
 </td>
@@ -26,7 +26,7 @@
     <tr>
 <td>type</td>
 <td>
-  
+
 滑块类型，可选值有：
 
 - `default` 水平滑块（默认）
@@ -43,7 +43,7 @@
     <tr>
 <td>value</td>
 <td>
-  
+
 滑块初始值。
 
 - 默认可直接设置数值，如： `value: 50`
@@ -56,7 +56,7 @@
     <tr>
 <td>range</td>
 <td>
-  
+
 是否开启滑块的区间选择。若开启，则滑块将出现两个可拖拽的点。
 
 </td>
@@ -70,7 +70,7 @@
     <tr>
 <td>min</td>
 <td>
-  
+
 滑块的最小值
 
 </td>
@@ -84,7 +84,7 @@
     <tr>
 <td>max</td>
 <td>
-  
+
 滑块的最大值
 
 </td>
@@ -98,7 +98,7 @@
     <tr>
 <td>step</td>
 <td>
-  
+
 滑块单次拖动的步长
 
 </td>
@@ -112,7 +112,7 @@
     <tr>
 <td>showstep</td>
 <td>
-  
+
 是否显示间断点
 
 </td>
@@ -126,7 +126,7 @@
     <tr>
 <td>tips</td>
 <td>
-  
+
 鼠标移入当前圆点，是否显示当前值
 
 </td>
@@ -138,9 +138,23 @@
 </td>
     </tr>
     <tr>
+<td>tipsAlways <sup>2.9.3+</sup></td>
+<td>
+
+是否始终显示提示文本，要开启此功能，tips 必须设置为 `true` 才能生效
+
+</td>
+<td>boolean</td>
+<td>
+
+`false`
+
+</td>
+    </tr>
+    <tr>
 <td>input</td>
 <td>
-  
+
 是否显示滑块的数字输入框。 注：若设置 `range: true` 则该属性强制无效。
 
 </td>
@@ -154,7 +168,7 @@
     <tr>
 <td>height</td>
 <td>
-  
+
 滑动条高度。 必须设置 `type: 'vertical'` 属性，即垂直滑块时有效。
 
 </td>
@@ -168,7 +182,7 @@
     <tr>
 <td>theme</td>
 <td>
-  
+
 滑块的主题色。
 
 </td>
@@ -178,7 +192,7 @@
     <tr>
 <td>disabled</td>
 <td>
-  
+
 是否禁用滑块
 
 </td>
@@ -192,13 +206,13 @@
     <tr>
 <td>setTips</td>
 <td colspan="3">
-  
+
 滑块拖拽时设置提示文本的回调函数。并返回当前的 `value` 参数。用法详见：[#设置提示文本](#demo-setTips)
 
 </td>
     </tr>
     <tr>
-<td colspan="4" style="text-align: center"> 
+<td colspan="4" style="text-align: center">
 
 
 <div id="options.callback" lay-pid="options" class="ws-anchor">
@@ -212,7 +226,7 @@
     <tr>
 <td>change</td>
 <td colspan="3">
-  
+
 滑块数值发生改变的回调函数。并返回当前的 `value` 参数。
 
 ```
@@ -232,7 +246,7 @@ slider.render({
     <tr>
 <td>done <sup>2.8+</sup></td>
 <td colspan="3">
-  
+
 滑块拖拽完毕的回调函数。并返回当前的 `value` 参数。滑块拖动过程中不会触发。
 
 ```

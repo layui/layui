@@ -2,7 +2,7 @@
 title: 工具模块 util
 toc: true
 ---
- 
+
 # 工具模块
 
 > 工具模块 `util` 是由工具类方法和小组件组成的集合。
@@ -20,38 +20,57 @@ toc: true
 | API | 描述 |
 | --- | --- |
 | var util = layui.util | 获得 `util` 模块。 |
-| util.fixbar(options) | `fixbar` 固定条组件，用法：[#详见](../fixbar/) |
-| [util.countdown(endTime, serverTime, callback)](#countdown) | 倒计时 |
+| [util.fixbar(options)](../fixbar/) | 固定条组件 |
+| [util.countdown(options)](#countdown) | 倒计时组件 |
 | [util.timeAgo(time, onlyDate)](#timeAgo) | 某个时间在多久前 |
-| [util.toDateString(time, format)](#toDateString) | 将毫秒数或日期对象转换成日期格式字符 |
+| [util.toDateString(time, format, options)](#toDateString) | 将毫秒数或日期对象转换成日期格式字符 |
 | [util.digit(num, length)](#digit) | 数字前置补零 |
 | [util.escape(str)](#escape) | 转义 HTML 字符 |
 | [util.unescape(str)](#escape) | 还原 HTML 字符 |
 | [util.openWin(options)](#openWin) <sup>2.8+</sup> | 打开浏览器新标签页 |
-| [util.on(attr, obj, eventType)](#on) | 批量事件处理 |
+| [util.on(attr, events, options)](#on) | 批量事件处理 |
 
 <h3 id="countdown" class="ws-anchor ws-bold">倒计时</h3>
 
-`util.countdown(endTime, serverTime, callback);`
+`util.countdown(options);`
 
-- 参数 `endTime` : 结束时间毫秒数或 `Date` 对象
-- 参数 `serverTime` : 服务器当前时间毫秒数 或 `Date` 对象
-- 参数 `callback` : 倒计时回调函数。若倒计时正在运行，则每一秒都会执行一次。并且返回以下三个参数。
-  - `date` 包含天/时/分/秒的对象
-  - `serverTime` 当前服务器时间毫秒数或 `Date` 对象
-  - `timer` 计时器返回的索引，用于 `clearTimeout` 
+- 参数 `options` <sup>2.8.9+</sup>: 属性配置项。可选项详见下表：
 
-该方法并不负责视图的呈现，而仅返回倒计时数值。 相关用法见：[#示例](#examples)
+| 属性 | 描述 |
+| --- | --- |
+| date | 目标时间值。值可以为毫秒数或 `Date` 对象 |
+| now | 当前时间值，一般为当前服务器时间。值可以为毫秒数或 `Date` 对象  |
+| ready | 倒计时初始时的回调函数。 |
+| clock | 倒计时计时中的回调函数，每秒触发一次，直到计时完成。 |
+| done | 倒计时计时完成的回调函数，即到达目标时间值时触发 |
 
+- 注： <sup>2.8.9</sup> 之前的版本写法为：`util.countdown(date, now, clock);`
+
+该方法返回的实例对象成员如下 <sup>2.8.9+</sup>：
+
+```js
+var countdown = util.countdown(options);
+countdown.clear(); // 清除当前倒计时
+countdown.reload(options); // 重载当前倒计时。
+countdown.timer; // 当前倒计时计时器 ID
 ```
+
+相关用法可参考：[#示例](#examples)
+
+```js
 layui.use('util', function(){
   var util = layui.util;
   // 示例
-  var endTime = new Date(2099,1,1).getTime() // 假设为结束日期
-  var serverTime = new Date().getTime(); // 这里采用的是本地时间，实际使用一般是取服务端时间
-
-  util.countdown(endTime, serverTime, function(date, serverTime, timer){
-    console.log(date, serverTime, timer)
+  util.countdown({
+    date: '2099-1-1', // 目标时间值
+    now: new Date(), // 当前时间，一般为服务器时间，此处以本地时间为例
+    clock: function(obj, countdown){ // 计时中
+      console.log(obj); // 得到当前计时器的「天、时、分、秒」值
+      console.log(countdown); // 得到当前实例对象
+    },
+    done: function(obj, countdown){ // 计时完成
+      console.log('time is up');
+    }
   });
 });
 ```
@@ -78,14 +97,56 @@ var result = util.timeAgo(1672531200000); // 2023-01-01 00:00:00
 
 <h3 id="toDateString" class="ws-anchor ws-bold">转换日期格式字符</h3>
 
-`var result = util.toDateString(time, format);`
+`var result = util.toDateString(time, format, options);`
 
 - 参数 `time` : 毫秒数或日期对象
 - 参数 `format` : 日期字符格式。默认格式：`yyyy-MM-dd HH:mm:ss` 。可自定义，如： `yyyy年MM月dd日`
+- 参数 `options` <sup>2.8.13+</sup> : 该方法的属性可选项，详见下表：
+
+| 属性名 | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| customMeridiem | 自定义 meridiem 格式 | Function | - |
 
 ```
 var result = util.toDateString(1672531200000, 'yyyy-MM-dd'); // 2023-01-01
+
+// 中括号中的字符会原样保留 2.8.13+
+var result2 = util.toDateString(new Date('2023-01-01 11:35:25'), 'ss[s]'); // 25s
+
+// 自定义 meridiem
+var result3 = util.toDateString(
+  '2023-01-01 11:35:25',
+  'hh:mm:ss A',
+  {
+    customMeridiem: function(hours, minutes){
+      return (hours < 12 ? 'AM' : 'PM')
+        //.split('').join('.') // 有句点，A.M.
+        //.toLowerCase() // 小写，a.m.
+    }
+  }
+); // 11:35:25 AM
 ```
+
+参数 `format` 所有可用的格式列表 :
+
+| 格式 | 示例 | 描述 |
+| --- | --- | --- |
+| yy <sup>2.8.13+</sup> | 23 | 年，两位数 |
+| yyyy | 2023 | 年，四位数 |
+| M <sup>2.8.13+</sup> | 1-12 | 月 |
+| MM | 01-12 | 月，两位数 |
+| d <sup>2.8.13+</sup> | 1-31 | 日 |
+| dd | 01-31 | 日，两位数 |
+| H <sup>2.8.13+</sup> | 0-23 | 小时 |
+| HH | 00-23 | 小时，两位数 |
+| h <sup>2.8.13+</sup> | 1-12 | 小时，12 小时制 |
+| hh <sup>2.8.13+</sup> | 01-12 | 小时，12 小时制，两位数 |
+| A <sup>2.8.13+</sup> | 凌晨/早上/上午/中午/下午/晚上 | meridiem |
+| m <sup>2.8.13+</sup> | 0-59 | 分钟 |
+| mm | 00-59 | 分钟，两位数 |
+| s <sup>2.8.13+</sup> | 0-59 | 秒 |
+| ss | 00-59 | 秒，两位数 |
+| SSS <sup>2.8.13+</sup> | 000-999 | 毫秒，三位数 |
 
 <h3 id="digit" class="ws-anchor ws-bold">数字前置补零</h3>
 
@@ -116,7 +177,7 @@ var str2 = util.unescape('&lt;div&gt;123&lt;/div&gt;'); // 返回： <div>123</d
 
 <h3 id="openWin" class="ws-anchor ws-bold">打开浏览器新标签页 <sup>2.8+</sup></h3>
 
-`util.openWin(options);` 
+`util.openWin(options);`
 
 - 参数 `options` : 属性配置项。可选项详见下表
 
@@ -143,37 +204,53 @@ util.openWin({
 
 <h3 id="on" class="ws-anchor ws-bold">批量事件处理</h3>
 
-`util.on(attr, obj, eventType);`
+`util.on(attr, events, options);`
 
-- 参数 `attr` : 触发事件的元素属性名
-- 参数 `obj` : 事件回调函数集合
-- 参数 `eventType` : 事件类型。默认 `click`
+| 参数 | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| attr | 触发事件的元素属性名。可省略<sup>2.9+</sup> | `string` | `lay-on` |
+| events | 事件集合。包含 `attr` 对应的属性值和事件回调函数的键值对 | `object` | - |
+| options <sup>2.9+</sup> | 参数的更多选项。详见下表。 | `object` | - |
+
+参数 `options` 可选项:
+
+| options | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| elem | 触发事件的委托元素 | string \| HTMLElement \| JQuery | - |
+| trigger | 事件触发的方式 | string | `click` |
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['code', 'preview'], tools: ['full']}">
   <textarea>
 <div class="layui-btn-container">
   <button class="layui-btn" lay-on="e1">事件 1</button>
   <button class="layui-btn" lay-on="e2">事件 2</button>
-  <button class="layui-btn" lay-on="e3">事件 3</button>
+  <button class="layui-btn" lay-active="e3">事件 3</button>
 </div>
 
 <!-- import layui -->
 <script>
 layui.use('util', function(){
   var util = layui.util;
-  
-  // 处理属性 为 lay-on 的所有元素事件
-  util.on('lay-on', {
+
+  //  2.9+ 版本可省略 attr 参数，默认读取 lay-on
+  util.on({
     e1: function(){
-      console.log(this); // 当前触发事件的 DOM 对象
+      console.log(this); // 当前触发事件的 DOM 元素
       layer.msg('触发了事件 1');
     },
     e2: function(){
       layer.msg('触发了事件 2');
-    },
-    e3: function(){
-      layer.msg('触发了事件 3');
     }
+  });
+
+   // 自定义：触发事件的元素属性名、触发事件的方式
+  util.on('lay-active', {
+    e3: layui.throttle(function(othis) {
+      console.log(this);
+      layer.tips(othis.html(), this);
+    }, 3000) // 3s 内不重复执行
+  }, {
+    trigger: 'mouseenter' // 鼠标移入时触发事件
   });
 });
 </script>

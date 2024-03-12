@@ -1183,36 +1183,33 @@ toc: true
   layui.use(function(){
     var $ = layui.jquery;
     var layer = layui.layer;
+    var lay = layui.lay;
+    var util = layui.util;
+    // click
+    $('.ws-docs-icon > div').on('click', function(e){
+      var elem = $(this);
+      var unicodeElem = elem.children('.docs-icon-code')
+      var classnameElem = elem.children('.docs-icon-fontclass')
+      var text = classnameElem.text();
+      var html = text;
 
-    $('.ws-docs-icon > div').on('click', function(){
-      var iconclass = $(this).find('.docs-icon-fontclass').text();
-      var copied = copy(iconclass);
-      if(copied){
-        layer.msg('已复制 '+ iconclass, {
-          icon: 1,
-          offset: '5%',
-          anim: 'slideDown',
-          isOutAnim: false
-        });
+      if ($(e.target).is(unicodeElem)) {
+        text = unicodeElem.text();
+        html = unicodeElem.html();
       }
+
+      lay.clipboard.writeText({
+        text: text,
+        done: function() {
+          layer.msg('已复制 '+ html, {
+            icon: 1,
+            offset: '5%',
+            anim: 'slideDown',
+            isOutAnim: false
+          });
+        }
+      });
     });
-
-    function copy(text){
-      var textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.style.position = 'absolute';
-      textarea.style.opacity = '0';
-      document.body.appendChild(textarea);
-      textarea.select();
-      var copied = false;
-      try{
-        copied = document.execCommand('copy');
-      }catch(err){
-        console.log('error', err);
-      }
-      textarea.remove();
-      return copied;
-    }
   });
 </script>
   </textarea>

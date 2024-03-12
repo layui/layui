@@ -11,6 +11,8 @@ toc: true
 
 以下所有示例中演示的数据均为「静态模拟数据」，实际使用时换成您的真实接口即可。
 
+<div class="ws-docs-showcase"></div>
+
 <div>
 {{- d.include("/table/detail/demo.md") }}
 </div>
@@ -20,10 +22,13 @@ toc: true
 | API | 描述 |
 | --- | --- |
 | var table = layui.table | 获得 `table` 模块。 |
+| [table.set(options)](#set) | 设定全局默认属性项。 |
 | [table.render(options)](#render) | table 组件渲染，核心方法。 |
 | [table.init(filter, options)](#table.init) | 初始化渲染静态表格。 |
 | [table.reload(id, options, deep)](#table.reload) | 表格完整重载。  |
 | [table.reloadData(id, options, deep)](#table.reloadData) <sup>2.7+</sup> | 表格数据重载。 |
+| [table.renderData(id)](#table.renderData) <sup>2.8.5+</sup> | 重新渲染数据。 |
+| [table.updateRow(id, opts)](#table.updateRow) <sup>2.9.4+</sup> | 更新指定行数据。 |
 | [table.checkStatus(id)](#table.checkStatus) | 获取选中行相关数据。  |
 | [table.setRowChecked(id, opts)](#table.setRowChecked) <sup>2.8+</sup> | 设置行选中状态。 |
 | [table.getData(id)](#table.getData) | 获取当前页所有行表格数据。 |
@@ -33,6 +38,25 @@ toc: true
 | [table.getOptions(id)](#table.getOptions) <sup>2.8+</sup> | 获取表格实例配置项。 |
 | [table.hideCol(id, cols)](#table.hideCol) <sup>2.8+</sup> | 设置表格列的显示隐藏属性。 |
 | [table.on(\'event(filter)\', callback)](#table.on) | table 相关事件。 |
+
+
+<h3 id="set" class="ws-anchor ws-bold">全局设置</h3>
+
+- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+
+该方法主要用于初始化设置属性默认值。实际应用时，必须先设置该方法，再执行渲染、重载等操作。
+
+```js
+layui.use(function(){
+  var table = layui.table;
+  // 全局设置
+  table.set({
+    headers: {token: '123'}
+  });
+  // 渲染
+  table.render(options);
+});
+```
 
 
 <h3 id="render" lay-toc="{level: 2}" class="ws-anchor ws-bold">渲染</h3>
@@ -266,6 +290,66 @@ table.reloadData('test', {
 });
 ```
 
+<h3 id="table.renderData" lay-pid="api" class="ws-anchor ws-bold">重新渲染数据 <sup>2.8.5+</sup></h3>
+
+`table.renderData(id);`
+- 参数 `id` : table 渲染时的 `id` 属性值
+
+该方法用于重新渲染数据，一般在修改 `table.cache` 后使用。
+
+```js
+// 渲染
+table.render({
+  elem: '', // 绑定元素选择器
+  id: 'test', // 自定义 id 索引
+  // 其他属性 …
+});
+// 获取当前实例的数据缓存
+var data = table.cache['test'];
+// 获取某行数据，并从 data 中移除该行
+var item = data.splice(index, 1) // index 为当前行下标，一般可在事件中通过 obj.index 得到
+// 将某行数据移动到另外某行
+data.splice(newIndex, 0, item[0]);
+// 根据 table.cache 重新渲染数据
+table.renderData('test');
+```
+
+<h3 id="table.updateRow" lay-pid="api" class="ws-anchor ws-bold">更新指定行数据 <sup>2.9.4+</sup></h3>
+
+`table.updateRow(id, opts);`
+- 参数 `id` : table 渲染时的 `id` 属性值
+- 参数 `opts` : 更新指定行时的可选属性，详见下表
+
+| opts | 描述 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| index | 行索引 | number | - |
+| data | 行数据 | object | - |
+| related | 是否更新其他包含自定义模板且可能有所关联的列视图 | boolean/function | - |
+
+该方法用于更新指定行数据。
+
+```js
+// 渲染
+table.render({
+  elem: '', // 绑定元素选择器
+  id: 'test', // 自定义 id 索引
+  // 其他属性 …
+});
+
+// 更新指定行数据
+table.updateRow('test', {
+  index: 0,
+  data: {
+    id: 1,
+    username: 'name'
+  }
+  // 是否更新关联的列视图
+  related: function(field, index){
+    return ['score', '5'].indexOf(field) !== -1;
+  }
+});
+```
+
 <h3 id="table.checkStatus" lay-pid="api" class="ws-anchor ws-bold">获取选中行</h3>
 
 `table.checkStatus(id);`
@@ -283,9 +367,9 @@ table.render({
 
 // 获取选中行相关数据
 var tableStatus = table.checkStatus('test');
-console.log(checkStatus.data) // 选中行的数据
-console.log(checkStatus.data.length) // 选中行数量，可作为是否有选中行的条件
-console.log(checkStatus.isAll ) // 表格是否全选
+console.log(tableStatus.data) // 选中行的数据
+console.log(tableStatus.data.length) // 选中行数量，可作为是否有选中行的条件
+console.log(tableStatus.isAll ) // 表格是否全选
 ```
 
 <h3 id="table.setRowChecked" lay-pid="api" class="ws-anchor ws-bold">设置行选中状态 <sup>2.8+</sup></h3>
@@ -297,9 +381,8 @@ console.log(checkStatus.isAll ) // 表格是否全选
 | opts | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | type | 选中方式。可选值: `checkbox,radio`  | string | `checkbox` |
-| index | 选中行的下标。即数据的所在数组下标（`0` 开头）。<br>可设置 `all` 表示全选。 | number<br>string | - |
+| index | 选中行的下标。支持以下几种情况：<ul><li>若值为 `number` 类型，则表示行所在的数组下标（`0` 开头）</li><li>若值为 `array` 类型 <sup>2.9.1+</sup>，则表示批量下标。</li><li>若值为 `string` 类型，则可设置 `all` 操作全选。</li></ul> | number<br>array<br>string | - |
 | checked | 选中状态值。 <ul><li>若传递该属性，则赋值固定值。</li><li>若不传递该属性（默认），则 `checkbox` 将在 `true\|false` 中自动切换值，而 `radio` 将赋值 `true` 固定值。<sup>2.8.4+</sup></li></ul> | boolean | - |
-| selectedStyle | 是否仅设置样式状态。若为 `true` 则只标注选中样式，不对数据中的 `LAY_CHECKED` 属性赋值。 | boolean | `false` |
 
 该方法用于设置行的选中样式及相关的特定属性值 `LAY_CHECKED`。
 
@@ -316,10 +399,15 @@ table.setRowChecked('test', {
   index: 0, // 选中行的下标。 0 表示第一行
 });
 
+// 批量选中行
+table.setRowChecked('test', {
+  index: [1,3,5] // 2.9.1+
+});
+
 // 取消选中行
 table.setRowChecked('test', {
   index: 'all', // 所有行
-  checked: false
+  checked: false // 此处若设置 true，则表示全选
 });
 ```
 
@@ -487,7 +575,8 @@ table.hideCol('test', false); // `true` or `false`
 |  event | 描述 |
 | --- | --- |
 | [toolbar](#on-toolbar) | 头部工具栏事件 |
-| [sort](#on-sort) | 排序切换事件 |
+| [sort](#on-sort) | 表头排序切换事件 |
+| [colTool](#on-colTool) <sup>2.8.8+</sup> | 表头自定义元素工具事件 |
 | [colResized](#on-colResized) <sup>2.8+</sup> | 列拖拽宽度后的事件 |
 | [colToggled](#on-colToggled) <sup>2.8+</sup> | 列筛选（显示或隐藏）后的事件 |
 | [row / rowDouble](#on-row) | 行单击和双击事件 |
@@ -587,6 +676,32 @@ table.on('sort(test)', function(obj){
 });
 ```
 
+<h3 id="on-colTool" lay-pid="table.on" class="ws-anchor ws-bold">表头自定义元素工具事件 <sup>2.8.8+</sup></h3>
+
+`table.on('colTool(filter)', callback);`
+
+点击表头单元格中带有 `lay-event` 属性的自定义元素触发，可充分借助该事件扩展 table 更多的操作空间。
+
+```js
+var table = layui.table;
+ 
+// 渲染
+table.render({
+  elem: '#test',
+  cols: [[
+    {field:'username', title:'用户名 <i class="layui-icon layui-icon-username" lay-event="username"></i>'
+  ]]
+  // … // 其他属性
+});
+ 
+// 表头自定义元素工具事件
+table.on('colTool(test)', function(obj){
+  var col = obj.col; // 获取当前列属性配置项
+  var options = obj.config; // 获取当前表格基础属性配置项
+  var layEvent = obj.event; // 获得自定义元素对应的 lay-event 属性值
+  console.log(obj); // 查看对象所有成员
+});
+```
 
 <h3 id="on-colResized" lay-pid="table.on" class="ws-anchor ws-bold">列拖拽宽度后的事件 <sup>2.8+</sup></h3>
 
@@ -655,6 +770,7 @@ table.render({
 // 行单击事件
 table.on('row(test)', function(obj){
   var data = obj.data; // 得到当前行数据
+  var dataCache = obj.dataCache; // 得到当前行缓存数据，包含特定字段 --- 2.8.8+
   var index = obj.index; // 得到当前行索引
   var tr = obj.tr; // 得到当前行 <tr> 元素的 jQuery 对象
   var options = obj.config; // 获取当前表格基础属性配置项
@@ -759,6 +875,7 @@ layui.use(function(){
   // 单元格工具事件
   table.on('tool(test)', function(obj){
     var data = obj.data; // 得到当前行数据
+    var dataCache = obj.dataCache; // 得到当前行缓存数据，包含特定字段 --- 2.8.8+
     var index = obj.index; // 得到当前行索引
     var layEvent = obj.event; // 获得元素对应的 lay-event 属性值
     var tr = obj.tr; // 得到当前行 <tr> 元素的 jQuery 对象

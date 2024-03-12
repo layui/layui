@@ -11,7 +11,7 @@
       <th>描述</th>
       <th>类型</th>
       <th>默认值</th>
-    </tr> 
+    </tr>
   </thead>
   <tbody>
     <tr>
@@ -36,12 +36,12 @@
     </tr>
     <tr>
 <td>
-  
+
 [cols](#options.cols)
 
 </td>
 <td>
-  
+
 表头属性集，通过二维数组定义多级表头。方法渲染时必填。 更多表头属性见 : [#表头属性](#options.cols)
 
 </td>
@@ -65,7 +65,7 @@
     <tr>
       <td>id</td>
 <td>
-  
+
 设定实例唯一索引，以便用于其他方法对 table 实例进行相关操作。若该属性未设置，则默认从 `elem` 属性绑定的原始 table 元素中的 `id` 属性值中获取。
 
 </td>
@@ -79,7 +79,7 @@
 开启表格头部工具栏。支持以下几种值写法：
 
 - `toolbar: '#template-id'`  自定义工具栏模板选择器
-- `toolbar: '<div>xxx</div>` 直接传入模板字符
+- `toolbar: '<div>xxx</div>'` 直接传入模板字符
 - `toolbar: true` 仅开启工具栏右侧，不显示左侧模板
 - `toolbar: 'default'` 开启工具栏并显示默认模板
 
@@ -109,7 +109,7 @@
     </tr>
     <tr>
 <td>
-  
+
 [height](#options.height)
 
 </td>
@@ -120,8 +120,19 @@
 </div>
 
 - `height: 315` 设置固定高度
-- `height: 'full-30'` 设置自适应高度。这是一个特定的语法格式：`full` 表示铺满；后面的数字表示当前 table 之外的元素占用的高度，如：表格头部到页面最顶部*加*表格底部距离页面最底部的“距离和”
-- `height: '#id-30'` 设置相对父元素的高度自适应，其中 `#id` 即父元素的 ID 选择器，其计算原理和上述 `full` 相同。
+- `height: 'full-30'` 设置相对可视屏幕的高度铺满。这是一个特定的语法格式：`full` 表示铺满；后面的数字表示当前 table 之外的元素占用的高度，如：表格头部到页面最顶部*加*表格底部距离页面最底部的“距离和”
+- `height: '#id-30'` 设置相对父元素的高度铺满，其中 `#id` 即父元素的 ID 选择器，其计算原理和上述 `full` 相同。
+
+**函数写法** <sup>2.9.1+</sup>
+
+当需要动态改变表格高度时建议使用，如下以等效 `full-xx` 的写法为例：
+
+```
+height: function(){
+  var otherHeight = $('#search-content').outerHeight(); // 自定义其他区域的高度
+  return $(window).height() - otherHeight; // 返回 number 类型
+}
+```
 
 </td>
 <td>number<br>string</td>
@@ -186,6 +197,33 @@
 </td>
 <td>string</td>
 <td>-</td>
+    </tr>
+    <tr>
+<td>cellExpandedMode <sup>2.8.17+</sup></td>
+<td>
+
+用于设置所有单元格默认展开方式，可选值有：
+
+- `tips` 悬浮展开方式
+- `default` 多行展开方式（默认）
+
+</td>
+<td>string</td>
+<td>-</td>
+    </tr>
+    <tr>
+<td>cellExpandedWidth <sup>2.8.17+</sup></td>
+<td>
+
+用于设置所有单元格默认展开后的宽度。当 `cellExpandedMode` 属性为默认值时有效。
+
+</td>
+<td>number</td>
+<td>
+
+`60`
+
+</td>
     </tr>
     <tr>
 <td>escape <sup>2.6+</sup></td>
@@ -332,7 +370,7 @@
 <td>initSort</td>
 <td>
 
-初始排序状态。用于在数据表格渲染完毕时，按某个字段排序显示。它接受一个 `object` 类型的值，包含属性有： 
+初始排序状态。用于在数据表格渲染完毕时，按某个字段排序显示。它接受一个 `object` 类型的值，包含属性有：
 - `field` 排序字段。对应 `cols` 设定的各字段名
 - `type` 排序方式。可选值 : `'asc','desc',null`，即：`升序、降序、默认`
 
@@ -356,7 +394,7 @@ initSort: {
 </td>
 <td>string</td>
 <td>
-  
+
 `grid`
 
 </td>
@@ -384,16 +422,34 @@ initSort: {
 </td>
 <td>string</td>
 <td>
-  
+
 `false`
 
 </td>
     </tr>
     <tr>
-<td>before <sup>2.7+</sup></td>
-<td>数据渲染之前的回调函数。</td>
-<td>function</td>
-<td>-</td>
+<td>
+
+[before](#options.before) <sup>2.7+</sup>
+
+</td>
+<td colspan="3">
+
+<div class="ws-anchor" id="options.before">
+数据渲染之前的回调函数。
+</div>
+
+```
+table.render({
+  before: function(options){
+    console.log(options); // 当前实例属性配置项
+    options.where.abc = 123; // 修改或额外追加 where 属性
+  },
+  // …  // 其它属性
+});
+```
+
+</td>
     </tr>
     <tr>
 <td>
@@ -401,7 +457,7 @@ initSort: {
 [done](#options.done)
 
 </td>
-<td>
+<td colspan="3">
 
 <div class="ws-anchor" id="options.done">
   数据渲染完毕的回调函数。返回的参数如下：
@@ -409,24 +465,45 @@ initSort: {
 
 ```
 table.render({
-  done: function(res, curr, count){
+  done: function(res, curr, count, origin){
     console.log(res); // 得到当前渲染的数据
     console.log(curr);  // 得到当前页码
     console.log(count); // 得到数据总量
-  }
+    console.log(origin); // 回调函数所执行的来源 --- 2.8.7+
+  },
   // …  // 其它属性
 });
 ```
 
 </td>
-<td>function</td>
-<td>-</td>
     </tr>
     <tr>
 <td>error <sup>2.6+</sup></td>
-<td> 数据请求失败的回调函数。返回两个参数：错误对象、内容。</td>
-<td>function</td>
-<td>-</td>
+<td colspan="3">
+
+数据请求失败的回调函数。返回两个参数：错误对象、内容。
+
+```
+error: function(e, msg) {
+  console.log(e, msg)
+}
+```
+
+</td>
+    </tr>
+    <tr>
+<td>complete <sup>2.8.18+</sup></td>
+<td colspan="3">
+
+数据接口请求完成后执行，无论成功还是失败均会触发
+
+```
+complete: function(xhr, ts) {
+  console.log(xhr, ts)
+}
+```
+
+</td>
     </tr>
   </tbody>
 </table>

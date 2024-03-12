@@ -85,6 +85,7 @@ treeTable.render({
 | iconLeaf | 叶子节点的图标 | string | - |
 | showFlexIconIfNotParent | 若非父节点时，是否显示折叠图标 | boolean | `false` |
 | dblClickExpand | 双击节点时，是否自动展开父节点 | boolean | `true` |
+| expandAllDefault <sup>2.8.7+</sup> | 是否默认展开全部节点 | boolean | `false` |
 
 </td>
     </tr>
@@ -102,6 +103,7 @@ treeTable.render({
 | --- | --- | --- | --- |
 | isSimpleData | 是否简单数据模式 | boolean | `false` |
 | rootPid | 用于设置根节点的 `pid` 属性值 | string | `null` |
+| cascade | 用于设置复选的级联方式。支持以下可选值：<ul><li><code>all</code> : 所有节点联动</li><li><code>parent</code> : 仅对父节点联动</li><li><code>children</code> : 仅对子节点联动</li><li><code>none</code> <sup>2.8.16+</sup> : 不做任何联动</li></ul> | string | `all` |
 
 </td>
     </tr>
@@ -135,7 +137,7 @@ treeTable.render({
 ```
 treeTable.render({
   elem: '',
-  treee: {
+  tree: {
     enable: true,
     async: {
       format: function(trData, options, callback){

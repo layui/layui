@@ -103,7 +103,7 @@ layui.use(function(){
   <div class="layui-form-item">
     <input type="checkbox" name="BBB" value="1" lay-skin="tag">
     <div lay-checkbox>
-      <i class="layui-icon layui-icon-heart"></i> 标题模板</span>
+      <i class="layui-icon layui-icon-heart" style="position: relative; top: 1px; line-height: normal;"></i> 标题模板
     </div>
   </div>
   <div class="layui-form-item">

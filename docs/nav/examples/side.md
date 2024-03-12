@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="{{= d.layui.cdn.css }}" rel="stylesheet">
+  <link href="{{= d.layui[2].cdn.css }}" rel="stylesheet">
 </head>
 <body>
 <ul class="layui-nav layui-nav-tree layui-nav-side">
@@ -31,7 +31,7 @@
   <li class="layui-nav-item"><a href="javascript:;">菜单3</a></li>
 </ul>
 
-<script src="{{= d.layui.cdn.js }}"></script>
+<script src="{{= d.layui[2].cdn.js }}"></script>
 <script>
 layui.use(function(){
   var element = layui.element;

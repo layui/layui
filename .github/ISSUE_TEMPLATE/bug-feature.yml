@@ -1,0 +1,64 @@
+name: 😄 创建议题
+description: 此处只受理 Bug 报告、功能请求。若是其他业务相关的问题建议在 Discussions 寻求社区帮助。
+body:
+  - type: checkboxes
+    attributes:
+      label: 议题条件
+      description: 在你开始之前，请花几分钟时间确保你已如实完成以下工作，以便让我们更高效地沟通。
+      options:
+        - label: 我确认已查看官方使用文档：https://layui.dev ，但没有找到相关解决方案。
+          required: true
+        - label: 我确认已在 [Issues](https://github.com/layui/layui/issues?q=is%3Aissue ) 中搜索过类似的问题，但没有找到相关解决方案。
+          required: true
+        - label: 我已仔细阅读： 🍀[ Layui Issue 贡献指南](https://github.com/layui/layui/blob/main/CONTRIBUTING.md)
+          required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: 议题类型
+      options:
+        - 疑是 BUG
+        - 功能请求
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: 使用版本
+      description: 请提供您当前使用的 Layui 版本号。若不清楚，可打开 `layui.js` 查看头部注释。
+      placeholder: 如：v2.8.18
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 问题描述
+      description: 请提供详细的问题描述和操作步骤等信息，以便我们也能够更轻松地将问题复现。
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 业务代码
+      description: 即你在调用组件时编写的代码片段。直接将你的代码粘贴到文本框即可，此处无需书写 `Markdown`
+      render: auto
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 截图补充
+      description: 如上述仍然无法准确地表述问题，可提供必要的截图（可直接粘贴上传）
+  - type: input
+    attributes:
+      label: 浏览器
+      placeholder: 如：Chrome x.x.x.x（正式版本）（64 位）
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: 演示地址
+      description: 若能提供 Stackblitz, CodePen 或自主搭建的页面演示地址，将更有助于解决问题
+      placeholder: URL
+  - type: checkboxes
+    attributes:
+      label: 友好承诺
+      options:
+        - label: 我承诺将本着相互尊重、理解和友善的态度进行交流，共同维护 Layui 良好的社区氛围。 <!-- layui-issue-template 请务必严格遵循模板规范 -->
+          required: true

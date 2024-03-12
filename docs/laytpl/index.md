@@ -2,7 +2,7 @@
 title: 模板引擎 laytpl
 toc: true
 ---
- 
+
 # 模板引擎
 
 > `laytpl` 是 Layui 的一款轻量 JavaScript 模板引擎，在字符解析上有着比较出色的表现。
@@ -37,14 +37,14 @@ toc: true
 ```
 layui.use('laytpl', function(){
   var laytpl = layui.laytpl;
-  
+
   // 直接解析字符
   laytpl('{{= d.name }}是一名前端工程师').render({
     name: '张三'
   }, function(str){
     console.log(str); // 张三是一名前端工程师
   });
-  
+
   // 同步写法
   var str =  laytpl('{{= d.name }}是一名前端工程师').render({
     name: '张三'
@@ -60,9 +60,9 @@ layui.use('laytpl', function(){
   <h3>{{= d.name }}</h3>
   <p>性别：{{= d.sex ? '男' : '女' }}</p>
 </script>
- 
+
 <div id="view"></div>
- 
+
 <!-- import layui -->
 <script>
 layui.use(function(){
@@ -98,6 +98,8 @@ compile.render(data, callback); // 模板渲染
 {{- d.include("/laytpl/detail/options.md") }}
 </div>
 
+> ### 注意
+> 开发者在使用模板语法时，需确保模板中的 JS 语句不来自于页面用户输入，即必须在页面开发者自身的可控范围内，否则请避免使用该模板引擎。
 
 <h2 id="config" lay-toc="{level: 2}">属性配置</h2>
 
@@ -119,7 +121,7 @@ laytpl.config({
   open: '<%',
   close: '%>'
 });
- 
+
 // 模板语法将默认采用上述定义的标签符书写
 laytpl(`
   <%# var job = ["前端工程师"]; %>
@@ -129,7 +131,7 @@ laytpl(`
   type: 0
 }, function(string){
   console.log(string); // 张三是一名前端工程师。
-}); 
+});
 ```
 
 ### 局部配置 <sup>2.8+</sup>
@@ -142,7 +144,7 @@ laytpl('<%= d.name %>是一名前端工程师', {
   close: '%>'
 }).render({name: '张三'}, function(string){
   console.log(string); // 张三是一名前端工程师。
-}); 
+});
 ```
 
 

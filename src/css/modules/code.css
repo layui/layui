@@ -2,59 +2,74 @@
  * code
  */
 
-/* 加载就绪标志 */
-html #layuicss-skincodecss{display:none; position: absolute; width:1989px;}
+html #layuicss-skincodecss{display: none; position: absolute; width: 1989px;}
 
-/* 默认风格 */
-.layui-code-view{display: block; position: relative; margin: 11px 0; padding: 0; border: 1px solid #eee; border-left-width: 6px; background-color: #FAFAFA; color: #333; font-family: Courier New; font-size: 13px;}
-.layui-code-title{position: relative; padding: 0 10px; height: 40px; line-height: 40px; border-bottom: 1px solid #eee; font-size: 12px;}
-.layui-code-title > .layui-code-about{position: absolute; right: 10px; top: 0; color: #B7B7B7;}
-.layui-code-about > a{padding-left: 10px;}
-.layui-code-view > .layui-code-ol, 
-.layui-code-view > .layui-code-ul{max-height: 100%; padding: 0 !important; position: relative; overflow: auto;}
-.layui-code-view > .layui-code-ol > li{position: relative; margin-top: 0  !important; margin-left: 45px  !important; line-height: 20px; padding: 0 10px  !important; border-left: 1px solid #e2e2e2; list-style-type: decimal-leading-zero; *list-style-type: decimal; background-color: #fff;}
-.layui-code-view > .layui-code-ol > li:first-child, 
-.layui-code-view > .layui-code-ul > li:first-child{padding-top: 10px  !important;}
-.layui-code-view > .layui-code-ol > li:last-child, 
-.layui-code-view > .layui-code-ul > li:last-child{padding-bottom: 10px  !important;}
-.layui-code-view > .layui-code-ul > li{position: relative; line-height: 20px; padding: 0 10px  !important; list-style-type: none; *list-style-type: none; background-color: #fff;}
-.layui-code-view pre{margin: 0;}
+/* 字体  */
+.layui-code-wrap{font-size: 13px; font-family: "Courier New",Consolas,"Lucida Console";}
 
-/* 深色风格 */
-.layui-code-dark{border: 1px solid #0C0C0C; border-left-color: #3F3F3F; background-color: #0C0C0C; color: #C2BE9E}
-.layui-code-dark > .layui-code-title{border-bottom: none;}
-.layui-code-dark > .layui-code-ol > li, 
-.layui-code-dark > .layui-code-ul > li{background-color: #3F3F3F; border-left: none;}
-.layui-code-dark > .layui-code-ul > li{margin-left: 6px;}
+/* 基础结构 */
+.layui-code-view{display: block; position: relative; padding: 0 !important; border: 1px solid #eee; border-left-width: 6px; background-color: #fff; color: #333;}
+.layui-code-view pre{margin: 0 !important;}
+
+.layui-code-header{position: relative; z-index: 3; padding: 0 11px; height: 40px; line-height: 40px; border-bottom: 1px solid #eee; background-color: #fafafa; font-size: 12px;}
+.layui-code-header > .layui-code-header-about{position: absolute; right: 11px; top: 0; color: #B7B7B7;}
+.layui-code-header-about > a{padding-left: 10px;}
+
+.layui-code-wrap{position: relative; display: block; z-index: 1; margin: 0 !important; padding: 11px 0 !important; overflow-x: hidden; overflow-y: auto;}
+.layui-code-line{position: relative; line-height: 19px; margin: 0 !important;}
+.layui-code-line-number{position: absolute; left: 0; top: 0; padding: 0 8px; min-width: 45px; height: 100%; text-align: right; user-select: none; white-space: nowrap; overflow: hidden;}
+.layui-code-line-content{padding: 0 11px; word-wrap: break-word; white-space: pre-wrap;}
+
+.layui-code-ln-mode > .layui-code-wrap > .layui-code-line{padding-left: 45px;}
+.layui-code-ln-side{position: absolute; left: 0; top: 0; bottom: 0; z-index: 0; width: 45px; border-right: 1px solid #eee; border-color: rgb(126 122 122 / 15%); background-color: #fafafa; pointer-events: none;}
+
+/* 不自动换行  */
+.layui-code-nowrap > .layui-code-wrap{overflow: auto;}
+.layui-code-nowrap > .layui-code-wrap > .layui-code-line > .layui-code-line-content{white-space: pre; word-wrap: normal;}
+.layui-code-nowrap > .layui-code-ln-side{border-right-width: 0 !important; background: none !important;}
+
+.layui-code-fixbar{position: absolute; top: 8px; right: 11px; padding-right: 45px; z-index: 5;}
+.layui-code-fixbar > span{position: absolute; right: 0; top: 0; padding: 0 8px; color: #777; transition: all .3s;}
+.layui-code-fixbar > span:hover{color: #16b777;}
+.layui-code-copy{display: none; cursor: pointer;}
+.layui-code-preview > .layui-code-view > .layui-code-fixbar .layui-code-copy{display: none !important;}
+.layui-code-view:hover > .layui-code-fixbar .layui-code-copy{display: block;}
+.layui-code-view:hover > .layui-code-fixbar .layui-code-lang-marker{display: none;}
+
+/* 深色主题 */
+.layui-code-theme-dark,
+.layui-code-theme-dark > .layui-code-header{border-color: rgb(126 122 122 / 15%); background-color: #1f1f1f;}
+.layui-code-theme-dark{border-width: 1px; color: #ccc;}
+.layui-code-theme-dark > .layui-code-ln-side{border-right-color: #2a2a2a; background: none; color: #6e7681;}
+
 
 /* 代码预览 */
 .layui-code textarea{display: none;}
-.layui-code-preview > .layui-code{margin: 0;}
+.layui-code-preview > .layui-code,
+.layui-code-preview > .layui-code-view{margin: 0;}
 .layui-code-preview > .layui-tab{position: relative; z-index: 1; margin-bottom: 0;}
-.layui-code-preview > .layui-tab > .layui-tab-title{border-bottom: none;}
-.layui-code-preview > .layui-code > .layui-code-title{display: none;}
+.layui-code-preview > .layui-tab > .layui-tab-title{border-width: 0;}
 .layui-code-preview .layui-code-item{display: none;}
-.layui-code-preview .layui-code-view > .layui-code-ol > li{}
+.layui-code-preview .layui-code-view > .layui-code-lines > .layui-code-line{}
 .layui-code-item-preview{position: relative; padding: 16px;}
 .layui-code-item-preview > iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;}
 
 /* 工具栏  */
-.layui-code-tools{position: absolute; right: 11px; top: 3px;}
+.layui-code-tools{position: absolute; right: 11px; top: 8px; line-height: normal;}
 .layui-code-tools > i{display: inline-block; margin-left: 6px; padding: 3px; cursor: pointer;}
 .layui-code-tools > i.layui-icon-file-b{color: #999;}
 .layui-code-tools > i:hover{color: #16b777;}
-
-/* 复制  */
-.layui-code-copy{position: absolute; right: 6px; top: 6px; cursor: pointer; display: none;}
-.layui-code-copy .layui-icon{color: #777; transition: all .3s;}
-.layui-code-copy:hover .layui-icon{color: #16b777;}
-.layui-code-view:hover > .layui-code-copy{display: block;}
-.layui-code-copy-offset{margin-right: 17px;}
-.layui-code-preview > .layui-code-view > .layui-code-copy{display: none !important;}
 
 /* 全屏风格  */
 .layui-code-full{position: fixed; left: 0; top: 0; z-index: 1111111; width: 100%; height: 100%; background-color: #fff;}
 .layui-code-full .layui-code-item{width: 100% !important; border-width: 0 !important; border-top-width: 1px !important;}
 .layui-code-full .layui-code-item,
-.layui-code-full .layui-code-ol,
-.layui-code-full .layui-code-ul{height: calc(100vh - 51px) !important; box-sizing: border-box;}
+.layui-code-full .layui-code-view,
+.layui-code-full .layui-code-wrap{height: calc(100vh - 51px) !important; box-sizing: border-box;}
+.layui-code-full .layui-code-item-preview{overflow: auto;}
+
+/* 代码高亮重置 */
+.layui-code-view.layui-code-hl{line-height: 20px !important; border-left-width: 1px;}
+.layui-code-view.layui-code-hl > .layui-code-ln-side{background-color: transparent;}
+.layui-code-theme-dark.layui-code-hl,
+.layui-code-theme-dark.layui-code-hl > .layui-code-ln-side{border-color: rgb(126 122 122 / 15%);}

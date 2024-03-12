@@ -15,11 +15,11 @@ Thumbs.db
 .nojekyll
 .project
 .settings/
-.npmignore
 node_modules/
 _site/
 .git/
+package-lock.json
 
+# Published folders
 release/
 v/
-package-lock.json

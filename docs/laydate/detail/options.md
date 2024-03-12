@@ -53,6 +53,16 @@
 </td>
     </tr>
     <tr>
+      <td>id</td>
+<td>
+  
+设定实例唯一索引，以便用于其他方法对例进行相关操作。若该属性未设置，则默认从 `elem` 属性绑定的元素中的 `id` 属性值中获取。
+
+</td>
+<td>string</td>
+<td>-</td>
+    </tr>
+    <tr>
 <td>
 
 [range](#options.range)
@@ -68,7 +78,7 @@
 
 - 若为 `boolean` 类型，即表示是否开启范围选择，若设为 `true`，则开始日期与结束日期默认采用 `-` 连接符
 - 若为 `string` 类型，则表示开启范围选择，且自定义开始日期与结束日期的连接符。如： `range: '~'`
-- 若为 `boolean` 类型，即表示开启范围选，且开始日期和结束日期分别赋值在两个目标选择器中，如：
+- 若为 `array` 类型，即表示开启范围选，且开始日期和结束日期分别赋值在两个目标选择器中，如：
 
 ```
 range: ['#start', '#end']
@@ -239,11 +249,12 @@ shortcuts: [
 - 若为 `string` 类型，必须和 `format` 设置的格式对应；
 - 若为 `date` 对象类型，则可通过操作 `new Date()` 来对选项值进行相应的返回计算；
 - 若为 `array` 类型，则数组成员可填写开始日期和结束日期。
+- 若为 `function` 类型，返回值同上。<sup>2.8.16+</sup>
 
 详细用法可参考： [#示例](#demo-shortcut)
 
 </td>
-<td>string<br>date<br>array</td>
+<td>string<br>date<br>array<br>function</td>
 <td>-</td>
     </tr>
     <tr>

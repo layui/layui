@@ -32,9 +32,9 @@ toc: true
 | [layer.photos(options)](#photos) | 弹出 `page` 类型图片层。 |
 | [layer.tab(options)](#tab) | 弹出 `page` 类型标签页层。 |
 | 关闭 : | - |
-| [layer.close(index)](#close) | 关闭对应的层，核心方法。 |
-| [layer.closeAll(type)](#closeAll) | 关闭所有对应类型的层。 |
-| [layer.closeLast(type)](#closeLast) <sup>2.8+</sup> | 关闭最近打开的对应类型的层。 |
+| [layer.close(index, callback)](#close) | 关闭对应的层，核心方法。 |
+| [layer.closeAll(type, callback)](#closeAll) | 关闭所有对应类型的层。 |
+| [layer.closeLast(type, callback)](#closeLast) <sup>2.8+</sup> | 关闭最近打开的对应类型的层。 |
 | 其他 : | - |
 | [layer.config(options)](#config) | 全局配置默认属性。 |
 | [layer.ready(callback)](#ready) | 样式初始化就绪。 |
@@ -248,6 +248,8 @@ layer.prompt({
 | 私有属性 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | photos | 图片层的数据源，格式详见下述示例。 | object | - |
+| toolbar <sup>2.8.16+</sup> | 是否显示顶部工具栏 | boolean | `true` |
+| footer <sup>2.8.16+</sup> | 是否隐藏底部栏 | boolean | `true` |
 | tab | 图片层切换后的回调函数，返回的参数见下述示例 | function | - |
 
 该方法用于弹出图片层，基于 `type: 1`（即 `page` 层）的自定义内容。 
@@ -337,9 +339,10 @@ layer.tab({
 
 <h2 id="close" lay-toc="{level: 2}">关闭弹层</h2>
 
-`layer.close(index);`
+`layer.close(index, callback);`
 
 - 参数 `index` : 打开弹层时返回的唯一索引
+- 参数 `callback` : 关闭弹层后的回调函数
 
 该方法用于关闭对应的弹层。
 
@@ -364,9 +367,10 @@ parent.layer.close(index); // 再执行关闭
 
 <h2 id="closeAll" lay-pid="api" class="ws-anchor ws-bold">关闭所有层</h2>
 
-`layer.closeAll(type);`
+`layer.closeAll(type, callback);`
 
 - 参数 `type` : 弹层的类型。可选值：`dialog,page,iframe,loading,tips`
+- 参数 `callback` : 关闭弹层后的回调函数
 
 该方法用于关闭所有同类型的弹层。
 
@@ -381,9 +385,10 @@ layer.closeAll('tips'); // 关闭所有的 tips 层
 
 <h2 id="closeLast" lay-pid="api" class="ws-anchor ws-bold">关闭最近一次打开的层 <sup>2.8+</sup></h2>
 
-`layer.closeLast(type);`
+`layer.closeLast(type, callback);`
 
 - 参数 `type` : 弹层的类型。可选值：`dialog,page,iframe,loading,tips`
+- 参数 `callback` <sup>2.9+</sup>: 关闭弹层后的回调函数
 
 该方法用于关闭最近一次打开的对应类型的层。
 
@@ -393,6 +398,7 @@ layer.closeLast('page'); // 关闭最近一次打开的页面层
 layer.closeLast('iframe'); // 关闭最近一次打开的 iframe 层
 layer.closeLast('loading'); // 关闭最近一次打开的加载层
 layer.closeLast('tips'); // 关闭最近一次打开的 tips 层
+layer.closeLast(['dialog', 'page']); // 关闭最近一次打开的信息框或页面层，2.9.7+
 ```
 
 <h2 id="config" lay-pid="api" class="ws-anchor ws-bold">全局配置默认属性</h2>

@@ -1,0 +1,35 @@
+name: Issue Closed
+
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  issue-closed:
+    runs-on: ubuntu-latest
+    steps:
+      # 追加标签
+      - name: Add labels
+        id: label-check
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const config = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            };
+            const issue = await github.rest.issues.get(config);
+            
+            // 是否带有 `bug`, `wontfix` 标签
+            const hasBugLabel = issue.data.labels.some(label => label.name === 'bug');
+            const hasWontfixLabel = issue.data.labels.some(label => label.name === 'wontfix');
+            
+            // 对带有 `bug` 标签的 issue 追加 `resolved` 标签，表示 bug 已解决。
+            if (hasBugLabel && !hasWontfixLabel) {
+              github.rest.issues.addLabels({
+                ...config,
+                labels: ['resolved']
+              });
+            }

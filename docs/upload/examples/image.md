@@ -32,7 +32,7 @@ layui.use(function(){
   // 单图片上传
   var uploadInst = upload.render({
     elem: '#ID-upload-demo-btn',
-    url: 'https://httpbin.org/post', // 此处用的是第三方的 http 请求演示，实际使用时改成您自己的上传接口即可。
+    url: '', // 实际使用时改成您自己的上传接口即可。
     before: function(obj){
       // 预读本地文件示例，不支持ie8
       obj.preview(function(index, file, result){
@@ -71,7 +71,7 @@ layui.use(function(){
   // 多图片上传
   upload.render({
     elem: '#ID-upload-demo-btn-2',
-    url: 'https://httpbin.org/post', // 此处用的是第三方的 http 请求演示，实际使用时改成您自己的上传接口即可。
+    url: '', // 实际使用时改成您自己的上传接口即可。
     multiple: true,
     before: function(obj){
       // 预读本地文件示例，不支持ie8

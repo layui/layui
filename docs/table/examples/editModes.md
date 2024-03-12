@@ -3,7 +3,7 @@
 <script type="text/html" id="TPL-select-primary">
   {{# var cityList = d.cityList || ["北京","上海","广州","城市-1"]; }}
   <select name="city" class="layui-border select-demo-primary" lay-ignore>
-    <option value="">原生 select 框</option>
+    <option value="">原生 select</option>
     {{# layui.each(cityList, function(i, v){ }}
     <option value="{{= v }}" {{= v === d.city ? 'selected' : '' }}>{{= v }}</option>
     {{# }); }}
@@ -49,36 +49,37 @@ layui.use(function(){
   // 渲染
   table.render({
     elem: '#ID-table-demo-editmodes',
-    url: '/static/2.8/json/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    url: '/static/json/2/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
     page: true,
     css: [ // 设置单元格样式
       // 取消默认的溢出隐藏，并设置适当高度
-      '.layui-table-cell{height: 50px; line-height: 40px; overflow: visible;}',
+      '.layui-table-cell{height: 50px; line-height: 40px;}',
       '.layui-table-cell .layui-colorpicker{width: 38px; height: 38px;}',
       '.layui-table-cell select{height: 36px; padding: 0 5px;}'
     ].join(''),
     cols: [[ // 表头
       {field: 'id', title: 'ID', width:80, align: 'center', fixed: 'left'},
-      {field: 'city', title: '原生 select', width:150, templet: '#TPL-select-primary'}, 
+      {field: 'city', title: '原生 select', width:135, unresize: true, templet: '#TPL-select-primary'}, 
       //{field: 'city', title: 'layui select', width:150, templet: '#TPL-select-city'}, 
-      {field: 'sex', title: 'dropdown', width:115, align: 'center', templet: '#TPL-dropdpwn-demo'}, 
+      {field: 'sex', title: 'dropdown', width:115, unresize: true, align: 'center', templet: '#TPL-dropdpwn-demo'}, 
       {field: 'date', title: 'laydate', width:150, templet: '#TPL-laydate-demo'}, 
-      {field: 'color', title: 'colorpicker', width:100, align: 'center', templet: '#TPL-colorpicker-demo'},
+      {field: 'color', title: 'color', width:80, unresize: true, align: 'center', templet: '#TPL-colorpicker-demo'},
       {field: 'sign', title: '文本', edit: 'textarea'}
     ]],
     done: function(res, curr, count){
       var options = this;
       
       // 获取当前行数据
-      table.getRowData = function(elem){
+      table.getRowData = function(tableId, elem){
         var index = $(elem).closest('tr').data('index');
-        return table.cache[options.id][index] || {};
+        return table.cache[tableId][index] || {};
       };
       
       // 原生 select 事件
-      $('.select-demo-primary').on('change', function(){
+      var tableViewElem = this.elem.next();
+      tableViewElem.find('.select-demo-primary').on('change', function(){
         var value = this.value; // 获取选中项 value
-        var data = table.getRowData(this); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
+        var data = table.getRowData(options.id, this); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
 
         // 更新数据中对应的字段
         data.city = value;
@@ -92,7 +93,7 @@ layui.use(function(){
         console.log(obj); // 获取选中项数据
         
         // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
-        var data = table.getRowData(obj.elem);
+        var data = table.getRowData(options.id, obj.elem);
 
         // 更新数据中对应的字段
         data.city = value;
@@ -115,7 +116,7 @@ layui.use(function(){
           id: 102
         }],
         click: function(obj){
-          var data = table.getRowData(this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
+          var data = table.getRowData(options.id, this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
           
           this.elem.find('span').html(obj.title);
 
@@ -131,7 +132,7 @@ layui.use(function(){
       laydate.render({
         elem: '.laydate-demo',
         done: function(value, date, endDate){
-          var data = table.getRowData(this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
+          var data = table.getRowData(options.id, this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
 
           // 更新数据中对应的字段
           data.date = value;
@@ -145,7 +146,7 @@ layui.use(function(){
       colorpicker.render({
         elem: '.colorpicker-demo',
         done: function(value){
-          var data = table.getRowData(this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
+          var data = table.getRowData(options.id, this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
 
           // 更新数据中对应的字段
           data.color = value;

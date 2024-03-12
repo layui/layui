@@ -1,0 +1,69 @@
+name: Issue Opened
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+
+jobs:
+  issue-opened:
+    permissions:
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: content template
+        id: template
+        run: |
+          contribute="详见：🍀 [Layui Issue 贡献指南](https://github.com/layui/layui/blob/main/CONTRIBUTING.md)"
+          echo "CONTRIBUTING=$contribute" >> $GITHUB_ENV
+
+      - name: check invalid
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const config = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            };
+
+            const payload = context.payload;
+            const isCreatedByBot = payload.sender.type === 'Bot';
+            const issue = payload.issue;
+            const isValid = issue.body?.includes('layui-issue-template');
+
+            // 跳过 closed 状态的 issues
+            if (issue.state === 'closed') {
+              return console.log('Issue is closed.');
+            }
+
+            // 若修改的不是内容，则不必校验
+            if (payload.action === 'edited') {
+              if (payload.changes && !payload.changes.body.from) {
+                return console.log('Edited fields exclude "body".');
+              }
+            }
+
+            // 不符合规则或由机器人创建
+            if (isCreatedByBot || !isValid) {
+              if (!isCreatedByBot) {
+                github.rest.issues.createComment({
+                  ...config,
+                  body: `@${payload.sender.login} 你好，为了提升沟通效率，我们对 Issue 制定了严格的要求，你的 Issue 因不符合规定而被自动关闭。
+              建议你在下次创建 Issue 时，遵循相应规范和社区行为准则。谢谢。\n > ${process.env.CONTRIBUTING}`
+                });
+              }
+              // 给 issue 添加指定标签和关闭
+              github.rest.issues.addLabels({
+                ...config,
+                labels: ['invalid']
+              });
+              github.rest.issues.update({
+                ...config,
+                state: 'closed'
+              });
+            }

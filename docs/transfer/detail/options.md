@@ -166,6 +166,30 @@ onchange: function(data, index){
 </td>
     </tr>
     <tr>
+<td>dblclick <sup>2.9.3+</sup></td>
+<td>
+  
+双击时的回调函数。返回的参数如下：
+
+```
+dblclick: function(obj){
+  console.log(obj.elem); // 点击的元素
+  console.log(obj.data); // 得到点击项的数据
+  console.log(obj.index); // 如果数据来自左边，index 为 0，否则为 1
+
+  return false // 返回 false 会阻止穿梭
+}
+```
+
+</td>
+<td>function</td>
+<td>
+
+ `null`
+
+</td>
+    </tr>
+    <tr>
 <td>
   
 [parseData](#options.parseData)

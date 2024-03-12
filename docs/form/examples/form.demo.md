@@ -26,7 +26,7 @@
     <div class="layui-inline">
       <label class="layui-form-label">验证邮箱</label>
       <div class="layui-input-inline">
-        <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+        <input type="text" name="email" lay-verify="email" placeholder="有值时才校验" autocomplete="off" class="layui-input">
       </div>
     </div>
     <div class="layui-inline">
@@ -48,13 +48,13 @@
   </div>
   <div class="layui-form-item">
     <div class="layui-inline">
-      <label class="layui-form-label">范围</label>
+      <label class="layui-form-label">数字输入框</label>
       <div class="layui-input-inline" style="width: 100px;">
-        <input type="text" name="price_min" placeholder="￥" autocomplete="off" class="layui-input">
+        <input type="number" name="price_min" placeholder="" autocomplete="off" class="layui-input" min="0" step="1" lay-affix="number">
       </div>
       <div class="layui-form-mid">-</div>
       <div class="layui-input-inline" style="width: 100px;">
-        <input type="text" name="price_max" placeholder="￥" autocomplete="off" class="layui-input">
+        <input type="number" name="price_max" placeholder="" autocomplete="off" class="layui-input" min="0" step="1" lay-affix="number">
       </div>
     </div>
   </div>
@@ -164,7 +164,7 @@
     <div class="layui-input-block">
       <input type="checkbox" name="arr1[0]" lay-skin="tag" title="选项1" checked>
       <input type="checkbox" name="arr1[1]" lay-skin="tag" title="选项2">
-      <input type="checkbox" name="arr1[2]" lay-skin="tag" title="选项3" disabled>
+      <input type="checkbox" name="arr1[2]" lay-skin="tag" title="选项3">
     </div>
   </div>
   <div class="layui-form-item">
@@ -205,10 +205,11 @@ layui.use(['form', 'laydate', 'util'], function(){
   
   // 自定义验证规则
   form.verify({
-    pass: [
-      /^[\S]{6,12}$/,
-      '密码必须6到12位，且不能出现空格'
-    ]
+    pass: function(value) {
+      if (!/(.+){6,12}$/.test(value)) {
+        return '密码必须 6 到 12 位';
+      }
+    }
   });
   
   // 指定开关事件

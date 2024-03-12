@@ -83,7 +83,7 @@
         <th lay-data="{field:'username', width:200}">昵称</th>
         <th lay-data="{field:'joinTime', width:150}">加入时间</th>
         <th lay-data="{field:'sign'}">签名</th>
-      </tr> 
+      </tr>
     </thead>
     <tbody>
       <tr>
@@ -177,9 +177,9 @@ layui.use('table', function(){
       ,{title:'操作', align:'center', toolbar: '#barDemo'}
     ]]
   });
-  
+
   //return;
-  
+
   // 直接赋值数据
   table.render({
     elem: '#test-data'
@@ -293,7 +293,7 @@ layui.use('table', function(){
     ,skin: 'row' //表格风格
     ,even: true
     //,size: 'lg' //尺寸
-    
+
     ,page: true //是否显示分页
     ,limits: [3,5,10]
     ,limit: 3 //每页默认显示的数量
@@ -314,7 +314,7 @@ layui.use('table', function(){
   });
 
 
-  
+
   var $ = layui.jquery, active = {
     parseTable: function(){
       table.init('parse-table-demo', {

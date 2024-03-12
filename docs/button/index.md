@@ -12,21 +12,21 @@ toc: true
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code']}">
   <textarea>
 <div class="layui-btn-container">
-  <button type="button" class="layui-btn layui-btn-primary">原始按钮</button>
   <button type="button" class="layui-btn">默认按钮</button>
-  <button type="button" class="layui-btn layui-btn-normal">百搭按钮</button>
-  <button type="button" class="layui-btn layui-btn-warm">暖色按钮</button>
-  <button type="button" class="layui-btn layui-btn-danger">警告按钮</button>
+  <button type="button" class="layui-btn layui-bg-blue">蓝色按钮</button>
+  <button type="button" class="layui-btn layui-bg-orange">橙色按钮</button>
+  <button type="button" class="layui-btn layui-bg-red">红色按钮</button>
+  <button type="button" class="layui-btn layui-bg-purple">紫色按钮</button>
   <button type="button" class="layui-btn layui-btn-disabled">禁用按钮</button>
 </div>
  
 <div class="layui-btn-container">
-  <button class="layui-btn layui-btn-primary layui-border">原始按钮</button>
   <button class="layui-btn layui-btn-primary layui-border-green">主色按钮</button>
-  <button class="layui-btn layui-btn-primary layui-border-blue">百搭按钮</button>
-  <button class="layui-btn layui-btn-primary layui-border-orange">暖色按钮</button>
-  <button class="layui-btn layui-btn-primary layui-border-red">警告按钮</button>
-  <button class="layui-btn layui-btn-primary layui-border-black">深色按钮</button>
+  <button class="layui-btn layui-btn-primary layui-border-blue">蓝色按钮</button>
+  <button class="layui-btn layui-btn-primary layui-border-orange">橙色按钮</button>
+  <button class="layui-btn layui-btn-primary layui-border-red">红色按钮</button>
+  <button class="layui-btn layui-btn-primary layui-border-purple">紫色按钮</button>
+  <button class="layui-btn layui-btn-primary layui-border">普通按钮</button>
 </div>
   </textarea>
 </pre>

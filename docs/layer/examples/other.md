@@ -64,11 +64,11 @@ layui.use(function(){
             {
               "alt": "浩瀚宇宙",
               "pid": 5,
-              "src": "https://unpkg.com/outeres/demo/outer-space.jpg",
+              "src": "https://unpkg.com/outeres@0.1.1/demo/outer-space.jpg",
             }
           ]
         },
-        hideFooter: true // 是否隐藏底部栏 --- 2.8+
+        footer: false // 是否显示底部栏 --- 2.8.16+
       });
     },
     'test-tips-photos': function(){
@@ -80,17 +80,17 @@ layui.use(function(){
             {
               "alt": "layer",
               "pid": 1,
-              "src": "https://unpkg.com/outeres/demo/layer.png",
+              "src": "https://unpkg.com/outeres@0.1.1/demo/layer.png",
             },
             {
               "alt": "壁纸",
               "pid": 3,
-              "src": "https://unpkg.com/outeres/demo/000.jpg",
+              "src": "https://unpkg.com/outeres@0.1.1/demo/000.jpg",
             },
             {
               "alt": "浩瀚宇宙",
               "pid": 5,
-              "src": "https://unpkg.com/outeres/demo/outer-space.jpg",
+              "src": "https://unpkg.com/outeres@0.1.1/demo/outer-space.jpg",
             }
           ]
         }

@@ -15,7 +15,7 @@ layui.use(function(){
   // 渲染
   upload.render({
     elem: '#ID-upload-demo-drag',
-    url: 'https://httpbin.org/post', // 此处用的是第三方的 http 请求演示，实际使用时改成您自己的上传接口即可。
+    url: '', // 实际使用时改成您自己的上传接口即可。
     done: function(res){
       layer.msg('上传成功');
       $('#ID-upload-demo-preview').removeClass('layui-hide')

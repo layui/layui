@@ -52,7 +52,7 @@
 <td>alpha</td>
 <td>
   
-是否开启透明度。当同时开启 `format: 'rga'` 时，`color` 值将采用 `rgba` 格式。
+是否开启透明度。当同时开启 `format: 'rgb'` 时，`color` 值将采用 `rgba` 格式。
 
 </td>
 <td>boolean</td>

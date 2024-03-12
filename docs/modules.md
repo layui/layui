@@ -144,7 +144,7 @@ layui.use('demo', layui.factory('demo'));
 
 2. **编写模块**
 
-接下来我们开始定义 `firstMod` 模块，并编写改模块主体代码。
+接下来我们开始定义 `firstMod` 模块，并编写该模块主体代码。
 
 ```
 /**

@@ -14,7 +14,7 @@ layui.use('table', function(){
   // 创建渲染实例
   table.render({
     elem: '#ID-table-demo-page',
-    url:'/static/2.8/json/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
+    url:'/static/json/2/table/user.json', // 此处为静态模拟数据，实际使用时需换成真实接口
     page: { // 支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
       layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'], //自定义分页布局
       //curr: 5, //设定初始在第 5 页

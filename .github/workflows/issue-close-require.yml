@@ -1,0 +1,36 @@
+name: Issue Close Require
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  issue-close-require:
+    permissions:
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: need reproduce
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issues'
+          labels: 'need reproduce'
+          inactive-day: 3
+          body: |
+            由于超过 3 天仍未收到相关重现或其他更多信息，该 issue 已被自动关闭。
+      - name: Close issues with inactive days of 3
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issues'
+          labels: 'duplicate'
+          inactive-day: 3
+      - name: Close issues with inactive days of 7
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issues'
+          labels: 'compatibility,resolved,usage'
+          inactive-day: 7

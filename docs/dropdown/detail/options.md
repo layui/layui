@@ -39,6 +39,16 @@
 <td>-</td>
     </tr>
     <tr>
+      <td>id</td>
+<td>
+  
+设定实例唯一索引，以便用于其他方法对例进行相关操作。若该属性未设置，则默认从 `elem` 属性绑定的元素中的 `id` 属性值中获取。
+
+</td>
+<td>string</td>
+<td>-</td>
+    </tr>
+    <tr>
 <td>trigger</td>
 <td>
   
@@ -113,16 +123,33 @@
 </td>
     </tr>
     <tr>
+<td>accordion <sup>2.8.18+</sup></td>
+<td>
+  
+是否开启手风琴效果
+
+</td>
+<td>boolean</td>
+<td>
+
+`false`
+
+</td>
+    </tr>
+    <tr>
 <td>delay</td>
 <td>
   
-延迟关闭的毫秒数。当 `trigger: 'hover'` 时才生效
+延迟触发的毫秒数。当 `trigger: 'hover'` 时才生效。示例：
+
+- `delay: 300` : 表示显示与隐藏的延迟时间均为 300 毫秒
+- `delay: [200, 300]` <sup>2.9.2+</sup> : 数组成员值分别表示显示延迟时间和隐藏延迟时间
 
 </td>
-<td>number</td>
+<td>number/array</td>
 <td>
 
-`300`
+`[200, 300]`
 
 </td>
     </tr>
@@ -208,6 +235,20 @@ templet: function(d){
 <td>-</td>
     </tr>
     <tr>
+<td>
+
+[customName](#options.customName) <sup>2.8.14+</sup>
+
+</td>
+<td>
+
+自定义 `data` 数据源中常用的字段名称。
+
+</td>
+<td>object</td>
+<td>-</td>
+    </tr>
+    <tr>
 <td colspan="4" style="text-align: center"> 
 
 
@@ -256,9 +297,24 @@ click: function(data, othis){
   /*
   return false;
   */
+}
 ```
 
 用法详见：[#示例](#examples)
+
+</td>
+    </tr>
+    <tr>
+<td>close <sup>2.9.7+</sup></td>
+<td colspan="3">
+  
+面板关闭后的回调函数。返回的参数如下：
+
+```
+close: function(elem){
+  console.log(elem); // 当前组件绑定的目标元素对象
+}   
+```
 
 </td>
     </tr>
