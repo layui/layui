@@ -61,6 +61,7 @@ layui.use(function(){
         scrollbar: false, // 暂时屏蔽浏览器滚动条
         anim: -1, // 禁用弹出动画
         isOutAnim: false, // 禁用关闭动画
+        resize: false,  // 禁用右下角拉伸尺寸
         id: 'ID-layer-demo-inst',
         skin: 'class-demo-layer-lockscreen', // className
         content: ['<div class="layui-form">',
