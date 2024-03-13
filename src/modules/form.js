@@ -408,6 +408,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
           // 搜索项
           var laySearch = select.attr('lay-search');
+
+          // #1449
+          // IE10 和 11 中，带有占位符的 input 元素获得/失去焦点时，会触发 input 事件
+          // 当鼠标按下时，根据 input 元素上的 __ieph 标识忽略 input 事件
+          var needPlaceholderPatch = !!(lay.ie && (lay.ie === '10' || lay.ie === '11') && input.attr('placeholder'));
           
           // 展开下拉
           var showDown = function(){
@@ -431,6 +436,15 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             }
 
             followScroll();
+
+            if(needPlaceholderPatch){
+              dl.off('mousedown.select.ieph').on('mousedown.select.ieph', function(){
+                input[0].__ieph = true;
+                setTimeout(function(){
+                  input[0].__ieph = false;
+                }, 60)
+              });
+            }
           };
           
           // 隐藏下拉
@@ -582,9 +596,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             layui.each(dds, function(){
               var othis = $(this);
               var text = othis.text();
+              var isCreateOption = isCreatable && othis.hasClass(CREATE_OPTION);
 
               // 需要区分大小写
-              if(isCreatable && text === rawValue){
+              if(isCreatable && !isCreateOption && text === rawValue){
                 hasEquals = true;
               }
 
@@ -598,7 +613,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               var not = text.indexOf(value) === -1;
               
               if(value === '' || (origin === 'blur') ? value !== text : not) num++;
-              origin === 'keyup' && othis[(not && (isCreatable ? !othis.hasClass(CREATE_OPTION) : true)) ? 'addClass' : 'removeClass'](HIDE);
+              origin === 'keyup' && othis[(isCreatable ? (not && !isCreateOption) : not) ? 'addClass' : 'removeClass'](HIDE);
             });
             // 处理 select 分组元素
             origin === 'keyup' && layui.each(dts, function(){
@@ -620,6 +635,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               || keyCode === 37 || keyCode === 38 
               || keyCode === 39 || keyCode === 40
             ){
+              return false;
+            }
+            
+            if(needPlaceholderPatch && e.target.__ieph){
+              e.target.__ieph = false;
               return false;
             }
             
@@ -661,12 +681,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           };
           
           if(isSearch){
-            // #1449: IE10 和 11 中，带有占位符的 input 元素获得/失去焦点时，会触发 input 事件
-            var eventsType = 'input propertychange';
-            if(lay.ie && (lay.ie === '10' || lay.ie === '11') && input.attr('placeholder')){
-              eventsType = 'keyup';
-            }
-            input.on(eventsType, search).on('blur', function(e){
+            input.on('input propertychange', layui.debounce(search, 50)).on('blur', function(e){
               var selectedIndex = select[0].selectedIndex;
               
               thatInput = input; // 当前的 select 中的 input 元素
