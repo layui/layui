@@ -29,6 +29,12 @@
     <a href="javascript:;" id="demo3">文字下拉 <i class="layui-icon layui-icon-down"></i></a>
   </div>
 
+  <div class="layui-btn-container">
+    <a href="javascript:;" id="testopen">testopen <i class="layui-icon layui-icon-down"></i></a>
+    <button class="layui-btn" lay-on="open">open</button>
+    <button class="layui-btn" lay-on="close">close</button>
+  </div>
+
   <div class="layui-bg-gray" style="margin-top: 30px; width: 100%; height: 300px; text-align: center;" id="demo20">
     <span class="layui-font-gray" style="position: relative; top:50%;">鼠标右键菜单</span>
   </div>
@@ -39,6 +45,7 @@
 <script>
 layui.use('dropdown', function () {
   var dropdown = layui.dropdown;
+  var util = layui.util;
 
   dropdown.render({
     elem: '#demo1',
@@ -308,6 +315,23 @@ layui.use('dropdown', function () {
       }
     }
   });
+
+  dropdown.render({
+    elem: '#testopen',
+    id: 'testopen',
+    trigger: "manual",
+    data: [{ id: "refresh", title: "刷新"}]
+  });
+
+  util.on({
+    open: function(){
+      dropdown.open('testopen')
+    },
+    close: function(){
+      dropdown.close('testopen')
+    }
+  },
+  {trigger: 'mouseenter'});
 
   return;
 
