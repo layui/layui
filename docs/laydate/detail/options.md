@@ -325,7 +325,7 @@ max: 7 // 最大日期为 7 天后
 </td>
     </tr>
     <tr>
-<td>disabledDate <sup>2.9.7+</sup> </td>
+<td>disabledDate <sup>2.9.8+</sup> </td>
 <td>
 
 不可选取的日期。
@@ -336,7 +336,7 @@ disabledDate: function(date, type){
   // type - 面板类型，'start'/'end'
 
   // 返回值为 true 的日期会被禁用
-  return date < new Date(2024, 1); // 2024-02-01
+  return date.getTime() < new Date(2024, 1).getTime(); // 2024-02-01
 }
 
 ```
@@ -346,7 +346,7 @@ disabledDate: function(date, type){
 <td> - </td>
     </tr>
     <tr>
-<td>disabledTime <sup>2.9.7+</sup> </td>
+<td>disabledTime <sup>2.9.8+</sup> </td>
 <td>
 
 不可选取的时间。
@@ -358,9 +358,15 @@ disabledTime: function(date, type){
 
   // 数组中指定的时间会被禁用
   return {
-    hours: type === "start" ? [0, 1] : range(0, 10),
-    minutes: range(0, 20),
-    seconds: range(0, 2)
+    hours: function(){
+      return range(0, 10);
+    },
+    minutes:function(hour){
+      return hour > 5 ? range(0, 20) : [];
+    },
+    seconds:function(hour, minute){
+      return range(0, 2);
+    }
   };
 }
 

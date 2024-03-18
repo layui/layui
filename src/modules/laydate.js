@@ -1147,7 +1147,7 @@
 
   /**
    * 不可选取的年或月。年或月中的所有日期都禁用时，才判定为不可选取。
-   * @param {Date} date 要检测的年/月
+   * @param {Date} date 要检测的年或月
    * @param {'year' | 'month'} type 面板类型
    * @param {'start' | 'end'} position 面板位置
    */
@@ -1195,8 +1195,8 @@
     var position = options.range ? (opts.rangeType === 0 ? 'start' : 'end') : 'start';
     
     if(!options.disabledDate) return false;
-    if(options.type === 'time')return false;
-    if(!(opts.disabledType === 'date' || opts.disabledType === 'datetime'))return false;
+    if(options.type === 'time') return false;
+    if(!(opts.disabledType === 'date' || opts.disabledType === 'datetime')) return false;
 
     // 不需要时分秒
     var normalizedDate = new Date(date);
@@ -1222,24 +1222,26 @@
  
     if(!options.disabledTime) return false;
     if(!(options.type === "time" || options.type === "datetime")) return false;
-    if(!(opts.disabledType === 'time' || opts.disabledType === 'datetime'))return false;
+    if(!(opts.disabledType === 'time' || opts.disabledType === 'datetime')) return false;
 
-    var isDisabledItem = function(val, disabledRange){
-      return (disabledRange && disabledRange.length) ? disabledRange.indexOf(val) !== -1 : false;
+    var isDisabledItem = function(compareVal, rangeFn, rangeFnParam){
+      return function(){
+        return (typeof rangeFn === 'function' && rangeFn.apply(options, rangeFnParam) || []).indexOf(compareVal) !== -1;
+      } 
     }
 
     var dateObj = that.systemDate(new Date(date));
-    var disabledTime = options.disabledTime.call(options, that.newDate(date), position);
+    var disabledTime = options.disabledTime.call(options, that.newDate(dateObj), position) || {};
 
     // 面板中的时分秒 HTML 元素需要分别检测是否禁用
     // 按钮检测任意一项是否禁用即可
     return opts.disabledType === 'datetime'
-      ? isDisabledItem(dateObj.hours, disabledTime.hours)
-          || isDisabledItem(dateObj.minutes, disabledTime.minutes)
-          || isDisabledItem(dateObj.seconds, disabledTime.seconds)
+      ? isDisabledItem(dateObj.hours, disabledTime.hours)()
+          || isDisabledItem(dateObj.minutes, disabledTime.minutes, [dateObj.hours])()
+          || isDisabledItem(dateObj.seconds, disabledTime.seconds, [dateObj.hours, dateObj.minutes])()
       : [isDisabledItem(dateObj.hours, disabledTime.hours),
-          isDisabledItem(dateObj.minutes, disabledTime.minutes),
-          isDisabledItem(dateObj.seconds, disabledTime.seconds)][opts.time.length - 1];
+          isDisabledItem(dateObj.minutes, disabledTime.minutes, [dateObj.hours]),
+          isDisabledItem(dateObj.seconds, disabledTime.seconds, [dateObj.hours, dateObj.minutes])][opts.time.length - 1]();
   }
 
   /**
@@ -1248,7 +1250,7 @@
    * @param {limitOptions} opts 
    * @returns 
    */
-  Class.prototype.disabledDateTime = function(timestamp, opts){
+  Class.prototype.isDisabledDateTime = function(timestamp, opts){
     opts = opts || {};
 
     var that = this;
@@ -1290,7 +1292,7 @@
       }())).getTime();  //time：是否比较时分秒
     });
 
-    isOut = timestamp.now < timestamp.min || timestamp.now > timestamp.max || that.disabledDateTime(timestamp.now, opts);
+    isOut = timestamp.now < timestamp.min || timestamp.now > timestamp.max || that.isDisabledDateTime(timestamp.now, opts);
     opts.elem && opts.elem[isOut ? 'addClass' : 'removeClass'](DISABLED);
 
     return isOut;

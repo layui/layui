@@ -70,8 +70,8 @@ layui.use(function(){
   // 禁用日期 
   laydate.render({
     elem: '#ID-laydate-limit-4',
-    disabledDate: function(date){
-      return date > Date.now();
+    disabledDate: function(date, type){
+      return date.getTime() > Date.now();
     }
   });
 
@@ -82,9 +82,15 @@ layui.use(function(){
     range: true,
     disabledTime: function(date, type){
       return {
-        hours: type === "start" ? [0, 1] : range(0, 10),
-        minutes: range(1, 5),
-        seconds: range(5, 10)
+        hours: function(){
+          return range(0, 10);
+        },
+        minutes:function(hour){
+          return hour > 5 ? range(0, 20) : [];
+        },
+        seconds:function(hour, minute){
+          return range(0, 2);
+        }
       };
     }
   });
