@@ -904,7 +904,7 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-form-onswitch > i{left: 100%; margin-left: -21px; background-color: #fff;}
 .layui-form-onswitch > div{margin-left: 0; margin-right: 21px; color: #fff!important;}
 
-/* 复选框-无样式风格-根据模板自定义样式*/
+/* 无样式风格-根据模板自定义样式*/
 .layui-form-checkbox[lay-skin="none"] *,
 .layui-form-radio[lay-skin="none"] *{box-sizing: border-box;}
 .layui-form-checkbox[lay-skin="none"],

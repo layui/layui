@@ -52,20 +52,6 @@ toc: true
   </textarea>
 </pre>
 
-
-<h2 id="custom-skin" lay-toc="{}">模板自定义风格 <sup>2.9.8+</sup></h2>
-
-在 `radio` 元素上设置 `lay-skin="none"` 启用无样式风格，然后就可以用模板自定义样式。
-
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
-  obj.render();
-}}">
-  <textarea>
-{{- d.include("/form/examples/radio.skin.md") }} 
-  </textarea>
-</pre>
-
-
 <h2 id="on" lay-toc="{hot: true}">单选框事件</h2>
 
 `form.on('radio(filter)', callback);`
