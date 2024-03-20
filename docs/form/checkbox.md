@@ -85,7 +85,7 @@ layui.use(function(){
 在 `title` 属性中通过 `|` 分隔符可设置两种状态下的不同标题
 
 
-<h2 id="title" lay-toc="{hot: true}">标题模板 <sup>2.8.3+</sup></h2>
+<h2 id="title" lay-toc="{}">自定义标题模板 <sup>2.8.3+</sup></h2>
 
 在 `checkbox` 元素后的相邻元素设置特定属性 `lay-checkbox`，可以与 `checkbox` 标题进行绑定。
 
@@ -116,6 +116,19 @@ layui.use(function(){
 </div>
 
 <!-- import layui -->
+  </textarea>
+</pre>
+
+<h2 id="skin" lay-toc="{hot: true}">自定义任意风格 <sup>2.9.8+</sup></h2>
+
+通过对 `checkbox` 元素设置 `lay-skin="none"` 属性禁用默认样式，从而实现任意风格的多选组件。<br>
+**注：** 这意味着你需要掌握一定的 `CSS` 技能，以下示例中的样式均为外部自主实现，并非 Layui 内置。
+
+<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+  obj.render();
+}}">
+  <textarea>
+{{- d.include("/form/examples/checkbox.skin.md") }}
   </textarea>
 </pre>
 
