@@ -49,18 +49,6 @@ toc: true
   </textarea>
 </pre>
 
-<h3 id="custom-skin" lay-toc="{}">单选框&复选框模板 <sup>2.9.8+</sup></h3>
-
-在 `checkbox` 或 `radio` 元素上设置 `lay-skin="none"` 启用无样式风格，然后用模板自定义样式。
-
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
-  obj.render();
-}}">
-  <textarea>
-{{- d.include("/form/examples/form.skin.md") }} 
-  </textarea>
-</pre>
-
 更多其他表单模板均可自由布局实现，为了避免影响文档其他重要版面的阅读，我们就不做过多演示了。
 
 
