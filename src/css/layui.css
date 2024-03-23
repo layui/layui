@@ -589,7 +589,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-panel-window{position: relative; padding: 15px; border-radius: 0; border-top: 5px solid #eee; background-color: #fff;}
 
 /* 其它辅助 */
-.layui-auxiliar-moving{position: fixed; left: 0; right: 0; top: 0; bottom: 0; width: 100%; height: 100%; background: none; z-index: 9999999999;}
+.layui-auxiliar-moving{position: fixed; left: 0; right: 0; top: 0; bottom: 0; width: 100%; height: 100%; background: none; z-index: 9999999999; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none;}
 .layui-scrollbar-hide{overflow: hidden !important;}
 
 
