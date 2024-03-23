@@ -27,6 +27,7 @@ toc: true
 - 属性 `checked` 可设置默认选中
 - 属性 `disabled` 可设置禁用状态
 - 属性 `value` 可设置值，否则选中时返回的默认值为 `on`（浏览器默认机制）。同组单选框一般设置相同值。
+- 属性 `lay-skin` 可设置单选框风格，可选值：`none`(无样式)<sup>2.9.8+</sup> 默认风格可不填
 
 <h2 id="title" lay-toc="{}">自定义标题模板</h2>
 
@@ -48,6 +49,19 @@ toc: true
 </div>
 
 <!-- import layui -->
+  </textarea>
+</pre>
+
+<h2 id="skin" lay-toc="{hot: true}">自定义任意风格 <sup>2.9.8+</sup></h2>
+
+通过对 `radio` 元素设置 `lay-skin="none"` 属性禁用默认样式，从而实现任意风格的单选组件。<br>
+**注：** 这意味着你需要掌握一定的 `CSS` 技能，以下示例中的样式均为外部自主实现，并非 Layui 内置。
+
+<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+  obj.render();
+}}">
+  <textarea>
+{{- d.include("/form/examples/radio.skin.md") }}
   </textarea>
 </pre>
 
