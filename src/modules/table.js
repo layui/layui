@@ -2544,7 +2544,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       if(hide){
         othis.find('.layui-table-grid-down').remove();
       } else if((
-        elemCell.prop('scrollWidth') > elemCell.outerWidth() ||
+        elemCell.prop('scrollWidth') > elemCell.prop('clientWidth') ||
         elemCell.find("br").length > 0
       ) && !options.lineStyle){
         if(elemCell.find('.'+ ELEM_GRID_DOWN)[0]) return;
