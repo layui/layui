@@ -473,7 +473,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var getWidth = function(parent){
         var width, isNone;
         parent = parent || options.elem.parent()
-        width = parent.width();
+        width = parseFloat(layui.getStyle(parent[0], 'width'));
         try {
           isNone = parent.css('display') === 'none';
         } catch(e){}
@@ -756,140 +756,108 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   Class.prototype.setColsWidth = function(){
     var that = this;
     var options = that.config;
-    var colNums = 0; // 列个数
-    var autoColNums = 0; // 自动列宽的列个数
-    var autoWidth = 0; // 自动列分配的宽度
-    var countWidth = 0; // 所有列总宽度和
-    var cntrWidth = that.setInit('width');
 
-    // 统计列个数
-    that.eachCols(function(i, item){
-      item.hide || colNums++;
-    });
+    var MIN_COL_WIDTH = 50;
 
-    // 减去边框差和滚动条宽
-    cntrWidth = cntrWidth - function(){
-      return (options.skin === 'line' || options.skin === 'nob') ? 2 : colNums + 1;
-    }() - that.getScrollWidth(that.layMain[0]) - 1;
+    var allDisplayedColumnsInfo = getAllDisplayedColumns();
+    var allDisplayedColumns = allDisplayedColumnsInfo.cols;
+    var colsToSpread = allDisplayedColumnsInfo.colsToSpread;
+    var colsToNotSpread = allDisplayedColumnsInfo.colsToNotSpread;
 
-    // 计算自动分配的宽度
-    var getAutoWidth = function(back){
-      // 遍历所有列
-      layui.each(options.cols, function(i1, item1){
-        layui.each(item1, function(i2, item2){
-          var width = 0;
-          var minWidth = item2.minWidth || options.cellMinWidth; // 最小宽度
-          var maxWidth = item2.maxWidth || options.cellMaxWidth; // 最大宽度
+    var tableWidth = that.setInit('width');
+    var scrollbarWidth = that.getScrollWidth(that.layMain[0]);
+    var borderWidth = parseFloat(layui.getStyle(that.elem[0], 'border-right-width'));
+    var lineWidth = (options.skin === 'line' || options.skin === 'nob') 
+      ? borderWidth * 2 
+      : (allDisplayedColumns.length * borderWidth + borderWidth);
+    var availableWidth = tableWidth - lineWidth - scrollbarWidth;
+    var availablePixels = availableWidth - calcWidthOfColsInList(colsToNotSpread, true);
+   
+    if (availablePixels <= 0) {
+      // 设置为最小宽度
+      layui.each(colsToSpread, function(i, col){
+        var colWidth = getColActualWidth(col);
+        setColActualWidth(col, colWidth);
+      })
+    }else{
+      var scale = availablePixels / calcWidthOfColsInList(colsToSpread);
+      var pixelsForLastCol = availablePixels;
 
-          if(!item2){
-            item1.splice(i2, 1);
-            return;
-          }
+      for (var i = colsToSpread.length - 1; i >= 0; i--) {
+        var col = colsToSpread[i]
+        var colMinWidth = col.minWidth || options.cellMinWidth || MIN_COL_WIDTH; // 最小宽度
+        var colMaxWidth = col.maxWidth || options.cellMaxWidth || Number.MAX_SAFE_INTEGER; // 最大宽度
+        var newWidth = Math.round(getColActualWidth(col) * scale);
 
-          if(item2.colGroup || item2.hide) return;
+        if(newWidth < colMinWidth){
+          newWidth = colMinWidth;
+        }else if(newWidth > colMaxWidth){
+          newWidth = colMaxWidth;
+        }else if(i === 0){
+          newWidth = pixelsForLastCol;
+        }
 
-          if(!back){
-            width = item2.width || 0;
-            if(/\d+%$/.test(width)){ // 列宽为百分比
-              width = Math.floor((parseFloat(width) / 100) * cntrWidth);
-              width < minWidth && (width = minWidth);
-              width > maxWidth && (width = maxWidth);
-            } else if(!width){ // 列宽未填写
-              item2.width = width = 0;
-              autoColNums++;
-            } else if(item2.type === 'normal'){
-              // 若 width 小于 minWidth， 则将 width 值自动设为 minWidth 的值
-              width < minWidth && (item2.width = width = minWidth);
-              // 若 width 大于 maxWidth， 则将 width 值自动设为 maxWidth 的值
-              width > maxWidth && (item2.width = width = maxWidth);
-            }
-          } else if(autoWidth && autoWidth < minWidth){
-            autoColNums--;
-            width = minWidth;
-          } else if(autoWidth && autoWidth > maxWidth){
-            autoColNums--;
-            width = maxWidth;
-          }
-
-          if(item2.hide) width = 0;
-          countWidth = countWidth + width;
-        });
-      });
-
-      // 如果未填充满，则将剩余宽度平分
-      (cntrWidth > countWidth && autoColNums > 0) && (
-        autoWidth = (cntrWidth - countWidth) / autoColNums
-      );
+        setColActualWidth(col, newWidth);
+        pixelsForLastCol = pixelsForLastCol - newWidth;
+      }
     }
 
-    getAutoWidth();
-    getAutoWidth(true); // 重新检测分配的宽度是否低于最小列宽
-
-    // 记录自动列数
-    that.autoColNums = autoColNums = autoColNums > 0 ? autoColNums : 0;
-
-    // 设置列宽
-    that.eachCols(function(i3, item3){
-      var minWidth = item3.minWidth || options.cellMinWidth;
-      var maxWidth = item3.maxWidth || options.cellMaxWidth;
-
-      if(item3.colGroup || item3.hide) return;
-
-      // 给未分配宽的列平均分配宽
-      if(item3.width === 0){
-        that.cssRules(item3.key, function(item){
-          item.style.width = Math.floor(function(){
-            if(autoWidth < minWidth) return minWidth;
-            if(autoWidth > maxWidth) return maxWidth;
-            return autoWidth;
-          }()) + 'px';
-        });
-      }
-
-      // 给设定百分比的列分配列宽
-      else if(/\d+%$/.test(item3.width)){
-        that.cssRules(item3.key, function(item){
-          var width = Math.floor((parseFloat(item3.width) / 100) * cntrWidth);
-          width < minWidth && (width = minWidth);
-          width > maxWidth && (width = maxWidth);
-          item.style.width = width + 'px';
-        });
-      }
-
-      // 给拥有普通 width 值的列分配最新列宽
-      else {
-        that.cssRules(item3.key, function(item){
-          item.style.width = item3.width + 'px';
-        });
-      }
-    });
-
-    // 填补 Math.floor 造成的数差
-    var patchNums = that.layMain.width() - that.getScrollWidth(that.layMain[0])
-    - that.layMain.children('table').outerWidth();
-
-    if(that.autoColNums > 0 && patchNums >= -colNums && patchNums <= colNums){
-      var getEndTh = function(th){
-        var field;
-        th = th || that.layHeader.eq(0).find('thead > tr:first-child > th:last-child')
-        field = th.data('field');
-        if(!field && th.prev()[0]){
-          return getEndTh(th.prev())
+    function calcWidthOfColsInList(colList, withSet){
+      var width = 0;
+      layui.each(colList, function(i, col){
+        var colWidth = getColActualWidth(col);
+        width = width + colWidth;
+        if(withSet){
+          setColActualWidth(col, colWidth);
         }
-        return th;
-      };
-      var th = getEndTh();
-      var key = th.data('key');
+      })
 
-      that.cssRules(key, function(item){
-        var width = item.style.width || th.outerWidth();
-        item.style.width = (parseFloat(width) + patchNums) + 'px';
+      return width;
+    }
 
-        // 二次校验，如果仍然出现横向滚动条（通常是 1px 的误差导致）
-        if(that.layMain.height() - that.layMain.prop('clientHeight') > 0){
-          item.style.width = (parseFloat(item.style.width) - 1) + 'px';
+    function setColActualWidth(col, newWidth){
+      that.cssRules(col.key, function(item){
+        item.style.width = newWidth + 'px';
+      });
+    }
+
+    function getColActualWidth(col){
+      var colMinWidth = col.minWidth || options.cellMinWidth || MIN_COL_WIDTH; // 最小宽度
+      var colMaxWidth = col.maxWidth || options.cellMaxWidth || Number.MAX_SAFE_INTEGER; // 最大宽度
+      var width;
+      // 列宽为百分比
+      if(/\d+%$/.test(col.width)){
+        width = (parseFloat(col.width) / 100) * availableWidth;
+      }else if(col.width !== null && col.width !== undefined){
+        width = col.width;
+      }else{
+        width = MIN_COL_WIDTH;
+      }
+
+      return Math.max(Math.min(width, colMaxWidth), colMinWidth);
+    }
+
+    function getAllDisplayedColumns(){
+      var cols = [];
+      var colsToSpread = [];
+      var colsToNotSpread = [];
+
+      that.eachCols(function(i, col){
+        if(!col.hide){
+          cols.push(col);
+          if(col.width || col.type !== 'normal'){
+            colsToNotSpread.push(col)
+          }else{
+            colsToSpread.push(col)
+          }
         }
       });
+
+      return {
+        cols: cols,
+        colsToNotSpread: colsToNotSpread,
+        colsToSpread: colsToSpread
+      }
     }
 
     that.setGroupWidth();
