@@ -871,9 +871,19 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           hasRender[0] && hasRender.remove(); // 若已经渲染，则 Rerender
          
           // 若存在标题模板，则优先读取标题模板
+          var titleTplAttrs = [];
           if(othis.next('[lay-checkbox]')[0]){
-            title = othis.next().html() || '';
+            var titleTplElem = othis.next();
+            title = titleTplElem.html() || '';
+            if(titleTplElem[0].attributes.length > 1){
+              layui.each(titleTplElem[0].attributes, function(i, attr){
+                if(attr.name !== 'lay-checkbox'){
+                  titleTplAttrs.push(attr.name + '="' + attr.value + '"')
+                }
+              })
+            }
           }
+          titleTplAttrs = titleTplAttrs.join(' ');
 
           // 若为开关，则对 title 进行分隔解析
           title = skin === 'switch' ? title.split('|') : [title];
@@ -891,7 +901,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             var type = {
               // 复选框
               "checkbox": [
-                (title[0] ? ('<div>'+ title[0] +'</div>') : (skin === 'primary' ? '' : '<div></div>')),
+                (title[0] ? ('<div ' + titleTplAttrs +'>'+ title[0] +'</div>') : (skin === 'primary' ? '' : '<div></div>')),
                 '<i class="layui-icon '+(skin === 'primary' && !check.checked && othis.get(0).indeterminate ? CLASS.SUBTRA : 'layui-icon-ok')+'"></i>'
               ].join(''),
               // 开关
@@ -947,22 +957,34 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         radios.each(function(index, radio){
           var othis = $(this), hasRender = othis.next('.' + CLASS);
           var disabled = this.disabled;
+          var skin = othis.attr('lay-skin');
           
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
           hasRender[0] && hasRender.remove(); // 如果已经渲染，则Rerender
+
+          var title = util.escape(radio.title || '');
+          var titleTplAttrs = [];
+          if(othis.next('[lay-radio]')[0]){
+            var titleTplElem = othis.next();
+            title = titleTplElem.html() || '';
+            if(titleTplElem[0].attributes.length > 1){
+              layui.each(titleTplElem[0].attributes, function(i, attr){
+                if(attr.name !== 'lay-radio'){
+                  titleTplAttrs.push(attr.name + '="' + attr.value + '"')
+                }
+              })
+            }
+          }
+          titleTplAttrs = titleTplAttrs.join(' ');
           
           // 替代元素
           var reElem = $(['<div class="layui-unselect '+ CLASS, 
             (radio.checked ? (' '+ CLASS +'ed') : ''), // 选中状态
-          (disabled ? ' layui-radio-disabled '+DISABLED : '') +'">', // 禁用状态
+          (disabled ? ' layui-radio-disabled '+DISABLED : '') +'"', // 禁用状态
+          (skin ? ' lay-skin="'+ skin +'"' : ''),
+          '>',
           '<i class="layui-anim layui-icon '+ ICON[radio.checked ? 0 : 1] +'"></i>',
-          '<div>'+ function(){
-            var title = util.escape(radio.title || '');
-            if(othis.next('[lay-radio]')[0]){
-              title = othis.next().html();
-            }
-            return title;
-          }() +'</div>',
+          '<div ' + titleTplAttrs +'>'+ title +'</div>',
           '</div>'].join(''));
 
           othis.after(reElem);
