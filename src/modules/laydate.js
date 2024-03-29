@@ -1085,7 +1085,7 @@
         ymd2[i] = parseInt(v, 10);
       })
       
-      return ymd1[0] === ymd2[0] && ymd1[1] === ymd2[1] && ymd1[2] === ymd2[2];
+      return ymd1.join('-') === ymd2.join('-');
     }
 
     lay.each(options.holidays, function(idx, item) {
