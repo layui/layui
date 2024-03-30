@@ -1074,9 +1074,23 @@
 
     if(layui.type(options.holidays) !== 'array') return that;
 
+    var isEquals = function(ymdStr1, ymdStr2){
+      var ymd1 = ymdStr1.split('-');
+      var ymd2 = ymdStr2.split('-');
+
+      lay.each(ymd1, function(i,v){
+        ymd1[i] = parseInt(v, 10);
+      })
+      lay.each(ymd2, function(i,v){
+        ymd2[i] = parseInt(v, 10);
+      })
+      
+      return ymd1.join('-') === ymd2.join('-');
+    }
+
     lay.each(options.holidays, function(idx, item) {
       lay.each(item, function(i, dayStr) {
-        if(dayStr === td.attr('lay-ymd')){
+        if(isEquals(dayStr, td.attr('lay-ymd'))){
           td.find('div').html('<span class="laydate-day-holidays"' + (
             type[idx] ? ('type="'+ type[idx] +'"') : ''
           ) + '>' + YMD[2] + '</span>');
