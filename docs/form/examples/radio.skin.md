@@ -66,14 +66,14 @@
 
   <h3 class="ws-bold">自定义“标签风格”的单选组件</h3>
   <div>
-    <input type="checkbox" name="hobby[0]" value="唱" lay-skin="none" checked>
-    <div lay-checkbox class="lay-skin-tag layui-badge">唱</div>
-    <input type="checkbox" name="hobby[1]" value="跳" lay-skin="none" checked>
-    <div lay-checkbox class="lay-skin-tag layui-badge">跳</div>
-    <input type="checkbox" name="hobby[2]" value="rap" lay-skin="none">
-    <div lay-checkbox class="lay-skin-tag layui-badge">rap</div>
-    <input type="checkbox" name="hobby[3]" value="篮球" lay-skin="none">
-    <div lay-checkbox class="lay-skin-tag layui-badge">篮球</div>
+    <input type="radio" name="hobby" value="唱" lay-skin="none" checked>
+    <div lay-radio class="lay-skin-tag layui-badge">唱</div>
+    <input type="radio" name="hobby" value="跳" lay-skin="none">
+    <div lay-radio class="lay-skin-tag layui-badge">跳</div>
+    <input type="radio" name="hobby" value="rap" lay-skin="none">
+    <div lay-radio class="lay-skin-tag layui-badge">rap</div>
+    <input type="radio" name="hobby" value="篮球" lay-skin="none">
+    <div lay-radio class="lay-skin-tag layui-badge">篮球</div>
   </div>
 
   <h3 class="ws-bold">自定义“颜色选择”的单选组件</h3>
