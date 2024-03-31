@@ -1152,8 +1152,32 @@ layui.define(['table'], function (exports) {
     if(!that) return;
 
     var options = that.getOptions();
+    var treeOptions = options.tree;
+
+    var tableData =  treeTable.getData(id);
+    var customName = treeOptions.customName;
+    var childrenKey = customName.children;
+
+    // 只和同级节点排序
+    var sort = function(data, field, type){
+      layui.sort(data, field, type, true);
+      layui.each(data, function(rowIndex, trData){
+        sort(trData[childrenKey] || [], field, type);
+      })
+    }
+
     if (options.autoSort) {
-      that.initData();
+      var initSort = options.initSort;
+      if (initSort.type) {
+        sort(tableData, initSort.field, initSort.type === 'desc');
+      } else {
+        // 恢复默认
+        sort(tableData, table.config.indexName, null);
+      }
+      // 更新缓存中数据的顺序
+      table.cache[id] = tableData;
+      // 重新初始化缓存数据
+      that.initData(tableData);
       treeTable.renderData(id);
     }
   }
