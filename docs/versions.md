@@ -10,9 +10,35 @@ toc: true
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
 
+<h2 id="v2.9.8" class="ws-anchor">
+  v2.9.8
+  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
+  <span class="layui-badge-rim">2024-03-31</span>
+</h2>
+
+- #### form
+  - 新增 `checkbox, radio` 组件更灵活的多选和单选模板自定义功能 #1686 @Sight-wcg
+  - 新增 `input-number` 组件的 `lay-precision` 属性值为 `0` 时的取整支持
+  - 修复 `select` 组件的 `lay-creatable` 属性在旧版微软拼音输入法兼容性问题 #1667 @Sight-wcg
+- #### treeTable
+  - 修复 点击表头排序后，内部缓存数据和表格显示数据不一致的问题 #1734 @Sight-wcg
+- #### laydate
+  - 新增 `disabledDate, disabledTime` 选项，用于设置不可选取的日期和时间 #1569 @Sight-wcg
+  - 优化 `holidays` 节假日标注在数字前置为 `0` 失效的问题 #1719 @Sight-wcg
+- #### slider
+  - 新增 `step` 选项的小数支持 #1663 @Sight-wcg
+  - 修复 Firefox 浏览器中拖动滑块时会选中文本的问题 #1716 @Sight-wcg
+- #### dropdown
+  - 新增 `dropdown.open()` 方法，用于外部打开下拉菜单面板 #1693 @Sight-wcg
+- #### upload
+  - 新增 图片 `.webp` 默认格式支持
+
+### 下载： [layui-v2.9.8.zip](https://gitee.com/layui/layui/attach_files/1720816/download)
+
+---
+
 <h2 id="v2.9.7" class="ws-anchor">
   v2.9.7
-  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
   <span class="layui-badge-rim">2024-02-28</span>
 </h2>
 
