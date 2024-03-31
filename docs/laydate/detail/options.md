@@ -328,7 +328,7 @@ max: 7 // 最大日期为 7 天后
 <td>disabledDate <sup>2.9.8+</sup> </td>
 <td>
 
-不可选取的日期。
+用于设置不可选取的日期。示例：
 
 ```js
 disabledDate: function(date, type){
@@ -349,7 +349,7 @@ disabledDate: function(date, type){
 <td>disabledTime <sup>2.9.8+</sup> </td>
 <td>
 
-不可选取的时间。
+用于设置不可选取的时间。示例：
 
 ```js
 disabledTime: function(date, type){
