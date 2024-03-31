@@ -201,7 +201,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
           precision = precision >= 0 ? precision : Math.max(decimals(step), decimals(rawValue));
 
-          // 初始化赋值
+          // 赋值
           if (!noAction) {
             // 初始渲染时只处理数字精度
             if (!isInit) {
