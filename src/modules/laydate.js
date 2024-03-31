@@ -3,17 +3,17 @@
 ;!function(window, document){ // gulp build: laydate-header
   "use strict";
 
-  var isLayui = window.layui && layui.define, ready = {
-    getPath: (window.lay && lay.getPath) ? lay.getPath : ''
+  var isLayui = window.layui && layui.define;
+  var ready = {
+    getPath: window.lay && lay.getPath ? lay.getPath : '',
 
     // 载入 CSS 依赖
-    ,link: function(href, fn, cssname){
-
+    link: function (href, fn, cssname) {
       // 未设置路径，则不主动加载 css
-      if(!laydate.path) return;
+      if (!laydate.path) return;
 
       // 加载 css
-      if(window.lay && lay.layui){
+      if (window.lay && lay.layui) {
         lay.layui.link(laydate.path + href, fn, cssname);
       }
     }
@@ -24,34 +24,34 @@
 
   // 模块名
   var MOD_NAME = 'laydate';
-  var MOD_ID = 'layui-'+ MOD_NAME +'-id' // 已渲染过的索引标记名
+  var MOD_ID = 'layui-' + MOD_NAME + '-id'; // 已渲染过的索引标记名
 
   // 外部调用
   var laydate = {
-    v: '5.5.0' // layDate 版本号
-    ,config: {
-      weekStart: 0, // 默认周日一周的开始
-    } // 全局配置项
-    ,index: (window.laydate && window.laydate.v) ? 100000 : 0
-    ,path: GLOBAL.laydate_dir || ready.getPath
+    v: '5.6.0', // layDate 版本号
+    config: {
+      weekStart: 0 // 默认周日一周的开始
+    }, // 全局配置项
+    index: window.laydate && window.laydate.v ? 100000 : 0,
+    path: GLOBAL.laydate_dir || ready.getPath,
 
     // 设置全局项
-    ,set: function(options){
+    set: function (options) {
       var that = this;
       that.config = lay.extend({}, that.config, options);
       return that;
-    }
+    },
 
     // 主体 CSS 等待事件
-    ,ready: function(callback){
+    ready: function (callback) {
       var cssname = 'laydate';
-      var ver = ''
-      var path = (isLayui ? 'modules/' : '') + 'laydate.css?v='+ laydate.v + ver;
+      var ver = '';
+      var path = (isLayui ? 'modules/' : '') + 'laydate.css?v=' + laydate.v + ver;
 
       isLayui ? (
-        layui['layui.all']
-          ? (typeof callback === 'function' && callback())
-        : layui.addcss(path, callback, cssname)
+        layui['layui.all'] ?
+          (typeof callback === 'function' && callback()) :
+        layui.addcss(path, callback, cssname)
       ) : ready.link(path, callback, cssname);
 
       return this;
@@ -2562,4 +2562,3 @@
   );
 
 }(window, window.document);
-
