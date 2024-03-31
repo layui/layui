@@ -201,13 +201,19 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
           precision = precision >= 0 ? precision : Math.max(decimals(step), decimals(rawValue));
 
-          if(!noAction){
+          // 初始化赋值
+          if (!noAction) {
             // 初始渲染时只处理数字精度
-            if(!isInit){
+            if (!isInit) {
               if(value <= min) value = min;
               if(value >= max) value = max;
             }
-            if(precision) value = value.toFixed(precision);
+            // 若 `lay-precision` 为 0, 则表示只保留整数
+            if (precision === 0) {
+              value = parseInt(value);
+            } else if(precision > 0) { // 小数位精度
+              value = value.toFixed(precision);
+            }
             elem.val(value);
           }
 
