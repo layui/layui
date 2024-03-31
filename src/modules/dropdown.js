@@ -60,6 +60,9 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       },
       close: function () {
         that.remove()
+      },
+      open: function () {
+        that.render()
       }
     }
   };
@@ -627,6 +630,15 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     that.remove();
     return thisModule.call(that);
   };
+
+  // 打开面板
+  dropdown.open = function(id){
+    var that = thisModule.getThis(id);
+    if(!that) return this;
+    
+    that.render();
+    return thisModule.call(that);
+  }
   
   // 重载实例
   dropdown.reload = function(id, options, type){
