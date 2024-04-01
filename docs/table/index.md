@@ -788,8 +788,8 @@ table.on('row(test)', function(obj){
 
 右键单击行时触发。
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['code', 'preview'], tools: ['full'], toolsEvent: function(oi, type){
-  if(type === 'full'){
+<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['code', 'preview'], tools: ['full'], toolsEvent: function(obj){
+  if(obj.type === 'full'){
     layui.table.resize('ID-table-onrowContextmenu');
   }
 }}">

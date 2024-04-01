@@ -22,8 +22,8 @@
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   layui.table.init(obj.container.children('table'));
-}, toolsEvent: function(oi, type){
-  if(type === 'full'){
+}, toolsEvent: function(obj){
+  if(obj.type === 'full'){
     layui.table.resize('ID-table-demo-init');
   }
 }}">
@@ -44,8 +44,8 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], ID: 'ID-table-demo-data', tools: ['full'], done: function(obj){
   layui.table.resize(this.ID);
-}, toolsEvent: function(oi, type){
-  if(type === 'full'){
+}, toolsEvent: function(obj){
+  if(obj.type === 'full'){
     layui.table.resize(this.ID);
   }
 }}">
@@ -58,8 +58,8 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], ID: 'ID-table-demo-templet', done: function(obj){
   layui.table.resize(this.ID);
-}, toolsEvent: function(oi, type){
-  if(type === 'full'){
+}, toolsEvent: function(obj){
+  if(obj.type === 'full'){
     layui.table.resize(this.ID);
   }
 }}">
@@ -80,8 +80,8 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], ID: 'ID-table-demo-page', done: function(obj){
   layui.table.resize(this.ID);
-}, toolsEvent: function(oi, type){
-  if(type === 'full'){
+}, toolsEvent: function(obj){
+  if(obj.type === 'full'){
     layui.table.resize(this.ID);
   }
 }}">
@@ -95,8 +95,8 @@
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], ID: 'ID-table-demo-search', done: function(obj){
   obj.render();
   layui.table.resize(this.ID);
-}, toolsEvent: function(oi, type){
-  if(type === 'full'){
+}, toolsEvent: function(obj){
+  if(obj.type === 'full'){
     layui.table.resize(this.ID);
   }
 }}">
@@ -117,8 +117,8 @@
 
 <h3 id="demo-editmodes" lay-toc="{level: 2, hot: true}" class="ws-bold">实现多样化编辑</h3>
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], toolsEvent: function(oi, type){
-  if(type === 'full'){
+<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], toolsEvent: function(obj){
+  if(obj.type === 'full'){
     layui.table.resize('ID-table-demo-editmodes');
   }
 }}">
@@ -129,8 +129,8 @@
 
 <h3 id="demo-parse" lay-toc="{level: 2, hot: true}" class="ws-bold">转换数据格式</h3>
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], toolsEvent: function(oi, type){
-  if(type === 'full'){
+<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], toolsEvent: function(obj){
+  if(obj.type === 'full'){
     layui.table.resize('ID-table-demo-parse');
   }
 }}">
@@ -143,8 +143,8 @@
 
 即点击当前表格右上角筛选图标后，对表头进行显示隐藏勾选，再刷新页面依然保留当前筛选状态。
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], toolsEvent: function(oi, type){
-  if(type === 'full'){
+<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], toolsEvent: function(obj){
+  if(obj.type === 'full'){
     layui.table.resize('ID-table-demo-filter');
   }
 }}">
@@ -157,8 +157,8 @@
 
 点击行任意处，通过行事件中执行相关选中方法，实现对整行的状态选中。*如下以「单选」行为例：*
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], toolsEvent: function(oi, type){
-  if(type === 'full'){
+<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], toolsEvent: function(obj){
+  if(obj.type === 'full'){
     layui.table.resize('ID-table-demo-setRowChecked');
   }
 }}">
@@ -171,8 +171,8 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   layui.table.init(obj.container.children('table'));
-}, toolsEvent: function(oi, type){
-  if(type === 'full'){
+}, toolsEvent: function(obj){
+  if(obj.type === 'full'){
     layui.table.resize('ID-table-demo-theads-1');
     layui.table.resize('ID-table-demo-theads-2');
   }
