@@ -2,8 +2,8 @@
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', text: {preview: '综合演示'}, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   layui.table.resize('ID-treeTable-demo');
-}, toolsEvent: function(oi, type){
-  if(type === 'full'){
+}, toolsEvent: function(obj){
+  if(obj.type === 'full'){
     layui.table.resize('ID-treeTable-demo');
   }
 }}">
