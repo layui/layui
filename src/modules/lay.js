@@ -617,6 +617,33 @@
     targetElem.addEventListener('touchstart', onStart);
   }
 
+  /**
+   * 获取元素的大小，双精度值
+   * @param {HTMLElement} elem - HTML 元素
+   */
+  lay.getElementSize = function(elem){
+    if(! window.getComputedStyle) return;
+
+    var style = window.getComputedStyle(elem, null);
+
+    return {
+      height: parseFloat(style.height || '0'),
+      width: parseFloat(style.width || '0'),
+      borderTopWidth: parseFloat(style.borderTopWidth || '0'),
+      borderRightWidth: parseFloat(style.borderRightWidth || '0'),
+      borderBottomWidth: parseFloat(style.borderBottomWidth || '0'),
+      borderLeftWidth: parseFloat(style.borderLeftWidth || '0'),
+      paddingTop: parseFloat(style.paddingTop || '0'),
+      paddingRight: parseFloat(style.paddingRight || '0'),
+      paddingBottom: parseFloat(style.paddingBottom || '0'),
+      paddingLeft: parseFloat(style.paddingLeft || '0'),
+      marginTop: parseFloat(style.marginTop || '0'),
+      marginRight: parseFloat(style.stylemarginRight || '0'),
+      marginBottom: parseFloat(style.marginBottom || '0'),
+      marginLeft: parseFloat(style.marginLeft || '0'),
+      boxSizing: style.boxSizing
+    }
+  }
 
   /*
    * lay 元素操作

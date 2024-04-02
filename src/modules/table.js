@@ -468,12 +468,27 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var that = this;
     var options = that.config;
 
-    options.clientWidth = options.width || function(){ //获取容器宽度
+    options.clientWidth = options.width || function(){ //获取容器内容区域的宽度
       //如果父元素宽度为0（一般为隐藏元素），则继续查找上层元素，直到找到真实宽度为止
       var getWidth = function(parent){
-        var width, isNone;
-        parent = parent || options.elem.parent()
-        width = parseFloat(layui.getStyle(parent[0], 'width'));
+        var width;
+        var isNone;
+        parent = parent || options.elem.parent();
+
+        // jQuery `.width()` 获取到的值通常是舍入后的整数值(width: auto/100% 某些下情况除外)，
+        // IE 中的 `currentStyle` 获取未显式设置的宽高时会得到 'auto',
+        // 而表格的列宽分配需要精确的宽高，所以需要使用 `getComputedStyle`
+        if(!window.getComputedStyle){
+          // 无论 CSS box-sizing 属性的值如何, `.width()` 始终返回的是内容区域宽度
+          width = parent.width();
+        }else{
+          var size = lay.getElementSize(parent[0]);
+          // IE BUG
+          // border-box: getComputedStyle 得到的 width/height 是按照 content-box 计算出来的
+          width = size.boxSizing === 'border-box' && !lay.ie
+            ? size.width - size.paddingLeft - size.paddingRight - size.borderLeftWidth - size.borderRightWidth
+            : size.width
+        }
         try {
           isNone = parent.css('display') === 'none';
         } catch(e){}
@@ -769,7 +784,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var borderWidth = parseFloat(layui.getStyle(that.elem[0], 'border-right-width'));
     var lineWidth = (options.skin === 'line' || options.skin === 'nob') 
       ? borderWidth * 2 
-      : (allDisplayedColumns.length * borderWidth + borderWidth);
+      : (allDisplayedColumns.length + 1) * borderWidth;
     var availableWidth = tableWidth - lineWidth - scrollbarWidth;
     var availablePixels = availableWidth - calcWidthOfColsInList(colsToNotSpread, true);
    
