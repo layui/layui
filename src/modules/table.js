@@ -784,37 +784,53 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var borderWidth = parseFloat(layui.getStyle(that.elem[0], 'border-right-width'));
     var lineWidth = (options.skin === 'line' || options.skin === 'nob') 
       ? borderWidth * 2 
-      : (allDisplayedColumns.length + 1) * borderWidth;
+      : (allDisplayedColumns.length + (scrollbarWidth > 0 ? 2 : 1)) * borderWidth;
     var availableWidth = tableWidth - lineWidth - scrollbarWidth;
-    var availablePixels = availableWidth - calcWidthOfColsInList(colsToNotSpread, true);
-   
-    if (availablePixels <= 0) {
-      // 设置为最小宽度
-      layui.each(colsToSpread, function(i, col){
-        var colWidth = getColActualWidth(col);
-        setColActualWidth(col, colWidth);
-      })
-    }else{
-      var scale = availablePixels / calcWidthOfColsInList(colsToSpread);
-      var pixelsForLastCol = availablePixels;
 
-      for (var i = colsToSpread.length - 1; i >= 0; i--) {
-        var col = colsToSpread[i]
-        var colMinWidth = col.minWidth || options.cellMinWidth || MIN_COL_WIDTH; // 最小宽度
-        var colMaxWidth = col.maxWidth || options.cellMaxWidth || Number.MAX_SAFE_INTEGER; // 最大宽度
-        var newWidth = Math.round(getColActualWidth(col) * scale);
+    var finishedResizing = false;
+    while(!finishedResizing) {
+      finishedResizing = true;
+      var availablePixels = availableWidth - calcWidthOfColsInList(colsToNotSpread, true);
+      if (availablePixels <= 0) {
+        // 设置为最小宽度
+        layui.each(colsToSpread, function (i, col) {
+          var colWidth = getColActualWidth(col);
+          setColActualWidth(col, colWidth);
+        })
+      } else {
+        var scale = availablePixels / calcWidthOfColsInList(colsToSpread);
+        var pixelsForLastCol = availablePixels;
 
-        if(newWidth < colMinWidth){
-          newWidth = colMinWidth;
-        }else if(newWidth > colMaxWidth){
-          newWidth = colMaxWidth;
-        }else if(i === 0){
-          newWidth = pixelsForLastCol;
+        for (var i = colsToSpread.length - 1; i >= 0; i--) {
+          var col = colsToSpread[i]
+          var colMinWidth = col.minWidth || options.cellMinWidth || MIN_COL_WIDTH; // 最小宽度
+          var colMaxWidth = col.maxWidth || options.cellMaxWidth || Number.MAX_SAFE_INTEGER; // 最大宽度
+          var newWidth = Math.round(getColActualWidth(col) * scale);
+
+          if(newWidth < colMinWidth){
+            newWidth = colMinWidth;
+            moveToNotSpread(col);
+            finishedResizing = false;
+          }else if(newWidth > colMaxWidth){
+            newWidth = colMaxWidth;
+            moveToNotSpread(col);
+            finishedResizing = false;
+          }else if(i === 0){
+            newWidth = pixelsForLastCol;
+          }
+
+          setColActualWidth(col, newWidth);
+          pixelsForLastCol = pixelsForLastCol - newWidth;
         }
-
-        setColActualWidth(col, newWidth);
-        pixelsForLastCol = pixelsForLastCol - newWidth;
       }
+    }
+
+    function moveToNotSpread(col){
+      const index = colsToSpread.indexOf(col);
+      if (index >= 0) {
+        colsToSpread.splice(index, 1)
+      }
+      colsToNotSpread.push(col);
     }
 
     function calcWidthOfColsInList(colList, withSet){
