@@ -1615,17 +1615,23 @@ layui.define(['table'], function (exports) {
     data = data.filter(function (item) {
         return !item[options.disabledName];
     });
-    layui.each(data, function (i1, item1) {
-      if (item1[checkName] || item1[LAY_CHECKBOX_HALF]) {
-        isIndeterminate = true;
-      }
-      if (!item1[checkName]) {
-        isAll = false;
-      }
-      if (isIndeterminate && !isAll) {
-        return true;
-      }
-    })
+    
+    if(data.length > 0){
+      layui.each(data, function (i1, item1) {
+        if (item1[checkName] || item1[LAY_CHECKBOX_HALF]) {
+          isIndeterminate = true;
+        }
+        if (!item1[checkName]) {
+          isAll = false;
+        }
+        if (isIndeterminate && !isAll) {
+          return true;
+        }
+      })
+    }else{
+      isAll = false;
+    }
+
     isIndeterminate = isIndeterminate && !isAll;
     form.render(tableView.find('input[name="layTableCheckbox"][lay-filter="layTableAllChoose"]').prop({
       'checked': isAll,
