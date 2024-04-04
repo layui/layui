@@ -600,6 +600,38 @@ layui.define(['lay', 'layer'], function(exports){
       elemFile.after('<span class="layui-inline '+ ELEM_CHOOSE +'">'+ value +'</span>');
     };
 
+    /**
+     * 判断文件是否加入排队
+     * @param file
+     * @return {boolean}
+     */
+    var checkFile = function (file) {
+      var result = true;
+      layui.each(that.files, function (index, item) {
+        if (item.name == file.name) {
+          result = false;
+        }
+      });
+      return result;
+    }
+
+    /**
+     *检查获取文件
+     * @param files
+     * @return {*[]}
+     */
+    var getFiles = function (files) {
+      files = files || [];
+      if (!that.files) return files;
+      var result = [];
+      layui.each(files, function (index, item) {
+        if (checkFile(item)) {
+          result.push(item);
+        }
+      });
+      return result;
+    }
+
     // 点击上传容器
     options.elem.off('upload.start').on('upload.start', function(){
       var othis = $(this);
@@ -620,7 +652,7 @@ layui.define(['lay', 'layer'], function(exports){
       })
       .off('upload.drop').on('upload.drop', function(e, param){
         var othis = $(this);
-        var files = param.originalEvent.dataTransfer.files || [];
+        var files = getFiles(param.originalEvent.dataTransfer.files);
         
         othis.removeAttr('lay-over');
         setChooseFile(files);
@@ -631,7 +663,7 @@ layui.define(['lay', 'layer'], function(exports){
     
     // 文件选择
     that.elemFile.on('change', function(){
-      var files = this.files || [];
+      var files = getFiles(this.files);
 
       if(files.length === 0) return;
 
