@@ -1266,8 +1266,32 @@ layui.define(['table'], function (exports) {
     })
 
     tableView.find(indexArr.join(',')).remove(); // 删除行
+
+    var tableCache = table.cache[id];
+    var deleteCacheKey = function(type){
+      var isUnused = type === 'unused';
+      var delNodeDataIndex = delNode[LAY_DATA_INDEX];
+
+      for (var key in tableCache) {
+        // 根节点 getNodeDataByIndex 内部已处理
+        if(key.indexOf('-') !== -1){
+          // 1. L93 updateCache() 中，cacheKey 取自 rowData 中的 LAY_DATA_INDEX，
+          // 两者不同说明当前 cacheKey 引用的 rowData 已被更新
+          // 2. 清理子节点 cacheKey
+          var shouldCleanup = isUnused ? key !== tableCache[key][LAY_DATA_INDEX] : key.indexOf(delNodeDataIndex) === 0;
+          if(shouldCleanup){
+            delete tableCache[key]
+          }
+        }
+      }
+    }
+
+    // 清理子节点 key
+    deleteCacheKey('childNode')
     // 重新整理数据
     var tableData = that.initData();
+    // 清理过期的 key
+    deleteCacheKey('unused')
     // index发生变化需要更新页面tr中对应的lay-data-index 新增和删除都要注意数据结构变动之后的index问题
     layui.each(that.treeToFlat(tableData), function (i3, item3) {
       if (item3[LAY_DATA_INDEX_HISTORY] && item3[LAY_DATA_INDEX_HISTORY] !== item3[LAY_DATA_INDEX]) {
