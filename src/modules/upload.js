@@ -608,9 +608,8 @@ layui.define(['lay', 'layer'], function(exports){
     var checkFile = function (file) {
       var result = true;
       layui.each(that.files, function (index, item) {
-        if (item.name == file.name) {
-          result = false;
-        }
+        result = !(item.name == file.name);
+        if(!result) return true;
       });
       return result;
     }
