@@ -505,15 +505,19 @@ layui.define(['table'], function (exports) {
     var isParentKey = customName.isParent;
     var childrenKey = customName.children;
 
-    layui.each(data, function (i1, item1) {
-      if (!(isParentKey in item1)) {
-        item1[isParentKey] = !!(item1[childrenKey] && item1[childrenKey].length);
-      }
-      item1[LAY_DATA_INDEX_HISTORY] = item1[LAY_DATA_INDEX];
-      item1[LAY_PARENT_INDEX] = parentIndex = parentIndex || '';
-      var dataIndex = item1[LAY_DATA_INDEX] = (parentIndex ? parentIndex + '-' : '') + i1;
-      that.initData(item1[childrenKey] || [], dataIndex);
-    });
+    var update = function(data, parentIndex){
+      layui.each(data, function (i1, item1) {
+        if (!(isParentKey in item1)) {
+          item1[isParentKey] = !!(item1[childrenKey] && item1[childrenKey].length);
+        }
+        item1[LAY_DATA_INDEX_HISTORY] = item1[LAY_DATA_INDEX];
+        item1[LAY_PARENT_INDEX] = parentIndex = parentIndex || '';
+        var dataIndex = item1[LAY_DATA_INDEX] = (parentIndex ? parentIndex + '-' : '') + i1;
+        update(item1[childrenKey] || [], dataIndex);
+      });
+    }
+
+    update(data, parentIndex);
 
     updateCache(tableId, childrenKey, data);
 
