@@ -1374,9 +1374,16 @@ layui.define(['table'], function (exports) {
       var tableViewElemFIXR = tableViewElem.find(ELEM_FIXR);
       if (trIndexPrev === -1) {
         // 插入到开头
-        tableViewElemMAIN.find('tr[data-level="0"][data-index="0"]').before(newNodesHtmlObj.trs);
-        tableViewElemFIXL.find('tr[data-level="0"][data-index="0"]').before(newNodesHtmlObj.trs_fixed);
-        tableViewElemFIXR.find('tr[data-level="0"][data-index="0"]').before(newNodesHtmlObj.trs_fixed_r);
+        var hasTr = tableViewElemMAIN.find('tr[data-level="0"][data-index="0"]')[0];
+        if(hasTr){
+          tableViewElemMAIN.find('tr[data-level="0"][data-index="0"]').before(newNodesHtmlObj.trs);
+          tableViewElemFIXL.find('tr[data-level="0"][data-index="0"]').before(newNodesHtmlObj.trs_fixed);
+          tableViewElemFIXR.find('tr[data-level="0"][data-index="0"]').before(newNodesHtmlObj.trs_fixed_r);
+        }else{
+          tableViewElemMAIN.find('tbody').prepend(newNodesHtmlObj.trs);
+          tableViewElemFIXL.find('tbody').prepend(newNodesHtmlObj.trs_fixed);
+          tableViewElemFIXR.find('tbody').prepend(newNodesHtmlObj.trs_fixed_r);
+        }
       } else {
         if (index === -1) {
           // 追加到最后
