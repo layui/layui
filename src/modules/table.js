@@ -413,7 +413,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     that.renderStyle();
 
     // 生成替代元素
-    hasRender[0] && hasRender.remove(); // 如果已经渲染，则 Rerender
+    if(hasRender[0]){
+      that.resizeObserver && that.resizeObserver.unobserve(that.elem[0]);
+      hasRender.remove(); // 如果已经渲染，则 Rerender
+    }
     othis.after(reElem);
 
     // 各级容器
@@ -2703,6 +2706,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       e.preventDefault();
       that.layMain.scrollTop(scrollTop + (delta > 0 ? -step : step));
     });
+
+    if(window.ResizeObserver){
+      that.resizeObserver = new ResizeObserver(function(){
+        table.resize(that.key);
+      });
+      that.resizeObserver.observe(that.elem[0]);
+    }
   };
 
   // 全局事件
