@@ -95,7 +95,7 @@ layui.define(['table'], function (exports) {
     layui.each(data || tableCache, function (index, item) {
       var itemDataIndex = item[LAY_DATA_INDEX] || '';
       if (itemDataIndex.indexOf('-') !== -1) {
-        tableCache[itemDataIndex] = item
+        tableCache[itemDataIndex] = item;
       }
       item[childrenKey] && updateCache(id, childrenKey, item[childrenKey]);
     })
@@ -1261,41 +1261,38 @@ layui.define(['table'], function (exports) {
     var tableView = options.elem.next();
     var delNode;
     var indexArr = [];
+    var tableCache = table.cache[id];
     delNode = that.getNodeDataByIndex(layui.type(node) === 'string' ? node : node[LAY_DATA_INDEX], false, 'delete');
     var nodeP = that.getNodeDataByIndex(delNode[LAY_PARENT_INDEX]);
     that.updateCheckStatus(nodeP);
     var delNodesFlat = that.treeToFlat([delNode], delNode[treeOptions.customName.pid], delNode[LAY_PARENT_INDEX]);
-    layui.each(delNodesFlat, function (i2, item2) {
-      indexArr.push('tr[lay-data-index="' + item2[LAY_DATA_INDEX] + '"]');
+    layui.each(delNodesFlat, function (i2, delNode) {
+      var delNodeDataIndex = delNode[LAY_DATA_INDEX];
+      indexArr.push('tr[lay-data-index="' + delNodeDataIndex + '"]');
+      // 删除临时 key
+      if(delNodeDataIndex.indexOf('-') !== -1){
+        delete tableCache[delNodeDataIndex]; 
+      }
     })
 
     tableView.find(indexArr.join(',')).remove(); // 删除行
 
-    var tableCache = table.cache[id];
-    var deleteCacheKey = function(type){
-      var isUnused = type === 'unused';
-      var delNodeDataIndex = delNode[LAY_DATA_INDEX];
-
+    var deleteCacheKey = function(){
       for (var key in tableCache) {
         // 根节点 getNodeDataByIndex 内部已处理
         if(key.indexOf('-') !== -1){
-          // 1. L93 updateCache() 中，cacheKey 取自 rowData 中的 LAY_DATA_INDEX，
+          // L93 updateCache() 中，cacheKey 取自 rowData 中的 LAY_DATA_INDEX，
           // 两者不同说明当前 cacheKey 引用的 rowData 已被更新
-          // 2. 清理子节点 cacheKey
-          var shouldCleanup = isUnused ? key !== tableCache[key][LAY_DATA_INDEX] : key.indexOf(delNodeDataIndex) === 0;
-          if(shouldCleanup){
+          if(key !== tableCache[key][LAY_DATA_INDEX]){
             delete tableCache[key]
           }
         }
       }
     }
 
-    // 清理子节点 key
-    deleteCacheKey('childNode')
     // 重新整理数据
     var tableData = that.initData();
-    // 清理过期的 key
-    deleteCacheKey('unused')
+    deleteCacheKey();
     // index发生变化需要更新页面tr中对应的lay-data-index 新增和删除都要注意数据结构变动之后的index问题
     layui.each(that.treeToFlat(tableData), function (i3, item3) {
       if (item3[LAY_DATA_INDEX_HISTORY] && item3[LAY_DATA_INDEX_HISTORY] !== item3[LAY_DATA_INDEX]) {
@@ -1307,7 +1304,7 @@ layui.define(['table'], function (exports) {
       }
     });
     // 重新更新顶层节点的data-index;
-    layui.each(table.cache[id], function (i4, item4) {
+    layui.each(tableCache, function (i4, item4) {
       tableView.find('tr[data-level="0"][lay-data-index="' + item4[LAY_DATA_INDEX] + '"]').attr('data-index', i4);
     })
     options.hasNumberCol && formatNumber(that);
