@@ -2708,9 +2708,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     });
 
     if(window.ResizeObserver){
-      that.resizeObserver = new ResizeObserver(function(){
-        table.resize(that.key);
-      });
+      if(!that.resizeObserver){
+        that.resizeObserver = new ResizeObserver(function(){
+          table.resize(that.key);
+        });
+      }
       that.resizeObserver.observe(that.elem[0]);
     }
   };
