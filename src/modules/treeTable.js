@@ -47,7 +47,11 @@ layui.define(['table'], function (exports) {
     }
   }
 
-  // 获取当前实例
+  /**
+   * 获取当前实例
+   * @param {string} id 表格id
+   * @returns {Class}
+   */
   var getThisTable = function (id) {
     var that = thisTreeTable.that[id];
     if (!that) hint.error(id ? ('The treeTable instance with ID \'' + id + '\' not found') : 'ID argument required');
@@ -80,7 +84,10 @@ layui.define(['table'], function (exports) {
   var LAY_ASYNC_STATUS = 'LAY_ASYNC_STATUS';
   var LAY_CASCADE = ['all', 'parent', 'children', 'none'];
 
-  // 构造器
+  /**
+   * 构造器
+   * @class
+   */
   var Class = function (options) {
     var that = this;
     that.index = ++treeTable.index;
@@ -941,6 +948,31 @@ layui.define(['table'], function (exports) {
     treeTable.resize(id);
   }
 
+  /**
+   * 更新节点图标
+   * @param {JQuery} scopeEl tr 元素
+   * @param {boolean} isExpand 是否是展开图标
+   * @param {Boolean} isParent 是否是父节点图标
+   */
+  Class.prototype.updateNodeIconByTrElem = function(scopeEl, isExpand, isParent){
+    var that = this;
+    var options = that.getOptions();
+    var treeOptions = options.tree || {};
+    // 处理折叠按钮图标
+    var flexIconElem = scopeEl.find('.layui-table-tree-flexIcon');
+    flexIconElem.html(isExpand ? treeOptions.view.flexIconOpen : treeOptions.view.flexIconClose);
+    flexIconElem.css('visibility', isParent || treeOptions.view.showFlexIconIfNotParent ? 'visible' : 'hidden');
+    // 处理节点图标
+    if(treeOptions.view.showIcon){
+      var nodeIcon = isParent 
+        ? (isExpand ? treeOptions.view.iconOpen : treeOptions.view.iconClose)
+        : treeOptions.view.iconLeaf;
+      scopeEl.find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom)')
+        .toggleClass('layui-table-tree-iconLeaf', !isParent)
+        .html(nodeIcon);
+    }
+  }
+
   Class.prototype.renderTreeTable = function (tableView, level, sonSign) {
     var that = this;
     var options = that.getOptions();
@@ -1260,6 +1292,14 @@ layui.define(['table'], function (exports) {
     delNode = that.getNodeDataByIndex(layui.type(node) === 'string' ? node : node[LAY_DATA_INDEX], false, 'delete');
     var nodeP = that.getNodeDataByIndex(delNode[LAY_PARENT_INDEX]);
     that.updateCheckStatus(nodeP);
+    // 更新父节点图标状态
+    if(nodeP){
+      var trEl =  tableView.find('tr[lay-data-index="' + nodeP[LAY_DATA_INDEX] + '"]');
+      var isExpand = nodeP[treeOptions.customName.children].length > 0;
+      var isParent =  nodeP[treeOptions.customName.children].length > 0;
+
+      that.updateNodeIconByTrElem(trEl, isExpand, isParent);   
+    }
     var delNodesFlat = that.treeToFlat([delNode], delNode[treeOptions.customName.pid], delNode[LAY_PARENT_INDEX]);
     layui.each(delNodesFlat, function (i2, item2) {
       indexArr.push('tr[lay-data-index="' + item2[LAY_DATA_INDEX] + '"]');
@@ -1437,6 +1477,11 @@ layui.define(['table'], function (exports) {
       expandNode({trElem: tableViewElem.find('tr[lay-data-index="' + parentIndex + '"]')}, true)
     }
     that.updateCheckStatus(parentNode);
+    // 更新父节点图标状态
+    if(parentNode){
+      var trEl = tableViewElem.find('tr[lay-data-index="' + parentNode[LAY_DATA_INDEX] + '"]');
+      that.updateNodeIconByTrElem(trEl, true, true); 
+    }
     treeTable.resize(id);
     if (focus) {
       // 滚动到第一个新增的节点
