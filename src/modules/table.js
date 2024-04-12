@@ -2285,7 +2285,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     //数据行中的事件返回的公共对象成员
     var commonMember = that.commonMember = function(sets){
       var othis = $(this);
-      var index = othis.parents('tr').eq(0).data('index');
+      // treeTable 中使用 attr('data-index'), tr 更新时 jQuery 的缓存会导致获取到错误的 index
+      var index = othis.parents('tr').eq(0).attr('data-index');
       var tr = that.layBody.find('tr[data-index="'+ index +'"]');
       var data = table.cache[that.key] || [];
 
