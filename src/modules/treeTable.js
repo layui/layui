@@ -951,7 +951,7 @@ layui.define(['table'], function (exports) {
   /**
    * 更新节点图标
    * @param {JQuery} scopeEl tr 元素
-   * @param {boolean} isExpand 是否是展开图标
+   * @param {Boolean} isExpand 是否是展开图标
    * @param {Boolean} isParent 是否是父节点图标
    */
   Class.prototype.updateNodeIconByTrElem = function(scopeEl, isExpand, isParent){
