@@ -234,6 +234,20 @@
     return text[options.lang] || text['cn'];
   };
 
+  Class.prototype.markerOfChineseFestivals = {
+    '0-1-1': '元旦',
+    '0-2-14': '情人' ,
+    '0-3-8': '妇女',
+    '0-3-12': '植树',
+    '0-4-1': '愚人',
+    '0-5-1': '劳动',
+    '0-5-4': '青年',
+    '0-6-1': '儿童',
+    '0-9-10': '教师',
+    '0-10-1': '国庆',
+    '0-12-25': '圣诞'
+  }
+
   // 重载实例
   Class.prototype.reload = function(options){
     var that = this;
@@ -358,20 +372,6 @@
     options.eventElem.attr('lay-key', that.index);
     options.elem.attr(MOD_ID, options.id); // 渲染过的标记
 
-    //记录重要日期
-    options.mark = lay.extend({}, (options.calendar && options.lang === 'cn') ? {
-      '0-1-1': '元旦'
-      ,'0-2-14': '情人'
-      ,'0-3-8': '妇女'
-      ,'0-3-12': '植树'
-      ,'0-4-1': '愚人'
-      ,'0-5-1': '劳动'
-      ,'0-5-4': '青年'
-      ,'0-6-1': '儿童'
-      ,'0-9-10': '教师'
-      ,'0-10-1': '国庆'
-      ,'0-12-25': '圣诞'
-    } : {}, options.mark);
 
     //获取限制内日期
     lay.each(['min', 'max'], function(i, item){
@@ -1049,30 +1049,66 @@
     return that;
   };
 
-  // 公历重要日期与自定义备注
+  /**
+   * 渲染备注
+   * @param {JQuery} tdElem td 元素
+   * @param {[number, number, number]} YMD 年月日
+   * @param {object | string} markers 备注信息
+   */
+  Class.prototype.markRender = function(tdElem, YMD, markers){
+    var markText;
+
+    if(typeof markers === 'object'){
+      lay.each(markers || {}, function(key, title){
+        var keys = key.split('-');
+        if((keys[0] == YMD[0] || keys[0] == 0) //每年的每月
+        && (keys[1] == YMD[1] || keys[1] == 0) //每月的每日
+        && keys[2] == YMD[2]){ //特定日
+          markText = title || YMD[2];
+        }
+      });
+    }else if(typeof markers === 'string'){
+      markText = markers ||  YMD[2];
+    }
+
+    markText && tdElem.find('div').html('<span class="laydate-day-mark">'+ markText +'</span>');
+  }
+
+  /**
+   * 公历重要日期与自定义备注
+   * @param {JQuery} td 
+   * @param {[number, number, number]} YMD 
+   * @returns Class
+   */
   Class.prototype.mark = function(td, YMD){
-    var that = this
-    ,mark, options = that.config;
-    lay.each(options.mark, function(key, title){
-      var keys = key.split('-');
-      if((keys[0] == YMD[0] || keys[0] == 0) //每年的每月
-      && (keys[1] == YMD[1] || keys[1] == 0) //每月的每日
-      && keys[2] == YMD[2]){ //特定日
-        mark = title || YMD[2];
-      }
-    });
-    mark && td.find('div').html('<span class="laydate-day-mark">'+ mark +'</span>');
+    var that = this;
+    var options = that.config;
+
+    var render = function(markers){
+      that.markRender(td, YMD, markers);
+    }
+
+    if(options.calendar && options.lang === 'cn'){
+      render(that.markerOfChineseFestivals);
+    } 
+
+    if(typeof options.mark === 'function'){
+      options.mark(YMD, render);
+    }else if(typeof options.mark === 'object'){
+      render(options.mark);
+    }
 
     return that;
   };
 
-  // 标注法定节假日或补假上班
-  Class.prototype.holidays = function(td, YMD) {
-    var that = this;
-    var options = that.config;
-    var type = ['', 'work'];
-
-    if(layui.type(options.holidays) !== 'array') return that;
+  /**
+   * 渲染法定节假日或补假上班标记
+   * @param {JQuery} tdElem td 元素
+   * @param {[number, number, number]} YMD 年月日
+   * @param {[Array<string>, Array<string>] | string} markers 标记信息
+   */
+  Class.prototype.holidaysRender = function(tdElem, YMD, markers){
+    var type = ['holidays', 'workdays'];
 
     var isEquals = function(ymdStr1, ymdStr2){
       var ymd1 = ymdStr1.split('-');
@@ -1088,15 +1124,51 @@
       return ymd1.join('-') === ymd2.join('-');
     }
 
-    lay.each(options.holidays, function(idx, item) {
-      lay.each(item, function(i, dayStr) {
-        if(isEquals(dayStr, td.attr('lay-ymd'))){
-          td.find('div').html('<span class="laydate-day-holidays"' + (
-            type[idx] ? ('type="'+ type[idx] +'"') : ''
-          ) + '>' + YMD[2] + '</span>');
-        }
+    var insertHtml = function(el, type, text){
+      el.find('div').html([
+        '<span',
+        ' class="laydate-day-holidays"',
+        ' type="'+ type +'"',
+        '>',
+          text,
+        '</span>'
+      ].join(''));
+    }
+    
+    if(layui.type(markers) === 'array'){
+      lay.each(markers, function(idx, item) {
+        lay.each(item, function(i, dayStr) {
+          if(isEquals(dayStr, tdElem.attr('lay-ymd'))){
+            insertHtml(tdElem, type[idx], YMD[2])
+          }
+        });
       });
-    });
+    }else if(typeof markers === 'string'){
+      if(type.indexOf(markers) !== -1){
+        insertHtml(tdElem, markers, YMD[2])
+      }
+    }
+  }
+
+  /**
+   * 标注法定节假日或补假上班
+   * @param {JQuery} td 
+   * @param {[number, number, number]} YMD 
+   * @returns Class
+   */
+  Class.prototype.holidays = function(td, YMD) {
+    var that = this;
+    var options = that.config;
+
+    var render = function(markers){
+      that.holidaysRender(td, YMD, markers);
+    }
+
+    if(typeof options.holidays === 'function'){
+      options.holidays(YMD, render);
+    }else if(layui.type(options.holidays) === 'array'){
+      render(options.holidays);
+    }
 
     return that;
   };
