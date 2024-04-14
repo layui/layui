@@ -615,17 +615,45 @@ layui.define(['lay', 'layer'], function(exports){
     }
 
     /**
-     *检查获取文件
+     * 扩展文件信息
+     * @param obj
+     * @return {*}
+     */
+    var extendInfo = function (obj) {
+
+      var extInfo = function (file) {
+        //文件扩展名
+        file.ext = file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
+        // 文件大小
+        file.sizes = upload.util.parseSize(file.size);
+        // 可以继续扩展
+      }
+
+      //FileList对象
+      if (obj instanceof FileList) {
+        layui.each(obj, function (index, item) {
+          extInfo(item);
+        });
+      } else {
+        extInfo(obj);
+      }
+
+      return obj;
+    }
+    
+    /**
+     * 检查获取文件
      * @param files
-     * @return {*[]}
+     * @return {*[]|*}
      */
     var getFiles = function (files) {
       files = files || [];
-      if (!that.files) return files;
+      if (!files.length) return [];
+      if (!that.files) return extendInfo(files);
       var result = [];
       layui.each(files, function (index, item) {
         if (checkFile(item)) {
-          result.push(item);
+          result.push(extendInfo(item));
         }
       });
       return result;
@@ -708,6 +736,32 @@ layui.define(['lay', 'layer'], function(exports){
     // 绑定元素索引
     options.elem.data(MOD_INDEX, options.id);
   };
+
+    /**
+   * 上传组件辅助方法
+   * @type {{parseSize: ((function((number|float), *=): string)|*)}}
+   */
+  upload.util = {
+    /**
+     * 文件大小处理
+     * @param {number|float} size -文件大小
+     * @param precision
+     * @return {string}
+     */
+    parseSize: function (/*文件大小*/size, precision) {
+      precision = precision || 2;
+      if (null == size || !size) {
+        return '0';
+      }
+      var unitArr = ["Bytes", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"];
+      var index;
+      var formatSize = typeof value === 'string' ? parseFloat(size + '') : size;
+      index = Math.floor(Math.log(formatSize) / Math.log(1024));
+      size = formatSize / Math.pow(1024, index);
+      size = size % 1 === 0 ? size : parseFloat(size.toFixed(precision));//保留的小数位数
+      return size + unitArr[index];
+    }
+  }
 
   // 记录所有实例
   thisModule.that = {}; // 记录所有实例对象
