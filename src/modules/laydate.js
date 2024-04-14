@@ -417,6 +417,19 @@
     if(options.show || isStatic) that.render();
     isStatic || that.events();
 
+    // 劫持 input 元素 get set
+    if(typeof options.formatToDisplay === 'function'){
+      if(that.isInput(options.elem[0])){
+        that.formatToDisplay(options.elem[0], options.formatToDisplay);
+      } else {
+        var rangeElem = that.rangeElem;
+        if(rangeElem){
+          that.formatToDisplay(rangeElem[0][0], options.formatToDisplay);
+          that.formatToDisplay(rangeElem[1][0], options.formatToDisplay);
+        }
+      }
+    }
+
     //默认赋值
     if(options.value && options.isInitValue){
       if(layui.type(options.value) === 'date'){
@@ -1859,6 +1872,30 @@
     return this.newDate(obj).getTime();
   }
 
+  /**
+   * 格式化输入框显示值
+   * @param {HTMLInputElement} elem HTML input 元素
+   * @param {(value: string) => string} displayValueCallback 
+   */
+  Class.prototype.formatToDisplay = function (elem, displayValueCallback) {
+    var that = this;
+    var props = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value');
+    
+    Object.defineProperty(
+      elem,
+      'value',
+      lay.extend({}, props, {
+        get: function () {
+          return this.getAttribute('lay-date');
+        },
+        set: function (value) {
+          props.set.call(this, displayValueCallback.call(that, value));
+          this.setAttribute('lay-date', value);
+        },
+      })
+    );
+  };
+
   //赋值
   Class.prototype.setValue = function(value){
     var that = this
@@ -1884,7 +1921,8 @@
         rangeElem[1].val(value[1] || '');
       } else {
         if(lay(elem).find('*').length === 0){
-          lay(elem).html(value);
+          var displayValue = typeof options.formatToDisplay === 'function' ? options.formatToDisplay(value) : value;
+          lay(elem).html(displayValue);
         }
         lay(elem).attr('lay-date', value);
       }
