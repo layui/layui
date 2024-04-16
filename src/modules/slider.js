@@ -113,6 +113,8 @@ layui.define(['jquery', 'lay'], function(exports){
     //间隔值不能小于等于 0
     if(options.step <= 0) options.step = 1;
 
+    if (options.min < 0 && options.step >= 1) options.step = 0.01;
+
     //最大值不能小于最小值
     if(options.max < options.min) options.max = options.min + options.step;
 
@@ -144,6 +146,10 @@ layui.define(['jquery', 'lay'], function(exports){
       if(options.value > options.max) options.value = options.max;
 
       var scale = (options.value - options.min) / (options.max - options.min) * 100 + '%';
+
+      if (options.min < 0) {
+        scale = 50 + '%';
+      }
     }
 
 
@@ -151,15 +157,64 @@ layui.define(['jquery', 'lay'], function(exports){
     var theme = options.disabled ? '#c2c2c2' : options.theme;
 
     //滑块
-    var temp = '<div class="layui-slider '+ (options.type === 'vertical' ? 'layui-slider-vertical' : '') +'">'+ (options.tips ? '<div class="'+ SLIDER_TIPS +'" '+ (options.tipsAlways ? '' : 'style="display:none;"') +'></div>' : '') +
-    '<div class="layui-slider-bar" style="background:'+ theme +'; '+ (options.type === 'vertical' ? 'height' : 'width') +':'+ scale +';'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ (scaleFir || 0) +';"></div><div class="layui-slider-wrap" style="'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ (scaleFir || scale) +';">' +
-    '<div class="layui-slider-wrap-btn" style="border: 2px solid '+ theme +';"></div></div>'+ (options.range ? '<div class="layui-slider-wrap" style="'+ (options.type === 'vertical' ? 'bottom' : 'left') +':'+ scaleSec +';"><div class="layui-slider-wrap-btn" style="border: 2px solid '+ theme +';"></div></div>' : '') +'</div>';
+    var templet = [
+      '<div class="layui-slider ' + (options.type === 'vertical' ? 'layui-slider-vertical' : '') + '">',
+      (function () {
+        return options.tips ? '<div class="' + SLIDER_TIPS + '" ' + (options.tipsAlways ? '' : 'style="display:none;"') + '></div>' : '';
+      })(),
+      '<div class="layui-slider-bar" style="background:',
+      (function () {
+        var style = [theme];
 
+        if (options.type === 'vertical') {
+          style.push('height:' + scale);
+          style.push('bottom:' + (scaleFir || 0));
+        } else {
+          if (options.min < 0) {
+            style.push('left:' + scale);
+            style.push('width:' + (scaleFir || 0));
+          } else {
+            style.push('width:' + scale);
+            style.push('left:' + (scaleFir || 0));
+          }
+
+        }
+
+        return style.join(';');
+      })(),
+      '"></div>',
+      '<div class="layui-slider-wrap" style="',
+      (function () {
+        var style = [];
+        if (options.type === 'vertical') {
+          style.push('bottom:' + (scaleFir || scale))
+        } else {
+          style.push('left:' + (scaleFir || scale))
+        }
+        return style.join(';');
+      })(),
+      '">',
+      '<div class="layui-slider-wrap-btn" style="border: 2px solid ' + theme + ';"></div>',
+      '</div>',
+      (function () {
+        var html = [];
+        var str;
+        if (options.range) {
+          str = '<div class="layui-slider-wrap" style="';
+          str += (options.type === 'vertical' ? 'bottom' : 'left') + ':' + scaleSec + ';">';
+          str += '<div class="layui-slider-wrap-btn" style="border: 2px solid ' + theme + ';"></div></div>';
+          html.push(str);
+        }
+        return html.join('');
+      })(),
+      '</div>'
+    ].join('');
+    
     var othis = $(options.elem);
     var hasRender = othis.next('.' + ELEM_VIEW);
     //生成替代元素
     hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender
-    that.elemTemp = $(temp);
+    that.elemTemp = $(templet);
 
     //把数据缓存到滑块上
     if(options.range){
@@ -319,7 +374,26 @@ layui.define(['jquery', 'lay'], function(exports){
       if(options.type === 'vertical'){
         sliderAct.find('.' + SLIDER_BAR).css({"height":wrapWidth + '%', "bottom":minLeft + '%'});
       }else{
-        sliderAct.find('.' + SLIDER_BAR).css({"width":wrapWidth + '%', "left":minLeft + '%'});
+        if (options.min < 0) {
+          var changeVal;
+          var style;
+          if (wrapWidth < 50) {
+            changeVal = 50 - wrapWidth;
+            style = {
+              left: 50 - changeVal + '%',
+              width: changeVal + '%'
+            }
+          } else {
+            changeVal = wrapWidth - 50;
+            style = {
+              left: '50%',
+              width: changeVal + '%'
+            }
+          }
+          sliderAct.find('.' + SLIDER_BAR).css(style);
+        } else {
+          sliderAct.find('.' + SLIDER_BAR).css({"width": wrapWidth + '%', "left": minLeft + '%'});
+        }
       }
       var selfValue = options.min + (options.max - options.min) * offsetValue / 100;
       selfValue = Number(parseFloat(selfValue).toFixed(precision));
@@ -393,11 +467,11 @@ layui.define(['jquery', 'lay'], function(exports){
           e.clientY = e.originalEvent.touches[0].clientY;
         }
 
-        var oldleft = othis.parent()[0].offsetLeft;
-        var oldx = e.clientX;
+        var oldLeft = othis.parent()[0].offsetLeft;
+        var oldCX = e.clientX;
         if(options.type === 'vertical'){
-          oldleft = sliderWidth() - othis.parent()[0].offsetTop - sliderWrap.height()
-          oldx = e.clientY;
+          oldLeft = sliderWidth() - othis.parent()[0].offsetTop - sliderWrap.height()
+          oldCX = e.clientY;
         }
 
         var move = function(e){
@@ -406,7 +480,7 @@ layui.define(['jquery', 'lay'], function(exports){
             e.clientX = e.touches[0].clientX;
             e.clientY = e.touches[0].clientY;
           }
-          var left = oldleft + (options.type === 'vertical' ? (oldx - e.clientY) : (e.clientX - oldx));
+          var left = oldLeft + (options.type === 'vertical' ? (oldCX - e.clientY) : (e.clientX - oldCX));
           if(left < 0)left = 0;
           if(left > sliderWidth())left = sliderWidth();
           var reaLeft = left / sliderWidth() * 100 / step;
