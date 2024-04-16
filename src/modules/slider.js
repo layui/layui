@@ -119,7 +119,9 @@ layui.define(['jquery', 'lay'], function(exports){
     if(options.max < options.min) options.max = options.min + options.step;
 
 
-
+    var tempLeft = 0;
+    var tempWidth = 0;
+    
     //判断是否开启双滑块
     if(options.range){
       options.value = typeof(options.value) == 'object' ? options.value : [options.min, options.value];
@@ -145,11 +147,21 @@ layui.define(['jquery', 'lay'], function(exports){
       if(options.value < options.min) options.value = options.min;
       if(options.value > options.max) options.value = options.max;
 
-      var scale = (options.value - options.min) / (options.max - options.min) * 100 + '%';
+      scale = (options.value - options.min) / (options.max - options.min) * 100;
 
       if (options.min < 0) {
-        scale = 50 + '%';
+        if (scale <= 50) {
+          tempLeft = scale;
+          tempWidth = 50 - scale;
+        } else {
+          tempLeft = 50;
+          tempWidth = scale - 50;
+        }
       }
+
+      scale += '%';
+      tempWidth += '%';
+      tempLeft += '%';
     }
 
 
@@ -171,8 +183,8 @@ layui.define(['jquery', 'lay'], function(exports){
           style.push('bottom:' + (scaleFir || 0));
         } else {
           if (options.min < 0) {
-            style.push('left:' + scale);
-            style.push('width:' + (scaleFir || 0));
+            style.push('left:' + tempLeft);
+            style.push('width:' + tempWidth);
           } else {
             style.push('width:' + scale);
             style.push('left:' + (scaleFir || 0));
