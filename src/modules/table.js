@@ -1025,7 +1025,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         curr: curr,
         count: res[response.countName],
         type: opts.type,
-        sort: true
+        disabledSort: true
       }), done(res, 'renderData');
     } else if(options.url){ // Ajax请求
       var params = {};
@@ -1277,7 +1277,19 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     return that.getTrHtml(data, null, that.page);
   }
 
-  // 数据渲染
+  /**
+   * @typedef renderDataOptions
+   * @prop res 响应数据
+   * @prop curr 当前页数
+   * @prop count 数据总数
+   * @prop {'reloadData' | undefined} type - 渲染类型
+   * @prop {boolean} [fromSort] - 来自原型 sort 方法的重新渲染，该标识主要是为了避免排序时重复渲染合计行
+   * @prop {boolean} [disabledSort] - 禁用 renderData 内部排序，table 静态方法 renderData(见 pull/1358) 和 原型 sort 方法应启用
+   */
+  /**
+   * 数据渲染
+   * @param {renderDataOptions} opts 
+   */
   Class.prototype.renderData = function(opts){
     var that = this;
     var options = that.config;
@@ -1285,7 +1297,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var res = opts.res;
     var curr = opts.curr;
     var count = that.count = opts.count;
-    var sort = opts.sort;
+    var fromSort = opts.fromSort;
+    var disabledSort = opts.disabledSort;
 
     var data = res[options.response.dataName] || []; //列表数据
     var totalRowData = res[options.response.totalRowName]; //合计行数据
@@ -1295,7 +1308,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 渲染视图
     var render = function(){ // 后续性能提升的重点
-      if(!sort && that.sortKey){
+      if(!disabledSort && that.sortKey){
         return that.sort({
           field: that.sortKey.field,
           type: that.sortKey.sort,
@@ -1303,7 +1316,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           reloadType: opts.type
         });
       }
-      that.getTrHtml(data, sort, curr, {
+      that.getTrHtml(data, fromSort, curr, {
         trs: trs,
         trs_fixed: trs_fixed,
         trs_fixed_r: trs_fixed_r
@@ -1359,7 +1372,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }
 
     //如果执行初始排序
-    if(sort){
+    if(fromSort){
       return render();
     }
 
@@ -1719,7 +1732,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       res: res,
       curr: that.page,
       count: that.count,
-      sort: true,
+      fromSort: true,
+      disabledSort: true,
       type: opts.reloadType
     });
 
