@@ -654,14 +654,13 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 if(hasEquals){
                   dl.children('.' + CREATE_OPTION).remove();
                 }else{
-                  // 和初始渲染保持行为一致
-                  var textVal = $('<div>' + value +'</div>').text();
                   var createOptionElem = dl.children('.' + CREATE_OPTION);
                   if(createOptionElem[0]){
-                    createOptionElem.attr('lay-value', value);
-                    createOptionElem.text(textVal);
+                    createOptionElem.attr('lay-value', value).html(util.escape(value));
                   }else{
-                    dl.append('<dd class="' + CREATE_OPTION + '" lay-value="'+ value +'">' + textVal + '</dd>');
+                    var ddElem = $('<dd>');
+                    ddElem.addClass(CREATE_OPTION).attr('lay-value', value).html(util.escape(value));
+                    dl.append(ddElem);
                   }
                 }
               }else{
@@ -722,7 +721,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
             if(isCreatable && othis.hasClass(CREATE_OPTION)){
               othis.removeClass(CREATE_OPTION);
-              select.append('<option value="' + value + '">' + value + '</option>');
+              var optionElem = $('<option>');
+              optionElem.attr('value', value).text(othis.text());
+              select.append(optionElem);
             }
 
             othis.siblings().removeClass(THIS);
