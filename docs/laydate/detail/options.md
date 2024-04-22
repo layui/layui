@@ -176,7 +176,7 @@ format: '北京时间 H 点 m 分'
 仅用于格式化日期显示的格式，不影响日期值
 
 ```
-function (value) {
+formatToDisplay: function (value) {
   // value - 日期字符串
   var date = new Date(value);
   var displayValue = [
