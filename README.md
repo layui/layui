@@ -10,7 +10,7 @@
 
 中文 · [English](./README.en-US.md)
 
-Classic modular front-end UI library
+原生态极简模块化 Web UI 组件库
 
 <p>
   <a href="https://www.npmjs.com/package/layui">
