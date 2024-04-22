@@ -1586,7 +1586,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 匹配行元素
     var tr = function(tr) {
       return isCheckAll ? tr : tr.filter(isCheckMult ? function() {
-        var dataIndex = $(this).data('index');
+        var dataIndex = $(this).attr('data-index');
         return opts.index.indexOf(dataIndex) !== -1;
       } : '[data-index="'+ opts.index +'"]');
     }(that.layBody.find('tr'));
@@ -2288,7 +2288,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     //数据行中的事件返回的公共对象成员
     var commonMember = that.commonMember = function(sets){
       var othis = $(this);
-      // treeTable 中使用 attr('data-index'), tr 更新时 jQuery 的缓存会导致获取到错误的 index
       var index = othis.parents('tr').eq(0).attr('data-index');
       var tr = that.layBody.find('tr[data-index="'+ index +'"]');
       var data = table.cache[that.key] || [];
@@ -2335,7 +2334,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var td = othis.closest('td');
       var checkbox = othis.prev();
       var children = that.layBody.find('input[name="layTableCheckbox"]');
-      var index = checkbox.parents('tr').eq(0).data('index');
+      var index = checkbox.parents('tr').eq(0).attr('data-index');
       var checked = checkbox[0].checked;
       var isAll = checkbox.attr('lay-filter') === 'layTableAllChoose';
 
@@ -2375,7 +2374,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var td = othis.closest('td');
       var radio = othis.prev();
       var checked = radio[0].checked;
-      var index = radio.parents('tr').eq(0).data('index');
+      var index = radio.parents('tr').eq(0).attr('data-index');
 
       layui.stope(e);
       if(radio[0].disabled) return false;
@@ -2448,7 +2447,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var field = othis.data('field');
       var key = othis.data('key');
       var col = that.col(key);
-      var index = othis.closest('tr').data('index');
+      var index = othis.closest('tr').attr('data-index');
       var data = table.cache[that.key][index];
       var elemCell = othis.children(ELEM_CELL);
 
@@ -2482,7 +2481,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var td = othis.parent();
       var value = this.value;
       var field = othis.parent().data('field');
-      var index = othis.closest('tr').data('index');
+      var index = othis.closest('tr').attr('data-index');
       var data = table.cache[that.key][index];
 
       //事件回调的参数对象
@@ -2561,7 +2560,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var td = othis.parent();
       var key = td.data('key');
       var col = that.col(key);
-      var index = td.parent().data('index');
+      var index = td.parent().attr('data-index');
       var elemCell = td.children(ELEM_CELL);
       var ELEM_CELL_C = 'layui-table-cell-c';
       var elemCellClose = $('<i class="layui-icon layui-icon-up '+ ELEM_CELL_C +'">');
@@ -2658,7 +2657,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var toolFn = function(type){
       var othis = $(this);
       var td = othis.closest('td');
-      var index = othis.parents('tr').eq(0).data('index');
+      var index = othis.parents('tr').eq(0).attr('data-index');
       // 标记当前活动行
       that.setRowActive(index);
 
