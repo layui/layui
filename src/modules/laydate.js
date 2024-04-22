@@ -417,7 +417,7 @@
     if(options.show || isStatic) that.render();
     isStatic || that.events();
 
-    // 劫持 input 元素 get set
+    // 重定义 input 元素的 get set
     if(typeof options.formatToDisplay === 'function'){
       if(that.isInput(options.elem[0])){
         that.formatToDisplay(options.elem[0], options.formatToDisplay);
