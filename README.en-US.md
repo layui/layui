@@ -4,32 +4,27 @@
   <img src="https://unpkg.com/outeres@0.1.0/img/layui/logo-icon.png" width="81" alt="Layui">
 </a>
 
-<h1>Layui</h1>
+</div>
+
+# Layui
+
+[中文](./README.md) · English
 
 Classic modular front-end UI library
 
 <p>
-  <a href="https://www.npmjs.com/package/layui">
-    <img src="https://img.shields.io/npm/v/layui" alt="Version">
+  <a href="https://github.com/layui/layui/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/npm-package-red" alt="NPM">
   </a>
-  <a href="https://www.npmjs.com/package/layui">
+  <a href="https://github.com/layui/layui/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/layui/layui" alt="License">
   </a>
-  <a href="https://github.com/layui/layui/blob/2.x/dist/css/layui.css">
-    <img src="https://img.badgesize.io/layui/layui/2.x/dist/css/layui.css?compression=brotli&label=CSS%20Brotli%20size" alt="CSS Brotli size">
-  </a>
-  <a href="https://github.com/layui/layui/blob/2.x/dist/layui.js">
-    <img src="https://img.badgesize.io/layui/layui/2.x/dist/layui.js?compression=brotli&label=JS%20Brotli%20size" alt="JS Brotli size">
+  <a href="https://github.com/layui/layui/releases">
+    <img src="https://badgen.net/github/release/layui/layui" alt="Version">
   </a>
 </p>
 
-[中文](./README.md) · English
-
-</div>
-
----
-
-Layui constitutes an open-source, freely available Web UI component library implementing its distinct lightweight modular specification. It adheres rigorously to the vanilla HTML/CSS/JavaScript development paradigm, thereby affording unparalleled ease of adoption and immediate usability. Characterized by a minimalist, lightweight aesthetic, the framework's core exudes elegance and richness, with each and every detail, inclusive of documentation, meticulously curated to facilitate swift assembly of web interfaces. Distinguishing itself from prevailing mainstream front-end frameworks, Layui does not contravene established principles but rather espouses a philosophy of reverting to fundamental simplicity. Specifically, it caters to pragmatic individuals with a penchant for simplicity, obviating the need for engagement with diverse build tools. it empowers users to intuitively harness and orchestrate the requisite page elements and interactive behaviors directly within the browser environment.
+> Layui constitutes an open-source, freely available Web UI component library implementing its distinct lightweight modular specification. It adheres rigorously to the vanilla `HTML/CSS/JavaScript` development paradigm, thereby affording unparalleled ease of adoption and immediate usability. Characterized by a minimalist, lightweight aesthetic, the framework's core exudes elegance and richness, with each and every detail, inclusive of documentation, meticulously curated to facilitate swift assembly of web interfaces. Distinguishing itself from prevailing mainstream front-end frameworks, Layui does not contravene established principles but rather espouses a philosophy of reverting to fundamental simplicity. Specifically, it caters to pragmatic individuals with a penchant for simplicity, obviating the need for engagement with diverse build tools. it empowers users to intuitively harness and orchestrate the requisite page elements and interactive behaviors directly within the browser environment.
 
 ## Usage
 
