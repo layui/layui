@@ -83,6 +83,8 @@ layui.define(['table'], function (exports) {
   var LAY_HAS_EXPANDED = 'LAY_HAS_EXPANDED';
   var LAY_ASYNC_STATUS = 'LAY_ASYNC_STATUS';
   var LAY_CASCADE = ['all', 'parent', 'children', 'none'];
+  var HTML_TAG_RE = /<[^>]+?>/;
+  var ICON_PROPS = ['flexIconClose', 'flexIconOpen', 'iconClose', 'iconOpen', 'iconLeaf', 'icon']
 
   /**
    * 构造器
@@ -209,6 +211,11 @@ layui.define(['table'], function (exports) {
       }
       options.done.mod = true;
     }
+
+    // 处理图标
+    layui.each(ICON_PROPS, function(i, iconProp){
+      options.tree.view[iconProp] = that.normalizedIcon(options.tree.view[iconProp]);
+    })
   }
 
   Class.prototype.init = function () {
@@ -276,6 +283,12 @@ layui.define(['table'], function (exports) {
       }
     },
   };
+
+  Class.prototype.normalizedIcon = function(iconStr){
+    return iconStr
+      ? HTML_TAG_RE.test(iconStr) ? iconStr : '<i class="' + iconStr +'"></i>'
+      : ''
+  }
 
   Class.prototype.getOptions = function () {
     var that = this;
@@ -1052,7 +1065,7 @@ layui.define(['table'], function (exports) {
             ((trData[customName.icon] || treeOptionsView.icon) ? ' layui-table-tree-iconCustom' : '') +
             (trData[isParentKey] ? '' : ' layui-table-tree-iconLeaf') +
             '">' +
-            (trData[customName.icon] || treeOptionsView.icon ||
+            (that.normalizedIcon(trData[customName.icon]) || treeOptionsView.icon ||
               (trData[isParentKey] ?
                 (trData[LAY_EXPAND] ? treeOptionsView.iconOpen : treeOptionsView.iconClose) :
                 treeOptionsView.iconLeaf) ||
