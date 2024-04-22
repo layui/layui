@@ -1,14 +1,14 @@
-<p align="center">
-  <a href="https://layui.dev">
-    <img src="https://unpkg.com/outeres@0.1.0/img/layui/logo-icon.png" width="81" alt="Layui">
-  </a>
-</p>
-<h1 align="center">Layui</h1>
-<p align="center">
-  Classic modular front-end UI library
-</p>
+<div align="center">
 
-<p align="center">  
+<a href="https://layui.dev">
+  <img src="https://unpkg.com/outeres@0.1.0/img/layui/logo-icon.png" width="81" alt="Layui">
+</a>
+
+<h1>Layui</h1>
+
+Classic modular front-end UI library
+
+<p>
   <a href="https://www.npmjs.com/package/layui">
     <img src="https://img.shields.io/npm/v/layui" alt="Version">
   </a>
@@ -22,6 +22,10 @@
     <img src="https://img.badgesize.io/layui/layui/2.x/dist/layui.js?compression=brotli&label=JS%20Brotli%20size" alt="JS Brotli size">
   </a>
 </p>
+
+中文 · [English](./README.en-US.md)
+
+</div>
 
 ---
 
