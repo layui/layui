@@ -755,7 +755,7 @@ layui.define(['lay', 'layer'], function(exports){
       }
       var unitArr = ["Bytes", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"];
       var index;
-      var formatSize = typeof value === 'string' ? parseFloat(size + '') : size;
+      var formatSize = typeof size === 'string' ? parseFloat(size + '') : size;
       index = Math.floor(Math.log(formatSize) / Math.log(1024));
       size = formatSize / Math.pow(1024, index);
       size = size % 1 === 0 ? size : parseFloat(size.toFixed(precision));//保留的小数位数
