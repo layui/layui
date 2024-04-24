@@ -13,14 +13,14 @@
 原生态极简模块化 Web UI 组件库
 
 <p>
-  <a href="https://www.npmjs.com/package/layui">
-    <img src="https://img.shields.io/badge/npm-package-red" alt="NPM">
-  </a>
   <a href="https://github.com/layui/layui/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/layui/layui" alt="License">
   </a>
   <a href="https://github.com/layui/layui/releases">
     <img src="https://badgen.net/github/release/layui/layui" alt="Version">
+  </a>
+  <a href="https://www.npmjs.com/package/layui">
+    <img src="https://img.shields.io/badge/npm-package-red" alt="NPM">
   </a>
 </p>
 
