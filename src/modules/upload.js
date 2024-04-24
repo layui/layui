@@ -602,13 +602,13 @@ layui.define(['lay', 'layer'], function(exports){
 
     /**
      * 判断文件是否加入排队
-     * @param file
+     * @param {File} file
      * @return {boolean}
      */
     var checkFile = function (file) {
       var result = true;
       layui.each(that.files, function (index, item) {
-        result = !(item.name == file.name);
+        result = !(item.name === file.name);
         if(!result) return true;
       });
       return result;
@@ -616,8 +616,9 @@ layui.define(['lay', 'layer'], function(exports){
 
     /**
      * 扩展文件信息
-     * @param obj
-     * @return {*}
+     * @template {File | FileList} T
+     * @param {T} obj
+     * @return {T}
      */
     var extendInfo = function (obj) {
 
@@ -643,8 +644,8 @@ layui.define(['lay', 'layer'], function(exports){
     
     /**
      * 检查获取文件
-     * @param files
-     * @return {*[]|*}
+     * @param {FileList} files
+     * @return {Array<File>|FileList}
      */
     var getFiles = function (files) {
       files = files || [];
@@ -737,25 +738,24 @@ layui.define(['lay', 'layer'], function(exports){
     options.elem.data(MOD_INDEX, options.id);
   };
 
-    /**
+  /**
    * 上传组件辅助方法
-   * @type {{parseSize: ((function((number|float), *=): string)|*)}}
    */
   upload.util = {
     /**
      * 文件大小处理
      * @param {number | string} size -文件大小
-     * @param precision
+     * @param {number} [precision] - 数值精度
      * @return {string}
      */
-    parseSize: function (/*文件大小*/size, precision) {
+    parseSize: function (size, precision) {
       precision = precision || 2;
       if (null == size || !size) {
         return '0';
       }
       var unitArr = ["Bytes", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"];
       var index;
-      var formatSize = typeof size === 'string' ? parseFloat(size + '') : size;
+      var formatSize = typeof size === 'string' ? parseFloat(size) : size;
       index = Math.floor(Math.log(formatSize) / Math.log(1024));
       size = formatSize / Math.pow(1024, index);
       size = size % 1 === 0 ? size : parseFloat(size.toFixed(precision));//保留的小数位数
