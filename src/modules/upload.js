@@ -744,7 +744,7 @@ layui.define(['lay', 'layer'], function(exports){
   upload.util = {
     /**
      * 文件大小处理
-     * @param {number|float} size -文件大小
+     * @param {number | string} size -文件大小
      * @param precision
      * @return {string}
      */
