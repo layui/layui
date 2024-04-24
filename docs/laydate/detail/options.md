@@ -599,6 +599,8 @@ theme: ['#16baaa', '#16b777']
 
 </div>
 
+- object 类型
+
 ```
 mark: {
   '0-10-14': '生日', //每年每月的某一天
@@ -608,6 +610,27 @@ mark: {
 ```
 
 前缀 `0-` 即代表每年，`0-0-` 即代表每年每月。
+
+- function 类型 <sup>2.9.9+</sup>
+
+```
+mark: function (ymd, render) {
+  var y = ymd[0];
+  var m = ymd[1];
+  var d = ymd[2];
+
+  // 字符串
+  if (m === 6 && d === 1) return render('儿童节');
+
+  // 对象
+  render ({
+    '0-10-14': '生日',
+    '0-0-15': '中旬',
+    '2024-03-20': 'v2',
+    '2024-03-31': '月底',
+  });
+}
+```
 
 效果详见： [#示例](#demo-mark)
 
@@ -625,8 +648,10 @@ mark: {
 <td>
   
 <div id="options.holidays" class="ws-anchor">
-用于标注节假日及补班日。值是一个二维数组，如：
+用于标注节假日及补班日。
 </div>
+
+- 若为 array 类型，值是一个二维数组，如：
 
 ```
 holidays: [
@@ -635,6 +660,27 @@ holidays: [
   // 2023 年的补班日
   ['2023-1-28','2023-1-29']
 ]
+```
+
+- 若为 function 类型 <sup>2.9.9+</sup>
+
+```
+holidays: function (ymd, render) {
+  var y = ymd[0];
+  var m = ymd[1];
+  var d = ymd[2];
+
+  // 字符串
+  if (y === 2023 && m === 6) {
+    render('holidays'); // 'holidays'/'workdays'
+  // 数组
+  } else if (y === 2024) {
+    render([
+      ['2024-03-01', '2024-03-02', '2024-03-03'],
+      ['2024-03-6', '2024-03-25'],
+    ]);
+  }
+}
 ```
 
 相关日期值可详细参考国家每年公布的法定节假日安排

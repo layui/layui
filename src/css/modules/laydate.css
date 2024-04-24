@@ -61,7 +61,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .laydate-day-mark::after{position: absolute; content:''; right: 2px; top: 2px; width: 5px; height: 5px; border-radius: 50%;}
 .laydate-day-holidays:before{position: absolute; left: 0; top: 0; font-size: 12px; transform: scale(.7);}
 .laydate-day-holidays:before{content:'\4F11'; color: #FF5722;}
-.laydate-day-holidays[type="work"]:before{content:'\73ED'; color: inherit;}
+.laydate-day-holidays[type="workdays"]:before{content:'\73ED'; color: inherit;}
 .layui-laydate .layui-this .laydate-day-holidays:before{color: #fff;}
 
 /* 底部结构 */
