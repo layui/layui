@@ -591,6 +591,7 @@ layui.define(['table'], function (exports) {
 
     // 找到表格中的同类节点（需要找到lay-data-index一致的所有行）
     var trsElem = tableViewElem.find('tr[lay-data-index="' + dataIndex + '"]');
+    var flexIconElem = trsElem.find('.layui-table-tree-flexIcon');
     treeTableThat.updateNodeIcon({
       scopeEl: trsElem,
       isExpand: trExpand,
