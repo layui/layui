@@ -213,9 +213,13 @@ layui.define(['table'], function (exports) {
     }
 
     // 处理图标
-    layui.each(ICON_PROPS, function(i, iconProp){
-      options.tree.view[iconProp] = that.normalizedIcon(options.tree.view[iconProp]);
-    })
+    if(options && options.tree && options.tree.view){
+      layui.each(ICON_PROPS, function(i, iconProp){
+        if(options.tree.view[iconProp] !== undefined){
+          options.tree.view[iconProp] = that.normalizedIcon(options.tree.view[iconProp]);
+        }
+      })
+    }
   }
 
   Class.prototype.init = function () {
