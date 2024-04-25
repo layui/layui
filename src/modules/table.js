@@ -1127,6 +1127,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }
   };
 
+  /** @typedef {{trs: Array<string>;trs_fixed: Array<string>;trs_fixed_r: Array<string>}} trsType */
+  /**
+   * 获取行数据的 HTML 字符串
+   * @param {Array<object | Array<any>>} data - 原始行数据
+   * @param {boolean} sort - 是否不记录排序索引 
+   * @param {number} curr - 当前页数
+   * @param {trsType} [trsObj] - 存储行 HTML 字符串数组的对象
+   * @returns {trsType}
+   */
   Class.prototype.getTrHtml = function(data, sort, curr, trsObj) {
     var that = this;
     var options = that.config;
@@ -1283,8 +1292,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
    * @prop curr 当前页数
    * @prop count 数据总数
    * @prop {'reloadData' | undefined} type - 渲染类型
-   * @prop {boolean} [fromSort] - 来自原型 sort 方法的重新渲染，该标识主要是为了避免排序时重复渲染合计行
-   * @prop {boolean} [disabledSort] - 禁用 renderData 内部排序，table 静态方法 renderData(见 pull/1358) 和 原型 sort 方法应启用
+   * @prop {boolean} fromSort - 来自原型 sort 方法的重新渲染，该标识主要是为了避免排序时重复渲染合计行
+   * @prop {boolean} disabledSort - 禁用 renderData 内部排序，table 静态方法 renderData(见 pull/1358) 和 原型 sort 方法应启用
    */
   /**
    * 数据渲染
@@ -1316,7 +1325,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           reloadType: opts.type
         });
       }
-      that.getTrHtml(data, fromSort, curr, {
+      that.getTrHtml(data, disabledSort, curr, {
         trs: trs,
         trs_fixed: trs_fixed,
         trs_fixed_r: trs_fixed_r
