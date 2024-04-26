@@ -600,6 +600,66 @@ layui.define(['lay', 'layer'], function(exports){
       elemFile.after('<span class="layui-inline '+ ELEM_CHOOSE +'">'+ value +'</span>');
     };
 
+    /**
+     * 判断文件是否加入排队
+     * @param {File} file
+     * @return {boolean}
+     */
+    var checkFile = function (file) {
+      var result = true;
+      layui.each(that.files, function (index, item) {
+        result = !(item.name === file.name);
+        if(!result) return true;
+      });
+      return result;
+    }
+
+    /**
+     * 扩展文件信息
+     * @template {File | FileList} T
+     * @param {T} obj
+     * @return {T}
+     */
+    var extendInfo = function (obj) {
+
+      var extInfo = function (file) {
+        //文件扩展名
+        file.ext = file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
+        // 文件大小
+        file.sizes = upload.util.parseSize(file.size);
+        // 可以继续扩展
+      }
+
+      //FileList对象
+      if (obj instanceof FileList) {
+        layui.each(obj, function (index, item) {
+          extInfo(item);
+        });
+      } else {
+        extInfo(obj);
+      }
+
+      return obj;
+    }
+    
+    /**
+     * 检查获取文件
+     * @param {FileList} files
+     * @return {Array<File>|FileList}
+     */
+    var getFiles = function (files) {
+      files = files || [];
+      if (!files.length) return [];
+      if (!that.files) return extendInfo(files);
+      var result = [];
+      layui.each(files, function (index, item) {
+        if (checkFile(item)) {
+          result.push(extendInfo(item));
+        }
+      });
+      return result;
+    }
+
     // 点击上传容器
     options.elem.off('upload.start').on('upload.start', function(){
       var othis = $(this);
@@ -620,7 +680,7 @@ layui.define(['lay', 'layer'], function(exports){
       })
       .off('upload.drop').on('upload.drop', function(e, param){
         var othis = $(this);
-        var files = param.originalEvent.dataTransfer.files || [];
+        var files = getFiles(param.originalEvent.dataTransfer.files);
         
         othis.removeAttr('lay-over');
         setChooseFile(files);
@@ -631,7 +691,7 @@ layui.define(['lay', 'layer'], function(exports){
     
     // 文件选择
     that.elemFile.on('change', function(){
-      var files = this.files || [];
+      var files = getFiles(this.files);
 
       if(files.length === 0) return;
 
@@ -677,6 +737,31 @@ layui.define(['lay', 'layer'], function(exports){
     // 绑定元素索引
     options.elem.data(MOD_INDEX, options.id);
   };
+
+  /**
+   * 上传组件辅助方法
+   */
+  upload.util = {
+    /**
+     * 文件大小处理
+     * @param {number | string} size -文件大小
+     * @param {number} [precision] - 数值精度
+     * @return {string}
+     */
+    parseSize: function (size, precision) {
+      precision = precision || 2;
+      if (null == size || !size) {
+        return '0';
+      }
+      var unitArr = ["Bytes", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"];
+      var index;
+      var formatSize = typeof size === 'string' ? parseFloat(size) : size;
+      index = Math.floor(Math.log(formatSize) / Math.log(1024));
+      size = formatSize / Math.pow(1024, index);
+      size = size % 1 === 0 ? size : parseFloat(size.toFixed(precision));//保留的小数位数
+      return size + unitArr[index];
+    }
+  }
 
   // 记录所有实例
   thisModule.that = {}; // 记录所有实例对象
