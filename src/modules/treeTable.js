@@ -213,9 +213,13 @@ layui.define(['table'], function (exports) {
     }
 
     // 处理图标
-    layui.each(ICON_PROPS, function(i, iconProp){
-      options.tree.view[iconProp] = that.normalizedIcon(options.tree.view[iconProp]);
-    })
+    if(options && options.tree && options.tree.view){
+      layui.each(ICON_PROPS, function(i, iconProp){
+        if(options.tree.view[iconProp] !== undefined){
+          options.tree.view[iconProp] = that.normalizedIcon(options.tree.view[iconProp]);
+        }
+      })
+    }
   }
 
   Class.prototype.init = function () {
@@ -527,7 +531,9 @@ layui.define(['table'], function (exports) {
 
     var update = function(data, parentIndex){
       layui.each(data, function (i1, item1) {
-        item1[isParentKey] = !!(item1[childrenKey] && item1[childrenKey].length);
+        if (!(isParentKey in item1)) {
+          item1[isParentKey] = !!(item1[childrenKey] && item1[childrenKey].length);
+        }
         item1[LAY_DATA_INDEX_HISTORY] = item1[LAY_DATA_INDEX];
         item1[LAY_PARENT_INDEX] = parentIndex = parentIndex || '';
         var dataIndex = item1[LAY_DATA_INDEX] = (parentIndex ? parentIndex + '-' : '') + i1;
@@ -587,6 +593,7 @@ layui.define(['table'], function (exports) {
 
     // 找到表格中的同类节点（需要找到lay-data-index一致的所有行）
     var trsElem = tableViewElem.find('tr[lay-data-index="' + dataIndex + '"]');
+    var flexIconElem = trsElem.find('.layui-table-tree-flexIcon');
     treeTableThat.updateNodeIcon({
       scopeEl: trsElem,
       isExpand: trExpand,
@@ -1310,6 +1317,8 @@ layui.define(['table'], function (exports) {
 
     var options = that.getOptions();
     var treeOptions = options.tree;
+    var isParentKey = treeOptions.customName.isParent;
+    var childrenKey = treeOptions.customName.children;
     var tableView = options.elem.next();
     var delNode;
     var indexArr = [];
@@ -1360,13 +1369,14 @@ layui.define(['table'], function (exports) {
       tableView.find('tr[data-level="0"][lay-data-index="' + item4[LAY_DATA_INDEX] + '"]').attr('data-index', i4);
     })
     options.hasNumberCol && formatNumber(that);
-    // 更新父节点图标状态
+    // 更新父节点状态
     if(nodeP){
       var trEl =  tableView.find('tr[lay-data-index="' + nodeP[LAY_DATA_INDEX] + '"]');
+      nodeP[isParentKey] = !!(nodeP[childrenKey] && nodeP[childrenKey].length);
       that.updateNodeIcon({
         scopeEl: trEl,
         isExpand: nodeP[LAY_EXPAND],
-        isParent: nodeP[treeOptions.customName.isParent],
+        isParent: nodeP[isParentKey],
       });  
     }
 
