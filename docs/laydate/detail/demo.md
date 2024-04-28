@@ -88,6 +88,14 @@
   </textarea>
 </pre>
 
+<h3 id="demo-custom-cell" lay-toc="{level: 2}">自定义单元格</h3>
+
+<pre class="layui-code" lay-options="{preview: 'iframe', codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
+  <textarea>
+{{- d.include("/laydate/examples/cell.md") }}
+  </textarea>
+</pre>
+
 <h3 id="demo-static" lay-toc="{level: 2}">直接静态显示</h3>
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">

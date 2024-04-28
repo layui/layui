@@ -715,6 +715,29 @@ holidays: function (ymd, render) {
 <td>-</td>
     </tr>
     <tr>
+<td>cellRender <sup>2.9.9+</sup></td>
+<td>
+  
+自定义单元格内容。
+
+```
+cellRender: function(ymd, render, info){
+  var y = ymd[0];
+  var m = ymd[1];
+  var d = ymd[2];
+
+  // 面板类型 'year' | 'month' | 'date'
+  if(info.type === 'date'){
+    render(d); // 参数为 string, HTMLElement, JQuery 类型
+  }
+}
+```
+
+</td>
+<td>function</td>
+<td> - </td>
+    </tr>
+    <tr>
     <td colspan="4" style="text-align: center"> 
 
 
