@@ -80,7 +80,7 @@
       elem: '#ID-laydate-cell-render',
       position: 'static',
       // value: '2024-03-30',
-      // isPreview: false,
+      isPreview: false,
       btns: ['now'],
       theme: 'lunar',
       autoConfirm: false,
