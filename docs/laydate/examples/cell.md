@@ -78,9 +78,9 @@
     // 渲染
     laydate.render({
       elem: '#ID-laydate-cell-render',
-      // value: '2024-03-30',
       position: 'static',
-      isPreview: false,
+      // value: '2024-03-30',
+      // isPreview: false,
       btns: ['now'],
       theme: 'lunar',
       autoConfirm: false,
