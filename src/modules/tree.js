@@ -551,7 +551,7 @@ layui.define(['form','util'], function(exports){
         elemMain.children('.layui-tree-editInput').val(util.unescape(text)).focus();
         // 嵌入文字移除输入框
         var getVal = function(input){
-          var textNew = input.val().trim();
+          var textNew = util.escape(input.val().trim());
           textNew = textNew ? textNew : options.text.defaultNodeName;
           input.remove();
           elemMain.children('.'+ ELEM_TEXT).html(textNew);
