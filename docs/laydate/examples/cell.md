@@ -10,7 +10,7 @@
     .laydate-theme-lunar .layui-laydate-main {
       width: auto;
     }
-    .laydate-theme-lunar .inner {
+    .laydate-theme-lunar .date-cell-inner {
       padding: 6px;
       width: 44px;
       height: 40px;
@@ -19,13 +19,13 @@
     .laydate-theme-lunar .layui-this {
       border-radius: 4px !important;
     }
-    .laydate-theme-lunar .inner b {
+    .laydate-theme-lunar .date-cell-inner b {
       display: block;
       font-weight: 400;
       height: 16px;
       font-size: 14px;
     }
-    .laydate-theme-lunar .inner i {
+    .laydate-theme-lunar .date-cell-inner i {
       display: block;
       font-style: normal;
       font-size: 10px;
@@ -92,37 +92,29 @@
         }
       },
       cellRender: function (ymd, render, info) {
-        var [y, m, d] = ymd;
+        var y = ymd[0];
+        var m = ymd[1];
+        var d = ymd[2];
         var that = this;
         var lunarDate = Solar.fromYmd(y, m, d).getLunar();
         var lunar = lunarDate.getDayInChinese();
         var jieQi = lunarDate.getJieQi();
         var holiday = HolidayUtil.getHoliday(y, m, d);
-        var displayHoliday =
-          holiday && holiday.getTarget() === holiday.getDay()
-            ? holiday.getName()
-            : undefined;
-        var displayHolidayBadge =
-          holiday && holiday.getTarget()
-            ? holiday.isWork()
-              ? '班'
-              : '休'
-            : undefined;
+        var displayHoliday = holiday && holiday.getTarget() === holiday.getDay() ? holiday.getName() : undefined;
+        var displayHolidayBadge = holiday && holiday.getTarget() ? (holiday.isWork() ? '班' : '休') : undefined;
         var isHoliday = holiday && holiday.getTarget() && !holiday.isWork();
         // 面板类型
         if (info.type === 'date') {
           var clazz = [
-            'inner',
+            'date-cell-inner',
             isHoliday ? 'holiday' : '',
             displayHoliday || jieQi ? 'hightlight' : '',
           ].join(' ');
           var content = [
             '<div class="' + clazz + '">',
-            '<b>' + d + '</b>',
-            '<i>' + (displayHoliday || jieQi || lunar) + '</i>',
-            displayHolidayBadge
-              ? '<u class="badge">' + displayHolidayBadge + '</u>'
-              : '',
+              '<b>' + d + '</b>',
+              '<i>' + (displayHoliday || jieQi || lunar) + '</i>',
+              displayHolidayBadge ? '<u class="badge">' + displayHolidayBadge + '</u>' : '',
             '</div>',
           ].join('');
           // render(content)
@@ -138,34 +130,26 @@
           contentEl.on('click', function () {
             var tipsText = [
               '<div>',
-              '<div style="color: #333;font-size:11px;display: inline-block;margin-right: 5px;">农历' +
-                lunarDate.getMonthInChinese() +
-                '月' +
-                lunarDate.getDayInChinese() +
+                '<div style="color: #333;font-size:11px;display: inline-block;margin-right: 5px;">',
+                  '农历' + lunarDate.getMonthInChinese() + '月' + lunarDate.getDayInChinese(),
                 '</div>',
-              '<div style="font-size:10px;display: inline-block;margin-right: 5px;">' +
-                lunarDate.getYearInGanZhi() +
-                lunarDate.getYearShengXiao() +
-                '年</div>',
-              '<div style="font-size:10px;display: inline-block;margin-right: 5px;">' +
-                lunarDate.getMonthInGanZhi() +
-                '月 ' +
-                lunarDate.getDayInGanZhi() +
-                '日</div>',
-              displayHolidayBadge
-                ? '<div class="badge" style="position:relative;color:#fff;display: inline-block;' +
-                  (isHoliday
-                    ? 'background-color:#eb3333;'
-                    : 'background-color:#333') +
-                  '"> ' +
-                  displayHolidayBadge +
-                  '</div>'
-                : '',
-              displayHoliday || jieQi
-                ? '<div class="badge" style="position:relative;color:#fff;background-color:#1e9fff;display: inline-block;"> ' +
-                  (displayHoliday || jieQi) +
-                  '</div>'
-                : '',
+                '<div style="font-size:10px;display: inline-block;margin-right: 5px;">',
+                  lunarDate.getYearInGanZhi() + lunarDate.getYearShengXiao() + '年',
+                '</div>',
+                '<div style="font-size:10px;display: inline-block;margin-right: 5px;">',
+                  lunarDate.getMonthInGanZhi() + '月 ' + lunarDate.getDayInGanZhi() + '日',
+                '</div>',
+                displayHolidayBadge
+                  ? '<div class="badge" style="position:relative;color:#fff;display: inline-block;' +
+                    (isHoliday ? 'background-color:#eb3333;' : 'background-color:#333') + '"> ' +
+                      displayHolidayBadge +
+                    '</div>'
+                  : '',
+                displayHoliday || jieQi
+                  ? '<div class="badge" style="position:relative;color:#fff;background-color:#1e9fff;display: inline-block;"> ' +
+                      (displayHoliday || jieQi) +
+                    '</div>'
+                  : '',
               '</div>',
             ].join('');
             that._previewEl.html(tipsText);
@@ -173,14 +157,11 @@
           render(contentEl);
         } else if (info.type === 'year') {
           var lunarDate = Lunar.fromDate(new Date(y + 1, 0));
-          var lunar =
-            lunarDate.getYearInGanZhi() + lunarDate.getYearShengXiao();
-          render(
-            [
-              y + '年',
-              '<div style="font-size:12px">' + lunar + '年</div>',
-            ].join('')
-          );
+          var lunar = lunarDate.getYearInGanZhi() + lunarDate.getYearShengXiao();
+          render([
+            y + '年',
+            '<div style="font-size:12px">' + lunar + '年</div>',
+          ].join(''));
         } else if (info.type === 'month') {
           var lunar = lunarDate.getMonthInChinese();
           render([m + '月(' + lunar + '月)'].join(''));
