@@ -638,9 +638,9 @@ mark: {
 
 ```
 mark: function (ymd, render) {
-  var y = ymd[0];
-  var m = ymd[1];
-  var d = ymd[2];
+  var y = ymd.year;
+  var m = ymd.month;
+  var d = ymd.date;
 
   // 字符串
   if (m === 6 && d === 1) return render('儿童节');
@@ -689,9 +689,9 @@ holidays: [
 
 ```
 holidays: function (ymd, render) {
-  var y = ymd[0];
-  var m = ymd[1];
-  var d = ymd[2];
+  var y = ymd.year;
+  var m = ymd.month;
+  var d = ymd.date;
 
   // 字符串
   if (y === 2023 && m === 6) {

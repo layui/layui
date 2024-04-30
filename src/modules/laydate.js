@@ -1106,7 +1106,7 @@
     } 
 
     if(typeof options.mark === 'function'){
-      options.mark(YMD, render);
+      options.mark({year: YMD[0], month: YMD[1], date: YMD[2]}, render);
     }else if(typeof options.mark === 'object'){
       render(options.mark);
     }
@@ -1178,7 +1178,7 @@
     }
 
     if(typeof options.holidays === 'function'){
-      options.holidays(YMD, render);
+      options.holidays({year: YMD[0], month: YMD[1], date: YMD[2]}, render);
     }else if(layui.type(options.holidays) === 'array'){
       render(options.holidays);
     }
