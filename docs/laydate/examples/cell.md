@@ -92,10 +92,10 @@
         }
       },
       cellRender: function (ymd, render, info) {
-        var y = ymd[0];
-        var m = ymd[1];
-        var d = ymd[2];
         var that = this;
+        var y = ymd.year;
+        var m = ymd.month;
+        var d = ymd.date;
         var lunarDate = Solar.fromYmd(y, m, d).getLunar();
         var lunar = lunarDate.getDayInChinese();
         var jieQi = lunarDate.getJieQi();
