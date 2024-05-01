@@ -453,6 +453,10 @@ layui.define(['lay', 'layer'], function(exports){
         var newFile = new File([file], filename);
         that.files = that.files || {};
         that.files[index] = newFile;
+      },
+      // 获取本次选取的文件
+      getChooseFiles: function(){
+        return that.chooseFiles;
       }
     };
     

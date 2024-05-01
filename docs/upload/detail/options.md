@@ -356,6 +356,9 @@ choose: function(obj){
     // delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
   });
 }
+
+// 获取本次选取的文件，大文件建议用此方法获取文件信息(2.9.9+)
+obj.getChooseFiles();
 ```
 
 详细用法参考：[#示例](#demo-files-table)
