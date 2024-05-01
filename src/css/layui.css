@@ -1566,7 +1566,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-colorpicker-pre-isalpha{background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)}
 .layui-colorpicker-pre.layui-this{box-shadow: 0 0 3px 2px rgba(0,0,0,.15);}
 .layui-colorpicker-pre > div{height: 100%; border-radius: 2px;}
-.layui-colorpicker-main-input{text-align: right; padding-top: 7px;}
+.layui-colorpicker-main-input{text-align: right; padding-top: 7px; position: relative; z-index: 10;}
 .layui-colorpicker-main-input .layui-btn-container .layui-btn{margin: 0 0 0 10px;}
 .layui-colorpicker-main-input div.layui-inline{float: left; margin-right: 10px; font-size: 14px;}
 .layui-colorpicker-main-input input.layui-input{width: 150px; height: 30px; color: #5F5F5F;}
