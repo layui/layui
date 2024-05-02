@@ -30,6 +30,7 @@ var ready = {
     removeFocus: true
   }, 
   end: {}, 
+  beforeEnd: {},
   events: {resize: {}}, 
   minStackIndex: 0,
   minStackArr: [],
@@ -925,6 +926,7 @@ Class.pt.callback = function(){
   });
 
   config.end && (ready.end[that.index] = config.end);
+  config.beforeEnd && (ready.beforeEnd[that.index] = config.beforeEnd);
 };
 
 // for ie6 恢复 select
@@ -1218,6 +1220,12 @@ layer.close = function(index, callback){
   var hideOnClose = options.id && options.hideOnClose; // 是否关闭时移除弹层容器
 
   if(!layero[0]) return;
+
+  if(!hideOnClose && typeof ready.beforeEnd[index] === 'function'){
+    var isClose = ready.beforeEnd[index](layero, index);
+    if(isClose === false) return;
+    delete ready.beforeEnd[index];
+  }
 
   // 关闭动画
   var closeAnim = ({
