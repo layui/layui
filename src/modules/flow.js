@@ -23,6 +23,9 @@ layui.define('jquery', function(exports){
     var direction = options.direction || 'bottom';
     var isTop = direction === 'top';
 
+    // 重复执行时清理旧的事件绑定
+    that._cleanup(elem, scrollElem);
+
     //滚动条所在元素是否为document
     var notDocument = options.scrollElem && options.scrollElem !== document;
 
@@ -67,7 +70,7 @@ layui.define('jquery', function(exports){
     done();
 
     //不自动滚动加载
-    more.find('a').on('click', function(){
+    more.find('a').on('click.flow', function(){
       var othis = $(this);
       if(isOver) return;
       lock || done();
@@ -84,7 +87,7 @@ layui.define('jquery', function(exports){
 
     if(!isAuto) return that;
 
-    scrollElem.on('scroll', function(){
+    scrollElem.on('scroll.flow', function(){
       var othis = $(this), top = othis.scrollTop();
 
       if(timer) clearTimeout(timer);
@@ -176,7 +179,7 @@ layui.define('jquery', function(exports){
 
     if(!haveScroll){
       var timer;
-      scrollElem.on('scroll', function(){
+      scrollElem.on('scroll.lazyimg' , function(){
         var othis = $(this);
         if(timer) clearTimeout(timer)
         timer = setTimeout(function(){
@@ -187,6 +190,13 @@ layui.define('jquery', function(exports){
     }
     return render;
   };
+
+  // 重复执行时清理旧的事件绑定，私有方法
+  Flow.prototype._cleanup = function(elem, scrollElem){
+    scrollElem.off('scroll.flow').off('scroll.lazyimg');
+    elem.find('.layui-flow-more').find('a').off('click.flow');
+    elem.html('');
+  }
 
   //暴露接口
   exports('flow', new Flow());
