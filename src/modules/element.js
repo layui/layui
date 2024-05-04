@@ -82,7 +82,7 @@ layui.define('jquery', function(exports){
   Element.prototype.tab = function(options){
     options = options || {};
     dom.on('click', options.headerElem, function(e){
-      var index = $(this).index();
+      var index = $(options.headerElem).index($(this));
       call.tabClick.call(this, {
         index: index,
         options: options
