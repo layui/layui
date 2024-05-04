@@ -79,7 +79,6 @@
   </textarea>
 </pre>
 
-
 <h3 id="demo-theme" lay-toc="{level: 2, hot: true}">自定义主题</h3>
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
@@ -88,10 +87,18 @@
   </textarea>
 </pre>
 
-<h3 id="demo-static" lay-toc="{level: 2}">直接静态显示</h3>
+<h3 id="demo-static" lay-toc="{level: 2}">静态显示</h3>
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 {{- d.include("/laydate/examples/static.md") }}
+  </textarea>
+</pre>
+
+<h3 id="demo-custom-cell" lay-toc="{level: 2}">扩展农历 🔥</h3>
+
+<pre class="layui-code" lay-options="{preview: 'iframe', style: 'height: 385px;', codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
+  <textarea>
+{{- d.include("/laydate/examples/cell.md") }}
   </textarea>
 </pre>

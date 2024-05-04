@@ -1187,6 +1187,31 @@
   };
 
   /**
+   * 自定义单元格
+   * @param {HTMLElement|Array<HTMLElement>} el - 单元格元素
+   * @param {{year:number, month:number, date:number}} dateObj - 当前单元格对应的日期信息
+   * @param {'year' | 'month' | 'date'} panelMode - 面板模式
+   * @returns 
+   */
+  Class.prototype.cellRender = function(el, dateObj, panelMode){
+    var that = this;
+    var options = that.config;
+
+    if(typeof options.cellRender === 'function'){
+      var render = function(content){
+        if(typeof content === 'string'){
+          lay(el).html(content);
+        }else if(typeof content === 'object'){
+          lay(el).html('').append(lay(content)[0]);
+        }
+      }
+      options.cellRender(dateObj, render, {originElem: el, type: panelMode})
+    }
+
+    return that;
+  }
+
+  /**
    * 给定年份的开始日期
    * @param {Date} date 
    */
@@ -1465,6 +1490,7 @@
         rangeType: index,
         disabledType: 'date' // 日面板，检测当前日期是否禁用
       });
+      that.cellRender(item, {year: YMD[0], month: YMD[1], date: YMD[2]}, 'date');
     });
 
     //同步头部年月
@@ -1612,6 +1638,7 @@
           rangeType: index,
           disabledType: 'date' // 年面板，检测当前年份中的所有日期是否禁用
         });
+        that.cellRender(li, {year: yearNum, month: 1, date: 1}, 'year');
         yearNum++;
       });
 
@@ -1651,6 +1678,7 @@
           rangeType: index,
           disabledType: 'date' // 月面板，检测当前月份中的所有日期是否禁用
         });
+        that.cellRender(li, {year: listYM[0], month: i + 1, date: 1}, 'month');
       });
 
       lay(elemYM[isCN ? 0 : 1]).attr('lay-ym', listYM[0] + '-' + listYM[1])
