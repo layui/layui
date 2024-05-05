@@ -9,10 +9,49 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+<h2 id="v2.9.9" class="ws-anchor">
+  v2.9.9
+  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
+  <span class="layui-badge-rim">2024-05-05</span>
+</h2>
+
+- #### laydate
+  - 新增 `mark` 和 `holidays` 选项的函数类型支持，以实现更灵活的赋值 #1786 @Sight-wcg
+  - 新增 `cellRender` 选项，用于自定义单元格内容，可实现农历扩展 #1843 @Sight-wcg
+  - 新增 `formatToDisplay` 选项，仅用于格式化日期显示的格式 #1788 @Sight-wcg
+  - 修复点击时间时 `change` 回调未触发的问题 #1787 @Sight-wcg
+- #### treeTable
+  - 新增对 `tree.view` 的图标相关选项中的 className 设置功能 #1808 @Sight-wcg
+  - 修复删除所有行后，再次添加新行失败的问题 #1758 @Sight-wcg
+  - 修复删除所有行后，全选按钮选中的问题 #1759 @Sight-wcg
+  - 修复删除子节点时，内部缓存未同步的问题 #1760 @Sight-wcg
+  - 修复节点移动后，点击事件中行索引获取错误的问题 #1760 @Sight-wcg
+  - 修复添加和删除节点时，未更新节点图标的问题 #1784 @Sight-wcg
+  - 修复删除子节点时，内部未更新 `isParentKey` 的问题 #1792 @Sight-wcg
+  - 修复节点移动后，行索引获取错误 #1812 @Sight-wcg
+- #### form
+  - 修复 `select`  组件当设置 `lay-creatable=""` 属性时的 XSS 问题 #1813 @Sight-wcg
+- #### tree
+  - 修复编辑节点标题时的 XSS 问题 #1845
+- #### upload
+  - 新增 `choose` 回调的 `getChooseFiles` 方法，用于获取本次选取的文件 #1849 @Sight-wcg
+  - 修复多文件上传时能选择已在队列中的文件的问题 #1757 @Diyar-IT
+- #### dropdown
+  - 将 `id` 选项添加到触发元素的 `lay-id` 属性上，以配合其它组件使用 #1761 @Sight-wcg
+- #### element
+  - 改进自定义 tab 的索引获取 #1853 @Sight-wcg
+- #### colorpicker
+  - 优化游标显示问题 #1850 @Sight-wcg
+  - 优化 RGBA 颜色输入框显示不全的问题 #1851 @Sight-wcg
+- #### flow
+  - 加强 `flow.load` 以便在重复执行时解除旧的事件 #1852 @Sight-wcg
+
+### 下载： [layui-v2.9.9.zip](https://gitee.com/layui/layui/attach_files/1757745/download)
+
+---
 
 <h2 id="v2.9.8" class="ws-anchor">
   v2.9.8
-  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
   <span class="layui-badge-rim">2024-03-31</span>
 </h2>
 
