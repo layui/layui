@@ -488,14 +488,14 @@ layui.define(['jquery', 'lay'], function(exports){
       var move = function(e){
         var top = oldtop + (e.clientY - oldy)
         ,left = oldleft + (e.clientX - oldx)
-        ,maxh = basis[0].offsetHeight - 3
-        ,maxw = basis[0].offsetWidth - 3;
-        if(top < -3)top = -3;
+        ,maxh = basis[0].offsetHeight
+        ,maxw = basis[0].offsetWidth;
+        if(top < 0)top = 0;
         if(top > maxh)top = maxh;
-        if(left < -3)left = -3;
+        if(left < 0)left = 0;
         if(left > maxw)left = maxw;
-        var s = (left + 3)/260*100
-        ,b = 100 - (top + 3)/180*100;
+        var s = left/260*100
+        ,b = 100 - top/180*100;
         _b = b;
         _s = s;
         change(_h, s, b, _a); 
@@ -507,14 +507,14 @@ layui.define(['jquery', 'lay'], function(exports){
     });
     
     basis.on('mousedown', function(e){
-      var top = e.clientY - $(this).offset().top - 3 + $win.scrollTop()
-      ,left = e.clientX - $(this).offset().left - 3 + $win.scrollLeft()
-      if(top < -3)top = -3;
-      if(top > this.offsetHeight - 3)top = this.offsetHeight - 3;
-      if(left < -3)left = -3;
-      if(left > this.offsetWidth - 3)left = this.offsetWidth - 3;
-      var s = (left + 3)/260*100
-      ,b = 100 - (top + 3)/180*100;
+      var top = e.clientY - $(this).offset().top + $win.scrollTop()
+      ,left = e.clientX - $(this).offset().left + $win.scrollLeft()
+      if(top < 0)top = 0;
+      if(top > this.offsetHeight)top = this.offsetHeight;
+      if(left < 0)left = 0;
+      if(left > this.offsetWidth)left = this.offsetWidth;
+      var s = left/260*100
+      ,b = 100 - top/180*100;
       _b = b;
       _s = s;
       change(_h, s, b, _a); 
@@ -602,16 +602,17 @@ layui.define(['jquery', 'lay'], function(exports){
     var hex = HSBToHEX({h:h, s:100, b:100});
     var color = HSBToHEX({h:h, s:s, b:b});
     var sidetop = h/360*180;
-    var top = 180 - b/100*180 - 3;
-    var left = s/100*260 - 3;
+    var top = 180 - b/100*180;
+    var left = s/100*260;
+    var basisElem = that.elemPicker.find('.' + PICKER_BASIS)[0];
     
     that.elemPicker.find('.' + PICKER_SIDE_SLIDER).css("top", sidetop); //滑块的top
-    that.elemPicker.find('.' + PICKER_BASIS)[0].style.background = '#' + hex; //颜色选择器的背景
+    basisElem.style.background = '#' + hex; //颜色选择器的背景
     
     //选择器的top left
     that.elemPicker.find('.' + PICKER_BASIS_CUR).css({
-      "top": top
-      ,"left": left
+      "top": top / basisElem.offsetHeight * 100 + '%',
+      "left": left / basisElem.offsetWidth * 100 + '%' 
     });
     
     // if(type === 'change') return;
