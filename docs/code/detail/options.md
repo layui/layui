@@ -243,6 +243,16 @@ text: {
 
 </td>
     </tr>
+     <tr>
+<td>height</td>
+<td>
+  
+控制整个面板的高度
+
+</td>
+<td>string</td>
+<td>-</td>
+    </tr>
     <tr>
 <td>theme <sup>2.8.17+</sup></td>
 <td>
