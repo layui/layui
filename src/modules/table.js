@@ -906,7 +906,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.layMain.find('table').width('auto');
     }
 
-    that.loading(!0);
   };
 
   // 重置表格尺寸/结构
@@ -971,6 +970,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     that.syncCheckAll();
     that.renderForm();
     that.setColsWidth();
+    that.loading(true);
   };
 
   // 初始页码
@@ -997,6 +997,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     };
     var done = function(res, origin){
       that.setColsWidth();
+      that.loading(true);
       typeof options.done === 'function' && options.done(
         res, curr, res[response.countName], origin
       );
