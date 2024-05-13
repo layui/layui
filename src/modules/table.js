@@ -775,8 +775,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
     }() - that.getScrollWidth(that.layMain[0]) - 1;
 
     // 计算自动分配的宽度
-    var tmpwrap = $('<div style="position:fixed;left:0;" class="layui-table-cell"></div>').appendTo(document.body);
+    var tmpwrap = $('<div style="position:fixed;left:0;" class="layui-table-cell"></div>').appendTo(document.body);  //临时计算宽度的容器
 
+    //获取最大宽度
     function getContentWidth(item2) {
       var width = 0;
       layui.each(options.data, function () {
@@ -834,7 +835,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
     // 记录自动列数
     that.autoColNums = autoColNums = autoColNums > 0 ? autoColNums : 0;
 
-    // 设置列宽
+    // 设置列宽，删除不必要的判断，因每一列都有列宽度值
     that.eachCols(function (i3, item3) {
       that.cssRules(item3.key, function (item) {
         item.style.width = item3.width + 'px';

@@ -1115,7 +1115,8 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-table-sort[lay-sort="asc"] .layui-table-sort-asc{border-bottom-color: #000;}
 .layui-table-sort[lay-sort="desc"] .layui-table-sort-desc{border-top-color: #000;}
 
-.layui-table-cell{height: 38px; line-height: 28px; padding: 6px 15px; position: relative; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-sizing: border-box;}
+.layui-table-cell { height: auto; line-height: 28px; padding: 6px 15px; position: relative; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-sizing: border-box; }
+.layui-table-cell.nowrap { overflow: auto; text-overflow: initial; white-space: normal; }}
 .layui-table-cell .layui-form-checkbox[lay-skin="primary"]{top: -1px; padding: 0;}
 .layui-table-cell .layui-form-checkbox[lay-skin="primary"] > div{padding-left: 24px;}
 .layui-table-cell .layui-table-link{color: #01AAED;}
