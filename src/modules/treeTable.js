@@ -1072,6 +1072,23 @@ layui.define(['table'], function (exports) {
     var that = this;
     that.tableIns = table[type === 'reloadData' ? 'reloadData' : 'reload'](that.tableIns.config.id, $.extend(true, {}, that.config));
     that.config = that.tableIns.config;
+    /**
+     * treeTable重载数据时，会先加载显示顶层节点，然后根据重载数据前的子节点展开状态，展开相应的子节点，
+     * 那么如果重载数据前有滚动条滚动在某个位子，重新加载时顶层节点如果比较少，只显示顶层节点时没有滚动条的情况下，
+     * 自动展开子节点后，滚动条就会显示在顶部，无法保持在重载数据之前的位置。
+     */
+    if (that.config.scrollPos === 'fixed' && type === 'reloadData') {
+      // 处理保持滚动条的问题,重载数据前记住滚动条的位置
+      var scrollTop = $('div[lay-id="' + that.config.id + '"]').find('.layui-table-body.layui-table-main').scrollTop();
+      if (typeof that.config.done === 'function') {
+        let oriDone = that.config.done;
+        that.config.done = function(){
+          oriDone && oriDone.call(this);
+          // 设置滚动条到原来的位置
+          $('div[lay-id="' + that.config.id + '"]').find('.layui-table-body').scrollTop(scrollTop);
+        }
+      }
+    }
   };
 
   // 表格重载
@@ -1981,22 +1998,6 @@ layui.define(['table'], function (exports) {
     // deep = deep !== false; // 默认采用深拷贝
     var that = getThisTable(id);
     if (!that) return;
-    /**
-     * treeTable重载数据时，会先加载显示顶层节点，然后根据重载数据前的子节点展开状态，展开相应的子节点，
-     * 那么如果重载数据前有滚动条滚动在某个位子，重新加载时顶层节点如果比较少，只显示顶层节点时没有滚动条的情况下，
-     * 自动展开子节点后，滚动条就会显示在顶部，无法保持在重载数据之前的位置。
-     */
-    if ((that.config.scrollPos === 'fixed' || options.scrollPos === 'fixed') && type === 'reloadData') {
-      // 处理保持滚动条的问题,重载数据前记住滚动条的位置
-      let scrollTop = $('div[lay-id="' + id + '"]').find('.layui-table-body.layui-table-main').scrollTop();
-      if (typeof options.done === 'function' || typeof that.config.done === 'function') {
-        let oriDone = options.done || that.config.done;
-        options.done = function(){
-          oriDone && oriDone.call(this);
-          $('div[lay-id="' + id + '"]').find('.layui-table-body').scrollTop(scrollTop);
-        }
-      }
-    }
     that.reload(options, deep, type);
     return thisTreeTable.call(that);
   };
