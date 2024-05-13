@@ -1081,7 +1081,7 @@ layui.define(['table'], function (exports) {
       // 处理保持滚动条的问题,重载数据前记住滚动条的位置
       var scrollTop = $('div[lay-id="' + that.config.id + '"]').find('.layui-table-body.layui-table-main').scrollTop();
       if (typeof that.config.done === 'function') {
-        let oriDone = that.config.done;
+        var oriDone = that.config.done;
         that.config.done = function(){
           oriDone && oriDone.call(this);
           // 设置滚动条到原来的位置
