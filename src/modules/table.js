@@ -1053,7 +1053,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       res = {};
       var newData = options.data.concat();
       res[response.dataName] = options.data;
-      res[response.countName] = options.page.count || options.data.length;
+      res[response.countName] = (options.page && options.page.count) || options.data.length;
 
       // 记录合计行数据
       if (typeof options.totalRow === 'object') {
@@ -1307,11 +1307,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
 
     //显示隐藏分页栏
     that.layPage[(options.page || options.pagebar) ? 'removeClass' : 'addClass'](HIDE);
-    that.layPage.find(ELEM_PAGE_VIEW)[
-      (!options.page || count == 0 || (data.length === 0 && curr == 1))
-        ? 'addClass'
-      : 'removeClass'
-    ](HIDE_V);
+    that.layPage.find(ELEM_PAGE_VIEW)[(!options.page || count == 0 || (data.length === 0 && curr == 1)) ? 'addClass' : 'removeClass'](HIDE_V);
 
     //如果无数据
     if (data.length === 0) {
