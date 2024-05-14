@@ -1072,7 +1072,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
             // 耗时（接口请求+视图渲染）
             options.time = (new Date().getTime() - that.startTime) + ' ms';
           }
-          done(res);
+          done(res, opts.type);
         },
         error: function(e, msg){
           that.errorView('请求异常，错误提示：'+ msg);
@@ -1102,7 +1102,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         type: opts.type
       }), sort();
 
-      done(res);
+      done(res, opts.type);
     }
   };
 
