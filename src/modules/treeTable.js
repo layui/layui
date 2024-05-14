@@ -1085,7 +1085,7 @@ layui.define(['table'], function (exports) {
         that.config.done = function(){
           oriDone && oriDone.call(this);
           // 设置滚动条到原来的位置
-          $('div[lay-id="' + that.config.id + '"]').find('.layui-table-body').scrollTop(scrollTop);
+         that.config.elem.next().find(ELEM_BODY).scrollTop(scrollTop);
         }
       }
     }
