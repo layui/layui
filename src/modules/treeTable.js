@@ -1070,8 +1070,6 @@ layui.define(['table'], function (exports) {
   // 树表渲染
   Class.prototype.render = function (type) {
     var that = this;
-    that.tableIns = table[type === 'reloadData' ? 'reloadData' : 'reload'](that.tableIns.config.id, $.extend(true, {}, that.config));
-    that.config = that.tableIns.config;
     /**
      * treeTable重载数据时，会先加载显示顶层节点，然后根据重载数据前的子节点展开状态，展开相应的子节点，
      * 那么如果重载数据前有滚动条滚动在某个位子，重新加载时顶层节点如果比较少，只显示顶层节点时没有滚动条的情况下，
@@ -1079,16 +1077,24 @@ layui.define(['table'], function (exports) {
      */
     if (that.config.scrollPos === 'fixed' && type === 'reloadData') {
       // 处理保持滚动条的问题,重载数据前记住滚动条的位置
-      var scrollTop = that.config.elem.next().find(ELEM_BODY).scrollTop();
-      if (typeof that.config.done === 'function') {
+      if (typeof that.config.done === 'function' && !that.config.done.scrollPosPatch) {
+        var scrollTop = that.config.elem.next().find(ELEM_BODY).scrollTop();
         var oriDone = that.config.done;
         that.config.done = function(){
-          oriDone && oriDone.call(this);
+          var args = arguments;
+          oriDone && oriDone.call(this, args);
           // 设置滚动条到原来的位置
-         that.config.elem.next().find(ELEM_BODY).scrollTop(scrollTop);
+          if (that.config.scrollPos === 'fixed' && type === 'reloadData') {
+            that.config.elem.next().find(ELEM_BODY).scrollTop(scrollTop);
+          }
+          // 包装过的done函数执行完毕后，恢复原来的done函数
+          this.done = oriDone;
         }
+        that.config.done.scrollPosPatch = true;
       }
     }
+    that.tableIns = table[type === 'reloadData' ? 'reloadData' : 'reload'](that.tableIns.config.id, $.extend(true, {}, that.config));
+    that.config = that.tableIns.config;
   };
 
   // 表格重载
