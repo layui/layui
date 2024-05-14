@@ -329,8 +329,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       countName: 'count'
     }, options.response);
 
-    //如果 page 传入 laypage 对象
-    if (options.page !== null && typeof options.page === 'object') {
+    //如果 page 传入 仅传入的是页数
+    if (options.page) {
+      if (typeof options.page === 'number') {
+        options.page = { "limit": options.page };
+      }
       options.limit = options.page.limit || options.limit;
       options.limits = options.page.limits || options.limits;
       that.page = options.page.curr = options.page.curr || 1;
@@ -666,9 +669,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
   Class.prototype.renderPagebar = function () {
     var that = this;
     var options = that.config;
-
     var layPagebar = that.layPagebar = $('<div class="layui-inline layui-table-pagebar"></div>');
-
     // 开启分页栏自定义模板
     if (options.pagebar) {
       var pagebarHtml = $(options.pagebar).html() || '';
@@ -981,7 +982,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       res = {};
       res[response.dataName] = table.cache[that.key];
       res[response.countName] = options.url ? (layui.type(options.page) === 'object' ? options.page.count : res[response.dataName].length) : options.data.length;
-
       // 记录合计行数据
       if (typeof options.totalRow === 'object') {
         res[response.totalRowName] = $.extend({}, that.totalRow);
@@ -1054,10 +1054,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       var startLimit = curr * options.limit - options.limit;
       var newData = options.data.concat();
 
-      res[response.dataName] = options.page
-        ? newData.splice(startLimit, options.limit)
-      : newData;
-      res[response.countName] = options.data.length;
+      res[response.dataName] = options.page ? newData.splice(startLimit, options.limit) : newData;
+      res[response.countName] = options.page.count || options.data.length;
 
       // 记录合计行数据
       if (typeof options.totalRow === 'object') {
@@ -1340,21 +1338,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
         elem: 'layui-table-page' + options.index,
         count: count,
         limit: options.limit,
-        limits: options.limits || [10, 20, 30, 40, 50, 60, 70, 80, 90],
+        limits: options.limits || [15, 30, 50, 80, 100, 300, 500],
         groups: 3,
         layout: ['prev', 'page', 'next', 'skip', 'count', 'limit'],
         prev: '<i class="layui-icon">&#xe603;</i>',
         next: '<i class="layui-icon">&#xe602;</i>',
-        jump: function (obj, first) {
-          if (!first) {
-            //分页本身并非需要做以下更新，下面参数的同步，主要是因为其它处理统一用到了它们
-            //而并非用的是 options.page 中的参数（以确保分页未开启的情况仍能正常使用）
-            that.page = obj.curr; //更新页码
-            options.limit = obj.limit; //更新每页条数
-
-            that.pullData(obj.curr);
-          }
-        }
       }, options.page);
       options.page.count = count; //更新总条数
       laypage.render(options.page);
@@ -2103,7 +2091,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
     that.layPagebar.on('click', '*[lay-event]', function (e) {
       var othis = $(this);
       var events = othis.attr('lay-event');
-
       layui.event.call(this, MOD_NAME, 'pagebar(' + filter + ')', $.extend({
         event: events,
         config: options
