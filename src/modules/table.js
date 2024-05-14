@@ -1159,7 +1159,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
           , '<div class="layui-table-cell laytable-cell-' + function () { // 返回对应的CSS类标识
             return item3.type === 'normal' ? key
               : (key + ' laytable-cell-' + item3.type);
-          }() + '"'
+          }() + (item3.nowrap === false ? " nowrap" : '') + '"'
           + (item3.align ? ' align="' + item3.align + '"' : '')
           + '>'
           + function () {
