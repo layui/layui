@@ -1082,7 +1082,7 @@ layui.define(['table'], function (exports) {
         var oriDone = that.config.done;
         that.config.done = function(){
           var args = arguments;
-          oriDone && oriDone.call(this, args);
+          oriDone && oriDone.apply(this, args);
           // 设置滚动条到原来的位置
           if (that.config.scrollPos === 'fixed' && type === 'reloadData') {
             that.config.elem.next().find(ELEM_BODY).scrollTop(scrollTop);
