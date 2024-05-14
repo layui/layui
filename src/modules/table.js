@@ -90,7 +90,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
   // 解析自定义模板数据
   var parseTempData = function (obj) {
     obj = obj || {};
-
     var options = this.config || {};
     var item3 = obj.item3; // 表头数据
     var content = obj.content; // 原始内容
@@ -285,7 +284,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
   Class.prototype.config = {
     limit: 10, // 每页显示的数量
     loading: true, // 请求数据时，是否显示 loading
-    escape: true, // 是否开启 HTML 编码功能，即转义 html 原文
+    escape: false, // 是否开启 HTML 编码功能，即转义 html 原文
     cellMinWidth: 60, // 所有单元格默认最小宽度
     cellMaxWidth: Number.MAX_VALUE, // 所有单元格默认最大宽度
     editTrigger: 'click', // 单元格编辑的事件触发方式
@@ -1131,7 +1130,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
         var field = item3.field || i3;
         var key = item3.key;
         var content = item1[field];
-
         if (content === undefined || content === null) content = '';
         if (item3.colGroup) return;
 
@@ -2623,19 +2621,22 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
 
     // 行工具条操作事件
     var toolFn = function (type) {
-      var othis = $(this);
+      var othis = $(this), event = othis.attr('lay-event');
       var td = othis.closest('td');
-      var index = othis.parents('tr').eq(0).attr('data-index');
+      var index = parseInt(othis.parents('tr').eq(0).attr('data-index'));
       // 标记当前活动行
       that.setRowActive(index);
-
+      if (options[event]) {
+        options[event].call(this, index, options.data[index] || {}, that.col(td.data('key')));
+        return;
+      }
       // 执行事件
       layui.event.call(
         this,
         MOD_NAME,
         (type || 'tool') + '(' + filter + ')',
         commonMember.call(this, {
-          event: othis.attr('lay-event'),
+          event: event,
           getCol: function () { // 获取当前列的表头配置信息
             return that.col(td.data('key'));
           }
