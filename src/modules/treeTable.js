@@ -1079,7 +1079,7 @@ layui.define(['table'], function (exports) {
      */
     if (that.config.scrollPos === 'fixed' && type === 'reloadData') {
       // 处理保持滚动条的问题,重载数据前记住滚动条的位置
-      var scrollTop = $('div[lay-id="' + that.config.id + '"]').find('.layui-table-body.layui-table-main').scrollTop();
+      var scrollTop = that.config.elem.next().find(ELEM_BODY).scrollTop();
       if (typeof that.config.done === 'function') {
         var oriDone = that.config.done;
         that.config.done = function(){
