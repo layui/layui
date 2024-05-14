@@ -71,7 +71,7 @@ layui.use(['table', 'dropdown'], function(){
     page: true,
     cols: [[
       {type: 'checkbox', fixed: 'left'},
-      {field:'id', fixed: 'left', width:80, title: 'ID', sort: true, totalRowText: '合计：'},
+      {field:'id', fixed: 'left', width:80, title: 'ID', sort: true, totalRow: '合计：'},
       {field:'username', width:80, title: '用户'},
       {field:'email', title:'邮箱 <i class="layui-icon layui-icon-tips layui-font-14" lay-event="email-tips" title="该字段开启了编辑功能" style="margin-left: 5px;"></i>', fieldTitle: '邮箱', hide: 0, width:150, expandedMode: 'tips', edit: 'text'},
       {field:'sex', width:80, title: '性别', sort: true},
@@ -161,7 +161,7 @@ layui.use(['table', 'dropdown'], function(){
                 /*{{!
                 cols: [[ // 重置表头
                   {type: 'checkbox', fixed: 'left'},
-                  {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计：'},
+                  {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRow: '合计：'},
                   {field:'sex', title:'性别', width:80, edit: 'text', sort: true},
                   {field:'experience', title:'积分', width:80, sort: true, totalRow: true, templet: '<div>{{= d.experience }} 分</div>'},
                   {field:'logins', title:'登入次数', width:100, sort: true, totalRow: true},
