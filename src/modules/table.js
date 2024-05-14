@@ -1051,10 +1051,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       });
     } else if (layui.type(options.data) === 'array') { //已知数据
       res = {};
-      var startLimit = curr * options.limit - options.limit;
       var newData = options.data.concat();
-
-      res[response.dataName] = options.page ? newData.splice(startLimit, options.limit) : newData;
+      res[response.dataName] = options.data;
       res[response.countName] = options.page.count || options.data.length;
 
       // 记录合计行数据
