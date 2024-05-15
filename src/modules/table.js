@@ -118,6 +118,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   // 字符
   var MOD_NAME = 'table';
+  var MOD_ID = 'lay-' + MOD_NAME + '-id';
   var ELEM = '.layui-table';
   var THIS = 'layui-this';
   var SHOW = 'layui-show';
@@ -392,16 +393,19 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       ];
       if(options.className) arr.push(options.className);
       return arr.join(' ');
-    }()).attr({
-      'lay-filter': 'LAY-TABLE-FORM-DF-'+ that.index,
-      'lay-id': options.id,
-      'style': function(){
-        var arr = [];
-        if(options.width) arr.push('width:'+ options.width + 'px;');
-        // if(options.height) arr.push('height:'+ options.height + 'px;');
-        return arr.join('')
-      }()
-    }).html(laytpl(TPL_MAIN, {
+    }()).attr(function(){
+      var obj = {
+        'lay-filter': 'LAY-TABLE-FORM-DF-'+ that.index,
+        'style': function(){
+          var arr = [];
+          if(options.width) arr.push('width:'+ options.width + 'px;');
+          // if(options.height) arr.push('height:'+ options.height + 'px;');
+          return arr.join('')
+        }()
+      }
+      obj[MOD_ID] = options.id;
+      return obj;
+    }()).html(laytpl(TPL_MAIN, {
       open: '{{', // 标签符前缀
       close: '}}' // 标签符后缀
     }).render({
@@ -2191,7 +2195,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
           if(dict.rule){
             var setWidth = dict.ruleWidth + e.clientX - dict.offset[0];
-            var id = thisTable.eventMoveElem.closest('.' + ELEM_VIEW).attr('lay-id');
+            var id = thisTable.eventMoveElem.closest('.' + ELEM_VIEW).attr(MOD_ID);
             var thatTable = getThisTable(id);
 
             if(!thatTable) return;
@@ -2207,7 +2211,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }).on('mouseup', function(e){
         if(thisTable.eventMoveElem){
           var th = thisTable.eventMoveElem; // 当前触发拖拽的 th 元素
-          var id = th.closest('.' + ELEM_VIEW).attr('lay-id');
+          var id = th.closest('.' + ELEM_VIEW).attr(MOD_ID);
           var thatTable = getThisTable(id);
 
           if(!thatTable) return;

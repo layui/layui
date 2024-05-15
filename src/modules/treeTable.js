@@ -60,6 +60,7 @@ layui.define(['table'], function (exports) {
 
   // 字符
   var MOD_NAME = 'treeTable';
+  var MOD_ID = 'lay-table-id';
   var HIDE = 'layui-hide';
 
   var ELEM_VIEW = '.layui-table-view';
@@ -564,7 +565,7 @@ layui.define(['table'], function (exports) {
     // treeNode // 需要展开的节点
     var trElem = treeNode.trElem;
     var tableViewElem = treeNode.tableViewElem || trElem.closest(ELEM_VIEW);
-    var tableId = treeNode.tableId || tableViewElem.attr('lay-id');
+    var tableId = treeNode.tableId || tableViewElem.attr(MOD_ID);
     var options = treeNode.options || table.getOptions(tableId);
     var dataIndex = treeNode.dataIndex || trElem.attr('lay-data-index'); // 可能出现多层
     var treeTableThat = getThisTable(tableId);
@@ -1102,12 +1103,12 @@ layui.define(['table'], function (exports) {
       });
       // #1463 expandNode 中已经展开过的节点不会重新渲染
       debounceFn('renderTreeTable2-' + tableId, function () {
-        form.render($('.layui-table-tree[lay-id="' + tableId + '"]'));
+        form.render($('.layui-table-tree[' + MOD_ID + '="' + tableId + '"]'));
       }, 0)();
     } else {
       debounceFn('renderTreeTable-' + tableId, function () {
         options.hasNumberCol && formatNumber(that);
-        form.render($('.layui-table-tree[lay-id="' + tableId + '"]'));
+        form.render($('.layui-table-tree[' + MOD_ID + '="' + tableId + '"]'));
       }, 0)();
     }
   }

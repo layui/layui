@@ -24,7 +24,7 @@
 
   // 模块名
   var MOD_NAME = 'laydate';
-  var MOD_ID = 'layui-' + MOD_NAME + '-id'; // 已渲染过的索引标记名
+  var MOD_ID = 'lay-' + MOD_NAME + '-id'; // 已渲染过的索引标记名
 
   // 外部调用
   var laydate = {
