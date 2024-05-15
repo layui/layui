@@ -182,7 +182,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
                       , ' laytable-cell-{{= item2.type }}'
                     , '{{# } }}'
                   , '{{# } }}'
-                , '" {{#if(item2.align){}}align="{{=item2.align}}"{{#}}}>'
+                , '" {{#if(item2.align){}} style="text-align:{{=item2.align}}"{{#}}}>'
                   , '{{# if(item2.type === "checkbox"){ }}' //复选框
                     , '<input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose" {{# if(item2[d.data.checkName]){ }}checked{{# }; }}>'
                   , '{{# } else { }}'
@@ -210,10 +210,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
     // 主模板
     var TPL_MAIN = [
       , '{{# if(d.data.toolbar){ }}'
-      , '<div class="layui-table-tool">'
+      , '<form class="layui-table-tool">'
         , '<div class="layui-table-tool-temp"></div>'
         , '<div class="layui-table-tool-self"></div>'
-      , '</div>'
+      , '</form>'
       , '{{# } }}'
 
       , '<div class="layui-table-box">'
@@ -621,20 +621,42 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
         var options = that.config
 
         // 添加工具栏左侧模板
-        var leftDefaultTemp = [
-          '<div class="layui-inline" lay-event="add"><i class="layui-icon layui-icon-add-1"></i></div>',
-          '<div class="layui-inline" lay-event="update"><i class="layui-icon layui-icon-edit"></i></div>',
-          '<div class="layui-inline" lay-event="delete"><i class="layui-icon layui-icon-delete"></i></div>'
-        ].join('');
         var elemToolTemp = that.layTool.find('.layui-table-tool-temp');
 
         if (options.toolbar === 'default') {
-            elemToolTemp.html(leftDefaultTemp);
+            elemToolTemp.html(['<div class="layui-inline" lay-event="add"><i class="layui-icon layui-icon-add-1"></i></div>', '<div class="layui-inline" lay-event="update"><i class="layui-icon layui-icon-edit"></i></div>', '<div class="layui-inline" lay-event="delete"><i class="layui-icon layui-icon-delete"></i></div>'].join(''));
         } else if (typeof options.toolbar === 'string') {
             var toolbarHtml = $(options.toolbar).html() || '';
             toolbarHtml && elemToolTemp.html(
               laytpl(toolbarHtml).render(options)
             );
+        } else if (typeof options.toolbar === "object") {
+            $.each(options.toolbar, function () {
+                if (this == "-") {
+                    elemToolTemp.append('<div class="layui-inline layui-toolbar-split"></div>');
+                    return;
+                }
+
+                if (this.text) {
+                    if (this.text.constructor !== String) {
+                        elemToolTemp.append(this.text);
+                        return;
+                    }
+                    this.text = '<span>' + this.text + '</span>';
+                }
+                if (this.icon) {
+                    this.text = '<i class="layui-icon ' + this.icon + '"></i>' + this.text;
+                }
+                var elem = $('<button class="layui-inline layui-btn"' + (this.title ? ' title="' + this.title + '"' : '') + '>' + this.text + '</button>')
+
+                var t = this;
+                if (this.handler) {
+                    elem.click(function () {
+                        t.handler();
+                    });
+                }
+                elemToolTemp.append(elem);
+            });
         }
 
         // 添加工具栏右侧面板
@@ -660,9 +682,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
             layui.each(options.defaultToolbar, function (i, item) {
                 var thisItem = typeof item === 'string' ? layout[item] : item;
                 if (thisItem) {
-                    iconElem.push('<div class="layui-inline" title="' + thisItem.title + '" lay-event="' + thisItem.layEvent + '">'
-                      + '<i class="layui-icon ' + thisItem.icon + '"></i>'
-                    + '</div>');
+                    iconElem.push('<div class="layui-inline" title="' + thisItem.title + '" lay-event="' + thisItem.layEvent + '"><i class="layui-icon ' + thisItem.icon + '"></i></div>');
                 }
             });
         }
@@ -827,7 +847,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
                 countWidth = countWidth + width;
             });
 
-            countWidth = countWidth - autoWidth + 1;
+            countWidth = countWidth - autoWidth + 2;
 
             if (autotd.length && cntrWidth > countWidth) {
                 // 如果未填充满，则将剩余宽度平分
@@ -1160,7 +1180,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
                       return item3.type === 'normal' ? key
                         : (key + ' laytable-cell-' + item3.type);
                   }() + (item3.nowrap === false ? " nowrap" : '') + '"'
-                  + (item3.align ? ' align="' + item3.align + '"' : '')
+                  + (item3.align ? ' style="text-align:' + item3.align + '"' : '')
                   + '>'
                   + function () {
                       var tplData = $.extend(true, {
@@ -1204,7 +1224,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
                       }
 
                       //解析工具列模板
-                      if (item3.toolbar) {
+                      if (item3.toolbar && item3.toolbar.constructor !== Object) {
                           return laytpl($(item3.toolbar).html() || '').render(tplData);
                       }
                       return parseTempData.call(that, {
@@ -1445,7 +1465,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
                   : (key + ' laytable-cell-' + item3.type);
               }() + '"' + function () {
                   var attr = [];
-                  if (item3.align) attr.push('align="' + item3.align + '"'); // 对齐方式
+                  if (item3.align) attr.push('style="text-align:' + item3.align + '"'); // 对齐方式
                   return attr.join(' ');
               }() + '>' + function () {
                   var totalRow = item3.totalRow || options.totalRow;

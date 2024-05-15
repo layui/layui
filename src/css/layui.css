@@ -1768,3 +1768,7 @@ body .layui-util-face .layui-layer-content { padding: 0; background-color: #fff;
 }
 
 .layui-anim-fadeout { -webkit-animation-name: layui-fadeout; animation-name: layui-fadeout }
+.layui-toolbar-split { border: none; }
+.layui-toolbar-split::before { content: "|"; color: #f8f8f8; margin: 0 5px; }
+.layui-table-tool .layui-btn { height: 28px; line-height: 28px; padding: 0 8px; overflow: hidden; background-color: transparent; color: #16baaa; border-radius: 5px; }
+.layui-table-tool .layui-btn:hover { border: solid 1px #16baaa; background-color: rgba(22, 186, 170, 0.05); }
