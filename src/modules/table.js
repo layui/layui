@@ -1335,7 +1335,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
                 limit: options.limit,
                 limits: options.limits || [15, 30, 50, 80, 100, 300, 500],
                 groups: 3,
-                layout: ['prev', 'page', 'next', 'skip', 'count', 'limit'],
+                layout: ['prev', 'page', 'next', 'skip', 'count', 'limit', 'refresh'],
                 prev: '<i class="layui-icon">&#xe603;</i>',
                 next: '<i class="layui-icon">&#xe602;</i>',
             }, options.page);
