@@ -789,6 +789,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
             });
             return Math.ceil(width);
         }
+        //计算表头宽度
+
 
         // 遍历所有列
         layui.each(options.cols, function (i1, item1) {
@@ -803,6 +805,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
 
                 if (item2.colGroup || item2.hide) return;
 
+                //获取表头宽度，当列数据少的时候防止表头显示不全
+                var header_width = tmpwrap.html(item2.title || "").outerWidth() || minWidth;
+
                 var width = item2.org_width;
                 if (width == undefined) {
                     width = getContentWidth(item2);
@@ -815,7 +820,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
                 } else if (/\d+%$/.test(width)) { // 列宽为百分比
                     width = parseFloat(width) / 100 * cntrWidth;
                 }
-                width = Math.min(width, maxWidth);
+                width = Math.max(Math.min(width, maxWidth), header_width);
 
                 if (item2.hide) width = 0;
                 item2.width = Math.ceil(width);
