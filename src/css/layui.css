@@ -1111,8 +1111,7 @@ hr.layui-border-black { border-width: 0 0 1px; }
 .layui-table-sort[lay-sort="asc"] .layui-table-sort-asc { border-bottom-color: #000; }
 .layui-table-sort[lay-sort="desc"] .layui-table-sort-desc { border-top-color: #000; }
 
-.layui-table-cell { height: auto; line-height: 28px; padding: 6px 15px; position: relative; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-sizing: border-box; }
-.layui-table-cell.nowrap { overflow: auto; text-overflow: initial; white-space: normal; }
+.layui-table-cell { height: 38px; line-height: 28px; padding: 6px 15px; position: relative; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-sizing: border-box; }
 .layui-table-cell .layui-form-checkbox[lay-skin="primary"] { top: -1px; padding: 0; }
 .layui-table-cell .layui-form-checkbox[lay-skin="primary"] > div { padding-left: 24px; }
 .layui-table-cell .layui-table-link { color: #01AAED; }
@@ -1547,10 +1546,10 @@ body .layui-util-face .layui-layer-content { padding: 0; background-color: #fff;
 
 .layui-colorpicker-main { position: absolute; left: -999999px; top: -999999px; z-index: 77777777; width: 280px; margin: 5px 0; padding: 7px; background: #FFF; border: 1px solid #d2d2d2; border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,.12); }
 .layui-colorpicker-main-wrapper { height: 180px; position: relative; }
-.layui-colorpicker-basis { width: 260px; height: 100%; position: relative; overflow: hidden; }
+.layui-colorpicker-basis { width: 260px; height: 100%; position: relative; }
 .layui-colorpicker-basis-white { width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: linear-gradient(90deg, #FFF, hsla(0,0%,100%,0)); }
 .layui-colorpicker-basis-black { width: 100%; height: 100%; position: absolute; top: 0; left: 0; background: linear-gradient(0deg, #000, transparent); }
-.layui-colorpicker-basis-cursor { width: 10px; height: 10px; border: 1px solid #FFF; border-radius: 50%; position: absolute; top: 0%; right: 100%; cursor: pointer; transform: translate(-50%,-50%); }
+.layui-colorpicker-basis-cursor { width: 10px; height: 10px; border: 1px solid #FFF; border-radius: 50%; position: absolute; top: -3px; right: -3px; cursor: pointer; }
 .layui-colorpicker-side { position: absolute; top: 0; right: 0; width: 12px; height: 100%; background: linear-gradient(#F00, #FF0, #0F0, #0FF, #00F, #F0F, #F00); }
 .layui-colorpicker-side-slider { width: 100%; height: 5px; box-shadow: 0 0 1px #888888; box-sizing: border-box; background: #FFF; border-radius: 1px; border: 1px solid #f0f0f0; cursor: pointer; position: absolute; left: 0; }
 .layui-colorpicker-main-alpha { display: none; height: 12px; margin-top: 7px; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==) }
@@ -1562,7 +1561,7 @@ body .layui-util-face .layui-layer-content { padding: 0; background-color: #fff;
 .layui-colorpicker-pre-isalpha { background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==) }
 .layui-colorpicker-pre.layui-this { box-shadow: 0 0 3px 2px rgba(0,0,0,.15); }
 .layui-colorpicker-pre > div { height: 100%; border-radius: 2px; }
-.layui-colorpicker-main-input { text-align: right; padding-top: 7px; }
+.layui-colorpicker-main-input { text-align: right; padding-top: 7px; position: relative; z-index: 10; }
 .layui-colorpicker-main-input .layui-btn-container .layui-btn { margin: 0 0 0 10px; }
 .layui-colorpicker-main-input div.layui-inline { float: left; font-size: 14px; }
 .layui-colorpicker-main-input input.layui-input { width: 168px; height: 30px; color: #5F5F5F; padding-left: 5px; }
@@ -1768,7 +1767,21 @@ body .layui-util-face .layui-layer-content { padding: 0; background-color: #fff;
 }
 
 .layui-anim-fadeout { -webkit-animation-name: layui-fadeout; animation-name: layui-fadeout }
+
+/*增加自定义工具栏按钮及分隔符*//
 .layui-toolbar-split { border: none; }
 .layui-toolbar-split::before { content: "|"; color: #f8f8f8; margin: 0 5px; }
 .layui-table-tool .layui-btn { height: 28px; line-height: 28px; padding: 0 8px; overflow: hidden; background-color: transparent; color: #16baaa; border-radius: 5px; }
 .layui-table-tool .layui-btn:hover { border: solid 1px #16baaa; background-color: rgba(22, 186, 170, 0.05); }
+
+/*增加在父容器内全视口布局（在父容器使用rsseasy类名），（填充满父容器，工具栏、分页栏固定在上下，数据表格高度自动但不超过父容器去掉工具栏与分页栏后的可视高度，当数据行内容超出时，显示滚动条）*/ /
+.rsseasy .layui-table-view { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+.rsseasy .layui-table-box { position: absolute; top: 0; left: 0; right: 0; bottom: 45px; z-index: 1; }
+.rsseasy .layui-table-body { position: absolute; top: 41px; left: 0; right: 0; bottom: 0; }
+.rsseasy .layui-table-page { position: absolute; left: 0; bottom: 0; right: 0; }
+.rsseasy .layui-laypage span, .layui-laypage a { font-size: 14px; }
+.rsseasy .layui-table-cell { text-align: center; }
+.rsseasy .layui-table-tool { position: absolute; top: 0; left: 0; right: 0; height: 45px; min-height: initial; line-height: normal; padding: 8px; overflow: hidden; }
+.rsseasy .layui-table-tool + .layui-table-box { top: 46px; }
+.rsseasy .layui-table-body .layui-none { text-align: left; }
+.rsseasy .layui-table-header .layui-table-cell { white-space: normal; text-overflow: inherit; overflow: visible; }
