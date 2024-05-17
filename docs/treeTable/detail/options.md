@@ -76,16 +76,21 @@ treeTable.render({
 | 属性 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | indent | 层级缩进量 | number | `14` |
-| flexIconClose | 关闭时的折叠图标 | string | - |
-| flexIconOpen | 打开时的折叠图标 | string | - |
+| flexIconClose | 自定义关闭时的折叠按钮图标 | string | - |
+| flexIconOpen | 自定义打开时的折叠按钮图标 | string | - |
 | showIcon | 是否显示节点图标 | boolean | `true` |
 | icon | 自定义节点图标。若设置了该属性或数据中有该字段信息，不管打开还是关闭都以这个图标的值为准 | string | - |
 | iconClose | 自定义关闭时的节点图标 | string | - |
 | iconOpen | 自定义打开时的节点图标 | string | - |
-| iconLeaf | 叶子节点的图标 | string | - |
+| iconLeaf | 自定义叶子节点的图标 | string | - |
 | showFlexIconIfNotParent | 若非父节点时，是否显示折叠图标 | boolean | `false` |
 | dblClickExpand | 双击节点时，是否自动展开父节点 | boolean | `true` |
 | expandAllDefault <sup>2.8.7+</sup> | 是否默认展开全部节点 | boolean | `false` |
+
+自定义图标支持 HTML 字符串和图标类名。例如：
+
+- `'<i class="i-svg-spinners-blocks-wave"></i>'`
+- `'layui-icon layui-icon-addition'`
 
 </td>
     </tr>
@@ -101,7 +106,7 @@ treeTable.render({
 
 | 属性 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| isSimpleData | 是否简单数据模式 | boolean | `false` |
+| isSimpleData | 是否使用平铺数据格式(Array) | boolean | `false` |
 | rootPid | 用于设置根节点的 `pid` 属性值 | string | `null` |
 | cascade | 用于设置复选的级联方式。支持以下可选值：<ul><li><code>all</code> : 所有节点联动</li><li><code>parent</code> : 仅对父节点联动</li><li><code>children</code> : 仅对子节点联动</li><li><code>none</code> <sup>2.8.16+</sup> : 不做任何联动</li></ul> | string | `all` |
 
