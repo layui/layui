@@ -149,7 +149,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
   var TPL_HEADER = function (options) {
     var rowCols = '{{#var colspan = layui.type(item2.colspan2) === \'number\' ? item2.colspan2 : item2.colspan; if(colspan){}} colspan="{{=colspan}}"{{#} if(item2.rowspan){}} rowspan="{{=item2.rowspan}}"{{#}}}';
     options = options || {};
-    console.log('{{# d}}');
     return ['<table cellspacing="0" cellpadding="0" border="0" class="layui-table" '
       , '{{# if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{# } }} {{# if(d.data.size){ }}lay-size="{{=d.data.size}}"{{# } }} {{# if(d.data.even){ }}lay-even{{# } }}>'
       , '<thead>'
@@ -2512,7 +2511,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       params.update(obj);
       // 执行 API 编辑事件
       if (options.onCellEdited) {
-        options.onCellEdited.call(this, parent(index), data, { "oldValue": params.oldValue, "value": value });
+        options.onCellEdited.call(this, parseInt(index), data, { "oldValue": params.oldValue, "value": value });
       }
       else {
         layui.event.call(td[0], MOD_NAME, 'edit(' + filter + ')', params);
