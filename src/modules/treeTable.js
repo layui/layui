@@ -310,6 +310,7 @@ layui.define(['table'], function (exports) {
     childrenKey = childrenKey || 'children';
     // 创建一个空的 nodes 对象，用于保存所有的节点
     var nodes = {};
+    var rootNodes = [];
     // 遍历所有节点，将其加入 nodes 对象中
     var idTemp = '';
     layui.each(flatArr, function (index, item) {
@@ -319,20 +320,20 @@ layui.define(['table'], function (exports) {
     })
     // 遍历所有节点，将其父子关系加入 nodes 对象
     var pidTemp = '';
-    layui.each(nodes, function (index, item) {
+    layui.each(flatArr, function(index, item){
+      idTemp = idKey + item[idKey];
       pidTemp = idKey + item[pIdKey];
-      if (pidTemp && nodes[pidTemp]) {
-        nodes[pidTemp][childrenKey].push(item);
+      var currentNode = nodes[idTemp];
+      var parentNode = nodes[pidTemp];
+      var isRootNode = (rootPid ? currentNode[pIdKey] === rootPid : !currentNode[pIdKey]);
+      if(pidTemp && parentNode){
+        parentNode[childrenKey].push(currentNode);
+      }else if(isRootNode){
+        rootNodes.push(currentNode);
       }
     })
-    // 返回顶层节点
-    return Object.keys(nodes)
-      .map(function(k) {
-        return nodes[k];
-      })
-      .filter(function (item) {
-        return rootPid ? item[pIdKey] === rootPid : !item[pIdKey];
-      })
+
+    return rootNodes;
   }
 
   Class.prototype.flatToTree = function (tableData) {
