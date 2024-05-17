@@ -148,8 +148,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
   // thead 区域模板
   var TPL_HEADER = function (options) {
     var rowCols = '{{#var colspan = layui.type(item2.colspan2) === \'number\' ? item2.colspan2 : item2.colspan; if(colspan){}} colspan="{{=colspan}}"{{#} if(item2.rowspan){}} rowspan="{{=item2.rowspan}}"{{#}}}';
-
     options = options || {};
+    console.log('{{# d}}');
     return ['<table cellspacing="0" cellpadding="0" border="0" class="layui-table" '
       , '{{# if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{# } }} {{# if(d.data.size){ }}lay-size="{{=d.data.size}}"{{# } }} {{# if(d.data.even){ }}lay-even{{# } }}>'
       , '<thead>'
@@ -294,6 +294,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
     defaultToolbar: ['filter', 'exports', 'print'], // 工具栏右侧图标
     defaultContextmenu: true, // 显示默认上下文菜单
     autoSort: true, // 是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
+    checkOnClick: true, //当选择行时自动选中当前行中的单选或复选框
     text: {
       none: '无数据'
     },
@@ -782,7 +783,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
     var colNums = 0; // 列个数
     var autoColNums = 0; // 自动列宽的列个数
     var autoWidth = 0; // 自动列分配的宽度
-    var countWidth = 0; // 所有列总宽度和
+    var totalWidth = 0; // 所有列总宽度和
     var cntrWidth = that.setInit('width');
     // 统计列个数
     that.eachCols(function (i, item) {
@@ -800,10 +801,20 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
     function getContentWidth(item2) {
       var width = 0;
       layui.each(options.data, function () {
-        tmpwrap.html(this[item2.field] || "");
+        switch (item2.type) {
+          case "checkbox":
+            tmpwrap.addClass("laytable-cell-checkbox").html('<input type="checkbox">');
+            break;
+          case "radio":
+            tmpwrap.addClass("laytable-cell-radio").html('<input type="radio">');
+            break;
+          default:
+            tmpwrap.removeClass("laytable-cell-checkbox").html(this[item2.field] || "");
+            break;
+        }
         width = Math.max(width, tmpwrap.outerWidth());
       });
-      return Math.ceil(width);
+      return Math.max(Math.ceil(width), item2.hd_width);
     }
     //计算表头宽度
 
@@ -822,7 +833,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
         if (item2.colGroup || item2.hide) return;
 
         //获取表头宽度，当列数据少的时候防止表头显示不全
-        var header_width = tmpwrap.html(item2.title || "").outerWidth() || minWidth;
+        item2.hd_width = tmpwrap.html(item2.title || "").outerWidth() || minWidth;
 
         var width = item2.org_width;
         if (width == undefined) {
@@ -836,18 +847,18 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
         } else if (/\d+%$/.test(width)) { // 列宽为百分比
           width = parseFloat(width) / 100 * cntrWidth;
         }
-        width = Math.max(Math.min(width, maxWidth), header_width);
+        width = Math.min(width, maxWidth);
 
         if (item2.hide) width = 0;
         item2.width = Math.ceil(width);
-        countWidth = countWidth + width;
+        totalWidth += item2.width;
       });
 
-      countWidth = countWidth - autoWidth + 2;
+      totalWidth = totalWidth - autoWidth + 2;
 
-      if (autotd.length && cntrWidth > countWidth) {
+      if (autotd.length && cntrWidth > totalWidth) {
         // 如果未填充满，则将剩余宽度平分
-        autoWidth = (cntrWidth - countWidth) / autoColNums
+        autoWidth = (cntrWidth - totalWidth) / autoColNums
         layui.each(autotd, function () {
           this.width = autoWidth;
         });
@@ -2309,6 +2320,19 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
 
       if (checkbox[0].disabled) return;
 
+      if (options.singleSelect) {
+
+        that.setRowChecked({
+          "index": "all",
+          "checked": false,
+        });
+        if (isAll) {
+          index = 0;
+          checked = true;
+          isAll = false;
+        }
+      }
+
       // 全选
       if (isAll) {
         that.setRowChecked({
@@ -2389,7 +2413,16 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       if ($(e.target).is(UNROW) || $(e.target).closest(UNROW)[0]) {
         return;
       }
-      setRowEvent.call(this, 'row');
+      var t = $(this);
+      if (options.checkOnClick) {
+        t.find(".layui-form-radio,.layui-form-checkbox").click();
+      }
+      if (options.onSelectRow) {
+        var index = parseInt(t.data('index'));
+        options.onSelectRow.call(this, index, options.data[index] || {})
+      } else {
+        setRowEvent.call(this, 'row');
+      }
     }).on('dblclick', 'tr', function () { // 双击行
       setRowEvent.call(this, 'rowDouble');
     }).on('contextmenu', 'tr', function (e) { // 菜单
@@ -2422,9 +2455,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
 
       // 是否开启编辑
       // 若 edit 传入函数，则根据函数的返回结果判断是否开启编辑
-      var editType = typeof col.edit === 'function'
-        ? col.edit(data)
-      : col.edit;
+      var editType = typeof col.edit === 'function' ? col.edit(data) : col.edit;
 
       // 显示编辑表单
       if (editType) {
@@ -2479,9 +2510,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       var obj = {}; //变更的键值
       obj[field] = value;
       params.update(obj);
-
       // 执行 API 编辑事件
-      layui.event.call(td[0], MOD_NAME, 'edit(' + filter + ')', params);
+      if (options.onCellEdited) {
+        options.onCellEdited.call(this, parent(index), data, { "oldValue": params.oldValue, "value": value });
+      }
+      else {
+        layui.event.call(td[0], MOD_NAME, 'edit(' + filter + ')', params);
+      }
     }).on('blur', '.' + ELEM_EDIT, function () { // 单元格编辑 - 恢复非编辑状态事件
       $(this).remove(); // 移除编辑状态
     });
@@ -2625,8 +2660,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
     // 行工具条操作事件
     var toolFn = function (type) {
       var othis = $(this), event = othis.attr('lay-event');
-      var td = othis.closest('td');
-      var index = parseInt(othis.parents('tr').eq(0).attr('data-index'));
+      var td = othis.closest('td'), tr = othis.parents('tr').eq(0);
+      var index = parseInt(tr.attr('data-index'));
       // 标记当前活动行
       that.setRowActive(index);
       if (options[event]) {
