@@ -1748,7 +1748,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var options = that.config;
 
     if(options.loading){
-      that.layBox.find(ELEM_INIT).toggleClass('layui-hide-v', !show); 
+      that.layBox.find(ELEM_INIT).toggleClass(HIDE_V, !show); 
     }
   };
 
