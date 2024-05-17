@@ -742,17 +742,19 @@ layui.define(['table'], function (exports) {
               'data-index': childItem[LAY_DATA_INDEX],
               'lay-data-index': childItem[LAY_DATA_INDEX],
               'data-level': dataLevelNew
-            })
+            }).data('index', childItem[LAY_DATA_INDEX]);
+
             str2Obj.trs_fixed.eq(childIndex).attr({
               'data-index': childItem[LAY_DATA_INDEX],
               'lay-data-index': childItem[LAY_DATA_INDEX],
               'data-level': dataLevelNew
-            })
+            }).data('index', childItem[LAY_DATA_INDEX]);
+
             str2Obj.trs_fixed_r.eq(childIndex).attr({
               'data-index': childItem[LAY_DATA_INDEX],
               'lay-data-index': childItem[LAY_DATA_INDEX],
               'data-level': dataLevelNew
-            })
+            }).data('index', childItem[LAY_DATA_INDEX]);
           })
 
           tableViewElem.find(ELEM_MAIN).find('tbody tr[lay-data-index="' + dataIndex + '"]').after(str2Obj.trs);
@@ -955,9 +957,9 @@ layui.define(['table'], function (exports) {
             'lay-data-index': dataItem[LAY_DATA_INDEX],
             'data-level': dataLevel
           };
-          trAllObj.trs.eq(dataIndex).attr(props)
-          trAllObj.trs_fixed.eq(dataIndex).attr(props)
-          trAllObj.trs_fixed_r.eq(dataIndex).attr(props)
+          trAllObj.trs.eq(dataIndex).attr(props).data('index', dataItem[LAY_DATA_INDEX]);
+          trAllObj.trs_fixed.eq(dataIndex).attr(props).data('index', dataItem[LAY_DATA_INDEX]);
+          trAllObj.trs_fixed_r.eq(dataIndex).attr(props).data('index', dataItem[LAY_DATA_INDEX]);
         })
         layui.each(['main', 'fixed-l', 'fixed-r'], function (i, item) {
           tableView.find('.layui-table-' + item + ' tbody').html(trAllObj[['trs', 'trs_fixed', 'trs_fixed_r'][i]]);
@@ -1306,7 +1308,7 @@ layui.define(['table'], function (exports) {
         'data-index': trIndex,
         'lay-data-index': index,
         'data-level': trLevel
-      }));
+      }).data('index', trIndex));
     });
     that.renderTreeTable(tableView.find('tr[lay-data-index="' + index + '"]'), trLevel);
   }
@@ -1361,13 +1363,15 @@ layui.define(['table'], function (exports) {
         tableView.find('tr[lay-data-index="' + item3[LAY_DATA_INDEX_HISTORY] + '"]').attr({
           'data-index': item3[LAY_DATA_INDEX],
           'lay-data-index': item3[LAY_DATA_INDEX],
-        });
+        }).data('index', item3[LAY_DATA_INDEX]);
         // item3[LAY_DATA_INDEX_HISTORY] = item3[LAY_DATA_INDEX]
       }
     });
     // 重新更新顶层节点的data-index;
     layui.each(tableCache, function (i4, item4) {
-      tableView.find('tr[data-level="0"][lay-data-index="' + item4[LAY_DATA_INDEX] + '"]').attr('data-index', i4);
+      tableView.find('tr[data-level="0"][lay-data-index="' + item4[LAY_DATA_INDEX] + '"]')
+        .attr('data-index', i4)
+        .data('index', i4);
     })
     options.hasNumberCol && formatNumber(that);
     // 更新父节点状态
@@ -1461,9 +1465,9 @@ layui.define(['table'], function (exports) {
           'lay-data-index': newNodeItem[LAY_DATA_INDEX],
           'data-level': '0'
         };
-        newNodesHtmlObj.trs.eq(newNodeIndex).attr(attrs)
-        newNodesHtmlObj.trs_fixed.eq(newNodeIndex).attr(attrs)
-        newNodesHtmlObj.trs_fixed_r.eq(newNodeIndex).attr(attrs)
+        newNodesHtmlObj.trs.eq(newNodeIndex).attr(attrs).data('index', newNodeItem[LAY_DATA_INDEX]);
+        newNodesHtmlObj.trs_fixed.eq(newNodeIndex).attr(attrs).data('index', newNodeItem[LAY_DATA_INDEX]);
+        newNodesHtmlObj.trs_fixed_r.eq(newNodeIndex).attr(attrs).data('index', newNodeItem[LAY_DATA_INDEX]);
       })
       var trIndexPrev = parseInt(newNodes[0][LAY_DATA_INDEX]) - 1;
       var tableViewElemMAIN = tableViewElem.find(ELEM_MAIN);
@@ -1498,7 +1502,9 @@ layui.define(['table'], function (exports) {
 
       // 重新更新顶层节点的data-index;
       layui.each(table.cache[id], function (i4, item4) {
-        tableViewElem.find('tr[data-level="0"][lay-data-index="' + item4[LAY_DATA_INDEX] + '"]').attr('data-index', i4);
+        tableViewElem.find('tr[data-level="0"][lay-data-index="' + item4[LAY_DATA_INDEX] + '"]')
+          .attr('data-index', i4)
+          .data('index', i4);
       })
 
       that.renderTreeTable(tableViewElem.find(newNodes.map(function (value, index, array) {
