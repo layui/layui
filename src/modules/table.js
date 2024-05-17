@@ -50,15 +50,23 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       config: options,
       reload: function (options, deep) {
         that.reload.call(that, options, deep);
+        return that;
       },
       reloadData: function (options, deep) {
         table.reloadData(id, options, deep);
+        return that;
       },
       setColsWidth: function () {
         that.setColsWidth.call(that);
+        return that;
       },
       resize: function () { // 重置表格尺寸/结构
         that.resize.call(that);
+        return that;
+      },
+      selectRow: function (index) {
+        that.selectRow(index);
+        return that;
       }
     }
   };
@@ -294,6 +302,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
     defaultContextmenu: true, // 显示默认上下文菜单
     autoSort: true, // 是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
     checkOnClick: true, //当选择行时自动选中当前行中的单选或复选框
+    singleSelect: true,  //当行启用复选框样式时，是否单选，默认单选
     text: {
       none: '无数据'
     },
@@ -1555,14 +1564,16 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
     tr.addClass(className);
     tr.siblings('tr').removeClass(className);
   };
-
+  Class.prototype.selectRow = function (index) {
+    this.layMain.find('[data-index="' + index + '"]').click()
+    return this;
+  };
   // 设置行选中状态
   Class.prototype.setRowChecked = function (opts) {
     var that = this;
     var options = that.config;
     var isCheckAll = opts.index === 'all'; // 是否操作全部
     var isCheckMult = layui.type(opts.index) === 'array'; // 是否操作多个
-
     // 匹配行元素
     var tr = function (tr) {
       return isCheckAll ? tr : tr.filter(isCheckMult ? function () {
@@ -1627,6 +1638,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
 
     that.syncCheckAll();
     that.renderForm(opts.type);
+
+    return this;
   };
 
   // 数据排序
@@ -2318,17 +2331,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       var isAll = checkbox.attr('lay-filter') === 'layTableAllChoose';
 
       if (checkbox[0].disabled) return;
-
       if (options.singleSelect) {
-
         that.setRowChecked({
           "index": "all",
           "checked": false,
         });
         if (isAll) {
-          index = 0;
-          checked = true;
-          isAll = false;
+          that.selectRow(0);
+          return;
         }
       }
 
@@ -2402,6 +2412,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       if (othis.data('off')) return; // 不触发事件
       that.layBody.find('tr:eq(' + index + ')').removeClass(ELEM_HOVER)
     }).on('click', 'tr', function (e) { // 单击行
+      var t = $(this);
       // 不支持行单击事件的元素
       var UNROW = [
         '.layui-form-checkbox',
@@ -2412,9 +2423,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       if ($(e.target).is(UNROW) || $(e.target).closest(UNROW)[0]) {
         return;
       }
-      var t = $(this);
-      if (options.checkOnClick) {
-        t.find(".layui-form-radio,.layui-form-checkbox").click();
+      var checked = t.find(".layui-form-radio,.layui-form-checkbox");
+      if (options.checkOnClick && checked.length) {
+        checked.click();
+      }
+      else if (options.singleSelect) {
+        t.addClass(ELEM_CHECKED).siblings().removeClass(ELEM_CHECKED);
+      }
+      else {
+        t.toggleClass(ELEM_CHECKED);
       }
       if (options.onSelectRow) {
         var index = parseInt(t.data('index'));
@@ -2658,13 +2675,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
 
     // 行工具条操作事件
     var toolFn = function (type) {
-      var othis = $(this), event = othis.attr('lay-event');
+      var othis = $(this), event = othis.attr('lay-event'), handler = othis.data("handler") || options[event];
       var td = othis.closest('td'), tr = othis.parents('tr').eq(0);
       var index = parseInt(tr.attr('data-index'));
       // 标记当前活动行
       that.setRowActive(index);
-      if (options[event]) {
-        options[event].call(this, index, options.data[index] || {}, that.col(td.data('key')));
+      if (handler) {
+        handler.call(this, index, options.data[index] || {}, that.col(td.data('key')));
         return;
       }
       // 执行事件
