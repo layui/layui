@@ -137,6 +137,14 @@ layui.define(['table'], function (exports) {
     var parseData = options.parseData;
     var done = options.done;
 
+    // treeTable重载数据时，会先加载显示顶层节点，然后根据重载数据前的子节点展开状态，展开相应的子节点，
+    // 那么如果重载数据前有滚动条滚动在某个位子，重新加载时顶层节点如果比较少，只显示顶层节点时没有滚动条的情况下，
+    // 自动展开子节点后，滚动条就会显示在顶部，无法保持在重载数据之前的位置。
+    // 处理保持滚动条的问题，重载数据前记录滚动条的位置
+    if(reload === 'reloadData' && thatOptionsTemp.scrollPos === 'fixed'){
+      that.scrollTopCache = that.config.elem.next().find(ELEM_BODY).scrollTop();
+    }
+
     if (thatOptionsTemp.url) {
       // 异步加载的时候需要处理parseData进行转换
       if (!reload || (reload && parseData && !parseData.mod)) {
@@ -180,7 +188,11 @@ layui.define(['table'], function (exports) {
       options.done = function () {
         var args = arguments;
         var doneThat = this;
-        var isRenderData = args[3]; // 是否是 renderData
+        // undefined: 初始 render 或 reload，两者本质没有区别可以不做区分
+        // 'reloadData': 重载数据
+        // 'renderData': 重新渲染数据
+        var renderType = args[3];
+        var isRenderData = renderType === 'renderData';
         if (!isRenderData) {
           delete that.isExpandAll;
         }
@@ -205,6 +217,11 @@ layui.define(['table'], function (exports) {
         }
 
         that.renderTreeTable(tableView);
+
+        // 恢复滚动条位置
+        if(renderType === 'reloadData' && doneThat.scrollPos === 'fixed'){
+          tableView.find(ELEM_BODY).scrollTop(that.scrollTopCache);
+        }
 
         if (layui.type(done) === 'function') {
           return done.apply(doneThat, args);
