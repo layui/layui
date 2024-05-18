@@ -117,7 +117,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           itemElem[0].checked = value;
         } else if(type === 'radio') { // 如果为单选框
           itemElem.each(function(){
-            this.checked = this.value == value;
+            this.checked = this.value == value + '';
           });
         } else { // 其它类型的表单
           itemElem.val(value);
