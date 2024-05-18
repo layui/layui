@@ -131,11 +131,15 @@ layui.use(['table', 'dropdown'], function(){
 
 
     // lineStyle: 'height: 95px;', // 行样式
-    css: [ // 自定义样式
+    css: [ // 对当前实例自定义样式
       '.layui-table-page{text-align: right;}',
-      '.layui-table-pagebar{float: left;}'
+      '.layui-table-pagebar{float: left;}',
+      // '.layui-table-init{background-color: rgba(255, 255, 255, 0.6);}'
     ].join(''),
     // className: '.demo-table-view',
+
+    // 自定义 loading 模板 --- 2.9.10+
+    // loading: '<i class="layui-icon layui-icon-loading-1 layui-anim layui-anim-rotate layui-anim-loop" style="font-size: 38px;"></i>',
 
     // size: 'sm',
     // skin: 'line',
