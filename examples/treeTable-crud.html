@@ -123,13 +123,16 @@
       ];
 
       var isHtmlIcon = false;
+      var genIcon = function (str, isHtml) {
+        return isHtml ? normalizedIcon(str) : str
+      }
       var icons = {
-        flexIconClose: isHtmlIcon ? normalizedIcon('layui-icon layui-icon-addition') : 'layui-icon layui-icon-addition',
-        flexIconOpen: isHtmlIcon ? normalizedIcon('layui-icon layui-icon-subtraction') : 'layui-icon layui-icon-subtraction',
-        iconClose: isHtmlIcon ? normalizedIcon('layui-icon layui-icon-add-circle') : 'layui-icon layui-icon-add-circle',
-        iconOpen: isHtmlIcon ? normalizedIcon('layui-icon layui-icon-reduce-circle') : 'layui-icon layui-icon-reduce-circle',
-        iconLeaf: isHtmlIcon ? normalizedIcon('layui-icon layui-icon-snowflake') : 'layui-icon layui-icon-snowflake',
-        icon: isHtmlIcon ? normalizedIcon('layui-icon layui-icon-addition') : 'layui-icon layui-icon-addition'
+        flexIconClose: genIcon('layui-icon layui-icon-addition', isHtmlIcon),
+        flexIconOpen: genIcon('layui-icon layui-icon-subtraction', isHtmlIcon),
+        iconClose: genIcon('layui-icon layui-icon-add-circle', isHtmlIcon),
+        iconOpen: genIcon('layui-icon layui-icon-reduce-circle', isHtmlIcon),
+        iconLeaf: genIcon('layui-icon layui-icon-snowflake', isHtmlIcon),
+        icon: genIcon('layui-icon layui-icon-addition', isHtmlIcon),
       }
 
       treeTable.render({
