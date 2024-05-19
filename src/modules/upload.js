@@ -462,15 +462,32 @@ layui.define(['lay', 'layer'], function(exports){
     
     // 提交上传
     var send = function(){
-      // 上传前的回调 - 如果回调函数明确返回 false，则停止上传
-      if(options.before && (options.before(args) === false)) return;
-
-      // IE 兼容处理
-      if(device.ie){
-        return device.ie > 9 ? ajaxSend() : iframeSend();
+      var ready = function(){
+        // IE 兼容处理
+        if(device.ie){
+          return device.ie > 9 ? ajaxSend() : iframeSend();
+        }
+        ajaxSend();
       }
-      
-      ajaxSend();
+      // 上传前的回调 - 如果回调函数明确返回 false 或 Promise.reject，则停止上传
+      if(typeof options.before === 'function'){
+        var maybePromise = options.before(args);
+        if(maybePromise === false){
+          return;
+        }else if(typeof maybePromise === 'object' && typeof maybePromise.then === 'function'){
+          // 兼容 jQuery Deferred Promise 对象和原生 Promise 对象
+          // 类型检测不够完善，但足以满足此场景
+          maybePromise.then(function(result){
+            ready();
+          }, function(error){
+            layui.hint().error(error);
+          })
+        }else{
+          ready();
+        }
+      }else{
+        ready();
+      }
     };
     
     // 文件类型名称
