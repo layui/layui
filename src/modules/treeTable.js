@@ -311,27 +311,26 @@ layui.define(['table'], function (exports) {
     // 创建一个空的 nodes 对象，用于保存所有的节点
     var nodes = {};
     var rootNodes = [];
+
     // 遍历所有节点，将其加入 nodes 对象中
     var idTemp = '';
-    layui.each(flatArr, function (index, item) {
-      idTemp = idKey + item[idKey];
-      nodes[idTemp] = $.extend({}, item);
-      nodes[idTemp][childrenKey] = [];
-    })
-    // 遍历所有节点，将其父子关系加入 nodes 对象
     var pidTemp = '';
     layui.each(flatArr, function(index, item){
       idTemp = idKey + item[idKey];
       pidTemp = idKey + item[pIdKey];
+      nodes[idTemp] = $.extend({}, item);
+      nodes[idTemp][childrenKey] = [];
+
       var currentNode = nodes[idTemp];
       var parentNode = nodes[pidTemp];
       var isRootNode = (rootPid ? currentNode[pIdKey] === rootPid : !currentNode[pIdKey]);
-      if(pidTemp && parentNode){
+
+      if (pidTemp && parentNode) {
         parentNode[childrenKey].push(currentNode);
-      }else if(isRootNode){
+      } else if(isRootNode) {
         rootNodes.push(currentNode);
       }
-    })
+    });
 
     return rootNodes;
   }
