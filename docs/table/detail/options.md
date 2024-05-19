@@ -298,10 +298,21 @@ height: function(){
 <td>loading</td>
 <td>
 
-是否显示加载条。若为 `false`，则在切换分页时，不会出现加载条。必须设置了 `url` 属性才生效。
+设置数据请求时的加载动画，需开启 `url` 选项才生效。
+
+- 若值为 `boolean` 类型，表示是否显示加载条，如：
+```
+loading: true // 显示默认加载条
+loading: false // 禁用加载条
+```
+
+- 若值为 `string` 类型 <sup>2.9.10+</sup>，表示自定义加载模板，此时可添加任意动画元素，如：
+```
+loading: '<i class="layui-icon layui-icon-loading-1 layui-anim layui-anim-rotate layui-anim-loop"></i>'
+```
 
 </td>
-<td>boolean</td>
+<td>boolean<br>string</td>
 <td>
 
 `true`

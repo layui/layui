@@ -220,8 +220,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     ,'<div class="layui-table-box">'
       ,'{{# if(d.data.loading){ }}'
-      ,'<div class="layui-table-init" style="background-color: #fff;">'
-        ,'<i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>'
+      ,'<div class="layui-table-init">'
+        ,'<div class="layui-table-loading-icon">'
+        ,'{{# if(typeof d.data.loading === "string"){ }}'
+          ,'{{- d.data.loading}}'
+        ,'{{# } else{ }}'
+          ,'<i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>'
+        ,'{{# } }}'
+        ,'</div>'
       ,'</div>'
       ,'{{# } }}'
 
@@ -910,7 +916,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.layMain.find('table').width('auto');
     }
 
-    that.loading(!0);
   };
 
   // 重置表格尺寸/结构
@@ -975,6 +980,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     that.syncCheckAll();
     that.renderForm();
     that.setColsWidth();
+    that.loading(false);
   };
 
   // 初始页码
@@ -1001,6 +1007,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     };
     var done = function(res, origin){
       that.setColsWidth();
+      that.loading(false);
       typeof options.done === 'function' && options.done(
         res, curr, res[response.countName], origin
       );
@@ -1045,7 +1052,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         data = JSON.stringify(data);
       }
 
-      that.loading();
+      that.loading(true);
 
       $.ajax({
         type: options.method || 'get',
@@ -1740,20 +1747,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   };
 
   // 请求 loading
-  Class.prototype.loading = function(hide){
+  Class.prototype.loading = function(show){
     var that = this;
     var options = that.config;
+
     if(options.loading){
-      if(hide){
-        that.layInit && that.layInit.remove();
-        delete that.layInit;
-        that.layBox.find(ELEM_INIT).remove();
-      } else {
-        that.layInit = $(['<div class="layui-table-init">',
-          '<i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>',
-          '</div>'].join(''));
-        that.layBox.append(that.layInit);
-      }
+      that.layBox.find(ELEM_INIT).toggleClass(HIDE_V, !show); 
     }
   };
 
