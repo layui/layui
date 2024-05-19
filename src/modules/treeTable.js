@@ -308,27 +308,36 @@ layui.define(['table'], function (exports) {
     idKey = idKey || 'id';
     pIdKey = pIdKey || 'parentId';
     childrenKey = childrenKey || 'children';
-    // 创建一个空的 nodes 对象，用于保存所有的节点
-    var nodes = {};
+    // 创建一个空的 map 对象，用于保存所有的节点
+    var map = {};
     var rootNodes = [];
 
-    // 遍历所有节点，将其加入 nodes 对象中
     var idTemp = '';
     var pidTemp = '';
     layui.each(flatArr, function(index, item){
       idTemp = idKey + item[idKey];
       pidTemp = idKey + item[pIdKey];
-      nodes[idTemp] = $.extend({}, item);
-      nodes[idTemp][childrenKey] = [];
 
-      var currentNode = nodes[idTemp];
-      var parentNode = nodes[pidTemp];
-      var isRootNode = (rootPid ? currentNode[pIdKey] === rootPid : !currentNode[pIdKey]);
+      // 将节点存入 map 对象
+      if(!map[idTemp]){
+        map[idTemp] = {};
+        map[idTemp][childrenKey] = [];
+      }
 
-      if (pidTemp && parentNode) {
-        parentNode[childrenKey].push(currentNode);
-      } else if(isRootNode) {
-        rootNodes.push(currentNode);
+      // 合并节点
+      var tempObj = {};
+      tempObj[childrenKey] = map[idTemp][childrenKey];
+      map[idTemp] = $.extend({}, item, tempObj);
+
+      var isRootNode = (rootPid ? map[idTemp][pIdKey] === rootPid : !map[idTemp][pIdKey]);
+      if(isRootNode){
+        rootNodes.push(map[idTemp]);
+      }else{
+        if(!map[pidTemp]){
+          map[pidTemp] = {};
+          map[pidTemp][childrenKey] = [];
+        }
+        map[pidTemp][childrenKey].push(map[idTemp]);
       }
     });
 
