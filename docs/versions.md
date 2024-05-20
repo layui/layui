@@ -9,9 +9,31 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+<h2 id="v2.9.10" class="ws-anchor">
+  v2.9.10
+  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
+  <span class="layui-badge-rim">2024-05-20</span>
+</h2>
+
+- #### table
+  - 加强 `loading` 选项，以支持数据加载时的自定义动画风格 #1893 @Sight-wcg
+  - 修复 上个版本导致的 `table.setRowChecked` 的 `index` 选项为数组值时无法选中的问题 #1914 @Sight-wcg
+- #### treeTable
+  - 修复重载数据时，指定参数 `scrollPos: 'fixed'` 无效的问题 #1892 @jichuanan
+  - 改进内部 `flatToTree` 函数性能 #1912 @Sight-wcg
+- #### colorpicker
+  - 优化游标显示效果 #1863 @Sight-wcg
+- #### form
+  - 修复 `form.val()` 为 radio 设置布尔值时的失效问题 #1903 @meihangbo
+- #### 其他
+  - 将部分组件上的 `lay-id` 属性重命名为 `lay-${MOD_NAME}-id` #1898 @Sight-wcg
+
+### 下载： [layui-v2.9.10.zip](https://gitee.com/layui/layui/attach_files/1773905/download)
+
+---
+
 <h2 id="v2.9.9" class="ws-anchor">
   v2.9.9
-  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
   <span class="layui-badge-rim">2024-05-05</span>
 </h2>
 
