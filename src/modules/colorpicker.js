@@ -450,9 +450,9 @@ layui.define(['jquery', 'lay'], function(exports){
     };
 
     //右侧主色选择
-    slider.on('mousedown', function(e){
-      var oldtop = this.offsetTop
-      ,oldy = e.clientY;
+    slider.on('mousedown', function(e, triggerEvent){
+      var oldtop = this.offsetTop;
+      var oldy = e.clientY === undefined ? triggerEvent.clientY : e.clientY;
       var move = function(e){
         var top = oldtop + (e.clientY - oldy)
         ,maxh = side[0].offsetHeight;
@@ -464,12 +464,12 @@ layui.define(['jquery', 'lay'], function(exports){
         e.preventDefault();
       };
       
+      layui.stope(e);
       createMoveElem(move);
-      //layui.stope(e);
       e.preventDefault();
     });
     
-    side.on('click', function(e){
+    side.on('mousedown', function(e){
       var top = e.clientY - $(this).offset().top + $win.scrollTop();
       if(top < 0)top = 0;
       if(top > this.offsetHeight) top = this.offsetHeight;     
@@ -477,14 +477,15 @@ layui.define(['jquery', 'lay'], function(exports){
       _h = h;
       change(h, _s, _b, _a); 
       e.preventDefault();
+      slider.trigger('mousedown', e);
     });
     
     //中间小圆点颜色选择
-    choose.on('mousedown', function(e){
-      var oldtop = this.offsetTop
-      ,oldleft = this.offsetLeft
-      ,oldy = e.clientY
-      ,oldx = e.clientX;
+    choose.on('mousedown', function(e, triggerEvent){
+      var oldtop = this.offsetTop;
+      var oldleft = this.offsetLeft;
+      var oldy = e.clientY === undefined ? triggerEvent.clientY : e.clientY;
+      var oldx = e.clientX === undefined ?  triggerEvent.clientX : e.clientX;
       var move = function(e){
         var top = oldtop + (e.clientY - oldy)
         ,left = oldleft + (e.clientX - oldx)
@@ -520,13 +521,13 @@ layui.define(['jquery', 'lay'], function(exports){
       change(_h, s, b, _a); 
       layui.stope(e);
       e.preventDefault();
-      choose.trigger(e, 'mousedown');
+      choose.trigger('mousedown', e);
     });
     
     //底部透明度选择
-    alphaslider.on('mousedown', function(e){
-      var oldleft = this.offsetLeft
-      ,oldx = e.clientX;
+    alphaslider.on('mousedown', function(e, triggerEvent){
+      var oldleft = this.offsetLeft;
+      var oldx = e.clientX === undefined ? triggerEvent.clientX : e.clientX;
       var move = function(e){
         var left = oldleft + (e.clientX - oldx)
         ,maxw = alphacolor[0].offsetWidth;
@@ -538,10 +539,11 @@ layui.define(['jquery', 'lay'], function(exports){
         e.preventDefault();
       };
       
+      layui.stope(e);
       createMoveElem(move);
       e.preventDefault();
     });
-    alphacolor.on('click', function(e){
+    alphacolor.on('mousedown', function(e){
       var left = e.clientX - $(this).offset().left
       if(left < 0)left = 0;
       if(left > this.offsetWidth)left = this.offsetWidth;
@@ -549,6 +551,7 @@ layui.define(['jquery', 'lay'], function(exports){
       _a = a;
       change(_h, _s, _b, a); 
       e.preventDefault();
+      alphaslider.trigger('mousedown', e);
     });
     
     //预定义颜色选择
@@ -571,8 +574,8 @@ layui.define(['jquery', 'lay'], function(exports){
     if(!lay.touchEventsSupported()) return;
     // 触摸事件模拟
     layui.each([
-      {elem: side, eventType: 'click'},
-      {elem: alphacolor, eventType: 'click'},
+      {elem: side, eventType: 'mousedown'},
+      {elem: alphacolor, eventType: 'mousedown'},
       {elem: basis, eventType: 'mousedown'}
     ], function(i, obj){
       lay.touchSwipe(obj.elem, {
