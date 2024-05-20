@@ -325,31 +325,40 @@ layui.define(['table'], function (exports) {
     idKey = idKey || 'id';
     pIdKey = pIdKey || 'parentId';
     childrenKey = childrenKey || 'children';
-    // 创建一个空的 nodes 对象，用于保存所有的节点
-    var nodes = {};
-    // 遍历所有节点，将其加入 nodes 对象中
+    // 创建一个空的 map 对象，用于保存所有的节点
+    var map = {};
+    var rootNodes = [];
+
     var idTemp = '';
-    layui.each(flatArr, function (index, item) {
-      idTemp = idKey + item[idKey];
-      nodes[idTemp] = $.extend({}, item);
-      nodes[idTemp][childrenKey] = [];
-    })
-    // 遍历所有节点，将其父子关系加入 nodes 对象
     var pidTemp = '';
-    layui.each(nodes, function (index, item) {
+    layui.each(flatArr, function(index, item){
+      idTemp = idKey + item[idKey];
       pidTemp = idKey + item[pIdKey];
-      if (pidTemp && nodes[pidTemp]) {
-        nodes[pidTemp][childrenKey].push(item);
+
+      // 将节点存入 map 对象
+      if(!map[idTemp]){
+        map[idTemp] = {};
+        map[idTemp][childrenKey] = [];
       }
-    })
-    // 返回顶层节点
-    return Object.keys(nodes)
-      .map(function(k) {
-        return nodes[k];
-      })
-      .filter(function (item) {
-        return rootPid ? item[pIdKey] === rootPid : !item[pIdKey];
-      })
+
+      // 合并节点
+      var tempObj = {};
+      tempObj[childrenKey] = map[idTemp][childrenKey];
+      map[idTemp] = $.extend({}, item, tempObj);
+
+      var isRootNode = (rootPid ? map[idTemp][pIdKey] === rootPid : !map[idTemp][pIdKey]);
+      if(isRootNode){
+        rootNodes.push(map[idTemp]);
+      }else{
+        if(!map[pidTemp]){
+          map[pidTemp] = {};
+          map[pidTemp][childrenKey] = [];
+        }
+        map[pidTemp][childrenKey].push(map[idTemp]);
+      }
+    });
+
+    return rootNodes;
   }
 
   Class.prototype.flatToTree = function (tableData) {
