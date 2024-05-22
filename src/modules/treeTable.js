@@ -176,12 +176,14 @@ layui.define(['table'], function (exports) {
         options.parseData.mod = true
       }
     } else {
-      options.data = options.data || [];
-      // 处理 isSimpleData
-      if (treeOptions.data.isSimpleData) {
-        options.data = that.flatToTree(options.data);
+      if(options.data !== undefined){
+        options.data = options.data || [];
+        // 处理 isSimpleData
+        if (treeOptions.data.isSimpleData) {
+          options.data = that.flatToTree(options.data);
+        }
+        that.initData(options.data);
       }
-      that.initData(options.data);
     }
 
     if (!reload || (reload && done && !done.mod)) {
