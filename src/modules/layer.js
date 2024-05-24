@@ -440,7 +440,7 @@ Class.pt.creat = function(){
   }
 
   // 是否移除活动元素的焦点
-  if(config.removeFocus) {
+  if(config.removeFocus && document.activeElement) {
     document.activeElement.blur(); // 将原始的聚焦节点失焦
   }
 
