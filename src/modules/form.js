@@ -658,9 +658,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                   if(createOptionElem[0]){
                     createOptionElem.attr('lay-value', value).html(util.escape(value));
                   }else{
-                    var ddElem = $('<dd>');
-                    ddElem.addClass(CREATE_OPTION).attr('lay-value', value).html(util.escape(value));
-                    dl.append(ddElem);
+                    // 临时显示在顶部
+                    var ddElem = $('<dd>').addClass(CREATE_OPTION).attr('lay-value', value).html(util.escape(value));
+                    var firstOptionELem = dl.children().eq(0);
+                    var hasTips = firstOptionELem.hasClass('layui-select-tips');
+                    firstOptionELem[hasTips ? 'after' : 'before'](ddElem);
                   }
                 }
               }else{
@@ -719,10 +721,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               othis.addClass(THIS);
             }
 
+            // 将新增的 option 元素添加到末尾
             if(isCreatable && othis.hasClass(CREATE_OPTION)){
-              othis.removeClass(CREATE_OPTION);
-              var optionElem = $('<option>');
-              optionElem.attr('value', value).text(othis.text());
+              dl.append(othis.removeClass(CREATE_OPTION));
+              var optionElem = $('<option>').attr('value', value).text(othis.text());
               select.append(optionElem);
             }
 
