@@ -534,50 +534,20 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             }
             
             // 标注 dd 的选中状态
-            var setThisDd = function(prevNext, thisElem1){
-              var nearDd, cacheNearElem
+            var setThisDd = function(prevNext){
               e.preventDefault();
+              var allDisplayedElem = dl.children('dd:not(.'+ HIDE +',.'+ DISABLED +')');
+              if(!allDisplayedElem.length) return;
+              var selectedElem = allDisplayedElem.filter('.'+ THIS);
+              var selectedIndex = selectedElem[0] ? allDisplayedElem.index(selectedElem) : -1;
+              var firstIndex = 0;
+              var lastIndex = allDisplayedElem.length - 1;
+              var nextIndex = prevNext === 'prev'
+                ? (selectedIndex - 1 < firstIndex ? lastIndex : selectedIndex - 1)
+                : (selectedIndex + 1 > lastIndex ? firstIndex : selectedIndex + 1)
 
-              // 得到当前队列元素  
-              var thisElem = function(){
-                var thisDd = dl.children('dd.'+ THIS);
-                
-                // 如果是搜索状态，且按 Down 键，且当前可视 dd 元素在选中元素之前，
-                // 则将当前可视 dd 元素的上一个元素作为虚拟的当前选中元素，以保证递归不中断
-                if(dl.children('dd.'+  HIDE)[0] && prevNext === 'next'){
-                  var showDd = dl.children('dd:not(.'+ HIDE +',.'+ DISABLED +')')
-                  ,firstIndex = showDd.eq(0).index();
-                  if(firstIndex >=0 && firstIndex < thisDd.index() && !showDd.hasClass(THIS)){
-                    return showDd.eq(0).prev()[0] ? showDd.eq(0).prev() : dl.children(':last');
-                  }
-                }
-
-                if(thisElem1 && thisElem1[0]){
-                  return thisElem1;
-                }
-                if(nearElem && nearElem[0]){
-                  return nearElem;
-                }
-       
-                return thisDd;
-                // return dds.eq(index);
-              }();
-              
-              cacheNearElem = thisElem[prevNext](); // 当前元素的附近元素
-              nearDd =  thisElem[prevNext]('dd:not(.'+ HIDE +')'); // 当前可视元素的 dd 元素
-
-              // 如果附近的元素不存在，则停止执行，并清空 nearElem
-              if(!cacheNearElem[0]) return nearElem = null;
-              
-              // 记录附近的元素，让其成为下一个当前元素
-              nearElem = thisElem[prevNext]();
-
-              // 如果附近不是 dd ，或者附近的 dd 元素是禁用状态，则进入递归查找
-              if((!nearDd[0] || nearDd.hasClass(DISABLED)) && nearElem[0]){
-                return setThisDd(prevNext, nearElem);
-              }
-              
-              nearDd.addClass(THIS).siblings().removeClass(THIS); // 标注样式
+              selectedElem = allDisplayedElem.eq(nextIndex);
+              selectedElem.addClass(THIS).siblings().removeClass(THIS); // 标注样式
               followScroll(); // 定位滚动条
             };
             
