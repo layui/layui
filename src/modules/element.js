@@ -145,7 +145,9 @@ layui.define('jquery', function(exports){
       if(!(isJump || unselect)){
         othis.addClass(THIS).siblings().removeClass(THIS);
         if(hasId){
-          item.filter('[lay-id="' +  hasId + '"]').addClass(SHOW).siblings().removeClass(SHOW);
+          var contentElem = item.filter('[lay-id="' +  hasId + '"]');
+          contentElem = contentElem.length ? contentElem : item.eq(index);
+          contentElem.addClass(SHOW).siblings().removeClass(SHOW);
         }else{
           item.eq(index).addClass(SHOW).siblings().removeClass(SHOW);
         }
@@ -186,7 +188,9 @@ layui.define('jquery', function(exports){
       
       li.remove();
       if(hasId){
-        item.filter('[lay-id="' +  hasId + '"]').remove();
+        var contentElem = item.filter('[lay-id="' +  hasId + '"]');
+        contentElem = contentElem.length ? contentElem : item.eq(index)
+        contentElem.remove()
       }else{
         item.eq(index).remove();
       }
@@ -228,15 +232,6 @@ layui.define('jquery', function(exports){
               var close = $('<i class="layui-icon layui-icon-close layui-unselect '+ CLOSE +'"></i>');
               close.on('click', call.tabDelete);
               li.append(close);
-            }
-            // 初始化时同步 title 和 content 上的 id 属性
-            var hasId = li.attr('lay-id');
-            if(hasId){
-              var liIndex = li.parent().children('li').index(li);
-              var contentEl = item.eq(liIndex);
-              if(!(contentEl).attr('lay-id')){
-                contentEl.attr('lay-id', hasId);
-              }
             }
           });
         }
