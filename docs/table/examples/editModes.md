@@ -77,13 +77,17 @@ layui.use(function(){
       
       // 原生 select 事件
       var tableViewElem = this.elem.next();
-      tableViewElem.find('.select-demo-primary').on('change', function(){
+
+      // 解除 tbSelect 命名空间下的所有 change 事件处理程序
+      tableViewElem.off("change.tbSelect");
+      // 将 '.select-demo-primary' 元素的 change 事件委托给 tableViewElem, 事件命名空间为 tbSelect
+      tableViewElem.on("change.tbSelect", ".select-demo-primary", function () {
         var value = this.value; // 获取选中项 value
         var data = table.getRowData(options.id, this); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
-
+        
         // 更新数据中对应的字段
         data.city = value;
-
+        
         // 显示 - 仅用于演示
         layer.msg('选中值: '+ value +'<br>当前行数据：'+ JSON.stringify(data));
       });
