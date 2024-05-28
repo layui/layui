@@ -225,7 +225,8 @@ layui.define('jquery', function(exports){
         }
         
         // 开启关闭图标
-        if(othis.attr('lay-allowclose')){
+        var allowclose = othis.attr('lay-allowclose');
+        if(allowclose && allowclose !== 'false'){
           title.find('li').each(function(){
             var li = $(this);
             if(!li.find('.'+CLOSE)[0] && li.attr('lay-allowclose') !== 'false'){
