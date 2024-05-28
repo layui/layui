@@ -165,7 +165,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     var that = this;
     var options = that.config;
     var elemForm = $(ELEM + function(){
-      return filter ? ('[lay-filter="' + filter +'"]') : '';
+      return filter ? ('[lay-filter="' + filter +'"],[lay-filter="' + filter +'"]') : '';
     }());
     var items = {
       // 输入框

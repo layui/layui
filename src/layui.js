@@ -56,6 +56,7 @@
     laypage: 'laypage', // 分页
     laytpl: 'laytpl', // 模板引擎
     form: 'form', // 表单集
+    checkbox: 'checkbox', // 复选款
     upload: 'upload', // 上传
     dropdown: 'dropdown', // 下拉菜单
     transfer: 'transfer', // 穿梭框
