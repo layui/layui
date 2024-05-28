@@ -1578,7 +1578,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
     }
     opts.sort = opts.sort || "desc";
     var config = this.config, fields = opts.field.split(",");
-
     function getdata(field) {
       var group = {};
       $.each(config.data, function () {
@@ -1620,29 +1619,27 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       return index;
     }
     var table = this.layBody.find(".layui-table"), trs = table.find(">tbody>tr");
-
     while (fields.length) {
       var gourp = getdata(fields);
       $.each(gourp, function (key, vals) {
         var len = vals.length;
-        if (len < 2) {
-          return false;
-        }
-        var colidx = getColIndex(fields[fields.length - 1]);
-        $.each(data, function (idx, rows) {
-          var td = $($(trs.get(idx)).find(">td").get(colidx));
-          var val = [];
-          $.each(fields, function () {
-            val.push(rows[this]);
-          });
-          if (key == val.join("~")) {
-            td.attr("rowspan", len);
-            for (var i = 1; i < len; i++) {
-              $($(trs.get(idx + i)).find(">td").get(colidx)).remove();
+        if (len > 1) {
+          var colidx = getColIndex(fields[fields.length - 1]);
+          $.each(data, function (idx, rows) {
+            var td = $($(trs.get(idx)).find(">td").get(colidx));
+            var val = [];
+            $.each(fields, function () {
+              val.push(rows[this]);
+            });
+            if (key == val.join("~")) {
+              td.attr("rowspan", len);
+              for (var i = 1; i < len; i++) {
+                $($(trs.get(idx + i)).find(">td").get(colidx)).remove();
+              }
+              return false;
             }
-            return false;
-          }
-        });
+          });
+        }
       });
       fields.pop();
     }
