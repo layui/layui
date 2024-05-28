@@ -67,6 +67,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
       selectRow: function (index) {
         that.selectRow(index);
         return that;
+      },
+      groupMerge: function (options) {
+        that.groupMerge(options);
+        return that;
       }
     }
   };
@@ -1285,10 +1289,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
     var that = this;
     var options = that.config;
 
-    var res = opts.res;
-    var curr = opts.curr;
-    var count = that.count = opts.count;
-    var sort = opts.sort;
+    var res = opts.res || options.res;
+    var curr = opts.curr || options.curr;
+    var count = that.count = opts.count || options.count;
+    var sort = opts.sort || options.sort;
 
     var data = res[options.response.dataName] || []; //列表数据
     var totalRowData = res[options.response.totalRowName]; //合计行数据
@@ -1566,6 +1570,83 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
   };
   Class.prototype.selectRow = function (index) {
     this.layMain.find('[data-index="' + index + '"]').click()
+    return this;
+  };
+  Class.prototype.groupMerge = function (opts) {
+    if (opts.constructor == String) {
+      opts = { "field": opts };
+    }
+    opts.sort = opts.sort || "desc";
+    var config = this.config, fields = opts.field.split(",");
+
+    function getdata(field) {
+      var group = {};
+      $.each(config.data, function () {
+        var t = this, key = [];
+        $.each(field, function () {
+          key.push(t[this] || "");
+        });
+        var name = key.join("~");
+        if (!group[name]) {
+          group[name] = [];
+        }
+        group[name].push(this);
+      });
+      return group;
+    }
+
+    var arr = [], group = getdata(fields);
+    $.each(group, function (key, val) {
+      arr.push(key);
+    });
+    arr.sort(function (x, y) {
+      return opts.sort == "desc" ? (x > y ? -1 : 1) : x > y ? 1 : -1;
+    });
+    var data = [];
+    $.each(arr, function () {
+      data = data.concat(group[this]);
+    });
+    config.data = data;
+    this.render("reloadData");
+
+    function getColIndex(field) {
+      var index = -1;
+      $.each(config.cols[0], function (idx, rows) {
+        if (this.field == field) {
+          index = idx;
+          return true;
+        }
+      });
+      return index;
+    }
+    var table = this.layBody.find(".layui-table"), trs = table.find(">tbody>tr");
+
+    while (fields.length) {
+      var gourp = getdata(fields);
+      $.each(gourp, function (key, vals) {
+        var len = vals.length;
+        if (len < 2) {
+          return false;
+        }
+        var colidx = getColIndex(fields[fields.length - 1]);
+        $.each(data, function (idx, rows) {
+          var td = $($(trs.get(idx)).find(">td").get(colidx));
+          var val = [];
+          $.each(fields, function () {
+            val.push(rows[this]);
+          });
+          if (key == val.join("~")) {
+            td.attr("rowspan", len);
+            for (var i = 1; i < len; i++) {
+              $($(trs.get(idx + i)).find(">td").get(colidx)).remove();
+            }
+            return false;
+          }
+        });
+      });
+      fields.pop();
+    }
+
     return this;
   };
   // 设置行选中状态
