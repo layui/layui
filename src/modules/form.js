@@ -538,15 +538,22 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               e.preventDefault();
               var allDisplayedElem = dl.children('dd:not(.'+ HIDE +',.'+ DISABLED +')');
               if(!allDisplayedElem.length) return;
-              var selectedElem = allDisplayedElem.filter('.'+ THIS);
-              var selectedIndex = selectedElem[0] ? allDisplayedElem.index(selectedElem) : -1;
               var firstIndex = 0;
               var lastIndex = allDisplayedElem.length - 1;
+              var selectedIndex = -1;
+
+              layui.each(allDisplayedElem, function(index, el){
+                if($(el).hasClass(THIS)){
+                  selectedIndex = index;
+                  return true;
+                }
+              })
+    
               var nextIndex = prevNext === 'prev'
                 ? (selectedIndex - 1 < firstIndex ? lastIndex : selectedIndex - 1)
                 : (selectedIndex + 1 > lastIndex ? firstIndex : selectedIndex + 1)
 
-              selectedElem = allDisplayedElem.eq(nextIndex);
+              var selectedElem = allDisplayedElem.eq(nextIndex);
               selectedElem.addClass(THIS).siblings().removeClass(THIS); // 标注样式
               followScroll(); // 定位滚动条
             };
