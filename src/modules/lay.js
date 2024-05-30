@@ -786,19 +786,49 @@
   // 事件绑定
   Class.fn.on = function(eventName, fn){
     return this.each(function(index, item){
-      item.attachEvent ? item.attachEvent('on' + eventName, function(e){
-        e.target = e.srcElement;
-        fn.call(item, e);
-      }) : item.addEventListener(eventName, fn, false);
+      item.attachEvent ? function(){
+        var prefix = '_lay_on_';
+        var listener = function(e){
+          e.target = e.srcElement;
+          fn.call(item, e);
+        }
+        listener._rawFn = fn;
+        if(!item[prefix + eventName]){
+          item[prefix + eventName] = [];
+        }
+        var include = false;
+        layui.each(item[prefix + eventName], function(_, listener){
+          if(listener._rawFn === fn){
+            include = true;
+            return true;
+          }
+        })
+        if(!include){
+          item[prefix + eventName].push(listener);
+          item.attachEvent('on' + eventName, listener);
+        }
+      }() : item.addEventListener(eventName, fn, false);
     });
   };
 
   // 解除事件
   Class.fn.off = function(eventName, fn){
     return this.each(function(index, item){
-      item.detachEvent
-        ? item.detachEvent('on'+ eventName, fn)
-      : item.removeEventListener(eventName, fn, false);
+      item.detachEvent ? function(){
+        var prefix = '_lay_on_';
+        var events = item[prefix + eventName];
+        if(layui.isArray(events)){
+          var newEvents = [];
+          lay.each(events, function(_, listener){
+            if(listener._rawFn === fn){
+              item.detachEvent('on'+ eventName, listener);
+            }else{
+              newEvents.push(listener);
+            }
+          })
+          item[prefix + eventName] = newEvents;
+        }
+      }() : item.removeEventListener(eventName, fn, false);
     });
   };
 
