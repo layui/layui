@@ -53,6 +53,19 @@
 </td>
     </tr>
     <tr>
+<td>moreText</td>
+<td>
+
+设置加载更多按钮的文字
+
+</td>
+<td>string</td>
+<td>
+
+<code style="font-size: 13px;">加载更多</code>
+
+</td>
+    <tr>
 <td>end</td>
 <td>
   
