@@ -56,7 +56,7 @@
 <td>moreText</td>
 <td>
 
-设置加载更多按钮的文字
+设置「加载更多」按钮的文本
 
 </td>
 <td>string</td>
