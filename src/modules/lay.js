@@ -617,6 +617,65 @@
     targetElem.addEventListener('touchstart', onStart);
   }
 
+  /** @type {(elem: Element|Document|Window,eventName: string,fn:EventListenerOrEventListenerObject,options: boolean | AddEventListenerOptions) => any}*/
+  lay.addEvent = function(){
+    if(document.addEventListener){
+      return function(elem, eventName, fn, options){
+        elem.addEventListener(eventName, fn, options);
+      }
+    }else{
+      return function(elem, eventName, fn){
+        var prefix = '_lay_on_';
+        var eventsCacheName = prefix + eventName;
+        var listener = function(e){
+          e.target = e.srcElement;
+          fn.call(elem, e);
+        }
+        listener._rawFn = fn;
+        if(!elem[eventsCacheName]){
+          elem[eventsCacheName] = [];
+        }
+        var include = false;
+        layui.each(elem[eventsCacheName], function(_, listener){
+          if(listener._rawFn === fn){
+            include = true;
+            return true;
+          }
+        })
+        if(!include){
+          elem[eventsCacheName].push(listener);
+          elem.attachEvent('on' + eventName, listener);
+        }
+      }
+    }
+  }()
+
+ /** @type {(elem: Element|Document|Window,eventName: string,fn:EventListenerOrEventListenerObject,options: boolean | EventListenerOptions) => any}*/
+  lay.removeEvent = function(){
+    if(document.removeEventListener){
+      return function(elem, eventName, fn, options){
+        elem.removeEventListener(eventName, fn, options);
+      }
+    }else{
+      return function(elem, eventName, fn){
+        var prefix = '_lay_on_';
+        var eventsCacheName = prefix + eventName;
+        var events = elem[eventsCacheName];
+        if(layui.isArray(events)){
+          var newEvents = [];
+          lay.each(events, function(_, listener){
+            if(listener._rawFn === fn){
+              elem.detachEvent('on'+ eventName, listener);
+            }else{
+              newEvents.push(listener);
+            }
+          })
+          elem[eventsCacheName] = newEvents;
+        }         
+      } 
+    }
+  }();
+
 
   /*
    * lay 元素操作
@@ -784,51 +843,16 @@
   };
 
   // 事件绑定
-  Class.fn.on = function(eventName, fn){
+  Class.fn.on = function(eventName, fn, options){
     return this.each(function(index, item){
-      item.attachEvent ? function(){
-        var prefix = '_lay_on_';
-        var listener = function(e){
-          e.target = e.srcElement;
-          fn.call(item, e);
-        }
-        listener._rawFn = fn;
-        if(!item[prefix + eventName]){
-          item[prefix + eventName] = [];
-        }
-        var include = false;
-        layui.each(item[prefix + eventName], function(_, listener){
-          if(listener._rawFn === fn){
-            include = true;
-            return true;
-          }
-        })
-        if(!include){
-          item[prefix + eventName].push(listener);
-          item.attachEvent('on' + eventName, listener);
-        }
-      }() : item.addEventListener(eventName, fn, false);
+      lay.addEvent(item, eventName, fn, options)
     });
   };
 
   // 解除事件
-  Class.fn.off = function(eventName, fn){
+  Class.fn.off = function(eventName, fn, options){
     return this.each(function(index, item){
-      item.detachEvent ? function(){
-        var prefix = '_lay_on_';
-        var events = item[prefix + eventName];
-        if(layui.isArray(events)){
-          var newEvents = [];
-          lay.each(events, function(_, listener){
-            if(listener._rawFn === fn){
-              item.detachEvent('on'+ eventName, listener);
-            }else{
-              newEvents.push(listener);
-            }
-          })
-          item[prefix + eventName] = newEvents;
-        }
-      }() : item.removeEventListener(eventName, fn, false);
+      lay.removeEvent(item, eventName, fn, options)
     });
   };
 
