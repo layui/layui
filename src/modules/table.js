@@ -272,7 +272,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function (exports) {
     , '{{# } }}'
 
     , '<div class="layui-table-column layui-table-page layui-hide">'
-      , '<div class="layui-inline layui-table-pageview" id="layui-table-page{{=d.index}}"></div>'
+      , '<div class="layui-inline layui-table-pageview" id="layui-table-page{{=d.index}}"></div><span class="layui-page-custom"></span>'
     , '</div>'
   ].join('');
 

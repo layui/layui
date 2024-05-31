@@ -183,7 +183,11 @@ layui.define(function (exports) {
       return plate.join('');
     }(), '</div>'].join('');
   };
-
+  Class.prototype.custom = function (elem) {
+    if (this.config.cushtml) {
+      $(elem).parent().next().html(this.config.cushtml);
+    }
+  };
   // 跳页的回调
   Class.prototype.jump = function (elem, isskip) {
     if (!elem) return;
@@ -294,6 +298,7 @@ layui.define(function (exports) {
     }
 
     that.skip(elem);
+    that.custom(elem);
   };
 
   // 外部接口
