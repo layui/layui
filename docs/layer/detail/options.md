@@ -733,6 +733,30 @@ layer.open({
     <tr>
 <td>
 
+[beforeEnd](#options.beforeEnd)
+
+</td>
+<td colspan="3">
+  
+<div id="options.beforeEnd" lay-pid="options" class="ws-anchor">
+弹层被关闭前的回调函数。
+</div>
+
+```
+layer.open({
+  content: '内容',
+  beforeEnd: function(layero, index){
+  
+    return false; // 阻止默认关闭行为
+  }
+});  
+```
+
+</td>
+    </tr>
+    <tr>
+<td>
+
 [end](#options.end)
 
 </td>
