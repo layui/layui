@@ -733,7 +733,7 @@ layer.open({
     <tr>
 <td>
 
-[beforeEnd](#options.beforeEnd)
+[beforeEnd](#options.beforeEnd) <sup>2.9.11+</sup>
 
 </td>
 <td colspan="3">
