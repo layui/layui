@@ -739,7 +739,7 @@ layer.open({
 <td colspan="3">
   
 <div id="options.beforeEnd" lay-pid="options" class="ws-anchor">
-弹层被关闭前的回调函数。如果返回 false 或者 PromiseLike.reject，将会取消关闭操作。
+弹层被关闭前的回调函数。如果返回 false 或者 Promise.reject，将会取消关闭操作。
 </div>
 
 ```

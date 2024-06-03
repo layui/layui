@@ -1326,7 +1326,7 @@ layer.close = function(index, callback){
           executor();
         }
       }, function(reason){
-        window.console && window.console.error('layer error hint: ' + reason);
+        reason !== undefined && window.console && window.console.error('layer error hint: ' + reason);
       });
   }else{
     delete ready.beforeEnd[index];
