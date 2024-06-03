@@ -1307,22 +1307,27 @@ layer.close = function(index, callback){
   }
 
   if(!hideOnClose && typeof ready.beforeEnd[index] === 'function'){
-    var maybePromise = ready.beforeEnd[index](layero, index);
-    var isPromiseLike = typeof maybePromise === 'object' && typeof maybePromise.then === 'function';
+    // 类似 Promise.resolve
+    var promiseLikeResolve = function(value){
+      var deferred = $.Deferred();
 
-    if(maybePromise === false){
-      return;
-    }else if(isPromiseLike){
-      maybePromise.then(function(result){
+      if(value && typeof value.then === 'function'){
+        value.then(deferred.resolve, deferred.reject);
+      }else{
+        deferred.resolve(value);
+      }
+      return deferred.promise();
+    }
+
+    promiseLikeResolve(ready.beforeEnd[index](layero, index))
+      .then(function(result){
         if(result !== false){
           delete ready.beforeEnd[index];
           executor();
         }
-      })
-    }else{
-      delete ready.beforeEnd[index];
-      executor();
-    }
+      }, function(reason){
+        window.console && window.console.error('layer error hint: ' + reason);
+      });
   }else{
     delete ready.beforeEnd[index];
     executor();
