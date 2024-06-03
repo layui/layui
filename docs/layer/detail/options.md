@@ -745,7 +745,7 @@ layer.open({
 ```
 layer.open({
   content: '<div style="padding: 32px;"><input id="id"/></div>',
-  /** @type {(layero: JQuery, index: number) => JQueryDeferred<boolean> | Promise<boolean>} */
+  /** @type {(layero: JQuery, index: number) => boolean | JQueryDeferred<boolean> | Promise<boolean>} */
   beforeEnd: function(layero, index){
     return $.Deferred(function(defer){
       var el = layero.find('#id');
