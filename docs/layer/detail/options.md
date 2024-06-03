@@ -739,15 +739,26 @@ layer.open({
 <td colspan="3">
   
 <div id="options.beforeEnd" lay-pid="options" class="ws-anchor">
-弹层被关闭前的回调函数。
+弹层被关闭前的回调函数。如果返回 false 或者 PromiseLike.reject，将会取消关闭操作。
 </div>
 
 ```
 layer.open({
-  content: '内容',
+  content: '<div style="padding: 32px;"><input id="id"/></div>',
+  /** @type {(layero: JQuery, index: number) => JQueryDeferred<boolean> | Promise<boolean>} */
   beforeEnd: function(layero, index){
-  
-    return false; // 阻止默认关闭行为
+    return $.Deferred(function(defer){
+      var el = layero.find('#id');
+      var val = el.val().trim();
+      if(val){
+        layer.confirm('关闭后您填写的内容将不会得到保存，确定关闭吗？', function (i) {
+          layer.close(i);
+          defer.resolve(true)
+        });
+      }else{
+        defer.resolve(true)
+      }
+    }).promise();
   }
 });  
 ```
