@@ -759,9 +759,9 @@ layui.define(['table'], function (exports) {
           var str2 = table.getTrHtml(tableId, childNodes, null, null, dataIndex);
 
           var str2Obj = {
-            trs: $(str2.trs.join('')),
-            trs_fixed: $(str2.trs_fixed.join('')),
-            trs_fixed_r: $(str2.trs_fixed_r.join(''))
+            trs: $(str2.trs.children),
+            trs_fixed: $(str2.trs_fixed.children),
+            trs_fixed_r: $(str2.trs_fixed_r.children)
           }
           var dataLevel = dataIndex.split('-').length - 1;
           var dataLevelNew = (dataLevel || 0) + 1;
@@ -973,9 +973,9 @@ layui.define(['table'], function (exports) {
         var trAll = table.getTrHtml(id, tableDataFlat);
 
         var trAllObj = {
-          trs: $(trAll.trs.join('')),
-          trs_fixed: $(trAll.trs_fixed.join('')),
-          trs_fixed_r: $(trAll.trs_fixed_r.join(''))
+          trs: $(trAll.trs.children),
+          trs_fixed: $(trAll.trs_fixed.children),
+          trs_fixed_r: $(trAll.trs_fixed_r.children)
         }
         var props;
         layui.each(tableDataFlat, function (dataIndex, dataItem) {
@@ -1332,7 +1332,7 @@ layui.define(['table'], function (exports) {
     var trNew = table.getTrHtml(id, [newNodeTemp]);
     // 重新渲染tr
     layui.each(['main', 'fixed-l', 'fixed-r'], function (i, item) {
-      tableView.find('.layui-table-' + item + ' tbody tr[lay-data-index="' + index + '"]').replaceWith($(trNew[['trs', 'trs_fixed', 'trs_fixed_r'][i]].join('')).attr({
+      tableView.find('.layui-table-' + item + ' tbody tr[lay-data-index="' + index + '"]').replaceWith($(trNew[['trs', 'trs_fixed', 'trs_fixed_r'][i]].children).attr({
         'data-index': trIndex,
         'lay-data-index': index,
         'data-level': trLevel
@@ -1481,9 +1481,9 @@ layui.define(['table'], function (exports) {
 
       var newNodesHtml = table.getTrHtml(id, newNodes);
       var newNodesHtmlObj = {
-        trs: $(newNodesHtml.trs.join('')),
-        trs_fixed: $(newNodesHtml.trs_fixed.join('')),
-        trs_fixed_r: $(newNodesHtml.trs_fixed_r.join(''))
+        trs: $(newNodesHtml.trs.children),
+        trs_fixed: $(newNodesHtml.trs_fixed.children),
+        trs_fixed_r: $(newNodesHtml.trs_fixed_r.children)
       }
 
       var attrs = {};

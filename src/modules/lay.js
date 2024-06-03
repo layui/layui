@@ -148,7 +148,11 @@
   lay.elem = function(elemName, attr){
     var elem = document.createElement(elemName);
     lay.each(attr || {}, function(key, value){
-      elem.setAttribute(key, value);
+      if(value === null){
+        elem.removeAttribute(key);
+        return;
+      }
+      elem.setAttribute(key, value + '');
     });
     return elem;
   };
