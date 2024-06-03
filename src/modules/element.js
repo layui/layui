@@ -48,7 +48,7 @@ layui.define('jquery', function(exports){
     }() +'>'+ (options.title || 'unnaming') +'</li>';
     
     barElem[0] ? barElem.before(li) : titElem.append(li);
-    contElem.append('<div class="layui-tab-item">'+ (options.content || '') +'</div>');
+    contElem.append('<div class="layui-tab-item" ' + (options.id ? 'lay-id=' + options.id : '') + '>'+ (options.content || '') +'</div>');
     // call.hideTabMore(true);
     // 是否添加即切换
     options.change && this.tabChange(filter, options.id);
@@ -134,6 +134,7 @@ layui.define('jquery', function(exports){
       var isJump = elemA.attr('href') !== 'javascript:;' && elemA.attr('target') === '_blank'; // 是否存在跳转
       var unselect = typeof othis.attr('lay-unselect') === 'string'; // 是否禁用选中
       var filter = parents.attr('lay-filter');
+      var hasId = othis.attr('lay-id');
 
       // 下标
       var index = 'index' in obj 
@@ -143,12 +144,19 @@ layui.define('jquery', function(exports){
       // 执行切换
       if(!(isJump || unselect)){
         othis.addClass(THIS).siblings().removeClass(THIS);
-        item.eq(index).addClass(SHOW).siblings().removeClass(SHOW);
+        if(hasId){
+          var contentElem = item.filter('[lay-id="' +  hasId + '"]');
+          contentElem = contentElem.length ? contentElem : item.eq(index);
+          contentElem.addClass(SHOW).siblings().removeClass(SHOW);
+        }else{
+          item.eq(index).addClass(SHOW).siblings().removeClass(SHOW);
+        }
       }
       
       layui.event.call(this, MOD_NAME, 'tab('+ filter +')', {
         elem: parents,
-        index: index
+        index: index,
+        id: hasId
       });
     }
     
@@ -159,6 +167,14 @@ layui.define('jquery', function(exports){
       var tabElem = li.closest('.layui-tab');
       var item = tabElem.children('.layui-tab-content').children('.layui-tab-item');
       var filter = tabElem.attr('lay-filter');
+      var hasId = li.attr('lay-id');
+
+      var shouldClose = layui.event.call(li[0], MOD_NAME, 'tabBeforeDelete('+ filter +')', {
+        elem: tabElem,
+        index: index,
+        id: hasId
+      });
+      if(shouldClose === false) return;
       
       if(li.hasClass(THIS)){
         if (li.next()[0] && li.next().is('li')){
@@ -171,14 +187,21 @@ layui.define('jquery', function(exports){
       }
       
       li.remove();
-      item.eq(index).remove();
+      if(hasId){
+        var contentElem = item.filter('[lay-id="' +  hasId + '"]');
+        contentElem = contentElem.length ? contentElem : item.eq(index)
+        contentElem.remove()
+      }else{
+        item.eq(index).remove();
+      }
       setTimeout(function(){
         call.tabAuto();
       }, 50);
       
       layui.event.call(this, MOD_NAME, 'tabDelete('+ filter +')', {
         elem: tabElem,
-        index: index
+        index: index,
+        id: hasId
       });
     }
     
@@ -202,10 +225,11 @@ layui.define('jquery', function(exports){
         }
         
         // 开启关闭图标
-        if(othis.attr('lay-allowclose')){
+        var allowclose = othis.attr('lay-allowclose');
+        if(allowclose && allowclose !== 'false'){
           title.find('li').each(function(){
             var li = $(this);
-            if(!li.find('.'+CLOSE)[0]){
+            if(!li.find('.'+CLOSE)[0] && li.attr('lay-allowclose') !== 'false'){
               var close = $('<i class="layui-icon layui-icon-close layui-unselect '+ CLOSE +'"></i>');
               close.on('click', call.tabDelete);
               li.append(close);
