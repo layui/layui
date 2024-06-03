@@ -118,7 +118,7 @@ tab 组件提供了三种 UI 风格，分别为：
 
 | 属性 | 描述 |
 | --- | --- |
-| lay-allowclose | 是否开启删除图标。设置在 tab 容器 `<ul class="layui-tab">` 上。 若需要单独关闭某一个选项卡的删除图标，可在选项卡标题元素 `<li>` 上设置 `lay-allowclose="false"`(2.9.11+)|
+| lay-allowclose | 是否开启删除图标。设置在 tab 容器 `<ul class="layui-tab">` 上。 <br><sup>2.9.11+</sup>: 若需要单独关闭某一个选项卡的删除图标，可在选项卡标题元素 `<li>` 上设置 `lay-allowclose="false"`|
 | lay-id | tab 选项唯一 ID，一般用于外部对 tab 的删除和切换等操作。设置在 tab 中的 `<li>` 元素上。在外部附加选项卡拖拽排序时，`layui-tab-item` 元素也要设置 ID |
 
 <h3 id="allowclose" lay-toc="{level: 2}" class="ws-bold">开启删除</h3>
@@ -129,14 +129,14 @@ tab 组件提供了三种 UI 风格，分别为：
   <textarea>
 <div class="layui-tab" lay-allowclose="true">
   <ul class="layui-tab-title">
-    <li class="layui-this">标签1</li>
+    <li class="layui-this" lay-allowclose="false">标签1</li>
     <li>标签2</li>
     <li>标签3</li>
     <li>标签4</li>
     <li>标签5</li>
   </ul>
   <div class="layui-tab-content">
-    <div class="layui-tab-item layui-show">内容-1</div>
+    <div class="layui-tab-item layui-show">单独设置「标签1」不允许删除 <sup>2.9.11+</sup></div>
     <div class="layui-tab-item">内容-2</div>
     <div class="layui-tab-item">内容-3</div>
     <div class="layui-tab-item">内容-4</div>
