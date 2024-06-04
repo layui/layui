@@ -636,7 +636,7 @@
           elem[eventsCacheName] = [];
         }
         var include = false;
-        layui.each(elem[eventsCacheName], function(_, listener){
+        lay.each(elem[eventsCacheName], function(_, listener){
           if(listener._rawFn === fn){
             include = true;
             return true;
@@ -648,7 +648,7 @@
         }
       }
     }
-  }()
+  }();
 
  /** @type {(elem: Element|Document|Window,eventName: string,fn:EventListenerOrEventListenerObject,options: boolean | EventListenerOptions) => any}*/
   lay.removeEvent = function(){
