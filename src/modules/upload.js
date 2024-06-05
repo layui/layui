@@ -471,20 +471,14 @@ layui.define(['lay', 'layer'], function(exports){
       }
       // 上传前的回调 - 如果回调函数明确返回 false 或 Promise.reject，则停止上传
       if(typeof options.before === 'function'){
-        var maybePromise = options.before(args);
-        if(maybePromise === false){
-          return;
-        }else if(typeof maybePromise === 'object' && typeof maybePromise.then === 'function'){
-          // 兼容 jQuery Deferred Promise 对象和原生 Promise 对象
-          // 类型检测不够完善，但足以满足此场景
-          maybePromise.then(function(result){
-            ready();
+        upload.util.promiseLikeResolve(options.before(args))
+          .then(function(result){
+            if(result !== false){
+              ready();
+            }
           }, function(error){
-            layui.hint().error(error);
+            error !== undefined && layui.hint().error(error);
           })
-        }else{
-          ready();
-        }
       }else{
         ready();
       }
@@ -781,6 +775,19 @@ layui.define(['lay', 'layer'], function(exports){
       size = formatSize / Math.pow(1024, index);
       size = size % 1 === 0 ? size : parseFloat(size.toFixed(precision));//保留的小数位数
       return size + unitArr[index];
+    },
+    /**
+     * 将给定的值转换为一个 JQueryDeferred 对象
+     */
+    promiseLikeResolve:function(value){
+      var deferred = $.Deferred();
+
+      if(value && typeof value.then === 'function'){
+        value.then(deferred.resolve, deferred.reject);
+      }else{
+        deferred.resolve(value);
+      }
+      return deferred.promise();
     }
   }
 
