@@ -9,9 +9,43 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+
+<h2 id="v2.9.11" class="ws-anchor">
+  v2.9.11
+  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
+  <span class="layui-badge-rim">2024-06-05</span>
+</h2>
+
+- #### tab
+  - 新增 标签头 `lay-allowclose="false"` 属性支持，用于给指定标签禁用删除图标 #1955 @Sight-wcg
+  - 新增 `element.tabAdd()` 第二个参数的 `allowClose` 选项，用于是否显示关闭图标 #1955 @Sight-wcg
+  - 新增 `tabBeforeDelete` 事件，返回 `false` 时可阻止关闭对应的选项卡 #1955 @Sight-wcg
+  - 优化 当标签头存在 `lay-id` 属性时，根据其属性值切换或删除对应的内容，方便拖拽排序 #1955 @Sight-wcg
+  - 优化 标签相关事件的返回参数，新增 `id` 属性 #1955 @Sight-wcg
+- #### layer
+  - 新增 `beforeEnd` 回调函数选项，在弹层关闭之前触发，可用于阻止弹层关闭 #1968 @Sight-wcg
+  - 修复 在某些浏览器的兼容模式下报错无法弹出的问题 #1940 @meihangbo
+- #### select
+  - 调整 当开启 `lay-creatable` 时，新创建的 `<option>` 元素显示在顶部 #1950 @Sight-wcg
+  - 新增 循环切换选中元素的支持 #1950 @Sight-wcg
+  - 修复 开启 `lay-creatable` 后方向键切换选中元素偶现异常 #1950 @Sight-wcg
+- #### upload
+  - 新增 `before` 返回值为 Promise 和 Deferred Promise 对象类型的支持 #1919 @Sight-wcg
+- #### flow
+  - 新增 `moreText` 选项，用于自定义"加载更多"按钮文本 #1965 @Pencil-hzp
+- #### treeTable
+  - 修复 `data` 模式非深度重载时，若未传入 `data` 选项导致表格数据被清除的问题 #1938 @Sight-wcg
+- #### colorpicker
+  - 优化 游标滑动效果 #1923 @Sight-wcg
+- #### lay
+  - 修复 IE8-10 中 `lay.off` 无法解除 `lay.on` 绑定的事件的问题 #1964 @Sight-wcg
+
+### 下载： [layui-v2.9.11.zip](https://gitee.com/layui/layui/attach_files/1793865/download)
+
+---
+
 <h2 id="v2.9.10" class="ws-anchor">
   v2.9.10
-  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
   <span class="layui-badge-rim">2024-05-20</span>
 </h2>
 
