@@ -53,7 +53,7 @@
 </td>
     </tr>
     <tr>
-<td>moreText</td>
+<td>moreText <sup>2.9.11+</sup></td>
 <td>
 
 设置「加载更多」按钮的文本
