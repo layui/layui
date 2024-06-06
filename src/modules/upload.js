@@ -476,6 +476,11 @@ layui.define(['lay', 'layer'], function(exports){
             if(result !== false){
               ready();
             }
+            else{
+              if(options.auto){
+                    elemFile.value = '';
+              }
+            }
           }, function(error){
             error !== undefined && layui.hint().error(error);
           })
