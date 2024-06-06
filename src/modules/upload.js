@@ -323,7 +323,7 @@ layui.define(['lay', 'layer'], function(exports){
               'Upload failed, please try again.',
               'status: '+ (e.status || '') +' - '+ (e.statusText || 'error')
             ].join('<br>'));
-            error(sets.index);
+            error(sets.index, e.responseText);
             allDone(sets.index);
             resetFileState(sets.file);
           }
@@ -386,21 +386,41 @@ layui.define(['lay', 'layer'], function(exports){
         }
       }, 30); 
     };
-    
+
+    // 强制返回的数据格式
+    var forceConvert = function(src) {
+      if(options.force === 'json'){
+        if(typeof src !== 'object'){
+          try {
+            return {
+              status: "CONVERTED",
+              data: JSON.parse(src)
+            };
+          } catch(e){
+            that.msg(text['data-format-error']);
+            return {
+              status: "FORMAT_ERROR",
+              data: {}
+            };
+          }
+        }
+      }
+      return { status: "DO_NOTHING", data: {} }
+    }
+
     // 统一回调
     var done = function(index, res){
       that.elemFile.next('.'+ ELEM_CHOOSE).remove();
       elemFile.value = '';
       
-      if(options.force === 'json'){
-        if(typeof res !== 'object'){
-          try {
-            res = JSON.parse(res);
-          } catch(e){
-            res = {};
-            return that.msg(text['data-format-error']);
-          }
-        }
+      var convert = forceConvert(res);
+
+      switch(convert.status) {
+        case "CONVERTED":
+          res = convert.data;
+          break;
+        case "FORMAT_ERROR":
+          return;
       }
       
       typeof options.done === 'function' && options.done(res, index || 0, function(files){
@@ -409,13 +429,24 @@ layui.define(['lay', 'layer'], function(exports){
     };
     
     // 统一网络异常回调
-    var error = function(index){
+    var error = function(index, res){
       if(options.auto){
         elemFile.value = '';
       }
+
+      var convert = forceConvert(res);
+
+      switch(convert.status) {
+        case "CONVERTED":
+          res = convert.data;
+          break;
+        case "FORMAT_ERROR":
+          return;
+      }
+
       typeof options.error === 'function' && options.error(index || 0, function(files){
         that.upload(files);
-      });
+      }, res);
     };
     
     var check;
