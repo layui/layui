@@ -448,6 +448,11 @@ layui.define(['jquery', 'lay'], function(exports){
         elemMove.remove();
       });
     };
+    // 移动端滑动模拟事件中
+    // 1. 不触发游标上绑定的事件，以提高性能，使滑动更流畅
+    // 2. 游标上的事件需要冒泡到颜色拾取区域，用来模拟拖动游标的效果
+    var needTrigger = true;
+    var needStopPropagation = true;
 
     //右侧主色选择
     slider.on('mousedown', function(e, triggerEvent){
@@ -463,8 +468,7 @@ layui.define(['jquery', 'lay'], function(exports){
         change(h, _s, _b, _a);
         e.preventDefault();
       };
-      
-      layui.stope(e);
+      needStopPropagation && layui.stope(e);
       createMoveElem(move);
       e.preventDefault();
     });
@@ -477,7 +481,7 @@ layui.define(['jquery', 'lay'], function(exports){
       _h = h;
       change(h, _s, _b, _a); 
       e.preventDefault();
-      slider.trigger('mousedown', e);
+      needTrigger && slider.trigger('mousedown', e);
     });
     
     //中间小圆点颜色选择
@@ -502,7 +506,7 @@ layui.define(['jquery', 'lay'], function(exports){
         change(_h, s, b, _a); 
         e.preventDefault();
       };
-      layui.stope(e);
+      needStopPropagation && layui.stope(e);
       createMoveElem(move);
       e.preventDefault();
     });
@@ -521,7 +525,7 @@ layui.define(['jquery', 'lay'], function(exports){
       change(_h, s, b, _a); 
       layui.stope(e);
       e.preventDefault();
-      choose.trigger('mousedown', e);
+      needTrigger && choose.trigger('mousedown', e);
     });
     
     //底部透明度选择
@@ -539,7 +543,7 @@ layui.define(['jquery', 'lay'], function(exports){
         e.preventDefault();
       };
       
-      layui.stope(e);
+      needStopPropagation && layui.stope(e);
       createMoveElem(move);
       e.preventDefault();
     });
@@ -551,7 +555,7 @@ layui.define(['jquery', 'lay'], function(exports){
       _a = a;
       change(_h, _s, _b, a); 
       e.preventDefault();
-      alphaslider.trigger('mousedown', e);
+      needTrigger && alphaslider.trigger('mousedown', e);
     });
     
     //预定义颜色选择
@@ -579,8 +583,17 @@ layui.define(['jquery', 'lay'], function(exports){
       {elem: basis, eventType: 'mousedown'}
     ], function(i, obj){
       lay.touchSwipe(obj.elem, {
+        onTouchStart: function(){
+          needTrigger = false;
+          needStopPropagation = false;
+        },
         onTouchMove: function(e){
           touchHandler(e, obj.eventType)
+        },
+        onTouchEnd: function(){
+          elemMove.remove();
+          needTrigger = true;
+          needStopPropagation = true;
         }
       })
     })
