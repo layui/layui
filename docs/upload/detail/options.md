@@ -512,12 +512,17 @@ allDone: function(obj){
 <td>error</td>
 <td colspan="3">
   
-执行上传请求出现异常的回调（一般为网络异常、URL 404等）。返回两个参数如下：
+执行上传请求出现异常的回调（一般为网络异常、URL 404等）。返回三个参数如下：
+- `index`： 当前文件的索引
+- `upload`： 重新上传的方法
+- `res`： 返回值（纯文本）<sup>2.9.12+</sup>
 
 ```
-error: function(index, upload){
+error: function(index, upload, res){
   console.log(index); // 当前文件的索引
   // upload(); 重新上传的方法
+  console.log(res);  // 返回值（纯文本）
+  console.log(JSON.parse(res));  // 返回值（json）
 }
 ```
 
