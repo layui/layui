@@ -478,7 +478,7 @@ layui.define(['lay', 'layer'], function(exports){
             }
             else{
               if(options.auto){
-                    elemFile.value = '';
+                elemFile.value = '';
               }
             }
           }, function(error){
