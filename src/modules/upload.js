@@ -482,6 +482,9 @@ layui.define(['lay', 'layer'], function(exports){
               }
             }
           }, function(error){
+            if(options.auto){
+              elemFile.value = '';
+            }
             error !== undefined && layui.hint().error(error);
           })
       }else{
