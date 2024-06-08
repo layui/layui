@@ -2,7 +2,7 @@
  * layer
  * 通用 Web 弹出层组件
  */
-
+//@ts-ignore
 ;!function(window, undefined){
 "use strict";
 
@@ -859,6 +859,16 @@ Class.pt.move = function(){
   return that;
 };
 
+Class.pt.btnLoading = function(btnElem, isLoading){
+  if(isLoading){
+    var loadingTpl = '<i class="layui-layer-btn-loading-icon layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>';
+    if(btnElem.find('.layui-layer-btn-loading-icon')[0]) return;
+    btnElem.addClass('layui-layer-btn-is-loading').attr({disabled: ''}).prepend(loadingTpl);
+  }else{
+    btnElem.removeClass('layui-layer-btn-is-loading').removeAttr('disabled').find('.layui-layer-btn-loading-icon').remove();
+  }
+}
+
 Class.pt.callback = function(){
   var that = this, layero = that.layero, config = that.config;
   that.openLayer();
@@ -875,18 +885,41 @@ Class.pt.callback = function(){
   
   // 按钮
   layero.find('.'+ doms[6]).children('a').on('click', function(){
+    var btnElem = $(this);
     var index = $(this).index();
-    if(index === 0){
-      if(config.yes){
-        config.yes(that.index, layero, that);
-      } else if(config['btn1']){
-        config['btn1'](that.index, layero, that);
-      } else {
+    if(btnElem.attr('disabled')) return;
+   
+    if(config.btnAsync){
+      var btnCallback = index === 0 ? (config.yes || config['btn1']) : config['btn'+(index+1)];
+      var loading = function(isLoading){
+        that.btnLoading(btnElem, isLoading);
+      }
+
+      if(btnCallback){
+        ready.promiseLikeResolve(btnCallback(that.index, layero, that, loading))
+          .then(function(result){
+            if(result !== false){
+              layer.close(that.index)
+            }
+          }, function(reason){
+             reason !== undefined && window.console && window.console.error('layer error hint: ' + reason);
+          });
+      }else{
         layer.close(that.index);
       }
-    } else {
-      var close = config['btn'+(index+1)] && config['btn'+(index+1)](that.index, layero, that);
-      close === false || layer.close(that.index);
+    }else{
+      if(index === 0){
+        if(config.yes){
+          config.yes(that.index, layero, that);
+        } else if(config['btn1']){
+          config['btn1'](that.index, layero, that);
+        } else {
+          layer.close(that.index);
+        }
+      } else {
+        var close = config['btn'+(index+1)] && config['btn'+(index+1)](that.index, layero, that);
+        close === false || layer.close(that.index);
+      }
     }
   });
   
@@ -999,6 +1032,18 @@ ready.restScrollbar = function(index){
     doms.html.removeAttr('layer-full');
   }
 };
+
+// 类似 Promise.resolve
+ready.promiseLikeResolve = function(value){
+  var deferred = $.Deferred();
+
+  if(value && typeof value.then === 'function'){
+    value.then(deferred.resolve, deferred.reject);
+  }else{
+    deferred.resolve(value);
+  }
+  return deferred.promise();
+}
 
 /** 内置成员 */
 
@@ -1307,19 +1352,7 @@ layer.close = function(index, callback){
   }
 
   if(!hideOnClose && typeof ready.beforeEnd[index] === 'function'){
-    // 类似 Promise.resolve
-    var promiseLikeResolve = function(value){
-      var deferred = $.Deferred();
-
-      if(value && typeof value.then === 'function'){
-        value.then(deferred.resolve, deferred.reject);
-      }else{
-        deferred.resolve(value);
-      }
-      return deferred.promise();
-    }
-
-    promiseLikeResolve(ready.beforeEnd[index](layero, index))
+    ready.promiseLikeResolve(ready.beforeEnd[index](layero, index))
       .then(function(result){
         if(result !== false){
           delete ready.beforeEnd[index];
