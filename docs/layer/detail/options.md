@@ -419,10 +419,10 @@ layer.confirm('一个询问框的示例？', {
     btnAsync: true,
     btn: ['确定', '关闭'] //按钮
   }, 
-  // loading 参数仅 btnAsync 开启后支持，参数为 boolean 类型，表示打开或关闭按钮的加载效果。
-  function (index, layero, that, loading) {
+  // that.loading 仅 btnAsync 开启后支持，参数为 boolean 类型，表示打开或关闭按钮的加载效果。
+  function (index, layero, that) {
     var defer = $.Deferred();
-    loading && loading(true);
+    that.loading(true);
     sleep(1000).then(defer.resolve);
     return defer.promise();
   }

@@ -22,9 +22,9 @@ layui.use(function () {
     alert: function () {
       layer.alert('对话框内容', {
         btnAsync: enableBtnAsync,
-      }, function (index, layero, that, loading) {
+      }, function (index, layero, that) {
         var defer = $.Deferred();
-        loading && loading(true);
+        that.loading(true);
         sleep(1000).then(defer.resolve);
         return defer.promise();
       });
@@ -33,9 +33,9 @@ layui.use(function () {
       layer.confirm('一个询问框的示例？', {
         btnAsync: enableBtnAsync,
         btn: ['确定', '关闭'] //按钮
-      }, function (index, layero, that, loading) {
+      }, function (index, layero, that) {
         var defer = $.Deferred();
-        loading && loading(true);
+        that.loading(true);
         sleep(1000).then(defer.resolve);
         return defer.promise();
       });
@@ -45,9 +45,9 @@ layui.use(function () {
         btnAsync: enableBtnAsync,
         time: 20000, // 20s 后自动关闭
         btn: ['明白了', '知道了'],
-        btn1: function (index, layero, that, loading) {
+        btn1: function (index, layero, that) {
           var defer = $.Deferred();
-          loading && loading(true);
+          that.loading(true);
           sleep(1000).then(defer.resolve);
           return defer.promise();
         }
@@ -59,15 +59,15 @@ layui.use(function () {
         type: 1,
         area: ['500px', '300px'],
         btn: ['确定', '关闭'],
-        btn1: function (index, layero, that, loading) {
+        btn1: function (index, layero, that) {
           var defer = $.Deferred();
-          loading && loading(true);
+          that.loading(true);
           sleep(1000).then(defer.resolve);
           return defer.promise();
         },
-        btn2: function (index, layero, that, loading) {
+        btn2: function (index, layero, that) {
           var defer = $.Deferred();
-          loading && loading(true);
+          that.loading(true);
           sleep(1000).then(defer.resolve);
           return defer.promise();
         }

@@ -891,12 +891,12 @@ Class.pt.callback = function(){
    
     if(config.btnAsync){
       var btnCallback = index === 0 ? (config.yes || config['btn1']) : config['btn'+(index+1)];
-      var loading = function(isLoading){
+      that.loading = function(isLoading){
         that.btnLoading(btnElem, isLoading);
       }
 
       if(btnCallback){
-        ready.promiseLikeResolve(btnCallback(that.index, layero, that, loading))
+        ready.promiseLikeResolve(btnCallback(that.index, layero, that))
           .then(function(result){
             if(result !== false){
               layer.close(that.index)
