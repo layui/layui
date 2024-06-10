@@ -1,8 +1,8 @@
-<button type="button" class="layui-btn layui-btn-primary" lay-on="alert">alert</button>
-<button type="button" class="layui-btn layui-btn-primary" lay-on="confirm">confirm</button>
-<button type="button" class="layui-btn layui-btn-primary" lay-on="msg">msg</button>
-<button type="button" class="layui-btn layui-btn-primary" lay-on="open">open</button>
-<button type="button" class="layui-btn layui-btn-primary" lay-on="prompt">prompt(不支持)</button>
+<button type="button" class="layui-btn layui-btn-primary" lay-on="bs_alert">alert</button>
+<button type="button" class="layui-btn layui-btn-primary" lay-on="bs_confirm">confirm</button>
+<button type="button" class="layui-btn layui-btn-primary" lay-on="bs_msg">msg</button>
+<button type="button" class="layui-btn layui-btn-primary" lay-on="bs_open">open</button>
+<button type="button" class="layui-btn layui-btn-primary" lay-on="bs_prompt">prompt(不支持)</button>
 
 <!-- import layui -->
 <script>
@@ -19,7 +19,7 @@ layui.use(function () {
   var enableBtnAsync = true;
 
   util.on({
-    alert: function () {
+    bs_alert: function () {
       layer.alert('对话框内容', {
         btnAsync: enableBtnAsync,
       }, function (index, layero, that) {
@@ -29,7 +29,7 @@ layui.use(function () {
         return defer.promise();
       });
     },
-    confirm: function () {
+    bs_confirm: function () {
       layer.confirm('一个询问框的示例？', {
         btnAsync: enableBtnAsync,
         btn: ['确定', '关闭'] //按钮
@@ -40,7 +40,7 @@ layui.use(function () {
         return defer.promise();
       });
     },
-    msg: function () {
+    bs_msg: function () {
       layer.msg('第二个回调', {
         btnAsync: enableBtnAsync,
         time: 20000, // 20s 后自动关闭
@@ -53,7 +53,7 @@ layui.use(function () {
         }
       });
     },
-    open: function () {
+    bs_open: function () {
       layer.open({
         btnAsync: enableBtnAsync,
         type: 1,
@@ -74,7 +74,7 @@ layui.use(function () {
       })
     },
     // 不支持 btnAsync
-    prompt: function () {
+    bs_prompt: function () {
       layer.prompt({
         formType: 2,
         value: '初始值',
