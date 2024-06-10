@@ -896,7 +896,7 @@ Class.pt.callback = function(){
       }
 
       if(btnCallback){
-        ready.promiseLikeResolve(btnCallback(that.index, layero, that))
+        ready.promiseLikeResolve(btnCallback.call(config, that.index, layero, that))
           .then(function(result){
             if(result !== false){
               layer.close(that.index)
@@ -959,7 +959,7 @@ Class.pt.callback = function(){
   });
 
   config.end && (ready.end[that.index] = config.end);
-  config.beforeEnd && (ready.beforeEnd[that.index] = config.beforeEnd);
+  config.beforeEnd && (ready.beforeEnd[that.index] = $.proxy(config.beforeEnd, config, layero, that.index, that));
 };
 
 // for ie6 恢复 select
@@ -1352,7 +1352,7 @@ layer.close = function(index, callback){
   }
 
   if(!hideOnClose && typeof ready.beforeEnd[index] === 'function'){
-    ready.promiseLikeResolve(ready.beforeEnd[index](layero, index))
+    ready.promiseLikeResolve(ready.beforeEnd[index]())
       .then(function(result){
         if(result !== false){
           delete ready.beforeEnd[index];
