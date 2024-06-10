@@ -10,6 +10,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   var util = layui.util;
   var hint = layui.hint();
   var device = layui.device();
+  var isIE8 = lay.ie === '8';
   
   var MOD_NAME = 'form';
   var ELEM = '.layui-form';
@@ -796,20 +797,37 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         // 事件
         var events = function(reElem, RE_CLASS){
           var check = $(this);
-          
-          // 勾选
-          reElem.on('click', function(){
-            var othis = $(this);
-            var filter = check.attr('lay-filter') // 获取过滤器
+
+          var updateAppearance = function(el, reElem, isChecked){
+            var check = $(el);
+            var othis = reElem;
             var title = (
               othis.next('*[lay-checkbox]')[0] 
                 ? othis.next().html()
               : check.attr('title') || ''
             );
             var skin = check.attr('lay-skin') || 'primary';
-
+            var isSwitch = skin === 'switch';
+  
             // 开关
-            title = skin === 'switch' ? title.split('|') : [title];
+            title = isSwitch ? title.split('|') : [title];
+
+            if(!check[0].indeterminate) {
+              reElem.find('.'+ CLASS.SUBTRA).removeClass(CLASS.SUBTRA).addClass('layui-icon-ok');
+            }
+
+            if(isChecked){
+              reElem.addClass(RE_CLASS[1]),
+              isSwitch && reElem.children('div').html(title[0])
+            }else{
+              reElem.removeClass(RE_CLASS[1]),
+              isSwitch && reElem.children('div').html(title[1])
+            }
+          }
+          
+          // 勾选
+          reElem.on('click', function(){
+            var filter = check.attr('lay-filter') // 获取过滤器
 
             // 禁用
             if(check[0].disabled) return;
@@ -817,19 +835,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             // 半选
             if (check[0].indeterminate) {
               check[0].indeterminate = false;
-              reElem.find('.'+ CLASS.SUBTRA).removeClass(CLASS.SUBTRA).addClass('layui-icon-ok');
             }
 
             // 开关
-            check[0].checked ? (
-              check[0].checked = false,
-              reElem.removeClass(RE_CLASS[1]),
-              skin === 'switch' && reElem.children('div').html(title[1])
-            ) : (
-              check[0].checked = true,
-              reElem.addClass(RE_CLASS[1]),
-              skin === 'switch' && reElem.children('div').html(title[0])
-            );
+            check[0].checked = !check[0].checked
             
             // 事件
             layui.event.call(check[0], MOD_NAME, RE_CLASS[2]+'('+ filter +')', {
@@ -838,6 +847,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               othis: reElem
             });
           });
+
+          that.syncAppearanceOnCheckedChange(this, reElem, updateAppearance);
         };
         
         // 遍历复选框
@@ -912,6 +923,17 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         var events = function(reElem){
           var radio = $(this);
           var ANIM = 'layui-anim-scaleSpring';
+
+          var updateAppearance = function(el, reElem, isChecked){
+            var next = reElem;
+            if(isChecked){
+              next.addClass(CLASS + 'ed');
+              next.children('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
+            }else{
+              next.removeClass(CLASS + 'ed');
+              next.children('.layui-icon').removeClass(ANIM + ' ' + ICON[0]).addClass(ICON[1]);
+            }
+          }
           
           reElem.on('click', function(){
             var name = radio[0].name, forms = radio.parents(ELEM);
@@ -921,15 +943,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             if(radio[0].disabled) return;
             
             layui.each(sameRadio, function(){
-              var next = $(this).next('.' + CLASS);
               this.checked = false;
-              next.removeClass(CLASS + 'ed');
-              next.children('.layui-icon').removeClass(ANIM + ' ' + ICON[0]).addClass(ICON[1]);
             });
             
             radio[0].checked = true;
-            reElem.addClass(CLASS + 'ed');
-            reElem.children('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
             
             layui.event.call(radio[0], MOD_NAME, 'radio('+ filter +')', {
               elem: radio[0],
@@ -937,6 +954,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               othis: reElem
             });
           });
+
+          that.syncAppearanceOnCheckedChange(this, reElem, updateAppearance)
         };
         
         // 初始渲染
@@ -1017,6 +1036,36 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     }
     return that;
   };
+  
+  /**
+   * checkbox 和 radio checked 属性变化时自动更新 UI
+   * @param {HTMLInputElement} elem
+   * @param {JQuery} reElem
+   * @param {(el: HTMLInputElement, ReElem: JQuery, isChecked: boolean) => void} handler 
+   * @see https://learn.microsoft.com/zh-cn/previous-versions//ff382725(v=vs.85)?redirectedfrom=MSDN
+   */
+  Form.prototype.syncAppearanceOnCheckedChange = function(elem, reElem, handler){
+    // IE<9
+    var needAttrPatch = isIE8;
+    var props = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'checked');
+    Object.defineProperty(elem, 'checked',
+      lay.extend({}, props, {
+        get: function(){
+          return needAttrPatch
+            ? function(){var val = this.getAttributeNode('checked'); return !!(val && val.specified);} 
+            : props.get;
+        }(),
+        set: function (newValue) {
+          var oldValue = this.checked;
+          props.set.call(this, newValue);
+          if(oldValue !== newValue){
+            newValue ? this.setAttribute('checked', '') : this.removeAttribute('checked');
+            handler(this, reElem, newValue);
+          }
+        }
+      })
+    );
+  }
 
   /**
    * 主动触发验证
