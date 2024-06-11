@@ -1586,12 +1586,31 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     tr.siblings('tr').removeClass(className);
   };
 
+  Class.prototype.disableTransition = function(){
+    var style = lay.style({
+      target: document.head,
+      id: 'lay-table-disabled-transition',
+      text: '*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}'
+    })
+
+    return function(){
+      var _ = layui.getStyle(style, 'opacity'); // 强制浏览器重绘
+      document.head.removeChild(style);
+    }
+  }
+
   // 设置行选中状态
   Class.prototype.setRowChecked = function(opts){
     var that = this;
     var options = that.config;
     var isCheckAll = opts.index === 'all'; // 是否操作全部
     var isCheckMult = layui.type(opts.index) === 'array'; // 是否操作多个
+    var needDisableTransition= isCheckAll || isCheckMult; // 减少回流
+
+    var removeStyleFn;
+    if(needDisableTransition){
+      removeStyleFn = that.disableTransition();
+    }
 
     if(isCheckMult){
       var makeMap = {}
@@ -1690,6 +1709,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     : checkedElem ).prop('checked', getChecked(checkedSameElem.prop('checked')));
 
     that.syncCheckAll();
+
+    if(needDisableTransition && removeStyleFn){
+      setTimeout(function(){
+        removeStyleFn();
+      },100)
+    }
   };
 
   // 数据排序
