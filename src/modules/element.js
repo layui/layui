@@ -48,7 +48,7 @@ layui.define('jquery', function(exports){
     }() +'>'+ (options.title || 'unnaming') +'</li>';
     
     barElem[0] ? barElem.before(li) : titElem.append(li);
-    contElem.append('<div class="layui-tab-item" ' + (options.id ? 'lay-id=' + options.id : '') + '>'+ (options.content || '') +'</div>');
+    contElem.append('<div class="layui-tab-item" ' + (options.id ? 'lay-id="' + options.id + '"' : '') + '>'+ (options.content || '') +'</div>');
     // call.hideTabMore(true);
     // 是否添加即切换
     options.change && this.tabChange(filter, options.id);
