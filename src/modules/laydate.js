@@ -2352,16 +2352,16 @@
 
   //统一切换处理
   Class.prototype.change = function(index){
-    var that = this
-    ,options = that.config
-    ,dateTime = that.thisDateTime(index)
-    ,isAlone = options.range && (options.type === 'year' || options.type === 'month')
+    var that = this;
+    var options = that.config;
+    var dateTime = that.thisDateTime(index);
+    var isAlone = options.range && (options.type === 'year' || options.type === 'month');
 
-    ,elemCont = that.elemCont[index || 0]
-    ,listYM = that.listYM[index]
-    ,addSubYear = function(type){
-      var isYear = lay(elemCont).find('.laydate-year-list')[0]
-      ,isMonth = lay(elemCont).find('.laydate-month-list')[0];
+    var elemCont = that.elemCont[index || 0];
+    var listYM = that.listYM[index];
+    var addSubYear = function (type) {
+      var isYear = lay(elemCont).find('.laydate-year-list')[0];
+      var isMonth = lay(elemCont).find('.laydate-month-list')[0];
 
       //切换年列表
       if(isYear){
@@ -2405,8 +2405,8 @@
           // 面板自动切换的模式下重新判定是否发生模式转换等细节处理
           that.autoCalendarModel.auto ? that.choose(lay(elemCont).find('td.layui-this'), index) : that.done(null, 'change');
         }
-      }
-      ,prevMonth: function(){
+      },
+      prevMonth: function(){
         if (that.rangeLinked) {
           dateTime = options.dateTime;
         }
@@ -2420,8 +2420,8 @@
         if (!that.rangeLinked) {
           that.autoCalendarModel.auto ? that.choose(lay(elemCont).find('td.layui-this'), index) : that.done(null, 'change');
         }
-      }
-      ,nextMonth: function(){
+      },
+      nextMonth: function(){
         if (that.rangeLinked) {
           dateTime = options.dateTime;
         }
@@ -2435,8 +2435,8 @@
         if (!that.rangeLinked) {
           that.autoCalendarModel.auto ? that.choose(lay(elemCont).find('td.layui-this'), index) : that.done(null, 'change');
         }
-      }
-      ,nextYear: function(){
+      },
+      nextYear: function(){
         if(addSubYear()) return;
         if (that.rangeLinked) {
           options.dateTime.year++;
@@ -2450,10 +2450,51 @@
     };
   };
 
+  //设置背景
+  Class.prototype.changeHover = function (td) {
+    var that = this;
+
+    if (td.hasClass(DISABLED) || !this.startDate || this.endState) {
+      return;
+    }
+
+    var tds = lay(that.elem).find('td');
+
+    var startTime = that.newDate({
+      year: that.startDate.year,
+      month: that.startDate.month,
+      date: that.startDate.date
+    }).getTime();
+
+    var hoverDate = lay(td).attr('lay-ymd').split('-');
+    var hoverTime = that.newDate({
+      year: hoverDate[0],
+      month: hoverDate[1] - 1,
+      date: hoverDate[2]
+    }).getTime();
+
+    lay(tds).each(function (index, item) {
+      var ymd = lay(item).attr('lay-ymd').split('-');
+      var thisTime = that.newDate({
+        year: ymd[0],
+        month: ymd[1] - 1,
+        date: ymd[2]
+      }).getTime();
+
+      if (thisTime > startTime && thisTime < hoverTime || thisTime < startTime && thisTime > hoverTime) {
+        lay(item).addClass(ELEM_SELECTED).removeClass(THIS);
+      } else if (thisTime === hoverTime) {
+        lay(item).addClass(THIS).removeClass(ELEM_SELECTED);
+      } else {
+        lay(item).removeClass(ELEM_SELECTED + (thisTime !== startTime ? ' ' + THIS : ''));
+      }
+    });
+  }
+  
   //日期切换事件
   Class.prototype.changeEvent = function(){
-    var that = this
-    ,options = that.config;
+    var that = this;
+    var options = that.config;
 
     //日期选择事件
     lay(that.elem).on('click', function(e){
@@ -2476,9 +2517,9 @@
 
       //选择年月
       lay(header[2]).find('span').on('click', function(e){
-        var othis = lay(this)
-        ,layYM = othis.attr('lay-ym')
-        ,layType = othis.attr('lay-type');
+        var othis = lay(this);
+        var layYM = othis.attr('lay-ym');
+        var layType = othis.attr('lay-type');
 
         if(!layYM) return;
 
@@ -2506,6 +2547,12 @@
       tds.on('click', function(){
         that.choose(lay(this), i);
       });
+
+      if (options.rangeLinked) {
+        tds.on('mouseover', function () {
+          that.changeHover(lay(this), i);
+        });
+      }
     });
 
     //点击底部按钮
