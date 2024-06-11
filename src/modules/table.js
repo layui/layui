@@ -1603,12 +1603,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }
 
     // 匹配行元素
+    var selector = (isCheckAll || isCheckMult) ? 'tr' : 'tr[data-index="'+ opts.index +'"]';
     var tr = function(tr) {
       return isCheckAll ? tr : tr.filter(isCheckMult ? function() {
         var dataIndex = $(this).data('index');
         return opts.index[dataIndex];
       } : '[data-index="'+ opts.index +'"]');
-    }(that.layBody.find('tr'));
+    }(that.layBody.find(selector));
 
     // 默认属性
     opts = $.extend({
@@ -1624,12 +1625,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       return opts.type === 'radio' ? true : (existChecked ? opts.checked : !value)
     };
 
-    var collectIgnoreTrIndex = {};
+    var ignoreTrIndex = {};
     // 设置选中状态
     layui.each(thisData, function(i, item){
       // 绕过空项和禁用项
       if(layui.type(item) === 'array' || item[options.disabledName]){
-        collectIgnoreTrIndex[i] = true;
+        ignoreTrIndex[i] = true;
         return;
       }
 
@@ -1661,17 +1662,17 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     if(isCheckAll){
       tr.each(function(i){
-        var el = $(this)
-        var index = el.data('index');
-        if(!collectIgnoreTrIndex[index]){
+        var index = Number(this.getAttribute('data-index'));
+        if(!ignoreTrIndex[index]){
+          var el = $(this);
           el.toggleClass(ELEM_CHECKED, getChecked(thisData[index][options.checkName]))
         }
       });
     }else if(isCheckMult){
       tr.each(function(i){
-        var el = $(this)
-        var index = el.data('index');
-        if(opts.index[index]){
+        var index = Number(this.getAttribute('data-index'));
+        if(opts.index[index] && !ignoreTrIndex[index]){
+          var el = $(this);
           el.toggleClass(ELEM_CHECKED, getChecked(thisData[index][options.checkName]))
         }
       });
