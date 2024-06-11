@@ -10,7 +10,6 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   var util = layui.util;
   var hint = layui.hint();
   var device = layui.device();
-  var isIE8 = lay.ie === '8';
   
   var MOD_NAME = 'form';
   var ELEM = '.layui-form';
@@ -797,33 +796,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         // 事件
         var events = function(reElem, RE_CLASS){
           var check = $(this);
-
-          var updateAppearance = function(el, reElem, isChecked){
-            var check = $(el);
-            var othis = reElem;
-            var title = (
-              othis.next('*[lay-checkbox]')[0] 
-                ? othis.next().html()
-              : check.attr('title') || ''
-            );
-            var skin = check.attr('lay-skin') || 'primary';
-            var isSwitch = skin === 'switch';
-  
-            // 开关
-            title = isSwitch ? title.split('|') : [title];
-
-            if(!check[0].indeterminate) {
-              reElem.find('.'+ CLASS.SUBTRA).removeClass(CLASS.SUBTRA).addClass('layui-icon-ok');
-            }
-
-            if(isChecked){
-              reElem.addClass(RE_CLASS[1]),
-              isSwitch && reElem.children('div').html(title[0])
-            }else{
-              reElem.removeClass(RE_CLASS[1]),
-              isSwitch && reElem.children('div').html(title[1])
-            }
-          }
+          var skin = check.attr('lay-skin') || 'primary';
+          var isSwitch = skin === 'switch';
+          var isPrimary = skin === 'primary';
           
           // 勾选
           reElem.on('click', function(){
@@ -848,7 +823,26 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             });
           });
 
-          that.syncAppearanceOnCheckedChange(this, reElem, updateAppearance);
+          that.syncAppearanceOnPropChange(this, 'checked', function(isChecked){
+            if(isSwitch){
+              var title = (reElem.next('*[lay-checkbox]')[0] 
+                ? reElem.next().html()
+                : check.attr('title') || ''
+              ).split('|');
+              reElem.children('div').html(isChecked ? title[0] : title[1] || title[0]);
+            }
+            reElem.toggleClass(RE_CLASS[1], isChecked);
+          });
+
+          if(isPrimary){
+            that.syncAppearanceOnPropChange(this, 'indeterminate', function(isIndeterminate){
+              if(isIndeterminate){
+                reElem.children('.layui-icon-ok').removeClass('layui-icon-ok').addClass(CLASS.SUBTRA);
+              }else{
+                reElem.children('.'+ CLASS.SUBTRA).removeClass(CLASS.SUBTRA).addClass('layui-icon-ok');
+              }
+            })
+          }
         };
         
         // 遍历复选框
@@ -902,7 +896,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 '<i class="layui-icon '+(skin === 'primary' && !check.checked && othis.get(0).indeterminate ? CLASS.SUBTRA : 'layui-icon-ok')+'"></i>'
               ].join(''),
               // 开关
-              "switch": '<div>'+ ((check.checked ? title[0] : title[1]) || '') +'</div><i></i>'
+              "switch": '<div>'+ ((check.checked ? title[0] : (title[1] || title[0])) || '') +'</div><i></i>'
             };
             return type[skin] || type['checkbox'];
           }(),
@@ -923,17 +917,6 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         var events = function(reElem){
           var radio = $(this);
           var ANIM = 'layui-anim-scaleSpring';
-
-          var updateAppearance = function(el, reElem, isChecked){
-            var next = reElem;
-            if(isChecked){
-              next.addClass(CLASS + 'ed');
-              next.children('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
-            }else{
-              next.removeClass(CLASS + 'ed');
-              next.children('.layui-icon').removeClass(ANIM + ' ' + ICON[0]).addClass(ICON[1]);
-            }
-          }
           
           reElem.on('click', function(){
             var name = radio[0].name, forms = radio.parents(ELEM);
@@ -955,7 +938,15 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             });
           });
 
-          that.syncAppearanceOnCheckedChange(this, reElem, updateAppearance)
+          that.syncAppearanceOnPropChange(this, 'checked', function(isChecked){
+            if(isChecked){
+              reElem.addClass(CLASS + 'ed');
+              reElem.children('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
+            }else{
+              reElem.removeClass(CLASS + 'ed');
+              reElem.children('.layui-icon').removeClass(ANIM + ' ' + ICON[0]).addClass(ICON[1]);
+            }
+          })
         };
         
         // 初始渲染
@@ -1038,29 +1029,26 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   };
   
   /**
-   * checkbox 和 radio checked 属性变化时自动更新 UI
-   * @param {HTMLInputElement} elem
-   * @param {JQuery} reElem
-   * @param {(el: HTMLInputElement, ReElem: JQuery, isChecked: boolean) => void} handler 
+   * checkbox 和 radio 指定属性变化时自动更新 UI
+   * @param {HTMLInputElement} elem - HTMLInput 元素
+   * @param {'checked' | 'indeterminate'} propName - 属性名
+   * @param {(newValue: boolean, oldValue: boolean) => void} handler - 定义如何更新
    * @see https://learn.microsoft.com/zh-cn/previous-versions//ff382725(v=vs.85)?redirectedfrom=MSDN
    */
-  Form.prototype.syncAppearanceOnCheckedChange = function(elem, reElem, handler){
-    // IE<9
-    var needAttrPatch = isIE8;
-    var props = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'checked');
-    Object.defineProperty(elem, 'checked',
-      lay.extend({}, props, {
+  Form.prototype.syncAppearanceOnPropChange = function(elem, propName, handler){
+    var originProps = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, propName);
+
+    Object.defineProperty(elem, propName,
+      lay.extend({}, originProps, {
+        // 此处的 get 是为了兼容 IE<9
         get: function(){
-          return needAttrPatch
-            ? function(){var val = this.getAttributeNode('checked'); return !!(val && val.specified);} 
-            : props.get;
-        }(),
+          return originProps.get.call(this);
+        },
         set: function (newValue) {
-          var oldValue = this.checked;
-          props.set.call(this, newValue);
+          var oldValue = this[propName];
+          originProps.set.call(this, newValue);
           if(oldValue !== newValue){
-            newValue ? this.setAttribute('checked', '') : this.removeAttribute('checked');
-            handler(this, reElem, newValue);
+            handler(newValue, oldValue);
           }
         }
       })
