@@ -2251,14 +2251,8 @@
         isChange && (options.dateTime = lay.extend({}, that.startDate));
       }
       if (that.rangeLinked) {
-        var checkYMD
-        if (!panelIndex) {
-          checkYMD = dateTime.year + '-' + (dateTime.month + 1) + '-' + dateTime.date;
-          isChange = that.checkPanelDate(checkYMD, 1);
-        } else {
-          checkYMD = dateTime.year + '-' + (dateTime.month + 1) + '-' + dateTime.date;
-          isChange = that.checkPanelDate(checkYMD, 0);
-        }
+        var checkYMD = dateTime.year + '-' + (dateTime.month + 1) + '-' + dateTime.date;
+        isChange = that.checkPanelDate(checkYMD, (!panelIndex ? 1 : 0));
         var dateTimeTemp = lay.extend({}, dateTime);
         if (panelIndex && !index && !isChange) { // 处理可能出现的联动面板中点击右面板但是判定为开始日期这个时候点击头部的切换上下月第一次没有反应的问题
           // 选择了右面板但是判断之后作为开始时间
