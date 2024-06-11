@@ -246,7 +246,7 @@ layui.define(['lay', 'layer'], function(exports){
       return files || that.files || that.chooseFiles || elemFile.files;
     };
     //判断文件队列是否为空
-    if(!getFiles().length){
+    if(getFiles().length==0){
       return that.msg(text.nofile);
     }
     
