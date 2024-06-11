@@ -2155,6 +2155,11 @@
     return that;
   };
 
+  //判断日期是否存在面板
+  Class.prototype.checkPanelDate = function (ymd, index) {
+    return lay(this.table[index]).find('td[lay-ymd="' + ymd + '"]')[0] !== undefined;
+  }
+  
   //选择日期
   Class.prototype.choose = function(td, index){
     if(td.hasClass(DISABLED)) return;
@@ -2246,6 +2251,14 @@
         isChange && (options.dateTime = lay.extend({}, that.startDate));
       }
       if (that.rangeLinked) {
+        var checkYMD
+        if (!panelIndex) {
+          checkYMD = dateTime.year + '-' + (dateTime.month + 1) + '-' + dateTime.date;
+          isChange = that.checkPanelDate(checkYMD, 1);
+        } else {
+          checkYMD = dateTime.year + '-' + (dateTime.month + 1) + '-' + dateTime.date;
+          isChange = that.checkPanelDate(checkYMD, 0);
+        }
         var dateTimeTemp = lay.extend({}, dateTime);
         if (panelIndex && !index && !isChange) { // 处理可能出现的联动面板中点击右面板但是判定为开始日期这个时候点击头部的切换上下月第一次没有反应的问题
           // 选择了右面板但是判断之后作为开始时间
