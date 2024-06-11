@@ -823,7 +823,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             });
           });
 
-          that.syncAppearanceOnPropChange(this, 'checked', function(isChecked){
+          that.syncAppearanceOnPropChanged(this, 'checked', function(isChecked){
             if(isSwitch){
               var title = (reElem.next('*[lay-checkbox]')[0] 
                 ? reElem.next().html()
@@ -835,7 +835,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           });
 
           if(isPrimary){
-            that.syncAppearanceOnPropChange(this, 'indeterminate', function(isIndeterminate){
+            that.syncAppearanceOnPropChanged(this, 'indeterminate', function(isIndeterminate){
               if(isIndeterminate){
                 reElem.children('.layui-icon-ok').removeClass('layui-icon-ok').addClass(CLASS.SUBTRA);
               }else{
@@ -938,7 +938,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             });
           });
 
-          that.syncAppearanceOnPropChange(this, 'checked', function(isChecked){
+          that.syncAppearanceOnPropChanged(this, 'checked', function(isChecked){
             if(isChecked){
               reElem.addClass(CLASS + 'ed');
               reElem.children('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
@@ -1035,7 +1035,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
    * @param {(newValue: boolean, oldValue: boolean) => void} handler - 定义如何更新
    * @see https://learn.microsoft.com/zh-cn/previous-versions//ff382725(v=vs.85)?redirectedfrom=MSDN
    */
-  Form.prototype.syncAppearanceOnPropChange = function(elem, propName, handler){
+  Form.prototype.syncAppearanceOnPropChanged = function(elem, propName, handler){
     var originProps = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, propName);
 
     Object.defineProperty(elem, propName,
