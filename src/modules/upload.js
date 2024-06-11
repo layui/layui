@@ -94,7 +94,8 @@ layui.define(['lay', 'layer'], function(exports){
       "check-error": "", // 文件格式校验失败
       "error": "", // 上传失败
       "limit-number": null, // 限制 number 属性的提示 --- function
-      "limit-size": null // 限制 size 属性的提示 --- function
+      "limit-size": null ,// 限制 size 属性的提示 --- function,
+      "nofile":"Please select the file you want to upload " // 没有选择文件
     }
   };
 
@@ -244,6 +245,10 @@ layui.define(['lay', 'layer'], function(exports){
     var getFiles = function(){
       return files || that.files || that.chooseFiles || elemFile.files;
     };
+    //判断文件队列是否为空
+    if(!getFiles().length){
+      return that.msg(text.nofile);
+    }
     
     // 高级浏览器处理方式，支持跨域
     var ajaxSend = function(){
