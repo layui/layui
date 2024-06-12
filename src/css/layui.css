@@ -1284,6 +1284,11 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-dropdown{position: absolute; left: -999999px; top: -999999px; z-index: 77777777; margin: 5px 0; min-width: 100px;}
 .layui-dropdown:before{content:""; position: absolute; width: 100%; height: 6px; left: 0; top: -6px;}
 .layui-dropdown-shade{top: 0; left: 0; width: 100%; height: 100%; _height: expression(document.body.offsetHeight+"px"); position: fixed; _position: absolute; pointer-events: auto;}
+.layui-dropdown-arrow:after,
+.layui-dropdown-arrow {position: absolute;display: block;width: 0;height: 0;border-color: transparent;border-style: solid;}
+.layui-dropdown-arrow {top: -6px;left: 50%;margin-right: 3px;border-bottom-color: #ebeef5;border-width: 6px;border-top-width: 0;-webkit-filter: drop-shadow(0 2px 12px rgba(0, 0, 0, .03));filter: drop-shadow(0 2px 12px rgba(0, 0, 0, .03));}
+.layui-dropdown-arrow:after {content: " ";border-width: 6px;top: 1px;margin-left: -6px;border-top-width: 0;border-bottom-color: #fff;-webkit-box-sizing: inherit;box-sizing: inherit;}
+
 
 /** 导航菜单 **/
 .layui-nav{position: relative; padding: 0 15px; background-color: #2f363c; color: #fff; border-radius: 2px; font-size: 0; box-sizing: border-box;}
