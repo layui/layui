@@ -244,10 +244,6 @@ layui.define(['lay', 'layer'], function(exports){
     var getFiles = function(){
       return files || that.files || that.chooseFiles || elemFile.files;
     };
-    //判断文件队列是否为空
-    if(getFiles().length==0){
-      return that.msg(text.nofile);
-    }
     
     // 高级浏览器处理方式，支持跨域
     var ajaxSend = function(){
