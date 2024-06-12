@@ -144,6 +144,8 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-btn .layui-layer-btn0{border-color: transparent; background-color: #1E9FFF; color:#fff;}
 .layui-layer-btn-l{text-align: left;}
 .layui-layer-btn-c{text-align: center;}
+.layui-layer-btn-is-loading{opacity:0.5 !important; cursor:not-allowed !important; cursor:wait !important; overflow:hidden; white-space:nowrap; -webkit-user-select: none; -ms-user-select: none;user-select: none;}
+.layui-layer-btn-is-loading .layui-layer-btn-loading-icon{margin-right: 8px; font-size: 14px;}
 
 /* 定制化 */
 .layui-layer-dialog{min-width: 240px;}

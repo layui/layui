@@ -88,6 +88,12 @@
   </textarea>
 </pre>
 
+<pre class="layui-code" lay-options="{preview: true, text: {preview: '异步按钮'}, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
+  <textarea>
+{{- d.include("/layer/examples/btnasync.md") }}
+  </textarea>
+</pre>
+
 
 <h3 id="demo-skin" lay-toc="{level: 2, hot: true}">主题风格</h3>
 
