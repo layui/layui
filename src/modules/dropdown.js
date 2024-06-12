@@ -84,6 +84,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   var STR_MENU_PANEL = 'layui-menu-body-panel';
   var STR_MENU_PANEL_L = 'layui-menu-body-panel-left';
   var STR_ELEM_SHADE = 'layui-dropdown-shade';
+  var STR_ELEM_ARROW = 'layui-dropdown-arrow';
   
   var STR_GROUP_TITLE = '.'+ STR_ITEM_GROUP + '>.'+ STR_MENU_TITLE;
 
@@ -320,6 +321,12 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       }
     }
 
+    //增加箭头元素
+    if (options.arrow) {
+      that.elemView.append('<div class="' + STR_ELEM_ARROW + '"></div>');
+      that.arrow = that.elemView.find('.' + STR_ELEM_ARROW);
+    }
+    
     // 坐标定位
     that.position();
     thisModule.prevElem = that.elemView; // 记录当前打开的元素，以便在下次关闭
@@ -379,6 +386,38 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       clickType: options.trigger === 'contextmenu' ? 'right' : null,
       align: options.align || null
     });
+
+    //箭头定位
+    if (that.arrow) {
+      var left;
+      
+      var arrowStyle = function (left, top, bottom, transform) {
+        that.arrow[0].style.left = left;
+        that.arrow[0].style.top = top || '';
+        that.arrow[0].style.bottom = bottom || '';
+        that.arrow[0].style.transform = transform || '';
+      }
+
+      switch (options.align) {
+        case 'right':
+          left = (that.elemView[0].clientWidth - (options.elem[0].clientWidth / 2)) + 'px';
+          break;
+        case 'center':
+          left = '50%';
+          break;
+        default :
+          left = (options.elem[0].clientWidth / 2) + 'px';
+          break;
+      }
+      //判断底部是否超出边界
+      var rect = options.elem[0].getBoundingClientRect();
+      if (rect.top > that.elemView[0].offsetTop) {
+        arrowStyle(left, 'auto', '-6px', 'rotate(180deg)');
+      } else {
+        arrowStyle(left);
+      }
+    }
+    
   };
   
   // 删除视图
