@@ -94,7 +94,7 @@ layui.define(['lay', 'layer'], function(exports){
       "check-error": "", // 文件格式校验失败
       "error": "", // 上传失败
       "limit-number": null, // 限制 number 属性的提示 --- function
-      "limit-size": null ,// 限制 size 属性的提示 --- function,
+      "limit-size": null // 限制 size 属性的提示 --- function
     }
   };
 
