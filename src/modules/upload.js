@@ -506,8 +506,7 @@ layui.define(['lay', 'layer'], function(exports){
           .then(function(result){
             if(result !== false){
               ready();
-            }
-            else{
+            } else {
               if(options.auto){
                 elemFile.value = '';
               }
