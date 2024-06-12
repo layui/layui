@@ -506,8 +506,15 @@ layui.define(['lay', 'layer'], function(exports){
           .then(function(result){
             if(result !== false){
               ready();
+            } else {
+              if(options.auto){
+                elemFile.value = '';
+              }
             }
           }, function(error){
+            if(options.auto){
+              elemFile.value = '';
+            }
             error !== undefined && layui.hint().error(error);
           })
       }else{
