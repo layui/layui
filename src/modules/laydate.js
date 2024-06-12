@@ -1496,6 +1496,8 @@
     //同步头部年月
     lay(elemYM[0]).attr('lay-ym', dateTime.year + '-' + (dateTime.month + 1));
     lay(elemYM[1]).attr('lay-ym', dateTime.year + '-' + (dateTime.month + 1));
+    if(!that.panelYM) that.panelYM = {};
+    that.panelYM[index] = {year: dateTime.year, month: dateTime.month};
 
     if(options.lang === 'cn'){
       lay(elemYM[0]).attr('lay-type', 'year').html(dateTime.year + ' 年')
@@ -2155,9 +2157,33 @@
     return that;
   };
 
-  //判断日期是否存在面板
-  Class.prototype.checkPanelDate = function (ymd, index) {
-    return lay(this.table[index]).find('td[lay-ymd="' + ymd + '"]')[0] !== undefined;
+  /**
+   * 判断日期是否存在面板，用于处理日期范围选择的一些边缘情况
+   * @param {object} datetime 日期时间对象
+   * @param {number} index - 面板索引
+   * @returns 
+   */
+  Class.prototype.checkPanelDate = function(datetime, index){
+    var that = this;
+    var options = that.config;
+    // 年月范围选择不需要处理
+    if(options.type !== 'date' && options.type !== 'datetime') return;
+
+    var startPanel = index === 0;
+    var month = datetime.month + 1;
+    var panelMonth = that.panelYM[index].month + 1;
+    // 1. 左侧面板中，点击的月份属于下一个月时，应渲染右侧面板而不是左侧面板
+    // 2. 左侧面板中，点击的月份属于上一个月时，应该将两个面板都重新渲染(等效点击 prevMonth)
+    // 3. 右侧面板同理
+    // 为简化实现，只要点击的月份不等于当前面板顶部显示的月份时，就重新渲染两侧面板
+    var firstRenderIndex = (startPanel && month > panelMonth) || (!startPanel && month < panelMonth)
+      ? (!index ? 1 : 0)
+      : (index ? 1 : 0)
+
+    return {
+      needFullRender: month !== panelMonth,
+      index: firstRenderIndex
+    }
   }
   
   //选择日期
@@ -2251,18 +2277,12 @@
         isChange && (options.dateTime = lay.extend({}, that.startDate));
       }
       if (that.rangeLinked) {
-        var checkYMD = dateTime.year + '-' + (dateTime.month + 1) + '-' + dateTime.date;
-        isChange = that.checkPanelDate(checkYMD, (!panelIndex ? 1 : 0));
+        // 处理日期范围选择的一些边缘情况
+        var checkState = that.checkPanelDate(dateTime, panelIndex);
         var dateTimeTemp = lay.extend({}, dateTime);
-        if (panelIndex && !index && !isChange) { // 处理可能出现的联动面板中点击右面板但是判定为开始日期这个时候点击头部的切换上下月第一次没有反应的问题
-          // 选择了右面板但是判断之后作为开始时间
-          var YM = that.getAsYM(dateTime.year, dateTime.month, 'sub');
-          lay.extend(options.dateTime, {
-            year: YM[0]
-            ,month: YM[1]
-          });
-        }
-        that.calendar(dateTimeTemp, panelIndex, isChange ? 'init' : null);
+        var renderMode = (isChange || (checkState && checkState.needFullRender)) ? 'init' : null;
+        var panelIdx =  checkState ? checkState.index : panelIndex;
+        that.calendar(dateTimeTemp, panelIdx, renderMode);
       } else {
         that.calendar(null, index, isChange ? 'init' : null);
       }
@@ -2414,32 +2434,37 @@
         }
       }
       ,prevMonth: function(){
-        if (that.rangeLinked) {
-          dateTime = options.dateTime;
-        }
-        var YM = that.getAsYM(dateTime.year, dateTime.month, 'sub');
-        lay.extend(dateTime, {
-          year: YM[0]
-          ,month: YM[1]
-        });
+        // rangeLinked 模式非实时选择日期，不需要同步 options.dateTime，应根据面板显示日期切换
+        if(that.rangeLinked){
+          var panelYM = that.panelYM[0];
+          var YM = that.getAsYM(panelYM.year, panelYM.month, 'sub');
+          var dateTimeTemp = lay.extend({}, options.dateTime, that.panelYM[0], {year: YM[0], month: YM[1]});
+          that.checkDate('limit').calendar(dateTimeTemp, null, 'init');
+        }else{
+          var YM = that.getAsYM(dateTime.year, dateTime.month, 'sub');
+          lay.extend(dateTime, {
+            year: YM[0]
+            ,month: YM[1]
+          });
 
-        that.checkDate('limit').calendar(null, null, 'init');
-        if (!that.rangeLinked) {
+          that.checkDate('limit').calendar(null, null, 'init');
           that.autoCalendarModel.auto ? that.choose(lay(elemCont).find('td.layui-this'), index) : that.done(null, 'change');
         }
       }
       ,nextMonth: function(){
-        if (that.rangeLinked) {
-          dateTime = options.dateTime;
-        }
-        var YM = that.getAsYM(dateTime.year, dateTime.month);
-        lay.extend(dateTime, {
-          year: YM[0]
-          ,month: YM[1]
-        });
-
-        that.checkDate('limit').calendar(null, null, 'init');
-        if (!that.rangeLinked) {
+        if(that.rangeLinked){
+          var panelYM = that.panelYM[0];
+          var YM = that.getAsYM(panelYM.year, panelYM.month);
+          var dateTimeTemp = lay.extend({}, options.dateTime, that.panelYM[0], {year: YM[0],month: YM[1]});
+          that.checkDate('limit').calendar(dateTimeTemp, null, 'init');
+        }else{
+          var YM = that.getAsYM(dateTime.year, dateTime.month);
+          lay.extend(dateTime, {
+            year: YM[0]
+            ,month: YM[1]
+          });
+  
+          that.checkDate('limit').calendar(null, null, 'init');
           that.autoCalendarModel.auto ? that.choose(lay(elemCont).find('td.layui-this'), index) : that.done(null, 'change');
         }
       }
