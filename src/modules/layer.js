@@ -886,9 +886,10 @@ Class.pt.callback = function(){
   // 按钮
   layero.find('.'+ doms[6]).children('a').on('click', function(){
     var btnElem = $(this);
-    var index = $(this).index();
+    var index = btnElem.index();
     if(btnElem.attr('disabled')) return;
-   
+
+    // 若为异步按钮
     if(config.btnAsync){
       var btnCallback = index === 0 ? (config.yes || config['btn1']) : config['btn'+(index+1)];
       that.loading = function(isLoading){
@@ -907,7 +908,7 @@ Class.pt.callback = function(){
       }else{
         layer.close(that.index);
       }
-    }else{
+    } else { // 普通按钮
       if(index === 0){
         if(config.yes){
           config.yes(that.index, layero, that);
