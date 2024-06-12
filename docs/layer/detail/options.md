@@ -403,7 +403,11 @@ layer.open({
 <td>
   
 <div id="options.btnAsync" lay-pid="options" class="ws-anchor">
-异步按钮。开启之后，除 `layer.prompt` 的按钮外，按钮回调的返回值将支持 `boolean | Promise<boolean> | JQueryDeferred<boolean>` 类型，返回 false 或 Promise.reject 时阻止关闭。注意，此时 yes 和 btn1(两者等效) 回调的默认行为发生了变化，由触发时不关闭弹层变为关闭弹层。
+
+异步按钮。开启之后，除 `layer.prompt` 的按钮外，按钮回调的返回值将支持 `boolean | Promise<boolean> | JQueryDeferred<boolean>` 类型，返回 `false` 或 `Promise.reject` 时阻止关闭。
+
+注意，此时 `yes` 和 `btn1`(两者等效) 回调的默认行为发生了变化，即由触发时不关闭弹层变为关闭弹层。
+
 </div>
 
 ```
@@ -414,14 +418,14 @@ var sleep = function (time) {
     }, time)
   })
 }
-
+// 下面以 confirm 层为例
 layer.confirm('一个询问框的示例？', {
     btnAsync: true,
-    btn: ['确定', '关闭'] //按钮
+    btn: ['确定', '关闭'] // 按钮
   }, 
-  // that.loading 仅 btnAsync 开启后支持，参数为 boolean 类型，表示打开或关闭按钮的加载效果。
   function (index, layero, that) {
     var defer = $.Deferred();
+    // 注: that.loading() 仅 btnAsync 开启后支持，参数为 boolean 类型，表示打开或关闭按钮的加载效果。
     that.loading(true);
     sleep(1000).then(defer.resolve);
     return defer.promise();
