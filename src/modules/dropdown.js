@@ -400,13 +400,13 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
 
       switch (options.align) {
         case 'right':
-          left = (that.elemView[0].clientWidth - (options.elem[0].clientWidth / 2)) + 'px';
+          left = (that.elemView[0].clientWidth - (options.elem[0].clientWidth / 2) - (that.arrow[0].offsetWidth / 2)) + 'px';
           break;
         case 'center':
           left = '50%';
           break;
         default :
-          left = (options.elem[0].clientWidth / 2) + 'px';
+          left = ((options.elem[0].clientWidth - that.arrow[0].offsetWidth) / 2) + 'px';
           break;
       }
       //判断底部是否超出边界
