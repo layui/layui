@@ -398,21 +398,33 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
         that.arrow[0].style.transform = transform || '';
       }
 
+      
+      var rect = options.elem[0].getBoundingClientRect();
+      var elemRect = that.elemView[0].getBoundingClientRect();
+      var arrowWidth = that.arrow[0].offsetWidth / 2;
+      var outPixel
+      
       switch (options.align) {
         case 'right':
-          left = (that.elemView[0].clientWidth - (options.elem[0].clientWidth / 2) - (that.arrow[0].offsetWidth / 2)) + 'px';
+          outPixel = (rect.x + rect.width) - (elemRect.x + elemRect.width);
+          var subNumeric = outPixel < -1 ? Math.abs(outPixel) : 0;
+          left = (elemRect.width - arrowWidth - rect.width + (rect.width / 2) - subNumeric) + 'px';
           break;
         case 'center':
           left = '50%';
           break;
         default :
-          left = ((options.elem[0].clientWidth - that.arrow[0].offsetWidth) / 2) + 'px';
+          outPixel = rect.x - elemRect.x;
+          if (outPixel === 0) {
+            left = ((rect.width - arrowWidth) / 2) + 'px';
+          } else {
+            left = (outPixel + (rect.width - arrowWidth) / 2) + 'px';
+          }
           break;
       }
       //判断底部是否超出边界
-      var rect = options.elem[0].getBoundingClientRect();
       if (rect.top > that.elemView[0].offsetTop) {
-        arrowStyle(left, 'auto', '-6px', 'rotate(180deg)');
+        arrowStyle(left, 'auto', '-' + arrowWidth + 'px', 'rotate(180deg)');
       } else {
         arrowStyle(left);
       }
