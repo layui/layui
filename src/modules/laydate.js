@@ -2170,16 +2170,26 @@
     if(options.type !== 'date' && options.type !== 'datetime') return;
 
     var startPanel = index === 0;
-    var month = datetime.month + 1;
-    var panelMonth = that.panelYM[index].month + 1;
-    // 1. 左侧面板中，点击的月份属于下一个月时，应渲染右侧面板而不是左侧面板
-    // 2. 左侧面板中，点击的月份属于上一个月时，应该将两个面板都重新渲染(等效点击 prevMonth)
-    // 3. 右侧面板同理
-    // 为简化实现，只要点击的月份不等于当前面板顶部显示的月份时，就重新渲染两侧面板
-    var firstRenderIndex = (startPanel && month > panelMonth) || (!startPanel && month < panelMonth)
-      ? (!index ? 1 : 0)
-      : (index ? 1 : 0)
+    var month = datetime.month + 1; // 点击的日期所在月份
+    var panelMonth = that.panelYM[index].month + 1; // 当前面板头部月份
 
+    // 边缘日期的处理
+    var firstRenderIndex = that.endState
+      // 二次点击（一般为结束日期）任意一侧面板时：
+      // 1. 左侧面板中，点击的月份属于下一个月时，应渲染右侧面板而不是左侧面板;
+      // 2. 左侧面板中，点击的月份属于上一个月时，应将两个面板都重新渲染(等效点击 prevMonth);
+      // 3. 右侧面板同理。
+      ? function() {
+        return (startPanel && month > panelMonth) || (!startPanel && month < panelMonth)
+          ? 1 - index
+          : index;
+      }()
+      // 初次点击（一般为开始日期）任意一侧面板时：
+      // 1. 让该面板自行切换，以保持日期的「选中状态」在该侧；
+      // 2. 另一侧面板则根据点击的面板进行响应式切换，以保持左右面板始终为连续月份。
+      : index;
+
+    // 为简化实现，只要点击的月份不等于当前面板顶部显示的月份时，就重新渲染两侧面板
     return {
       needFullRender: month !== panelMonth,
       index: firstRenderIndex
