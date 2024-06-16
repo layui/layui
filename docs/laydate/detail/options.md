@@ -241,7 +241,7 @@ value: '1900-01-01 - 2100-01-01'
 <td>boolean</td>
 <td>
 
-`false`
+`true`
 
 </td>
     </tr>
