@@ -737,7 +737,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           });
 
           if(isAppendTo){
-            titleElem.on('_lay-custom-destroy', function(){
+            titleElem.on('_lay-select-destroy', function(){
               reElem.remove();
             })
           }
