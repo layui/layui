@@ -404,6 +404,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var laySearch = select.attr('lay-search');
           // 目前只支持 body
           var appendTarget = select.attr('lay-append-to') || 'body';
+          var appendPosition = select.attr('lay-append-position');
 
           // #1449
           // IE10 和 11 中，带有占位符的 input 元素获得/失去焦点时，会触发 input 事件
@@ -417,7 +418,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               reElem.appendTo(appendTarget).css({width: title.width() + 'px'});
 
               var updatePosition = function(){
-                lay.position(title[0], reElem[0],{
+                lay.position(title[0], reElem[0], {
+                  position: appendPosition || null,
                   allowBottomOut: true,
                   offset: [0, 5]
                 });
