@@ -860,6 +860,8 @@ hr.layui-border-black{border-width: 0 0 1px;}
 :root .layui-form-selected .layui-edge{margin-top: -9px\0/IE9;}
 .layui-form-selectup dl{top: auto; bottom: 42px;}
 .layui-select-none{margin: 5px 0; text-align: center; color: #999;}
+.layui-select-panel-wrap {position: absolute; z-index: 99999999;}
+.layui-select-panel-wrap dl{position: relative; display: block; top:0;}
 
 .layui-select-disabled .layui-disabled{border-color: #eee !important;}
 .layui-select-disabled .layui-edge{border-top-color: #d2d2d2}

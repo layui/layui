@@ -1,28 +1,19 @@
 <table class="layui-hide" id="ID-table-demo-editmodes"></table>
-{{!<!-- 原生 select 模板（推荐） -->
-<script type="text/html" id="TPL-select-primary">
+{{!<!-- select -->
+<!--注: 自 2.9.12 版本开始，select 可与 table 实现友好兼容。若使用旧版本，则推荐采用原生 select（即添加 lay-ignore 属性）-->
+<script type="text/html" id="TPL-select-demo">
   {{# var cityList = d.cityList || ["北京","上海","广州","城市-1"]; }}
-  <select name="city" class="layui-border select-demo-primary" lay-ignore>
-    <option value="">原生 select</option>
-    {{# layui.each(cityList, function(i, v){ }}
-    <option value="{{= v }}" {{= v === d.city ? 'selected' : '' }}>{{= v }}</option>
-    {{# }); }}
-  </select> 
-</script>
-<!-- layui select 在 table 中使用（不推荐。因为当 select 出现在 table 底部时，可能会撑起多余高度） -->
-<script type="text/html" id="TPL-select-city">
-  {{# var cityList = d.cityList || ["北京","上海","广州","城市-1"]; }}
-  <select name="city" lay-filter="select-demo">
+  <select name="city" lay-filter="select-demo" lay-append-to="body">
     <option value="">select 方式</option>
     {{# layui.each(cityList, function(i, v){ }}
     <option value="{{= v }}" {{= v === d.city ? 'selected' : '' }}>{{= v }}</option>
     {{# }); }}
   </select> 
 </script>
-<!-- 推荐 -->
+<!-- dropdpwn -->
 <script type="text/html" id="TPL-dropdpwn-demo">
   <button class="layui-btn layui-btn-primary dropdpwn-demo">
-    <span>{{= d.sex || '保密' }}</span>
+    <span>{{= d.sex || '无' }}</span>
     <i class="layui-icon layui-icon-down layui-font-12"></i>
   </button>
 </script>
@@ -45,6 +36,7 @@ layui.use(function(){
   var dropdown = layui.dropdown;
   var laydate = layui.laydate;
   var colorpicker = layui.colorpicker;
+  var util = layui.util;
   
   // 渲染
   table.render({
@@ -59,49 +51,40 @@ layui.use(function(){
     ].join(''),
     cols: [[ // 表头
       {field: 'id', title: 'ID', width:80, align: 'center', fixed: 'left'},
-      {field: 'city', title: '原生 select', width:135, unresize: true, templet: '#TPL-select-primary'}, 
-      //{field: 'city', title: 'layui select', width:150, templet: '#TPL-select-city'}, 
-      {field: 'sex', title: 'dropdown', width:115, unresize: true, align: 'center', templet: '#TPL-dropdpwn-demo'}, 
-      {field: 'date', title: 'laydate', width:150, templet: '#TPL-laydate-demo'}, 
-      {field: 'color', title: 'color', width:80, unresize: true, align: 'center', templet: '#TPL-colorpicker-demo'},
+      {field: 'city', title: 'select', minWidth: 150, templet: '#TPL-select-demo'},
+      {field: 'sex', title: 'dropdown', width: 130, unresize: true, align: 'center', templet: '#TPL-dropdpwn-demo'},
+      {field: 'date', title: 'laydate', minWidth: 150, templet: '#TPL-laydate-demo'},
+      {field: 'color', title: 'color', width: 80, unresize: true, align: 'center', templet: '#TPL-colorpicker-demo'},
       {field: 'sign', title: '文本', edit: 'textarea'}
     ]],
     done: function(res, curr, count){
       var options = this;
       
-      // 获取当前行数据
+      // 获取当前行数据 - 自定义方法
       table.getRowData = function(tableId, elem){
         var index = $(elem).closest('tr').data('index');
         return table.cache[tableId][index] || {};
       };
-      
-      // 原生 select 事件
-      var tableViewElem = this.elem.next();
 
-      // 解除 tbSelect 命名空间下的所有 change 事件处理程序
-      tableViewElem.off("change.tbSelect");
-      // 将 '.select-demo-primary' 元素的 change 事件委托给 tableViewElem, 事件命名空间为 tbSelect
-      tableViewElem.on("change.tbSelect", ".select-demo-primary", function () {
-        var value = this.value; // 获取选中项 value
-        var data = table.getRowData(options.id, this); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
-        
-        // 更新数据中对应的字段
-        data.city = value;
-        
-        // 显示 - 仅用于演示
-        layer.msg('选中值: '+ value +'<br>当前行数据：'+ JSON.stringify(data));
-      });
+      // 展示数据 - 仅用于演示
+      var showData = function(data) {
+        return layer.msg('当前行最新数据：<br>'+ util.escape(JSON.stringify(data)), {
+          offset: '16px',
+          anim: 'slideDown'
+        });
+      };
       
       // layui form select 事件
       form.on('select(select-demo)', function(obj){
-        console.log(obj); // 获取选中项数据
-        
+        var value = obj.value; // 获取选中项 value
         // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
         var data = table.getRowData(options.id, obj.elem);
 
         // 更新数据中对应的字段
         data.city = value;
-        console.log(data);
+
+        // 显示当前行最新数据 - 仅用于示例展示
+        showData(data);
       });
       
       // dropdown 方式的下拉选择
@@ -127,8 +110,8 @@ layui.use(function(){
           // 更新数据中对应的字段
           data.sex = obj.title;
 
-          // 显示 - 仅用于演示
-          layer.msg('选中值: '+ obj.title +'<br>当前行数据：'+ JSON.stringify(data));
+          // 显示当前行最新数据 - 仅用于示例展示
+          showData(data);
         }
       });
       
@@ -141,8 +124,8 @@ layui.use(function(){
           // 更新数据中对应的字段
           data.date = value;
           
-          // 显示 - 仅用于演示
-          layer.msg('选中值: '+ value +'<br>当前行数据：'+ JSON.stringify(data));
+          // 显示当前行最新数据 - 仅用于示例展示
+          showData(data);
         }
       });
       
@@ -155,8 +138,8 @@ layui.use(function(){
           // 更新数据中对应的字段
           data.color = value;
           
-          // 显示 - 仅用于演示
-          layer.msg('选中值: '+ value +'<br>当前行数据：'+ JSON.stringify(data));
+          // 显示当前行最新数据 - 仅用于示例展示
+          showData(data);
         }
       });
       
@@ -174,8 +157,8 @@ layui.use(function(){
         // 编辑后续操作，如提交更新请求，以完成真实的数据更新
         // …
         
-        // 显示 - 仅用于演示
-        layer.msg('编辑值: '+ value +'<br>当前行数据：'+ JSON.stringify(data));
+        // 显示当前行最新数据 - 仅用于示例展示
+        showData(data);
       });
       
       // 更多编辑方式……
