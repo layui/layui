@@ -153,11 +153,37 @@ layui.use(['table', 'dropdown'], function(){
     },
     limit: 30,
     toolbar: '#toolbarDemo',
-    defaultToolbar: ['filter', 'exports', 'print', {
-      title: '帮助',
-      layEvent: 'LAYTABLE_TIPS',
-      icon: 'layui-icon-tips'
-    }],
+    defaultToolbar: [
+      'filter',
+      {
+        // 自定义导出 --- 2.9.12+
+        name: 'exports',
+        onClick: function(obj) {
+          var data = table.clearCacheKey(obj.data); // 清除临时字段
+          // 弹出面板
+          obj.openPanel({
+            list: [
+              '<li data-type="csv">导出 CSV 文件</li>',
+              '<li data-type="xlsx">导出 XLSX 文件</li>'
+            ].join(''),
+            done: function(panel, list) {
+              list.on('click', function(){
+                var type = $(this).data('type')
+                layer.msg(type);
+                // 自助处理导出 - 如借助 sheetjs 库
+                // …
+              });
+            }
+          });
+        }
+      },
+      'print',
+      {
+        title: '帮助',
+        layEvent: 'LAYTABLE_TIPS',
+        icon: 'layui-icon-tips'
+      }
+    ],
     // escape: false,
     editTrigger: 'dblclick',
     // cellMaxWidth: 320
