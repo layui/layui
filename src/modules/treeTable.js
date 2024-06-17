@@ -1342,7 +1342,8 @@ layui.define(['table'], function (exports) {
   }
 
   // 删除数据
-  treeTable.removeNode = function (id, node) {
+  // _keepParent 暂时为私有参数，仅供内部使用
+  treeTable.removeNode = function (id, node, _keepParent) {
     var that = getThisTable(id);
     if(!that) return;
 
@@ -1405,7 +1406,11 @@ layui.define(['table'], function (exports) {
     // 更新父节点状态
     if(nodeP){
       var trEl =  tableView.find('tr[lay-data-index="' + nodeP[LAY_DATA_INDEX] + '"]');
-      nodeP[isParentKey] = !!(nodeP[childrenKey] && nodeP[childrenKey].length);
+
+      if(!_keepParent){
+        nodeP[isParentKey] = !!(nodeP[childrenKey] && nodeP[childrenKey].length);
+      }
+
       that.updateNodeIcon({
         scopeEl: trEl,
         isExpand: nodeP[LAY_EXPAND],
@@ -2060,7 +2065,7 @@ layui.define(['table'], function (exports) {
     dataP[LAY_EXPAND] = false;
     dataP[LAY_ASYNC_STATUS] = false;
     layui.each(that.treeToFlat(dataP[treeOptions.customName.children]).reverse(), function (i1, item1) {
-      treeTable.removeNode(id, item1[LAY_DATA_INDEX]);
+      treeTable.removeNode(id, item1[LAY_DATA_INDEX], true);
     })
     // 重新展开
     treeTable.expandNode(id, {
