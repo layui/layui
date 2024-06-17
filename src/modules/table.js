@@ -641,8 +641,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       );
     }
 
-    // 添加工具栏右侧面板
-    var layout = {
+    // 右上角默认工具
+    var defaultConfig = {
       filter: {
         title: '筛选列',
         layEvent: 'LAYTABLE_COLS',
@@ -660,16 +660,30 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
     }, iconElem = [];
 
-    if(typeof options.defaultToolbar === 'object'){
-      layui.each(options.defaultToolbar, function(i, item){
-        var thisItem = typeof item === 'string' ? layout[item] : item;
-        if(thisItem){
-          iconElem.push('<div class="layui-inline" title="'+ thisItem.title +'" lay-event="'+ thisItem.layEvent +'">'
+    if (typeof options.defaultToolbar === 'object') {
+      options.defaultToolbar = $.map(options.defaultToolbar, function(item, i) {
+        var itemIsName = typeof item === 'string';
+        var thisItem = itemIsName ? defaultConfig[item] : item;
+        if (thisItem) {
+          // 根据 name 匹配默认工具并合并
+          if (thisItem.name && defaultConfig[thisItem.name]) {
+            thisItem = $.extend({}, defaultConfig[thisItem.name], thisItem);
+          }
+          // 初始化默认工具 name
+          if (!thisItem.name && itemIsName) {
+            thisItem.name = item;
+          }
+          // 图标列表
+          iconElem.push(
+            '<div class="layui-inline" title="'+ thisItem.title +'" lay-event="'+ thisItem.layEvent +'">'
             +'<i class="layui-icon '+ thisItem.icon +'"></i>'
-          +'</div>');
+            +'</div>'
+          );
         }
+        return thisItem;
       });
     }
+
     that.layTool.find('.layui-table-tool-self').html(iconElem.join(''));
   };
 
@@ -1971,6 +1985,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   Class.prototype.events = function(){
     var that = this;
     var options = that.config;
+    var defaultToolbar = options.defaultToolbar || [];
 
     var filter = options.elem.attr('lay-filter');
     var th = that.layHeader.find('th');
@@ -2063,11 +2078,24 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
               tips: 3
             });
           } else {
+            // 如果自助处理导出
+            var exportsConf = defaultToolbar.find(function(item, i) {
+              return item.name === 'exports';
+            });
+
+            if (typeof exportsConf.onClick === 'function') {
+              return exportsConf.onClick({
+                data: data,
+                options: options,
+                openPanel: openPanel
+              });
+            }
+
+            // 自带导出
             openPanel({
               list: function(){
                 return [
-                  '<li data-type="csv">导出 csv 格式文件</li>',
-                  '<li data-type="xls">导出 xls 格式文件</li>'
+                  '<li data-type="csv">导出 CSV 文件</li>'
                 ].join('')
               }(),
               done: function(panel, list){
