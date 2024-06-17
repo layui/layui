@@ -419,7 +419,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
               var updatePosition = function(){
                 lay.position(title[0], reElem[0], {
-                  position: appendPosition || null,
+                  position: appendPosition,
                   allowBottomOut: true,
                   offset: [0, 5]
                 });
