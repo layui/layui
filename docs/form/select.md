@@ -216,7 +216,16 @@ layui.use(function(){
         // 注: 这里特别对 select 设置了 lay-append-position 属性，以便与 layer 的定位方式保持一致
         content: '<form class="layui-form layui-padding-3" lay-filter="test"><select lay-append-to="body" lay-append-position="fixed"><option value="">请选择</option<option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="BBB">选项 B</option><option value="CCC">选项 C</option></select></form>',
         success: function (layero) {
+          // 定向渲染 select
           form.render(layero.find('.layui-form select'));
+
+          // 鼠标滑动 layer 内部滚动条时移除下拉框，以规避错位
+          // 若 layer 内部不存在滚动条，以下代码可删除
+          var selectElem = layero.find('.layui-form-select');
+          layero.find('.layui-layer-content').on('scroll', function() {
+            selectElem.removeClass('layui-form-selected');
+            layui.$('.layui-select-panel-wrap').remove();
+          });
         },
       });
     }
