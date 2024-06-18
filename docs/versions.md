@@ -9,10 +9,41 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+<h2 id="v2.9.12" class="ws-anchor">
+  v2.9.12
+  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
+  <span class="layui-badge-rim">2024-06-18</span>
+</h2>
+
+> 颇具看点的一个版本 🎉🎉🎉
+
+- #### form
+  - 新增 `checkbox,radio` 的数据驱动功能，可直接设置 `checked` 属性更新 UI #2004 @Sight-wcg
+  - 新增 `select` 的 `lay-append-to` 属性，用于将 `select` 面板追加到给定的元素中 #1926 @Sight-wcg
+- #### table
+  - 重构 `defaultToolbar` 选项，增加 `onClick` 事件，可自定义文件导出等操作 #2019 @sentsim
+  - 优化 表格数据量较大时行选中的性能 #2004 @Sight-wcg
+- #### layer
+  - 新增 `btnAsync` 选项，用于对按钮进行异步操作 #2002 @Sight-wcg
+- #### laydate
+  - 修复 日期范围联动模式中，点击任一侧边缘日期时，另一侧面板未正确切换的问题 #2005 @Diyar-IT @Sight-wcg
+  - 优化 选中主题色 #2018 @sentsim
+- #### upload
+  - 优化 `error` 回调函数的返回参数，增加返回值 #1988 @Pencil-hzp
+  - 修复 `auto` 选项开启且 `before` 返回 `false` 后再次选择同一文件不自动上传的问题 #1991 @langyan1022
+- #### treeTable
+  - 修复 `treeTable.reloadAsyncNode` 方法重载节点异常 #2014 @Sight-wcg
+- #### tab
+  - 修复 `element.tabAdd()` 第二个参数的 `id` 选项若传入特殊字符时的异常问题 #1992 @Sight-wcg
+- #### colorpicker
+  - 修复 移动端颜色选取异常的问题 #1986 @Sight-wcg
+
+### 下载： [layui-v2.9.12.zip](https://gitee.com/layui/layui/attach_files/1805581/download)
+
+---
 
 <h2 id="v2.9.11" class="ws-anchor">
   v2.9.11
-  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
   <span class="layui-badge-rim">2024-06-05</span>
 </h2>
 
