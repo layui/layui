@@ -214,7 +214,7 @@ layui.use(function(){
         shadeClose: true, // 点击遮罩区域，关闭弹层
         maxmin: true, // 允许全屏最小化
         // 注: 这里特别对 select 设置了 lay-append-position 属性，以便与 layer 的定位方式保持一致
-        content: '<form class="layui-form layui-padding-3" lay-filter="test"><select lay-append-to="body" lay-append-position="fixed"><option value="">请选择</option<option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="AAA">选项 A</option><option value="BBB">选项 B</option><option value="CCC">选项 C</option></select></form>',
+        content: '<form class="layui-form layui-padding-3" lay-filter="test"><select lay-append-to="body" lay-append-position="fixed"><option value="">请选择</option><option value="AAA1">选项 A1</option><option value="AAA2">选项 A2</option><option value="AAA3">选项 A3</option><option value="AAA4">选项 A4</option><option value="AAA5">选项 A5</option><option value="AAA6">选项 A6</option><option value="AAA7">选项 A7</option><option value="AAA8">选项 A8</option><option value="AAA9">选项 A9</option><option value="AAA10">选项 A10</option><option value="AAA11">选项 A11</option><option value="AAA12">选项 A12</option><option value="BBB">选项 B</option><option value="CCC">选项 C</option></select></form>',
         success: function (layero) {
           // 定向渲染 select
           form.render(layero.find('.layui-form select'));
