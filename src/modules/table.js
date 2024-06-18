@@ -147,7 +147,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   var ELEM_GROUP = 'laytable-cell-group';
   var ELEM_COL_SPECIAL = 'layui-table-col-special';
   var ELEM_TOOL_PANEL = 'layui-table-tool-panel';
-  var ELEM_EXPAND = 'layui-table-expanded'
+  var ELEM_EXPAND = 'layui-table-expanded';
+  var DISABLED_TRANSITION = 'layui-table-disabled-transition';
 
   var DATA_MOVE_NAME = 'LAY_TABLE_MOVE_DICT';
 
@@ -1571,7 +1572,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       checked: checkStatus.isAll,
       indeterminate: !checkStatus.isAll && checkStatus.data.length // 半选
     });
-    form.render(checkAllElem);
   };
 
   // 标记当前活动行背景色
@@ -1593,14 +1593,28 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var options = that.config;
     var isCheckAll = opts.index === 'all'; // 是否操作全部
     var isCheckMult = layui.type(opts.index) === 'array'; // 是否操作多个
+    var needDisableTransition= isCheckAll || isCheckMult; // 减少回流
+
+    if(needDisableTransition){
+      that.layBox.addClass(DISABLED_TRANSITION);
+    }
+
+    if(isCheckMult){
+      var makeMap = {}
+      layui.each(opts.index, function(i,v){
+        makeMap[v] = true;
+      })
+      opts.index = makeMap;
+    }
 
     // 匹配行元素
+    var selector = (isCheckAll || isCheckMult) ? 'tr' : 'tr[data-index="'+ opts.index +'"]';
     var tr = function(tr) {
       return isCheckAll ? tr : tr.filter(isCheckMult ? function() {
         var dataIndex = $(this).data('index');
-        return opts.index.indexOf(dataIndex) !== -1;
+        return opts.index[dataIndex];
       } : '[data-index="'+ opts.index +'"]');
-    }(that.layBody.find('tr'));
+    }(that.layBody.find(selector));
 
     // 默认属性
     opts = $.extend({
@@ -1616,14 +1630,18 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       return opts.type === 'radio' ? true : (existChecked ? opts.checked : !value)
     };
 
+    var ignoreTrIndex = {};
     // 设置选中状态
     layui.each(thisData, function(i, item){
       // 绕过空项和禁用项
-      if(layui.type(item) === 'array' || item[options.disabledName]) return;
+      if(layui.type(item) === 'array' || item[options.disabledName]){
+        ignoreTrIndex[i] = true;
+        return;
+      }
 
       // 匹配条件
       var matched = isCheckAll || (
-        isCheckMult ? opts.index.indexOf(i) !== -1 : Number(opts.index) === i
+        isCheckMult ? opts.index[i] : Number(opts.index) === i
       );
 
       // 设置匹配项的选中值
@@ -1632,17 +1650,38 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         var checked = item[options.checkName] = getChecked(item[options.checkName]);
 
         // 标记当前行背景色
-        var currTr = tr.filter('[data-index="'+ i +'"]');
-        currTr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED);
-
-        // 若为 radio 类型，则取消其他行选中背景色
-        if(opts.type === 'radio'){
-          currTr.siblings().removeClass(ELEM_CHECKED);
+        // 此处只更新 radio 和 单个 checkbox
+        if(!isCheckAll && !isCheckMult){
+          var currTr = tr.filter('[data-index="'+ i +'"]');
+          currTr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED);
+  
+          // 若为 radio 类型，则取消其他行选中背景色
+          if(opts.type === 'radio'){
+            currTr.siblings().removeClass(ELEM_CHECKED);
+          }
         }
       } else if(opts.type === 'radio') {
         delete item[options.checkName];
       }
     });
+
+    if(isCheckAll){
+      tr.each(function(i){
+        var index = Number(this.getAttribute('data-index'));
+        if(!ignoreTrIndex[index]){
+          var el = $(this);
+          el.toggleClass(ELEM_CHECKED, getChecked(thisData[index][options.checkName]))
+        }
+      });
+    }else if(isCheckMult){
+      tr.each(function(i){
+        var index = Number(this.getAttribute('data-index'));
+        if(opts.index[index] && !ignoreTrIndex[index]){
+          var el = $(this);
+          el.toggleClass(ELEM_CHECKED, getChecked(thisData[index][options.checkName]))
+        }
+      });
+    }
 
     // 若存在复选框或单选框，则标注选中状态样式
     var checkedElem = tr.find('input[lay-type="'+ ({
@@ -1657,7 +1696,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     : checkedElem ).prop('checked', getChecked(checkedSameElem.prop('checked')));
 
     that.syncCheckAll();
-    that.renderForm(opts.type);
+
+    if(needDisableTransition){
+      setTimeout(function(){
+        that.layBox.removeClass(DISABLED_TRANSITION);
+      },100)
+    }
   };
 
   // 数据排序

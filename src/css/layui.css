@@ -1028,6 +1028,9 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-table-checked{background-color: #dbfbf0;}
 .layui-table-checked.layui-table-hover,
 .layui-table-checked.layui-table-click{background-color: #abf8dd;}
+.layui-table-disabled-transition *,
+.layui-table-disabled-transition *:before,
+.layui-table-disabled-transition *:after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}
 
 
 .layui-table th,
