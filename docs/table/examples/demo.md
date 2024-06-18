@@ -57,10 +57,13 @@ layui.use(['table', 'dropdown'], function(){
     elem: '#test',
     url: '/static/json/2/table/demo1.json', // 此处为静态模拟数据，实际使用时需换成真实接口
     toolbar: '#toolbarDemo',
-    defaultToolbar: ['filter', 'exports', 'print', {
+    defaultToolbar: ['filter', 'exports', 'print', { // 右上角工具图标
       title: '提示',
       layEvent: 'LAYTABLE_TIPS',
-      icon: 'layui-icon-tips'
+      icon: 'layui-icon-tips',
+      onClick: function(obj) { // 2.9.12+
+        layer.alert('自定义工具栏图标按钮');
+      }
     }],
     height: 'full-35', // 最大高度减去其他容器已占有的高度差
     css: [ // 重设当前表格样式
@@ -259,15 +262,12 @@ layui.use(['table', 'dropdown'], function(){
       case 'getCheckData':
         var data = checkStatus.data;
         layer.alert(layui.util.escape(JSON.stringify(data)));
-      break;
+        break;
       case 'getData':
         var getData = table.getData(id);
         console.log(getData);
         layer.alert(layui.util.escape(JSON.stringify(getData)));
-      break;
-      case 'LAYTABLE_TIPS':
-        layer.alert('自定义工具栏图标按钮');
-      break;
+        break;
     };
   });
 

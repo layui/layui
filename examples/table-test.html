@@ -160,6 +160,8 @@ layui.use(['table', 'dropdown'], function(){
         name: 'exports',
         onClick: function(obj) {
           var data = table.clearCacheKey(obj.data); // 清除临时字段
+          var options = obj.config;
+
           // 弹出面板
           obj.openPanel({
             list: [
@@ -169,9 +171,14 @@ layui.use(['table', 'dropdown'], function(){
             done: function(panel, list) {
               list.on('click', function(){
                 var type = $(this).data('type')
-                layer.msg(type);
-                // 自助处理导出 - 如借助 sheetjs 库
-                // …
+                if (type === 'csv') {
+                  table.exportFile(options.id, null, type); // 调用内置导出方法
+                } else if(type === 'xlsx') {
+                  // 自助处理导出 - 如借助 sheetjs 库或服务端导出
+                  // …
+                  layer.msg('自助处理导出 xlsx');
+                }
+
               });
             }
           });
@@ -181,7 +188,10 @@ layui.use(['table', 'dropdown'], function(){
       {
         title: '帮助',
         layEvent: 'LAYTABLE_TIPS',
-        icon: 'layui-icon-tips'
+        icon: 'layui-icon-tips',
+        onClick: function(obj) {
+          layer.alert('Table for layui-v'+ layui.v);
+        }
       }
     ],
     // escape: false,
@@ -495,9 +505,6 @@ layui.use(['table', 'dropdown'], function(){
           lineStyle: null // 恢复单行
         });
         layer.msg('已设为单行');
-        break;
-      case 'LAYTABLE_TIPS':
-        layer.alert('Table for layui-v'+ layui.v);
         break;
     };
   });
