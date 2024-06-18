@@ -151,9 +151,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       elem.attr('id') || that.index
     );
 
-    if(!lay.isTopElem(elem[0])){
-      elem.attr(MOD_ID, options.id);
-    }
+    elem.attr(MOD_ID, options.id);
 
     // 初始化自定义字段名
     options.customName = $.extend({}, dropdown.config.customName, options.customName);
