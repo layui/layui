@@ -1794,7 +1794,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     if(isCheckAll){
       tr.each(function(i){
-        var index = Number(this.getAttribute('data-index'));
+        var index = this.getAttribute('data-index');
         if(!ignoreTrIndex[index]){
           var el = $(this);
           el.toggleClass(ELEM_CHECKED, getChecked(thisData[index][options.checkName]))
@@ -1802,7 +1802,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       });
     }else if(isCheckMult){
       tr.each(function(i){
-        var index = Number(this.getAttribute('data-index'));
+        var index = this.getAttribute('data-index');
         if(opts.index[index] && !ignoreTrIndex[index]){
           var el = $(this);
           el.toggleClass(ELEM_CHECKED, getChecked(thisData[index][options.checkName]))
