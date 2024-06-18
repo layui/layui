@@ -149,7 +149,7 @@ defaultToolbar: [
         }
       });
     }
-  }
+  },
   'print'
 ]
 ```
