@@ -150,6 +150,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     options.id = 'id' in options ? options.id : (
       elem.attr('id') || that.index
     );
+    elem.data(MOD_INDEX, options.id)
 
     if(!lay.isTopElem(elem[0])){
       elem.attr(MOD_ID, options.id);
