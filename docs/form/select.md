@@ -224,7 +224,7 @@ layui.use(function(){
           var selectElem = layero.find('.layui-form-select');
           layero.find('.layui-layer-content').on('scroll', function() {
             selectElem.removeClass('layui-form-selected');
-            layui.$('.layui-select-panel-wrap').remove();
+            layui.$('.layui-select-panel-wrap').detach();
           });
         },
       });
