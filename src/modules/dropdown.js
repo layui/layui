@@ -137,8 +137,8 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     $.extend(options, lay.options(elem[0]));
 
     // 若重复执行 render，则视为 reload 处理
-    if(!rerender && elem[0] && elem.data(MOD_INDEX)){
-      var newThat = thisModule.getThis(elem.data(MOD_INDEX));
+    if(!rerender && elem[0] && elem.attr(MOD_ID)){
+      var newThat = thisModule.getThis(elem.attr(MOD_ID));
       if(!newThat) return;
 
       return newThat.reload(options, type);
@@ -151,9 +151,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       elem.attr('id') || that.index
     );
 
-    if(!lay.isTopElem(elem[0])){
-      elem.attr(MOD_ID, options.id);
-    }
+    elem.attr(MOD_ID, options.id);
 
     // 初始化自定义字段名
     options.customName = $.extend({}, dropdown.config.customName, options.customName);
