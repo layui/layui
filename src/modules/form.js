@@ -870,20 +870,20 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             });
           });
 
-          that.syncAppearanceOnPropChanged(this, 'checked', function(isChecked){
+          that.syncAppearanceOnPropChanged(this, 'checked', function(){
             if(isSwitch){
               var title = (reElem.next('*[lay-checkbox]')[0] 
                 ? reElem.next().html()
                 : check.attr('title') || ''
               ).split('|');
-              reElem.children('div').html(isChecked ? title[0] : title[1] || title[0]);
+              reElem.children('div').html(this.checked ? title[0] : title[1] || title[0]);
             }
-            reElem.toggleClass(RE_CLASS[1], isChecked);
+            reElem.toggleClass(RE_CLASS[1], this.checked);
           });
 
           if(isPrimary){
-            that.syncAppearanceOnPropChanged(this, 'indeterminate', function(isIndeterminate){
-              if(isIndeterminate){
+            that.syncAppearanceOnPropChanged(this, 'indeterminate', function(){
+              if(this.indeterminate){
                 reElem.children('.layui-icon-ok').removeClass('layui-icon-ok').addClass(CLASS.SUBTRA);
               }else{
                 reElem.children('.'+ CLASS.SUBTRA).removeClass(CLASS.SUBTRA).addClass('layui-icon-ok');
@@ -985,8 +985,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             });
           });
 
-          that.syncAppearanceOnPropChanged(this, 'checked', function(isChecked){
-            if(isChecked){
+          that.syncAppearanceOnPropChanged(this, 'checked', function(){
+            if(this.checked){
               reElem.addClass(CLASS + 'ed');
               reElem.children('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
             }else{
@@ -1095,7 +1095,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var oldValue = this[propName];
           originProps.set.call(this, newValue);
           if(oldValue !== newValue){
-            handler(newValue, oldValue);
+            handler.call(this);
           }
         }
       })

@@ -1797,7 +1797,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         var index = this.getAttribute('data-index');
         if(!ignoreTrIndex[index]){
           var el = $(this);
-          el.toggleClass(ELEM_CHECKED, getChecked(thisData[index][options.checkName]))
+          el.toggleClass(ELEM_CHECKED, !!getChecked(thisData[index][options.checkName]))
         }
       });
     }else if(isCheckMult){
@@ -1805,7 +1805,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         var index = this.getAttribute('data-index');
         if(opts.index[index] && !ignoreTrIndex[index]){
           var el = $(this);
-          el.toggleClass(ELEM_CHECKED, getChecked(thisData[index][options.checkName]))
+          el.toggleClass(ELEM_CHECKED, !!getChecked(thisData[index][options.checkName]))
         }
       });
     }
