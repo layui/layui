@@ -179,6 +179,62 @@ toc: true
   </textarea>
 </pre>
 
+<h2 id="lay-append" lay-toc="{hot: true}">独立选择框 <sup>2.9.12+</sup></h2>
+
+在 `<select>` 元素中设置  `lay-append-to="body"` 属性，可将 select 面板插入到 `<body>` 根节点下，以便让选择框从 form 结构中剥离，成为更灵活的独立选择框。借助该特性，可完美解决 select 在 table, layer 等组件中使用的若干问题。
+
+### 1. 在 table 中使用 select
+
+参考 table 示例： [实现多样化编辑](/docs/2/table/#demo-editmodes)
+
+### 2. 在 layer 中使用 select
+
+<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+  obj.render();
+}}">
+  <textarea>
+<button class="layui-btn" lay-on="layer-select">弹出 layer+select</button>
+
+<!-- import layui -->
+<script>
+layui.use(function(){
+  var form = layui.form;
+  var table = layui.table;
+  var layer = layui.layer;
+  var util = layui.util;
+
+  // 事件
+  util.on({
+    // 在 layer 中使用 select
+    "layer-select": function() {
+      layer.open({
+        type: 1, // page 层类型
+        area: ['500px', '300px'],
+        title: 'layer+select',
+        shadeClose: true, // 点击遮罩区域，关闭弹层
+        maxmin: true, // 允许全屏最小化
+        // 注: 这里特别对 select 设置了 lay-append-position 属性，以便与 layer 的定位方式保持一致
+        content: '<form class="layui-form layui-padding-3" lay-filter="test"><select lay-append-to="body" lay-append-position="fixed"><option value="">请选择</option><option value="AAA1">选项 A1</option><option value="AAA2">选项 A2</option><option value="AAA3">选项 A3</option><option value="AAA4">选项 A4</option><option value="AAA5">选项 A5</option><option value="AAA6">选项 A6</option><option value="AAA7">选项 A7</option><option value="AAA8">选项 A8</option><option value="AAA9">选项 A9</option><option value="AAA10">选项 A10</option><option value="AAA11">选项 A11</option><option value="AAA12">选项 A12</option><option value="BBB">选项 B</option><option value="CCC">选项 C</option></select></form>',
+        success: function (layero) {
+          // 定向渲染 select
+          form.render(layero.find('.layui-form select'));
+
+          // 鼠标滑动 layer 内部滚动条时移除下拉框，以规避错位
+          // 若 layer 内部不存在滚动条，以下代码可删除
+          var selectElem = layero.find('.layui-form-select');
+          layero.find('.layui-layer-content').on('scroll', function() {
+            selectElem.removeClass('layui-form-selected');
+            layui.$('.layui-select-panel-wrap').detach();
+          });
+        },
+      });
+    }
+  });
+});
+</script>
+  </textarea>
+</pre>
+
 
 <h2 id="on" lay-toc="{hot: true}">选择框事件</h2>
 

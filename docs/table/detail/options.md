@@ -92,14 +92,89 @@
 </td>
     </tr>
     <tr>
-<td>defaultToolbar</td>
 <td>
 
-设置头部工具栏右侧图标。值是一个数组，可选成员有: `filter,exports,print` （分别代表：筛选图标、导出图标、打印图标）。图标可根据数组值的顺序排列，如：`defaultToolbar: ['filter','print','exports']` <br>支持自定义图标及事件，用法详见示例: [#综合演示](#examples)
+[defaultToolbar](#options.defaultToolbar)
 
 </td>
-<td>array</td>
-<td>-</td>
+<td colspan="3">
+
+<div class="ws-anchor" id="options.defaultToolbar">
+  设置头部工具栏右上角工具图标，值为一个数组，图标将根据数组值的顺序排列。
+</div>
+
+**默认内置工具**：
+
+```js
+defaultToolbar: [
+  'filter', // 列筛选
+  'exports', // 导出
+  'print' // 打印
+]
+```
+
+**重写内置工具** <sup>2.9.12+</sup>，以自定义导出为例：
+
+<div id="options-defaultToolbar-rewrite">
+  <style>#options-defaultToolbar-rewrite .layui-code-wrap{max-height: 280px;}</style>
+
+```js
+defaultToolbar: [
+  'filter',
+  {
+    name: 'exports',
+    onClick: function(obj) {
+      // 获得数据并清除临时字段
+      var data = table.clearCacheKey(obj.data);
+      // 当前示例配置项
+      var options = obj.config;
+
+      // 弹出面板
+      obj.openPanel({
+        list: [ // 列表
+          '<li data-type="csv">导出 CSV 文件</li>',
+          '<li data-type="xlsx">导出 XLSX 文件</li>'
+        ].join(''),
+        done: function(panel, list) { // 操作列表
+          list.on('click', function() {
+            var type = $(this).data('type')
+            if (type === 'csv') {
+               // 调用内置导出方法
+              table.exportFile(options.id, null, type);
+            } else if(type === 'xlsx') {
+              // 自助处理导出 - 如借助 sheetjs 库或服务端导出
+              // …
+            }
+          });
+        }
+      });
+    }
+  },
+  'print'
+]
+```
+
+</div>
+
+**扩展工具图标**：
+
+```js
+defaultToolbar: [
+  'filter', 'exports', 'print', // 内置工具
+  {
+    // 扩展工具
+    title: '提示', // 标题
+    name: 'tips', // name
+    layEvent: 'LAYTABLE_TIPS', // 事件标识
+    icon: 'layui-icon-tips', // 图标 className
+    onClick: function(obj) { // 点击事件 - 2.9.12+
+      console.log(obj); // 查看返回的对象成员
+    }
+  }
+]
+```
+
+</td>
     </tr>
     <tr>
 <td>width</td>
@@ -113,7 +188,7 @@
 [height](#options.height)
 
 </td>
-<td>
+<td colspan="3">
 
 <div class="ws-anchor" id="options.height">
   设置表格容器高度，默认自适应。其他可选值的规则如下：
@@ -127,16 +202,15 @@
 
 当需要动态改变表格高度时建议使用，如下以等效 `full-xx` 的写法为例：
 
-```
+```js
 height: function(){
-  var otherHeight = $('#search-content').outerHeight(); // 自定义其他区域的高度
+   // 自定义其他区域的高度
+  var otherHeight = $('#search-content').outerHeight();
   return $(window).height() - otherHeight; // 返回 number 类型
 }
 ```
 
 </td>
-<td>number<br>string</td>
-<td>-</td>
     </tr>
     <tr>
 <td>maxHeight <sup>2.8+</sup></td>
