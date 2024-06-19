@@ -625,7 +625,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var that = this;
     var options = that.config;
     var filter = options.elem.attr('lay-filter');
-
+    // 工具栏渲染完成回调
+    var toolbarRenderComplete = function(){
+        typeof options.toolbarRenderComplete === 'function' && options.toolbarRenderComplete();
+    };
     // 添加工具栏左侧模板
     var leftDefaultTemp = [
       '<div class="layui-inline" lay-event="add"><i class="layui-icon layui-icon-add-1"></i></div>',
@@ -798,6 +801,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         return thisItem;
       });
       that.layTool.find('.layui-table-tool-self').html(iconElem.join(''));
+      //工具栏渲染后的回调
+      toolbarRenderComplete();
     }
   };
 
