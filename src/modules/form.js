@@ -1079,7 +1079,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
    * checkbox 和 radio 指定属性变化时自动更新 UI
    * @param {HTMLInputElement} elem - HTMLInput 元素
    * @param {'checked' | 'indeterminate'} propName - 属性名
-   * @param {(newValue: boolean, oldValue: boolean) => void} handler - 定义如何更新
+   * @param {() => void} handler - 属性值改变时执行的回调
    * @see https://learn.microsoft.com/zh-cn/previous-versions//ff382725(v=vs.85)?redirectedfrom=MSDN
    */
   Form.prototype.syncAppearanceOnPropChanged = function(elem, propName, handler){
