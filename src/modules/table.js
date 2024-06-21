@@ -551,6 +551,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 初始化列参数
     layui.each(options.cols, function(i1, item1){
       layui.each(item1, function(i2, item2){
+        if (item2 === undefined) {
+          hint.error(`Table(id: ${options.id})的列定义非法, 可能会导致渲染错误。请检查您的列定义是否正确(特别是逗号)`)
+        }
         if (i1) {
           delete item2.HAS_PARENT; // 去掉临时的计数排除标识，避免有新字段插入的时候重新计算被跳过导致下标出错的问题
         } else {
