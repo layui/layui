@@ -3045,7 +3045,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     if(device.ie) return hint.error('IE_NOT_SUPPORT_EXPORTS');
 
     // 处理 treeTable 数据
-    if (config.tree && config.tree.view) {
+    var isTreeTable = config.tree && config.tree.view;
+    if (isTreeTable) {
       try {
         data = $.extend(true, [], table.cache[id]);
         data = (function fn(data) {
@@ -3099,6 +3100,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
                 text: 'text',
                 obj: {
                   td: function(field){
+                    if (isTreeTable) i1 = item1['LAY_DATA_INDEX']; // 兼容 treeTable 索引
                     var td = thatTable.layBody.find('tr[data-index="'+ i1 +'"]>td');
                     return td.filter('[data-field="'+ field +'"]');
                   }
