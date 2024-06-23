@@ -549,9 +549,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     };
 
     // 初始化列参数
+    let col_def_err_logged = false;
     layui.each(options.cols, function(i1, item1){
       layui.each(item1, function(i2, item2){
-        if (item2 === undefined) {
+        if (item2 === undefined && !col_def_err_logged) {
+          col_def_err_logged = true;
           hint.error(`Table(id: ${options.id})的列定义非法, 可能会导致渲染错误。请检查您的列定义是否正确(特别是逗号)`)
         }
         if (i1) {
