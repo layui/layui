@@ -397,6 +397,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var index =  this.selectedIndex; // 当前选中的索引
           var initValue = '';
           var removeClickOutsideEvent;
+          var customFilterFn;
           
           if(disabled) return;
 
@@ -405,6 +406,16 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           // 目前只支持 body
           var appendTarget = select.attr('lay-append-to') || 'body';
           var appendPosition = select.attr('lay-append-position');
+          var layFilterPath = select.attr('lay-search-method');
+          var getFilterFn = function(path, options){
+            if(typeof path !== 'string')return;
+            var result;
+            layui.each(path.split('.'), function(i, v){
+              result = i === 0 ? options[v] : result[v];
+              return result === undefined;
+            })
+            return result;
+          };
 
           // #1449
           // IE10 和 11 中，带有占位符的 input 元素获得/失去焦点时，会触发 input 事件
@@ -465,6 +476,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               },
               {ignore: title}
             );
+
+            customFilterFn = getFilterFn(layFilterPath, window);
           };
           
           // 隐藏下拉
@@ -593,24 +606,31 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             var dds = dl.children('dd');
             var hasEquals = false;
             var rawValue = value;
+            var isCustomFilter = typeof customFilterFn === 'function';
+
             layui.each(dds, function(){
               var othis = $(this);
               var text = othis.text();
               var isCreateOption = isCreatable && othis.hasClass(CREATE_OPTION);
+              var not;
 
               // 需要区分大小写
               if(isCreatable && !isCreateOption && text === rawValue){
                 hasEquals = true;
               }
 
-              // 是否区分大小写
-              if(laySearch !== 'cs'){
-                text = text.toLowerCase();
-                value = value.toLowerCase();
-              }
+              if(isCustomFilter){
+                not = !customFilterFn.call(select[0], value, othis);
+              }else{
+                // 是否区分大小写
+                if(laySearch !== 'cs'){
+                  text = text.toLowerCase();
+                  value = value.toLowerCase();
+                }
               
-              // 匹配
-              var not = text.indexOf(value) === -1;
+                // 匹配
+                not = text.indexOf(value) === -1;              
+              }
               
               if(value === '' || (origin === 'blur') ? value !== text : not) num++;
               origin === 'keyup' && othis[(isCreatable ? (not && !isCreateOption) : not) ? 'addClass' : 'removeClass'](HIDE);
