@@ -205,7 +205,7 @@ layui.define(['jquery', 'lay'], function(exports){
     // 模板
     var tplArrow = $([
       '<button type="button" class="layui-icon '+ (options.anim === 'updown' ? 'layui-icon-up' : 'layui-icon-left') + ' ' + ELEM_ARROW +'" lay-type="sub"></button>',
-      '<button type="button" class="layui-icon '+  (options.anim === 'updown' ? 'layui-icon-down' : 'layui-icon-right')  + ' ' + ELEM_ARROW +'" lay-type="add"></button>'
+      '<button type="button" class="layui-icon '+ (options.anim === 'updown' ? 'layui-icon-down' : 'layui-icon-right') + ' ' + ELEM_ARROW +'" lay-type="add"></button>'
     ].join(''));
     
     // 预设基础属性
