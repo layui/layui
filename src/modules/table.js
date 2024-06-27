@@ -2504,21 +2504,24 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       if( $(e.target).is(UNROW) || $(e.target).closest(UNROW)[0]){
         return;
       }
-      setRowEvent.call(this, 'row');
-    }).on('dblclick', 'tr', function(){ // 双击行
-      setRowEvent.call(this, 'rowDouble');
+      setRowEvent.call(this, 'row', e);
+    }).on('dblclick', 'tr', function(e){ // 双击行
+      setRowEvent.call(this, 'rowDouble', e);
     }).on('contextmenu', 'tr', function(e){ // 菜单
       if (!options.defaultContextmenu) e.preventDefault();
-      setRowEvent.call(this, 'rowContextmenu');
+      setRowEvent.call(this, 'rowContextmenu', e);
     });
 
     // 创建行单击、双击、菜单事件
-    var setRowEvent = function(eventType){
+    var setRowEvent = function(eventType, eventObject){
       var othis = $(this);
       if(othis.data('off')) return; //不触发事件
-      layui.event.call(this,
+      layui.event.call(
+        this,
         MOD_NAME, eventType + '('+ filter +')',
-        commonMember.call(othis.children('td')[0])
+        commonMember.call(othis.children('td')[0], {
+          event: eventObject
+        })
       );
     };
 
