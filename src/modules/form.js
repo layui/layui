@@ -593,6 +593,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             var dds = dl.children('dd');
             var hasEquals = false;
             var rawValue = value;
+            var caseInsensitive = laySearch !== 'cs';
+            if(caseInsensitive){
+              value = value.toLowerCase();
+            }
+            var fuzzyMatch = fuzzyMatchRegExp(value, caseInsensitive);
             layui.each(dds, function(){
               var othis = $(this);
               var text = othis.text();
@@ -604,13 +609,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               }
 
               // 是否区分大小写
-              if(laySearch !== 'cs'){
+              if(caseInsensitive){
                 text = text.toLowerCase();
-                value = value.toLowerCase();
               }
               
               // 匹配
-              var not = text.indexOf(value) === -1;
+              var not = !fuzzyMatch.test(text);
               
               if(value === '' || (origin === 'blur') ? value !== text : not) num++;
               origin === 'keyup' && othis[(isCreatable ? (not && !isCreateOption) : not) ? 'addClass' : 'removeClass'](HIDE);
@@ -1234,6 +1238,38 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     // 事件
     return layui.event.call(this, MOD_NAME, 'submit('+ layFilter +')', params);
   };
+
+  function fuzzyMatchRegExp(keyword, caseInsensitive) {
+    var wordMap = {};
+    var regexPattern = ['^'];
+    var escapeRegExp = function(str){
+      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    if(caseInsensitive)keyword = keyword.toLowerCase();
+
+    // 统计关键字中各字符出现次数
+    var wordArr = keyword.trim().split('');
+    for (var i = 0; i < wordArr.length; i++) {
+      var c = wordArr[i];
+      wordMap[c] = (wordMap[c] || 0) + 1;
+    }
+
+    // 构建正则表达式模式
+    for (c in wordMap) {
+      regexPattern.push('(?=.*');
+      for (var i = 0; i < wordMap[c]; i++) {
+        regexPattern.push(escapeRegExp(c));
+        if (i !== wordMap[c] - 1) {
+          regexPattern.push('.*'); // 在字符之间添加任意字符匹配
+        }
+      }
+      regexPattern.push(')');
+    }
+    regexPattern.push('.*');
+
+    return new RegExp(regexPattern.join(''), caseInsensitive ? 'i' : undefined);
+  }
   
   var form = new Form();
   var $dom = $(document);
