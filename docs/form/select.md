@@ -192,10 +192,53 @@ toc: true
 layui.use(function(){
   var form = layui.form;
 
+  var searchFn = createSearchFn();
+
   window.$$store = {
     filter: function(inputVal, optionElem){
-      return inputVal === optionElem.text();
+      return searchFn(inputVal, optionElem.text());
     }
+  }
+
+  // 正向肯定预查，乱序，非连续字符匹配。
+  function createSearchFn() {
+    var metaCharacter = ['$', '(', ')', '*', '+', '.', '[', ']', '?', '\\', '^', '{', '}', '|'];
+    var metaCharacterMap = {};
+    for (var i = 0; i < metaCharacter.length; i++) {
+      var c = metaCharacter[i];
+      metaCharacterMap[c] = '\\' + c;
+    }
+
+    var positiveLookahead = function (keyword, str) {
+      var pattern = '^';
+      var preLook = '(?=.*';
+      var wordMap = {};
+
+      var wordArr = keyword.trim().split('');
+      for (var i = 0; i < wordArr.length; i++) {
+        var character = wordArr[i].toLowerCase();
+        if (wordMap[character]) {
+          wordMap[character]++;
+        } else {
+          wordMap[character] = 1;
+        }
+      }
+
+      for (character in wordMap) {
+        var num = wordMap[character];
+        pattern += preLook;
+        for (var i = 0; i < num; i++) {
+          if (i !== 0) pattern += '.*';
+          pattern += (metaCharacterMap[character] || character);
+        }
+        pattern += ')';
+      }
+      pattern += '.*';
+
+      return new RegExp(pattern, 'i').test(str);
+    }
+
+    return positiveLookahead;
   }
 });
 </script>
