@@ -706,10 +706,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           var data = obj.data;
           var options = obj.config;
           var openPanel = obj.openPanel;
+          var elem = obj.elem;
 
-          if (!data.length) return layer.tips('当前表格无数据', this, {tips: 3});
+          if (!data.length) return layer.tips('当前表格无数据', elem, {tips: 3});
           if(device.ie){
-            layer.tips('导出功能不支持 IE，请用 Chrome 等高级浏览器导出', this, {
+            layer.tips('导出功能不支持 IE，请用 Chrome 等高级浏览器导出', elem, {
               tips: 3
             });
           } else {
@@ -736,8 +737,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         onClick: function(obj) {
           var data = obj.data;
           var options = obj.config;
+          var elem = obj.elem;
 
-          if (!data.length) return layer.tips('当前表格无数据', this, {tips: 3});
+          if (!data.length) return layer.tips('当前表格无数据', elem, {tips: 3});
           var printWin = window.open('about:blank', '_blank');
           var style = ['<style>',
             'body{font-size: 12px; color: #5F5F5F;}',
@@ -2189,7 +2191,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           typeof item.onClick === 'function' && item.onClick({
             data: data,
             config: options,
-            openPanel: openPanel
+            openPanel: openPanel,
+            elem: othis
           });
           return true;
         }
