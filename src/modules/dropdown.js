@@ -84,6 +84,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   var STR_MENU_PANEL = 'layui-menu-body-panel';
   var STR_MENU_PANEL_L = 'layui-menu-body-panel-left';
   var STR_ELEM_SHADE = 'layui-dropdown-shade';
+  var STR_ELEM_ARROW = 'layui-dropdown-arrow';
   
   var STR_GROUP_TITLE = '.'+ STR_ITEM_GROUP + '>.'+ STR_MENU_TITLE;
 
@@ -318,6 +319,12 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       }
     }
 
+    //增加箭头元素
+    if (options.arrow) {
+      that.elemView.append('<div class="' + STR_ELEM_ARROW + '"></div>');
+      that.arrow = that.elemView.find('.' + STR_ELEM_ARROW);
+    }
+    
     // 坐标定位
     that.position();
     thisModule.prevElem = that.elemView; // 记录当前打开的元素，以便在下次关闭
@@ -377,6 +384,50 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       clickType: options.trigger === 'contextmenu' ? 'right' : null,
       align: options.align || null
     });
+
+    //箭头定位
+    if (that.arrow) {
+      var left;
+      
+      var arrowStyle = function (left, top, bottom, transform) {
+        that.arrow[0].style.left = left;
+        that.arrow[0].style.top = top || '';
+        that.arrow[0].style.bottom = bottom || '';
+        that.arrow[0].style.transform = transform || '';
+      }
+
+      
+      var rect = options.elem[0].getBoundingClientRect();
+      var elemRect = that.elemView[0].getBoundingClientRect();
+      var arrowWidth = that.arrow[0].offsetWidth / 2;
+      var outPixel
+      
+      switch (options.align) {
+        case 'right':
+          outPixel = (rect.x + rect.width) - (elemRect.x + elemRect.width);
+          var subNumeric = outPixel < -1 ? Math.abs(outPixel) : 0;
+          left = (elemRect.width - arrowWidth - rect.width + (rect.width / 2) - subNumeric) + 'px';
+          break;
+        case 'center':
+          left = '50%';
+          break;
+        default :
+          outPixel = rect.x - elemRect.x;
+          if (outPixel === 0) {
+            left = ((rect.width - arrowWidth) / 2) + 'px';
+          } else {
+            left = (outPixel + (rect.width - arrowWidth) / 2) + 'px';
+          }
+          break;
+      }
+      //判断底部是否超出边界
+      if (rect.top > that.elemView[0].offsetTop) {
+        arrowStyle(left, 'auto', '-' + arrowWidth + 'px', 'rotate(180deg)');
+      } else {
+        arrowStyle(left);
+      }
+    }
+    
   };
   
   // 删除视图
