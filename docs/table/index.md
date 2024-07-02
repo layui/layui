@@ -774,13 +774,7 @@ table.on('row(test)', function(obj) {
   var index = obj.index; // 得到当前行索引
   var tr = obj.tr; // 得到当前行 <tr> 元素的 jQuery 对象
   var options = obj.config; // 获取当前表格基础属性配置项
-
-  // 根据自定条件，阻止某个单元格的行事件
-  var event = obj.event; // 2.9.14+
-  var td = $(event.target).closest('td');
-  if (td.data('edit')) { // 此处以阻止可编辑列的行事件为例
-    return layui.stope(event);
-  }
+  var e = obj.e; // 当前的 jQuery 事件对象 --- 2.9.14+
 
   console.log('onrow', obj); // 查看返回对象的所有成员
   
