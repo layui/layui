@@ -2497,31 +2497,39 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       if(othis.data('off')) return; // 不触发事件
       that.layBody.find('tr:eq('+ index +')').removeClass(ELEM_HOVER)
     }).on('click', 'tr', function(e){ // 单击行
-      // 不支持行单击事件的元素
-      var UNROW = [
-        '.layui-form-checkbox',
-        '.layui-form-switch',
-        '.layui-form-radio',
-        '[lay-unrow]'
-      ].join(',');
-      if( $(e.target).is(UNROW) || $(e.target).closest(UNROW)[0]){
-        return;
-      }
-      setRowEvent.call(this, 'row');
-    }).on('dblclick', 'tr', function(){ // 双击行
-      setRowEvent.call(this, 'rowDouble');
+      setRowEvent.call(this, 'row', e);
+    }).on('dblclick', 'tr', function(e){ // 双击行
+      setRowEvent.call(this, 'rowDouble', e);
     }).on('contextmenu', 'tr', function(e){ // 菜单
       if (!options.defaultContextmenu) e.preventDefault();
-      setRowEvent.call(this, 'rowContextmenu');
+      setRowEvent.call(this, 'rowContextmenu', e);
     });
 
     // 创建行单击、双击、菜单事件
-    var setRowEvent = function(eventType){
+    var setRowEvent = function(eventType, e){
       var othis = $(this);
-      if(othis.data('off')) return; //不触发事件
-      layui.event.call(this,
+      if(othis.data('off')) return; // 不触发事件
+
+      // 不触发「行单/双击事件」的子元素
+      if (eventType !== 'rowContextmenu') {
+        var UNROW = [
+          '.layui-form-checkbox',
+          '.layui-form-switch',
+          '.layui-form-radio',
+          '[lay-unrow]'
+        ].join(',');
+
+        if($(e.target).is(UNROW) || $(e.target).closest(UNROW)[0]){
+          return;
+        }
+      }
+
+      layui.event.call(
+        this,
         MOD_NAME, eventType + '('+ filter +')',
-        commonMember.call(othis.children('td')[0])
+        commonMember.call(othis.children('td')[0], {
+          e: e
+        })
       );
     };
 
@@ -2606,7 +2614,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 表格主体单元格触发编辑的事件
     that.layBody.on(options.editTrigger, 'td', function(e){
-      renderGridEdit(this, e)
+      renderGridEdit(this, e);
     }).on('mouseenter', 'td', function(){
       showGridExpandIcon.call(this)
     }).on('mouseleave', 'td', function(){
