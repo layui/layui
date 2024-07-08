@@ -966,15 +966,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var ANIM = 'layui-anim-scaleSpring';
           
           reElem.on('click', function(){
-            var name = radio[0].name, forms = radio.parents(ELEM);
             var filter = radio.attr('lay-filter'); // 获取过滤器
-            var sameRadio = forms.find('input[name='+ name.replace(/(\.|#|\[|\])/g, '\\$1') +']'); // 找到相同name的兄弟
             
             if(radio[0].disabled) return;
-            
-            layui.each(sameRadio, function(){
-              this.checked = false;
-            });
             
             radio[0].checked = true;
             
@@ -986,9 +980,16 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           });
 
           that.syncAppearanceOnPropChanged(this, 'checked', function(){
-            if(this.checked){
+            var radioEl = this;
+            if(radioEl.checked){
               reElem.addClass(CLASS + 'ed');
               reElem.children('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
+              var forms = radio.parents(ELEM);
+              var sameRadios = forms.find('input[name='+ radioEl.name.replace(/(\.|#|\[|\])/g, '\\$1') +']'); // 找到相同name的兄弟
+              layui.each(sameRadios, function(){
+                if(radioEl === this)return;
+                this.checked = false;
+              });
             }else{
               reElem.removeClass(CLASS + 'ed');
               reElem.children('.layui-icon').removeClass(ANIM + ' ' + ICON[0]).addClass(ICON[1]);
@@ -1092,11 +1093,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           return originProps.get.call(this);
         },
         set: function (newValue) {
-          var oldValue = this[propName];
           originProps.set.call(this, newValue);
-          if(oldValue !== newValue){
-            handler.call(this);
-          }
+          handler.call(this);
         }
       })
     );
