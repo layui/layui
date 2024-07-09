@@ -9,9 +9,29 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+<h2 id="v2.9.14" class="ws-anchor">
+  v2.9.14
+  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
+  <span class="layui-badge-rim">2024-07-09</span>
+</h2>
+
+- #### form
+  - 改进 `select` 搜索，支持非连续、乱序字符匹配 #2065 @Sight-wcg
+  - 优化 `select` 的 `checked` 属性设置为非 `boolean` 类型值时的异常问题 #2033 @Sight-wcg
+  - 修复 `radio` 改变 `checked` 属性值时，UI 更新异常 #2084 @Sight-wcg
+- #### table
+  - 优化行单双击事件机制，避免与单元格编辑等事件冲突 #2064 @sentsim
+- #### treeTable
+  - 修复 `cols` 的 `exportTemplet` 函数导出异常的问题 #2034 @sentsim
+- #### carousel
+  - 修复 点击切换按钮会触发 `form` 表单 `submit` 事件的问题 #2059 @Pencil-hzp
+
+### 下载： [layui-v2.9.14.zip](https://gitee.com/layui/layui/attach_files/1830626/download)
+
+---
+
 <h2 id="v2.9.13" class="ws-anchor">
   v2.9.13
-  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
   <span class="layui-badge-rim">2024-06-18</span>
 </h2>
 
