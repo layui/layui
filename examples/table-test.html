@@ -195,7 +195,7 @@ layui.use(['table', 'dropdown'], function(){
       }
     ],
     // escape: false,
-    editTrigger: 'dblclick',
+    // editTrigger: 'dblclick',
     // cellMaxWidth: 320
     // cellExpandedWidth: 160, // 单元格默认展开后的宽度
     // cellExpandedStyle: 'tips', // 单元格默认展开风格
@@ -555,18 +555,18 @@ layui.use(['table', 'dropdown'], function(){
   });
 
   // 行单击事件
-  table.on('row(test)', function(obj){
-    console.log(obj);
-    // layer.closeAll('tips');
+  table.on('row(test)', function(obj) {
+    console.log('onrow', obj); // 查看返回的对象成员
+
+    // 单击行设置选中
     obj.setRowChecked({
       // type: 'radio'
     });
-    // layer.msg('row 事件')
   });
 
   // 行双击事件
-  table.on('rowDouble(test)', function(obj){
-    console.log(obj);
+  table.on('rowDouble(test)', function(obj) {
+    console.log('onrowDouble', obj); // 查看返回的对象成员
   });
 
   // 单元格编辑事件
