@@ -50,7 +50,7 @@ layui.use(['table', 'dropdown', 'util'], function(){
     
     // obj.del() // 删除当前行
     // obj.update(fields, related);  // 修改行数据
-    obj.setRowChecked({selectedStyle: true}); // 标注行选中状态样式
+    obj.setRowChecked({ type: 'radio' });  // 选中当前行
   });
 });
 </script>
