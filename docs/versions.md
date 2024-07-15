@@ -17,10 +17,10 @@ toc: true
 
 - #### form
   - 改进 `select` 搜索，支持非连续、乱序字符匹配 #2065 @Sight-wcg
-  - 优化 `select` 的 `checked` 属性设置为非 `boolean` 类型值时的异常问题 #2033 @Sight-wcg
-  - 修复 `radio` 改变 `checked` 属性值时，UI 更新异常 #2084 @Sight-wcg
+  - 优化 `checkbox` 的 `checked` 属性设置为非 `boolean` 类型值时的异常问题 #2033 @Sight-wcg
+  - 修复 `radio` 改变 `checked` 属性值时，UI 更新异常的问题 #2084 @Sight-wcg
 - #### table
-  - 优化行单双击事件机制，避免与单元格编辑等事件冲突 #2064 @sentsim
+  - 优化 行单双击事件机制，避免与单元格编辑等事件冲突 #2064 @sentsim
 - #### treeTable
   - 修复 `cols` 的 `exportTemplet` 函数导出异常的问题 #2034 @sentsim
 - #### carousel

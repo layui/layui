@@ -23,13 +23,15 @@ layui.use(['table', 'dropdown', 'util'], function(){
     ]],
   });
    
-  // 行单击事件
+  // 右键单击行事件
   table.on('rowContextmenu(ID-table-onrowContextmenu)', function(obj){
     var data = obj.data; // 得到当前行数据
+    var dataCache = obj.dataCache; // 得到当前行缓存数据，包含特定字段 --- 2.8.8+
     var index = obj.index; // 得到当前行索引
     var tr = obj.tr; // 得到当前行 <tr> 元素的 jQuery 对象
     var options = obj.config; // 获取当前表格基础属性配置项
-    // console.log(obj); // 查看对象所有成员
+    var e = obj.e; // 当前的 jQuery 事件对象 --- 2.9.14+
+    console.log('rowContextmenu', obj); // 查看返回对象的所有成员
     
     // 右键操作
     dropdown.render({
@@ -50,7 +52,7 @@ layui.use(['table', 'dropdown', 'util'], function(){
     
     // obj.del() // 删除当前行
     // obj.update(fields, related);  // 修改行数据
-    obj.setRowChecked({selectedStyle: true}); // 标注行选中状态样式
+    obj.setRowChecked({ type: 'radio' });  // 选中当前行
   });
 });
 </script>
