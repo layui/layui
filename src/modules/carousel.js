@@ -189,12 +189,12 @@ layui.define(['jquery', 'lay'], function(exports){
   Class.prototype.autoplay = function(){
     var that = this;
     var options = that.config;
-    var itemNums = that.elemItem.length;
+    var itemsCount = that.elemItem.length;
     
     if(!options.autoplay) return;
     clearInterval(that.timer);
     
-    if (itemNums > 1) {
+    if (itemsCount > 1) {
       that.timer = setInterval(function(){
         that.slide();
       }, options.interval);
@@ -205,7 +205,7 @@ layui.define(['jquery', 'lay'], function(exports){
   Class.prototype.arrow = function(){
     var that = this;
     var options = that.config;
-    var itemNums = that.elemItem.length;
+    var itemsCount = that.elemItem.length;
     
     // 模板
     var tplArrow = $([
@@ -220,7 +220,7 @@ layui.define(['jquery', 'lay'], function(exports){
     if(options.elem.find('.'+ELEM_ARROW)[0]){
       options.elem.find('.'+ELEM_ARROW).remove();
     }
-    itemNums > 1 ? options.elem.append(tplArrow) : tplArrow.remove();
+    itemsCount > 1 ? options.elem.append(tplArrow) : tplArrow.remove();
     
     // 事件
     tplArrow.on('click', function(){
@@ -246,7 +246,7 @@ layui.define(['jquery', 'lay'], function(exports){
   Class.prototype.indicator = function(){
     var that = this;
     var options = that.config;
-    var itemNums = that.elemItem.length;
+    var itemsCount = that.elemItem.length;
     
     // 模板
     var tplInd = that.elemInd = $(['<div class="'+ ELEM_IND +'"><ul>',
@@ -267,7 +267,7 @@ layui.define(['jquery', 'lay'], function(exports){
       options.elem.find('.'+ELEM_IND).remove();
     }
 
-    itemNums > 1 ? options.elem.append(tplInd) : tplInd.remove();
+    itemsCount > 1 ? options.elem.append(tplInd) : tplInd.remove();
     
     if(options.anim === 'updown'){
       tplInd.css('margin-top', -(tplInd.height()/2));
