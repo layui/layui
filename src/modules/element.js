@@ -67,13 +67,14 @@ layui.define('jquery', function(exports){
   };
   
   // 外部 Tab 切换
-  Element.prototype.tabChange = function(filter, layid){
+  Element.prototype.tabChange = function(filter, layid, skipBeforeChange){
     var tabElem = $('.layui-tab[lay-filter='+ filter +']');
     var titElem = tabElem.children(TITLE);
     var liElem = titElem.find('>li[lay-id="'+ layid +'"]');
 
     call.tabClick.call(liElem[0], {
-      liElem: liElem
+      liElem: liElem,
+      skipBeforeChange: skipBeforeChange
     });
     return this;
   };
