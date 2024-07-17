@@ -140,6 +140,23 @@ layui.define('jquery', function(exports){
       var index = 'index' in obj 
         ? obj.index 
       : othis.parent().children('li').index(othis);
+
+      // 判断是否可以切换
+      if (!obj.skipBeforeChange) {
+        var liThis = othis.siblings('.' + THIS);
+        var shouldChange = layui.event.call(this, MOD_NAME, 'tabBeforeChange('+ filter +')', {
+          elem: parents,
+          from: {
+            index: othis.parent().children('li').index(liThis),
+            id: liThis.attr('lay-id')
+          },
+          to: {
+            index: index,
+            id: hasId
+          },
+        });
+        if(shouldChange === false) return;
+      }
       
       // 执行切换
       if(!(isJump || unselect)){
