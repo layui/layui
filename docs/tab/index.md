@@ -111,7 +111,7 @@ tab 组件提供了三种 UI 风格，分别为：
 | [element.render(\'tab\', filter)](#element.render) | 渲染 tab 组件 |
 | [element.tabAdd(filter, options)](#element.tabAdd) | 添加 tab 选项 |
 | [element.tabDelete(filter, layid)](#element.tabDelete) | 删除 tab 选项 |
-| [element.tabChange(filter, layid)](#element.tabChange) | 切换 tab 选项 |
+| [element.tabChange(filter, layid, skipBeforeChange)](#element.tabChange) | 切换 tab 选项 |
 | [element.tab(options)](#element.tab) | 绑定自定义 tab 元素 |
 
 <h3 id="options" lay-toc="{level: 2}" class="ws-bold">元素属性</h3>
@@ -207,10 +207,11 @@ layui.use(function(){
 
 <h3 id="element.tabChange" lay-toc="{level: 2}" class="ws-bold">切换 tab</h3>
 
-`element.tabChange(filter, layid);`
+`element.tabChange(filter, layid, skipBeforeChange);`
 
 - 参数 `filter` : tab 容器（`class="layui-tab"`）的 `lay-filter` 属性值
 - 参数 `layid` : 选项卡标题元素的 `lay-id` 属性值
+- 参数 `skipBeforeChange` : 跳过 `tabBeforeChange` 事件，默认值为 `false`(2.9.15+)
 
 该方法用于切换到对应的 tab 选项。用法详见 : [#示例](#examples)
 
@@ -290,6 +291,31 @@ element.on('tab(filter)', function(data){
 });
 ```
 
+<h3 id="on-tabBeforeChange" lay-toc="{level: 2}" class="ws-bold">tab 切换前的事件 <sup>2.9.15+</sup></h3>
+
+`element.on('tabBeforeChange(filter)', callback);`
+
+- 参数 `tabBeforeChange(filter)` 是一个特定结构。
+  - `tabBeforeChange` 为 tab 切换前事件固定值；
+  - `filter` 为 tab 容器属性 `lay-filter` 对应的值。
+- 参数 `callback` 为事件执行时的回调函数，并返回一个 `object` 类型的参数。
+
+点击 tab 选项切换前触发。
+
+```
+var element = layui.element;
+ 
+// tab 删除前的事件
+element.on('tabBeforeChange(filter)', function(data){
+  console.log(data.elem); // 得到当前的 tab 容器
+  console.log(data.from.index); // 得到切换前的 tab 项所在下标
+  console.log(data.from.id); // 得到切换前的 tab 项所在ID
+  console.log(data.to.index); // 得到切换后的 tab 项所在下标
+  console.log(data.to.id); // 得到切换后的 tab 项所在ID
+
+  if(data.to.id === 'home') return false; // 返回 false 时阻止切换到对应的选项卡
+});
+```
 
 <h3 id="on-tabDelete" lay-toc="{level: 2}" class="ws-bold">tab 删除事件</h3>
 
@@ -318,7 +344,7 @@ element.on('tabDelete(filter)', function(data){
 `element.on('tabBeforeDelete(filter)', callback);`
 
 - 参数 `tabBeforeDelete(filter)` 是一个特定结构。
-  - `tabBeforeDelete` 为 tab 删除事件固定值；
+  - `tabBeforeDelete` 为 tab 删除前事件固定值；
   - `filter` 为 tab 容器属性 `lay-filter` 对应的值。
 - 参数 `callback` 为事件执行时的回调函数，并返回一个 `object` 类型的参数。
 
