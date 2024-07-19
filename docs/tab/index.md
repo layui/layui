@@ -305,7 +305,7 @@ element.on('tab(filter)', function(data){
 ```
 var element = layui.element;
  
-// tab 删除前的事件
+// tab 切换前的事件
 element.on('tabBeforeChange(filter)', function(data){
   console.log(data.elem); // 得到当前的 tab 容器
   console.log(data.from.index); // 得到切换前的 tab 项所在下标
