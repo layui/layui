@@ -211,7 +211,7 @@ layui.use(function(){
 
 - 参数 `filter` : tab 容器（`class="layui-tab"`）的 `lay-filter` 属性值
 - 参数 `layid` : 选项卡标题元素的 `lay-id` 属性值
-- 参数 `skipBeforeChange` : 跳过 `tabBeforeChange` 事件，默认值为 `false`(2.9.15+)
+- 参数 `skipBeforeChange` : 跳过 `tabBeforeChange` 事件，默认值为 `false` <sup>2.9.15+</sup>
 
 该方法用于切换到对应的 tab 选项。用法详见 : [#示例](#examples)
 
