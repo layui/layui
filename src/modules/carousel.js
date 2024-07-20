@@ -283,11 +283,12 @@ layui.define(['jquery', 'lay'], function(exports){
   Class.prototype.slide = function(type, num){
     var that = this;
     var elemItem = that.elemItem;
+    var itemsCount = elemItem.length;
     var options = that.config;
     var thisIndex = options.index;
     var filter = options.elem.attr('lay-filter');
     
-    if(that.haveSlide) return;
+    if (that.haveSlide || itemsCount <= 1) return;
     
     // 滑动方向
     if(type === 'sub'){
