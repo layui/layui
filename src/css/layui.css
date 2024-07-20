@@ -650,12 +650,6 @@ hr.layui-border-black{border-width: 0 0 1px;}
 
 /* 文本区域 */
 .layui-text{line-height: 1.8; font-size: 14px;}
-.layui-text h1,
-.layui-text h2,
-.layui-text h3,
-.layui-text h4,
-.layui-text h5,
-.layui-text h6{color: #3A3A3A;}
 .layui-text h1{font-size: 32px;}
 .layui-text h2{font-size: 24px;}
 .layui-text h3{font-size: 18px;}
