@@ -623,7 +623,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 not = text.indexOf(value) === -1; 
               }
               
-              if(value === ''    || (origin === 'blur') ? value !== text : not) num++;
+              if(value === '' || (origin === 'blur') ? value !== text : not) num++;
               origin === 'keyup' && othis[(isCreatable ? (not && !isCreateOption) : not) ? 'addClass' : 'removeClass'](HIDE);
             });
             // 处理 select 分组元素
