@@ -397,6 +397,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var index =  this.selectedIndex; // 当前选中的索引
           var initValue = '';
           var removeClickOutsideEvent;
+          var customSearchFn;
           
           if(disabled) return;
 
@@ -405,6 +406,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           // 目前只支持 body
           var appendTarget = select.attr('lay-append-to') || 'body';
           var appendPosition = select.attr('lay-append-position');
+          var laySearchFnPath = select.attr('lay-search-method');
 
           // #1449
           // IE10 和 11 中，带有占位符的 input 元素获得/失去焦点时，会触发 input 事件
@@ -465,6 +467,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               },
               {ignore: title}
             );
+
+            customSearchFn = customSearchFn || getValueByPath(laySearchFnPath, window);
           };
           
           // 隐藏下拉
@@ -594,29 +598,32 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             var hasEquals = false;
             var rawValue = value;
             var caseInsensitive = laySearch !== 'cs';
-            if(caseInsensitive){
-              value = value.toLowerCase();
-            }
-            var fuzzyMatch = fuzzyMatchRegExp(value, caseInsensitive);
+            var isCustomSearch = typeof customSearchFn === 'function';
+            var matchFn = isCustomSearch && customSearchFn.call(select[0], rawValue, dds);
             layui.each(dds, function(){
               var othis = $(this);
               var text = othis.text();
               var isCreateOption = isCreatable && othis.hasClass(CREATE_OPTION);
+              var not;
 
               // 需要区分大小写
               if(isCreatable && !isCreateOption && text === rawValue){
                 hasEquals = true;
               }
 
-              // 是否区分大小写
-              if(caseInsensitive){
-                text = text.toLowerCase();
+              if(isCustomSearch && typeof matchFn === 'function'){
+                not = !matchFn.call(select[0], othis);
+              }else{
+               // 是否区分大小写
+                if(caseInsensitive){
+                 text = text.toLowerCase();
+                 value = value.toLowerCase();
+                }
+                // 匹配
+                not = text.indexOf(value) === -1; 
               }
               
-              // 匹配
-              var not = !fuzzyMatch.test(text);
-              
-              if(value === '' || (origin === 'blur') ? value !== text : not) num++;
+              if(value === ''    || (origin === 'blur') ? value !== text : not) num++;
               origin === 'keyup' && othis[(isCreatable ? (not && !isCreateOption) : not) ? 'addClass' : 'removeClass'](HIDE);
             });
             // 处理 select 分组元素
@@ -828,6 +835,16 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             events.call(this, reElem, triggerElem, disabled, isSearch, isCreatable, isAppendTo);
           }
         });
+
+        function getValueByPath(path, obj){
+          if(typeof path !== 'string')return;
+          var result;
+          layui.each(path.split('.'), function(i, propName){
+            result = i === 0 ? obj[propName] : result[propName];
+            return result === undefined;
+          })
+          return result;
+        };
       }
       
       // 复选框/开关
@@ -1236,38 +1253,6 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     // 事件
     return layui.event.call(this, MOD_NAME, 'submit('+ layFilter +')', params);
   };
-
-  function fuzzyMatchRegExp(keyword, caseInsensitive) {
-    var wordMap = {};
-    var regexPattern = ['^'];
-    var escapeRegExp = function(str){
-      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    }
-
-    if(caseInsensitive)keyword = keyword.toLowerCase();
-
-    // 统计关键字中各字符出现次数
-    var wordArr = keyword.trim().split('');
-    for (var i = 0; i < wordArr.length; i++) {
-      var c = wordArr[i];
-      wordMap[c] = (wordMap[c] || 0) + 1;
-    }
-
-    // 构建正则表达式模式
-    for (c in wordMap) {
-      regexPattern.push('(?=.*');
-      for (var i = 0; i < wordMap[c]; i++) {
-        regexPattern.push(escapeRegExp(c));
-        if (i !== wordMap[c] - 1) {
-          regexPattern.push('.*'); // 在字符之间添加任意字符匹配
-        }
-      }
-      regexPattern.push(')');
-    }
-    regexPattern.push('.*');
-
-    return new RegExp(regexPattern.join(''), caseInsensitive ? 'i' : undefined);
-  }
   
   var form = new Form();
   var $dom = $(document);
