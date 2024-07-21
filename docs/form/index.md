@@ -117,6 +117,7 @@ form 还可以借助*栅格*实现更灵活的响应式布局。
 | lay-affix | [#详见](input.html#affix) | 输入框动态点缀，`<input type="text">`元素 **私有属性** |
 | lay-skin | [#详见](checkbox.html#default) | 设置 UI 风格。 `<input type="checkbox">`，`<input type="radio">` 元素 **私有属性** |
 | lay-search | 默认不区分大小写;<br>设置`cs`区分大小写 | 给 `select` 组件开启搜索功能。`<select>` 元素 **私有属性** |
+| lay-search-method <sup>2.9.15+</sup>| 全局作用域内可访问的函数的名称，支持使用点运算符访问，例如 `$store.select.filter`| 自定义搜索方法。`<select>` 元素 **私有属性** |
 | lay-creatable <sup>2.9.7+</sup> | 无需值 | 是否允许创建新条目，需要配合 `lay-search` 使用。`<select>` 元素 **私有属性** |
 | lay-append-to <sup>2.9.12+</sup> <sup>实验性</sup> | `body` | 是否将 select 面板追加到 body 元素中。`<select>` 元素 **私有属性** |
 | lay-append-position <sup>2.9.12+</sup> <sup>实验性</sup> | `absolute` 绝对定位 (默认)<br>`fixed` 固定定位 | 用于设置 select 面板开启 `lay-append-to` 属性后的定位方式。`<select>` 元素 **私有属性** |

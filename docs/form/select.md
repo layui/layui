@@ -173,9 +173,34 @@ toc: true
       <option value="7">AbC</option>
     </select>
   </div>
+  <div class="layui-col-md6">
+    <select lay-search="" lay-creatable="" lay-search-method="$store.filter">
+      <option value="">自定义搜索方法</option>
+      <option value="1">AAA</option>
+      <option value="2">aaa</option>
+      <option value="3">BBB</option>
+      <option value="4">bbb</option>
+      <option value="5">ABC</option>
+      <option value="6">abc</option>
+      <option value="7">AbC</option>
+    </select>
+  </div>
 </div>
 
-<!-- import layui -->
+<!-- import layui --> 
+<script>
+layui.use(function(){
+  var form = layui.form;
+
+  window.$store = {
+    filter: function(inputVal, optionElems){
+      return function(optionElem){
+        return inputVal === optionElem.text();
+      }
+    }
+  }
+});
+</script>
   </textarea>
 </pre>
 
