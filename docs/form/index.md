@@ -116,7 +116,7 @@ form 还可以借助*栅格*实现更灵活的响应式布局。
 | lay-reqtext | 自定义 | 设置*必填项*（`lay-verify="required"`）的默认提示文本 |
 | lay-affix | [#详见](input.html#affix) | 输入框动态点缀，`<input type="text">`元素 **私有属性** |
 | lay-skin | [#详见](checkbox.html#default) | 设置 UI 风格。 `<input type="checkbox">`，`<input type="radio">` 元素 **私有属性** |
-| lay-search | 默认不区分大小写;<br>设置`cs`区分大小写 | 给 `select` 组件开启搜索功能。`<select>` 元素 **私有属性** |
+| lay-search |<sup>2.9.15+</sup> `lay-search="{caseSensitive:false, fuzzy: false}"` <br>`caseSensitive` 是否区分大小写，默认值为 `false` <br>`fuzzy`是否开启模糊匹配，开启后将会忽略匹配字符出现在字符串中的位置，默认值为 `false` <br>设置`cs`区分大小写(2.9.15+ 已弃用) | 给 `select` 组件开启搜索功能。`<select>` 元素 **私有属性** |
 | lay-creatable <sup>2.9.7+</sup> | 无需值 | 是否允许创建新条目，需要配合 `lay-search` 使用。`<select>` 元素 **私有属性** |
 | lay-append-to <sup>2.9.12+</sup> <sup>实验性</sup> | `body` | 是否将 select 面板追加到 body 元素中。`<select>` 元素 **私有属性** |
 | lay-append-position <sup>2.9.12+</sup> <sup>实验性</sup> | `absolute` 绝对定位 (默认)<br>`fixed` 固定定位 | 用于设置 select 面板开启 `lay-append-to` 属性后的定位方式。`<select>` 元素 **私有属性** |

@@ -400,8 +400,14 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           
           if(disabled) return;
 
-          // 搜索项
-          var laySearch = select.attr('lay-search');
+          /**
+           * 搜索项 
+           * @typedef searchOption
+           * @prop {boolean} [caseSensitive=false] 是否区分大小写
+           * @prop {boolean} [fuzzy=false] 是否开启模糊匹配，开启后将会忽略模式出现在字符串中的位置。
+           */
+          /** @type {searchOption} */
+          var laySearch = select.attr('lay-search') === 'cs' ? {caseSensitive:true} : lay.options(select, {attr:'lay-search'});
           // 目前只支持 body
           var appendTarget = select.attr('lay-append-to') || 'body';
           var appendPosition = select.attr('lay-append-position');
@@ -593,11 +599,13 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             var dds = dl.children('dd');
             var hasEquals = false;
             var rawValue = value;
-            var caseInsensitive = laySearch !== 'cs';
-            if(caseInsensitive){
+            var fuzzyMatchRE;
+            if(!laySearch.caseSensitive){
               value = value.toLowerCase();
             }
-            var fuzzyMatch = fuzzyMatchRegExp(value, caseInsensitive);
+            if(laySearch.fuzzy){
+              fuzzyMatchRE = fuzzyMatchRegExp(value, laySearch.caseSensitive);
+            }
             layui.each(dds, function(){
               var othis = $(this);
               var text = othis.text();
@@ -609,12 +617,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               }
 
               // 是否区分大小写
-              if(caseInsensitive){
+              if(!laySearch.caseSensitive){
                 text = text.toLowerCase();
               }
               
               // 匹配
-              var not = !fuzzyMatch.test(text);
+              var not = laySearch.fuzzy ? !fuzzyMatchRE.test(text) : text.indexOf(value) === -1;
               
               if(value === '' || (origin === 'blur') ? value !== text : not) num++;
               origin === 'keyup' && othis[(isCreatable ? (not && !isCreateOption) : not) ? 'addClass' : 'removeClass'](HIDE);
@@ -1237,14 +1245,14 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     return layui.event.call(this, MOD_NAME, 'submit('+ layFilter +')', params);
   };
 
-  function fuzzyMatchRegExp(keyword, caseInsensitive) {
+  function fuzzyMatchRegExp(keyword, caseSensitive) {
     var wordMap = {};
     var regexPattern = ['^'];
     var escapeRegExp = function(str){
       return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
-    if(caseInsensitive)keyword = keyword.toLowerCase();
+    if(!caseSensitive)keyword = keyword.toLowerCase();
 
     // 统计关键字中各字符出现次数
     var wordArr = keyword.trim().split('');
@@ -1266,7 +1274,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     }
     regexPattern.push('.*');
 
-    return new RegExp(regexPattern.join(''), caseInsensitive ? 'i' : undefined);
+    return new RegExp(regexPattern.join(''), !caseSensitive ? 'i' : undefined);
   }
   
   var form = new Form();
