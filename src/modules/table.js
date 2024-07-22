@@ -1798,16 +1798,22 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       tr.each(function(i){
         var index = this.getAttribute('data-index');
         if(!ignoreTrIndex[index]){
-          var el = $(this);
-          el.toggleClass(ELEM_CHECKED, !!getChecked(thisData[index][options.checkName]))
+          var currentTrData = thisData[index];
+          if(currentTrData){
+            var el = $(this);
+            el.toggleClass(ELEM_CHECKED, !!getChecked(currentTrData[options.checkName]))
+          }
         }
       });
     }else if(isCheckMult){
       tr.each(function(i){
         var index = this.getAttribute('data-index');
         if(opts.index[index] && !ignoreTrIndex[index]){
-          var el = $(this);
-          el.toggleClass(ELEM_CHECKED, !!getChecked(thisData[index][options.checkName]))
+          var currentTrData = thisData[index];
+          if(currentTrData){
+            var el = $(this);
+            el.toggleClass(ELEM_CHECKED, !!getChecked(currentTrData[options.checkName]))
+          }
         }
       });
     }
@@ -2433,6 +2439,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           index: 'all',
           checked: checked
         });
+        layui.stope(e);
       } else {
         that.setRowChecked({
           index: index,
