@@ -120,6 +120,7 @@ layui.define(['jquery', 'lay'], function(exports){
     that.arrow();
     that.autoplay();
     that.events();
+    that.bindSwipe();
   };
   
   // 重置轮播
@@ -323,6 +324,76 @@ layui.define(['jquery', 'lay'], function(exports){
     layui.event.call(this, MOD_NAME, 'change('+ filter +')', params);
   };
   
+  // 触摸滑动绑定事件
+  Class.prototype.bindSwipe = function() {
+    var that = this;
+    var options = that.config;
+    var startX, startY, endX, endY, isTouching = false;
+
+    // 触摸开始事件
+    options.elem.on('touchstart mousedown', function(e) {
+      e = e.originalEvent || e;
+      startX = e.touches ? e.touches[0].pageX : e.pageX;
+      startY = e.touches ? e.touches[0].pageY : e.pageY;
+      isTouching = true;
+      
+      clearInterval(that.timer); // 清除自动轮播计时器
+    });
+
+    // 触摸移动事件
+    options.elem.on('touchmove mousemove', function(e) {
+      if (!isTouching) return;
+      e = e.originalEvent || e;
+      endX = e.touches ? e.touches[0].pageX : e.pageX;
+      endY = e.touches ? e.touches[0].pageY : e.pageY;
+
+      var diffX = endX - startX;
+      var diffY = endY - startY;
+
+      // 判断是左右滑动还是上下滑动
+      if (options.anim === 'updown') {
+        if (Math.abs(diffY) > Math.abs(diffX)) {
+          e.preventDefault();
+        }
+      } else {
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+          e.preventDefault();
+        }
+      }
+    });
+
+    // 触摸结束事件
+    options.elem.on('touchend mouseup', function(e) {
+      if (!isTouching) return;
+      isTouching = false;
+
+      var diffX = endX - startX;
+      var diffY = endY - startY;
+
+      // 判断滑动距离是否达到触发切换的阈值
+      if (options.anim === 'updown') {
+        if (Math.abs(diffY) > 50) {
+          if (diffY > 0) {
+            that.slide('sub');
+          } else {
+            that.slide('add');
+          }
+        }
+      } else {
+        if (Math.abs(diffX) > 50) {
+          if (diffX > 0) {
+            that.slide('sub');
+          } else {
+            that.slide('add');
+          }
+        }
+      }
+
+      that.autoplay(); // 重新启动自动轮播
+    });
+  };
+
+
   // 事件处理
   Class.prototype.events = function(){
     var that = this;
