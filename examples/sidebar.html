@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>锚点导航 - layui</title>
+
+<link rel="stylesheet" href="../src/css/layui.css">
+
+<style>
+body{padding: 20px;}
+
+/* 为了区分效果 */
+div[sidebar-item]>*{display: flex;align-items: center;}
+.layui-sidebar>*[sidebar-item]{position: fixed;left: 0;top: 0;}
+.layui-sidebar-active{background-color: #009688;color: #fff;}
+div[sidebar-content]>*{height: 100vh;text-align: center; line-height: 280px; color: #fff;}
+div[sidebar-content]>*:nth-child(2n){background-color: #009688;}
+div[sidebar-content]>*:nth-child(2n+1){background-color: #5FB878;}
+
+
+#sidebar-2{display: flex;}
+#sidebar-2>*[sidebar-item]{position: fixed;height: 100vh;width: 10vw;left: 0;top: 0;flex-direction: column;}
+#sidebar-2>*[sidebar-item]>*{height: 44px;}
+#sidebar-2>*[sidebar-content]{height: 100vh;width: 90vw;margin-left: 10vw;}
+</style>
+</head>
+<body>
+
+
+<!-- <div class="layui-sidebar" id="sidebar-1">
+  <div sidebar-item>
+    <div class="layui-active">锚点-导航1</div>
+    <div>锚点-导航2</div>
+    <div>锚点-导航3</div>
+    <div>锚点-导航4</div>
+  </div>
+  <div sidebar-content>
+    <div>内容-1</div>
+    <div>内容-2</div>
+    <div>内容-3</div>
+    <div>内容-4</div>
+  </div>
+</div> -->
+
+
+<div class="layui-sidebar " id="sidebar-2">
+  <div sidebar-item>
+    <div class="layui-active">锚点2-导航1</div>
+    <div class="clickItem">锚点2-导航2</div>
+    <div class="clickItem">锚点2-导航3</div>
+    <div class="clickItem">锚点2-导航4</div>
+  </div>
+  <div sidebar-content>
+    <div>内容2-1</div>
+    <div>内容2-2</div>
+    <div>内容2-3</div>
+    <div>内容2-4</div>
+  </div>
+</div>
+
+
+
+<script src="../src/layui.js"></script>
+<script>
+  layui.use('sidebar', function(){
+    var sidebar = layui.sidebar;
+    sidebar.render({
+      elem: '#sidebar-1' // 你的侧边导航容器
+    });
+    sidebar.render({
+      elem: '#sidebar-2', // 你的侧边导航容器
+      scrollDuration: 300
+      // offset: 100
+    });
+  });
+</script>
+
+</body>
+</html>

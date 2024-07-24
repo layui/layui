@@ -67,6 +67,7 @@
     colorpicker: 'colorpicker', // 颜色选择器
     slider: 'slider', // 滑块
     carousel: 'carousel', // 轮播
+    sidebar: 'sidebar', // 锚点导航
     flow: 'flow', // 流加载
     util: 'util', // 工具块
     code: 'code', // 代码修饰器

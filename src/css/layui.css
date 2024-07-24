@@ -1641,7 +1641,8 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-tree-editInput{position: relative; display: inline-block; vertical-align: middle; height: 20px; line-height: 20px; padding: 0; border: none; background-color: rgba(0,0,0,0.05);}
 .layui-tree-emptyText{text-align: center; color: #999;}
 
-
+/** 锚点导航 **/
+.layui-sidebar >*[sidebar-item] > *{cursor: pointer;}
 
 
 /** 动画 **/
