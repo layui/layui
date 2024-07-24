@@ -39,6 +39,8 @@ layui.define(['jquery', 'lay'], function(exports){
   
   var ELEM_ITEM = '>*[carousel-item]>*';
   var ELEM_LEFT = 'layui-carousel-left';
+  var ELEM_HORIZONTAL = 'layui-carousel-horizontal';
+  var ELEM_VERTICAL = 'layui-carousel-vertical';
   var ELEM_RIGHT = 'layui-carousel-right';
   var ELEM_PREV = 'layui-carousel-prev';
   var ELEM_NEXT = 'layui-carousel-next';
@@ -110,6 +112,13 @@ layui.define(['jquery', 'lay'], function(exports){
     
     options.elem.attr('lay-anim', options.anim);
     
+    // 添加方向类
+    if (options.anim === 'updown') {
+      options.elem.addClass(ELEM_VERTICAL);
+    } else {
+      options.elem.addClass(ELEM_HORIZONTAL);
+    }
+
     // 初始焦点状态
     that.elemItem.eq(options.index).addClass(THIS);
 
@@ -120,7 +129,6 @@ layui.define(['jquery', 'lay'], function(exports){
     that.arrow();
     that.autoplay();
     that.events();
-    that.bindSwipe();
   };
   
   // 重置轮播
@@ -324,24 +332,34 @@ layui.define(['jquery', 'lay'], function(exports){
     layui.event.call(this, MOD_NAME, 'change('+ filter +')', params);
   };
   
-  // 触摸滑动绑定事件
-  Class.prototype.bindSwipe = function() {
+  // 事件处理
+  Class.prototype.events = function(){
     var that = this;
     var options = that.config;
+    
+    if(options.elem.data('haveEvents')) return;
+    
+    var touchEl = options.elem;
+    var isVertical = options.anim === 'updown';
     var startX, startY, endX, endY, isTouching = false;
 
     // 触摸开始事件
-    options.elem.on('touchstart mousedown', function(e) {
+    touchEl.on('touchstart mousedown', function(e) {
       e = e.originalEvent || e;
       startX = e.touches ? e.touches[0].pageX : e.pageX;
       startY = e.touches ? e.touches[0].pageY : e.pageY;
       isTouching = true;
       
       clearInterval(that.timer); // 清除自动轮播计时器
+
+      // 防止图片的默认行为
+      if ($(e.target).is('img')) {
+        e.preventDefault();
+      }
     });
 
     // 触摸移动事件
-    options.elem.on('touchmove mousemove', function(e) {
+    touchEl.on('touchmove mousemove', function(e) {
       if (!isTouching) return;
       e = e.originalEvent || e;
       endX = e.touches ? e.touches[0].pageX : e.pageX;
@@ -351,7 +369,7 @@ layui.define(['jquery', 'lay'], function(exports){
       var diffY = endY - startY;
 
       // 判断是左右滑动还是上下滑动
-      if (options.anim === 'updown') {
+      if (isVertical) {
         if (Math.abs(diffY) > Math.abs(diffX)) {
           e.preventDefault();
         }
@@ -360,10 +378,15 @@ layui.define(['jquery', 'lay'], function(exports){
           e.preventDefault();
         }
       }
+
+      // 防止图片的默认行为
+      if ($(e.target).is('img')) {
+        e.preventDefault();
+      }
     });
 
     // 触摸结束事件
-    options.elem.on('touchend mouseup', function(e) {
+    touchEl.on('touchend mouseup', function(e) {
       if (!isTouching) return;
       isTouching = false;
 
@@ -371,7 +394,7 @@ layui.define(['jquery', 'lay'], function(exports){
       var diffY = endY - startY;
 
       // 判断滑动距离是否达到触发切换的阈值
-      if (options.anim === 'updown') {
+      if (isVertical) {
         if (Math.abs(diffY) > 50) {
           if (diffY > 0) {
             that.slide('sub');
@@ -391,18 +414,10 @@ layui.define(['jquery', 'lay'], function(exports){
 
       that.autoplay(); // 重新启动自动轮播
     });
-  };
 
 
-  // 事件处理
-  Class.prototype.events = function(){
-    var that = this;
-    var options = that.config;
-    
-    if(options.elem.data('haveEvents')) return;
-    
     // 移入移出容器
-    options.elem.on('mouseenter touchstart', function(){
+    touchEl.on('mouseenter touchstart', function(){
       if (that.config.autoplay === 'always') return;
       clearInterval(that.timer);
     }).on('mouseleave touchend', function(){
@@ -410,23 +425,9 @@ layui.define(['jquery', 'lay'], function(exports){
       that.autoplay();
     });
 
-    var touchEl = options.elem;
-    var isVertical = options.anim === 'updown';
-    lay.touchSwipe(touchEl, {
-      onTouchEnd: function(e, state){
-        var duration = Date.now() - state.timeStart;
-        var distance = isVertical ? state.distanceY : state.distanceX;
-        var speed = distance / duration;
-        var shouldSwipe = Math.abs(speed) > 0.25 || Math.abs(distance) > touchEl[isVertical ? 'height' : 'width']() / 3;
-        if(shouldSwipe){
-          that.slide(distance > 0 ? '' : 'sub');
-        }
-      }
-    })
-    
-    options.elem.data('haveEvents', true);
+    touchEl.data('haveEvents', true);
   };
-  
+
   // 核心入口
   carousel.render = function(options){
     return new Class(options);
