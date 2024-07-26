@@ -111,7 +111,7 @@ tab 组件提供了三种 UI 风格，分别为：
 | [element.render(\'tab\', filter)](#element.render) | 渲染 tab 组件 |
 | [element.tabAdd(filter, options)](#element.tabAdd) | 添加 tab 选项 |
 | [element.tabDelete(filter, layid)](#element.tabDelete) | 删除 tab 选项 |
-| [element.tabChange(filter, layid, skipBeforeChange)](#element.tabChange) | 切换 tab 选项 |
+| [element.tabChange(filter, layid, force)](#element.tabChange) | 切换 tab 选项 |
 | [element.tab(options)](#element.tab) | 绑定自定义 tab 元素 |
 
 <h3 id="options" lay-toc="{level: 2}" class="ws-bold">元素属性</h3>
