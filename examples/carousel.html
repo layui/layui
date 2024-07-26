@@ -68,54 +68,56 @@ div[carousel-item]>*:nth-child(2n+1){background-color: #5FB878;}
 layui.use('carousel', function(){
   var carousel = layui.carousel;
   
-  //建造实例
-  carousel.render({
-    elem: '#test1'
-    ,index: 2
-    //,full: true
-    ,arrow: 'always'
-    ,autoplay: 'always'
-    ,change: function(obj){
+  // 实例
+  var carInst = carousel.render({
+    elem: '#test1',
+    index: 2,
+    // full: true,
+    arrow: 'always',
+    autoplay: 'always',
+    change: function(obj) {
       console.log(obj)
-    }
-    //,interval: 5000
-    //,autoplay: false
-    //,indicator: 'outside'
-    //,trigger: 'hover'
+    },
+    // interval: 5000,
+    // autoplay: false,
+    // indicator: 'outside',
+    // trigger: 'hover'
   });
+
+  // carInst.goto(1);
   
-  //事件
+  // 事件
   /*
-  carousel.on('change(test1)', function(obj){
+  carousel.on('change(test1)', function(obj) {
     console.log(obj)
   });
   */
 
   carousel.render({
-    elem: '#test2'
-    ,interval: 1800
-    //,full: true
-    ,anim: 'fade'
-    ,height: '120px'
+    elem: '#test2',
+    interval: 1800,
+    // full: true,
+    anim: 'fade',
+    height: '120px'
   });
   
   carousel.render({
-    elem: '#test3'
-    //,full: true
-    ,arrow: 'always'
-    //,autoplay: false
-    //,indicator: 'outside'
-    //,trigger: 'hover'
-    ,anim: 'updown'
-    //,full: true
+    elem: '#test3',
+    // full: true,
+    arrow: 'always',
+    // autoplay: false,
+    // indicator: 'outside',
+    // trigger: 'hover',
+    anim: 'updown',
+    // full: true
   });
   
   // 图片轮播
   carousel.render({
-    elem: '#test4'
-    ,width: '720px'
-    ,height: '360px'
-    ,interval: 5000
+    elem: '#test4',
+    width: '720px',
+    height: '360px',
+    interval: 5000
   });
 });
 </script>

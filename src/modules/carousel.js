@@ -113,13 +113,14 @@ layui.define(['jquery', 'lay'], function(exports){
     // 初始焦点状态
     that.elemItem.eq(options.index).addClass(THIS);
 
-    // 指示器等动作
-    if(that.elemItem.length <= 1) return;
-
+    // 指示器、箭头等动作
     that.indicator();
     that.arrow();
     that.autoplay();
-    that.events();
+
+    if (that.elemItem.length > 1) {
+      that.events();
+    }
   };
   
   // 重置轮播
@@ -188,19 +189,23 @@ layui.define(['jquery', 'lay'], function(exports){
   Class.prototype.autoplay = function(){
     var that = this;
     var options = that.config;
+    var itemsCount = that.elemItem.length;
     
     if(!options.autoplay) return;
     clearInterval(that.timer);
     
-    that.timer = setInterval(function(){
-      that.slide();
-    }, options.interval);
+    if (itemsCount > 1) {
+      that.timer = setInterval(function(){
+        that.slide();
+      }, options.interval);
+    }
   };
   
   // 箭头
   Class.prototype.arrow = function(){
     var that = this;
     var options = that.config;
+    var itemsCount = that.elemItem.length;
     
     // 模板
     var tplArrow = $([
@@ -215,7 +220,7 @@ layui.define(['jquery', 'lay'], function(exports){
     if(options.elem.find('.'+ELEM_ARROW)[0]){
       options.elem.find('.'+ELEM_ARROW).remove();
     }
-    options.elem.append(tplArrow);
+    itemsCount > 1 ? options.elem.append(tplArrow) : tplArrow.remove();
     
     // 事件
     tplArrow.on('click', function(){
@@ -241,6 +246,7 @@ layui.define(['jquery', 'lay'], function(exports){
   Class.prototype.indicator = function(){
     var that = this;
     var options = that.config;
+    var itemsCount = that.elemItem.length;
     
     // 模板
     var tplInd = that.elemInd = $(['<div class="'+ ELEM_IND +'"><ul>',
@@ -260,7 +266,8 @@ layui.define(['jquery', 'lay'], function(exports){
     if(options.elem.find('.'+ELEM_IND)[0]){
       options.elem.find('.'+ELEM_IND).remove();
     }
-    options.elem.append(tplInd);
+
+    itemsCount > 1 ? options.elem.append(tplInd) : tplInd.remove();
     
     if(options.anim === 'updown'){
       tplInd.css('margin-top', -(tplInd.height()/2));
@@ -276,11 +283,12 @@ layui.define(['jquery', 'lay'], function(exports){
   Class.prototype.slide = function(type, num){
     var that = this;
     var elemItem = that.elemItem;
+    var itemsCount = elemItem.length;
     var options = that.config;
     var thisIndex = options.index;
     var filter = options.elem.attr('lay-filter');
     
-    if(that.haveSlide) return;
+    if (that.haveSlide || itemsCount <= 1) return;
     
     // 滑动方向
     if(type === 'sub'){
@@ -329,6 +337,7 @@ layui.define(['jquery', 'lay'], function(exports){
     var options = that.config;
     
     if(options.elem.data('haveEvents')) return;
+
     
     // 移入移出容器
     options.elem.on('mouseenter touchstart', function(){
