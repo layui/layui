@@ -66,14 +66,21 @@ layui.define('jquery', function(exports){
     return this;
   };
   
-  // 外部 Tab 切换
-  Element.prototype.tabChange = function(filter, layid){
+  /**
+   * 外部 Tab 切换
+   * @param {string} filter - 标签主容器 lay-filter 值
+   * @param {string} layid - 标签头 lay-id 值
+   * @param {boolean} force - 是否强制切换
+   * @returns {this}
+   */
+  Element.prototype.tabChange = function(filter, layid, force){
     var tabElem = $('.layui-tab[lay-filter='+ filter +']');
     var titElem = tabElem.children(TITLE);
     var liElem = titElem.find('>li[lay-id="'+ layid +'"]');
 
     call.tabClick.call(liElem[0], {
-      liElem: liElem
+      liElem: liElem,
+      force: force
     });
     return this;
   };
@@ -140,6 +147,23 @@ layui.define('jquery', function(exports){
       var index = 'index' in obj 
         ? obj.index 
       : othis.parent().children('li').index(othis);
+
+      // 若非强制切换，则根据 tabBeforeChange 事件的返回结果决定是否切换
+      if (!obj.force) {
+        var liThis = othis.siblings('.' + THIS);
+        var shouldChange = layui.event.call(this, MOD_NAME, 'tabBeforeChange('+ filter +')', {
+          elem: parents,
+          from: {
+            index: othis.parent().children('li').index(liThis),
+            id: liThis.attr('lay-id')
+          },
+          to: {
+            index: index,
+            id: hasId
+          },
+        });
+        if(shouldChange === false) return;
+      }
       
       // 执行切换
       if(!(isJump || unselect)){
