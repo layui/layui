@@ -207,11 +207,11 @@ layui.use(function(){
 
 <h3 id="element.tabChange" lay-toc="{level: 2}" class="ws-bold">切换 tab</h3>
 
-`element.tabChange(filter, layid, skipBeforeChange);`
+`element.tabChange(filter, layid, force);`
 
 - 参数 `filter` : tab 容器（`class="layui-tab"`）的 `lay-filter` 属性值
 - 参数 `layid` : 选项卡标题元素的 `lay-id` 属性值
-- 参数 `skipBeforeChange` : 跳过 `tabBeforeChange` 事件，默认值为 `false` <sup>2.9.15+</sup>
+- 参数 `force` : 是否强制执行 tab 切换。设置 `true` 后，将忽略 `tabBeforeChange` 事件行为。默认 `false` <sup>2.9.15+</sup>
 
 该方法用于切换到对应的 tab 选项。用法详见 : [#示例](#examples)
 
