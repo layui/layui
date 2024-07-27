@@ -1796,23 +1796,23 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     if(isCheckAll){
       tr.each(function(i){
-        var index = this.getAttribute('data-index');
-        if(!ignoreTrIndex[index]){
-          var currentTrData = thisData[index];
-          if(currentTrData){
-            var el = $(this);
-            el.toggleClass(ELEM_CHECKED, !!getChecked(currentTrData[options.checkName]))
+        var trEl = $(this);
+        var index = trEl.attr('data-index');
+        if(index && !ignoreTrIndex[index]){
+          var currentRowData = thisData[index];
+          if(currentRowData){
+            trEl.toggleClass(ELEM_CHECKED, !!getChecked(currentRowData[options.checkName]))
           }
         }
       });
     }else if(isCheckMult){
       tr.each(function(i){
-        var index = this.getAttribute('data-index');
-        if(opts.index[index] && !ignoreTrIndex[index]){
-          var currentTrData = thisData[index];
-          if(currentTrData){
-            var el = $(this);
-            el.toggleClass(ELEM_CHECKED, !!getChecked(currentTrData[options.checkName]))
+        var trEl = $(this);
+        var index = trEl.attr('data-index');
+        if(index && opts.index[index] && !ignoreTrIndex[index]){
+          var currentRowData = thisData[index];
+          if(currentRowData){
+            trEl.toggleClass(ELEM_CHECKED, !!getChecked(currentRowData[options.checkName]))
           }
         }
       });
