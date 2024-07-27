@@ -745,6 +745,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             hideDown(true);
             return false;
           });
+
+          // 
+          dl.on('mousedown pointerdown touchstart', function(e){
+            return false;
+          })
           
           reElem.find('dl>dt').on('click', function(e){
             return false;
