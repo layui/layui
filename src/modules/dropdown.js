@@ -18,7 +18,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   var MOD_NAME = 'dropdown';
   var MOD_INDEX = 'layui_'+ MOD_NAME +'_index'; // 模块索引名
   var MOD_ID = 'lay-' + MOD_NAME + '-id';
-  var EVENT_NP = '.lay_dropdown';
+  var EVENT_NAMESPACE = '.lay_dropdown';
   var DESTROY_EVENT = '_lay-dropdown-destroy';
 
   // 外部接口
@@ -117,18 +117,26 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     hideOnClose: false // 关闭时隐藏面板
   };
   
-  // 重载实例
+  /**
+   * 重载实例
+   * @param {object} options - 配置项 
+   * @param {'reload' | 'reloadData'} [type="reload"] - 重载类型 
+   */
   Class.prototype.reload = function(options, type){
     var that = this;
     // 绑定元素改变时，清理旧事件
     if(options.elem && options.elem !== that.config.elem){
-      that.config.elem.off(EVENT_NP);
+      that.config.elem.off(EVENT_NAMESPACE);
     }
     that.config = $.extend({}, that.config, options);
     that.init(true, type || 'reload');
   };
 
-  // 初始化准备
+  /**
+   * 初始化准备
+   * @param {boolean} [rerender] - 是否是重复渲染
+   * @param {'reload' | 'reloadData' | undefined} [type] - 渲染类型 
+   */
   Class.prototype.init = function(rerender, type){
     var that = this;
     var options = that.config;
@@ -167,7 +175,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     // 初始化自定义字段名
     options.customName = $.extend({}, dropdown.config.customName, options.customName);
 
-    //初始即显示或者面板弹出之后执行了刷新数据
+    // 初始即显示或者面板弹出之后执行了刷新数据
     var isOpened = options.elem.data(MOD_INDEX +'_opened');
     if(options.show || (type === 'reloadData' && isOpened)){
       that.open(rerender, type);
@@ -176,8 +184,132 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     // 初始化完毕事件
     options.elem.trigger('_lay-dropdown-inited', {id: options.id});
   };
+
+  /**
+   * 创建默认菜单内容
+   * @returns {JQuery}
+   */
+  Class.prototype.createDefaultView = function(){
+    var that = this;
+    var options = that.config;
+
+    var elemUl = $('<ul class="layui-menu layui-dropdown-menu"></ul>');
+    if(options.data.length > 0 ){
+      that.createMenuItemView(elemUl, options.data)
+    } else {
+      elemUl.html('<li class="layui-menu-item-none">暂无数据</li>');
+    }
+    return elemUl;
+  }
+
+  /**
+   * 创建菜单项
+   * @param {JQuery} views - 菜单视图元素 
+   * @param {object} data - 菜单数据结构
+   * @returns {JQuery} 
+   */
+  Class.prototype.createMenuItemView = function(views, data){
+    var that = this;
+    var options = that.config;
+    var customName = options.customName;
+
+    layui.each(data, function(index, item){
+      // 是否存在子级
+      var isChild = item[customName.children] && item[customName.children].length > 0;
+      var isSpreadItem = ('isSpreadItem' in item) ? item.isSpreadItem : options.isSpreadItem
+      var title = function(title){
+        var templet = item.templet || options.templet;
+        if(templet){
+          title = typeof templet === 'function' 
+            ? templet(item)
+          : laytpl(templet).render(item);
+        }
+        return title;
+      }(util.escape(item[customName.title]));
+      
+      // 初始类型
+      var type = function(){
+        if(isChild){
+          item.type = item.type || 'parent';
+        }
+        if(item.type){
+          return ({
+            group: 'group'
+            ,parent: 'parent'
+            ,'-': '-'
+          })[item.type] || 'parent';
+        }
+        return '';
+      }();
+
+      if(type !== '-' && (!item[customName.title] && !item[customName.id] && !isChild)) return;
+      
+      //列表元素
+      var viewLi = $(['<li'+ function(){
+        var className = {
+          group: 'layui-menu-item-group'+ (
+            options.isAllowSpread ? (
+              isSpreadItem ? ' layui-menu-item-down' : ' layui-menu-item-up'
+            ) : ''
+          )
+          ,parent: STR_ITEM_PARENT
+          ,'-': 'layui-menu-item-divider'
+        };
+        if(isChild || type){
+          return ' class="'+ className[type] +'"';
+        }
+        return item.disabled ? ' class="'+ STR_DISABLED +'"' : '';
+      }() +'>'
+      
+        //标题区
+        ,function(){
+          //是否超文本
+          var viewText = ('href' in item) ? (
+            '<a href="'+ item.href +'" target="'+ (item.target || '_self') +'">'+ title +'</a>'
+          ) : title;
+          
+          //是否存在子级
+          if(isChild){
+            return '<div class="'+ STR_MENU_TITLE +'">'+ viewText + function(){
+              if(type === 'parent'){
+                return '<i class="layui-icon layui-icon-right"></i>';
+              } else if(type === 'group' && options.isAllowSpread){
+                return '<i class="layui-icon layui-icon-'+ (isSpreadItem ? 'up' : 'down') +'"></i>';
+              } else {
+                return '';
+              }
+            }() +'</div>'
+            
+          }
+          return '<div class="'+ STR_MENU_TITLE +'">'+ viewText +'</div>';
+        }()
+      ,'</li>'].join(''));
+      
+      viewLi.data('item', item);
+      
+      //子级区
+      if(isChild){
+        var elemPanel = $('<div class="layui-panel layui-menu-body-panel"></div>');
+        var elemUl = $('<ul></ul>');
+
+        if(type === 'parent'){
+          elemPanel.append(that.createMenuItemView(elemUl, item[customName.children]));
+          viewLi.append(elemPanel);
+        } else {
+          viewLi.append(that.createMenuItemView(elemUl, item[customName.children]));
+        }
+      }
+
+      views.append(viewLi);
+    });
+    return views;
+  }
   
-  // 渲染
+  /**
+   * 渲染面板内容
+   * @param {boolean | undefined} rerender - 重新渲染面板内容
+   * @param {'reload' | 'reloadData' | undefined} type - 渲染类型
+   */
   Class.prototype.render = function(rerender, type){
     var that = this;
     var options = that.config;
@@ -186,116 +318,14 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     var isCtxMenu = options.trigger === 'contextmenu';
     var isTopElem = lay.isTopElem(options.elem[0]);
     
-    // 默认菜单内容
-    var getDefaultView = function(){
-      var elemUl = $('<ul class="layui-menu layui-dropdown-menu"></ul>');
-      if(options.data.length > 0 ){
-        eachItemView(elemUl, options.data)
-      } else {
-        elemUl.html('<li class="layui-menu-item-none">暂无数据</li>');
-      }
-      return elemUl;
-    };
-    
-    // 遍历菜单项
-    var eachItemView = function(views, data){
-      // var views = [];
-
-      layui.each(data, function(index, item){
-        // 是否存在子级
-        var isChild = item[customName.children] && item[customName.children].length > 0;
-        var isSpreadItem = ('isSpreadItem' in item) ? item.isSpreadItem : options.isSpreadItem
-        var title = function(title){
-          var templet = item.templet || options.templet;
-          if(templet){
-            title = typeof templet === 'function' 
-              ? templet(item)
-            : laytpl(templet).render(item);
-          }
-          return title;
-        }(util.escape(item[customName.title]));
-        
-        // 初始类型
-        var type = function(){
-          if(isChild){
-            item.type = item.type || 'parent';
-          }
-          if(item.type){
-            return ({
-              group: 'group'
-              ,parent: 'parent'
-              ,'-': '-'
-            })[item.type] || 'parent';
-          }
-          return '';
-        }();
-
-        if(type !== '-' && (!item[customName.title] && !item[customName.id] && !isChild)) return;
-        
-        //列表元素
-        var viewLi = $(['<li'+ function(){
-          var className = {
-            group: 'layui-menu-item-group'+ (
-              options.isAllowSpread ? (
-                isSpreadItem ? ' layui-menu-item-down' : ' layui-menu-item-up'
-              ) : ''
-            )
-            ,parent: STR_ITEM_PARENT
-            ,'-': 'layui-menu-item-divider'
-          };
-          if(isChild || type){
-            return ' class="'+ className[type] +'"';
-          }
-          return item.disabled ? ' class="'+ STR_DISABLED +'"' : '';
-        }() +'>'
-        
-          //标题区
-          ,function(){
-            //是否超文本
-            var viewText = ('href' in item) ? (
-              '<a href="'+ item.href +'" target="'+ (item.target || '_self') +'">'+ title +'</a>'
-            ) : title;
-            
-            //是否存在子级
-            if(isChild){
-              return '<div class="'+ STR_MENU_TITLE +'">'+ viewText + function(){
-                if(type === 'parent'){
-                  return '<i class="layui-icon layui-icon-right"></i>';
-                } else if(type === 'group' && options.isAllowSpread){
-                  return '<i class="layui-icon layui-icon-'+ (isSpreadItem ? 'up' : 'down') +'"></i>';
-                } else {
-                  return '';
-                }
-              }() +'</div>'
-              
-            }
-            return '<div class="'+ STR_MENU_TITLE +'">'+ viewText +'</div>';
-          }()
-        ,'</li>'].join(''));
-        
-        viewLi.data('item', item);
-        
-        //子级区
-        if(isChild){
-          var elemPanel = $('<div class="layui-panel layui-menu-body-panel"></div>');
-          var elemUl = $('<ul></ul>');
-
-          if(type === 'parent'){
-            elemPanel.append(eachItemView(elemUl, item[customName.children]));
-            viewLi.append(elemPanel);
-          } else {
-            viewLi.append(eachItemView(elemUl, item[customName.children]));
-          }
-        }
-
-        views.append(viewLi);
-      });
-      return views;
-    };
-    
     // 主模板
-    var TPL_MAIN = ['<div class="layui-dropdown layui-border-box layui-panel layui-anim layui-anim-downbit" ' + MOD_ID + '="' + options.id + '">'
-    ,'</div>'].join('');
+    var TPL_MAIN = [
+      '<div ', 
+        'class="layui-dropdown layui-border-box layui-panel layui-anim layui-anim-downbit" ',
+        MOD_ID + '="' + options.id + '" ',
+      '>',
+      '</div>'
+    ].join('');
     
     // 如果是右键事件，则每次触发事件时，将允许重新渲染
     if(isCtxMenu || isTopElem) rerender = true;
@@ -306,20 +336,18 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     // 记录模板对象
     that.elemView = $('.' + STR_ELEM + '[' + MOD_ID + '="' + options.id + '"]');
     if (type === 'reloadData' && that.elemView.length) {
-      that.elemView.empty().append(options.content || getDefaultView());
+      that.elemView.empty().append(options.content || that.createDefaultView());
     } else {
       if(type === 'reload'){
+        // 因为需要移除旧事件，所以不用 that.remove
         that.close(true);
       }
       that.elemView = $(TPL_MAIN);
-      that.elemView.append(options.content || getDefaultView());
+      that.elemView.append(options.content || that.createDefaultView());
 
       // 初始化某些属性
       if(options.className) that.elemView.addClass(options.className);
       if(options.style) that.elemView.attr('style', options.style);
-
-      // 记录当前执行的实例索引
-      dropdown.thisId = options.id;
 
       // 插入视图
       elemBody.append(that.elemView);
@@ -339,18 +367,8 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
         : '';
       that.shadeElem = $(shadeTpl);
       that.elemView.before(that.shadeElem);
-
-      // 如果是鼠标移入事件，则鼠标移出时自动关闭
-      if(options.trigger === 'mouseenter'){
-        that.elemView.on('mouseenter', function(){
-          clearTimeout(that.timer);
-        }).on('mouseleave', function(e){
-          options.elem.trigger('_lay-dropdown-context-hide', e.toElement);
-          if(that.isNestedContains(e.toElement))return;
-         
-          that.delayClose();
-        });
-      }
+      // 事件绑定
+      that.viewEvents();
     }
 
     // 坐标定位
@@ -392,27 +410,6 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       }
     });
 
-    // 监听子组件初始化完毕事件
-    // 收集子组件 id，并继续向父组件传播事件
-    that.elemView.on('_lay-dropdown-inited', function(e, data){
-      that.addChildrenIds(data.id);
-      options.elem.trigger('_lay-dropdown-inited', data);
-    })
-
-    // 监听子组件销毁前的事件
-    // 移除子组件 id，并继续向父组件传播事件
-    that.elemView.on('_lay-dropdown-dispose', function(e, data){
-      that.removeChildrenIds(data.id);
-      options.elem.trigger('_lay-dropdown-dispose', data);
-    })
-
-    // 监听子组件关闭事件
-    that.elemView.on('_lay-dropdown-context-hide', function(e, el){
-      options.elem.trigger('_lay-dropdown-context-hide', el);
-      if(that.isNestedContains(el))return;
-      that.delayClose();
-    })
-
     // 组件面板渲染完毕的事件
     typeof options.ready === "function" && options.ready(
       that.elemView,
@@ -420,8 +417,10 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     );
   };
   
-  // 位置定位
-  Class.prototype.position = function(obj){
+  /**
+   * 位置定位
+   */
+  Class.prototype.position = function(){
     var that = this;
     var options = that.config;
     
@@ -433,7 +432,9 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     });
   };
   
-  // 删除视图
+  /**
+   * 删除视图
+   */
   Class.prototype.remove = function(){
     var that = this;
     var options = that.config;
@@ -441,10 +442,14 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     var shadeElem = that.shadeElem;
 
     // 受限于自动销毁实例的实现机制，需要最后清理外层元素
-    contentElem && contentElem[0] && contentElem.empty().remove();
-    shadeElem && shadeElem[0] && shadeElem.empty().remove();
+    contentElem  && contentElem.empty().remove();
+    shadeElem && shadeElem.empty().remove();
   };
 
+  /**
+   * 规范化 delay 参数
+   * @returns {{show:number, hide:number}}
+   */
   Class.prototype.normalizedDelay = function(){
     var that = this;
     var options = that.config;
@@ -456,7 +461,9 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     }
   }
   
-  // 延迟删除视图
+  /**
+   * 延迟删除视图
+   */
   Class.prototype.delayClose = function(){
     var that = this;
     var options = that.config;
@@ -467,7 +474,9 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     }, that.normalizedDelay().hide);
   };
   
-  // 事件
+  /**
+   * 初始化触发元素事件
+   */
   Class.prototype.events = function(){
     var that = this;
     var options = that.config;
@@ -476,7 +485,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     if(options.trigger === 'hover') options.trigger = 'mouseenter';
 
     // 解除上一个事件
-    options.elem.off(EVENT_NP);
+    options.elem.off(EVENT_NAMESPACE);
 
     // 是否鼠标移入时触发
     var isMouseEnter = options.trigger === 'mouseenter';
@@ -504,12 +513,12 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     };
 
     // 触发元素事件
-    options.elem.on(options.trigger + EVENT_NP, triggerCallback);
+    options.elem.on(options.trigger + EVENT_NAMESPACE, triggerCallback);
     
     // 如果是鼠标移入事件
     if (isMouseEnter) {
       // 执行鼠标移出事件
-      options.elem.on('mouseleave' + EVENT_NP, function(e){
+      options.elem.on('mouseleave' + EVENT_NAMESPACE, function(e){
         that.delayClose();
       });
     }
@@ -522,7 +531,51 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     }
   };
 
-  // 是否嵌套包含指定元素
+  /**
+   * 初始化视图元素事件
+   */
+  Class.prototype.viewEvents = function(){
+    var that = this;
+    var options = that.config;
+
+  // 如果是鼠标移入事件，则鼠标移出时自动关闭
+    if(options.trigger === 'mouseenter'){
+      that.elemView.on('mouseenter', function(){
+        clearTimeout(that.timer);
+      }).on('mouseleave', function(e){
+        options.elem.trigger('_lay-dropdown-context-hide', e.toElement);
+        if(that.isNestedContains(e.toElement))return;
+        
+        that.delayClose();
+      });
+    }
+    // 监听子组件初始化完毕事件
+    // 收集子组件 id，并继续向父组件传播事件
+    that.elemView.on('_lay-dropdown-inited' + EVENT_NAMESPACE, function(e, data){
+      that.addChildrenIds(data.id);
+      options.elem.trigger('_lay-dropdown-inited', data);
+    })
+
+    // 监听子组件销毁前的事件
+    // 移除子组件 id，并继续向父组件传播事件
+    that.elemView.on('_lay-dropdown-dispose' + EVENT_NAMESPACE, function(e, data){
+      that.removeChildrenIds(data.id);
+      options.elem.trigger('_lay-dropdown-dispose', data);
+    })
+
+    // 监听子组件关闭事件
+    that.elemView.on('_lay-dropdown-context-hide' + EVENT_NAMESPACE, function(e, el){
+      options.elem.trigger('_lay-dropdown-context-hide', el);
+      if(that.isNestedContains(el))return;
+      that.delayClose();
+    })
+  }
+
+  /**
+   * 是否嵌套包含指定元素
+   * @param {HTMLElement} targetEl - 目标元素
+   * @returns {boolean | undefined}
+   */
   Class.prototype.isNestedContains = function (targetEl) {
     var that = this;
 
@@ -539,7 +592,10 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     }
   };
 
-  // 点击面板外部时关闭
+  /**
+   * 点击面板外部时的事件
+   * @returns {(() => void) | null} 返回一个函数，用于取消事件
+   */
   Class.prototype.onClickOutside = function () {
     var that = this;
     var options = that.config;
@@ -567,7 +623,10 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     );
   };
 
-  // 窗口大小变化时自动更新位置
+  /**
+   * 窗口大小变化时自动更新位置
+   * @returns {(() => void) | null} 返回一个函数，用于取消事件
+   */
   Class.prototype.autoUpdatePosition = function(){
     var that = this;
     var options = that.config;
@@ -579,14 +638,18 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
         that.position();
       }
     }
-    $(window).on('resize' + EVENT_NP, handleResize)
+    $(window).on('resize' + EVENT_NAMESPACE, handleResize)
 
     return function(){
-      $(window).off('resize' + EVENT_NP, handleResize)
+      $(window).off('resize' + EVENT_NAMESPACE, handleResize)
     }
   }
 
-  // 打开面板
+  /**
+   * 打开面板
+   * @param {boolean | undefined} rerender - 重新渲染面板内容
+   * @param {'reload' | 'reloadData' | undefined} type - 渲染类型
+   */
   Class.prototype.open = function(rerender, type){
     var that = this;
     var options = that.config;
@@ -594,6 +657,8 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     var needRenderPanel = !openedWithHideOnClose || type === 'reload' || type === 'reloadData';
 
     if(needRenderPanel){
+      typeof that.removeResizeEvent === 'function' && that.removeResizeEvent();
+      typeof that.removeOutsideEvent === 'function' && that.removeOutsideEvent();
       that.render(rerender, type);
     }else{
       var shadeElem = that.shadeElem;
@@ -612,7 +677,10 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     );
   }
 
-  // 关闭面板
+  /**
+   * 关闭面板
+   * @param {boolean | undefined} [focusRemove] - 是否移除面板
+   */
   Class.prototype.close = function(focusRemove){
     var that = this;
     var options = that.config;
@@ -621,18 +689,30 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     var shadeElem = that.shadeElem;
 
     if(options.hideOnClose && !focusRemove){
-      contentElem && contentElem[0] && contentElem.addClass(STR_HIDE);
-      shadeElem && shadeElem[0] && shadeElem.addClass(STR_HIDE);
+      contentElem && contentElem.addClass(STR_HIDE);
+      shadeElem && shadeElem.addClass(STR_HIDE);
     }else{
       that.remove();
     }
+
     triggerElem.data(MOD_INDEX + '_opened', false);
-    typeof that.removeResizeEvent === 'function' && that.removeResizeEvent();
-    typeof that.removeOutsideEvent === 'function' && that.removeOutsideEvent();
+    
+    // 关闭后移除事件
+    if(typeof that.removeResizeEvent === 'function'){
+      that.removeResizeEvent();
+      that.removeResizeEvent = null;
+    }
+    if(typeof that.removeOutsideEvent === 'function'){
+      that.removeOutsideEvent();
+      that.removeOutsideEvent = null;
+    }
+    // 组件关闭完毕的事件
     typeof options.close === 'function' &&  options.close(triggerElem);
   }
 
-  // 销毁实例
+  /**
+   * 销毁实例
+   */
   Class.prototype.dispose = function(){
     var that = this;
     var options = that.config;
@@ -642,15 +722,25 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     that.remove();
     options.elem.removeData(MOD_INDEX + '_opened');
     options.elem.removeAttr(MOD_ID);
-    options.elem.off(EVENT_NP);
+    options.elem.off(EVENT_NAMESPACE);
     options.elem.off(DESTROY_EVENT);
     typeof that.removeResizeEvent === 'function' && that.removeResizeEvent();
     typeof that.removeOutsideEvent === 'function' && that.removeOutsideEvent();
+
+    for(var propName in that){
+      if(that.hasOwnProperty(propName) && propName !== 'config'){
+        that[propName] = null;
+      }
+    }
+
     thisModule.that[options.id] = null;
     delete thisModule.that[options.id];
   }
 
-  // 添加子组件 id
+  /**
+   * 添加子组件 id
+   * @param {string} id 
+   */
   Class.prototype.addChildrenIds = function(id){
     var that = this;
     var options = that.config;
@@ -659,7 +749,10 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     childrenIds[id] = true;
   }
 
-  // 移除子组件 id
+  /**
+   * 移除子组件 id
+   * @param {string} id 
+   */
   Class.prototype.removeChildrenIds = function(id){
     var that = this;
     var options = that.config;
