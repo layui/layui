@@ -650,12 +650,6 @@ hr.layui-border-black{border-width: 0 0 1px;}
 
 /* 文本区域 */
 .layui-text{line-height: 1.8; font-size: 14px;}
-.layui-text h1,
-.layui-text h2,
-.layui-text h3,
-.layui-text h4,
-.layui-text h5,
-.layui-text h6{color: #3A3A3A;}
 .layui-text h1{font-size: 32px;}
 .layui-text h2{font-size: 24px;}
 .layui-text h3{font-size: 18px;}
@@ -673,7 +667,7 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-text p:last-child{margin-bottom: 0;}
 .layui-text a:not(.layui-btn){color: #01AAED;}
 .layui-text a:not(.layui-btn):hover{text-decoration: underline;}
-.layui-text blockquote:not(.layui-elem-quote){padding: 5px 15px; border-left: 5px solid #eee;}
+.layui-text blockquote:not(.layui-elem-quote){margin: 15px 0; padding: 5px 15px; border-left: 5px solid #eee;}
 .layui-text pre > code:not(.layui-code){padding: 15px; font-family: "Courier New",Consolas,"Lucida Console";}
 
 /* 字体大小 */
