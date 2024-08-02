@@ -745,6 +745,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             hideDown(true);
             return false;
           });
+
+          // 用于开启 lay-append-to 时兼容 dropdown
+          dl.on('mousedown pointerdown touchstart', function(e){
+            return false;
+          })
           
           reElem.find('dl>dt').on('click', function(e){
             return false;
