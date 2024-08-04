@@ -1722,9 +1722,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var options = that.config;
     var isCheckAll = opts.index === 'all'; // 是否操作全部
     var isCheckMult = layui.type(opts.index) === 'array'; // 是否操作多个
-    var needDisableTransition= isCheckAll || isCheckMult; // 减少回流
+    var isCheckAllOrMult = isCheckAll || isCheckMult; // 是否全选或多选
 
-    if(needDisableTransition){
+    // 全选或多选时减少回流
+    if(isCheckAllOrMult){
       that.layBox.addClass(DISABLED_TRANSITION);
     }
 
@@ -1737,13 +1738,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     }
 
     // 匹配行元素
-    var selector = (isCheckAll || isCheckMult) ? 'tr' : 'tr[data-index="'+ opts.index +'"]';
+    var tbody = that.layBody.children('.layui-table').children('tbody');
+    var selector = isCheckAllOrMult ? 'tr' : 'tr[data-index="'+ opts.index +'"]';
     var tr = function(tr) {
       return isCheckAll ? tr : tr.filter(isCheckMult ? function() {
         var dataIndex = $(this).data('index');
         return opts.index[dataIndex];
       } : '[data-index="'+ opts.index +'"]');
-    }(that.layBody.find(selector));
+    }(tbody.children(selector));
 
     // 默认属性
     opts = $.extend({
@@ -1759,61 +1761,44 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       return opts.type === 'radio' ? true : (existChecked ? opts.checked : !value)
     };
 
-    var ignoreTrIndex = {};
     // 设置选中状态
-    layui.each(thisData, function(i, item){
+    tr.each(function() {
+      var el = $(this);
+      var i = el.attr('data-index');
+      var item = thisData[i];
+
+      if (!i) return; // 此时 el 通常为静态表格嵌套时的原始模板
+
       // 绕过空项和禁用项
-      if(layui.type(item) === 'array' || item[options.disabledName]){
-        ignoreTrIndex[i] = true;
+      if (layui.type(item) === 'array' || item[options.disabledName]) {
         return;
       }
 
       // 匹配条件
       var matched = isCheckAll || (
-        isCheckMult ? opts.index[i] : Number(opts.index) === i
+        isCheckMult ? opts.index[i] : Number(opts.index) === Number(i)
       );
 
       // 设置匹配项的选中值
-      if(matched){
+      if (matched) {
         // 标记数据选中状态
         var checked = item[options.checkName] = getChecked(item[options.checkName]);
 
         // 标记当前行背景色
-        // 此处只更新 radio 和 单个 checkbox
-        if(!isCheckAll && !isCheckMult){
-          var currTr = tr.filter('[data-index="'+ i +'"]');
-          currTr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED);
-  
-          // 若为 radio 类型，则取消其他行选中背景色
-          if(opts.type === 'radio'){
-            currTr.siblings().removeClass(ELEM_CHECKED);
-          }
+        el.toggleClass(ELEM_CHECKED, !!checked);
+
+        // 若为 radio 类型，则取消其他行选中背景色
+        if (opts.type === 'radio') {
+          el.siblings().removeClass(ELEM_CHECKED);
         }
       } else if(opts.type === 'radio') {
         delete item[options.checkName];
       }
     });
 
-    if(isCheckAll){
-      tr.each(function(i){
-        var index = this.getAttribute('data-index');
-        if(!ignoreTrIndex[index]){
-          var el = $(this);
-          el.toggleClass(ELEM_CHECKED, !!getChecked(thisData[index][options.checkName]))
-        }
-      });
-    }else if(isCheckMult){
-      tr.each(function(i){
-        var index = this.getAttribute('data-index');
-        if(opts.index[index] && !ignoreTrIndex[index]){
-          var el = $(this);
-          el.toggleClass(ELEM_CHECKED, !!getChecked(thisData[index][options.checkName]))
-        }
-      });
-    }
-
     // 若存在复选框或单选框，则标注选中状态样式
-    var checkedElem = tr.find('input[lay-type="'+ ({
+    var td = tr.children('td').children('.layui-table-cell');
+    var checkedElem = td.children('input[lay-type="'+ ({
       radio: 'layTableRadio',
       checkbox: 'layTableCheckbox'
     }[opts.type] || 'checkbox') +'"]:not(:disabled)');
@@ -1826,7 +1811,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     that.syncCheckAll();
 
-    if(needDisableTransition){
+    if(isCheckAllOrMult){
       setTimeout(function(){
         that.layBox.removeClass(DISABLED_TRANSITION);
       },100)
@@ -2438,8 +2423,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           index: index,
           checked: checked
         });
-        layui.stope(e);
       }
+
+      layui.stope(e);
 
       // 事件
       layui.event.call(
