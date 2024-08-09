@@ -1724,9 +1724,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var isCheckMult = layui.type(opts.index) === 'array'; // 是否操作多个
     var isCheckAllOrMult = isCheckAll || isCheckMult; // 是否全选或多选
 
-    // 全选或多选时减少回流
-    if(isCheckAllOrMult){
-      that.layBox.addClass(DISABLED_TRANSITION);
+    // 全选或多选时
+    if (isCheckAllOrMult) {
+      that.layBox.addClass(DISABLED_TRANSITION); // 减少回流
+      if (opts.type === 'radio') return; // radio 不允许全选或多选
     }
 
     if(isCheckMult){
@@ -1761,7 +1762,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       return opts.type === 'radio' ? true : (existChecked ? opts.checked : !value)
     };
 
-    // 设置选中状态
+    var radioCheckedIndex;
+
+    // 给匹配行设置选中状态
     tr.each(function() {
       var el = $(this);
       var i = el.attr('data-index');
@@ -1774,27 +1777,27 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         return;
       }
 
-      // 匹配条件
-      var matched = isCheckAll || (
-        isCheckMult ? opts.index[i] : Number(opts.index) === Number(i)
-      );
+      // 标记数据选中状态
+      var checked = item[options.checkName] = getChecked(el.hasClass(ELEM_CHECKED));
 
-      // 设置匹配项的选中值
-      if (matched) {
-        // 标记数据选中状态
-        var checked = item[options.checkName] = getChecked(item[options.checkName]);
+      // 标记当前行背景色
+      el.toggleClass(ELEM_CHECKED, !!checked);
 
-        // 标记当前行背景色
-        el.toggleClass(ELEM_CHECKED, !!checked);
-
-        // 若为 radio 类型，则取消其他行选中背景色
-        if (opts.type === 'radio') {
-          el.siblings().removeClass(ELEM_CHECKED);
-        }
-      } else if(opts.type === 'radio') {
-        delete item[options.checkName];
+      // 若为 radio 类型，则取消其他行选中背景色
+      if (opts.type === 'radio') {
+        radioCheckedIndex = i;
+        el.siblings().removeClass(ELEM_CHECKED);
       }
     });
+
+    // 若为 radio 类型，移除其他行数据选中状态
+    if (opts.type === 'radio' && radioCheckedIndex) {
+      layui.each(thisData, function(i, item) {
+        if (Number(radioCheckedIndex) !== Number(i)) {
+          delete item[options.checkName];
+        }
+      });
+    }
 
     // 若存在复选框或单选框，则标注选中状态样式
     var td = tr.children('td').children('.layui-table-cell');
