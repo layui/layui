@@ -323,7 +323,7 @@ layui.define(['lay', 'layer'], function(exports){
               'Upload failed, please try again.',
               'status: '+ (e.status || '') +' - '+ (e.statusText || 'error')
             ].join('<br>'));
-            error(sets.index, e.responseText);
+            error(sets.index, e.responseText, e);
             allDone(sets.index);
             resetFileState(sets.file);
           }
@@ -429,7 +429,7 @@ layui.define(['lay', 'layer'], function(exports){
     };
     
     // 统一网络异常回调
-    var error = function(index, res){
+    var error = function(index, res, xhr){
       if(options.auto){
         elemFile.value = '';
       }
@@ -446,7 +446,7 @@ layui.define(['lay', 'layer'], function(exports){
 
       typeof options.error === 'function' && options.error(index || 0, function(files){
         that.upload(files);
-      }, res);
+      }, res, xhr);
     };
     
     var check;
