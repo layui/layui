@@ -230,14 +230,15 @@ layui.define('jquery', function(exports){
     }
     
     // Tab 自适应
-    ,tabAuto: function(spread){
+    ,tabAuto: function(spread, elem){
       var SCROLL = 'layui-tab-scroll';
       var MORE = 'layui-tab-more';
       var BAR = 'layui-tab-bar';
       var CLOSE = 'layui-tab-close';
       var that = this;
+      var targetElem = elem || $('.layui-tab');
       
-      $('.layui-tab').each(function(){
+      targetElem.each(function(){
         var othis = $(this);
         var title = othis.children('.layui-tab-title');
         var item = othis.children('.layui-tab-content').children('.layui-tab-item');
@@ -414,16 +415,16 @@ layui.define('jquery', function(exports){
   // 初始化元素操作
   Element.prototype.init = function(type, filter){
     var that = this, elemFilter = function(){
-      return filter ? ('[lay-filter="' + filter +'"]') : '';
+      return (typeof filter === 'string' && filter) ? ('[lay-filter="' + filter +'"]') : '';
     }(), items = {
       
       // Tab 选项卡
-      tab: function(){
-        call.tabAuto.call({});
+      tab: function(elem){
+        call.tabAuto.call({}, elem);
       }
       
       // 导航菜单
-      ,nav: function(){
+      ,nav: function(elem){
         var TIME = 200;
         var timer = {};
         var timerMore = {};
@@ -491,7 +492,8 @@ layui.define('jquery', function(exports){
         };
         
         // 遍历导航
-        $(NAV_ELEM + elemFilter).each(function(index) {
+        var targetElem = elem || $(NAV_ELEM + elemFilter);
+        targetElem.each(function(index) {
           var othis = $(this);
           var bar = $('<span class="'+ NAV_BAR +'"></span>');
           var itemElem = othis.find('.'+NAV_ITEM);
@@ -553,10 +555,11 @@ layui.define('jquery', function(exports){
       }
       
       //面包屑
-      ,breadcrumb: function(){
+      ,breadcrumb: function(elem){
         var ELEM = '.layui-breadcrumb';
-        
-        $(ELEM + elemFilter).each(function(){
+        var targetElem = elem || $(ELEM + elemFilter);
+
+        targetElem.each(function(){
           var othis = $(this)
           ,ATTE_SPR = 'lay-separator'
           ,separator = othis.attr(ATTE_SPR) || '/'
@@ -571,9 +574,11 @@ layui.define('jquery', function(exports){
       }
       
       //进度条
-      ,progress: function(){
+      ,progress: function(elem){
         var ELEM = 'layui-progress';
-        $('.' + ELEM + elemFilter).each(function(){
+        var targetElem = elem || $('.' + ELEM + elemFilter);
+
+        targetElem.each(function(){
           var othis = $(this)
           ,elemBar = othis.find('.layui-progress-bar')
           ,percent = elemBar.attr('lay-percent');
@@ -593,10 +598,11 @@ layui.define('jquery', function(exports){
       }
       
       //折叠面板
-      ,collapse: function(){
+      ,collapse: function(elem){
         var ELEM = 'layui-collapse';
+        var targetElem = elem || $('.' + ELEM + elemFilter);
         
-        $('.' + ELEM + elemFilter).each(function(){
+        targetElem.each(function(){
           var elemItem = $(this).find('.layui-colla-item')
           elemItem.each(function(){
             var othis = $(this)
@@ -615,6 +621,11 @@ layui.define('jquery', function(exports){
         });
       }
     };
+
+    if(type && typeof filter === 'object' && filter instanceof $){
+      var targetElem = filter;
+      return items[type](targetElem);
+    }
 
     return items[type] ? items[type]() : layui.each(items, function(index, item){
       item();
