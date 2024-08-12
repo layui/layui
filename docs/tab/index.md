@@ -274,7 +274,7 @@ layui.use(function(){
 
 - 参数 `tab(filter)` 是一个特定结构。
   - `tab` 为 tab 切换事件固定值；
-  - `filter` 为 tab 容器属性 `lay-filter` 对应的值。
+  - `filter` 为 tab 容器属性 `lay-filter` 对应的值或<sup>2.9.15+</sup>指定元素的 jQuery 对象。
 - 参数 `callback` 为事件执行时的回调函数，并返回一个 `object` 类型的参数。
 
 点击 tab 选项切换时触发。[#参考示例](#hash-match)

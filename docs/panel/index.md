@@ -217,7 +217,7 @@ toc: true
 `element.render('collapse', filter);`
 
 - 参数 `'collapse'` : 渲染折叠面板的固定值
-- 参数 `filter` : 对应折叠面板容器 `lay-filter` 的属性值
+- 参数 `filter` : 对应折叠面板容器 `lay-filter` 的属性值或<sup>2.9.15+</sup>指定元素的 jQuery 对象
 
 在元素加载完毕后，`element` 模块会自动对元素进行一次渲染。而当元素为动态插入时，需通过该方法完成初始化渲染。
 
