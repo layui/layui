@@ -1791,7 +1791,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     });
 
     // 若为 radio 类型，移除其他行数据选中状态
-    if (opts.type === 'radio' && radioCheckedIndex) {
+    if (radioCheckedIndex) {
       layui.each(thisData, function(i, item) {
         if (Number(radioCheckedIndex) !== Number(i)) {
           delete item[options.checkName];
