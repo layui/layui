@@ -478,8 +478,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             title.parent().removeClass(CLASS+'ed ' + CLASS+'up');
             input.blur();
             if(isAutoCreatable){
-              input.val() && layui.each(dl.children('dd'), (_, el) => {
-                input.val() == $(el).text() && el.click();
+              layui.each(dl.children('dd'), (_, el) => {
+                if(input.val())
+                  input.val() == $(el).text() && el.click();
+                else $(el).attr('lay-value') || el.click();
               });
             }
             dl.children('.' + CREATE_OPTION).removeClass(CREATE_OPTION).addClass(THIS);
@@ -585,7 +587,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
               var selectedElem = allDisplayedElem.eq(nextIndex);
               selectedElem.addClass(THIS).siblings().removeClass(THIS); // 标注样式
-              selectedElem.hasClass('layui-select-tips') || input.val(selectedElem.text());
+              if(selectedElem.hasClass('layui-select-tips')) input.val('');
+              else input.val(selectedElem.text());
               followScroll(); // 定位滚动条
             };
             
