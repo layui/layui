@@ -387,7 +387,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         var selects = elem || elemForm.find('select');
 
         // 各种事件
-        var events = function(reElem, titleElem, disabled, isSearch, isCreatable, isAppendTo){
+        var events = function(reElem, titleElem, disabled, isSearch, isCreatable, isAppendTo, isAutoCreatable){
           var select = $(this);
           var title = titleElem;
           var input = title.find('input');
@@ -477,6 +477,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var hideDown = function(choose){
             title.parent().removeClass(CLASS+'ed ' + CLASS+'up');
             input.blur();
+            if(isAutoCreatable){
+              input.val() && layui.each(dl.children('dd'), (_, el) => {
+                input.val() == $(el).text() && el.click();
+              });
+            }
+            dl.children('.' + CREATE_OPTION).removeClass(CREATE_OPTION).addClass(THIS);
             isCreatable && dl.children('.' + CREATE_OPTION).remove();
             removeClickOutsideEvent && removeClickOutsideEvent();
             if(isAppendTo){
@@ -498,6 +504,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                   initValue = '';
                 }
 
+                if(isAutoCreatable) initValue = input.val();
                 // 如果有选中值，则将输入框纠正为该值。否则清空输入框
                 input.val(initValue || '');
               }
@@ -578,6 +585,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
               var selectedElem = allDisplayedElem.eq(nextIndex);
               selectedElem.addClass(THIS).siblings().removeClass(THIS); // 标注样式
+              selectedElem.hasClass('layui-select-tips') || input.val(selectedElem.text());
               followScroll(); // 定位滚动条
             };
             
@@ -659,8 +667,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               if(isCreatable){
                 if(hasEquals){
                   dl.children('.' + CREATE_OPTION).remove();
+                  input.val() && layui.each(dl.children('dd'), (_, el) => {
+                    input.val() == $(el).text() && $(el).addClass(THIS);
+                  });
                 }else{
                   var createOptionElem = dl.children('.' + CREATE_OPTION);
+                  if(isAutoCreatable) createOptionElem.addClass(THIS).siblings().removeClass(THIS);
                   if(createOptionElem[0]){
                     createOptionElem.attr('lay-value', value).html(util.escape(value));
                   }else{
@@ -706,7 +718,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               
               setTimeout(function(){
                 notOption(input.val(), function(none){
-                  initValue || input.val(''); // none && !initValue
+                  initValue || isAutoCreatable || input.val(''); // none && !initValue
                 }, 'blur');
               }, 200);
             });
@@ -720,7 +732,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             if(othis.hasClass(DISABLED)) return false;
             
             if(othis.hasClass('layui-select-tips')){
-              input.val('');
+              !isAutoCreatable && input.val('');
             } else {
               input.val(othis.text());
               othis.addClass(THIS);
@@ -781,7 +793,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
           
           var isSearch = typeof othis.attr('lay-search') === 'string'
-          var isCreatable = typeof othis.attr('lay-creatable') === 'string' && isSearch
+          var isAutoCreatable = typeof othis.attr('lay-auto-creatable') === 'string' && isSearch
+          var isCreatable = isAutoCreatable || (typeof othis.attr('lay-creatable') === 'string' && isSearch)
           var isAppendTo = typeof othis.attr('lay-append-to') === 'string'
           var placeholder = optionsFirst
             ? (optionsFirst.value ? TIPS : (optionsFirst.innerHTML || TIPS)) 
@@ -834,11 +847,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             othis.after(reElem);
             var contentWrapElem = $('<div class="'+ CLASS + ' ' + PANEL_WRAP +'"></div>').append(contentElem);
             reElem.data(PANEL_ELEM_DATA, contentWrapElem); // 将面板元素对象记录在触发元素 data 中，重新渲染时需要清理旧面板元素
-            events.call(this, contentWrapElem, triggerElem, disabled, isSearch, isCreatable, isAppendTo);
+            events.call(this, contentWrapElem, triggerElem, disabled, isSearch, isCreatable, isAppendTo, isAutoCreatable);
           }else{
             reElem.append(triggerElem).append(contentElem);
             othis.after(reElem);
-            events.call(this, reElem, triggerElem, disabled, isSearch, isCreatable, isAppendTo);
+            events.call(this, reElem, triggerElem, disabled, isSearch, isCreatable, isAppendTo, isAutoCreatable);
           }
         });
       }
