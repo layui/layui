@@ -712,7 +712,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               initValue = $(select[0].options[selectedIndex]).text(); // 重新获得初始选中值
               
               // 如果是第一项，且文本值等于 placeholder，则清空初始值
-              if(selectedIndex === 0 && initValue === input.attr('placeholder')){
+              if(selectedIndex === 0 && initValue === input.attr('placeholder') 
+                && $(select[0].options[selectedIndex]).hasClass('layui-select-tips')){
                 initValue = '';
               }
               
