@@ -516,13 +516,15 @@ allDone: function(obj){
 - `index`： 当前文件的索引
 - `upload`： 重新上传的方法
 - `res`： 返回值（纯文本）<sup>2.9.12+</sup>
+- `xhr`: jQuery XHR 对象 <sup>2.9.15+</sup>
 
 ```
-error: function(index, upload, res){
+error: function(index, upload, res, xhr){
   console.log(index); // 当前文件的索引
   // upload(); 重新上传的方法
   console.log(res);  // 返回值（纯文本）
   console.log(JSON.parse(res));  // 返回值（json）
+  console.log(xhr);
 }
 ```
 
