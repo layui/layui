@@ -381,8 +381,8 @@ console.log(tableStatus.isAll ) // 表格是否全选
 | opts | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | type | 选中方式。可选值: `checkbox,radio`  | string | `checkbox` |
-| index | 选中行的下标。支持以下几种情况：<ul><li>若值为 `number` 类型，则表示行所在的数组下标（`0` 开头）</li><li>若值为 `array` 类型 <sup>2.9.1+</sup>，则表示批量下标。</li><li>若值为 `string` 类型，则可设置 `all` 操作全选。</li></ul> | number<br>array<br>string | - |
-| checked | 选中状态值。 <ul><li>若传递该属性，则赋值固定值。</li><li>若不传递该属性（默认），则 `checkbox` 将在 `true\|false` 中自动切换值，而 `radio` 将赋值 `true` 固定值。<sup>2.8.4+</sup></li></ul> | boolean | - |
+| index | 选中行的下标。支持以下几种情况：<ul><li>若值为 `number` 类型，则表示行所在的数组下标（`0` 开头）</li><li>若值为 `array` 类型 <sup>2.9.1+</sup>，则表示多选下标。</li><li>若值为 `string` 类型，则可设置 `all` 操作全选。</li></ul> | number<br>array<br>string | - |
+| checked | 选中状态值。 <ul><li>若传递该属性，则赋值固定值。</li><li>若不传递该属性（默认），则 `checkbox` 将在 `true\|false` 中自动切换值，而 `radio` 将赋值 `true` 固定值。<sup>2.8.4+</sup><br>**注意**：若 `index` 指定为多选或全选，`checked` 应当显式传递固定值</li></ul> | boolean | - |
 
 该方法用于设置行的选中样式及相关的特定属性值 `LAY_CHECKED`。
 
