@@ -193,9 +193,34 @@ layui.use(['layer', 'util'], function(layer, util){
     ,test9: function(){
       layer.photos({
         photos: {
-          "data": [{
-            "src": "https://unpkg.com/outeres/demo/layer.png"
-          }]
+          'showRemove': true,
+          "data": [
+            {
+              "alt": "layer",
+              "pid": 1,
+              "src": "https://unpkg.com/outeres@0.1.1/demo/layer.png",
+            },
+            {
+              "alt": "壁纸",
+              "pid": 3,
+              "src": "https://unpkg.com/outeres@0.1.1/demo/000.jpg",
+            },
+            {
+              "alt": "浩瀚宇宙",
+              "pid": 5,
+              "src": "https://unpkg.com/outeres@0.1.1/demo/outer-space.jpg",
+            },
+            {
+              "alt": "风景",
+              "pid": 2,
+              "src": "https://unpkg.com/outeres@0.1.1/demo/1.jpg",
+            },
+            {
+              "alt": "桥",
+              "pid": 4,
+              "src": "https://unpkg.com/outeres@0.1.1/demo/2.jpg",
+            }
+          ]
         },
         hideFooter: true  // 是否隐藏图片底部栏（v2.8.0 新增）
       });
