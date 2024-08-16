@@ -152,8 +152,8 @@ tab 组件提供了三种 UI 风格，分别为：
 
 `element.render('tab', filter);`
 
-- 参数 `'tab'` 是渲染 tab 的固定值
-- 参数 `filter` : 对应 tab 容器 `lay-filter` 的属性值
+- 参数 `'tab'` 是渲染 tab 的固定值。
+- 参数 `filter` : 对应 tab 容器 `lay-filter` 的属性值或<sup>2.9.15+</sup>指定元素的 jQuery 对象。
 
 tab 组件会在元素加载完毕后，自动对 tab 元素完成一次渲染，因此该方法主要用于对动态插入的 tab 元素的初始化渲染。
 
@@ -274,7 +274,7 @@ layui.use(function(){
 
 - 参数 `tab(filter)` 是一个特定结构。
   - `tab` 为 tab 切换事件固定值；
-  - `filter` 为 tab 容器属性 `lay-filter` 对应的值或<sup>2.9.15+</sup>指定元素的 jQuery 对象。
+  - `filter` 为 tab 容器属性 `lay-filter` 对应的值。
 - 参数 `callback` 为事件执行时的回调函数，并返回一个 `object` 类型的参数。
 
 点击 tab 选项切换时触发。[#参考示例](#hash-match)
