@@ -223,7 +223,7 @@ toc: true
 `element.render('nav', filter);`
 
 - 参数 `'nav'` 是渲染导航的固定值
-- 参数 `filter` : 对应导航容器 `lay-filter` 的属性值
+- 参数 `filter` : 对应导航容器 `lay-filter` 的属性值或<sup>2.9.15+</sup>指定元素的 jQuery 对象
 
 `nav` 组件会在元素加载完毕后，自动对导航完成一次渲染，因此该方法主要用于对动态插入的导航元素的初始化渲染。
 
@@ -342,6 +342,6 @@ layui.use(function(){
 `element.render('breadcrumb', filter);`
 
 - 参数 `'breadcrumb'` 是渲染面包屑导航的固定值
-- 参数 `filter` : 对应面包屑导航容器 `lay-filter` 的属性值
+- 参数 `filter` : 对应面包屑导航容器 `lay-filter` 的属性值或<sup>2.9.15+</sup>指定元素的 jQuery 对象
 
 该方法主要用于对动态插入的面包屑导航的初始化渲染，用法同上述导航菜单。
