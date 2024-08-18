@@ -20,4 +20,4 @@ jobs:
       - name: Build
         run: npm run build
 
-      - run: npx pkg-pr-new publish --compact --template './examples/pr-preview'
+      - run: npx pkg-pr-new publish --template './examples/pr-preview'
