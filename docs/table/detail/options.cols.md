@@ -431,7 +431,17 @@ edit: function(d){
 <td>style</td>
 <td>
 
-自定义单元格样式。可传入任意的 CSS 内容，如：`style: 'font-size: 13px; color: red;'`
+自定义单元格样式，该样式作用于表体中的单元格。可传入任意的 CSS 内容，如：`style: 'font-size: 13px; color: red;'`
+
+</td>
+<td>string</td>
+<td>-</td>
+    </tr>
+    <tr>
+<td>tdStyle</td>
+<td>
+
+自定义表头标题单元格样式。可传入任意的 CSS 内容，如：`style: 'font-size: 13px; color: red;'`
 
 </td>
 <td>string</td>
