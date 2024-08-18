@@ -1,4 +1,4 @@
 # 预览
 
-- npm run install
+- npm install
 - npm run dev
