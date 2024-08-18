@@ -1,4 +1,4 @@
-name: Publish Preview
+name: Publish Pull Request Preview
 on: [pull_request]
 
 jobs:
