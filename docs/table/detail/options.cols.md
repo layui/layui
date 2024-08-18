@@ -438,7 +438,7 @@ edit: function(d){
 <td>-</td>
     </tr>
     <tr>
-<td>tdStyle</td>
+<td>tdStyle <sup>2.9.16+</sup></td>
 <td>
 
 自定义表头标题单元格样式。可传入任意的 CSS 内容，如：`style: 'font-size: 13px; color: red;'`
