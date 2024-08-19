@@ -93,7 +93,8 @@ toc: true
 
 - `caseSensitive`：是否区分大小写，默认值 `false`
 - `fuzzy`：是否开启模糊匹配，设置 `true` 开启后将忽略匹配字符出现在字符串中的位置。默认值 `false`
-- `lay-creatable=""`：创建option选项
+
+在 `<select>` 元素上设置 `lay-creatable=""` 可允许创建新的 option，需开启 `lay-search` 后生效。
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
