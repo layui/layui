@@ -114,7 +114,7 @@ toc: true
     </select>
   </div>
   <div class="layui-col-md6">
-    <select lay-search="{caseSensitive:false,fuzzy:true}">
+    <select lay-search="{caseSensitive:true}">
       <option value="">请选择或搜索（设置区分大小写）</option>
       <option value="1">AAA</option>
       <option value="2">aaa</option>
