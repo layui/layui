@@ -91,9 +91,8 @@ toc: true
 
 在 `<select>` 元素上设置 `lay-search` 可开启选择框的搜索功能，如：`lay-search="{caseSensitive:false, fuzzy: false}"`，支持的可选项如下：
 
-- `lay-search=""`：默认不区分大小写，关闭模糊搜索
-- `caseSensitive:true`：开启区分大小写
-- `fuzzy:true`：开启模糊搜索
+- `caseSensitive`：是否区分大小写，默认值 `false`
+- `fuzzy`：是否开启模糊匹配，设置 `true` 开启后将忽略匹配字符出现在字符串中的位置。默认值 `false`
 - `lay-creatable=""`：创建option选项
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
