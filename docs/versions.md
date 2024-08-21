@@ -9,10 +9,10 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
-<h2 id="v2.9.15" class="ws-anchor">
-  v2.9.15
-  <!-- <span class="layui-badge-rim" style="color: #16b777;">稳定版</span> -->
-  <span class="layui-badge-rim">2024-08-16</span>
+<h2 id="v2.9.16" class="ws-anchor">
+  v2.9.16
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+  <span class="layui-badge-rim">2024-08-21</span>
 </h2>
 
 - #### select
@@ -32,7 +32,11 @@ toc: true
 - #### 其他
   - 微调 `layui-text` 文本区域样式，以更好地适配 Markdown #2126 @sentsim
 
-### 下载： [layui-v2.9.15.zip](https://gitee.com/layui/layui/attach_files/1873673/download)
+### 下载： [layui-v2.9.16.zip](https://gitee.com/layui/layui/attach_files/1878209/download)
+
+---
+
+`2.9.15` 版本因为存在一个小缺陷而被跳过
 
 ---
 
