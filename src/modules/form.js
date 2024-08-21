@@ -748,7 +748,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
           // 用于开启 lay-append-to 时兼容 dropdown
           dl.on('mousedown pointerdown touchstart', function(e){
-            return false;
+            layui.stope(e);
           })
           
           reElem.find('dl>dt').on('click', function(e){
