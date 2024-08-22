@@ -483,9 +483,21 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     options.clientWidth = options.width || function(){ //获取容器宽度
       //如果父元素宽度为0（一般为隐藏元素），则继续查找上层元素，直到找到真实宽度为止
       var getWidth = function(parent){
-        var width, isNone;
-        parent = parent || options.elem.parent()
-        width = parent.width();
+        var width;
+        var isNone;
+        parent = parent || options.elem.parent();
+
+        if(!window.getComputedStyle){
+          // IE 中的 `currentStyle` 获取未显式设置的宽高时会得到 'auto'，jQuery 中有一些 hack 方法获取准确值
+          width = parent.width();
+        }else{
+          var size = that.getElementSize(parent[0]);
+          // IE BUG
+          // border-box: getComputedStyle 得到的 width/height 是按照 content-box 计算出来的
+          width = size.boxSizing === 'border-box' && !lay.ie
+            ? size.width - size.paddingLeft - size.paddingRight - size.borderLeftWidth - size.borderRightWidth
+            : size.width
+        }
         try {
           isNone = parent.css('display') === 'none';
         } catch(e){}
@@ -902,16 +914,23 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var autoWidth = 0; // 自动列分配的宽度
     var countWidth = 0; // 所有列总宽度和
     var cntrWidth = that.setInit('width');
+    var borderWidth = parseFloat(layui.getStyle(that.elem[0], 'border-right-width'));
+    var lastSpreadColKey;
 
-    // 统计列个数
+    // 统计列个数和最后一个自动分配列的 key
     that.eachCols(function(i, item){
-      item.hide || colNums++;
+      if(!item.hide){
+        colNums++;
+        if(!(item.width || item.type !== 'normal')){
+          lastSpreadColKey = item.key;
+        }
+      }
     });
 
     // 减去边框差和滚动条宽
     cntrWidth = cntrWidth - function(){
       return (options.skin === 'line' || options.skin === 'nob') ? 2 : colNums + 1;
-    }() - that.getScrollWidth(that.layMain[0]) - 1;
+    }() * borderWidth - that.getScrollWidth(that.layMain[0]);
 
     // 计算自动分配的宽度
     var getAutoWidth = function(back){
@@ -932,7 +951,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           if(!back){
             width = item2.width || 0;
             if(/\d+%$/.test(width)){ // 列宽为百分比
-              width = Math.floor((parseFloat(width) / 100) * cntrWidth);
+              width = (parseFloat(width) / 100) * cntrWidth;
               width < minWidth && (width = minWidth);
               width > maxWidth && (width = maxWidth);
             } else if(!width){ // 列宽未填写
@@ -969,31 +988,35 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 记录自动列数
     that.autoColNums = autoColNums = autoColNums > 0 ? autoColNums : 0;
 
-    // 设置列宽
+    var pixelsForLastCol = cntrWidth;
     that.eachCols(function(i3, item3){
       var minWidth = item3.minWidth || options.cellMinWidth;
       var maxWidth = item3.maxWidth || options.cellMaxWidth;
 
       if(item3.colGroup || item3.hide) return;
+      if(lastSpreadColKey === item3.key) return;
 
       // 给未分配宽的列平均分配宽
       if(item3.width === 0){
         that.cssRules(item3.key, function(item){
-          item.style.width = Math.floor(function(){
+          var newWidth =  Math.round(function(){
             if(autoWidth < minWidth) return minWidth;
             if(autoWidth > maxWidth) return maxWidth;
             return autoWidth;
-          }()) + 'px';
+          }());
+          item.style.width = newWidth + 'px';
+          pixelsForLastCol = pixelsForLastCol - newWidth;
         });
       }
 
       // 给设定百分比的列分配列宽
       else if(/\d+%$/.test(item3.width)){
         that.cssRules(item3.key, function(item){
-          var width = Math.floor((parseFloat(item3.width) / 100) * cntrWidth);
+          var width = Math.round((parseFloat(item3.width) / 100) * cntrWidth);
           width < minWidth && (width = minWidth);
           width > maxWidth && (width = maxWidth);
           item.style.width = width + 'px';
+          pixelsForLastCol = pixelsForLastCol - width;
         });
       }
 
@@ -1001,35 +1024,17 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       else {
         that.cssRules(item3.key, function(item){
           item.style.width = item3.width + 'px';
+          pixelsForLastCol = pixelsForLastCol - item3.width;
         });
       }
     });
-
-    // 填补 Math.floor 造成的数差
-    var patchNums = that.layMain.width() - that.getScrollWidth(that.layMain[0])
-    - that.layMain.children('table').outerWidth();
-
-    if(that.autoColNums > 0 && patchNums >= -colNums && patchNums <= colNums){
-      var getEndTh = function(th){
-        var field;
-        th = th || that.layHeader.eq(0).find('thead > tr:first-child > th:last-child')
-        field = th.data('field');
-        if(!field && th.prev()[0]){
-          return getEndTh(th.prev())
-        }
-        return th;
-      };
-      var th = getEndTh();
-      var key = th.data('key');
-
-      that.cssRules(key, function(item){
-        var width = item.style.width || th.outerWidth();
-        item.style.width = (parseFloat(width) + patchNums) + 'px';
-
-        // 二次校验，如果仍然出现横向滚动条（通常是 1px 的误差导致）
-        if(that.layMain.height() - that.layMain.prop('clientHeight') > 0){
-          item.style.width = (parseFloat(item.style.width) - 1) + 'px';
-        }
+    // 最后一列获取剩余的空间，避免舍入导致的布局问题
+    if(lastSpreadColKey){
+      that.cssRules(lastSpreadColKey, function(item){
+        var minWidth = item.minWidth || options.cellMinWidth;
+        var maxWidth = item.maxWidth || options.cellMaxWidth;
+        var newWidth = Math.max(Math.min(pixelsForLastCol, maxWidth), minWidth);
+        item.style.width = newWidth + 'px';
       });
     }
 
@@ -1043,7 +1048,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     } else {
       that.layMain.find('table').width('auto');
     }
-
   };
 
   // 重置表格尺寸/结构
@@ -2789,6 +2793,33 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       that.layMain.scrollTop(scrollTop + (delta > 0 ? -step : step));
     });
 
+  }
+
+  /**
+   * 获取元素的大小
+   * @param {HTMLElement} elem - HTML 元素
+   */
+  Class.prototype.getElementSize = function(elem){
+    if(!window.getComputedStyle) return;
+
+    var style = window.getComputedStyle(elem, null);
+    return {
+      height: parseFloat(style.height || '0'),
+      width: parseFloat(style.width || '0'),
+      borderTopWidth: parseFloat(style.borderTopWidth || '0'),
+      borderRightWidth: parseFloat(style.borderRightWidth || '0'),
+      borderBottomWidth: parseFloat(style.borderBottomWidth || '0'),
+      borderLeftWidth: parseFloat(style.borderLeftWidth || '0'),
+      paddingTop: parseFloat(style.paddingTop || '0'),
+      paddingRight: parseFloat(style.paddingRight || '0'),
+      paddingBottom: parseFloat(style.paddingBottom || '0'),
+      paddingLeft: parseFloat(style.paddingLeft || '0'),
+      marginTop: parseFloat(style.marginTop || '0'),
+      marginRight: parseFloat(style.marginRight || '0'),
+      marginBottom: parseFloat(style.marginBottom || '0'),
+      marginLeft: parseFloat(style.marginLeft || '0'),
+      boxSizing: style.boxSizing
+    }
   };
 
   // 全局事件
