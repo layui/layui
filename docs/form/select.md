@@ -89,7 +89,12 @@ toc: true
 
 <h2 id="search" lay-toc="{hot: true}">搜索选择框</h2>
 
-在 `<select>` 元素上设置 `lay-search` 可开启选择框的搜索功能
+在 `<select>` 元素上设置 `lay-search` 可开启选择框的搜索功能，如：`lay-search="{caseSensitive:false, fuzzy: false}"`，支持的可选项如下：
+
+- `caseSensitive`：是否区分大小写，默认值 `false`
+- `fuzzy`：是否开启模糊匹配，设置 `true` 开启后将忽略匹配字符出现在字符串中的位置。默认值 `false`
+
+在 `<select>` 元素上设置 `lay-creatable=""` 可允许创建新的 option，需开启 `lay-search` 后生效。
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
@@ -109,7 +114,7 @@ toc: true
     </select>
   </div>
   <div class="layui-col-md6">
-    <select lay-search="cs">
+    <select lay-search="{caseSensitive:true}">
       <option value="">请选择或搜索（设置区分大小写）</option>
       <option value="1">AAA</option>
       <option value="2">aaa</option>
@@ -118,6 +123,7 @@ toc: true
       <option value="5">ABC</option>
       <option value="6">abc</option>
       <option value="7">AbC</option>
+      <option value="8">ACb</option>
     </select>
   </div>
   <div class="layui-col-md6">
