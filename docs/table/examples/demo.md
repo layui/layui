@@ -36,7 +36,7 @@
   </div>
 !}}</script>
  
-<script type="text/html" id="templetDemo">
+<script type="text/html" id="toolDemo">
   <div class="layui-clear-space">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-xs" lay-event="more">
