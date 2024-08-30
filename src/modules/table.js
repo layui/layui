@@ -1013,7 +1013,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         var field;
         th = th || that.layHeader.eq(0).find('thead > tr:first-child > th:last-child')
         field = th.data('field');
-        if(!field && th.prev()[0]){
+        if((!field || th.hasClass(HIDE)) && th.prev()[0]){
           return getEndTh(th.prev())
         }
         return th;
