@@ -532,7 +532,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     
       
     // 点击任意处关闭
-    _DOC.on(clickOrMousedown, function(e){
+    lay(_DOC).on(clickOrMousedown, function(e){
       if(!dropdown.thisId) return;
       var that = thisModule.getThis(dropdown.thisId)
       if(!that) return;
@@ -550,8 +550,12 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
         ) return;
       }
       
+      if(e.type === 'touchstart' && options.elem.data(MOD_INDEX +'_opened')){
+        $(e.target).hasClass(STR_ELEM_SHADE) && e.preventDefault();
+      }
+      
       that.remove();
-    });
+    }, {passive: false});
     
     // 基础菜单的静态元素事件
     var ELEM_LI = '.layui-menu:not(.layui-dropdown-menu) li';
