@@ -36,7 +36,7 @@
   </div>
 !}}</script>
  
-<script type="text/html" id="barDemo">
+<script type="text/html" id="toolDemo">
   <div class="layui-clear-space">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-xs" lay-event="more">
@@ -83,7 +83,7 @@ layui.use(['table', 'dropdown'], function(){
       {field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{!{{= parseInt(d.TOTAL_NUMS) }} 次!}}'},
       {field:'ip', title:'IP', width: 120},
       {field:'joinTime', title:'加入时间', width: 120},
-      {fixed: 'right', title:'操作', width: 134, minWidth: 125, toolbar: '#barDemo'}
+      {fixed: 'right', title:'操作', width: 134, minWidth: 125, templet: '#toolDemo'}
     ]],
     done: function(){
       var id = this.id;
