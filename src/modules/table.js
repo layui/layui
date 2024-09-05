@@ -447,6 +447,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 让表格平铺
     that.fullSize();
+    that.setColsWidth();
 
     that.pullData(that.page); // 请求数据
     that.events(); // 事件
