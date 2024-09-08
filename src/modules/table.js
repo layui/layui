@@ -930,7 +930,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 减去边框差和滚动条宽
     cntrWidth = cntrWidth - function(){
       return (options.skin === 'line' || options.skin === 'nob') ? 2 : colNums + 1;
-    }() * borderWidth - that.getScrollWidth(that.layMain[0]);
+    }() * borderWidth - that.getScrollWidth(that.layMain[0]) - 1;
 
     // 计算自动分配的宽度
     var getAutoWidth = function(back){
