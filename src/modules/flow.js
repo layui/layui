@@ -196,7 +196,6 @@ layui.define('jquery', function(exports){
   Flow.prototype._cleanup = function(elem, scrollElem){
     scrollElem.off('scroll.flow').off('scroll.lazyimg');
     elem.find('.layui-flow-more').find('a').off('click.flow');
-    elem.html('');
   }
 
   //暴露接口
