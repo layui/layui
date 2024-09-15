@@ -1085,6 +1085,13 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           }
         });
       }
+    } else if (layui.type(type) === 'array' && layui.type(filter) === 'object') {
+      elemForm = $(filter);
+      //判断元素是否layui-form容器中
+      if (!elemForm.closest(ELEM).length && !elemForm.is(ELEM) && !elemForm.find(ELEM).length) return;
+      layui.each(type, function (index, key) {
+        items[key] && items[key]();
+      });
     } else {
       type ? (
         items[type] ? items[type]() : hint.error('不支持的 "'+ type + '" 表单渲染')
