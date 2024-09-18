@@ -2974,7 +2974,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     });
     return {
       data: arr, // 选中的数据
-      isAll: data.length ? (nums === (data.length - invalidNum)) : false // 是否全选
+      isAll: (data.length && nums) ? (nums === (data.length - invalidNum)) : false // 是否全选
     };
   };
 
