@@ -915,14 +915,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var countWidth = 0; // 所有列总宽度和
     var cntrWidth = that.setInit('width');
     var borderWidth = parseFloat(layui.getStyle(that.elem[0], 'border-right-width'));
-    var lastSpreadColKey;
+    var lastSpreadCol;
 
     // 统计列个数和最后一个自动分配列的 key
     that.eachCols(function(i, item){
       if(!item.hide){
         colNums++;
         if(!(item.width || item.type !== 'normal')){
-          lastSpreadColKey = item.key;
+          lastSpreadCol = item;
         }
       }
     });
@@ -993,8 +993,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       var minWidth = item3.minWidth || options.cellMinWidth;
       var maxWidth = item3.maxWidth || options.cellMaxWidth;
 
-      if(item3.colGroup || item3.hide) return;
-      if(lastSpreadColKey === item3.key) return;
+      if(item3.colGroup || item3.hide || (lastSpreadCol && lastSpreadCol.key === item3.key)) return;
 
       // 给未分配宽的列平均分配宽
       if(item3.width === 0){
@@ -1029,10 +1028,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
     });
     // 最后一列获取剩余的空间，避免舍入导致的布局问题
-    if(lastSpreadColKey){
-      that.cssRules(lastSpreadColKey, function(item){
-        var minWidth = item.minWidth || options.cellMinWidth;
-        var maxWidth = item.maxWidth || options.cellMaxWidth;
+    if(lastSpreadCol){
+      that.cssRules(lastSpreadCol.key, function(item){
+        var minWidth = lastSpreadCol.minWidth || options.cellMinWidth;
+        var maxWidth = lastSpreadCol.maxWidth || options.cellMaxWidth;
         var newWidth = Math.max(Math.min(pixelsForLastCol, maxWidth), minWidth);
         item.style.width = newWidth + 'px';
       });
