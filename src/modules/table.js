@@ -15,6 +15,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   var util = layui.util;
   var hint = layui.hint();
   var device = layui.device();
+  var isChrome = layui.device('chrome').chrome;
 
   // api
   var table = {
@@ -930,7 +931,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 减去边框差和滚动条宽
     cntrWidth = cntrWidth - function(){
       return (options.skin === 'line' || options.skin === 'nob') ? 2 : colNums + 1;
-    }() * borderWidth - that.getScrollWidth(that.layMain[0]) - 1;
+    }() * borderWidth - that.getScrollWidth(that.layMain[0]);
 
     // 计算自动分配的宽度
     var getAutoWidth = function(back){
@@ -1034,6 +1035,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         var maxWidth = lastSpreadCol.maxWidth || options.cellMaxWidth;
         var newWidth = Math.max(Math.min(pixelsForLastCol, maxWidth), minWidth);
         item.style.width = newWidth + 'px';
+
+        // 二次校验，如果仍然出现横向滚动条（通常是 1px 的误差导致）
+        if(isChrome){
+          setTimeout(function(){
+            if(that.layMain.prop('offsetHeight') > that.layMain.prop('clientHeight')){
+              item.style.width = (parseFloat(item.style.width) - 1) + 'px';
+            }
+          }, 0)
+        }
       });
     }
 
