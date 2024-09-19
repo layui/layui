@@ -2954,7 +2954,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   // 获取表格选中状态
   table.checkStatus = function(id){
-    var nums = 0;
     var invalidNum = 0;
     var arr = [];
     var data = table.cache[id] || [];
@@ -2966,15 +2965,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         return;
       }
       if(item[table.config.checkName]){
-        nums++;
-        if(!item[table.config.disabledName]){
-          arr.push(table.clearCacheKey(item));
-        }
+        arr.push(table.clearCacheKey(item));
       }
     });
     return {
       data: arr, // 选中的数据
-      isAll: data.length ? (nums === (data.length - invalidNum)) : false // 是否全选
+      isAll: arr.length && data.length ? (arr.length === (data.length - invalidNum)) : false // 是否全选
     };
   };
 
