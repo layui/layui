@@ -514,9 +514,9 @@
       }(), function(){ //年月选择
         var elem = lay.elem('div', {
           "class": 'laydate-set-ym'
-        }), spanY = lay.elem('span'), spanM = lay.elem('span');
-        elem.appendChild(spanY);
-        elem.appendChild(spanM);
+        });
+        elem.appendChild(lay.elem('span'));
+        elem.appendChild(lay.elem('span'));
         return elem;
       }(), function(){ //下一月
         var elem = lay.elem('i', {
@@ -1788,13 +1788,14 @@
         }
 
         //当为年选择器或者年月选择器
-        var isYearOrMonth = options.type === 'year' || options.type === 'month';
-        if(isYearOrMonth){
+        var isYearOrMonth = ['year', 'month'].indexOf(options.type) !== -1;
+        var isChangeMonth = type === 'year' && ['date', 'datetime'].indexOf(options.type) !== -1;
+        if (isYearOrMonth || isChangeMonth) {
           lay(ul).find('.'+ THIS).removeClass(THIS);
           lay(this).addClass(THIS);
 
           //如果为年月选择器，点击了年列表，则切换到月选择器
-          if(options.type === 'month' && type === 'year'){
+          if ((options.type === 'month' && type === 'year') || isChangeMonth) {
             that.listYM[index][0] = ym;
             isAlone && ((index ? that.endDate : dateTime).year = ym);
             that.list('month', index);
