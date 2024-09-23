@@ -918,7 +918,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var borderWidth = parseFloat(layui.getStyle(that.elem[0], 'border-right-width'));
     var lastSpreadCol;
 
-    // 统计列个数和最后一个自动分配列的 key
+    // 统计列个数和最后一个分配宽度的列
     that.eachCols(function(i, item){
       if(!item.hide){
         colNums++;
@@ -1037,12 +1037,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         item.style.width = newWidth + 'px';
 
         // 二次校验，如果仍然出现横向滚动条（通常是 1px 的误差导致）
-        if(isChrome){
-          setTimeout(function(){
-            if(that.layMain.prop('offsetHeight') > that.layMain.prop('clientHeight')){
-              item.style.width = (parseFloat(item.style.width) - 1) + 'px';
-            }
-          }, 0)
+        if(isChrome && that.layMain.prop('offsetHeight') > that.layMain.prop('clientHeight')){
+          item.style.width = (parseFloat(item.style.width) - 1) + 'px';
         }
       });
     }
