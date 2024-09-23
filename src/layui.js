@@ -24,8 +24,8 @@
 
   // 获取 layui 所在目录
   var getPath = function(){
-    var jsPath = doc.currentScript ? doc.currentScript.src : function(){
-      var js = doc.scripts;
+    var jsPath = (doc.currentScript && doc.currentScript.tagName.toUpperCase() === 'SCRIPT') ? doc.currentScript.src : function(){
+      var js = doc.getElementsByTagName('script');
       var last = js.length - 1;
       var src;
       for(var i = last; i > 0; i--){
