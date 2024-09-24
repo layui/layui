@@ -369,6 +369,7 @@ table.render({
 var tableStatus = table.checkStatus('test');
 console.log(tableStatus.data) // 选中行的数据
 console.log(tableStatus.data.length) // 选中行数量，可作为是否有选中行的条件
+console.log(tableStatus.dataCache) // 选中的原始缓存数据，包含内部特定字段 --- 2.9.17+
 console.log(tableStatus.isAll ) // 表格是否全选
 ```
 

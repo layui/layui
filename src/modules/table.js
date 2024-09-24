@@ -2990,27 +2990,27 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   // 获取表格选中状态
   table.checkStatus = function(id){
-    var nums = 0;
     var invalidNum = 0;
     var arr = [];
+    var dataCache = [];
     var data = table.cache[id] || [];
 
-    //计算全选个数
+    // 过滤禁用或已删除的数据
     layui.each(data, function(i, item){
       if(layui.type(item) === 'array' || item[table.config.disabledName]){
-        invalidNum++; // 无效数据，或已删除的
+        invalidNum++; // 无效数据数量
         return;
       }
       if(item[table.config.checkName]){
-        nums++;
-        if(!item[table.config.disabledName]){
-          arr.push(table.clearCacheKey(item));
-        }
+        arr.push(table.clearCacheKey(item));
+        dataCache.push(item);
       }
     });
+
     return {
       data: arr, // 选中的数据
-      isAll: data.length ? (nums === (data.length - invalidNum)) : false // 是否全选
+      dataCache: dataCache, // 选中的原始缓存数据，包含内部特定字段
+      isAll: (data.length && arr.length) ? (arr.length === (data.length - invalidNum)) : false // 是否全选
     };
   };
 
