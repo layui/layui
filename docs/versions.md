@@ -9,9 +9,31 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+
+<h2 id="v2.9.17" class="ws-anchor">
+  v2.9.17
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+  <span class="layui-badge-rim">2024-09-25</span>
+</h2>
+
+- #### table
+  - 修复 表格列宽计算问题 #2187 @Sight-wcg
+  - 优化 慢速网络下表头数据加载时的列宽 #2205 @Sight-wcg
+  - 增加 ` table.checkStatus()` 方法返回的 `dataCache`，即包含内部特定字段的缓存数据 #2239 @sentsim
+  - 修复 返回数据均为 `LAY_DISABLED: true` 时默认全选的问题 #2239 @sentsim
+- #### dropdown
+  - 修复 移动端遮罩层点击穿透问题 #2206 @Sight-wcg
+- #### flow
+  - 回滚 #1852 中加载时自动清除绑定元素内容的改动 #2218 @Sight-wcg
+- #### 重要
+  - 修复 `getPath` 内部方法潜在的 XSS 安全漏洞，建议尽快升级（[详见低版本修复方式](https://layui.dev/notes/share/security-currentscript.html)） - [f756b41] @jackfromeast
+
+### 下载： [layui-v2.9.17.zip](https://gitee.com/layui/layui/attach_files/1911445/download)
+
+---
+
 <h2 id="v2.9.16" class="ws-anchor">
   v2.9.16
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
   <span class="layui-badge-rim">2024-08-21</span>
 </h2>
 
