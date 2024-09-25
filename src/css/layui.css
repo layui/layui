@@ -1064,7 +1064,9 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-table[lay-data],
 .layui-table[lay-options]{display: none;}
 .layui-table-box{position: relative; overflow: hidden;}
-.layui-table-view{clear: both;}
+.layui-table-view{clear: both;position: relative; border-right: none;}
+.layui-table-view:after {top: 0; right: 0; width: 1px; height: 100%;}
+.layui-table-view:after {content: ""; position: absolute; background-color: #eee; z-index: 101;}
 .layui-table-view .layui-table{position: relative; width: auto; margin: 0; border: 0; border-collapse: separate;}
 .layui-table-view .layui-table[lay-skin="line"]{border-width: 0; border-right-width: 1px;}
 .layui-table-view .layui-table[lay-skin="row"]{border-width: 0; border-bottom-width: 1px;}
@@ -1129,7 +1131,7 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .laytable-cell-space,
 .laytable-cell-numbers{text-align: center; -webkit-box-pack: center;}
 
-.layui-table-body{position: relative; overflow: auto; margin-right: -1px; margin-bottom: -1px;}
+.layui-table-body{position: relative; overflow: auto; margin-bottom: -1px;}
 .layui-table-body .layui-none{line-height: 26px; padding: 30px 15px; text-align: center; color: #999;}
 .layui-table-fixed{position: absolute; left: 0; top: 0; z-index: 101;}
 .layui-table-fixed .layui-table-body{overflow: hidden;}
