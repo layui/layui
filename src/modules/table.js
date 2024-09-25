@@ -1212,11 +1212,17 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
               ('返回的数据不符合规范，正确的成功状态码应为："'+ response.statusName +'": '+ response.statusCode)
             );
           } else {
+            // 当前页不能超过总页数
+            var count = res[response.countName];
+            var pages = Math.ceil(count / options.limit) || 1;
+            if(curr > pages){
+              curr = pages;
+            }
             that.totalRow = res[response.totalRowName];
             that.renderData({
               res: res,
               curr: curr,
-              count: res[response.countName],
+              count: count,
               type: opts.type
             }), sort();
 
