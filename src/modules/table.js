@@ -15,7 +15,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   var util = layui.util;
   var hint = layui.hint();
   var device = layui.device();
-  var isChrome = layui.device('chrome').chrome;
 
   // api
   var table = {
@@ -1046,8 +1045,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         item.style.width = newWidth + 'px';
 
         // 二次校验，如果仍然出现横向滚动条（通常是 1px 的误差导致）
-        if(isChrome && that.layMain.prop('offsetHeight') > that.layMain.prop('clientHeight')){
-          item.style.width = (parseFloat(item.style.width) - 1) + 'px';
+        // 不同屏幕分辨率、缩放水平以及浏览器渲染差异，可能会触发这个问题 
+        if(that.layMain.prop('offsetHeight') > that.layMain.prop('clientHeight')){
+          item.style.width = (parseFloat(item.style.width) - borderWidth) + 'px';
         }
       });
     }
