@@ -12,7 +12,7 @@ var win;
 var ready = {
   getPath: function(){
     var jsPath = (document.currentScript && document.currentScript.tagName.toUpperCase() === 'SCRIPT') ? document.currentScript.src : function(){
-      var js = document.scripts;
+      var js = document.getElementsByTagName('script');
       var last = js.length - 1;
       var src;
       for(var i = last; i > 0; i--){
