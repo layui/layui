@@ -11,7 +11,7 @@ var $;
 var win;
 var ready = {
   getPath: function(){
-    var jsPath = document.currentScript ? document.currentScript.src : function(){
+    var jsPath = (document.currentScript && document.currentScript.tagName.toUpperCase() === 'SCRIPT') ? document.currentScript.src : function(){
       var js = document.scripts;
       var last = js.length - 1;
       var src;
