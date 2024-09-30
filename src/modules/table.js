@@ -15,7 +15,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   var util = layui.util;
   var hint = layui.hint();
   var device = layui.device();
-  var isChrome = layui.device('chrome').chrome;
 
   // api
   var table = {
@@ -502,7 +501,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         try {
           isNone = parent.css('display') === 'none';
         } catch(e){}
-        if(parent[0] && (!width || isNone)) return getWidth(parent.parent());
+        if(parent[0] && !lay.isTopElem(parent[0]) && (!width || isNone)) return getWidth(parent.parent());
         return width;
       };
       return getWidth();
@@ -915,7 +914,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var autoWidth = 0; // 自动列分配的宽度
     var countWidth = 0; // 所有列总宽度和
     var cntrWidth = that.setInit('width');
-    var borderWidth = parseFloat(layui.getStyle(that.elem[0], 'border-right-width'));
+    var borderWidth = parseFloat(layui.getStyle(that.elem[0], 'border-left-width'));
     var lastSpreadCol;
 
     // 统计列个数和最后一个分配宽度的列
@@ -989,6 +988,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 记录自动列数
     that.autoColNums = autoColNums = autoColNums > 0 ? autoColNums : 0;
 
+    // 如果表格内容为空（无数据 或 请求异常）
+    if (that.layMain.find('tbody').is(":empty")) {
+      // 将表格宽度设置为跟表头一样的宽度，使之可以出现底部滚动条，以便滚动查看所有字段
+      var headerWidth = that.layHeader.first().children('table').width()
+      that.layMain.find('table').width(headerWidth);
+    } else {
+      that.layMain.find('table').width('auto');
+    }
+
     var pixelsForLastCol = cntrWidth;
     that.eachCols(function(i3, item3){
       var minWidth = item3.minWidth || options.cellMinWidth;
@@ -1037,22 +1045,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         item.style.width = newWidth + 'px';
 
         // 二次校验，如果仍然出现横向滚动条（通常是 1px 的误差导致）
-        if(isChrome && that.layMain.prop('offsetHeight') > that.layMain.prop('clientHeight')){
-          item.style.width = (parseFloat(item.style.width) - 1) + 'px';
+        // 不同屏幕分辨率、缩放水平以及浏览器渲染差异，可能会触发这个问题 
+        if(that.layMain.prop('offsetHeight') > that.layMain.prop('clientHeight')){
+          item.style.width = (parseFloat(item.style.width) - borderWidth) + 'px';
         }
       });
     }
 
     that.setGroupWidth();
 
-    // 如果表格内容为空（无数据 或 请求异常）
-    if (that.layMain.find('tbody').is(":empty")) {
-      // 将表格宽度设置为跟表头一样的宽度，使之可以出现底部滚动条，以便滚动查看所有字段
-      var headerWidth = that.layHeader.first().children('table').width()
-      that.layMain.find('table').width(headerWidth);
-    } else {
-      that.layMain.find('table').width('auto');
-    }
   };
 
   // 重置表格尺寸/结构
