@@ -1081,8 +1081,7 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-table-view .layui-form-checkbox[lay-skin="primary"] i{width: 18px; height: 18px; line-height: 16px;}
 .layui-table-view .layui-form-radio{line-height: 0; padding: 0;}
 .layui-table-view .layui-form-radio>i{margin: 0; font-size: 20px;}
-.layui-table-init{position: absolute; left: 0; top: 0; right: 0; bottom: 0; margin: 0; z-index: 199; transition: opacity .1s; user-select: none; opacity: 1;}
-.layui-table-init.layui-hide-v{opacity: 0;}
+.layui-table-init{position: absolute; left: 0; top: 0; right: 0; bottom: 0; margin: 0; z-index: 199; transition: opacity .1s; user-select: none;}
 .layui-table-loading-icon{position: absolute; width: 100%\0; left: 50%; left:auto\0; top: 50%; margin-top: -15px\0; transform: translate(-50%, -50%); transform: none\0; text-align: center;}
 .layui-table-loading-icon .layui-icon{font-size: 30px; color: #c2c2c2;}
 .layui-table-header{border-width: 0; border-bottom-width: 1px; overflow: hidden;}
