@@ -77,7 +77,7 @@
 </head>
 <body class="layui-padding-3">
   <div class="layui-inline" id="ID-laydate-cell-render"></div>
-  <script src="https://cdn.staticfile.net/lunar-javascript/1.6.12/lunar.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lunar-javascript/1.6.12/lunar.min.js"></script>
   <script src="{{= d.layui[2].cdn.js }}"></script>
   <script>
   layui.use(function () {

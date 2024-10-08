@@ -533,8 +533,8 @@ div class="layui-row">
 ```
 <!-- 让 IE8/9 支持媒体查询，从而兼容栅格 -->
 <!--[if lt IE 9]>
-  <script src="https://cdn.staticfile.net/html5shiv/r29/html5.min.js"></script>
-  <script src="https://cdn.staticfile.net/respond.js/1.4.2/respond.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 ```
 
