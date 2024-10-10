@@ -153,7 +153,7 @@ layer.open({
 <td>maxWidth</td>
 <td>
   
-弹层的最大宽度。当 `area` 属性值为默认的 `auto'` 时有效。
+弹层的最大宽度。当 `area` 属性设置宽度自适应时有效。
 
 </td>
 <td>number</td>
@@ -167,7 +167,7 @@ layer.open({
 <td>maxHeight</td>
 <td>
   
-弹层的最大高度。当 `area` 属设置高度自适应时有效。
+弹层的最大高度。当 `area` 属性设置高度自适应时有效。
 
 </td>
 <td>number</td>
