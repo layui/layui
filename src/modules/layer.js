@@ -558,7 +558,7 @@ Class.pt.resize = function(){
 Class.pt.auto = function(index){
   var that = this, config = that.config, layero = $('#'+ doms[0] + index);
   
-  if(config.area[0] === '' && config.maxWidth > 0){
+  if((config.area[0] === '' || config.area[0] === 'auto') && config.maxWidth > 0){
     // 适配 ie7
     if(layer.ie && layer.ie < 8 && config.btn){
       layero.width(layero.innerWidth());
@@ -579,7 +579,7 @@ Class.pt.auto = function(index){
       setHeight('iframe');
     break;
     default:
-      if(config.area[1] === ''){
+      if(config.area[1] === '' || config.area[1] === 'auto'){
         if(config.maxHeight > 0 && layero.outerHeight() > config.maxHeight){
           area[1] = config.maxHeight;
           setHeight('.'+doms[5]);
