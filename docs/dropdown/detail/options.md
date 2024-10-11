@@ -288,10 +288,11 @@ ready: function(elemPanel, elem){
 </div>
 
 ```
-click: function(data, othis){
+click: function(data, othis, event){
   console.log(data); // 当前所点击的菜单项对应的数据
   console.log(othis); // 当前所点击的菜单项元素对象
   console.log(this.elem); // 当前组件绑定的目标元素对象，批量绑定中常用
+  console.log(event); // 事件对象 2.9.18+
   
   // 若返回 false，则点击选项可不关闭面板 --- 2.8+
   /*

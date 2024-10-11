@@ -340,7 +340,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       // 普通菜单项点击后的回调及关闭面板
       if((!isChild || isClickAllScope) && data.type !== '-'){
         var ret = typeof options.click === 'function' 
-          ? options.click(data, othis) 
+          ? options.click(data, othis, e) 
         : null;
         
         ret === false || (isChild || that.remove());
