@@ -107,7 +107,8 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     data: [], // 菜单数据结构
     delay: [200, 300], // 延时显示或隐藏的毫秒数，若为 number 类型，则表示显示和隐藏的延迟时间相同，trigger 为 hover 时才生效
     shade: 0, // 遮罩
-    accordion: false // 手风琴效果，仅菜单组生效。基础菜单需要在容器上追加 'lay-accordion' 属性。
+    accordion: false, // 手风琴效果，仅菜单组生效。基础菜单需要在容器上追加 'lay-accordion' 属性。
+    closeOnClick: false // 点击 dropdown 外部时是否关闭，行为取决于所使用的触发事件类型
   };
   
   // 重载实例
@@ -443,11 +444,17 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       that.e = e;
 
       // 若为鼠标移入事件，则延迟触发
-      isMouseEnter ? (
+      if(isMouseEnter){
         thisModule.timer = setTimeout(function(){
           that.render();
         }, that.normalizedDelay().show)
-      ) : that.render();
+      }else{
+        if(options.closeOnClick && options.elem.data(MOD_INDEX +'_opened') && options.trigger === 'click'){
+          that.remove();
+        }else{
+          that.render();
+        }
+      }
       
       e.preventDefault();
     };
@@ -538,20 +545,23 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       if(!that) return;
       
       var options = that.config;
+      var isTopElem = lay.isTopElem(options.elem[0]);
+      var isCtxMenu = options.trigger === 'contextmenu';
       
       // 若触发的是绑定的元素，或者属于绑定元素的子元素，则不关闭
-      // 满足条件：当前绑定的元素不是 body document，或者不是鼠标右键事件
-      if(!(lay.isTopElem(options.elem[0]) || options.trigger === 'contextmenu')){
-        if(
-          e.target === options.elem[0] || 
-          options.elem.find(e.target)[0] ||
-          (that.elemView && e.target === that.elemView[0]) ||
-          (that.elemView && that.elemView.find(e.target)[0])
-        ) return;
-      }
-      
+      // 满足条件：当前绑定的元素是 body document，或者是鼠标右键事件时，忽略绑定元素
+      var isTriggerTarget = !(isTopElem || isCtxMenu) && (options.elem[0] === e.target || options.elem.find(e.target)[0]);
+      var isPanelTarget = that.elemView && (e.target === that.elemView[0] || that.elemView.find(e.target)[0]);
+      if(isTriggerTarget || isPanelTarget) return;
+      // 处理移动端点击穿透问题
       if(e.type === 'touchstart' && options.elem.data(MOD_INDEX +'_opened')){
         $(e.target).hasClass(STR_ELEM_SHADE) && e.preventDefault();
+      }
+
+      // 点击 dropdown 外部时的回调
+      if(typeof options.onClickOutside === 'function'){
+        var shouldClose = options.onClickOutside(e);
+        if(shouldClose === false) return;
       }
       
       that.remove();

@@ -63,6 +63,20 @@
 </td>
     </tr>
     <tr>
+<td>closeOnClick <sup>2.9.18+</sup></td>
+<td>
+  
+点击触发元素时是否关闭面板。
+
+</td>
+<td>boolean</td>
+<td>
+
+`false`
+
+</td>
+    </tr>
+    <tr>
 <td>show</td>
 <td>
   
@@ -313,6 +327,20 @@ click: function(data, othis){
 ```
 close: function(elem){
   console.log(elem); // 当前组件绑定的目标元素对象
+}   
+```
+
+</td>
+    </tr>
+    <tr>
+<td>onClickOutside <sup>2.9.18+</sup></td>
+<td colspan="3">
+  
+点击 dropdown 外部时的回调函数，返回 `false` 阻止关闭。
+
+```
+onClickOutside: function(event){
+  - event: 当前点击的 `event` 对象
 }   
 ```
 
