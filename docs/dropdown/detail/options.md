@@ -341,7 +341,9 @@ close: function(elem){
 
 ```
 onClickOutside: function(event){
-  - event: 当前点击的 `event` 对象
+  // 参数 event 即为当前点击的事件对象
+  // …
+  // return false; // 若返回 false，当点击面板外部时可阻止关闭
 }   
 ```
 
