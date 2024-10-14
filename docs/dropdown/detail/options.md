@@ -336,7 +336,7 @@ close: function(elem){
 <td>onClickOutside <sup>2.9.18+</sup></td>
 <td colspan="3">
   
-点击 dropdown 外部时的回调函数，返回 `false` 阻止关闭。
+点击 dropdown 外部时的回调函数，返回 `false` 可阻止关闭。
 
 ```
 onClickOutside: function(event){
