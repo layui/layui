@@ -10,9 +10,35 @@ toc: true
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
 
+<h2 id="v2.9.18" class="ws-anchor">
+  v2.9.18
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+  <span class="layui-badge-rim">2024-10-14</span>
+</h2>
+
+- #### table
+  - 修复 重载时若当前页超过总页数，序号列渲染异常 #2247 @Sight-wcg
+  - 修复 表格列宽计算一些边缘情况 #2250 @Sight-wcg
+  - 修复 table 在 Firefox 中偶现行闪烁的问题 #2260 @Sight-wcg
+- #### layer
+  - 改进 `maxWidth` 和 `maxHeight` 的处理 #2270 @Sight-wcg
+  - 修复 `layer.path` 潜在的缺陷 #2257 @sentsim
+- #### laydate
+  - 优化 `date` 或 `datetime` 类型时点击年列表换到月选择器功能 #2235 @Diyar-IT
+- #### dropdown
+  - 新增 `click` 回调中传递的事件对象 #2273 @Sight-wcg
+  - 新增 `closeOnClick` 选项，用于点击触发元素时是否关闭面板 #2274 @Sight-wcg
+  - 新增 `onClickOutside` 回调函数，点击下拉面板外部时触发 #2274 @Sight-wcg
+  - 修复 `trigger:'contextmenu'` 时点击自定义 `content` 任意处导致面板异常关闭的问题 #2274 @Sight-wcg
+- #### nav
+  - 修复 动态添加元素渲染异常的问题 #2276 @Sight-wcg
+
+### 下载： [layui-v2.9.18.zip](https://gitee.com/layui/layui/attach_files/1930232/download)
+
+---
+
 <h2 id="v2.9.17" class="ws-anchor">
   v2.9.17
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
   <span class="layui-badge-rim">2024-09-25</span>
 </h2>
 
