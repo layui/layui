@@ -66,7 +66,7 @@
 <td>closeOnClick <sup>2.9.18+</sup></td>
 <td>
   
-点击触发元素时是否关闭面板。
+下拉面板打开后，再次点击目标元素时是否关闭该面板。
 
 </td>
 <td>boolean</td>
