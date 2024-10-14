@@ -108,7 +108,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     delay: [200, 300], // 延时显示或隐藏的毫秒数，若为 number 类型，则表示显示和隐藏的延迟时间相同，trigger 为 hover 时才生效
     shade: 0, // 遮罩
     accordion: false, // 手风琴效果，仅菜单组生效。基础菜单需要在容器上追加 'lay-accordion' 属性。
-    closeOnClick: false // 点击 dropdown 外部时是否关闭，行为取决于所使用的触发事件类型
+    closeOnClick: false // 面板打开后，再次点击目标元素时是否关闭面板。行为取决于所使用的触发事件类型
   };
   
   // 重载实例
