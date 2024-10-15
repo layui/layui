@@ -66,12 +66,12 @@ jobs:
           mv dist layui
           mv layui $DIR_NAME/
           mv examples/introduce/* $DIR_NAME/
-          zip -r $DIR_NAME.zip $DIR_NAME
+          7z a $DIR_NAME.zip $DIR_NAME
           echo "filename=$DIR_NAME" >> $GITHUB_OUTPUT
             
       - name: GH Release
         id: create_release
-        uses: softprops/action-gh-release@v0.1.15
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
