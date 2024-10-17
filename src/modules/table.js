@@ -501,7 +501,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         try {
           isNone = parent.css('display') === 'none';
         } catch(e){}
-        if(parent[0] && !lay.isTopElem(parent[0]) && (!width || isNone)) return getWidth(parent.parent());
+        var parentElem = parent.parent();
+        if(parent[0] && parentElem && parentElem.nodeType === 1 && (!width || isNone)) return getWidth(parentElem);
         return width;
       };
       return getWidth();
