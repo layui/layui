@@ -501,7 +501,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         try {
           isNone = parent.css('display') === 'none';
         } catch(e){}
-        if(parent[0] && !lay.isTopElem(parent[0]) && (!width || isNone)) return getWidth(parent.parent());
+        var parentElem = parent.parent();
+        if(parent[0] && parentElem && parentElem.nodeType === 1 && (!width || isNone)) return getWidth(parentElem);
         return width;
       };
       return getWidth();
@@ -1060,7 +1061,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   Class.prototype.resize = function(){
     var that = this;
 
-    if (!that.layMain) return;
+    var tableElemIsConnected = that.layMain && ('isConnected' in that.layMain[0]
+      ? that.layMain[0].isConnected 
+      : $.contains(document.body, that.layMain[0]));
+
+    if(!tableElemIsConnected) return;
 
     that.fullSize(); // 让表格铺满
     that.setColsWidth(); // 自适应列宽
