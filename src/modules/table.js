@@ -2077,7 +2077,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     ](HIDE);
 
     // 操作栏
-    that.layFixRight.css('right', scrollWidth - 1);
+    that.layFixRight.css('right', scrollWidth);
   };
 
   /**
