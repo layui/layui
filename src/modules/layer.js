@@ -261,6 +261,29 @@ doms.MOVE = 'layui-layer-move';
 
 var SHADE_KEY = 'LAYUI-LAYER-SHADE-KEY';
 var RECORD_HEIGHT_KEY = 'LAYUI_LAYER_CONTENT_RECORD_HEIGHT';
+var BASE_ZINDEX = 19891014;
+
+var getNextZIndex = function(zIndex){
+  // 初始化 layer.zIndex
+  if(layer.zIndex === undefined || layer.zIndex === null){
+    layer.zIndex = zIndex;
+    return layer.zIndex;
+  }
+
+  // 主动设置 zIndex
+  if(zIndex !== BASE_ZINDEX){
+    // 更新最大值
+    if(zIndex > layer.zIndex){
+      layer.zIndex = zIndex;
+    }
+    return zIndex;
+  }
+
+  // 默认自增 zIndex
+  layer.zIndex++;
+
+  return layer.zIndex;
+ }
 
 // 默认配置
 Class.pt.config = {
@@ -274,7 +297,7 @@ Class.pt.config = {
   closeBtn: 1,
   icon: -1,
   time: 0, // 0 表示不自动关闭
-  zIndex: 19891014, 
+  zIndex: BASE_ZINDEX, 
   maxWidth: 360,
   anim: 0,
   isOutAnim: true, // 退出动画
@@ -288,7 +311,7 @@ Class.pt.config = {
 // 容器
 Class.pt.vessel = function(conType, callback){
   var that = this, times = that.index, config = that.config;
-  var zIndex = config.zIndex + times, titype = typeof config.title === 'object';
+  var zIndex = getNextZIndex(config.zIndex), titype = typeof config.title === 'object';
   var ismax = config.maxmin && (config.type === 1 || config.type === 2);
   var titleHTML = (config.title ? '<div class="layui-layer-title" style="'+ (titype ? config.title[1] : '') +'">' 
     + (titype ? config.title[0] : config.title) 
@@ -990,13 +1013,17 @@ Class.pt.openLayer = function(){
   var that = this;
   
   // 置顶当前窗口
-  layer.zIndex = that.config.zIndex;
   layer.setTop = function(layero){
     var setZindex = function(){
-      layer.zIndex++;
-      layero.css('z-index', layer.zIndex + 1);
+      var currentZIndex = parseInt(layero[0].style.zIndex);
+      if(currentZIndex > layer.zIndex){
+        layer.zIndex = currentZIndex;
+      }
+      if(layer.zIndex > currentZIndex){
+        layer.zIndex++;
+      }
+      layero.css('z-index', layer.zIndex);
     };
-    layer.zIndex = parseInt(layero[0].style.zIndex);
     layero.on('mousedown', setZindex);
     return layer.zIndex;
   };
