@@ -262,14 +262,9 @@ doms.MOVE = 'layui-layer-move';
 var SHADE_KEY = 'LAYUI-LAYER-SHADE-KEY';
 var RECORD_HEIGHT_KEY = 'LAYUI_LAYER_CONTENT_RECORD_HEIGHT';
 var BASE_ZINDEX = 19891014;
+layer.zIndex = BASE_ZINDEX;
 
 var getNextZIndex = function(zIndex){
-  // 初始化 layer.zIndex
-  if(layer.zIndex === undefined || layer.zIndex === null){
-    layer.zIndex = zIndex;
-    return layer.zIndex;
-  }
-
   // 主动设置 zIndex
   if(zIndex !== BASE_ZINDEX){
     // 更新最大值
