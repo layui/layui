@@ -549,7 +549,7 @@ layer.iframeSrc(index, 'https://cn.bing.com/');
 
 `layer.setTop(layero);`
 
-- 参数 `layero` : layer 最外层容器的元素对象，一般可通过各个回调函数返回的参数获取。
+- 参数 `layero` : layer 最外层容器或其内部(2.9.19+)元素的 jQuery 对象，一般可通过各个回调函数返回的参数获取。
 
 该方法一般用于多弹层模式时，实现点击某个弹层让其层叠顺序置顶。效果参考：[#示例](#demo-more)
 
