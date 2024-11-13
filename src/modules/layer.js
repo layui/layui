@@ -991,13 +991,17 @@ Class.pt.openLayer = function(){
   
   // 置顶当前窗口
   layer.zIndex = that.config.zIndex;
-  layer.setTop = function(layero){
+  layer.setTop = function(targetElem){
+    var layero = targetElem.closest('.layui-layer');
+    var shadeo = $('#layui-layer-shade' + layero.attr('times'));
+    
     var setZindex = function(){
       layer.zIndex++;
       layero.css('z-index', layer.zIndex + 1);
+      shadeo.css('z-index', layer.zIndex);
     };
     layer.zIndex = parseInt(layero[0].style.zIndex);
-    layero.on('mousedown', setZindex);
+    targetElem.on('mousedown', setZindex);
     return layer.zIndex;
   };
 };
