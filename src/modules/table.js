@@ -2800,16 +2800,26 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       layer.close(that.tipsIndex);
     });
 
+    var rAF = window.requestAnimationFrame || function(fn){return setTimeout(fn, 1000 / 60)};
+
     // 固定列滚轮事件 - 临时兼容方案
     that.layFixed.find(ELEM_BODY).on('mousewheel DOMMouseScroll', function(e) {
       var delta = e.originalEvent.wheelDelta || -e.originalEvent.detail;
       var scrollTop = that.layMain.scrollTop();
-      var step = 30;
+      var step = 100;
+      var rAFStep = 10;
 
       e.preventDefault();
-      that.layMain.scrollTop(scrollTop + (delta > 0 ? -step : step));
+      var cb = function(){
+        if(step > 0){
+          step -= rAFStep;
+          scrollTop += (delta > 0 ? -rAFStep : rAFStep);
+          that.layMain.scrollTop(scrollTop);
+          rAF(cb);
+        }
+      }
+      rAF(cb);
     });
-
   }
 
   /**
