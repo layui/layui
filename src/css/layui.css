@@ -1384,6 +1384,8 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-tab-more li.layui-this:after{border-bottom-color: #eee; border-radius: 2px;}
 .layui-tab-more .layui-tab-bar .layui-icon{top: -2px; top: 3px\0; -webkit-transform: rotate(180deg); transform: rotate(180deg);}
 :root .layui-tab-more .layui-tab-bar .layui-icon{top: -2px\0/IE9;}
+.layui-tab-scroll .layui-tab-bar{display: none;}
+.layui-tab-border-bottom-container{border-bottom-color: #eee; border-bottom-width: 1px; border-style: none none solid; bottom: 0; left: 0; pointer-events: none; position: absolute; width: 100%; z-index: 9;}
 
 .layui-tab-content{padding: 15px 0;}
 

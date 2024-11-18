@@ -231,9 +231,6 @@ layui.define('jquery', function(exports){
     
     // Tab 自适应
     ,tabAuto: function(spread, elem){
-      var SCROLL = 'layui-tab-scroll';
-      var MORE = 'layui-tab-more';
-      var BAR = 'layui-tab-bar';
       var CLOSE = 'layui-tab-close';
       var that = this;
       var targetElem = elem || $('.layui-tab');
@@ -241,9 +238,6 @@ layui.define('jquery', function(exports){
       targetElem.each(function(){
         var othis = $(this);
         var title = othis.children('.layui-tab-title');
-        var item = othis.children('.layui-tab-content').children('.layui-tab-item');
-        var STOPE = 'lay-stope="tabmore"';
-        var span = $('<span class="layui-unselect layui-tab-bar" '+ STOPE +'><i '+ STOPE +' class="layui-icon">&#xe61a;</i></span>');
 
         if(that === window && device.ie != 8){
           // call.hideTabMore(true)
@@ -262,33 +256,11 @@ layui.define('jquery', function(exports){
           });
         }
         
-        if(typeof othis.attr('lay-unauto') === 'string') return;
-        
-        // 响应式
-        if(
-          title.prop('scrollWidth') > title.outerWidth() + 1 || (
-            title.find('li').length && title.height() > function(height){
-              return height + height/2;
-            }(title.find('li').eq(0).height())
-          )
-        ){
-          // 若执行是来自于切换，则自动展开
-          (
-            spread === 'change' && title.data('LAY_TAB_CHANGE')
-          ) && title.addClass(MORE);
-          
-          if(title.find('.'+BAR)[0]) return;
-          title.append(span);
-          othis.attr('overflow', '');
-
-          // 展开图标事件
-          span.on('click', function(e){
-            var isSpread = title.hasClass(MORE);
-            title[isSpread ? 'removeClass' : 'addClass'](MORE);
-          });
-        } else {
-          title.find('.'+ BAR).remove();
-          othis.removeAttr('overflow');
+        // 当超出可用空间时，tab 是否应在多行之间换行，或者是否开启滚动模式
+        if(typeof othis.attr('lay-nowrap') === 'string'){
+          call.tabNoWrap(othis, spread);
+        }else{
+          call.tabWrap(othis, spread);
         }
       });
     }
@@ -298,6 +270,87 @@ layui.define('jquery', function(exports){
       if(e === true || $(e.target).attr('lay-stope') !== 'tabmore'){
         tsbTitle.removeClass('layui-tab-more');
         tsbTitle.find('.layui-tab-bar').attr('title','');
+      }
+    }
+    ,tabWrap: function(tabElem, spread){
+      var tabElem = tabElem;
+      if(typeof tabElem.attr('lay-unauto') === 'string') return;
+     
+      var BAR = 'layui-tab-bar';
+      var MORE = 'layui-tab-more';
+      var STOPE = 'lay-stope="tabmore"';
+      var titleElem = tabElem.children('.layui-tab-title');
+      var checkOverflow = function(titleElem){
+        if(titleElem.prop('scrollWidth') > titleElem.outerWidth() + 1) return true;
+        var titleItemsElem = titleElem.find('li');
+        if(titleItemsElem.length){
+          var titleFirstElHeight = titleItemsElem.eq(0).height();
+          return titleElem.height() > titleFirstElHeight + titleFirstElHeight/2;
+        }
+      }(titleElem);
+
+      if(checkOverflow){
+        // 若执行是来自于切换，则自动展开
+        if( spread === 'change' && titleElem.data('LAY_TAB_CHANGE')){
+          titleElem.addClass(MORE)
+        }
+        if(titleElem.find('.'+BAR)[0]) return;
+        var span = $('<span class="layui-unselect layui-tab-bar" '+ STOPE +'><i '+ STOPE +' class="layui-icon">&#xe61a;</i></span>');
+        titleElem.append(span);
+        tabElem.attr('overflow', '');
+
+        // 展开图标事件
+        span.on('click', function(e){
+          var isSpread = titleElem.hasClass(MORE);
+          titleElem[isSpread ? 'removeClass' : 'addClass'](MORE);
+        });
+      }else{
+        titleElem.find('.'+ BAR).remove();
+        tabElem.removeAttr('overflow');
+      }
+    }
+    ,tabNoWrap: function(tabElem, spread){
+      var tabElem = tabElem;
+      if(typeof tabElem.attr('lay-unauto') === 'string') return;
+     
+      var BAR = 'layui-tab-bar';
+      var SCROLL = 'layui-tab-scroll';
+      var STOPE = 'lay-stope="tabmore"';
+      var BORDER_BOTTOM = 'layui-tab-border-bottom-container';
+      var titleElem = tabElem.children('.layui-tab-title');
+      var checkOverflow = titleElem.prop('scrollWidth') > titleElem.outerWidth() + 1;
+      var borderBottomPatch = titleElem.find('.' + BORDER_BOTTOM);
+
+      // 添加底边框容器，并同步父容器宽度
+      if(!borderBottomPatch[0]){
+        borderBottomPatch = $('<div class="'+ BORDER_BOTTOM +'"></div>');
+        titleElem.append(borderBottomPatch);
+      }
+      titleElem.addClass(SCROLL);
+
+      if(checkOverflow){
+        borderBottomPatch.width(titleElem.prop('scrollWidth'));
+        if(titleElem.find('.'+BAR)[0])return;
+        var span = $('<span class="layui-unselect layui-tab-bar" '+ STOPE +'><i '+ STOPE +' class="layui-icon">&#xe61a;</i></span>');
+        titleElem.append(span);
+        tabElem.attr('overflow', '');
+
+        // 不使用 mousewheel，因为要支持滚轮滚动，触摸板，移动设备手势滑动(IE9+)
+        titleElem.off('wheel.lay_tab').on('wheel.lay_tab', function(e){
+          e= e.originalEvent
+          var el = this;
+          e.preventDefault()
+          var direction = Math.abs(e.deltaX) >= Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+          var distance = 30 * (direction > 0 ? 1 : -1);
+          var offset = el.scrollLeft + distance
+          el.scrollTo({
+            left: offset,
+          })
+        })
+      }else{
+        titleElem.find('.'+ BAR).remove();
+        tabElem.removeAttr('overflow');
+        borderBottomPatch.width('100%');
       }
     }
     
