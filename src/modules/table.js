@@ -487,7 +487,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         var isNone;
         parent = parent || options.elem.parent();
 
-        width = that.getInnerWidth(parent);
+        width = that.getContentWidth(parent);
 
         try {
           isNone = parent.css('display') === 'none';
@@ -1033,7 +1033,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
         if (!isInit && isEmptyTable){
           // 将表格宽度设置为跟表头一样的宽度，使之可以出现底部滚动条，以便滚动查看所有字段
-          mainTableElem.width(that.getInnerWidth(headerTableElem));
+          mainTableElem.width(that.getContentWidth(headerTableElem));
         }
         // 二次校验，如果仍然出现横向滚动条（通常是 1px 的误差导致）
         // 不同屏幕分辨率、缩放水平以及浏览器渲染差异，可能会触发这个问题 
@@ -1045,7 +1045,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     if (!isInit && isEmptyTable) {
       // 将表格宽度设置为跟表头一样的宽度，使之可以出现底部滚动条，以便滚动查看所有字段
-      mainTableElem.width(that.getInnerWidth(headerTableElem));
+      mainTableElem.width(that.getContentWidth(headerTableElem));
     } else {
       mainTableElem.width('auto');
     }
@@ -2840,7 +2840,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
    * 获取元素 content 区域宽度值
    * @param {JQuery} elem - 元素的 jQuery 对象
    */
-  Class.prototype.getInnerWidth = function(elem){
+  Class.prototype.getContentWidth = function(elem){
     var that = this;
 
     if(!window.getComputedStyle){
