@@ -9,7 +9,8 @@ layui.define('jquery', function(exports){
   var $ = layui.$;
   var hint = layui.hint();
   var device = layui.device();
-  
+  var tabWheelEvents = 'wheel.lay_tab mousewheel.lay_tab DOMMouseScroll.lay_tab';
+
   var MOD_NAME = 'element';
   var THIS = 'layui-this';
   var SHOW = 'layui-show';
@@ -329,23 +330,31 @@ layui.define('jquery', function(exports){
       titleElem.addClass(SCROLL);
 
       if(checkOverflow){
+        // TODO 计算所有选项卡宽度之和，以规避 float 带来的瑕疵？
+        borderBottomPatch.width('100%');
         borderBottomPatch.width(titleElem.prop('scrollWidth'));
         if(titleElem.find('.'+BAR)[0])return;
+
         var span = $('<span class="layui-unselect layui-tab-bar" '+ STOPE +'><i '+ STOPE +' class="layui-icon">&#xe61a;</i></span>');
         titleElem.append(span);
         tabElem.attr('overflow', '');
 
-        // 不使用 mousewheel，因为要支持滚轮滚动，触摸板，移动设备手势滑动(IE9+)
-        titleElem.off('wheel.lay_tab').on('wheel.lay_tab', function(e){
-          e= e.originalEvent
-          var el = this;
-          e.preventDefault()
-          var direction = Math.abs(e.deltaX) >= Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+        titleElem.off('.lay_tab').on(tabWheelEvents, function(e){
+          e.preventDefault();
+          e= e.originalEvent;
+          var el = $(this);
+          var direction = 0;
+
+          // IE9+，chrome 和 firefox 同时添加 'wheel' 和 'mousewheel' 事件时，只执行 'wheel' 事件
+          if(e.type === 'wheel'){
+            direction = Math.abs(e.deltaX) >= Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+          }else if(e.type === 'mousewheel' ){
+            direction = -e.wheelDelta;
+          }else if(e.type === 'DOMMouseScroll'){
+            direction = e.detail;
+          }
           var distance = 30 * (direction > 0 ? 1 : -1);
-          var offset = el.scrollLeft + distance
-          el.scrollTo({
-            left: offset,
-          })
+          el.scrollLeft(el.scrollLeft() + distance);
         })
       }else{
         titleElem.find('.'+ BAR).remove();

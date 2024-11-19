@@ -1395,7 +1395,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 /* Tab 简洁风格 */.layui-tab-brief > .layui-tab-title .layui-this{color: #16baaa;}
 .layui-tab-brief > .layui-tab-title .layui-this:after
 ,.layui-tab-brief > .layui-tab-more li.layui-this:after{border: none; border-radius: 0; border-bottom: 2px solid #16b777;}
-.layui-tab-brief[overflow] > .layui-tab-title .layui-this:after{top: -1px;}
+.layui-tab-brief[overflow] > .layui-tab-title .layui-this:after{top: 0px;}
 
 /* Tab 卡片风格 */.layui-tab-card{border-width: 1px; border-style: solid; border-radius: 2px; box-shadow: 0 2px 5px 0 rgba(0,0,0,.1);}
 .layui-tab-card > .layui-tab-title{background-color: #fafafa;}
