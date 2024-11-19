@@ -328,6 +328,7 @@ layui.define('jquery', function(exports){
         titleElem.append(borderBottomPatch);
       }
       titleElem.addClass(SCROLL);
+      call.tabUpdateShadowHelper(tabElem, titleElem);
 
       if(checkOverflow){
         // TODO 计算所有选项卡宽度之和，以规避 float 带来的瑕疵？
@@ -355,12 +356,19 @@ layui.define('jquery', function(exports){
           }
           var distance = 30 * (direction > 0 ? 1 : -1);
           el.scrollLeft(el.scrollLeft() + distance);
+          call.tabUpdateShadowHelper(tabElem, el);
         })
       }else{
         titleElem.find('.'+ BAR).remove();
         tabElem.removeAttr('overflow');
         borderBottomPatch.width('100%');
       }
+    }
+    ,tabUpdateShadowHelper: function(targetEl, scrollEl){
+      var scrollLeft = scrollEl.scrollLeft();
+      // 阴影 helper 类
+      targetEl.toggleClass('layui-tab-has-start-shadow', scrollLeft > 0);
+      targetEl.toggleClass('layui-tab-has-end-shadow', scrollLeft < scrollEl.prop('scrollWidth') - scrollEl.outerWidth() - 1);
     }
     
     //点击一级菜单
