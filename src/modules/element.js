@@ -265,8 +265,9 @@ layui.define('jquery', function(exports){
         }
         
         // 当超出可用空间时，tab 是否应在多行之间换行，或者是否开启滚动模式
-        if(typeof othis.attr('lay-nowrap') === 'string'){
-          call.tabNoWrap(othis, spread);
+        var scrollTarget = othis.attr('lay-scrollable');
+        if(typeof scrollTarget === 'string'){
+          call.tabNoWrap(othis, scrollTarget);
         }else{
           call.tabWrap(othis, spread);
         }
@@ -317,7 +318,7 @@ layui.define('jquery', function(exports){
         tabElem.removeAttr('overflow');
       }
     }
-    ,tabNoWrap: function(tabElem, spread){
+    ,tabNoWrap: function(tabElem, scrollTarget){
       var tabElem = tabElem;
       if(typeof tabElem.attr('lay-unauto') === 'string') return;
      
@@ -326,56 +327,50 @@ layui.define('jquery', function(exports){
       var STOPE = 'lay-stope="tabmore"';
       var BORDER_BOTTOM = 'layui-tab-border-bottom-container';
       var titleElem = tabElem.children('.layui-tab-title');
-      var checkOverflow = titleElem.prop('scrollWidth') > titleElem.outerWidth() + 1;
+      var overflowElem = scrollTarget ? $(scrollTarget) : titleElem;
       var borderBottomPatch = titleElem.find('.' + BORDER_BOTTOM);
 
-      // 添加底边框容器，并同步父容器宽度
+      // 添加底边框容器补丁，并同步父容器宽度
       if(!borderBottomPatch[0]){
         borderBottomPatch = $('<div class="'+ BORDER_BOTTOM +'"></div>');
         titleElem.append(borderBottomPatch);
       }
-      titleElem.addClass(SCROLL);
-      call.tabUpdateShadowHelper(tabElem, titleElem);
+      borderBottomPatch.width('100%').width(titleElem.prop('scrollWidth'));
+      call.tabUpdateShadowHelper(overflowElem);
 
-      if(checkOverflow){
-        // TODO 计算所有选项卡宽度之和，以规避 float 带来的瑕疵？
-        borderBottomPatch.width('100%');
-        borderBottomPatch.width(titleElem.prop('scrollWidth'));
-        if(titleElem.find('.'+BAR)[0])return;
+      if(titleElem.find('.'+BAR)[0])return;
 
-        var span = $('<span class="layui-unselect layui-tab-bar" '+ STOPE +'><i '+ STOPE +' class="layui-icon">&#xe61a;</i></span>');
-        titleElem.append(span);
-        tabElem.attr('overflow', '');
+      var barElem = $('<span class="layui-unselect layui-tab-bar" '+ STOPE +'><i '+ STOPE +' class="layui-icon">&#xe61a;</i></span>');
+      titleElem.append(barElem);
+      overflowElem.addClass(SCROLL);
 
-        titleElem.off('.lay_tab').on(tabWheelEvents, function(e){
-          e.preventDefault();
-          e= e.originalEvent;
-          var el = $(this);
-          var direction = 0;
+      overflowElem.off('.lay_tab').on(tabWheelEvents, function(e){
+        e.preventDefault();
+        e= e.originalEvent;
+        var el = $(this);
+        var direction = 0;
 
-          // IE9+，chrome 和 firefox 同时添加 'wheel' 和 'mousewheel' 事件时，只执行 'wheel' 事件
-          if(e.type === 'wheel'){
-            direction = Math.abs(e.deltaX) >= Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-          }else if(e.type === 'mousewheel' ){
-            direction = -e.wheelDelta;
-          }else if(e.type === 'DOMMouseScroll'){
-            direction = e.detail;
-          }
-          var distance = 30 * (direction > 0 ? 1 : -1);
-          el.scrollLeft(el.scrollLeft() + distance);
-          call.tabUpdateShadowHelper(tabElem, el);
-        })
-      }else{
-        titleElem.find('.'+ BAR).remove();
-        tabElem.removeAttr('overflow');
-        borderBottomPatch.width('100%');
-      }
+        // IE9+，chrome 和 firefox 同时添加 'wheel' 和 'mousewheel' 事件时，只执行 'wheel' 事件
+        if(e.type === 'wheel'){
+          direction = Math.abs(e.deltaX) >= Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+        }else if(e.type === 'mousewheel' ){
+          direction = -e.wheelDelta;
+        }else if(e.type === 'DOMMouseScroll'){
+          direction = e.detail;
+        }
+        var distance = 30 * (direction > 0 ? 1 : -1);
+        el.scrollLeft(el.scrollLeft() + distance);
+        call.tabUpdateShadowHelper(el);
+      });
     }
-    ,tabUpdateShadowHelper: function(targetEl, scrollEl){
-      var scrollLeft = scrollEl.scrollLeft();
+    ,tabUpdateShadowHelper: function(overflowElem){
+      // 始终添加到剪切元素的父元素
+      var targetElem = overflowElem.parent();
+
+      var scrollLeft = overflowElem.scrollLeft();
       // 阴影 helper 类
-      targetEl.toggleClass('layui-tab-has-start-shadow', scrollLeft > 0);
-      targetEl.toggleClass('layui-tab-has-end-shadow', scrollLeft < scrollEl.prop('scrollWidth') - scrollEl.outerWidth() - 1);
+      targetElem.toggleClass('layui-tab-has-start-shadow', scrollLeft > 0);
+      targetElem.toggleClass('layui-tab-has-end-shadow', scrollLeft < overflowElem.prop('scrollWidth') - overflowElem.outerWidth() - 1);
     }
     
     //点击一级菜单
