@@ -36,8 +36,8 @@ layui.define('jquery', function(exports){
   Element.prototype.tabAdd = function(filter, options){
     var tabElem = $('.layui-tab[lay-filter='+ filter +']');
     var titElem = tabElem.children(TITLE);
-    var barElem = titElem.children('.layui-tab-bar');
-    var contElem = tabElem.children('.layui-tab-content');
+    var contentTarget = tabElem.attr('lay-for');
+    var contElem = contentTarget ? $(contentTarget) : tabElem.children('.layui-tab-content');
     var li = '<li'+ function(){
       var layAttr = [];
       layui.each(options, function(key, value){
@@ -48,7 +48,7 @@ layui.define('jquery', function(exports){
       return layAttr.join(' ');
     }() +'>'+ (options.title || 'unnaming') +'</li>';
     
-    barElem[0] ? barElem.before(li) : titElem.append(li);
+    titElem.children('li').eq(-1).after(li);
     contElem.append('<div class="layui-tab-item" ' + (options.id ? 'lay-id="' + options.id + '"' : '') + '>'+ (options.content || '') +'</div>');
     // call.hideTabMore(true);
     // 是否添加即切换
@@ -135,9 +135,13 @@ layui.define('jquery', function(exports){
       var parents = options.headerElem 
         ? othis.parent() 
       : othis.parents('.layui-tab').eq(0);
-      var item = options.bodyElem 
+      // 自定义 content 区域位置
+      var contentTarget = parents.attr('lay-for');
+      var item = options.bodyElem
         ? $(options.bodyElem) 
-      : parents.children('.layui-tab-content').children('.layui-tab-item');
+        : contentTarget
+        ? $(contentTarget).children('.layui-tab-item') 
+        : parents.children('.layui-tab-content').children('.layui-tab-item');
       var elemA = othis.find('a');
       var isJump = elemA.attr('href') !== 'javascript:;' && elemA.attr('target') === '_blank'; // 是否存在跳转
       var unselect = typeof othis.attr('lay-unselect') === 'string'; // 是否禁用选中
@@ -190,7 +194,10 @@ layui.define('jquery', function(exports){
       var li = othis || $(this).parent();
       var index = li.parent().children('li').index(li);
       var tabElem = li.closest('.layui-tab');
-      var item = tabElem.children('.layui-tab-content').children('.layui-tab-item');
+      var contentTarget = tabElem.attr('lay-for');
+      var item = contentTarget 
+        ? $(contentTarget).children('.layui-tab-item')
+        : tabElem.children('.layui-tab-content').children('.layui-tab-item');
       var filter = tabElem.attr('lay-filter');
       var hasId = li.attr('lay-id');
 
