@@ -35,9 +35,13 @@
     <button class="layui-btn" lay-on="close">close</button>
   </div>
 
-  <div class="layui-bg-gray" style="margin-top: 30px; width: 100%; height: 300px; text-align: center;" id="demo20">
+  <div class="layui-bg-gray" style="margin-top: 30px; width: 100%; height: 300px; text-align: center;" id="ID-dropdown-demo-contextmenu">
     <span class="layui-font-gray" style="position: relative; top:50%;">鼠标右键菜单</span>
   </div>
+  <button class="layui-btn" style="margin-top: 15px;" lay-on="contextmenu">
+    开启全局右键菜单
+  </button>
+
 </div>
 
 
@@ -258,9 +262,9 @@ layui.use('dropdown', function () {
     }
   });
 
-  //右键
+  // 右键
   dropdown.render({
-    elem: document, //'#demo20' //也可绑定到 document，从而重置整个右键
+    elem: '#ID-dropdown-demo-contextmenu', // 也可绑定到 document，从而重置整个右键
     trigger: 'contextmenu', //contextmenu
     isAllowSpread: false,
     //,style: 'width: 200px'
@@ -316,6 +320,28 @@ layui.use('dropdown', function () {
     }
   });
 
+  util.on({
+    // 改变触发右键菜单的目标元素
+    contextmenu: function(othis){
+      var ID = 'ID-dropdown-demo-contextmenu';
+      if (!othis.data('open')) {
+        dropdown.reload(ID, {
+          elem: document // 设置全局元素右键
+        });
+
+        othis.html('取消全局右键菜单');
+        othis.data('open', true);
+      } else {
+        dropdown.reload(ID, {
+          elem: '#'+ ID // 设置局部元素右键
+        });
+
+        othis.html('开启全局右键菜单');
+        othis.data('open', false);
+      }
+    }
+  });
+
   dropdown.render({
     elem: '#testopen',
     id: 'testopen',
@@ -330,8 +356,7 @@ layui.use('dropdown', function () {
     close: function(){
       dropdown.close('testopen')
     }
-  },
-  {trigger: 'mouseenter'});
+  });
 
   return;
 

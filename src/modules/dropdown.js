@@ -15,7 +15,6 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   
   // 模块名
   var MOD_NAME = 'dropdown';
-  var MOD_INDEX = 'layui_'+ MOD_NAME +'_index'; // 模块索引名
   var MOD_ID = 'lay-' + MOD_NAME + '-id';
 
   // 外部接口
@@ -47,8 +46,6 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     var that = this;
     var options = that.config;
     var id = options.id;
-
-    thisModule.that[id] = that; // 记录当前实例对象
 
     return {
       config: options,
@@ -108,7 +105,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     delay: [200, 300], // 延时显示或隐藏的毫秒数，若为 number 类型，则表示显示和隐藏的延迟时间相同，trigger 为 hover 时才生效
     shade: 0, // 遮罩
     accordion: false, // 手风琴效果，仅菜单组生效。基础菜单需要在容器上追加 'lay-accordion' 属性。
-    closeOnClick: false // 面板打开后，再次点击目标元素时是否关闭面板。行为取决于所使用的触发事件类型
+    closeOnClick: true // 面板打开后，再次点击目标元素时是否关闭面板。行为取决于所使用的触发事件类型
   };
   
   // 重载实例
@@ -138,10 +135,9 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     $.extend(options, lay.options(elem[0]));
 
     // 若重复执行 render，则视为 reload 处理
-    if(!rerender && elem[0] && elem.attr(MOD_ID)){
+    if(!rerender && elem.attr(MOD_ID)){
       var newThat = thisModule.getThis(elem.attr(MOD_ID));
       if(!newThat) return;
-
       return newThat.reload(options, type);
     }
 
@@ -152,17 +148,26 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       elem.attr('id') || that.index
     );
 
-    elem.attr(MOD_ID, options.id);
+    thisModule.that[options.id] = that; // 记录当前实例对象
+    elem.attr(MOD_ID, options.id); // 目标元素已渲染过的标记
 
     // 初始化自定义字段名
     options.customName = $.extend({}, dropdown.config.customName, options.customName);
 
-    if(options.show || (type === 'reloadData' && that.elemView && $('body').find(that.elemView.get(0)).length)) that.render(rerender, type); //初始即显示或者面板弹出之后执行了刷新数据
-    that.events(); // 事件
+    // 若传入 hover，则解析为 mouseenter
+    if (options.trigger === 'hover') {
+      options.trigger = 'mouseenter';
+    }
+
+    // 初始即显示或者面板弹出之后执行了刷新数据
+    if(options.show || (type === 'reloadData' && that.mainElem && $('body').find(that.mainElem.get(0)).length)) that.render(type);
+
+    // 事件
+    that.events();
   };
   
   // 渲染
-  Class.prototype.render = function(rerender, type){
+  Class.prototype.render = function(type) {
     var that = this;
     var options = that.config;
     var customName = options.customName;
@@ -276,42 +281,36 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     };
     
     // 主模板
-    var TPL_MAIN = ['<div class="layui-dropdown layui-border-box layui-panel layui-anim layui-anim-downbit" ' + MOD_ID + '="' + options.id + '">'
-    ,'</div>'].join('');
-    
-    // 如果是右键事件，则每次触发事件时，将允许重新渲染
-    if(options.trigger === 'contextmenu' || lay.isTopElem(options.elem[0])) rerender = true;
-    
-    // 判断是否已经打开了下拉菜单面板
-    if(!rerender && options.elem.data(MOD_INDEX +'_opened')) return;
+    var TPL_MAIN = [
+      '<div class="layui-dropdown layui-border-box layui-panel layui-anim layui-anim-downbit" ' + MOD_ID + '="' + options.id + '">',
+      '</div>'
+    ].join('');
 
-    // 记录模板对象
-    that.elemView = $('.' + STR_ELEM + '[' + MOD_ID + '="' + options.id + '"]');
-    if (type === 'reloadData' && that.elemView.length) {
-      that.elemView.html(options.content || getDefaultView());
-    } else {
-      that.elemView = $(TPL_MAIN);
-      that.elemView.append(options.content || getDefaultView());
+    // 重载或插入面板内容
+    var content = options.content || getDefaultView();
+    var mainElemExisted = $('.' + STR_ELEM + '[' + MOD_ID + '="' + options.id + '"]');
+    if (type === 'reloadData' && mainElemExisted.length) { // // 是否仅重载数据
+      var mainElem = that.mainElem = mainElemExisted;
+      mainElemExisted.html(content);
+    } else { // 常规渲染
+      var mainElem = that.mainElem = $(TPL_MAIN);
+      mainElem.append(content);
 
       // 初始化某些属性
-      if(options.className) that.elemView.addClass(options.className);
-      if(options.style) that.elemView.attr('style', options.style);
+      mainElem.addClass(options.className);
+      mainElem.attr('style', options.style);
 
-      // 记录当前执行的实例索引
-      dropdown.thisId = options.id;
-
-      // 插入视图
-      that.remove(); // 移除非当前绑定元素的面板
-      elemBody.append(that.elemView);
-      options.elem.data(MOD_INDEX +'_opened', true);
+      // 辞旧迎新
+      that.remove(dropdown.thisId);
+      elemBody.append(mainElem);
 
       // 遮罩
-      var shade = options.shade ? ('<div class="'+ STR_ELEM_SHADE +'" style="'+ ('z-index:'+ (that.elemView.css('z-index')-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
-      that.elemView.before(shade);
+      var shade = options.shade ? ('<div class="'+ STR_ELEM_SHADE +'" style="'+ ('z-index:'+ (mainElem.css('z-index')-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
+      mainElem.before(shade);
 
       // 如果是鼠标移入事件，则鼠标移出时自动关闭
       if(options.trigger === 'mouseenter'){
-        that.elemView.on('mouseenter', function(){
+        mainElem.on('mouseenter', function(){
           clearTimeout(thisModule.timer);
         }).on('mouseleave', function(){
           that.delayRemove();
@@ -319,18 +318,16 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       }
     }
 
-    // 坐标定位
-    that.position();
-    thisModule.prevElem = that.elemView; // 记录当前打开的元素，以便在下次关闭
-    thisModule.prevElem.data('prevElem', options.elem); // 将当前绑定的元素，记录在打开元素的 data 对象中
-    
+    that.position(); // 定位坐标
+    dropdown.thisId = options.id; // 当前打开的面板 id
+
     // 阻止全局事件
-    that.elemView.find('.layui-menu').on(clickOrMousedown, function(e){
+    mainElem.find('.layui-menu').on(clickOrMousedown, function(e){
       layui.stope(e);
     });
 
     // 触发菜单列表事件
-    that.elemView.find('.layui-menu li').on('click', function(e){
+    mainElem.find('.layui-menu li').on('click', function(e){
       var othis = $(this);
       var data = othis.data('item') || {};
       var isChild = data[customName.children] && data[customName.children].length > 0;
@@ -350,7 +347,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     });
     
     // 触发菜单组展开收缩
-    that.elemView.find(STR_GROUP_TITLE).on('click', function(e){
+    mainElem.find(STR_GROUP_TITLE).on('click', function(e){
       var othis = $(this);
       var elemGroup = othis.parent();
       var data = elemGroup.data('item') || {};
@@ -361,10 +358,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     });
 
     // 组件打开完毕的事件
-    typeof options.ready === 'function' && options.ready(
-      that.elemView, 
-      options.elem
-    );
+    typeof options.ready === 'function' && options.ready(mainElem, options.elem);
   };
   
   // 位置定位
@@ -372,7 +366,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     var that = this;
     var options = that.config;
     
-    lay.position(options.elem[0], that.elemView[0], {
+    lay.position(options.elem[0], that.mainElem[0], {
       position: options.position,
       e: that.e,
       clickType: options.trigger === 'contextmenu' ? 'right' : null,
@@ -380,25 +374,19 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     });
   };
   
-  // 删除视图
-  Class.prototype.remove = function(){
+  // 移除面板
+  Class.prototype.remove = function(id) {
     var that = this;
     var options = that.config;
-    var prevContentElem = thisModule.prevElem;
-    
-    // 若存在已打开的面板元素，则移除
-    if(prevContentElem){
-      var prevId = prevContentElem.attr(MOD_ID);
-      var prevTriggerElem = prevContentElem.data('prevElem');
-      var prevInstance = thisModule.getThis(prevId);
-      var prevOnClose = prevInstance.config.close;
-      
-      prevTriggerElem && prevTriggerElem.data(MOD_INDEX +'_opened', false);
-      prevContentElem.remove();
-      delete thisModule.prevElem;
-      typeof prevOnClose === 'function' && prevOnClose.call(prevInstance.config, prevTriggerElem);
+    var mainElem = $('.' + STR_ELEM + '[' + MOD_ID + '="' + (id || options.id) + '"]');
+
+    // 移除面板
+    if (mainElem[0]) {
+      mainElem.prev('.' + STR_ELEM_SHADE).remove(); // 先移除遮罩
+      mainElem.remove();
+      delete dropdown.thisId;
+      typeof options.close === 'function' && options.close(options.elem);
     }
-    lay('.' + STR_ELEM_SHADE).remove();
   };
 
   Class.prototype.normalizedDelay = function(){
@@ -412,7 +400,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     }
   }
   
-  // 延迟删除视图
+  // 延迟移除面板
   Class.prototype.delayRemove = function(){
     var that = this;
     var options = that.config;
@@ -427,40 +415,44 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   Class.prototype.events = function(){
     var that = this;
     var options = that.config;
-    
-    // 若传入 hover，则解析为 mouseenter
-    if(options.trigger === 'hover') options.trigger = 'mouseenter';
-
-    // 解除上一个事件
-    if(that.prevElem) that.prevElem.off(options.trigger, that.prevElemCallback);
 
     // 是否鼠标移入时触发
     var isMouseEnter = options.trigger === 'mouseenter';
-    
-    // 记录被绑定的元素及回调
-    that.prevElem = options.elem;
-    that.prevElemCallback = function(e){
+    var trigger = options.trigger + '.lay_dropdown_render';
+
+    // 始终先解除上一个触发元素的事件（如重载时改变 elem 的情况）
+    if (that.thisEventElem) that.thisEventElem.off(trigger);
+    that.thisEventElem = options.elem;
+
+    // 触发元素事件
+    options.elem.off(trigger).on(trigger, function(e) {
+      if (options.show) return; // 若是直接显示，则不必事件再执行渲染
+
       clearTimeout(thisModule.timer);
       that.e = e;
 
+      // 已存在于页面的主面板
+      var mainElemExisted = $('.' + STR_ELEM + '[' + MOD_ID + '="' + options.id + '"]');
+      var opened = mainElemExisted.attr(MOD_ID) == options.id; // 主面板是否已打开
+
       // 若为鼠标移入事件，则延迟触发
-      if(isMouseEnter){
-        thisModule.timer = setTimeout(function(){
-          that.render();
-        }, that.normalizedDelay().show)
-      }else{
-        if(options.closeOnClick && options.elem.data(MOD_INDEX +'_opened') && options.trigger === 'click'){
+      if (isMouseEnter) {
+        if (!opened) {
+          thisModule.timer = setTimeout(function(){
+            that.render();
+          }, that.normalizedDelay().show);
+        }
+      } else {
+        // 若为 click 事件，则根据主面板状态，自动切换打开与关闭
+        if (options.closeOnClick && opened && options.trigger === 'click') {
           that.remove();
-        }else{
+        } else {
           that.render();
         }
       }
-      
-      e.preventDefault();
-    };
 
-    // 触发元素事件
-    options.elem.on(options.trigger, that.prevElemCallback);
+      e.preventDefault();
+    });
     
     // 如果是鼠标移入事件
     if (isMouseEnter) {
@@ -475,10 +467,11 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   thisModule.that = {}; // 记录所有实例对象
   
   // 获取当前实例对象
-  thisModule.getThis = function(id){
-    var that = thisModule.that[id];
-    if(!that) hint.error(id ? (MOD_NAME +' instance with ID \''+ id +'\' not found') : 'ID argument required');
-    return that;
+  thisModule.getThis = function(id) {
+    if (id === undefined) {
+      throw new Error('ID argument required');
+    }
+    return thisModule.that[id];
   };
   
   // 设置菜单组展开和收缩状态
@@ -523,7 +516,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       var that = thisModule.getThis(dropdown.thisId);
       if(!that) return;
       
-      if((that.elemView && !that.elemView[0]) || !$('.'+ STR_ELEM)[0]){
+      if((that.mainElem && !that.mainElem[0]) || !$('.'+ STR_ELEM)[0]){
         return false;
       }
       
@@ -551,10 +544,10 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       // 若触发的是绑定的元素，或者属于绑定元素的子元素，则不关闭
       // 满足条件：当前绑定的元素是 body document，或者是鼠标右键事件时，忽略绑定元素
       var isTriggerTarget = !(isTopElem || isCtxMenu) && (options.elem[0] === e.target || options.elem.find(e.target)[0]);
-      var isPanelTarget = that.elemView && (e.target === that.elemView[0] || that.elemView.find(e.target)[0]);
+      var isPanelTarget = that.mainElem && (e.target === that.mainElem[0] || that.mainElem.find(e.target)[0]);
       if(isTriggerTarget || isPanelTarget) return;
       // 处理移动端点击穿透问题
-      if(e.type === 'touchstart' && options.elem.data(MOD_INDEX +'_opened')){
+      if(e.type === 'touchstart'){
         $(e.target).hasClass(STR_ELEM_SHADE) && e.preventDefault();
       }
 
