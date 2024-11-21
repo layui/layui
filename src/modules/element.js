@@ -97,6 +97,12 @@ layui.define('jquery', function(exports){
       });
     });
   };
+
+  Element.prototype.tabScrollTo = function(filter, position){
+    var tabElem = $('.layui-tab[lay-filter='+ filter +']');
+
+    call.tabScrollPosition(tabElem, position || 'start');
+  }
   
   
   // 动态改变进度条
@@ -181,6 +187,8 @@ layui.define('jquery', function(exports){
           item.eq(index).addClass(SHOW).siblings().removeClass(SHOW);
         }
       }
+
+      call.tabScrollPosition(parents, 'active');
       
       layui.event.call(this, MOD_NAME, 'tab('+ filter +')', {
         elem: parents,
@@ -330,19 +338,19 @@ layui.define('jquery', function(exports){
       var overflowElem = scrollTarget ? $(scrollTarget) : titleElem;
       var borderBottomPatch = titleElem.find('.' + BORDER_BOTTOM);
 
-      // 添加底边框容器补丁，并同步父容器宽度
+      // 考虑兼容性不改 DOM 结构，添加底边框容器补丁，以保证底边框宽度与内容宽度一致
       if(!borderBottomPatch[0]){
         borderBottomPatch = $('<div class="'+ BORDER_BOTTOM +'"></div>');
         titleElem.append(borderBottomPatch);
+        overflowElem.addClass(SCROLL);
       }
-      borderBottomPatch.width('100%').width(titleElem.prop('scrollWidth'));
+      borderBottomPatch.width('').width(titleElem.prop('scrollWidth'));
       call.tabUpdateShadowHelper(overflowElem);
 
       if(titleElem.find('.'+BAR)[0])return;
 
       var barElem = $('<span class="layui-unselect layui-tab-bar" '+ STOPE +'><i '+ STOPE +' class="layui-icon">&#xe61a;</i></span>');
       titleElem.append(barElem);
-      overflowElem.addClass(SCROLL);
 
       overflowElem.off('.lay_tab').on(tabWheelEvents, function(e){
         e.preventDefault();
@@ -364,13 +372,78 @@ layui.define('jquery', function(exports){
       });
     }
     ,tabUpdateShadowHelper: function(overflowElem){
-      // 始终添加到剪切元素的父元素
+      // 阴影 helper 类始终添加到剪切容器的父级
       var targetElem = overflowElem.parent();
-
       var scrollLeft = overflowElem.scrollLeft();
-      // 阴影 helper 类
-      targetElem.toggleClass('layui-tab-has-start-shadow', scrollLeft > 0);
-      targetElem.toggleClass('layui-tab-has-end-shadow', scrollLeft < overflowElem.prop('scrollWidth') - overflowElem.outerWidth() - 1);
+
+      targetElem.toggleClass('layui-tab-ping-start', scrollLeft > 0);
+      // -1 是为了处理特殊分辨率或屏幕缩放
+      targetElem.toggleClass('layui-tab-ping-end', scrollLeft < overflowElem.prop('scrollWidth') - overflowElem.prop('clientWidth') - 1);
+    }
+    ,tabScrollPosition: function(tabElem, position){
+      // 暂不考虑垂直方向
+      // 使用 scrollXXX API 而非 CSS 样式 1.兼容IE 2.不必处理边界值
+      var scrollable = tabElem.attr('lay-scrollable');
+      if(typeof scrollable !== 'string') return;
+      var scrollElem = $(scrollable || tabElem.children('.layui-tab-title'));
+      var containerSize = scrollElem.outerWidth();
+      var tabListSize = scrollElem.prop('scrollWidth');
+      var currentOffset = scrollElem.scrollLeft();
+      var maxOffset = tabListSize - containerSize;
+      var minOffset = 0;
+      var newOffset = currentOffset;
+
+      if(position === 'start'){
+        newOffset = minOffset;
+      }else if(position === 'end'){
+        newOffset = maxOffset;
+      }else if(position === 'prev'){
+        newOffset = currentOffset > containerSize ? currentOffset - containerSize : minOffset;
+      }else if(position === 'next'){
+        newOffset = tabListSize - currentOffset > containerSize * 2
+          ? currentOffset + containerSize
+          : maxOffset;
+      }else if(position === 'active-center'){
+        var activeTabElem = tabElem.children('.layui-tab-title').find('.' + THIS);
+        if(!activeTabElem[0]) return;
+        var containerRect = scrollElem[0].getBoundingClientRect();
+        var activeTabRect = activeTabElem[0].getBoundingClientRect();
+
+        // 先贴边，再判断能否居中
+        newOffset = currentOffset - (containerRect.right - activeTabRect.right);
+        if(activeTabElem.outerWidth(true) < containerSize){
+          newOffset += (containerSize / 2) - (activeTabElem.outerWidth(true) / 2);
+        }
+      }else if(position === 'active'){
+        // 活动选项卡的前一个或后一个选项卡超出 tab 边界且可以同时显示时，以超出边界的选项卡为准贴边修正
+        var activeTabElem = tabElem.children('.layui-tab-title').find('.' + THIS);
+        if(!activeTabElem[0]) return;
+        var containerRect = scrollElem[0].getBoundingClientRect();
+        var activeTabRect = activeTabElem[0].getBoundingClientRect();
+
+        var shouldNext = activeTabRect.left + activeTabElem.outerWidth(true) / 2 > containerRect.left + containerSize / 2;
+        var checkElem = activeTabElem[shouldNext ? 'next' : 'prev']('li');
+        if(checkElem[0] && (checkElem.outerWidth(true) + activeTabElem.outerWidth(true) < containerSize)){
+          activeTabRect = checkElem[0].getBoundingClientRect();
+        }
+
+        // 尽量右贴边以显示关闭按钮
+        if(activeTabRect.left < containerRect.left) {
+          newOffset = currentOffset - (containerRect.left - activeTabRect.left);
+        }
+        if(activeTabRect.right > containerRect.right) {
+          newOffset = currentOffset - (containerRect.right - activeTabRect.right);
+        }
+      }
+
+      scrollElem.animate(
+        {scrollLeft: newOffset}, 
+        100, 
+        'linear', 
+        function(){ 
+          call.tabUpdateShadowHelper(scrollElem); 
+        }
+      );
     }
     
     //点击一级菜单
