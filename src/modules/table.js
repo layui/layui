@@ -447,7 +447,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     // 让表格平铺
     that.fullSize();
-    that.setColsWidth();
+    that.setColsWidth({isInit: true});
 
     that.pullData(that.page); // 请求数据
     that.events(); // 事件
@@ -487,17 +487,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         var isNone;
         parent = parent || options.elem.parent();
 
-        if(!window.getComputedStyle){
-          // IE 中的 `currentStyle` 获取未显式设置的宽高时会得到 'auto'，jQuery 中有一些 hack 方法获取准确值
-          width = parent.width();
-        }else{
-          var size = that.getElementSize(parent[0]);
-          // IE BUG
-          // border-box: getComputedStyle 得到的 width/height 是按照 content-box 计算出来的
-          width = size.boxSizing === 'border-box' && !lay.ie
-            ? size.width - size.paddingLeft - size.paddingRight - size.borderLeftWidth - size.borderRightWidth
-            : size.width
-        }
+        width = that.getContentWidth(parent);
+
         try {
           isNone = parent.css('display') === 'none';
         } catch(e){}
@@ -907,7 +898,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   };
 
   // 动态分配列宽
-  Class.prototype.setColsWidth = function(){
+  Class.prototype.setColsWidth = function(opt){
     var that = this;
     var options = that.config;
     var colNums = 0; // 列个数
@@ -917,6 +908,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var cntrWidth = that.setInit('width');
     var borderWidth = parseFloat(layui.getStyle(that.elem[0], 'border-left-width'));
     var lastSpreadCol;
+    var headerTableElem = that.layHeader.first().children('table');
+    var mainTableElem = that.layMain.find('table');
+    var isEmptyTable = that.layMain.find('tbody').is(":empty");
+    var isInit = opt && opt.isInit;
 
     // 统计列个数和最后一个分配宽度的列
     that.eachCols(function(i, item){
@@ -989,15 +984,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     // 记录自动列数
     that.autoColNums = autoColNums = autoColNums > 0 ? autoColNums : 0;
 
-    // 如果表格内容为空（无数据 或 请求异常）
-    if (that.layMain.find('tbody').is(":empty")) {
-      // 将表格宽度设置为跟表头一样的宽度，使之可以出现底部滚动条，以便滚动查看所有字段
-      var headerWidth = that.layHeader.first().children('table').width()
-      that.layMain.find('table').width(headerWidth);
-    } else {
-      that.layMain.find('table').width('auto');
-    }
-
     var pixelsForLastCol = cntrWidth;
     that.eachCols(function(i3, item3){
       var minWidth = item3.minWidth || options.cellMinWidth;
@@ -1045,12 +1031,23 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         var newWidth = Math.max(Math.min(pixelsForLastCol, maxWidth), minWidth);
         item.style.width = newWidth + 'px';
 
+        if (!isInit && isEmptyTable){
+          // 将表格宽度设置为跟表头一样的宽度，使之可以出现底部滚动条，以便滚动查看所有字段
+          mainTableElem.width(that.getContentWidth(headerTableElem));
+        }
         // 二次校验，如果仍然出现横向滚动条（通常是 1px 的误差导致）
         // 不同屏幕分辨率、缩放水平以及浏览器渲染差异，可能会触发这个问题 
         if(that.layMain.prop('offsetHeight') > that.layMain.prop('clientHeight')){
           item.style.width = (parseFloat(item.style.width) - borderWidth) + 'px';
         }
       });
+    }
+
+    if (!isInit && isEmptyTable) {
+      // 将表格宽度设置为跟表头一样的宽度，使之可以出现底部滚动条，以便滚动查看所有字段
+      mainTableElem.width(that.getContentWidth(headerTableElem));
+    } else {
+      mainTableElem.width('auto');
     }
 
     that.setGroupWidth();
@@ -2846,6 +2843,26 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       marginBottom: parseFloat(style.marginBottom || '0'),
       marginLeft: parseFloat(style.marginLeft || '0'),
       boxSizing: style.boxSizing
+    }
+  }
+
+  /**
+   * 获取元素 content 区域宽度值
+   * @param {JQuery} elem - 元素的 jQuery 对象
+   */
+  Class.prototype.getContentWidth = function(elem){
+    var that = this;
+
+    if(!window.getComputedStyle){
+      // IE 中的 `currentStyle` 获取未显式设置的宽高时会得到 'auto'，jQuery 中有一些 hack 方法获取准确值
+      return elem.width();
+    }else{
+      var size = that.getElementSize(elem[0]);
+      // IE BUG
+      // border-box: getComputedStyle 得到的 width/height 是按照 content-box 计算出来的
+      return (size.boxSizing === 'border-box' && !lay.ie)
+        ? size.width - size.paddingLeft - size.paddingRight - size.borderLeftWidth - size.borderRightWidth
+        : size.width
     }
   };
 
