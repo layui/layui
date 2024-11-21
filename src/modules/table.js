@@ -20,7 +20,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   var table = {
     config: { // 全局配置项
       checkName: 'LAY_CHECKED', // 是否选中状态的特定字段名
-      indexName: 'LAY_INDEX', // 初始下标索引名，用于恢复当前页表格排序
+      indexName: 'LAY_INDEX', // 下标索引
+      initIndexName: 'LAY_INDEX_INIT', // 初始下标索引名，仅用于内部恢复当前页表格排序
       numbersName: 'LAY_NUM', // 序号
       disabledName: 'LAY_DISABLED' // 禁用状态的特定字段名
     },
@@ -1312,8 +1313,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       // 加入序号保留字段
       item1[table.config.numbersName] = numbers;
 
-      // 记录下标索引，用于恢复排序
-      if(!sort) item1[table.config.indexName] = i1;
+      // 记录下标，
+      item1[table.config.indexName] = i1;
+      if(!sort) item1[table.config.initIndexName] = i1; // 记录初始状态下标，仅用于内部恢复当前页表格排序
 
       // 遍历表头
       that.eachCols(function(i3, item3){
@@ -1460,6 +1462,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           reloadType: opts.type
         });
       }
+
       that.getTrHtml(data, sort, curr, {
         trs: trs,
         trs_fixed: trs_fixed,
@@ -1894,7 +1897,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       } else if(opts.type === 'desc'){ //降序
         thisData = layui.sort(data, field, true, true);
       } else { // 清除排序
-        thisData = layui.sort(data, table.config.indexName, null, true);
+        thisData = layui.sort(data, table.config.initIndexName, null, true);
         delete that.sortKey;
         delete options.initSort;
       }
@@ -3300,6 +3303,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     data = $.extend({}, data);
     delete data[table.config.checkName];
     delete data[table.config.indexName];
+    delete data[table.config.initIndexName];
     delete data[table.config.numbersName];
     delete data[table.config.disabledName];
     return data;
