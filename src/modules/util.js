@@ -425,10 +425,7 @@ layui.define('jquery', function(exports){
       var dataCache = elem.data(DATANAME);
 
       // 根据 attr 和 trigger 的组合作为 key
-      var getKey = function(attr) {
-        return attr + '_' + options.trigger;
-      };
-      var key = getKey(attr);
+      var key = attr + '_' + options.trigger;
 
       // 根据 key 记录事件集合
       events = dataCache.events[key] = $.extend(true, dataCache.events[key], events);
