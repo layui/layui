@@ -84,6 +84,8 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   
   var STR_GROUP_TITLE = '.'+ STR_ITEM_GROUP + '>.'+ STR_MENU_TITLE;
 
+  var bodyElem = $('body');
+
   // 构造器
   var Class = function(options){
     var that = this;
@@ -160,7 +162,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     }
 
     // 初始即显示或者面板弹出之后执行了刷新数据
-    if(options.show || (type === 'reloadData' && that.mainElem && $('body').find(that.mainElem.get(0)).length)) that.render(type);
+    if(options.show || (type === 'reloadData' && that.mainElem && bodyElem.find(that.mainElem.get(0)).length)) that.render(type);
 
     // 事件
     that.events();
@@ -171,7 +173,6 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     var that = this;
     var options = that.config;
     var customName = options.customName;
-    var elemBody = $('body');
     
     // 默认菜单内容
     var getDefaultView = function(){
@@ -302,7 +303,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
 
       // 辞旧迎新
       that.remove(dropdown.thisId);
-      elemBody.append(mainElem);
+      bodyElem.append(mainElem);
 
       // 遮罩
       var shade = options.shade ? ('<div class="'+ STR_ELEM_SHADE +'" style="'+ ('z-index:'+ (mainElem.css('z-index')-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
