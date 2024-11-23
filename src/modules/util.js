@@ -433,7 +433,7 @@ layui.define('jquery', function(exports){
 
       // 清除事件委托，避免重复绑定
       var trigger = options.trigger + '.lay_util_on';
-      elem.off(options.trigger, attrSelector);
+      elem.off(trigger, attrSelector);
 
       // 绑定事件委托
       elem.on(trigger, attrSelector, function(e) {
