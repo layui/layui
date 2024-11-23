@@ -15,6 +15,8 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   
   // 模块名
   var MOD_NAME = 'dropdown';
+  var MOD_INDEX = 'layui_'+ MOD_NAME +'_index'; // 模块索引名
+  var MOD_INDEX_OPENED = MOD_INDEX + '_opened';
   var MOD_ID = 'lay-' + MOD_NAME + '-id';
 
   // 外部接口
@@ -304,6 +306,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       // 辞旧迎新
       that.remove(dropdown.thisId);
       bodyElem.append(mainElem);
+      options.elem.data(MOD_INDEX_OPENED, true); // 面板已打开的标记
 
       // 遮罩
       var shade = options.shade ? ('<div class="'+ STR_ELEM_SHADE +'" style="'+ ('z-index:'+ (mainElem.css('z-index')-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
@@ -385,6 +388,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     if (mainElem[0]) {
       mainElem.prev('.' + STR_ELEM_SHADE).remove(); // 先移除遮罩
       mainElem.remove();
+      options.elem.removeData(MOD_INDEX_OPENED);
       delete dropdown.thisId;
       typeof options.close === 'function' && options.close(options.elem);
     }
@@ -427,14 +431,11 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
 
     // 触发元素事件
     options.elem.off(trigger).on(trigger, function(e) {
-      if (options.show) return; // 若是直接显示，则不必事件再执行渲染
-
       clearTimeout(thisModule.timer);
       that.e = e;
 
-      // 已存在于页面的主面板
-      var mainElemExisted = $('.' + STR_ELEM + '[' + MOD_ID + '="' + options.id + '"]');
-      var opened = mainElemExisted.attr(MOD_ID) == options.id; // 主面板是否已打开
+      // 主面板是否已打开
+      var opened = options.elem.data(MOD_INDEX_OPENED);
 
       // 若为鼠标移入事件，则延迟触发
       if (isMouseEnter) {
@@ -548,7 +549,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       var isPanelTarget = that.mainElem && (e.target === that.mainElem[0] || that.mainElem.find(e.target)[0]);
       if(isTriggerTarget || isPanelTarget) return;
       // 处理移动端点击穿透问题
-      if(e.type === 'touchstart'){
+      if(e.type === 'touchstart' && options.elem.data(MOD_INDEX_OPENED)){
         $(e.target).hasClass(STR_ELEM_SHADE) && e.preventDefault();
       }
 
