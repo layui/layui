@@ -9,12 +9,12 @@ layui.define('jquery', function(exports){
   var $ = layui.$;
   var hint = layui.hint();
   var device = layui.device();
-  var tabWheelEvents = 'wheel.lay_tab mousewheel.lay_tab DOMMouseScroll.lay_tab';
 
   var MOD_NAME = 'element';
   var THIS = 'layui-this';
   var SHOW = 'layui-show';
   var TITLE = '.layui-tab-title';
+  var TAB_WHEEL = 'wheel.lay_tab mousewheel.lay_tab DOMMouseScroll.lay_tab';
   
   var Element = function(){
     this.config = {};
@@ -47,8 +47,8 @@ layui.define('jquery', function(exports){
       if(layAttr.length > 0) layAttr.unshift(''); //向前插，预留空格
       return layAttr.join(' ');
     }() +'>'+ (options.title || 'unnaming') +'</li>';
-    
-    titElem.children('li').eq(-1).after(li);
+    var titleList = titElem.children('li');
+    titleList.length ? titleList.eq(-1).after(li) : titElem.append(li);
     contElem.append('<div class="layui-tab-item" ' + (options.id ? 'lay-id="' + options.id + '"' : '') + '>'+ (options.content || '') +'</div>');
     // call.hideTabMore(true);
     // 是否添加即切换
@@ -352,7 +352,7 @@ layui.define('jquery', function(exports){
       var barElem = $('<span class="layui-unselect layui-tab-bar" '+ STOPE +'><i '+ STOPE +' class="layui-icon">&#xe61a;</i></span>');
       titleElem.append(barElem);
 
-      overflowElem.off('.lay_tab').on(tabWheelEvents, function(e){
+      overflowElem.off('.lay_tab').on(TAB_WHEEL, function(e){
         e.preventDefault();
         e= e.originalEvent;
         var el = $(this);
@@ -382,7 +382,7 @@ layui.define('jquery', function(exports){
     }
     ,tabScrollPosition: function(tabElem, position){
       // 暂不考虑垂直方向
-      // 使用 scrollXXX API 而非 CSS 样式 1.兼容IE 2.不必处理边界值
+      // 使用 scrollXX API 而非 CSS 样式 1.兼容IE 2.不必处理边界值
       var scrollable = tabElem.attr('lay-scrollable');
       if(typeof scrollable !== 'string') return;
       var scrollElem = $(scrollable || tabElem.children('.layui-tab-title'));
