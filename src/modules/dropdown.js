@@ -291,8 +291,8 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
 
     // 重载或插入面板内容
     var content = options.content || getDefaultView();
-    var mainElemExisted = $('.' + STR_ELEM + '[' + MOD_ID + '="' + options.id + '"]');
-    if (type === 'reloadData' && mainElemExisted.length) { // // 是否仅重载数据
+    var mainElemExisted = thisModule.findMainElem(options.id);
+    if (type === 'reloadData' && mainElemExisted.length) { // 是否仅重载数据
       var mainElem = that.mainElem = mainElemExisted;
       mainElemExisted.html(content);
     } else { // 常规渲染
@@ -380,11 +380,14 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   
   // 移除面板
   Class.prototype.remove = function(id) {
-    var that = this;
-    var options = that.config;
-    var mainElem = $('.' + STR_ELEM + '[' + MOD_ID + '="' + (id || options.id) + '"]');
+    id = id || this.config.id;
+    var that = thisModule.getThis(id); // 根据 id 查找对应的实例
+    if (!that) return;
 
-    // 移除面板
+    var options = that.config;
+    var mainElem = thisModule.findMainElem(id);
+
+    // 若存在已打开的面板元素，则移除
     if (mainElem[0]) {
       mainElem.prev('.' + STR_ELEM_SHADE).remove(); // 先移除遮罩
       mainElem.remove();
@@ -474,6 +477,11 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       throw new Error('ID argument required');
     }
     return thisModule.that[id];
+  };
+
+  // 根据 id 从页面查找组件主面板元素
+  thisModule.findMainElem = function(id) {
+    return $('.' + STR_ELEM + '[' + MOD_ID + '="' + id + '"]');
   };
   
   // 设置菜单组展开和收缩状态
