@@ -9,8 +9,8 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
-<h2 id="v2.9.19" class="ws-anchor">
-  v2.9.19
+<h2 id="v2.9.20" class="ws-anchor">
+  v2.9.20
   <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
   <span class="layui-badge-rim">2024-11-25</span>
 </h2>
@@ -30,7 +30,11 @@ toc: true
 - #### util
   - 修复 `util.on()` 多个方法并列使用时，同一委托元素的 `trigger` 冲突问题 #2348 @sentsim
 
-### 下载： [layui-v2.9.19.zip](https://gitee.com/layui/layui/attach_files/1972535/download)
+### 下载： [layui-v2.9.20.zip](https://gitee.com/layui/layui/attach_files/1973261/download)
+
+---
+
+😹 `2.9.19` 版本因为存在一个小缺陷而被跳过
 
 ---
 
