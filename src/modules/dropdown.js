@@ -86,8 +86,6 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
   
   var STR_GROUP_TITLE = '.'+ STR_ITEM_GROUP + '>.'+ STR_MENU_TITLE;
 
-  var bodyElem = $('body');
-
   // 构造器
   var Class = function(options){
     var that = this;
@@ -146,6 +144,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     }
 
     options.elem = $(options.elem);
+    options.target = $('body'); // 后续考虑开放 target 元素
     
     // 初始化 id 属性 - 优先取 options > 元素 id > 自增索引
     options.id = 'id' in options ? options.id : (
@@ -164,7 +163,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
     }
 
     // 初始即显示或者面板弹出之后执行了刷新数据
-    if(options.show || (type === 'reloadData' && that.mainElem && bodyElem.find(that.mainElem.get(0)).length)) that.render(type);
+    if(options.show || (type === 'reloadData' && that.mainElem && options.target.find(that.mainElem.get(0)).length)) that.render(type);
 
     // 事件
     that.events();
@@ -305,7 +304,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
 
       // 辞旧迎新
       that.remove(dropdown.thisId);
-      bodyElem.append(mainElem);
+      options.target.append(mainElem);
       options.elem.data(MOD_INDEX_OPENED, true); // 面板已打开的标记
 
       // 遮罩
