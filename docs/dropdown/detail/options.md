@@ -72,7 +72,7 @@
 <td>boolean</td>
 <td>
 
-`false`
+`true`
 
 </td>
     </tr>
