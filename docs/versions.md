@@ -9,10 +9,33 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+<h2 id="v2.9.19" class="ws-anchor">
+  v2.9.19
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+  <span class="layui-badge-rim">2024-11-25</span>
+</h2>
+
+- #### table
+  - 加强 固定列的滚动体验使得其更接近原生的平滑 #2335 @Sight-wcg
+  - 改进 表格自动调整大小的处理，以修复一些边缘报错问题 #2284 @Sight-wcg
+  - 修复 由 #2250 造成的右侧固定列偏移问题 #2318 @Sight-wcg
+  - 修复 设置列宽仍然存在的一些边缘情况 #2332 @Sight-wcg
+  - 修复 排序且重载后 `table.cache` 数据中的 `LAY_INDEX` 丢失的问题 #2340 @sentsim
+- #### layer
+  - 新增 iframe 弹层在初始加载时的 loading 动画 #2330 @sentsim
+- #### dropdown
+  - 重构 面板打开与关闭的逻辑 #2349 @sentsim
+  - 调整 `closeOnClick` 选项默认值为 `true`，即点击目标元素时自动切换打开与关闭 #2349 @sentsim
+  - 修复 在元素自定义事件中创建实例并立刻显示的报错问题 #2349 @sentsim
+- #### util
+  - 修复 `util.on()` 多个方法并列使用时，同一委托元素的 `trigger` 冲突问题 #2348 @sentsim
+
+### 下载： [layui-v2.9.19.zip](https://gitee.com/layui/layui/attach_files/1972535/download)
+
+---
 
 <h2 id="v2.9.18" class="ws-anchor">
   v2.9.18
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
   <span class="layui-badge-rim">2024-10-14</span>
 </h2>
 
