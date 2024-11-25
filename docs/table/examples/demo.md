@@ -316,11 +316,19 @@ layui.use(['table', 'dropdown'], function(){
             });
           } 
         },
+        id: 'dropdown-table-tool',
         align: 'right', // 右对齐弹出
         style: 'box-shadow: 1px 1px 10px rgb(0 0 0 / 12%);' // 设置额外样式
-      })
+      });
     }
   });
+
+  // table 滚动时移除内部弹出的元素
+  var tableInst = table.getOptions('test');
+  tableInst.elem.next().find('.layui-table-main').on('scroll', function() {
+    dropdown.close('dropdown-table-tool');
+  });
+
  
   // 触发表格复选框选择
   table.on('checkbox(test)', function(obj){

@@ -65,20 +65,22 @@ layui.use(function(){
 
   // 其他操作
   util.event('lay-on', {
-    // 全局右键菜单
+    // 改变触发右键菜单的目标元素
     contextmenu: function(othis){
       var ID = 'ID-dropdown-demo-contextmenu';
-      if(!othis.data('open')){
+      if (!othis.data('open')) {
         dropdown.reload(ID, {
-          elem: document // 将事件直接绑定到 document
+          elem: document // 设置全局元素右键
         });
+
         layer.msg('已开启全局右键菜单，请尝试在页面任意处单击右键。')
         othis.html('取消全局右键菜单');
         othis.data('open', true);
       } else {
         dropdown.reload(ID, {
-          elem: '#'+ ID // 重新绑定到指定元素上
+          elem: '#'+ ID // 设置局部元素右键
         });
+
         layer.msg('已取消全局右键菜单，恢复默认右键菜单')
         othis.html('开启全局右键菜单');
         othis.data('open', false);

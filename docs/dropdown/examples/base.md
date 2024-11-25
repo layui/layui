@@ -46,6 +46,7 @@ layui.use(function(){
   // 绑定输入框
   dropdown.render({
     elem: '#ID-dropdown-demo-base-input',
+    closeOnClick: false, // 不开启“打开与关闭的自动切换”，即点击输入框时始终为打开状态
     data: [{
       title: 'menu item 1',
       id: 101
