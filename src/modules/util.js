@@ -417,31 +417,30 @@ layui.define('jquery', function(exports){
       // 初始化 data 默认值，以委托元素为存储单元
       if (!elem.data(DATANAME)) {
         elem.data(DATANAME, {
-          events: {},
-          callbacks: {}
+          events: {}
         });
       }
 
       // 读取 data 缓存
       var dataCache = elem.data(DATANAME);
-      var callbacks = dataCache.callbacks;
 
-      // 根据 attr 记录事件集合
-      events = dataCache.events[attr] = $.extend(true, dataCache.events[attr], events);
+      // 根据 attr 和 trigger 的组合作为 key
+      var key = attr + '_' + options.trigger;
+
+      // 根据 key 记录事件集合
+      events = dataCache.events[key] = $.extend(true, dataCache.events[key], events);
+
 
       // 清除事件委托，避免重复绑定
-      elem.off(options.trigger, attrSelector, callbacks[attr]);
+      var trigger = options.trigger + '.lay_util_on';
+      elem.off(trigger, attrSelector);
 
       // 绑定事件委托
-      elem.on(
-        options.trigger,
-        attrSelector,
-        callbacks[attr] = function(e) {
-          var othis = $(this);
-          var key = othis.attr(attr);
-          typeof events[key] === 'function' && events[key].call(this, othis, e);
-        }
-      );
+      elem.on(trigger, attrSelector, function(e) {
+        var othis = $(this);
+        var attrValue = othis.attr(attr);
+        typeof events[attrValue] === 'function' && events[attrValue].call(this, othis, e);
+      });
 
       return events;
     }

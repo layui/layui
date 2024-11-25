@@ -13,18 +13,32 @@ body{padding: 50px;}
 </head>
 <body>
 
-<button class="layui-btn" lay-on="e1">事件1</button>
-<button class="layui-btn" lay-on="e2">事件2</button>
-<button class="layui-btn" lay-on="e3">事件3</button>
-<button class="layui-btn" lay-active="e4">hover: active - 事件4</button>
-<button class="layui-btn" lay-active1="e4">hover: active1 - 事件4</button>
+<fieldset class="layui-elem-field">
+  <legend>默认 body 委托元素</legend>
+  <div class="layui-field-box">
+    <button class="layui-btn" lay-on="e1">事件 e1</button>
+    <button class="layui-btn" lay-on="e2">事件 e2</button>
+    <button class="layui-btn" lay-on="e3">事件 e3</button>
+    <button class="layui-btn" lay-bind="e1">hover: lay-bind - 事件 e1</button>
+    <button class="layui-btn" lay-active="e1">hover: lay-active - 事件 e1</button>
+    <button class="layui-btn layui-btn-primary" lay-on="getBodyEvents">查看 body 的事件集合</button>
+  </div>
+</fieldset>
 
 <br><br>
 
-<div id="ID-util-on-test">
-  <button class="layui-btn" lay-on="e1">新的容器 - 事件1</button>
-  <button class="layui-btn" lay-on="e5">新的容器 - 事件5</button>
-</div>
+<fieldset class="layui-elem-field">
+  <legend>自定义委托元素</legend>
+  <div class="layui-field-box">
+    <div id="ID-util-on-test">
+      <button class="layui-btn" lay-on="e1">事件 e1 - 测试阻止冒泡</button>
+      <button class="layui-btn" lay-on="e5">事件 e5</button>
+      <button class="layui-btn" lay-on="e6">hover: 事件 e6</button>
+      <button class="layui-btn layui-btn-primary" lay-on="getElemEvents">查看该委托元素的事件集合</button>
+    </div>
+  </div>
+</fieldset>
+
 
 <hr>
 
@@ -105,7 +119,11 @@ layui.use(['lay', 'util', 'layer'], function(){
       alert(othis.html())
     },
     e2: function(othis){
-      alert(othis.html())
+      alert('body:'+ othis.html())
+    },
+    getBodyEvents: function(othis, e) {
+      var dataCache = $(e.delegateTarget).data('UTIL_ON_DATA');
+      console.log(dataCache.events);
     }
   });
 
@@ -120,20 +138,20 @@ layui.use(['lay', 'util', 'layer'], function(){
   });
 
   // 自定义触发事件的元素属性名、自定义触发事件的方式
-  util.on('lay-active', {
-    e4: layui.throttle(function(othis) {
+  util.on('lay-bind', {
+    e1: layui.throttle(function(othis) {
       layer.tips(othis.html(), this, { tips: 3 });
     }, 3000), // 3s 内不重复执行
-    e5: function() {
+    e2: function() {
       console.log(111);
     }
   }, {
     trigger: 'mouseenter'
   });
   // Test: 不同属性、相同值
-  util.on('lay-active1', {
-    e4: function(othis) {
-      this.innerHTML = 'hover: '+ (Math.random()*100000 | 0);
+  util.on('lay-active', {
+    e1: function(othis) {
+      this.innerHTML = 'hover: lay-active - 事件 e1 - '+ (Math.random()*100000 | 0);
     }
   }, {
     trigger: 'mouseenter'
@@ -146,11 +164,25 @@ layui.use(['lay', 'util', 'layer'], function(){
       this.innerHTML = 'click: '+ (Math.random()*100000 | 0);
       layui.stope(e); // 阻止事件冒泡
     },
-    e5: function(othis) {
+    e5: function(othis, e) {
       this.innerHTML = 'click: '+ (Math.random()*100000 | 0);
+    },
+    getElemEvents: function(othis, e) {
+      var dataCache = $(e.delegateTarget).data('UTIL_ON_DATA');
+      console.log(dataCache.events);
     }
   }, {
     elem: '#ID-util-on-test'
+  });
+
+  // 自定义触发事件的委托元素 + 自定义触发事件
+  util.on({
+    e6: function(othis, e) {
+      this.innerHTML = 'hover: 事件 e6 - '+ (Math.random()*100000 | 0);
+    }
+  }, {
+    elem: '#ID-util-on-test',
+    trigger: 'mouseenter'
   });
 
 
