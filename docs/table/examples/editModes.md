@@ -10,9 +10,9 @@
     {{# }); }}
   </select> 
 </script>
-<!-- dropdpwn -->
-<script type="text/html" id="TPL-dropdpwn-demo">
-  <button class="layui-btn layui-btn-primary dropdpwn-demo">
+<!-- dropdown -->
+<script type="text/html" id="TPL-dropdown-demo">
+  <button class="layui-btn layui-btn-primary dropdown-demo">
     <span>{{= d.sex || '无' }}</span>
     <i class="layui-icon layui-icon-down layui-font-12"></i>
   </button>
@@ -52,7 +52,7 @@ layui.use(function(){
     cols: [[ // 表头
       {field: 'id', title: 'ID', width:80, align: 'center', fixed: 'left'},
       {field: 'city', title: 'select', minWidth: 150, templet: '#TPL-select-demo'},
-      {field: 'sex', title: 'dropdown', width: 130, unresize: true, align: 'center', templet: '#TPL-dropdpwn-demo'},
+      {field: 'sex', title: 'dropdown', width: 130, unresize: true, align: 'center', templet: '#TPL-dropdown-demo'},
       {field: 'date', title: 'laydate', minWidth: 150, templet: '#TPL-laydate-demo'},
       {field: 'color', title: 'color', width: 80, unresize: true, align: 'center', templet: '#TPL-colorpicker-demo'},
       {field: 'sign', title: '文本', edit: 'textarea'}
@@ -89,7 +89,7 @@ layui.use(function(){
       
       // dropdown 方式的下拉选择
       dropdown.render({
-        elem: '.dropdpwn-demo',
+        elem: '.dropdown-demo',
         // trigger: 'hover',
         // 此处的 data 值，可根据 done 返回的 res 遍历来赋值
         data: [{
