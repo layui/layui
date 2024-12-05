@@ -494,7 +494,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           isNone = parent.css('display') === 'none';
         } catch(e){}
         var parentElem = parent.parent();
-        if(parent[0] && parentElem && parentElem.nodeType === 1 && (!width || isNone)) return getWidth(parentElem);
+        if(parent[0] && parentElem[0] && parentElem[0].nodeType === 1 && (!width || isNone)) return getWidth(parentElem);
         return width;
       };
       return getWidth();
