@@ -53,7 +53,7 @@ layui.define('jquery', function(exports){
     // 是否添加即切换
     options.change && this.tabChange(filter, options.id);
     titElem.data('LAY_TAB_CHANGE', options.change);
-    call.tabAuto(options.change ? 'change' : null);
+    call.tabAuto(options.change ? 'change' : null, tabElem);
     return this;
   };
   
@@ -219,7 +219,7 @@ layui.define('jquery', function(exports){
         item.eq(index).remove();
       }
       setTimeout(function(){
-        call.tabAuto();
+        call.tabAuto(null, tabElem);
       }, 50);
       
       layui.event.call(this, MOD_NAME, 'tabDelete('+ filter +')', {
