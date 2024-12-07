@@ -420,7 +420,9 @@ layui.define('jquery', function(exports){
       
       // Tab 选项卡
       tab: function(elem){
-        call.tabAuto.call({}, elem);
+        var TAB_ELEM = '.layui-tab';
+        var targetElem = elem || $(TAB_ELEM + elemFilter);
+        call.tabAuto.call({}, null, targetElem);
       }
       
       // 导航菜单
