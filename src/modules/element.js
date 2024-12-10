@@ -53,7 +53,7 @@ layui.define('jquery', function(exports){
     // 是否添加即切换
     options.change && this.tabChange(filter, options.id);
     titElem.data('LAY_TAB_CHANGE', options.change);
-    call.tabAuto(options.change ? 'change' : null);
+    call.tabAuto(options.change ? 'change' : null, tabElem);
     return this;
   };
   
@@ -219,7 +219,7 @@ layui.define('jquery', function(exports){
         item.eq(index).remove();
       }
       setTimeout(function(){
-        call.tabAuto();
+        call.tabAuto(null, tabElem);
       }, 50);
       
       layui.event.call(this, MOD_NAME, 'tabDelete('+ filter +')', {
@@ -420,7 +420,9 @@ layui.define('jquery', function(exports){
       
       // Tab 选项卡
       tab: function(elem){
-        call.tabAuto.call({}, elem);
+        var TAB_ELEM = '.layui-tab';
+        var targetElem = elem || $(TAB_ELEM + elemFilter);
+        call.tabAuto.call({}, null, targetElem);
       }
       
       // 导航菜单
