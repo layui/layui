@@ -123,9 +123,9 @@ toc: true
 | layui-font-black | <span class="layui-font-black">深</span> |
 | layui-font-gray | <span class="layui-font-gray">浅</span> |
 
-<h2 id="text" lay-toc="{hot: true}">文档容器</h2>
+<h2 id="text" lay-toc="{hot: true}">文本容器</h2>
 
-通过设置 `class="layui-text"` 定义一段包含标题、段落、列表、链接等组合的文档区域。
+通过设置 `class="layui-text"` 定义一段包含标题、段落、列表等组合的文本区域，通常用于 Markdown 文档。
 
 <pre class="layui-code" lay-options="{preview: 'iframe', style: 'height: 535px;', layout: ['preview', 'code'], tools: ['full','window']}">
   <textarea>
@@ -139,45 +139,59 @@ toc: true
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="{{= d.layui[2].cdn.css }}" rel="stylesheet">
 </head>
-<body>
-  <div class="layui-text" style="padding: 16px;">
+<body class="layui-padding-3">
+  <div class="layui-text">
     <h1>标题1</h1>
+    <p>段落1段落1段落1段落1段落1段落1段落1段落1段落1 <sup class="footnote-ref"><a href="javascript:;">[1]</a></sup></p>
     <h2>标题2</h2>
+    <p>段落2段落2 <strong>加粗</strong> <em>强调</em>  段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2</p>
+    <p>段落2-1 <code>inline code</code> 段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1段落2-1</p>
     <h3>标题3</h3>
+    <p>段落3段落3段落3段落3段落3段落3段落3段落3段落3段落3段落3段落3段落3段落3段落3段落3 <a href="javascript:;">链接</a></p>
     <h4>标题4</h4>
     <h5>标题5</h5>
     <h6>标题6</h6>
-    
-    <hr>
+    <p>段落6段落6段落6段落6段落6段落6段落6段落6段落6</p>
 
+    <h3>无序列表</h3>
     <ul>
       <li>列表1</li>
       <li>
         列表2
         <ul>
-          <li>列表2-1</li>
+          <li>
+            列表2-1
+            <ul>
+              <li>列表2-1-1</li>
+            </ul>
+          </li>
           <li>列表2-2</li>
-          <li>列表2-3</li>
         </ul>
       </li>
       <li>列表3</li>
     </ul>
 
-    <hr>
-
+    <h3>有序列表</h3>
     <ol>
       <li>列表1</li>
       <li>列表2</li>
       <li>列表3</li>
     </ol>
 
-    <hr>
+    <h3>Blockquote</h3>
+    <blockquote>
+      <p>引用</p>
+      <blockquote>内嵌引用<blockquote>内嵌引用</blockquote></blockquote>
+    </blockquote>
 
-    <h2>标题2</h2>
-    <p>段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1</p>
-    <p>段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2</p>
-    <blockquote>引用</blockquote>
-    <p>这是一个包含<a href="javascript:;">超文本</a>和<strong>加粗文本</strong>的段落</p>
+    <h3>Code</h3>
+&lt;pre&gt;<code>var cp = function(){
+  return gulp.src('./dist/**/*')
+  .pipe(gulp.dest(dest));
+};
+</code>&lt;/pre&gt;
+    <hr>
+    <p id="ref-1">Footer</p>
   </div>
 </body>
 </html>
