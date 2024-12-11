@@ -11,8 +11,8 @@ a:active,a:hover{outline:0}
 img{display: inline-block; border: none; vertical-align: middle;}
 li{list-style:none;}
 table{border-collapse: collapse; border-spacing: 0;}
-h1,h2,h3,h4{font-weight: 700;}
-h5,h6{font-weight: 500; font-size: 100%;}
+h1,h2,h3,h4,h5,h6{font-weight: 700;}
+h5,h6{font-size: 100%;}
 button,input,select,textarea{font-size: 100%; }
 input,button,textarea,select,optgroup,option{font-family: inherit; font-size: inherit; font-style: inherit; font-weight: inherit; outline: 0;}
 pre{white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;}
@@ -650,12 +650,12 @@ hr.layui-border-black{border-width: 0 0 1px;}
 
 /* 文本区域 */
 .layui-text{line-height: 1.8; font-size: 14px;}
-.layui-text h1{font-size: 32px;}
-.layui-text h2{font-size: 24px;}
-.layui-text h3{font-size: 18px;}
-.layui-text h4{font-size: 16px;}
-.layui-text h5{font-size: 14px;}
-.layui-text h6{font-size: 13px;}
+.layui-text h1{margin: 32px 0; font-size: 32px;}
+.layui-text h2{margin: 24px 0; font-size: 24px;}
+.layui-text h3{margin: 16px 0; font-size: 18px;}
+.layui-text h4{margin: 11px 0; font-size: 16px;}
+.layui-text h5{margin: 11px 0; font-size: 14px;}
+.layui-text h6{margin: 11px 0; font-size: 13px;}
 .layui-text ul,
 .layui-text ol{padding-left: 15px;}
 .layui-text ul li{margin-top: 5px; list-style-type: disc;}
@@ -668,7 +668,7 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-text a:not(.layui-btn){color: #01AAED;}
 .layui-text a:not(.layui-btn):hover{text-decoration: underline;}
 .layui-text blockquote:not(.layui-elem-quote){margin: 15px 0; padding: 5px 15px; border-left: 5px solid #eee;}
-.layui-text pre > code:not(.layui-code){padding: 15px; font-family: "Courier New",Consolas,"Lucida Console";}
+.layui-text pre > code:not(.layui-code){display: block; padding: 15px; font-family: "Courier New",Consolas,"Lucida Console";}
 
 /* 字体大小 */
 .layui-font-12{font-size: 12px !important;}
