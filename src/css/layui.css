@@ -266,7 +266,7 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-header a:hover{transition: all .5s; -webkit-transition: all .5s;}
 .layui-side{position: fixed; left: 0; top: 0; bottom: 0; z-index: 999; width: 200px; overflow-x: hidden;}
 .layui-side-scroll{position: relative; width: 220px; height: 100%; overflow-x: hidden;}
-.layui-body{position: relative; left: 200px; right: 0; top: 0; bottom: 0; z-index: 900; width: auto; box-sizing: border-box;}
+.layui-body{position: relative; left: 200px; right: 0; top: 0; bottom: 0; width: auto; box-sizing: border-box;}
 
 /* 后台框架大布局 */
 .layui-layout-body{overflow-x: hidden;}
