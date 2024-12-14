@@ -494,7 +494,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           isNone = parent.css('display') === 'none';
         } catch(e){}
         var parentElem = parent.parent();
-        if(parent[0] && parentElem[0] && parentElem[0].nodeType === 1 && (!width || isNone)) return getWidth(parentElem);
+        if(parent[0] && parentElem && parentElem[0] && (!width || isNone)) return getWidth(parent.parent());
         return width;
       };
       return getWidth();
@@ -2866,9 +2866,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   Class.prototype.getContentWidth = function(elem){
     var that = this;
 
-    // IE 中 border-box 盒模型，getComputedStyle 得到的 width/height 是按照 content-box 计算出来的
-    var isBorderBox = elem.css('box-sizing') === 'border-box';
-    if((isBorderBox && lay.ie) || elem.css('display') === 'none'){
+    if(
+      // document
+      elem[0].nodeType === 9 ||
+      // IE 中 border-box 盒模型，getComputedStyle 得到的 width/height 是按照 content-box 计算出来的
+      (elem.css('box-sizing') === 'border-box' && lay.ie) ||
+      elem.css('display') === 'none'
+    ){
       return elem.width();
     }
 
@@ -2878,7 +2882,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     if(typeof size === 'undefined' || !size.width){
       return elem.width();
     }else{
-      return isBorderBox
+      return size.boxSizing === 'border-box'
         ? size.width - size.paddingLeft - size.paddingRight - size.borderLeftWidth - size.borderRightWidth
         : size.width
     }
