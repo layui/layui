@@ -2858,7 +2858,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
    * 
    * 这个方法使用 getComputedStyle 获取精确的宽度值进行计算，为了尽可能和以前的行为
    * 保持一致(主要是隐藏元素内渲染 table 递归获取父元素宽度 https://github.com/layui/layui/discussions/2398)，
-   * 任何非预期的值，都回退到 jQUery.fn.width。未来的版本使用 ResizeObserver 时，可以直接获取表格视图元素的宽度，
+   * 任何非预期的值，都回退到 jQuery.fn.width。未来的版本使用 ResizeObserver 时，可以直接获取表格视图元素的宽度，
    * 并移除兼容性代码
    * 
    * @param {JQuery} elem - 元素的 jQuery 对象
