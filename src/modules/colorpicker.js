@@ -405,8 +405,8 @@ layui.define(['jquery', 'lay'], function(exports){
     ,alphaslider = that.elemPicker.find('.' + PICKER_ALPHA_SLIDER)
     
     ,_h = slider[0].offsetTop/180*360
-    ,_b = 100 - (choose[0].offsetTop + 3)/180*100
-    ,_s = (choose[0].offsetLeft + 3)/260*100
+    ,_b = 100 - (choose[0].offsetTop)/180*100
+    ,_s = (choose[0].offsetLeft)/260*100
     ,_a = Math.round(alphaslider[0].offsetLeft/280*100)/100    
     
     ,i = that.elemColorBox.find('.' + PICKER_TRIG_I)
