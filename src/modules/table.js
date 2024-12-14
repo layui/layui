@@ -2862,6 +2862,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
    * 并移除兼容性代码
    * 
    * @param {JQuery} elem - 元素的 jQuery 对象
+   * 
+   * @see {@link https://learn.microsoft.com/zh-cn/archive/blogs/ie_cn/css-3}
    */
   Class.prototype.getContentWidth = function(elem){
     var that = this;
