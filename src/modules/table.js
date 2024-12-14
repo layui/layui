@@ -494,7 +494,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           isNone = parent.css('display') === 'none';
         } catch(e){}
         var parentElem = parent.parent();
-        if(parent[0] && parentElem && parentElem[0] && (!width || isNone)) return getWidth(parent.parent());
+        if(parent[0] && parentElem && parentElem[0] && (!width || isNone)) return getWidth(parentElem);
         return width;
       };
       return getWidth();
@@ -2852,7 +2852,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   /**
    * 获取元素 content 区域宽度值
    * 
-   * layui 内置 jQuery v1.12.4 中的 jQUery.fn.width 始终对值四舍五入(3.x 已修复),
+   * layui 内置 jQuery v1.12.4 中的 jQuery.fn.width 始终对值四舍五入(3.x 已修复),
    * 在支持 subpixel Rendering 的浏览器中渲染表格，由于列宽分配时计算值精度不足，
    * 可能会导致一些小问题(#1726)
    * 
