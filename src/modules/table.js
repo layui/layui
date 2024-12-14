@@ -2870,7 +2870,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       // document
       elem[0].nodeType === 9 ||
       // IE 中 border-box 盒模型，getComputedStyle 得到的 width/height 是按照 content-box 计算出来的
-      (elem.css('box-sizing') === 'border-box' && lay.ie) ||
+      (lay.ie && elem.css('box-sizing') === 'border-box') ||
       elem.css('display') === 'none'
     ){
       return elem.width();
