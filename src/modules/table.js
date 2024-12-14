@@ -2851,19 +2851,34 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   /**
    * 获取元素 content 区域宽度值
+   * 
+   * layui 内置 jQuery v1.12.4 中的 jQUery.fn.width 始终对值四舍五入(3.x 已修复),
+   * 在支持 subpixel Rendering 的浏览器中渲染表格，由于列宽分配时计算值精度不足，
+   * 可能会导致一些小问题(#1726)
+   * 
+   * 这个方法使用 getComputedStyle 获取精确的宽度值进行计算，为了尽可能和以前的行为
+   * 保持一致(主要是隐藏元素内渲染 table 递归获取父元素宽度 https://github.com/layui/layui/discussions/2398)，
+   * 任何非预期的值，都回退到 jQUery.fn.width。未来的版本使用 ResizeObserver 时，可以直接获取表格视图元素的宽度，
+   * 并移除兼容性代码
+   * 
    * @param {JQuery} elem - 元素的 jQuery 对象
    */
   Class.prototype.getContentWidth = function(elem){
     var that = this;
 
-    if(!window.getComputedStyle){
-      // IE 中的 `currentStyle` 获取未显式设置的宽高时会得到 'auto'，jQuery 中有一些 hack 方法获取准确值
+    // IE 中 border-box 盒模型，getComputedStyle 得到的 width/height 是按照 content-box 计算出来的
+    var isBorderBox = elem.css('box-sizing') === 'border-box';
+    if((isBorderBox && lay.ie) || elem.css('display') === 'none'){
+      return elem.width();
+    }
+
+    var size = that.getElementSize(elem[0]);
+
+    // display: none|inline 元素，getComputedStyle 无法得到准确的 width/height
+    if(typeof size === 'undefined' || !size.width){
       return elem.width();
     }else{
-      var size = that.getElementSize(elem[0]);
-      // IE BUG
-      // border-box: getComputedStyle 得到的 width/height 是按照 content-box 计算出来的
-      return (size.boxSizing === 'border-box' && !lay.ie)
+      return isBorderBox
         ? size.width - size.paddingLeft - size.paddingRight - size.borderLeftWidth - size.borderRightWidth
         : size.width
     }
