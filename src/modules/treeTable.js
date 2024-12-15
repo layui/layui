@@ -1048,6 +1048,7 @@ layui.define(['table'], function (exports) {
     var isParentKey = customName.isParent;
     var tableFilterId = tableViewElem.attr('lay-filter');
     var treeTableThat = that;
+    var existsData = options.data.length; // 是否直接赋值 data
     // var tableData = treeTableThat.getTableData();
 
     level = level || 0;
@@ -1056,9 +1057,11 @@ layui.define(['table'], function (exports) {
       // 初始化的表格里面没有level信息，可以作为顶层节点的判断
       tableViewElem.find('.layui-table-body tr:not([data-level])').attr('data-level', level);
       layui.each(table.cache[tableId], function (dataIndex, dataItem) {
-        tableViewElem.find('.layui-table-main tbody tr[data-level="0"]:eq(' + dataIndex + ')').attr('lay-data-index', dataItem[LAY_DATA_INDEX]);
-        tableViewElem.find('.layui-table-fixed-l tbody tr[data-level="0"]:eq(' + dataIndex + ')').attr('lay-data-index', dataItem[LAY_DATA_INDEX]);
-        tableViewElem.find('.layui-table-fixed-r tbody tr[data-level="0"]:eq(' + dataIndex + ')').attr('lay-data-index', dataItem[LAY_DATA_INDEX]);
+        // 若直接赋值 data，则将顶层节点 lay-data-index 赋值为 data-index，以规避 LAY_DATA_INDEX 值异常
+        var layDataIndex = existsData ? dataItem[table.config.indexName] : dataItem[LAY_DATA_INDEX];
+        tableViewElem.find('.layui-table-main tbody tr[data-level="0"]:eq(' + dataIndex + ')').attr('lay-data-index', layDataIndex);
+        tableViewElem.find('.layui-table-fixed-l tbody tr[data-level="0"]:eq(' + dataIndex + ')').attr('lay-data-index', layDataIndex);
+        tableViewElem.find('.layui-table-fixed-r tbody tr[data-level="0"]:eq(' + dataIndex + ')').attr('lay-data-index', layDataIndex);
       })
     }
 
