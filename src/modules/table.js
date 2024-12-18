@@ -1605,7 +1605,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         ? parseFloat(totalNums[field] || 0).toFixed(decimals)
       : '';
 
-      // td 显示内容
+      // 合计内容
       var content = function(){
         var text = item3.totalRowText || '';
         var tplData = {
@@ -1625,11 +1625,26 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         return TOTAL_NUMS || getContent;
       }();
 
+      // td 显示内容
+      var tdContent = function(){
+        var totalRow = item3.totalRow || options.totalRow;
+
+        // 如果 totalRow 参数为字符类型，则解析为自定义模版
+        if(typeof totalRow === 'string'){
+          return laytpl(totalRow).render($.extend({
+            TOTAL_NUMS: TOTAL_NUMS || totalNums[field],
+            TOTAL_ROW: totalRowData || {},
+            LAY_COL: item3
+          }, item3));
+        }
+
+        return content;
+      }();
+
       // 合计原始结果
-      var total = TOTAL_NUMS || thisTotalNum || '';
       item3.field && that.dataTotal.push({
         field: item3.field,
-        total: $('<div>'+ content +'</div>').text()
+        total: $('<div>'+ tdContent +'</div>').text()
       });
 
       // td 容器
@@ -1653,19 +1668,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         var attr = [];
         if(item3.align) attr.push('align="'+ item3.align +'"'); // 对齐方式
         return attr.join(' ');
-      }() +'>' + function(){
-          var totalRow = item3.totalRow || options.totalRow;
-
-          // 如果 totalRow 参数为字符类型，则解析为自定义模版
-          if(typeof totalRow === 'string'){
-            return laytpl(totalRow).render($.extend({
-              TOTAL_NUMS: TOTAL_NUMS || totalNums[field],
-              TOTAL_ROW: totalRowData || {},
-              LAY_COL: item3
-            }, item3));
-          }
-          return content;
-        }(),
+      }() +'>' + tdContent,
       '</div></td>'].join('');
 
       tds.push(td);
