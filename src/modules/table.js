@@ -2874,8 +2874,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   Class.prototype.autoResize = function(){
     var that = this;
 
-    // 可能要主动包裹一层检测大小的元素，在 table 视图元素检测并不可靠
-    // var targetElem = that.elem.parent('.layui-table-auto-resize')[0] || that.elem;
     that.resizeStrategy(that.elem);
   }
 
@@ -2884,7 +2882,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     if(window.ResizeObserver){
       return function(targetElem){
         var that = this;
-        // 不需要每次创建 observer 实例，只是为了简化实现
         if(that.resizeObserver){
           that.resizeObserver.disconnect();
           that.resizeObserver = null;
@@ -2921,7 +2918,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         .attr('aria-hidden', 'true')
         .attr('tabindex', '-1')
         .attr('type', 'text/html')
-        .attr('style', 'display:block;position:absolute;top:0;left:0;width:100%;height:100%;border:none;overflow:hidden;z-index:-1;opacity:0;pointer-events:none;')
+        .attr('style', 'display:block;position:absolute;top:0;left:0;width:100%;height:100%;border:none;overflow:hidden;z-index:-1000;opacity:0;pointer-events:none;')
       
       objectElem[0].onload = function(){
         this.contentDocument.defaultView.onresize = function(){
