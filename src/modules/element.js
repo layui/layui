@@ -501,8 +501,8 @@ layui.define('jquery', function(exports){
           var itemElem = othis.find('.'+NAV_ITEM);
           
           // hover 滑动效果
-          var hasBarElem = othis.find('.'+NAV_BAR)[0];
-          if (hasBarElem) hasBarElem.remove();
+          var hasBarElem = othis.find('.'+NAV_BAR);
+          if (hasBarElem[0]) hasBarElem.remove();
           othis.append(bar);
           ( othis.hasClass(NAV_TREE)
             ? itemElem.find('dd,>.'+ NAV_TITLE) 
