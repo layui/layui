@@ -387,6 +387,13 @@ done: function(obj){
 onCopy: function(code){
   console.log(code); // 得到当前 code 内容
 }
+// 此函数签名无内置提示(2.9.21+)
+onCopy: function(code, copied){
+  console.log(code); // 得到当前 code 内容
+  
+  layer.msg(copied ? 'copied' : 'error'); // 提示复制
+}
+
 ```
 
 </td>
