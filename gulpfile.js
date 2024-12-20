@@ -26,17 +26,17 @@ const config = {
 // 获取参数
 const argv = minimist(process.argv.slice(2), {
   default: {
-    version: pkg.version
+    vs: pkg.version
   }
 });
 
-const rlsFileName = `${pkg.name}-v${pkg.version}`; // 发行文件名
+const rlsFileName = `${pkg.name}-v${argv.vs}`; // 发行文件名
 const rlsDest = `./release/zip/${rlsFileName}/${pkg.name}`; // 发行目标路径
 const rlsDirname = path.dirname(rlsDest); // 发行目录名
 
 // 复制目标路径
 const copyDest = argv.dest
-  ? path.join(argv.dest, (argv.vs ? '/' + pkg.version : ''))
+  ? path.join(argv.dest, (argv.vs ? '/' + argv.vs : ''))
 : rlsDest;
 
 // 打包目标路径
@@ -150,6 +150,6 @@ exports.help = () => {
     '  default  默认任务',
     '  release  发行任务',
     '  cp  将 dist 目录复制一份到参数 --dest 指向的目录'
-  ].join('\n'), '\n\nExamples:\n  gulp cp --dest ./v --vs', '\n');
+  ].join('\n'), '\n\nExamples:\n  gulp cp --dest ./v', '\n');
   return gulp.src('./');
 };
