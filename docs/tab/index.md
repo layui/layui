@@ -110,7 +110,7 @@ tab 组件提供了三种 UI 风格，分别为：
 | var element = layui.element | 获得 `element` 模块。 |
 | [element.render(\'tab\', filter)](#element.render) | 渲染 tab 组件 |
 | [element.tabAdd(filter, options)](#element.tabAdd) | 添加 tab 选项 |
-| [element.tabDelete(filter, layid)](#element.tabDelete) | 删除 tab 选项 |
+| [element.tabDelete(filter, layid, force)](#element.tabDelete) | 删除 tab 选项 |
 | [element.tabChange(filter, layid, force)](#element.tabChange) | 切换 tab 选项 |
 | [element.tab(options)](#element.tab) | 绑定自定义 tab 元素 |
 
@@ -197,10 +197,12 @@ layui.use(function(){
 
 <h3 id="element.tabDelete" lay-toc="{level: 2}" class="ws-bold">删除 tab</h3>
 
-`element.tabDelete(filter, layid);`
+`element.tabDelete(filter, layid, force);`
 
 - 参数 `filter` : tab 容器（`class="layui-tab"`）的 `lay-filter` 属性值
 - 参数 `layid` : 选项卡标题元素的 `lay-id` 属性值
+- 参数 `force` <sup>2.9.21+</sup>
+: 是否强制删除 tab。若设置 `true` 将忽略 `tabBeforeDelete` 事件行为。默认 `false`
 
 该方法用于删除 tab 选项。用法详见 : [#示例](#examples)
 
@@ -349,19 +351,52 @@ element.on('tabDelete(filter)', function(data){
   - `filter` 为 tab 容器属性 `lay-filter` 对应的值。
 - 参数 `callback` 为事件执行时的回调函数，并返回一个 `object` 类型的参数。
 
-点击 tab 选项删除前触发。
+点击 tab 选项删除前触发。 示例：
 
-```
-var element = layui.element;
- 
-// tab 删除前的事件
-element.on('tabBeforeDelete(filter)', function(data){
-  console.log(data.index); // 得到被删除的 tab 项的所在下标
-  console.log(data.elem); // 得到当前的 tab 容器
-  console.log(data.id); // 得到被删除的 tab 项的 ID(2.9.11+)
+<pre class="layui-code" lay-options="{preview: true, layout: ['code', 'preview'], tools: ['full'], done: function(obj){
+  obj.render();
+}}">
+  <textarea>
+<div class="layui-tab" lay-allowclose="true" lay-filter="test-tabs">
+  <ul class="layui-tab-title">
+    <li lay-id="1" class="layui-this">标签1</li>
+    <li lay-id="2">标签2</li>
+    <li lay-id="3">标签3</li>
+    <li lay-id="4">标签4</li>
+    <li lay-id="5">标签5</li>
+  </ul>
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">删除标签，弹出确认提示框</div>
+    <div class="layui-tab-item">内容-2</div>
+    <div class="layui-tab-item">内容-3</div>
+    <div class="layui-tab-item">内容-4</div>
+    <div class="layui-tab-item">内容-5</div>
+  </div>
+</div>
 
-  if(data.id === 'home') return false; // 返回 false 时阻止关闭对应的选项卡
+<!-- import layui -->
+<script>
+layui.use(function(){
+  var layer = layui.layer;
+  var element = layui.element;
+
+  // tab 删除前的事件
+  element.on('tabBeforeDelete(test-tabs)', function(data){
+    console.log(data.index); // 得到被删除的 tab 项的所在下标
+    console.log(data.elem); // 得到当前的 tab 容器
+    console.log(data.id); // 得到被删除的 tab 项的 ID(2.9.11+)
+
+    // 确认删除
+    layer.confirm(`确认删除【${this.innerText}】吗？`, function (index) {
+      element.tabDelete('test-tabs', data.id, true); // 确认后强制删除 - 2.9.21+
+      layer.close(index);
+    });
+
+    return false; // 返回 false 时阻止默认删除选项卡行为
+  });
 });
-```
+</script>
+  </textarea>
+</pre>
 
 
