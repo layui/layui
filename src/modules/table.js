@@ -2903,39 +2903,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           })
       }
     }
-
-    // 修改自 https://github.com/wnr/element-resize-detector/blame/bae322eff9057a532ec42e324f0ef05d4e509f5f/src/detection-strategy/object.js
-    // 支持 IE9+ 和 firefox，
-    // chrome 中 object 元素显示或隐藏时不触发 resize 事件
-    return function(targetElem){
-      var that = this;
-      var oldProxyResizeElem = targetElem.children('object');
-      if(oldProxyResizeElem.length > 0){
-        oldProxyResizeElem.remove();
-        oldProxyResizeElem = null;
-      }
-      var objectElem = $('<object></object>')
-        .attr('aria-hidden', 'true')
-        .attr('tabindex', '-1')
-        .attr('type', 'text/html')
-        .attr('style', 'display:block;position:absolute;top:0;left:0;width:100%;height:100%;border:none;overflow:hidden;z-index:-1000;opacity:0;pointer-events:none;')
-      
-      objectElem[0].onload = function(){
-        this.contentDocument.defaultView.onresize = function(){
-          that.resize();
-        }
-      }
-
-      if(!lay.ie){
-        objectElem.attr('data', 'about:blank');
-      }
-
-      targetElem.append(objectElem);
-
-      if(lay.ie){
-        objectElem.attr('data', 'about:blank');
-      }
-    }
    }();
 
   // 全局事件
