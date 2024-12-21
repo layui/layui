@@ -203,19 +203,25 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         title: ['复制代码'],
         event: function(obj){
           var code = util.unescape(finalCode(options.code));
+          var hasOnCopy = typeof options.onCopy === 'function';
+          var preventDefaultHandler = hasOnCopy && options.onCopy.length && options.onCopy.length > 1;
 
           // 写入剪切板
           lay.clipboard.writeText({
             text: code,
             done: function() {
-              layer.msg('已复制', {icon: 1});
+              if(!preventDefaultHandler){
+                layer.msg('已复制', {icon: 1});
+              }
+              hasOnCopy && options.onCopy(code, true);
             },
             error: function() {
-              layer.msg('复制失败', {icon: 2});
+              if(!preventDefaultHandler){
+                layer.msg('复制失败', {icon: 2});
+              }
+              hasOnCopy && options.onCopy(code, false);
             }
           });
-
-          typeof options.onCopy === 'function' && options.onCopy(code);
         }
       }
     };
