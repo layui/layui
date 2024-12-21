@@ -2823,6 +2823,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
       rAF(cb);
     });
+
+    that.autoResize();
   }
 
   /**
@@ -2891,7 +2893,41 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         ? size.width - size.paddingLeft - size.paddingRight - size.borderLeftWidth - size.borderRightWidth
         : size.width
     }
-  };
+  }
+  
+  Class.prototype.autoResize = function(){
+    var that = this;
+
+    that.resizeStrategy(that.elem);
+  }
+
+  Class.prototype.resizeStrategy = function(){
+    // chrome 64+
+    if(window.ResizeObserver){
+      return function(targetElem){
+        var that = this;
+        if(that.resizeObserver){
+          that.resizeObserver.disconnect();
+          that.resizeObserver = null;
+        }
+        that.resizeObserver = new ResizeObserver(function(){
+          that.resize();
+        });
+        that.resizeObserver.observe(targetElem[0]);
+      }
+    }
+
+    // IE8 支持元素 resize 事件
+    if(lay.ie === '8'){
+      return function(targetElem){
+        var that = this;
+        targetElem.off('resize.lay-table-autoresize')
+          .on('resize.lay-table-autoresize', function(){
+            that.resize();
+          })
+      }
+    }
+   }();
 
   // 全局事件
   (function(){
