@@ -205,11 +205,19 @@ layui.define(['lay', 'layer'], function(exports){
   };
   
   //异常提示
-  Class.prototype.msg = function(content){
-    return layer.msg(content, {
-      icon: 2,
-      shift: 6
-    });
+  Class.prototype.onValidate = function(type, content){
+    var that = this;
+    var options = that.config;
+
+    if(typeof options.onValidate === 'function'){
+      return options.onValidate(type);
+    }
+    if(typeof content !== 'undefined'){
+      return layer.msg(content, {
+        icon: 2,
+        shift: 6
+      });
+    }
   };
   
   //判断绑定元素是否为文件域本身
@@ -244,6 +252,11 @@ layui.define(['lay', 'layer'], function(exports){
     var getFiles = function(){
       return files || that.files || that.chooseFiles || elemFile.files;
     };
+
+    //判断文件队列是否为空
+    if(getFiles().length==0){
+      return that.onValidate('FILE_CHOOSE_ERROR');
+    }
     
     // 高级浏览器处理方式，支持跨域
     var ajaxSend = function(){
@@ -319,7 +332,7 @@ layui.define(['lay', 'layer'], function(exports){
           },
           error: function(e){ // 异常回调
             options.unified ? (failed += that.fileLength) : failed++;
-            that.msg(text['error'] || [
+            that.onValidate('UPLOAD_FAILED', text['error'] || [
               'Upload failed, please try again.',
               'status: '+ (e.status || '') +' - '+ (e.statusText || 'error')
             ].join('<br>'));
@@ -375,7 +388,7 @@ layui.define(['lay', 'layer'], function(exports){
         try {
           res = iframeBody.text();
         } catch(e) {
-          that.msg(text['cross-domain']); 
+          that.onValidate('CROSS_DOMAIN', text['cross-domain']); 
           clearInterval(Class.timer);
           error();
         }
@@ -397,7 +410,7 @@ layui.define(['lay', 'layer'], function(exports){
               data: JSON.parse(src)
             };
           } catch(e){
-            that.msg(text['data-format-error']);
+            that.onValidate('DATA_FORMAT_ERROR', text['data-format-error']);
             return {
               status: "FORMAT_ERROR",
               data: {}
@@ -572,7 +585,7 @@ layui.define(['lay', 'layer'], function(exports){
     
     // 校验失败提示
     if(check){
-      that.msg(text['check-error'] || ('选择的'+ typeName +'中包含不支持的格式'));
+      that.onValidate('FILE_EXTENSION_ERROR', text['check-error'] || ('选择的'+ typeName +'中包含不支持的格式'));
       return elemFile.value = '';
     }
 
@@ -595,7 +608,7 @@ layui.define(['lay', 'layer'], function(exports){
     }();
     
     if(options.number && that.fileLength > options.number){
-      return that.msg(typeof text['limit-number'] === 'function' 
+      return that.onValidate('FILES_OVER_LENGTH_LIMIT', typeof text['limit-number'] === 'function' 
         ? text['limit-number'](options, that.fileLength) 
       : (
         '同时最多只能上传: '+ options.number + ' 个文件'
@@ -615,7 +628,7 @@ layui.define(['lay', 'layer'], function(exports){
           limitSize = size;
         }
       });
-      if(limitSize) return that.msg(typeof text['limit-size'] === 'function' 
+      if(limitSize) return that.onValidate('FILE_OVER_SIZE_LIMIT', typeof text['limit-size'] === 'function' 
         ? text['limit-size'](options, limitSize) 
       : '文件大小不能超过 '+ limitSize);
     }
