@@ -384,14 +384,11 @@ done: function(obj){
 </div>
 
 ```
-onCopy: function(code){
-  console.log(code); // 得到当前 code 内容
-}
-// 此函数签名无内置提示(2.9.21+)
 onCopy: function(code, copied){
   console.log(code); // 得到当前 code 内容
-  
-  layer.msg(copied ? 'copied' : 'error'); // 提示复制
+  console.log(copied); // 是否复制成功(2.9.21+)
+
+  return false; // 返回 false 阻止内置提示(2.9.21+)
 }
 
 ```

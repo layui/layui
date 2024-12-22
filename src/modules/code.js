@@ -204,22 +204,24 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
         event: function(obj){
           var code = util.unescape(finalCode(options.code));
           var hasOnCopy = typeof options.onCopy === 'function';
-          var preventDefaultHandler = hasOnCopy && options.onCopy.length && options.onCopy.length > 1;
 
           // 写入剪切板
           lay.clipboard.writeText({
             text: code,
             done: function() {
-              if(!preventDefaultHandler){
-                layer.msg('已复制', {icon: 1});
+              if(hasOnCopy){
+                var ret = options.onCopy(code, true);
+                if(ret === false) return;
               }
-              hasOnCopy && options.onCopy(code, true);
+
+              layer.msg('已复制', {icon: 1});
             },
             error: function() {
-              if(!preventDefaultHandler){
-                layer.msg('复制失败', {icon: 2});
+              if(hasOnCopy){
+                var ret = options.onCopy(code, false);
+                if(ret === false) return;
               }
-              hasOnCopy && options.onCopy(code, false);
+              layer.msg('复制失败', {icon: 2});
             }
           });
         }
