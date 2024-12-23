@@ -154,7 +154,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       }
       
       if(/^(checkbox|radio)$/.test(item.type) && !item.checked) return;  // 复选框和单选框未选中，不记录字段     
-      field[init_name || item.name] = item.value;
+      field[init_name || item.name] = $(item).val();
     });
     
     return field;
