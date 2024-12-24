@@ -154,7 +154,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       }
       
       if(/^(checkbox|radio)$/.test(item.type) && !item.checked) return;  // 复选框和单选框未选中，不记录字段     
-      field[init_name || item.name] = $(item).val();
+      field[init_name || item.name] = othis.val();
     });
     
     return field;
@@ -1148,7 +1148,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       var verifyStr = othis.attr('lay-verify') || '';
       var vers = verifyStr.split('|');
       var verType = othis.attr('lay-vertype'); // 提示方式
-      var value = $.trim(othis.val());
+      var value = othis.val();
+      value = typeof value === 'string' ? $.trim(value) : value;
 
       othis.removeClass(DANGER); // 移除警示样式
       
