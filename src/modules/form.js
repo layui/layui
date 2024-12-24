@@ -24,7 +24,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       // 内置的验证规则
       verify: {
         required: function(value) {
-          if (!/[\S]+/.test(value)) {
+          if (!/[\S]+/.test(value) || value === undefined || value === null) {
             return '必填项不能为空';
           }
         },
@@ -113,7 +113,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         type = itemElem[0].type;
         
         // 如果为复选框
-        if(type === 'checkbox'){
+        if(itemElem.length === 1 && type === 'checkbox'){
           itemElem[0].checked = value;
         } else if(type === 'radio') { // 如果为单选框
           itemElem.each(function(){
@@ -154,7 +154,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       }
       
       if(/^(checkbox|radio)$/.test(item.type) && !item.checked) return;  // 复选框和单选框未选中，不记录字段     
-      field[init_name || item.name] = item.value;
+      var n = init_name || item.name;
+      var v = othis.val();
+      // 相同 name 的字段，将值合并到数组
+      field[n] = field[n] === undefined ? v
+        : $.isArray(field[n]) ? field[n].concat(v) 
+        : [field[n], v];
     });
     
     return field;
@@ -1148,7 +1153,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       var verifyStr = othis.attr('lay-verify') || '';
       var vers = verifyStr.split('|');
       var verType = othis.attr('lay-vertype'); // 提示方式
-      var value = $.trim(othis.val());
+      var value = othis.val();
+      value = typeof value === 'string' ? $.trim(value) : value;
 
       othis.removeClass(DANGER); // 移除警示样式
       
