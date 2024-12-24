@@ -24,7 +24,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       // 内置的验证规则
       verify: {
         required: function(value) {
-          if (!/[\S]+/.test(value)) {
+          if (!/[\S]+/.test(value) || value === undefined || value === null) {
             return '必填项不能为空';
           }
         },
