@@ -384,9 +384,13 @@ done: function(obj){
 </div>
 
 ```
-onCopy: function(code){
+onCopy: function(code, copied){
   console.log(code); // 得到当前 code 内容
+  console.log(copied); // 是否复制成功(2.9.21+)
+
+  return false; // 返回 false 阻止内置提示(2.9.21+)
 }
+
 ```
 
 </td>
