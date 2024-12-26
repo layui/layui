@@ -772,18 +772,6 @@
     );
   };
 
-  var hyphenateRE = /\B([A-Z])/g;
-  lay.hyphenate = function(str){
-    return str.replace(hyphenateRE, '-$1').toLowerCase();
-  };
-
-  var camelizeRE = /-(\w)/g;
-  lay.camelize = function(str){
-    return str.replace(camelizeRE, function(_, c){
-      return c ? c.toUpperCase() : '';
-    });
-  };
-
 
   /*
    * lay 元素操作
