@@ -256,7 +256,7 @@
   // 获取节点的 style 属性值
   Layui.prototype.getStyle = function(node, name){
     var style = node.currentStyle ? node.currentStyle : win.getComputedStyle(node, null);
-    return style[style.getPropertyValue ? 'getPropertyValue' : 'getAttribute'](name);
+    return style.getPropertyValue ? style.getPropertyValue(lay.hyphenate(name)) : style.getAttribute(lay.camelize(name));
   };
 
   // css 外部加载器

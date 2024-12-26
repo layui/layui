@@ -2898,7 +2898,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   Class.prototype.autoResize = function(){
     var that = this;
 
-    that.resizeStrategy(that.elem);
+    if(typeof that.resizeStrategy === 'function'){
+      that.resizeStrategy(that.elem);
+    }
   }
 
   Class.prototype.resizeStrategy = function(){
