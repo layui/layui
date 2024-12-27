@@ -10,6 +10,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   var util = layui.util;
   var hint = layui.hint();
   var device = layui.device();
+  var needCheckboxFallback = lay.ie && parseFloat(lay.ie) === 8;
   
   var MOD_NAME = 'form';
   var ELEM = '.layui-form';
@@ -949,7 +950,13 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           title = skin === 'switch' ? title.split('|') : [title];
           
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
-          
+
+          // 处理 IE8 indeterminate 属性重新定义 get set 后无法设置值的问题
+          if(needCheckboxFallback){
+            toggleAttribute.call(check, 'lay-form-sync-checked', check.checked);
+            !check.checked && toggleAttribute.call(check, 'lay-form-sync-indeterminate', check.indeterminate);
+          }
+
           // 替代元素
           var reElem = $(['<div class="layui-unselect '+ RE_CLASS[0],
             (check.checked ? (' '+ RE_CLASS[1]) : ''), // 选中状态
@@ -1026,6 +1033,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var skin = othis.attr('lay-skin');
           
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
+
+          if(needCheckboxFallback){
+            toggleAttribute.call(radio, 'lay-form-sync-checked', radio.checked);
+          }
+
           hasRender[0] && hasRender.remove(); // 如果已经渲染，则Rerender
 
           var title = util.escape(radio.title || '');
@@ -1100,27 +1112,50 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   
   /**
    * checkbox 和 radio 指定属性变化时自动更新 UI
+   * 只能用于 boolean 属性
    * @param {HTMLInputElement} elem - HTMLInput 元素
    * @param {'checked' | 'indeterminate'} propName - 属性名
    * @param {() => void} handler - 属性值改变时执行的回调
    * @see https://learn.microsoft.com/zh-cn/previous-versions//ff382725(v=vs.85)?redirectedfrom=MSDN
    */
-  Form.prototype.syncAppearanceOnPropChanged = function(elem, propName, handler){
-    var originProps = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, propName);
+  Form.prototype.syncAppearanceOnPropChanged = function(){
+    // 处理 IE8 indeterminate 属性重新定义 get set 后无法设置值的问题
+    // 此处性能敏感，不希望每次赋值取值时都判断是否需要 fallback
+    if (needCheckboxFallback) {
+      return function(elem, propName, handler) {
+        var originProps = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, propName);
 
-    Object.defineProperty(elem, propName,
-      lay.extend({}, originProps, {
-        // 此处的 get 是为了兼容 IE<9
-        get: function(){
-          return originProps.get.call(this);
-        },
-        set: function (newValue) {
-          originProps.set.call(this, newValue);
-          handler.call(this);
-        }
-      })
-    );
-  }
+        Object.defineProperty(elem, propName,
+          lay.extend({}, originProps, {
+            // 此处的 get 是为了兼容 IE<9
+            get: function(){
+              return typeof this.getAttribute('lay-form-sync-' + propName) === 'string';
+            },
+            set: function (newValue) {
+              toggleAttribute.call(this, 'lay-form-sync-' + propName, newValue);
+              handler.call(this);
+            }
+          })
+        ); 
+      }
+    }
+    return function(elem, propName, handler){
+      var originProps = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, propName);
+  
+      Object.defineProperty(elem, propName,
+        lay.extend({}, originProps, {
+          // 此处的 get 是为了兼容 IE<9
+          get: function(){
+            return originProps.get.call(this);
+          },
+          set: function (newValue) {
+            originProps.set.call(this, !!newValue);
+            handler.call(this);
+          }
+        })
+      );
+    }
+  }()
 
   /**
    * 主动触发验证
@@ -1286,6 +1321,25 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     regexPattern.push('.*');
 
     return new RegExp(regexPattern.join(''), !caseSensitive ? 'i' : undefined);
+  }
+
+  // 引用自 https://github.com/msn0/mdn-polyfills/blob/master/src/Element.prototype.toggleAttribute/toggleattribute.js
+  function toggleAttribute(name, force) {
+    var forcePassed = arguments.length === 2;
+    var forceOn = !!force;
+    var forceOff = forcePassed && !force;
+
+    if (this.getAttribute(name) !== null) {
+        if (forceOn) return true;
+
+        this.removeAttribute(name);
+        return false;
+    } else {
+        if (forceOff) return false;
+
+        this.setAttribute(name, '');
+        return true;
+    }
   }
   
   var form = new Form();
