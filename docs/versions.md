@@ -10,7 +10,7 @@ toc: true
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
 <h2 id="v2.9.21" class="ws-anchor">
-  v2.9.21-rc.2
+  v2.9.21-rc.3
   <span class="layui-badge-rim" style="color: #16b777;">预览版</span>
   <span class="layui-badge-rim">2024-12-30</span>
 </h2>
@@ -29,6 +29,7 @@ toc: true
 - #### form
   - ~~新增 将相同 `name` 的 `checkbox` 的值序列化为数组功能~~（已撤销）#2443 #2428 @Sight-wcg
   - 修复 `form.val()` 获取 `multiple select` 值错误 #2425 @Sight-wcg
+  - 修复 IE8 中 `checkbox` 半选异常问题 #2442 @Sight-wcg
 - #### nav
   - 修复 IE 低版本下执行 `element.render('nav')` 的报错问题 #2415 @Sight-wcg
 - #### colorpicker
@@ -38,7 +39,7 @@ toc: true
 - #### 其他
   - 优化 `.layui-body` 和 `.layui-text` 样式细节 #2395 @sentsim
 
-### 下载： [layui-v2.9.21-rc.2.zip](https://gitee.com/layui/layui/attach_files/2009889/download)
+### 下载： [layui-v2.9.21-rc.3.zip](https://gitee.com/layui/layui/attach_files/2010850/download)
 
 ---
 
