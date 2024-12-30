@@ -27,6 +27,7 @@ toc: true
   - 修复 指定元素渲染，添加和删除选项卡会导致全部 tab 重新渲染的问题 #2386 @Sight-wcg
   - 修复 出现展开按钮时，活动选项卡底边框显示异常 #2387 @Sight-wcg
 - #### form
+  - ~~新增 将相同 `name` 的 `checkbox` 的值序列化为数组功能~~（已撤销）#2443 #2428 @Sight-wcg
   - 修复 `form.val()` 获取 `multiple select` 值错误 #2425 @Sight-wcg
 - #### nav
   - 修复 IE 低版本下执行 `element.render('nav')` 的报错问题 #2415 @Sight-wcg
