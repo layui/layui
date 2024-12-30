@@ -1144,7 +1144,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             return originProps.get.call(this);
           },
           set: function (newValue) {
-            originProps.set.call(this, !!newValue);
+            originProps.set.call(this, newValue);
             handler.call(this);
           }
         })
