@@ -9,16 +9,17 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
-<h2 id="v2.9.21-rc" class="ws-anchor">
-  v2.9.21-rc.1
+<h2 id="v2.9.21" class="ws-anchor">
+  v2.9.21-rc.2
   <span class="layui-badge-rim" style="color: #16b777;">预览版</span>
-  <span class="layui-badge-rim">2024-12-25</span>
+  <span class="layui-badge-rim">2024-12-30</span>
 </h2>
 
 - #### table
   - 新增 通过 `ResizeObserver` 自动处理 `table.reisze`，以适应所处容器的尺寸变化 #2411 @Sight-wcg
   - 修复 未正确导出合计行模板的问题 #2412 @sentsim
   - 优化 表格在隐藏元素中渲染的宽度问题 #2376 #2402 @Sight-wcg
+  - 修复 IE8 下执行渲染的报错问题 #2437 @Sight-wcg
 - #### treeTable
   - 修复 直接赋值 `data` 时切换分页出现报错的问题 #2406 @sentsim
 - #### tab
@@ -26,8 +27,7 @@ toc: true
   - 修复 指定元素渲染，添加和删除选项卡会导致全部 tab 重新渲染的问题 #2386 @Sight-wcg
   - 修复 出现展开按钮时，活动选项卡底边框显示异常 #2387 @Sight-wcg
 - #### form
-  - 新增 将相同 `name` 的 `checkbox` 的值序列化为数组功能 #2428 @Sight-wcg
-  - 修复 `form.val()` 获取 multiple select 值错误 #2425 @Sight-wcg
+  - 修复 `form.val()` 获取 `multiple select` 值错误 #2425 @Sight-wcg
 - #### nav
   - 修复 IE 低版本下执行 `element.render('nav')` 的报错问题 #2415 @Sight-wcg
 - #### colorpicker
@@ -37,7 +37,7 @@ toc: true
 - #### 其他
   - 优化 `.layui-body` 和 `.layui-text` 样式细节 #2395 @sentsim
 
-### 下载： [layui-v2.9.21-rc.1.zip](https://gitee.com/layui/layui/attach_files/2005992/download)
+### 下载： [layui-v2.9.21-rc.2.zip](https://gitee.com/layui/layui/attach_files/2009889/download)
 
 ---
 
