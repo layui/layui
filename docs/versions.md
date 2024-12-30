@@ -39,7 +39,7 @@ toc: true
 - #### 其他
   - 优化 `.layui-body` 和 `.layui-text` 样式细节 #2395 @sentsim
 
-### 下载： [layui-v2.9.21-rc.3.zip](https://gitee.com/layui/layui/attach_files/2010850/download)
+### 下载： [layui-v2.9.21-rc.3.zip](https://gitee.com/layui/layui/attach_files/2010855/download)
 
 ---
 
