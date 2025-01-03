@@ -10,9 +10,9 @@ toc: true
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
 <h2 id="v2.9.21" class="ws-anchor">
-  v2.9.21-rc.3
-  <span class="layui-badge-rim" style="color: #16b777;">预览版</span>
-  <span class="layui-badge-rim">2024-12-30</span>
+  v2.9.21
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+  <span class="layui-badge-rim">2025-01-03</span>
 </h2>
 
 - #### table
@@ -27,7 +27,6 @@ toc: true
   - 修复 指定元素渲染，添加和删除选项卡会导致全部 tab 重新渲染的问题 #2386 @Sight-wcg
   - 修复 出现展开按钮时，活动选项卡底边框显示异常 #2387 @Sight-wcg
 - #### form
-  - ~~新增 将相同 `name` 的 `checkbox` 的值序列化为数组功能~~（已撤销）#2443 #2428 @Sight-wcg
   - 修复 `form.val()` 获取 `multiple select` 值错误 #2425 @Sight-wcg
   - 修复 IE8 中 `checkbox` 半选异常问题 #2442 @Sight-wcg
 - #### nav
@@ -39,7 +38,7 @@ toc: true
 - #### 其他
   - 优化 `.layui-body` 和 `.layui-text` 样式细节 #2395 @sentsim
 
-### 下载： [layui-v2.9.21-rc.3.zip](https://gitee.com/layui/layui/attach_files/2010855/download)
+### 下载： [layui-v2.9.21.zip](https://gitee.com/layui/layui/attach_files/2014210/download)
 
 ---
 
