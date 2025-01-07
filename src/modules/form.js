@@ -19,6 +19,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   var HIDE = 'layui-hide';
   var DISABLED = 'layui-disabled';
   var OUT_OF_RANGE = 'layui-input-number-out-of-range';
+  var BAD_INPUT = 'layui-input-number-invalid';
   
   var Form = function(){
     this.config = {
@@ -186,8 +187,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var precision = Number(elem.attr('lay-precision'));
           var noAction = eventType !== 'click' && rawValue === ''; // 初始渲染和失焦时空值不作处理
           var isInit = eventType === 'init';
+          var isBadInput = isNaN(value);
 
-          if(isNaN(value)) return; // 若非数字，则不作处理
+
+          elem.toggleClass(BAD_INPUT, isBadInput);
+          if(isBadInput) return; // 若非数字，则不作处理
 
           if(eventType === 'click'){
             var isDecrement = !!$(that).index() // 0: icon-up, 1: icon-down
@@ -361,6 +365,19 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               className: 'layui-input-number',
               disabled: othis.is('[disabled]'), // 跟随输入框禁用状态
               init: function(elem){
+                // 旧版浏览器不支持更改 input 元素的 type 属性，需要主动设置 text
+                if(elem.attr('type') === 'text'){
+                  var oldValue = isNaN(Number(elem.val())) ? '' : elem.val();
+                  elem.off('input.lay_input_number')
+                    .on('input.lay_input_number', function(e){
+                      if(canInputNumber(this.value)){
+                        oldValue = this.value;
+                      }else{
+                        this.value = oldValue;
+                      }
+                      elem.toggleClass(BAD_INPUT, isNaN(Number(this.value)));
+                    });
+                }
                 handleInputNumber.call(this, elem, 'init')
               },
               click: function(elem){
@@ -1335,6 +1352,32 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         this.setAttribute(name, '');
         return true;
     }
+  }
+
+  // 修改自 https://github.com/Tencent/tdesign-common/blob/53786c58752401e648cc45918f2a4dbb9e8cecfa/js/input-number/number.ts#L209
+  var specialCode = ['-', '.', 'e', 'E', '+'];
+  function canInputNumber(number) {
+    if (number === '') return true;
+    // 数字最前方不允许出现连续的两个 0
+    if (number.slice(0, 2) === '00') return false;
+    // 不能出现空格
+    if (number.match(/\s/g)) return false;
+    // 只能出现一个点（.）
+    var tempMatched = number.match(/\./g);
+    if (tempMatched && tempMatched.length > 1) return false;
+    // 只能出现一个e（e）
+    tempMatched = number.match(/e/g);
+    if (tempMatched && tempMatched.length > 1) return false;
+    // 只能出现一个负号（-）或 一个正号（+），并且在第一个位置；但允许 3e+10 这种形式
+    var tempNumber = number.slice(1);
+    tempMatched = tempNumber.match(/(\+|-)/g);
+    if (tempMatched && tempMatched.length > 1) return false;
+    if (tempMatched && !/e(\+|-)/i.test(tempNumber)) return false;
+    // 允许输入数字字符
+    var isNumber = !isNaN(Number(number));
+    if (!isNumber && !(specialCode.indexOf(number.slice(-1)) !== -1)) return false;
+    if (/e/i.test(number) && !/\de/i.test(number)) return false;
+    return true;
   }
   
   var form = new Form();
