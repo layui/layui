@@ -1371,8 +1371,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     // 只能出现一个负号（-）或 一个正号（+），并且在第一个位置；但允许 3e+10 这种形式
     var tempNumber = number.slice(1);
     tempMatched = tempNumber.match(/(\+|-)/g);
-    if (tempMatched && tempMatched.length > 1) return false;
-    if (tempMatched && !/e(\+|-)/i.test(tempNumber)) return false;
+    if (tempMatched && (!/e(\+|-)/i.test(tempNumber) || tempMatched.length > 1)) return false;
     // 允许输入数字字符
     var isNumber = !isNaN(Number(number));
     if (!isNumber && !(specialCode.indexOf(number.slice(-1)) !== -1)) return false;
