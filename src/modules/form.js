@@ -368,8 +368,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 // 旧版浏览器不支持更改 input 元素的 type 属性，需要主动设置 text
                 if(elem.attr('type') === 'text'){
                   var oldValue = isNaN(Number(elem.val())) ? '' : elem.val();
-                  elem.off('input.lay_input_number')
-                    .on('input.lay_input_number', function(e){
+                  elem.off('.lay_input_number')
+                    .on('input.lay_input_number propertychange.lay_input_number', function(e){
+                      if(e.type === 'propertychange' && e.originalEvent.propertyName !== 'value') return;
                       if(canInputNumber(this.value)){
                         oldValue = this.value;
                       }else{
