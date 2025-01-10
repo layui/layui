@@ -1376,7 +1376,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
     // 允许输入数字字符
     var isNumber = !isNaN(Number(number));
     if (!isNumber && !(specialCode.indexOf(number.slice(-1)) !== -1)) return false;
-    if (/e/i.test(number) && !/\de/i.test(number)) return false;
+    if (/e/i.test(number) && (!/\de/i.test(number) || /e\./.test(number))) return false;
     return true;
   }
   
