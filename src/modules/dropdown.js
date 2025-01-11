@@ -63,6 +63,9 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       },
       open: function () {
         that.render()
+      },
+      updatePosition: function () {
+        that.position()
       }
     }
   };
@@ -687,6 +690,15 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
 
     return dropdown.reload.apply(null, args);
   };
+
+  // 更新位置
+  dropdown.updatePosition = function(id){
+    var that = thisModule.getThis(id);
+    if(!that) return this;
+
+    that.position();
+    return thisModule.call(that);
+  }
 
   // 核心入口
   dropdown.render = function(options){

@@ -25,6 +25,8 @@ toc: true
 | [dropdown.reloadData(id, options)](#reload) <sup>2.8+</sup> | 仅重载数据或内容 |
 | [dropdown.close(id)](#close) | 关闭对应的组件面板 |
 | [dropdown.open(id)](#open) <sup>2.9.8+</sup> | 打开对应的组件面板 |
+| [dropdown.updatePosition(id)](#update-position) <sup>2.9.22+</sup> | 更新组件面板位置 |
+
 
 <h3 id="render" lay-toc="{level: 2}">渲染</h3>
 
@@ -177,4 +179,25 @@ dropdown.render({
 });
 // 打开对应的组件面板
 dropdown.open('test');
+```
+
+<h3 id="update-position" lay-pid="api" class="ws-anchor ws-bold">更新面板位置 <sup>2.9.22+</sup></h3>
+
+`dropdown.updatePosition(id);`
+
+- 参数 `id` : 组件渲染时定义的 `id` 属性值
+
+该方法用于绑定元素、面板元素大小变化时或嵌套滚动容器内更新对应的 `dropdown` 组件面板位置。
+
+```
+var dropdown = layui.dropdown;
+
+// 渲染
+dropdown.render({
+  elem: '', // 绑定元素选择器
+  id: 'test', // 自定义 id 
+  // 其他属性 …
+});
+// 更新对应的组件面板位置
+dropdown.updatePosition('test');
 ```
