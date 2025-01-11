@@ -529,7 +529,8 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       {
         ignore: (isCtxMenu || isTopElem) ? null : [options.elem[0]],
         event: clickOrMousedown,
-        capture: false
+        capture: false,
+        detectIframe: true
       }
     );
   };

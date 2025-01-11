@@ -470,7 +470,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 hideDown();
                 initValue && input.val(initValue);
               },
-              {ignore: title}
+              {ignore: title, detectIframe: true}
             );
           };
           

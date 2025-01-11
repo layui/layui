@@ -688,6 +688,7 @@
    * @param {HTMLElement | Window} [options.scope=document] - 监听范围
    * @param {Array<HTMLElement | string>} [options.ignore] - 忽略监听的元素或选择器字符串
    * @param {boolean} [options.capture=true] - 对内部事件侦听器使用捕获阶段
+   * @param {boolean} [options.detectIframe] - 是否检测 iframe
    * @returns {() => void} - 返回一个停止事件监听的函数
    */
   lay.onClickOutside = function(target, handler, options){
@@ -696,6 +697,7 @@
     var scopeTarget = options.scope || document;
     var ignore = options.ignore || [];
     var useCapture = 'capture' in options ? options.capture : true;
+    var detectIframe = options.detectIframe;
 
     var listener = function(event){
       var el = target;
@@ -764,12 +766,29 @@
       }
     }
 
-    return bindEventListener(
-      scopeTarget, 
-      eventType, 
-      listener, 
-      lay.passiveSupported ? { passive: true, capture: useCapture } : useCapture
-    );
+    var cleanup = [
+      bindEventListener(
+        scopeTarget, 
+        eventType, 
+        listener, 
+        lay.passiveSupported ? { passive: true, capture: useCapture } : useCapture
+      ),
+      detectIframe && bindEventListener(window, 'blur', function(event){
+        setTimeout(function(){
+          if(document.activeElement && document.activeElement.tagName === 'IFRAME' 
+            && target.contains && !target.contains(document.activeElement)
+          ){
+            handler(event);
+          }
+        }, 0);
+      })
+    ];
+
+    return function(){
+      for(var i=0; i < cleanup.length; i++){
+        cleanup[i] && cleanup[i]();
+      }
+    }
   };
 
 
