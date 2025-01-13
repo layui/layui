@@ -380,6 +380,12 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports){
       }
     });
 
+    if(typeof that.stopClickOutsideEvent === 'function'){
+      that.stopClickOutsideEvent();
+    }
+    if(typeof that.stopResizeEvent === 'function'){
+      that.stopResizeEvent();
+    }
     that.stopClickOutsideEvent = that.onClickOutside();
     that.stopResizeEvent = that.autoUpdatePosition();
 
