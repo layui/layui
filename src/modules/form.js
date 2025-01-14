@@ -188,6 +188,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var noAction = eventType !== 'click' && rawValue === ''; // 初始渲染和失焦时空值不作处理
           var isInit = eventType === 'init';
           var isBadInput = isNaN(value);
+          var isStepStrictly = typeof elem.attr('lay-step-strictly') === 'string';
 
           elem.toggleClass(BAD_INPUT, isBadInput);
           if(isBadInput) return; // 若非数字，则不作处理
@@ -217,6 +218,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               value = parseInt(value);
             } else if(precision > 0) { // 小数位精度
               value = value.toFixed(precision);
+            }
+            if(isStepStrictly && step !== 0){
+              var remainder = Math.abs(value % step);
+              if(remainder){
+                value = value - remainder + step;
+              }
             }
             elem.val(value);
             elem.attr('lay-input-mirror', elem.val())
@@ -370,6 +377,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                   var ns = '.lay_input_number';
                   var skipCheck = false;
                   var isComposition = false;
+                  var isKeyboard = typeof elem.attr('lay-keyboard') === 'string';
+                  var isMouseWheel = typeof elem.attr('lay-wheel') === 'string';
+                  var btnElem = elem.next('.layui-input-number').children('i');
                   // 旧版浏览器不支持 beforeInput 事件，需要设置一个 attr 存储输入前的值
                   elem.attr('lay-input-mirror', elem.val());
                   elem.off(ns);
@@ -378,6 +388,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                     skipCheck = false;
                     if (e.keyCode === 8 || e.keyCode === 46) { // Backspace || Delete
                       skipCheck = true;
+                    }
+                    // Up & Down 键盘事件处理
+                    if(isKeyboard && btnElem.length === 2 && (e.keyCode === 38 || e.keyCode === 40)){
+                      e.preventDefault();
+                      btnElem.eq(e.keyCode === 38 ? 0 : 1).click();
                     }
                   })
                   elem.on('input' + ns + ' propertychange' + ns, function (e) {
@@ -397,6 +412,26 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                     isComposition = false;
                     elem.trigger('input');
                   })
+                  // 响应鼠标滚轮或触摸板
+                  if(isMouseWheel){
+                    elem.on(['wheel','mousewheel','DOMMouseScroll'].join(ns + ' ') + ns, function (e) {
+                      if(!btnElem.length) return;
+                      if(!$(this).is(':focus')) return;
+                      var direction = 0;
+                      e.preventDefault();
+                      // IE9+，chrome 和 firefox 同时添加 'wheel' 和 'mousewheel' 事件时，只执行 'wheel' 事件
+                      if(e.type === 'wheel'){
+                        e.deltaX = e.originalEvent.deltaX;
+                        e.deltaY = e.originalEvent.deltaY;
+                        direction = Math.abs(e.deltaX) >= Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+                      }else if(e.type === 'mousewheel' ){
+                        direction = -e.originalEvent.wheelDelta;
+                      }else if(e.type === 'DOMMouseScroll'){
+                        direction = e.originalEvent.detail;
+                      }
+                      btnElem.eq(direction > 0 ? 1 : 0).click();
+                    })
+                  }
                 }
                 handleInputNumber.call(this, elem, 'init')
               },
