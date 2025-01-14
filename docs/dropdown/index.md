@@ -181,7 +181,7 @@ dropdown.render({
 dropdown.open('test');
 ```
 
-<h3 id="update-position" lay-pid="api" class="ws-anchor ws-bold">更新面板位置 <sup>2.9.22+</sup></h3>
+<h3 id="update-position" lay-pid="api" class="ws-anchor ws-bold">更新面板位置 <sup>2.10.0+</sup></h3>
 
 `dropdown.updatePosition(id);`
 
