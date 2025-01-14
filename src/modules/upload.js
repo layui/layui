@@ -3,13 +3,14 @@
  * 上传组件
  */
  
-layui.define(['lay', 'layer'], function(exports){
+layui.define(['lay', 'layer', 'util'], function(exports){
   "use strict";
   
   var $ = layui.$;
   var lay = layui.lay;
   var layer = layui.layer;
   var device = layui.device();
+  var util = layui.util;
 
   // 模块名
   var MOD_NAME = 'upload';
@@ -502,7 +503,7 @@ layui.define(['lay', 'layer'], function(exports){
       }
       // 上传前的回调 - 如果回调函数明确返回 false 或 Promise.reject，则停止上传
       if(typeof options.before === 'function'){
-        upload.util.promiseLikeResolve(options.before(args))
+        util.promiseLikeResolve(options.before(args))
           .then(function(result){
             if(result !== false){
               ready();
@@ -813,19 +814,6 @@ layui.define(['lay', 'layer'], function(exports){
       size = formatSize / Math.pow(1024, index);
       size = size % 1 === 0 ? size : parseFloat(size.toFixed(precision));//保留的小数位数
       return size + unitArr[index];
-    },
-    /**
-     * 将给定的值转换为一个 JQueryDeferred 对象
-     */
-    promiseLikeResolve:function(value){
-      var deferred = $.Deferred();
-
-      if(value && typeof value.then === 'function'){
-        value.then(deferred.resolve, deferred.reject);
-      }else{
-        deferred.resolve(value);
-      }
-      return deferred.promise();
     }
   }
 

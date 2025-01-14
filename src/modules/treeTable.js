@@ -3,13 +3,14 @@
  * 树表组件
  */
 
-layui.define(['table'], function (exports) {
+layui.define(['table', 'util'], function (exports) {
   "use strict";
 
   var $ = layui.$;
   var form = layui.form;
   var table = layui.table;
   var hint = layui.hint();
+  var util = layui.util;
 
   // api
   var treeTable = {
@@ -149,29 +150,40 @@ layui.define(['table'], function (exports) {
       // 异步加载的时候需要处理parseData进行转换
       if (!reload || (reload && parseData && !parseData.mod)) {
         options.parseData = function () {
+          var defer = $.Deferred();
           var parseDataThat = this;
           var args = arguments;
           var retData = args[0];
           if (layui.type(parseData) === 'function') {
             retData = parseData.apply(parseDataThat, args) || args[0];
           }
-          var dataName = parseDataThat.response.dataName;
-          // 处理 isSimpleData
-          if (treeOptions.data.isSimpleData && !treeOptions.async.enable) { // 异步加载和 isSimpleData 不应该一起使用
-            retData[dataName] = that.flatToTree(retData[dataName]);
-          }
-          // 处理节点状态
-          updateStatus(retData[dataName], function (item) {
-            item[LAY_EXPAND] = LAY_EXPAND in item ? item[LAY_EXPAND] : (item[idKey] !== undefined && that.status.expand[item[idKey]])
-          }, childrenKey);
-
-          if (parseDataThat.autoSort && parseDataThat.initSort && parseDataThat.initSort.type) {
-            layui.sort(retData[dataName], parseDataThat.initSort.field, parseDataThat.initSort.type === 'desc', true)
-          }
-
-          that.initData(retData[dataName]);
-
-          return retData;
+          var p = layui.type(parseData) === 'function'
+            ? parseData.apply(parseDataThat, args) || args[0]
+            : args[0];
+          util.promiseLikeResolve(p).then(function (res) {
+            return res;
+          },function(reason){
+            reason !== undefined && layui.hint().error(reason);
+            defer.reject(reason);
+          }).then(function (retData) {
+            var dataName = parseDataThat.response.dataName;
+            // 处理 isSimpleData
+            if (treeOptions.data.isSimpleData && !treeOptions.async.enable) { // 异步加载和 isSimpleData 不应该一起使用
+              retData[dataName] = that.flatToTree(retData[dataName]);
+            }
+            // 处理节点状态
+            updateStatus(retData[dataName], function (item) {
+              item[LAY_EXPAND] = LAY_EXPAND in item ? item[LAY_EXPAND] : (item[idKey] !== undefined && that.status.expand[item[idKey]])
+            }, childrenKey);
+  
+            if (parseDataThat.autoSort && parseDataThat.initSort && parseDataThat.initSort.type) {
+              layui.sort(retData[dataName], parseDataThat.initSort.field, parseDataThat.initSort.type === 'desc', true)
+            }
+  
+            that.initData(retData[dataName]);
+            defer.resolve(retData);
+          });
+          return defer.promise();
         }
         options.parseData.mod = true
       }
@@ -723,16 +735,24 @@ layui.define(['table'], function (exports) {
               if (typeof asyncParseData === 'function') {
                 res = asyncParseData.call(options, res) || res;
               }
-              // 检查数据格式是否符合规范
-              if (res[asyncResponse.statusName] != asyncResponse.statusCode) {
-                trData[LAY_ASYNC_STATUS] = 'error';
-                // 异常处理 todo
-                flexIconElem.html('<i class="layui-icon layui-icon-refresh"></i>');
-                // 事件
-              } else {
-                // 正常返回
-                asyncSuccessFn(res[asyncResponse.dataName]);
-              }
+              var param = typeof asyncParseData === 'function'
+                ? asyncParseData.call(options, res) || res
+                : res;
+              util.promiseLikeResolve(param)
+                .then(function (res) {
+                  // 检查数据格式是否符合规范
+                  if (res[asyncResponse.statusName] != asyncResponse.statusCode) {
+                    trData[LAY_ASYNC_STATUS] = 'error';
+                    // 异常处理 todo
+                    flexIconElem.html('<i class="layui-icon layui-icon-refresh"></i>');
+                    // 事件
+                  } else {
+                    // 正常返回
+                    asyncSuccessFn(res[asyncResponse.dataName]);
+                  }
+                }, function (reason) {
+                  reason !== undefined && layui.hint().error(reason);
+                })
             },
             error: function (e, msg) {
               trData[LAY_ASYNC_STATUS] = 'error';

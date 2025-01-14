@@ -1206,34 +1206,38 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         complete: typeof options.complete === 'function' ? options.complete : undefined,
         success: function(res){
           // 若有数据解析的回调，则获得其返回的数据
-          if(typeof options.parseData === 'function'){
-            res = options.parseData(res) || res;
-          }
-          // 检查数据格式是否符合规范
-          if(res[response.statusName] != response.statusCode){
-            that.errorView(
-              res[response.msgName] ||
-              ('返回的数据不符合规范，正确的成功状态码应为："'+ response.statusName +'": '+ response.statusCode)
-            );
-          } else {
-            // 当前页不能超过总页数
-            var count = res[response.countName];
-            var pages = Math.ceil(count / options.limit) || 1;
-            if(curr > pages){
-              curr = pages;
-            }
-            that.totalRow = res[response.totalRowName];
-            that.renderData({
-              res: res,
-              curr: curr,
-              count: count,
-              type: opts.type
-            }), sort();
+          var param = typeof options.parseData === 'function'
+            ? options.parseData(res) || res
+            : res;
+          util.promiseLikeResolve(param).then(function(res){
+            // 检查数据格式是否符合规范
+            if (res[response.statusName] != response.statusCode) {
+              that.errorView(
+                res[response.msgName] ||
+                ('返回的数据不符合规范，正确的成功状态码应为："' + response.statusName + '": ' + response.statusCode)
+              );
+            } else {
+              // 当前页不能超过总页数
+              var count = res[response.countName];
+              var pages = Math.ceil(count / options.limit) || 1;
+              if (curr > pages) {
+                curr = pages;
+              }
+              that.totalRow = res[response.totalRowName];
+              that.renderData({
+                res: res,
+                curr: curr,
+                count: count,
+                type: opts.type
+              }), sort();
 
-            // 耗时（接口请求+视图渲染）
-            options.time = (new Date().getTime() - that.startTime) + ' ms';
-          }
-          done(res, opts.type);
+              // 耗时（接口请求+视图渲染）
+              options.time = (new Date().getTime() - that.startTime) + ' ms';
+            }
+            done(res, opts.type);
+          }, function (reason) {
+            reason !== undefined && layui.hint().error(reason);
+          });
         },
         error: function(e, msg){
           that.errorView('请求异常，错误提示：'+ msg);

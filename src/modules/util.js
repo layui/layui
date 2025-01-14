@@ -443,6 +443,23 @@ layui.define('jquery', function(exports){
       });
 
       return events;
+    },
+    /**
+     * 仅供内部使用，未文档化
+     * 将给定的值转换为一个 JQueryDeferred 对象,类似 Promise.Resolve
+     * @template T
+     * @param {T | PromiseLike<T>} value  值
+     * @return {JQueryDeferred<Awaited<T>>} 返回一个 JQueryDeferred 对象
+     */
+    promiseLikeResolve: function (value) {
+      var deferred = $.Deferred();
+
+      if (value && typeof value === 'object' && typeof value.then === 'function') {
+        value.then(deferred.resolve, deferred.reject);
+      } else {
+        deferred.resolve(value);
+      }
+      return deferred.promise();
     }
   };
 
