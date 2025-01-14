@@ -189,7 +189,6 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var isInit = eventType === 'init';
           var isBadInput = isNaN(value);
 
-
           elem.toggleClass(BAD_INPUT, isBadInput);
           if(isBadInput) return; // 若非数字，则不作处理
 
@@ -220,6 +219,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               value = value.toFixed(precision);
             }
             elem.val(value);
+            elem.attr('lay-input-mirror', elem.val())
           }
 
           // 超出范围的样式
@@ -367,17 +367,36 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               init: function(elem){
                 // 旧版浏览器不支持更改 input 元素的 type 属性，需要主动设置 text
                 if(elem.attr('type') === 'text'){
-                  var oldValue = isNaN(Number(elem.val())) ? '' : elem.val();
-                  elem.off('.lay_input_number')
-                    .on('input.lay_input_number propertychange.lay_input_number', function(e){
-                      if(e.type === 'propertychange' && e.originalEvent.propertyName !== 'value') return;
-                      if(canInputNumber(this.value)){
-                        oldValue = this.value;
-                      }else{
-                        this.value = oldValue;
-                      }
-                      elem.toggleClass(BAD_INPUT, isNaN(Number(this.value)));
-                    });
+                  var ns = '.lay_input_number';
+                  var skipCheck = false;
+                  var isComposition = false;
+                  // 旧版浏览器不支持 beforeInput 事件，需要设置一个 attr 存储输入前的值
+                  elem.attr('lay-input-mirror', elem.val());
+                  elem.off(ns);
+                  // 旧版浏览器不支持 event.inputType 属性，需要用 keydown 事件来判断是否跳过输入检查
+                  elem.on('keydown' + ns, function (e) {
+                    skipCheck = false;
+                    if (e.keyCode === 8 || e.keyCode === 46) { // Backspace || Delete
+                      skipCheck = true;
+                    }
+                  })
+                  elem.on('input' + ns + ' propertychange' + ns, function (e) {
+                    if (isComposition || (e.type === 'propertychange' && e.originalEvent.propertyName !== 'value')) return;
+                    if (skipCheck || canInputNumber(this.value)) {
+                      elem.attr('lay-input-mirror', this.value);
+                    } else {
+                      // 恢复输入前的值
+                      this.value = elem.attr('lay-input-mirror');
+                    }
+                    elem.toggleClass(BAD_INPUT, isNaN(Number(this.value)));
+                  });
+                  elem.on('compositionstart' + ns, function () {
+                    isComposition = true;
+                  });
+                  elem.on('compositionend' + ns, function () {
+                    isComposition = false;
+                    elem.trigger('input');
+                  })
                 }
                 handleInputNumber.call(this, elem, 'init')
               },
