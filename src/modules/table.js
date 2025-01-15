@@ -1194,7 +1194,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
 
       that.loading(true);
-
+      var currentRequestId = that.requestId = that.startTime;
       $.ajax({
         type: options.method || 'get',
         url: options.url,
@@ -1210,6 +1210,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
             ? options.parseData(res) || res
             : res;
           util.promiseLikeResolve(maybePromise).then(function(res){
+          // 忽略过期的请求结果
+            if(currentRequestId !== that.requestId){
+              hint.error('AJAX_CANCELED: ' + currentRequestId, 'warn');
+              return;
+            };
             // 检查数据格式是否符合规范
             if (res[response.statusName] != response.statusCode) {
               that.errorView(
