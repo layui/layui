@@ -153,10 +153,7 @@ layui.define(['table', 'util'], function (exports) {
           var defer = $.Deferred();
           var parseDataThat = this;
           var args = arguments;
-          var retData = args[0];
-          if (layui.type(parseData) === 'function') {
-            retData = parseData.apply(parseDataThat, args) || args[0];
-          }
+
           var maybePromise = layui.type(parseData) === 'function'
             ? parseData.apply(parseDataThat, args) || args[0]
             : args[0];
