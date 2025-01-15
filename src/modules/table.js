@@ -1241,6 +1241,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
             }
             done(res, opts.type);
           }, function (reason) {
+            that.loading(false);
             reason !== undefined && layui.hint().error(reason);
           });
         },

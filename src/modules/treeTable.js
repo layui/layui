@@ -160,12 +160,7 @@ layui.define(['table', 'util'], function (exports) {
           var maybePromise = layui.type(parseData) === 'function'
             ? parseData.apply(parseDataThat, args) || args[0]
             : args[0];
-          util.promiseLikeResolve(maybePromise).then(function (res) {
-            return res;
-          },function(reason){
-            reason !== undefined && layui.hint().error(reason);
-            defer.reject(reason);
-          }).then(function (retData) {
+          util.promiseLikeResolve(maybePromise).then(function (retData) {
             var dataName = parseDataThat.response.dataName;
             // 处理 isSimpleData
             if (treeOptions.data.isSimpleData && !treeOptions.async.enable) { // 异步加载和 isSimpleData 不应该一起使用
@@ -182,7 +177,11 @@ layui.define(['table', 'util'], function (exports) {
   
             that.initData(retData[dataName]);
             defer.resolve(retData);
-          });
+          },function(reason){
+            reason !== undefined && layui.hint().error(reason);
+            defer.reject(reason);
+          })
+
           return defer.promise();
         }
         options.parseData.mod = true
@@ -751,6 +750,9 @@ layui.define(['table', 'util'], function (exports) {
                     asyncSuccessFn(res[asyncResponse.dataName]);
                   }
                 }, function (reason) {
+                  trData[LAY_ASYNC_STATUS] = 'error';
+                  // 异常处理 todo
+                  flexIconElem.html('<i class="layui-icon layui-icon-refresh"></i>');
                   reason !== undefined && layui.hint().error(reason);
                 })
             },
