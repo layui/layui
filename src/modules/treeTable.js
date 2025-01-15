@@ -682,7 +682,7 @@ layui.define(['table', 'util'], function (exports) {
       } else {
         var asyncSetting = treeOptions.async || {};
         var asyncUrl = asyncSetting.url || options.url;
-        if (asyncSetting.enable && trData[isParentKey] && !trData[LAY_ASYNC_STATUS]) {
+        if (asyncSetting.enable && trData[isParentKey] && (!trData[LAY_ASYNC_STATUS] || trData[LAY_ASYNC_STATUS] === 'error')) {
           trData[LAY_ASYNC_STATUS] = 'loading';
           flexIconElem.html('<i class="layui-icon layui-icon-loading layui-anim layui-anim-loop layui-anim-rotate"></i>');
 
@@ -731,9 +731,6 @@ layui.define(['table', 'util'], function (exports) {
             headers: asyncHeaders || {},
             success: function (res) {
               // 若有数据解析的回调，则获得其返回的数据
-              if (typeof asyncParseData === 'function') {
-                res = asyncParseData.call(options, res) || res;
-              }
               var maybePromise = typeof asyncParseData === 'function'
                 ? asyncParseData.call(options, res) || res
                 : res;
@@ -742,6 +739,7 @@ layui.define(['table', 'util'], function (exports) {
                   // 检查数据格式是否符合规范
                   if (res[asyncResponse.statusName] != asyncResponse.statusCode) {
                     trData[LAY_ASYNC_STATUS] = 'error';
+                    trData[LAY_EXPAND] = false;
                     // 异常处理 todo
                     flexIconElem.html('<i class="layui-icon layui-icon-refresh"></i>');
                     // 事件
@@ -750,6 +748,7 @@ layui.define(['table', 'util'], function (exports) {
                     asyncSuccessFn(res[asyncResponse.dataName]);
                   }
                 }, function (reason) {
+                  trData[LAY_EXPAND] = false;
                   trData[LAY_ASYNC_STATUS] = 'error';
                   // 异常处理 todo
                   flexIconElem.html('<i class="layui-icon layui-icon-refresh"></i>');
