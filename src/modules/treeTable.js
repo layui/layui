@@ -157,10 +157,10 @@ layui.define(['table', 'util'], function (exports) {
           if (layui.type(parseData) === 'function') {
             retData = parseData.apply(parseDataThat, args) || args[0];
           }
-          var p = layui.type(parseData) === 'function'
+          var maybePromise = layui.type(parseData) === 'function'
             ? parseData.apply(parseDataThat, args) || args[0]
             : args[0];
-          util.promiseLikeResolve(p).then(function (res) {
+          util.promiseLikeResolve(maybePromise).then(function (res) {
             return res;
           },function(reason){
             reason !== undefined && layui.hint().error(reason);
@@ -735,10 +735,10 @@ layui.define(['table', 'util'], function (exports) {
               if (typeof asyncParseData === 'function') {
                 res = asyncParseData.call(options, res) || res;
               }
-              var param = typeof asyncParseData === 'function'
+              var maybePromise = typeof asyncParseData === 'function'
                 ? asyncParseData.call(options, res) || res
                 : res;
-              util.promiseLikeResolve(param)
+              util.promiseLikeResolve(maybePromise)
                 .then(function (res) {
                   // 检查数据格式是否符合规范
                   if (res[asyncResponse.statusName] != asyncResponse.statusCode) {

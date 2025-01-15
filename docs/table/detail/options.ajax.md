@@ -135,6 +135,20 @@ table.render({
   },
   // … //其他参数
 }); 
+
+// 返回 Promise 或 JqueryDeferred 对象(2.10+)
+table.render({
+  elem: '',
+  url: '',
+  parseData: function(res){ // res 即为原始返回的数据
+    return new Promise(function(resolve, reject){
+      setTimeout(() => {
+        resolve(res)
+      },3000)
+    })
+  },
+  // … //其他参数
+}); 
 ```
 
 该函数非常实用

@@ -1206,10 +1206,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         complete: typeof options.complete === 'function' ? options.complete : undefined,
         success: function(res){
           // 若有数据解析的回调，则获得其返回的数据
-          var param = typeof options.parseData === 'function'
+          var maybePromise = typeof options.parseData === 'function'
             ? options.parseData(res) || res
             : res;
-          util.promiseLikeResolve(param).then(function(res){
+          util.promiseLikeResolve(maybePromise).then(function(res){
             // 检查数据格式是否符合规范
             if (res[response.statusName] != response.statusCode) {
               that.errorView(
