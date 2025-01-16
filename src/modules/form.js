@@ -373,7 +373,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               disabled: othis.is('[disabled]'), // 跟随输入框禁用状态
               init: function(elem){
                 // 旧版浏览器不支持更改 input 元素的 type 属性，需要主动设置 text
-                if(elem.attr('type') === 'text'){
+                if(elem.attr('type') === 'text' || elem[0].type === 'text'){
                   var ns = '.lay_input_number';
                   var skipCheck = false;
                   var isComposition = false;
