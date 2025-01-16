@@ -788,6 +788,7 @@
       for(var i=0; i < cleanup.length; i++){
         cleanup[i] && cleanup[i]();
       }
+      cleanup = null;
     }
   };
 
