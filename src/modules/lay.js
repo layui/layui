@@ -792,6 +792,11 @@
     }
   };
 
+  var hasOwnProperty = Object.prototype.hasOwnProperty;
+  lay.hasOwn = function(obj, prop){
+    return hasOwnProperty.call(obj, prop);
+  };
+
 
   /*
    * lay 元素操作

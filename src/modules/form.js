@@ -105,9 +105,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       var itemForm = $(this);
       
       // 赋值
-      layui.each(object, function(key, value){
-        var itemElem = itemForm.find('[name="'+ key +'"]')
-        ,type;
+      for(var key in object){
+        if(!lay.hasOwn(object, key)) continue;
+
+        var type;
+        var value = object[key];
+        var itemElem = itemForm.find('[name="'+ key +'"]');
         
         // 如果对应的表单不存在，则不执行
         if(!itemElem[0]) return;
@@ -123,7 +126,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         } else { // 其它类型的表单
           itemElem.val(value);
         }
-      });
+      };
     });
     
     form.render(null, filter);
