@@ -450,8 +450,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     that.fullSize();
     that.setColsWidth({isInit: true});
 
-    that.pullData(that.page); // 请求数据
-    that.events(); // 事件
+    // 请求数据
+    that.pullData(that.page).then(function(){
+      that.events(); // 事件
+    });
   };
 
   // 根据列类型，定制化参数
@@ -1129,6 +1131,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   // 获得数据
   Class.prototype.pullData = function(curr, opts){
+    var defer = $.Deferred();
     var that = this;
     var options = that.config;
     // 同步表头父列的相关值
@@ -1149,6 +1152,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var done = function(res, origin){
       that.setColsWidth();
       that.loading(false);
+      defer.resolve({result: res, origin: origin});
       typeof options.done === 'function' && options.done(
         res, curr, res[response.countName], origin
       );
@@ -1157,9 +1161,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     opts = opts || {};
 
     // 数据拉取前的回调
-    typeof options.before === 'function' && options.before(
-      options
-    );
+    if(typeof options.before === 'function'){
+      var cancelRequest = options.before(options);
+      if(cancelRequest === false){
+        that.loading(false)
+        defer.resolve();
+        return defer.promise();
+      }
+    } 
     that.startTime = new Date().getTime(); // 渲染开始时间
 
     if (opts.renderData) { // 将 cache 信息重新渲染
@@ -1275,6 +1284,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       done(res, opts.type);
     }
+
+    return defer.promise();
   };
 
   // 遍历表头
