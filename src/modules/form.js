@@ -377,7 +377,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                   var ns = '.lay_input_number';
                   var skipCheck = false;
                   var isComposition = false;
-                  var isKeyboard = typeof elem.attr('lay-keyboard') === 'string';
+                  var isKeyboard = typeof elem.attr('readonly') !== 'string';
                   var isMouseWheel = typeof elem.attr('lay-wheel') === 'string';
                   var btnElem = elem.next('.layui-input-number').children('i');
                   // 旧版浏览器不支持 beforeInput 事件，需要设置一个 attr 存储输入前的值
