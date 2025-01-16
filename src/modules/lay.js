@@ -770,6 +770,11 @@
       listener, 
       lay.passiveSupported ? { passive: true, capture: useCapture } : useCapture
     );
+  }
+
+  var hasOwnProperty = Object.prototype.hasOwnProperty;
+  lay.hasOwn = function(obj, prop){
+    return hasOwnProperty.call(obj, prop);
   };
 
 
