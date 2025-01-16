@@ -194,6 +194,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           if(isBadInput) return; // 若非数字，则不作处理
 
           if(eventType === 'click'){
+            // 兼容旧版行为，2.10 以前 readonly 不禁用控制按钮
+            if(elem[0].type === 'text' && typeof elem.attr('readonly') === 'string') return;
             var isDecrement = !!$(that).index() // 0: icon-up, 1: icon-down
             value = isDecrement ? value - step : value + step;
           }
@@ -375,7 +377,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                   var ns = '.lay_input_number';
                   var skipCheck = false;
                   var isComposition = false;
-                  var isKeyboard = typeof elem.attr('readonly') !== 'string';
+                  var isReadonly = typeof elem.attr('readonly') === 'string';
                   var isMouseWheel = typeof elem.attr('lay-wheel') === 'string';
                   var btnElem = elem.next('.layui-input-number').children('i');
                   // 旧版浏览器不支持 beforeInput 事件，需要设置一个 attr 存储输入前的值
@@ -388,7 +390,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                       skipCheck = true;
                     }
                     // Up & Down 键盘事件处理
-                    if(isKeyboard && btnElem.length === 2 && (e.keyCode === 38 || e.keyCode === 40)){
+                    if(!isReadonly && btnElem.length === 2 && (e.keyCode === 38 || e.keyCode === 40)){
                       e.preventDefault();
                       btnElem.eq(e.keyCode === 38 ? 0 : 1).click();
                     }
@@ -429,6 +431,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                       }
                       btnElem.eq(direction > 0 ? 1 : 0).click();
                     })
+                  }
+
+                  if(isReadonly){
+                    btnElem.addClass(DISABLED);
                   }
                 }
                 handleInputNumber.call(this, elem, 'init')
