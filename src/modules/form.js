@@ -210,6 +210,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           if (!noAction) {
             // 初始渲染时只处理数字精度
             if (!isInit) {
+              if(isStepStrictly){
+                value = Math.round(value / step) * step;
+              }
               if(value <= min) value = min;
               if(value >= max) value = max;
             }
@@ -219,12 +222,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             } else if(precision > 0) { // 小数位精度
               value = value.toFixed(precision);
             }
-            if(isStepStrictly && step !== 0){
-              var remainder = Math.abs(value % step);
-              if(remainder){
-                value = value - remainder + step;
-              }
-            }
+
             elem.val(value);
             elem.attr('lay-input-mirror', elem.val())
           }
