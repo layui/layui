@@ -140,10 +140,10 @@ toc: true
       <input type="text" lay-affix="number" placeholder="设置 step 为 0.01" step="0.01" class="layui-input">
     </div>
     <div class="layui-col-xs6">
-      <input type="text" lay-affix="number" placeholder="设置 step,min,max" lay-step-strictly step="10" min="0" max="100" class="layui-input">
+      <input type="text" lay-affix="number" placeholder="设置 step,min,max" step="10" min="0" max="100" class="layui-input">
     </div>
     <div class="layui-col-xs6">
-      <input type="text" lay-affix="number" placeholder="步长严格模式" step="10" min="0" max="100" class="layui-input">
+      <input type="text" lay-affix="number" placeholder="步长严格模式" lay-step-strictly step="10" min="0" max="100" class="layui-input">
     </div>
     <div class="layui-col-xs4">
       <input type="text" lay-affix="number" placeholder="设置小数位精度为 2" step="0.1" lay-precision="2" class="layui-input">
