@@ -152,6 +152,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   var DISABLED_TRANSITION = 'layui-table-disabled-transition';
 
   var DATA_MOVE_NAME = 'LAY_TABLE_MOVE_DICT';
+  var ERROR_TYPE = {
+    NO_DATA_EXCEPTION: 'NO_DATA_EXCEPTION',
+    PARSE_DATA_EXCEPTION: 'PARSE_DATA_EXCEPTION',
+    AJAX_ERROR: 'AJAX_ERROR',
+    STATUS_CODE_ERROR: 'STATUS_CODE_ERROR'
+  }
 
   // thead 区域模板
   var TPL_HEADER = function(options){
@@ -1097,10 +1103,18 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   };
 
   // 异常提示
-  Class.prototype.errorView = function(html){
-    var that = this
-    ,elemNone = that.layMain.find('.'+ NONE)
-    ,layNone = $('<div class="'+ NONE +'">'+ (html || 'Error') +'</div>');
+  Class.prototype.errorView = function(html, contextInfo){
+    var that = this;
+    var options = that.config;
+    if(typeof options.error === 'function'){
+      if(options.error(contextInfo.xhr, contextInfo.msg, contextInfo.type) === false){
+        that.loading(false);
+        return;
+      }
+    };
+    if(!html)return;
+    var elemNone = that.layMain.find('.'+ NONE)
+    var layNone = $('<div class="'+ NONE +'">'+ (html || 'Error') +'</div>');
 
     if(elemNone[0]){
       that.layNone.remove();
@@ -1232,7 +1246,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
             if (res[response.statusName] != response.statusCode) {
               that.errorView(
                 res[response.msgName] ||
-                ('返回的数据不符合规范，正确的成功状态码应为："' + response.statusName + '": ' + response.statusCode)
+                ('返回的数据不符合规范，正确的成功状态码应为："' + response.statusName + '": ' + response.statusCode),
+                {type: ERROR_TYPE.STATUS_CODE_ERROR}
               );
             } else {
               // 当前页不能超过总页数
@@ -1255,12 +1270,13 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
             done(res, opts.type);
           }, function (reason) {
             that.loading(false);
-            reason !== undefined && layui.hint().error(reason);
+            reason !== undefined && hint.error(reason);
+            that.errorView(null, {type: ERROR_TYPE.PARSE_DATA_EXCEPTION});
           });
         },
-        error: function(e, msg){
-          that.errorView('请求异常，错误提示：'+ msg);
-          typeof options.error === 'function' && options.error(e, msg);
+        error: function(xhr, msg){
+          that.errorView('请求异常，错误提示：'+ msg, {xhr: xhr, msg: msg, type: ERROR_TYPE.AJAX_ERROR});
+          //typeof options.error === 'function' && options.error(e, msg);
         }
       });
     } else if(layui.type(options.data) === 'array'){ //已知数据
@@ -1536,7 +1552,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
     //如果无数据
     if(data.length === 0){
-      return that.errorView(options.text.none);
+      return that.errorView(options.text.none, {type: 'NO_DATA_EXCEPTION'});
     } else {
       that.layFixLeft.removeClass(HIDE);
     }
