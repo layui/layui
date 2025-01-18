@@ -450,10 +450,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     that.fullSize();
     that.setColsWidth({isInit: true});
 
-    // 请求数据
-    that.pullData(that.page).then(function(){
-      that.events(); // 事件
-    });
+    that.pullData(that.page)     // 请求数据
+    that.events(); // 事件
   };
 
   // 根据列类型，定制化参数
@@ -1131,7 +1129,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   // 获得数据
   Class.prototype.pullData = function(curr, opts){
-    var defer = $.Deferred();
     var that = this;
     var options = that.config;
     // 同步表头父列的相关值
@@ -1152,7 +1149,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var done = function(res, origin){
       that.setColsWidth();
       that.loading(false);
-      defer.resolve({result: res, origin: origin});
       typeof options.done === 'function' && options.done(
         res, curr, res[response.countName], origin
       );
@@ -1161,12 +1157,11 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     opts = opts || {};
 
     // 数据拉取前的回调
-    if(typeof options.before === 'function'){
-      var cancelRequest = options.before(options);
-      if(cancelRequest === false){
-        that.loading(false)
-        defer.resolve();
-        return defer.promise();
+    if(typeof options.before === 'function' && !options.url){
+      var shouldCancel = options.before(options);
+      if(shouldCancel === false){
+        that.loading(false);
+        return;
       }
     } 
     that.startTime = new Date().getTime(); // 渲染开始时间
@@ -1198,6 +1193,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       // 参数
       var data = $.extend(params, options.where);
+
+      if(typeof options.before === 'function'){
+        var shouldCancel = options.before(options, data);
+        if(shouldCancel === false){
+          that.loading(false);
+          return;
+        }
+      } 
+
       if(options.contentType && options.contentType.indexOf("application/json") == 0){ // 提交 json 格式
         data = JSON.stringify(data);
       }
@@ -1284,8 +1288,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       done(res, opts.type);
     }
-
-    return defer.promise();
   };
 
   // 遍历表头
