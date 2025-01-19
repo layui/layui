@@ -456,7 +456,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     that.fullSize();
     that.setColsWidth({isInit: true});
 
-    that.pullData(that.page)  // 请求数据
+    that.pullData(that.page);  // 请求数据
     that.events(); // 事件
   };
 
@@ -1237,7 +1237,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
             ? options.parseData(res) || res
             : res;
           util.promiseLikeResolve(maybePromise).then(function(res){
-          // 忽略过期的请求结果
+            // 忽略过期的请求结果
             if(currentRequestId !== that.requestId){
               hint.error('DATA_EXPIRED: ' + currentRequestId + ' | ' + that.requestId, 'warn');
               return;
