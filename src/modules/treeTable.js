@@ -749,7 +749,7 @@ layui.define(['table', 'util'], function (exports) {
                   trData[LAY_ASYNC_STATUS] = 'error';
                   // 异常处理 todo
                   flexIconElem.html('<i class="layui-icon layui-icon-refresh"></i>');
-                  reason !== undefined && layui.hint().error(reason);
+                  reason !== undefined && hint.error(reason);
                 })
             },
             error: function (e, msg) {

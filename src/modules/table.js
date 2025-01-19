@@ -456,7 +456,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     that.fullSize();
     that.setColsWidth({isInit: true});
 
-    that.pullData(that.page)     // 请求数据
+    that.pullData(that.page)  // 请求数据
     that.events(); // 事件
   };
 
@@ -1239,7 +1239,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           util.promiseLikeResolve(maybePromise).then(function(res){
           // 忽略过期的请求结果
             if(currentRequestId !== that.requestId){
-              hint.error('AJAX_CANCELED: ' + currentRequestId, 'warn');
+              hint.error('DATA_EXPIRED: ' + currentRequestId + ' | ' + that.requestId, 'warn');
               return;
             };
             // 检查数据格式是否符合规范
@@ -1276,7 +1276,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         },
         error: function(xhr, msg){
           that.errorView('请求异常，错误提示：'+ msg, {xhr: xhr, msg: msg, type: ERROR_TYPE.AJAX_ERROR});
-          //typeof options.error === 'function' && options.error(e, msg);
         }
       });
     } else if(layui.type(options.data) === 'array'){ //已知数据
