@@ -62,6 +62,7 @@
     tree: 'tree', // 树结构
     table: 'table', // 表格
     treeTable: 'treeTable', // 树表
+    tabs: 'tabs', // 标签页
     element: 'element', // 常用元素操作
     rate: 'rate',  // 评分组件
     colorpicker: 'colorpicker', // 颜色选择器
@@ -71,6 +72,7 @@
     util: 'util', // 工具块
     code: 'code', // 代码修饰器
     jquery: 'jquery', // DOM 库（第三方）
+    component: 'component', // 组件构建器
 
     all: 'all',
     'layui.all': 'layui.all' // 聚合标识（功能性的，非真实模块）
@@ -257,8 +259,8 @@
   // currentStyle.getAttribute 参数为 camelCase 形式的字符串
   Layui.prototype.getStyle = function(node, name){
     var style = node.currentStyle ? node.currentStyle : win.getComputedStyle(node, null);
-    return style.getPropertyValue 
-      ? style.getPropertyValue(name) 
+    return style.getPropertyValue
+      ? style.getPropertyValue(name)
       : style.getAttribute(name.replace(/-(\w)/g, function(_, c){ return c ? c.toUpperCase() : '';}));
   };
 
@@ -401,13 +403,14 @@
     var data = {
       path: [],
       search: {},
-      hash: (hash.match(/[^#](#.*$)/) || [])[1] || ''
+      hash: (hash.match(/[^#](#.*$)/) || [])[1] || '',
+      href: ''
     };
 
-    if(!/^#\//.test(hash)) return data; // 禁止非路由规范
+    if (!/^#/.test(hash)) return data; // 禁止非路由规范
 
-    hash = hash.replace(/^#\//, '');
-    data.href = '/' + hash;
+    hash = hash.replace(/^#/, '');
+    data.href = hash;
     hash = hash.replace(/([^#])(#.*$)/, '$1').split('/') || [];
 
     // 提取 Hash 结构
