@@ -526,12 +526,9 @@ initSort: {
 
 ```
 table.render({
-  before: function(options, data){
+  before: function(options){
     console.log(options); // 当前实例属性配置项
     options.where.abc = 123; // 修改或额外追加 where 属性
-    console.log(data); // 请求参数，包含了自动传递的参数，如：page、limit 等。(2.10+)
-
-    //return false; // 返回 false 则停止渲染数据表格(2.10+)
   },
   // …  // 其它属性
 });
@@ -569,21 +566,11 @@ table.render({
 <td>error <sup>2.6+</sup></td>
 <td colspan="3">
 
-数据请求失败的回调函数。返回参数如下：
-
-- e: 错误对象
-- msg: 内容
-- type: 错误类型，可选值(2.10+)：
-  - `NO_DATA_EXCEPTION` 数据为空异常
-  - `PARSE_DATA_EXCEPTION` parseData 解析数据异常
-  - `AJAX_ERROR` ajax 请求错误
-  - `STATUS_CODE_ERROR` 状态码错误
-
-返回 `false` 可阻止默认的异常提示。(2.10+)
+数据请求失败的回调函数。返回两个参数：错误对象、内容。
 
 ```
-error: function(e, msg, type) {
-  console.log(e, msg) // 非 AJAX_ERROR 类型时，这两个参数值为 undefined
+error: function(e, msg) {
+  console.log(e, msg)
 }
 ```
 
