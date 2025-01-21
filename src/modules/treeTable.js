@@ -155,9 +155,15 @@ layui.define(['table', 'util'], function (exports) {
           var args = arguments;
 
           var maybePromise = layui.type(parseData) === 'function'
-            ? parseData.apply(parseDataThat, args) || args[0]
+            ? parseData.apply(parseDataThat, args)
             : args[0];
           util.promiseLikeResolve(maybePromise).then(function (retData) {
+            if(retData === false){
+              // 包装后的 parseData 仍然由 table 模块执行，
+              // 这里只是返回原始值，所以不使用 reject
+              return defer.resolve(false);
+            };
+            retData = retData || args[0];
             var dataName = parseDataThat.response.dataName;
             // 处理 isSimpleData
             if (treeOptions.data.isSimpleData && !treeOptions.async.enable) { // 异步加载和 isSimpleData 不应该一起使用
@@ -175,7 +181,6 @@ layui.define(['table', 'util'], function (exports) {
             that.initData(retData[dataName]);
             defer.resolve(retData);
           },function(reason){
-            reason !== undefined && layui.hint().error(reason);
             defer.reject(reason);
           })
 
@@ -726,13 +731,15 @@ layui.define(['table', 'util'], function (exports) {
             dataType: asyncDataType || 'json',
             jsonpCallback: asyncJsonpCallback,
             headers: asyncHeaders || {},
-            success: function (res) {
+            success: function (response) {
               // 若有数据解析的回调，则获得其返回的数据
               var maybePromise = typeof asyncParseData === 'function'
-                ? asyncParseData.call(options, res) || res
-                : res;
+                ? asyncParseData.call(options, response)
+                : response;
               util.promiseLikeResolve(maybePromise)
                 .then(function (res) {
+                  if(res === false) return;
+                  res = res || response;
                   // 检查数据格式是否符合规范
                   if (res[asyncResponse.statusName] != asyncResponse.statusCode) {
                     trData[LAY_ASYNC_STATUS] = 'error';

@@ -137,6 +137,7 @@ table.render({
 }); 
 
 // 返回 Promise 或 JqueryDeferred 对象(2.10+)
+// 返回 false 或 Promise.reject 时，将取消解析
 table.render({
   elem: '',
   url: '',

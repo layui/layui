@@ -1204,12 +1204,14 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
         jsonpCallback: options.jsonpCallback,
         headers: options.headers || {},
         complete: typeof options.complete === 'function' ? options.complete : undefined,
-        success: function(res){
+        success: function(response){
           // 若有数据解析的回调，则获得其返回的数据
           var maybePromise = typeof options.parseData === 'function'
-            ? options.parseData(res) || res
-            : res;
+            ? options.parseData(response)
+            : response;
           util.promiseLikeResolve(maybePromise).then(function(res){
+            if(res === false) return;
+            res = res || response;
             // 忽略过期的请求结果
             if(currentRequestId !== that.requestId){
               hint.error('DATA_EXPIRED: ' + currentRequestId + ' | ' + that.requestId, 'warn');
