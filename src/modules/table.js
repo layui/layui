@@ -2904,6 +2904,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   }
 
   Class.prototype.resizeStrategy = function(){
+    var debounce = typeof window.requestAnimationFrame === 'function' 
+      ? frameDebounce 
+      : layui.debounce;
+
     // chrome 64+
     if(window.ResizeObserver){
       return function(targetElem){
@@ -2912,9 +2916,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           that.resizeObserver.disconnect();
           that.resizeObserver = null;
         }
-        that.resizeObserver = new ResizeObserver(function(){
-          that.resize();
-        });
+        that.resizeObserver = new ResizeObserver(debounce(that.resize, 1000 / 60));
         that.resizeObserver.observe(targetElem[0]);
       }
     }
@@ -2924,9 +2926,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       return function(targetElem){
         var that = this;
         targetElem.off('resize.lay-table-autoresize')
-          .on('resize.lay-table-autoresize', function(){
-            that.resize();
-          })
+          .on('resize.lay-table-autoresize', debounce(that.resize, 1000 / 60));
       }
     }
    }();
@@ -3370,6 +3370,32 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     delete data[table.config.disabledName];
     return data;
   };
+
+  function frameDebounce(fn) {
+    var wait = false;
+    var frame;
+    var callArgs;
+  
+    function debounced () {
+      var ctx = this;
+      callArgs = arguments;
+      if (wait === true) return;
+  
+      wait = true;
+      frame = window.requestAnimationFrame(function(){
+        fn.apply(ctx, callArgs);
+        callArgs = void 0;
+        wait = false;
+      })
+    }
+  
+    debounced.cancel = function(){
+      window.cancelAnimationFrame(frame);
+      wait = false;
+    }
+  
+    return debounced;
+  }
 
   // 自动完成渲染
   $(function(){
