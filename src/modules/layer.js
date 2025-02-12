@@ -379,7 +379,16 @@ Class.pt.vessel = function(conType, callback){
         var button = '';
         typeof config.btn === 'string' && (config.btn = [config.btn]);
         for(var i = 0, len = config.btn.length; i < len; i++){
-          button += '<a class="'+ doms[6] +''+ i +'">'+ config.btn[i] +'</a>'
+          var currentBtn = config.btn[i];
+          var btnClass = doms[6] + i;
+          var btnText = '';
+          if(typeof currentBtn !== 'string' && currentBtn){
+            btnClass += currentBtn.className ? ' ' + currentBtn.className : '';
+            btnText = currentBtn.text;
+          } else {
+            btnText = currentBtn;
+          }
+          button += '<a class="'+ btnClass +'">'+ btnText +'</a>'
         }
         return '<div class="'+ function(){
           var className = [doms[6]];
