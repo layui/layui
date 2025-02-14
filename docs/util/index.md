@@ -245,10 +245,15 @@ layui.use('util', function(){
 
    // 自定义：触发事件的元素属性名、触发事件的方式
   util.on('lay-active', {
-    e3: layui.throttle(function(othis) {
-      console.log(this);
+    e3: function(othis, e) {
+      console.log(othis); // 当前触发事件的元素的 jQuery 对象
+
+      // e 为当前事件对象，此处演示阻止事件冒泡（比如委托父元素和子元素共用了同一事件名）
+      layui.stope(e);
+
+      // 演示提示
       layer.tips(othis.html(), this);
-    }, 3000) // 3s 内不重复执行
+    }
   }, {
     trigger: 'mouseenter' // 鼠标移入时触发事件
   });
