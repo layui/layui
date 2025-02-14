@@ -5,7 +5,7 @@
 html #layuicss-skincodecss{display: none; position: absolute; width: 1989px;}
 
 /* 字体  */
-.layui-code-wrap{font-size: 13px; font-family: "Courier New",Consolas,"Lucida Console";}
+.layui-code-wrap{font-size: 13px; font-family: "Courier New",Consolas,"Lucida Console", monospace;}
 
 /* 基础结构 */
 .layui-code-view{display: block; position: relative; padding: 0 !important; border: 1px solid #eee; border-left-width: 6px; background-color: #fff; color: #333;}

@@ -668,7 +668,7 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-text a:not(.layui-btn){color: #01AAED;}
 .layui-text a:not(.layui-btn):hover{text-decoration: underline;}
 .layui-text blockquote:not(.layui-elem-quote){margin: 15px 0; padding: 5px 15px; border-left: 5px solid #eee;}
-.layui-text pre > code:not(.layui-code){display: block; padding: 15px; font-family: "Courier New",Consolas,"Lucida Console";}
+.layui-text pre > code:not(.layui-code){display: block; padding: 15px; font-family: "Courier New",Consolas,"Lucida Console", monospace;}
 
 /* 字体大小 */
 .layui-font-12{font-size: 12px !important;}
@@ -1505,7 +1505,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-util-face ul li:hover{position: relative; z-index: 2; border: 1px solid #eb7350; background: #fff9ec;}
 
 /** 代码文本修饰 **/
-.layui-code{display: block; position: relative; padding: 15px; line-height: 20px; border: 1px solid #eee; border-left-width: 6px; background-color: #fff; color: #333; font-family: "Courier New",Consolas,"Lucida Console"; font-size: 12px;}
+.layui-code{display: block; position: relative; padding: 15px; line-height: 20px; border: 1px solid #eee; border-left-width: 6px; background-color: #fff; color: #333; font-family: "Courier New",Consolas,"Lucida Console", monospace; font-size: 12px;}
 
 /** 穿梭框 **/
 .layui-transfer-box,
