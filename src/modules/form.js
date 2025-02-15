@@ -113,7 +113,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         var itemElem = itemForm.find('[name="'+ key +'"]');
         
         // 如果对应的表单不存在，则不执行
-        if(!itemElem[0]) return;
+        if(!itemElem[0]) continue;
         type = itemElem[0].type;
         
         // 如果为复选框
