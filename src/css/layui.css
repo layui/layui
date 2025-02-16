@@ -513,19 +513,55 @@ a cite{font-style: normal; *cursor:pointer;}
 .layui-col-space32>*{padding: 16px;}
 
 
-/* 内边距  */
+/*
+ * 内边距
+ */
 .layui-padding-1{padding: 4px !important;}
 .layui-padding-2{padding: 8px !important;}
 .layui-padding-3{padding: 16px !important;}
 .layui-padding-4{padding: 32px !important;}
 .layui-padding-5{padding: 48px !important;}
 
-/* 外边距  */
+/* 上下内边距 */
+.layui-py-xxs{padding: 5px 0;}
+.layui-py-xs{padding: 8px 0;}
+.layui-py-sm{padding: 11px 0;}
+.layui-py-md, .layui-py{padding: 16px 0;}
+.layui-py-lg{padding: 24px 0;}
+.layui-py-xl{padding: 32px 0;}
+
+.layui-py-0{padding: 0;}
+.layui-py-1{padding: 4px 0;}
+.layui-py-2{padding: 8px 0;}
+.layui-py-3{padding: 12px 0;}
+.layui-py-4{padding: 16px 0;}
+.layui-py-5{padding: 20px 0;}
+.layui-py-5{padding: 24px 0;}
+
+/*
+ * 外边距
+ */
 .layui-margin-1{margin: 4px !important;}
 .layui-margin-2{margin: 8px !important;}
 .layui-margin-3{margin: 16px !important;}
 .layui-margin-4{margin: 32px !important;}
 .layui-margin-5{margin: 48px !important;}
+
+/* 上下外边距 */
+.layui-my-xxs{margin: 5px 0;}
+.layui-my-xs{margin: 8px 0;}
+.layui-my-sm{margin: 11px 0;}
+.layui-my-md, .layui-my{margin: 16px 0;}
+.layui-my-lg{margin: 24px 0;}
+.layui-my-xl{margin: 32px 0;}
+
+.layui-my-0{margin: 0;}
+.layui-my-1{margin: 4px 0;}
+.layui-my-2{margin: 8px 0;}
+.layui-my-3{margin: 12px 0;}
+.layui-my-4{margin: 16px 0;}
+.layui-my-5{margin: 20px 0;}
+.layui-my-5{margin: 24px 0;}
 
 
 /*
@@ -1283,6 +1319,42 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-dropdown{position: absolute; left: -999999px; top: -999999px; z-index: 77777777; margin: 5px 0; min-width: 100px;}
 .layui-dropdown:before{content:""; position: absolute; width: 100%; height: 6px; left: 0; top: -6px;}
 .layui-dropdown-shade{top: 0; left: 0; width: 100%; height: 100%; _height: expression(document.body.offsetHeight+"px"); position: fixed; _position: absolute; pointer-events: auto;}
+
+
+/* Tabs 标签页 */
+.layui-tabs{position: relative;}
+.layui-tabs *{box-sizing: border-box;}
+.layui-tabs.layui-hide-v{overflow: hidden;}
+.layui-tabs-header{position: relative; left: 0; height: 40px; white-space: nowrap; font-size: 0; transition: all .16s; -webkit-transition: all .16s;}
+.layui-tabs-header:after,
+.layui-tabs-scroll:after{content: ""; position: absolute; left: 0; bottom: 0; z-index: 0; width: 100%; border-bottom: 1px solid #eee;}
+.layui-tabs-header li{position: relative; display: inline-block; vertical-align: middle; line-height: 40px; padding: 0 16px; text-align: center; cursor: pointer; font-size: 14px; transition: all .16s; -webkit-transition: all .16s;}
+.layui-tabs-header li:first-child{margin-left: 0;}
+.layui-tabs-header li a{display: block; padding: 0 16px; margin: 0 -16px;}
+.layui-tabs-header .layui-this{color: #16baaa;}
+.layui-tabs-header .layui-this:after{content: ""; position: absolute; left:0; top: 0; z-index: 1; width: 100%; height: 100%; border-bottom: 3px solid #16baaa; box-sizing: border-box; pointer-events: none;}
+.layui-tabs-header .layui-badge,
+.layui-tabs-header .layui-badge-dot{left: 5px; top: -1px;}
+
+.layui-tabs-scroll{position: relative; overflow: hidden; padding: 0 40px;}
+.layui-tabs-scroll .layui-tabs-header:after{display: none; content: none; border: 0;}
+.layui-tabs-bar .layui-icon{position: absolute; left: 0; top: 0; z-index: 3; width: 40px; height: 100%; line-height: 40px; border: 1px solid #eee; text-align: center; cursor: pointer; box-sizing: border-box; background-color: #fff; box-shadow: 2px 0 5px 0 rgb(0 0 0 / 6%);}
+.layui-tabs-bar .layui-icon-next{left: auto; right: 0; box-shadow: -2px 0 5px 0 rgb(0 0 0 / 6%);}
+
+.layui-tabs-header li .layui-tabs-close{position: relative; display: inline-block; width: 16px; height: 16px; line-height: 18px; margin-left: 8px; top: 0px; text-align: center; font-size: 12px; color: #959595; border-radius: 50%; font-weight: 700; transition: all .16s; -webkit-transition: all .16s;}
+.layui-tabs-header li .layui-tabs-close:hover{ background-color: #ff5722; color: #fff;}
+
+.layui-tabs-body{padding: 16px 0;}
+.layui-tabs-item{display: none;}
+
+/* tabs 卡片风格 */
+.layui-tabs-card>.layui-tabs-header .layui-this{background-color: #fff;}
+.layui-tabs-card>.layui-tabs-header .layui-this:after{border: 1px solid #eee; border-bottom-color: #fff; border-radius: 2px 2px 0 0;}
+.layui-tabs-card>.layui-tabs-header li:first-child.layui-this:after{margin-left: -1px;}
+.layui-tabs-card>.layui-tabs-header li:last-child.layui-this:after{margin-right: -1px;}
+.layui-tabs-card.layui-panel>.layui-tabs-header .layui-this:after{border-top: 0; border-radius: 0;}
+.layui-tabs-card.layui-panel>.layui-tabs-body{padding: 16px;}
+
 
 /** 导航菜单 **/
 .layui-nav{position: relative; padding: 0 15px; background-color: #2f363c; color: #fff; border-radius: 2px; font-size: 0; box-sizing: border-box;}
