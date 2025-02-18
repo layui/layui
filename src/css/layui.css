@@ -48,12 +48,12 @@ a cite{font-style: normal; *cursor:pointer;}
 /** 图标字体 **/
 @font-face {
   font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=282');
-  src: url('../font/iconfont.eot?v=282#iefix') format('embedded-opentype'),
-       url('../font/iconfont.woff2?v=282') format('woff2'),
-       url('../font/iconfont.woff?v=282') format('woff'),
-       url('../font/iconfont.ttf?v=282') format('truetype'),
-       url('../font/iconfont.svg?v=282#layui-icon') format('svg');
+  src: url('../font/iconfont.eot?v=293');
+  src: url('../font/iconfont.eot?v=293#iefix') format('embedded-opentype'),
+       url('../font/iconfont.woff2?v=293') format('woff2'),
+       url('../font/iconfont.woff?v=293') format('woff'),
+       url('../font/iconfont.ttf?v=293') format('truetype'),
+       url('../font/iconfont.svg?v=293#layui-icon') format('svg');
 }
 
 .layui-icon{
@@ -65,6 +65,8 @@ a cite{font-style: normal; *cursor:pointer;}
 }
 
 /* font-class */
+.layui-icon-sound:before{content: "\e69d";}
+.layui-icon-bot:before{content: "\e7d6";}
 .layui-icon-leaf:before{content: "\e701";}
 .layui-icon-folder:before{content: "\eabe";}
 .layui-icon-folder-open:before{content: "\eac1";}
