@@ -9,9 +9,25 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+<h2 id="v2.9.23" class="ws-anchor">
+  v2.9.23
+  <span class="layui-badge-rim">2025-02-19</span>
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+</h2>
+
+- #### 基础
+  - 新增 6 个图标 #2511 @sentsim
+- #### form
+  - 修复 `form.val()` 某些情况下赋值失效问题 #2503 @Sight-wcg
+- #### 公共类
+  - 优化 `layui-text` 在混合列表下的显示问题 #2510 @sentsim
+
+### 下载： [layui-v2.9.23.zip](https://gitee.com/layui/layui/attach_files/2060356/download)
+
+---
+
 <h2 id="v2.9.22" class="ws-anchor">
   v2.9.22
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
   <span class="layui-badge-rim">2025-02-14</span>
 </h2>
 
