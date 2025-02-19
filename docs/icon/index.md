@@ -22,14 +22,51 @@ toc: true
 通过对一个内联元素（如 `<i>`标签）添加基础类 `class="layui-icon"` 来定义一个图标，然后对元素加上图标对应的 `font-class`，即可显示出你想要的图标，如上所示。
 
 
-<h2 id="list" lay-toc="{hot: true, title: '图标列表'}">图标列表（186 个）</h2>
+<h2 id="list" lay-toc="{hot: true, title: '图标列表'}">图标列表（192 个）</h2>
 
 <div class="ws-docs-icon">
+  <div>
+    <i class="layui-icon layui-icon-bot"></i>
+    <div class="docs-icon-name">机器人</div>
+    <div class="docs-icon-code">&amp;#xe7d6;</div>
+    <div class="docs-icon-fontclass">layui-icon-bot</div>
+  </div>
+  <div>
+    <i class="layui-icon layui-icon-leaf"></i>
+    <div class="docs-icon-name">叶子节点</div>
+    <div class="docs-icon-code">&amp;#xe701;</div>
+    <div class="docs-icon-fontclass">layui-icon-leaf</div>
+  </div>
+  <div>
+    <i class="layui-icon layui-icon-folder" style="font-size: 32px;"></i>
+    <div class="docs-icon-name">文件夹</div>
+    <div class="docs-icon-code">&amp;#xeabe;</div>
+    <div class="docs-icon-fontclass">layui-icon-folder</div>
+  </div>
+  <div>
+    <i class="layui-icon layui-icon-folder-open" style="font-size: 32px;"></i>
+    <div class="docs-icon-name">文件夹打开</div>
+    <div class="docs-icon-code">&amp;#xeac1;</div>
+    <div class="docs-icon-fontclass layui-font-12">layui-icon-folder-open</div>
+  </div>
+  <div>
+    <i class="layui-icon layui-icon-gitee"></i>
+    <div class="docs-icon-name">Gitee</div>
+    <div class="docs-icon-code">&amp;#xe69b;</div>
+    <div class="docs-icon-fontclass">layui-icon-gitee</div>
+  </div>
   <div>
     <i class="layui-icon layui-icon-github"></i>
     <div class="docs-icon-name">Github</div>
     <div class="docs-icon-code">&amp;#xe6a7;</div>
     <div class="docs-icon-fontclass">layui-icon-github</div>
+  </div>
+
+  <div>
+    <i class="layui-icon layui-icon-light"></i>
+    <div class="docs-icon-name">太阳/明亮</div>
+    <div class="docs-icon-code">&amp;#xe748;</div>
+    <div class="docs-icon-fontclass">layui-icon-light</div>
   </div>
   <div>
     <i class="layui-icon layui-icon-moon"></i>
@@ -135,7 +172,6 @@ toc: true
     <div class="docs-icon-code">&amp;#xe7bb;</div>
     <div class="docs-icon-fontclass">layui-icon-ie</div>
   </div>
-
   <div>
     <i class="layui-icon layui-icon-heart-fill"></i>
     <div class="docs-icon-name">实心</div>
@@ -149,29 +185,34 @@ toc: true
     <div class="docs-icon-fontclass">layui-icon-heart</div>
   </div>
   <div>
-    <i class="layui-icon layui-icon-light"></i>
-    <div class="docs-icon-name">太阳/明亮</div>
-    <div class="docs-icon-code">&amp;#xe748;</div>
-    <div class="docs-icon-fontclass">layui-icon-light</div>
-  </div>
-  <div>
     <i class="layui-icon layui-icon-time"></i>
     <div class="docs-icon-name">时间/历史</div>
     <div class="docs-icon-code">&amp;#xe68d;</div>
     <div class="docs-icon-fontclass">layui-icon-time</div>
-  </div>
-  
-  <div>
-    <i class="layui-icon layui-icon-bluetooth"></i>
-    <div class="docs-icon-name">蓝牙</div>
-    <div class="docs-icon-code">&amp;#xe689;</div>
-    <div class="docs-icon-fontclass">layui-icon-bluetooth</div>
   </div>
   <div>
     <i class="layui-icon layui-icon-at"></i>
     <div class="docs-icon-name">@艾特</div>
     <div class="docs-icon-code">&amp;#xe687;</div>
     <div class="docs-icon-fontclass">layui-icon-at</div>
+  </div>
+  <div>
+    <i class="layui-icon layui-icon-email"></i>
+    <div class="docs-icon-name">邮箱</div>
+    <div class="docs-icon-code">&amp;#xe618;</div>
+    <div class="docs-icon-fontclass">layui-icon-email</div>
+  </div>
+  <div>
+    <i class="layui-icon layui-icon-rss"></i>
+    <div class="docs-icon-name">RSS</div>
+    <div class="docs-icon-code">&amp;#xe808;</div>
+    <div class="docs-icon-fontclass">layui-icon-rss</div>
+  </div>
+  <div>
+    <i class="layui-icon layui-icon-sound"></i>
+    <div class="docs-icon-name">声音</div>
+    <div class="docs-icon-code">&amp;#xe69d;</div>
+    <div class="docs-icon-fontclass">layui-icon-sound</div>
   </div>
   <div>
     <i class="layui-icon layui-icon-mute"></i>
@@ -198,16 +239,10 @@ toc: true
     <div class="docs-icon-fontclass">layui-icon-gift</div>
   </div>
   <div>
-    <i class="layui-icon layui-icon-email"></i>
-    <div class="docs-icon-name">邮箱</div>
-    <div class="docs-icon-code">&amp;#xe618;</div>
-    <div class="docs-icon-fontclass">layui-icon-email</div>
-  </div>
-  <div>
-    <i class="layui-icon layui-icon-rss"></i>
-    <div class="docs-icon-name">RSS</div>
-    <div class="docs-icon-code">&amp;#xe808;</div>
-    <div class="docs-icon-fontclass">layui-icon-rss</div>
+    <i class="layui-icon layui-icon-bluetooth"></i>
+    <div class="docs-icon-name">蓝牙</div>
+    <div class="docs-icon-code">&amp;#xe689;</div>
+    <div class="docs-icon-fontclass">layui-icon-bluetooth</div>
   </div>
   <div>
     <i class="layui-icon layui-icon-wifi"></i>
