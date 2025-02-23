@@ -25,8 +25,8 @@ layui.define(['jquery', 'lay'], function(exports) {
 
     // 组件基础对外接口
     var component = {
-      config: settings.global || {},
-      index: layui[MOD_NAME] ? (layui[MOD_NAME].index + 10000) : 0,
+      config: {}, // 全局配置项，一般通过 component.set() 设置
+      index: layui[MOD_NAME] ? (layui[MOD_NAME].index + 10000) : 0, // 组件索引
 
       // 通用常量集，一般存放固定字符，如类名等
       CONST: $.extend(true, {
@@ -54,9 +54,6 @@ layui.define(['jquery', 'lay'], function(exports) {
       }
     };
 
-    // 扩展对外接口
-    $.extend(true, component, settings.exports);
-
     // 操作当前实例
     var instance = function() {
       var that = this;
@@ -74,9 +71,9 @@ layui.define(['jquery', 'lay'], function(exports) {
         }
       };
 
-      // 扩展实例对象
-      if (typeof settings.inst === 'function') {
-        $.extend(true, inst, settings.inst.call(that));
+      // 扩展实例对象的回调
+      if (typeof settings.extendsInstance === 'function') {
+        $.extend(true, inst, settings.extendsInstance.call(that));
       }
 
       // 返回实例对象
@@ -212,7 +209,12 @@ layui.define(['jquery', 'lay'], function(exports) {
     // 用于扩展原型
     component.Class = Class;
 
-    // 完整重载实例
+    /**
+     * 组件完整重载
+     * @param {string} id - 实例 id
+     * @param {Object} options - 配置项
+     * @returns
+     */
     component.reload = function(id, options) {
       var that = instance.getThis(id);
       if (!that) return;
@@ -233,7 +235,11 @@ layui.define(['jquery', 'lay'], function(exports) {
       if (!that) return;
     } */
 
-    // 核心入口
+    /**
+     * 组件渲染
+     * @param {Object} options - 配置项
+     * @returns
+     */
     component.render = function(options) {
       var inst = new Class(options);
       return instance.call(inst);

@@ -150,73 +150,22 @@ layui.define('component', function(exports) {
         });
         inner.onresize = true;
       }
-    },
-
-    // 实例接口
-    inst: {},
-
-    // 扩展接口
-    exports: {
-      // 增加标签
-      add: function(id, obj) {
-        var that = component.getThis(id);
-        if(!that) return this;
-        that.add(obj);
-      },
-
-      // 关闭单个标签
-      close: function(id, index) {
-        var that = component.getThis(id);
-        if(!that) return this;
-        if(index === undefined) index = that.data().index; // index 若不传，则表示关闭当前标签
-        that.close(that.findHeaderItem(index));
-      },
-
-      // 关闭多个标签。若传 index，则按 index 所在标签为事件执行关闭操作
-      closeMore: function(id, type, index) {
-        var that = component.getThis(id);
-        if(!that) return this;
-        that.closeMore(type, index);
-      },
-
-      // 切换标签
-      change: function(id, index) {
-        var that = component.getThis(id);
-        if(!that) return this;
-        that.change(that.findHeaderItem(index));
-      },
-
-      // 获取标签信息
-      data: function(id) {
-        var that = component.getThis(id);
-        return that ? that.data() : {};
-      },
-
-      // 获取标签指定头部项
-      headerItem: function(id, index) {
-        var that = component.getThis(id);
-        return that ? that.findHeaderItem(index) : this;
-      },
-
-      // 获取标签指定头部项
-      bodyItem: function(id, index) {
-        var that = component.getThis(id);
-        return that ? that.findBodyItem(index) : this;
-      },
-
-      // 调整视图结构
-      setView: function(id) {
-        var that = component.getThis(id);
-        if (!that) return this;
-        that.roll('auto');
-      }
     }
   });
 
+  // 内部变量集
   var inner = {};
+
+  /**
+   * 扩展组件原型方法
+   */
+
   var Class = component.Class;
 
-  // 增加标签
+  /**
+   * 增加标签
+   * @param {*} obj
+   */
   Class.prototype.add = function(obj){
     var that = this;
     var options = that.config;
@@ -612,6 +561,63 @@ layui.define('component', function(exports) {
       length: elemItem.header.items.length // 当前标签数
     }
   };
+
+  // 扩展组件接口
+  $.extend(component, {
+    // 增加标签
+    add: function(id, obj) {
+      var that = component.getThis(id);
+      if(!that) return this;
+      that.add(obj);
+    },
+
+    // 关闭单个标签
+    close: function(id, index) {
+      var that = component.getThis(id);
+      if(!that) return this;
+      if(index === undefined) index = that.data().index; // index 若不传，则表示关闭当前标签
+      that.close(that.findHeaderItem(index));
+    },
+
+    // 关闭多个标签。若传 index，则按 index 所在标签为事件执行关闭操作
+    closeMore: function(id, type, index) {
+      var that = component.getThis(id);
+      if(!that) return this;
+      that.closeMore(type, index);
+    },
+
+    // 切换标签
+    change: function(id, index) {
+      var that = component.getThis(id);
+      if(!that) return this;
+      that.change(that.findHeaderItem(index));
+    },
+
+    // 获取标签信息
+    data: function(id) {
+      var that = component.getThis(id);
+      return that ? that.data() : {};
+    },
+
+    // 获取标签指定头部项
+    headerItem: function(id, index) {
+      var that = component.getThis(id);
+      return that ? that.findHeaderItem(index) : this;
+    },
+
+    // 获取标签指定头部项
+    bodyItem: function(id, index) {
+      var that = component.getThis(id);
+      return that ? that.findBodyItem(index) : this;
+    },
+
+    // 调整视图结构
+    setView: function(id) {
+      var that = component.getThis(id);
+      if (!that) return this;
+      that.roll('auto');
+    }
+  });
 
   // 初始化渲染
   $(function() {
