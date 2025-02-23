@@ -1,0 +1,154 @@
+---
+title: 组件构建器 component
+toc: true
+---
+
+# 组件构建器 <sup>2.10+</sup>
+
+> 组件构建器 `component` 是 2.10 版本新增的重要模块，旨在为 Layui 2 系列版本逐步构建统一 API 规范的组件。
+
+<h2 id="api" lay-toc="{}">API</h2>
+
+| API | 描述 |
+| --- | --- |
+| [layui.component(options)](#create) | 创建组件 |
+
+<h3 id="create" lay-toc="{hot: true, level: 2}">创建组件</h3>
+
+`layui.component(options);`
+
+- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+
+该方法返回一个对象，通常用于当前组件的基础对外接口，如：组件渲染、重载、事件操作，及构造函数等等。用法示例：
+
+```js
+/**
+ * tabs
+ * 标签页组件
+ */
+layui.define('component', function(exports) {
+  // 创建组件
+  var component = layui.component({
+    name: 'tabs', // 组件名称
+    config: {}, // 组件默认配置项
+    render: function() {
+      // 组件渲染逻辑
+      // …
+    },
+    // 其他选项
+  });
+
+  // 将创建组件时返回的 `component` 对象作为组件的接口输出
+  // 接口将继承基础成员，如 render, reload, set 等方法
+  exports(component.CONST.MOD_NAME, component);
+});
+```
+
+<h3 id="options" lay-toc="{level: 2, hot: true}">属性配置</h3>
+
+<div>
+{{- d.include("/component/detail/options.md") }}
+</div>
+
+<h2 id="prototype" lay-toc="{hot: true}">原型</h2>
+
+创建组件时的 `layui.component()` 方法返回的对象中包含 `Class` 构造函数，它通常用于扩展组件的原型，以灵活实现组件的个性化定制。但一般不推荐重写 `component.js` 原型中已经定义的基础方法，如：`init, reload, cache`。
+
+```
+layui.define('component', function(exports) {
+  // 创建组件
+  var component = layui.component({
+    // …
+  });
+
+  // 获取构造器
+  var Class = component.Class;
+
+  // 扩展原型
+  Class.prototype.xxx = function() {
+    // …
+  };
+  Class.prototype.aaa = function() {
+    // …
+  };
+
+  // 输出组件接口
+  exports(component.CONST.MOD_NAME, component);
+});
+```
+
+<h2 id="inherit" lay-toc="{hot: true}">继承</h2>
+
+通过 `component` 模块创建的组件，均会继承内部定义的基础对外接口和渲染时的通用选项。
+
+### 1. 组件继承的基础接口：
+
+| 接口 | 描述 |
+| --- | --- |
+| component.render(options) | 组件渲染 |
+| component.reload(id, options) | 组件重载 |
+| component.set(options) | 设置组件渲染时的全局配置项 |
+| component.on('event(filter)', callback) | 组件的自定义事件 |
+| component.getThis(id) | 获取指定组件的实例对象 |
+| component.index | 获得组件的自增索引 |
+| component.config | 获得组件渲染时的全局配置项。一般通过 `set` 方法设置 |
+| component.CONST | 获得组件的通用常量集。如 `MOD_NAME` 等 |
+| component.cache | 获得组件的缓存数据集。如组件实例 ID 集 |
+| component.Class | 获得组件的构造函数。一般用于扩展原型方法 |
+
+除此之外，你也可以对接口进行任意扩展，如：
+
+```js
+/**
+ * 定义组件
+ */
+layui.define('component', function(exports) {
+  // 创建组件
+  var component = layui.component({
+    name: 'test',
+    // …
+  });
+  // 扩展组件接口
+  layui.$.extend(component, {
+    // 以扩展一个关闭组件面板的接口为例
+    close: function(id) {
+      var that = component.getThis(id);
+      if(!that) return this;
+      that.remove(obj); // 调用原型中的 remove 方法
+    }
+  });
+  // 输出组件接口
+  exports(component.CONST.MOD_NAME, component);
+});
+```
+
+```js
+/**
+ * 使用组件（以上述定义的 test 组件为例）
+ */
+layui.use('test', function() {
+  var test = layui.test;
+  // 渲染组件
+  test.render({
+    elem: '#id',
+    id: 'test-1'
+  });
+  // 关闭组件面板（通常在某个事件中使用）
+  test.close('test-1');
+});
+```
+
+### 2. 组件渲染时继承的通用选项：
+
+| 选项 | 描述 |
+| --- | --- |
+| elem | 组件渲染指定的目标元素 |
+| id | 组件渲染的唯一索引 |
+| show | 是否初始即渲染组件。通常结合创建组件设定的 `isRenderOnEvent` 选项决定是否启用 |
+
+除此之外，其他渲染时的配置选项则由各自的组件内部单独定义。
+
+## 💖 心语
+
+Layui 由于早前欠缺统筹性思维，很多组件自成一体，使得无法对组件进行很好的统一管理。随着版本的迭代，我们也在努力尝试改善这一问题，但很多时候，为了向下兼容而又不得不保留许多旧有的特性。`component` 模块的初衷正是为了确保组件的一致性，如核心逻辑和 API 设计，尽管它的出现时机已经显得有些过晚，但也算是为 2.x 系列版本尽可能地减少些遗憾吧。
+
