@@ -304,7 +304,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     text: {
       none: '无数据'
     },
-    cols: []
+    cols: [],
+    hightlightSelectedRow: true, // 是否高亮选中行
   };
 
   // 表格渲染
@@ -1414,7 +1415,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       // 添加 tr 属性
       var trAttr = function(){
         var arr = ['data-index="'+ i1 +'"'];
-        if(item1[table.config.checkName]) arr.push('class="'+ ELEM_CHECKED +'"');
+        if(options.hightlightSelectedRow && item1[table.config.checkName]) arr.push('class="'+ ELEM_CHECKED +'"');
         return arr.join(' ');
       }();
 
@@ -1746,6 +1747,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var isCheckMult = layui.type(opts.index) === 'array'; // 是否操作多个
     var isCheckAllOrMult = isCheckAll || isCheckMult; // 是否全选或多选
 
+    // treeTable 内部已处理选中，此处不再处理
+    if(options.tree && options.tree.view) return;
+
     // 全选或多选时
     if (isCheckAllOrMult) {
       that.layBox.addClass(DISABLED_TRANSITION); // 减少回流
@@ -1800,15 +1804,19 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
 
       // 标记数据选中状态
-      var checked = item[options.checkName] = getChecked(el.hasClass(ELEM_CHECKED));
+      var checked = item[options.checkName] = getChecked(item[options.checkName]);
 
       // 标记当前行背景色
-      el.toggleClass(ELEM_CHECKED, !!checked);
+      if(options.hightlightSelectedRow){
+        el.toggleClass(ELEM_CHECKED, !!checked);
+      }
 
       // 若为 radio 类型，则取消其他行选中背景色
       if (opts.type === 'radio') {
         radioCheckedIndex = i;
-        el.siblings().removeClass(ELEM_CHECKED);
+        if(options.hightlightSelectedRow){
+          el.siblings().removeClass(ELEM_CHECKED);
+        }
       }
     });
 
@@ -1839,7 +1847,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     if(isCheckAllOrMult){
       setTimeout(function(){
         that.layBox.removeClass(DISABLED_TRANSITION);
-      },100)
+      }, 1000)
     }
   };
 

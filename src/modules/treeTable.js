@@ -1720,6 +1720,7 @@ layui.define(['table'], function (exports) {
   Class.prototype.setRowCheckedClass = function(tr, checked){
     var that = this;
     var options = that.getOptions();
+    if(!options.hightlightSelectedRow) return;
 
     var index = tr.data('index');
     var tableViewElem = options.elem.next();
@@ -1761,10 +1762,10 @@ layui.define(['table'], function (exports) {
         that.setRowCheckedClass(checkboxElem.closest('tr'), checked);
         
         // 设置原始复选框 checked 属性值并渲染
-        form.render(checkboxElem.prop({
+        checkboxElem.prop({
           checked: checked,
           indeterminate: itemP[LAY_CHECKBOX_HALF]
-        }))
+        })
       })
     }
 
@@ -1793,10 +1794,10 @@ layui.define(['table'], function (exports) {
     }
     
     isIndeterminate = isIndeterminate && !isAll;
-    form.render(tableView.find('input[name="layTableCheckbox"][lay-filter="layTableAllChoose"]').prop({
+    tableView.find('input[name="layTableCheckbox"][lay-filter="layTableAllChoose"]').prop({
       'checked': isAll,
       indeterminate: isIndeterminate
-    }));
+    })
 
     return isAll
   }
@@ -1908,7 +1909,7 @@ layui.define(['table'], function (exports) {
 
             // 取消当前选中行背景色
             that.setRowCheckedClass(radioElem.closest('tr'), false);
-            form.render(radioElem.prop('checked', false));
+            radioElem.prop('checked', false);
           }
         }); // 取消其他的选中状态
         trData[checkName] = checked;
@@ -1916,8 +1917,11 @@ layui.define(['table'], function (exports) {
         that.setRowCheckedClass(trElem, checked);  // 标记当前选中行背景色
         that.setRowCheckedClass(trElem.siblings(), false); // 取消其他行背景色
 
-        form.render(trElem.find('input[type="radio"][lay-type="layTableRadio"]').prop('checked', checked));
+        trElem.find('input[type="radio"][lay-type="layTableRadio"]').prop('checked', checked);
       } else {
+        var DISABLED_TRANSITION = 'layui-table-disabled-transition';
+        var tableboxElem = tableView.find('.layui-table-box');// 减少回流
+        tableboxElem.addClass(DISABLED_TRANSITION);
         // 切换只能用到单条，全选到这一步的时候应该是一个确定的状态
         checked = layui.type(checked) === 'boolean' ? checked : !trData[checkName]; // 状态切换，如果遇到不可操作的节点待处理 todo
         // 全选或者是一个父节点，将子节点的状态同步为当前节点的状态
@@ -1935,7 +1939,7 @@ layui.define(['table'], function (exports) {
         }).join(','));
 
         that.setRowCheckedClass(checkboxElem.closest('tr'), checked);  // 标记当前选中行背景色
-        form.render(checkboxElem.prop({checked: checked, indeterminate: false}));
+        checkboxElem.prop({checked: checked, indeterminate: false});
 
         var trDataP;
 
@@ -1945,7 +1949,13 @@ layui.define(['table'], function (exports) {
           trDataP = that.getNodeDataByIndex(trData[LAY_PARENT_INDEX]);
         }
 
-        return that.updateCheckStatus(trDataP, checked);
+        var isAll = that.updateCheckStatus(trDataP, checked);
+
+        setTimeout(function(){
+          tableboxElem.removeClass(DISABLED_TRANSITION);
+        }, 1000)
+        
+        return isAll;
       }
     }
   }
