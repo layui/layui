@@ -3,12 +3,13 @@
  * Code 预览组件
  */
 
-layui.define(['lay', 'util', 'element', 'form'], function(exports){
+layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
   "use strict";
 
   var $ = layui.$;
   var util = layui.util;
   var element = layui.element;
+  var tabs = layui.tabs;
   var form = layui.form;
   var layer = layui.layer;
   var hint = layui.hint();
@@ -403,6 +404,7 @@ layui.define(['lay', 'util', 'element', 'form'], function(exports){
             render: function(){
               form.render(thisItemBody.find('.layui-form'));
               element.render();
+              tabs.render();
             }
           });
         },3);

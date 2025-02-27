@@ -564,14 +564,24 @@ layui.define('component', function(exports) {
 
   // 扩展组件接口
   $.extend(component, {
-    // 增加标签
+    /**
+     * 增加标签
+     * @param {string} id - 标签 ID
+     * @param {object} obj - 标签配置信息
+     * @returns
+     */
     add: function(id, obj) {
       var that = component.getThis(id);
       if(!that) return this;
       that.add(obj);
     },
 
-    // 关闭单个标签
+    /**
+     * 关闭标签
+     * @param {string} id - 标签 ID
+     * @param {number} index - 标签下标
+     * @returns
+     */
     close: function(id, index) {
       var that = component.getThis(id);
       if(!that) return this;
@@ -579,39 +589,68 @@ layui.define('component', function(exports) {
       that.close(that.findHeaderItem(index));
     },
 
-    // 关闭多个标签。若传 index，则按 index 所在标签为事件执行关闭操作
+    /**
+     * 关闭多个标签
+     * @param {string} id - 标签 ID
+     * @param {string} type - 关闭类型，可选值：left、right、other、all
+     * @param {number} index - 标签下标。若传入，则按 index 所在标签为事件执行关闭操作
+     * @returns
+     */
     closeMore: function(id, type, index) {
       var that = component.getThis(id);
       if(!that) return this;
       that.closeMore(type, index);
     },
 
-    // 切换标签
+    /**
+     * 切换标签
+     * @param {string} id - 标签 ID
+     * @param {number} index - 标签下标
+     * @returns
+     */
     change: function(id, index) {
       var that = component.getThis(id);
       if(!that) return this;
       that.change(that.findHeaderItem(index));
     },
 
-    // 获取标签信息
+    /**
+     * 获取标签信息
+     * @param {string} id - 标签 ID
+     * @returns
+     */
     data: function(id) {
       var that = component.getThis(id);
       return that ? that.data() : {};
     },
 
-    // 获取标签指定头部项
+    /**
+     * 获取标签指定头部项
+     * @param {string} id - 标签 ID
+     * @param {number} index - 标签下标
+     * @returns
+     */
     headerItem: function(id, index) {
       var that = component.getThis(id);
       return that ? that.findHeaderItem(index) : this;
     },
 
-    // 获取标签指定头部项
+    /**
+     * 获取标签指定内容项
+     * @param {string} id - 标签 ID
+     * @param {number} index - 标签下标
+     * @returns
+     */
     bodyItem: function(id, index) {
       var that = component.getThis(id);
       return that ? that.findBodyItem(index) : this;
     },
 
-    // 调整视图结构
+    /**
+     * 调整视图结构
+     * @param {string} id - 标签 ID
+     * @returns
+     */
     setView: function(id) {
       var that = component.getThis(id);
       if (!that) return this;

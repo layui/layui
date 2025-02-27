@@ -1328,7 +1328,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-tabs-header{position: relative; left: 0; height: 40px; white-space: nowrap; font-size: 0; transition: all .16s; -webkit-transition: all .16s;}
 .layui-tabs-header:after,
 .layui-tabs-scroll:after{content: ""; position: absolute; left: 0; bottom: 0; z-index: 0; width: 100%; border-bottom: 1px solid #eee;}
-.layui-tabs-header li{position: relative; display: inline-block; vertical-align: middle; line-height: 40px; padding: 0 16px; text-align: center; cursor: pointer; font-size: 14px; transition: all .16s; -webkit-transition: all .16s;}
+.layui-tabs-header li{position: relative; display: inline-block; vertical-align: middle; line-height: 40px; margin: 0 !important; padding: 0 16px; text-align: center; cursor: pointer; font-size: 14px; transition: all .16s; -webkit-transition: all .16s;}
 .layui-tabs-header li:first-child{margin-left: 0;}
 .layui-tabs-header li a{display: block; padding: 0 16px; margin: 0 -16px;}
 .layui-tabs-header .layui-this{color: #16baaa;}
