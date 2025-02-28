@@ -304,8 +304,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     text: {
       none: '无数据'
     },
-    cols: [],
-    hightlightSelectedRow: true, // 是否高亮选中行
+    cols: []
   };
 
   // 表格渲染
@@ -1415,7 +1414,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       // 添加 tr 属性
       var trAttr = function(){
         var arr = ['data-index="'+ i1 +'"'];
-        if(options.hightlightSelectedRow && item1[table.config.checkName]) arr.push('class="'+ ELEM_CHECKED +'"');
+        if(item1[table.config.checkName]) arr.push('class="'+ ELEM_CHECKED +'"');
         return arr.join(' ');
       }();
 
@@ -1804,19 +1803,15 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
       }
 
       // 标记数据选中状态
-      var checked = item[options.checkName] = getChecked(item[options.checkName]);
+      var checked = item[options.checkName] = getChecked(el.hasClass(ELEM_CHECKED));
 
       // 标记当前行背景色
-      if(options.hightlightSelectedRow){
-        el.toggleClass(ELEM_CHECKED, !!checked);
-      }
+      el.toggleClass(ELEM_CHECKED, !!checked);
 
       // 若为 radio 类型，则取消其他行选中背景色
       if (opts.type === 'radio') {
         radioCheckedIndex = i;
-        if(options.hightlightSelectedRow){
-          el.siblings().removeClass(ELEM_CHECKED);
-        }
+        el.siblings().removeClass(ELEM_CHECKED);
       }
     });
 
@@ -1847,7 +1842,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     if(isCheckAllOrMult){
       setTimeout(function(){
         that.layBox.removeClass(DISABLED_TRANSITION);
-      }, 1000)
+      }, 100)
     }
   };
 

@@ -1720,7 +1720,6 @@ layui.define(['table'], function (exports) {
   Class.prototype.setRowCheckedClass = function(tr, checked){
     var that = this;
     var options = that.getOptions();
-    if(!options.hightlightSelectedRow) return;
 
     var index = tr.data('index');
     var tableViewElem = options.elem.next();
@@ -1919,9 +1918,6 @@ layui.define(['table'], function (exports) {
 
         trElem.find('input[type="radio"][lay-type="layTableRadio"]').prop('checked', checked);
       } else {
-        var DISABLED_TRANSITION = 'layui-table-disabled-transition';
-        var tableboxElem = tableView.find('.layui-table-box');// 减少回流
-        tableboxElem.addClass(DISABLED_TRANSITION);
         // 切换只能用到单条，全选到这一步的时候应该是一个确定的状态
         checked = layui.type(checked) === 'boolean' ? checked : !trData[checkName]; // 状态切换，如果遇到不可操作的节点待处理 todo
         // 全选或者是一个父节点，将子节点的状态同步为当前节点的状态
@@ -1948,14 +1944,8 @@ layui.define(['table'], function (exports) {
           // 找到父节点，然后判断父节点的子节点是否全部选中
           trDataP = that.getNodeDataByIndex(trData[LAY_PARENT_INDEX]);
         }
-
-        var isAll = that.updateCheckStatus(trDataP, checked);
-
-        setTimeout(function(){
-          tableboxElem.removeClass(DISABLED_TRANSITION);
-        }, 1000)
         
-        return isAll;
+        return that.updateCheckStatus(trDataP, checked);
       }
     }
   }
