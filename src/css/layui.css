@@ -20,9 +20,8 @@ pre{white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; w
 /** 初始化全局标签 **/
 body{line-height: 1.6; color: #333; color: rgba(0,0,0,.85); font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;}
 hr{height: 0; line-height: 0; margin: 10px 0; padding: 0; border: none; border-bottom: 1px solid #eee; clear: both; overflow: hidden; background: none;}
-a{color: #333; text-decoration:none;}
-a:hover{color: #777;}
-a cite{font-style: normal; *cursor:pointer;}
+a{color: #333; text-decoration: none;}
+a cite{font-style: normal;}
 
 /** 基础通用 **/
 .layui-border-box, .layui-border-box *{box-sizing: border-box;}
@@ -701,8 +700,8 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-text p{margin: 15px 0;}
 .layui-text p:first-child{margin-top: 0;}
 .layui-text p:last-child{margin-bottom: 0;}
-.layui-text a:not(.layui-btn){color: #01AAED;}
-.layui-text a:not(.layui-btn):hover{text-decoration: underline;}
+.layui-text :where(a:not(.layui-btn)){color: #01AAED;}
+.layui-text :where(a:not(.layui-btn):hover){text-decoration: underline;}
 .layui-text blockquote:not(.layui-elem-quote){margin: 15px 0; padding: 5px 15px; border-left: 5px solid #eee;}
 .layui-text pre > code:not(.layui-code){display: block; padding: 15px; font-family: "Courier New",Consolas,"Lucida Console";}
 
