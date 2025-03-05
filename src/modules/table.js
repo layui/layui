@@ -1746,6 +1746,9 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var isCheckMult = layui.type(opts.index) === 'array'; // 是否操作多个
     var isCheckAllOrMult = isCheckAll || isCheckMult; // 是否全选或多选
 
+    // treeTable 内部已处理选中，此处不再处理
+    if(options.tree && options.tree.view) return;
+
     // 全选或多选时
     if (isCheckAllOrMult) {
       that.layBox.addClass(DISABLED_TRANSITION); // 减少回流
@@ -1839,7 +1842,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     if(isCheckAllOrMult){
       setTimeout(function(){
         that.layBox.removeClass(DISABLED_TRANSITION);
-      },100)
+      }, 100)
     }
   };
 
