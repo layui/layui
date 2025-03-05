@@ -18,7 +18,7 @@
 <td>name</td>
 <td>
 
-组件名称。如 `name:'tabs'`，那么在使用组件时，可通过 `layui.tabs` 获得该组件。注：*组件名必须唯一*。
+组件名称。如 `name:'tabs'`，在使用组件时，即可通过 `layui.tabs` 获得该组件。注：*组件名必须唯一*。
 
 </td>
 <td>string</td>
@@ -70,7 +70,7 @@ CONST: {
 <td>isRenderOnEvent</td>
 <td>
 
-渲染是否仅由事件触发。如 `dropdown` 这类通过点击触发的组件，那么应该设置为 `true`；而诸如 `tabs` 这类初始即展示的组件，则应该设置为 `false`。*推荐根据组件类型始终显式设置对应值*。
+渲染是否由事件触发。如 `dropdown` 这类通过点击触发的组件，那么应该设置为 `true`；而诸如 `tabs` 这类初始即展示的组件，则应该设置为 `false`。*推荐根据组件类型始终显式设置对应值*。
 
 </td>
 <td>boolean</td>
@@ -84,7 +84,7 @@ CONST: {
 <td>isDeepReload</td>
 <td>
 
-组件重载时是否允许为深度重载，即每次重载时选项进行深度合并。
+组件重载时是否允许深度重载，即对重载时选项进行深度合并。
 
 </td>
 <td>boolean</td>
@@ -167,7 +167,7 @@ extendsInstance: function(that) {
 }
 ```
 
-那么，当组件渲染时，即可通过它返回的对象调用实例方法：
+当组件渲染时，即可通过它返回的对象调用实例方法：
 
 ```js
 var inst = xxx.render(); // 某组件渲染
@@ -180,7 +180,7 @@ inst.close(); // 关闭某组件
 <td>events</td>
 <td colspan="3">
 
-定义组件各类内部事件。
+定义组件各内部事件。
 
 ```js
 events: function() {

@@ -19,7 +19,7 @@ toc: true
 
 - 参数 `options` : 基础属性配置项。[#详见属性](#options)
 
-该方法返回一个对象，通常用于当前组件的基础对外接口，如：组件渲染、重载、事件操作，及构造函数等等。用法示例：
+该方法返回一个对象，包含用于组件对外的基础接口，如：组件渲染、重载、事件操作，及构造函数等等。用法示例：
 
 ```js
 /**
@@ -68,7 +68,7 @@ layui.define('component', function(exports) {
 | [component.CONST](#CONST) | 获得组件的通用常量集。如 `MOD_NAME` 等 |
 | [component.Class](#Class) | 获得组件的构造函数。一般用于扩展原型方法 |
 
-> 注：上表中的 `component` 为组件的基础对象，实际使用时，请根据实组件名称进行替换。如 `tabs` 组件，对应的接口则为：`tabs.render(options)` `tabs.on('event(filter)', callback)` 等。
+> 😊 注：上表中的 `component` 为组件的基础对象，实际使用时，请根据实组件名称进行替换。如 `tabs` 组件，对应的接口则为：`tabs.render(options)` `tabs.on('event(filter)', callback)` 等。
 
 <h3 id="render" lay-toc="{level: 2}">组件渲染</h3>
 
@@ -78,7 +78,7 @@ layui.define('component', function(exports) {
 
 | 选项 | 描述 |
 | --- | --- |
-| elem | 组件渲染指定的目标元素 |
+| elem | 件渲染指定的目标元素选择器或 DOM 对象 |
 | id | 组件渲染的唯一实例 ID |
 | show | 是否初始即渲染组件。通常结合创建组件设定的 `isRenderOnEvent` 选项决定是否启用 |
 
@@ -140,7 +140,7 @@ tabs.render({
 
 `component.on('event(id)', callback)`
 
-- 参数 `event(id)` : 是事件的特定结构。 `event` 为事件名，支持的事件见下表。`id` 为组件的实例 ID。
+- 参数 `event(id)` : 是事件的特定结构。 `event` 为事件名，支持的事件见各组件列表。`id` 为组件的实例 ID。
 - 参数 `callback` : 事件回调函数。返回的参数由各组件内部单独定义。
 
 具体事件一般由组件内部单独定义，具体可查看各组件对应的文档。
@@ -237,22 +237,7 @@ layui.use('test', function() {
 
 `component.Class`
 
-通过获得组件的构造函数，可对组件的原型进行重构，但一般不推荐，因为这可能破坏组件的基础功能。
-
-```
-//  以 tabs 组件为例
-var tabs = layui.tabs;
-
-// 获得 tabs 组件构造函数
-var Class = tabs.Class;
-
-// 重构 tabs 组件内部的 xxx 方法（不推荐）
-Class.prototype.xxx = function() {
-  // …
-};
-```
-
-当然，如果是通过 `layui.component()` 方法创建一个新的组件，通常必须借助 `Class` 构造函数扩展组件原型，以灵活实现组件的个性化定制。但一般不推荐重写 `component.js` 原型中已经定义的基础方法，如：`init, reload, cache`
+当通过 `layui.component()` 方法创建一个新的组件时，通常需借助 `Class` 构造函数扩展组件原型，以灵活实现组件的个性化定制。但一般不推荐重写 `component.js` 原型中已经定义的基础方法，如：`init, reload, cache`
 
 ```
 /**
@@ -281,7 +266,24 @@ layui.define('component', function(exports) {
 });
 ```
 
+通过 `Class` 构造函数也可以对某个组件的原型进行重构，但一般不推荐，因为这可能破坏组件的基础功能。
+
+```
+//  以 tabs 组件为例
+var tabs = layui.tabs;
+
+// 获得 tabs 组件构造函数
+var Class = tabs.Class;
+
+// 重构 tabs 组件内部的 xxx 方法（不推荐）
+Class.prototype.xxx = function() {
+  // …
+};
+```
+
+您也可以直接参考 tabs 组件源码中关于扩展原型的具体实践。
+
 ## 💖 心语
 
-Layui 由于早前欠缺统筹性思维，很多组件自成一体，使得无法对组件进行很好的统一管理。随着版本的迭代，我们也一直在努力尝试改善这一问题，但很多时候，为了向下兼容而不得不保留许多旧有的特性。`component` 模块的初衷正是为了确保组件的一致性，如核心逻辑和 API 设计等，其目的也是为了让 2.x 系列版本尽可能地减少些遗憾，让 Layui 始终拥有自己的范式。
+Layui 由于早前欠缺统筹性思维，很多组件自成一体，使得无法对组件进行很好的统一管理。随着版本的迭代，我们也一直在努力尝试改善这一问题，但很多时候，为了向下兼容而不得不保留许多旧有的特性。`component` 模块的初衷正是为了确保组件的一致性，如核心逻辑和 API 设计等，其目的也是为了让 2.x 系列版本尽可能地减少些遗憾，让 Layui 在既定的范式中保持前行。
 
