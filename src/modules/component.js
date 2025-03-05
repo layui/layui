@@ -223,18 +223,6 @@ layui.define(['jquery', 'lay'], function(exports) {
       return instance.call(that);
     };
 
-    // 仅刷新视图 --- 待统一整理
-    /* component.refresh = function(id) {
-      var that = instance.getThis(id);
-      if (!that) return;
-    } */
-
-    // 仅更新数据 --- 待统一整理
-    /* component.update = function(id) {
-      var that = instance.getThis(id);
-      if (!that) return;
-    } */
-
     /**
      * 组件渲染
      * @param {Object} options - 配置项
