@@ -1278,19 +1278,21 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 /* 下拉菜单 */
 .layui-dropdown{position: absolute; left: -999999px; top: -999999px; z-index: 77777777; margin: 5px 0; min-width: 100px;}
 .layui-dropdown:before{content:""; position: absolute; width: 100%; height: 6px; left: 0; top: -6px;}
-.layui-dropdown-shade{top: 0; left: 0; width: 100%; height: 100%; _height: expression(document.body.offsetHeight+"px"); position: fixed; _position: absolute; pointer-events: auto;}
+.layui-dropdown-shade{top: 0; left: 0; width: 100%; height: 100%; position: fixed; pointer-events: auto;}
 
 
 /* Tabs 标签页 */
 .layui-tabs{position: relative;}
 .layui-tabs *{box-sizing: border-box;}
 .layui-tabs.layui-hide-v{overflow: hidden;}
-.layui-tabs-header{position: relative; left: 0; height: 40px; white-space: nowrap; font-size: 0; transition: all .16s; -webkit-transition: all .16s;}
+.layui-tabs-header{position: relative; left: 0; height: 40px; padding: 0 !important; white-space: nowrap; font-size: 0; transition: all .16s; -webkit-transition: all .16s;}
 .layui-tabs-header:after,
 .layui-tabs-scroll:after{content: ""; position: absolute; left: 0; bottom: 0; z-index: 0; width: 100%; border-bottom: 1px solid #eee;}
 .layui-tabs-header li{position: relative; display: inline-block; vertical-align: middle; line-height: 40px; margin: 0 !important; padding: 0 16px; text-align: center; cursor: pointer; font-size: 14px; transition: all .16s; -webkit-transition: all .16s;}
 .layui-tabs-header li:first-child{margin-left: 0;}
-.layui-tabs-header li a{display: block; padding: 0 16px; margin: 0 -16px;}
+.layui-tabs-header li a{display: block; padding: 0 16px; margin: 0 -16px; color: inherit;}
+.layui-tabs-header li a:hover{text-decoration: none;}
+.layui-tabs-header li:hover,
 .layui-tabs-header .layui-this{color: #16baaa;}
 .layui-tabs-header .layui-this:after{content: ""; position: absolute; left:0; top: 0; z-index: 1; width: 100%; height: 100%; border-bottom: 3px solid #16baaa; box-sizing: border-box; pointer-events: none;}
 .layui-tabs-header .layui-badge,

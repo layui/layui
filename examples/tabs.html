@@ -7,10 +7,11 @@
     <link rel="stylesheet" href="../src/css/layui.css">
   </head>
 <body>
-  <div class="layui-container layui-padding-3">
+  <div class="layui-container layui-padding-3 layui-text">
+    <h2>动态操作</h2>
     <div class="layui-tabs layui-hide-v" id="demoTabs1" lay-options="{closable: true, headerMode:'scroll'}">
       <ul class="layui-tabs-header">
-        <li lay-id="aaa" lay-unclosed="true" class="layui-this">Tab1</li>
+        <li lay-id="aaa" lay-closable="false">Tab1</li>
         <li lay-id="bbb">Tab2</li>
         <li lay-id="ccc">Tab3</li>
         <li lay-id="ddd">Tab4</li>
@@ -18,7 +19,7 @@
         <li lay-id="fff">Tab6</li>
       </ul>
       <div class="layui-tabs-body">
-        <div class="layui-tabs-item layui-show">Tab Content-1</div>
+        <div class="layui-tabs-item">Tab Content-1</div>
         <div class="layui-tabs-item">Tab Content-2</div>
         <div class="layui-tabs-item">Tab Content-3</div>
         <div class="layui-tabs-item">Tab Content-4</div>
@@ -35,14 +36,10 @@
       <button class="layui-btn" lay-on="add">添加 Tab</button>
     </div>
 
-    <div class="layui-py">
-      方法渲染：
-      <hr class="layui-my">
-      <div id="demoTabs2"></div>
-    </div>
+    <h2>方法渲染</h2>
+    <div id="demoTabs2"></div>
 
-    <div class="layui-py">卡片风格：</div>
-
+    <h2>卡片风格</h2>
     <div class="layui-tabs layui-tabs-card" lay-options="{index: 1}">
       <ul class="layui-tabs-header">
         <li>标题1</li>
@@ -62,8 +59,7 @@
       </div>
     </div>
 
-    <div class="layui-py">卡片 + 边框：</div>
-
+    <h3>卡片 + 边框</h3>
     <div class="layui-tabs layui-tabs-card layui-panel layui-inline">
       <ul class="layui-tabs-header layui-bg-tint">
         <li class="layui-this">标题1</li>
@@ -94,8 +90,7 @@
       </div>
     </div>
 
-    <div class="layui-py">HASH：</div>
-
+    <h2>标签 HASH 定位</h2>
     <div class="layui-tabs layui-hide-v" id="demoTabs-hash">
       <ul class="layui-tabs-header">
         <li lay-id="A1" class="layui-this"><a href="#A1">标题题题题题题1</a></li>
@@ -109,8 +104,7 @@
       </ul>
     </div>
 
-    <div class="layui-py">标签嵌套：</div>
-
+    <h2>标签嵌套</h2>
     <div class="layui-tabs layui-tabs-card" lay-options="{headerMode:'normal'}">
       <ul class="layui-tabs-header">
         <li class="layui-this">标题1</li>
@@ -150,10 +144,8 @@
       </div>
     </div>
 
-    <div class="layui-py" id="demoTabs3">
-      给任意元素添加 Tab 功能：
-      <hr class="layui-my">
-
+    <h2>给任意元素绑定 tabs 切换功能</h2>
+    <div id="demoTabs3">
       <style>
         #demoTabsHeader .layui-btn.layui-this{border-color: #eee; color: #000; background: none;}
         #demoTabsBody .test-item{display: none;}
@@ -168,18 +160,19 @@
         <div class="test-item">内容 222</div>
         <div class="test-item">内容 333</div>
       </div>
-
     </div>
 
   </div>
 
   <script src="../src/layui.js"></script>
   <script>
-  layui.use(['tabs', 'form', 'util'], function(){
+  layui.use(function() {
     var tabs = layui.tabs
     var util = layui.util;
+    var layer = layui.layer;
+    var dropdown = layui.dropdown;
 
-    // 事件
+    // 自定义事件
     util.on({
       add: function(){
         var n = Math.random()*1000 | 0; // 演示标记
@@ -195,6 +188,69 @@
             console.log(params);
           }
         });
+      }
+    });
+
+    // tabs 关闭前的事件
+    tabs.on('beforeClose(demoTabs1)', function(data) {
+      console.log('beforeClose', data);
+
+      // 关闭确认提示
+      layer.confirm(`确定关闭标签「${this.innerText}」吗？`, function(i) {
+        tabs.close('demoTabs1', data.index, true); // 强制关闭对应的标签项
+        layer.close(i); // 关闭确认框
+      });
+      return false; // 阻止标签默认关闭
+    });
+
+    // tabs 关闭后的事件
+    tabs.on('afterClose(demoTabs1)', function(data) {
+      console.log('afterClose', data);
+    });
+
+    // tabs 切换前的事件
+    tabs.on('beforeChange(demoTabs1)', function(data) {
+      console.log('beforeChange', data);
+
+      // 切换确认提示
+      /*layer.confirm(`确定从「当前标签」切换到标签「${this.innerText}」吗？`, function(i) {
+        tabs.change('demoTabs1', data.to.index, true); // 强制切换
+        layer.close(i); // 关闭确认框
+      });
+      return false; // 阻止标签默认关闭*/
+    });
+
+    // tabs 切换后的事件
+    tabs.on('afterChange(demoTabs1)', function(data) {
+      console.log('afterChange', data);
+    });
+
+    // 为标签头添加上下文菜单
+    dropdown.render({
+      elem: '#demoTabs1 .layui-tabs-header>li',
+      trigger: 'contextmenu',
+      data: [{
+        title: '关闭',
+        type: 'this'
+      }, {
+        title: '关闭其他标签页',
+        type: 'other'
+      }, {
+        title: '关闭右侧标签页',
+        type: 'right'
+      }, {
+        type: '-'
+      }, {
+        title: '关闭所有标签页',
+        type: 'all'
+      }],
+      click: function(data, othis, event) {
+        var index = this.elem.index();
+        if (data.type === 'this') {
+          tabs.close('demoTabs1', index); // 关闭当前标签
+        } else {
+          tabs.closeMult('demoTabs1', data.type, index); // 批量关闭标签
+        }
       }
     });
 
@@ -225,10 +281,7 @@
     tabs.render({
       elem: '#demoTabs3',
       header: ['#demoTabsHeader', '>button'],
-      body: ['#demoTabsBody', '>.test-item'],
-      change: function(obj) {
-        console.log(obj);
-      }
+      body: ['#demoTabsBody', '>.test-item']
     });
   });
   </script>
