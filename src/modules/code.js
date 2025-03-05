@@ -404,7 +404,9 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
             render: function(){
               form.render(thisItemBody.find('.layui-form'));
               element.render();
-              tabs.render();
+              tabs.render({
+                elem: ['.'+ CONST.ELEM_PREVIEW, '.layui-tabs'].join(' ')
+              });
             }
           });
         },3);
