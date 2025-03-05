@@ -24,10 +24,7 @@ layui.use(function(){
   tabs.render({
     elem: '#demoTabs3',
     header: ['#demoTabsHeader', '>button'],
-    body: ['#demoTabsBody', '>.test-item'],
-    change: function(obj) {
-      console.log(obj);
-    }
+    body: ['#demoTabsBody', '>.test-item']
   });
 });
 </script>

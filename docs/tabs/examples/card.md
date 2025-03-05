@@ -1,4 +1,4 @@
-<h4>普通卡片：</h4>
+#### 普通卡片
 
 <div class="layui-tabs layui-tabs-card" lay-options="{index: 1}">
   <ul class="layui-tabs-header">
@@ -19,7 +19,7 @@
   </div>
 </div>
 
-<h4>边框卡片：</h4>
+#### 边框卡片
 
 <div class="layui-tabs layui-tabs-card layui-panel layui-inline">
   <ul class="layui-tabs-header layui-bg-tint">
