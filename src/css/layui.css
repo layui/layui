@@ -47,12 +47,12 @@ a cite{font-style: normal;}
 /** 图标字体 **/
 @font-face {
   font-family: 'layui-icon';
-  src: url('../font/iconfont.eot?v=282');
-  src: url('../font/iconfont.eot?v=282#iefix') format('embedded-opentype'),
-       url('../font/iconfont.woff2?v=282') format('woff2'),
-       url('../font/iconfont.woff?v=282') format('woff'),
-       url('../font/iconfont.ttf?v=282') format('truetype'),
-       url('../font/iconfont.svg?v=282#layui-icon') format('svg');
+  src: url('../font/iconfont.eot?v=293');
+  src: url('../font/iconfont.eot?v=293#iefix') format('embedded-opentype'),
+       url('../font/iconfont.woff2?v=293') format('woff2'),
+       url('../font/iconfont.woff?v=293') format('woff'),
+       url('../font/iconfont.ttf?v=293') format('truetype'),
+       url('../font/iconfont.svg?v=293#layui-icon') format('svg');
 }
 
 .layui-icon{
@@ -64,6 +64,8 @@ a cite{font-style: normal;}
 }
 
 /* font-class */
+.layui-icon-sound:before{content: "\e69d";}
+.layui-icon-bot:before{content: "\e7d6";}
 .layui-icon-leaf:before{content: "\e701";}
 .layui-icon-folder:before{content: "\eabe";}
 .layui-icon-folder-open:before{content: "\eac1";}
@@ -659,19 +661,26 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-text h4{margin: 11px 0; font-size: 16px;}
 .layui-text h5{margin: 11px 0; font-size: 14px;}
 .layui-text h6{margin: 11px 0; font-size: 13px;}
+.layui-text p{margin: 15px 0;}
+.layui-text p:first-child{margin-top: 0;}
+.layui-text p:last-child{margin-bottom: 0;}
+.layui-text hr{margin: 15px 0;}
 .layui-text ul,
 .layui-text ol{padding-left: 15px;}
 .layui-text ul li{margin-top: 5px; list-style-type: disc;}
 .layui-text ol li{margin-top: 5px; list-style-type: decimal;}
-.layui-text-em,
-.layui-word-aux{color: #999 !important; padding-left: 5px !important; padding-right: 5px !important;}
-.layui-text p{margin: 15px 0;}
-.layui-text p:first-child{margin-top: 0;}
-.layui-text p:last-child{margin-bottom: 0;}
+.layui-text ul ul > li,
+.layui-text ol ul > li{list-style-type: disc;}
+.layui-text ul li > p:first-child,
+.layui-text ol li > p:first-child{margin-top: 0; margin-bottom: 0;}
 .layui-text :where(a:not(.layui-btn)){color: #01AAED;}
 .layui-text :where(a:not(.layui-btn):hover){text-decoration: underline;}
 .layui-text blockquote:not(.layui-elem-quote){margin: 15px 0; padding: 5px 15px; border-left: 5px solid #eee;}
-.layui-text pre > code:not(.layui-code){display: block; padding: 15px; font-family: "Courier New",Consolas,"Lucida Console";}
+.layui-text pre > code:not(.layui-code){display: block; padding: 15px; font-family: "Courier New",Consolas,"Lucida Console", monospace;}
+
+/* 文本区域辅助  */
+.layui-text-em,
+.layui-word-aux{color: #999 !important; padding-left: 5px !important; padding-right: 5px !important;}
 
 /* 字体大小 */
 .layui-font-12{font-size: 12px !important;}
@@ -1538,7 +1547,7 @@ body .layui-util-face  .layui-layer-content{padding:0; background-color:#fff; co
 .layui-util-face ul li:hover{position: relative; z-index: 2; border: 1px solid #eb7350; background: #fff9ec;}
 
 /** 代码文本修饰 **/
-.layui-code{display: block; position: relative; padding: 15px; line-height: 20px; border: 1px solid #eee; border-left-width: 6px; background-color: #fff; color: #333; font-family: "Courier New",Consolas,"Lucida Console"; font-size: 12px;}
+.layui-code{display: block; position: relative; padding: 15px; line-height: 20px; border: 1px solid #eee; border-left-width: 6px; background-color: #fff; color: #333; font-family: "Courier New",Consolas,"Lucida Console", monospace; font-size: 12px;}
 
 /** 穿梭框 **/
 .layui-transfer-box,

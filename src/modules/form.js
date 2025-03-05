@@ -113,7 +113,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         var itemElem = itemForm.find('[name="'+ key +'"]');
         
         // 如果对应的表单不存在，则不执行
-        if(!itemElem[0]) return;
+        if(!itemElem[0]) continue;
         type = itemElem[0].type;
         
         // 如果为复选框
@@ -158,7 +158,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       }
       
       if(/^(checkbox|radio)$/.test(item.type) && !item.checked) return;  // 复选框和单选框未选中，不记录字段     
-      field[init_name || item.name] = othis.val();
+      // select 多选用 jQuery 方式取值，未选中 option 时，
+      // jQuery v2.2.4 及以下版本返回 null，以上(3.x) 返回 []。
+      // 统一规范化为 []，参考 https://github.com/jquery/jquery/issues/2562
+      field[init_name || item.name] = (this.tagName === 'SELECT' && typeof this.getAttribute('multiple') === 'string') 
+        ? othis.val() || []
+        : this.value;
     });
     
     return field;

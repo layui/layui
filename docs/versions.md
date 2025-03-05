@@ -9,9 +9,44 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+<h2 id="v2.9.23" class="ws-anchor">
+  v2.9.23
+  <span class="layui-badge-rim">2025-02-19</span>
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+</h2>
+
+- #### 基础
+  - 新增 6 个图标 #2511 @sentsim
+- #### form
+  - 修复 `form.val()` 某些情况下赋值失效问题 #2503 @Sight-wcg
+- #### 公共类
+  - 优化 `layui-text` 在混合列表下的显示问题 #2510 @sentsim
+
+### 下载： [layui-v2.9.23.zip](https://gitee.com/layui/layui/attach_files/2060356/download)
+
+---
+
+<h2 id="v2.9.22" class="ws-anchor">
+  v2.9.22
+  <span class="layui-badge-rim">2025-02-14</span>
+</h2>
+
+- #### form
+  - 修复 `form.val()` 第二个参数为 ArrayLike 时表单赋值异常 #2455 @Sight-wcg
+  - 修复 `select` 未选中时 form.val 获取到的值为 null 的问题 #2475 @Sight-wcg
+- #### table
+  - 回滚 #2411 中的 `ResizeObserver` 逻辑，因为可能存在更多的边缘影响 #2501 @Sight-wcg
+- #### treeTable
+  - 修复 异步加载子节点失败后，无法点击重新加载的问题 #2479 @Sight-wcg
+- #### 基础
+  - 优化 Linux 个别环境下的等宽字体 #2488 @SessionHu
+
+### 下载： [layui-v2.9.22.zip](https://gitee.com/layui/layui/attach_files/2054722/download)
+
+---
+
 <h2 id="v2.9.21" class="ws-anchor">
   v2.9.21
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
   <span class="layui-badge-rim">2025-01-03</span>
 </h2>
 
