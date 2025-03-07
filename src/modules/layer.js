@@ -1025,7 +1025,7 @@ ready.setScrollbar = function(index){
 };
 
 // 恢复页面滚动条
-ready.restScrollbar = function(index, isZoom){
+ready.restScrollbar = function(index) {
   // 关闭和大小化, layer-full 处理
   var targetEl = $('.'+ doms[0]).filter(function(){ 
     var layero = $(this);
