@@ -261,11 +261,36 @@ layui.define('jquery', function(exports){
       // 引用自 dayjs
       // https://github.com/iamkun/dayjs/blob/v1.11.9/src/constant.js#L30
       var REGEX_FORMAT = /\[([^\]]+)]|y{1,4}|M{1,2}|d{1,2}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|SSS/g;
+      var REGEX_PARSE = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[T\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/i;
       var that = this;
-      var date = new Date(function(){
-        if(!time) return;
-        return isNaN(time) ? time : (typeof time === 'string' ? parseInt(time) : time)
-      }() || new Date())
+
+      var normalizeDate = function(date) {
+        if(typeof date === 'undefined'){
+          return new Date();
+        }
+        if(!isNaN(date)){
+          return new Date(typeof date === 'string' ? parseInt(date) : date);
+        }
+        if(typeof date === 'string' && !/Z$/i.test(date)){
+          var d = date.match(REGEX_PARSE);
+          if(d){
+            var m = d[2] - 1 || 0;
+            var ms = (d[7] || '0').substring(0, 3);
+            return new Date(
+              d[1],
+              m,
+              d[3] || 1,
+              d[4] || 0,
+              d[5] || 0,
+              d[6] || 0,
+              ms
+            );
+          }
+        }
+      
+        return new Date(date)
+      }
+      var date = normalizeDate(time);
 
       if(!date.getDate()) return hint.error('Invalid millisecond for "util.toDateString(millisecond)"'), '';
 
