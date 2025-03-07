@@ -2,8 +2,10 @@
 title: 选项卡组件 tab
 toc: true
 ---
- 
-# 选项卡组件
+
+# ~~选项卡组件~~
+
+> 📣 <span style="color: #ff5722;">升级提示：我们在 2.10 版本中新增了全新的 tabs 标签页组件，用于替代原 `element` 模块中的 `tab` 组件，建议过渡到全新的 tabs 组件，旧的 ~~tab~~ 组件将在后续合适的版本中移除。</span> [前往全新 tabs 组件](../tabs/)
 
 > 选项卡组件 `tab` 是指可进行标签页切换的一段容器，常广泛应用于 Web 页面。由于为了向下兼容等诸多历史原因，在 2.x 版本中，`tab` 组件属于 `element` 模块的子集。
 
@@ -159,7 +161,7 @@ tab 组件会在元素加载完毕后，自动对 tab 元素完成一次渲染�
 
 ```
 <div id="test"></div>
- 
+
 <!-- import layui -->
 <script>
 layui.use(function(){
@@ -284,7 +286,7 @@ layui.use(function(){
 
 ```
 var element = layui.element;
- 
+
 // tab 切换事件
 element.on('tab(filter)', function(data){
   console.log(this); // 当前 tab 标题所在的原始 DOM 元素
@@ -307,7 +309,7 @@ element.on('tab(filter)', function(data){
 
 ```
 var element = layui.element;
- 
+
 // tab 切换前的事件
 element.on('tabBeforeChange(filter)', function(data){
   console.log(data.elem); // 得到当前的 tab 容器
@@ -333,7 +335,7 @@ element.on('tabBeforeChange(filter)', function(data){
 
 ```
 var element = layui.element;
- 
+
 // tab 删除事件
 element.on('tabDelete(filter)', function(data){
   console.log(data.index); // 得到被删除的 tab 项的所在下标
