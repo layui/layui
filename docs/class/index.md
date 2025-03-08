@@ -12,7 +12,7 @@ toc: true
 | className | 描述 |
 | --- | --- |
 | layui-main | 设置一个固定宽度为 `1160px` 的水平居中块 |
-| layui-border-box | 设置元素及其所有子元素均为 `box-sizing: content-box` 模型的容器 |
+| layui-border-box | 设置元素及其所有子元素均为 `box-sizing: border-box` 模型的容器 |
 | layui-clear | 清除前面的同级元素产生的浮动 |
 | layui-clear-space <sup>2.8+</sup> | 清除容器内的空白符 |
 | layui-inline | 设置元素为内联块状结构 |
