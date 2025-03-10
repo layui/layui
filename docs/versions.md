@@ -7,6 +7,47 @@ toc: true
 
 > 导读：📑 [Layui 2.8+ 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
+<h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
+
+
+<h2 id="v2.10.0" class="ws-anchor">
+  v2.10.0-beta
+  <span class="layui-badge-rim">2025-03-10</span>
+  <span class="layui-badge-rim" style="color: #16b777;">预览版</span>
+</h2>
+
+- #### 新特性
+  - 新增 component 组件构建器，旨在为 2.x 系列版本逐步构建统一规范的组件 #2477 @sentsim
+  - 新增 tabs 全新标签页组件，以替代原 `element` 模块中的 `tab` 组件 #2477 @sentsim
+  - 升级 jQuery v3.7.1 #2477 @sentsim
+  - 调整 将最低浏览器兼容标准过渡到 `IE9`。如需兼容 IE8，可使用 2.9.x #2477 @sentsim
+- #### component  <sup>new</sup>
+  - 继「轻量级模块系统」之后的又一个重要底层模块，重定义 Layui 特有的组件范式
+  - 支持 创建不同的展示和交互形态的组件
+  - 支持 输出组件通用的基础接口，如渲染、重载、全局设置、事件、获取实例等
+  - 支持 扩展组件任意接口
+  - 支持 扩展和重构组件原型，实现更灵活的个性化定制
+- #### tabs  <sup>new</sup>
+  - 由 component 构建的首个加强型组件
+  - 支持 标签头部左右滚动模式，以应对复杂的多标签页使用场景
+  - 支持 关闭当前标签和批量关闭「其他、右侧、全部」标签
+  - 支持 关闭前后、切换前后等周期事件
+  - 支持 标签「自动渲染、方法渲染、任意绑定」三种渲染方式
+  - 支持 原 tab 组件的全部功能，并重新优化了界面和交互体验
+- #### input-number
+  - 新增 限制允许输入的字符功能 #2465 @Sight-wcg
+  - 新增 `lay-step-strictly` 属性，可开启步长严格模式，只能输入步长的倍数 #2465 @Sight-wcg
+  - 新增 `lay-wheel` 属性，可通过鼠标滚轮或触摸板改变数值功能 #2465 @Sight-wcg
+  - 新增 按 Up/Down 键时改变数值功能 #2465 @Sight-wcg
+- #### util
+  - 优化 `util.toDateString` 规范化字符串日期 #2543 @Sight-wcg
+- #### 其他
+  - 调低 `.layui-text` 中的 `<a>` 标签文字颜色优先级  #2477 @sentsim
+
+### 下载： [layui-v2.10.0-beta.zip](https://gitee.com/layui/layui/attach_files/2087806/download)
+
+---
+
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
 <h2 id="v2.9.24" class="ws-anchor">
