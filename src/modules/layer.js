@@ -1021,16 +1021,20 @@ ready.record = function(layero){
 
 // 设置页面滚动条
 ready.setScrollbar = function(index){
-  doms.html.css('overflow', 'hidden').attr('layer-full', index);
+  doms.html.css('overflow', 'hidden');
 };
 
 // 恢复页面滚动条
-ready.restScrollbar = function(index){
-  if(doms.html.attr('layer-full') == index){
-    doms.html[0].style[doms.html[0].style.removeProperty 
-      ? 'removeProperty' 
-    : 'removeAttribute']('overflow');
-    doms.html.removeAttr('layer-full');
+ready.restScrollbar = function(index) {
+  // 关闭和大小化, layer-full 处理
+  var targetEl = $('.'+ doms[0]).filter(function(){ 
+    var layero = $(this);
+    return layero.data('config').scrollbar === false 
+      && layero.data('maxminStatus') !== 'min'
+      && layero.attr('times') !== String(index);
+  });
+  if(targetEl.length === 0){
+    doms.html.css('overflow', '');
   }
 };
 
@@ -1230,9 +1234,7 @@ layer.full = function(index){
   layero.data('maxminStatus', 'max');
   ready.record(layero); // 记录当前尺寸、坐标
 
-  if(!doms.html.attr('layer-full')){
-    ready.setScrollbar(index);
-  }
+  ready.setScrollbar(index);
 
   setTimeout(function(){
     var isfix = layero.css('position') === 'fixed';

@@ -9,10 +9,27 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+<h2 id="v2.9.24" class="ws-anchor">
+  v2.9.24
+  <span class="layui-badge-rim">2025-03-07</span>
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+</h2>
+
+- #### layer
+  - 改进 打开弹层后设置页面滚动条逻辑 #2537 @Sight-wcg
+- #### treeTable
+  - 修复 treeToFlat 改变根节点 pid 问题 #2526 @Sight-wcg
+  - 修复 checkbox 重复更新的问题，大约可提升 30% 性能 #2528 @Sight-wcg
+- #### code
+  - 修复 选项卡底边框显示异常问题 #2519 @Sight-wcg
+
+### 下载： [layui-v2.9.24.zip](https://gitee.com/layui/layui/attach_files/2085224/download)
+
+---
+
 <h2 id="v2.9.23" class="ws-anchor">
   v2.9.23
   <span class="layui-badge-rim">2025-02-19</span>
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
 </h2>
 
 - #### 基础

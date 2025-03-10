@@ -19,6 +19,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   var HIDE = 'layui-hide';
   var DISABLED = 'layui-disabled';
   var OUT_OF_RANGE = 'layui-input-number-out-of-range';
+  var BAD_INPUT = 'layui-input-number-invalid';
   
   var Form = function(){
     this.config = {
@@ -194,10 +195,15 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var precision = Number(elem.attr('lay-precision'));
           var noAction = eventType !== 'click' && rawValue === ''; // 初始渲染和失焦时空值不作处理
           var isInit = eventType === 'init';
+          var isBadInput = isNaN(value);
+          var isStepStrictly = typeof elem.attr('lay-step-strictly') === 'string';
 
-          if(isNaN(value)) return; // 若非数字，则不作处理
+          elem.toggleClass(BAD_INPUT, isBadInput);
+          if(isBadInput) return; // 若非数字，则不作处理
 
           if(eventType === 'click'){
+            // 兼容旧版行为，2.10 以前 readonly 不禁用控制按钮
+            if(elem[0].type === 'text' && typeof elem.attr('readonly') === 'string') return;
             var isDecrement = !!$(that).index() // 0: icon-up, 1: icon-down
             value = isDecrement ? value - step : value + step;
           }
@@ -214,6 +220,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           if (!noAction) {
             // 初始渲染时只处理数字精度
             if (!isInit) {
+              if(isStepStrictly){
+                value = Math.round(value / step) * step;
+              }
               if(value <= min) value = min;
               if(value >= max) value = max;
             }
@@ -223,7 +232,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             } else if(precision > 0) { // 小数位精度
               value = value.toFixed(precision);
             }
+
             elem.val(value);
+            elem.attr('lay-input-mirror', elem.val())
           }
 
           // 超出范围的样式
@@ -369,6 +380,71 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               className: 'layui-input-number',
               disabled: othis.is('[disabled]'), // 跟随输入框禁用状态
               init: function(elem){
+                // 旧版浏览器不支持更改 input 元素的 type 属性，需要主动设置 text
+                if(elem.attr('type') === 'text' || elem[0].type === 'text'){
+                  var ns = '.lay_input_number';
+                  var skipCheck = false;
+                  var isComposition = false;
+                  var isReadonly = typeof elem.attr('readonly') === 'string';
+                  var isMouseWheel = typeof elem.attr('lay-wheel') === 'string';
+                  var btnElem = elem.next('.layui-input-number').children('i');
+                  // 旧版浏览器不支持 beforeInput 事件，需要设置一个 attr 存储输入前的值
+                  elem.attr('lay-input-mirror', elem.val());
+                  elem.off(ns);
+                  // 旧版浏览器不支持 event.inputType 属性，需要用 keydown 事件来判断是否跳过输入检查
+                  elem.on('keydown' + ns, function (e) {
+                    skipCheck = false;
+                    if (e.keyCode === 8 || e.keyCode === 46) { // Backspace || Delete
+                      skipCheck = true;
+                    }
+                    // Up & Down 键盘事件处理
+                    if(!isReadonly && btnElem.length === 2 && (e.keyCode === 38 || e.keyCode === 40)){
+                      e.preventDefault();
+                      btnElem.eq(e.keyCode === 38 ? 0 : 1).click();
+                    }
+                  })
+                  elem.on('input' + ns + ' propertychange' + ns, function (e) {
+                    if (isComposition || (e.type === 'propertychange' && e.originalEvent.propertyName !== 'value')) return;
+                    if (skipCheck || canInputNumber(this.value)) {
+                      elem.attr('lay-input-mirror', this.value);
+                    } else {
+                      // 恢复输入前的值
+                      this.value = elem.attr('lay-input-mirror');
+                    }
+                    elem.toggleClass(BAD_INPUT, isNaN(Number(this.value)));
+                  });
+                  elem.on('compositionstart' + ns, function () {
+                    isComposition = true;
+                  });
+                  elem.on('compositionend' + ns, function () {
+                    isComposition = false;
+                    elem.trigger('input');
+                  })
+                  // 响应鼠标滚轮或触摸板
+                  if(isMouseWheel){
+                    elem.on(['wheel','mousewheel','DOMMouseScroll'].join(ns + ' ') + ns, function (e) {
+                      if(!btnElem.length) return;
+                      if(!$(this).is(':focus')) return;
+                      var direction = 0;
+                      e.preventDefault();
+                      // IE9+，chrome 和 firefox 同时添加 'wheel' 和 'mousewheel' 事件时，只执行 'wheel' 事件
+                      if(e.type === 'wheel'){
+                        e.deltaX = e.originalEvent.deltaX;
+                        e.deltaY = e.originalEvent.deltaY;
+                        direction = Math.abs(e.deltaX) >= Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+                      }else if(e.type === 'mousewheel' ){
+                        direction = -e.originalEvent.wheelDelta;
+                      }else if(e.type === 'DOMMouseScroll'){
+                        direction = e.originalEvent.detail;
+                      }
+                      btnElem.eq(direction > 0 ? 1 : 0).click();
+                    })
+                  }
+
+                  if(isReadonly){
+                    btnElem.addClass(DISABLED);
+                  }
+                }
                 handleInputNumber.call(this, elem, 'init')
               },
               click: function(elem){
@@ -1343,6 +1419,31 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         this.setAttribute(name, '');
         return true;
     }
+  }
+
+  // 修改自 https://github.com/Tencent/tdesign-common/blob/53786c58752401e648cc45918f2a4dbb9e8cecfa/js/input-number/number.ts#L209
+  var specialCode = ['-', '.', 'e', 'E', '+'];
+  function canInputNumber(number) {
+    if (number === '') return true;
+    // 数字最前方不允许出现连续的两个 0
+    if (number.slice(0, 2) === '00') return false;
+    // 不能出现空格
+    if (number.match(/\s/g)) return false;
+    // 只能出现一个点（.）
+    var tempMatched = number.match(/\./g);
+    if (tempMatched && tempMatched.length > 1) return false;
+    // 只能出现一个e（e）
+    tempMatched = number.match(/e/g);
+    if (tempMatched && tempMatched.length > 1) return false;
+    // 只能出现一个负号（-）或 一个正号（+），并且在第一个位置；但允许 3e+10 这种形式
+    var tempNumber = number.slice(1);
+    tempMatched = tempNumber.match(/(\+|-)/g);
+    if (tempMatched && (!/e(\+|-)/i.test(tempNumber) || tempMatched.length > 1)) return false;
+    // 允许输入数字字符
+    var isNumber = !isNaN(Number(number));
+    if (!isNumber && !(specialCode.indexOf(number.slice(-1)) !== -1)) return false;
+    if (/e/i.test(number) && (!/\de/i.test(number) || /e\./.test(number))) return false;
+    return true;
   }
   
   var form = new Form();

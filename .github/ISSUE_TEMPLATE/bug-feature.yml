@@ -1,6 +1,10 @@
 name: 😄 创建议题
 description: 此处只受理 Bug 报告、功能请求。若是其他业务相关的问题建议在 Discussions 寻求社区帮助。
 body:
+  - type: markdown
+    attributes:
+      value: |
+        > 💡 请遵循标题格式：**[组件名称] 描述问题的标题** （ 例如：[table] 表格能否支持自定义请求 ）
   - type: checkboxes
     attributes:
       label: 议题条件

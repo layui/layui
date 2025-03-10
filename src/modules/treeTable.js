@@ -387,7 +387,8 @@ layui.define(['table'], function (exports) {
     layui.each(tableData, function (i1, item1) {
       var dataIndex = (parentIndex ? parentIndex + '-' : '') + i1;
       var dataNew = $.extend({}, item1);
-      dataNew[pIdKey] = item1[pIdKey] || parentId;
+      
+      dataNew[pIdKey] = typeof item1[pIdKey] !== 'undefined' ? item1[pIdKey] : parentId;
       flat.push(dataNew);
       flat = flat.concat(that.treeToFlat(item1[childrenKey], item1[customName.id], dataIndex));
     });
@@ -1761,10 +1762,10 @@ layui.define(['table'], function (exports) {
         that.setRowCheckedClass(checkboxElem.closest('tr'), checked);
         
         // 设置原始复选框 checked 属性值并渲染
-        form.render(checkboxElem.prop({
+        checkboxElem.prop({
           checked: checked,
           indeterminate: itemP[LAY_CHECKBOX_HALF]
-        }))
+        })
       })
     }
 
@@ -1793,10 +1794,10 @@ layui.define(['table'], function (exports) {
     }
     
     isIndeterminate = isIndeterminate && !isAll;
-    form.render(tableView.find('input[name="layTableCheckbox"][lay-filter="layTableAllChoose"]').prop({
+    tableView.find('input[name="layTableCheckbox"][lay-filter="layTableAllChoose"]').prop({
       'checked': isAll,
       indeterminate: isIndeterminate
-    }));
+    })
 
     return isAll
   }
@@ -1908,7 +1909,7 @@ layui.define(['table'], function (exports) {
 
             // 取消当前选中行背景色
             that.setRowCheckedClass(radioElem.closest('tr'), false);
-            form.render(radioElem.prop('checked', false));
+            radioElem.prop('checked', false);
           }
         }); // 取消其他的选中状态
         trData[checkName] = checked;
@@ -1916,7 +1917,7 @@ layui.define(['table'], function (exports) {
         that.setRowCheckedClass(trElem, checked);  // 标记当前选中行背景色
         that.setRowCheckedClass(trElem.siblings(), false); // 取消其他行背景色
 
-        form.render(trElem.find('input[type="radio"][lay-type="layTableRadio"]').prop('checked', checked));
+        trElem.find('input[type="radio"][lay-type="layTableRadio"]').prop('checked', checked);
       } else {
         // 切换只能用到单条，全选到这一步的时候应该是一个确定的状态
         checked = layui.type(checked) === 'boolean' ? checked : !trData[checkName]; // 状态切换，如果遇到不可操作的节点待处理 todo
@@ -1935,7 +1936,7 @@ layui.define(['table'], function (exports) {
         }).join(','));
 
         that.setRowCheckedClass(checkboxElem.closest('tr'), checked);  // 标记当前选中行背景色
-        form.render(checkboxElem.prop({checked: checked, indeterminate: false}));
+        checkboxElem.prop({checked: checked, indeterminate: false});
 
         var trDataP;
 
@@ -1944,7 +1945,7 @@ layui.define(['table'], function (exports) {
           // 找到父节点，然后判断父节点的子节点是否全部选中
           trDataP = that.getNodeDataByIndex(trData[LAY_PARENT_INDEX]);
         }
-
+        
         return that.updateCheckStatus(trDataP, checked);
       }
     }
