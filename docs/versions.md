@@ -11,7 +11,7 @@ toc: true
 
 
 <h2 id="v2.10.0" class="ws-anchor">
-  v2.10.0-rc.2
+  v2.10.0-rc.3
   <span class="layui-badge-rim">2025-03-10</span>
   <span class="layui-badge-rim" style="color: #16b777;">预览版</span>
 </h2>
@@ -44,7 +44,7 @@ toc: true
 - #### 其他
   - 调低 `.layui-text` 中的 `<a>` 标签文字颜色优先级  #2477 @sentsim
 
-### 下载： [layui-v2.10.0-rc.2.zip](111)
+### 下载： [layui-v2.10.0-rc.3.zip](https://gitee.com/layui/layui/attach_files/2087873/download)
 
 ---
 
