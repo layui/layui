@@ -114,7 +114,8 @@ toc: true
   数字输入框 <sup>2.8.9+</sup>
 </h3>
 
-一般搭配 `<input type="number">` 使用，用于替代原生数字输入框，支持的属性如下：
+一般搭配 `<input type="text">` 使用，用于替代原生数字输入框，支持的属性如下：
+注：<sup>2.10+</sup> 之前的版本，使用 `type="number"` 类型的输入框。
 
 | 属性 | 描述 |
 | --- | --- |
@@ -122,6 +123,8 @@ toc: true
 | min | 设置数字的最小值 |
 | max | 设置数字的最大值 |
 | lay-precision <sup>2.8.18+</sup> | 设置数字的小数位精度。注<sup>2.9.8+</sup>：若值为 `0`，则表示取整。 |
+| lay-step-strictly <sup>2.10+</sup> | 步长严格模式，只能输入步长的倍数 |
+| lay-wheel <sup>2.10+</sup> | 是否启用滚轮或触摸板事件处理 |
 
 ### 示例
 
@@ -134,19 +137,22 @@ toc: true
   <hr class="ws-space-16">
   <div class="layui-row layui-col-space16">
     <div class="layui-col-xs6">
-      <input type="number" lay-affix="number" placeholder="设置 step 为 0.01" step="0.01" class="layui-input">
+      <input type="text" lay-affix="number" placeholder="设置 step 为 0.01" step="0.01" class="layui-input">
     </div>
     <div class="layui-col-xs6">
-      <input type="number" lay-affix="number" placeholder="设置 step,min,max" step="10" min="0" max="100" class="layui-input">
+      <input type="text" lay-affix="number" placeholder="设置 step,min,max" step="10" min="0" max="100" class="layui-input">
+    </div>
+    <div class="layui-col-xs6">
+      <input type="text" lay-affix="number" placeholder="步长严格模式" lay-step-strictly step="10" min="0" max="100" class="layui-input">
     </div>
     <div class="layui-col-xs4">
-      <input type="number" lay-affix="number" placeholder="设置小数位精度为 2" step="0.1" lay-precision="2" class="layui-input">
+      <input type="text" lay-affix="number" placeholder="设置小数位精度为 2" step="0.1" lay-precision="2" class="layui-input">
     </div>
     <div class="layui-col-xs4">
-      <input type="number" lay-affix="number" readonly placeholder="不允许输入状态" class="layui-input">
+      <input type="text" lay-affix="number" readonly placeholder="不允许输入状态" class="layui-input">
     </div>
     <div class="layui-col-xs4">
-      <input type="number" lay-affix="number" disabled placeholder="禁用状态" class="layui-input">
+      <input type="text" lay-affix="number" disabled placeholder="禁用状态" class="layui-input">
     </div>
   </div>
 </div> 

@@ -838,7 +838,8 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-input-wrap .layui-input[type="number"]::-webkit-outer-spin-button,
 .layui-input-wrap .layui-input[type="number"]::-webkit-inner-spin-button{-webkit-appearance: none !important;}
 .layui-input-wrap .layui-input[type="number"]{-moz-appearance: textfield;}
-.layui-input-wrap .layui-input[type="number"].layui-input-number-out-of-range{color:#ff5722;}
+.layui-input-wrap .layui-input.layui-input-number-out-of-range,
+.layui-input-wrap .layui-input.layui-input-number-invalid{color:#ff5722;}
 
 
 
