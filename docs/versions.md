@@ -11,7 +11,7 @@ toc: true
 
 
 <h2 id="v2.10.0" class="ws-anchor">
-  v2.10.0-rc.3
+  v2.10.0-rc.4
   <span class="layui-badge-rim">2025-03-10</span>
   <span class="layui-badge-rim" style="color: #16b777;">预览版</span>
 </h2>
@@ -39,12 +39,14 @@ toc: true
   - 新增 `lay-step-strictly` 属性，可开启步长严格模式，只能输入步长的倍数 #2465 @Sight-wcg
   - 新增 `lay-wheel` 属性，可通过鼠标滚轮或触摸板改变数值功能 #2465 @Sight-wcg
   - 新增 按 Up/Down 键时改变数值功能 #2465 @Sight-wcg
+- #### layer
+  - 修复在 `success` 中关闭上一个弹层报错的问题 #2548 @sentsim
 - #### util
   - 优化 `util.toDateString` 规范化字符串日期 #2543 @Sight-wcg
 - #### 其他
   - 调低 `.layui-text` 中的 `<a>` 标签文字颜色优先级  #2477 @sentsim
 
-### 下载： [layui-v2.10.0-rc.3.zip](https://gitee.com/layui/layui/attach_files/2087873/download)
+### 下载： [layui-v2.10.0-rc.4.zip](https://gitee.com/layui/layui/attach_files/2088387/download)
 
 ---
 
