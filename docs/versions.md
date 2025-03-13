@@ -11,16 +11,15 @@ toc: true
 
 
 <h2 id="v2.10.0" class="ws-anchor">
-  v2.10.0-rc.5
-  <span class="layui-badge-rim">2025-03-11</span>
-  <span class="layui-badge-rim" style="color: #16b777;">预览版</span>
+  v2.10.0
+  <span class="layui-badge-rim">2025-03-13</span>
 </h2>
 
 - #### 新特性
   - 新增 component 组件构建器，旨在为 2.x 系列版本逐步构建统一规范的组件 #2477 @sentsim
   - 新增 tabs 全新标签页组件，以替代原 `element` 模块中的 `tab` 组件 #2477 @sentsim
   - 升级 jQuery v3.7.1 #2477 @sentsim
-  - 调整 将最低浏览器兼容标准过渡到 `IE9`。如需兼容 IE8，可使用 2.9.x #2477 @sentsim
+  - 调整 将最低浏览器兼容标准过渡到 IE9。如需兼容 IE8，可使用 2.9.x 版本 #2477 @sentsim
 - #### component  <sup>new</sup>
   - 继「轻量级模块系统」之后的又一个重要底层模块，重定义 Layui 特有的组件范式
   - 支持 创建不同的展示和交互形态的组件
@@ -46,7 +45,20 @@ toc: true
 - #### 其他
   - 调低 `.layui-text` 中的 `<a>` 标签文字颜色优先级  #2477 @sentsim
 
-### 下载： [layui-v2.10.0-rc.5.zip](https://gitee.com/layui/layui/attach_files/2090171/download)
+### 下载： [layui-v2.10.0.zip](https://gitee.com/layui/layui/attach_files/2092421/download)
+
+---
+
+<h2 id="v2.9.25" class="ws-anchor">
+  v2.9.25
+  <span class="layui-badge-rim">2025-03-13</span>
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+</h2>
+
+- #### layer
+  - 修复在 `success` 中关闭上一个弹层报错的问题 #2548 @sentsim
+
+### 下载： [layui-v2.9.25.zip](https://gitee.com/layui/layui/attach_files/2092395/download)
 
 ---
 
@@ -55,7 +67,6 @@ toc: true
 <h2 id="v2.9.24" class="ws-anchor">
   v2.9.24
   <span class="layui-badge-rim">2025-03-07</span>
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
 </h2>
 
 - #### layer
