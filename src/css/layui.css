@@ -35,7 +35,9 @@ a cite{font-style: normal;}
 .layui-edge-right{border-left-color: #999; border-left-style: solid;}
 .layui-edge-bottom{top: 2px; border-top-color: #999; border-top-style: solid;}
 .layui-edge-left{border-right-color: #999; border-right-style: solid;}
-/* 单行溢出省略 */.layui-elip{text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
+/* 单行溢出省略 */
+.layui-elip, /* 仅为向下兼容保留 #2557  */
+.layui-ellip{text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 /* 屏蔽选中 */.layui-unselect,.layui-icon, .layui-disabled{user-select: none;}
 /* 禁用 */.layui-disabled,.layui-disabled:hover{color: #d2d2d2 !important; cursor: not-allowed !important;}
 /* 纯圆角 */.layui-circle{border-radius: 100%;}
