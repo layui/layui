@@ -16,7 +16,7 @@ toc: true
 | layui-clear | 清除前面的同级元素产生的浮动 |
 | layui-clear-space <sup>2.8+</sup> | 清除容器内的空白符 |
 | layui-inline | 设置元素为内联块状结构 |
-| layui-elip | 设置单行文本溢出并显示省略号 |
+| layui-ellip | 设置单行文本溢出并显示省略号 |
 | layui-unselect | 屏蔽选中 |
 | layui-disabled | 设置元素为不可点击状态 |
 | layui-circle | 设置元素为圆形。需确保 `width` 和 `height` 相同 |
