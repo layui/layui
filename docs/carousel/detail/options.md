@@ -77,7 +77,7 @@
 - `fade` 渐隐渐显切换
 
 </td>
-<td>boolean</td>
+<td>string</td>
 <td>
 
 `default`
