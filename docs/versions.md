@@ -9,10 +9,22 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+<h2 id="v2.9.25" class="ws-anchor">
+  v2.9.25
+  <span class="layui-badge-rim">2025-03-13</span>
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+</h2>
+
+- #### layer
+  - 修复在 `success` 中关闭上一个弹层报错的问题 #2548 @sentsim
+
+### 下载： [layui-v2.9.25.zip](https://gitee.com/layui/layui/attach_files/2092395/download)
+
+---
+
 <h2 id="v2.9.24" class="ws-anchor">
   v2.9.24
   <span class="layui-badge-rim">2025-03-07</span>
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
 </h2>
 
 - #### layer
