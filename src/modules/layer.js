@@ -533,15 +533,18 @@ Class.pt.creat = function(){
       win.on('resize', ready.events.resize[that.index]);
     }
   }
+
+  // 记录配置信息
+  that.layero.data('config', config);
   
+  // 自动关闭
   config.time <= 0 || setTimeout(function(){
     layer.close(that.index);
   }, config.time);
+
+
   that.move().callback();
   setAnim(that.layero);
-  
-  // 记录配置信息
-  that.layero.data('config', config);
 };
 
 // 当前实例的 resize 事件
@@ -1026,10 +1029,13 @@ ready.setScrollbar = function(index){
 
 // 恢复页面滚动条
 ready.restScrollbar = function(index) {
+  if(!doms.html.css('overflow')) return;
+  
   // 关闭和大小化, layer-full 处理
   var targetEl = $('.'+ doms[0]).filter(function(){ 
     var layero = $(this);
-    return layero.data('config').scrollbar === false 
+    var options = layero.data('config') || {};
+    return options.scrollbar === false
       && layero.data('maxminStatus') !== 'min'
       && layero.attr('times') !== String(index);
   });

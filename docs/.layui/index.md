@@ -2,10 +2,10 @@
 title: 某某组件 MOD_NAME
 toc: true
 ---
- 
+
 # 某某组件
 
-> 某某组件 `MOD_NAME` 
+> 某某组件 `MOD_NAME`
 
 <h2 id="examples" lay-toc="{hot: true}" style="margin-bottom: 0;">示例</h2>
 
@@ -27,7 +27,7 @@ toc: true
 
 - 参数 `options` : 基础属性配置项。[#详见属性](#options)
 
-<h2 id="options" lay-toc="{level: 2, hot: true}">属性</h2>
+<h3 id="options" lay-toc="{level: 2, hot: true}">属性</h3>
 
 <div>
 {{- d.include("/MOD_NAME/detail/options.md") }}

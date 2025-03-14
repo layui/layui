@@ -217,6 +217,16 @@ layui.use(['lay', 'util', 'layer'], function(){
     toDateString($('#test2').val())
   }, 50)
 
+  console.log(util.toDateString('2025-3-8 12:30:00') === '2025-03-08 12:30:00');
+  console.log(util.toDateString('2025-03-08 12:30:00') === '2025-03-08 12:30:00');
+  console.log(util.toDateString('2025-03-08') === '2025-03-08 00:00:00');
+  console.log(util.toDateString('2025-3-8') === '2025-03-08 00:00:00');
+  console.log(util.toDateString('2025-3') === '2025-03-01 00:00:00');
+  console.log(util.toDateString(null) === '');
+  console.log(util.toDateString(undefined) ===  util.toDateString(new Date()));
+  console.log(util.toDateString('') === '');
+  console.log(util.toDateString('2025/3/8 12:30:00') === '2025-03-08 12:30:00');
+  console.log(util.toDateString('2025/3/8') === '2025-03-08 00:00:00');
 });
 </script>
 </body>

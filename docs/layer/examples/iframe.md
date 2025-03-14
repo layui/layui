@@ -67,7 +67,7 @@ layui.use(function(){
         shadeClose: true,
         maxmin: true, //开启最大化最小化按钮
         area: ['900px', '600px'],
-        content: 'https://cn.bing.com/'
+        content: 'https://dashi.aliyun.com/activity/aigc?userCode=ap0255is'
       });
     }
   })
