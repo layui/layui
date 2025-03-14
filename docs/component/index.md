@@ -78,7 +78,7 @@ layui.define('component', function(exports) {
 
 | 选项 | 描述 |
 | --- | --- |
-| elem | 件渲染指定的目标元素选择器或 DOM 对象 |
+| elem | 组件渲染指定的目标元素选择器或 DOM 对象 |
 | id | 组件渲染的唯一实例 ID |
 | show | 是否初始即渲染组件。通常结合创建组件设定的 `isRenderOnEvent` 选项决定是否启用 |
 
