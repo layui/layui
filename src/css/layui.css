@@ -930,6 +930,8 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-checkbox-disabled > div{color: #c2c2c2!important;}
 .layui-checkbox-disabled > i{border-color: #eee !important;}
 .layui-checkbox-disabled:hover > i{color: #fff !important;}
+.layui-form-checkbox[lay-skin="tag"].layui-form-checked.layui-checkbox-disabled > i{color:#c2c2c2;}
+.layui-form-checkbox[lay-skin="tag"].layui-form-checked.layui-checkbox-disabled:hover > i{color: #c2c2c2!important;}
 
 /* 单选框 */
 .layui-form-radio{display: inline-block; vertical-align: middle; line-height: 28px; margin: 6px 10px 0 0; padding-right: 10px; cursor: pointer; font-size: 0;}
