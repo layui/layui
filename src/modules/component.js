@@ -103,7 +103,7 @@ layui.define(['jquery', 'lay'], function(exports) {
     // 重载实例
     Class.prototype.reload = function(options, type) {
       var that = this;
-      $.extend(settings.isDeepReload, that.config, options);
+      that.config = $.extend(settings.isDeepReload, {}, that.config, options);
       that.init(true, type);
     };
 
