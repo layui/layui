@@ -20,7 +20,6 @@ layui.define(['jquery', 'lay'], function(exports) {
 
     // 组件名
     var MOD_NAME = settings.name;
-    var MOD_INDEX = 'layui_'+ MOD_NAME +'_index'; // 组件索引名
     var MOD_ID = 'lay-' + MOD_NAME + '-id'; // 用于记录组件实例 id 的属性名
 
     // 组件基础对外接口
@@ -31,7 +30,7 @@ layui.define(['jquery', 'lay'], function(exports) {
       // 通用常量集，一般存放固定字符，如类名等
       CONST: $.extend(true, {
         MOD_NAME: MOD_NAME,
-        MOD_INDEX: MOD_INDEX,
+        MOD_ID: MOD_ID,
 
         CLASS_THIS: 'layui-this',
         CLASS_SHOW: 'layui-show',
@@ -179,21 +178,39 @@ layui.define(['jquery', 'lay'], function(exports) {
     Class.prototype.render = settings.render; // 渲染
     Class.prototype.events = settings.events; // 事件
 
-    // 元素操作缓存
-    Class.prototype.cache = function(key, value) {
+    /**
+     * 元素缓存操作
+     * @param {string} key - 缓存键
+     * @param {*} value - 缓存值
+     * @param {boolean} remove - 是否删除缓存
+     * @returns {*} - 若 value 未传，则返回缓存值
+     */
+    Class.prototype.cache = function(key, value, remove) {
       var that = this;
       var options = that.config;
       var elem = options.elem;
-
+      var MOD_CACHE_NAME = MOD_ID + '-cache';
       if (!elem) return;
 
-      var CACHE_NAME = 'lay_'+ MOD_NAME + '_cache';
-      var cache = elem.data(CACHE_NAME) || {};
+      var cache = elem.data(MOD_CACHE_NAME) || {};
 
-      if (value === undefined) return cache[key];
+      // value 未传则获取缓存值
+      if (value === undefined) {
+        return cache[key];
+      }
 
-      cache[key] = value;
-      elem.data(CACHE_NAME, cache);
+      if (remove) {
+        delete cache[key]; // 删除缓存
+      } else {
+        cache[key] = value; // 设置缓存
+      }
+
+      elem.data(MOD_CACHE_NAME, cache);
+    };
+
+    // 清除缓存
+    Class.prototype.removeCache = function(key) {
+      this.cache(key, null, true);
     };
 
     // 缓存所有实例对象
