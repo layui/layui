@@ -459,7 +459,7 @@ layui.define('component', function(exports) {
     var that = this
     var options = that.config;
 
-    if(!options.closable) return;
+    if (!options.closable) return;
 
     opts = opts || {};
 
@@ -484,17 +484,13 @@ layui.define('component', function(exports) {
     var that = this;
     var options = that.config;
     var container = that.getContainer();
-    var hasDel = that.cache('close');
 
     // 是否开启关闭
     if (options.closable) {
-      if (!hasDel) {
-        container.header.items.each(function(){
-          that.appendClose($(this));
-        });
-        that.cache('close', true);
-      }
-    } else if(hasDel) {
+      container.header.items.each(function() {
+        that.appendClose($(this));
+      });
+    } else  {
       container.header.items.each(function() {
         $(this).find('.'+ component.CONST.CLOSE).remove();
       });
