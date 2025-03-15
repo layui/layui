@@ -124,7 +124,13 @@ layui.define(['jquery', 'lay'], function(exports) {
       }
 
       // 合并 lay-options 属性上的配置信息
-      $.extend(true, options, lay.options(elem[0]));
+      var layOptions = lay.options(elem[0]);
+      if (rerender) {
+        // 若重载渲染，则重载传入的 options 配置优先
+        options = that.config = $.extend(layOptions, options);
+      } else {
+        $.extend(options, layOptions); // 若首次渲染，则 lay-options 配置优先
+      }
 
       // 若重复执行 render，则视为 reload 处理
       if (!rerender && elem.attr(MOD_ID)) {
