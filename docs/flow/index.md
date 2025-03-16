@@ -33,7 +33,7 @@ toc: true
 
 `flow.load(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 信息流是分页的另一种表现形式，新加载的内容不替换原有的内容，而是随着滚动条滚动而追加显示。[#详见示例](#examples)
 
@@ -47,7 +47,7 @@ toc: true
 
 `flow.lazyimg(options);`
 
-- 参数 `options` : 属性配置项。可选项见下表。
+- 参数 `options` : 属性选项。可选项见下表。
 
 | 属性名 | 描述 |
 | --- | --- |

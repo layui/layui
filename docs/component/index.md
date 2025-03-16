@@ -17,7 +17,7 @@ toc: true
 
 `layui.component(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 该方法返回一个对象，包含用于组件对外的基础接口，如：组件渲染、重载、事件操作，及构造函数等等。用法示例：
 
@@ -45,7 +45,7 @@ layui.define('component', function(exports) {
 });
 ```
 
-<h3 id="options" lay-toc="{level: 2}">属性配置</h3>
+<h3 id="options" lay-toc="{level: 2}">属性选项</h3>
 
 <div>
 {{- d.include("/component/detail/options.md") }}

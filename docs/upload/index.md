@@ -27,13 +27,13 @@ toc: true
 | [var inst = upload.render(options)](#render) | upload 组件渲染，核心方法。 |
 | [inst.upload()](#upload) | 对当前实例提交上传 |
 | [inst.reload(options)](#reload) | 对当前实例进行重载 |
-| inst.config | 获得当前实例的属性配置项 |
+| inst.config | 获得当前实例的属性选项 |
 
 <h3 id="render" lay-toc="{level: 2, hot: true}">渲染</h3>
 
 `upload.render(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
   <br>注 : 除 `elem` 属性外，其他基础属性也可以直接写在元素的 `lay-options="{}"` 属性中。
 
 ```
@@ -94,7 +94,7 @@ var inst = upload.render({
 
 `inst.reload(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 该方法用于对当前的上传实例进行完整重载，所有属性均可参与到重载中。
 
