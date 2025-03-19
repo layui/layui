@@ -30,7 +30,9 @@
 
 <h3 id="demo-trigger" lay-toc="{level: 2}">自定义事件</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'max-height: 520px;', tools: ['full']}">
+<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'max-height: 520px;', tools: ['full'], done: function(obj){
+  obj.render();
+}}">
   <textarea>
 {{- d.include("/tabs/examples/trigger.md") }}
   </textarea>
