@@ -30,7 +30,7 @@ toc: true
 
 `dropdown.render(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
   <br>注 <sup>2.8+</sup> : 除 `elem` 属性外，其他基础属性也可以直接写在元素的 `lay-options="{}"` 属性中。
 
 ```
@@ -111,7 +111,7 @@ dropdown.render({
 `dropdown.reload(id, options);`
 
 - 参数 `id` : 组件渲染时定义的 `id` 属性值
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 该方法用于对下拉菜单进行完整重载，所有属性均可参与到重载中。
 

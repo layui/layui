@@ -47,7 +47,7 @@ toc: true
 
 `treeTable.render(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 该组件渲染的使用方式与 `table` 组件完全相同。
 
@@ -69,7 +69,7 @@ toc: true
 | 仅数据重载 | treeTable.reloadData(id, options) |
 
 - 参数 `id` : treeTable 渲染时的 id 属性值
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 使用方式与 `table` 组件完全相同，具体用法可参考：[table 重载](../table/#reload)
 
@@ -144,7 +144,7 @@ console.log(obj);
 
 - 参数 `id` : treeTable 渲染时的 `id` 属性值
 - 参数 `filter` : 过滤函数
-- 参数 `opts` : 该方法的属性可选项，详见下表：
+- 参数 `opts` : 该方法的属性选项，详见下表：
 
 | 属性名 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |

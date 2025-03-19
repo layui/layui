@@ -35,7 +35,7 @@ toc: true
 
 `tabs.render(options)`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 组件支持以下三种渲染方式：
 

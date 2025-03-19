@@ -28,7 +28,7 @@ toc: true
 `laytpl(str, options).render(data, callback);`
 
 - 参数 `str` : 模板原始字符
-- 参数 `options` <sup>2.8+</sup> : 当前模板实例的属性配置项。可选项详见：[#属性配置](#config)
+- 参数 `options` <sup>2.8+</sup> : 当前模板实例的属性选项。可选项详见：[#属性选项](#config)
 - 参数 `data` : 模板数据
 - 参数 `callback` : 模板渲染完毕的回调函数，并返回渲染后的字符
 
@@ -101,11 +101,11 @@ compile.render(data, callback); // 模板渲染
 > ### 注意
 > 开发者在使用模板语法时，需确保模板中的 JS 语句不来自于页面用户输入，即必须在页面开发者自身的可控范围内，否则请避免使用该模板引擎。
 
-<h2 id="config" lay-toc="{level: 2}">属性配置</h2>
+<h2 id="config" lay-toc="{level: 2}">选项配置</h2>
 
 `laytpl.config(options);`
 
-- 参数 `options` : 属性配置项。可选项详见下表
+- 参数 `options` : 属性选项。可选项详见下表
 
 | 属性 | 描述 |
 | --- | --- |

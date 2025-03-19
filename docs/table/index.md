@@ -42,7 +42,7 @@ toc: true
 
 <h3 id="set" class="ws-anchor ws-bold">全局设置</h3>
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 该方法主要用于初始化设置属性默认值。实际应用时，必须先设置该方法，再执行渲染、重载等操作。
 
@@ -74,7 +74,7 @@ table 提供了以下三种渲染模式，在实际使用时，一般按情况�
 
 `table.render(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 该方法返回当前实例对象，包含可操作当前表格的一些成员方法。
 
@@ -119,7 +119,7 @@ layui.use(function(){
 </table>
 ```
 
-> 2.8 之前版本通过 `lay-data="{}"` 定义属性配置项；<br>
+> 2.8 之前版本通过 `lay-data="{}"` 定义属性选项；<br>
 > 2.8+ 版本推荐采用 `lay-options`，但同时兼容 `lay-data`。
 
 
@@ -128,7 +128,7 @@ layui.use(function(){
 `table.init(filter, options);`
 
 - 参数 `filter` :  `<table>` 元素对应的 `lay-filter` 属性值
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 该方法用于将已输出在页面中的静态表格内容转换为动态 table 组件。[#参考相关示例](#demo-init)
 
@@ -220,7 +220,7 @@ table 的属性众多，我们大致分为以下几种：
 `table.reload(id, options, deep);`
 
 - 参数 `id` : table 渲染时的 `id` 属性值
-- 参数 `options` : 为基础属性配置项
+- 参数 `options` : 为基础属性选项
 - 参数 `deep` <sup>2.6+</sup> : 是否采用深度重载（即重载时始终携带初始时及上一次重载时的参数），默认 false。<div style="margin-top:5px;"><button type="button" class="layui-btn layui-btn-sm layui-btn-primary" lay-layer="{content: '#DOCS-table-reload-comp'}">2.6 之前版本的 <code>table.reload()</code> 方法兼容性说明</button></div>
 
 <div style="display: none;" id="DOCS-table-reload-comp">
@@ -482,7 +482,7 @@ table.resize('test');
 `table.exportFile(id, data, opts);`
 - 参数 `id` : table 渲染时的 `id` **或** 要导出的数据表头（当 `id` 为 `array` 类型时）。
 - 参数 `data` : 要导出的自定义数据，参数可选。
-- 参数 `opts` <sup>2.7+</sup>: 导出数据时的属性可选项，支持： `type,title`。
+- 参数 `opts` <sup>2.7+</sup>: 导出数据时的属性选项，支持： `type,title`。
 
 该方法用于外部导出对应 table 的数据和任意自定义数据。
 
@@ -513,7 +513,7 @@ table.exportFile(['名字','性别','年龄'], [
 `table.getOptions(id);`
 - 参数 `id` : table 渲染时的 `id` 属性值
 
-该方法用于外部获取对应 table 实例的属性配置项。
+该方法用于外部获取对应 table 实例的属性选项。
 
 ```
 // 渲染
@@ -622,7 +622,7 @@ layui.use(function(){
    
   // 头部工具栏事件
   table.on('toolbar(test)', function(obj){
-    var options = obj.config; // 获取当前表格属性配置项
+    var options = obj.config; // 获取当前表格属性选项
     var checkStatus = table.checkStatus(options.id); // 获取选中行相关数据
     console.log(obj); // 查看对象所有成员
     
@@ -697,8 +697,8 @@ table.render({
  
 // 表头自定义元素工具事件
 table.on('colTool(test)', function(obj){
-  var col = obj.col; // 获取当前列属性配置项
-  var options = obj.config; // 获取当前表格基础属性配置项
+  var col = obj.col; // 获取当前列属性选项
+  var options = obj.config; // 获取当前表格基础属性选项
   var layEvent = obj.event; // 获得自定义元素对应的 lay-event 属性值
   console.log(obj); // 查看对象所有成员
 });
@@ -721,8 +721,8 @@ table.render({
  
 // 列拖拽宽度后的事件
 table.on('colResized(test)', function(obj){
-  var col = obj.col; // 获取当前列属性配置项
-  var options = obj.config; // 获取当前表格基础属性配置项
+  var col = obj.col; // 获取当前列属性选项
+  var options = obj.config; // 获取当前表格基础属性选项
   console.log(obj); // 查看对象所有成员
 });
 ```
@@ -744,8 +744,8 @@ table.render({
  
 // 列筛选（显示或隐藏）后的事件
 table.on('colToggled(test)', function(obj){
-  var col = obj.col; // 获取当前列属性配置项
-  var options = obj.config; // 获取当前表格基础属性配置项
+  var col = obj.col; // 获取当前列属性选项
+  var options = obj.config; // 获取当前表格基础属性选项
   console.log(obj); // 查看对象所有成员
 });
 ```
@@ -774,7 +774,7 @@ table.on('row(test)', function(obj) {
   var dataCache = obj.dataCache; // 得到当前行缓存数据，包含特定字段 --- 2.8.8+
   var index = obj.index; // 得到当前行索引
   var tr = obj.tr; // 得到当前行 <tr> 元素的 jQuery 对象
-  var options = obj.config; // 获取当前表格基础属性配置项
+  var options = obj.config; // 获取当前表格基础属性选项
   var e = obj.e; // 当前的 jQuery 事件对象 --- 2.9.14+
 
   console.log('onrow', obj); // 查看返回对象的所有成员
@@ -887,7 +887,7 @@ layui.use(function(){
     var index = obj.index; // 得到当前行索引
     var layEvent = obj.event; // 获得元素对应的 lay-event 属性值
     var tr = obj.tr; // 得到当前行 <tr> 元素的 jQuery 对象
-    var options = obj.config; // 获取当前表格基础属性配置项
+    var options = obj.config; // 获取当前表格基础属性选项
     var col = obj.getCol(); // 得到当前列的表头配置属性 -- v2.8.3 新增
     console.log(obj); // 查看对象所有成员
     

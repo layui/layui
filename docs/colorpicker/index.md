@@ -27,7 +27,7 @@ toc: true
 
 `colorpicker.render(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
   <br>注 <sup>2.7+</sup> : 除 `elem` 属性外，其他基础属性也可以直接写在元素的 `lay-options="{}"` 属性中。
 
 ```

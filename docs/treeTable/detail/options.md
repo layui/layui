@@ -124,7 +124,7 @@ treeTable.render({
 
 | 属性 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| enable | 是否开启异步加载模式。只有开启时 `async` 的其他属性配置才有效。 **注意：** 异步加载子节点不应跟 `simpleData` 同时开启，可以是 `url+simpleData` 的方式，获取完整的简单数据进行转换。若开启异步加载模式，即表示按需异步加载子节点。 | boolean | `false` |
+| enable | 是否开启异步加载模式。只有开启时 `async` 的其他属性选项才有效。 **注意：** 异步加载子节点不应跟 `simpleData` 同时开启，可以是 `url+simpleData` 的方式，获取完整的简单数据进行转换。若开启异步加载模式，即表示按需异步加载子节点。 | boolean | `false` |
 | url | 异步加载的接口，可以根据需要设置与顶层接口不同的接口，若相同可不设置该属性 | string | - |
 | [format](#options.tree.async.format) | 用于处理异步子节点数据的回调函数，该属性优先级高于 `async.url` 属性。用法详见下文。 | function | - |
 | type | 请求的接口类型，设置可缺省同上 | string | - |
@@ -146,7 +146,7 @@ treeTable.render({
     enable: true,
     async: {
       format: function(trData, options, callback){
-        // trData 为行数据、options 为 treeTable 属性配置项
+        // trData 为行数据、options 为 treeTable 属性选项
         // callbacck 为子节点的渲染函数
         // 可利用该函数对子节点数据进行异步请求或其他格式化处理
         var nodeList = [

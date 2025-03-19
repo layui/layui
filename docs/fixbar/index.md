@@ -24,7 +24,7 @@ toc: true
 
 `util.fixbar(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 <h2 id="options" lay-toc="{level: 2, hot: true}">属性</h2>
 
