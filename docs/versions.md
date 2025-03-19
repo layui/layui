@@ -5,10 +5,26 @@ toc: true
 
 # 更新日志
 
-> 导读：📑 [Layui 2.8+ 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
+> 导读：📑 [Layui 2.x 系列版本主要升级变化](/notes/share/2x-major-upgrade-changes.html) · 📑 [Layui 2.8+ 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.10.1" class="ws-anchor">
+  v2.10.1
+  <span class="layui-badge-rim">2025-03-19</span>
+</h2>
+
+- #### component
+  - 修复 `reload` 时传入的选项未正确合并的问题 #2566 @sentsim
+  - 优化 `lay-options` 属性上的配置在重载时的优先级 #2566 @sentsim
+- #### 其他
+  - 优化 tabs `reload` 未按照 `closable` 正确渲染可关闭状态的问题 #2566 @sentsim
+  - 优化 form 的 `checkbox` 标签风格选中且禁用时的显示 #2563 @bxjt123
+  - 修复 body 初始 `line-height` 无效的问题 #2569 @sentsim
+
+### 下载： [layui-v2.10.1.zip](https://gitee.com/layui/layui/attach_files/2100525/download)
+
+---
 
 <h2 id="v2.10.0" class="ws-anchor">
   v2.10.0
