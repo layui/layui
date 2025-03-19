@@ -1319,6 +1319,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 
 .layui-tabs-header li .layui-tabs-close{position: relative; display: inline-block; width: 16px; height: 16px; line-height: 18px; margin-left: 8px; top: 0px; text-align: center; font-size: 12px; color: #959595; border-radius: 50%; font-weight: 700; transition: all .16s; -webkit-transition: all .16s;}
 .layui-tabs-header li .layui-tabs-close:hover{ background-color: #ff5722; color: #fff;}
+.layui-tabs-header li[lay-closable="false"] .layui-tabs-close{display: none;}
 
 .layui-tabs-body{padding: 16px 0;}
 .layui-tabs-item{display: none;}
