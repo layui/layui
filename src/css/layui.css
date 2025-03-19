@@ -18,7 +18,7 @@ input,button,textarea,select,optgroup,option{font-family: inherit; font-size: in
 pre{white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;}
 
 /** 初始化全局标签 **/
-body{line-height: 1.6; color: #333; color: rgba(0,0,0,.85); font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;}
+body{line-height: 1.6; color: rgba(0,0,0,.85); font-size: 14px; font-family: Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;}
 hr{height: 0; line-height: 0; margin: 10px 0; padding: 0; border: none; border-bottom: 1px solid #eee; clear: both; overflow: hidden; background: none;}
 a{color: #333; text-decoration:none;}
 a:hover{color: #777;}
