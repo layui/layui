@@ -48,7 +48,7 @@ layui.use(function(){
 - 在元素外层设置 `class="layui-carousel"` 来定义一个轮播容器
 - 在元素内层设置属性 `carousel-item` 用来定义条目容器
 
-<h3 id="demo-config" lay-toc="{level: 2, hot: true}">属性配置预览</h3>
+<h3 id="demo-config" lay-toc="{level: 2, hot: true}">可选项预览</h3>
 
 <pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 515px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();

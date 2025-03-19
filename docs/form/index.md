@@ -448,7 +448,7 @@ form.on('select(test)', function(data){
 
 `form.set(options);`
 
-- 参数 `options` : 全局属性配置项。详见下表：
+- 参数 `options` : 全局属性选项。详见下表：
 
 | 属性名 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |

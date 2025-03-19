@@ -49,6 +49,10 @@ toc: true
 
 ---
 
+
+
+<h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
+
 <h2 id="v2.9.25" class="ws-anchor">
   v2.9.25
   <span class="layui-badge-rim">2025-03-13</span>
@@ -61,8 +65,6 @@ toc: true
 ### 下载： [layui-v2.9.25.zip](https://gitee.com/layui/layui/attach_files/2092395/download)
 
 ---
-
-<h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
 <h2 id="v2.9.24" class="ws-anchor">
   v2.9.24

@@ -56,7 +56,7 @@ toc: true
 
 `layer.open(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 打开弹层的核心方法，其他不同类型的弹出方法均为该方法的二次封装。
 
@@ -79,7 +79,7 @@ var index = layer.open({
 `layer.alert(content, options, yes);`
 
 - 参数 `content` : 弹出内容
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 - 参数 `yes` : 点击确定后的回调函数
 
 该方法用于弹出 `dialog` 类型信息框（`type: 0`），参数自动向左补位。
@@ -106,7 +106,7 @@ layer.alert('不开启图标', function(index){
 `layer.confirm(content, options, yes, cancel);`
 
 - 参数 `content` : 弹出内容
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 - 参数 `yes` : 点击确定后的回调函数
 - 参数 `cancel` : 点击第二个按钮（默认「取消」）后的回调函数
 
@@ -133,7 +133,7 @@ layer.confirm('确定吗?', function(index){
 `layer.msg(content, options, end);`
 
 - 参数 `content` : 弹出内容
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 - 参数 `end` : 提示框关闭后的回调函数
 
 该方法用于弹出 `dialog` 类型提示框（`type: 0`），默认 `3` 秒后自动关闭。参数自动向左补位。
@@ -162,7 +162,7 @@ layer.msg('提示框', {
 `layer.load(icon, options);`
 
 - 参数 `icon` : 加载图标风格，支持 `0-2` 可选值
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 该方法用于弹出 `load` 类型加载层（`type: 3`）。
 
@@ -184,7 +184,7 @@ layer.close(index);
 
 - 参数 `content` : 弹出内容
 - 参数 `elem` : 吸附的目标元素选择器或对象
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 该方法用于弹出 `tips` 类型贴士层（`type: 4`），默认 `3` 秒后自动关闭。
 
@@ -206,7 +206,7 @@ layer.tips('显示在目标元素上方', '#id', {
 
 `layer.prompt(options, yes);`
 
-- 参数 `options` : 基础属性配置项。除了支持 [基础属性](#options) 之外，还支持下表私有属性：
+- 参数 `options` : 基础属性选项。除了支持 [基础属性](#options) 之外，还支持下表私有属性：
 
 | 私有属性 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
@@ -243,7 +243,7 @@ layer.prompt({
 
 `layer.photos(options);`
 
-- 参数 `options` : 基础属性配置项。除了支持 [基础属性](#options) 之外，还支持下表私有属性：
+- 参数 `options` : 基础属性选项。除了支持 [基础属性](#options) 之外，还支持下表私有属性：
 
 | 私有属性 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
@@ -312,7 +312,7 @@ layui.use(function(){
 
 `layer.tab(options);`
 
-- 参数 `options` : 基础属性配置项。除了支持 [基础属性](#options) 之外，还支持下表私有属性：
+- 参数 `options` : 基础属性选项。除了支持 [基础属性](#options) 之外，还支持下表私有属性：
 
 | 私有属性 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
@@ -405,7 +405,7 @@ layer.closeLast(['dialog', 'page']); // 关闭最近一次打开的信息框或�
 
 `layer.config(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 该方法用于全局设置弹层的默认基础属性。
 
