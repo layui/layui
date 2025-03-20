@@ -24,13 +24,13 @@ toc: true
 | var slider = layui.slider | 获得 `slider` 模块。 |
 | [var inst = slider.render(options)](#render) | slider 组件渲染，核心方法。 |
 | [inst.setValue(value)](#setValue) | 设置滑块值 |
-| inst.config | 获得当前实例的属性配置项 |
+| inst.config | 获得当前实例的属性选项 |
 
 <h2 id="render" lay-toc="{level: 2}">渲染</h2>
 
 `slider.render(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
   <br>注 <sup>2.8+</sup> : 除 `elem` 属性外，其他基础属性也可以直接写在元素的 `lay-options="{}"` 属性中。
 
 ```

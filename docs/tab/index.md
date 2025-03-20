@@ -185,7 +185,7 @@ layui.use(function(){
 `element.tabAdd(filter, options);`
 
 - 参数 `filter` : tab 容器（`class="layui-tab"`）的 `lay-filter` 属性值
-- 参数 `options` : 添加 tab 时的属性可选项，见下表：
+- 参数 `options` : 添加 tab 时的属性选项，见下表：
 
 | options | 描述 | 类型 | 默认 |
 | --- | --- | --- | --- |
@@ -225,7 +225,7 @@ layui.use(function(){
 
 `element.tab(options);`
 
-- 参数 `options` : 属性可选项，见下表：
+- 参数 `options` : 属性选项，见下表：
 
 | options | 描述 | 类型 |
 | --- | --- | --- |

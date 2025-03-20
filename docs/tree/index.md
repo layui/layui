@@ -27,7 +27,7 @@ toc: true
 
 `tree.render(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 <h3 id="options" lay-toc="{level: 2, hot: true}">属性</h3>
 
@@ -109,7 +109,7 @@ tree.setChecked('test', [1, 3]); // 批量勾选 id 为 1,3 的节点
 `tree.reload(id, idArr);`
 
 - 参数 `id` : 对应 tree 渲染时定义的 id 属性值
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 ```
 var tree = layui.tree;

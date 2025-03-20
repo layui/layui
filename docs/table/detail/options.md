@@ -527,7 +527,7 @@ initSort: {
 ```
 table.render({
   before: function(options){
-    console.log(options); // 当前实例属性配置项
+    console.log(options); // 当前实例属性选项
     options.where.abc = 123; // 修改或额外追加 where 属性
   },
   // …  // 其它属性

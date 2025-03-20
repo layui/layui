@@ -53,7 +53,7 @@ CONST: {
 <td>-</td>
     </tr>
     <tr>
-<td>isRenderWithoutElem</td>
+<td>isRenderWithoutElem <br><sup>实验性</sup></td>
 <td>
 
 渲染是否无需指定目标元素。即无需设置 `elem` 选项，一般用于渲染即显示的组件类型。
@@ -67,7 +67,7 @@ CONST: {
 </td>
     </tr>
     <tr>
-<td>isRenderOnEvent</td>
+<td>isRenderOnEvent <br><sup>实验性</sup></td>
 <td>
 
 渲染是否由事件触发。如 `dropdown` 这类通过点击触发的组件，那么应该设置为 `true`；而诸如 `tabs` 这类初始即展示的组件，则应该设置为 `false`。*推荐根据组件类型始终显式设置对应值*。
@@ -81,7 +81,7 @@ CONST: {
 </td>
     </tr>
     <tr>
-<td>isDeepReload</td>
+<td>isDeepReload <br><sup>实验性</sup></td>
 <td>
 
 组件重载时是否允许深度重载，即对重载时选项进行深度合并。

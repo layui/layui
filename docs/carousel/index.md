@@ -33,7 +33,7 @@ div[carousel-item]>*:nth-child(2n+1){background-color: #16baaa;}
 
 `carousel.render(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 该方法返回一个实例对象，包含操作当前实例的相关方法成员。
 
@@ -46,7 +46,7 @@ console.log(inst); // 得到当前实例对象
 
 `inst.reload(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 通过渲染返回的实例对象，可获得重载方法，用于实现对实例的属性重载。
 
