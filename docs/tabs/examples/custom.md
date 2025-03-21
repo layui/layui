@@ -1,6 +1,6 @@
 <div id="demoTabs3">
   <style>
-    #demoTabsHeader .layui-btn.layui-this{border-color: #eee; color: #000; background: none;}
+    #demoTabsHeader .layui-btn.layui-this{border-color: #eee; color: unset; background: none;}
     #demoTabsBody .test-item{display: none;}
   </style>
   <div class="layui-btn-container" id="demoTabsHeader">
