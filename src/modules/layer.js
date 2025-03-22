@@ -1554,8 +1554,6 @@ layer.photos = function(options, loop, key){
     
     pushData();
     
-    if (data.length === 0) return;
-    
     loop || parent.on('click', options.img, function(){
       pushData();
       var othis = $(this), index = othis.attr('layer-index'); 
