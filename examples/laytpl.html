@@ -18,7 +18,7 @@
       #ID-tpl-view-body > div {
         display: none;
       }
-      pre {
+      .laytpl-demo pre {
         padding: 16px; background-color: #20222A; color: #F8F9FA; font-family: 'Courier New',Consolas, monospace;
       }
     </style>
@@ -29,7 +29,7 @@
         <div class="layui-col-xs6 laytpl-demo">
           <div>
             <a href="javascript:;" id="ID-tpl-src-title">
-              <cite>模板</cite>
+              <cite><strong>模板</strong></cite>
               <i class="layui-icon layui-icon-down layui-font-12"></i>
             </a>
           </div>
@@ -37,7 +37,7 @@
         </div>
         <div class="layui-col-xs6 laytpl-demo">
           <div class="layui-row">
-            <div>数据</div>
+            <div><strong>数据</strong></div>
           </div>
           <textarea id="ID-tpl-data">
 {
@@ -67,15 +67,15 @@
           <div class="layui-row">
             <div class="layui-col-xs4 layui-tabs" id="ID-tpl-view-header">
               <ul class="layui-tabs-header">
-                <li>视图</li>
-                <li>源码</li>
+                <li><strong>渲染结果</strong></li>
+                <li><strong>源码</strong></li>
               </ul>
             </div>
             <div class="layui-col-xs4" style="text-align: center">
                 <button class="layui-btn layui-btn-sm layui-btn-border" lay-on="test">性能测试</button>
             </div>
             <div class="layui-col-xs4" style="text-align: right">
-              <span class="layui-badge" id="ID-tpl-time"></span>
+              <span class="layui-badge" id="ID-tpl-view-time"></span>
             </div>
           </div>
           <div id="ID-tpl-view-body">
@@ -100,7 +100,7 @@
 {{# 这是一段注释。仅在模板中显示，不在视图中输出 }}
 
 {{!
-这是一段不进行模板解析的区域，可显示原始界定符：
+这是一段不进行模板解析的区域，可显示原始标签：
 {{ let a = 0; }}、{{= escape }}、{{- source }}、{{# comments }}、&#123;&#123;! ignore !&#125;&#125;
 !}}
 
@@ -218,7 +218,7 @@
 
         // 默认设置
         laytpl.config({
-          delimiterStyle: 'modern' // 初始采用新版界定符风格
+          tagStyle: 'modern' // 初始采用新版标签风格
         })
 
         // 获取模板和数据
@@ -228,7 +228,7 @@
             data: function(){  // 获取数据
               try {
                 return JSON.parse($('#ID-tpl-data').val());
-              } catch(e){
+              } catch(e) {
                 $('#ID-tpl-view').html(e);
               }
             }()
@@ -245,11 +245,11 @@
         // 生成模板
         var createTemplate = function(opts) {
           opts = $.extend({
-            delimiterStyle: 'modern'
+            tagStyle: 'modern'
           }, opts);
 
           // 初始化模板
-          var elem = $('#ID-tpl-template-'+ opts.delimiterStyle);
+          var elem = $('#ID-tpl-template-'+ opts.tagStyle);
           $('#ID-tpl-src').val(elem.html());
 
           return opts;
@@ -260,22 +260,20 @@
         // 耗时计算
         var timer = function(startTime, title) {
           var endTime = new Date();
-          $('#ID-tpl-time').html((title || '模板解析耗时：')+ (endTime - startTime) + 'ms');
+          $('#ID-tpl-view-time').html((title || '模板解析耗时：')+ (endTime - startTime) + 'ms');
         };
         var startTime = new Date();
 
         // 创建一个模板实例
-        var thisTpl = laytpl(data.template, {
+        var templateInst = laytpl(data.template, {
           condense: false, // 不处理连续空白符，即保留模板原始结构
-          delimiterStyle: tplConfig.delimiterStyle
+          tagStyle: tplConfig.tagStyle
         });
 
         // 初始渲染
-        thisTpl.render(data.data, function(html) {
+        templateInst.render(data.data, function(html) {
           renderView(html, startTime);
         });
-
-
 
         // 编辑
         $('.laytpl-demo textarea').on('input', function() {
@@ -284,11 +282,11 @@
 
           // 若模板有变化，则重新编译模板
           if (this.id === 'ID-tpl-src') {
-            thisTpl.compile(data.template);
+            templateInst.compile(data.template);
           }
 
           // 若模板没变，数据有变化，则从模板缓存中直接渲染数据（效率大增）
-          thisTpl.render(data.data, function(html) {
+          templateInst.render(data.data, function(html) {
             renderView(html, startTime);
           });
         });
@@ -339,10 +337,6 @@
           console.log(str); // 张三是一名前端工程师。
         });
 
-
-        // 由于 2.10.0 component 存在一个重载的问题，此处暂时手工解除 tabs 元素上的 id 标记
-        $('#ID-tpl-view-header').removeAttr('lay-tabs-id');
-
         // 视图结果 tabs
         tabs.render({
           elem: '#ID-tpl-view-header',
@@ -354,25 +348,25 @@
           elem: '#ID-tpl-src-title',
           data: [{
             title: '新版本模板',
-            delimiterStyle: 'modern'
+            tagStyle: 'modern'
           }, {
             title: '旧版本模板',
-            delimiterStyle: 'legacy'
+            tagStyle: 'legacy'
           }],
           click: function(obj){
             createTemplate({
-              delimiterStyle: obj.delimiterStyle
+              tagStyle: obj.tagStyle
             });
             this.elem.children('cite').html(obj.title);
 
-            // 同步设置界定符风格
-            thisTpl.config.delimiterStyle = obj.delimiterStyle;
+            // 同步设置标签风格
+            templateInst.config.tagStyle = obj.tagStyle;
 
             var data = getData();
             var startTime = new Date();
 
             // 重新渲染
-            thisTpl.compile(data.template).render(data.data, function(html) {
+            templateInst.compile(data.template).render(data.data, function(html) {
               renderView(html, startTime);
             });
           }

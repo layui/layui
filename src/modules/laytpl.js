@@ -115,11 +115,11 @@
 
   // 默认配置
   var config = {
-    open: '{{', // 开头界定符
-    close: '}}', // 闭合界定符
+    open: '{{', // 起始界定符
+    close: '}}', // 结束界定符
     cache: true, // 是否开启模板缓存，以便下次渲染时不重新编译模板
     condense: true, // 是否压缩模板空白符，如：将多个连续的空白符压缩为单个空格
-    delimiterStyle: '' // 界定符风格。默认采用 < 2.11 的风格，设置 modern 则采用 2.11+ 风格
+    tagStyle: '' // 标签风格。默认采用 < 2.11 的风格，设置 modern 则采用 2.11+ 风格
   };
 
   // 构造器
@@ -205,32 +205,32 @@
 
     // console.log('compile');
 
-    // 若无模板
-    if (!template) {
+    // 模板必须为 string 类型，且不能为空
+    if (typeof template !== 'string' || !template) {
       return function() {
         return '';
       };
     }
 
     /**
-     * 完整界定符正则
-     * @param {string[]} cores - 界定符内部核心表达式，含：前置、主体、后置
-     * @param {Object} sides - 界定符两侧外部表达式
+     * 完整标签正则
+     * @param {string[]} cores - 标签内部核心表达式，含：前置、主体、后置
+     * @param {Object} sides - 标签两侧外部表达式
      * @returns {RegExp}
      */
-    var delimRegex = function(cores, sides) {
+    var tagRegex = function(cores, sides) {
       var arr = [
         '(?:'+ openDelimiter + (cores[0] || '') +'\\s*)', // 界定符前置
-        '('+ (cores[1] || '[\\s\\S]') +'*?)', // 界定符主体
+        '('+ (cores[1] || '[\\s\\S]') +'*?)', // 标签主体
         '(?:\\s*'+ (cores[2] || '') + closeDelimiter +')' // 界定符后置
       ];
       sides = sides || {};
-      sides.before && arr.unshift(sides.before); // 界定符前面的表达式
-      sides.after && arr.push(sides.after); // 界定符后面的表达式
+      sides.before && arr.unshift(sides.before); // 标签前面的表达式
+      sides.after && arr.push(sides.after); // 标签后面的表达式
       return regex(arr.join(''));
     };
 
-    // 匹配非输出类型界定符两侧的换行符和空白符，避免渲染后占用一行
+    // 匹配非输出类型标签两侧的换行符和空白符，避免渲染后占用一行
     var sidesRegex = condense ? ['', ''] : ['(?:(?:\\n)*\\s*)', '(?:\\s*?)'];
     var delimSides = {
       before: sidesRegex[0],
@@ -239,7 +239,7 @@
 
     /**
      * 清理多余符号
-     * @param {string} body - 界定符主体字符
+     * @param {string} body - 标签主体字符
      * @param {boolean} nowrap - 是否强制不换行
      * @returns {string} 清理后的字符
      */
@@ -252,7 +252,7 @@
       return body;
     };
 
-    // 纠正界定符结构
+    // 纠正标签结构
     var correct = function(tpl) {
       return tpl.replace(regex('([}\\]])'+ closeDelimiter), '$1 '+ closeDelimiter);
     };
@@ -268,12 +268,12 @@
       }
 
       // 初始整理
-      tpl = correct(tpl) // 纠正界定符
+      tpl = correct(tpl) // 纠正标签
       .replace(/(?=\\|")/g, '\\')  // 转义反斜杠和双引号
       .replace(/\r?\n/g, condense ? '' : placeholder); // 整理换行符
 
-      // 忽略界定符 - 即区域中的内容不进行界定符解析
-      tpl = tpl.replace(delimRegex(['!', '', '!'], delimSides), function(str, body) {
+      // 忽略标签 - 即区域中的内容不进行标签解析
+      tpl = tpl.replace(tagRegex(['!', '', '!'], delimSides), function(str, body) {
         body = body.replace(regex(openDelimiter + '|' + closeDelimiter), function(tag) {
           return tag.replace(/(?=.)/g, '\\');
         });
@@ -289,7 +289,7 @@
         // return ['");', body, '__laytpl__.push("'].join('\n');
       };
 
-      // 解析「输出类型」界定符
+      // 解析输出标签
       var output = function(str, delimiter, body) {
         var _escape;
 
@@ -309,26 +309,26 @@
         ) : '';
       };
 
-      // 解析「语句类型」界定符
+      // 解析 Scriptlet
       var statement = function(str, body) {
         if (!body) return '';
         body = clear(body);
         return strConcatenation(body);
       };
 
-      // 界定符风格
-      if (options.delimiterStyle === 'modern') { // 2.11+ 版本风格
-        // 注释界定符 - 仅在模板中显示，不进行解析，也不在视图中输出
-        tpl = tpl.replace(delimRegex(['#'], delimSides), '');
-        // 输出类型界定符
-        tpl = tpl.replace(delimRegex(['(=|-)']), output);
-        // 语句类型界定符
-        tpl = tpl.replace(delimRegex([], delimSides), statement);
+      // 标签风格
+      if (options.tagStyle === 'modern') { // 2.11+ 版本风格
+        // 注释标签 - 仅在模板中显示，不进行解析，也不在视图中输出
+        tpl = tpl.replace(tagRegex(['#'], delimSides), '');
+        // 输出标签
+        tpl = tpl.replace(tagRegex(['(=|-)']), output);
+        // Scriptlet 标签
+        tpl = tpl.replace(tagRegex([], delimSides), statement);
       } else { // < 2.11 版本风格
-        // 语句类型界定符
-        tpl = tpl.replace(delimRegex(['#'], delimSides), statement);
-        // 输出类型界定符
-        tpl = tpl.replace(delimRegex(['(=|-)*']), output);
+        // Scriptlet 标签
+        tpl = tpl.replace(tagRegex(['#'], delimSides), statement);
+        // 输出标签
+        tpl = tpl.replace(tagRegex(['(=|-)*']), output);
       }
 
       // 恢复换行符
@@ -360,6 +360,11 @@
         '};'
       ].join('\n');
       // console.log(codeBuilder);
+
+      /**
+       * 请注意: 开发者在使用模板语法时，需确保模板中的 JS 语句不来自于页面用户输入。
+       * 即模板中的 JS 语句必须在页面开发者自身的可控范围内，否则请避免使用该模板解析。
+       */
       return new Function('laytpl', 'return '+ codeBuilder)(that.vars);
     };
 
@@ -441,10 +446,10 @@
 
   /**
    * 扩展模板内部变量
-   * @param {Object} settings - 扩展内部变量，变量值通常为函数
+   * @param {Object} variables - 扩展内部变量，变量值通常为函数
    */
-  laytpl.extendVars = function(settings) {
-    Object.assign(vars, settings);
+  laytpl.extendVars = function(variables) {
+    Object.assign(vars, variables);
   };
 
   /**
