@@ -137,6 +137,30 @@
           <textarea class="layui-textarea" lay-affix="clear"></textarea>
         </div>
       </div>
+      <div>忽略指令直接设置</div>
+      <input type="checkbox" name="like[write]" lay-ignore title="写作">
+      <input type="radio" name="sex" value="1" lay-ignore title="男">
+      <select name="quiz" lay-ignore>
+        <option value="">请选择问题</option>
+        <option disabled value="你工作的第一个城市">你工作的第一个城市</option>
+        <option value="你的工号">你的工号</option>
+        <option value="你最喜欢的老师">你最喜欢的老师</option>
+        <option value="你的工号" selected>你的工号</option>
+        <option value="你的工号">你的工号</option>
+      </select>
+      <div>忽略指令父元素设置</div>
+      <div lay-ignore>
+          <input type="checkbox" name="like[write]" title="写作">
+          <input type="radio" name="sex" value="1" title="男">
+          <select name="quiz">
+            <option value="">请选择问题</option>
+            <option disabled value="你工作的第一个城市">你工作的第一个城市</option>
+            <option value="你的工号">你的工号</option>
+            <option value="你最喜欢的老师">你最喜欢的老师</option>
+            <option value="你的工号" selected>你的工号</option>
+            <option value="你的工号">你的工号</option>
+          </select>
+      </div>
       <div class="layui-col-md12">
         <button class="layui-btn" id="testSubmit">立即提交</button>
       </div>
@@ -524,6 +548,5 @@
     </select>
     <button type="submit">原始表单，测试提交</button>
   </form>
-
 </body>
 </html>

@@ -864,6 +864,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var optionsFirst = select.options[0];
           
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
+          if(othis.closest('[lay-ignore]').length > 0) return othis.show();
           
           var isSearch = typeof othis.attr('lay-search') === 'string'
           var isCreatable = typeof othis.attr('lay-creatable') === 'string' && isSearch
@@ -1029,6 +1030,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           title = skin === 'switch' ? title.split('|') : [title];
           
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
+          if(othis.closest('[lay-ignore]').length > 0) return othis.show();
 
           // 处理 IE8 indeterminate 属性重新定义 get set 后无法设置值的问题
           if(needCheckboxFallback){
@@ -1112,6 +1114,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var skin = othis.attr('lay-skin');
           
           if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
+          if(othis.closest('[lay-ignore]').length > 0) return othis.show();
 
           if(needCheckboxFallback){
             toggleAttribute.call(radio, 'lay-form-sync-checked', radio.checked);
@@ -1301,7 +1304,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             // 提示层风格
             if (verType === 'tips') {
               layer.tips(errorText, function(){
-                if(typeof othis.attr('lay-ignore') !== 'string'){
+                if(typeof othis.attr('lay-ignore') !== 'string' && othis.closest('[lay-ignore]').length > 0){
                   if(isForm2Elem){
                     return othis.next();
                   }
