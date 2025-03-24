@@ -1195,7 +1195,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
       that.loading(true);
 
-      $.ajax({
+      // 4：代表响应已完成
+      if (that._xhr && that._xhr.readyState !== 4) {
+        that._xhrAbort = true;
+        that._xhr.abort();
+      }
+      that._xhr = $.ajax({
         type: options.method || 'get',
         url: options.url,
         contentType: options.contentType,
@@ -1236,6 +1241,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           done(res, opts.type);
         },
         error: function(e, msg){
+          if (e && e.status === 0 && that._xhrAbort){
+            that._xhrAbort = false;
+            return;
+          }
           that.errorView('请求异常，错误提示：'+ msg);
           typeof options.error === 'function' && options.error(e, msg);
         }
