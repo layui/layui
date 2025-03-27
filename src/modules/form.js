@@ -1300,13 +1300,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           if (verst) {
             // 提示层风格
             if (verType === 'tips') {
-              layer.tips(errorText, function(){
-                if(othis.closest('[lay-ignore]').length > 0){
-                  if(isForm2Elem){
-                    return othis.next();
-                  }
+              layer.tips(errorText, function() {
+                if (othis.closest('[lay-ignore]').length > 0) {
+                  return othis;
+                } else if(isForm2Elem) {
+                  return othis.next();
                 }
-                return othis;
               }(), {tips: 1});
             } else if(verType === 'alert') {
               layer.alert(errorText, {title: '提示', shadeClose: true});
