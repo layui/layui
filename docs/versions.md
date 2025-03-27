@@ -5,11 +5,13 @@ toc: true
 
 # 更新日志
 
-> 导读：📑 [Layui 2.x 系列版本主要升级变化](/notes/share/2x-major-upgrade-changes.html) · 📑 [Layui 2.8+ 《升级指南》](/notes/2.8/upgrade-guide.html) · 📑 [Layui 新版文档站上线初衷](/notes/2.8/news.html)
+> 导读：📑 [Layui 不同版本的浏览器兼容说明](/notes/browser-support.html) · 📑 [Layui 2.x 系列版本主要升级变化](/notes/share/2x-major-upgrade-changes.html) · 📑 [Layui 2.8+ 《升级指南》](/notes/2.8/upgrade-guide.html)
+
+<div id="WS-switch-v"></div>
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
-<h2 id="v2.10.1" class="ws-anchor">
+<h2 id="v2.10.1" lay-pid="2.10+" class="ws-anchor">
   v2.10.1
   <span class="layui-badge-rim">2025-03-19</span>
 </h2>
@@ -26,7 +28,7 @@ toc: true
 
 ---
 
-<h2 id="v2.10.0" class="ws-anchor">
+<h2 id="v2.10.0" lay-pid="2.10+" class="ws-anchor">
   v2.10.0
   <span class="layui-badge-rim">2025-03-13</span>
 </h2>
@@ -69,7 +71,7 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
-<h2 id="v2.9.25" class="ws-anchor">
+<h2 id="v2.9.25" lay-pid="2.9.x" class="ws-anchor">
   v2.9.25
   <span class="layui-badge-rim">2025-03-13</span>
   <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
@@ -576,7 +578,7 @@ toc: true
 
 ---
 
-<h2 id="2.9.0" class="ws-anchor">
+<h2 id="2.9.0" lay-pid="2.9.x" class="ws-anchor">
   2.9.0
   <span class="layui-badge-rim">2023-11-29</span>
 </h2>
@@ -653,7 +655,7 @@ toc: true
 
 <h2 id="2.8.x" lay-toc="{title: '2.8.x'}"></h2>
 
-<h2 id="2.8.18" class="ws-anchor">
+<h2 id="2.8.18" lay-pid="2.8.x" class="ws-anchor">
   2.8.18
   <span class="layui-badge-rim">2023-10-31</span>
 </h2>

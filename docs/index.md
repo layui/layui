@@ -18,7 +18,7 @@ toc: true
       <td>用途：用于更简单快速地构建网页界面</td>
     </tr>
     <tr>
-      <td>环境：<a href="/notes/browser-support.html" target="_blank">详见不同版本的浏览器兼容规划</a> <sup>N</sup></td>
+      <td>环境：<a href="/notes/browser-support.html" target="_blank">详见不同版本的浏览器兼容说明</a> <sup>N</sup></td>
       <td>特性：原生态开发 / 轻量级模块化 / 外简内丰 / 开箱即用</td>
     </tr>
   </tbody>

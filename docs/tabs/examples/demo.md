@@ -91,8 +91,12 @@ layui.use(function() {
       id: 'new-'+ n,
       aaa: 'attr-'+ n, // 自定义属性，其中 aaa 可任意命名
       done: function(params) {
-        console.log(params);
-        dropdownInst.reload();
+        console.log(params); // 查看返回的参数
+
+        // 给新标签头添加上下文菜单
+        dropdown.render($.extend({}, dropdownInst.config, {
+          elem: params.thisHeaderItem // 当前标签头元素
+        }));
       }
     }, opts);
     // 添加标签到最后
@@ -107,3 +111,4 @@ layui.use(function() {
     }
   });
 });
+</script>
