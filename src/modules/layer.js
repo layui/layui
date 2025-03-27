@@ -1068,6 +1068,7 @@ layer.getChildFrame = function(selector, index){
 
 // 得到当前 iframe 层的索引，子 iframe 时使用
 layer.getFrameIndex = function(name){
+  if(!name) return;
   return $('#'+ name).parents('.'+doms[4]).attr('times');
 };
 
