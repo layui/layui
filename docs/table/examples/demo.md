@@ -277,7 +277,7 @@ layui.use(['table', 'dropdown'], function(){
     console.log(obj);
     if(event === 'email-tips'){
       layer.alert(layui.util.escape(JSON.stringify(obj.col)), {
-        title: '当前列属性配置项'
+        title: '当前列属性选项'
       });
     }
   });

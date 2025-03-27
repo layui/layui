@@ -18,7 +18,7 @@ input,button,textarea,select,optgroup,option{font-family: inherit; font-size: in
 pre{white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;}
 
 /** 初始化全局标签 **/
-body{line-height: 1.6; color: #333; color: rgba(0,0,0,.85); font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;}
+body{line-height: 1.6; color: rgba(0,0,0,.85); font-size: 14px; font-family: Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;}
 hr{height: 0; line-height: 0; margin: 10px 0; padding: 0; border: none; border-bottom: 1px solid #eee; clear: both; overflow: hidden; background: none;}
 a{color: #333; text-decoration: none;}
 a cite{font-style: normal;}
@@ -930,6 +930,8 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-checkbox-disabled > div{color: #c2c2c2!important;}
 .layui-checkbox-disabled > i{border-color: #eee !important;}
 .layui-checkbox-disabled:hover > i{color: #fff !important;}
+.layui-form-checkbox[lay-skin="tag"].layui-form-checked.layui-checkbox-disabled > i{color:#c2c2c2;}
+.layui-form-checkbox[lay-skin="tag"].layui-form-checked.layui-checkbox-disabled:hover > i{color: #c2c2c2!important;}
 
 /* 单选框 */
 .layui-form-radio{display: inline-block; vertical-align: middle; line-height: 28px; margin: 6px 10px 0 0; padding-right: 10px; cursor: pointer; font-size: 0;}
@@ -1317,6 +1319,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 
 .layui-tabs-header li .layui-tabs-close{position: relative; display: inline-block; width: 16px; height: 16px; line-height: 18px; margin-left: 8px; top: 0px; text-align: center; font-size: 12px; color: #959595; border-radius: 50%; font-weight: 700; transition: all .16s; -webkit-transition: all .16s;}
 .layui-tabs-header li .layui-tabs-close:hover{ background-color: #ff5722; color: #fff;}
+.layui-tabs-header li[lay-closable="false"] .layui-tabs-close{display: none;}
 
 .layui-tabs-body{padding: 16px 0;}
 .layui-tabs-item{display: none;}

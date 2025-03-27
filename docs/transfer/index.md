@@ -27,7 +27,7 @@ toc: true
 
 `transfer.render(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 <h3 id="options" lay-toc="{level: 2, hot: true}">属性</h3>
 
@@ -46,7 +46,7 @@ toc: true
 `transfer.reload(id, options);`
 
 - 参数 `id` : 对应渲染时定义的 `id` 属性值
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 ```
 var transfer = layui.transfer;
@@ -89,7 +89,7 @@ var getData = transfer.getData('test');
 
 `transfer.set(options);`
 
-- 参数 `options` : 基础属性配置项。[#详见属性](#options)
+- 参数 `options` : 基础属性选项。[#详见属性](#options)
 
 该方法对所有的 `transfer` 实例有效，设置的属性优先级低于 `transfer.render(options)`
 
