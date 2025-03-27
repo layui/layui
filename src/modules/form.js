@@ -1028,7 +1028,6 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           // 若为开关，则对 title 进行分隔解析
           title = skin === 'switch' ? title.split('|') : [title];
           
-          if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
           if(othis.closest('[lay-ignore]').length > 0) return othis.show();
 
           // 处理 IE8 indeterminate 属性重新定义 get set 后无法设置值的问题
