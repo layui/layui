@@ -133,10 +133,10 @@ var html = templateInst.render({ name: '张三' });
 {{- d.include("/laytpl/detail/options.md") }}
 </div>
 
-<h3 id="delimiter" lay-toc="{level: 2, hot: true}">标签规则</h3>
+<h3 id="tags" lay-toc="{level: 2, hot: true}">标签规则</h3>
 
 <div>
-{{- d.include("/laytpl/detail/delimiter.md") }}
+{{- d.include("/laytpl/detail/tags.md") }}
 </div>
 
 #### ⚡ 请注意：
