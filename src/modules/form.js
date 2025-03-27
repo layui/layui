@@ -1301,7 +1301,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             // 提示层风格
             if (verType === 'tips') {
               layer.tips(errorText, function(){
-                if(typeof othis.attr('lay-ignore') !== 'string' && othis.closest('[lay-ignore]').length > 0){
+                if(othis.closest('[lay-ignore]').length > 0){
                   if(isForm2Elem){
                     return othis.next();
                   }
