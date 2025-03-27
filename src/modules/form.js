@@ -863,7 +863,6 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var selected = $(select.options[select.selectedIndex]); // 获取当前选中项
           var optionsFirst = select.options[0];
           
-          if(typeof othis.attr('lay-ignore') === 'string') return othis.show();
           if(othis.closest('[lay-ignore]').length > 0) return othis.show();
           
           var isSearch = typeof othis.attr('lay-search') === 'string'
