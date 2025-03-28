@@ -11,6 +11,26 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.10.2" lay-pid="2.10+" class="ws-anchor">
+  v2.10.2
+  <span class="layui-badge-rim">2025-03-28</span>
+</h2>
+
+- #### component
+  - 新增 `component.removeInst()` 基础方法，用于移除缓存中的组件实例 #2597 @sentsim
+  - 调整 `component.getThis` → `component.getInst` #2597 @sentsim
+- #### table
+  - 优化 数据请求时的竞态问题 #2584 @Sight-wcg
+- #### layer
+  - 修复 空图片容器动态添加图片时，无法获取 data 的问题 #2581 @Sight-wcg
+  - 修复 `layer.getFrameIndex()` 方法行为，与 2.9 保持一致 #2592 @Sight-wcg
+- #### form
+  - 优化 `lay-ignore` 的判断逻辑，支持设置在父元素上 #2585 @augushong
+
+### 下载： [layui-v2.10.2.zip](https://gitee.com/layui/layui/attach_files/2123899/download)
+
+---
+
 <h2 id="v2.10.1" lay-pid="2.10+" class="ws-anchor">
   v2.10.1
   <span class="layui-badge-rim">2025-03-19</span>
