@@ -766,7 +766,6 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-form select,
 .layui-form input[type=checkbox],
 .layui-form input[type=radio]{display: none;}
-.layui-form *[lay-ignore]{display: initial;}
 
 .layui-form-item{position: relative; margin-bottom: 15px; clear: both;}
 .layui-form-item:after{content:'\20'; clear: both; display: block; height:0;}

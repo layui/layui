@@ -2,7 +2,7 @@
 title: 表单组件 form
 toc: true
 ---
- 
+
 # 表单组件 🔥
 
 > 表单组件`form`是包含输入框、选择框、复选框、开关、单选框等表单项组件的集合，主要用于对表单域进行各类动态化渲染和相关的交互操作。`form`是 Layui 最常用的组件之一。
@@ -121,7 +121,7 @@ form 还可以借助*栅格*实现更灵活的响应式布局。
 | lay-append-to <sup>2.9.12+</sup> <sup>实验性</sup> | `body` | 是否将 select 面板追加到 body 元素中。`<select>` 元素 **私有属性** |
 | lay-append-position <sup>2.9.12+</sup> <sup>实验性</sup> | `absolute` 绝对定位 (默认)<br>`fixed` 固定定位 | 用于设置 select 面板开启 `lay-append-to` 属性后的定位方式。`<select>` 元素 **私有属性** |
 | lay-submit | 无需值 | 设置元素（一般为`<button>` 标签）触发 `submit` 提交事件 |
-| lay-ignore | 无需值 | 设置表单元素忽略渲染，即让元素保留系统原始 UI 风格 |
+| lay-ignore | 无需值 | 设置表单元素忽略渲染，即让元素保留系统原始 UI 风格。注 <sup>2.10.2+</sup>：该属性若设置在 `<div>` 等父元素上，则该父元素下的所有表单均可被忽略渲染。 |
 
 
 <h2 id="render" lay-toc="{hot: true, level: 2}">渲染</h2>
@@ -139,12 +139,12 @@ form 还可以借助*栅格*实现更灵活的响应式布局。
 <form class="layui-form" lay-filter="test">
   动态插入的表单域
 </form>
-  
-<!-- import layui --> 
+
+<!-- import layui -->
 <script>
 layui.use(function(){
   var form = layui.form;
-  
+
   // 当表单元素被动态插入时，需主动进行组件渲染才能显示
   form.render(); // 渲染全部表单
   form.render('select'); // 仅渲染 select 元素
@@ -170,15 +170,15 @@ layui.use(function(){
   </select>
   <!-- 其他表单元素 -->
 </div>
- 
-<!-- import layui --> 
-<script> 
+
+<!-- import layui -->
+<script>
 layui.use('form', function(){
   var $ = layui.$;
   var form = layui.form;
-  
+
   // 定向渲染（一般当表单存在动态生成时，进行渲染）
-  // 传入需要渲染的相应表单元素的 jQuery 对象 
+  // 传入需要渲染的相应表单元素的 jQuery 对象
   form.render($('#form-id')); // 渲染 id="form-id" 的表单域中的所有表单项
   form.render($('#select-id')); // 仅渲染 id="select-id" 的表单项
 });
@@ -278,7 +278,7 @@ form.verify({
   obj.render()
 }}">
   <textarea>
-{{- d.include("/form/examples/form.verify.md") }}  
+{{- d.include("/form/examples/form.verify.md") }}
   </textarea>
 </pre>
 
@@ -297,7 +297,7 @@ form.verify({
   obj.render()
 }}">
   <textarea>
-{{- d.include("/form/examples/form.validate.md") }}  
+{{- d.include("/form/examples/form.validate.md") }}
   </textarea>
 </pre>
 
@@ -330,14 +330,14 @@ form.verify({
   obj.render()
 }}">
   <textarea>
-<form class="layui-form">  
+<form class="layui-form">
   <input type="text" name="nickname" lay-verify="required" class="layui-input">
   <hr>
   <button class="layui-btn" lay-submit lay-filter="demo-submit">提交按钮</button>
   <button class="layui-btn" id="test-btn-other">普通按钮</button>
 </form>
 
-<!-- import layui --> 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var $ = layui.$;
@@ -370,7 +370,7 @@ layui.use(function(){
 
 ### **提交方法** <sup>2.7+</sup>
 
-`form.submit(filter, callback);` 
+`form.submit(filter, callback);`
 
 - 参数 `filter` 为表单域容器的 `lay-filter` 属性值
 - 参数 `callback` 为执行提交事件后的回调函数
@@ -384,7 +384,7 @@ layui.use(function(){
 <fieldset class="layui-elem-field">
   <legend>表单内部</legend>
   <div class="layui-field-box">
-    <form class="layui-form" lay-filter="form-demo-submit">  
+    <form class="layui-form" lay-filter="form-demo-submit">
       <input type="text" name="nickname" lay-verify="required" class="layui-input">
     </form>
   </div>
@@ -392,7 +392,7 @@ layui.use(function(){
 
 <button class="layui-btn" id="test-btn-submit">任意位置按钮</button>
 
-<!-- import layui --> 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var $ = layui.$;
@@ -437,7 +437,7 @@ layui.use(function(){
 form.on('select', function(data){
   console.log(data);
 });
- 
+
 // 指向元素为 `<select lay-filter="test"></select>` 的选择事件
 form.on('select(test)', function(data){
   console.log(data);
