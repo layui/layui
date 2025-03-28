@@ -145,7 +145,7 @@ layui.define('component', function(exports) {
           clearTimeout(timer);
           timer = setTimeout(function(){
             layui.each(component.cache.id, function(key) {
-              var that = component.getThis(key);
+              var that = component.getInst(key);
               if(!that) return;
               that.roll('init');
             });
@@ -694,7 +694,7 @@ layui.define('component', function(exports) {
      * @param {Object} opts - 添加标签的配置项，详见 Class.prototype.add
      */
     add: function(id, opts) {
-      var that = component.getThis(id);
+      var that = component.getInst(id);
       if(!that) return;
       that.add(opts);
     },
@@ -706,7 +706,7 @@ layui.define('component', function(exports) {
      * @param {boolean} [force=false] - 是否强制关闭
      */
     close: function(id, index, force) {
-      var that = component.getThis(id);
+      var that = component.getInst(id);
       if(!that) return;
       if(index === undefined) index = that.data().index; // index 若不传，则表示关闭当前标签
       that.close(that.findHeaderItem(index), force);
@@ -719,7 +719,7 @@ layui.define('component', function(exports) {
      * @param {number} index - 活动标签的索引，默认取当前选中标签的索引。一般用于标签右键事件
      */
     closeMult: function(id, mode, index, force) {
-      var that = component.getThis(id);
+      var that = component.getInst(id);
       if(!that) return;
       that.closeMult(mode, index, force);
     },
@@ -730,7 +730,7 @@ layui.define('component', function(exports) {
      * @param {number} index - 标签索引
      */
     change: function(id, index, force) {
-      var that = component.getThis(id);
+      var that = component.getInst(id);
       if(!that) return;
       that.change(that.findHeaderItem(index), force);
     },
@@ -740,7 +740,7 @@ layui.define('component', function(exports) {
      * @param {string} id - 渲染时的实例 ID
      */
     data: function(id) {
-      var that = component.getThis(id);
+      var that = component.getInst(id);
       return that ? that.data() : {};
     },
 
@@ -751,7 +751,7 @@ layui.define('component', function(exports) {
      * @returns
      */
     getHeaderItem: function(id, index) {
-      var that = component.getThis(id);
+      var that = component.getInst(id);
       if(!that) return;
       return that.findHeaderItem(index);
     },
@@ -763,7 +763,7 @@ layui.define('component', function(exports) {
      * @returns
      */
     getBodyItem: function(id, index) {
-      var that = component.getThis(id);
+      var that = component.getInst(id);
       if(!that) return;
       return that.findBodyItem(index);
     },
@@ -773,7 +773,7 @@ layui.define('component', function(exports) {
      * @param {string} id - 渲染时的实例 ID
      */
     refresh: function(id) {
-      var that = component.getThis(id);
+      var that = component.getInst(id);
       if (!that) return;
       that.roll('auto');
     }

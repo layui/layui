@@ -61,7 +61,8 @@ layui.define('component', function(exports) {
 | [component.reload(id, options)](#reload) | 组件重载 |
 | [component.set(options)](#set) | 设置组件渲染时的全局配置项 |
 | [component.on(\'event(filter)\', callback)](#on) | 组件的自定义事件 |
-| [component.getThis(id)](#getThis) | 获取指定组件的实例对象 |
+| [component.getInst(id)](#getInst) | 获取组件指定的实例对象 |
+| [component.removeInst(id)](#removeInst) <sup>2.10.2+</sup> | 删除组件指定的实例对象 |
 | component.index | 获得组件的自增索引 |
 | component.config | 获得组件渲染时的全局配置项。一般通过 `set` 方法设置 |
 | component.cache | 获得组件的缓存数据集。如组件实例 ID 集 |
@@ -153,9 +154,9 @@ tabs.on('afterRender(id)', function(data) {
 });
 ```
 
-<h3 id="getThis" lay-toc="{level: 2}">获取实例</h3>
+<h3 id="getInst" lay-toc="{level: 2}">获取实例</h3>
 
-`component.getThis(id)`
+`component.getInst(id)`
 
 - 参数 `id` : 组件的实例 ID。
 
@@ -163,9 +164,22 @@ tabs.on('afterRender(id)', function(data) {
 
 ```js
 // 以 tabs 组件为例
-var tabInstance = tabs.getThis('id');
+var tabInstance = tabs.getInst('id');
 // 调用内部的标签滚动方法
 tabInstance.roll();
+```
+
+<h3 id="removeInst" lay-toc="{level: 2}">删除实例 <sup>2.10.2+</sup></h3>
+
+`component.removeInst(id)`
+
+- 参数 `id` : 组件的实例 ID。
+
+该方法可删除组件渲染时对应的实例，*一般在完全移除组件时使用，否则可能造成组件相关方法失效*。
+
+```js
+// 以 tabs 组件为例
+tabs.removeInst('id');
 ```
 
 <h3 id="CONST" lay-toc="{level: 2}">基础常量</h3>
@@ -207,7 +221,7 @@ layui.define('component', function(exports) {
   layui.$.extend(component, {
     // 以扩展一个关闭组件面板的接口为例
     close: function(id) {
-      var that = component.getThis(id);
+      var that = component.getInst(id);
       if(!that) return this;
       that.remove(obj); // 调用原型中的 remove 方法
     }
