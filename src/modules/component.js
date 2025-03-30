@@ -133,7 +133,7 @@ layui.define(['jquery', 'lay'], function(exports) {
 
       // 若重复执行 render，则视为 reload 处理
       if (!rerender && elem.attr(MOD_ID)) {
-        var newThat = instance.getThis(elem.attr(MOD_ID));
+        var newThat = component.getInst(elem.attr(MOD_ID));
         if (!newThat) return;
         return newThat.reload(options, type);
       }
@@ -214,14 +214,24 @@ layui.define(['jquery', 'lay'], function(exports) {
     };
 
     // 缓存所有实例对象
-    instance.that = {};
+   instance.that = {};
 
-    // 获取当前实例对象
-    instance.getThis = component.getThis = function(id) {
+    // 获取指定的实例对象
+    component.getInst = component.getThis = function(id) {
       if (id === undefined) {
         throw new Error('ID argument required');
       }
       return instance.that[id];
+    };
+
+    // 获取所有实例
+    component.getAllInst = function() {
+      return instance.that;
+    };
+
+    // 移除指定的实例对象
+    component.removeInst = function(id) {
+      delete instance.that[id];
     };
 
     // 组件缓存
@@ -239,7 +249,7 @@ layui.define(['jquery', 'lay'], function(exports) {
      * @returns
      */
     component.reload = function(id, options) {
-      var that = instance.getThis(id);
+      var that = component.getInst(id);
       if (!that) return;
 
       that.reload(options);

@@ -387,7 +387,7 @@ layui.define(['table'], function (exports) {
     layui.each(tableData, function (i1, item1) {
       var dataIndex = (parentIndex ? parentIndex + '-' : '') + i1;
       var dataNew = $.extend({}, item1);
-      
+
       dataNew[pIdKey] = typeof item1[pIdKey] !== 'undefined' ? item1[pIdKey] : parentId;
       flat.push(dataNew);
       flat = flat.concat(that.treeToFlat(item1[childrenKey], item1[customName.id], dataIndex));
@@ -1028,7 +1028,7 @@ layui.define(['table'], function (exports) {
     // 处理节点图标
     if(treeOptions.view.showIcon){
       var nodeIconElem = scopeEl.find('.layui-table-tree-nodeIcon:not(.layui-table-tree-iconCustom)');
-      var nodeIcon = isParent 
+      var nodeIcon = isParent
         ? (isExpand ? treeOptions.view.iconOpen : treeOptions.view.iconClose)
         : treeOptions.view.iconLeaf;
 
@@ -1373,7 +1373,7 @@ layui.define(['table'], function (exports) {
       indexArr.push('tr[lay-data-index="' + delNodeDataIndex + '"]');
       // 删除临时 key
       if(delNodeDataIndex.indexOf('-') !== -1){
-        delete tableCache[delNodeDataIndex]; 
+        delete tableCache[delNodeDataIndex];
       }
     })
 
@@ -1424,7 +1424,7 @@ layui.define(['table'], function (exports) {
         scopeEl: trEl,
         isExpand: nodeP[LAY_EXPAND],
         isParent: nodeP[isParentKey],
-      });  
+      });
     }
 
     // 重新适配尺寸
@@ -1589,7 +1589,7 @@ layui.define(['table'], function (exports) {
         scopeEl: trEl,
         isExpand: parentNode[LAY_EXPAND],
         isParent: parentNode[isParentKey],
-      }); 
+      });
     }
     treeTable.resize(id);
     if (focus) {
@@ -1724,7 +1724,7 @@ layui.define(['table'], function (exports) {
 
     var index = tr.data('index');
     var tableViewElem = options.elem.next();
-    
+
     tr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 主体行
 
     // 右侧固定行
@@ -1760,7 +1760,7 @@ layui.define(['table'], function (exports) {
 
         // 标记父节点行背景色
         that.setRowCheckedClass(checkboxElem.closest('tr'), checked);
-        
+
         // 设置原始复选框 checked 属性值并渲染
         checkboxElem.prop({
           checked: checked,
@@ -1792,7 +1792,7 @@ layui.define(['table'], function (exports) {
     }else{
       isAll = false;
     }
-    
+
     isIndeterminate = isIndeterminate && !isAll;
     tableView.find('input[name="layTableCheckbox"][lay-filter="layTableAllChoose"]').prop({
       'checked': isAll,
@@ -1945,7 +1945,7 @@ layui.define(['table'], function (exports) {
           // 找到父节点，然后判断父节点的子节点是否全部选中
           trDataP = that.getNodeDataByIndex(trData[LAY_PARENT_INDEX]);
         }
-        
+
         return that.updateCheckStatus(trDataP, checked);
       }
     }

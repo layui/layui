@@ -2,7 +2,7 @@
  * util 工具组件
  */
 
-layui.define('jquery', function(exports){
+layui.define('jquery', function(exports) {
   "use strict";
 
   var $ = layui.$;
@@ -287,7 +287,7 @@ layui.define('jquery', function(exports){
             );
           }
         }
-      
+
         return new Date(date)
       }
       var date = normalizeDate(time);

@@ -2,7 +2,7 @@
  * slider 滑块组件
  */
 
-layui.define(['jquery', 'lay'], function(exports){
+layui.define(['jquery', 'lay'], function(exports) {
   'use strict';
 
   var $ = layui.$;
@@ -14,14 +14,14 @@ layui.define(['jquery', 'lay'], function(exports){
     index: layui.slider ? (layui.slider.index + 10000) : 0,
 
     // 设置全局项
-    set: function(options){
+    set: function(options) {
       var that = this;
       that.config = $.extend({}, that.config, options);
       return that;
     },
 
     // 事件
-    on: function(events, callback){
+    on: function(events, callback) {
       return layui.onevent.call(this, MOD_NAME, events, callback);
     }
   };
@@ -381,7 +381,7 @@ layui.define(['jquery', 'lay'], function(exports){
     //动态赋值
     if(setValue === 'set'){
       return change((value - options.min) / (options.max - options.min) * 100 / step, i, 'done');
-    } 
+    }
 
     //滑块滑动
     sliderAct.find('.' + SLIDER_WRAP_BTN).each(function(index){

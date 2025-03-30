@@ -1,6 +1,6 @@
-/** laydate 日期与时间控件 | MIT Licensed */ 
+/** laydate 日期与时间控件 | MIT Licensed */
 // @ts-expect-error
-;!function(window, document){ // gulp build: laydate-header
+(function(window, document) {
   "use strict";
 
   var isLayui = window.layui && layui.define;
@@ -1089,8 +1089,8 @@
 
   /**
    * 公历重要日期与自定义备注
-   * @param {JQuery} td 
-   * @param {[number, number, number]} YMD 
+   * @param {JQuery} td
+   * @param {[number, number, number]} YMD
    * @returns Class
    */
   Class.prototype.mark = function(td, YMD){
@@ -1103,7 +1103,7 @@
 
     if(options.calendar && options.lang === 'cn'){
       render(that.markerOfChineseFestivals);
-    } 
+    }
 
     if(typeof options.mark === 'function'){
       options.mark({year: YMD[0], month: YMD[1], date: YMD[2]}, render);
@@ -1133,7 +1133,7 @@
       lay.each(ymd2, function(i,v){
         ymd2[i] = parseInt(v, 10);
       })
-      
+
       return ymd1.join('-') === ymd2.join('-');
     }
 
@@ -1147,7 +1147,7 @@
         '</span>'
       ].join(''));
     }
-    
+
     if(layui.type(markers) === 'array'){
       lay.each(markers, function(idx, item) {
         lay.each(item, function(i, dayStr) {
@@ -1165,8 +1165,8 @@
 
   /**
    * 标注法定节假日或补假上班
-   * @param {JQuery} td 
-   * @param {[number, number, number]} YMD 
+   * @param {JQuery} td
+   * @param {[number, number, number]} YMD
    * @returns Class
    */
   Class.prototype.holidays = function(td, YMD) {
@@ -1191,7 +1191,7 @@
    * @param {HTMLElement|Array<HTMLElement>} el - 单元格元素
    * @param {{year:number, month:number, date:number}} dateObj - 当前单元格对应的日期信息
    * @param {'year' | 'month' | 'date'} panelMode - 面板模式
-   * @returns 
+   * @returns
    */
   Class.prototype.cellRender = function(el, dateObj, panelMode){
     var that = this;
@@ -1213,7 +1213,7 @@
 
   /**
    * 给定年份的开始日期
-   * @param {Date} date 
+   * @param {Date} date
    */
   Class.prototype.startOfYear = function(date){
     var newDate = new Date(date);
@@ -1236,7 +1236,7 @@
 
   /**
    * 给定月份的开始日期
-   * @param {Date} date 
+   * @param {Date} date
    */
   Class.prototype.startOfMonth = function(date){
     var newDate =  new Date(date);
@@ -1247,7 +1247,7 @@
 
   /**
    * 给定月份的结束日期
-   * @param {Date} date 
+   * @param {Date} date
    */
   Class.prototype.endOfMonth = function(date){
     var newDate = new Date(date);
@@ -1284,7 +1284,7 @@
     var endDay = type === 'year' ? that.endOfYear(date) : that.endOfMonth(date);
     var numOfDays = Math.floor((endDay.getTime() - startDay.getTime()) / millisecondsInDay) + 1;
     var disabledCount = 0;
-      
+
     for(var i = 0; i < numOfDays; i++){
       var day = that.addDays(startDay, i);
       if(options.disabledDate.call(options, day, position)){
@@ -1317,7 +1317,7 @@
     var that = this;
     var options = that.config;
     var position = options.range ? (opts.rangeType === 0 ? 'start' : 'end') : 'start';
-    
+
     if(!options.disabledDate) return false;
     if(options.type === 'time') return false;
     if(!(opts.disabledType === 'date' || opts.disabledType === 'datetime')) return false;
@@ -1325,7 +1325,7 @@
     // 不需要时分秒
     var normalizedDate = new Date(date);
     normalizedDate.setHours(0, 0, 0, 0);
-     
+
     return opts.type === 'year' || opts.type === 'month'
       ? that.isDisabledYearOrMonth(normalizedDate, opts.type, position)
       : options.disabledDate.call(options, normalizedDate, position);
@@ -1343,7 +1343,7 @@
     var that = this;
     var options = that.config;
     var position = options.range ? (opts.rangeType === 0 ? 'start' : 'end') : 'start';
- 
+
     if(!options.disabledTime) return false;
     if(!(options.type === "time" || options.type === "datetime")) return false;
     if(!(opts.disabledType === 'time' || opts.disabledType === 'datetime')) return false;
@@ -1351,7 +1351,7 @@
     var isDisabledItem = function(compareVal, rangeFn, rangeFnParam){
       return function(){
         return (typeof rangeFn === 'function' && rangeFn.apply(options, rangeFnParam) || []).indexOf(compareVal) !== -1;
-      } 
+      }
     }
 
     var dateObj = that.systemDate(new Date(date));
@@ -1371,8 +1371,8 @@
   /**
    * 不可选取的日期时间
    * @param {number} timestamp 当前检测的日期的时间戳
-   * @param {limitOptions} opts 
-   * @returns 
+   * @param {limitOptions} opts
+   * @returns
    */
   Class.prototype.isDisabledDateTime = function(timestamp, opts){
     opts = opts || {};
@@ -1386,8 +1386,8 @@
 
   /**
    * 无效日期范围的标记
-   * @param {limitOptions} opts 
-   * 
+   * @param {limitOptions} opts
+   *
    */
   Class.prototype.limit = function(opts){
     opts = opts || {};
@@ -1978,12 +1978,12 @@
   /**
    * 格式化输入框显示值
    * @param {HTMLInputElement} elem HTML input 元素
-   * @param {(value: string) => string} displayValueCallback 
+   * @param {(value: string) => string} displayValueCallback
    */
   Class.prototype.formatToDisplay = function (elem, displayValueCallback) {
     var that = this;
     var props = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value');
-    
+
     Object.defineProperty(
       elem,
       'value',
@@ -2162,7 +2162,7 @@
    * 判断日期是否存在面板，用于处理日期范围选择的一些边缘情况
    * @param {object} datetime 日期时间对象
    * @param {number} index - 面板索引
-   * @returns 
+   * @returns
    */
   Class.prototype.checkPanelDate = function(datetime, index){
     var that = this;
@@ -2196,7 +2196,7 @@
       index: firstRenderIndex
     }
   }
-  
+
   //选择日期
   Class.prototype.choose = function(td, index){
     if(td.hasClass(DISABLED)) return;
@@ -2373,7 +2373,7 @@
               ? that.startTime && that.endTime && that.newDate(that.startTime) > that.newDate(that.endTime)
               : that.startDate && that.endDate && that.newDate(lay.extend({},that.startDate, that.startTime || {})) > that.newDate(lay.extend({},that.endDate, that.endTime || {}));
 
-            return isTimeout 
+            return isTimeout
               ? that.hint(options.type === 'time' ? lang.timeout.replace(/日期/g, '时间') : lang.timeout)
               : that.hint(lang.invalidDate);
           }
@@ -2474,7 +2474,7 @@
             year: YM[0]
             ,month: YM[1]
           });
-  
+
           that.checkDate('limit').calendar(null, null, 'init');
           that.autoCalendarModel.auto ? that.choose(lay(elemCont).find('td.layui-this'), index) : that.done(null, 'change');
         }
@@ -2756,4 +2756,4 @@
     }()
   );
 
-}(window, window.document);
+})(window, window.document);
