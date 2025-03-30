@@ -862,9 +862,9 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var value = select.value;
           var selected = $(select.options[select.selectedIndex]); // 获取当前选中项
           var optionsFirst = select.options[0];
-
-          if(othis.closest('[lay-ignore]').length > 0) return othis.show();
-
+          
+          if (othis.closest('[lay-ignore]').length) return othis.show();
+          
           var isSearch = typeof othis.attr('lay-search') === 'string'
           var isCreatable = typeof othis.attr('lay-creatable') === 'string' && isSearch
           var isAppendTo = typeof othis.attr('lay-append-to') === 'string'
@@ -1027,8 +1027,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
           // 若为开关，则对 title 进行分隔解析
           title = skin === 'switch' ? title.split('|') : [title];
-
-          if(othis.closest('[lay-ignore]').length > 0) return othis.show();
+          
+          if (othis.closest('[lay-ignore]').length) return othis.show();
 
           // 处理 IE8 indeterminate 属性重新定义 get set 后无法设置值的问题
           if(needCheckboxFallback){
@@ -1110,8 +1110,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var othis = $(this), hasRender = othis.next('.' + CLASS);
           var disabled = this.disabled;
           var skin = othis.attr('lay-skin');
-
-          if(othis.closest('[lay-ignore]').length > 0) return othis.show();
+          
+          if (othis.closest('[lay-ignore]').length) return othis.show();
 
           if(needCheckboxFallback){
             toggleAttribute.call(radio, 'lay-form-sync-checked', radio.checked);
@@ -1301,11 +1301,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             // 提示层风格
             if (verType === 'tips') {
               layer.tips(errorText, function() {
-                if (othis.closest('[lay-ignore]').length > 0) {
-                  return othis;
-                } else if(isForm2Elem) {
-                  return othis.next();
+                if (!othis.closest('[lay-ignore]').length) {
+                  if(isForm2Elem) {
+                    return othis.next();
+                  }
                 }
+                return othis;
               }(), {tips: 1});
             } else if(verType === 'alert') {
               layer.alert(errorText, {title: '提示', shadeClose: true});
