@@ -28,7 +28,7 @@
 
   // constructor
   var Class = function() {
-    this.v = '2.11.0-beta.1'; // 版本号
+    this.v = '2.11.0-rc.1'; // 版本号
   };
 
   // 识别预先可能定义的指定全局对象
