@@ -11,9 +11,9 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
-<h2 id="v2.10.2" lay-pid="2.10+" class="ws-anchor">
-  v2.10.2
-  <span class="layui-badge-rim">2025-03-28</span>
+<h2 id="v2.10.3" lay-pid="2.10+" class="ws-anchor">
+  v2.10.3
+  <span class="layui-badge-rim">2025-03-30</span>
 </h2>
 
 - #### component
@@ -27,7 +27,11 @@ toc: true
 - #### form
   - 优化 `lay-ignore` 的判断逻辑，支持设置在父元素上 #2585 @augushong
 
-### 下载： [layui-v2.10.2.zip](https://gitee.com/layui/layui/attach_files/2123899/download)
+### 下载： [layui-v2.10.3.zip](https://gitee.com/layui/layui/attach_files/2128275/download)
+
+---
+
+😐 `2.10.2` 版本因为存在一个小缺陷而被跳过
 
 ---
 
@@ -190,7 +194,6 @@ toc: true
 
 <h2 id="v2.9.20" class="ws-anchor">
   v2.9.20
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
   <span class="layui-badge-rim">2024-11-25</span>
 </h2>
 
