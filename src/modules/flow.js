@@ -3,15 +3,16 @@
  */
 
 
-layui.define('jquery', function(exports){
+layui.define('jquery', function(exports) {
   "use strict";
 
-  var $ = layui.$, Flow = function(options){}
-  ,ELEM_MORE = 'layui-flow-more'
-  ,ELEM_LOAD = '<i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon ">&#xe63e;</i>';
+  var $ = layui.$;
+  var Flow = function(options) {};
+  var ELEM_MORE = 'layui-flow-more';
+  var ELEM_LOAD = '<i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon ">&#xe63e;</i>';
 
-  //主方法
-  Flow.prototype.load = function(options){
+  // 主方法
+  Flow.prototype.load = function(options) {
     var that = this, page = 0, lock, isOver, lazyimg, timer;
     options = options || {};
 

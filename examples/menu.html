@@ -14,12 +14,12 @@
 <div class="layui-container" style="padding-top: 30px;">
 
   <div class="layui-btn-container">
-    <button type="button" class="layui-btn" lay-active="lg">大尺寸</button> 
-    <button type="button" class="layui-btn" lay-active="normal">常规尺寸</button> 
+    <button type="button" class="layui-btn" lay-active="lg">大尺寸</button>
+    <button type="button" class="layui-btn" lay-active="normal">常规尺寸</button>
   </div>
 
   <div class="layui-row layui-col-space30" id="demo-box" style="padding: 30px 0;">
-    
+
     <div class="layui-col-xs9 layui-col-md3">
       <div class="layui-panel">
         <ul class="layui-menu" id="demo1">
@@ -109,7 +109,7 @@
         </ul>
       </div>
     </div>
-  
+
     <div class="layui-col-xs9 layui-col-md3">
       <div class="layui-panel">
         <ul class="layui-menu" id="docDemoMenu1">
@@ -146,7 +146,7 @@
           <li class="layui-menu-item-divider"></li>
           <li class="layui-menu-item-parent" lay-options="{type: 'parent'}">
             <div class="layui-menu-body-title">
-              menu item 5 
+              menu item 5
               <i class="layui-icon layui-icon-right"></i>
             </div>
             <div class="layui-panel layui-menu-body-panel">
@@ -166,7 +166,7 @@
         </ul>
       </div>
     </div>
-  
+
   </div>
 </div>
 
@@ -176,13 +176,13 @@ layui.use(['dropdown', 'util'], function(){
   var dropdown = layui.dropdown
   ,util = layui.util
   ,$ = layui.jquery;
-  
-  
+
+
   dropdown.on('click(demo1)', function(options){
     var thisElem = $(this);
     console.log(thisElem, options);
   });
-  
+
   util.event('lay-active', {
     normal: function(){
       $('#demo-box').children().addClass('layui-col-md3').removeClass('layui-col-md4');

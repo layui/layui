@@ -1,37 +1,37 @@
 /**
- * colorpicker 
+ * colorpicker
  * 颜色选择组件
  */
 
-layui.define(['jquery', 'lay'], function(exports){
+layui.define(['jquery', 'lay'], function(exports) {
   "use strict";
-  
+
   var $ = layui.$;
   var lay = layui.lay;
   var hint = layui.hint();
   var device = layui.device();
   var clickOrMousedown = (device.mobile ? 'click' : 'mousedown');
 
-  //外部接口
+  // 外部接口
   var colorpicker = {
-    config: {}
-    ,index: layui.colorpicker ? (layui.colorpicker.index + 10000) : 0
+    config: {},
+    index: layui.colorpicker ? (layui.colorpicker.index + 10000) : 0,
 
-    //设置全局项
-    ,set: function(options){
+    // 设置全局项
+    set: function(options) {
       var that = this;
       that.config = $.extend({}, that.config, options);
       return that;
-    }
-    
-    //事件
-    ,on: function(events, callback){
+    },
+
+    // 事件
+    on: function(events, callback) {
       return layui.onevent.call(this, 'colorpicker', events, callback);
     }
   };
-  
+
   // 操作当前实例
-  var thisModule = function(){
+  var thisModule = function() {
     var that = this;
     var options = that.config;
     var id = options.id;
@@ -45,7 +45,7 @@ layui.define(['jquery', 'lay'], function(exports){
 
   //字符常量
   ,MOD_NAME = 'colorpicker', SHOW = 'layui-show', THIS = 'layui-this', ELEM = 'layui-colorpicker'
-  
+
   ,ELEM_MAIN = '.layui-colorpicker-main', ICON_PICKER_DOWN = 'layui-icon-down', ICON_PICKER_CLOSE = 'layui-icon-close'
   ,PICKER_TRIG_SPAN = 'layui-colorpicker-trigger-span', PICKER_TRIG_I = 'layui-colorpicker-trigger-i', PICKER_SIDE = 'layui-colorpicker-side', PICKER_SIDE_SLIDER = 'layui-colorpicker-side-slider'
   ,PICKER_BASIS = 'layui-colorpicker-basis', PICKER_ALPHA_BG = 'layui-colorpicker-alpha-bgcolor', PICKER_ALPHA_SLIDER = 'layui-colorpicker-alpha-slider', PICKER_BASIS_CUR = 'layui-colorpicker-basis-cursor', PICKER_INPUT = 'layui-colorpicker-main-input'
@@ -78,7 +78,7 @@ layui.define(['jquery', 'lay'], function(exports){
     }
     hsb.s *= 100/255;
     hsb.b *= 100/255;
-    return hsb;  
+    return hsb;
   }
 
   //HEX转HSB
@@ -139,10 +139,10 @@ layui.define(['jquery', 'lay'], function(exports){
     var re = rgbs.match(regexp) || [];
     return {r:re[0], g:re[1], b:re[2]};
   }
-  
+
   ,$win = $(window)
   ,$doc = $(document)
-  
+
   //构造器
   ,Class = function(options){
     var that = this;
@@ -182,7 +182,7 @@ layui.define(['jquery', 'lay'], function(exports){
 
     // 合并 lay-options 属性上的配置信息
     $.extend(options, lay.options(elem[0]));
-    
+
     //颜色选择框对象
     var elemColorBox = $(['<div class="layui-unselect layui-colorpicker">'
       ,'<span '+ (options.format == 'rgb' && options.alpha
@@ -194,20 +194,20 @@ layui.define(['jquery', 'lay'], function(exports){
             var bgstr = '';
             if(options.color){
               bgstr = options.color;
-              
+
               if((options.color.match(/[0-9]{1,3}/g) || []).length > 3){ //需要优化
                 if(!(options.alpha && options.format == 'rgb')){
                   bgstr = '#' + HSBToHEX(RGBToHSB(RGBSTo(options.color)))
                 }
               }
-              
+
               return 'background: '+ bgstr;
             }
-            
+
             return bgstr;
           }() +'">'
-          ,'<i class="layui-icon layui-colorpicker-trigger-i '+ (options.color 
-            ? ICON_PICKER_DOWN 
+          ,'<i class="layui-icon layui-colorpicker-trigger-i '+ (options.color
+            ? ICON_PICKER_DOWN
           : ICON_PICKER_CLOSE) +'"></i>'
         ,'</span>'
       ,'</span>'
@@ -216,7 +216,7 @@ layui.define(['jquery', 'lay'], function(exports){
     //初始化颜色选择框
     elem = options.elem = $(options.elem);
     options.size && elemColorBox.addClass('layui-colorpicker-'+ options.size); //初始化颜色选择框尺寸
-    
+
     // 插入颜色选择框
     elem.addClass('layui-inline').html(
       that.elemColorBox = elemColorBox
@@ -226,10 +226,10 @@ layui.define(['jquery', 'lay'], function(exports){
     options.id = 'id' in options ? options.id : (
       elem.attr('id') || that.index
     );
-    
+
     // 获取背景色值
     that.color = that.elemColorBox.find('.'+ PICKER_TRIG_SPAN)[0].style.background;
-    
+
     // 相关事件
     that.events();
   };
@@ -239,7 +239,7 @@ layui.define(['jquery', 'lay'], function(exports){
     var that = this
     ,options = that.config
     ,elemColorBox = that.elemColorBox[0]
-    
+
     //颜色选择器对象
     ,elemPicker = that.elemPicker = $(['<div id="layui-colorpicker'+ that.index +'" data-index="'+ that.index +'" class="layui-anim layui-anim-downbit layui-colorpicker-main">'
       //颜色面板
@@ -253,21 +253,21 @@ layui.define(['jquery', 'lay'], function(exports){
           ,'<div class="layui-colorpicker-side-slider"></div>'
         ,'</div>'
       ,'</div>'
-      
+
       //透明度条块
       ,'<div class="layui-colorpicker-main-alpha '+ (options.alpha ? SHOW : '') +'">'
         ,'<div class="layui-colorpicker-alpha-bgcolor">'
           ,'<div class="layui-colorpicker-alpha-slider"></div>'
         ,'</div>'
       ,'</div>'
-      
+
       //预设颜色列表
       ,function(){
         if(options.predefine){
           var list = ['<div class="layui-colorpicker-main-pre">'];
           layui.each(options.colors, function(i, v){
-            list.push(['<div class="layui-colorpicker-pre'+ ((v.match(/[0-9]{1,3}/g) || []).length > 3 
-              ? ' layui-colorpicker-pre-isalpha' 
+            list.push(['<div class="layui-colorpicker-pre'+ ((v.match(/[0-9]{1,3}/g) || []).length > 3
+              ? ' layui-colorpicker-pre-isalpha'
             : '') +'">'
               ,'<div style="background:'+ v +'"></div>'
             ,'</div>'].join(''));
@@ -278,7 +278,7 @@ layui.define(['jquery', 'lay'], function(exports){
           return '';
         }
       }()
-      
+
       //底部表单元素区域
       ,'<div class="layui-colorpicker-main-input">'
         ,'<div class="layui-inline">'
@@ -290,23 +290,23 @@ layui.define(['jquery', 'lay'], function(exports){
         ,'</div'
       ,'</div>'
     ,'</div>'].join(''))
-    
+
     ,elemColorBoxSpan = that.elemColorBox.find('.' + PICKER_TRIG_SPAN)[0];
-    
+
     //如果当前点击的颜色盒子已经存在选择器，则关闭
     if($(ELEM_MAIN)[0] && $(ELEM_MAIN).data('index') == that.index){
       that.removePicker(Class.thisElemInd);
     } else { //插入颜色选择器
-      that.removePicker(Class.thisElemInd); 
+      that.removePicker(Class.thisElemInd);
       $('body').append(elemPicker);
     }
 
     // 记录当前执行的实例索引
     colorpicker.thisId = options.id;
-    
+
     Class.thisElemInd = that.index; //记录最新打开的选择器索引
     Class.thisColor =  elemColorBox.style.background //记录最新打开的选择器颜色选中值
-    
+
     that.position();
     that.pickerEvents();
   };
@@ -327,7 +327,7 @@ layui.define(['jquery', 'lay'], function(exports){
 
     return that;
   };
-  
+
   //定位算法
   Class.prototype.position = function(){
     var that = this
@@ -343,7 +343,7 @@ layui.define(['jquery', 'lay'], function(exports){
   Class.prototype.val = function(){
     var that = this
     ,options = that.config
-    
+
     ,elemColorBox = that.elemColorBox.find('.' + PICKER_TRIG_SPAN)
     ,elemPickerInput = that.elemPicker.find('.' + PICKER_INPUT)
     ,e = elemColorBox[0]
@@ -351,20 +351,20 @@ layui.define(['jquery', 'lay'], function(exports){
 
     //判断是否有背景颜色
     if(bgcolor){
-      
+
       //转化成hsb格式
       var hsb = RGBToHSB(RGBSTo(bgcolor))
       ,type = elemColorBox.attr('lay-type');
-      
+
       //同步滑块的位置及颜色选择器的选择
       that.select(hsb.h, hsb.s, hsb.b);
-      
+
       // 若格式要求为rgb
       if(type === 'torgb'){
         elemPickerInput.find('input').val(bgcolor);
       } else if(type === 'rgba'){ // 若格式要求为 rgba
         var rgb = RGBSTo(bgcolor);
-        
+
         // 若开启透明度而没有设置，则给默认值
         if((bgcolor.match(/[0-9]{1,3}/g) || []).length === 3){
           elemPickerInput.find('input').val('rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', 1)');
@@ -374,9 +374,9 @@ layui.define(['jquery', 'lay'], function(exports){
           var left = bgcolor.slice(bgcolor.lastIndexOf(",") + 1, bgcolor.length - 1) * 280;
           that.elemPicker.find('.'+ PICKER_ALPHA_SLIDER).css("left", left);
         }
-        
+
         // 设置 span 背景色
-        that.elemPicker.find('.'+ PICKER_ALPHA_BG)[0].style.background = 'linear-gradient(to right, rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', 0), rgb('+ rgb.r +', '+ rgb.g +', '+ rgb.b +'))';    
+        that.elemPicker.find('.'+ PICKER_ALPHA_BG)[0].style.background = 'linear-gradient(to right, rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', 0), rgb('+ rgb.r +', '+ rgb.g +', '+ rgb.b +'))';
       } else {
         elemPickerInput.find('input').val('#'+ HSBToHEX(hsb));
       }
@@ -393,7 +393,7 @@ layui.define(['jquery', 'lay'], function(exports){
   Class.prototype.side = function(){
     var that = this
     ,options = that.config
-    
+
     ,span = that.elemColorBox.find('.' + PICKER_TRIG_SPAN)
     ,type = span.attr('lay-type')
 
@@ -403,12 +403,12 @@ layui.define(['jquery', 'lay'], function(exports){
     ,choose = that.elemPicker.find('.' + PICKER_BASIS_CUR)
     ,alphacolor = that.elemPicker.find('.' + PICKER_ALPHA_BG)
     ,alphaslider = that.elemPicker.find('.' + PICKER_ALPHA_SLIDER)
-    
+
     ,_h = slider[0].offsetTop/180*360
     ,_b = 100 - (choose[0].offsetTop)/180*100
     ,_s = (choose[0].offsetLeft)/260*100
-    ,_a = Math.round(alphaslider[0].offsetLeft/280*100)/100    
-    
+    ,_a = Math.round(alphaslider[0].offsetLeft/280*100)/100
+
     ,i = that.elemColorBox.find('.' + PICKER_TRIG_I)
     ,pre = that.elemPicker.find('.layui-colorpicker-pre').children('div')
 
@@ -432,7 +432,7 @@ layui.define(['jquery', 'lay'], function(exports){
       } else {
         elemInput.val('#'+ color);
       }
-      
+
       //回调更改的颜色
       options.change && options.change($.trim(that.elemPicker.find('.' + PICKER_INPUT).find('input').val()));
     }
@@ -472,18 +472,18 @@ layui.define(['jquery', 'lay'], function(exports){
       createMoveElem(move);
       e.preventDefault();
     });
-    
+
     side.on('mousedown', function(e){
       var top = e.clientY - $(this).offset().top + $win.scrollTop();
       if(top < 0)top = 0;
-      if(top > this.offsetHeight) top = this.offsetHeight;     
+      if(top > this.offsetHeight) top = this.offsetHeight;
       var h = top/180*360;
       _h = h;
-      change(h, _s, _b, _a); 
+      change(h, _s, _b, _a);
       e.preventDefault();
       needTrigger && slider.trigger('mousedown', e);
     });
-    
+
     //中间小圆点颜色选择
     choose.on('mousedown', function(e, triggerEvent){
       var oldtop = this.offsetTop;
@@ -503,14 +503,14 @@ layui.define(['jquery', 'lay'], function(exports){
         ,b = 100 - top/180*100;
         _b = b;
         _s = s;
-        change(_h, s, b, _a); 
+        change(_h, s, b, _a);
         e.preventDefault();
       };
       needStopPropagation && layui.stope(e);
       createMoveElem(move);
       e.preventDefault();
     });
-    
+
     basis.on('mousedown', function(e){
       var top = e.clientY - $(this).offset().top + $win.scrollTop()
       ,left = e.clientX - $(this).offset().left + $win.scrollLeft()
@@ -522,12 +522,12 @@ layui.define(['jquery', 'lay'], function(exports){
       ,b = 100 - top/180*100;
       _b = b;
       _s = s;
-      change(_h, s, b, _a); 
+      change(_h, s, b, _a);
       layui.stope(e);
       e.preventDefault();
       needTrigger && choose.trigger('mousedown', e);
     });
-    
+
     //底部透明度选择
     alphaslider.on('mousedown', function(e, triggerEvent){
       var oldleft = this.offsetLeft;
@@ -539,10 +539,10 @@ layui.define(['jquery', 'lay'], function(exports){
         if(left > maxw)left = maxw;
         var a = Math.round(left /280*100) /100;
         _a = a;
-        change(_h, _s, _b, a); 
+        change(_h, _s, _b, a);
         e.preventDefault();
       };
-      
+
       needStopPropagation && layui.stope(e);
       createMoveElem(move);
       e.preventDefault();
@@ -553,11 +553,11 @@ layui.define(['jquery', 'lay'], function(exports){
       if(left > this.offsetWidth)left = this.offsetWidth;
       var a = Math.round(left /280*100) /100;
       _a = a;
-      change(_h, _s, _b, a); 
+      change(_h, _s, _b, a);
       e.preventDefault();
       needTrigger && alphaslider.trigger('mousedown', e);
     });
-    
+
     //预定义颜色选择
     pre.each(function(){
       $(this).on('click', function(){
@@ -602,9 +602,9 @@ layui.define(['jquery', 'lay'], function(exports){
       var pointer = event.touches[0];
       var simulatedEvent = document.createEvent("MouseEvent");
 
-      simulatedEvent.initMouseEvent(eventType, 
-        true, true, window, 1, 
-        pointer.screenX, pointer.screenY,pointer.clientX, pointer.clientY, 
+      simulatedEvent.initMouseEvent(eventType,
+        true, true, window, 1,
+        pointer.screenX, pointer.screenY,pointer.clientX, pointer.clientY,
         false, false, false, false, 0, null
       );
       pointer.target.dispatchEvent(simulatedEvent);
@@ -621,51 +621,51 @@ layui.define(['jquery', 'lay'], function(exports){
     var top = 180 - b/100*180;
     var left = s/100*260;
     var basisElem = that.elemPicker.find('.' + PICKER_BASIS)[0];
-    
+
     that.elemPicker.find('.' + PICKER_SIDE_SLIDER).css("top", sidetop); //滑块的top
     basisElem.style.background = '#' + hex; //颜色选择器的背景
-    
+
     //选择器的top left
     that.elemPicker.find('.' + PICKER_BASIS_CUR).css({
       "top": top / basisElem.offsetHeight * 100 + '%',
-      "left": left / basisElem.offsetWidth * 100 + '%' 
+      "left": left / basisElem.offsetWidth * 100 + '%'
     });
-    
+
     // if(type === 'change') return;
 
     // 选中的颜色
     // that.elemPicker.find('.' + PICKER_INPUT).find('input').val('#'+ color);
   };
-  
+
   Class.prototype.pickerEvents = function(){
     var that = this
     ,options = that.config
-    
+
     ,elemColorBoxSpan = that.elemColorBox.find('.' + PICKER_TRIG_SPAN) //颜色盒子
     ,elemPickerInput = that.elemPicker.find('.' + PICKER_INPUT + ' input') //颜色选择器表单
-    
+
     ,pickerEvents = {
       //清空
       clear: function(othis){
         elemColorBoxSpan[0].style.background ='';
         that.elemColorBox.find('.' + PICKER_TRIG_I).removeClass(ICON_PICKER_DOWN).addClass(ICON_PICKER_CLOSE);
         that.color = '';
-        
+
         options.done && options.done('');
         that.removePicker();
       }
-      
+
       //确认
       ,confirm: function(othis, change){
         var value =  $.trim(elemPickerInput.val())
         ,colorValue
         ,hsb;
-        
+
         if(value.indexOf(',') > -1){
           hsb = RGBToHSB(RGBSTo(value));
           that.select(hsb.h, hsb.s, hsb.b);
-          elemColorBoxSpan[0].style.background = (colorValue = '#' + HSBToHEX(hsb)); 
-          
+          elemColorBoxSpan[0].style.background = (colorValue = '#' + HSBToHEX(hsb));
+
           if((value.match(/[0-9]{1,3}/g) || []).length > 3 && elemColorBoxSpan.attr('lay-type') === 'rgba'){
             var left = value.slice(value.lastIndexOf(",") + 1, value.length - 1) * 280;
             that.elemPicker.find('.' + PICKER_ALPHA_SLIDER).css("left", left);
@@ -674,29 +674,29 @@ layui.define(['jquery', 'lay'], function(exports){
           }
         } else {
           hsb = HEXToHSB(value);
-          elemColorBoxSpan[0].style.background = (colorValue = '#' + HSBToHEX(hsb)); 
+          elemColorBoxSpan[0].style.background = (colorValue = '#' + HSBToHEX(hsb));
           that.elemColorBox.find('.' + PICKER_TRIG_I).removeClass(ICON_PICKER_CLOSE).addClass(ICON_PICKER_DOWN);
         }
-        
+
         if(change === 'change'){
           that.select(hsb.h, hsb.s, hsb.b, change);
           options.change && options.change(colorValue);
           return;
         }
         that.color = value;
-        
+
         options.done && options.done(value);
-        that.removePicker(); 
+        that.removePicker();
       }
     };
-    
+
     //选择器面板点击事件
     that.elemPicker.on('click', '*[colorpicker-events]', function(){
       var othis = $(this)
       ,attrEvent = othis.attr('colorpicker-events');
       pickerEvents[attrEvent] && pickerEvents[attrEvent].call(this, othis);
     });
-    
+
     //输入框事件
     elemPickerInput.on('keyup', function(e){
       var othis = $(this);
@@ -731,25 +731,25 @@ layui.define(['jquery', 'lay'], function(exports){
       var elemColorBoxSpan = that.elemColorBox.find('.' + PICKER_TRIG_SPAN);
 
       //如果点击的元素是颜色框
-      if($(e.target).hasClass(ELEM) 
+      if($(e.target).hasClass(ELEM)
         || $(e.target).parents('.'+ELEM)[0]
-      ) return; 
-      
+      ) return;
+
       //如果点击的元素是选择器
-      if($(e.target).hasClass(ELEM_MAIN.replace(/\./g, '')) 
+      if($(e.target).hasClass(ELEM_MAIN.replace(/\./g, ''))
         || $(e.target).parents(ELEM_MAIN)[0]
-      ) return; 
-      
+      ) return;
+
       if(!that.elemPicker) return;
-      
+
       if(that.color){
         var hsb = RGBToHSB(RGBSTo(that.color));
-        that.select(hsb.h, hsb.s, hsb.b); 
+        that.select(hsb.h, hsb.s, hsb.b);
       } else {
         that.elemColorBox.find('.' + PICKER_TRIG_I).removeClass(ICON_PICKER_DOWN).addClass(ICON_PICKER_CLOSE);
       }
       elemColorBoxSpan[0].style.background = that.color || '';
-      
+
       // 取消选择的回调
       typeof options.cancel === 'function' && options.cancel(that.color);
 
@@ -772,19 +772,19 @@ layui.define(['jquery', 'lay'], function(exports){
 
   // 记录所有实例
   thisModule.that = {}; // 记录所有实例对象
-  
+
   // 获取当前实例对象
   thisModule.getThis = function(id){
     var that = thisModule.that[id];
     if(!that) hint.error(id ? (MOD_NAME +' instance with ID \''+ id +'\' not found') : 'ID argument required');
     return that;
   };
-  
+
   //核心入口
   colorpicker.render = function(options){
     var inst = new Class(options);
     return thisModule.call(inst);
   };
-  
+
   exports(MOD_NAME, colorpicker);
 });
