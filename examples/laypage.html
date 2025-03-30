@@ -26,10 +26,10 @@ body{padding: 10px;}
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
   <legend>将一段已知数组分页展示</legend>
 </fieldset>
- 
+
 <div id="demo9"></div>
- 
-<ul id="biuuu_city_list"></ul>  
+
+<ul id="biuuu_city_list"></ul>
 
 
 <script src="../src/layui.js"></script>
@@ -39,13 +39,13 @@ layui.use(['laypage', 'layer'], function(){
   var laypage = layui.laypage
   ,layer = layui.layer;
 
-  
+
   //总页数低于页码总数
   laypage.render({
     elem: 'demo0'
     ,count: 50 //数据总数
   });
-  
+
   //总页数大于页码总数
   laypage.render({
     elem: 'demo1'
@@ -54,14 +54,14 @@ layui.use(['laypage', 'layer'], function(){
       console.log(obj)
     }
   });
-  
+
   //自定义样式
   laypage.render({
     elem: 'demo2'
     ,count: 100
     ,theme: '#1E9FFF'
   });
-  
+
   //自定义首页、尾页、上一页、下一页文本
   laypage.render({
     elem: 'demo3'
@@ -71,7 +71,7 @@ layui.use(['laypage', 'layer'], function(){
     ,prev: '<em>←</em>'
     ,next: '<em>→</em>'
   });
-  
+
   //不显示首页尾页
   laypage.render({
     elem: 'demo4'
@@ -79,7 +79,7 @@ layui.use(['laypage', 'layer'], function(){
     ,first: false
     ,last: false
   });
-  
+
   //开启HASH
   laypage.render({
     elem: 'demo5'
@@ -87,7 +87,7 @@ layui.use(['laypage', 'layer'], function(){
     ,curr: location.hash.replace('#!fenye=', '') //获取hash值为fenye的当前页
     ,hash: 'fenye' //自定义hash值
   });
-  
+
   //只显示上一页、下一页
   laypage.render({
     elem: 'demo6'
@@ -99,7 +99,7 @@ layui.use(['laypage', 'layer'], function(){
       }
     }
   });
-  
+
   //完整功能
   laypage.render({
     elem: 'demo7'
@@ -114,7 +114,7 @@ layui.use(['laypage', 'layer'], function(){
       console.log(obj)
     }
   });
-  
+
   //自定义排版
   laypage.render({
     elem: 'demo8'
@@ -123,11 +123,11 @@ layui.use(['laypage', 'layer'], function(){
     //,limits: [100, 200, 300]
     ,limit: 200
   });
-  
-  
-  
+
+
+
   //将一段数组分页展示
-  
+
   //测试数据
   var data = [
     '北京',
@@ -168,7 +168,7 @@ layui.use(['laypage', 'layer'], function(){
     '澳门',
     '台北'
   ];
-  
+
   //调用分页
   laypage.render({
     elem: 'demo9'
@@ -186,7 +186,7 @@ layui.use(['laypage', 'layer'], function(){
       }();
     }
   });
-  
+
 });
 </script>
 </body>

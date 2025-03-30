@@ -16,7 +16,7 @@ hr{margin: 32px 0;}
 
 <div class="layui-upload">
   <button type="button" class="layui-btn" id="test1" name="123">上传图片</button>
-  
+
   <div class="layui-upload-list">
     <img class="layui-upload-img" src="" id="demo1">
     <p id="demoText"></p>
@@ -31,14 +31,14 @@ hr{margin: 32px 0;}
 <hr>
 
 <div class="layui-upload">
-  <button type="button" class="layui-btn" id="test2">多图片上传</button> 
+  <button type="button" class="layui-btn" id="test2">多图片上传</button>
   <div class="layui-upload-list" id="demo2"></div>
 </div>
 
 <hr>
 
 <div class="layui-upload">
-  <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button> 
+  <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
   <div class="layui-upload-list">
     <table class="layui-table">
       <thead>
@@ -121,13 +121,13 @@ layui.use(['upload', 'element', 'form'], function(){
       obj.preview(function(index, file, result){
         $('#demo1').attr('src', result); //图片链接（base64）
       });
-      
+
       return;
       layer.msg('不允许上传')
       return false;
     },
     done: function(res, index){
-    
+
       //如果上传失败
       if(res.code > 0){
         return layer.msg('上传失败');
@@ -137,14 +137,14 @@ layui.use(['upload', 'element', 'form'], function(){
     },
     error: function(index, upload){
       this.item.html('重选上传');
-      
+
       //演示失败状态，并实现重传
       var demoText = $('#demoText');
       demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
       demoText.find('.demo-reload').on('click', function(){
         uploadInst.upload();
       });
-      
+
       element.progress('demo', '0%');
     },
     progress: function(n, elem, res, index){
@@ -160,7 +160,7 @@ layui.use(['upload', 'element', 'form'], function(){
     acceptMime: 'image/*', // 只筛选图片
     // size: 2,
   });
-  
+
   // 演示多图片上传
   upload.render({
     elem: '#test2',
@@ -186,7 +186,7 @@ layui.use(['upload', 'element', 'form'], function(){
       console.log(obj)
     }
   });
-  
+
   // 演示多文件列表 ---  本示例仅演示未开启 unified 属性的情况
   var demoListView = $('#demoList');
   var uploadListIns = upload.render({
@@ -198,10 +198,10 @@ layui.use(['upload', 'element', 'form'], function(){
     auto: false,
     bindAction: '#testListAction',
     // size: 30,
-    choose: function(obj){   
+    choose: function(obj){
       var files = this.files = obj.pushFile(); // 将每次选择的文件追加到文件队列
       //读取本地文件
-      obj.preview(function(index, file, result){        
+      obj.preview(function(index, file, result){
         var tr = $(['<tr id="upload-'+ index +'">'
           ,'<td>'+ file.name +'</td>'
           ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
@@ -211,12 +211,12 @@ layui.use(['upload', 'element', 'form'], function(){
             ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
           ,'</td>'
         ,'</tr>'].join(''));
-        
+
         //单个重传
         tr.find('.demo-reload').on('click', function(){
           obj.upload(index, file);
         });
-        
+
         //删除
         var that = this;
         tr.find('.demo-delete').on('click', function(){
@@ -225,9 +225,9 @@ layui.use(['upload', 'element', 'form'], function(){
           tr.remove();
           uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
         });
-        
+
         demoListView.append(tr);
-        
+
         element.render('progress');
       });
     },
@@ -267,7 +267,7 @@ layui.use(['upload', 'element', 'form'], function(){
       console.log(res);
     }
   });
-  
+
   upload.render({
     elem: '.testm',
     done: function(res, index, upload){
@@ -276,7 +276,7 @@ layui.use(['upload', 'element', 'form'], function(){
 
     }
   })
-  
+
   /*
   upload.render({
     elem: '#test33',
@@ -286,7 +286,7 @@ layui.use(['upload', 'element', 'form'], function(){
       console.log(res)
     }
   });*/
-  
+
   upload.render({
     elem: '#test4',
     url: url, // 实际使用时改成您自己的上传接口即可
@@ -295,7 +295,7 @@ layui.use(['upload', 'element', 'form'], function(){
       console.log(res)
     }
   });
-  
+
   upload.render({
     elem: '#test5',
     url: '',
@@ -304,8 +304,8 @@ layui.use(['upload', 'element', 'form'], function(){
       console.log(res)
     }
   });
-  
-  
+
+
   //手动上传
   upload.render({
     elem: '#test6',
@@ -313,7 +313,7 @@ layui.use(['upload', 'element', 'form'], function(){
     auto: false,
     // multiple: true,
     bindAction: '#test7',
-    choose: function(obj){   
+    choose: function(obj){
       var that = this;
       obj.preview(function(index, file){
         that.elem.after('<span class="layui-inline layui-upload-choose">'+ file.name +'</span>');
@@ -328,7 +328,7 @@ layui.use(['upload', 'element', 'form'], function(){
       console.log(res);
     }
   });
-  
+
   upload.render({
     elem: '#test8',
     url: url, // 实际使用时改成您自己的上传接口即可
@@ -336,7 +336,7 @@ layui.use(['upload', 'element', 'form'], function(){
       console.log(res);
     }
   });
-  
+
   upload.render({
     elem: '#test9',
     url: url, // 实际使用时改成您自己的上传接口即可
@@ -344,9 +344,9 @@ layui.use(['upload', 'element', 'form'], function(){
       console.log(res);
     }
   });
-  
-  
-  
+
+
+
 });
 </script>
 </body>

@@ -2,7 +2,7 @@
  * rate 评分评星组件
  */
 
-layui.define(['jquery', 'lay'],function(exports){
+layui.define(['jquery', 'lay'],function(exports) {
   "use strict";
 
   var $ = layui.jquery;
@@ -13,15 +13,15 @@ layui.define(['jquery', 'lay'],function(exports){
     config: {},
     index: layui.rate ? (layui.rate.index + 10000) : 0,
 
-    //设置全局项
-    set: function(options){
+    // 设置全局项
+    set: function(options) {
       var that = this;
       that.config = $.extend({}, that.config, options);
       return that;
     },
 
-    //事件
-    on: function(events, callback){
+    // 事件
+    on: function(events, callback) {
       return layui.onevent.call(this, MOD_NAME, events, callback);
     }
   }
