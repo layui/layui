@@ -114,6 +114,7 @@ tabs.render({
 | headerItem | 自定义标签头部元素，如 `headerItem: '<li></li>'` | string | - |
 | bodyItem | 自定义标签内容元素，如 `bodyItem: '<div></div>'` | string | - |
 | done | 标签添加成功后执行的回调函数 | Function | - |
+| change | 是否将插入项切换为当前标签 | boolean | true |
 
 该方法用于给对应的 tabs 实例新增一个标签
 
