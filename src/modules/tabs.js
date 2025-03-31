@@ -177,6 +177,7 @@ layui.define('component', function(exports) {
    * @param {string} [opts.headerItem] - 自定义标签头部元素
    * @param {string} [opts.bodyItem] - 自定义标签内容元素
    * @param {Function} [opts.done] - 标签添加成功后执行的回调函数
+   * @param {boolean} opts.change - 是否添加即切换
    */
   Class.prototype.add = function(opts) {
     var that = this;
@@ -202,8 +203,10 @@ layui.define('component', function(exports) {
       container.body.elem[mode](newBodyItem);
     }
 
-    // 将插入项切换为当前标签
-    that.change(newHeaderItem, true);
+    // 是否将插入项切换为当前标签
+    if (opts.change || true) {
+      that.change(newHeaderItem, true);
+    }
 
     // 回调
     var params = that.data();
