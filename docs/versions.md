@@ -127,17 +127,23 @@ toc: true
 ---
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x', href: '/docs/2/versions/2.9.x.html'}">
-  <a href="/docs/2/versions/2.9.x.html">2.9.x 系列</a>
+  <a href="/docs/2/versions/2.9.x.html">2.9.x</a>
 </h2>
+
+查看 <a href="/docs/2/versions/2.9.x.html">2.9.x</a> 系列版本更新日志
 
 ---
 
 <h2 id="2.8.x" lay-toc="{title: '2.8.x', href: '/docs/2/versions/2.8.x.html'}">
-  <a href="/docs/2/versions/2.8.x.html">2.8.x 系列</a>
+  <a href="/docs/2/versions/2.8.x.html">2.8.x</a>
 </h2>
+
+查看 <a href="/docs/2/versions/2.8.x.html">2.8.x</a> 系列版本更新日志
 
 ---
 
 <h2 id="2.7.x" lay-toc="{title: '2.7.x', href: '/2.7/docs/base/changelog.html'}">
-  <a href="/2.7/docs/base/changelog.html" target="_blank">2.7.x 及更早前版本</a>
+  <a href="/2.7/docs/base/changelog.html" target="_blank">2.7.x</a>
 </h2>
+
+查看 <a href="/2.7/docs/base/changelog.html" target="_blank">2.7.x</a> 系列及更早前版本更新日志
