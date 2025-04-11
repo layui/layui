@@ -1297,7 +1297,6 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 
 /* Tabs 标签页 */
 .layui-tabs{position: relative;}
-.layui-tabs *{box-sizing: border-box;}
 .layui-tabs.layui-hide-v{overflow: hidden;}
 .layui-tabs-header{position: relative; left: 0; height: 40px; padding: 0 !important; white-space: nowrap; font-size: 0; transition: all .16s; -webkit-transition: all .16s;}
 .layui-tabs-header:after,
