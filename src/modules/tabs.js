@@ -174,7 +174,7 @@ layui.define('component', function(exports) {
    * @param {string} [opts.index] - 活动标签索引，默认取当前选中标签的索引
    * @param {('append'|'prepend'|'after'|'before')} [opts.mode='append'] - 标签插入方式
    * @param {boolean} [opts.active] - 是否将新增项设置为活动标签
-   * @param {string} [opts.closable] - 标签是否可关闭。初始值取决于 options.closable
+   * @param {boolean} [opts.closable] - 标签是否可关闭。初始值取决于 options.closable
    * @param {string} [opts.headerItem] - 自定义标签头部元素
    * @param {string} [opts.bodyItem] - 自定义标签内容元素
    * @param {Function} [opts.done] - 标签添加成功后执行的回调函数
