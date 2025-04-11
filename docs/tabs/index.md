@@ -110,11 +110,11 @@ tabs.render({
 | id | 标签的 `lay-id` 属性值 | string | - |
 | index | 活动标签的索引或 `lay-id` 属性值，默认取当前选中标签的索引 | number | - |
 | mode | 标签的插入方式。支持以下可选值：<ul><li>`append` 插入标签到最后</li> <li>`prepend` 插入标签到最前</li> <li>`before` 在活动标签前插入</li> <li>`after` 在活动标签后插入</li></ul> | string | `append` |
+| active | 是否将新增项设置为活动标签 | boolean | `true` |
 | closable | 标签是否可关闭。初始值取决于 `options.closable` | boolean | `false` |
 | headerItem | 自定义标签头部元素，如 `headerItem: '<li></li>'` | string | - |
 | bodyItem | 自定义标签内容元素，如 `bodyItem: '<div></div>'` | string | - |
 | done | 标签添加成功后执行的回调函数 | Function | - |
-| change | 是否将插入项切换为当前标签 | boolean | true |
 
 该方法用于给对应的 tabs 实例新增一个标签
 
