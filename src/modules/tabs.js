@@ -28,8 +28,6 @@ layui.define('component', function(exports) {
       CARD: 'layui-tabs-card'
     },
 
-    isRenderOnEvent: false,
-
     // 渲染
     render: function() {
       var that = this;
