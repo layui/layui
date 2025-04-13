@@ -202,7 +202,7 @@ layui.define(function(exports) {
       }()
     };
 
-    return ['<div class="layui-box layui-laypage layui-laypage-'+ (config.theme ? (
+    return ['<div class="layui-box layui-unselect layui-laypage layui-laypage-'+ (config.theme ? (
       /^#/.test(config.theme) ? 'molv' : config.theme
     ) : 'default') +'" id="layui-laypage-'+ config.index +'">',
       function(){
