@@ -2,7 +2,7 @@
 title: 评分组件 rate
 toc: true
 ---
- 
+
 # 评分组件
 
 > 评分组件 `rate` 一般用于等级展示或评价类操作。
@@ -20,6 +20,7 @@ toc: true
 | API | 描述 |
 | --- | --- |
 | var rate = layui.rate | 获得 `rate` 模块。 |
+| [基础接口](../component/#export) <sup>2.11+</sup> | 该组件由 `component` 构建，因此继承其提供的基础接口。|
 | [rate.render(options)](#render) | rate 组件渲染，核心方法。 |
 
 <h2 id="render" lay-toc="{level: 2}">渲染</h2>
@@ -33,7 +34,7 @@ toc: true
 <div id="ID-test-rate"></div>
 <div class="class-test-rate" lay-options="{value: 3}"></div>
 <div class="class-test-rate" lay-options="{value: 5}"></div>
- 
+
 <!-- import layui -->
 <script>
 layui.use(function(){
