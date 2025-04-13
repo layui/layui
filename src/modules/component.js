@@ -13,8 +13,6 @@ layui.define(['jquery', 'lay'], function(exports) {
   exports('component', function(settings) {
     // 默认设置
     settings = $.extend(true, {
-      isRenderWithoutElem: false, // 渲染是否无需指定目标元素
-      isRenderOnEvent: true, // 渲染是否仅由事件触发。--- 推荐根据组件类型始终显式设置对应值
       isDeepReload: false // 是否默认为深度重载
     }, settings);
 
@@ -107,7 +105,7 @@ layui.define(['jquery', 'lay'], function(exports) {
     };
 
     // 初始化准备（若由事件触发渲染，则必经此步）
-    Class.prototype.init = function(rerender, type){
+    Class.prototype.init = function(rerender, type) {
       var that = this;
       var options = that.config;
       var elem = $(options.elem);
@@ -153,21 +151,11 @@ layui.define(['jquery', 'lay'], function(exports) {
         settings.beforeRender.call(that, options);
       }
 
-      // 执行渲染
-      var render = function() {
+      // 渲染
+      if (typeof settings.render === 'function') {
         component.cache.id[options.id] = null; // 记录所有实例 id，用于批量操作（如 resize）
         elem.attr(MOD_ID, options.id); // 目标元素已渲染过的标记
         that.render(rerender); // 渲染核心
-      };
-
-      // 若绑定元素不存在
-      if (!elem[0]) {
-        return settings.isRenderWithoutElem ? render() : null; // 渲染是否无需指定目标元素
-      };
-
-      // 执行渲染 - 是否初始即渲染组件
-      if((settings.isRenderOnEvent && options.show) || !settings.isRenderOnEvent) {
-        render();
       }
 
       // 事件
@@ -232,6 +220,7 @@ layui.define(['jquery', 'lay'], function(exports) {
     // 移除指定的实例对象
     component.removeInst = function(id) {
       delete instance.that[id];
+      delete component.cache.id[id];
     };
 
     // 组件缓存
