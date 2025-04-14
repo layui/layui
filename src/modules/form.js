@@ -554,7 +554,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 hideDown();
                 initValue && input.val(initValue);
               },
-              {ignore: title}
+              {ignore: title, detectIframe: true, capture: false}
             );
           };
 
@@ -563,7 +563,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             title.parent().removeClass(CLASS+'ed ' + CLASS+'up');
             input.blur();
             isCreatable && dl.children('.' + CREATE_OPTION).remove();
-            removeClickOutsideEvent && removeClickOutsideEvent();
+            if(typeof removeClickOutsideEvent === 'function'){
+              removeClickOutsideEvent();
+              removeClickOutsideEvent = null;
+            }
             if(isAppendTo){
               reElem.detach();
               $(window).off('resize.lay_select_resize');
