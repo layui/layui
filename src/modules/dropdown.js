@@ -567,7 +567,29 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports) {
       }
 
       that.remove();
-    }, {passive: false});
+    }, lay.passiveSupported ? { passive: false} : false);
+
+    // onClickOutside 检测 iframe 
+    _WIN.on('blur', function(e){
+      if(!dropdown.thisId) return;
+      var that = thisModule.getThis(dropdown.thisId)
+      if(!that) return;
+      if(!that.config.elem.data(MOD_INDEX_OPENED)) return;
+
+      setTimeout(function(){
+        if(document.activeElement && document.activeElement.tagName === 'IFRAME'
+          && that.mainElem && that.mainElem[0]
+          && that.mainElem[0].contains && !that.mainElem[0].contains(document.activeElement)
+        ){
+          // 点击 dropdown 外部时的回调
+          if(typeof that.config.onClickOutside === 'function'){
+            var shouldClose = that.config.onClickOutside(e.originalEvent);
+            if(shouldClose === false) return;
+          }
+          that.remove();
+        }
+      }, 0);
+    })
 
     // 基础菜单的静态元素事件
     var ELEM_LI = '.layui-menu:not(.layui-dropdown-menu) li';
