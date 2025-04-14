@@ -348,13 +348,13 @@ layui.define('jquery', function(exports) {
 
     // 转义 html
     escape: function(html){
-      var exp = /[<"'>]|&(?=#[a-zA-Z0-9]+)/g;
+      var exp = /[<"'>]|&(?=#?[a-zA-Z0-9]+)/g;
       if(html === undefined || html === null) return '';
 
       html += '';
       if(!exp.test(html)) return html;
 
-      return html.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
+      return html.replace(/&(?=#?[a-zA-Z0-9]+;?)/g, '&amp;')
       .replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
     },
