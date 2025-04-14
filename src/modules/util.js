@@ -364,9 +364,9 @@ layui.define('jquery', function(exports) {
       if(html === undefined || html === null) html = '';
       html += '';
 
-      return html.replace(/\&amp;/g, '&')
-      .replace(/\&lt;/g, '<').replace(/\&gt;/g, '>')
-      .replace(/\&#39;/g, '\'').replace(/\&quot;/g, '"');
+      return html.replace(/\&quot;/g, '"').replace(/\&#39;/g, '\'')
+      .replace(/\&gt;/g, '>').replace(/\&lt;/g, '<')
+      .replace(/\&amp;/g, '&');
     },
 
     // 打开新窗口
