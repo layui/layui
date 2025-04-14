@@ -349,10 +349,10 @@ layui.define('jquery', function(exports) {
     // 转义 html
     escape: function(html){
       var exp = /[<"'>]|&(?=#?[a-zA-Z0-9]+)/g;
-      if(html === undefined || html === null) return '';
+      if (html === undefined || html === null) return '';
 
       html += '';
-      if(!exp.test(html)) return html;
+      if (!exp.test(html)) return html;
 
       return html.replace(/&(?=#?[a-zA-Z0-9]+;?)/g, '&amp;')
       .replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -361,10 +361,9 @@ layui.define('jquery', function(exports) {
 
     // 还原转义的 html
     unescape: function(html){
-      if(html === undefined || html === null) html = '';
-      html += '';
+      if (html === undefined || html === null) return '';
 
-      return html.replace(/\&quot;/g, '"').replace(/\&#39;/g, '\'')
+      return String(html).replace(/\&quot;/g, '"').replace(/\&#39;/g, '\'')
       .replace(/\&gt;/g, '>').replace(/\&lt;/g, '<')
       .replace(/\&amp;/g, '&');
     },
