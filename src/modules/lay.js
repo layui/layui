@@ -551,11 +551,12 @@
   /**
    * 基于 touch 事件的触摸滑动
    * @param {string | HTMLElement | JQuery} elem - HTML 元素
-   * @param {{onTouchStart?: touchSwipeCallback, onTouchMove?: touchSwipeCallback, onTouchEnd?: touchSwipeCallback}} opts - 配置项
+   * @param {{onTouchStart?: touchSwipeCallback; onTouchMove?: touchSwipeCallback; onTouchEnd?: touchSwipeCallback; preventDefault?: boolean}} opts - 配置项
    */
   lay.touchSwipe = function(elem, opts){
     var options = opts
     var targetElem = lay(elem)[0];
+    var preventDefault = 'preventDefault' in options ? options.preventDefault : true;
 
     if(!targetElem || !lay.touchEventsSupported()) return;
 
@@ -582,7 +583,9 @@
     }
 
     var onMove = function(e){
-      e.preventDefault();
+      if(preventDefault){
+        e.preventDefault();
+      }
       state.pointerEnd.x = e.touches[0].clientX;
       state.pointerEnd.y = e.touches[0].clientY;
       state.distanceX = state.pointerStart.x - state.pointerEnd.x;
