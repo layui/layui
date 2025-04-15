@@ -20,19 +20,20 @@
     <span>{{= item.site || '' }}</span>
   </li>
 {{# }); }}
- 
+
 {{# if(d.list.length === 0){ }}
   无数据
-{{# } }} 
+{{# } }}
 </ul>
     &lt;/textarea>
   </div>
-  
+
   <div class="layui-col-xs6 laytpl-demo">
     <div>数据</div>
     &lt;textarea id="ID-tpl-data"&gt;
 {
-  "title": "Layui 常用模块",
+  "title": "Layui 常用组件",
+  "desc": "<a style=\"color:blue;\">一段带 HTML 的内容</a>",
   "list": [
     {
       "modname": "弹层",
@@ -71,7 +72,7 @@
 </div>
 <div class="layui-clear"></div>
 
-<!-- import layui --> 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var laytpl = layui.laytpl;
@@ -91,9 +92,9 @@ layui.use(function(){
       }()
     };
   };
-  
+
   var data = get();
-  
+
   // 耗时计算
   var startTime = new Date().getTime(), timer = function(startTime, title){
     var endTime = new Date().getTime();
@@ -108,20 +109,20 @@ layui.use(function(){
     timer(startTime);
     $('#ID-tpl-view').html(view);
   });
-  
+
   // 编辑
   $('.laytpl-demo textarea').on('input propertychange', function(){
     var data = get();
     if(!data.data) return;
-    
+
     // 计算模板渲染耗时
     var startTime = new Date().getTime();
-    
+
     // 若模板有变化，则重新解析模板；若模板没变，数据有变化，则从模板缓存中直接渲染（效率大增）
-    if(this.id === 'ID-tpl-src'){ 
+    if(this.id === 'ID-tpl-src'){
       thisTpl.parse(data.template, data.data); // 解析模板
     }
-    
+
     // 执行渲染
     thisTpl.render(data.data, function(view){
       timer(startTime);
