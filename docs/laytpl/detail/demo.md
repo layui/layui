@@ -33,7 +33,7 @@
     &lt;textarea id="ID-tpl-data"&gt;
 {
   "title": "Layui 常用组件",
-  "desc": "<a style=\"color:blue;\">一段带 HTML 内容的描述</a>",
+  "desc": "<a style=\"color:blue;\">一段带 HTML 的内容</a>",
   "list": [
     {
       "title": "弹层",
