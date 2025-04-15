@@ -11,6 +11,45 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.11.0" lay-pid="2.10+" class="ws-anchor">
+  v2.11.0-rc.3
+  <span class="layui-badge-rim">2025-04-15</span>
+</h2>
+
+- #### 新特性
+  - 新增 无缝扩展任意外部模块的支持，及优化大量核心 #2560 @sentsim
+  - 重构 laytpl 模板引擎，增强对更多复杂模板结构的解析能力 #2577 @sentsim
+- #### Core
+  - 新增 `layui.extend()` 无缝扩展任意外部模块的支持，即无需遵循 Layui 模块规范的第三方模块
+  - 优化 `layui.use(), layui.link()` 核心逻辑
+  - 优化 `layui.js` 整体代码风格
+- #### [laytpl](/docs/2/laytpl/)
+  - 新增 `cache` 选项，用于是否开启模板缓存
+  - 新增 `condense` 选项，用于是否压缩模板空白符，如将多个连续的空白符压缩为单个空格
+  - 新增 `tagStyle` 选项，用于设置界定符风格。默认仍采用 `< 2.11` 版本风格
+  - 新增 `laytpl.extendVars()` 方法，用于扩展模板内部变量
+  - 新增 `compile` 实例方法，用于清除缓存后以便渲染时重新对模板进行编译
+  - 新增 在模板中通过 `include()` 方法导入子模板的功能
+  - 新增 新的界定符风格：{{!`{{ 语句 }}` `{{= 转义输出 }}` `{{- 原文输出 }}` `{{# 注释 }}`!}}
+  - 新增 模板错误行捕获，可更精准地找到模板出错区域
+  - 提升 模板解析的整体性能及稳定性
+  - 内置 对多种模块加载方式的支持，以同时适配 Node.js 和浏览器端的使用场景
+- #### rate
+  - 重构 组件代码结构，由 component 模块构建，并继承其全部基础接口 #2626 @sentsim
+- #### component
+  - 剔除 `isRenderOnEvent, isRenderWithoutElem` 实验型选项 #2625 @sentsim
+- #### tabs
+  - 新增 `tabs.add()` 的 `active` 选项，用于是否将新增项设置为活动标签 #2607 @lanrenbulan
+  - 修复 `box-sizing` 对主体区域中其他组件的样式影响 #2622 @sentsim
+- #### 其他
+  - 优化 card 面板头部样式，去除高度限制 #2621 @sentsim
+  - 优化 laypage 快速点击时文本被选中的问题 #2623 @sentsim
+  - 优化 util 的 `escape` 和 `unescape` 在解析某些特殊字符串时的潜在问题 #2628 @sentsim
+
+### 下载： [layui-v2.11.0-rc.3.zip](https://gitee.com/layui/layui/attach_files/2149808/download)
+
+---
+
 <h2 id="v2.10.3" lay-pid="2.10+" class="ws-anchor">
   v2.10.3
   <span class="layui-badge-rim">2025-03-30</span>
