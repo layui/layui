@@ -9,10 +9,23 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+<h2 id="v2.9.26" class="ws-anchor">
+  v2.9.26
+  <span class="layui-badge-rim">2025-04-15</span>
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+</h2>
+
+- 优化 util 的 `escape` 和 `unescape` 在解析某些特殊字符串时的潜在问题 #2628 @sentsim
+- 修复 layer.photos 在空图片容器动态添加图片时，无法获取 data 的问题 #2581 @Sight-wcg
+- 修复 body 初始 `line-height` 无效的问题 #2569 @sentsim
+
+### 下载： [layui-v2.9.26.zip](https://gitee.com/layui/layui/attach_files/2149661/download)
+
+---
+
 <h2 id="v2.9.25" class="ws-anchor">
   v2.9.25
   <span class="layui-badge-rim">2025-03-13</span>
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
 </h2>
 
 - #### layer
