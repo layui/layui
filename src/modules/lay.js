@@ -683,16 +683,16 @@
   }();
 
   /**
-   * 监听指定元素外部的点击
-   * @param {HTMLElement} target - 被监听的元素
+   * 绑定指定元素外部的点击事件
+   * @param {HTMLElement} target - 响应事件的元素
    * @param {(e: Event) => void} handler - 事件触发时执行的函数
    * @param {object} [options] - 选项
-   * @param {string} [options.event="pointerdown"] - 监听的事件类型
-   * @param {HTMLElement | Window} [options.scope=document] - 监听范围
-   * @param {Array<HTMLElement | string>} [options.ignore] - 忽略监听的元素或选择器字符串
-   * @param {boolean} [options.capture=true] - 对内部事件侦听器使用捕获阶段
+   * @param {string} [options.event="pointerdown"] - 事件类型
+   * @param {HTMLElement | Window} [options.scope=document] - 事件范围
+   * @param {Array<HTMLElement | string>} [options.ignore] - 忽略触发事件的元素或选择器字符串
+   * @param {boolean} [options.capture=true] - 对内部事件 listener 使用捕获阶段
    * @param {boolean} [options.detectIframe] - 是否检测 iframe
-   * @returns {() => void} - 返回一个停止事件监听的函数
+   * @returns {() => void} - 返回一个停止事件响应的函数
    */
   lay.onClickOutside = function(target, handler, options){
     options = options || {};
