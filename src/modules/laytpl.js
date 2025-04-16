@@ -201,7 +201,7 @@
     var closeDelimiter = options.close;
     var condense = options.condense;
     var regex = tools.regex;
-    const placeholder = '\u2028'; // Unicode 行分隔符
+    var placeholder = '\u2028'; // Unicode 行分隔符
 
     // console.log('compile');
 
