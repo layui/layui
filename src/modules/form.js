@@ -10,7 +10,6 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   var util = layui.util;
   var hint = layui.hint();
   var device = layui.device();
-  var needCheckboxFallback = lay.ie && parseFloat(lay.ie) === 8;
 
   var MOD_NAME = 'form';
   var ELEM = '.layui-form';
@@ -20,6 +19,11 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   var DISABLED = 'layui-disabled';
   var OUT_OF_RANGE = 'layui-input-number-out-of-range';
   var BAD_INPUT = 'layui-input-number-invalid';
+
+  // ie8 中可以获取到 input 元素的 'indeterminate' 属性描述符，但重新定义 getter/setter 无效，无报错
+  // AppleWebKit/537.36 无法获取 input 元素任意属性的属性描述符(包括lookupGetter)，但可以重新定义 getter/setter
+  var needCheckboxFallback = (lay.ie && parseFloat(lay.ie) === 8)
+    || typeof Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'checked') === 'undefined'
 
   var Form = function(){
     this.config = {
