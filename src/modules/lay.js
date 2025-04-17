@@ -551,11 +551,12 @@
   /**
    * 基于 touch 事件的触摸滑动
    * @param {string | HTMLElement | JQuery} elem - HTML 元素
-   * @param {{onTouchStart?: touchSwipeCallback, onTouchMove?: touchSwipeCallback, onTouchEnd?: touchSwipeCallback}} opts - 配置项
+   * @param {{onTouchStart?: touchSwipeCallback; onTouchMove?: touchSwipeCallback; onTouchEnd?: touchSwipeCallback; preventDefault?: boolean}} opts - 配置项
    */
   lay.touchSwipe = function(elem, opts){
     var options = opts
     var targetElem = lay(elem)[0];
+    var preventDefault = 'preventDefault' in options ? options.preventDefault : true;
 
     if(!targetElem || !lay.touchEventsSupported()) return;
 
@@ -582,7 +583,9 @@
     }
 
     var onMove = function(e){
-      e.preventDefault();
+      if(preventDefault){
+        e.preventDefault();
+      }
       state.pointerEnd.x = e.touches[0].clientX;
       state.pointerEnd.y = e.touches[0].clientY;
       state.distanceX = state.pointerStart.x - state.pointerEnd.x;
@@ -680,15 +683,16 @@
   }();
 
   /**
-   * 监听指定元素外部的点击
-   * @param {HTMLElement} target - 被监听的元素
+   * 绑定指定元素外部的点击事件
+   * @param {HTMLElement} target - 响应事件的元素
    * @param {(e: Event) => void} handler - 事件触发时执行的函数
    * @param {object} [options] - 选项
-   * @param {string} [options.event="pointerdown"] - 监听的事件类型
-   * @param {HTMLElement | Window} [options.scope=document] - 监听范围
-   * @param {Array<HTMLElement | string>} [options.ignore] - 忽略监听的元素或选择器字符串
-   * @param {boolean} [options.capture=true] - 对内部事件侦听器使用捕获阶段
-   * @returns {() => void} - 返回一个停止事件监听的函数
+   * @param {string} [options.event="pointerdown"] - 事件类型
+   * @param {HTMLElement | Window} [options.scope=document] - 事件范围
+   * @param {Array<HTMLElement | string>} [options.ignore] - 忽略触发事件的元素或选择器字符串
+   * @param {boolean} [options.capture=true] - 对内部事件 listener 使用捕获阶段
+   * @param {boolean} [options.detectIframe] - 是否检测 iframe
+   * @returns {() => void} - 返回一个停止事件响应的函数
    */
   lay.onClickOutside = function(target, handler, options){
     options = options || {};
@@ -696,6 +700,7 @@
     var scopeTarget = options.scope || document;
     var ignore = options.ignore || [];
     var useCapture = 'capture' in options ? options.capture : true;
+    var detectIframe = options.detectIframe;
 
     var listener = function(event){
       var el = target;
@@ -764,13 +769,31 @@
       }
     }
 
-    return bindEventListener(
-      scopeTarget,
-      eventType,
-      listener,
-      lay.passiveSupported ? { passive: true, capture: useCapture } : useCapture
-    );
-  }
+    var cleanup = [
+      bindEventListener(
+        scopeTarget, 
+        eventType, 
+        listener, 
+        lay.passiveSupported ? { passive: true, capture: useCapture } : useCapture
+      ),
+      detectIframe && bindEventListener(window, 'blur', function(event){
+        setTimeout(function(){
+          if(document.activeElement && document.activeElement.tagName === 'IFRAME' 
+            && target.contains && !target.contains(document.activeElement)
+          ){
+            handler(event);
+          }
+        }, 0);
+      })
+    ];
+
+    return function(){
+      for(var i=0; i < cleanup.length; i++){
+        cleanup[i] && cleanup[i]();
+      }
+      cleanup = null;
+    }
+  };
 
   var hasOwnProperty = Object.prototype.hasOwnProperty;
   lay.hasOwn = function(obj, prop){
