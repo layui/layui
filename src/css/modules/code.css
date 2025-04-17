@@ -49,7 +49,6 @@ html #layuicss-skincodecss{display: none; position: absolute; width: 1989px;}
 .layui-code-preview > .layui-code-view{margin: 0;}
 .layui-code-preview > .layui-tab{position: relative; z-index: 1; margin-bottom: 0;}
 .layui-code-preview .layui-code-item{display: none; border-top-width: 0;}
-.layui-code-preview .layui-code-view > .layui-code-lines > .layui-code-line{}
 .layui-code-item-preview{position: relative; padding: 16px;}
 .layui-code-item-preview > iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;}
 
