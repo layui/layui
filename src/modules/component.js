@@ -152,14 +152,14 @@ layui.define(['jquery', 'lay'], function(exports) {
       }
 
       // 渲染
-      if (typeof settings.render === 'function') {
+      if (typeof that.render === 'function') {
         component.cache.id[options.id] = null; // 记录所有实例 id，用于批量操作（如 resize）
         elem.attr(MOD_ID, options.id); // 目标元素已渲染过的标记
         that.render(rerender); // 渲染核心
       }
 
       // 事件
-      typeof settings.events === 'function' && that.events();
+      typeof that.events === 'function' && that.events();
     };
 
     // 组件必传项
