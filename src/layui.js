@@ -156,7 +156,7 @@
     }
   };
 
-  // 或许配置及临时缓存信息
+  // 获取配置及临时缓存信息
   Class.prototype.cache = Object.assign(config, cache);
 
   /**
@@ -521,12 +521,16 @@
     var hash = hash || location.hash;
     var data = {
       path: [],
+      pathname: [],
       search: {},
       hash: (hash.match(/[^#](#.*$)/) || [])[1] || '',
       href: ''
     };
 
-    if (!/^#/.test(hash)) return data; // 禁止非路由规范
+    // 禁止非 hash 路由规范
+    if (!/^#/.test(hash)) {
+      return data;
+    }
 
     hash = hash.replace(/^#/, '');
     data.href = hash;
@@ -540,6 +544,7 @@
       }() : data.path.push(item);
     });
 
+    data.pathname = data.path; // path → pathname, 与 layui.url 一致
     return data;
   };
 
