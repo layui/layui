@@ -12,8 +12,8 @@ toc: true
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
 <h2 id="v2.11.0" lay-pid="2.10+" class="ws-anchor">
-  v2.11.0-rc.3
-  <span class="layui-badge-rim">2025-04-15</span>
+  v2.11.0-rc.4
+  <span class="layui-badge-rim">2025-04-18</span>
 </h2>
 
 - #### 新特性
@@ -23,7 +23,7 @@ toc: true
   - 新增 `layui.extend()` 无缝扩展任意外部模块的支持，即无需遵循 Layui 模块规范的第三方模块
   - 优化 `layui.use(), layui.link()` 核心逻辑
   - 优化 `layui.js` 整体代码风格
-- #### [laytpl](/docs/2/laytpl/)
+- #### [laytpl](./laytpl/)
   - 新增 `cache` 选项，用于是否开启模板缓存
   - 新增 `condense` 选项，用于是否压缩模板空白符，如将多个连续的空白符压缩为单个空格
   - 新增 `tagStyle` 选项，用于设置界定符风格。默认仍采用 `< 2.11` 版本风格
@@ -42,11 +42,14 @@ toc: true
   - 新增 `tabs.add()` 的 `active` 选项，用于是否将新增项设置为活动标签 #2607 @lanrenbulan
   - 修复 `box-sizing` 对主体区域中其他组件的样式影响 #2622 @sentsim
 - #### 其他
+  - 新增 dropdown 可点击面板外部 iframe 区域关闭的功能 #2629 @Sight-wcg
+  - 新增 select 可点击面板外部 iframe 区域关闭的功能 #2631 @Sight-wcg
+  - 新增 layui.hash() 返回的成员 `pathname`, 与 layui.url() 一致 #2649 @sentsim
   - 优化 card 面板头部样式，去除高度限制 #2621 @sentsim
   - 优化 laypage 快速点击时文本被选中的问题 #2623 @sentsim
   - 优化 util 的 `escape` 和 `unescape` 在解析某些特殊字符串时的潜在问题 #2628 @sentsim
 
-### 下载： [layui-v2.11.0-rc.3.zip](https://gitee.com/layui/layui/attach_files/2149808/download)
+### 下载： [layui-v2.11.0-rc.4.zip](https://gitee.com/layui/layui/attach_files/2155682/download)
 
 ---
 
