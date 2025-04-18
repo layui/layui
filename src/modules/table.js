@@ -415,7 +415,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
       return obj;
     }()).html(laytpl(TPL_MAIN, {
       open: '{{', // 标签符前缀
-      close: '}}' // 标签符后缀
+      close: '}}', // 标签符后缀
+      tagStyle: 'legacy'
     }).render({
       data: options,
       index: that.index //索引
