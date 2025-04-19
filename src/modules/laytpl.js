@@ -461,12 +461,12 @@
   };
 
   // 输出接口
-  typeof module === 'object' && typeof exports === 'object'
-    ? module.exports = laytpl // CommonJS
-  : ( // 浏览器
-    typeof layui === 'object' ? layui.define(function(exports) { // Layui
-      exports(MOD_NAME, laytpl);
-    }) : (
+  typeof layui === 'object' ? layui.define(function(exports) { // Layui
+    exports(MOD_NAME, laytpl);
+  }) : (
+    typeof module === 'object' && typeof exports === 'object'
+      ? module.exports = laytpl // CommonJS
+    : (
       typeof define === 'function' && define.amd ? define(function() { // RequireJS
         return laytpl;
       }) : global.laytpl = laytpl // 单独引入
