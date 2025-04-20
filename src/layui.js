@@ -445,6 +445,8 @@
     id = 'layuicss-'+ id;
 
     var link = document.getElementById(id);
+
+    // 初始创建节点
     if (!link) {
       link = document.createElement('link');
       link.href = href + (config.debug ? '?v='+new Date().getTime() : '');
@@ -453,10 +455,13 @@
       head.appendChild(link);
     }
 
+    // 若加载已完成，则直接执行回调函数
     if (link.__lay_readyState__ === 'complete') {
       hasCallback && callback(link);
       return that;
     }
+
+    // 初始加载
     onNodeLoad(link, function() {
       link.__lay_readyState__ = 'complete';
       hasCallback && callback(link);
