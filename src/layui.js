@@ -421,7 +421,7 @@
   Class.prototype.link = function(href, callback, id) {
     var that = this;
     var head = document.getElementsByTagName('head')[0];
-    var link = document.createElement('link');
+    var hasCallback = typeof callback === 'function';
 
     // 若第二个参数为 string 类型，则该参数为 id
     if (typeof callback === 'string') {
@@ -444,22 +444,22 @@
     id = id || href.replace(/^(#|(http(s?)):\/\/|\/\/)|\.|\/|\?.+/g, '');
     id = 'layuicss-'+ id;
 
-    link.href = href + (config.debug ? '?v='+new Date().getTime() : '');
-    link.rel = 'stylesheet';
-    link.id = id;
-
-    // 插入节点
-    if (!document.getElementById(id)) {
+    var link = document.getElementById(id);
+    if (!link) {
+      link = document.createElement('link');
+      link.href = href + (config.debug ? '?v='+new Date().getTime() : '');
+      link.rel = 'stylesheet';
+      link.id = id;
       head.appendChild(link);
     }
 
-    // 是否执行回调
-    if (typeof callback !== 'function') {
+    if(link.__lay_readyState__ === 'complete'){
+      hasCallback && callback(link);
       return that;
     }
-
     onNodeLoad(link, function() {
-      callback(link);
+      link.__lay_readyState__ = 'complete';
+      hasCallback && callback(link);
     }, function() {
       error(href + ' load error', 'error');
       head.removeChild(link); // 移除节点
