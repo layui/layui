@@ -440,7 +440,7 @@
       });
     }
 
-    // 若为传入 id ，则取路径 `//` 后面的字符拼接为 id，不含.与参数
+    // 若未传入 id ，则取路径 `//` 后面的字符拼接为 id，不含.与参数
     id = id || href.replace(/^(#|(http(s?)):\/\/|\/\/)|\.|\/|\?.+/g, '');
     id = 'layuicss-'+ id;
 
@@ -453,7 +453,7 @@
       head.appendChild(link);
     }
 
-    if(link.__lay_readyState__ === 'complete'){
+    if (link.__lay_readyState__ === 'complete') {
       hasCallback && callback(link);
       return that;
     }
