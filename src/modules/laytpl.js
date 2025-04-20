@@ -12,6 +12,7 @@
   var thisModule = function() {
     var that = this;
     var options = that.config;
+
     return {
       config: options,
 
@@ -88,6 +89,12 @@
 
   // 组件工具类方法
   var tools = {
+    /**
+     * 创建动态正则表达式
+     * @param {string} str - 表达式字符
+     * @param {string} mod - 修饰符
+     * @returns {RegExp} - 正则表达式
+     */
     regex: function(str, mod) {
       return new RegExp(str, mod || 'g');
     },
@@ -102,14 +109,17 @@
     error: function(e, opts, error) {
       opts = opts || {};
       opts = Object.assign({
-        debug: '',
-        message: 'Laytpl '+ (opts.type || '') +'Error: ' + e
+        errorContext: ''
       }, opts);
 
       // 向控制台输出错误信息
-      typeof console === 'object' && console.error(opts.message, '\n', opts.debug, '\n', opts);
+      var message = 'Laytpl '+ (opts.type || '') +'Error: ' + e;
+      var errorContext = opts.errorContext;
+
+      delete opts.errorContext;
+      typeof console === 'object' && console.error(message, '\n', errorContext, '\n', opts);
       typeof error === 'function' && error(opts); // 执行错误回调
-      return opts.message; // 向视图返回错误提示
+      return message; // 向视图返回错误提示
     }
   };
 
@@ -173,7 +183,7 @@
       } catch(e) {
         template = template || options.template;
         return tools.error(e, {
-          debug: that.checkErrorArea(template, data),
+          errorContext: that.extractErrorContext(template, data),
           template: template,
           type: 'Render'
         }, options.error);
@@ -196,7 +206,6 @@
   Class.prototype.compile = function(template) {
     var that = this;
     var options = that.config;
-    var source = template;
     var openDelimiter = options.open;
     var closeDelimiter = options.close;
     var condense = options.condense;
@@ -339,9 +348,17 @@
       return tpl;
     };
 
-    // 创建模板编译器
-    var createCompiler = that.createCompiler = function(template) {
-      var codeBuilder = [
+    /**
+     * 创建模板编译器
+     * 请注意: 开发者在使用模板语法时，需确保模板中的 JS 语句不来自于页面用户输入。
+     * 即模板中的 JS 语句必须在页面开发者自身的可控范围内，否则请避免使用该模板解析。
+     */
+    var createCompiler = that.createCompiler = function(template, builder) {
+      builder = builder || createBuilder(template);
+      return new Function('laytpl', 'return '+ builder)(that.vars);
+    };
+    var createBuilder = that.createBuilder = function(template, builder) {
+       builder = builder || [
         'function(d){',
           '"use strict";',
           'var __laytpl__="",'+
@@ -359,13 +376,8 @@
           // 'return __laytpl__.join("");',
         '};'
       ].join('\n');
-      // console.log(codeBuilder);
-
-      /**
-       * 请注意: 开发者在使用模板语法时，需确保模板中的 JS 语句不来自于页面用户输入。
-       * 即模板中的 JS 语句必须在页面开发者自身的可控范围内，否则请避免使用该模板解析。
-       */
-      return new Function('laytpl', 'return '+ codeBuilder)(that.vars);
+      // console.log(builder);
+      return builder;
     };
 
     try {
@@ -374,8 +386,8 @@
       delete that.compilerCache;
       return function() {
         return tools.error(e, {
-          debug: that.checkErrorArea(source),
-          template: source,
+          errorContext: that.extractErrorContext(template),
+          template: template,
           type: 'Compile'
         }, options.error);
       };
@@ -383,61 +395,82 @@
   };
 
   /**
-   * 校验出错区域
-   * @param {string} source - 原始模板
+   * 获取模板出错行上下文
+   * @param {string} template - 原始模板
    * @param {Object} data - 数据
-   * @returns {string} 出错区域的模板碎片
+   * @returns {string}
    */
-  Class.prototype.checkErrorArea = function(source, data) {
+  Class.prototype.extractErrorContext = function(template, data) {
     var that = this;
-    var srcs = source.split(/\n/g);
-    var validLine = -1; // 有效行
 
-    // 逐行查找
-    var i = 0;
-    var str = '';
-    var len = srcs.length;
-    for (; i < len; i++) {
-      str += srcs[i];
-      try {
-        data
-          ? that.createCompiler(str)(data)
-        : new Function('"use strict";_laytpl__="'+ that.parse(str) +'";');
-        validLine = i;
-      } catch(e) {
-        continue;
-      }
-    }
+    // 给模板每行开头添加行号标记
+    var lineNum = 1; // 行号
+    var templateArr = template.split(/\r?\n/g);
 
-    // 呈现模板出错大致区域
-    var errorArea = function(errLine) {
-      var arr = [];
-      var addLine = 3; // 错误行上下延伸的行数
-      var i = 0;
-      var len = srcs.length;
+    template = template.replace(/(?=^)/gm, function() {
+      return '/*LINE:'+ (lineNum++) +'*/';
+    });
 
-      if (errLine < 0) errLine = 0;
-      if (errLine > len - 1) errLine = len - 1;
+    var builder = that.createBuilder(template);
+    var builderArr = builder.split(/\r?\n/);
+    var sourceURL = 'laytpl.builder.map';
 
-      i = errLine - addLine;
-      if (i < 0) i = 0;
+    // 模板出错行上下文
+    var errorContext = function(errLineNum) {
+      errLineNum = parseInt(errLineNum) - 1;
 
-      for (; i < len; i++) {
-        arr.push((i == errLine ? '? ' : '  ') +(i + 1)+ '| '+ srcs[i]);
-        if (i >= errLine + addLine) break;
+      var arr = [''];
+      var contextLines = 3; // 错误行上下延伸的行数
+      var start = Math.max(0, errLineNum - contextLines);
+      var end = Math.min(templateArr.length, errLineNum + contextLines);
+
+      for (; start <= end; start++) {
+        arr.push(
+          (start == errLineNum ? '? ' : '  ') +
+          ((start + 1) + '| ') +
+          templateArr[start]
+        );
       }
 
-      return '\n'+ arr.join('\n');
+      return arr.join('\n') + '\n';
     };
 
-    return errorArea(validLine + 1); // 有效行的下一行即为出错行
+    try {
+      builder += ('\n//# sourceURL='+ sourceURL); // 添加映射
+      var compiler = that.createCompiler(template, builder);
+      if (data) compiler(data);
+    } catch(e) {
+      // 提取堆栈报错行号
+      var stackLineNumRegxp = tools.regex(sourceURL.replace(/\./g, '\\.')+':(\\d+)', 'i');
+      var stackLineNum = (e.stack.match(stackLineNumRegxp) || [])[1] || 0;
+
+      // 提取模板实际行号
+      var extractErrLineNum = function(stackLineNum, isRecursion) {
+        var lineNumRegxp = isRecursion ? /\/\*LINE:(\d+)\*\/[^*]*$/ : /\/\*LINE:(\d+)\*\//;
+        var errLineNum = String(builderArr[stackLineNum - 1]).match(lineNumRegxp) || [];
+        errLineNum = errLineNum[1];
+
+        // 若当前行未找到行号映射，则递归查找上一行
+        if (!errLineNum && stackLineNum > 0) {
+          return extractErrLineNum(stackLineNum - 1, true);
+        }
+
+        return errLineNum;
+      };
+
+      // 此处减去 anonymous 开头占用的 2 行
+      var errLineNum = extractErrLineNum(stackLineNum - 2);
+
+      // 若未找到映射行号，则直接返回 SyntaxError 对象（通过 DevTools 映射源查看模板行号标记）
+      return errLineNum ? errorContext(errLineNum) : e;
+    }
   };
 
   /**
    * 创建实例
    * @param {string} template - 模板
    * @param {Object} options - 选项
-   * @returns
+   * @returns {Object}
    */
   var laytpl = function(template, options) {
     var inst = new Class(template, options);
@@ -461,12 +494,12 @@
   };
 
   // 输出接口
-  typeof module === 'object' && typeof exports === 'object'
-    ? module.exports = laytpl // CommonJS
-  : ( // 浏览器
-    typeof layui === 'object' ? layui.define(function(exports) { // Layui
-      exports(MOD_NAME, laytpl);
-    }) : (
+  typeof layui === 'object' ? layui.define(function(exports) { // Layui
+    exports(MOD_NAME, laytpl);
+  }) : (
+    typeof module === 'object' && typeof exports === 'object'
+      ? module.exports = laytpl // CommonJS
+    : (
       typeof define === 'function' && define.amd ? define(function() { // RequireJS
         return laytpl;
       }) : global.laytpl = laytpl // 单独引入
