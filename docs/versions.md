@@ -12,8 +12,8 @@ toc: true
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
 <h2 id="v2.11.0" lay-pid="2.10+" class="ws-anchor">
-  v2.11.0-rc.4
-  <span class="layui-badge-rim">2025-04-18</span>
+  v2.11.0-rc.5
+  <span class="layui-badge-rim">2025-04-21</span>
 </h2>
 
 - #### 新特性
@@ -31,7 +31,7 @@ toc: true
   - 新增 `compile` 实例方法，用于清除缓存后以便渲染时重新对模板进行编译
   - 新增 在模板中通过 `include()` 方法导入子模板的功能
   - 新增 新的界定符风格：{{!`{{ 语句 }}` `{{= 转义输出 }}` `{{- 原文输出 }}` `{{# 注释 }}`!}}
-  - 新增 模板错误行捕获，可更精准地找到模板出错区域
+  - 新增 template 报错时的上下文捕获，基于映射，可更精确定位到模板具体错误行 #2650 @sentsim
   - 提升 模板解析的整体性能及稳定性
   - 内置 对多种模块加载方式的支持，以同时适配 Node.js 和浏览器端的使用场景
 - #### rate
@@ -49,7 +49,7 @@ toc: true
   - 优化 laypage 快速点击时文本被选中的问题 #2623 @sentsim
   - 优化 util 的 `escape` 和 `unescape` 在解析某些特殊字符串时的潜在问题 #2628 @sentsim
 
-### 下载： [layui-v2.11.0-rc.4.zip](https://gitee.com/layui/layui/attach_files/2155682/download)
+### 下载： [layui-v2.11.0-rc.5.zip](https://gitee.com/layui/layui/attach_files/2157325/download)
 
 ---
 
