@@ -12,7 +12,7 @@ toc: true
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
 <h2 id="v2.11.0" lay-pid="2.10+" class="ws-anchor">
-  v2.11.0-rc.5
+  v2.11.0
   <span class="layui-badge-rim">2025-04-21</span>
 </h2>
 
@@ -49,7 +49,7 @@ toc: true
   - 优化 laypage 快速点击时文本被选中的问题 #2623 @sentsim
   - 优化 util 的 `escape` 和 `unescape` 在解析某些特殊字符串时的潜在问题 #2628 @sentsim
 
-### 下载： [layui-v2.11.0-rc.5.zip](https://gitee.com/layui/layui/attach_files/2157325/download)
+### 下载： [layui-v2.11.0.zip](https://gitee.com/layui/layui/attach_files/2158121/download)
 
 ---
 
