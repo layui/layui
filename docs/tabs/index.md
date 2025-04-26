@@ -220,6 +220,7 @@ console.log(data);
 
 ```js
 var headerItem = tabs.getHeaderItem('test', 3); // 获取索引为 3 的标签头部项元素
+var headerItem = tabs.getHeaderItem('test', 'abc'); // 获取 lay-id="abc" 的标签头部项元素
 ```
 
 <h3 id="getBodyItem" class="ws-anchor ws-bold">获取标签内容项</h3>
@@ -227,7 +228,7 @@ var headerItem = tabs.getHeaderItem('test', 3); // 获取索引为 3 的标签�
 `tabs.getBodyItem(id, index)`
 
 - 参数 `id` : 组件的实例 ID
-- 参数 `index` : 标签索引或标签的 `lay-id` 属性值
+- 参数 `index` : 标签索引
 
 该方法用于获取标签内容项元素。
 
