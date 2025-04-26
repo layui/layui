@@ -200,8 +200,8 @@
       <div class="layui-inline">
         <label class="layui-form-label">行内表单</label>
         <div class="layui-input-block">
-          <select name="quiz" lay-verify="required" lay-vertype="tips"  lay-filter="quiz111">
-            <option value="">请"选择"问题</option>
+          <select name="quiz" lay-verify="required" lay-vertype="tips"  lay-filter="quiz">
+            <option value="">请"选择"问题&nbsp;&nbsp;&nbsp;😀</option>
             <option value="0">你工"作"的 第一个城市</option>
             <option value="1" disabled>你的工号</option>
             <option value="2">
@@ -213,7 +213,7 @@
       <div class="layui-inline">
         <label class="layui-form-label">select分组</label>
         <div class="layui-input-block">
-          <select name="quiz" lay-filter="quiz">
+          <select name="quiz111" lay-filter="quiz111">
             <option value="">请选择问题</option>
             <optgroup label="城市记忆">
               <option value="0">你工作的第一个城市</option>
@@ -245,7 +245,7 @@
       <div class="layui-inline">
         <label class="layui-form-label">搜索选择框</label>
         <div class="layui-input-block">
-          <select name="interest-search" lay-filter="interest-search" lay-search="">
+          <select name="interest-search" lay-filter="interest-search" lay-search="" lay-creatable>
             <option value="">请搜索</option>
             <option value="写作">写"作"</option>
             <option value="阅读" disabled>阅读</option>
@@ -451,12 +451,12 @@
     });
 
     //事件
-    form.on('select(quiz111)', function(data){
-      console.log('select: ', this, data);
+    form.on('select(quiz)', function(data){
+      console.log('select.quiz: ', this, data);
     });
 
-    form.on('select(quiz)', function(data){
-      console.log('select.quiz：', this, data);
+    form.on('select(quiz111)', function(data){
+      console.log('select.quiz111：', this, data);
     });
 
     form.on('select(interest)', function(data){
@@ -531,7 +531,7 @@
       <div class="layui-inline" lay-ignore>
         <input type="checkbox" name="like[write]" title="写作">
         <input type="radio" name="sex" value="1" title="男">
-        <select name="quiz">
+        <select name="quiz111">
           <option value="">请选择</option>
           <option value="AAAAA">AAAAA</option>
           <option value="BBBBB">BBBBB</option>
