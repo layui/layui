@@ -924,7 +924,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             }
             var content = function() {
               var arr = [];
-              layui.each(othis.find('*'), function(index, item) {
+              layui.each(othis.find('optgroup,option'), function(index, item) {
                 var tagName = item.tagName.toLowerCase();
                 var dd = $('<dd lay-value=""></dd>');
                 if (index === 0 && !item.value && tagName !== 'optgroup') {
