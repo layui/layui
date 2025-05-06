@@ -1504,13 +1504,13 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-carousel>*[carousel-item]>.layui-this,
 .layui-carousel>*[carousel-item]>.layui-carousel-prev,
 .layui-carousel>*[carousel-item]>.layui-carousel-next{display: block}
-.layui-carousel>*[carousel-item]>.layui-this{left: 0;}
-.layui-carousel>*[carousel-item]>.layui-carousel-prev{left: -100%;}
-.layui-carousel>*[carousel-item]>.layui-carousel-next{left: 100%;}
+.layui-carousel>*[carousel-item]>.layui-this{-webkit-transform: translateX(0);transform: translateX(0);}
+.layui-carousel>*[carousel-item]>.layui-carousel-prev{-webkit-transform: translateX(-100%);transform: translateX(-100%);}
+.layui-carousel>*[carousel-item]>.layui-carousel-next{-webkit-transform: translateX(100%);transform: translateX(100%);}
 .layui-carousel>*[carousel-item]>.layui-carousel-prev.layui-carousel-right,
-.layui-carousel>*[carousel-item]>.layui-carousel-next.layui-carousel-left{left: 0;}
-.layui-carousel>*[carousel-item]>.layui-this.layui-carousel-left{left: -100%;}
-.layui-carousel>*[carousel-item]>.layui-this.layui-carousel-right{left: 100%;}
+.layui-carousel>*[carousel-item]>.layui-carousel-next.layui-carousel-left{-webkit-transform: translateX(0);transform: translateX(0);}
+.layui-carousel>*[carousel-item]>.layui-this.layui-carousel-left{-webkit-transform: translateX(-100%);transform: translateX(-100%);}
+.layui-carousel>*[carousel-item]>.layui-this.layui-carousel-right{-webkit-transform: translateX(100%);transform: translateX(100%);}
 
 /* 上下切换 */.layui-carousel[lay-anim="updown"] .layui-carousel-arrow{left: 50%!important; top: 20px; margin: 0 0 0 -18px;}
 .layui-carousel[lay-anim="updown"] .layui-carousel-arrow[lay-type="add"]{top: auto!important; bottom: 20px;}
@@ -1519,13 +1519,13 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-carousel[lay-anim="updown"] .layui-carousel-ind li{display: block; margin: 6px 0;}
 
 .layui-carousel[lay-anim="updown"]>*[carousel-item]>*{left: 0!important;}
-.layui-carousel[lay-anim="updown"]>*[carousel-item]>.layui-this{top: 0;}
-.layui-carousel[lay-anim="updown"]>*[carousel-item]>.layui-carousel-prev{top: -100%;}
-.layui-carousel[lay-anim="updown"]>*[carousel-item]>.layui-carousel-next{top: 100%;}
+.layui-carousel[lay-anim="updown"]>*[carousel-item]>.layui-this{-webkit-transform: translateY(0);transform: translateY(0);}
+.layui-carousel[lay-anim="updown"]>*[carousel-item]>.layui-carousel-prev{-webkit-transform: translateY(-100%);transform: translateY(-100%);}
+.layui-carousel[lay-anim="updown"]>*[carousel-item]>.layui-carousel-next{-webkit-transform: translateY(100%);transform: translateY(100%);}
 .layui-carousel[lay-anim="updown"]>*[carousel-item]>.layui-carousel-prev.layui-carousel-right,
-.layui-carousel[lay-anim="updown"]>*[carousel-item]>.layui-carousel-next.layui-carousel-left{top: 0;}
-.layui-carousel[lay-anim="updown"]>*[carousel-item]>.layui-this.layui-carousel-left{top: -100%;}
-.layui-carousel[lay-anim="updown"]>*[carousel-item]>.layui-this.layui-carousel-right{top: 100%;}
+.layui-carousel[lay-anim="updown"]>*[carousel-item]>.layui-carousel-next.layui-carousel-left{-webkit-transform: translateY(0);transform: translateY(0);}
+.layui-carousel[lay-anim="updown"]>*[carousel-item]>.layui-this.layui-carousel-left{-webkit-transform: translateY(-100%);transform: translateY(-100%);}
+.layui-carousel[lay-anim="updown"]>*[carousel-item]>.layui-this.layui-carousel-right{-webkit-transform: translateY(100%);transform: translateY(100%);}
 
 /* 渐显切换 */.layui-carousel[lay-anim="fade"]>*[carousel-item]>*{left: 0!important;}
 .layui-carousel[lay-anim="fade"]>*[carousel-item]>.layui-carousel-prev,
