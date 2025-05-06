@@ -583,7 +583,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
               // 未查询到相关值
               if(none){
-                initValue = $(select[0].options[selectedIndex]).html(); // 重新获得初始选中值
+                initValue = $(select[0].options[selectedIndex]).text(); // 重新获得初始选中值
 
                 // 如果是第一项，且文本值等于 placeholder，则清空初始值
                 if(selectedIndex === 0 && initValue === input.attr('placeholder')){
@@ -754,10 +754,10 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 }else{
                   var createOptionElem = dl.children('.' + CREATE_OPTION);
                   if(createOptionElem[0]){
-                    createOptionElem.attr('lay-value', value).html(util.escape(value));
+                    createOptionElem.attr('lay-value', value).text(value);
                   }else{
                     // 临时显示在顶部
-                    var ddElem = $('<dd>').addClass(CREATE_OPTION).attr('lay-value', value).html(util.escape(value));
+                    var ddElem = $('<dd>').addClass(CREATE_OPTION).attr('lay-value', value).text(value);
                     var firstOptionELem = dl.children().eq(0);
                     var hasTips = firstOptionELem.hasClass('layui-select-tips');
                     firstOptionELem[hasTips ? 'after' : 'before'](ddElem);
@@ -862,7 +862,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
         };
 
         // 初始渲染 select 组件选项
-        selects.each(function(index, select){
+        selects.each(function(index, select) {
           var othis = $(this);
           var hasRender = othis.next('.'+CLASS);
           var disabled = this.disabled;
@@ -870,67 +870,114 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var selected = $(select.options[select.selectedIndex]); // 获取当前选中项
           var optionsFirst = select.options[0];
 
-          if (othis.closest('[lay-ignore]').length) return othis.show();
+          // 为忽略渲染的 select 元素保持原生显示状态
+          if (othis.closest('[lay-ignore]').length) {
+            return othis.show();
+          }
 
-          var isSearch = typeof othis.attr('lay-search') === 'string'
-          var isCreatable = typeof othis.attr('lay-creatable') === 'string' && isSearch
-          var isAppendTo = typeof othis.attr('lay-append-to') === 'string'
+          var isSearch = typeof othis.attr('lay-search') === 'string';
+          var isCreatable = typeof othis.attr('lay-creatable') === 'string' && isSearch;
+          var isAppendTo = typeof othis.attr('lay-append-to') === 'string';
           var placeholder = optionsFirst
-            ? (optionsFirst.value ? TIPS : (optionsFirst.innerHTML || TIPS))
+            ? (optionsFirst.value ? TIPS : (optionsFirst.innerText || TIPS))
             : TIPS;
 
-          // 替代元素
-          var reElem = $(['<div class="'+ (isSearch ? '' : 'layui-unselect ') + CLASS
-          ,(disabled ? ' layui-select-disabled' : '') + '"></div>'].join(''));
+          // 用于替代 select 的外层容器
+          var selectWrapper = (function() {
+            var elem = $('<div class="'+ CLASS +'"></div>');
+            if (!isSearch) {
+              elem.addClass('layui-unselect');
+            }
+            if (disabled) {
+              elem.addClass('layui-select-disabled');
+            }
+            return elem;
+          })();
 
-          var triggerElem = $([
-            '<div class="'+ TITLE +'">'
-              ,('<input type="text" placeholder="'+ util.escape($.trim(placeholder)) +'" '
-                +('value="'+ util.escape($.trim(value ? selected.html() : '')) +'"') // 默认值
-                +((!disabled && isSearch) ? '' : ' readonly') // 是否开启搜索
-                +' class="layui-input'
-                +(isSearch ? '' : ' layui-unselect')
-              + (disabled ? (' ' + DISABLED) : '') +'">') // 禁用状态
-              ,'<i class="layui-edge"></i>'
-            ,'</div>'].join(''));
+          var inputElem = (function() {
+            var elem = $('<input type="text" class="layui-input">');
 
-          var contentElem = $(['<dl class="layui-anim layui-anim-upbit'+ (othis.find('optgroup')[0] ? ' layui-select-group' : '') +'">'
-            ,function(options){
+            // 设置占位符和默认值
+            elem.prop('placeholder', $.trim(placeholder));
+            elem.val($.trim(value ? selected.text() : ''));
+
+            // 设置未开启搜索或禁用时的输入框只读状态
+            if (!isSearch || disabled) {
+              elem.prop('readonly', true);
+            }
+
+            // 添加禁用状态时的 className
+            if (disabled) {
+              elem.addClass(DISABLED);
+            }
+
+            return elem;
+          })();
+
+          var titleElem = (function() {
+            var elem = $('<div class="'+ TITLE +'"></div>');
+            elem.append(inputElem);
+            elem.append('<i class="layui-edge"></i>');
+            return elem;
+          })();
+
+          var contentElem = (function() {
+            var elem = $('<dl class="layui-anim layui-anim-upbit"></dl>');
+            if (othis.find('optgroup')[0]) {
+              elem.addClass('layui-select-group');
+            }
+            var content = function() {
               var arr = [];
-              layui.each(options, function(index, item){
+              layui.each(othis.find('optgroup,option'), function(index, item) {
                 var tagName = item.tagName.toLowerCase();
-
-                if(index === 0 && !item.value && tagName !== 'optgroup'){
-                  arr.push('<dd lay-value="" class="layui-select-tips">'+ $.trim(item.innerHTML || TIPS) +'</dd>');
-                } else if(tagName === 'optgroup'){
-                  arr.push('<dt>'+ item.label +'</dt>');
+                var dd = $('<dd lay-value=""></dd>');
+                if (index === 0 && !item.value && tagName !== 'optgroup') {
+                  dd.addClass('layui-select-tips');
+                  dd.text($.trim(item.innerText || TIPS));
+                  arr.push(dd.prop('outerHTML'));
+                } else if(tagName === 'optgroup') {
+                  var dt = $('<dt></dt>');
+                  dt.text(item.label);
+                  arr.push(dt.prop('outerHTML'));
                 } else {
-                  arr.push('<dd lay-value="'+ util.escape(item.value) +'" class="'+ (value === item.value ?  THIS : '') + (item.disabled ? (' '+DISABLED) : '') +'">'+ $.trim(item.innerHTML) +'</dd>');
+                  dd.attr('lay-value', item.value);
+                  if (value === item.value) {
+                    dd.addClass(THIS);
+                  }
+                  if (item.disabled) {
+                    dd.addClass(DISABLED);
+                  }
+                  dd.text($.trim(item.innerText));
+                  arr.push(dd.prop('outerHTML'));
                 }
               });
-              arr.length === 0 && arr.push('<dd lay-value="" class="'+ DISABLED +'">没有选项</dd>');
+              if (arr.length === 0) {
+                arr.push('<dd lay-value="" class="'+ DISABLED +'">None</dd>');
+              }
               return arr.join('');
-            }(othis.find('*')) +'</dl>'
-          ].join(''));
+            }();
+            elem.html(content);
+            return elem;
+          })();
 
-          // 如果已经渲染，则Rerender
-          if(hasRender[0]){
-            if(isAppendTo){
+          // 如果已经渲染，则 Rerender
+          if (hasRender[0]) {
+            if (isAppendTo) {
               var panelWrapElem = hasRender.data(PANEL_ELEM_DATA);
               panelWrapElem && panelWrapElem.remove();
             }
             hasRender.remove();
           }
-          if(isAppendTo){
-            reElem.append(triggerElem);
-            othis.after(reElem);
+          if (isAppendTo) {
+            selectWrapper.append(titleElem);
+            othis.after(selectWrapper);
             var contentWrapElem = $('<div class="'+ CLASS + ' ' + PANEL_WRAP +'"></div>').append(contentElem);
-            reElem.data(PANEL_ELEM_DATA, contentWrapElem); // 将面板元素对象记录在触发元素 data 中，重新渲染时需要清理旧面板元素
-            events.call(this, contentWrapElem, triggerElem, disabled, isSearch, isCreatable, isAppendTo);
-          }else{
-            reElem.append(triggerElem).append(contentElem);
-            othis.after(reElem);
-            events.call(this, reElem, triggerElem, disabled, isSearch, isCreatable, isAppendTo);
+            selectWrapper.data(PANEL_ELEM_DATA, contentWrapElem); // 将面板元素对象记录在触发元素 data 中，重新渲染时需要清理旧面板元素
+            events.call(this, contentWrapElem, titleElem, disabled, isSearch, isCreatable, isAppendTo);
+          } else {
+            selectWrapper.append(titleElem).append(contentElem);
+            othis.after(selectWrapper);
+            events.call(this, selectWrapper, titleElem, disabled, isSearch, isCreatable, isAppendTo);
           }
         });
       }
@@ -1476,5 +1523,3 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
   exports(MOD_NAME, form);
 });
-
-
