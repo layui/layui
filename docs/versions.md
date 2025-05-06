@@ -11,6 +11,19 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.11.1" lay-pid="2.10+" class="ws-anchor">
+  v2.11.1
+  <span class="layui-badge-rim">2025-05-06</span>
+</h2>
+
+- 修复 select 组件的字符转义问题 #2661 @sentsim
+- 修复 checkbox/radio 在 WebKit/537.36 的异常 #2637 @Sight-wcg
+- 优化 carousel 切换时的动画性能 #2654 @SessionHu
+
+### 下载： [layui-v2.11.1.zip](https://gitee.com/layui/layui/attach_files/2177069/download)
+
+---
+
 <h2 id="v2.11.0" lay-pid="2.10+" class="ws-anchor">
   v2.11.0
   <span class="layui-badge-rim">2025-04-21</span>
