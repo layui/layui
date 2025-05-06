@@ -6,7 +6,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
 
@@ -140,7 +140,7 @@
       <div class="layui-col-md12">
         <button class="layui-btn" id="testSubmit">立即提交</button>
       </div>
-    </div>  
+    </div>
   </form>
 
   <hr>
@@ -163,7 +163,7 @@
       <div class="layui-input-inline">
         <input type="text" name="vercode" lay-verify="required" autocomplete="off" class="layui-input">
       </div>
-      <div class="layui-form-mid" style="padding: 0!important;"> 
+      <div class="layui-form-mid" style="padding: 0!important;">
         <button type="button" class="layui-btn layui-btn-primary" lay-on="get-vercode">获取验证码</button>
       </div>
     </div>
@@ -200,8 +200,8 @@
       <div class="layui-inline">
         <label class="layui-form-label">行内表单</label>
         <div class="layui-input-block">
-          <select name="quiz" lay-verify="required" lay-vertype="tips"  lay-filter="quiz111">
-            <option value="">请"选择"问题</option>
+          <select name="quiz" lay-verify="required" lay-vertype="tips"  lay-filter="quiz">
+            <option value="">请"选择"问题&nbsp;&nbsp;&nbsp;😀</option>
             <option value="0">你工"作"的 第一个城市</option>
             <option value="1" disabled>你的工号</option>
             <option value="2">
@@ -213,7 +213,7 @@
       <div class="layui-inline">
         <label class="layui-form-label">select分组</label>
         <div class="layui-input-block">
-          <select name="quiz" lay-filter="quiz">
+          <select name="quiz111" lay-filter="quiz111">
             <option value="">请选择问题</option>
             <optgroup label="城市记忆">
               <option value="0">你工作的第一个城市</option>
@@ -226,7 +226,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="layui-form-item">
       <label class="layui-form-label">选择框</label>
       <div class="layui-input-block">
@@ -240,12 +240,12 @@
         </select>
       </div>
     </div>
-    
+
     <div class="layui-form-item">
       <div class="layui-inline">
         <label class="layui-form-label">搜索选择框</label>
         <div class="layui-input-block">
-          <select name="interest-search" lay-filter="interest-search" lay-search="">
+          <select name="interest-search" lay-filter="interest-search" lay-search="" lay-creatable>
             <option value="">请搜索</option>
             <option value="写作">写"作"</option>
             <option value="阅读" disabled>阅读</option>
@@ -309,7 +309,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="layui-form-item" pane>
       <label class="layui-form-label">复选框</label>
       <div class="layui-input-block">
@@ -398,14 +398,14 @@
         }
       }
     });
-    
+
     /*
     form.on('submit(top)', function(data){
       console.log(data);
       return false;
     });
     */
-    
+
     //方法提交
   $('#testSubmit').on('click', function(){
     form.submit('top', function(data){
@@ -416,18 +416,18 @@
         setTimeout(function(){
           alert(JSON.stringify(data.field));
         })
-        
+
       });
     });
     return false;
   });
-    
-    
+
+
     //日期
     laydate.render({
       elem: '#date'
     });
-    
+
     //初始赋值
     var thisValue = form.val('first', {
       'title': '测试测试测试'
@@ -449,32 +449,32 @@
       var elem = data.elem;
       elem.value = '通过自定义事件设置的值';
     });
-    
+
     //事件
-    form.on('select(quiz111)', function(data){
-      console.log('select: ', this, data);
-    });
-    
     form.on('select(quiz)', function(data){
-      console.log('select.quiz：', this, data);
+      console.log('select.quiz: ', this, data);
     });
-    
+
+    form.on('select(quiz111)', function(data){
+      console.log('select.quiz111：', this, data);
+    });
+
     form.on('select(interest)', function(data){
       console.log('select.interest: ', this, data);
     });
-    
+
     form.on('checkbox', function(data){
       console.log(this.checked, data.elem.checked);
     });
-    
+
     form.on('switch', function(data){
       console.log(data);
     });
-    
+
     form.on('radio', function(data){
       console.log(data);
     });
-    
+
     // 提交事件
     form.on('submit(*)', function(data){
       console.log(data)
@@ -497,12 +497,51 @@
         }
       }
     });
-    
+
   });
 
   </script>
 
-
+  <h3>设置 lay-ignore 忽略渲染</h3>
+  <hr>
+  <div class="layui-form">
+    <div class="layui-form-item">
+      <div class="layui-inline">未设置 ignore 时：</div>
+      <div class="layui-inline">
+        <input type="checkbox" name="like[write]" title="checkbox">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-inline">忽略指令直接设置：</div>
+      <div class="layui-inline">
+        <input type="checkbox" name="like[write]" lay-ignore title="写作">
+        <input type="radio" name="sex" value="1" lay-ignore title="男">
+        <select name="quiz" lay-ignore>
+          <option value="">请选择</option>
+          <option value="AAAAA" selected>AAAAA</option>
+          <option value="BBBBB">BBBBB</option>
+          <option value="CCCCC">CCCCC</option>
+          <option value="DDDDD" disabled>DDDDD</option>
+          <option value="EEEEE">EEEEE</option>
+        </select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-inline">忽略指令父元素设置：</div>
+      <div class="layui-inline" lay-ignore>
+        <input type="checkbox" name="like[write]" title="写作">
+        <input type="radio" name="sex" value="1" title="男">
+        <select name="quiz111">
+          <option value="">请选择</option>
+          <option value="AAAAA">AAAAA</option>
+          <option value="BBBBB">BBBBB</option>
+          <option value="CCCCC" selected>CCCCC</option>
+          <option value="DDDDD" disabled>DDDDD</option>
+          <option value="EEEEE">EEEEE</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
   <h3>原始表单调试：</h3>
   <hr>
