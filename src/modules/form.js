@@ -811,19 +811,19 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
             if(othis.hasClass(DISABLED)) return false;
 
-            if(othis.hasClass('layui-select-tips')){
-              input.val('');
-            } else {
-              input.val(othis.attr('lay-label'));
-              othis.addClass(THIS);
-            }
-
             // 将新增的 option 元素添加到末尾
             if(isCreatable && othis.hasClass(CREATE_OPTION)){
               dl.append(othis.removeClass(CREATE_OPTION));
               var optionElem = $('<option>').attr('value', value).text(othis.text());
               select.append(optionElem);
               othis.attr('lay-label', optionElem.prop('text'));
+            }
+
+            if(othis.hasClass('layui-select-tips')){
+              input.val('');
+            } else {
+              input.val(othis.attr('lay-label'));
+              othis.addClass(THIS);
             }
 
             othis.siblings().removeClass(THIS);
