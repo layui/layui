@@ -815,6 +815,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             if(isCreatable && othis.hasClass(CREATE_OPTION)){
               var optionElem = $('<option>').text(othis.text());
               var displayValue = optionElem.prop('text');
+              value = displayValue;
               optionElem.attr('value', displayValue);
               select.append(optionElem);
               othis.removeClass(CREATE_OPTION).attr('lay-value', displayValue).text(displayValue);
