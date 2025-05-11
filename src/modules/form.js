@@ -700,7 +700,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             }
             layui.each(dds, function(){
               var othis = $(this);
-              var text = othis.attr('lay-label') || othis.text();
+              var text = othis.text();
               var isCreateOption = isCreatable && othis.hasClass(CREATE_OPTION);
 
               // 需要区分大小写
@@ -813,16 +813,18 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
             // 将新增的 option 元素添加到末尾
             if(isCreatable && othis.hasClass(CREATE_OPTION)){
-              dl.append(othis.removeClass(CREATE_OPTION));
-              var optionElem = $('<option>').attr('value', value).text(othis.text());
+              var optionElem = $('<option>').text(othis.text());
+              var displayValue = optionElem.prop('text');
+              optionElem.attr('value', displayValue);
               select.append(optionElem);
-              othis.attr('lay-label', optionElem.prop('text'));
+              othis.removeClass(CREATE_OPTION).attr('lay-value', displayValue).text(displayValue);
+              dl.append(othis);
             }
 
             if(othis.hasClass('layui-select-tips')){
               input.val('');
             } else {
-              input.val(othis.attr('lay-label'));
+              input.val(othis.text());
               othis.addClass(THIS);
             }
 
@@ -934,8 +936,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 var dd = $('<dd lay-value=""></dd>');
                 if (index === 0 && !item.value && tagName !== 'optgroup') {
                   dd.addClass('layui-select-tips');
-                  dd.text(item.innerText || TIPS);
-                  dd.attr('lay-label', item.text);
+                  dd.text(item.text || TIPS);
                   arr.push(dd.prop('outerHTML'));
                 } else if(tagName === 'optgroup') {
                   var dt = $('<dt></dt>');
@@ -949,8 +950,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                   if (item.disabled) {
                     dd.addClass(DISABLED);
                   }
-                  dd.text(item.innerText);
-                  dd.attr('lay-label', item.text)
+                  dd.text(item.text);
                   arr.push(dd.prop('outerHTML'));
                 }
               });
