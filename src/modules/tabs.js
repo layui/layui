@@ -54,7 +54,7 @@ layui.define('component', function(exports) {
 
       // 若 header 选项类型为数组
       if (layui.type(options.header) === 'array') {
-        if (options.header.length === 0) return;
+        // if (options.header.length === 0) return;
 
         // 给任意元素绑定 tabs 切换功能
         if (typeof options.header[0] === 'string') {
