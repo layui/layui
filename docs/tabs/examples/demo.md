@@ -89,13 +89,12 @@ layui.use(function() {
       title: 'New Tab '+ n, // 此处加 n 仅为演示区分，实际应用不需要
       content: 'New Tab Content '+ n,
       id: 'new-'+ n,
-      aaa: 'attr-'+ n, // 自定义属性，其中 aaa 可任意命名
-      done: function(params) {
-        console.log(params); // 查看返回的参数
+      done: function(data) {
+        console.log(data); // 查看返回的参数
 
         // 给新标签头添加上下文菜单
         dropdown.render($.extend({}, dropdownInst.config, {
-          elem: params.thisHeaderItem // 当前标签头元素
+          elem: data.headerItem // 新标签头元素 --- headerItem 为 2.11.2 新增
         }));
       }
     }, opts);

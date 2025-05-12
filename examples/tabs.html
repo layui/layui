@@ -167,27 +167,40 @@
   <script src="../src/layui.js"></script>
   <script>
   layui.use(function() {
+    var $ = layui.$;
     var tabs = layui.tabs
     var util = layui.util;
     var layer = layui.layer;
     var dropdown = layui.dropdown;
 
+    // 新增随机标签
+    var addTabs = function(opts) {
+      var n = Math.random()*1000 | 0; // 演示标记
+      opts = $.extend({
+        title: 'New Tab '+ n, // 此处加 n 仅为演示区分，实际应用不需要
+        content: 'New Tab Content '+ n,
+        id: 'new-'+ n,
+        // active: false, // 是否设为活动标签
+        done: function(data) {
+          console.log(data); // 查看返回的参数
+
+          // 为新标签头添加任意属性 --- 2.11.2+
+          data.headerItem.attr('lay-tips', 'tip-'+ n);
+
+          // 给新标签头添加上下文菜单
+          dropdown.render($.extend({}, dropdownInst.config, {
+            elem: data.headerItem // 新标签头元素
+          }));
+        }
+      }, opts);
+      // 添加标签到最后
+      tabs.add('demoTabs1', opts);
+    }
+
     // 自定义事件
     util.on({
       add: function(){
-        var n = Math.random()*1000 | 0; // 演示标记
-
-        //添加标签
-        tabs.add('demoTabs1', {
-          title: 'New Tab '+ n, // 此处加 n 仅为演示区分，实际应用不需要
-          content: 'New Tab Content '+ n,
-          id: 'new-'+ n,
-          aaa: 'attr-'+ n, // 自定义属性，其中 aaa 可任意命名
-          // mode: 'curr',
-          done: function(params) {
-            console.log(params);
-          }
-        });
+        addTabs();
       }
     });
 
@@ -226,30 +239,47 @@
     });
 
     // 为标签头添加上下文菜单
-    dropdown.render({
+    var dropdownInst = dropdown.render({
       elem: '#demoTabs1 .layui-tabs-header>li',
       trigger: 'contextmenu',
       data: [{
-        title: '关闭',
-        type: 'this'
-      }, {
-        title: '关闭其他标签页',
-        type: 'other'
-      }, {
-        title: '关闭右侧标签页',
-        type: 'right'
+        title: '在右侧新增标签页',
+        action: 'add',
+        mode: 'after'
       }, {
         type: '-'
       }, {
+        title: '关闭',
+        action: 'close',
+        mode: 'this',
+      }, {
+        title: '关闭其他标签页',
+        action: 'close',
+        mode: 'other'
+      }, {
+        title: '关闭右侧标签页',
+        action: 'close',
+        mode: 'right'
+      }, {
         title: '关闭所有标签页',
-        type: 'all'
+        action: 'close',
+        mode: 'all'
       }],
       click: function(data, othis, event) {
-        var index = this.elem.index();
-        if (data.type === 'this') {
-          tabs.close('demoTabs1', index); // 关闭当前标签
-        } else {
-          tabs.closeMult('demoTabs1', data.type, index); // 批量关闭标签
+        var index = this.elem.index(); // 获取活动标签索引
+        // 新增标签操作
+        if (data.action === 'add') {
+          // 在当前活动标签右侧新增标签页
+          addTabs({
+            mode: data.mode,
+            index: index
+          });
+        } else if(data.action === 'close') { // 关闭标签操作
+          if (data.mode === 'this') {
+            tabs.close('demoTabs1', index); // 关闭当前标签
+          } else {
+            tabs.closeMult('demoTabs1', data.mode, index); // 批量关闭标签
+          }
         }
       }
     });
@@ -258,7 +288,7 @@
     tabs.render({
       elem: '#demoTabs2',
       header: [
-        { title: 'Tab1' },
+        { title: 'Tab1', closable: false },
         { title: 'Tab2' },
         { title: 'Tab3' }
       ],
@@ -267,9 +297,9 @@
         { content: 'Tab content 2' },
         { content: 'Tab content 3' }
       ],
-      // index: 1, //初始选中项
+      // index: 1, // 初始选中项
       // className: 'layui-tabs-card',
-      // closable: true
+      closable: true
     });
 
 
