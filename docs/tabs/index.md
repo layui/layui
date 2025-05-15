@@ -122,6 +122,12 @@ tabs.render({
 tabs.add('test', {
   title: 'New Tab 1',
   content: 'New Tab Content 1',
+  done: function(data) {
+    console.log(data); // 标签相关数据
+
+    // 为新标签头添加任意属性
+    data.headerItem.attr('lay-tips', '111');
+  }
 });
 ```
 
@@ -202,10 +208,10 @@ console.log(data);
 {
   options, // 标签配置信息
   container, // 标签容器的相关元素
-  thisHeaderItem, // 当前标签头部项
-  thisBodyItem, // 当前标签内容项
-  index, // 当前标签索引
-  length, // 当前标签数
+  thisHeaderItem, // 当前活动标签头部项
+  thisBodyItem, // 当前活动标签内容项
+  index, // 当前活动标签索引
+  length, // 标签数量
 }
 ```
 
@@ -228,12 +234,13 @@ var headerItem = tabs.getHeaderItem('test', 'abc'); // 获取 lay-id="abc" 的�
 `tabs.getBodyItem(id, index)`
 
 - 参数 `id` : 组件的实例 ID
-- 参数 `index` : 标签索引
+- 参数 `index` : 标签索引或标签的 `lay-id` 属性值 <sup>2.11.2+</sup>
 
 该方法用于获取标签内容项元素。
 
 ```js
 var bodyItem = tabs.getBodyItem('test', 3); // 获取索引为 3 的标签内容项元素
+var bodyItem = tabs.getBodyItem('test', 'abc'); // 获取 lay-id="abc" 的标签内容项元素
 ```
 
 <h3 id="refresh" class="ws-anchor ws-bold">刷新标签视图</h3>
