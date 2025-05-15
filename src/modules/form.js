@@ -583,7 +583,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
               // 未查询到相关值
               if(none){
-                initValue = $(select[0].options[selectedIndex]).text(); // 重新获得初始选中值
+                initValue = $(select[0].options[selectedIndex]).prop('text'); // 重新获得初始选中值
 
                 // 如果是第一项，且文本值等于 placeholder，则清空初始值
                 if(selectedIndex === 0 && initValue === input.attr('placeholder')){
@@ -789,7 +789,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             input.on('input propertychange', layui.debounce(search, 50)).on('blur', function(e){
               var selectedIndex = select[0].selectedIndex;
 
-              initValue = $(select[0].options[selectedIndex]).text(); // 重新获得初始选中值
+              initValue = $(select[0].options[selectedIndex]).prop('text'); // 重新获得初始选中值
 
               // 如果是第一项，且文本值等于 placeholder，则清空初始值
               if(selectedIndex === 0 && initValue === input.attr('placeholder')){
@@ -811,18 +811,22 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
             if(othis.hasClass(DISABLED)) return false;
 
+            // 将新增的 option 元素添加到末尾
+            if(isCreatable && othis.hasClass(CREATE_OPTION)){
+              var optionElem = $('<option>').text(othis.text());
+              var displayValue = optionElem.prop('text');
+              value = displayValue;
+              optionElem.attr('value', displayValue);
+              select.append(optionElem);
+              othis.removeClass(CREATE_OPTION).attr('lay-value', displayValue).text(displayValue);
+              dl.append(othis);
+            }
+
             if(othis.hasClass('layui-select-tips')){
               input.val('');
             } else {
               input.val(othis.text());
               othis.addClass(THIS);
-            }
-
-            // 将新增的 option 元素添加到末尾
-            if(isCreatable && othis.hasClass(CREATE_OPTION)){
-              dl.append(othis.removeClass(CREATE_OPTION));
-              var optionElem = $('<option>').attr('value', value).text(othis.text());
-              select.append(optionElem);
             }
 
             othis.siblings().removeClass(THIS);
@@ -879,7 +883,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var isCreatable = typeof othis.attr('lay-creatable') === 'string' && isSearch;
           var isAppendTo = typeof othis.attr('lay-append-to') === 'string';
           var placeholder = optionsFirst
-            ? (optionsFirst.value ? TIPS : (optionsFirst.innerText || TIPS))
+            ? (optionsFirst.value ? TIPS : (optionsFirst.text || TIPS))
             : TIPS;
 
           // 用于替代 select 的外层容器
@@ -898,8 +902,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             var elem = $('<input type="text" class="layui-input">');
 
             // 设置占位符和默认值
-            elem.prop('placeholder', $.trim(placeholder));
-            elem.val($.trim(value ? selected.text() : ''));
+            elem.prop('placeholder', placeholder);
+            elem.val(value ? selected.prop('text') : '');
 
             // 设置未开启搜索或禁用时的输入框只读状态
             if (!isSearch || disabled) {
@@ -933,7 +937,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 var dd = $('<dd lay-value=""></dd>');
                 if (index === 0 && !item.value && tagName !== 'optgroup') {
                   dd.addClass('layui-select-tips');
-                  dd.text($.trim(item.innerText || TIPS));
+                  dd.text(item.text || TIPS);
                   arr.push(dd.prop('outerHTML'));
                 } else if(tagName === 'optgroup') {
                   var dt = $('<dt></dt>');
@@ -947,7 +951,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                   if (item.disabled) {
                     dd.addClass(DISABLED);
                   }
-                  dd.text($.trim(item.innerText));
+                  dd.text(item.text);
                   arr.push(dd.prop('outerHTML'));
                 }
               });
