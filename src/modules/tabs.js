@@ -228,13 +228,12 @@ layui.define('component', function(exports) {
    * @param {boolean} force - 是否强制删除
    */
   Class.prototype.close = function(thisHeaderItem, force) {
-    if(!thisHeaderItem || !thisHeaderItem[0]) return;
+    if (!thisHeaderItem || !thisHeaderItem[0]) return;
 
     var that = this;
     var options = that.config;
+    var layid = thisHeaderItem.attr('lay-id');
     var index = thisHeaderItem.index();
-
-    if (!thisHeaderItem[0]) return;
 
     // 标签是否不可关闭
     if (thisHeaderItem.attr('lay-closable') === 'false') {
@@ -251,7 +250,7 @@ layui.define('component', function(exports) {
         component.CONST.MOD_NAME,
         'beforeClose('+ options.id +')',
         $.extend(data, {
-          index: thisHeaderItem.index()
+          index: index
         })
       );
 
@@ -271,8 +270,8 @@ layui.define('component', function(exports) {
     }
 
     // 移除元素
+    that.findBodyItem(layid || index).remove();
     thisHeaderItem.remove();
-    that.findBodyItem(index).remove();
 
     that.roll('auto', index);
 
@@ -365,7 +364,8 @@ layui.define('component', function(exports) {
 
     var that = this;
     var options = that.config;
-    var index = thisHeaderItem.attr('lay-id') || thisHeaderItem.index();
+    var layid = thisHeaderItem.attr('lay-id');
+    var index = thisHeaderItem.index();
     var thatA = thisHeaderItem.find('a');
     // 是否存在跳转链接
     var isLink = typeof thatA.attr('href') === 'string' && thatA.attr('target') === '_blank';
@@ -392,7 +392,7 @@ layui.define('component', function(exports) {
             headerItem: data.thisHeaderItem
           },
           to: {
-            index: thisHeaderItem.index(),
+            index: index,
             headerItem: thisHeaderItem
           }
         })
@@ -409,7 +409,7 @@ layui.define('component', function(exports) {
     .removeClass(component.CONST.CLASS_THIS);
 
     // 执行标签内容切换
-    that.findBodyItem(index).addClass(component.CONST.CLASS_SHOW)
+    that.findBodyItem(layid || index).addClass(component.CONST.CLASS_SHOW)
     .siblings().removeClass(component.CONST.CLASS_SHOW);
 
     that.roll('auto', index);
