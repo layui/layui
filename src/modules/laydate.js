@@ -176,7 +176,7 @@
     ,showBottom: true //是否显示底部栏
     ,isPreview: true //是否显示值预览
     ,btns: ['clear', 'now', 'confirm'] //右下角显示的按钮，会按照数组顺序排列
-    ,lang: (isLayui && layui.cache.locale) || 'cn' //语言，只支持cn/en，即中文和英文
+    ,lang: 'cn' //语言，只支持cn/en，即中文和英文
     ,theme: 'default' //主题
     ,position: null //控件定位方式定位, 默认absolute，支持：fixed/absolute/static
     ,calendar: false //是否开启公历重要节日，仅支持中文版
@@ -279,6 +279,7 @@
     };
 
     if(isLayui){
+      options.lang = layui.cache.locale;
       var message = layui.cache.i18nMessages[layui.cache.locale];
       if(message){
         text[layui.cache.locale] = message.lay.laydate;
