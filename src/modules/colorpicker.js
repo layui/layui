@@ -284,9 +284,9 @@ layui.define(['jquery', 'lay'], function(exports) {
         ,'<div class="layui-inline">'
           ,'<input type="text" class="layui-input">'
         ,'</div>'
-        ,'<div class="layui-btn-container">'
-          ,layui.$t('<button class="layui-btn layui-btn-primary layui-btn-sm" colorpicker-events="clear">清空</button>')
-          ,layui.$t('<button class="layui-btn layui-btn-sm" colorpicker-events="confirm">确定</button>')
+        ,'<div class="layui-btn-group">'
+          ,'<button style="border-radius: 0" class="layui-btn layui-btn-primary layui-btn-sm" colorpicker-events="clear">' + layui.$t('lay.colorpicker.clear') + '</button>'
+          ,'<button style="border-radius: 0; border-left: 0" class="layui-btn layui-btn-sm" colorpicker-events="confirm">' + layui.$t('lay.colorpicker.confirm')  + '</button>'
         ,'</div'
       ,'</div>'
     ,'</div>'].join(''))

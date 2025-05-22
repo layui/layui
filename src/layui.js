@@ -13,6 +13,10 @@
 
   var zhCn = {
     locale: 'zh-cn',
+    colorpicker: {
+      clear: '清除',
+      confirm: '确定',
+    },
     /** 未使用的字段为保留字段，将来可能会使用 */
     laydate: {
       month: {
