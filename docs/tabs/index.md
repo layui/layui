@@ -156,19 +156,23 @@ tabs.close('test', 'abc'); // 关闭 lay-id="abc" 的标签
 
 | mode | 描述 |
 | --- | --- |
-| other | 关闭除当前标签外的所有标签 |
-| right | 关闭当前标签及右侧标签 |
+| other | 关闭除当前标签外的其他标签 |
+| right | 关闭当前标签的右侧所有标签 |
 | all | 关闭所有标签 |
 
 - 参数 `index` : 活动标签的索引或 `lay-id` 属性值，默认取当前选中标签的索引。一般用于标签右键事件。
 
-该方法用于批量关闭标签。
+该方法用于批量关闭标签，若标签项已设置不允许关闭（`lay-closable="false"`），则操作将被忽略。
 
 ```js
-tabs.closeMult(id, 'other'); // 关闭除当前标签外的所有标签
-tabs.closeMult(id, 'other', 3); // 关闭除索引为 3 的标签外的所有标签
-tabs.closeMult(id, 'right'); // 关闭当前标签及右侧标签
+tabs.closeMult(id, 'other'); // 关闭除当前活动标签外的其他标签
+tabs.closeMult(id, 'other', 3); // 关闭除索引为 3 的标签外的其他标签
+tabs.closeMult(id, 'other', 'ccc'); // 关闭除 lay-id="ccc" 的标签外的其他标签
+
+tabs.closeMult(id, 'right'); // 关闭当前活动标签的右侧所有标签
 tabs.closeMult(id, 'right', 3); // 关闭索引为 3 的标签的右侧所有标签
+tabs.closeMult(id, 'right', 'ccc'); // 关闭 lay-id="ccc" 的标签的右侧所有标签
+
 tabs.closeMult(id, 'all'); // 关闭所有标签
 ```
 

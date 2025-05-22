@@ -90,6 +90,26 @@
       </div>
     </div>
 
+    <h2>打乱标签顺序：</h2>
+    <div class="layui-tabs" lay-options="{closable: true}">
+      <ul class="layui-tabs-header">
+        <li lay-id="fff">Tab6</li>
+        <li lay-id="eee">Tab5</li>
+        <li lay-id="ccc">Tab3</li>
+        <li lay-id="bbb">Tab2</li>
+        <li lay-id="aaa">Tab1</li>
+        <li lay-id="ddd">Tab4</li>
+      </ul>
+      <div class="layui-tabs-body">
+        <div class="layui-tabs-item" lay-id="aaa">Tab Content-1</div>
+        <div class="layui-tabs-item" lay-id="bbb">Tab Content-2</div>
+        <div class="layui-tabs-item" lay-id="ccc">Tab Content-3</div>
+        <div class="layui-tabs-item" lay-id="ddd">Tab Content-4</div>
+        <div class="layui-tabs-item" lay-id="eee">Tab Content-5</div>
+        <div class="layui-tabs-item" lay-id="fff">Tab Content-6</div>
+      </div>
+    </div>
+
     <h2>标签 HASH 定位</h2>
     <div class="layui-tabs layui-hide-v" id="demoTabs-hash">
       <ul class="layui-tabs-header">
@@ -267,6 +287,8 @@
       }],
       click: function(data, othis, event) {
         var index = this.elem.index(); // 获取活动标签索引
+        var layid = this.elem.attr('lay-id');
+
         // 新增标签操作
         if (data.action === 'add') {
           // 在当前活动标签右侧新增标签页
