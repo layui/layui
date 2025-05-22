@@ -181,7 +181,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports) {
       if(options.data.length > 0 ){
         eachItemView(elemUl, options.data)
       } else {
-        elemUl.html('<li class="layui-menu-item-none">暂无数据</li>');
+        elemUl.html(layui.$t('<li class="layui-menu-item-none">暂无数据</li>'));
       }
       return elemUl;
     };

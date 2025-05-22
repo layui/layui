@@ -201,7 +201,7 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
     var tools = {
       copy: {
         className: 'file-b',
-        title: ['复制代码'],
+        title: [layui.$t('复制代码')],
         event: function(obj){
           var code = util.unescape(finalCode(options.code));
           var hasOnCopy = typeof options.onCopy === 'function';
@@ -215,14 +215,14 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
                 if(ret === false) return;
               }
 
-              layer.msg('已复制', {icon: 1});
+              layer.msg(layui.$t('已复制'), {icon: 1});
             },
             error: function() {
               if(hasOnCopy){
                 var ret = options.onCopy(code, false);
                 if(ret === false) return;
               }
-              layer.msg('复制失败', {icon: 2});
+              layer.msg(layui.$t('复制失败'), {icon: 2});
             }
           });
         }
@@ -277,7 +277,7 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
       $.extend(tools, {
         'full': {
           className: 'screen-full',
-          title: ['最大化显示', '还原显示'],
+          title: [layui.$t('最大化显示'), layui.$t('还原显示')],
           event: function(obj){
             var el = obj.elem;
             var elemView = el.closest('.'+ CONST.ELEM_PREVIEW);
@@ -302,7 +302,7 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
         },
         'window': {
           className: 'release',
-          title: ['在新窗口预览'],
+          title: [layui.$t('在新窗口预览')],
           event: function(obj){
             util.openWin({
               content: finalCode(options.code)
@@ -562,7 +562,7 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
     // 若开启复制，且未开启预览，则单独生成复制图标
     if(options.copy && !options.preview){
       var copyElem = $(['<span class="layui-code-copy">',
-        '<i class="layui-icon layui-icon-file-b" title="复制"></i>',
+        layui.$t('<i class="layui-icon layui-icon-file-b" title="复制"></i>'),
       '</span>'].join(''));
 
       // 点击复制

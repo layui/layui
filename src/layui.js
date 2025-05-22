@@ -11,11 +11,61 @@
   var document = window.document;
   var location = window.location;
 
+  var zhCn = {
+    locale: 'zh-cn',
+    /** 未使用的字段为保留字段，将来可能会使用 */
+    laydate: {
+      month: {
+        long: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+        short: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
+      },
+      week:{
+        long: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+        short: ['日', '一', '二', '三', '四', '五', '六']
+      },
+      time: ['时', '分', '秒'],
+      selectTime: '选择时间',
+      startTime: '开始时间',
+      endTime: '结束时间',
+      selectDate: '选择日期',
+      tools: {
+        confirm: '确定',
+        clear: '清空',
+        now: '现在',
+        reset: '重置'
+      },
+      timeout: {
+        date: '结束日期不能早于开始日期<br>请重新选择',
+        time: '结束时间不能早于开始时间<br>请重新选择'
+      },
+      invalidDate: '不在有效日期或时间范围内',
+      formatError: ['日期格式不合法<br>必须遵循下述格式：<br>', '<br>已为你重置'],
+      preview: '当前选中的结果',
+      panelHeaderFormat: {
+        year: function(y){return y + ' 年'},
+        month: function(m){return m + ' 月'},
+        monthBeforeYear: false
+      },
+      /** 面板中某些字符串拼接使用 */
+      view: {
+        year: '年',
+        month: '月',
+        week: '周',
+        day: '天'
+      }
+    }
+  }
   // 基础配置
   var config = {
     timeout: 10, // 符合规范的模块请求最长等待秒数
     debug: false, // 是否开启调试模式
-    version: false // 是否在模块请求时加入版本号参数（以更新模块缓存）
+    version: false, // 是否在模块请求时加入版本号参数（以更新模块缓存）
+    locale: 'zh-cn', // 设置全局配置的语言
+    i18nMessages: { // 语言包，格式为：{locale: {namespace:{component:{...}}}}
+      'zh-cn': {
+        lay: zhCn
+      }
+    }
   };
 
   // 模块加载缓存信息
@@ -55,7 +105,13 @@
   // 异常提示
   var error = function(msg, type) {
     type = type || 'log';
-    window.console && console[type] && console[type]('layui error hint: ' + msg);
+    msg = 'layui error hint: ' + msg
+
+    if (window.console && console[type]) {
+      console[type](msg);
+    } else if (window.console && console.log) {
+      console.log(msg);
+    }
   };
 
   // 内置模块
@@ -1028,6 +1084,107 @@
       }
     }
   };
+
+  /**
+   * 根据给定的键从国际化消息中获取翻译后的内容
+   * @overload
+   * @param {string} key 要翻译的键
+   * @param {Record<string, any>} opts 国际化消息对象，替换 {key} 形式的占位符
+   * @returns {string} 翻译后的文本
+   * @example
+   * ```
+   * message: {
+   *   hello: '{msg} world'
+   * }
+   * layui.$t('message.hello', {msg: 'Hello'})
+   * ```
+   * 
+   * @overload
+   * @param {string} key 要翻译的键
+   * @param {any[]} opts 国际化消息数组，替换 {0}, {1}... 形式的占位符
+   * @returns {string} 翻译后的文本
+   * @example
+   * ```
+   * message: {
+   *   hello: '{0} world'
+   * }
+   * layui.$t('message.hello', ['Hello'])
+   * ```
+   * 
+   * @overload
+   * @param {string} key 要翻译的键
+   * @param {...*} args 国际化消息可变参数，替换 {0}, {1}... 形式的占位符
+   * @returns {string} 翻译后的文本
+   * @example
+   * ```
+   * message: {
+   *   hello: '{0} world'
+   * }
+   * layui.$t('message.hello', 'Hello')
+   * ```
+   * 
+   * @param {string} key
+   * @param {any[]} args
+   */
+  Class.prototype.i18nTranslation = function(key){
+    var that = this;
+    var args = arguments;
+    var locale = that.cache.locale;
+    var i18nMessage = that.cache.i18nMessages[locale];
+
+    if(!i18nMessage){
+      error('Locale "' + locale + '" not found. Please add i18n messages for this locale first.', 'warn');
+    }
+
+    var result = get(i18nMessage, key, key);
+
+    // 替换占位符
+    if(typeof result === 'string'){
+      if(args.length > 1){
+        var opts = args[1];
+        // 第二个参数为对象或数组，替换占位符 {key} 或 {0}, {1}...
+        if(typeof opts === 'object'){
+          return result.replace(/\{(\w+)\}/g, function(match, key) {
+            return opts[key] !== undefined ? opts[key] : match;
+          });
+        }
+
+        // 处理可变参数，替换占位符 {0}, {1}...
+        return result.replace(/\{(\d+)\}/g, function(match, index) {
+          var arg = args[index + 1];
+          return arg !== undefined ? arg : match;
+        });
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * i18nTranslation 的别名
+   */
+  Class.prototype.$t = Class.prototype.i18nTranslation;
+
+  /**
+   * 获取对象中的值，lodash _.get 简易版
+   * @param {Record<string, any>} obj 
+   * @param {string} path 
+   * @param {any} defaultValue 
+   */
+  function get(obj, path, defaultValue){
+    // 'a[0].b.c' ==> ['a', '0', 'b', 'c']
+    var casePath = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+    var result = obj;
+
+    for(var i = 0; i < casePath.length; i++) {
+      result = result && result[casePath[i]];
+      if(result === null || result === undefined){
+        return defaultValue;
+      }
+    }
+
+    return result;
+  }
 
   // export layui
   window.layui = new Class();

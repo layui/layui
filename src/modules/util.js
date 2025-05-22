@@ -230,15 +230,15 @@ layui.define('jquery', function(exports) {
 
       // 30 天以内，返回「多久前」
       if(stamp >= 1000*60*60*24){
-        return ((stamp/1000/60/60/24)|0) + ' 天前';
+        return ((stamp/1000/60/60/24)|0) + ' ' + layui.$t('天前');
       } else if(stamp >= 1000*60*60){
-        return ((stamp/1000/60/60)|0) + ' 小时前';
+        return ((stamp/1000/60/60)|0) + ' ' + layui.$t('小时前');
       } else if(stamp >= 1000*60*3){ // 3 分钟以内为：刚刚
-        return ((stamp/1000/60)|0) + ' 分钟前';
+        return ((stamp/1000/60)|0) + ' ' + layui.$t('分钟前');
       } else if(stamp < 0){
-        return '未来';
+        return layui.$t('未来');
       } else {
-        return '刚刚';
+        return layui.$t('刚刚');
       }
     },
 
@@ -305,17 +305,17 @@ layui.define('jquery', function(exports) {
       var defaultMeridiem = function(hours, minutes){
           var hm = hours * 100 + minutes;
           if (hm < 600) {
-            return '凌晨';
+            return layui.$t('凌晨');
           } else if (hm < 900) {
-            return '早上';
+            return layui.$t('早上');
           } else if (hm < 1100) {
-            return '上午';
+            return layui.$t('上午');
           } else if (hm < 1300) {
-            return '中午';
+            return layui.$t('中午');
           } else if (hm < 1800) {
-            return '下午';
+            return layui.$t('下午');
           }
-          return '晚上';
+          return layui.$t('晚上');
       };
 
       var meridiem = (options && options.customMeridiem) || defaultMeridiem;

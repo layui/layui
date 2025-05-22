@@ -72,8 +72,8 @@ layui.define(function(exports) {
       groups = config.pages;
     }
 
-    config.prev = 'prev' in config ? config.prev : '上一页'; // 上一页文本
-    config.next = 'next' in config ? config.next : '下一页'; // 下一页文本
+    config.prev = 'prev' in config ? config.prev : layui.$t('上一页'); // 上一页文本
+    config.next = 'next' in config ? config.next : layui.$t('下一页'); // 下一页文本
 
     // 计算当前组
     var index = config.pages > groups
@@ -100,7 +100,7 @@ layui.define(function(exports) {
 
         // 首页
         if(index > 1 && config.first !== false && groups !== 0){
-          pager.push('<a class="layui-laypage-first" data-page="1"  title="首页">'+ (config.first || 1) +'</a>');
+          pager.push(layui.$t('<a class="layui-laypage-first" data-page="1"  title="首页">')+ (config.first || 1) +'</a>');
         }
 
         // 计算当前页码组的起始页
@@ -137,7 +137,7 @@ layui.define(function(exports) {
             pager.push('<span class="layui-laypage-spr">...</span>');
           }
           if(groups !== 0){
-            pager.push('<a class="layui-laypage-last" title="尾页"  data-page="'+ config.pages +'">'+ (config.last || config.pages) +'</a>');
+            pager.push(layui.$t('<a class="layui-laypage-last" title="尾页"  data-page="')+ config.pages +'">'+ (config.last || config.pages) +'</a>');
           }
         }
 
@@ -153,7 +153,7 @@ layui.define(function(exports) {
 
       // 数据总数
       count: function(){
-        var countText = typeof config.countText === 'object' ? config.countText : ['共 ', ' 条'];
+        var countText = typeof config.countText === 'object' ? config.countText : [layui.$t('共')+ ' ', ' ' + layui.$t('条')];
         return '<span class="layui-laypage-count">'+ countText[0] + config.count + countText[1] +'</span>'
       }(),
 
@@ -161,7 +161,7 @@ layui.define(function(exports) {
       limit: function(){
         var elemArr = ['<span class="layui-laypage-limits"><select lay-ignore>'];
         var template = function(item) {
-          var def = item +' 条/页';
+          var def = item +' ' + layui.$t('条/页');
           return typeof config.limitTemplet === 'function'
             ? (config.limitTemplet(item) || def)
           : def;
@@ -189,9 +189,9 @@ layui.define(function(exports) {
       // 跳页区域
       skip: function(){
         var skipText = typeof config.skipText === 'object' ? config.skipText : [
-          '到第',
-          '页',
-          '确定'
+          layui.$t('到第'),
+          layui.$t('页'),
+          layui.$t('确定')
         ];
         return [
           '<span class="layui-laypage-skip">'+ skipText[0],

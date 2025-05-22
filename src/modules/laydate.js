@@ -176,7 +176,7 @@
     ,showBottom: true //是否显示底部栏
     ,isPreview: true //是否显示值预览
     ,btns: ['clear', 'now', 'confirm'] //右下角显示的按钮，会按照数组顺序排列
-    ,lang: 'cn' //语言，只支持cn/en，即中文和英文
+    ,lang: (isLayui && layui.cache.locale) || 'cn' //语言，只支持cn/en，即中文和英文
     ,theme: 'default' //主题
     ,position: null //控件定位方式定位, 默认absolute，支持：fixed/absolute/static
     ,calendar: false //是否开启公历重要节日，仅支持中文版
@@ -191,50 +191,107 @@
 
   //多语言
   Class.prototype.lang = function(){
-    var that = this
-    ,options = that.config
-    ,text = {
+    var that = this;
+    var options = that.config;
+    var enMonthShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var text = {
       cn: {
-        weeks: ['日', '一', '二', '三', '四', '五', '六']
-        ,time: ['时', '分', '秒']
-        ,timeTips: '选择时间'
-        ,startTime: '开始时间'
-        ,endTime: '结束时间'
-        ,dateTips: '返回日期'
-        ,month: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
-        ,tools: {
-          confirm: '确定'
-          ,clear: '清空'
-          ,now: '现在'
+        month: {
+          long: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+          short: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
+        },
+        week: {
+          long: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+          short: ['日', '一', '二', '三', '四', '五', '六']
+        },
+        time: ['时', '分', '秒'],
+        selectTime: '选择时间',
+        startTime: '开始时间',
+        endTime: '结束时间',
+        selectDate: '选择日期',
+        tools: {
+          confirm: '确定',
+          clear: '清空',
+          now: '现在',
+          reset: '重置'
+        },
+        timeout: {
+          date: '结束日期不能早于开始日期<br>请重新选择',
+          time: '结束时间不能早于开始时间<br>请重新选择'
+        },
+        invalidDate: '不在有效日期或时间范围内',
+        formatError: ['日期格式不合法<br>必须遵循下述格式：<br>', '<br>已为你重置'],
+        preview: '当前选中的结果',
+        panelHeaderFormat: {
+          year: function (y) { return y + ' 年' },
+          month: function (m) { return m + ' 月' },
+          monthBeforeYear: false
+        },
+        /** 面板中某些字符串拼接使用 */
+        view: {
+          year: '年',
+          month: '月',
+          week: '周',
+          day: '天'
+        },
+      },
+      en: {
+        month: {
+          long: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+          short: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        week: {
+          long: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+          short: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+        },
+        time: ['Hours', 'Minutes', 'Seconds'],
+        selectTime: 'Select Time',
+        startTime: 'Start Time',
+        endTime: 'End Time',
+        selectDate: 'Select Date',
+        tools: {
+          confirm: 'Confirm',
+          clear: 'Clear',
+          now: 'Now',
+          reset: 'Reset'
+        },
+        timeout: {
+          date: 'End time cannot be less than start Time<br>Please re-select',
+          time: 'End time cannot be less than start Time<br>Please re-select'
+        },
+        invalidDate: 'Invalid date',
+        formatError: ['The date format error<br>Must be followed：<br>', '<br>It has been reset'],
+        preview: 'The selected result',
+        // IE11- Date.prototype.toLocaleDateString 不支持第二个参数，所以这里直接使用英文短格式
+        panelHeaderFormat: {
+          year: function (y) { return y},
+          month: function (m) { return enMonthShort[m - 1]},
+          monthBeforeYear: true
+        },
+        /** 面板中某些字符串拼接使用 */
+        view: {
+          year: '',
+          month: '',
+          week: '',
+          day: ''
         }
-        ,timeout: '结束时间不能早于开始时间<br>请重新选择'
-        ,invalidDate: '不在有效日期或时间范围内'
-        ,formatError: ['日期格式不合法<br>必须遵循下述格式：<br>', '<br>已为你重置']
-        ,preview: '当前选中的结果'
-      }
-      ,en: {
-        weeks: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
-        ,time: ['Hours', 'Minutes', 'Seconds']
-        ,timeTips: 'Select Time'
-        ,startTime: 'Start Time'
-        ,endTime: 'End Time'
-        ,dateTips: 'Select Date'
-        ,month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        ,tools: {
-          confirm: 'Confirm'
-          ,clear: 'Clear'
-          ,now: 'Now'
-        }
-        ,timeout: 'End time cannot be less than start Time<br>Please re-select'
-        ,invalidDate: 'Invalid date'
-        ,formatError: ['The date format error<br>Must be followed：<br>', '<br>It has been reset']
-        ,preview: 'The selected result'
       }
     };
+
+    if(isLayui){
+      var message = layui.cache.i18nMessages[layui.cache.locale];
+      if(message){
+        text[layui.cache.locale] = message.lay.laydate;
+      }else{
+        window.console && console.log && console.log('layui[laydate]: Locale "' + layui.cache.locale + '" not found. Please add i18n messages for this locale first.');
+      }
+    }
+
     return text[options.lang] || text['cn'];
   };
 
   Class.prototype.markerOfChineseFestivals = {
+    // 仅 /(zh|cn)/i 生效，不做国际化
     '0-1-1': '元旦',
     '0-2-14': '情人' ,
     '0-3-8': '妇女',
@@ -328,7 +385,7 @@
     if (options.weekStart) {
       if (!/^[0-6]$/.test(options.weekStart)) {
         var lang = that.lang();
-        options.weekStart = lang.weeks.indexOf(options.weekStart);
+        options.weekStart = lang.week.short.indexOf(options.weekStart);
         if (options.weekStart === -1) options.weekStart = 0;
       }
     }
@@ -551,7 +608,7 @@
         lay.each(new Array(7), function(j){
           if(i === 0){
             var th = lay.elem('th');
-            th.innerHTML = lang.weeks[(j + options.weekStart) % 7];
+            th.innerHTML = lang.week.short[(j + options.weekStart) % 7];
             theadTr.appendChild(th);
           }
           tr.insertCell(j);
@@ -576,7 +633,7 @@
     lay(divFooter).html(function(){
       var html = [], btns = [];
       if(options.type === 'datetime'){
-        html.push('<span lay-type="datetime" class="'+ ELEM_TIME_BTN +'">'+ lang.timeTips +'</span>');
+        html.push('<span lay-type="datetime" class="'+ ELEM_TIME_BTN +'">'+ lang.selectTime +'</span>');
       }
       if(!(!options.range && options.type === 'datetime') || options.fullPanel){
         html.push('<span class="'+ ELEM_PREVIEW +'" title="'+ lang.preview +'"></span>')
@@ -585,7 +642,7 @@
       lay.each(options.btns, function(i, item){
         var title = lang.tools[item] || 'btn';
         if(options.range && item === 'now') return;
-        if(isStatic && item === 'clear') title = options.lang === 'cn' ? '重置' : 'Reset';
+        if(isStatic && item === 'clear') title = lang.tools.reset;
         btns.push('<span lay-type="'+ item +'" class="laydate-btns-'+ item +'">'+ title +'</span>');
       });
       html.push('<div class="laydate-footer-btns">'+ btns.join('') +'</div>');
@@ -1101,7 +1158,7 @@
       that.markRender(td, YMD, markers);
     }
 
-    if(options.calendar && options.lang === 'cn'){
+    if(options.calendar && /(zh|cn)/i.test(options.lang)){
       render(that.markerOfChineseFestivals);
     }
 
@@ -1499,13 +1556,16 @@
     if(!that.panelYM) that.panelYM = {};
     that.panelYM[index] = {year: dateTime.year, month: dateTime.month};
 
-    if(options.lang === 'cn'){
-      lay(elemYM[0]).attr('lay-type', 'year').html(dateTime.year + ' 年')
-      lay(elemYM[1]).attr('lay-type', 'month').html((dateTime.month + 1) + ' 月');
-    } else {
-      lay(elemYM[0]).attr('lay-type', 'month').html(lang.month[dateTime.month]);
-      lay(elemYM[1]).attr('lay-type', 'year').html(dateTime.year);
+    var formatArr = [
+      {type: 'year', value: lang.panelHeaderFormat.year(dateTime.year)},
+      {type: 'month', value: lang.panelHeaderFormat.month(dateTime.month + 1)}
+    ];
+    if(lang.panelHeaderFormat.monthBeforeYear){
+      formatArr = formatArr.reverse();
     }
+
+    lay(elemYM[0]).attr('lay-type', formatArr[0]['type']).html(formatArr[0]['value']);
+    lay(elemYM[1]).attr('lay-type', formatArr[1]['type']).html(formatArr[1]['value']);
 
     //初始默认选择器
     if(isAlone){ //年、月等独立选择器
@@ -1518,7 +1578,7 @@
           that.list(options.type, 0).list(options.type, 1);
 
           //同步按钮可点状态
-          options.type === 'time' ? that.setBtnStatus('时间'
+          options.type === 'time' ? that.setBtnStatus('isTime'
             ,lay.extend({}, that.systemDate(), that.startTime)
             ,lay.extend({}, that.systemDate(), that.endTime)
           ) : that.setBtnStatus(true);
@@ -1595,8 +1655,8 @@
     ,elemYM = lay(elemHeader[2]).find('span')
     ,elemCont = that.elemCont[index || 0]
     ,haveList = lay(elemCont).find('.'+ ELEM_LIST)[0]
-    ,isCN = options.lang === 'cn'
-    ,text = isCN ? '年' : ''
+    ,isMonthBeforeYear = lang.panelHeaderFormat.monthBeforeYear
+    ,text = lang.view.year
 
     ,listYM = that.listYM[index] || {}
     ,hms = ['hours', 'minutes', 'seconds']
@@ -1644,7 +1704,7 @@
         yearNum++;
       });
 
-      lay(elemYM[isCN ? 0 : 1]).attr('lay-ym', (yearNum - 8) + '-' + listYM[1])
+      lay(elemYM[!isMonthBeforeYear ? 0 : 1]).attr('lay-ym', (yearNum - 8) + '-' + listYM[1])
       .html((startY + text) + ' - ' + (yearNum - 1 + text));
     }
 
@@ -1661,7 +1721,7 @@
         };
 
         i + 1 == listYM[1] && lay(li).addClass(THIS);
-        li.innerHTML = lang.month[i] + (isCN ? '月' : '');
+        li.innerHTML = lang.month.short[i] + lang.view.month;
         ul.appendChild(li);
 
         /*
@@ -1683,7 +1743,7 @@
         that.cellRender(li, {year: listYM[0], month: i + 1, date: 1}, 'month');
       });
 
-      lay(elemYM[isCN ? 0 : 1]).attr('lay-ym', listYM[0] + '-' + listYM[1])
+      lay(elemYM[!isMonthBeforeYear ? 0 : 1]).attr('lay-ym', listYM[0] + '-' + listYM[1])
       .html(listYM[0] + text);
     }
 
@@ -1843,7 +1903,7 @@
       ,haveSpan = lay(elemHeader[2]).find('.'+ ELEM_TIME_TEXT);
 
       scroll();
-      span.innerHTML = options.range ? [lang.startTime,lang.endTime][index] : lang.timeTips;
+      span.innerHTML = options.range ? [lang.startTime,lang.endTime][index] : lang.selectTime;
       lay(that.elemMain[index]).addClass('laydate-time-show');
 
       if(haveSpan[0]) haveSpan.remove();
@@ -1930,7 +1990,7 @@
 
       //是否异常提示
       if(tips && isOut) that.hint(
-        typeof tips === 'string' ? lang.timeout.replace(/日期/g, tips) : lang.timeout
+        typeof tips === 'string' ? lang.timeout.time : lang.timeout.date
       );
     }
   };
@@ -2320,13 +2380,13 @@
         if(lay(btn).hasClass(DISABLED)) return;
         that.list('time', 0);
         options.range && that.list('time', 1);
-        lay(btn).attr('lay-type', 'date').html(that.lang().dateTips);
+        lay(btn).attr('lay-type', 'date').html(that.lang().selectDate);
       }
 
       //选择日期
       ,date: function(){
         that.closeList();
-        lay(btn).attr('lay-type', 'datetime').html(that.lang().timeTips);
+        lay(btn).attr('lay-type', 'datetime').html(that.lang().selectTime);
       }
 
       //清空、重置
@@ -2374,7 +2434,7 @@
               : that.startDate && that.endDate && that.newDate(lay.extend({},that.startDate, that.startTime || {})) > that.newDate(lay.extend({},that.endDate, that.endTime || {}));
 
             return isTimeout
-              ? that.hint(options.type === 'time' ? lang.timeout.replace(/日期/g, '时间') : lang.timeout)
+              ? that.hint(options.type === 'time' ? lang.timeout.time : lang.timeout.date)
               : that.hint(lang.invalidDate);
           }
         } else {

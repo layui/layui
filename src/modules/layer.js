@@ -34,7 +34,7 @@ var ready = {
   events: {resize: {}},
   minStackIndex: 0,
   minStackArr: [],
-  btn: ['确定', '取消'],
+  btn: [layui.$t('确定'), layui.$t('取消')],
 
   // 五种原始层模式
   type: ['dialog', 'page', 'iframe', 'loading', 'tips'],
@@ -268,7 +268,7 @@ Class.pt.config = {
   shade: 0.3,
   fixed: true,
   move: doms[1],
-  title: '信息',
+  title: layui.$t('信息'),
   offset: 'auto',
   area: 'auto',
   closeBtn: 1,
@@ -1444,7 +1444,7 @@ layer.prompt = function(options, yes){
 
   return layer.open($.extend({
     type: 1,
-    btn: ['确定','取消'],
+    btn: [layui.$t('确定'),layui.$t('取消')],
     content: content,
     skin: 'layui-layer-prompt' + skin('prompt'),
     maxWidth: win.width(),
@@ -1457,7 +1457,7 @@ layer.prompt = function(options, yes){
     yes: function(index){
       var value = prompt.val();
       if(value.length > (options.maxlength||500)) {
-        layer.tips('最多输入'+ (options.maxlength || 500) +'个字符', prompt, {tips: 1});
+        layer.tips(layui.$t('最多输入')+ (options.maxlength || 500) +layui.$t('个字符'), prompt, {tips: 1});
       } else {
         yes && yes(value, index, prompt);
       }
@@ -1571,7 +1571,7 @@ layer.photos = function(options, loop, key){
     // 不直接弹出
     if (!loop) return;
   } else if (data.length === 0){
-    return layer.msg('没有图片');
+    return layer.msg(layui.$t('没有图片'));
   }
 
   // 上一张
@@ -1819,12 +1819,12 @@ layer.photos = function(options, loop, key){
           if (options.toolbar) {
             arr.push([
               '<div class="layui-layer-photos-toolbar layui-layer-photos-header">',
-                '<span toolbar-event="rotate" data-option="90" title="旋转"><i class="layui-icon layui-icon-refresh"></i></span>',
-                '<span toolbar-event="scalex" title="变换"><i class="layui-icon layui-icon-slider"></i></span>',
-                '<span toolbar-event="zoom" data-option="0.1" title="放大"><i class="layui-icon layui-icon-add-circle"></i></span>',
-                '<span toolbar-event="zoom" data-option="-0.1" title="缩小"><i class="layui-icon layui-icon-reduce-circle"></i></span>',
-                '<span toolbar-event="reset" title="还原"><i class="layui-icon layui-icon-refresh-1"></i></span>',
-                '<span toolbar-event="close" title="关闭"><i class="layui-icon layui-icon-close"></i></span>',
+                layui.$t('<span toolbar-event="rotate" data-option="90" title="旋转"><i class="layui-icon layui-icon-refresh"></i></span>'),
+                layui.$t('<span toolbar-event="scalex" title="变换"><i class="layui-icon layui-icon-slider"></i></span>'),
+                layui.$t('<span toolbar-event="zoom" data-option="0.1" title="放大"><i class="layui-icon layui-icon-add-circle"></i></span>'),
+                layui.$t('<span toolbar-event="zoom" data-option="-0.1" title="缩小"><i class="layui-icon layui-icon-reduce-circle"></i></span>'),
+                layui.$t('<span toolbar-event="reset" title="还原"><i class="layui-icon layui-icon-refresh-1"></i></span>'),
+                layui.$t('<span toolbar-event="close" title="关闭"><i class="layui-icon layui-icon-close"></i></span>'),
               '</div>'
             ].join(''));
           }
@@ -1834,7 +1834,7 @@ layer.photos = function(options, loop, key){
             arr.push(['<div class="layui-layer-photos-toolbar layui-layer-photos-footer">',
               '<h3>'+ alt +'</h3>',
               '<em>'+ dict.imgIndex +' / '+ data.length +'</em>',
-              '<a href="'+ data[start].src +'" target="_blank">查看原图</a>',
+              '<a href="'+ data[start].src +layui.$t('" target="_blank">查看原图</a>'),
             '</div>'].join(''));
           }
 
@@ -1856,9 +1856,9 @@ layer.photos = function(options, loop, key){
     }, options));
   }, function(){
     layer.close(dict.loadi);
-    layer.msg('当前图片地址异常，<br>是否继续查看下一张？', {
+    layer.msg(layui.$t('当前图片地址异常，<br>是否继续查看下一张？'), {
       time: 30000,
-      btn: ['下一张', '不看了'],
+      btn: [layui.$t('下一张'), layui.$t('不看了')],
       yes: function(){
         data.length > 1 && dict.imgnext(true,true);
       }

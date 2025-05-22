@@ -31,42 +31,42 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       verify: {
         required: function(value) {
           if (!/[\S]+/.test(value) || value === undefined || value === null) {
-            return '必填项不能为空';
+            return layui.$t('必填项不能为空');
           }
         },
         phone: function(value) {
           var EXP = /^1\d{10}$/;
           if (value && !EXP.test(value)) {
-            return '手机号格式不正确';
+            return layui.$t('手机号格式不正确');
           }
         },
         email: function(value) {
           var EXP = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
           if (value && !EXP.test(value)) {
-            return '邮箱格式不正确';
+            return layui.$t('邮箱格式不正确');
           }
         },
         url: function(value) {
           var EXP = /^(#|(http(s?)):\/\/|\/\/)[^\s]+\.[^\s]+$/;
           if (value && !EXP.test(value)) {
-            return '链接格式不正确';
+            return layui.$t('链接格式不正确');
           }
         },
         number: function(value){
           if (value && isNaN(value)) {
-            return '只能填写数字';
+            return layui.$t('只能填写数字');
           }
         },
         date: function(value){
           var EXP = /^(\d{4})[-\/](\d{1}|0\d{1}|1[0-2])([-\/](\d{1}|0\d{1}|[1-2][0-9]|3[0-1]))*$/;
           if (value && !EXP.test(value)) {
-            return '日期格式不正确';
+            return layui.$t('日期格式不正确');
           }
         },
         identity: function(value) {
           var EXP = /(^\d{15}$)|(^\d{17}(x|X|\d)$)/;
           if (value && !EXP.test(value)) {
-            return '身份证号格式不正确';
+            return layui.$t('身份证号格式不正确');
           }
         }
       },
@@ -466,7 +466,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
       // 下拉选择框
       ,select: function(elem){
-        var TIPS = '请选择';
+        var TIPS = layui.$t('请选择');
         var CLASS = 'layui-form-select';
         var TITLE = 'layui-select-title';
         var NONE = 'layui-select-none';
@@ -765,7 +765,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 }
               }else{
                 if(none){
-                  dl.find('.'+NONE)[0] || dl.append('<p class="'+ NONE +'">无匹配项</p>');
+                  dl.find('.'+NONE)[0] || dl.append('<p class="'+ NONE +layui.$t('">无匹配项</p>'));
                 } else {
                   dl.find('.'+NONE).remove();
                 }
@@ -956,7 +956,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 }
               });
               if (arr.length === 0) {
-                arr.push('<dd lay-value="" class="'+ DISABLED +'">None</dd>');
+                arr.push('<dd lay-value="" class="'+ DISABLED +layui.$t('">None</dd>'));
               }
               return arr.join('');
             }();
@@ -1241,7 +1241,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       }
     } else {
       type ? (
-        items[type] ? items[type]() : hint.error('不支持的 "'+ type + '" 表单渲染')
+        items[type] ? items[type]() : hint.error(layui.$t('不支持的 "')+ type + layui.$t('" 表单渲染'))
       ) : renderItem();
     }
     return that;
@@ -1367,7 +1367,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 return othis;
               }(), {tips: 1});
             } else if(verType === 'alert') {
-              layer.alert(errorText, {title: '提示', shadeClose: true});
+              layer.alert(errorText, {title: layui.$t('提示'), shadeClose: true});
             }
             // 若返回的为字符或数字，则自动弹出默认提示框；否则由 verify 方法中处理提示
             else if(/\b(string|number)\b/.test(typeof errorText)) {
