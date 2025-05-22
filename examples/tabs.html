@@ -287,6 +287,8 @@
       }],
       click: function(data, othis, event) {
         var index = this.elem.index(); // 获取活动标签索引
+        var layid = this.elem.attr('lay-id');
+
         // 新增标签操作
         if (data.action === 'add') {
           // 在当前活动标签右侧新增标签页

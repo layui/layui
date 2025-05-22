@@ -303,14 +303,9 @@ layui.define('component', function(exports) {
 
     index = index === undefined ? data.index : index;
 
-    // 将标签头 lay-closable 属性值同步到 body 项
-    headers.each(function(i) {
-      var othis = $(this);
-      var closableAttr = othis.attr('lay-closable');
-      if (closableAttr) {
-        bodys.eq(i).attr('lay-closable', closableAttr);
-      }
-    });
+    var headerItem = that.findHeaderItem(index);
+    var bodyItem = that.findBodyItem(index);
+    var itemIndex = headerItem.index();
 
     // 若当前选中标签也允许关闭，则尝试寻找不可关闭的标签并将其选中
     if (data.thisHeaderItem.attr('lay-closable') !== 'false') {
@@ -322,22 +317,33 @@ layui.define('component', function(exports) {
         } else if(prevHeader[0]) {
           that.change(prevHeader, true);
         }
-      } else if(index !== data.index) { // 自动切换到活动标签（功能可取消）
-        that.change(that.findHeaderItem(index), true);
+      } else if(index !== data.index) { // 自动切换到活动标签
+        that.change(headerItem, true);
       }
     }
 
     // 执行批量关闭标签
-    if (mode === 'other') { // 关闭其他标签
-      headers.eq(index).siblings(FILTER).remove();
-      bodys.eq(index).siblings(FILTER).remove();
-    } else if(mode === 'right') { // 关闭右侧标签
-      headers.filter(':gt('+ index +')'+ FILTER).remove();
-      bodys.filter(':gt('+ index +')'+ FILTER).remove();
-    } else { // 关闭所有标签
-      headers.filter(FILTER).remove();
-      bodys.filter(FILTER).remove();
-    }
+    headers.each(function(i) {
+      var $this = $(this);
+      var layid = $this.attr('lay-id');
+      var bodyItem = that.findBodyItem(layid || i);
+
+      // 标签是否不可关闭
+      if ($this.attr('lay-closable') === 'false') {
+        return;
+      }
+
+      // 批量关闭方式
+      var isCloseOther = mode === 'other' && i !== itemIndex; // 关闭其他标签
+      var isCloseRight = mode === 'right' && i > itemIndex; // 关闭右侧标签
+      var isCloseLeft = mode === 'left' && i < itemIndex; // 关闭左侧标签（不推荐）
+      var isCloseAll = mode === 'all'; // 关闭所有标签
+
+      if (isCloseOther || isCloseRight || isCloseLeft || isCloseAll) {
+        $this.remove();
+        bodyItem.remove();
+      }
+    });
 
     that.roll('auto');
 
@@ -467,7 +473,11 @@ layui.define('component', function(exports) {
     opts = opts || {};
 
     // 不可关闭项
-    if (opts.closable == false || headerItem.attr('lay-closable') === 'false') {
+    if (opts.closable == false) {
+      headerItem.attr('lay-closable', 'false');
+    }
+
+    if (headerItem.attr('lay-closable') === 'false') {
       return;
     }
 
@@ -734,10 +744,10 @@ layui.define('component', function(exports) {
      * @param {('other'|'right'|'all')} [mode="all"] - 关闭方式
      * @param {number} index - 活动标签的索引，默认取当前选中标签的索引。一般用于标签右键事件
      */
-    closeMult: function(id, mode, index, force) {
+    closeMult: function(id, mode, index) {
       var that = component.getInst(id);
       if(!that) return;
-      that.closeMult(mode, index, force);
+      that.closeMult(mode, index);
     },
 
     /**
