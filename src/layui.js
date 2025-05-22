@@ -57,6 +57,17 @@
         week: '周',
         day: '天'
       }
+    },
+    laypage: {
+      prev: '上一页',
+      next: '下一页',
+      first: '首页',
+      last: '尾页',
+      total: '共 {total} 条',
+      pagesize: '条/页',
+      goto: '到第',
+      page: '页',
+      confirm: '确定'
     }
   }
   // 基础配置
