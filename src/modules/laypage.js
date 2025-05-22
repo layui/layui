@@ -118,9 +118,7 @@ layui.define(function(exports) {
 
         // 输出左分割符
         if(config.first !== false && start > 2){
-          pager.push('<span class="layui-laypage-spr">...</span>')
-          console.log(pager);
-          
+          pager.push('<span class="layui-laypage-spr">...</span>');
         }
 
         // 输出连续页码
