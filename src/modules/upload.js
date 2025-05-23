@@ -524,11 +524,11 @@ layui.define(['lay', 'layer'], function(exports) {
 
     // 文件类型名称
     var typeName = ({
-      file: layui.$t('文件'),
-      images: layui.$t('图片'),
-      video: layui.$t('视频'),
-      audio: layui.$t('音频')
-    })[options.accept] || layui.$t('文件');
+      file: layui.$t('lay.fileType.file'),
+      images: layui.$t('lay.fileType.image'),
+      video: layui.$t('lay.fileType.video'),
+      audio: layui.$t('lay.fileType.audio')
+    })[options.accept] || layui.$t('lay.fileType.file');
 
     // 校验文件格式
     value = value.length === 0
@@ -572,7 +572,7 @@ layui.define(['lay', 'layer'], function(exports) {
 
     // 校验失败提示
     if(check){
-      that.msg(text['check-error'] || (layui.$t('选择的')+ typeName +layui.$t('中包含不支持的格式')));
+      that.msg(text['check-error'] || layui.$t('lay.upload.prompt.fileExtensionError', {fileType: typeName}));
       return elemFile.value = '';
     }
 
@@ -598,8 +598,9 @@ layui.define(['lay', 'layer'], function(exports) {
       return that.msg(typeof text['limit-number'] === 'function'
         ? text['limit-number'](options, that.fileLength)
       : (
-        layui.$t('同时最多只能上传:')+ ' '+ options.number + ' ' + layui.$t('个文件')
-        +layui.$t('<br>您当前已经选择了:')+ ' '+ that.fileLength +' ' + layui.$t('个文件')
+        layui.$t('lay.upload.prompt.filesOverLengthLimit', {length: options.number})
+        + '<br/>'
+        + layui.$t('lay.upload.prompt.currentFilesLength', {length: that.fileLength})
       ));
     }
 
@@ -615,9 +616,10 @@ layui.define(['lay', 'layer'], function(exports) {
           limitSize = size;
         }
       });
-      if(limitSize) return that.msg(typeof text['limit-size'] === 'function'
-        ? text['limit-size'](options, limitSize)
-      : layui.$t('文件大小不能超过')+ ' '+ limitSize);
+      if(limitSize) return that.msg(
+        typeof text['limit-size'] === 'function'
+          ? text['limit-size'](options, limitSize)
+          : layui.$t('lay.upload.prompt.fileOverSizeLimit', {size: limitSize}));
     }
 
     send();
@@ -642,7 +644,7 @@ layui.define(['lay', 'layer'], function(exports) {
       var elemFile = that.elemFile;
       var item = options.item ? options.item : options.elem;
       var value = files.length > 1
-        ? files.length + layui.$t('个文件')
+        ? layui.$t('lay.upload.chooseText', {length: files.length})
       : ((files[0] || {}).name || (elemFile[0].value.match(/[^\/\\]+\..+/g)||[]) || '');
 
       if(elemFile.next().hasClass(ELEM_CHOOSE)){

@@ -168,7 +168,21 @@
         noData: '无数据',
         deleteNodePrompt: '确认删除该节点 ({name}) 吗？',
       },
-  },
+      upload: {
+        fileType: {
+          file: '文件',
+          image: '图片',
+          video: '视频',
+          audio: '音频'
+        },
+        prompt: {
+          fileExtensionError: '选择的{fileType}中包含不支持的格式',
+          filesOverLengthLimit: '同时最多只能上传: {length} 个文件',
+          currentFilesLength: '您当前已经选择了: {length} 个文件',
+          fileOverSizeLimit: '文件大小不能超过 {size}'
+        },
+        chooseText: '{length} 个文件' 
+      },
     }
   }
   // 基础配置
