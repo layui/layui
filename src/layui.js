@@ -13,61 +13,67 @@
 
   var zhCn = {
     locale: 'zh-cn',
-    colorpicker: {
-      clear: '清除',
-      confirm: '确定',
-    },
-    /** 未使用的字段为保留字段，将来可能会使用 */
-    laydate: {
-      month: {
-        long: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-        short: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
+    lay: {
+      common: {
+        placeholder: '请选择'
       },
-      week:{
-        long: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-        short: ['日', '一', '二', '三', '四', '五', '六']
+      colorpicker: {
+        clear: '清除',
+        confirm: '确定'
       },
-      time: ['时', '分', '秒'],
-      selectTime: '选择时间',
-      startTime: '开始时间',
-      endTime: '结束时间',
-      selectDate: '选择日期',
-      tools: {
-        confirm: '确定',
-        clear: '清空',
-        now: '现在',
-        reset: '重置'
+      // 未使用的字段为保留字段，将来可能会使用
+      laydate: {
+        month: {
+          long: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+          short: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
+        },
+        week: {
+          long: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+          short: ['日', '一', '二', '三', '四', '五', '六']
+        },
+        time: ['时', '分', '秒'],
+        selectTime: '选择时间',
+        startTime: '开始时间',
+        endTime: '结束时间',
+        selectDate: '选择日期',
+        tools: {
+          confirm: '确定',
+          clear: '清空',
+          now: '现在',
+          reset: '重置'
+        },
+        timeout: {
+          date: '结束日期不能早于开始日期<br>请重新选择',
+          time: '结束时间不能早于开始时间<br>请重新选择'
+        },
+        invalidDate: '不在有效日期或时间范围内',
+        formatError: ['日期格式不合法<br>必须遵循下述格式：<br>', '<br>已为你重置'],
+        preview: '当前选中的结果',
+        // IE11- Date.prototype.toLocaleDateString 不支持第二个参数，所以此处用函数实现
+        panelHeaderFormat: {
+          year: function (y) { return y + ' 年' },
+          month: function (m) { return m + ' 月' },
+          monthBeforeYear: false
+        },
+        // 面板中某些字符串拼接使用
+        view: {
+          year: '年',
+          month: '月',
+          week: '周',
+          day: '天'
+        }
       },
-      timeout: {
-        date: '结束日期不能早于开始日期<br>请重新选择',
-        time: '结束时间不能早于开始时间<br>请重新选择'
-      },
-      invalidDate: '不在有效日期或时间范围内',
-      formatError: ['日期格式不合法<br>必须遵循下述格式：<br>', '<br>已为你重置'],
-      preview: '当前选中的结果',
-      panelHeaderFormat: {
-        year: function(y){return y + ' 年'},
-        month: function(m){return m + ' 月'},
-        monthBeforeYear: false
-      },
-      /** 面板中某些字符串拼接使用 */
-      view: {
-        year: '年',
-        month: '月',
-        week: '周',
-        day: '天'
+      laypage: {
+        prev: '上一页',
+        next: '下一页',
+        first: '首页',
+        last: '尾页',
+        total: '共 {total} 条',
+        pagesize: '条/页',
+        goto: '到第',
+        page: '页',
+        confirm: '确定'
       }
-    },
-    laypage: {
-      prev: '上一页',
-      next: '下一页',
-      first: '首页',
-      last: '尾页',
-      total: '共 {total} 条',
-      pagesize: '条/页',
-      goto: '到第',
-      page: '页',
-      confirm: '确定'
     }
   }
   // 基础配置
@@ -78,9 +84,7 @@
     i18n:{
       locale: 'zh-cn', // 设置全局配置的语言
       messages: { // 全局国际化消息对象，格式为：{locale: {namespace:{component:{...}}}}
-        'zh-cn': {
-          lay: zhCn // layui 使用 `lay` 命名空间，外部自定义模块应使用自定义命名空间
-        }
+        'zh-cn': zhCn
       }
     }
   };
