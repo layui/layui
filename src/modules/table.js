@@ -192,7 +192,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
               ,'{{# } else { }}'
                 ,'<span>{{-item2.title||""}}</span>'
                 ,'{{# if(isSort){ }}'
-                  ,layui.$t('<span class="layui-table-sort layui-inline"><i class="layui-edge layui-table-sort-asc" title="升序"></i><i class="layui-edge layui-table-sort-desc" title="降序"></i></span>')
+                  ,'<span class="layui-table-sort layui-inline"><i class="layui-edge layui-table-sort-asc" title="' + layui.$t('lay.table.sort.asc') + '"></i><i class="layui-edge layui-table-sort-desc" title="' + layui.$t('lay.table.sort.desc') + '"></i></span>'
                 ,'{{# } }}'
               ,'{{# } }}'
             ,'</div>'
@@ -302,7 +302,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
     defaultContextmenu: true, // 显示默认上下文菜单
     autoSort: true, // 是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
     text: {
-      none: layui.$t('无数据')
+      none: layui.$t('lay.table.noData')
     },
     cols: []
   };
@@ -650,7 +650,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
     // 头部工具栏右上角默认工具
     var defaultConfig = {
       filter: {
-        title: layui.$t('筛选列'),
+        title: layui.$t('lay.table.tools.filter.title'),
         layEvent: 'LAYTABLE_COLS',
         icon: 'layui-icon-cols',
         onClick: function(obj) {
@@ -703,7 +703,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
         }
       },
       exports: {
-        title: layui.$t('导出'),
+        title: layui.$t('layui.table.tools.export.title'),
         layEvent: 'LAYTABLE_EXPORT',
         icon: 'layui-icon-export',
         onClick: function(obj) { // 自带导出
@@ -712,16 +712,16 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
           var openPanel = obj.openPanel;
           var elem = obj.elem;
 
-          if (!data.length) return layer.tips(layui.$t('当前表格无数据'), elem, {tips: 3});
+          if (!data.length) return layer.tips(layui.$t('lay.table.tools.export.noDataPrompt'), elem, {tips: 3});
           if(device.ie){
-            layer.tips(layui.$t('导出功能不支持 IE，请用 Chrome 等高级浏览器导出'), elem, {
+            layer.tips(layui.$t('lay.table.tools.export.compatPrompt'), elem, {
               tips: 3
             });
           } else {
             openPanel({
               list: function(){
                 return [
-                  layui.$t('<li data-type="csv">导出 CSV 文件</li>')
+                  '<li data-type="csv">'+ layui.$t('lay.table.tools.export.csvText') +'</li>'
                 ].join('')
               }(),
               done: function(panel, list){
@@ -735,7 +735,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
         }
       },
       print: {
-        title: layui.$t('打印'),
+        title: layui.$t('lay.table.tools.print.title'),
         layEvent: 'LAYTABLE_PRINT',
         icon: 'layui-icon-print',
         onClick: function(obj) {
@@ -743,7 +743,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
           var options = obj.config;
           var elem = obj.elem;
 
-          if (!data.length) return layer.tips(layui.$t('当前表格无数据'), elem, {tips: 3});
+          if (!data.length) return layer.tips(layui.$t('lay.table.tools.print.noDataPrompt'), elem, {tips: 3});
           var printWin = window.open('about:blank', '_blank');
           var style = ['<style>',
             'body{font-size: 12px; color: #5F5F5F;}',
@@ -1219,7 +1219,10 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
           if(res[response.statusName] != response.statusCode){
             that.errorView(
               res[response.msgName] ||
-              (layui.$t('返回的数据不符合规范，正确的成功状态码应为："')+ response.statusName +'": '+ response.statusCode)
+              layui.$t('lay.table.dataFormatError', {
+                statusName: response.statusName, 
+                statusCode: response.statusCode
+              })
             );
           } else {
             // 当前页不能超过总页数
@@ -1246,7 +1249,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
             that._xhrAbort = false;
             return;
           }
-          that.errorView(layui.$t('请求异常，错误提示：')+ msg);
+          that.errorView(layui.$t('lay.table.xhrError', {msg: msg}));
           typeof options.error === 'function' && options.error(e, msg);
         }
       });

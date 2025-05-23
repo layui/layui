@@ -132,7 +132,31 @@
         goto: '到第',
         page: '页',
         confirm: '确定'
-      }
+      },
+      table: {
+        sort: {
+          asc: '升序',
+          desc: '降序'
+        },
+        noData: '无数据',
+        tools:{
+          filter: {
+            title: '筛选列'
+          },
+          export: {
+            title: '导出',
+            noDataPrompt: '当前表格无数据',
+            compatPrompt: '导出功能不支持 IE，请用 Chrome 等高级浏览器导出',
+            csvText : '导出 CSV 文件'
+          },
+          print: {
+            title: '打印',
+            noDataPrompt: '当前表格无数据'
+          }
+        },
+        dataFormatError: '返回的数据不符合规范，正确的成功状态码应为："{statusName}": {statusCode}',
+        xhrError: '请求异常，错误提示：{msg}'
+      },
     }
   }
   // 基础配置
