@@ -1290,7 +1290,6 @@
   Class.prototype.i18nTranslation = function(key){
     var that = this;
     var args = arguments;
-    console.log(that);
     
     var i18n = that.cache.i18n;
     var i18nMessage = i18n.messages[i18n.locale];
