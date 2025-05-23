@@ -14,11 +14,6 @@
   var zhCn = {
     locale: 'zh-cn',
     lay: {
-      common: {
-        noData: '暂无数据',
-        noMatch: '无匹配数据',
-        placeholder: '请选择'
-      },
       code: {
         copy: '复制代码',
         copied: '已复制',
@@ -53,7 +48,7 @@
           date: '日期格式不正确',
           identity: '身份证号格式不正确'
         },
-        verifyErrorPromptTitle: '提示',
+        verifyErrorPromptTitle: '提示'
       },
       // 未使用的字段为保留字段，将来可能会使用
       laydate: {
@@ -102,7 +97,7 @@
         cancel: '取消',
         defaultTitle: '信息',
         prompt: {
-          InputLengthPrompt: '最多输入 {length} 个字符',
+          InputLengthPrompt: '最多输入 {length} 个字符'
         },
         photos: {
           noData: '没有图片',
@@ -166,7 +161,7 @@
       tree: {
         defaultNodeName: '未命名',
         noData: '无数据',
-        deleteNodePrompt: '确认删除该节点 ({name}) 吗？',
+        deleteNodePrompt: '确认删除该节点 ({name}) 吗？'
       },
       upload: {
         fileType: {
@@ -183,6 +178,32 @@
         },
         chooseText: '{length} 个文件' 
       },
+      util: {
+        timeAgo: {
+          days: '{days} 天前',
+          hours: '{hours} 小时前',
+          minutes: '{minutes} 分钟前',
+          future: '未来',
+          justNow: '刚刚'
+        },
+        toDateString: {
+          meridiem: function(hours, minutes){
+            var hm = hours * 100 + minutes;
+            if (hm < 600) {
+              return '凌晨';
+            } else if (hm < 900) {
+              return '早上';
+            } else if (hm < 1100) {
+              return '上午';
+            } else if (hm < 1300) {
+              return '中午';
+            } else if (hm < 1800) {
+              return '下午';
+            }
+            return '晚上';
+          }
+        }
+      }
     }
   }
   // 基础配置
