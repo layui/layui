@@ -193,7 +193,6 @@
   Class.prototype.lang = function(){
     var that = this;
     var options = that.config;
-    var enMonthShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var text = {
       cn: {
         month: {
@@ -262,10 +261,10 @@
         invalidDate: 'Invalid date',
         formatError: ['The date format error<br>Must be followed：<br>', '<br>It has been reset'],
         preview: 'The selected result',
-        // IE11- Date.prototype.toLocaleDateString 不支持第二个参数，所以这里直接使用英文短格式
+        // IE11- Date.prototype.toLocaleDateString 不支持第二个参数，所以这里用函数实现，直接使用英文短格式
         panelHeaderFormat: {
           year: function (y) { return y},
-          month: function (m) { return enMonthShort[m - 1]},
+          month: function (m) { return text.en.month.short[m - 1]},
           monthBeforeYear: true
         },
         /** 面板中某些字符串拼接使用 */
@@ -279,12 +278,15 @@
     };
 
     if(isLayui){
-      options.lang = layui.cache.locale;
-      var message = layui.cache.i18nMessages[layui.cache.locale];
+      var i18n = layui.cache.i18n;
+      var isBuiltinEn = options.lang === 'en';
+      // TODO 此处无法得知 render option 中是否设置了 lang，因此不能遵循选项就近原则
+      options.lang = options.lang === 'en' ? options.lang : i18n.locale;
+      var message = i18n.messages[i18n.locale];
       if(message){
-        text[layui.cache.locale] = message.lay.laydate;
+        text[i18n.locale] = message.lay.laydate;
       }else{
-        window.console && console.log && console.log('layui[laydate]: Locale "' + layui.cache.locale + '" not found. Please add i18n messages for this locale first.');
+        !isBuiltinEn && window.console && console.log && console.log('layui[laydate]: Locale "' + i18n.locale + '" not found. Please add i18n messages for this locale first.');
       }
     }
 

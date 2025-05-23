@@ -75,10 +75,12 @@
     timeout: 10, // 符合规范的模块请求最长等待秒数
     debug: false, // 是否开启调试模式
     version: false, // 是否在模块请求时加入版本号参数（以更新模块缓存）
-    locale: 'zh-cn', // 设置全局配置的语言
-    i18nMessages: { // 语言包，格式为：{locale: {namespace:{component:{...}}}}
-      'zh-cn': {
-        lay: zhCn
+    i18n:{
+      locale: 'zh-cn', // 设置全局配置的语言
+      messages: { // 全局国际化消息对象，格式为：{locale: {namespace:{component:{...}}}}
+        'zh-cn': {
+          lay: zhCn // layui 使用 `lay` 命名空间，外部自定义模块应使用自定义命名空间
+        }
       }
     }
   };
@@ -232,10 +234,17 @@
 
   /**
    * 全局配置
-   * @param {Object} options
+   * @param {Object} options - 配置对象
+   * @param {boolean} deepMerged - 是否深度合并配置信息，默认为 false
    */
-  Class.prototype.config = function(options) {
-    Object.assign(config, options);
+  Class.prototype.config = function(options, deepMerged) {
+
+    if(deepMerged){
+      deepClone(config, options);
+    }else{
+      Object.assign(config, options);
+    }
+
     return this;
   };
 
@@ -1102,6 +1111,9 @@
 
   /**
    * 根据给定的键从国际化消息中获取翻译后的内容
+   * 
+   * 未文档化的私有方法，仅限内部使用
+   * @internal
    * @overload
    * @param {string} key 要翻译的键
    * @param {Record<string, any>} opts 国际化消息对象，替换 {key} 形式的占位符
@@ -1144,11 +1156,11 @@
   Class.prototype.i18nTranslation = function(key){
     var that = this;
     var args = arguments;
-    var locale = that.cache.locale;
-    var i18nMessage = that.cache.i18nMessages[locale];
+    var i18n = that.cache.i18n;
+    var i18nMessage = i18n.messages[i18n.locale];
 
     if(!i18nMessage){
-      error('Locale "' + locale + '" not found. Please add i18n messages for this locale first.', 'warn');
+      error('Locale "' + i18n.locale + '" not found. Please add i18n messages for this locale first.', 'warn');
     }
 
     var result = get(i18nMessage, key, key);
@@ -1176,7 +1188,9 @@
   }
 
   /**
-   * i18nTranslation 的别名
+   * 根据给定的键从国际化消息中获取翻译后的内容
+   * 
+   * layui.i18nTranslation 的别名，用于简化代码书写，未文档化仅限内部使用
    */
   Class.prototype.$t = Class.prototype.i18nTranslation;
 
@@ -1200,6 +1214,41 @@
 
     return result;
   }
+
+  /**
+   * 将两个或多个对象的内容深度合并到第一个对象中
+   * 复制自 lay.extend
+   * @callback ExtendFunc
+   * @param {*} target - 一个对象
+   * @param {...*} objectN - 包含额外的属性合并到第一个参数
+   * @returns {*} 返回合并后的对象
+   */
+  /** @type ExtendFunc*/
+  function deepClone(){
+    var ai = 1;
+    var length;
+    var args = arguments;
+    var clone = function(target, obj){
+      target = target || (layui.type(obj) === 'array' ? [] : {}); // 目标对象
+      for(var i in obj){
+        // 若值为普通对象，则进入递归，继续深度合并
+        target[i] = (obj[i] && obj[i].constructor === Object)
+          ? clone(target[i], obj[i])
+        : obj[i];
+      }
+      return target;
+    };
+
+    args[0] = typeof args[0] === 'object' ? args[0] : {};
+    length = args.length
+
+    for(; ai < length; ai++){
+      if(typeof args[ai] === 'object'){
+        clone(args[0], args[ai]);
+      }
+    }
+    return args[0];
+  };
 
   // export layui
   window.layui = new Class();
