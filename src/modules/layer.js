@@ -9,6 +9,7 @@
 var isLayui = window.layui && layui.define;
 var $;
 var win;
+
 var ready = {
   getPath: function(){
     var jsPath = (document.currentScript && document.currentScript.tagName.toUpperCase() === 'SCRIPT') ? document.currentScript.src : function(){
@@ -27,15 +28,38 @@ var ready = {
     return GLOBAL.layer_dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
   }(),
   config: {
-    removeFocus: true
+    removeFocus: true,
+    lang: {
+      confirm: '确定',
+      cancel: '取消',
+      defaultTitle: '信息',
+      prompt: {
+        InputLengthPrompt: '最多输入 {length} 个字符'
+      },
+      photos: {
+        noData: '没有图片',
+        tools: {
+          rotate: '旋转',
+          scaleX: '水平变换',
+          zoomIn: '放大',
+          zoomOut: '缩小',
+          reset: '还原',
+          close: '关闭'
+        },
+        viewOriginal: '查看原图',
+        urlError: {
+          Prompt: '当前图片地址异常，<br>是否继续查看下一张？',
+          confirm: '下一张',
+          cancel: '不看了'
+        }
+      }
+    },
   },
   end: {},
   beforeEnd: {},
   events: {resize: {}},
   minStackIndex: 0,
   minStackArr: [],
-  btn: [layui.$t('确定'), layui.$t('取消')],
-
   // 五种原始层模式
   type: ['dialog', 'page', 'iframe', 'loading', 'tips'],
 
@@ -98,6 +122,48 @@ var ready = {
 
   }
 };
+
+  /**
+   * 获取对象中的值，lodash _.get 简易版
+   * @param {Record<string, any>} obj 
+   * @param {string} path 
+   * @param {any} defaultValue 
+   */
+var get = function (obj, path, defaultValue) {
+  // 'a[0].b.c' ==> ['a', '0', 'b', 'c']
+  var casePath = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  var result = obj;
+
+  for (var i = 0; i < casePath.length; i++) {
+    result = result && result[casePath[i]];
+    if (result === null || result === undefined) {
+      return defaultValue;
+    }
+  }
+
+  return result;
+}
+
+// 根据给定的键从国际化消息中获取翻译后的内容
+var $t = false
+  ? layui.$t.bind(layui)
+  : function(key){
+    // 非 layui 环境去除命名空间前缀，从 config.lang 中取值
+    // TODO 简化版，暂不文档化，不支持配置多个 locale
+    key = key.replace(/^lay\.layer\./, '');
+    var result = get(ready.config.lang, key, key);
+    if(typeof result === 'string' && arguments.length > 1) {
+      var opts = arguments[1];
+      return result.replace(/\{(\w+)\}/g, function(match, key) {
+        return opts[key] !== undefined ? opts[key] : match;
+      })
+    }
+    return result;
+  };
+
+// default btnText 需要在 $t 之后初始化 
+ready.btn = [$t('lay.layer.confirm'), $t('lay.layer.cancel')];
+
 
 // 默认内置方法。
 var layer = {
@@ -268,7 +334,7 @@ Class.pt.config = {
   shade: 0.3,
   fixed: true,
   move: doms[1],
-  title: layui.$t('信息'),
+  title: $t('lay.layer.defaultTitle'),
   offset: 'auto',
   area: 'auto',
   closeBtn: 1,
@@ -1444,7 +1510,7 @@ layer.prompt = function(options, yes){
 
   return layer.open($.extend({
     type: 1,
-    btn: [layui.$t('确定'),layui.$t('取消')],
+    btn: [$t('lay.layer.confirm'),$t('lay.layer.cancel')],
     content: content,
     skin: 'layui-layer-prompt' + skin('prompt'),
     maxWidth: win.width(),
@@ -1457,7 +1523,7 @@ layer.prompt = function(options, yes){
     yes: function(index){
       var value = prompt.val();
       if(value.length > (options.maxlength||500)) {
-        layer.tips(layui.$t('最多输入')+ (options.maxlength || 500) +layui.$t('个字符'), prompt, {tips: 1});
+        layer.tips($t('lay.layer.prompt.InputLengthPrompt', {length: (options.maxlength || 500)}), prompt, {tips: 1});
       } else {
         yes && yes(value, index, prompt);
       }
@@ -1571,7 +1637,7 @@ layer.photos = function(options, loop, key){
     // 不直接弹出
     if (!loop) return;
   } else if (data.length === 0){
-    return layer.msg(layui.$t('没有图片'));
+    return layer.msg($t('lay.layer.photos.noData'));
   }
 
   // 上一张
@@ -1716,7 +1782,7 @@ layer.photos = function(options, loop, key){
     });
 
     // 滑动切换图片事件，仅限 layui 中
-    if(window.layui || window.lay){
+    if(isLayui || (window.lay && typeof window.lay === 'function')){
       var lay = window.layui.lay || window.lay;
       var touchEndCallback = function(e, state){
         var duration = Date.now() - state.timeStart;
@@ -1819,12 +1885,12 @@ layer.photos = function(options, loop, key){
           if (options.toolbar) {
             arr.push([
               '<div class="layui-layer-photos-toolbar layui-layer-photos-header">',
-                layui.$t('<span toolbar-event="rotate" data-option="90" title="旋转"><i class="layui-icon layui-icon-refresh"></i></span>'),
-                layui.$t('<span toolbar-event="scalex" title="变换"><i class="layui-icon layui-icon-slider"></i></span>'),
-                layui.$t('<span toolbar-event="zoom" data-option="0.1" title="放大"><i class="layui-icon layui-icon-add-circle"></i></span>'),
-                layui.$t('<span toolbar-event="zoom" data-option="-0.1" title="缩小"><i class="layui-icon layui-icon-reduce-circle"></i></span>'),
-                layui.$t('<span toolbar-event="reset" title="还原"><i class="layui-icon layui-icon-refresh-1"></i></span>'),
-                layui.$t('<span toolbar-event="close" title="关闭"><i class="layui-icon layui-icon-close"></i></span>'),
+                '<span toolbar-event="rotate" data-option="90" title="'+ $t('lay.layer.photos.tools.rotate') +'"><i class="layui-icon layui-icon-refresh"></i></span>',
+                '<span toolbar-event="scalex" title="'+ $t('lay.layer.photos.tools.scaleX') +'"><i class="layui-icon layui-icon-slider"></i></span>',
+                '<span toolbar-event="zoom" data-option="0.1" title="'+ $t('lay.layer.photos.tools.zoomIn') +'"><i class="layui-icon layui-icon-add-circle"></i></span>',
+                '<span toolbar-event="zoom" data-option="-0.1" title="'+ $t('lay.layer.photos.tools.zoomOut') +'"><i class="layui-icon layui-icon-reduce-circle"></i></span>',
+                '<span toolbar-event="reset" title="'+ $t('lay.layer.photos.tools.reset') +'"><i class="layui-icon layui-icon-refresh-1"></i></span>',
+                '<span toolbar-event="close" title="'+ $t('lay.layer.photos.tools.close') +'"><i class="layui-icon layui-icon-close"></i></span>',
               '</div>'
             ].join(''));
           }
@@ -1834,7 +1900,7 @@ layer.photos = function(options, loop, key){
             arr.push(['<div class="layui-layer-photos-toolbar layui-layer-photos-footer">',
               '<h3>'+ alt +'</h3>',
               '<em>'+ dict.imgIndex +' / '+ data.length +'</em>',
-              '<a href="'+ data[start].src +layui.$t('" target="_blank">查看原图</a>'),
+              '<a href="'+ data[start].src + '" target="_blank">'+ $t('lay.layer.photos.viewOriginal') +'</a>',
             '</div>'].join(''));
           }
 
@@ -1856,9 +1922,9 @@ layer.photos = function(options, loop, key){
     }, options));
   }, function(){
     layer.close(dict.loadi);
-    layer.msg(layui.$t('当前图片地址异常，<br>是否继续查看下一张？'), {
+    layer.msg($t('lay.layer.photos.urlError.prompt'), {
       time: 30000,
-      btn: [layui.$t('下一张'), layui.$t('不看了')],
+      btn: [$t('lay.layer.photos.urlError.confirm'), $t('lay.layer.photos.urlError.cancel')],
       yes: function(){
         data.length > 1 && dict.imgnext(true,true);
       }

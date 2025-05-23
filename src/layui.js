@@ -97,6 +97,31 @@
           day: '天'
         }
       },
+      layer: {
+        confirm: '确定',
+        cancel: '取消',
+        defaultTitle: '信息',
+        prompt: {
+          InputLengthPrompt: '最多输入 {length} 个字符',
+        },
+        photos: {
+          noData: '没有图片',
+          tools:{
+            rotate: '旋转',
+            scaleX: '水平变换',
+            zoomIn: '放大',
+            zoomOut: '缩小',
+            reset: '还原',
+            close: '关闭'
+          },
+          viewOriginal: '查看原图',
+          urlError: {
+            Prompt: '当前图片地址异常，<br>是否继续查看下一张？',
+            confirm: '下一张',
+            cancel: '不看了'
+          }
+        }
+      },
       laypage: {
         prev: '上一页',
         next: '下一页',
@@ -1194,6 +1219,8 @@
   Class.prototype.i18nTranslation = function(key){
     var that = this;
     var args = arguments;
+    console.log(that);
+    
     var i18n = that.cache.i18n;
     var i18nMessage = i18n.messages[i18n.locale];
 
