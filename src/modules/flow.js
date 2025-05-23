@@ -20,8 +20,8 @@ layui.define('jquery', function(exports) {
     var scrollElem = $(options.scrollElem || document); // 滚动条所在元素
     var threshold = 'mb' in options ? options.mb : 50; // 临界距离
     var isAuto = 'isAuto' in options ? options.isAuto : true; // 否自动滚动加载
-    var moreText = options.moreText || layui.$t('加载更多'); // 手动加载时，加载更多按钮文案
-    var end = options.end || layui.$t('没有更多了'); // “末页”显示文案
+    var moreText = options.moreText || layui.$t('lay.flow.loadMore'); // 手动加载时，加载更多按钮文案
+    var end = options.end || layui.$t('lay.flow.noMore'); // “末页”显示文案
     var direction = options.direction || 'bottom';
     var isTop = direction === 'top';
 

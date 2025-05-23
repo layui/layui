@@ -34,6 +34,10 @@
       dropdown: {
         noData: '暂无数据'
       },
+      flow: {
+        loadMore: '加载更多',
+        noMore: '没有更多了'
+      },
       // 未使用的字段为保留字段，将来可能会使用
       laydate: {
         month: {
