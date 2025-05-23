@@ -15,8 +15,8 @@
     locale: 'zh-cn',
     lay: {
       common: {
-        noMatch: '无匹配数据',
         noData: '暂无数据',
+        noMatch: '无匹配数据',
         placeholder: '请选择'
       },
       code: {
@@ -156,6 +156,12 @@
         },
         dataFormatError: '返回的数据不符合规范，正确的成功状态码应为："{statusName}": {statusCode}',
         xhrError: '请求异常，错误提示：{msg}'
+      },
+      transfer: {
+        noData: '无数据',
+        noMatch: '无匹配数据',
+        title: ['列表一', '列表二'],
+        searchPlaceholder: '关键词搜索'
       },
     }
   }

@@ -80,7 +80,7 @@ layui.define(['laytpl', 'form'], function(exports) {
       '{{# if(d.data.showSearch){ }}',
       '<div class="layui-transfer-search">',
         '<i class="layui-icon layui-icon-search"></i>',
-        layui.$t('<input type="text" class="layui-input" placeholder="关键词搜索">'),
+        '<input type="text" class="layui-input" placeholder="'+ layui.$t('lay.transfer.searchPlaceholder') +'">',
       '</div>',
       '{{# } }}',
       '<ul class="layui-transfer-data"></ul>',
@@ -117,7 +117,7 @@ layui.define(['laytpl', 'form'], function(exports) {
 
   // 默认配置
   Class.prototype.config = {
-    title: [layui.$t('列表一'), layui.$t('列表二')],
+    title: layui.$t('lay.transfer.title'),
     width: 200,
     height: 360,
     data: [], // 数据源
@@ -125,8 +125,8 @@ layui.define(['laytpl', 'form'], function(exports) {
     showSearch: false, // 是否开启搜索
     id: '', // 唯一索引，默认自增 index
     text: {
-      none: layui.$t('无数据'),
-      searchNone: layui.$t('无匹配数据')
+      none: layui.$t('lay.transfer.noData'),
+      searchNone: layui.$t('lay.transfer.noMatch')
     }
   };
 
