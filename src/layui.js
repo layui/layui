@@ -17,7 +17,7 @@
       common: {
         noMatch: '无匹配数据',
         noData: '暂无数据',
-        placeholder: '请选择',
+        placeholder: '请选择'
       },
       code: {
         copy: '复制代码',
@@ -25,11 +25,14 @@
         copyError: '复制失败',
         maximize: '最大化显示',
         restore: '还原显示',
-        preview: '在新窗口预览',
+        preview: '在新窗口预览'
       },
       colorpicker: {
         clear: '清除',
         confirm: '确定'
+      },
+      dropdown: {
+        noData: '暂无数据'
       },
       // 未使用的字段为保留字段，将来可能会使用
       laydate: {
