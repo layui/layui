@@ -163,6 +163,12 @@
         title: ['列表一', '列表二'],
         searchPlaceholder: '关键词搜索'
       },
+      tree: {
+        defaultNodeName: '未命名',
+        noData: '无数据',
+        deleteNodePrompt: '确认删除该节点 ({name}) 吗？',
+      },
+  },
     }
   }
   // 基础配置

@@ -108,8 +108,8 @@ layui.define(['form','util'], function(exports) {
     edit: false,  // 是否开启节点的操作图标
 
     text: {
-      defaultNodeName: layui.$t('未命名'), // 节点默认名称
-      none: layui.$t('无数据')  // 数据为空时的文本提示
+      defaultNodeName: layui.$t('lay.tree.defaultNodeName'), // 节点默认名称
+      none: layui.$t('lay.tree.noData')  // 数据为空时的文本提示
     }
   };
 
@@ -576,7 +576,12 @@ layui.define(['form','util'], function(exports) {
 
       // 删除
       } else {
-        layer.confirm(layui.$t('确认删除该节点 "<span style="color: #999;">')+ (item[customName.title] || '') +layui.$t('</span>" 吗？'), function(index){
+        // 兼容性，手动替换括号为 html
+        var i18nText = layui.$t('lay.tree.deleteNodePrompt', {
+          name: item[customName.title] || ''
+        }).replace(/\(/, '<span style="color: #999;">')
+        .replace(/\)/, '</span>');
+        layer.confirm(i18nText, function(index){
           options.operate && options.operate(returnObj); // 节点删除的回调
           returnObj.status = 'remove'; // 标注节点删除
 
