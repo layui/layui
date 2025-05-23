@@ -109,9 +109,9 @@
             reset: '还原',
             close: '关闭'
           },
-          viewOriginal: '查看原图',
+          viewPicture: '查看原图',
           urlError: {
-            Prompt: '当前图片地址异常，<br>是否继续查看下一张？',
+            prompt: '当前图片地址异常，<br>是否继续查看下一张？',
             confirm: '下一张',
             cancel: '不看了'
           }

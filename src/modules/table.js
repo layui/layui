@@ -703,7 +703,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
         }
       },
       exports: {
-        title: layui.$t('layui.table.tools.export.title'),
+        title: layui.$t('lay.table.tools.export.title'),
         layEvent: 'LAYTABLE_EXPORT',
         icon: 'layui-icon-export',
         onClick: function(obj) { // 自带导出

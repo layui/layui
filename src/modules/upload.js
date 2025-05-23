@@ -524,11 +524,11 @@ layui.define(['lay', 'layer'], function(exports) {
 
     // 文件类型名称
     var typeName = ({
-      file: layui.$t('lay.fileType.file'),
-      images: layui.$t('lay.fileType.image'),
-      video: layui.$t('lay.fileType.video'),
-      audio: layui.$t('lay.fileType.audio')
-    })[options.accept] || layui.$t('lay.fileType.file');
+      file: layui.$t('lay.upload.fileType.file'),
+      images: layui.$t('lay.upload.fileType.image'),
+      video: layui.$t('lay.upload.fileType.video'),
+      audio: layui.$t('lay.upload.fileType.audio')
+    })[options.accept] || layui.$t('lay.upload.fileType.file');
 
     // 校验文件格式
     value = value.length === 0

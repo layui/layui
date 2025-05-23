@@ -46,9 +46,9 @@ var ready = {
           reset: '还原',
           close: '关闭'
         },
-        viewOriginal: '查看原图',
+        viewPicture: '查看原图',
         urlError: {
-          Prompt: '当前图片地址异常，<br>是否继续查看下一张？',
+          prompt: '当前图片地址异常，<br>是否继续查看下一张？',
           confirm: '下一张',
           cancel: '不看了'
         }
@@ -145,7 +145,7 @@ var get = function (obj, path, defaultValue) {
 }
 
 // 根据给定的键从国际化消息中获取翻译后的内容
-var $t = false
+var $t = isLayui
   ? layui.$t.bind(layui)
   : function(key){
     // 非 layui 环境去除命名空间前缀，从 config.lang 中取值
@@ -1900,7 +1900,7 @@ layer.photos = function(options, loop, key){
             arr.push(['<div class="layui-layer-photos-toolbar layui-layer-photos-footer">',
               '<h3>'+ alt +'</h3>',
               '<em>'+ dict.imgIndex +' / '+ data.length +'</em>',
-              '<a href="'+ data[start].src + '" target="_blank">'+ $t('lay.layer.photos.viewOriginal') +'</a>',
+              '<a href="'+ data[start].src + '" target="_blank">'+ $t('lay.layer.photos.viewPicture') +'</a>',
             '</div>'].join(''));
           }
 

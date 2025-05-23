@@ -286,7 +286,7 @@ layui.define(['jquery', 'lay'], function(exports) {
         ,'</div>'
         ,'<div class="layui-btn-group">'
           ,'<button style="border-radius: 0" class="layui-btn layui-btn-primary layui-btn-sm" colorpicker-events="clear">' + layui.$t('lay.colorpicker.clear') + '</button>'
-          ,'<button style="border-radius: 0; border-left: 0" class="layui-btn layui-btn-sm" colorpicker-events="confirm">' + layui.$t('lay.colorpicker.confirm')  + '</button>'
+          ,'<button style="border-radius: 0; border-left: 0" class="layui-btn layui-btn-primary layui-btn-sm" colorpicker-events="confirm">' + layui.$t('lay.colorpicker.confirm')  + '</button>'
         ,'</div'
       ,'</div>'
     ,'</div>'].join(''))
