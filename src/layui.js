@@ -38,6 +38,23 @@
         loadMore: '加载更多',
         noMore: '没有更多了'
       },
+      form: {
+        select: {
+          noData: '暂无数据',
+          noMatch: '无匹配数据',
+          placeholder: '请选择'
+        },
+        validateMessages: {
+          required: '必填项不能为空',
+          phone: '手机号格式不正确',
+          email: '邮箱格式不正确',
+          url: '链接格式不正确',
+          number: '只能填写数字',
+          date: '日期格式不正确',
+          identity: '身份证号格式不正确'
+        },
+        verifyErrorPromptTitle: '提示',
+      },
       // 未使用的字段为保留字段，将来可能会使用
       laydate: {
         month: {
