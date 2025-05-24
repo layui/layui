@@ -177,7 +177,7 @@
     ,isPreview: true //是否显示值预览
     ,btns: ['clear', 'now', 'confirm'] //右下角显示的按钮，会按照数组顺序排列
     // 为实现 lang 选项就近生效，去除此处的默认值，原型 lang() 方法中有兜底值
-    ,lang: isLayui && layui.cache.i18n.locale //语言，只支持cn/en，即中文和英文
+    ,lang: '' //语言，只支持cn/en，即中文和英文
     ,theme: 'default' //主题
     ,position: null //控件定位方式定位, 默认absolute，支持：fixed/absolute/static
     ,calendar: false //是否开启公历重要节日，仅支持中文版
@@ -286,9 +286,17 @@
       }else{
         window.console && console.log && console.log('layui[laydate]: Locale "' + i18n.locale + '" not found. Please add i18n messages for this locale first.');
       }
+      // 同步 locale
+      if(!options.lang){
+        options.lang = i18n.locale;
+      }
     }
 
-    return text[options.lang] || text['cn'];
+    if(!options.lang) {
+      options.lang = 'cn'
+    };
+
+    return text[options.lang];
   };
 
   Class.prototype.markerOfChineseFestivals = {

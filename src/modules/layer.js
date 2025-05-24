@@ -161,8 +161,6 @@ var $t = isLayui
     return result;
   };
 
-// default btnText 需要在 $t 之后初始化 
-ready.btn = [$t('lay.layer.confirm'), $t('lay.layer.cancel')];
 
 
 // 默认内置方法。
@@ -228,7 +226,7 @@ var layer = {
     }
     return layer.open($.extend({
       content: content,
-      btn: ready.btn,
+      btn: [$t('lay.layer.confirm'), $t('lay.layer.cancel')],
       yes: yes,
       btn2: cancel
     }, type ? {} : options));
@@ -291,6 +289,8 @@ var Class = function(setings){
   var that = this, creat = function(){
     that.creat();
   };
+  // TODO 临时的同步方案
+  ready.config.title = $t('lay.layer.defaultTitle');
   that.index = ++layer.index;
   that.config.maxWidth = $(win).width() - 15*2; // 初始最大宽度：当前屏幕宽，左右留 15px 边距
   that.config = $.extend({}, that.config, ready.config, setings);
@@ -522,7 +522,7 @@ Class.pt.creat = function(){
 
   switch(config.type){
     case 0:
-      config.btn = ('btn' in config) ? config.btn : ready.btn[0];
+      config.btn = ('btn' in config) ? config.btn : $t('lay.layer.confirm');
       layer.closeAll('dialog');
     break;
     case 2:
