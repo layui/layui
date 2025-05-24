@@ -11,7 +11,8 @@
   var document = window.document;
   var location = window.location;
 
-  var zhCn = {
+  // 中文国际化消息对象
+  var zhCN = {
     locale: 'zh-cn',
     lay: {
       code: {
@@ -161,7 +162,7 @@
       tree: {
         defaultNodeName: '未命名',
         noData: '无数据',
-        deleteNodePrompt: '确认删除该节点 ({name}) 吗？'
+        deleteNodePrompt: '确认删除"{name}"节点吗？'
       },
       upload: {
         fileType: {
@@ -206,15 +207,16 @@
       }
     }
   }
+
   // 基础配置
   var config = {
     timeout: 10, // 符合规范的模块请求最长等待秒数
     debug: false, // 是否开启调试模式
     version: false, // 是否在模块请求时加入版本号参数（以更新模块缓存）
     i18n:{
-      locale: 'zh-cn', // 设置全局配置的语言
+      locale: 'zh-cn', // 全局内置语言
       messages: { // 全局国际化消息对象，格式为：{locale: {namespace:{component:{...}}}}
-        'zh-cn': zhCn
+        'zh-cn': zhCN
       }
     }
   };
@@ -234,6 +236,8 @@
 
   // 识别预先可能定义的指定全局对象
   var GLOBAL = window.LAYUI_GLOBAL || {};
+  var OBJECT_REPLACE_REGEX = /\{(\w+)\}/g;
+  var INDEX_REPLACE_REGEX = /\{(\d+)\}/g;
 
   // 获取 layui 所在目录
   var getPath = function() {
@@ -369,11 +373,11 @@
   /**
    * 全局配置
    * @param {Object} options - 配置对象
-   * @param {boolean} deepMerged - 是否深度合并配置信息，默认为 false
+   * @param {boolean} deepMerge - 是否深度合并配置信息，默认为 false
    */
-  Class.prototype.config = function(options, deepMerged) {
+  Class.prototype.config = function(options, deepMerge) {
 
-    if(deepMerged){
+    if(deepMerge){
       deepClone(config, options);
     }else{
       Object.assign(config, options);
@@ -1247,7 +1251,7 @@
    * 根据给定的键从国际化消息中获取翻译后的内容
    * 
    * 未文档化的私有方法，仅限内部使用
-   * @internal
+   * 
    * @overload
    * @param {string} key 要翻译的键
    * @param {Record<string, any>} opts 国际化消息对象，替换 {key} 形式的占位符
@@ -1283,7 +1287,7 @@
    * }
    * layui.$t('message.hello', 'Hello')
    * ```
-   * 
+   * @internal
    * @param {string} key
    * @param {any[]} args
    */
@@ -1296,31 +1300,30 @@
 
     if(!i18nMessage){
       error('Locale "' + i18n.locale + '" not found. Please add i18n messages for this locale first.', 'warn');
+      return key;
     }
 
     var result = get(i18nMessage, key, key);
 
     // 替换占位符
-    if(typeof result === 'string'){
-      if(args.length > 1){
-        var opts = args[1];
-        // 第二个参数为对象或数组，替换占位符 {key} 或 {0}, {1}...
-        if(typeof opts === 'object'){
-          return result.replace(/\{(\w+)\}/g, function(match, key) {
-            return opts[key] !== undefined ? opts[key] : match;
-          });
-        }
-
-        // 处理可变参数，替换占位符 {0}, {1}...
-        return result.replace(/\{(\d+)\}/g, function(match, index) {
-          var arg = args[index + 1];
-          return arg !== undefined ? arg : match;
+    if(typeof result === 'string' && args.length > 1){
+      var opts = args[1];
+      // 第二个参数为对象或数组，替换占位符 {key} 或 {0}, {1}...
+      if(opts !== null && typeof opts === 'object'){
+        return result.replace(OBJECT_REPLACE_REGEX, function(match, key) {
+          return opts[key] !== undefined ? opts[key] : match;
         });
       }
+
+      // 处理可变参数，替换占位符 {0}, {1}...
+      return result.replace(INDEX_REPLACE_REGEX, function(match, index) {
+        var arg = args[index + 1];
+        return arg !== undefined ? arg : match;
+      });
     }
 
     return result;
-  }
+  };
 
   /**
    * 根据给定的键从国际化消息中获取翻译后的内容

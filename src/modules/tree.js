@@ -579,8 +579,7 @@ layui.define(['form','util'], function(exports) {
         // 兼容性，手动替换括号为 html
         var i18nText = layui.$t('lay.tree.deleteNodePrompt', {
           name: item[customName.title] || ''
-        }).replace(/\(/, '<span style="color: #999;">')
-        .replace(/\)/, '</span>');
+        });
         layer.confirm(i18nText, function(index){
           options.operate && options.operate(returnObj); // 节点删除的回调
           returnObj.status = 'remove'; // 标注节点删除
