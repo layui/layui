@@ -176,7 +176,8 @@
     ,showBottom: true //是否显示底部栏
     ,isPreview: true //是否显示值预览
     ,btns: ['clear', 'now', 'confirm'] //右下角显示的按钮，会按照数组顺序排列
-    ,lang: 'cn' //语言，只支持cn/en，即中文和英文
+    // 为实现 lang 选项就近生效，去除此处的默认值，原型 lang() 方法中有兜底值
+    ,lang: isLayui && layui.cache.i18n.locale //语言，只支持cn/en，即中文和英文
     ,theme: 'default' //主题
     ,position: null //控件定位方式定位, 默认absolute，支持：fixed/absolute/static
     ,calendar: false //是否开启公历重要节日，仅支持中文版
@@ -279,14 +280,11 @@
 
     if(isLayui){
       var i18n = layui.cache.i18n;
-      var isBuiltinEn = options.lang === 'en';
-      // TODO 此处无法得知 render option 中是否设置了 lang，因此不能遵循选项就近原则
-      options.lang = options.lang === 'en' ? options.lang : i18n.locale;
       var message = i18n.messages[i18n.locale];
       if(message){
         text[i18n.locale] = message.lay.laydate;
       }else{
-        !isBuiltinEn && window.console && console.log && console.log('layui[laydate]: Locale "' + i18n.locale + '" not found. Please add i18n messages for this locale first.');
+        window.console && console.log && console.log('layui[laydate]: Locale "' + i18n.locale + '" not found. Please add i18n messages for this locale first.');
       }
     }
 
@@ -294,7 +292,7 @@
   };
 
   Class.prototype.markerOfChineseFestivals = {
-    // 仅 /(zh|cn)/i 生效，不做国际化
+    // 仅 /cn/i 生效，不做国际化
     '0-1-1': '元旦',
     '0-2-14': '情人' ,
     '0-3-8': '妇女',
@@ -1161,7 +1159,8 @@
       that.markRender(td, YMD, markers);
     }
 
-    if(options.calendar && /(zh|cn)/i.test(options.lang)){
+    // chineseFestivals 仅简体中文生效
+    if(options.calendar && /cn$/i.test(options.lang)){
       render(that.markerOfChineseFestivals);
     }
 
