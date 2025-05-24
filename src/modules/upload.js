@@ -572,7 +572,7 @@ layui.define(['lay', 'layer'], function(exports) {
 
     // 校验失败提示
     if(check){
-      that.msg(text['check-error'] || layui.$t('lay.upload.prompt.fileExtensionError', {fileType: typeName}));
+      that.msg(text['check-error'] || layui.$t('lay.upload.validateMessages.fileExtensionError', {fileType: typeName}));
       return elemFile.value = '';
     }
 
@@ -598,9 +598,9 @@ layui.define(['lay', 'layer'], function(exports) {
       return that.msg(typeof text['limit-number'] === 'function'
         ? text['limit-number'](options, that.fileLength)
       : (
-        layui.$t('lay.upload.prompt.filesOverLengthLimit', {length: options.number})
+        layui.$t('lay.upload.validateMessages.filesOverLengthLimit', {length: options.number})
         + '<br/>'
-        + layui.$t('lay.upload.prompt.currentFilesLength', {length: that.fileLength})
+        + layui.$t('lay.upload.validateMessages.currentFilesLength', {length: that.fileLength})
       ));
     }
 
@@ -619,7 +619,7 @@ layui.define(['lay', 'layer'], function(exports) {
       if(limitSize) return that.msg(
         typeof text['limit-size'] === 'function'
           ? text['limit-size'](options, limitSize)
-          : layui.$t('lay.upload.prompt.fileOverSizeLimit', {size: limitSize}));
+          : layui.$t('lay.upload.validateMessages.fileOverSizeLimit', {size: limitSize}));
     }
 
     send();
