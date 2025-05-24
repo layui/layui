@@ -230,15 +230,15 @@ layui.define('jquery', function(exports) {
 
       // 30 天以内，返回「多久前」
       if(stamp >= 1000*60*60*24){
-        return ((stamp/1000/60/60/24)|0) + ' 天前';
+        return layui.$t('lay.util.timeAgo.days', {days: (stamp/1000/60/60/24)|0});
       } else if(stamp >= 1000*60*60){
-        return ((stamp/1000/60/60)|0) + ' 小时前';
+        return layui.$t('lay.util.timeAgo.hours', {hours: (stamp/1000/60/60)|0});
       } else if(stamp >= 1000*60*3){ // 3 分钟以内为：刚刚
-        return ((stamp/1000/60)|0) + ' 分钟前';
+        return layui.$t('lay.util.timeAgo.minutes', {minutes: (stamp/1000/60)|0});
       } else if(stamp < 0){
-        return '未来';
+        return layui.$t('lay.util.timeAgo.future');
       } else {
-        return '刚刚';
+        return layui.$t('lay.util.timeAgo.justNow');
       }
     },
 
@@ -318,7 +318,7 @@ layui.define('jquery', function(exports) {
           return '晚上';
       };
 
-      var meridiem = (options && options.customMeridiem) || defaultMeridiem;
+      var meridiem = (options && options.customMeridiem) || layui.$t('lay.util.toDateString.meridiem') || defaultMeridiem;
 
       var matches = {
         yy: function(){return String(years).slice(-2);},
