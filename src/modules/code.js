@@ -201,7 +201,7 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
     var tools = {
       copy: {
         className: 'file-b',
-        title: [layui.$t('lay.code.copy')],
+        title: [layui.$t('code.copy')],
         event: function(obj){
           var code = util.unescape(finalCode(options.code));
           var hasOnCopy = typeof options.onCopy === 'function';
@@ -215,14 +215,14 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
                 if(ret === false) return;
               }
 
-              layer.msg(layui.$t('lay.code.copied'), {icon: 1});
+              layer.msg(layui.$t('code.copied'), {icon: 1});
             },
             error: function() {
               if(hasOnCopy){
                 var ret = options.onCopy(code, false);
                 if(ret === false) return;
               }
-              layer.msg(layui.$t('lay.code.copyError'), {icon: 2});
+              layer.msg(layui.$t('code.copyError'), {icon: 2});
             }
           });
         }
@@ -277,7 +277,7 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
       $.extend(tools, {
         'full': {
           className: 'screen-full',
-          title: [layui.$t('lay.code.maximize'), layui.$t('lay.code.restore')],
+          title: [layui.$t('code.maximize'), layui.$t('code.restore')],
           event: function(obj){
             var el = obj.elem;
             var elemView = el.closest('.'+ CONST.ELEM_PREVIEW);
@@ -302,7 +302,7 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
         },
         'window': {
           className: 'release',
-          title: [layui.$t('lay.code.preview')],
+          title: [layui.$t('code.preview')],
           event: function(obj){
             util.openWin({
               content: finalCode(options.code)
@@ -563,7 +563,7 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
     if(options.copy && !options.preview){
       var copyElem = $([
         '<span class="layui-code-copy">',
-        '<i class="layui-icon layui-icon-file-b" title="' + layui.$t('lay.code.copy') + '"></i>',
+        '<i class="layui-icon layui-icon-file-b" title="' + layui.$t('code.copy') + '"></i>',
         '</span>'
       ].join(''));
 

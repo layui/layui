@@ -524,11 +524,11 @@ layui.define(['lay', 'layer'], function(exports) {
 
     // 文件类型名称
     var typeName = ({
-      file: layui.$t('lay.upload.fileType.file'),
-      images: layui.$t('lay.upload.fileType.image'),
-      video: layui.$t('lay.upload.fileType.video'),
-      audio: layui.$t('lay.upload.fileType.audio')
-    })[options.accept] || layui.$t('lay.upload.fileType.file');
+      file: layui.$t('upload.fileType.file'),
+      images: layui.$t('upload.fileType.image'),
+      video: layui.$t('upload.fileType.video'),
+      audio: layui.$t('upload.fileType.audio')
+    })[options.accept] || layui.$t('upload.fileType.file');
 
     // 校验文件格式
     value = value.length === 0
@@ -572,7 +572,7 @@ layui.define(['lay', 'layer'], function(exports) {
 
     // 校验失败提示
     if(check){
-      that.msg(text['check-error'] || layui.$t('lay.upload.validateMessages.fileExtensionError', {fileType: typeName}));
+      that.msg(text['check-error'] || layui.$t('upload.validateMessages.fileExtensionError', {fileType: typeName}));
       return elemFile.value = '';
     }
 
@@ -598,9 +598,9 @@ layui.define(['lay', 'layer'], function(exports) {
       return that.msg(typeof text['limit-number'] === 'function'
         ? text['limit-number'](options, that.fileLength)
       : (
-        layui.$t('lay.upload.validateMessages.filesOverLengthLimit', {length: options.number})
+        layui.$t('upload.validateMessages.filesOverLengthLimit', {length: options.number})
         + '<br/>'
-        + layui.$t('lay.upload.validateMessages.currentFilesLength', {length: that.fileLength})
+        + layui.$t('upload.validateMessages.currentFilesLength', {length: that.fileLength})
       ));
     }
 
@@ -619,7 +619,7 @@ layui.define(['lay', 'layer'], function(exports) {
       if(limitSize) return that.msg(
         typeof text['limit-size'] === 'function'
           ? text['limit-size'](options, limitSize)
-          : layui.$t('lay.upload.validateMessages.fileOverSizeLimit', {size: limitSize}));
+          : layui.$t('upload.validateMessages.fileOverSizeLimit', {size: limitSize}));
     }
 
     send();
@@ -644,7 +644,7 @@ layui.define(['lay', 'layer'], function(exports) {
       var elemFile = that.elemFile;
       var item = options.item ? options.item : options.elem;
       var value = files.length > 1
-        ? layui.$t('lay.upload.chooseText', {length: files.length})
+        ? layui.$t('upload.chooseText', {length: files.length})
       : ((files[0] || {}).name || (elemFile[0].value.match(/[^\/\\]+\..+/g)||[]) || '');
 
       if(elemFile.next().hasClass(ELEM_CHOOSE)){

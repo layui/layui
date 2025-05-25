@@ -108,8 +108,8 @@ layui.define(['form','util'], function(exports) {
     edit: false,  // 是否开启节点的操作图标
 
     text: {
-      defaultNodeName: layui.$t('lay.tree.defaultNodeName'), // 节点默认名称
-      none: layui.$t('lay.tree.noData')  // 数据为空时的文本提示
+      defaultNodeName: layui.$t('tree.defaultNodeName'), // 节点默认名称
+      none: layui.$t('tree.noData')  // 数据为空时的文本提示
     }
   };
 
@@ -577,7 +577,7 @@ layui.define(['form','util'], function(exports) {
       // 删除
       } else {
         // 兼容性，手动替换括号为 html
-        var i18nText = layui.$t('lay.tree.deleteNodePrompt', {
+        var i18nText = layui.$t('tree.deleteNodePrompt', {
           name: item[customName.title] || ''
         });
         layer.confirm(i18nText, function(index){

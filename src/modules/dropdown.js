@@ -181,7 +181,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports) {
       if(options.data.length > 0 ){
         eachItemView(elemUl, options.data)
       } else {
-        elemUl.html('<li class="layui-menu-item-none">' + layui.$t('lay.dropdown.noData') + '</li>');
+        elemUl.html('<li class="layui-menu-item-none">' + layui.$t('dropdown.noData') + '</li>');
       }
       return elemUl;
     };

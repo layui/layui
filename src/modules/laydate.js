@@ -282,7 +282,7 @@
       var i18n = layui.cache.i18n;
       var message = i18n.messages[i18n.locale];
       if(message){
-        text[i18n.locale] = message.lay.laydate;
+        text[i18n.locale] = message.laydate;
       }else{
         window.console && console.log && console.log('layui[laydate]: Locale "' + i18n.locale + '" not found. Please add i18n messages for this locale first.');
       }

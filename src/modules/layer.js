@@ -9,6 +9,7 @@
 var isLayui = window.layui && layui.define;
 var $;
 var win;
+var OBJECT_REPLACE_REGEX = /\{(\w+)\}/g;
 
 var ready = {
   getPath: function(){
@@ -150,11 +151,11 @@ var $t = isLayui
   : function(key){
     // 非 layui 环境去除命名空间前缀，从 config.lang 中取值
     // TODO 简化版，暂不文档化，不支持配置多个 locale
-    key = key.replace(/^lay\.layer\./, '');
+    key = key.replace(/^layer\./, '');
     var result = get(ready.config.lang, key, key);
     if(typeof result === 'string' && arguments.length > 1) {
       var opts = arguments[1];
-      return result.replace(/\{(\w+)\}/g, function(match, key) {
+      return result.replace(OBJECT_REPLACE_REGEX, function(match, key) {
         return opts[key] !== undefined ? opts[key] : match;
       })
     }
@@ -226,7 +227,7 @@ var layer = {
     }
     return layer.open($.extend({
       content: content,
-      btn: [$t('lay.layer.confirm'), $t('lay.layer.cancel')],
+      btn: [$t('layer.confirm'), $t('layer.cancel')],
       yes: yes,
       btn2: cancel
     }, type ? {} : options));
@@ -290,7 +291,7 @@ var Class = function(setings){
     that.creat();
   };
   // TODO 临时的同步方案
-  ready.config.title = $t('lay.layer.defaultTitle');
+  ready.config.title = $t('layer.defaultTitle');
   that.index = ++layer.index;
   that.config.maxWidth = $(win).width() - 15*2; // 初始最大宽度：当前屏幕宽，左右留 15px 边距
   that.config = $.extend({}, that.config, ready.config, setings);
@@ -334,7 +335,7 @@ Class.pt.config = {
   shade: 0.3,
   fixed: true,
   move: doms[1],
-  title: $t('lay.layer.defaultTitle'),
+  title: $t('layer.defaultTitle'),
   offset: 'auto',
   area: 'auto',
   closeBtn: 1,
@@ -522,7 +523,7 @@ Class.pt.creat = function(){
 
   switch(config.type){
     case 0:
-      config.btn = ('btn' in config) ? config.btn : $t('lay.layer.confirm');
+      config.btn = ('btn' in config) ? config.btn : $t('layer.confirm');
       layer.closeAll('dialog');
     break;
     case 2:
@@ -1510,7 +1511,7 @@ layer.prompt = function(options, yes){
 
   return layer.open($.extend({
     type: 1,
-    btn: [$t('lay.layer.confirm'),$t('lay.layer.cancel')],
+    btn: [$t('layer.confirm'),$t('layer.cancel')],
     content: content,
     skin: 'layui-layer-prompt' + skin('prompt'),
     maxWidth: win.width(),
@@ -1523,7 +1524,7 @@ layer.prompt = function(options, yes){
     yes: function(index){
       var value = prompt.val();
       if(value.length > (options.maxlength||500)) {
-        layer.tips($t('lay.layer.prompt.InputLengthPrompt', {length: (options.maxlength || 500)}), prompt, {tips: 1});
+        layer.tips($t('layer.prompt.InputLengthPrompt', {length: (options.maxlength || 500)}), prompt, {tips: 1});
       } else {
         yes && yes(value, index, prompt);
       }
@@ -1637,7 +1638,7 @@ layer.photos = function(options, loop, key){
     // 不直接弹出
     if (!loop) return;
   } else if (data.length === 0){
-    return layer.msg($t('lay.layer.photos.noData'));
+    return layer.msg($t('layer.photos.noData'));
   }
 
   // 上一张
@@ -1885,12 +1886,12 @@ layer.photos = function(options, loop, key){
           if (options.toolbar) {
             arr.push([
               '<div class="layui-layer-photos-toolbar layui-layer-photos-header">',
-                '<span toolbar-event="rotate" data-option="90" title="'+ $t('lay.layer.photos.tools.rotate') +'"><i class="layui-icon layui-icon-refresh"></i></span>',
-                '<span toolbar-event="scalex" title="'+ $t('lay.layer.photos.tools.scaleX') +'"><i class="layui-icon layui-icon-slider"></i></span>',
-                '<span toolbar-event="zoom" data-option="0.1" title="'+ $t('lay.layer.photos.tools.zoomIn') +'"><i class="layui-icon layui-icon-add-circle"></i></span>',
-                '<span toolbar-event="zoom" data-option="-0.1" title="'+ $t('lay.layer.photos.tools.zoomOut') +'"><i class="layui-icon layui-icon-reduce-circle"></i></span>',
-                '<span toolbar-event="reset" title="'+ $t('lay.layer.photos.tools.reset') +'"><i class="layui-icon layui-icon-refresh-1"></i></span>',
-                '<span toolbar-event="close" title="'+ $t('lay.layer.photos.tools.close') +'"><i class="layui-icon layui-icon-close"></i></span>',
+                '<span toolbar-event="rotate" data-option="90" title="'+ $t('layer.photos.tools.rotate') +'"><i class="layui-icon layui-icon-refresh"></i></span>',
+                '<span toolbar-event="scalex" title="'+ $t('layer.photos.tools.scaleX') +'"><i class="layui-icon layui-icon-slider"></i></span>',
+                '<span toolbar-event="zoom" data-option="0.1" title="'+ $t('layer.photos.tools.zoomIn') +'"><i class="layui-icon layui-icon-add-circle"></i></span>',
+                '<span toolbar-event="zoom" data-option="-0.1" title="'+ $t('layer.photos.tools.zoomOut') +'"><i class="layui-icon layui-icon-reduce-circle"></i></span>',
+                '<span toolbar-event="reset" title="'+ $t('layer.photos.tools.reset') +'"><i class="layui-icon layui-icon-refresh-1"></i></span>',
+                '<span toolbar-event="close" title="'+ $t('layer.photos.tools.close') +'"><i class="layui-icon layui-icon-close"></i></span>',
               '</div>'
             ].join(''));
           }
@@ -1900,7 +1901,7 @@ layer.photos = function(options, loop, key){
             arr.push(['<div class="layui-layer-photos-toolbar layui-layer-photos-footer">',
               '<h3>'+ alt +'</h3>',
               '<em>'+ dict.imgIndex +' / '+ data.length +'</em>',
-              '<a href="'+ data[start].src + '" target="_blank">'+ $t('lay.layer.photos.viewPicture') +'</a>',
+              '<a href="'+ data[start].src + '" target="_blank">'+ $t('layer.photos.viewPicture') +'</a>',
             '</div>'].join(''));
           }
 
@@ -1922,9 +1923,9 @@ layer.photos = function(options, loop, key){
     }, options));
   }, function(){
     layer.close(dict.loadi);
-    layer.msg($t('lay.layer.photos.urlError.prompt'), {
+    layer.msg($t('layer.photos.urlError.prompt'), {
       time: 30000,
-      btn: [$t('lay.layer.photos.urlError.confirm'), $t('lay.layer.photos.urlError.cancel')],
+      btn: [$t('layer.photos.urlError.confirm'), $t('layer.photos.urlError.cancel')],
       yes: function(){
         data.length > 1 && dict.imgnext(true,true);
       }
