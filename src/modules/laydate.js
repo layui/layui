@@ -201,11 +201,12 @@
         selectTime: '选择时间',
         startTime: '开始时间',
         endTime: '结束时间',
-        selectDate: '返回日期',
+        selectDate: '选择日期',
         tools: {
           confirm: '确定',
           clear: '清空',
-          now: '现在'
+          now: '现在',
+          reset: '重置'
         },
         timeout: '结束时间不能早于开始时间<br>请重新选择',
         invalidDate: '不在有效日期或时间范围内',
@@ -223,7 +224,8 @@
         tools: {
           confirm: 'Confirm',
           clear: 'Clear',
-          now: 'Now'
+          now: 'Now',
+          reset: 'Reset'
         },
         timeout: 'End time cannot be less than start Time<br>Please re-select',
         invalidDate: 'Invalid date',
@@ -594,8 +596,10 @@
 
       lay.each(options.btns, function(i, item){
         var title = lang.tools[item] || 'btn';
-        if(options.range && item === 'now') return;
-        if(isStatic && item === 'clear') title = options.lang === 'cn' ? '重置' : 'Reset';
+        if (options.range && item === 'now') return;
+        if (isStatic && item === 'clear') {
+          title = lang.tools.reset;
+        }
         btns.push('<span lay-type="'+ item +'" class="laydate-btns-'+ item +'">'+ title +'</span>');
       });
       html.push('<div class="laydate-footer-btns">'+ btns.join('') +'</div>');
@@ -2388,9 +2392,7 @@
               ? that.startTime && that.endTime && that.newDate(that.startTime) > that.newDate(that.endTime)
               : that.startDate && that.endDate && that.newDate(lay.extend({},that.startDate, that.startTime || {})) > that.newDate(lay.extend({},that.endDate, that.endTime || {}));
 
-            return isTimeout
-              ? that.hint(options.type === 'time' ? lang.timeout.replace(/日期/g, '时间') : lang.timeout)
-              : that.hint(lang.invalidDate);
+            return that.hint(isTimeout ? lang.timeout : lang.invalidDate);
           }
         } else {
           if(lay(btn).hasClass(DISABLED)) return that.hint(lang.invalidDate);
