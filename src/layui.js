@@ -11,212 +11,11 @@
   var document = window.document;
   var location = window.location;
 
-  // 中文国际化消息对象
-  var zhCN = {
-    locale: 'zh-cn',
-    code: {
-      copy: '复制代码',
-      copied: '已复制',
-      copyError: '复制失败',
-      maximize: '最大化显示',
-      restore: '还原显示',
-      preview: '在新窗口预览'
-    },
-    colorpicker: {
-      clear: '清除',
-      confirm: '确定'
-    },
-    dropdown: {
-      noData: '暂无数据'
-    },
-    flow: {
-      loadMore: '加载更多',
-      noMore: '没有更多了'
-    },
-    form: {
-      select: {
-        noData: '暂无数据',
-        noMatch: '无匹配数据',
-        placeholder: '请选择'
-      },
-      validateMessages: {
-        required: '必填项不能为空',
-        phone: '手机号格式不正确',
-        email: '邮箱格式不正确',
-        url: '链接格式不正确',
-        number: '只能填写数字',
-        date: '日期格式不正确',
-        identity: '身份证号格式不正确'
-      },
-      verifyErrorPromptTitle: '提示'
-    },
-    laydate: {
-      // 未使用的字段为保留字段，将来可能会使用
-      month: {
-        long: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-        short: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
-      },
-      week: {
-        long: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-        short: ['日', '一', '二', '三', '四', '五', '六']
-      },
-      time: ['时', '分', '秒'],
-      selectTime: '选择时间',
-      startTime: '开始时间',
-      endTime: '结束时间',
-      selectDate: '选择日期',
-      tools: {
-        confirm: '确定',
-        clear: '清空',
-        now: '现在',
-        reset: '重置'
-      },
-      timeout: {
-        date: '结束日期不能早于开始日期<br>请重新选择',
-        time: '结束时间不能早于开始时间<br>请重新选择'
-      },
-      invalidDate: '不在有效日期或时间范围内',
-      formatError: ['日期格式不合法<br>必须遵循下述格式：<br>', '<br>已为你重置'],
-      preview: '当前选中的结果',
-      // IE11- Date.prototype.toLocaleDateString 不支持第二个参数，所以此处用函数实现
-      panelHeaderFormat: {
-        year: function (y) { return y + ' 年' },
-        month: function (m) { return m + ' 月' },
-        monthBeforeYear: false
-      },
-      // 面板中某些字符串拼接使用
-      view: {
-        year: '年',
-        month: '月',
-        week: '周',
-        day: '天'
-      }
-    },
-    layer: {
-      confirm: '确定',
-      cancel: '取消',
-      defaultTitle: '信息',
-      prompt: {
-        InputLengthPrompt: '最多输入 {length} 个字符'
-      },
-      photos: {
-        noData: '没有图片',
-        tools:{
-          rotate: '旋转',
-          scaleX: '水平变换',
-          zoomIn: '放大',
-          zoomOut: '缩小',
-          reset: '还原',
-          close: '关闭'
-        },
-        viewPicture: '查看原图',
-        urlError: {
-          prompt: '当前图片地址异常，<br>是否继续查看下一张？',
-          confirm: '下一张',
-          cancel: '不看了'
-        }
-      }
-    },
-    laypage: {
-      prev: '上一页',
-      next: '下一页',
-      first: '首页',
-      last: '尾页',
-      total: '共 {total} 条',
-      pagesize: '条/页',
-      goto: '到第',
-      page: '页',
-      confirm: '确定'
-    },
-    table: {
-      sort: {
-        asc: '升序',
-        desc: '降序'
-      },
-      noData: '无数据',
-      tools:{
-        filter: {
-          title: '筛选列'
-        },
-        export: {
-          title: '导出',
-          noDataPrompt: '当前表格无数据',
-          compatPrompt: '导出功能不支持 IE，请用 Chrome 等高级浏览器导出',
-          csvText : '导出 CSV 文件'
-        },
-        print: {
-          title: '打印',
-          noDataPrompt: '当前表格无数据'
-        }
-      },
-      dataFormatError: '返回的数据不符合规范，正确的成功状态码应为："{statusName}": {statusCode}',
-      xhrError: '请求异常，错误提示：{msg}'
-    },
-    transfer: {
-      noData: '无数据',
-      noMatch: '无匹配数据',
-      title: ['列表一', '列表二'],
-      searchPlaceholder: '关键词搜索'
-    },
-    tree: {
-      defaultNodeName: '未命名',
-      noData: '无数据',
-      deleteNodePrompt: '确认删除"{name}"节点吗？'
-    },
-    upload: {
-      fileType: {
-        file: '文件',
-        image: '图片',
-        video: '视频',
-        audio: '音频'
-      },
-      validateMessages: {
-        fileExtensionError: '选择的{fileType}中包含不支持的格式',
-        filesOverLengthLimit: '同时最多只能上传: {length} 个文件',
-        currentFilesLength: '您当前已经选择了: {length} 个文件',
-        fileOverSizeLimit: '文件大小不能超过 {size}'
-      },
-      chooseText: '{length} 个文件' 
-    },
-    util: {
-      timeAgo: {
-        days: '{days} 天前',
-        hours: '{hours} 小时前',
-        minutes: '{minutes} 分钟前',
-        future: '未来',
-        justNow: '刚刚'
-      },
-      toDateString: {
-        meridiem: function(hours, minutes){
-          var hm = hours * 100 + minutes;
-          if (hm < 600) {
-            return '凌晨';
-          } else if (hm < 900) {
-            return '早上';
-          } else if (hm < 1100) {
-            return '上午';
-          } else if (hm < 1300) {
-            return '中午';
-          } else if (hm < 1800) {
-            return '下午';
-          }
-          return '晚上';
-        }
-      }
-    }
-  }
-
   // 基础配置
   var config = {
     timeout: 10, // 符合规范的模块请求最长等待秒数
     debug: false, // 是否开启调试模式
-    version: false, // 是否在模块请求时加入版本号参数（以更新模块缓存）
-    i18n:{
-      locale: 'zh-cn', // 全局内置语言
-      messages: { // 全局国际化消息对象
-        'zh-cn': zhCN
-      }
-    }
+    version: false // 是否在模块请求时加入版本号参数（以更新模块缓存）
   };
 
   // 模块加载缓存信息
@@ -234,8 +33,6 @@
 
   // 识别预先可能定义的指定全局对象
   var GLOBAL = window.LAYUI_GLOBAL || {};
-  var OBJECT_REPLACE_REGEX = /\{(\w+)\}/g;
-  var INDEX_REPLACE_REGEX = /\{(\d+)\}/g;
 
   // 获取 layui 所在目录
   var getPath = function() {
@@ -258,12 +55,10 @@
   // 异常提示
   var error = function(msg, type) {
     type = type || 'log';
-    msg = 'layui error hint: ' + msg
+    msg = 'Layui message: ' + msg;
 
-    if (window.console && console[type]) {
-      console[type](msg);
-    } else if (window.console && console.log) {
-      console.log(msg);
+    if (window.console) {
+      console[type] ? console[type](msg) : console.log(msg);
     }
   };
 
@@ -292,6 +87,7 @@
     code: 'code', // 代码修饰器
     jquery: 'jquery', // DOM 库（第三方）
     component: 'component', // 组件构建器
+    i18n:  'i18n', // 国际化
 
     all: 'all',
     'layui.all': 'layui.all' // 聚合标识（功能性的，非真实模块）
@@ -371,16 +167,9 @@
   /**
    * 全局配置
    * @param {Object} options - 配置对象
-   * @param {boolean} deepMerge - 是否深度合并配置信息，默认为 false
    */
-  Class.prototype.config = function(options, deepMerge) {
-
-    if(deepMerge){
-      deepClone(config, options);
-    }else{
-      Object.assign(config, options);
-    }
-
+  Class.prototype.config = function(options) {
+    Object.assign(config, options);
     return this;
   };
 
@@ -1243,147 +1032,6 @@
         }, wait);
       }
     }
-  };
-
-  /**
-   * 根据给定的键从国际化消息中获取翻译后的内容
-   * 
-   * 未文档化的私有方法，仅限内部使用
-   * 
-   * @overload
-   * @param {string} key 要翻译的键
-   * @param {Record<string, any>} opts 国际化消息对象，替换 {key} 形式的占位符
-   * @returns {string} 翻译后的文本
-   * @example
-   * ```
-   * message: {
-   *   hello: '{msg} world'
-   * }
-   * layui.$t('message.hello', {msg: 'Hello'})
-   * ```
-   * 
-   * @overload
-   * @param {string} key 要翻译的键
-   * @param {any[]} opts 国际化消息数组，替换 {0}, {1}... 形式的占位符
-   * @returns {string} 翻译后的文本
-   * @example
-   * ```
-   * message: {
-   *   hello: '{0} world'
-   * }
-   * layui.$t('message.hello', ['Hello'])
-   * ```
-   * 
-   * @overload
-   * @param {string} key 要翻译的键
-   * @param {...*} args 国际化消息可变参数，替换 {0}, {1}... 形式的占位符
-   * @returns {string} 翻译后的文本
-   * @example
-   * ```
-   * message: {
-   *   hello: '{0} world'
-   * }
-   * layui.$t('message.hello', 'Hello')
-   * ```
-   * @internal
-   * @param {string} key
-   * @param {any[]} args
-   */
-  Class.prototype.i18nTranslation = function(key){
-    var that = this;
-    var args = arguments;
-    
-    var i18n = that.cache.i18n;
-    var i18nMessage = i18n.messages[i18n.locale];
-
-    if(!i18nMessage){
-      error('Locale "' + i18n.locale + '" not found. Please add i18n messages for this locale first.', 'warn');
-      return key;
-    }
-
-    var result = get(i18nMessage, key, key);
-
-    // 替换占位符
-    if(typeof result === 'string' && args.length > 1){
-      var opts = args[1];
-      // 第二个参数为对象或数组，替换占位符 {key} 或 {0}, {1}...
-      if(opts !== null && typeof opts === 'object'){
-        return result.replace(OBJECT_REPLACE_REGEX, function(match, key) {
-          return opts[key] !== undefined ? opts[key] : match;
-        });
-      }
-
-      // 处理可变参数，替换占位符 {0}, {1}...
-      return result.replace(INDEX_REPLACE_REGEX, function(match, index) {
-        var arg = args[index + 1];
-        return arg !== undefined ? arg : match;
-      });
-    }
-
-    return result;
-  };
-
-  /**
-   * 根据给定的键从国际化消息中获取翻译后的内容
-   * 
-   * layui.i18nTranslation 的别名，用于简化代码书写，未文档化仅限内部使用
-   */
-  Class.prototype.$t = Class.prototype.i18nTranslation;
-
-  /**
-   * 获取对象中的值，lodash _.get 简易版
-   * @param {Record<string, any>} obj 
-   * @param {string} path 
-   * @param {any} defaultValue 
-   */
-  function get(obj, path, defaultValue){
-    // 'a[0].b.c' ==> ['a', '0', 'b', 'c']
-    var casePath = path.replace(/\[(\d+)\]/g, '.$1').split('.');
-    var result = obj;
-
-    for(var i = 0; i < casePath.length; i++) {
-      result = result && result[casePath[i]];
-      if(result === null || result === undefined){
-        return defaultValue;
-      }
-    }
-
-    return result;
-  }
-
-  /**
-   * 将两个或多个对象的内容深度合并到第一个对象中
-   * 复制自 lay.extend
-   * @callback ExtendFunc
-   * @param {*} target - 一个对象
-   * @param {...*} objectN - 包含额外的属性合并到第一个参数
-   * @returns {*} 返回合并后的对象
-   */
-  /** @type ExtendFunc*/
-  function deepClone(){
-    var ai = 1;
-    var length;
-    var args = arguments;
-    var clone = function(target, obj){
-      target = target || (layui.type(obj) === 'array' ? [] : {}); // 目标对象
-      for(var i in obj){
-        // 若值为普通对象，则进入递归，继续深度合并
-        target[i] = (obj[i] && obj[i].constructor === Object)
-          ? clone(target[i], obj[i])
-        : obj[i];
-      }
-      return target;
-    };
-
-    args[0] = typeof args[0] === 'object' ? args[0] : {};
-    length = args.length
-
-    for(; ai < length; ai++){
-      if(typeof args[ai] === 'object'){
-        clone(args[0], args[ai]);
-      }
-    }
-    return args[0];
   };
 
   // export layui

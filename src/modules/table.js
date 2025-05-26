@@ -3,7 +3,7 @@
  * 表格组件
  */
 
-layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
+layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
   "use strict";
 
   var $ = layui.$;
@@ -15,6 +15,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
   var util = layui.util;
   var hint = layui.hint();
   var device = layui.device();
+  var i18n = layui.i18n;
 
   // api
   var table = {
@@ -192,7 +193,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
               ,'{{# } else { }}'
                 ,'<span>{{-item2.title||""}}</span>'
                 ,'{{# if(isSort){ }}'
-                  ,'<span class="layui-table-sort layui-inline"><i class="layui-edge layui-table-sort-asc" title="' + layui.$t('table.sort.asc') + '"></i><i class="layui-edge layui-table-sort-desc" title="' + layui.$t('table.sort.desc') + '"></i></span>'
+                  ,'<span class="layui-table-sort layui-inline"><i class="layui-edge layui-table-sort-asc" title="' + i18n.$t('table.sort.asc') + '"></i><i class="layui-edge layui-table-sort-desc" title="' + i18n.$t('table.sort.desc') + '"></i></span>'
                 ,'{{# } }}'
               ,'{{# } }}'
             ,'</div>'
@@ -302,7 +303,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
     defaultContextmenu: true, // 显示默认上下文菜单
     autoSort: true, // 是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
     text: {
-      none: layui.$t('table.noData')
+      none: '无数据'
     },
     cols: []
   };
@@ -323,7 +324,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
     thisTable.that[id] = that; // 记录当前实例对象
     thisTable.config[id] = options; // 记录当前实例配置项
 
-    //请求参数的自定义格式
+    // 请求参数的自定义格式
     options.request = $.extend({
       pageName: 'page',
       limitName: 'limit'
@@ -339,7 +340,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
       countName: 'count'
     }, options.response);
 
-    //如果 page 传入 laypage 对象
+    // 如果 page 传入 laypage 对象
     if(options.page !== null && typeof options.page === 'object'){
       options.limit = options.page.limit || options.limit;
       options.limits = options.page.limits || options.limits;
@@ -348,7 +349,12 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
       delete options.page.jump;
     }
 
-    if(!options.elem[0]) return that;
+    // 加载 i18n 自定义文本
+    options.text = $.extend(true, {
+      none: i18n.$t('table.noData')
+    }, options.text);
+
+    if (!options.elem[0]) return that;
 
     // 若元素未设 lay-filter 属性，则取实例 id 值
     if(!options.elem.attr('lay-filter')){
@@ -650,7 +656,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
     // 头部工具栏右上角默认工具
     var defaultConfig = {
       filter: {
-        title: layui.$t('table.tools.filter.title'),
+        title: i18n.$t('table.tools.filter.title'),
         layEvent: 'LAYTABLE_COLS',
         icon: 'layui-icon-cols',
         onClick: function(obj) {
@@ -703,7 +709,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
         }
       },
       exports: {
-        title: layui.$t('table.tools.export.title'),
+        title: i18n.$t('table.tools.export.title'),
         layEvent: 'LAYTABLE_EXPORT',
         icon: 'layui-icon-export',
         onClick: function(obj) { // 自带导出
@@ -712,16 +718,16 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
           var openPanel = obj.openPanel;
           var elem = obj.elem;
 
-          if (!data.length) return layer.tips(layui.$t('table.tools.export.noDataPrompt'), elem, {tips: 3});
+          if (!data.length) return layer.tips(i18n.$t('table.tools.export.noDataPrompt'), elem, {tips: 3});
           if(device.ie){
-            layer.tips(layui.$t('table.tools.export.compatPrompt'), elem, {
+            layer.tips(i18n.$t('table.tools.export.compatPrompt'), elem, {
               tips: 3
             });
           } else {
             openPanel({
               list: function(){
                 return [
-                  '<li data-type="csv">'+ layui.$t('table.tools.export.csvText') +'</li>'
+                  '<li data-type="csv">'+ i18n.$t('table.tools.export.csvText') +'</li>'
                 ].join('')
               }(),
               done: function(panel, list){
@@ -735,7 +741,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
         }
       },
       print: {
-        title: layui.$t('table.tools.print.title'),
+        title: i18n.$t('table.tools.print.title'),
         layEvent: 'LAYTABLE_PRINT',
         icon: 'layui-icon-print',
         onClick: function(obj) {
@@ -743,7 +749,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
           var options = obj.config;
           var elem = obj.elem;
 
-          if (!data.length) return layer.tips(layui.$t('table.tools.print.noDataPrompt'), elem, {tips: 3});
+          if (!data.length) return layer.tips(i18n.$t('table.tools.print.noDataPrompt'), elem, {tips: 3});
           var printWin = window.open('about:blank', '_blank');
           var style = ['<style>',
             'body{font-size: 12px; color: #5F5F5F;}',
@@ -1219,8 +1225,8 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
           if(res[response.statusName] != response.statusCode){
             that.errorView(
               res[response.msgName] ||
-              layui.$t('table.dataFormatError', {
-                statusName: response.statusName, 
+              i18n.$t('table.dataFormatError', {
+                statusName: response.statusName,
                 statusCode: response.statusCode
               })
             );
@@ -1249,7 +1255,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
             that._xhrAbort = false;
             return;
           }
-          that.errorView(layui.$t('table.xhrError', {msg: msg}));
+          that.errorView(i18n.$t('table.xhrError', {msg: msg}));
           typeof options.error === 'function' && options.error(e, msg);
         }
       });

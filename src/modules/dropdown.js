@@ -3,13 +3,14 @@
  * 下拉菜单组件
  */
 
-layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports) {
+layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
   "use strict";
 
   var $ = layui.$;
   var laytpl = layui.laytpl;
   var util = layui.util;
   var hint = layui.hint();
+  var i18n = layui.i18n;
   var device = layui.device();
   var clickOrMousedown = (device.mobile ? 'touchstart' : 'mousedown');
 
@@ -181,7 +182,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports) {
       if(options.data.length > 0 ){
         eachItemView(elemUl, options.data)
       } else {
-        elemUl.html('<li class="layui-menu-item-none">' + layui.$t('dropdown.noData') + '</li>');
+        elemUl.html('<li class="layui-menu-item-none">' + i18n.$t('dropdown.noData') + '</li>');
       }
       return elemUl;
     };
@@ -569,7 +570,7 @@ layui.define(['jquery', 'laytpl', 'lay', 'util'], function(exports) {
       that.remove();
     }, lay.passiveSupported ? { passive: false} : false);
 
-    // onClickOutside 检测 iframe 
+    // onClickOutside 检测 iframe
     _WIN.on('blur', function(e){
       if(!dropdown.thisId) return;
       var that = thisModule.getThis(dropdown.thisId)

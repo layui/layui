@@ -9,6 +9,7 @@
 var isLayui = window.layui && layui.define;
 var $;
 var win;
+var i18n = {};
 var OBJECT_REPLACE_REGEX = /\{(\w+)\}/g;
 
 var ready = {
@@ -126,9 +127,9 @@ var ready = {
 
   /**
    * 获取对象中的值，lodash _.get 简易版
-   * @param {Record<string, any>} obj 
-   * @param {string} path 
-   * @param {any} defaultValue 
+   * @param {Record<string, any>} obj
+   * @param {string} path
+   * @param {any} defaultValue
    */
 var get = function (obj, path, defaultValue) {
   // 'a[0].b.c' ==> ['a', '0', 'b', 'c']
@@ -146,22 +147,19 @@ var get = function (obj, path, defaultValue) {
 }
 
 // 根据给定的键从国际化消息中获取翻译后的内容
-var $t = isLayui
-  ? layui.$t.bind(layui)
-  : function(key){
-    // 非 layui 环境去除命名空间前缀，从 config.lang 中取值
-    // TODO 简化版，暂不文档化，不支持配置多个 locale
-    key = key.replace(/^layer\./, '');
-    var result = get(ready.config.lang, key, key);
-    if(typeof result === 'string' && arguments.length > 1) {
-      var opts = arguments[1];
-      return result.replace(OBJECT_REPLACE_REGEX, function(match, key) {
-        return opts[key] !== undefined ? opts[key] : match;
-      })
-    }
-    return result;
-  };
-
+i18n.$t = function(key) {
+  // 非 layui 环境去除命名空间前缀，从 config.lang 中取值
+  // TODO 简化版，暂不文档化，不支持配置多个 locale
+  key = key.replace(/^layer\./, '');
+  var result = get(ready.config.lang, key, key);
+  if(typeof result === 'string' && arguments.length > 1) {
+    var opts = arguments[1];
+    return result.replace(OBJECT_REPLACE_REGEX, function(match, key) {
+      return opts[key] !== undefined ? opts[key] : match;
+    })
+  }
+  return result;
+};
 
 
 // 默认内置方法。
@@ -227,7 +225,7 @@ var layer = {
     }
     return layer.open($.extend({
       content: content,
-      btn: [$t('layer.confirm'), $t('layer.cancel')],
+      btn: [i18n.$t('layer.confirm'), i18n.$t('layer.cancel')],
       yes: yes,
       btn2: cancel
     }, type ? {} : options));
@@ -291,7 +289,7 @@ var Class = function(setings){
     that.creat();
   };
   // TODO 临时的同步方案
-  ready.config.title = $t('layer.defaultTitle');
+  ready.config.title = i18n.$t('layer.defaultTitle');
   that.index = ++layer.index;
   that.config.maxWidth = $(win).width() - 15*2; // 初始最大宽度：当前屏幕宽，左右留 15px 边距
   that.config = $.extend({}, that.config, ready.config, setings);
@@ -335,7 +333,7 @@ Class.pt.config = {
   shade: 0.3,
   fixed: true,
   move: doms[1],
-  title: $t('layer.defaultTitle'),
+  title: i18n.$t('layer.defaultTitle'),
   offset: 'auto',
   area: 'auto',
   closeBtn: 1,
@@ -523,7 +521,7 @@ Class.pt.creat = function(){
 
   switch(config.type){
     case 0:
-      config.btn = ('btn' in config) ? config.btn : $t('layer.confirm');
+      config.btn = ('btn' in config) ? config.btn : i18n.$t('layer.confirm');
       layer.closeAll('dialog');
     break;
     case 2:
@@ -1511,7 +1509,7 @@ layer.prompt = function(options, yes){
 
   return layer.open($.extend({
     type: 1,
-    btn: [$t('layer.confirm'),$t('layer.cancel')],
+    btn: [i18n.$t('layer.confirm'),i18n.$t('layer.cancel')],
     content: content,
     skin: 'layui-layer-prompt' + skin('prompt'),
     maxWidth: win.width(),
@@ -1524,7 +1522,7 @@ layer.prompt = function(options, yes){
     yes: function(index){
       var value = prompt.val();
       if(value.length > (options.maxlength||500)) {
-        layer.tips($t('layer.prompt.InputLengthPrompt', {length: (options.maxlength || 500)}), prompt, {tips: 1});
+        layer.tips(i18n.$t('layer.prompt.InputLengthPrompt', {length: (options.maxlength || 500)}), prompt, {tips: 1});
       } else {
         yes && yes(value, index, prompt);
       }
@@ -1638,7 +1636,7 @@ layer.photos = function(options, loop, key){
     // 不直接弹出
     if (!loop) return;
   } else if (data.length === 0){
-    return layer.msg($t('layer.photos.noData'));
+    return layer.msg(i18n.$t('layer.photos.noData'));
   }
 
   // 上一张
@@ -1886,12 +1884,12 @@ layer.photos = function(options, loop, key){
           if (options.toolbar) {
             arr.push([
               '<div class="layui-layer-photos-toolbar layui-layer-photos-header">',
-                '<span toolbar-event="rotate" data-option="90" title="'+ $t('layer.photos.tools.rotate') +'"><i class="layui-icon layui-icon-refresh"></i></span>',
-                '<span toolbar-event="scalex" title="'+ $t('layer.photos.tools.scaleX') +'"><i class="layui-icon layui-icon-slider"></i></span>',
-                '<span toolbar-event="zoom" data-option="0.1" title="'+ $t('layer.photos.tools.zoomIn') +'"><i class="layui-icon layui-icon-add-circle"></i></span>',
-                '<span toolbar-event="zoom" data-option="-0.1" title="'+ $t('layer.photos.tools.zoomOut') +'"><i class="layui-icon layui-icon-reduce-circle"></i></span>',
-                '<span toolbar-event="reset" title="'+ $t('layer.photos.tools.reset') +'"><i class="layui-icon layui-icon-refresh-1"></i></span>',
-                '<span toolbar-event="close" title="'+ $t('layer.photos.tools.close') +'"><i class="layui-icon layui-icon-close"></i></span>',
+                '<span toolbar-event="rotate" data-option="90" title="'+ i18n.$t('layer.photos.tools.rotate') +'"><i class="layui-icon layui-icon-refresh"></i></span>',
+                '<span toolbar-event="scalex" title="'+ i18n.$t('layer.photos.tools.scaleX') +'"><i class="layui-icon layui-icon-slider"></i></span>',
+                '<span toolbar-event="zoom" data-option="0.1" title="'+ i18n.$t('layer.photos.tools.zoomIn') +'"><i class="layui-icon layui-icon-add-circle"></i></span>',
+                '<span toolbar-event="zoom" data-option="-0.1" title="'+ i18n.$t('layer.photos.tools.zoomOut') +'"><i class="layui-icon layui-icon-reduce-circle"></i></span>',
+                '<span toolbar-event="reset" title="'+ i18n.$t('layer.photos.tools.reset') +'"><i class="layui-icon layui-icon-refresh-1"></i></span>',
+                '<span toolbar-event="close" title="'+ i18n.$t('layer.photos.tools.close') +'"><i class="layui-icon layui-icon-close"></i></span>',
               '</div>'
             ].join(''));
           }
@@ -1901,7 +1899,7 @@ layer.photos = function(options, loop, key){
             arr.push(['<div class="layui-layer-photos-toolbar layui-layer-photos-footer">',
               '<h3>'+ alt +'</h3>',
               '<em>'+ dict.imgIndex +' / '+ data.length +'</em>',
-              '<a href="'+ data[start].src + '" target="_blank">'+ $t('layer.photos.viewPicture') +'</a>',
+              '<a href="'+ data[start].src + '" target="_blank">'+ i18n.$t('layer.photos.viewPicture') +'</a>',
             '</div>'].join(''));
           }
 
@@ -1923,9 +1921,9 @@ layer.photos = function(options, loop, key){
     }, options));
   }, function(){
     layer.close(dict.loadi);
-    layer.msg($t('layer.photos.urlError.prompt'), {
+    layer.msg(i18n.$t('layer.photos.urlError.prompt'), {
       time: 30000,
-      btn: [$t('layer.photos.urlError.confirm'), $t('layer.photos.urlError.cancel')],
+      btn: [i18n.$t('layer.photos.urlError.confirm'), i18n.$t('layer.photos.urlError.cancel')],
       yes: function(){
         data.length > 1 && dict.imgnext(true,true);
       }
@@ -1964,7 +1962,8 @@ ready.run = function(_$){
 // 加载方式
 window.layui && layui.define ? (
   layer.ready(),
-  layui.define(['jquery','lay'], function(exports){ // layui
+  layui.define(['jquery', 'lay', 'i18n'], function(exports) { // layui
+    i18n.$t = layui.i18n.$t;
     layer.path = layui.cache.dir;
     ready.run(layui.$);
 

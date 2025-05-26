@@ -3,13 +3,14 @@
  * 上传组件
  */
 
-layui.define(['lay', 'layer'], function(exports) {
+layui.define(['lay', 'i18n', 'layer'], function(exports) {
   "use strict";
 
   var $ = layui.$;
   var lay = layui.lay;
   var layer = layui.layer;
   var device = layui.device();
+  var i18n = layui.i18n;
 
   // 模块名
   var MOD_NAME = 'upload';
@@ -524,11 +525,11 @@ layui.define(['lay', 'layer'], function(exports) {
 
     // 文件类型名称
     var typeName = ({
-      file: layui.$t('upload.fileType.file'),
-      images: layui.$t('upload.fileType.image'),
-      video: layui.$t('upload.fileType.video'),
-      audio: layui.$t('upload.fileType.audio')
-    })[options.accept] || layui.$t('upload.fileType.file');
+      file: i18n.$t('upload.fileType.file'),
+      images: i18n.$t('upload.fileType.image'),
+      video: i18n.$t('upload.fileType.video'),
+      audio: i18n.$t('upload.fileType.audio')
+    })[options.accept] || i18n.$t('upload.fileType.file');
 
     // 校验文件格式
     value = value.length === 0
@@ -572,7 +573,7 @@ layui.define(['lay', 'layer'], function(exports) {
 
     // 校验失败提示
     if(check){
-      that.msg(text['check-error'] || layui.$t('upload.validateMessages.fileExtensionError', {fileType: typeName}));
+      that.msg(text['check-error'] || i18n.$t('upload.validateMessages.fileExtensionError', {fileType: typeName}));
       return elemFile.value = '';
     }
 
@@ -598,9 +599,9 @@ layui.define(['lay', 'layer'], function(exports) {
       return that.msg(typeof text['limit-number'] === 'function'
         ? text['limit-number'](options, that.fileLength)
       : (
-        layui.$t('upload.validateMessages.filesOverLengthLimit', {length: options.number})
+        i18n.$t('upload.validateMessages.filesOverLengthLimit', {length: options.number})
         + '<br/>'
-        + layui.$t('upload.validateMessages.currentFilesLength', {length: that.fileLength})
+        + i18n.$t('upload.validateMessages.currentFilesLength', {length: that.fileLength})
       ));
     }
 
@@ -619,7 +620,7 @@ layui.define(['lay', 'layer'], function(exports) {
       if(limitSize) return that.msg(
         typeof text['limit-size'] === 'function'
           ? text['limit-size'](options, limitSize)
-          : layui.$t('upload.validateMessages.fileOverSizeLimit', {size: limitSize}));
+          : i18n.$t('upload.validateMessages.fileOverSizeLimit', {size: limitSize}));
     }
 
     send();
@@ -644,7 +645,7 @@ layui.define(['lay', 'layer'], function(exports) {
       var elemFile = that.elemFile;
       var item = options.item ? options.item : options.elem;
       var value = files.length > 1
-        ? layui.$t('upload.chooseText', {length: files.length})
+        ? i18n.$t('upload.chooseText', {length: files.length})
       : ((files[0] || {}).name || (elemFile[0].value.match(/[^\/\\]+\..+/g)||[]) || '');
 
       if(elemFile.next().hasClass(ELEM_CHOOSE)){

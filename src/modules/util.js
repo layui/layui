@@ -2,11 +2,12 @@
  * util 工具组件
  */
 
-layui.define('jquery', function(exports) {
+layui.define(['i18n', 'jquery'], function(exports) {
   "use strict";
 
   var $ = layui.$;
   var hint = layui.hint();
+  var i18n = layui.i18n;
 
   // 外部接口
   var util = {
@@ -230,15 +231,15 @@ layui.define('jquery', function(exports) {
 
       // 30 天以内，返回「多久前」
       if(stamp >= 1000*60*60*24){
-        return layui.$t('util.timeAgo.days', {days: (stamp/1000/60/60/24)|0});
+        return i18n.$t('util.timeAgo.days', {days: (stamp/1000/60/60/24)|0});
       } else if(stamp >= 1000*60*60){
-        return layui.$t('util.timeAgo.hours', {hours: (stamp/1000/60/60)|0});
+        return i18n.$t('util.timeAgo.hours', {hours: (stamp/1000/60/60)|0});
       } else if(stamp >= 1000*60*3){ // 3 分钟以内为：刚刚
-        return layui.$t('util.timeAgo.minutes', {minutes: (stamp/1000/60)|0});
+        return i18n.$t('util.timeAgo.minutes', {minutes: (stamp/1000/60)|0});
       } else if(stamp < 0){
-        return layui.$t('util.timeAgo.future');
+        return i18n.$t('util.timeAgo.future');
       } else {
-        return layui.$t('util.timeAgo.justNow');
+        return i18n.$t('util.timeAgo.justNow');
       }
     },
 
@@ -318,7 +319,7 @@ layui.define('jquery', function(exports) {
           return '晚上';
       };
 
-      var meridiem = (options && options.customMeridiem) || layui.$t('util.toDateString.meridiem') || defaultMeridiem;
+      var meridiem = (options && options.customMeridiem) || i18n.$t('util.toDateString.meridiem') || defaultMeridiem;
 
       var matches = {
         yy: function(){return String(years).slice(-2);},

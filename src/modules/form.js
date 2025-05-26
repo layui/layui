@@ -2,7 +2,7 @@
  * form 表单组件
  */
 
-layui.define(['lay', 'layer', 'util'], function(exports){
+layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
   "use strict";
 
   var $ = layui.$;
@@ -10,6 +10,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
   var util = layui.util;
   var hint = layui.hint();
   var device = layui.device();
+  var i18n = layui.i18n;
 
   var MOD_NAME = 'form';
   var ELEM = '.layui-form';
@@ -31,42 +32,42 @@ layui.define(['lay', 'layer', 'util'], function(exports){
       verify: {
         required: function(value) {
           if (!/[\S]+/.test(value) || value === undefined || value === null) {
-            return layui.$t('form.validateMessages.required');
+            return i18n.$t('form.validateMessages.required');
           }
         },
         phone: function(value) {
           var EXP = /^1\d{10}$/;
           if (value && !EXP.test(value)) {
-            return layui.$t('form.validateMessages.phone');
+            return i18n.$t('form.validateMessages.phone');
           }
         },
         email: function(value) {
           var EXP = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
           if (value && !EXP.test(value)) {
-            return layui.$t('form.validateMessages.email');
+            return i18n.$t('form.validateMessages.email');
           }
         },
         url: function(value) {
           var EXP = /^(#|(http(s?)):\/\/|\/\/)[^\s]+\.[^\s]+$/;
           if (value && !EXP.test(value)) {
-            return layui.$t('form.validateMessages.url');
+            return i18n.$t('form.validateMessages.url');
           }
         },
         number: function(value){
           if (value && isNaN(value)) {
-            return layui.$t('form.validateMessages.number');
+            return i18n.$t('form.validateMessages.number');
           }
         },
         date: function(value){
           var EXP = /^(\d{4})[-\/](\d{1}|0\d{1}|1[0-2])([-\/](\d{1}|0\d{1}|[1-2][0-9]|3[0-1]))*$/;
           if (value && !EXP.test(value)) {
-            return layui.$t('form.validateMessages.date');
+            return i18n.$t('form.validateMessages.date');
           }
         },
         identity: function(value) {
           var EXP = /(^\d{15}$)|(^\d{17}(x|X|\d)$)/;
           if (value && !EXP.test(value)) {
-            return layui.$t('form.validateMessages.identity');
+            return i18n.$t('form.validateMessages.identity');
           }
         }
       },
@@ -466,7 +467,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
 
       // 下拉选择框
       ,select: function(elem){
-        var TIPS = layui.$t('form.select.placeholder');
+        var TIPS = i18n.$t('form.select.placeholder');
         var CLASS = 'layui-form-select';
         var TITLE = 'layui-select-title';
         var NONE = 'layui-select-none';
@@ -765,7 +766,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 }
               }else{
                 if(none){
-                  dl.find('.'+NONE)[0] || dl.append('<p class="'+ NONE + '">' + layui.$t('form.select.noMatch') + '</p>');
+                  dl.find('.'+NONE)[0] || dl.append('<p class="'+ NONE + '">' + i18n.$t('form.select.noMatch') + '</p>');
                 } else {
                   dl.find('.'+NONE).remove();
                 }
@@ -956,7 +957,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 }
               });
               if (arr.length === 0) {
-                arr.push('<dd lay-value="" class="'+ DISABLED + '">' + layui.$t('form.select.noData') + '</dd>');
+                arr.push('<dd lay-value="" class="'+ DISABLED + '">' + i18n.$t('form.select.noData') + '</dd>');
               }
               return arr.join('');
             }();
@@ -1367,7 +1368,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
                 return othis;
               }(), {tips: 1});
             } else if(verType === 'alert') {
-              layer.alert(errorText, {title: layui.$t('form.verifyErrorPromptTitle'), shadeClose: true});
+              layer.alert(errorText, {title: i18n.$t('form.verifyErrorPromptTitle'), shadeClose: true});
             }
             // 若返回的为字符或数字，则自动弹出默认提示框；否则由 verify 方法中处理提示
             else if(/\b(string|number)\b/.test(typeof errorText)) {

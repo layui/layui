@@ -3,12 +3,13 @@
  * 颜色选择组件
  */
 
-layui.define(['jquery', 'lay'], function(exports) {
+layui.define(['i18n', 'jquery', 'lay'], function(exports) {
   "use strict";
 
   var $ = layui.$;
   var lay = layui.lay;
   var hint = layui.hint();
+  var i18n = layui.i18n;
   var device = layui.device();
   var clickOrMousedown = (device.mobile ? 'click' : 'mousedown');
 
@@ -285,8 +286,8 @@ layui.define(['jquery', 'lay'], function(exports) {
           ,'<input type="text" class="layui-input">'
         ,'</div>'
         ,'<div class="layui-btn-group">'
-          ,'<button style="border-radius: 0" class="layui-btn layui-btn-primary layui-btn-sm" colorpicker-events="clear">' + layui.$t('colorpicker.clear') + '</button>'
-          ,'<button style="border-radius: 0; border-left: 0" class="layui-btn layui-btn-primary layui-btn-sm" colorpicker-events="confirm">' + layui.$t('colorpicker.confirm')  + '</button>'
+          ,'<button style="border-radius: 0" class="layui-btn layui-btn-primary layui-btn-sm" colorpicker-events="clear">' + i18n.$t('colorpicker.clear') + '</button>'
+          ,'<button style="border-radius: 0; border-left: 0" class="layui-btn layui-btn-primary layui-btn-sm" colorpicker-events="confirm">' + i18n.$t('colorpicker.confirm')  + '</button>'
         ,'</div'
       ,'</div>'
     ,'</div>'].join(''))
