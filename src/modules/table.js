@@ -302,9 +302,6 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     defaultToolbar: ['filter', 'exports', 'print'], // 工具栏右侧图标
     defaultContextmenu: true, // 显示默认上下文菜单
     autoSort: true, // 是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
-    text: {
-      none: '无数据'
-    },
     cols: []
   };
 
