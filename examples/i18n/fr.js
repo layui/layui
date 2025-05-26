@@ -135,19 +135,7 @@ export default {
     },
     toDateString: {
       meridiem: function(hours, minutes){
-        var hm = hours * 100 + minutes;
-        if (hm < 600) {
-          return 'Tôt le matin';
-        } else if (hm < 900) {
-          return 'Matin';
-        } else if (hm < 1100) {
-          return 'Avant-midi';
-        } else if (hm < 1300) {
-          return 'Midi';
-        } else if (hm < 1800) {
-          return 'Après-midi';
-        }
-        return 'Soir';
+        return hours < 12 ? 'AM' : 'PM';
       }
     }
   }

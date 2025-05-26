@@ -136,19 +136,7 @@ export default {
     },
     toDateString: {
       meridiem: function (hours, minutes) {
-        var hm = hours * 100 + minutes;
-        if (hm < 600) {
-          return 'Midnight';
-        } else if (hm < 900) {
-          return 'Morning';
-        } else if (hm < 1100) {
-          return 'Forenoon';
-        } else if (hm < 1300) {
-          return 'Noon';
-        } else if (hm < 1800) {
-          return 'Afternoon';
-        }
-        return 'Evening';
+        return hours < 12 ? 'AM' : 'PM';
       }
     }
   }
