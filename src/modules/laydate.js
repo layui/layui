@@ -1,26 +1,13 @@
-/** laydate 日期与时间控件 | MIT Licensed */
-// @ts-expect-error
-(function(window, document) {
+/**
+ * laydate
+ * 日期与时间组件
+ */
+
+layui.define(['lay', 'i18n'], function(exports) {
   "use strict";
 
-  var isLayui = window.layui && layui.define;
-  var ready = {
-    getPath: window.lay && lay.getPath ? lay.getPath : '',
-
-    // 载入 CSS 依赖
-    link: function (href, fn, cssname) {
-      // 未设置路径，则不主动加载 css
-      if (!laydate.path) return;
-
-      // 加载 css
-      if (window.lay && lay.layui) {
-        lay.layui.link(laydate.path + href, fn, cssname);
-      }
-    }
-  };
-
-  // 识别预先可能定义的指定全局对象
-  var GLOBAL = window.LAYUI_GLOBAL || {};
+  var lay  = layui.lay;
+  var i18n = layui.i18n;
 
   // 模块名
   var MOD_NAME = 'laydate';
@@ -28,12 +15,11 @@
 
   // 外部调用
   var laydate = {
-    v: '5.6.0', // layDate 版本号
+    v: '5.7.0', // layDate 版本号
     config: {
       weekStart: 0 // 默认周日一周的开始
     }, // 全局配置项
     index: window.laydate && window.laydate.v ? 100000 : 0,
-    path: GLOBAL.laydate_dir || ready.getPath,
 
     // 设置全局项
     set: function (options) {
@@ -45,14 +31,14 @@
     // 主体 CSS 等待事件
     ready: function (callback) {
       var cssname = 'laydate';
-      var ver = '';
-      var path = (isLayui ? 'modules/' : '') + 'laydate.css?v=' + laydate.v + ver;
+      var path = 'modules/laydate.css?v=' + laydate.v;
 
-      isLayui ? (
-        layui['layui.all'] ?
-          (typeof callback === 'function' && callback()) :
-        layui.addcss(path, callback, cssname)
-      ) : ready.link(path, callback, cssname);
+      // 打包版直接执行回调函数
+      if (layui['layui.all']) {
+        typeof callback === 'function' && callback();
+      } else {
+        layui.addcss(path, callback, cssname);
+      }
 
       return this;
     }
@@ -234,12 +220,10 @@
       }
     };
 
-    // 为了避免边缘情况，laydate 只提供「简体中文」和「英文」切换
-    if (isLayui) {
-      var locale = layui.i18n.config.locale;
-      if (options.lang === 'cn' && locale !== 'zh-CN') {
-        options.lang = 'en';
-      }
+    // 临时代码
+    var locale = i18n.config.locale;
+    if (options.lang === 'cn' && locale !== 'zh-CN') {
+      options.lang = 'en';
     }
 
     return text[options.lang] || text['cn'];
@@ -1117,8 +1101,7 @@
 
     // chineseFestivals 仅简体中文生效
     if (options.calendar) {
-      var isZhCN = isLayui ? layui.i18n.config.locale === 'zh-CN' : options.lang === 'cn';
-      if (isZhCN) {
+      if (options.lang === 'cn') {
         render(that.markerOfChineseFestivals);
       }
     }
@@ -2611,62 +2594,61 @@
     };
   };
 
-  //记录所有实例
+  // 绑定关闭控件事件
+  lay(document).on('mousedown', function(e){
+    if(!laydate.thisId) return;
+    var that = thisModule.getThis(laydate.thisId);
+    if(!that) return;
+
+    var options = that.config;
+
+    if(
+      e.target === options.elem[0] ||
+      e.target === options.eventElem[0] ||
+      e.target === lay(options.closeStop)[0] ||
+      (options.elem[0] && options.elem[0].contains(e.target))
+    ) return;
+
+    that.remove();
+
+  }).on('keydown', function(e){
+    if(!laydate.thisId) return;
+    var that = thisModule.getThis(laydate.thisId);
+    if(!that) return;
+
+    // 回车触发确认
+    if(that.config.position === 'static') return;
+    if(e.keyCode === 13){
+      if(lay('#'+ that.elemID)[0] && that.elemID === Class.thisElemDate){
+        e.preventDefault();
+        lay(that.footer).find(ELEM_CONFIRM)[0].click();
+      }
+    }
+  });
+
+  //自适应定位
+  lay(window).on('resize', function(){
+    if(!laydate.thisId) return;
+    var that = thisModule.getThis(laydate.thisId);
+    if(!that) return;
+
+    if(!that.elem || !lay(ELEM)[0]){
+      return false;
+    }
+
+    that.position();
+  });
+
+  // 记录所有实例
   thisModule.that = {}; //记录所有实例对象
 
-  //获取当前实例对象
-  thisModule.getThis = function(id){
+  // 获取当前实例对象
+  thisModule.getThis = function(id) {
     var that = thisModule.that[id];
-    if(!that && isLayui) layui.hint().error(id ? (MOD_NAME +' instance with ID \''+ id +'\' not found') : 'ID argument required');
+    if (!that) {
+      layui.hint().error(id ? (MOD_NAME +' instance with ID \''+ id +'\' not found') : 'ID argument required');
+    }
     return that;
-  };
-
-  // 初始执行
-  ready.run = function(lay){
-    // 绑定关闭控件事件
-    lay(document).on('mousedown', function(e){
-      if(!laydate.thisId) return;
-      var that = thisModule.getThis(laydate.thisId);
-      if(!that) return;
-
-      var options = that.config;
-
-      if(
-        e.target === options.elem[0] ||
-        e.target === options.eventElem[0] ||
-        e.target === lay(options.closeStop)[0] ||
-        (options.elem[0] && options.elem[0].contains(e.target))
-      ) return;
-
-      that.remove();
-
-    }).on('keydown', function(e){
-      if(!laydate.thisId) return;
-      var that = thisModule.getThis(laydate.thisId);
-      if(!that) return;
-
-      // 回车触发确认
-      if(that.config.position === 'static') return;
-      if(e.keyCode === 13){
-        if(lay('#'+ that.elemID)[0] && that.elemID === Class.thisElemDate){
-          e.preventDefault();
-          lay(that.footer).find(ELEM_CONFIRM)[0].click();
-        }
-      }
-    });
-
-    //自适应定位
-    lay(window).on('resize', function(){
-      if(!laydate.thisId) return;
-      var that = thisModule.getThis(laydate.thisId);
-      if(!that) return;
-
-      if(!that.elem || !lay(ELEM)[0]){
-        return false;
-      }
-
-      that.position();
-    });
   };
 
   // 渲染 - 核心接口
@@ -2754,23 +2736,5 @@
     return new Date(thisDate.getTime() - 1000*60*60*24).getDate();
   };
 
-  //加载方式
-  isLayui ? (
-    laydate.ready(),
-    layui.define(['lay', 'i18n'], function(exports){ // layui 加载
-      laydate.path = layui.cache.dir;
-      ready.run(lay);
-      exports(MOD_NAME, laydate);
-    })
-  ) : (
-    (typeof define === 'function' && define.amd) ? define(function(){ //requirejs 加载
-      ready.run(lay);
-      return laydate;
-    }) : function(){ //普通 script 标签加载
-      laydate.ready();
-      ready.run(window.lay);
-      window.laydate = laydate;
-    }()
-  );
-
-})(window, window.document);
+  exports(MOD_NAME, laydate);
+});
