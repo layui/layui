@@ -46,6 +46,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-header i.laydate-prev-m{left: 45px;}
 .layui-laydate-header i.laydate-next-y{right: 15px;}
 .layui-laydate-header i.laydate-next-m{right: 45px;}
+.laydate-time-show .layui-laydate-header{padding-left: 10px; padding-right: 10px;}
 .laydate-set-ym{width: 100%; text-align: center; box-sizing: border-box; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .laydate-set-ym span{padding: 0 10px; cursor: pointer;}
 .laydate-time-text{cursor: default !important;}

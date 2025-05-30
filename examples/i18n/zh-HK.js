@@ -39,6 +39,25 @@ export default {
     },
     verifyErrorPromptTitle: '提示'
   },
+  laydate: {
+    month: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+    weeks: ['日', '一', '二', '三', '四', '五', '六'],
+    time: ['時', '分', '秒'],
+    selectDate: '選擇日期',
+    selectTime: '選擇時間',
+    startTime: '開始時間',
+    endTime: '結束時間',
+    tools: {
+      confirm: '確定',
+      clear: '清除',
+      now: '現在',
+      reset: '重設'
+    },
+    timeout: '結束時間不能早於開始時間<br>請重新選擇',
+    invalidDate: '不在有效日期或時間範圍內',
+    formatError: ['日期格式不合法<br>必須遵循以下格式：<br>', '<br>已為你重設'],
+    preview: '當前選中的結果'
+  },
   layer: {
     confirm: '確定',
     cancel: '取消',

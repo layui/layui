@@ -52,6 +52,25 @@ layui.define('lay', function(exports) {
       },
       verifyErrorPromptTitle: '提示'
     },
+    laydate: {
+      month: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
+      weeks: ['日', '一', '二', '三', '四', '五', '六'],
+      time: ['时', '分', '秒'],
+      selectDate: '选择日期',
+      selectTime: '选择时间',
+      startTime: '开始时间',
+      endTime: '结束时间',
+      tools: {
+        confirm: '确定',
+        clear: '清空',
+        now: '现在',
+        reset: '重置'
+      },
+      timeout: '结束时间不能早于开始时间<br>请重新选择',
+      invalidDate: '不在有效日期或时间范围内',
+      formatError: ['日期格式不合法<br>必须遵循下述格式：<br>', '<br>已为你重置'],
+      preview: '当前选中的结果'
+    },
     layer: {
       confirm: '确定',
       cancel: '取消',

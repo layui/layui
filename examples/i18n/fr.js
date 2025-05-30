@@ -39,6 +39,26 @@ export default {
     },
     verifyErrorPromptTitle: 'Avertissement'
   },
+  laydate: {
+    month: ['Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'],
+    weeks: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+    time: ['Heure', 'Minute', 'Seconde'],
+    selectDate: 'Sélec. date',
+    selectTime: 'Sélec. heure',
+    startTime: 'Heure de début',
+    endTime: 'Heure de fin',
+    // Recommandé en version abrégée en raison de l’espace limité du composant
+    tools: {
+      confirm: 'OK',
+      clear: 'Eff.',
+      now: 'Ajd.',
+      reset: 'Réinit.'
+    },
+    timeout: 'L’heure de fin ne peut pas être antérieure à l’heure de début<br>Veuillez recommencer',
+    invalidDate: 'Date ou heure hors plage valide',
+    formatError: ['Format de date invalide<br>Le format attendu est :<br>', '<br>Il a été réinitialisé pour vous'],
+    preview: 'Résultat sélectionné actuel'
+  },
   layer: {
     confirm: 'Confirmer',
     cancel: 'Annuler',

@@ -179,34 +179,20 @@ layui.define(['lay', 'i18n'], function(exports) {
   Class.prototype.lang = function() {
     var that = this;
     var options = that.config;
+    var locale = i18n.config.locale.replace(/^\s+|\s+$/g, '');
+    var messages = i18n.config.messages;
+    var message = messages[locale];
     var text = {
-      cn: {
-        month: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
-        weeks: ['日', '一', '二', '三', '四', '五', '六'],
-        time: ['时', '分', '秒'],
-        selectTime: '选择时间',
-        startTime: '开始时间',
-        endTime: '结束时间',
-        selectDate: '选择日期',
-        tools: {
-          confirm: '确定',
-          clear: '清空',
-          now: '现在',
-          reset: '重置'
-        },
-        timeout: '结束时间不能早于开始时间<br>请重新选择',
-        invalidDate: '不在有效日期或时间范围内',
-        formatError: ['日期格式不合法<br>必须遵循下述格式：<br>', '<br>已为你重置'],
-        preview: '当前选中的结果'
-      },
+      cn: messages['zh-CN'].laydate,
+      // 保留原版 en
       en: {
         month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         weeks: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-        time: ['Hours', 'Minutes', 'Seconds'],
+        time: ['Hour', 'Minute', 'Second'],
+        selectDate: 'Select Date',
         selectTime: 'Select Time',
         startTime: 'Start Time',
         endTime: 'End Time',
-        selectDate: 'Select Date',
         tools: {
           confirm: 'Confirm',
           clear: 'Clear',
@@ -220,10 +206,20 @@ layui.define(['lay', 'i18n'], function(exports) {
       }
     };
 
-    // 临时代码
-    var locale = i18n.config.locale;
-    if (options.lang === 'cn' && locale !== 'zh-CN') {
-      options.lang = 'en';
+    // 若 lang 选项未明确传入 en，则取 i18n locale
+    if (options.lang !== 'en') {
+      options.lang = locale === 'zh-CN' ? 'cn' : locale;
+    }
+
+    // 同步消息配置
+    if (message) {
+      // 若 locale 为英文系列，且外部未配置 laydate 消息，则读取上述内置 en 配置
+      if (/^en(?:-[a-z]{2,})?$/i.test(locale)) {
+        if (!message.laydate) {
+          message.laydate = text['en'];
+        }
+      }
+      text[locale] = message.laydate;
     }
 
     return text[options.lang] || text['cn'];
