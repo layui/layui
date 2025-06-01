@@ -12,6 +12,7 @@ layui.define(['lay', 'i18n'], function(exports) {
   // 模块名
   var MOD_NAME = 'laydate';
   var MOD_ID = 'lay-' + MOD_NAME + '-id'; // 已渲染过的索引标记名
+  var zhCN = 'zh-CN'; // 简体中文语言码
 
   // 外部调用
   var laydate = {
@@ -162,7 +163,8 @@ layui.define(['lay', 'i18n'], function(exports) {
     showBottom: true, // 是否显示底部栏
     isPreview: true, // 是否显示值预览
     btns: ['clear', 'now', 'confirm'], // 右下角显示的按钮，会按照数组顺序排列
-    lang: 'cn', // 语言，只支持 cn/en，即中文和英文
+    // 为实现 lang 选项就近生效，去除此处的默认值，原型 lang() 方法中有兜底值
+    lang: '', // 语言，只支持 cn/en，即中文和英文
     theme: 'default', // 主题
     position: null, // 控件定位方式定位, 默认absolute，支持：fixed/absolute/static
     calendar: false, // 是否开启公历重要节日，仅支持中文版
@@ -180,10 +182,8 @@ layui.define(['lay', 'i18n'], function(exports) {
     var that = this;
     var options = that.config;
     var locale = i18n.config.locale.replace(/^\s+|\s+$/g, '');
-    var messages = i18n.config.messages;
-    var message = messages[locale];
-    var text = {
-      cn: messages['zh-CN'].laydate,
+    var i18nMessages = i18n.config.messages[locale];
+    var laydateMessages = {
       // 保留原版 en
       en: {
         month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -206,23 +206,21 @@ layui.define(['lay', 'i18n'], function(exports) {
       }
     };
 
-    // 若 lang 选项未明确传入 en，则取 i18n locale
-    if (options.lang !== 'en') {
-      options.lang = locale === 'zh-CN' ? 'cn' : locale;
+    // 同步 message
+    if (i18nMessages) {
+      laydateMessages[locale] = i18nMessages.laydate;
     }
 
-    // 同步消息配置
-    if (message) {
-      // 若 locale 为英文系列，且外部未配置 laydate 消息，则读取上述内置 en 配置
-      if (/^en(?:-[a-z]{2,})?$/i.test(locale)) {
-        if (!message.laydate) {
-          message.laydate = text['en'];
-        }
-      }
-      text[locale] = message.laydate;
+    // 纠正旧版「简体中文」语言码
+    if (options.lang === 'cn') {
+      options.lang = zhCN;
+    } else if (!options.lang) { // 若未传 lang 选项，则取 locale
+      options.lang = locale;
     }
 
-    return text[options.lang] || text['cn'];
+    // 获取当前语言的 laydate 消息
+    // 若无消息数据，则取上述内置 en，确保组件正常显示。注：此非默认值逻辑，默认值已由 i18n 统一控制
+    return laydateMessages[options.lang] || laydateMessages['en'];;
   };
 
   // 仅简体中文生效，不做国际化
@@ -1097,7 +1095,7 @@ layui.define(['lay', 'i18n'], function(exports) {
 
     // chineseFestivals 仅简体中文生效
     if (options.calendar) {
-      if (options.lang === 'cn') {
+      if (options.lang === zhCN) {
         render(that.markerOfChineseFestivals);
       }
     }
@@ -1496,7 +1494,7 @@ layui.define(['lay', 'i18n'], function(exports) {
     if(!that.panelYM) that.panelYM = {};
     that.panelYM[index] = {year: dateTime.year, month: dateTime.month};
 
-    if(options.lang === 'cn'){
+    if(options.lang === zhCN){
       lay(elemYM[0]).attr('lay-type', 'year').html(dateTime.year + ' 年')
       lay(elemYM[1]).attr('lay-type', 'month').html((dateTime.month + 1) + ' 月');
     } else {
@@ -1593,7 +1591,7 @@ layui.define(['lay', 'i18n'], function(exports) {
     ,elemYM = lay(elemHeader[2]).find('span')
     ,elemCont = that.elemCont[index || 0]
     ,haveList = lay(elemCont).find('.'+ ELEM_LIST)[0]
-    ,isCN = options.lang === 'cn'
+    ,isCN = options.lang === zhCN
     ,text = isCN ? '年' : ''
 
     ,listYM = that.listYM[index] || {}
