@@ -2,8 +2,10 @@
  * laypage 分页组件
  */
 
-layui.define(function(exports) {
+layui.define('i18n', function(exports) {
   "use strict";
+
+  var i18n = layui.i18n;
 
   var doc = document;
   var id = 'getElementById';
@@ -72,8 +74,8 @@ layui.define(function(exports) {
       groups = config.pages;
     }
 
-    config.prev = 'prev' in config ? config.prev : '上一页'; // 上一页文本
-    config.next = 'next' in config ? config.next : '下一页'; // 下一页文本
+    config.prev = 'prev' in config ? config.prev : i18n.$t('laypage.prev'); // 上一页文本
+    config.next = 'next' in config ? config.next : i18n.$t('laypage.next'); // 下一页文本
 
     // 计算当前组
     var index = config.pages > groups
@@ -100,7 +102,7 @@ layui.define(function(exports) {
 
         // 首页
         if(index > 1 && config.first !== false && groups !== 0){
-          pager.push('<a class="layui-laypage-first" data-page="1"  title="首页">'+ (config.first || 1) +'</a>');
+          pager.push('<a class="layui-laypage-first" data-page="1"  title="' + i18n.$t('laypage.first') + '">' + (config.first || 1) +'</a>');
         }
 
         // 计算当前页码组的起始页
@@ -118,7 +120,7 @@ layui.define(function(exports) {
 
         // 输出左分割符
         if(config.first !== false && start > 2){
-          pager.push('<span class="layui-laypage-spr">...</span>')
+          pager.push('<span class="layui-laypage-spr">...</span>');
         }
 
         // 输出连续页码
@@ -137,7 +139,7 @@ layui.define(function(exports) {
             pager.push('<span class="layui-laypage-spr">...</span>');
           }
           if(groups !== 0){
-            pager.push('<a class="layui-laypage-last" title="尾页"  data-page="'+ config.pages +'">'+ (config.last || config.pages) +'</a>');
+            pager.push('<a class="layui-laypage-last" title="' + i18n.$t('laypage.last') + '"  data-page="'+ config.pages +'">'+ (config.last || config.pages) +'</a>');
           }
         }
 
@@ -153,15 +155,18 @@ layui.define(function(exports) {
 
       // 数据总数
       count: function(){
-        var countText = typeof config.countText === 'object' ? config.countText : ['共 ', ' 条'];
-        return '<span class="layui-laypage-count">'+ countText[0] + config.count + countText[1] +'</span>'
+        var countText = typeof config.countText === 'object'
+          ? countText[0] + config.count + countText[1]
+          : i18n.$t('laypage.total', {total: config.count});
+
+        return '<span class="layui-laypage-count">'+ countText +'</span>'
       }(),
 
       // 每页条数
       limit: function(){
         var elemArr = ['<span class="layui-laypage-limits"><select lay-ignore>'];
         var template = function(item) {
-          var def = item +' 条/页';
+          var def = item + ' ' + i18n.$t('laypage.pagesize');
           return typeof config.limitTemplet === 'function'
             ? (config.limitTemplet(item) || def)
           : def;
@@ -189,9 +194,9 @@ layui.define(function(exports) {
       // 跳页区域
       skip: function(){
         var skipText = typeof config.skipText === 'object' ? config.skipText : [
-          '到第',
-          '页',
-          '确定'
+          i18n.$t('laypage.goto'),
+          i18n.$t('laypage.page'),
+          i18n.$t('laypage.confirm')
         ];
         return [
           '<span class="layui-laypage-skip">'+ skipText[0],
