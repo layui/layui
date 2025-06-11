@@ -400,7 +400,7 @@ layui.define(['table'], function (exports) {
   Class.prototype.getTreeNode = function (data) {
     var that = this;
     if (!data) {
-      return hint.error('找不到节点数据');
+      return hint.error('Node data not found');
     }
     var options = that.getOptions();
     var treeOptions = options.tree;
@@ -422,7 +422,7 @@ layui.define(['table'], function (exports) {
     var that = this;
     var treeNodeData = that.getNodeDataByIndex(index);
     if (!treeNodeData) {
-      return hint.error('找不到节点数据');
+      return hint.error('Node data not found by index: ' + index);
     }
     var options = that.getOptions();
     var treeOptions = options.tree;
@@ -881,7 +881,7 @@ layui.define(['table'], function (exports) {
    * */
   treeTable.expandAll = function (id, expandFlag) {
     if (layui.type(expandFlag) !== 'boolean') {
-      return hint.error('expandAll 的展开状态参数只接收true/false')
+      return hint.error('treeTable.expandAll param "expandFlag" must be a boolean value.')
     }
 
     var that = getThisTable(id);
