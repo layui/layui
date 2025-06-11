@@ -230,7 +230,7 @@ layui.define('lay', function(exports) {
    *
    * @internal
    * @param {string} key 要翻译的键
-   * @param {Record<string, any> | any[] | ...any} [args] 可选的占位符替换参数：
+   * @param {any[]} [args] 可选的占位符替换参数：
    * - 对象形式：用于替换 `{key}` 形式的占位符；
    * - 数组形式：用于替换 `{0}`, `{1}` 等占位符；
    * - 可变参数：用于替换 `{0}`, `{1}` 等占位符。
