@@ -9,6 +9,11 @@ layui.define(['i18n', 'jquery'], function(exports) {
   var hint = layui.hint();
   var i18n = layui.i18n;
 
+  // 引用自 dayjs
+  // https://github.com/iamkun/dayjs/blob/v1.11.9/src/constant.js#L30
+  var REGEX_FORMAT = /\[([^\]]+)]|y{1,4}|M{1,2}|d{1,2}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|SSS/g;
+  var REGEX_PARSE = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[T\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/i;
+
   // 外部接口
   var util = {
     // 固定块
@@ -259,10 +264,6 @@ layui.define(['i18n', 'jquery'], function(exports) {
       // 若 null 或空字符，则返回空字符
       if(time === null || time === '') return '';
 
-      // 引用自 dayjs
-      // https://github.com/iamkun/dayjs/blob/v1.11.9/src/constant.js#L30
-      var REGEX_FORMAT = /\[([^\]]+)]|y{1,4}|M{1,2}|d{1,2}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|SSS/g;
-      var REGEX_PARSE = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[T\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/i;
       var that = this;
 
       var normalizeDate = function(date) {
@@ -303,23 +304,9 @@ layui.define(['i18n', 'jquery'], function(exports) {
       var seconds = date.getSeconds();
       var milliseconds = date.getMilliseconds();
 
-      var defaultMeridiem = function(hours, minutes){
-          var hm = hours * 100 + minutes;
-          if (hm < 600) {
-            return '凌晨';
-          } else if (hm < 900) {
-            return '早上';
-          } else if (hm < 1100) {
-            return '上午';
-          } else if (hm < 1300) {
-            return '中午';
-          } else if (hm < 1800) {
-            return '下午';
-          }
-          return '晚上';
-      };
+      var defaultMeridiem = i18n.$t('util.toDateString.meridiem');
 
-      var meridiem = (options && options.customMeridiem) || i18n.$t('util.toDateString.meridiem') || defaultMeridiem;
+      var meridiem = (options && options.customMeridiem) || defaultMeridiem;
 
       var matches = {
         yy: function(){return String(years).slice(-2);},
