@@ -275,7 +275,7 @@ treeTable.addNodes('test', {
 | expandFlag | 设置展开或关闭状态，若为 `true` 则表示展开；`false` 则为关闭；`null` 则表示切换 | boolean/null | - |
 | inherit | 子节点是否继承父节点的展开或关闭状态，`expandFlag` 属性必须为 `boolean` 型时才有效。 | boolean | `false` |
 | callbackFlag | 是否触发 tree.callback 事件（`beforeExpand,onExpand`） | boolean | `false` |
-| done <sup>2.11.3+</sup>| 节点操作完成后的回调函数 | (tableId, trData, trExpand) => boolean | - |
+| done <sup>2.11.3+</sup>| 节点操作完成后的回调函数 | (tableId, trData, trExpand) => void | - |
 
 若操作的节点不是一个父节点，则返回 `null`，否则返回操作之后的折叠状态。
 
