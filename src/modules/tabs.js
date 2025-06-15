@@ -228,13 +228,12 @@ layui.define('component', function(exports) {
    * @param {boolean} force - 是否强制删除
    */
   Class.prototype.close = function(thisHeaderItem, force) {
-    if(!thisHeaderItem || !thisHeaderItem[0]) return;
+    if (!thisHeaderItem || !thisHeaderItem[0]) return;
 
     var that = this;
     var options = that.config;
+    var layid = thisHeaderItem.attr('lay-id');
     var index = thisHeaderItem.index();
-
-    if (!thisHeaderItem[0]) return;
 
     // 标签是否不可关闭
     if (thisHeaderItem.attr('lay-closable') === 'false') {
@@ -251,7 +250,7 @@ layui.define('component', function(exports) {
         component.CONST.MOD_NAME,
         'beforeClose('+ options.id +')',
         $.extend(data, {
-          index: thisHeaderItem.index()
+          index: index
         })
       );
 
@@ -271,8 +270,8 @@ layui.define('component', function(exports) {
     }
 
     // 移除元素
+    that.findBodyItem(layid || index).remove();
     thisHeaderItem.remove();
-    that.findBodyItem(index).remove();
 
     that.roll('auto', index);
 
@@ -304,14 +303,9 @@ layui.define('component', function(exports) {
 
     index = index === undefined ? data.index : index;
 
-    // 将标签头 lay-closable 属性值同步到 body 项
-    headers.each(function(i) {
-      var othis = $(this);
-      var closableAttr = othis.attr('lay-closable');
-      if (closableAttr) {
-        bodys.eq(i).attr('lay-closable', closableAttr);
-      }
-    });
+    var headerItem = that.findHeaderItem(index);
+    var bodyItem = that.findBodyItem(index);
+    var itemIndex = headerItem.index();
 
     // 若当前选中标签也允许关闭，则尝试寻找不可关闭的标签并将其选中
     if (data.thisHeaderItem.attr('lay-closable') !== 'false') {
@@ -323,22 +317,33 @@ layui.define('component', function(exports) {
         } else if(prevHeader[0]) {
           that.change(prevHeader, true);
         }
-      } else if(index !== data.index) { // 自动切换到活动标签（功能可取消）
-        that.change(that.findHeaderItem(index), true);
+      } else if(index !== data.index) { // 自动切换到活动标签
+        that.change(headerItem, true);
       }
     }
 
     // 执行批量关闭标签
-    if (mode === 'other') { // 关闭其他标签
-      headers.eq(index).siblings(FILTER).remove();
-      bodys.eq(index).siblings(FILTER).remove();
-    } else if(mode === 'right') { // 关闭右侧标签
-      headers.filter(':gt('+ index +')'+ FILTER).remove();
-      bodys.filter(':gt('+ index +')'+ FILTER).remove();
-    } else { // 关闭所有标签
-      headers.filter(FILTER).remove();
-      bodys.filter(FILTER).remove();
-    }
+    headers.each(function(i) {
+      var $this = $(this);
+      var layid = $this.attr('lay-id');
+      var bodyItem = that.findBodyItem(layid || i);
+
+      // 标签是否不可关闭
+      if ($this.attr('lay-closable') === 'false') {
+        return;
+      }
+
+      // 批量关闭方式
+      var isCloseOther = mode === 'other' && i !== itemIndex; // 关闭其他标签
+      var isCloseRight = mode === 'right' && i > itemIndex; // 关闭右侧标签
+      var isCloseLeft = mode === 'left' && i < itemIndex; // 关闭左侧标签（不推荐）
+      var isCloseAll = mode === 'all'; // 关闭所有标签
+
+      if (isCloseOther || isCloseRight || isCloseLeft || isCloseAll) {
+        $this.remove();
+        bodyItem.remove();
+      }
+    });
 
     that.roll('auto');
 
@@ -365,7 +370,8 @@ layui.define('component', function(exports) {
 
     var that = this;
     var options = that.config;
-    var index = thisHeaderItem.attr('lay-id') || thisHeaderItem.index();
+    var layid = thisHeaderItem.attr('lay-id');
+    var index = thisHeaderItem.index();
     var thatA = thisHeaderItem.find('a');
     // 是否存在跳转链接
     var isLink = typeof thatA.attr('href') === 'string' && thatA.attr('target') === '_blank';
@@ -392,7 +398,7 @@ layui.define('component', function(exports) {
             headerItem: data.thisHeaderItem
           },
           to: {
-            index: thisHeaderItem.index(),
+            index: index,
             headerItem: thisHeaderItem
           }
         })
@@ -409,7 +415,7 @@ layui.define('component', function(exports) {
     .removeClass(component.CONST.CLASS_THIS);
 
     // 执行标签内容切换
-    that.findBodyItem(index).addClass(component.CONST.CLASS_SHOW)
+    that.findBodyItem(layid || index).addClass(component.CONST.CLASS_SHOW)
     .siblings().removeClass(component.CONST.CLASS_SHOW);
 
     that.roll('auto', index);
@@ -467,7 +473,11 @@ layui.define('component', function(exports) {
     opts = opts || {};
 
     // 不可关闭项
-    if (opts.closable == false || headerItem.attr('lay-closable') === 'false') {
+    if (opts.closable == false) {
+      headerItem.attr('lay-closable', 'false');
+    }
+
+    if (headerItem.attr('lay-closable') === 'false') {
       return;
     }
 
@@ -652,30 +662,35 @@ layui.define('component', function(exports) {
   Class.prototype.findHeaderItem = function(index) {
     var container = this.getContainer();
     var headerItems = container.header.items;
-    var headerItem = headerItems.filter('[lay-id="'+ index +'"]');
-    return headerItem[0] ? headerItem : headerItems.eq(index);
+
+    // 根据 lay-id 匹配
+    if (typeof index === 'string') {
+      return headerItems.filter('[lay-id="'+ index +'"]');
+    }
+
+    return headerItems.eq(index);
   };
 
   /**
    * 获取标签内容项
-   * @param {number} index - 标签索引或 lay-id
+   * @param {number|string} index - 标签索引或 lay-id
    */
   Class.prototype.findBodyItem = function(index) {
     var container = this.getContainer();
     var bodyItems = container.body.items;
-    var bodyItem = bodyItems.filter('[lay-id="'+ index +'"]');
 
-    return bodyItem[0] ? bodyItem : function() {
-      // 若未匹配到 lay-id 对应内容项，则继续匹配对应头部项
-      var headerItems = container.header.items;
-      var headerItem = headerItems.filter('[lay-id="'+ index +'"]');
+    // 根据 lay-id 匹配
+    if (typeof index === 'string') {
+      var bodyItem = bodyItems.filter('[lay-id="'+ index +'"]');
+      return bodyItem[0] ? bodyItem : function() {
+        // 若未匹配到 lay-id 对应内容项，则通过对应头部项的索引匹配内容项
+        var headerItems = container.header.items;
+        var headerItem = headerItems.filter('[lay-id="'+ index +'"]');
+        return bodyItems.eq(headerItem.index());
+      }();
+    }
 
-      if (headerItem[0]) {
-        index = headerItem.index();
-      }
-
-      return bodyItems.eq(index);
-    }();
+    return bodyItems.eq(index);
   };
 
   /**
@@ -734,10 +749,10 @@ layui.define('component', function(exports) {
      * @param {('other'|'right'|'all')} [mode="all"] - 关闭方式
      * @param {number} index - 活动标签的索引，默认取当前选中标签的索引。一般用于标签右键事件
      */
-    closeMult: function(id, mode, index, force) {
+    closeMult: function(id, mode, index) {
       var that = component.getInst(id);
       if(!that) return;
-      that.closeMult(mode, index, force);
+      that.closeMult(mode, index);
     },
 
     /**
