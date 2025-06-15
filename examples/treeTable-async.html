@@ -14,12 +14,17 @@
   <div class="layui-fluid" style="padding: 15px;">
     <button class="layui-btn" lay-on="asyncLoad">asyncLoad</button>
     <button class="layui-btn" lay-on="flatData">flatData</button>
+    <button class="layui-btn" lay-on="expandNode">expandNode</button>
+    <button class="layui-btn" lay-on="unexpandNode">unexpandNode</button>
     <table id="demo"></table>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Mock.js/1.0.0/mock-min.js"></script>
   <script src="../src/layui.js" src1="//cdnjs.cloudflare.com/ajax/libs/layui/2.9.7/layui.js"
     src1="https://cdn.jsdelivr.net/gh/layui/layui@879a9c629cc832f5b235d138adf164d74c34991b/src/layui.js"></script>
   <script>
+    Mock.setup({
+      timeout: '100-300'
+    });
     layui.use(["treeTable", "util"], function () {
       var treeTable = layui.treeTable;
       var util = layui.util;
@@ -39,6 +44,11 @@
               async: {
                 enable: true,
                 autoParam: ["parentId=id"]
+              },
+              callback: {
+                onExpand: function (tableId, trData, trExpand) {
+                  console.log('onExpand', tableId, trData.id, trExpand);
+                }
               }
             },
           }, true)
@@ -57,6 +67,28 @@
               }
             },
           }, true)
+        },
+        expandNode: function(){
+          treeTable.expandNode('demo', {
+            index: 0,
+            expandFlag: true,
+            inherit: true,
+            callbackFlag: true,
+            done: function (tableId, trData, trExpand) {
+              console.log('done', tableId, trData.id, trExpand);
+            }
+          })
+        },
+        unexpandNode: function(){
+          treeTable.expandNode('demo', {
+            index: 0,
+            expandFlag: false,
+            inherit: true,
+            callbackFlag: true,
+            done: function (tableId, trData, trExpand) {
+              console.log('done', tableId, trData.id, trExpand);
+            }
+          })
         }
       })
 
@@ -130,7 +162,7 @@
       //var testDatas = getTreeData(rootNodes);
 
       Mock.mock(/getDatas/, "get", (config) => {
-        console.log(config);
+        //console.log(config);
         var params = layui.url(config.url);
         var search = params.search;
         var parentId = search.parentId;
