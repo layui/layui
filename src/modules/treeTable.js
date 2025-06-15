@@ -590,7 +590,7 @@ layui.define(['table'], function (exports) {
   })()
 
   // 优化参数，添加一个 getNodeByIndex 方法 只传 表格id 和行 dataIndex 分几步优化 todo
-  var expandNode = function (treeNode, expandFlag, sonSign, focus, callbackFlag) {
+  var expandNode = function (treeNode, expandFlag, sonSign, focus, callbackFlag, done) {
     // treeNode // 需要展开的节点
     var trElem = treeNode.trElem;
     var tableViewElem = treeNode.tableViewElem || trElem.closest(ELEM_VIEW);
@@ -658,7 +658,7 @@ layui.define(['table'], function (exports) {
               tableViewElem: tableViewElem,
               tableId: tableId,
               options: options,
-            }, expandFlag, sonSign, focus, callbackFlag);
+            }, expandFlag, sonSign, focus, callbackFlag, done);
           } else if (item1[LAY_EXPAND]) { // 初始化级联展开
             expandNode({
               dataIndex: item1[LAY_DATA_INDEX],
@@ -666,7 +666,7 @@ layui.define(['table'], function (exports) {
               tableViewElem: tableViewElem,
               tableId: tableId,
               options: options,
-            }, true);
+            }, true, undefined, undefined, undefined, done);
           }
         });
       } else {
@@ -681,7 +681,7 @@ layui.define(['table'], function (exports) {
             trData[LAY_ASYNC_STATUS] = 'success';
             trData[customName.children] = data;
             treeTableThat.initData(trData[customName.children], trData[LAY_DATA_INDEX])
-            expandNode(treeNode, true, isToggle ? false : sonSign, focus, callbackFlag);
+            expandNode(treeNode, true, isToggle ? false : sonSign, focus, callbackFlag, done);
           }
 
           var format = asyncSetting.format; // 自定义数据返回方法
@@ -804,7 +804,7 @@ layui.define(['table'], function (exports) {
                 tableViewElem: tableViewElem,
                 tableId: tableId,
                 options: options,
-              }, expandFlag, sonSign, focus, callbackFlag);
+              }, expandFlag, sonSign, focus, callbackFlag, done);
             })
           }
         }
@@ -820,7 +820,7 @@ layui.define(['table'], function (exports) {
             tableViewElem: tableViewElem,
             tableId: tableId,
             options: options,
-          }, expandFlag, sonSign, focus, callbackFlag);
+          }, expandFlag, sonSign, focus, callbackFlag, done);
         });
         tableViewElem.find(childNodes.map(function (value, index, array) { // 只隐藏直接子节点，其他由递归的处理
           return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]'
@@ -843,6 +843,10 @@ layui.define(['table'], function (exports) {
       layui.type(onExpand) === 'function' && onExpand(tableId, trData, trExpand);
     }
 
+    if(layui.type(done) === 'function' && trData[LAY_ASYNC_STATUS] !== 'loading'){
+      done(tableId, trData, trExpand);
+    }
+
     return retValue;
   }
 
@@ -853,7 +857,8 @@ layui.define(['table'], function (exports) {
    * @param {Number|String} opts.index 展开行的数据下标
    * @param {Boolean} [opts.expandFlag] 展开、关闭、切换
    * @param {Boolean} [opts.inherit] 是否级联子节点
-   * @param {Boolean} [opts.callbackFlag] 是否触发事件
+   * @param {Boolean} [opts.callbackFlag] 是否触发 tree.callback 事件
+   * @param {Boolean} [opts.done] 节点操作完成后的回调函数
    * @return [{Boolean}] 状态结果
    * */
   treeTable.expandNode = function (id, opts) {
@@ -871,7 +876,7 @@ layui.define(['table'], function (exports) {
     var tableViewElem = options.elem.next();
     return expandNode({
       trElem: tableViewElem.find('tr[lay-data-index="' + index + '"]').first()
-    }, expandFlag, sonSign, null, callbackFlag)
+    }, expandFlag, sonSign, null, callbackFlag, opts.done)
   };
 
   /**
