@@ -662,30 +662,35 @@ layui.define('component', function(exports) {
   Class.prototype.findHeaderItem = function(index) {
     var container = this.getContainer();
     var headerItems = container.header.items;
-    var headerItem = headerItems.filter('[lay-id="'+ index +'"]');
-    return headerItem[0] ? headerItem : headerItems.eq(index);
+
+    // 根据 lay-id 匹配
+    if (typeof index === 'string') {
+      return headerItems.filter('[lay-id="'+ index +'"]');
+    }
+
+    return headerItems.eq(index);
   };
 
   /**
    * 获取标签内容项
-   * @param {number} index - 标签索引或 lay-id
+   * @param {number|string} index - 标签索引或 lay-id
    */
   Class.prototype.findBodyItem = function(index) {
     var container = this.getContainer();
     var bodyItems = container.body.items;
-    var bodyItem = bodyItems.filter('[lay-id="'+ index +'"]');
 
-    return bodyItem[0] ? bodyItem : function() {
-      // 若未匹配到 lay-id 对应内容项，则继续匹配对应头部项
-      var headerItems = container.header.items;
-      var headerItem = headerItems.filter('[lay-id="'+ index +'"]');
+    // 根据 lay-id 匹配
+    if (typeof index === 'string') {
+      var bodyItem = bodyItems.filter('[lay-id="'+ index +'"]');
+      return bodyItem[0] ? bodyItem : function() {
+        // 若未匹配到 lay-id 对应内容项，则通过对应头部项的索引匹配内容项
+        var headerItems = container.header.items;
+        var headerItem = headerItems.filter('[lay-id="'+ index +'"]');
+        return bodyItems.eq(headerItem.index());
+      }();
+    }
 
-      if (headerItem[0]) {
-        index = headerItem.index();
-      }
-
-      return bodyItems.eq(index);
-    }();
+    return bodyItems.eq(index);
   };
 
   /**
