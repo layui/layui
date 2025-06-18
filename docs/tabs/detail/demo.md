@@ -38,6 +38,16 @@
   </textarea>
 </pre>
 
+<h3 id="demo-shuffle" lay-toc="{level: 2}">打乱标签顺序</h3>
+
+<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'max-height: 520px;', tools: ['full'], done: function(obj){
+  obj.render();
+}}">
+  <textarea>
+{{- d.include("/tabs/examples/shuffle.md") }}
+  </textarea>
+</pre>
+
 <h3 id="demo-hash" lay-toc="{level: 2, title: 'HASH 匹配'}">通过 HASH 匹配选中标签</h3>
 
 切换 tabs 标签项后，地址栏同步 `hash` 值，当页面刷新时，tabs 仍保持对应的切换状态。
