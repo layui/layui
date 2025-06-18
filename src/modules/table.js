@@ -81,7 +81,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   // lay 函数可以处理 Selector，HTMLElement，JQuery 类型
   // 无效的 CSS 选择器字符串，会抛出 SyntaxError 异常，此时直接返回 laytpl 模板字符串
   var resolveTplStr = function(templet){
-    try{ 
+    try{
       return lay(templet).html();
     }catch(err){
       return templet;
@@ -1037,7 +1037,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           mainTableElem.width(that.getContentWidth(headerTableElem));
         }
         // 二次校验，如果仍然出现横向滚动条（通常是 1px 的误差导致）
-        // 不同屏幕分辨率、缩放水平以及浏览器渲染差异，可能会触发这个问题 
+        // 不同屏幕分辨率、缩放水平以及浏览器渲染差异，可能会触发这个问题
         if(that.layMain.prop('offsetHeight') > that.layMain.prop('clientHeight')){
           item.style.width = (parseFloat(item.style.width) - borderWidth) + 'px';
         }
@@ -1060,7 +1060,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var that = this;
 
     var tableElemIsConnected = that.layMain && ('isConnected' in that.layMain[0]
-      ? that.layMain[0].isConnected 
+      ? that.layMain[0].isConnected
       : $.contains(document.body, that.layMain[0]));
 
     if(!tableElemIsConnected) return;
@@ -1938,7 +1938,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
     var options = that.config;
 
     if(options.loading){
-      that.layBox.find(ELEM_INIT).toggleClass(HIDE, !show); 
+      that.layBox.find(ELEM_INIT).toggleClass(HIDE, !show);
     }
   };
 
@@ -2094,7 +2094,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
    */
   /**
    * 更新指定行
-   * @param {updateRowOptions | updateRowOptions[]} opts 
+   * @param {updateRowOptions | updateRowOptions[]} opts
    * @param {(field: string, value: any) => void} [callback] - 更新每个字段时的回调函数
    */
   Class.prototype.updateRow = function(opts, callback){
@@ -2146,7 +2146,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
   /**
    * 更新指定行
    * @param {string} id - table ID
-   * @param {updateRowOptions | updateRowOptions[]} options 
+   * @param {updateRowOptions | updateRowOptions[]} options
    */
   table.updateRow = function (id, options){
     var that = getThisTable(id);
@@ -2745,7 +2745,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
           $this.remove();
           // 重置单元格滚动条位置
           elemCell.scrollTop(0);
-          elemCell.scrollLeft(0); 
+          elemCell.scrollLeft(0);
         });
       }
 
@@ -2857,18 +2857,18 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports){
 
   /**
    * 获取元素 content 区域宽度值
-   * 
+   *
    * layui 内置 jQuery v1.12.4 中的 jQuery.fn.width 始终对值四舍五入(3.x 已修复),
    * 在支持 subpixel Rendering 的浏览器中渲染表格，由于列宽分配时计算值精度不足，
    * 可能会导致一些小问题(#1726)
-   * 
+   *
    * 这个方法使用 getComputedStyle 获取精确的宽度值进行计算，为了尽可能和以前的行为
    * 保持一致(主要是隐藏元素内渲染 table 递归获取父元素宽度 https://github.com/layui/layui/discussions/2398)，
    * 任何非预期的值，都回退到 jQuery.fn.width。未来的版本使用 ResizeObserver 时，可以直接获取表格视图元素的宽度，
    * 并移除兼容性代码
-   * 
+   *
    * @param {JQuery} elem - 元素的 jQuery 对象
-   * 
+   *
    * @see {@link https://learn.microsoft.com/zh-cn/archive/blogs/ie_cn/css-3}
    */
   Class.prototype.getContentWidth = function(elem){

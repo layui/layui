@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>树组件 - layui</title>
-  <link rel="stylesheet" href="../src/css/layui.css" media="all">  
+  <link rel="stylesheet" href="../src/css/layui.css" media="all">
   <style>
     body{padding: 100px;}
     #test1,#test2{margin-bottom: 100px; width: 400px;}
@@ -22,9 +22,9 @@
   <div class="layui-form-item">
     <label class="layui-form-label">表单内</label>
     <div class="layui-input-block">
-     
+
   </div>
-</div>  
+</div>
 
 <div id="test1"></div>
 <div id="test2"></div>
@@ -37,7 +37,7 @@
     ,layer = layui.layer
     ,util = layui.util
     ,index = 100;
-    
+
     //数据源
     var data1 = [{
       title: 'A-1'
@@ -156,7 +156,7 @@
         }]
       }]
     }];
-    
+
     //数据源
     var data2 = [{
       title: '控制台'
@@ -200,7 +200,7 @@
       }
       ,showCheckbox: true  //是否显示复选框
       ,accordion: 0  //是否开启手风琴模式
-      
+
       ,onlyIconControl: true //是否仅允许节点左侧图标控制展开收缩
       ,isJump: 0  //点击文案跳转地址
       ,edit: true  //操作节点图标
@@ -218,7 +218,7 @@
       }
       ,reload: function(){
         tree.reload('demoId1', {
-          
+
         });
       }
     });
@@ -246,7 +246,7 @@
         console.log(state, obj, target);
       }
     });
-     
+
   });
 </script>
 

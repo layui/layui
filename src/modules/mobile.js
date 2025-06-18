@@ -1,9 +1,9 @@
 /**
  * layui 移动模块入口
- * 构建后则为移动模块集合 
+ * 构建后则为移动模块集合
  */
 
- 
+
 if(!layui['layui.mobile']){
   layui.config({
     base: layui.cache.dir + 'lay/modules/mobile/'
@@ -13,7 +13,7 @@ if(!layui['layui.mobile']){
     ,'upload-mobile': 'upload-mobile'
     ,'layim-mobile': 'layim-mobile'
   });
-}  
+}
 
 layui.define([
   'layer-mobile'

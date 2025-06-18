@@ -4,15 +4,15 @@
 
 layui.define(function(exports){
   "use strict";
-  
+
   var doc = document;
   var id = 'getElementById';
   var tag = 'getElementsByTagName';
-  
+
   // 字符常量
   var MOD_NAME = 'laypage';
   var DISABLED = 'layui-disabled';
-  
+
   // 构造器
   var Class = function(options){
     var that = this;
@@ -35,15 +35,15 @@ layui.define(function(exports){
     var config = that.config;
 
     // 连续页码个数
-    var groups = config.groups = 'groups' in config 
+    var groups = config.groups = 'groups' in config
       ? (Number(config.groups) || 0)
-    : 5; 
-    
+    : 5;
+
     // 排版
-    config.layout = typeof config.layout === 'object' 
-      ? config.layout 
+    config.layout = typeof config.layout === 'object'
+      ? config.layout
     : ['prev', 'page', 'next'];
-    
+
     config.count = Number(config.count) || 0; // 数据总数
     config.curr = Number(config.curr) || 1; // 当前页
 
@@ -54,50 +54,50 @@ layui.define(function(exports){
 
      // 默认条数
     config.limit = Number(config.limit) || 10;
-    
+
     // 总页数
     config.pages = Math.ceil(config.count/config.limit) || 1;
-    
+
     // 当前页不能超过总页数
     if(config.curr > config.pages){
       config.curr = config.pages;
     } else if(config.curr < 1) { // 当前分页不能小于 1
       config.curr = 1;
     }
-    
+
     // 连续分页个数不能低于 0 且不能大于总页数
     if(groups < 0){
       groups = 1;
     } else if (groups > config.pages){
       groups = config.pages;
     }
-    
+
     config.prev = 'prev' in config ? config.prev : '上一页'; // 上一页文本
     config.next = 'next' in config ? config.next : '下一页'; // 下一页文本
-    
+
     // 计算当前组
-    var index = config.pages > groups 
+    var index = config.pages > groups
       ? Math.ceil( (config.curr + (groups > 1 ? 1 : 0)) / (groups > 0 ? groups : 1) )
     : 1;
-    
+
     // 视图片段
     var views = {
       // 上一页
       prev: function(){
-        return config.prev 
+        return config.prev
           ? '<a class="layui-laypage-prev'+ (config.curr == 1 ? (' ' + DISABLED) : '') +'" data-page="'+ (config.curr - 1) +'">'+ config.prev +'</a>'
         : '';
       }(),
-      
+
       // 页码
       page: function(){
         var pager = [];
-        
+
         // 数据量为0时，不输出页码
         if(config.count < 1){
           return '';
         }
-        
+
         // 首页
         if(index > 1 && config.first !== false && groups !== 0){
           pager.push('<a class="layui-laypage-first" data-page="1"  title="首页">'+ (config.first || 1) +'</a>');
@@ -110,7 +110,7 @@ layui.define(function(exports){
           var max = config.curr + (groups - halve - 1);
           return max > config.pages ? config.pages : max;
         }()) : groups;
-        
+
         // 防止最后一组出现“不规定”的连续页码数
         if(end - start < groups - 1){
           start = end - groups + 1;
@@ -120,7 +120,7 @@ layui.define(function(exports){
         if(config.first !== false && start > 2){
           pager.push('<span class="layui-laypage-spr">...</span>')
         }
-        
+
         // 输出连续页码
         for(; start <= end; start++){
           if(start === config.curr){
@@ -130,7 +130,7 @@ layui.define(function(exports){
             pager.push('<a data-page="'+ start +'">'+ start +'</a>');
           }
         }
-        
+
         // 输出输出右分隔符 & 末页
         if(config.pages > groups && config.pages > end && config.last !== false){
           if(end + 1 < config.pages){
@@ -143,20 +143,20 @@ layui.define(function(exports){
 
         return pager.join('');
       }(),
-      
+
       // 下一页
       next: function(){
-        return config.next 
+        return config.next
           ? '<a class="layui-laypage-next'+ (config.curr == config.pages ? (' ' + DISABLED) : '') +'" data-page="'+ (config.curr + 1) +'">'+ config.next +'</a>'
         : '';
       }(),
-      
+
       // 数据总数
       count: function(){
         var countText = typeof config.countText === 'object' ? config.countText : ['共 ', ' 条'];
         return '<span class="layui-laypage-count">'+ countText[0] + config.count + countText[1] +'</span>'
       }(),
-      
+
       // 每页条数
       limit: function(){
         var elemArr = ['<span class="layui-laypage-limits"><select lay-ignore>'];
@@ -178,7 +178,7 @@ layui.define(function(exports){
 
         return elemArr.join('') +'</select></span>';
       }(),
-      
+
       // 刷新当前页
       refresh: [
         '<a data-page="'+ config.curr +'" class="layui-laypage-refresh">',
@@ -234,9 +234,9 @@ layui.define(function(exports){
         that.render();
       }
     };
-    
+
     if(isskip) return skip();
-    
+
     // 页码
     for(var i = 0, len = childs.length; i < len; i++){
       if(childs[i].nodeName.toLowerCase() === 'a'){
@@ -248,7 +248,7 @@ layui.define(function(exports){
         });
       }
     }
-    
+
     // 条数
     if(select){
       laypage.on(select, 'change', function(){
@@ -260,7 +260,7 @@ layui.define(function(exports){
         that.render();
       });
     }
-    
+
     // 确定
     if(btn){
       laypage.on(btn, 'click', function(){
@@ -268,7 +268,7 @@ layui.define(function(exports){
       });
     }
   };
-  
+
   // 输入页数字控制
   Class.prototype.skip = function(elem){
     if(!elem) return;
@@ -300,7 +300,7 @@ layui.define(function(exports){
     var config = that.config;
     var type = that.type();
     var view = that.view();
-    
+
     if(type === 2){
       config.elem && (config.elem.innerHTML = view);
     } else if(type === 3){
@@ -312,17 +312,17 @@ layui.define(function(exports){
     }
 
     config.jump && config.jump(config, load);
-    
+
     var elem = doc[id]('layui-laypage-' + config.index);
     that.jump(elem);
-    
+
     if(config.hash && !load){
       location.hash = '!'+ config.hash +'='+ config.curr;
     }
-    
+
     that.skip(elem);
   };
-  
+
   // 外部接口
   var laypage = {
     // 分页渲染

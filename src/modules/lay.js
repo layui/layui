@@ -599,7 +599,7 @@
       options.onTouchEnd && options.onTouchEnd(e, state);
       unbindEvents();
     }
-    
+
     var bindEvents = function(){
       targetElem.addEventListener('touchmove', onMove, lay.passiveSupported ? { passive: false} : false);
       targetElem.addEventListener('touchend', onEnd);
@@ -674,8 +674,8 @@
             }
           })
           elem[eventsCacheName] = newEvents;
-        }         
-      } 
+        }
+      }
     }
   }();
 
@@ -765,9 +765,9 @@
     }
 
     return bindEventListener(
-      scopeTarget, 
-      eventType, 
-      listener, 
+      scopeTarget,
+      eventType,
+      listener,
       lay.passiveSupported ? { passive: true, capture: useCapture } : useCapture
     );
   }
