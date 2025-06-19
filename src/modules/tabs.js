@@ -8,6 +8,8 @@ layui.define('component', function(exports) {
 
   var $ = layui.$;
 
+  var isSupportsAnimationend = supportsAnimationEnd();
+  
   // 创建组件
   var component = layui.component({
     name: 'tabs', // 组件名
@@ -25,7 +27,8 @@ layui.define('component', function(exports) {
       CLOSE: 'layui-tabs-close',
       BODY: 'layui-tabs-body',
       ITEM: 'layui-tabs-item',
-      CARD: 'layui-tabs-card'
+      CARD: 'layui-tabs-card',
+      ANIM_END_EVENT_NAME: 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend'
     },
 
     // 渲染
@@ -97,7 +100,12 @@ layui.define('component', function(exports) {
       if ('index' in options && data.index != options.index) {
         that.change(that.findHeaderItem(options.index), true);
       } else if (data.index === -1) { // 初始选中项为空时，默认选中第一个
-        that.change(that.findHeaderItem(0), true);
+        var activeElem = that.findHeaderItem(0);
+        if(activeElem.length > 0){
+          activeElem.addClass(component.CONST.CLASS_THIS);
+          that.findBodyItem(activeElem.attr('lay-id') || 0).addClass(component.CONST.CLASS_SHOW);
+          that.change(activeElem, true);
+        }
       }
 
       // 初始化滚动结构
@@ -133,7 +141,9 @@ layui.define('component', function(exports) {
       var trigger = options.trigger + TRIGGER_NAMESPACE;
       var elemHeaderItem = that.documentElem ? that.headerElem[1] : that.headerElem.join('');
       delegatedElement.off(trigger).on(trigger, elemHeaderItem, function() {
-        that.change($(this));
+        if(this !== that.data().thisHeaderItem[0]){
+          that.change($(this));
+        }
       });
 
       // 窗口 resize 事件
@@ -270,7 +280,11 @@ layui.define('component', function(exports) {
     }
 
     // 移除元素
-    that.findBodyItem(layid || index).remove();
+    // 延迟移除元素，否则会导致元素移除后，无法触发 animationend 事件
+    var waitRemoveEl = that.findBodyItem(layid || index)
+    setTimeout(function(){
+      waitRemoveEl.remove();
+    }, 450)
     thisHeaderItem.remove();
 
     that.roll('auto', index);
@@ -415,8 +429,16 @@ layui.define('component', function(exports) {
     .removeClass(component.CONST.CLASS_THIS);
 
     // 执行标签内容切换
-    that.findBodyItem(layid || index).addClass(component.CONST.CLASS_SHOW)
-    .siblings().removeClass(component.CONST.CLASS_SHOW);
+    var bodyElem = that.findBodyItem(layid || index);
+    if(
+      isSupportsAnimationend 
+      && options.anim 
+      && layui.type(options.anim) === 'array'
+    ){
+      that.applyAnim(data.thisBodyItem, bodyElem);
+    }else{
+      bodyElem.addClass(component.CONST.CLASS_SHOW).siblings().removeClass(component.CONST.CLASS_SHOW);
+    }
 
     that.roll('auto', index);
 
@@ -430,6 +452,37 @@ layui.define('component', function(exports) {
       'afterChange('+ options.id +')',
       data
     );
+  };
+
+  Class.prototype.applyAnim = function(oldActiveContentEl, activeContentEl){
+    var that = this;
+    var options = that.config;
+    
+    var onlyIn = !isConnectedElement(oldActiveContentEl[0]) || oldActiveContentEl[0] === activeContentEl[0]; // 处理初始渲染
+
+    var animInClass = options.anim[0];
+    var animOutClass = options.anim[1];
+    var transitionOut = function(cb){
+      oldActiveContentEl
+        .addClass(animOutClass)
+        .one(component.CONST.ANIM_END_EVENT_NAME, function() {
+          oldActiveContentEl.removeClass(component.CONST.CLASS_SHOW).removeClass(animOutClass);
+          cb && cb();
+        })
+    }
+    var transitionIn = function(){
+      activeContentEl
+        .addClass(component.CONST.CLASS_SHOW)
+        .addClass(animInClass)
+        .one(component.CONST.ANIM_END_EVENT_NAME, function() {
+          activeContentEl.removeClass(animInClass);
+        });
+    }
+    if(onlyIn){
+      transitionIn();
+    }else{
+      transitionOut(transitionIn);
+    }
   };
 
   /**
@@ -703,12 +756,13 @@ layui.define('component', function(exports) {
     var container = that.getContainer();
     var thisHeaderItem = container.header.items.filter('.'+ component.CONST.CLASS_THIS);
     var index = thisHeaderItem.index();
+    var layid = thisHeaderItem.attr('lay-id');
 
     return {
       options: options, // 标签配置信息
       container: container, // 标签容器的相关元素
       thisHeaderItem: thisHeaderItem, // 当前活动标签头部项
-      thisBodyItem: that.findBodyItem(index), // 当前活动标签内容项
+      thisBodyItem: that.findBodyItem(layid || index), // 当前活动标签内容项
       index: index, // 当前活动标签索引
       length: container.header.items.length // 标签数量
     };
@@ -814,6 +868,43 @@ layui.define('component', function(exports) {
   $(function() {
     component.render();
   });
+
+  /**
+   * 检测当前环境是否支持动画结束事件
+   * @returns {boolean} - 如果支持动画结束事件则返回 true，否则返回 false
+   */
+  function supportsAnimationEnd() {
+    if(typeof AnimationEvent !== 'undefined'){
+      return true;
+    }
+
+    var el = document.createElement('div');
+    var prefixes = ['', 'webkit', 'moz', 'MS', 'o'];
+    var isSupport = prefixes.some(function(prefix){
+      var eventName = 'on' + prefix.toLowerCase() + 'animationend'
+      return eventName in el;
+    });
+    el = null;
+
+    return isSupport;
+  };
+
+  /**
+   * 检查指定元素是否已连接到文档的 DOM 树中
+   * @param {HTMLElement} element - 需要检查的 HTML 元素
+   * @returns {boolean} - 如果元素已连接到 DOM 树则返回 true，否则返回 false
+   */
+  var isConnectedElement = function(){
+    if('isConnected' in Node.prototype){
+      return function(el){
+        return el.isConnected;
+      }
+    }else{
+      return function(el){
+        return document.body.contains(el);
+      }
+    }
+  }();
 
   exports(component.CONST.MOD_NAME, component);
 });

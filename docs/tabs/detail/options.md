@@ -102,6 +102,22 @@
 </td>
     </tr>
     <tr>
+<td>anim <sup>2.11.4</sup></td>
+<td>
+
+自定义切换标签时的过渡效果。例如：
+
+`['layui-anim layui-anim-fadein', 'layui-anim layui-anim-fadeout']`
+
+</td>
+<td>Array</td>
+<td>
+
+undefined
+
+</td>
+    </tr>
+    <tr>
 <td>header</td>
 <td colspan="3">
 
