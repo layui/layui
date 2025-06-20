@@ -1,8 +1,9 @@
-```js
+<pre class="layui-code" lay-options="{style: 'height: 525px;', layout: ['code'], tools: []}">
+  <textarea>
 i18n.set({
   locale: 'zh-CN', // 设置语言环境
   messages: { // 语言包
-    'zh-CN': { // 简体中文（默认）
+    'zh-CN': { // 简体中文语言包（内置）
       code: {
         copy: '复制代码',
         copied: '已复制',
@@ -170,18 +171,8 @@ i18n.set({
           }
         }
       }
-    },
-    'en': { // 通用英语
-      code: {
-        copy: 'Copy Code',
-        copied: 'Copied',
-        // ……
-      },
-      // ……
-    },
-    'fr': {}, // 通用法语
-    'zh-HK': {}, // 繁体中文
-    // …… // 更多语言代码
+    }
   }
 });
-```
+  </textarea>
+</pre>
