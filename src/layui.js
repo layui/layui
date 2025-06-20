@@ -55,7 +55,11 @@
   // 异常提示
   var error = function(msg, type) {
     type = type || 'log';
-    window.console && console[type] && console[type]('layui error hint: ' + msg);
+    msg = 'Layui message: ' + msg;
+
+    if (window.console) {
+      console[type] ? console[type](msg) : console.log(msg);
+    }
   };
 
   // 内置模块
@@ -83,6 +87,7 @@
     code: 'code', // 代码修饰器
     jquery: 'jquery', // DOM 库（第三方）
     component: 'component', // 组件构建器
+    i18n:  'i18n', // 国际化
 
     all: 'all',
     'layui.all': 'layui.all' // 聚合标识（功能性的，非真实模块）
@@ -161,7 +166,7 @@
 
   /**
    * 全局配置
-   * @param {Object} options
+   * @param {Object} options - 配置对象
    */
   Class.prototype.config = function(options) {
     Object.assign(config, options);

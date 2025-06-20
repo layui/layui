@@ -2,13 +2,14 @@
  * tree 树组件
  */
 
-layui.define(['form','util'], function(exports) {
+layui.define(['i18n', 'form', 'util'], function(exports) {
   "use strict";
 
   var $ = layui.$;
   var form = layui.form;
   var layer = layui.layer;
   var util = layui.util;
+  var i18n = layui.i18n;
 
   // 模块名
   var MOD_NAME = 'tree';
@@ -92,7 +93,12 @@ layui.define(['form','util'], function(exports) {
   var Class = function(options){
     var that = this;
     that.index = ++tree.index;
-    that.config = $.extend({}, that.config, tree.config, options);
+    that.config = $.extend({
+      text: {
+        defaultNodeName: i18n.$t('tree.defaultNodeName'), // 节点默认名称
+        none: i18n.$t('tree.noData')  // 数据为空时的文本提示
+      }
+    }, that.config, tree.config, options);
     that.render();
   };
 
@@ -106,11 +112,6 @@ layui.define(['form','util'], function(exports) {
     onlyIconControl: false,  // 是否仅允许节点左侧图标控制展开收缩
     isJump: false,  // 是否允许点击节点时弹出新窗口跳转
     edit: false,  // 是否开启节点的操作图标
-
-    text: {
-      defaultNodeName: '未命名', // 节点默认名称
-      none: '无数据'  // 数据为空时的文本提示
-    }
   };
 
   // 重载实例
@@ -576,7 +577,11 @@ layui.define(['form','util'], function(exports) {
 
       // 删除
       } else {
-        layer.confirm('确认删除该节点 "<span style="color: #999;">'+ (item[customName.title] || '') +'</span>" 吗？', function(index){
+        // 兼容性，手动替换括号为 html
+        var i18nText = i18n.$t('tree.deleteNodePrompt', {
+          name: item[customName.title] || ''
+        });
+        layer.confirm(i18nText, function(index){
           options.operate && options.operate(returnObj); // 节点删除的回调
           returnObj.status = 'remove'; // 标注节点删除
 
