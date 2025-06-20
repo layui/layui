@@ -105,15 +105,26 @@
 <td>anim <sup>2.11.4</sup></td>
 <td>
 
-自定义切换标签时的过渡效果。例如：
+设置标签切换时的动画效果。传入一个对象，包含以下属性：
 
-`['layui-anim layui-anim-fadein', 'layui-anim layui-anim-fadeout']`
+- `enterClass`：进入动画 CSS 类名
+- `leaveClass`：离开动画 CSS 类名
+
+例如：
+
+```js
+anim: {
+  enterClass: 'layui-anim layui-anim-fadein', 
+  leaveClass: 'layui-anim layui-anim-fadeout' 
+}
+
+```
 
 </td>
-<td>Array</td>
+<td>`{enterClass: string, leaveClass: string}`</td>
 <td>
 
-undefined
+-
 
 </td>
     </tr>

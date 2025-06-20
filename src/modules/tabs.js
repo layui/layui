@@ -8,7 +8,7 @@ layui.define('component', function(exports) {
 
   var $ = layui.$;
 
-  var isSupportsAnimationend = supportsAnimationEnd();
+  var animEnd = getSupportsAnimationEnd();
   
   // 创建组件
   var component = layui.component({
@@ -28,7 +28,7 @@ layui.define('component', function(exports) {
       BODY: 'layui-tabs-body',
       ITEM: 'layui-tabs-item',
       CARD: 'layui-tabs-card',
-      ANIM_END_EVENT_NAME: 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend'
+      EVENT_ANIMATIONEND: animEnd.eventName
     },
 
     // 渲染
@@ -280,11 +280,11 @@ layui.define('component', function(exports) {
     }
 
     // 移除元素
-    // 延迟移除元素，否则会导致元素移除后，无法触发 animationend 事件
-    var waitRemoveEl = that.findBodyItem(layid || index)
-    setTimeout(function(){
-      waitRemoveEl.remove();
-    }, 450)
+    var bodyItemElem = that.findBodyItem(layid || index)
+    if(options.anim && bodyItemElem.hasClass(component.CONST.CLASS_SHOW)){
+      bodyItemElem.trigger(component.CONST.EVENT_ANIMATIONEND);
+    }
+    bodyItemElem.remove();
     thisHeaderItem.remove();
 
     that.roll('auto', index);
@@ -354,6 +354,9 @@ layui.define('component', function(exports) {
       var isCloseAll = mode === 'all'; // 关闭所有标签
 
       if (isCloseOther || isCloseRight || isCloseLeft || isCloseAll) {
+        if(options.anim && bodyItem.hasClass(component.CONST.CLASS_SHOW)){
+          bodyItem.trigger(component.CONST.EVENT_ANIMATIONEND);
+        }
         $this.remove();
         bodyItem.remove();
       }
@@ -377,7 +380,6 @@ layui.define('component', function(exports) {
    * 切换标签
    * @param {Object} thisHeaderItem - 当前标签头部项元素
    * @param {boolean} [force=false] - 是否强制切换
-   * @returns
    */
   Class.prototype.change = function(thisHeaderItem, force) {
     if (!thisHeaderItem || !thisHeaderItem[0]) return;
@@ -431,11 +433,11 @@ layui.define('component', function(exports) {
     // 执行标签内容切换
     var bodyElem = that.findBodyItem(layid || index);
     if(
-      isSupportsAnimationend 
-      && options.anim 
-      && layui.type(options.anim) === 'array'
+      animEnd.isSupported 
+      && options.anim
+      && layui.type(options.anim) === 'object'
     ){
-      that.applyAnim(data.thisBodyItem, bodyElem);
+      that.changeContentWithAnim(data.thisBodyItem, bodyElem);
     }else{
       bodyElem.addClass(component.CONST.CLASS_SHOW).siblings().removeClass(component.CONST.CLASS_SHOW);
     }
@@ -454,28 +456,31 @@ layui.define('component', function(exports) {
     );
   };
 
-  Class.prototype.applyAnim = function(oldActiveContentEl, activeContentEl){
+  /**
+   * 切换标签内容项，带过渡动画
+   * @param {jQUery} oldActiveContentEl - 旧的标签内容项元素
+   * @param {jQUery} activeContentEl - 新的标签内容项元素
+   */
+  Class.prototype.changeContentWithAnim = function(oldActiveContentEl, activeContentEl){
     var that = this;
     var options = that.config;
     
     var onlyIn = !isConnectedElement(oldActiveContentEl[0]) || oldActiveContentEl[0] === activeContentEl[0]; // 处理初始渲染
 
-    var animInClass = options.anim[0];
-    var animOutClass = options.anim[1];
     var transitionOut = function(cb){
       oldActiveContentEl
-        .addClass(animOutClass)
-        .one(component.CONST.ANIM_END_EVENT_NAME, function() {
-          oldActiveContentEl.removeClass(component.CONST.CLASS_SHOW).removeClass(animOutClass);
+        .addClass(options.anim.leaveClass)
+        .one(component.CONST.EVENT_ANIMATIONEND, function() {
+          oldActiveContentEl.removeClass(component.CONST.CLASS_SHOW).removeClass(options.anim.leaveClass);
           cb && cb();
         })
     }
     var transitionIn = function(){
       activeContentEl
         .addClass(component.CONST.CLASS_SHOW)
-        .addClass(animInClass)
-        .one(component.CONST.ANIM_END_EVENT_NAME, function() {
-          activeContentEl.removeClass(animInClass);
+        .addClass(options.anim.enterClass)
+        .one(component.CONST.EVENT_ANIMATIONEND, function() {
+          activeContentEl.removeClass(options.anim.enterClass);
         });
     }
     if(onlyIn){
@@ -871,22 +876,31 @@ layui.define('component', function(exports) {
 
   /**
    * 检测当前环境是否支持动画结束事件
-   * @returns {boolean} - 如果支持动画结束事件则返回 true，否则返回 false
+   * @returns {{isSupported: boolean, eventName: string}}
    */
-  function supportsAnimationEnd() {
-    if(typeof AnimationEvent !== 'undefined'){
-      return true;
-    }
+  function getSupportsAnimationEnd() {
+    var vender = '';
+    var eventsMap = {
+      '': 'animationend',
+      'o': 'oanimationend',
+      'MS': 'MSAnimationEnd',
+      'moz': 'mozAnimationEnd',
+      'webkit': 'webkitAnimationEnd'
+    };
 
     var el = document.createElement('div');
     var prefixes = ['', 'webkit', 'moz', 'MS', 'o'];
-    var isSupport = prefixes.some(function(prefix){
-      var eventName = 'on' + prefix.toLowerCase() + 'animationend'
+    var isSupported = prefixes.some(function(prefix){
+      var eventName = 'on' + prefix.toLowerCase() + 'animationend';
+      vender = prefix;
       return eventName in el;
     });
     el = null;
-
-    return isSupport;
+    
+    return {
+      isSupported: isSupported,
+      eventName: eventsMap[vender]
+    }
   };
 
   /**
