@@ -57,8 +57,8 @@ toc: true
 <div class="layui-collapse">
   <div class="layui-colla-item">
     <div class="layui-colla-title">Collapse Title 1</div>
-    <div class="layui-colla-content">
-      <p>Content 1</p>
+    <div class="layui-colla-content layui-show">
+      <p>Content 1 （添加 layui-show 类设置初始展开）</p>
     </div>
   </div>
   <div class="layui-colla-item">

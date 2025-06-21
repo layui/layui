@@ -14,9 +14,6 @@ layui.define('jquery', function(exports) {
   var THIS = 'layui-this';
   var SHOW = 'layui-show';
   var TITLE = '.layui-tab-title';
-  var CONST = {
-    CLASS_COLLAPSE_EXTEND: 'layui-collapse-item-expand'
-  };
 
   var Element = function(){
     this.config = {};
@@ -419,20 +416,35 @@ layui.define('jquery', function(exports) {
       var thisItemElem = othis.parent(CLASS_ITEM);
       var thisContentElem = othis.siblings(CLASS_CONTENT);
       var isNone = thisContentElem.css('display') === 'none';
+      var isAccordion = typeof wrapper.attr('lay-accordion') === 'string';
 
-      // 是否手风琴
-      if (typeof wrapper.attr('lay-accordion') === 'string') {
-        var itemElems = wrapper.children(CLASS_ITEM);
-        itemElems.removeClass(CONST.CLASS_COLLAPSE_EXTEND);
-        itemElems.children(CLASS_CONTENT).slideUp(ANIM_MS, function() {
-          $(this).removeClass(SHOW);
-        });
-      }
+      // 动画执行完成后的操作
+      var complete = function() {
+        $(this).css('display', ''); // 剔除动画生成的 style display，以适配外部样式的状态重置
+      };
+
+      // 是否正处于动画中的状态
+      if (thisContentElem.is(':animated')) return;
 
       // 展开或收缩
-      thisItemElem[isNone ? 'addClass' : 'removeClass'](CONST.CLASS_COLLAPSE_EXTEND);
-      thisContentElem[isNone ? 'slideDown' : 'slideUp'](ANIM_MS);
+      if (isNone) {
+        // 先执行 slideDown 动画，再标注展开状态样式，避免元素 `block` 状态导致动画无效
+        thisContentElem.slideDown(ANIM_MS, complete);
+        thisItemElem.addClass(SHOW);
+      } else {
+        // 先取消展开状态样式，再将元素临时显示，避免 `none` 状态导致 slideUp 动画无效
+        thisItemElem.removeClass(SHOW);
+        thisContentElem.show().slideUp(ANIM_MS, complete);
+      }
 
+      // 是否开启手风琴
+      if (isAccordion) {
+        var itemSiblings = thisItemElem.siblings('.'+ SHOW);
+        itemSiblings.removeClass(SHOW);
+        itemSiblings.children(CLASS_CONTENT).show().slideUp(ANIM_MS, complete);
+      }
+
+      // 事件
       layui.event.call(this, MOD_NAME, 'collapse('+ filter +')', {
         title: othis,
         content: thisContentElem,
@@ -644,7 +656,12 @@ layui.define('jquery', function(exports) {
             // 初始状态
             elemTitle.find('.layui-colla-icon').remove();
             elemTitle.append('<i class="layui-icon layui-icon-right layui-colla-icon"></i>');
-            othis[isNone ? 'removeClass' : 'addClass'](CONST.CLASS_COLLAPSE_EXTEND);
+            othis[isNone ? 'removeClass' : 'addClass'](SHOW);
+
+            // 兼容旧版（ < 2.11.3）
+            if (elemCont.hasClass(SHOW)) {
+              elemCont.removeClass(SHOW);
+            }
 
             // 点击标题
             elemTitle.off('click', call.collapse).on('click', call.collapse);
