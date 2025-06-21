@@ -733,11 +733,13 @@ layui.define('component', function(exports) {
     var that = this;
     var namespace = '.lay-tabs-drag';
     var container = headerElem.parent();
-    var scrollable = container.hasClass('layui-tabs-scroll');
     var draggedElem;
-    var scrollWidth = headerElem.prop('scrollWidth');
-    var outerWidth = headerElem.outerWidth();
+    var scrollable;
+    var tabListSize;
+    var containerSize;
     var scrollThreshold = 100;
+    var maxOffset = 0;
+    var minOffset;
 
     var isDndElem = function(el) {
       return el && el.nodeName.toLowerCase() == 'li' && !!el.getAttribute('lay-id');
@@ -747,6 +749,10 @@ layui.define('component', function(exports) {
     headerElem.on('mousedown' + namespace, '>li', function() {
       if(isDndElem(this)){
         this.draggable = true;
+        scrollable = container.hasClass('layui-tabs-scroll');
+        tabListSize = headerElem.prop('scrollWidth');
+        containerSize = headerElem.outerWidth();
+        minOffset = containerSize - tabListSize;
       }
     });
     headerElem.on('dragstart' + namespace, function(e) {
@@ -761,14 +767,11 @@ layui.define('component', function(exports) {
     });
     headerElem.on("dragover" + namespace, function (e) {
       e.preventDefault();
-      e.originalEvent.dataTransfer.dropEffect = "move";
+      e.originalEvent.dataTransfer.dropEffect = 'move';
 
       // 拖拽边缘滚动
       if (scrollable) {
-        var tabLeft = headerElem.data("left") || 0;
         var containerRect = container[0].getBoundingClientRect();
-        var step = 200;
-        var rAFStep = 5;
         var isScrollLeft = e.clientX - containerRect.left < scrollThreshold;
         var isScrollRight = containerRect.right - e.clientX < scrollThreshold;
 
@@ -776,20 +779,24 @@ layui.define('component', function(exports) {
           return;
         }
 
+        var step = 35;
+        var rAFStep = 5;
+        var newOffset = headerElem.data('left') || 0;
+
         var cb = function () {
           if (step > 0) {
             step -= rAFStep;
             if (isScrollLeft) {
-              tabLeft += rAFStep;
+              newOffset = newOffset + rAFStep;
             } else if (isScrollRight) {
-              tabLeft += -rAFStep;
+              newOffset = newOffset - rAFStep;
             }
-            if (tabLeft > 0) {
-              tabLeft = 0;
-            } else if (tabLeft < outerWidth - scrollWidth) {
-              tabLeft = outerWidth - scrollWidth;
+            if (newOffset > maxOffset) {
+              newOffset = maxOffset;
+            } else if (newOffset < minOffset) {
+              newOffset = minOffset;
             }
-            headerElem.css("left", tabLeft).data("left", tabLeft);
+            headerElem.css('left', newOffset).data('left', newOffset);
             rAF(cb);
           }
         };
