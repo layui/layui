@@ -102,6 +102,20 @@
 </td>
     </tr>
     <tr>
+<td>dragSort <sup>2.12+</sup></td>
+<td>
+
+是否开启标签项拖拽排序功能
+
+</td>
+<td>boolean</td>
+<td>
+
+`false`
+
+</td>
+    </tr>
+    <tr>
 <td>header</td>
 <td colspan="3">
 

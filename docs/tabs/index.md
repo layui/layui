@@ -357,6 +357,19 @@ tabs.on('afterClose(testID)', function(data) {
 });
 ```
 
+<h3 id="on-dragend" class="ws-anchor ws-bold">标签拖拽结束后的事件 <sup>2.12+</sup></h3>
+
+`tabs.on('dragend(id)', callback)`
+
+标签拖拽结束后触发。
+
+```js
+// tabs 拖拽结束后的事件
+tabs.on('dragend(testID)', function(data) {
+  console.log(data);
+});
+```
+
 ## 💖 心语
 
 tabs 是通过 component 重构的首个组件，它来自于最早试图发布的 Layui 3.0（后因为 3.0 技术路线的变化，而整理放至 2.10+ 版本中），目的是将 element 模块中的 tab 组件进行解耦，增强其可扩展性。为了给开发者必要的时间缓冲，我们会将旧 tab 组件仍然保留在后续的若干版本中，但会在合适的时机对旧 tab 组件进行剔除，建议开发者尽量提前过渡到当前新的 tabs 组件。

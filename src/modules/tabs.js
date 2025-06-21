@@ -25,7 +25,8 @@ layui.define('component', function(exports) {
       CLOSE: 'layui-tabs-close',
       BODY: 'layui-tabs-body',
       ITEM: 'layui-tabs-item',
-      CARD: 'layui-tabs-card'
+      CARD: 'layui-tabs-card',
+      DRAG_CHOSEN: 'layui-tabs-dragsort-chosen'
     },
 
     // 渲染
@@ -151,11 +152,17 @@ layui.define('component', function(exports) {
         });
         inner.onresize = true;
       }
+      
+      // 拖拽事件
+      if(options.dragSort){
+        that.dragSort(container.header.elem);
+      }
     }
   });
 
   // 内部变量集
   var inner = {};
+  var rAF = window.requestAnimationFrame || function(fn){return setTimeout(fn, 1000 / 60)};
 
   /**
    * 扩展组件原型方法
@@ -363,9 +370,10 @@ layui.define('component', function(exports) {
    * 切换标签
    * @param {Object} thisHeaderItem - 当前标签头部项元素
    * @param {boolean} [force=false] - 是否强制切换
+   * @param {boolean} [disabledScroll=false] - 是否禁用滚动
    * @returns
    */
-  Class.prototype.change = function(thisHeaderItem, force) {
+  Class.prototype.change = function(thisHeaderItem, force, disabledScroll) {
     if (!thisHeaderItem || !thisHeaderItem[0]) return;
 
     var that = this;
@@ -418,7 +426,10 @@ layui.define('component', function(exports) {
     that.findBodyItem(layid || index).addClass(component.CONST.CLASS_SHOW)
     .siblings().removeClass(component.CONST.CLASS_SHOW);
 
-    that.roll('auto', index);
+    // 标签切换
+    if (!disabledScroll) {
+      that.roll('auto', index);
+    }
 
     // 重新获取标签相关数据
     var data = that.data();
@@ -712,6 +723,118 @@ layui.define('component', function(exports) {
       index: index, // 当前活动标签索引
       length: container.header.items.length // 标签数量
     };
+  };
+
+  /**
+   * 拖拽排序
+   * @param {jQuery} headerElem - 拖拽的头部容器元素
+   */
+  Class.prototype.dragSort = function(headerElem) {
+    var that = this;
+    var namespace = '.lay-tabs-drag';
+    var container = headerElem.parent();
+    var draggedElem;
+    var scrollable;
+    var tabListSize;
+    var containerSize;
+    var scrollThreshold = 100;
+    var maxOffset = 0;
+    var minOffset;
+
+    var isDndElem = function(el) {
+      return el && el.nodeName.toLowerCase() == 'li' && !!el.getAttribute('lay-id');
+    };
+
+    headerElem.off(namespace);
+    headerElem.on('mousedown' + namespace, '>li', function() {
+      if(isDndElem(this)){
+        this.draggable = true;
+        scrollable = container.hasClass('layui-tabs-scroll');
+        tabListSize = headerElem.prop('scrollWidth');
+        containerSize = headerElem.outerWidth();
+        minOffset = containerSize - tabListSize;
+      }
+    });
+    headerElem.on('dragstart' + namespace, function(e) {
+      e.originalEvent.dataTransfer.effectAllowed = 'move';
+      draggedElem = $(e.target);
+      that.change(draggedElem, false, true);
+    });
+    headerElem.on('dragenter' + namespace, function(e) {
+      if(isDndElem(e.target)) {
+        $(e.target).addClass(component.CONST.DRAG_CHOSEN);
+      }
+    });
+    headerElem.on("dragover" + namespace, function (e) {
+      e.preventDefault();
+      e.originalEvent.dataTransfer.dropEffect = 'move';
+
+      // 拖拽边缘滚动
+      if (scrollable) {
+        var containerRect = container[0].getBoundingClientRect();
+        var isScrollLeft = e.clientX - containerRect.left < scrollThreshold;
+        var isScrollRight = containerRect.right - e.clientX < scrollThreshold;
+
+        if (!isScrollLeft && !isScrollRight) {
+          return;
+        }
+
+        var step = 35;
+        var rAFStep = 5;
+        var newOffset = headerElem.data('left') || 0;
+
+        var cb = function () {
+          if (step > 0) {
+            step -= rAFStep;
+            if (isScrollLeft) {
+              newOffset = newOffset + rAFStep;
+            } else if (isScrollRight) {
+              newOffset = newOffset - rAFStep;
+            }
+            if (newOffset > maxOffset) {
+              newOffset = maxOffset;
+            } else if (newOffset < minOffset) {
+              newOffset = minOffset;
+            }
+            headerElem.css('left', newOffset).data('left', newOffset);
+            rAF(cb);
+          }
+        };
+        rAF(cb);
+      }
+    });
+    headerElem.on('dragleave' + namespace, function(e) {
+      if(isDndElem(e.target)) {
+        $(e.target).removeClass(component.CONST.DRAG_CHOSEN);
+      }
+    });
+    headerElem.on('drop' + namespace, function(e) {
+      e.preventDefault();
+      if (isDndElem(e.target)) {
+        var dropTargetElem = $(e.target);
+        dropTargetElem.removeClass(component.CONST.DRAG_CHOSEN);
+        var dragIndex = that.data().thisHeaderItem.index();
+        var dropIndex = dropTargetElem.index();
+
+        if(dragIndex > dropIndex) {
+          dropTargetElem.before(draggedElem);
+        } else {
+          dropTargetElem.after(draggedElem);
+        }
+      }
+    });
+    headerElem.on('dragend' + namespace, function(e) {
+      e.preventDefault();
+      draggedElem = null;
+
+      var data = that.data();
+      layui.event.call(
+        data.thisHeaderItem[0],
+        component.CONST.MOD_NAME,
+        'dragend(' + that.config.id +')',
+        that.data()
+      );
+    });
   };
 
   // 扩展组件接口
