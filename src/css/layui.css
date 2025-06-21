@@ -1315,6 +1315,8 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-tabs-scroll .layui-tabs-header:after{display: none; content: none; border: 0;}
 .layui-tabs-bar .layui-icon{position: absolute; left: 0; top: 0; z-index: 3; width: 40px; height: 100%; line-height: 40px; border: 1px solid #eee; text-align: center; cursor: pointer; box-sizing: border-box; background-color: #fff; box-shadow: 2px 0 5px 0 rgb(0 0 0 / 6%);}
 .layui-tabs-bar .layui-icon-next{left: auto; right: 0; box-shadow: -2px 0 5px 0 rgb(0 0 0 / 6%);}
+.layui-tabs-dragsort-chosen:before {content: ''; height: 100%; width: 2px; background-color: #16baaa; position: absolute; top: 0; left: 0; box-sizing: border-box;}
+.layui-tabs-dragsort-chosen *{ pointer-events: none;}
 
 .layui-tabs-header li .layui-tabs-close{position: relative; display: inline-block; width: 16px; height: 16px; line-height: 18px; margin-left: 8px; top: 0px; text-align: center; font-size: 12px; color: #959595; border-radius: 50%; font-weight: 700; transition: all .16s; -webkit-transition: all .16s;}
 .layui-tabs-header li .layui-tabs-close:hover{ background-color: #ff5722; color: #fff;}
