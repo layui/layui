@@ -578,7 +578,8 @@ a cite{font-style: normal;}
 .layui-colla-title{position: relative; height: 42px; line-height: 42px; padding: 0 15px 0 35px; color: #333; background-color: #fafafa; cursor: pointer; font-size: 14px; overflow: hidden;}
 .layui-colla-content{display: none; padding: 10px 15px; line-height: 1.6; color: #5F5F5F;}
 .layui-colla-icon{position: absolute; left: 15px; top: 50%; margin-top: -7px; font-size: 14px; line-height: normal; transition: all .2s;}
-.layui-collapse-item-expand > .layui-colla-title .layui-colla-icon{transform: rotate(90deg);}
+.layui-colla-item.layui-show > .layui-colla-title .layui-colla-icon{transform: rotate(90deg);}
+.layui-colla-item.layui-show > .layui-colla-content{display: block;}
 
 /* 卡片面板 */
 .layui-card{margin-bottom: 15px; border-radius: 2px; background-color: #fff; box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);}
