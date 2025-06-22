@@ -758,7 +758,9 @@ layui.define('component', function(exports) {
       }
     });
     headerElem.on('dragstart' + namespace, function(e) {
-      e.originalEvent.dataTransfer.effectAllowed = 'move';
+      if(e.originalEvent.dataTransfer){
+        e.originalEvent.dataTransfer.effectAllowed = 'move';
+      }
       draggedElem = $(e.target);
       that.change(draggedElem, false, true);
     });
@@ -769,7 +771,9 @@ layui.define('component', function(exports) {
     });
     headerElem.on("dragover" + namespace, function (e) {
       e.preventDefault();
-      e.originalEvent.dataTransfer.dropEffect = 'move';
+      if(e.originalEvent.dataTransfer){
+        e.originalEvent.dataTransfer.dropEffect = 'move';
+      }
 
       // 拖拽边缘滚动
       if (scrollable) {
