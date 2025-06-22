@@ -9,22 +9,22 @@
 <body>
   <div class="layui-container layui-padding-3 layui-text">
     <h2>动态操作</h2>
-    <div class="layui-tabs layui-hide-v" id="demoTabs1" lay-options="{closable: true, headerMode:'scroll'}">
+    <div class="layui-tabs layui-hide-v" id="demoTabs1" lay-options="{closable: true, headerMode:'scroll', dragSort: true}">
       <ul class="layui-tabs-header">
-        <li lay-id="aaa" lay-closable="false">Tab1</li>
-        <li lay-id="bbb">Tab2</li>
-        <li lay-id="ccc">Tab3</li>
-        <li lay-id="ddd">Tab4</li>
-        <li lay-id="eee">Tab5</li>
-        <li lay-id="fff">Tab6</li>
+        <li lay-id="t-1" lay-closable="false">Tab1</li>
+        <li lay-id="t-2">Tab2</li>
+        <li lay-id="t-3">Tab3</li>
+        <li lay-id="t-4">Tab4</li>
+        <li lay-id="t-5">Tab5</li>
+        <li lay-id="t-6">Tab6</li>
       </ul>
       <div class="layui-tabs-body">
-        <div class="layui-tabs-item">Tab Content-1</div>
-        <div class="layui-tabs-item">Tab Content-2</div>
-        <div class="layui-tabs-item">Tab Content-3</div>
-        <div class="layui-tabs-item">Tab Content-4</div>
-        <div class="layui-tabs-item">Tab Content-5</div>
-        <div class="layui-tabs-item">Tab Content-6</div>
+        <div lay-id="t-1" class="layui-tabs-item">Tab Content-1</div>
+        <div lay-id="t-2" class="layui-tabs-item">Tab Content-2</div>
+        <div lay-id="t-3" class="layui-tabs-item">Tab Content-3</div>
+        <div lay-id="t-4" class="layui-tabs-item">Tab Content-4</div>
+        <div lay-id="t-5" class="layui-tabs-item">Tab Content-5</div>
+        <div lay-id="t-6" class="layui-tabs-item">Tab Content-6</div>
       </div>
     </div>
 
