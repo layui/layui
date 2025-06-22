@@ -735,11 +735,13 @@ layui.define('component', function(exports) {
     var container = headerElem.parent();
     var draggedElem;
     var scrollable;
-    var tabListSize;
-    var containerSize;
-    var scrollThreshold = 100;
+    var tabListScrollSize;
+    var tabListOuterSize;
     var maxOffset = 0;
     var minOffset;
+    var dragScrollLength = 35;
+    var dragScrollSpeed = 5;
+    var dragScrollPercentage = 12; // 容器边缘滚动区域大小，百分比值
 
     var isDndElem = function(el) {
       return el && el.nodeName.toLowerCase() == 'li' && !!el.getAttribute('lay-id');
@@ -750,9 +752,9 @@ layui.define('component', function(exports) {
       if(isDndElem(this)){
         this.draggable = true;
         scrollable = container.hasClass('layui-tabs-scroll');
-        tabListSize = headerElem.prop('scrollWidth');
-        containerSize = headerElem.outerWidth();
-        minOffset = containerSize - tabListSize;
+        tabListScrollSize = headerElem.prop('scrollWidth');
+        tabListOuterSize = headerElem.outerWidth();
+        minOffset = tabListOuterSize - tabListScrollSize;
       }
     });
     headerElem.on('dragstart' + namespace, function(e) {
@@ -772,15 +774,15 @@ layui.define('component', function(exports) {
       // 拖拽边缘滚动
       if (scrollable) {
         var containerRect = container[0].getBoundingClientRect();
-        var isScrollLeft = e.clientX - containerRect.left < scrollThreshold;
-        var isScrollRight = containerRect.right - e.clientX < scrollThreshold;
+        var isScrollLeft = (e.clientX - containerRect.left) / containerRect.width * 100 < dragScrollPercentage;
+        var isScrollRight = (containerRect.right - e.clientX) / containerRect.width * 100 < dragScrollPercentage
 
-        if (!isScrollLeft && !isScrollRight) {
+        if (!(isScrollLeft || isScrollRight)) {
           return;
         }
 
-        var step = 35;
-        var rAFStep = 5;
+        var step = dragScrollLength;
+        var rAFStep = dragScrollSpeed;
         var newOffset = headerElem.data('left') || 0;
 
         var cb = function () {
