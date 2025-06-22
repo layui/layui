@@ -778,10 +778,10 @@ layui.define('component', function(exports) {
       // 拖拽边缘滚动
       if (scrollable) {
         var containerRect = container[0].getBoundingClientRect();
-        var isScrollLeft = (e.clientX - containerRect.left) / containerRect.width * 100 < dragScrollPercentage;
-        var isScrollRight = (containerRect.right - e.clientX) / containerRect.width * 100 < dragScrollPercentage
+        var isScrollStart = (e.clientX - containerRect.left) / containerRect.width * 100 < dragScrollPercentage;
+        var isScrollEnd = (containerRect.right - e.clientX) / containerRect.width * 100 < dragScrollPercentage
 
-        if (!(isScrollLeft || isScrollRight)) {
+        if (!(isScrollStart || isScrollEnd)) {
           return;
         }
 
@@ -792,9 +792,9 @@ layui.define('component', function(exports) {
         var cb = function () {
           if (step > 0) {
             step -= rAFStep;
-            if (isScrollLeft) {
+            if (isScrollStart) {
               newOffset = newOffset + rAFStep;
-            } else if (isScrollRight) {
+            } else if (isScrollEnd) {
               newOffset = newOffset - rAFStep;
             }
             if (newOffset > maxOffset) {
