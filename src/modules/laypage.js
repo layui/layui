@@ -156,7 +156,7 @@ layui.define('i18n', function(exports) {
       // 数据总数
       count: function(){
         var countText = typeof config.countText === 'object'
-          ? countText[0] + config.count + countText[1]
+          ? config.countText[0] + config.count + config.countText[1]
           : i18n.$t('laypage.total', {total: config.count});
 
         return '<span class="layui-laypage-count">'+ countText +'</span>'
