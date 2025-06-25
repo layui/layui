@@ -54,9 +54,9 @@ export default {
       now: 'Ajd.',
       reset: 'Réinit.'
     },
-    timeout: 'L’heure de fin ne peut pas être antérieure à l’heure de début<br>Veuillez recommencer',
+    timeout: 'L’heure de fin ne peut pas être antérieure à l’heure de début\nVeuillez recommencer',
     invalidDate: 'Date ou heure hors plage valide',
-    formatError: ['Format de date invalide<br>Le format attendu est :<br>', '<br>Il a été réinitialisé pour vous'],
+    formatError: ['Format de date invalide\nLe format attendu est :\n', '\nIl a été réinitialisé pour vous'],
     preview: 'Résultat sélectionné actuel'
   },
   layer: {
@@ -78,7 +78,7 @@ export default {
       },
       viewPicture: 'Voir l’image originale',
       urlError: {
-        prompt: 'L’adresse de l’image est invalide<br>Continuer avec la suivante ?',
+        prompt: 'L’adresse de l’image est invalide,\nContinuer avec la suivante ?',
         confirm: 'Suivante',
         cancel: 'Annuler'
       }

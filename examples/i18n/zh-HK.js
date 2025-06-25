@@ -53,9 +53,9 @@ export default {
       now: '現在',
       reset: '重設'
     },
-    timeout: '結束時間不能早於開始時間<br>請重新選擇',
+    timeout: '結束時間不能早於開始時間\n請重新選擇',
     invalidDate: '不在有效日期或時間範圍內',
-    formatError: ['日期格式不合法<br>必須遵循以下格式：<br>', '<br>已為你重設'],
+    formatError: ['日期格式不合法\n必須遵循以下格式：\n', '\n已為你重設'],
     preview: '當前選中的結果'
   },
   layer: {
@@ -77,7 +77,7 @@ export default {
       },
       viewPicture: '查看原圖',
       urlError: {
-        prompt: '當前圖片地址異常，<br>是否繼續查看下一張？',
+        prompt: '當前圖片地址異常，\n是否繼續查看下一張？',
         confirm: '下一張',
         cancel: '不看了'
       }

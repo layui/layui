@@ -199,9 +199,9 @@ layui.define(['lay', 'i18n'], function(exports) {
           now: 'Now',
           reset: 'Reset'
         },
-        timeout: 'End time cannot be less than start Time<br>Please re-select',
+        timeout: 'End time cannot be less than start Time\nPlease re-select',
         invalidDate: 'Invalid date',
-        formatError: ['The date format error<br>Must be followed：<br>', '<br>It has been reset'],
+        formatError: ['The date format error\nMust be followed：\n', '\nIt has been reset'],
         preview: 'The selected result'
       }
     };

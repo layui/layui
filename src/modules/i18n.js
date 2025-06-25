@@ -66,9 +66,9 @@ layui.define('lay', function(exports) {
         now: '现在',
         reset: '重置'
       },
-      timeout: '结束时间不能早于开始时间<br>请重新选择',
+      timeout: '结束时间不能早于开始时间\n请重新选择',
       invalidDate: '不在有效日期或时间范围内',
-      formatError: ['日期格式不合法<br>必须遵循下述格式：<br>', '<br>已为你重置'],
+      formatError: ['日期格式不合法\n必须遵循下述格式：\n', '\n已为你重置'],
       preview: '当前选中的结果'
     },
     layer: {
@@ -90,7 +90,7 @@ layui.define('lay', function(exports) {
         },
         viewPicture: '查看原图',
         urlError: {
-          prompt: '当前图片地址异常，<br>是否继续查看下一张？',
+          prompt: '当前图片地址异常，\n是否继续查看下一张？',
           confirm: '下一张',
           cancel: '不看了'
         }
@@ -217,6 +217,30 @@ layui.define('lay', function(exports) {
     return result;
   }
 
+  /**
+   * 对传入的值进行转义处理
+   * 若值为字符串，直接进行转义；若为函数，对函数返回的字符串进行转义；若为数组，对数组中的字符串元素进行转义
+   * @param {any} value - 需要进行转义处理的值
+   * @returns {any} - 转义后的结果
+   */
+  function escape(value) {
+    if(typeof value === 'string'){
+      value = lay.escape(value);
+    }else if(typeof value === 'function'){
+      var origFn = value;
+      value = function(){
+        var val = origFn.apply(this, arguments)
+        return typeof val === 'string' ? lay.escape(val) : val;
+      }
+    }else if(layui.type(value) === 'array'){
+      value = value.map(function(v){
+        return typeof v === 'string' ? lay.escape(v) : v;
+      });
+    }
+
+    return value
+  }
+
   var i18n = {
     config: config,
     set: function(options) {
@@ -271,19 +295,19 @@ layui.define('lay', function(exports) {
       var opts = args[1];
       // 第二个参数为对象或数组，替换占位符 {key} 或 {0}, {1}...
       if (opts !== null && typeof opts === 'object') {
-        return result.replace(OBJECT_REPLACE_REGEX, function(match, key) {
+        result = result.replace(OBJECT_REPLACE_REGEX, function(match, key) {
           return opts[key] !== undefined ? opts[key] : match;
         });
+      }else{
+        // 处理可变参数，替换占位符 {0}, {1}...
+        result = result.replace(INDEX_REPLACE_REGEX, function(match, index) {
+          var arg = args[index + 1];
+          return arg !== undefined ? arg : match;
+        });
       }
-
-      // 处理可变参数，替换占位符 {0}, {1}...
-      return result.replace(INDEX_REPLACE_REGEX, function(match, index) {
-        var arg = args[index + 1];
-        return arg !== undefined ? arg : match;
-      });
     }
 
-    return result;
+    return escape(result);
   };
 
   /**

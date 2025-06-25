@@ -96,7 +96,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate .laydate-time-list-hide-2 ol li{padding-left: 117px;}
 
 /* 提示 */
-.layui-laydate-hint{position: absolute; top: 115px; left: 50%; width: 250px; margin-left: -125px; line-height: 20px; padding: 15px; text-align: center; font-size: 12px; color: #FF5722;}
+.layui-laydate-hint{position: absolute; top: 115px; left: 50%; width: 250px; margin-left: -125px; line-height: 20px; padding: 15px; text-align: center; font-size: 12px; color: #FF5722;white-space: pre-line;}
 
 
 /* 双日历 */

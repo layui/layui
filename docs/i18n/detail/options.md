@@ -54,9 +54,9 @@ i18n.set({
           now: '现在',
           reset: '重置'
         },
-        timeout: '结束时间不能早于开始时间<br>请重新选择',
+        timeout: '结束时间不能早于开始时间\n请重新选择',
         invalidDate: '不在有效日期或时间范围内',
-        formatError: ['日期格式不合法<br>必须遵循下述格式：<br>', '<br>已为你重置'],
+        formatError: ['日期格式不合法\n必须遵循下述格式：\n', '\n已为你重置'],
         preview: '当前选中的结果'
       },
       layer: {
@@ -78,7 +78,7 @@ i18n.set({
           },
           viewPicture: '查看原图',
           urlError: {
-            prompt: '当前图片地址异常，<br>是否继续查看下一张？',
+            prompt: '当前图片地址异常，\n是否继续查看下一张？',
             confirm: '下一张',
             cancel: '不看了'
           }

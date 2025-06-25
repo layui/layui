@@ -2,12 +2,13 @@
  * util 工具组件
  */
 
-layui.define(['i18n', 'jquery'], function(exports) {
+layui.define(['lay', 'i18n', 'jquery'], function(exports) {
   "use strict";
 
   var $ = layui.$;
   var hint = layui.hint();
   var i18n = layui.i18n;
+  var lay = layui.lay;
 
   // 引用自 dayjs
   // https://github.com/iamkun/dayjs/blob/v1.11.9/src/constant.js#L30
@@ -335,26 +336,10 @@ layui.define(['i18n', 'jquery'], function(exports) {
     },
 
     // 转义 html
-    escape: function(html){
-      var exp = /[<"'>]|&(?=#?[a-zA-Z0-9]+)/g;
-      if (html === undefined || html === null) return '';
-
-      html += '';
-      if (!exp.test(html)) return html;
-
-      return html.replace(/&(?=#?[a-zA-Z0-9]+;?)/g, '&amp;')
-      .replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
-    },
+    escape: lay.escape,
 
     // 还原转义的 html
-    unescape: function(html){
-      if (html === undefined || html === null) return '';
-
-      return String(html).replace(/\&quot;/g, '"').replace(/\&#39;/g, '\'')
-      .replace(/\&gt;/g, '>').replace(/\&lt;/g, '<')
-      .replace(/\&amp;/g, '&');
-    },
+    unescape: lay.unescape,
 
     // 打开新窗口
     openWin: function(options){

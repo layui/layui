@@ -50,7 +50,7 @@ var ready = {
         },
         viewPicture: '查看原图',
         urlError: {
-          prompt: '当前图片地址异常，<br>是否继续查看下一张？',
+          prompt: '当前图片地址异常，\n是否继续查看下一张？',
           confirm: '下一张',
           cancel: '不看了'
         }
@@ -1921,7 +1921,7 @@ layer.photos = function(options, loop, key){
     }, options));
   }, function(){
     layer.close(dict.loadi);
-    layer.msg(i18n.$t('layer.photos.urlError.prompt'), {
+    layer.msg('<span style="white-space: pre-line;">' + i18n.$t('layer.photos.urlError.prompt') + '</span>', {
       time: 30000,
       btn: [i18n.$t('layer.photos.urlError.confirm'), i18n.$t('layer.photos.urlError.cancel')],
       yes: function(){
