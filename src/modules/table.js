@@ -193,7 +193,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
               ,'{{# } else { }}'
                 ,'<span>{{-item2.title||""}}</span>'
                 ,'{{# if(isSort){ }}'
-                  ,'<span class="layui-table-sort layui-inline"><i class="layui-edge layui-table-sort-asc" title="' + i18n.$t('table.sort.asc') + '"></i><i class="layui-edge layui-table-sort-desc" title="' + i18n.$t('table.sort.desc') + '"></i></span>'
+                  ,'<span class="layui-table-sort layui-inline"><i class="layui-edge layui-table-sort-asc" title="{{= d.i18nMessages.table_sort_asc }}"></i><i class="layui-edge layui-table-sort-desc" title="{{= d.i18nMessages.table_sort_desc }}"></i></span>'
                 ,'{{# } }}'
               ,'{{# } }}'
             ,'</div>'
@@ -422,7 +422,11 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
       tagStyle: 'legacy'
     }).render({
       data: options,
-      index: that.index //索引
+      index: that.index, //索引
+      i18nMessages: {
+        'table_sort_asc': i18n.$t('table.sort.asc'),
+        'table_sort_desc': i18n.$t('table.sort.desc')
+      }
     }));
 
     // 初始化样式

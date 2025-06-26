@@ -120,28 +120,6 @@
     };
   }
 
-  // Array.prototype.map
-  // 引用自 https://github.com/inexorabletash/polyfill/blob/716a3f36ca10fad032083014faf1a47c638e2502/es5.js#L300-L345
-  if (!Array.prototype.map) {
-    Array.prototype.map = function (fun /*, thisp */) {
-      if (this === void 0 || this === null) { throw TypeError(); }
-
-      var t = Object(this);
-      var len = t.length >>> 0;
-      if (typeof fun !== "function") { throw TypeError(); }
-
-      var res = []; res.length = len;
-      var thisp = arguments[1], i;
-      for (i = 0; i < len; i++) {
-        if (i in t) {
-          res[i] = fun.call(thisp, t[i], i, t);
-        }
-      }
-
-      return res;
-    };
-  }
-
   /**
    * 节点加载事件
    * @param {HTMLElement} node - script 或 link 节点
