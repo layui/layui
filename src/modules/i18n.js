@@ -197,10 +197,11 @@ layui.define('lay', function(exports) {
   var INDEX_REPLACE_REGEX = /\{(\d+)\}/g;
 
   /**
-   * 获取对象中的值，lodash _.get 简易版
-   * @param {Record<string, any>} obj
-   * @param {string} path
-   * @param {any} defaultValue
+   * 获取对象中指定路径的值，类似于 lodash 的 _.get 方法（简易版）
+   * @param {Record<string, any>} obj - 要查找的对象
+   * @param {string} path - 要查找的路径，支持类似 'a[0].b.c' 的格式
+   * @param {any} defaultValue - 若未找到对应值时返回的默认值
+   * @returns {any} - 找到的值或默认值
    */
   function get(obj, path, defaultValue) {
     // 'a[0].b.c' ==> ['a', '0', 'b', 'c']
@@ -215,6 +216,27 @@ layui.define('lay', function(exports) {
     }
 
     return result;
+  }
+
+  /**
+   * 为纯函数创建具有缓存功能的版本，类似于 lodash 的 _.memoize 方法（简易版）
+   * @template T
+   * @param {(key: string, ...args) => T} fn - 需要缓存的函数，第一个参数为键
+   * @returns {{(key: string, ...args): T, cleanup: () => void}} - 带有缓存的函数
+   */
+  function memoize(fn){
+    /** @type Record<string, T> */
+    var cache = Object.create(null);
+
+    function cachedFn(key) {
+      var hit = cache[key];
+      return hit || (cache[key] = fn.apply(cache, arguments));
+    }
+
+    cachedFn.cleanup = function() {
+      cache = Object.create(null);
+    }
+    return cachedFn;
   }
 
   /**
@@ -245,8 +267,13 @@ layui.define('lay', function(exports) {
     config: config,
     set: function(options) {
       lay.extend(config, options);
+      getCachedValueForKeyPath.cleanup();
     }
   };
+
+  var getCachedValueForKeyPath = memoize(function(key, obj){
+    return get(obj, key, key);
+  });
 
   /**
    * 根据给定的键从国际化消息中获取翻译后的内容
@@ -281,14 +308,14 @@ layui.define('lay', function(exports) {
   i18n.translation = function(key) {
     var options = config;
     var args = arguments;
-    var i18nMessage = options.messages[options.locale];
+    var i18nMessages = options.messages[options.locale];
 
-    if (!i18nMessage) {
+    if (!i18nMessages) {
       hint.error('Locale "' + options.locale + '" not found. Please add i18n messages for this locale first.', 'warn');
       return key;
     }
 
-    var result = get(i18nMessage, key, key);
+    var result = getCachedValueForKeyPath(key, i18nMessages);
 
     // 替换占位符
     if (typeof result === 'string' && args.length > 1) {
