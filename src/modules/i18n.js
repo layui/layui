@@ -194,7 +194,6 @@ layui.define('lay', function(exports) {
   }, GLOBAL.i18n); // 读取全局预设配置，确保打包后的版本初始调用时机
 
   var OBJECT_REPLACE_REGEX = /\{(\w+)\}/g;
-  var INDEX_REPLACE_REGEX = /\{(\d+)\}/g;
 
   /**
    * 获取对象中指定路径的值，类似于 lodash 的 _.get 方法（简易版）
@@ -284,7 +283,6 @@ layui.define('lay', function(exports) {
    * @param {any[]} [args] 可选的占位符替换参数：
    * - 对象形式：用于替换 `{key}` 形式的占位符；
    * - 数组形式：用于替换 `{0}`, `{1}` 等占位符；
-   * - 可变参数：用于替换 `{0}`, `{1}` 等占位符。
    * @returns {string} 翻译后的文本
    *
    * @example 使用对象替换命名占位符
@@ -298,12 +296,6 @@ layui.define('lay', function(exports) {
    *   hello: '{0} world'
    * }
    * i18n.$t('message.hello', ['Hello'])
-   *
-   * @example 使用变长参数替换索引占位符
-   * message: {
-   *   hello: '{0} world'
-   * }
-   * i18n.$t('message.hello', 'Hello')
    */
   i18n.translation = function(key) {
     var options = config;
@@ -324,12 +316,6 @@ layui.define('lay', function(exports) {
       if (opts !== null && typeof opts === 'object') {
         result = result.replace(OBJECT_REPLACE_REGEX, function(match, key) {
           return opts[key] !== undefined ? opts[key] : match;
-        });
-      }else{
-        // 处理可变参数，替换占位符 {0}, {1}...
-        result = result.replace(INDEX_REPLACE_REGEX, function(match, index) {
-          var arg = args[index + 1];
-          return arg !== undefined ? arg : match;
         });
       }
     }
