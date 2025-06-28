@@ -53,14 +53,30 @@
   }();
 
   // 异常提示
-  var error = function(msg, type) {
+  var error = function(msg, type, isDebug) {
     type = type || 'log';
-    msg = 'Layui message: ' + msg;
+    msg = '[Layui]: ' + msg;
 
     if (window.console) {
       console[type] ? console[type](msg) : console.log(msg);
     }
+    if(isDebug && layui && layui.cache.debug) {
+      debugger
+    }
   };
+  var warned = Object.create(null);
+
+  var errorOnce = function (msg, type, isDebug) {
+    if(warned._size && warned._size > 500){
+      warned = Object.create(null);
+      warned._size = 0;
+    }
+    if (!warned[msg]) {
+      warned[msg] = true;
+      warned._size = (warned._size || 0) + 1;
+      error(msg, type, isDebug)
+    }
+  }
 
   // 内置模块
   var builtinModules = config.builtin = {
@@ -715,7 +731,8 @@
   // 提示
   Class.prototype.hint = function() {
     return {
-      error: error
+      error: error,
+      errorOnce: errorOnce
     };
   };
 

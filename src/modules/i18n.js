@@ -8,6 +8,7 @@ layui.define('lay', function(exports) {
 
   var lay = layui.lay;
   var hint  = layui.hint();
+  var isDev = layui.cache.debug;
 
   var MOD_NAME = 'i18n';
 
@@ -262,27 +263,46 @@ layui.define('lay', function(exports) {
     return value
   }
 
+  var resolveValue = memoize(function(path, obj, defaultValue){
+    var pathParts = path.split(':');
+    var locale = pathParts[0];
+
+    path = pathParts[1];
+
+    var value = get(obj, path, defaultValue);
+
+    if (isDev) {
+      var isFallback = defaultValue === value || value === path;
+      var isNotFound = !value || isFallback;
+      if (isNotFound) {
+        hint.errorOnce("Not found '" + path + "' key in '" + locale + "' locale messages.", 'warn', true);
+      }
+      if (isFallback) {
+        hint.errorOnce("Fallback to default message for key: '" + path + "'", 'warn', true);
+      }
+    }
+
+    return value || path;
+  });
+
   var i18n = {
     config: config,
     set: function(options) {
       lay.extend(config, options);
-      getCachedValueForKeyPath.cleanup();
+      resolveValue.cleanup();
     }
   };
-
-  var getCachedValueForKeyPath = memoize(function(key, obj){
-    return get(obj, key, key);
-  });
 
   /**
    * 根据给定的键从国际化消息中获取翻译后的内容
    * 未文档化的私有方法，仅限内部使用
    *
    * @internal
-   * @param {string} key 要翻译的键
-   * @param {any[]} [args] 可选的占位符替换参数：
+   * @param {string} keypath 要翻译的键路径
+   * @param {Record<string, any> | any[]} [parameters] 可选的占位符替换参数：
    * - 对象形式：用于替换 `{key}` 形式的占位符；
    * - 数组形式：用于替换 `{0}`, `{1}` 等占位符；
+   * @param {{locale: string, default: string}} [options] 翻译选项
    * @returns {string} 翻译后的文本
    *
    * @example 使用对象替换命名占位符
@@ -297,27 +317,24 @@ layui.define('lay', function(exports) {
    * }
    * i18n.$t('message.hello', ['Hello'])
    */
-  i18n.translation = function(key) {
-    var options = config;
-    var args = arguments;
-    var i18nMessages = options.messages[options.locale];
+  i18n.translation = function(keypath, parameters, options) {
+    var locale = (options && options.locale) || config.locale;
+    var i18nMessages = config.messages[locale];
+    var namespace = locale + ':';
+    var fallbackMessage = options && options.default;
 
     if (!i18nMessages) {
-      hint.error('Locale "' + options.locale + '" not found. Please add i18n messages for this locale first.', 'warn');
-      return key;
+      hint.errorOnce("Locale '" + locale + "' not found. Please add i18n messages for this locale first.", 'error');
     }
-
-    var result = getCachedValueForKeyPath(key, i18nMessages);
+    
+    var result = resolveValue(namespace + keypath, i18nMessages, fallbackMessage);
 
     // 替换占位符
-    if (typeof result === 'string' && args.length > 1) {
-      var opts = args[1];
+    if (typeof result === 'string' && parameters) {
       // 第二个参数为对象或数组，替换占位符 {key} 或 {0}, {1}...
-      if (opts !== null && typeof opts === 'object') {
-        result = result.replace(OBJECT_REPLACE_REGEX, function(match, key) {
-          return opts[key] !== undefined ? opts[key] : match;
-        });
-      }
+      result = result.replace(OBJECT_REPLACE_REGEX, function(match, key) {
+        return parameters[key] !== undefined ? parameters[key] : match;
+      });
     }
 
     return escape(result);
