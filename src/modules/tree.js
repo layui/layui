@@ -577,7 +577,6 @@ layui.define(['i18n', 'form', 'util'], function(exports) {
 
       // 删除
       } else {
-        // 兼容性，手动替换括号为 html
         var i18nText = i18n.$t('tree.deleteNodePrompt', {
           name: item[customName.title] || ''
         });
