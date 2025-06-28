@@ -404,28 +404,51 @@ layui.define('jquery', function(exports) {
     }
 
     // 折叠面板
-    ,collapse: function(){
+    ,collapse: function() {
       var othis = $(this);
-      var icon = othis.find('.layui-colla-icon');
-      var elemCont = othis.siblings('.layui-colla-content');
-      var parents = othis.parents('.layui-collapse').eq(0);
-      var filter = parents.attr('lay-filter');
-      var isNone = elemCont.css('display') === 'none';
+      var wrapper = othis.closest('.layui-collapse');
+      var filter = wrapper.attr('lay-filter');
 
-      // 是否手风琴
-      if(typeof parents.attr('lay-accordion') === 'string'){
-        var show = parents.children('.layui-colla-item').children('.'+SHOW);
-        show.siblings('.layui-colla-title').children('.layui-colla-icon').html('&#xe602;');
-        show.removeClass(SHOW);
+      var ANIM_MS = 200; // 动画过渡毫秒数
+      var CLASS_ITEM = '.layui-colla-item';
+      var CLASS_CONTENT = '.layui-colla-content';
+
+      var thisItemElem = othis.parent(CLASS_ITEM);
+      var thisContentElem = othis.siblings(CLASS_CONTENT);
+      var isNone = thisContentElem.css('display') === 'none';
+      var isAccordion = typeof wrapper.attr('lay-accordion') === 'string';
+
+      // 动画执行完成后的操作
+      var complete = function() {
+        $(this).css('display', ''); // 剔除动画生成的 style display，以适配外部样式的状态重置
+      };
+
+      // 是否正处于动画中的状态
+      if (thisContentElem.is(':animated')) return;
+
+      // 展开或收缩
+      if (isNone) {
+        // 先执行 slideDown 动画，再标注展开状态样式，避免元素 `block` 状态导致动画无效
+        thisContentElem.slideDown(ANIM_MS, complete);
+        thisItemElem.addClass(SHOW);
+      } else {
+        // 先取消展开状态样式，再将元素临时显示，避免 `none` 状态导致 slideUp 动画无效
+        thisItemElem.removeClass(SHOW);
+        thisContentElem.show().slideUp(ANIM_MS, complete);
       }
 
-      elemCont[isNone ? 'addClass' : 'removeClass'](SHOW);
-      icon.html(isNone ? '&#xe61a;' : '&#xe602;');
+      // 是否开启手风琴
+      if (isAccordion) {
+        var itemSiblings = thisItemElem.siblings('.'+ SHOW);
+        itemSiblings.removeClass(SHOW);
+        itemSiblings.children(CLASS_CONTENT).show().slideUp(ANIM_MS, complete);
+      }
 
+      // 事件
       layui.event.call(this, MOD_NAME, 'collapse('+ filter +')', {
-        title: othis
-        ,content: elemCont
-        ,show: isNone
+        title: othis,
+        content: thisContentElem,
+        show: isNone
       });
     }
   };
@@ -617,27 +640,32 @@ layui.define('jquery', function(exports) {
         });
       }
 
-      //折叠面板
-      ,collapse: function(elem){
+      // 折叠面板
+      ,collapse: function(elem) {
         var ELEM = 'layui-collapse';
         var targetElem = elem || $('.' + ELEM + elemFilter);
 
-        targetElem.each(function(){
-          var elemItem = $(this).find('.layui-colla-item')
-          elemItem.each(function(){
+        targetElem.each(function() {
+          var elemItem = $(this).find('.layui-colla-item');
+          elemItem.each(function() {
             var othis = $(this)
-            ,elemTitle = othis.find('.layui-colla-title')
-            ,elemCont = othis.find('.layui-colla-content')
-            ,isNone = elemCont.css('display') === 'none';
+            var elemTitle = othis.find('.layui-colla-title');
+            var elemCont = othis.find('.layui-colla-content');
+            var isNone = elemCont.css('display') === 'none';
 
-            //初始状态
+            // 初始状态
             elemTitle.find('.layui-colla-icon').remove();
-            elemTitle.append('<i class="layui-icon layui-colla-icon">'+ (isNone ? '&#xe602;' : '&#xe61a;') +'</i>');
+            elemTitle.append('<i class="layui-icon layui-icon-right layui-colla-icon"></i>');
+            othis[isNone ? 'removeClass' : 'addClass'](SHOW);
 
-            //点击标题
+            // 兼容旧版（ < 2.11.3）
+            if (elemCont.hasClass(SHOW)) {
+              elemCont.removeClass(SHOW);
+            }
+
+            // 点击标题
             elemTitle.off('click', call.collapse).on('click', call.collapse);
           });
-
         });
       }
     };

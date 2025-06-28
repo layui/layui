@@ -11,6 +11,38 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.11.4" lay-pid="2.10+" class="ws-anchor">
+  v2.11.4
+  <span class="layui-badge-rim">2025-06-23</span>
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+</h2>
+
+- 重构 collapse 展开收缩动画的核心逻辑 #2734
+- 新增 collapse 列表项添加 `layui-show` 类设置默认展开的支持，且兼容旧版 #2734
+- 修复 collapse 列表项的内容元素添加 `layui-show` 类时的收缩异常问题 #2734
+
+### 下载： [layui-v2.11.4.zip](https://gitee.com/layui/layui/attach_files/2241193/download)
+
+---
+
+<h2 id="v2.11.3" lay-pid="2.10+" class="ws-anchor">
+  v2.11.3
+  <span class="layui-badge-rim">2025-06-18</span>
+</h2>
+
+- #### tabs
+  - 优化 `close` 方法在标签顺序打乱时传入 `lay-id` 的支持 #2690 @sentsim
+  - 优化 `closeMult` 方法的 `index` 参数值为 `lay-id` 时的无效问题 #2690 @sentsim
+  - 优化 `getHeaderItem` 等方法的 `index` 参数的类型检测 #2690 @sentsim
+- #### treeTable
+  - 新增 `expandNode` 方法的 `done` 回调 #2721 @Sight-wcg
+- #### collapse
+  - 新增 折叠面板展开和收缩时的过渡动画 #2722 @sentsim
+
+### 下载： [layui-v2.11.3.zip](https://gitee.com/layui/layui/attach_files/2233291/download)
+
+---
+
 <h2 id="v2.11.2" lay-pid="2.10+" class="ws-anchor">
   v2.11.2
   <span class="layui-badge-rim">2025-05-15</span>
