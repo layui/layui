@@ -796,8 +796,44 @@
   };
 
   var hasOwnProperty = Object.prototype.hasOwnProperty;
+  /**
+   * 检查对象是否具有指定的属性
+   * @param {Record<string, any>} obj 要检查的对象
+   * @param {string} prop 要检查的属性名
+   * @returns {boolean} 如果对象具有指定的属性，则为 true；否则为 false
+   */
   lay.hasOwn = function(obj, prop){
     return hasOwnProperty.call(obj, prop);
+  };
+
+  /**
+   * 转义 HTML 字符串中的特殊字符
+   * @param {string} html 要转义的 HTML 字符串
+   * @returns {string} 转义后的 HTML 字符串
+   */
+  lay.escape = function (html) {
+    var exp = /[<"'>]|&(?=#?[a-zA-Z0-9]+)/g;
+    if (html === undefined || html === null) return '';
+
+    html += '';
+    if (!exp.test(html)) return html;
+
+    return html.replace(/&(?=#?[a-zA-Z0-9]+;?)/g, '&amp;')
+      .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+  };
+
+  /**
+   * 还原转义的 HTML 字符串中的特殊字符
+   * @param {string} html 要还原转义的 HTML 字符串
+   * @returns {string} 还原转义后的 HTML 字符串
+   */
+  lay.unescape = function (html) {
+    if (html === undefined || html === null) return '';
+
+    return String(html).replace(/\&quot;/g, '"').replace(/\&#39;/g, '\'')
+      .replace(/\&gt;/g, '>').replace(/\&lt;/g, '<')
+      .replace(/\&amp;/g, '&');
   };
 
 
