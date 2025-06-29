@@ -55,7 +55,7 @@
   // 异常提示
   var error = function(msg, type, isDebug) {
     type = type || 'log';
-    msg = '[Layui]: ' + msg;
+    msg = '[Layui warn]: ' + msg;
 
     if (window.console) {
       console[type] ? console[type](msg) : console.log(msg);
