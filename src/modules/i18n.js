@@ -8,7 +8,6 @@ layui.define('lay', function(exports) {
 
   var lay = layui.lay;
   var hint  = layui.hint();
-  var isDev = layui.cache.debug;
 
   var MOD_NAME = 'i18n';
 
@@ -271,7 +270,7 @@ layui.define('lay', function(exports) {
 
     var value = get(obj, path, defaultValue);
 
-    if (isDev) {
+    if (layui.cache.debug) {
       var isFallback = defaultValue === value || value === path;
       var isNotFound = !value || isFallback;
       if (isNotFound) {
