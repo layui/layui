@@ -55,12 +55,25 @@
   // 异常提示
   var error = function(msg, type) {
     type = type || 'log';
-    msg = 'Layui message: ' + msg;
+    msg = '[Layui warn]: ' + msg;
 
     if (window.console) {
       console[type] ? console[type](msg) : console.log(msg);
     }
   };
+  var warned = Object.create(null);
+
+  var errorOnce = function (msg, type) {
+    if(warned._size && warned._size > 100){
+      warned = Object.create(null);
+      warned._size = 0;
+    }
+    if (!warned[msg]) {
+      warned[msg] = true;
+      warned._size = (warned._size || 0) + 1;
+      error(msg, type)
+    }
+  }
 
   // 内置模块
   var builtinModules = config.builtin = {
@@ -715,7 +728,8 @@
   // 提示
   Class.prototype.hint = function() {
     return {
-      error: error
+      error: error,
+      errorOnce: errorOnce
     };
   };
 
