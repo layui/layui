@@ -187,8 +187,7 @@ layui.define(['lay', 'i18n'], function(exports) {
     // 纠正旧版「简体中文」语言码
     if (options.lang === 'cn') {
       options.lang = zhCN;
-    }
-    if(!options.lang){
+    }else if(!options.lang){
       options.lang = i18n.config.locale;
     }
     var locale = options.lang || i18n.config.locale;
