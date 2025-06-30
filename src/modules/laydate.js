@@ -183,6 +183,7 @@ layui.define(['lay', 'i18n'], function(exports) {
   Class.prototype.getI18nMessages = function () {
     var that = this;
     var options = that.config;
+    var locale = i18n.config.locale;
 
     // 纠正旧版「简体中文」语言码
     if (options.lang === 'cn') {
@@ -190,7 +191,7 @@ layui.define(['lay', 'i18n'], function(exports) {
     }else if(!options.lang){
       options.lang = i18n.config.locale;
     }
-    var locale = options.lang || i18n.config.locale;
+    locale = options.lang;
 
     return {
       month: i18n.$t('laydate.month', null, {
