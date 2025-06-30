@@ -188,6 +188,9 @@ layui.define(['lay', 'i18n'], function(exports) {
     if (options.lang === 'cn') {
       options.lang = zhCN;
     }
+    if(!options.lang){
+      options.lang = i18n.config.locale;
+    }
     var locale = options.lang || i18n.config.locale;
 
     return {
