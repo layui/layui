@@ -111,6 +111,9 @@ layui.define(['lay', 'i18n'], function(exports) {
     // 初始化属性
     options = lay.extend(that.config, lay.options(elem[0])); // 继承节点上的属性
 
+    // 更新 i18n 消息对象
+    that.i18nMessages = that.getI18nMessages();
+
     // 若重复执行 render，则视为 reload 处理
     if(elem[0] && elem.attr(MOD_ID)){
       var newThat = thisModule.getThis(elem.attr(MOD_ID));
@@ -163,7 +166,7 @@ layui.define(['lay', 'i18n'], function(exports) {
     showBottom: true, // 是否显示底部栏
     isPreview: true, // 是否显示值预览
     btns: ['clear', 'now', 'confirm'], // 右下角显示的按钮，会按照数组顺序排列
-    // 为实现 lang 选项就近生效，去除此处的默认值，原型 lang() 方法中有兜底值
+    // 为实现 lang 选项就近生效，去除此处的默认值，$t 设置了英文回退值
     lang: '', // 语言，只支持 cn/en，即中文和英文
     theme: 'default', // 主题
     position: null, // 控件定位方式定位, 默认absolute，支持：fixed/absolute/static
@@ -177,51 +180,84 @@ layui.define(['lay', 'i18n'], function(exports) {
     shade: 0
   };
 
-  // 多语言
-  Class.prototype.lang = function() {
+  Class.prototype.getI18nMessages = function () {
     var that = this;
     var options = that.config;
-    var locale = i18n.config.locale.replace(/^\s+|\s+$/g, '');
-    var i18nMessages = i18n.config.messages[locale];
-    var laydateMessages = {
-      // 保留原版 en
-      en: {
-        month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        weeks: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-        time: ['Hour', 'Minute', 'Second'],
-        selectDate: 'Select Date',
-        selectTime: 'Select Time',
-        startTime: 'Start Time',
-        endTime: 'End Time',
-        tools: {
-          confirm: 'Confirm',
-          clear: 'Clear',
-          now: 'Now',
-          reset: 'Reset'
-        },
-        timeout: 'End time cannot be less than start Time\nPlease re-select',
-        invalidDate: 'Invalid date',
-        formatError: ['The date format error\nMust be followed：\n', '\nIt has been reset'],
-        preview: 'The selected result'
-      }
-    };
-
-    // 同步 message
-    if (i18nMessages) {
-      laydateMessages[locale] = i18nMessages.laydate;
-    }
+    var locale = i18n.config.locale;
 
     // 纠正旧版「简体中文」语言码
     if (options.lang === 'cn') {
       options.lang = zhCN;
-    } else if (!options.lang) { // 若未传 lang 选项，则取 locale
-      options.lang = locale;
+    }else if(!options.lang){
+      options.lang = i18n.config.locale;
     }
+    locale = options.lang;
 
-    // 获取当前语言的 laydate 消息
-    // 若无消息数据，则取上述内置 en，确保组件正常显示。注：此非默认值逻辑，默认值已由 i18n 统一控制
-    return laydateMessages[options.lang] || laydateMessages['en'];;
-  };
+    return {
+      month: i18n.$t('laydate.month', null, {
+        locale: locale,
+        default: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      }),
+      weeks: i18n.$t('laydate.weeks', null, {
+        locale: locale,
+        default: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+      }),
+      time: i18n.$t('laydate.time', null, {
+        locale: locale,
+        default: ['Hour', 'Minute', 'Second']
+      }),
+      selectDate: i18n.$t('laydate.selectDate', null, {
+        locale: locale,
+        default: 'Select Date'
+      }),
+      selectTime: i18n.$t('laydate.selectTime', null, {
+        locale: locale,
+        default: 'Select Time'
+      }),
+      startTime: i18n.$t('laydate.startTime', null, {
+        locale: locale,
+        default: 'Start Time'
+      }),
+      endTime: i18n.$t('laydate.endTime', null, {
+        locale: locale,
+        default: 'End Time'
+      }),
+      tools: {
+        confirm: i18n.$t('laydate.tools.confirm', null, {
+          locale: locale,
+          default: 'Confirm'
+        }),
+        clear: i18n.$t('laydate.tools.clear', null, {
+          locale: locale,
+          default: 'Clear'
+        }),
+        now: i18n.$t('laydate.tools.now', null, {
+          locale: locale,
+          default: 'Now'
+        }),
+        reset: i18n.$t('laydate.tools.reset', null, {
+          locale: locale,
+          default: 'Reset'
+        })
+      },
+      timeout: i18n.$t('laydate.timeout', null, {
+        locale: locale,
+        default: 'End time cannot be less than start Time\nPlease re-select'
+      }),
+      invalidDate: i18n.$t('laydate.invalidDate', null, {
+        locale: locale,
+        default: 'Invalid date'
+      }),
+      formatError: i18n.$t('laydate.formatError', null, {
+        locale: locale,
+        default: ['The date format error\nMust be followed：\n', '\nIt has been reset']
+      }),
+      preview: i18n.$t('laydate.preview', null, {
+        locale: locale,
+        default: 'The selected result'
+      })
+    }
+  }
 
   // 仅简体中文生效，不做国际化
   Class.prototype.markerOfChineseFestivals = {
@@ -317,7 +353,7 @@ layui.define(['lay', 'i18n'], function(exports) {
     // 设置了一周的开始是周几，此处做一个控制
     if (options.weekStart) {
       if (!/^[0-6]$/.test(options.weekStart)) {
-        var lang = that.lang();
+        var lang = that.i18nMessages;
         options.weekStart = lang.weeks.indexOf(options.weekStart);
         if (options.weekStart === -1) options.weekStart = 0;
       }
@@ -434,7 +470,7 @@ layui.define(['lay', 'i18n'], function(exports) {
   Class.prototype.render = function(){
     var that = this
     ,options = that.config
-    ,lang = that.lang()
+    ,lang = that.i18nMessages
     ,isStatic = options.position === 'static'
 
     //主面板
@@ -830,7 +866,7 @@ layui.define(['lay', 'i18n'], function(exports) {
     var that = this
     ,thisDate = new Date()
     ,options = that.config
-    ,lang = that.lang()
+    ,lang = that.i18nMessages
     ,dateTime = options.dateTime = options.dateTime || that.systemDate()
     ,thisMaxDate, error
 
@@ -1431,7 +1467,7 @@ layui.define(['lay', 'i18n'], function(exports) {
     ,options = that.config
     ,dateTime = value || that.thisDateTime(index)
     ,thisDate = new Date(), startWeek, prevMaxDate, thisMaxDate
-    ,lang = that.lang()
+    ,lang = that.i18nMessages
 
     ,isAlone = options.type !== 'date' && options.type !== 'datetime'
     ,tds = lay(that.table[index]).find('td')
@@ -1577,7 +1613,7 @@ layui.define(['lay', 'i18n'], function(exports) {
     var that = this
     ,options = that.config
     ,dateTime = that.rangeLinked ? options.dateTime : [options.dateTime, that.endDate][index]
-    ,lang = that.lang()
+    ,lang = that.i18nMessages
     ,isAlone = options.range && options.type !== 'date' && options.type !== 'datetime' //独立范围选择器
 
     ,ul = lay.elem('ul', {
@@ -1900,7 +1936,7 @@ layui.define(['lay', 'i18n'], function(exports) {
   Class.prototype.setBtnStatus = function(tips, start, end){
     var that = this
     ,options = that.config
-    ,lang = that.lang()
+    ,lang = that.i18nMessages
     ,isOut
     ,elemBtn = lay(that.footer).find(ELEM_CONFIRM)
     ,timeParams = options.type === 'datetime' || options.type === 'time' ? ['hours', 'minutes', 'seconds'] : undefined;
@@ -2307,7 +2343,7 @@ layui.define(['lay', 'i18n'], function(exports) {
   Class.prototype.tool = function(btn, type){
     var that = this
     ,options = that.config
-    ,lang = that.lang()
+    ,lang = that.i18nMessages
     ,dateTime = options.dateTime
     ,isStatic = options.position === 'static'
     ,active = {
@@ -2316,13 +2352,13 @@ layui.define(['lay', 'i18n'], function(exports) {
         if(lay(btn).hasClass(DISABLED)) return;
         that.list('time', 0);
         options.range && that.list('time', 1);
-        lay(btn).attr('lay-type', 'date').html(that.lang().selectDate);
+        lay(btn).attr('lay-type', 'date').html(that.i18nMessages.selectDate);
       }
 
       //选择日期
       ,date: function(){
         that.closeList();
-        lay(btn).attr('lay-type', 'datetime').html(that.lang().selectTime);
+        lay(btn).attr('lay-type', 'datetime').html(that.i18nMessages.selectTime);
       }
 
       //清空、重置
