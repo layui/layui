@@ -46,6 +46,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate-header i.laydate-prev-m{left: 45px;}
 .layui-laydate-header i.laydate-next-y{right: 15px;}
 .layui-laydate-header i.laydate-next-m{right: 45px;}
+.laydate-time-show .layui-laydate-header{padding-left: 10px; padding-right: 10px;}
 .laydate-set-ym{width: 100%; text-align: center; box-sizing: border-box; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .laydate-set-ym span{padding: 0 10px; cursor: pointer;}
 .laydate-time-text{cursor: default !important;}
@@ -95,7 +96,7 @@ html #layuicss-laydate{display: none; position: absolute; width: 1989px;}
 .layui-laydate .laydate-time-list-hide-2 ol li{padding-left: 117px;}
 
 /* 提示 */
-.layui-laydate-hint{position: absolute; top: 115px; left: 50%; width: 250px; margin-left: -125px; line-height: 20px; padding: 15px; text-align: center; font-size: 12px; color: #FF5722;}
+.layui-laydate-hint{position: absolute; top: 115px; left: 50%; width: 250px; margin-left: -125px; line-height: 20px; padding: 15px; text-align: center; font-size: 12px; color: #FF5722;white-space: pre-line;}
 
 
 /* 双日历 */

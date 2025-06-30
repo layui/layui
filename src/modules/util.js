@@ -2,11 +2,18 @@
  * util 工具组件
  */
 
-layui.define('jquery', function(exports) {
+layui.define(['lay', 'i18n', 'jquery'], function(exports) {
   "use strict";
 
   var $ = layui.$;
   var hint = layui.hint();
+  var i18n = layui.i18n;
+  var lay = layui.lay;
+
+  // 引用自 dayjs
+  // https://github.com/iamkun/dayjs/blob/v1.11.9/src/constant.js#L30
+  var REGEX_FORMAT = /\[([^\]]+)]|y{1,4}|M{1,2}|d{1,2}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|SSS/g;
+  var REGEX_PARSE = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[T\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/i;
 
   // 外部接口
   var util = {
@@ -230,15 +237,15 @@ layui.define('jquery', function(exports) {
 
       // 30 天以内，返回「多久前」
       if(stamp >= 1000*60*60*24){
-        return ((stamp/1000/60/60/24)|0) + ' 天前';
+        return i18n.$t('util.timeAgo.days', {days: (stamp/1000/60/60/24)|0});
       } else if(stamp >= 1000*60*60){
-        return ((stamp/1000/60/60)|0) + ' 小时前';
+        return i18n.$t('util.timeAgo.hours', {hours: (stamp/1000/60/60)|0});
       } else if(stamp >= 1000*60*3){ // 3 分钟以内为：刚刚
-        return ((stamp/1000/60)|0) + ' 分钟前';
+        return i18n.$t('util.timeAgo.minutes', {minutes: (stamp/1000/60)|0});
       } else if(stamp < 0){
-        return '未来';
+        return i18n.$t('util.timeAgo.future');
       } else {
-        return '刚刚';
+        return i18n.$t('util.timeAgo.justNow');
       }
     },
 
@@ -258,10 +265,6 @@ layui.define('jquery', function(exports) {
       // 若 null 或空字符，则返回空字符
       if(time === null || time === '') return '';
 
-      // 引用自 dayjs
-      // https://github.com/iamkun/dayjs/blob/v1.11.9/src/constant.js#L30
-      var REGEX_FORMAT = /\[([^\]]+)]|y{1,4}|M{1,2}|d{1,2}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|SSS/g;
-      var REGEX_PARSE = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[T\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/i;
       var that = this;
 
       var normalizeDate = function(date) {
@@ -302,21 +305,7 @@ layui.define('jquery', function(exports) {
       var seconds = date.getSeconds();
       var milliseconds = date.getMilliseconds();
 
-      var defaultMeridiem = function(hours, minutes){
-          var hm = hours * 100 + minutes;
-          if (hm < 600) {
-            return '凌晨';
-          } else if (hm < 900) {
-            return '早上';
-          } else if (hm < 1100) {
-            return '上午';
-          } else if (hm < 1300) {
-            return '中午';
-          } else if (hm < 1800) {
-            return '下午';
-          }
-          return '晚上';
-      };
+      var defaultMeridiem = i18n.$t('util.toDateString.meridiem');
 
       var meridiem = (options && options.customMeridiem) || defaultMeridiem;
 
@@ -347,26 +336,10 @@ layui.define('jquery', function(exports) {
     },
 
     // 转义 html
-    escape: function(html){
-      var exp = /[<"'>]|&(?=#?[a-zA-Z0-9]+)/g;
-      if (html === undefined || html === null) return '';
-
-      html += '';
-      if (!exp.test(html)) return html;
-
-      return html.replace(/&(?=#?[a-zA-Z0-9]+;?)/g, '&amp;')
-      .replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
-    },
+    escape: lay.escape,
 
     // 还原转义的 html
-    unescape: function(html){
-      if (html === undefined || html === null) return '';
-
-      return String(html).replace(/\&quot;/g, '"').replace(/\&#39;/g, '\'')
-      .replace(/\&gt;/g, '>').replace(/\&lt;/g, '<')
-      .replace(/\&amp;/g, '&');
-    },
+    unescape: lay.unescape,
 
     // 打开新窗口
     openWin: function(options){
