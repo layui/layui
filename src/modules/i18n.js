@@ -274,10 +274,10 @@ layui.define('lay', function(exports) {
       var isFallback = defaultValue === value || value === path;
       var isNotFound = !value || isFallback;
       if (isNotFound) {
-        hint.errorOnce("Not found '" + path + "' key in '" + locale + "' locale messages.", 'warn', true);
+        hint.errorOnce("Not found '" + path + "' key in '" + locale + "' locale messages.", 'warn');
       }
       if (isFallback) {
-        hint.errorOnce("Fallback to default message for key: '" + path + "'", 'warn', true);
+        hint.errorOnce("Fallback to default message for key: '" + path + "'", 'warn');
       }
     }
 

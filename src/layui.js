@@ -53,28 +53,25 @@
   }();
 
   // 异常提示
-  var error = function(msg, type, isDebug) {
+  var error = function(msg, type) {
     type = type || 'log';
     msg = '[Layui warn]: ' + msg;
 
     if (window.console) {
       console[type] ? console[type](msg) : console.log(msg);
     }
-    if(isDebug && layui && layui.cache.debug) {
-      debugger
-    }
   };
   var warned = Object.create(null);
 
-  var errorOnce = function (msg, type, isDebug) {
-    if(warned._size && warned._size > 500){
+  var errorOnce = function (msg, type) {
+    if(warned._size && warned._size > 100){
       warned = Object.create(null);
       warned._size = 0;
     }
     if (!warned[msg]) {
       warned[msg] = true;
       warned._size = (warned._size || 0) + 1;
-      error(msg, type, isDebug)
+      error(msg, type)
     }
   }
 
