@@ -41,7 +41,7 @@ i18n.set({
         verifyErrorPromptTitle: '提示'
       },
       laydate: {
-        month: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
+        months: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
         weeks: ['日', '一', '二', '三', '四', '五', '六'],
         time: ['时', '分', '秒'],
         selectDate: '选择日期',
@@ -54,9 +54,10 @@ i18n.set({
           now: '现在',
           reset: '重置'
         },
-        timeout: '结束时间不能早于开始时间\n请重新选择',
-        invalidDate: '不在有效日期或时间范围内',
-        formatError: ['日期格式不合法\n必须遵循下述格式：\n', '\n已为你重置'],
+        rangeOrderPrompt: '结束时间不能早于开始时间\n请重新选择',
+        invalidDatePrompt: '不在有效日期或时间范围内\n',
+        formatErrorPrompt: '日期格式不合法\n必须遵循：\n{format}\n',
+        autoResetPrompt: '已自动重置',
         preview: '当前选中的结果'
       },
       layer: {

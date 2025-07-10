@@ -41,7 +41,7 @@ export default {
     verifyErrorPromptTitle: 'Notice'
   },
   laydate: {
-    month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     weeks: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
     time: ['Hour', 'Minute', 'Second'],
     selectDate: 'Select Date',
@@ -54,9 +54,10 @@ export default {
       now: 'Now',
       reset: 'Reset'
     },
-    timeout: 'End time cannot be less than start Time\nPlease re-select',
-    invalidDate: 'Invalid date',
-    formatError: ['The date format error\nMust be followed：\n', '\nIt has been reset'],
+    rangeOrderPrompt: 'End time cannot be less than start Time\nPlease re-select',
+    invalidDatePrompt: 'Invalid date\n',
+    formatErrorPrompt: 'Date format is invalid\nMust follow the format:\n{format}\n',
+    autoResetPrompt: 'It has been reset',
     preview: 'The selected result'
   },
   layer: {

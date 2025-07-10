@@ -194,7 +194,7 @@ layui.define(['lay', 'i18n'], function(exports) {
     locale = options.lang;
 
     return {
-      month: i18n.$t('laydate.month', null, {
+      months: i18n.$t('laydate.months', null, {
         locale: locale,
         default: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       }),
@@ -240,19 +240,25 @@ layui.define(['lay', 'i18n'], function(exports) {
           default: 'Reset'
         })
       },
-      timeout: i18n.$t('laydate.timeout', null, {
+      rangeOrderPrompt: i18n.$t('laydate.rangeOrderPrompt', null, {
         locale: locale,
         default: 'End time cannot be less than start Time\nPlease re-select'
       }),
-      invalidDate: i18n.$t('laydate.invalidDate', null, {
+      invalidDatePrompt: i18n.$t('laydate.invalidDatePrompt', null, {
         locale: locale,
-        default: 'Invalid date'
+        default: 'Invalid date\n'
       }),
-      formatError: i18n.$t('laydate.formatError', null, {
+      formatErrorPrompt: function (format) {
+        return i18n.$t('laydate.formatErrorPrompt', {format: format}, {
+          locale: locale,
+          default: 'Date format is invalid\nMust follow the format:\n{format}\n'
+        });
+      },
+      autoResetPrompt: i18n.$t('laydate.autoResetPrompt', null, {
         locale: locale,
-        default: ['The date format error\nMust be followed：\n', '\nIt has been reset']
+        default: 'It has been reset'
       }),
-      preview: i18n.$t('laydate.preview', null, {
+      previewPrompt: i18n.$t('laydate.previewPrompt', null, {
         locale: locale,
         default: 'The selected result'
       })
@@ -998,9 +1004,12 @@ layui.define(['lay', 'i18n'], function(exports) {
         }
       } else {
         //格式不合法
-        that.hint(lang.formatError[0] + (
-          options.range ? (options.format + ' '+ that.rangeStr +' ' + options.format) : options.format
-        ) + lang.formatError[1]);
+        that.hint(
+          lang.formatErrorPrompt(
+            options.range ? (options.format + ' '+ that.rangeStr +' ' + options.format) : options.format
+          ) + 
+          lang.autoResetPrompt
+        );
         error = true;
       }
     } else if(value && layui.type(value) === 'date'){ //若值为日期对象
@@ -1078,7 +1087,7 @@ layui.define(['lay', 'i18n'], function(exports) {
     // 初始值不在最大最小范围内
     if(minMaxError && value){
       that.setValue(that.parse());
-      that.hint('value ' + lang.invalidDate + lang.formatError[1]);
+      that.hint('value ' + lang.invalidDatePrompt + lang.autoResetPrompt);
     }
 
     // 初始赋值 startDate,endState
@@ -1473,8 +1482,8 @@ layui.define(['lay', 'i18n'], function(exports) {
     ,tds = lay(that.table[index]).find('td')
     ,elemYM = lay(that.elemHeader[index][2]).find('span');
 
-    if(dateTime.year < LIMIT_YEAR[0]) dateTime.year = LIMIT_YEAR[0], that.hint(lang.invalidDate);
-    if(dateTime.year > LIMIT_YEAR[1]) dateTime.year = LIMIT_YEAR[1], that.hint(lang.invalidDate);
+    if(dateTime.year < LIMIT_YEAR[0]) dateTime.year = LIMIT_YEAR[0], that.hint(lang.invalidDatePrompt);
+    if(dateTime.year > LIMIT_YEAR[1]) dateTime.year = LIMIT_YEAR[1], that.hint(lang.invalidDatePrompt);
 
     //记录初始值
     if(!that.firstDate){
@@ -1534,7 +1543,7 @@ layui.define(['lay', 'i18n'], function(exports) {
       lay(elemYM[0]).attr('lay-type', 'year').html(dateTime.year + ' 年')
       lay(elemYM[1]).attr('lay-type', 'month').html((dateTime.month + 1) + ' 月');
     } else {
-      lay(elemYM[0]).attr('lay-type', 'month').html(lang.month[dateTime.month]);
+      lay(elemYM[0]).attr('lay-type', 'month').html(lang.months[dateTime.month]);
       lay(elemYM[1]).attr('lay-type', 'year').html(dateTime.year);
     }
 
@@ -1693,7 +1702,7 @@ layui.define(['lay', 'i18n'], function(exports) {
         };
 
         i + 1 == listYM[1] && lay(li).addClass(THIS);
-        li.innerHTML = lang.month[i] + (isCN ? '月' : '');
+        li.innerHTML = lang.months[i] + (isCN ? '月' : '');
         ul.appendChild(li);
 
         /*
@@ -1962,7 +1971,7 @@ layui.define(['lay', 'i18n'], function(exports) {
 
       // 是否异常提示
       if (tips && isOut) {
-        that.hint(lang.timeout);
+        that.hint(lang.rangeOrderPrompt);
       }
     }
   };
@@ -2383,7 +2392,7 @@ layui.define(['lay', 'i18n'], function(exports) {
 
         // 当前系统时间未在 min/max 范围内，则不可点击
         if(lay(btn).hasClass(DISABLED)){
-          return that.hint(lang.tools.now +', '+ lang.invalidDate);
+          return that.hint(lang.tools.now +', '+ lang.invalidDatePrompt);
         }
 
         lay.extend(dateTime, that.systemDate(), {
@@ -2405,10 +2414,10 @@ layui.define(['lay', 'i18n'], function(exports) {
               ? that.startTime && that.endTime && that.newDate(that.startTime) > that.newDate(that.endTime)
               : that.startDate && that.endDate && that.newDate(lay.extend({},that.startDate, that.startTime || {})) > that.newDate(lay.extend({},that.endDate, that.endTime || {}));
 
-            return that.hint(isTimeout ? lang.timeout : lang.invalidDate);
+            return that.hint(isTimeout ? lang.rangeOrderPrompt : lang.invalidDatePrompt);
           }
         } else {
-          if(lay(btn).hasClass(DISABLED)) return that.hint(lang.invalidDate);
+          if(lay(btn).hasClass(DISABLED)) return that.hint(lang.invalidDatePrompt);
         }
 
         that.setValue(that.parse());

@@ -40,7 +40,7 @@ export default {
     verifyErrorPromptTitle: '提示'
   },
   laydate: {
-    month: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+    months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
     weeks: ['日', '一', '二', '三', '四', '五', '六'],
     time: ['時', '分', '秒'],
     selectDate: '選擇日期',
@@ -53,9 +53,10 @@ export default {
       now: '現在',
       reset: '重設'
     },
-    timeout: '結束時間不能早於開始時間\n請重新選擇',
-    invalidDate: '不在有效日期或時間範圍內',
-    formatError: ['日期格式不合法\n必須遵循以下格式：\n', '\n已為你重設'],
+    rangeOrderPrompt: '結束時間不能早於開始時間\n請重新選擇', 
+    invalidDatePrompt: '不在有效日期或時間範圍內\n',
+    formatErrorPrompt: '日期格式不合法\n必須遵循：\n{format}\n',
+    autoResetPrompt: '已自動重設',
     preview: '當前選中的結果'
   },
   layer: {

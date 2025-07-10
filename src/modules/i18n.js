@@ -53,7 +53,7 @@ layui.define('lay', function(exports) {
       verifyErrorPromptTitle: '提示'
     },
     laydate: {
-      month: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
+      months: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
       weeks: ['日', '一', '二', '三', '四', '五', '六'],
       time: ['时', '分', '秒'],
       selectDate: '选择日期',
@@ -66,9 +66,10 @@ layui.define('lay', function(exports) {
         now: '现在',
         reset: '重置'
       },
-      timeout: '结束时间不能早于开始时间\n请重新选择',
-      invalidDate: '不在有效日期或时间范围内',
-      formatError: ['日期格式不合法\n必须遵循下述格式：\n', '\n已为你重置'],
+      rangeOrderPrompt: '结束时间不能早于开始时间\n请重新选择', 
+      invalidDatePrompt: '不在有效日期或时间范围内\n',
+      formatErrorPrompt: '日期格式不合法\n必须遵循：\n{format}\n',
+      autoResetPrompt: '已自动重置',
       preview: '当前选中的结果'
     },
     layer: {
@@ -112,7 +113,7 @@ layui.define('lay', function(exports) {
         asc: '升序',
         desc: '降序'
       },
-      noData: '无数据',
+      noData: '暂无数据',
       tools:{
         filter: {
           title: '筛选列'
@@ -132,14 +133,14 @@ layui.define('lay', function(exports) {
       xhrError: '请求异常，错误提示：{msg}'
     },
     transfer: {
-      noData: '无数据',
+      noData: '暂无数据',
       noMatch: '无匹配数据',
       title: ['列表一', '列表二'],
       searchPlaceholder: '关键词搜索'
     },
     tree: {
       defaultNodeName: '未命名',
-      noData: '无数据',
+      noData: '暂无数据',
       deleteNodePrompt: '确认删除"{name}"节点吗？'
     },
     upload: {
@@ -152,7 +153,7 @@ layui.define('lay', function(exports) {
       validateMessages: {
         fileExtensionError: '选择的{fileType}中包含不支持的格式',
         filesOverLengthLimit: '同时最多只能上传: {length} 个文件',
-        currentFilesLength: '您当前已经选择了: {length} 个文件',
+        currentFilesLength: '当前已经选择了: {length} 个文件',
         fileOverSizeLimit: '文件大小不能超过 {size}'
       },
       chooseText: '{length} 个文件'

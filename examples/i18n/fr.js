@@ -40,7 +40,7 @@ export default {
     verifyErrorPromptTitle: 'Avertissement'
   },
   laydate: {
-    month: ['Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'],
+    months: ['Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'],
     weeks: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
     time: ['Heure', 'Minute', 'Seconde'],
     selectDate: 'Sélec. date',
@@ -54,9 +54,10 @@ export default {
       now: 'Ajd.',
       reset: 'Réinit.'
     },
-    timeout: 'L’heure de fin ne peut pas être antérieure à l’heure de début\nVeuillez recommencer',
-    invalidDate: 'Date ou heure hors plage valide',
-    formatError: ['Format de date invalide\nLe format attendu est :\n', '\nIl a été réinitialisé pour vous'],
+    rangeOrderPrompt: 'L’heure de fin ne peut pas être antérieure à l’heure de début\nVeuillez recommencer', 
+    invalidDatePrompt: 'Date ou heure hors plage valide\n',
+    formatErrorPrompt: 'Format de date invalide\nLe format attendu est :\n{format}\n',
+    autoResetPrompt: 'Il a été réinitialisé pour vous',
     preview: 'Résultat sélectionné actuel'
   },
   layer: {
