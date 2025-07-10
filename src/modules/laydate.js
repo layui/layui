@@ -258,7 +258,7 @@ layui.define(['lay', 'i18n'], function(exports) {
         locale: locale,
         default: 'It has been reset'
       }),
-      previewPrompt: i18n.$t('laydate.previewPrompt', null, {
+      preview: i18n.$t('laydate.preview', null, {
         locale: locale,
         default: 'The selected result'
       })
