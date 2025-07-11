@@ -20,8 +20,8 @@ layui.define(['lay', 'i18n'], function(exports) {
       return str;
     }
 
-    let result = '';
-    for (let i = 0; i < str.length - 1; i++) {
+    var result = '';
+    for (var i = 0; i < str.length - 1; i++) {
       var char = str[i];
       var nextChar = str[i + 1];
       result += char;
