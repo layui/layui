@@ -170,17 +170,18 @@ layui.define('lay', function(exports) {
         justNow: '刚刚'
       },
       toDateString: {
+        // https://www.unicode.org/cldr/charts/47/supplemental/day_periods.html
         meridiem: function(hours, minutes){
           var hm = hours * 100 + minutes;
-          if (hm < 600) {
+          if (hm < 500) {
             return '凌晨';
-          } else if (hm < 900) {
+          } else if (hm < 800) {
             return '早上';
-          } else if (hm < 1100) {
+          } else if (hm < 1200) {
             return '上午';
           } else if (hm < 1300) {
             return '中午';
-          } else if (hm < 1800) {
+          } else if (hm < 1900) {
             return '下午';
           }
           return '晚上';
