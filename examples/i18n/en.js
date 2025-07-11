@@ -44,6 +44,9 @@ export default {
     months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     weeks: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
     time: ['Hour', 'Minute', 'Second'],
+    literal: {
+      year: ''
+    },
     selectDate: 'Select Date',
     selectTime: 'Select Time',
     startTime: 'Start Time',

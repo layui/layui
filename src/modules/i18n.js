@@ -53,9 +53,12 @@ layui.define('lay', function(exports) {
       verifyErrorPromptTitle: '提示'
     },
     laydate: {
-      months: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
+      months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
       weeks: ['日', '一', '二', '三', '四', '五', '六'],
       time: ['时', '分', '秒'],
+      literal: {
+        year: '年'
+      },
       selectDate: '选择日期',
       selectTime: '选择时间',
       startTime: '开始时间',
@@ -263,6 +266,10 @@ layui.define('lay', function(exports) {
     return value
   }
 
+  function isDef(value) {
+    return value !== null && value !== undefined;
+  }
+
   var resolveValue = memoize(function(path, obj, defaultValue){
     var pathParts = path.split(':');
     var locale = pathParts[0];
@@ -273,7 +280,7 @@ layui.define('lay', function(exports) {
 
     if (layui.cache.debug) {
       var isFallback = defaultValue === value || value === path;
-      var isNotFound = !value || isFallback;
+      var isNotFound = !isDef(value) || isFallback;
       if (isNotFound) {
         hint.errorOnce("Not found '" + path + "' key in '" + locale + "' locale messages.", 'warn');
       }
@@ -282,7 +289,7 @@ layui.define('lay', function(exports) {
       }
     }
 
-    return value || path;
+    return isDef(value) ? value : path;
   });
 
   var i18n = {
@@ -321,7 +328,7 @@ layui.define('lay', function(exports) {
     var locale = (options && options.locale) || config.locale;
     var i18nMessages = config.messages[locale];
     var namespace = locale + ':';
-    var fallbackMessage = options && options.default;
+    var fallbackMessage = (options && lay.hasOwn(options, 'default')) ? options.default : undefined;
 
     if (!i18nMessages) {
       hint.errorOnce("Locale '" + locale + "' not found. Please add i18n messages for this locale first.", 'error');

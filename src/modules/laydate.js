@@ -13,6 +13,39 @@ layui.define(['lay', 'i18n'], function(exports) {
   var MOD_NAME = 'laydate';
   var MOD_ID = 'lay-' + MOD_NAME + '-id'; // 已渲染过的索引标记名
   var zhCN = 'zh-CN'; // 简体中文语言码
+  var YearBeforeMonthLocale = ['eu-ES', 'ja-JP', 'km-KH', 'ko-KR', 'pt-BR', 'si-LK', 'ms-MY', 'ug-CN', 'zh-CN', 'zh-HK', 'zh-TW']; // 年份在前的语言
+
+  function addSpaceBetweenChars(str) {
+    if (typeof str !== 'string' || str.length <= 1) {
+      return str;
+    }
+
+    let result = '';
+    for (let i = 0; i < str.length - 1; i++) {
+      var char = str[i];
+      var nextChar = str[i + 1];
+      result += char;
+
+      // 判断当前字符和下一个字符的类型
+      var isCharDigit = isDigit(char);
+      var isNextCharDigit = isDigit(nextChar);
+
+      // 在数字和非数字（非空格）之间添加空格
+      if (
+        (isCharDigit && !isNextCharDigit && nextChar !== ' ') ||  // 数字 → 非数字（非空格）
+        (char !== ' ' && !isCharDigit && isNextCharDigit)       // 非空格非数字 → 数字
+      ) {
+        result += ' ';
+      }
+    }
+    result += str[str.length - 1];  // 添加最后一个字符
+    return result;
+  }
+
+  function isDigit(char) {
+    var code = char.charCodeAt(0);
+    return code >= 48 && code <= 57;  // '0' 到 '9' 的 ASCII 码范围
+  }
 
   // 外部调用
   var laydate = {
@@ -114,6 +147,24 @@ layui.define(['lay', 'i18n'], function(exports) {
     // 更新 i18n 消息对象
     that.i18nMessages = that.getI18nMessages();
 
+    // 处理日期面板顶部年月顺序
+    // 这是一个变通的方法，因为 i18nMessages.monthBeforeYear 不存在
+    if(typeof that.i18nMessages.monthBeforeYear !== 'boolean'){
+      if(!window.Intl){
+        that.i18nMessages.monthBeforeYear = !(YearBeforeMonthLocale.indexOf(options.lang) > -1);
+      }else{
+        var formatter = new Intl.DateTimeFormat(options.lang, { year: 'numeric', month: 'short' });
+        var parts = formatter.formatToParts(new Date(1970, 0));
+        var order = [];
+        parts.map(function(part) {
+          if (part.type === 'year' || part.type === 'month') {
+            order.push(part.type);
+          }
+        })
+        that.i18nMessages.monthBeforeYear = order[0] === 'month';
+      }
+    }
+
     // 若重复执行 render，则视为 reload 处理
     if(elem[0] && elem.attr(MOD_ID)){
       var newThat = thisModule.getThis(elem.attr(MOD_ID));
@@ -205,6 +256,15 @@ layui.define(['lay', 'i18n'], function(exports) {
       time: i18n.$t('laydate.time', null, {
         locale: locale,
         default: ['Hour', 'Minute', 'Second']
+      }),
+      literal: {
+        year: i18n.$t('laydate.literal.year', null, {
+          locale: locale,
+          default: ''
+        })
+      },
+      monthBeforeYear: i18n.$t('laydate.monthBeforeYear', null, {
+        locale: locale
       }),
       selectDate: i18n.$t('laydate.selectDate', null, {
         locale: locale,
@@ -1539,12 +1599,14 @@ layui.define(['lay', 'i18n'], function(exports) {
     if(!that.panelYM) that.panelYM = {};
     that.panelYM[index] = {year: dateTime.year, month: dateTime.month};
 
-    if(options.lang === zhCN){
-      lay(elemYM[0]).attr('lay-type', 'year').html(dateTime.year + ' 年')
-      lay(elemYM[1]).attr('lay-type', 'month').html((dateTime.month + 1) + ' 月');
+    var normalizedYearStr = addSpaceBetweenChars(dateTime.year + lang.literal.year);
+    var normalizedMonthStr = addSpaceBetweenChars(lang.months[dateTime.month]);
+    if(!lang.monthBeforeYear){
+      lay(elemYM[0]).attr('lay-type', 'year').html(normalizedYearStr);
+      lay(elemYM[1]).attr('lay-type', 'month').html(normalizedMonthStr);
     } else {
-      lay(elemYM[0]).attr('lay-type', 'month').html(lang.months[dateTime.month]);
-      lay(elemYM[1]).attr('lay-type', 'year').html(dateTime.year);
+      lay(elemYM[0]).attr('lay-type', 'month').html(normalizedMonthStr);
+      lay(elemYM[1]).attr('lay-type', 'year').html(normalizedYearStr);
     }
 
     //初始默认选择器
@@ -1636,8 +1698,8 @@ layui.define(['lay', 'i18n'], function(exports) {
     ,elemYM = lay(elemHeader[2]).find('span')
     ,elemCont = that.elemCont[index || 0]
     ,haveList = lay(elemCont).find('.'+ ELEM_LIST)[0]
-    ,isCN = options.lang === zhCN
-    ,text = isCN ? '年' : ''
+    ,isMonthBeforeYear = lang.monthBeforeYear
+    ,text = lang.literal.year
 
     ,listYM = that.listYM[index] || {}
     ,hms = ['hours', 'minutes', 'seconds']
@@ -1685,7 +1747,7 @@ layui.define(['lay', 'i18n'], function(exports) {
         yearNum++;
       });
 
-      lay(elemYM[isCN ? 0 : 1]).attr('lay-ym', (yearNum - 8) + '-' + listYM[1])
+      lay(elemYM[!isMonthBeforeYear ? 0 : 1]).attr('lay-ym', (yearNum - 8) + '-' + listYM[1])
       .html((startY + text) + ' - ' + (yearNum - 1 + text));
     }
 
@@ -1702,7 +1764,7 @@ layui.define(['lay', 'i18n'], function(exports) {
         };
 
         i + 1 == listYM[1] && lay(li).addClass(THIS);
-        li.innerHTML = lang.months[i] + (isCN ? '月' : '');
+        li.innerHTML = lang.months[i];
         ul.appendChild(li);
 
         /*
@@ -1724,7 +1786,7 @@ layui.define(['lay', 'i18n'], function(exports) {
         that.cellRender(li, {year: listYM[0], month: i + 1, date: 1}, 'month');
       });
 
-      lay(elemYM[isCN ? 0 : 1]).attr('lay-ym', listYM[0] + '-' + listYM[1])
+      lay(elemYM[!isMonthBeforeYear ? 0 : 1]).attr('lay-ym', listYM[0] + '-' + listYM[1])
       .html(listYM[0] + text);
     }
 
