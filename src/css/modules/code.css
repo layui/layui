@@ -17,7 +17,7 @@ html #layuicss-skincodecss{display: none; position: absolute; width: 1989px;}
 
 .layui-code-wrap{position: relative; display: block; z-index: 1; margin: 0 !important; padding: 11px 0 !important; overflow-x: hidden; overflow-y: auto;}
 .layui-code-line{position: relative; line-height: 19px; margin: 0 !important;}
-.layui-code-line-number{position: absolute; left: 0; top: 0; padding: 0 8px; min-width: 45px; height: 100%; text-align: right; user-select: none; white-space: nowrap; overflow: hidden;}
+.layui-code-line-number{position: absolute; left: 0; top: 0; padding: 0 8px; min-width: 45px; height: 100%; text-align: right; -webkit-user-select: none; user-select: none; white-space: nowrap; overflow: hidden;}
 .layui-code-line-content{padding: 0 11px; word-wrap: break-word; white-space: pre-wrap;}
 
 .layui-code-ln-mode > .layui-code-wrap > .layui-code-line{padding-left: 45px;}
