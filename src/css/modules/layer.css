@@ -7,7 +7,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 /* common */
 .layui-layer-shade, .layui-layer{position:fixed; _position:absolute; pointer-events: auto;}
 .layui-layer-shade{opacity: 0; transition: opacity .35s cubic-bezier(0.34, 0.69, 0.1, 1); top:0; left:0; width:100%; height:100%;}
-.layui-layer{-webkit-overflow-scrolling: touch;}
+.layui-layer{-webkit-overflow-scrolling: touch; overflow: auto; scroll-behavior: smooth;}
 .layui-layer{top:150px; left: 0; margin:0; padding:0; background-color:#fff; -webkit-background-clip: content; background-clip: content; border-radius: 2px; box-shadow: 1px 1px 50px rgba(0,0,0,.3);}
 .layui-layer-close{position:absolute;}
 .layui-layer-content{position:relative;}
@@ -148,7 +148,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-setwin .layui-layer-close2:hover{opacity: unset; background-color: #3888f6;}
 
 /* 按钮栏 */
-.layui-layer-btn{text-align: right; padding: 0 15px 12px; pointer-events: auto; user-select: none; -webkit-user-select: none;}
+.layui-layer-btn{text-align: right; padding: 0 15px 12px; pointer-events: auto; -webkit-user-select: none; user-select: none;}
 .layui-layer-btn a{height: 30px; line-height: 30px; margin: 5px 5px 0; padding: 0 16px; border: 1px solid #dedede; background-color: #fff; color: #333; border-radius: 2px; font-weight: 400; cursor: pointer; text-decoration: none; box-sizing: border-box;}
 .layui-layer-btn a:hover{opacity: 0.9; text-decoration: none;}
 .layui-layer-btn a:active{opacity: 0.8;}
