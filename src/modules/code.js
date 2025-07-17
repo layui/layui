@@ -48,6 +48,30 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
     lang: 'text', // 指定语言类型
     highlighter: false, // 是否开启语法高亮，'hljs','prism','shiki'
     langMarker: false, // 代码区域是否显示语言类型标记
+    highlightLine: { // 行高亮
+      // 聚焦
+      focus: {
+        range: '', // 高亮范围，不可全局设置值
+        comment: false, // 是否解析注释，性能敏感不可全局开启  [!code name:<lines>]
+        classActiveLine: 'layui-code-line-has-focus', // 添加到高亮行上的类
+        classActivePre: 'layui-code-has-focused-lines' // 有高亮行时向根元素添加的类
+      },
+      // 高亮
+      hl: {
+        comment: false,
+        classActiveLine: 'layui-code-line-highlighted',
+      },
+      // diff++
+      '++':{
+        comment: false,
+        classActiveLine: 'layui-code-line-diff-remove',
+      },
+      // diff--
+      '--': {
+        comment: false,
+        classActiveLine: 'layui-code-line-diff-add',
+      }
+    }
   };
 
   // 初始索引
@@ -61,6 +85,88 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
   var trim = function(str){
     return trimEnd(str).replace(/^\n|\n$/, '');
   };
+  
+  // '1,3-5,8' -> [1,3,4,5,8]
+  var parseHighlightedLines  = function(rangeStr){
+    var lineArray = $.map(rangeStr.split(','), function(v){
+      var range = v.split('-');
+      var start = parseInt(range[0], 10);
+      var end = parseInt(range[1], 10);
+      return start && end
+        ? $.map(new Array(end - start + 1), function(_, index){ return start + index })
+        : start ? start : undefined
+    })
+    return lineArray.length ? lineArray : undefined
+  }
+
+  // 引用自 shiki
+  var hightLineRE = /(?:\/\/|\/\*{1,2}) *\[!code ([\w+-]+)(?::(\d+))?] *(?:\*{1,2}\/)?/;
+  var preprocessHighlightLine = function (highlightLineOptions, lines) {
+    var hasHighlightLine = false;
+    var needParseComment = false;
+    var lineClassMap = {};
+    var preClassMap = {};
+
+    var updateLineClassMap = function (lineNumber, className) {
+      if (!lineClassMap[lineNumber]) {
+        lineClassMap[lineNumber] = [];
+      }
+      lineClassMap[lineNumber].push(className);
+    }
+
+    $.each(highlightLineOptions, function (name, hlOpts) {
+      if (hlOpts.range) {
+        var hLines = parseHighlightedLines(hlOpts.range);
+        if (hLines.length > 0) {
+          hasHighlightLine = true;
+          if (hlOpts.classActivePre) {
+            preClassMap[hlOpts.classActivePre] = true;
+          }
+          $.each(hLines, function (i, lineNumber) {
+            updateLineClassMap(lineNumber, hlOpts.classActiveLine);
+          });
+        }
+      }
+      if (hlOpts.comment) {
+        needParseComment = true;
+      }
+    });
+
+    if (needParseComment) {
+      // 解析注释中的高亮行
+      $.each(lines, function (i, line) {
+        var matched = line.match(hightLineRE);
+        if (matched && matched[1] && lay.hasOwn(highlightLineOptions, matched[1])) {
+          var hlOpts = highlightLineOptions[matched[1]];
+          hasHighlightLine = true;
+          if (hlOpts.classActivePre) {
+            preClassMap[hlOpts.classActivePre] = true;
+          }
+          // 要高亮的行数
+          var lines = parseInt(matched[2], 10)
+          if (matched[2] && lines && lines > 1) {
+            var startLine = i + 1;
+            var endLine = startLine + lines - 1;
+            var hLines = parseHighlightedLines(startLine + '-' + endLine);
+            if (hLines.length > 0) {
+              $.each(hLines, function (i, lineNumber) {
+                updateLineClassMap(lineNumber, hlOpts.classActiveLine);
+              });
+            }
+          }else{
+            updateLineClassMap(i + 1, hlOpts.classActiveLine);
+          }
+        }
+      });
+    }
+
+    return {
+      needParseComment: needParseComment,
+      hasHighlightLine: hasHighlightLine,
+      preClass: Object.keys(preClassMap).join(' '),
+      lineClassMap: lineClassMap
+    }
+  }
 
   // export api
   exports('code', function(options, mode){
@@ -142,10 +248,16 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
       // code 行
       var lines = String(html).split(/\r?\n/g);
 
+      // 预处理行高亮
+      var hl = preprocessHighlightLine(options.highlightLine, lines);
+
       // 包裹 code 行结构
       html = $.map(lines, function(line, num) {
+        var lineClass = (hl.hasHighlightLine && hl.lineClassMap[num + 1] && hl.lineClassMap[num + 1].length)
+          ?  [CONST.ELEM_LINE].concat(hl.lineClassMap[num + 1]).join(' ')
+          :  CONST.ELEM_LINE;
         return [
-          '<div class="'+ CONST.ELEM_LINE +'">',
+          '<div class="'+ lineClass + '">',
             (
               options.ln ? [
                 '<div class="'+ CONST.ELEM_LINE_NUM +'">',
@@ -154,11 +266,15 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
               ].join('') : ''
             ),
             '<div class="layui-code-line-content">',
-              (line || ' '),
+               (hl.needParseComment ? line.replace(hightLineRE, '') : line) || ' ',
             '</div>',
           '</div>'
         ].join('');
       });
+
+      if(hl.preClass){
+        othis.addClass(hl.preClass)
+      }
 
       return {
         lines: lines,
