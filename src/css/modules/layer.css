@@ -148,7 +148,7 @@ html #layuicss-layer{display: none; position: absolute; width: 1989px;}
 .layui-layer-setwin .layui-layer-close2:hover{opacity: unset; background-color: #3888f6;}
 
 /* 按钮栏 */
-.layui-layer-btn{text-align: right; padding: 0 15px 12px; pointer-events: auto; -webkit-user-select: none; user-select: none;}
+.layui-layer-btn{text-align: right; padding: 0 15px 12px; pointer-events: auto; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
 .layui-layer-btn a{height: 30px; line-height: 30px; margin: 5px 5px 0; padding: 0 16px; border: 1px solid #dedede; background-color: #fff; color: #333; border-radius: 2px; font-weight: 400; cursor: pointer; text-decoration: none; box-sizing: border-box;}
 .layui-layer-btn a:hover{opacity: 0.9; text-decoration: none;}
 .layui-layer-btn a:active{opacity: 0.8;}

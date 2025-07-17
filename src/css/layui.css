@@ -38,7 +38,7 @@ a cite{font-style: normal;}
 /* 单行溢出省略 */
 .layui-elip, /* 仅为向下兼容保留 #2557  */
 .layui-ellip{text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
-/* 屏蔽选中 */.layui-unselect,.layui-icon, .layui-disabled{-webkit-user-select: none; user-select: none;}
+/* 屏蔽选中 */.layui-unselect,.layui-icon, .layui-disabled{-webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
 /* 禁用 */.layui-disabled,.layui-disabled:hover{color: #d2d2d2 !important; cursor: not-allowed !important;}
 /* 纯圆角 */.layui-circle{border-radius: 100%;}
 .layui-show{display: block !important;}
@@ -543,7 +543,7 @@ a cite{font-style: normal;}
 .layui-input,
 .layui-select,
 .layui-textarea,
-.layui-upload-button{outline: none; -webkit-appearance: none; appearance: none; -webkit-transition: all .3s; transition: all .3s; box-sizing: border-box;}
+.layui-upload-button{outline: none; -webkit-appearance: none; -moz-appearance: none; appearance: none; -webkit-transition: all .3s; transition: all .3s; box-sizing: border-box;}
 
 /* 引用 */
 .layui-elem-quote{margin-bottom: 10px; padding: 15px; line-height: 1.8; border-left: 5px solid #16b777; border-radius: 0 2px 2px 0; background-color: #fafafa;}
@@ -715,7 +715,7 @@ hr.layui-border-black{border-width: 0 0 1px;}
  * 按钮
  */
 
-.layui-btn{display: inline-block; vertical-align: middle; height: 38px; line-height: 38px; border: 1px solid transparent; padding: 0 18px; background-color: #16baaa; color: #fff; white-space: nowrap; text-align: center; font-size: 14px; border-radius: 2px; cursor: pointer; -webkit-user-select: none; user-select: none;}
+.layui-btn{display: inline-block; vertical-align: middle; height: 38px; line-height: 38px; border: 1px solid transparent; padding: 0 18px; background-color: #16baaa; color: #fff; white-space: nowrap; text-align: center; font-size: 14px; border-radius: 2px; cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
 .layui-btn:hover{opacity: 0.8; filter:alpha(opacity=80); color: #fff;}
 .layui-btn:active{opacity: 1; filter:alpha(opacity=100);}
 .layui-btn+.layui-btn{margin-left: 10px;}
@@ -1092,7 +1092,7 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-table-view .layui-form-checkbox[lay-skin="primary"] i{width: 18px; height: 18px; line-height: 16px;}
 .layui-table-view .layui-form-radio{line-height: 0; padding: 0;}
 .layui-table-view .layui-form-radio>i{margin: 0; font-size: 20px;}
-.layui-table-init{position: absolute; left: 0; top: 0; right: 0; bottom: 0; margin: 0; z-index: 199; transition: opacity .1s; -webkit-user-select: none; user-select: none;}
+.layui-table-init{position: absolute; left: 0; top: 0; right: 0; bottom: 0; margin: 0; z-index: 199; transition: opacity .1s; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
 .layui-table-loading-icon{position: absolute; width: 100%\0; left: 50%; left:auto\0; top: 50%; margin-top: -15px\0; transform: translate(-50%, -50%); transform: none\0; text-align: center;}
 .layui-table-loading-icon .layui-icon{font-size: 30px; color: #c2c2c2;}
 .layui-table-header{border-width: 0; border-bottom-width: 1px; overflow: hidden;}
@@ -1250,7 +1250,7 @@ body .layui-table-tips .layui-layer-content{background: none; padding: 0; box-sh
 .layui-menu .layui-menu-item-none:hover,
 .layui-menu .layui-menu-item-divider:hover{background: none; cursor: default;}
 .layui-menu .layui-menu-item-group>ul{margin: 5px 0 -5px;}
-.layui-menu .layui-menu-item-group>.layui-menu-body-title{color: rgba(0,0,0,.35); -webkit-user-select: none; user-select: none;}
+.layui-menu .layui-menu-item-group>.layui-menu-body-title{color: rgba(0,0,0,.35); -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
 .layui-menu .layui-menu-item-none{color: rgba(0,0,0,.35); cursor: default;}
 
 .layui-menu .layui-menu-item-none{text-align: center;}
