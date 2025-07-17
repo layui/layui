@@ -15,7 +15,7 @@ h1,h2,h3,h4,h5,h6{font-weight: 700;}
 h5,h6{font-size: 100%;}
 button,input,select,textarea{font-size: 100%; }
 input,button,textarea,select,optgroup,option{font-family: inherit; font-size: inherit; font-style: inherit; font-weight: inherit; outline: 0;}
-pre{white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; white-space: pre-wrap; word-wrap: break-word;}
+pre{white-space: pre-wrap; word-wrap: break-word;}
 
 /** 初始化全局标签 **/
 body{line-height: 1.6; color: rgba(0,0,0,.85); font-size: 14px; font-family: Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;}
