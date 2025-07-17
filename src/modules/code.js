@@ -64,12 +64,12 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
       // diff++
       '++':{
         comment: false,
-        classActiveLine: 'layui-code-line-diff-remove',
+        classActiveLine: 'layui-code-line-diff-add',
       },
       // diff--
       '--': {
         comment: false,
-        classActiveLine: 'layui-code-line-diff-add',
+        classActiveLine: 'layui-code-line-diff-remove',
       }
     }
   };
