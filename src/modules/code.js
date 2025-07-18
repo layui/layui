@@ -51,8 +51,8 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
     highlightLine: { // 行高亮
       // 聚焦
       focus: {
-        range: '', // 高亮范围，不可全局设置值
-        comment: false, // 是否解析注释，性能敏感不可全局开启  [!code name:<lines>]
+        range: '', // 高亮范围，不可全局设置值 '1,3-5,8'
+        comment: false, // 是否解析注释，性能敏感不可全局开启  [!code type:<lines>]
         classActiveLine: 'layui-code-line-has-focus', // 添加到高亮行上的类
         classActivePre: 'layui-code-has-focused-lines' // 有高亮行时向根元素添加的类
       },
@@ -88,7 +88,8 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
   
   // '1,3-5,8' -> [1,3,4,5,8]
   var parseHighlightedLines  = function(rangeStr){
-    var lineArray = $.map(rangeStr.split(','), function(v){
+    if (typeof rangeStr !== 'string') return [];
+    var lines = $.map(rangeStr.split(','), function(v){
       var range = v.split('-');
       var start = parseInt(range[0], 10);
       var end = parseInt(range[1], 10);
@@ -96,65 +97,67 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
         ? $.map(new Array(end - start + 1), function(_, index){ return start + index })
         : start ? start : undefined
     })
-    return lineArray.length ? lineArray : undefined
+    return lines;
   }
 
-  // 引用自 shiki
-  var hightLineRE = /(?:\/\/|\/\*{1,2}) *\[!code ([\w+-]+)(?::(\d+))?] *(?:\*{1,2}\/)?/;
-  var preprocessHighlightLine = function (highlightLineOptions, lines) {
+  // 引用自 https://github.com/innocenzi/shiki-processor/blob/efa20624be415c866cc8e350d1ada886b6b5cd52/src/utils/create-range-processor.ts#L7
+  // 添加了 HTML 注释支持，用来处理预览场景 
+  var highlightLineRegex = /(?:\/\/|\/\*{1,2}|<!--|&lt;!--) *\[!code ([\w+-]+)(?::(\d+))?] *(?:\*{1,2}\/|-->|--&gt;)?/;
+  var preprocessHighlightLine = function (highlightLineOptions, codeLines) {
     var hasHighlightLine = false;
     var needParseComment = false;
-    var lineClassMap = {};
-    var preClassMap = {};
+    var lineClassMap = Object.create(null);
+    var preClassMap = Object.create(null);
 
     var updateLineClassMap = function (lineNumber, className) {
       if (!lineClassMap[lineNumber]) {
-        lineClassMap[lineNumber] = [];
+        lineClassMap[lineNumber] = [CONST.ELEM_LINE];
       }
       lineClassMap[lineNumber].push(className);
     }
 
-    $.each(highlightLineOptions, function (name, hlOpts) {
-      if (hlOpts.range) {
-        var hLines = parseHighlightedLines(hlOpts.range);
-        if (hLines.length > 0) {
+    // 收集高亮行 className
+    $.each(highlightLineOptions, function (type, opts) {
+      if (opts.range) {
+        var highlightLines = parseHighlightedLines(opts.range);
+        if (highlightLines.length > 0) {
           hasHighlightLine = true;
-          if (hlOpts.classActivePre) {
-            preClassMap[hlOpts.classActivePre] = true;
+          if (opts.classActivePre) {
+            preClassMap[opts.classActivePre] = true;
           }
-          $.each(hLines, function (i, lineNumber) {
-            updateLineClassMap(lineNumber, hlOpts.classActiveLine);
+          $.each(highlightLines, function (i, lineNumber) {
+            updateLineClassMap(lineNumber, opts.classActiveLine);
           });
         }
       }
-      if (hlOpts.comment) {
+      if (opts.comment) {
         needParseComment = true;
       }
     });
 
+    // 解析行高亮注释并收集 className
     if (needParseComment) {
-      // 解析注释中的高亮行
-      $.each(lines, function (i, line) {
-        var matched = line.match(hightLineRE);
-        if (matched && matched[1] && lay.hasOwn(highlightLineOptions, matched[1])) {
-          var hlOpts = highlightLineOptions[matched[1]];
+      $.each(codeLines, function (i, line) {
+        var match = line.match(highlightLineRegex);
+        if (match && match[1] && lay.hasOwn(highlightLineOptions, match[1])) {
+          var opts = highlightLineOptions[match[1]];
           hasHighlightLine = true;
-          if (hlOpts.classActivePre) {
-            preClassMap[hlOpts.classActivePre] = true;
+          if (opts.classActivePre) {
+            preClassMap[opts.classActivePre] = true;
           }
-          // 要高亮的行数
-          var lines = parseInt(matched[2], 10)
-          if (matched[2] && lines && lines > 1) {
+          // 高亮的行数
+          var lines = parseInt(match[2], 10)
+          if (match[2] && lines && lines > 1) {
             var startLine = i + 1;
             var endLine = startLine + lines - 1;
-            var hLines = parseHighlightedLines(startLine + '-' + endLine);
-            if (hLines.length > 0) {
-              $.each(hLines, function (i, lineNumber) {
-                updateLineClassMap(lineNumber, hlOpts.classActiveLine);
+            var highlightLines = parseHighlightedLines(startLine + '-' + endLine);
+            if (highlightLines.length > 0) {
+              $.each(highlightLines, function (i, lineNumber) {
+                updateLineClassMap(lineNumber, opts.classActiveLine);
               });
             }
           }else{
-            updateLineClassMap(i + 1, hlOpts.classActiveLine);
+            updateLineClassMap(i + 1, opts.classActiveLine);
           }
         }
       });
@@ -249,13 +252,13 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
       var lines = String(html).split(/\r?\n/g);
 
       // 预处理行高亮
-      var hl = preprocessHighlightLine(options.highlightLine, lines);
+      var highlightLineInfo = preprocessHighlightLine(options.highlightLine, lines);
 
       // 包裹 code 行结构
       html = $.map(lines, function(line, num) {
-        var lineClass = (hl.hasHighlightLine && hl.lineClassMap[num + 1] && hl.lineClassMap[num + 1].length)
-          ?  [CONST.ELEM_LINE].concat(hl.lineClassMap[num + 1]).join(' ')
-          :  CONST.ELEM_LINE;
+        var lineClass = (highlightLineInfo.hasHighlightLine && highlightLineInfo.lineClassMap[num + 1])
+          ? highlightLineInfo.lineClassMap[num + 1].join(' ')
+          : CONST.ELEM_LINE;
         return [
           '<div class="'+ lineClass + '">',
             (
@@ -266,14 +269,14 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
               ].join('') : ''
             ),
             '<div class="layui-code-line-content">',
-               (hl.needParseComment ? line.replace(hightLineRE, '') : line) || ' ',
+               (highlightLineInfo.needParseComment ? line.replace(highlightLineRegex, '') : line) || ' ',
             '</div>',
           '</div>'
         ].join('');
       });
 
-      if(hl.preClass){
-        othis.addClass(hl.preClass)
+      if(highlightLineInfo.preClass){
+        othis.addClass(highlightLineInfo.preClass)
       }
 
       return {
