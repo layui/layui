@@ -395,5 +395,43 @@ onCopy: function(code, copied){
 
 </td>
     </tr>
+    <tr>
+<td>
+
+[highlightLine](#options.highlightLine) <sup>2.12+</sup>
+
+</td>
+<td colspan="3">
+
+<div id="options.highlightLine" lay-pid="options" class="ws-anchor">  
+设置行高亮，可选值：
+- hl：高亮
+- ++：diff++
+- --：diff--
+- focus：聚焦
+</div>
+
+通过 `range` 选项或注释 `[!code type:<lines>]` 指定行高亮范围
+
+```
+highlightLine: {
+  hl: {
+    range: '1,3-5,8', // 指定行高亮范围 '1,3,4,5,8'
+    comment: true, // 是否解析行中的高亮注释
+  }
+}
+```
+
+```
+layui.use(function(){ // [!code focus:5]
+  var layer = layui.layer; // [!code hl]
+
+  layer.msg('test');
+})
+
+```
+
+</td>
+    </tr>
   </tbody>
 </table>
