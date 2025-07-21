@@ -9,6 +9,19 @@ toc: true
 
 <h2 id="2.9.x" lay-toc="{title: '2.9.x'}"></h2>
 
+<h2 id="v2.9.27" class="ws-anchor">
+  v2.9.27
+  <span class="layui-badge-rim">2025-07-21</span>
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+</h2>
+
+- 修复 select 组件的字符转义问题 #2661 @sentsim
+- 修复 `<option>` 文本两端的 Unicode 空格(U+00A0)被去除的问题 #2676 @Sight-wcg
+
+### 下载： [layui-v2.9.27.zip](https://gitee.com/layui/layui/attach_files/2276751/download)
+
+---
+
 <h2 id="v2.9.26" class="ws-anchor">
   v2.9.26
   <span class="layui-badge-rim">2025-04-15</span>
