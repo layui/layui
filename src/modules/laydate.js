@@ -1908,6 +1908,15 @@ layui.define(['lay', 'i18n'], function(exports) {
           that.closeList();
         }
 
+        if(!options.range){
+          that.limit({
+            type: type,
+            elem: lay(that.footer).find(ELEM_CONFIRM),
+            date: dateTime,
+            disabledType: 'datetime' // 按钮，检测日期和时间
+          });
+        }
+        
         that.setBtnStatus(); //同步按钮可点状态
 
         //若为月选择器，只有当选择月份时才自动关闭；
@@ -2522,7 +2531,8 @@ layui.define(['lay', 'i18n'], function(exports) {
         options.range || that.limit({
           elem: lay(that.footer).find(ELEM_CONFIRM),
           date: {
-            year: listYM[0]
+            year: listYM[0],
+            month: isYear ? 0 : listYM[1] - 1,
           },
           disabledType: 'datetime' // 按钮，检测日期和时间
         });
