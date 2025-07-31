@@ -192,6 +192,517 @@
       </fieldset>
     </template>!}}
 
+    <script>
+    // 组件语言包配置
+    window.LAYUI_GLOBAL = {
+      i18n: {
+        locale: localStorage.getItem('layui-i18n-local-test') || 'zh-CN', // 当前语言环境
+        messages: { // 扩展其他语言包
+          // English
+          'en': {
+            code: {
+              copy: 'Copy Code',
+              copied: 'Copied',
+              copyError: 'Copy Failed',
+              maximize: 'Maximize',
+              restore: 'Restore',
+              preview: 'Open Preview in New Window'
+            },
+            colorpicker: {
+              clear: 'Clear',
+              confirm: 'OK'
+            },
+            dropdown: {
+              noData: 'No Data'
+            },
+            flow: {
+              loadMore: 'Load More',
+              noMore: 'No More Data'
+            },
+            form: {
+              select: {
+                noData: 'No Data',
+                noMatch: 'No Matching Data',
+                placeholder: 'Please Select'
+              },
+              validateMessages: {
+                required: 'This field is required',
+                phone: 'Invalid phone number format',
+                email: 'Invalid email format',
+                url: 'Invalid URL format',
+                number: 'Numbers only',
+                date: 'Invalid date format',
+                identity: 'Invalid ID number format'
+              },
+              verifyErrorPromptTitle: 'Notice'
+            },
+            laydate: {
+              months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+              weeks: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+              time: ['Hour', 'Minute', 'Second'],
+              literal: {
+                year: ''
+              },
+              selectDate: 'Select Date',
+              selectTime: 'Select Time',
+              startTime: 'Start Time',
+              endTime: 'End Time',
+              tools: {
+                confirm: 'Confirm',
+                clear: 'Clear',
+                now: 'Now',
+                reset: 'Reset'
+              },
+              rangeOrderPrompt: 'End time cannot be less than start Time\nPlease re-select',
+              invalidDatePrompt: 'Invalid date\n',
+              formatErrorPrompt: 'Date format is invalid\nMust follow the format:\n{format}\n',
+              autoResetPrompt: 'It has been reset',
+              preview: 'The selected result'
+            },
+            layer: {
+              confirm: 'OK',
+              cancel: 'Cancel',
+              defaultTitle: 'Info',
+              prompt: {
+                InputLengthPrompt: 'Maximum {length} characters'
+              },
+              photos: {
+                noData: 'No Image',
+                tools: {
+                  rotate: 'Rotate',
+                  scaleX: 'Flip Horizontally',
+                  zoomIn: 'Zoom In',
+                  zoomOut: 'Zoom Out',
+                  reset: 'Reset',
+                  close: 'Close'
+                },
+                viewPicture: 'View Picture',
+                urlError: {
+                  prompt: 'Image URL is invalid, \nContinue to next one?',
+                  confirm: 'Next',
+                  cancel: 'Cancel'
+                }
+              }
+            },
+            laypage: {
+              prev: 'Prev',
+              next: 'Next',
+              first: 'First',
+              last: 'Last',
+              total: 'Total {total} items',
+              pagesize: '/page',
+              goto: 'Go to',
+              page: 'page',
+              confirm: 'Confirm'
+            },
+            table: {
+              sort: {
+                asc: 'Ascending',
+                desc: 'Descending'
+              },
+              noData: 'No Data',
+              tools: {
+                filter: {
+                  title: 'Filter Columns'
+                },
+                export: {
+                  title: 'Export',
+                  noDataPrompt: 'No data in the table',
+                  compatPrompt: 'Export is not supported in IE. Please use Chrome or another modern browser.',
+                  csvText: 'Export CSV File'
+                },
+                print: {
+                  title: 'Print',
+                  noDataPrompt: 'No data in the table'
+                }
+              },
+              dataFormatError: 'Returned data is invalid. The correct success status code should be: "{statusName}": {statusCode}',
+              xhrError: 'Request Error: {msg}'
+            },
+            transfer: {
+              noData: 'No Data',
+              noMatch: 'No Match',
+              title: ['List 1', 'List 2'],
+              searchPlaceholder: 'Search by Keyword'
+            },
+            tree: {
+              defaultNodeName: 'Unnamed',
+              noData: 'No Data',
+              deleteNodePrompt: 'Are you sure you want to delete the node "{name}"?'
+            },
+            upload: {
+              fileType: {
+                file: 'File',
+                image: 'Image',
+                video: 'Video',
+                audio: 'Audio'
+              },
+              validateMessages: {
+                fileExtensionError: 'Unsupported format in selected {fileType}',
+                filesOverLengthLimit: 'Maximum {length} files allowed at once',
+                currentFilesLength: 'You have selected {length} files',
+                fileOverSizeLimit: 'File size must not exceed {size}'
+              },
+              chooseText: '{length} files'
+            },
+            util: {
+              timeAgo: {
+                days: '{days} days ago',
+                hours: '{hours} hours ago',
+                minutes: '{minutes} minutes ago',
+                future: 'In the future',
+                justNow: 'Just now'
+              },
+              toDateString: {
+                meridiem: function (hours, minutes) {
+                  return hours < 12 ? 'AM' : 'PM';
+                }
+              }
+            }
+          },
+
+          // Français
+          'fr': {
+            code: {
+              copy: 'Copier le code',
+              copied: 'Copié',
+              copyError: 'Échec de la copie',
+              maximize: 'Afficher en plein écran',
+              restore: 'Restaurer l’affichage',
+              preview: 'Aperçu dans une nouvelle fenêtre'
+            },
+            colorpicker: {
+              clear: 'Effacer',
+              confirm: 'OK'
+            },
+            dropdown: {
+              noData: 'Aucune donnée disponible'
+            },
+            flow: {
+              loadMore: 'Charger plus',
+              noMore: 'Plus de données'
+            },
+            form: {
+              select: {
+                noData: 'Aucune donnée disponible',
+                noMatch: 'Aucune correspondance',
+                placeholder: 'Veuillez sélectionner'
+              },
+              validateMessages: {
+                required: 'Ce champ est obligatoire',
+                phone: 'Numéro de téléphone invalide',
+                email: 'Adresse e-mail invalide',
+                url: 'URL invalide',
+                number: 'Uniquement des chiffres',
+                date: 'Format de date invalide',
+                identity: 'Numéro d’identification invalide'
+              },
+              verifyErrorPromptTitle: 'Avertissement'
+            },
+            laydate: {
+              months: ['Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'],
+              weeks: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+              time: ['Heure', 'Minute', 'Seconde'],
+              literal: {
+                year: ''
+              },
+              selectDate: 'Sélec. date',
+              selectTime: 'Sélec. heure',
+              startTime: 'Heure de début',
+              endTime: 'Heure de fin',
+              // Recommandé en version abrégée en raison de l’espace limité du composant
+              tools: {
+                confirm: 'OK',
+                clear: 'Eff.',
+                now: 'Ajd.',
+                reset: 'Réinit.'
+              },
+              rangeOrderPrompt: 'L’heure de fin ne peut pas être antérieure à l’heure de début\nVeuillez recommencer',
+              invalidDatePrompt: 'Date ou heure hors plage valide\n',
+              formatErrorPrompt: 'Format de date invalide\nLe format attendu est :\n{format}\n',
+              autoResetPrompt: 'Il a été réinitialisé pour vous',
+              preview: 'Résultat sélectionné actuel'
+            },
+            layer: {
+              confirm: 'Confirmer',
+              cancel: 'Annuler',
+              defaultTitle: 'Information',
+              prompt: {
+                InputLengthPrompt: 'Maximum {length} caractères'
+              },
+              photos: {
+                noData: 'Aucune image',
+                tools: {
+                  rotate: 'Faire pivoter',
+                  scaleX: 'Inverser horizontalement',
+                  zoomIn: 'Agrandir',
+                  zoomOut: 'Réduire',
+                  reset: 'Réinitialiser',
+                  close: 'Fermer'
+                },
+                viewPicture: 'Voir l’image originale',
+                urlError: {
+                  prompt: 'L’adresse de l’image est invalide,\nContinuer avec la suivante ?',
+                  confirm: 'Suivante',
+                  cancel: 'Annuler'
+                }
+              }
+            },
+            laypage: {
+              prev: 'Page précédente',
+              next: 'Page suivante',
+              first: 'Première',
+              last: 'Dernière',
+              total: 'Total {total} éléments',
+              pagesize: 'éléments/page',
+              goto: 'Aller à',
+              page: 'page',
+              confirm: 'Confirmer'
+            },
+            table: {
+              sort: {
+                asc: 'Croissant',
+                desc: 'Décroissant'
+              },
+              noData: 'Aucune donnée',
+              tools: {
+                filter: {
+                  title: 'Filtrer les colonnes'
+                },
+                export: {
+                  title: 'Exporter',
+                  noDataPrompt: 'Aucune donnée à exporter',
+                  compatPrompt: 'L’exportation n’est pas supportée par IE, veuillez utiliser Chrome ou un autre navigateur moderne',
+                  csvText: 'Exporter au format CSV'
+                },
+                print: {
+                  title: 'Imprimer',
+                  noDataPrompt: 'Aucune donnée à imprimer'
+                }
+              },
+              dataFormatError: 'Les données retournées sont invalides. Le code de réussite attendu est : "{statusName}": {statusCode}',
+              xhrError: 'Erreur de requête : {msg}'
+            },
+            transfer: {
+              noData: 'Aucune donnée',
+              noMatch: 'Aucune correspondance',
+              title: ['Liste 1', 'Liste 2'],
+              searchPlaceholder: 'Recherche par mot-clé'
+            },
+            tree: {
+              defaultNodeName: 'Sans nom',
+              noData: 'Aucune donnée',
+              deleteNodePrompt: 'Confirmer la suppression du nœud "{name}" ?'
+            },
+            upload: {
+              fileType: {
+                file: 'Fichier',
+                image: 'Image',
+                video: 'Vidéo',
+                audio: 'Audio'
+              },
+              validateMessages: {
+                fileExtensionError: 'Le {fileType} sélectionné contient un format non supporté',
+                filesOverLengthLimit: 'Nombre maximum de fichiers : {length}',
+                currentFilesLength: 'Vous avez sélectionné {length} fichiers',
+                fileOverSizeLimit: 'La taille du fichier ne doit pas dépasser {size}'
+              },
+              chooseText: '{length} fichiers'
+            },
+            util: {
+              timeAgo: {
+                days: 'il y a {days} jours',
+                hours: 'il y a {hours} heures',
+                minutes: 'il y a {minutes} minutes',
+                future: 'Futur',
+                justNow: 'À l’instant'
+              },
+              toDateString: {
+                meridiem: function(hours, minutes){
+                  return hours < 12 ? 'AM' : 'PM';
+                }
+              }
+            }
+          },
+
+          // 繁體中文
+          'zh-HK': {
+            code: {
+              copy: '複製代碼',
+              copied: '已複製',
+              copyError: '複製失敗',
+              maximize: '最大化顯示',
+              restore: '還原顯示',
+              preview: '在新視窗預覽'
+            },
+            colorpicker: {
+              clear: '清除',
+              confirm: '確定'
+            },
+            dropdown: {
+              noData: '暫無資料'
+            },
+            flow: {
+              loadMore: '載入更多',
+              noMore: '沒有更多了'
+            },
+            form: {
+              select: {
+                noData: '暫無資料',
+                noMatch: '無匹配資料',
+                placeholder: '請選擇'
+              },
+              validateMessages: {
+                required: '必填項不能為空',
+                phone: '手機號碼格式不正確',
+                email: '電郵格式不正確',
+                url: '連結格式不正確',
+                number: '只能填寫數字',
+                date: '日期格式不正確',
+                identity: '身份證號碼格式不正確'
+              },
+              verifyErrorPromptTitle: '提示'
+            },
+            laydate: {
+              months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+              weeks: ['日', '一', '二', '三', '四', '五', '六'],
+              time: ['時', '分', '秒'],
+              literal: {
+                year: '年'
+              },
+              selectDate: '選擇日期',
+              selectTime: '選擇時間',
+              startTime: '開始時間',
+              endTime: '結束時間',
+              tools: {
+                confirm: '確定',
+                clear: '清除',
+                now: '現在',
+                reset: '重設'
+              },
+              rangeOrderPrompt: '結束時間不能早於開始時間\n請重新選擇',
+              invalidDatePrompt: '不在有效日期或時間範圍內\n',
+              formatErrorPrompt: '日期格式不合法\n必須遵循：\n{format}\n',
+              autoResetPrompt: '已自動重設',
+              preview: '當前選中的結果'
+            },
+            layer: {
+              confirm: '確定',
+              cancel: '取消',
+              defaultTitle: '資訊',
+              prompt: {
+                InputLengthPrompt: '最多輸入 {length} 個字符'
+              },
+              photos: {
+                noData: '沒有圖片',
+                tools:{
+                  rotate: '旋轉',
+                  scaleX: '水平變換',
+                  zoomIn: '放大',
+                  zoomOut: '縮小',
+                  reset: '還原',
+                  close: '關閉'
+                },
+                viewPicture: '查看原圖',
+                urlError: {
+                  prompt: '當前圖片地址異常，\n是否繼續查看下一張？',
+                  confirm: '下一張',
+                  cancel: '不看了'
+                }
+              }
+            },
+            laypage: {
+              prev: '上一頁',
+              next: '下一頁',
+              first: '首頁',
+              last: '尾頁',
+              total: '共 {total} 條',
+              pagesize: '條/頁',
+              goto: '到第',
+              page: '頁',
+              confirm: '確定'
+            },
+            table: {
+              sort: {
+                asc: '升序',
+                desc: '降序'
+              },
+              noData: '無資料',
+              tools:{
+                filter: {
+                  title: '篩選列'
+                },
+                export: {
+                  title: '匯出',
+                  noDataPrompt: '當前表格無資料',
+                  compatPrompt: '匯出功能不支援 IE，請用 Chrome 等高級瀏覽器匯出',
+                  csvText : '匯出 CSV 檔案'
+                },
+                print: {
+                  title: '列印',
+                  noDataPrompt: '當前表格無資料'
+                }
+              },
+              dataFormatError: '返回的資料不符合規範，正確的成功狀態碼應為："{statusName}": {statusCode}',
+              xhrError: '請求異常，錯誤提示：{msg}'
+            },
+            transfer: {
+              noData: '無資料',
+              noMatch: '無匹配資料',
+              title: ['列表一', '列表二'],
+              searchPlaceholder: '關鍵詞搜尋'
+            },
+            tree: {
+              defaultNodeName: '未命名',
+              noData: '無資料',
+              deleteNodePrompt: '確認刪除"{name}"節點嗎？'
+            },
+            upload: {
+              fileType: {
+                file: '檔案',
+                image: '圖片',
+                video: '影片',
+                audio: '音訊'
+              },
+              validateMessages: {
+                fileExtensionError: '選擇的{fileType}中包含不支援的格式',
+                filesOverLengthLimit: '同時最多只能上傳: {length} 個檔案',
+                currentFilesLength: '您當前已經選擇了: {length} 個檔案',
+                fileOverSizeLimit: '檔案大小不能超過 {size}'
+              },
+              chooseText: '{length} 個檔案'
+            },
+            util: {
+              timeAgo: {
+                days: '{days} 天前',
+                hours: '{hours} 小時前',
+                minutes: '{minutes} 分鐘前',
+                future: '未來',
+                justNow: '剛剛'
+              },
+              toDateString: {
+                meridiem: function(hours, minutes){
+                  var hm = hours * 100 + minutes;
+                  if (hm < 500) {
+                    return '凌晨';
+                  } else if (hm < 800) {
+                    return '早上';
+                  } else if (hm < 1200) {
+                    return '上午';
+                  } else if (hm < 1300) {
+                    return '中午';
+                  } else if (hm < 1900) {
+                    return '下午';
+                  }
+                  return '晚上';
+                }
+              }
+            }
+          },
+        }
+      }
+    }
+    </script>
     <script src="{{= d.layui[2].cdn.js }}"></script>
     <script>
     layui.use(async function () {
@@ -200,23 +711,6 @@
         i18n, laydate, laypage, laytpl, layer,
         table, transfer, tree, upload, util
       } = layui;
-
-      // 演示异步加载组件语言包
-      const base = 'https://cdn.jsdelivr.net/gh/layui/layui@0a0e64347166796cf42ac6a8ee08b27082f36c02/examples/i18n/';
-
-      const { default: en } = await import(`${base}en.js`);
-      const { default: fr } = await import(`${base}fr.js`);
-      const { default: zhHK } = await import(`${base}zh-HK.js`);
-
-      // 组件 i18n 配置
-      i18n.set({
-        locale: layui.data('layui-i18n-test').locale || 'zh-CN', // 指定语言
-        messages: {
-          en, // 扩展英语
-          fr, // 扩展法语
-          'zh-HK': zhHK, // 扩展繁体中文
-        },
-      });
 
       // 业务 i18n 配置
       i18n.set({
@@ -466,10 +960,7 @@
       $("#change-locale").val(i18n.config.locale);
       form.render('select').on("select(change-locale)", function (elem) {
         // 记录语言，并重载页面（推荐）
-        layui.data('layui-i18n-test', {
-          key: 'locale',
-          value: elem.value
-        });
+        localStorage.setItem('layui-i18n-local-test', elem.value);
         window.location.reload();
       });
 
