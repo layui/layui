@@ -1008,7 +1008,8 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var isPrimary = skin === 'primary';
 
           // 勾选
-          reElem.on('click', function(){
+          // 通过重新赋值触发美化元素样式更新
+          check.on('click', function(e){
             var filter = check.attr('lay-filter') // 获取过滤器
 
             // 禁用
@@ -1020,7 +1021,7 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             }
 
             // 开关
-            check[0].checked = !check[0].checked
+            check[0].checked = check[0].checked;
 
             // 事件
             layui.event.call(check[0], MOD_NAME, RE_CLASS[2]+'('+ filter +')', {
@@ -1029,6 +1030,13 @@ layui.define(['lay', 'layer', 'util'], function(exports){
               othis: reElem
             });
           });
+
+          reElem.on('click', function(){
+             var hasLabel = check.closest('label').length;
+             if(!hasLabel){
+              check.trigger('click');
+             }
+          })
 
           that.syncAppearanceOnPropChanged(this, 'checked', function(){
             if(isSwitch){
@@ -1131,12 +1139,18 @@ layui.define(['lay', 'layer', 'util'], function(exports){
           var radio = $(this);
           var ANIM = 'layui-anim-scaleSpring';
 
-          reElem.on('click', function(){
+          radio.on('click', function(){
             var filter = radio.attr('lay-filter'); // 获取过滤器
 
             if(radio[0].disabled) return;
 
             radio[0].checked = true;
+            var forms = radio.parents(ELEM);
+            var sameRadios = forms.find('input[name='+ radio[0].name.replace(/(\.|#|\[|\])/g, '\\$1') +']'); // 找到相同name的兄弟
+              layui.each(sameRadios, function(){
+                if(radio[0] === this)return;
+                this.checked = false;
+            });
 
             layui.event.call(radio[0], MOD_NAME, 'radio('+ filter +')', {
               elem: radio[0],
@@ -1145,17 +1159,18 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             });
           });
 
+          reElem.on('click', function(){
+             var hasLabel = radio.closest('label').length;
+             if(!hasLabel){
+              radio.trigger('click');
+             }
+          })
+
           that.syncAppearanceOnPropChanged(this, 'checked', function(){
             var radioEl = this;
             if(radioEl.checked){
               reElem.addClass(CLASS + 'ed');
               reElem.children('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
-              var forms = radio.parents(ELEM);
-              var sameRadios = forms.find('input[name='+ radioEl.name.replace(/(\.|#|\[|\])/g, '\\$1') +']'); // 找到相同name的兄弟
-              layui.each(sameRadios, function(){
-                if(radioEl === this)return;
-                this.checked = false;
-              });
             }else{
               reElem.removeClass(CLASS + 'ed');
               reElem.children('.layui-icon').removeClass(ANIM + ' ' + ICON[0]).addClass(ICON[1]);
