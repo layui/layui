@@ -1145,12 +1145,6 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             if(radio[0].disabled) return;
 
             radio[0].checked = true;
-            var forms = radio.parents(ELEM);
-            var sameRadios = forms.find('input[name='+ radio[0].name.replace(/(\.|#|\[|\])/g, '\\$1') +']'); // 找到相同name的兄弟
-              layui.each(sameRadios, function(){
-                if(radio[0] === this)return;
-                this.checked = false;
-            });
 
             layui.event.call(radio[0], MOD_NAME, 'radio('+ filter +')', {
               elem: radio[0],
@@ -1171,6 +1165,12 @@ layui.define(['lay', 'layer', 'util'], function(exports){
             if(radioEl.checked){
               reElem.addClass(CLASS + 'ed');
               reElem.children('.layui-icon').addClass(ANIM + ' ' + ICON[0]);
+              var forms = radio.parents(ELEM);
+              var sameRadios = forms.find('input[name='+ radioEl.name.replace(/(\.|#|\[|\])/g, '\\$1') +']'); // 找到相同name的兄弟
+              layui.each(sameRadios, function(){
+                if(radioEl === this)return;
+                this.checked = false;
+              });
             }else{
               reElem.removeClass(CLASS + 'ed');
               reElem.children('.layui-icon').removeClass(ANIM + ' ' + ICON[0]).addClass(ICON[1]);
