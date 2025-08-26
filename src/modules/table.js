@@ -2707,6 +2707,7 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
             tipsContent = null;
           },
           success: function(layero, index){
+            layero.appendTo(elemCell);
             var wrapElem = $([
               '<div class="layui-table-tips-main" style="margin-top: -'+ (elemCell.height() + 23) +'px;'+ function(){
                 if(options.size === 'sm'){
@@ -2729,32 +2730,6 @@ layui.define(['lay', 'laytpl', 'laypage', 'form', 'util'], function(exports) {
           }
         });
         showGridExpandIcon.call(td, 'hide');
-        // that.tipsIndex = layer.tips([
-        //   '<div class="layui-table-tips-main" style="margin-top: -'+ (elemCell.height() + 23) +'px;'+ function(){
-        //     if(options.size === 'sm'){
-        //       return 'padding: 4px 15px; font-size: 12px;';
-        //     }
-        //     if(options.size === 'lg'){
-        //       return 'padding: 14px 15px;';
-        //     }
-        //     return '';
-        //   }() +'">',
-        //     elemCell.html(),
-        //   '</div>',
-        //   '<i class="layui-icon layui-table-tips-c layui-icon-close"></i>'
-        // ].join(''), elemCell[0], {
-        //   tips: [3, ''],
-        //   time: -1,
-        //   anim: -1,
-        //   maxWidth: (device.ios || device.android) ? 300 : that.elem.width()/2,
-        //   isOutAnim: false,
-        //   skin: 'layui-table-tips',
-        //   success: function(layero, index){
-        //     layero.find('.layui-table-tips-c').on('click', function(){
-        //       layer.close(index);
-        //     });
-        //   }
-        // });
       } else { // 多行展开风格
         // 恢复其他已经展开的单元格
         that.elem.find('.'+ ELEM_CELL_C).trigger('click');
