@@ -401,6 +401,7 @@ Class.pt.creat = function(){
   var content = config.content;
   var conType = typeof content === 'object';
   var body = $('body');
+  var container = $(config.appendTo || 'body');
 
   var setAnim = function(layero){
     // anim 兼容旧版 shift
@@ -441,7 +442,7 @@ Class.pt.creat = function(){
   }
 
   // 是否移除活动元素的焦点
-  if(config.removeFocus && document.activeElement) {
+  if(config.removeFocus && document.activeElement && document.activeElement.blur) {
     document.activeElement.blur(); // 将原始的聚焦节点失焦
   }
 
@@ -480,18 +481,21 @@ Class.pt.creat = function(){
   }
 
   // 建立容器
+  // 0-shade 1-layero 2-title 3-move
   that.vessel(conType, function(html, titleHTML, moveElem){
-    body.append(html[0]);
+    //body.append(html[0]);
+    container.append(html[0]);
     conType ? function(){
       (config.type == 2 || config.type == 4) ? function(){
-        $('body').append(html[1]);
+        //$('body').append(html[1]);
+        container.append(html[1]);
       }() : function(){
         if(!content.parents('.'+doms[0])[0]){
           content.data('display', content.css('display')).show().addClass('layui-layer-wrap').wrap(html[1]);
           $('#'+ doms[0] + times).find('.'+doms[5]).before(titleHTML);
         }
       }();
-    }() : body.append(html[1]);
+    }() : container.append(html[1]);
     $('#'+ doms.MOVE)[0] || body.append(ready.moveElem = moveElem);
 
     that.layero = $('#'+ doms[0] + times);
