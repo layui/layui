@@ -685,8 +685,9 @@ layui.define('component', function(exports) {
       return bodyItem[0] ? bodyItem : function() {
         // 若未匹配到 lay-id 对应内容项，则通过对应头部项的索引匹配内容项
         var headerItems = container.header.items;
-        var headerItem = headerItems.filter('[lay-id="'+ index +'"]');
-        return bodyItems.eq(headerItem.index());
+        var headerItemIndex = headerItems.filter('[lay-id="'+ index +'"]').index();
+        
+        return headerItemIndex !== -1 ? bodyItems.eq(headerItemIndex) : bodyItem;
       }();
     }
 
@@ -703,12 +704,13 @@ layui.define('component', function(exports) {
     var container = that.getContainer();
     var thisHeaderItem = container.header.items.filter('.'+ component.CONST.CLASS_THIS);
     var index = thisHeaderItem.index();
+    var layid = thisHeaderItem.attr('lay-id');
 
     return {
       options: options, // 标签配置信息
       container: container, // 标签容器的相关元素
       thisHeaderItem: thisHeaderItem, // 当前活动标签头部项
-      thisBodyItem: that.findBodyItem(index), // 当前活动标签内容项
+      thisBodyItem: that.findBodyItem(layid || index), // 当前活动标签内容项
       index: index, // 当前活动标签索引
       length: container.header.items.length // 标签数量
     };
