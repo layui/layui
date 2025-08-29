@@ -1008,7 +1008,7 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-laypage select{height: 22px; padding: 3px; border-radius: 2px; cursor: pointer;}
 .layui-laypage .layui-laypage-skip{height: 30px; line-height: 30px; color: #999;}
 .layui-laypage input, .layui-laypage button{height: 30px; line-height: 30px; border-radius: 2px; vertical-align: top;  background-color: #fff; box-sizing: border-box;}
-.layui-laypage input{display: inline-block; width: 40px; margin: 0 10px; padding: 0 3px; text-align: center;}
+.layui-laypage input{display: inline-block; width: 40px; margin: 0 10px; padding: 0 3px; text-align: center; transition: none;}
 .layui-laypage input:focus,
 .layui-laypage select:focus{border-color: #16baaa!important;}
 .layui-laypage button{margin-left: 10px; padding: 0 10px; cursor: pointer;}
