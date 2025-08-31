@@ -295,9 +295,24 @@ layui.define('lay', function(exports) {
 
   var i18n = {
     config: config,
+    on: function(events, callback){
+      return layui.onevent.call(this, MOD_NAME, events, callback);
+    },
     set: function(options) {
+      var oldLocale = config.locale;
+      
       lay.extend(config, options);
       resolveValue.cleanup();
+      if(oldLocale !== config.locale){
+        if(layui.cache.debug){
+          hint.error('localeChanged' + config.locale, 'log')
+        }
+
+        layui.event.call(this, MOD_NAME,'localeChanged', {
+          locale: config.locale,
+          oldLocale: oldLocale,
+        });
+      }
     }
   };
 

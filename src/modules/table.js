@@ -302,7 +302,10 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     defaultToolbar: ['filter', 'exports', 'print'], // 工具栏右侧图标
     defaultContextmenu: true, // 显示默认上下文菜单
     autoSort: true, // 是否前端自动排序。如果否，则需自主排序（通常为服务端处理好排序）
-    cols: []
+    cols: [],
+    text: {
+      none: i18n.$t('table.noData')
+    }
   };
 
   // 表格渲染
@@ -345,11 +348,6 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
       delete options.page.elem;
       delete options.page.jump;
     }
-
-    // 加载 i18n 自定义文本
-    options.text = $.extend(true, {
-      none: i18n.$t('table.noData')
-    }, options.text);
 
     if (!options.elem[0]) return that;
 
@@ -654,6 +652,8 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
       );
     }
 
+    console.log('toll',i18n.$t('table.tools.filter.title') );
+    
     // 头部工具栏右上角默认工具
     var defaultConfig = {
       filter: {
@@ -3355,6 +3355,31 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     delete data[table.config.disabledName];
     return data;
   };
+
+  i18n.on('localeChanged', function(){
+    var newVal = {
+      text: {
+        none: i18n.$t('table.noData')
+      }
+    };
+
+    lay.each(thisTable.that, function(id, inst){
+      if(!inst) return;
+      if(!inst.config.text.none || inst.config.text.none === Class.prototype.config.text.none){
+        inst.config.text.none = newVal.text.none;
+      }
+      
+      inst.config.defaultToolbar[0].title = i18n.$t('table.tools.filter.title');
+      inst.config.defaultToolbar[1].title = i18n.$t('table.tools.export.title');
+      inst.config.defaultToolbar[2].title = i18n.$t('table.tools.print.title');
+    });
+
+    lay.extend(Class.prototype.config, newVal);
+
+    lay.each(thisTable.that, function(id, inst){
+      inst.reload();
+    })
+  })
 
   // 自动完成渲染
   $(function(){

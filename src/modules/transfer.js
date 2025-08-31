@@ -92,13 +92,7 @@ layui.define(['i18n', 'laytpl', 'form'], function(exports) {
   var Class = function(options) {
     var that = this;
     that.index = ++transfer.index;
-    that.config = $.extend({
-      title: i18n.$t('transfer.title'),
-      text: {
-        none: i18n.$t('transfer.noData'),
-        searchNone: i18n.$t('transfer.noMatch')
-      }
-    }, that.config, transfer.config, options);
+    that.config = $.extend({}, that.config, transfer.config, options);
     that.render();
   };
 
@@ -110,6 +104,11 @@ layui.define(['i18n', 'laytpl', 'form'], function(exports) {
     value: [], // 选中的数据
     showSearch: false, // 是否开启搜索
     id: '', // 唯一索引，默认自增 index
+    title: i18n.$t('transfer.title'),
+    text: {
+      none: i18n.$t('transfer.noData'),
+      searchNone: i18n.$t('transfer.noMatch')
+    }
   };
 
   // 重载实例
@@ -516,6 +515,35 @@ layui.define(['i18n', 'laytpl', 'form'], function(exports) {
     var inst = new Class(options);
     return thisModule.call(inst);
   };
+
+  i18n.on('localeChanged', function(){
+    var newVal = {
+      title: i18n.$t('transfer.title'),
+      text: {
+        none: i18n.$t('transfer.noData'),
+        searchNone: i18n.$t('transfer.noMatch')
+      }
+    };
+
+    lay.each(thisModule.that, function(id, inst){
+      if(!inst) return;
+      if(inst.config.title === Class.prototype.config.title){
+        inst.config.title = newVal.title;
+      }
+      if(inst.config.text.none === Class.prototype.config.text.none){
+        inst.config.text.none = newVal.text.none;
+      }
+      if(inst.config.text.searchNone === Class.prototype.config.text.searchNone){
+        inst.config.text.searchNone = newVal.text.searchNone;
+      }
+    });
+
+    lay.extend(Class.prototype.config, newVal);
+
+    lay.each(thisModule.that, function(id, inst){
+      inst.reload();
+    })
+  })
 
   exports(MOD_NAME, transfer);
 });

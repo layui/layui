@@ -182,7 +182,7 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
       if(options.data.length > 0 ){
         eachItemView(elemUl, options.data)
       } else {
-        elemUl.html('<li class="layui-menu-item-none">' + i18n.$t('dropdown.noData') + '</li>');
+        elemUl.html('<li class="layui-menu-item-none" lay-i18n="dropdown.noData">' + i18n.$t('dropdown.noData') + '</li>');
       }
       return elemUl;
     };

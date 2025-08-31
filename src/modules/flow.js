@@ -22,7 +22,7 @@ layui.define(['i18n', 'jquery'], function(exports) {
     var threshold = 'mb' in options ? options.mb : 50; // 临界距离
     var isAuto = 'isAuto' in options ? options.isAuto : true; // 否自动滚动加载
     var moreText = options.moreText || i18n.$t('flow.loadMore'); // 手动加载时，加载更多按钮文案
-    var end = options.end || i18n.$t('flow.noMore'); // “末页”显示文案
+    var end = options.end; // “末页”显示文案
     var direction = options.direction || 'bottom';
     var isTop = direction === 'top';
 
@@ -33,7 +33,7 @@ layui.define(['i18n', 'jquery'], function(exports) {
     var notDocument = options.scrollElem && options.scrollElem !== document;
 
     //加载更多
-    var ELEM_TEXT = '<cite>' + moreText + '</cite>'
+    var ELEM_TEXT = '<cite lay-i18n="flow.loadMore">' + moreText + '</cite>'
     ,more = $('<div class="layui-flow-more"><a href="javascript:;">'+ ELEM_TEXT +'</a></div>');
 
     if(!elem.find('.layui-flow-more')[0]){
@@ -47,7 +47,7 @@ layui.define(['i18n', 'jquery'], function(exports) {
       html = $(html);
       more[isTop ? 'after' : 'before'](html);
       over = over == 0 ? true : null;
-      over ? more.html(end) : more.find('a').html(ELEM_TEXT);
+      over ? more.attr('lay-i18n', 'flow.noMore').html(end || i18n.$t('flow.noMore')) : more.find('a').html(ELEM_TEXT);
       isOver = over;
       lock = null;
       lazyimg && lazyimg();

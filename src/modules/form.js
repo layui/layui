@@ -766,7 +766,7 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
                 }
               }else{
                 if(none){
-                  dl.find('.'+NONE)[0] || dl.append('<p class="'+ NONE + '">' + i18n.$t('form.select.noMatch') + '</p>');
+                  dl.find('.'+NONE)[0] || dl.append('<p class="'+ NONE + '" lay-i18n="form.select.noMatch">' + i18n.$t('form.select.noMatch') + '</p>');
                 } else {
                   dl.find('.'+NONE).remove();
                 }
@@ -902,6 +902,10 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
           var inputElem = (function() {
             var elem = $('<input type="text" class="layui-input">');
 
+            // 处理默认占位符
+            if(placeholder === TIPS){
+              elem.attr('lay-i18n', '[placeholder]form.select.placeholder');
+            }
             // 设置占位符和默认值
             elem.prop('placeholder', placeholder);
             elem.val(value ? selected.prop('text') : '');
@@ -939,6 +943,9 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
                 if (index === 0 && !item.value && tagName !== 'optgroup') {
                   dd.addClass('layui-select-tips');
                   dd.text(item.text || TIPS);
+                  if(!item.text){
+                    dd.attr('lay-i18n', 'form.select.placeholder');
+                  }
                   arr.push(dd.prop('outerHTML'));
                 } else if(tagName === 'optgroup') {
                   var dt = $('<dt></dt>');
@@ -957,7 +964,7 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
                 }
               });
               if (arr.length === 0) {
-                arr.push('<dd lay-value="" class="'+ DISABLED + '">' + i18n.$t('form.select.noData') + '</dd>');
+                arr.push('<dd lay-value="" class="'+ DISABLED + '" lay-i18n="form.select.noData">' + i18n.$t('form.select.noData') + '</dd>');
               }
               return arr.join('');
             }();
@@ -1346,7 +1353,7 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
           // 是否属于美化替换后的表单元素
           var isForm2Elem = item.tagName.toLowerCase() === 'select' || (
             /^(checkbox|radio)$/.test(item.type)
-          );
+          );         
 
           errorText = errorText || rule[1];
 
@@ -1368,7 +1375,14 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
                 return othis;
               }(), {tips: 1});
             } else if(verType === 'alert') {
-              layer.alert(errorText, {title: i18n.$t('form.verifyErrorPromptTitle'), shadeClose: true});
+              layer.alert(errorText, {
+                title: i18n.$t('form.verifyErrorPromptTitle'), 
+                shadeClose: true,
+                success: function(layero){
+                  layero.find('.layui-layer-title').attr('lay-i18n', 'form.verifyErrorPromptTitle');
+                  layero.find('.layui-layer-content').attr('lay-i18n', 'form.validateMessages.' + thisVer);
+                }
+              });
             }
             // 若返回的为字符或数字，则自动弹出默认提示框；否则由 verify 方法中处理提示
             else if(/\b(string|number)\b/.test(typeof errorText)) {

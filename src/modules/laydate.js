@@ -144,27 +144,6 @@ layui.define(['lay', 'i18n'], function(exports) {
     // 初始化属性
     options = lay.extend(that.config, lay.options(elem[0])); // 继承节点上的属性
 
-    // 更新 i18n 消息对象
-    that.i18nMessages = that.getI18nMessages();
-
-    // 处理日期面板顶部年月顺序
-    // 这是一个变通的方法，因为 i18nMessages.monthBeforeYear 不存在
-    if(typeof that.i18nMessages.monthBeforeYear !== 'boolean'){
-      if(!window.Intl){
-        that.i18nMessages.monthBeforeYear = !(YearBeforeMonthLocale.indexOf(options.lang) > -1);
-      }else{
-        var formatter = new Intl.DateTimeFormat(options.lang, { year: 'numeric', month: 'short' });
-        var parts = formatter.formatToParts(new Date(1970, 0));
-        var order = [];
-        parts.map(function(part) {
-          if (part.type === 'year' || part.type === 'month') {
-            order.push(part.type);
-          }
-        })
-        that.i18nMessages.monthBeforeYear = order[0] === 'month';
-      }
-    }
-
     // 若重复执行 render，则视为 reload 处理
     if(elem[0] && elem.attr(MOD_ID)){
       var newThat = thisModule.getThis(elem.attr(MOD_ID));
@@ -234,15 +213,14 @@ layui.define(['lay', 'i18n'], function(exports) {
   Class.prototype.getI18nMessages = function () {
     var that = this;
     var options = that.config;
-    var locale = i18n.config.locale;
 
     // 纠正旧版「简体中文」语言码
     if (options.lang === 'cn') {
       options.lang = zhCN;
-    }else if(!options.lang){
-      options.lang = i18n.config.locale;
     }
-    locale = options.lang;
+     var locale = that.currentLang = options.lang 
+       ? options.lang 
+       : i18n.config.locale;
 
     return {
       months: i18n.$t('laydate.months', null, {
@@ -364,6 +342,26 @@ layui.define(['lay', 'i18n'], function(exports) {
     options.eventElem = lay(options.eventElem);
 
     if(!options.elem[0]) return;
+
+    // 更新 i18n 消息对象
+    that.i18nMessages = that.getI18nMessages();
+    // 处理日期面板顶部年月顺序
+    // 这是一个变通的方法，i18nMessages.monthBeforeYear 暂未文档化，后续版本视情况加入
+    if(typeof that.i18nMessages.monthBeforeYear !== 'boolean'){
+      if(!window.Intl){
+        that.i18nMessages.monthBeforeYear = !(YearBeforeMonthLocale.indexOf(that.currentLang) > -1);
+      }else{
+        var formatter = new Intl.DateTimeFormat(that.currentLang, { year: 'numeric', month: 'short' });
+        var parts = formatter.formatToParts(new Date(1970, 0));
+        var order = [];
+        parts.map(function(part) {
+          if (part.type === 'year' || part.type === 'month') {
+            order.push(part.type);
+          }
+        })
+        that.i18nMessages.monthBeforeYear = order[0] === 'month';
+      }
+    }
 
     layui.type(options.theme) !== 'array' && (options.theme = [options.theme]);
     // 设置了全面版模式
@@ -816,10 +814,13 @@ layui.define(['lay', 'i18n'], function(exports) {
     laydate.thisId = options.id;
 
     //如果是静态定位，则插入到指定的容器中，否则，插入到body
-    isStatic ? options.elem.append(elem) : (
-      document.body.appendChild(elem)
-      ,that.position() //定位
-    );
+    if(isStatic){
+      options.elem.find('.' + ELEM_STATIC).remove();
+      options.elem.append(elem);
+    } else {
+      document.body.appendChild(elem);
+      that.position(); //定位
+    }
 
     var shade = options.shade ? ('<div class="'+ ELEM_SHADE +'" style="'+ ('z-index:'+ (parseInt(layui.getStyle(elem, 'z-index'))-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
     elem.insertAdjacentHTML('beforebegin', shade);
@@ -1200,7 +1201,7 @@ layui.define(['lay', 'i18n'], function(exports) {
 
     // chineseFestivals 仅简体中文生效
     if (options.calendar) {
-      if (options.lang === zhCN) {
+      if (that.currentLang === zhCN) {
         render(that.markerOfChineseFestivals);
       }
     }
@@ -2846,6 +2847,14 @@ layui.define(['lay', 'i18n'], function(exports) {
     //减去一天，得到当前月最后一天
     return new Date(thisDate.getTime() - 1000*60*60*24).getDate();
   };
+
+  i18n.on('localeChanged', function(){
+    lay.each(thisModule.that, function(id, inst){
+      if(inst){
+        inst.reload();
+      }
+    })
+  });
 
   exports(MOD_NAME, laydate);
 });

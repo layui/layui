@@ -203,6 +203,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
       copy: {
         className: 'file-b',
         title: [i18n.$t('code.copy')],
+        _i18nKey: ['code.copy'],
         event: function(obj){
           var code = util.unescape(finalCode(options.code));
           var hasOnCopy = typeof options.onCopy === 'function';
@@ -279,6 +280,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
         'full': {
           className: 'screen-full',
           title: [i18n.$t('code.maximize'), i18n.$t('code.restore')],
+          _i18nKey: ['code.maximize', 'code.restore'],
           event: function(obj){
             var el = obj.elem;
             var elemView = el.closest('.'+ CONST.ELEM_PREVIEW);
@@ -292,11 +294,13 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
               elemView.addClass(CONST.ELEM_FULL);
               el.removeClass(classNameFull).addClass(classNameRestore);
               el.attr('title', title[1]);
+              el.attr('lay-i18n', '[title]'+ this._i18nKey[1]);
               htmlElem.addClass(ELEM_SCROLLBAR_HIDE);
             } else {
               elemView.removeClass(CONST.ELEM_FULL);
               el.removeClass(classNameRestore).addClass(classNameFull);
               el.attr('title', title[0]);
+              el.attr('lay-i18n', '[title]'+ this._i18nKey[0]);
               htmlElem.removeClass(ELEM_SCROLLBAR_HIDE);
             }
           }
@@ -304,6 +308,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
         'window': {
           className: 'release',
           title: [i18n.$t('code.preview')],
+          _i18nKey: ['code.preview'],
           event: function(obj){
             util.openWin({
               content: finalCode(options.code)
@@ -372,7 +377,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
         }
 
         elemToolbar.append(
-          '<i class="layui-icon layui-icon-'+ className +'" data-type="'+ type +'" title="'+ title[0] +'"></i>'
+          '<i class="layui-icon layui-icon-'+ className +'" data-type="'+ type +'" title="'+ title[0] +'" lay-i18n="[title]'+ tool._i18nKey[0] +'"></i>'
         );
       });
 
@@ -564,7 +569,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
     if(options.copy && !options.preview){
       var copyElem = $([
         '<span class="layui-code-copy">',
-        '<i class="layui-icon layui-icon-file-b" title="' + i18n.$t('code.copy') + '"></i>',
+        '<i class="layui-icon layui-icon-file-b" title="' + i18n.$t('code.copy') + ' " lay-i18n="[title]code.copy"></i>',
         '</span>'
       ].join(''));
 

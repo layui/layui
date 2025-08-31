@@ -18,7 +18,7 @@ layui.define('i18n', function(exports) {
   // 构造器
   var Class = function(options){
     var that = this;
-    that.config = options || {};
+    that.config = lay.extend({}, options || {});
     that.config.index = ++laypage.index;
     that.render(true);
   };
@@ -333,6 +333,9 @@ layui.define('i18n', function(exports) {
     // 分页渲染
     render: function(options){
       var o = new Class(options);
+      i18n.on('localeChanged', function(){
+        new Class(options);
+      })
       return o.index;
     },
     index: layui.laypage ? (layui.laypage.index + 10000) : 0,
