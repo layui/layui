@@ -1008,7 +1008,7 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-laypage select{height: 22px; padding: 3px; border-radius: 2px; cursor: pointer;}
 .layui-laypage .layui-laypage-skip{height: 30px; line-height: 30px; color: #999;}
 .layui-laypage input, .layui-laypage button{height: 30px; line-height: 30px; border-radius: 2px; vertical-align: top;  background-color: #fff; box-sizing: border-box;}
-.layui-laypage input{display: inline-block; width: 40px; margin: 0 10px; padding: 0 3px; text-align: center;}
+.layui-laypage input{display: inline-block; width: 40px; margin: 0 10px; padding: 0 3px; text-align: center; transition: none;}
 .layui-laypage input:focus,
 .layui-laypage select:focus{border-color: #16baaa!important;}
 .layui-laypage button{margin-left: 10px; padding: 0 10px; cursor: pointer;}
@@ -1032,7 +1032,8 @@ hr.layui-border-black{border-width: 0 0 1px;}
 .layui-table[lay-even] tbody tr:nth-child(even){background-color: #f8f8f8;}
 .layui-table-checked{background-color: #dbfbf0;}
 .layui-table-checked.layui-table-hover,
-.layui-table-checked.layui-table-click{background-color: #abf8dd;}
+.layui-table-checked.layui-table-click,
+.layui-table[lay-even] tbody tr:nth-child(even).layui-table-checked{background-color: #abf8dd;}
 .layui-table-disabled-transition *,
 .layui-table-disabled-transition *:before,
 .layui-table-disabled-transition *:after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}

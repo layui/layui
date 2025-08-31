@@ -11,10 +11,24 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.11.6" lay-pid="2.10+" class="ws-anchor">
+  v2.11.6
+  <span class="layui-badge-rim">2025-08-29</span>
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+</h2>
+
+- 修复 table 设置 `even:true` 时，行选中背景色异常 #2776 @Sight-wcg
+- 修复 checkbox / radio 和 label 关联时的问题 #2795 @Sight-wcg
+- 移除 laypage 中 input 元素不必要的过渡效果 #2796 @Sight-wcg
+- 修复 tabs 获取标签内容项 `lay-id` 不存在时返回最后一项的问题 #2806 @Sight-wcg
+
+### 下载： [layui-v2.11.6.zip](https://gitee.com/layui/layui/attach_files/2327281/download)
+
+---
+
 <h2 id="v2.11.5" lay-pid="2.10+" class="ws-anchor">
   v2.11.5
   <span class="layui-badge-rim">2025-07-21</span>
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
 </h2>
 
 - 修复 laydate `range:false` 某些场景下确认按钮状态异常问题 #2754 @Sight-wcg

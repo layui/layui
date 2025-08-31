@@ -994,6 +994,7 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
           "switch": ['layui-form-switch', 'layui-form-onswitch', 'switch'],
           SUBTRA: 'layui-icon-indeterminate'
         };
+        var clickEventName = 'click.lay_checkbox_click';
         var checks = elem || elemForm.find('input[type=checkbox]');
         // 风格
         var skins = {
@@ -1009,7 +1010,8 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
           var isPrimary = skin === 'primary';
 
           // 勾选
-          reElem.on('click', function(){
+          // 通过重新赋值触发美化元素样式更新
+          check.off(clickEventName).on(clickEventName, function(e){
             var filter = check.attr('lay-filter') // 获取过滤器
 
             // 禁用
@@ -1021,7 +1023,7 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
             }
 
             // 开关
-            check[0].checked = !check[0].checked
+            check[0].checked = check[0].checked;
 
             // 事件
             layui.event.call(check[0], MOD_NAME, RE_CLASS[2]+'('+ filter +')', {
@@ -1030,6 +1032,13 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
               othis: reElem
             });
           });
+
+          reElem.on('click', function(){
+             var hasLabel = check.closest('label').length;
+             if(!hasLabel){
+              check.trigger('click');
+             }
+          })
 
           that.syncAppearanceOnPropChanged(this, 'checked', function(){
             if(isSwitch){
@@ -1126,13 +1135,14 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
         var CLASS = 'layui-form-radio';
         var ICON = ['layui-icon-radio', 'layui-icon-circle'];
         var radios = elem || elemForm.find('input[type=radio]');
+        var clickEventName = 'click.lay_radio_click';
 
         // 事件
         var events = function(reElem){
           var radio = $(this);
           var ANIM = 'layui-anim-scaleSpring';
 
-          reElem.on('click', function(){
+          radio.off(clickEventName).on(clickEventName, function(){
             var filter = radio.attr('lay-filter'); // 获取过滤器
 
             if(radio[0].disabled) return;
@@ -1145,6 +1155,13 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
               othis: reElem
             });
           });
+
+          reElem.on('click', function(){
+             var hasLabel = radio.closest('label').length;
+             if(!hasLabel){
+              radio.trigger('click');
+             }
+          })
 
           that.syncAppearanceOnPropChanged(this, 'checked', function(){
             var radioEl = this;
