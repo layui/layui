@@ -876,7 +876,7 @@
       return null;
     }
 
-    var ATTR_NAME = 'lay-resizeobserver-key';
+    var ATTR_NAME = 'lay-' + namespace + '-resizeobserver-key';
     var handlerCache = {};
 
     var o = new ResizeObserver(function (entries) {
@@ -905,6 +905,7 @@
           element.setAttribute(ATTR_NAME, attrValue);
         }
 
+        // 使用同一个观察者实例多次观察同一个元素，不会重复添加
         handlerCache[attrValue] = callback;
         o.observe(element);
       },
@@ -924,11 +925,20 @@
           delete handlerCache[attrValue];
         }
 
+        element.removeAttribute(ATTR_NAME);
         o.unobserve(element);
       },
       disconnect: function () {
+        for (var key in handlerCache) {
+          if (lay.hasOwn(handlerCache,key)) {
+            delete handlerCache[key];
+            var elem = document.querySelector('[' + ATTR_NAME + '="' + key + '"]');
+            if(elem){
+              elem.removeAttribute(ATTR_NAME);
+            }
+          }
+        }
         o.disconnect();
-        handlerCache = {};
       }
     });
   };

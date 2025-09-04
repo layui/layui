@@ -395,13 +395,16 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
     var options = that.config;
     var mainElem = thisModule.findMainElem(id);
 
+    if(resizeObserver){
+      resizeObserver.unobserve(options.elem[0]);
+    }
+
     // 若存在已打开的面板元素，则移除
     if (mainElem[0]) {
       mainElem.prev('.' + STR_ELEM_SHADE).remove(); // 先移除遮罩
       mainElem.remove();
       options.elem.removeData(MOD_INDEX_OPENED);
       if(resizeObserver){
-        resizeObserver.unobserve(options.elem[0]);
         resizeObserver.unobserve(mainElem[0]);
       }
       delete dropdown.thisId;
