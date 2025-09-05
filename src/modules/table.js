@@ -2965,9 +2965,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     that.resizeObserver.observe(that.elem[0], that.resize.bind(that));
 
     // 同步固定列表格和主表格高度
-    that.needSyncFixedColHeight = that.config.syncFixedRowHeight &&
-      (that.layBody.length > 1) &&
-      that.config.lineStyle
+    that.needSyncFixedColHeight = that.config.syncFixedRowHeight && (that.layBody.length > 1)
 
     if(that.needSyncFixedColHeight){
       var tableElem = that.layMain.children('table');
