@@ -460,6 +460,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
 
     that.pullData(that.page); // 请求数据
     that.events(); // 事件
+    that.autoResize();
   };
 
   // 根据列类型，定制化参数
@@ -1522,6 +1523,11 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
       that.haveInit = true;
 
       layer.close(that.tipsIndex);
+
+      // reloadData 或 renderData 时，tbody 高度可能不变，需要主动同步
+      if(that.needSyncFixedColHeight && (opts.type === 'reloadData' || opts.type === 'renderData')){
+        that.syncFixedColHeight();
+      }
     };
 
     table.cache[that.key] = data; //记录数据
@@ -2919,6 +2925,57 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
       return size.boxSizing === 'border-box'
         ? size.width - size.paddingLeft - size.paddingRight - size.borderLeftWidth - size.borderRightWidth
         : size.width
+    }
+  };
+
+  Class.prototype.createResizeObserver = function(){
+    var that = this;
+    if(that.resizeObserver){
+      that.resizeObserver.disconnect();
+      that.resizeObserver = null;
+    }
+    that.resizeObserver = lay._createResizeObserver('table-' + that.config.id);
+  }
+
+  Class.prototype.syncFixedColHeight = function(){
+    var that = this;
+
+    var tableElem = that.layMain.children('table');
+    var leftTrs = that.layFixLeft.find('.layui-table-body>table>tbody>tr');
+    var rightTrs = that.layFixRight.find('.layui-table-body>table>tbody>tr');
+
+    tableElem.find('>tbody>tr').each(function (i) {
+      if (leftTrs.length) {
+        leftTrs.eq(i).height(that.getElementSize(this).height);
+      }
+      if (rightTrs.length) {
+        rightTrs.eq(i).height(that.getElementSize(this).height);
+      }
+    });
+  }
+
+  Class.prototype.autoResize = function(){
+    var that = this;
+
+    that.createResizeObserver();
+    
+    if(!that.resizeObserver) return;
+
+    // 显示或隐藏时重置列宽
+    that.resizeObserver.observe(that.elem[0], function(){
+      that.resize();
+    });
+
+    // 同步固定列表格和主表格高度
+    that.needSyncFixedColHeight = (that.layBody.length > 1) && 
+      that.config.lineStyle && 
+      (/\bheight\s*:\s*auto\b/g.test(that.config.lineStyle) || that.config.lineStyle.indexOf('max-height') !== -1);
+
+    if(that.needSyncFixedColHeight){
+      var tableElem = that.layMain.children('table');
+      that.resizeObserver.observe(tableElem[0], function () {
+        that.syncFixedColHeight();
+      });
     }
   };
 
