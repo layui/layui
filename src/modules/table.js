@@ -2945,11 +2945,12 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     var rightTrs = that.layFixRight.find('.layui-table-body>table>tbody>tr');
 
     tableElem.find('>tbody>tr').each(function (i) {
+      var newHeight = that.getElementSize(this).height;
       if (leftTrs.length) {
-        leftTrs.eq(i).height(that.getElementSize(this).height);
+        leftTrs.eq(i).height(newHeight);
       }
       if (rightTrs.length) {
-        rightTrs.eq(i).height(that.getElementSize(this).height);
+        rightTrs.eq(i).height(newHeight);
       }
     });
   }
