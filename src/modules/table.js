@@ -2943,16 +2943,30 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     var tableElem = that.layMain.children('table');
     var leftTrs = that.layFixLeft.find('.layui-table-body>table>tbody>tr');
     var rightTrs = that.layFixRight.find('.layui-table-body>table>tbody>tr');
+    var mainTrs = tableElem.find('>tbody>tr');
 
-    tableElem.find('>tbody>tr').each(function (i) {
-      var newHeight = that.getElementSize(this).height;
-      if (leftTrs.length) {
-        leftTrs.eq(i).height(newHeight);
-      }
-      if (rightTrs.length) {
-        rightTrs.eq(i).height(newHeight);
-      }
+    // 批量获取高度
+    var heights = [];
+    mainTrs.each(function() {
+      heights.push(that.getElementSize(this).height);
     });
+
+    // 批量设置高度
+    if (leftTrs.length) {
+      leftTrs.each(function(i) {
+        if (heights[i]) {
+          this.style.height = heights[i] + 'px';
+        }
+      });
+    }
+    
+    if (rightTrs.length) {
+      rightTrs.each(function(i) {
+        if (heights[i]) {
+          this.style.height = heights[i] + 'px';
+        }
+      });
+    }
   }
 
   Class.prototype.autoResize = function(){
