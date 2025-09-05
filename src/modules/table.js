@@ -2962,20 +2962,16 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     if(!that.resizeObserver) return;
 
     // 显示或隐藏时重置列宽
-    that.resizeObserver.observe(that.elem[0], function(){
-      that.resize();
-    });
+    that.resizeObserver.observe(that.elem[0], that.resize.bind(that));
 
     // 同步固定列表格和主表格高度
-    that.needSyncFixedColHeight = (that.layBody.length > 1) && 
-      that.config.lineStyle && 
-      (/\bheight\s*:\s*auto\b/g.test(that.config.lineStyle) || that.config.lineStyle.indexOf('max-height') !== -1);
+    that.needSyncFixedColHeight = that.config.syncFixedRowHeight &&
+      (that.layBody.length > 1) &&
+      that.config.lineStyle
 
     if(that.needSyncFixedColHeight){
       var tableElem = that.layMain.children('table');
-      that.resizeObserver.observe(tableElem[0], function () {
-        that.syncFixedColHeight();
-      });
+      that.resizeObserver.observe(tableElem[0], that.syncFixedColHeight.bind(that));
     }
   };
 
