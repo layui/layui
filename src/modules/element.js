@@ -485,7 +485,7 @@ layui.define('jquery', function(exports) {
             if (!child[0]) {
               var thisA = othis.children('.'+ NAV_TITLE);
               bar.css({
-                top: othis.offset().top - nav.offset().top,
+                top: othis.offset().top - nav.offset().top + nav.scrollTop(),
                 height: (thisA[0] ? thisA : othis).outerHeight(),
                 opacity: 1
               });
