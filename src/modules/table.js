@@ -2941,8 +2941,8 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     var that = this;
 
     var tableElem = that.layMain.children('table');
-    var leftTrs = that.layFixLeft.find('.layui-table-body>table>tbody>tr');
-    var rightTrs = that.layFixRight.find('.layui-table-body>table>tbody>tr');
+    var leftTrs = that.layFixLeft.find('>.layui-table-body>table>tbody>tr');
+    var rightTrs = that.layFixRight.find('>.layui-table-body>table>tbody>tr');
     var mainTrs = tableElem.find('>tbody>tr');
 
     // 批量获取高度
