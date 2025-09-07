@@ -104,7 +104,7 @@ i18n.set({
           asc: '升序',
           desc: '降序'
         },
-        noData: '无数据',
+        noData: '暂无数据',
         tools:{
           filter: {
             title: '筛选列'
@@ -124,14 +124,14 @@ i18n.set({
         xhrError: '请求异常，错误提示：{msg}'
       },
       transfer: {
-        noData: '无数据',
+        noData: '暂无数据',
         noMatch: '无匹配数据',
         title: ['列表一', '列表二'],
         searchPlaceholder: '关键词搜索'
       },
       tree: {
         defaultNodeName: '未命名',
-        noData: '无数据',
+        noData: '暂无数据',
         deleteNodePrompt: '确认删除"{name}"节点吗？'
       },
       upload: {
@@ -144,7 +144,7 @@ i18n.set({
         validateMessages: {
           fileExtensionError: '选择的{fileType}中包含不支持的格式',
           filesOverLengthLimit: '同时最多只能上传: {length} 个文件',
-          currentFilesLength: '您当前已经选择了: {length} 个文件',
+          currentFilesLength: '当前已经选择了: {length} 个文件',
           fileOverSizeLimit: '文件大小不能超过 {size}'
         },
         chooseText: '{length} 个文件'
@@ -158,6 +158,7 @@ i18n.set({
           justNow: '刚刚'
         },
         toDateString: {
+          // https://www.unicode.org/cldr/charts/47/supplemental/day_periods.html
           meridiem: function(hours, minutes){
             var hm = hours * 100 + minutes;
             if (hm < 500) {

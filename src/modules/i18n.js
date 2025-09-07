@@ -69,7 +69,7 @@ layui.define('lay', function(exports) {
         now: '现在',
         reset: '重置'
       },
-      rangeOrderPrompt: '结束时间不能早于开始时间\n请重新选择', 
+      rangeOrderPrompt: '结束时间不能早于开始时间\n请重新选择',
       invalidDatePrompt: '不在有效日期或时间范围内\n',
       formatErrorPrompt: '日期格式不合法\n必须遵循：\n{format}\n',
       autoResetPrompt: '已自动重置',
@@ -334,7 +334,7 @@ layui.define('lay', function(exports) {
     if (!i18nMessages) {
       hint.errorOnce("Locale '" + locale + "' not found. Please add i18n messages for this locale first.", 'error');
     }
-    
+
     var result = resolveValue(namespace + keypath, i18nMessages, fallbackMessage);
 
     // 替换占位符
