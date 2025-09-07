@@ -2977,14 +2977,18 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     if(!that.resizeObserver) return;
 
     // 显示或隐藏时重置列宽
-    that.resizeObserver.observe(that.elem[0], that.resize.bind(that));
+    that.resizeObserver.observe(that.elem[0], $.proxy(that.resize, that));
 
     // 同步固定列表格和主表格高度
-    that.needSyncFixedColHeight = that.config.syncFixedRowHeight && (that.layBody.length > 1)
+    var lineStyle = that.config.lineStyle;
+    var isAutoHeight = lineStyle && (/\bheight\s*:\s*auto\b/g.test(lineStyle) || lineStyle.indexOf('max-height') !== -1);
+    that.needSyncFixedColHeight = (that.layBody.length > 1) && (that.config.syncFixedRowHeight || (that.config.syncFixedRowHeight !== false && isAutoHeight));
 
     if(that.needSyncFixedColHeight){
-      var tableElem = that.layMain.children('table');
-      that.resizeObserver.observe(tableElem[0], that.syncFixedColHeight.bind(that));
+      that.resizeObserver.observe(
+        that.layMain.children('table')[0], 
+        $.proxy(that.syncFixedColHeight, that)
+      );
     }
   };
 
