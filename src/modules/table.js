@@ -1203,12 +1203,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
 
       that.loading(true);
 
-      // 4：代表响应已完成
-      if (that._xhr && that._xhr.readyState !== 4) {
-        that._xhrAbort = true;
-        that._xhr.abort();
-      }
-      that._xhr = $.ajax({
+      var ajaxOptions = {
         type: options.method || 'get',
         url: options.url,
         contentType: options.contentType,
@@ -1259,7 +1254,18 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
           that.errorView(i18n.$t('table.xhrError', {msg: msg}));
           typeof options.error === 'function' && options.error(e, msg);
         }
-      });
+      };
+
+      if(options.ajax){
+        options.ajax(ajaxOptions, 'table');
+      }else{
+        // 4：代表响应已完成
+        if (that._xhr && that._xhr.readyState !== 4) {
+          that._xhrAbort = true;
+          that._xhr.abort();
+        }
+        that._xhr = $.ajax(ajaxOptions);
+      }
     } else if(layui.type(options.data) === 'array'){ //已知数据
       res = {};
       var startLimit = curr*options.limit - options.limit;

@@ -711,7 +711,7 @@ layui.define(['table'], function (exports) {
           var asyncParseData = asyncSetting.parseData || options.parseData;
           var asyncResponse = asyncSetting.response || options.response;
 
-          $.ajax({
+          var ajaxOptions = {
             type: asyncType || 'get',
             url: asyncUrl,
             contentType: asyncContentType,
@@ -742,7 +742,14 @@ layui.define(['table'], function (exports) {
               // 异常处理 todo
               typeof options.error === 'function' && options.error(e, msg);
             }
-          });
+          }
+
+          if(options.ajax){
+            options.ajax(ajaxOptions, 'treeNodes')
+          }else{
+            $.ajax(ajaxOptions);
+          }
+
           return retValue;
         }
         trExpanded = trData[LAY_HAS_EXPANDED] = true;
