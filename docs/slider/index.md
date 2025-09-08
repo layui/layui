@@ -2,7 +2,7 @@
 title: 滑块组件 slider
 toc: true
 ---
- 
+
 # 滑块组件
 
 > 滑块组件 `slider` 是一个拖拽选值的交互性组件，常与 `form` 元素结合使用。
@@ -22,6 +22,7 @@ toc: true
 | API | 描述 |
 | --- | --- |
 | var slider = layui.slider | 获得 `slider` 模块。 |
+| [基础接口](../component/#export) <sup>2.12+</sup> | 该组件由 `component` 构建，因此继承其提供的基础接口。|
 | [var inst = slider.render(options)](#render) | slider 组件渲染，核心方法。 |
 | [inst.setValue(value)](#setValue) | 设置滑块值 |
 | inst.config | 获得当前实例的属性选项 |
@@ -37,7 +38,7 @@ toc: true
 <div id="ID-test-slider"></div>
 <div class="class-test-slider" lay-options="{value: 50}"></div>
 <div class="class-test-slider" lay-options="{value: 80}"></div>
- 
+
 <!-- import layui -->
 <script>
 layui.use(function(){
@@ -71,16 +72,16 @@ console.log(inst); // 得到当前实例对象
 
 ```
 var slider = layui.slider;
- 
+
 // 渲染
 var inst = slider.render({
   elem: '#id'
   // …
-});      
- 
+});
+
 // 设置滑块值
 inst.setValue(20);
- 
+
 // 若滑块开启了范围，即： `range: true`
 ins1.setValue(20, 0) // 设置开始值
 ins1.setValue(60, 1) // 设置结尾值
