@@ -11,13 +11,13 @@
       <th>描述</th>
       <th>类型</th>
       <th>默认值</th>
-    </tr> 
+    </tr>
   </thead>
   <tbody>
     <tr>
 <td>elem</td>
 <td>
-  
+
 绑定元素选择器或 DOM 对象
 
 </td>
@@ -37,11 +37,11 @@
     <tr>
 <td>preview <sup>2.8+</sup></td>
 <td>
-  
+
 是否开启 Code 预览功能，可选值有：
 
 - `true` 开启 Code 的普通预览
-- `false` 关闭 Code 预览（默认） 
+- `false` 关闭 Code 预览（默认）
 - `"iframe"` 开启 Code 在 iframe 模式中预览
 
 当开启该属性时，`elem` 指定的元素需要设置成以下结构：
@@ -65,13 +65,13 @@ code content
     <tr>
 <td>layout <sup>2.8+</sup></td>
 <td>
-  
+
 开启预览后的面板布局方式，值为一个数组，数组的可选成员有：
 
 - `code` 代码区域
 - `preview` 预览区域
 
-面板将根据数组的排列顺序来显示，如： 
+面板将根据数组的排列顺序来显示，如：
 
 ```
 layout: ['code', 'preview']
@@ -84,7 +84,7 @@ layout: ['code', 'preview']
     <tr>
 <td>style <sup>2.8+</sup></td>
 <td>
-  
+
 设置 Code 和预览区域的公共样式
 
 </td>
@@ -94,7 +94,7 @@ layout: ['code', 'preview']
     <tr>
 <td>codeStyle <sup>2.8+</sup></td>
 <td>
-  
+
 设置 Code 区域的局部样式，优先级高于 `style` 属性
 
 </td>
@@ -104,7 +104,7 @@ layout: ['code', 'preview']
     <tr>
 <td>previewStyle <sup>2.8+</sup></td>
 <td>
-  
+
 设置预览区域的局部样式，优先级高于 `style` 属性
 
 </td>
@@ -114,7 +114,7 @@ layout: ['code', 'preview']
     <tr>
 <td>id <sup>2.8+</sup></td>
 <td>
-  
+
 设置实例的唯一索引，以便用于其他操作
 
 </td>
@@ -124,7 +124,7 @@ layout: ['code', 'preview']
     <tr>
 <td>className <sup>2.8+</sup></td>
 <td>
-  
+
 追加实例面板的 `className`，以便对其自定义样式
 
 </td>
@@ -134,7 +134,7 @@ layout: ['code', 'preview']
     <tr>
 <td>tools <sup>2.8+</sup></td>
 <td>
-  
+
 用于开启 `preview` 属性后的面板头部右侧区域工具栏图标，值为一个数组，内置成员：
 
 - `copy` <sup>2.8.2+</sup> : 代码复制
@@ -168,7 +168,7 @@ tools: [
     <tr>
 <td>toolsEvent <sup>2.8+</sup></td>
 <td>
-  
+
 点击工具栏的回调函数，功能同 `tools` 中的 `event`，只是需通过 `type` 属性来区分是哪个工具菜单。
 
 ```
@@ -187,7 +187,7 @@ toolsEvent: function(obj){
     <tr>
 <td>copy <sup>2.8.2+</sup></td>
 <td>
-  
+
 用于开启代码复制功能图标。若开启 `priview`，则自动放置在 `tools` 属性中，复制图标将显示在容器右上角工具栏；若未开启 `priview`，则显示在 code 区域右上角。
 
 </td>
@@ -201,7 +201,7 @@ toolsEvent: function(obj){
     <tr>
 <td>text <sup>2.8+</sup></td>
 <td>
-  
+
 自定义默认文本，值为一个对象，可选成员有:
 
 ```
@@ -218,7 +218,7 @@ text: {
     <tr>
 <td>header <sup>2.8+</sup></td>
 <td>
-  
+
 是否开启 Code 栏头部区域。
 
 </td>
@@ -232,7 +232,7 @@ text: {
     <tr>
 <td>ln</td>
 <td>
-  
+
 是否显示 Code 区域的行号
 
 </td>
@@ -246,7 +246,7 @@ text: {
     <tr>
 <td>theme <sup>2.8.17+</sup></td>
 <td>
-  
+
 Code 容器的主题风格，可选值有：
 
 - `light` 浅色模式（默认）
@@ -259,7 +259,7 @@ Code 容器的主题风格，可选值有：
     <tr>
 <td>encode</td>
 <td>
-  
+
 是否对 code 中的 html 进行编码（转义）。
 
 </td>
@@ -358,7 +358,7 @@ code 组件语法高亮相关示例：
 </td>
 <td colspan="3">
 
-<div id="options.done" lay-pid="options" class="ws-anchor">  
+<div id="options.done" lay-pid="options" class="ws-anchor">
 组件渲染完毕的回调函数，函数返回一个 object 类型参数
 </div>
 
@@ -379,7 +379,7 @@ done: function(obj){
 </td>
 <td colspan="3">
 
-<div id="options.onCopy" lay-pid="options" class="ws-anchor">  
+<div id="options.onCopy" lay-pid="options" class="ws-anchor">
 点击复制图标时的回调函数。
 </div>
 
@@ -392,6 +392,49 @@ onCopy: function(code, copied){
 }
 
 ```
+
+</td>
+    </tr>
+    <tr>
+<td>
+
+[highlightLine](#options.highlightLine) <sup>2.12+</sup>
+
+</td>
+<td colspan="3">
+
+<div id="options.highlightLine" lay-pid="options" class="ws-anchor">
+
+设置行高亮，可选项：
+- `hl` : 高亮
+- `++` : diff++
+- `--` : diff--
+- `focus` : 聚焦
+
+</div>
+
+可通过 `hl.range` 选项来设置行高亮范围：
+
+```
+highlightLine: {
+  hl: {
+    range: '1,3-5,8', // 指定行高亮范围 '1,3,4,5,8'
+    comment: true, // 是否解析行中的高亮注释
+  }
+}
+```
+
+或通过特定注释格式： `[!code <type>:<lines>]` 指定行高亮范围，规则解释：
+- `<type>` : `highlightLine` 的可选项，如 `h1, focus` 等
+- `<lines>` : 行数（含本行）
+
+```
+111 聚焦 2 行（含本行） // [!code focus:2]
+222 高亮本行 // [!code hl]
+333
+```
+
+highlightLine 选项的详细用法可参考：<a href="https://stackblitz.com/edit/iw6hx7mi?file=index.html" rel="nofollow" target="_blank">highlightLine 行高亮在线示例</a>
 
 </td>
     </tr>

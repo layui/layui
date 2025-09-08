@@ -71,3 +71,12 @@ html #layuicss-skincodecss{display: none; position: absolute; width: 1989px;}
 .layui-code-view.layui-code-hl > .layui-code-ln-side{background-color: transparent;}
 .layui-code-theme-dark.layui-code-hl,
 .layui-code-theme-dark.layui-code-hl > .layui-code-ln-side{border-color: rgb(126 122 122 / 15%);}
+
+/*行高亮*/
+.layui-code-line-highlighted{background-color:rgba(142, 150, 170, .14)}
+.layui-code-line-diff-add{background-color: rgba(16, 185, 129, .14);}
+.layui-code-line-diff-remove{background-color: rgba(244, 63, 94, .14);}
+.layui-code-line-diff-add:before{position:absolute; content: "+"; color: #18794e;}
+.layui-code-line-diff-remove:before{position:absolute; content: "-"; color: #b8272c;}
+.layui-code-has-focused-lines .layui-code-line:not(.layui-code-line-has-focus) {filter: blur(.095rem); opacity: .7; -webkit-transition: filter .35s, opacity .35s; transition: filter .35s, opacity .35s;}
+.layui-code-has-focused-lines:hover .layui-code-line:not(.layui-code-line-has-focus) {filter: blur(); opacity: 1;}
