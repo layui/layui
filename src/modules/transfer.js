@@ -2,12 +2,13 @@
  * transfer 穿梭框组件
  */
 
-layui.define(['laytpl', 'form'], function(exports) {
+layui.define(['i18n', 'laytpl', 'form'], function(exports) {
   "use strict";
 
   var $ = layui.$;
   var laytpl = layui.laytpl;
   var form = layui.form;
+  var i18n = layui.i18n;
 
   // 模块名
   var MOD_NAME = 'transfer';
@@ -71,7 +72,7 @@ layui.define(['laytpl', 'form'], function(exports) {
   var ELEM_DATA = 'layui-transfer-data';
 
   // 穿梭框模板
-  var TPL_BOX = function(obj){
+  var TPL_BOX = function(obj) {
     obj = obj || {};
     return ['<div class="layui-transfer-box" data-index="'+ obj.index +'">',
       '<div class="layui-transfer-header">',
@@ -80,54 +81,35 @@ layui.define(['laytpl', 'form'], function(exports) {
       '{{# if(d.data.showSearch){ }}',
       '<div class="layui-transfer-search">',
         '<i class="layui-icon layui-icon-search"></i>',
-        '<input type="text" class="layui-input" placeholder="关键词搜索">',
+        '<input type="text" class="layui-input" placeholder="'+ i18n.$t('transfer.searchPlaceholder') +'">',
       '</div>',
       '{{# } }}',
       '<ul class="layui-transfer-data"></ul>',
     '</div>'].join('');
   };
 
-  // 主模板
-  var TPL_MAIN = ['<div class="layui-transfer layui-form layui-border-box" lay-filter="LAY-transfer-{{= d.index }}">',
-    TPL_BOX({
-      index: 0,
-      checkAllName: 'layTransferLeftCheckAll'
-    }),
-    '<div class="layui-transfer-active">',
-      '<button type="button" class="layui-btn layui-btn-sm layui-btn-primary layui-btn-disabled" data-index="0">',
-        '<i class="layui-icon layui-icon-next"></i>',
-      '</button>',
-      '<button type="button" class="layui-btn layui-btn-sm layui-btn-primary layui-btn-disabled" data-index="1">',
-        '<i class="layui-icon layui-icon-prev"></i>',
-      '</button>',
-    '</div>',
-    TPL_BOX({
-      index: 1,
-      checkAllName: 'layTransferRightCheckAll'
-    }),
-  '</div>'].join('');
-
   // 构造器
-  var Class = function(options){
+  var Class = function(options) {
     var that = this;
     that.index = ++transfer.index;
-    that.config = $.extend({}, that.config, transfer.config, options);
+    that.config = $.extend({
+      title: i18n.$t('transfer.title'),
+      text: {
+        none: i18n.$t('transfer.noData'),
+        searchNone: i18n.$t('transfer.noMatch')
+      }
+    }, that.config, transfer.config, options);
     that.render();
   };
 
   // 默认配置
   Class.prototype.config = {
-    title: ['列表一', '列表二'],
     width: 200,
     height: 360,
     data: [], // 数据源
     value: [], // 选中的数据
     showSearch: false, // 是否开启搜索
     id: '', // 唯一索引，默认自增 index
-    text: {
-      none: '无数据',
-      searchNone: '无匹配数据'
-    }
   };
 
   // 重载实例
@@ -141,6 +123,26 @@ layui.define(['laytpl', 'form'], function(exports) {
   Class.prototype.render = function(){
     var that = this;
     var options = that.config;
+
+    // 主模板
+    var TPL_MAIN = ['<div class="layui-transfer layui-form layui-border-box" lay-filter="LAY-transfer-{{= d.index }}">',
+      TPL_BOX({
+        index: 0,
+        checkAllName: 'layTransferLeftCheckAll'
+      }),
+      '<div class="layui-transfer-active">',
+        '<button type="button" class="layui-btn layui-btn-sm layui-btn-primary layui-btn-disabled" data-index="0">',
+          '<i class="layui-icon layui-icon-next"></i>',
+        '</button>',
+        '<button type="button" class="layui-btn layui-btn-sm layui-btn-primary layui-btn-disabled" data-index="1">',
+          '<i class="layui-icon layui-icon-prev"></i>',
+        '</button>',
+      '</div>',
+      TPL_BOX({
+        index: 1,
+        checkAllName: 'layTransferRightCheckAll'
+      }),
+    '</div>'].join('');
 
     // 解析模板
     var thisElem = that.elem = $(laytpl(TPL_MAIN, {

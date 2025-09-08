@@ -3,7 +3,7 @@
  * Code 预览组件
  */
 
-layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
+layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(exports) {
   "use strict";
 
   var $ = layui.$;
@@ -13,6 +13,7 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
   var form = layui.form;
   var layer = layui.layer;
   var hint = layui.hint();
+  var i18n = layui.i18n;
 
   // 常量
   var CONST = {
@@ -201,7 +202,7 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
     var tools = {
       copy: {
         className: 'file-b',
-        title: ['复制代码'],
+        title: [i18n.$t('code.copy')],
         event: function(obj){
           var code = util.unescape(finalCode(options.code));
           var hasOnCopy = typeof options.onCopy === 'function';
@@ -215,14 +216,14 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
                 if(ret === false) return;
               }
 
-              layer.msg('已复制', {icon: 1});
+              layer.msg(i18n.$t('code.copied'), {icon: 1});
             },
             error: function() {
               if(hasOnCopy){
                 var ret = options.onCopy(code, false);
                 if(ret === false) return;
               }
-              layer.msg('复制失败', {icon: 2});
+              layer.msg(i18n.$t('code.copyError'), {icon: 2});
             }
           });
         }
@@ -277,7 +278,7 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
       $.extend(tools, {
         'full': {
           className: 'screen-full',
-          title: ['最大化显示', '还原显示'],
+          title: [i18n.$t('code.maximize'), i18n.$t('code.restore')],
           event: function(obj){
             var el = obj.elem;
             var elemView = el.closest('.'+ CONST.ELEM_PREVIEW);
@@ -302,7 +303,7 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
         },
         'window': {
           className: 'release',
-          title: ['在新窗口预览'],
+          title: [i18n.$t('code.preview')],
           event: function(obj){
             util.openWin({
               content: finalCode(options.code)
@@ -561,9 +562,11 @@ layui.define(['lay', 'util', 'element', 'tabs', 'form'], function(exports){
 
     // 若开启复制，且未开启预览，则单独生成复制图标
     if(options.copy && !options.preview){
-      var copyElem = $(['<span class="layui-code-copy">',
-        '<i class="layui-icon layui-icon-file-b" title="复制"></i>',
-      '</span>'].join(''));
+      var copyElem = $([
+        '<span class="layui-code-copy">',
+        '<i class="layui-icon layui-icon-file-b" title="' + i18n.$t('code.copy') + '"></i>',
+        '</span>'
+      ].join(''));
 
       // 点击复制
       copyElem.on('click', function(){

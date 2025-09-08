@@ -55,8 +55,25 @@
   // 异常提示
   var error = function(msg, type) {
     type = type || 'log';
-    window.console && console[type] && console[type]('layui error hint: ' + msg);
+    msg = '[Layui warn]: ' + msg;
+
+    if (window.console) {
+      console[type] ? console[type](msg) : console.log(msg);
+    }
   };
+  var warned = Object.create(null);
+
+  var errorOnce = function (msg, type) {
+    if(warned._size && warned._size > 100){
+      warned = Object.create(null);
+      warned._size = 0;
+    }
+    if (!warned[msg]) {
+      warned[msg] = true;
+      warned._size = (warned._size || 0) + 1;
+      error(msg, type)
+    }
+  }
 
   // 内置模块
   var builtinModules = config.builtin = {
@@ -83,6 +100,7 @@
     code: 'code', // 代码修饰器
     jquery: 'jquery', // DOM 库（第三方）
     component: 'component', // 组件构建器
+    i18n:  'i18n', // 国际化
 
     all: 'all',
     'layui.all': 'layui.all' // 聚合标识（功能性的，非真实模块）
@@ -161,7 +179,7 @@
 
   /**
    * 全局配置
-   * @param {Object} options
+   * @param {Object} options - 配置对象
    */
   Class.prototype.config = function(options) {
     Object.assign(config, options);
@@ -710,7 +728,8 @@
   // 提示
   Class.prototype.hint = function() {
     return {
-      error: error
+      error: error,
+      errorOnce: errorOnce
     };
   };
 
