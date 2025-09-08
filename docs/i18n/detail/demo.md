@@ -696,7 +696,7 @@
               {
                 "alt": "error",
                 "pid": 3,
-                "src": "",
+                "src": "error.png",
               },
               {
                 "alt": "universe",
