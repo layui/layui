@@ -365,8 +365,8 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
     });
 
     if(resizeObserver){
-      resizeObserver.observe(options.elem[0], that.position.bind(that));
-      resizeObserver.observe(mainElem[0], that.position.bind(that));
+      resizeObserver.observe(options.elem[0], $.proxy(that.position, that));
+      resizeObserver.observe(mainElem[0], $.proxy(that.position, that));
     }
 
     // 组件打开完毕的事件
