@@ -372,15 +372,8 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
       }
     });
 
-    if(resizeObserver){
-      resizeObserver.observe(options.elem[0], that.position.bind(that));
-      resizeObserver.observe(mainElem[0], that.position.bind(that));
-    }
-
-    that.stopClickOutsideEvent();
-    that.stopResizeEvent();
-    that.stopClickOutsideEvent = that.onClickOutside();
-    that.stopResizeEvent = that.autoUpdatePosition();
+    that.onClickOutside();
+    that.autoUpdatePosition();
 
     // 组件打开完毕的事件
     typeof options.ready === 'function' && options.ready(mainElem, options.elem);
@@ -407,28 +400,17 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
 
     var options = that.config;
     var mainElem = thisModule.findMainElem(id);
-
-    if(resizeObserver){
-      resizeObserver.unobserve(options.elem[0]);
-    }
+    that.stopClickOutsideEvent();
+    that.stopResizeEvent();
 
     // 若存在已打开的面板元素，则移除
     if (mainElem[0]) {
       mainElem.prev('.' + STR_ELEM_SHADE).remove(); // 先移除遮罩
       mainElem.remove();
       options.elem.removeData(MOD_INDEX_OPENED);
-      if(resizeObserver){
-        resizeObserver.unobserve(mainElem[0]);
-      }
-      delete dropdown.thisId;
       typeof options.close === 'function' && options.close(options.elem);
     }
 
-    // 关闭后移除全局事件
-    that.stopResizeEvent();
-    that.stopResizeEvent = $.noop;
-    that.stopClickOutsideEvent();
-    that.stopClickOutsideEvent = $.noop;
   };
 
   Class.prototype.normalizedDelay = function(){
@@ -512,7 +494,9 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
     var isCtxMenu = options.trigger === 'contextmenu';
     var isTopElem = lay.isTopElem(options.elem[0]);
 
-    return lay.onClickOutside(
+    that.stopClickOutsideEvent();
+
+    var stop = lay.onClickOutside(
       that.mainElem[0],
       function (e) {
         // 点击面板外部时的事件
@@ -530,6 +514,11 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
         detectIframe: true
       }
     );
+
+    that.stopClickOutsideEvent = function(){
+      stop();
+      that.stopClickOutsideEvent = $.noop;
+    }
   };
 
   /**
@@ -540,7 +529,9 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
     var that = this;
     var options = that.config;
 
-    var handleResize = function(){
+    that.stopResizeEvent();
+
+    var windowResizeHandler = function(){
       if(that.mainElem && (!that.mainElem[0] || !that.mainElem.is(':visible'))) return;
       if(options.trigger === 'contextmenu'){
         that.remove();
@@ -548,11 +539,24 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
         that.position();
       }
     }
+    $(window).on('resize.lay_dropdown_resize', windowResizeHandler);
 
-    $(window).on('resize.lay_dropdown_resize', handleResize)
+    var shouldObserveResize = resizeObserver && options.trigger !== 'contextmenu';
+    var triggerEl = options.elem[0];
+    var contentEl = that.mainElem[0];
+    if(shouldObserveResize){
+      resizeObserver.observe(triggerEl, $.proxy(that.position, that));
+      resizeObserver.observe(contentEl, $.proxy(that.position, that));
+    }
 
-    return function(){
-      $(window).off('resize.lay_dropdown_resize')
+    that.stopResizeEvent = function(){
+      $(window).off('resize.lay_dropdown_resize', windowResizeHandler);
+      if(shouldObserveResize){
+        resizeObserver.unobserve(triggerEl);
+        resizeObserver.unobserve(contentEl);
+      }
+
+      that.stopResizeEvent = $.noop;
     }
   }
 
