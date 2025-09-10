@@ -9,7 +9,6 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
   var $ = layui.$;
   var laytpl = layui.laytpl;
   var util = layui.util;
-  var lay = layui.lay;
   var hint = layui.hint();
   var i18n = layui.i18n;
   var device = layui.device();
@@ -20,8 +19,6 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
   var MOD_INDEX = 'layui_'+ MOD_NAME +'_index'; // 模块索引名
   var MOD_INDEX_OPENED = MOD_INDEX + '_opened';
   var MOD_ID = 'lay-' + MOD_NAME + '-id';
-
-  var resizeObserver = lay._createResizeObserver(MOD_NAME);
 
   // 外部接口
   var dropdown = {
@@ -364,11 +361,6 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
       }
     });
 
-    if(resizeObserver){
-      resizeObserver.observe(options.elem[0], $.proxy(that.position, that));
-      resizeObserver.observe(mainElem[0], $.proxy(that.position, that));
-    }
-
     // 组件打开完毕的事件
     typeof options.ready === 'function' && options.ready(mainElem, options.elem);
   };
@@ -395,18 +387,11 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
     var options = that.config;
     var mainElem = thisModule.findMainElem(id);
 
-    if(resizeObserver){
-      resizeObserver.unobserve(options.elem[0]);
-    }
-
     // 若存在已打开的面板元素，则移除
     if (mainElem[0]) {
       mainElem.prev('.' + STR_ELEM_SHADE).remove(); // 先移除遮罩
       mainElem.remove();
       options.elem.removeData(MOD_INDEX_OPENED);
-      if(resizeObserver){
-        resizeObserver.unobserve(mainElem[0]);
-      }
       delete dropdown.thisId;
       typeof options.close === 'function' && options.close(options.elem);
     }
