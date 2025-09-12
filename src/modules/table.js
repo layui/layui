@@ -154,6 +154,8 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
 
   var DATA_MOVE_NAME = 'LAY_TABLE_MOVE_DICT';
 
+  var resizeObserver = lay._createResizeObserver(MOD_NAME);
+
   // thead 区域模板
   var TPL_HEADER = function(options){
     var rowCols = '{{#var colspan = layui.type(item2.colspan2) === \'number\' ? item2.colspan2 : item2.colspan; if(colspan){}} colspan="{{=colspan}}"{{#} if(item2.rowspan){}} rowspan="{{=item2.rowspan}}"{{#}}}';
@@ -288,6 +290,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     var that = this;
     that.index = ++table.index;
     that.config = $.extend({}, that.config, table.config, options);
+    that.unobserveResize = $.noop;
     that.render();
   };
 
@@ -317,6 +320,11 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     var id = options.id = 'id' in options ? options.id : (
       options.elem.attr('id') || that.index
     );
+
+    // 重复 render 时清理旧实例
+    if(thisTable.that[id] && thisTable.that[id] !== that){
+      thisTable.that[id].dispose();
+    }
 
     thisTable.that[id] = that; // 记录当前实例对象
     thisTable.config[id] = options; // 记录当前实例配置项
@@ -460,6 +468,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
 
     that.pullData(that.page); // 请求数据
     that.events(); // 事件
+    that.observeResize(); // 观察尺寸变化
   };
 
   // 根据列类型，定制化参数
@@ -1522,6 +1531,11 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
       that.haveInit = true;
 
       layer.close(that.tipsIndex);
+
+      // reloadData 或 renderData 时，tbody 高度可能不变，需要主动同步
+      if(that.needSyncFixedColHeight && (opts.type === 'reloadData' || opts.type === 'renderData')){
+        that.syncFixedColHeight();
+      }
     };
 
     table.cache[that.key] = data; //记录数据
@@ -2919,6 +2933,84 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
       return size.boxSizing === 'border-box'
         ? size.width - size.paddingLeft - size.paddingRight - size.borderLeftWidth - size.borderRightWidth
         : size.width
+    }
+  };
+
+  Class.prototype.dispose = function(){
+    var that = this;
+
+    that.unobserveResize();
+    for (const propName in that) {
+      if(lay.hasOwn(that, propName) && propName !== 'config'){
+        that[propName] = null;
+      }
+    }
+
+  }
+
+  Class.prototype.syncFixedColHeight = function(){
+    var that = this;
+
+    var tableElem = that.layMain.children('table');
+    var leftTrs = that.layFixLeft.find('>.layui-table-body>table>tbody>tr');
+    var rightTrs = that.layFixRight.find('>.layui-table-body>table>tbody>tr');
+    var mainTrs = tableElem.find('>tbody>tr');
+
+    // 批量获取主表格行高，设置高度以优化性能
+    var heights = [];
+    mainTrs.each(function() {
+      heights.push(that.getElementSize(this).height);
+    });
+
+    if (leftTrs.length) {
+      leftTrs.each(function(i) {
+        if (heights[i]) {
+          this.style.height = heights[i] + 'px';
+        }
+      });
+    }
+    
+    if (rightTrs.length) {
+      rightTrs.each(function(i) {
+        if (heights[i]) {
+          this.style.height = heights[i] + 'px';
+        }
+      });
+    }
+  }
+
+  Class.prototype.observeResize = function(){
+    var that = this;
+    
+    if(!resizeObserver) return;
+
+    that.unobserveResize();
+
+    var el = that.elem[0];
+    var tableEl = that.layMain.children('table')[0];
+    // 显示或隐藏时重置列宽
+    resizeObserver.observe(el, $.proxy(that.resize, that));
+
+    // 同步固定列表格和主表格高度
+    var lineStyle = that.config.lineStyle;
+    var isAutoHeight = lineStyle && /\bheight\s*:\s*auto\b/g.test(lineStyle);
+    // 只重载数据时需要主动同步高度，因为 tbody 大小可能不变
+    var needSyncFixedColHeight = that.needSyncFixedColHeight = (that.layBody.length > 1) && (that.config.syncFixedRowHeight || (that.config.syncFixedRowHeight !== false && isAutoHeight));
+
+    if(needSyncFixedColHeight){
+      resizeObserver.observe(
+        tableEl, 
+        $.proxy(that.syncFixedColHeight, that)
+      );
+    }
+
+    that.unobserveResize = function(){
+      resizeObserver.unobserve(el);
+      if(needSyncFixedColHeight){
+        resizeObserver.unobserve(tableEl);
+      }
+
+      that.unobserveResize = $.noop;
     }
   };
 

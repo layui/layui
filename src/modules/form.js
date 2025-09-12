@@ -8,6 +8,7 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
   var $ = layui.$;
   var layer = layui.layer;
   var util = layui.util;
+  var lay = layui.lay;
   var hint = layui.hint();
   var device = layui.device();
   var i18n = layui.i18n;
@@ -20,6 +21,8 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
   var DISABLED = 'layui-disabled';
   var OUT_OF_RANGE = 'layui-input-number-out-of-range';
   var BAD_INPUT = 'layui-input-number-invalid';
+
+  var resizeObserver = lay._createResizeObserver(MOD_NAME);
 
   // ie8 中可以获取到 input 元素的 'indeterminate' 属性描述符，但重新定义 getter/setter 无效，无报错
   // AppleWebKit/537.36 无法获取 input 元素任意属性的属性描述符(包括lookupGetter)，但可以重新定义 getter/setter
@@ -523,6 +526,9 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
 
               updatePosition();
               $(window).on('resize.lay_select_resize', updatePosition);
+              if(resizeObserver){
+                resizeObserver.observe(reElem[0], updatePosition);
+              }
             }
             var top = reElem.offset().top + reElem.outerHeight() + 5 - $win.scrollTop();
             var dlHeight = dl.outerHeight();
@@ -575,6 +581,9 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
             if(isAppendTo){
               reElem.detach();
               $(window).off('resize.lay_select_resize');
+              if(resizeObserver){
+                resizeObserver.unobserve(reElem[0]);
+              }
             }
 
             if(choose) return;

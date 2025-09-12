@@ -257,6 +257,16 @@ height: function(){
 <td>-</td>
     </tr>
     <tr>
+<td>syncFixedRowHeight <sup>2.12+ 实验性</sup></td>
+<td>
+
+是否强制计算表格主区域的行高度并同步到固定列区域。开启后会对表格性能有一定的影响，仅适用于行高度自适应的场景。
+
+</td>
+<td>boolean</td>
+<td>-</td>
+    </tr>
+    <tr>
 <td>className <sup>2.7+</sup></td>
 <td>用于给表格主容器追加 css 类名，以便更好地扩展表格样式</td>
 <td>string</td>
