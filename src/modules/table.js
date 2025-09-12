@@ -2993,7 +2993,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
 
     // 同步固定列表格和主表格高度
     var lineStyle = that.config.lineStyle;
-    var isAutoHeight = lineStyle && (/\bheight\s*:\s*auto\b/g.test(lineStyle) || lineStyle.indexOf('max-height') !== -1);
+    var isAutoHeight = lineStyle && /\bheight\s*:\s*auto\b/g.test(lineStyle);
     // 只重载数据时需要主动同步高度，因为 tbody 大小可能不变
     var needSyncFixedColHeight = that.needSyncFixedColHeight = (that.layBody.length > 1) && (that.config.syncFixedRowHeight || (that.config.syncFixedRowHeight !== false && isAutoHeight));
 
