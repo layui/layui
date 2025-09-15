@@ -434,7 +434,7 @@ highlightLine: {
 333
 ```
 
-highlightLine 选项的详细用法可参考：<a href="https://stackblitz.com/edit/iw6hx7mi?file=index.html" rel="nofollow" target="_blank">highlightLine 行高亮在线示例</a>
+highlightLine 选项的详细用法可参考：<a href="https://github.com/layui/layui/blob/main/examples/code.html" rel="nofollow" target="_blank">highlightLine 行高亮在线示例</a>
 
 </td>
     </tr>
