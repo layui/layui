@@ -151,6 +151,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
   var ELEM_TOOL_PANEL = 'layui-table-tool-panel';
   var ELEM_EXPAND = 'layui-table-expanded';
   var DISABLED_TRANSITION = 'layui-table-disabled-transition';
+  var FIXED_HEIGHT_PATCH = 'layui-table-fixed-height-patch';
 
   var DATA_MOVE_NAME = 'LAY_TABLE_MOVE_DICT';
 
@@ -631,6 +632,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
 
     // 自定义 css 属性
     if (options.css) text.push(options.css);
+    text.push('.' + FIXED_HEIGHT_PATCH + '{height:auto;}');
 
     // 生成 style
     lay.style({
@@ -1533,8 +1535,8 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
       layer.close(that.tipsIndex);
 
       // reloadData 或 renderData 时，tbody 高度可能不变，需要主动同步
-      if(that.needSyncFixedColHeight && (opts.type === 'reloadData' || opts.type === 'renderData')){
-        that.syncFixedColHeight();
+      if(that.needSyncFixedRowHeight && (opts.type === 'reloadData' || opts.type === 'renderData')){
+        that.calcFixedRowHeight();
       }
     };
 
@@ -2544,12 +2546,20 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
       var othis = $(this);
       var index = othis.index();
       if(othis.data('off')) return; // 不触发事件
-      that.layBody.find('tr:eq('+ index +')').addClass(ELEM_HOVER)
+      var trsElem = that.layBody.find('tr:eq('+ index +')');
+      trsElem.addClass(ELEM_HOVER);
+      if(that.needSyncFixedRowHeight){
+        that.fixedRowHeightPatchOnHover(this, trsElem, true);
+      }
     }).on('mouseleave', 'tr', function(){ // 鼠标移出行
       var othis = $(this);
       var index = othis.index();
       if(othis.data('off')) return; // 不触发事件
-      that.layBody.find('tr:eq('+ index +')').removeClass(ELEM_HOVER)
+      var trsElem = that.layBody.find('tr:eq('+ index +')');
+      trsElem.removeClass(ELEM_HOVER);
+      if(that.needSyncFixedRowHeight){
+        that.fixedRowHeightPatchOnHover(this, trsElem, false);
+      }
     }).on('click', 'tr', function(e){ // 单击行
       setRowEvent.call(this, 'row', e);
     }).on('dblclick', 'tr', function(e){ // 双击行
@@ -2948,7 +2958,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
 
   }
 
-  Class.prototype.syncFixedColHeight = function(){
+  Class.prototype.calcFixedRowHeight = function(){
     var that = this;
 
     var tableElem = that.layMain.children('table');
@@ -2979,6 +2989,41 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     }
   }
 
+  // 鼠标悬停于某一列纵向移动时，若单元格会出现横向滚动条，此时 tbody 高度不变，需要修复行高
+  Class.prototype.fixedRowHeightPatchOnHover = function (targetEl, trsElem, isEnter) {
+    var that = this;
+    var style = that.elem.children('style')[0];
+    var selector = '.' + FIXED_HEIGHT_PATCH;
+    
+    trsElem.toggleClass(FIXED_HEIGHT_PATCH, isEnter);
+    // 将当前鼠标悬停行的高度同步到 FIXED_HEIGHT_PATCH （所有区域）类名的样式中
+    if (isEnter) {
+      lay.getStyleRules(style, function (item) {
+        if (item.selectorText === selector) {
+          item.style.setProperty('height', that.getElementSize(targetEl).height + 'px', 'important');
+        }
+      })
+    } else {
+      // 将当前鼠标悬停行主区域的行高同步到固定列行
+      var height;
+      lay.getStyleRules(style, function (item) {
+        if (item.selectorText === selector) {
+          item.style.setProperty('height', 'auto');
+        }
+      })
+      trsElem = trsElem.filter(function () {
+        var tr = $(this);
+        var isFixed = tr.closest(ELEM_FIXED, that.layBox).length > 0;
+        if (!isFixed) {
+          height = that.getElementSize(tr[0]).height;
+        }
+        return isFixed;
+      })
+
+      trsElem.css('height', height);
+    }
+  }
+
   Class.prototype.observeResize = function(){
     var that = this;
     
@@ -2995,18 +3040,18 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     var lineStyle = that.config.lineStyle;
     var isAutoHeight = lineStyle && /\bheight\s*:\s*auto\b/g.test(lineStyle);
     // 只重载数据时需要主动同步高度，因为 tbody 大小可能不变
-    var needSyncFixedColHeight = that.needSyncFixedColHeight = (that.layBody.length > 1) && (that.config.syncFixedRowHeight || (that.config.syncFixedRowHeight !== false && isAutoHeight));
+    var needSyncFixedRowHeight = that.needSyncFixedRowHeight = (that.layBody.length > 1) && (that.config.syncFixedRowHeight || (that.config.syncFixedRowHeight !== false && isAutoHeight));
 
-    if(needSyncFixedColHeight){
+    if(needSyncFixedRowHeight){
       resizeObserver.observe(
         tableEl, 
-        $.proxy(that.syncFixedColHeight, that)
+        $.proxy(that.calcFixedRowHeight, that)
       );
     }
 
     that.unobserveResize = function(){
       resizeObserver.unobserve(el);
-      if(needSyncFixedColHeight){
+      if(needSyncFixedRowHeight){
         resizeObserver.unobserve(tableEl);
       }
 

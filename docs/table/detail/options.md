@@ -261,6 +261,7 @@ height: function(){
 <td>
 
 是否强制计算表格主区域的行高度并同步到固定列区域。开启后会对表格性能有一定的影响，仅适用于行高度自适应的场景。
+该功能使用 [ResizeObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/ResizeObserver) 实现，如果你的浏览器不支持 `ResizeObserver`，可以尝试添加 [polyfill](https://github.com/que-etc/resize-observer-polyfill) 来解决兼容性问题。
 
 </td>
 <td>boolean</td>
