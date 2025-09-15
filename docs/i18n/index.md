@@ -103,12 +103,8 @@ i18n.set({
 });
 ```
 
-为了节省时间，也可以借助「**第三方提供并维护**的 Layui 多语言 AI 翻译工具」直接生成不同语言的消息文本，如：
-
-| 翻译工具 | 提供者 |
-| --- | --- |
-| <a href="https://gitee.com/mail_osc/translate/tree/master/extend/layui-i18n-object-translate" target="_blank">https://gitee.com/mail_osc/translate/tree/master/extend/layui-i18n-object-translate</a> | <a href="https://github.com/xnx3" target="_blank">@xnx3</a> |
+对消息文本进行翻译时，为了节省时间，你可以使用 AI 直接生成不同语言的消息文本，或者使用第三方提供的 Layui 多语言 AI 翻译工具（如：<a href="https://gitee.com/mail_osc/translate/tree/master/extend/layui-i18n-object-translate" target="_blank">https://gitee.com/mail_osc/translate/tree/master/extend/layui-i18n-object-translate</a> By <a href="https://github.com/xnx3" target="_blank">@xnx3</a>）。
 
 ## 💖 心语
 
-i18n 模块是在众多开发者的广泛需求背景下开发的，该模块通过简练的设计，为 Layui 组件实现了多语言的无缝接入，并且兼容了一些原本自带简单多语言或消息配置的组件，从而使 Layui 2.x 版本全面支持国际化。
+i18n 模块是在众多开发者的广泛需求背景下完成开发，它通过简练的设计，为 Layui 组件实现了多语言的无缝接入，并且兼容了一些原本自带简单多语言或消息配置的组件，从而使 Layui 2 系列版本正式全面支持国际化。
