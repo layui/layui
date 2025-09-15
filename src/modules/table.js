@@ -1532,12 +1532,12 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
       }, 50);
       that.haveInit = true;
 
-      layer.close(that.tipsIndex);
-
       // reloadData 或 renderData 时，tbody 高度可能不变，需要主动同步
-      if(that.needSyncFixedRowHeight && (opts.type === 'reloadData' || opts.type === 'renderData')){
+      if(that.needSyncFixedRowHeight){
         that.calcFixedRowHeight();
       }
+
+      layer.close(that.tipsIndex);
     };
 
     table.cache[that.key] = data; //记录数据
