@@ -2556,7 +2556,9 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
           '.layui-form-checkbox',
           '.layui-form-switch',
           '.layui-form-radio',
-          '[lay-unrow]'
+          '[lay-unrow]',
+          '[lay-type="layTableCheckbox"]',
+          '[lay-type="layTableRadio"]'
         ].join(',');
 
         if($(e.target).is(UNROW) || $(e.target).closest(UNROW)[0]){
