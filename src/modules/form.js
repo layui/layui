@@ -1036,7 +1036,7 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
           reElem.on('click', function(){
              var hasLabel = check.closest('label').length;
              if(!hasLabel){
-               check.trigger(clickEventName);
+               check.trigger('click');
              }
           })
 
@@ -1159,7 +1159,7 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
           reElem.on('click', function(){
              var hasLabel = radio.closest('label').length;
              if(!hasLabel){
-               radio.trigger(clickEventName);
+               radio.trigger('click');
              }
           })
 
