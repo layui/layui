@@ -1140,12 +1140,18 @@ layer.getFrameIndex = function(name){
 // iframe 层自适应宽高
 layer.iframeAuto = function(index){
   if(!index) return;
-  var heg = layer.getChildFrame('html', index).outerHeight();
   var layero = $('#'+ doms[0] + index);
-  var titHeight = layero.find(doms[1]).outerHeight() || 0;
+  var options = layero.data('config');
+  var iframeHeight = layer.getChildFrame('html', index).outerHeight();
+  var titleHeight = layero.find(doms[1]).outerHeight() || 0;
   var btnHeight = layero.find('.'+doms[6]).outerHeight() || 0;
-  layero.css({height: heg + titHeight + btnHeight});
-  layero.find('iframe').css({height: heg});
+  var maxHeight = 'maxHeight' in options ? options.maxHeight : $(window).height();
+  if(maxHeight){
+    iframeHeight = Math.min(iframeHeight, maxHeight - titleHeight - btnHeight);
+  }
+  layero.css({height: iframeHeight + titleHeight + btnHeight});
+  layero.find('iframe').css({height: iframeHeight});
+  options = null;
 };
 
 // 重置 iframe url
