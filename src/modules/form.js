@@ -1012,7 +1012,6 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
           // 勾选
           // 通过重新赋值触发美化元素样式更新
           check.off(clickEventName).on(clickEventName, function(e){
-            layui.stope(e);
             var filter = check.attr('lay-filter') // 获取过滤器
 
             // 禁用
@@ -1143,8 +1142,7 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
           var radio = $(this);
           var ANIM = 'layui-anim-scaleSpring';
 
-          radio.off(clickEventName).on(clickEventName, function(e){
-            layui.stope(e);
+          radio.off(clickEventName).on(clickEventName, function(){
             var filter = radio.attr('lay-filter'); // 获取过滤器
 
             if(radio[0].disabled) return;
