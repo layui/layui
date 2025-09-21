@@ -836,6 +836,113 @@
       .replace(/\&amp;/g, '&');
   };
 
+  /**
+   * 生成唯一的 ID 字符串
+   * @param {string} prefix ID前缀，默认为'id'
+   * @returns {string} 唯一ID字符串
+   */
+  var generateUniqueId = (function () {
+    var counter = 0;
+    var lastTimestamp = null;
+
+    return function (prefix) {
+      prefix = prefix || 'id';
+      var timestamp = new Date().getTime();
+
+      // 如果时间戳与上一次相同，增加计数器
+      // 否则重置计数器
+      if (timestamp === lastTimestamp) {
+        counter++;
+      } else {
+        counter = 0;
+        lastTimestamp = timestamp;
+      }
+
+      // 结合时间戳、随机数和计数器生成ID
+      var random = Math.floor(Math.random() * 10000);
+
+      return prefix + '-' + timestamp + '-' + random + '-' + counter;
+    };
+  })();
+
+  /**
+   * 创建全局 ResizeObserver 实例
+   * @param {string} namespace 命名空间，用于区分不同的 ResizeObserver 实例
+   * @returns {ResizeObserver | null} 全局 ResizeObserver 实例或 null（如果不支持）
+   */
+  lay._createResizeObserver = function (namespace) {
+    if (typeof window.ResizeObserver === 'undefined') {
+      console.log && console.log('ResizeObserver is not supported in this browser');
+      return null;
+    }
+
+    var ATTR_NAME = 'lay-' + namespace + '-resizeobserver-key';
+    var handlerCache = {};
+
+    var o = new ResizeObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        var attrValue = entries[i].target.getAttribute(ATTR_NAME);
+
+        if (attrValue) {
+          var callback = handlerCache[attrValue];
+          if (typeof callback === 'function') {
+            callback(entries[i]);
+          }
+        }
+      }
+    });
+
+    return Object.freeze({
+      observe: function (element, callback) {
+        if (!element || !(element instanceof Element)) {
+          console.log && console.log('createResizeObserver: Cannot observe non-Element.');
+          return;
+        }
+
+        var attrValue = element.getAttribute(ATTR_NAME);
+        if (!attrValue) {
+          attrValue = generateUniqueId(namespace);
+          element.setAttribute(ATTR_NAME, attrValue);
+        }
+
+        // 使用同一个观察者实例多次观察同一个元素，不会重复添加
+        handlerCache[attrValue] = callback;
+        o.observe(element);
+      },
+      unobserve: function (element) {
+        if (!element || !(element instanceof Element)) {
+          console.log && console.log('createResizeObserver: Cannot unobserve non-Element.');
+          return;
+        }
+
+        var attrValue = element.getAttribute(ATTR_NAME);
+        if (!attrValue) {
+          return;
+        }
+
+        // 清除相关回调
+        if (handlerCache[attrValue]) {
+          delete handlerCache[attrValue];
+        }
+
+        element.removeAttribute(ATTR_NAME);
+        o.unobserve(element);
+      },
+      disconnect: function () {
+        for (var key in handlerCache) {
+          if (lay.hasOwn(handlerCache,key)) {
+            delete handlerCache[key];
+            var elem = document.querySelector('[' + ATTR_NAME + '="' + key + '"]');
+            if(elem){
+              elem.removeAttribute(ATTR_NAME);
+            }
+          }
+        }
+        o.disconnect();
+      }
+    });
+  };
+
 
   /*
    * lay 元素操作
