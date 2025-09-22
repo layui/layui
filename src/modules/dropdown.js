@@ -486,7 +486,6 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
 
   /**
    * 点击面板外部时的事件
-   * @returns {() => void} 返回一个函数，用于取消事件
    */
   Class.prototype.onClickOutside = function () {
     var that = this;
@@ -523,7 +522,6 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
 
   /**
    * 窗口大小变化时自动更新位置
-   * @returns {() => void} 返回一个函数，用于取消事件
    */
   Class.prototype.autoUpdatePosition = function(){
     var that = this;

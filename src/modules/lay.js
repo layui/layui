@@ -872,7 +872,7 @@
    */
   lay._createResizeObserver = function (namespace) {
     if (typeof window.ResizeObserver === 'undefined') {
-      console.log && console.log('ResizeObserver is not supported in this browser');
+      window.console && console.log('ResizeObserver is not supported in this browser');
       return null;
     }
 
@@ -895,7 +895,7 @@
     return Object.freeze({
       observe: function (element, callback) {
         if (!element || !(element instanceof Element)) {
-          console.log && console.log('createResizeObserver: Cannot observe non-Element.');
+          window.console && console.log('createResizeObserver: Cannot observe non-Element.');
           return;
         }
 
@@ -911,7 +911,7 @@
       },
       unobserve: function (element) {
         if (!element || !(element instanceof Element)) {
-          console.log && console.log('createResizeObserver: Cannot unobserve non-Element.');
+          window.console && console.log('createResizeObserver: Cannot unobserve non-Element.');
           return;
         }
 
