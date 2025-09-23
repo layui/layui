@@ -667,64 +667,10 @@ Class.pt.auto = function(index){
 // 计算坐标
 Class.pt.offset = function(){
   var that = this, config = that.config, layero = that.layero;
-  var area = [layero.outerWidth(), layero.outerHeight()];
-  var type = typeof config.offset === 'object';
-  that.offsetTop = (win.height() - area[1])/2;
-  that.offsetLeft = (win.width() - area[0])/2;
+  var coords = ready.updatePosition(layero, config);
 
-  if(type){
-    that.offsetTop = config.offset[0];
-    that.offsetLeft = config.offset[1]||that.offsetLeft;
-  } else if(config.offset !== 'auto'){
-
-    if(config.offset === 't'){ // 上
-      that.offsetTop = 0;
-    } else if(config.offset === 'r'){ // 右
-      that.offsetLeft = win.width() - area[0];
-    } else if(config.offset === 'b'){ // 下
-      that.offsetTop = win.height() - area[1];
-    } else if(config.offset === 'l'){ // 左
-      that.offsetLeft = 0;
-    } else if(config.offset === 'lt'){ // 左上
-      that.offsetTop = 0;
-      that.offsetLeft = 0;
-    } else if(config.offset === 'lb'){ // 左下
-      that.offsetTop = win.height() - area[1];
-      that.offsetLeft = 0;
-    } else if(config.offset === 'rt'){ // 右上
-      that.offsetTop = 0;
-      that.offsetLeft = win.width() - area[0];
-    } else if(config.offset === 'rb'){ // 右下
-      that.offsetTop = win.height() - area[1];
-      that.offsetLeft = win.width() - area[0];
-    } else {
-      that.offsetTop = config.offset;
-    }
-
-  }
-
-  if(!config.fixed){
-    that.offsetTop = /%$/.test(that.offsetTop) ?
-      win.height()*parseFloat(that.offsetTop)/100
-    : parseFloat(that.offsetTop);
-    that.offsetLeft = /%$/.test(that.offsetLeft) ?
-      win.width()*parseFloat(that.offsetLeft)/100
-    : parseFloat(that.offsetLeft);
-    that.offsetTop += win.scrollTop();
-    that.offsetLeft += win.scrollLeft();
-  }
-
-  // 最小化窗口时的自适应
-  if(layero.data('maxminStatus') === 'min'){
-    that.offsetTop = win.height() - (layero.find(doms[1]).outerHeight() || 0);
-    that.offsetLeft = layero.css('left');
-  }
-
-  // 设置坐标
-  layero.css({
-    top: that.offsetTop,
-    left: that.offsetLeft
-  });
+  that.offsetTop = coords.offsetTop;
+  that.offsetLeft = coords.offsetLeft;
 };
 
 // Tips
@@ -1121,6 +1067,70 @@ ready.promiseLikeResolve = function(value){
   return deferred.promise();
 }
 
+ready.updatePosition = function(layero, config){
+  var area = [layero.outerWidth(), layero.outerHeight()];
+  var coords = {
+    offsetTop: (win.height() - area[1])/2,
+    offsetLeft: (win.width() - area[0])/2
+  };
+
+  if(typeof config.offset === 'object'){
+    coords.offsetTop = config.offset[0];
+    coords.offsetLeft = config.offset[1] || coords.offsetLeft;
+  } else if(config.offset !== 'auto'){
+
+    if(config.offset === 't'){ // 上
+      coords.offsetTop = 0;
+    } else if(config.offset === 'r'){ // 右
+      coords.offsetLeft = win.width() - area[0];
+    } else if(config.offset === 'b'){ // 下
+      coords.offsetTop = win.height() - area[1];
+    } else if(config.offset === 'l'){ // 左
+      coords.offsetLeft = 0;
+    } else if(config.offset === 'lt'){ // 左上
+      coords.offsetTop = 0;
+      coords.offsetLeft = 0;
+    } else if(config.offset === 'lb'){ // 左下
+      coords.offsetTop = win.height() - area[1];
+      coords.offsetLeft = 0;
+    } else if(config.offset === 'rt'){ // 右上
+      coords.offsetTop = 0;
+      coords.offsetLeft = win.width() - area[0];
+    } else if(config.offset === 'rb'){ // 右下
+      coords.offsetTop = win.height() - area[1];
+      coords.offsetLeft = win.width() - area[0];
+    } else {
+      coords.offsetTop = config.offset;
+    }
+
+  }
+
+  if(!config.fixed){
+    coords.offsetTop = /%$/.test(coords.offsetTop) ?
+      win.height()*parseFloat(coords.offsetTop)/100
+    : parseFloat(coords.offsetTop);
+    coords.offsetLeft = /%$/.test(coords.offsetLeft) ?
+      win.width()*parseFloat(coords.offsetLeft)/100
+    : parseFloat(coords.offsetLeft);
+    coords.offsetTop += win.scrollTop();
+    coords.offsetLeft += win.scrollLeft();
+  }
+
+  // 最小化窗口时的自适应
+  if(layero.data('maxminStatus') === 'min'){
+    coords.offsetTop = win.height() - (layero.find(doms[1]).outerHeight() || 0);
+    coords.offsetLeft = layero.css('left');
+  }
+
+  // 设置坐标
+  layero.css({
+    top: coords.offsetTop,
+    left: coords.offsetLeft
+  });
+
+  return coords;
+};
+
 /** 内置成员 */
 
 window.layer = layer;
@@ -1151,7 +1161,8 @@ layer.iframeAuto = function(index){
   }
   layero.css({height: iframeHeight + titleHeight + btnHeight});
   layero.find('iframe').css({height: iframeHeight});
-  options = null;
+
+  ready.updatePosition(layero, options);
 };
 
 // 重置 iframe url
