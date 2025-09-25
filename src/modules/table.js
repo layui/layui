@@ -151,8 +151,11 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
   var ELEM_TOOL_PANEL = 'layui-table-tool-panel';
   var ELEM_EXPAND = 'layui-table-expanded';
   var DISABLED_TRANSITION = 'layui-table-disabled-transition';
+  var FIXED_HEIGHT_PATCH = 'layui-table-fixed-height-patch';
 
   var DATA_MOVE_NAME = 'LAY_TABLE_MOVE_DICT';
+
+  var resizeObserver = lay._createResizeObserver(MOD_NAME);
 
   // thead 区域模板
   var TPL_HEADER = function(options){
@@ -288,6 +291,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     var that = this;
     that.index = ++table.index;
     that.config = $.extend({}, that.config, table.config, options);
+    that.unobserveResize = $.noop;
     that.render();
   };
 
@@ -317,6 +321,11 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     var id = options.id = 'id' in options ? options.id : (
       options.elem.attr('id') || that.index
     );
+
+    // 重复 render 时清理旧实例
+    if(thisTable.that[id] && thisTable.that[id] !== that){
+      thisTable.that[id].dispose();
+    }
 
     thisTable.that[id] = that; // 记录当前实例对象
     thisTable.config[id] = options; // 记录当前实例配置项
@@ -460,6 +469,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
 
     that.pullData(that.page); // 请求数据
     that.events(); // 事件
+    that.observeResize(); // 观察尺寸变化
   };
 
   // 根据列类型，定制化参数
@@ -622,6 +632,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
 
     // 自定义 css 属性
     if (options.css) text.push(options.css);
+    text.push('.' + FIXED_HEIGHT_PATCH + '{height:auto;}');
 
     // 生成 style
     lay.style({
@@ -1520,6 +1531,11 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
         that.scrollPatch();
       }, 50);
       that.haveInit = true;
+
+      // reloadData 或 renderData 时，tbody 高度可能不变，需要主动同步
+      if(that.needSyncFixedRowHeight){
+        that.calcFixedRowHeight();
+      }
 
       layer.close(that.tipsIndex);
     };
@@ -2530,12 +2546,20 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
       var othis = $(this);
       var index = othis.index();
       if(othis.data('off')) return; // 不触发事件
-      that.layBody.find('tr:eq('+ index +')').addClass(ELEM_HOVER)
+      var trsElem = that.layBody.find('tr:eq('+ index +')');
+      trsElem.addClass(ELEM_HOVER);
+      if(that.needSyncFixedRowHeight){
+        that.fixedRowHeightPatchOnHover(this, trsElem, true);
+      }
     }).on('mouseleave', 'tr', function(){ // 鼠标移出行
       var othis = $(this);
       var index = othis.index();
       if(othis.data('off')) return; // 不触发事件
-      that.layBody.find('tr:eq('+ index +')').removeClass(ELEM_HOVER)
+      var trsElem = that.layBody.find('tr:eq('+ index +')');
+      trsElem.removeClass(ELEM_HOVER);
+      if(that.needSyncFixedRowHeight){
+        that.fixedRowHeightPatchOnHover(this, trsElem, false);
+      }
     }).on('click', 'tr', function(e){ // 单击行
       setRowEvent.call(this, 'row', e);
     }).on('dblclick', 'tr', function(e){ // 双击行
@@ -2919,6 +2943,119 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
       return size.boxSizing === 'border-box'
         ? size.width - size.paddingLeft - size.paddingRight - size.borderLeftWidth - size.borderRightWidth
         : size.width
+    }
+  };
+
+  Class.prototype.dispose = function(){
+    var that = this;
+
+    that.unobserveResize();
+    for (const propName in that) {
+      if(lay.hasOwn(that, propName) && propName !== 'config'){
+        that[propName] = null;
+      }
+    }
+
+  }
+
+  Class.prototype.calcFixedRowHeight = function(){
+    var that = this;
+
+    var tableElem = that.layMain.children('table');
+    var leftTrs = that.layFixLeft.find('>.layui-table-body>table>tbody>tr');
+    var rightTrs = that.layFixRight.find('>.layui-table-body>table>tbody>tr');
+    var mainTrs = tableElem.find('>tbody>tr');
+
+    // 批量获取主表格行高，设置高度以优化性能
+    var heights = [];
+    mainTrs.each(function() {
+      heights.push(that.getElementSize(this).height);
+    });
+
+    if (leftTrs.length) {
+      leftTrs.each(function(i) {
+        if (heights[i]) {
+          this.style.height = heights[i] + 'px';
+        }
+      });
+    }
+    
+    if (rightTrs.length) {
+      rightTrs.each(function(i) {
+        if (heights[i]) {
+          this.style.height = heights[i] + 'px';
+        }
+      });
+    }
+  }
+
+  // 鼠标悬停于某一列纵向移动时，若单元格会出现横向滚动条，此时 tbody 高度不变，需要修复行高
+  Class.prototype.fixedRowHeightPatchOnHover = function (targetEl, trsElem, isEnter) {
+    var that = this;
+    var style = that.elem.children('style')[0];
+    var selector = '.' + FIXED_HEIGHT_PATCH;
+    
+    trsElem.toggleClass(FIXED_HEIGHT_PATCH, isEnter);
+    // 将当前鼠标悬停行的高度同步到 FIXED_HEIGHT_PATCH （所有区域）类名的样式中
+    if (isEnter) {
+      lay.getStyleRules(style, function (item) {
+        if (item.selectorText === selector) {
+          item.style.setProperty('height', that.getElementSize(targetEl).height + 'px', 'important');
+        }
+      })
+    } else {
+      // 将当前鼠标悬停行主区域的行高同步到固定列行
+      var height;
+      lay.getStyleRules(style, function (item) {
+        if (item.selectorText === selector) {
+          item.style.setProperty('height', 'auto');
+        }
+      })
+      trsElem = trsElem.filter(function () {
+        var tr = $(this);
+        var isFixed = tr.closest(ELEM_FIXED, that.layBox).length > 0;
+        if (!isFixed) {
+          height = that.getElementSize(tr[0]).height;
+        }
+        return isFixed;
+      })
+
+      trsElem.css('height', height);
+    }
+  }
+
+  Class.prototype.observeResize = function(){
+    var that = this;
+    
+    if(!resizeObserver) return;
+
+    that.unobserveResize();
+
+    var el = that.elem[0];
+    var tableEl = that.layMain.children('table')[0];
+    // 显示或隐藏时重置列宽
+    resizeObserver.observe(el, $.proxy(that.resize, that));
+
+    // 同步固定列表格和主表格高度
+    var lineStyle = that.config.lineStyle;
+    var isAutoHeight = lineStyle && /\bheight\s*:\s*auto\b/g.test(lineStyle);
+    // 只重载数据时需要主动同步高度，因为 tbody 大小可能不变
+    var needSyncFixedRowHeight = that.needSyncFixedRowHeight = (that.layBody.length > 1) && (that.config.syncFixedRowHeight || (that.config.syncFixedRowHeight !== false && isAutoHeight));
+
+    if(needSyncFixedRowHeight){
+      resizeObserver.observe(
+        tableEl, 
+        $.proxy(that.calcFixedRowHeight, that)
+      );
+    }
+
+    that.unobserveResize = function(){
+      resizeObserver.unobserve(el);
+      if(needSyncFixedRowHeight){
+        resizeObserver.unobserve(tableEl);
+      }
+
+      that.unobserveResize = $.noop;
     }
   };
 
