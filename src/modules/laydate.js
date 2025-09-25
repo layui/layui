@@ -2161,14 +2161,18 @@ layui.define(['lay', 'i18n'], function(exports) {
 
     // 预览颜色渐变
     var oldValue = elemPreview.html();
-    oldValue && (elemPreview.css({
-      'color': '#16b777'
-    }),
-    setTimeout(function(){
+    if (oldValue) {
+      var color = layui.type(options.theme) === 'array' ? options.theme[0] : options.theme;
       elemPreview.css({
-        'color': '#777'
+        'color': /^#/.test(String(color)) ? color : '#16b777'
       });
-    }, 300));
+
+      setTimeout(function(){
+        elemPreview.css({
+          'color': '#777'
+        });
+      }, 300);
+    }
   };
 
   // 附加的渲染处理，在 ready 和 change 的时候调用
