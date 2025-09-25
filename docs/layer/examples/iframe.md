@@ -8,7 +8,7 @@
   <button type="button" class="layui-btn layui-btn-primary" lay-on="test-iframe-curl">弹出任意 URL 页面</button>
 </div>
 
-<!-- import layui --> 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var $ = layui.$;
@@ -22,7 +22,7 @@ layui.use(function(){
         type: 2,
         area: ['680px', '520px'],
         content: '/layer/test/iframe.html',
-        fixed: false, // 不固定
+        // fixed: false, // 不固定
         maxmin: true,
         shadeClose: true,
         btn: ['获取表单值', '取消'],
@@ -32,7 +32,7 @@ layui.use(function(){
           var iframeWin =  window[layero.find('iframe')[0]['name']];
           var elemMark = iframeWin.$('#mark'); // 获得 iframe 中某个输入框元素
           var value = elemMark.val();
-          
+
           if($.trim(value) === '') return elemMark.focus();
 
           // 显示获得的值
