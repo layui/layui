@@ -9,6 +9,7 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
   var $ = layui.$;
   var laytpl = layui.laytpl;
   var util = layui.util;
+  var lay = layui.lay;
   var hint = layui.hint();
   var i18n = layui.i18n;
   var device = layui.device();
@@ -19,6 +20,8 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
   var MOD_INDEX = 'layui_'+ MOD_NAME +'_index'; // 模块索引名
   var MOD_INDEX_OPENED = MOD_INDEX + '_opened';
   var MOD_ID = 'lay-' + MOD_NAME + '-id';
+
+  var resizeObserver = lay._createResizeObserver(MOD_NAME);
 
   // 外部接口
   var dropdown = {
@@ -92,6 +95,8 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
     var that = this;
     that.index = ++dropdown.index;
     that.config = $.extend({}, that.config, dropdown.config, options);
+    that.stopClickOutsideEvent = $.noop;
+    that.stopResizeEvent = $.noop;
     that.init();
   };
 
@@ -304,18 +309,25 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
       mainElem.attr('style', options.style);
 
       // 辞旧迎新
-      that.remove(dropdown.thisId);
+      that.remove(options.id);
       options.target.append(mainElem);
       options.elem.data(MOD_INDEX_OPENED, true); // 面板已打开的标记
 
       // 遮罩
       var shade = options.shade ? ('<div class="'+ STR_ELEM_SHADE +'" style="'+ ('z-index:'+ (mainElem.css('z-index')-1) +'; background-color: ' + (options.shade[1] || '#000') + '; opacity: ' + (options.shade[0] || options.shade)) +'"></div>') : '';
-      mainElem.before(shade);
+      var shadeElem = $(shade);
+      // 处理移动端点击穿透问题
+      if(clickOrMousedown === 'touchstart'){
+        shadeElem.on(clickOrMousedown, function(e){
+          e.preventDefault();
+        })
+      }
+      mainElem.before(shadeElem);
 
       // 如果是鼠标移入事件，则鼠标移出时自动关闭
       if(options.trigger === 'mouseenter'){
         mainElem.on('mouseenter', function(){
-          clearTimeout(thisModule.timer);
+          clearTimeout(that.timer);
         }).on('mouseleave', function(){
           that.delayRemove();
         });
@@ -323,7 +335,6 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
     }
 
     that.position(); // 定位坐标
-    dropdown.thisId = options.id; // 当前打开的面板 id
 
     // 阻止全局事件
     mainElem.find('.layui-menu').on(clickOrMousedown, function(e){
@@ -361,6 +372,9 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
       }
     });
 
+    that.onClickOutside();
+    that.autoUpdatePosition();
+
     // 组件打开完毕的事件
     typeof options.ready === 'function' && options.ready(mainElem, options.elem);
   };
@@ -386,15 +400,17 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
 
     var options = that.config;
     var mainElem = thisModule.findMainElem(id);
+    that.stopClickOutsideEvent();
+    that.stopResizeEvent();
 
     // 若存在已打开的面板元素，则移除
     if (mainElem[0]) {
       mainElem.prev('.' + STR_ELEM_SHADE).remove(); // 先移除遮罩
       mainElem.remove();
       options.elem.removeData(MOD_INDEX_OPENED);
-      delete dropdown.thisId;
       typeof options.close === 'function' && options.close(options.elem);
     }
+
   };
 
   Class.prototype.normalizedDelay = function(){
@@ -412,9 +428,9 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
   Class.prototype.delayRemove = function(){
     var that = this;
     var options = that.config;
-    clearTimeout(thisModule.timer);
+    clearTimeout(that.timer);
 
-    thisModule.timer = setTimeout(function(){
+    that.timer = setTimeout(function(){
       that.remove();
     }, that.normalizedDelay().hide);
   };
@@ -434,7 +450,7 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
 
     // 触发元素事件
     options.elem.off(trigger).on(trigger, function(e) {
-      clearTimeout(thisModule.timer);
+      clearTimeout(that.timer);
       that.e = e;
 
       // 主面板是否已打开
@@ -443,7 +459,7 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
       // 若为鼠标移入事件，则延迟触发
       if (isMouseEnter) {
         if (!opened) {
-          thisModule.timer = setTimeout(function(){
+          that.timer = setTimeout(function(){
             that.render();
           }, that.normalizedDelay().show);
         }
@@ -467,6 +483,80 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
       });
     }
   };
+
+  /**
+   * 点击面板外部时的事件
+   */
+  Class.prototype.onClickOutside = function () {
+    var that = this;
+    var options = that.config;
+    var isCtxMenu = options.trigger === 'contextmenu';
+    var isTopElem = lay.isTopElem(options.elem[0]);
+
+    that.stopClickOutsideEvent();
+
+    var stop = lay.onClickOutside(
+      that.mainElem[0],
+      function (e) {
+        // 点击面板外部时的事件
+        if(typeof options.onClickOutside === 'function'){
+          var shouldClose = options.onClickOutside(e);
+          if(shouldClose === false) return;
+        }
+
+        that.remove();
+      },
+      {
+        ignore: (isCtxMenu || isTopElem) ? null : [options.elem[0]],
+        event: clickOrMousedown,
+        capture: false,
+        detectIframe: true
+      }
+    );
+
+    that.stopClickOutsideEvent = function(){
+      stop();
+      that.stopClickOutsideEvent = $.noop;
+    }
+  };
+
+  /**
+   * 窗口大小变化时自动更新位置
+   */
+  Class.prototype.autoUpdatePosition = function(){
+    var that = this;
+    var options = that.config;
+
+    that.stopResizeEvent();
+
+    var windowResizeHandler = function(){
+      if(that.mainElem && (!that.mainElem[0] || !that.mainElem.is(':visible'))) return;
+      if(options.trigger === 'contextmenu'){
+        that.remove();
+      } else {
+        that.position();
+      }
+    }
+    $(window).on('resize.lay_dropdown_resize', windowResizeHandler);
+
+    var shouldObserveResize = resizeObserver && options.trigger !== 'contextmenu';
+    var triggerEl = options.elem[0];
+    var contentEl = that.mainElem[0];
+    if(shouldObserveResize){
+      resizeObserver.observe(triggerEl, $.proxy(that.position, that));
+      resizeObserver.observe(contentEl, $.proxy(that.position, that));
+    }
+
+    that.stopResizeEvent = function(){
+      $(window).off('resize.lay_dropdown_resize', windowResizeHandler);
+      if(shouldObserveResize){
+        resizeObserver.unobserve(triggerEl);
+        resizeObserver.unobserve(contentEl);
+      }
+
+      that.stopResizeEvent = $.noop;
+    }
+  }
 
   // 记录所有实例
   thisModule.that = {}; // 记录所有实例对象
@@ -519,78 +609,6 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
   (function(){
     var _WIN = $(window);
     var _DOC = $(document);
-
-    // 自适应定位
-    _WIN.on('resize', function(){
-      if(!dropdown.thisId) return;
-      var that = thisModule.getThis(dropdown.thisId);
-      if(!that) return;
-
-      if((that.mainElem && !that.mainElem[0]) || !$('.'+ STR_ELEM)[0]){
-        return false;
-      }
-
-      var options = that.config;
-
-      if(options.trigger === 'contextmenu'){
-        that.remove();
-      } else {
-        that.position();
-      }
-    });
-
-
-
-    // 点击任意处关闭
-    lay(_DOC).on(clickOrMousedown, function(e){
-      if(!dropdown.thisId) return;
-      var that = thisModule.getThis(dropdown.thisId)
-      if(!that) return;
-
-      var options = that.config;
-      var isTopElem = lay.isTopElem(options.elem[0]);
-      var isCtxMenu = options.trigger === 'contextmenu';
-
-      // 若触发的是绑定的元素，或者属于绑定元素的子元素，则不关闭
-      // 满足条件：当前绑定的元素是 body document，或者是鼠标右键事件时，忽略绑定元素
-      var isTriggerTarget = !(isTopElem || isCtxMenu) && (options.elem[0] === e.target || options.elem.find(e.target)[0]);
-      var isPanelTarget = that.mainElem && (e.target === that.mainElem[0] || that.mainElem.find(e.target)[0]);
-      if(isTriggerTarget || isPanelTarget) return;
-      // 处理移动端点击穿透问题
-      if(e.type === 'touchstart' && options.elem.data(MOD_INDEX_OPENED)){
-        $(e.target).hasClass(STR_ELEM_SHADE) && e.preventDefault();
-      }
-
-      // 点击 dropdown 外部时的回调
-      if(typeof options.onClickOutside === 'function'){
-        var shouldClose = options.onClickOutside(e);
-        if(shouldClose === false) return;
-      }
-
-      that.remove();
-    }, lay.passiveSupported ? { passive: false} : false);
-
-    // onClickOutside 检测 iframe
-    _WIN.on('blur', function(e){
-      if(!dropdown.thisId) return;
-      var that = thisModule.getThis(dropdown.thisId)
-      if(!that) return;
-      if(!that.config.elem.data(MOD_INDEX_OPENED)) return;
-
-      setTimeout(function(){
-        if(document.activeElement && document.activeElement.tagName === 'IFRAME'
-          && that.mainElem && that.mainElem[0]
-          && that.mainElem[0].contains && !that.mainElem[0].contains(document.activeElement)
-        ){
-          // 点击 dropdown 外部时的回调
-          if(typeof that.config.onClickOutside === 'function'){
-            var shouldClose = that.config.onClickOutside(e.originalEvent);
-            if(shouldClose === false) return;
-          }
-          that.remove();
-        }
-      }, 0);
-    })
 
     // 基础菜单的静态元素事件
     var ELEM_LI = '.layui-menu:not(.layui-dropdown-menu) li';
