@@ -1155,7 +1155,7 @@ layer.iframeAuto = function(index){
   var iframeHeight = layer.getChildFrame('html', index).outerHeight();
   var titleHeight = layero.find(doms[1]).outerHeight() || 0;
   var btnHeight = layero.find('.'+doms[6]).outerHeight() || 0;
-  var maxHeight = 'maxHeight' in options ? options.maxHeight : $(window).height();
+  var maxHeight = 'maxHeight' in options ? options.maxHeight : win.height();
   if(maxHeight){
     iframeHeight = Math.min(iframeHeight, maxHeight - titleHeight - btnHeight);
   }
