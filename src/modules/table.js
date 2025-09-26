@@ -155,7 +155,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
 
   var DATA_MOVE_NAME = 'LAY_TABLE_MOVE_DICT';
 
-  var resizeObserver = lay._createResizeObserver(MOD_NAME);
+  var resizeObserver = lay.createSharedResizeObserver(MOD_NAME);
 
   // thead 区域模板
   var TPL_HEADER = function(options){

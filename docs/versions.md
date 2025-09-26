@@ -17,30 +17,28 @@ toc: true
   <span class="layui-badge-rim" style="color: #ff5722;">预览版</span>
 </h2>
 
-> 本次更新全部由 @Sight-wcg 完成 🎉
-
 - #### 新特性
-  - 新增 i18n 模块，用于提供国际化多语言支持 #2698 @Sight-wcg
+  - 新增 i18n 模块，用于提供国际化多语言支持 #2698 @sentsim @Sight-wcg
 - #### table
-  - 新增 `ajax` 选项，用于自定义 Ajax 请求 #2752
-  - 新增 `syncFixedRowHeight` 选项，用于行高自适应时同步固定列行高 #2825
-  - 修复 checkbox/radio 列触发行事件问题 #2836
+  - 新增 `ajax` 选项，用于自定义 Ajax 请求 #2752 @Sight-wcg
+  - 新增 `syncFixedRowHeight` 选项，用于行高自适应时同步固定列行高 #2825 @Sight-wcg
+  - 修复 checkbox/radio 列触发行事件问题 #2836 @Sight-wcg
 - #### code
-  - 新增 `highlightLine` 选项，用于实现行高亮功能 #2763
+  - 新增 `highlightLine` 选项，用于实现行高亮功能 #2763 @Sight-wcg
 - #### slider
-  - 使用 component 模块重构组件，并继承其全部基础接口 #2781
+  - 使用 component 模块重构组件，并继承其全部基础接口 #2781 @Sight-wcg
 - #### dropdown
-  - 新增 同时打开多个下拉面板的功能支持 #2827
-  - 优化 目标元素尺寸变化时重新定位 #2827
-  - 优化 点击目标元素的外部区域关闭面板的逻辑 #2827
+  - 新增 同时打开多个下拉面板的功能支持 #2827 @Sight-wcg
+  - 优化 目标元素尺寸变化时重新定位 #2827 @Sight-wcg
+  - 优化 点击目标元素的外部区域关闭面板的逻辑 #2827 @Sight-wcg
 - #### form
-  - 优化 select 面板在大小出现变化时定位问题 #2824
+  - 优化 select 面板在大小出现变化时定位问题 #2824 @Sight-wcg
 - #### layer
-  - 修复 `layer.iframeAuto()` 最大高度未限制在浏览器高度内的问题 #2839
+  - 修复 `layer.iframeAuto()` 最大高度未限制在浏览器高度内的问题 #2839 @Sight-wcg
 - #### laydate
-  - 优化 左下角预览区域过渡色未与主题色保持一致的问题 #2840
+  - 优化 左下角预览区域过渡色未与主题色保持一致的问题 #2840 @Sight-wcg
 - #### nav
-  - 修复 纵向菜单出现滚动条时，滑块位置异常 #2826
+  - 修复 纵向菜单出现滚动条时，滑块位置异常 #2826 @Sight-wcg
 
 ### 下载： [layui-v2.12.0-alpha.0.zip](https://gitee.com/layui/layui/attach_files/2365521/download)
 
