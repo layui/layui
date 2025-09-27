@@ -22,7 +22,7 @@ toc: true
 - #### table
   - 新增 `ajax` 选项，用于自定义 Ajax 请求 #2752 @Sight-wcg
   - 新增 `syncFixedRowHeight` 选项，用于行高自适应时同步固定列行高 #2825 @Sight-wcg
-  - 修复 checkbox/radio 列触发行事件问题 #2836 @Sight-wcg
+  - 修复 checkbox/radio 列触发行事件的问题 #2836 @Sight-wcg
 - #### code
   - 新增 `highlightLine` 选项，用于实现行高亮功能 #2763 @Sight-wcg
 - #### slider
