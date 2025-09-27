@@ -22,7 +22,7 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
   var OUT_OF_RANGE = 'layui-input-number-out-of-range';
   var BAD_INPUT = 'layui-input-number-invalid';
 
-  var resizeObserver = lay._createResizeObserver(MOD_NAME);
+  var resizeObserver = lay.createSharedResizeObserver(MOD_NAME);
 
   // ie8 中可以获取到 input 元素的 'indeterminate' 属性描述符，但重新定义 getter/setter 无效，无报错
   // AppleWebKit/537.36 无法获取 input 元素任意属性的属性描述符(包括lookupGetter)，但可以重新定义 getter/setter

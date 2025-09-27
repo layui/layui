@@ -21,7 +21,7 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function(exports) {
   var MOD_INDEX_OPENED = MOD_INDEX + '_opened';
   var MOD_ID = 'lay-' + MOD_NAME + '-id';
 
-  var resizeObserver = lay._createResizeObserver(MOD_NAME);
+  var resizeObserver = lay.createSharedResizeObserver(MOD_NAME);
 
   // 外部接口
   var dropdown = {

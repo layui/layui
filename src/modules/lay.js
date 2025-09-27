@@ -838,8 +838,8 @@
 
   /**
    * 生成唯一的 ID 字符串
-   * @param {string} prefix ID前缀，默认为'id'
-   * @returns {string} 唯一ID字符串
+   * @param {string} prefix ID 前缀，默认为'id'
+   * @returns {string} 唯一 ID 字符串
    */
   var generateUniqueId = (function () {
     var counter = 0;
@@ -858,7 +858,7 @@
         lastTimestamp = timestamp;
       }
 
-      // 结合时间戳、随机数和计数器生成ID
+      // 结合时间戳、随机数和计数器生成 ID
       var random = Math.floor(Math.random() * 10000);
 
       return prefix + '-' + timestamp + '-' + random + '-' + counter;
@@ -866,16 +866,17 @@
   })();
 
   /**
-   * 创建全局 ResizeObserver 实例
+   * 创建共享的 ResizeObserver 实例
    * @param {string} namespace 命名空间，用于区分不同的 ResizeObserver 实例
-   * @returns {ResizeObserver | null} 全局 ResizeObserver 实例或 null（如果不支持）
+   * @returns {ResizeObserver | null} ResizeObserver 实例或 null（如果不支持）
    */
-  lay._createResizeObserver = function (namespace) {
+  lay.createSharedResizeObserver = function (namespace) {
     if (typeof window.ResizeObserver === 'undefined') {
-      window.console && console.log('ResizeObserver is not supported in this browser');
+      window.console && console.log('ResizeObserver is not supported in this browser.');
       return null;
     }
 
+    namespace = namespace || '';
     var ATTR_NAME = 'lay-' + namespace + '-resizeobserver-key';
     var handlerCache = {};
 
@@ -895,7 +896,7 @@
     return Object.freeze({
       observe: function (element, callback) {
         if (!element || !(element instanceof Element)) {
-          window.console && console.log('createResizeObserver: Cannot observe non-Element.');
+          window.console && console.log('createSharedResizeObserver: Cannot observe non-Element.');
           return;
         }
 
@@ -911,7 +912,7 @@
       },
       unobserve: function (element) {
         if (!element || !(element instanceof Element)) {
-          window.console && console.log('createResizeObserver: Cannot unobserve non-Element.');
+          window.console && console.log('createSharedResizeObserver: Cannot unobserve non-Element.');
           return;
         }
 
