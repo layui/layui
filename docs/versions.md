@@ -38,7 +38,7 @@ toc: true
 - #### laydate
   - 优化 左下角预览区域过渡色未与主题色保持一致的问题 #2840 @Sight-wcg
 - #### nav
-  - 修复 纵向菜单出现滚动条时，滑块位置异常 #2826 @Sight-wcg
+  - 修复 纵向菜单出现滚动条时滑块位置异常的问题 #2826 @Sight-wcg
 
 ### 下载： [layui-v2.12.0-alpha.0.zip](https://gitee.com/layui/layui/attach_files/2365521/download)
 
