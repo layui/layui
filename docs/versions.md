@@ -12,9 +12,8 @@ toc: true
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
 <h2 id="v2.12.0" lay-pid="2.10+" class="ws-anchor">
-  v2.12.0-alpha.0
-  <span class="layui-badge-rim">2025-09-26</span>
-  <span class="layui-badge-rim" style="color: #ff5722;">预览版</span>
+  v2.12.0
+  <span class="layui-badge-rim">2025-09-29</span>
 </h2>
 
 - #### 新特性
@@ -40,7 +39,7 @@ toc: true
 - #### nav
   - 修复 纵向菜单出现滚动条时滑块位置异常的问题 #2826 @Sight-wcg
 
-### 下载： [layui-v2.12.0-alpha.0.zip](https://gitee.com/layui/layui/attach_files/2365521/download)
+### 下载： [layui-v2.12.0.zip](https://gitee.com/layui/layui/attach_files/2369898/download)
 
 ---
 

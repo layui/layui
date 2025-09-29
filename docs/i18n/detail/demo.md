@@ -625,7 +625,7 @@
     layui.code({
       elem: "#demo-code",
       preview: true,
-      tools: ['copy', 'full', 'window'],
+      tools: ['copy'],
       header: true,
       lang: 'html',
       langMarker: true,

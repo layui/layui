@@ -13,7 +13,7 @@ toc: true
 
 <div class="ws-docs-showcase"></div>
 
-<pre class="layui-code" lay-options="{preview: 'iframe', text: {preview: 'Preview'}, style: 'height: 560px;', layout: ['preview', 'code'], tools: ['full','window']}">
+<pre class="layui-code" lay-options="{preview: 'iframe', text: {preview: 'Preview'}, style: 'height: 560px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 {{- d.include("/i18n/detail/demo.md") }}
   </textarea>
