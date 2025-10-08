@@ -2,7 +2,7 @@
  * slider 滑块组件
  */
 
-layui.define(['component', 'jquery', 'lay'], function(exports) {
+layui.define('component', function(exports) {
   'use strict';
 
   var $ = layui.$;
@@ -11,19 +11,19 @@ layui.define(['component', 'jquery', 'lay'], function(exports) {
   var component = layui.component({
     name: 'slider',
     config: {
-      type: 'default', //滑块类型，垂直：vertical
-      min: 0, //最小值
-      max: 100, //最大值，默认100
-      value: 0, //初始值，默认为0
-      step: 1, //间隔值
-      showstep: false, //间隔点开启
-      tips: true, //文字提示，开启
-      tipsAlways: false, //文字提示，始终开启
-      input: false, //输入框，关闭
-      range: false, //范围选择，与输入框不能同时开启，默认关闭
-      height: 200, //配合 type:"vertical" 使用，默认200px
-      disabled: false, //滑块禁用，默认关闭
-      theme: '#16baaa' //主题颜色
+      type: 'default', // 滑块类型，垂直：vertical
+      min: 0, // 最小值
+      max: 100, // 最大值，默认100
+      value: 0, // 初始值，默认为0
+      step: 1, // 间隔值
+      showstep: false, // 间隔点开启
+      tips: true, // 文字提示，开启
+      tipsAlways: false, // 文字提示，始终开启
+      input: false, // 输入框，关闭
+      range: false, // 范围选择，与输入框不能同时开启，默认关闭
+      height: 200, // 配合 type:"vertical" 使用，默认200px
+      disabled: false, // 滑块禁用，默认关闭
+      theme: '#16baaa' // 主题颜色
     },
     CONST: {
       ELEM_VIEW: 'layui-slider',
