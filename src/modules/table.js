@@ -2952,7 +2952,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     var that = this;
 
     that.unobserveResize();
-    for (const propName in that) {
+    for (var propName in that) {
       if(lay.hasOwn(that, propName) && propName !== 'config'){
         that[propName] = null;
       }
@@ -2981,7 +2981,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
         }
       });
     }
-    
+
     if (rightTrs.length) {
       rightTrs.each(function(i) {
         if (heights[i]) {
@@ -2996,7 +2996,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
     var that = this;
     var style = that.elem.children('style')[0];
     var selector = '.' + FIXED_HEIGHT_PATCH;
-    
+
     trsElem.toggleClass(FIXED_HEIGHT_PATCH, isEnter);
     // 将当前鼠标悬停行的高度同步到 FIXED_HEIGHT_PATCH （所有区域）类名的样式中
     if (isEnter) {
@@ -3028,7 +3028,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
 
   Class.prototype.observeResize = function(){
     var that = this;
-    
+
     if(!resizeObserver) return;
 
     that.unobserveResize();
@@ -3046,7 +3046,7 @@ layui.define(['lay', 'i18n', 'laytpl', 'laypage', 'form', 'util'], function(expo
 
     if(needSyncFixedRowHeight){
       resizeObserver.observe(
-        tableEl, 
+        tableEl,
         $.proxy(that.calcFixedRowHeight, that)
       );
     }
