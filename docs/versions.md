@@ -11,6 +11,19 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.12.1" lay-pid="2.10+" class="ws-anchor">
+  v2.12.1
+  <span class="layui-badge-rim">2025-10-11</span>
+</h2>
+
+- 修复 table 浏览器兼容性问题 #2850 @sentsim
+- 修复 carousel 设置 `anim: 'fade'` 无效的问题 #2855 @sentsim
+- 优化 slider 提示条的箭头样式 #2849 @sentsim
+
+### 下载： [layui-v2.12.1.zip](https://gitee.com/layui/layui/attach_files/2379972/download)
+
+---
+
 <h2 id="v2.12.0" lay-pid="2.10+" class="ws-anchor">
   v2.12.0
   <span class="layui-badge-rim">2025-09-29</span>
@@ -76,9 +89,9 @@ toc: true
   <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
 </h2>
 
-- 重构 collapse 展开收缩动画的核心逻辑 #2734
-- 新增 collapse 列表项添加 `layui-show` 类设置默认展开的支持，且兼容旧版 #2734
-- 修复 collapse 列表项的内容元素添加 `layui-show` 类时的收缩异常问题 #2734
+- 重构 collapse 展开收缩动画的核心逻辑 #2734 @sentsim
+- 新增 collapse 列表项添加 `layui-show` 类设置默认展开的支持，且兼容旧版 #2734 @sentsim
+- 修复 collapse 列表项的内容元素添加 `layui-show` 类时的收缩异常问题 #2734 @sentsim
 
 ### 下载： [layui-v2.11.4.zip](https://gitee.com/layui/layui/attach_files/2241193/download)
 
