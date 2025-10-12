@@ -8,7 +8,6 @@ layui.define(['i18n', 'component'], function(exports) {
 
   var $ = layui.$;
   var lay = layui.lay;
-  var hint = layui.hint();
   var i18n = layui.i18n;
   var device = layui.device();
   var clickOrMousedown = (device.mobile ? 'click' : 'mousedown');
@@ -56,7 +55,6 @@ layui.define(['i18n', 'component'], function(exports) {
       that.stopClickOutsideEvent = $.noop;
       that.stopResizeEvent = $.noop;
       CONST.PICKER_OPENED = CONST.MOD_ID + '-opened';
-
     },
 
     // 渲染之前
@@ -221,7 +219,6 @@ layui.define(['i18n', 'component'], function(exports) {
   Class.prototype.renderPicker = function(){
     var that = this;
     var options = that.config;
-    var elemColorBox = that.elemColorBox[0];
 
     // 颜色选择器对象
     var elemPicker = that.elemPicker = $(['<div id="layui-colorpicker'+ that.index +'" data-index="'+ that.index +'" class="layui-anim layui-anim-downbit layui-colorpicker-main">'
@@ -694,10 +691,8 @@ layui.define(['i18n', 'component'], function(exports) {
         that.removePicker();
       } else {
         that.renderPicker();
-        if ($(CONST.ELEM_MAIN)[0]) {
-          that.val();
-          that.side();
-        }
+        that.val();
+        that.side();
       }
     });
   };
