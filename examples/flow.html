@@ -1,92 +1,84 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>流加载 - layui</title>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>流加载 - layui</title>
+    <link rel="stylesheet" href="../src/css/layui.css">
+    <style>
+      .flow-default{ font-size: 0;}
+      .flow-default li{display: inline-block; margin-right: 10px; font-size: 14px; width: 48%;  margin-bottom: 10px; height: 200px; line-height: 200px; text-align: center; background-color: #eee;}
+      img{width: 500px; height: 300px;}
+      .flow-default img{width: 100%; height: 100%;}
+    </style>
+  </head>
+  <body class="layui-padding-3">
+    <ul class="flow-default" id="test1"></ul>
+    <div class="layui-hide">
+      <ul class="flow-default" id="test2"></ul>
+    </div>
 
-<link rel="stylesheet" href="../src/css/layui.css">
+    <div class="demo" style="height: 300px; margin-top: 32px; overflow: auto;">
+      <img src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif" lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg">
+      <img src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif" lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg">
+      <img src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif" lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg">
+      <img src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif" lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg">
+      <img src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif" lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg">
+      <img src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif" lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg">
+      <img src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif" lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg">
+      <img src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif" lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg">
+      <img src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif" lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg">
+      <img src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif" lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg">
+    </div>
 
-<style>
-body{padding: 15px;}
-.flow-default{ font-size: 0;}
-.flow-default li{display: inline-block; margin-right: 10px; font-size: 14px; width: 48%;  margin-bottom: 10px; height: 200px; line-height: 200px; text-align: center; background-color: #eee;}
-img{width: 500px; height: 300px;}
-.flow-default img{width: 100%; height: 100%;}
-</style>
-</head>
-<body>
+    <script src="../src/layui.js"></script>
+    <script>
+    layui.use('flow', function() {
+      var flow = layui.flow;
 
-
-<ul class="flow-default" id="test1"></ul>
-
-<div class="layui-hide">
-  <ul class="flow-default" id="test2"></ul>
-</div>
-
-
-<div class="demo" style="height: 300px; overflow: auto;">
-  <img src="https://sentsin.gitee.io/res/images/demo/loading.gif" lay-src="https://sentsin.gitee.io/res/images/demo/layer.png">
-  <img src="https://sentsin.gitee.io/res/images/demo/loading.gif" lay-src="https://sentsin.gitee.io/res/images/demo/layer.png">
-  <img src="https://sentsin.gitee.io/res/images/demo/loading.gif" lay-src="https://sentsin.gitee.io/res/images/demo/error.png">
-  <img src="https://sentsin.gitee.io/res/images/demo/loading.gif" lay-src="https://sentsin.gitee.io/res/images/demo/layer.png">
-  <img src="https://sentsin.gitee.io/res/images/demo/loading.gif" lay-src="https://sentsin.gitee.io/res/images/demo/layer.png">
-  <img src="https://sentsin.gitee.io/res/images/demo/loading.gif" lay-src="https://sentsin.gitee.io/res/images/demo/layer.png">
-  <img src="https://sentsin.gitee.io/res/images/demo/loading.gif" lay-src="https://sentsin.gitee.io/res/images/demo/layer.png">
-  <img src="https://sentsin.gitee.io/res/images/demo/loading.gif" lay-src="https://sentsin.gitee.io/res/images/demo/layer.png">
-  <img src="https://sentsin.gitee.io/res/images/demo/loading.gif" lay-src="https://sentsin.gitee.io/res/images/demo/layer.png">
-  <img src="https://sentsin.gitee.io/res/images/demo/loading.gif" lay-src="https://sentsin.gitee.io/res/images/demo/layer.png">
-</div>
-
-
-<script src="../src/layui.js"></script>
-<script>
-layui.use('flow', function(){
-  var flow = layui.flow;
-
-  flow.load({
-    elem: '#test1' //流加载容器
-    //,scrollElem: '.flow-default' //滚动条所在元素，默认document
-    //,isAuto: false
-    //,end: '没了'
-    ,isLazyimg: true
-    ,done: function(page, next){ //加载下一页
-      console.log('done:', page)
-      setTimeout(function(){
-        var lis = [];
-        for(var i = 0; i < 6; i++){
-          lis.push('<li><img lay-src="https://sentsin.gitee.io/res/images/demo/layer.png?v='+ (page+i) +'"></li>')
+      var flowInst = flow.load({
+        elem: '#test1', // 流加载容器
+        // scrollElem: '.flow-default', // 滚动条所在元素，默认 document
+        // isAuto: false,
+        // end: '没有更多数据',
+        isLazyimg: true,
+        done: function(page, next) { // 加载下一页
+          console.log('done:', page)
+          setTimeout(function(){
+            var lis = [];
+            for(var i = 0; i < 6; i++){
+              lis.push('<li><img lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg?v='+ (page+i) +'"></li>')
+            }
+            next(lis.join(''), page < 3);
+          }, 500);
         }
-        next(lis.join(''), page < 3);
-      }, 500);
-    }
-  });
+      });
 
-  flow.load({
-    elem: '#test2' //流加载容器
-    //,scrollElem: '.flow-default' //滚动条所在元素，默认document
-    //,isAuto: false
-    //,end: '没了'
-    ,isLazyimg: true
-    ,done: function(page, next){ //加载下一页
-      setTimeout(function(){
-        var lis = [];
-        for(var i = 0; i < 6; i++){
-          lis.push('<li><img lay-src="https://sentsin.gitee.io/res/images/demo/layer.png?v='+ (page+i) +'"></li>')
+      // 重载
+      flowInst.reload({
+        moreText: '...'
+      });
+
+      flow.load({
+        elem: '#test2', // 流加载容器
+        isLazyimg: true,
+        done: function(page, next) { // 加载下一页
+          setTimeout(function(){
+            var lis = [];
+            for(var i = 0; i < 6; i++){
+              lis.push('<li><img lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg?v='+ (page+i) +'"></li>')
+            }
+            next(lis.join(''), page < 3);
+          }, 500);
         }
-        next(lis.join(''), page < 3);
-      }, 500);
-    }
-  });
+      });
 
-  //按屏加载图片
-  flow.lazyimg({
-    elem: '.demo img'
-    ,scrollElem: '.demo'
-  });
-
-});
-</script>
-
-</body>
+      // 按屏加载图片
+      flow.lazyimg({
+        elem: '.demo img',
+        scrollElem: '.demo'
+      });
+    });
+    </script>
+  </body>
 </html>
