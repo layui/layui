@@ -1,254 +1,294 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>树组件 - layui</title>
-  <link rel="stylesheet" href="../src/css/layui.css" media="all">
-  <style>
-    body{padding: 100px;}
-    #test1,#test2{margin-bottom: 100px; width: 400px;}
-  </style>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>树组件 - layui</title>
+    <link rel="stylesheet" href="../src/css/layui.css" media="all">
+  </head>
+  <body class="layui-padding-5">
+    <div class="layui-btn-container">
+      <button type="button" class="layui-btn" lay-on="getChecked">获取选中数据</button>
+      <button type="button" class="layui-btn" lay-on="setChecked">设置节点勾选</button>
+      <button type="button" class="layui-btn" lay-on="reload">重载实例</button>
+    </div>
 
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn" lay-demo="getChecked">获取选中数据</button>
-  <button type="button" class="layui-btn" lay-demo="setChecked">设置节点勾选</button>
-  <button type="button" class="layui-btn" lay-demo="reload">重载实例</button>
-</div>
+    <div id="test1"></div>
+    <br><hr><br>
+    <div id="test2"></div>
 
-<div class="layui-form">
-  <div class="layui-form-item">
-    <label class="layui-form-label">表单内</label>
-    <div class="layui-input-block">
+    <script src="../src/layui.js"></script>
+    <script>
+      layui.use(['tree', 'layer', 'util'], function() {
+        var $ = layui.$;
+        var tree = layui.tree;
+        var layer = layui.layer;
+        var util = layui.util;
+        var index = 100;
 
-  </div>
-</div>
+        // 数据源
+        var data1 = [
+          {
+            "title": "A-1",
+            "id": 1,
+            "children": [
+              {
+                "title": "B-1-1",
+                "id": 3,
+                "href": "",
+                "children": [
+                  {
+                    "title": "C-1-1-3",
+                    "id": 23,
+                    "children": [
+                      {
+                        "title": "D-1-1-3-1",
+                        "id": 24,
+                        "children": [
+                          {
+                            "title": "E-1-1-3-1-1",
+                            "id": 30
+                          },
+                          {
+                            "title": "E-1-1-3-1-2",
+                            "id": 31
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "title": "C-1-1-1",
+                    "id": 7,
+                    "checked": true,
+                    "children": [
+                      {
+                        "title": "D-1-1-1-1",
+                        "id": 15,
+                        "href": ""
+                      }
+                    ]
+                  },
+                  {
+                    "title": "C-1-1-2",
+                    "id": 8,
+                    "children": [
+                      {
+                        "title": "D-1-1-2-1",
+                        "id": 32
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "B-1-2",
+                "id": 4,
+                "spread": true,
+                "children": [
+                  {
+                    "title": "C-1-2-1",
+                    "id": 9,
+                    "checked": true,
+                    "disabled": true
+                  },
+                  {
+                    "title": "C-1-2-2",
+                    "id": 10
+                  }
+                ]
+              },
+              {
+                "title": "B-1-3",
+                "id": 20,
+                "children": [
+                  {
+                    "title": "C-1-3-1",
+                    "id": 21
+                  },
+                  {
+                    "title": "C-1-3-2",
+                    "id": 22
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "A-2",
+            "id": 2,
+            "spread": true,
+            "children": [
+              {
+                "title": "B-2-1",
+                "id": 5,
+                "spread": true,
+                "children": [
+                  {
+                    "title": "C-2-1-1",
+                    "id": 11
+                  },
+                  {
+                    "title": "C-2-1-2",
+                    "id": 12
+                  }
+                ]
+              },
+              {
+                "title": "B-2-2",
+                "id": 6,
+                "checked": true,
+                "children": [
+                  {
+                    "title": "C-2-2-1",
+                    "id": 13
+                  },
+                  {
+                    "title": "C-2-2-2",
+                    "id": 14,
+                    "disabled": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "A-3",
+            "id": 16,
+            "children": [
+              {
+                "title": "B-3-1",
+                "id": 17,
+                "fixed": true,
+                "children": [
+                  {
+                    "title": "C-3-1-1",
+                    "id": 18
+                  },
+                  {
+                    "title": "C-3-1-2",
+                    "id": 19
+                  }
+                ]
+              },
+              {
+                "title": "B-3-2",
+                "id": 27,
+                "children": [
+                  {
+                    "title": "C-3-2-1",
+                    "id": 28
+                  },
+                  {
+                    "title": "C-3-2-2",
+                    "id": 29
+                  }
+                ]
+              }
+            ]
+          }
+        ];
 
-<div id="test1"></div>
-<div id="test2"></div>
+        // 数据源
+        var data2 = [
+          {
+            "title": "控制台",
+            "id": "1000",
+            "spread": true,
+            "checked": true,
+            "children": [
+              {
+                "title": "概览",
+                "id": "1001",
+                "spread": true,
+                "checked": true
+              },
+              {
+                "title": "域名",
+                "id": "1002",
+                "spread": true,
+                "checked": true
+              }
+            ]
+          }
+        ]
 
-<script src="../src/layui.js"></script>
-<script>
-  layui.use(['tree', 'layer', 'util'], function(){
-    var $ = layui.$
-    ,tree = layui.tree
-    ,layer = layui.layer
-    ,util = layui.util
-    ,index = 100;
-
-    //数据源
-    var data1 = [{
-      title: 'A-1'
-      ,id: 1
-      ,children: [{
-        title: 'B-1-1'
-        ,id: 3
-        ,href: 'https://www.layui.com/doc/'
-        ,children: [{
-          title: 'C-1-1-3'
-          ,id: 23
-          ,children: [{
-            title: 'D-1-1-3-1'
-            ,id: 24
-            ,children: [{
-              title: 'E-1-1-3-1-1'
-              ,id: 30
-            },{
-              title: 'E-1-1-3-1-2'
-              ,id: 31
-            }]
-          }]
-        },{
-          title: 'C-1-1-1'
-          ,id: 7
-          ,checked: true
-          ,children: [{
-            title: 'D-1-1-1-1'
-            ,id: 15
-            //,checked: true
-            ,href: 'https://www.layui.com/doc/base/infrastructure.html'
-          }]
-        },{
-          title: 'C-1-1-2'
-          ,id: 8
-          ,children: [{
-            title: 'D-1-1-2-1'
-            ,id: 32
-          }]
-        }]
-      },{
-        title: 'B-1-2'
-        ,id: 4
-        ,spread: true
-        ,children: [{
-          title: 'C-1-2-1'
-          ,id: 9
-          ,checked: true
-          ,disabled: true
-        },{
-          title: 'C-1-2-2'
-          ,id: 10
-        }]
-      },{
-        title: 'B-1-3'
-        ,id: 20
-        ,children: [{
-          title: 'C-1-3-1'
-          ,id: 21
-        },{
-          title: 'C-1-3-2'
-          ,id: 22
-        }]
-      }]
-    },{
-      title: 'A-2'
-      ,id: 2
-      ,spread: true
-      ,children: [{
-        title: 'B-2-1'
-        ,id: 5
-        ,spread: true
-        ,children: [{
-          title: 'C-2-1-1'
-          ,id: 11
-        },{
-          title: 'C-2-1-2'
-          ,id: 12
-        }]
-      },{
-        title: 'B-2-2'
-        ,id: 6
-        ,checked: true
-        ,children: [{
-          title: 'C-2-2-1'
-          ,id: 13
-        },{
-          title: 'C-2-2-2'
-          ,id: 14
-          ,disabled: true
-        }]
-      }]
-    },{
-      title: 'A-3'
-      ,id: 16
-      ,children: [{
-        title: 'B-3-1'
-        ,id: 17
-        ,fixed: true
-        ,children: [{
-          title: 'C-3-1-1'
-          ,id: 18
-        },{
-          title: 'C-3-1-2'
-          ,id: 19
-        }]
-      },{
-        title: 'B-3-2'
-        ,id: 27
-        ,children: [{
-          title: 'C-3-2-1'
-          ,id: 28
-        },{
-          title: 'C-3-2-2'
-          ,id: 29
-        }]
-      }]
-    }];
-
-    //数据源
-    var data2 = [{
-      title: '控制台'
-      ,id: '1000'
-      ,spread: true
-      ,checked: true
-      ,children: [{
-        title: '概览'
-        ,id: '1001'
-        ,spread: true
-        ,checked: true
-      },{
-        title: '域名'
-        ,id: '1002'
-        ,spread: true
-        ,checked: true
-      }]
-    }]
-
-    tree.render({
-      elem: '#test1'
-      ,data: data1
-      ,id: 'demoId1'
-      ,click: function(obj){
-        layer.msg(JSON.stringify(obj.data));
-        console.log(obj);
-      }
-      ,oncheck: function(obj){
-        //console.log(obj);
-      }
-      ,operate: function(obj){
-        var type = obj.type;
-        if(type == 'add'){
-          //ajax操作，返回key值
-          return index++;
-        }else if(type == 'update'){
-          console.log(obj.elem.find('.layui-tree-txt').html());
-        }else if(type == 'del'){
-          console.log(obj);
-        };
-      }
-      ,showCheckbox: true  //是否显示复选框
-      ,accordion: 0  //是否开启手风琴模式
-
-      ,onlyIconControl: true //是否仅允许节点左侧图标控制展开收缩
-      ,isJump: 0  //点击文案跳转地址
-      ,edit: true  //操作节点图标
-    });
-
-    //按钮事件
-    util.event('lay-demo', {
-      getChecked: function(othis){
-        var checkedData = tree.getChecked('demoId1');
-        layer.alert(JSON.stringify(checkedData), {shade:0});
-        console.log(checkedData);
-      }
-      ,setChecked: function(){
-        tree.setChecked('demoId1', [11,12]);
-      }
-      ,reload: function(){
-        tree.reload('demoId1', {
-
+        // 实例 1
+        var treeInst = tree.render({
+          elem: '#test1',
+          data: data1,
+          id: 'demoId1',
+          click: function(obj) {
+            layer.msg(JSON.stringify(obj.data));
+            console.log(obj);
+          },
+          oncheck: function(obj) {
+            // console.log(obj);
+          },
+          operate: function(obj) {
+            var type = obj.type;
+            if (type == 'add') {
+              // ajax 操作，返回 key 值
+              return index++;
+            } else if(type == 'update') {
+              console.log(obj.elem.find('.layui-tree-txt').html());
+            } else if(type == 'del') {
+              console.log(obj);
+            };
+          },
+          showCheckbox: true,  // 是否显示复选框
+          accordion: false,  // 是否开启手风琴模式
+          onlyIconControl: true, // 是否仅允许节点左侧图标控制展开收缩
+          isJump: 0,  // 点击文案跳转地址
+          edit: true,  // 操作节点图标
+          /*
+          customName: { // 自定义 data 字段名
+            children: 'nodes'
+          }
+          */
         });
-      }
-    });
 
-    tree.render({
-      elem: '#test2'
-      ,data: data1
-      //,expandClick: false
-      ,showLine: false //关闭连接线
-      ,click: function(obj, state){
-        console.log(obj);
-      }
-      ,oncheck: function(obj, checked, child){
-        if(checked){
-          console.log(obj[0]);
-        }
-      }
-      ,onsearch: function(data, num){
-        console.log(num);
-      }
-      ,dragstart: function(obj, parent){
-        console.log(obj, parent);
-      }
-      ,dragend: function(state, obj, target){
-        console.log(state, obj, target);
-      }
-    });
+        // console.log(treeInst);
 
-  });
-</script>
+        // 按钮事件
+        util.on({
+          getChecked: function(othis) {
+            var checkedData = tree.getChecked('demoId1');
+            layer.alert(JSON.stringify(checkedData), {shade:0});
+            console.log(checkedData);
+          },
+          setChecked: function() {
+            tree.setChecked('demoId1', [11,12]);
+          },
+          reload: function(){
+            tree.reload('demoId1', {});
+          }
+        });
 
-</body>
+        tree.render({
+          elem: '#test2',
+          data: data1,
+          // expandClick: false,
+          showLine: false, // 关闭连接线
+          click: function(obj, state) {
+            console.log(obj);
+          },
+          oncheck: function(obj, checked, child) {
+            if (checked) {
+              console.log(obj[0]);
+            }
+          },
+          onsearch: function(data, num) {
+            console.log(num);
+          },
+          dragstart: function(obj, parent) {
+            console.log(obj, parent);
+          },
+          dragend: function(state, obj, target) {
+            console.log(state, obj, target);
+          }
+        });
+      });
+    </script>
+  </body>
 </html>
