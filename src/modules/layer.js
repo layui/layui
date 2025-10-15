@@ -693,7 +693,8 @@ Class.pt.tips = function(){
       goal.tipLeft = goal.left + goal.width - layArea[0];
       tipsG.css({right: 12, left: 'auto'});
     } else {
-      goal.tipLeft = goal.left;
+      goal.tipLeft = goal.left - (goal.width * 0.75 < 21 ? 21 - goal.width * 0.5 : 0);
+      goal.tipLeft = Math.max(goal.tipLeft, 0);
     }
   };
 
