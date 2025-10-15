@@ -356,7 +356,7 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
     if (elemCheckbox.prop('disabled')) return;
 
     // 同步子节点选中状态
-    var setChildrenChecked = function(thisNodeElem) {
+    var setChildrenChecked = function(thisNodeElem, item) {
       var children = item[customName.children];
       if (!children || children.length === 0) return;
 
@@ -374,7 +374,7 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
         that.updateFieldValue(child, 'checked', childChecked);
 
         if (child[customName.children]) {
-          setChildrenChecked(childNodeWrapper.eq(i));
+          setChildrenChecked(childNodeWrapper.eq(i), child);
         }
       });
     };
@@ -407,7 +407,7 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
       setParentsChecked(parentNodeElem);
     };
 
-    setChildrenChecked(nodeWrapper);
+    setChildrenChecked(nodeWrapper, item);
     setParentsChecked(nodeWrapper);
 
     that.renderForm('checkbox');
@@ -806,7 +806,7 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
     var that = this;
     var options = that.config;
     var flatData = options.flatData;
-console.log(flatData)
+
     if (typeof checkedId !== 'object') {
       checkedId = [checkedId];
     }
