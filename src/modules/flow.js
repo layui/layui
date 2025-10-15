@@ -68,7 +68,8 @@ layui.define(['i18n', 'component'], function(exports) {
           component.lazyimg({
             elem: options.elem.find('img[lay-src]'),
             scrollElem: options.scrollElem,
-            direction: options.direction
+            direction: options.direction,
+            id: options.id
           });
         }
 
@@ -103,8 +104,8 @@ layui.define(['i18n', 'component'], function(exports) {
 
       // 滚动条滚动事件
       var timer;
-      scrollElem.off(CONST.FLOW_SCROLL_EVENTS);
-      scrollElem.on(CONST.FLOW_SCROLL_EVENTS, function() {
+      var FLOW_SCROLL_EVENTS = CONST.FLOW_SCROLL_EVENTS + '_' + that.index;
+      scrollElem.off(FLOW_SCROLL_EVENTS).on(FLOW_SCROLL_EVENTS, function() {
         var othis = $(this), top = othis.scrollTop();
 
         if (timer) clearTimeout(timer);
@@ -209,8 +210,9 @@ layui.define(['i18n', 'component'], function(exports) {
 
       // 滚动事件
       var timer;
-      scrollElem.off(CONST.LAZYIMG_SCROLL_EVENTS);
-      scrollElem.on(CONST.LAZYIMG_SCROLL_EVENTS, function() {
+      var id = options.id || '';
+      var LAZYIMG_SCROLL_EVENTS = CONST.LAZYIMG_SCROLL_EVENTS + '_' + id;
+      scrollElem.off(LAZYIMG_SCROLL_EVENTS).on(LAZYIMG_SCROLL_EVENTS, function() {
         if (timer) clearTimeout(timer)
         timer = setTimeout(function(){
           render();
