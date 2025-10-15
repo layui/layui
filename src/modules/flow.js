@@ -104,7 +104,7 @@ layui.define(['i18n', 'component'], function(exports) {
 
       // 滚动条滚动事件
       var timer;
-      var FLOW_SCROLL_EVENTS = CONST.FLOW_SCROLL_EVENTS + '_' + that.index;
+      var FLOW_SCROLL_EVENTS = CONST.FLOW_SCROLL_EVENTS + '_' + options.id;
       scrollElem.off(FLOW_SCROLL_EVENTS).on(FLOW_SCROLL_EVENTS, function() {
         var othis = $(this), top = othis.scrollTop();
 
