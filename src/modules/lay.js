@@ -771,14 +771,14 @@
 
     var cleanup = [
       bindEventListener(
-        scopeTarget, 
-        eventType, 
-        listener, 
+        scopeTarget,
+        eventType,
+        listener,
         lay.passiveSupported ? { passive: true, capture: useCapture } : useCapture
       ),
       detectIframe && bindEventListener(window, 'blur', function(event){
         setTimeout(function(){
-          if(document.activeElement && document.activeElement.tagName === 'IFRAME' 
+          if(document.activeElement && document.activeElement.tagName === 'IFRAME'
             && target.contains && !target.contains(document.activeElement)
           ){
             handler(event);
@@ -943,6 +943,95 @@
       }
     });
   };
+
+  /**
+   * 树状数据转平铺
+   * @param {Object[]} data - 树状数据
+   * @param {Object} options - 可选项
+   * @param {string} [options.childrenKey='children'] - 子节点字段名
+   * @param {string} [options.idKey='id'] - 节点 id 字段名
+   * @param {string} [options.parentKey='parentId'] - 父节点 id 字段名
+   * @param {boolean} [options.keepChildren=true] - 是否保留子节点数据
+   * @returns {Object[]} 返回平铺数据
+   */
+  lay.treeToFlat = function(data, options) {
+    options = lay.extend({
+      childrenKey: 'children',
+      idKey: 'id',
+      parentKey: 'parentId',
+      keepChildren: true
+    }, options);
+
+    var result = [];
+    var toFlat = function(nodes, parentId) {
+      for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        var item = {};
+
+        for (var key in node) {
+          if (node.hasOwnProperty(key)) {
+            if (key === options.childrenKey && !options.keepChildren) {
+              continue;
+            }
+            item[key] = node[key];
+          }
+        }
+
+        item[options.parentKey] = parentId == null ? null : parentId;
+        result.push(item);
+
+        var children = node[options.childrenKey];
+        if (children && children.length) {
+          toFlat(children, node[options.idKey]);
+        }
+      }
+    };
+
+    toFlat(data, null);
+    return result;
+  };
+
+  /**
+   * 平铺数据转树状
+   * @param {Array} data - 平铺数据
+   * @param {Object} options - 可选项
+   * @param {string} [options.childrenKey='children'] - 子节点字段名
+   * @param {string} [options.idKey='id'] - 节点 id 字段名
+   * @param {string} [options.parentKey='parentId'] - 父节点 id 字段名
+   */
+  lay.flatToTree = function(data, options) {
+    options = lay.extend({
+      childrenKey: 'children',
+      idKey: 'id',
+      parentKey: 'parentId'
+    }, options);
+
+    var map = {};
+    var result = [];
+    var i, item, parent;
+
+    // 建立索引
+    for (i = 0; i < data.length; i++) {
+      item = data[i];
+      map[item[options.idKey]] = item;
+      item[options.childrenKey] = [];
+    }
+
+    // 组装树
+    for (i = 0; i < data.length; i++) {
+      item = data[i];
+      // 根节点
+      if (item[options.parentKey] == null || !map[item[options.parentKey]]) {
+        result.push(item);
+      } else { // 子节点
+        parent = map[item[options.parentKey]];
+        parent[options.childrenKey].push(item);
+      }
+    }
+
+    return result;
+  };
+
 
 
   /*
