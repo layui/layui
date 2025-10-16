@@ -8,16 +8,16 @@
   <button type="button" class="layui-btn layui-btn-sm" lay-on="setChecked">勾选指定节点</button>
   <button type="button" class="layui-btn layui-btn-sm" lay-on="reload">重载实例</button>
 </div>
- 
+
 <div id="ID-tree-demo"></div>
 
 <!-- import layui -->
 <script>
-layui.use(function(){
+layui.use(function() {
   var tree = layui.tree;
   var layer = layui.layer;
   var util = layui.util;
- 
+
   // 模拟数据
   var data = [{title:'A-1',id:1,field:'name1',checked:true,spread:true,children:[{title:'B-1-1 可允许跳转',id:3,field:'name11',href:'',children:[{title:'C-1-1-3',id:23,field:'',children:[{title:'D-1-1-3-1',id:24,field:'',children:[{title:'E-1-1-3-1-1',id:30,field:''},{title:'E-1-1-3-1-2',id:31,field:''}]}]},{title:'C-1-1-1',id:7,field:'',children:[{title:'D-1-1-1-1 可允许跳转',id:15,field:'',href:''}]},{title:'C-1-1-2',id:8,field:'',children:[{title:'D-1-1-2-1',id:32,field:''}]}]},{title:'B-1-2',id:4,spread:true,children:[{title:'C-1-2-1',id:9,field:'',disabled:true},{title:'C-1-2-2',id:10,field:''}]},{title:'B-1-3',id:20,field:'',children:[{title:'C-1-3-1',id:21,field:''},{title:'C-1-3-2',id:22,field:''}]}]},{title:'A-2',id:2,field:'',spread:true,children:[{title:'B-2-1',id:5,field:'',spread:true,children:[{title:'C-2-1-1',id:11,field:''},{title:'C-2-1-2',id:12,field:''}]},{title:'B-2-2',id:6,field:'',children:[{title:'C-2-2-1',id:13,field:''},{title:'C-2-2-2',id:14,field:'',disabled:true}]}]},{title:'A-3',id:16,field:'',children:[{title:'B-3-1',id:17,field:'',fixed:true,children:[{title:'C-3-1-1',id:18,field:''},{title:'C-3-1-2',id:19,field:''}]},{title:'B-3-2',id:27,field:'',children:[{title:'C-3-2-1',id:28,field:''},{title:'C-3-2-2',id:29,field:''}]}]}];
 
@@ -36,21 +36,21 @@ layui.use(function(){
   });
 
   // 按钮事件
-  util.event('lay-on', {
-    getChecked: function(othis){
+  util.on({
+    getChecked: function(othis) {
       var checkedData = tree.getChecked('demo-id-1'); // 获取选中节点的数据
-      
+
       layer.alert(JSON.stringify(checkedData), {shade:0});
       console.log(checkedData);
     },
-    setChecked: function(){
+    setChecked: function() {
       tree.setChecked('demo-id-1', [12, 16]); // 勾选对应 id 值的节点
     },
     reload: function(){
       tree.reload('demo-id-1', {}); // 重载实例
     }
   });
-  
+
 });
 </script>
   </textarea>
@@ -64,7 +64,7 @@ layui.use(function(){
 
 <!-- import layui -->
 <script>
-layui.use(function(){
+layui.use(function() {
   var tree = layui.tree;
 
   // 模拟数据
@@ -89,7 +89,7 @@ layui.use(function(){
 
 <!-- import layui -->
 <script>
-layui.use(function(){
+layui.use(function() {
   var tree = layui.tree;
   var layer = layui.layer;
 
@@ -105,7 +105,6 @@ layui.use(function(){
       layer.msg(JSON.stringify(obj.data));
     }
   });
-  
 });
 </script>
   </textarea>
@@ -119,7 +118,7 @@ layui.use(function(){
 
 <!-- import layui -->
 <script>
-layui.use(function(){
+layui.use(function() {
   var tree = layui.tree;
 
   // 渲染
@@ -145,7 +144,7 @@ layui.use(function(){
         title: '0 ~ 60'
       }]
     }],
-    accordion: true 
+    accordion: true
   });
 });
 </script>
@@ -160,9 +159,9 @@ layui.use(function(){
 
 <!-- import layui -->
 <script>
-layui.use(function(){
+layui.use(function() {
   var tree = layui.tree;
- 
+
   // 模拟数据
   var data = [{title:'早餐',id:1,children:[{title:'拌粉',id:5},{title:'蒸饺',id:6},{title:'豆浆',id:7}]},{title:'午餐',id:2,checked:true,children:[{title:'藜蒿炒腊肉',id:8},{title:'西湖醋鱼',id:9},{title:'小白菜',id:10},{title:'海带排骨汤',id:11}]},{title:'晚餐',id:3,children:[{title:'红烧肉',id:12,fixed:true},{title:'番茄炒蛋',id:13}]},{title:'夜宵',id:4,children:[{title:'小龙虾',id:14,checked:true},{title:'香辣蟹',id:15,disabled:true},{title:'烤鱿鱼',id:16}]}];
 
