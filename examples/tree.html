@@ -16,6 +16,8 @@
     <div id="test1"></div>
     <br><hr><br>
     <div id="test2"></div>
+    <br><hr><br>
+    <div id="test3"></div>
 
     <script src="../src/layui.js"></script>
     <script>
@@ -214,13 +216,12 @@
               }
             ]
           }
-        ]
+        ];
 
         // 实例 1
         var treeInst = tree.render({
           elem: '#test1',
           data: data1,
-          id: 'demoId1',
           click: function(obj) {
             layer.msg(JSON.stringify(obj.data));
             console.log(obj);
@@ -257,20 +258,28 @@
         // 按钮事件
         util.on({
           getChecked: function(othis) {
-            var checkedData = tree.getChecked('demoId1');
+            var checkedData = tree.getChecked('test1');
             layer.alert(JSON.stringify(checkedData), {shade:0});
             console.log(checkedData);
           },
           setChecked: function() {
-            tree.setChecked('demoId1', [11,12]);
+            tree.setChecked('test1', [11,12]);
           },
           reload: function(){
-            tree.reload('demoId1', {});
+            tree.reload('test1', {});
           }
         });
 
+        // checked 测试
         tree.render({
           elem: '#test2',
+          data: data3,
+          showCheckbox: true,
+        });
+
+        // 关闭连接线，箭头展开风格
+        tree.render({
+          elem: '#test3',
           data: data1,
           // expandClick: false,
           showLine: false, // 关闭连接线

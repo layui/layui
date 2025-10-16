@@ -2,15 +2,15 @@
  * tree 树组件
  */
 
-layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
+layui.define(['i18n', 'component', 'form'], function(exports) {
   "use strict";
 
+  var lay = layui.lay;
   var i18n = layui.i18n;
   var component = layui.component;
   var $ = layui.$;
   var form = layui.form;
   var layer = layui.layer;
-  var util = layui.util;
 
   // 创建组件
   var component = layui.component({
@@ -201,7 +201,6 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
               }
             }(),
           '</div>',
-
           // 节点操作图标
           function() {
             if (!options.edit) {
@@ -275,8 +274,8 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
 
     // 展开收缩
     touchOpen.on('click', function(e){
-      var packCont = elem.children('.'+CONST.ELEM_PACK)
-      ,iconClick = touchOpen.children('.layui-icon')[0] ? touchOpen.children('.layui-icon') : touchOpen.find('.layui-tree-icon').children('.layui-icon');
+      var packCont = elem.children('.'+CONST.ELEM_PACK);
+      var iconClick = touchOpen.children('.layui-icon')[0] ? touchOpen.children('.layui-icon') : touchOpen.find('.layui-tree-icon').children('.layui-icon');
 
       // 若没有子节点
       if(!packCont[0]){
@@ -360,9 +359,9 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
       var children = item[customName.children];
       if (!children || children.length === 0) return;
 
-      var childPack = thisNodeElem.children('.'+ CONST.ELEM_PACK);
-      var childNodeWrapper = childPack.children('.'+ CONST.ELEM_SET);
-      var elemCheckboxs = childNodeWrapper.children('.'+ CONST.ELEM_ENTRY).find('input[same="layuiTreeCheck"]');
+      var childrenPack = thisNodeElem.children('.'+ CONST.ELEM_PACK);
+      var childrenWrapper = childrenPack.children('.'+ CONST.ELEM_SET);
+      var elemCheckboxs = childrenWrapper.children('.'+ CONST.ELEM_ENTRY).find('input[same="layuiTreeCheck"]');
 
       elemCheckboxs.each(function(i) {
         if (this.disabled) return; // 不可点击则跳过
@@ -374,7 +373,7 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
         that.updateFieldValue(child, 'checked', childChecked);
 
         if (child[customName.children]) {
-          setChildrenChecked(childNodeWrapper.eq(i), child);
+          setChildrenChecked(childrenWrapper.eq(i), child);
         }
       });
     };
@@ -384,23 +383,25 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
       // 若无父节点，则终止递归
       if (!thisNodeElem.parents('.'+ CONST.ELEM_SET)[0]) return;
 
-      var state;
+      var descendantsChecked; // 后代节点选中状态
       var parentPack = thisNodeElem.parent('.'+ CONST.ELEM_PACK);
       var parentNodeElem = parentPack.parent();
       var parentCheckbox =  parentPack.prev().find('input[same="layuiTreeCheck"]');
 
-      // 如果子节点有任意一条选中，则父节点为选中状态
+      if (parentCheckbox.prop('disabled')) return;
+
+      // 如果后代节点有任意一条选中，则父节点为选中状态（考虑到兼容性，暂时不支持半选状态）
       if (checked) {
         parentCheckbox.prop('checked', checked);
-      } else { // 如果当前节点取消选中，则根据计算“兄弟和子孙”节点选中状态，来同步父节点选中状态
-        parentPack.find('input[same="layuiTreeCheck"]').each(function(){
-          if(this.checked){
-            state = true;
+      } else { // 如果当前节点取消选中，则根据计算后代节点选中状态，来同步父节点选中状态
+        parentPack.find('input[same="layuiTreeCheck"]').each(function() {
+          if (this.checked) {
+            descendantsChecked = true;
           }
         });
 
-        // 如果兄弟子孙节点全部未选中，则父节点也应为非选中状态
-        state || parentCheckbox.prop('checked', false);
+        // 如果后代节点全部未选中，则父节点也应为非选中状态
+        descendantsChecked || parentCheckbox.prop('checked', false);
       }
 
       // 向父节点递归
@@ -549,10 +550,10 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
         // 添加输入框，覆盖在文字上方
         elemMain.append('<input type="text" class="layui-tree-editInput">');
         // 获取焦点
-        elemMain.children('.layui-tree-editInput').val(util.unescape(text)).focus();
+        elemMain.children('.layui-tree-editInput').val(lay.unescape(text)).focus();
         // 嵌入文字移除输入框
         var getVal = function(input){
-          var textNew = util.escape(input.val().trim());
+          var textNew = lay.escape(input.val().trim());
           textNew = textNew ? textNew : options.text.defaultNodeName;
           input.remove();
           elemMain.children('.'+ CONST.ELEM_TEXT).html(textNew);
@@ -763,23 +764,23 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
   };
 
   // 得到选中节点
-  Class.prototype.getChecked = function(){
+  Class.prototype.getChecked = function() {
     var that = this;
     var options = that.config;
     var customName = options.customName;
-    var checkId = [];
-    var checkData = [];
+    var checkedId = [];
+    var checkedData = [];
 
     // 遍历节点找到选中索引
-    that.elem.find('.layui-form-checked').each(function(){
-      checkId.push($(this).prev()[0].value);
+    that.elem.find('.layui-form-checked').each(function() {
+      checkedId.push($(this).prev()[0].value);
     });
 
     // 遍历节点
-    var eachNodes = function(data, checkNode){
-      layui.each(data, function(index, item){
-        layui.each(checkId, function(index2, item2){
-          if(item[customName.id] == item2){
+    var eachNodes = function(data, checkNode) {
+      layui.each(data, function(index, item) {
+        layui.each(checkedId, function(index2, item2) {
+          if (item[customName.id] == item2) {
             that.updateFieldValue(item, 'checked', true);
 
             var cloneItem = $.extend({}, item);
@@ -787,7 +788,7 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
 
             checkNode.push(cloneItem);
 
-            if(item[customName.children]){
+            if (item[customName.children]) {
               cloneItem[customName.children] = [];
               eachNodes(item[customName.children], cloneItem[customName.children]);
             }
@@ -797,9 +798,8 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
       });
     };
 
-    eachNodes($.extend({}, options.data), checkData);
-
-    return checkData;
+    eachNodes($.extend({}, options.data), checkedData);
+    return checkedData;
   };
 
   // 设置选中节点
