@@ -421,6 +421,7 @@ layui.define(['i18n', 'component', 'form', 'util'], function(exports) {
     var elemMain = entry.children('.'+ CONST.ELEM_MAIN);
 
     // 点击复选框
+    elemMain.on('click', 'input[same="layuiTreeCheck"]', layui.stope);
     elemMain.on('click', 'input[same="layuiTreeCheck"]+', function(e) {
       layui.stope(e); // 阻止点击节点事件
 
