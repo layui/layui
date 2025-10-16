@@ -1504,8 +1504,20 @@ var skin = function(type){
 
 // 仿系统 prompt
 layer.prompt = function(options, yes){
-  var style = '', placeholder = '';
+  var style = '';
+  var placeholder = '';
   options = options || {};
+
+  // 兼容旧版参数
+  var legacyTypeMap = { 
+    0: 'text',
+    1: 'password',
+    2: 'textarea'
+  };
+  if(options.formType in legacyTypeMap){
+    options.formType = legacyTypeMap[options.formType];
+  }
+
 
   if(typeof options === 'function') yes = options;
 
@@ -1517,9 +1529,12 @@ layer.prompt = function(options, yes){
   if (options.placeholder) {
     placeholder = ' placeholder="' + options.placeholder + '"';
   }
-  var prompt, content = options.formType == 2 ? '<textarea class="layui-layer-input"' + style + placeholder + '></textarea>' : function () {
-    return '<input type="' + (options.formType == 1 ? 'password' : 'text') + '" class="layui-layer-input"' + placeholder + '>';
-  }();
+  var prompt;
+  var content = options.formType == 'textarea' 
+    ? '<textarea class="layui-layer-input"' + style + placeholder + '></textarea>' 
+    : function () {
+      return '<input type="' + (options.formType || 'text') + '" class="layui-layer-input"' + placeholder + '>';
+    }();
 
   var success = options.success;
   delete options.success;
