@@ -210,7 +210,7 @@ layer.tips('显示在目标元素上方', '#id', {
 
 | 私有属性 | 描述 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| formType | 输入框类型。支持以下可选值：<ul><li> `0` 文本输入框 </li><li> `1` 密令输入框 </li><li> `2` 多行文本输入框 </li></ul> | number | `0` |
+| formType | 输入框类型。支持以下可选值：<ul><li> `0` 文本输入框 </li><li> `1` 密令输入框 </li><li> `2` 多行文本输入框 </li><li> <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/input#input_%E7%B1%BB%E5%9E%8B" rel="nofollow" target="_blank">MDN: input 类型</a>(2.13+) </li></ul> | number/string | `0` |
 | value | 输入框初始值 | string | - |
 | maxlength | 可输入的最大字符长度 | number | `500` |
 | placeholder | 输入框内容为空时的占位符 | string | - |
