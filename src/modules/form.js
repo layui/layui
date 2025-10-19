@@ -165,7 +165,7 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
         nameIndex[key] = nameIndex[key] | 0;
         init_name = item.name.replace(/^(.*)\[\]$/, '$1['+ (nameIndex[key]++) +']');
       }
-
+      if(/^(checkbox)$/.test(item.type) && !item.checked) field[init_name || item.name] = null; // 建议复选框和单选框分开处理,字段没有数据或者选中也需要返回到后台处理
       if(/^(checkbox|radio)$/.test(item.type) && !item.checked) return;  // 复选框和单选框未选中，不记录字段
       // select 多选用 jQuery 方式取值，未选中 option 时，
       // jQuery v2.2.4 及以下版本返回 null，以上(3.x) 返回 []。
