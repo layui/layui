@@ -197,24 +197,34 @@
         // 数据源 3
         var data3 = [
           {
-            "title": "控制台",
+            "title": "节点 1",
             "id": "1000",
             "spread": true,
             "checked": true,
             "children": [
               {
-                "title": "概览",
+                "title": "节点 1-1",
                 "id": "1001",
                 "spread": true,
-                "checked": true
+                "checked": false
               },
               {
-                "title": "域名",
+                "title": "节点 1-2",
                 "id": "1002",
                 "spread": true,
-                "checked": false
+                "checked": true,
+                "children": [
+                  {
+                    "title": "节点 1-2-1",
+                    "id": "1003"
+                  }
+                ]
               }
             ]
+          },
+          {
+            "title": "节点 2",
+            "id": "2000",
           }
         ];
 
@@ -270,14 +280,14 @@
           }
         });
 
-        // checked 测试
+        // 实例 2 - checked 测试
         tree.render({
           elem: '#test2',
           data: data3,
           showCheckbox: true,
         });
 
-        // 关闭连接线，箭头展开风格
+        // 实例 3 - 关闭连接线，箭头展开风格
         tree.render({
           elem: '#test3',
           data: data1,

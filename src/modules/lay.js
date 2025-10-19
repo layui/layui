@@ -955,40 +955,35 @@
    * @returns {Object[]} 返回平铺数据
    */
   lay.treeToFlat = function(data, options) {
-    options = lay.extend({
+    options = Object.assign({
       childrenKey: 'children',
       idKey: 'id',
       parentKey: 'parentId',
       keepChildren: true
     }, options);
 
-    var result = [];
-    var toFlat = function(nodes, parentId) {
-      for (var i = 0; i < nodes.length; i++) {
-        var node = nodes[i];
-        var item = {};
+    // 展平
+    var toFlat = function(initData, nodes, parentId) {
+      return nodes.reduce(function(acc, currNode) {
+        var children = currNode[options.childrenKey];
 
-        for (var key in node) {
-          if (node.hasOwnProperty(key)) {
-            if (key === options.childrenKey && !options.keepChildren) {
-              continue;
-            }
-            item[key] = node[key];
-          }
+        if (!options.keepChildren) {
+          delete currNode[options.childrenKey];
         }
 
-        item[options.parentKey] = parentId == null ? null : parentId;
-        result.push(item);
+        currNode[options.parentKey] = parentId; // 设置父节点 id
+        acc.push(currNode);
 
-        var children = node[options.childrenKey];
+        // 递归子节点
         if (children && children.length) {
-          toFlat(children, node[options.idKey]);
+          return toFlat(acc, children, currNode[options.idKey]);
         }
-      }
+
+        return acc;
+      }, initData);
     };
 
-    toFlat(data, null);
-    return result;
+    return toFlat([], JSON.parse(JSON.stringify(data)), null);
   };
 
   /**
@@ -1000,36 +995,36 @@
    * @param {string} [options.parentKey='parentId'] - 父节点 id 字段名
    */
   lay.flatToTree = function(data, options) {
-    options = lay.extend({
+    options = Object.assign({
       childrenKey: 'children',
       idKey: 'id',
       parentKey: 'parentId'
     }, options);
 
-    var map = {};
-    var result = [];
-    var i, item, parent;
+    data = JSON.parse(JSON.stringify(data)); // 深拷贝，防止修改原数据
 
-    // 建立索引
-    for (i = 0; i < data.length; i++) {
-      item = data[i];
-      map[item[options.idKey]] = item;
-      item[options.childrenKey] = [];
-    }
+    // 先创建节点映射，确保无论平铺数据的顺序如何，组装树时都能正确匹配
+    var map = data.reduce(function(acc, currNode) {
+      var id = currNode[options.idKey];
+      acc[id] = currNode;
+      acc[id][options.childrenKey] = [];
+      return acc;
+    }, {});
 
     // 组装树
-    for (i = 0; i < data.length; i++) {
-      item = data[i];
-      // 根节点
-      if (item[options.parentKey] == null || !map[item[options.parentKey]]) {
-        result.push(item);
-      } else { // 子节点
-        parent = map[item[options.parentKey]];
-        parent[options.childrenKey].push(item);
-      }
-    }
+    return data.reduce(function(acc, currNode) {
+      var id = currNode[options.idKey];
+      var parentId = currNode[options.parentKey];
 
-    return result;
+      // 根节点
+      if (parentId === null || !map[parentId]) {
+        acc.push(map[id]);
+      } else { // 子节点
+        map[parentId][options.childrenKey].push(currNode);
+      }
+
+      return acc;
+    }, []);
   };
 
 
