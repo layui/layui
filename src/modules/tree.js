@@ -180,7 +180,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
                 if (hasChild) {
                   return '<span class="layui-tree-iconClick layui-tree-icon"><i class="layui-icon '+ (item.spread ? "layui-icon-subtraction" : "layui-icon-addition") +'"></i></span>';
                 } else {
-                  return '<span class="layui-tree-iconClick"><i class="layui-icon layui-icon-file"></i></span>';
+                  return '<span class="layui-tree-iconClick"><i class="layui-icon layui-icon-leaf"></i></span>';
                 };
               } else {
                 return '<span class="layui-tree-iconClick"><i class="layui-tree-iconArrow '+ (hasChild ? "": CONST.CLASS_HIDE) +'"></i></span>';
@@ -468,7 +468,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
           // 若开启连接线，更改图标样式
           if(options.showLine){
             elemMain.find('.'+CONST.ICON_CLICK).addClass('layui-tree-icon');
-            elemMain.find('.'+CONST.ICON_CLICK).children('.layui-icon').addClass(CONST.ICON_ADD).removeClass('layui-icon-file');
+            elemMain.find('.'+CONST.ICON_CLICK).children('.layui-icon').addClass(CONST.ICON_ADD).removeClass('layui-icon-leaf');
           // 若未开启连接线，显示箭头
           } else {
             elemMain.find('.layui-tree-iconArrow').removeClass(CONST.CLASS_HIDE);
@@ -677,7 +677,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
             // 若开启了连接线
             if(options.showLine){
               prevDiv.find('.'+CONST.ICON_CLICK).removeClass('layui-tree-icon');
-              prevDiv.find('.'+CONST.ICON_CLICK).children('.layui-icon').removeClass(CONST.ICON_SUB).addClass('layui-icon-file');
+              prevDiv.find('.'+CONST.ICON_CLICK).children('.layui-icon').removeClass(CONST.ICON_SUB).addClass('layui-icon-leaf');
               // 父节点所在层添加延伸线
               var pare = prevDiv.parents('.'+CONST.ELEM_PACK).eq(0);
               pare.addClass(CONST.ELEM_EXTEND);
