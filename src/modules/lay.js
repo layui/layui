@@ -54,38 +54,91 @@
   Class.fn.constructor = Class;
 
   /**
-   * 将两个或多个对象的内容深度合并到第一个对象中
-   * @callback ExtendFunc
-   * @param {*} target - 一个对象
-   * @param {...*} objectN - 包含额外的属性合并到第一个参数
+   * 将一个或多个对象合并到目标对象中
+   * 对象类型值始终进行「深拷贝」合并。若需浅拷贝合并，请使用 Object.assign()
+   * @param {*} target - 目标对象
+   * @param {...*} objectN - 一个或多个包含要应用的属性的源对象
+   * @param {Function} customizer - 可选的自定义合并函数
    * @returns {*} 返回合并后的对象
+   * @example
+   *```js
+   * console.log(lay.extend({}, {a:1})); // expected: {a:1}
+   * console.log(lay.extend({a:1}, {a:3}, {a:5,b:5})); // expected: {a:5,b:5}
+   * // 多个相同源对象的不同合并方式
+   * const objN = [
+   *   {
+   *     a: [1, 3],
+   *     b: {ba: 1}
+   *   },
+   *   {
+   *     a: [5],
+   *     b: {bb: 2}
+   *   },
+   *   {
+   *     b: {ba: 3},
+   *     c: 3
+   *   }
+   * ];
+   * console.log(lay.extend({}, ...objN)); // expected: {a:[5,3],b:{ba:3,bb:2},c:3}
+   * // 使用 customizer 实现数组覆盖而非合并
+   * const rstObj1 = lay.extend({}, ...objN, function(objValue, srcValue) {
+   *   if (Array.isArray(objValue) && Array.isArray(srcValue)) {
+   *     return srcValue;
+   *   }
+   * });
+   * console.log(rstObj1); // expected: {a:[5],b:{ba:3,bb:2},c:3}
+   * // 使用 customizer 实现特定字段跳过合并
+   * const rstObj2 = lay.extend({}, ...objN, function(objValue, srcValue, key) {
+   *   if (key === 'b') {
+   *     return objValue;
+   *   }
+   * });
+   * console.log(rstObj2); // expected: {a:[5,3],b:{ba:1},c:3}
+   * ```
    */
-  /** @type ExtendFunc*/
-  lay.extend = function(){
-    var ai = 1;
-    var length;
-    var args = arguments;
-    var clone = function(target, obj){
-      target = target || (layui.type(obj) === 'array' ? [] : {}); // 目标对象
-      for(var i in obj){
-        // 若值为普通对象，则进入递归，继续深度合并
-        target[i] = (obj[i] && obj[i].constructor === Object)
-          ? clone(target[i], obj[i])
-        : obj[i];
+  lay.extend = function() {
+    var args = [].slice.call(arguments);
+
+    // 最后一个参数是否为 customizer
+    var customizer = typeof args[args.length - 1] === 'function'
+      ? args.pop()
+      : false;
+
+    // 深拷贝合并
+    return args.reduce(function(target, source) {
+      // 确保 target 始终是一个对象
+      if (typeof target !== 'object' || target === null) {
+        target = {};
       }
+
+      for (var key in source) {
+        if (!source.hasOwnProperty(key)) continue; // 仅处理自有属性
+
+        var targetValue = target[key];
+        var sourceValue = source[key];
+
+        // 自定义合并逻辑（如数组覆盖、特定字段跳过等）
+        if (customizer) {
+          var customResult = customizer(targetValue, sourceValue, key, target, source);
+          if (customResult !== undefined) {
+            target[key] = customResult;
+            continue;
+          }
+        }
+
+        // 默认深拷贝逻辑
+        if (Array.isArray(sourceValue)) {
+          targetValue = Array.isArray(targetValue) ? targetValue : []
+        }
+        target[key] = sourceValue && typeof sourceValue === 'object'
+          ? lay.extend(targetValue, sourceValue, customizer)
+          : sourceValue;
+      }
+
       return target;
-    };
-
-    args[0] = typeof args[0] === 'object' ? args[0] : {};
-    length = args.length
-
-    for(; ai < length; ai++){
-      if(typeof args[ai] === 'object'){
-        clone(args[0], args[ai]);
-      }
-    }
-    return args[0];
+    });
   };
+
 
   /**
    * IE 版本
