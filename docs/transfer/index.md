@@ -2,7 +2,7 @@
 title: 穿梭框组件 transfer
 toc: true
 ---
- 
+
 # 穿梭框组件
 
 > 穿梭框组件 `transfer` 以左右栏 `checkbox` 列表为表现形式，可对列表进行选择并移动到另一栏。
@@ -18,10 +18,10 @@ toc: true
 | API | 描述 |
 | --- | --- |
 | var transfer = layui.transfer | 获得 `transfer` 模块。 |
+| [基础接口](../component/#export) <sup>2.13+</sup> | 该组件由 `component` 构建，因此继承其提供的基础接口。|
 | [transfer.render(options)](#render) | transfer 组件渲染，核心方法。 |
 | [transfer.reload(id, options)](#reload) | 重载实例 |
 | [transfer.getData(id)](#getData) | 获得右侧数据 |
-| [transfer.set(options)](#set) | 设定全局默认属性 |
 
 <h3 id="render" lay-toc="{level: 2}">渲染</h3>
 
@@ -82,21 +82,4 @@ transfer.render({
 });
 // 获得右侧数据
 var getData = transfer.getData('test');
-```
-
-
-<h3 id="set" lay-pid="api" class="ws-anchor ws-bold">设置全局默认属性</h3>
-
-`transfer.set(options);`
-
-- 参数 `options` : 基础属性选项。[#详见属性](#options)
-
-该方法对所有的 `transfer` 实例有效，设置的属性优先级低于 `transfer.render(options)`
-
-```
-// 设置 transfer 全局默认属性
-transfer.set({
-  height: 'auto', // 所有穿梭框默认高度为自动
-  // …
-});
 ```
