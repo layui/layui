@@ -81,19 +81,19 @@
    * ];
    * console.log(lay.extend({}, ...objN)); // expected: {a:[5,3],b:{ba:3,bb:2},c:3}
    * // 使用 customizer 实现数组覆盖而非合并
-   * const rstObj1 = lay.extend({}, ...objN, function(objValue, srcValue) {
+   * const obj1 = lay.extend({}, ...objN, function(objValue, srcValue) {
    *   if (Array.isArray(objValue) && Array.isArray(srcValue)) {
    *     return srcValue;
    *   }
    * });
-   * console.log(rstObj1); // expected: {a:[5],b:{ba:3,bb:2},c:3}
+   * console.log(obj1); // expected: {a:[5],b:{ba:3,bb:2},c:3}
    * // 使用 customizer 实现特定字段跳过合并
-   * const rstObj2 = lay.extend({}, ...objN, function(objValue, srcValue, key) {
+   * const obj2 = lay.extend({}, ...objN, function(objValue, srcValue, key, target, source) {
    *   if (key === 'b') {
    *     return objValue;
    *   }
    * });
-   * console.log(rstObj2); // expected: {a:[5,3],b:{ba:1},c:3}
+   * console.log(obj2); // expected: {a:[5,3],b:{ba:1},c:3}
    * ```
    */
   lay.extend = function() {
@@ -129,14 +129,41 @@
         // 默认深拷贝逻辑
         if (Array.isArray(sourceValue)) {
           targetValue = Array.isArray(targetValue) ? targetValue : []
+        } else if(lay.isPlainObject(sourceValue)) {
+          targetValue = lay.isPlainObject(targetValue) ? targetValue : {}
         }
-        target[key] = sourceValue && typeof sourceValue === 'object'
+        target[key] = (lay.isPlainObject(sourceValue) || Array.isArray(sourceValue))
           ? lay.extend(targetValue, sourceValue, customizer)
           : sourceValue;
       }
 
       return target;
     });
+  };
+
+  /**
+   * 判断是否为纯对象
+   * @param {*} obj - 要检查的对象
+   * @returns {boolean}
+   */
+  lay.isPlainObject = function(obj) {
+    if (
+      obj === null ||
+      typeof obj !== 'object' ||
+      Object.prototype.toString.call(obj) !== '[object Object]'
+    ) {
+      return false;
+    }
+
+    // 过滤特殊场景下的 DOM 对象
+    if (obj instanceof Node || obj instanceof NodeList || obj instanceof DocumentFragment) {
+      return false;
+    }
+
+    // 验证原型链
+    var proto = Object.getPrototypeOf(obj);
+    if (proto === null) return true; // Object.create(null) 场景
+    return proto === Object.prototype;
   };
 
 
