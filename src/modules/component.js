@@ -61,6 +61,7 @@ layui.define(['jquery', 'lay'], function(exports) {
       var inst = {
         config: options,
         id: id,
+        index: that.index,
 
         // 重置实例
         reload: function(options) {
