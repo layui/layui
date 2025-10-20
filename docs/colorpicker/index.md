@@ -2,7 +2,7 @@
 title: 颜色选择器 colorpicker
 toc: true
 ---
- 
+
 # 颜色选择器
 
 > 颜色选择器 `colorpicker` 用于对颜色的快捷选择，支持 `hex,rgb,rgba` 三种颜色类型。
@@ -20,6 +20,7 @@ toc: true
 | API | 描述 |
 | --- | --- |
 | var colorpicker = layui.colorpicker | 获得 `colorpicker` 模块。 |
+| [基础接口](../component/#export) <sup>2.13+</sup> | 该组件由 `component` 构建，因此继承其提供的基础接口。|
 | [colorpicker.render(options)](#render) | colorpicker 组件渲染，核心方法。 |
 
 
@@ -35,7 +36,7 @@ toc: true
 <div class="class-test-colorpicker" lay-options="{color: '#333'}"></div>
 <div class="class-test-colorpicker" lay-options="{color: '#777'}"></div>
 
-<!-- import layui --> 
+<!-- import layui -->
 <script>
 layui.use(function(){
   var colorpicker = layui.colorpicker;
