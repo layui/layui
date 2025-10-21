@@ -31,6 +31,10 @@
     });
   };
 
+  var fnToString = Function.prototype.toString;
+  var ObjectFunctionString = fnToString.call(Object);
+  var hasOwnProperty = Object.prototype.hasOwnProperty;
+
   /*
    * API 兼容
    */
@@ -52,6 +56,7 @@
 
   Class.fn = Class.prototype = [];
   Class.fn.constructor = Class;
+
 
   /**
    * 将一个或多个对象合并到目标对象中
@@ -155,15 +160,16 @@
       return false;
     }
 
-    // 过滤特殊场景下的 DOM 对象
-    if (obj instanceof Node || obj instanceof NodeList || obj instanceof DocumentFragment) {
-      return false;
+    var proto = Object.getPrototypeOf(obj);
+
+    // Object.create(null) 创建的对象
+    if (proto === null) {
+      return true;
     }
 
-    // 验证原型链
-    var proto = Object.getPrototypeOf(obj);
-    if (proto === null) return true; // Object.create(null) 场景
-    return proto === Object.prototype;
+    // 判定具有原型且由全局 Object 构造函数创建的对象为纯对象（来自 jQuery 方案）
+    var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
+    return typeof Ctor === 'function' && fnToString.call(Ctor) === ObjectFunctionString;
   };
 
 
@@ -875,7 +881,6 @@
     }
   };
 
-  var hasOwnProperty = Object.prototype.hasOwnProperty;
   /**
    * 检查对象是否具有指定的属性
    * @param {Record<string, any>} obj 要检查的对象
