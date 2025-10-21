@@ -1001,7 +1001,9 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
         var CLASS = {
           "checkbox": ['layui-form-checkbox', 'layui-form-checked', 'checkbox'],
           "switch": ['layui-form-switch', 'layui-form-onswitch', 'switch'],
-          SUBTRA: 'layui-icon-indeterminate'
+          SUBTRA: 'layui-icon-indeterminate',
+          ICON: 'layui-icon',
+          ICON_OK: 'layui-icon-ok'
         };
         var clickEventName = 'click.lay_checkbox_click';
         var checks = elem || elemForm.find('input[type=checkbox]');
@@ -1027,9 +1029,7 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
             if(check[0].disabled) return;
 
             // 半选
-            if (check[0].indeterminate) {
-              check[0].indeterminate = false;
-            }
+            check[0].indeterminate = check[0].indeterminate;
 
             // 开关
             check[0].checked = check[0].checked;
@@ -1063,9 +1063,9 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
           if(isPrimary){
             that.syncAppearanceOnPropChanged(this, 'indeterminate', function(){
               if(this.indeterminate){
-                reElem.children('.layui-icon-ok').removeClass('layui-icon-ok').addClass(CLASS.SUBTRA);
+                reElem.children(CLASS.ICON).removeClass(CLASS.ICON_OK).addClass(CLASS.SUBTRA);
               }else{
-                reElem.children('.'+ CLASS.SUBTRA).removeClass(CLASS.SUBTRA).addClass('layui-icon-ok');
+                reElem.children(CLASS.ICON).removeClass(CLASS.SUBTRA).addClass(CLASS.ICON_OK);
               }
             })
           }
