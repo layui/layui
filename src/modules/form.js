@@ -1063,9 +1063,9 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
           if(isPrimary){
             that.syncAppearanceOnPropChanged(this, 'indeterminate', function(){
               if(this.indeterminate){
-                reElem.children(CLASS.ICON).removeClass(CLASS.ICON_OK).addClass(CLASS.SUBTRA);
+                reElem.children('.' + CLASS.ICON).removeClass(CLASS.ICON_OK).addClass(CLASS.SUBTRA);
               }else{
-                reElem.children(CLASS.ICON).removeClass(CLASS.SUBTRA).addClass(CLASS.ICON_OK);
+                reElem.children('.' + CLASS.ICON).removeClass(CLASS.SUBTRA).addClass(CLASS.ICON_OK);
               }
             })
           }
