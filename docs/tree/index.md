@@ -2,7 +2,7 @@
 title: 树组件 tree
 toc: true
 ---
- 
+
 # 树组件
 
 > 树组件 `tree` 是以树形为结构的菜单伸缩型组件，*当前版本中，`tree`主要用于树菜单展示，交互性相对较弱。*
@@ -18,6 +18,7 @@ toc: true
 | API | 描述 |
 | --- | --- |
 | var tree = layui.tree | 获得 `tree` 模块。 |
+| [基础接口](../component/#export) <sup>2.13+</sup> | 该组件由 `component` 构建，因此继承其提供的基础接口。|
 | [tree.render(options)](#render) | tree 组件渲染，核心方法。 |
 | [tree.getChecked(id)](#getChecked) | 获取选中的节点数据 |
 | [tree.setChecked(id, idArr)](#setChecked) | 设置对应 id 的节点选中 |

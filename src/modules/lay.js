@@ -771,14 +771,14 @@
 
     var cleanup = [
       bindEventListener(
-        scopeTarget, 
-        eventType, 
-        listener, 
+        scopeTarget,
+        eventType,
+        listener,
         lay.passiveSupported ? { passive: true, capture: useCapture } : useCapture
       ),
       detectIframe && bindEventListener(window, 'blur', function(event){
         setTimeout(function(){
-          if(document.activeElement && document.activeElement.tagName === 'IFRAME' 
+          if(document.activeElement && document.activeElement.tagName === 'IFRAME'
             && target.contains && !target.contains(document.activeElement)
           ){
             handler(event);
@@ -943,6 +943,90 @@
       }
     });
   };
+
+  /**
+   * 树状数据转平铺
+   * @param {Object[]} data - 树状数据
+   * @param {Object} options - 可选项
+   * @param {string} [options.childrenKey='children'] - 子节点字段名
+   * @param {string} [options.idKey='id'] - 节点 id 字段名
+   * @param {string} [options.parentKey='parentId'] - 父节点 id 字段名
+   * @param {boolean} [options.keepChildren=true] - 是否保留子节点数据
+   * @returns {Object[]} 返回平铺数据
+   */
+  lay.treeToFlat = function(data, options) {
+    options = Object.assign({
+      childrenKey: 'children',
+      idKey: 'id',
+      parentKey: 'parentId',
+      keepChildren: true
+    }, options);
+
+    // 展平
+    var toFlat = function(initData, nodes, parentId) {
+      return nodes.reduce(function(acc, currNode) {
+        var children = currNode[options.childrenKey];
+
+        if (!options.keepChildren) {
+          delete currNode[options.childrenKey];
+        }
+
+        currNode[options.parentKey] = parentId; // 设置父节点 id
+        acc.push(currNode);
+
+        // 递归子节点
+        if (children && children.length) {
+          return toFlat(acc, children, currNode[options.idKey]);
+        }
+
+        return acc;
+      }, initData);
+    };
+
+    return toFlat([], JSON.parse(JSON.stringify(data)), null);
+  };
+
+  /**
+   * 平铺数据转树状
+   * @param {Array} data - 平铺数据
+   * @param {Object} options - 可选项
+   * @param {string} [options.childrenKey='children'] - 子节点字段名
+   * @param {string} [options.idKey='id'] - 节点 id 字段名
+   * @param {string} [options.parentKey='parentId'] - 父节点 id 字段名
+   */
+  lay.flatToTree = function(data, options) {
+    options = Object.assign({
+      childrenKey: 'children',
+      idKey: 'id',
+      parentKey: 'parentId'
+    }, options);
+
+    data = JSON.parse(JSON.stringify(data)); // 深拷贝，防止修改原数据
+
+    // 先创建节点映射，确保无论平铺数据的顺序如何，组装树时都能正确匹配
+    var map = data.reduce(function(acc, currNode) {
+      var id = currNode[options.idKey];
+      acc[id] = currNode;
+      acc[id][options.childrenKey] = [];
+      return acc;
+    }, {});
+
+    // 组装树
+    return data.reduce(function(acc, currNode) {
+      var id = currNode[options.idKey];
+      var parentId = currNode[options.parentKey];
+
+      // 根节点
+      if (parentId === null || !map[parentId]) {
+        acc.push(map[id]);
+      } else { // 子节点
+        map[parentId][options.childrenKey].push(currNode);
+      }
+
+      return acc;
+    }, []);
+  };
+
 
 
   /*
