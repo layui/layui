@@ -11,6 +11,34 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.13.0-alpha.0" lay-pid="2.10+" class="ws-anchor">
+  v2.13.0-alpha.0
+  <span class="layui-badge-rim">2025-10-21</span>
+</h2>
+
+- #### component
+  - 重构 carousel 组件 #2857 @sentsim
+  - 重构 colorpicker 组件 #2858 @sentsim
+  - 重构 flow 组件 #2860 @sentsim
+  - 重构 transfer 组件 #2862 @sentsim
+  - 重构 tree 组件 #2863 @sentsim
+- #### tree
+  - 修复 点击复选框时触发了节点展开收缩的问题 #2863 @sentsim
+  - 优化 父、子节点的 checked 状态关系 #2863 @sentsim
+  - 优化 叶子节点的图标 #2863 @sentsim
+- #### layer
+  - 增强 prompt 的 `formType` 选项，支持原生语义化 input 类型 #2873 @Sight-wcg
+  - 修复 tips 在触发元素宽度较小时的定位 #2871 @Sight-wcg
+- #### checkbox
+  - 修复 初始半选时，再点击选中后的图标状态异常问题 #2882 @Sight-wcg
+- #### lay
+  - 新增 `lay.treeToFlat, lay.flatToTree` 方法 #2863 @sentsim
+
+
+### 下载： [layui-v2.13.0-alpha.0.zip](https://gitee.com/layui/layui/attach_files/2394275/download)
+
+---
+
 <h2 id="v2.12.1" lay-pid="2.10+" class="ws-anchor">
   v2.12.1
   <span class="layui-badge-rim">2025-10-11</span>
