@@ -1,0 +1,51 @@
+/**
+ * Layui Visual Test
+ */
+
+.test-side {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 160px;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.test-main {
+  --padding: 16px;
+
+  --border-color: #eee;
+}
+
+
+.test-main {
+  margin-left: 160px;
+  padding: 32px;
+}
+
+.test-stats {
+  padding-bottom: var(--padding);
+  border-bottom: 1px solid var(--border-color);
+}
+.test-stats span {
+  padding-right: var(--padding);
+}
+
+.test-item {
+  margin: var(--padding) 0;
+  padding: var(--padding);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 18px 18px -18px,
+    rgba(0, 0, 0, 0.05) 0px 0px 18px;
+}
+.test-item > div {
+  padding: 5px 0;
+  color: #16b777;
+}
+.test-result ul li span {
+  padding-right: var(--padding);
+}
+.test-result ul li code {
+  color: #1F1F1F;
+  font-family: "Courier New", Consolas, "Lucida Console", monospace;
+}
