@@ -329,10 +329,11 @@ layui.define('lay', function(exports) {
     var locale = (options && options.locale) || config.locale;
     var i18nMessages = config.messages[locale];
     var namespace = locale + ':';
-    var fallbackMessage = (options && lay.hasOwn(options, 'default')) ? options.default : undefined;
+    var hasDefault = options && lay.hasOwn(options, 'default');
+    var fallbackMessage = hasDefault ? options.default : undefined;
 
-    if (!i18nMessages) {
-      hint.errorOnce("Locale '" + locale + "' not found. Please add i18n messages for this locale first.", 'error');
+    if (!i18nMessages && !hasDefault) {
+      hint.errorOnce("Locale '" + locale + "' not found. Please add i18n messages for this locale first.", 'warn');
     }
 
     var result = resolveValue(namespace + keypath, i18nMessages, fallbackMessage);
