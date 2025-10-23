@@ -90,6 +90,11 @@
     table: 'table', // 表格
     treeTable: 'treeTable', // 树表
     tabs: 'tabs', // 标签页
+    tab: 'tab', // 选项卡（兼容保留）
+    nav: 'nav', // 导航菜单
+    breadcrumb: 'breadcrumb', // 面包屑
+    progress: 'progress', // 进度条
+    collapse: 'collapse', // 折叠面板
     element: 'element', // 常用元素操作
     rate: 'rate',  // 评分组件
     colorpicker: 'colorpicker', // 颜色选择器
