@@ -11,9 +11,9 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
-<h2 id="v2.13.0-alpha.0" lay-pid="2.10+" class="ws-anchor">
-  v2.13.0-alpha.0
-  <span class="layui-badge-rim">2025-10-21</span>
+<h2 id="v2.13.0-beta.0" lay-pid="2.10+" class="ws-anchor">
+  v2.13.0-beta.0
+  <span class="layui-badge-rim">2025-10-24</span>
 </h2>
 
 - #### component
@@ -22,20 +22,31 @@ toc: true
   - 重构 flow 组件 #2860 @sentsim
   - 重构 transfer 组件 #2862 @sentsim
   - 重构 tree 组件 #2863 @sentsim
+  - 重构 elemeng 模块，保留原接口，拆分成如下 5 个单独组件 #2885 @sentsim
+  - 新增 tab 单独组件 (*已被 tabs 平替，仅为兼容保留*) #2885 @sentsim
+  - 新增 nav 单独组件 #2885 @sentsim
+  - 新增 breadcrumb 单独组件 #2885 @sentsim
+  - 新增 progress 单独组件 #2885 @sentsim
+  - 新增 collapse 单独组件 #2885 @sentsim
 - #### tree
   - 修复 点击复选框时触发了节点展开收缩的问题 #2863 @sentsim
   - 优化 父、子节点的 checked 状态关系 #2863 @sentsim
   - 优化 叶子节点的图标 #2863 @sentsim
+- #### checkbox
+  - 修复 初始半选时，再点击选中后的图标状态异常问题 #2882 @Sight-wcg
 - #### layer
   - 增强 prompt 的 `formType` 选项，支持原生语义化 input 类型 #2873 @Sight-wcg
   - 修复 tips 在触发元素宽度较小时的定位 #2871 @Sight-wcg
-- #### checkbox
-  - 修复 初始半选时，再点击选中后的图标状态异常问题 #2882 @Sight-wcg
+- #### laydate
+  - 优化 lang: 'en' 时的报错提示 #2884 @sentsim
 - #### lay
   - 新增 `lay.treeToFlat, lay.flatToTree` 方法 #2863 @sentsim
+  - 重构 `lay.extend` 实现，增强整体逻辑 #2879 @sentsim
+  - 新增 `lay.extend` 最后一个参数为函数的支持，用于定制合并值 #2879 @sentsim
+  - 修复 `lay.extend` 合并嵌套的数组类型值时产生引用的问题 #2879 @sentsim
 
 
-### 下载： [layui-v2.13.0-alpha.0.zip](https://gitee.com/layui/layui/attach_files/2394275/download)
+### 下载： [layui-v2.13.0-beta.0.zip](https://gitee.com/layui/layui/attach_files/2398248/download)
 
 ---
 
