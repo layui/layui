@@ -7,7 +7,6 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
 
   var lay = layui.lay;
   var i18n = layui.i18n;
-  var component = layui.component;
   var $ = layui.$;
   var form = layui.form;
   var layer = layui.layer;
