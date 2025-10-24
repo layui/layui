@@ -56,7 +56,7 @@ layui.define('component', function(exports) {
       var elemBar = elem.find('.'+ ELEM +'-bar');
       var text = elemBar.find('.'+ ELEM +'-text');
 
-      elemBar.css('width', function(){
+      elemBar.css('width', function() {
         return /^.+\/.+$/.test(percent)
           ? (new Function('return '+ percent)() * 100) + '%'
       : percent;
