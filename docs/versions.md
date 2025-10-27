@@ -22,7 +22,7 @@ toc: true
   - 重构 flow 组件 #2860 @sentsim
   - 重构 transfer 组件 #2862 @sentsim
   - 重构 tree 组件 #2863 @sentsim
-  - 重构 elemeng 模块，保留原接口，拆分成如下 5 个组件模块 #2885 @sentsim
+  - 重构 element 模块，保留原接口，拆分成如下 5 个组件模块 #2885 @sentsim
   - 新增 tab 组件模块 (*已被 tabs 平替，仅为兼容保留*) #2885 @sentsim
   - 新增 nav 组件模块 #2885 @sentsim
   - 新增 breadcrumb 组件模块 #2885 @sentsim
