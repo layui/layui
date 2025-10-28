@@ -302,7 +302,7 @@ tabs.on(`beforeChange(testID)`, function(data) {
   console.log(data.to.index); // 切换后的选中标签索引
   console.log(data.to.headerItem); // 切换后的选中标签头部项
 
-  // 阻止标签默认关闭
+  // 阻止标签默认切换
   return false;
 });
 ```
@@ -334,7 +334,7 @@ tabs.on('afterChange(testID)', function(data) {
 
 `tabs.on('beforeClose(id)', callback)`
 
-标签在切换前触发，通过在事件中 `return false` 可阻止默认标签切换行为。通常和 `tabs.close()` 方法搭配使用。
+标签在关闭前触发，通过在事件中 `return false` 可阻止默认标签关闭行为。通常和 `tabs.close()` 方法搭配使用。
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'max-height: 520px;', tools: ['full'], done: function(obj){
   obj.render();

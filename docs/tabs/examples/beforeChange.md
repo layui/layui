@@ -37,7 +37,7 @@ layui.use(function() {
       layer.close(i); // 关闭确认框
     });
 
-    // 阻止标签默认关闭
+    // 阻止标签默认切换
     return false;
   });
 });
