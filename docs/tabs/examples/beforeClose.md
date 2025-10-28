@@ -27,7 +27,7 @@ layui.use(function() {
   // 标签实例 ID
   var DEMO_TABS_ID = 'demoTabsBeforeClose';
 
-  // tabs 切换前的事件
+  // tabs 关闭前的事件
   tabs.on(`beforeClose(${DEMO_TABS_ID})`, function(data) {
     console.log('beforeClose', data);
 
