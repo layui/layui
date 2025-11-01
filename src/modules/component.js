@@ -13,7 +13,7 @@ layui.define(['jquery', 'lay'], function(exports) {
   exports('component', function(settings) {
     // 默认设置
     settings = $.extend(true, {
-      isDeepReload: false // 是否默认为深度重载
+      isDeepReload: false, // 是否默认为深度重载
     }, settings);
 
     // 组件名
@@ -35,7 +35,7 @@ layui.define(['jquery', 'lay'], function(exports) {
         CLASS_HIDE: 'layui-hide',
         CLASS_HIDEV: 'layui-hide-v',
         CLASS_DISABLED: 'layui-disabled',
-        CLASS_NONE: 'layui-none'
+        CLASS_NONE: 'layui-none',
       }, settings.CONST),
 
       // 设置全局项
@@ -48,7 +48,7 @@ layui.define(['jquery', 'lay'], function(exports) {
       // 事件
       on: function(events, callback) {
         return layui.onevent.call(this, MOD_NAME, events, callback);
-      }
+      },
     };
 
     // 操作当前实例
@@ -66,7 +66,7 @@ layui.define(['jquery', 'lay'], function(exports) {
         // 重置实例
         reload: function(options) {
           that.reload.call(that, options);
-        }
+        },
       };
 
       // 扩展实例对象的回调
@@ -115,7 +115,7 @@ layui.define(['jquery', 'lay'], function(exports) {
       if (elem.length > 1) {
         layui.each(elem, function() {
           component.render($.extend({}, options, {
-            elem: this
+            elem: this,
           }));
         });
         return that;
@@ -226,7 +226,7 @@ layui.define(['jquery', 'lay'], function(exports) {
 
     // 组件缓存
     component.cache = {
-      id: {}
+      id: {},
     };
 
     // 用于扩展原型

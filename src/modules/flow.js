@@ -69,7 +69,7 @@ layui.define(['i18n', 'component'], function(exports) {
             elem: options.elem.find('img[lay-src]'),
             scrollElem: options.scrollElem,
             direction: options.direction,
-            id: options.id
+            id: options.id,
           });
         }
 
@@ -128,7 +128,7 @@ layui.define(['i18n', 'component'], function(exports) {
           }
         }, 100);
       });
-    }
+    },
   });
 
   var CONST = component.CONST;
@@ -213,14 +213,14 @@ layui.define(['i18n', 'component'], function(exports) {
       var id = options.id || '';
       var LAZYIMG_SCROLL_EVENTS = CONST.LAZYIMG_SCROLL_EVENTS + '_' + id;
       scrollElem.off(LAZYIMG_SCROLL_EVENTS).on(LAZYIMG_SCROLL_EVENTS, function() {
-        if (timer) clearTimeout(timer)
+        if (timer) clearTimeout(timer);
         timer = setTimeout(function(){
           render();
         }, 50);
       });
 
       return render;
-    }
+    },
   });
 
   exports(CONST.MOD_NAME, component);

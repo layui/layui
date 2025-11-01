@@ -28,7 +28,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
         bars: [], //  bar 信息
         "default": true, // 是否显示默认 bar
         margin: 160, // 出现 top bar 的滚动条高度临界值
-        duration: 320 // top bar 等动画时长（毫秒）
+        duration: 320, // top bar 等动画时长（毫秒）
       }, options);
 
       // 目标元素对象
@@ -37,7 +37,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       // 滚动条所在元素对象
       var $scroll = options.scroll
         ? $(options.scroll)
-      : $(options.target === 'body' ? $doc : $target)
+      : $(options.target === 'body' ? $doc : $target);
 
       // 是否提供默认图标
       if(options['default']){
@@ -45,19 +45,19 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
         if(options.bar1){
           options.bars.push({
             type: 'bar1',
-            icon: 'layui-icon-chat'
+            icon: 'layui-icon-chat',
           });
         }
         if(options.bar2){
           options.bars.push({
             type: 'bar2',
-            icon: 'layui-icon-help'
+            icon: 'layui-icon-help',
           });
         }
         // 默认 top bar
         options.bars.push({
           type: 'top',
-          icon: 'layui-icon-top'
+          icon: 'layui-icon-top',
         });
       }
 
@@ -71,7 +71,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
         // 设置 bar 相关属性
         elemBar.addClass(item.icon).attr({
           'lay-type': item.type,
-          'style': item.style || (options.bgcolor ? 'background-color: '+ options.bgcolor : '')
+          'style': item.style || (options.bgcolor ? 'background-color: '+ options.bgcolor : ''),
         }).html(item.content);
 
         // bar 点击事件
@@ -83,7 +83,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
                 ? $('html,body')
               : $scroll
             ).animate({
-              scrollTop : 0
+              scrollTop : 0,
             }, options.duration);
           }
           typeof options.click === 'function' && options.click.call(this, type);
@@ -96,7 +96,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
               var type = $(this).attr('lay-type');
               typeof callback === 'function' && callback.call(this, type);
             });
-          })
+          });
         }
 
         // 获得 top bar 节点
@@ -147,7 +147,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       // 默认可选项
       options = $.extend(true, {
         date: new Date(),
-        now: new Date()
+        now: new Date(),
       }, options);
 
       // 兼容旧版参数
@@ -167,10 +167,10 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
         reload: function(opts){ // 重置倒计时
           this.clear();
           $.extend(true, this.options, {
-            now: new Date()
+            now: new Date(),
           }, opts);
           count();
-        }
+        },
       };
 
       typeof options.ready === 'function' && options.ready();
@@ -186,7 +186,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
           d: Math.floor(countTime/(1000*60*60*24)), // 天
           h: Math.floor(countTime/(1000*60*60)) % 24, // 时
           m: Math.floor(countTime/(1000*60)) % 60, // 分
-          s: Math.floor(countTime/1000) % 60 // 秒
+          s: Math.floor(countTime/1000) % 60, // 秒
         };
         var next = function(){
           now.setTime(now.getTime() + 1000);
@@ -195,7 +195,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
         };
 
         // 兼容旧版返回值
-        if(args.length > 1) result = [result.d,result.h,result.m,result.s]
+        if(args.length > 1) result = [result.d,result.h,result.m,result.s];
 
         // 计时 - 以秒间隔
         inst.timer = setTimeout(next, 1000);
@@ -291,8 +291,8 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
           }
         }
 
-        return new Date(date)
-      }
+        return new Date(date);
+      };
       var date = normalizeDate(time);
 
       if(!date.getDate()) return hint.error('Invalid millisecond for "util.toDateString(millisecond)"'), '';
@@ -325,8 +325,8 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
         mm: function(){return that.digit(minutes);},
         s: function(){return String(seconds);},
         ss: function(){return that.digit(seconds);},
-        SSS: function(){return that.digit(milliseconds, 3);}
-      }
+        SSS: function(){return that.digit(milliseconds, 3);},
+      };
 
       format = format || 'yyyy-MM-dd HH:mm:ss';
 
@@ -357,25 +357,25 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       options = $.extend({
         margin: 160, // 触发动作的边界值
         duration: 200, // 动画持续毫秒数
-        type: 'y' // 触发方向，x 水平、y 垂直
+        type: 'y', // 触发方向，x 水平、y 垂直
       }, options);
 
       if(!options.scrollElem[0] || !options.thisElem[0]) return;
 
-      var scrollElem = options.scrollElem // 滚动元素
-      var thisElem = options.thisElem // 目标元素
-      var vertical = options.type === 'y' // 是否垂直方向
-      var SCROLL_NAME = vertical ? 'scrollTop' : 'scrollLeft' // 滚动方法
-      var OFFSET_NAME = vertical ? 'top' : 'left' // 坐标方式
-      var scrollValue = scrollElem[SCROLL_NAME]() // 当前滚动距离
-      var size = scrollElem[vertical ? 'height' : 'width']() // 滚动元素的尺寸
-      var scrollOffset = scrollElem.offset()[OFFSET_NAME] // 滚动元素所处位置
-      var thisOffset = thisElem.offset()[OFFSET_NAME] - scrollOffset // 目标元素当前的所在位置
+      var scrollElem = options.scrollElem; // 滚动元素
+      var thisElem = options.thisElem; // 目标元素
+      var vertical = options.type === 'y'; // 是否垂直方向
+      var SCROLL_NAME = vertical ? 'scrollTop' : 'scrollLeft'; // 滚动方法
+      var OFFSET_NAME = vertical ? 'top' : 'left'; // 坐标方式
+      var scrollValue = scrollElem[SCROLL_NAME](); // 当前滚动距离
+      var size = scrollElem[vertical ? 'height' : 'width'](); // 滚动元素的尺寸
+      var scrollOffset = scrollElem.offset()[OFFSET_NAME]; // 滚动元素所处位置
+      var thisOffset = thisElem.offset()[OFFSET_NAME] - scrollOffset; // 目标元素当前的所在位置
       var obj = {};
 
       // 边界满足条件
       if(thisOffset > size - options.margin || thisOffset < options.margin){
-        obj[SCROLL_NAME] = thisOffset - size/2 + scrollValue
+        obj[SCROLL_NAME] = thisOffset - size/2 + scrollValue;
         scrollElem.animate(obj, options.duration);
       }
     },
@@ -400,9 +400,9 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       // 更多选项
       options = $.extend({
         elem: 'body',
-        trigger: 'click'
+        trigger: 'click',
       }, typeof options === 'object' ? options : {
-        trigger: options // 兼容旧版
+        trigger: options, // 兼容旧版
       });
 
       var elem = options.elem = $(options.elem);
@@ -414,7 +414,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       // 初始化 data 默认值，以委托元素为存储单元
       if (!elem.data(DATANAME)) {
         elem.data(DATANAME, {
-          events: {}
+          events: {},
         });
       }
 
@@ -440,7 +440,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       });
 
       return events;
-    }
+    },
   };
 
   // 兼容旧版

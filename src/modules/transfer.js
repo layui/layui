@@ -31,7 +31,7 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
       ELEM_SEARCH: 'layui-transfer-search',
       ELEM_ACTIVE: 'layui-transfer-active',
       ELEM_DATA: 'layui-transfer-data',
-      BTN_DISABLED: 'layui-btn-disabled'
+      BTN_DISABLED: 'layui-btn-disabled',
     },
 
     beforeRender: function(options) {
@@ -40,8 +40,8 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
         title: i18n.$t('transfer.title'),
         text: {
           none: i18n.$t('transfer.noData'),
-          searchNone: i18n.$t('transfer.noMatch')
-        }
+          searchNone: i18n.$t('transfer.noMatch'),
+        },
       }, that.config, options);
     },
 
@@ -71,7 +71,7 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
       var TPL_MAIN = ['<div class="layui-transfer layui-form layui-border-box" lay-filter="LAY-transfer-{{= d.index }}">',
         TPL_BOX({
           index: 0,
-          checkAllName: 'layTransferLeftCheckAll'
+          checkAllName: 'layTransferLeftCheckAll',
         }),
         '<div class="layui-transfer-active">',
           '<button type="button" class="layui-btn layui-btn-sm layui-btn-primary layui-btn-disabled" data-index="0">',
@@ -83,7 +83,7 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
         '</div>',
         TPL_BOX({
           index: 1,
-          checkAllName: 'layTransferRightCheckAll'
+          checkAllName: 'layTransferRightCheckAll',
         }),
       '</div>'].join('');
 
@@ -91,10 +91,10 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
       var thisElem = that.elem = $(laytpl(TPL_MAIN, {
         open: '{{', // 标签符前缀
         close: '}}', // 标签符后缀
-        tagStyle: 'modern'
+        tagStyle: 'modern',
       }).render({
         data: options,
-        index: that.index // 索引
+        index: that.index, // 索引
       }));
 
       var othis = options.elem;
@@ -108,16 +108,16 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
       othis.html(that.elem);
 
       // 各级容器
-      that.layBox = that.elem.find('.'+ CONST.ELEM_BOX)
-      that.layHeader = that.elem.find('.'+ CONST.ELEM_HEADER)
-      that.laySearch = that.elem.find('.'+ CONST.ELEM_SEARCH)
+      that.layBox = that.elem.find('.'+ CONST.ELEM_BOX);
+      that.layHeader = that.elem.find('.'+ CONST.ELEM_HEADER);
+      that.laySearch = that.elem.find('.'+ CONST.ELEM_SEARCH);
       that.layData = thisElem.find('.'+ CONST.ELEM_DATA);
       that.layBtn = thisElem.find('.'+ CONST.ELEM_ACTIVE + ' .layui-btn');
 
       // 初始化尺寸
       that.layBox.css({
         width: options.width,
-        height: options.height
+        height: options.height,
       });
       that.layData.css({
         height: function() {
@@ -126,7 +126,7 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
             height -= that.laySearch.outerHeight();
           }
           return height - 2;
-        }()
+        }(),
       });
 
       that.renderData(); // 渲染数据
@@ -141,9 +141,9 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
         // 获取右侧数据
         getData: function() {
           return that.getData.call(that);
-        }
+        },
       };
-    }
+    },
   });
 
   var CONST = component.CONST;
@@ -162,16 +162,16 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
     // 左右穿梭框差异数据
     var arr = [{
       checkName: 'layTransferLeftCheck',
-      views: []
+      views: [],
     }, {
       checkName: 'layTransferRightCheck',
-      views: []
+      views: [],
     }];
 
     // 解析格式
     that.parseData(function(item) {
       // 标注为 selected 的为右边的数据
-      var _index = item.selected ? 1 : 0
+      var _index = item.selected ? 1 : 0;
       var listElem = ['<li>',
         '<input type="checkbox" name="'+ arr[_index].checkName +'" lay-skin="primary" lay-filter="layTransferCheckbox" title="'+ item.title +'"'+ (item.disabled ? ' disabled' : '') + (item.checked ? ' checked' : '') +' value="'+ item.value +'">',
       '</li>'].join('');
@@ -231,7 +231,7 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
 
       // 无数据视图
       if (!obj.stopNone) {
-        var isNone = thisDataElem.children('li:not(.'+ CONST.CLASS_HIDE +')').length
+        var isNone = thisDataElem.children('li:not(.'+ CONST.CLASS_HIDE +')').length;
         that.noneView(thisDataElem, isNone ? '' : options.text.none);
       }
     });
@@ -275,7 +275,7 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
         ? options.parseData(item)
       : item) || item;
 
-      newData.push(item = $.extend({}, item))
+      newData.push(item = $.extend({}, item));
 
       layui.each(options.value, function(index2, item2){
         if(item2 == item.value){
@@ -356,12 +356,12 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
     that.renderCheckBtn();
 
     // 穿梭时，如果另外一个框正在搜索，则触发匹配
-    var siblingInput = thisBoxElem.siblings('.'+ CONST.ELEM_BOX).find('.'+ CONST.ELEM_SEARCH +' input')
+    var siblingInput = thisBoxElem.siblings('.'+ CONST.ELEM_BOX).find('.'+ CONST.ELEM_SEARCH +' input');
     siblingInput.val() === '' ||  siblingInput.trigger('keyup');
 
     // 穿梭时的回调
     options.onchange && options.onchange(that.getData(arr), _index);
-  }
+  };
 
   // 事件
   Class.prototype.events = function() {
@@ -386,7 +386,7 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
 
       setTimeout(function () {
         that.renderCheckBtn({stopNone: true});
-      }, 0)
+      }, 0);
     });
 
     // 双击穿梭
@@ -403,13 +403,13 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
       var ret = typeof options.dblclick === 'function' ? options.dblclick({
         elem: elemThis,
         data: that.getData([thisElemCheckbox[0].value])[0],
-        index: index
+        index: index,
       }) : null;
 
       if (ret === false) return;
 
       that.transfer(index, elemThis);
-    })
+    });
 
     // 穿梭按钮事件
     that.layBtn.on('click', function() {
@@ -458,7 +458,7 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function(exports) {
       var that = component.getInst(id);
       if(!that) return;
       return that.getData();
-    }
+    },
   });
 
   exports(CONST.MOD_NAME, component);

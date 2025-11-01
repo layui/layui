@@ -16,7 +16,7 @@ layui.define('component', function(exports) {
 
     // 默认配置
     config: {
-      elem: '.layui-nav'
+      elem: '.layui-nav',
     },
 
     CONST: {
@@ -55,7 +55,7 @@ layui.define('component', function(exports) {
             bar.css({
               top: othis.offset().top - nav.offset().top + nav.scrollTop(),
               height: (thisA[0] ? thisA : othis).outerHeight(),
-              opacity: 1
+              opacity: 1,
             });
           }
         } else {
@@ -64,7 +64,7 @@ layui.define('component', function(exports) {
           // 若居中对齐
           if (child.hasClass(CONST.NAV_CHILD_C)) {
             child.css({
-              left: -(child.outerWidth() - othis.width()) / 2
+              left: -(child.outerWidth() - othis.width()) / 2,
             });
           }
 
@@ -73,12 +73,12 @@ layui.define('component', function(exports) {
             bar.css({
               left: bar.position().left + bar.width() / 2,
               width: 0,
-              opacity: 0
+              opacity: 0,
             });
           } else { // bar 跟随
             bar.css({
               left: othis.position().left + parseFloat(othis.css('marginLeft')),
-              top: othis.position().top + othis.height() - bar.height()
+              top: othis.position().top + othis.height() - bar.height(),
             });
           }
 
@@ -86,7 +86,7 @@ layui.define('component', function(exports) {
           timer[index] = setTimeout(function() {
             bar.css({
               width: child[0] ? 0 : othis.width(),
-              opacity: child[0] ? 0 : 1
+              opacity: child[0] ? 0 : 1,
             });
           }, device.ie && device.ie < 10 ? 0 : TIME);
 
@@ -122,7 +122,7 @@ layui.define('component', function(exports) {
           if (othis.hasClass(CONST.NAV_TREE)) {
             bar.css({
               height: 0,
-              opacity: 0
+              opacity: 0,
             });
           } else {
             // 隐藏子菜单
@@ -136,13 +136,13 @@ layui.define('component', function(exports) {
 
         // 鼠标离开当前菜单时
         othis.off('mouseleave.lay_nav').on('mouseleave.lay_nav', function() {
-          clearTimeout(timer[index])
+          clearTimeout(timer[index]);
           timeEnd[index] = setTimeout(function() {
             if (!othis.hasClass(CONST.NAV_TREE)) {
               bar.css({
                 width: 0,
                 left: bar.position().left + bar.width() / 2,
-                opacity: 0
+                opacity: 0,
               });
             }
           }, TIME);
@@ -163,7 +163,7 @@ layui.define('component', function(exports) {
           thisA.off(clickEventName, events.clickThis).on(clickEventName, events.clickThis);
         });
       });
-    }
+    },
   });
 
   var events = {
@@ -193,12 +193,12 @@ layui.define('component', function(exports) {
         // 动画执行完成后的操作
         var complete = function() {
           $(this).css({
-            "display": "" // 剔除动画生成的 style display，以适配外部样式的状态重置
+            "display": "", // 剔除动画生成的 style display，以适配外部样式的状态重置
           });
           // 避免导航滑块错位
           parents.children('.'+ CONST.NAV_BAR).css({
-            opacity: 0
-          })
+            opacity: 0,
+          });
         };
 
         // 是否正处于动画中的状态
@@ -229,7 +229,7 @@ layui.define('component', function(exports) {
       }
 
       layui.event.call(this, SUPER_MOD_NAME, 'nav('+ filter +')', othis);
-    }
+    },
   };
 
   var CONST = component.CONST;

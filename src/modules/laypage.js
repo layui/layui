@@ -106,7 +106,7 @@ layui.define('i18n', function(exports) {
         }
 
         // 计算当前页码组的起始页
-        var halve = Math.floor((groups-1)/2) // 页码数等分
+        var halve = Math.floor((groups-1)/2); // 页码数等分
         var start = index > 1 ? config.curr - halve : 1;
         var end = index > 1 ? (function(){
           var max = config.curr + (groups - halve - 1);
@@ -159,7 +159,7 @@ layui.define('i18n', function(exports) {
           ? config.countText[0] + config.count + config.countText[1]
           : i18n.$t('laypage.total', {total: config.count});
 
-        return '<span class="layui-laypage-count">'+ countText +'</span>'
+        return '<span class="layui-laypage-count">'+ countText +'</span>';
       }(),
 
       // 每页条数
@@ -188,7 +188,7 @@ layui.define('i18n', function(exports) {
       refresh: [
         '<a data-page="'+ config.curr +'" class="layui-laypage-refresh">',
           '<i class="layui-icon layui-icon-refresh"></i>',
-        '</a>'
+        '</a>',
       ].join(''),
 
       // 跳页区域
@@ -196,15 +196,15 @@ layui.define('i18n', function(exports) {
         var skipText = typeof config.skipText === 'object' ? config.skipText : [
           i18n.$t('laypage.goto'),
           i18n.$t('laypage.page'),
-          i18n.$t('laypage.confirm')
+          i18n.$t('laypage.confirm'),
         ];
         return [
           '<span class="layui-laypage-skip">'+ skipText[0],
             '<input type="text" min="1" value="'+ config.curr +'" class="layui-input">',
             skipText[1]+ '<button type="button" class="layui-laypage-btn">'+ skipText[2] +'</button>',
-          '</span>'
+          '</span>',
         ].join('');
-      }()
+      }(),
     };
 
     return ['<div class="layui-box layui-unselect layui-laypage layui-laypage-'+ (config.theme ? (
@@ -214,7 +214,7 @@ layui.define('i18n', function(exports) {
         var plate = [];
         layui.each(config.layout, function(index, item){
           if(views[item]){
-            plate.push(views[item])
+            plate.push(views[item]);
           }
         });
         return plate.join('');
@@ -294,7 +294,7 @@ layui.define('i18n', function(exports) {
         this.value = value.replace(/\D/, '');
       }
       if(keyCode === 13){
-        that.jump(elem, true)
+        that.jump(elem, true);
       }
     });
   };
@@ -342,8 +342,8 @@ layui.define('i18n', function(exports) {
         fn.call(elem, e);
       }) : elem.addEventListener(even, fn, false);
       return this;
-    }
-  }
+    },
+  };
 
   exports(MOD_NAME, laypage);
 });

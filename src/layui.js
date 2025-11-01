@@ -15,7 +15,7 @@
   var config = {
     timeout: 10, // 符合规范的模块请求最长等待秒数
     debug: false, // 是否开启调试模式
-    version: false // 是否在模块请求时加入版本号参数（以更新模块缓存）
+    version: false, // 是否在模块请求时加入版本号参数（以更新模块缓存）
   };
 
   // 模块加载缓存信息
@@ -23,7 +23,7 @@
     modules: {}, // 模块物理路径
     status: {}, // 模块加载就绪状态
     event: {}, // 模块自定义事件
-    callback: {} // 模块的回调
+    callback: {}, // 模块的回调
   };
 
   // constructor
@@ -71,9 +71,9 @@
     if (!warned[msg]) {
       warned[msg] = true;
       warned._size = (warned._size || 0) + 1;
-      error(msg, type)
+      error(msg, type);
     }
-  }
+  };
 
   // 内置模块
   var builtinModules = config.builtin = {
@@ -108,7 +108,7 @@
     i18n:  'i18n', // 国际化
 
     all: 'all',
-    'layui.all': 'layui.all' // 聚合标识（功能性的，非真实模块）
+    'layui.all': 'layui.all', // 聚合标识（功能性的，非真实模块）
   };
 
   /**
@@ -209,7 +209,7 @@
         // 记录模块回调，以便需要时再执行
         cache.callback[mod] = function() {
           callback(setModule);
-        }
+        };
       });
       return this;
     };
@@ -552,7 +552,7 @@
       pathname: [],
       search: {},
       hash: (hash.match(/[^#](#.*$)/) || [])[1] || '',
-      href: ''
+      href: '',
     };
 
     // 禁止非 hash 路由规范
@@ -632,7 +632,7 @@
         return href
           ? ((href.match(/#.+/) || [])[0] || '/')
         : location.hash;
-      }())
+      }()),
     };
 
     return data;
@@ -679,7 +679,7 @@
    */
   Class.prototype.sessionData = function(table, settings) {
     return this.data(table, settings, sessionStorage);
-  }
+  };
 
   /**
    * 设备信息
@@ -714,7 +714,7 @@
           (agent.match(/msie\s(\d+)/) || [])[1] || '11' // 由于 ie11 并没有 msie 的标识
         ) : false;
       }(),
-      weixin: getVersion('micromessenger')  // 是否微信
+      weixin: getVersion('micromessenger'),  // 是否微信
     };
 
     // 任意的 key
@@ -734,7 +734,7 @@
   Class.prototype.hint = function() {
     return {
       error: error,
-      errorOnce: errorOnce
+      errorOnce: errorOnce,
     };
   };
 
@@ -1002,7 +1002,7 @@
   Class.prototype.on = function(events, modName, callback) {
     var that = this;
     return that.onevent.call(that, modName, events, callback);
-  }
+  };
 
   /**
    * 移除模块事件
@@ -1030,7 +1030,7 @@
       timeout = setTimeout(function () {
         func.apply(context, args);
       }, wait);
-    }
+    };
   };
 
   /**
@@ -1050,7 +1050,7 @@
           cooldown = false;
         }, wait);
       }
-    }
+    };
   };
 
   // export layui

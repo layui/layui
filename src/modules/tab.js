@@ -15,7 +15,7 @@ layui.define('component', function(exports) {
 
     // 默认配置
     config: {
-      elem: '.layui-tab'
+      elem: '.layui-tab',
     },
 
     CONST: {
@@ -23,7 +23,7 @@ layui.define('component', function(exports) {
       HEADER: 'layui-tab-title',
       CLOSE: 'layui-tab-close',
       MORE: 'layui-tab-more',
-      BAR: 'layui-tab-bar'
+      BAR: 'layui-tab-bar',
     },
 
     // 渲染
@@ -32,7 +32,7 @@ layui.define('component', function(exports) {
       var options = that.config;
 
       events.tabAuto(null, options.elem);
-    }
+    },
   });
 
   var CONST = component.CONST;
@@ -71,11 +71,11 @@ layui.define('component', function(exports) {
           elem: parents,
           from: {
             index: othis.parent().children('li').index(liThis),
-            id: liThis.attr('lay-id')
+            id: liThis.attr('lay-id'),
           },
           to: {
             index: index,
-            id: hasId
+            id: hasId,
           },
         });
         if(shouldChange === false) return;
@@ -96,7 +96,7 @@ layui.define('component', function(exports) {
       layui.event.call(this, SUPER_MOD_NAME, 'tab('+ filter +')', {
         elem: parents,
         index: index,
-        id: hasId
+        id: hasId,
       });
     },
 
@@ -116,7 +116,7 @@ layui.define('component', function(exports) {
         var shouldClose = layui.event.call(li[0], SUPER_MOD_NAME, 'tabBeforeDelete('+ filter +')', {
           elem: tabElem,
           index: index,
-          id: hasId
+          id: hasId,
         });
         if(shouldClose === false) return;
       }
@@ -124,7 +124,7 @@ layui.define('component', function(exports) {
       if(li.hasClass(CONST.CLASS_THIS)){
         if (li.next()[0] && li.next().is('li')){
           events.tabClick.call(li.next()[0], {
-            index: index + 1
+            index: index + 1,
           });
         } else if (li.prev()[0] && li.prev().is('li')){
           events.tabClick.call(li.prev()[0], null, index - 1);
@@ -134,8 +134,8 @@ layui.define('component', function(exports) {
       li.remove();
       if(hasId){
         var contentElem = item.filter('[lay-id="' +  hasId + '"]');
-        contentElem = contentElem.length ? contentElem : item.eq(index)
-        contentElem.remove()
+        contentElem = contentElem.length ? contentElem : item.eq(index);
+        contentElem.remove();
       }else{
         item.eq(index).remove();
       }
@@ -146,7 +146,7 @@ layui.define('component', function(exports) {
       layui.event.call(this, SUPER_MOD_NAME, 'tabDelete('+ filter +')', {
         elem: tabElem,
         index: index,
-        id: hasId
+        id: hasId,
       });
     },
 
@@ -169,7 +169,7 @@ layui.define('component', function(exports) {
               var close = $('<i class="layui-icon layui-icon-close layui-unselect '+ CONST.CLOSE +'"></i>');
               close.on('click', function(e) {
                 events.tabDelete.call(this, {
-                  e: e
+                  e: e,
                 });
               });
               li.append(close);
@@ -215,7 +215,7 @@ layui.define('component', function(exports) {
         tsbTitle.removeClass(CONST.MORE);
         tsbTitle.find('.'+ CONST.BAR).attr('title','');
       }
-    }
+    },
   };
 
 
@@ -260,7 +260,7 @@ layui.define('component', function(exports) {
       var liElem = titElem.find('>li[lay-id="'+ layid +'"]');
       events.tabDelete.call(liElem[0], {
         liElem: liElem,
-        force: force
+        force: force,
       });
       return this;
     },
@@ -279,7 +279,7 @@ layui.define('component', function(exports) {
 
       events.tabClick.call(liElem[0], {
         liElem: liElem,
-        force: force
+        force: force,
       });
       return this;
     },
@@ -291,10 +291,10 @@ layui.define('component', function(exports) {
         var index = $(options.headerElem).index($(this));
         events.tabClick.call(this, {
           index: index,
-          options: options
+          options: options,
         });
       });
-    }
+    },
   });
 
   $doc.on('click', '.' + CONST.HEADER + ' li', events.tabClick); // tab 头部项点击

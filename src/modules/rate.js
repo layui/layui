@@ -20,7 +20,7 @@ layui.define('component', function(exports) {
       half: false,  // 是否可以选择半星
       text: false,  // 是否显示评分对应的文本
       readonly: false,  // 是否只读
-      theme: '' // 主题颜色
+      theme: '', // 主题颜色
     },
 
     CONST: {
@@ -51,7 +51,7 @@ layui.define('component', function(exports) {
         if (!options.half) {
           options.value = (Math.ceil(options.value) - options.value) < 0.5
             ? Math.ceil(options.value)
-            : Math.floor(options.value)
+            : Math.floor(options.value);
         }
       }
 
@@ -101,9 +101,9 @@ layui.define('component', function(exports) {
         setvalue: function (value) {
           options.value = value;
           that.render();
-        }
+        },
       };
-    }
+    },
   });
 
   var CONST = component.CONST;
@@ -149,37 +149,37 @@ layui.define('component', function(exports) {
       // 移入
       othis.on('mousemove', function(e) {
         _ul.find("i").each(function() {
-          $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF)
+          $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF);
         });
         _ul.find("i:lt(" + ind + ")").each(function() {
-          $(this).addClass(CONST.ICON_RATE_SOLID).removeClass(CONST.ICON_HALF_RATE)
+          $(this).addClass(CONST.ICON_RATE_SOLID).removeClass(CONST.ICON_HALF_RATE);
         });
         // 如果设置可选半星，那么判断鼠标相对 li 的位置
         if (options.half) {
           var x = e.pageX - $(this).offset().left;
           if (x <= wide / 2) {
-            othis.children("i").addClass(CONST.ICON_RATE_HALF).removeClass(CONST.ICON_RATE_SOLID)
+            othis.children("i").addClass(CONST.ICON_RATE_HALF).removeClass(CONST.ICON_RATE_SOLID);
           }
         }
-      })
+      });
 
       // 移出
       othis.on('mouseleave', function() {
         _ul.find("i").each(function() {
-          $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF)
+          $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF);
         });
         _ul.find("i:lt(" + Math.floor(options.value) + ")").each(function() {
-          $(this).addClass(CONST.ICON_RATE_SOLID).removeClass(CONST.ICON_HALF_RATE)
+          $(this).addClass(CONST.ICON_RATE_SOLID).removeClass(CONST.ICON_HALF_RATE);
         });
         // 如果设置可选半星，根据分数判断是否有半星
         if (options.half) {
           if (parseInt(options.value) !== options.value) {
-            _ul.children("li:eq(" + Math.floor(options.value) + ")").children("i").addClass(CONST.ICON_RATE_HALF).removeClass(CONST.ICON_SOLID_RATE)
+            _ul.children("li:eq(" + Math.floor(options.value) + ")").children("i").addClass(CONST.ICON_RATE_HALF).removeClass(CONST.ICON_SOLID_RATE);
           }
         }
-      })
+      });
 
-    })
+    });
 
     lay.touchSwipe(_ul, {
       onTouchMove: function(e, state) {
@@ -228,7 +228,7 @@ layui.define('component', function(exports) {
         _ul.find('i').removeClass('layui-rate-hover');
         options.choose && options.choose(options.value);
         options.setText && options.setText(options.value);
-      }
+      },
     });
   };
 

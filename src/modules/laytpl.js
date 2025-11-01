@@ -23,7 +23,7 @@
        * @returns {string} 渲染后的模板
        */
       render: function(data, callback) {
-        options.data = data
+        options.data = data;
         var html = that.render();
 
         // 如果传入目标元素选择器，则直接将模板渲染到目标元素中
@@ -69,7 +69,7 @@
       // 解析并渲染模板
       parse: function(template, data) {
         return this.compile(template).render(data);
-      }
+      },
     };
   };
 
@@ -84,7 +84,7 @@
       return html.replace(exp, function(str) {
         return '&#'+ str.charCodeAt(0) + ';';
       });
-    }
+    },
   };
 
   // 组件工具类方法
@@ -109,7 +109,7 @@
     error: function(e, opts, error) {
       opts = opts || {};
       opts = Object.assign({
-        errorContext: ''
+        errorContext: '',
       }, opts);
 
       // 向控制台输出错误信息
@@ -120,7 +120,7 @@
       typeof console === 'object' && console.error(message, '\n', errorContext, '\n', opts);
       typeof error === 'function' && error(opts); // 执行错误回调
       return message; // 向视图返回错误提示
-    }
+    },
   };
 
   // 默认配置
@@ -129,7 +129,7 @@
     close: '}}', // 结束界定符
     cache: true, // 是否开启模板缓存，以便下次渲染时不重新编译模板
     condense: true, // 是否压缩模板空白符，如：将多个连续的空白符压缩为单个空格
-    tagStyle: '' // 标签风格。默认采用 < 2.11 的风格，设置 modern 则采用 2.11+ 风格
+    tagStyle: '', // 标签风格。默认采用 < 2.11 的风格，设置 modern 则采用 2.11+ 风格
   };
 
   // 构造器
@@ -138,7 +138,7 @@
 
     // 选项合并
     options = that.config = Object.assign({
-      template: template
+      template: template,
     }, config, options);
 
     // 当前实例的模板内工具
@@ -153,7 +153,7 @@
         var elem = document.getElementById(id);
         var template = elem ? elem.innerHTML : '';
         return template ? that.render(template, data) : '';
-      }
+      },
     }, vars);
 
     // 编译模板
@@ -185,7 +185,7 @@
         return tools.error(e, {
           errorContext: that.extractErrorContext(template, data),
           template: template,
-          type: 'Render'
+          type: 'Render',
         }, options.error);
       }
     }();
@@ -231,7 +231,7 @@
       var arr = [
         '(?:'+ openDelimiter + (cores[0] || '') +'\\s*)', // 界定符前置
         '('+ (cores[1] || '[\\s\\S]') +'*?)', // 标签主体
-        '(?:\\s*'+ (cores[2] || '') + closeDelimiter +')' // 界定符后置
+        '(?:\\s*'+ (cores[2] || '') + closeDelimiter +')', // 界定符后置
       ];
       sides = sides || {};
       sides.before && arr.unshift(sides.before); // 标签前面的表达式
@@ -243,7 +243,7 @@
     var sidesRegex = condense ? ['', ''] : ['(?:(?:\\n)*\\s*)', '(?:\\s*?)'];
     var delimSides = {
       before: sidesRegex[0],
-      after: sidesRegex[1]
+      after: sidesRegex[1],
     };
 
     /**
@@ -374,7 +374,7 @@
           'return __laytpl__;',
           // '__laytpl__.push("'+ parse(template) +'");',
           // 'return __laytpl__.join("");',
-        '};'
+        '};',
       ].join('\n');
       // console.log(builder);
       return builder;
@@ -388,7 +388,7 @@
         return tools.error(e, {
           errorContext: that.extractErrorContext(template),
           template: template,
-          type: 'Compile'
+          type: 'Compile',
         }, options.error);
       };
     }

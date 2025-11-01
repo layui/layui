@@ -27,8 +27,8 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
       customName: { // 自定义 data 字段名
         id: 'id',
         title: 'title',
-        children: 'children'
-      }
+        children: 'children',
+      },
     },
 
     CONST: {
@@ -44,7 +44,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
       ELEM_SPREAD: 'layui-tree-spread',
       ELEM_LINE_SHORT: 'layui-tree-setLineShort',
       ELEM_SHOW: 'layui-tree-showLine',
-      ELEM_EXTEND: 'layui-tree-lineExtend'
+      ELEM_EXTEND: 'layui-tree-lineExtend',
     },
 
     // 渲染之前
@@ -53,8 +53,8 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
       that.config = $.extend({
         text: {
           defaultNodeName: i18n.$t('tree.defaultNodeName'), // 节点默认名称
-          none: i18n.$t('tree.noData')  // 数据为空时的文本提示
-        }
+          none: i18n.$t('tree.noData'),  // 数据为空时的文本提示
+        },
       }, that.config, options);
 
       // 扁平化数据
@@ -62,7 +62,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
       that.config.flatData = lay.treeToFlat(that.config.data, {
         idKey: customName.id,
         childrenKey: customName.children,
-        keepChildren: true
+        keepChildren: true,
       });
     },
 
@@ -123,9 +123,9 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
         },
         setChecked: function(id) {// 设置值
           return that.setChecked.call(that, id);
-        }
+        },
       };
-    }
+    },
   });
 
   var CONST = component.CONST;
@@ -169,7 +169,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
       var packDiv = $('<div class="layui-tree-pack" '+ (item.spread ? 'style="display: block;"' : '') +'></div>');
       var entryDiv = $(['<div data-id="'+ item[customName.id] +'" class="'+ [
         CONST.ELEM_SET,
-        (item.spread ? 'layui-tree-spread' : '')
+        (item.spread ? 'layui-tree-spread' : ''),
       ].join(' ') +'">',
         '<div class="layui-tree-entry">',
           '<div class="layui-tree-main">',
@@ -209,7 +209,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
             var editIcon = {
               add: '<i class="layui-icon layui-icon-add-1"  data-type="add"></i>',
               update: '<i class="layui-icon layui-icon-edit" data-type="update"></i>',
-              del: '<i class="layui-icon layui-icon-delete" data-type="del"></i>'
+              del: '<i class="layui-icon layui-icon-delete" data-type="del"></i>',
             };
             var arr = ['<div class="layui-btn-group layui-tree-btnGroup">'];
 
@@ -219,7 +219,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
 
             if (typeof options.edit === 'object') {
               layui.each(options.edit, function(i, val) {
-                arr.push(editIcon[val] || '')
+                arr.push(editIcon[val] || '');
               });
               return arr.join('') + '</div>';
             }
@@ -325,7 +325,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
       options.click && options.click({
         elem: elem,
         state: state,
-        data: item
+        data: item,
       });
     });
   };
@@ -437,7 +437,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
       options.oncheck && options.oncheck({
         elem: elem,
         checked: checked,
-        data: item
+        data: item,
       });
     });
   };
@@ -458,7 +458,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
       var returnObj = {
         data: item,
         type: type,
-        elem:elem
+        elem:elem,
       };
       // 增加
       if(type == 'add'){
@@ -489,7 +489,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
           // 节点本身无子节点
           if(!packCont[0]){
             // 遍历兄弟节点，判断兄弟节点是否有子节点
-            var siblings = elem.siblings('.'+CONST.ELEM_SET)
+            var siblings = elem.siblings('.'+CONST.ELEM_SET);
             var num = 1;
             var parentPack = elem.parent('.'+CONST.ELEM_PACK);
 
@@ -578,7 +578,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
       // 删除
       } else {
         var i18nText = i18n.$t('tree.deleteNodePrompt', {
-          name: item[customName.title] || ''
+          name: item[customName.title] || '',
         });
         layer.confirm(i18nText, function(index){
           options.operate && options.operate(returnObj); // 节点删除的回调
@@ -610,7 +610,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
                 if(checkState.checked == false){
                   // 遍历兄弟节点
                   siblingTree.each(function(i, item1){
-                    var input = $(item1).find('input[same="layuiTreeCheck"]')[0]
+                    var input = $(item1).find('input[same="layuiTreeCheck"]')[0];
                     if(input.checked == false && !input.disabled){
                       state = 0;
                     };
@@ -748,7 +748,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
 
       // 节点过滤的回调
       options.onsearch && options.onsearch({
-        elem: arr
+        elem: arr,
       });
     });
 
@@ -791,7 +791,7 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
               cloneItem[customName.children] = [];
               eachNodes(item[customName.children], cloneItem[customName.children]);
             }
-            return true
+            return true;
           }
         });
       });
@@ -844,8 +844,8 @@ layui.define(['i18n', 'component', 'form'], function(exports) {
       var that = component.getInst(id);
       if(!that) return;
       return that.setChecked(checkedId);
-    }
+    },
   });
 
   exports(CONST.MOD_NAME, component);
-})
+});

@@ -24,7 +24,7 @@ layui.define('component', function(exports) {
       interval: 3000, // 自动切换的时间间隔，不能低于 800ms
       anim: '', // 动画类型：default/updown/fade
       trigger: 'click', // 指示器的触发方式：click/hover
-      index: 0 // 初始开始的索引
+      index: 0, // 初始开始的索引
     },
 
     CONST: {
@@ -35,7 +35,7 @@ layui.define('component', function(exports) {
       ELEM_PREV: 'layui-carousel-prev',
       ELEM_NEXT: 'layui-carousel-next',
       ELEM_ARROW: 'layui-carousel-arrow',
-      ELEM_IND: 'layui-carousel-ind'
+      ELEM_IND: 'layui-carousel-ind',
     },
 
     // 渲染
@@ -61,12 +61,12 @@ layui.define('component', function(exports) {
           position: 'fixed',
           width: '100%',
           height: '100%',
-          zIndex: 9999
+          zIndex: 9999,
         });
       } else {
         options.elem.css({
           width: options.width,
-          height: options.height
+          height: options.height,
         });
       }
 
@@ -95,7 +95,7 @@ layui.define('component', function(exports) {
           that.goto(index);
         },
       };
-    }
+    },
   });
 
   var CONST = component.CONST;
@@ -185,7 +185,7 @@ layui.define('component', function(exports) {
     // 模板
     var tplArrow = $([
       '<button type="button" class="layui-icon '+ (options.anim === 'updown' ? 'layui-icon-up' : 'layui-icon-left') + ' ' + CONST.ELEM_ARROW +'" lay-type="sub"></button>',
-      '<button type="button" class="layui-icon '+ (options.anim === 'updown' ? 'layui-icon-down' : 'layui-icon-right') + ' ' + CONST.ELEM_ARROW +'" lay-type="add"></button>'
+      '<button type="button" class="layui-icon '+ (options.anim === 'updown' ? 'layui-icon-down' : 'layui-icon-right') + ' ' + CONST.ELEM_ARROW +'" lay-type="add"></button>',
     ].join(''));
 
     // 预设基础属性
@@ -200,7 +200,7 @@ layui.define('component', function(exports) {
     // 事件
     tplArrow.on('click', function(){
       var othis = $(this);
-      var type = othis.attr('lay-type')
+      var type = othis.attr('lay-type');
       that.slide(type);
     });
   };
@@ -215,7 +215,7 @@ layui.define('component', function(exports) {
     } else if(index < options.index){
       that.slide('sub', options.index - index);
     }
-  }
+  };
 
   // 指示器
   Class.prototype.indicator = function(){
@@ -299,7 +299,7 @@ layui.define('component', function(exports) {
     var params = {
       index: options.index,
       prevIndex: thisIndex,
-      item: elemItem.eq(options.index)
+      item: elemItem.eq(options.index),
     };
 
     typeof options.change === 'function' && options.change(params);
@@ -334,8 +334,8 @@ layui.define('component', function(exports) {
         if(shouldSwipe){
           that.slide(distance > 0 ? '' : 'sub');
         }
-      }
-    })
+      },
+    });
 
     options.elem.data('haveEvents', true);
   };

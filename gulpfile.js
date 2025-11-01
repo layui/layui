@@ -97,7 +97,7 @@ exports.cp = gulp.series(() => del(copyDest), () => {
 
   // 复制 css js
   gulp.src(`${src}.{css,js}`)
-  .pipe(replace(/\n\/(\*|\/)\#[\s\S]+$/, '')) // 过滤 css,js 的 map 特定注释
+  .pipe(replace(/\n\/(\*|\/)#[\s\S]+$/, '')) // 过滤 css,js 的 map 特定注释
   .pipe(gulp.dest(copyDest));
 
   // 复制其他文件
@@ -105,7 +105,7 @@ exports.cp = gulp.series(() => del(copyDest), () => {
     src,
     `!${src}.{css,js,map}` // 过滤 map 文件
   ])
-  .pipe(replace(/\n\/(\*|\/)\#[\s\S]+$/, '')) // 过滤 css,js 的 map 特定注释
+  .pipe(replace(/\n\/(\*|\/)#[\s\S]+$/, '')) // 过滤 css,js 的 map 特定注释
   .pipe(gulp.dest(copyDest));
 });
 
@@ -126,7 +126,7 @@ exports.release = gulp.series(
       base: base
     })
     .pipe(zip(`${rlsFileName}.zip`))
-    .pipe(gulp.dest(base))
+    .pipe(gulp.dest(base));
   }
 );
 

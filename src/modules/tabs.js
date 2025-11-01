@@ -16,7 +16,7 @@ layui.define('component', function(exports) {
     config: {
       elem: '.layui-tabs',
       trigger: 'click', // 标签切换的触发事件
-      headerMode: 'auto' // 标签头部的显示模式 auto | scroll | normal
+      headerMode: 'auto', // 标签头部的显示模式 auto | scroll | normal
     },
 
     CONST: {
@@ -25,7 +25,7 @@ layui.define('component', function(exports) {
       CLOSE: 'layui-tabs-close',
       BODY: 'layui-tabs-body',
       ITEM: 'layui-tabs-item',
-      CARD: 'layui-tabs-card'
+      CARD: 'layui-tabs-card',
     },
 
     // 渲染
@@ -43,12 +43,12 @@ layui.define('component', function(exports) {
         return {
           header: {
             elem: elem.find(that.headerElem[0]),
-            items: elem.find(that.headerElem.join(''))
+            items: elem.find(that.headerElem.join('')),
           },
           body: {
             elem: elem.find(that.bodyElem[0]),
-            items: elem.find(that.bodyElem.join(''))
-          }
+            items: elem.find(that.bodyElem.join('')),
+          },
         };
       };
 
@@ -151,7 +151,7 @@ layui.define('component', function(exports) {
         });
         inner.onresize = true;
       }
-    }
+    },
   });
 
   // 内部变量集
@@ -187,12 +187,12 @@ layui.define('component', function(exports) {
 
     // 选项默认值
     opts = $.extend({
-      active: true
+      active: true,
     }, opts);
 
     // 插入方式
     if (/(before|after)/.test(opts.mode)) { // 在活动标签前后插入
-      var hasOwnIndex = opts.hasOwnProperty('index');
+      var hasOwnIndex = Object.prototype.hasOwnProperty.call(opts, 'index');
       var headerItem = hasOwnIndex ? that.findHeaderItem(opts.index) : data.thisHeaderItem;
       var bodyItem = hasOwnIndex ? that.findBodyItem(opts.index) : data.thisHeaderItem;
       headerItem[opts.mode](newHeaderItem);
@@ -200,7 +200,7 @@ layui.define('component', function(exports) {
     } else { // 在标签最前后插入
       var mode = ({
         prepend: 'prepend', // 插入标签到最前
-        append: 'append' // 插入标签到最后
+        append: 'append', // 插入标签到最后
       })[opts.mode || 'append'] || 'append';
       container.header.elem[mode](newHeaderItem);
       container.body.elem[mode](newBodyItem);
@@ -217,7 +217,7 @@ layui.define('component', function(exports) {
     typeof opts.done === 'function' && opts.done(
       $.extend(data, {
         headerItem: newHeaderItem,
-        bodyItem: newBodyItem
+        bodyItem: newBodyItem,
       })
     );
   };
@@ -250,7 +250,7 @@ layui.define('component', function(exports) {
         component.CONST.MOD_NAME,
         'beforeClose('+ options.id +')',
         $.extend(data, {
-          index: index
+          index: index,
         })
       );
 
@@ -395,12 +395,12 @@ layui.define('component', function(exports) {
         $.extend(data, {
           from: {
             index: data.index,
-            headerItem: data.thisHeaderItem
+            headerItem: data.thisHeaderItem,
           },
           to: {
             index: index,
-            headerItem: thisHeaderItem
-          }
+            headerItem: thisHeaderItem,
+          },
         })
       );
 
@@ -465,7 +465,7 @@ layui.define('component', function(exports) {
    * @param {Object} opts - 标签项配置信息
    */
   Class.prototype.appendClose = function(headerItem, opts) {
-    var that = this
+    var that = this;
     var options = that.config;
 
     if (!options.closable) return;
@@ -570,8 +570,8 @@ layui.define('component', function(exports) {
         '<div class="'+ CLASS_BAR +'">',
           '<i class="layui-icon '+ CLASS_BAR_ICON[0] +'" lay-mode="prev"></i>',
           '<i class="layui-icon '+ CLASS_BAR_ICON[1] +'" lay-mode="next"></i>',
-        '</div>'
-      ].join(''))
+        '</div>',
+      ].join('')),
     };
 
     // 不渲染头部滚动结构
@@ -608,8 +608,8 @@ layui.define('component', function(exports) {
     if (mode === 'init') return;
 
     // 重新获取
-    scrollWidth = headerElem.prop('scrollWidth') // 实际总长度
-    outerWidth = headerElem.outerWidth() // 可视区域的长度
+    scrollWidth = headerElem.prop('scrollWidth'); // 实际总长度
+    outerWidth = headerElem.outerWidth(); // 可视区域的长度
     elemScroll = headerElem.parent('.'+ CLASS_SCROLL);
 
     // 左箭头（往右滚动）
@@ -686,7 +686,7 @@ layui.define('component', function(exports) {
         // 若未匹配到 lay-id 对应内容项，则通过对应头部项的索引匹配内容项
         var headerItems = container.header.items;
         var headerItemIndex = headerItems.filter('[lay-id="'+ index +'"]').index();
-        
+
         return headerItemIndex !== -1 ? bodyItems.eq(headerItemIndex) : bodyItem;
       }();
     }
@@ -712,7 +712,7 @@ layui.define('component', function(exports) {
       thisHeaderItem: thisHeaderItem, // 当前活动标签头部项
       thisBodyItem: that.findBodyItem(layid || index), // 当前活动标签内容项
       index: index, // 当前活动标签索引
-      length: container.header.items.length // 标签数量
+      length: container.header.items.length, // 标签数量
     };
   };
 
@@ -809,7 +809,7 @@ layui.define('component', function(exports) {
       var that = component.getInst(id);
       if (!that) return;
       that.roll('auto');
-    }
+    },
   });
 
   // 初始化渲染

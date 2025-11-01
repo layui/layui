@@ -15,7 +15,7 @@ layui.define('component', function(exports) {
 
     // 默认配置
     config: {
-      elem: '.layui-collapse'
+      elem: '.layui-collapse',
     },
 
     render: function() {
@@ -25,7 +25,7 @@ layui.define('component', function(exports) {
       options.elem.each(function() {
         var elemItem = $(this).find('.layui-colla-item');
         elemItem.each(function() {
-          var othis = $(this)
+          var othis = $(this);
           var elemTitle = othis.find('.layui-colla-title');
           var elemCont = othis.find('.layui-colla-content');
           var isNone = elemCont.css('display') === 'none';
@@ -46,7 +46,7 @@ layui.define('component', function(exports) {
           .on(clickEventName, event.titleClick);
         });
       });
-    }
+    },
   });
 
   // 基础事件体
@@ -96,9 +96,9 @@ layui.define('component', function(exports) {
       layui.event.call(this, SUPER_MOD_NAME, 'collapse('+ filter +')', {
         title: othis,
         content: thisContentElem,
-        show: isNone
+        show: isNone,
       });
-    }
+    },
   };
 
   var CONST = component.CONST;

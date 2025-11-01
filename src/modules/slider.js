@@ -23,7 +23,7 @@ layui.define('component', function(exports) {
       range: false, // 范围选择，与输入框不能同时开启，默认关闭
       height: 200, // 配合 type:"vertical" 使用，默认200px
       disabled: false, // 滑块禁用，默认关闭
-      theme: '#16baaa' // 主题颜色
+      theme: '#16baaa', // 主题颜色
     },
     CONST: {
       ELEM_VIEW: 'layui-slider',
@@ -111,7 +111,7 @@ layui.define('component', function(exports) {
         for (var i = 1; i < number + 1; i++) {
           var step = i * 100 / number;
           if (step < 100) {
-            item += '<div class="layui-slider-step" style="' + (options.type === 'vertical' ? 'bottom' : 'left') + ':' + step + '%"></div>'
+            item += '<div class="layui-slider-step" style="' + (options.type === 'vertical' ? 'bottom' : 'left') + ':' + step + '%"></div>';
           }
         }
         that.elemTemp.append(item);
@@ -126,7 +126,7 @@ layui.define('component', function(exports) {
         if (options.type === 'vertical') {
           elemInput.css({
             left: 0
-            , top: -48
+            , top: -48,
           });
         } else {
           that.elemTemp.css("margin-right", elemInput.outerWidth() + 15);
@@ -160,7 +160,7 @@ layui.define('component', function(exports) {
         var sliderWrap = that.elemTemp.find('.' + CONST.SLIDER_WRAP);
         var tipsLeft = options.type === 'vertical' ? (sliderWidth - sliderWrapBtnElem.parent()[0].offsetTop - sliderWrap.height()) : sliderWrapBtnElem.parent()[0].offsetLeft;
         var left = tipsLeft / sliderWidth * 100;
-        return left
+        return left;
       }
 
       /**
@@ -172,12 +172,12 @@ layui.define('component', function(exports) {
           that.elemTemp.find('.' + CONST.SLIDER_TIPS).css({
             "bottom": left + '%',
             "margin-bottom": "20px",
-            "display": "inline-block"
+            "display": "inline-block",
           });
         } else {
           that.elemTemp.find('.' + CONST.SLIDER_TIPS).css({
             "left": left + '%',
-            "display": "inline-block"
+            "display": "inline-block",
           });
         }
       }
@@ -186,18 +186,18 @@ layui.define('component', function(exports) {
       if (options.tips) {
         if (options.tipsAlways) {
           var sliderWrapBtnElem = that.elemTemp.find('.' + CONST.SLIDER_WRAP_BTN);
-          setSliderTipsTxt(sliderWrapBtnElem)
+          setSliderTipsTxt(sliderWrapBtnElem);
           var left = calcSliderTipsLeft(sliderWrapBtnElem);
-          setSliderTipsLeft(left)
+          setSliderTipsLeft(left);
         } else {
           //划过滑块显示数值
           var timer;
           that.elemTemp.find('.' + CONST.SLIDER_WRAP_BTN).on('mouseover', function () {
-            setSliderTipsTxt($(this))
+            setSliderTipsTxt($(this));
             var left = calcSliderTipsLeft($(this));
             clearTimeout(timer);
             timer = setTimeout(function () {
-              setSliderTipsLeft(left)
+              setSliderTipsLeft(left);
             }, 300);
           }).on('mouseout', function () {
             clearTimeout(timer);
@@ -217,9 +217,9 @@ layui.define('component', function(exports) {
           value = value < options.min ? options.min : value;
           options.value = value;
           return that.slide('set', value, index || 0);
-        }
+        },
       };
-    }
+    },
   });
 
   var CONST = component.CONST;
@@ -232,9 +232,9 @@ layui.define('component', function(exports) {
     var precisions = $.map([options.min, options.max, options.step], function(v, i){
       var decimalArr = String(v).split('.');
       return decimalArr[1] ? decimalArr[1].length : 0;
-    })
+    });
     return Math.max.apply(null, precisions);
-  }
+  };
 
   //滑块滑动
   Class.prototype.slide = function(setValue, value, i){
@@ -242,7 +242,7 @@ layui.define('component', function(exports) {
     var options = that.config;
     var sliderAct = that.elemTemp;
     var sliderWidth = function(){
-      return options.type === 'vertical' ? options.height : sliderAct[0].offsetWidth
+      return options.type === 'vertical' ? options.height : sliderAct[0].offsetWidth;
     };
     var sliderWrap = sliderAct.find('.' + CONST.SLIDER_WRAP);
     var sliderTxt = sliderAct.next('.' + CONST.SLIDER_INPUT);
@@ -251,9 +251,9 @@ layui.define('component', function(exports) {
     var precision = that.precision();
     var change = function(offsetValue, index, from){
       if(Math.ceil(offsetValue) * step > 100){
-        offsetValue = Math.ceil(offsetValue) * step
+        offsetValue = Math.ceil(offsetValue) * step;
       }else{
-        offsetValue = Math.round(offsetValue) * step
+        offsetValue = Math.round(offsetValue) * step;
       }
       offsetValue = offsetValue > 100 ? 100: offsetValue;
       offsetValue = offsetValue < 0 ? 0: offsetValue;
@@ -287,7 +287,7 @@ layui.define('component', function(exports) {
       if(options.range){
         var arrValue = [
           sliderWrap.eq(0).data('value'),
-          sliderWrap.eq(1).data('value')
+          sliderWrap.eq(1).data('value'),
         ];
         if(arrValue[0] > arrValue[1]) arrValue.reverse(); //如果前面的圆点超过了后面的圆点值，则调换顺序
       }
@@ -351,7 +351,7 @@ layui.define('component', function(exports) {
         var oldleft = othis.parent()[0].offsetLeft;
         var oldx = e.clientX;
         if(options.type === 'vertical'){
-          oldleft = sliderWidth() - othis.parent()[0].offsetTop - sliderWrap.height()
+          oldleft = sliderWidth() - othis.parent()[0].offsetTop - sliderWrap.height();
           oldx = e.clientY;
         }
 
@@ -380,7 +380,7 @@ layui.define('component', function(exports) {
           }
         };
 
-        createMoveElem(othis, move, up)
+        createMoveElem(othis, move, up);
       });
     });
 
@@ -388,7 +388,7 @@ layui.define('component', function(exports) {
     sliderAct.on('click', function(e){
       var main = $('.' + CONST.SLIDER_WRAP_BTN);
       var othis = $(this);
-      if(!main.is(event.target) && main.has(event.target).length === 0 && main.length){
+      if(!main.is(e.target) && main.has(e.target).length === 0 && main.length){
         var index;
         var offset = options.type === 'vertical'
           ? (sliderWidth() - e.clientY + othis.offset().top - $(window).scrollTop())
@@ -448,4 +448,4 @@ layui.define('component', function(exports) {
   };
 
   exports(CONST.MOD_NAME, component);
-})
+});

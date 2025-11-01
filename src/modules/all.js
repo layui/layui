@@ -4,7 +4,7 @@
  */
 
 layui.define(function() {
-  var mods = []
+  var mods = [];
   var builtin = layui.cache.builtin;
 
   layui.each(builtin, function(modName) {
@@ -25,7 +25,7 @@ layui.define(function() {
       var time = new Date().getTime() - layui.cache.startTime;
       delete layui.cache.startTime;
       return time;
-    }()
+    }(),
   };
 
   exports(MOD_NAME, all);

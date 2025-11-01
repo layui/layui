@@ -15,7 +15,7 @@ layui.define(['component', 'tab', 'nav', 'breadcrumb', 'progress', 'collapse'], 
     name: 'element', // 模块名
 
     CONST: {
-      MOD_NAME: 'element'
+      MOD_NAME: 'element',
     },
   });
 
@@ -35,7 +35,7 @@ layui.define(['component', 'tab', 'nav', 'breadcrumb', 'progress', 'collapse'], 
         nav: '.layui-nav' + elemFilter,
         breadcrumb: '.layui-breadcrumb' + elemFilter,
         progress: '.layui-progress' + elemFilter,
-        collapse: '.layui-collapse' + elemFilter
+        collapse: '.layui-collapse' + elemFilter,
       };
 
       // 仅允许渲染指定组件
@@ -44,15 +44,15 @@ layui.define(['component', 'tab', 'nav', 'breadcrumb', 'progress', 'collapse'], 
       // 若 filter 为 jQuery 对象
       if (type && typeof filter === 'object' && filter instanceof $) {
         return layui[type].render({
-          elem: filter
+          elem: filter,
         });
       }
 
       return components[type] ? layui[type].render({
-        elem: components[type]
+        elem: components[type],
       }) : layui.each(components, function(componentName) {
         layui[componentName].render({
-          elem: components[componentName]
+          elem: components[componentName],
         });
       });
     },
@@ -62,7 +62,7 @@ layui.define(['component', 'tab', 'nav', 'breadcrumb', 'progress', 'collapse'], 
     tabChange: tab.tabChange,
     tab: tab.tab,
 
-    progress: progress.setValue
+    progress: progress.setValue,
   });
 
   component.init = component.render;

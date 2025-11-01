@@ -14,11 +14,11 @@ layui.define('component', function(exports) {
 
     // 默认配置
     config: {
-      elem: '.layui-progress'
+      elem: '.layui-progress',
     },
 
     CONST: {
-      ELEM: 'layui-progress'
+      ELEM: 'layui-progress',
     },
 
     render: function() {
@@ -42,7 +42,7 @@ layui.define('component', function(exports) {
           }, 350);
         }
       });
-    }
+    },
   });
 
   var CONST = component.CONST;
@@ -63,7 +63,7 @@ layui.define('component', function(exports) {
       }).attr('lay-percent', percent);
       text.text(percent);
       return this;
-    }
+    },
   });
 
   // export

@@ -14,7 +14,7 @@ layui.define('component', function(exports) {
 
     // 默认配置
     config: {
-      elem: '.layui-breadcrumb'
+      elem: '.layui-breadcrumb',
     },
 
     render: function() {
@@ -33,7 +33,7 @@ layui.define('component', function(exports) {
         });
         othis.css('visibility', 'visible');
       });
-    }
+    },
   });
 
   var CONST = component.CONST;

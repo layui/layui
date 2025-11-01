@@ -29,8 +29,8 @@ layui.define(['i18n', 'component'], function(exports) {
         '#90ee90', '#00ced1', '#1e90ff', '#c71585', '#393D49',
         'rgb(0, 186, 189)', 'rgb(255, 120, 0)', 'rgb(250, 212, 0)',
         'rgba(0,0,0,.5)', 'rgba(255, 69, 0, 0.68)',
-        'rgba(144, 240, 144, 0.5)', 'rgba(31, 147, 255, 0.73)'
-      ]
+        'rgba(144, 240, 144, 0.5)', 'rgba(31, 147, 255, 0.73)',
+      ],
     },
 
     CONST: {
@@ -46,7 +46,7 @@ layui.define(['i18n', 'component'], function(exports) {
       PICKER_ALPHA_BG: 'layui-colorpicker-alpha-bgcolor',
       PICKER_ALPHA_SLIDER: 'layui-colorpicker-alpha-slider',
       PICKER_BASIS_CUR: 'layui-colorpicker-basis-cursor',
-      PICKER_INPUT: 'layui-colorpicker-main-input'
+      PICKER_INPUT: 'layui-colorpicker-main-input',
     },
 
     // 初始化之前
@@ -83,7 +83,7 @@ layui.define(['i18n', 'component'], function(exports) {
 
                 if((options.color.match(/[0-9]{1,3}/g) || []).length > 3){ //需要优化
                   if(!(options.alpha && options.format == 'rgb')){
-                    bgstr = '#' + HSBToHEX(RGBToHSB(RGBSTo(options.color)))
+                    bgstr = '#' + HSBToHEX(RGBToHSB(RGBSTo(options.color)));
                   }
                 }
 
@@ -110,7 +110,7 @@ layui.define(['i18n', 'component'], function(exports) {
 
       // 获取背景色值
       that.color = that.elemColorBox.find('.'+ CONST.PICKER_TRIG_SPAN)[0].style.background;
-    }
+    },
   });
 
   // RGB 转 HSB
@@ -149,7 +149,7 @@ layui.define(['i18n', 'component'], function(exports) {
     hex = hex.indexOf('#') > -1 ? hex.substring(1) : hex;
     if (hex.length === 3) {
       var num = hex.split("");
-      hex = num[0]+num[0]+num[1]+num[1]+num[2]+num[2]
+      hex = num[0]+num[0]+num[1]+num[1]+num[2]+num[2];
     }
     hex = parseInt(hex, 16);
     var rgb = {r:hex >> 16, g:(hex & 0x00FF00) >> 8, b:(hex & 0x0000FF)};
@@ -170,13 +170,13 @@ layui.define(['i18n', 'component'], function(exports) {
       var t2 = (255 - s) * b /255;
       var t3 = (t1 - t2) * (h % 60) /60;
       if(h === 360) h = 0;
-      if(h < 60) {rgb.r=t1; rgb.b=t2; rgb.g=t2+t3}
-      else if(h < 120) {rgb.g=t1; rgb.b=t2; rgb.r=t1-t3}
-      else if(h < 180) {rgb.g=t1; rgb.r=t2; rgb.b=t2+t3}
-      else if(h < 240) {rgb.b=t1; rgb.r=t2; rgb.g=t1-t3}
-      else if(h < 300) {rgb.b=t1; rgb.g=t2; rgb.r=t2+t3}
-      else if(h < 360) {rgb.r=t1; rgb.g=t2; rgb.b=t1-t3}
-      else {rgb.r=0; rgb.g=0; rgb.b=0}
+      if(h < 60) {rgb.r=t1; rgb.b=t2; rgb.g=t2+t3;}
+      else if(h < 120) {rgb.g=t1; rgb.b=t2; rgb.r=t1-t3;}
+      else if(h < 180) {rgb.g=t1; rgb.r=t2; rgb.b=t2+t3;}
+      else if(h < 240) {rgb.b=t1; rgb.r=t2; rgb.g=t1-t3;}
+      else if(h < 300) {rgb.b=t1; rgb.g=t2; rgb.r=t2+t3;}
+      else if(h < 360) {rgb.r=t1; rgb.g=t2; rgb.b=t1-t3;}
+      else {rgb.r=0; rgb.g=0; rgb.b=0;}
     }
     return {r:Math.round(rgb.r), g:Math.round(rgb.g), b:Math.round(rgb.b)};
   };
@@ -187,7 +187,7 @@ layui.define(['i18n', 'component'], function(exports) {
     var hex = [
       rgb.r.toString(16)
       ,rgb.g.toString(16)
-      ,rgb.b.toString(16)
+      ,rgb.b.toString(16),
     ];
     $.each(hex, function(nr, val){
       if(val.length === 1){
@@ -307,7 +307,7 @@ layui.define(['i18n', 'component'], function(exports) {
     var options = that.config;
     lay.position(that.bindElem || that.elemColorBox[0], that.elemPicker[0], {
       position: options.position,
-      align: 'center'
+      align: 'center',
     });
     return that;
   };
@@ -400,7 +400,7 @@ layui.define(['i18n', 'component'], function(exports) {
         alphaslider.css("left", left);
         elemInput.val('rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', '+ a +')');
         span[0].style.background = 'rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', '+ a +')';
-        alphacolor[0].style.background = 'linear-gradient(to right, rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', 0), rgb('+ rgb.r +', '+ rgb.g +', '+ rgb.b +'))'
+        alphacolor[0].style.background = 'linear-gradient(to right, rgba('+ rgb.r +', '+ rgb.g +', '+ rgb.b +', 0), rgb('+ rgb.r +', '+ rgb.g +', '+ rgb.b +'))';
       } else {
         elemInput.val('#'+ color);
       }
@@ -485,7 +485,7 @@ layui.define(['i18n', 'component'], function(exports) {
 
     basis.on('mousedown', function(e){
       var top = e.clientY - $(this).offset().top + $win.scrollTop()
-      ,left = e.clientX - $(this).offset().left + $win.scrollLeft()
+      ,left = e.clientX - $(this).offset().left + $win.scrollLeft();
       if(top < 0)top = 0;
       if(top > this.offsetHeight)top = this.offsetHeight;
       if(left < 0)left = 0;
@@ -520,7 +520,7 @@ layui.define(['i18n', 'component'], function(exports) {
       e.preventDefault();
     });
     alphacolor.on('mousedown', function(e){
-      var left = e.clientX - $(this).offset().left
+      var left = e.clientX - $(this).offset().left;
       if(left < 0)left = 0;
       if(left > this.offsetWidth)left = this.offsetWidth;
       var a = Math.round(left /280*100) /100;
@@ -544,7 +544,7 @@ layui.define(['i18n', 'component'], function(exports) {
         _a = a;
         left = a * 280;
         change(hsb.h, hsb.s, hsb.b, a);
-      })
+      });
     });
 
     if(!lay.touchEventsSupported()) return;
@@ -552,7 +552,7 @@ layui.define(['i18n', 'component'], function(exports) {
     layui.each([
       {elem: side, eventType: 'mousedown'},
       {elem: alphacolor, eventType: 'mousedown'},
-      {elem: basis, eventType: 'mousedown'}
+      {elem: basis, eventType: 'mousedown'},
     ], function(i, obj){
       lay.touchSwipe(obj.elem, {
         onTouchStart: function(){
@@ -560,15 +560,15 @@ layui.define(['i18n', 'component'], function(exports) {
           needStopPropagation = false;
         },
         onTouchMove: function(e){
-          touchHandler(e, obj.eventType)
+          touchHandler(e, obj.eventType);
         },
         onTouchEnd: function(){
           elemMove.remove();
           needTrigger = true;
           needStopPropagation = true;
-        }
-      })
-    })
+        },
+      });
+    });
 
     function touchHandler(event, eventType) {
       var pointer = event.touches[0];
@@ -600,7 +600,7 @@ layui.define(['i18n', 'component'], function(exports) {
     //选择器的top left
     that.elemPicker.find('.' + CONST.PICKER_BASIS_CUR).css({
       "top": top / basisElem.offsetHeight * 100 + '%',
-      "left": left / basisElem.offsetWidth * 100 + '%'
+      "left": left / basisElem.offsetWidth * 100 + '%',
     });
 
     // if(type === 'change') return;
@@ -659,7 +659,7 @@ layui.define(['i18n', 'component'], function(exports) {
 
         options.done && options.done(value);
         that.removePicker();
-      }
+      },
     };
 
     // 选择器面板点击事件
@@ -674,7 +674,7 @@ layui.define(['i18n', 'component'], function(exports) {
       var othis = $(this);
       pickerEvents.confirm.call(this, othis, e.keyCode === 13 ?  null : 'change');
     });
-  }
+  };
 
   // 事件
   Class.prototype.events = function() {
@@ -729,14 +729,14 @@ layui.define(['i18n', 'component'], function(exports) {
       {
         ignore: [options.elem[0]],
         event: clickOrMousedown,
-        capture: false
+        capture: false,
       }
     );
 
     that.stopClickOutsideEvent = function(){
       stop();
       that.stopClickOutsideEvent = $.noop;
-    }
+    };
   };
 
   /**

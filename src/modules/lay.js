@@ -117,7 +117,7 @@
       }
 
       for (var key in source) {
-        if (!source.hasOwnProperty(key)) continue; // 仅处理自有属性
+        if (!Object.prototype.hasOwnProperty.call(source, key)) continue; // 仅处理自有属性
 
         var targetValue = target[key];
         var sourceValue = source[key];
@@ -133,9 +133,9 @@
 
         // 默认深拷贝逻辑
         if (Array.isArray(sourceValue)) {
-          targetValue = Array.isArray(targetValue) ? targetValue : []
+          targetValue = Array.isArray(targetValue) ? targetValue : [];
         } else if(lay.isPlainObject(sourceValue)) {
-          targetValue = lay.isPlainObject(targetValue) ? targetValue : {}
+          targetValue = lay.isPlainObject(targetValue) ? targetValue : {};
         }
         target[key] = (lay.isPlainObject(sourceValue) || Array.isArray(sourceValue))
           ? lay.extend(targetValue, sourceValue, customizer)
@@ -255,7 +255,7 @@
    * 获取 style rules
    * @param {HTMLStyleElement} style - HTMLStyle 元素
    * @param {(ruleItem: CSSStyleRule, index: number) => boolean} [callback] - 用来返回 style 元素中的每个 `style rule` 的函数，返回 true 终止遍历
-   * @returns {CSSRuleList } 返回 `style rules`
+   * @returns {CSSRuleList} 返回 `style rules`
    * @example
    * ```
    * <style id="test">
@@ -392,8 +392,8 @@
         left: e.clientX,
         top: e.clientY,
         right: e.clientX,
-        bottom: e.clientY
-      }
+        bottom: e.clientY,
+      };
     }() : target.getBoundingClientRect();
     var elemWidth = elem.offsetWidth; // 控件的宽度
     var elemHeight = elem.offsetHeight; // 控件的高度
@@ -406,7 +406,7 @@
 
     // 窗口宽高
     var winArea = function(type){
-      return document.documentElement[type ? 'clientWidth' : 'clientHeight']
+      return document.documentElement[type ? 'clientWidth' : 'clientHeight'];
     };
     var margin = 'margin' in opts ? opts.margin : 5;
     var left = rect.left;
@@ -514,7 +514,7 @@
     } catch(ev) {
       layui.hint().error(opts.errorText || [
         attrName + '="'+ attrValue + '"',
-        '\n parseerror: '+ ev
+        '\n parseerror: '+ ev,
       ].join('\n'), 'error');
       return {};
     }
@@ -535,7 +535,7 @@
     ,matched = false;
     lay.each(topElems, function(index, item){
       if(item === elem){
-        return matched = true
+        return matched = true;
       }
     });
     return matched;
@@ -591,7 +591,7 @@
           elem.remove ? elem.remove() : document.body.removeChild(elem);
         }
       }
-    }
+    },
   };
 
   /**
@@ -605,7 +605,7 @@
       var opts = Object.defineProperty({}, 'passive', {
         get: function() {
           passiveSupported = true;
-        }
+        },
       });
       window.addEventListener('test', null, opts);
       window.removeEventListener('test', null, opts);
@@ -640,7 +640,7 @@
    * @param {{onTouchStart?: touchSwipeCallback; onTouchMove?: touchSwipeCallback; onTouchEnd?: touchSwipeCallback; preventDefault?: boolean}} opts - 配置项
    */
   lay.touchSwipe = function(elem, opts){
-    var options = opts
+    var options = opts;
     var targetElem = lay(elem)[0];
     var preventDefault = 'preventDefault' in options ? options.preventDefault : true;
 
@@ -652,8 +652,8 @@
       distanceX: 0,
       distanceY: 0,
       direction:'none', // 'up','down','left','right','none
-      timeStart: null
-    }
+      timeStart: null,
+    };
 
     var onStart = function(e){
       if(e.touches.length !== 1) return;
@@ -663,10 +663,10 @@
       state.pointerStart.x = state.pointerEnd.x = e.touches[0].clientX;
       state.pointerStart.y = state.pointerEnd.y = e.touches[0].clientY;
       state.distanceX = state.distanceY = 0;
-      state.direction = 'none'
+      state.direction = 'none';
 
       options.onTouchStart && options.onTouchStart(e, state);
-    }
+    };
 
     var onMove = function(e){
       if(preventDefault){
@@ -682,24 +682,24 @@
         state.direction = state.distanceY > 0 ? 'up' : 'down';
       }
       options.onTouchMove && options.onTouchMove(e, state);
-    }
+    };
 
     var onEnd = function(e){
       options.onTouchEnd && options.onTouchEnd(e, state);
       unbindEvents();
-    }
+    };
 
     var bindEvents = function(){
       targetElem.addEventListener('touchmove', onMove, lay.passiveSupported ? { passive: false} : false);
       targetElem.addEventListener('touchend', onEnd);
       targetElem.addEventListener('touchcancel', onEnd);
-    }
+    };
 
     var unbindEvents = function(){
       targetElem.removeEventListener('touchmove', onMove);
       targetElem.removeEventListener('touchend', onEnd, lay.passiveSupported ? { passive: false} : false);
       targetElem.removeEventListener('touchcancel', onEnd);
-    }
+    };
 
     // 防止事件重复绑定
     if(targetElem.__lay_touchswipe_cb_){
@@ -707,14 +707,14 @@
     }
     targetElem.__lay_touchswipe_cb_ = onStart;
     targetElem.addEventListener('touchstart', onStart);
-  }
+  };
 
   /** @type {(elem: Element|Document|Window,eventName: string,fn:EventListenerOrEventListenerObject,options: boolean | AddEventListenerOptions) => any}*/
   lay.addEvent = function(){
     if(document.addEventListener){
       return function(elem, eventName, fn, options){
         elem.addEventListener(eventName, fn, options);
-      }
+      };
     }else{
       return function(elem, eventName, fn){
         var prefix = '_lay_on_';
@@ -722,7 +722,7 @@
         var listener = function(e){
           e.target = e.srcElement;
           fn.call(elem, e);
-        }
+        };
         listener._rawFn = fn;
         if(!elem[eventsCacheName]){
           elem[eventsCacheName] = [];
@@ -733,12 +733,12 @@
             include = true;
             return true;
           }
-        })
+        });
         if(!include){
           elem[eventsCacheName].push(listener);
           elem.attachEvent('on' + eventName, listener);
         }
-      }
+      };
     }
   }();
 
@@ -747,7 +747,7 @@
     if(document.removeEventListener){
       return function(elem, eventName, fn, options){
         elem.removeEventListener(eventName, fn, options);
-      }
+      };
     }else{
       return function(elem, eventName, fn){
         var prefix = '_lay_on_';
@@ -761,10 +761,10 @@
             }else{
               newEvents.push(listener);
             }
-          })
+          });
           elem[eventsCacheName] = newEvents;
         }
-      }
+      };
     }
   }();
 
@@ -852,7 +852,7 @@
         elem.removeEventListener
           ? elem.removeEventListener(eventName, handler, opts)
           : elem.detachEvent('on' + eventName, handler);
-      }
+      };
     }
 
     var cleanup = [
@@ -870,7 +870,7 @@
             handler(event);
           }
         }, 0);
-      })
+      }),
     ];
 
     return function(){
@@ -878,7 +878,7 @@
         cleanup[i] && cleanup[i]();
       }
       cleanup = null;
-    }
+    };
   };
 
   /**
@@ -1025,7 +1025,7 @@
           }
         }
         o.disconnect();
-      }
+      },
     });
   };
 
@@ -1044,7 +1044,7 @@
       childrenKey: 'children',
       idKey: 'id',
       parentKey: 'parentId',
-      keepChildren: true
+      keepChildren: true,
     }, options);
 
     // 展平
@@ -1083,7 +1083,7 @@
     options = Object.assign({
       childrenKey: 'children',
       idKey: 'id',
-      parentKey: 'parentId'
+      parentKey: 'parentId',
     }, options);
 
     data = JSON.parse(JSON.stringify(data)); // 深拷贝，防止修改原数据
@@ -1136,7 +1136,7 @@
     str = str.replace(/\s+/, ' ');
     new_str = new_str.replace(/\s+/, ' ').split(' ');
     lay.each(new_str, function(ii, item){
-      var exp = new RegExp('\\b'+ item + '\\b')
+      var exp = new RegExp('\\b'+ item + '\\b');
       if(exp.test(str)){
         str = str.replace(exp, '');
       }
@@ -1171,7 +1171,7 @@
   // 添加 className
   Class.fn.addClass = function(className, type){
     return this.each(function(index, item){
-      item.className = Class[type ? 'removeStr' : 'addStr'](item.className, className)
+      item.className = Class[type ? 'removeStr' : 'addStr'](item.className, className);
     });
   };
 
@@ -1282,14 +1282,14 @@
   // 事件绑定
   Class.fn.on = function(eventName, fn, options){
     return this.each(function(index, item){
-      lay.addEvent(item, eventName, fn, options)
+      lay.addEvent(item, eventName, fn, options);
     });
   };
 
   // 解除事件
   Class.fn.off = function(eventName, fn, options){
     return this.each(function(index, item){
-      lay.removeEvent(item, eventName, fn, options)
+      lay.removeEvent(item, eventName, fn, options);
     });
   };
 
