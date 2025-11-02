@@ -1029,10 +1029,10 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function(exports){
             if(check[0].disabled) return;
 
             // 半选
-            check[0].indeterminate = check[0].indeterminate;
+            // check[0].indeterminate = check[0].indeterminate;
 
             // 开关
-            check[0].checked = check[0].checked;
+            // check[0].checked = check[0].checked;
 
             // 事件
             layui.event.call(check[0], MOD_NAME, RE_CLASS[2]+'('+ filter +')', {
