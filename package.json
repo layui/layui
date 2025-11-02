@@ -26,11 +26,12 @@
   ],
   "scripts": {
     "build": "gulp",
-    "release": "npm run build && npm rum release-zip",
+    "release": "npm run build && npm run release-zip",
     "release-zip": "gulp release",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "lint:check": "eslint src/ --max-warnings 0"
+    "lint:strict": "eslint src/ --max-warnings 0",
+    "format": "npm run lint:fix"
   },
   "devDependencies": {
     "@eslint/js": "^9.38.0",

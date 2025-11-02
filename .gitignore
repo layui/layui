@@ -46,6 +46,8 @@ pnpm-lock.yaml
 # IDE and editor directories
 .idea/
 .vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
 .svn/
 .history/
 *.sublime-project

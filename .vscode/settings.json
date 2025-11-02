@@ -1,0 +1,36 @@
+{
+  // ESLint 配置
+  "eslint.enable": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  // 保存时自动修复
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  // 自动格式化配置
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": null,
+  // JavaScript 文件使用 ESLint 作为默认格式化工具
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+  // 其他相关配置
+  "eslint.workingDirectories": [
+    "."
+  ],
+  "eslint.options": {
+    "overrideConfigFile": "./eslint.config.mjs"
+  },
+  // 文件保存配置
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true
+}
