@@ -605,6 +605,7 @@
       var opts = Object.defineProperty({}, 'passive', {
         get: function() {
           passiveSupported = true;
+          return true;
         },
       });
       window.addEventListener('test', null, opts);
