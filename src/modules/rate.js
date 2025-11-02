@@ -4,7 +4,7 @@
  */
 
 layui.define('component', function(exports) {
-  "use strict";
+  'use strict';
 
   var $ = layui.$;
   var lay = layui.lay;
@@ -39,7 +39,7 @@ layui.define('component', function(exports) {
       var options = that.config;
 
       // 自定义主题
-      var style = options.theme ? ('style="color: '+ options.theme + ';"') : '';
+      var style = options.theme ? ('style="color: ' + options.theme + ';"') : '';
 
       // 最大值不能大于总长度
       if (options.value > options.length) {
@@ -56,13 +56,13 @@ layui.define('component', function(exports) {
       }
 
       // 组件模板
-      var template = '<ul class="layui-rate" '+ (options.readonly ? 'readonly' : '') +'>';
+      var template = '<ul class="layui-rate" ' + (options.readonly ? 'readonly' : '') + '>';
       for (var i = 1; i <= options.length; i++) {
         var item = '<li class="layui-inline"><i class="layui-icon '
           + (i > Math.floor(options.value) ? CONST.ICON_RATE : CONST.ICON_RATE_SOLID)
-        + '" '+ style +'></i></li>';
+        + '" ' + style + '></i></li>';
         if (options.half && parseInt(options.value) !== options.value && i == Math.ceil(options.value)) {
-          template = template + '<li><i class="layui-icon layui-icon-rate-half" '+ style +'></i></li>';
+          template = template + '<li><i class="layui-icon layui-icon-rate-half" ' + style + '></i></li>';
         } else {
           template = template + item;
         }
@@ -70,7 +70,7 @@ layui.define('component', function(exports) {
       template += '</ul>';
 
       if (options.text) {
-        template += '<span class="layui-inline">'+ options.value + '</span>';
+        template += '<span class="layui-inline">' + options.value + '</span>';
       }
 
       // 开始插入替代元素
@@ -85,7 +85,7 @@ layui.define('component', function(exports) {
       options.setText && options.setText(options.value);
 
       othis.html(that.elemTemplate);
-      othis.addClass("layui-inline");
+      othis.addClass('layui-inline');
 
       // 若非只读，则添加触控事件
       if (!options.readonly) {
@@ -98,7 +98,7 @@ layui.define('component', function(exports) {
       var that = this;
       var options = that.config;
       return {
-        setvalue: function (value) {
+        setvalue: function(value) {
           options.value = value;
           that.render();
         },
@@ -119,8 +119,8 @@ layui.define('component', function(exports) {
     var that = this;
     var options = that.config;
     var _ul = that.elemTemplate;
-    var wide = _ul.find("i").width();
-    var liElems =  _ul.children("li");
+    var wide = _ul.find('i').width();
+    var liElems =  _ul.children('li');
 
     liElems.each(function(index) {
       var ind = index + 1;
@@ -139,7 +139,7 @@ layui.define('component', function(exports) {
         }
 
         if (options.text) {
-          _ul.next("span").text(options.value);
+          _ul.next('span').text(options.value);
         }
 
         options.choose && options.choose(options.value);
@@ -148,33 +148,33 @@ layui.define('component', function(exports) {
 
       // 移入
       othis.on('mousemove', function(e) {
-        _ul.find("i").each(function() {
+        _ul.find('i').each(function() {
           $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF);
         });
-        _ul.find("i:lt(" + ind + ")").each(function() {
+        _ul.find('i:lt(' + ind + ')').each(function() {
           $(this).addClass(CONST.ICON_RATE_SOLID).removeClass(CONST.ICON_HALF_RATE);
         });
         // 如果设置可选半星，那么判断鼠标相对 li 的位置
         if (options.half) {
           var x = e.pageX - $(this).offset().left;
           if (x <= wide / 2) {
-            othis.children("i").addClass(CONST.ICON_RATE_HALF).removeClass(CONST.ICON_RATE_SOLID);
+            othis.children('i').addClass(CONST.ICON_RATE_HALF).removeClass(CONST.ICON_RATE_SOLID);
           }
         }
       });
 
       // 移出
       othis.on('mouseleave', function() {
-        _ul.find("i").each(function() {
+        _ul.find('i').each(function() {
           $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF);
         });
-        _ul.find("i:lt(" + Math.floor(options.value) + ")").each(function() {
+        _ul.find('i:lt(' + Math.floor(options.value) + ')').each(function() {
           $(this).addClass(CONST.ICON_RATE_SOLID).removeClass(CONST.ICON_HALF_RATE);
         });
         // 如果设置可选半星，根据分数判断是否有半星
         if (options.half) {
           if (parseInt(options.value) !== options.value) {
-            _ul.children("li:eq(" + Math.floor(options.value) + ")").children("i").addClass(CONST.ICON_RATE_HALF).removeClass(CONST.ICON_SOLID_RATE);
+            _ul.children('li:eq(' + Math.floor(options.value) + ')').children('i').addClass(CONST.ICON_RATE_HALF).removeClass(CONST.ICON_SOLID_RATE);
           }
         }
       });
@@ -183,7 +183,7 @@ layui.define('component', function(exports) {
 
     lay.touchSwipe(_ul, {
       onTouchMove: function(e, state) {
-        if(Date.now() - state.timeStart <= 200) return;
+        if (Date.now() - state.timeStart <= 200) return;
         var pageX = e.touches[0].pageX;
         var rateElemWidth = _ul.width();
         var itemElemWidth = rateElemWidth / options.length; // 单颗星的宽度
@@ -194,8 +194,8 @@ layui.define('component', function(exports) {
 
         // 最终值
         var score = remainder <= 0.5 && options.half ? integer + 0.5 : Math.ceil(num);
-        if(score > options.length) score = options.length;
-        if(score < 0) score = 0;
+        if (score > options.length) score = options.length;
+        if (score < 0) score = 0;
 
         liElems.each(function(index) {
           var iconElem = $(this).children('i');
@@ -206,7 +206,7 @@ layui.define('component', function(exports) {
           if (needSelect) {
             // 设置选中样式
             iconElem.addClass(CONST.ICON_RATE_SOLID).removeClass(CONST.ICON_HALF_RATE);
-            if(options.half && shouldHalfIcon){
+            if (options.half && shouldHalfIcon) {
               iconElem.addClass(CONST.ICON_RATE_HALF).removeClass(CONST.ICON_RATE_SOLID);
             }
           } else {
@@ -220,11 +220,11 @@ layui.define('component', function(exports) {
 
         // 更新最终值
         options.value = score;
-        if(options.text)  _ul.next("span").text(options.value);
+        if (options.text)  _ul.next('span').text(options.value);
         options.setText && options.setText(options.value);
       },
       onTouchEnd: function(e, state) {
-        if(Date.now() - state.timeStart <= 200) return;
+        if (Date.now() - state.timeStart <= 200) return;
         _ul.find('i').removeClass('layui-rate-hover');
         options.choose && options.choose(options.value);
         options.setText && options.setText(options.value);

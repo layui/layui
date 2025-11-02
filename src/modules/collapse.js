@@ -43,7 +43,7 @@ layui.define('component', function(exports) {
 
           // 点击标题
           elemTitle.off(clickEventName, event.titleClick)
-          .on(clickEventName, event.titleClick);
+            .on(clickEventName, event.titleClick);
         });
       });
     },
@@ -87,13 +87,13 @@ layui.define('component', function(exports) {
 
       // 是否开启手风琴
       if (isAccordion) {
-        var itemSiblings = thisItemElem.siblings('.'+ CONST.CLASS_SHOW);
+        var itemSiblings = thisItemElem.siblings('.' + CONST.CLASS_SHOW);
         itemSiblings.removeClass(CONST.CLASS_SHOW);
         itemSiblings.children(CLASS_CONTENT).show().slideUp(ANIM_MS, complete);
       }
 
       // 事件
-      layui.event.call(this, SUPER_MOD_NAME, 'collapse('+ filter +')', {
+      layui.event.call(this, SUPER_MOD_NAME, 'collapse(' + filter + ')', {
         title: othis,
         content: thisContentElem,
         show: isNone,

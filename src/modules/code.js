@@ -4,7 +4,7 @@
  */
 
 layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(exports) {
-  "use strict";
+  'use strict';
 
   var $ = layui.$;
   var util = layui.util;
@@ -78,23 +78,23 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
   var codeIndex = layui.code ? (layui.code.index + 10000) : 0;
 
   // 去除尾部空格
-  var trimEnd = function(str){
+  var trimEnd = function(str) {
     return String(str).replace(/\s+$/, '');
   };
   // 保留首行缩进
-  var trim = function(str){
+  var trim = function(str) {
     return trimEnd(str).replace(/^\n|\n$/, '');
   };
 
   // '1,3-5,8' -> [1,3,4,5,8]
-  var parseHighlightedLines  = function(rangeStr){
+  var parseHighlightedLines  = function(rangeStr) {
     if (typeof rangeStr !== 'string') return [];
-    var lines = $.map(rangeStr.split(','), function(v){
+    var lines = $.map(rangeStr.split(','), function(v) {
       var range = v.split('-');
       var start = parseInt(range[0], 10);
       var end = parseInt(range[1], 10);
       return start && end
-        ? $.map(new Array(end - start + 1), function(_, index){ return start + index; })
+        ? $.map(new Array(end - start + 1), function(_, index) { return start + index; })
         : start ? start : undefined;
     });
     return lines;
@@ -103,13 +103,13 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
   // 引用自 https://github.com/innocenzi/shiki-processor/blob/efa20624be415c866cc8e350d1ada886b6b5cd52/src/utils/create-range-processor.ts#L7
   // 添加了 HTML 注释支持，用来处理预览场景
   var highlightLineRegex = /(?:\/\/|\/\*{1,2}|<!--|&lt;!--) *\[!code ([\w+-]+)(?::(\d+))?] *(?:\*{1,2}\/|-->|--&gt;)?/;
-  var preprocessHighlightLine = function (highlightLineOptions, codeLines) {
+  var preprocessHighlightLine = function(highlightLineOptions, codeLines) {
     var hasHighlightLine = false;
     var needParseComment = false;
     var lineClassMap = Object.create(null);
     var preClassMap = Object.create(null);
 
-    var updateLineClassMap = function (lineNumber, className) {
+    var updateLineClassMap = function(lineNumber, className) {
       if (!lineClassMap[lineNumber]) {
         lineClassMap[lineNumber] = [CONST.ELEM_LINE];
       }
@@ -117,7 +117,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
     };
 
     // 收集高亮行 className
-    $.each(highlightLineOptions, function (type, opts) {
+    $.each(highlightLineOptions, function(type, opts) {
       if (opts.range) {
         var highlightLines = parseHighlightedLines(opts.range);
         if (highlightLines.length > 0) {
@@ -125,7 +125,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
           if (opts.classActivePre) {
             preClassMap[opts.classActivePre] = true;
           }
-          $.each(highlightLines, function (i, lineNumber) {
+          $.each(highlightLines, function(i, lineNumber) {
             updateLineClassMap(lineNumber, opts.classActiveLine);
           });
         }
@@ -137,7 +137,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
 
     // 解析行高亮注释并收集 className
     if (needParseComment) {
-      $.each(codeLines, function (i, line) {
+      $.each(codeLines, function(i, line) {
         var match = line.match(highlightLineRegex);
         if (match && match[1] && lay.hasOwn(highlightLineOptions, match[1])) {
           var opts = highlightLineOptions[match[1]];
@@ -152,11 +152,11 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
             var endLine = startLine + lines - 1;
             var highlightLines = parseHighlightedLines(startLine + '-' + endLine);
             if (highlightLines.length > 0) {
-              $.each(highlightLines, function (i, lineNumber) {
+              $.each(highlightLines, function(i, lineNumber) {
                 updateLineClassMap(lineNumber, opts.classActiveLine);
               });
             }
-          }else{
+          } else {
             updateLineClassMap(i + 1, opts.classActiveLine);
           }
         }
@@ -172,7 +172,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
   };
 
   // export api
-  exports('code', function(options, mode){
+  exports('code', function(options, mode) {
     options = $.extend(true, {}, config, options);
 
     // 返回对象
@@ -193,9 +193,9 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
 
     // 若 elem 非唯一
     var elem = $(options.elem);
-    if(elem.length > 1){
+    if (elem.length > 1) {
       // 是否正向渲染
-      layui.each(options.obverse ? elem : elem.get().reverse(), function(){
+      layui.each(options.obverse ? elem : elem.get().reverse(), function() {
         layui.code($.extend({}, options, {
           elem: this,
         }), mode);
@@ -205,14 +205,14 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
 
     // 目标元素是否存在
     var othis = options.elem = $(options.elem);
-    if(!othis[0]) return ret;
+    if (!othis[0]) return ret;
 
     // 合并属性上的参数，并兼容旧版本属性写法 lay-*
-    $.extend(true, options, lay.options(othis[0]), function(obj){
+    $.extend(true, options, lay.options(othis[0]), function(obj) {
       var attrs = ['title', 'height', 'encode', 'skin', 'about'];
-      layui.each(attrs, function(i, attr){
-        var value = othis.attr('lay-'+ attr);
-        if(typeof value === 'string'){
+      layui.each(attrs, function(i, attr) {
+        var value = othis.attr('lay-' + attr);
+        if (typeof value === 'string') {
           obj[attr] = value;
         }
       });
@@ -224,17 +224,17 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
     options.encode = (options.encode || options.preview) && !options.codeRender;
 
     // 获得初始 code
-    options.code = options.code || function(){
+    options.code = options.code || function() {
       var arr = [];
       var textarea = othis.children('textarea');
 
       // 若内容放置在 textarea 中
-      textarea.each(function(){
+      textarea.each(function() {
         arr.push(trim(this.value));
       });
 
       // 内容直接放置在元素外层
-      if(arr.length === 0){
+      if (arr.length === 0) {
         arr.push(trim(othis.html()));
       }
 
@@ -244,7 +244,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
     // 创建 code 行结构
     var createCode = function(html) {
       // codeRender
-      if(typeof options.codeRender === 'function') {
+      if (typeof options.codeRender === 'function') {
         html = options.codeRender(String(html), options);
       }
 
@@ -260,22 +260,22 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
           ? highlightLineInfo.lineClassMap[num + 1].join(' ')
           : CONST.ELEM_LINE;
         return [
-          '<div class="'+ lineClass + '">',
-            (
-              options.ln ? [
-                '<div class="'+ CONST.ELEM_LINE_NUM +'">',
-                  (util.digit(num + 1) + '.'),
-                '</div>',
-              ].join('') : ''
-            ),
-            '<div class="layui-code-line-content">',
-               (highlightLineInfo.needParseComment ? line.replace(highlightLineRegex, '') : line) || ' ',
-            '</div>',
+          '<div class="' + lineClass + '">',
+          (
+            options.ln ? [
+              '<div class="' + CONST.ELEM_LINE_NUM + '">',
+              (util.digit(num + 1) + '.'),
+              '</div>',
+            ].join('') : ''
+          ),
+          '<div class="layui-code-line-content">',
+          (highlightLineInfo.needParseComment ? line.replace(highlightLineRegex, '') : line) || ' ',
+          '</div>',
           '</div>',
         ].join('');
       });
 
-      if(highlightLineInfo.preClass){
+      if (highlightLineInfo.preClass) {
         othis.addClass(highlightLineInfo.preClass);
       }
 
@@ -292,7 +292,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
     var finalCode = function(code) {
       return typeof options.codeParse === 'function' ?
         options.codeParse(code, options) :
-      code;
+        code;
     };
 
     // 仅重载 code
@@ -322,7 +322,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
       copy: {
         className: 'file-b',
         title: [i18n.$t('code.copy')],
-        event: function(obj){
+        event: function(obj) {
           var code = util.unescape(finalCode(options.code));
           var hasOnCopy = typeof options.onCopy === 'function';
 
@@ -330,17 +330,17 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
           lay.clipboard.writeText({
             text: code,
             done: function() {
-              if(hasOnCopy){
+              if (hasOnCopy) {
                 var ret = options.onCopy(code, true);
-                if(ret === false) return;
+                if (ret === false) return;
               }
 
               layer.msg(i18n.$t('code.copied'), {icon: 1});
             },
             error: function() {
-              if(hasOnCopy){
+              if (hasOnCopy) {
                 var ret = options.onCopy(code, false);
-                if(ret === false) return;
+                if (ret === false) return;
               }
               layer.msg(i18n.$t('code.copyError'), {icon: 2});
             },
@@ -352,8 +352,8 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
     // 移除包裹结构
     var unwrap = (function fn() {
       var elemViewHas = othis.parent('.' + CONST.ELEM_PREVIEW);
-      var elemTabHas = elemViewHas.children('.'+ CONST.ELEM_TAB);
-      var elemPreviewViewHas = elemViewHas.children('.' + CONST.ELEM_ITEM +'-preview');
+      var elemTabHas = elemViewHas.children('.' + CONST.ELEM_TAB);
+      var elemPreviewViewHas = elemViewHas.children('.' + CONST.ELEM_ITEM + '-preview');
 
       // 移除旧结构
       elemTabHas.remove(); // 移除 tab
@@ -364,31 +364,31 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
     })();
 
     // 是否开启预览
-    if(options.preview){
-      var FILTER_VALUE = 'LAY-CODE-DF-'+ index;
+    if (options.preview) {
+      var FILTER_VALUE = 'LAY-CODE-DF-' + index;
       var layout = options.layout || ['code', 'preview'];
       var isIframePreview = options.preview === 'iframe';
 
       // 追加 Tab 组件
-      var elemView = $('<div class="'+ CONST.ELEM_PREVIEW +'">');
+      var elemView = $('<div class="' + CONST.ELEM_PREVIEW + '">');
       var elemTabView = $('<div class="layui-tab layui-tab-brief">');
       var elemHeaderView = $('<div class="layui-tab-title">');
-      var elemPreviewView = $('<div class="'+ [
+      var elemPreviewView = $('<div class="' + [
         CONST.ELEM_ITEM,
-        CONST.ELEM_ITEM +'-preview',
+        CONST.ELEM_ITEM + '-preview',
         'layui-border',
-      ].join(' ') +'">');
+      ].join(' ') + '">');
       var elemToolbar = $('<div class="layui-code-tools"></div>');
 
 
-      if(options.id) elemView.attr('id', options.id);
+      if (options.id) elemView.attr('id', options.id);
       elemView.addClass(options.className);
       elemTabView.attr('lay-filter', FILTER_VALUE);
 
       // 标签头
-      layui.each(layout, function(i, v){
-        var li = $('<li lay-id="'+ v +'">');
-        if(i === 0) li.addClass('layui-this');
+      layui.each(layout, function(i, v) {
+        var li = $('<li lay-id="' + v + '">');
+        if (i === 0) li.addClass('layui-this');
         li.html(options.text[v]);
         elemHeaderView.append(li);
       });
@@ -398,16 +398,16 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
         'full': {
           className: 'screen-full',
           title: [i18n.$t('code.maximize'), i18n.$t('code.restore')],
-          event: function(obj){
+          event: function(obj) {
             var el = obj.elem;
-            var elemView = el.closest('.'+ CONST.ELEM_PREVIEW);
-            var classNameFull = 'layui-icon-'+ this.className;
+            var elemView = el.closest('.' + CONST.ELEM_PREVIEW);
+            var classNameFull = 'layui-icon-' + this.className;
             var classNameRestore = 'layui-icon-screen-restore';
             var title = this.title;
             var htmlElem = $('html,body');
             var ELEM_SCROLLBAR_HIDE = 'layui-scrollbar-hide';
 
-            if(el.hasClass(classNameFull)){
+            if (el.hasClass(classNameFull)) {
               elemView.addClass(CONST.ELEM_FULL);
               el.removeClass(classNameFull).addClass(classNameRestore);
               el.attr('title', title[1]);
@@ -423,7 +423,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
         'window': {
           className: 'release',
           title: [i18n.$t('code.preview')],
-          event: function(obj){
+          event: function(obj) {
             util.openWin({
               content: finalCode(options.code),
             });
@@ -432,10 +432,10 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
       });
 
       // copy
-      if(options.copy){
-        if(layui.type(options.tools) === 'array'){
+      if (options.copy) {
+        if (layui.type(options.tools) === 'array') {
           // 若 copy 未存在于 tools 中，则追加到最前
-          if(options.tools.indexOf('copy') === -1){
+          if (options.tools.indexOf('copy') === -1) {
             options.tools.unshift('copy');
           }
         } else {
@@ -444,7 +444,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
       }
 
       // 工具栏事件
-      elemToolbar.on('click', '>i', function(){
+      elemToolbar.on('click', '>i', function() {
         var oi = $(this);
         var type = oi.data('type');
         var parameters = {
@@ -468,7 +468,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
       }
 
       // 渲染工具栏
-      layui.each(options.tools, function(i, v){
+      layui.each(options.tools, function(i, v) {
         var viso = typeof v === 'object'; // 若为 object 值，则可自定义更多属性
         var tool = viso ? v : (
           tools[v] || {
@@ -491,7 +491,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
         }
 
         elemToolbar.append(
-          '<i class="layui-icon layui-icon-'+ className +'" data-type="'+ type +'" title="'+ title[0] +'"></i>'
+          '<i class="layui-icon layui-icon-' + className + '" data-type="' + type + '" title="' + title[0] + '"></i>'
         );
       });
 
@@ -501,38 +501,38 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
       othis.before(elemTabView); // 追加标签结构
 
       // 追加预览
-      if(isIframePreview){
+      if (isIframePreview) {
         elemPreviewView.html('<iframe allowtransparency="true" frameborder="0"></iframe>');
       }
 
       // 执行预览
-      var runPreview = function(thisItemBody){
+      var runPreview = function(thisItemBody) {
         var iframe = thisItemBody.children('iframe')[0];
 
         // 是否 iframe 方式预览
-        if(isIframePreview && iframe){
+        if (isIframePreview && iframe) {
           iframe.srcdoc = finalCode(options.code);
         } else {
           thisItemBody.html(options.code);
         }
 
         // 当前实例预览完毕后的回调
-        setTimeout(function(){
+        setTimeout(function() {
           typeof options.done === 'function' && options.done({
             container: thisItemBody,
             options: options,
-            render: function(){
+            render: function() {
               form.render(thisItemBody.find('.layui-form'));
               element.render();
               tabs.render({
-                elem: ['.'+ CONST.ELEM_PREVIEW, '.layui-tabs'].join(' '),
+                elem: ['.' + CONST.ELEM_PREVIEW, '.layui-tabs'].join(' '),
               });
             },
           });
-        },3);
+        }, 3);
       };
 
-      if(layout[0] === 'preview'){
+      if (layout[0] === 'preview') {
         elemPreviewView.addClass(CONST.ELEM_SHOW);
         othis.before(elemPreviewView);
         runPreview(elemPreviewView);
@@ -545,16 +545,16 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
       elemPreviewView.attr('style', options.previewStyle);
 
       // tab change
-      element.on('tab('+ FILTER_VALUE +')', function(data){
+      element.on('tab(' + FILTER_VALUE + ')', function(data) {
         var $this = $(this);
-        var thisElem = $(data.elem).closest('.'+ CONST.ELEM_PREVIEW);
-        var elemItemBody = thisElem.find('.'+ CONST.ELEM_ITEM);
+        var thisElem = $(data.elem).closest('.' + CONST.ELEM_PREVIEW);
+        var elemItemBody = thisElem.find('.' + CONST.ELEM_ITEM);
         var thisItemBody = elemItemBody.eq(data.index);
 
         elemItemBody.removeClass(CONST.ELEM_SHOW);
         thisItemBody.addClass(CONST.ELEM_SHOW);
 
-        if($this.attr('lay-id') === 'preview'){
+        if ($this.attr('lay-id') === 'preview') {
           runPreview(thisItemBody);
         }
 
@@ -575,7 +575,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
     var theme = options.theme || options.skin;
     if (theme) {
       othis.removeClass('layui-code-theme-dark layui-code-theme-light');
-      othis.addClass('layui-code-theme-'+ theme);
+      othis.addClass('layui-code-theme-' + theme);
     }
 
     // 添加高亮必要的 className
@@ -625,7 +625,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
       {
         selector: '>.layui-code-wrap>.layui-code-line>.layui-code-line-number{}',
         setValue: function(item, value) {
-         item.style.width = value + 'px';
+          item.style.width = value + 'px';
         },
       },
       {
@@ -639,11 +639,11 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
     // 生成初始 style 元素
     var styleElem = lay.style({
       target: othis[0],
-      id: 'DF-code-'+ index,
-      text: $.map($.map(cssRules, function(val){
+      id: 'DF-code-' + index,
+      text: $.map($.map(cssRules, function(val) {
         return val.selector;
       }), function(val, i) {
-        return ['.layui-code-view[lay-code-index="'+ index + '"]', val].join(' ');
+        return ['.layui-code-view[lay-code-index="' + index + '"]', val].join(' ');
       }).join(''),
     });
 
@@ -651,8 +651,8 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
     var setCodeLayout = (function fn() {
       if (options.ln) {
         var multiLine = Math.floor(lines.length / 100);
-        var lineElem = codeElem.children('.'+ CONST.ELEM_LINE);
-        var width = lineElem.last().children('.'+ CONST.ELEM_LINE_NUM).outerWidth();
+        var lineElem = codeElem.children('.' + CONST.ELEM_LINE);
+        var width = lineElem.last().children('.' + CONST.ELEM_LINE_NUM).outerWidth();
 
         othis.addClass(CONST.ELEM_LN_MODE);
 
@@ -661,7 +661,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
           lay.getStyleRules(styleElem, function(item, i) {
             try {
               cssRules[i].setValue(item, width);
-            } catch(e) { }
+            } catch (e) { }
           });
         }
       }
@@ -671,7 +671,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
 
     // 创建 code header
     if (options.header) {
-      var headerElem = $('<div class="'+ CONST.ELEM_HEADER +'"></div>');
+      var headerElem = $('<div class="' + CONST.ELEM_HEADER + '"></div>');
       headerElem.html(options.title || options.text.code);
       othis.prepend(headerElem);
     }
@@ -680,7 +680,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
     var elemFixbar = $('<div class="layui-code-fixbar"></div>');
 
     // 若开启复制，且未开启预览，则单独生成复制图标
-    if(options.copy && !options.preview){
+    if (options.copy && !options.preview) {
       var copyElem = $([
         '<span class="layui-code-copy">',
         '<i class="layui-icon layui-icon-file-b" title="' + i18n.$t('code.copy') + '"></i>',
@@ -688,7 +688,7 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
       ].join(''));
 
       // 点击复制
-      copyElem.on('click', function(){
+      copyElem.on('click', function() {
         tools.copy.event();
       });
 
@@ -710,13 +710,13 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
 
     // code 渲染完毕后的回调
     if (!options.preview) {
-      setTimeout(function(){
+      setTimeout(function() {
         typeof options.done === 'function' && options.done({});
-      },3);
+      }, 3);
     }
 
     // 所有实例渲染完毕后的回调
-    if(options.elem.length === index + 1){
+    if (options.elem.length === index + 1) {
       typeof options.allDone === 'function' && options.allDone();
     }
 
@@ -725,6 +725,6 @@ layui.define(['lay', 'i18n', 'util', 'element', 'tabs', 'form'], function(export
 });
 
 // 若为源码版，则自动加载该组件依赖的 css 文件
-if(!layui['layui.all']){
+if (!layui['layui.all']) {
   layui.addcss('modules/code.css?v=6', 'skincodecss');
 }

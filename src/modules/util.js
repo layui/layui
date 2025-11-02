@@ -3,7 +3,7 @@
  */
 
 layui.define(['lay', 'i18n', 'jquery'], function(exports) {
-  "use strict";
+  'use strict';
 
   var $ = layui.$;
   var hint = layui.hint();
@@ -18,7 +18,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
   // 外部接口
   var util = {
     // 固定块
-    fixbar: function(options){
+    fixbar: function(options) {
       var ELEM = 'layui-fixbar';
       var $doc = $(document);
 
@@ -26,7 +26,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       options = $.extend(true, {
         target: 'body', // fixbar 的插入目标选择器
         bars: [], //  bar 信息
-        "default": true, // 是否显示默认 bar
+        'default': true, // 是否显示默认 bar
         margin: 160, // 出现 top bar 的滚动条高度临界值
         duration: 320, // top bar 等动画时长（毫秒）
       }, options);
@@ -37,18 +37,18 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       // 滚动条所在元素对象
       var $scroll = options.scroll
         ? $(options.scroll)
-      : $(options.target === 'body' ? $doc : $target);
+        : $(options.target === 'body' ? $doc : $target);
 
       // 是否提供默认图标
-      if(options['default']){
+      if (options['default']) {
         // 兼容旧版本的一些属性
-        if(options.bar1){
+        if (options.bar1) {
           options.bars.push({
             type: 'bar1',
             icon: 'layui-icon-chat',
           });
         }
-        if(options.bar2){
+        if (options.bar2) {
           options.bars.push({
             type: 'bar2',
             icon: 'layui-icon-help',
@@ -65,23 +65,23 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       var elemTopBar;
 
       // 遍历生成 bars 节点
-      layui.each(options.bars, function(i, item){
+      layui.each(options.bars, function(i, item) {
         var elemBar = $('<li class="layui-icon">');
 
         // 设置 bar 相关属性
         elemBar.addClass(item.icon).attr({
           'lay-type': item.type,
-          'style': item.style || (options.bgcolor ? 'background-color: '+ options.bgcolor : ''),
+          'style': item.style || (options.bgcolor ? 'background-color: ' + options.bgcolor : ''),
         }).html(item.content);
 
         // bar 点击事件
-        elemBar.on('click', function(){
+        elemBar.on('click', function() {
           var type = $(this).attr('lay-type');
-          if(type === 'top'){
+          if (type === 'top') {
             (
               options.target === 'body'
                 ? $('html,body')
-              : $scroll
+                : $scroll
             ).animate({
               scrollTop : 0,
             }, options.duration);
@@ -90,9 +90,9 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
         });
 
         // 自定义任意事件
-        if(layui.type(options.on) === 'object'){
-          layui.each(options.on, function(eventName, callback){
-            elemBar.on(eventName, function(){
+        if (layui.type(options.on) === 'object') {
+          layui.each(options.on, function(eventName, callback) {
+            elemBar.on(eventName, function() {
               var type = $(this).attr('lay-type');
               typeof callback === 'function' && callback.call(this, type);
             });
@@ -100,7 +100,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
         }
 
         // 获得 top bar 节点
-        if(item.type === 'top'){
+        if (item.type === 'top') {
           elemBar.addClass('layui-fixbar-top');
           elemTopBar = elemBar;
         }
@@ -109,18 +109,18 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       });
 
       // 若目标元素已存在 fixbar，则移除旧的节点
-      $target.find('.'+ ELEM).remove();
+      $target.find('.' + ELEM).remove();
 
       // 向目标元素插入 fixbar 节点
       typeof options.css === 'object' && elem.css(options.css);
       $target.append(elem);
 
       // top bar 的显示隐藏
-      if(elemTopBar){
+      if (elemTopBar) {
         var lock;
-        var setTopBar = (function setTopBar(){
+        var setTopBar = (function setTopBar() {
           var top = $scroll.scrollTop();
-          if(top >= options.margin){
+          if (top >= options.margin) {
             lock || (elemTopBar.show(), lock = 1);
           } else {
             lock && (elemTopBar.hide(), lock = 0);
@@ -131,17 +131,17 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
 
       // 根据 scrollbar 设置 fixbar 相关状态
       var timer;
-      $scroll.on('scroll', function(){
-        if(!setTopBar) return;
+      $scroll.on('scroll', function() {
+        if (!setTopBar) return;
         clearTimeout(timer);
-        timer = setTimeout(function(){
+        timer = setTimeout(function() {
           setTopBar();
         }, 100);
       });
     },
 
     // 倒计时
-    countdown: function(options){
+    countdown: function(options) {
       var that = this;
 
       // 默认可选项
@@ -152,7 +152,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
 
       // 兼容旧版参数
       var args = arguments;
-      if(args.length > 1){
+      if (args.length > 1) {
         options.date = new Date(args[0]);
         options.now = new Date(args[1]);
         options.clock = args[2];
@@ -161,10 +161,10 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       // 实例对象
       var inst = {
         options: options,
-        clear: function(){ // 清除计时器
+        clear: function() { // 清除计时器
           clearTimeout(inst.timer);
         },
-        reload: function(opts){ // 重置倒计时
+        reload: function(opts) { // 重置倒计时
           this.clear();
           $.extend(true, this.options, {
             now: new Date(),
@@ -176,33 +176,33 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       typeof options.ready === 'function' && options.ready();
 
       // 计算倒计时
-      var count = (function fn(){
+      var count = (function fn() {
         var date = new Date(options.date);
         var now = new Date(options.now);
-        var countTime = function(time){
+        var countTime = function(time) {
           return time > 0 ? time : 0;
         }(date.getTime() - now.getTime());
         var result = {
-          d: Math.floor(countTime/(1000*60*60*24)), // 天
-          h: Math.floor(countTime/(1000*60*60)) % 24, // 时
-          m: Math.floor(countTime/(1000*60)) % 60, // 分
-          s: Math.floor(countTime/1000) % 60, // 秒
+          d: Math.floor(countTime / (1000 * 60 * 60 * 24)), // 天
+          h: Math.floor(countTime / (1000 * 60 * 60)) % 24, // 时
+          m: Math.floor(countTime / (1000 * 60)) % 60, // 分
+          s: Math.floor(countTime / 1000) % 60, // 秒
         };
-        var next = function(){
+        var next = function() {
           now.setTime(now.getTime() + 1000);
           options.now = now;
           count();
         };
 
         // 兼容旧版返回值
-        if(args.length > 1) result = [result.d,result.h,result.m,result.s];
+        if (args.length > 1) result = [result.d, result.h, result.m, result.s];
 
         // 计时 - 以秒间隔
         inst.timer = setTimeout(next, 1000);
         typeof options.clock === 'function' && options.clock(result, inst);
 
         // 计时完成
-        if(countTime <= 0){
+        if (countTime <= 0) {
           clearTimeout(inst.timer);
           typeof options.done === 'function' && options.done(result, inst);
         }
@@ -214,20 +214,20 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
     },
 
     // 某个时间在当前时间的多久前
-    timeAgo: function(time, onlyDate){
+    timeAgo: function(time, onlyDate) {
       var that = this;
       var arr = [[], []];
       var stamp = new Date().getTime() - new Date(time).getTime();
 
       // 返回具体日期
-      if(stamp > 1000*60*60*24*31){
+      if (stamp > 1000 * 60 * 60 * 24 * 31) {
         stamp =  new Date(time);
         arr[0][0] = that.digit(stamp.getFullYear(), 4);
         arr[0][1] = that.digit(stamp.getMonth() + 1);
         arr[0][2] = that.digit(stamp.getDate());
 
         // 是否输出时间
-        if(!onlyDate){
+        if (!onlyDate) {
           arr[1][0] = that.digit(stamp.getHours());
           arr[1][1] = that.digit(stamp.getMinutes());
           arr[1][2] = that.digit(stamp.getSeconds());
@@ -236,13 +236,13 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       }
 
       // 30 天以内，返回「多久前」
-      if(stamp >= 1000*60*60*24){
-        return i18n.$t('util.timeAgo.days', {days: (stamp/1000/60/60/24)|0});
-      } else if(stamp >= 1000*60*60){
-        return i18n.$t('util.timeAgo.hours', {hours: (stamp/1000/60/60)|0});
-      } else if(stamp >= 1000*60*3){ // 3 分钟以内为：刚刚
-        return i18n.$t('util.timeAgo.minutes', {minutes: (stamp/1000/60)|0});
-      } else if(stamp < 0){
+      if (stamp >= 1000 * 60 * 60 * 24) {
+        return i18n.$t('util.timeAgo.days', {days: (stamp / 1000 / 60 / 60 / 24) | 0});
+      } else if (stamp >= 1000 * 60 * 60) {
+        return i18n.$t('util.timeAgo.hours', {hours: (stamp / 1000 / 60 / 60) | 0});
+      } else if (stamp >= 1000 * 60 * 3) { // 3 分钟以内为：刚刚
+        return i18n.$t('util.timeAgo.minutes', {minutes: (stamp / 1000 / 60) | 0});
+      } else if (stamp < 0) {
         return i18n.$t('util.timeAgo.future');
       } else {
         return i18n.$t('util.timeAgo.justNow');
@@ -250,33 +250,33 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
     },
 
     // 数字前置补零
-    digit: function(num, length){
+    digit: function(num, length) {
       var str = '';
       num = String(num);
       length = length || 2;
-      for(var i = num.length; i < length; i++){
+      for (var i = num.length; i < length; i++) {
         str += '0';
       }
-      return num < Math.pow(10, length) ? str + (num|0) : num;
+      return num < Math.pow(10, length) ? str + (num | 0) : num;
     },
 
     // 转化为日期格式字符
-    toDateString: function(time, format, options){
+    toDateString: function(time, format, options) {
       // 若 null 或空字符，则返回空字符
-      if(time === null || time === '') return '';
+      if (time === null || time === '') return '';
 
       var that = this;
 
       var normalizeDate = function(date) {
-        if(typeof date === 'undefined'){
+        if (typeof date === 'undefined') {
           return new Date();
         }
-        if(!isNaN(date)){
+        if (!isNaN(date)) {
           return new Date(typeof date === 'string' ? parseInt(date) : date);
         }
-        if(typeof date === 'string' && !/Z$/i.test(date)){
+        if (typeof date === 'string' && !/Z$/i.test(date)) {
           var d = date.match(REGEX_PARSE);
-          if(d){
+          if (d) {
             var m = d[2] - 1 || 0;
             var ms = (d[7] || '0').substring(0, 3);
             return new Date(
@@ -295,7 +295,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       };
       var date = normalizeDate(time);
 
-      if(!date.getDate()) return hint.error('Invalid millisecond for "util.toDateString(millisecond)"'), '';
+      if (!date.getDate()) return hint.error('Invalid millisecond for "util.toDateString(millisecond)"'), '';
 
       var years = date.getFullYear();
       var month = date.getMonth();
@@ -310,22 +310,22 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       var meridiem = (options && options.customMeridiem) || defaultMeridiem;
 
       var matches = {
-        yy: function(){return String(years).slice(-2);},
-        yyyy: function(){return that.digit(years, 4);},
-        M: function(){return String(month + 1);},
-        MM: function(){return that.digit(month + 1);},
-        d: function(){return String(days);},
-        dd: function(){return that.digit(days);},
-        H: function(){return String(hours);},
-        HH: function(){return that.digit(hours);},
-        h: function(){return String(hours % 12 || 12);},
-        hh: function(){return that.digit(hours % 12 || 12);},
-        A: function(){return meridiem(hours, minutes);},
-        m: function(){return String(minutes);},
-        mm: function(){return that.digit(minutes);},
-        s: function(){return String(seconds);},
-        ss: function(){return that.digit(seconds);},
-        SSS: function(){return that.digit(milliseconds, 3);},
+        yy: function() {return String(years).slice(-2);},
+        yyyy: function() {return that.digit(years, 4);},
+        M: function() {return String(month + 1);},
+        MM: function() {return that.digit(month + 1);},
+        d: function() {return String(days);},
+        dd: function() {return that.digit(days);},
+        H: function() {return String(hours);},
+        HH: function() {return that.digit(hours);},
+        h: function() {return String(hours % 12 || 12);},
+        hh: function() {return that.digit(hours % 12 || 12);},
+        A: function() {return meridiem(hours, minutes);},
+        m: function() {return String(minutes);},
+        mm: function() {return that.digit(minutes);},
+        s: function() {return String(seconds);},
+        ss: function() {return that.digit(seconds);},
+        SSS: function() {return that.digit(milliseconds, 3);},
       };
 
       format = format || 'yyyy-MM-dd HH:mm:ss';
@@ -342,25 +342,25 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
     unescape: lay.unescape,
 
     // 打开新窗口
-    openWin: function(options){
+    openWin: function(options) {
       var win;
       options = options || {};
       win = options.window || window.open((options.url || ''), options.target, options.specs);
-      if(options.url) return;
+      if (options.url) return;
       win.document.open('text/html', 'replace');
       win.document.write(options.content || '');
       win.document.close();
     },
 
     // 让指定的元素保持在可视区域
-    toVisibleArea: function(options){
+    toVisibleArea: function(options) {
       options = $.extend({
         margin: 160, // 触发动作的边界值
         duration: 200, // 动画持续毫秒数
         type: 'y', // 触发方向，x 水平、y 垂直
       }, options);
 
-      if(!options.scrollElem[0] || !options.thisElem[0]) return;
+      if (!options.scrollElem[0] || !options.thisElem[0]) return;
 
       var scrollElem = options.scrollElem; // 滚动元素
       var thisElem = options.thisElem; // 目标元素
@@ -374,8 +374,8 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       var obj = {};
 
       // 边界满足条件
-      if(thisOffset > size - options.margin || thisOffset < options.margin){
-        obj[SCROLL_NAME] = thisOffset - size/2 + scrollValue;
+      if (thisOffset > size - options.margin || thisOffset < options.margin) {
+        obj[SCROLL_NAME] = thisOffset - size / 2 + scrollValue;
         scrollElem.animate(obj, options.duration);
       }
     },
@@ -406,7 +406,7 @@ layui.define(['lay', 'i18n', 'jquery'], function(exports) {
       });
 
       var elem = options.elem = $(options.elem);
-      var attrSelector = '['+ attr +']';
+      var attrSelector = '[' + attr + ']';
       var DATANAME = 'UTIL_ON_DATA'; // 缓存在委托元素上的 data-* 属性名
 
       if (!elem[0]) return; // 若委托元素不存在

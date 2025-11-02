@@ -45,13 +45,13 @@ layui.define('component', function(exports) {
       // 滑块跟随
       var follow = function(bar, nav, index) {
         var othis = $(this);
-        var child = othis.find('.'+ CONST.NAV_CHILD);
+        var child = othis.find('.' + CONST.NAV_CHILD);
 
         // 是否垂直导航菜单
         if (nav.hasClass(CONST.NAV_TREE)) {
           // 无子菜单时跟随
           if (!child[0]) {
-            var thisA = othis.children('.'+ NAV_TITLE);
+            var thisA = othis.children('.' + NAV_TITLE);
             bar.css({
               top: othis.offset().top - nav.offset().top + nav.scrollTop(),
               height: (thisA[0] ? thisA : othis).outerHeight(),
@@ -95,9 +95,9 @@ layui.define('component', function(exports) {
           if (child.css('display') === 'block') {
             clearTimeout(timerMore[index]);
           }
-          timerMore[index] = setTimeout(function(){
+          timerMore[index] = setTimeout(function() {
             child.addClass(CONST.CLASS_SHOW);
-            othis.find('.'+ CONST.NAV_MORE).addClass(CONST.NAV_MORE +'d');
+            othis.find('.' + CONST.NAV_MORE).addClass(CONST.NAV_MORE + 'd');
           }, 300);
         }
       };
@@ -105,15 +105,15 @@ layui.define('component', function(exports) {
       // 遍历导航
       options.elem.each(function(index) {
         var othis = $(this);
-        var bar = $('<span class="'+ CONST.NAV_BAR +'"></span>');
-        var itemElem = othis.find('.'+ CONST.NAV_ITEM);
+        var bar = $('<span class="' + CONST.NAV_BAR + '"></span>');
+        var itemElem = othis.find('.' + CONST.NAV_ITEM);
 
         // hover 滑动效果
-        var hasBarElem = othis.find('.'+CONST.NAV_BAR);
+        var hasBarElem = othis.find('.' + CONST.NAV_BAR);
         if (hasBarElem[0]) hasBarElem.remove();
         othis.append(bar);
         ( othis.hasClass(CONST.NAV_TREE)
-          ? itemElem.find('dd,>.'+ CONST.NAV_TITLE)
+          ? itemElem.find('dd,>.' + CONST.NAV_TITLE)
           : itemElem
         ).off('mouseenter.lay_nav').on('mouseenter.lay_nav', function() {
           follow.call(this, bar, othis, index);
@@ -127,9 +127,9 @@ layui.define('component', function(exports) {
           } else {
             // 隐藏子菜单
             clearTimeout(timerMore[index]);
-            timerMore[index] = setTimeout(function(){
-              othis.find('.'+ CONST.NAV_CHILD).removeClass(CONST.CLASS_SHOW);
-              othis.find('.'+ CONST.NAV_MORE).removeClass(CONST.NAV_MORE +'d');
+            timerMore[index] = setTimeout(function() {
+              othis.find('.' + CONST.NAV_CHILD).removeClass(CONST.CLASS_SHOW);
+              othis.find('.' + CONST.NAV_MORE).removeClass(CONST.NAV_MORE + 'd');
             }, 300);
           }
         });
@@ -151,12 +151,12 @@ layui.define('component', function(exports) {
         // 展开子菜单
         itemElem.find('a').each(function() {
           var thisA = $(this);
-          var child = thisA.siblings('.'+ CONST.NAV_CHILD);
+          var child = thisA.siblings('.' + CONST.NAV_CHILD);
           var clickEventName = 'click.lay_nav_click';
 
           // 输出小箭头
-          if (child[0] && !thisA.children('.'+ CONST.NAV_MORE)[0]) {
-            thisA.append('<i class="layui-icon '+ CONST.NAV_DOWN +' '+ CONST.NAV_MORE +'"></i>');
+          if (child[0] && !thisA.children('.' + CONST.NAV_MORE)[0]) {
+            thisA.append('<i class="layui-icon ' + CONST.NAV_DOWN + ' ' + CONST.NAV_MORE + '"></i>');
           }
 
           // 点击菜单
@@ -173,13 +173,13 @@ layui.define('component', function(exports) {
       var parents = othis.closest(CONST.NAV_ELEM);
       var filter = parents.attr('lay-filter');
       var parent = othis.parent() ;
-      var child = othis.siblings('.'+ CONST.NAV_CHILD);
+      var child = othis.siblings('.' + CONST.NAV_CHILD);
       var unselect = typeof parent.attr('lay-unselect') === 'string'; // 是否禁用选中
 
       // 满足点击选中的条件
       if (!(othis.attr('href') !== 'javascript:;' && othis.attr('target') === '_blank') && !unselect) {
         if (!child[0]) {
-          parents.find('.'+ CONST.CLASS_THIS).removeClass(CONST.CLASS_THIS);
+          parents.find('.' + CONST.CLASS_THIS).removeClass(CONST.CLASS_THIS);
           parent.addClass(CONST.CLASS_THIS);
         }
       }
@@ -193,10 +193,10 @@ layui.define('component', function(exports) {
         // 动画执行完成后的操作
         var complete = function() {
           $(this).css({
-            "display": "", // 剔除动画生成的 style display，以适配外部样式的状态重置
+            'display': '', // 剔除动画生成的 style display，以适配外部样式的状态重置
           });
           // 避免导航滑块错位
-          parents.children('.'+ CONST.NAV_BAR).css({
+          parents.children('.' + CONST.NAV_BAR).css({
             opacity: 0,
           });
         };
@@ -221,14 +221,14 @@ layui.define('component', function(exports) {
 
           // 手风琴 --- 收缩兄弟展开项
           if (typeof parents.attr('lay-accordion') === 'string' || parents.attr('lay-shrink') === 'all') {
-            var parentSibs = parent.siblings('.'+ NAV_ITEMED);
+            var parentSibs = parent.siblings('.' + NAV_ITEMED);
             parentSibs.removeClass(NAV_ITEMED);
-            parentSibs.children('.'+ CONST.NAV_CHILD).show().stop().slideUp(ANIM_MS, complete);
+            parentSibs.children('.' + CONST.NAV_CHILD).show().stop().slideUp(ANIM_MS, complete);
           }
         }
       }
 
-      layui.event.call(this, SUPER_MOD_NAME, 'nav('+ filter +')', othis);
+      layui.event.call(this, SUPER_MOD_NAME, 'nav(' + filter + ')', othis);
     },
   };
 

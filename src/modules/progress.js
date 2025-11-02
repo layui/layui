@@ -32,13 +32,13 @@ layui.define('component', function(exports) {
 
         elemBar.css('width', function() {
           return /^.+\/.+$/.test(percent)
-            ? (new Function('return '+ percent)() * 100) + '%'
-          : percent;
+            ? (new Function('return ' + percent)() * 100) + '%'
+            : percent;
         });
 
         if (othis.attr('lay-showpercent')) {
           setTimeout(function() {
-            elemBar.html('<span class="'+ CONST.ELEM +'-text">'+ percent +'</span>');
+            elemBar.html('<span class="' + CONST.ELEM + '-text">' + percent + '</span>');
           }, 350);
         }
       });
@@ -52,14 +52,14 @@ layui.define('component', function(exports) {
     // 动态改变进度条
     setValue: function(filter, percent) {
       var ELEM = 'layui-progress';
-      var elem = $('.'+ ELEM +'[lay-filter='+ filter +']');
-      var elemBar = elem.find('.'+ ELEM +'-bar');
-      var text = elemBar.find('.'+ ELEM +'-text');
+      var elem = $('.' + ELEM + '[lay-filter=' + filter + ']');
+      var elemBar = elem.find('.' + ELEM + '-bar');
+      var text = elemBar.find('.' + ELEM + '-text');
 
       elemBar.css('width', function() {
         return /^.+\/.+$/.test(percent)
-          ? (new Function('return '+ percent)() * 100) + '%'
-      : percent;
+          ? (new Function('return ' + percent)() * 100) + '%'
+          : percent;
       }).attr('lay-percent', percent);
       text.text(percent);
       return this;

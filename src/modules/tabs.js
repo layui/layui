@@ -34,8 +34,8 @@ layui.define('component', function(exports) {
       var options = that.config;
 
       // 标签页元素项
-      that.headerElem = ['.'+ component.CONST.HEADER + ':eq(0)', '>li'];
-      that.bodyElem = ['.'+ component.CONST.BODY + ':eq(0)', '>.'+ component.CONST.ITEM];
+      that.headerElem = ['.' + component.CONST.HEADER + ':eq(0)', '>li'];
+      that.bodyElem = ['.' + component.CONST.BODY + ':eq(0)', '>.' + component.CONST.ITEM];
 
       // 获取标签容器中的 header body 相关元素
       that.getContainer = function() {
@@ -68,11 +68,11 @@ layui.define('component', function(exports) {
           var bodyElem = $('<div class="layui-tabs-body"></div>');
 
           // 生成标签项
-          layui.each(options.header, function(i, item){
+          layui.each(options.header, function(i, item) {
             var elemHeaderItem = that.renderHeaderItem(item);
             headerElem.append(elemHeaderItem);
           });
-          layui.each(options.body, function(i, item){
+          layui.each(options.body, function(i, item) {
             var elemBodyItem = that.renderBodyItem(item);
             bodyElem.append(elemBodyItem);
           });
@@ -115,7 +115,7 @@ layui.define('component', function(exports) {
       layui.event.call(
         options.elem[0],
         component.CONST.MOD_NAME,
-        'afterRender('+ options.id +')',
+        'afterRender(' + options.id + ')',
         data
       );
     },
@@ -126,7 +126,7 @@ layui.define('component', function(exports) {
       var options = that.config;
       var container = that.getContainer();
       var MOD_NAME = component.CONST.MOD_NAME;
-      var TRIGGER_NAMESPACE = '.lay_'+ MOD_NAME + '_trigger';
+      var TRIGGER_NAMESPACE = '.lay_' + MOD_NAME + '_trigger';
       var delegatedElement = that.documentElem ? container.header.elem : options.elem;
 
       // 标签头部事件
@@ -141,10 +141,10 @@ layui.define('component', function(exports) {
         var timer;
         $(window).on('resize', function() {
           clearTimeout(timer);
-          timer = setTimeout(function(){
+          timer = setTimeout(function() {
             layui.each(component.cache.id, function(key) {
               var that = component.getInst(key);
-              if(!that) return;
+              if (!that) return;
               that.roll('init');
             });
           }, 50);
@@ -240,15 +240,15 @@ layui.define('component', function(exports) {
       return;
     }
 
-     // 当前标签相关数据
-     var data = that.data();
+    // 当前标签相关数据
+    var data = that.data();
 
     // 标签关闭前的事件。若非强制关闭，可则根据事件的返回结果决定是否关闭
     if (!force) {
       var closable = layui.event.call(
         thisHeaderItem[0],
         component.CONST.MOD_NAME,
-        'beforeClose('+ options.id +')',
+        'beforeClose(' + options.id + ')',
         $.extend(data, {
           index: index,
         })
@@ -264,7 +264,7 @@ layui.define('component', function(exports) {
     if (thisHeaderItem.hasClass(component.CONST.CLASS_THIS)) {
       if (thisHeaderItem.next()[0]) {
         that.change(thisHeaderItem.next(), true);
-      } else if(thisHeaderItem.prev()[0]) {
+      } else if (thisHeaderItem.prev()[0]) {
         that.change(thisHeaderItem.prev(), true);
       }
     }
@@ -282,7 +282,7 @@ layui.define('component', function(exports) {
     layui.event.call(
       data.thisHeaderItem[0],
       component.CONST.MOD_NAME,
-      'afterClose('+ options.id +')',
+      'afterClose(' + options.id + ')',
       data
     );
   };
@@ -299,7 +299,7 @@ layui.define('component', function(exports) {
     var headers = container.header.items;
     var bodys = container.body.items;
     var DISABLED_CLOSE_SELECTOR = '[lay-closable="false"]'; // 不可关闭标签选择器
-    var FILTER = ':not('+ DISABLED_CLOSE_SELECTOR +')'; // 不可关闭标签过滤器
+    var FILTER = ':not(' + DISABLED_CLOSE_SELECTOR + ')'; // 不可关闭标签过滤器
 
     index = index === undefined ? data.index : index;
 
@@ -309,15 +309,15 @@ layui.define('component', function(exports) {
 
     // 若当前选中标签也允许关闭，则尝试寻找不可关闭的标签并将其选中
     if (data.thisHeaderItem.attr('lay-closable') !== 'false') {
-      if(mode === 'all' || !mode){
-        var nextHeader = headers.filter(':gt('+ data.index +')'+ DISABLED_CLOSE_SELECTOR).eq(0);
-        var prevHeader = $(headers.filter(':lt('+ data.index +')'+ DISABLED_CLOSE_SELECTOR).get().reverse()).eq(0);
+      if (mode === 'all' || !mode) {
+        var nextHeader = headers.filter(':gt(' + data.index + ')' + DISABLED_CLOSE_SELECTOR).eq(0);
+        var prevHeader = $(headers.filter(':lt(' + data.index + ')' + DISABLED_CLOSE_SELECTOR).get().reverse()).eq(0);
         if (nextHeader[0]) {
           that.change(nextHeader, true);
-        } else if(prevHeader[0]) {
+        } else if (prevHeader[0]) {
           that.change(prevHeader, true);
         }
-      } else if(index !== data.index) { // 自动切换到活动标签
+      } else if (index !== data.index) { // 自动切换到活动标签
         that.change(headerItem, true);
       }
     }
@@ -354,7 +354,7 @@ layui.define('component', function(exports) {
     layui.event.call(
       data.thisHeaderItem[0],
       component.CONST.MOD_NAME,
-      'afterClose('+ options.id +')',
+      'afterClose(' + options.id + ')',
       data
     );
   };
@@ -391,7 +391,7 @@ layui.define('component', function(exports) {
       var enable = layui.event.call(
         thisHeaderItem[0],
         component.CONST.MOD_NAME,
-        'beforeChange('+ options.id +')',
+        'beforeChange(' + options.id + ')',
         $.extend(data, {
           from: {
             index: data.index,
@@ -412,11 +412,11 @@ layui.define('component', function(exports) {
 
     // 执行标签头部切换
     thisHeaderItem.addClass(component.CONST.CLASS_THIS).siblings()
-    .removeClass(component.CONST.CLASS_THIS);
+      .removeClass(component.CONST.CLASS_THIS);
 
     // 执行标签内容切换
     that.findBodyItem(layid || index).addClass(component.CONST.CLASS_SHOW)
-    .siblings().removeClass(component.CONST.CLASS_SHOW);
+      .siblings().removeClass(component.CONST.CLASS_SHOW);
 
     that.roll('auto', index);
 
@@ -427,7 +427,7 @@ layui.define('component', function(exports) {
     layui.event.call(
       data.thisHeaderItem[0],
       component.CONST.MOD_NAME,
-      'afterChange('+ options.id +')',
+      'afterChange(' + options.id + ')',
       data
     );
   };
@@ -453,7 +453,7 @@ layui.define('component', function(exports) {
   Class.prototype.renderBodyItem = function(opts) {
     var that = this;
     var options = that.config;
-    var bodyItem = $(opts.bodyItem || options.bodyItem || '<div class="'+ component.CONST.ITEM +'"></div>');
+    var bodyItem = $(opts.bodyItem || options.bodyItem || '<div class="' + component.CONST.ITEM + '"></div>');
 
     bodyItem.html(opts.content || '').attr('lay-id', opts.id);
     return bodyItem;
@@ -482,9 +482,9 @@ layui.define('component', function(exports) {
     }
 
     // 可关闭项追加关闭按钮
-    if (!headerItem.find('.'+ component.CONST.CLOSE)[0]) {
-      var close = $('<i class="layui-icon layui-icon-close layui-unselect '+ component.CONST.CLOSE +'"></i>');
-      close.on('click', function(){
+    if (!headerItem.find('.' + component.CONST.CLOSE)[0]) {
+      var close = $('<i class="layui-icon layui-icon-close layui-unselect ' + component.CONST.CLOSE + '"></i>');
+      close.on('click', function() {
         that.close($(this).parent());
         return false;
       });
@@ -504,7 +504,7 @@ layui.define('component', function(exports) {
       if (options.closable) {
         that.appendClose($this);
       } else {
-        $this.find('.'+ component.CONST.CLOSE).remove();
+        $this.find('.' + component.CONST.CLOSE).remove();
       }
     });
   };
@@ -565,11 +565,11 @@ layui.define('component', function(exports) {
 
     // 滚动结构
     var rollElem = {
-      elem: $('<div class="'+ CLASS_SCROLL +' layui-border-box layui-unselect"></div>'),
+      elem: $('<div class="' + CLASS_SCROLL + ' layui-border-box layui-unselect"></div>'),
       bar: $([
-        '<div class="'+ CLASS_BAR +'">',
-          '<i class="layui-icon '+ CLASS_BAR_ICON[0] +'" lay-mode="prev"></i>',
-          '<i class="layui-icon '+ CLASS_BAR_ICON[1] +'" lay-mode="next"></i>',
+        '<div class="' + CLASS_BAR + '">',
+        '<i class="layui-icon ' + CLASS_BAR_ICON[0] + '" lay-mode="prev"></i>',
+        '<i class="layui-icon ' + CLASS_BAR_ICON[1] + '" lay-mode="next"></i>',
         '</div>',
       ].join('')),
     };
@@ -578,7 +578,7 @@ layui.define('component', function(exports) {
     if (options.headerMode === 'normal') return;
 
     // 是否渲染滚动结构
-    var elemScroll = headerElem.parent('.'+ CLASS_SCROLL);
+    var elemScroll = headerElem.parent('.' + CLASS_SCROLL);
     if (scrollMode || (!scrollMode && scrollWidth > outerWidth)) {
       if (!elemScroll[0]) {
         if (options.elem.hasClass(component.CONST.CARD)) {
@@ -588,16 +588,16 @@ layui.define('component', function(exports) {
         headerElem.after(rollElem.bar);
 
         // 点击左右箭头
-        rollElem.bar.children().on('click', function(){
+        rollElem.bar.children().on('click', function() {
           var othis = $(this);
           var mode = othis.attr('lay-mode');
           if ($(this).hasClass(component.CONST.CLASS_DISABLED)) return;
           mode && that.roll(mode);
         });
       }
-    } else if(!scrollMode) {
+    } else if (!scrollMode) {
       if (elemScroll[0]) {
-        elemScroll.find('.'+ CLASS_BAR).remove();
+        elemScroll.find('.' + CLASS_BAR).remove();
         headerElem.unwrap().css('left', 0).data('left', 0);
       } else {
         return;
@@ -610,14 +610,14 @@ layui.define('component', function(exports) {
     // 重新获取
     scrollWidth = headerElem.prop('scrollWidth'); // 实际总长度
     outerWidth = headerElem.outerWidth(); // 可视区域的长度
-    elemScroll = headerElem.parent('.'+ CLASS_SCROLL);
+    elemScroll = headerElem.parent('.' + CLASS_SCROLL);
 
     // 左箭头（往右滚动）
     if (mode === 'prev') {
       // 当前的 left 减去可视宽度，用于与上一轮的页签比较
       var  prevLeft = -tabsLeft - outerWidth;
-      if(prevLeft < 0) prevLeft = 0;
-      headerItems.each(function(i, item){
+      if (prevLeft < 0) prevLeft = 0;
+      headerItems.each(function(i, item) {
         var li = $(item);
         var left = Math.ceil(li.position().left);
 
@@ -626,10 +626,10 @@ layui.define('component', function(exports) {
           return false;
         }
       });
-    } else if(mode === 'auto') { // 自动识别滚动
+    } else if (mode === 'auto') { // 自动识别滚动
       rollToVisibleArea();
     } else { // 右箭头（往左滚动） 默认 next
-      headerItems.each(function(i, item){
+      headerItems.each(function(i, item) {
         var li = $(item);
         var left = Math.ceil(li.position().left);
 
@@ -643,15 +643,15 @@ layui.define('component', function(exports) {
     // 同步箭头状态
     tabsLeft = headerElem.data('left') || 0;
 
-     // 左
-    elemScroll.find('.'+ CLASS_BAR_ICON[0])[
+    // 左
+    elemScroll.find('.' + CLASS_BAR_ICON[0])[
       tabsLeft < 0 ? 'removeClass' : 'addClass'
     ](component.CONST.CLASS_DISABLED);
-     // 右
-    elemScroll.find('.'+ CLASS_BAR_ICON[1])[
+    // 右
+    elemScroll.find('.' + CLASS_BAR_ICON[1])[
       parseFloat(tabsLeft + scrollWidth) - outerWidth > 0
         ? 'removeClass'
-      : 'addClass'
+        : 'addClass'
     ](component.CONST.CLASS_DISABLED);
   };
 
@@ -665,7 +665,7 @@ layui.define('component', function(exports) {
 
     // 根据 lay-id 匹配
     if (typeof index === 'string') {
-      return headerItems.filter('[lay-id="'+ index +'"]');
+      return headerItems.filter('[lay-id="' + index + '"]');
     }
 
     return headerItems.eq(index);
@@ -681,11 +681,11 @@ layui.define('component', function(exports) {
 
     // 根据 lay-id 匹配
     if (typeof index === 'string') {
-      var bodyItem = bodyItems.filter('[lay-id="'+ index +'"]');
+      var bodyItem = bodyItems.filter('[lay-id="' + index + '"]');
       return bodyItem[0] ? bodyItem : function() {
         // 若未匹配到 lay-id 对应内容项，则通过对应头部项的索引匹配内容项
         var headerItems = container.header.items;
-        var headerItemIndex = headerItems.filter('[lay-id="'+ index +'"]').index();
+        var headerItemIndex = headerItems.filter('[lay-id="' + index + '"]').index();
 
         return headerItemIndex !== -1 ? bodyItems.eq(headerItemIndex) : bodyItem;
       }();
@@ -702,7 +702,7 @@ layui.define('component', function(exports) {
     var that = this;
     var options = that.config;
     var container = that.getContainer();
-    var thisHeaderItem = container.header.items.filter('.'+ component.CONST.CLASS_THIS);
+    var thisHeaderItem = container.header.items.filter('.' + component.CONST.CLASS_THIS);
     var index = thisHeaderItem.index();
     var layid = thisHeaderItem.attr('lay-id');
 
@@ -725,7 +725,7 @@ layui.define('component', function(exports) {
      */
     add: function(id, opts) {
       var that = component.getInst(id);
-      if(!that) return;
+      if (!that) return;
       that.add(opts);
     },
 
@@ -753,7 +753,7 @@ layui.define('component', function(exports) {
      */
     closeMult: function(id, mode, index) {
       var that = component.getInst(id);
-      if(!that) return;
+      if (!that) return;
       that.closeMult(mode, index);
     },
 
@@ -764,7 +764,7 @@ layui.define('component', function(exports) {
      */
     change: function(id, index, force) {
       var that = component.getInst(id);
-      if(!that) return;
+      if (!that) return;
       that.change(that.findHeaderItem(index), force);
     },
 
@@ -785,7 +785,7 @@ layui.define('component', function(exports) {
      */
     getHeaderItem: function(id, index) {
       var that = component.getInst(id);
-      if(!that) return;
+      if (!that) return;
       return that.findHeaderItem(index);
     },
 
@@ -797,7 +797,7 @@ layui.define('component', function(exports) {
      */
     getBodyItem: function(id, index) {
       var that = component.getInst(id);
-      if(!that) return;
+      if (!that) return;
       return that.findBodyItem(index);
     },
 

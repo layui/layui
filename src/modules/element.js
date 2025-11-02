@@ -26,7 +26,7 @@ layui.define(['component', 'tab', 'nav', 'breadcrumb', 'progress', 'collapse'], 
     render: function(type, filter) {
       var elemFilter = function() {
         if (typeof filter === 'string' && filter) {
-          return '[lay-filter="' + filter +'"]';
+          return '[lay-filter="' + filter + '"]';
         }
         return '';
       }();

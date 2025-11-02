@@ -36,7 +36,7 @@ layui.define('component', function(exports) {
       SLIDER_INPUT_BTN: 'layui-slider-input-btn',
       ELEM_HOVER: 'layui-slider-hover',
     },
-    render: function (rerender) {
+    render: function(rerender) {
       var that = this;
       var options = that.config;
 
@@ -120,7 +120,7 @@ layui.define('component', function(exports) {
       //插入输入框
       if (options.input && !options.range) {
         var elemInput = $('<div class="layui-slider-input"><div class="layui-slider-input-txt"><input type="text" class="layui-input"></div><div class="layui-slider-input-btn"><i class="layui-icon layui-icon-up"></i><i class="layui-icon layui-icon-down"></i></div></div>');
-        othis.css("position", "relative");
+        othis.css('position', 'relative');
         othis.append(elemInput);
         othis.find('.' + CONST.SLIDER_INPUT_TXT).children('input').val(options.value);
         if (options.type === 'vertical') {
@@ -129,7 +129,7 @@ layui.define('component', function(exports) {
             , top: -48,
           });
         } else {
-          that.elemTemp.css("margin-right", elemInput.outerWidth() + 15);
+          that.elemTemp.css('margin-right', elemInput.outerWidth() + 15);
         }
       }
 
@@ -170,14 +170,14 @@ layui.define('component', function(exports) {
       function setSliderTipsLeft(left) {
         if (options.type === 'vertical') {
           that.elemTemp.find('.' + CONST.SLIDER_TIPS).css({
-            "bottom": left + '%',
-            "margin-bottom": "20px",
-            "display": "inline-block",
+            'bottom': left + '%',
+            'margin-bottom': '20px',
+            'display': 'inline-block',
           });
         } else {
           that.elemTemp.find('.' + CONST.SLIDER_TIPS).css({
-            "left": left + '%',
-            "display": "inline-block",
+            'left': left + '%',
+            'display': 'inline-block',
           });
         }
       }
@@ -192,27 +192,27 @@ layui.define('component', function(exports) {
         } else {
           //划过滑块显示数值
           var timer;
-          that.elemTemp.find('.' + CONST.SLIDER_WRAP_BTN).on('mouseover', function () {
+          that.elemTemp.find('.' + CONST.SLIDER_WRAP_BTN).on('mouseover', function() {
             setSliderTipsTxt($(this));
             var left = calcSliderTipsLeft($(this));
             clearTimeout(timer);
-            timer = setTimeout(function () {
+            timer = setTimeout(function() {
               setSliderTipsLeft(left);
             }, 300);
-          }).on('mouseout', function () {
+          }).on('mouseout', function() {
             clearTimeout(timer);
             if (!options.tipsAlways) {
-              that.elemTemp.find('.' + CONST.SLIDER_TIPS).css("display", "none");
+              that.elemTemp.find('.' + CONST.SLIDER_TIPS).css('display', 'none');
             }
           });
         }
       }
     },
-    extendsInstance: function(){
+    extendsInstance: function() {
       var that = this;
       var options = that.config;
       return {
-        setValue: function (value, index) {
+        setValue: function(value, index) {
           value = value > options.max ? options.max : value;
           value = value < options.min ? options.min : value;
           options.value = value;
@@ -226,10 +226,10 @@ layui.define('component', function(exports) {
   var Class = component.Class;
 
   // 数值精度
-  Class.prototype.precision = function(){
+  Class.prototype.precision = function() {
     var that = this;
     var options = that.config;
-    var precisions = $.map([options.min, options.max, options.step], function(v, i){
+    var precisions = $.map([options.min, options.max, options.step], function(v, i) {
       var decimalArr = String(v).split('.');
       return decimalArr[1] ? decimalArr[1].length : 0;
     });
@@ -237,11 +237,11 @@ layui.define('component', function(exports) {
   };
 
   //滑块滑动
-  Class.prototype.slide = function(setValue, value, i){
+  Class.prototype.slide = function(setValue, value, i) {
     var that = this;
     var options = that.config;
     var sliderAct = that.elemTemp;
-    var sliderWidth = function(){
+    var sliderWidth = function() {
       return options.type === 'vertical' ? options.height : sliderAct[0].offsetWidth;
     };
     var sliderWrap = sliderAct.find('.' + CONST.SLIDER_WRAP);
@@ -249,32 +249,32 @@ layui.define('component', function(exports) {
     var inputValue = sliderTxt.children('.' + CONST.SLIDER_INPUT_TXT).children('input').val();
     var step = 100 / ((options.max - options.min) / options.step);
     var precision = that.precision();
-    var change = function(offsetValue, index, from){
-      if(Math.ceil(offsetValue) * step > 100){
+    var change = function(offsetValue, index, from) {
+      if (Math.ceil(offsetValue) * step > 100) {
         offsetValue = Math.ceil(offsetValue) * step;
-      }else{
+      } else {
         offsetValue = Math.round(offsetValue) * step;
       }
-      offsetValue = offsetValue > 100 ? 100: offsetValue;
-      offsetValue = offsetValue < 0 ? 0: offsetValue;
-      sliderWrap.eq(index).css((options.type === 'vertical' ?'bottom':'left'), offsetValue + '%');
+      offsetValue = offsetValue > 100 ? 100 : offsetValue;
+      offsetValue = offsetValue < 0 ? 0 : offsetValue;
+      sliderWrap.eq(index).css((options.type === 'vertical' ? 'bottom' : 'left'), offsetValue + '%');
       var firLeft = valueTo(sliderWrap[0].offsetLeft);
       var secLeft = options.range ? valueTo(sliderWrap[1].offsetLeft) : 0;
-      if(options.type === 'vertical'){
-        sliderAct.find('.' + CONST.SLIDER_TIPS).css({"bottom":offsetValue + '%', "margin-bottom":"20px"});
+      if (options.type === 'vertical') {
+        sliderAct.find('.' + CONST.SLIDER_TIPS).css({'bottom':offsetValue + '%', 'margin-bottom':'20px'});
         firLeft = valueTo(sliderWidth() - sliderWrap[0].offsetTop - sliderWrap.height());
         secLeft = options.range ? valueTo(sliderWidth() - sliderWrap[1].offsetTop - sliderWrap.height()) : 0;
-      }else{
-        sliderAct.find('.' + CONST.SLIDER_TIPS).css("left",offsetValue + '%');
+      } else {
+        sliderAct.find('.' + CONST.SLIDER_TIPS).css('left', offsetValue + '%');
       }
-      firLeft = firLeft > 100 ? 100: firLeft;
-      secLeft = secLeft > 100 ? 100: secLeft;
+      firLeft = firLeft > 100 ? 100 : firLeft;
+      secLeft = secLeft > 100 ? 100 : secLeft;
       var minLeft = Math.min(firLeft, secLeft)
-      ,wrapWidth = Math.abs(firLeft - secLeft);
-      if(options.type === 'vertical'){
-        sliderAct.find('.' + CONST.SLIDER_BAR).css({"height":wrapWidth + '%', "bottom":minLeft + '%'});
-      }else{
-        sliderAct.find('.' + CONST.SLIDER_BAR).css({"width":wrapWidth + '%', "left":minLeft + '%'});
+        , wrapWidth = Math.abs(firLeft - secLeft);
+      if (options.type === 'vertical') {
+        sliderAct.find('.' + CONST.SLIDER_BAR).css({'height':wrapWidth + '%', 'bottom':minLeft + '%'});
+      } else {
+        sliderAct.find('.' + CONST.SLIDER_BAR).css({'width':wrapWidth + '%', 'left':minLeft + '%'});
       }
       var selfValue = options.min + (options.max - options.min) * offsetValue / 100;
       selfValue = Number(parseFloat(selfValue).toFixed(precision));
@@ -284,24 +284,24 @@ layui.define('component', function(exports) {
       sliderAct.find('.' + CONST.SLIDER_TIPS).html(options.setTips ? options.setTips(selfValue) : selfValue);
 
       //如果开启范围选择，则返回数组值
-      if(options.range){
+      if (options.range) {
         var arrValue = [
           sliderWrap.eq(0).data('value'),
           sliderWrap.eq(1).data('value'),
         ];
-        if(arrValue[0] > arrValue[1]) arrValue.reverse(); //如果前面的圆点超过了后面的圆点值，则调换顺序
+        if (arrValue[0] > arrValue[1]) arrValue.reverse(); //如果前面的圆点超过了后面的圆点值，则调换顺序
       }
 
       that.value = options.range ? arrValue : selfValue; // 最新值
       options.change && options.change(that.value); // change 回调
 
       // 值完成选中的事件
-      if(from === 'done') options.done && options.done(that.value);
+      if (from === 'done') options.done && options.done(that.value);
     };
-    var valueTo = function(value){
+    var valueTo = function(value) {
       var oldLeft = value / sliderWidth() * 100 / step;
       var left =  Math.round(oldLeft) * step;
-      if(value == sliderWidth()){
+      if (value == sliderWidth()) {
         left =  Math.ceil(oldLeft) * step;
       }
       return left;
@@ -309,15 +309,15 @@ layui.define('component', function(exports) {
 
     //拖拽元素
     var elemMove = $(['<div class="layui-auxiliar-moving" id="LAY-slider-moving"></div'].join(''));
-    var createMoveElem = function(sliderBtnElem, move, up){
-      var upCall = function(){
+    var createMoveElem = function(sliderBtnElem, move, up) {
+      var upCall = function() {
         // 移动端延时一秒关闭
         up && up(lay.touchEventsSupported() ? 1000 : 0);
         elemMove.remove();
         options.done && options.done(that.value);
         // 移动端
         if (lay.touchEventsSupported()) {
-          sliderBtnElem[0].removeEventListener('touchmove', move, lay.passiveSupported ? { passive: false } : false);
+          sliderBtnElem[0].removeEventListener('touchmove', move, lay.passiveSupported ? {passive: false} : false);
           sliderBtnElem[0].removeEventListener('touchend', upCall);
           sliderBtnElem[0].removeEventListener('touchcancel', upCall);
         }
@@ -327,43 +327,43 @@ layui.define('component', function(exports) {
       elemMove.on('mouseup', upCall).on('mouseleave', upCall);
       // 移动端
       if (lay.touchEventsSupported()) {
-        sliderBtnElem[0].addEventListener('touchmove', move, lay.passiveSupported ? { passive: false } : false);
+        sliderBtnElem[0].addEventListener('touchmove', move, lay.passiveSupported ? {passive: false} : false);
         sliderBtnElem[0].addEventListener('touchend', upCall);
         sliderBtnElem[0].addEventListener('touchcancel', upCall);
       }
     };
 
     //动态赋值
-    if(setValue === 'set'){
+    if (setValue === 'set') {
       return change((value - options.min) / (options.max - options.min) * 100 / step, i, 'done');
     }
 
     //滑块滑动
-    sliderAct.find('.' + CONST.SLIDER_WRAP_BTN).each(function(index){
+    sliderAct.find('.' + CONST.SLIDER_WRAP_BTN).each(function(index) {
       var othis = $(this);
-      othis.on('mousedown touchstart', function(e){
+      othis.on('mousedown touchstart', function(e) {
         e = e || window.event;
-        if(e.type === 'touchstart'){
+        if (e.type === 'touchstart') {
           e.clientX = e.originalEvent.touches[0].clientX;
           e.clientY = e.originalEvent.touches[0].clientY;
         }
 
         var oldleft = othis.parent()[0].offsetLeft;
         var oldx = e.clientX;
-        if(options.type === 'vertical'){
+        if (options.type === 'vertical') {
           oldleft = sliderWidth() - othis.parent()[0].offsetTop - sliderWrap.height();
           oldx = e.clientY;
         }
 
-        var move = function(e){
+        var move = function(e) {
           e = e || window.event;
           if (e.type === 'touchmove') {
             e.clientX = e.touches[0].clientX;
             e.clientY = e.touches[0].clientY;
           }
           var left = oldleft + (options.type === 'vertical' ? (oldx - e.clientY) : (e.clientX - oldx));
-          if(left < 0)left = 0;
-          if(left > sliderWidth())left = sliderWidth();
+          if (left < 0)left = 0;
+          if (left > sliderWidth())left = sliderWidth();
           var reaLeft = left / sliderWidth() * 100 / step;
           change(reaLeft, index);
           othis.addClass(CONST.ELEM_HOVER);
@@ -371,10 +371,10 @@ layui.define('component', function(exports) {
           e.preventDefault();
         };
 
-        var up = function(delay){
+        var up = function(delay) {
           othis.removeClass(CONST.ELEM_HOVER);
-          if(!options.tipsAlways){
-            setTimeout(function(){
+          if (!options.tipsAlways) {
+            setTimeout(function() {
               sliderAct.find('.' + CONST.SLIDER_TIPS).hide();
             }, delay);
           }
@@ -385,20 +385,20 @@ layui.define('component', function(exports) {
     });
 
     // 点击滑块
-    sliderAct.on('click', function(e){
+    sliderAct.on('click', function(e) {
       var main = $('.' + CONST.SLIDER_WRAP_BTN);
       var othis = $(this);
-      if(!main.is(e.target) && main.has(e.target).length === 0 && main.length){
+      if (!main.is(e.target) && main.has(e.target).length === 0 && main.length) {
         var index;
         var offset = options.type === 'vertical'
           ? (sliderWidth() - e.clientY + othis.offset().top - $(window).scrollTop())
-        :(e.clientX - othis.offset().left - $(window).scrollLeft());
+          : (e.clientX - othis.offset().left - $(window).scrollLeft());
 
-        if(offset < 0)offset = 0;
-        if(offset > sliderWidth()) offset = sliderWidth();
+        if (offset < 0)offset = 0;
+        if (offset > sliderWidth()) offset = sliderWidth();
         var reaLeft = offset / sliderWidth() * 100 / step;
-        if(options.range){
-          if(options.type === 'vertical'){
+        if (options.range) {
+          if (options.type === 'vertical') {
             index = Math.abs(offset - parseInt($(sliderWrap[0]).css('bottom'))) > Math.abs(offset -  parseInt($(sliderWrap[1]).css('bottom'))) ? 1 : 0;
           } else {
             index = Math.abs(offset - sliderWrap[0].offsetLeft) > Math.abs(offset - sliderWrap[1].offsetLeft) ? 1 : 0;
@@ -412,17 +412,17 @@ layui.define('component', function(exports) {
     });
 
     //点击加减输入框
-    sliderTxt.children('.' + CONST.SLIDER_INPUT_BTN).children('i').each(function(index){
-      $(this).on('click', function(){
+    sliderTxt.children('.' + CONST.SLIDER_INPUT_BTN).children('i').each(function(index) {
+      $(this).on('click', function() {
         inputValue = sliderTxt.children('.' + CONST.SLIDER_INPUT_TXT).children('input').val();
-        if(index == 1){ //减
+        if (index == 1) { //减
           inputValue = inputValue - options.step < options.min
             ? options.min
-          : Number(inputValue) - options.step;
-        }else{
+            : Number(inputValue) - options.step;
+        } else {
           inputValue = Number(inputValue) + options.step > options.max
             ? options.max
-          : Number(inputValue) + options.step;
+            : Number(inputValue) + options.step;
         }
         var inputScale =  (inputValue - options.min) / (options.max - options.min) * 100 / step;
         change(inputScale, 0, 'done');
@@ -430,7 +430,7 @@ layui.define('component', function(exports) {
     });
 
     //获取输入框值
-    var getInputValue = function(){
+    var getInputValue = function() {
       var realValue = this.value;
       realValue = isNaN(realValue) ? 0 : realValue;
       realValue = realValue < options.min ? options.min : realValue;
@@ -439,8 +439,8 @@ layui.define('component', function(exports) {
       var inputScale =  (realValue - options.min) / (options.max - options.min) * 100 / step;
       change(inputScale, 0, 'done');
     };
-    sliderTxt.children('.' + CONST.SLIDER_INPUT_TXT).children('input').on('keydown', function(e){
-      if(e.keyCode === 13){
+    sliderTxt.children('.' + CONST.SLIDER_INPUT_TXT).children('input').on('keydown', function(e) {
+      if (e.keyCode === 13) {
         e.preventDefault();
         getInputValue.call(this);
       }

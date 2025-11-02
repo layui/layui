@@ -82,7 +82,7 @@
       html += '';
       if (!exp.test(html)) return html;
       return html.replace(exp, function(str) {
-        return '&#'+ str.charCodeAt(0) + ';';
+        return '&#' + str.charCodeAt(0) + ';';
       });
     },
   };
@@ -113,7 +113,7 @@
       }, opts);
 
       // 向控制台输出错误信息
-      var message = 'Laytpl '+ (opts.type || '') +'Error: ' + e;
+      var message = 'Laytpl ' + (opts.type || '') + 'Error: ' + e;
       var errorContext = opts.errorContext;
 
       delete opts.errorContext;
@@ -180,7 +180,7 @@
       data = data || options.data || {};
       try {
         return compiler(data);
-      } catch(e) {
+      } catch (e) {
         template = template || options.template;
         return tools.error(e, {
           errorContext: that.extractErrorContext(template, data),
@@ -229,9 +229,9 @@
      */
     var tagRegex = function(cores, sides) {
       var arr = [
-        '(?:'+ openDelimiter + (cores[0] || '') +'\\s*)', // 界定符前置
-        '('+ (cores[1] || '[\\s\\S]') +'*?)', // 标签主体
-        '(?:\\s*'+ (cores[2] || '') + closeDelimiter +')', // 界定符后置
+        '(?:' + openDelimiter + (cores[0] || '') + '\\s*)', // 界定符前置
+        '(' + (cores[1] || '[\\s\\S]') + '*?)', // 标签主体
+        '(?:\\s*' + (cores[2] || '') + closeDelimiter + ')', // 界定符后置
       ];
       sides = sides || {};
       sides.before && arr.unshift(sides.before); // 标签前面的表达式
@@ -263,7 +263,7 @@
 
     // 纠正标签结构
     var correct = function(tpl) {
-      return tpl.replace(regex('([}\\]])'+ closeDelimiter), '$1 '+ closeDelimiter);
+      return tpl.replace(regex('([}\\]])' + closeDelimiter), '$1 ' + closeDelimiter);
     };
 
     // 模板解析
@@ -278,8 +278,8 @@
 
       // 初始整理
       tpl = correct(tpl) // 纠正标签
-      .replace(/(?=\\|")/g, '\\')  // 转义反斜杠和双引号
-      .replace(/\r?\n/g, condense ? '' : placeholder); // 整理换行符
+        .replace(/(?=\\|")/g, '\\')  // 转义反斜杠和双引号
+        .replace(/\r?\n/g, condense ? '' : placeholder); // 整理换行符
 
       // 忽略标签 - 即区域中的内容不进行标签解析
       tpl = tpl.replace(tagRegex(['!', '', '!'], delimSides), function(str, body) {
@@ -313,7 +313,7 @@
         }
 
         return body ? strConcatenation(
-          '__laytpl__+='+ _escape +'('+ body +');'
+          '__laytpl__+=' + _escape + '(' + body + ');'
           // '__laytpl__.push('+ _escape +'('+ body +'));'
         ) : '';
       };
@@ -355,25 +355,25 @@
      */
     var createCompiler = that.createCompiler = function(template, builder) {
       builder = builder || createBuilder(template);
-      return new Function('laytpl', 'return '+ builder)(that.vars);
+      return new Function('laytpl', 'return ' + builder)(that.vars);
     };
     var createBuilder = that.createBuilder = function(template, builder) {
-       builder = builder || [
+      builder = builder || [
         'function(d){',
-          '"use strict";',
-          'var __laytpl__="",'+
+        '"use strict";',
+        'var __laytpl__="",' +
           function() { // 内部变量
             // 内部方法
             var arr = [];
             for (var key in that.vars) {
-              arr.push(((key === 'escape' ? '_' : '') + key) +'=laytpl.'+ key);
+              arr.push(((key === 'escape' ? '_' : '') + key) + '=laytpl.' + key);
             }
             return arr.join(',');
           }() + ';',
-          '__laytpl__="'+ parse(template) +'";',
-          'return __laytpl__;',
-          // '__laytpl__.push("'+ parse(template) +'");',
-          // 'return __laytpl__.join("");',
+        '__laytpl__="' + parse(template) + '";',
+        'return __laytpl__;',
+        // '__laytpl__.push("'+ parse(template) +'");',
+        // 'return __laytpl__.join("");',
         '};',
       ].join('\n');
       // console.log(builder);
@@ -382,7 +382,7 @@
 
     try {
       return createCompiler(template); // 返回编译器
-    } catch(e) {
+    } catch (e) {
       delete that.compilerCache;
       return function() {
         return tools.error(e, {
@@ -408,7 +408,7 @@
     var templateArr = template.split(/\r?\n/g);
 
     template = template.replace(/(?=^)/gm, function() {
-      return '/*LINE:'+ (lineNum++) +'*/';
+      return '/*LINE:' + (lineNum++) + '*/';
     });
 
     var builder = that.createBuilder(template);
@@ -436,12 +436,12 @@
     };
 
     try {
-      builder += ('\n//# sourceURL='+ sourceURL); // 添加映射
+      builder += ('\n//# sourceURL=' + sourceURL); // 添加映射
       var compiler = that.createCompiler(template, builder);
       if (data) compiler(data);
-    } catch(e) {
+    } catch (e) {
       // 提取堆栈报错行号
-      var stackLineNumRegxp = tools.regex(sourceURL.replace(/\./g, '\\.')+':(\\d+)', 'i');
+      var stackLineNumRegxp = tools.regex(sourceURL.replace(/\./g, '\\.') + ':(\\d+)', 'i');
       var stackLineNum = (e.stack.match(stackLineNumRegxp) || [])[1] || 0;
 
       // 提取模板实际行号
@@ -499,10 +499,10 @@
   }) : (
     typeof module === 'object' && typeof exports === 'object'
       ? module.exports = laytpl // CommonJS
-    : (
-      typeof define === 'function' && define.amd ? define(function() { // RequireJS
-        return laytpl;
-      }) : global.laytpl = laytpl // 单独引入
-    )
+      : (
+        typeof define === 'function' && define.amd ? define(function() { // RequireJS
+          return laytpl;
+        }) : global.laytpl = laytpl // 单独引入
+      )
   );
 })(this);

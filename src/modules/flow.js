@@ -4,7 +4,7 @@
  */
 
 layui.define(['i18n', 'component'], function(exports) {
-  "use strict";
+  'use strict';
 
   var $ = layui.$;
   var i18n = layui.i18n;
@@ -45,9 +45,9 @@ layui.define(['i18n', 'component'], function(exports) {
 
       // 加载更多
       var ELEM_TEXT = '<cite>' + moreText + '</cite>';
-      var $more = $('<div class="'+ CONST.ELEM_MORE +'"><a href="javascript:;">'+ ELEM_TEXT +'</a></div>');
+      var $more = $('<div class="' + CONST.ELEM_MORE + '"><a href="javascript:;">' + ELEM_TEXT + '</a></div>');
 
-      elem.find('.'+ CONST.ELEM_MORE).remove(); // 清除旧的「加载更多」元素
+      elem.find('.' + CONST.ELEM_MORE).remove(); // 清除旧的「加载更多」元素
       elem[isTop ? 'prepend' : 'append']($more);
 
       // 加载下一个元素
@@ -78,7 +78,7 @@ layui.define(['i18n', 'component'], function(exports) {
           if (page === 1) {
             // 首次渲染后滑动到底部
             scrollElem.scrollTop(scrollHeightEnd);
-          } else if(page > 1) {
+          } else if (page > 1) {
             var nextElementHeight = scrollHeightEnd - scrollHeightStart;
             scrollElem.scrollTop(scrollTopStart + nextElementHeight);
           }
@@ -120,10 +120,10 @@ layui.define(['i18n', 'component'], function(exports) {
           // 计算滚动所在容器的实际高度
           var scrollHeight = notDocument
             ? othis.prop('scrollHeight')
-          : document.documentElement.scrollHeight;
+            : document.documentElement.scrollHeight;
 
           // 临界点
-          if(!isTop ? scrollHeight - top - height <= threshold : top <= threshold){
+          if (!isTop ? scrollHeight - top - height <= threshold : top <= threshold) {
             locked || done();
           }
         }, 100);
@@ -166,13 +166,13 @@ layui.define(['i18n', 'component'], function(exports) {
         var end = start + height;
 
         var show = function(item) {
-          var elemTop = notDocument ? function(){
+          var elemTop = notDocument ? function() {
             return item.offset().top - scrollElem.offset().top + start;
           }() : item.offset().top;
 
           /* 始终只加载在当前屏范围内的图片 */
           if ((isTop ? elemTop + item.height() : elemTop) >= start && elemTop <= end) {
-            if(item.attr('lay-src')){
+            if (item.attr('lay-src')) {
               var src = item.attr('lay-src');
               layui.img(src, function() {
                 var next = $elem.eq(index);
@@ -193,7 +193,7 @@ layui.define(['i18n', 'component'], function(exports) {
         } else {
           // 计算未加载过的图片
           for (var i = 0; i < $elem.length; i++) {
-            var item = $elem.eq(i), elemTop = notDocument ? function(){
+            var item = $elem.eq(i), elemTop = notDocument ? function() {
               return item.offset().top - scrollElem.offset().top + start;
             }() : item.offset().top;
 
@@ -214,7 +214,7 @@ layui.define(['i18n', 'component'], function(exports) {
       var LAZYIMG_SCROLL_EVENTS = CONST.LAZYIMG_SCROLL_EVENTS + '_' + id;
       scrollElem.off(LAZYIMG_SCROLL_EVENTS).on(LAZYIMG_SCROLL_EVENTS, function() {
         if (timer) clearTimeout(timer);
-        timer = setTimeout(function(){
+        timer = setTimeout(function() {
           render();
         }, 50);
       });

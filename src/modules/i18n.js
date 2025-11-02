@@ -171,7 +171,7 @@ layui.define('lay', function(exports) {
       },
       toDateString: {
         // https://www.unicode.org/cldr/charts/47/supplemental/day_periods.html
-        meridiem: function(hours, minutes){
+        meridiem: function(hours, minutes) {
           var hm = hours * 100 + minutes;
           if (hm < 500) {
             return '凌晨';
@@ -212,9 +212,9 @@ layui.define('lay', function(exports) {
     var casePath = path.replace(/\[(\d+)\]/g, '.$1').split('.');
     var result = obj;
 
-    for(var i = 0; i < casePath.length; i++) {
+    for (var i = 0; i < casePath.length; i++) {
       result = result && result[casePath[i]];
-      if(result === null || result === undefined){
+      if (result === null || result === undefined) {
         return defaultValue;
       }
     }
@@ -228,7 +228,7 @@ layui.define('lay', function(exports) {
    * @param {(key: string, ...args) => T} fn - 需要缓存的函数，第一个参数为键
    * @returns {{(key: string, ...args): T, cleanup: () => void}} - 带有缓存的函数
    */
-  function memoize(fn){
+  function memoize(fn) {
     /** @type Record<string, T> */
     var cache = Object.create(null);
 
@@ -250,16 +250,16 @@ layui.define('lay', function(exports) {
    * @returns {any} - 转义后的结果
    */
   function escape(value) {
-    if(typeof value === 'string'){
+    if (typeof value === 'string') {
       value = lay.escape(value);
-    }else if(typeof value === 'function'){
+    } else if (typeof value === 'function') {
       var origFn = value;
-      value = function(){
+      value = function() {
         var val = origFn.apply(this, arguments);
         return typeof val === 'string' ? lay.escape(val) : val;
       };
-    }else if(layui.type(value) === 'array'){
-      value = value.map(function(v){
+    } else if (layui.type(value) === 'array') {
+      value = value.map(function(v) {
         return typeof v === 'string' ? lay.escape(v) : v;
       });
     }
@@ -271,7 +271,7 @@ layui.define('lay', function(exports) {
     return value !== null && value !== undefined;
   }
 
-  var resolveValue = memoize(function(path, obj, defaultValue){
+  var resolveValue = memoize(function(path, obj, defaultValue) {
     var pathParts = path.split(':');
     var locale = pathParts[0];
 
@@ -283,10 +283,10 @@ layui.define('lay', function(exports) {
       var isFallback = defaultValue === value || value === path;
       var isNotFound = !isDef(value) || isFallback;
       if (isNotFound) {
-        hint.errorOnce("Not found '" + path + "' key in '" + locale + "' locale messages.", 'warn');
+        hint.errorOnce('Not found \'' + path + '\' key in \'' + locale + '\' locale messages.', 'warn');
       }
       if (isFallback) {
-        hint.errorOnce("Fallback to default message for key: '" + path + "'", 'warn');
+        hint.errorOnce('Fallback to default message for key: \'' + path + '\'', 'warn');
       }
     }
 
@@ -333,7 +333,7 @@ layui.define('lay', function(exports) {
     var fallbackMessage = hasDefault ? options.default : undefined;
 
     if (!i18nMessages && !hasDefault) {
-      hint.errorOnce("Locale '" + locale + "' not found. Please add i18n messages for this locale first.", 'warn');
+      hint.errorOnce('Locale \'' + locale + '\' not found. Please add i18n messages for this locale first.', 'warn');
     }
 
     var result = resolveValue(namespace + keypath, i18nMessages, fallbackMessage);

@@ -4,7 +4,7 @@
  */
 
 layui.define(['jquery', 'lay'], function(exports) {
-  "use strict";
+  'use strict';
 
   var $ = layui.$;
   var lay = layui.lay;
@@ -203,7 +203,7 @@ layui.define(['jquery', 'lay'], function(exports) {
     };
 
     // 缓存所有实例对象
-   instance.that = {};
+    instance.that = {};
 
     // 获取指定的实例对象
     component.getInst = component.getThis = function(id) {

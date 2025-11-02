@@ -14,7 +14,7 @@ layui.define(function() {
 
   return mods;
 }(), function(exports) {
-  "use strict";
+  'use strict';
 
   var MOD_NAME = 'all';
 

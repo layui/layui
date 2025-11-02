@@ -36,12 +36,12 @@
 
   // 获取 layui 所在目录
   var getPath = function() {
-    var jsPath = (document.currentScript && document.currentScript.tagName.toUpperCase() === 'SCRIPT') ? document.currentScript.src : function(){
+    var jsPath = (document.currentScript && document.currentScript.tagName.toUpperCase() === 'SCRIPT') ? document.currentScript.src : function() {
       var js = document.getElementsByTagName('script');
       var last = js.length - 1;
       var src;
-      for(var i = last; i > 0; i--){
-        if(js[i].readyState === 'interactive'){
+      for (var i = last; i > 0; i--) {
+        if (js[i].readyState === 'interactive') {
           src = js[i].src;
           break;
         }
@@ -63,8 +63,8 @@
   };
   var warned = Object.create(null);
 
-  var errorOnce = function (msg, type) {
-    if(warned._size && warned._size > 100){
+  var errorOnce = function(msg, type) {
+    if (warned._size && warned._size > 100) {
       warned = Object.create(null);
       warned._size = 0;
     }
@@ -146,7 +146,7 @@
    */
   var onNodeLoad = function(node, done, error) {
     // 资源加载完毕
-    var onCompleted = function (e) {
+    var onCompleted = function(e) {
       var readyRegExp = /^(complete|loaded)$/;
       if (e.type === 'load' || (readyRegExp.test((e.currentTarget || e.srcElement).readyState))) {
         removeListener();
@@ -154,7 +154,7 @@
       }
     };
     // 资源加载失败
-    var onError = function (e) {
+    var onError = function(e) {
       removeListener();
       typeof error === 'function' && error(e);
     };
@@ -170,7 +170,7 @@
     };
 
     // 添加事件
-    if(node.attachEvent && !(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code') < 0)){
+    if (node.attachEvent && !(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code') < 0)) {
       // 此处考虑到 IE9+ load 的稳定性，固仍然采用 onreadystatechange
       node.attachEvent('onreadystatechange', onCompleted);
     } else {
@@ -237,9 +237,8 @@
     mods = (function() {
       if (typeof mods === 'string') {
         return [mods];
-      }
-      // 若第一个参数为 function ，则自动加载所有内置模块，且执行的回调即为该 function 参数；
-      else if(typeof mods === 'function') {
+      } else if (typeof mods === 'function') {
+        // 若第一个参数为 function ，则自动加载所有内置模块，且执行的回调即为该 function 参数；
         callback = mods;
         return ['all'];
       }
@@ -248,7 +247,7 @@
 
     // 获取 layui 静态资源所在 host
     if (!config.host) {
-      config.host = (dir.match(/\/\/([\s\S]+?)\//)||['//'+ location.host +'/'])[0];
+      config.host = (dir.match(/\/\/([\s\S]+?)\//) || ['//' + location.host + '/'])[0];
     }
 
     // 若参数异常
@@ -274,23 +273,23 @@
     var isExternalModule = typeof modInfo === 'object';
 
     // 回调触发
-    var onCallback = function () {
+    var onCallback = function() {
       exports.push(layui[item]);
       mods.length > 1
         ? that.use(mods.slice(1), callback, exports, from)
-      : (typeof callback === 'function' && function() {
+        : (typeof callback === 'function' && function() {
         // 保证文档加载完毕再执行回调
-        if(layui.jquery && typeof layui.jquery === 'function' && from !== 'define'){
-          return layui.jquery(function(){
-            callback.apply(layui, exports);
-          });
-        }
-        callback.apply(layui, exports);
-      }() );
+          if (layui.jquery && typeof layui.jquery === 'function' && from !== 'define') {
+            return layui.jquery(function() {
+              callback.apply(layui, exports);
+            });
+          }
+          callback.apply(layui, exports);
+        }() );
     };
 
     // 回调轮询
-    var pollCallback = function () {
+    var pollCallback = function() {
       var timeout = 0; // 超时计数器（秒）
       var delay = 5; // 轮询等待毫秒数
 
@@ -305,7 +304,7 @@
         // 若为遵循 layui 规范的模块，则标志为模块的 status 状态值
         (isExternalModule ? layui[item] = window[modInfo.api] : cache.status[item])
           ? onCallback()
-        : setTimeout(poll, delay);
+          : setTimeout(poll, delay);
       })();
     };
 
@@ -332,7 +331,7 @@
     var url = basePath + modSrc + '.js';
 
     // 若扩展模块对象已经存在，则不必再重复加载
-    if(!cache.modules[item] && layui[item]){
+    if (!cache.modules[item] && layui[item]) {
       cache.modules[item] = url; // 并记录起该扩展模块的 url
     }
 
@@ -386,7 +385,7 @@
     // 遍历拓展模块
     for (var modName in settings) {
       if (that[modName] || that.modules[modName]) { // 验证模块是否被占用
-        error('the '+ modName + ' module already exists, extend failure');
+        error('the ' + modName + ' module already exists, extend failure');
       } else {
         var modInfo = settings[modName];
         // 若直接传入模块路径字符
@@ -411,7 +410,7 @@
   Class.prototype.disuse = function(mods) {
     var that = this;
     mods = that.isArray(mods) ? mods : [mods];
-    that.each(mods, function (index, item) {
+    that.each(mods, function(index, item) {
       delete that[item];
       delete builtinModules[item];
       delete that.modules[item];
@@ -432,7 +431,7 @@
     var style = node.currentStyle ? node.currentStyle : window.getComputedStyle(node, null);
     return style.getPropertyValue
       ? style.getPropertyValue(name)
-      : style.getAttribute(name.replace(/-(\w)/g, function(_, c){ return c ? c.toUpperCase() : '';}));
+      : style.getAttribute(name.replace(/-(\w)/g, function(_, c) { return c ? c.toUpperCase() : '';}));
   };
 
   /**
@@ -454,7 +453,7 @@
     // 若加载多个
     if (typeof href === 'object') {
       var isArr = that.type(id) === 'array';
-      return that.each(href, function(index, value){
+      return that.each(href, function(index, value) {
         that.link(
           value,
           index === href.length - 1 && callback,
@@ -465,14 +464,14 @@
 
     // 若未传入 id ，则取路径 `//` 后面的字符拼接为 id，不含.与参数
     id = id || href.replace(/^(#|(http(s?)):\/\/|\/\/)|\.|\/|\?.+/g, '');
-    id = 'layuicss-'+ id;
+    id = 'layuicss-' + id;
 
     var link = document.getElementById(id);
 
     // 初始创建节点
     if (!link) {
       link = document.createElement('link');
-      link.href = href + (config.debug ? '?v='+new Date().getTime() : '');
+      link.href = href + (config.debug ? '?v=' + new Date().getTime() : '');
       link.rel = 'stylesheet';
       link.id = id;
       head.appendChild(link);
@@ -513,7 +512,7 @@
     if (layui[modName]) {
       return typeof config.callback[modName] === 'function'
         ? config.callback[modName]
-      : null;
+        : null;
     }
   };
 
@@ -529,11 +528,11 @@
     if (img.complete) {
       return callback(img);
     }
-    img.onload = function(){
+    img.onload = function() {
       img.onload = null;
       typeof callback === 'function' && callback(img);
     };
-    img.onerror = function(e){
+    img.onerror = function(e) {
       img.onerror = null;
       typeof error === 'function' && error(e);
     };
@@ -566,7 +565,7 @@
 
     // 提取 Hash 结构
     that.each(hash, function(index, item) {
-      /^\w+=/.test(item) ? function(){
+      /^\w+=/.test(item) ? function() {
         item = item.split('=');
         data.search[item[0]] = item[1];
       }() : data.path.push(item);
@@ -587,19 +586,19 @@
       // 提取 url 路径
       pathname: function() {
         var pathname = href
-          ? function(){
+          ? function() {
             var str = (href.match(/\.[^.]+?\/.+/) || [])[0] || '';
             return str.replace(/^[^\/]+/, '').replace(/\?.+/, '');
           }()
-        : location.pathname;
+          : location.pathname;
         return pathname.replace(/^\//, '').split('/');
       }(),
 
       // 提取 url 参数
-      search: function(){
+      search: function() {
         var obj = {};
         var search = (href
-          ? function(){
+          ? function() {
             var str = (href.match(/\?.+/) || [])[0] || '';
             return str.replace(/\#.+/, '');
           }()
@@ -612,7 +611,7 @@
           var key = function() { // 提取 key
             if (_index < 0) {
               return item.substr(0, item.length);
-            } else if(_index === 0) {
+            } else if (_index === 0) {
               return false;
             } else {
               return item.substr(0, _index);
@@ -631,7 +630,7 @@
       hash: that.router(function() {
         return href
           ? ((href.match(/#.+/) || [])[0] || '/')
-        : location.hash;
+          : location.hash;
       }()),
     };
 
@@ -656,11 +655,11 @@
 
     settings = typeof settings === 'object'
       ? settings
-    : {key: settings};
+      : {key: settings};
 
     try {
       var data = JSON.parse(storage[table]);
-    } catch(e) {
+    } catch (e) {
       var data = {};
     }
 
@@ -692,7 +691,7 @@
     // 获取版本号
     var getVersion = function(label) {
       var exp = new RegExp(label + '/([^\\s\\_\\-]+)');
-      label = (agent.match(exp)||[])[1];
+      label = (agent.match(exp) || [])[1];
       return label || false;
     };
 
@@ -701,16 +700,16 @@
       os: function() { // 底层操作系统
         if (/windows/.test(agent)) {
           return 'windows';
-        } else if(/linux/.test(agent)) {
+        } else if (/linux/.test(agent)) {
           return 'linux';
-        } else if(/iphone|ipod|ipad|ios/.test(agent)) {
+        } else if (/iphone|ipod|ipad|ios/.test(agent)) {
           return 'ios';
-        } else if(/mac/.test(agent)) {
+        } else if (/mac/.test(agent)) {
           return 'mac';
         }
       }(),
       ie: function() { // ie 版本
-        return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
+        return (!!window.ActiveXObject || 'ActiveXObject' in window) ? (
           (agent.match(/msie\s(\d+)/) || [])[1] || '11' // 由于 ie11 并没有 msie 的标识
         ) : false;
       }(),
@@ -744,7 +743,7 @@
    * @returns {string}
    */
   Class.prototype._typeof = Class.prototype.type = function(operand) {
-    if(operand === null) return String(operand);
+    if (operand === null) return String(operand);
 
     // 细分引用类型
     return (typeof operand === 'object' || typeof operand === 'function') ? function() {
@@ -754,9 +753,9 @@
       type = type[1] || 'Object';
 
       // 除匹配到的类型外，其他对象均返回 object
-      return new RegExp('\\b('+ classType + ')\\b').test(type)
+      return new RegExp('\\b(' + classType + ')\\b').test(type)
         ? type.toLowerCase()
-      : 'object';
+        : 'object';
     }() : typeof operand;
   };
 
@@ -799,11 +798,11 @@
     // 优先处理数组结构
     if (that.isArray(obj)) {
       for (key = 0; key < obj.length; key++) {
-        if(callback(key, obj)) break;
+        if (callback(key, obj)) break;
       }
     } else {
       for (key in obj) {
-        if(callback(key, obj)) break;
+        if (callback(key, obj)) break;
       }
     }
 
@@ -827,7 +826,7 @@
     // 若未传入 key，则直接返回原对象
     if (that.type(arr) === 'object' && !key) {
       return clone;
-    } else if(typeof arr !== 'object') { // 若 arr 非对象
+    } else if (typeof arr !== 'object') { // 若 arr 非对象
       return [clone];
     }
 
@@ -846,7 +845,7 @@
 
       // 若比较的成员只存在某一个非对象
       if (!isNaN(o1) && isNaN(o2)) {
-        if(key && typeof o2 === 'object'){
+        if (key && typeof o2 === 'object') {
           v1 = o1;
         } else {
           return -1;
@@ -870,9 +869,9 @@
 
       // 若为数字比较
       if (isNum[0] && isNum[1]) {
-        if(v1 && (!v2 && v2 !== 0)) { // 数字 vs 空
+        if (v1 && (!v2 && v2 !== 0)) { // 数字 vs 空
           return 1;
-        } else if((!v1 && v1 !== 0) && v2) { // 空 vs 数字
+        } else if ((!v1 && v1 !== 0) && v2) { // 空 vs 数字
           return -1;
         } else { // 数字 vs 数字
           return v1 - v2;
@@ -898,7 +897,7 @@
       // 若为混合比较
       if (isNum[0] || !isNum[1]) { // 数字 vs 非数字
         return -1;
-      } else if(!isNum[0] || isNum[1]) { // 非数字 vs 数字
+      } else if (!isNum[0] || isNum[1]) { // 非数字 vs 数字
         return 1;
       }
 
@@ -915,7 +914,7 @@
   Class.prototype.stope = function(thisEvent) {
     try {
       thisEvent.stopPropagation();
-    } catch(e) {
+    } catch (e) {
       thisEvent.cancelBubble = true;
     }
   };
@@ -947,8 +946,8 @@
   Class.prototype.event = Class.event = function(modName, events, params, fn) {
     var that = this;
     var result = null;
-    var filter = (events || '').match(/\((.*)\)$/)||[]; // 提取事件过滤器字符结构，如：select(xxx)
-    var eventName = (modName + '.'+ events).replace(filter[0], ''); // 获取事件名称，如：form.select
+    var filter = (events || '').match(/\((.*)\)$/) || []; // 提取事件过滤器字符结构，如：select(xxx)
+    var eventName = (modName + '.' + events).replace(filter[0], ''); // 获取事件名称，如：form.select
     var filterName = filter[1] || ''; // 获取过滤器名称, 如：xxx
     var callback = function(_, item) {
       var res = item && item.call(that, params);
@@ -1021,13 +1020,13 @@
    * @param {number} wait - 延时执行的毫秒数
    * @returns {Function}
    */
-  Class.prototype.debounce = function (func, wait) {
+  Class.prototype.debounce = function(func, wait) {
     var timeout;
-    return function () {
+    return function() {
       var context = this;
       var args = arguments;
       clearTimeout(timeout);
-      timeout = setTimeout(function () {
+      timeout = setTimeout(function() {
         func.apply(context, args);
       }, wait);
     };
@@ -1038,15 +1037,15 @@
    * @param {Function} func - 回调
    * @param {number} wait - 不重复执行的毫秒数
    */
-  Class.prototype.throttle = function (func, wait) {
+  Class.prototype.throttle = function(func, wait) {
     var cooldown = false;
-    return function () {
+    return function() {
       var context = this;
       var args = arguments;
       if (!cooldown) {
         func.apply(context, args);
         cooldown = true;
-        setTimeout(function () {
+        setTimeout(function() {
           cooldown = false;
         }, wait);
       }

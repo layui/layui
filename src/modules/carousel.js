@@ -4,7 +4,7 @@
  */
 
 layui.define('component', function(exports) {
-  "use strict";
+  'use strict';
 
   var $ = layui.$;
   var lay = layui.lay;
@@ -91,7 +91,7 @@ layui.define('component', function(exports) {
         elemInd: that.elemInd,
         elemItem: that.elemItem,
         timer: that.timer,
-        goto: function (index) {
+        goto: function(index) {
           that.goto(index);
         },
       };
@@ -107,12 +107,12 @@ layui.define('component', function(exports) {
   var Class = component.Class;
 
   // 获取上一个等待条目的索引
-  Class.prototype.prevIndex = function(){
+  Class.prototype.prevIndex = function() {
     var that = this;
     var options = that.config;
     var prevIndex = options.index - 1;
 
-    if(prevIndex < 0){
+    if (prevIndex < 0) {
       prevIndex = that.elemItem.length - 1;
     }
 
@@ -120,12 +120,12 @@ layui.define('component', function(exports) {
   };
 
   // 获取下一个等待条目的索引
-  Class.prototype.nextIndex = function(){
+  Class.prototype.nextIndex = function() {
     var that = this;
     var options = that.config;
     var nextIndex = options.index + 1;
 
-    if(nextIndex >= that.elemItem.length){
+    if (nextIndex >= that.elemItem.length) {
       nextIndex = 0;
     }
 
@@ -133,7 +133,7 @@ layui.define('component', function(exports) {
   };
 
   // 索引递增
-  Class.prototype.addIndex = function(num){
+  Class.prototype.addIndex = function(num) {
     var that = this;
     var options = that.config;
 
@@ -141,13 +141,13 @@ layui.define('component', function(exports) {
     options.index = options.index + num;
 
     // index 不能超过轮播总数量
-    if(options.index >= that.elemItem.length){
+    if (options.index >= that.elemItem.length) {
       options.index = 0;
     }
   };
 
   // 索引递减
-  Class.prototype.subIndex = function(num){
+  Class.prototype.subIndex = function(num) {
     var that = this;
     var options = that.config;
 
@@ -155,50 +155,50 @@ layui.define('component', function(exports) {
     options.index = options.index - num;
 
     // index 不能超过轮播总数量
-    if(options.index < 0){
+    if (options.index < 0) {
       options.index = that.elemItem.length - 1;
     }
   };
 
   // 自动轮播
-  Class.prototype.autoplay = function(){
+  Class.prototype.autoplay = function() {
     var that = this;
     var options = that.config;
     var itemsCount = that.elemItem.length;
 
-    if(!options.autoplay) return;
+    if (!options.autoplay) return;
     clearInterval(that.timer);
 
     if (itemsCount > 1) {
-      that.timer = setInterval(function(){
+      that.timer = setInterval(function() {
         that.slide();
       }, options.interval);
     }
   };
 
   // 箭头
-  Class.prototype.arrow = function(){
+  Class.prototype.arrow = function() {
     var that = this;
     var options = that.config;
     var itemsCount = that.elemItem.length;
 
     // 模板
     var tplArrow = $([
-      '<button type="button" class="layui-icon '+ (options.anim === 'updown' ? 'layui-icon-up' : 'layui-icon-left') + ' ' + CONST.ELEM_ARROW +'" lay-type="sub"></button>',
-      '<button type="button" class="layui-icon '+ (options.anim === 'updown' ? 'layui-icon-down' : 'layui-icon-right') + ' ' + CONST.ELEM_ARROW +'" lay-type="add"></button>',
+      '<button type="button" class="layui-icon ' + (options.anim === 'updown' ? 'layui-icon-up' : 'layui-icon-left') + ' ' + CONST.ELEM_ARROW + '" lay-type="sub"></button>',
+      '<button type="button" class="layui-icon ' + (options.anim === 'updown' ? 'layui-icon-down' : 'layui-icon-right') + ' ' + CONST.ELEM_ARROW + '" lay-type="add"></button>',
     ].join(''));
 
     // 预设基础属性
     options.elem.attr('lay-arrow', options.arrow);
 
     // 避免重复插入
-    if(options.elem.find('.'+CONST.ELEM_ARROW)[0]){
-      options.elem.find('.'+CONST.ELEM_ARROW).remove();
+    if (options.elem.find('.' + CONST.ELEM_ARROW)[0]) {
+      options.elem.find('.' + CONST.ELEM_ARROW).remove();
     }
     itemsCount > 1 ? options.elem.append(tplArrow) : tplArrow.remove();
 
     // 事件
-    tplArrow.on('click', function(){
+    tplArrow.on('click', function() {
       var othis = $(this);
       var type = othis.attr('lay-type');
       that.slide(type);
@@ -206,56 +206,56 @@ layui.define('component', function(exports) {
   };
 
   // 跳转到特定下标
-  Class.prototype.goto = function(index){
+  Class.prototype.goto = function(index) {
     var that = this;
     var options = that.config;
 
-    if(index > options.index){
+    if (index > options.index) {
       that.slide('add', index - options.index);
-    } else if(index < options.index){
+    } else if (index < options.index) {
       that.slide('sub', options.index - index);
     }
   };
 
   // 指示器
-  Class.prototype.indicator = function(){
+  Class.prototype.indicator = function() {
     var that = this;
     var options = that.config;
     var itemsCount = that.elemItem.length;
 
     // 模板
-    var tplInd = that.elemInd = $(['<div class="'+ CONST.ELEM_IND +'"><ul>',
-      function(){
+    var tplInd = that.elemInd = $(['<div class="' + CONST.ELEM_IND + '"><ul>',
+      function() {
         var li = [];
-        layui.each(that.elemItem, function(index){
-          li.push('<li'+ (options.index === index ? ' class="layui-this"' : '') +'></li>');
+        layui.each(that.elemItem, function(index) {
+          li.push('<li' + (options.index === index ? ' class="layui-this"' : '') + '></li>');
         });
         return li.join('');
       }(),
-    '</ul></div>'].join(''));
+      '</ul></div>'].join(''));
 
     // 预设基础属性
     options.elem.attr('lay-indicator', options.indicator);
 
     // 避免重复插入
-    if(options.elem.find('.'+CONST.ELEM_IND)[0]){
-      options.elem.find('.'+CONST.ELEM_IND).remove();
+    if (options.elem.find('.' + CONST.ELEM_IND)[0]) {
+      options.elem.find('.' + CONST.ELEM_IND).remove();
     }
 
     itemsCount > 1 ? options.elem.append(tplInd) : tplInd.remove();
 
-    if(options.anim === 'updown'){
-      tplInd.css('margin-top', -(tplInd.height()/2));
+    if (options.anim === 'updown') {
+      tplInd.css('margin-top', -(tplInd.height() / 2));
     }
 
     // 事件
-    tplInd.find('li').on(options.trigger === 'hover' ? 'mouseover' : options.trigger, function(){
+    tplInd.find('li').on(options.trigger === 'hover' ? 'mouseover' : options.trigger, function() {
       that.goto($(this).index());
     });
   };
 
   // 滑动切换
-  Class.prototype.slide = function(type, num){
+  Class.prototype.slide = function(type, num) {
     var that = this;
     var elemItem = that.elemItem;
     var itemsCount = elemItem.length;
@@ -266,17 +266,17 @@ layui.define('component', function(exports) {
     if (that.haveSlide || itemsCount <= 1) return;
 
     // 滑动方向
-    if(type === 'sub'){
+    if (type === 'sub') {
       that.subIndex(num);
       elemItem.eq(options.index).addClass(CONST.ELEM_PREV);
-      setTimeout(function(){
+      setTimeout(function() {
         elemItem.eq(thisIndex).addClass(CONST.ELEM_RIGHT);
         elemItem.eq(options.index).addClass(CONST.ELEM_RIGHT);
       }, 50);
     } else { // 默认递增滑
       that.addIndex(num);
       elemItem.eq(options.index).addClass(CONST.ELEM_NEXT);
-      setTimeout(function(){
+      setTimeout(function() {
         elemItem.eq(thisIndex).addClass(CONST.ELEM_LEFT);
         elemItem.eq(options.index).addClass(CONST.ELEM_LEFT);
       }, 50);
@@ -291,7 +291,7 @@ layui.define('component', function(exports) {
 
     // 指示器焦点
     that.elemInd.find('li').eq(options.index).addClass(CONST.CLASS_THIS)
-    .siblings().removeClass(CONST.CLASS_THIS);
+      .siblings().removeClass(CONST.CLASS_THIS);
 
     that.haveSlide = true;
 
@@ -303,22 +303,22 @@ layui.define('component', function(exports) {
     };
 
     typeof options.change === 'function' && options.change(params);
-    layui.event.call(this, CONST.MOD_NAME, 'change('+ filter +')', params);
+    layui.event.call(this, CONST.MOD_NAME, 'change(' + filter + ')', params);
   };
 
-   // 事件处理
-   Class.prototype.events = function(){
+  // 事件处理
+  Class.prototype.events = function() {
     var that = this;
     var options = that.config;
 
-    if(options.elem.data('haveEvents')) return;
+    if (options.elem.data('haveEvents')) return;
 
 
     // 移入移出容器
-    options.elem.on('mouseenter touchstart', function(){
+    options.elem.on('mouseenter touchstart', function() {
       if (that.config.autoplay === 'always') return;
       clearInterval(that.timer);
-    }).on('mouseleave touchend', function(){
+    }).on('mouseleave touchend', function() {
       if (that.config.autoplay === 'always') return;
       that.autoplay();
     });
@@ -326,12 +326,12 @@ layui.define('component', function(exports) {
     var touchEl = options.elem;
     var isVertical = options.anim === 'updown';
     lay.touchSwipe(touchEl, {
-      onTouchEnd: function(e, state){
+      onTouchEnd: function(e, state) {
         var duration = Date.now() - state.timeStart;
         var distance = isVertical ? state.distanceY : state.distanceX;
         var speed = distance / duration;
         var shouldSwipe = Math.abs(speed) > 0.25 || Math.abs(distance) > touchEl[isVertical ? 'height' : 'width']() / 3;
-        if(shouldSwipe){
+        if (shouldSwipe) {
           that.slide(distance > 0 ? '' : 'sub');
         }
       },
@@ -342,5 +342,4 @@ layui.define('component', function(exports) {
 
   exports(CONST.MOD_NAME, component);
 });
-
 

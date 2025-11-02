@@ -37,7 +37,7 @@ const rlsDirname = path.dirname(rlsDest); // 发行目录名
 // 复制目标路径
 const copyDest = argv.dest
   ? path.join(argv.dest, (argv.vs ? '/' + argv.vs : ''))
-: rlsDest;
+  : rlsDest;
 
 // 打包目标路径
 const dest = './dist';
@@ -45,20 +45,20 @@ const dest = './dist';
 // js
 const js = () => {
   let src = [
-    './src/**/{layui,layui.all,'+ config.modules +'}.js'
+    './src/**/{layui,layui.all,' + config.modules + '}.js'
   ];
   return gulp.src(src)
-  .pipe(sourcemaps.init())
-  .pipe(uglify({
-    output: {
-      ascii_only: true // escape Unicode characters in strings and regexps
-    },
-    ie: true
-  }))
-  .pipe(concat('layui.js', {newLine: ''}))
-  .pipe(header.apply(null, config.comment))
-  .pipe(sourcemaps.write('.'))
-  .pipe(gulp.dest(dest));
+    .pipe(sourcemaps.init())
+    .pipe(uglify({
+      output: {
+        ascii_only: true // escape Unicode characters in strings and regexps
+      },
+      ie: true
+    }))
+    .pipe(concat('layui.js', {newLine: ''}))
+    .pipe(header.apply(null, config.comment))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(dest));
 };
 
 // css
@@ -67,20 +67,20 @@ const css = () => {
     './src/css/**/{layui,*}.css'
   ];
   return gulp.src(src)
-  .pipe(sourcemaps.init())
-  .pipe(cleanCSS({
-    compatibility: 'ie8'
-  }))
-  .pipe(concat('layui.css', {newLine: ''}))
-  .pipe(sourcemaps.write('.'))
-  .pipe(gulp.dest(dest +'/css'));
+    .pipe(sourcemaps.init())
+    .pipe(cleanCSS({
+      compatibility: 'ie8'
+    }))
+    .pipe(concat('layui.css', {newLine: ''}))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(dest + '/css'));
 };
 
 // files
 const files = () => {
   let src = ['./src/**/*.{eot,svg,ttf,woff,woff2,html,json,png,jpg,gif}'];
   return gulp.src(src)
-  .pipe(gulp.dest(dest));
+    .pipe(gulp.dest(dest));
 };
 
 // clean
@@ -97,16 +97,16 @@ exports.cp = gulp.series(() => del(copyDest), () => {
 
   // 复制 css js
   gulp.src(`${src}.{css,js}`)
-  .pipe(replace(/\n\/(\*|\/)#[\s\S]+$/, '')) // 过滤 css,js 的 map 特定注释
-  .pipe(gulp.dest(copyDest));
+    .pipe(replace(/\n\/(\*|\/)#[\s\S]+$/, '')) // 过滤 css,js 的 map 特定注释
+    .pipe(gulp.dest(copyDest));
 
   // 复制其他文件
   return gulp.src([
     src,
     `!${src}.{css,js,map}` // 过滤 map 文件
   ])
-  .pipe(replace(/\n\/(\*|\/)#[\s\S]+$/, '')) // 过滤 css,js 的 map 特定注释
-  .pipe(gulp.dest(copyDest));
+    .pipe(replace(/\n\/(\*|\/)#[\s\S]+$/, '')) // 过滤 css,js 的 map 特定注释
+    .pipe(gulp.dest(copyDest));
 });
 
 // 发行
@@ -114,10 +114,10 @@ exports.release = gulp.series(
   () => del([rlsDirname]), // 清理发行目录
   () => { // 生成说明
     return gulp.src('./release/introduce/**/*')
-    .pipe(replace(/[^'"]+(\/layui\.css)/, 'layui/css$1')) // 替换 css 引入路径中的本地 path
-    .pipe(replace(/[^'"]+(\/layui\.js)/, 'layui$1')) // 替换 js 引入路径中的本地 path
-    .pipe(gulp.dest(rlsDirname)) // 用于本地
-    .pipe(gulp.dest('./examples/introduce')); // 用于 Github actions
+      .pipe(replace(/[^'"]+(\/layui\.css)/, 'layui/css$1')) // 替换 css 引入路径中的本地 path
+      .pipe(replace(/[^'"]+(\/layui\.js)/, 'layui$1')) // 替换 js 引入路径中的本地 path
+      .pipe(gulp.dest(rlsDirname)) // 用于本地
+      .pipe(gulp.dest('./examples/introduce')); // 用于 Github actions
   },
   exports.cp, // 复制 dist 目录文件
   () => { // 生成 ZIP 压缩包
@@ -125,8 +125,8 @@ exports.release = gulp.series(
     return gulp.src(rlsDirname + '/**/*', {
       base: base
     })
-    .pipe(zip(`${rlsFileName}.zip`))
-    .pipe(gulp.dest(base));
+      .pipe(zip(`${rlsFileName}.zip`))
+      .pipe(gulp.dest(base));
   }
 );
 

@@ -4,7 +4,7 @@
  */
 
 layui.define(['lay', 'i18n', 'layer'], function(exports) {
-  "use strict";
+  'use strict';
 
   var $ = layui.$;
   var lay = layui.lay;
@@ -15,26 +15,26 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
 
   // 模块名
   var MOD_NAME = 'upload';
-  var MOD_INDEX = 'layui_'+ MOD_NAME +'_index'; // 模块索引名
+  var MOD_INDEX = 'layui_' + MOD_NAME + '_index'; // 模块索引名
 
   // 外部接口
   var upload = {
     config: {}, // 全局配置项
     index: layui[MOD_NAME] ? (layui[MOD_NAME].index + 10000) : 0, // 索引
     // 设置全局项
-    set: function(options){
+    set: function(options) {
       var that = this;
       that.config = $.extend({}, that.config, options);
       return that;
     },
     // 事件
-    on: function(events, callback){
+    on: function(events, callback) {
       return layui.onevent.call(this, MOD_NAME, events, callback);
     },
   };
 
   // 操作当前实例
-  var thisModule = function(){
+  var thisModule = function() {
     var that = this;
     var options = that.config;
     var id = options.id;
@@ -42,10 +42,10 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
     thisModule.that[id] = that; // 记录当前实例对象
 
     return {
-      upload: function(files){
+      upload: function(files) {
         that.upload.call(that, files);
       },
-      reload: function(options){
+      reload: function(options) {
         that.reload.call(that, options);
       },
       config: that.config,
@@ -67,7 +67,7 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
   var UPLOADING = 'UPLOADING';
 
   // 构造器
-  var Class = function(options){
+  var Class = function(options) {
     var that = this;
     that.index = ++upload.index;
     that.config = $.extend({}, that.config, upload.config, options);
@@ -91,24 +91,24 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
     number: 0, // 允许同时上传的文件数，默认不限制
     multiple: false, // 是否允许多文件上传，不支持 ie8-9
     text: { // 自定义提示文本
-      "cross-domain": "Cross-domain requests are not supported", // 跨域
-      "data-format-error": "Please return JSON data format", // 数据格式错误
-      "check-error": "", // 文件格式校验失败
-      "error": "", // 上传失败
-      "limit-number": null, // 限制 number 属性的提示 --- function
-      "limit-size": null, // 限制 size 属性的提示 --- function
+      'cross-domain': 'Cross-domain requests are not supported', // 跨域
+      'data-format-error': 'Please return JSON data format', // 数据格式错误
+      'check-error': '', // 文件格式校验失败
+      'error': '', // 上传失败
+      'limit-number': null, // 限制 number 属性的提示 --- function
+      'limit-size': null, // 限制 size 属性的提示 --- function
     },
   };
 
   // 重载实例
-  Class.prototype.reload = function(options){
+  Class.prototype.reload = function(options) {
     var that = this;
     that.config = $.extend({}, that.config, options);
     that.render(true);
   };
 
   // 初始渲染
-  Class.prototype.render = function(rerender){
+  Class.prototype.render = function(rerender) {
     var that = this;
     var options = that.config;
 
@@ -131,7 +131,7 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
     // 若重复执行 render，则视为 reload 处理
     if (!rerender && elem[0] && elem.data(MOD_INDEX)) {
       var newThat = thisModule.getThis(elem.data(MOD_INDEX));
-      if(!newThat) return;
+      if (!newThat) return;
 
       return newThat.reload(options);
     }
@@ -149,22 +149,22 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
   };
 
   //追加文件域
-  Class.prototype.file = function(){
+  Class.prototype.file = function() {
     var that = this;
     var options = that.config;
     var elemFile = that.elemFile = $([
-      '<input class="'+ ELEM_FILE +'" type="file" accept="'+ options.acceptMime +'" name="'+ options.field +'"'
-      ,(options.multiple ? ' multiple' : '')
-      ,'>',
+      '<input class="' + ELEM_FILE + '" type="file" accept="' + options.acceptMime + '" name="' + options.field + '"'
+      , (options.multiple ? ' multiple' : '')
+      , '>',
     ].join(''));
     var next = options.elem.next();
 
-    if(next.hasClass(ELEM_FILE) || next.hasClass(ELEM_FORM)){
+    if (next.hasClass(ELEM_FILE) || next.hasClass(ELEM_FORM)) {
       next.remove();
     }
 
     //包裹ie8/9容器
-    if(device.ie && device.ie < 10){
+    if (device.ie && device.ie < 10) {
       options.elem.wrap('<div class="layui-upload-wrap"></div>');
     }
 
@@ -174,32 +174,32 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
     ) : options.elem.after(elemFile);
 
     //初始化ie8/9的Form域
-    if(device.ie && device.ie < 10){
+    if (device.ie && device.ie < 10) {
       that.initIE();
     }
   };
 
   //ie8-9初始化
-  Class.prototype.initIE = function(){
+  Class.prototype.initIE = function() {
     var that = this;
     var options = that.config;
-    var iframe = $('<iframe id="'+ ELEM_IFRAME +'" class="'+ ELEM_IFRAME +'" name="'+ ELEM_IFRAME +'" frameborder="0"></iframe>');
-    var elemForm = $(['<form target="'+ ELEM_IFRAME +'" class="'+ ELEM_FORM +'" method="post" key="set-mine" enctype="multipart/form-data" action="'+ options.url +'">'
-    ,'</form>'].join(''));
+    var iframe = $('<iframe id="' + ELEM_IFRAME + '" class="' + ELEM_IFRAME + '" name="' + ELEM_IFRAME + '" frameborder="0"></iframe>');
+    var elemForm = $(['<form target="' + ELEM_IFRAME + '" class="' + ELEM_FORM + '" method="post" key="set-mine" enctype="multipart/form-data" action="' + options.url + '">'
+      , '</form>'].join(''));
 
     //插入iframe
-    $('#'+ ELEM_IFRAME)[0] || $('body').append(iframe);
+    $('#' + ELEM_IFRAME)[0] || $('body').append(iframe);
 
     //包裹文件域
-    if(!options.elem.next().hasClass(ELEM_FORM)){
+    if (!options.elem.next().hasClass(ELEM_FORM)) {
       that.elemFile.wrap(elemForm);
 
       //追加额外的参数
-      options.elem.next('.'+ ELEM_FORM).append(function(){
+      options.elem.next('.' + ELEM_FORM).append(function() {
         var arr = [];
-        layui.each(options.data, function(key, value){
+        layui.each(options.data, function(key, value) {
           value = typeof value === 'function' ? value() : value;
-          arr.push('<input type="hidden" name="'+ key +'" value="'+ value +'">');
+          arr.push('<input type="hidden" name="' + key + '" value="' + value + '">');
         });
         return arr.join('');
       }());
@@ -207,7 +207,7 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
   };
 
   //异常提示
-  Class.prototype.msg = function(content){
+  Class.prototype.msg = function(content) {
     return layer.msg(content, {
       icon: 2,
       shift: 6,
@@ -215,20 +215,20 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
   };
 
   //判断绑定元素是否为文件域本身
-  Class.prototype.isFile = function(){
+  Class.prototype.isFile = function() {
     var elem = this.config.elem[0];
-    if(!elem) return;
+    if (!elem) return;
     return elem.tagName.toLocaleLowerCase() === 'input' && elem.type === 'file';
   };
 
   //预读图片信息
-  Class.prototype.preview = function(callback){
+  Class.prototype.preview = function(callback) {
     var that = this;
-    if(window.FileReader){
-      layui.each(that.chooseFiles, function(index, file){
+    if (window.FileReader) {
+      layui.each(that.chooseFiles, function(index, file) {
         var reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = function(){
+        reader.onload = function() {
           callback && callback(index, file, this.result);
         };
       });
@@ -236,26 +236,26 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
   };
 
   // 执行上传
-  Class.prototype.upload = function(files, type){
+  Class.prototype.upload = function(files, type) {
     var that = this;
     var options = that.config;
     var text = options.text || {};
     var elemFile = that.elemFile[0];
 
     // 获取文件队列
-    var getFiles = function(){
+    var getFiles = function() {
       return files || that.files || that.chooseFiles || elemFile.files;
     };
 
     // 高级浏览器处理方式，支持跨域
-    var ajaxSend = function(){
+    var ajaxSend = function() {
       var successful = 0;
       var failed = 0;
       var items = getFiles();
 
       // 多文件全部上传完毕的回调
-      var allDone = function(){
-        if(options.multiple && successful + failed === that.fileLength){
+      var allDone = function() {
+        if (options.multiple && successful + failed === that.fileLength) {
           typeof options.allDone === 'function' && options.allDone({
             total: that.fileLength,
             successful: successful,
@@ -265,13 +265,13 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
       };
 
       // 发送请求
-      var request = function(sets){
+      var request = function(sets) {
         var formData = new FormData();
 
         // 恢复文件状态
         var resetFileState = function(file) {
           if (sets.unified) {
-            layui.each(items, function(index, file){
+            layui.each(items, function(index, file) {
               delete file[UPLOADING];
             });
           } else {
@@ -280,7 +280,7 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
         };
 
         // 追加额外的参数
-        layui.each(options.data, function(key, value){
+        layui.each(options.data, function(key, value) {
           value = typeof value === 'function'
             ? sets.unified ? value() : value(sets.index, sets.file)
             : value;
@@ -293,7 +293,7 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
 
         // 是否统一上传
         if (sets.unified) {
-          layui.each(items, function(index, file){
+          layui.each(items, function(index, file) {
             if (file[UPLOADING]) return;
             file[UPLOADING] = true; // 上传中的标记
             formData.append(options.field, file);
@@ -313,17 +313,17 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
           contentType: false,
           processData: false,
           headers: options.headers || {},
-          success: function(res){ // 成功回调
+          success: function(res) { // 成功回调
             options.unified ? (successful += that.fileLength) : successful++;
             done(sets.index, res);
             allDone(sets.index);
             resetFileState(sets.file);
           },
-          error: function(e){ // 异常回调
+          error: function(e) { // 异常回调
             options.unified ? (failed += that.fileLength) : failed++;
             that.msg(text['error'] || [
               'Upload failed, please try again.',
-              'status: '+ (e.status || '') +' - '+ (e.statusText || 'error'),
+              'status: ' + (e.status || '') + ' - ' + (e.statusText || 'error'),
             ].join('<br>'));
             error(sets.index, e.responseText, e);
             allDone(sets.index);
@@ -332,14 +332,14 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
         };
 
         // 进度条
-        if(typeof options.progress === 'function'){
-          opts.xhr = function(){
+        if (typeof options.progress === 'function') {
+          opts.xhr = function() {
             var xhr = $.ajaxSettings.xhr();
             // 上传进度
-            xhr.upload.addEventListener("progress", function (obj) {
-              if(obj.lengthComputable){
-                var percent = Math.floor((obj.loaded/obj.total)* 100); // 百分比
-                options.progress(percent, (options.item ? options.item[0] : options.elem[0]) , obj, sets.index);
+            xhr.upload.addEventListener('progress', function(obj) {
+              if (obj.lengthComputable) {
+                var percent = Math.floor((obj.loaded / obj.total) * 100); // 百分比
+                options.progress(percent, (options.item ? options.item[0] : options.elem[0]), obj, sets.index);
               }
             });
             return xhr;
@@ -349,13 +349,13 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
       };
 
       // 多文件是否一起上传
-      if(options.unified){
+      if (options.unified) {
         request({
           unified: true,
           index: 0,
         });
       } else {
-        layui.each(items, function(index, file){
+        layui.each(items, function(index, file) {
           request({
             index: index,
             file: file,
@@ -365,8 +365,8 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
     };
 
     // 低版本 IE 处理方式，不支持跨域
-    var iframeSend = function(){
-      var iframe = $('#'+ ELEM_IFRAME);
+    var iframeSend = function() {
+      var iframe = $('#' + ELEM_IFRAME);
 
       that.elemFile.parent().submit();
 
@@ -376,12 +376,12 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
         var res, iframeBody = iframe.contents().find('body');
         try {
           res = iframeBody.text();
-        } catch(e) {
+        } catch (e) {
           that.msg(text['cross-domain']);
           clearInterval(Class.timer);
           error();
         }
-        if(res){
+        if (res) {
           clearInterval(Class.timer);
           iframeBody.html('');
           done(0, res);
@@ -391,71 +391,71 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
 
     // 强制返回的数据格式
     var forceConvert = function(src) {
-      if(options.force === 'json'){
-        if(typeof src !== 'object'){
+      if (options.force === 'json') {
+        if (typeof src !== 'object') {
           try {
             return {
-              status: "CONVERTED",
+              status: 'CONVERTED',
               data: JSON.parse(src),
             };
-          } catch(e){
+          } catch (e) {
             that.msg(text['data-format-error']);
             return {
-              status: "FORMAT_ERROR",
+              status: 'FORMAT_ERROR',
               data: {},
             };
           }
         }
       }
-      return { status: "DO_NOTHING", data: {} };
+      return {status: 'DO_NOTHING', data: {}};
     };
 
     // 统一回调
-    var done = function(index, res){
-      that.elemFile.next('.'+ ELEM_CHOOSE).remove();
+    var done = function(index, res) {
+      that.elemFile.next('.' + ELEM_CHOOSE).remove();
       elemFile.value = '';
 
       var convert = forceConvert(res);
 
-      switch(convert.status) {
-        case "CONVERTED":
+      switch (convert.status) {
+        case 'CONVERTED':
           res = convert.data;
           break;
-        case "FORMAT_ERROR":
+        case 'FORMAT_ERROR':
           return;
       }
 
-      typeof options.done === 'function' && options.done(res, index || 0, function(files){
+      typeof options.done === 'function' && options.done(res, index || 0, function(files) {
         that.upload(files);
       });
     };
 
     // 统一网络异常回调
-    var error = function(index, res, xhr){
-      if(options.auto){
+    var error = function(index, res, xhr) {
+      if (options.auto) {
         elemFile.value = '';
       }
 
       var convert = forceConvert(res);
 
-      switch(convert.status) {
-        case "CONVERTED":
+      switch (convert.status) {
+        case 'CONVERTED':
           res = convert.data;
           break;
-        case "FORMAT_ERROR":
+        case 'FORMAT_ERROR':
           return;
       }
 
-      typeof options.error === 'function' && options.error(index || 0, function(files){
+      typeof options.error === 'function' && options.error(index || 0, function(files) {
         that.upload(files);
       }, res, xhr);
     };
 
     var check;
     var exts = options.exts;
-    var value = function(){
+    var value = function() {
       var arr = [];
-      layui.each(files || that.chooseFiles, function(i, item){
+      layui.each(files || that.chooseFiles, function(i, item) {
         arr.push(item.name);
       });
       return arr;
@@ -464,62 +464,62 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
     // 回调函数返回的参数
     var args = {
       // 预览
-      preview: function(callback){
+      preview: function(callback) {
         that.preview(callback);
       },
       // 上传
-      upload: function(index, file){
+      upload: function(index, file) {
         var thisFile = {};
         thisFile[index] = file;
         that.upload(thisFile);
       },
       // 追加文件到队列
-      pushFile: function(){
+      pushFile: function() {
         that.files = that.files || {};
-        layui.each(that.chooseFiles, function(index, item){
+        layui.each(that.chooseFiles, function(index, item) {
           that.files[index] = item;
         });
         return that.files;
       },
       // 重置文件
-      resetFile: function(index, file, filename){
+      resetFile: function(index, file, filename) {
         var newFile = new File([file], filename);
         that.files = that.files || {};
         that.files[index] = newFile;
       },
       // 获取本次选取的文件
-      getChooseFiles: function(){
+      getChooseFiles: function() {
         return that.chooseFiles;
       },
     };
 
     // 提交上传
-    var send = function(){
-      var ready = function(){
+    var send = function() {
+      var ready = function() {
         // IE 兼容处理
-        if(device.ie){
+        if (device.ie) {
           return device.ie > 9 ? ajaxSend() : iframeSend();
         }
         ajaxSend();
       };
       // 上传前的回调 - 如果回调函数明确返回 false 或 Promise.reject，则停止上传
-      if(typeof options.before === 'function'){
+      if (typeof options.before === 'function') {
         upload.util.promiseLikeResolve(options.before(args))
-          .then(function(result){
-            if(result !== false){
+          .then(function(result) {
+            if (result !== false) {
               ready();
             } else {
-              if(options.auto){
+              if (options.auto) {
                 elemFile.value = '';
               }
             }
-          }, function(error){
-            if(options.auto){
+          }, function(error) {
+            if (options.auto) {
               elemFile.value = '';
             }
             error !== undefined && hint.error(error);
           });
-      }else{
+      } else {
         ready();
       }
     };
@@ -534,91 +534,91 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
 
     // 校验文件格式
     value = value.length === 0
-      ? ((elemFile.value.match(/[^\/\\]+\..+/g)||[]) || '')
-    : value;
+      ? ((elemFile.value.match(/[^\/\\]+\..+/g) || []) || '')
+      : value;
 
     // 若文件域值为空
     if (value.length === 0) return;
 
     // 根据文件类型校验
-    switch(options.accept){
+    switch (options.accept) {
       case 'file': // 一般文件
-        layui.each(value, function(i, item){
-          if(exts && !RegExp('.\\.('+ exts +')$', 'i').test(escape(item))){
+        layui.each(value, function(i, item) {
+          if (exts && !RegExp('.\\.(' + exts + ')$', 'i').test(escape(item))) {
             return check = true;
           }
         });
-      break;
+        break;
       case 'video': // 视频文件
-        layui.each(value, function(i, item){
-          if(!RegExp('.\\.('+ (exts || 'avi|mp4|wma|rmvb|rm|flash|3gp|flv') +')$', 'i').test(escape(item))){
+        layui.each(value, function(i, item) {
+          if (!RegExp('.\\.(' + (exts || 'avi|mp4|wma|rmvb|rm|flash|3gp|flv') + ')$', 'i').test(escape(item))) {
             return check = true;
           }
         });
-      break;
+        break;
       case 'audio': // 音频文件
-        layui.each(value, function(i, item){
-          if(!RegExp('.\\.('+ (exts || 'mp3|wav|mid') +')$', 'i').test(escape(item))){
+        layui.each(value, function(i, item) {
+          if (!RegExp('.\\.(' + (exts || 'mp3|wav|mid') + ')$', 'i').test(escape(item))) {
             return check = true;
           }
         });
-      break;
+        break;
       default: // 图片文件
-        layui.each(value, function(i, item){
-          if(!RegExp('.\\.('+ (exts || 'jpg|png|gif|bmp|jpeg|svg|webp') +')$', 'i').test(escape(item))){
+        layui.each(value, function(i, item) {
+          if (!RegExp('.\\.(' + (exts || 'jpg|png|gif|bmp|jpeg|svg|webp') + ')$', 'i').test(escape(item))) {
             return check = true;
           }
         });
-      break;
+        break;
     }
 
     // 校验失败提示
-    if(check){
+    if (check) {
       that.msg(text['check-error'] || i18n.$t('upload.validateMessages.fileExtensionError', {fileType: typeName}));
       return elemFile.value = '';
     }
 
     // 选择文件的回调
-    if(type === 'choose' || options.auto){
+    if (type === 'choose' || options.auto) {
       options.choose && options.choose(args);
-      if(type === 'choose'){
+      if (type === 'choose') {
         return;
       }
     }
 
     // 检验文件数量
-    that.fileLength = function(){
+    that.fileLength = function() {
       var length = 0;
       var items = getFiles();
-      layui.each(items, function(){
+      layui.each(items, function() {
         length++;
       });
       return length;
     }();
 
-    if(options.number && that.fileLength > options.number){
+    if (options.number && that.fileLength > options.number) {
       return that.msg(typeof text['limit-number'] === 'function'
         ? text['limit-number'](options, that.fileLength)
-      : (
-        i18n.$t('upload.validateMessages.filesOverLengthLimit', {length: options.number})
+        : (
+          i18n.$t('upload.validateMessages.filesOverLengthLimit', {length: options.number})
         + '<br/>'
         + i18n.$t('upload.validateMessages.currentFilesLength', {length: that.fileLength})
-      ));
+        ));
     }
 
     // 检验文件大小
-    if(options.size > 0 && !(device.ie && device.ie < 10)){
+    if (options.size > 0 && !(device.ie && device.ie < 10)) {
       var limitSize;
 
-      layui.each(getFiles(), function(index, file){
-        if(file.size > 1024*options.size){
-          var size = options.size/1024;
+      layui.each(getFiles(), function(index, file) {
+        if (file.size > 1024 * options.size) {
+          var size = options.size / 1024;
           size = size >= 1 ? (size.toFixed(2) + 'MB') : options.size + 'KB';
           elemFile.value = '';
           limitSize = size;
         }
       });
-      if(limitSize) return that.msg(
+      if (limitSize) return that.msg(
         typeof text['limit-size'] === 'function'
           ? text['limit-size'](options, limitSize)
           : i18n.$t('upload.validateMessages.fileOverSizeLimit', {size: limitSize}));
@@ -628,33 +628,33 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
   };
 
   //事件处理
-  Class.prototype.events = function(){
+  Class.prototype.events = function() {
     var that = this;
     var options = that.config;
 
     // 设置当前选择的文件队列
-    var setChooseFile = function(files){
+    var setChooseFile = function(files) {
       that.chooseFiles = {};
-      layui.each(files, function(i, item){
+      layui.each(files, function(i, item) {
         var time = new Date().getTime();
         that.chooseFiles[time + '-' + i] = item;
       });
     };
 
     // 设置选择的文本
-    var setChooseText = function(files, filename){
+    var setChooseText = function(files, filename) {
       var elemFile = that.elemFile;
       var item = options.item ? options.item : options.elem;
       var value = files.length > 1
         ? i18n.$t('upload.chooseText', {length: files.length})
-      : ((files[0] || {}).name || (elemFile[0].value.match(/[^\/\\]+\..+/g)||[]) || '');
+        : ((files[0] || {}).name || (elemFile[0].value.match(/[^\/\\]+\..+/g) || []) || '');
 
-      if(elemFile.next().hasClass(ELEM_CHOOSE)){
+      if (elemFile.next().hasClass(ELEM_CHOOSE)) {
         elemFile.next().remove();
       }
       that.upload(null, 'choose');
-      if(that.isFile() || options.choose) return;
-      elemFile.after('<span class="layui-inline '+ ELEM_CHOOSE +'">'+ value +'</span>');
+      if (that.isFile() || options.choose) return;
+      elemFile.after('<span class="layui-inline ' + ELEM_CHOOSE + '">' + value + '</span>');
     };
 
     /**
@@ -662,11 +662,11 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
      * @param {File} file
      * @return {boolean}
      */
-    var checkFile = function (file) {
+    var checkFile = function(file) {
       var result = true;
-      layui.each(that.files, function (index, item) {
+      layui.each(that.files, function(index, item) {
         result = !(item.name === file.name);
-        if(!result) return true;
+        if (!result) return true;
       });
       return result;
     };
@@ -677,9 +677,9 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
      * @param {T} obj
      * @return {T}
      */
-    var extendInfo = function (obj) {
+    var extendInfo = function(obj) {
 
-      var extInfo = function (file) {
+      var extInfo = function(file) {
         //文件扩展名
         file.ext = file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
         // 文件大小
@@ -689,7 +689,7 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
 
       //FileList对象
       if (obj instanceof FileList) {
-        layui.each(obj, function (index, item) {
+        layui.each(obj, function(index, item) {
           extInfo(item);
         });
       } else {
@@ -704,12 +704,12 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
      * @param {FileList} files
      * @return {Array<File>|FileList}
      */
-    var getFiles = function (files) {
+    var getFiles = function(files) {
       files = files || [];
       if (!files.length) return [];
       if (!that.files) return extendInfo(files);
       var result = [];
-      layui.each(files, function (index, item) {
+      layui.each(files, function(index, item) {
         if (checkFile(item)) {
           result.push(extendInfo(item));
         }
@@ -718,7 +718,7 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
     };
 
     // 点击上传容器
-    options.elem.off('upload.start').on('upload.start', function(){
+    options.elem.off('upload.start').on('upload.start', function() {
       var othis = $(this);
 
       that.config.item = othis;
@@ -726,31 +726,31 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
     });
 
     // 拖拽上传
-    if(!(device.ie && device.ie < 10)){
-      options.elem.off('upload.over').on('upload.over', function(){
+    if (!(device.ie && device.ie < 10)) {
+      options.elem.off('upload.over').on('upload.over', function() {
         var othis = $(this);
         othis.attr('lay-over', '');
       })
-      .off('upload.leave').on('upload.leave', function(){
-        var othis = $(this);
-        othis.removeAttr('lay-over');
-      })
-      .off('upload.drop').on('upload.drop', function(e, param){
-        var othis = $(this);
-        var files = getFiles(param.originalEvent.dataTransfer.files);
+        .off('upload.leave').on('upload.leave', function() {
+          var othis = $(this);
+          othis.removeAttr('lay-over');
+        })
+        .off('upload.drop').on('upload.drop', function(e, param) {
+          var othis = $(this);
+          var files = getFiles(param.originalEvent.dataTransfer.files);
 
-        othis.removeAttr('lay-over');
-        setChooseFile(files);
+          othis.removeAttr('lay-over');
+          setChooseFile(files);
 
-        options.auto ? that.upload() : setChooseText(files); // 是否自动触发上传
-      });
+          options.auto ? that.upload() : setChooseText(files); // 是否自动触发上传
+        });
     }
 
     // 文件选择
-    that.elemFile.on('change', function(){
+    that.elemFile.on('change', function() {
       var files = getFiles(this.files);
 
-      if(files.length === 0) return;
+      if (files.length === 0) return;
 
       setChooseFile(files);
 
@@ -758,36 +758,36 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
     });
 
     // 手动触发上传
-    options.bindAction.off('upload.action').on('upload.action', function(){
+    options.bindAction.off('upload.action').on('upload.action', function() {
       that.upload();
     });
 
 
     // 防止事件重复绑定
-    if(options.elem.data(MOD_INDEX)) return;
+    if (options.elem.data(MOD_INDEX)) return;
 
 
     // 目标元素 click 事件
-    options.elem.on('click', function(){
-      if(that.isFile()) return;
+    options.elem.on('click', function() {
+      if (that.isFile()) return;
       $(this).trigger('upload.start');
     });
 
     // 目标元素 drop 事件
-    if(options.drag){
-      options.elem.on('dragover', function(e){
+    if (options.drag) {
+      options.elem.on('dragover', function(e) {
         e.preventDefault();
         $(this).trigger('upload.over');
-      }).on('dragleave', function(e){
+      }).on('dragleave', function(e) {
         $(this).trigger('upload.leave');
-      }).on('drop', function(e){
+      }).on('drop', function(e) {
         e.preventDefault();
         $(this).trigger('upload.drop', e);
       });
     }
 
     // 手动上传时触发上传的元素 click 事件
-    options.bindAction.on('click', function(){
+    options.bindAction.on('click', function() {
       $(this).trigger('upload.action');
     });
 
@@ -805,12 +805,12 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
      * @param {number} [precision] - 数值精度
      * @return {string}
      */
-    parseSize: function (size, precision) {
+    parseSize: function(size, precision) {
       precision = precision || 2;
       if (null == size || !size) {
         return '0';
       }
-      var unitArr = ["Bytes", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"];
+      var unitArr = ['Bytes', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
       var index;
       var formatSize = typeof size === 'string' ? parseFloat(size) : size;
       index = Math.floor(Math.log(formatSize) / Math.log(1024));
@@ -821,12 +821,12 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
     /**
      * 将给定的值转换为一个 JQueryDeferred 对象
      */
-    promiseLikeResolve:function(value){
+    promiseLikeResolve:function(value) {
       var deferred = $.Deferred();
 
-      if(value && typeof value.then === 'function'){
+      if (value && typeof value.then === 'function') {
         value.then(deferred.resolve, deferred.reject);
-      }else{
+      } else {
         deferred.resolve(value);
       }
       return deferred.promise();
@@ -837,14 +837,14 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
   thisModule.that = {}; // 记录所有实例对象
 
   // 获取当前实例对象
-  thisModule.getThis = function(id){
+  thisModule.getThis = function(id) {
     var that = thisModule.that[id];
-    if(!that) hint.error(id ? (MOD_NAME +' instance with ID \''+ id +'\' not found') : 'ID argument required');
+    if (!that) hint.error(id ? (MOD_NAME + ' instance with ID \'' + id + '\' not found') : 'ID argument required');
     return that;
   };
 
   // 核心入口
-  upload.render = function(options){
+  upload.render = function(options) {
     var inst = new Class(options);
     return thisModule.call(inst);
   };
