@@ -11,6 +11,7 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
   var layer = layui.layer;
   var device = layui.device();
   var i18n = layui.i18n;
+  var hint = layui.hint();
 
   // 模块名
   var MOD_NAME = 'upload';
@@ -516,7 +517,7 @@ layui.define(['lay', 'i18n', 'layer'], function(exports) {
             if(options.auto){
               elemFile.value = '';
             }
-            error !== undefined && layui.hint().error(error);
+            error !== undefined && hint.error(error);
           });
       }else{
         ready();
