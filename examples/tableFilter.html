@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Table Filter Example - Layui</title>
+  <link href="../dist/css/layui.css" rel="stylesheet">
+  <link href="../src/css/modules/tableFilter.css" rel="stylesheet">
+</head>
+<body>
+  <div class="layui-container" style="margin-top: 30px;">
+    <h1>Table Header Filtering Example</h1>
+    <p>Click the filter icon in table headers to filter data</p>
+    
+    <table id="demo" lay-filter="test"></table>
+  </div>
+
+  <script src="../dist/layui.js"></script>
+  <script src="../src/modules/tableFilter.js"></script>
+  <script>
+    layui.use(['table', 'tableFilter'], function(){
+      var table = layui.table;
+      var tableFilter = layui.tableFilter;
+      
+      // Sample data
+      var data = [
+        {id: 1, username: 'Alice', email: 'alice@example.com', age: 25, city: 'New York'},
+        {id: 2, username: 'Bob', email: 'bob@example.com', age: 30, city: 'London'},
+        {id: 3, username: 'Charlie', email: 'charlie@example.com', age: 35, city: 'Paris'},
+        {id: 4, username: 'David', email: 'david@example.com', age: 28, city: 'Tokyo'},
+        {id: 5, username: 'Eve', email: 'eve@example.com', age: 32, city: 'New York'},
+        {id: 6, username: 'Frank', email: 'frank@example.com', age: 27, city: 'London'},
+        {id: 7, username: 'Grace', email: 'grace@example.com', age: 29, city: 'Paris'},
+        {id: 8, username: 'Henry', email: 'henry@example.com', age: 31, city: 'Tokyo'},
+        {id: 9, username: 'Ivy', email: 'ivy@example.com', age: 26, city: 'New York'},
+        {id: 10, username: 'Jack', email: 'jack@example.com', age: 33, city: 'London'}
+      ];
+      
+      // Render table
+      table.render({
+        elem: '#demo',
+        data: data,
+        cols: [[
+          {field: 'id', title: 'ID', width: 80, sort: true},
+          {field: 'username', title: 'Username', width: 150, templet: function(d){
+            return '<div data-filter-type="text">' + d.username + '</div>';
+          }},
+          {field: 'email', title: 'Email', width: 200, templet: function(d){
+            return '<div data-filter-type="text">' + d.email + '</div>';
+          }},
+          {field: 'age', title: 'Age', width: 100, sort: true, templet: function(d){
+            return '<div data-filter-type="number">' + d.age + '</div>';
+          }},
+          {field: 'city', title: 'City', width: 150, templet: function(d){
+            return '<div data-filter-type="select">' + d.city + '</div>';
+          }}
+        ]],
+        page: true,
+        id: 'testTable'
+      });
+      
+      // Initialize table filter
+      tableFilter.render({
+        tableId: 'testTable'
+      });
+    });
+  </script>
+</body>
+</html>

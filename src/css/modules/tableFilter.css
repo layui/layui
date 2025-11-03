@@ -1,0 +1,92 @@
+/**
+ * Table Filter Styles
+ * Styles for table header filtering and search functionality
+ */
+
+/* Filter icon in table header */
+.layui-table-filter {
+  display: inline-block;
+  margin-left: 5px;
+  cursor: pointer;
+  color: #999;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.layui-table-filter:hover {
+  color: #16baaa;
+}
+
+.layui-table-filter-active {
+  color: #16baaa;
+}
+
+/* Filter dropdown content */
+.layui-table-filter-content {
+  padding: 10px;
+  min-width: 200px;
+}
+
+.layui-table-filter-content .layui-form-item {
+  margin-bottom: 10px;
+}
+
+.layui-table-filter-content .layui-form-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Filter input */
+.layui-table-filter-input {
+  width: 100%;
+}
+
+/* Number range inputs */
+.layui-table-filter-min,
+.layui-table-filter-max {
+  width: 100%;
+}
+
+/* Select filter options */
+.layui-table-filter-options {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.layui-table-filter-options .layui-form-item {
+  margin-bottom: 5px;
+}
+
+/* Date range inputs */
+.layui-table-filter-date-start,
+.layui-table-filter-date-end {
+  width: 100%;
+}
+
+/* Filter actions */
+.layui-table-filter-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.layui-table-filter-actions .layui-btn {
+  flex: 1;
+}
+
+/* Table header cell with filter */
+.layui-table-header th .layui-table-cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .layui-table-filter-content {
+    min-width: 150px;
+  }
+  
+  .layui-table-filter-actions {
+    flex-direction: column;
+  }
+}
