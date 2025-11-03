@@ -21,8 +21,10 @@
     "url": "git+ssh://git@github.com/layui/layui.git"
   },
   "main": "dist/layui.js",
+  "types": "types/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "scripts": {
     "build": "gulp",
