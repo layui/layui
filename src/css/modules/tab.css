@@ -1,0 +1,191 @@
+/**
+ * Tab 选项卡（已被 tabs 平替，仅为兼容保留）
+ **/
+.layui-tab {
+  margin: 10px 0;
+  text-align: left !important;
+}
+.layui-tab[overflow] > .layui-tab-title {
+  overflow: hidden;
+}
+.layui-tab .layui-tab-title {
+  position: relative;
+  left: 0;
+  height: 40px;
+  white-space: nowrap;
+  font-size: 0;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.layui-tab .layui-tab-title:after {
+  content: "";
+  border-bottom-color: var(--lay-border-color);
+  border-bottom-width: 1px;
+  border-style: none none solid;
+  bottom: 0;
+  left: 0;
+  right: auto;
+  top: auto;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  z-index: 8;
+}
+.layui-tab .layui-tab-title li {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.layui-tab .layui-tab-title li {
+  position: relative;
+  line-height: 40px;
+  min-width: 65px;
+  margin: 0;
+  padding: 0 15px;
+  text-align: center;
+  cursor: pointer;
+}
+.layui-tab .layui-tab-title li a {
+  display: block;
+  padding: 0 15px;
+  margin: 0 -15px;
+}
+.layui-tab-title .layui-this {
+  color: #000;
+}
+
+.layui-tab-title .layui-this:after {
+  position: absolute;
+  left: 0;
+  top: 0;
+  content: "";
+  width: 100%;
+  height: 40px;
+  border-width: 1px;
+  border-bottom-width: 1px;
+  border-style: solid;
+  border-bottom-color: #fff;
+  border-radius: var(--lay-border-radius) var(--lay-border-radius) 0 0;
+  box-sizing: border-box;
+  pointer-events: none;
+  z-index: 9;
+}
+.layui-tab-bar {
+  box-sizing: border-box;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
+  width: 30px;
+  height: 40px;
+  line-height: 40px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--lay-border-radius);
+  text-align: center;
+  background-color: #fff;
+  cursor: pointer;
+}
+.layui-tab-bar .layui-icon {
+  position: relative;
+  display: inline-block;
+  top: 3px;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+.layui-tab-item {
+  display: none;
+}
+.layui-tab-more {
+  padding-right: 30px;
+  height: auto !important;
+  white-space: normal !important;
+}
+.layui-tab-more li.layui-this:after {
+  border-bottom-color: var(--lay-border-color);
+  border-radius: var(--lay-border-radius);
+}
+.layui-tab-more .layui-tab-bar .layui-icon {
+  top: -2px;
+  top: 3px\0;
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+:root .layui-tab-more .layui-tab-bar .layui-icon {
+  top: -2px\0 / IE9;
+}
+
+.layui-tab-content {
+  padding: 15px 0;
+}
+
+/* Tab 关闭 */
+.layui-tab-title li .layui-tab-close {
+  position: relative;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  line-height: 20px;
+  margin-left: 8px;
+  top: 1px;
+  text-align: center;
+  font-size: 14px;
+  color: #c2c2c2;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.layui-tab-title li .layui-tab-close:hover {
+  border-radius: var(--lay-border-radius);
+  background-color: var(--lay-color-red);
+  color: #fff;
+}
+
+/* Tab 简洁风格 */
+.layui-tab-brief > .layui-tab-title .layui-this {
+  color: var(--lay-color-primary);
+}
+.layui-tab-brief > .layui-tab-title .layui-this:after,
+.layui-tab-brief > .layui-tab-more li.layui-this:after {
+  border: none;
+  border-radius: 0;
+  border-bottom: 2px solid var(--lay-color-accent);
+}
+
+/* Tab 卡片风格 */
+.layui-tab-card {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--lay-border-radius);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+}
+.layui-tab-card > .layui-tab-title {
+  background-color: var(--lay-color-gray);
+}
+.layui-tab-card > .layui-tab-title li {
+  margin-right: -1px;
+  margin-left: -1px;
+}
+.layui-tab-card > .layui-tab-title .layui-this {
+  background-color: #fff;
+}
+.layui-tab-card > .layui-tab-title .layui-this:after {
+  border-top: none;
+  border-width: 1px;
+  border-bottom-color: #fff;
+}
+.layui-tab-card > .layui-tab-title .layui-tab-bar {
+  height: 40px;
+  line-height: 40px;
+  border-radius: 0;
+  border-top: none;
+  border-right: none;
+}
+.layui-tab-card > .layui-tab-more .layui-this {
+  background: none;
+  color: var(--lay-color-accent);
+}
+.layui-tab-card > .layui-tab-more .layui-this:after {
+  border: none;
+}

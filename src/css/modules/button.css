@@ -1,0 +1,162 @@
+/*
+ * 按钮
+ */
+
+.layui-btn {
+  display: inline-block;
+  vertical-align: middle;
+  height: 38px;
+  line-height: 36px;
+  border: 1px solid transparent;
+  padding: 0 18px;
+  background-color: var(--lay-color-primary);
+  color: #fff;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 14px;
+  border-radius: var(--lay-border-radius);
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.layui-btn:hover {
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  color: #fff;
+}
+.layui-btn:active {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.layui-btn + .layui-btn {
+  margin-left: 10px;
+}
+
+/* 按钮容器 */
+.layui-btn-container {
+  word-spacing: -5px;
+}
+.layui-btn-container .layui-btn {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  word-spacing: normal;
+}
+.layui-btn-container .layui-btn + .layui-btn {
+  margin-left: 0;
+}
+.layui-table .layui-btn-container .layui-btn {
+  margin-bottom: 9px;
+}
+
+/* 圆角 */
+.layui-btn-radius {
+  border-radius: 100px;
+}
+.layui-btn .layui-icon {
+  padding: 0 2px;
+  vertical-align: middle\0;
+  vertical-align: bottom;
+}
+
+/* 原始 */
+.layui-btn-primary {
+  border-color: var(--lay-border-color-accent);
+  background: none;
+  color: #5f5f5f;
+}
+.layui-btn-primary:hover {
+  border-color: var(--lay-color-primary);
+  color: #333;
+}
+/* 百搭 */
+.layui-btn-normal {
+  background-color: var(--lay-color-blue);
+}
+/* 暖色 */
+.layui-btn-warm {
+  background-color: var(--lay-color-orange);
+}
+/* 警告 */
+.layui-btn-danger {
+  background-color: var(--lay-color-red);
+}
+/* 选中 */
+.layui-btn-checked {
+  background-color: var(--lay-color-accent);
+}
+/* 禁用 */
+.layui-btn-disabled,
+.layui-btn-disabled:hover,
+.layui-btn-disabled:active {
+  border-color: var(--lay-border-color) !important;
+  background-color: #fbfbfb !important;
+  color: var(--lay-gray-400) !important;
+  cursor: not-allowed !important;
+  opacity: 1;
+}
+
+/* 大型 */
+.layui-btn-lg {
+  height: 44px;
+  line-height: 44px;
+  padding: 0 25px;
+  font-size: 16px;
+}
+/* 小型 */
+.layui-btn-sm {
+  height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+/* 超小 */
+.layui-btn-xs {
+  height: 22px;
+  line-height: 22px;
+  padding: 0 5px;
+  font-size: 12px;
+}
+.layui-btn-xs i {
+  font-size: 12px !important;
+}
+/* 按钮组 */
+.layui-btn-group {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 0;
+}
+.layui-btn-group .layui-btn {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 0;
+}
+.layui-btn-group .layui-btn-primary {
+  border-left: none;
+}
+.layui-btn-group .layui-btn-primary:hover {
+  border-color: var(--lay-border-color-accent);
+  color: var(--lay-color-primary);
+}
+.layui-btn-group .layui-btn:first-child {
+  border-left: none;
+  border-radius: var(--lay-border-radius) 0 0 var(--lay-border-radius);
+}
+.layui-btn-group .layui-btn-primary:first-child {
+  border-left: 1px solid var(--lay-gray-400);
+}
+.layui-btn-group .layui-btn:last-child {
+  border-radius: 0 var(--lay-border-radius) var(--lay-border-radius) 0;
+}
+.layui-btn-group .layui-btn + .layui-btn {
+  margin-left: 0;
+}
+.layui-btn-group + .layui-btn-group {
+  margin-left: 10px;
+}
+/* 流体 */
+.layui-btn-fluid {
+  width: 100%;
+}

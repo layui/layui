@@ -1,0 +1,169 @@
+/** 滑块 **/
+.layui-slider {
+  height: 4px;
+  background: var(--lay-gray-300);
+  border-radius: var(--lay-border-radius);
+  position: relative;
+  cursor: pointer;
+}
+.layui-slider-bar {
+  border-radius: var(--lay-border-radius);
+  position: absolute;
+  height: 100%;
+}
+.layui-slider-step {
+  position: absolute;
+  top: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fff;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+.layui-slider-wrap {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  top: -16px;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  z-index: 10;
+  text-align: center;
+}
+.layui-slider-wrap-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.layui-slider-wrap:after {
+  content: "";
+  height: 100%;
+  display: inline-block;
+  vertical-align: middle;
+}
+.layui-slider-wrap-btn:hover,
+.layui-slider-wrap-btn.layui-slider-hover {
+  transform: scale(1.2);
+}
+.layui-slider-wrap-btn.layui-disabled:hover {
+  transform: scale(1) !important;
+}
+.layui-slider-tips {
+  position: absolute;
+  top: -42px;
+  z-index: 77777777;
+  white-space: nowrap;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  color: #fff;
+  background: #000;
+  border-radius: var(--lay-border-radius);
+  height: 25px;
+  line-height: 25px;
+  padding: 0 10px;
+}
+.layui-slider-tips:after {
+  content: "";
+  position: absolute;
+  bottom: -11px;
+  left: 50%;
+  margin-left: -6px;
+  width: 0;
+  height: 0;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #000 transparent transparent transparent;
+}
+.layui-slider-input {
+  width: 70px;
+  height: 32px;
+  border: 1px solid var(--lay-border-color);
+  border-radius: var(--lay-border-radius);
+  font-size: 16px;
+  line-height: 32px;
+  position: absolute;
+  right: 0;
+  top: -14px;
+  box-sizing: border-box;
+}
+.layui-slider-input-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  border-left: 1px solid var(--lay-border-color);
+}
+.layui-slider-input-btn i {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 20px;
+  height: 50%;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  color: #999;
+}
+.layui-slider-input-btn i:first-child {
+  top: 0;
+  border-bottom: 1px solid var(--lay-border-color);
+}
+.layui-slider-input-txt {
+  height: 100%;
+  font-size: 14px;
+}
+.layui-slider-input-txt input {
+  height: 100%;
+  border: none;
+  padding-right: 21px;
+}
+.layui-slider-input-btn i:hover {
+  color: var(--lay-color-primary);
+}
+/*垂直滑块*/
+.layui-slider-vertical {
+  width: 4px;
+  margin-left: 33px;
+}
+.layui-slider-vertical .layui-slider-bar {
+  width: 4px;
+}
+.layui-slider-vertical .layui-slider-step {
+  top: auto;
+  left: 0px;
+  -webkit-transform: translateY(50%);
+  transform: translateY(50%);
+}
+.layui-slider-vertical .layui-slider-wrap {
+  top: auto;
+  left: -16px;
+  -webkit-transform: translateY(50%);
+  transform: translateY(50%);
+}
+.layui-slider-vertical .layui-slider-tips {
+  top: auto;
+  left: 2px;
+}
+@media \0screen {
+  .layui-slider-wrap-btn {
+    margin-left: -20px;
+  }
+  .layui-slider-vertical .layui-slider-wrap-btn {
+    margin-left: 0;
+    margin-bottom: -20px;
+  }
+  .layui-slider-vertical .layui-slider-tips {
+    margin-left: -8px;
+  }
+  .layui-slider > span {
+    margin-left: 8px;
+  }
+}

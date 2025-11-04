@@ -1,0 +1,50 @@
+/* 小徽章 */
+.layui-badge,
+.layui-badge-dot,
+.layui-badge-rim {
+  position: relative;
+  display: inline-block;
+  padding: 0 6px;
+  font-size: 12px;
+  text-align: center;
+  background-color: var(--lay-color-red);
+  color: #fff;
+  border-radius: var(--lay-border-radius);
+}
+.layui-badge {
+  height: 18px;
+  line-height: 18px;
+}
+.layui-badge-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 50%;
+}
+.layui-badge-rim {
+  height: 18px;
+  line-height: 18px;
+  border-width: 1px;
+  border-style: solid;
+  background-color: #fff;
+  color: #5f5f5f;
+}
+
+.layui-btn .layui-badge,
+.layui-btn .layui-badge-dot {
+  margin-left: 5px;
+}
+.layui-nav .layui-badge,
+.layui-nav .layui-badge-dot {
+  position: absolute;
+  top: 50%;
+  margin: -5px 6px 0;
+}
+.layui-nav .layui-badge {
+  margin-top: -10px;
+}
+.layui-tab-title .layui-badge,
+.layui-tab-title .layui-badge-dot {
+  left: 5px;
+  top: -2px;
+}

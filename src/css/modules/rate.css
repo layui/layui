@@ -1,0 +1,32 @@
+/** 评分组件 **/
+.layui-rate,
+.layui-rate * {
+  display: inline-block;
+  vertical-align: middle;
+}
+.layui-rate {
+  padding: 11px 6px 11px 0;
+  font-size: 0;
+}
+.layui-rate li {
+  margin-top: 0 !important;
+}
+.layui-rate li i.layui-icon {
+  font-size: 20px;
+  color: var(--lay-color-orange);
+}
+.layui-rate li i.layui-icon {
+  margin-right: 5px;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+.layui-rate li i:hover,
+.layui-rate-hover {
+  cursor: pointer;
+  -webkit-transform: scale(1.12);
+  transform: scale(1.12);
+}
+.layui-rate[readonly] li i:hover {
+  cursor: default;
+  transform: scale(1);
+}

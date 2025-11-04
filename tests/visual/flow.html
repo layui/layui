@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>流加载 - layui</title>
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <style>
+      .flow-demo {
+        height: 400px;
+        overflow: auto;
+      }
+      .flow-default {
+        margin-bottom: 32px;
+        border: 1px solid #e2e2e2;
+        text-align: center;
+      }
+      .flow-default li {
+        display: inline-block;
+        margin-right: 10px;
+        width: 48%;
+        margin-bottom: 10px;
+        height: 200px;
+        line-height: 200px;
+        text-align: center;
+        background-color: #eee;
+      }
+      .flow-default img {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+      .flow-default > img {
+        width: 48%;
+        height: 49%;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body class="layui-padding-3">
+    <div class="flow-default flow-demo" id="ID-flow-demo"></div>
+    <ul class="flow-default" id="test1"></ul>
+    <div class="layui-hide">
+      <ul class="flow-default" id="test2"></ul>
+    </div>
+
+    <div
+      class="flow-default"
+      style="height: 300px; overflow: auto"
+      id="ID-flow-lazyimg"
+    >
+      <img
+        src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif"
+        lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg"
+      />
+      <img
+        src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif"
+        lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg"
+      />
+      <img
+        src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif"
+        lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg"
+      />
+      <img
+        src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif"
+        lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg"
+      />
+      <img
+        src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif"
+        lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg"
+      />
+      <img
+        src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif"
+        lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg"
+      />
+      <img
+        src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif"
+        lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg"
+      />
+      <img
+        src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif"
+        lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg"
+      />
+      <img
+        src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif"
+        lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg"
+      />
+      <img
+        src="https://unpkg.com/outeres@0.2.0/img/other/loading.gif"
+        lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg"
+      />
+    </div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use('flow', () => {
+        var flow = layui.flow;
+
+        // 自动加载
+        flow.load({
+          elem: '#ID-flow-demo', // 流加载容器
+          scrollElem: '#ID-flow-demo', // 滚动条所在元素，一般不用填，此处只是演示需要。
+          done: (page, next) => {
+            // 执行下一页的回调
+            // 模拟数据插入
+            setTimeout(() => {
+              var lis = [];
+              for (var i = 0; i < 8; i++) {
+                lis.push('<li>' + ((page - 1) * 8 + i + 1) + '</li>');
+              }
+
+              // 执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+              // pages 为 Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+              next(lis.join(''), page < 10); // 此处假设总页数为 10
+            }, 300);
+          },
+        });
+
+        // 手动加载
+        var flowInst = flow.load({
+          elem: '#test1', // 流加载容器
+          // scrollElem: '.flow-default', // 滚动条所在元素，默认 document
+          // end: '没有更多数据',
+          isAuto: false,
+          isLazyimg: true,
+          done: (page, next) => {
+            // 加载下一页
+            console.log('done:', page);
+            setTimeout(() => {
+              var lis = [];
+              for (var i = 0; i < 6; i++) {
+                lis.push(
+                  '<li><img lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg?v=' +
+                    (page + i) +
+                    '"></li>',
+                );
+              }
+              next(lis.join(''), page < 3);
+            }, 300);
+          },
+        });
+
+        // 重载
+        flowInst.reload({
+          moreText: '...',
+        });
+
+        flow.load({
+          elem: '#test2', // 流加载容器
+          isLazyimg: true,
+          done: (page, next) => {
+            // 加载下一页
+            setTimeout(() => {
+              var lis = [];
+              for (var i = 0; i < 6; i++) {
+                lis.push(
+                  '<li><img lay-src="https://unpkg.com/outeres@0.2.0/demo/wallpaper.jpg?v=' +
+                    (page + i) +
+                    '"></li>',
+                );
+              }
+              next(lis.join(''), page < 3);
+            }, 300);
+          },
+        });
+
+        // 按屏加载图片
+        flow.lazyimg({
+          elem: '#ID-flow-lazyimg img',
+          scrollElem: '#ID-flow-lazyimg',
+          id: 'flow-lazyimg-demo',
+        });
+      });
+    </script>
+  </body>
+</html>

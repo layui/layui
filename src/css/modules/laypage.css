@@ -1,0 +1,136 @@
+/** 分页 **/
+.layui-laypage {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 10px 0;
+  font-size: 0;
+}
+.layui-laypage > a:first-child,
+.layui-laypage > a:first-child em {
+  border-radius: var(--lay-border-radius) 0 0 var(--lay-border-radius);
+}
+.layui-laypage > a:last-child,
+.layui-laypage > a:last-child em {
+  border-radius: 0 var(--lay-border-radius) var(--lay-border-radius) 0;
+}
+.layui-laypage > *:first-child {
+  margin-left: 0 !important;
+}
+.layui-laypage > *:last-child {
+  margin-right: 0 !important;
+}
+.layui-laypage a,
+.layui-laypage span,
+.layui-laypage input,
+.layui-laypage button,
+.layui-laypage select {
+  border: 1px solid var(--lay-border-color);
+}
+.layui-laypage a,
+.layui-laypage span {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 15px;
+  height: 28px;
+  line-height: 28px;
+  margin: 0 -1px 5px 0;
+  background-color: #fff;
+  color: #333;
+  font-size: 12px;
+}
+.layui-laypage a[data-page] {
+  color: #333;
+}
+.layui-laypage a {
+  text-decoration: none !important;
+  cursor: pointer;
+}
+.layui-laypage a:hover {
+  color: var(--lay-color-primary);
+}
+.layui-laypage em {
+  font-style: normal;
+}
+.layui-laypage .layui-laypage-spr {
+  color: #999;
+  font-weight: 700;
+}
+.layui-laypage .layui-laypage-curr {
+  position: relative;
+}
+.layui-laypage .layui-laypage-curr em {
+  position: relative;
+  color: #fff;
+}
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+  position: absolute;
+  left: -1px;
+  top: -1px;
+  padding: 1px;
+  width: 100%;
+  height: 100%;
+  background-color: var(--lay-color-primary);
+}
+.layui-laypage-em {
+  border-radius: var(--lay-border-radius);
+}
+.layui-laypage-prev em,
+.layui-laypage-next em {
+  font-family: Sim sun;
+  font-size: 16px;
+}
+
+.layui-laypage .layui-laypage-count,
+.layui-laypage .layui-laypage-limits,
+.layui-laypage .layui-laypage-refresh,
+.layui-laypage .layui-laypage-skip {
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 0;
+  border: none;
+}
+.layui-laypage .layui-laypage-limits,
+.layui-laypage .layui-laypage-refresh {
+  vertical-align: top;
+}
+.layui-laypage .layui-laypage-refresh i {
+  font-size: 18px;
+  cursor: pointer;
+}
+.layui-laypage select {
+  height: 22px;
+  padding: 3px;
+  border-radius: var(--lay-border-radius);
+  cursor: pointer;
+}
+.layui-laypage .layui-laypage-skip {
+  height: 30px;
+  line-height: 30px;
+  color: #999;
+}
+.layui-laypage input,
+.layui-laypage button {
+  height: 30px;
+  line-height: 30px;
+  border-radius: var(--lay-border-radius);
+  vertical-align: top;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+.layui-laypage input {
+  display: inline-block;
+  width: 40px;
+  margin: 0 10px;
+  padding: 0 3px;
+  text-align: center;
+  transition: none;
+}
+.layui-laypage input:focus,
+.layui-laypage select:focus {
+  border-color: var(--lay-color-primary) !important;
+}
+.layui-laypage button {
+  margin-left: 10px;
+  padding: 0 10px;
+  cursor: pointer;
+}

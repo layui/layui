@@ -1,7 +1,8 @@
 {
   "name": "layui",
-  "version": "2.13.0",
-  "description": "Classic modular Front-End UI library",
+  "description": "Classic Web UI Component Library",
+  "version": "3.0.0-alpha.0",
+  "type": "module",
   "keywords": [
     "layui",
     "components",
@@ -21,25 +22,71 @@
     "url": "git+ssh://git@github.com/layui/layui.git"
   },
   "main": "dist/layui.js",
+  "module": "dist/layui.esm.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    }
+  },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "gulp",
-    "release": "npm run build && npm rum release-zip",
-    "release-zip": "gulp release"
+    "dev": "node scripts/dev.mjs",
+    "serve": "serve tests/visual -p 3003 --cors -L -n",
+    "build": "run-s clean:dist build:*",
+    "build:css": "postcss src/css/index.css -o dist/css/layui.css",
+    "build:js": "rollup -c",
+    "format": "prettier --write --cache .",
+    "format:check": "prettier --check --cache .",
+    "lint": "eslint . --cache",
+    "prepare": "husky",
+    "test": "jest --no-cache",
+    "clean:dist": "del-cli dist/*",
+    "release": "node scripts/release.mjs"
   },
+  "lint-staged": {
+    "*": [
+      "prettier --write --cache --ignore-unknown"
+    ],
+    "*.{js,mjs,cjs}": [
+      "eslint --fix --cache"
+    ]
+  },
+  "browserslist": [
+    "defaults"
+  ],
   "devDependencies": {
-    "gulp": "^4.0.2",
-    "gulp-uglify": "^3.0.2",
-    "gulp-clean-css": "^4.3.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-replace": "^1.1.4",
-    "gulp-header": "^2.0.9",
-    "gulp-sourcemaps": "^3.0.0",
-    "gulp-zip": "^5.1.0",
-    "del": "^6.1.1",
-    "minimist": "^1.2.8"
+    "@rollup/plugin-babel": "^6.1.0",
+    "@rollup/plugin-commonjs": "^28.0.9",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-replace": "^6.0.2",
+    "@rollup/plugin-terser": "^0.4.4",
+    "archiver": "^7.0.1",
+    "autoprefixer": "^10.4.21",
+    "chalk": "^5.6.2",
+    "cross-env": "^10.1.0",
+    "cross-spawn": "^7.0.6",
+    "cssnano": "^7.1.1",
+    "del-cli": "^7.0.0",
+    "eslint": "^9.38.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.4.0",
+    "husky": "^9.1.7",
+    "jest": "^30.2.0",
+    "lint-staged": "^16.2.6",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "postcss-import": "^16.1.1",
+    "postcss-nested": "^7.0.2",
+    "postcss-url": "^10.1.3",
+    "prettier": "^3.6.2",
+    "rollup": "^4.52.5",
+    "serve": "^14.2.5",
+    "shelljs": "^0.10.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "jquery": "^3.7.1"
+  }
 }

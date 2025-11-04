@@ -1,0 +1,151 @@
+/** 树组件 **/
+.layui-tree {
+  line-height: 22px;
+}
+.layui-tree .layui-form-checkbox {
+  margin: 0 !important;
+}
+.layui-tree-set {
+  width: 100%;
+  position: relative;
+}
+.layui-tree-pack {
+  display: none;
+  padding-left: 20px;
+  position: relative;
+}
+.layui-tree-line .layui-tree-pack {
+  padding-left: 27px;
+}
+.layui-tree-line .layui-tree-set .layui-tree-set:after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: -9px;
+  width: 17px;
+  height: 0;
+  border-top: 1px dotted #c0c4cc;
+}
+.layui-tree-entry {
+  position: relative;
+  padding: 3px 0;
+  height: 26px;
+  white-space: nowrap;
+}
+.layui-tree-entry:hover {
+  background-color: var(--lay-gray-300);
+}
+.layui-tree-line .layui-tree-entry:hover {
+  background-color: rgba(0, 0, 0, 0);
+}
+.layui-tree-line .layui-tree-entry:hover .layui-tree-txt {
+  color: #999;
+  text-decoration: underline;
+  transition: 0.3s;
+}
+.layui-tree-main {
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+  padding-right: 10px;
+}
+.layui-tree-line .layui-tree-set:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -9px;
+  width: 0;
+  height: 100%;
+  border-left: 1px dotted #c0c4cc;
+}
+.layui-tree-line .layui-tree-set.layui-tree-setLineShort:before {
+  height: 13px;
+}
+.layui-tree-line .layui-tree-set.layui-tree-setHide:before {
+  height: 0;
+}
+.layui-tree-iconClick {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  height: 20px;
+  line-height: 20px;
+  margin: 0 10px;
+  color: #c0c4cc;
+}
+.layui-tree-icon {
+  height: 14px;
+  line-height: 10px;
+  width: 14px;
+  margin: 0 11px;
+  text-align: center;
+  border: 1px solid #c0c4cc;
+}
+.layui-tree-icon .layui-icon {
+  font-size: 12px;
+  color: #5f5f5f;
+}
+.layui-tree-iconArrow {
+  padding: 0 5px;
+}
+.layui-tree-iconArrow:after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 3px;
+  z-index: 100;
+  width: 0;
+  height: 0;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent #c0c4cc;
+  transition: 0.5s;
+}
+.layui-tree-spread
+  > .layui-tree-entry
+  .layui-tree-iconClick
+  > .layui-tree-iconArrow:after {
+  transform: rotate(90deg) translate(3px, 4px);
+}
+.layui-tree-txt {
+  display: inline-block;
+  vertical-align: middle;
+  color: #555;
+}
+.layui-tree-search {
+  margin-bottom: 15px;
+  color: #5f5f5f;
+}
+.layui-tree-btnGroup {
+  visibility: hidden;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+}
+.layui-tree-btnGroup .layui-icon {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 2px;
+  cursor: pointer;
+}
+.layui-tree-btnGroup .layui-icon:hover {
+  color: #999;
+  transition: 0.3s;
+}
+.layui-tree-entry:hover .layui-tree-btnGroup {
+  visibility: visible;
+}
+.layui-tree-editInput {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  height: 20px;
+  line-height: 20px;
+  padding: 0;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.layui-tree-emptyText {
+  text-align: center;
+  color: #999;
+}

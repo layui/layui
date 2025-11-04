@@ -1,0 +1,568 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>基础方法测试 - layui</title>
+    <link href="./assets/dist/css/layui.css" rel="stylesheet" />
+    <link href="./assets/modules/test/test.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(async () => {
+        var lay = layui.lay;
+        var util = layui.util;
+
+        // 异步导入测试模块
+        const { test } = await import('./assets/modules/test/test.js');
+        const tester = test({
+          elem: '#root',
+          items: [
+            {
+              name: 'layui',
+              children: [
+                { name: 'sort' },
+                { name: 'type' },
+                { name: 'isArray' },
+                { name: 'extend' },
+              ],
+            },
+            { type: '-' },
+            {
+              name: 'lay',
+              children: [
+                { name: 'extend' },
+                { name: 'treeToFlat' },
+                { name: 'flatToTree' },
+              ],
+            },
+          ],
+        });
+
+        tester.describe('layui.sort', (it) => {
+          it({
+            title: '整数型数字排序',
+            code: `
+const arr = layui.sort([{a: 3},{a: 0},{a: 0},{a: -1},{a: -5},{a: 6},{a: 9},{a: -333333}], 'a');
+console.log(arr);
+`,
+            expected: [
+              { a: -333333 },
+              { a: -5 },
+              { a: -1 },
+              { a: 0 },
+              { a: 0 },
+              { a: 3 },
+              { a: 6 },
+              { a: 9 },
+            ],
+          });
+
+          it({
+            title: '浮点型数字排序',
+            code: `
+const arr = layui.sort([{a: 3.5},{a: 0.5},{a: 0.5},{a: -1.5},{a: -5.5},{a: 6.5},{a: 9.5},{a: -333333.5}], 'a');
+console.log(arr);
+`,
+            expected: [
+              { a: -333333.5 },
+              { a: -5.5 },
+              { a: -1.5 },
+              { a: 0.5 },
+              { a: 0.5 },
+              { a: 3.5 },
+              { a: 6.5 },
+              { a: 9.5 },
+            ],
+          });
+
+          it({
+            title: '混合型数字排序',
+            code: `
+const arr = layui.sort([{a: 1},{a: 20.5},{a: 20.3},{a: 3},{a: 52},{a: 4.3}], 'a');
+console.log(arr);
+`,
+            expected: [
+              { a: 1 },
+              { a: 3 },
+              { a: 4.3 },
+              { a: 20.3 },
+              { a: 20.5 },
+              { a: 52 },
+            ],
+          });
+
+          it({
+            title: '中文排序',
+            code: `
+const arr = layui.sort([{a: '男'},{a: '女'},{a: '男'},{a: '女'},{a: '男'}], 'a');
+console.log(arr);
+`,
+            expected: [
+              { a: '女' },
+              { a: '女' },
+              { a: '男' },
+              { a: '男' },
+              { a: '男' },
+            ],
+          });
+
+          it({
+            title: '英文排序',
+            code: `
+const arr = layui.sort([{a: 'E'},{a: 'B'},{a: 'D'},{a: 'C'},{a: 'A'}], 'a');
+console.log(arr);
+`,
+            expected: [
+              { a: 'A' },
+              { a: 'B' },
+              { a: 'C' },
+              { a: 'D' },
+              { a: 'E' },
+            ],
+          });
+
+          it({
+            title: '混合排序',
+            code: `
+const arr = layui.sort([
+{a: 3},
+{a: '男'},
+{a: 0},
+{a: 66},
+{a: 99},
+{a: 'C'},
+{a: '女'},
+{a: 3.5},
+{a: 0},
+{a: -1},
+{a: 'B'},
+{a: 5.5},
+{a: '男'},
+{a: 'A'},
+{a: -5},
+{a: '男'},
+{a: 6},
+{a: 9}
+], 'a');
+console.log(arr);
+`,
+            expected: [
+              { a: -5 },
+              { a: -1 },
+              { a: 0 },
+              { a: 0 },
+              { a: 3 },
+              { a: 3.5 },
+              { a: 5.5 },
+              { a: 6 },
+              { a: 9 },
+              { a: 66 },
+              { a: 99 },
+              { a: 'A' },
+              { a: 'B' },
+              { a: 'C' },
+              { a: '女' },
+              { a: '男' },
+              { a: '男' },
+              { a: '男' },
+            ],
+          });
+
+          it({
+            title: '数组成员为纯数字',
+            code: `
+const arr = layui.sort([1, 20.5, 19.5, 52, 4.5]);
+console.log(arr);
+`,
+            expected: [1, 4.5, 19.5, 20.5, 52],
+          });
+
+          it({
+            title: '数组成员为混合型',
+            code: `
+// 按成员对象的 key 为 a 进行比较
+const arr = layui.sort([1, {a: 32}, 20.5, {a: 6}, 52, 5.5], 'a');
+console.log(arr);
+`,
+            expected: [1, 5.5, { a: 6 }, 20.5, { a: 32 }, 52],
+          });
+        });
+
+        tester.describe('layui.type', (it) => {
+          it({
+            title: 'new RegExp()',
+            code: `console.log(layui.type(new RegExp()))`,
+            expected: 'regexp',
+          });
+
+          it({
+            title: 'new Date()',
+            code: `console.log(layui.type(new Date()))`,
+            expected: 'date',
+          });
+        });
+
+        tester.describe('layui.isArray', (it) => {
+          it({
+            title: '[]',
+            code: `console.log(layui.isArray([]))`,
+            expected: true,
+          });
+
+          it({
+            title: 'lay("div")',
+            code: `console.log(layui.isArray(lay("div")))`,
+            expected: true,
+          });
+
+          it({
+            title: 'document.querySelectorAll("div")',
+            code: `console.log(layui.isArray(document.querySelectorAll("div")))`,
+            expected: true,
+          });
+
+          it({
+            title: '{}',
+            code: `console.log(layui.isArray({}))`,
+            expected: false,
+          });
+        });
+
+        tester.describe('layui.extend', (it) => {
+          it({
+            title: '测试扩展模块是否注册成功',
+            code: `
+layui.config({
+base: './assets/modules/extends/' // 用于扩展模块的基础路径
+});
+
+// 扩展模块
+layui.extend({
+// 扩展遵循 Layui 规范的模块
+index: 'index', // 会前置追加 base 基础路径
+test1: 'test/test1', // 会前置追加 base 基础路径
+test2: '{/}./assets/modules/extends/test/test2', // 不会前置追加 base 基础路径，即单独路径
+// 扩展任意外部模块
+markdownit: {
+src: 'https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.2/markdown-it.min.js', // 模块路径
+api: 'markdownit' // 接口名称
+},
+Prism: {
+src: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js',
+api: 'Prism'
+}
+});
+`,
+            expected: '扩展模块名应为 layui.modules 成员',
+            assert(actual, expected) {
+              var modules = layui.modules;
+              if (
+                modules.index &&
+                modules.test1 &&
+                modules.test2 &&
+                modules.markdownit &&
+                modules.Prism
+              ) {
+                return true;
+              }
+            },
+          });
+
+          it({
+            title: '测试加载「扩展模块」是否成功',
+            code: `
+// 加载全部扩展模块
+layui.use(['index', 'test1', 'test2', 'markdownit', 'Prism'], function() {
+console.log('All modules loaded successfully.');
+});
+
+// 直接加载 base 目录下的模块
+layui.use(['test'], function() {
+console.log('test module: loaded successfully');
+});
+`,
+            expected: '扩展模块应成功绑定在 layui 对象上',
+            async assert(actual, expected) {
+              async function loadExtendModule() {
+                await new Promise((resolve, reject) => {
+                  // 加载全部扩展模块
+                  layui.use(
+                    ['index', 'test1', 'test2', 'markdownit', 'Prism'],
+                    () => {
+                      console.log(
+                        '遵循 Layui 规范的扩展模块 loaded: ',
+                        layui.index,
+                        layui.test1,
+                        layui.test2,
+                      );
+                      console.log('任意外部模块 loaded: ');
+                      console.log('  > markdownit: ', layui.markdownit);
+                      console.log('  > Prism: ', layui.Prism);
+
+                      resolve();
+                    },
+                  );
+                });
+
+                await new Promise((resolve, reject) => {
+                  // 直接加载 base 目录下的模块
+                  layui.use(['test'], () => {
+                    console.log(
+                      '直接加载 base 目录下的模块 loaded: ',
+                      layui.test,
+                    );
+                    resolve();
+                  });
+                });
+
+                if (
+                  layui.index &&
+                  layui.test1 &&
+                  layui.test2 &&
+                  layui.markdownit &&
+                  layui.Prism &&
+                  layui.test
+                ) {
+                  return true;
+                }
+              }
+
+              return await loadExtendModule();
+            },
+          });
+        });
+
+        /**
+         *  lay
+         */
+
+        tester.describe('lay.extend', (it) => {
+          const objNCode = `
+const objN = [
+{
+a: [1, 3],
+b: {ba: 1}
+},
+{
+a: [5],
+b: {bb: 2}
+},
+{
+b: {ba: 3},
+c: 3
+}
+];
+`;
+
+          it({
+            title: '普通拷贝',
+            code: `
+const obj = lay.extend({}, {a:1});
+console.log(obj);
+`,
+            expected: { a: 1 },
+          });
+
+          it({
+            title: '普通合并',
+            code: `
+const obj = lay.extend({a:1}, {a:3}, {a:5, b:5});
+console.log(obj);
+`,
+            expected: { a: 5, b: 5 },
+          });
+
+          it({
+            title: '值为「普通对象和数组」的深拷贝合并',
+            code: `
+${objNCode}
+const obj = lay.extend({}, ...objN);
+console.log(obj);
+`,
+            expected: { a: [5, 3], b: { ba: 3, bb: 2 }, c: 3 },
+          });
+
+          it({
+            title: '使用 customizer 实现数组覆盖而非合并',
+            code: `
+${objNCode}
+const obj = lay.extend({}, ...objN, (objValue, srcValue) => {
+if (Array.isArray(objValue) && Array.isArray(srcValue)) {
+return srcValue
+
+// 若为 Object[] 值，可深拷贝数据源覆盖
+// return lay.extend([], srcValue);
+}
+});
+console.log(obj);
+`,
+            expected: { a: [5], b: { ba: 3, bb: 2 }, c: 3 },
+          });
+
+          it({
+            title: '使用 customizer 实现特定字段跳过合并',
+            code: `
+${objNCode}
+const obj = lay.extend({}, ...objN, (objValue, srcValue, key) => {
+if (key === 'b') {
+return objValue;
+}
+});
+console.log(obj);
+`,
+            expected: { a: [5, 3], b: { ba: 1 }, c: 3 },
+          });
+
+          it({
+            title: '是否存在对象引用',
+            code: `
+const src = { data: [{a: 1, b: 2}] };
+const obj = lay.extend({}, src);
+
+// 修改 obj 数组类型中的对象成员，查看 src 是否被影响
+obj.data[0].a = '11111';
+console.log(obj.data[0].a === src.data[0].a);
+`,
+            expected: false,
+          });
+        });
+
+        tester.describe('lay.treeToFlat', (it) => {
+          const data = [
+            {
+              title: '节点 1',
+              id: '1000',
+              children: [
+                {
+                  title: '节点 1-1',
+                  id: '1001',
+                },
+                {
+                  title: '节点 1-2',
+                  id: '1002',
+                  children: [
+                    {
+                      title: '节点 1-2-1',
+                      id: '1003',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              title: '节点 2',
+              id: '2000',
+            },
+          ];
+
+          it({
+            title: '树状数据展平',
+            code: `
+const data = ${JSON.stringify(data, null, 2)};
+
+// 树状数据展平
+const flatData = lay.treeToFlat(data, {
+keepChildren: true  // 是否保留 children 字段
+});
+console.log(JSON.stringify(flatData));
+`,
+            expected: '子节点被展平到一级数组中（控制台查看）',
+            assert(actual, expected) {
+              try {
+                actual = JSON.parse(actual);
+                console.log(`${this.title} : `, actual);
+                return actual.length === 5;
+              } catch (e) {
+                return false;
+              }
+            },
+          });
+
+          it({
+            title: '是否存在对象引用',
+            code: `
+const data = ${JSON.stringify(data, null, 2)};
+
+// 树状数据展平
+const flatData = lay.treeToFlat(data, {
+keepChildren: true  // 是否保留 children 字段
+});
+flatData[0].children[0].title="333333"; // 修改数据
+console.log(flatData[0].children[0].title === data[0].children[0].title);
+`,
+            expected: false,
+          });
+        });
+
+        tester.describe('lay.flatToTree', (it) => {
+          const data = [
+            {
+              title: '节点 1',
+              id: '1000',
+              parentId: null,
+            },
+            {
+              title: '节点 1-1',
+              id: '1001',
+              parentId: '1000',
+            },
+            {
+              title: '节点 1-2',
+              id: '1002',
+              parentId: '1000',
+            },
+            {
+              title: '节点 1-2-1',
+              id: '1003',
+              parentId: '1002',
+            },
+            {
+              title: '节点 2',
+              id: '2000',
+              parentId: null,
+            },
+          ];
+
+          it({
+            title: '平铺数据转树状',
+            code: `
+const data = ${JSON.stringify(data, null, 2)};
+
+const treeData = lay.flatToTree(data); // 平铺数据转树状
+console.log(JSON.stringify(treeData));
+`,
+            expected: '根据 parentId 字段进行树状数据生成（控制台查看）',
+            assert(actual, expected) {
+              try {
+                actual = JSON.parse(actual);
+                console.log(`${this.title} : `, actual);
+                return actual.length === 2;
+              } catch (e) {
+                return false;
+              }
+            },
+          });
+
+          it({
+            title: '是否存在对象引用',
+            code: `
+const data = ${JSON.stringify(data, null, 2)};
+
+const treeData = lay.flatToTree(data); // 平铺数据转树状
+treeData[0].children[0].title="333333"; // 修改数据
+// 查看原始数据是否被修改
+console.log(treeData[0].children[0].title === data[1].title);
+`,
+            expected: false,
+          });
+        });
+
+        // 返回顶部
+        util.fixbar();
+      });
+    </script>
+  </body>
+</html>
