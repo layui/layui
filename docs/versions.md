@@ -9,6 +9,33 @@ toc: true
 
 <div id="WS-switch-v"></div>
 
+
+<h2 id="v3" lay-toc="{title: 'v3'}"></h2>
+
+<h2 id="v3.0.0-alpha.0" lay-pid="v3" class="ws-anchor">
+  v3.0.0-alpha.0
+  <span class="layui-badge-rim">2025-11-04</span>
+</h2>
+
+`3.0.0-alpha` 版本暂时仍然借助了 `v2` 既有的组件用于打通 `v3` 的【**🚧 基础开发设施**】，主要升级包括：
+
+- 模块化全面迁移至 **ES Module**, 放弃 Layui 2 原有的自身轻量级模块系统。
+- 基础开发设施由过去单一的 Gulp 打包工具，升级为 **Rollup + Babel + PostCSS** 的组合式构建流程。
+  为融入前端更广阔的生态，发行版本提供了三种导入方式：
+  - 浏览器 IIFE 版本
+  - 浏览器 ESM 版本
+  - Node 构建环境 ESM 版本
+- 使用 **Prettier + ESLint** 来统一代码格式和规范，并且我们在「_本地开发阶段_、_git commit 阶段_、_CI 阶段_」都加入了 Code Formatting 和 Linting 的检查，全链路确保代码质量的提升。(后续也可能会考虑直接使用一体化工具链替代，如：Biome)
+- 使用 **Jest** 作为单元测试工具，同时也提供了可视化测试示例页面，多方面提升版本发行的稳定性
+- 开发模式由过去直接导入源码，切换为导入 watch 构建后的代码，让调试更贴近生产环境，避免 src 与 dist 代码表现的差异问题。
+- 另外我们还为 Layui 2 既有的组件库添加了 **CSS Variable**，这意味着重置主题终于变方便了。
+- 浏览器兼容采用 [browserslist](https://github.com/browserslist/browserslist#readme) 默认配置，不再支持 IE。
+
+### 下载： [layui-v3.0.0-alpha.0.zip](https://gitee.com/layui/layui/attach_files/2420141/download)
+
+---
+
+
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
 <h2 id="v2.13.0" lay-pid="2.10+" class="ws-anchor">
