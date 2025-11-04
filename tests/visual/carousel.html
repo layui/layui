@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>轮播组件 - layui</title>
+
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+
+    <style>
+      body {
+        padding: 20px;
+      }
+
+      /* 为了区分效果 */
+      div[carousel-item] > * {
+        text-align: center;
+        line-height: 280px;
+        color: #fff;
+      }
+      div[carousel-item] > *:nth-child(2n) {
+        background-color: #009688;
+      }
+      div[carousel-item] > *:nth-child(2n + 1) {
+        background-color: #5fb878;
+      }
+
+      #test2 div[carousel-item] > * {
+        line-height: 120px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layui-carousel" id="test1" lay-filter="test1">
+      <div carousel-item>
+        <div>条目1</div>
+        <div>条目2</div>
+        <div>条目3</div>
+        <div>条目4</div>
+      </div>
+    </div>
+
+    <br />
+
+    <div class="layui-carousel" id="test2">
+      <div carousel-item>
+        <div>条目1</div>
+        <div>条目2</div>
+      </div>
+    </div>
+
+    <br />
+
+    <div class="layui-carousel" id="test3">
+      <div carousel-item>
+        <div>条目1</div>
+        <div>条目2</div>
+        <div>条目3</div>
+        <div>条目4</div>
+      </div>
+    </div>
+
+    <br />
+
+    <div class="layui-carousel" id="test4">
+      <div carousel-item>
+        <div>
+          <img src="https://unpkg.com/outeres/demo/carousel/720x360-1.jpg" />
+        </div>
+        <div>
+          <img src="https://unpkg.com/outeres/demo/carousel/720x360-2.jpg" />
+        </div>
+        <div>
+          <img src="https://unpkg.com/outeres/demo/carousel/720x360-3.jpg" />
+        </div>
+        <div>
+          <img src="https://unpkg.com/outeres/demo/carousel/720x360-4.jpg" />
+        </div>
+        <div>
+          <img src="https://unpkg.com/outeres/demo/carousel/720x360-5.jpg" />
+        </div>
+      </div>
+    </div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use('carousel', () => {
+        var carousel = layui.carousel;
+
+        // 实例
+        var carInst = carousel.render({
+          elem: '#test1',
+          index: 2,
+          // full: true,
+          arrow: 'always',
+          autoplay: 'always',
+          change: (obj) => {
+            console.log(obj);
+          },
+          // interval: 5000,
+          // autoplay: false,
+          // indicator: 'outside',
+          // trigger: 'hover'
+        });
+
+        // console.log(carInst); carInst.goto(1);
+
+        // 事件
+        /*
+  carousel.on('change(test1)', function(obj) {
+    console.log(obj)
+  });
+  */
+
+        carousel.render({
+          elem: '#test2',
+          interval: 1800,
+          // full: true,
+          anim: 'fade',
+          height: '120px',
+        });
+
+        carousel.render({
+          elem: '#test3',
+          // full: true,
+          arrow: 'always',
+          // autoplay: false,
+          // indicator: 'outside',
+          // trigger: 'hover',
+          anim: 'updown',
+          // full: true
+        });
+
+        // 图片轮播
+        carousel.render({
+          elem: '#test4',
+          width: '720px',
+          height: '360px',
+          interval: 5000,
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -16,7 +16,6 @@
 .nojekyll
 .project
 .settings
-package-lock.json
 Thumbs.db
 
 .idea/
@@ -25,7 +24,8 @@ _site/
 .vscode/
 node_modules/
 
+# ESLint cache
+.eslintcache
 
 # Published folders
 /release/
-/v/

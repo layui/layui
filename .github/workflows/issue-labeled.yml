@@ -41,7 +41,7 @@ jobs:
             @${{ github.event.issue.user.login }} 你好，为了提升沟通效率，我们对 Issue 制定了严格的要求，你的 Issue 因不符合规定而被自动关闭。
             建议你在下次创建 Issue 时，遵循相应规范和社区行为准则。谢谢。
             > ${{ steps.template.outputs.CONTRIBUTING }}
-      
+
       - name: need reproduce
         if: github.event.label.name == 'need reproduce'
         uses: actions-cool/issues-helper@v3
@@ -68,7 +68,7 @@ jobs:
             - 通过其他技术社区搜索相关资料、或充分利用当前主流的人工智能大模型
             - [Discussions](https://github.com/layui/layui/discussions)
             > ${{ steps.template.outputs.CONTRIBUTING }}
-            
+
       - name: unrelated
         if: github.event.label.name == 'unrelated'
         uses: actions-cool/issues-helper@v3

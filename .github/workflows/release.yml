@@ -11,7 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          NODE_ENV: development
 
       - name: Get the version
         id: get_version
@@ -28,13 +39,13 @@ jobs:
 
           # 按日期排序标签，获取上一个标签
           PREVIOUS_TAG=$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags | sed -n 2p)
-          
+
           # 获取当前标签
           CURRENT_TAG=${GITHUB_REF#refs/tags/}
 
           echo "Previous Tag: $PREVIOUS_TAG"
           echo "Current Tag: $CURRENT_TAG"
-          
+
           for COMMIT_SHA in $(git log ${PREVIOUS_TAG}...$CURRENT_TAG --pretty=format:"%H")
           do
             USER=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
@@ -61,14 +72,10 @@ jobs:
       - name: Create Zip File
         id: asset
         run: |
-          DIR_NAME="layui-${{ env.VERSION }}"
-          mkdir -p $DIR_NAME/layui
-          mv dist layui
-          mv layui $DIR_NAME/
-          mv examples/introduce/* $DIR_NAME/
-          7z a $DIR_NAME.zip $DIR_NAME
+          npm run release
+          DIR_NAME="release/assets/layui-${{ env.VERSION }}"
           echo "filename=$DIR_NAME" >> $GITHUB_OUTPUT
-            
+
       - name: GH Release
         id: create_release
         uses: softprops/action-gh-release@v2
@@ -76,7 +83,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           body: |
-            - **更新日志**: https://layui.dev/docs/2/versions.html#${{ env.VERSION }}
+            - **更新日志**: https://layui.dev/docs/3/versions.html#${{ env.VERSION }}
             - **本次贡献**: ${{ steps.contributors.outputs.usernames }} 🎉
           prerelease: ${{ steps.prerelease.outputs.prerelease }}
           files: ${{ steps.asset.outputs.filename }}.zip

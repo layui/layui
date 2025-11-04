@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dev - layui</title>
+    <link href="../assets/dist/css/layui.css" rel="stylesheet" />
+    <link href="../assets/modules/test/test.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module">
+      import {
+        layui,
+        lay,
+        componentBuilder,
+        layer,
+      } from '../assets/dist/layui.esm.js';
+
+      layer.alert(`Hello Layui ${layui.v}.`, {
+        shade: false,
+      });
+
+      console.log(layui);
+    </script>
+  </body>
+</html>

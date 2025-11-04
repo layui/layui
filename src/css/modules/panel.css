@@ -1,0 +1,98 @@
+/*
+ * 面板
+ */
+
+/* 折叠面板 */
+.layui-collapse {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--lay-border-radius);
+}
+.layui-colla-item,
+.layui-colla-content {
+  border-top-width: 1px;
+  border-top-style: solid;
+}
+.layui-colla-item:first-child {
+  border-top: none;
+}
+.layui-colla-title {
+  position: relative;
+  height: 42px;
+  line-height: 42px;
+  padding: 0 15px 0 35px;
+  color: #333;
+  background-color: var(--lay-color-gray);
+  cursor: pointer;
+  font-size: 14px;
+  overflow: hidden;
+}
+.layui-colla-content {
+  display: none;
+  padding: 10px 15px;
+  line-height: 1.6;
+  color: #5f5f5f;
+}
+.layui-colla-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  margin-top: -7px;
+  font-size: 14px;
+  line-height: normal;
+  transition: all 0.2s;
+}
+.layui-colla-item.layui-show > .layui-colla-title .layui-colla-icon {
+  transform: rotate(90deg);
+}
+.layui-colla-item.layui-show > .layui-colla-content {
+  display: block;
+}
+
+/* 卡片面板 */
+.layui-card {
+  margin-bottom: 15px;
+  border-radius: var(--lay-border-radius);
+  background-color: #fff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.layui-card:last-child {
+  margin-bottom: 0;
+}
+.layui-card-header,
+.layui-card-body {
+  position: relative;
+  padding: 10px 15px;
+}
+.layui-card-header {
+  border-bottom: 1px solid #f8f8f8;
+  color: #333;
+  border-radius: var(--lay-border-radius) 2px 0 0;
+  font-size: 14px;
+}
+.layui-card-body .layui-table {
+  margin: 5px 0;
+}
+.layui-card .layui-tab {
+  margin: 0;
+}
+
+/* 常规面板 */
+.layui-panel {
+  position: relative;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--lay-border-radius);
+  box-shadow: 1px 1px 4px rgb(0 0 0 / 8%);
+  background-color: #fff;
+  color: #5f5f5f;
+}
+
+/* 窗口面板 */
+.layui-panel-window {
+  position: relative;
+  padding: 15px;
+  border-radius: 0;
+  border-top: 5px solid var(--lay-border-color);
+  background-color: #fff;
+}

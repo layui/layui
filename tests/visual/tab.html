@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>选项卡 - layui</title>
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+  </head>
+  <body>
+    <div class="layui-container layui-padding-3">
+      <blockquote class="layui-elem-quote">
+        📣 升级提示：当前 tab 仅为兼容保留，推荐使用全新 tabs 组件平替
+      </blockquote>
+
+      <hr />
+      <br />
+
+      <div class="layui-tab" lay-filter="test" lay-allowClose="true">
+        <ul class="layui-tab-title">
+          <li class="layui-this" lay-id="1">Tab1</li>
+          <li lay-id="2">Tab2</li>
+          <li lay-id="3">Tab3</li>
+          <li lay-id="4">Tab4</li>
+          <li lay-id="5">Tab5</li>
+        </ul>
+        <div class="layui-tab-content">
+          <div class="layui-tab-item layui-show">Tab Content-1</div>
+          <div class="layui-tab-item">Tab Content-2</div>
+          <div class="layui-tab-item">Tab Content-3</div>
+          <div class="layui-tab-item">Tab Content-4</div>
+          <div class="layui-tab-item">Tab Content-5</div>
+        </div>
+      </div>
+
+      <div class="layui-btn-container">
+        <button class="layui-btn" onclick="layui.element.tabChange('test', 3)">
+          切换到：Tab3
+        </button>
+        <button class="layui-btn" onclick="layui.element.tabDelete('test', 4)">
+          删除：Tab4
+        </button>
+        <button class="layui-btn" lay-on="add">添加 Tab</button>
+      </div>
+
+      <hr />
+      <br />
+
+      <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+          <li class="layui-this">标题1</li>
+          <li>标题2</li>
+          <li>标题3</li>
+          <li>标题4</li>
+          <li>标题5</li>
+          <li>标题6</li>
+        </ul>
+      </div>
+
+      <div class="layui-inline">
+        <div class="layui-tab layui-tab-card">
+          <ul class="layui-tab-title">
+            <li class="layui-this">标题一</li>
+            <li>标题2</li>
+            <li>标题3</li>
+            <li>标题4</li>
+            <li>标题5</li>
+            <li>标题6</li>
+          </ul>
+          <div class="layui-tab-content layui-padding-3">
+            <div class="layui-tab-item layui-show">
+              <div class="layui-form">
+                <select>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                </select>
+              </div>
+            </div>
+            <div class="layui-tab-item">2</div>
+            <div class="layui-tab-item">3</div>
+            <div class="layui-tab-item">4</div>
+            <div class="layui-tab-item">5</div>
+            <div class="layui-tab-item">6</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="layui-tab">
+        <ul class="layui-tab-title">
+          <li class="layui-this"><a href="#1">标题题题题题题1</a></li>
+          <li><a href="#2">标题题题2</a></li>
+          <li><a href="#3">标题3</a></li>
+          <li><a href="#4">标题题题题题题题4</a></li>
+          <li><a href="#5">标题5</a></li>
+          <li><a href="#6">标题6</a></li>
+          <li><a href="#7">标题7</a></li>
+          <li><a href="#8">标题题题题题题题8</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(['element', 'form', 'util'], () => {
+        var element = layui.element;
+        var util = layui.util;
+
+        element.on('tab(test)', function (data) {
+          console.log(this, data);
+        });
+
+        element.on('tabDelete(test)', function (data) {
+          console.log(this, data);
+        });
+
+        // 自定义事件
+        util.on({
+          // 新增随机标签
+          add: () => {
+            var n = (Math.random() * 1000) | 0; // 演示标记
+            element.tabAdd('test', {
+              title: 'New Tab ' + n, // 此处加 n 仅为演示区分，实际应用不需要
+              content: 'New Tab Content ' + n,
+              id: 'new-' + n,
+              change: true,
+            });
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

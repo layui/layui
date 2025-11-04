@@ -1,0 +1,199 @@
+/** 初始化 **/
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+button,
+textarea,
+p,
+blockquote,
+th,
+td,
+form,
+pre {
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+a:active,
+a:hover {
+  outline: 0;
+}
+img {
+  display: inline-block;
+  border: none;
+  vertical-align: middle;
+}
+li {
+  list-style: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+}
+h5,
+h6 {
+  font-size: 100%;
+}
+button,
+input,
+select,
+textarea {
+  font-size: 100%;
+}
+input,
+button,
+textarea,
+select,
+optgroup,
+option {
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  outline: 0;
+}
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/** 初始化全局标签 **/
+body {
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-family: var(--lay-font-family);
+}
+hr {
+  height: 0;
+  line-height: 0;
+  margin: 10px 0;
+  padding: 0;
+  border: none;
+  border-bottom: 1px solid var(--lay-border-color);
+  clear: both;
+  overflow: hidden;
+  background: none;
+}
+a {
+  color: #333;
+  text-decoration: none;
+}
+a cite {
+  font-style: normal;
+}
+
+/** 基础通用 **/
+.layui-border-box,
+.layui-border-box * {
+  box-sizing: border-box;
+}
+/* 消除第三方 ui 可能造成的冲突 */
+.layui-box,
+.layui-box * {
+  box-sizing: content-box;
+}
+.layui-clear {
+  clear: both;
+}
+.layui-clear:after {
+  content: "\20";
+  clear: both;
+  display: block;
+  height: 0;
+}
+.layui-clear-space {
+  word-spacing: -5px;
+}
+.layui-inline {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+/* 三角形 */
+.layui-edge {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  width: 0;
+  height: 0;
+  border-width: 6px;
+  border-style: dashed;
+  border-color: transparent;
+  overflow: hidden;
+}
+.layui-edge-top {
+  top: -4px;
+  border-bottom-color: #999;
+  border-bottom-style: solid;
+}
+.layui-edge-right {
+  border-left-color: #999;
+  border-left-style: solid;
+}
+.layui-edge-bottom {
+  top: 2px;
+  border-top-color: #999;
+  border-top-style: solid;
+}
+.layui-edge-left {
+  border-right-color: #999;
+  border-right-style: solid;
+}
+/* 单行溢出省略 */
+.layui-ellip {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+/* 屏蔽选中 */
+.layui-unselect,
+.layui-icon,
+.layui-disabled {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+/* 禁用 */
+.layui-disabled,
+.layui-disabled:hover {
+  color: var(--lay-gray-400) !important;
+  cursor: not-allowed !important;
+}
+/* 纯圆角 */
+.layui-circle {
+  border-radius: 100%;
+}
+.layui-show {
+  display: block !important;
+}
+.layui-hide {
+  display: none !important;
+}
+.layui-show-v {
+  visibility: visible !important;
+}
+.layui-hide-v {
+  visibility: hidden !important;
+}

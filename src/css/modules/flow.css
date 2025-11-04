@@ -1,0 +1,30 @@
+/** 流加载 **/
+.layui-flow-more {
+  margin: 10px 0;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+  clear: both;
+}
+.layui-flow-more a {
+  height: 32px;
+  line-height: 32px;
+}
+.layui-flow-more a * {
+  display: inline-block;
+  vertical-align: top;
+}
+.layui-flow-more a cite {
+  padding: 0 20px;
+  border-radius: var(--lay-border-radius);
+  background-color: var(--lay-gray-300);
+  color: #333;
+  font-style: normal;
+}
+.layui-flow-more a cite:hover {
+  opacity: 0.8;
+}
+.layui-flow-more a i {
+  font-size: 30px;
+  color: #737383;
+}

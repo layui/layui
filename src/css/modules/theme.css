@@ -1,0 +1,123 @@
+/*
+ * 默认主题
+ */
+
+/* 背景颜色 */
+.layui-bg-red {
+  background-color: var(--lay-color-red) !important;
+  color: #fff !important;
+} /*赤*/
+.layui-bg-orange {
+  background-color: var(--lay-color-orange) !important;
+  color: #fff !important;
+} /*橙*/
+.layui-bg-green {
+  background-color: var(--lay-color-primary) !important;
+  color: #fff !important;
+} /*绿*/
+.layui-bg-cyan {
+  background-color: #2f4056 !important;
+  color: #fff !important;
+} /*藏青*/
+.layui-bg-blue {
+  background-color: var(--lay-color-blue) !important;
+  color: #fff !important;
+} /*蓝*/
+.layui-bg-purple {
+  background-color: var(--lay-color-purple) !important;
+  color: #fff !important;
+} /*紫*/
+.layui-bg-black {
+  background-color: var(--lay-color-black) !important;
+  color: #fff !important;
+} /*深*/
+.layui-bg-gray {
+  background-color: var(--lay-color-gray) !important;
+  color: #5f5f5f !important;
+} /*浅*/
+
+/* 边框 */
+.layui-border,
+.layui-quote-nm,
+.layui-elem-field,
+.layui-collapse,
+.layui-panel,
+.layui-colla-item,
+.layui-colla-content,
+.layui-badge-rim,
+.layui-tab-title,
+.layui-tab-title .layui-this:after,
+.layui-tab-bar,
+.layui-tab-card,
+.layui-input,
+.layui-textarea,
+.layui-select,
+.layui-input-split,
+.layui-form-pane .layui-form-label,
+.layui-form-pane .layui-form-item[pane] {
+  border-color: var(--lay-border-color);
+}
+
+.layui-border {
+  border-width: 1px;
+  border-style: solid;
+  color: #5f5f5f !important;
+}
+.layui-border-red {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--lay-color-red) !important;
+  color: var(--lay-color-red) !important;
+}
+.layui-border-orange {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--lay-color-orange) !important;
+  color: var(--lay-color-orange) !important;
+}
+.layui-border-green {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--lay-color-primary) !important;
+  color: var(--lay-color-primary) !important;
+}
+.layui-border-cyan {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #2f4056 !important;
+  color: #2f4056 !important;
+}
+.layui-border-blue {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--lay-color-blue) !important;
+  color: var(--lay-color-blue) !important;
+}
+.layui-border-purple {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--lay-color-purple) !important;
+  color: var(--lay-color-purple) !important;
+}
+.layui-border-black {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--lay-color-black) !important;
+  color: var(--lay-color-black) !important;
+}
+
+/* 分割线边框 */
+hr.layui-border-red,
+hr.layui-border-orange,
+hr.layui-border-green,
+hr.layui-border-cyan,
+hr.layui-border-blue,
+hr.layui-border-purple,
+hr.layui-border-black {
+  border-width: 0 0 1px;
+}
+
+/* 背景边框 */
+.layui-timeline-item:before {
+  background-color: var(--lay-gray-300);
+}

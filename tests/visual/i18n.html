@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>i18n - Layui</title>
+    <link href="./assets/dist/css/layui.css" rel="stylesheet" />
+    <style>
+      body {
+        transition: opacity 0.8s ease-in-out;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body class="layui-padding-3">
+    <div id="root"></div>
+    <template id="template">
+      {{ const i18n = layui.i18n; }}
+      <div class="layui-form">
+        <div class="layui-inline">
+          <strong>{{= i18n.$t('custom.switchLanguage') }}: </strong>
+        </div>
+        <div class="layui-inline">
+          <select id="change-locale" lay-filter="change-locale">
+            <option value="zh-CN">简体中文</option>
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+            <option value="zh-HK">繁體中文</option>
+          </select>
+        </div>
+      </div>
+      <br />
+      <fieldset class="layui-elem-field">
+        <legend>README</legend>
+        <div class="layui-field-box layui-text" id="tpl-test">
+          <p>{{= i18n.$t('custom.readme.description') }}</p>
+          <ul>
+            <li>
+              <strong>locale</strong>:
+              <span style="color: red">{{= i18n.config.locale }}</span>
+            </li>
+            <li>
+              <strong>Date</strong>: {{= new
+              Date().toLocaleDateString(i18n.config.locale) }}
+            </li>
+            <li>
+              <strong>Hello</strong>: {{= i18n.$t('custom.readme.hello') }}
+            </li>
+          </ul>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>code</legend>
+        <div class="layui-field-box">
+          <pre id="demo-code" class="layui-code" lay-options="{}">
+            <textarea>
+              code content
+            </textarea>
+          </pre>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>colorpicker</legend>
+        <div class="layui-field-box">
+          <div id="demo-colorpicker"></div>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>dropdown</legend>
+        <div class="layui-field-box">
+          <button id="demo-dropdown" class="layui-btn demo-dropdown-base">
+            <span>Dropdown</span>
+            <i class="layui-icon layui-icon-down layui-font-12"></i>
+          </button>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>flow</legend>
+        <div class="layui-field-box">
+          <div class="flow-demo" id="demo-flow"></div>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>form</legend>
+        <div class="layui-field-box">
+          <form class="layui-form" action="">
+            <div class="layui-form-item">
+              <label class="layui-form-label"
+                >{{= i18n.$t('custom.form.required') }}</label
+              >
+              <div class="layui-input-block">
+                <input
+                  type="text"
+                  name="username"
+                  lay-verify="required"
+                  lay-vertype="alert"
+                  placeholder="{{= i18n.$t('custom.form.placeholder') }}"
+                  autocomplete="off"
+                  class="layui-input"
+                />
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <div class="layui-inline">
+                <label class="layui-form-label"
+                  >{{= i18n.$t('custom.form.phone') }}</label
+                >
+                <div class="layui-input-inline layui-input-wrap">
+                  <input
+                    type="tel"
+                    name="phone"
+                    lay-verify="phone"
+                    autocomplete="off"
+                    value="123456"
+                    lay-affix="clear"
+                    class="layui-input demo-phone"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <div class="layui-inline">
+                <label class="layui-form-label"
+                  >{{= i18n.$t('custom.form.email') }}</label
+                >
+                <div class="layui-input-inline">
+                  <input
+                    type="text"
+                    name="email"
+                    value="123.com"
+                    lay-verify="email"
+                    autocomplete="off"
+                    class="layui-input"
+                  />
+                </div>
+              </div>
+              <div class="layui-inline">
+                <label class="layui-form-label"
+                  >{{= i18n.$t('custom.form.date') }}</label
+                >
+                <div class="layui-input-inline layui-input-wrap">
+                  <div class="layui-input-prefix">
+                    <i class="layui-icon layui-icon-date"></i>
+                  </div>
+                  <input
+                    type="text"
+                    name="date"
+                    value="2077"
+                    id="date"
+                    lay-verify="date"
+                    placeholder="yyyy-MM-dd"
+                    autocomplete="off"
+                    class="layui-input"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label"
+                >{{= i18n.$t('custom.form.select') }}</label
+              >
+              <div class="layui-input-block">
+                <select name="interest" lay-filter="aihao" lay-search>
+                  <option value=""></option>
+                  <option value="0">AAA</option>
+                  <option value="1" selected>BBB</option>
+                  <option value="2">CCC</option>
+                  <option value="3">DDD</option>
+                  <option value="4">EEE</option>
+                </select>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                <button
+                  type="submit"
+                  class="layui-btn"
+                  lay-submit
+                  lay-filter="demo1"
+                >
+                  {{= i18n.$t('custom.form.submit') }}
+                </button>
+                <button type="reset" class="layui-btn layui-btn-primary">
+                  {{= i18n.$t('custom.form.reset') }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>laydate</legend>
+        <div class="layui-field-box">
+          <div class="layui-inline">
+            <input class="layui-input" id="demo-laydate" />
+          </div>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>layer</legend>
+        <div class="layui-field-box">
+          <button
+            type="button"
+            class="layui-btn layui-btn-primary"
+            lay-on="alert"
+          >
+            Alert
+          </button>
+          <button
+            type="button"
+            class="layui-btn layui-btn-primary"
+            lay-on="prompt"
+          >
+            Prompt
+          </button>
+          <button
+            type="button"
+            class="layui-btn layui-btn-primary"
+            lay-on="photos"
+          >
+            Photos
+          </button>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>laypage</legend>
+        <div class="layui-field-box">
+          <div id="demo-laypage-all"></div>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>table</legend>
+        <div class="layui-field-box">
+          <table class="layui-hide" id="demo-table" lay-filter="test"></table>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>transfer</legend>
+        <div class="layui-field-box">
+          <div id="demo-transfer"></div>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>tree</legend>
+        <div class="layui-field-box">
+          <div id="demo-tree"></div>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>upload</legend>
+        <div class="layui-field-box">
+          <button type="button" class="layui-btn" id="demo-upload">
+            <i class="layui-icon layui-icon-upload"></i> Upload
+          </button>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>utils</legend>
+        <div class="layui-field-box">
+          <label>
+            timeAgo: <input id="demo-time-ago-picker" type="datetime-local" />
+            <span id="demo-time-ago-display"></span>
+          </label>
+          <br />
+          <label>
+            toDateString:
+            <div id="demo-toDateString"></div>
+          </label>
+        </div>
+      </fieldset>
+    </template>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(async () => {
+        const {
+          $,
+          colorpicker,
+          dropdown,
+          flow,
+          form,
+          i18n,
+          laydate,
+          laypage,
+          laytpl,
+          layer,
+          table,
+          transfer,
+          tree,
+          upload,
+          util,
+        } = layui;
+
+        // 演示异步加载组件语言包
+        const { default: en } = await import('./assets/i18n/en.js');
+        const { default: fr } = await import('./assets/i18n/fr.js');
+        const { default: zhHK } = await import('./assets/i18n/zh-HK.js');
+
+        // 组件 i18n 配置
+        i18n.set({
+          locale: layui.data('layui-i18n-test').locale || 'zh-CN', // 指定语言
+          messages: {
+            en, // 扩展英语
+            fr, // 扩展法语
+            'zh-HK': zhHK, // 扩展繁体中文
+          },
+        });
+
+        // 业务 i18n 配置
+        i18n.set({
+          messages: {
+            'zh-CN': {
+              custom: {
+                switchLanguage: '切换语言',
+                readme: {
+                  description:
+                    'layui.i18n.$t 是私有方法（未文档化），此处仅用于演示',
+                  hello: '你好',
+                },
+                form: {
+                  required: '验证必填项',
+                  phone: '验证手机号',
+                  email: '验证邮箱',
+                  date: '验证日期',
+                  select: '选择框',
+                  submit: '立即提交',
+                  reset: '重置',
+                  placeholder: '请输入',
+                },
+              },
+            },
+            en: {
+              custom: {
+                switchLanguage: 'Switch Language',
+                readme: {
+                  description:
+                    'layui.i18n.$t is a private method (undocumented), used here for demonstration only.',
+                  hello: 'Hello',
+                },
+                form: {
+                  required: 'Required',
+                  phone: 'Telephone',
+                  email: 'Email',
+                  date: 'Date',
+                  select: 'Select',
+                  submit: 'Submit',
+                  reset: 'Reset',
+                  placeholder: 'Please enter',
+                },
+              },
+            },
+            fr: {
+              custom: {
+                switchLanguage: 'Changer la langue',
+                readme: {
+                  description:
+                    'layui.i18n.$t est une méthode privée (non documentée), utilisée ici uniquement à des fins de démonstration.',
+                  hello: 'Bonjour',
+                },
+                form: {
+                  required: 'Requis',
+                  phone: 'Téléphone',
+                  email: 'Email',
+                  date: 'Date',
+                  select: 'Sélection',
+                  submit: 'Soumettre maintenant',
+                  reset: 'Réinitialiser',
+                  placeholder: 'Veuillez entrer',
+                },
+              },
+            },
+            'zh-HK': {
+              custom: {
+                switchLanguage: '切換語言',
+                readme: {
+                  description:
+                    'layui.i18n.$t 是私有方法（未文檔化），此處僅用於示範',
+                  hello: '你好',
+                },
+                form: {
+                  required: '驗證必填項',
+                  phone: '驗證手機號',
+                  email: '驗證郵箱',
+                  date: '驗證日期',
+                  select: '選擇框',
+                  submit: '立即提交',
+                  reset: '重置',
+                  placeholder: '請輸入',
+                },
+              },
+            },
+          },
+        });
+
+        // 渲染页面模板
+        const template = $('#template').html();
+        const html = laytpl(template, { tagStyle: 'modern' }).render();
+        $('#root').html(html);
+
+        /**
+         * 组件示例
+         */
+
+        // code
+        layui.code({
+          elem: '#demo-code',
+          preview: true,
+          tools: ['copy', 'full', 'window'],
+          header: true,
+          lang: 'html',
+          langMarker: true,
+        });
+
+        // colorpicker
+        colorpicker.render({
+          elem: '#demo-colorpicker',
+        });
+
+        // dropdown
+        dropdown.render({
+          elem: '#demo-dropdown',
+        });
+
+        // flow
+        flow.load({
+          elem: '#demo-flow',
+          scrollElem: '#demo-flow',
+          done: (page, next) => {
+            // 模拟数据插入
+            setTimeout(() => {
+              var lis = [];
+              for (var i = 0; i < 3; i++) {
+                lis.push('<li>' + ((page - 1) * 3 + i + 1) + '</li>');
+              }
+              next(lis.join(''), page < 2);
+            }, 200);
+          },
+        });
+
+        // form
+        form.on('submit(demo1)', (data) => {
+          var field = data.field;
+          // 显示填写结果，仅作演示用
+          layer.alert(JSON.stringify(field));
+          return false;
+        });
+
+        //laydate
+        laydate.render({
+          elem: '#demo-laydate',
+          type: 'datetime',
+          calendar: true,
+        });
+
+        // layer
+        util.on({
+          alert: () => {
+            layer.alert('Hello world');
+          },
+          prompt: () => {
+            layer.prompt({ formType: 1, maxlength: 3 }, (value, index) => {
+              layer.close(index);
+            });
+          },
+          photos: () => {
+            layer.photos({
+              photos: {
+                title: 'Photos Demo',
+                start: 0,
+                data: [
+                  {
+                    alt: 'layer',
+                    pid: 1,
+                    src: 'https://unpkg.com/outeres@0.1.1/demo/layer.png',
+                  },
+                  {
+                    alt: 'error',
+                    pid: 3,
+                    src: '错误提示演示',
+                  },
+                  {
+                    alt: 'universe',
+                    pid: 5,
+                    src: 'https://unpkg.com/outeres@0.1.1/demo/outer-space.jpg',
+                  },
+                ],
+              },
+            });
+          },
+        });
+
+        // laypage
+        laypage.render({
+          elem: 'demo-laypage-all',
+          count: 100,
+          layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip'],
+        });
+
+        // table
+        table.render({
+          elem: '#demo-table',
+          cols: [
+            [
+              { field: 'test', title: '1', sort: true },
+              { field: 'test2', title: '2', sort: true },
+            ],
+          ],
+          data: new Array(0),
+          toolbar: 'default',
+          defaultToolbar: ['filter', 'exports', 'print'],
+          height: 'full',
+          page: true,
+          text: {
+            // none: 'none'
+          },
+        });
+
+        // transfer
+        transfer.render({
+          elem: '#demo-transfer',
+          data: [
+            { value: '1', title: 'Item 1' },
+            { value: '2', title: 'Item 2' },
+            { value: '3', title: 'Item 3' },
+          ],
+          showSearch: true,
+        });
+
+        // tree
+        tree.render({
+          elem: '#demo-tree',
+          //data: [],
+          data: [
+            {
+              title: 'Item 1',
+              id: 1,
+              children: [{ title: 'Item 1-1', id: 2 }],
+            },
+          ],
+          edit: ['add', 'update', 'del'],
+        });
+
+        // upload
+        upload.render({
+          elem: '#demo-upload',
+          url: '', // 实际使用时改成您自己的上传接口即可。
+          multiple: true,
+          accept: 'file',
+          //exts: 'zip',
+          number: 1,
+          //size: 60,
+        });
+
+        // util
+        $('#demo-time-ago-picker').on('change', function () {
+          $('#demo-time-ago-display').html(util.timeAgo(this.value));
+        });
+
+        $('#demo-toDateString').html(
+          util.toDateString('2023-01-01 11:35:25', 'yyyy-MM-dd HH:mm:ss A') +
+            '<br>' +
+            util.toDateString('2023-01-01 18:35:25', 'yyyy-MM-dd HH:mm:ss A'),
+        );
+
+        // 演示：切换语言
+        $('#change-locale').val(i18n.config.locale);
+        form.render('select').on('select(change-locale)', (elem) => {
+          // 记录语言，并重载页面（推荐）
+          layui.data('layui-i18n-test', {
+            key: 'locale',
+            value: elem.value,
+          });
+          window.location.reload();
+        });
+
+        $('body').css('opacity', 1);
+        layer.msg(layui.v);
+        console.log(i18n.config);
+      });
+    </script>
+  </body>
+</html>

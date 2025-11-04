@@ -1,0 +1,266 @@
+/** 导航菜单 **/
+.layui-nav {
+  position: relative;
+  padding: 0 15px;
+  background-color: var(--lay-color-black);
+  color: #fff;
+  border-radius: var(--lay-border-radius);
+  font-size: 0;
+  box-sizing: border-box;
+}
+.layui-nav * {
+  font-size: 14px;
+}
+.layui-nav .layui-nav-item {
+  position: relative;
+  display: inline-block;
+  margin-top: 0;
+  list-style: none;
+  vertical-align: middle;
+  line-height: 60px;
+}
+.layui-nav .layui-nav-item a {
+  display: block;
+  padding: 0 20px;
+  color: #fff;
+  color: rgba(255, 255, 255, 0.7);
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+.layui-nav-bar,
+.layui-nav .layui-this:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 3px;
+  background-color: var(--lay-color-accent);
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  pointer-events: none;
+}
+.layui-nav-bar {
+  z-index: 1000;
+}
+.layui-nav[lay-bar="disabled"] .layui-nav-bar {
+  display: none;
+}
+.layui-nav .layui-this a,
+.layui-nav .layui-nav-item a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+.layui-nav .layui-this:after {
+  top: auto;
+  bottom: 0;
+  width: 100%;
+}
+.layui-nav-img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.layui-nav .layui-nav-more {
+  position: absolute;
+  top: 0;
+  right: 3px;
+  left: auto !important;
+  margin-top: 0;
+  font-size: 12px;
+  cursor: pointer;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.layui-nav .layui-nav-mored,
+.layui-nav-itemed > a .layui-nav-more {
+  transform: rotate(180deg);
+}
+
+.layui-nav-child {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 65px;
+  min-width: 100%;
+  line-height: 36px;
+  padding: 5px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--lay-border-color);
+  background-color: #fff;
+  z-index: 100;
+  border-radius: var(--lay-border-radius);
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+.layui-nav .layui-nav-child a {
+  color: #5f5f5f;
+  color: rgba(0, 0, 0, 0.8);
+}
+.layui-nav .layui-nav-child a:hover {
+  background-color: #f8f8f8;
+  color: rgba(0, 0, 0, 0.8);
+}
+.layui-nav-child dd {
+  margin: 1px 0;
+  position: relative;
+}
+.layui-nav-child dd.layui-this {
+  background-color: #f8f8f8;
+  color: #000;
+}
+.layui-nav-child dd.layui-this:after {
+  display: none;
+}
+.layui-nav-child-r {
+  left: auto;
+  right: 0;
+}
+.layui-nav-child-c {
+  text-align: center;
+}
+
+/* 垂直导航菜单 */
+.layui-nav.layui-nav-tree {
+  width: 200px;
+  padding: 0;
+}
+.layui-nav-tree .layui-nav-item {
+  display: block;
+  width: 100%;
+  line-height: 40px;
+}
+.layui-nav-tree .layui-nav-item a {
+  position: relative;
+  height: 40px;
+  line-height: 40px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.layui-nav-tree .layui-nav-item > a {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.layui-nav-tree .layui-nav-more {
+  right: 15px;
+}
+.layui-nav-tree .layui-nav-item > a .layui-nav-more {
+  padding: 5px 0;
+}
+.layui-nav-tree .layui-nav-bar {
+  width: 5px;
+  height: 0;
+}
+.layui-side .layui-nav-tree .layui-nav-bar {
+  width: 2px;
+}
+.layui-nav-tree .layui-this,
+.layui-nav-tree .layui-this > a,
+.layui-nav-tree .layui-this > a:hover,
+.layui-nav-tree .layui-nav-child dd.layui-this,
+.layui-nav-tree .layui-nav-child dd.layui-this a {
+  background-color: var(--lay-color-primary);
+  color: #fff;
+}
+.layui-nav-tree .layui-this:after {
+  display: none;
+}
+.layui-nav-tree .layui-nav-title a,
+.layui-nav-tree .layui-nav-title a:hover,
+.layui-nav-itemed > a {
+  color: #fff !important;
+}
+.layui-nav-tree .layui-nav-bar {
+  background-color: var(--lay-color-primary);
+}
+
+.layui-nav-tree .layui-nav-child {
+  position: relative;
+  z-index: 0;
+  top: 0;
+  border: none;
+  background: none;
+  background-color: rgba(0, 0, 0, 0.3);
+  box-shadow: none;
+}
+.layui-nav-tree .layui-nav-child dd {
+  margin: 0;
+}
+.layui-nav-tree .layui-nav-child a {
+  color: #fff;
+  color: rgba(255, 255, 255, 0.7);
+}
+.layui-nav-tree .layui-nav-child a:hover {
+  background: none;
+  color: #fff;
+}
+
+/* 垂直导航 - 展开状态 */
+.layui-nav-itemed > .layui-nav-child,
+.layui-nav-itemed > .layui-nav-child > .layui-this > .layui-nav-child {
+  display: block;
+}
+
+/* 垂直导航 - 侧边 */
+.layui-nav-side {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  overflow-x: hidden;
+  z-index: 999;
+}
+
+/* 导航浅色背景 */
+.layui-nav.layui-bg-gray .layui-nav-item a,
+.layui-nav-tree.layui-bg-gray a {
+  color: #373737;
+  color: rgba(0, 0, 0, 0.8);
+}
+.layui-nav-tree.layui-bg-gray .layui-nav-itemed > a {
+  color: #000 !important;
+}
+.layui-nav.layui-bg-gray .layui-this a {
+  color: var(--lay-color-accent);
+}
+.layui-nav-tree.layui-bg-gray .layui-nav-child {
+  padding-left: 11px;
+  background: none;
+}
+.layui-nav-tree.layui-bg-gray .layui-this,
+.layui-nav-tree.layui-bg-gray .layui-this > a,
+.layui-nav-tree.layui-bg-gray .layui-nav-child dd.layui-this,
+.layui-nav-tree.layui-bg-gray .layui-nav-child dd.layui-this a {
+  background: none !important;
+  color: var(--lay-color-accent) !important;
+  font-weight: 700;
+}
+.layui-nav-tree.layui-bg-gray .layui-nav-bar {
+  background-color: var(--lay-color-accent);
+}
+
+/** 面包屑 **/
+.layui-breadcrumb {
+  visibility: hidden;
+  font-size: 0;
+}
+.layui-breadcrumb > * {
+  font-size: 14px;
+}
+.layui-breadcrumb a {
+  color: #999 !important;
+}
+.layui-breadcrumb a:hover {
+  color: var(--lay-color-accent) !important;
+}
+.layui-breadcrumb a cite {
+  color: #5f5f5f;
+  font-style: normal;
+}
+.layui-breadcrumb span[lay-separator] {
+  margin: 0 10px;
+  color: #999;
+}

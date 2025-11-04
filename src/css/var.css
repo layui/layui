@@ -1,0 +1,51 @@
+/**
+ * Layui
+ */
+
+:root,
+.light {
+  /* 默认主题色 */
+  --lay-color-primary: #16baaa;
+  --lay-color-accent: #16b777;
+
+  /* 七色 */
+  --lay-color-red: #ff5722;
+  --lay-color-orange: #ffb800;
+  --lay-color-green: #16baaa;
+  --lay-color-blue: #1e9fff;
+  --lay-color-purple: #a233c6;
+  --lay-color-black: #2f363c;
+  --lay-color-gray: #fafafa;
+
+  /* 灰度 */
+  --lay-gray-100: #fafafa;
+  --lay-gray-200: #f7f7f7;
+  --lay-gray-300: #eeeeee;
+  --lay-gray-400: #d1d1d1;
+  --lay-gray-500: #c8c8c8;
+  --lay-gray-600: #b7b7b7;
+  --lay-gray-700: #959595;
+  --lay-gray-800: #777777;
+  --lay-gray-900: #5a5a5a;
+
+  /* 边框 */
+  --lay-border-color: var(--lay-gray-300);
+  --lay-border-color-accent: var(--lay-gray-400);
+  --lay-border-radius: 2px;
+  --lay-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  --lay-box-shadow-sm: 0 0.5px 1px rgba(0, 0, 0, 0.08);
+  --lay-box-shadow-lg: 0 3px 6px rgba(0, 0, 0, 0.3);
+
+  /* 字体 */
+  --lay-font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --lay-font-monospace: "Courier New", Consolas, "Lucida Console", monospace;
+
+  /* 间距 */
+  --lay-spacing: 16px;
+  --lay-spacing-xs: 5px;
+  --lay-spacing-sm: 8px;
+  --lay-spacing-lg: 24px;
+  --lay-spacing-xl: 32px;
+}

@@ -1,0 +1,452 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>树组件 - layui</title>
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" media="all" />
+  </head>
+  <body class="layui-padding-5">
+    <div class="layui-btn-container">
+      <button type="button" class="layui-btn" lay-on="getChecked">
+        获取选中数据
+      </button>
+      <button type="button" class="layui-btn" lay-on="setChecked">
+        设置节点勾选
+      </button>
+      <button type="button" class="layui-btn" lay-on="reload">重载实例</button>
+    </div>
+
+    <div id="test1"></div>
+    <br />
+    <hr />
+    <br />
+    <div id="test2"></div>
+    <br />
+    <hr />
+    <br />
+    <div id="test3"></div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(['tree', 'layer', 'util'], () => {
+        var $ = layui.$;
+        var tree = layui.tree;
+        var layer = layui.layer;
+        var util = layui.util;
+        var index = 100;
+
+        // 数据源
+        var data1 = [
+          {
+            title: 'A-1',
+            id: 1,
+            children: [
+              {
+                title: 'B-1-1',
+                id: 3,
+                href: '',
+                children: [
+                  {
+                    title: 'C-1-1-3',
+                    id: 23,
+                    children: [
+                      {
+                        title: 'D-1-1-3-1',
+                        id: 24,
+                        children: [
+                          {
+                            title: 'E-1-1-3-1-1',
+                            id: 30,
+                          },
+                          {
+                            title: 'E-1-1-3-1-2',
+                            id: 31,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    title: 'C-1-1-1',
+                    id: 7,
+                    checked: true,
+                    children: [
+                      {
+                        title: 'D-1-1-1-1',
+                        id: 15,
+                        href: '',
+                      },
+                    ],
+                  },
+                  {
+                    title: 'C-1-1-2',
+                    id: 8,
+                    children: [
+                      {
+                        title: 'D-1-1-2-1',
+                        id: 32,
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                title: 'B-1-2',
+                id: 4,
+                spread: true,
+                children: [
+                  {
+                    title: 'C-1-2-1',
+                    id: 9,
+                    checked: true,
+                    disabled: true,
+                  },
+                  {
+                    title: 'C-1-2-2',
+                    id: 10,
+                  },
+                ],
+              },
+              {
+                title: 'B-1-3',
+                id: 20,
+                children: [
+                  {
+                    title: 'C-1-3-1',
+                    id: 21,
+                  },
+                  {
+                    title: 'C-1-3-2',
+                    id: 22,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            title: 'A-2',
+            id: 2,
+            spread: true,
+            children: [
+              {
+                title: 'B-2-1',
+                id: 5,
+                spread: true,
+                children: [
+                  {
+                    title: 'C-2-1-1',
+                    id: 11,
+                  },
+                  {
+                    title: 'C-2-1-2',
+                    id: 12,
+                  },
+                ],
+              },
+              {
+                title: 'B-2-2',
+                id: 6,
+                checked: true,
+                children: [
+                  {
+                    title: 'C-2-2-1',
+                    id: 13,
+                  },
+                  {
+                    title: 'C-2-2-2',
+                    id: 14,
+                    disabled: true,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            title: 'A-3',
+            id: 16,
+            children: [
+              {
+                title: 'B-3-1',
+                id: 17,
+                fixed: true,
+                children: [
+                  {
+                    title: 'C-3-1-1',
+                    id: 18,
+                  },
+                  {
+                    title: 'C-3-1-2',
+                    id: 19,
+                  },
+                ],
+              },
+              {
+                title: 'B-3-2',
+                id: 27,
+                children: [
+                  {
+                    title: 'C-3-2-1',
+                    id: 28,
+                  },
+                  {
+                    title: 'C-3-2-2',
+                    id: 29,
+                  },
+                ],
+              },
+            ],
+          },
+        ];
+
+        // 数据源 2
+        var data2 = [
+          {
+            title: 'A-1',
+            id: 1,
+            field: 'name1',
+            checked: true,
+            spread: true,
+            children: [
+              {
+                title: 'B-1-1 可允许跳转',
+                id: 3,
+                field: 'name11',
+                href: '',
+                children: [
+                  {
+                    title: 'C-1-1-3',
+                    id: 23,
+                    field: '',
+                    children: [
+                      {
+                        title: 'D-1-1-3-1',
+                        id: 24,
+                        field: '',
+                        children: [
+                          { title: 'E-1-1-3-1-1', id: 30, field: '' },
+                          { title: 'E-1-1-3-1-2', id: 31, field: '' },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    title: 'C-1-1-1',
+                    id: 7,
+                    field: '',
+                    children: [
+                      {
+                        title: 'D-1-1-1-1 可允许跳转',
+                        id: 15,
+                        field: '',
+                        href: '',
+                      },
+                    ],
+                  },
+                  {
+                    title: 'C-1-1-2',
+                    id: 8,
+                    field: '',
+                    children: [{ title: 'D-1-1-2-1', id: 32, field: '' }],
+                  },
+                ],
+              },
+              {
+                title: 'B-1-2',
+                id: 4,
+                spread: true,
+                children: [
+                  { title: 'C-1-2-1', id: 9, field: '', disabled: true },
+                  { title: 'C-1-2-2', id: 10, field: '' },
+                ],
+              },
+              {
+                title: 'B-1-3',
+                id: 20,
+                field: '',
+                children: [
+                  { title: 'C-1-3-1', id: 21, field: '' },
+                  { title: 'C-1-3-2', id: 22, field: '' },
+                ],
+              },
+            ],
+          },
+          {
+            title: 'A-2',
+            id: 2,
+            field: '',
+            spread: true,
+            children: [
+              {
+                title: 'B-2-1',
+                id: 5,
+                field: '',
+                spread: true,
+                children: [
+                  { title: 'C-2-1-1', id: 11, field: '' },
+                  { title: 'C-2-1-2', id: 12, field: '' },
+                ],
+              },
+              {
+                title: 'B-2-2',
+                id: 6,
+                field: '',
+                children: [
+                  { title: 'C-2-2-1', id: 13, field: '' },
+                  { title: 'C-2-2-2', id: 14, field: '', disabled: true },
+                ],
+              },
+            ],
+          },
+          {
+            title: 'A-3',
+            id: 16,
+            field: '',
+            children: [
+              {
+                title: 'B-3-1',
+                id: 17,
+                field: '',
+                fixed: true,
+                children: [
+                  { title: 'C-3-1-1', id: 18, field: '' },
+                  { title: 'C-3-1-2', id: 19, field: '' },
+                ],
+              },
+              {
+                title: 'B-3-2',
+                id: 27,
+                field: '',
+                children: [
+                  { title: 'C-3-2-1', id: 28, field: '' },
+                  { title: 'C-3-2-2', id: 29, field: '' },
+                ],
+              },
+            ],
+          },
+        ];
+
+        // 数据源 3
+        var data3 = [
+          {
+            title: '节点 1',
+            id: '1000',
+            spread: true,
+            checked: true,
+            children: [
+              {
+                title: '节点 1-1',
+                id: '1001',
+                spread: true,
+                checked: false,
+              },
+              {
+                title: '节点 1-2',
+                id: '1002',
+                spread: true,
+                checked: true,
+                children: [
+                  {
+                    title: '节点 1-2-1',
+                    id: '1003',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            title: '节点 2',
+            id: '2000',
+          },
+        ];
+
+        // 实例 1
+        var treeInst = tree.render({
+          elem: '#test1',
+          data: data1,
+          click: (obj) => {
+            layer.msg(JSON.stringify(obj.data));
+            console.log(obj);
+          },
+          oncheck: (obj) => {
+            // console.log(obj);
+          },
+          operate: (obj) => {
+            var type = obj.type;
+            if (type == 'add') {
+              // ajax 操作，返回 key 值
+              return index++;
+            } else if (type == 'update') {
+              console.log(obj.elem.find('.layui-tree-txt').html());
+            } else if (type == 'del') {
+              console.log(obj);
+            }
+          },
+          showCheckbox: true, // 是否显示复选框
+          accordion: false, // 是否开启手风琴模式
+          onlyIconControl: true, // 是否仅允许节点左侧图标控制展开收缩
+          isJump: 0, // 点击文案跳转地址
+          edit: true, // 操作节点图标
+          /*
+          customName: { // 自定义 data 字段名
+            children: 'nodes'
+          }
+          */
+        });
+
+        console.log(treeInst);
+        console.log('flatData:', treeInst.config.flatData);
+
+        // 按钮事件
+        util.on({
+          getChecked: (othis) => {
+            var checkedData = tree.getChecked('test1');
+            layer.alert(JSON.stringify(checkedData), { shade: 0 });
+            console.log(checkedData);
+          },
+          setChecked: () => {
+            tree.setChecked('test1', [11, 12]);
+          },
+          reload: () => {
+            tree.reload('test1', {});
+          },
+        });
+
+        // 实例 2 - checked 测试
+        tree.render({
+          elem: '#test2',
+          data: data3,
+          showCheckbox: true,
+        });
+
+        // 实例 3 - 关闭连接线，箭头展开风格
+        tree.render({
+          elem: '#test3',
+          data: data1,
+          // expandClick: false,
+          showLine: false, // 关闭连接线
+          click: (obj, state) => {
+            console.log(obj);
+          },
+          oncheck: (obj, checked, child) => {
+            if (checked) {
+              console.log(obj[0]);
+            }
+          },
+          onsearch: (data, num) => {
+            console.log(num);
+          },
+          dragstart: (obj, parent) => {
+            console.log(obj, parent);
+          },
+          dragend: (state, obj, target) => {
+            console.log(state, obj, target);
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

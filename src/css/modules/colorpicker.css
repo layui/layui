@@ -1,0 +1,192 @@
+/** 颜色选择器 **/
+.layui-colorpicker {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--lay-border-color);
+  padding: 5px;
+  border-radius: var(--lay-border-radius);
+  line-height: 24px;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  box-sizing: border-box;
+}
+.layui-colorpicker:hover {
+  border-color: var(--lay-gray-400);
+}
+.layui-colorpicker.layui-colorpicker-lg {
+  width: 44px;
+  height: 44px;
+  line-height: 30px;
+}
+.layui-colorpicker.layui-colorpicker-sm {
+  width: 30px;
+  height: 30px;
+  line-height: 20px;
+  padding: 3px;
+}
+.layui-colorpicker.layui-colorpicker-xs {
+  width: 22px;
+  height: 22px;
+  line-height: 16px;
+  padding: 1px;
+}
+
+.layui-colorpicker-trigger-bgcolor {
+  display: block;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+  border-radius: var(--lay-border-radius);
+}
+.layui-colorpicker-trigger-span {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: var(--lay-border-radius);
+  text-align: center;
+}
+.layui-colorpicker-trigger-i {
+  display: inline-block;
+  color: #fff;
+  font-size: 12px;
+}
+.layui-colorpicker-trigger-i.layui-icon-close {
+  color: #999;
+}
+
+.layui-colorpicker-main {
+  position: absolute;
+  left: -999999px;
+  top: -999999px;
+  z-index: 77777777;
+  width: 280px;
+  margin: 5px 0;
+  padding: 7px;
+  background: #fff;
+  border: 1px solid var(--lay-border-color);
+  border-radius: var(--lay-border-radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+.layui-colorpicker-main-wrapper {
+  height: 180px;
+  position: relative;
+}
+.layui-colorpicker-basis {
+  width: 260px;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.layui-colorpicker-basis-white {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(90deg, #fff, hsla(0, 0%, 100%, 0));
+}
+.layui-colorpicker-basis-black {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(0deg, #000, transparent);
+}
+.layui-colorpicker-basis-cursor {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 0%;
+  right: 100%;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+.layui-colorpicker-side {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 100%;
+  background: linear-gradient(#f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+}
+.layui-colorpicker-side-slider {
+  width: 100%;
+  height: 5px;
+  box-shadow: 0 0 1px #888888;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 1px;
+  border: 1px solid #f0f0f0;
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+}
+.layui-colorpicker-main-alpha {
+  display: none;
+  height: 12px;
+  margin-top: 7px;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+}
+.layui-colorpicker-alpha-bgcolor {
+  height: 100%;
+  position: relative;
+}
+.layui-colorpicker-alpha-slider {
+  width: 5px;
+  height: 100%;
+  box-shadow: 0 0 1px #888888;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 1px;
+  border: 1px solid #f0f0f0;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+}
+.layui-colorpicker-main-pre {
+  padding-top: 7px;
+  font-size: 0;
+}
+.layui-colorpicker-pre {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--lay-border-radius);
+  display: inline-block;
+  margin-left: 6px;
+  margin-bottom: 7px;
+  cursor: pointer;
+}
+.layui-colorpicker-pre:nth-child(11n + 1) {
+  margin-left: 0;
+}
+.layui-colorpicker-pre-isalpha {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+}
+.layui-colorpicker-pre.layui-this {
+  box-shadow: 0 0 3px 2px rgba(0, 0, 0, 0.15);
+}
+.layui-colorpicker-pre > div {
+  height: 100%;
+  border-radius: var(--lay-border-radius);
+}
+.layui-colorpicker-main-input {
+  text-align: right;
+  padding-top: 7px;
+}
+.layui-colorpicker-main-input .layui-btn-container .layui-btn {
+  margin: 0 0 0 10px;
+}
+.layui-colorpicker-main-input div.layui-inline {
+  float: left;
+  font-size: 14px;
+}
+.layui-colorpicker-main-input input.layui-input {
+  width: 168px;
+  height: 30px;
+  color: #5f5f5f;
+  padding-left: 5px;
+}

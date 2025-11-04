@@ -1,0 +1,39 @@
+import { layui } from './core/layui.js';
+export { lay } from './core/lay.js';
+export { laytpl } from './core/laytpl.js';
+export { i18n } from './core/i18n.js';
+export { default as $, default as jquery } from 'jquery';
+export { component, component as componentBuilder } from './core/component.js';
+export { laypage } from './components/laypage.js';
+export { laydate } from './components/laydate.js';
+export { layer } from './components/layer.js';
+export { dropdown } from './components/dropdown.js';
+export { slider } from './components/slider.js';
+export { colorpicker } from './components/colorpicker.js';
+export { tab } from './components/tab.js';
+export { nav } from './components/nav.js';
+export { breadcrumb } from './components/breadcrumb.js';
+export { progress } from './components/progress.js';
+export { collapse } from './components/collapse.js';
+export { element } from './components/element.js';
+export { upload } from './components/upload.js';
+export { form } from './components/form.js';
+export { table } from './components/table.js';
+export { treeTable } from './components/treeTable.js';
+export { tabs } from './components/tabs.js';
+export { tree } from './components/tree.js';
+export { transfer } from './components/transfer.js';
+export { carousel } from './components/carousel.js';
+export { rate } from './components/rate.js';
+export { flow } from './components/flow.js';
+export { util } from './components/util.js';
+export { code } from './components/code.js';
+
+/**
+ * Layui ESM 入口
+ */
+
+layui.all = true;
+layui['layui.all'] = 'layui.all'; // 阻止 layui.use 加载内部模块
+
+export { layui };

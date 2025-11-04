@@ -1,0 +1,77 @@
+/*
+ * 辅助类
+ */
+
+.layui-btn,
+.layui-input,
+.layui-select,
+.layui-textarea,
+.layui-upload-button {
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  box-sizing: border-box;
+}
+
+/* 引用 */
+.layui-elem-quote {
+  margin-bottom: 10px;
+  padding: var(--lay-spacing);
+  line-height: 1.8;
+  border-left: 5px solid var(--lay-color-accent);
+  border-radius: 0 var(--lay-border-radius) var(--lay-border-radius) 0;
+  background-color: var(--lay-color-gray);
+}
+.layui-quote-nm {
+  border-style: solid;
+  border-width: 1px;
+  border-left-width: 5px;
+  background: none;
+}
+
+/* 字段集合 */
+.layui-elem-field {
+  margin-bottom: 10px;
+  padding: 0;
+  border-width: 1px;
+  border-style: solid;
+}
+.layui-elem-field legend {
+  margin-left: 20px;
+  padding: 0 10px;
+  font-size: 20px;
+}
+.layui-field-title {
+  margin: var(--lay-spacing) 0;
+  border-width: 0;
+  border-top-width: 1px;
+}
+.layui-field-box {
+  padding: var(--lay-spacing);
+}
+.layui-field-title .layui-field-box {
+  padding: 10px 0;
+}
+
+/* 其它辅助 */
+.layui-auxiliar-moving {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: none;
+  z-index: 9999999999;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.layui-scrollbar-hide {
+  overflow: hidden !important;
+}

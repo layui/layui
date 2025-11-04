@@ -1,0 +1,414 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>Code blocks adorn - Layui</title>
+    <link href="./assets/dist/css/layui.css" rel="stylesheet" />
+    <style>
+      pre {
+        margin: 16px 0;
+      }
+    </style>
+  </head>
+  <body class="layui-padding-3">
+    <div class="layui-text">
+      <h2>代码高亮</h2>
+    </div>
+    <pre id="test" class="layui-test">
+  <textarea class="layui-hide">
+<div class="layui-btn-container">
+  <button type="button" class="layui-btn">默认按钮</button>
+</div>
+
+<p class="layui-padding-3">
+AaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaA
+</p>
+
+<div class="layui-btn-container">
+  <button class="layui-btn layui-btn-primary layui-border-green">主色按钮</button>
+</div>
+<script type="text/html">
+<h3>{{= d.title }}</h3>
+<ul>
+{{#  layui.each(d.list, function(index, item){ }}
+  <li>
+    <span>{{= item.modname }}</span>
+    <span>{{= item.alias }}：</span>
+    <span>{{= item.site || '' }}</span>
+  </li>
+{{#  }); }}
+<p>{{#  if(d.list.length === 0){ }}
+无数据
+{{#  } }}</p>
+</ul>
+</script>
+<script>
+  layui.use(function () {
+    var layer = layui.layer;
+    const a = '1'
+    function aa(a, b) {
+      return '11'
+    }
+    layer.msg(layui.v)
+  })
+</script>
+  </textarea>
+</pre>
+
+    <div class="layui-text">
+      <h2>行高亮和聚焦</h2>
+    </div>
+    <pre
+      class="layui-code"
+      lay-options="{
+    highlightLine: {
+      hl: {
+        range: '1,3-5,8', // 指定行高亮范围 '1,3,4,5,8'
+        comment: true, // 是否解析行中的高亮注释
+      }
+    }
+  }"
+    >
+<textarea class="layui-hide">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quick Start - Layui</title>
+  <link href="//unpkg.com/layui@2.11.4/dist/css/layui.css" rel="stylesheet">
+</head>
+<body>
+  <!-- HTML Content -->
+  <script src="//unpkg.com/layui@2.11.4/dist/layui.js"></script>
+  <script>
+  // Usage // [!code focus:6]
+  layui.use(function(){
+    var layer = layui.layer;
+    // Welcome
+    layer.msg('Hello World', {icon: 6});
+  });
+  </script>
+</body>
+</html>
+</textarea>
+</pre>
+
+    <div class="layui-text">
+      <h2>diff</h2>
+    </div>
+    <pre
+      class="layui-code"
+      lay-options="{
+    highlightLine: {
+      hl:{range: '38-40'},
+      '++':{comment: true},
+      '--':{comment: true}
+    }
+  }"
+    >
+<textarea class="layui-hide">
+<template id="test">
+  <p>转义输出：{{= d.desc }}</p>
+  <p>原文输出：{{- d.desc }}</p>
+  {{# 注释标签 - 仅在模板中显示，不在视图中输出 }} // [!code ++]
+  <p>{{! 忽略标签，可显示原始标签：
+  {{# let a = 0; }} // [!code --]
+  {{ let a = 0; }} // [!code ++]
+  !}}
+  </p>
+  <p>
+    条件语句：
+    {{= d.list.length ? d.title : '' }}
+    {{# if(d.title){}} - #AAAA{{='A'}}{{# } }} //[!code --]
+    {{ if(d.title){}} - #AAAA{{='A'}}{{ } }} //[!code ++]
+  </p>
+  <p>循环语句：</p>
+  <ul>
+  {{# d.list.forEach(function(item) { }} //[!code --]
+  {{ d.list.forEach(function(item) { }} //[!code ++]
+  </p>
+    <li>
+      <span>{{= item.title }}</span>
+      <span>{{= item.name }}</span>
+    </li>
+  {{# }); }} //[!code --]
+  {{ }); }} //[!code ++]
+  </ul>
+  {{# if (d.list.length === 0) { }} //[!code --]
+  {{ if (d.list.length === 0) { }} //[!code ++]
+    无数据
+  {{#} }} //[!code --]
+  {{} }} //[!code ++]
+</template>
+<script>
+  layui.use(function(){
+    var laytpl = layui.laytpl;
+
+    laytpl.config({
+      tagStyle: 'modern'
+    })
+  })
+</script>
+</textarea>
+</pre>
+
+    <h2>普通示例</h2>
+
+    <pre><code class="layui-code" lay-options="{header: true}">
+code line
+code line
+code line
+</code></pre>
+
+    <pre
+      class="layui-code"
+      lay-options="{style: 'height: 300px'}"
+      id="ID-multi-line"
+    ></pre>
+    <script type="module">
+      // 生成批量行，测试行结构
+      const elem = document.getElementById('ID-multi-line');
+      elem.innerHTML = Array(1001)
+        .fill()
+        .map((v) => {
+          return Math.random().toString(32).substring(2).toUpperCase();
+        })
+        .join('\n');
+    </script>
+
+    <pre class="layui-code" lay-options="{title: '不显示行号', ln: false}">
+code line
+code line
+code line
+code line
+code line
+code line
+</pre
+    >
+
+    <pre class="layui-code" lay-options="{title: '深色风格', skin: 'dark'}">
+code line
+code line
+code line
+code line
+code line
+code line
+</pre
+    >
+
+    <pre class="layui-code" lay-options="{title: '嵌套', encode: false}">
+code line
+code line
+code line
+code line
+<pre class="layui-code" lay-options="{ln: false, encode: false}">
+code line
+code line
+code line
+<pre class="layui-code">
+code line
+code line
+code line
+  </pre>
+</pre>
+</pre>
+
+    <pre class="layui-code" lay-options="{skin: 'dark', encode: false}">
+code line
+code line
+code line
+code line
+code line
+code line
+<pre class="layui-code" lay-options="{skin: 'dark', encode: false}">
+code line
+code line
+code line
+code line
+code line
+code line
+<pre class="layui-code" lay-options="{skin: 'dark', ln: false, encode: false}">
+code line
+code line
+code line
+code line
+code line
+code line
+</pre>
+</pre>
+</pre>
+
+    <pre class="layui-code" lay-options="{encode: true}">
+<div>
+  123
+</div>
+</pre>
+
+    <pre class="layui-code" lay-options="{about: 'AboutInfo'}">
+  About
+</pre
+    >
+
+    <!-- 第三方语法高亮库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+    <!-- layui -->
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(['code', 'dropdown'], () => {
+        var dropdown = layui.dropdown;
+        var layer = layui.layer;
+        var $ = layui.$;
+
+        // return;
+
+        // 高亮主题 css 库
+        var themeData = $.map(
+          [
+            // hljs 主题库
+            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/vs2015.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/vs.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/base16/google-dark.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/base16/google-light.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai-sublime.min.css',
+            '-',
+            // prism 主题库
+            'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-dark.min.css',
+            'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css',
+          ],
+          (v, index) => ({
+            title: v,
+            link: v,
+            highlighter: v.indexOf('prism') === -1 ? 'hljs' : 'prism',
+            type: v === '-' ? '-' : 'normal',
+          }),
+        );
+
+        // 创建实例
+        var codeInst = layui.code({
+          elem: '#test',
+          preview: true,
+          codeStyle: 'height: 510px;',
+          previewStyle: 'word-wrap: break-word;',
+          // theme: 'dark',
+          // header: true,
+          // wordWrap: false, // 是否自动换行
+          lang: 'html',
+          highlighter: 'hljs',
+          // code: '<div class="layui-btn">初始按钮</div>',
+          /*codeRender: function (code, opts) { // 初始高亮
+      layui.link(themeData[1].link, 'layui-code-theme');
+      return hljs.highlight(code, {language: opts.lang}).value;
+    },*/
+          tools: [
+            'full',
+            'window',
+            {
+              title: ['文字换行'],
+              type: 'form',
+              event: (obj) => {
+                dropdown.render({
+                  elem: obj.elem,
+                  data: [
+                    { title: '自动换行', wordWrap: true },
+                    { title: '不自动换行', wordWrap: false },
+                  ],
+                  show: true,
+                  click: (data, othis) => {
+                    codeInst.reload({
+                      wordWrap: data.wordWrap,
+                    });
+                  },
+                });
+              },
+            },
+            {
+              title: ['切换高亮主题'],
+              type: 'theme',
+              event: (obj) => {
+                dropdown.render({
+                  elem: obj.elem,
+                  data: themeData,
+                  show: true,
+                  click: (data, othis) => {
+                    $('#layuicss-layui-code-theme').remove();
+                    layui.link(data.link, 'layui-code-theme');
+
+                    // 若高亮器有变化，则重载
+                    if (data.highlighter !== codeInst.config.highlighter) {
+                      var highlighter = {
+                        hljs: (code, opts) =>
+                          hljs.highlight(code, {
+                            language: opts.lang,
+                          }).value,
+                        prism: (code, opts) =>
+                          Prism.highlight(
+                            code,
+                            Prism.languages[opts.lang],
+                            opts.lang,
+                          ),
+                      };
+                      // 重载
+                      codeInst.reload({
+                        highlighter: data.highlighter,
+                        codeRender: (code, opts) =>
+                          highlighter[data.highlighter](code, opts),
+                      });
+                    }
+                  },
+                });
+              },
+            },
+            {
+              title: ['编辑'],
+              type: 'edit',
+              event: (obj) => {
+                layer.prompt(
+                  {
+                    formType: 2,
+                    value: obj.rawCode,
+                    title: '编辑代码',
+                    area: ['800px', '500px'],
+                    maxlength: 9999999999,
+                  },
+                  (value, index) => {
+                    layer.close(index);
+                    // 重载 code
+                    codeInst.reloadCode({
+                      code: value,
+                    });
+                  },
+                );
+              },
+            },
+          ],
+        });
+
+        // 语法高亮重载
+        codeInst.reloadCode({
+          codeRender: (code, opts) => {
+            layui.link(themeData[1].link, 'layui-code-theme');
+            return hljs.highlight(code, { language: opts.lang }).value;
+          },
+        });
+
+        // 通用实例，根据元素属性定制化参数
+        layui.code({
+          elem: '.layui-code',
+          tools: ['tips'],
+          langMarker: true,
+          lang: 'html',
+          // preview: true
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,270 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>导航 - 常用元素 - layui</title>
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <style>
+      .demo-nav-tree > .layui-inline {
+        vertical-align: top;
+      }
+    </style>
+  </head>
+  <body class="layui-padding-3">
+    <ul class="layui-nav">
+      <li class="layui-nav-item"><a href="">最新活动</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">产品</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="">大数据<span class="layui-badge-dot"></span></a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">方案</a>
+        <dl class="layui-nav-child layui-nav-child-c">
+          <dd><a href="">移动模块</a></dd>
+          <dd class="layui-this"><a href="">后台模版</a></dd>
+          <dd><a href="">电商平台</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">社区</a></li>
+      <li class="layui-nav-item">
+        <a href=""
+          ><img
+            src="https://unpkg.com/outeres@0.0.10/demo/avatar/1.jpg"
+            class="layui-nav-img"
+        /></a>
+        <dl class="layui-nav-child layui-nav-child-r">
+          <dd><a href="">Your organizations</a></dd>
+          <dd><a href="">Settings</a></dd>
+          <hr />
+          <dd><a href="">Sign out</a></dd>
+        </dl>
+      </li>
+    </ul>
+
+    <br />
+
+    <ul class="layui-nav layui-bg-cyan">
+      <li class="layui-nav-item layui-this"><a href="">最新活动</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">产品</a>
+      </li>
+      <li class="layui-nav-item"><a href="">大数据</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">解决方案</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">移动模块</a></dd>
+          <dd class="layui-this"><a href="">后台模版</a></dd>
+          <dd><a href="">电商平台</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">社区</a></li>
+    </ul>
+
+    <br />
+
+    <ul class="layui-nav layui-bg-green">
+      <li class="layui-nav-item"><a href="">最新活动</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">产品</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">选项1</a></dd>
+          <dd><a href="">选项2</a></dd>
+          <dd><a href="">选项3</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">大数据</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">解决方案</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">移动模块</a></dd>
+          <dd class="layui-this"><a href="">后台模版</a></dd>
+          <dd><a href="">电商平台</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">社区</a></li>
+    </ul>
+
+    <br />
+
+    <ul class="layui-nav layui-bg-blue" lay-bar="disabled">
+      <li class="layui-nav-item"><a href="">最新活动</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">产品</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">选项1</a></dd>
+          <dd><a href="">选项2</a></dd>
+          <dd><a href="">选项3</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">大数据</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">解决方案</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">移动模块</a></dd>
+          <dd class="layui-this"><a href="">后台模版</a></dd>
+          <dd><a href="">电商平台</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">社区</a></li>
+    </ul>
+
+    <br />
+
+    <ul class="layui-nav layui-bg-gray">
+      <li class="layui-nav-item"><a href="">最新活动</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">产品</a>
+      </li>
+      <li class="layui-nav-item"><a href="">大数据</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">解决方案</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">移动模块</a></dd>
+          <dd class="layui-this"><a href="">后台模版</a></dd>
+          <dd><a href="">电商平台</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">社区</a></li>
+    </ul>
+
+    <br />
+
+    <div class="demo-nav-tree">
+      <div class="layui-inline">
+        <ul class="layui-nav layui-nav-tree" lay-accordion lay-filter="test">
+          <li class="layui-nav-item">
+            <a class="" href="javascript:;">菜单 1</a>
+            <dl class="layui-nav-child">
+              <dd><a href="javascript:;">选项1</a></dd>
+              <dd><a href="javascript:;">选项2</a></dd>
+              <dd><a href="javascript:;">选项3</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item">
+            <a href="javascript:;">菜单 2</a>
+            <dl class="layui-nav-child">
+              <dd><a href="javascript:;">选项1</a></dd>
+              <dd><a href="javascript:;">选项2</a></dd>
+              <dd><a href="javascript:;">选项3</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item">
+            <a href="javascript:;">菜单 3</a>
+            <dl class="layui-nav-child">
+              <dd><a href="javascript:;">选项1</a></dd>
+              <dd><a href="javascript:;">选项2</a></dd>
+              <dd><a href="javascript:;">选项3</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item"><a href="javascript:;">菜单 4</a></li>
+          <li class="layui-nav-item"><a href="javascript:;">菜单 5</a></li>
+        </ul>
+      </div>
+      <div class="layui-inline">
+        <ul class="layui-nav layui-nav-tree layui-bg-gray" lay-filter="test">
+          <li class="layui-nav-item">
+            <a class="" href="javascript:;">菜单 1</a>
+            <dl class="layui-nav-child">
+              <dd><a href="javascript:;">选项1</a></dd>
+              <dd><a href="javascript:;">选项2</a></dd>
+              <dd><a href="javascript:;">选项3</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item">
+            <a href="javascript:;">菜单 2</a>
+            <dl class="layui-nav-child">
+              <dd><a href="javascript:;">选项1</a></dd>
+              <dd><a href="javascript:;">选项2</a></dd>
+              <dd><a href="javascript:;">选项3</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item">
+            <a href="javascript:;">菜单 3</a>
+            <dl class="layui-nav-child">
+              <dd><a href="javascript:;">选项1</a></dd>
+              <dd><a href="javascript:;">选项2</a></dd>
+              <dd><a href="javascript:;">选项3</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item"><a href="javascript:;">菜单 4</a></li>
+          <li class="layui-nav-item"><a href="javascript:;">菜单 5</a></li>
+        </ul>
+      </div>
+      <div class="layui-inline">
+        <ul
+          class="layui-nav layui-nav-tree layui-bg-black"
+          lay-accordion
+          lay-filter="test"
+        >
+          <li class="layui-nav-item layui-nav-itemed">
+            <a class="" href="javascript:;">菜单 1</a>
+            <dl class="layui-nav-child">
+              <dd><a href="javascript:;">选项1</a></dd>
+              <dd><a href="javascript:;">选项2</a></dd>
+              <dd><a href="javascript:;">选项3</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item">
+            <a href="javascript:;">菜单 2</a>
+            <dl class="layui-nav-child">
+              <dd><a href="javascript:;">选项1</a></dd>
+              <dd><a href="javascript:;">选项2</a></dd>
+              <dd><a href="javascript:;">选项3</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item">
+            <a href="javascript:;">菜单 3</a>
+            <dl class="layui-nav-child">
+              <dd><a href="javascript:;">选项1</a></dd>
+              <dd><a href="javascript:;">选项2</a></dd>
+              <dd><a href="javascript:;">选项3</a></dd>
+            </dl>
+          </li>
+          <li class="layui-nav-item"><a href="javascript:;">菜单 4</a></li>
+          <li class="layui-nav-item"><a href="javascript:;">菜单 5</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <br />
+    <br />
+
+    <span class="layui-breadcrumb">
+      <a href="">首页</a>
+      <a href="">国际新闻</a>
+      <a href="">亚太地区</a>
+      <a><cite>正文</cite></a>
+    </span>
+
+    <br /><br />
+
+    <span class="layui-breadcrumb" lay-separator="|">
+      <a href="">娱乐</a>
+      <a href="">八卦</a>
+      <a href="">体育</a>
+      <a href="">搞笑</a>
+      <a href="">视频</a>
+      <a href="">游戏</a>
+      <a href="">综艺</a>
+    </span>
+
+    <br /><br /><br /><br /><br /><br />
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(['element', 'form'], () => {
+        var element = layui.element;
+
+        element.on('nav(test)', (elem) => {
+          console.log(elem);
+        });
+      });
+    </script>
+  </body>
+</html>
