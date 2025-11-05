@@ -10,12 +10,12 @@ import { util } from './util.js';
 import { layer } from './layer.js';
 
 var hint = layui.hint();
-var device = layui.device();
+// var device = layui.device();
 
 var MOD_NAME = 'form';
 var ELEM = '.layui-form';
 var THIS = 'layui-this';
-var SHOW = 'layui-show';
+// var SHOW = 'layui-show';
 var HIDE = 'layui-hide';
 var DISABLED = 'layui-disabled';
 var OUT_OF_RANGE = 'layui-input-number-out-of-range';
@@ -117,7 +117,7 @@ Form.prototype.val = function (filter, object) {
   var formElem = that.getFormElem(filter);
 
   // 遍历
-  formElem.each(function (index, item) {
+  formElem.each(function () {
     var itemForm = $(this);
 
     // 赋值
@@ -411,7 +411,7 @@ Form.prototype.render = function (type, filter) {
           eye: {
             // 密码显隐
             value: 'eye-invisible',
-            click: function (elem, opts) {
+            click: function (elem) {
               // 事件
               var SHOW_NAME = 'LAY_FORM_INPUT_AFFIX_SHOW';
               var isShow = elem.data(SHOW_NAME);
@@ -563,7 +563,7 @@ Form.prototype.render = function (type, filter) {
         var title = titleElem;
         var input = title.find('input');
         var dl = reElem.find('dl');
-        var dds = dl.children('dd');
+        // var dds = dl.children('dd');
         var dts = dl.children('dt'); // select 分组dt元素
         var index = this.selectedIndex; // 当前选中的索引
         var initValue = '';
@@ -720,7 +720,7 @@ Form.prototype.render = function (type, filter) {
         };
 
         // 点击标题区域
-        title.on('click', function (e) {
+        title.on('click', function () {
           title.parent().hasClass(CLASS + 'ed') ? hideDown() : showDown();
           dl.find('.' + NONE).remove();
         });
@@ -926,7 +926,7 @@ Form.prototype.render = function (type, filter) {
         if (isSearch) {
           input
             .on('input propertychange', layui.debounce(search, 50))
-            .on('blur', function (e) {
+            .on('blur', function () {
               var selectedIndex = select[0].selectedIndex;
 
               initValue = $(select[0].options[selectedIndex]).prop('text'); // 重新获得初始选中值
@@ -942,7 +942,7 @@ Form.prototype.render = function (type, filter) {
               setTimeout(function () {
                 notOption(
                   input.val(),
-                  function (none) {
+                  function () {
                     initValue || input.val(''); // none && !initValue
                   },
                   'blur',
@@ -998,7 +998,7 @@ Form.prototype.render = function (type, filter) {
           layui.stope(e);
         });
 
-        reElem.find('dl>dt').on('click', function (e) {
+        reElem.find('dl>dt').on('click', function () {
           return false;
         });
 
@@ -1176,11 +1176,11 @@ Form.prototype.render = function (type, filter) {
       var clickEventName = 'click.lay_checkbox_click';
       var checks = elem || elemForm.find('input[type=checkbox]');
       // 风格
-      var skins = {
+      /* var skins = {
         primary: true, // 默认风格
         tag: true, // 标签风格
         switch: true, // 开关风格
-      };
+      }; */
       // 事件
       var events = function (reElem, RE_CLASS) {
         var check = $(this);

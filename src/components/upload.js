@@ -50,18 +50,10 @@ var thisModule = function () {
   };
 };
 
-// 字符常量
-var ELEM = 'layui-upload';
-var THIS = 'layui-this';
-var SHOW = 'layui-show';
-var HIDE = 'layui-hide';
-var DISABLED = 'layui-disabled';
-
 var ELEM_FILE = 'layui-upload-file';
 var ELEM_FORM = 'layui-upload-form';
 var ELEM_IFRAME = 'layui-upload-iframe';
 var ELEM_CHOOSE = 'layui-upload-choose';
-var ELEM_DRAG = 'layui-upload-drag';
 var UPLOADING = 'UPLOADING';
 
 // 构造器
@@ -426,7 +418,7 @@ Class.prototype.upload = function (files, type) {
         iframeBody = iframe.contents().find('body');
       try {
         res = iframeBody.text();
-      } catch (e) {
+      } catch {
         that.msg(text['cross-domain']);
         clearInterval(Class.timer);
         error();
@@ -448,7 +440,7 @@ Class.prototype.upload = function (files, type) {
             status: 'CONVERTED',
             data: JSON.parse(src),
           };
-        } catch (e) {
+        } catch {
           that.msg(text['data-format-error']);
           return {
             status: 'FORMAT_ERROR',
@@ -730,9 +722,9 @@ Class.prototype.events = function () {
   };
 
   // 设置选择的文本
-  var setChooseText = function (files, filename) {
+  var setChooseText = function (files) {
     var elemFile = that.elemFile;
-    var item = options.item ? options.item : options.elem;
+    // var item = options.item ? options.item : options.elem;
     var value =
       files.length > 1
         ? i18n.$t('upload.chooseText', { length: files.length })
@@ -875,7 +867,7 @@ Class.prototype.events = function () {
         e.preventDefault();
         $(this).trigger('upload.over');
       })
-      .on('dragleave', function (e) {
+      .on('dragleave', function () {
         $(this).trigger('upload.leave');
       })
       .on('drop', function (e) {
