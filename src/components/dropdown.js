@@ -95,6 +95,7 @@ var Class = function (options) {
   that.config = $.extend({}, that.config, dropdown.config, options);
   that.stopClickOutsideEvent = $.noop;
   that.stopResizeEvent = $.noop;
+  that.stopScrollEvent = $.noop;
   that.init();
 };
 
@@ -112,6 +113,7 @@ Class.prototype.config = {
   shade: 0, // 遮罩
   accordion: false, // 手风琴效果，仅菜单组生效。基础菜单需要在容器上追加 'lay-accordion' 属性。
   closeOnClick: true, // 面板打开后，再次点击目标元素时是否关闭面板。行为取决于所使用的触发事件类型
+  position: 'bottom', // 面板显示位置，可选值：bottom, top, left, right
 };
 
 // 重载实例
@@ -445,6 +447,7 @@ Class.prototype.render = function (type) {
 
   that.onClickOutside();
   that.autoUpdatePosition();
+  that.onScrollClose();
 
   // 组件打开完毕的事件
   typeof options.ready === 'function' && options.ready(mainElem, options.elem);
@@ -455,12 +458,58 @@ Class.prototype.position = function (obj) {
   var that = this;
   var options = that.config;
 
-  lay.position(options.elem[0], that.mainElem[0], {
-    position: options.position,
-    e: that.e,
-    clickType: options.trigger === 'contextmenu' ? 'right' : null,
-    align: options.align || null,
-  });
+  if (
+    options.position === 'left' ||
+    options.position === 'right' ||
+    options.position === 'top'
+  ) {
+    // 自定义定位
+    var rect = options.elem[0].getBoundingClientRect();
+    var elemWidth = that.mainElem[0].offsetWidth;
+    var elemHeight = that.mainElem[0].offsetHeight;
+    var winArea = function (type) {
+      return document.documentElement[type ? 'clientWidth' : 'clientHeight'];
+    };
+    var scrollArea = function (type) {
+      type = type ? 'scrollLeft' : 'scrollTop';
+      return document.body[type] | document.documentElement[type];
+    };
+    var margin = 5;
+    var left, top;
+
+    if (options.position === 'left') {
+      left = rect.left - elemWidth - margin;
+      top = rect.top;
+    } else if (options.position === 'right') {
+      left = rect.right + margin;
+      top = rect.top;
+    } else if (options.position === 'top') {
+      left = rect.left;
+      top = rect.top - elemHeight - margin;
+    }
+
+    // 调整超出边界
+    if (left + elemWidth + margin > winArea('width')) {
+      left = winArea('width') - elemWidth - margin;
+    }
+    if (left < margin) left = margin;
+    if (top + elemHeight + margin > winArea()) {
+      top = winArea() - elemHeight - margin;
+    }
+    if (top < margin) top = margin;
+
+    that.mainElem[0].style.position = 'fixed';
+    that.mainElem[0].style.left = left + scrollArea(1) + 'px';
+    that.mainElem[0].style.top = top + scrollArea() + 'px';
+  } else {
+    // 默认 bottom 定位，使用原有逻辑
+    lay.position(options.elem[0], that.mainElem[0], {
+      position: options.position,
+      e: that.e,
+      clickType: options.trigger === 'contextmenu' ? 'right' : null,
+      align: options.align || null,
+    });
+  }
 };
 
 // 移除面板
@@ -473,6 +522,7 @@ Class.prototype.remove = function (id) {
   var mainElem = thisModule.findMainElem(id);
   that.stopClickOutsideEvent();
   that.stopResizeEvent();
+  that.stopScrollEvent();
 
   // 若存在已打开的面板元素，则移除
   if (mainElem[0]) {
@@ -626,6 +676,33 @@ Class.prototype.autoUpdatePosition = function () {
     }
 
     that.stopResizeEvent = $.noop;
+  };
+};
+
+/**
+ * 滚动时关闭面板
+ */
+Class.prototype.onScrollClose = function () {
+  var that = this;
+  var options = that.config;
+
+  that.stopScrollEvent();
+
+  // 查找滚动容器：优先 table body，其次 window
+  var scrollContainer = options.elem.closest('.layui-table-body');
+  if (!scrollContainer.length) {
+    scrollContainer = $(window);
+  }
+
+  var scrollHandler = function () {
+    that.remove();
+  };
+
+  scrollContainer.on('scroll.lay_dropdown_scroll', scrollHandler);
+
+  that.stopScrollEvent = function () {
+    scrollContainer.off('scroll.lay_dropdown_scroll', scrollHandler);
+    that.stopScrollEvent = $.noop;
   };
 };
 
