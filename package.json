@@ -3,6 +3,9 @@
   "description": "Classic Web UI Component Library",
   "version": "3.0.0-alpha.0",
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "keywords": [
     "layui",
     "components",
