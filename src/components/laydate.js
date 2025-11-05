@@ -145,7 +145,13 @@ var ELEM_SHADE = 'layui-laydate-shade';
 var Class = function (options) {
   var that = this;
   that.index = laydate.index = lay.autoIncrementer('laydate');
-  that.config = lay.extend({}, that.config, laydate.config, options, overwriteArray);
+  that.config = lay.extend(
+    {},
+    that.config,
+    laydate.config,
+    options,
+    overwriteArray,
+  );
 
   // 若 elem 非唯一，则拆分为多个实例
   var elem = lay(options.elem || that.config.elem);
@@ -155,7 +161,7 @@ var Class = function (options) {
         lay.extend({}, that.config, {
           elem: this,
         }),
-        overwriteArray
+        overwriteArray,
       );
     });
     return that;
