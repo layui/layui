@@ -47,7 +47,7 @@
       layui.use(function () {
         var layer = layui.layer;
         // Welcome
-        layer.msg("Hello World", { icon: 6 });
+        layer.msg('Hello World', { icon: 6 });
       });
     </script>
   </body>

@@ -1,13 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>折叠面板 - Layui</title>
-    <link rel="stylesheet" href="../src/css/layui.css">
+    <link rel="stylesheet" href="../src/css/layui.css" />
   </head>
   <body class="layui-padding-3">
-    <h2>常规用法：</h2><br>
+    <h2>常规用法：</h2>
+    <br />
     <div class="layui-collapse" lay-filter="test">
       <div class="layui-colla-item">
         <h3 class="layui-colla-title">item 1</h3>
@@ -17,19 +18,15 @@
       </div>
       <div class="layui-colla-item">
         <h3 class="layui-colla-title">item2</h3>
-        <div class="layui-colla-content">
-          content 2
-        </div>
+        <div class="layui-colla-content">content 2</div>
       </div>
       <div class="layui-colla-item">
         <h3 class="layui-colla-title">item 3</h3>
-        <div class="layui-colla-content">
-          content 3
-        </div>
+        <div class="layui-colla-content">content 3</div>
       </div>
     </div>
 
-    <br>
+    <br />
 
     <div class="layui-collapse" lay-filter="test">
       <div class="layui-colla-item layui-show">
@@ -40,20 +37,17 @@
       </div>
       <div class="layui-colla-item">
         <h3 class="layui-colla-title">item 222</h3>
-        <div class="layui-colla-content">
-          content 2
-        </div>
+        <div class="layui-colla-content">content 2</div>
       </div>
       <div class="layui-colla-item">
         <h3 class="layui-colla-title">item 333</h3>
-        <div class="layui-colla-content">
-          content 3
-        </div>
+        <div class="layui-colla-content">content 3</div>
       </div>
     </div>
 
-
-    <br><h2>开启手风琴：</h2><br>
+    <br />
+    <h2>开启手风琴：</h2>
+    <br />
     <div class="layui-collapse" lay-accordion>
       <div class="layui-colla-item layui-show">
         <h3 class="layui-colla-title">item 1</h3>
@@ -63,27 +57,23 @@
       </div>
       <div class="layui-colla-item">
         <h3 class="layui-colla-title">item2</h3>
-        <div class="layui-colla-content">
-          content 2
-        </div>
+        <div class="layui-colla-content">content 2</div>
       </div>
       <div class="layui-colla-item">
         <h3 class="layui-colla-title">item 3</h3>
-        <div class="layui-colla-content">
-          content 3
-        </div>
+        <div class="layui-colla-content">content 3</div>
       </div>
     </div>
 
     <script src="../src/layui.js"></script>
     <script>
-    layui.use('element', function(){
-      var element = layui.element;
+      layui.use('element', function () {
+        var element = layui.element;
 
-      element.on('collapse(test)', function(data){
-        console.log(data);
+        element.on('collapse(test)', function (data) {
+          console.log(data);
+        });
       });
-    });
     </script>
   </body>
 </html>

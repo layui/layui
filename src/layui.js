@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-(function(window) {
+(function (window) {
   'use strict';
 
   // 便于打包时的字符压缩
@@ -15,7 +15,7 @@
   var config = {
     timeout: 10, // 符合规范的模块请求最长等待秒数
     debug: false, // 是否开启调试模式
-    version: false, // 是否在模块请求时加入版本号参数（以更新模块缓存）
+    version: false // 是否在模块请求时加入版本号参数（以更新模块缓存）
   };
 
   // 模块加载缓存信息
@@ -23,11 +23,11 @@
     modules: {}, // 模块物理路径
     status: {}, // 模块加载就绪状态
     event: {}, // 模块自定义事件
-    callback: {}, // 模块的回调
+    callback: {} // 模块的回调
   };
 
   // constructor
-  var Class = function() {
+  var Class = function () {
     this.v = '2.13.0'; // 版本号
   };
 
@@ -35,35 +35,43 @@
   var GLOBAL = window.LAYUI_GLOBAL || {};
 
   // 获取 layui 所在目录
-  var getPath = function() {
-    var jsPath = (document.currentScript && document.currentScript.tagName.toUpperCase() === 'SCRIPT') ? document.currentScript.src : function() {
-      var js = document.getElementsByTagName('script');
-      var last = js.length - 1;
-      var src;
-      for (var i = last; i > 0; i--) {
-        if (js[i].readyState === 'interactive') {
-          src = js[i].src;
-          break;
-        }
-      }
-      return src || js[last].src;
-    }();
+  var getPath = (function () {
+    var jsPath =
+      document.currentScript &&
+      document.currentScript.tagName.toUpperCase() === 'SCRIPT'
+        ? document.currentScript.src
+        : (function () {
+            var js = document.getElementsByTagName('script');
+            var last = js.length - 1;
+            var src;
+            for (var i = last; i > 0; i--) {
+              if (js[i].readyState === 'interactive') {
+                src = js[i].src;
+                break;
+              }
+            }
+            return src || js[last].src;
+          })();
 
-    return config.dir = GLOBAL.dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
-  }();
+    return (config.dir =
+      GLOBAL.dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1));
+  })();
 
   // 异常提示
-  var error = function(msg, type) {
-    type = type || 'log';
+  var error = function (msg, type) {
+    type = type || 'warn';
     msg = '[Layui warn]: ' + msg;
 
-    if (window.console) {
-      console[type] ? console[type](msg) : console.log(msg);
+    // 仅允许 error 或 warn 两种类型的提示
+    if (/warn|error/.test(String(type).replace(/^\s+|\s+$/g, ''))) {
+      type = 'warn';
     }
+
+    window.console[type](msg);
   };
   var warned = Object.create(null);
 
-  var errorOnce = function(msg, type) {
+  var errorOnce = function (msg, type) {
     if (warned._size && warned._size > 100) {
       warned = Object.create(null);
       warned._size = 0;
@@ -76,7 +84,7 @@
   };
 
   // 内置模块
-  var builtinModules = config.builtin = {
+  var builtinModules = (config.builtin = {
     lay: 'lay', // 基础 DOM 操作
     layer: 'layer', // 弹层
     laydate: 'laydate', // 日期
@@ -96,7 +104,7 @@
     progress: 'progress', // 进度条
     collapse: 'collapse', // 折叠面板
     element: 'element', // 常用元素操作
-    rate: 'rate',  // 评分组件
+    rate: 'rate', // 评分组件
     colorpicker: 'colorpicker', // 颜色选择器
     slider: 'slider', // 滑块
     carousel: 'carousel', // 轮播
@@ -105,11 +113,11 @@
     code: 'code', // 代码修饰器
     jquery: 'jquery', // DOM 库（第三方）
     component: 'component', // 组件构建器
-    i18n:  'i18n', // 国际化
+    i18n: 'i18n', // 国际化
 
     all: 'all',
-    'layui.all': 'layui.all', // 聚合标识（功能性的，非真实模块）
-  };
+    'layui.all': 'layui.all' // 聚合标识（功能性的，非真实模块）
+  });
 
   /**
    * 低版本浏览器适配
@@ -118,7 +126,7 @@
 
   // Object.assign
   if (typeof Object.assign !== 'function') {
-    Object.assign = function(target) {
+    Object.assign = function (target) {
       var to = Object(target);
       if (arguments.length < 2) return to;
 
@@ -144,23 +152,26 @@
    * @param {Function} done
    * @param {Function} error
    */
-  var onNodeLoad = function(node, done, error) {
+  var onNodeLoad = function (node, done, error) {
     // 资源加载完毕
-    var onCompleted = function(e) {
+    var onCompleted = function (e) {
       var readyRegExp = /^(complete|loaded)$/;
-      if (e.type === 'load' || (readyRegExp.test((e.currentTarget || e.srcElement).readyState))) {
+      if (
+        e.type === 'load' ||
+        readyRegExp.test((e.currentTarget || e.srcElement).readyState)
+      ) {
         removeListener();
         typeof done === 'function' && done(e);
       }
     };
     // 资源加载失败
-    var onError = function(e) {
+    var onError = function (e) {
       removeListener();
       typeof error === 'function' && error(e);
     };
 
     // 移除事件
-    var removeListener = function() {
+    var removeListener = function () {
       if (node.detachEvent) {
         node.detachEvent('onreadystatechange', onCompleted);
       } else {
@@ -170,7 +181,13 @@
     };
 
     // 添加事件
-    if (node.attachEvent && !(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code') < 0)) {
+    if (
+      node.attachEvent &&
+      !(
+        node.attachEvent.toString &&
+        node.attachEvent.toString().indexOf('[native code') < 0
+      )
+    ) {
       // 此处考虑到 IE9+ load 的稳定性，固仍然采用 onreadystatechange
       node.attachEvent('onreadystatechange', onCompleted);
     } else {
@@ -186,7 +203,7 @@
    * 全局配置
    * @param {Object} options - 配置对象
    */
-  Class.prototype.config = function(options) {
+  Class.prototype.config = function (options) {
     Object.assign(config, options);
     return this;
   };
@@ -196,21 +213,22 @@
    * @param {(string|string[])} deps - 依赖的模块列表
    * @param {Function} callback - 模块的回调
    */
-  Class.prototype.define = function(deps, callback) {
+  Class.prototype.define = function (deps, callback) {
     var that = this;
-    var useCallback = function() {
-      var setModule = function(mod, exports) {
+    var useCallback = function () {
+      var setModule = function (mod, exports) {
         layui[mod] = exports; // 将模块接口赋值在 layui 对象中
         cache.status[mod] = true; // 标记模块注册完成
       };
       // 执行模块的回调
-      typeof callback === 'function' && callback(function(mod, exports) {
-        setModule(mod, exports);
-        // 记录模块回调，以便需要时再执行
-        cache.callback[mod] = function() {
-          callback(setModule);
-        };
-      });
+      typeof callback === 'function' &&
+        callback(function (mod, exports) {
+          setModule(mod, exports);
+          // 记录模块回调，以便需要时再执行
+          cache.callback[mod] = function () {
+            callback(setModule);
+          };
+        });
       return this;
     };
 
@@ -229,12 +247,12 @@
    * @param {(string|string[])} mods - 模块列表
    * @param {Function} callback - 回调
    */
-  Class.prototype.use = function(mods, callback, exports, from) {
+  Class.prototype.use = function (mods, callback, exports, from) {
     var that = this;
-    var dir = config.dir = config.dir ? config.dir : getPath;
+    var dir = (config.dir = config.dir ? config.dir : getPath);
 
     // 整理模块队列
-    mods = (function() {
+    mods = (function () {
       if (typeof mods === 'string') {
         return [mods];
       } else if (typeof mods === 'function') {
@@ -247,7 +265,9 @@
 
     // 获取 layui 静态资源所在 host
     if (!config.host) {
-      config.host = (dir.match(/\/\/([\s\S]+?)\//) || ['//' + location.host + '/'])[0];
+      config.host = (dir.match(/\/\/([\s\S]+?)\//) || [
+        '//' + location.host + '/'
+      ])[0];
     }
 
     // 若参数异常
@@ -255,7 +275,7 @@
 
     // 若页面已经存在 jQuery 且所定义的模块依赖 jQuery，则不加载内部 jquery 模块
     if (window.jQuery && jQuery.fn.on) {
-      that.each(mods, function(index, item) {
+      that.each(mods, function (index, item) {
         if (item === 'jquery') {
           mods.splice(index, 1);
         }
@@ -273,36 +293,45 @@
     var isExternalModule = typeof modInfo === 'object';
 
     // 回调触发
-    var onCallback = function() {
+    var onCallback = function () {
       exports.push(layui[item]);
       mods.length > 1
         ? that.use(mods.slice(1), callback, exports, from)
-        : (typeof callback === 'function' && function() {
-        // 保证文档加载完毕再执行回调
-          if (layui.jquery && typeof layui.jquery === 'function' && from !== 'define') {
-            return layui.jquery(function() {
-              callback.apply(layui, exports);
-            });
-          }
-          callback.apply(layui, exports);
-        }() );
+        : typeof callback === 'function' &&
+          (function () {
+            // 保证文档加载完毕再执行回调
+            if (
+              layui.jquery &&
+              typeof layui.jquery === 'function' &&
+              from !== 'define'
+            ) {
+              return layui.jquery(function () {
+                callback.apply(layui, exports);
+              });
+            }
+            callback.apply(layui, exports);
+          })();
     };
 
     // 回调轮询
-    var pollCallback = function() {
+    var pollCallback = function () {
       var timeout = 0; // 超时计数器（秒）
       var delay = 5; // 轮询等待毫秒数
 
       // 轮询模块加载完毕状态
       (function poll() {
-        if (++timeout > config.timeout * 1000 / delay) {
+        if (++timeout > (config.timeout * 1000) / delay) {
           return error(item + ' is not a valid module', 'error');
-        };
+        }
 
         // 根据模块加载完毕的标志来完成轮询
         // 若为任意外部模块，则标志为该模块接口是否存在；
         // 若为遵循 layui 规范的模块，则标志为模块的 status 状态值
-        (isExternalModule ? layui[item] = window[modInfo.api] : cache.status[item])
+        (
+          isExternalModule
+            ? (layui[item] = window[modInfo.api])
+            : cache.status[item]
+        )
           ? onCallback()
           : setTimeout(poll, delay);
       })();
@@ -310,7 +339,7 @@
 
     // 若为发行版，则内置模块不必异步加载
     if (mods.length === 0 || (layui['layui.all'] && builtinModules[item])) {
-      return onCallback(), that;
+      return (onCallback(), that);
     }
 
     // 当前模块所在路径
@@ -318,14 +347,16 @@
 
     // 基础路径
     var basePath = builtinModules[item]
-      ? (dir + 'modules/')  // 若为内置模块，则按照默认 dir 参数拼接模块 URL
-      : (modSrc ? '' : config.base); // 若为扩展模块，且模块路径已设置，则不必再重复拼接基础路径
+      ? dir + 'modules/' // 若为内置模块，则按照默认 dir 参数拼接模块 URL
+      : modSrc
+        ? ''
+        : config.base; // 若为扩展模块，且模块路径已设置，则不必再重复拼接基础路径
 
     // 若从 layui.modules 为获取到模块路径, 则将传入的模块名视为路径名
     if (!modSrc) modSrc = item;
 
     // 过滤空格符和 .js 后缀
-    modSrc = modSrc.replace(/\s/g, '').replace(/\.js[^\/\.]*$/, '');
+    modSrc = modSrc.replace(/\s/g, '').replace(/\.js[^/.]*$/, '');
 
     // 拼接最终模块 URL
     var url = basePath + modSrc + '.js';
@@ -342,26 +373,34 @@
 
       node.async = true;
       node.charset = 'utf-8'; // 避免 IE9 的编码问题
-      node.src = url + function() {
-        var version = config.version === true
-          ? (config.v || (new Date()).getTime())
-          : (config.version || '');
-        return version ? ('?v=' + version) : '';
-      }();
+      node.src =
+        url +
+        (function () {
+          var version =
+            config.version === true
+              ? config.v || new Date().getTime()
+              : config.version || '';
+          return version ? '?v=' + version : '';
+        })();
 
       head.appendChild(node);
 
       // 节点加载事件
-      onNodeLoad(node, function() {
-        head.removeChild(node);
-        pollCallback();
-      }, function() {
-        head.removeChild(node);
-      });
+      onNodeLoad(
+        node,
+        function () {
+          head.removeChild(node);
+          pollCallback();
+        },
+        function () {
+          head.removeChild(node);
+        }
+      );
 
       // 模块已首次加载的标记
       cache.modules[item] = url;
-    } else { // 再次 use 模块
+    } else {
+      // 再次 use 模块
       pollCallback();
     }
 
@@ -375,7 +414,7 @@
    * 拓展模块
    * @param {Object} settings - 拓展模块的配置
    */
-  Class.prototype.extend = function(settings) {
+  Class.prototype.extend = function (settings) {
     var that = this;
     var base = config.base || '';
     var firstSymbolEXP = /^\{\/\}/; // 模块单独路径首字符表达式
@@ -384,7 +423,8 @@
 
     // 遍历拓展模块
     for (var modName in settings) {
-      if (that[modName] || that.modules[modName]) { // 验证模块是否被占用
+      if (that[modName] || that.modules[modName]) {
+        // 验证模块是否被占用
         error('the ' + modName + ' module already exists, extend failure');
       } else {
         var modInfo = settings[modName];
@@ -393,7 +433,7 @@
           // 判断传入的模块路径是否特定首字符
           // 若存在特定首字符，则模块 URL 即为该首字符后面紧跟的字符
           // 否则，则按照 config.base 路径进行拼接
-          if (firstSymbolEXP.test(modInfo))  base = '';
+          if (firstSymbolEXP.test(modInfo)) base = '';
           modInfo = (base + modInfo).replace(firstSymbolEXP, '');
         }
         that.modules[modName] = modInfo;
@@ -407,10 +447,10 @@
    * 弃用指定的模块，以便重新扩展新的同名模块。
    * @param {(string|string[])} mods - 模块列表
    */
-  Class.prototype.disuse = function(mods) {
+  Class.prototype.disuse = function (mods) {
     var that = this;
     mods = that.isArray(mods) ? mods : [mods];
-    that.each(mods, function(index, item) {
+    that.each(mods, function (index, item) {
       delete that[item];
       delete builtinModules[item];
       delete that.modules[item];
@@ -427,11 +467,17 @@
    * @param {string} name - 属性名
    * @returns 属性值
    */
-  Class.prototype.getStyle = function(node, name) {
-    var style = node.currentStyle ? node.currentStyle : window.getComputedStyle(node, null);
+  Class.prototype.getStyle = function (node, name) {
+    var style = node.currentStyle
+      ? node.currentStyle
+      : window.getComputedStyle(node, null);
     return style.getPropertyValue
       ? style.getPropertyValue(name)
-      : style.getAttribute(name.replace(/-(\w)/g, function(_, c) { return c ? c.toUpperCase() : '';}));
+      : style.getAttribute(
+          name.replace(/-(\w)/g, function (_, c) {
+            return c ? c.toUpperCase() : '';
+          })
+        );
   };
 
   /**
@@ -440,7 +486,7 @@
    * @param {Function} callback - 回调函数
    * @param {string} id - 定义 link 标签的 id
    */
-  Class.prototype.link = function(href, callback, id) {
+  Class.prototype.link = function (href, callback, id) {
     var that = this;
     var head = document.getElementsByTagName('head')[0];
     var hasCallback = typeof callback === 'function';
@@ -453,7 +499,7 @@
     // 若加载多个
     if (typeof href === 'object') {
       var isArr = that.type(id) === 'array';
-      return that.each(href, function(index, value) {
+      return that.each(href, function (index, value) {
         that.link(
           value,
           index === href.length - 1 && callback,
@@ -484,13 +530,17 @@
     }
 
     // 初始加载
-    onNodeLoad(link, function() {
-      link.__lay_readyState__ = 'complete';
-      hasCallback && callback(link);
-    }, function() {
-      error(href + ' load error', 'error');
-      head.removeChild(link); // 移除节点
-    });
+    onNodeLoad(
+      link,
+      function () {
+        link.__lay_readyState__ = 'complete';
+        hasCallback && callback(link);
+      },
+      function () {
+        error(href + ' load error', 'error');
+        head.removeChild(link); // 移除节点
+      }
+    );
 
     return that;
   };
@@ -499,7 +549,7 @@
    * CSS 内部加载器
    * @param {string} modName - 模块名
    */
-  Class.prototype.addcss = function(modName, callback, id) {
+  Class.prototype.addcss = function (modName, callback, id) {
     return layui.link(config.dir + 'css/' + modName, callback, id);
   };
 
@@ -508,7 +558,7 @@
    * @param {string} modName - 模块名
    * @returns {Function}
    */
-  Class.prototype.factory = function(modName) {
+  Class.prototype.factory = function (modName) {
     if (layui[modName]) {
       return typeof config.callback[modName] === 'function'
         ? config.callback[modName]
@@ -522,17 +572,17 @@
    * @param {Function} callback - 成功回调
    * @param {Function} error - 错误回调
    */
-  Class.prototype.img = function(url, callback, error) {
+  Class.prototype.img = function (url, callback, error) {
     var img = new Image();
     img.src = url;
     if (img.complete) {
       return callback(img);
     }
-    img.onload = function() {
+    img.onload = function () {
       img.onload = null;
       typeof callback === 'function' && callback(img);
     };
-    img.onerror = function(e) {
+    img.onerror = function (e) {
       img.onerror = null;
       typeof error === 'function' && error(e);
     };
@@ -543,15 +593,15 @@
    * @param {string} hash 值
    * @returns {Object}
    */
-  Class.prototype.router = Class.prototype.hash = function(hash) {
+  Class.prototype.router = Class.prototype.hash = function (hash) {
+    hash = hash || location.hash;
     var that = this;
-    var hash = hash || location.hash;
     var data = {
       path: [],
       pathname: [],
       search: {},
       hash: (hash.match(/[^#](#.*$)/) || [])[1] || '',
-      href: '',
+      href: ''
     };
 
     // 禁止非 hash 路由规范
@@ -564,11 +614,13 @@
     hash = hash.replace(/([^#])(#.*$)/, '$1').split('/') || [];
 
     // 提取 Hash 结构
-    that.each(hash, function(index, item) {
-      /^\w+=/.test(item) ? function() {
-        item = item.split('=');
-        data.search[item[0]] = item[1];
-      }() : data.path.push(item);
+    that.each(hash, function (index, item) {
+      /^\w+=/.test(item)
+        ? (function () {
+            item = item.split('=');
+            data.search[item[0]] = item[1];
+          })()
+        : data.path.push(item);
     });
 
     data.pathname = data.path; // path → pathname, 与 layui.url 一致
@@ -580,35 +632,39 @@
    * @param {string} href - url 路径
    * @returns {Object}
    */
-  Class.prototype.url = function(href) {
+  Class.prototype.url = function (href) {
     var that = this;
     var data = {
       // 提取 url 路径
-      pathname: function() {
+      pathname: (function () {
         var pathname = href
-          ? function() {
-            var str = (href.match(/\.[^.]+?\/.+/) || [])[0] || '';
-            return str.replace(/^[^\/]+/, '').replace(/\?.+/, '');
-          }()
+          ? (function () {
+              var str = (href.match(/\.[^.]+?\/.+/) || [])[0] || '';
+              return str.replace(/^[^/]+/, '').replace(/\?.+/, '');
+            })()
           : location.pathname;
         return pathname.replace(/^\//, '').split('/');
-      }(),
+      })(),
 
       // 提取 url 参数
-      search: function() {
+      search: (function () {
         var obj = {};
-        var search = (href
-          ? function() {
-            var str = (href.match(/\?.+/) || [])[0] || '';
-            return str.replace(/\#.+/, '');
-          }()
-          : location.search
-        ).replace(/^\?+/, '').split('&'); // 去除 ?，按 & 分割参数
+        var search = (
+          href
+            ? (function () {
+                var str = (href.match(/\?.+/) || [])[0] || '';
+                return str.replace(/#.+/, '');
+              })()
+            : location.search
+        )
+          .replace(/^\?+/, '')
+          .split('&'); // 去除 ?，按 & 分割参数
 
         // 遍历分割后的参数
-        that.each(search, function(index, item) {
+        that.each(search, function (index, item) {
           var _index = item.indexOf('=');
-          var key = function() { // 提取 key
+          var key = (function () {
+            // 提取 key
             if (_index < 0) {
               return item.substr(0, item.length);
             } else if (_index === 0) {
@@ -616,7 +672,7 @@
             } else {
               return item.substr(0, _index);
             }
-          }();
+          })();
           // 提取 value
           if (key) {
             obj[key] = _index > 0 ? item.substr(_index + 1) : null;
@@ -624,14 +680,14 @@
         });
 
         return obj;
-      }(),
+      })(),
 
       // 提取 Hash
-      hash: that.router(function() {
-        return href
-          ? ((href.match(/#.+/) || [])[0] || '/')
-          : location.hash;
-      }()),
+      hash: that.router(
+        (function () {
+          return href ? (href.match(/#.+/) || [])[0] || '/' : location.hash;
+        })()
+      )
     };
 
     return data;
@@ -644,7 +700,7 @@
    * @param {Storage} storage - 存储对象，localStorage 或 sessionStorage
    * @returns {Object}
    */
-  Class.prototype.data = function(table, settings, storage) {
+  Class.prototype.data = function (table, settings, storage) {
     table = table || 'layui';
     storage = storage || localStorage;
 
@@ -653,14 +709,14 @@
       return delete storage[table];
     }
 
-    settings = typeof settings === 'object'
-      ? settings
-      : {key: settings};
+    settings = typeof settings === 'object' ? settings : { key: settings };
+
+    var data;
 
     try {
-      var data = JSON.parse(storage[table]);
+      data = JSON.parse(storage[table]);
     } catch (e) {
-      var data = {};
+      data = {};
     }
 
     if ('value' in settings) data[settings.key] = settings.value;
@@ -676,7 +732,7 @@
    * @param {Object} settings - 设置项
    * @returns {Object}
    */
-  Class.prototype.sessionData = function(table, settings) {
+  Class.prototype.sessionData = function (table, settings) {
     return this.data(table, settings, sessionStorage);
   };
 
@@ -685,11 +741,11 @@
    * @param {string} key - 任意 key
    * @returns {Object}
    */
-  Class.prototype.device = function(key) {
+  Class.prototype.device = function (key) {
     var agent = navigator.userAgent.toLowerCase();
 
     // 获取版本号
-    var getVersion = function(label) {
+    var getVersion = function (label) {
       var exp = new RegExp(label + '/([^\\s\\_\\-]+)');
       label = (agent.match(exp) || [])[1];
       return label || false;
@@ -697,7 +753,8 @@
 
     // 返回结果集
     var result = {
-      os: function() { // 底层操作系统
+      os: (function () {
+        // 底层操作系统
         if (/windows/.test(agent)) {
           return 'windows';
         } else if (/linux/.test(agent)) {
@@ -707,13 +764,14 @@
         } else if (/mac/.test(agent)) {
           return 'mac';
         }
-      }(),
-      ie: function() { // ie 版本
-        return (!!window.ActiveXObject || 'ActiveXObject' in window) ? (
-          (agent.match(/msie\s(\d+)/) || [])[1] || '11' // 由于 ie11 并没有 msie 的标识
-        ) : false;
-      }(),
-      weixin: getVersion('micromessenger'),  // 是否微信
+      })(),
+      ie: (function () {
+        // ie 版本
+        return !!window.ActiveXObject || 'ActiveXObject' in window
+          ? (agent.match(/msie\s(\d+)/) || [])[1] || '11' // 由于 ie11 并没有 msie 的标识
+          : false;
+      })(),
+      weixin: getVersion('micromessenger') // 是否微信
     };
 
     // 任意的 key
@@ -724,16 +782,16 @@
     // 移动设备
     result.android = /android/.test(agent);
     result.ios = result.os === 'ios';
-    result.mobile = (result.android || result.ios);
+    result.mobile = result.android || result.ios;
 
     return result;
   };
 
   // 提示
-  Class.prototype.hint = function() {
+  Class.prototype.hint = function () {
     return {
       error: error,
-      errorOnce: errorOnce,
+      errorOnce: errorOnce
     };
   };
 
@@ -742,21 +800,24 @@
    * @param {*} operand - 任意值
    * @returns {string}
    */
-  Class.prototype._typeof = Class.prototype.type = function(operand) {
+  Class.prototype._typeof = Class.prototype.type = function (operand) {
     if (operand === null) return String(operand);
 
     // 细分引用类型
-    return (typeof operand === 'object' || typeof operand === 'function') ? function() {
-      var type = Object.prototype.toString.call(operand).match(/\s(.+)\]$/) || []; // 匹配类型字符
-      var classType = 'Function|Array|Date|RegExp|Object|Error|Symbol'; // 常见类型字符
+    return typeof operand === 'object' || typeof operand === 'function'
+      ? (function () {
+          var type =
+            Object.prototype.toString.call(operand).match(/\s(.+)\]$/) || []; // 匹配类型字符
+          var classType = 'Function|Array|Date|RegExp|Object|Error|Symbol'; // 常见类型字符
 
-      type = type[1] || 'Object';
+          type = type[1] || 'Object';
 
-      // 除匹配到的类型外，其他对象均返回 object
-      return new RegExp('\\b(' + classType + ')\\b').test(type)
-        ? type.toLowerCase()
-        : 'object';
-    }() : typeof operand;
+          // 除匹配到的类型外，其他对象均返回 object
+          return new RegExp('\\b(' + classType + ')\\b').test(type)
+            ? type.toLowerCase()
+            : 'object';
+        })()
+      : typeof operand;
   };
 
   /**
@@ -764,16 +825,18 @@
    * @param {Object} obj - 任意对象
    * @returns {boolean}
    */
-  Class.prototype._isArray = Class.prototype.isArray = function(obj) {
+  Class.prototype._isArray = Class.prototype.isArray = function (obj) {
     var that = this;
     var len;
     var type = that.type(obj);
 
-    if (!obj || (typeof obj !== 'object') || obj === window) return false;
+    if (!obj || typeof obj !== 'object' || obj === window) return false;
 
     len = 'length' in obj && obj.length; // 兼容 ie
-    return type === 'array' || len === 0 || (
-      typeof len === 'number' && len > 0 && (len - 1) in obj // 兼容 jQuery 对象
+    return (
+      type === 'array' ||
+      len === 0 ||
+      (typeof len === 'number' && len > 0 && len - 1 in obj) // 兼容 jQuery 对象
     );
   };
 
@@ -782,10 +845,10 @@
    * @param {Object} obj - 任意对象
    * @param {Function} fn - 遍历回调
    */
-  Class.prototype.each = function(obj, fn) {
+  Class.prototype.each = function (obj, fn) {
     var key;
     var that = this;
-    var callback = function(key, obj) {
+    var callback = function (key, obj) {
       return fn.call(obj[key], key, obj[key]);
     };
 
@@ -817,21 +880,20 @@
    * @param {boolean} notClone - 是否不对 arr 进行克隆
    * @returns {Object[]}
    */
-  Class.prototype.sort = function(arr, key, desc, notClone) {
+  Class.prototype.sort = function (arr, key, desc, notClone) {
     var that = this;
-    var clone = notClone ? (arr || []) : JSON.parse(
-      JSON.stringify(arr || [])
-    );
+    var clone = notClone ? arr || [] : JSON.parse(JSON.stringify(arr || []));
 
     // 若未传入 key，则直接返回原对象
     if (that.type(arr) === 'object' && !key) {
       return clone;
-    } else if (typeof arr !== 'object') { // 若 arr 非对象
+    } else if (typeof arr !== 'object') {
+      // 若 arr 非对象
       return [clone];
     }
 
     // 开始排序
-    clone.sort(function(o1, o2) {
+    clone.sort(function (o1, o2) {
       var v1 = o1[key];
       var v2 = o2[key];
 
@@ -869,11 +931,14 @@
 
       // 若为数字比较
       if (isNum[0] && isNum[1]) {
-        if (v1 && (!v2 && v2 !== 0)) { // 数字 vs 空
+        if (v1 && !v2 && v2 !== 0) {
+          // 数字 vs 空
           return 1;
-        } else if ((!v1 && v1 !== 0) && v2) { // 空 vs 数字
+        } else if (!v1 && v1 !== 0 && v2) {
+          // 空 vs 数字
           return -1;
-        } else { // 数字 vs 数字
+        } else {
+          // 数字 vs 数字
           return v1 - v2;
         }
       }
@@ -895,12 +960,13 @@
       }
 
       // 若为混合比较
-      if (isNum[0] || !isNum[1]) { // 数字 vs 非数字
+      if (isNum[0] || !isNum[1]) {
+        // 数字 vs 非数字
         return -1;
-      } else if (!isNum[0] || isNum[1]) { // 非数字 vs 数字
+      } else if (!isNum[0] || isNum[1]) {
+        // 非数字 vs 数字
         return 1;
       }
-
     });
 
     desc && clone.reverse(); // 倒序
@@ -911,7 +977,7 @@
    * 阻止事件冒泡
    * @param {Event} thisEvent - 事件对象
    */
-  Class.prototype.stope = function(thisEvent) {
+  Class.prototype.stope = function (thisEvent) {
     try {
       thisEvent.stopPropagation();
     } catch (e) {
@@ -929,7 +995,7 @@
    * @param {Function} callback - 回调
    * @returns {Object}
    */
-  Class.prototype.onevent = function(modName, events, callback) {
+  Class.prototype.onevent = function (modName, events, callback) {
     if (typeof modName !== 'string' || typeof callback !== 'function') {
       return this;
     }
@@ -943,13 +1009,13 @@
    * @param {Object} params - 参数
    * @param {Function} fn - 回调
    */
-  Class.prototype.event = Class.event = function(modName, events, params, fn) {
+  Class.prototype.event = Class.event = function (modName, events, params, fn) {
     var that = this;
     var result = null;
     var filter = (events || '').match(/\((.*)\)$/) || []; // 提取事件过滤器字符结构，如：select(xxx)
     var eventName = (modName + '.' + events).replace(filter[0], ''); // 获取事件名称，如：form.select
     var filterName = filter[1] || ''; // 获取过滤器名称, 如：xxx
-    var callback = function(_, item) {
+    var callback = function (_, item) {
       var res = item && item.call(that, params);
       res === false && result === null && (result = false);
     };
@@ -969,14 +1035,15 @@
         cache.event[eventName][filterName] = [fn];
       } else {
         // 不带 filter 处理的是所有的同类事件，应该支持重复事件
-        cache.event[eventName][filterName] = cache.event[eventName][filterName] || [];
+        cache.event[eventName][filterName] =
+          cache.event[eventName][filterName] || [];
         cache.event[eventName][filterName].push(fn);
       }
       return this;
     }
 
     // 执行事件回调
-    layui.each(cache.event[eventName], function(key, item) {
+    layui.each(cache.event[eventName], function (key, item) {
       // 执行当前模块的全部事件
       if (filterName === '{*}') {
         layui.each(item, callback);
@@ -985,7 +1052,7 @@
 
       // 执行指定事件
       key === '' && layui.each(item, callback);
-      (filterName && key === filterName) && layui.each(item, callback);
+      filterName && key === filterName && layui.each(item, callback);
     });
 
     return result;
@@ -998,7 +1065,7 @@
    * @param {Function} callback - 回调
    * @returns {Object}
    */
-  Class.prototype.on = function(events, modName, callback) {
+  Class.prototype.on = function (events, modName, callback) {
     var that = this;
     return that.onevent.call(that, modName, events, callback);
   };
@@ -1009,7 +1076,7 @@
    * @param {string} modName - 模块名
    * @returns {Object}
    */
-  Class.prototype.off = function(events, modName) {
+  Class.prototype.off = function (events, modName) {
     var that = this;
     return that.event.call(that, modName, events, EV_REMOVE);
   };
@@ -1020,13 +1087,13 @@
    * @param {number} wait - 延时执行的毫秒数
    * @returns {Function}
    */
-  Class.prototype.debounce = function(func, wait) {
+  Class.prototype.debounce = function (func, wait) {
     var timeout;
-    return function() {
+    return function () {
       var context = this;
       var args = arguments;
       clearTimeout(timeout);
-      timeout = setTimeout(function() {
+      timeout = setTimeout(function () {
         func.apply(context, args);
       }, wait);
     };
@@ -1037,15 +1104,15 @@
    * @param {Function} func - 回调
    * @param {number} wait - 不重复执行的毫秒数
    */
-  Class.prototype.throttle = function(func, wait) {
+  Class.prototype.throttle = function (func, wait) {
     var cooldown = false;
-    return function() {
+    return function () {
       var context = this;
       var args = arguments;
       if (!cooldown) {
         func.apply(context, args);
         cooldown = true;
-        setTimeout(function() {
+        setTimeout(function () {
           cooldown = false;
         }, wait);
       }

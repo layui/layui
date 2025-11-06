@@ -3,7 +3,7 @@
  * 流加载组件
  */
 
-layui.define(['i18n', 'component'], function(exports) {
+layui.define(['i18n', 'component'], function (exports) {
   'use strict';
 
   var $ = layui.$;
@@ -14,14 +14,15 @@ layui.define(['i18n', 'component'], function(exports) {
     name: 'flow',
 
     CONST: {
-      ELEM_LOAD: '<i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon layui-icon-loading-1"></i>',
+      ELEM_LOAD:
+        '<i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon layui-icon-loading-1"></i>',
       ELEM_MORE: 'layui-flow-more',
       FLOW_SCROLL_EVENTS: 'scroll.lay_flow_scroll',
-      LAZYIMG_SCROLL_EVENTS: 'scroll.lay_flow_lazyimg_scroll',
+      LAZYIMG_SCROLL_EVENTS: 'scroll.lay_flow_lazyimg_scroll'
     },
 
     // 渲染
-    render: function() {
+    render: function () {
       var that = this;
       var options = that.config;
 
@@ -45,13 +46,19 @@ layui.define(['i18n', 'component'], function(exports) {
 
       // 加载更多
       var ELEM_TEXT = '<cite>' + moreText + '</cite>';
-      var $more = $('<div class="' + CONST.ELEM_MORE + '"><a href="javascript:;">' + ELEM_TEXT + '</a></div>');
+      var $more = $(
+        '<div class="' +
+          CONST.ELEM_MORE +
+          '"><a href="javascript:;">' +
+          ELEM_TEXT +
+          '</a></div>'
+      );
 
       elem.find('.' + CONST.ELEM_MORE).remove(); // 清除旧的「加载更多」元素
       elem[isTop ? 'prepend' : 'append']($more);
 
       // 加载下一个元素
-      var next = function(content, status) {
+      var next = function (content, status) {
         var scrollHeightStart = notDocument
           ? scrollElem.prop('scrollHeight')
           : document.documentElement.scrollHeight;
@@ -69,12 +76,14 @@ layui.define(['i18n', 'component'], function(exports) {
             elem: options.elem.find('img[lay-src]'),
             scrollElem: options.scrollElem,
             direction: options.direction,
-            id: options.id,
+            id: options.id
           });
         }
 
         if (isTop) {
-          var scrollHeightEnd = notDocument ? scrollElem.prop('scrollHeight') : document.documentElement.scrollHeight;
+          var scrollHeightEnd = notDocument
+            ? scrollElem.prop('scrollHeight')
+            : document.documentElement.scrollHeight;
           if (page === 1) {
             // 首次渲染后滑动到底部
             scrollElem.scrollTop(scrollHeightEnd);
@@ -95,7 +104,7 @@ layui.define(['i18n', 'component'], function(exports) {
       })();
 
       // 不自动滚动加载
-      $moreBtn.on('click', function() {
+      $moreBtn.on('click', function () {
         if (finished) return;
         locked || done();
       });
@@ -105,15 +114,16 @@ layui.define(['i18n', 'component'], function(exports) {
       // 滚动条滚动事件
       var timer;
       var FLOW_SCROLL_EVENTS = CONST.FLOW_SCROLL_EVENTS + '_' + options.id;
-      scrollElem.off(FLOW_SCROLL_EVENTS).on(FLOW_SCROLL_EVENTS, function() {
-        var othis = $(this), top = othis.scrollTop();
+      scrollElem.off(FLOW_SCROLL_EVENTS).on(FLOW_SCROLL_EVENTS, function () {
+        var othis = $(this),
+          top = othis.scrollTop();
 
         if (timer) clearTimeout(timer);
 
         // 如果已经结束，或者元素处于隐藏状态，则不执行滚动加载
         if (finished || !elem.width()) return;
 
-        timer = setTimeout(function() {
+        timer = setTimeout(function () {
           // 计算滚动所在容器的可视高度
           var height = notDocument ? othis.height() : $(window).height();
 
@@ -123,12 +133,14 @@ layui.define(['i18n', 'component'], function(exports) {
             : document.documentElement.scrollHeight;
 
           // 临界点
-          if (!isTop ? scrollHeight - top - height <= threshold : top <= threshold) {
+          if (
+            !isTop ? scrollHeight - top - height <= threshold : top <= threshold
+          ) {
             locked || done();
           }
         }, 100);
       });
-    },
+    }
   });
 
   var CONST = component.CONST;
@@ -139,12 +151,12 @@ layui.define(['i18n', 'component'], function(exports) {
 
   // 保留原接口，确保向下兼容
   $.extend(component, {
-    load: function(options) {
+    load: function (options) {
       return component.render(options);
     },
 
     // 图片懒加载
-    lazyimg: function(options) {
+    lazyimg: function (options) {
       options = options || {};
 
       var scrollElem = $(options.scrollElem || document); // 滚动条所在元素
@@ -165,25 +177,34 @@ layui.define(['i18n', 'component'], function(exports) {
         var start = scrollElem.scrollTop();
         var end = start + height;
 
-        var show = function(item) {
-          var elemTop = notDocument ? function() {
-            return item.offset().top - scrollElem.offset().top + start;
-          }() : item.offset().top;
+        var show = function (item) {
+          var elemTop = notDocument
+            ? (function () {
+                return item.offset().top - scrollElem.offset().top + start;
+              })()
+            : item.offset().top;
 
           /* 始终只加载在当前屏范围内的图片 */
-          if ((isTop ? elemTop + item.height() : elemTop) >= start && elemTop <= end) {
+          if (
+            (isTop ? elemTop + item.height() : elemTop) >= start &&
+            elemTop <= end
+          ) {
             if (item.attr('lay-src')) {
               var src = item.attr('lay-src');
-              layui.img(src, function() {
-                var next = $elem.eq(index);
-                item.attr('src', src).removeAttr('lay-src');
+              layui.img(
+                src,
+                function () {
+                  var next = $elem.eq(index);
+                  item.attr('src', src).removeAttr('lay-src');
 
-                /* 当前图片加载就绪后，检测下一个图片是否在当前屏 */
-                next[0] && render(next);
-                index++;
-              }, function() {
-                item.removeAttr('lay-src');
-              });
+                  /* 当前图片加载就绪后，检测下一个图片是否在当前屏 */
+                  next[0] && render(next);
+                  index++;
+                },
+                function () {
+                  item.removeAttr('lay-src');
+                }
+              );
             }
           }
         };
@@ -193,9 +214,12 @@ layui.define(['i18n', 'component'], function(exports) {
         } else {
           // 计算未加载过的图片
           for (var i = 0; i < $elem.length; i++) {
-            var item = $elem.eq(i), elemTop = notDocument ? function() {
-              return item.offset().top - scrollElem.offset().top + start;
-            }() : item.offset().top;
+            var item = $elem.eq(i),
+              elemTop = notDocument
+                ? (function () {
+                    return item.offset().top - scrollElem.offset().top + start;
+                  })()
+                : item.offset().top;
 
             show(item);
             index = i;
@@ -212,15 +236,17 @@ layui.define(['i18n', 'component'], function(exports) {
       var timer;
       var id = options.id || '';
       var LAZYIMG_SCROLL_EVENTS = CONST.LAZYIMG_SCROLL_EVENTS + '_' + id;
-      scrollElem.off(LAZYIMG_SCROLL_EVENTS).on(LAZYIMG_SCROLL_EVENTS, function() {
-        if (timer) clearTimeout(timer);
-        timer = setTimeout(function() {
-          render();
-        }, 50);
-      });
+      scrollElem
+        .off(LAZYIMG_SCROLL_EVENTS)
+        .on(LAZYIMG_SCROLL_EVENTS, function () {
+          if (timer) clearTimeout(timer);
+          timer = setTimeout(function () {
+            render();
+          }, 50);
+        });
 
       return render;
-    },
+    }
   });
 
   exports(CONST.MOD_NAME, component);

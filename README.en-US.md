@@ -47,7 +47,7 @@ To use Layui, simply include the core files in your page, such as:
       layui.use(function () {
         var layer = layui.layer;
         // Welcome
-        layer.msg("Hello World", { icon: 6 });
+        layer.msg('Hello World', { icon: 6 });
       });
     </script>
   </body>

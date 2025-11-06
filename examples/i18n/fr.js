@@ -40,7 +40,20 @@ export default {
     verifyErrorPromptTitle: 'Avertissement'
   },
   laydate: {
-    months: ['Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'],
+    months: [
+      'Janv',
+      'Févr',
+      'Mars',
+      'Avr',
+      'Mai',
+      'Juin',
+      'Juil',
+      'Août',
+      'Sept',
+      'Oct',
+      'Nov',
+      'Déc'
+    ],
     weeks: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
     time: ['Heure', 'Minute', 'Seconde'],
     literal: {
@@ -57,9 +70,11 @@ export default {
       now: 'Ajd.',
       reset: 'Réinit.'
     },
-    rangeOrderPrompt: 'L’heure de fin ne peut pas être antérieure à l’heure de début\nVeuillez recommencer', 
+    rangeOrderPrompt:
+      'L’heure de fin ne peut pas être antérieure à l’heure de début\nVeuillez recommencer',
     invalidDatePrompt: 'Date ou heure hors plage valide\n',
-    formatErrorPrompt: 'Format de date invalide\nLe format attendu est :\n{format}\n',
+    formatErrorPrompt:
+      'Format de date invalide\nLe format attendu est :\n{format}\n',
     autoResetPrompt: 'Il a été réinitialisé pour vous',
     preview: 'Résultat sélectionné actuel'
   },
@@ -82,7 +97,8 @@ export default {
       },
       viewPicture: 'Voir l’image originale',
       urlError: {
-        prompt: 'L’adresse de l’image est invalide,\nContinuer avec la suivante ?',
+        prompt:
+          'L’adresse de l’image est invalide,\nContinuer avec la suivante ?',
         confirm: 'Suivante',
         cancel: 'Annuler'
       }
@@ -112,7 +128,8 @@ export default {
       export: {
         title: 'Exporter',
         noDataPrompt: 'Aucune donnée à exporter',
-        compatPrompt: 'L’exportation n’est pas supportée par IE, veuillez utiliser Chrome ou un autre navigateur moderne',
+        compatPrompt:
+          'L’exportation n’est pas supportée par IE, veuillez utiliser Chrome ou un autre navigateur moderne',
         csvText: 'Exporter au format CSV'
       },
       print: {
@@ -120,7 +137,8 @@ export default {
         noDataPrompt: 'Aucune donnée à imprimer'
       }
     },
-    dataFormatError: 'Les données retournées sont invalides. Le code de réussite attendu est : "{statusName}": {statusCode}',
+    dataFormatError:
+      'Les données retournées sont invalides. Le code de réussite attendu est : "{statusName}": {statusCode}',
     xhrError: 'Erreur de requête : {msg}'
   },
   transfer: {
@@ -142,7 +160,8 @@ export default {
       audio: 'Audio'
     },
     validateMessages: {
-      fileExtensionError: 'Le {fileType} sélectionné contient un format non supporté',
+      fileExtensionError:
+        'Le {fileType} sélectionné contient un format non supporté',
       filesOverLengthLimit: 'Nombre maximum de fichiers : {length}',
       currentFilesLength: 'Vous avez sélectionné {length} fichiers',
       fileOverSizeLimit: 'La taille du fichier ne doit pas dépasser {size}'
@@ -158,7 +177,7 @@ export default {
       justNow: 'À l’instant'
     },
     toDateString: {
-      meridiem: function(hours, minutes){
+      meridiem: function (hours, minutes) {
         return hours < 12 ? 'AM' : 'PM';
       }
     }

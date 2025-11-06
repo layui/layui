@@ -21,11 +21,11 @@ jobs:
               issue_number: context.issue.number,
             };
             const issue = await github.rest.issues.get(config);
-            
+
             // 是否带有 `bug`, `wontfix` 标签
             const hasBugLabel = issue.data.labels.some(label => label.name === 'bug');
             const hasWontfixLabel = issue.data.labels.some(label => label.name === 'wontfix');
-            
+
             // 对带有 `bug` 标签的 issue 追加 `resolved` 标签，表示 bug 已解决。
             if (hasBugLabel && !hasWontfixLabel) {
               github.rest.issues.addLabels({

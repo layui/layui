@@ -3,7 +3,7 @@
  * 轮播
  */
 
-layui.define('component', function(exports) {
+layui.define('component', function (exports) {
   'use strict';
 
   var $ = layui.$;
@@ -24,7 +24,7 @@ layui.define('component', function(exports) {
       interval: 3000, // 自动切换的时间间隔，不能低于 800ms
       anim: '', // 动画类型：default/updown/fade
       trigger: 'click', // 指示器的触发方式：click/hover
-      index: 0, // 初始开始的索引
+      index: 0 // 初始开始的索引
     },
 
     CONST: {
@@ -35,11 +35,11 @@ layui.define('component', function(exports) {
       ELEM_PREV: 'layui-carousel-prev',
       ELEM_NEXT: 'layui-carousel-next',
       ELEM_ARROW: 'layui-carousel-arrow',
-      ELEM_IND: 'layui-carousel-ind',
+      ELEM_IND: 'layui-carousel-ind'
     },
 
     // 渲染
-    render: function() {
+    render: function () {
       var that = this;
       var options = that.config;
 
@@ -61,12 +61,12 @@ layui.define('component', function(exports) {
           position: 'fixed',
           width: '100%',
           height: '100%',
-          zIndex: 9999,
+          zIndex: 9999
         });
       } else {
         options.elem.css({
           width: options.width,
-          height: options.height,
+          height: options.height
         });
       }
 
@@ -82,20 +82,20 @@ layui.define('component', function(exports) {
     },
 
     // 扩展实例方法
-    extendsInstance: function() {
+    extendsInstance: function () {
       var that = this;
-      var options = that.config;
+      // var options = that.config;
 
       // 确保与文档描述一致
       return {
         elemInd: that.elemInd,
         elemItem: that.elemItem,
         timer: that.timer,
-        goto: function(index) {
+        goto: function (index) {
           that.goto(index);
-        },
+        }
       };
-    },
+    }
   });
 
   var CONST = component.CONST;
@@ -107,7 +107,7 @@ layui.define('component', function(exports) {
   var Class = component.Class;
 
   // 获取上一个等待条目的索引
-  Class.prototype.prevIndex = function() {
+  Class.prototype.prevIndex = function () {
     var that = this;
     var options = that.config;
     var prevIndex = options.index - 1;
@@ -120,7 +120,7 @@ layui.define('component', function(exports) {
   };
 
   // 获取下一个等待条目的索引
-  Class.prototype.nextIndex = function() {
+  Class.prototype.nextIndex = function () {
     var that = this;
     var options = that.config;
     var nextIndex = options.index + 1;
@@ -133,7 +133,7 @@ layui.define('component', function(exports) {
   };
 
   // 索引递增
-  Class.prototype.addIndex = function(num) {
+  Class.prototype.addIndex = function (num) {
     var that = this;
     var options = that.config;
 
@@ -147,7 +147,7 @@ layui.define('component', function(exports) {
   };
 
   // 索引递减
-  Class.prototype.subIndex = function(num) {
+  Class.prototype.subIndex = function (num) {
     var that = this;
     var options = that.config;
 
@@ -161,7 +161,7 @@ layui.define('component', function(exports) {
   };
 
   // 自动轮播
-  Class.prototype.autoplay = function() {
+  Class.prototype.autoplay = function () {
     var that = this;
     var options = that.config;
     var itemsCount = that.elemItem.length;
@@ -170,23 +170,33 @@ layui.define('component', function(exports) {
     clearInterval(that.timer);
 
     if (itemsCount > 1) {
-      that.timer = setInterval(function() {
+      that.timer = setInterval(function () {
         that.slide();
       }, options.interval);
     }
   };
 
   // 箭头
-  Class.prototype.arrow = function() {
+  Class.prototype.arrow = function () {
     var that = this;
     var options = that.config;
     var itemsCount = that.elemItem.length;
 
     // 模板
-    var tplArrow = $([
-      '<button type="button" class="layui-icon ' + (options.anim === 'updown' ? 'layui-icon-up' : 'layui-icon-left') + ' ' + CONST.ELEM_ARROW + '" lay-type="sub"></button>',
-      '<button type="button" class="layui-icon ' + (options.anim === 'updown' ? 'layui-icon-down' : 'layui-icon-right') + ' ' + CONST.ELEM_ARROW + '" lay-type="add"></button>',
-    ].join(''));
+    var tplArrow = $(
+      [
+        '<button type="button" class="layui-icon ' +
+          (options.anim === 'updown' ? 'layui-icon-up' : 'layui-icon-left') +
+          ' ' +
+          CONST.ELEM_ARROW +
+          '" lay-type="sub"></button>',
+        '<button type="button" class="layui-icon ' +
+          (options.anim === 'updown' ? 'layui-icon-down' : 'layui-icon-right') +
+          ' ' +
+          CONST.ELEM_ARROW +
+          '" lay-type="add"></button>'
+      ].join('')
+    );
 
     // 预设基础属性
     options.elem.attr('lay-arrow', options.arrow);
@@ -198,7 +208,7 @@ layui.define('component', function(exports) {
     itemsCount > 1 ? options.elem.append(tplArrow) : tplArrow.remove();
 
     // 事件
-    tplArrow.on('click', function() {
+    tplArrow.on('click', function () {
       var othis = $(this);
       var type = othis.attr('lay-type');
       that.slide(type);
@@ -206,7 +216,7 @@ layui.define('component', function(exports) {
   };
 
   // 跳转到特定下标
-  Class.prototype.goto = function(index) {
+  Class.prototype.goto = function (index) {
     var that = this;
     var options = that.config;
 
@@ -218,21 +228,29 @@ layui.define('component', function(exports) {
   };
 
   // 指示器
-  Class.prototype.indicator = function() {
+  Class.prototype.indicator = function () {
     var that = this;
     var options = that.config;
     var itemsCount = that.elemItem.length;
 
     // 模板
-    var tplInd = that.elemInd = $(['<div class="' + CONST.ELEM_IND + '"><ul>',
-      function() {
-        var li = [];
-        layui.each(that.elemItem, function(index) {
-          li.push('<li' + (options.index === index ? ' class="layui-this"' : '') + '></li>');
-        });
-        return li.join('');
-      }(),
-      '</ul></div>'].join(''));
+    var tplInd = (that.elemInd = $(
+      [
+        '<div class="' + CONST.ELEM_IND + '"><ul>',
+        (function () {
+          var li = [];
+          layui.each(that.elemItem, function (index) {
+            li.push(
+              '<li' +
+                (options.index === index ? ' class="layui-this"' : '') +
+                '></li>'
+            );
+          });
+          return li.join('');
+        })(),
+        '</ul></div>'
+      ].join('')
+    ));
 
     // 预设基础属性
     options.elem.attr('lay-indicator', options.indicator);
@@ -249,13 +267,18 @@ layui.define('component', function(exports) {
     }
 
     // 事件
-    tplInd.find('li').on(options.trigger === 'hover' ? 'mouseover' : options.trigger, function() {
-      that.goto($(this).index());
-    });
+    tplInd
+      .find('li')
+      .on(
+        options.trigger === 'hover' ? 'mouseover' : options.trigger,
+        function () {
+          that.goto($(this).index());
+        }
+      );
   };
 
   // 滑动切换
-  Class.prototype.slide = function(type, num) {
+  Class.prototype.slide = function (type, num) {
     var that = this;
     var elemItem = that.elemItem;
     var itemsCount = elemItem.length;
@@ -269,29 +292,44 @@ layui.define('component', function(exports) {
     if (type === 'sub') {
       that.subIndex(num);
       elemItem.eq(options.index).addClass(CONST.ELEM_PREV);
-      setTimeout(function() {
+      setTimeout(function () {
         elemItem.eq(thisIndex).addClass(CONST.ELEM_RIGHT);
         elemItem.eq(options.index).addClass(CONST.ELEM_RIGHT);
       }, 50);
-    } else { // 默认递增滑
+    } else {
+      // 默认递增滑
       that.addIndex(num);
       elemItem.eq(options.index).addClass(CONST.ELEM_NEXT);
-      setTimeout(function() {
+      setTimeout(function () {
         elemItem.eq(thisIndex).addClass(CONST.ELEM_LEFT);
         elemItem.eq(options.index).addClass(CONST.ELEM_LEFT);
       }, 50);
     }
 
     // 移除过渡类
-    setTimeout(function() {
-      elemItem.removeClass(CONST.CLASS_THIS + ' ' + CONST.ELEM_PREV + ' ' + CONST.ELEM_NEXT + ' ' + CONST.ELEM_LEFT + ' ' + CONST.ELEM_RIGHT);
+    setTimeout(function () {
+      elemItem.removeClass(
+        CONST.CLASS_THIS +
+          ' ' +
+          CONST.ELEM_PREV +
+          ' ' +
+          CONST.ELEM_NEXT +
+          ' ' +
+          CONST.ELEM_LEFT +
+          ' ' +
+          CONST.ELEM_RIGHT
+      );
       elemItem.eq(options.index).addClass(CONST.CLASS_THIS);
       that.haveSlide = false; // 解锁
     }, 350);
 
     // 指示器焦点
-    that.elemInd.find('li').eq(options.index).addClass(CONST.CLASS_THIS)
-      .siblings().removeClass(CONST.CLASS_THIS);
+    that.elemInd
+      .find('li')
+      .eq(options.index)
+      .addClass(CONST.CLASS_THIS)
+      .siblings()
+      .removeClass(CONST.CLASS_THIS);
 
     that.haveSlide = true;
 
@@ -299,7 +337,7 @@ layui.define('component', function(exports) {
     var params = {
       index: options.index,
       prevIndex: thisIndex,
-      item: elemItem.eq(options.index),
+      item: elemItem.eq(options.index)
     };
 
     typeof options.change === 'function' && options.change(params);
@@ -307,34 +345,37 @@ layui.define('component', function(exports) {
   };
 
   // 事件处理
-  Class.prototype.events = function() {
+  Class.prototype.events = function () {
     var that = this;
     var options = that.config;
 
     if (options.elem.data('haveEvents')) return;
 
-
     // 移入移出容器
-    options.elem.on('mouseenter touchstart', function() {
-      if (that.config.autoplay === 'always') return;
-      clearInterval(that.timer);
-    }).on('mouseleave touchend', function() {
-      if (that.config.autoplay === 'always') return;
-      that.autoplay();
-    });
+    options.elem
+      .on('mouseenter touchstart', function () {
+        if (that.config.autoplay === 'always') return;
+        clearInterval(that.timer);
+      })
+      .on('mouseleave touchend', function () {
+        if (that.config.autoplay === 'always') return;
+        that.autoplay();
+      });
 
     var touchEl = options.elem;
     var isVertical = options.anim === 'updown';
     lay.touchSwipe(touchEl, {
-      onTouchEnd: function(e, state) {
+      onTouchEnd: function (e, state) {
         var duration = Date.now() - state.timeStart;
         var distance = isVertical ? state.distanceY : state.distanceX;
         var speed = distance / duration;
-        var shouldSwipe = Math.abs(speed) > 0.25 || Math.abs(distance) > touchEl[isVertical ? 'height' : 'width']() / 3;
+        var shouldSwipe =
+          Math.abs(speed) > 0.25 ||
+          Math.abs(distance) > touchEl[isVertical ? 'height' : 'width']() / 3;
         if (shouldSwipe) {
           that.slide(distance > 0 ? '' : 'sub');
         }
-      },
+      }
     });
 
     options.elem.data('haveEvents', true);
@@ -342,4 +383,3 @@ layui.define('component', function(exports) {
 
   exports(CONST.MOD_NAME, component);
 });
-

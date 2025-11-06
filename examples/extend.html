@@ -1,10 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
     <title>扩展模块 - Layui</title>
-    <link rel="stylesheet" href="../src/css/layui.css">
+    <link rel="stylesheet" href="../src/css/layui.css" />
   </head>
   <body>
     <div class="layui-text layui-padding-3">
@@ -34,23 +37,35 @@
       });
 
       // 加载模块
-      layui.use(['all', 'index', 'test1', 'test2', 'markdownit', 'Prism'], function() {
-        console.log('Layui 内置模块 loaded: ', layui);
-        console.log('遵循 Layui 规范的扩展模块 loaded: ', layui.index, layui.test1, layui.test2);
-        console.log('任意外部模块 loaded: ')
-        console.log('  > markdownit: ', layui.markdownit);
-        console.log('  > Prism: ', layui.Prism);
-      });
+      layui.use(
+        ['all', 'index', 'test1', 'test2', 'markdownit', 'Prism'],
+        function () {
+          console.log('Layui 内置模块 loaded: ', layui);
+          console.log(
+            '遵循 Layui 规范的扩展模块 loaded: ',
+            layui.index,
+            layui.test1,
+            layui.test2
+          );
+          console.log('任意外部模块 loaded: ');
+          console.log('  > markdownit: ', layui.markdownit);
+          console.log('  > Prism: ', layui.Prism);
+        }
+      );
 
       // 直接加载 base 目录下的模块
-      layui.use(['test'], function() {
+      layui.use(['test'], function () {
         console.log('直接加载 base 目录下的模块 loaded: ', layui.test);
       });
 
       // 加载外部样式
-      layui.link('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css', function(link) {
-        console.log('prism.min.css loaded');
-      }, 'prism');
+      layui.link(
+        'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css',
+        function (link) {
+          console.log('prism.min.css loaded');
+        },
+        'prism'
+      );
     </script>
   </body>
 </html>

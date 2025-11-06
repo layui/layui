@@ -41,7 +41,20 @@ export default {
     verifyErrorPromptTitle: 'Notice'
   },
   laydate: {
-    months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    months: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ],
     weeks: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
     time: ['Hour', 'Minute', 'Second'],
     literal: {
@@ -57,9 +70,11 @@ export default {
       now: 'Now',
       reset: 'Reset'
     },
-    rangeOrderPrompt: 'End time cannot be less than start Time\nPlease re-select',
+    rangeOrderPrompt:
+      'End time cannot be less than start Time\nPlease re-select',
     invalidDatePrompt: 'Invalid date\n',
-    formatErrorPrompt: 'Date format is invalid\nMust follow the format:\n{format}\n',
+    formatErrorPrompt:
+      'Date format is invalid\nMust follow the format:\n{format}\n',
     autoResetPrompt: 'It has been reset',
     preview: 'The selected result'
   },
@@ -112,7 +127,8 @@ export default {
       export: {
         title: 'Export',
         noDataPrompt: 'No data in the table',
-        compatPrompt: 'Export is not supported in IE. Please use Chrome or another modern browser.',
+        compatPrompt:
+          'Export is not supported in IE. Please use Chrome or another modern browser.',
         csvText: 'Export CSV File'
       },
       print: {
@@ -120,7 +136,8 @@ export default {
         noDataPrompt: 'No data in the table'
       }
     },
-    dataFormatError: 'Returned data is invalid. The correct success status code should be: "{statusName}": {statusCode}',
+    dataFormatError:
+      'Returned data is invalid. The correct success status code should be: "{statusName}": {statusCode}',
     xhrError: 'Request Error: {msg}'
   },
   transfer: {

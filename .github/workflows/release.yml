@@ -28,13 +28,13 @@ jobs:
 
           # 按日期排序标签，获取上一个标签
           PREVIOUS_TAG=$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags | sed -n 2p)
-          
+
           # 获取当前标签
           CURRENT_TAG=${GITHUB_REF#refs/tags/}
 
           echo "Previous Tag: $PREVIOUS_TAG"
           echo "Current Tag: $CURRENT_TAG"
-          
+
           for COMMIT_SHA in $(git log ${PREVIOUS_TAG}...$CURRENT_TAG --pretty=format:"%H")
           do
             USER=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
@@ -68,7 +68,7 @@ jobs:
           mv examples/introduce/* $DIR_NAME/
           7z a $DIR_NAME.zip $DIR_NAME
           echo "filename=$DIR_NAME" >> $GITHUB_OUTPUT
-            
+
       - name: GH Release
         id: create_release
         uses: softprops/action-gh-release@v2
