@@ -47,9 +47,17 @@ layui.define(['lay', 'i18n'], function(exports) {
     return code >= 48 && code <= 57;  // '0' 到 '9' 的 ASCII 码范围
   }
 
+  // 对象合并时，让数组覆盖，而非合并
+  function overwriteArray(objValue, srcValue) {
+    // 数组覆盖而非合并
+    if (Array.isArray(objValue) && Array.isArray(srcValue)) {
+      return srcValue;
+    }
+  }
+
   // 外部调用
   var laydate = {
-    v: '5.7.0', // layDate 版本号
+    v: '5.8.0', // layDate 版本号
     config: {
       weekStart: 0 // 默认周日一周的开始
     }, // 全局配置项
@@ -58,7 +66,7 @@ layui.define(['lay', 'i18n'], function(exports) {
     // 设置全局项
     set: function (options) {
       var that = this;
-      that.config = lay.extend({}, that.config, options);
+      that.config = lay.extend({}, that.config, options, overwriteArray);
       return that;
     },
 
@@ -128,7 +136,7 @@ layui.define(['lay', 'i18n'], function(exports) {
   var Class = function(options){
     var that = this;
     that.index = ++laydate.index;
-    that.config = lay.extend({}, that.config, laydate.config, options);
+    that.config = lay.extend({}, that.config, laydate.config, options, overwriteArray);
 
     // 若 elem 非唯一，则拆分为多个实例
     var elem = lay(options.elem || that.config.elem);
@@ -136,13 +144,13 @@ layui.define(['lay', 'i18n'], function(exports) {
       lay.each(elem, function(){
         laydate.render(lay.extend({}, that.config, {
           elem: this
-        }));
+        }, overwriteArray));
       });
       return that;
     }
 
     // 初始化属性
-    options = lay.extend(that.config, lay.options(elem[0])); // 继承节点上的属性
+    options = lay.extend(that.config, lay.options(elem[0]), overwriteArray); // 继承节点上的属性
 
     // 更新 i18n 消息对象
     that.i18nMessages = that.getI18nMessages();
@@ -344,7 +352,7 @@ layui.define(['lay', 'i18n'], function(exports) {
   // 重载实例
   Class.prototype.reload = function(options){
     var that = this;
-    that.config = lay.extend({}, that.config, options);
+    that.config = lay.extend({}, that.config, options, overwriteArray);
     that.init();
   };
 
