@@ -4,7 +4,7 @@
   "version": "3.0.0-alpha.0",
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=20.17"
   },
   "keywords": [
     "layui",
