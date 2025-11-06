@@ -94,6 +94,9 @@ pids/
 *.seed
 *.pid.lock
 
+# ESLint cache
+.eslintcache
+
 # Published folders
 /release/
 /v/
