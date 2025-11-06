@@ -31,7 +31,19 @@
     "format": "prettier --write --cache .",
     "format:check": "prettier --check --cache .",
     "lint": "eslint . --cache",
-    "lint:strict": "eslint . --cache --max-warnings 0"
+    "lint:strict": "eslint . --cache --max-warnings 0",
+    "prepare": "npx simple-git-hooks"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged --concurrent false"
+  },
+  "lint-staged": {
+    "*": [
+      "prettier --write --cache --ignore-unknown"
+    ],
+    "*.{js,mjs,cjs}": [
+      "eslint --fix --cache"
+    ]
   },
   "devDependencies": {
     "@eslint/js": "^9.38.0",
@@ -48,7 +60,9 @@
     "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.2",
     "gulp-zip": "^5.1.0",
+    "lint-staged": "^16.2.6",
     "minimist": "^1.2.8",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "simple-git-hooks": "^2.13.1"
   }
 }
