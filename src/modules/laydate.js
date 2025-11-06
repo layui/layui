@@ -150,7 +150,7 @@ layui.define(['lay', 'i18n'], function(exports) {
     }
 
     // 初始化属性
-    options = lay.extend(that.config, lay.options(elem[0])); // 继承节点上的属性
+    options = lay.extend(that.config, lay.options(elem[0]), overwriteArray); // 继承节点上的属性
 
     // 更新 i18n 消息对象
     that.i18nMessages = that.getI18nMessages();
