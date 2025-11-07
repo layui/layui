@@ -43,7 +43,7 @@
     "format": "prettier --write --cache .",
     "format:check": "prettier --check --cache .",
     "lint": "eslint . --cache",
-    "prepare": "husky",
+    "prepare": "node .husky/install.mjs",
     "test": "jest --no-cache",
     "clean:dist": "del-cli dist/*",
     "release": "node scripts/release.mjs"
