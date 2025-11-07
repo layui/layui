@@ -1,8 +1,0 @@
-blank_issues_enabled: false
-contact_links:
-  - name: 😄 创建议题
-    url: https://github.com/layui/layui/issues/new?template=bug-feature.yml
-    about: 为了加强 Issue 规范、提升沟通效率，Layui Issues 已统一在 Github 受理
-  - name: 📄 官方文档
-    url: https://layui.dev/
-    about: 建议在创建 Issue 之前，仔细查阅 Layui 开发文档，以便对其有更深入的了解，和更好地分析问题。
