@@ -32,7 +32,7 @@
     "format:check": "prettier --check --cache .",
     "lint": "eslint . --cache",
     "lint:strict": "eslint . --cache --max-warnings 0",
-    "prepare": "husky"
+    "prepare": "node .husky/install.mjs"
   },
   "lint-staged": {
     "*": [
