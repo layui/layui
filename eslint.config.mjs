@@ -13,7 +13,9 @@ export default defineConfig([
   // Browser
   {
     files: ['src/**/*.js'],
-    plugins: { js },
+    plugins: {
+      js,
+    },
     extends: ['js/recommended'],
     languageOptions: {
       ecmaVersion: 'latest',
@@ -22,9 +24,12 @@ export default defineConfig([
     },
     rules: {
       'no-console': ['error', { allow: ['warn', 'error'] }], // 仅允许 warn 和 error
-      'no-unused-vars': 'warn', // 因 v2 这类代码较多，此处只做提醒
+      // 有时未完成代码，只做提醒
+      'no-unused-vars': 'warn', // 未使用变量/函数/参数
+      'no-empty': 'warn', // 空代码块
     },
   },
+
   // Node
   {
     files: [
