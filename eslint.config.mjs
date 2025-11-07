@@ -23,7 +23,6 @@ export default defineConfig([
   // 全局忽略规则
   globalIgnores([
     '**/dist/',
-    'docs/**',
     '.temp/**', // 临时文件目录 - 临时生成的文件
     'docs/**', // 文档目录 - 文档相关文件，无需代码检查
     'src/modules/jquery.js' // 第三方库文件 - jQuery 源码，无需检查
