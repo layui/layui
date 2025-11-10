@@ -3,8 +3,8 @@
  * 评分组件
  */
 
-layui.define('component', function(exports) {
-  "use strict";
+layui.define('component', function (exports) {
+  'use strict';
 
   var $ = layui.$;
   var lay = layui.lay;
@@ -15,11 +15,11 @@ layui.define('component', function(exports) {
 
     // 默认配置
     config: {
-      length: 5,  // 评分的最大长度值
+      length: 5, // 评分的最大长度值
       value: 0, // 评分的初始值
-      half: false,  // 是否可以选择半星
-      text: false,  // 是否显示评分对应的文本
-      readonly: false,  // 是否只读
+      half: false, // 是否可以选择半星
+      text: false, // 是否显示评分对应的文本
+      readonly: false, // 是否只读
       theme: '' // 主题颜色
     },
 
@@ -30,16 +30,16 @@ layui.define('component', function(exports) {
       ICON_RATE_HALF: 'layui-icon-rate-half',
       ICON_SOLID_HALF: 'layui-icon-rate-solid layui-icon-rate-half',
       ICON_SOLID_RATE: 'layui-icon-rate-solid layui-icon-rate',
-      ICON_HALF_RATE: 'layui-icon-rate layui-icon-rate-half',
+      ICON_HALF_RATE: 'layui-icon-rate layui-icon-rate-half'
     },
 
     // 渲染
-    render: function() {
+    render: function () {
       var that = this;
       var options = that.config;
 
       // 自定义主题
-      var style = options.theme ? ('style="color: '+ options.theme + ';"') : '';
+      var style = options.theme ? 'style="color: ' + options.theme + ';"' : '';
 
       // 最大值不能大于总长度
       if (options.value > options.length) {
@@ -49,20 +49,35 @@ layui.define('component', function(exports) {
       // 如果没有选择半星的属性，却给了小数的数值，统一向上或向下取整
       if (parseInt(options.value) !== options.value) {
         if (!options.half) {
-          options.value = (Math.ceil(options.value) - options.value) < 0.5
-            ? Math.ceil(options.value)
-            : Math.floor(options.value)
+          options.value =
+            Math.ceil(options.value) - options.value < 0.5
+              ? Math.ceil(options.value)
+              : Math.floor(options.value);
         }
       }
 
       // 组件模板
-      var template = '<ul class="layui-rate" '+ (options.readonly ? 'readonly' : '') +'>';
+      var template =
+        '<ul class="layui-rate" ' + (options.readonly ? 'readonly' : '') + '>';
       for (var i = 1; i <= options.length; i++) {
-        var item = '<li class="layui-inline"><i class="layui-icon '
-          + (i > Math.floor(options.value) ? CONST.ICON_RATE : CONST.ICON_RATE_SOLID)
-        + '" '+ style +'></i></li>';
-        if (options.half && parseInt(options.value) !== options.value && i == Math.ceil(options.value)) {
-          template = template + '<li><i class="layui-icon layui-icon-rate-half" '+ style +'></i></li>';
+        var item =
+          '<li class="layui-inline"><i class="layui-icon ' +
+          (i > Math.floor(options.value)
+            ? CONST.ICON_RATE
+            : CONST.ICON_RATE_SOLID) +
+          '" ' +
+          style +
+          '></i></li>';
+        if (
+          options.half &&
+          parseInt(options.value) !== options.value &&
+          i == Math.ceil(options.value)
+        ) {
+          template =
+            template +
+            '<li><i class="layui-icon layui-icon-rate-half" ' +
+            style +
+            '></i></li>';
         } else {
           template = template + item;
         }
@@ -70,7 +85,7 @@ layui.define('component', function(exports) {
       template += '</ul>';
 
       if (options.text) {
-        template += '<span class="layui-inline">'+ options.value + '</span>';
+        template += '<span class="layui-inline">' + options.value + '</span>';
       }
 
       // 开始插入替代元素
@@ -85,7 +100,7 @@ layui.define('component', function(exports) {
       options.setText && options.setText(options.value);
 
       othis.html(that.elemTemplate);
-      othis.addClass("layui-inline");
+      othis.addClass('layui-inline');
 
       // 若非只读，则添加触控事件
       if (!options.readonly) {
@@ -94,7 +109,7 @@ layui.define('component', function(exports) {
     },
 
     // 扩展实例方法
-    extendsInstance: function() {
+    extendsInstance: function () {
       var that = this;
       var options = that.config;
       return {
@@ -115,19 +130,19 @@ layui.define('component', function(exports) {
   var Class = component.Class;
 
   // li 相关事件
-  Class.prototype.action = function() {
+  Class.prototype.action = function () {
     var that = this;
     var options = that.config;
     var _ul = that.elemTemplate;
-    var wide = _ul.find("i").width();
-    var liElems =  _ul.children("li");
+    var wide = _ul.find('i').width();
+    var liElems = _ul.children('li');
 
-    liElems.each(function(index) {
+    liElems.each(function (index) {
       var ind = index + 1;
       var othis = $(this);
 
       // 点击
-      othis.on('click', function(e) {
+      othis.on('click', function (e) {
         // 将当前点击li的索引值赋给 value
         options.value = ind;
         if (options.half) {
@@ -139,7 +154,7 @@ layui.define('component', function(exports) {
         }
 
         if (options.text) {
-          _ul.next("span").text(options.value);
+          _ul.next('span').text(options.value);
         }
 
         options.choose && options.choose(options.value);
@@ -147,43 +162,53 @@ layui.define('component', function(exports) {
       });
 
       // 移入
-      othis.on('mousemove', function(e) {
-        _ul.find("i").each(function() {
-          $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF)
+      othis.on('mousemove', function (e) {
+        _ul.find('i').each(function () {
+          $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF);
         });
-        _ul.find("i:lt(" + ind + ")").each(function() {
-          $(this).addClass(CONST.ICON_RATE_SOLID).removeClass(CONST.ICON_HALF_RATE)
+        _ul.find('i:lt(' + ind + ')').each(function () {
+          $(this)
+            .addClass(CONST.ICON_RATE_SOLID)
+            .removeClass(CONST.ICON_HALF_RATE);
         });
         // 如果设置可选半星，那么判断鼠标相对 li 的位置
         if (options.half) {
           var x = e.pageX - $(this).offset().left;
           if (x <= wide / 2) {
-            othis.children("i").addClass(CONST.ICON_RATE_HALF).removeClass(CONST.ICON_RATE_SOLID)
+            othis
+              .children('i')
+              .addClass(CONST.ICON_RATE_HALF)
+              .removeClass(CONST.ICON_RATE_SOLID);
           }
         }
-      })
+      });
 
       // 移出
-      othis.on('mouseleave', function() {
-        _ul.find("i").each(function() {
-          $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF)
+      othis.on('mouseleave', function () {
+        _ul.find('i').each(function () {
+          $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF);
         });
-        _ul.find("i:lt(" + Math.floor(options.value) + ")").each(function() {
-          $(this).addClass(CONST.ICON_RATE_SOLID).removeClass(CONST.ICON_HALF_RATE)
+        _ul.find('i:lt(' + Math.floor(options.value) + ')').each(function () {
+          $(this)
+            .addClass(CONST.ICON_RATE_SOLID)
+            .removeClass(CONST.ICON_HALF_RATE);
         });
         // 如果设置可选半星，根据分数判断是否有半星
         if (options.half) {
           if (parseInt(options.value) !== options.value) {
-            _ul.children("li:eq(" + Math.floor(options.value) + ")").children("i").addClass(CONST.ICON_RATE_HALF).removeClass(CONST.ICON_SOLID_RATE)
+            _ul
+              .children('li:eq(' + Math.floor(options.value) + ')')
+              .children('i')
+              .addClass(CONST.ICON_RATE_HALF)
+              .removeClass(CONST.ICON_SOLID_RATE);
           }
         }
-      })
-
-    })
+      });
+    });
 
     lay.touchSwipe(_ul, {
-      onTouchMove: function(e, state) {
-        if(Date.now() - state.timeStart <= 200) return;
+      onTouchMove: function (e, state) {
+        if (Date.now() - state.timeStart <= 200) return;
         var pageX = e.touches[0].pageX;
         var rateElemWidth = _ul.width();
         var itemElemWidth = rateElemWidth / options.length; // 单颗星的宽度
@@ -193,25 +218,32 @@ layui.define('component', function(exports) {
         var integer = num - remainder;
 
         // 最终值
-        var score = remainder <= 0.5 && options.half ? integer + 0.5 : Math.ceil(num);
-        if(score > options.length) score = options.length;
-        if(score < 0) score = 0;
+        var score =
+          remainder <= 0.5 && options.half ? integer + 0.5 : Math.ceil(num);
+        if (score > options.length) score = options.length;
+        if (score < 0) score = 0;
 
-        liElems.each(function(index) {
+        liElems.each(function (index) {
           var iconElem = $(this).children('i');
-          var isActiveIcon = (Math.ceil(score) - index === 1);
+          var isActiveIcon = Math.ceil(score) - index === 1;
           var needSelect = Math.ceil(score) > index;
-          var shouldHalfIcon = (score - index === 0.5);
+          var shouldHalfIcon = score - index === 0.5;
 
           if (needSelect) {
             // 设置选中样式
-            iconElem.addClass(CONST.ICON_RATE_SOLID).removeClass(CONST.ICON_HALF_RATE);
-            if(options.half && shouldHalfIcon){
-              iconElem.addClass(CONST.ICON_RATE_HALF).removeClass(CONST.ICON_RATE_SOLID);
+            iconElem
+              .addClass(CONST.ICON_RATE_SOLID)
+              .removeClass(CONST.ICON_HALF_RATE);
+            if (options.half && shouldHalfIcon) {
+              iconElem
+                .addClass(CONST.ICON_RATE_HALF)
+                .removeClass(CONST.ICON_RATE_SOLID);
             }
           } else {
             // 恢复初始样式
-            iconElem.addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF);
+            iconElem
+              .addClass(CONST.ICON_RATE)
+              .removeClass(CONST.ICON_SOLID_HALF);
           }
 
           // 设置缩放样式
@@ -220,11 +252,11 @@ layui.define('component', function(exports) {
 
         // 更新最终值
         options.value = score;
-        if(options.text)  _ul.next("span").text(options.value);
+        if (options.text) _ul.next('span').text(options.value);
         options.setText && options.setText(options.value);
       },
-      onTouchEnd: function(e, state) {
-        if(Date.now() - state.timeStart <= 200) return;
+      onTouchEnd: function (e, state) {
+        if (Date.now() - state.timeStart <= 200) return;
         _ul.find('i').removeClass('layui-rate-hover');
         options.choose && options.choose(options.value);
         options.setText && options.setText(options.value);

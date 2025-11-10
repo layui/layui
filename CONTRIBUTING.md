@@ -40,12 +40,11 @@ Layui 的 issue 只受理 「Bug 报告」和「功能请求」。如果是关�
 - 在 issue 交流过程中，若议题已经得到解决，请主动关闭 issue。
 - 大家本着相互尊重、理解和友善的态度，共同维护 Layui 来之不易的良好的社区氛围，谢谢 💖。
 
-
 ### 其他参考资料
+
 1. [**贡献者行为准则**](CODE_OF_CONDUCT.md)
 2. [**提问的智慧**](https://github.com/tvvocold/How-To-Ask-Questions-The-Smart-Way) @tvvocold
 3. [**为什么需要最小重现**](https://antfu.me/posts/why-reproductions-are-required-zh) @antfu
-
 
 ## Pull Request
 

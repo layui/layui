@@ -1,25 +1,54 @@
 <!doctype html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>模板引擎 - Layui</title>
-    <link rel="stylesheet" href="../src/css/layui.css">
+    <link rel="stylesheet" href="../src/css/layui.css" />
     <style>
-      .laytpl-demo{border: 1px solid #eee;}
-      .laytpl-demo:first-child{border-right: none;}
-      .laytpl-demo>textarea{position: relative; display: block; width:100%; height: 300px; padding: 11px; border: 0; box-sizing: border-box; resize: none; background-color: #fff; font-family: Courier New; font-size: 13px;}
-      .laytpl-demo>div:first-child{height: 32px; line-height: 32px; padding: 6px 11px; border-bottom: 1px solid #eee; background-color: #F8F9FA;}
-      .laytpl-demo .layui-tabs{top: -1px;}
+      .laytpl-demo {
+        border: 1px solid #eee;
+      }
+      .laytpl-demo:first-child {
+        border-right: none;
+      }
+      .laytpl-demo > textarea {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 300px;
+        padding: 11px;
+        border: 0;
+        box-sizing: border-box;
+        resize: none;
+        background-color: #fff;
+        font-family: Courier New;
+        font-size: 13px;
+      }
+      .laytpl-demo > div:first-child {
+        height: 32px;
+        line-height: 32px;
+        padding: 6px 11px;
+        border-bottom: 1px solid #eee;
+        background-color: #f8f9fa;
+      }
+      .laytpl-demo .layui-tabs {
+        top: -1px;
+      }
 
       #ID-tpl-view-body {
-        height: calc(100vh - 430px); overflow: auto; clear: both;
+        height: calc(100vh - 430px);
+        overflow: auto;
+        clear: both;
       }
       #ID-tpl-view-body > div {
         display: none;
       }
       .laytpl-demo pre {
-        padding: 16px; background-color: #20222A; color: #F8F9FA; font-family: 'Courier New',Consolas, monospace;
+        padding: 16px;
+        background-color: #20222a;
+        color: #f8f9fa;
+        font-family: 'Courier New', Consolas, monospace;
       }
     </style>
   </head>
@@ -61,9 +90,10 @@
     },
     {"title": "list 3"}
   ]
-}</textarea>
+}</textarea
+          >
         </div>
-        <div class="layui-col-xs12 laytpl-demo" style="border-top: none;">
+        <div class="layui-col-xs12 laytpl-demo" style="border-top: none">
           <div class="layui-row">
             <div class="layui-col-xs4 layui-tabs" id="ID-tpl-view-header">
               <ul class="layui-tabs-header">
@@ -72,144 +102,139 @@
               </ul>
             </div>
             <div class="layui-col-xs4" style="text-align: center">
-                <button class="layui-btn layui-btn-sm layui-btn-border" lay-on="test">性能测试</button>
+              <button
+                class="layui-btn layui-btn-sm layui-btn-border"
+                lay-on="test"
+              >
+                性能测试
+              </button>
             </div>
             <div class="layui-col-xs4" style="text-align: right">
               <span class="layui-badge" id="ID-tpl-view-time"></span>
             </div>
           </div>
           <div id="ID-tpl-view-body">
-            <div class="layui-show layui-padding-3 layui-text" id="ID-tpl-view"></div>
+            <div
+              class="layui-show layui-padding-3 layui-text"
+              id="ID-tpl-view"
+            ></div>
             <div><pre id="ID-tpl-view-code"></pre></div>
           </div>
         </div>
       </div>
 
       <script type="text/html" id="ID-tpl-template-modern">
-<h2>
-  {{= d.title }} - {{= d.title ? '#' : '' }}
-  {{ if(true){ }}AAAA{{='A'}}{{ } }}
-</h2>
-{{- include('ID-tpl-template-common', {title: '头部'}) }}
+        <h2>
+          {{= d.title }} - {{= d.title ? '#' : '' }} {{ if(true){
+          }}AAAA{{='A'}}{{ } }}
+        </h2>
+        {{- include('ID-tpl-template-common', {title: '头部'}) }}
 
-<hr>
+        <hr />
 
-<p>转义输出：{{= d.desc }}</p>
-<p>原文输出：{{- d.desc }}</p>
+        <p>转义输出：{{= d.desc }}</p>
+        <p>原文输出：{{- d.desc }}</p>
 
-{{# 这是一段注释。仅在模板中显示，不在视图中输出 }}
+        {{# 这是一段注释。仅在模板中显示，不在视图中输出 }} {{!
+        这是一段不进行模板解析的区域，可显示原始标签： {{ let a = 0; }}、{{=
+        escape }}、{{- source }}、{{# comments }}、&#123;&#123;! ignore
+        !&#125;&#125; !}} {{# 空主体测试 }} {{}} {{ }} {{ }} {{= }} {{=}} {{= }}
 
-{{!
-这是一段不进行模板解析的区域，可显示原始标签：
-{{ let a = 0; }}、{{= escape }}、{{- source }}、{{# comments }}、&#123;&#123;! ignore !&#125;&#125;
-!}}
+        <div>
+          {{- !0 ? '<br />循环输出：' : '' }}
+          <hr />
+          <ul>
+            {{ var str = "一级列表 a \\ b c"; d.items.forEach(function(value,
+            index) { }}
+            <li class="{{= index > 0 ? 'list' : '' }}">
+              <strong>{{= value.title }}</strong>
+              {{ if(value.content){ }}
+              <span>{{= value.content }}</span>
+              {{ } }}
+              <span>{{= value.time || '' }}</span>
+              {{= str }} {{- include('ID-tpl-template-list', { items:
+              value.child }) }}
+            </li>
+            {{ }); }} {{ if(d.items.length === 0){ }} 无数据 {{ } }}
+          </ul>
+          <hr />
+        </div>
 
-{{# 空主体测试 }}
-{{}} {{  }} {{   }} {{= }} {{=}} {{= }}
+        <div>
+          {{= d.content || '' }} \反斜杠 | '单引号' "双引号" ""''"" | "左双右单'
+          | '左单右双"
+        </div>
 
-<div>
-  {{- !0 ? '<br>循环输出：' : '' }}
-  <hr>
-  <ul>
-  {{
-    var str = "一级列表 a  \\ b		c";
-    d.items.forEach(function(value, index) {
-  }}
-    <li class="{{= index > 0 ? 'list' : '' }}">
-      <strong>{{= value.title }}</strong>
-      {{ if(value.content){ }}
-      <span>{{= value.content }}</span>
-      {{ } }}
-      <span>{{= value.time || '' }}</span>
-      {{= str }}
-      {{- include('ID-tpl-template-list', { items: value.child }) }}
-    </li>
-  {{ }); }}
-  {{ if(d.items.length === 0){ }}
-    无数据
-  {{ } }}
-  </ul>
-  <hr>
-</div>
-
-<div>
-  {{= d.content || '' }}
-  \反斜杠 | '单引号' "双引号" ""''"" | "左双右单' | '左单右双"
-</div>
-
-<p>渲染时间：{{= layui.util.toDateString(new Date()) }}</p>
+        <p>渲染时间：{{= layui.util.toDateString(new Date()) }}</p>
       </script>
 
       <script type="text/html" id="ID-tpl-template-common">
-公共模板 - {{= d.title }}
+        公共模板 - {{= d.title }}
       </script>
 
       <script type="text/html" id="ID-tpl-template-list">
-      {{ if(d.items && d.items.length > 0){ }}
+        {{ if(d.items && d.items.length > 0){ }}
         <ul>
           {{ layui.each(d.items, function(index, item){ }}
-            <li>
-              <strong>{{= item.title }}</strong>
-              {{- include('ID-tpl-template-list', {items: item.child}) }}
-            </li>
+          <li>
+            <strong>{{= item.title }}</strong>
+            {{- include('ID-tpl-template-list', {items: item.child}) }}
+          </li>
           {{ }); }}
         </ul>
-      {{ } }}
+        {{ } }}
       </script>
 
       <script type="text/html" id="ID-tpl-template-test">
-      {{ for (var i = 0; i < d.items.length; i++) { }}
-        第 {{= d.items[i].index }} 个，Name: {{- d.items[i].name }} Number: {{= d.items[i].number }}
-      {{ } }}
+        {{ for (var i = 0; i < d.items.length; i++) { }} 第 {{= d.items[i].index
+        }} 个，Name: {{- d.items[i].name }} Number: {{= d.items[i].number }} {{
+        } }}
       </script>
 
       <!-- 旧版本模板 -->
       <script type="text/html" id="ID-tpl-template-legacy">
-<h2>
-  {{= d.title }} - {{= d.title ? '#' : '' }}
-  {{# if(true){ }}AAAA{{='A'}}{{# } }}
-</h2>
+        <h2>
+          {{= d.title }} - {{= d.title ? '#' : '' }} {{# if(true){
+          }}AAAA{{='A'}}{{# } }}
+        </h2>
 
-<hr>
+        <hr />
 
-<p>转义输出：{{ d.desc }}</p>
-<p>转义输出：{{= d.desc }}</p>
-<p>原文输出：{{- d.desc }}</p>
+        <p>转义输出：{{ d.desc }}</p>
+        <p>转义输出：{{= d.desc }}</p>
+        <p>原文输出：{{- d.desc }}</p>
 
-{{}} {{  }} {{   }} {{= }} {{=}} {{= }}
+        {{}} {{ }} {{ }} {{= }} {{=}} {{= }}
 
-<div>
-  <ul>
-  {{# var str = "a  b		c"; }}
-  {{# layui.each(d.items, function(index, item) { }}
-    <li class="{{= index > 0 ? 'list' : '' }}">
-      <strong>{{= item.title }}</strong>
-      {{# if(item.content){ }}
-        <span>{{= item.content }}</span>
-      {{# } }}
-      <span>{{= item.time || '' }}</span>
-      {{ str }}
-    </li>
-  {{# }); }}
-  {{# if (d.items.length === 0) { }}
-    无数据
-  {{# } }}
-  </ul>
-  <hr>
-</div>
+        <div>
+          <ul>
+            {{# var str = "a b c"; }} {{# layui.each(d.items, function(index,
+            item) { }}
+            <li class="{{= index > 0 ? 'list' : '' }}">
+              <strong>{{= item.title }}</strong>
+              {{# if(item.content){ }}
+              <span>{{= item.content }}</span>
+              {{# } }}
+              <span>{{= item.time || '' }}</span>
+              {{ str }}
+            </li>
+            {{# }); }} {{# if (d.items.length === 0) { }} 无数据 {{# } }}
+          </ul>
+          <hr />
+        </div>
 
-<div>
-  {{= d.content || '' }}
-  \反斜杠 | '单引号' "双引号" ""''"" | "左双右单' | '左单右双"
-</div>
+        <div>
+          {{= d.content || '' }} \反斜杠 | '单引号' "双引号" ""''"" | "左双右单'
+          | '左单右双"
+        </div>
 
-<p>渲染时间：{{ layui.util.toDateString(new Date()) }}</p>
+        <p>渲染时间：{{ layui.util.toDateString(new Date()) }}</p>
       </script>
     </div>
 
     <script src="../src/layui.js"></script>
     <script>
-      layui.use(['laytpl', 'util', 'tabs', 'dropdown'], function() {
+      layui.use(['laytpl', 'util', 'tabs', 'dropdown'], function () {
         var laytpl = layui.laytpl;
         var util = layui.util;
         var tabs = layui.tabs;
@@ -219,37 +244,41 @@
         // 默认设置
         laytpl.config({
           tagStyle: 'modern' // 初始采用新版标签风格
-        })
+        });
 
         // 获取模板和数据
-        var getData = function(type) {
+        var getData = function (type) {
           return {
             template: $('#ID-tpl-src').val(), // 获取模板
-            data: function(){  // 获取数据
+            data: (function () {
+              // 获取数据
               try {
                 return JSON.parse($('#ID-tpl-data').val());
-              } catch(e) {
+              } catch (e) {
                 $('#ID-tpl-view').html(e);
               }
-            }()
+            })()
           };
         };
 
         // 视图渲染
-        var renderView = function(html, startTime) {
+        var renderView = function (html, startTime) {
           timer(startTime);
           $('#ID-tpl-view').html(html);
           $('#ID-tpl-view-code').html(util.escape(html));
         };
 
         // 生成模板
-        var createTemplate = function(opts) {
-          opts = $.extend({
-            tagStyle: 'modern'
-          }, opts);
+        var createTemplate = function (opts) {
+          opts = $.extend(
+            {
+              tagStyle: 'modern'
+            },
+            opts
+          );
 
           // 初始化模板
-          var elem = $('#ID-tpl-template-'+ opts.tagStyle);
+          var elem = $('#ID-tpl-template-' + opts.tagStyle);
           $('#ID-tpl-src').val(elem.html());
 
           return opts;
@@ -258,9 +287,11 @@
         var data = getData();
 
         // 耗时计算
-        var timer = function(startTime, title) {
+        var timer = function (startTime, title) {
           var endTime = new Date();
-          $('#ID-tpl-view-time').html((title || '模板解析耗时：')+ (endTime - startTime) + 'ms');
+          $('#ID-tpl-view-time').html(
+            (title || '模板解析耗时：') + (endTime - startTime) + 'ms'
+          );
         };
         var startTime = new Date();
 
@@ -271,12 +302,12 @@
         });
 
         // 初始渲染
-        templateInst.render(data.data, function(html) {
+        templateInst.render(data.data, function (html) {
           renderView(html, startTime);
         });
 
         // 编辑
-        $('.laytpl-demo textarea').on('input', function() {
+        $('.laytpl-demo textarea').on('input', function () {
           var data = getData();
           var startTime = new Date();
 
@@ -286,7 +317,7 @@
           }
 
           // 若模板没变，数据有变化，则从模板缓存中直接渲染数据（效率大增）
-          templateInst.render(data.data, function(html) {
+          templateInst.render(data.data, function (html) {
             renderView(html, startTime);
           });
         });
@@ -294,29 +325,31 @@
         // 事件
         util.on({
           // 性能测试
-          test: function() {
-            var dataLen = 1000 // 数据量
+          test: function () {
+            var dataLen = 1000; // 数据量
             var renderTimes = 1000; // 渲染次数
 
             // 初始化数据
             var data = {
               title: '性能测试',
-              items: function(items) {
+              items: (function (items) {
                 for (var i = 0; i < dataLen; i++) {
                   items.push({
                     index: i,
                     name: '<strong style="color: red;">张三</strong>',
-                    number: 100+i
+                    number: 100 + i
                   });
                 }
                 return items;
-              }([])
+              })([])
             };
 
             // 模板
             var startTime = new Date();
             for (var j = 0; j < renderTimes; j++) {
-              var template = document.getElementById('ID-tpl-template-test').innerHTML;
+              var template = document.getElementById(
+                'ID-tpl-template-test'
+              ).innerHTML;
               var html = laytpl(template).render(data);
             }
             renderView(html, startTime);
@@ -324,18 +357,24 @@
         });
 
         // 局部自定义标签符
-        laytpl(`
+        laytpl(
+          `
           <% var job = ["前端工程师"]; %>
           <%= d.name %>是一名<%= job[d.index] %>。
-        `, {
-          open: '<%',
-          close: '%>'
-        }).render({
-          name: '张三',
-          index: 0
-        }, function(str) {
-          console.log(str); // 张三是一名前端工程师。
-        });
+        `,
+          {
+            open: '<%',
+            close: '%>'
+          }
+        ).render(
+          {
+            name: '张三',
+            index: 0
+          },
+          function (str) {
+            console.log(str); // 张三是一名前端工程师。
+          }
+        );
 
         // 视图结果 tabs
         tabs.render({
@@ -346,14 +385,17 @@
         // 切换模板
         dropdown.render({
           elem: '#ID-tpl-src-title',
-          data: [{
-            title: '新版本模板',
-            tagStyle: 'modern'
-          }, {
-            title: '旧版本模板',
-            tagStyle: 'legacy'
-          }],
-          click: function(obj){
+          data: [
+            {
+              title: '新版本模板',
+              tagStyle: 'modern'
+            },
+            {
+              title: '旧版本模板',
+              tagStyle: 'legacy'
+            }
+          ],
+          click: function (obj) {
             createTemplate({
               tagStyle: obj.tagStyle
             });
@@ -366,11 +408,13 @@
             var startTime = new Date();
 
             // 重新渲染
-            templateInst.compile(data.template).render(data.data, function(html) {
-              renderView(html, startTime);
-            });
+            templateInst
+              .compile(data.template)
+              .render(data.data, function (html) {
+                renderView(html, startTime);
+              });
           }
-        })
+        });
       });
     </script>
   </body>

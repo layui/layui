@@ -1,8 +1,7 @@
-
 /** lay 基础模块 | MIT Licensed */
 
-(function(window) {
-  "use strict";
+(function (window) {
+  'use strict';
 
   var MOD_NAME = 'lay'; // 模块名
   var document = window.document;
@@ -11,22 +10,23 @@
    * 元素查找
    * @param {string | HTMLElement | JQuery} selector
    */
-  var lay = function(selector){
+  var lay = function (selector) {
     return new Class(selector);
   };
 
   // 构造器
-  var Class = function(selector){
+  var Class = function (selector) {
     var that = this;
-    var elem = typeof selector === 'object' ? function(){
-      // 仅适配简单元素对象
-      return layui.isArray(selector) ? selector : [selector];
-    }() : (
-      this.selector = selector,
-      document.querySelectorAll(selector || null)
-    );
+    var elem =
+      typeof selector === 'object'
+        ? (function () {
+            // 仅适配简单元素对象
+            return layui.isArray(selector) ? selector : [selector];
+          })()
+        : ((this.selector = selector),
+          document.querySelectorAll(selector || null));
 
-    lay.each(elem, function(index, item){
+    lay.each(elem, function (index, item) {
       that.push(elem[index]);
     });
   };
@@ -38,17 +38,19 @@
   /*
    * API 兼容
    */
-  Array.prototype.indexOf = Array.prototype.indexOf || function(searchElement, fromIndex) {
-    var rst = -1;
-    fromIndex = fromIndex || 0;
-    layui.each(this, function(index, val){
-      if (searchElement === val && index >= fromIndex) {
-        rst = index;
-        return !0;
-      }
-    });
-    return rst;
-  };
+  Array.prototype.indexOf =
+    Array.prototype.indexOf ||
+    function (searchElement, fromIndex) {
+      var rst = -1;
+      fromIndex = fromIndex || 0;
+      layui.each(this, function (index, val) {
+        if (searchElement === val && index >= fromIndex) {
+          rst = index;
+          return !0;
+        }
+      });
+      return rst;
+    };
 
   /*
     lay 对象操作
@@ -56,7 +58,6 @@
 
   Class.fn = Class.prototype = [];
   Class.fn.constructor = Class;
-
 
   /**
    * 将一个或多个对象合并到目标对象中
@@ -101,30 +102,35 @@
    * console.log(obj2); // expected: {a:[5,3],b:{ba:1},c:3}
    * ```
    */
-  lay.extend = function() {
+  lay.extend = function () {
     var args = [].slice.call(arguments);
 
     // 最后一个参数是否为 customizer
-    var customizer = typeof args[args.length - 1] === 'function'
-      ? args.pop()
-      : false;
+    var customizer =
+      typeof args[args.length - 1] === 'function' ? args.pop() : false;
 
     // 深拷贝合并
-    return args.reduce(function(target, source) {
+    return args.reduce(function (target, source) {
       // 确保 target 始终是一个对象
       if (typeof target !== 'object' || target === null) {
         target = {};
       }
 
       for (var key in source) {
-        if (!source.hasOwnProperty(key)) continue; // 仅处理自有属性
+        if (!Object.prototype.hasOwnProperty.call(source, key)) continue; // 仅处理自有属性
 
         var targetValue = target[key];
         var sourceValue = source[key];
 
         // 自定义合并逻辑（如数组覆盖、特定字段跳过等）
         if (customizer) {
-          var customResult = customizer(targetValue, sourceValue, key, target, source);
+          var customResult = customizer(
+            targetValue,
+            sourceValue,
+            key,
+            target,
+            source
+          );
           if (customResult !== undefined) {
             target[key] = customResult;
             continue;
@@ -133,13 +139,14 @@
 
         // 默认深拷贝逻辑
         if (Array.isArray(sourceValue)) {
-          targetValue = Array.isArray(targetValue) ? targetValue : []
-        } else if(lay.isPlainObject(sourceValue)) {
-          targetValue = lay.isPlainObject(targetValue) ? targetValue : {}
+          targetValue = Array.isArray(targetValue) ? targetValue : [];
+        } else if (lay.isPlainObject(sourceValue)) {
+          targetValue = lay.isPlainObject(targetValue) ? targetValue : {};
         }
-        target[key] = (lay.isPlainObject(sourceValue) || Array.isArray(sourceValue))
-          ? lay.extend(targetValue, sourceValue, customizer)
-          : sourceValue;
+        target[key] =
+          lay.isPlainObject(sourceValue) || Array.isArray(sourceValue)
+            ? lay.extend(targetValue, sourceValue, customizer)
+            : sourceValue;
       }
 
       return target;
@@ -151,7 +158,7 @@
    * @param {*} obj - 要检查的对象
    * @returns {boolean}
    */
-  lay.isPlainObject = function(obj) {
+  lay.isPlainObject = function (obj) {
     if (
       obj === null ||
       typeof obj !== 'object' ||
@@ -169,21 +176,22 @@
 
     // 判定具有原型且由全局 Object 构造函数创建的对象为纯对象（来自 jQuery 方案）
     var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
-    return typeof Ctor === 'function' && fnToString.call(Ctor) === ObjectFunctionString;
+    return (
+      typeof Ctor === 'function' &&
+      fnToString.call(Ctor) === ObjectFunctionString
+    );
   };
-
 
   /**
    * IE 版本
    * @type {string | boolean} - 如果是 IE 返回版本字符串，否则返回 false
    */
-  lay.ie = function(){
+  lay.ie = (function () {
     var agent = navigator.userAgent.toLowerCase();
-    return (!!window.ActiveXObject || "ActiveXObject" in window) ? (
-      (agent.match(/msie\s(\d+)/) || [])[1] || '11' // 由于 ie11 并没有 msie 的标识
-    ) : false;
-  }();
-
+    return !!window.ActiveXObject || 'ActiveXObject' in window
+      ? (agent.match(/msie\s(\d+)/) || [])[1] || '11' // 由于 ie11 并没有 msie 的标识
+      : false;
+  })();
 
   /**
    * 获取 layui 常见方法，以便用于组件单独版
@@ -192,11 +200,11 @@
   lay.layui = layui || {};
   lay.getPath = layui.cache.dir; // 获取当前 JS 所在目录
   lay.stope = layui.stope; // 中止冒泡
-  lay.each = function(){ // 遍历
+  lay.each = function () {
+    // 遍历
     layui.each.apply(layui, arguments);
     return this;
   };
-
 
   /**
    * 数字前置补零
@@ -209,13 +217,13 @@
    * lay.digit('7', 3); // "007"
    * ```
    */
-  lay.digit = function(num, length){
-    if(!(typeof num === 'string' || typeof num === 'number')) return '';
+  lay.digit = function (num, length) {
+    if (!(typeof num === 'string' || typeof num === 'number')) return '';
 
     var str = '';
     num = String(num);
     length = length || 2;
-    for(var i = num.length; i < length; i++){
+    for (var i = num.length; i < length; i++) {
       str += '0';
     }
     return num < Math.pow(10, length) ? str + num : num;
@@ -231,9 +239,9 @@
    * lay.elem('div', {id: 'test'}) // <div id="test"></div>
    * ```
    */
-  lay.elem = function(elemName, attr){
+  lay.elem = function (elemName, attr) {
     var elem = document.createElement(elemName);
-    lay.each(attr || {}, function(key, value){
+    lay.each(attr || {}, function (key, value) {
       elem.setAttribute(key, value);
     });
     return elem;
@@ -247,15 +255,18 @@
    * lay.hasScrollbar() // true 或 false
    * ```
    */
-  lay.hasScrollbar = function(){
-    return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
+  lay.hasScrollbar = function () {
+    return (
+      document.body.scrollHeight >
+      (window.innerHeight || document.documentElement.clientHeight)
+    );
   };
 
   /**
    * 获取 style rules
    * @param {HTMLStyleElement} style - HTMLStyle 元素
    * @param {(ruleItem: CSSStyleRule, index: number) => boolean} [callback] - 用来返回 style 元素中的每个 `style rule` 的函数，返回 true 终止遍历
-   * @returns {CSSRuleList } 返回 `style rules`
+   * @returns {CSSRuleList} 返回 `style rules`
    * @example
    * ```
    * <style id="test">
@@ -276,14 +287,14 @@
    * }) // RuleList
    * ```
    */
-  lay.getStyleRules = function(style, callback) {
+  lay.getStyleRules = function (style, callback) {
     if (!style) return;
 
     var sheet = style.sheet || style.styleSheet || {};
     var rules = sheet.cssRules || sheet.rules;
 
     if (typeof callback === 'function') {
-      layui.each(rules, function(i, item){
+      layui.each(rules, function (i, item) {
         if (callback(item, i)) return true;
       });
     }
@@ -311,7 +322,7 @@
    * }) // <style id="LAY-STYLE-DF-0">.card{color: #000}</style>
    * ```
    */
-  lay.style = function(options){
+  lay.style = function (options) {
     options = options || {};
 
     var style = lay.elem('style');
@@ -329,14 +340,17 @@
     }
 
     // ID
-    style.id = 'LAY-STYLE-'+ (options.id || function(index) {
-      lay.style.index++;
-      return 'DF-'+ index;
-    }(lay.style.index || 0));
+    style.id =
+      'LAY-STYLE-' +
+      (options.id ||
+        (function (index) {
+          lay.style.index++;
+          return 'DF-' + index;
+        })(lay.style.index || 0));
 
     // 是否向目标容器中追加 style 元素
     if (target) {
-      var styleElem = lay(target).find('#'+ style.id);
+      var styleElem = lay(target).find('#' + style.id);
       styleElem[0] && styleElem.remove();
       lay(target).append(style);
     }
@@ -376,65 +390,69 @@
    * )
    * ```
    */
-  lay.position = function(target, elem, opts){
-    if(!elem) return;
+  lay.position = function (target, elem, opts) {
+    if (!elem) return;
     opts = opts || {};
 
     // 如果绑定的是 document 或 body 元素，则直接获取鼠标坐标
-    if(target === document || target === lay('body')[0]){
+    if (target === document || target === lay('body')[0]) {
       opts.clickType = 'right';
     }
 
     // 绑定绑定元素的坐标
-    var rect = opts.clickType === 'right' ? function(){
-      var e = opts.e || window.event || {};
-      return {
-        left: e.clientX,
-        top: e.clientY,
-        right: e.clientX,
-        bottom: e.clientY
-      }
-    }() : target.getBoundingClientRect();
+    var rect =
+      opts.clickType === 'right'
+        ? (function () {
+            var e = opts.e || window.event || {};
+            return {
+              left: e.clientX,
+              top: e.clientY,
+              right: e.clientX,
+              bottom: e.clientY
+            };
+          })()
+        : target.getBoundingClientRect();
     var elemWidth = elem.offsetWidth; // 控件的宽度
     var elemHeight = elem.offsetHeight; // 控件的高度
 
     // 滚动条高度
-    var scrollArea = function(type){
+    var scrollArea = function (type) {
       type = type ? 'scrollLeft' : 'scrollTop';
       return document.body[type] | document.documentElement[type];
     };
 
     // 窗口宽高
-    var winArea = function(type){
-      return document.documentElement[type ? 'clientWidth' : 'clientHeight']
+    var winArea = function (type) {
+      return document.documentElement[type ? 'clientWidth' : 'clientHeight'];
     };
     var margin = 'margin' in opts ? opts.margin : 5;
     var left = rect.left;
     var top = rect.bottom;
 
     // 相对元素居中
-    if(opts.align === 'center'){
+    if (opts.align === 'center') {
       left = left - (elemWidth - target.offsetWidth) / 2;
-    } else if(opts.align === 'right'){
+    } else if (opts.align === 'right') {
       left = left - elemWidth + target.offsetWidth;
     }
 
     // 判断右侧是否超出边界
-    if(left + elemWidth + margin > winArea('width')){
+    if (left + elemWidth + margin > winArea('width')) {
       left = winArea('width') - elemWidth - margin; // 如果超出右侧，则将面板向右靠齐
     }
     // 左侧是否超出边界
-    if(left < margin) left = margin;
-
+    if (left < margin) left = margin;
 
     // 判断底部和顶部是否超出边界
-    if(rect.bottom + elemHeight + margin > winArea()){ // 底部超出边界
+    if (rect.bottom + elemHeight + margin > winArea()) {
+      // 底部超出边界
       // 优先判断顶部是否有足够区域显示完全，且底部不能超出边界
-      if(rect.top > elemHeight + margin && rect.top <= winArea() ){
-        top = rect.top - elemHeight - margin*2; // 顶部有足够的区域显示
-      } else if(!opts.allowBottomOut){ // 顶部没有足够区域显示时，是否允许底部溢出
-        top = winArea() - elemHeight - margin*2; // 面板向底部靠齐
-        if(top < 0) top = 0; // 如果面板底部靠齐时，又溢出窗口顶部，则只能将顶部靠齐
+      if (rect.top > elemHeight + margin && rect.top <= winArea()) {
+        top = rect.top - elemHeight - margin * 2; // 顶部有足够的区域显示
+      } else if (!opts.allowBottomOut) {
+        // 顶部没有足够区域显示时，是否允许底部溢出
+        top = winArea() - elemHeight - margin * 2; // 面板向底部靠齐
+        if (top < 0) top = 0; // 如果面板底部靠齐时，又溢出窗口顶部，则只能将顶部靠齐
       }
     }
     /*
@@ -456,21 +474,23 @@
 
     // 定位类型
     var position = opts.position;
-    if(position) elem.style.position = position;
+    if (position) elem.style.position = position;
     var offsetX = opts.offset ? opts.offset[0] : 0;
     var offsetY = opts.offset ? opts.offset[1] : 0;
 
     // 设置坐标
-    elem.style.left = left + (position === 'fixed' ? 0 : scrollArea(1)) + offsetX + 'px';
-    elem.style.top = top + (position === 'fixed' ? 0 : scrollArea()) + offsetY + 'px';
+    elem.style.left =
+      left + (position === 'fixed' ? 0 : scrollArea(1)) + offsetX + 'px';
+    elem.style.top =
+      top + (position === 'fixed' ? 0 : scrollArea()) + offsetY + 'px';
 
     // 防止页面无滚动条时，又因为弹出面板而出现滚动条导致的坐标计算偏差
-    if(!lay.hasScrollbar()){
+    if (!lay.hasScrollbar()) {
       var rect1 = elem.getBoundingClientRect();
       // 如果弹出面板的溢出窗口底部，则表示将出现滚动条，此时需要重新计算坐标
-      if(!opts.SYSTEM_RELOAD && (rect1.bottom + margin) > winArea()){
+      if (!opts.SYSTEM_RELOAD && rect1.bottom + margin > winArea()) {
         opts.SYSTEM_RELOAD = true;
-        setTimeout(function(){
+        setTimeout(function () {
           lay.position(target, elem, opts);
         }, 50);
       }
@@ -496,10 +516,10 @@
    * $('#testEl').attr('lay-toc') // '{hot: true}'
    * ```
    */
-  lay.options = function(elem, opts){
-    opts = typeof opts === 'object' ? opts : {attr: opts};
+  lay.options = function (elem, opts) {
+    opts = typeof opts === 'object' ? opts : { attr: opts };
 
-    if(elem === document) return {};
+    if (elem === document) return {};
 
     var othis = lay(elem);
     var attrName = opts.attr || 'lay-options';
@@ -510,16 +530,20 @@
        * 请注意: 开发者在使用 lay-options="{}" 配置组件选项时，需确保属性值不来自于网页用户,
        * 即属性值必须在网页开发者自身的可控范围内，否则请勿在 HTML 标签属性中获取组件选项。
        */
-      return new Function('return '+ (attrValue || '{}'))();
-    } catch(ev) {
-      layui.hint().error(opts.errorText || [
-        attrName + '="'+ attrValue + '"',
-        '\n parseerror: '+ ev
-      ].join('\n'), 'error');
+      return new Function('return ' + (attrValue || '{}'))();
+    } catch (ev) {
+      layui
+        .hint()
+        .error(
+          opts.errorText ||
+            [attrName + '="' + attrValue + '"', '\n parseerror: ' + ev].join(
+              '\n'
+            ),
+          'error'
+        );
       return {};
     }
   };
-
 
   /**
    * 元素是否属于顶级元素（document 或 body）
@@ -530,12 +554,12 @@
    * lay.isTopElem(document) // true
    * ```
    */
-  lay.isTopElem = function(elem){
-    var topElems = [document, lay('body')[0]]
-    ,matched = false;
-    lay.each(topElems, function(index, item){
-      if(item === elem){
-        return matched = true
+  lay.isTopElem = function (elem) {
+    var topElems = [document, lay('body')[0]],
+      matched = false;
+    lay.each(topElems, function (index, item) {
+      if (item === elem) {
+        return (matched = true);
       }
     });
     return matched;
@@ -558,19 +582,18 @@
      * })
      * ```
      */
-    writeText: function(options) {
+    writeText: function (options) {
       var text = String(options.text);
 
-      if(navigator && 'clipboard' in navigator){
-        navigator.clipboard.writeText(text)
-          .then(options.done, function(){
-            legacyCopy();
+      if (navigator && 'clipboard' in navigator) {
+        navigator.clipboard.writeText(text).then(options.done, function () {
+          legacyCopy();
         });
-      }else{
+      } else {
         legacyCopy();
       }
 
-      function legacyCopy(){
+      function legacyCopy() {
         var elem = document.createElement('textarea');
 
         elem.value = text;
@@ -585,7 +608,7 @@
         try {
           document.execCommand('copy');
           typeof options.done === 'function' && options.done();
-        } catch(err) {
+        } catch (err) {
           typeof options.error === 'function' && options.error(err);
         } finally {
           elem.remove ? elem.remove() : document.body.removeChild(elem);
@@ -599,24 +622,27 @@
    * 引用自 https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
    * @type {boolean}
    */
-  lay.passiveSupported = function(){
+  lay.passiveSupported = (function () {
     var passiveSupported = false;
     try {
       var opts = Object.defineProperty({}, 'passive', {
-        get: function() {
+        get: function () {
           passiveSupported = true;
+          return true;
         }
       });
       window.addEventListener('test', null, opts);
       window.removeEventListener('test', null, opts);
-    } catch (err) {}
+    } catch (err) {
+      //
+    }
     return passiveSupported;
-  }();
+  })();
 
   /**
    * 是否支持 touch 事件
    */
-  lay.touchEventsSupported = function(){
+  lay.touchEventsSupported = function () {
     return 'ontouchstart' in window;
   };
 
@@ -639,134 +665,146 @@
    * @param {string | HTMLElement | JQuery} elem - HTML 元素
    * @param {{onTouchStart?: touchSwipeCallback; onTouchMove?: touchSwipeCallback; onTouchEnd?: touchSwipeCallback; preventDefault?: boolean}} opts - 配置项
    */
-  lay.touchSwipe = function(elem, opts){
-    var options = opts
+  lay.touchSwipe = function (elem, opts) {
+    var options = opts;
     var targetElem = lay(elem)[0];
-    var preventDefault = 'preventDefault' in options ? options.preventDefault : true;
+    var preventDefault =
+      'preventDefault' in options ? options.preventDefault : true;
 
-    if(!targetElem || !lay.touchEventsSupported()) return;
+    if (!targetElem || !lay.touchEventsSupported()) return;
 
     var state = {
-      pointerStart: {x:0, y:0},
-      pointerEnd: {x:0, y:0},
+      pointerStart: { x: 0, y: 0 },
+      pointerEnd: { x: 0, y: 0 },
       distanceX: 0,
       distanceY: 0,
-      direction:'none', // 'up','down','left','right','none
+      direction: 'none', // 'up','down','left','right','none
       timeStart: null
-    }
+    };
 
-    var onStart = function(e){
-      if(e.touches.length !== 1) return;
+    var onStart = function (e) {
+      if (e.touches.length !== 1) return;
       bindEvents();
       // 重置状态
       state.timeStart = Date.now();
       state.pointerStart.x = state.pointerEnd.x = e.touches[0].clientX;
       state.pointerStart.y = state.pointerEnd.y = e.touches[0].clientY;
       state.distanceX = state.distanceY = 0;
-      state.direction = 'none'
+      state.direction = 'none';
 
       options.onTouchStart && options.onTouchStart(e, state);
-    }
+    };
 
-    var onMove = function(e){
-      if(preventDefault){
+    var onMove = function (e) {
+      if (preventDefault) {
         e.preventDefault();
       }
       state.pointerEnd.x = e.touches[0].clientX;
       state.pointerEnd.y = e.touches[0].clientY;
       state.distanceX = state.pointerStart.x - state.pointerEnd.x;
       state.distanceY = state.pointerStart.y - state.pointerEnd.y;
-      if(Math.abs(state.distanceX) > Math.abs(state.distanceY)){
+      if (Math.abs(state.distanceX) > Math.abs(state.distanceY)) {
         state.direction = state.distanceX > 0 ? 'left' : 'right';
-      }else{
+      } else {
         state.direction = state.distanceY > 0 ? 'up' : 'down';
       }
       options.onTouchMove && options.onTouchMove(e, state);
-    }
+    };
 
-    var onEnd = function(e){
+    var onEnd = function (e) {
       options.onTouchEnd && options.onTouchEnd(e, state);
       unbindEvents();
-    }
+    };
 
-    var bindEvents = function(){
-      targetElem.addEventListener('touchmove', onMove, lay.passiveSupported ? { passive: false} : false);
+    var bindEvents = function () {
+      targetElem.addEventListener(
+        'touchmove',
+        onMove,
+        lay.passiveSupported ? { passive: false } : false
+      );
       targetElem.addEventListener('touchend', onEnd);
       targetElem.addEventListener('touchcancel', onEnd);
-    }
+    };
 
-    var unbindEvents = function(){
+    var unbindEvents = function () {
       targetElem.removeEventListener('touchmove', onMove);
-      targetElem.removeEventListener('touchend', onEnd, lay.passiveSupported ? { passive: false} : false);
+      targetElem.removeEventListener(
+        'touchend',
+        onEnd,
+        lay.passiveSupported ? { passive: false } : false
+      );
       targetElem.removeEventListener('touchcancel', onEnd);
-    }
+    };
 
     // 防止事件重复绑定
-    if(targetElem.__lay_touchswipe_cb_){
-      targetElem.removeEventListener('touchstart', targetElem.__lay_touchswipe_cb_);
+    if (targetElem.__lay_touchswipe_cb_) {
+      targetElem.removeEventListener(
+        'touchstart',
+        targetElem.__lay_touchswipe_cb_
+      );
     }
     targetElem.__lay_touchswipe_cb_ = onStart;
     targetElem.addEventListener('touchstart', onStart);
-  }
+  };
 
   /** @type {(elem: Element|Document|Window,eventName: string,fn:EventListenerOrEventListenerObject,options: boolean | AddEventListenerOptions) => any}*/
-  lay.addEvent = function(){
-    if(document.addEventListener){
-      return function(elem, eventName, fn, options){
+  lay.addEvent = (function () {
+    if (document.addEventListener) {
+      return function (elem, eventName, fn, options) {
         elem.addEventListener(eventName, fn, options);
-      }
-    }else{
-      return function(elem, eventName, fn){
+      };
+    } else {
+      return function (elem, eventName, fn) {
         var prefix = '_lay_on_';
         var eventsCacheName = prefix + eventName;
-        var listener = function(e){
+        var listener = function (e) {
           e.target = e.srcElement;
           fn.call(elem, e);
-        }
+        };
         listener._rawFn = fn;
-        if(!elem[eventsCacheName]){
+        if (!elem[eventsCacheName]) {
           elem[eventsCacheName] = [];
         }
         var include = false;
-        lay.each(elem[eventsCacheName], function(_, listener){
-          if(listener._rawFn === fn){
+        lay.each(elem[eventsCacheName], function (_, listener) {
+          if (listener._rawFn === fn) {
             include = true;
             return true;
           }
-        })
-        if(!include){
+        });
+        if (!include) {
           elem[eventsCacheName].push(listener);
           elem.attachEvent('on' + eventName, listener);
         }
-      }
+      };
     }
-  }();
+  })();
 
- /** @type {(elem: Element|Document|Window,eventName: string,fn:EventListenerOrEventListenerObject,options: boolean | EventListenerOptions) => any}*/
-  lay.removeEvent = function(){
-    if(document.removeEventListener){
-      return function(elem, eventName, fn, options){
+  /** @type {(elem: Element|Document|Window,eventName: string,fn:EventListenerOrEventListenerObject,options: boolean | EventListenerOptions) => any}*/
+  lay.removeEvent = (function () {
+    if (document.removeEventListener) {
+      return function (elem, eventName, fn, options) {
         elem.removeEventListener(eventName, fn, options);
-      }
-    }else{
-      return function(elem, eventName, fn){
+      };
+    } else {
+      return function (elem, eventName, fn) {
         var prefix = '_lay_on_';
         var eventsCacheName = prefix + eventName;
         var events = elem[eventsCacheName];
-        if(layui.isArray(events)){
+        if (layui.isArray(events)) {
           var newEvents = [];
-          lay.each(events, function(_, listener){
-            if(listener._rawFn === fn){
-              elem.detachEvent('on'+ eventName, listener);
-            }else{
+          lay.each(events, function (_, listener) {
+            if (listener._rawFn === fn) {
+              elem.detachEvent('on' + eventName, listener);
+            } else {
               newEvents.push(listener);
             }
-          })
+          });
           elem[eventsCacheName] = newEvents;
         }
-      }
+      };
     }
-  }();
+  })();
 
   /**
    * 绑定指定元素外部的点击事件
@@ -780,58 +818,66 @@
    * @param {boolean} [options.detectIframe] - 是否检测 iframe
    * @returns {() => void} - 返回一个停止事件响应的函数
    */
-  lay.onClickOutside = function(target, handler, options){
+  lay.onClickOutside = function (target, handler, options) {
     options = options || {};
-    var eventType = options.event || ('onpointerdown' in window ? 'pointerdown' : 'mousedown');
+    var eventType =
+      options.event ||
+      ('onpointerdown' in window ? 'pointerdown' : 'mousedown');
     var scopeTarget = options.scope || document;
     var ignore = options.ignore || [];
     var useCapture = 'capture' in options ? options.capture : true;
     var detectIframe = options.detectIframe;
 
-    var listener = function(event){
+    var listener = function (event) {
       var el = target;
       var eventTarget = event.target || event.srcElement;
       var eventPath = getEventPath(event);
 
-      if (!el || el === eventTarget || eventPath.indexOf(el) !== -1){
+      if (!el || el === eventTarget || eventPath.indexOf(el) !== -1) {
         return;
       }
-      if(shouldIgnore(event, eventPath)){
+      if (shouldIgnore(event, eventPath)) {
         return;
       }
 
       handler(event);
     };
 
-    function shouldIgnore(event, eventPath){
+    function shouldIgnore(event, eventPath) {
       var eventTarget = event.target || event.srcElement;
-      for(var i = 0; i < ignore.length; i++){
+      for (var i = 0; i < ignore.length; i++) {
         var target = ignore[i];
-        if(typeof target === 'string'){
+        if (typeof target === 'string') {
           var targetElements = document.querySelectorAll(target);
-          for(var j = 0; j < targetElements.length; j++){
+          for (var j = 0; j < targetElements.length; j++) {
             var targetEl = targetElements[i];
-            if(targetEl === eventTarget || eventPath.indexOf(targetEl) !== -1){
+            if (
+              targetEl === eventTarget ||
+              eventPath.indexOf(targetEl) !== -1
+            ) {
               return true;
             }
           }
-        }else{
-          if(target && (target === eventTarget || eventPath.indexOf(target) !== -1)){
+        } else {
+          if (
+            target &&
+            (target === eventTarget || eventPath.indexOf(target) !== -1)
+          ) {
             return true;
           }
         }
       }
     }
 
-    function getEventPath(event){
+    function getEventPath(event) {
       var path = (event.composedPath && event.composedPath()) || event.path;
       var eventTarget = event.target || event.srcElement;
 
-      if (path !== null && path !== undefined){
+      if (path !== null && path !== undefined) {
         return path;
       }
 
-      function getParents(node, memo){
+      function getParents(node, memo) {
         memo = memo || [];
         var parentNode = node.parentNode;
 
@@ -843,16 +889,16 @@
       return [eventTarget].concat(getParents(eventTarget));
     }
 
-    function bindEventListener(elem, eventName, handler, opts){
+    function bindEventListener(elem, eventName, handler, opts) {
       elem.addEventListener
         ? elem.addEventListener(eventName, handler, opts)
         : elem.attachEvent('on' + eventName, handler);
 
-      return function(){
+      return function () {
         elem.removeEventListener
           ? elem.removeEventListener(eventName, handler, opts)
           : elem.detachEvent('on' + eventName, handler);
-      }
+      };
     }
 
     var cleanup = [
@@ -860,25 +906,31 @@
         scopeTarget,
         eventType,
         listener,
-        lay.passiveSupported ? { passive: true, capture: useCapture } : useCapture
+        lay.passiveSupported
+          ? { passive: true, capture: useCapture }
+          : useCapture
       ),
-      detectIframe && bindEventListener(window, 'blur', function(event){
-        setTimeout(function(){
-          if(document.activeElement && document.activeElement.tagName === 'IFRAME'
-            && target.contains && !target.contains(document.activeElement)
-          ){
-            handler(event);
-          }
-        }, 0);
-      })
+      detectIframe &&
+        bindEventListener(window, 'blur', function (event) {
+          setTimeout(function () {
+            if (
+              document.activeElement &&
+              document.activeElement.tagName === 'IFRAME' &&
+              target.contains &&
+              !target.contains(document.activeElement)
+            ) {
+              handler(event);
+            }
+          }, 0);
+        })
     ];
 
-    return function(){
-      for(var i=0; i < cleanup.length; i++){
+    return function () {
+      for (var i = 0; i < cleanup.length; i++) {
         cleanup[i] && cleanup[i]();
       }
       cleanup = null;
-    }
+    };
   };
 
   /**
@@ -887,7 +939,7 @@
    * @param {string} prop 要检查的属性名
    * @returns {boolean} 如果对象具有指定的属性，则为 true；否则为 false
    */
-  lay.hasOwn = function(obj, prop){
+  lay.hasOwn = function (obj, prop) {
     return hasOwnProperty.call(obj, prop);
   };
 
@@ -903,9 +955,12 @@
     html += '';
     if (!exp.test(html)) return html;
 
-    return html.replace(/&(?=#?[a-zA-Z0-9]+;?)/g, '&amp;')
-      .replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+    return html
+      .replace(/&(?=#?[a-zA-Z0-9]+;?)/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/'/g, '&#39;')
+      .replace(/"/g, '&quot;');
   };
 
   /**
@@ -916,9 +971,12 @@
   lay.unescape = function (html) {
     if (html === undefined || html === null) return '';
 
-    return String(html).replace(/\&quot;/g, '"').replace(/\&#39;/g, '\'')
-      .replace(/\&gt;/g, '>').replace(/\&lt;/g, '<')
-      .replace(/\&amp;/g, '&');
+    return String(html)
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&gt;/g, '>')
+      .replace(/&lt;/g, '<')
+      .replace(/&amp;/g, '&');
   };
 
   /**
@@ -957,7 +1015,8 @@
    */
   lay.createSharedResizeObserver = function (namespace) {
     if (typeof window.ResizeObserver === 'undefined') {
-      window.console && console.log('ResizeObserver is not supported in this browser.');
+      window.console &&
+        console.warn('ResizeObserver is not supported in this browser.');
       return null;
     }
 
@@ -981,7 +1040,10 @@
     return Object.freeze({
       observe: function (element, callback) {
         if (!element || !(element instanceof Element)) {
-          window.console && console.log('createSharedResizeObserver: Cannot observe non-Element.');
+          window.console &&
+            console.warn(
+              'createSharedResizeObserver: Cannot observe non-Element.'
+            );
           return;
         }
 
@@ -997,7 +1059,10 @@
       },
       unobserve: function (element) {
         if (!element || !(element instanceof Element)) {
-          window.console && console.log('createSharedResizeObserver: Cannot unobserve non-Element.');
+          window.console &&
+            console.warn(
+              'createSharedResizeObserver: Cannot unobserve non-Element.'
+            );
           return;
         }
 
@@ -1016,10 +1081,12 @@
       },
       disconnect: function () {
         for (var key in handlerCache) {
-          if (lay.hasOwn(handlerCache,key)) {
+          if (lay.hasOwn(handlerCache, key)) {
             delete handlerCache[key];
-            var elem = document.querySelector('[' + ATTR_NAME + '="' + key + '"]');
-            if(elem){
+            var elem = document.querySelector(
+              '[' + ATTR_NAME + '="' + key + '"]'
+            );
+            if (elem) {
               elem.removeAttribute(ATTR_NAME);
             }
           }
@@ -1039,17 +1106,20 @@
    * @param {boolean} [options.keepChildren=true] - 是否保留子节点数据
    * @returns {Object[]} 返回平铺数据
    */
-  lay.treeToFlat = function(data, options) {
-    options = Object.assign({
-      childrenKey: 'children',
-      idKey: 'id',
-      parentKey: 'parentId',
-      keepChildren: true
-    }, options);
+  lay.treeToFlat = function (data, options) {
+    options = Object.assign(
+      {
+        childrenKey: 'children',
+        idKey: 'id',
+        parentKey: 'parentId',
+        keepChildren: true
+      },
+      options
+    );
 
     // 展平
-    var toFlat = function(initData, nodes, parentId) {
-      return nodes.reduce(function(acc, currNode) {
+    var toFlat = function (initData, nodes, parentId) {
+      return nodes.reduce(function (acc, currNode) {
         var children = currNode[options.childrenKey];
 
         if (!options.keepChildren) {
@@ -1079,17 +1149,20 @@
    * @param {string} [options.idKey='id'] - 节点 id 字段名
    * @param {string} [options.parentKey='parentId'] - 父节点 id 字段名
    */
-  lay.flatToTree = function(data, options) {
-    options = Object.assign({
-      childrenKey: 'children',
-      idKey: 'id',
-      parentKey: 'parentId'
-    }, options);
+  lay.flatToTree = function (data, options) {
+    options = Object.assign(
+      {
+        childrenKey: 'children',
+        idKey: 'id',
+        parentKey: 'parentId'
+      },
+      options
+    );
 
     data = JSON.parse(JSON.stringify(data)); // 深拷贝，防止修改原数据
 
     // 先创建节点映射，确保无论平铺数据的顺序如何，组装树时都能正确匹配
-    var map = data.reduce(function(acc, currNode) {
+    var map = data.reduce(function (acc, currNode) {
       var id = currNode[options.idKey];
       acc[id] = currNode;
       acc[id][options.childrenKey] = [];
@@ -1097,14 +1170,15 @@
     }, {});
 
     // 组装树
-    return data.reduce(function(acc, currNode) {
+    return data.reduce(function (acc, currNode) {
       var id = currNode[options.idKey];
       var parentId = currNode[options.parentKey];
 
       // 根节点
       if (parentId === null || !map[parentId]) {
         acc.push(map[id]);
-      } else { // 子节点
+      } else {
+        // 子节点
         map[parentId][options.childrenKey].push(currNode);
       }
 
@@ -1112,19 +1186,16 @@
     }, []);
   };
 
-
-
   /*
    * lay 元素操作
    */
 
-
   // 追加字符
-  Class.addStr = function(str, new_str){
+  Class.addStr = function (str, new_str) {
     str = str.replace(/\s+/, ' ');
     new_str = new_str.replace(/\s+/, ' ').split(' ');
-    lay.each(new_str, function(ii, item){
-      if(!new RegExp('\\b'+ item + '\\b').test(str)){
+    lay.each(new_str, function (ii, item) {
+      if (!new RegExp('\\b' + item + '\\b').test(str)) {
         str = str + ' ' + item;
       }
     });
@@ -1132,12 +1203,12 @@
   };
 
   // 移除值
-  Class.removeStr = function(str, new_str){
+  Class.removeStr = function (str, new_str) {
     str = str.replace(/\s+/, ' ');
     new_str = new_str.replace(/\s+/, ' ').split(' ');
-    lay.each(new_str, function(ii, item){
-      var exp = new RegExp('\\b'+ item + '\\b')
-      if(exp.test(str)){
+    lay.each(new_str, function (ii, item) {
+      var exp = new RegExp('\\b' + item + '\\b');
+      if (exp.test(str)) {
         str = str.replace(exp, '');
       }
     });
@@ -1145,17 +1216,18 @@
   };
 
   // 查找子元素
-  Class.fn.find = function(selector){
-    var that = this;
+  Class.fn.find = function (selector) {
+    // var that = this;
     var elem = [];
     var isObject = typeof selector === 'object';
 
-    this.each(function(i, item){
-      var children = isObject && item.contains(selector)
-        ? selector
-      : item.querySelectorAll(selector || null);
+    this.each(function (i, item) {
+      var children =
+        isObject && item.contains(selector)
+          ? selector
+          : item.querySelectorAll(selector || null);
 
-      lay.each(children, function(index, child){
+      lay.each(children, function (index, child) {
         elem.push(child);
       });
     });
@@ -1164,27 +1236,30 @@
   };
 
   // 元素遍历
-  Class.fn.each = function(fn){
+  Class.fn.each = function (fn) {
     return lay.each.call(this, this, fn);
   };
 
   // 添加 className
-  Class.fn.addClass = function(className, type){
-    return this.each(function(index, item){
-      item.className = Class[type ? 'removeStr' : 'addStr'](item.className, className)
+  Class.fn.addClass = function (className, type) {
+    return this.each(function (index, item) {
+      item.className = Class[type ? 'removeStr' : 'addStr'](
+        item.className,
+        className
+      );
     });
   };
 
   // 移除 className
-  Class.fn.removeClass = function(className){
+  Class.fn.removeClass = function (className) {
     return this.addClass(className, true);
   };
 
   // 是否包含 css 类
-  Class.fn.hasClass = function(className){
+  Class.fn.hasClass = function (className) {
     var has = false;
-    this.each(function(index, item){
-      if(new RegExp('\\b'+ className +'\\b').test(item.className)){
+    this.each(function (index, item) {
+      if (new RegExp('\\b' + className + '\\b').test(item.className)) {
         has = true;
       }
     });
@@ -1192,104 +1267,118 @@
   };
 
   // 添加或获取 css style
-  Class.fn.css = function(key, value){
+  Class.fn.css = function (key, value) {
     var that = this;
-    var parseValue = function(v){
-      return isNaN(v) ? v : (v +'px');
+    var parseValue = function (v) {
+      return isNaN(v) ? v : v + 'px';
     };
-    return (typeof key === 'string' && value === undefined) ? function(){
-      if(that.length > 0) return that[0].style[key];
-    }() : that.each(function(index, item){
-      typeof key === 'object' ? lay.each(key, function(thisKey, thisValue){
-        item.style[thisKey] = parseValue(thisValue);
-      }) : item.style[key] = parseValue(value);
-    });
+    return typeof key === 'string' && value === undefined
+      ? (function () {
+          if (that.length > 0) return that[0].style[key];
+        })()
+      : that.each(function (index, item) {
+          typeof key === 'object'
+            ? lay.each(key, function (thisKey, thisValue) {
+                item.style[thisKey] = parseValue(thisValue);
+              })
+            : (item.style[key] = parseValue(value));
+        });
   };
 
   // 添加或获取宽度
-  Class.fn.width = function(value){
+  Class.fn.width = function (value) {
     var that = this;
-    return value === undefined ? function(){
-      if(that.length > 0) return that[0].offsetWidth; // 此处还需做兼容
-    }() : that.each(function(index, item){
-      that.css('width', value);
-    });
+    return value === undefined
+      ? (function () {
+          if (that.length > 0) return that[0].offsetWidth; // 此处还需做兼容
+        })()
+      : that.each(function (index, item) {
+          that.css('width', value);
+        });
   };
 
   // 添加或获取高度
-  Class.fn.height = function(value){
+  Class.fn.height = function (value) {
     var that = this;
-    return value === undefined ? function(){
-      if(that.length > 0) return that[0].offsetHeight; // 此处还需做兼容
-    }() : that.each(function(index, item){
-      that.css('height', value);
-    });
+    return value === undefined
+      ? (function () {
+          if (that.length > 0) return that[0].offsetHeight; // 此处还需做兼容
+        })()
+      : that.each(function (index, item) {
+          that.css('height', value);
+        });
   };
 
   // 添加或获取属性
-  Class.fn.attr = function(key, value){
+  Class.fn.attr = function (key, value) {
     var that = this;
-    return value === undefined ? function(){
-      if(that.length > 0) return that[0].getAttribute(key);
-    }() : that.each(function(index, item){
-      item.setAttribute(key, value);
-    });
+    return value === undefined
+      ? (function () {
+          if (that.length > 0) return that[0].getAttribute(key);
+        })()
+      : that.each(function (index, item) {
+          item.setAttribute(key, value);
+        });
   };
 
   // 移除属性
-  Class.fn.removeAttr = function(key){
-    return this.each(function(index, item){
+  Class.fn.removeAttr = function (key) {
+    return this.each(function (index, item) {
       item.removeAttribute(key);
     });
   };
 
   // 设置或获取 HTML 内容
-  Class.fn.html = function(html){
+  Class.fn.html = function (html) {
     var that = this;
-    return html === undefined ? function(){
-      if(that.length > 0) return that[0].innerHTML;
-    }() : this.each(function(index, item){
-      item.innerHTML = html;
-    });
+    return html === undefined
+      ? (function () {
+          if (that.length > 0) return that[0].innerHTML;
+        })()
+      : this.each(function (index, item) {
+          item.innerHTML = html;
+        });
   };
 
   // 设置或获取值
-  Class.fn.val = function(value){
+  Class.fn.val = function (value) {
     var that = this;
-    return value === undefined ? function(){
-      if(that.length > 0) return that[0].value;
-    }() : this.each(function(index, item){
-        item.value = value;
-    });
+    return value === undefined
+      ? (function () {
+          if (that.length > 0) return that[0].value;
+        })()
+      : this.each(function (index, item) {
+          item.value = value;
+        });
   };
 
   // 追加内容
-  Class.fn.append = function(elem){
-    return this.each(function(index, item){
+  Class.fn.append = function (elem) {
+    return this.each(function (index, item) {
       typeof elem === 'object'
         ? item.appendChild(elem)
-      :  item.innerHTML = item.innerHTML + elem;
+        : (item.innerHTML = item.innerHTML + elem);
     });
   };
 
   // 移除内容
-  Class.fn.remove = function(elem){
-    return this.each(function(index, item){
+  Class.fn.remove = function (elem) {
+    return this.each(function (index, item) {
       elem ? item.removeChild(elem) : item.parentNode.removeChild(item);
     });
   };
 
   // 事件绑定
-  Class.fn.on = function(eventName, fn, options){
-    return this.each(function(index, item){
-      lay.addEvent(item, eventName, fn, options)
+  Class.fn.on = function (eventName, fn, options) {
+    return this.each(function (index, item) {
+      lay.addEvent(item, eventName, fn, options);
     });
   };
 
   // 解除事件
-  Class.fn.off = function(eventName, fn, options){
-    return this.each(function(index, item){
-      lay.removeEvent(item, eventName, fn, options)
+  Class.fn.off = function (eventName, fn, options) {
+    return this.each(function (index, item) {
+      lay.removeEvent(item, eventName, fn, options);
     });
   };
 
@@ -1297,10 +1386,9 @@
   window.lay = lay;
 
   // 输出为 layui 模块
-  if(window.layui && layui.define){
-    layui.define(function(exports){
+  if (window.layui && layui.define) {
+    layui.define(function (exports) {
       exports(MOD_NAME, lay);
     });
   }
-
 })(window);

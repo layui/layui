@@ -3,11 +3,11 @@
  * 国际化
  */
 
-layui.define('lay', function(exports) {
+layui.define('lay', function (exports) {
   'use strict';
 
   var lay = layui.lay;
-  var hint  = layui.hint();
+  var hint = layui.hint();
 
   var MOD_NAME = 'i18n';
 
@@ -53,7 +53,20 @@ layui.define('lay', function(exports) {
       verifyErrorPromptTitle: '提示'
     },
     laydate: {
-      months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+      months: [
+        '1月',
+        '2月',
+        '3月',
+        '4月',
+        '5月',
+        '6月',
+        '7月',
+        '8月',
+        '9月',
+        '10月',
+        '11月',
+        '12月'
+      ],
       weeks: ['日', '一', '二', '三', '四', '五', '六'],
       time: ['时', '分', '秒'],
       literal: {
@@ -84,7 +97,7 @@ layui.define('lay', function(exports) {
       },
       photos: {
         noData: '没有图片',
-        tools:{
+        tools: {
           rotate: '旋转',
           scaleX: '水平变换',
           zoomIn: '放大',
@@ -117,7 +130,7 @@ layui.define('lay', function(exports) {
         desc: '降序'
       },
       noData: '暂无数据',
-      tools:{
+      tools: {
         filter: {
           title: '筛选列'
         },
@@ -125,14 +138,15 @@ layui.define('lay', function(exports) {
           title: '导出',
           noDataPrompt: '当前表格无数据',
           compatPrompt: '导出功能不支持 IE，请用 Chrome 等高级浏览器导出',
-          csvText : '导出 CSV 文件'
+          csvText: '导出 CSV 文件'
         },
         print: {
           title: '打印',
           noDataPrompt: '当前表格无数据'
         }
       },
-      dataFormatError: '返回的数据不符合规范，正确的成功状态码应为："{statusName}": {statusCode}',
+      dataFormatError:
+        '返回的数据不符合规范，正确的成功状态码应为："{statusName}": {statusCode}',
       xhrError: '请求异常，错误提示：{msg}'
     },
     transfer: {
@@ -171,7 +185,7 @@ layui.define('lay', function(exports) {
       },
       toDateString: {
         // https://www.unicode.org/cldr/charts/47/supplemental/day_periods.html
-        meridiem: function(hours, minutes){
+        meridiem: function (hours, minutes) {
           var hm = hours * 100 + minutes;
           if (hm < 500) {
             return '凌晨';
@@ -191,12 +205,16 @@ layui.define('lay', function(exports) {
   };
 
   // 默认配置
-  var config = lay.extend({
-    locale: 'zh-CN', // 全局内置语言
-    messages: { // 全局国际化消息对象
-      'zh-CN': zhCN
-    }
-  }, GLOBAL.i18n); // 读取全局预设配置，确保打包后的版本初始调用时机
+  var config = lay.extend(
+    {
+      locale: 'zh-CN', // 全局内置语言
+      messages: {
+        // 全局国际化消息对象
+        'zh-CN': zhCN
+      }
+    },
+    GLOBAL.i18n
+  ); // 读取全局预设配置，确保打包后的版本初始调用时机
 
   var OBJECT_REPLACE_REGEX = /\{(\w+)\}/g;
 
@@ -212,9 +230,9 @@ layui.define('lay', function(exports) {
     var casePath = path.replace(/\[(\d+)\]/g, '.$1').split('.');
     var result = obj;
 
-    for(var i = 0; i < casePath.length; i++) {
+    for (var i = 0; i < casePath.length; i++) {
       result = result && result[casePath[i]];
-      if(result === null || result === undefined){
+      if (result === null || result === undefined) {
         return defaultValue;
       }
     }
@@ -228,7 +246,7 @@ layui.define('lay', function(exports) {
    * @param {(key: string, ...args) => T} fn - 需要缓存的函数，第一个参数为键
    * @returns {{(key: string, ...args): T, cleanup: () => void}} - 带有缓存的函数
    */
-  function memoize(fn){
+  function memoize(fn) {
     /** @type Record<string, T> */
     var cache = Object.create(null);
 
@@ -237,9 +255,9 @@ layui.define('lay', function(exports) {
       return hit || (cache[key] = fn.apply(cache, arguments));
     }
 
-    cachedFn.cleanup = function() {
+    cachedFn.cleanup = function () {
       cache = Object.create(null);
-    }
+    };
     return cachedFn;
   }
 
@@ -250,28 +268,28 @@ layui.define('lay', function(exports) {
    * @returns {any} - 转义后的结果
    */
   function escape(value) {
-    if(typeof value === 'string'){
+    if (typeof value === 'string') {
       value = lay.escape(value);
-    }else if(typeof value === 'function'){
+    } else if (typeof value === 'function') {
       var origFn = value;
-      value = function(){
-        var val = origFn.apply(this, arguments)
+      value = function () {
+        var val = origFn.apply(this, arguments);
         return typeof val === 'string' ? lay.escape(val) : val;
-      }
-    }else if(layui.type(value) === 'array'){
-      value = value.map(function(v){
+      };
+    } else if (layui.type(value) === 'array') {
+      value = value.map(function (v) {
         return typeof v === 'string' ? lay.escape(v) : v;
       });
     }
 
-    return value
+    return value;
   }
 
   function isDef(value) {
     return value !== null && value !== undefined;
   }
 
-  var resolveValue = memoize(function(path, obj, defaultValue){
+  var resolveValue = memoize(function (path, obj, defaultValue) {
     var pathParts = path.split(':');
     var locale = pathParts[0];
 
@@ -283,10 +301,16 @@ layui.define('lay', function(exports) {
       var isFallback = defaultValue === value || value === path;
       var isNotFound = !isDef(value) || isFallback;
       if (isNotFound) {
-        hint.errorOnce("Not found '" + path + "' key in '" + locale + "' locale messages.", 'warn');
+        hint.errorOnce(
+          "Not found '" + path + "' key in '" + locale + "' locale messages.",
+          'warn'
+        );
       }
       if (isFallback) {
-        hint.errorOnce("Fallback to default message for key: '" + path + "'", 'warn');
+        hint.errorOnce(
+          "Fallback to default message for key: '" + path + "'",
+          'warn'
+        );
       }
     }
 
@@ -295,7 +319,7 @@ layui.define('lay', function(exports) {
 
   var i18n = {
     config: config,
-    set: function(options) {
+    set: function (options) {
       lay.extend(config, options);
       resolveValue.cleanup();
     }
@@ -325,7 +349,7 @@ layui.define('lay', function(exports) {
    * }
    * i18n.$t('message.hello', ['Hello'])
    */
-  i18n.translation = function(keypath, parameters, options) {
+  i18n.translation = function (keypath, parameters, options) {
     var locale = (options && options.locale) || config.locale;
     var i18nMessages = config.messages[locale];
     var namespace = locale + ':';
@@ -333,15 +357,24 @@ layui.define('lay', function(exports) {
     var fallbackMessage = hasDefault ? options.default : undefined;
 
     if (!i18nMessages && !hasDefault) {
-      hint.errorOnce("Locale '" + locale + "' not found. Please add i18n messages for this locale first.", 'warn');
+      hint.errorOnce(
+        "Locale '" +
+          locale +
+          "' not found. Please add i18n messages for this locale first.",
+        'warn'
+      );
     }
 
-    var result = resolveValue(namespace + keypath, i18nMessages, fallbackMessage);
+    var result = resolveValue(
+      namespace + keypath,
+      i18nMessages,
+      fallbackMessage
+    );
 
     // 替换占位符
     if (typeof result === 'string' && parameters) {
       // 第二个参数为对象或数组，替换占位符 {key} 或 {0}, {1}...
-      result = result.replace(OBJECT_REPLACE_REGEX, function(match, key) {
+      result = result.replace(OBJECT_REPLACE_REGEX, function (match, key) {
         return parameters[key] !== undefined ? parameters[key] : match;
       });
     }

@@ -26,20 +26,40 @@
   ],
   "scripts": {
     "build": "gulp",
-    "release": "npm run build && npm rum release-zip",
-    "release-zip": "gulp release"
+    "release": "npm run build && npm run release-zip",
+    "release-zip": "gulp release",
+    "format": "prettier --write --cache .",
+    "format:check": "prettier --check --cache .",
+    "lint": "eslint . --cache",
+    "lint:strict": "eslint . --cache --max-warnings 0",
+    "prepare": "node .husky/install.mjs"
+  },
+  "lint-staged": {
+    "*": [
+      "prettier --write --cache --ignore-unknown"
+    ],
+    "*.{js,mjs,cjs}": [
+      "eslint --fix --cache"
+    ]
   },
   "devDependencies": {
+    "@eslint/js": "^9.38.0",
+    "@types/layui": "^2.11.0",
+    "del": "^6.1.1",
+    "eslint": "^9.38.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.5.0",
     "gulp": "^4.0.2",
-    "gulp-uglify": "^3.0.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
-    "gulp-replace": "^1.1.4",
     "gulp-header": "^2.0.9",
+    "gulp-replace": "^1.1.4",
     "gulp-sourcemaps": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
     "gulp-zip": "^5.1.0",
-    "del": "^6.1.1",
-    "minimist": "^1.2.8"
-  },
-  "dependencies": {}
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
+    "minimist": "^1.2.8",
+    "prettier": "^3.6.2"
+  }
 }

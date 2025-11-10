@@ -1,0 +1,10 @@
+*.min.js
+*.bundle.js
+*.map
+
+dist
+node_modules
+package-lock.json
+
+/docs/
+/release/

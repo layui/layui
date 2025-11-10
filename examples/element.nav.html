@@ -1,12 +1,17 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
     <title>导航 - 常用元素 - layui</title>
-    <link rel="stylesheet" href="../src/css/layui.css">
+    <link rel="stylesheet" href="../src/css/layui.css" />
     <style>
-      .demo-nav-tree>.layui-inline{vertical-align: top;}
+      .demo-nav-tree > .layui-inline {
+        vertical-align: top;
+      }
     </style>
   </head>
   <body class="layui-padding-3">
@@ -15,7 +20,9 @@
       <li class="layui-nav-item">
         <a href="javascript:;">产品</a>
       </li>
-      <li class="layui-nav-item"><a href="">大数据<span class="layui-badge-dot"></span></a></li>
+      <li class="layui-nav-item">
+        <a href="">大数据<span class="layui-badge-dot"></span></a>
+      </li>
       <li class="layui-nav-item">
         <a href="javascript:;">方案</a>
         <dl class="layui-nav-child layui-nav-child-c">
@@ -26,17 +33,21 @@
       </li>
       <li class="layui-nav-item"><a href="">社区</a></li>
       <li class="layui-nav-item">
-        <a href=""><img src="https://unpkg.com/outeres@0.0.10/demo/avatar/1.jpg" class="layui-nav-img"></a>
+        <a href=""
+          ><img
+            src="https://unpkg.com/outeres@0.0.10/demo/avatar/1.jpg"
+            class="layui-nav-img"
+        /></a>
         <dl class="layui-nav-child layui-nav-child-r">
           <dd><a href="">Your organizations</a></dd>
           <dd><a href="">Settings</a></dd>
-          <hr>
+          <hr />
           <dd><a href="">Sign out</a></dd>
         </dl>
       </li>
     </ul>
 
-    <br>
+    <br />
 
     <ul class="layui-nav layui-bg-cyan">
       <li class="layui-nav-item layui-this"><a href="">最新活动</a></li>
@@ -55,7 +66,7 @@
       <li class="layui-nav-item"><a href="">社区</a></li>
     </ul>
 
-    <br>
+    <br />
 
     <ul class="layui-nav layui-bg-green">
       <li class="layui-nav-item"><a href="">最新活动</a></li>
@@ -79,7 +90,7 @@
       <li class="layui-nav-item"><a href="">社区</a></li>
     </ul>
 
-    <br>
+    <br />
 
     <ul class="layui-nav layui-bg-blue" lay-bar="disabled">
       <li class="layui-nav-item"><a href="">最新活动</a></li>
@@ -103,7 +114,7 @@
       <li class="layui-nav-item"><a href="">社区</a></li>
     </ul>
 
-    <br>
+    <br />
 
     <ul class="layui-nav layui-bg-gray">
       <li class="layui-nav-item"><a href="">最新活动</a></li>
@@ -122,7 +133,7 @@
       <li class="layui-nav-item"><a href="">社区</a></li>
     </ul>
 
-    <br>
+    <br />
 
     <div class="demo-nav-tree">
       <div class="layui-inline">
@@ -186,7 +197,11 @@
         </ul>
       </div>
       <div class="layui-inline">
-        <ul class="layui-nav layui-nav-tree layui-bg-black" lay-accordion lay-filter="test">
+        <ul
+          class="layui-nav layui-nav-tree layui-bg-black"
+          lay-accordion
+          lay-filter="test"
+        >
           <li class="layui-nav-item layui-nav-itemed">
             <a class="" href="javascript:;">菜单 1</a>
             <dl class="layui-nav-child">
@@ -217,8 +232,8 @@
       </div>
     </div>
 
-    <br>
-    <br>
+    <br />
+    <br />
 
     <span class="layui-breadcrumb">
       <a href="">首页</a>
@@ -227,7 +242,7 @@
       <a><cite>正文</cite></a>
     </span>
 
-    <br><br>
+    <br /><br />
 
     <span class="layui-breadcrumb" lay-separator="|">
       <a href="">娱乐</a>
@@ -239,17 +254,17 @@
       <a href="">综艺</a>
     </span>
 
-    <br><br><br><br><br><br>
+    <br /><br /><br /><br /><br /><br />
 
     <script src="../src/layui.js"></script>
     <script>
-    layui.use(['element', 'form'], function(){
-      var element = layui.element;
+      layui.use(['element', 'form'], function () {
+        var element = layui.element;
 
-      element.on('nav(test)', function(elem){
-        console.log(elem)
+        element.on('nav(test)', function (elem) {
+          console.log(elem);
+        });
       });
-    });
     </script>
   </body>
 </html>

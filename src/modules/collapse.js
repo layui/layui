@@ -3,7 +3,7 @@
  * 折叠面板组件
  */
 
-layui.define('component', function(exports) {
+layui.define('component', function (exports) {
   'use strict';
 
   var $ = layui.$;
@@ -18,14 +18,14 @@ layui.define('component', function(exports) {
       elem: '.layui-collapse'
     },
 
-    render: function() {
+    render: function () {
       var that = this;
       var options = that.config;
 
-      options.elem.each(function() {
+      options.elem.each(function () {
         var elemItem = $(this).find('.layui-colla-item');
-        elemItem.each(function() {
-          var othis = $(this)
+        elemItem.each(function () {
+          var othis = $(this);
           var elemTitle = othis.find('.layui-colla-title');
           var elemCont = othis.find('.layui-colla-content');
           var isNone = elemCont.css('display') === 'none';
@@ -33,7 +33,9 @@ layui.define('component', function(exports) {
 
           // 初始状态
           elemTitle.find('.layui-colla-icon').remove();
-          elemTitle.append('<i class="layui-icon layui-icon-right layui-colla-icon"></i>');
+          elemTitle.append(
+            '<i class="layui-icon layui-icon-right layui-colla-icon"></i>'
+          );
           othis[isNone ? 'removeClass' : 'addClass'](CONST.CLASS_SHOW);
 
           // 兼容旧版（ < 2.11.3）
@@ -42,8 +44,9 @@ layui.define('component', function(exports) {
           }
 
           // 点击标题
-          elemTitle.off(clickEventName, event.titleClick)
-          .on(clickEventName, event.titleClick);
+          elemTitle
+            .off(clickEventName, event.titleClick)
+            .on(clickEventName, event.titleClick);
         });
       });
     }
@@ -52,7 +55,7 @@ layui.define('component', function(exports) {
   // 基础事件体
   var event = {
     // 点击面板标题项
-    titleClick: function() {
+    titleClick: function () {
       var othis = $(this);
       var wrapper = othis.closest('.layui-collapse');
       var filter = wrapper.attr('lay-filter');
@@ -67,7 +70,7 @@ layui.define('component', function(exports) {
       var isAccordion = typeof wrapper.attr('lay-accordion') === 'string';
 
       // 动画执行完成后的操作
-      var complete = function() {
+      var complete = function () {
         $(this).css('display', ''); // 剔除动画生成的 style display，以适配外部样式的状态重置
       };
 
@@ -87,13 +90,13 @@ layui.define('component', function(exports) {
 
       // 是否开启手风琴
       if (isAccordion) {
-        var itemSiblings = thisItemElem.siblings('.'+ CONST.CLASS_SHOW);
+        var itemSiblings = thisItemElem.siblings('.' + CONST.CLASS_SHOW);
         itemSiblings.removeClass(CONST.CLASS_SHOW);
         itemSiblings.children(CLASS_CONTENT).show().slideUp(ANIM_MS, complete);
       }
 
       // 事件
-      layui.event.call(this, SUPER_MOD_NAME, 'collapse('+ filter +')', {
+      layui.event.call(this, SUPER_MOD_NAME, 'collapse(' + filter + ')', {
         title: othis,
         content: thisContentElem,
         show: isNone

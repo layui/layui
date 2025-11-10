@@ -1,10 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
     <title>选项卡 - layui</title>
-    <link rel="stylesheet" href="../src/css/layui.css">
+    <link rel="stylesheet" href="../src/css/layui.css" />
   </head>
   <body>
     <div class="layui-container layui-padding-3">
@@ -12,7 +15,8 @@
         📣 升级提示：当前 tab 仅为兼容保留，推荐使用全新 tabs 组件平替
       </blockquote>
 
-      <hr><br>
+      <hr />
+      <br />
 
       <div class="layui-tab" lay-filter="test" lay-allowClose="true">
         <ul class="layui-tab-title">
@@ -32,12 +36,17 @@
       </div>
 
       <div class="layui-btn-container">
-        <button class="layui-btn" onclick="layui.element.tabChange('test', 3)">切换到：Tab3</button>
-        <button class="layui-btn" onclick="layui.element.tabDelete('test', 4)">删除：Tab4</button>
+        <button class="layui-btn" onclick="layui.element.tabChange('test', 3)">
+          切换到：Tab3
+        </button>
+        <button class="layui-btn" onclick="layui.element.tabDelete('test', 4)">
+          删除：Tab4
+        </button>
         <button class="layui-btn" lay-on="add">添加 Tab</button>
       </div>
 
-      <hr><br>
+      <hr />
+      <br />
 
       <div class="layui-tab layui-tab-brief">
         <ul class="layui-tab-title">
@@ -98,27 +107,27 @@
 
     <script src="../src/layui.js"></script>
     <script>
-      layui.use(['element', 'form', 'util'], function() {
+      layui.use(['element', 'form', 'util'], function () {
         var element = layui.element;
         var util = layui.util;
 
-        element.on('tab(test)', function(data){
+        element.on('tab(test)', function (data) {
           console.log(this, data);
         });
 
-        element.on('tabDelete(test)', function(data){
+        element.on('tabDelete(test)', function (data) {
           console.log(this, data);
         });
 
         // 自定义事件
         util.on({
           // 新增随机标签
-          add: function() {
-            var n = Math.random()*1000 | 0; // 演示标记
+          add: function () {
+            var n = (Math.random() * 1000) | 0; // 演示标记
             element.tabAdd('test', {
-              title: 'New Tab '+ n, // 此处加 n 仅为演示区分，实际应用不需要
-              content: 'New Tab Content '+ n,
-              id: 'new-'+ n,
+              title: 'New Tab ' + n, // 此处加 n 仅为演示区分，实际应用不需要
+              content: 'New Tab Content ' + n,
+              id: 'new-' + n,
               change: true
             });
           }

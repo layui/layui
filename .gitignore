@@ -1,30 +1,101 @@
+# Temporary files
 *~
 ~*
+*.tmp
+*.temp
 
+# Backup files
 *.bak
+*.orig
+*.backup
+
+# Build and compilation files
 *.bat
 *.diff
 *.err
 *.log
 *.patch
-*.swo
-*.swp
 *.zip
 
+# Editor swap files
+*.swo
+*.swp
+*.swn
+
+# System files
 .DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Environment and config files
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .nojekyll
 .project
 .settings
+
+# Package manager lock files
 package-lock.json
-Thumbs.db
+yarn.lock
+pnpm-lock.yaml
 
+# IDE and editor directories
 .idea/
-.svn/
-_site/
 .vscode/
-node_modules/
+!.vscode/extensions.json
+!.vscode/settings.json
+.svn/
+.history/
+*.sublime-project
+*.sublime-workspace
 
+# Dependencies
+node_modules/
+jspm_packages/
+bower_components/
+
+# Build output directories
+dist/
+build/
+out/
+_site/
+
+# Cache directories
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.vuepress/dist/
+.serverless/
+.fusebox/
+
+# Coverage and test reports
+coverage/
+.nyc_output/
+.coverage/
+*.lcov
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# ESLint cache
+.eslintcache
 
 # Published folders
 /release/

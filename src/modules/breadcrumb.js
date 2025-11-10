@@ -3,7 +3,7 @@
  * 面包屑导航组件
  */
 
-layui.define('component', function(exports) {
+layui.define('component', function (exports) {
   'use strict';
 
   var $ = layui.$;
@@ -17,19 +17,19 @@ layui.define('component', function(exports) {
       elem: '.layui-breadcrumb'
     },
 
-    render: function() {
+    render: function () {
       var that = this;
       var options = that.config;
 
-      options.elem.each(function() {
+      options.elem.each(function () {
         var othis = $(this);
         var ATTE_SPR = 'lay-separator';
         var separator = othis.attr(ATTE_SPR) || '/';
         var aNode = othis.find('a');
-        if (aNode.next('span['+ ATTE_SPR +']')[0]) return;
-        aNode.each(function(index) {
+        if (aNode.next('span[' + ATTE_SPR + ']')[0]) return;
+        aNode.each(function (index) {
           if (index === aNode.length - 1) return;
-          $(this).after('<span '+ ATTE_SPR +'>'+ separator +'</span>');
+          $(this).after('<span ' + ATTE_SPR + '>' + separator + '</span>');
         });
         othis.css('visibility', 'visible');
       });

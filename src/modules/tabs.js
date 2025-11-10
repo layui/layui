@@ -3,7 +3,7 @@
  * 标签页组件
  */
 
-layui.define('component', function(exports) {
+layui.define('component', function (exports) {
   'use strict';
 
   var $ = layui.$;
@@ -29,16 +29,19 @@ layui.define('component', function(exports) {
     },
 
     // 渲染
-    render: function() {
+    render: function () {
       var that = this;
       var options = that.config;
 
       // 标签页元素项
-      that.headerElem = ['.'+ component.CONST.HEADER + ':eq(0)', '>li'];
-      that.bodyElem = ['.'+ component.CONST.BODY + ':eq(0)', '>.'+ component.CONST.ITEM];
+      that.headerElem = ['.' + component.CONST.HEADER + ':eq(0)', '>li'];
+      that.bodyElem = [
+        '.' + component.CONST.BODY + ':eq(0)',
+        '>.' + component.CONST.ITEM
+      ];
 
       // 获取标签容器中的 header body 相关元素
-      that.getContainer = function() {
+      that.getContainer = function () {
         var elem = that.documentElem || options.elem;
         return {
           header: {
@@ -60,7 +63,8 @@ layui.define('component', function(exports) {
         if (typeof options.header[0] === 'string') {
           that.headerElem = options.header.concat();
           that.documentElem = $(document);
-        } else { // 方法传值渲染
+        } else {
+          // 方法传值渲染
           that.elemView = $('<div class="layui-tabs"></div>');
           if (options.className) that.elemView.addClass(options.className);
 
@@ -68,11 +72,11 @@ layui.define('component', function(exports) {
           var bodyElem = $('<div class="layui-tabs-body"></div>');
 
           // 生成标签项
-          layui.each(options.header, function(i, item){
+          layui.each(options.header, function (i, item) {
             var elemHeaderItem = that.renderHeaderItem(item);
             headerElem.append(elemHeaderItem);
           });
-          layui.each(options.body, function(i, item){
+          layui.each(options.body, function (i, item) {
             var elemBodyItem = that.renderBodyItem(item);
             bodyElem.append(elemBodyItem);
           });
@@ -96,7 +100,8 @@ layui.define('component', function(exports) {
       var data = that.data();
       if ('index' in options && data.index != options.index) {
         that.change(that.findHeaderItem(options.index), true);
-      } else if (data.index === -1) { // 初始选中项为空时，默认选中第一个
+      } else if (data.index === -1) {
+        // 初始选中项为空时，默认选中第一个
         that.change(that.findHeaderItem(0), true);
       }
 
@@ -115,36 +120,40 @@ layui.define('component', function(exports) {
       layui.event.call(
         options.elem[0],
         component.CONST.MOD_NAME,
-        'afterRender('+ options.id +')',
+        'afterRender(' + options.id + ')',
         data
       );
     },
 
     // 事件
-    events: function() {
+    events: function () {
       var that = this;
       var options = that.config;
       var container = that.getContainer();
       var MOD_NAME = component.CONST.MOD_NAME;
-      var TRIGGER_NAMESPACE = '.lay_'+ MOD_NAME + '_trigger';
-      var delegatedElement = that.documentElem ? container.header.elem : options.elem;
+      var TRIGGER_NAMESPACE = '.lay_' + MOD_NAME + '_trigger';
+      var delegatedElement = that.documentElem
+        ? container.header.elem
+        : options.elem;
 
       // 标签头部事件
       var trigger = options.trigger + TRIGGER_NAMESPACE;
-      var elemHeaderItem = that.documentElem ? that.headerElem[1] : that.headerElem.join('');
-      delegatedElement.off(trigger).on(trigger, elemHeaderItem, function() {
+      var elemHeaderItem = that.documentElem
+        ? that.headerElem[1]
+        : that.headerElem.join('');
+      delegatedElement.off(trigger).on(trigger, elemHeaderItem, function () {
         that.change($(this));
       });
 
       // 窗口 resize 事件
       if (!inner.onresize) {
         var timer;
-        $(window).on('resize', function() {
+        $(window).on('resize', function () {
           clearTimeout(timer);
-          timer = setTimeout(function(){
-            layui.each(component.cache.id, function(key) {
+          timer = setTimeout(function () {
+            layui.each(component.cache.id, function (key) {
               var that = component.getInst(key);
-              if(!that) return;
+              if (!that) return;
               that.roll('init');
             });
           }, 50);
@@ -177,31 +186,41 @@ layui.define('component', function(exports) {
    * @param {string} [opts.bodyItem] - 自定义标签内容元素
    * @param {Function} [opts.done] - 标签添加成功后执行的回调函数
    */
-  Class.prototype.add = function(opts) {
+  Class.prototype.add = function (opts) {
     var that = this;
-    var options = that.config;
+    // var options = that.config;
     var container = that.getContainer();
     var newHeaderItem = that.renderHeaderItem(opts);
     var newBodyItem = that.renderBodyItem(opts);
     var data = that.data();
 
     // 选项默认值
-    opts = $.extend({
-      active: true
-    }, opts);
+    opts = $.extend(
+      {
+        active: true
+      },
+      opts
+    );
 
     // 插入方式
-    if (/(before|after)/.test(opts.mode)) { // 在活动标签前后插入
-      var hasOwnIndex = opts.hasOwnProperty('index');
-      var headerItem = hasOwnIndex ? that.findHeaderItem(opts.index) : data.thisHeaderItem;
-      var bodyItem = hasOwnIndex ? that.findBodyItem(opts.index) : data.thisHeaderItem;
+    if (/(before|after)/.test(opts.mode)) {
+      // 在活动标签前后插入
+      var hasOwnIndex = Object.prototype.hasOwnProperty.call(opts, 'index');
+      var headerItem = hasOwnIndex
+        ? that.findHeaderItem(opts.index)
+        : data.thisHeaderItem;
+      var bodyItem = hasOwnIndex
+        ? that.findBodyItem(opts.index)
+        : data.thisHeaderItem;
       headerItem[opts.mode](newHeaderItem);
       bodyItem[opts.mode](newBodyItem);
-    } else { // 在标签最前后插入
-      var mode = ({
-        prepend: 'prepend', // 插入标签到最前
-        append: 'append' // 插入标签到最后
-      })[opts.mode || 'append'] || 'append';
+    } else {
+      // 在标签最前后插入
+      var mode =
+        {
+          prepend: 'prepend', // 插入标签到最前
+          append: 'append' // 插入标签到最后
+        }[opts.mode || 'append'] || 'append';
       container.header.elem[mode](newHeaderItem);
       container.body.elem[mode](newBodyItem);
     }
@@ -214,12 +233,13 @@ layui.define('component', function(exports) {
     }
 
     // 回调
-    typeof opts.done === 'function' && opts.done(
-      $.extend(data, {
-        headerItem: newHeaderItem,
-        bodyItem: newBodyItem
-      })
-    );
+    typeof opts.done === 'function' &&
+      opts.done(
+        $.extend(data, {
+          headerItem: newHeaderItem,
+          bodyItem: newBodyItem
+        })
+      );
   };
 
   /**
@@ -227,7 +247,7 @@ layui.define('component', function(exports) {
    * @param {Object} thisHeaderItem - 当前标签头部项元素
    * @param {boolean} force - 是否强制删除
    */
-  Class.prototype.close = function(thisHeaderItem, force) {
+  Class.prototype.close = function (thisHeaderItem, force) {
     if (!thisHeaderItem || !thisHeaderItem[0]) return;
 
     var that = this;
@@ -240,15 +260,15 @@ layui.define('component', function(exports) {
       return;
     }
 
-     // 当前标签相关数据
-     var data = that.data();
+    // 当前标签相关数据
+    var data = that.data();
 
     // 标签关闭前的事件。若非强制关闭，可则根据事件的返回结果决定是否关闭
     if (!force) {
       var closable = layui.event.call(
         thisHeaderItem[0],
         component.CONST.MOD_NAME,
-        'beforeClose('+ options.id +')',
+        'beforeClose(' + options.id + ')',
         $.extend(data, {
           index: index
         })
@@ -264,7 +284,7 @@ layui.define('component', function(exports) {
     if (thisHeaderItem.hasClass(component.CONST.CLASS_THIS)) {
       if (thisHeaderItem.next()[0]) {
         that.change(thisHeaderItem.next(), true);
-      } else if(thisHeaderItem.prev()[0]) {
+      } else if (thisHeaderItem.prev()[0]) {
         that.change(thisHeaderItem.prev(), true);
       }
     }
@@ -276,13 +296,13 @@ layui.define('component', function(exports) {
     that.roll('auto', index);
 
     // 获取当前标签相关数据
-    var data = that.data();
+    data = that.data();
 
     // 标签关闭后的事件
     layui.event.call(
       data.thisHeaderItem[0],
       component.CONST.MOD_NAME,
-      'afterClose('+ options.id +')',
+      'afterClose(' + options.id + ')',
       data
     );
   };
@@ -291,39 +311,47 @@ layui.define('component', function(exports) {
    * 批量关闭标签
    * @see tabs.close
    */
-  Class.prototype.closeMult = function(mode, index) {
+  Class.prototype.closeMult = function (mode, index) {
     var that = this;
     var options = that.config;
     var container = that.getContainer();
     var data = that.data();
     var headers = container.header.items;
-    var bodys = container.body.items;
+    // var bodys = container.body.items;
     var DISABLED_CLOSE_SELECTOR = '[lay-closable="false"]'; // 不可关闭标签选择器
-    var FILTER = ':not('+ DISABLED_CLOSE_SELECTOR +')'; // 不可关闭标签过滤器
+    // var FILTER = ':not(' + DISABLED_CLOSE_SELECTOR + ')'; // 不可关闭标签过滤器
 
     index = index === undefined ? data.index : index;
 
     var headerItem = that.findHeaderItem(index);
-    var bodyItem = that.findBodyItem(index);
+    // var bodyItem = that.findBodyItem(index);
     var itemIndex = headerItem.index();
 
     // 若当前选中标签也允许关闭，则尝试寻找不可关闭的标签并将其选中
     if (data.thisHeaderItem.attr('lay-closable') !== 'false') {
-      if(mode === 'all' || !mode){
-        var nextHeader = headers.filter(':gt('+ data.index +')'+ DISABLED_CLOSE_SELECTOR).eq(0);
-        var prevHeader = $(headers.filter(':lt('+ data.index +')'+ DISABLED_CLOSE_SELECTOR).get().reverse()).eq(0);
+      if (mode === 'all' || !mode) {
+        var nextHeader = headers
+          .filter(':gt(' + data.index + ')' + DISABLED_CLOSE_SELECTOR)
+          .eq(0);
+        var prevHeader = $(
+          headers
+            .filter(':lt(' + data.index + ')' + DISABLED_CLOSE_SELECTOR)
+            .get()
+            .reverse()
+        ).eq(0);
         if (nextHeader[0]) {
           that.change(nextHeader, true);
-        } else if(prevHeader[0]) {
+        } else if (prevHeader[0]) {
           that.change(prevHeader, true);
         }
-      } else if(index !== data.index) { // 自动切换到活动标签
+      } else if (index !== data.index) {
+        // 自动切换到活动标签
         that.change(headerItem, true);
       }
     }
 
     // 执行批量关闭标签
-    headers.each(function(i) {
+    headers.each(function (i) {
       var $this = $(this);
       var layid = $this.attr('lay-id');
       var bodyItem = that.findBodyItem(layid || i);
@@ -348,13 +376,13 @@ layui.define('component', function(exports) {
     that.roll('auto');
 
     // 回调
-    var data = that.data();
+    data = that.data();
 
     // 标签关闭后的事件
     layui.event.call(
       data.thisHeaderItem[0],
       component.CONST.MOD_NAME,
-      'afterClose('+ options.id +')',
+      'afterClose(' + options.id + ')',
       data
     );
   };
@@ -365,7 +393,7 @@ layui.define('component', function(exports) {
    * @param {boolean} [force=false] - 是否强制切换
    * @returns
    */
-  Class.prototype.change = function(thisHeaderItem, force) {
+  Class.prototype.change = function (thisHeaderItem, force) {
     if (!thisHeaderItem || !thisHeaderItem[0]) return;
 
     var that = this;
@@ -374,7 +402,9 @@ layui.define('component', function(exports) {
     var index = thisHeaderItem.index();
     var thatA = thisHeaderItem.find('a');
     // 是否存在跳转链接
-    var isLink = typeof thatA.attr('href') === 'string' && thatA.attr('target') === '_blank';
+    var isLink =
+      typeof thatA.attr('href') === 'string' &&
+      thatA.attr('target') === '_blank';
     // 是否不允许选中
     var unselect = typeof thisHeaderItem.attr('lay-unselect') === 'string';
 
@@ -391,7 +421,7 @@ layui.define('component', function(exports) {
       var enable = layui.event.call(
         thisHeaderItem[0],
         component.CONST.MOD_NAME,
-        'beforeChange('+ options.id +')',
+        'beforeChange(' + options.id + ')',
         $.extend(data, {
           from: {
             index: data.index,
@@ -411,23 +441,28 @@ layui.define('component', function(exports) {
     }
 
     // 执行标签头部切换
-    thisHeaderItem.addClass(component.CONST.CLASS_THIS).siblings()
-    .removeClass(component.CONST.CLASS_THIS);
+    thisHeaderItem
+      .addClass(component.CONST.CLASS_THIS)
+      .siblings()
+      .removeClass(component.CONST.CLASS_THIS);
 
     // 执行标签内容切换
-    that.findBodyItem(layid || index).addClass(component.CONST.CLASS_SHOW)
-    .siblings().removeClass(component.CONST.CLASS_SHOW);
+    that
+      .findBodyItem(layid || index)
+      .addClass(component.CONST.CLASS_SHOW)
+      .siblings()
+      .removeClass(component.CONST.CLASS_SHOW);
 
     that.roll('auto', index);
 
     // 重新获取标签相关数据
-    var data = that.data();
+    data = that.data();
 
     // 标签切换后的事件
     layui.event.call(
       data.thisHeaderItem[0],
       component.CONST.MOD_NAME,
-      'afterChange('+ options.id +')',
+      'afterChange(' + options.id + ')',
       data
     );
   };
@@ -436,7 +471,7 @@ layui.define('component', function(exports) {
    * 渲染标签头部项
    * @param {Object} opts - 标签项配置信息
    */
-  Class.prototype.renderHeaderItem = function(opts) {
+  Class.prototype.renderHeaderItem = function (opts) {
     var that = this;
     var options = that.config;
     var headerItem = $(opts.headerItem || options.headerItem || '<li></li>');
@@ -450,10 +485,14 @@ layui.define('component', function(exports) {
    * 渲染标签内容项
    * @param {Object} opts - 标签项配置信息
    */
-  Class.prototype.renderBodyItem = function(opts) {
+  Class.prototype.renderBodyItem = function (opts) {
     var that = this;
     var options = that.config;
-    var bodyItem = $(opts.bodyItem || options.bodyItem || '<div class="'+ component.CONST.ITEM +'"></div>');
+    var bodyItem = $(
+      opts.bodyItem ||
+        options.bodyItem ||
+        '<div class="' + component.CONST.ITEM + '"></div>'
+    );
 
     bodyItem.html(opts.content || '').attr('lay-id', opts.id);
     return bodyItem;
@@ -464,8 +503,8 @@ layui.define('component', function(exports) {
    * @param {Object} headerItem - 标签项元素
    * @param {Object} opts - 标签项配置信息
    */
-  Class.prototype.appendClose = function(headerItem, opts) {
-    var that = this
+  Class.prototype.appendClose = function (headerItem, opts) {
+    var that = this;
     var options = that.config;
 
     if (!options.closable) return;
@@ -482,9 +521,13 @@ layui.define('component', function(exports) {
     }
 
     // 可关闭项追加关闭按钮
-    if (!headerItem.find('.'+ component.CONST.CLOSE)[0]) {
-      var close = $('<i class="layui-icon layui-icon-close layui-unselect '+ component.CONST.CLOSE +'"></i>');
-      close.on('click', function(){
+    if (!headerItem.find('.' + component.CONST.CLOSE)[0]) {
+      var close = $(
+        '<i class="layui-icon layui-icon-close layui-unselect ' +
+          component.CONST.CLOSE +
+          '"></i>'
+      );
+      close.on('click', function () {
         that.close($(this).parent());
         return false;
       });
@@ -493,18 +536,18 @@ layui.define('component', function(exports) {
   };
 
   // 渲染标签可关闭元素
-  Class.prototype.renderClose = function() {
+  Class.prototype.renderClose = function () {
     var that = this;
     var options = that.config;
     var container = that.getContainer();
 
-    container.header.items.each(function() {
+    container.header.items.each(function () {
       var $this = $(this);
       // 是否开启关闭
       if (options.closable) {
         that.appendClose($this);
       } else {
-        $this.find('.'+ component.CONST.CLOSE).remove();
+        $this.find('.' + component.CONST.CLOSE).remove();
       }
     });
   };
@@ -515,7 +558,7 @@ layui.define('component', function(exports) {
    * @param {number} index - 标签索引。默认取当前选中标签的索引值
    * @returns
    */
-  Class.prototype.roll = function(mode, index) {
+  Class.prototype.roll = function (mode, index) {
     var that = this;
     var options = that.config;
     var container = that.getContainer();
@@ -527,7 +570,7 @@ layui.define('component', function(exports) {
     var scrollMode = options.headerMode === 'scroll'; // 标签头部是否始终保持滚动模式
 
     // 让选中标签始终保持在可视区域
-    var rollToVisibleArea = function() {
+    var rollToVisibleArea = function () {
       index = isNaN(index) ? that.data().index : index;
 
       var thisItemElem = headerItems.eq(index);
@@ -538,7 +581,7 @@ layui.define('component', function(exports) {
       var padding = 1; // 让边界额外保持一定间距
 
       // 当选中标签溢出在可视区域「左侧」时
-      var countWidth = thisLeft - (thisItemElem.prev().outerWidth() || 0);  // 始终空出上一个标签
+      var countWidth = thisLeft - (thisItemElem.prev().outerWidth() || 0); // 始终空出上一个标签
       if (countWidth > 0) countWidth = countWidth - padding;
 
       // 左侧临界值
@@ -548,8 +591,11 @@ layui.define('component', function(exports) {
       }
 
       // 当选中标签溢出在可视区域「右侧」时，
-      var countWidth = thisLeft + thisItemElem.outerWidth()
-      + (thisItemElem.next().outerWidth() || 0) + padding; // 始终空出下一个标签
+      countWidth =
+        thisLeft +
+        thisItemElem.outerWidth() +
+        (thisItemElem.next().outerWidth() || 0) +
+        padding; // 始终空出下一个标签
 
       // 右侧临界值
       if (tabsLeft + countWidth - outerWidth > 0) {
@@ -565,20 +611,30 @@ layui.define('component', function(exports) {
 
     // 滚动结构
     var rollElem = {
-      elem: $('<div class="'+ CLASS_SCROLL +' layui-border-box layui-unselect"></div>'),
-      bar: $([
-        '<div class="'+ CLASS_BAR +'">',
-          '<i class="layui-icon '+ CLASS_BAR_ICON[0] +'" lay-mode="prev"></i>',
-          '<i class="layui-icon '+ CLASS_BAR_ICON[1] +'" lay-mode="next"></i>',
-        '</div>'
-      ].join(''))
+      elem: $(
+        '<div class="' +
+          CLASS_SCROLL +
+          ' layui-border-box layui-unselect"></div>'
+      ),
+      bar: $(
+        [
+          '<div class="' + CLASS_BAR + '">',
+          '<i class="layui-icon ' +
+            CLASS_BAR_ICON[0] +
+            '" lay-mode="prev"></i>',
+          '<i class="layui-icon ' +
+            CLASS_BAR_ICON[1] +
+            '" lay-mode="next"></i>',
+          '</div>'
+        ].join('')
+      )
     };
 
     // 不渲染头部滚动结构
     if (options.headerMode === 'normal') return;
 
     // 是否渲染滚动结构
-    var elemScroll = headerElem.parent('.'+ CLASS_SCROLL);
+    var elemScroll = headerElem.parent('.' + CLASS_SCROLL);
     if (scrollMode || (!scrollMode && scrollWidth > outerWidth)) {
       if (!elemScroll[0]) {
         if (options.elem.hasClass(component.CONST.CARD)) {
@@ -588,16 +644,16 @@ layui.define('component', function(exports) {
         headerElem.after(rollElem.bar);
 
         // 点击左右箭头
-        rollElem.bar.children().on('click', function(){
+        rollElem.bar.children().on('click', function () {
           var othis = $(this);
           var mode = othis.attr('lay-mode');
           if ($(this).hasClass(component.CONST.CLASS_DISABLED)) return;
           mode && that.roll(mode);
         });
       }
-    } else if(!scrollMode) {
+    } else if (!scrollMode) {
       if (elemScroll[0]) {
-        elemScroll.find('.'+ CLASS_BAR).remove();
+        elemScroll.find('.' + CLASS_BAR).remove();
         headerElem.unwrap().css('left', 0).data('left', 0);
       } else {
         return;
@@ -608,16 +664,16 @@ layui.define('component', function(exports) {
     if (mode === 'init') return;
 
     // 重新获取
-    scrollWidth = headerElem.prop('scrollWidth') // 实际总长度
-    outerWidth = headerElem.outerWidth() // 可视区域的长度
-    elemScroll = headerElem.parent('.'+ CLASS_SCROLL);
+    scrollWidth = headerElem.prop('scrollWidth'); // 实际总长度
+    outerWidth = headerElem.outerWidth(); // 可视区域的长度
+    elemScroll = headerElem.parent('.' + CLASS_SCROLL);
 
     // 左箭头（往右滚动）
     if (mode === 'prev') {
       // 当前的 left 减去可视宽度，用于与上一轮的页签比较
-      var  prevLeft = -tabsLeft - outerWidth;
-      if(prevLeft < 0) prevLeft = 0;
-      headerItems.each(function(i, item){
+      var prevLeft = -tabsLeft - outerWidth;
+      if (prevLeft < 0) prevLeft = 0;
+      headerItems.each(function (i, item) {
         var li = $(item);
         var left = Math.ceil(li.position().left);
 
@@ -626,10 +682,12 @@ layui.define('component', function(exports) {
           return false;
         }
       });
-    } else if(mode === 'auto') { // 自动识别滚动
+    } else if (mode === 'auto') {
+      // 自动识别滚动
       rollToVisibleArea();
-    } else { // 右箭头（往左滚动） 默认 next
-      headerItems.each(function(i, item){
+    } else {
+      // 右箭头（往左滚动） 默认 next
+      headerItems.each(function (i, item) {
         var li = $(item);
         var left = Math.ceil(li.position().left);
 
@@ -643,29 +701,33 @@ layui.define('component', function(exports) {
     // 同步箭头状态
     tabsLeft = headerElem.data('left') || 0;
 
-     // 左
-    elemScroll.find('.'+ CLASS_BAR_ICON[0])[
-      tabsLeft < 0 ? 'removeClass' : 'addClass'
-    ](component.CONST.CLASS_DISABLED);
-     // 右
-    elemScroll.find('.'+ CLASS_BAR_ICON[1])[
-      parseFloat(tabsLeft + scrollWidth) - outerWidth > 0
-        ? 'removeClass'
-      : 'addClass'
-    ](component.CONST.CLASS_DISABLED);
+    // 左
+    elemScroll
+      .find('.' + CLASS_BAR_ICON[0])
+      [
+        tabsLeft < 0 ? 'removeClass' : 'addClass'
+      ](component.CONST.CLASS_DISABLED);
+    // 右
+    elemScroll
+      .find('.' + CLASS_BAR_ICON[1])
+      [
+        parseFloat(tabsLeft + scrollWidth) - outerWidth > 0
+          ? 'removeClass'
+          : 'addClass'
+      ](component.CONST.CLASS_DISABLED);
   };
 
   /**
    * 获取标签头部项
    * @param {number|string} index - 标签索引或 lay-id
    */
-  Class.prototype.findHeaderItem = function(index) {
+  Class.prototype.findHeaderItem = function (index) {
     var container = this.getContainer();
     var headerItems = container.header.items;
 
     // 根据 lay-id 匹配
     if (typeof index === 'string') {
-      return headerItems.filter('[lay-id="'+ index +'"]');
+      return headerItems.filter('[lay-id="' + index + '"]');
     }
 
     return headerItems.eq(index);
@@ -675,20 +737,26 @@ layui.define('component', function(exports) {
    * 获取标签内容项
    * @param {number|string} index - 标签索引或 lay-id
    */
-  Class.prototype.findBodyItem = function(index) {
+  Class.prototype.findBodyItem = function (index) {
     var container = this.getContainer();
     var bodyItems = container.body.items;
 
     // 根据 lay-id 匹配
     if (typeof index === 'string') {
-      var bodyItem = bodyItems.filter('[lay-id="'+ index +'"]');
-      return bodyItem[0] ? bodyItem : function() {
-        // 若未匹配到 lay-id 对应内容项，则通过对应头部项的索引匹配内容项
-        var headerItems = container.header.items;
-        var headerItemIndex = headerItems.filter('[lay-id="'+ index +'"]').index();
-        
-        return headerItemIndex !== -1 ? bodyItems.eq(headerItemIndex) : bodyItem;
-      }();
+      var bodyItem = bodyItems.filter('[lay-id="' + index + '"]');
+      return bodyItem[0]
+        ? bodyItem
+        : (function () {
+            // 若未匹配到 lay-id 对应内容项，则通过对应头部项的索引匹配内容项
+            var headerItems = container.header.items;
+            var headerItemIndex = headerItems
+              .filter('[lay-id="' + index + '"]')
+              .index();
+
+            return headerItemIndex !== -1
+              ? bodyItems.eq(headerItemIndex)
+              : bodyItem;
+          })();
     }
 
     return bodyItems.eq(index);
@@ -698,11 +766,13 @@ layui.define('component', function(exports) {
    * 返回给回调的公共信息
    * @returns
    */
-  Class.prototype.data = function() {
+  Class.prototype.data = function () {
     var that = this;
     var options = that.config;
     var container = that.getContainer();
-    var thisHeaderItem = container.header.items.filter('.'+ component.CONST.CLASS_THIS);
+    var thisHeaderItem = container.header.items.filter(
+      '.' + component.CONST.CLASS_THIS
+    );
     var index = thisHeaderItem.index();
     var layid = thisHeaderItem.attr('lay-id');
 
@@ -723,9 +793,9 @@ layui.define('component', function(exports) {
      * @param {string} id - 渲染时的实例 ID
      * @param {Object} opts - 添加标签的配置项，详见 Class.prototype.add
      */
-    add: function(id, opts) {
+    add: function (id, opts) {
       var that = component.getInst(id);
-      if(!that) return;
+      if (!that) return;
       that.add(opts);
     },
 
@@ -735,7 +805,7 @@ layui.define('component', function(exports) {
      * @param {number} index - 标签索引
      * @param {boolean} [force=false] - 是否强制关闭
      */
-    close: function(id, index, force) {
+    close: function (id, index, force) {
       var that = component.getInst(id);
       if (!that) return;
       // index 若不传，则表示关闭当前标签
@@ -751,9 +821,9 @@ layui.define('component', function(exports) {
      * @param {('other'|'right'|'all')} [mode="all"] - 关闭方式
      * @param {number} index - 活动标签的索引，默认取当前选中标签的索引。一般用于标签右键事件
      */
-    closeMult: function(id, mode, index) {
+    closeMult: function (id, mode, index) {
       var that = component.getInst(id);
-      if(!that) return;
+      if (!that) return;
       that.closeMult(mode, index);
     },
 
@@ -762,9 +832,9 @@ layui.define('component', function(exports) {
      * @param {string} id - 渲染时的实例 ID
      * @param {number} index - 标签索引
      */
-    change: function(id, index, force) {
+    change: function (id, index, force) {
       var that = component.getInst(id);
-      if(!that) return;
+      if (!that) return;
       that.change(that.findHeaderItem(index), force);
     },
 
@@ -772,7 +842,7 @@ layui.define('component', function(exports) {
      * 获取标签信息
      * @param {string} id - 渲染时的实例 ID
      */
-    data: function(id) {
+    data: function (id) {
       var that = component.getInst(id);
       return that ? that.data() : {};
     },
@@ -783,9 +853,9 @@ layui.define('component', function(exports) {
      * @param {number} index - 标签索引或 lay-id 值
      * @returns
      */
-    getHeaderItem: function(id, index) {
+    getHeaderItem: function (id, index) {
       var that = component.getInst(id);
-      if(!that) return;
+      if (!that) return;
       return that.findHeaderItem(index);
     },
 
@@ -795,9 +865,9 @@ layui.define('component', function(exports) {
      * @param {number} index - 标签索引或 lay-id 值
      * @returns
      */
-    getBodyItem: function(id, index) {
+    getBodyItem: function (id, index) {
       var that = component.getInst(id);
-      if(!that) return;
+      if (!that) return;
       return that.findBodyItem(index);
     },
 
@@ -805,7 +875,7 @@ layui.define('component', function(exports) {
      * 刷新标签视图结构
      * @param {string} id - 渲染时的实例 ID
      */
-    refresh: function(id) {
+    refresh: function (id) {
       var that = component.getInst(id);
       if (!that) return;
       that.roll('auto');
@@ -813,7 +883,7 @@ layui.define('component', function(exports) {
   });
 
   // 初始化渲染
-  $(function() {
+  $(function () {
     component.render();
   });
 

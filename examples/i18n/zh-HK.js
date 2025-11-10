@@ -40,7 +40,20 @@ export default {
     verifyErrorPromptTitle: '提示'
   },
   laydate: {
-    months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+    months: [
+      '1月',
+      '2月',
+      '3月',
+      '4月',
+      '5月',
+      '6月',
+      '7月',
+      '8月',
+      '9月',
+      '10月',
+      '11月',
+      '12月'
+    ],
     weeks: ['日', '一', '二', '三', '四', '五', '六'],
     time: ['時', '分', '秒'],
     literal: {
@@ -56,7 +69,7 @@ export default {
       now: '現在',
       reset: '重設'
     },
-    rangeOrderPrompt: '結束時間不能早於開始時間\n請重新選擇', 
+    rangeOrderPrompt: '結束時間不能早於開始時間\n請重新選擇',
     invalidDatePrompt: '不在有效日期或時間範圍內\n',
     formatErrorPrompt: '日期格式不合法\n必須遵循：\n{format}\n',
     autoResetPrompt: '已自動重設',
@@ -71,7 +84,7 @@ export default {
     },
     photos: {
       noData: '沒有圖片',
-      tools:{
+      tools: {
         rotate: '旋轉',
         scaleX: '水平變換',
         zoomIn: '放大',
@@ -104,7 +117,7 @@ export default {
       desc: '降序'
     },
     noData: '無資料',
-    tools:{
+    tools: {
       filter: {
         title: '篩選列'
       },
@@ -112,14 +125,15 @@ export default {
         title: '匯出',
         noDataPrompt: '當前表格無資料',
         compatPrompt: '匯出功能不支援 IE，請用 Chrome 等高級瀏覽器匯出',
-        csvText : '匯出 CSV 檔案'
+        csvText: '匯出 CSV 檔案'
       },
       print: {
         title: '列印',
         noDataPrompt: '當前表格無資料'
       }
     },
-    dataFormatError: '返回的資料不符合規範，正確的成功狀態碼應為："{statusName}": {statusCode}',
+    dataFormatError:
+      '返回的資料不符合規範，正確的成功狀態碼應為："{statusName}": {statusCode}',
     xhrError: '請求異常，錯誤提示：{msg}'
   },
   transfer: {
@@ -157,7 +171,7 @@ export default {
       justNow: '剛剛'
     },
     toDateString: {
-      meridiem: function(hours, minutes){
+      meridiem: function (hours, minutes) {
         var hm = hours * 100 + minutes;
         if (hm < 500) {
           return '凌晨';

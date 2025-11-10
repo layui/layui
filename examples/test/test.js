@@ -15,12 +15,12 @@ class Test {
   static stats = {
     total: 0,
     passes: 0,
-    failures: 0,
-  }
+    failures: 0
+  };
 
   options = {
-    elem: '#tests',
-  }
+    elem: '#tests'
+  };
 
   #init() {
     const options = this.options;
@@ -55,7 +55,7 @@ class Test {
       }
       return obj;
     }
-  }
+  };
 
   describe(opts, fn) {
     const { el } = this.options;
@@ -67,15 +67,18 @@ class Test {
       };
     }
 
-    const describer = this.describer = lay.extend({
-      suiteElem: lay.elem('div', {
-        "class": 'layui-text test-suite',
-        "id": opts.id,
-      }),
-      itemsElem: lay.elem('div', {
-        "class": 'test-items',
-      }),
-    }, opts);
+    const describer = (this.describer = lay.extend(
+      {
+        suiteElem: lay.elem('div', {
+          class: 'layui-text test-suite',
+          id: opts.id
+        }),
+        itemsElem: lay.elem('div', {
+          class: 'test-items'
+        })
+      },
+      opts
+    ));
 
     lay(describer.suiteElem).append(`<h2>${opts.title} : </h2>`);
     lay(describer.suiteElem).append(describer.itemsElem);
@@ -92,7 +95,7 @@ class Test {
     const stats = Test.stats;
 
     const startTime = Date.now();
-    const actual = (function() {
+    const actual = (function () {
       try {
         return new Function(`return function() {
           let result;
@@ -101,7 +104,7 @@ class Test {
           ${code}
           return result;
         }`)()();
-      } catch(e) {
+      } catch (e) {
         return e.message;
       }
     })();
@@ -112,7 +115,7 @@ class Test {
     )(actual, expected);
     const result = passed ? '✅' : '❌';
     const output = Test.tools.output;
-    const itemElem = lay.elem('div', {  "class": 'test-item' });
+    const itemElem = lay.elem('div', { class: 'test-item' });
 
     stats.total++;
     title = title || `任务 ${stats.total}`;
@@ -121,7 +124,9 @@ class Test {
       stats.passes++;
     } else {
       stats.failures++;
-      console.error(`${describer.title} → ${title} : Test failed\nExpected: ${output(expected)}\nActual: ${output(actual)}`);
+      console.error(
+        `${describer.title} → ${title} : Test failed\nExpected: ${output(expected)}\nActual: ${output(actual)}`
+      );
     }
 
     itemElem.innerHTML = `
@@ -132,7 +137,9 @@ class Test {
           <li><strong>预期：</strong><code>${output(expected)}</code></li>
           ${
             !passed || opts.showActual
-              ? '<li><strong>实际：</strong><code>' + output(actual) + '</code></li>'
+              ? '<li><strong>实际：</strong><code>' +
+                output(actual) +
+                '</code></li>'
               : ''
           }
           <li>
@@ -146,7 +153,7 @@ class Test {
     layui.code({
       elem: lay(itemElem).find('.layui-code')[0],
       theme: 'dark',
-      encode: false,
+      encode: false
     });
 
     itemsElem.append(itemElem);
@@ -156,13 +163,13 @@ class Test {
     const options = this.options;
     const { el } = options;
     const stats = Test.stats;
-    const statsElem = lay.elem('div', { "class": 'test-stats' });
+    const statsElem = lay.elem('div', { class: 'test-stats' });
 
     lay(statsElem).html(`
       <span><strong>测试数量 : </strong>${stats.total}</span>
       <span><strong>✅ 通过 : </strong>${stats.passes}</span>
       <span><strong>❌ 失败 : </strong>${stats.failures}</span>
-    `)
+    `);
     el[0].prepend(statsElem);
   }
 }
