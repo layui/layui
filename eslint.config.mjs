@@ -5,18 +5,18 @@ import eslintConfigPrettier from 'eslint-config-prettier/flat';
 
 // Layui 全局变量定义
 globals.layui = {
-  layui: 'readonly',
-  lay: 'readonly',
+  layui: false,
+  lay: false,
   // jQuery
-  $: 'readonly',
-  jQuery: 'readonly',
+  $: false,
+  jQuery: false,
   // 国际化 API
-  Intl: 'readonly',
+  Intl: false,
   // 模块系统支持
-  exports: 'writable', // CommonJS 导出对象
-  module: 'readonly', // CommonJS 模块对象
-  require: 'readonly', // CommonJS 导入函数
-  define: 'readonly' // AMD/RequireJS 模块定义函数
+  exports: false, // CommonJS 导出对象
+  module: false, // CommonJS 模块对象
+  require: false, // CommonJS 导入函数
+  define: false // AMD/RequireJS 模块定义函数
 };
 
 export default defineConfig([
@@ -90,7 +90,7 @@ export default defineConfig([
 
   // Node.js 环境 - 构建脚本
   {
-    files: ['gulpfile.js'],
+    files: ['*.{js,cjs}'],
     plugins: { js },
     extends: ['js/recommended'],
     languageOptions: {
