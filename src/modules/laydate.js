@@ -188,18 +188,22 @@ layui.define(['lay', 'i18n'], function (exports) {
           YearBeforeMonthLocale.indexOf(options.lang) > -1
         );
       } else {
-        var formatter = new Intl.DateTimeFormat(options.lang, {
-          year: 'numeric',
-          month: 'short'
-        });
-        var parts = formatter.formatToParts(new Date(1970, 0));
-        var order = [];
-        parts.map(function (part) {
-          if (part.type === 'year' || part.type === 'month') {
-            order.push(part.type);
-          }
-        });
-        that.i18nMessages.monthBeforeYear = order[0] === 'month';
+        try {
+          var formatter = new Intl.DateTimeFormat(options.lang, {
+            year: 'numeric',
+            month: 'short'
+          });
+          var parts = formatter.formatToParts(new Date(1970, 0));
+          var order = [];
+          parts.map(function (part) {
+            if (part.type === 'year' || part.type === 'month') {
+              order.push(part.type);
+            }
+          });
+          that.i18nMessages.monthBeforeYear = order[0] === 'month';
+        } catch (e) {
+          //
+        }
       }
     }
 

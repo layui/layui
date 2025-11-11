@@ -262,10 +262,13 @@
           console.log('beforeClose', data);
 
           // 关闭确认提示
-          layer.confirm(`确定关闭标签「${this.innerText}」吗？`, function (i) {
-            tabs.close('demoTabs1', data.index, true); // 强制关闭对应的标签项
-            layer.close(i); // 关闭确认框
-          });
+          layer.confirm(
+            '确定关闭标签「' + this.innerText + '」吗？',
+            function (i) {
+              tabs.close('demoTabs1', data.index, true); // 强制关闭对应的标签项
+              layer.close(i); // 关闭确认框
+            }
+          );
           return false; // 阻止标签默认关闭
         });
 

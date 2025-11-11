@@ -261,7 +261,7 @@
           var dateString = util.toDateString(new Date(), format);
           $('#test3').html(dateString);
         };
-        timer = setInterval(() => {
+        timer = setInterval(function () {
           toDateString($('#test2').val());
         }, 50);
 
