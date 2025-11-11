@@ -9,19 +9,16 @@ const sourcemaps = require('gulp-sourcemaps');
 const zip = require('gulp-zip');
 const del = require('del');
 const minimist = require('minimist');
-const yargs = require('yargs');
 const pkg = require('./package.json');
 
 // 基础配置
 const config = {
   // 头部注释
-  comment: [
-    '/** v<%= pkg.version %> | <%= pkg.license %> Licensed */<%= js %>',
-    { pkg: pkg, js: ';' }
-  ],
+  comment: `/** v${pkg.version} | ${pkg.license} Licensed */;`,
+
   // 全部模块
   modules:
-    'lay,i18n,laytpl,laypage,laydate,jquery,component,layer,util,dropdown,slider,colorpicker,tab,nav,breadcrumb,progress,collapse,element,upload,form,table,treeTable,tabs,tree,transfer,carousel,rate,flow,code'
+    'layui.all,lay,i18n,laytpl,laypage,laydate,jquery,component,layer,util,dropdown,slider,colorpicker,tab,nav,breadcrumb,progress,collapse,element,upload,form,table,treeTable,tabs,tree,transfer,carousel,rate,flow,code'
 };
 
 // 获取参数
@@ -45,7 +42,10 @@ const dest = './dist';
 
 // js
 const js = () => {
-  let src = ['./src/**/{layui,layui.all,' + config.modules + '}.js'];
+  let src = [
+    './src/layui.js',
+    ...config.modules.split(',').map((mod) => `./src/modules/${mod}.js`)
+  ];
   return gulp
     .src(src)
     .pipe(sourcemaps.init())
@@ -58,7 +58,7 @@ const js = () => {
       })
     )
     .pipe(concat('layui.js', { newLine: '' }))
-    .pipe(header.apply(null, config.comment))
+    .pipe(header(config.comment))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(dest));
 };
@@ -141,10 +141,14 @@ exports.release = gulp.series(
   }
 );
 
-// helper
-exports.help = () => {
-  let usage = '\nUsage: gulp [options] tasks';
-  let parser = yargs.usage(usage, {
+/**
+ * 显示 gulp tasks 命令行帮助
+ * 由于 gulp-cli 依赖了 yargs，此处直接使用
+ * @returns
+ */
+exports.helper = () => {
+  let usage = '\nUsage: gulp [options] tasks\n';
+  let parser = require('yargs').options({
     dest: {
       type: 'string',
       desc: '自定义输出路径'
@@ -154,14 +158,14 @@ exports.help = () => {
       desc: '生成一个带版本号的文件夹'
     }
   });
-
+  console.log(usage);
   parser.showHelp(console.log);
   console.log(
     [
-      'Tasks:',
+      '\nTasks:',
       '  default  默认任务',
       '  release  发行任务',
-      '  cp  将 dist 目录复制一份到参数 --dest 指向的目录'
+      '  cp       将 dist 目录复制一份到参数 --dest 指向的目录'
     ].join('\n'),
     '\n\nExamples:\n  gulp cp --dest ./v',
     '\n'
