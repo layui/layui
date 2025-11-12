@@ -256,12 +256,11 @@
         $('#test1').html('示例写于：' + str);
 
         // 转换日期格式
-        var timer = null;
         var toDateString = function (format) {
           var dateString = util.toDateString(new Date(), format);
           $('#test3').html(dateString);
         };
-        timer = setInterval(function () {
+        setInterval(function () {
           toDateString($('#test2').val());
         }, 50);
 
