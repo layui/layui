@@ -358,10 +358,7 @@
 
         // 局部自定义标签符
         laytpl(
-          `
-          <% var job = ["前端工程师"]; %>
-          <%= d.name %>是一名<%= job[d.index] %>。
-        `,
+          '<% var job = ["前端工程师"]; %><%= d.name %>是一名<%= job[d.index] %>。',
           {
             open: '<%',
             close: '%>'
