@@ -202,7 +202,9 @@ layui.define(['lay', 'i18n'], function (exports) {
           });
           that.i18nMessages.monthBeforeYear = order[0] === 'month';
         } catch (e) {
-          that.i18nMessages.monthBeforeYear = !(YearBeforeMonthLocale.indexOf(options.lang) > -1);
+          that.i18nMessages.monthBeforeYear = !(
+            YearBeforeMonthLocale.indexOf(options.lang) > -1
+          );
         }
       }
     }
