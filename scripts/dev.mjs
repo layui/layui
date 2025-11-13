@@ -6,9 +6,7 @@
 
 import { spawn } from 'cross-spawn';
 import chalk from 'chalk';
-
-const DEST = 'tests/visual/assets/dist'; // 输出目录
-const env = { ...process.env, DEST, MODE: 'dev' };
+import { rollup, postcss } from './dev-builder.mjs';
 
 // 初始提示信息
 console.log(chalk.hex('#16b777').bold('🚀 Starting Layui development mode...'));
@@ -52,20 +50,13 @@ function pipeOutput(child, prefix) {
   });
 }
 
-// 启动 rollup 和 postcss watcher
-const rollup = spawn('rollup', ['-c', '-w'], {
+// 启动 postcss 和 rollup watcher
+const child_postcss = postcss(['-w'], {
   stdio: 'pipe',
-  env,
+});
+const child_rollup = rollup(['-w'], {
+  stdio: 'pipe',
 });
 
-const postcss = spawn(
-  'postcss',
-  ['src/css/index.css', '-o', `${DEST}/css/layui.css`, '-w', '--verbose'],
-  {
-    stdio: 'pipe',
-    env,
-  },
-);
-
-pipeOutput(rollup, 'rollup');
-pipeOutput(postcss, 'postcss');
+pipeOutput(child_postcss, 'postcss');
+pipeOutput(child_rollup, 'rollup');
