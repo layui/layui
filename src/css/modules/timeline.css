@@ -24,7 +24,7 @@
   color: var(--lay-color-red);
 }
 .layui-timeline-item:before {
-  content: "";
+  content: '';
   position: absolute;
   left: 5px;
   top: 0;

@@ -117,7 +117,7 @@ a cite {
   clear: both;
 }
 .layui-clear:after {
-  content: "\20";
+  content: '\20';
   clear: both;
   display: block;
   height: 0;

@@ -74,7 +74,7 @@
 .layui-text pre > code:not(.layui-code) {
   display: block;
   padding: 15px;
-  font-family: "Courier New", Consolas, "Lucida Console", monospace;
+  font-family: 'Courier New', Consolas, 'Lucida Console', monospace;
 }
 
 /* 文本区域辅助  */

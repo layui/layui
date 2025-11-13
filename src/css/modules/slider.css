@@ -42,7 +42,7 @@
   transition: 0.3s;
 }
 .layui-slider-wrap:after {
-  content: "";
+  content: '';
   height: 100%;
   display: inline-block;
   vertical-align: middle;
@@ -69,7 +69,7 @@
   padding: 0 10px;
 }
 .layui-slider-tips:after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: -11px;
   left: 50%;

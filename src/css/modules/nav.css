@@ -29,7 +29,7 @@
 }
 .layui-nav-bar,
 .layui-nav .layui-this:after {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -43,7 +43,7 @@
 .layui-nav-bar {
   z-index: 1000;
 }
-.layui-nav[lay-bar="disabled"] .layui-nav-bar {
+.layui-nav[lay-bar='disabled'] .layui-nav-bar {
   display: none;
 }
 .layui-nav .layui-this a,

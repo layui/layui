@@ -115,7 +115,7 @@
 
 .layui-row:before,
 .layui-row:after {
-  content: "";
+  content: '';
   display: block;
   clear: both;
 }

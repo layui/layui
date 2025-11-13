@@ -76,14 +76,14 @@
 .laydate-ym-show .laydate-next-y {
   display: inline-block !important;
 }
-.laydate-ym-show .laydate-set-ym span[lay-type="month"] {
+.laydate-ym-show .laydate-set-ym span[lay-type='month'] {
   display: none !important;
 }
 
 /* 展开时间列表时 */
 .laydate-time-show .layui-laydate-header .layui-icon,
-.laydate-time-show .laydate-set-ym span[lay-type="year"],
-.laydate-time-show .laydate-set-ym span[lay-type="month"] {
+.laydate-time-show .laydate-set-ym span[lay-type='year'],
+.laydate-time-show .laydate-set-ym span[lay-type='month'] {
   display: none !important;
 }
 
@@ -175,7 +175,7 @@
 }
 .laydate-day-mark::after {
   position: absolute;
-  content: "";
+  content: '';
   right: 2px;
   top: 2px;
   width: 5px;
@@ -190,11 +190,11 @@
   transform: scale(0.7);
 }
 .laydate-day-holidays:before {
-  content: "\4F11";
+  content: '\4F11';
   color: #ff5722;
 }
-.laydate-day-holidays[type="workdays"]:before {
-  content: "\73ED";
+.laydate-day-holidays[type='workdays']:before {
+  content: '\73ED';
   color: inherit;
 }
 .layui-laydate .layui-this .laydate-day-holidays:before {
@@ -410,7 +410,7 @@
   color: var(--lay-color-accent);
 }
 .layui-laydate-content td.laydate-day-now:after {
-  content: "";
+  content: '';
   position: absolute;
   width: 100%;
   height: 30px;
@@ -469,7 +469,7 @@
 .layui-laydate-content td.layui-this .laydate-day-mark::after {
   display: none;
 }
-.layui-laydate-footer span[lay-type="date"] {
+.layui-laydate-footer span[lay-type='date'] {
   color: var(--lay-color-accent);
 }
 .layui-laydate .layui-this,
@@ -603,11 +603,11 @@
 .laydate-theme-fullpanel
   .laydate-time-show
   .laydate-set-ym
-  span[lay-type="year"],
+  span[lay-type='year'],
 .laydate-theme-fullpanel
   .laydate-time-show
   .laydate-set-ym
-  span[lay-type="month"] {
+  span[lay-type='month'] {
   display: inline-block !important;
 }
 .laydate-theme-fullpanel .laydate-btns-time {
