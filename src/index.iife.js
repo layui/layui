@@ -36,10 +36,8 @@ import { flow } from './components/flow.js';
 import { util } from './components/util.js';
 import { code } from './components/code.js';
 
-layui.all = true;
-layui['layui.all'] = 'layui.all'; // 阻止 layui.use 加载内部模块
-
-// 兼容处理
+// 兼容 v2
+window.layui = layui;
 window.lay = lay;
 window.layer = layer;
 layui.$ = jquery;

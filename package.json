@@ -3,9 +3,6 @@
   "description": "Classic Web UI Component Library",
   "version": "3.0.0-alpha.0",
   "type": "module",
-  "engines": {
-    "node": ">=20.17"
-  },
   "keywords": [
     "layui",
     "components",
@@ -38,8 +35,9 @@
     "dev": "node scripts/dev.mjs",
     "serve": "serve tests/visual -p 3003 --cors -L -n",
     "build": "run-s clean:dist build:*",
-    "build:css": "postcss src/css/index.css -o dist/css/layui.css",
+    "build:css": "postcss src/css/index.css -o dist/css/layui.css --verbose",
     "build:js": "rollup -c",
+    "build:dev": "cross-env RUN=true node scripts/dev-builder.mjs",
     "format": "prettier --write --cache .",
     "format:check": "prettier --check --cache .",
     "lint": "eslint . --cache",

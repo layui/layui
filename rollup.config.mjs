@@ -23,8 +23,8 @@ const DEST = process.env.DEST || 'dist';
 const outputDir = path.resolve(__dirname, `./${DEST}`);
 const isDevMode = process.env.MODE === 'dev';
 
-// config
-const options = {
+// 插件配置
+const pluginsConfig = {
   terser: {
     compress: {
       passes: 2, // 提高压缩率，默认 1
@@ -65,14 +65,14 @@ const pushRollupConfig = (opts, callback) => {
       }),
       resolve(),
       commonjs(),
-      babel(options.babel),
+      babel(pluginsConfig.babel),
     ],
   };
 
   // 开发模式不压缩
   if (opts.minify && !isDevMode) {
     config.output.plugins.push(
-      terser(options.terser),
+      terser(pluginsConfig.terser),
       banner({
         comment: `/** ${version} | ${pkg.license} Licensed */`,
       }),

@@ -1,7 +1,7 @@
 /** 图标字体 **/
 @font-face {
   font-family: "layui-icon";
-  src: url("iconfont.woff") format("woff");
+  src: url("iconfont.woff2") format("woff2");
 }
 
 .layui-icon {

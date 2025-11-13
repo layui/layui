@@ -67,7 +67,6 @@ function overwriteArray(objValue, srcValue) {
 
 // 外部调用
 var laydate = {
-  v: '5.7.0', // layDate 版本号
   config: {
     weekStart: 0, // 默认周日一周的开始
   }, // 全局配置项

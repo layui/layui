@@ -1016,6 +1016,10 @@ Class$g.prototype.throttle = function (func, wait) {
 };
 const layui = new Class$g();
 
+// 阻止 layui.use 加载内部模块
+layui.all = true;
+layui['layui.all'] = 'layui.all';
+
 /**
  * lay
  * 基础模块
@@ -14309,8 +14313,6 @@ function overwriteArray(objValue, srcValue) {
 
 // 外部调用
 var laydate = {
-  v: '5.7.0',
-  // layDate 版本号
   config: {
     weekStart: 0 // 默认周日一周的开始
   },
@@ -16995,7 +16997,6 @@ var ready = {
 
 // 默认内置方法。
 var layer = {
-  v: '3.7.0',
   ie: function () {
     // ie 版本
     var agent = navigator.userAgent.toLowerCase();
@@ -32536,13 +32537,6 @@ function code(options, mode) {
   }
   return ret;
 }
-
-/**
- * Layui ESM 入口
- */
-
-layui.all = true;
-layui['layui.all'] = 'layui.all'; // 阻止 layui.use 加载内部模块
 
 export { $, component$9 as breadcrumb, component$2 as carousel, code, component$7 as collapse, component$c as colorpicker, component$e as component, component$e as componentBuilder, dropdown, component$6 as element, component as flow, form, i18n, $ as jquery, lay, laydate, layer, laypage, laytpl, layui, component$a as nav, component$8 as progress, component$1 as rate, component$d as slider, component$b as tab, table, component$5 as tabs, component$3 as transfer, component$4 as tree, treeTable, upload, util };
 //# sourceMappingURL=layui.esm.js.map

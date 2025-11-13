@@ -1019,6 +1019,10 @@ var layui = (function () {
   };
   const layui = new Class$g();
 
+  // 阻止 layui.use 加载内部模块
+  layui.all = true;
+  layui['layui.all'] = 'layui.all';
+
   /**
    * lay
    * 基础模块
@@ -14312,8 +14316,6 @@ var layui = (function () {
 
   // 外部调用
   var laydate = {
-    v: '5.7.0',
-    // layDate 版本号
     config: {
       weekStart: 0 // 默认周日一周的开始
     },
@@ -16998,7 +17000,6 @@ var layui = (function () {
 
   // 默认内置方法。
   var layer = {
-    v: '3.7.0',
     ie: function () {
       // ie 版本
       var agent = navigator.userAgent.toLowerCase();
@@ -32544,10 +32545,9 @@ var layui = (function () {
    * Layui IIFE 入口
    */
 
-  layui.all = true;
-  layui['layui.all'] = 'layui.all'; // 阻止 layui.use 加载内部模块
 
-  // 兼容处理
+  // 兼容 v2
+  window.layui = layui;
   window.lay = lay;
   window.layer = layer;
   layui.$ = jquery;
