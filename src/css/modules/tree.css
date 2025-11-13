@@ -18,7 +18,7 @@
   padding-left: 27px;
 }
 .layui-tree-line .layui-tree-set .layui-tree-set:after {
-  content: "";
+  content: '';
   position: absolute;
   top: 14px;
   left: -9px;
@@ -50,7 +50,7 @@
   padding-right: 10px;
 }
 .layui-tree-line .layui-tree-set:before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: -9px;
@@ -89,7 +89,7 @@
   padding: 0 5px;
 }
 .layui-tree-iconArrow:after {
-  content: "";
+  content: '';
   position: absolute;
   left: 4px;
   top: 3px;

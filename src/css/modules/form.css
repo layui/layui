@@ -47,8 +47,8 @@
   padding: 0 10px;
 }
 .layui-form select,
-.layui-form input[type="checkbox"],
-.layui-form input[type="radio"] {
+.layui-form input[type='checkbox'],
+.layui-form input[type='radio'] {
   display: none;
 }
 .layui-form *[lay-ignore] {
@@ -61,7 +61,7 @@
   clear: both;
 }
 .layui-form-item:after {
-  content: "\20";
+  content: '\20';
   clear: both;
   display: block;
   height: 0;
@@ -283,11 +283,11 @@
 .layui-input-wrap .layui-input-number .layui-icon:hover {
   font-weight: 700;
 }
-.layui-input-wrap .layui-input[type="number"]::-webkit-outer-spin-button,
-.layui-input-wrap .layui-input[type="number"]::-webkit-inner-spin-button {
+.layui-input-wrap .layui-input[type='number']::-webkit-outer-spin-button,
+.layui-input-wrap .layui-input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
 }
-.layui-input-wrap .layui-input[type="number"] {
+.layui-input-wrap .layui-input[type='number'] {
   -moz-appearance: textfield;
   -webkit-appearance: textfield;
   appearance: textfield;
@@ -488,7 +488,7 @@
 }
 
 /* 复选框-默认风格 */
-.layui-form-checkbox[lay-skin="primary"] {
+.layui-form-checkbox[lay-skin='primary'] {
   height: auto !important;
   line-height: normal !important;
   min-width: 18px;
@@ -499,7 +499,7 @@
   padding-right: 0;
   background: none;
 }
-.layui-form-checkbox[lay-skin="primary"] > div {
+.layui-form-checkbox[lay-skin='primary'] > div {
   margin-top: -1px;
   padding-left: 0;
   padding-right: 15px;
@@ -507,7 +507,7 @@
   background: none;
   color: #5f5f5f;
 }
-.layui-form-checkbox[lay-skin="primary"] > i {
+.layui-form-checkbox[lay-skin='primary'] > i {
   right: auto;
   left: 0;
   width: 16px;
@@ -520,34 +520,34 @@
   -webkit-transition: 0.1s linear;
   transition: 0.1s linear;
 }
-.layui-form-checkbox[lay-skin="primary"]:hover > i {
+.layui-form-checkbox[lay-skin='primary']:hover > i {
   border-color: var(--lay-color-accent);
   color: #fff;
 }
-.layui-form-checked[lay-skin="primary"] > i {
+.layui-form-checked[lay-skin='primary'] > i {
   border-color: var(--lay-color-accent) !important;
   background-color: var(--lay-color-accent);
   color: #fff;
 }
-.layui-checkbox-disabled[lay-skin="primary"] > div {
+.layui-checkbox-disabled[lay-skin='primary'] > div {
   background: none !important;
 }
-.layui-form-checked.layui-checkbox-disabled[lay-skin="primary"] > i {
+.layui-form-checked.layui-checkbox-disabled[lay-skin='primary'] > i {
   background: var(--lay-gray-300) !important;
   border-color: var(--lay-gray-300) !important;
 }
-.layui-checkbox-disabled[lay-skin="primary"]:hover > i {
+.layui-checkbox-disabled[lay-skin='primary']:hover > i {
   border-color: var(--lay-border-color-accent);
 }
-.layui-form-item .layui-form-checkbox[lay-skin="primary"] {
+.layui-form-item .layui-form-checkbox[lay-skin='primary'] {
   margin-top: 10px;
 }
-.layui-form-checkbox[lay-skin="primary"] > .layui-icon-indeterminate {
+.layui-form-checkbox[lay-skin='primary'] > .layui-icon-indeterminate {
   border-color: var(--lay-color-accent);
   background-color: #fff;
 }
-.layui-form-checkbox[lay-skin="primary"] > .layui-icon-indeterminate:before {
-  content: "";
+.layui-form-checkbox[lay-skin='primary'] > .layui-icon-indeterminate:before {
+  content: '';
   display: inline-block;
   vertical-align: middle;
   position: relative;
@@ -612,12 +612,12 @@
 }
 
 /* 无样式风格-根据模板自定义样式*/
-.layui-form-checkbox[lay-skin="none"] *,
-.layui-form-radio[lay-skin="none"] * {
+.layui-form-checkbox[lay-skin='none'] *,
+.layui-form-radio[lay-skin='none'] * {
   box-sizing: border-box;
 }
-.layui-form-checkbox[lay-skin="none"],
-.layui-form-radio[lay-skin="none"] {
+.layui-form-checkbox[lay-skin='none'],
+.layui-form-radio[lay-skin='none'] {
   position: relative;
   min-height: 20px;
   margin: 0;
@@ -625,8 +625,8 @@
   height: auto;
   line-height: normal;
 }
-.layui-form-checkbox[lay-skin="none"] > div,
-.layui-form-radio[lay-skin="none"] > div {
+.layui-form-checkbox[lay-skin='none'] > div,
+.layui-form-radio[lay-skin='none'] > div {
   position: relative;
   top: 0;
   left: 0;
@@ -635,12 +635,12 @@
   color: inherit;
   background-color: inherit;
 }
-.layui-form-checkbox[lay-skin="none"] > i,
-.layui-form-radio[lay-skin="none"] > i {
+.layui-form-checkbox[lay-skin='none'] > i,
+.layui-form-radio[lay-skin='none'] > i {
   display: none;
 }
-.layui-form-checkbox[lay-skin="none"].layui-checkbox-disabled > div,
-.layui-form-radio[lay-skin="none"].layui-radio-disabled > div {
+.layui-form-checkbox[lay-skin='none'].layui-checkbox-disabled > div,
+.layui-form-radio[lay-skin='none'].layui-radio-disabled > div {
   cursor: not-allowed;
 }
 
@@ -656,11 +656,11 @@
 .layui-checkbox-disabled:hover > i {
   color: #fff !important;
 }
-.layui-form-checkbox[lay-skin="tag"].layui-form-checked.layui-checkbox-disabled
+.layui-form-checkbox[lay-skin='tag'].layui-form-checked.layui-checkbox-disabled
   > i {
   color: #c2c2c2;
 }
-.layui-form-checkbox[lay-skin="tag"].layui-form-checked.layui-checkbox-disabled:hover
+.layui-form-checkbox[lay-skin='tag'].layui-form-checked.layui-checkbox-disabled:hover
   > i {
   color: #c2c2c2 !important;
 }
@@ -787,7 +787,7 @@
     clear: both;
   }
   .layui-form-item .layui-inline:after {
-    content: "\20";
+    content: '\20';
     clear: both;
     display: block;
     height: 0;

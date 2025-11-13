@@ -17,7 +17,7 @@
 }
 .layui-tabs-header:after,
 .layui-tabs-scroll:after {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   bottom: 0;
@@ -55,7 +55,7 @@
   color: var(--lay-color-primary);
 }
 .layui-tabs-header .layui-this:after {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -123,7 +123,7 @@
   background-color: var(--lay-color-red);
   color: #fff;
 }
-.layui-tabs-header li[lay-closable="false"] .layui-tabs-close {
+.layui-tabs-header li[lay-closable='false'] .layui-tabs-close {
   display: none;
 }
 

@@ -270,12 +270,12 @@
 }
 .layui-code-line-diff-add:before {
   position: absolute;
-  content: "+";
+  content: '+';
   color: #18794e;
 }
 .layui-code-line-diff-remove:before {
   position: absolute;
-  content: "-";
+  content: '-';
   color: #b8272c;
 }
 .layui-code-has-focused-lines .layui-code-line:not(.layui-code-line-has-focus) {

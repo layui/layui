@@ -121,7 +121,7 @@
   top: 0;
   bottom: 0;
   border-right: 3px solid var(--lay-color-accent);
-  content: "";
+  content: '';
 }
 
 .layui-menu-body-title {
@@ -164,7 +164,7 @@
   padding: 5px 0;
 }
 .layui-menu-body-panel:before {
-  content: "";
+  content: '';
   position: absolute;
   width: 20px;
   left: -16px;
@@ -206,7 +206,7 @@
   min-width: 100px;
 }
 .layui-dropdown:before {
-  content: "";
+  content: '';
   position: absolute;
   width: 100%;
   height: 6px;

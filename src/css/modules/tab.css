@@ -18,7 +18,7 @@
   transition: all 0.2s;
 }
 .layui-tab .layui-tab-title:after {
-  content: "";
+  content: '';
   border-bottom-color: var(--lay-border-color);
   border-bottom-width: 1px;
   border-style: none none solid;
@@ -60,7 +60,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  content: "";
+  content: '';
   width: 100%;
   height: 40px;
   border-width: 1px;
