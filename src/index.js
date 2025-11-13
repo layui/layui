@@ -2,13 +2,8 @@
  * Layui ESM 入口
  */
 
-import { layui } from './core/layui.js';
-
-layui.all = true;
-layui['layui.all'] = 'layui.all'; // 阻止 layui.use 加载内部模块
-
 // 导出核心模块
-export { layui };
+export { layui } from './core/layui.js';
 export { lay } from './core/lay.js';
 export { laytpl } from './core/laytpl.js';
 export { i18n } from './core/i18n.js';

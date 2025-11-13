@@ -34,7 +34,6 @@ var ready = {
 
 // 默认内置方法。
 var layer = {
-  v: '3.7.0',
   ie: (function () {
     // ie 版本
     var agent = navigator.userAgent.toLowerCase();

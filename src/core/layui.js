@@ -1089,5 +1089,11 @@ Class.prototype.throttle = function (func, wait) {
   };
 };
 
-export const layui = new Class();
-export default layui;
+const layui = new Class();
+
+// 阻止 layui.use 加载内部模块
+layui.all = true;
+layui['layui.all'] = 'layui.all';
+
+// export
+export { layui, layui as default };
