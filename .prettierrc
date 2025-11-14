@@ -1,3 +1,13 @@
 {
-  "singleQuote": true
+  "singleQuote": true,
+  "plugins": ["prettier-plugin-sort-pkgjson"],
+  "overrides": [
+    {
+      "files": "package.json",
+      "options": {
+        "parser": "sort-package-json",
+        "packageJsonIgnoreSortKeys": ["scripts", "exports"]
+      }
+    }
+  ]
 }

@@ -1,36 +1,17 @@
 {
   "name": "layui",
-  "description": "Classic Web UI Component Library",
   "version": "3.0.0-alpha.0",
-  "type": "module",
-  "keywords": [
-    "layui",
-    "components",
-    "front-end",
-    "framework",
-    "library",
-    "ui",
-    "web"
-  ],
-  "homepage": "https://layui.dev",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/layui/layui/issues"
-  },
+  "description": "Classic Web UI Component Library",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/layui/layui.git"
   },
-  "main": "dist/layui.js",
-  "module": "dist/layui.esm.js",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js"
-    }
+  "bugs": {
+    "url": "https://github.com/layui/layui/issues"
   },
-  "files": [
-    "dist"
-  ],
+  "homepage": "https://layui.dev",
+  "license": "MIT",
+  "type": "module",
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "serve": "serve tests/visual -p 3003 --cors -L -n",
@@ -46,17 +27,28 @@
     "clean:dist": "del-cli dist/*",
     "release": "node scripts/release.mjs"
   },
-  "lint-staged": {
-    "*": [
-      "prettier --write --cache --ignore-unknown"
-    ],
-    "*.{js,mjs,cjs}": [
-      "eslint --fix --cache"
-    ]
+  "main": "dist/layui.js",
+  "module": "dist/layui.esm.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    }
   },
-  "browserslist": [
-    "defaults"
+  "files": [
+    "dist"
   ],
+  "keywords": [
+    "components",
+    "framework",
+    "front-end",
+    "layui",
+    "library",
+    "ui",
+    "web"
+  ],
+  "dependencies": {
+    "jquery": "^3.7.1"
+  },
   "devDependencies": {
     "@rollup/plugin-babel": "^6.1.0",
     "@rollup/plugin-commonjs": "^28.0.9",
@@ -83,11 +75,20 @@
     "postcss-nested": "^7.0.2",
     "postcss-url": "^10.1.3",
     "prettier": "^3.6.2",
+    "prettier-plugin-sort-pkgjson": "^1.0.0",
     "rollup": "^4.52.5",
     "serve": "^14.2.5",
     "shelljs": "^0.10.0"
   },
-  "dependencies": {
-    "jquery": "^3.7.1"
+  "browserslist": [
+    "defaults"
+  ],
+  "lint-staged": {
+    "*": [
+      "prettier --write --cache --ignore-unknown"
+    ],
+    "*.{js,mjs,cjs}": [
+      "eslint --fix --cache"
+    ]
   }
 }
