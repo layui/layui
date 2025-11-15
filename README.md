@@ -13,14 +13,14 @@
 原生态 Web UI 组件库
 
 <p>
-  <a href="https://github.com/layui/layui/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/layui/layui" alt="License">
-  </a>
-  <a href="https://github.com/layui/layui/releases">
-    <img src="https://badgen.net/github/release/layui/layui" alt="Version">
+  <a href="https://github.com/layui/layui/actions/workflows/ci.yml">
+    <img src="https://github.com/layui/layui/actions/workflows/ci.yml/badge.svg" alt="CI Status">
   </a>
   <a href="https://www.npmjs.com/package/layui">
-    <img src="https://img.shields.io/badge/npm-package-red" alt="NPM">
+    <img src="https://img.shields.io/npm/v/layui" alt="NPM Version">
+  </a>
+  <a href="https://github.com/layui/layui/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/layui/layui" alt="License">
   </a>
 </p>
 
