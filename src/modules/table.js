@@ -3588,6 +3588,10 @@ layui.define(
       }
     };
 
+    /**
+     * 观察表格容器尺寸变化
+     * @returns
+     */
     Class.prototype.observeResize = function () {
       var that = this;
 
@@ -3597,12 +3601,19 @@ layui.define(
 
       var el = that.elem[0];
       var tableEl = that.layMain.children('table')[0];
+
       // 显示或隐藏时重置列宽
-      resizeObserver.observe(el, $.proxy(that.resize, that));
+      resizeObserver.observe(
+        el,
+        setTimeout.bind(null, function () {
+          that.resize();
+        })
+      );
 
       // 同步固定列表格和主表格高度
       var lineStyle = that.config.lineStyle;
       var isAutoHeight = lineStyle && /\bheight\s*:\s*auto\b/g.test(lineStyle);
+
       // 只重载数据时需要主动同步高度，因为 tbody 大小可能不变
       var needSyncFixedRowHeight = (that.needSyncFixedRowHeight =
         that.layBody.length > 1 &&
@@ -3610,7 +3621,7 @@ layui.define(
           (that.config.syncFixedRowHeight !== false && isAutoHeight)));
 
       if (needSyncFixedRowHeight) {
-        resizeObserver.observe(tableEl, $.proxy(that.calcFixedRowHeight, that));
+        resizeObserver.observe(tableEl, that.calcFixedRowHeight.bind(that));
       }
 
       that.unobserveResize = function () {
