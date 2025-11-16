@@ -24342,9 +24342,14 @@ var layui = (function () {
     that.setColsWidth({
       isInit: true
     });
-    that.pullData(that.page); // 请求数据
+
+    // 请求数据
+    that.pullData(that.page, {
+      done: function () {
+        that.observeResize(); // 观察尺寸变化
+      }
+    });
     that.events(); // 事件
-    that.observeResize(); // 观察尺寸变化
   };
 
   // 根据列类型，定制化参数
@@ -24981,6 +24986,7 @@ var layui = (function () {
       that.setColsWidth();
       that.loading(false);
       typeof options.done === 'function' && options.done(res, curr, res[response.countName], origin);
+      typeof opts.done === 'function' && opts.done();
     };
     opts = opts || {};
 
@@ -26717,16 +26723,18 @@ var layui = (function () {
     that.unobserveResize();
     var el = that.elem[0];
     var tableEl = that.layMain.children('table')[0];
+
     // 显示或隐藏时重置列宽
-    resizeObserver.observe(el, jquery.proxy(that.resize, that));
+    resizeObserver.observe(el, that.resize.bind(that));
 
     // 同步固定列表格和主表格高度
     var lineStyle = that.config.lineStyle;
     var isAutoHeight = lineStyle && /\bheight\s*:\s*auto\b/g.test(lineStyle);
+
     // 只重载数据时需要主动同步高度，因为 tbody 大小可能不变
     var needSyncFixedRowHeight = that.needSyncFixedRowHeight = that.layBody.length > 1 && (that.config.syncFixedRowHeight || that.config.syncFixedRowHeight !== false && isAutoHeight);
     if (needSyncFixedRowHeight) {
-      resizeObserver.observe(tableEl, jquery.proxy(that.calcFixedRowHeight, that));
+      resizeObserver.observe(tableEl, that.calcFixedRowHeight.bind(that));
     }
     that.unobserveResize = function () {
       resizeObserver.unobserve(el);
