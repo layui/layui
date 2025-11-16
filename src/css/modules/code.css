@@ -11,7 +11,7 @@ html #layuicss-skincodecss {
 /* 字体  */
 .layui-code-wrap {
   font-size: 13px;
-  font-family: "Courier New", Consolas, "Lucida Console", monospace;
+  font-family: 'Courier New', Consolas, 'Lucida Console', monospace;
 }
 
 /* 基础结构 */
@@ -262,12 +262,12 @@ html #layuicss-skincodecss {
 }
 .layui-code-line-diff-add:before {
   position: absolute;
-  content: "+";
+  content: '+';
   color: #18794e;
 }
 .layui-code-line-diff-remove:before {
   position: absolute;
-  content: "-";
+  content: '-';
   color: #b8272c;
 }
 .layui-code-has-focused-lines .layui-code-line:not(.layui-code-line-has-focus) {
