@@ -11,6 +11,23 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.13.1" lay-pid="2.10+" class="ws-anchor">
+  v2.13.1
+  <span class="layui-badge-rim">2025-11-16</span>
+  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
+</h2>
+
+- 添加 lint / format 工具、CI 流程，提升版本发行质量 #2905 @sunxiaobin89 @sentsim
+- 优化 font-family, 让页面字体更清晰均匀 #2924 @sentsim
+- 修复 table 当存在横向滚动条时，尾部列出现错位的问题 #2931 @sentsim
+- 修复 laydate 的 `btns` 数组参与深拷贝的问题 #2909 @sentsim
+- 修复 upload 代码中变量 `hint` 未声明的问题 #2901 @sentsim
+- 修复 IE11 下的若干异常 #2920 @sentsim
+
+### 下载： [layui-v2.13.1.zip](https://gitee.com/layui/layui/attach_files/2439162/download)
+
+---
+
 <h2 id="v2.13.0" lay-pid="2.10+" class="ws-anchor">
   v2.13.0
   <span class="layui-badge-rim">2025-10-24</span>
@@ -125,7 +142,6 @@ toc: true
 <h2 id="v2.11.4" lay-pid="2.10+" class="ws-anchor">
   v2.11.4
   <span class="layui-badge-rim">2025-06-23</span>
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
 </h2>
 
 - 重构 collapse 展开收缩动画的核心逻辑 #2734 @sentsim
