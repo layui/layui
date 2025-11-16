@@ -217,7 +217,8 @@ var RGBSTo = function (rgbs) {
   };
 };
 var $win = $(window);
-$(document);
+// var $doc = $(document);
+
 var CONST = component.CONST;
 
 /**
@@ -292,9 +293,9 @@ Class.prototype.position = function () {
 
 // 颜色选择器赋值
 Class.prototype.val = function () {
-  var that = this;
-    that.config;
-    var elemColorBox = that.elemColorBox.find('.' + CONST.PICKER_TRIG_SPAN),
+  var that = this,
+    // options = that.config,
+    elemColorBox = that.elemColorBox.find('.' + CONST.PICKER_TRIG_SPAN),
     elemPickerInput = that.elemPicker.find('.' + CONST.PICKER_INPUT),
     e = elemColorBox[0],
     bgcolor = e.style.backgroundColor;
@@ -512,11 +513,13 @@ Class.prototype.side = function () {
       var color = this.style.backgroundColor,
         hsb = RGBToHSB(RGBSTo(color)),
         a = color.slice(color.lastIndexOf(',') + 1, color.length - 1);
+      // var left;
       _h = hsb.h;
       _s = hsb.s;
       _b = hsb.b;
       if ((color.match(/[0-9]{1,3}/g) || []).length === 3) a = 1;
       _a = a;
+      // left = a * 280;
       change(hsb.h, hsb.s, hsb.b, a);
     });
   });
@@ -556,19 +559,15 @@ Class.prototype.side = function () {
 };
 
 // 颜色选择器hsb转换
-Class.prototype.select = function (h, s, b, type) {
+Class.prototype.select = function (h, s, b) {
   var that = this;
-  that.config;
+  // var options = that.config;
   var hex = HSBToHEX({
     h: h,
     s: 100,
     b: 100
   });
-  HSBToHEX({
-    h: h,
-    s: s,
-    b: b
-  });
+  // var color = HSBToHEX({ h: h, s: s, b: b });
   var sidetop = h / 360 * 180;
   var top = 180 - b / 100 * 180;
   var left = s / 100 * 260;
@@ -595,7 +594,7 @@ Class.prototype.pickerEvents = function () {
 
   var pickerEvents = {
     // 清空
-    clear: function (othis) {
+    clear: function () {
       elemColorBoxSpan[0].style.background = '';
       that.elemColorBox.find('.' + CONST.PICKER_TRIG_I).removeClass(CONST.ICON_PICKER_DOWN).addClass(CONST.ICON_PICKER_CLOSE);
       that.color = '';
@@ -675,7 +674,7 @@ Class.prototype.onClickOutside = function () {
   var that = this;
   var options = that.config;
   that.stopClickOutsideEvent();
-  var stop = lay.onClickOutside(that.elemPicker[0], function (e) {
+  var stop = lay.onClickOutside(that.elemPicker[0], function () {
     var elemColorBoxSpan = that.elemColorBox.find('.' + CONST.PICKER_TRIG_SPAN);
     if (that.color) {
       var hsb = RGBToHSB(RGBSTo(that.color));
@@ -706,7 +705,7 @@ Class.prototype.onClickOutside = function () {
  */
 Class.prototype.autoUpdatePosition = function () {
   var that = this;
-  that.config;
+  // var options = that.config;
   var RESIZE_EVENT_NAME = 'resize.lay_colorpicker_resize';
   that.stopResizeEvent();
   var windowResizeHandler = function () {

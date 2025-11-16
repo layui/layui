@@ -1,4 +1,4 @@
-import { layui } from './core/layui.js';
+export { layui } from './core/layui.js';
 export { lay } from './core/lay.js';
 export { laytpl } from './core/laytpl.js';
 export { i18n } from './core/i18n.js';
@@ -28,12 +28,3 @@ export { rate } from './components/rate.js';
 export { flow } from './components/flow.js';
 export { util } from './components/util.js';
 export { code } from './components/code.js';
-
-/**
- * Layui ESM 入口
- */
-
-layui.all = true;
-layui['layui.all'] = 'layui.all'; // 阻止 layui.use 加载内部模块
-
-export { layui };

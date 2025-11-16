@@ -55,11 +55,19 @@ var getThisTable = function (id) {
   if (!that) hint.error(id ? "The treeTable instance with ID '" + id + "' not found" : 'ID argument required');
   return that || null;
 };
+
+// 字符
+// var MOD_NAME = 'treeTable';
 var MOD_ID = 'lay-table-id';
 var HIDE = 'layui-hide';
 var ELEM_VIEW = '.layui-table-view';
+// var ELEM_TREE = '.layui-table-tree';
+// var ELEM_TOOL = '.layui-table-tool';
+// var ELEM_BOX = '.layui-table-box';
+// var ELEM_HEADER = '.layui-table-header';
 var ELEM_BODY = '.layui-table-body';
 var ELEM_MAIN = '.layui-table-main';
+// var ELEM_FIXED = '.layui-table-fixed';
 var ELEM_FIXL = '.layui-table-fixed-l';
 var ELEM_FIXR = '.layui-table-fixed-r';
 var ELEM_CHECKED = 'layui-table-checked';
@@ -388,10 +396,10 @@ Class.prototype.getTreeNode = function (data) {
   if (!data) {
     return hint.error('Node data not found');
   }
-  var options = that.getOptions();
-  var treeOptions = options.tree;
-  options.id;
-  treeOptions.customName;
+  // var options = that.getOptions();
+  // var treeOptions = options.tree;
+  // var tableId = options.id;
+  // var customName = treeOptions.customName;
 
   // 带上一些常用的方法
   return {
@@ -411,9 +419,9 @@ Class.prototype.getNodeByIndex = function (index) {
     return hint.error('Node data not found by index: ' + index);
   }
   var options = that.getOptions();
-  var treeOptions = options.tree;
-  var customName = treeOptions.customName;
-  customName.parent;
+  // var treeOptions = options.tree;
+  // var customName = treeOptions.customName;
+  // var parentKey = customName.parent;
   var tableId = options.id;
   var treeNode = {
     data: treeNodeData,
@@ -519,6 +527,19 @@ treeTable.getNodeDataByIndex = function (id, index) {
   if (!that) return;
   return that.getNodeDataByIndex(index, true);
 };
+
+// 判断是否是父节点
+/* var checkIsParent = function (data, isParentKey, childrenKey) {
+  isParentKey = isParentKey || 'isParent';
+  childrenKey = childrenKey || 'children';
+  layui.each(data, function (i1, item1) {
+    if (!(isParentKey in item1)) {
+      item1[isParentKey] = !!(item1[childrenKey] && item1[childrenKey].length);
+      checkIsParent(item1[childrenKey]);
+    }
+  });
+}; */
+
 Class.prototype.initData = function (data, parentIndex) {
   var that = this;
   var options = that.getOptions();
@@ -604,7 +625,7 @@ var expandNode = function (treeNode, expandFlag, sonSign, focus, callbackFlag, d
     if (trExpanded) {
       // 已经展开过
       if (!childNodes.length) return; //异步如果子节点没有数据情况下双点行展开所有已展开的节点问题解决
-      trsElem.nextAll(childNodes.map(function (value, index, array) {
+      trsElem.nextAll(childNodes.map(function (value) {
         return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]';
       }).join(',')).removeClass(HIDE);
       layui.each(childNodes, function (i1, item1) {
@@ -656,6 +677,7 @@ var expandNode = function (treeNode, expandFlag, sonSign, focus, callbackFlag, d
         var data = $.extend(params, asyncSetting.where || options.where);
         var asyncAutoParam = asyncSetting.autoParam;
         layui.each(asyncAutoParam, function (index, item) {
+          // var itemStr = item;
           var itemArr = item.split('=');
           data[itemArr[0].trim()] = trData[(itemArr[1] || itemArr[0]).trim()];
         });
@@ -783,13 +805,13 @@ var expandNode = function (treeNode, expandFlag, sonSign, focus, callbackFlag, d
           options: options
         }, expandFlag, sonSign, focus, callbackFlag, done);
       });
-      tableViewElem.find(childNodes.map(function (value, index, array) {
+      tableViewElem.find(childNodes.map(function (value) {
         // 只隐藏直接子节点，其他由递归的处理
         return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]';
       }).join(',')).addClass(HIDE);
     } else {
       var childNodesFlat = treeTableThat.treeToFlat(childNodes, trData[customName.id], dataIndex);
-      tableViewElem.find(childNodesFlat.map(function (value, index, array) {
+      tableViewElem.find(childNodesFlat.map(function (value) {
         return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]';
       }).join(',')).addClass(HIDE);
     }
@@ -986,11 +1008,11 @@ Class.prototype.renderTreeTable = function (tableView, level, sonSign) {
   !tableViewElem.hasClass(TABLE_TREE) && tableViewElem.addClass(TABLE_TREE);
   var tableId = options.id;
   var treeOptions = options.tree || {};
-  treeOptions.data || {};
+  // var treeOptionsData = treeOptions.data || {};
   var treeOptionsView = treeOptions.view || {};
   var customName = treeOptions.customName || {};
   var isParentKey = customName.isParent;
-  tableViewElem.attr('lay-filter');
+  // var tableFilterId = tableViewElem.attr('lay-filter');
   var treeTableThat = that;
   var existsData = options.data.length; // 是否直接赋值 data
   // var tableData = treeTableThat.getTableData();
@@ -1061,7 +1083,7 @@ Class.prototype.renderTreeTable = function (tableView, level, sonSign) {
 
   // 当前层的数据看看是否需要展开
   if (sonSign !== false && dataExpand) {
-    layui.each(dataExpand, function (index, item) {
+    layui.each(dataExpand, function (index) {
       var trDefaultExpand = tableViewElem.find('tr[lay-data-index="' + index + '"]');
       trDefaultExpand.find('.layui-table-tree-flexIcon').html(treeOptionsView.flexIconOpen);
       expandNode({
@@ -1240,7 +1262,7 @@ treeTable.updateNode = function (id, index, newNode) {
   var that = getThisTable(id);
   if (!that) return;
   var options = that.getOptions();
-  options.tree;
+  // var treeOptions = options.tree;
   var tableView = options.elem.next();
   var trElem = tableView.find('tr[lay-data-index="' + index + '"]');
   var trIndex = trElem.attr('data-index');
@@ -1373,8 +1395,9 @@ treeTable.addNodes = function (id, opts) {
       item[checkName] = parentNode[checkName];
     }
   });
-  that.getTableData();
-    var dataAfter;
+
+  // var tableData = that.getTableData();
+  var dataAfter;
   if (!parentNode) {
     // 添加到根节点
     dataAfter = table.cache[id].splice(index === -1 ? table.cache[id].length : index);
@@ -1389,7 +1412,8 @@ treeTable.addNodes = function (id, opts) {
       }
     }
     // 将新节点添加到页面
-    that.initData();
+    // tableData = that.initData();
+
     if (tableViewElem.find('.layui-none').length) {
       table.renderData(id);
       return newNodes;
@@ -1445,7 +1469,7 @@ treeTable.addNodes = function (id, opts) {
     layui.each(table.cache[id], function (i4, item4) {
       tableViewElem.find('tr[data-level="0"][lay-data-index="' + item4[LAY_DATA_INDEX] + '"]').attr('data-index', i4).data('index', i4);
     });
-    that.renderTreeTable(tableViewElem.find(newNodes.map(function (value, index, array) {
+    that.renderTreeTable(tableViewElem.find(newNodes.map(function (value) {
       return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]';
     }).join(',')));
   } else {
@@ -1469,7 +1493,8 @@ treeTable.addNodes = function (id, opts) {
     tableViewElem.find(childrenNodesFlat.map(function (value) {
       return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]';
     }).join(',')).remove();
-    that.initData();
+
+    // tableData = that.initData();
     // 去掉父节点的已经展开过的状态，重新执行一次展开的方法
     parentNode[LAY_HAS_EXPANDED] = false;
     parentNode[LAY_ASYNC_STATUS] = 'local'; // 转为本地数据，应该规定异步加载子节点的时候addNodes的规则
@@ -1505,7 +1530,7 @@ treeTable.checkStatus = function (id, includeHalfCheck) {
 
   // 需要区分单双选
   var tableData = treeTable.getData(id, true);
-  var checkedData = tableData.filter(function (value, index, array) {
+  var checkedData = tableData.filter(function (value) {
     return value[checkName] || includeHalfCheck && value[LAY_CHECKBOX_HALF];
   });
   var isAll = true;
@@ -1544,7 +1569,8 @@ treeTable.on('row', function (obj) {
 treeTable.on('rowDouble', function (obj) {
   var options = obj.config;
   var tableView = options.elem.next();
-  options.id;
+  // var tableId = options.id;
+
   if (tableView.hasClass(TABLE_TREE)) {
     updateObjParams(obj);
     var treeOptions = options.tree || {};
@@ -1560,7 +1586,8 @@ treeTable.on('rowDouble', function (obj) {
 treeTable.on('rowContextmenu', function (obj) {
   var options = obj.config;
   var tableView = options.elem.next();
-  options.id;
+  // var tableId = options.id;
+
   if (tableView.hasClass(TABLE_TREE)) {
     updateObjParams(obj);
   }
@@ -1570,7 +1597,8 @@ treeTable.on('rowContextmenu', function (obj) {
 treeTable.on('tool', function (obj) {
   var options = obj.config;
   var tableView = options.elem.next();
-  options.id;
+  // var tableId = options.id;
+
   if (tableView.hasClass(TABLE_TREE)) {
     updateObjParams(obj);
   }
@@ -1581,7 +1609,8 @@ treeTable.on('edit', function (obj) {
   // 如果编辑涉及到关键的name字段需要重新更新一下tr节点
   var options = obj.config;
   var tableView = options.elem.next();
-  options.id;
+  // var tableId = options.id;
+
   if (tableView.hasClass(TABLE_TREE)) {
     updateObjParams(obj);
     if (obj.field === options.tree.customName.name) {
@@ -1608,7 +1637,8 @@ treeTable.on('radio', function (obj) {
 Class.prototype.setRowCheckedClass = function (tr, checked) {
   var that = this;
   var options = that.getOptions();
-  tr.data('index');
+
+  // var index = tr.data('index');
   var tableViewElem = options.elem.next();
   tr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 主体行
 

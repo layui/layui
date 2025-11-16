@@ -44,10 +44,16 @@ function isDigit(char) {
   return code >= 48 && code <= 57; // '0' 到 '9' 的 ASCII 码范围
 }
 
+// 对象合并时，让数组覆盖，而非合并
+function overwriteArray(objValue, srcValue) {
+  // 数组覆盖而非合并
+  if (Array.isArray(objValue) && Array.isArray(srcValue)) {
+    return srcValue;
+  }
+}
+
 // 外部调用
 var laydate = {
-  v: '5.7.0',
-  // layDate 版本号
   config: {
     weekStart: 0 // 默认周日一周的开始
   },
@@ -56,7 +62,7 @@ var laydate = {
   // 设置全局项
   set: function (options) {
     var that = this;
-    that.config = lay.extend({}, that.config, options);
+    that.config = lay.extend({}, that.config, options, overwriteArray);
     return that;
   },
   // 主体 CSS 等待事件
@@ -97,6 +103,8 @@ var thisModule = function () {
 // 字符常量
 var ELEM = '.layui-laydate';
 var THIS = 'layui-this';
+// var SHOW = 'layui-show';
+// var HIDE = 'layui-hide';
 var DISABLED = 'laydate-disabled';
 var LIMIT_YEAR = [100, 200000];
 var ELEM_STATIC = 'layui-laydate-static';
@@ -120,7 +128,7 @@ var ELEM_SHADE = 'layui-laydate-shade';
 var Class = function (options) {
   var that = this;
   that.index = laydate.index = lay.autoIncrementer('laydate');
-  that.config = lay.extend({}, that.config, laydate.config, options);
+  that.config = lay.extend({}, that.config, laydate.config, options, overwriteArray);
 
   // 若 elem 非唯一，则拆分为多个实例
   var elem = lay(options.elem || that.config.elem);
@@ -128,13 +136,13 @@ var Class = function (options) {
     lay.each(elem, function () {
       laydate.render(lay.extend({}, that.config, {
         elem: this
-      }));
+      }), overwriteArray);
     });
     return that;
   }
 
   // 初始化属性
-  options = lay.extend(that.config, lay.options(elem[0])); // 继承节点上的属性
+  options = lay.extend(that.config, lay.options(elem[0]), overwriteArray); // 继承节点上的属性
 
   // 更新 i18n 消息对象
   that.i18nMessages = that.getI18nMessages();
@@ -359,7 +367,7 @@ Class.prototype.markerOfChineseFestivals = {
 // 重载实例
 Class.prototype.reload = function (options) {
   var that = this;
-  that.config = lay.extend({}, that.config, options);
+  that.config = lay.extend({}, that.config, options, overwriteArray);
   that.init();
 };
 
@@ -685,7 +693,7 @@ Class.prototype.render = function () {
         shortcutBtns.push('<li data-index="' + i + '">' + item.text + '</li>');
       });
       return shortcutBtns.join('');
-    }()).find('li').on('click', function (event) {
+    }()).find('li').on('click', function () {
       var btnSetting = options.shortcuts[this.dataset['index']] || {};
       var value = (typeof btnSetting.value === 'function' ? btnSetting.value() : btnSetting.value) || [];
       if (!layui.isArray(value)) {
@@ -847,7 +855,7 @@ Class.prototype.position = function () {
 // 提示
 Class.prototype.hint = function (opts) {
   var that = this;
-  that.config;
+  // var options = that.config;
   var div = lay.elem('div', {
     class: ELEM_HINT
   });
@@ -905,14 +913,15 @@ Class.prototype.systemDate = function (newDate) {
 //日期校验
 Class.prototype.checkDate = function (fn) {
   var that = this,
+    // thisDate = new Date(),
     options = that.config,
     lang = that.i18nMessages,
     dateTime = options.dateTime = options.dateTime || that.systemDate(),
     thisMaxDate,
     error,
-    elem = options.elem[0];
-    that.isInput(elem) ? 'val' : 'html';
-    var value = function () {
+    elem = options.elem[0],
+    // valType = that.isInput(elem) ? 'val' : 'html',
+    value = function () {
       //如果传入了开始和结束日期的 input 对象，则将其拼接为日期范围字符
       if (that.rangeElem) {
         var vals = [that.rangeElem[0].val(), that.rangeElem[1].val()];
@@ -1419,7 +1428,8 @@ Class.prototype.isDisabledTime = function (date, opts) {
 Class.prototype.isDisabledDateTime = function (timestamp, opts) {
   opts = opts || {};
   var that = this;
-  that.config;
+  // var options = that.config;
+
   return that.isDisabledDate(timestamp, opts) || that.isDisabledTime(timestamp, opts);
 };
 
@@ -1647,7 +1657,7 @@ Class.prototype.list = function (type, index) {
     var yearNum,
       startY = yearNum = listYM[0] - 7;
     if (startY < 1) startY = yearNum = 1;
-    lay.each(new Array(15), function (i) {
+    lay.each(new Array(15), function () {
       var li = lay.elem('li', {
           'lay-ym': yearNum
         }),
@@ -1874,7 +1884,7 @@ Class.prototype.list = function (type, index) {
             li = lay(ol).find('li');
           ol.scrollTop = 30 * (that[startEnd][hms[i]] - 2);
           if (ol.scrollTop <= 0) {
-            li.each(function (ii, item) {
+            li.each(function (ii) {
               if (!lay(this).hasClass(DISABLED)) {
                 ol.scrollTop = 30 * (ii - 2);
                 return true;
@@ -1927,8 +1937,9 @@ Class.prototype.listYM = [];
 //关闭列表
 Class.prototype.closeList = function () {
   var that = this;
-    that.config;
-  lay.each(that.elemCont, function (index, item) {
+  // var options = that.config;
+
+  lay.each(that.elemCont, function (index) {
     lay(this).find('.' + ELEM_LIST).remove();
     lay(that.elemMain[index]).removeClass('laydate-ym-show laydate-time-show');
   });
@@ -2209,9 +2220,9 @@ Class.prototype.choose = function (td, index) {
       that.endState = true;
     }
   }
-  var dateTime = that.thisDateTime(index);
-    lay(that.elem).find('td');
-    var YMD = td.attr('lay-ymd').split('-');
+  var dateTime = that.thisDateTime(index),
+    // tds = lay(that.elem).find('td'),
+    YMD = td.attr('lay-ymd').split('-');
   YMD = {
     year: YMD[0] | 0,
     month: (YMD[1] | 0) - 1,
@@ -2471,10 +2482,10 @@ Class.prototype.change = function (index) {
   };
 };
 
-//日期切换事件
+// 日期切换事件
 Class.prototype.changeEvent = function () {
   var that = this;
-    that.config;
+  // var options = that.config;
 
   //日期选择事件
   lay(that.elem).on('click', function (e) {

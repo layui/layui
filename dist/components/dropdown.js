@@ -67,7 +67,9 @@ var thisModule = function () {
 
 // 字符常量
 var STR_ELEM = 'layui-dropdown';
+// var STR_HIDE = 'layui-hide';
 var STR_DISABLED = 'layui-disabled';
+// var STR_NONE = 'layui-none';
 var STR_ITEM_UP = 'layui-menu-item-up';
 var STR_ITEM_DOWN = 'layui-menu-item-down';
 var STR_MENU_TITLE = 'layui-menu-body-title';
@@ -341,7 +343,7 @@ Class.prototype.render = function (type) {
   });
 
   // 触发菜单组展开收缩
-  mainElem.find(STR_GROUP_TITLE).on('click', function (e) {
+  mainElem.find(STR_GROUP_TITLE).on('click', function () {
     var othis = $(this);
     var elemGroup = othis.parent();
     var data = elemGroup.data('item') || {};
@@ -357,7 +359,7 @@ Class.prototype.render = function (type) {
 };
 
 // 位置定位
-Class.prototype.position = function (obj) {
+Class.prototype.position = function () {
   var that = this;
   var options = that.config;
   lay.position(options.elem[0], that.mainElem[0], {
@@ -399,7 +401,7 @@ Class.prototype.normalizedDelay = function () {
 // 延迟移除面板
 Class.prototype.delayRemove = function () {
   var that = this;
-  that.config;
+  // var options = that.config;
   clearTimeout(that.timer);
   that.timer = setTimeout(function () {
     that.remove();
@@ -572,7 +574,7 @@ thisModule.spread = function (othis, isAccordion) {
 
   // 基础菜单的静态元素事件
   var ELEM_LI = '.layui-menu:not(.layui-dropdown-menu) li';
-  _DOC.on('click', ELEM_LI, function (e) {
+  _DOC.on('click', ELEM_LI, function () {
     var othis = $(this);
     var parent = othis.parents('.layui-menu').eq(0);
     var isChild = othis.hasClass(STR_ITEM_GROUP) || othis.hasClass(STR_ITEM_PARENT);
@@ -598,7 +600,7 @@ thisModule.spread = function (othis, isAccordion) {
   });
 
   // 基础菜单的展开收缩事件
-  _DOC.on('click', ELEM_LI + STR_GROUP_TITLE, function (e) {
+  _DOC.on('click', ELEM_LI + STR_GROUP_TITLE, function () {
     var othis = $(this);
     var elemGroup = othis.parents('.' + STR_ITEM_GROUP + ':eq(0)');
     var options = lay.options(elemGroup[0]);
@@ -610,7 +612,7 @@ thisModule.spread = function (othis, isAccordion) {
 
   // 判断子级菜单是否超出屏幕
   var ELEM_LI_PAR = '.layui-menu .' + STR_ITEM_PARENT;
-  _DOC.on('mouseenter', ELEM_LI_PAR, function (e) {
+  _DOC.on('mouseenter', ELEM_LI_PAR, function () {
     var othis = $(this);
     var elemPanel = othis.find('.' + STR_MENU_PANEL);
     if (!elemPanel[0]) return;
@@ -630,7 +632,7 @@ thisModule.spread = function (othis, isAccordion) {
     if (rect.bottom > _WIN.height()) {
       elemPanel.eq(0).css('margin-top', -(rect.bottom - _WIN.height() + 5));
     }
-  }).on('mouseleave', ELEM_LI_PAR, function (e) {
+  }).on('mouseleave', ELEM_LI_PAR, function () {
     var othis = $(this);
     var elemPanel = othis.children('.' + STR_MENU_PANEL);
     elemPanel.removeClass(STR_MENU_PANEL_L);
@@ -671,7 +673,7 @@ dropdown.reloadData = function () {
   var dataParams = new RegExp('^(' + ['data', 'templet', 'content'].join('|') + ')$');
 
   // 过滤与数据无关的参数
-  layui.each(args[1], function (key, value) {
+  layui.each(args[1], function (key) {
     if (!dataParams.test(key)) {
       delete args[1][key];
     }

@@ -29,7 +29,7 @@ var cache = {
 
 // constructor
 var Class = function () {
-  this.v = '3.0.0-alpha.0'; // 版本号
+  this.v = '3.0.0-alpha.1'; // 版本号
 };
 
 // 识别预先可能定义的指定全局对象
@@ -1015,5 +1015,9 @@ Class.prototype.throttle = function (func, wait) {
   };
 };
 const layui = new Class();
+
+// 阻止 layui.use 加载内部模块
+layui.all = true;
+layui['layui.all'] = 'layui.all';
 
 export { layui as default, layui };

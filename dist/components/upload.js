@@ -369,7 +369,7 @@ Class.prototype.upload = function (files, type) {
         iframeBody = iframe.contents().find('body');
       try {
         res = iframeBody.text();
-      } catch (e) {
+      } catch {
         that.msg(text['cross-domain']);
         clearInterval(Class.timer);
         error();
@@ -391,7 +391,7 @@ Class.prototype.upload = function (files, type) {
             status: 'CONVERTED',
             data: JSON.parse(src)
           };
-        } catch (e) {
+        } catch {
           that.msg(text['data-format-error']);
           return {
             status: 'FORMAT_ERROR',
@@ -628,9 +628,9 @@ Class.prototype.events = function () {
   };
 
   // 设置选择的文本
-  var setChooseText = function (files, filename) {
+  var setChooseText = function (files) {
     var elemFile = that.elemFile;
-    options.item ? options.item : options.elem;
+    // var item = options.item ? options.item : options.elem;
     var value = files.length > 1 ? i18n.$t('upload.chooseText', {
       length: files.length
     }) : (files[0] || {}).name || elemFile[0].value.match(/[^/\\]+\..+/g) || [] || '';
@@ -751,7 +751,7 @@ Class.prototype.events = function () {
     options.elem.on('dragover', function (e) {
       e.preventDefault();
       $(this).trigger('upload.over');
-    }).on('dragleave', function (e) {
+    }).on('dragleave', function () {
       $(this).trigger('upload.leave');
     }).on('drop', function (e) {
       e.preventDefault();
