@@ -89,8 +89,19 @@ body {
   color: rgba(0, 0, 0, 0.85);
   font-size: 14px;
   font-family:
-    -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', 'PingFang SC',
-    'Helvetica Neue', Helvetica, Arial, sans-serif;
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'PingFang SC',
+    'Microsoft YaHei',
+    'Helvetica Neue',
+    Arial,
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    'Noto Color Emoji';
 }
 hr {
   height: 0;
