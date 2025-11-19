@@ -179,8 +179,11 @@ Class.prototype.init = function (rerender, type) {
   )
     that.render(type);
 
-  // 事件
-  that.events();
+    //show=true时多次回调ready函数临时解决办法
+    if (!options.elem.data(MOD_INDEX_OPENED)) {
+      //事件
+      that.events();
+    }
 };
 
 // 渲染
