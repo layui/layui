@@ -182,10 +182,9 @@ layui.define(['i18n', 'jquery', 'laytpl', 'lay', 'util'], function (exports) {
     )
       that.render(type);
 
-    //show=true时多次回调ready函数临时解决办法
-    if (!options.elem.data(MOD_INDEX_OPENED)) {
-      //事件
-      that.events();
+    // 若面板已经打开，则无需再绑定目标元素事件，避免 render 重复执行
+    if (!elem.data(MOD_INDEX_OPENED)) {
+      that.events(); // 事件
     }
   };
 
