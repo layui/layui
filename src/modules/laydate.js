@@ -3027,13 +3027,14 @@ layui.define(['lay', 'i18n'], function (exports) {
       },
       nextMonth: function () {
         var YM;
+
         if (that.rangeLinked) {
           var panelYM = that.panelYM[0];
+          YM = that.getAsYM(panelYM.year, panelYM.month);
           var dateTimeTemp = lay.extend({}, options.dateTime, that.panelYM[0], {
             year: YM[0],
             month: YM[1]
           });
-          YM = that.getAsYM(panelYM.year, panelYM.month);
           that.checkDate('limit').calendar(dateTimeTemp, null, 'init');
         } else {
           YM = that.getAsYM(dateTime.year, dateTime.month);
