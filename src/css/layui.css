@@ -89,19 +89,8 @@ body {
   color: rgba(0, 0, 0, 0.85);
   font-size: 14px;
   font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    'PingFang SC',
-    'Microsoft YaHei',
-    'Helvetica Neue',
-    Arial,
-    sans-serif,
-    'Apple Color Emoji',
-    'Segoe UI Emoji',
-    'Segoe UI Symbol',
-    'Noto Color Emoji';
+    -apple-system, Roboto, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 hr {
   height: 0;
@@ -5964,7 +5953,7 @@ body .layui-util-face .layui-layer-content {
 }
 .layui-tree-icon {
   height: 14px;
-  line-height: 10px;
+  line-height: 12px;
   width: 14px;
   margin: 0 11px;
   text-align: center;
