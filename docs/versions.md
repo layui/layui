@@ -11,10 +11,22 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.13.2" lay-pid="2.10+" class="ws-anchor">
+  v2.13.2
+  <span class="layui-badge-rim">2025-11-21</span>
+</h2>
+
+- 修复 laydate 开启范围联动选择模式时，点击月份报错的问题 #2949 @sentsim
+- 修复 dropdown 设置 `show: true` 时 render 重复执行的问题 #2946 @Diyar-IT
+- 恢复 font-family 字体，避免产生不必要的细微兼容问题 #2950 @sentsim
+
+### 下载： [layui-v2.13.2.zip](https://gitee.com/layui/layui/attach_files/2447015/download)
+
+---
+
 <h2 id="v2.13.1" lay-pid="2.10+" class="ws-anchor">
   v2.13.1
   <span class="layui-badge-rim">2025-11-16</span>
-  <span class="layui-badge-rim" style="color: #16b777;">稳定版</span>
 </h2>
 
 - 添加 lint / format 工具、CI 流程，提升版本发行质量 #2905 @sunxiaobin89 @sentsim
