@@ -121,12 +121,7 @@ exports.release = gulp.series(
   () => del([rlsDirname]), // 清理发行目录
   () => {
     // 生成说明
-    return gulp
-      .src('./release/introduce/**/*')
-      .pipe(replace(/[^'"]+(\/layui\.css)/, 'layui/css$1')) // 替换 css 引入路径中的本地 path
-      .pipe(replace(/[^'"]+(\/layui\.js)/, 'layui$1')) // 替换 js 引入路径中的本地 path
-      .pipe(gulp.dest(rlsDirname)) // 用于本地
-      .pipe(gulp.dest('./examples/introduce')); // 用于 Github actions
+    return gulp.src('./examples/introduce/**/*').pipe(gulp.dest(rlsDirname)); // 用于本地
   },
   exports.cp, // 复制 dist 目录文件
   () => {
