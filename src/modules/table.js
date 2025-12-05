@@ -2875,7 +2875,12 @@ layui.define(
         var nowType = elemSort.attr('lay-sort');
         var type;
 
-        // 排序不触发的条件
+        // 表头工具元素不触发排序
+        if (e.target.hasAttribute('lay-event')) {
+          return;
+        }
+
+        // 其他条件不触发排序
         if (!elemSort[0] || othis.data('resizing') === 1) {
           return othis.removeData('resizing');
         }
