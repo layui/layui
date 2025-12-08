@@ -2876,7 +2876,7 @@ layui.define(
         var type;
 
         // 表头工具元素不触发排序
-        if (e.target.hasAttribute('lay-event')) {
+        if ($(e.target).closest('[lay-event]')[0]) {
           return;
         }
 
