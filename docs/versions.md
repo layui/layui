@@ -11,6 +11,20 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.13.3" lay-pid="2.10+" class="ws-anchor">
+  v2.13.3
+  <span class="layui-badge-rim">2025-12-29</span>
+</h2>
+
+- 修复 table 表头同时开启 sort 和 colTool 时的事件冒泡问题 #2954 @sentsim
+- 修复 table 大小的微小变化触发 resize 循环的问题 #2964 @Sight-wcg
+- 修复 menu 菜单标题若存在嵌套元素时未溢出隐藏的问题 #2955 @sentsim
+- 修复 flow 突破懒加载在某些场景下的报错问题 #2965 @Sight-wcg
+
+### 下载： [layui-v2.13.3.zip](https://gitee.com/layui/layui/attach_files/2502813/download)
+
+---
+
 <h2 id="v2.13.2" lay-pid="2.10+" class="ws-anchor">
   v2.13.2
   <span class="layui-badge-rim">2025-11-21</span>
