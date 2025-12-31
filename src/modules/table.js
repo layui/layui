@@ -1367,14 +1367,17 @@ layui.define(
 
       // 仅由 resizeObserver 触发时生效
       if (entry) {
+        var isHidden =
+          entry.contentRect.height === 0 && entry.contentRect.width === 0;
         var shouldIgnore =
-          entry.target._lay_lastSize &&
-          Math.abs(
-            entry.target._lay_lastSize.height - entry.contentRect.height
-          ) < RESIZE_THRESHOLD &&
-          Math.abs(entry.target._lay_lastSize.width - entry.contentRect.width) <
-            RESIZE_THRESHOLD;
-
+          isHidden ||
+          (entry.target._lay_lastSize &&
+            Math.abs(
+              entry.target._lay_lastSize.height - entry.contentRect.height
+            ) < RESIZE_THRESHOLD &&
+            Math.abs(
+              entry.target._lay_lastSize.width - entry.contentRect.width
+            ) < RESIZE_THRESHOLD);
         if (shouldIgnore) return;
 
         entry.target._lay_lastSize = {
