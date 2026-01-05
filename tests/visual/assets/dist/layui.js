@@ -19282,8 +19282,10 @@ var layui = (function () {
     // 初始即显示或者面板弹出之后执行了刷新数据
     if (options.show || type === 'reloadData' && that.mainElem && options.target.find(that.mainElem.get(0)).length) that.render(type);
 
-    // 事件
-    that.events();
+    // 若面板已经打开，则无需再绑定目标元素事件，避免 render 重复执行
+    if (!elem.data(MOD_INDEX_OPENED)) {
+      that.events(); // 事件
+    }
   };
 
   // 渲染
@@ -24902,8 +24904,25 @@ var layui = (function () {
   };
 
   // 重置表格尺寸/结构
-  Class$6.prototype.resize = function () {
+  var RESIZE_THRESHOLD = 2;
+  Class$6.prototype.resize = function (entry) {
     var that = this;
+
+    // 仅由 resizeObserver 触发时生效
+    if (entry) {
+      // 当表格被隐藏时，不触发 resize
+      if (entry.contentRect.height === 0 && entry.contentRect.width === 0) {
+        return;
+      }
+
+      // 忽略微小的尺寸变化
+      var shouldIgnore = entry.target._lay_lastSize && Math.abs(entry.target._lay_lastSize.height - entry.contentRect.height) < RESIZE_THRESHOLD && Math.abs(entry.target._lay_lastSize.width - entry.contentRect.width) < RESIZE_THRESHOLD;
+      if (shouldIgnore) return;
+      entry.target._lay_lastSize = {
+        height: entry.contentRect.height,
+        width: entry.contentRect.width
+      };
+    }
     var tableElemIsConnected = that.layMain && ('isConnected' in that.layMain[0] ? that.layMain[0].isConnected : jquery.contains(document.body, that.layMain[0]));
     if (!tableElemIsConnected) return;
     that.fullSize(); // 让表格铺满
@@ -26122,13 +26141,18 @@ var layui = (function () {
     thisTable.docEvent = true;
 
     // 排序
-    th.on('click', function () {
+    th.on('click', function (e) {
       var othis = jquery(this);
       var elemSort = othis.find(ELEM_SORT);
       var nowType = elemSort.attr('lay-sort');
       var type;
 
-      // 排序不触发的条件
+      // 表头工具元素不触发排序
+      if (jquery(e.target).closest('[lay-event]')[0]) {
+        return;
+      }
+
+      // 其他条件不触发排序
       if (!elemSort[0] || othis.data('resizing') === 1) {
         return othis.removeData('resizing');
       }
@@ -31834,7 +31858,7 @@ var layui = (function () {
                 item.attr('src', src).removeAttr('lay-src');
 
                 /* 当前图片加载就绪后，检测下一个图片是否在当前屏 */
-                next[0] && render(next);
+                next[0] && fn(next);
                 index++;
               }, function () {
                 item.removeAttr('lay-src');
