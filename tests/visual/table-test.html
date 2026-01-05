@@ -302,8 +302,9 @@
                   },
                   {
                     field: 'sex',
-                    title: '性别',
-                    width: 80,
+                    title:
+                      '性别  <i class="layui-icon layui-icon-female" lay-event="gender"></i>',
+                    width: 100,
                     edit: 'text',
                     sort: true,
                     escape: false,
@@ -671,7 +672,13 @@
 
         // 表头自定义元素工具事件
         table.on('colTool(test)', (obj) => {
+          const { event } = obj;
           console.log(obj);
+          if (event === 'gender') {
+            layer.alert(layui.util.escape(JSON.stringify(obj.col)), {
+              title: '当前列属性',
+            });
+          }
         });
 
         // 触发单元格工具事件
