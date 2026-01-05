@@ -1367,6 +1367,12 @@ layui.define(
 
       // 仅由 resizeObserver 触发时生效
       if (entry) {
+        // 当表格被隐藏时，不触发 resize
+        if (entry.contentRect.height === 0 && entry.contentRect.width === 0) {
+          return;
+        }
+
+        // 忽略微小的尺寸变化
         var shouldIgnore =
           entry.target._lay_lastSize &&
           Math.abs(
@@ -1374,7 +1380,6 @@ layui.define(
           ) < RESIZE_THRESHOLD &&
           Math.abs(entry.target._lay_lastSize.width - entry.contentRect.width) <
             RESIZE_THRESHOLD;
-
         if (shouldIgnore) return;
 
         entry.target._lay_lastSize = {
