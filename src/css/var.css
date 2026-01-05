@@ -38,8 +38,9 @@
 
   /* 字体 */
   --lay-font-family:
-    -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', 'PingFang SC',
-    'Helvetica Neue', Helvetica, Arial, sans-serif;
+    system-ui, -apple-system, 'Segoe UI', Roboto, 'PingFang SC',
+    'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --lay-font-monospace: 'Courier New', Consolas, 'Lucida Console', monospace;
 
   /* 间距 */
