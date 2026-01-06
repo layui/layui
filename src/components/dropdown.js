@@ -179,8 +179,10 @@ Class.prototype.init = function (rerender, type) {
   )
     that.render(type);
 
-  // 事件
-  that.events();
+  // 若面板已经打开，则无需再绑定目标元素事件，避免 render 重复执行
+  if (!elem.data(MOD_INDEX_OPENED)) {
+    that.events(); // 事件
+  }
 };
 
 // 渲染

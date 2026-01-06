@@ -1194,8 +1194,32 @@ Class.prototype.setColsWidth = function (opt) {
 };
 
 // 重置表格尺寸/结构
-Class.prototype.resize = function () {
+var RESIZE_THRESHOLD = 2;
+Class.prototype.resize = function (entry) {
   var that = this;
+
+  // 仅由 resizeObserver 触发时生效
+  if (entry) {
+    // 当表格被隐藏时，不触发 resize
+    if (entry.contentRect.height === 0 && entry.contentRect.width === 0) {
+      return;
+    }
+
+    // 忽略微小的尺寸变化
+    var shouldIgnore =
+      entry.target._lay_lastSize &&
+      Math.abs(entry.target._lay_lastSize.height - entry.contentRect.height) <
+        RESIZE_THRESHOLD &&
+      Math.abs(entry.target._lay_lastSize.width - entry.contentRect.width) <
+        RESIZE_THRESHOLD;
+
+    if (shouldIgnore) return;
+
+    entry.target._lay_lastSize = {
+      height: entry.contentRect.height,
+      width: entry.contentRect.width,
+    };
+  }
 
   var tableElemIsConnected =
     that.layMain &&
@@ -2683,13 +2707,18 @@ Class.prototype.events = function () {
   thisTable.docEvent = true;
 
   // 排序
-  th.on('click', function () {
+  th.on('click', function (e) {
     var othis = $(this);
     var elemSort = othis.find(ELEM_SORT);
     var nowType = elemSort.attr('lay-sort');
     var type;
 
-    // 排序不触发的条件
+    // 表头工具元素不触发排序
+    if ($(e.target).closest('[lay-event]')[0]) {
+      return;
+    }
+
+    // 其他条件不触发排序
     if (!elemSort[0] || othis.data('resizing') === 1) {
       return othis.removeData('resizing');
     }

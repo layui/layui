@@ -197,7 +197,7 @@ $.extend(component, {
                 item.attr('src', src).removeAttr('lay-src');
 
                 /* 当前图片加载就绪后，检测下一个图片是否在当前屏 */
-                next[0] && render(next);
+                next[0] && fn(next);
                 index++;
               },
               function () {

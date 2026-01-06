@@ -133,6 +133,8 @@
 .layui-menu-body-title a {
   display: block;
   margin: -5px -15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: rgba(0, 0, 0, 0.8);
 }
 .layui-menu-body-title a:hover {
