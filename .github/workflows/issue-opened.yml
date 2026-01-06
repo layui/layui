@@ -21,7 +21,7 @@ jobs:
           echo "CONTRIBUTING=$contribute" >> $GITHUB_ENV
 
       - name: check invalid
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
