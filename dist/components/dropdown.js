@@ -171,8 +171,10 @@ Class.prototype.init = function (rerender, type) {
   // 初始即显示或者面板弹出之后执行了刷新数据
   if (options.show || type === 'reloadData' && that.mainElem && options.target.find(that.mainElem.get(0)).length) that.render(type);
 
-  // 事件
-  that.events();
+  // 若面板已经打开，则无需再绑定目标元素事件，避免 render 重复执行
+  if (!elem.data(MOD_INDEX_OPENED)) {
+    that.events(); // 事件
+  }
 };
 
 // 渲染

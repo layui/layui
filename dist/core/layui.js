@@ -29,7 +29,7 @@ var cache = {
 
 // constructor
 var Class = function () {
-  this.v = '3.0.0-alpha.1'; // 版本号
+  this.v = '3.0.0-alpha.2'; // 版本号
 };
 
 // 识别预先可能定义的指定全局对象
@@ -202,13 +202,13 @@ Class.prototype.config = function (options) {
 Class.prototype.define = function (deps, callback) {
   var that = this;
   var useCallback = function () {
-    var setModule = function (mod, exports) {
-      layui[mod] = exports; // 将模块接口赋值在 layui 对象中
+    var setModule = function (mod, exports$1) {
+      layui[mod] = exports$1; // 将模块接口赋值在 layui 对象中
       cache.status[mod] = true; // 标记模块注册完成
     };
     // 执行模块的回调
-    typeof callback === 'function' && callback(function (mod, exports) {
-      setModule(mod, exports);
+    typeof callback === 'function' && callback(function (mod, exports$1) {
+      setModule(mod, exports$1);
       // 记录模块回调，以便需要时再执行
       cache.callback[mod] = function () {
         callback(setModule);
@@ -231,7 +231,7 @@ Class.prototype.define = function (deps, callback) {
  * @param {(string|string[])} mods - 模块列表
  * @param {Function} callback - 回调
  */
-Class.prototype.use = function (mods, callback, exports, from) {
+Class.prototype.use = function (mods, callback, exports$1, from) {
   var that = this;
   var dir = config.dir = config.dir ? config.dir : getPath;
 
@@ -267,7 +267,7 @@ Class.prototype.use = function (mods, callback, exports, from) {
   }
 
   // 将模块的接口作为回调的参数传递
-  exports = exports || [];
+  exports$1 = exports$1 || [];
 
   // 加载当前队列的第一个模块
   var item = mods[0];
@@ -277,15 +277,15 @@ Class.prototype.use = function (mods, callback, exports, from) {
 
   // 回调触发
   var onCallback = function () {
-    exports.push(layui[item]);
-    mods.length > 1 ? that.use(mods.slice(1), callback, exports, from) : typeof callback === 'function' && function () {
+    exports$1.push(layui[item]);
+    mods.length > 1 ? that.use(mods.slice(1), callback, exports$1, from) : typeof callback === 'function' && function () {
       // 保证文档加载完毕再执行回调
       if (layui.jquery && typeof layui.jquery === 'function' && from !== 'define') {
         return layui.jquery(function () {
-          callback.apply(layui, exports);
+          callback.apply(layui, exports$1);
         });
       }
-      callback.apply(layui, exports);
+      callback.apply(layui, exports$1);
     }();
   };
 

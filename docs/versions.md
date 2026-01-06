@@ -16,6 +16,7 @@ toc: true
   v3.0.0-alpha
 </h2>
 
+- https://github.com/layui/layui/releases/tag/v3.0.0-alpha.2
 - https://github.com/layui/layui/releases/tag/v3.0.0-alpha.1
 - https://github.com/layui/layui/releases/tag/v3.0.0-alpha.0
 
