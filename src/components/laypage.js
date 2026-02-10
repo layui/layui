@@ -271,7 +271,7 @@ Class.prototype.view = function () {
           : config.theme
         : 'default') +
       '" id="layui-laypage-' +
-      config.index +
+      that.index +
       '">',
     (function () {
       var plate = [];
@@ -382,7 +382,7 @@ Class.prototype.render = function (load) {
 
   config.jump && config.jump(config, load);
 
-  var elem = doc[id]('layui-laypage-' + config.index);
+  var elem = doc[id]('layui-laypage-' + that.index);
   that.jump(elem);
 
   if (config.hash && !load) {
