@@ -18,7 +18,7 @@ var DISABLED = 'layui-disabled';
 var Class = function (options) {
   var that = this;
   that.config = options || {};
-  that.config.index = laypage.index = lay.autoIncrementer('laypage');
+  that.index = laypage.index = lay.autoIncrementer('laypage');
   that.render(true);
 };
 
