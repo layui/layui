@@ -2,7 +2,6 @@
   "name": "layui",
   "description": "Classic Web UI Component Library",
   "version": "3.0.0-alpha.2",
-  "type": "module",
   "keywords": [
     "layui",
     "components",
@@ -21,12 +20,14 @@
     "type": "git",
     "url": "git+ssh://git@github.com/layui/layui.git"
   },
+  "type": "module",
   "main": "dist/layui.js",
-  "module": "dist/layui.esm.js",
   "exports": {
     ".": {
-      "import": "./dist/index.js"
-    }
+      "import": "./dist/index.js",
+      "require": "./dist/layui.js"
+    },
+    "./css": "./dist/css/layui.css"
   },
   "files": [
     "dist"

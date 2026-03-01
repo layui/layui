@@ -52,7 +52,7 @@ const pushRollupConfig = (opts, callback) => {
     input,
     output: {
       file: `${outputDir}/${name}${esm}.js`,
-      format: opts.format || 'iife',
+      format: opts.format || 'umd',
       sourcemap: true,
       plugins: [],
     },
@@ -79,9 +79,9 @@ const pushRollupConfig = (opts, callback) => {
     );
   }
 
-  // iife 模式的全局变量名
-  if (opts.format === 'iife') {
-    config.input = input.replace(/index\.js$/, 'index.iife.js');
+  // umd 模式的全局变量名
+  if (opts.format === 'umd') {
+    config.input = input.replace(/index\.js$/, 'index.umd.js');
     config.output.name = name;
   }
 
@@ -89,7 +89,7 @@ const pushRollupConfig = (opts, callback) => {
   rollupConfig.push(config);
 };
 
-pushRollupConfig({ format: 'iife' }); // 浏览器 iife 版本
+pushRollupConfig({ format: 'umd' }); // umd 版本
 pushRollupConfig({ format: 'es' }); // 浏览器 esm 版本
 
 // Node 构建环境 esm 版本

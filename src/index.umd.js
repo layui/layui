@@ -1,5 +1,5 @@
 /**
- * Layui IIFE 入口
+ * Layui UMD 入口
  */
 
 // 导入核心模块
@@ -8,7 +8,7 @@ import { lay } from './core/lay.js';
 import { laytpl } from './core/laytpl.js';
 import { i18n } from './core/i18n.js';
 import { default as jquery, default as $ } from 'jquery';
-import { componentBuilder } from './core/component.js';
+import { component, componentBuilder } from './core/component.js';
 
 // 导入组件模块
 import { laypage } from './components/laypage.js';
@@ -37,10 +37,12 @@ import { util } from './components/util.js';
 import { code } from './components/code.js';
 
 // 兼容 v2
-window.layui = layui;
-window.lay = lay;
-window.layer = layer;
-layui.$ = jquery;
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  window.layui = layui;
+  window.lay = lay;
+  window.layer = layer;
+  layui.$ = jquery;
+}
 
 Object.assign(layui, {
   lay,
@@ -48,7 +50,7 @@ Object.assign(layui, {
   i18n,
   $,
   jquery,
-  component: componentBuilder, // 兼容
+  component, // 兼容
   componentBuilder,
   layer,
   laydate,
