@@ -11,6 +11,18 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.13.4" lay-pid="2.10+" class="ws-anchor">
+  v2.13.4
+  <span class="layui-badge-rim">2026-03-01</span>
+</h2>
+
+- 优化 #2964 边缘问题，避免隐藏时触发 resize #2970 @Sight-wcg
+- 修复 `laypage.render()` 方法返回值错误的问题 #2994 @axguowen
+
+### 下载： [layui-v2.13.4.zip](https://gitee.com/layui/layui/attach_files/2596786/download)
+
+---
+
 <h2 id="v2.13.3" lay-pid="2.10+" class="ws-anchor">
   v2.13.3
   <span class="layui-badge-rim">2025-12-29</span>
