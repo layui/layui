@@ -29,7 +29,7 @@ var cache = {
 
 // constructor
 var Class = function () {
-  this.v = '3.0.0-alpha.2'; // 版本号
+  this.v = '3.0.0-alpha.3'; // 版本号
 };
 
 // 识别预先可能定义的指定全局对象
@@ -740,7 +740,7 @@ Class.prototype._isArray = Class.prototype.isArray = function (obj) {
   if (!obj || typeof obj !== 'object' || obj === window) return false;
   len = 'length' in obj && obj.length; // 兼容 ie
   return type === 'array' || len === 0 || typeof len === 'number' && len > 0 && len - 1 in obj // 兼容 jQuery 对象
-  ;
+;
 };
 
 /**
@@ -1020,4 +1020,4 @@ const layui = new Class();
 layui.all = true;
 layui['layui.all'] = 'layui.all';
 
-export { layui as default, layui };
+export { layui };

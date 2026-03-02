@@ -29,7 +29,7 @@ var cache$1 = {
 
 // constructor
 var Class$g = function () {
-  this.v = '3.0.0-alpha.2'; // 版本号
+  this.v = '3.0.0-alpha.3'; // 版本号
 };
 
 // 识别预先可能定义的指定全局对象
@@ -740,7 +740,7 @@ Class$g.prototype._isArray = Class$g.prototype.isArray = function (obj) {
   if (!obj || typeof obj !== 'object' || obj === window) return false;
   len = 'length' in obj && obj.length; // 兼容 ie
   return type === 'array' || len === 0 || typeof len === 'number' && len > 0 && len - 1 in obj // 兼容 jQuery 对象
-  ;
+;
 };
 
 /**
@@ -13992,7 +13992,7 @@ var DISABLED$2 = 'layui-disabled';
 var Class$d = function (options) {
   var that = this;
   that.config = options || {};
-  that.config.index = laypage.index = lay.autoIncrementer('laypage');
+  that.index = laypage.index = lay.autoIncrementer('laypage');
   that.render(true);
 };
 
@@ -14138,7 +14138,7 @@ Class$d.prototype.view = function () {
       return ['<span class="layui-laypage-skip">' + skipText[0], '<input type="text" min="1" value="' + config.curr + '" class="layui-input">', skipText[1] + '<button type="button" class="layui-laypage-btn">' + skipText[2] + '</button>', '</span>'].join('');
     }()
   };
-  return ['<div class="layui-box layui-unselect layui-laypage layui-laypage-' + (config.theme ? /^#/.test(config.theme) ? 'molv' : config.theme : 'default') + '" id="layui-laypage-' + config.index + '">', function () {
+  return ['<div class="layui-box layui-unselect layui-laypage layui-laypage-' + (config.theme ? /^#/.test(config.theme) ? 'molv' : config.theme : 'default') + '" id="layui-laypage-' + that.index + '">', function () {
     var plate = [];
     layui.each(config.layout, function (index, item) {
       if (views[item]) {
@@ -14236,7 +14236,7 @@ Class$d.prototype.render = function (load) {
     }
   }
   config.jump && config.jump(config, load);
-  var elem = doc[id]('layui-laypage-' + config.index);
+  var elem = doc[id]('layui-laypage-' + that.index);
   that.jump(elem);
   if (config.hash && !load) {
     location.hash = '!' + config.hash + '=' + config.curr;

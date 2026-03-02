@@ -1096,4 +1096,4 @@ layui.all = true;
 layui['layui.all'] = 'layui.all';
 
 // export
-export { layui, layui as default };
+export { layui };
