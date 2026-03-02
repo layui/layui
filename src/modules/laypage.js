@@ -19,7 +19,7 @@ layui.define('i18n', function (exports) {
   var Class = function (options) {
     var that = this;
     that.config = options || {};
-    that.config.index = ++laypage.index;
+    that.index = ++laypage.index;
     that.render(true);
   };
 
@@ -278,7 +278,7 @@ layui.define('i18n', function (exports) {
             : config.theme
           : 'default') +
         '" id="layui-laypage-' +
-        config.index +
+        that.index +
         '">',
       (function () {
         var plate = [];
@@ -389,7 +389,7 @@ layui.define('i18n', function (exports) {
 
     config.jump && config.jump(config, load);
 
-    var elem = doc[id]('layui-laypage-' + config.index);
+    var elem = doc[id]('layui-laypage-' + that.index);
     that.jump(elem);
 
     if (config.hash && !load) {
