@@ -5,7 +5,7 @@
 
 import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
-import $ from 'jquery';
+import { $ } from 'jquery';
 import { component as componentBuilder } from '../core/component.js';
 
 // 创建组件

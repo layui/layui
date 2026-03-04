@@ -4,7 +4,7 @@
  */
 
 import { layui } from '../core/layui.js';
-import $ from 'jquery';
+import { $ } from 'jquery';
 import { form } from './form.js';
 import { table } from './table.js';
 

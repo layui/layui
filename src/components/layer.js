@@ -6,7 +6,7 @@
 import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
-import $ from 'jquery';
+import { $ } from 'jquery';
 
 var win;
 var ready = {
@@ -1595,7 +1595,7 @@ layer.closeAll = function (type, callback) {
 // 根据弹层类型关闭最近打开的层
 layer.closeLast = function (type, callback) {
   var layerIndexList = [];
-  var isArrayType = $.isArray(type);
+  var isArrayType = Array.isArray(type);
   $(typeof type === 'string' ? '.layui-layer-' + type : '.layui-layer').each(
     function (i, el) {
       var layero = $(el);
