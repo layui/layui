@@ -4,7 +4,7 @@
  */
 
 import { layui } from '../core/layui.js';
-import $ from 'jquery';
+import { $ } from 'jquery';
 import { componentBuilder } from '../core/component.js';
 
 var SUPER_MOD_NAME = 'element'; // 所属的超级模块名，确保向下兼容

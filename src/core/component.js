@@ -5,7 +5,7 @@
 
 import { layui } from './layui.js';
 import { lay } from './lay.js';
-import $ from 'jquery';
+import { $ } from 'jquery';
 
 // export
 export function component(settings) {

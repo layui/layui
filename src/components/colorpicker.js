@@ -6,7 +6,7 @@
 import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
-import $ from 'jquery';
+import { $ } from 'jquery';
 import { componentBuilder } from '../core/component.js';
 
 var device = layui.device();
@@ -502,12 +502,11 @@ Class.prototype.side = function () {
       //回调更改的颜色
       options.change &&
         options.change(
-          $.trim(
-            that.elemPicker
-              .find('.' + CONST.PICKER_INPUT)
-              .find('input')
-              .val(),
-          ),
+          that.elemPicker
+            .find('.' + CONST.PICKER_INPUT)
+            .find('input')
+            .val()
+            .trim(),
         );
     },
     //拖拽元素
@@ -761,7 +760,7 @@ Class.prototype.pickerEvents = function () {
 
     //确认
     confirm: function (othis, change) {
-      var value = $.trim(elemPickerInput.val()),
+      var value = elemPickerInput.val().trim(),
         colorValue,
         hsb;
 
