@@ -93,7 +93,7 @@ layui.define('lay', function (exports) {
       cancel: '取消',
       defaultTitle: '信息',
       prompt: {
-        InputLengthPrompt: '最多输入 {length} 个字符'
+        inputLengthPrompt: '最多输入 {length} 个字符'
       },
       photos: {
         noData: '没有图片',
@@ -349,7 +349,7 @@ layui.define('lay', function (exports) {
    * }
    * i18n.$t('message.hello', ['Hello'])
    */
-  i18n.translation = function (keypath, parameters, options) {
+  i18n.translate = function (keypath, parameters, options) {
     var locale = (options && options.locale) || config.locale;
     var i18nMessages = config.messages[locale];
     var namespace = locale + ':';
@@ -383,9 +383,9 @@ layui.define('lay', function (exports) {
   };
 
   /**
-   * i18n.translation 的别名，用于简化代码书写，未文档化仅限内部使用
+   * i18n.translate 的别名，用于简化代码书写，未文档化仅限内部使用
    */
-  i18n.$t = i18n.translation;
+  i18n.$t = i18n.translate;
 
   exports(MOD_NAME, i18n);
 });

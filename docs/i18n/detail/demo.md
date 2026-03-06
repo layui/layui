@@ -261,7 +261,7 @@
             cancel: 'Cancel',
             defaultTitle: 'Info',
             prompt: {
-              InputLengthPrompt: 'Maximum {length} characters'
+              inputLengthPrompt: 'Maximum {length} characters'
             },
             photos: {
               noData: 'No Image',
@@ -423,7 +423,7 @@
             cancel: '取消',
             defaultTitle: '資訊',
             prompt: {
-              InputLengthPrompt: '最多輸入 {length} 個字符'
+              inputLengthPrompt: '最多輸入 {length} 個字符'
             },
             photos: {
               noData: '沒有圖片',
