@@ -12,6 +12,11 @@
       pre {
         margin: 16px 0;
       }
+      html.dark .shiki,
+      html.dark .shiki span {
+        background-color: var(--shiki-dark-bg) !important;
+        color: var(--shiki-dark) !important;
+      }
     </style>
   </head>
 
@@ -261,13 +266,20 @@ code line
 
     <!-- layui -->
     <script src="../src/layui.js"></script>
-    <script>
-      layui.use(['code', 'dropdown'], function () {
+    <script type="module">
+      import { createHighlighter } from 'https://esm.sh/shiki@3.23.0';
+      layui.use(['code', 'dropdown'], async function () {
         var dropdown = layui.dropdown;
         var layer = layui.layer;
         var $ = layui.$;
 
         // return;
+
+        // 初始化一个 shiki 高亮器实例，并加载指定的语言和主题。之后，他可以同步地用于代码高亮显示
+        var shikiHighlighter = await createHighlighter({
+          themes: ['github-dark', 'github-light'],
+          langs: ['javascript', 'html']
+        });
 
         // 高亮主题 css 库
         var themeData = $.map(
@@ -283,13 +295,21 @@ code line
             '-',
             // prism 主题库
             'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-dark.min.css',
-            'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css'
+            'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css',
+            '-',
+            'shiki-github-dark',
+            'shiki-github-light'
           ],
           function (v, index) {
             return {
               title: v,
               link: v,
-              highlighter: v.indexOf('prism') === -1 ? 'hljs' : 'prism',
+              highlighter:
+                v.indexOf('prism') === -1
+                  ? v.indexOf('shiki') === -1
+                    ? 'hljs'
+                    : 'shiki'
+                  : 'prism',
               type: v === '-' ? '-' : 'normal'
             };
           }
@@ -342,11 +362,23 @@ code line
                   data: themeData,
                   show: true,
                   click: function (data, othis) {
+                    // 更改主题样式
                     $('#layuicss-layui-code-theme').remove();
-                    layui.link(data.link, 'layui-code-theme');
+                    if (data.highlighter !== 'shiki') {
+                      // prism 和 hljs 加载 css 样式实现主题切换
+                      layui.link(data.link, 'layui-code-theme');
+                    } else {
+                      // shiki 通过行内样式实现语法着色，因此无需加载 css 样式
+                      // 切换 html 类名实现明暗主题切换
+                      $('html').toggleClass(
+                        'dark',
+                        data.link.indexOf('dark') !== -1
+                      );
+                    }
 
                     // 若高亮器有变化，则重载
                     if (data.highlighter !== codeInst.config.highlighter) {
+                      // codeToHtml
                       var highlighter = {
                         hljs: function (code, opts) {
                           return hljs.highlight(code, {
@@ -359,12 +391,56 @@ code line
                             Prism.languages[opts.lang],
                             opts.lang
                           );
+                        },
+                        shiki: function (code, opts) {
+                          var preClass;
+                          var preStyle;
+                          // 使用高亮器实例将代码转换为带有高亮样式的 HTML 字符串
+                          var html = shikiHighlighter.codeToHtml(code, {
+                            lang: opts.lang,
+                            themes: {
+                              light: 'github-light',
+                              dark: 'github-dark'
+                            },
+                            transformers: [
+                              {
+                                root(rootNode) {
+                                  var preNode = rootNode.children[0];
+                                  var codeNode = preNode.children[0];
+                                  var lineNodes = codeNode.children;
+
+                                  // 收集所有 line tokenNode
+                                  var lineTokenNodes = lineNodes.reduce(
+                                    (pre, cur) =>
+                                      pre.concat(cur.children || cur),
+                                    []
+                                  );
+                                  // 将 line tokenNode 设置为根节点的子级，剔除 pre 和 code 节点
+                                  rootNode.children = lineTokenNodes;
+                                  // 记录 preNode 的 class 和 style
+                                  preClass = preNode.properties.class;
+                                  preStyle = preNode.properties.style;
+
+                                  return rootNode;
+                                }
+                              }
+                            ]
+                          });
+                          // 应用 preNode 的 class 和 style 到 code 组件的最外层元素上
+                          opts.elem.addClass(preClass);
+                          opts.elem.attr('style', function (_, origVal) {
+                            return (origVal || '') + preStyle;
+                          });
+
+                          return html;
                         }
                       };
                       // 重载
                       codeInst.reload({
                         highlighter: data.highlighter,
                         codeRender: function (code, opts) {
+                          // 仅在切换 shiki 高亮器时才需要重置 style 属性
+                          opts.elem.attr('style', '');
                           return highlighter[data.highlighter](code, opts);
                         }
                       });
