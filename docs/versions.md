@@ -16,7 +16,7 @@ toc: true
   <span class="layui-badge-rim">2026-03-01</span>
 </h2>
 
-- 优化 #2964 边缘问题，避免隐藏时触发 resize #2970 @Sight-wcg
+- 优化 #2825 边缘问题，避免隐藏时触发 resize #2970 @Sight-wcg
 - 修复 `laypage.render()` 方法返回值错误的问题 #2994 @axguowen
 
 ### 下载： [layui-v2.13.4.zip](https://gitee.com/layui/layui/attach_files/2596786/download)
@@ -31,7 +31,7 @@ toc: true
 - 修复 table 表头同时开启 sort 和 colTool 时的事件冒泡问题 #2954 @sentsim
 - 修复 table 大小的微小变化触发 resize 循环的问题 #2964 @Sight-wcg
 - 修复 menu 菜单标题若存在嵌套元素时未溢出隐藏的问题 #2955 @sentsim
-- 修复 flow 突破懒加载在某些场景下的报错问题 #2965 @Sight-wcg
+- 修复 flow 图片懒加载在某些场景下的报错问题 #2965 @Sight-wcg
 
 ### 下载： [layui-v2.13.3.zip](https://gitee.com/layui/layui/attach_files/2502813/download)
 
