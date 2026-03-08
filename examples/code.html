@@ -12,6 +12,7 @@
       pre {
         margin: 16px 0;
       }
+      /** Shiki 切换暗色主题所需的样式，!important 是为了覆盖 Shiki 生成的内联样式 */
       html.dark .shiki,
       html.dark .shiki span {
         background-color: var(--shiki-dark-bg) !important;
@@ -305,11 +306,11 @@ code line
               title: v,
               link: v,
               highlighter:
-                v.indexOf('prism') === -1
-                  ? v.indexOf('shiki') === -1
-                    ? 'hljs'
-                    : 'shiki'
-                  : 'prism',
+                v.indexOf('prism') !== -1
+                  ? 'prism'
+                  : v.indexOf('shiki') !== -1
+                    ? 'shiki'
+                    : 'hljs',
               type: v === '-' ? '-' : 'normal'
             };
           }
@@ -439,7 +440,7 @@ code line
                       codeInst.reload({
                         highlighter: data.highlighter,
                         codeRender: function (code, opts) {
-                          // 仅在切换 shiki 高亮器时才需要重置 style 属性
+                          // 切换高亮器时，重置 style 属性，防止不同高亮器之间的样式污染
                           opts.elem.attr('style', '');
                           return highlighter[data.highlighter](code, opts);
                         }
