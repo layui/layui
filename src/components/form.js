@@ -5,7 +5,7 @@
 import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
-import $ from 'jquery';
+import { $ } from 'jquery';
 import { util } from './util.js';
 import { layer } from './layer.js';
 
@@ -304,7 +304,7 @@ Form.prototype.render = function (type, filter) {
         var showAffix = function (elem, value) {
           elem = $(elem);
           if (!elem[0]) return;
-          elem[$.trim(value) ? 'removeClass' : 'addClass'](HIDE);
+          elem[value.trim() ? 'removeClass' : 'addClass'](HIDE);
         };
 
         // 渲染动态点缀内容
@@ -1260,13 +1260,13 @@ Form.prototype.render = function (type, filter) {
         var othis = $(this);
         var skin = othis.attr('lay-skin') || 'primary';
         var title = util.escape(
-          $.trim(
+          (
             check.title ||
-              (function () {
-                // 向下兼容 lay-text 属性
-                return (check.title = othis.attr('lay-text') || '');
-              })(),
-          ),
+            (function () {
+              // 向下兼容 lay-text 属性
+              return (check.title = othis.attr('lay-text') || '');
+            })()
+          ).trim(),
         );
         var disabled = this.disabled;
 
@@ -1597,7 +1597,7 @@ Form.prototype.validate = function (elem) {
     var vers = verifyStr.split('|');
     var verType = othis.attr('lay-vertype'); // 提示方式
     var value = othis.val();
-    value = typeof value === 'string' ? $.trim(value) : value;
+    value = typeof value === 'string' ? value.trim() : value;
 
     othis.removeClass(DANGER); // 移除警示样式
 

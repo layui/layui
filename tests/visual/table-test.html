@@ -61,7 +61,7 @@
 
     <script type="text/html" id="barDemo">
       <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-      {{# if(layui.$.trim(d.email)){ }}
+      {{# if((d.email || '').trim()){ }}
       <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
         >删除</a
       >

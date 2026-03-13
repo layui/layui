@@ -4,7 +4,7 @@
  */
 
 import { layui } from '../core/layui.js';
-import $ from 'jquery';
+import { $ } from 'jquery';
 import { componentBuilder } from '../core/component.js';
 import { tab } from './tab.js';
 import { nav } from './nav.js';
