@@ -2327,7 +2327,7 @@ layui.define(['table'], function (exports) {
     return dataRet;
   };
 
-  var checkNode = function (trElem, checked, callbackFlag) {
+  var checkNode = function (trElem, checked, callbackFlag, type) {
     var that = this;
     var options = that.getOptions();
     var treeOptions = options.tree;
@@ -2339,6 +2339,11 @@ layui.define(['table'], function (exports) {
       .last();
     // 判断是单选还是多选 不应该同时存在radio列和checkbox列
     var isRadio = inputElem.attr('type') === 'radio';
+
+    // 如果没有找到选择框元素，但指定了type，按照type处理
+    if (!inputElem.length && type) {
+      isRadio = type === 'radio';
+    }
 
     if (callbackFlag) {
       var triggerEvent = function () {
@@ -2388,8 +2393,16 @@ layui.define(['table'], function (exports) {
             d[checkName] = false;
 
             // 取消当前选中行背景色
-            that.setRowCheckedClass(radioElem.closest('tr'), false);
-            radioElem.prop('checked', false);
+            if (radioElem.length) {
+              that.setRowCheckedClass(radioElem.closest('tr'), false);
+              radioElem.prop('checked', false);
+            } else {
+              // 没有radio元素的话，直接找对应的tr
+              var tr = tableView.find(
+                'tr[lay-data-index="' + d[LAY_DATA_INDEX] + '"]'
+              );
+              that.setRowCheckedClass(tr, false);
+            }
           }
         }); // 取消其他的选中状态
         trData[checkName] = checked;
@@ -2397,9 +2410,12 @@ layui.define(['table'], function (exports) {
         that.setRowCheckedClass(trElem, checked); // 标记当前选中行背景色
         that.setRowCheckedClass(trElem.siblings(), false); // 取消其他行背景色
 
-        trElem
-          .find('input[type="radio"][lay-type="layTableRadio"]')
-          .prop('checked', checked);
+        var radioElem = trElem.find(
+          'input[type="radio"][lay-type="layTableRadio"]'
+        );
+        if (radioElem.length) {
+          radioElem.prop('checked', checked);
+        }
       } else {
         // 切换只能用到单条，全选到这一步的时候应该是一个确定的状态
         checked =
@@ -2431,8 +2447,18 @@ layui.define(['table'], function (exports) {
             .join(',')
         );
 
-        that.setRowCheckedClass(checkboxElem.closest('tr'), checked); // 标记当前选中行背景色
-        checkboxElem.prop({ checked: checked, indeterminate: false });
+        if (checkboxElem.length) {
+          that.setRowCheckedClass(checkboxElem.closest('tr'), checked); // 标记当前选中行背景色
+          checkboxElem.prop({ checked: checked, indeterminate: false });
+        } else {
+          // 没有checkbox元素的话，直接给tr加高亮
+          layui.each(trs, function (i, item) {
+            var tr = tableView.find(
+              'tr[lay-data-index="' + item[LAY_DATA_INDEX] + '"]'
+            );
+            that.setRowCheckedClass(tr, checked);
+          });
+        }
 
         var trDataP;
 
@@ -2481,6 +2507,13 @@ layui.define(['table'], function (exports) {
     var node = opts.index;
     var checked = opts.checked;
     var callbackFlag = opts.callbackFlag;
+    var type = opts.type;
+
+    // 处理用户传入对象的情况，比如 { type: 'radio', checked: true }
+    if (layui.type(checked) === 'object') {
+      type = checked.type;
+      checked = checked.checked !== undefined ? checked.checked : true;
+    }
 
     var dataIndex = layui.type(node) === 'string' ? node : node[LAY_DATA_INDEX];
     // 判断是否在当前页面中
@@ -2515,7 +2548,7 @@ layui.define(['table'], function (exports) {
       });
       trElem = tableView.find('tr[lay-data-index="' + dataIndex + '"]');
     }
-    checkNode.call(that, trElem, checked, callbackFlag);
+    checkNode.call(that, trElem, checked, callbackFlag, type);
   };
 
   treeTable.checkAllNodes = function (id, checked) {
