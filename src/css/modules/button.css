@@ -23,12 +23,10 @@
 }
 .layui-btn:hover {
   opacity: 0.8;
-  filter: alpha(opacity=80);
   color: #fff;
 }
 .layui-btn:active {
   opacity: 1;
-  filter: alpha(opacity=100);
 }
 .layui-btn + .layui-btn {
   margin-left: 10px;

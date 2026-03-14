@@ -58,7 +58,6 @@
   height: 100%;
   cursor: move;
   opacity: 0;
-  filter: alpha(opacity=0);
   background-color: #fff;
   z-index: 2147483647;
 }
@@ -638,8 +637,6 @@
 }
 .layui-layer-hui {
   min-width: 100px;
-  background-color: #000;
-  filter: alpha(opacity=60);
   background-color: rgba(0, 0, 0, 0.6);
   color: #fff;
   border: none;
