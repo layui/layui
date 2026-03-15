@@ -84,9 +84,6 @@ var builtinModules = (config.builtin = {
   jquery: 'jquery', // DOM 库（第三方）
   component: 'component', // 组件构建器
   i18n: 'i18n', // 国际化
-
-  all: 'all',
-  'layui.all': 'layui.all', // 聚合标识（功能性的，非真实模块）
 });
 
 /**
@@ -181,10 +178,10 @@ Class.prototype.use = function (mods, callback, exports, from) {
     if (typeof mods === 'string') {
       return [mods];
     }
-    // 若第一个参数为 function ，则自动加载所有内置模块，且执行的回调即为该 function 参数；
+    // 若第一个参数为 function ，则直接执行
     else if (typeof mods === 'function') {
       callback = mods;
-      return ['all'];
+      return [];
     }
     return mods;
   })();
@@ -263,8 +260,8 @@ Class.prototype.use = function (mods, callback, exports, from) {
     })();
   };
 
-  // 若为发行版，则内置模块不必异步加载
-  if (mods.length === 0 || (layui['layui.all'] && builtinModules[item])) {
+  // 内置模块不必异步加载
+  if (mods.length === 0 || builtinModules[item]) {
     return (onCallback(), that);
   }
 
@@ -1031,10 +1028,6 @@ Class.prototype.throttle = function (func, wait) {
 };
 
 const layui = new Class();
-
-// 阻止 layui.use 加载内部模块
-layui.all = true;
-layui['layui.all'] = 'layui.all';
 
 // export
 export { layui };
