@@ -157,13 +157,13 @@ class Test {
     const startTime = Date.now();
     const actual = (() => {
       try {
-        return new Function(`return function() {
+        return new Function(`return function(lay) {
           let result;
           const console = Object.assign({}, window.console);
           console.log = (a) => result = a;
           ${code}
           return result;
-        }`)()();
+        }`)()(lay);
       } catch (e) {
         return e.message;
       }

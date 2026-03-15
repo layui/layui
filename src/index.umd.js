@@ -36,14 +36,6 @@ import { flow } from './components/flow.js';
 import { util } from './components/util.js';
 import { code } from './components/code.js';
 
-// 兼容 v2
-if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-  window.layui = layui;
-  window.lay = lay;
-  window.layer = layer;
-  layui.$ = jquery;
-}
-
 Object.assign(layui, {
   lay,
   laytpl,
