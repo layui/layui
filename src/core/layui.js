@@ -27,32 +27,6 @@ var Class = function () {
   this.v = '__VERSION__'; // 版本号
 };
 
-// 识别预先可能定义的指定全局对象
-var GLOBAL = window.LAYUI_GLOBAL || {};
-
-// 获取 layui 所在目录
-var getPath = (function () {
-  var jsPath =
-    document.currentScript &&
-    document.currentScript.tagName.toUpperCase() === 'SCRIPT'
-      ? document.currentScript.src
-      : (function () {
-          var js = document.getElementsByTagName('script');
-          var last = js.length - 1;
-          var src;
-          for (var i = last; i > 0; i--) {
-            if (js[i].readyState === 'interactive') {
-              src = js[i].src;
-              break;
-            }
-          }
-          return src || js[last].src;
-        })();
-
-  return (config.dir =
-    GLOBAL.dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1));
-})();
-
 // 异常提示
 var error = function (msg, type) {
   type = type || 'warn';
@@ -200,7 +174,7 @@ Class.prototype.define = function (deps, callback) {
  */
 Class.prototype.use = function (mods, callback, exports, from) {
   var that = this;
-  var dir = (config.dir = config.dir ? config.dir : getPath);
+  var dir = config.dir || '';
 
   // 整理模块队列
   mods = (function () {
