@@ -11,6 +11,19 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.13.5" lay-pid="2.10+" class="ws-anchor">
+  v2.13.5
+  <span class="layui-badge-rim">2026-03-16</span>
+</h2>
+
+- 优化 i18n 部分选项命名 #3006 @Sight-wcg
+- 更新 code 结合 shiki 实现语法高亮的示例及修复文档中失效的链接 #3008 @Sight-wcg
+- 修复 laydate 公历节日标记颜色不跟随主题色变化的问题 #3013 @coredwriter
+
+### 下载： [layui-v2.13.5.zip](#download)
+
+---
+
 <h2 id="v2.13.4" lay-pid="2.10+" class="ws-anchor">
   v2.13.4
   <span class="layui-badge-rim">2026-03-01</span>
@@ -19,7 +32,7 @@ toc: true
 - 优化 table 在 #2825 中的边缘问题，避免隐藏时触发 resize #2970 @Sight-wcg
 - 修复 `laypage.render()` 方法返回值错误的问题 #2994 @axguowen
 
-### 下载： [layui-v2.13.4.zip](https://gitee.com/layui/layui/attach_files/2596786/download)
+### 下载： [layui-v2.13.4.zip](#download)
 
 ---
 
@@ -33,7 +46,7 @@ toc: true
 - 修复 menu 菜单标题若存在嵌套元素时未溢出隐藏的问题 #2955 @sentsim
 - 修复 flow 图片懒加载在某些场景下的报错问题 #2965 @Sight-wcg
 
-### 下载： [layui-v2.13.3.zip](https://gitee.com/layui/layui/attach_files/2502813/download)
+### 下载： [layui-v2.13.3.zip](#download)
 
 ---
 
@@ -46,7 +59,7 @@ toc: true
 - 修复 dropdown 设置 `show: true` 时 render 重复执行的问题 #2946 @Diyar-IT
 - 恢复 font-family 字体，避免产生不必要的细微兼容问题 #2950 @sentsim
 
-### 下载： [layui-v2.13.2.zip](https://gitee.com/layui/layui/attach_files/2447015/download)
+### 下载： [layui-v2.13.2.zip](#download)
 
 ---
 
@@ -62,7 +75,7 @@ toc: true
 - 修复 upload 代码中变量 `hint` 未声明的问题 #2901 @sentsim
 - 修复 IE11 下的若干异常 #2920 @sentsim
 
-### 下载： [layui-v2.13.1.zip](https://gitee.com/layui/layui/attach_files/2439162/download)
+### 下载： [layui-v2.13.1.zip](#download)
 
 ---
 
@@ -101,7 +114,7 @@ toc: true
   - 修复 `lay.extend` 合并嵌套的数组类型值时产生引用的问题 #2879 @sentsim
 
 
-### 下载： [layui-v2.13.0.zip](https://gitee.com/layui/layui/attach_files/2398303/download)
+### 下载： [layui-v2.13.0.zip](#download)
 
 ---
 
@@ -114,7 +127,7 @@ toc: true
 - 修复 carousel 设置 `anim: 'fade'` 无效的问题 #2855 @sentsim
 - 优化 slider 提示条的箭头样式 #2849 @sentsim
 
-### 下载： [layui-v2.12.1.zip](https://gitee.com/layui/layui/attach_files/2379972/download)
+### 下载： [layui-v2.12.1.zip](#download)
 
 ---
 
@@ -146,7 +159,7 @@ toc: true
 - #### nav
   - 修复 纵向菜单出现滚动条时滑块位置异常的问题 #2826 @Sight-wcg
 
-### 下载： [layui-v2.12.0.zip](https://gitee.com/layui/layui/attach_files/2369898/download)
+### 下载： [layui-v2.12.0.zip](#download)
 
 ---
 
@@ -161,7 +174,7 @@ toc: true
 - 移除 laypage 中 input 元素不必要的过渡效果 #2796 @Sight-wcg
 - 修复 tabs 获取标签内容项 `lay-id` 不存在时返回最后一项的问题 #2806 @Sight-wcg
 
-### 下载： [layui-v2.11.6.zip](https://gitee.com/layui/layui/attach_files/2327281/download)
+### 下载： [layui-v2.11.6.zip](#download)
 
 ---
 
@@ -173,7 +186,7 @@ toc: true
 - 修复 laydate `range:false` 某些场景下确认按钮状态异常问题 #2754 @Sight-wcg
 - 优化 CSS 部分属性兼容性书写规范 #2761 @firework-a
 
-### 下载： [layui-v2.11.5.zip](https://gitee.com/layui/layui/attach_files/2277781/download)
+### 下载： [layui-v2.11.5.zip](#download)
 
 ---
 
@@ -186,7 +199,7 @@ toc: true
 - 新增 collapse 列表项添加 `layui-show` 类设置默认展开的支持，且兼容旧版 #2734 @sentsim
 - 修复 collapse 列表项的内容元素添加 `layui-show` 类时的收缩异常问题 #2734 @sentsim
 
-### 下载： [layui-v2.11.4.zip](https://gitee.com/layui/layui/attach_files/2241193/download)
+### 下载： [layui-v2.11.4.zip](#download)
 
 ---
 
@@ -204,7 +217,7 @@ toc: true
 - #### collapse
   - 新增 折叠面板展开和收缩时的过渡动画 #2722 @sentsim
 
-### 下载： [layui-v2.11.3.zip](https://gitee.com/layui/layui/attach_files/2233291/download)
+### 下载： [layui-v2.11.3.zip](#download)
 
 ---
 
@@ -221,7 +234,7 @@ toc: true
   - 优化 `tabs.add()` 的 `done` 回调，参数新增包含新标签项元素 #2680
   - 优化 `tabs.change()` 方法，标签项打乱顺序时仍可通过 `lay-id` 切换 #2680
 
-### 下载： [layui-v2.11.2.zip](https://gitee.com/layui/layui/attach_files/2189123/download)
+### 下载： [layui-v2.11.2.zip](#download)
 
 ---
 
@@ -234,7 +247,7 @@ toc: true
 - 修复 checkbox/radio 在 WebKit/537.36 的异常 #2637 @Sight-wcg
 - 优化 carousel 切换时的动画性能 #2654 @SessionHu
 
-### 下载： [layui-v2.11.1.zip](https://gitee.com/layui/layui/attach_files/2177069/download)
+### 下载： [layui-v2.11.1.zip](#download)
 
 ---
 
@@ -276,7 +289,7 @@ toc: true
   - 优化 laypage 快速点击时文本被选中的问题 #2623 @sentsim
   - 优化 util 的 `escape` 和 `unescape` 在解析某些特殊字符串时的潜在问题 #2628 @sentsim
 
-### 下载： [layui-v2.11.0.zip](https://gitee.com/layui/layui/attach_files/2158121/download)
+### 下载： [layui-v2.11.0.zip](#download)
 
 ---
 
@@ -296,7 +309,7 @@ toc: true
 - #### form
   - 优化 `lay-ignore` 的判断逻辑，支持设置在父元素上 #2585 @augushong
 
-### 下载： [layui-v2.10.3.zip](https://gitee.com/layui/layui/attach_files/2128275/download)
+### 下载： [layui-v2.10.3.zip](#download)
 
 ---
 
@@ -317,7 +330,7 @@ toc: true
   - 优化 form 的 `checkbox` 标签风格选中且禁用时的显示 #2563 @bxjt123
   - 修复 body 初始 `line-height` 无效的问题 #2569 @sentsim
 
-### 下载： [layui-v2.10.1.zip](https://gitee.com/layui/layui/attach_files/2100525/download)
+### 下载： [layui-v2.10.1.zip](#download)
 
 ---
 
@@ -356,7 +369,7 @@ toc: true
 - #### 其他
   - 调低 `.layui-text` 中的 `<a>` 标签文字颜色优先级  #2477 @sentsim
 
-### 下载： [layui-v2.10.0.zip](https://gitee.com/layui/layui/attach_files/2092421/download)
+### 下载： [layui-v2.10.0.zip](#download)
 
 <script>
 (function() {
@@ -389,6 +402,13 @@ toc: true
         }
       }
     });
+  });
+
+  // 解析发行版下载链接
+  document.querySelectorAll('a[href="#download"]').forEach(function(item) {
+    var filename = item.innerText.replace(/^\s+|\s+$/g, '');
+    item.href = 'https://layui.github.io/releases/'+ filename;
+    item.download = '';
   });
 })();
 </script>
