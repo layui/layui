@@ -937,7 +937,8 @@ layui.define(['lay', 'i18n'], function (exports) {
               ? ''
               : '#{{id}} .layui-this{background-color:{{theme}} !important;}',
             '#{{id}} .laydate-day-now{color:{{theme}} !important;}',
-            '#{{id}} .laydate-day-now:after{border-color:{{theme}} !important;}'
+            '#{{id}} .laydate-day-now:after{border-color:{{theme}} !important;}',
+            '#{{id}} .laydate-day-mark::after{background-color:{{theme}} !important;}'
           ]
             .join('')
             .replace(/{{id}}/g, that.elemID)
