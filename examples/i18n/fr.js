@@ -83,7 +83,7 @@ export default {
     cancel: 'Annuler',
     defaultTitle: 'Information',
     prompt: {
-      InputLengthPrompt: 'Maximum {length} caractères'
+      inputLengthPrompt: 'Maximum {length} caractères'
     },
     photos: {
       noData: 'Aucune image',

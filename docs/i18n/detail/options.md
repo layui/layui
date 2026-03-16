@@ -66,7 +66,7 @@ var zhCN = {
     cancel: '取消',
     defaultTitle: '信息',
     prompt: {
-      InputLengthPrompt: '最多输入 {length} 个字符'
+      inputLengthPrompt: '最多输入 {length} 个字符'
     },
     photos: {
       noData: '没有图片',
