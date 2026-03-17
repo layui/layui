@@ -85,15 +85,12 @@ var component = componentBuilder({
         }
 
         // 渐显滑块并适配宽度
-        timer[index] = setTimeout(
-          function () {
-            bar.css({
-              width: child[0] ? 0 : othis.width(),
-              opacity: child[0] ? 0 : 1,
-            });
-          },
-          device.ie && device.ie < 10 ? 0 : TIME,
-        );
+        timer[index] = setTimeout(function () {
+          bar.css({
+            width: child[0] ? 0 : othis.width(),
+            opacity: child[0] ? 0 : 1,
+          });
+        }, TIME);
 
         // 显示子菜单
         clearTimeout(timeEnd[index]);

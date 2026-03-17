@@ -949,12 +949,7 @@ Class.prototype.render = function () {
   }
   if (styleText.length) {
     styleText = styleText.join('');
-    if ('styleSheet' in style) {
-      style.setAttribute('type', 'text/css');
-      style.styleSheet.cssText = styleText;
-    } else {
-      style.innerHTML = styleText;
-    }
+    style.innerHTML = styleText;
 
     colorTheme && lay(elem).addClass('laydate-theme-molv');
     elem.appendChild(style);

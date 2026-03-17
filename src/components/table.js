@@ -676,14 +676,7 @@ Class.prototype.renderStyle = function () {
           cellMaxHeight +
           '; white-space: normal; text-overflow: clip;}',
         '> td:hover > .layui-table-cell{overflow: auto;}',
-      ].concat(
-        device.ie
-          ? [
-              '.layui-table-edit{height: ' + cellMaxHeight + ';}',
-              'td[data-edit]:hover:after{height: ' + cellMaxHeight + ';}',
-            ]
-          : [],
-      ),
+      ],
       function (i, val) {
         val && text.push(trClassName + ' ' + val);
       },
@@ -811,27 +804,21 @@ Class.prototype.renderToolbar = function () {
           return layer.tips(i18n.$t('table.tools.export.noDataPrompt'), elem, {
             tips: 3,
           });
-        if (device.ie) {
-          layer.tips(i18n.$t('table.tools.export.compatPrompt'), elem, {
-            tips: 3,
-          });
-        } else {
-          openPanel({
-            list: (function () {
-              return [
-                '<li data-type="csv">' +
-                  i18n.$t('table.tools.export.csvText') +
-                  '</li>',
-              ].join('');
-            })(),
-            done: function (panel, list) {
-              list.on('click', function () {
-                var type = $(this).data('type');
-                table.exportFile.call(that, options.id, null, type);
-              });
-            },
-          });
-        }
+        openPanel({
+          list: (function () {
+            return [
+              '<li data-type="csv">' +
+                i18n.$t('table.tools.export.csvText') +
+                '</li>',
+            ].join('');
+          })(),
+          done: function (panel, list) {
+            list.on('click', function () {
+              var type = $(this).data('type');
+              table.exportFile.call(that, options.id, null, type);
+            });
+          },
+        });
       },
     },
     print: {
@@ -3324,8 +3311,6 @@ Class.prototype.getContentWidth = function (elem) {
   if (
     // document
     elem[0].nodeType === 9 ||
-    // IE 中 border-box 盒模型，getComputedStyle 得到的 width/height 是按照 content-box 计算出来的
-    (lay.ie && elem.css('box-sizing') === 'border-box') ||
     elem.css('display') === 'none'
   ) {
     return elem.width();
@@ -3734,8 +3719,6 @@ table.exportFile = function (id, data, opts) {
     xls: 'application/vnd.ms-excel',
   }[type];
   var alink = document.createElement('a');
-
-  if (device.ie) return hint.error('IE_NOT_SUPPORT_EXPORTS');
 
   // 处理 treeTable 数据
   var isTreeTable = config.tree && config.tree.view;

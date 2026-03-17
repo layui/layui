@@ -140,12 +140,10 @@
 @keyframes layui-scale {
   0% {
     opacity: 0.3;
-    -ms-transform: scale(0.5);
     transform: scale(0.5);
   }
   100% {
     opacity: 1;
-    -ms-transform: scale(1);
     transform: scale(1);
   }
 }

@@ -125,10 +125,7 @@ var onNodeLoad = function (node, done, error) {
   // 资源加载完毕
   var onCompleted = function (e) {
     var readyRegExp = /^(complete|loaded)$/;
-    if (
-      e.type === 'load' ||
-      readyRegExp.test((e.currentTarget || e.srcElement).readyState)
-    ) {
+    if (e.type === 'load' || readyRegExp.test(e.currentTarget.readyState)) {
       removeListener();
       typeof done === 'function' && done(e);
     }
@@ -141,28 +138,13 @@ var onNodeLoad = function (node, done, error) {
 
   // 移除事件
   var removeListener = function () {
-    if (node.detachEvent) {
-      node.detachEvent('onreadystatechange', onCompleted);
-    } else {
-      node.removeEventListener('load', onCompleted, false);
-      node.removeEventListener('error', onError, false);
-    }
+    node.removeEventListener('load', onCompleted, false);
+    node.removeEventListener('error', onError, false);
   };
 
   // 添加事件
-  if (
-    node.attachEvent &&
-    !(
-      node.attachEvent.toString &&
-      node.attachEvent.toString().indexOf('[native code') < 0
-    )
-  ) {
-    // 此处考虑到 IE9+ load 的稳定性，固仍然采用 onreadystatechange
-    node.attachEvent('onreadystatechange', onCompleted);
-  } else {
-    node.addEventListener('load', onCompleted, false);
-    node.addEventListener('error', onError, false);
-  }
+  node.addEventListener('load', onCompleted, false);
+  node.addEventListener('error', onError, false);
 };
 
 // 获取配置及临时缓存信息
@@ -342,7 +324,7 @@ Class.prototype.use = function (mods, callback, exports, from) {
     var node = document.createElement('script');
 
     node.async = true;
-    node.charset = 'utf-8'; // 避免 IE9 的编码问题
+    node.charset = 'utf-8';
     node.src =
       url +
       (function () {
@@ -432,22 +414,13 @@ Class.prototype.disuse = function (mods) {
 
 /**
  * 获取节点的 style 属性值
- * currentStyle.getAttribute 参数为 camelCase 形式的字符串
  * @param {HTMLElement} node - 节点
  * @param {string} name - 属性名
  * @returns 属性值
  */
 Class.prototype.getStyle = function (node, name) {
-  var style = node.currentStyle
-    ? node.currentStyle
-    : window.getComputedStyle(node, null);
-  return style.getPropertyValue
-    ? style.getPropertyValue(name)
-    : style.getAttribute(
-        name.replace(/-(\w)/g, function (_, c) {
-          return c ? c.toUpperCase() : '';
-        }),
-      );
+  var style = window.getComputedStyle(node, null);
+  return style.getPropertyValue(name);
 };
 
 /**
@@ -735,12 +708,6 @@ Class.prototype.device = function (key) {
         return 'mac';
       }
     })(),
-    ie: (function () {
-      // ie 版本
-      return !!window.ActiveXObject || 'ActiveXObject' in window
-        ? (agent.match(/msie\s(\d+)/) || [])[1] || '11' // 由于 ie11 并没有 msie 的标识
-        : false;
-    })(),
     weixin: getVersion('micromessenger'), // 是否微信
   };
 
@@ -802,7 +769,7 @@ Class.prototype._isArray = Class.prototype.isArray = function (obj) {
 
   if (!obj || typeof obj !== 'object' || obj === window) return false;
 
-  len = 'length' in obj && obj.length; // 兼容 ie
+  len = 'length' in obj && obj.length;
   return (
     type === 'array' ||
     len === 0 ||

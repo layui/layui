@@ -23,10 +23,8 @@ var BAD_INPUT = 'layui-input-number-invalid';
 
 var resizeObserver = lay.createSharedResizeObserver(MOD_NAME);
 
-// ie8 中可以获取到 input 元素的 'indeterminate' 属性描述符，但重新定义 getter/setter 无效，无报错
 // AppleWebKit/537.36 无法获取 input 元素任意属性的属性描述符(包括lookupGetter)，但可以重新定义 getter/setter
 var needCheckboxFallback =
-  (lay.ie && parseFloat(lay.ie) === 8) ||
   typeof Object.getOwnPropertyDescriptor(
     HTMLInputElement.prototype,
     'checked',
@@ -373,7 +371,7 @@ Form.prototype.render = function (type, filter) {
           typeof opts.init === 'function' && opts.init.call(this, othis, opts);
 
           // 输入事件
-          othis.on('input propertychange', function () {
+          othis.on('input', function () {
             var value = this.value;
             opts.show === 'auto' && showAffix(elemAffix, value);
           });
@@ -470,13 +468,8 @@ Form.prototype.render = function (type, filter) {
                     btnElem.eq(e.keyCode === 38 ? 0 : 1).click();
                   }
                 });
-                elem.on('input' + ns + ' propertychange' + ns, function (e) {
-                  if (
-                    isComposition ||
-                    (e.type === 'propertychange' &&
-                      e.originalEvent.propertyName !== 'value')
-                  )
-                    return;
+                elem.on('input' + ns, function () {
+                  if (isComposition) return;
                   if (skipCheck || canInputNumber(this.value)) {
                     elem.attr('lay-input-mirror', this.value);
                   } else {
@@ -502,7 +495,6 @@ Form.prototype.render = function (type, filter) {
                       if (!$(this).is(':focus')) return;
                       var direction = 0;
                       e.preventDefault();
-                      // IE9+，chrome 和 firefox 同时添加 'wheel' 和 'mousewheel' 事件时，只执行 'wheel' 事件
                       if (e.type === 'wheel') {
                         e.deltaX = e.originalEvent.deltaX;
                         e.deltaY = e.originalEvent.deltaY;
@@ -586,15 +578,6 @@ Form.prototype.render = function (type, filter) {
         var appendTarget = select.attr('lay-append-to') || 'body';
         var appendPosition = select.attr('lay-append-position');
 
-        // #1449
-        // IE10 和 11 中，带有占位符的 input 元素获得/失去焦点时，会触发 input 事件
-        // 当鼠标按下时，根据 input 元素上的 __ieph 标识忽略 input 事件
-        var needPlaceholderPatch = !!(
-          lay.ie &&
-          (lay.ie === '10' || lay.ie === '11') &&
-          input.attr('placeholder')
-        );
-
         // 展开下拉
         var showDown = function () {
           if (isAppendTo) {
@@ -635,18 +618,6 @@ Form.prototype.render = function (type, filter) {
           }
 
           followScroll();
-
-          if (needPlaceholderPatch) {
-            dl.off('mousedown.lay_select_ieph').on(
-              'mousedown.lay_select_ieph',
-              function () {
-                input[0].__ieph = true;
-                setTimeout(function () {
-                  input[0].__ieph = false;
-                }, 60);
-              },
-            );
-          }
 
           removeClickOutsideEvent = lay.onClickOutside(
             isAppendTo ? reElem[0] : dl[0],
@@ -865,11 +836,6 @@ Form.prototype.render = function (type, filter) {
             return false;
           }
 
-          if (needPlaceholderPatch && e.target.__ieph) {
-            e.target.__ieph = false;
-            return false;
-          }
-
           notOption(
             value,
             function (none, hasEquals) {
@@ -924,31 +890,29 @@ Form.prototype.render = function (type, filter) {
         };
 
         if (isSearch) {
-          input
-            .on('input propertychange', layui.debounce(search, 50))
-            .on('blur', function () {
-              var selectedIndex = select[0].selectedIndex;
+          input.on('input', layui.debounce(search, 50)).on('blur', function () {
+            var selectedIndex = select[0].selectedIndex;
 
-              initValue = $(select[0].options[selectedIndex]).prop('text'); // 重新获得初始选中值
+            initValue = $(select[0].options[selectedIndex]).prop('text'); // 重新获得初始选中值
 
-              // 如果是第一项，且文本值等于 placeholder，则清空初始值
-              if (
-                selectedIndex === 0 &&
-                initValue === input.attr('placeholder')
-              ) {
-                initValue = '';
-              }
+            // 如果是第一项，且文本值等于 placeholder，则清空初始值
+            if (
+              selectedIndex === 0 &&
+              initValue === input.attr('placeholder')
+            ) {
+              initValue = '';
+            }
 
-              setTimeout(function () {
-                notOption(
-                  input.val(),
-                  function () {
-                    initValue || input.val(''); // none && !initValue
-                  },
-                  'blur',
-                );
-              }, 200);
-            });
+            setTimeout(function () {
+              notOption(
+                input.val(),
+                function () {
+                  initValue || input.val(''); // none && !initValue
+                },
+                'blur',
+              );
+            }, 200);
+          });
         }
 
         // 选择
@@ -1297,7 +1261,6 @@ Form.prototype.render = function (type, filter) {
 
         if (othis.closest('[lay-ignore]').length) return othis.show();
 
-        // 处理 IE8 indeterminate 属性重新定义 get set 后无法设置值的问题
         if (needCheckboxFallback) {
           toggleAttribute.call(check, 'lay-form-sync-checked', check.checked);
           !check.checked &&
@@ -1515,7 +1478,6 @@ Form.prototype.render = function (type, filter) {
  * @see https://learn.microsoft.com/zh-cn/previous-versions//ff382725(v=vs.85)?redirectedfrom=MSDN
  */
 Form.prototype.syncAppearanceOnPropChanged = (function () {
-  // 处理 IE8 indeterminate 属性重新定义 get set 后无法设置值的问题
   // 此处性能敏感，不希望每次赋值取值时都判断是否需要 fallback
   if (needCheckboxFallback) {
     return function (elem, propName, handler) {
@@ -1528,7 +1490,6 @@ Form.prototype.syncAppearanceOnPropChanged = (function () {
         elem,
         propName,
         lay.extend({}, originProps, {
-          // 此处的 get 是为了兼容 IE<9
           get: function () {
             return (
               typeof this.getAttribute('lay-form-sync-' + propName) === 'string'
@@ -1552,7 +1513,6 @@ Form.prototype.syncAppearanceOnPropChanged = (function () {
       elem,
       propName,
       lay.extend({}, originProps, {
-        // 此处的 get 是为了兼容 IE<9
         get: function () {
           return originProps.get.call(this);
         },

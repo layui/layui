@@ -9,7 +9,6 @@ import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
 import { layer } from './layer.js';
 
-var device = layui.device();
 var hint = layui.hint();
 
 // 模块名
@@ -51,8 +50,6 @@ var thisModule = function () {
 };
 
 var ELEM_FILE = 'layui-upload-file';
-var ELEM_FORM = 'layui-upload-form';
-var ELEM_IFRAME = 'layui-upload-iframe';
 var ELEM_CHOOSE = 'layui-upload-choose';
 var UPLOADING = 'UPLOADING';
 
@@ -79,7 +76,7 @@ Class.prototype.config = {
   drag: true, // 是否允许拖拽上传
   size: 0, // 文件限制大小，默认不限制
   number: 0, // 允许同时上传的文件数，默认不限制
-  multiple: false, // 是否允许多文件上传，不支持 ie8-9
+  multiple: false, // 是否允许多文件上传
   text: {
     // 自定义提示文本
     'cross-domain': 'Cross-domain requests are not supported', // 跨域
@@ -161,72 +158,13 @@ Class.prototype.file = function () {
   ));
   var next = options.elem.next();
 
-  if (next.hasClass(ELEM_FILE) || next.hasClass(ELEM_FORM)) {
+  if (next.hasClass(ELEM_FILE)) {
     next.remove();
-  }
-
-  //包裹ie8/9容器
-  if (device.ie && device.ie < 10) {
-    options.elem.wrap('<div class="layui-upload-wrap"></div>');
   }
 
   that.isFile()
     ? ((that.elemFile = options.elem), (options.field = options.elem[0].name))
     : options.elem.after(elemFile);
-
-  //初始化ie8/9的Form域
-  if (device.ie && device.ie < 10) {
-    that.initIE();
-  }
-};
-
-//ie8-9初始化
-Class.prototype.initIE = function () {
-  var that = this;
-  var options = that.config;
-  var iframe = $(
-    '<iframe id="' +
-      ELEM_IFRAME +
-      '" class="' +
-      ELEM_IFRAME +
-      '" name="' +
-      ELEM_IFRAME +
-      '" frameborder="0"></iframe>',
-  );
-  var elemForm = $(
-    [
-      '<form target="' +
-        ELEM_IFRAME +
-        '" class="' +
-        ELEM_FORM +
-        '" method="post" key="set-mine" enctype="multipart/form-data" action="' +
-        options.url +
-        '">',
-      '</form>',
-    ].join(''),
-  );
-
-  //插入iframe
-  $('#' + ELEM_IFRAME)[0] || $('body').append(iframe);
-
-  //包裹文件域
-  if (!options.elem.next().hasClass(ELEM_FORM)) {
-    that.elemFile.wrap(elemForm);
-
-    //追加额外的参数
-    options.elem.next('.' + ELEM_FORM).append(
-      (function () {
-        var arr = [];
-        layui.each(options.data, function (key, value) {
-          value = typeof value === 'function' ? value() : value;
-          arr.push(
-            '<input type="hidden" name="' + key + '" value="' + value + '">',
-          );
-        });
-        return arr.join('');
-      })(),
-    );
-  }
 };
 
 //异常提示
@@ -405,32 +343,6 @@ Class.prototype.upload = function (files, type) {
     }
   };
 
-  // 低版本 IE 处理方式，不支持跨域
-  var iframeSend = function () {
-    var iframe = $('#' + ELEM_IFRAME);
-
-    that.elemFile.parent().submit();
-
-    // 获取响应信息
-    clearInterval(Class.timer);
-    Class.timer = setInterval(function () {
-      var res,
-        iframeBody = iframe.contents().find('body');
-      try {
-        res = iframeBody.text();
-      } catch {
-        that.msg(text['cross-domain']);
-        clearInterval(Class.timer);
-        error();
-      }
-      if (res) {
-        clearInterval(Class.timer);
-        iframeBody.html('');
-        done(0, res);
-      }
-    }, 30);
-  };
-
   // 强制返回的数据格式
   var forceConvert = function (src) {
     if (options.force === 'json') {
@@ -545,10 +457,6 @@ Class.prototype.upload = function (files, type) {
   // 提交上传
   var send = function () {
     var ready = function () {
-      // IE 兼容处理
-      if (device.ie) {
-        return device.ie > 9 ? ajaxSend() : iframeSend();
-      }
       ajaxSend();
     };
     // 上传前的回调 - 如果回调函数明确返回 false 或 Promise.reject，则停止上传
@@ -683,7 +591,7 @@ Class.prototype.upload = function (files, type) {
   }
 
   // 检验文件大小
-  if (options.size > 0 && !(device.ie && device.ie < 10)) {
+  if (options.size > 0) {
     var limitSize;
 
     layui.each(getFiles(), function (index, file) {
@@ -811,29 +719,27 @@ Class.prototype.events = function () {
   });
 
   // 拖拽上传
-  if (!(device.ie && device.ie < 10)) {
-    options.elem
-      .off('upload.over')
-      .on('upload.over', function () {
-        var othis = $(this);
-        othis.attr('lay-over', '');
-      })
-      .off('upload.leave')
-      .on('upload.leave', function () {
-        var othis = $(this);
-        othis.removeAttr('lay-over');
-      })
-      .off('upload.drop')
-      .on('upload.drop', function (e, param) {
-        var othis = $(this);
-        var files = getFiles(param.originalEvent.dataTransfer.files);
+  options.elem
+    .off('upload.over')
+    .on('upload.over', function () {
+      var othis = $(this);
+      othis.attr('lay-over', '');
+    })
+    .off('upload.leave')
+    .on('upload.leave', function () {
+      var othis = $(this);
+      othis.removeAttr('lay-over');
+    })
+    .off('upload.drop')
+    .on('upload.drop', function (e, param) {
+      var othis = $(this);
+      var files = getFiles(param.originalEvent.dataTransfer.files);
 
-        othis.removeAttr('lay-over');
-        setChooseFile(files);
+      othis.removeAttr('lay-over');
+      setChooseFile(files);
 
-        options.auto ? that.upload() : setChooseText(files); // 是否自动触发上传
-      });
-  }
+      options.auto ? that.upload() : setChooseText(files); // 是否自动触发上传
+    });
 
   // 文件选择
   that.elemFile.on('change', function () {

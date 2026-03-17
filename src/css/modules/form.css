@@ -4,7 +4,6 @@
 .layui-select {
   height: 38px;
   line-height: 1.3;
-  line-height: 38px\9;
   border-width: 1px;
   border-style: solid;
   background-color: #fff;
@@ -195,10 +194,6 @@
 .layui-input-wrap .layui-input {
   padding-right: 35px;
 }
-.layui-input-wrap .layui-input::-ms-clear,
-.layui-input-wrap .layui-input::-ms-reveal {
-  display: none;
-}
 .layui-input-wrap .layui-input-prefix + .layui-input,
 .layui-input-wrap .layui-input-prefix ~ * .layui-input {
   padding-left: 35px;
@@ -377,12 +372,6 @@
   margin-top: -9px;
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
-}
-.layui-form-selected .layui-edge {
-  margin-top: -3px\0;
-}
-:root .layui-form-selected .layui-edge {
-  margin-top: -9px\0 / IE9;
 }
 .layui-form-selectup dl {
   top: auto;

@@ -23,24 +23,13 @@ var ready = {
 
   // 获取节点的 style 属性值
   getStyle: function (node, name) {
-    var style = node.currentStyle
-      ? node.currentStyle
-      : window.getComputedStyle(node, null);
-    return style[style.getPropertyValue ? 'getPropertyValue' : 'getAttribute'](
-      name,
-    );
+    var style = window.getComputedStyle(node, null);
+    return style.getPropertyValue(name);
   },
 };
 
 // 默认内置方法。
 var layer = {
-  ie: (function () {
-    // ie 版本
-    var agent = navigator.userAgent.toLowerCase();
-    return !!window.ActiveXObject || 'ActiveXObject' in window
-      ? (agent.match(/msie\s(\d+)/) || [])[1] || '11' // 由于 ie11 并没有 msie 的标识
-      : false;
-  })(),
   config: function (options) {
     options = options || {};
     layer.cache = ready.config = $.extend({}, ready.config, options);
@@ -1494,17 +1483,6 @@ layer.close = function (index, callback) {
         }
         wrap.css('display', wrap.data('display')).removeClass(WRAP);
       } else {
-        // 低版本 IE 回收 iframe
-        if (type === ready.type[2]) {
-          try {
-            var iframe = $('#' + doms[4] + index)[0];
-            iframe.contentWindow.document.write('');
-            iframe.contentWindow.close();
-            layero.find('.' + doms[5])[0].removeChild(iframe);
-          } catch {
-            // ignore
-          }
-        }
         layero[0].innerHTML = '';
         layero.remove();
       }
@@ -1521,7 +1499,7 @@ layer.close = function (index, callback) {
     };
     // 移除遮罩
     var shadeo = $('#' + doms.SHADE + index);
-    if ((layer.ie && layer.ie < 10) || !options.isOutAnim) {
+    if (!options.isOutAnim) {
       shadeo[hideOnClose ? 'hide' : 'remove']();
     } else {
       shadeo.css({ opacity: 0 });
@@ -1543,7 +1521,7 @@ layer.close = function (index, callback) {
       ready.minStackArr.push(layero.attr('minLeft'));
     }
 
-    if ((layer.ie && layer.ie < 10) || !options.isOutAnim) {
+    if (!options.isOutAnim) {
       remove();
     } else {
       setTimeout(function () {

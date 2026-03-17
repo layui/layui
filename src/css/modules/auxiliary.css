@@ -69,7 +69,6 @@
   z-index: 9999999999;
   -moz-user-select: none;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 .layui-scrollbar-hide {
