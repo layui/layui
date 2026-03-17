@@ -169,7 +169,12 @@ lay.isPlainObject = function (obj) {
  * IE 版本
  * @type {string | boolean} - 如果是 IE 返回版本字符串，否则返回 false
  */
-lay.ie = false;
+lay.ie = (function () {
+  var agent = navigator.userAgent.toLowerCase();
+  return !!window.ActiveXObject || 'ActiveXObject' in window
+    ? (agent.match(/msie\s(\d+)/) || [])[1] || '11' // 由于 ie11 并没有 msie 的标识
+    : false;
+})();
 
 /**
  * 获取 layui 常见方法，以便用于组件单独版

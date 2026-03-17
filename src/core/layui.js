@@ -417,7 +417,7 @@ Class.prototype.disuse = function (mods) {
  */
 Class.prototype.getStyle = function (node, name) {
   var style = window.getComputedStyle(node, null);
-  return style ? style.getPropertyValue(name) : null;
+  return style.getPropertyValue(name);
 };
 
 /**
