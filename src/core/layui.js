@@ -468,14 +468,14 @@ Class.prototype.addcss = function (modName, callback, id) {
 };
 
 /**
- * 获取执行定义模块时的回调函数，factory 为向下兼容
+ * 获取通过 `layui.define` 定义模块时的回调函数
  * @param {string} modName - 模块名
  * @returns {Function}
  */
-Class.prototype.factory = function (modName) {
+Class.prototype.getDefineCallback = function (modName) {
   if (layui[modName]) {
-    return typeof config.callback[modName] === 'function'
-      ? config.callback[modName]
+    return typeof cache.callback[modName] === 'function'
+      ? cache.callback[modName]
       : null;
   }
 };
