@@ -507,7 +507,7 @@ Class.prototype.img = function (url, callback, error) {
  * @param {string} hash 值
  * @returns {Object}
  */
-Class.prototype.router = Class.prototype.hash = function (hash) {
+Class.prototype.hash = function (hash) {
   hash = hash || location.hash;
   var that = this;
   var data = {
@@ -597,7 +597,7 @@ Class.prototype.url = function (href) {
     })(),
 
     // 提取 Hash
-    hash: that.router(
+    hash: that.hash(
       (function () {
         return href ? (href.match(/#.+/) || [])[0] || '/' : location.hash;
       })(),
@@ -708,7 +708,7 @@ Class.prototype.hint = function () {
  * @param {*} operand - 任意值
  * @returns {string}
  */
-Class.prototype._typeof = Class.prototype.type = function (operand) {
+Class.prototype.type = function (operand) {
   if (operand === null) return String(operand);
 
   // 细分引用类型
@@ -729,11 +729,11 @@ Class.prototype._typeof = Class.prototype.type = function (operand) {
 };
 
 /**
- * 对象是否具备数组结构（此处为兼容 jQuery 对象）
+ * 对象是否具备「类数组」结构（此处为兼容 jQuery 对象）
  * @param {Object} obj - 任意对象
  * @returns {boolean}
  */
-Class.prototype._isArray = Class.prototype.isArray = function (obj) {
+Class.prototype.isArray = function (obj) {
   var that = this;
   var len;
   var type = that.type(obj);
