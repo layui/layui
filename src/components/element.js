@@ -6,13 +6,12 @@
 import { layui } from '../core/layui.js';
 import { $ } from 'jquery';
 import { componentBuilder } from '../core/component.js';
-import { tab } from './tab.js';
 import { nav } from './nav.js';
 import { breadcrumb } from './breadcrumb.js';
 import { progress } from './progress.js';
 import { collapse } from './collapse.js';
 
-const elements = { tab, nav, breadcrumb, progress, collapse };
+const elements = { nav, breadcrumb, progress, collapse };
 
 // 创建组件
 const component = componentBuilder({
@@ -35,7 +34,6 @@ $.extend(component, {
       return '';
     })();
     const components = {
-      tab: '.layui-tab' + elemFilter,
       nav: '.layui-nav' + elemFilter,
       breadcrumb: '.layui-breadcrumb' + elemFilter,
       progress: '.layui-progress' + elemFilter,
@@ -62,11 +60,6 @@ $.extend(component, {
           });
         });
   },
-
-  tabAdd: tab.tabAdd,
-  tabDelete: tab.tabDelete,
-  tabChange: tab.tabChange,
-  tab: tab.tab,
 
   progress: progress.setValue,
 });

@@ -17,7 +17,6 @@ import { layer } from './components/layer.js';
 import { dropdown } from './components/dropdown.js';
 import { slider } from './components/slider.js';
 import { colorpicker } from './components/colorpicker.js';
-import { tab } from './components/tab.js';
 import { nav } from './components/nav.js';
 import { breadcrumb } from './components/breadcrumb.js';
 import { progress } from './components/progress.js';
@@ -50,7 +49,6 @@ Object.assign(layui, {
   dropdown,
   slider,
   colorpicker,
-  tab,
   nav,
   breadcrumb,
   progress,

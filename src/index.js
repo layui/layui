@@ -17,7 +17,6 @@ export { layer } from './components/layer.js';
 export { dropdown } from './components/dropdown.js';
 export { slider } from './components/slider.js';
 export { colorpicker } from './components/colorpicker.js';
-export { tab } from './components/tab.js';
 export { nav } from './components/nav.js';
 export { breadcrumb } from './components/breadcrumb.js';
 export { progress } from './components/progress.js';
