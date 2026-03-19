@@ -322,7 +322,7 @@ treeTable.expandAll('test', false); // 关闭全部节点
 | --- | --- | -- | --- |
 | index | 要设置选中状态的行下标或行数据 | number/object | - |
 | type | 选中方式。支持 `radio` 或 `checkbox`，常用于在 `row` 事件中显式声明单选模式。 | string | 依据当前选择列自动识别 |
-| checked | 选中状态。`true` 选中；`false` 取消选中；`null` 切换。其中，当 `type: 'radio'` 时不支持 `null`(切换)，未传时默认按 `true` 处理。 | boolean | - |
+| checked | 选中状态值。`true` 选中；`false` 取消选中；若未设置值，则 `checkbox` 模式可自动切换值。 | boolean | - |
 | callbackFlag | 是否触发事件，若为 `true`，则 `checked: false` 无效。其对应的事件跟 `table` 的 `radio,checkbox` 事件用法一样 | boolean | `false` |
 
 ```js
