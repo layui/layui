@@ -17,7 +17,7 @@ toc: true
 
 | API | 描述 |
 | --- | --- |
-| var 组件名 = layui.组件名 | 获得 `组件名` 模块。 |
+| const 组件名 = layui.组件名 | 获得 `组件名` 模块。 |
 | [组件名.render(options)](#render) | 组件名 组件渲染，核心方法。 |
 | …… | …… |
 
