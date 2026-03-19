@@ -20,7 +20,7 @@ toc: true
 
 <h2 id="api" lay-toc="{hot: true, bold: true}">API</h2>
 
-`table` 组件的所有 `API` 均适用于 `treeTable` 组件。在此基础上，`treeTable` 还专门提供了以下方法： 
+`table` 组件的所有 `API` 均适用于 `treeTable` 组件。在此基础上，`treeTable` 还专门提供了以下方法：
 
 | API | 描述 |
 | --- | --- |
@@ -53,7 +53,7 @@ toc: true
 
 <h2 id="options" lay-toc="{level: 2, hot: true}">属性</h2>
 
-`table` 组件的所有基础属性均适用于 `treeTable` 组件。在此基础上，`treeTable` 还专门提供了 `tree` 属性集： 
+`table` 组件的所有基础属性均适用于 `treeTable` 组件。在此基础上，`treeTable` 还专门提供了 `tree` 属性集：
 
 <div>
 {{- d.include("/treeTable/detail/options.md") }}
@@ -321,7 +321,8 @@ treeTable.expandAll('test', false); // 关闭全部节点
 | opts | 描述 | 类型 | 默认值 |
 | --- | --- | -- | --- |
 | index | 要设置选中状态的行下标或行数据 | number/object | - |
-| checked | 选中状态。`true` 选中；`false` 取消选中；`null` 切换。 其中，若为 `radio` 框，则不支持 `null`(切换)。 | boolean | - |
+| type | 选中方式。支持 `radio` 或 `checkbox`，常用于在 `row` 事件中显式声明单选模式。 | string | 依据当前选择列自动识别 |
+| checked | 选中状态。`true` 选中；`false` 取消选中；`null` 切换。其中，当 `type: 'radio'` 时不支持 `null`(切换)，未传时默认按 `true` 处理。 | boolean | - |
 | callbackFlag | 是否触发事件，若为 `true`，则 `checked: false` 无效。其对应的事件跟 `table` 的 `radio,checkbox` 事件用法一样 | boolean | `false` |
 
 ```js
@@ -335,7 +336,14 @@ treeTable.render({
 treeTable.setRowChecked('test', {
   index: 0,
   checked: true // 选中
-}); 
+});
+
+// 行单击时设置单选选中（可与 row 事件配合）
+treeTable.on('row(test)', function (obj) {
+  obj.setRowChecked({
+    type: 'radio'
+  });
+});
 ```
 
 <h3 id="checkAllNodes" lay-pid="api" class="ws-anchor ws-bold">设置全选或取消全选</h3>
@@ -353,7 +361,7 @@ treeTable.render({
   // 其他属性 …
 });
 // 勾选或取消勾选单个节点
-treeTable.checkAllNodes('test', true);  // 全选 
+treeTable.checkAllNodes('test', true);  // 全选
 ```
 
 <h3 id="checkStatus" lay-pid="api" class="ws-anchor ws-bold">获取行选中相关数据</h3>
@@ -371,7 +379,7 @@ treeTable.render({
   // 其他属性 …
 });
 
-treeTable.checkStatus('test', true);  // 包含半选 
+treeTable.checkStatus('test', true);  // 包含半选
 ```
 
 

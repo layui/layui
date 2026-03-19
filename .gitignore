@@ -53,6 +53,17 @@ pnpm-lock.yaml
 *.sublime-project
 *.sublime-workspace
 
+# AI IDE configuration
+.claude/
+.codex/
+.cursor/
+.windsurf/
+.trae/
+.qoder/
+.lingma/
+.ai/
+.agents/
+
 # Dependencies
 node_modules/
 jspm_packages/

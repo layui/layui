@@ -63,6 +63,13 @@ layui.use(function(){
     }
   });
 
+  // 行单击事件：设置当前行为单选选中状态（包含固定列时同步高亮）
+  treeTable.on("row(ID-treeTable-demo)", function (obj) {
+    obj.setRowChecked({
+      type: "radio" // radio 单选模式；checkbox 复选模式
+    });
+  });
+
   // 单元格工具事件
   treeTable.on('tool('+ inst.config.id +')', function (obj) {
     var layEvent = obj.event; // 获得 lay-event 对应的值
