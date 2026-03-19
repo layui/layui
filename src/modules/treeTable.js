@@ -1657,14 +1657,14 @@ layui.define(['table'], function (exports) {
 
     // 处理setRowChecked
     obj.setRowChecked = function (opts) {
-      opts = opts || {};
+      opts = layui.type(opts) === 'object' ? opts : { checked: opts };
       treeTable.setRowChecked(
         tableId,
         $.extend(
           {
             index: trData
           },
-          layui.type(opts) === 'object' ? opts : { checked: opts }
+          opts
         )
       );
     };
