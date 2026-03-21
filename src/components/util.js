@@ -520,8 +520,5 @@ var util = {
   },
 };
 
-// 兼容旧版
-util.event = util.on;
-
 // 输出接口
 export { util };
