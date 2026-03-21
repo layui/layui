@@ -881,18 +881,6 @@ Class.prototype.sort = function (arr, key, desc, notClone) {
   return clone;
 };
 
-/**
- * 阻止事件冒泡
- * @param {Event} thisEvent - 事件对象
- */
-Class.prototype.stope = function (thisEvent) {
-  try {
-    thisEvent.stopPropagation();
-  } catch {
-    thisEvent.cancelBubble = true;
-  }
-};
-
 // 字符常理
 var EV_REMOVE = 'LAYUI-EVENT-REMOVE';
 

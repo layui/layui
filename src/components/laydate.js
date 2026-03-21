@@ -3033,10 +3033,10 @@ Class.prototype.changeEvent = function () {
   //日期选择事件
   lay(that.elem)
     .on('click', function (e) {
-      lay.stope(e);
+      e.stopPropagation();
     })
     .on('mousedown', function (e) {
-      lay.stope(e);
+      e.stopPropagation();
     });
 
   //年月切换

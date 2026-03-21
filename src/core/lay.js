@@ -182,7 +182,6 @@ lay.ie = (function () {
 
 lay.layui = layui || {};
 lay.getPath = layui.cache.dir; // 获取当前 JS 所在目录
-lay.stope = layui.stope; // 中止冒泡
 lay.each = function () {
   // 遍历
   layui.each.apply(layui, arguments);

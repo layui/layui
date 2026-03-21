@@ -2510,13 +2510,13 @@ Class.prototype.events = function () {
       that.renderForm();
 
       panel.on('click', function (e) {
-        layui.stope(e);
+        e.stopPropagation();
       });
 
       sets.done && sets.done(panel, list);
     };
 
-    layui.stope(e);
+    e.stopPropagation();
     _DOC.trigger('table.tool.panel.remove');
     layer.close(that.tipsIndex);
 
@@ -2728,7 +2728,7 @@ Class.prototype.events = function () {
       var othis = $(this);
       var index = othis.index();
       var field = othis.parents('th').eq(0).data('field');
-      layui.stope(e);
+      e.stopPropagation();
       if (index === 0) {
         that.sort({
           field: field,
@@ -2822,7 +2822,7 @@ Class.prototype.events = function () {
       });
     }
 
-    layui.stope(e);
+    e.stopPropagation();
 
     // 事件
     layui.event.call(
@@ -2848,7 +2848,7 @@ Class.prototype.events = function () {
     var checked = radio[0].checked;
     var index = radio.parents('tr').eq(0).data('index');
 
-    layui.stope(e);
+    e.stopPropagation();
     if (radio[0].disabled) return false;
 
     // 标注选中样式
@@ -2978,7 +2978,7 @@ Class.prototype.events = function () {
       })(othis.data('content') || data[field]);
       othis.find('.' + ELEM_EDIT)[0] || othis.append(input);
       input.focus();
-      e && layui.stope(e);
+      e?.stopPropagation();
     }
   };
 
@@ -3176,7 +3176,7 @@ Class.prototype.events = function () {
     }
 
     othis.remove();
-    layui.stope(e);
+    e.stopPropagation();
   };
 
   // 表格主体单元格展开事件
@@ -3215,12 +3215,12 @@ Class.prototype.events = function () {
   that.layBody
     .on('click', '*[lay-event]', function (e) {
       toolFn.call(this);
-      layui.stope(e);
+      e.stopPropagation();
     })
     .on('dblclick', '*[lay-event]', function (e) {
       //行工具条双击事件
       toolFn.call(this, 'toolDouble');
-      layui.stope(e);
+      e.stopPropagation();
     });
 
   // 同步滚动条

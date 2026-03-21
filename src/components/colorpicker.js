@@ -546,7 +546,7 @@ Class.prototype.side = function () {
       change(h, _s, _b, _a);
       e.preventDefault();
     };
-    needStopPropagation && layui.stope(e);
+    needStopPropagation && e.stopPropagation();
     createMoveElem(move);
     e.preventDefault();
   });
@@ -584,7 +584,7 @@ Class.prototype.side = function () {
       change(_h, s, b, _a);
       e.preventDefault();
     };
-    needStopPropagation && layui.stope(e);
+    needStopPropagation && e.stopPropagation();
     createMoveElem(move);
     e.preventDefault();
   });
@@ -601,7 +601,7 @@ Class.prototype.side = function () {
     _b = b;
     _s = s;
     change(_h, s, b, _a);
-    layui.stope(e);
+    e.stopPropagation();
     e.preventDefault();
     needTrigger && choose.trigger('mousedown', e);
   });
@@ -621,7 +621,7 @@ Class.prototype.side = function () {
       e.preventDefault();
     };
 
-    needStopPropagation && layui.stope(e);
+    needStopPropagation && e.stopPropagation();
     createMoveElem(move);
     e.preventDefault();
   });
