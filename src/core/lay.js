@@ -180,8 +180,6 @@ lay.ie = (function () {
  * 获取 layui 常见方法，以便用于组件单独版
  */
 
-lay.layui = layui || {};
-lay.getPath = layui.cache.dir; // 获取当前 JS 所在目录
 lay.each = function () {
   // 遍历
   layui.each.apply(layui, arguments);
