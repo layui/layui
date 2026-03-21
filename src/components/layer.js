@@ -3,7 +3,6 @@
  * 通用 Web 弹出层组件
  */
 
-import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
@@ -2197,7 +2196,6 @@ ready.run = function (_$) {
   };
 };
 
-layer.path = layui.cache.dir;
 layer.ready();
 ready.run($);
 
