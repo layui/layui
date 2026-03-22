@@ -24,6 +24,17 @@ _site/
 .vscode/
 node_modules/
 
+# AI IDE configuration
+.claude/
+.codex/
+.cursor/
+.windsurf/
+.trae/
+.qoder/
+.lingma/
+.ai/
+.agents/
+
 # ESLint cache
 .eslintcache
 
