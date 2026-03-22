@@ -20,12 +20,6 @@ var ready = {
   minStackArr: [],
   // 五种原始层模式
   type: ['dialog', 'page', 'iframe', 'loading', 'tips'],
-
-  // 获取节点的 style 属性值
-  getStyle: function (node, name) {
-    var style = window.getComputedStyle(node, null);
-    return style.getPropertyValue(name);
-  },
 };
 
 // 默认内置方法。
@@ -573,7 +567,7 @@ Class.pt.creat = function () {
         that.offset();
         // 首次弹出时，若 css 尚未加载，则等待 css 加载完毕后，重新设定尺寸
         parseInt(
-          ready.getStyle(document.getElementById(doms.MOVE), 'z-index'),
+          layui.getStyle(document.getElementById(doms.MOVE), 'z-index'),
         ) ||
           (function () {
             that.layero.css('visibility', 'hidden');
@@ -1078,8 +1072,8 @@ ready.record = function (layero) {
   var contentRecordHeightElem =
     type === ready.type[2] ? contentElem.children('iframe') : contentElem;
   var area = [
-    layero[0].style.width || ready.getStyle(layero[0], 'width'),
-    layero[0].style.height || ready.getStyle(layero[0], 'height'),
+    layero[0].style.width || layui.getStyle(layero[0], 'width'),
+    layero[0].style.height || layui.getStyle(layero[0], 'height'),
     layero.position().top,
     layero.position().left + parseFloat(layero.css('margin-left')),
   ];
@@ -1087,7 +1081,7 @@ ready.record = function (layero) {
   layero.attr({ area: area });
   contentElem.data(
     RECORD_HEIGHT_KEY,
-    ready.getStyle(contentRecordHeightElem[0], 'height'),
+    layui.getStyle(contentRecordHeightElem[0], 'height'),
   );
 };
 
