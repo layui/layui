@@ -302,7 +302,8 @@ Form.prototype.render = function (type, filter) {
         var showAffix = function (elem, value) {
           elem = $(elem);
           if (!elem[0]) return;
-          elem[value.trim() ? 'removeClass' : 'addClass'](HIDE);
+          var normalizedValue = String(value ?? '').trim();
+          elem[normalizedValue ? 'removeClass' : 'addClass'](HIDE);
         };
 
         // 渲染动态点缀内容
