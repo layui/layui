@@ -185,6 +185,11 @@ layui.define(['lay', 'i18n', 'layer'], function (exports) {
       ? ((that.elemFile = options.elem), (options.field = options.elem[0].name))
       : options.elem.after(elemFile);
 
+    // 阻止文件域点击事件冒泡
+    elemFile.on('click', function (e) {
+      e.stopPropagation();
+    });
+
     //初始化ie8/9的Form域
     if (device.ie && device.ie < 10) {
       that.initIE();
@@ -868,9 +873,11 @@ layui.define(['lay', 'i18n', 'layer'], function (exports) {
     if (options.elem.data(MOD_INDEX)) return;
 
     // 目标元素 click 事件
-    options.elem.on('click', function () {
+    options.elem.on('click', function (e) {
       if (that.isFile()) return;
       $(this).trigger('upload.start');
+
+      e.stopPropagation();
     });
 
     // 目标元素 drop 事件
