@@ -127,8 +127,6 @@ export default {
       export: {
         title: 'Export',
         noDataPrompt: 'No data in the table',
-        compatPrompt:
-          'Export is not supported in IE. Please use Chrome or another modern browser.',
         csvText: 'Export CSV File',
       },
       print: {

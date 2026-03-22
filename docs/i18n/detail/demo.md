@@ -305,7 +305,6 @@
               export: {
                 title: 'Export',
                 noDataPrompt: 'No data in the table',
-                compatPrompt: 'Export is not supported in IE. Please use Chrome or another modern browser.',
                 csvText: 'Export CSV File'
               },
               print: {
@@ -467,7 +466,6 @@
               export: {
                 title: '匯出',
                 noDataPrompt: '當前表格無資料',
-                compatPrompt: '匯出功能不支援 IE，請用 Chrome 等高級瀏覽器匯出',
                 csvText : '匯出 CSV 檔案'
               },
               print: {

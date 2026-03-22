@@ -172,7 +172,6 @@ a cite {
 .layui-disabled {
   -webkit-user-select: none;
   -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 /* 禁用 */

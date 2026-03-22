@@ -2,7 +2,6 @@
 .layui-upload-file {
   display: none !important;
   opacity: 0.01;
-  filter: Alpha(opacity=1);
 }
 .layui-upload-list {
   margin: 11px 0;
@@ -32,34 +31,6 @@
 }
 .layui-upload-drag[lay-over] {
   border-color: var(--lay-color-primary);
-}
-.layui-upload-form {
-  display: inline-block;
-}
-.layui-upload-iframe {
-  position: absolute;
-  width: 0;
-  height: 0;
-  border: 0;
-  visibility: hidden;
-}
-.layui-upload-wrap {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-}
-.layui-upload-wrap .layui-upload-file {
-  display: block !important;
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 10;
-  font-size: 100px;
-  width: 100%;
-  height: 100%;
-  opacity: 0.01;
-  filter: Alpha(opacity=1);
-  cursor: pointer;
 }
 .layui-btn-container .layui-upload-choose {
   padding-left: 0;

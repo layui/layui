@@ -602,7 +602,7 @@ export function code(options, mode) {
   }
 
   // 创建 code 容器
-  var codeElem = $('<code class="layui-code-wrap"></code>'); // 此处的闭合标签是为了兼容 IE8
+  var codeElem = $('<code class="layui-code-wrap"></code>');
 
   // 添加主容器 className
   othis.addClass(

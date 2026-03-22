@@ -59,7 +59,6 @@
   color: rgba(0, 0, 0, 0.35);
   -webkit-user-select: none;
   -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 .layui-menu .layui-menu-item-none {

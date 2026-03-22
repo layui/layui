@@ -400,13 +400,7 @@ var laypage = {
     return o.index;
   },
   on: function (elem, even, fn) {
-    elem.attachEvent
-      ? elem.attachEvent('on' + even, function (e) {
-          // for ie
-          e.target = e.srcElement;
-          fn.call(elem, e);
-        })
-      : elem.addEventListener(even, fn, false);
+    elem.addEventListener(even, fn, false);
     return this;
   },
 };

@@ -110,7 +110,6 @@ var zhCN = {
       export: {
         title: '导出',
         noDataPrompt: '当前表格无数据',
-        compatPrompt: '导出功能不支持 IE，请用 Chrome 等高级浏览器导出',
         csvText : '导出 CSV 文件'
       },
       print: {

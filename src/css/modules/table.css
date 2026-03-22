@@ -36,7 +36,6 @@
   -webkit-transition: none !important;
   -moz-transition: none !important;
   -o-transition: none !important;
-  -ms-transition: none !important;
   transition: none !important;
 }
 
@@ -209,18 +208,13 @@
   transition: opacity 0.1s;
   -webkit-user-select: none;
   -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 .layui-table-loading-icon {
   position: absolute;
-  width: 100%\0;
   left: 50%;
-  left: auto\0;
   top: 50%;
-  margin-top: -15px\0;
   transform: translate(-50%, -50%);
-  transform: none\0;
   text-align: center;
 }
 .layui-table-loading-icon .layui-icon {

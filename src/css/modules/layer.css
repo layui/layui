@@ -6,7 +6,6 @@
 .layui-layer-shade,
 .layui-layer {
   position: fixed;
-  _position: absolute;
   pointer-events: auto;
 }
 .layui-layer-shade {
@@ -58,7 +57,6 @@
   height: 100%;
   cursor: move;
   opacity: 0;
-  filter: alpha(opacity=0);
   background-color: #fff;
   z-index: 2147483647;
 }
@@ -96,13 +94,11 @@
   0% {
     opacity: 0;
     -webkit-transform: scale(0.5);
-    -ms-transform: scale(0.5);
     transform: scale(0.5);
   }
   100% {
     opacity: 1;
     -webkit-transform: scale(1);
-    -ms-transform: scale(1);
     transform: scale(1);
   }
 }
@@ -131,7 +127,6 @@
   0% {
     opacity: 0;
     -webkit-transform: scale(0.1) translateY(-2000px);
-    -ms-transform: scale(0.1) translateY(-2000px);
     transform: scale(0.1) translateY(-2000px);
     -webkit-animation-timing-function: ease-in-out;
     animation-timing-function: ease-in-out;
@@ -139,7 +134,6 @@
   60% {
     opacity: 1;
     -webkit-transform: scale(0.475) translateY(60px);
-    -ms-transform: scale(0.475) translateY(60px);
     transform: scale(0.475) translateY(60px);
     -webkit-animation-timing-function: ease-out;
     animation-timing-function: ease-out;
@@ -166,13 +160,11 @@
   0% {
     opacity: 0;
     -webkit-transform: translateY(2000px);
-    -ms-transform: translateY(2000px);
     transform: translateY(2000px);
   }
   100% {
     opacity: 1;
     -webkit-transform: translateY(0);
-    -ms-transform: translateY(0);
     transform: translateY(0);
   }
 }
@@ -201,7 +193,6 @@
   0% {
     opacity: 0;
     -webkit-transform: scale(0.1) translateX(-2000px);
-    -ms-transform: scale(0.1) translateX(-2000px);
     transform: scale(0.1) translateX(-2000px);
     -webkit-animation-timing-function: ease-in-out;
     animation-timing-function: ease-in-out;
@@ -209,7 +200,6 @@
   60% {
     opacity: 1;
     -webkit-transform: scale(0.475) translateX(48px);
-    -ms-transform: scale(0.475) translateX(48px);
     transform: scale(0.475) translateX(48px);
     -webkit-animation-timing-function: ease-out;
     animation-timing-function: ease-out;
@@ -236,13 +226,11 @@
   0% {
     opacity: 0;
     -webkit-transform: translateX(-100%) rotate(-120deg);
-    -ms-transform: translateX(-100%) rotate(-120deg);
     transform: translateX(-100%) rotate(-120deg);
   }
   100% {
     opacity: 1;
     -webkit-transform: translateX(0px) rotate(0deg);
-    -ms-transform: translateX(0px) rotate(0deg);
     transform: translateX(0px) rotate(0deg);
   }
 }
@@ -298,7 +286,6 @@
   0%,
   100% {
     -webkit-transform: translateX(0);
-    -ms-transform: translateX(0);
     transform: translateX(0);
   }
   10%,
@@ -307,7 +294,6 @@
   70%,
   90% {
     -webkit-transform: translateX(-10px);
-    -ms-transform: translateX(-10px);
     transform: translateX(-10px);
   }
   20%,
@@ -315,7 +301,6 @@
   60%,
   80% {
     -webkit-transform: translateX(10px);
-    -ms-transform: translateX(10px);
     transform: translateX(10px);
   }
 }
@@ -450,7 +435,6 @@
   font-size: 16px;
   cursor: pointer;
   color: #000;
-  _overflow: hidden;
   box-sizing: border-box;
 }
 .layui-layer-setwin .layui-layer-min:before {
@@ -462,7 +446,6 @@
   top: 50%;
   margin: -0.5px 0 0 -6px;
   cursor: pointer;
-  _overflow: hidden;
 }
 .layui-layer-setwin .layui-layer-min:hover:before {
   background-color: #2d93ca;
@@ -530,7 +513,6 @@
   pointer-events: auto;
   -webkit-user-select: none;
   -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 .layui-layer-btn a {
@@ -572,7 +554,6 @@
   overflow: hidden;
   white-space: nowrap;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 .layui-layer-btn-is-loading .layui-layer-btn-loading-icon {
@@ -600,7 +581,6 @@
   left: 16px;
   color: #959595;
   font-size: 32px;
-  _left: -40px;
 }
 .layui-layer-dialog .layui-layer-content .layui-icon-tips {
   color: #f39b12;
@@ -638,8 +618,6 @@
 }
 .layui-layer-hui {
   min-width: 100px;
-  background-color: #000;
-  filter: alpha(opacity=60);
   background-color: rgba(0, 0, 0, 0.6);
   color: #fff;
   border: none;
@@ -723,7 +701,6 @@
   min-width: 12px;
   padding: 8px 15px;
   font-size: 12px;
-  _float: left;
   border-radius: var(--lay-border-radius);
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
   background-color: #000;
@@ -1046,17 +1023,14 @@
   100% {
     opacity: 0;
     -webkit-transform: scale(0.7);
-    -ms-transform: scale(0.7);
     transform: scale(0.7);
   }
   30% {
     -webkit-transform: scale(1.05);
-    -ms-transform: scale(1.05);
     transform: scale(1.05);
   }
   0% {
     -webkit-transform: scale(1);
-    -ms-transform: scale(1);
     transform: scale(1);
   }
 }

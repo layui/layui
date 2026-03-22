@@ -128,8 +128,6 @@ export default {
       export: {
         title: 'Exporter',
         noDataPrompt: 'Aucune donnée à exporter',
-        compatPrompt:
-          'L’exportation n’est pas supportée par IE, veuillez utiliser Chrome ou un autre navigateur moderne',
         csvText: 'Exporter au format CSV',
       },
       print: {
