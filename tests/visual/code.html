@@ -263,12 +263,12 @@ code line
       layui.extend({
         hljs: {
           src: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js',
-          api: 'hljs'
+          api: 'hljs',
         },
         prism: {
           src: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js',
-          api: 'Prism'
-        }
+          api: 'Prism',
+        },
       });
 
       // 高亮主题 css 库
@@ -300,7 +300,7 @@ code line
         options = {
           highlighter: 'hljs',
           link: themeData[1].link,
-          ...options
+          ...options,
         };
 
         layui.use(['hljs', 'prism'], () => {
@@ -315,11 +315,7 @@ code line
                 language: opts.lang,
               }).value,
             prism: (code, opts) =>
-              Prism.highlight(
-                code,
-                Prism.languages[opts.lang],
-                opts.lang,
-              ),
+              Prism.highlight(code, Prism.languages[opts.lang], opts.lang),
           };
 
           // 重载以渲染语法高亮
@@ -327,7 +323,7 @@ code line
             highlighter: options.highlighter,
             codeRender: (code, opts) => {
               return highlighter[options.highlighter](code, opts);
-            }
+            },
           });
         });
       };
