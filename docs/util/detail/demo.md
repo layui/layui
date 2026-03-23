@@ -107,14 +107,14 @@ layui.use(function(){
   });
   
   // HTML 转义
-  util.event('lay-on', {
-    escape: function(){ // 转义
+  util.on({
+    escape: function() { // 转义
       var textarea = $('#test7');
       var value = textarea.val();
       var str = util.escape(value); // 执行转义方法
       textarea.val(str);
     },
-    unescape: function(){
+    unescape: function() {
       var textarea = $('#test7');
       var value = textarea.val();
       var str = util.unescape(value); // 执行转义方法

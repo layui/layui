@@ -231,6 +231,7 @@ util.openWin({
 <script>
 layui.use('util', function(){
   var util = layui.util;
+  var layer = layui.layer;
 
   //  2.9+ 版本可省略 attr 参数，默认读取 lay-on
   util.on({
@@ -249,7 +250,7 @@ layui.use('util', function(){
       console.log(othis); // 当前触发事件的元素的 jQuery 对象
 
       // e 为当前事件对象，此处演示阻止事件冒泡（比如委托父元素和子元素共用了同一事件名）
-      layui.stope(e);
+      e.stopPropagation();
 
       // 演示提示
       layer.tips(othis.html(), this);

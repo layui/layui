@@ -153,7 +153,6 @@ if(device.MYAPP){
 | layui.sessionData(table, settings) | 会话性存储。[#用法](#data) |
 | layui.device(key) | 获取浏览器信息。[#用法](#device) |
 | layui.hint() | 向控制台打印一些异常信息，目前只返回了 error 方法，如： <br>`var hint = layui.hint();` <br> `hint.error('出错啦');` |
-| layui.stope(e) | 阻止事件冒泡 |
 | layui.onevent(modName, events, callback) | 增加自定义模块事件，一般在内置组件中使用。 |
 | layui.event(modName, events, params) | 执行自定义模块事件，搭配 onevent 使用。注<sup>2.8+</sup>：当 events 参数中未设定 filter 时则可重复执行该事件，否则只会执行一次最新添加的事件。 |
 | layui.off(events, modName) <sup>2.5.7+</sup> | 用于移除模块相关事件，如：`layui.off('select(filter)', 'form')`，那么`form.on('select(filter)', callback)`事件将会被移除 |
