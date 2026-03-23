@@ -77,21 +77,6 @@ var laydate = {
     that.config = lay.extend({}, that.config, options, overwriteArray);
     return that;
   },
-
-  // 主体 CSS 等待事件
-  ready: function (callback) {
-    var cssname = 'laydate';
-    var path = 'modules/laydate.css?v=' + laydate.v;
-
-    // 打包版直接执行回调函数
-    if (layui['layui.all']) {
-      typeof callback === 'function' && callback();
-    } else {
-      layui.addcss(path, callback, cssname);
-    }
-
-    return this;
-  },
 };
 
 // 操作当前实例
@@ -209,9 +194,7 @@ var Class = function (options) {
   options.index = that.index;
 
   // 初始化
-  laydate.ready(function () {
-    that.init();
-  });
+  that.init();
 };
 
 // 日期格式字符
