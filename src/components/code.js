@@ -16,7 +16,7 @@ import { tabs } from './tabs.js';
 // 常量
 var CONST = {
   ELEM_VIEW: 'layui-code-view',
-  ELEM_TAB: 'layui-tab',
+  ELEM_TABS: 'layui-tabs',
   ELEM_HEADER: 'layui-code-header',
   ELEM_FULL: 'layui-code-full',
   ELEM_PREVIEW: 'layui-code-preview',
@@ -44,7 +44,7 @@ var config = {
   },
   wordWrap: true, // 是否自动换行
   lang: 'text', // 指定语言类型
-  highlighter: false, // 是否开启语法高亮，'hljs','prism','shiki'
+  highlighter: false, // 是否开启语法高亮，可选值: hljs | prism | shiki
   langMarker: false, // 代码区域是否显示语言类型标记
   // 行高亮
   highlightLine: {
@@ -173,7 +173,7 @@ var preprocessHighlightLine = function (highlightLineOptions, codeLines) {
 };
 
 // export api
-export function code(options, mode) {
+export function code(options) {
   options = $.extend(true, {}, config, options);
 
   // 返回对象
@@ -189,10 +189,6 @@ export function code(options, mode) {
       delete opts.elem;
       return $.extend(true, options, opts);
     },
-    reloadCode: function (opts) {
-      // 仅重载 code
-      layui.code(this.updateOptions(opts), 'reloadCode');
-    },
   };
 
   // 若 elem 非唯一
@@ -204,7 +200,6 @@ export function code(options, mode) {
         $.extend({}, options, {
           elem: this,
         }),
-        mode,
       );
     });
     return ret;
@@ -214,22 +209,8 @@ export function code(options, mode) {
   var othis = (options.elem = $(options.elem));
   if (!othis[0]) return ret;
 
-  // 合并属性上的参数，并兼容旧版本属性写法 lay-*
-  $.extend(
-    true,
-    options,
-    lay.options(othis[0]),
-    (function (obj) {
-      var attrs = ['title', 'height', 'encode', 'skin', 'about'];
-      layui.each(attrs, function (i, attr) {
-        var value = othis.attr('lay-' + attr);
-        if (typeof value === 'string') {
-          obj[attr] = value;
-        }
-      });
-      return obj;
-    })({}),
-  );
+  // 合并属性上的参数
+  $.extend(true, options, lay.options(othis[0]));
 
   // codeRender 需要关闭编码
   // 未使用 codeRender 时若开启了预览，则强制开启编码
@@ -316,16 +297,6 @@ export function code(options, mode) {
       : code;
   };
 
-  // 仅重载 code
-  if (mode === 'reloadCode') {
-    return (
-      othis
-        .children('.layui-code-wrap')
-        .html(createCode(finalCode(rawCode)).html),
-      ret
-    );
-  }
-
   // 自增索引
   var index = lay.autoIncrementer('code');
   othis.attr('lay-code-index', index);
@@ -376,13 +347,13 @@ export function code(options, mode) {
   // 移除包裹结构
   (function fn() {
     var elemViewHas = othis.parent('.' + CONST.ELEM_PREVIEW);
-    var elemTabHas = elemViewHas.children('.' + CONST.ELEM_TAB);
+    var elemTabsHas = elemViewHas.children('.' + CONST.ELEM_TABS);
     var elemPreviewViewHas = elemViewHas.children(
       '.' + CONST.ELEM_ITEM + '-preview',
     );
 
     // 移除旧结构
-    elemTabHas.remove(); // 移除 tab
+    elemTabsHas.remove(); // 移除 tab
     elemPreviewViewHas.remove(); // 移除预览区域
     if (elemViewHas[0]) othis.unwrap(); // 移除外层容器
 
@@ -391,14 +362,14 @@ export function code(options, mode) {
 
   // 是否开启预览
   if (options.preview) {
-    var FILTER_VALUE = 'LAY-CODE-DF-' + index;
+    var TABS_ID = 'LAY-CODE-TABS-' + index;
     var layout = options.layout || ['code', 'preview'];
     var isIframePreview = options.preview === 'iframe';
 
     // 追加 Tab 组件
     var elemView = $('<div class="' + CONST.ELEM_PREVIEW + '">');
-    var elemTabView = $('<div class="layui-tab layui-tab-brief">');
-    var elemHeaderView = $('<div class="layui-tab-title">');
+    var elemTabsView = $('<div class="layui-tabs">');
+    var elemHeaderView = $('<div class="layui-tabs-header">');
     var elemPreviewView = $(
       '<div class="' +
         [CONST.ELEM_ITEM, CONST.ELEM_ITEM + '-preview', 'layui-border'].join(
@@ -410,7 +381,6 @@ export function code(options, mode) {
 
     if (options.id) elemView.attr('id', options.id);
     elemView.addClass(options.className);
-    elemTabView.attr('lay-filter', FILTER_VALUE);
 
     // 标签头
     layui.each(layout, function (i, v) {
@@ -532,9 +502,9 @@ export function code(options, mode) {
     });
 
     othis.addClass(CONST.ELEM_ITEM).wrap(elemView); // 包裹外层容器
-    elemTabView.append(elemHeaderView); // 追加标签头
-    options.tools && elemTabView.append(elemToolbar); // 追加工具栏
-    othis.before(elemTabView); // 追加标签结构
+    elemTabsView.append(elemHeaderView); // 追加标签头
+    options.tools && elemTabsView.append(elemToolbar); // 追加工具栏
+    othis.before(elemTabsView); // 追加标签结构
 
     // 追加预览
     if (isIframePreview) {
@@ -583,17 +553,23 @@ export function code(options, mode) {
     options.previewStyle = [options.style, options.previewStyle].join('');
     elemPreviewView.attr('style', options.previewStyle);
 
-    // tab change
-    element.on('tab(' + FILTER_VALUE + ')', function (data) {
-      var $this = $(this);
-      var thisElem = $(data.elem).closest('.' + CONST.ELEM_PREVIEW);
+    // 初始化 tabs
+    tabs.render({
+      elem: elemTabsView,
+      id: TABS_ID,
+    });
+
+    // 标签切换后的事件
+    tabs.on(`afterChange(${TABS_ID})`, function (data) {
+      var { thisHeaderItem } = data;
+      var thisElem = thisHeaderItem.closest('.' + CONST.ELEM_PREVIEW);
       var elemItemBody = thisElem.find('.' + CONST.ELEM_ITEM);
       var thisItemBody = elemItemBody.eq(data.index);
 
       elemItemBody.removeClass(CONST.ELEM_SHOW);
       thisItemBody.addClass(CONST.ELEM_SHOW);
 
-      if ($this.attr('lay-id') === 'preview') {
+      if (thisHeaderItem.attr('lay-id') === 'preview') {
         runPreview(thisItemBody);
       }
 
@@ -621,11 +597,10 @@ export function code(options, mode) {
 
   // 添加高亮必要的 className
   if (options.highlighter) {
-    othis.addClass(
-      [options.highlighter, 'language-' + options.lang, 'layui-code-hl'].join(
-        ' ',
-      ),
-    );
+    othis.addClass(`${options.highlighter} layui-code-hl`);
+    if (options.highlighter === 'prism') {
+      othis.addClass(`language-${options.lang}`);
+    }
   }
 
   // 获取 code 行结构
