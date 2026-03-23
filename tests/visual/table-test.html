@@ -113,17 +113,10 @@
 
     <script src="./assets/dist/layui.js"></script>
     <script>
-      ((off) => {
-        if (!off) return;
-        layui.disuse('table').extend({
-          table:
-            '{/}https://cdn.jsdelivr.net/gh/layui/layui@2.7.6/src/modules/table',
-        });
-      })();
-
       layui.use(['table', 'dropdown'], () => {
         var $ = layui.$;
         var table = layui.table;
+        var layer = layui.layer;
         var laytpl = layui.laytpl;
         var dropdown = layui.dropdown;
         var form = layui.form;
