@@ -3,6 +3,7 @@
  * 通用 Web 弹出层组件
  */
 
+import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
