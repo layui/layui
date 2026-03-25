@@ -143,7 +143,7 @@ layout: ['code', 'preview']
 
 工具图标将根据数组的排列顺序来显示，如：
 
-```
+```js
 tools: ['full', 'window','copy']
 ```
 
@@ -172,8 +172,12 @@ extendToolkit: {
 }
 ```
 
+选项解释：
+
 - `title` 值为数组形式，以支持不同状态时的默认标题
-- `iconName` 值对应[图标](../icon/) `className` 的 `layui-icon-` 后的名称。如图标：`layui-icon-theme`，那么 `name` 设置 `theme` 即可。
+- `iconName` 值对应[图标](../icon/) `className` 的 `layui-icon-` 后的名称。如图标：`layui-icon-theme`，那么 `iconName` 设置值为 `theme` 即可。
+
+扩展后，即可在 `tools` 选项中设置，如：`tools: ['theme']`
 
 </td>
 <td>object</td>
@@ -185,7 +189,7 @@ extendToolkit: {
 
 点击任意工具触发的回调函数。
 
-```
+```js
 onToolClick: function(obj) {
   console.log(obj); // 返回信息
   console.log(obj.name); // 当前工具 name
