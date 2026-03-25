@@ -10,7 +10,7 @@ html #layuicss-skincodecss {
 
 /* 字体  */
 .layui-code-wrap {
-  font-size: 13px;
+  font-size: 0.875rem;
   font-family: 'Courier New', Consolas, 'Lucida Console', monospace;
 }
 
@@ -21,7 +21,7 @@ html #layuicss-skincodecss {
   padding: 0 !important;
   border: 1px solid #eee;
   border-left-width: 6px;
-  background-color: #fff;
+  background-color: #fafafa;
   color: #333;
 }
 .layui-code-view pre {
@@ -59,7 +59,7 @@ html #layuicss-skincodecss {
 }
 .layui-code-line {
   position: relative;
-  line-height: 19px;
+  line-height: inherit;
   margin: 0 !important;
 }
 .layui-code-line-number {
