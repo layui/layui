@@ -960,7 +960,7 @@ Form.prototype.render = function (type, filter) {
 
         // 用于开启 lay-append-to 时兼容 dropdown
         dl.on('mousedown pointerdown touchstart', function (e) {
-          layui.stope(e);
+          e.stopPropagation();
         });
 
         reElem.find('dl>dt').on('click', function () {

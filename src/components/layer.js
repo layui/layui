@@ -2197,7 +2197,6 @@ ready.run = function (_$) {
   };
 };
 
-layer.path = layui.cache.dir;
 layer.ready();
 ready.run($);
 

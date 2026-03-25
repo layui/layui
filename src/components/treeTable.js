@@ -1414,8 +1414,9 @@ Class.prototype.renderTreeTable = function (tableView, level, sonSign) {
         .find('.layui-table-tree-flexIcon');
 
       // 添加展开按钮的事件
-      flexIconElem.on('click', function (event) {
-        layui.stope(event);
+      flexIconElem.on('click', function (e) {
+        e.stopPropagation();
+
         // 处理数据
         // var trElem = item.closest('tr');
         expandNode({ trElem: trElem }, null, null, null, true);
@@ -2320,8 +2321,8 @@ var checkNode = function (trElem, checked, callbackFlag) {
 
   if (callbackFlag) {
     var triggerEvent = function () {
-      var fn = function (event) {
-        layui.stope(event);
+      var fn = function (e) {
+        e.stopPropagation();
       };
       inputElem.parent().on('click', fn); // 添加临时的阻止冒泡事件
       inputElem.next().click();

@@ -31,30 +31,29 @@ Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 <div class="layui-btn-container">
   <button class="layui-btn layui-btn-primary layui-border-green">主色按钮</button>
 </div>
-<script type="text/html">
-<h3>{{= d.title }}</h3>
-<ul>
-{{#  layui.each(d.list, function(index, item){ }}
-  <li>
-    <span>{{= item.modname }}</span>
-    <span>{{= item.alias }}：</span>
-    <span>{{= item.site || '' }}</span>
-  </li>
-{{#  }); }}
-<p>{{#  if(d.list.length === 0){ }}
-无数据
-{{#  } }}</p>
-</ul>
-</script>
+
+<template>
+  <h3>{{= d.title }}</h3>
+  <ul>
+  {{ d.list.forEach((item) => { }}
+    <li>
+      <span>{{= item.modname }}</span>
+      <span>{{= item.alias }}：</span>
+      <span>{{= item.site || '' }}</span>
+    </li>
+  {{ }); }}
+  </ul>
+</template>
+
 <script>
-  layui.use(function () {
-    var layer = layui.layer;
-    const a = '1'
+  layui.use(() => {
+    const { layer } = layui;
+    const a = '1';
     function aa(a, b) {
       return '11'
     }
     layer.msg(layui.v)
-  })
+  });
 </script>
   </textarea>
 </pre>
@@ -254,160 +253,170 @@ code line
 </pre
     >
 
-    <!-- 第三方语法高亮库 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-
     <!-- layui -->
     <script src="./assets/dist/layui.js"></script>
-    <script>
-      layui.use(['code', 'dropdown'], () => {
-        var dropdown = layui.dropdown;
-        var layer = layui.layer;
-        var $ = layui.$;
+    <script type="module">
+      const { dropdown, layer, $ } = layui;
 
-        // return;
+      // 扩展「第三方语法高亮库」
+      layui.extend({
+        hljs: {
+          src: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js',
+          api: 'hljs',
+        },
+        prism: {
+          src: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js',
+          api: 'Prism',
+        },
+      });
 
-        // 高亮主题 css 库
-        var themeData = $.map(
-          [
-            // hljs 主题库
-            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/vs2015.min.css',
-            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/vs.min.css',
-            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css',
-            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css',
-            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/base16/google-dark.min.css',
-            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/base16/google-light.min.css',
-            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai-sublime.min.css',
-            '-',
-            // prism 主题库
-            'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-dark.min.css',
-            'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css',
-          ],
-          (v, index) => ({
-            title: v,
-            link: v,
-            highlighter: v.indexOf('prism') === -1 ? 'hljs' : 'prism',
-            type: v === '-' ? '-' : 'normal',
-          }),
-        );
+      // 高亮主题 css 库
+      const themeData = [
+        // hljs 主题库
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css',
 
-        // 创建实例
-        var codeInst = layui.code({
-          elem: '#test',
-          preview: true,
-          codeStyle: 'height: 510px;',
-          previewStyle: 'word-wrap: break-word;',
-          // theme: 'dark',
-          // header: true,
-          // wordWrap: false, // 是否自动换行
-          lang: 'html',
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/google-light.min.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/google-dark.min.css',
+
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/monokai-sublime.min.css',
+        '-',
+
+        // prism 主题库
+        'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism.min.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-dark.min.css',
+      ].map((v, i) => ({
+        title: v
+          .replace('https://cdnjs.cloudflare.com/ajax/libs/', '')
+          .replace('.min.css', ''),
+        link: v,
+        highlighter: v.indexOf('prism') === -1 ? 'hljs' : 'prism',
+        type: v === '-' ? '-' : 'normal',
+      }));
+
+      // 渲染高亮器
+      const renderHighlighter = (options) => {
+        options = {
           highlighter: 'hljs',
-          // code: '<div class="layui-btn">初始按钮</div>',
-          /*codeRender: function (code, opts) { // 初始高亮
-      layui.link(themeData[1].link, 'layui-code-theme');
-      return hljs.highlight(code, {language: opts.lang}).value;
-    },*/
-          tools: [
-            'full',
-            'window',
-            {
-              title: ['文字换行'],
-              type: 'form',
-              event: (obj) => {
-                dropdown.render({
-                  elem: obj.elem,
-                  data: [
-                    { title: '自动换行', wordWrap: true },
-                    { title: '不自动换行', wordWrap: false },
-                  ],
-                  show: true,
-                  click: (data, othis) => {
-                    codeInst.reload({
-                      wordWrap: data.wordWrap,
-                    });
-                  },
-                });
-              },
-            },
-            {
-              title: ['切换高亮主题'],
-              type: 'theme',
-              event: (obj) => {
-                dropdown.render({
-                  elem: obj.elem,
-                  data: themeData,
-                  show: true,
-                  click: (data, othis) => {
-                    $('#layuicss-layui-code-theme').remove();
-                    layui.link(data.link, 'layui-code-theme');
+          link: themeData[0].link,
+          ...options,
+        };
 
-                    // 若高亮器有变化，则重载
-                    if (data.highlighter !== codeInst.config.highlighter) {
-                      var highlighter = {
-                        hljs: (code, opts) =>
-                          hljs.highlight(code, {
-                            language: opts.lang,
-                          }).value,
-                        prism: (code, opts) =>
-                          Prism.highlight(
-                            code,
-                            Prism.languages[opts.lang],
-                            opts.lang,
-                          ),
-                      };
-                      // 重载
-                      codeInst.reload({
-                        highlighter: data.highlighter,
-                        codeRender: (code, opts) =>
-                          highlighter[data.highlighter](code, opts),
-                      });
-                    }
-                  },
-                });
-              },
+        layui.use(['hljs', 'prism'], () => {
+          // 加载 css
+          $('#layuicss-layui-code-theme').remove();
+          layui.link(options.link, 'layui-code-theme');
+
+          // 高亮器实例
+          const highlighter = {
+            hljs: (code, opts) =>
+              hljs.highlight(code, {
+                language: opts.lang,
+              }).value,
+            prism: (code, opts) =>
+              Prism.highlight(code, Prism.languages[opts.lang], opts.lang),
+          };
+
+          // 重载以渲染语法高亮
+          codeInst.reload({
+            highlighter: options.highlighter,
+            codeRender: (code, opts) => {
+              return highlighter[options.highlighter](code, opts);
             },
-            {
-              title: ['编辑'],
-              type: 'edit',
-              event: (obj) => {
-                layer.prompt(
-                  {
-                    formType: 2,
-                    value: obj.rawCode,
-                    title: '编辑代码',
-                    area: ['800px', '500px'],
-                    maxlength: 9999999999,
-                  },
-                  (value, index) => {
-                    layer.close(index);
-                    // 重载 code
-                    codeInst.reloadCode({
-                      code: value,
-                    });
-                  },
-                );
-              },
-            },
-          ],
+          });
         });
+      };
 
-        // 语法高亮重载
-        codeInst.reloadCode({
-          codeRender: (code, opts) => {
-            layui.link(themeData[1].link, 'layui-code-theme');
-            return hljs.highlight(code, { language: opts.lang }).value;
+      // 创建「代码高亮」初始实例
+      const codeInst = layui.code({
+        elem: '#test',
+        preview: true,
+        codeStyle: 'height: 510px;',
+        previewStyle: 'word-wrap: break-word;',
+        // theme: 'dark',
+        // header: true,
+        // wordWrap: false, // 是否自动换行
+        lang: 'html',
+        // code: '<div class="layui-btn">初始按钮</div>',
+        highlighter: 'hljs',
+        /*codeRender: function (code, opts) { // 初始高亮
+          layui.link(themeData[1].link, 'layui-code-theme');
+          return hljs.highlight(code, {language: opts.lang}).value;
+        },*/
+
+        tools: ['full', 'wordWrap', 'theme', 'edit'], // 显示的工具列表
+
+        // 扩展工具包
+        extendToolkit: {
+          wordWrap: {
+            title: ['文字换行'],
+            iconName: 'form',
+            onClick(obj) {
+              dropdown.render({
+                elem: obj.elem,
+                data: [
+                  { title: '自动换行', wordWrap: true },
+                  { title: '不自动换行', wordWrap: false },
+                ],
+                show: true,
+                click: (data, othis) => {
+                  codeInst.reload({
+                    wordWrap: data.wordWrap,
+                  });
+                },
+              });
+            },
           },
-        });
+          theme: {
+            title: ['切换高亮主题'],
+            iconName: 'theme',
+            onClick(obj) {
+              dropdown.render({
+                elem: obj.elem,
+                data: themeData,
+                show: true,
+                click: (data, othis) => {
+                  renderHighlighter({
+                    highlighter: data.highlighter,
+                    link: data.link,
+                  });
+                },
+              });
+            },
+          },
+          edit: {
+            title: ['编辑'],
+            iconName: 'edit',
+            onClick(obj) {
+              layer.prompt(
+                {
+                  formType: 2,
+                  value: obj.rawCode,
+                  title: '编辑代码',
+                  area: ['800px', '500px'],
+                  maxlength: 9999999999,
+                },
+                (value, index) => {
+                  layer.close(index);
+                  // 更新 code
+                  codeInst.reload({ code: value });
+                },
+              );
+            },
+          },
+        },
+      });
 
-        // 通用实例，根据元素属性定制化参数
-        layui.code({
-          elem: '.layui-code',
-          tools: ['tips'],
-          langMarker: true,
-          lang: 'html',
-          // preview: true
-        });
+      // 初始渲染高亮器
+      renderHighlighter();
+
+      // 通用实例，根据元素属性定制化参数
+      layui.code({
+        elem: '.layui-code',
+        tools: ['tips'],
+        langMarker: true,
+        lang: 'html',
+        // preview: true
       });
     </script>
   </body>

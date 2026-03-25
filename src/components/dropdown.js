@@ -409,7 +409,7 @@ Class.prototype.render = function (type) {
 
   // 阻止全局事件
   mainElem.find('.layui-menu').on(clickOrMousedown, function (e) {
-    layui.stope(e);
+    e.stopPropagation();
   });
 
   // 触发菜单列表事件
@@ -430,7 +430,7 @@ Class.prototype.render = function (type) {
           : null;
 
       ret === false || isChild || that.remove();
-      layui.stope(e);
+      e.stopPropagation();
     }
   });
 

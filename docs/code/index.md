@@ -2,7 +2,7 @@
 title: Code 预览组件 code
 toc: true
 ---
- 
+
 # Code 预览组件
 
 > 代码预览组件 `code` 主要用于对代码区块的修饰和对应的效果预览，如 Layui 各组件文档中的示例演示。
@@ -14,14 +14,13 @@ toc: true
 
 - 参数 `options` : 基础属性选项。[#详见属性](#options)。
 
-其中 `codeInst` <sup>2.8.17+</sup> 即实例返回的对象，包含对当前实例进行重载等方法成员，如：
+其中 `codeInst` 即实例返回的对象，包含对当前实例进行重载等方法成员，如：
 
 ```
 var codeInst = layui.code(options);
 console.log(codeInst); // 查看所有成员
 codeInst.config; // 当前实例配置项
 codeInst.reload(options); // 重载
-codeInst.reloadCode(options); // 仅重载 code
 ```
 
 
@@ -43,7 +42,7 @@ dark theme
 dark theme
 </pre>
 
-<!-- import layui -->  
+<!-- import layui -->
 <script>
 layui.use(function(){
   // code

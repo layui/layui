@@ -64,9 +64,9 @@ layui.use(function(){
   });
 
   // 其他操作
-  util.event('lay-on', {
+  util.on({
     // 改变触发右键菜单的目标元素
-    contextmenu: function(othis){
+    contextmenu: function(othis) {
       var ID = 'ID-dropdown-demo-contextmenu';
       if (!othis.data('open')) {
         dropdown.reload(ID, {

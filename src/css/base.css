@@ -161,7 +161,7 @@ a cite {
   border-right-style: solid;
 }
 /* 单行溢出省略 */
-.layui-ellip {
+.layui-ellipsis {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

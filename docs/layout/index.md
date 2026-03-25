@@ -2,7 +2,7 @@
 title: Admin UI 框体布局
 toc: true
 ---
- 
+
 # 框体布局
 
 > Layui 的主要应用场景是面向中后台的界面搭建，因此也提供了大框体布局方案。
@@ -110,18 +110,13 @@ toc: true
     底部固定区域
   </div>
 </div>
- 
+
 <script src="{{= d.layui[2].cdn.js }}"></script>
-<script>
-//JS 
-layui.use(['element', 'layer', 'util'], function(){
-  var element = layui.element;
-  var layer = layui.layer;
-  var util = layui.util;
-  var $ = layui.$;
-  
-  //头部事件
-  util.event('lay-header-event', {
+<script type="module">
+  const { $, layer, util, element } = layui;
+
+  // 头部事件
+  util.on('lay-header-event', {
     menuLeft: function(othis){ // 左侧菜单事件
       layer.msg('展开左侧菜单的操作', {icon: 0});
     },
@@ -138,7 +133,6 @@ layui.use(['element', 'layer', 'util'], function(){
       });
     }
   });
-});
 </script>
 </body>
 </html>

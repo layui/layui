@@ -132,49 +132,67 @@ layout: ['code', 'preview']
 <td>-</td>
     </tr>
     <tr>
-<td>tools <sup>2.8+</sup></td>
+<td>tools</td>
 <td>
 
-用于开启 `preview` 属性后的面板头部右侧区域工具栏图标，值为一个数组，内置成员：
+用于设置组件右上角面板工具列表，仅 `preview: true` 时有效。值为一个数组，可选值（内置工具）：
 
-- `copy` <sup>2.8.2+</sup> : 代码复制
+- `copy` : 代码复制
 - `full` : 最大化显示
 - `window` : 在新窗口预览。一般当 `layout: 'iframe'` 时开启，且 code 中须包含完整的 HTML 方可在新窗口正常预览。
 
 工具图标将根据数组的排列顺序来显示，如：
 
+```js
+tools: ['full', 'window','copy']
 ```
-tools: [
-  'full',
-  'window',
-  // 自定义扩展工具 --- 2.8.17+
-  {
-    title: ['切换高亮主题'],
-    type: 'theme',
-    event: function(obj) {
-      console.log(obj); // 当前实例相关信息
-      // do something
-    }
-  }
-]
-```
-
-`type` 值对应[图标](../icon/) `className` 的 `layui-icon-` 后的名称。如图标：`layui-icon-theme`，那么 `type` 设置 `theme` 即可。
 
 </td>
 <td>array</td>
 <td>-</td>
     </tr>
     <tr>
-<td>toolsEvent <sup>2.8+</sup></td>
+<td>extendToolkit</td>
 <td>
 
-点击工具栏的回调函数，功能同 `tools` 中的 `event`，只是需通过 `type` 属性来区分是哪个工具菜单。
+用于扩展工具包。
 
+```js
+extendToolkit: {
+  // 主题工具
+  theme: {
+    title: ['切换高亮主题'], // 工具标题
+    iconName: 'theme', // 工具图标名
+    // 点击事件
+    onClick(obj) {
+      // do something
+      console.log(obj); // 当前实例相关信息
+    }
+  }
+}
 ```
-toolsEvent: function(obj){
-  console.log(obj); // 当前实例相关信息
-  console.log(obj.type); // 当前实例相关信息
+
+选项解释：
+
+- `title` 值为数组形式，以支持不同状态时的默认标题
+- `iconName` 值对应[图标](../icon/) `className` 的 `layui-icon-` 后的名称。如图标：`layui-icon-theme`，那么 `iconName` 设置值为 `theme` 即可。
+
+扩展后，即可在 `tools` 选项中设置，如：`tools: ['theme']`
+
+</td>
+<td>object</td>
+<td>-</td>
+    </tr>
+    <tr>
+<td>onToolClick</td>
+<td>
+
+点击任意工具触发的回调函数。
+
+```js
+onToolClick: function(obj) {
+  console.log(obj); // 返回信息
+  console.log(obj.name); // 当前工具 name
 }
 ```
 

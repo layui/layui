@@ -17,7 +17,6 @@ import { layer } from './components/layer.js';
 import { dropdown } from './components/dropdown.js';
 import { slider } from './components/slider.js';
 import { colorpicker } from './components/colorpicker.js';
-import { tab } from './components/tab.js';
 import { nav } from './components/nav.js';
 import { breadcrumb } from './components/breadcrumb.js';
 import { progress } from './components/progress.js';
@@ -36,14 +35,6 @@ import { flow } from './components/flow.js';
 import { util } from './components/util.js';
 import { code } from './components/code.js';
 
-// 兼容 v2
-if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-  window.layui = layui;
-  window.lay = lay;
-  window.layer = layer;
-  layui.$ = jquery;
-}
-
 Object.assign(layui, {
   lay,
   laytpl,
@@ -58,7 +49,6 @@ Object.assign(layui, {
   dropdown,
   slider,
   colorpicker,
-  tab,
   nav,
   breadcrumb,
   progress,

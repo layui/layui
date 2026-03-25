@@ -2,7 +2,7 @@
 title: 底层方法
 toc: true
 ---
- 
+
 # 底层方法
 
 > Layui 提供了一系列基础 API，以更好地辅助组件的使用。
@@ -29,7 +29,7 @@ layui.config({
 特别地，若你对 `layui.js` 本身进行了动态加载或是其他特殊场景中使用，那么上述 `layui.config()` 所设定的 `dir` 属性会因此失效，此时你可以在动态加载 <code>layui.js</code> 之前预先定义一个我们约定好的全局对象，如：
 
 ```
-<script>  
+<script>
 var LAYUI_GLOBAL = {
   dir: '/res/layui/' // layui.js 所在目录
 };
@@ -50,7 +50,7 @@ var LAYUI_GLOBAL = {
 ```
 // 假设当前页面 url 为： https://domain.com/docs/base.html?a=1&c=3#/user/set/id=123/
 var url = layui.url();
- 
+
 // url 返回结果为：
 {
   "pathname": ["docs","base.html"], // 路径
@@ -82,16 +82,16 @@ layui.data('test', {
   key: 'nickname',
   value: '张三'
 });
- 
+
 // 【删】：删除 test 表的 nickname 字段
 layui.data('test', {
   key: 'nickname',
   remove: true
 });
 layui.data('test', null); // 删除 test 表
-  
+
 // 【改】：同【增】，会覆盖已经存储的数据
-  
+
 // 【查】：向 test 表读取全部的数据
 var localTest = layui.data('test');
 console.log(localTest.nickname); // 获得“张三”
@@ -153,14 +153,13 @@ if(device.MYAPP){
 | layui.sessionData(table, settings) | 会话性存储。[#用法](#data) |
 | layui.device(key) | 获取浏览器信息。[#用法](#device) |
 | layui.hint() | 向控制台打印一些异常信息，目前只返回了 error 方法，如： <br>`var hint = layui.hint();` <br> `hint.error('出错啦');` |
-| layui.stope(e) | 阻止事件冒泡 |
 | layui.onevent(modName, events, callback) | 增加自定义模块事件，一般在内置组件中使用。 |
 | layui.event(modName, events, params) | 执行自定义模块事件，搭配 onevent 使用。注<sup>2.8+</sup>：当 events 参数中未设定 filter 时则可重复执行该事件，否则只会执行一次最新添加的事件。 |
 | layui.off(events, modName) <sup>2.5.7+</sup> | 用于移除模块相关事件，如：`layui.off('select(filter)', 'form')`，那么`form.on('select(filter)', callback)`事件将会被移除 |
 | layui.debounce(fn, wait) <sup>2.8.3+</sup> | 防抖，函数按指定毫秒延时执行 |
 | layui.throttle(fn, wait) <sup>2.8.3+</sup> | 节流，限制函数在指定毫秒内不重复执行 |
-| layui.factory(modName) | 用于获取模块对应的 `layui.define()` 的回调函数 |
-| var lay = layui.lay | 基础模块，提供了更多基础 API，一般供 Layui 内置组件中使用 |
+| layui.getDefineCallback(modName) | 用于获取通过 `layui.define` 定义模块时的回调函数 |
+| layui.lay | 基础模块，提供了更多基础 API，一般供 Layui 内置组件中使用 |
 
 > 基础 API 是整个 UI 的有力支撑，我们在组件的使用过程中也经常会用到。
 

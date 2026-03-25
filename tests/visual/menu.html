@@ -242,33 +242,29 @@
     </div>
 
     <script src="./assets/dist/layui.js"></script>
-    <script>
-      layui.use(['dropdown', 'util'], () => {
-        var dropdown = layui.dropdown,
-          util = layui.util,
-          $ = layui.jquery;
+    <script type="module">
+      const { $, dropdown, util } = layui;
 
-        dropdown.on('click(demo1)', function (options) {
-          var thisElem = $(this);
-          console.log(thisElem, options);
-        });
+      dropdown.on('click(demo1)', function (options) {
+        var thisElem = $(this);
+        console.log(thisElem, options);
+      });
 
-        util.event('lay-active', {
-          normal: () => {
-            $('#demo-box')
-              .children()
-              .addClass('layui-col-md3')
-              .removeClass('layui-col-md4');
-            $('#demo-box').find('.layui-menu').removeClass('layui-menu-lg');
-          },
-          lg: () => {
-            $('#demo-box')
-              .children()
-              .addClass('layui-col-md4')
-              .removeClass('layui-col-md3');
-            $('#demo-box').find('.layui-menu').addClass('layui-menu-lg');
-          },
-        });
+      util.on('lay-active', {
+        normal: () => {
+          $('#demo-box')
+            .children()
+            .addClass('layui-col-md3')
+            .removeClass('layui-col-md4');
+          $('#demo-box').find('.layui-menu').removeClass('layui-menu-lg');
+        },
+        lg: () => {
+          $('#demo-box')
+            .children()
+            .addClass('layui-col-md4')
+            .removeClass('layui-col-md3');
+          $('#demo-box').find('.layui-menu').addClass('layui-menu-lg');
+        },
       });
     </script>
   </body>

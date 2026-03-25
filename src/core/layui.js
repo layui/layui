@@ -27,32 +27,6 @@ var Class = function () {
   this.v = '__VERSION__'; // 版本号
 };
 
-// 识别预先可能定义的指定全局对象
-var GLOBAL = window.LAYUI_GLOBAL || {};
-
-// 获取 layui 所在目录
-var getPath = (function () {
-  var jsPath =
-    document.currentScript &&
-    document.currentScript.tagName.toUpperCase() === 'SCRIPT'
-      ? document.currentScript.src
-      : (function () {
-          var js = document.getElementsByTagName('script');
-          var last = js.length - 1;
-          var src;
-          for (var i = last; i > 0; i--) {
-            if (js[i].readyState === 'interactive') {
-              src = js[i].src;
-              break;
-            }
-          }
-          return src || js[last].src;
-        })();
-
-  return (config.dir =
-    GLOBAL.dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1));
-})();
-
 // 异常提示
 var error = function (msg, type) {
   type = type || 'warn';
@@ -110,9 +84,6 @@ var builtinModules = (config.builtin = {
   jquery: 'jquery', // DOM 库（第三方）
   component: 'component', // 组件构建器
   i18n: 'i18n', // 国际化
-
-  all: 'all',
-  'layui.all': 'layui.all', // 聚合标识（功能性的，非真实模块）
 });
 
 /**
@@ -200,17 +171,17 @@ Class.prototype.define = function (deps, callback) {
  */
 Class.prototype.use = function (mods, callback, exports, from) {
   var that = this;
-  var dir = (config.dir = config.dir ? config.dir : getPath);
+  var dir = config.dir || '';
 
   // 整理模块队列
   mods = (function () {
     if (typeof mods === 'string') {
       return [mods];
     }
-    // 若第一个参数为 function ，则自动加载所有内置模块，且执行的回调即为该 function 参数；
+    // 若第一个参数为 function ，则直接执行
     else if (typeof mods === 'function') {
       callback = mods;
-      return ['all'];
+      return [];
     }
     return mods;
   })();
@@ -289,8 +260,8 @@ Class.prototype.use = function (mods, callback, exports, from) {
     })();
   };
 
-  // 若为发行版，则内置模块不必异步加载
-  if (mods.length === 0 || (layui['layui.all'] && builtinModules[item])) {
+  // 内置模块不必异步加载
+  if (mods.length === 0 || builtinModules[item]) {
     return (onCallback(), that);
   }
 
@@ -497,14 +468,14 @@ Class.prototype.addcss = function (modName, callback, id) {
 };
 
 /**
- * 获取执行定义模块时的回调函数，factory 为向下兼容
+ * 获取通过 `layui.define` 定义模块时的回调函数
  * @param {string} modName - 模块名
  * @returns {Function}
  */
-Class.prototype.factory = function (modName) {
+Class.prototype.getDefineCallback = function (modName) {
   if (layui[modName]) {
-    return typeof config.callback[modName] === 'function'
-      ? config.callback[modName]
+    return typeof cache.callback[modName] === 'function'
+      ? cache.callback[modName]
       : null;
   }
 };
@@ -536,7 +507,7 @@ Class.prototype.img = function (url, callback, error) {
  * @param {string} hash 值
  * @returns {Object}
  */
-Class.prototype.router = Class.prototype.hash = function (hash) {
+Class.prototype.hash = function (hash) {
   hash = hash || location.hash;
   var that = this;
   var data = {
@@ -626,7 +597,7 @@ Class.prototype.url = function (href) {
     })(),
 
     // 提取 Hash
-    hash: that.router(
+    hash: that.hash(
       (function () {
         return href ? (href.match(/#.+/) || [])[0] || '/' : location.hash;
       })(),
@@ -737,7 +708,7 @@ Class.prototype.hint = function () {
  * @param {*} operand - 任意值
  * @returns {string}
  */
-Class.prototype._typeof = Class.prototype.type = function (operand) {
+Class.prototype.type = function (operand) {
   if (operand === null) return String(operand);
 
   // 细分引用类型
@@ -758,11 +729,11 @@ Class.prototype._typeof = Class.prototype.type = function (operand) {
 };
 
 /**
- * 对象是否具备数组结构（此处为兼容 jQuery 对象）
+ * 对象是否具备「类数组」结构（此处为兼容 jQuery 对象）
  * @param {Object} obj - 任意对象
  * @returns {boolean}
  */
-Class.prototype._isArray = Class.prototype.isArray = function (obj) {
+Class.prototype.isArray = function (obj) {
   var that = this;
   var len;
   var type = that.type(obj);
@@ -910,18 +881,6 @@ Class.prototype.sort = function (arr, key, desc, notClone) {
   return clone;
 };
 
-/**
- * 阻止事件冒泡
- * @param {Event} thisEvent - 事件对象
- */
-Class.prototype.stope = function (thisEvent) {
-  try {
-    thisEvent.stopPropagation();
-  } catch {
-    thisEvent.cancelBubble = true;
-  }
-};
-
 // 字符常理
 var EV_REMOVE = 'LAYUI-EVENT-REMOVE';
 
@@ -1057,10 +1016,6 @@ Class.prototype.throttle = function (func, wait) {
 };
 
 const layui = new Class();
-
-// 阻止 layui.use 加载内部模块
-layui.all = true;
-layui['layui.all'] = 'layui.all';
 
 // export
 export { layui };
