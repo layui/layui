@@ -10,14 +10,14 @@
   line-height: 20px;
   border: 1px solid var(--lay-border-color);
   border-left-width: 6px;
-  background-color: #fff;
+  background-color: var(--lay-gray-100);
   font-family: var(--lay-font-monospace);
   font-size: 12px;
 }
 
 /* 字体  */
 .layui-code-wrap {
-  font-size: 13px;
+  font-size: 0.875rem;
   font-family: var(--lay-font-monospace);
 }
 
@@ -28,7 +28,7 @@
   padding: 0 !important;
   border: 1px solid var(--lay-border-color);
   border-left-width: 6px;
-  background-color: #fff;
+  background-color: var(--lay-gray-100);
 
   --lay-code-side-width: 45px;
 }
@@ -67,7 +67,7 @@
 }
 .layui-code-line {
   position: relative;
-  line-height: 19px;
+  line-height: inherit;
   margin: 0 !important;
 }
 .layui-code-line-number {

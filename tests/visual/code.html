@@ -31,30 +31,29 @@ Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 <div class="layui-btn-container">
   <button class="layui-btn layui-btn-primary layui-border-green">主色按钮</button>
 </div>
-<script type="text/html">
-<h3>{{= d.title }}</h3>
-<ul>
-{{#  layui.each(d.list, function(index, item){ }}
-  <li>
-    <span>{{= item.modname }}</span>
-    <span>{{= item.alias }}：</span>
-    <span>{{= item.site || '' }}</span>
-  </li>
-{{#  }); }}
-<p>{{#  if(d.list.length === 0){ }}
-无数据
-{{#  } }}</p>
-</ul>
-</script>
+
+<template>
+  <h3>{{= d.title }}</h3>
+  <ul>
+  {{ d.list.forEach((item) => { }}
+    <li>
+      <span>{{= item.modname }}</span>
+      <span>{{= item.alias }}：</span>
+      <span>{{= item.site || '' }}</span>
+    </li>
+  {{ }); }}
+  </ul>
+</template>
+
 <script>
-  layui.use(function () {
-    var layer = layui.layer;
-    const a = '1'
+  layui.use(() => {
+    const { layer } = layui;
+    const a = '1';
     function aa(a, b) {
       return '11'
     }
     layer.msg(layui.v)
-  })
+  });
 </script>
   </textarea>
 </pre>
@@ -272,34 +271,34 @@ code line
       });
 
       // 高亮主题 css 库
-      const themeData = $.map(
-        [
-          // hljs 主题库
-          'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/vs2015.min.css',
-          'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/vs.min.css',
-          'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css',
-          'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css',
-          'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/google-dark.min.css',
-          'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/google-light.min.css',
-          'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/monokai-sublime.min.css',
-          '-',
-          // prism 主题库
-          'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-dark.min.css',
-          'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism.min.css',
-        ],
-        (v, index) => ({
-          title: v,
-          link: v,
-          highlighter: v.indexOf('prism') === -1 ? 'hljs' : 'prism',
-          type: v === '-' ? '-' : 'normal',
-        }),
-      );
+      const themeData = [
+        // hljs 主题库
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css',
+
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/google-light.min.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/base16/google-dark.min.css',
+
+        'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/monokai-sublime.min.css',
+        '-',
+
+        // prism 主题库
+        'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism.min.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-dark.min.css',
+      ].map((v, i) => ({
+        title: v
+          .replace('https://cdnjs.cloudflare.com/ajax/libs/', '')
+          .replace('.min.css', ''),
+        link: v,
+        highlighter: v.indexOf('prism') === -1 ? 'hljs' : 'prism',
+        type: v === '-' ? '-' : 'normal',
+      }));
 
       // 渲染高亮器
       const renderHighlighter = (options) => {
         options = {
           highlighter: 'hljs',
-          link: themeData[1].link,
+          link: themeData[0].link,
           ...options,
         };
 
@@ -344,13 +343,15 @@ code line
           layui.link(themeData[1].link, 'layui-code-theme');
           return hljs.highlight(code, {language: opts.lang}).value;
         },*/
-        tools: [
-          'full',
-          'window',
-          {
+
+        tools: ['full', 'wordWrap', 'theme', 'edit'], // 显示的工具列表
+
+        // 扩展工具包
+        extendToolkit: {
+          wordWrap: {
             title: ['文字换行'],
-            type: 'form',
-            event: (obj) => {
+            iconName: 'form',
+            onClick(obj) {
               dropdown.render({
                 elem: obj.elem,
                 data: [
@@ -366,10 +367,10 @@ code line
               });
             },
           },
-          {
+          theme: {
             title: ['切换高亮主题'],
-            type: 'theme',
-            event: (obj) => {
+            iconName: 'theme',
+            onClick(obj) {
               dropdown.render({
                 elem: obj.elem,
                 data: themeData,
@@ -383,10 +384,10 @@ code line
               });
             },
           },
-          {
+          edit: {
             title: ['编辑'],
-            type: 'edit',
-            event: (obj) => {
+            iconName: 'edit',
+            onClick(obj) {
               layer.prompt(
                 {
                   formType: 2,
@@ -403,7 +404,7 @@ code line
               );
             },
           },
-        ],
+        },
       });
 
       // 初始渲染高亮器

@@ -312,12 +312,12 @@ export function code(options) {
     othis.data(CONST.CDDE_DATA_CLASS, othis.attr('class'));
   }
 
-  // 工具栏
-  var tools = {
+  // 内置工具包
+  var toolkit = {
     copy: {
-      className: 'file-b',
       title: [i18n.$t('code.copy')],
-      event: function () {
+      iconName: 'file-b',
+      onClick() {
         var code = util.unescape(finalCode(options.code));
         var hasOnCopy = typeof options.onCopy === 'function';
 
@@ -390,15 +390,15 @@ export function code(options) {
       elemHeaderView.append(li);
     });
 
-    // 工具栏
-    $.extend(tools, {
+    // 扩展内置工具包
+    $.extend(toolkit, {
       full: {
-        className: 'screen-full',
         title: [i18n.$t('code.maximize'), i18n.$t('code.restore')],
-        event: function (obj) {
+        iconName: 'screen-full',
+        onClick(obj) {
           var el = obj.elem;
           var elemView = el.closest('.' + CONST.ELEM_PREVIEW);
-          var classNameFull = 'layui-icon-' + this.className;
+          var classNameFull = 'layui-icon-' + this.iconName;
           var classNameRestore = 'layui-icon-screen-restore';
           var title = this.title;
           var htmlElem = $('html,body');
@@ -418,9 +418,9 @@ export function code(options) {
         },
       },
       window: {
-        className: 'release',
         title: [i18n.$t('code.preview')],
-        event: function () {
+        iconName: 'release',
+        onClick() {
           util.openWin({
             content: finalCode(options.code),
           });
@@ -428,7 +428,7 @@ export function code(options) {
       },
     });
 
-    // copy
+    // 初始化 copy tool
     if (options.copy) {
       if (layui.type(options.tools) === 'array') {
         // 若 copy 未存在于 tools 中，则追加到最前
@@ -442,62 +442,38 @@ export function code(options) {
 
     // 工具栏事件
     elemToolbar.on('click', '>i', function () {
-      var oi = $(this);
-      var type = oi.data('type');
+      var elem = $(this);
+      var name = elem.data('name');
       var parameters = {
-        elem: oi,
-        type: type,
-        options: options, // 当前属性选项
+        elem,
+        name,
+        options, // 当前属性选项
         rawCode: options.code, // 原始 code
         finalCode: util.unescape(finalCode(options.code)), // 最终 code
       };
 
-      // 内部 tools event
-      tools[type] &&
-        typeof tools[type].event === 'function' &&
-        tools[type].event(parameters);
-
-      // 外部 tools event
-      typeof options.toolsEvent === 'function' &&
-        options.toolsEvent(parameters);
+      toolkit[name]?.onClick?.(parameters); // 执行当前工具事件
+      options.onToolClick?.(parameters); // 执行全局工具事件
     });
 
-    // 增加工具栏
-    if (options.addTools && options.tools) {
-      options.tools = [].concat(options.tools, options.addTools);
+    // 外部扩展工具包
+    $.extend(toolkit, options.extendToolkit);
+
+    // 追加 tools
+    if (options.appendTools && options.tools) {
+      options.tools = [].concat(options.tools, options.appendTools);
     }
 
+    // tools 去重
+    options.tools = Array.from(new Set(options.tools));
+
     // 渲染工具栏
-    layui.each(options.tools, function (i, v) {
-      var viso = typeof v === 'object'; // 若为 object 值，则可自定义更多属性
-      var tool = viso
-        ? v
-        : tools[v] || {
-            className: v,
-            title: [v],
-          };
-
-      var className = tool.className || tool.type;
-      var title = tool.title || [''];
-      var type = viso ? tool.type || className : v;
-
-      if (!type) return;
-
-      // 若非内置 tool，则合并到 tools 中
-      if (!tools[type]) {
-        var obj = {};
-        obj[type] = tool;
-        $.extend(tools, obj);
-      }
+    options.tools.forEach((name) => {
+      const tool = toolkit[name];
+      if (!tool) return;
 
       elemToolbar.append(
-        '<i class="layui-icon layui-icon-' +
-          className +
-          '" data-type="' +
-          type +
-          '" title="' +
-          title[0] +
-          '"></i>',
+        `<i class="layui-icon layui-icon-${tool.iconName}" data-name="${name}" title="${tool.title[0]}"></i>`,
       );
     });
 
@@ -719,7 +695,7 @@ export function code(options) {
 
     // 点击复制
     copyElem.on('click', function () {
-      tools.copy.event();
+      toolkit.copy.onClick();
     });
 
     elemFixbar.append(copyElem);
