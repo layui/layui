@@ -3,7 +3,7 @@
  * Layui 可视化简易单元测试
  */
 
-const { lay, code: layCode } = layui;
+const { lay, code: layCode, $ } = layui;
 
 class Test {
   constructor(options) {
@@ -26,7 +26,7 @@ class Test {
   #init() {
     const options = this.options;
 
-    options.el = lay(options.elem);
+    options.el = $(options.elem);
   }
 
   #render() {
@@ -62,14 +62,14 @@ class Test {
         const title = item.title || item.name;
 
         if (item.type === '-') {
-          lay(liElem).attr('class', 'layui-menu-item-divider');
+          $(liElem).attr('class', 'layui-menu-item-divider');
         } else {
           const hasChildren = item.children && item.children.length;
           const anchor = hasChildren
             ? 'javascript:;'
             : `#${parentName ? parentName + '.' : ''}${item.name}`;
 
-          lay(liElem).append(`
+          $(liElem).append(`
             <div class="layui-menu-body-title">
               <a href="${anchor}">${title}</a>
             </div>
@@ -77,16 +77,16 @@ class Test {
 
           if (hasChildren) {
             const ulElem = lay.elem('ul');
-            lay(liElem).attr(
+            $(liElem).attr(
               'class',
               'layui-menu-item-group layui-menu-item-down',
             );
             renderMenu(ulElem, item.children, item.name);
-            lay(liElem).append(ulElem);
+            $(liElem).append(ulElem);
           }
         }
 
-        lay(target).append(liElem);
+        $(target).append(liElem);
       });
     })(menuElem, options.items || []);
 
@@ -141,9 +141,9 @@ class Test {
       opts,
     ));
 
-    lay(describer.suiteElem).append(`<h2>${opts.title} : </h2>`);
-    lay(describer.suiteElem).append(describer.itemsElem);
-    lay(this.mainElem).append(describer.suiteElem);
+    $(describer.suiteElem).append(`<h2>${opts.title} : </h2>`);
+    $(describer.suiteElem).append(describer.itemsElem);
+    $(this.mainElem).append(describer.suiteElem);
 
     fn?.(this.#it.bind(this));
     return this;
@@ -157,13 +157,13 @@ class Test {
     const startTime = Date.now();
     const actual = (() => {
       try {
-        return new Function(`return function(lay) {
+        return new Function(`return function(lay, $) {
           let result;
           const console = Object.assign({}, window.console);
           console.log = (a) => result = a;
           ${code}
           return result;
-        }`)()(lay);
+        }`)()(lay, $);
       } catch (e) {
         return e.message;
       }
@@ -211,12 +211,12 @@ class Test {
     `;
 
     layCode({
-      elem: lay(itemElem).find('.layui-code')[0],
+      elem: $(itemElem).find('.layui-code')[0],
       theme: 'dark',
       encode: false,
     });
 
-    lay(describer.itemsElem).append(itemElem);
+    $(describer.itemsElem).append(itemElem);
 
     // 更新统计信息
     this.#stats();
@@ -229,7 +229,7 @@ class Test {
     const statsElem = lay.elem('div', { class: 'test-stats' });
     const existingStatsElem = this.mainElem.querySelector('.test-stats');
 
-    lay(statsElem).html(`
+    $(statsElem).html(`
       <span><strong>测试数量 : </strong>${stats.total}</span>
       <span><strong>✅ 通过 : </strong>${stats.passes}</span>
       <span><strong>❌ 失败 : </strong>${stats.failures}</span>

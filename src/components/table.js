@@ -88,11 +88,29 @@ var getThisTableConfig = function (id) {
   return config || null;
 };
 
-// lay 函数可以处理 Selector，HTMLElement，JQuery 类型
-// 无效的 CSS 选择器字符串，会抛出 SyntaxError 异常，此时直接返回 laytpl 模板字符串
+/**
+ * 该实现最早可追溯：https://github.com/layui/layui/pull/1438
+ * 由于已取消 `lay()` 查找元素功能，此处按当年「兼容模板选择器与模板字符串」的契约重构：
+ * 1. 传入 HTMLElement 或 jQuery 对象时，读取首个元素的 innerHTML
+ * 2. 传入字符串时，沿用原生 querySelector 的行为，不再支持 jQuery 特有的选择器
+ * 3. 无效的 CSS 选择器字符串，会抛出 SyntaxError 异常，此时直接返回 laytpl 模板字符串
+ */
 var resolveTplStr = function (templet) {
   try {
-    return lay(templet).html();
+    if (templet?.jquery) {
+      return templet[0] ? templet.html() : undefined;
+    }
+
+    if (templet?.nodeType === 1) {
+      return templet.innerHTML;
+    }
+
+    if (typeof templet === 'string') {
+      var elem = document.querySelector(templet);
+      return elem ? elem.innerHTML : undefined;
+    }
+
+    return undefined;
   } catch {
     return templet;
   }
