@@ -56,7 +56,7 @@ layui.use(function(){
     },
     clock: function(obj, inst){  // 计时中
       var str = [obj.d,'天',obj.h,'时',obj.m,'分',obj.s,'秒'].join(' ');
-      lay('#test2').html(str);
+      $('#test2').html(str);
       util.countdown.timer = inst.timer; // 记录当前定时器，以便在重复渲染时清除。实际使用时不常用
     },
     done: function(obj, inst){ // 计时完成
@@ -78,7 +78,7 @@ layui.use(function(){
   // 某个时间在多久前
   var setTimeAgo = function(y, M, d, H, m, s){
     var str = util.timeAgo(new Date(y, M||0, d||1, H||0, m||0, s||0));
-    lay('#test4').html(str);
+    $('#test4').html(str);
   };
   laydate.render({
     elem: '#test3',

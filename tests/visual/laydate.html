@@ -181,7 +181,7 @@
 
     <script src="./assets/dist/layui.js"></script>
     <script type="module">
-      const { lay, laydate } = layui;
+      const { $, lay, laydate } = layui;
 
       // 全局配置
       laydate.set({
@@ -383,7 +383,7 @@
         trigger: 'click',
       });
       /*
-lay('.test-item').each(function(){
+$('.test-item').each(function(){
 laydate.render({
   elem: this
   ,trigger: 'click'
@@ -501,7 +501,7 @@ laydate.render({
       });
 
       //外部事件
-      lay('#test9').on('click', (e) => {
+      $('#test9').on('click', (e) => {
         laydate.render({
           elem: '#test8',
           type: 'datetime',

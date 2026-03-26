@@ -242,7 +242,7 @@
             var str = [obj.d, '天', obj.h, '时', obj.m, '分', obj.s, '秒'].join(
               ' ',
             );
-            lay('#test').html(str);
+            $('#test').html(str);
             util.countdown.timer = inst.timer; // 记录当前定时器，以便在重复渲染时清除。实际使用时不常用
           },
           done: (obj, inst) => {

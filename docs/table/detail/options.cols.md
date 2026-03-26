@@ -11,7 +11,7 @@
       <th>描述</th>
       <th>类型</th>
       <th>默认值</th>
-    </tr> 
+    </tr>
   </thead>
   <tbody>
     <tr>
@@ -64,7 +64,7 @@
 </td>
 <td>number</td>
 <td>
-  
+
 `60`
 
 </td>
@@ -118,7 +118,7 @@
 </td>
 <td>string</td>
 <td>
-  
+
 `normal`
 
 </td>
@@ -132,7 +132,7 @@
 </td>
 <td>boolean</td>
 <td>
-  
+
 `false`
 
 </td>
@@ -142,7 +142,7 @@
 <td>
 
 设置固定列，即不跟随 table 横向滚动条而滚动。可选值有：
-- `left` 固定在左 
+- `left` 固定在左
 - `right` 固定在右
 
 多级表头设置固定列时，父列和子列均需设置。
@@ -153,7 +153,7 @@
     </tr>
     <tr>
 <td>
-  
+
 [templet](#cols.templet)
 
 </td>
@@ -171,13 +171,13 @@
 ```
 <script type="text/html" id="TPL-demo-title">
   <a href="/detail/{{= d.id }}" class="layui-table-link">
-    {{= d.title }} 
+    {{= d.title }}
   </a>
 </script>
- 
-<!-- 
+
+<!--
 模板中的 `d` 不仅包含当前行数据，还包含特定字段，如：
-{{= d.LAY_INDEX }} {{= d.LAY_COL }} 等 
+{{= d.LAY_INDEX }} {{= d.LAY_COL }} 等
 -->
 ```
 
@@ -193,8 +193,6 @@ table.render({
 !}}
 
 - **设置模板内容**
-
-该方式必须在内容中包裹一层 `<div></div>`，否则无法读取模板。
 
 {{!
 ```
@@ -218,7 +216,7 @@ table.render({
       console.log(d); // 得到当前行数据
       console.log(this); // 得到表头当前列配置项
       console.log(d.LAY_NUM); // 得到序号。或其他特定字段
-      
+
       // 返回模板内容
       return '<a href="/detail/'+ d.id +'" class="layui-table-link">'+ d.title +'</a>'
     }}
@@ -253,7 +251,7 @@ exportTemplet: function(d, obj){
     </tr>
     <tr>
 <td>
-  
+
   [totalRow](#cols.totalRow)
 
 </td>
@@ -271,7 +269,7 @@ exportTemplet: function(d, obj){
 totalRow: true
 
 // 开启并输出合计行自定义模板。此处 TOTAL_NUMS 即为合计结果的固定特定字段
-totalRow: '{{= d.TOTAL_NUMS }} 单位' 
+totalRow: '{{= d.TOTAL_NUMS }} 单位'
 // 取整或其他运算
 totalRow: '{{= parseInt(d.TOTAL_NUMS) }}'
 ```
@@ -313,7 +311,7 @@ totalRow: '分数：{{= d.TOTAL_ROW.score }}'
     </tr>
     <tr>
 <td>
-  
+
 [edit](#cols.edit)
 
 </td>
@@ -341,7 +339,7 @@ edit: function(d){
 </td>
 <td>string<br>function</td>
 <td>
-  
+
 `false`
 
 </td>
@@ -355,7 +353,7 @@ edit: function(d){
 </td>
 <td>boolean</td>
 <td>
-  
+
 `false`
 
 </td>
@@ -383,7 +381,7 @@ edit: function(d){
 </td>
 <td>boolean</td>
 <td>
-  
+
 `true`
 
 </td>
@@ -398,7 +396,7 @@ edit: function(d){
 </td>
 <td>boolean</td>
 <td>
-  
+
 `false`
 
 </td>
@@ -412,7 +410,7 @@ edit: function(d){
 </td>
 <td>boolean</td>
 <td>
-  
+
 `false`
 
 </td>
@@ -446,7 +444,7 @@ edit: function(d){
 </td>
 <td>string</td>
 <td>
-  
+
 `left`
 
 </td>
@@ -460,7 +458,7 @@ edit: function(d){
 </td>
 <td>number</td>
 <td>
-  
+
 `1`
 
 </td>
@@ -474,7 +472,7 @@ edit: function(d){
 </td>
 <td>number</td>
 <td>
-  
+
 `1`
 
 </td>
