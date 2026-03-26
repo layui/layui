@@ -70,25 +70,25 @@
     <script type="text/html" id="provinceTpl">
       <select name="select-province" class="layui-border select-province" lay-ignore lay-filter="province_{{d.rowid}}" id="province_{{d.rowid}}">
         <option value="">请选择</option>
-        {{# layui.each(d.provinceList, function(i, v){ }}
-          <option value="{{v.id}}" {{d.province==v.id?"selected":""}}>{{v.name}}</option>
-          {{# }); }}
+        {{ layui.each(d.provinceList, function(i, v){ }}
+          <option value="{{= v.id }}" {{= d.province==v.id?"selected":"" }}>{{= v.name }}</option>
+          {{ }); }}
       </select>
     </script>
     <script type="text/html" id="cityTpl">
       <select name="select-city" class="layui-border select-city" lay-ignore lay-filter="city_{{d.rowid}}" id="city_{{d.rowid}}">
         <option value="">请选择</option>
-        {{# layui.each(d.cityList, function(i, v){ }}
-          <option value="{{v.id}}" {{d.city==v.id?"selected":""}}>{{v.name}}</option>
-          {{# }); }}
+        {{ layui.each(d.cityList, function(i, v){ }}
+          <option value="{{= v.id }}" {{= d.city==v.id?"selected":"" }}>{{= v.name }}</option>
+          {{ }); }}
       </select>
     </script>
     <script type="text/html" id="districtTpl">
       <select name="select-district" class="layui-border select-district" lay-ignore lay-filter="district_{{d.rowid}}" id="district_{{d.rowid}}">
         <option value="">请选择</option>
-        {{# layui.each(d.districtList, function(i, v){ }}
-          <option value="{{v.id}}" {{d.district==v.id?"selected":""}}>{{v.name}}</option>
-          {{# }); }}
+        {{ layui.each(d.districtList, function(i, v){ }}
+          <option value="{{= v.id }}" {{= d.district==v.id?"selected":"" }}>{{= v.name }}</option>
+          {{ }); }}
       </select>
     </script>
     <script

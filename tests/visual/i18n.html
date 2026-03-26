@@ -394,7 +394,7 @@
 
         // 渲染页面模板
         const template = $('#template').html();
-        const html = laytpl(template, { tagStyle: 'modern' }).render();
+        const html = laytpl(template).render();
         $('#root').html(html);
 
         /**

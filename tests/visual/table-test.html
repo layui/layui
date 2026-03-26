@@ -61,11 +61,11 @@
 
     <script type="text/html" id="barDemo">
       <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-      {{# if((d.email || '').trim()){ }}
+      {{ if((d.email || '').trim()){ }}
       <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
         >删除</a
       >
-      {{# } }}
+      {{ } }}
       <input
         type="checkbox"
         name="demoTableSwitch"

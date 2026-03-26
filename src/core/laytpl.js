@@ -126,7 +126,6 @@ var config = {
   close: '}}', // 结束界定符
   cache: true, // 是否开启模板缓存，以便下次渲染时不重新编译模板
   condense: true, // 是否压缩模板空白符，如：将多个连续的空白符压缩为单个空格
-  tagStyle: '', // 标签风格。默认采用 < 2.11 的风格，设置 modern 则采用 2.11+ 风格
 };
 
 // 构造器
@@ -346,22 +345,12 @@ Class.prototype.compile = function (template) {
       return strConcatenation(body);
     };
 
-    // 标签风格
-    if (options.tagStyle === 'modern') {
-      // 2.11+ 版本风格
-      // 注释标签 - 仅在模板中显示，不进行解析，也不在视图中输出
-      tpl = tpl.replace(tagRegex(['#'], delimSides), '');
-      // 输出标签
-      tpl = tpl.replace(tagRegex(['(=|-)']), output);
-      // Scriptlet 标签
-      tpl = tpl.replace(tagRegex([], delimSides), statement);
-    } else {
-      // < 2.11 版本风格
-      // Scriptlet 标签
-      tpl = tpl.replace(tagRegex(['#'], delimSides), statement);
-      // 输出标签
-      tpl = tpl.replace(tagRegex(['(=|-)*']), output);
-    }
+    // 注释标签 - 仅在模板中显示，不进行解析，也不在视图中输出
+    tpl = tpl.replace(tagRegex(['#'], delimSides), '');
+    // 输出标签
+    tpl = tpl.replace(tagRegex(['(=|-)']), output);
+    // Scriptlet 标签
+    tpl = tpl.replace(tagRegex([], delimSides), statement);
 
     // 恢复换行符
     if (!condense) {
