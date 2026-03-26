@@ -2,13 +2,13 @@
 {{!<!-- select -->
 <!--注: 自 2.9.12 版本开始，select 可与 table 实现友好兼容。若使用旧版本，则推荐采用原生 select（即添加 lay-ignore 属性）-->
 <script type="text/html" id="TPL-select-demo">
-  {{# var cityList = d.cityList || ["北京","上海","广州","城市-1"]; }}
+  {{ var cityList = d.cityList || ["北京","上海","广州","城市-1"]; }}
   <select name="city" lay-filter="select-demo" lay-append-to="body">
     <option value="">select 方式</option>
-    {{# layui.each(cityList, function(i, v){ }}
+    {{ layui.each(cityList, function(i, v){ }}
     <option value="{{= v }}" {{= v === d.city ? 'selected' : '' }}>{{= v }}</option>
-    {{# }); }}
-  </select> 
+    {{ }); }}
+  </select>
 </script>
 <!-- dropdown -->
 <script type="text/html" id="TPL-dropdown-demo">
@@ -23,7 +23,7 @@
 </script>
 <!-- colorpicker -->
 <script type="text/html" id="TPL-colorpicker-demo">
-  {{# var color = d.color || ['#16baaa','#16b777','#1E9FFF','#FF5722','#FFB800','#393D49'][Math.round(Math.random()*5)]; }}
+  {{ var color = d.color || ['#16baaa','#16b777','#1E9FFF','#FF5722','#FFB800','#393D49'][Math.round(Math.random()*5)]; }}
   <div class="colorpicker-demo" lay-options="{color: '{{= color }}'}"></div>
 </script>!}}
 
@@ -37,7 +37,7 @@ layui.use(function(){
   var laydate = layui.laydate;
   var colorpicker = layui.colorpicker;
   var util = layui.util;
-  
+
   // 渲染
   table.render({
     elem: '#ID-table-demo-editmodes',
@@ -59,7 +59,7 @@ layui.use(function(){
     ]],
     done: function(res, curr, count){
       var options = this;
-      
+
       // 获取当前行数据 - 自定义方法
       table.getRowData = function(tableId, elem){
         var index = $(elem).closest('tr').data('index');
@@ -73,7 +73,7 @@ layui.use(function(){
           anim: 'slideDown'
         });
       };
-      
+
       // layui form select 事件
       form.on('select(select-demo)', function(obj){
         var value = obj.value; // 获取选中项 value
@@ -86,7 +86,7 @@ layui.use(function(){
         // 显示当前行最新数据 - 仅用于示例展示
         showData(data);
       });
-      
+
       // dropdown 方式的下拉选择
       dropdown.render({
         elem: '.dropdown-demo',
@@ -104,7 +104,7 @@ layui.use(function(){
         }],
         click: function(obj){
           var data = table.getRowData(options.id, this.elem); // 获取当前行数据(如 id 等字段，以作为数据修改的索引)
-          
+
           this.elem.find('span').html(obj.title);
 
           // 更新数据中对应的字段
@@ -114,7 +114,7 @@ layui.use(function(){
           showData(data);
         }
       });
-      
+
       // laydate
       laydate.render({
         elem: '.laydate-demo',
@@ -123,12 +123,12 @@ layui.use(function(){
 
           // 更新数据中对应的字段
           data.date = value;
-          
+
           // 显示当前行最新数据 - 仅用于示例展示
           showData(data);
         }
       });
-      
+
       // colorpicker
       colorpicker.render({
         elem: '.colorpicker-demo',
@@ -137,30 +137,30 @@ layui.use(function(){
 
           // 更新数据中对应的字段
           data.color = value;
-          
+
           // 显示当前行最新数据 - 仅用于示例展示
           showData(data);
         }
       });
-      
+
       // 单元格普通编辑事件
       table.on('edit(ID-table-demo-editmodes)', function(obj){
         var value = obj.value // 得到修改后的值
         var data = obj.data // 得到所在行所有键值
         var field = obj.field; // 得到字段
-        
+
         // 更新数据中对应的字段
         var update = {};
         update[field] = value;
         obj.update(update);
-        
+
         // 编辑后续操作，如提交更新请求，以完成真实的数据更新
         // …
-        
+
         // 显示当前行最新数据 - 仅用于示例展示
         showData(data);
       });
-      
+
       // 更多编辑方式……
     }
   });

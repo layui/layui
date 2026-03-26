@@ -176,129 +176,136 @@ var resizeObserver = lay.createSharedResizeObserver(MOD_NAME);
 // thead 区域模板
 var TPL_HEADER = function (options) {
   var rowCols =
-    '{{#var colspan = layui.type(item2.colspan2) === \'number\' ? item2.colspan2 : item2.colspan; if(colspan){}} colspan="{{=colspan}}"{{#} if(item2.rowspan){}} rowspan="{{=item2.rowspan}}"{{#}}}';
+    '{{ var colspan = layui.type(item2.colspan2) === \'number\' ? item2.colspan2 : item2.colspan; if(colspan){ }} colspan="{{=colspan}}"{{ } if(item2.rowspan){ }} rowspan="{{=item2.rowspan}}"{{ } }}';
 
   options = options || {};
-  return [
-    '<table cellspacing="0" cellpadding="0" border="0" class="layui-table" ',
-    '{{# if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{# } }} {{# if(d.data.size){ }}lay-size="{{=d.data.size}}"{{# } }} {{# if(d.data.even){ }}lay-even{{# } }}>',
-    '<thead>',
-    '{{# layui.each(d.data.cols, function(i1, item1){ }}',
-    '<tr>',
-    '{{# layui.each(item1, function(i2, item2){ }}',
-    '{{# if(item2.fixed && item2.fixed !== "right"){ left = true; } }}',
-    '{{# if(item2.fixed === "right"){ right = true; } }}',
-    (function () {
-      if (options.fixed && options.fixed !== 'right') {
-        return '{{# if(item2.fixed && item2.fixed !== "right"){ }}';
-      }
-      if (options.fixed === 'right') {
-        return '{{# if(item2.fixed === "right"){ }}';
-      }
-      return '';
-    })(),
-    '{{# var isSort = !(item2.colGroup) && item2.sort; }}',
-    '<th data-field="{{= item2.field||i2 }}" data-key="{{=d.index}}-{{=i1}}-{{=i2}}" {{# if( item2.parentKey){ }}data-parentkey="{{= item2.parentKey }}"{{# } }} {{# if(item2.minWidth){ }}data-minwidth="{{=item2.minWidth}}"{{# } }} {{# if(item2.maxWidth){ }}data-maxwidth="{{=item2.maxWidth}}"{{# } }} {{# if(item2.style){ }}style="{{=item2.style}}"{{# } }} ' +
-      rowCols +
-      ' {{# if(item2.unresize || item2.colGroup){ }}data-unresize="true"{{# } }} class="{{# if(item2.hide){ }}layui-hide{{# } }}{{# if(isSort){ }} layui-unselect{{# } }}{{# if(!item2.field){ }} layui-table-col-special{{# } }}"{{# if(item2.title){ }} title="{{ layui.$(\'<div>\' + item2.title + \'</div>\').text() }}"{{# } }}>',
-    '<div class="layui-table-cell laytable-cell-',
-    '{{# if(item2.colGroup){ }}',
-    'group',
-    '{{# } else { }}',
-    '{{=d.index}}-{{=i1}}-{{=i2}}',
-    '{{# if(item2.type !== "normal"){ }}',
-    ' laytable-cell-{{= item2.type }}',
-    '{{# } }}',
-    '{{# } }}',
-    '" {{#if(item2.align){}}align="{{=item2.align}}"{{#}}}>',
-    '{{# if(item2.type === "checkbox"){ }}', //复选框
-    '<input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose" {{# if(item2[d.data.checkName]){ }}checked{{# }; }}>',
-    '{{# } else { }}',
-    '<span>{{-item2.title||""}}</span>',
-    '{{# if(isSort){ }}',
-    '<span class="layui-table-sort layui-inline"><i class="layui-edge layui-table-sort-asc" title="{{= d.i18nMessages.table_sort_asc }}"></i><i class="layui-edge layui-table-sort-desc" title="{{= d.i18nMessages.table_sort_desc }}"></i></span>',
-    '{{# } }}',
-    '{{# } }}',
-    '</div>',
-    '</th>',
-    options.fixed ? '{{# }; }}' : '',
-    '{{# }); }}',
-    '</tr>',
-    '{{# }); }}',
-    '</thead>',
-    '</table>',
-  ].join('');
+  return `
+    <table cellspacing="0" cellpadding="0" border="0" class="layui-table"
+      {{ if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{ } }}
+      {{ if(d.data.size){ }}lay-size="{{=d.data.size}}"{{ } }}
+      {{ if(d.data.even){ }}lay-even{{ } }}>
+      <thead>
+        {{ layui.each(d.data.cols, function(i1, item1){ }}
+          <tr>
+            {{ layui.each(item1, function(i2, item2){ }}
+              {{ if(item2.fixed && item2.fixed !== "right"){ left = true; } }}
+              {{ if(item2.fixed === "right"){ right = true; } }}
+              ${(function () {
+                if (options.fixed && options.fixed !== 'right') {
+                  return '{{ if(item2.fixed && item2.fixed !== "right"){ }}';
+                }
+                if (options.fixed === 'right') {
+                  return '{{ if(item2.fixed === "right"){ }}';
+                }
+                return '';
+              })()}
+              {{ var isSort = !(item2.colGroup) && item2.sort; }}
+              <th
+                data-field="{{= item2.field||i2 }}"
+                data-key="{{=d.index}}-{{=i1}}-{{=i2}}"
+                {{ if(item2.parentKey){ }}data-parentkey="{{= item2.parentKey }}"{{ } }}
+                {{ if(item2.minWidth){ }}data-minwidth="{{=item2.minWidth}}"{{ } }}
+                {{ if(item2.maxWidth){ }}data-maxwidth="{{=item2.maxWidth}}"{{ } }}
+                {{ if(item2.style){ }}style="{{=item2.style}}"{{ } }}
+                ${rowCols}
+                {{ if(item2.unresize || item2.colGroup){ }}data-unresize="true"{{ } }}
+                class="{{ if(item2.hide){ }}layui-hide{{ } }}{{ if(isSort){ }} layui-unselect{{ } }}{{ if(!item2.field){ }} layui-table-col-special{{ } }}"
+                {{ if(item2.title){ }}title="{{ layui.$('<div>' + item2.title + '</div>').text() }}"{{ } }}>
+                <div
+                  class="layui-table-cell laytable-cell-{{ if(item2.colGroup){ }}group{{ } else { }}{{=d.index}}-{{=i1}}-{{=i2}}{{ if(item2.type !== "normal"){ }} laytable-cell-{{= item2.type }}{{ } }}{{ } }}"
+                  {{ if(item2.align){ }}align="{{=item2.align}}"{{ } }}>
+                  {{ if(item2.type === "checkbox"){ }}
+                    <input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose" {{ if(item2[d.data.checkName]){ }}checked{{ }; }}>
+                  {{ } else { }}
+                    <span>{{-item2.title||""}}</span>
+                    {{ if(isSort){ }}
+                      <span class="layui-table-sort layui-inline"><i class="layui-edge layui-table-sort-asc" title="{{= d.i18nMessages.table_sort_asc }}"></i><i class="layui-edge layui-table-sort-desc" title="{{= d.i18nMessages.table_sort_desc }}"></i></span>
+                    {{ } }}
+                  {{ } }}
+                </div>
+              </th>
+              ${options.fixed ? '{{ }; }}' : ''}
+            {{ }); }}
+          </tr>
+        {{ }); }}
+      </thead>
+    </table>
+  `;
 };
 
 // tbody 区域模板
-var TPL_BODY = [
-  '<table cellspacing="0" cellpadding="0" border="0" class="layui-table" ',
-  '{{# if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{# } }} {{# if(d.data.size){ }}lay-size="{{=d.data.size}}"{{# } }} {{# if(d.data.even){ }}lay-even{{# } }}>',
-  '<tbody></tbody>',
-  '</table>',
-].join('');
+var TPL_BODY = `
+  <table cellspacing="0" cellpadding="0" border="0" class="layui-table"
+    {{ if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{ } }}
+    {{ if(d.data.size){ }}lay-size="{{=d.data.size}}"{{ } }}
+    {{ if(d.data.even){ }}lay-even{{ } }}>
+    <tbody></tbody>
+  </table>
+`;
 
 // 主模板
-var TPL_MAIN = [
-  '{{# if(d.data.toolbar){ }}',
-  '<div class="layui-table-tool">',
-  '<div class="layui-table-tool-temp"></div>',
-  '<div class="layui-table-tool-self"></div>',
-  '</div>',
-  '{{# } }}',
-  '<div class="layui-table-box">',
-  '{{# if(d.data.loading){ }}',
-  '<div class="layui-table-init">',
-  '<div class="layui-table-loading-icon">',
-  '{{# if(typeof d.data.loading === "string"){ }}',
-  '{{- d.data.loading}}',
-  '{{# } else{ }}',
-  '<i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>',
-  '{{# } }}',
-  '</div>',
-  '</div>',
-  '{{# } }}',
-  '{{# var left, right; }}',
-  '<div class="layui-table-header">',
-  TPL_HEADER(),
-  '</div>',
-  '<div class="layui-table-body layui-table-main">',
-  TPL_BODY,
-  '</div>',
-  '{{# if(left){ }}',
-  '<div class="layui-table-fixed layui-table-fixed-l">',
-  '<div class="layui-table-header">',
-  TPL_HEADER({ fixed: true }),
-  '</div>',
-  '<div class="layui-table-body">',
-  TPL_BODY,
-  '</div>',
-  '</div>',
-  '{{# }; }}',
-  '{{# if(right){ }}',
-  '<div class="layui-table-fixed layui-table-fixed-r layui-hide">',
-  '<div class="layui-table-header">',
-  TPL_HEADER({ fixed: 'right' }),
-  '<div class="layui-table-mend"></div>',
-  '</div>',
-  '<div class="layui-table-body">',
-  TPL_BODY,
-  '</div>',
-  '</div>',
-  '{{# }; }}',
-  '</div>',
-  '{{# if(d.data.totalRow){ }}',
-  '<div class="layui-table-total">',
-  '<table cellspacing="0" cellpadding="0" border="0" class="layui-table" ',
-  '{{# if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{# } }} {{# if(d.data.size){ }}lay-size="{{=d.data.size}}"{{# } }} {{# if(d.data.even){ }}lay-even{{# } }}>',
-  '<tbody><tr><td><div class="layui-table-cell" style="visibility: hidden;">Total</div></td></tr></tbody>',
-  '</table>',
-  '</div>',
-  '{{# } }}',
-  '<div class="layui-table-column layui-table-page layui-hide">',
-  '<div class="layui-inline layui-table-pageview" id="layui-table-page{{=d.index}}"></div>',
-  '</div>',
-].join('');
+var TPL_MAIN = `
+  {{ if(d.data.toolbar){ }}
+    <div class="layui-table-tool">
+      <div class="layui-table-tool-temp"></div>
+      <div class="layui-table-tool-self"></div>
+    </div>
+  {{ } }}
+  <div class="layui-table-box">
+    {{ if(d.data.loading){ }}
+      <div class="layui-table-init">
+        <div class="layui-table-loading-icon">
+          {{ if(typeof d.data.loading === "string"){ }}
+            {{- d.data.loading}}
+          {{ } else{ }}
+            <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>
+          {{ } }}
+        </div>
+      </div>
+    {{ } }}
+    {{ var left, right; }}
+    <div class="layui-table-header">
+      ${TPL_HEADER()}
+    </div>
+    <div class="layui-table-body layui-table-main">
+      ${TPL_BODY}
+    </div>
+    {{ if(left){ }}
+      <div class="layui-table-fixed layui-table-fixed-l">
+        <div class="layui-table-header">
+          ${TPL_HEADER({ fixed: true })}
+        </div>
+        <div class="layui-table-body">
+          ${TPL_BODY}
+        </div>
+      </div>
+    {{ }; }}
+    {{ if(right){ }}
+      <div class="layui-table-fixed layui-table-fixed-r layui-hide">
+        <div class="layui-table-header">
+          ${TPL_HEADER({ fixed: 'right' })}
+          <div class="layui-table-mend"></div>
+        </div>
+        <div class="layui-table-body">
+          ${TPL_BODY}
+        </div>
+      </div>
+    {{ }; }}
+  </div>
+  {{ if(d.data.totalRow){ }}
+    <div class="layui-table-total">
+      <table cellspacing="0" cellpadding="0" border="0" class="layui-table"
+        {{ if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{ } }}
+        {{ if(d.data.size){ }}lay-size="{{=d.data.size}}"{{ } }}
+        {{ if(d.data.even){ }}lay-even{{ } }}>
+        <tbody><tr><td><div class="layui-table-cell" style="visibility: hidden;">Total</div></td></tr></tbody>
+      </table>
+    </div>
+  {{ } }}
+  <div class="layui-table-column layui-table-page layui-hide">
+    <div class="layui-inline layui-table-pageview" id="layui-table-page{{=d.index}}"></div>
+  </div>
+`;
 
 var _WIN = $(window);
 var _DOC = $(document);
@@ -463,7 +470,6 @@ Class.prototype.render = function (type) {
       laytpl(TPL_MAIN, {
         open: '{{', // 标签符前缀
         close: '}}', // 标签符后缀
-        tagStyle: 'legacy',
       }).render({
         data: options,
         index: that.index, //索引

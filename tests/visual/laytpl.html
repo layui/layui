@@ -56,12 +56,7 @@
     <div class="layui-padding-3">
       <div class="layui-row">
         <div class="layui-col-xs6 laytpl-demo">
-          <div>
-            <a href="javascript:;" id="ID-tpl-src-title">
-              <cite><strong>模板</strong></cite>
-              <i class="layui-icon layui-icon-down layui-font-12"></i>
-            </a>
-          </div>
+          <div><strong>模板</strong></div>
           <textarea id="ID-tpl-src"></textarea>
         </div>
         <div class="layui-col-xs6 laytpl-demo">
@@ -71,7 +66,7 @@
           <textarea id="ID-tpl-data">
 {
   "title": "标题",
-  "desc": "<a href=\"\" style=\"color:blue;\">一段描述</a>",
+  "desc": "<strong>一段描述</strong>",
   "items": [
     {
       "title": "list 1",
@@ -90,8 +85,8 @@
     },
     {"title": "list 3"}
   ]
-}</textarea
-          >
+}
+          </textarea>
         </div>
         <div class="layui-col-xs12 laytpl-demo" style="border-top: none">
           <div class="layui-row">
@@ -123,128 +118,86 @@
         </div>
       </div>
 
-      <script type="text/html" id="ID-tpl-template-modern">
-        <h2>
-          {{= d.title }} - {{= d.title ? '#' : '' }} {{ if(true){
-          }}AAAA{{='A'}}{{ } }}
-        </h2>
-        {{- include('ID-tpl-template-common', {title: '头部'}) }}
+      <!-- prettier-ignore -->
+      <script type="text/html" id="ID-tpl-template">
+<h2>
+  {{= d.title }} - {{= d.title ? '#' : '' }} {{ if(true){
+  }}AAAA{{='A'}}{{ } }}
+</h2>
+{{- include('ID-tpl-template-common', {title: '头部'}) }}
 
-        <hr />
+<hr />
 
-        <p>转义输出：{{= d.desc }}</p>
-        <p>原文输出：{{- d.desc }}</p>
+<p>转义输出：{{= d.desc }}</p>
+<p>原文输出：{{- d.desc }}</p>
 
-        {{# 这是一段注释。仅在模板中显示，不在视图中输出 }} {{!
-        这是一段不进行模板解析的区域，可显示原始标签： {{ let a = 0; }}、{{=
-        escape }}、{{- source }}、{{# comments }}、&#123;&#123;! ignore
-        !&#125;&#125; !}} {{# 空主体测试 }} {{}} {{ }} {{ }} {{= }} {{=}} {{= }}
+{{# 这是一段注释。仅在模板中显示，不在视图中输出 }} {{!
+这是一段不进行模板解析的区域，可显示原始标签： {{ let a = 0; }}、{{=
+escape }}、{{- source }}、{{# comments }}、&#123;&#123;! ignore
+!&#125;&#125; !}} {{# 空主体测试 }} {{}} {{ }} {{ }} {{= }} {{=}} {{= }}
 
-        <div>
-          {{- !0 ? '<br />循环输出：' : '' }}
-          <hr />
-          <ul>
-            {{ var str = "一级列表 a \\ b c"; d.items.forEach(function(value,
-            index) { }}
-            <li class="{{= index > 0 ? 'list' : '' }}">
-              <strong>{{= value.title }}</strong>
-              {{ if(value.content){ }}
-              <span>{{= value.content }}</span>
-              {{ } }}
-              <span>{{= value.time || '' }}</span>
-              {{= str }} {{- include('ID-tpl-template-list', { items:
-              value.child }) }}
-            </li>
-            {{ }); }} {{ if(d.items.length === 0){ }} 无数据 {{ } }}
-          </ul>
-          <hr />
-        </div>
+<div>
+  {{- !0 ? '<br />循环输出：' : '' }}
+  <hr />
+  <ul>
+    {{ var str = "一级列表 a \\ b c"; d.items.forEach(function(value,
+    index) { }}
+    <li class="{{= index > 0 ? 'list' : '' }}">
+      <strong>{{= value.title }}</strong>
+      {{ if(value.content){ }}
+      <span>{{= value.content }}</span>
+      {{ } }}
+      <span>{{= value.time || '' }}</span>
+      {{= str }} {{- include('ID-tpl-template-list', { items:
+      value.child }) }}
+    </li>
+    {{ }); }} {{ if(d.items.length === 0){ }} 无数据 {{ } }}
+  </ul>
+  <hr />
+</div>
 
-        <div>
-          {{= d.content || '' }} \反斜杠 | '单引号' "双引号" ""''"" | "左双右单'
-          | '左单右双"
-        </div>
+<div>
+  {{= d.content || '' }} \反斜杠 | '单引号' "双引号" ""''"" | "左双右单'
+  | '左单右双"
+</div>
 
-        <p>渲染时间：{{= layui.util.toDateString(new Date()) }}</p>
+<p>渲染时间：{{= layui.util.toDateString(new Date()) }}</p>
       </script>
 
+      <!-- prettier-ignore -->
       <script type="text/html" id="ID-tpl-template-common">
-        公共模板 - {{= d.title }}
+公共模板 - {{= d.title }}
       </script>
 
+      <!-- prettier-ignore -->
       <script type="text/html" id="ID-tpl-template-list">
-        {{ if(d.items && d.items.length > 0){ }}
-        <ul>
-          {{ layui.each(d.items, function(index, item){ }}
-          <li>
-            <strong>{{= item.title }}</strong>
-            {{- include('ID-tpl-template-list', {items: item.child}) }}
-          </li>
-          {{ }); }}
-        </ul>
-        {{ } }}
+{{ if(d.items && d.items.length > 0){ }}
+<ul>
+  {{ layui.each(d.items, function(index, item){ }}
+  <li>
+    <strong>{{= item.title }}</strong>
+    {{- include('ID-tpl-template-list', {items: item.child}) }}
+  </li>
+  {{ }); }}
+</ul>
+{{ } }}
       </script>
 
+      <!-- prettier-ignore -->
       <script type="text/html" id="ID-tpl-template-test">
-        {{ for (var i = 0; i < d.items.length; i++) { }} 第 {{= d.items[i].index
-        }} 个，Name: {{- d.items[i].name }} Number: {{= d.items[i].number }} {{
-        } }}
-      </script>
-
-      <!-- 旧版本模板 -->
-      <script type="text/html" id="ID-tpl-template-legacy">
-        <h2>
-          {{= d.title }} - {{= d.title ? '#' : '' }} {{# if(true){
-          }}AAAA{{='A'}}{{# } }}
-        </h2>
-
-        <hr />
-
-        <p>转义输出：{{ d.desc }}</p>
-        <p>转义输出：{{= d.desc }}</p>
-        <p>原文输出：{{- d.desc }}</p>
-
-        {{}} {{ }} {{ }} {{= }} {{=}} {{= }}
-
-        <div>
-          <ul>
-            {{# var str = "a b c"; }} {{# layui.each(d.items, function(index,
-            item) { }}
-            <li class="{{= index > 0 ? 'list' : '' }}">
-              <strong>{{= item.title }}</strong>
-              {{# if(item.content){ }}
-              <span>{{= item.content }}</span>
-              {{# } }}
-              <span>{{= item.time || '' }}</span>
-              {{ str }}
-            </li>
-            {{# }); }} {{# if (d.items.length === 0) { }} 无数据 {{# } }}
-          </ul>
-          <hr />
-        </div>
-
-        <div>
-          {{= d.content || '' }} \反斜杠 | '单引号' "双引号" ""''"" | "左双右单'
-          | '左单右双"
-        </div>
-
-        <p>渲染时间：{{ layui.util.toDateString(new Date()) }}</p>
+{{ for (var i = 0; i < d.items.length; i++) { }} 第 {{= d.items[i].index
+}} 个，Name: {{- d.items[i].name }} Number: {{= d.items[i].number }} {{
+} }}
       </script>
     </div>
 
     <script src="./assets/dist/layui.js"></script>
     <script>
-      layui.use(['laytpl', 'util', 'tabs', 'dropdown'], () => {
-        var laytpl = layui.laytpl;
-        var util = layui.util;
-        var tabs = layui.tabs;
-        var dropdown = layui.dropdown;
-        var $ = layui.$;
+      layui.use(() => {
+        const { laytpl, util, tabs, $ } = layui;
 
         // 默认设置
-        laytpl.config({
-          tagStyle: 'modern', // 初始采用新版标签风格
-        });
+        // laytpl.config({});
 
         // 获取模板和数据
         var getData = (type) => ({
@@ -266,22 +219,10 @@
           $('#ID-tpl-view-code').html(util.escape(html));
         };
 
-        // 生成模板
-        var createTemplate = (opts) => {
-          opts = $.extend(
-            {
-              tagStyle: 'modern',
-            },
-            opts,
-          );
+        // 初始化模板
+        var elem = document.querySelector('#ID-tpl-template');
+        $('#ID-tpl-src').val(elem.textContent.trim());
 
-          // 初始化模板
-          var elem = $('#ID-tpl-template-' + opts.tagStyle);
-          $('#ID-tpl-src').val(elem.html());
-
-          return opts;
-        };
-        var tplConfig = createTemplate();
         var data = getData();
 
         // 耗时计算
@@ -296,7 +237,6 @@
         // 创建一个模板实例
         var templateInst = laytpl(data.template, {
           condense: false, // 不处理连续空白符，即保留模板原始结构
-          tagStyle: tplConfig.tagStyle,
         });
 
         // 初始渲染
@@ -347,7 +287,7 @@
             for (var j = 0; j < renderTimes; j++) {
               var template = document.getElementById(
                 'ID-tpl-template-test',
-              ).innerHTML;
+              ).textContent;
               var html = laytpl(template).render(data);
             }
             renderView(html, startTime);
@@ -378,38 +318,6 @@
         tabs.render({
           elem: '#ID-tpl-view-header',
           body: ['#ID-tpl-view-body', '>div'],
-        });
-
-        // 切换模板
-        dropdown.render({
-          elem: '#ID-tpl-src-title',
-          data: [
-            {
-              title: '新版本模板',
-              tagStyle: 'modern',
-            },
-            {
-              title: '旧版本模板',
-              tagStyle: 'legacy',
-            },
-          ],
-          click: function (obj) {
-            createTemplate({
-              tagStyle: obj.tagStyle,
-            });
-            this.elem.children('cite').html(obj.title);
-
-            // 同步设置标签风格
-            templateInst.config.tagStyle = obj.tagStyle;
-
-            var data = getData();
-            var startTime = new Date();
-
-            // 重新渲染
-            templateInst.compile(data.template).render(data.data, (html) => {
-              renderView(html, startTime);
-            });
-          },
         });
       });
     </script>
