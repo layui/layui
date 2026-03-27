@@ -2445,7 +2445,7 @@ layui.define(['table'], function (exports) {
             })
             .join(',')
         );
-        var trsElem = tableView.find(
+        var trsElem = checkboxElem.length ? checkboxElem.closest('tr') : tableView.find(
           trs
             .map(function (value) {
               return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]';
