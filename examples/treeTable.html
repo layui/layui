@@ -148,7 +148,7 @@
         // 行单击事件：设置当前行为单选选中状态（包含固定列时同步高亮）
         treeTable.on('row(test)', function (obj) {
           obj.setRowChecked({
-            type: 'radio' // radio 单选模式；checkbox 复选模式
+            type: 'checkbox' // radio | checkbox
           });
         });
 

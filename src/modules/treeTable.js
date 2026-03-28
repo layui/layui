@@ -2204,9 +2204,6 @@ layui.define(['table'], function (exports) {
   Class.prototype.updateCheckStatus = function (dataP, checked) {
     var that = this;
     var options = that.getOptions();
-    if (!options.hasChecboxCol) {
-      return false; // 如果没有复选列则不需要更新状态
-    }
     var treeOptions = options.tree;
     var tableId = options.id;
     var tableView = options.elem.next();
@@ -2228,10 +2225,15 @@ layui.define(['table'], function (exports) {
             itemP[LAY_DATA_INDEX] +
             '"]  input[name="layTableCheckbox"]:not(:disabled)'
         );
+        var trElem = checkboxElem.length
+          ? checkboxElem.closest('tr')
+          : tableView.find(
+              'tr[lay-data-index="' + itemP[LAY_DATA_INDEX] + '"]'
+            );
         var checked = itemP[checkName];
 
         // 标记父节点行背景色
-        that.setRowCheckedClass(checkboxElem.closest('tr'), checked);
+        that.setRowCheckedClass(trElem, checked);
 
         // 设置原始复选框 checked 属性值并渲染
         checkboxElem.prop({
@@ -2445,18 +2447,17 @@ layui.define(['table'], function (exports) {
             })
             .join(',')
         );
-        var trsElem = checkboxElem.length ? checkboxElem.closest('tr') : tableView.find(
-          trs
-            .map(function (value) {
-              return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]';
-            })
-            .join(',')
-        );
+        var trsElem = checkboxElem.length
+          ? checkboxElem.closest('tr')
+          : tableView.find(
+              trs
+                .map(function (value) {
+                  return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]';
+                })
+                .join(',')
+            );
 
-        that.setRowCheckedClass(
-          checkboxElem.length ? checkboxElem.closest('tr') : trsElem,
-          checked
-        ); // 标记当前选中行背景色
+        that.setRowCheckedClass(trsElem, checked); // 标记当前选中行背景色
         checkboxElem.prop({ checked: checked, indeterminate: false });
 
         var trDataP;
