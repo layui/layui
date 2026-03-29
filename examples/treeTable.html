@@ -145,9 +145,11 @@
           page: true
         });
 
-        // 单元格工具事件
+        // 行单击事件：设置当前行为单选选中状态（包含固定列时同步高亮）
         treeTable.on('row(test)', function (obj) {
-          console.log(obj);
+          obj.setRowChecked({
+            type: 'checkbox' // radio | checkbox
+          });
         });
 
         // 表头工具栏工具事件
