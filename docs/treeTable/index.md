@@ -341,7 +341,7 @@ treeTable.setRowChecked('test', {
 // 行单击时设置单选选中（可与 row 事件配合）
 treeTable.on('row(test)', function (obj) {
   obj.setRowChecked({
-    type: 'radio'
+    type: 'checkbox' // radio | checkbox
   });
 });
 ```

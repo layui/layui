@@ -44,7 +44,7 @@ layui.use(function(){
       {field: 'sex', title: '性别', width: 80, sort: true},
       {field: 'experience', title: '积分', width: 90, sort: true},
       {field: 'city', title: '城市', width: 100},
-      { fixed: "right", title: "操作", width: 190, align: "center", toolbar: "#TPL-treeTable-demo-tools"} 
+      { fixed: "right", title: "操作", width: 190, align: "center", toolbar: "#TPL-treeTable-demo-tools"}
     ]],
     page: true
   });
@@ -66,7 +66,7 @@ layui.use(function(){
   // 行单击事件：设置当前行为单选选中状态（包含固定列时同步高亮）
   treeTable.on("row(ID-treeTable-demo)", function (obj) {
     obj.setRowChecked({
-      type: "radio" // radio 单选模式；checkbox 复选模式
+      type: 'checkbox' // radio | checkbox
     });
   });
 
@@ -82,8 +82,8 @@ layui.use(function(){
     } else if (layEvent === "addChild") {
       var data = { id: Date.now(), name: "新节点" };
       var newNode2 = treeTable.addNodes(tableId, {
-        parentIndex: trData["LAY_DATA_INDEX"], 
-        index: -1, 
+        parentIndex: trData["LAY_DATA_INDEX"],
+        index: -1,
         data: data
       });
     } else if (layEvent === "more") {
