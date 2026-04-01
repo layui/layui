@@ -2244,7 +2244,7 @@ Class.prototype.list = function (type, index) {
               li.each(function (ii) {
                 if (!$(this).hasClass(DISABLED)) {
                   ol.scrollTop = 30 * (ii - 2);
-                  return true;
+                  return false;
                 }
               });
             }
