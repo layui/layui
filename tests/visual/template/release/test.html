@@ -44,7 +44,7 @@
       layer.msg('Hello World', { icon: 6 });
 
       // 输出版本号
-      lay('#version').html(layui.v);
+      document.querySelector('#version').textContent = layui.v;
 
       // 日期
       laydate.render({

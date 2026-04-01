@@ -72,7 +72,7 @@
   </div>
 </div>
 <h5 style="margin-bottom: 15px; font-weight: 700;">
-  覆盖实例与解除实例 <sup>2.8+</sup> : 
+  覆盖实例与解除实例 <sup>2.8+</sup> :
 </h5>
 <div class="layui-form">
   <div class="layui-form-item">
@@ -93,9 +93,10 @@
   </div>
 </div>
 
-<!-- import layui --> 
+<!-- import layui -->
 <script>
 layui.use(function(){
+  var $ = layui.$;
   var laydate = layui.laydate;
   var form = layui.form;
 
@@ -105,7 +106,7 @@ layui.use(function(){
     value: '2016-10-14',
     isInitValue: true
   });
-  
+
   // 选中后的回调
   laydate.render({
     elem: '#ID-laydate-more-done',
@@ -113,7 +114,7 @@ layui.use(function(){
       layer.alert('你选择的日期是：' + value + '<br>获得的对象是' + JSON.stringify(date));
     }
   });
-  
+
   // 日期切换的回调
   laydate.render({
     elem: '#ID-laydate-more-change',
@@ -127,41 +128,41 @@ layui.use(function(){
     elem: '#ID-laydate-more-bottom',
     showBottom: false
   });
-  
+
   // 只出现确定按钮
   laydate.render({
     elem: '#ID-laydate-more-btns',
     btns: ['confirm']
   });
-  
+
   // 自定义事件
   laydate.render({
     elem: '#ID-laydate-more-trigger',
     trigger: 'mousedown'
   });
-  
+
   // 点我触发
   laydate.render({
     elem: '#ID-laydate-more-event',
     eventElem: '#ID-laydate-more-event-1',
     trigger: 'click'
   });
-  
+
   // 双击我触发
-  lay('#ID-laydate-more-dblclick').on('dblclick', function(){
+  $('#ID-laydate-more-dblclick').on('dblclick', function(){
     laydate.render({
       elem: '#ID-laydate-more-dblclick-input',
       show: true,
       closeStop: '#ID-laydate-more-dblclick',
     });
   });
-  
+
   // 日期只读
   laydate.render({
     elem: '#ID-laydate-more-readonly',
     trigger: 'click',
   });
-  
+
   // 非 input 元素
   laydate.render({
     elem: '#ID-laydate-more-div'

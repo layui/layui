@@ -9,24 +9,24 @@
   <link href="{{= d.layui[2].cdn.css }}" rel="stylesheet">
 </head>
 <body>
-<!-- 
+<!--
 本「综合演示」包含：自定义头部工具栏、获取表格数据、表格重载、自定义模板、单双行显示、单元格编辑、自定义底部分页栏、表格相关事件与操作、与其他组件的结合等相对常用的功能，以便快速掌握 table 组件的使用。
 -->
- 
-<div style="padding: 16px;"> 
+
+<div style="padding: 16px;">
   <table class="layui-hide" id="test" lay-filter="test"></table>
 </div>
-  
+
 <script type="text/html" id="toolbarDemo">{{!
   <div class="layui-btn-container">
     <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
     <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页数据</button>
     <button class="layui-btn layui-btn-sm" id="dropdownButton">
-      下拉按钮 
+      下拉按钮
       <i class="layui-icon layui-icon-down layui-font-12"></i>
     </button>
     <button class="layui-btn layui-btn-sm layui-bg-blue" id="reloadTest">
-      重载测试 
+      重载测试
       <i class="layui-icon layui-icon-down layui-font-12"></i>
     </button>
     <button class="layui-btn layui-btn-sm layui-btn-primary" id="rowMode">
@@ -35,23 +35,23 @@
     </button>
   </div>
 !}}</script>
- 
+
 <script type="text/html" id="toolDemo">
   <div class="layui-clear-space">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-xs" lay-event="more">
-      更多 
+      更多
       <i class="layui-icon layui-icon-down"></i>
     </a>
   </div>
-</script>  
- 
+</script>
+
 <script src="{{= d.layui[2].cdn.js }}"></script>
 <script>
 layui.use(['table', 'dropdown'], function(){
   var table = layui.table;
   var dropdown = layui.dropdown;
-  
+
   // 创建渲染实例
   table.render({
     elem: '#test',
@@ -79,7 +79,7 @@ layui.use(['table', 'dropdown'], function(){
       {field:'email', title:'邮箱 <i class="layui-icon layui-icon-tips layui-font-14" lay-event="email-tips" title="该字段开启了编辑功能" style="margin-left: 5px;"></i>', fieldTitle: '邮箱', hide: 0, width:150, expandedMode: 'tips', edit: 'text'},
       {field:'sex', width:80, title: '性别', sort: true},
       {field:'sign', title: '签名', edit: 'textarea', minWidth: 260, expandedWidth: 260, totalRow: '{{!人物：<span class="layui-badge-rim">唐代：{{= d.TOTAL_ROW.era.tang }} </span> <span class="layui-badge-rim">宋代：{{= d.TOTAL_ROW.era.song }}</span> <span class="layui-badge-rim">现代：{{= d.TOTAL_ROW.era.xian }}</span>!}}'},
-      {field:'experience', width: 100, title: '积分', sort: true, totalRow: '{{!{{= d.TOTAL_NUMS }} 😊!}}'}, 
+      {field:'experience', width: 100, title: '积分', sort: true, totalRow: '{{!{{= d.TOTAL_NUMS }} 😊!}}'},
       {field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{!{{= parseInt(d.TOTAL_NUMS) }} 次!}}'},
       {field:'ip', title:'IP', width: 120},
       {field:'joinTime', title:'加入时间', width: 120},
@@ -133,7 +133,7 @@ layui.use(['table', 'dropdown'], function(){
           }
         }
       });
- 
+
       // 重载测试
       dropdown.render({
         elem: '#reloadTest', // 可绑定在任意元素中，此处以上述按钮为例
@@ -211,7 +211,7 @@ layui.use(['table', 'dropdown'], function(){
           layer.msg('可观察 Network 请求参数的变化');
         }
       });
- 
+
       // 行模式
       dropdown.render({
         elem: '#rowMode',
@@ -238,7 +238,7 @@ layui.use(['table', 'dropdown'], function(){
             case 'multi-row':
               table.reload('test', {
                 // 设置行样式，此处以设置多行高度为例。若为单行，则没必要设置改参数 - 注：v2.7.0 新增
-                lineStyle: 'height: 95px;' 
+                lineStyle: 'height: 95px;'
               });
               layer.msg('即通过设置 lineStyle 参数可开启多行');
             break;
@@ -251,12 +251,11 @@ layui.use(['table', 'dropdown'], function(){
       console.log(res, msg)
     }
   });
-  
+
   // 工具栏事件
   table.on('toolbar(test)', function(obj){
     var id = obj.config.id;
     var checkStatus = table.checkStatus(id);
-    var othis = lay(this);
 
     switch(obj.event){
       case 'getCheckData':
@@ -281,7 +280,7 @@ layui.use(['table', 'dropdown'], function(){
       });
     }
   });
-  
+
   // 触发单元格工具事件
   table.on('tool(test)', function(obj){ // 双击 toolDouble
     var data = obj.data; // 获得当前行数据
@@ -314,7 +313,7 @@ layui.use(['table', 'dropdown'], function(){
               layer.close(index);
               // 向服务端发送删除指令
             });
-          } 
+          }
         },
         id: 'dropdown-table-tool',
         align: 'right', // 右对齐弹出
@@ -329,17 +328,17 @@ layui.use(['table', 'dropdown'], function(){
     dropdown.close('dropdown-table-tool');
   });
 
- 
+
   // 触发表格复选框选择
   table.on('checkbox(test)', function(obj){
     console.log(obj)
   });
- 
+
   // 触发表格单选框选择
   table.on('radio(test)', function(obj){
     console.log(obj)
   });
-  
+
   // 行单击事件
   table.on('row(test)', function(obj){
     //console.log(obj);
@@ -349,7 +348,7 @@ layui.use(['table', 'dropdown'], function(){
   table.on('rowDouble(test)', function(obj){
     console.log(obj);
   });
- 
+
   // 单元格编辑事件
   table.on('edit(test)', function(obj){
     var field = obj.field; // 得到字段
@@ -367,7 +366,7 @@ layui.use(['table', 'dropdown'], function(){
     // 编辑后续操作，如提交更新请求，以完成真实的数据更新
     // …
     layer.msg('编辑成功', {icon: 1});
-    
+
     // 其他更新操作
     var update = {};
     update[field] = value;
