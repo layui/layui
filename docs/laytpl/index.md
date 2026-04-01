@@ -9,7 +9,7 @@ toc: true
 
 <h2 id="test" lay-toc="{hot: true}" style="margin-bottom: 0;">在线测试</h2>
 
-对文本框中的*模板*或*数据*进行编辑，下方将呈现对应的*渲染结果*。注：自 <sup>2.11+</sup> 版本开始，你可以设置 `tagStyle: 'modern'` 让模板采用新的标签风格。为了保持向下兼容，默认仍然采用旧版本的标签风格。
+对文本框中的*模板*或*数据*进行编辑，下方将呈现对应的*渲染结果*。
 
 <div>
 {{- d.include("/laytpl/detail/demo.md") }}
@@ -120,9 +120,7 @@ layui.use(function(){
 var templateInst = laytpl(`
   {{ let role = d.role || '全栈开发者'; }}
   {{= d.name }}是一名{{= role }}
-`, {
-  tagStyle: 'modern' // 采用新版本的标签风格
-});
+`);
 var html = templateInst.render({ name: '张三' });
 ```
 !}}
@@ -188,9 +186,7 @@ layui.use(function() {
   };
 
   // 创建模板实例
-  var templateInst = laytpl(template, {
-    tagStyle: 'modern' // 采用新版本的标签风格
-  });
+  var templateInst = laytpl(template);
 
   // 渲染并输出结果
   templateInst.render(data, function(html) {
@@ -218,7 +214,6 @@ layui.use(function() {
 laytpl.config({
   open: '<%', // 自定义起始界定符
   close: '%>', // 自定义起始界定符
-  tagStyle: 'modern' // 采用新版本的标签风格
 });
 
 // 创建模板实例

@@ -20,12 +20,7 @@
 </style>
 <div class="layui-row">
   <div class="layui-col-xs6 laytpl-demo">
-    <div>
-      <div style="cursor: pointer;" id="ID-tpl-src-title">
-        <strong>模板（旧版本）</strong>
-        <i class="layui-icon layui-icon-down layui-font-12"></i>
-      </div>
-    </div>
+    <div><strong>模板</strong></div>
     &lt;textarea id="ID-tpl-src"&gt;&lt;/textarea>
   </div>
   <div class="layui-col-xs6 laytpl-demo">
@@ -79,8 +74,8 @@
 </div>
 <div class="layui-clear"></div>
 
-<!-- 新版本模板 -->
-<script type="text/html" id="ID-tpl-template-modern">
+<!-- 模板 -->
+<script type="text/html" id="ID-tpl-template">
 <p>转义输出：{{= d.desc }}</p>
 <p>原文输出：{{- d.desc }}</p>
 
@@ -112,42 +107,13 @@
 {{} }}
 </script>
 
-<!-- 旧版本模板 -->
-<script type="text/html" id="ID-tpl-template-legacy">
-<p>转义输出：{{= d.desc }}</p>
-<p>原文输出：{{- d.desc }}</p>
-<p>
-  条件语句：
-  {{= d.list.length ? d.title : '' }}
-  {{#if(d.title){}} - #AAAA{{='A'}}{{#}}}
-</p>
-<p>循环语句：</p>
-<ul>
-{{#d.list.forEach(function(item) { }}
-  <li>
-    <span>{{= item.title }}</span>
-    <span>{{= item.name }}</span>
-  </li>
-{{#}); }}
-</ul>
-{{#if (d.list.length === 0) { }}
-  无数据
-{{#} }}
-</script>
-
 <!-- import layui -->
 <script>
-layui.use(['laytpl', 'util', 'tabs', 'dropdown'], function() {
-  var laytpl = layui.laytpl;
-  var util = layui.util;
-  var tabs = layui.tabs;
-  var dropdown = layui.dropdown;
-  var $ = layui.$;
+layui.use(function() {
+  const { laytpl, util, tabs, $ } = layui;
 
   // 默认设置
-  laytpl.config({
-    // tagStyle: 'modern' // 初始化标签风格
-  });
+  // laytpl.config({});
 
   // 获取模板和数据
   var getData = function(type) {
@@ -170,19 +136,10 @@ layui.use(['laytpl', 'util', 'tabs', 'dropdown'], function() {
     $('#ID-tpl-view-code').html(util.escape(html));
   };
 
-  // 生成模板
-  var createTemplate = function(opts) {
-    opts = $.extend({
-      tagStyle: 'legacy'
-    }, opts);
+  // 初始化模板
+  var elem = document.querySelector('#ID-tpl-template');
+  $('#ID-tpl-src').val(elem.textContent.trim());
 
-    // 初始化模板
-    var elem = $('#ID-tpl-template-'+ opts.tagStyle);
-    $('#ID-tpl-src').val(elem.html().replace(/^\s+/g, ''));
-
-    return opts;
-  };
-  var tplConfig = createTemplate();
   var data = getData();
 
   // 耗时计算
@@ -195,7 +152,6 @@ layui.use(['laytpl', 'util', 'tabs', 'dropdown'], function() {
   // 创建一个模板实例
   var templateInst = laytpl(data.template, {
     condense: false, // 不处理连续空白符，即保留模板原始结构
-    tagStyle: tplConfig.tagStyle
   });
 
   // 初始渲染
@@ -225,34 +181,6 @@ layui.use(['laytpl', 'util', 'tabs', 'dropdown'], function() {
     body: ['#ID-tpl-view-body', '>div']
   });
 
-  // 切换模板
-  dropdown.render({
-    elem: '#ID-tpl-src-title',
-    data: [{
-      title: '新版本模板',
-      tagStyle: 'modern'
-    }, {
-      title: '旧版本模板',
-      tagStyle: 'legacy'
-    }],
-    click: function(obj){
-      createTemplate({
-        tagStyle: obj.tagStyle
-      });
-      this.elem.children('strong').html(obj.title);
-
-      // 同步设置标签风格
-      templateInst.config.tagStyle = obj.tagStyle;
-
-      var data = getData();
-      var startTime = new Date();
-
-      // 重新渲染
-      templateInst.compile(data.template).render(data.data, function(html) {
-        renderView(html, startTime);
-      });
-    }
-  })
 });
 </script>!}}</textarea>
 </pre>
