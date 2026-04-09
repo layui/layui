@@ -46,14 +46,15 @@ Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 </template>
 
 <script>
-  layui.use(() => {
+  (() => {
     const { layer } = layui;
-    const a = '1';
-    function aa(a, b) {
-      return '11'
+    const abc = [1, 2, 3];
+    function sum(a, b) {
+      return `${a} + ${b} = ${a + b}`;
     }
+    console.log(sum(...abc));
     layer.msg(layui.v)
-  });
+  })();
 </script>
   </textarea>
 </pre>
@@ -73,26 +74,24 @@ Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   }"
     >
 <textarea class="layui-hide">
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Quick Start - Layui</title>
-  <link href="//unpkg.com/layui@2.11.4/dist/css/layui.css" rel="stylesheet">
-</head>
-<body>
-  <!-- HTML Content -->
-  <script src="//unpkg.com/layui@2.11.4/dist/layui.js"></script>
-  <script>
-  // Usage // [!code focus:6]
-  layui.use(function(){
-    var layer = layui.layer;
-    // Welcome
-    layer.msg('Hello World', {icon: 6});
-  });
-  </script>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quick Start - Layui</title>
+    <link href="//unpkg.com/layui/dist/css/layui.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- HTML Content -->
+    <script src="//unpkg.com/layui/dist/layui.js"></script>
+    &lt;script type="module"&gt;
+      const { layer } = layui;
+
+      // Welcome
+      layer.msg('Hello World', { icon: 6 });
+    </script>
+  </body>
 </html>
 </textarea>
 </pre>
@@ -145,11 +144,11 @@ Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   {{} }} //[!code ++]
 </template>
 <script>
-  layui.use(function(){
-    var laytpl = layui.laytpl;
+  (function(){
+    const laytpl = layui.laytpl;
 
     laytpl.config({})
-  })
+  })();
 </script>
 </textarea>
 </pre>
@@ -254,17 +253,14 @@ code line
     <!-- layui -->
     <script src="./assets/dist/layui.js"></script>
     <script type="module">
-      const { dropdown, layer, $ } = layui;
+      const { loader, $, layer, dropdown } = layui;
 
-      // 扩展「第三方语法高亮库」
-      layui.extend({
-        hljs: {
-          src: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js',
-          api: 'hljs',
-        },
-        prism: {
-          src: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js',
-          api: 'Prism',
+      // 配置「第三方语法高亮库」路径
+      loader.config({
+        alias: {
+          hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js',
+          prism:
+            'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js',
         },
       });
 
@@ -293,35 +289,39 @@ code line
       }));
 
       // 渲染高亮器
-      const renderHighlighter = (options) => {
+      const renderHighlighter = async (options) => {
         options = {
           highlighter: 'hljs',
           link: themeData[0].link,
           ...options,
         };
 
-        layui.use(['hljs', 'prism'], () => {
-          // 加载 css
-          $('#layuicss-layui-code-theme').remove();
-          layui.link(options.link, 'layui-code-theme');
+        const result = await loader.script(['hljs', 'prism']);
+        // console.log('await', result);
+        if (result.error) return;
 
-          // 高亮器实例
-          const highlighter = {
-            hljs: (code, opts) =>
-              hljs.highlight(code, {
-                language: opts.lang,
-              }).value,
-            prism: (code, opts) =>
-              Prism.highlight(code, Prism.languages[opts.lang], opts.lang),
-          };
+        // 加载 css
+        const linkId = 'LAY-LOADER-CODE-THEME';
 
-          // 重载以渲染语法高亮
-          codeInst.reload({
-            highlighter: options.highlighter,
-            codeRender: (code, opts) => {
-              return highlighter[options.highlighter](code, opts);
-            },
-          });
+        $(`#${linkId}`).remove();
+        loader.css(options.link, linkId);
+
+        // 高亮器实例
+        const highlighter = {
+          hljs: (code, opts) =>
+            hljs.highlight(code, {
+              language: opts.lang,
+            }).value,
+          prism: (code, opts) =>
+            Prism.highlight(code, Prism.languages[opts.lang], opts.lang),
+        };
+
+        // 重载以渲染语法高亮
+        codeInst.reload({
+          highlighter: options.highlighter,
+          codeRender: (code, opts) => {
+            return highlighter[options.highlighter](code, opts);
+          },
         });
       };
 
@@ -334,14 +334,9 @@ code line
         // theme: 'dark',
         // header: true,
         // wordWrap: false, // 是否自动换行
-        lang: 'html',
         // code: '<div class="layui-btn">初始按钮</div>',
+        lang: 'html',
         highlighter: 'hljs',
-        /*codeRender: function (code, opts) { // 初始高亮
-          layui.link(themeData[1].link, 'layui-code-theme');
-          return hljs.highlight(code, {language: opts.lang}).value;
-        },*/
-
         tools: ['full', 'wordWrap', 'theme', 'edit'], // 显示的工具列表
 
         // 扩展工具包

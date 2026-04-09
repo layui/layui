@@ -1,0 +1,228 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>loader 加载器 - layui</title>
+    <link href="./assets/dist/css/layui.css" rel="stylesheet" />
+    <link href="./assets/modules/test/test.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./assets/dist/layui.js"></script>
+    <script type="module">
+      import { test } from './assets/modules/test/test.js';
+
+      const { loader, lay, layer } = layui;
+
+      // 创建测试实例
+      const tester = test({
+        elem: '#root',
+        items: [
+          {
+            name: 'loader.config',
+          },
+          {
+            name: 'loader.script',
+          },
+          {
+            name: 'loader.css',
+          },
+          {
+            name: 'loader.image',
+          },
+        ],
+      });
+
+      const vars = 'const { loader } = layui';
+
+      const DEMO_ROOT = './assets/modules/@demo/loader';
+
+      tester.describe('loader.config', (it) => {
+        it({
+          title: '基础设置',
+          code: `
+${vars};
+
+loader.config({
+  alias: {
+    demo: '${DEMO_ROOT}/demo1.js',
+    'demo.css': '${DEMO_ROOT}/demo1.css'
+  },
+  urlArgs: 'v=3',
+  // debug: true,
+});
+
+const ret1 = await loader.script('demo');
+const ret2 = await loader.css('demo.css');
+
+console.log(ret1 && !ret1.error && ret2 && !ret2.error);
+          `,
+          expected:
+            '1. 能通过别名加载资源；2. 加载的资源 URL 上应追加 urlArgs 参数',
+          async assert(actual, expected) {
+            const ret1 = await loader.script('demo');
+            const ret2 = await loader.css('demo.css');
+            return ret1 && !ret1.error && ret2 && !ret2.error;
+          },
+        });
+      });
+
+      tester.describe('loader.script', (it) => {
+        it({
+          title: '加载单个 script 文件',
+          code: `
+${vars};
+
+const ret = await loader.script('${DEMO_ROOT}/demo1.js');
+console.log(ret && !ret.error);
+          `,
+          expected: 'script 文件应加载成功',
+          async assert(actual, expected) {
+            const ret = await loader.script(`${DEMO_ROOT}/demo1.js`);
+            return ret && !ret.error;
+          },
+        });
+
+        it({
+          title: '并行加载多个 script 文件',
+          code: `
+${vars};
+
+const ret = await loader.script([
+  '${DEMO_ROOT}/demo1.js',
+  '${DEMO_ROOT}/demo2.js',
+  '${DEMO_ROOT}/demo3.js',
+]);
+
+console.log(ret && !ret.error);
+          `,
+          expected: '所有 script 文件应并行加载成功',
+          async assert(actual, expected) {
+            const ret = await loader.script([
+              `${DEMO_ROOT}/demo1.js`,
+              `${DEMO_ROOT}/demo2.js`,
+              `${DEMO_ROOT}/demo3.js`,
+            ]);
+
+            return ret && !ret.error;
+          },
+        });
+
+        it({
+          title: '顺序加载多个 script 文件',
+          code: `
+${vars};
+
+const ret1 = await loader.script('${DEMO_ROOT}/demo1.js');
+const ret2 = await loader.script('${DEMO_ROOT}/demo2.js');
+const ret3 = await loader.script('${DEMO_ROOT}/demo3.js');
+
+console.log(ret1 && !ret1.error && ret2 && !ret2.error && ret3 && !ret3.error);
+          `,
+          expected: '所有 script 文件应按顺序加载成功',
+          async assert(actual, expected) {
+            const ret1 = await loader.script(`${DEMO_ROOT}/demo1.js`);
+            const ret2 = await loader.script(`${DEMO_ROOT}/demo2.js`);
+            const ret3 = await loader.script(`${DEMO_ROOT}/demo3.js`);
+
+            return (
+              ret1 && !ret1.error && ret2 && !ret2.error && ret3 && !ret3.error
+            );
+          },
+        });
+
+        const CDN_ROOT = 'https://cdnjs.cloudflare.com/ajax/libs';
+        const CDN_PLUGINS = [
+          `${CDN_ROOT}/markdown-it/13.0.2/markdown-it.min.js`,
+          `${CDN_ROOT}/prism/1.30.0/prism.min.js`,
+        ];
+
+        it({
+          title: '加载第三方 CDN 插件',
+          code: `
+${vars};
+
+await loader.script(${JSON.stringify(CDN_PLUGINS, null, 2)});
+
+console.log(window.markdownit && window.Prism);
+          `,
+          expected: '应成功获取到插件接口',
+          async assert(actual, expected) {
+            await loader.script(CDN_PLUGINS);
+            return window.markdownit && window.Prism;
+          },
+        });
+      });
+
+      tester.describe('loader.css', (it) => {
+        it({
+          title: '加载 CSS 文件',
+          code: `
+${vars};
+
+// 加载单个
+const ret1 = await loader.css('${DEMO_ROOT}/demo1.css');
+
+// 加载多个
+const ret2 = await loader.css([
+  '${DEMO_ROOT}/demo2.css',
+  '${DEMO_ROOT}/demo3.css'
+]);
+
+console.log(ret1 && !ret1.error && ret2 && !ret2.error);
+          `,
+          expected: '所有样式文件应加载成功',
+          async assert(actual, expected) {
+            const result1 = await loader.css(`${DEMO_ROOT}/demo1.css`);
+            const result2 = await loader.css([
+              `${DEMO_ROOT}/demo2.css`,
+              `${DEMO_ROOT}/demo3.css`,
+            ]);
+
+            return result1 && !result1.error && result2 && !result2.error;
+          },
+        });
+      });
+
+      const DEMO_IMG = 'https://unpkg.com/outeres/demo/carousel/720x360-1.jpg';
+
+      tester.describe('loader.image', (it) => {
+        it({
+          title: '加载图片',
+          code: `
+${vars};
+
+const ret = await loader.image('${DEMO_IMG}');
+console.log(ret && !ret.error);
+          `,
+          expected: '图片加载成功 ',
+          async assert(actual, expected) {
+            const result = await loader.image(DEMO_IMG);
+            return result && !result.error;
+          },
+          done(result) {
+            const { itemElem } = result;
+            const button = lay.elem('button', {
+              class: 'layui-btn',
+            });
+
+            button.innerText = '查看图片';
+            button.addEventListener('click', () => {
+              layer.photos({
+                photos: {
+                  data: [
+                    {
+                      src: DEMO_IMG,
+                    },
+                  ],
+                },
+              });
+            });
+            itemElem.appendChild(button);
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

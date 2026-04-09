@@ -5,6 +5,7 @@
 // 导入核心模块
 import { layui } from './core/layui.js';
 import { lay } from './core/lay.js';
+import { loader } from './core/loader.js';
 import { laytpl } from './core/laytpl.js';
 import { i18n } from './core/i18n.js';
 import { default as jquery, default as $ } from 'jquery';

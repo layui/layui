@@ -894,6 +894,31 @@ lay.unescape = function (html) {
 };
 
 /**
+ * 将字符串编码为 base64
+ * 在 btoa 的基础上，增加对 Unicode、编码模式的支持
+ * @param {string} str - 待编码的二进制字符串
+ * @param {'url'} [mode] - 编码模式，设为 `url` 时表示输出为 base64url 安全编码
+ * @returns {string} 编码后的字符串
+ * @see
+ * - https://developer.mozilla.org/docs/Web/API/Window/btoa
+ * - https://datatracker.ietf.org/doc/html/rfc4648#section-5
+ */
+lay.btoa = (str, mode) => {
+  const encoder = new TextEncoder();
+  let encodedStr = btoa(String.fromCharCode.apply(null, encoder.encode(str)));
+
+  // 是否编码为 base64url
+  if (mode === 'url') {
+    return encodedStr
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+  }
+
+  return encodedStr;
+};
+
+/**
  * 生成唯一的 ID 字符串
  * @param {string} prefix ID 前缀，默认为'id'
  * @returns {string} 唯一 ID 字符串
