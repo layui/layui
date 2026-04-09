@@ -167,7 +167,7 @@ Class.prototype.reload = function (options, type) {
   var that = this;
 
   // 数组直接覆盖
-  layui.each(options, function (key, item) {
+  Object.entries(options).forEach(function ([key, item]) {
     if (layui.type(item) === 'array') {
       delete that.config[key];
     }
@@ -190,7 +190,7 @@ Class.prototype.tree = function (elem, children) {
   var data = children || options.data;
 
   // 遍历数据
-  layui.each(data, function (index, item) {
+  data.forEach(function (item) {
     var hasChild =
       item[customName.children] && item[customName.children].length > 0;
     var packDiv = $(
@@ -288,7 +288,7 @@ Class.prototype.tree = function (elem, children) {
           }
 
           if (typeof options.edit === 'object') {
-            layui.each(options.edit, function (i, val) {
+            options.edit.forEach(function (val) {
               arr.push(editIcon[val] || '');
             });
             return arr.join('') + '</div>';
@@ -593,7 +593,7 @@ Class.prototype.operate = function (elem, item) {
             var num = 1;
             var parentPack = elem.parent('.' + CONST.ELEM_PACK);
 
-            layui.each(siblings, function (index, i) {
+            siblings.each(function (_index, i) {
               if (!$(i).children('.' + CONST.ELEM_PACK)[0]) {
                 num = 0;
               }
@@ -791,7 +791,7 @@ Class.prototype.operate = function (elem, item) {
               var num = 1;
               var parentPack = elem.parent('.' + CONST.ELEM_PACK);
 
-              layui.each(siblings, function (index, i) {
+              siblings.each(function (_index, i) {
                 if (!$(i).children('.' + CONST.ELEM_PACK)[0]) {
                   num = 0;
                 }
@@ -972,8 +972,8 @@ Class.prototype.getChecked = function () {
 
   // 遍历节点
   var eachNodes = function (data, checkNode) {
-    layui.each(data, function (index, item) {
-      layui.each(checkedId, function (index2, item2) {
+    for (const item of data) {
+      for (const item2 of checkedId) {
         if (item[customName.id] == item2) {
           that.updateFieldValue(item, 'checked', true);
 
@@ -989,10 +989,10 @@ Class.prototype.getChecked = function () {
               cloneItem[customName.children],
             );
           }
-          return true;
+          break;
         }
-      });
-    });
+      }
+    }
   };
 
   eachNodes($.extend({}, options.data), checkedData);
@@ -1017,16 +1017,16 @@ Class.prototype.setChecked = function (checkedId) {
       .find('input[same="layuiTreeCheck"]');
     var checked = input.prop('checked');
 
-    layui.each(checkedId, function (_i, id) {
+    for (const id of checkedId) {
       if (thisId == id) {
         if (input.prop('disabled')) return;
         if (!checked) {
           input.prop('checked', true);
           that.syncCheckedState(input, flatData[i]);
-          return true;
+          break;
         }
       }
-    });
+    }
   });
 };
 

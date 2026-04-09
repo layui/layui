@@ -129,7 +129,7 @@ Class.prototype.init = function (rerender, type) {
   // 若 elem 非唯一
   var elem = $(options.elem);
   if (elem.length > 1) {
-    layui.each(elem, function () {
+    elem.each(function () {
       dropdown.render(
         $.extend({}, options, {
           elem: this,
@@ -210,7 +210,7 @@ Class.prototype.render = function (type) {
   var eachItemView = function (views, data) {
     // var views = [];
 
-    layui.each(data, function (index, item) {
+    data.forEach(function (item) {
       // 是否存在子级
       var isChild =
         item[customName.children] && item[customName.children].length > 0;
@@ -803,7 +803,7 @@ dropdown.reloadData = function () {
   );
 
   // 过滤与数据无关的参数
-  layui.each(args[1], function (key) {
+  Object.keys(args[1] || {}).forEach(function (key) {
     if (!dataParams.test(key)) {
       delete args[1][key];
     }

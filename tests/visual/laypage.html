@@ -192,7 +192,7 @@
                 thisData = data
                   .concat()
                   .splice(obj.curr * obj.limit - obj.limit, obj.limit);
-              layui.each(thisData, (index, item) => {
+              thisData.forEach((item) => {
                 arr.push('<li>' + item + '</li>');
               });
               return arr.join('');

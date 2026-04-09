@@ -5,6 +5,7 @@
 import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
+import { log } from '../core/logger.js';
 import { $ } from 'jquery';
 import { laytpl } from '../core/laytpl.js';
 import { laypage } from './laypage.js';
@@ -12,7 +13,6 @@ import { util } from './util.js';
 import { layer } from './layer.js';
 import { form } from './form.js';
 
-var hint = layui.hint();
 var device = layui.device();
 
 // api
@@ -68,7 +68,7 @@ var thisTable = function () {
 var getThisTable = function (id) {
   var that = thisTable.that[id];
   if (!that)
-    hint.error(
+    log(
       id
         ? "The table instance with ID '" + id + "' not found"
         : 'ID argument required',
@@ -80,7 +80,7 @@ var getThisTable = function (id) {
 var getThisTableConfig = function (id) {
   var config = thisTable.config[id];
   if (!config)
-    hint.error(
+    log(
       id
         ? "The table instance with ID '" + id + "' not found"
         : 'ID argument required',
@@ -203,9 +203,9 @@ var TPL_HEADER = function (options) {
       {{ if(d.data.size){ }}lay-size="{{=d.data.size}}"{{ } }}
       {{ if(d.data.even){ }}lay-even{{ } }}>
       <thead>
-        {{ layui.each(d.data.cols, function(i1, item1){ }}
+        {{ for(var i1 = 0; i1 < d.data.cols.length; i1++){ var item1 = d.data.cols[i1]; }}
           <tr>
-            {{ layui.each(item1, function(i2, item2){ }}
+            {{ for(var i2 = 0; i2 < item1.length; i2++){ var item2 = item1[i2]; }}
               {{ if(item2.fixed && item2.fixed !== "right"){ left = true; } }}
               {{ if(item2.fixed === "right"){ right = true; } }}
               ${(function () {
@@ -243,9 +243,9 @@ var TPL_HEADER = function (options) {
                 </div>
               </th>
               ${options.fixed ? '{{ }; }}' : ''}
-            {{ }); }}
+            {{ } }}
           </tr>
-        {{ }); }}
+        {{ } }}
       </thead>
     </table>
   `;
@@ -596,7 +596,7 @@ Class.prototype.setInit = function (type) {
   // 初始化 css 参数
   if (options.css && options.css.indexOf(ELEM_VIEW) === -1) {
     var css = options.css.split('}');
-    layui.each(css, function (index, value) {
+    css.forEach(function (value, index) {
       if (value) {
         css[index] = '.' + ELEM_VIEW + '-' + that.index + ' ' + value;
       }
@@ -626,20 +626,21 @@ Class.prototype.setInit = function (type) {
       // 只要不是最后一层都会有子列
       item2.colGroup = true;
       var childIndex = 0;
-      layui.each(options.cols[indexChild], function (i22, item22) {
+      for (var i22 = 0; i22 < options.cols[indexChild].length; i22++) {
+        var item22 = options.cols[indexChild][i22];
         //如果子列已经被标注为{HAS_PARENT}，或者子列累计 colspan 数等于父列定义的 colspan，则跳出当前子列循环
         if (
           item22.HAS_PARENT ||
           (childIndex >= 1 && childIndex == (item2.colspan || 1))
         )
-          return;
+          break;
 
         item22.HAS_PARENT = true;
         item22.parentKey = [options.index, i1, i2].join('-'); // i1 + '-' + i2;
         childIndex =
           childIndex + parseInt(item22.colspan > 1 ? item22.colspan : 1);
         initChildCols(indexChild, options.cols[indexChild], i22, item22);
-      });
+      }
     } else {
       item2.colGroup = false;
     }
@@ -647,8 +648,8 @@ Class.prototype.setInit = function (type) {
   };
 
   // 初始化列参数
-  layui.each(options.cols, function (i1, item1) {
-    layui.each(item1, function (i2, item2) {
+  options.cols.forEach(function (item1, i1) {
+    item1.forEach(function (item2, i2) {
       if (i1) {
         delete item2.HAS_PARENT; // 去掉临时的计数排除标识，避免有新字段插入的时候重新计算被跳过导致下标出错的问题
       } else {
@@ -666,8 +667,8 @@ Class.prototype.renderStyle = function () {
   var text = [];
 
   // 单元格宽度
-  layui.each(options.cols, function (i1, item1) {
-    layui.each(item1, function (i2, item2) {
+  options.cols.forEach(function (item1, i1) {
+    item1.forEach(function (item2, i2) {
       var key = [index, i1, i2].join('-');
       var val = ['width: ', item2.width || options.cellMinWidth, 'px'].join('');
       text.push('.laytable-cell-' + key + '{' + val + '}');
@@ -683,28 +684,25 @@ Class.prototype.renderStyle = function () {
     var cellMaxHeight = 'none';
 
     // 计算单元格最大高度
-    layui.each(rules, function (i, rule) {
+    for (let rule of rules) {
       rule = rule.split(':');
       if (rule[0] === 'height') {
         var val = parseFloat(rule[1]);
         if (!isNaN(val)) cellMaxHeight = val - 1 + 'px';
-        return true;
+        break;
       }
-    });
+    }
 
     // 多行相关样式
-    layui.each(
-      [
-        '{' + lineStyle + '}',
-        '.layui-table-cell{height: auto; max-height: ' +
-          cellMaxHeight +
-          '; white-space: normal; text-overflow: clip;}',
-        '> td:hover > .layui-table-cell{overflow: auto;}',
-      ],
-      function (i, val) {
-        val && text.push(trClassName + ' ' + val);
-      },
-    );
+    [
+      '{' + lineStyle + '}',
+      '.layui-table-cell{height: auto; max-height: ' +
+        cellMaxHeight +
+        '; white-space: normal; text-overflow: clip;}',
+      '> td:hover > .layui-table-cell{overflow: auto;}',
+    ].forEach(function (val) {
+      val && text.push(trClassName + ' ' + val);
+    });
   })(options.lineStyle);
 
   // 自定义 css 属性
@@ -981,8 +979,8 @@ Class.prototype.setColsPatch = function () {
   var options = that.config;
 
   // 同步表头父列的相关值
-  layui.each(options.cols, function (i1, item1) {
-    layui.each(item1, function (i2, item2) {
+  options.cols.forEach(function (item1) {
+    item1.forEach(function (item2) {
       if (item2.hide) {
         that.setParentCol(item2.hide, item2.parentKey);
       }
@@ -1004,28 +1002,31 @@ Class.prototype.setGroupWidth = function (th) {
   ); // 若无指向当前活动表头，则自下而上获取所有组合表头
 
   groups.css('width', 0);
-  layui.each(groups.get().reverse(), function () {
-    var othis = $(this);
-    var key = othis.parent().data('key');
-    var maxWidth = 0;
+  groups
+    .get()
+    .reverse()
+    .forEach(function (group) {
+      var othis = $(group);
+      var key = othis.parent().data('key');
+      var maxWidth = 0;
 
-    that.layHeader
-      .eq(0)
-      .find('th[data-parentkey=' + key + ']')
-      .width(function (i, width) {
-        var oTh = $(this);
-        if (oTh.hasClass(HIDE)) return;
-        width > 0 && (maxWidth += width);
-      });
+      that.layHeader
+        .eq(0)
+        .find('th[data-parentkey=' + key + ']')
+        .width(function (i, width) {
+          var oTh = $(this);
+          if (oTh.hasClass(HIDE)) return;
+          width > 0 && (maxWidth += width);
+        });
 
-    // 给组合表头赋值最大宽度
-    if (maxWidth) othis.css('max-width', maxWidth - 1);
+      // 给组合表头赋值最大宽度
+      if (maxWidth) othis.css('max-width', maxWidth - 1);
 
-    // 若当前活动的组合表头仍存在上级，则继续向上设置
-    if (th && othis.parent().data('parentkey')) {
-      that.setGroupWidth(othis.parent());
-    }
-  });
+      // 若当前活动的组合表头仍存在上级，则继续向上设置
+      if (th && othis.parent().data('parentkey')) {
+        that.setGroupWidth(othis.parent());
+      }
+    });
   groups.css('width', 'auto');
 };
 
@@ -1038,9 +1039,7 @@ Class.prototype.setColsWidth = function (opt) {
   var autoWidth = 0; // 自动列分配的宽度
   var countWidth = 0; // 所有列总宽度和
   var cntrWidth = that.setInit('width');
-  var borderWidth = parseFloat(
-    layui.getStyle(that.elem[0], 'border-left-width'),
-  );
+  var borderWidth = parseFloat(lay.getStyle(that.elem[0], 'border-left-width'));
   var lastSpreadCol;
   var headerTableElem = that.layHeader.first().children('table');
   var mainTableElem = that.layMain.find('table');
@@ -1071,8 +1070,8 @@ Class.prototype.setColsWidth = function (opt) {
   // 计算自动分配的宽度
   var getAutoWidth = function (back) {
     // 遍历所有列
-    layui.each(options.cols, function (i1, item1) {
-      layui.each(item1, function (i2, item2) {
+    options.cols.forEach(function (item1) {
+      item1.forEach(function (item2, i2) {
         var width = 0;
         var minWidth = item2.minWidth || options.cellMinWidth; // 最小宽度
         var maxWidth = item2.maxWidth || options.cellMaxWidth; // 最大宽度
@@ -1253,15 +1252,15 @@ Class.prototype.reload = function (options, deep, type) {
   delete that.haveInit;
 
   // 防止数组深度合并
-  layui.each(options, function (key, item) {
+  Object.entries(options).forEach(function ([key, item]) {
     if (layui.type(item) === 'array') delete that.config[key];
   });
 
   // 对参数进行深度或浅扩展
   that.config = $.extend(deep, {}, that.config, options);
   if (type !== 'reloadData') {
-    layui.each(that.config.cols, function (i1, item1) {
-      layui.each(item1, function (i2, item2) {
+    that.config.cols.forEach(function (item1) {
+      item1.forEach(function (item2) {
         delete item2.colspan2;
       });
     });
@@ -1486,7 +1485,7 @@ Class.prototype.col = function (key) {
     key = key.split('-');
     return this.config.cols[key[1]][key[2]] || {};
   } catch (e) {
-    hint.error(e);
+    log(e);
     return {};
   }
 };
@@ -1499,7 +1498,7 @@ Class.prototype.getTrHtml = function (data, sort, curr, trsObj) {
   var trs_fixed_r = (trsObj && trsObj.trs_fixed_r) || [];
   curr = curr || 1;
 
-  layui.each(data, function (i1, item1) {
+  data.forEach(function (item1, i1) {
     var tds = [];
     var tds_fixed = [];
     var tds_fixed_r = [];
@@ -1833,7 +1832,7 @@ Class.prototype.renderTotal = function (data, totalRowData) {
 
   if (!options.totalRow) return;
 
-  layui.each(data, function (i1, item1) {
+  data.forEach(function (item1) {
     // 若数据项为空数组，则不往下执行（因为删除数据时，会将原有数据设置为 []）
     if (layui.type(item1) === 'array' && item1.length === 0) return;
 
@@ -1987,7 +1986,7 @@ Class.prototype.renderForm = function (type) {
 
 // 定向渲染表单
 Class.prototype.renderFormByElem = function (elem) {
-  layui.each(['input', 'select'], function (i, formType) {
+  ['input', 'select'].forEach(function (formType) {
     form.render(elem.find(formType));
   });
 };
@@ -2049,7 +2048,7 @@ Class.prototype.setRowChecked = function (opts) {
 
   if (isCheckMult) {
     var makeMap = {};
-    layui.each(opts.index, function (i, v) {
+    opts.index.forEach(function (v) {
       makeMap[v] = true;
     });
     opts.index = makeMap;
@@ -2122,7 +2121,7 @@ Class.prototype.setRowChecked = function (opts) {
 
   // 若为 radio 类型，移除其他行数据选中状态
   if (radioCheckedIndex) {
-    layui.each(thisData, function (i, item) {
+    thisData.forEach(function (item, i) {
       if (Number(radioCheckedIndex) !== Number(i)) {
         delete item[options.checkName];
       }
@@ -2201,7 +2200,7 @@ Class.prototype.sort = function (opts) {
     elemSort.attr('lay-sort', opts.type || null);
     that.layFixed.find('th');
   } catch {
-    hint.error("Table modules: sort field '" + field + "' not matched");
+    log("Table modules: sort field '" + field + "' not matched");
   }
 
   // 记录排序索引和类型
@@ -2307,7 +2306,7 @@ Class.prototype.fullSize = function () {
     var th = that.layFixed.find(ELEM_HEADER).find('th');
     // 固定列表头同步跟本体 th 一致高度
     var headerMain = that.layHeader.first();
-    layui.each(th, function (thIndex, thElem) {
+    th.each(function (thIndex, thElem) {
       thElem = $(thElem);
       thElem.height(
         headerMain
@@ -2338,15 +2337,15 @@ Class.prototype.fullSize = function () {
   }
 
   if (options.maxHeight) {
-    layui.each(
-      { elem: height, layMain: bodyHeight },
-      function (elemName, elemHeight) {
-        that[elemName].css({
-          height: 'auto',
-          maxHeight: elemHeight + 'px',
-        });
-      },
-    );
+    Object.entries({ elem: height, layMain: bodyHeight }).forEach(function ([
+      elemName,
+      elemHeight,
+    ]) {
+      that[elemName].css({
+        height: 'auto',
+        maxHeight: elemHeight + 'px',
+      });
+    });
   } else {
     that.layMain.outerHeight(bodyHeight);
   }
@@ -2447,7 +2446,7 @@ Class.prototype.updateRow = function (opts, callback) {
     var tr = that.layBody.find('tr[data-index="' + index + '"]');
 
     // 更新缓存中的数据
-    layui.each(row, function (key, value) {
+    Object.entries(row).forEach(function ([key, value]) {
       data[key] = value;
       callback && callback(key, value);
     });
@@ -2481,7 +2480,7 @@ Class.prototype.updateRow = function (opts, callback) {
     });
   };
 
-  layui.each(opts, function (i, opt) {
+  opts.forEach(function (opt) {
     update(opt);
   });
 };
@@ -2545,7 +2544,7 @@ Class.prototype.events = function () {
     layer.close(that.tipsIndex);
 
     // 头部工具栏右侧图标
-    layui.each(options.defaultToolbar, function (index, item) {
+    for (const item of options.defaultToolbar) {
       if (item.layEvent === events) {
         typeof item.onClick === 'function' &&
           item.onClick({
@@ -2554,9 +2553,9 @@ Class.prototype.events = function () {
             openPanel: openPanel,
             elem: othis,
           });
-        return true;
+        break;
       }
-    });
+    }
 
     // table toolbar 事件
     layui.event.call(
@@ -3482,8 +3481,8 @@ Class.prototype.observeResize = function () {
 (function () {
   // 自适应尺寸
   _WIN.on('resize', function () {
-    layui.each(thisTable.that, function () {
-      this.resize();
+    Object.values(thisTable.that).forEach(function (tableInst) {
+      tableInst.resize();
     });
   });
 
@@ -3603,7 +3602,8 @@ var eachChildCols = function (index, cols, i1, item2) {
     item2.CHILD_COLS = [];
     // 找到它的子列所在cols的下标
     var i2 = i1 + (parseInt(item2.rowspan) || 1);
-    layui.each(cols[i2], function (i22, item22) {
+    for (var i22 = 0; i22 < cols[i2].length; i22++) {
+      var item22 = cols[i2][i22];
       if (item22.parentKey) {
         // 如果字段信息中包含了parentKey和key信息
         if (item22.parentKey === item2.key) {
@@ -3618,14 +3618,14 @@ var eachChildCols = function (index, cols, i1, item2) {
           item22.PARENT_COL_INDEX ||
           (childIndex >= 1 && childIndex == (item2.colspan || 1))
         )
-          return;
+          break;
         item22.PARENT_COL_INDEX = index;
         item2.CHILD_COLS.push(item22);
         childIndex =
           childIndex + parseInt(item22.colspan > 1 ? item22.colspan : 1);
         eachChildCols(index, cols, i2, item22);
       }
-    });
+    }
   }
 };
 
@@ -3638,18 +3638,17 @@ table.eachCols = function (id, callback, cols) {
   cols = $.extend(true, [], cols || config.cols);
 
   //重新整理表头结构
-  layui.each(cols, function (i1, item1) {
-    if (i1) return true; // 只需遍历第一层
-    layui.each(item1, function (i2, item2) {
-      eachChildCols(index, cols, i1, item2);
+  if (cols[0]) {
+    cols[0].forEach(function (item2) {
+      eachChildCols(index, cols, 0, item2);
       if (item2.PARENT_COL_INDEX) return; //如果是子列，则不进行追加，因为已经存储在父列中
       arrs.push(item2);
     });
-  });
+  }
 
   //重新遍历列，如果有子列，则进入递归
   var eachArrs = function (obj) {
-    layui.each(obj || arrs, function (i, item) {
+    (obj || arrs).forEach(function (item, i) {
       if (item.CHILD_COLS) return eachArrs(item.CHILD_COLS);
       typeof callback === 'function' && callback(i, item);
     });
@@ -3666,7 +3665,7 @@ table.checkStatus = function (id) {
   var data = table.cache[id] || [];
 
   // 过滤禁用或已删除的数据
-  layui.each(data, function (i, item) {
+  data.forEach(function (item) {
     if (layui.type(item) === 'array' || item[table.config.disabledName]) {
       invalidNum++; // 无效数据数量
       return;
@@ -3698,7 +3697,7 @@ table.setRowChecked = function (id, opts) {
 table.getData = function (id) {
   var arr = [];
   var data = table.cache[id] || [];
-  layui.each(data, function (i, item) {
+  data.forEach(function (item) {
     if (layui.type(item) === 'array') {
       return;
     }
@@ -3717,8 +3716,8 @@ table.resize = function (id) {
     getThisTable(id).resize();
   } else {
     // 否则重置所有表格实例尺寸
-    layui.each(thisTable.that, function () {
-      this.resize();
+    Object.values(thisTable.that).forEach(function (tableInst) {
+      tableInst.resize();
     });
   }
 };
@@ -3773,21 +3772,19 @@ table.exportFile = function (id, data, opts) {
         var fieldsIsHide = {};
 
         // 表头和表体
-        layui.each(data, function (i1, item1) {
+        data.forEach(function (item1, i1) {
           var vals = [];
           if (typeof id === 'object') {
             // 若 id 参数直接为表头数据
-            layui.each(id, function (i, item) {
+            id.forEach(function (item) {
               i1 == 0 && dataTitle.push(item || '');
             });
-            layui.each(
-              layui.isArray(item1)
-                ? $.extend([], item1)
-                : table.clearCacheKey(item1),
-              function (i2, item2) {
-                vals.push('"' + (item2 || '') + '"');
-              },
-            );
+            (layui.isArray(item1)
+              ? $.extend([], item1)
+              : table.clearCacheKey(item1)
+            ).forEach(function (item2) {
+              vals.push('"' + (item2 || '') + '"');
+            });
           } else {
             table.eachCols(id, function (i3, item3) {
               if (
@@ -3846,7 +3843,7 @@ table.exportFile = function (id, data, opts) {
 
         // 表合计
         thatTable &&
-          layui.each(thatTable.dataTotal, function (i, o) {
+          thatTable.dataTotal.forEach(function (o) {
             fieldsIsHide[o.field] ||
               dataTotal.push('"' + (o.total || '') + '"');
           });
@@ -3900,7 +3897,7 @@ table.hideCol = function (id, cols) {
     });
   } else {
     cols = layui.isArray(cols) ? cols : [cols];
-    layui.each(cols, function (i1, item1) {
+    cols.forEach(function (item1) {
       that.eachCols(function (i2, item2) {
         if (item1.field === item2.field) {
           var key = item2.key;
@@ -3960,7 +3957,7 @@ table.reloadData = function () {
   );
 
   // 过滤与数据无关的参数
-  layui.each(args[1], function (key) {
+  Object.keys(args[1] || {}).forEach(function (key) {
     if (dataParams.test(key)) {
       delete args[1][key];
     }

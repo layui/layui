@@ -195,7 +195,7 @@ export function code(options) {
   var elem = $(options.elem);
   if (elem.length > 1) {
     // 是否正向渲染
-    layui.each(options.obverse ? elem : elem.get().reverse(), function () {
+    (options.obverse ? elem : $(elem.get().reverse())).each(function () {
       layui.code(
         $.extend({}, options, {
           elem: this,
@@ -383,7 +383,7 @@ export function code(options) {
     elemView.addClass(options.className);
 
     // 标签头
-    layui.each(layout, function (i, v) {
+    layout.forEach(function (v, i) {
       var li = $('<li lay-id="' + v + '">');
       if (i === 0) li.addClass('layui-this');
       li.html(options.text[v]);

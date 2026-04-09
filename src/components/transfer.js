@@ -3,7 +3,6 @@
  * 穿梭框组件
  */
 
-import { layui } from '../core/layui.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
 import { componentBuilder } from '../core/component.js';
@@ -196,7 +195,7 @@ Class.prototype.renderData = function () {
     `;
     // 按照 options.value 顺序排列右侧数据
     if (_index) {
-      layui.each(options.value, function (i, v) {
+      options.value.forEach(function (v, i) {
         if (v == item.value && item.selected) {
           arr[_index].views[i] = listElem;
         }
@@ -300,7 +299,7 @@ Class.prototype.parseData = function (callback) {
   var options = that.config;
   var newData = [];
 
-  layui.each(options.data, function (index, item) {
+  options.data.forEach(function (item) {
     // 解析格式
     item =
       (typeof options.parseData === 'function'
@@ -309,7 +308,7 @@ Class.prototype.parseData = function (callback) {
 
     newData.push((item = $.extend({}, item)));
 
-    layui.each(options.value, function (index2, item2) {
+    options.value.forEach(function (item2) {
       if (item2 == item.value) {
         item.selected = true;
       }
@@ -329,8 +328,8 @@ Class.prototype.getData = function (value) {
 
   that.setValue();
 
-  layui.each(value || options.value, function (index, item) {
-    layui.each(options.data, function (index2, item2) {
+  (value || options.value).forEach(function (item) {
+    options.data.forEach(function (item2) {
       delete item2.selected;
       if (item == item2.value) {
         selectedData.push(item2);

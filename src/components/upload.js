@@ -6,10 +6,9 @@
 import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
+import { log } from '../core/logger.js';
 import { $ } from 'jquery';
 import { layer } from './layer.js';
-
-var hint = layui.hint();
 
 // 模块名
 var MOD_NAME = 'upload';
@@ -103,7 +102,7 @@ Class.prototype.render = function (rerender) {
   // 若 elem 非唯一
   var elem = $(options.elem);
   if (elem.length > 1) {
-    layui.each(elem, function () {
+    elem.each(function () {
       upload.render(
         $.extend({}, options, {
           elem: this,
@@ -186,7 +185,7 @@ Class.prototype.isFile = function () {
 Class.prototype.preview = function (callback) {
   var that = this;
   if (window.FileReader) {
-    layui.each(that.chooseFiles, function (index, file) {
+    Object.entries(that.chooseFiles || {}).forEach(function ([index, file]) {
       var reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = function () {
@@ -233,7 +232,7 @@ Class.prototype.upload = function (files, type) {
       // 恢复文件状态
       var resetFileState = function (file) {
         if (sets.unified) {
-          layui.each(items, function (index, file) {
+          Object.values(items || {}).forEach(function (file) {
             delete file[UPLOADING];
           });
         } else {
@@ -242,7 +241,7 @@ Class.prototype.upload = function (files, type) {
       };
 
       // 追加额外的参数
-      layui.each(options.data, function (key, value) {
+      Object.entries(options.data || {}).forEach(function ([key, value]) {
         value =
           typeof value === 'function'
             ? sets.unified
@@ -258,7 +257,7 @@ Class.prototype.upload = function (files, type) {
 
       // 是否统一上传
       if (sets.unified) {
-        layui.each(items, function (index, file) {
+        Object.values(items || {}).forEach(function (file) {
           if (file[UPLOADING]) return;
           file[UPLOADING] = true; // 上传中的标记
           formData.append(options.field, file);
@@ -334,7 +333,7 @@ Class.prototype.upload = function (files, type) {
         index: 0,
       });
     } else {
-      layui.each(items, function (index, file) {
+      Object.entries(items || {}).forEach(function ([index, file]) {
         request({
           index: index,
           file: file,
@@ -416,7 +415,7 @@ Class.prototype.upload = function (files, type) {
   var exts = options.exts;
   var value = (function () {
     var arr = [];
-    layui.each(files || that.chooseFiles, function (i, item) {
+    Object.values(files || that.chooseFiles || {}).forEach(function (item) {
       arr.push(item.name);
     });
     return arr;
@@ -437,7 +436,7 @@ Class.prototype.upload = function (files, type) {
     // 追加文件到队列
     pushFile: function () {
       that.files = that.files || {};
-      layui.each(that.chooseFiles, function (index, item) {
+      Object.entries(that.chooseFiles || {}).forEach(function ([index, item]) {
         that.files[index] = item;
       });
       return that.files;
@@ -475,7 +474,7 @@ Class.prototype.upload = function (files, type) {
           if (options.auto) {
             elemFile.value = '';
           }
-          error !== undefined && hint.error(error);
+          error !== undefined && log(error);
         },
       );
     } else {
@@ -504,46 +503,50 @@ Class.prototype.upload = function (files, type) {
   // 根据文件类型校验
   switch (options.accept) {
     case 'file': // 一般文件
-      layui.each(value, function (i, item) {
+      for (const item of value) {
         if (exts && !RegExp('.\\.(' + exts + ')$', 'i').test(escape(item))) {
-          return (check = true);
+          check = true;
+          break;
         }
-      });
+      }
       break;
     case 'video': // 视频文件
-      layui.each(value, function (i, item) {
+      for (const item of value) {
         if (
           !RegExp(
             '.\\.(' + (exts || 'avi|mp4|wma|rmvb|rm|flash|3gp|flv') + ')$',
             'i',
           ).test(escape(item))
         ) {
-          return (check = true);
+          check = true;
+          break;
         }
-      });
+      }
       break;
     case 'audio': // 音频文件
-      layui.each(value, function (i, item) {
+      for (const item of value) {
         if (
           !RegExp('.\\.(' + (exts || 'mp3|wav|mid') + ')$', 'i').test(
             escape(item),
           )
         ) {
-          return (check = true);
+          check = true;
+          break;
         }
-      });
+      }
       break;
     default: // 图片文件
-      layui.each(value, function (i, item) {
+      for (const item of value) {
         if (
           !RegExp(
             '.\\.(' + (exts || 'jpg|png|gif|bmp|jpeg|svg|webp') + ')$',
             'i',
           ).test(escape(item))
         ) {
-          return (check = true);
+          check = true;
+          break;
         }
-      });
+      }
       break;
   }
 
@@ -568,12 +571,7 @@ Class.prototype.upload = function (files, type) {
 
   // 检验文件数量
   that.fileLength = (function () {
-    var length = 0;
-    var items = getFiles();
-    layui.each(items, function () {
-      length++;
-    });
-    return length;
+    return Object.keys(getFiles() || {}).length;
   })();
 
   if (options.number && that.fileLength > options.number) {
@@ -594,7 +592,7 @@ Class.prototype.upload = function (files, type) {
   if (options.size > 0) {
     var limitSize;
 
-    layui.each(getFiles(), function (index, file) {
+    Object.values(getFiles() || {}).forEach(function (file) {
       if (file.size > 1024 * options.size) {
         var size = options.size / 1024;
         size = size >= 1 ? size.toFixed(2) + 'MB' : options.size + 'KB';
@@ -623,7 +621,7 @@ Class.prototype.events = function () {
   // 设置当前选择的文件队列
   var setChooseFile = function (files) {
     that.chooseFiles = {};
-    layui.each(files, function (i, item) {
+    Array.from(files || []).forEach(function (item, i) {
       var time = new Date().getTime();
       that.chooseFiles[time + '-' + i] = item;
     });
@@ -657,12 +655,9 @@ Class.prototype.events = function () {
    * @return {boolean}
    */
   var checkFile = function (file) {
-    var result = true;
-    layui.each(that.files, function (index, item) {
-      result = !(item.name === file.name);
-      if (!result) return true;
+    return !Object.values(that.files || {}).some(function (item) {
+      return item.name === file.name;
     });
-    return result;
   };
 
   /**
@@ -682,7 +677,7 @@ Class.prototype.events = function () {
 
     //FileList对象
     if (obj instanceof FileList) {
-      layui.each(obj, function (index, item) {
+      Array.from(obj).forEach(function (item) {
         extInfo(item);
       });
     } else {
@@ -702,7 +697,7 @@ Class.prototype.events = function () {
     if (!files.length) return [];
     if (!that.files) return extendInfo(files);
     var result = [];
-    layui.each(files, function (index, item) {
+    Array.from(files).forEach(function (item) {
       if (checkFile(item)) {
         result.push(extendInfo(item));
       }
@@ -836,7 +831,7 @@ thisModule.that = {}; // 记录所有实例对象
 thisModule.getThis = function (id) {
   var that = thisModule.that[id];
   if (!that)
-    hint.error(
+    log(
       id
         ? MOD_NAME + " instance with ID '" + id + "' not found"
         : 'ID argument required',

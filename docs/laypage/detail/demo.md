@@ -247,7 +247,7 @@ layui.use(function(){
 <pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-data"></div>
-<div id="demo-laypage-data-view"></div> 
+<div id="demo-laypage-data-view"></div>
 
 <!-- import layui -->
 <script>
@@ -265,7 +265,7 @@ layui.use(function(){
       document.getElementById('demo-laypage-data-view').innerHTML = function(){
         var arr = [];
         var thisData = data.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
-        layui.each(thisData, function(index, item){
+        thisData.forEach(function(item){
           arr.push(item);
         });
         return arr.join('，');

@@ -118,7 +118,7 @@ export function component(settings) {
 
     // 若 elem 非唯一，则拆分为多个实例
     if (elem.length > 1) {
-      layui.each(elem, function () {
+      elem.each(function () {
         component.render(
           $.extend({}, options, {
             elem: this,

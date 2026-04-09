@@ -5,12 +5,10 @@
 import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
+import { log } from '../core/logger.js';
 import { $ } from 'jquery';
 import { util } from './util.js';
 import { layer } from './layer.js';
-
-var hint = layui.hint();
-// var device = layui.device();
 
 var MOD_NAME = 'form';
 var ELEM = '.layui-form';
@@ -159,7 +157,7 @@ Form.prototype.getValue = function (filter, itemForm) {
     field = {},
     fieldElem = itemForm.find('input,select,textarea'); // 获取所有表单域
 
-  layui.each(fieldElem, function (_, item) {
+  fieldElem.each(function (_, item) {
     var othis = $(this),
       init_name; // 初始 name
 
@@ -321,7 +319,7 @@ Form.prototype.render = function (type, filter) {
           var elemIcon = $(
             (function () {
               var arr = [];
-              layui.each(value, function (i, item) {
+              value.forEach(function (item) {
                 arr.push(
                   '<i class="layui-icon layui-icon-' +
                     item +
@@ -733,10 +731,10 @@ Form.prototype.render = function (type, filter) {
               var lastIndex = allDisplayedElem.length - 1;
               var selectedIndex = -1;
 
-              layui.each(allDisplayedElem, function (index, el) {
+              allDisplayedElem.each(function (index, el) {
                 if ($(el).hasClass(THIS)) {
                   selectedIndex = index;
-                  return true;
+                  return false;
                 }
               });
 
@@ -780,7 +778,7 @@ Form.prototype.render = function (type, filter) {
           if (laySearch.fuzzy) {
             fuzzyMatchRE = fuzzyMatchRegExp(value, laySearch.caseSensitive);
           }
-          layui.each(dds, function () {
+          dds.each(function () {
             var othis = $(this);
             var text = othis.text();
             var isCreateOption = isCreatable && othis.hasClass(CREATE_OPTION);
@@ -810,7 +808,7 @@ Form.prototype.render = function (type, filter) {
           });
           // 处理 select 分组元素
           origin === 'keyup' &&
-            layui.each(dts, function () {
+            dts.each(function () {
               var othis = $(this);
               var thisDds = othis.nextUntil('dt').filter('dd'); // 当前分组下的dd元素
               if (isCreatable) thisDds = thisDds.not('.' + CREATE_OPTION);
@@ -1051,7 +1049,7 @@ Form.prototype.render = function (type, filter) {
           }
           var content = (function () {
             var arr = [];
-            layui.each(othis.find('optgroup,option'), function (index, item) {
+            othis.find('optgroup,option').each(function (index, item) {
               var tagName = item.tagName.toLowerCase();
               var dd = $('<dd lay-value=""></dd>');
               if (index === 0 && !item.value && tagName !== 'optgroup') {
@@ -1248,7 +1246,7 @@ Form.prototype.render = function (type, filter) {
           var titleTplElem = othis.next();
           title = titleTplElem.html() || '';
           if (titleTplElem[0].attributes.length > 1) {
-            layui.each(titleTplElem[0].attributes, function (i, attr) {
+            Array.from(titleTplElem[0].attributes).forEach(function (attr) {
               if (attr.name !== 'lay-checkbox') {
                 titleTplAttrs.push(attr.name + '="' + attr.value + '"');
               }
@@ -1360,7 +1358,7 @@ Form.prototype.render = function (type, filter) {
                 radioEl.name.replace(/(\.|#|\[|\])/g, '\\$1') +
                 ']',
             ); // 找到相同name的兄弟
-            layui.each(sameRadios, function () {
+            sameRadios.each(function () {
               if (radioEl === this) return;
               this.checked = false;
             });
@@ -1395,7 +1393,7 @@ Form.prototype.render = function (type, filter) {
           var titleTplElem = othis.next();
           title = titleTplElem.html() || '';
           if (titleTplElem[0].attributes.length > 1) {
-            layui.each(titleTplElem[0].attributes, function (i, attr) {
+            Array.from(titleTplElem[0].attributes).forEach(function (attr) {
               if (attr.name !== 'lay-radio') {
                 titleTplAttrs.push(attr.name + '="' + attr.value + '"');
               }
@@ -1428,7 +1426,7 @@ Form.prototype.render = function (type, filter) {
 
   // 执行所有渲染项
   var renderItem = function () {
-    layui.each(items, function (index, item) {
+    Object.values(items).forEach(function (item) {
       item();
     });
   };
@@ -1462,9 +1460,7 @@ Form.prototype.render = function (type, filter) {
     type
       ? items[type]
         ? items[type]()
-        : hint.error(
-            '[form] "' + type + '" is an unsupported form element type',
-          )
+        : log('[form] "' + type + '" is an unsupported form element type')
       : renderItem();
   }
   return that;
@@ -1552,7 +1548,7 @@ Form.prototype.validate = function (elem) {
   }
 
   // 开始校验
-  layui.each(elem, function (_, item) {
+  elem.each(function (_, item) {
     var othis = $(this);
     var verifyStr = othis.attr('lay-verify') || '';
     var vers = verifyStr.split('|');
@@ -1563,7 +1559,7 @@ Form.prototype.validate = function (elem) {
     othis.removeClass(DANGER); // 移除警示样式
 
     // 遍历元素绑定的验证规则
-    layui.each(vers, function (_, thisVer) {
+    for (const thisVer of vers) {
       var verst; // 校验结果
       var errorText = ''; // 错误提示文本
       var rule = verify[thisVer]; // 获取校验规则
@@ -1622,7 +1618,7 @@ Form.prototype.validate = function (elem) {
           return (intercept = true);
         }
       }
-    });
+    }
 
     if (intercept) return intercept;
   });

@@ -298,7 +298,7 @@ Class.prototype.renderPicker = function () {
       (function () {
         if (options.predefine) {
           var list = ['<div class="layui-colorpicker-main-pre">'];
-          layui.each(options.colors, function (i, v) {
+          options.colors.forEach(function (v) {
             list.push(
               [
                 '<div class="layui-colorpicker-pre' +
@@ -660,30 +660,26 @@ Class.prototype.side = function () {
 
   if (!lay.touchEventsSupported()) return;
   // 触摸事件模拟
-  layui.each(
-    [
-      { elem: side, eventType: 'mousedown' },
-      { elem: alphacolor, eventType: 'mousedown' },
-      { elem: basis, eventType: 'mousedown' },
-    ],
-    function (i, obj) {
-      lay.touchSwipe(obj.elem, {
-        onTouchStart: function () {
-          needTrigger = false;
-          needStopPropagation = false;
-        },
-        onTouchMove: function (e) {
-          touchHandler(e, obj.eventType);
-        },
-        onTouchEnd: function () {
-          elemMove.remove();
-          needTrigger = true;
-          needStopPropagation = true;
-        },
-      });
-    },
-  );
-
+  [
+    { elem: side, eventType: 'mousedown' },
+    { elem: alphacolor, eventType: 'mousedown' },
+    { elem: basis, eventType: 'mousedown' },
+  ].forEach(function (obj) {
+    lay.touchSwipe(obj.elem, {
+      onTouchStart: function () {
+        needTrigger = false;
+        needStopPropagation = false;
+      },
+      onTouchMove: function (e) {
+        touchHandler(e, obj.eventType);
+      },
+      onTouchEnd: function () {
+        elemMove.remove();
+        needTrigger = true;
+        needStopPropagation = true;
+      },
+    });
+  });
   function touchHandler(event, eventType) {
     var pointer = event.touches[0];
     var simulatedEvent = document.createEvent('MouseEvent');

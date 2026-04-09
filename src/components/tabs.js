@@ -71,11 +71,11 @@ var component = componentBuilder({
         var bodyElem = $('<div class="layui-tabs-body"></div>');
 
         // 生成标签项
-        layui.each(options.header, function (i, item) {
+        options.header.forEach(function (item) {
           var elemHeaderItem = that.renderHeaderItem(item);
           headerElem.append(elemHeaderItem);
         });
-        layui.each(options.body, function (i, item) {
+        options.body.forEach(function (item) {
           var elemBodyItem = that.renderBodyItem(item);
           bodyElem.append(elemBodyItem);
         });
@@ -150,7 +150,7 @@ var component = componentBuilder({
       $(window).on('resize', function () {
         clearTimeout(timer);
         timer = setTimeout(function () {
-          layui.each(component.cache.id, function (key) {
+          Object.keys(component.cache.id).forEach(function (key) {
             var that = component.getInst(key);
             if (!that) return;
             that.roll('init');

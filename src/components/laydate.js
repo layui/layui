@@ -141,7 +141,7 @@ var Class = function (options) {
   // 若 elem 非唯一，则拆分为多个实例
   var elem = $(options.elem || that.config.elem);
   if (elem.length > 1) {
-    lay.each(elem, function () {
+    elem.each(function () {
       laydate.render(
         lay.extend({}, that.config, {
           elem: this,
@@ -476,7 +476,7 @@ Class.prototype.init = function () {
   //生成正则表达式
   that.EXP_IF = '';
   that.EXP_SPLIT = '';
-  lay.each(that.format, function (i, item) {
+  that.format.forEach(function (item, i) {
     var EXP = new RegExp(dateType).test(item)
       ? '\\d{' +
         (function () {
@@ -521,7 +521,7 @@ Class.prototype.init = function () {
   options.elem.attr(MOD_ID, options.id); // 渲染过的标记
 
   //获取限制内日期
-  lay.each(['min', 'max'], function (i, item) {
+  ['min', 'max'].forEach(function (item, i) {
     var ymd = [];
     var hms = [];
     if (typeof options[item] === 'number') {
@@ -615,7 +615,7 @@ Class.prototype.render = function () {
         // ,options.theme && options.theme !== 'default' && !/^#/.test(options.theme) ? (' laydate-theme-' + options.theme) : ''
         (function () {
           var themeStr = '';
-          lay.each(options.theme, function (index, theme) {
+          options.theme.forEach(function (theme) {
             if (theme !== 'default' && !/^#/.test(theme)) {
               themeStr += ' laydate-theme-' + theme;
             }
@@ -641,9 +641,9 @@ Class.prototype.render = function () {
   if (options.zIndex) elem.style.zIndex = options.zIndex;
 
   //单双日历区域
-  lay.each(new Array(2), function (i) {
+  for (var i = 0; i < 2; i++) {
     if (!options.range && i > 0) {
-      return true;
+      break;
     }
 
     //头部区域
@@ -703,24 +703,24 @@ Class.prototype.render = function () {
       theadTr = lay.elem('tr');
 
     //生成年月选择
-    lay.each(headerChild, function (i, item) {
+    headerChild.forEach(function (item) {
       divHeader.appendChild(item);
     });
 
     //生成表格
     thead.appendChild(theadTr);
-    lay.each(new Array(6), function (i) {
+    for (var rowIndex = 0; rowIndex < 6; rowIndex++) {
       //表体
       var tr = table.insertRow(0);
-      lay.each(new Array(7), function (j) {
-        if (i === 0) {
+      for (var j = 0; j < 7; j++) {
+        if (rowIndex === 0) {
           var th = lay.elem('th');
           th.innerHTML = lang.weeks[(j + options.weekStart) % 7];
           theadTr.appendChild(th);
         }
         tr.insertCell(j);
-      });
-    });
+      }
+    }
     table.insertBefore(thead, table.children[0]); //表头
     divContent.appendChild(table);
 
@@ -734,7 +734,7 @@ Class.prototype.render = function () {
     elemHeader.push(headerChild);
     elemCont.push(divContent);
     elemTable.push(table);
-  });
+  }
 
   //生成底部栏
   $(divFooter).html(
@@ -763,7 +763,7 @@ Class.prototype.render = function () {
         );
       }
 
-      lay.each(options.btns, function (i, item) {
+      options.btns.forEach(function (item) {
         var title = lang.tools[item] || 'btn';
         if (options.range && item === 'now') return;
         if (isStatic && item === 'clear') {
@@ -791,7 +791,7 @@ Class.prototype.render = function () {
       .html(
         (function () {
           var shortcutBtns = [];
-          lay.each(options.shortcuts, function (i, item) {
+          options.shortcuts.forEach(function (item, i) {
             shortcutBtns.push(
               '<li data-index="' + i + '">' + item.text + '</li>',
             );
@@ -810,7 +810,7 @@ Class.prototype.render = function () {
           value = [value];
         }
         var type = options.type;
-        lay.each(value, function (i, item) {
+        value.forEach(function (item, i) {
           var dateTime = [options.dateTime, that.endDate][i];
           if (type === 'time' && layui.type(item) !== 'date') {
             if (that.EXP_IF.test(item)) {
@@ -878,7 +878,7 @@ Class.prototype.render = function () {
   }
 
   //插入到主区域
-  lay.each(elemMain, function (i, main) {
+  elemMain.forEach(function (main) {
     elem.appendChild(main);
   });
   options.showBottom && elem.appendChild(divFooter);
@@ -888,7 +888,7 @@ Class.prototype.render = function () {
   var styleText = [];
   var colorTheme;
   var isPrimaryColor = true;
-  lay.each(options.theme, function (index, theme) {
+  options.theme.forEach(function (theme) {
     // 主色
     if (isPrimaryColor && /^#/.test(theme)) {
       colorTheme = true;
@@ -955,7 +955,7 @@ Class.prototype.render = function () {
       ELEM_SHADE +
       '" style="' +
       ('z-index:' +
-        (parseInt(layui.getStyle(elem, 'z-index')) - 1) +
+        (parseInt(lay.getStyle(elem, 'z-index')) - 1) +
         '; background-color: ' +
         (options.shade[1] || '#000') +
         '; opacity: ' +
@@ -1131,7 +1131,7 @@ Class.prototype.checkDate = function (fn) {
       if (options.range) {
         that[startEnd[index]] = that[startEnd[index]] || {};
       }
-      lay.each(that.format, function (i, item) {
+      that.format.forEach(function (item, i) {
         var thisv = parseFloat(value[i]);
         if (value[i].length < item.length) error = true;
         if (/yyyy|y/.test(item)) {
@@ -1223,7 +1223,7 @@ Class.prototype.checkDate = function (fn) {
       //校验日期格式
       if (options.range) {
         value = value.split(' ' + that.rangeStr + ' ');
-        lay.each([options.dateTime, that.endDate], function (i, item) {
+        [options.dateTime, that.endDate].forEach(function (item, i) {
           initDate(item, value[i], i);
         });
       } else {
@@ -1259,7 +1259,7 @@ Class.prototype.checkDate = function (fn) {
     if (that.rangeElem) {
       var vals = [that.rangeElem[0].val(), that.rangeElem[1].val()],
         arrDate = [options.dateTime, that.endDate];
-      lay.each(vals, function (_i, _v) {
+      vals.forEach(function (_v, _i) {
         if (that.EXP_IF_ONE.test(_v)) {
           //校验日期格式
           initDate(arrDate[_i], _v, _i);
@@ -1346,7 +1346,7 @@ Class.prototype.markRender = function (tdElem, YMD, markers) {
   var markText;
 
   if (typeof markers === 'object') {
-    lay.each(markers || {}, function (key, title) {
+    Object.entries(markers || {}).forEach(function ([key, title]) {
       var keys = key.split('-');
       if (
         (keys[0] == YMD[0] || keys[0] == 0) && //每年的每月
@@ -1410,10 +1410,10 @@ Class.prototype.holidaysRender = function (tdElem, YMD, markers) {
     var ymd1 = ymdStr1.split('-');
     var ymd2 = ymdStr2.split('-');
 
-    lay.each(ymd1, function (i, v) {
+    ymd1.forEach(function (v, i) {
       ymd1[i] = parseInt(v, 10);
     });
-    lay.each(ymd2, function (i, v) {
+    ymd2.forEach(function (v, i) {
       ymd2[i] = parseInt(v, 10);
     });
 
@@ -1434,8 +1434,8 @@ Class.prototype.holidaysRender = function (tdElem, YMD, markers) {
   };
 
   if (layui.type(markers) === 'array') {
-    lay.each(markers, function (idx, item) {
-      lay.each(item, function (i, dayStr) {
+    markers.forEach(function (item, idx) {
+      (item || []).forEach(function (dayStr) {
         if (isEquals(dayStr, tdElem.attr('lay-ymd'))) {
           insertHtml(tdElem, type[idx], YMD[2]);
         }
@@ -1714,34 +1714,30 @@ Class.prototype.limit = function (opts) {
     opts.index > (opts.time ? 0 : 41) ? that.endDate : options.dateTime;
   var isOut;
 
-  lay.each(
-    {
-      now: lay.extend({}, dateTime, opts.date || {}),
-      min: options.min,
-      max: options.max,
-    },
-    function (key, item) {
-      timestamp[key] = that
-        .newDate(
-          lay.extend(
-            {
-              year: item.year,
-              month: opts.type === 'year' ? 0 : item.month, // 年份的时候只比较年
-              date:
-                opts.type === 'year' || opts.type === 'month' ? 1 : item.date, // 年月只比较年月不与最大最小比日期
-            },
-            (function () {
-              var hms = {};
-              lay.each(opts.time, function (i, keys) {
-                hms[keys] = item[keys];
-              });
-              return hms;
-            })(),
-          ),
-        )
-        .getTime(); //time：是否比较时分秒
-    },
-  );
+  Object.entries({
+    now: lay.extend({}, dateTime, opts.date || {}),
+    min: options.min,
+    max: options.max,
+  }).forEach(function ([key, item]) {
+    timestamp[key] = that
+      .newDate(
+        lay.extend(
+          {
+            year: item.year,
+            month: opts.type === 'year' ? 0 : item.month, // 年份的时候只比较年
+            date: opts.type === 'year' || opts.type === 'month' ? 1 : item.date, // 年月只比较年月不与最大最小比日期
+          },
+          (function () {
+            var hms = {};
+            (opts.time || []).forEach(function (keys) {
+              hms[keys] = item[keys];
+            });
+            return hms;
+          })(),
+        ),
+      )
+      .getTime(); //time：是否比较时分秒
+  });
 
   isOut =
     timestamp.now < timestamp.min ||
@@ -1792,7 +1788,7 @@ Class.prototype.calendar = function (value, index, type) {
   thisMaxDate = laydate.getEndDate(dateTime.month + 1, dateTime.year); //计算当前月的最后一天
 
   //赋值日
-  lay.each(tds, function (index_, item) {
+  tds.each(function (index_, item) {
     var YMD = [dateTime.year, dateTime.month],
       st;
     item = $(item);
@@ -1978,7 +1974,7 @@ Class.prototype.list = function (type, index) {
     var yearNum,
       startY = (yearNum = listYM[0] - 7);
     if (startY < 1) startY = yearNum = 1;
-    lay.each(new Array(15), function () {
+    for (var yearIndex = 0; yearIndex < 15; yearIndex++) {
       var li = lay.elem('li', {
           'lay-ym': yearNum,
         }),
@@ -2012,7 +2008,7 @@ Class.prototype.list = function (type, index) {
       });
       that.cellRender(li, { year: yearNum, month: 1, date: 1 }, 'year');
       yearNum++;
-    });
+    }
 
     $(elemYM[!isMonthBeforeYear ? 0 : 1])
       .attr('lay-ym', yearNum - 8 + '-' + listYM[1])
@@ -2021,15 +2017,15 @@ Class.prototype.list = function (type, index) {
 
   //生成月列表
   else if (type === 'month') {
-    lay.each(new Array(12), function (i) {
-      var li = lay.elem('li', {
-          'lay-ym': i,
-        }),
-        ymd = {
-          year: listYM[0],
-          month: i,
-          date: 1,
-        };
+    for (var i = 0; i < 12; i++) {
+      const li = lay.elem('li', {
+        'lay-ym': i,
+      });
+      const ymd = {
+        year: listYM[0],
+        month: i,
+        date: 1,
+      };
 
       i + 1 == listYM[1] && $(li).addClass(THIS);
       li.innerHTML = lang.months[i];
@@ -2052,7 +2048,7 @@ Class.prototype.list = function (type, index) {
         disabledType: 'date', // 月面板，检测当前月份中的所有日期是否禁用
       });
       that.cellRender(li, { year: listYM[0], month: i + 1, date: 1 }, 'month');
-    });
+    }
 
     $(elemYM[!isMonthBeforeYear ? 0 : 1])
       .attr('lay-ym', listYM[0] + '-' + listYM[1])
@@ -2114,7 +2110,7 @@ Class.prototype.list = function (type, index) {
       var liElem = ul.children;
       var hideCount = 0;
 
-      lay.each([showHour, showMinute, showSecond], function (i, isShow) {
+      [showHour, showMinute, showSecond].forEach(function (isShow, i) {
         if (!isShow) {
           liElem[i].className += ' layui-hide';
           hideCount++;
@@ -2133,10 +2129,10 @@ Class.prototype.list = function (type, index) {
     }
 
     //生成时分秒
-    lay.each([24, 60, 60], function (i, item) {
+    [24, 60, 60].forEach(function (item, i) {
       var li = lay.elem('li'),
         childUL = ['<p>' + lang.time[i] + '</p><ol>'];
-      lay.each(new Array(item), function (ii) {
+      for (var ii = 0; ii < item; ii++) {
         childUL.push(
           '<li' +
             (that[startEnd][hms[i]] === ii ? ' class="' + THIS + '"' : '') +
@@ -2144,7 +2140,7 @@ Class.prototype.list = function (type, index) {
             lay.digit(ii, 2) +
             '</li>',
         );
-      });
+      }
       li.innerHTML = childUL.join('') + '</ol>';
       ul.appendChild(li);
     });
@@ -2312,8 +2308,8 @@ Class.prototype.closeList = function () {
   var that = this;
   // var options = that.config;
 
-  lay.each(that.elemCont, function (index) {
-    $(this)
+  that.elemCont.forEach(function (item, index) {
+    $(item)
       .find('.' + ELEM_LIST)
       .remove();
     $(that.elemMain[index]).removeClass('laydate-ym-show laydate-time-show');
@@ -2549,7 +2545,7 @@ Class.prototype.stampRange = function () {
 
   // if(startTime > endTime) return that.hint(TIPS_OUT);
 
-  lay.each(tds, function (i, item) {
+  tds.each(function (i, item) {
     var ymd = $(item).attr('lay-ymd').split('-');
     var thisTime = that
       .newDate({
@@ -2605,7 +2601,7 @@ Class.prototype.done = function (param, type) {
   );
   var end = lay.extend({}, lay.extend(that.endDate, that.endTime));
 
-  lay.each([start, end], function (i, item) {
+  [start, end].forEach(function (item) {
     if (!('month' in item)) return;
     lay.extend(item, {
       month: item.month + 1,
@@ -2696,7 +2692,7 @@ Class.prototype.choose = function (td, index) {
   //范围选择
   if (options.range) {
     //补充时分秒
-    lay.each(['startTime', 'endTime'], function (i, item) {
+    ['startTime', 'endTime'].forEach(function (item, i) {
       that[item] = that[item] || {
         hours: i ? 23 : 0,
         minutes: i ? 59 : 0,
@@ -3022,7 +3018,7 @@ Class.prototype.changeEvent = function () {
     });
 
   //年月切换
-  lay.each(that.elemHeader, function (i, header) {
+  that.elemHeader.forEach(function (header, i) {
     //上一年
     $(header[0]).on('click', function () {
       that.change(i).prevYear();
@@ -3064,7 +3060,7 @@ Class.prototype.changeEvent = function () {
   });
 
   //点击日期
-  lay.each(that.table, function (i, table) {
+  that.table.forEach(function (table, i) {
     var tds = $(table).find('td');
     tds.on('click', function () {
       that.choose($(this), i);
@@ -3238,7 +3234,7 @@ laydate.parse = function (dateTime, format, one) {
   format = (format || []).concat();
 
   //转义为规定格式
-  lay.each(format, function (i, item) {
+  format.forEach(function (item, i) {
     if (/yyyy|y/.test(item)) {
       //年
       format[i] = lay.digit(dateTime.year, item.length);

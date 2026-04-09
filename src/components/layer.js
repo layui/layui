@@ -3,7 +3,6 @@
  * 通用 Web 弹出层组件
  */
 
-import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
@@ -566,9 +565,7 @@ Class.pt.creat = function () {
     : (function () {
         that.offset();
         // 首次弹出时，若 css 尚未加载，则等待 css 加载完毕后，重新设定尺寸
-        parseInt(
-          layui.getStyle(document.getElementById(doms.MOVE), 'z-index'),
-        ) ||
+        parseInt(lay.getStyle(document.getElementById(doms.MOVE), 'z-index')) ||
           (function () {
             that.layero.css('visibility', 'hidden');
             layer.ready(function () {
@@ -1072,8 +1069,8 @@ ready.record = function (layero) {
   var contentRecordHeightElem =
     type === ready.type[2] ? contentElem.children('iframe') : contentElem;
   var area = [
-    layero[0].style.width || layui.getStyle(layero[0], 'width'),
-    layero[0].style.height || layui.getStyle(layero[0], 'height'),
+    layero[0].style.width || lay.getStyle(layero[0], 'width'),
+    layero[0].style.height || lay.getStyle(layero[0], 'height'),
     layero.position().top,
     layero.position().left + parseFloat(layero.css('margin-left')),
   ];
@@ -1081,7 +1078,7 @@ ready.record = function (layero) {
   layero.attr({ area: area });
   contentElem.data(
     RECORD_HEIGHT_KEY,
-    layui.getStyle(contentRecordHeightElem[0], 'height'),
+    lay.getStyle(contentRecordHeightElem[0], 'height'),
   );
 };
 

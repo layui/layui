@@ -233,10 +233,7 @@ table 的属性众多，我们大致分为以下几种：
     <pre><code>// 对 2.6 之前版本的 table.reload() 方法兼容
 var tableReload = table.reload;
 table.reload = function(){
-  var args = [];
-  layui.each(arguments, function(index, item){
-    args.push(item);
-  });
+  var args = Array.from(arguments);
   args[2] === undefined && (args[2] = true);
   return tableReload.apply(null, args);
 }; </code></pre>

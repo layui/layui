@@ -5,9 +5,9 @@
   {{ var cityList = d.cityList || ["北京","上海","广州","城市-1"]; }}
   <select name="city" lay-filter="select-demo" lay-append-to="body">
     <option value="">select 方式</option>
-    {{ layui.each(cityList, function(i, v){ }}
+    {{ for(var i = 0; i < cityList.length; i++){ var v = cityList[i]; }}
     <option value="{{= v }}" {{= v === d.city ? 'selected' : '' }}>{{= v }}</option>
-    {{ }); }}
+    {{ } }}
   </select>
 </script>
 <!-- dropdown -->

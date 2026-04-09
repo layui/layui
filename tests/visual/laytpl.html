@@ -173,12 +173,12 @@ escape }}、{{- source }}、{{# comments }}、&#123;&#123;! ignore
       <script type="text/html" id="ID-tpl-template-list">
 {{ if(d.items && d.items.length > 0){ }}
 <ul>
-  {{ layui.each(d.items, function(index, item){ }}
+  {{ for(var index = 0; index < d.items.length; index++){ var item = d.items[index]; }}
   <li>
     <strong>{{= item.title }}</strong>
     {{- include('ID-tpl-template-list', {items: item.child}) }}
   </li>
-  {{ }); }}
+  {{ } }}
 </ul>
 {{ } }}
       </script>

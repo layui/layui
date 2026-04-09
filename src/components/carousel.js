@@ -237,7 +237,7 @@ Class.prototype.indicator = function () {
       '<div class="' + CONST.ELEM_IND + '"><ul>',
       (function () {
         var li = [];
-        layui.each(that.elemItem, function (index) {
+        that.elemItem.each(function (index) {
           li.push(
             '<li' +
               (options.index === index ? ' class="layui-this"' : '') +
