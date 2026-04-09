@@ -237,6 +237,7 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
                   (item.field || 'layuiTreeCheck_' + item[customName.id]) +
                   '" same="layuiTreeCheck" lay-skin="primary" ' +
                   (item.disabled ? 'disabled' : '') +
+                  (item.disabled && item.checked ? ' checked' : '') +
                   ' value="' +
                   item[customName.id] +
                   '">'
