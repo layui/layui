@@ -31,6 +31,13 @@
   padding-right: var(--padding);
 }
 
+.test-suite {
+  display: none;
+}
+.test-suite.active {
+  display: block;
+}
+
 .test-item {
   margin: var(--padding) 0;
   padding: var(--padding);
