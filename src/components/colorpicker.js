@@ -3,13 +3,12 @@
  * 颜色选择组件
  */
 
-import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
 import { componentBuilder } from '../core/component.js';
 
-var device = layui.device();
+var device = lay.device();
 var clickOrMousedown = device.mobile ? 'click' : 'mousedown';
 
 // 创建组件

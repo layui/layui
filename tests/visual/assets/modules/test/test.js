@@ -100,6 +100,7 @@ class Test {
     const flatItems = lay.treeToFlat(options.items).filter((item) => {
       return item.type !== '-' && !item.children;
     });
+    // console.log(flatItems);
 
     // 根据 hash，初始化默认显示的测试套件
     this.initSwitchSuite = () => {
@@ -108,9 +109,7 @@ class Test {
         flatItems.findIndex((item) => item.hash === hash) ||
         options.activeIndex;
 
-      if (index !== -1) {
-        this.#switchSuite(index);
-      }
+      this.#switchSuite(index >= 0 ? index : 0);
     };
 
     // hash 切换事件

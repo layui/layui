@@ -3,11 +3,11 @@
  */
 
 // 导入核心模块
-import { layui } from './core/layui.js';
-import { lay } from './core/lay.js';
+import { lay, use, version } from './core/lay.js';
 import { loader } from './core/loader.js';
 import { laytpl } from './core/laytpl.js';
 import { i18n } from './core/i18n.js';
+import { router } from './core/router.js';
 import { default as jquery, default as $ } from 'jquery';
 import { component, componentBuilder } from './core/component.js';
 
@@ -36,13 +36,17 @@ import { flow } from './components/flow.js';
 import { util } from './components/util.js';
 import { code } from './components/code.js';
 
-Object.assign(layui, {
+const layui = {
   lay,
+  use,
+  version,
+  loader,
   laytpl,
   i18n,
+  router,
   $,
   jquery,
-  component, // 兼容
+  component,
   componentBuilder,
   layer,
   laydate,
@@ -67,6 +71,6 @@ Object.assign(layui, {
   flow,
   util,
   code,
-});
+};
 
 export default layui;

@@ -15,15 +15,6 @@ const normalizeUrl = (url) => {
   }
 };
 
-// DOM 加载就绪事件
-const domReady = (fn) => {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fn, { once: true });
-  } else {
-    fn();
-  }
-};
-
 /**
  * 外部资源加载器
  * @param {string} url - 资源路径
@@ -254,7 +245,7 @@ class Loader {
         cache.status[urlKey] = true;
 
         // 保证文档加载完毕再执行回调
-        domReady(() => {
+        lay.use(() => {
           opts.success?.(result, e);
         });
       },

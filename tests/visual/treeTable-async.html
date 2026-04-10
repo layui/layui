@@ -31,11 +31,8 @@
       Mock.setup({
         timeout: '100-300',
       });
-      layui.use(['treeTable', 'util'], () => {
-        var treeTable = layui.treeTable;
-        var util = layui.util;
-
-        treeTable.set({});
+      layui.use(() => {
+        const { treeTable, lay, util, router } = layui;
 
         util.on({
           asyncLoad: () => {
@@ -175,7 +172,7 @@
 
         Mock.mock(/getDatas/, 'get', (config) => {
           //console.log(config);
-          var params = layui.url(config.url);
+          var params = router.url(config.url);
           var search = params.search;
           var parentId = search.parentId;
           var dataRet = testDatas.filter(
@@ -185,7 +182,7 @@
           var sortColumn = search.sortColumn;
           var sortType = search.sortType;
 
-          dataRet = layui.sort(dataRet, sortColumn, sortType === 'desc');
+          dataRet = lay.sort(dataRet, sortColumn, sortType === 'desc');
 
           var curr = search.page;
           if (!curr) {

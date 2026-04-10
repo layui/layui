@@ -1,6 +1,5 @@
 layui.use(() => {
-  var $ = layui.$;
-  var layer = layui.layer;
+  const { lay, layer, $ } = layui;
 
-  layer.msg(layui.v);
+  layer.msg(layui.version);
 });

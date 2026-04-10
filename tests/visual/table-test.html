@@ -113,13 +113,8 @@
 
     <script src="./assets/dist/layui.js"></script>
     <script>
-      layui.use(['table', 'dropdown'], () => {
-        var $ = layui.$;
-        var table = layui.table;
-        var layer = layui.layer;
-        var laytpl = layui.laytpl;
-        var dropdown = layui.dropdown;
-        var form = layui.form;
+      layui.use(() => {
+        const { lay, $, table, layer, laytpl, dropdown, form } = layui;
 
         // 仅用于各类测试的表头
         var test_cols = [
@@ -202,11 +197,7 @@
 
           totalRow: true,
           pagebar: '#pagebarDemo', // 分页栏模板
-          page: !1
-            ? false
-            : {
-                // curr: layui.data('tableCache').curr || 1 // 读取记录中的页码，赋值给起始页
-              },
+          page: !1 ? false : {},
           limit: 30,
           toolbar: '#toolbarDemo',
           defaultToolbar: [
@@ -245,7 +236,7 @@
               layEvent: 'LAYTABLE_TIPS',
               icon: 'layui-icon-tips',
               onClick: (obj) => {
-                layer.alert('Table for layui-v' + layui.v);
+                layer.alert('Table for layui-v' + layui.version);
               },
             },
           ],
@@ -290,8 +281,7 @@
                     hide: 0,
                     edit: 'text',
                     style: 'background-color: #fafafa; color: red;',
-                    templet: (d) =>
-                      '<em>' + layui.util.escape(d.email) + '</em>',
+                    templet: (d) => '<em>' + lay.escape(d.email) + '</em>',
                   },
                   {
                     field: 'sex',
@@ -369,14 +359,6 @@
           },
           done: function (res, curr, count) {
             var id = this.id;
-
-            // 记录当前页码
-            /*
-      layui.data('tableCache', {
-        key: 'curr',
-        value: curr
-      });
-      */
 
             // 设置选中行状态
             dropdown.render({
@@ -635,13 +617,13 @@
           switch (obj.event) {
             case 'getCheckData': {
               var data = checkStatus.data;
-              layer.alert(layui.util.escape(JSON.stringify(data)));
+              layer.alert(lay.escape(JSON.stringify(data)));
               break;
             }
             case 'getData': {
               var getData = table.getData(id);
               console.log(getData);
-              layer.alert(layui.util.escape(JSON.stringify(getData)));
+              layer.alert(lay.escape(JSON.stringify(getData)));
               break;
             }
             case 'isAll':
@@ -668,7 +650,7 @@
           const { event } = obj;
           console.log(obj);
           if (event === 'gender') {
-            layer.alert(layui.util.escape(JSON.stringify(obj.col)), {
+            layer.alert(lay.escape(JSON.stringify(obj.col)), {
               title: '当前列属性',
             });
           }

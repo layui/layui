@@ -3,14 +3,38 @@
  * 基础模块
  */
 
-import { layui } from './layui.js';
+import { log } from './logger.js';
 
-var document = window.document;
-var lay = Object.create(null);
+const { document } = window;
+const lay = Object.create(null);
+const version = '__VERSION__';
 
-var fnToString = Function.prototype.toString;
-var ObjectFunctionString = fnToString.call(Object);
-var hasOwnProperty = Object.prototype.hasOwnProperty;
+const fnToString = Function.prototype.toString;
+const ObjectFunctionString = fnToString.call(Object);
+const hasOwnProperty = Object.prototype.hasOwnProperty;
+
+/**
+ * 使用入口
+ *
+ * 保留 `layui.use` 作为「开始使用」的语义，用于确保组件实例化的执行时序。
+ * 但当前不再承载模块加载或依赖解析的职责，模块体系已全面迁移至 ES Modules。
+ * 我们希望它依然是一个具有高辨别度的门户、一个具有特殊意蕴的连接。
+ *
+ * @param {Function} callback - DOM 就绪后执行的回调函数
+ */
+const use = (lay.use = (callback) => {
+  if (document.readyState === 'loading') {
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => {
+        queueMicrotask(callback);
+      },
+      { once: true },
+    );
+  } else {
+    queueMicrotask(callback);
+  }
+});
 
 /**
  * 将一个或多个对象合并到目标对象中
@@ -135,6 +159,142 @@ lay.isPlainObject = function (obj) {
 };
 
 /**
+ * typeof 类型细分 -> string/number/boolean/undefined/null、object/array/function/…
+ * @param {*} operand - 任意值
+ * @returns {string}
+ */
+lay.type = function (operand) {
+  if (operand === null) return String(operand);
+
+  // 细分引用类型
+  return typeof operand === 'object' || typeof operand === 'function'
+    ? (function () {
+        var type =
+          Object.prototype.toString.call(operand).match(/\s(.+)\]$/) || []; // 匹配类型字符
+        var classType = 'Function|Array|Date|RegExp|Object|Error|Symbol'; // 常见类型字符
+
+        type = type[1] || 'Object';
+
+        // 除匹配到的类型外，其他对象均返回 object
+        return new RegExp('\\b(' + classType + ')\\b').test(type)
+          ? type.toLowerCase()
+          : 'object';
+      })()
+    : typeof operand;
+};
+
+/**
+ * 对象是否具备「类数组」结构（此处为兼容 jQuery 对象）
+ * @param {Object} obj - 任意对象
+ * @returns {boolean}
+ */
+lay.isArray = function (obj) {
+  var len;
+  var type = lay.type(obj);
+
+  if (!obj || typeof obj !== 'object' || obj === window) return false;
+
+  len = 'length' in obj && obj.length;
+  return (
+    type === 'array' ||
+    len === 0 ||
+    (typeof len === 'number' && len > 0 && len - 1 in obj) // 兼容 jQuery 对象
+  );
+};
+
+/**
+ * 本地存储
+ * @param {string} table - 表名
+ * @param {Object} settings - 设置项
+ * @param {Storage} storage - 存储对象，localStorage | sessionStorage
+ * @returns {Object}
+ */
+lay.storage = function (table = 'LAY', settings, storage) {
+  storage = storage || localStorage;
+
+  // 如果 settings 为 null，则删除表
+  if (settings === null) {
+    return delete storage[table];
+  }
+
+  settings = typeof settings === 'object' ? settings : { key: settings };
+
+  var data;
+
+  try {
+    data = JSON.parse(storage[table]);
+  } catch {
+    data = {};
+  }
+
+  if ('value' in settings) {
+    data[settings.key] = settings.value;
+  }
+  if (settings.remove) {
+    delete data[settings.key];
+  }
+
+  storage[table] = JSON.stringify(data);
+
+  return settings.key ? data[settings.key] : data;
+};
+
+/**
+ * 本地会话存储
+ * @param {string} table - 表名
+ * @param {Object} settings - 设置项
+ * @returns {Object}
+ */
+lay.sessionStorage = function (table, settings) {
+  return lay.storage(table, settings, sessionStorage);
+};
+
+/**
+ * 设备信息
+ * @param {string} key - 任意 key
+ * @returns {Object}
+ */
+lay.device = function (key) {
+  var agent = navigator.userAgent.toLowerCase();
+
+  // 获取版本号
+  var getVersion = function (label) {
+    var exp = new RegExp(label + '/([^\\s\\_\\-]+)');
+    label = (agent.match(exp) || [])[1];
+    return label || false;
+  };
+
+  // 返回结果集
+  var result = {
+    os: (function () {
+      // 底层操作系统
+      if (/windows/.test(agent)) {
+        return 'windows';
+      } else if (/linux/.test(agent)) {
+        return 'linux';
+      } else if (/iphone|ipod|ipad|ios/.test(agent)) {
+        return 'ios';
+      } else if (/mac/.test(agent)) {
+        return 'mac';
+      }
+    })(),
+    weixin: getVersion('micromessenger'), // 是否微信
+  };
+
+  // 任意的 key
+  if (key && !result[key]) {
+    result[key] = getVersion(key);
+  }
+
+  // 移动设备
+  result.android = /android/.test(agent);
+  result.ios = result.os === 'ios';
+  result.mobile = result.android || result.ios;
+
+  return result;
+};
+
+/**
  * IE 版本
  * @type {string | boolean} - 如果是 IE 返回版本字符串，否则返回 false
  */
@@ -145,10 +305,241 @@ lay.ie = (function () {
     : false;
 })();
 
-// 遍历
-lay.each = function () {
-  layui.each.apply(layui, arguments);
-  return this;
+/**
+ * 将数组中的成员对象按照某个 key 的 value 值进行排序
+ * @param {Object[]} arr - 任意数组
+ * @param {string} key - 任意 key
+ * @param {boolean} desc - 是否降序
+ * @param {boolean} notClone - 是否不对 arr 进行克隆
+ * @returns {Object[]}
+ */
+lay.sort = function (arr, key, desc, notClone) {
+  var clone = notClone ? arr || [] : JSON.parse(JSON.stringify(arr || []));
+
+  // 若未传入 key，则直接返回原对象
+  if (lay.type(arr) === 'object' && !key) {
+    return clone;
+  } else if (typeof arr !== 'object') {
+    // 若 arr 非对象
+    return [clone];
+  }
+
+  // 开始排序
+  clone.sort(function (o1, o2) {
+    var v1 = o1[key];
+    var v2 = o2[key];
+
+    /*
+     * 特殊数据
+     * 若比较的成员均非对象
+     */
+
+    // 若比较的成员均为数字
+    if (!isNaN(o1) && !isNaN(o2)) return o1 - o2;
+
+    // 若比较的成员只存在某一个非对象
+    if (!isNaN(o1) && isNaN(o2)) {
+      if (key && typeof o2 === 'object') {
+        v1 = o1;
+      } else {
+        return -1;
+      }
+    } else if (isNaN(o1) && !isNaN(o2)) {
+      if (key && typeof o1 === 'object') {
+        v2 = o2;
+      } else {
+        return 1;
+      }
+    }
+
+    /*
+     * 正常数据
+     * 即成员均为对象，也传入了对比依据： key
+     * 若 value 为数字，按「大小」排序；若 value 非数字，则按「字典序」排序
+     */
+
+    // value 是否为数字
+    var isNum = [!isNaN(v1), !isNaN(v2)];
+
+    // 若为数字比较
+    if (isNum[0] && isNum[1]) {
+      if (v1 && !v2 && v2 !== 0) {
+        // 数字 vs 空
+        return 1;
+      } else if (!v1 && v1 !== 0 && v2) {
+        // 空 vs 数字
+        return -1;
+      } else {
+        // 数字 vs 数字
+        return v1 - v2;
+      }
+    }
+
+    /**
+     * 字典序排序
+     */
+
+    // 若为非数字比较
+    if (!isNum[0] && !isNum[1]) {
+      // 字典序比较
+      if (v1 > v2) {
+        return 1;
+      } else if (v1 < v2) {
+        return -1;
+      } else {
+        return 0;
+      }
+    }
+
+    // 若为混合比较
+    if (isNum[0] || !isNum[1]) {
+      // 数字 vs 非数字
+      return -1;
+    } else if (!isNum[0] || isNum[1]) {
+      // 非数字 vs 数字
+      return 1;
+    }
+  });
+
+  desc && clone.reverse(); // 倒序
+  return clone;
+};
+
+// 移除事件的特殊标识
+var EV_REMOVE = 'LAY-EVENT-REMOVE';
+
+// 事件缓存集
+lay.events = {};
+
+/**
+ * 自定义模块事件
+ * @param {string} modName - 模块名
+ * @param {string} events - 事件名
+ * @param {Function} callback - 回调
+ * @returns {Object}
+ */
+lay.onevent = function (modName, events, callback) {
+  if (typeof modName !== 'string' || typeof callback !== 'function') {
+    return this;
+  }
+  return lay.event(modName, events, null, callback);
+};
+
+/**
+ * 执行自定义模块事件
+ * @param {string} modName - 模块名
+ * @param {string} events - 事件名
+ * @param {Object} params - 参数
+ * @param {Function} fn - 回调
+ */
+lay.event = function (modName, events, params, fn) {
+  var result = null;
+  var filter = (events || '').match(/\((.*)\)$/) || []; // 提取事件过滤器字符结构，如：select(xxx)
+  var eventName = (modName + '.' + events).replace(filter[0], ''); // 获取事件名称，如：form.select
+  var filterName = filter[1] || ''; // 获取过滤器名称, 如：xxx
+  var callback = (item) => {
+    var res = item && item.call(this, params);
+    res === false && result === null && (result = false);
+  };
+
+  // 如果参数传入特定字符，则执行移除事件
+  if (params === EV_REMOVE) {
+    delete (lay.events[eventName] || {})[filterName];
+    return lay;
+  }
+
+  // 添加事件
+  if (fn) {
+    lay.events[eventName] = lay.events[eventName] || {};
+
+    if (filterName) {
+      // 带 filter 不支持重复事件
+      lay.events[eventName][filterName] = [fn];
+    } else {
+      // 不带 filter 处理的是所有的同类事件，应该支持重复事件
+      lay.events[eventName][filterName] =
+        lay.events[eventName][filterName] || [];
+      lay.events[eventName][filterName].push(fn);
+    }
+    return this;
+  }
+
+  // 执行事件回调
+  const eventHandlers = lay.events[eventName];
+  for (const key in eventHandlers) {
+    const item = eventHandlers[key];
+
+    // 执行当前模块的全部事件
+    if (filterName === '{*}') {
+      item.forEach(callback);
+      return;
+    }
+
+    // 执行指定事件
+    key === '' && item.forEach(callback);
+    filterName && key === filterName && item.forEach(callback);
+  }
+
+  return result;
+};
+
+/**
+ * 新增模块事件
+ * @param {string} events - 事件名
+ * @param {string} modName - 模块名
+ * @param {Function} callback - 回调
+ * @returns {Object}
+ */
+lay.on = function (events, modName, callback) {
+  return lay.onevent(modName, events, callback);
+};
+
+/**
+ * 移除模块事件
+ * @param {string} events - 事件名
+ * @param {string} modName - 模块名
+ * @returns {Object}
+ */
+lay.off = function (events, modName) {
+  return lay.event(modName, events, EV_REMOVE);
+};
+
+/**
+ * 防抖
+ * @param {Function} func - 回调
+ * @param {number} wait - 延时执行的毫秒数
+ * @returns {Function}
+ */
+lay.debounce = function (func, wait) {
+  var timeout;
+  return function () {
+    var context = this;
+    var args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      func.apply(context, args);
+    }, wait);
+  };
+};
+
+/**
+ * 节流
+ * @param {Function} func - 回调
+ * @param {number} wait - 不重复执行的毫秒数
+ */
+lay.throttle = function (func, wait) {
+  var cooldown = false;
+  return function () {
+    var context = this;
+    var args = arguments;
+    if (!cooldown) {
+      func.apply(context, args);
+      cooldown = true;
+      setTimeout(function () {
+        cooldown = false;
+      }, wait);
+    }
+  };
 };
 
 /**
@@ -202,9 +593,11 @@ var getElement = function (elem) {
  */
 lay.elem = function (elemName, attr) {
   var elem = document.createElement(elemName);
-  lay.each(attr || {}, function (key, value) {
+
+  for (const [key, value] of Object.entries(attr || {})) {
     elem.setAttribute(key, value);
-  });
+  }
+
   return elem;
 };
 
@@ -233,6 +626,17 @@ lay.autoIncrementer = function (key, opts = {}) {
 
   incrementer[key] = incrementer[key] || 0;
   return ++incrementer[key];
+};
+
+/**
+ * 获取节点的 style 属性值
+ * @param {HTMLElement} node - 节点
+ * @param {string} name - 属性名
+ * @returns 属性值
+ */
+lay.getStyle = function (node, name) {
+  var style = window.getComputedStyle(node, null);
+  return style.getPropertyValue(name);
 };
 
 /**
@@ -267,9 +671,11 @@ lay.getStyleRules = function (style, callback) {
   var rules = sheet.cssRules || [];
 
   if (typeof callback === 'function') {
-    layui.each(rules, function (i, item) {
-      if (callback(item, i)) return true;
-    });
+    for (const [index, item] of Array.from(rules).entries()) {
+      if (callback(item, index)) {
+        break;
+      }
+    }
   }
 
   return rules;
@@ -503,15 +909,11 @@ lay.options = function (elem, opts) {
      */
     return new Function('return ' + (attrValue || '{}'))();
   } catch (ev) {
-    layui
-      .hint()
-      .error(
-        opts.errorText ||
-          [attrName + '="' + attrValue + '"', '\n parseerror: ' + ev].join(
-            '\n',
-          ),
-        'error',
-      );
+    log(
+      opts.errorText ||
+        [attrName + '="' + attrValue + '"', '\n parseerror: ' + ev].join('\n'),
+      'error',
+    );
     return {};
   }
 };
@@ -526,13 +928,16 @@ lay.options = function (elem, opts) {
  * ```
  */
 lay.isTopElem = function (elem) {
-  var topElems = [document, document.body],
-    matched = false;
-  lay.each(topElems, function (index, item) {
+  const topElems = [document, document.body];
+  let matched = false;
+
+  for (const item of topElems) {
     if (item === elem) {
-      return (matched = true);
+      matched = true;
+      break;
     }
-  });
+  }
+
   return matched;
 };
 
@@ -1120,4 +1525,4 @@ lay.flatToTree = function (data, options) {
   }, []);
 };
 
-export { lay };
+export { lay, use, version };

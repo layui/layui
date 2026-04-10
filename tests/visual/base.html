@@ -21,209 +21,18 @@
         vars: { lay, $, util },
         items: [
           {
-            name: 'layui',
-            children: [{ name: 'sort' }, { name: 'type' }, { name: 'isArray' }],
-          },
-          { type: '-' },
-          {
             name: 'lay',
             children: [
               { name: 'extend' },
+              { name: 'sort' },
+              { name: 'type' },
+              { name: 'isArray' },
               { name: 'treeToFlat' },
               { name: 'flatToTree' },
             ],
           },
+          { type: '-' },
         ],
-      });
-
-      tester.describe('layui.sort', (it) => {
-        it({
-          title: '整数型数字排序',
-          code: `
-const arr = layui.sort([{a: 3},{a: 0},{a: 0},{a: -1},{a: -5},{a: 6},{a: 9},{a: -333333}], 'a');
-console.log(arr);
-          `,
-          expected: [
-            { a: -333333 },
-            { a: -5 },
-            { a: -1 },
-            { a: 0 },
-            { a: 0 },
-            { a: 3 },
-            { a: 6 },
-            { a: 9 },
-          ],
-        });
-
-        it({
-          title: '浮点型数字排序',
-          code: `
-const arr = layui.sort([{a: 3.5},{a: 0.5},{a: 0.5},{a: -1.5},{a: -5.5},{a: 6.5},{a: 9.5},{a: -333333.5}], 'a');
-console.log(arr);
-          `,
-          expected: [
-            { a: -333333.5 },
-            { a: -5.5 },
-            { a: -1.5 },
-            { a: 0.5 },
-            { a: 0.5 },
-            { a: 3.5 },
-            { a: 6.5 },
-            { a: 9.5 },
-          ],
-        });
-
-        it({
-          title: '混合型数字排序',
-          code: `
-const arr = layui.sort([{a: 1},{a: 20.5},{a: 20.3},{a: 3},{a: 52},{a: 4.3}], 'a');
-console.log(arr);
-          `,
-          expected: [
-            { a: 1 },
-            { a: 3 },
-            { a: 4.3 },
-            { a: 20.3 },
-            { a: 20.5 },
-            { a: 52 },
-          ],
-        });
-
-        it({
-          title: '中文排序',
-          code: `
-const arr = layui.sort([{a: '男'},{a: '女'},{a: '男'},{a: '女'},{a: '男'}], 'a');
-console.log(arr);
-          `,
-          expected: [
-            { a: '女' },
-            { a: '女' },
-            { a: '男' },
-            { a: '男' },
-            { a: '男' },
-          ],
-        });
-
-        it({
-          title: '英文排序',
-          code: `
-const arr = layui.sort([{a: 'E'},{a: 'B'},{a: 'D'},{a: 'C'},{a: 'A'}], 'a');
-console.log(arr);
-          `,
-          expected: [
-            { a: 'A' },
-            { a: 'B' },
-            { a: 'C' },
-            { a: 'D' },
-            { a: 'E' },
-          ],
-        });
-
-        it({
-          title: '混合排序',
-          code: `
-const arr = layui.sort([
-  {a: 3},
-  {a: '男'},
-  {a: 0},
-  {a: 66},
-  {a: 99},
-  {a: 'C'},
-  {a: '女'},
-  {a: 3.5},
-  {a: 0},
-  {a: -1},
-  {a: 'B'},
-  {a: 5.5},
-  {a: '男'},
-  {a: 'A'},
-  {a: -5},
-  {a: '男'},
-  {a: 6},
-  {a: 9}
-], 'a');
-console.log(arr);
-          `,
-          expected: [
-            { a: -5 },
-            { a: -1 },
-            { a: 0 },
-            { a: 0 },
-            { a: 3 },
-            { a: 3.5 },
-            { a: 5.5 },
-            { a: 6 },
-            { a: 9 },
-            { a: 66 },
-            { a: 99 },
-            { a: 'A' },
-            { a: 'B' },
-            { a: 'C' },
-            { a: '女' },
-            { a: '男' },
-            { a: '男' },
-            { a: '男' },
-          ],
-        });
-
-        it({
-          title: '数组成员为纯数字',
-          code: `
-const arr = layui.sort([1, 20.5, 19.5, 52, 4.5]);
-console.log(arr);
-         `,
-          expected: [1, 4.5, 19.5, 20.5, 52],
-        });
-
-        it({
-          title: '数组成员为混合型',
-          code: `
-// 按成员对象的 key 为 a 进行比较
-const arr = layui.sort([1, {a: 32}, 20.5, {a: 6}, 52, 5.5], 'a');
-console.log(arr);
-          `,
-          expected: [1, 5.5, { a: 6 }, 20.5, { a: 32 }, 52],
-        });
-      });
-
-      tester.describe('layui.type', (it) => {
-        it({
-          title: 'new RegExp()',
-          code: `console.log(layui.type(new RegExp()))`,
-          expected: 'regexp',
-        });
-
-        it({
-          title: 'new Date()',
-          code: `console.log(layui.type(new Date()))`,
-          expected: 'date',
-        });
-      });
-
-      tester.describe('layui.isArray', (it) => {
-        it({
-          title: '[]',
-          code: `console.log(layui.isArray([]))`,
-          expected: true,
-        });
-
-        it({
-          title: '$("div")',
-          code: `console.log(layui.isArray($("div")))`,
-          expected: true,
-        });
-
-        it({
-          title: 'document.querySelectorAll("div")',
-          code: `console.log(layui.isArray(document.querySelectorAll("div")))`,
-          expected: true,
-        });
-
-        it({
-          title: '{}',
-          code: `console.log(layui.isArray({}))`,
-          expected: false,
-        });
       });
 
       /**
@@ -317,6 +126,196 @@ const obj = lay.extend({}, src);
 obj.data[0].a = '11111';
 console.log(obj.data[0].a === src.data[0].a);
           `,
+          expected: false,
+        });
+      });
+
+      tester.describe('lay.sort', (it) => {
+        it({
+          title: '整数型数字排序',
+          code: `
+const arr = lay.sort([{a: 3},{a: 0},{a: 0},{a: -1},{a: -5},{a: 6},{a: 9},{a: -333333}], 'a');
+console.log(arr);
+          `,
+          expected: [
+            { a: -333333 },
+            { a: -5 },
+            { a: -1 },
+            { a: 0 },
+            { a: 0 },
+            { a: 3 },
+            { a: 6 },
+            { a: 9 },
+          ],
+        });
+
+        it({
+          title: '浮点型数字排序',
+          code: `
+const arr = lay.sort([{a: 3.5},{a: 0.5},{a: 0.5},{a: -1.5},{a: -5.5},{a: 6.5},{a: 9.5},{a: -333333.5}], 'a');
+console.log(arr);
+          `,
+          expected: [
+            { a: -333333.5 },
+            { a: -5.5 },
+            { a: -1.5 },
+            { a: 0.5 },
+            { a: 0.5 },
+            { a: 3.5 },
+            { a: 6.5 },
+            { a: 9.5 },
+          ],
+        });
+
+        it({
+          title: '混合型数字排序',
+          code: `
+const arr = lay.sort([{a: 1},{a: 20.5},{a: 20.3},{a: 3},{a: 52},{a: 4.3}], 'a');
+console.log(arr);
+          `,
+          expected: [
+            { a: 1 },
+            { a: 3 },
+            { a: 4.3 },
+            { a: 20.3 },
+            { a: 20.5 },
+            { a: 52 },
+          ],
+        });
+
+        it({
+          title: '中文排序',
+          code: `
+const arr = lay.sort([{a: '男'},{a: '女'},{a: '男'},{a: '女'},{a: '男'}], 'a');
+console.log(arr);
+          `,
+          expected: [
+            { a: '女' },
+            { a: '女' },
+            { a: '男' },
+            { a: '男' },
+            { a: '男' },
+          ],
+        });
+
+        it({
+          title: '英文排序',
+          code: `
+const arr = lay.sort([{a: 'E'},{a: 'B'},{a: 'D'},{a: 'C'},{a: 'A'}], 'a');
+console.log(arr);
+          `,
+          expected: [
+            { a: 'A' },
+            { a: 'B' },
+            { a: 'C' },
+            { a: 'D' },
+            { a: 'E' },
+          ],
+        });
+
+        it({
+          title: '混合排序',
+          code: `
+const arr = lay.sort([
+  {a: 3},
+  {a: '男'},
+  {a: 0},
+  {a: 66},
+  {a: 99},
+  {a: 'C'},
+  {a: '女'},
+  {a: 3.5},
+  {a: 0},
+  {a: -1},
+  {a: 'B'},
+  {a: 5.5},
+  {a: '男'},
+  {a: 'A'},
+  {a: -5},
+  {a: '男'},
+  {a: 6},
+  {a: 9}
+], 'a');
+console.log(arr);
+          `,
+          expected: [
+            { a: -5 },
+            { a: -1 },
+            { a: 0 },
+            { a: 0 },
+            { a: 3 },
+            { a: 3.5 },
+            { a: 5.5 },
+            { a: 6 },
+            { a: 9 },
+            { a: 66 },
+            { a: 99 },
+            { a: 'A' },
+            { a: 'B' },
+            { a: 'C' },
+            { a: '女' },
+            { a: '男' },
+            { a: '男' },
+            { a: '男' },
+          ],
+        });
+
+        it({
+          title: '数组成员为纯数字',
+          code: `
+const arr = lay.sort([1, 20.5, 19.5, 52, 4.5]);
+console.log(arr);
+         `,
+          expected: [1, 4.5, 19.5, 20.5, 52],
+        });
+
+        it({
+          title: '数组成员为混合型',
+          code: `
+// 按成员对象的 key 为 a 进行比较
+const arr = lay.sort([1, {a: 32}, 20.5, {a: 6}, 52, 5.5], 'a');
+console.log(arr);
+          `,
+          expected: [1, 5.5, { a: 6 }, 20.5, { a: 32 }, 52],
+        });
+      });
+
+      tester.describe('lay.type', (it) => {
+        it({
+          title: 'new RegExp()',
+          code: `console.log(lay.type(new RegExp()))`,
+          expected: 'regexp',
+        });
+
+        it({
+          title: 'new Date()',
+          code: `console.log(lay.type(new Date()))`,
+          expected: 'date',
+        });
+      });
+
+      tester.describe('lay.isArray', (it) => {
+        it({
+          title: '[]',
+          code: `console.log(lay.isArray([]))`,
+          expected: true,
+        });
+
+        it({
+          title: '$("div")',
+          code: `console.log(lay.isArray($("div")))`,
+          expected: true,
+        });
+
+        it({
+          title: 'document.querySelectorAll("div")',
+          code: `console.log(lay.isArray(document.querySelectorAll("div")))`,
+          expected: true,
+        });
+
+        it({
+          title: '{}',
+          code: `console.log(lay.isArray({}))`,
           expected: false,
         });
       });

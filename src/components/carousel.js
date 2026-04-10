@@ -3,7 +3,6 @@
  * 轮播
  */
 
-import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { $ } from 'jquery';
 import { component as componentBuilder } from '../core/component.js';
@@ -339,7 +338,7 @@ Class.prototype.slide = function (type, num) {
   };
 
   typeof options.change === 'function' && options.change(params);
-  layui.event.call(this, CONST.MOD_NAME, 'change(' + filter + ')', params);
+  lay.event.call(this, CONST.MOD_NAME, 'change(' + filter + ')', params);
 };
 
 // 事件处理

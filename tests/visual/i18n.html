@@ -274,6 +274,7 @@
     <script>
       layui.use(async () => {
         const {
+          lay,
           $,
           colorpicker,
           dropdown,
@@ -298,7 +299,7 @@
 
         // 组件 i18n 配置
         i18n.set({
-          locale: layui.data('layui-i18n-test').locale || 'zh-CN', // 指定语言
+          locale: lay.storage('layui-i18n-test').locale || 'zh-CN', // 指定语言
           messages: {
             en, // 扩展英语
             fr, // 扩展法语
@@ -566,7 +567,7 @@
         $('#change-locale').val(i18n.config.locale);
         form.render('select').on('select(change-locale)', (elem) => {
           // 记录语言，并重载页面（推荐）
-          layui.data('layui-i18n-test', {
+          lay.storage('layui-i18n-test', {
             key: 'locale',
             value: elem.value,
           });
@@ -574,7 +575,7 @@
         });
 
         $('body').css('opacity', 1);
-        layer.msg(layui.v);
+        layer.msg(layui.version);
         console.log(i18n.config);
       });
     </script>

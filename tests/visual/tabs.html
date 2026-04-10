@@ -366,8 +366,8 @@
         });
 
         // HASH 初始定位
-        var hash = layui.hash();
-        tabs.change('demoTabs-hash', hash.href);
+        var hash = location.hash.replace(/^#/, '');
+        tabs.change('demoTabs-hash', hash);
 
         // 给任意元素绑定 Tab 功能
         tabs.render({

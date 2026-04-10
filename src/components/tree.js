@@ -2,7 +2,6 @@
  * tree 树组件
  */
 
-import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
@@ -168,7 +167,7 @@ Class.prototype.reload = function (options, type) {
 
   // 数组直接覆盖
   Object.entries(options).forEach(function ([key, item]) {
-    if (layui.type(item) === 'array') {
+    if (lay.type(item) === 'array') {
       delete that.config[key];
     }
   });

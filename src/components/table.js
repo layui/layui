@@ -1,8 +1,8 @@
 /**
- * layui.table
+ * table
  * 表格组件
  */
-import { layui } from '../core/layui.js';
+
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { log } from '../core/logger.js';
@@ -13,7 +13,7 @@ import { util } from './util.js';
 import { layer } from './layer.js';
 import { form } from './form.js';
 
-var device = layui.device();
+var device = lay.device();
 
 // api
 var table = {
@@ -36,7 +36,7 @@ var table = {
 
   // 事件
   on: function (events, callback) {
-    return layui.onevent.call(this, MOD_NAME, events, callback);
+    return lay.onevent.call(this, MOD_NAME, events, callback);
   },
 };
 
@@ -194,7 +194,7 @@ var resizeObserver = lay.createSharedResizeObserver(MOD_NAME);
 // thead 区域模板
 var TPL_HEADER = function (options) {
   var rowCols =
-    '{{ var colspan = layui.type(item2.colspan2) === \'number\' ? item2.colspan2 : item2.colspan; if(colspan){ }} colspan="{{=colspan}}"{{ } if(item2.rowspan){ }} rowspan="{{=item2.rowspan}}"{{ } }}';
+    '{{ var colspan = lay.type(item2.colspan2) === \'number\' ? item2.colspan2 : item2.colspan; if(colspan){ }} colspan="{{=colspan}}"{{ } if(item2.rowspan){ }} rowspan="{{=item2.rowspan}}"{{ } }}';
 
   options = options || {};
   return `
@@ -228,7 +228,11 @@ var TPL_HEADER = function (options) {
                 ${rowCols}
                 {{ if(item2.unresize || item2.colGroup){ }}data-unresize="true"{{ } }}
                 class="{{ if(item2.hide){ }}layui-hide{{ } }}{{ if(isSort){ }} layui-unselect{{ } }}{{ if(!item2.field){ }} layui-table-col-special{{ } }}"
-                {{ if(item2.title){ }}title="{{ layui.$('<div>' + item2.title + '</div>').text() }}"{{ } }}>
+                {{ if (item2.title) {
+                  const tempDiv = document.createElement('div');
+                  tempDiv.innerHTML = item2.title;
+                  const title = tempDiv.textContent || tempDiv.innerText || '';
+                }}title="{{= title }}"{{ } }}>
                 <div
                   class="layui-table-cell laytable-cell-{{ if(item2.colGroup){ }}group{{ } else { }}{{=d.index}}-{{=i1}}-{{=i2}}{{ if(item2.type !== "normal"){ }} laytable-cell-{{= item2.type }}{{ } }}{{ } }}"
                   {{ if(item2.align){ }}align="{{=item2.align}}"{{ } }}>
@@ -263,6 +267,7 @@ var TPL_BODY = `
 
 // 主模板
 var TPL_MAIN = `
+  {{ var left, right; const { lay } = d.vars; }}
   {{ if(d.data.toolbar){ }}
     <div class="layui-table-tool">
       <div class="layui-table-tool-temp"></div>
@@ -281,7 +286,6 @@ var TPL_MAIN = `
         </div>
       </div>
     {{ } }}
-    {{ var left, right; }}
     <div class="layui-table-header">
       ${TPL_HEADER()}
     </div>
@@ -495,6 +499,7 @@ Class.prototype.render = function (type) {
           table_sort_asc: i18n.$t('table.sort.asc'),
           table_sort_desc: i18n.$t('table.sort.desc'),
         },
+        vars: { lay, i18n, $, util },
       }),
     );
 
@@ -802,7 +807,7 @@ Class.prototype.renderToolbar = function () {
               that.resize();
 
               // 列筛选（显示或隐藏）后的事件
-              layui.event.call(this, MOD_NAME, 'colToggled(' + filter + ')', {
+              lay.event.call(this, MOD_NAME, 'colToggled(' + filter + ')', {
                 col: col,
                 config: options,
               });
@@ -885,7 +890,7 @@ Class.prototype.renderToolbar = function () {
         printWin.document.write(style + html.prop('outerHTML'));
         printWin.document.close();
 
-        if (layui.device('edg').edg) {
+        if (lay.device('edg').edg) {
           printWin.onafterprint = printWin.close;
           printWin.print();
         } else {
@@ -1253,7 +1258,7 @@ Class.prototype.reload = function (options, deep, type) {
 
   // 防止数组深度合并
   Object.entries(options).forEach(function ([key, item]) {
-    if (layui.type(item) === 'array') delete that.config[key];
+    if (lay.type(item) === 'array') delete that.config[key];
   });
 
   // 对参数进行深度或浅扩展
@@ -1339,7 +1344,7 @@ Class.prototype.pullData = function (curr, opts) {
     res = {};
     res[response.dataName] = table.cache[that.key];
     res[response.countName] = options.url
-      ? layui.type(options.page) === 'object'
+      ? lay.type(options.page) === 'object'
         ? options.page.count
         : res[response.dataName].length
       : options.data.length;
@@ -1443,7 +1448,7 @@ Class.prototype.pullData = function (curr, opts) {
       }
       that._xhr = $.ajax(ajaxOptions);
     }
-  } else if (layui.type(options.data) === 'array') {
+  } else if (lay.type(options.data) === 'array') {
     //已知数据
     res = {};
     var startLimit = curr * options.limit - options.limit;
@@ -1515,7 +1520,7 @@ Class.prototype.getTrHtml = function (data, sort, curr, trsObj) {
     }
 
     //若数据项为空数组，则不往下执行（因为删除数据时，会将原有数据设置为 []）
-    if (layui.type(item1) === 'array' && item1.length === 0) return;
+    if (lay.type(item1) === 'array' && item1.length === 0) return;
 
     // 加入序号保留字段
     item1[table.config.numbersName] = numbers;
@@ -1834,7 +1839,7 @@ Class.prototype.renderTotal = function (data, totalRowData) {
 
   data.forEach(function (item1) {
     // 若数据项为空数组，则不往下执行（因为删除数据时，会将原有数据设置为 []）
-    if (layui.type(item1) === 'array' && item1.length === 0) return;
+    if (lay.type(item1) === 'array' && item1.length === 0) return;
 
     that.eachCols(function (i3, item3) {
       var field = item3.field || i3,
@@ -2034,7 +2039,7 @@ Class.prototype.setRowChecked = function (opts) {
   var that = this;
   var options = that.config;
   var isCheckAll = opts.index === 'all'; // 是否操作全部
-  var isCheckMult = layui.type(opts.index) === 'array'; // 是否操作多个
+  var isCheckMult = lay.type(opts.index) === 'array'; // 是否操作多个
   var isCheckAllOrMult = isCheckAll || isCheckMult; // 是否全选或多选
 
   // treeTable 内部已处理选中，此处不再处理
@@ -2100,7 +2105,7 @@ Class.prototype.setRowChecked = function (opts) {
     if (!i) return; // 此时 el 通常为静态表格嵌套时的原始模板
 
     // 绕过空项和禁用项
-    if (layui.type(item) === 'array' || item[options.disabledName]) {
+    if (lay.type(item) === 'array' || item[options.disabledName]) {
       return;
     }
 
@@ -2213,13 +2218,13 @@ Class.prototype.sort = function (opts) {
   if (options.autoSort) {
     if (opts.type === 'asc') {
       //升序
-      thisData = layui.sort(data, field, null, true);
+      thisData = lay.sort(data, field, null, true);
     } else if (opts.type === 'desc') {
       //降序
-      thisData = layui.sort(data, field, true, true);
+      thisData = lay.sort(data, field, true, true);
     } else {
       // 清除排序
-      thisData = layui.sort(data, table.config.initIndexName, null, true);
+      thisData = lay.sort(data, table.config.initIndexName, null, true);
       delete that.sortKey;
       delete options.initSort;
     }
@@ -2242,7 +2247,7 @@ Class.prototype.sort = function (opts) {
       field: field,
       type: opts.type,
     };
-    layui.event.call(
+    lay.event.call(
       opts.field,
       MOD_NAME,
       'sort(' + filter + ')',
@@ -2431,7 +2436,7 @@ Class.prototype.scrollPatch = function () {
  * @param {(field: string, value: any) => void} [callback] - 更新每个字段时的回调函数
  */
 Class.prototype.updateRow = function (opts, callback) {
-  opts = layui.type(opts) === 'array' ? opts : [opts];
+  opts = lay.type(opts) === 'array' ? opts : [opts];
 
   var that = this;
   var ELEM_CELL = '.layui-table-cell';
@@ -2558,7 +2563,7 @@ Class.prototype.events = function () {
     }
 
     // table toolbar 事件
-    layui.event.call(
+    lay.event.call(
       this,
       MOD_NAME,
       'toolbar(' + filter + ')',
@@ -2580,7 +2585,7 @@ Class.prototype.events = function () {
     var key = th.data('key');
     var col = that.col(key);
 
-    layui.event.call(
+    lay.event.call(
       this,
       MOD_NAME,
       'colTool(' + filter + ')',
@@ -2600,7 +2605,7 @@ Class.prototype.events = function () {
     var othis = $(this);
     var events = othis.attr('lay-event');
 
-    layui.event.call(
+    lay.event.call(
       this,
       MOD_NAME,
       'pagebar(' + filter + ')',
@@ -2704,7 +2709,7 @@ Class.prototype.events = function () {
           // 列拖拽宽度后的事件
           thatTable.cssRules(key, function (item) {
             col.width = parseFloat(item.style.width);
-            layui.event.call(th[0], MOD_NAME, 'colResized(' + filter + ')', {
+            lay.event.call(th[0], MOD_NAME, 'colResized(' + filter + ')', {
               col: col,
               config: thatTable.config,
             });
@@ -2848,7 +2853,7 @@ Class.prototype.events = function () {
     e.stopPropagation();
 
     // 事件
-    layui.event.call(
+    lay.event.call(
       checkbox[0],
       MOD_NAME,
       'checkbox(' + filter + ')',
@@ -2881,7 +2886,7 @@ Class.prototype.events = function () {
     });
 
     // 事件
-    layui.event.call(
+    lay.event.call(
       radio[0],
       MOD_NAME,
       'radio(' + filter + ')',
@@ -2954,7 +2959,7 @@ Class.prototype.events = function () {
       }
     }
 
-    layui.event.call(
+    lay.event.call(
       this,
       MOD_NAME,
       eventType + '(' + filter + ')',
@@ -3045,7 +3050,7 @@ Class.prototype.events = function () {
       params.update(obj);
 
       // 执行 API 编辑事件
-      layui.event.call(td[0], MOD_NAME, 'edit(' + filter + ')', params);
+      lay.event.call(td[0], MOD_NAME, 'edit(' + filter + ')', params);
     })
     .on('blur', '.' + ELEM_EDIT, function () {
       // 单元格编辑 - 恢复非编辑状态事件
@@ -3220,7 +3225,7 @@ Class.prototype.events = function () {
     that.setRowActive(index);
 
     // 执行事件
-    layui.event.call(
+    lay.event.call(
       this,
       MOD_NAME,
       (type || 'tool') + '(' + filter + ')',
@@ -3666,7 +3671,7 @@ table.checkStatus = function (id) {
 
   // 过滤禁用或已删除的数据
   data.forEach(function (item) {
-    if (layui.type(item) === 'array' || item[table.config.disabledName]) {
+    if (lay.type(item) === 'array' || item[table.config.disabledName]) {
       invalidNum++; // 无效数据数量
       return;
     }
@@ -3698,7 +3703,7 @@ table.getData = function (id) {
   var arr = [];
   var data = table.cache[id] || [];
   data.forEach(function (item) {
-    if (layui.type(item) === 'array') {
+    if (lay.type(item) === 'array') {
       return;
     }
     arr.push(table.clearCacheKey(item));
@@ -3779,7 +3784,7 @@ table.exportFile = function (id, data, opts) {
             id.forEach(function (item) {
               i1 == 0 && dataTitle.push(item || '');
             });
-            (layui.isArray(item1)
+            (lay.isArray(item1)
               ? $.extend([], item1)
               : table.clearCacheKey(item1)
             ).forEach(function (item2) {
@@ -3879,7 +3884,7 @@ table.hideCol = function (id, cols) {
     return;
   }
 
-  if (layui.type(cols) === 'boolean') {
+  if (lay.type(cols) === 'boolean') {
     // 显示全部或者隐藏全部
     that.eachCols(function (i2, item2) {
       var key = item2.key;
@@ -3896,7 +3901,7 @@ table.hideCol = function (id, cols) {
       }
     });
   } else {
-    cols = layui.isArray(cols) ? cols : [cols];
+    cols = lay.isArray(cols) ? cols : [cols];
     cols.forEach(function (item1) {
       that.eachCols(function (i2, item2) {
         if (item1.field === item2.field) {
@@ -3984,7 +3989,7 @@ table.clearCacheKey = function (data) {
 };
 
 // 自动完成渲染
-$(function () {
+lay.use(function () {
   table.init();
 });
 

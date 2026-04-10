@@ -7,16 +7,9 @@
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
     <title>util 组件 - layui</title>
-
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
-
-    <style>
-      body {
-        padding: 50px;
-      }
-    </style>
   </head>
-  <body>
+  <body class="layui-padding-5">
     <fieldset class="layui-elem-field">
       <legend>默认 body 委托元素</legend>
       <div class="layui-field-box">
@@ -83,7 +76,7 @@
 
     <script src="./assets/dist/layui.js"></script>
     <script>
-      layui.use(['lay', 'util', 'layer'], () => {
+      layui.use(() => {
         var $ = layui.$;
         var util = layui.util;
         var layer = layui.layer;
@@ -168,7 +161,7 @@
         util.on(
           'lay-bind',
           {
-            e1: layui.throttle(function (othis) {
+            e1: lay.throttle(function (othis) {
               layer.tips(othis.html(), this, { tips: 3 });
             }, 3000), // 3s 内不重复执行
             e2: () => {

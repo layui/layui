@@ -3,11 +3,11 @@
  */
 
 // 导出核心模块
-export { layui } from './core/layui.js';
-export { lay } from './core/lay.js';
+export { lay, use, version } from './core/lay.js';
 export { loader } from './core/loader.js';
 export { laytpl } from './core/laytpl.js';
 export { i18n } from './core/i18n.js';
+export { router } from './core/router.js';
 export { default as jquery, default as $ } from 'jquery';
 export { component, componentBuilder } from './core/component.js';
 

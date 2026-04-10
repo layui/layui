@@ -3,11 +3,8 @@
  * 国际化
  */
 
-import { layui } from './layui.js';
 import { lay } from './lay.js';
-
-var hint = layui.hint();
-// var MOD_NAME = 'i18n';
+import { logOnce } from './logger.js';
 
 // 识别预先可能定义的指定全局对象
 var GLOBAL = window.LAYUI_GLOBAL || {};
@@ -273,7 +270,7 @@ function escape(value) {
       var val = origFn.apply(this, arguments);
       return typeof val === 'string' ? lay.escape(val) : val;
     };
-  } else if (layui.type(value) === 'array') {
+  } else if (lay.type(value) === 'array') {
     value = value.map(function (v) {
       return typeof v === 'string' ? lay.escape(v) : v;
     });
@@ -294,20 +291,17 @@ var resolveValue = memoize(function (path, obj, defaultValue) {
 
   var value = get(obj, path, defaultValue);
 
-  if (layui.cache.debug) {
+  if (config.debug) {
     var isFallback = defaultValue === value || value === path;
     var isNotFound = !isDef(value) || isFallback;
     if (isNotFound) {
-      hint.errorOnce(
+      logOnce(
         "Not found '" + path + "' key in '" + locale + "' locale messages.",
         'warn',
       );
     }
     if (isFallback) {
-      hint.errorOnce(
-        "Fallback to default message for key: '" + path + "'",
-        'warn',
-      );
+      logOnce("Fallback to default message for key: '" + path + "'", 'warn');
     }
   }
 
@@ -346,7 +340,7 @@ var i18n = {
  * }
  * i18n.$t('message.hello', ['Hello'])
  */
-i18n.translation = function (keypath, parameters, options) {
+i18n.translate = function (keypath, parameters, options) {
   var locale = (options && options.locale) || config.locale;
   var i18nMessages = config.messages[locale];
   var namespace = locale + ':';
@@ -354,7 +348,7 @@ i18n.translation = function (keypath, parameters, options) {
   var fallbackMessage = hasDefault ? options.default : undefined;
 
   if (!i18nMessages && !hasDefault) {
-    hint.errorOnce(
+    logOnce(
       "Locale '" +
         locale +
         "' not found. Please add i18n messages for this locale first.",
@@ -376,8 +370,8 @@ i18n.translation = function (keypath, parameters, options) {
 };
 
 /**
- * i18n.translation 的别名，用于简化代码书写，未文档化仅限内部使用
+ * i18n.translate 的别名，用于简化代码书写，未文档化仅限内部使用
  */
-i18n.$t = i18n.translation;
+i18n.$t = i18n.translate;
 
 export { i18n };

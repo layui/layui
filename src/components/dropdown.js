@@ -3,14 +3,13 @@
  * 下拉菜单组件
  */
 
-import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
 import { laytpl } from '../core/laytpl.js';
 import { util } from './util.js';
 
-var device = layui.device();
+var device = lay.device();
 var clickOrMousedown = device.mobile ? 'touchstart' : 'mousedown';
 
 // 模块名
@@ -41,7 +40,7 @@ var dropdown = {
 
   // 事件
   on: function (events, callback) {
-    return layui.onevent.call(this, MOD_NAME, events, callback);
+    return lay.onevent.call(this, MOD_NAME, events, callback);
   },
 };
 
@@ -713,7 +712,7 @@ thisModule.spread = function (othis, isAccordion) {
           .trim();
 
       // 触发事件
-      layui.event.call(this, MOD_NAME, 'click(' + filter + ')', options);
+      lay.event.call(this, MOD_NAME, 'click(' + filter + ')', options);
     }
   });
 

@@ -1,8 +1,8 @@
 /**
- * util 工具组件
+ * util
+ * 工具组件
  */
 
-import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { log } from '../core/logger.js';
@@ -98,7 +98,7 @@ var util = {
       });
 
       // 自定义任意事件
-      if (layui.type(options.on) === 'object') {
+      if (lay.type(options.on) === 'object') {
         Object.entries(options.on).forEach(function ([eventName, callback]) {
           elemBar.on(eventName, function () {
             var type = $(this).attr('lay-type');

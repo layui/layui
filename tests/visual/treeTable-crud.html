@@ -70,25 +70,25 @@
     <script type="text/html" id="provinceTpl">
       <select name="select-province" class="layui-border select-province" lay-ignore lay-filter="province_{{d.rowid}}" id="province_{{d.rowid}}">
         <option value="">请选择</option>
-        {{ for(var i = 0; i < d.provinceList.length; i++){ var v = d.provinceList[i]; }}
+        {{ d.provinceList?.forEach(function(v, i) { }}
           <option value="{{= v.id }}" {{= d.province==v.id?"selected":"" }}>{{= v.name }}</option>
-          {{ } }}
+          {{ }) }}
       </select>
     </script>
     <script type="text/html" id="cityTpl">
       <select name="select-city" class="layui-border select-city" lay-ignore lay-filter="city_{{d.rowid}}" id="city_{{d.rowid}}">
         <option value="">请选择</option>
-        {{ for(var i = 0; i < d.cityList.length; i++){ var v = d.cityList[i]; }}
+        {{ d.cityList?.forEach(function(v, i) { }}
           <option value="{{= v.id }}" {{= d.city==v.id?"selected":"" }}>{{= v.name }}</option>
-          {{ } }}
+          {{ }) }}
       </select>
     </script>
     <script type="text/html" id="districtTpl">
       <select name="select-district" class="layui-border select-district" lay-ignore lay-filter="district_{{d.rowid}}" id="district_{{d.rowid}}">
         <option value="">请选择</option>
-        {{ for(var i = 0; i < d.districtList.length; i++){ var v = d.districtList[i]; }}
+        {{ d.districtList?.forEach(function(v, i) { }}
           <option value="{{= v.id }}" {{= d.district==v.id?"selected":"" }}>{{= v.name }}</option>
-          {{ } }}
+          {{ }) }}
       </select>
     </script>
     <script
@@ -96,7 +96,7 @@
       src1="//cdnjs.cloudflare.com/ajax/libs/layui/2.9.9/layui.js"
     ></script>
     <script>
-      layui.use(['jquery', 'treeTable', 'form'], () => {
+      layui.use(() => {
         var $ = layui.jquery;
         var table = layui.table;
         var treeTable = layui.treeTable;

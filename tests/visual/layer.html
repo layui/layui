@@ -106,8 +106,9 @@
       };
       window.jQuery && runTest(1, window.jQuery, window.layer);
 
-      layui.use(['layer', 'util'], (layer, util) => {
+      layui.use(() => {
         var $ = layui.jquery;
+        var layer = layui.layer;
         var util = layui.util;
         //return
 

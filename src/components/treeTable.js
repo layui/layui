@@ -1,9 +1,9 @@
 /**
- * layui.treeTable
+ * treeTable
  * 树表组件
  */
 
-import { layui } from '../core/layui.js';
+import { lay } from '../core/lay.js';
 import { log } from '../core/logger.js';
 import { $ } from 'jquery';
 import { form } from './form.js';
@@ -168,7 +168,7 @@ var updateOptions = function (id, options, reload) {
         var parseDataThat = this;
         var args = arguments;
         var retData = args[0];
-        if (layui.type(parseData) === 'function') {
+        if (lay.type(parseData) === 'function') {
           retData = parseData.apply(parseDataThat, args) || args[0];
         }
         var dataName = parseDataThat.response.dataName;
@@ -194,7 +194,7 @@ var updateOptions = function (id, options, reload) {
           parseDataThat.initSort &&
           parseDataThat.initSort.type
         ) {
-          layui.sort(
+          lay.sort(
             retData[dataName],
             parseDataThat.initSort.field,
             parseDataThat.initSort.type === 'desc',
@@ -265,7 +265,7 @@ var updateOptions = function (id, options, reload) {
         tableView.find(ELEM_BODY).scrollTop(that.scrollTopCache);
       }
 
-      if (layui.type(done) === 'function') {
+      if (lay.type(done) === 'function') {
         return done.apply(doneThat, args);
       }
     };
@@ -655,7 +655,7 @@ var debounceFn = (function () {
   var fn = {};
   return function (tableId, func, wait) {
     if (!fn[tableId]) {
-      fn[tableId] = layui.debounce(func, wait);
+      fn[tableId] = lay.debounce(func, wait);
     }
     return fn[tableId];
   };
@@ -685,7 +685,7 @@ var expandNode = function (
   var trData = treeTableThat.getNodeDataByIndex(dataIndex);
 
   // 后续调优：对已经展开的节点进行展开和已经关闭的节点进行关闭应该做优化减少不必要的代码执行 todo
-  var isToggle = layui.type(expandFlag) !== 'boolean';
+  var isToggle = lay.type(expandFlag) !== 'boolean';
   var trExpand = isToggle ? !trData[LAY_EXPAND] : expandFlag;
   var retValue = trData[isParentKey] ? trExpand : null;
 
@@ -695,7 +695,7 @@ var expandNode = function (
     (!trData[LAY_ASYNC_STATUS] || trData[LAY_ASYNC_STATUS] === 'local')
   ) {
     var beforeExpand = treeOptions.callback.beforeExpand;
-    if (layui.type(beforeExpand) === 'function') {
+    if (lay.type(beforeExpand) === 'function') {
       if (beforeExpand(tableId, trData, expandFlag) === false) {
         return retValue;
       }
@@ -811,7 +811,7 @@ var expandNode = function (
         };
 
         var format = asyncSetting.format; // 自定义数据返回方法
-        if (layui.type(format) === 'function') {
+        if (lay.type(format) === 'function') {
           format(trData, options, asyncSuccessFn);
           return retValue;
         }
@@ -891,7 +891,7 @@ var expandNode = function (
         if (options.initSort && (!options.url || options.autoSort)) {
           var initSort = options.initSort;
           if (initSort.type) {
-            layui.sort(
+            lay.sort(
               childNodes,
               initSort.field,
               initSort.type === 'desc',
@@ -899,7 +899,7 @@ var expandNode = function (
             );
           } else {
             // 恢复默认
-            layui.sort(childNodes, table.config.indexName, null, true);
+            lay.sort(childNodes, table.config.indexName, null, true);
           }
         }
         treeTableThat.initData(
@@ -1046,13 +1046,10 @@ var expandNode = function (
 
   if (callbackFlag && trData[LAY_ASYNC_STATUS] !== 'loading') {
     var onExpand = treeOptions.callback.onExpand;
-    layui.type(onExpand) === 'function' && onExpand(tableId, trData, trExpand);
+    lay.type(onExpand) === 'function' && onExpand(tableId, trData, trExpand);
   }
 
-  if (
-    layui.type(done) === 'function' &&
-    trData[LAY_ASYNC_STATUS] !== 'loading'
-  ) {
+  if (lay.type(done) === 'function' && trData[LAY_ASYNC_STATUS] !== 'loading') {
     done(tableId, trData, trExpand);
   }
 
@@ -1101,7 +1098,7 @@ treeTable.expandNode = function (id, opts) {
  * @param {Boolean} expandFlag 展开或关闭
  * */
 treeTable.expandAll = function (id, expandFlag) {
-  if (layui.type(expandFlag) !== 'boolean') {
+  if (lay.type(expandFlag) !== 'boolean') {
     return log(
       'treeTable.expandAll param "expandFlag" must be a boolean value.',
     );
@@ -1496,7 +1493,7 @@ Class.prototype.reload = function (options, deep, type) {
 
   // 防止数组深度合并
   Object.entries(options).forEach(function ([key, item]) {
-    if (layui.type(item) === 'array') delete that.config[key];
+    if (lay.type(item) === 'array') delete that.config[key];
   });
 
   // 根据需要处理options中的一些参数
@@ -1520,7 +1517,7 @@ treeTable.reloadData = function () {
 var updateStatus = function (data, statusObj, childrenKey, notCascade) {
   var dataUpdated = [];
   (data || []).forEach(function (item1) {
-    if (layui.type(statusObj) === 'function') {
+    if (lay.type(statusObj) === 'function') {
       statusObj(item1);
     } else {
       $.extend(item1, statusObj);
@@ -1581,7 +1578,7 @@ treeTable.sort = function (id) {
 
   // 只和同级节点排序
   var sort = function (data, field, type) {
-    layui.sort(data, field, type, true);
+    lay.sort(data, field, type, true);
     data.forEach(function (trData) {
       sort(trData[childrenKey] || [], field, type);
     });
@@ -1698,7 +1695,7 @@ treeTable.removeNode = function (id, node, _keepParent) {
   var indexArr = [];
   var tableCache = table.cache[id];
   delNode = that.getNodeDataByIndex(
-    layui.type(node) === 'string' ? node : node[LAY_DATA_INDEX],
+    lay.type(node) === 'string' ? node : node[LAY_DATA_INDEX],
     false,
     'delete',
   );
@@ -1810,16 +1807,12 @@ treeTable.addNodes = function (id, opts) {
   var focus = opts.focus;
 
   parentIndex =
-    layui.type(parentIndex) === 'number' ? parentIndex.toString() : parentIndex;
+    lay.type(parentIndex) === 'number' ? parentIndex.toString() : parentIndex;
   var parentNode = parentIndex ? that.getNodeDataByIndex(parentIndex) : null;
-  index = layui.type(index) === 'number' ? index : -1;
+  index = lay.type(index) === 'number' ? index : -1;
 
   // 添加数据
-  newNodes = $.extend(
-    true,
-    [],
-    layui.isArray(newNodes) ? newNodes : [newNodes],
-  );
+  newNodes = $.extend(true, [], lay.isArray(newNodes) ? newNodes : [newNodes]);
 
   // 若未传入 LAY_CHECKED 属性，则继承父节点的 checked 状态
   newNodes.forEach(function (item) {
@@ -2179,7 +2172,7 @@ Class.prototype.updateCheckStatus = function (dataP, checked) {
   if (isCascadeParent && dataP) {
     var trsP = that.updateParentCheckStatus(
       dataP,
-      layui.type(checked) === 'boolean' ? checked : null,
+      lay.type(checked) === 'boolean' ? checked : null,
     );
     trsP.forEach(function (itemP) {
       var checkboxElem = tableView.find(
@@ -2328,7 +2321,7 @@ var checkNode = function (trElem, checked, callbackFlag) {
         triggerEvent();
       }
     } else {
-      if (layui.type(checked) === 'boolean') {
+      if (lay.type(checked) === 'boolean') {
         if (inputElem.prop('checked') !== checked) {
           // 如果当前已经是想要修改的状态则不做处理
           triggerEvent();
@@ -2374,8 +2367,7 @@ var checkNode = function (trElem, checked, callbackFlag) {
         .prop('checked', checked);
     } else {
       // 切换只能用到单条，全选到这一步的时候应该是一个确定的状态
-      checked =
-        layui.type(checked) === 'boolean' ? checked : !trData[checkName]; // 状态切换，如果遇到不可操作的节点待处理 todo
+      checked = lay.type(checked) === 'boolean' ? checked : !trData[checkName]; // 状态切换，如果遇到不可操作的节点待处理 todo
       // 全选或者是一个父节点，将子节点的状态同步为当前节点的状态
       // 处理不可操作的信息
       var checkedStatusFn = function (d) {
@@ -2454,7 +2446,7 @@ treeTable.setRowChecked = function (id, opts) {
   var checked = opts.checked;
   var callbackFlag = opts.callbackFlag;
 
-  var dataIndex = layui.type(node) === 'string' ? node : node[LAY_DATA_INDEX];
+  var dataIndex = lay.type(node) === 'string' ? node : node[LAY_DATA_INDEX];
   // 判断是否在当前页面中
   var nodeData = that.getNodeDataByIndex(dataIndex);
   if (!nodeData) {

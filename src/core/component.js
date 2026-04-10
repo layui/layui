@@ -1,9 +1,8 @@
 /**
  * component
- * Layui 2 组件构建器
+ * 组件构建器
  */
 
-import { layui } from './layui.js';
 import { lay } from './lay.js';
 import { $ } from 'jquery';
 
@@ -52,7 +51,7 @@ export function component(settings) {
 
     // 事件
     on: function (events, callback) {
-      return layui.onevent.call(this, MOD_NAME, events, callback);
+      return lay.onevent.call(this, MOD_NAME, events, callback);
     },
   };
 

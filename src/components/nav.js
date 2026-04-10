@@ -3,7 +3,7 @@
  * 导航菜单组件
  */
 
-import { layui } from '../core/layui.js';
+import { lay } from '../core/lay.js';
 import { $ } from 'jquery';
 import { componentBuilder } from '../core/component.js';
 
@@ -257,7 +257,7 @@ var events = {
       }
     }
 
-    layui.event.call(this, SUPER_MOD_NAME, 'nav(' + filter + ')', othis);
+    lay.event.call(this, SUPER_MOD_NAME, 'nav(' + filter + ')', othis);
   },
 };
 

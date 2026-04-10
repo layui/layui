@@ -2,7 +2,6 @@
  * form 表单组件
  */
 
-import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { log } from '../core/logger.js';
@@ -104,7 +103,7 @@ Form.prototype.getFormElem = function (filter) {
 
 // 表单事件
 Form.prototype.on = function (events, callback) {
-  return layui.onevent.call(this, MOD_NAME, events, callback);
+  return lay.onevent.call(this, MOD_NAME, events, callback);
 };
 
 // 赋值/取值
@@ -315,7 +314,7 @@ Form.prototype.render = function (type, filter) {
             lay.options(othis[0]),
           );
           var elemAffix = $('<div class="' + CLASS_AFFIX + '">');
-          var value = layui.isArray(opts.value) ? opts.value : [opts.value];
+          var value = lay.isArray(opts.value) ? opts.value : [opts.value];
           var elemIcon = $(
             (function () {
               var arr = [];
@@ -390,16 +389,11 @@ Form.prototype.render = function (type, filter) {
               opts.click.call(this, othis, opts);
 
             // 对外事件
-            layui.event.call(
-              this,
-              MOD_NAME,
-              'input-affix(' + inputFilter + ')',
-              {
-                elem: othis[0],
-                affix: affix,
-                options: opts,
-              },
-            );
+            lay.event.call(this, MOD_NAME, 'input-affix(' + inputFilter + ')', {
+              elem: othis[0],
+              affix: affix,
+              options: opts,
+            });
           });
         };
 
@@ -889,7 +883,7 @@ Form.prototype.render = function (type, filter) {
         };
 
         if (isSearch) {
-          input.on('input', layui.debounce(search, 50)).on('blur', function () {
+          input.on('input', lay.debounce(search, 50)).on('blur', function () {
             var selectedIndex = select[0].selectedIndex;
 
             initValue = $(select[0].options[selectedIndex]).prop('text'); // 重新获得初始选中值
@@ -946,7 +940,7 @@ Form.prototype.render = function (type, filter) {
           othis.siblings().removeClass(THIS);
           select.val(value).removeClass('layui-form-danger');
 
-          layui.event.call(this, MOD_NAME, 'select(' + filter + ')', {
+          lay.event.call(this, MOD_NAME, 'select(' + filter + ')', {
             elem: select[0],
             value: value,
             othis: reElem,
@@ -1168,16 +1162,11 @@ Form.prototype.render = function (type, filter) {
           check[0].checked = checked;
 
           // 事件
-          layui.event.call(
-            check[0],
-            MOD_NAME,
-            RE_CLASS[2] + '(' + filter + ')',
-            {
-              elem: check[0],
-              value: check[0].value,
-              othis: reElem,
-            },
-          );
+          lay.event.call(check[0], MOD_NAME, RE_CLASS[2] + '(' + filter + ')', {
+            elem: check[0],
+            value: check[0].value,
+            othis: reElem,
+          });
         });
 
         reElem.on('click', function () {
@@ -1333,7 +1322,7 @@ Form.prototype.render = function (type, filter) {
 
           radio[0].checked = true;
 
-          layui.event.call(radio[0], MOD_NAME, 'radio(' + filter + ')', {
+          lay.event.call(radio[0], MOD_NAME, 'radio(' + filter + ')', {
             elem: radio[0],
             value: radio[0].value,
             othis: reElem,
@@ -1432,7 +1421,7 @@ Form.prototype.render = function (type, filter) {
   };
 
   // jquery 对象
-  if (layui.type(type) === 'object') {
+  if (lay.type(type) === 'object') {
     // 若对象为表单域容器
     if ($(type).is(ELEM)) {
       elemForm = $(type);
@@ -1660,7 +1649,7 @@ var submit = (Form.prototype.submit = function (filter, callback) {
   typeof callback === 'function' && callback(params);
 
   // 事件
-  return layui.event.call(this, MOD_NAME, 'submit(' + layFilter + ')', params);
+  return lay.event.call(this, MOD_NAME, 'submit(' + layFilter + ')', params);
 });
 
 function fuzzyMatchRegExp(keyword, caseSensitive) {
@@ -1749,7 +1738,7 @@ var $dom = $(document);
 var $win = $(window);
 
 // 初始自动完成渲染
-$(function () {
+lay.use(function () {
   form.render();
 });
 

@@ -3,7 +3,6 @@
  * 上传组件
  */
 
-import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { log } from '../core/logger.js';
@@ -25,7 +24,7 @@ var upload = {
   },
   // 事件
   on: function (events, callback) {
-    return layui.onevent.call(this, MOD_NAME, events, callback);
+    return lay.onevent.call(this, MOD_NAME, events, callback);
   },
 };
 

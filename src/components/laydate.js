@@ -3,8 +3,8 @@
  * 日期与时间组件
  */
 
-import { layui } from '../core/layui.js';
 import { lay } from '../core/lay.js';
+import { log } from '../core/logger.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
 
@@ -396,7 +396,7 @@ Class.prototype.init = function () {
 
   if (!options.elem[0]) return;
 
-  layui.type(options.theme) !== 'array' && (options.theme = [options.theme]);
+  lay.type(options.theme) !== 'array' && (options.theme = [options.theme]);
   // 设置了全面版模式
   if (options.fullPanel) {
     if (options.type !== 'datetime' || options.range) {
@@ -442,7 +442,7 @@ Class.prototype.init = function () {
     that.rangeLinked && options.rangeLinked === 'auto';
 
   //若 range 参数为数组，则表示为开始日期和结束日期的 input 对象
-  if (layui.type(options.range) === 'array') {
+  if (lay.type(options.range) === 'array') {
     that.rangeElem = [$(options.range[0]), $(options.range[1])];
   }
 
@@ -589,7 +589,7 @@ Class.prototype.init = function () {
 
   //默认赋值
   if (options.value && options.isInitValue) {
-    if (layui.type(options.value) === 'date') {
+    if (lay.type(options.value) === 'date') {
       that.setValue(that.parse(0, that.systemDate(options.value)));
     } else {
       that.setValue(options.value);
@@ -806,13 +806,13 @@ Class.prototype.render = function () {
           (typeof btnSetting.value === 'function'
             ? btnSetting.value()
             : btnSetting.value) || [];
-        if (!layui.isArray(value)) {
+        if (!lay.isArray(value)) {
           value = [value];
         }
         var type = options.type;
         value.forEach(function (item, i) {
           var dateTime = [options.dateTime, that.endDate][i];
-          if (type === 'time' && layui.type(item) !== 'date') {
+          if (type === 'time' && lay.type(item) !== 'date') {
             if (that.EXP_IF.test(item)) {
               item = (item.match(that.EXP_SPLIT) || []).slice(1);
               lay.extend(dateTime, {
@@ -825,7 +825,7 @@ Class.prototype.render = function () {
             lay.extend(
               dateTime,
               that.systemDate(
-                layui.type(item) === 'date' ? item : new Date(item),
+                lay.type(item) === 'date' ? item : new Date(item),
               ),
             );
           }
@@ -1240,7 +1240,7 @@ Class.prototype.checkDate = function (fn) {
       );
       error = true;
     }
-  } else if (value && layui.type(value) === 'date') {
+  } else if (value && lay.type(value) === 'date') {
     //若值为日期对象
     options.dateTime = that.systemDate(value);
   } else {
@@ -1433,7 +1433,7 @@ Class.prototype.holidaysRender = function (tdElem, YMD, markers) {
     );
   };
 
-  if (layui.type(markers) === 'array') {
+  if (lay.type(markers) === 'array') {
     markers.forEach(function (item, idx) {
       (item || []).forEach(function (dayStr) {
         if (isEquals(dayStr, tdElem.attr('lay-ymd'))) {
@@ -1464,7 +1464,7 @@ Class.prototype.holidays = function (td, YMD) {
 
   if (typeof options.holidays === 'function') {
     options.holidays({ year: YMD[0], month: YMD[1], date: YMD[2] }, render);
-  } else if (layui.type(options.holidays) === 'array') {
+  } else if (lay.type(options.holidays) === 'array') {
     render(options.holidays);
   }
 
@@ -2289,7 +2289,7 @@ Class.prototype.list = function (type, index) {
         });
     });
 
-    if (layui.device().mobile) {
+    if (lay.device().mobile) {
       olElem.css({
         overflowY: 'auto',
         touchAction: 'pan-y',
@@ -2445,7 +2445,7 @@ Class.prototype.setValue = function (value) {
     //如果 range 传入了开始和结束的 input 对象，则分别对其赋值
     var rangeElem = that.rangeElem;
     if (rangeElem) {
-      if (layui.type(value) !== 'array') {
+      if (lay.type(value) !== 'array') {
         value = value.split(' ' + that.rangeStr + ' ');
       }
       rangeElem[0].val(value[0] || '');
@@ -2486,7 +2486,7 @@ Class.prototype.preview = function () {
   var oldValue = elemPreview.html();
   if (oldValue) {
     var color =
-      layui.type(options.theme) === 'array' ? options.theme[0] : options.theme;
+      lay.type(options.theme) === 'array' ? options.theme[0] : options.theme;
     elemPreview.css({
       color: /^#/.test(String(color)) ? color : '#16b777',
     });
@@ -3169,13 +3169,11 @@ thisModule.that = {}; //记录所有实例对象
 thisModule.getThis = function (id) {
   var that = thisModule.that[id];
   if (!that) {
-    layui
-      .hint()
-      .error(
-        id
-          ? MOD_NAME + " instance with ID '" + id + "' not found"
-          : 'ID argument required',
-      );
+    log(
+      id
+        ? MOD_NAME + " instance with ID '" + id + "' not found"
+        : 'ID argument required',
+    );
   }
   return that;
 };

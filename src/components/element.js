@@ -3,6 +3,7 @@
  * 常用元素操作
  */
 
+import { lay } from '../core/lay.js';
 import { $ } from 'jquery';
 import { componentBuilder } from '../core/component.js';
 import { nav } from './nav.js';
@@ -68,7 +69,7 @@ $.extend(component, {
 component.init = component.render;
 
 // 自动渲染
-$(() => {
+lay.use(() => {
   component.render();
 });
 

@@ -3,7 +3,7 @@
  * 折叠面板组件
  */
 
-import { layui } from '../core/layui.js';
+import { lay } from '../core/lay.js';
 import { $ } from 'jquery';
 import { componentBuilder } from '../core/component.js';
 
@@ -96,7 +96,7 @@ var event = {
     }
 
     // 事件
-    layui.event.call(this, SUPER_MOD_NAME, 'collapse(' + filter + ')', {
+    lay.event.call(this, SUPER_MOD_NAME, 'collapse(' + filter + ')', {
       title: othis,
       content: thisContentElem,
       show: isNone,
