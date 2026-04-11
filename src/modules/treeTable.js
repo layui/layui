@@ -1656,11 +1656,17 @@ layui.define(['table'], function (exports) {
     };
 
     // 处理setRowChecked
-    obj.setRowChecked = function (checked) {
-      treeTable.setRowChecked(tableId, {
-        index: trData,
-        checked: checked
-      });
+    obj.setRowChecked = function (opts) {
+      opts = layui.type(opts) === 'object' ? opts : { checked: opts };
+      treeTable.setRowChecked(
+        tableId,
+        $.extend(
+          {
+            index: trData
+          },
+          opts
+        )
+      );
     };
   };
 
@@ -2167,23 +2173,30 @@ layui.define(['table'], function (exports) {
     }
   });
 
-  // 设置或取消行选中样式
+  /**
+   * 同步设置行选中样式（主体、左固定列、右固定列）
+   * @param {jQuery} tr 行节点集合
+   * @param {boolean} checked 是否选中
+   */
   Class.prototype.setRowCheckedClass = function (tr, checked) {
     var that = this;
     var options = that.getOptions();
-
-    // var index = tr.data('index');
     var tableViewElem = options.elem.next();
+    var method = checked ? 'addClass' : 'removeClass';
 
-    tr[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED); // 主体行
+    tr[method](ELEM_CHECKED); // 主体行
 
-    // 右侧固定行
+    // 固定列行（左、右）
     tr.each(function () {
       var index = $(this).data('index');
-      var trFixedR = tableViewElem.find(
-        '.layui-table-fixed-r tbody tr[data-index="' + index + '"]'
+      var fixedTr = tableViewElem.find(
+        '.layui-table-fixed-l tbody tr[data-index="' +
+          index +
+          '"], .layui-table-fixed-r tbody tr[data-index="' +
+          index +
+          '"]'
       );
-      trFixedR[checked ? 'addClass' : 'removeClass'](ELEM_CHECKED);
+      fixedTr[method](ELEM_CHECKED);
     });
   };
 
@@ -2191,9 +2204,6 @@ layui.define(['table'], function (exports) {
   Class.prototype.updateCheckStatus = function (dataP, checked) {
     var that = this;
     var options = that.getOptions();
-    if (!options.hasChecboxCol) {
-      return false; // 如果没有复选列则不需要更新状态
-    }
     var treeOptions = options.tree;
     var tableId = options.id;
     var tableView = options.elem.next();
@@ -2215,10 +2225,15 @@ layui.define(['table'], function (exports) {
             itemP[LAY_DATA_INDEX] +
             '"]  input[name="layTableCheckbox"]:not(:disabled)'
         );
+        var trElem = checkboxElem.length
+          ? checkboxElem.closest('tr')
+          : tableView.find(
+              'tr[lay-data-index="' + itemP[LAY_DATA_INDEX] + '"]'
+            );
         var checked = itemP[checkName];
 
         // 标记父节点行背景色
-        that.setRowCheckedClass(checkboxElem.closest('tr'), checked);
+        that.setRowCheckedClass(trElem, checked);
 
         // 设置原始复选框 checked 属性值并渲染
         checkboxElem.prop({
@@ -2327,7 +2342,7 @@ layui.define(['table'], function (exports) {
     return dataRet;
   };
 
-  var checkNode = function (trElem, checked, callbackFlag) {
+  var checkNode = function (trElem, checked, callbackFlag, type) {
     var that = this;
     var options = that.getOptions();
     var treeOptions = options.tree;
@@ -2337,8 +2352,10 @@ layui.define(['table'], function (exports) {
       .find('.laytable-cell-radio, .laytable-cell-checkbox')
       .children('input')
       .last();
-    // 判断是单选还是多选 不应该同时存在radio列和checkbox列
-    var isRadio = inputElem.attr('type') === 'radio';
+    // 判断是单选还是多选，不应该同时存在 radio 列和 checkbox 列
+    // 当未配置选择列时，允许通过 type 参数显式指定模式以兼容 table 的写法
+    var isRadio = type ? type === 'radio' : inputElem.attr('type') === 'radio';
+    checked = isRadio && layui.type(checked) !== 'boolean' ? true : checked;
 
     if (callbackFlag) {
       var triggerEvent = function () {
@@ -2430,8 +2447,17 @@ layui.define(['table'], function (exports) {
             })
             .join(',')
         );
+        var trsElem = checkboxElem.length
+          ? checkboxElem.closest('tr')
+          : tableView.find(
+              trs
+                .map(function (value) {
+                  return 'tr[lay-data-index="' + value[LAY_DATA_INDEX] + '"]';
+                })
+                .join(',')
+            );
 
-        that.setRowCheckedClass(checkboxElem.closest('tr'), checked); // 标记当前选中行背景色
+        that.setRowCheckedClass(trsElem, checked); // 标记当前选中行背景色
         checkboxElem.prop({ checked: checked, indeterminate: false });
 
         var trDataP;
@@ -2467,6 +2493,7 @@ layui.define(['table'], function (exports) {
    * @param {Object} opts
    * @param {Object|String} opts.index 节点下标
    * @param {Boolean} opts.checked 选中或取消
+   * @param {String} [opts.type] 选中方式，支持 radio / checkbox
    * @param {Boolean} [opts.callbackFlag] 是否触发事件回调
    * */
   treeTable.setRowChecked = function (id, opts) {
@@ -2481,6 +2508,7 @@ layui.define(['table'], function (exports) {
     var node = opts.index;
     var checked = opts.checked;
     var callbackFlag = opts.callbackFlag;
+    var type = opts.type;
 
     var dataIndex = layui.type(node) === 'string' ? node : node[LAY_DATA_INDEX];
     // 判断是否在当前页面中
@@ -2515,7 +2543,7 @@ layui.define(['table'], function (exports) {
       });
       trElem = tableView.find('tr[lay-data-index="' + dataIndex + '"]');
     }
-    checkNode.call(that, trElem, checked, callbackFlag);
+    checkNode.call(that, trElem, checked, callbackFlag, type);
   };
 
   treeTable.checkAllNodes = function (id, checked) {
