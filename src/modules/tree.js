@@ -435,8 +435,6 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
     var checked = elemCheckbox.prop('checked');
     var nodeWrapper = elemCheckbox.closest('.' + CONST.ELEM_SET);
 
-    if (elemCheckbox.prop('disabled')) return;
-
     // 同步子节点选中状态
     var setChildrenChecked = function (thisNodeElem, item) {
       var children = item[customName.children];
@@ -499,6 +497,15 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
       // 向父节点递归
       setParentsChecked(parentNodeElem);
     };
+
+    // 禁用节点不参与父节点状态同步，但初始化时仍需向子节点级联选中状态
+    if (elemCheckbox.prop('disabled')) {
+      if (!isManual) {
+        setChildrenChecked(nodeWrapper, item);
+        that.renderForm('checkbox');
+      }
+      return;
+    }
 
     setChildrenChecked(nodeWrapper, item);
     setParentsChecked(nodeWrapper);
@@ -1025,7 +1032,10 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
 
       layui.each(checkedId, function (_i, id) {
         if (thisId == id) {
-          if (input.prop('disabled')) return;
+          if (input.prop('disabled')) {
+            that.syncCheckedState(input, flatData[i]); // 禁用节点仍需向子节点级联选中状态
+            return true;
+          }
           if (!checked) {
             input.prop('checked', true);
             that.syncCheckedState(input, flatData[i]);
