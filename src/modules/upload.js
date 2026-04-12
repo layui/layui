@@ -185,6 +185,11 @@ layui.define(['lay', 'i18n', 'layer'], function (exports) {
       ? ((that.elemFile = options.elem), (options.field = options.elem[0].name))
       : options.elem.after(elemFile);
 
+    // 阻止追加的文件域的 click 事件冒泡
+    elemFile.on('click', function (e) {
+      e.stopPropagation();
+    });
+
     //初始化ie8/9的Form域
     if (device.ie && device.ie < 10) {
       that.initIE();
@@ -815,14 +820,6 @@ layui.define(['lay', 'i18n', 'layer'], function (exports) {
       return result;
     };
 
-    // 点击上传容器
-    options.elem.off('upload.start').on('upload.start', function () {
-      var othis = $(this);
-
-      that.config.item = othis;
-      that.elemFile[0].click();
-    });
-
     // 拖拽上传
     if (!(device.ie && device.ie < 10)) {
       options.elem
@@ -864,14 +861,18 @@ layui.define(['lay', 'i18n', 'layer'], function (exports) {
       that.upload();
     });
 
+    // 目标元素 click 事件
+    var elemClickEventName = 'click.lay_upload_start';
+    options.elem.off(elemClickEventName).on(elemClickEventName, function () {
+      var othis = $(this);
+      if (that.isFile()) return;
+
+      that.config.item = othis;
+      that.elemFile[0].click();
+    });
+
     // 防止事件重复绑定
     if (options.elem.data(MOD_INDEX)) return;
-
-    // 目标元素 click 事件
-    options.elem.on('click', function () {
-      if (that.isFile()) return;
-      $(this).trigger('upload.start');
-    });
 
     // 目标元素 drop 事件
     if (options.drag) {
