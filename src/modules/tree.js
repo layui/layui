@@ -63,12 +63,7 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
       );
 
       // 扁平化数据
-      var customName = options.customName || {};
-      that.config.flatData = lay.treeToFlat(that.config.data, {
-        idKey: customName.id,
-        childrenKey: customName.children,
-        keepChildren: true
-      });
+      that.config.flatData = that.treeToFlat(that.config.data);
     },
 
     // 渲染
@@ -181,6 +176,32 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
   // 渲染表单
   Class.prototype.renderForm = function (type) {
     form.render(type, 'LAY-tree-' + this.index);
+  };
+
+  // 树转平
+  Class.prototype.treeToFlat = function (data) {
+    var that = this;
+    var options = that.config;
+    var customName = options.customName || {};
+
+    return lay.treeToFlat(data, {
+      idKey: customName.id,
+      childrenKey: customName.children,
+      keepChildren: true
+    });
+  };
+
+  // 平转树
+  Class.prototype.flatToTree = function (data) {
+    var that = this;
+    var options = that.config;
+    var customName = options.customName || {};
+
+    return lay.flatToTree(data, {
+      idKey: customName.id,
+      childrenKey: customName.children,
+      keepParentId: false
+    });
   };
 
   // 节点解析
@@ -433,8 +454,6 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
     var customName = options.customName;
     var checked = elemCheckbox.prop('checked');
     var nodeWrapper = elemCheckbox.closest('.' + CONST.ELEM_SET);
-
-    if (elemCheckbox.prop('disabled')) return;
 
     // 同步子节点选中状态
     var setChildrenChecked = function (thisNodeElem, item) {
@@ -967,41 +986,45 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
     var that = this;
     var options = that.config;
     var customName = options.customName;
-    var checkedId = [];
-    var checkedData = [];
+    var flatData = options.flatData;
+    var flatDataToMap = {};
+    var checkedIds = []; // 选中节点 id 列表
+    var checkedIdMap = {}; // 选中节点 id 映射
 
     // 遍历节点找到选中索引
     that.elem.find('.layui-form-checked').each(function () {
-      checkedId.push($(this).prev()[0].value);
+      var checkedId = $(this).prev()[0].value;
+      checkedIds.push(checkedId);
+      checkedIdMap[checkedId] = true;
     });
 
-    // 遍历节点
-    var eachNodes = function (data, checkNode) {
-      layui.each(data, function (index, item) {
-        layui.each(checkedId, function (index2, item2) {
-          if (item[customName.id] == item2) {
-            that.updateFieldValue(item, 'checked', true);
+    // 数据 Map 化，便于快速匹配
+    flatData.forEach(function (item) {
+      flatDataToMap[item[customName.id]] = item;
+    });
 
-            var cloneItem = $.extend({}, item);
-            delete cloneItem[customName.children];
+    // 由于 tree 缺少半选机制，当禁用状态的节点选中，而父节点未选中时：
+    // - 只能强制将父节点视为选中，以确保数据结构的完整性
+    checkedIds.forEach(function (id) {
+      var currentItem = flatDataToMap[id];
 
-            checkNode.push(cloneItem);
+      // 根据 parentId 向上查找
+      while (currentItem && currentItem.parentId) {
+        var parentId = currentItem.parentId;
 
-            if (item[customName.children]) {
-              cloneItem[customName.children] = [];
-              eachNodes(
-                item[customName.children],
-                cloneItem[customName.children]
-              );
-            }
-            return true;
-          }
-        });
-      });
-    };
+        if (checkedIdMap[parentId]) break;
 
-    eachNodes($.extend({}, options.data), checkedData);
-    return checkedData;
+        checkedIdMap[parentId] = true;
+        currentItem = flatDataToMap[parentId];
+      }
+    });
+
+    // 匹配选中数据
+    var checkedData = flatData.filter(function (item) {
+      return !!checkedIdMap[item[customName.id]];
+    });
+
+    return that.flatToTree(checkedData);
   };
 
   // 设置选中节点
@@ -1024,7 +1047,6 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
 
       layui.each(checkedId, function (_i, id) {
         if (thisId == id) {
-          if (input.prop('disabled')) return;
           if (!checked) {
             input.prop('checked', true);
             that.syncCheckedState(input, flatData[i]);
