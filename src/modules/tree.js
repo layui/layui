@@ -435,7 +435,8 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
     var checked = elemCheckbox.prop('checked');
     var nodeWrapper = elemCheckbox.closest('.' + CONST.ELEM_SET);
 
-    if (elemCheckbox.prop('disabled')) return;
+    // 手动交互时，禁用节点不触发级联
+    if (isManual && elemCheckbox.prop('disabled')) return;
 
     // 同步子节点选中状态
     var setChildrenChecked = function (thisNodeElem, item) {
@@ -903,7 +904,7 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
     var options = that.config;
 
     // 初始选中
-    that.setChecked(that.checkids);
+    that.setChecked(that.checkids, true);
 
     // 搜索
     that.elem.find('.layui-tree-search').on('keyup', function () {
@@ -1006,7 +1007,7 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
   };
 
   // 设置选中节点
-  Class.prototype.setChecked = function (checkedId) {
+  Class.prototype.setChecked = function (checkedId, isInit) {
     var that = this;
     var options = that.config;
     var flatData = options.flatData;
@@ -1025,12 +1026,16 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
 
       layui.each(checkedId, function (_i, id) {
         if (thisId == id) {
-          if (input.prop('disabled')) return;
+          // 非初始化时，禁用节点跳过选中操作
+          if (!isInit && input.prop('disabled')) return;
           if (!checked) {
             input.prop('checked', true);
-            that.syncCheckedState(input, flatData[i]);
-            return true;
           }
+          // 初始化或新选中时，同步级联状态
+          if (isInit || !checked) {
+            that.syncCheckedState(input, flatData[i]);
+          }
+          return true;
         }
       });
     });
