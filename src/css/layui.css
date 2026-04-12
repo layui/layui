@@ -5381,13 +5381,12 @@ body .layui-util-face .layui-layer-content {
   display: block;
   position: relative;
   padding: 15px;
-  line-height: 20px;
+  line-height: 1.5;
   border: 1px solid #eee;
   border-left-width: 6px;
-  background-color: #fff;
+  background-color: #fafafa;
   color: #333;
   font-family: 'Courier New', Consolas, 'Lucida Console', monospace;
-  font-size: 12px;
 }
 
 /** 穿梭框 **/
