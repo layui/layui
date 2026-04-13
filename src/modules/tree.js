@@ -61,9 +61,6 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
         that.config,
         options
       );
-
-      // 扁平化数据
-      that.config.flatData = that.treeToFlat(that.config.data);
     },
 
     // 渲染
@@ -991,7 +988,7 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
     var that = this;
     var options = that.config;
     var customName = options.customName;
-    var flatData = options.flatData;
+    var flatData = that.treeToFlat(options.data);
     var flatDataToMap = {};
     var checkedIds = []; // 选中节点 id 列表
     var checkedIdMap = {}; // 选中节点 id 映射
@@ -1014,7 +1011,11 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
       var currentItem = flatDataToMap[id];
 
       // 根据 parentId 向上查找
-      while (currentItem && currentItem.parentId) {
+      while (
+        currentItem &&
+        currentItem.parentId !== null &&
+        currentItem.parentId !== undefined
+      ) {
         var parentId = currentItem.parentId;
 
         if (checkedIdMap[parentId]) break;
@@ -1036,7 +1037,7 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
   Class.prototype.setChecked = function (checkedId) {
     var that = this;
     var options = that.config;
-    var flatData = options.flatData;
+    var flatData = that.treeToFlat(options.data);
 
     if (typeof checkedId !== 'object') {
       checkedId = [checkedId];
