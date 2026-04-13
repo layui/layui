@@ -467,17 +467,20 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
         .find('input[same="layuiTreeCheck"]');
 
       elemCheckboxs.each(function (i) {
-        if (this.disabled) return; // 不可点击则跳过
         var child = children[i];
-        // 手动触发时，子节点跟随父节点选中状态；自动渲染时，子节点优先跟随 checked 字段值
+        // 手动触发时，子节点跟随父节点选中状态；
+        // 自动渲染时，子节点优先跟随 checked 字段值
         var childChecked = isManual
           ? checked
           : 'checked' in child
             ? child.checked
             : checked;
 
-        this.checked = childChecked;
-        that.updateFieldValue(child, 'checked', childChecked);
+        // 非禁用状态的节点才能进行选中状态更改
+        if (!this.disabled) {
+          this.checked = childChecked;
+          that.updateFieldValue(child, 'checked', childChecked);
+        }
 
         if (child[customName.children]) {
           setChildrenChecked(childrenWrapper.eq(i), child);
@@ -497,21 +500,23 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
         .prev()
         .find('input[same="layuiTreeCheck"]');
 
-      if (parentCheckbox.prop('disabled')) return;
+      // 非禁用状态的节点才能进行选中状态更改
+      if (!parentCheckbox.prop('disabled')) {
+        // 如果后代节点有任意一条选中，则父节点为选中状态
+        // 考虑到兼容性，暂时不支持半选状态
+        if (checked) {
+          parentCheckbox.prop('checked', checked);
+        } else {
+          // 如果当前节点取消选中，则根据计算后代节点选中状态，来同步父节点选中状态
+          parentPack.find('input[same="layuiTreeCheck"]').each(function () {
+            if (this.checked) {
+              descendantsChecked = true;
+            }
+          });
 
-      // 如果后代节点有任意一条选中，则父节点为选中状态（考虑到兼容性，暂时不支持半选状态）
-      if (checked) {
-        parentCheckbox.prop('checked', checked);
-      } else {
-        // 如果当前节点取消选中，则根据计算后代节点选中状态，来同步父节点选中状态
-        parentPack.find('input[same="layuiTreeCheck"]').each(function () {
-          if (this.checked) {
-            descendantsChecked = true;
-          }
-        });
-
-        // 如果后代节点全部未选中，则父节点也应为非选中状态
-        descendantsChecked || parentCheckbox.prop('checked', false);
+          // 如果后代节点全部未选中，则父节点也应为非选中状态
+          descendantsChecked || parentCheckbox.prop('checked', false);
+        }
       }
 
       // 向父节点递归
