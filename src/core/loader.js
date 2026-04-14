@@ -361,13 +361,17 @@ class Loader {
 
         // 若元素的「加载状态」已完成，则根据 naturalWidth 执行相应的回调函数
         if (elem.complete) {
-          elem.naturalWidth > 0
-            ? opts.success?.(result)
-            : opts.error?.({
-                ...result,
-                error: new Error(`Failed to load image: ${url}`),
-              });
-          resolve(result);
+          if (elem.naturalWidth > 0) {
+            opts.success?.(result);
+            resolve(result);
+          } else {
+            const errorResult = {
+              ...result,
+              error: new Error(`Failed to load image: ${url}`),
+            };
+            opts.error?.(errorResult);
+            resolve(errorResult);
+          }
         }
       },
     });

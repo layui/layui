@@ -10,13 +10,11 @@ let warned = Object.create(null);
  * @param {'warn'|'error'} [level='warn'] - 消息级别
  */
 export function log(message, level = 'warn') {
-  message = `[Layui ${level}]: ${message}`;
-
   // 限定消息级别
   if (!/^(warn|error)$/.test(level.trim())) {
     level = 'warn';
   }
-
+  message = `[Layui ${level}]: ${message}`;
   window.console[level](message);
 }
 

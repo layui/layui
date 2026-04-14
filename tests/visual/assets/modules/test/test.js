@@ -105,9 +105,8 @@ class Test {
     // 根据 hash，初始化默认显示的测试套件
     this.initSwitchSuite = () => {
       const hash = location.hash;
-      const index =
-        flatItems.findIndex((item) => item.hash === hash) ||
-        options.activeIndex;
+      const foundIndex = flatItems.findIndex((item) => item.hash === hash);
+      const index = foundIndex >= 0 ? foundIndex : options.activeIndex;
 
       this.#switchSuite(index >= 0 ? index : 0);
     };
