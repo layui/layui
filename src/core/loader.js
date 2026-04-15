@@ -367,8 +367,8 @@ class Loader {
    */
   #normalizeUrl(url) {
     const urlArgs = this.options.urlArgs.trim?.().replace(/^(\?|&)/, '');
+    if (!urlArgs) return url;
     const u = new URL(url, location.href);
-
     return `${url}${u.search ? '&' : '?'}${urlArgs}`;
   }
 }
