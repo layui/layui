@@ -104,12 +104,10 @@ class Router {
 
       try {
         // 使用 replaceState 的任一条件：
-        // - 目标 url 与当前页面 url/hash 相同
+        // - 目标 url 与当前页面 url 相同
         // - opts.replaceState 为 true
         const historyMethod =
-          this.url(url).href === href ||
-          url === location.hash ||
-          opts.replaceState
+          this.url(url).href === href || opts.replaceState
             ? 'replaceState'
             : 'pushState';
 
@@ -126,12 +124,14 @@ class Router {
   /**
    * 路由变化事件
    * @param {Function} callback - 路由变化时的回调函数
-   * @returns {void}
+   * @returns {Function} 清除事件的函数
    */
   onRouteChange(callback) {
     const { options } = this;
     const type = options.mode === 'hash' ? 'hashchange' : 'popstate';
+
     window.addEventListener(type, callback);
+    return () => window.removeEventListener(type, callback);
   }
 }
 
