@@ -83,7 +83,6 @@ class Router {
    * @param {*} [opts.state=null] - 传递给 history 的状态对象（仅 history 模式有效）
    * @param {string} [opts.title=''] - 页面标题（部分浏览器忽略，仅 history 模式传入）
    * @param {string} [opts.target='_self'] - url 跨域时 window.open 的打开方式
-   * @param {string} [opts.windowName] - 指定操作的 window 对象名称（用于多窗口、iframe 场景）
    * @param {Function} [opts.done] - 跳转后的回调函数
    * @returns {void}
    * @example
@@ -91,14 +90,22 @@ class Router {
    */
   navigate(url, opts = {}) {
     const { options } = this;
-    const selfWindow = window[opts.windowName] || window;
 
     if (!url) return;
     url = this.normalizeUrl(url);
 
+    // 默认值
+    opts = {
+      mode: options.mode,
+      state: null,
+      title: '',
+      target: '_self',
+      ...opts,
+    };
+
     // 路由跳转方式
-    if (options.mode === 'hash') {
-      selfWindow.location.hash = url;
+    if (opts.mode === 'hash') {
+      location.hash = url;
     } else {
       const { href } = this.url();
 
@@ -111,14 +118,14 @@ class Router {
             ? 'replaceState'
             : 'pushState';
 
-        selfWindow.history[historyMethod](opts.state, opts.title, url);
+        history[historyMethod](opts.state, opts.title, url);
       } catch {
-        // 跨域 url
+        // url 跨域等异常时的降级处理
         window.open(url, opts.target);
       }
     }
 
-    opts.done?.({ url, window: selfWindow });
+    opts.done?.({ url });
   }
 
   /**

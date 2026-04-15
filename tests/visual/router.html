@@ -73,12 +73,6 @@
                 <button class="layui-btn" lay-on="hashNavigateButton">
                   跳转到复杂 hash 地址
                 </button>
-                <button
-                  class="layui-btn layui-btn-primary"
-                  lay-on="hashNavigateFrame"
-                >
-                  跳转到 iframe
-                </button>
               </div>
 
               <iframe
@@ -313,23 +307,6 @@
         // hash 锚路由跳转（复杂地址）
         hashNavigateButton() {
           events.hashNavigateBase('/button/demo?from=router#toolbar');
-        },
-        // hash 锚路由跳转（iframe）
-        hashNavigateFrame() {
-          setMode('hash');
-          const action = '/base/frame?tab=preview#inner';
-          router.navigate(action, {
-            windowName: 'routerDemoFrame',
-            done(result) {
-              setOutput('hashNavigate', {
-                action,
-                normalizedUrl: result.url,
-                frameHash: frameWindow.location.hash,
-                frameHref: frameWindow.location.href,
-              });
-              routerDemoFrame.srcdoc = `当前 iframe URL：${frameWindow.location.href}`;
-            },
-          });
         },
 
         //  URL 解析

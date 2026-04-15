@@ -143,13 +143,8 @@ const loadAll = async (urls, opts = {}, resourceLoader = loadResource) => {
   // 获取结果集
   const getResults = (result) => {
     for (const [key, value] of Object.entries(result)) {
-      let values;
-      if (key === 'error') {
-        values = value;
-      } else {
-        values = results[key] || [];
-        values.push(value);
-      }
+      const values = results[key] || [];
+      values.push(value);
       results[key] = values;
     }
   };
