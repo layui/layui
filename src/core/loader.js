@@ -324,8 +324,8 @@ class Loader {
           head.appendChild(elem);
         }
 
-        // 若 url 存在差异（一般为参数差异），则重新赋值
-        if (url !== elem.href) {
+        // 若目标 href 与当前节点 href 值不同（一般为参数差异），则重新赋值
+        if (href !== elem.getAttribute('href')) {
           elem.href = href;
         }
       },
