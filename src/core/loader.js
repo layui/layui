@@ -5,8 +5,8 @@
 
 import { lay } from './lay.js';
 
-// URL 归一化
-const normalizeUrl = (url) => {
+// 生成 URL Key
+const createUrlKey = (url) => {
   try {
     const u = new URL(url, location.href);
     return u.host + u.pathname;
@@ -16,7 +16,7 @@ const normalizeUrl = (url) => {
 };
 
 /**
- * 外部资源加载器
+ * 资源加载器
  * @param {string} url - 资源路径
  * @param {Object} opts - 配置项
  * @param {HTMLElement} opts.elem - 资源 DOM 元素
@@ -53,9 +53,7 @@ const normalizeUrl = (url) => {
 const loadResource = async (url, opts = {}) => {
   // 根据 url 生成唯一 id
   const generateId = (url) => {
-    url = normalizeUrl(url);
-    const base64Id = lay.btoa(url, 'url');
-
+    const base64Id = lay.btoa(createUrlKey(url), 'url');
     return `LAY-LOADER-${base64Id}`;
   };
 
@@ -70,7 +68,7 @@ const loadResource = async (url, opts = {}) => {
     opts.elem = existingElem;
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const { elem } = opts;
     const result = { elem, id, url };
 
@@ -121,7 +119,7 @@ const loadResource = async (url, opts = {}) => {
     elem.addEventListener('error', onError, { signal });
 
     // 创建元素之后的回调函数，用于处理后续逻辑
-    opts.afterCreate?.(result, resolve, reject);
+    opts.afterCreate?.(result, onLoad, onError);
 
     // 若元素的「加载状态」已完成
     if (elem.__lay_state__ === 'complete') {
@@ -235,7 +233,7 @@ class Loader {
       url = options.alias[url];
     }
 
-    const urlKey = normalizeUrl(url);
+    const urlKey = createUrlKey(url);
 
     return await loadResource(url, {
       elem: document.createElement('script'),
@@ -263,14 +261,16 @@ class Loader {
         }
         opts.done?.(result);
       },
-      afterCreate: (result, resolve) => {
+      afterCreate: (result, onLoad) => {
         const { elem, id } = result;
 
-        // 首次加载
-        if (!cache.status[urlKey]) {
-          // 初始创建节点
+        // 是否已加载
+        if (cache.status[urlKey]) {
+          onLoad();
+        } else {
+          // 首次加载，创建节点
           if (!elem.__lay_state__) {
-            const src = url + this.#getUrlArgs();
+            const src = this.#normalizeUrl(url);
 
             Object.assign(elem, { src, async: true, id });
             head.appendChild(elem);
@@ -278,8 +278,6 @@ class Loader {
             // 资源开始加载的标记
             elem.__lay_state__ = 'loading';
           }
-        } else {
-          resolve(result);
         }
       },
     });
@@ -323,7 +321,7 @@ class Loader {
       },
       afterCreate: (result) => {
         const { elem, id } = result;
-        const href = url + this.#getUrlArgs();
+        const href = this.#normalizeUrl(url);
 
         // 初始创建节点
         if (!document.contains(elem)) {
@@ -354,33 +352,29 @@ class Loader {
     return await loadResource(url, {
       elem: new Image(),
       ...opts,
-      afterCreate(result, resolve) {
+      afterCreate(result, onLoad, onError) {
         const { elem } = result;
 
         elem.src = url;
 
         // 若元素的「加载状态」已完成，则根据 naturalWidth 执行相应的回调函数
         if (elem.complete) {
-          if (elem.naturalWidth > 0) {
-            opts.success?.(result);
-            resolve(result);
-          } else {
-            const errorResult = {
-              ...result,
-              error: new Error(`Failed to load image: ${url}`),
-            };
-            opts.error?.(errorResult);
-            resolve(errorResult);
-          }
+          elem.naturalWidth > 0 ? onLoad() : onError();
         }
       },
     });
   }
 
-  // 获取 urlArgs 参数字符串
-  #getUrlArgs() {
+  /**
+   * 规范化 URL
+   * @param {string} url - 原始 URL
+   * @return {string} 规范化后的 URL
+   */
+  #normalizeUrl(url) {
     const urlArgs = this.options.urlArgs.trim?.().replace(/^(\?|&)/, '');
-    return urlArgs ? `?${urlArgs}` : '';
+    const u = new URL(url, location.href);
+
+    return `${url}${u.search ? '&' : '?'}${urlArgs}`;
   }
 }
 
