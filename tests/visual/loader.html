@@ -49,7 +49,7 @@ loader.config({
     demo: '${DEMO_ROOT}/demo1.js',
     'demo.css': '${DEMO_ROOT}/demo1.css'
   },
-  urlArgs: 'v=3',
+  urlParams: 'v=3',
   // debug: true,
 });
 
@@ -59,7 +59,7 @@ const ret2 = await loader.css('demo.css');
 console.log(ret1 && !ret1.error && ret2 && !ret2.error);
           `,
           expected:
-            '1. 能通过别名加载资源；2. 加载的资源 URL 上应追加 urlArgs 参数',
+            '1. 能通过别名加载资源；2. 加载的资源 URL 上应追加 urlParams 的参数',
           async assert(actual, expected) {
             const ret1 = await loader.script('demo');
             const ret2 = await loader.css('demo.css');

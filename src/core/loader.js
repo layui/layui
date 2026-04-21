@@ -7,12 +7,8 @@ import { lay } from './lay.js';
 
 // 生成 URL Key
 const createUrlKey = (url) => {
-  try {
-    const u = new URL(url, location.href);
-    return u.host + u.pathname;
-  } catch {
-    return url.replace(/^((http(s?):)?\/\/)|(\?|#).*/g, '');
-  }
+  const u = new URL(url, location.href);
+  return u.host + u.pathname;
 };
 
 /**
@@ -189,7 +185,7 @@ class Loader {
   // 默认配置项
   static options = {
     alias: {}, // script、link 资源路径别名
-    urlArgs: '', // 加载 script、link 资源时，是否在 URL 后添加一个参数，避免浏览器缓存
+    urlParams: '', // 加载 script、link 资源时，是否在 URL 后添加一个参数，避免浏览器缓存
     debug: false, // 是否开启调试模式，若开启，不会移除已加载的 script 节点
     // timeout: 10, // 请求最长等待秒数
   };
@@ -228,7 +224,7 @@ class Loader {
       url = options.alias[url];
     }
 
-    const urlKey = createUrlKey(url);
+    const urlKey = opts.id || createUrlKey(url);
 
     return await loadResource(url, {
       elem: document.createElement('script'),
@@ -366,10 +362,10 @@ class Loader {
    * @return {string} 规范化后的 URL
    */
   #normalizeUrl(url) {
-    const urlArgs = this.options.urlArgs.trim?.().replace(/^(\?|&)/, '');
-    if (!urlArgs) return url;
+    const urlParams = this.options.urlParams.trim?.().replace(/^(\?|&)/, '');
+    if (!urlParams) return url;
     const u = new URL(url, location.href);
-    return `${url}${u.search ? '&' : '?'}${urlArgs}`;
+    return `${url}${u.search ? '&' : '?'}${urlParams}`;
   }
 }
 
