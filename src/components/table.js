@@ -638,7 +638,7 @@ Class.prototype.setInit = function (type) {
           item22.HAS_PARENT ||
           (childIndex >= 1 && childIndex == (item2.colspan || 1))
         )
-          break;
+          continue;
 
         item22.HAS_PARENT = true;
         item22.parentKey = [options.index, i1, i2].join('-'); // i1 + '-' + i2;
