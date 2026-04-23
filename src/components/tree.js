@@ -1018,7 +1018,7 @@ Class.prototype.setChecked = function (checkedId) {
 
     for (const id of checkedId) {
       if (thisId == id) {
-        if (input.prop('disabled')) return;
+        if (input.prop('disabled')) continue;
         if (!checked) {
           input.prop('checked', true);
           that.syncCheckedState(input, flatData[i]);
