@@ -136,8 +136,8 @@ const loadAll = async (urls, opts = {}, resourceLoader = loadResource) => {
   let completed = 0;
   const results = {};
 
-  // 获取结果集
-  const getResults = (result) => {
+  // 处理成结果集
+  const aggregateResults = (result) => {
     for (const [key, value] of Object.entries(result)) {
       const values = results[key] || [];
       values.push(value);
@@ -151,21 +151,22 @@ const loadAll = async (urls, opts = {}, resourceLoader = loadResource) => {
       resourceLoader(u, {
         ...opts,
         success(result, ...args) {
-          getResults(result);
+          aggregateResults(result);
 
           // 所有资源加载成功后执行 success 回调
           if (++successful === urls.length) {
             opts.success?.(results, ...args);
           }
         },
-        error(result, ...args) {
-          getResults(result);
-
-          // 任意资源加载失败即执行 error 回调
-          opts.error?.(results, ...args);
+        error(result) {
+          aggregateResults(result);
         },
         done(_result, ...args) {
           if (++completed === urls.length) {
+            // 任意资源加载失败即执行 error 回调
+            if (results.error?.length) {
+              opts.error?.(results, ...args);
+            }
             opts.done?.(results, ...args);
           }
         },

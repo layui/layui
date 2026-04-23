@@ -105,7 +105,7 @@ console.log(ret && !ret.error);
               `${DEMO_ROOT}/demo3.js`,
             ]);
 
-            return ret && !ret.error;
+            return ret && !ret.error?.length;
           },
         });
 
@@ -170,7 +170,7 @@ const ret2 = await loader.css([
   '${DEMO_ROOT}/demo3.css'
 ]);
 
-console.log(ret1 && !ret1.error && ret2 && !ret2.error);
+console.log(ret1 && !ret1.error && ret2 && !ret2.error?.length);
           `,
           expected: '所有样式文件应加载成功',
           async assert(actual, expected) {
@@ -180,7 +180,9 @@ console.log(ret1 && !ret1.error && ret2 && !ret2.error);
               `${DEMO_ROOT}/demo3.css`,
             ]);
 
-            return result1 && !result1.error && result2 && !result2.error;
+            return (
+              result1 && !result1.error && result2 && !result2.error?.length
+            );
           },
         });
       });
