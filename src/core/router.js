@@ -29,7 +29,8 @@ class Router {
    * hash('#/user/profile?tab=info#section1') // 返回结果同 `new URL()`
    */
   hash(anchor = location.hash) {
-    const url = anchor.replace(/^\s*#?/, ''); // 去除开头的空白和 # 号
+    // 去除锚字符开头的空白和 # 号。为空时视为 '/'（见 normalizeUrl 约定）
+    const url = String(anchor ?? '').replace(/^\s*#?/, '') || '/';
     return new URL(url, location.href);
   }
 
