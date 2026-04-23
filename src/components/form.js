@@ -1610,7 +1610,7 @@ Form.prototype.validate = function (elem) {
       }
     }
 
-    if (intercept) return intercept;
+    if (intercept) return false;
   });
 
   return !intercept;
