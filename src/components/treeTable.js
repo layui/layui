@@ -580,12 +580,12 @@ Class.prototype.getNodeDataByIndex = function (index, clone, newValue) {
         // 删除并返回当前数据
         // 同步 cache --- 此段代码注释缘由：data 属性模式造成数据重复执行 splice (@Gitee: #I7Z0A/I82E2S)
         /*if (tableCache) {
-          tableCache.forEach(function (item1, i1) {
+          for (const [item1, i1] of tableCache.entries()) {
             if (item1[LAY_DATA_INDEX] === index) {
               tableCache.splice(i1, 1);
-              return;
+              break;
             }
-          })
+          }
         }*/
         return (i ? dataRet[childrenKey] : dataRet).splice(indexArr[i], 1)[0];
       } else {

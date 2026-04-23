@@ -267,7 +267,7 @@ var TPL_BODY = `
 
 // 主模板
 var TPL_MAIN = `
-  {{ var left, right; const { lay } = d.vars; }}
+  {{ var left, right, vars = d.vars, lay = vars.lay; }}
   {{ if(d.data.toolbar){ }}
     <div class="layui-table-tool">
       <div class="layui-table-tool-temp"></div>
@@ -633,7 +633,7 @@ Class.prototype.setInit = function (type) {
       var childIndex = 0;
       for (var i22 = 0; i22 < options.cols[indexChild].length; i22++) {
         var item22 = options.cols[indexChild][i22];
-        //如果子列已经被标注为{HAS_PARENT}，或者子列累计 colspan 数等于父列定义的 colspan，则跳出当前子列循环
+        // 如果子列已经被标注为{HAS_PARENT}，或者子列累计 colspan 数等于父列定义的 colspan，则跳过当前子列
         if (
           item22.HAS_PARENT ||
           (childIndex >= 1 && childIndex == (item2.colspan || 1))
@@ -3618,7 +3618,7 @@ var eachChildCols = function (index, cols, i1, item2) {
         }
       } else {
         // 没有key信息以colspan数量所谓判断标准
-        //如果子列已经被标注为{PARENT_COL_INDEX}，或者子列累计 colspan 数等于父列定义的 colspan，则跳出当前子列循环
+        // 如果子列已经被标注为{PARENT_COL_INDEX}，或者子列累计 colspan 数等于父列定义的 colspan，则跳过当前子列
         if (
           item22.PARENT_COL_INDEX ||
           (childIndex >= 1 && childIndex == (item2.colspan || 1))
