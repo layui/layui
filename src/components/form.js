@@ -1604,7 +1604,8 @@ Form.prototype.validate = function (elem) {
           }, 7);
 
           othis.addClass(DANGER);
-          return (intercept = true);
+          intercept = true;
+          break;
         }
       }
     }
