@@ -718,7 +718,7 @@ lay.style = function (options) {
     'LAY-STYLE-' +
     (options.id ||
       (function (index) {
-        lay.style.index++;
+        lay.style.index = ++index;
         return 'DF-' + index;
       })(lay.style.index || 0));
 
@@ -1309,8 +1309,15 @@ lay.unescape = function (html) {
  * - https://datatracker.ietf.org/doc/html/rfc4648#section-5
  */
 lay.btoa = (str, mode) => {
-  const encoder = new TextEncoder();
-  let encodedStr = btoa(String.fromCharCode.apply(null, encoder.encode(str)));
+  const bytes = new TextEncoder().encode(str);
+  const chunkSize = 1024 * 32; // 用于对大字符串进行分块处理
+  let binary = '';
+
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+
+  let encodedStr = btoa(binary);
 
   // 是否编码为 base64url
   if (mode === 'url') {
