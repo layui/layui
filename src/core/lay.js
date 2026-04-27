@@ -472,7 +472,7 @@ lay.event = function (modName, events, params, fn) {
     // 执行当前模块的全部事件
     if (filterName === '{*}') {
       item.forEach(callback);
-      return;
+      continue;
     }
 
     // 执行指定事件
