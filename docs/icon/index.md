@@ -57,7 +57,7 @@ toc: true
   </div>
   <div>
     <i class="layui-icon layui-icon-github"></i>
-    <div class="docs-icon-name">Github</div>
+    <div class="docs-icon-name">GitHub</div>
     <div class="docs-icon-code">&amp;#xe6a7;</div>
     <div class="docs-icon-fontclass">layui-icon-github</div>
   </div>

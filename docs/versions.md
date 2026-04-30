@@ -11,6 +11,21 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.13.6" lay-pid="2.10+" class="ws-anchor">
+  v2.13.6
+  <span class="layui-badge-rim">2026-04-30</span>
+</h2>
+
+- 修复 treeTable 通过 `setRowChecked` 选中列时的边缘问题 #3022 @coredwriter
+- 修复 tree 节点 `disabled: true` 时的级联选择逻辑 #3039 @sentsim
+- 修复 upload 点击事件多余的冒泡问题 #3026 @honglelizhi @coredwriter
+- 优化 code 部分样式 #3028 @sentsim
+- 优化 `lay.style()` 的默认索引递增逻辑 #3047 @sentsim @Sight-wcg
+
+### 下载： [layui-v2.13.6.zip](#download)
+
+---
+
 <h2 id="v2.13.5" lay-pid="2.10+" class="ws-anchor">
   v2.13.5
   <span class="layui-badge-rim">2026-03-16</span>
