@@ -344,7 +344,7 @@
       'LAY-STYLE-' +
       (options.id ||
         (function (index) {
-          lay.style.index++;
+          lay.style.index = ++index;
           return 'DF-' + index;
         })(lay.style.index || 0));
 
