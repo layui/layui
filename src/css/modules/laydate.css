@@ -40,10 +40,6 @@ html #layuicss-laydate {
   -webkit-transition-duration: 0.3s;
   transition-duration: 0.3s;
 }
-.layui-laydate-list li {
-  -webkit-transition-property: width, height, color, background-color;
-  transition-property: width, height, color, background-color;
-}
 .layui-laydate-shade {
   top: 0;
   left: 0;

@@ -3,10 +3,9 @@
  * 日期与时间组件
  */
 
-layui.define(['lay', 'i18n', 'jquery'], function (exports) {
+layui.define(['lay', 'i18n'], function (exports) {
   'use strict';
 
-  var $ = layui.jquery;
   var lay = layui.lay;
   var i18n = layui.i18n;
 
@@ -2293,42 +2292,32 @@ layui.define(['lay', 'i18n', 'jquery'], function (exports) {
               var ol = this;
               var li = lay(ol).find('li');
               var firstItem = li[0];
-              var lastItem = li[li.length - 1];
               var selectedItem = li[that[startEnd][hms[i]]];
               var itemHeight = firstItem ? firstItem.offsetHeight : 30;
-
+              // 锚点行偏移：scrollTop 始终落在 itemHeight 整数倍上，让选中项
+              // 显示在接近 ol 中央的整行位置，端点项自然贴顶/贴底
+              var anchorOffset =
+                Math.floor((ol.clientHeight - itemHeight) / 2 / itemHeight) *
+                itemHeight;
               // item.offsetTop 和同级 li[0] 相减，差值即 item 在 ol 中的真实偏移，无需考虑 offsetParent
               var getScrollTop = function (item) {
                 if (!item || !firstItem) return 0;
-                return Math.max(0, item.offsetTop - firstItem.offsetTop);
+                return Math.max(
+                  0,
+                  item.offsetTop - firstItem.offsetTop - anchorOffset
+                );
               };
-
-              // 给首末项添加外边距，使其也能滚动到正中央，
-              // 避免如 04:03:02 时三列在水平方向排列参差不齐
-              var spacer = Math.max(0, (ol.clientHeight - itemHeight) / 2);
-              if (firstItem) firstItem.style.marginTop = spacer + 'px';
-              if (lastItem) lastItem.style.marginBottom = spacer + 'px';
 
               var isDisabled = lay(selectedItem).hasClass(DISABLED);
               if (!isDisabled) {
-                $(ol).animate(
-                  {
-                    scrollTop: getScrollTop(selectedItem)
-                  },
-                  200
-                );
+                ol.scrollTop = getScrollTop(selectedItem);
               }
 
               // 选中项缺失或被禁用时，回退到首个可用项
               if (!selectedItem || isDisabled) {
                 li.each(function (ii, item) {
                   if (!lay(this).hasClass(DISABLED)) {
-                    $(ol).animate(
-                      {
-                        scrollTop: getScrollTop(item)
-                      },
-                      200
-                    );
+                    ol.scrollTop = getScrollTop(item);
                     return true;
                   }
                 });
