@@ -2293,7 +2293,7 @@ layui.define(['lay', 'i18n'], function (exports) {
               var li = lay(ol).find('li');
               var firstItem = li[0];
               var selectedItem = li[that[startEnd][hms[i]]];
-              var itemHeight = firstItem ? firstItem.offsetHeight : 30;
+              var itemHeight = (firstItem && firstItem.offsetHeight) || 30;
               // 锚点行偏移：scrollTop 始终落在 itemHeight 整数倍上，让选中项
               // 显示在接近 ol 中央的整行位置，端点项自然贴顶/贴底
               var anchorOffset =
