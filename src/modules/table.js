@@ -3443,26 +3443,109 @@ layui.define(
         function (fn) {
           return setTimeout(fn, 1000 / 60);
         };
+      var cAF = window.cancelAnimationFrame || clearTimeout;
 
-      // 固定列滚轮事件 - 临时兼容方案
+      // 固定列滚轮事件
+      var scrollRAF = null;
+      var scrollVelocity = 0;
+      var lastTime = 0;
+      var lastWheelTime = 0;
+
       that.layFixed
         .find(ELEM_BODY)
         .on('mousewheel DOMMouseScroll', function (e) {
-          var delta = e.originalEvent.wheelDelta || -e.originalEvent.detail;
-          var scrollTop = that.layMain.scrollTop();
-          var step = 100;
-          var rAFStep = 10;
+          // 规范化 deltaY
+          var oe = e.originalEvent;
+          var deltaY;
+          if (oe.deltaY !== undefined) {
+            deltaY = oe.deltaY;
+          } else if (oe.wheelDelta !== undefined) {
+            deltaY = -oe.wheelDelta;
+          } else if (oe.detail !== undefined) {
+            deltaY = oe.detail * 40;
+          }
+
+          // 边界检测：到达边界时不阻止默认行为，让页面正常滚动
+          var mainEl = that.layMain[0];
+          var scrollTop = mainEl.scrollTop;
+          var scrollH = mainEl.scrollHeight;
+          var clientH = mainEl.clientHeight;
+          var atTop = scrollTop <= 0;
+          var atBottom = Math.ceil(scrollTop + clientH) >= Math.floor(scrollH);
+          // 判断是否为触摸板惯性滚动，此场景性能优先，使用最简单的方案
+          // 触摸板惯性滚动触发频率和屏幕刷新率一致，所以当两个 wheel 事件
+          // 触发间隔极短时，认为是惯性滚动
+          var wheelTime = e.timeStamp || Date.now();
+          var isInertia = wheelTime - lastWheelTime < 50;
+          lastWheelTime = wheelTime;
+
+          if ((deltaY < 0 && atTop) || (deltaY > 0 && atBottom)) {
+            if (scrollRAF) {
+              cAF(scrollRAF);
+              scrollRAF = null;
+            }
+            scrollVelocity = 0;
+            // 惯性滚动到达边界，阻止默认行为（防止页面滚动）
+            if (isInertia) {
+              e.preventDefault();
+            }
+            return;
+          }
 
           e.preventDefault();
-          var cb = function () {
-            if (step > 0) {
-              step -= rAFStep;
-              scrollTop += delta > 0 ? -rAFStep : rAFStep;
-              that.layMain.scrollTop(scrollTop);
-              rAF(cb);
+
+          // 取消之前的动画
+          if (scrollRAF) {
+            cAF(scrollRAF);
+            scrollRAF = null;
+          }
+
+          // 累积滚动速度
+          var now = Date.now();
+          var timeDelta = now - lastTime;
+          lastTime = now;
+
+          if (timeDelta < 100) {
+            scrollVelocity += deltaY * 0.5;
+          } else {
+            scrollVelocity = deltaY * 0.2;
+          }
+
+          // 限制最大速度
+          scrollVelocity = Math.max(-120, Math.min(120, scrollVelocity));
+
+          // 直接滚动
+          that.layMain.scrollTop(scrollTop + scrollVelocity);
+
+          // 惯性衰减动画
+          var animate = function () {
+            scrollVelocity *= 0.85;
+
+            if (Math.abs(scrollVelocity) > 1) {
+              var curTop = that.layMain.scrollTop();
+              var newTop = curTop + scrollVelocity;
+              var newAtTop = newTop <= 0;
+              var newAtBottom =
+                Math.ceil(newTop + clientH) >= Math.floor(scrollH);
+
+              if (
+                (scrollVelocity < 0 && newAtTop) ||
+                (scrollVelocity > 0 && newAtBottom)
+              ) {
+                scrollVelocity = 0;
+                scrollRAF = null;
+                return;
+              }
+
+              that.layMain.scrollTop(newTop);
+              scrollRAF = rAF(animate);
+            } else {
+              scrollVelocity = 0;
+              scrollRAF = null;
             }
           };
-          rAF(cb);
+
+          scrollRAF = rAF(animate);
         });
     };
 
