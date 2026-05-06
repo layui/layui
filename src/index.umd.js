@@ -34,6 +34,7 @@ import { carousel } from './components/carousel.js';
 import { rate } from './components/rate.js';
 import { flow } from './components/flow.js';
 import { util } from './components/util.js';
+import { floatbar } from './components/floatbar.js';
 import { code } from './components/code.js';
 
 const layui = {
@@ -70,6 +71,7 @@ const layui = {
   rate,
   flow,
   util,
+  floatbar,
   code,
 };
 

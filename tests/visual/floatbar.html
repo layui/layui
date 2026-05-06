@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>floatbar 组件 - layui</title>
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+  </head>
+  <body class="layui-padding-5">
+    <div
+      id="target-test"
+      class="layui-text"
+      style1="position: relative; height: 320px; overflow: auto;"
+    >
+      <script type="module">
+        // 批量生产行，便于测试
+        const target = document.querySelector('#target-test');
+        const ol = document.createElement('ol');
+
+        ol.innerHTML = Array(100)
+          .fill()
+          .map((v) => {
+            const content = Math.random().toString(32).substring(2);
+            return `<li>${content}</li>`;
+          })
+          .join('');
+        target.appendChild(ol);
+      </script>
+    </div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(() => {
+        const { floatbar, layer } = layui;
+
+        // 悬浮条
+        floatbar.render({
+          bars: [
+            {
+              type: 'share',
+              icon: 'layui-icon-share',
+            },
+            {
+              type: 'help',
+              icon: 'layui-icon-help',
+            },
+            {
+              type: 'cart',
+              icon: 'layui-icon-cart',
+              style: 'background-color: #FF5722;',
+            },
+            {
+              type: 'groups',
+              content: '群',
+              style: 'font-size: 21px;',
+            },
+            {
+              type: 'text',
+              content: '文字',
+            },
+          ],
+          css: `
+bottom: 50%;
+transform: translateY(50%);
+.layui-floatbar-item {
+  background-color: #393D52;
+}
+          `.trim(),
+          // showDefaultBar: false, // 是否显示默认的 bar 列表
+          // target: '#target-test', // 插入 floatbar 节点的目标元素选择器
+          on: {
+            // 点击事件
+            click(type) {
+              console.log(this, type);
+              // layer.msg(type);
+            },
+            // 任意事件
+            mouseenter(type) {
+              layer.tips(type, this, {
+                tips: 4,
+                fixed: true,
+              });
+            },
+            mouseleave(type) {
+              layer.closeAll('tips');
+            },
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

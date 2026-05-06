@@ -34,4 +34,5 @@ export { carousel } from './components/carousel.js';
 export { rate } from './components/rate.js';
 export { flow } from './components/flow.js';
 export { util } from './components/util.js';
+export { floatbar } from './components/floatbar.js';
 export { code } from './components/code.js';
