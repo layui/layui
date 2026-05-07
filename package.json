@@ -27,6 +27,9 @@
       "import": "./dist/index.js",
       "require": "./dist/layui.js"
     },
+    "./utils": {
+      "import": "./dist/utils/index.js"
+    },
     "./css": "./dist/css/layui.css"
   },
   "files": [

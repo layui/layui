@@ -161,7 +161,7 @@ escape }}、{{- source }}、{{# comments }}、&#123;&#123;! ignore
   | '左单右双"
 </div>
 
-<p>渲染时间：{{= layui.util.toDateString(new Date()) }}</p>
+<p>渲染时间：{{= layui.utils.toDateString(new Date()) }}</p>
       </script>
 
       <!-- prettier-ignore -->
@@ -194,7 +194,7 @@ escape }}、{{- source }}、{{# comments }}、&#123;&#123;! ignore
     <script src="./assets/dist/layui.js"></script>
     <script>
       layui.use(() => {
-        const { laytpl, util, tabs, $ } = layui;
+        const { laytpl, lay, utils, tabs, $ } = layui;
 
         // 默认设置
         // laytpl.config({});
@@ -216,7 +216,7 @@ escape }}、{{- source }}、{{# comments }}、&#123;&#123;! ignore
         var renderView = (html, startTime) => {
           timer(startTime);
           $('#ID-tpl-view').html(html);
-          $('#ID-tpl-view-code').html(util.escape(html));
+          $('#ID-tpl-view-code').html(lay.escape(html));
         };
 
         // 初始化模板
@@ -261,7 +261,7 @@ escape }}、{{- source }}、{{# comments }}、&#123;&#123;! ignore
         });
 
         // 事件
-        util.on({
+        utils.on({
           // 性能测试
           test: () => {
             var dataLen = 1000; // 数据量

@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>utils - layui</title>
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+  </head>
+  <body>
+    <div class="layui-text layui-padding-5">
+      <h3>默认 body 委托元素</h3>
+      <div class="layui-btn-container">
+        <button class="layui-btn" lay-on="e1">事件 e1</button>
+        <button class="layui-btn" lay-on="e2">事件 e2</button>
+        <button class="layui-btn" lay-on="e3">事件 e3</button>
+        <button class="layui-btn" lay-bind="e1">
+          hover: lay-bind - 事件 e1
+        </button>
+        <button class="layui-btn" lay-active="e1">
+          hover: lay-active - 事件 e1
+        </button>
+        <button class="layui-btn layui-btn-primary" lay-on="getBodyEvents">
+          查看 body 的事件集合
+        </button>
+      </div>
+
+      <h3>自定义委托元素</h3>
+      <div class="layui-btn-container" id="ID-utils-on-test">
+        <button class="layui-btn" lay-on="e1">事件 e1 - 测试阻止冒泡</button>
+        <button class="layui-btn" lay-on="e5">事件 e5</button>
+        <button class="layui-btn" lay-on="e6">hover: 事件 e6</button>
+        <button class="layui-btn layui-btn-primary" lay-on="getElemEvents">
+          查看该委托元素的事件集合
+        </button>
+      </div>
+
+      <h3>转换日期格式</h3>
+
+      编辑格式：
+      <div class="layui-inline" style="width: 210px">
+        <input
+          type="text"
+          value="yyyy-MM-dd HH:mm:ss"
+          class="layui-input"
+          id="ID-utils-toDateString-test"
+        />
+      </div>
+      <span
+        class="layui-word-aux"
+        id="ID-utils-toDateString-result-test"
+      ></span>
+
+      <h3>倒计时</h3>
+      <div id="ID-utils-countdown-test"></div>
+
+      <h3>某个时间在多久前</h3>
+      <div id="ID-utils-timeAgo-test"></div>
+    </div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(() => {
+        const { $, utils, layer, lay } = layui;
+
+        // 批量处理事件
+        utils.on({
+          e1: (othis) => {
+            alert(othis.html());
+          },
+          e2: (othis) => {
+            alert('body:' + othis.html());
+          },
+          getBodyEvents: (othis, e) => {
+            var dataCache = $(e.delegateTarget).data('UTIL_ON_DATA');
+            console.log(dataCache.events);
+          },
+        });
+
+        // Test: 事件集的替换和增加
+        utils.on({
+          e1: (othis) => {
+            // 重置事件 e1
+            alert(othis.html() + ' - replace');
+          },
+          e3: (othis) => {
+            // 增加事件 e3
+            alert(othis.html());
+          },
+        });
+
+        // 自定义触发事件的元素属性名、自定义触发事件的方式
+        utils.on(
+          'lay-bind',
+          {
+            e1: lay.throttle(function (othis) {
+              layer.tips(othis.html(), this, { tips: 3 });
+            }, 3000), // 3s 内不重复执行
+            e2: () => {
+              console.log(111);
+            },
+          },
+          {
+            trigger: 'mouseenter',
+          },
+        );
+        // Test: 不同属性、相同值
+        utils.on(
+          'lay-active',
+          {
+            e1: function (othis) {
+              this.innerHTML =
+                'hover: lay-active - 事件 e1 - ' +
+                ((Math.random() * 100000) | 0);
+            },
+          },
+          {
+            trigger: 'mouseenter',
+          },
+        );
+
+        // 自定义触发事件的委托元素
+        utils.on(
+          {
+            // 此处与委托在 body 上的事件共用了 e1 名称，以测试事件冒泡
+            e1: function (othis, e) {
+              this.innerHTML = 'click: ' + ((Math.random() * 100000) | 0);
+              e.stopPropagation(); // 阻止事件冒泡
+            },
+            e5: function (othis, e) {
+              this.innerHTML = 'click: ' + ((Math.random() * 100000) | 0);
+            },
+            getElemEvents: (othis, e) => {
+              var dataCache = $(e.delegateTarget).data('UTIL_ON_DATA');
+              console.log(dataCache.events);
+            },
+          },
+          {
+            elem: '#ID-utils-on-test',
+          },
+        );
+
+        // 自定义触发事件的委托元素 + 自定义触发事件
+        utils.on(
+          {
+            e6: function (othis, e) {
+              this.innerHTML =
+                'hover: 事件 e6 - ' + ((Math.random() * 100000) | 0);
+            },
+          },
+          {
+            elem: '#ID-utils-on-test',
+            trigger: 'mouseenter',
+          },
+        );
+
+        /**
+         * 转换日期格式
+         */
+
+        var timer = null;
+        var toDateString = (format) => {
+          var dateString = utils.toDateString(new Date(), format);
+          $('#ID-utils-toDateString-result-test').html(dateString);
+        };
+        timer = setInterval(() => {
+          toDateString($('#ID-utils-toDateString-test').val());
+        }, 50);
+
+        console.log(
+          utils.toDateString('2025-3-8 12:30:00') === '2025-03-08 12:30:00',
+        );
+        console.log(
+          utils.toDateString('2025-03-08 12:30:00') === '2025-03-08 12:30:00',
+        );
+        console.log(utils.toDateString('2025-03-08') === '2025-03-08 00:00:00');
+        console.log(utils.toDateString('2025-3-8') === '2025-03-08 00:00:00');
+        console.log(utils.toDateString('2025-3') === '2025-03-01 00:00:00');
+        console.log(utils.toDateString(null) === '');
+        console.log(
+          utils.toDateString(undefined) === utils.toDateString(new Date()),
+        );
+        console.log(utils.toDateString('') === '');
+        console.log(
+          utils.toDateString('2025/3/8 12:30:00') === '2025-03-08 12:30:00',
+        );
+        console.log(utils.toDateString('2025/3/8') === '2025-03-08 00:00:00');
+
+        /**
+         * 倒计时
+         */
+
+        var countdown = utils.countdown({
+          date: '2100-01-01 00:00:00', // 目标时间值
+          now: new Date(), // 当前时间，一般为服务器时间，此处以本地时间为例
+          ready: function () {
+            // 初始操作
+            clearTimeout(utils.countdown.timer); // 清除旧定时器，防止多次渲染时重复执行。实际使用时不常用
+          },
+          clock: function (obj, inst) {
+            // 计时中
+            var str = [obj.d, '天', obj.h, '时', obj.m, '分', obj.s, '秒'].join(
+              ' ',
+            );
+            $('#ID-utils-countdown-test').html(
+              `距离 ${inst.options.date} 还有：${str}`,
+            );
+            utils.countdown.timer = inst.timer; // 记录当前定时器，以便在重复渲染时清除。实际使用时不常用
+          },
+          done: function (obj, inst) {
+            // 计时完成
+            layer.msg('Time is up');
+          },
+        });
+
+        /**
+         * 某个时间在当前时间的多久前
+         */
+
+        var str = utils.timeAgo(new Date('2026-05-07 12:00:00'));
+        $('#ID-utils-timeAgo-test').html('示例更新于：' + str);
+      });
+    </script>
+  </body>
+</html>

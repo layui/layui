@@ -167,7 +167,7 @@
 
     <script src="./assets/dist/layui.js"></script>
     <script type="module">
-      const { util, router, tabs, code, layer, dropdown } = layui;
+      const { utils, router, tabs, code, layer, dropdown } = layui;
 
       const hashInputElem = document.getElementById('hashInput');
       const hashNormalizeSampleElem = document.getElementById(
@@ -275,7 +275,7 @@
       });
 
       // 事件
-      const events = util.on({
+      const events = utils.on({
         // hash 锚路由解析
         parseHash() {
           setMode('hash');

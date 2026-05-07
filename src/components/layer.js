@@ -1654,7 +1654,7 @@ layer.prompt = function (options, yes) {
           var value = prompt.val();
           if (value.length > (options.maxlength || 500)) {
             layer.tips(
-              i18n.$t('layer.prompt.InputLengthPrompt', {
+              i18n.$t('layer.prompt.inputLengthPrompt', {
                 length: options.maxlength || 500,
               }),
               prompt,

@@ -7,7 +7,6 @@ import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
 import { laytpl } from '../core/laytpl.js';
-import { util } from './util.js';
 
 var device = lay.device();
 var clickOrMousedown = device.mobile ? 'touchstart' : 'mousedown';
@@ -224,7 +223,7 @@ Class.prototype.render = function (type) {
               : laytpl(templet).render(item);
         }
         return title;
-      })(util.escape(item[customName.title]));
+      })(lay.escape(item[customName.title]));
 
       // 初始类型
       var type = (function () {

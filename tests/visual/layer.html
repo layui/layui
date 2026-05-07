@@ -108,16 +108,17 @@
 
       layui.use(() => {
         var $ = layui.jquery;
+        var lay = layui.lay;
         var layer = layui.layer;
-        var util = layui.util;
-        //return
+        var utils = layui.utils;
+        // return
 
         var index = layer.msg('Hello World');
         //layer.close(index);
         //runTest(1, $, layer);
 
         // 触发事件
-        util.on('lay-on', {
+        utils.on('lay-on', {
           test: () => {
             var icon = -1;
             (function changeIcon() {
@@ -206,9 +207,9 @@
                     layer.close(index);
                     layer.msg(
                       '演示完毕！您的口令：' +
-                        util.escape(pass) +
+                        lay.escape(pass) +
                         '<br>您最后写下了：' +
-                        util.escape(text),
+                        lay.escape(text),
                     );
                   },
                 );

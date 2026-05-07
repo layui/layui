@@ -243,14 +243,14 @@
 
     <script src="./assets/dist/layui.js"></script>
     <script type="module">
-      const { $, dropdown, util } = layui;
+      const { $, dropdown, utils } = layui;
 
       dropdown.on('click(demo1)', function (options) {
         var thisElem = $(this);
         console.log(thisElem, options);
       });
 
-      util.on('lay-active', {
+      utils.on('lay-active', {
         normal: () => {
           $('#demo-box')
             .children()

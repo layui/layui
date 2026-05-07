@@ -11,10 +11,13 @@ import { router } from './core/router.js';
 import { default as jquery, default as $ } from 'jquery';
 import { component, componentBuilder } from './core/component.js';
 
+// 导入工具模块
+import * as utils from './utils/index.js';
+
 // 导入组件模块
-import { laypage } from './components/laypage.js';
-import { laydate } from './components/laydate.js';
 import { layer } from './components/layer.js';
+import { laydate } from './components/laydate.js';
+import { laypage } from './components/laypage.js';
 import { dropdown } from './components/dropdown.js';
 import { slider } from './components/slider.js';
 import { colorpicker } from './components/colorpicker.js';
@@ -33,7 +36,6 @@ import { transfer } from './components/transfer.js';
 import { carousel } from './components/carousel.js';
 import { rate } from './components/rate.js';
 import { flow } from './components/flow.js';
-import { util } from './components/util.js';
 import { floatbar } from './components/floatbar.js';
 import { code } from './components/code.js';
 
@@ -49,6 +51,7 @@ const layui = {
   jquery,
   component,
   componentBuilder,
+  utils,
   layer,
   laydate,
   laypage,
@@ -70,7 +73,6 @@ const layui = {
   carousel,
   rate,
   flow,
-  util,
   floatbar,
   code,
 };

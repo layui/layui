@@ -44,7 +44,7 @@
 
     <script src="./assets/dist/layui.js"></script>
     <script type="module">
-      const { $, transfer, util } = layui;
+      const { $, transfer, utils } = layui;
 
       var ins1 = transfer.render({
         elem: '#text1',
@@ -72,7 +72,7 @@
       });
 
       //按钮事件
-      util.on('lay-demo', {
+      utils.on('lay-demo', {
         getData: (othis) => {
           alert(JSON.stringify(ins1.getData()));
         },

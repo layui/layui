@@ -114,10 +114,10 @@
 
     <script src="./assets/dist/layui.js"></script>
     <script type="module">
-      const { $, layer, util, element } = layui;
+      const { $, layer, utils, element } = layui;
 
       // 头部事件
-      util.on('lay-header-event', {
+      utils.on('lay-header-event', {
         menuLeft: (othis) => {
           // 左侧菜单事件
           layer.msg('展开左侧菜单的操作', { icon: 0 });

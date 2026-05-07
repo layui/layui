@@ -289,7 +289,7 @@
           transfer,
           tree,
           upload,
-          util,
+          utils,
         } = layui;
 
         // 演示异步加载组件语言包
@@ -454,7 +454,7 @@
         });
 
         // layer
-        util.on({
+        utils.on({
           alert: () => {
             layer.alert('Hello world');
           },
@@ -552,15 +552,15 @@
           //size: 60,
         });
 
-        // util
+        // utils
         $('#demo-time-ago-picker').on('change', function () {
-          $('#demo-time-ago-display').html(util.timeAgo(this.value));
+          $('#demo-time-ago-display').html(utils.timeAgo(this.value));
         });
 
         $('#demo-toDateString').html(
-          util.toDateString('2023-01-01 11:35:25', 'yyyy-MM-dd HH:mm:ss A') +
+          utils.toDateString('2023-01-01 11:35:25', 'yyyy-MM-dd HH:mm:ss A') +
             '<br>' +
-            util.toDateString('2023-01-01 18:35:25', 'yyyy-MM-dd HH:mm:ss A'),
+            utils.toDateString('2023-01-01 18:35:25', 'yyyy-MM-dd HH:mm:ss A'),
         );
 
         // 演示：切换语言

@@ -83,7 +83,7 @@ export default {
     cancel: 'Annuler',
     defaultTitle: 'Information',
     prompt: {
-      InputLengthPrompt: 'Maximum {length} caractères',
+      inputLengthPrompt: 'Maximum {length} caractères',
     },
     photos: {
       noData: 'Aucune image',
@@ -166,7 +166,7 @@ export default {
     },
     chooseText: '{length} fichiers',
   },
-  util: {
+  utils: {
     timeAgo: {
       days: 'il y a {days} jours',
       hours: 'il y a {hours} heures',

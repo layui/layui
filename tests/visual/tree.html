@@ -36,7 +36,7 @@
         var $ = layui.$;
         var tree = layui.tree;
         var layer = layui.layer;
-        var util = layui.util;
+        var utils = layui.utils;
         var index = 100;
 
         // 数据源
@@ -401,7 +401,7 @@
         console.log('flatData:', treeInst.config.flatData);
 
         // 按钮事件
-        util.on({
+        utils.on({
           getChecked: (othis) => {
             var checkedData = tree.getChecked('test1');
             layer.alert(JSON.stringify(checkedData), { shade: 0 });

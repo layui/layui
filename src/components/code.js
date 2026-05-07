@@ -6,7 +6,7 @@
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
-import { util } from './util.js';
+import { openWindow } from '../utils/index.js';
 import { element } from './element.js';
 import { layer } from './layer.js';
 import { form } from './form.js';
@@ -38,7 +38,7 @@ var config = {
   copy: true, // 是否开启代码区域复制功能图标
   // 默认文本
   text: {
-    code: util.escape('</>'),
+    code: lay.escape('</>'),
     preview: 'Preview',
   },
   wordWrap: true, // 是否自动换行
@@ -263,7 +263,7 @@ export function code(options) {
         options.ln
           ? [
               '<div class="' + CONST.ELEM_LINE_NUM + '">',
-              util.digit(num + 1) + '.',
+              lay.digit(num + 1) + '.',
               '</div>',
             ].join('')
           : '',
@@ -317,7 +317,7 @@ export function code(options) {
       title: [i18n.$t('code.copy')],
       iconName: 'file-b',
       onClick() {
-        var code = util.unescape(finalCode(options.code));
+        var code = lay.unescape(finalCode(options.code));
         var hasOnCopy = typeof options.onCopy === 'function';
 
         // 写入剪切板
@@ -420,7 +420,7 @@ export function code(options) {
         title: [i18n.$t('code.preview')],
         iconName: 'release',
         onClick() {
-          util.openWin({
+          openWindow({
             content: finalCode(options.code),
           });
         },
@@ -448,7 +448,7 @@ export function code(options) {
         name,
         options, // 当前属性选项
         rawCode: options.code, // 原始 code
-        finalCode: util.unescape(finalCode(options.code)), // 最终 code
+        finalCode: lay.unescape(finalCode(options.code)), // 最终 code
       };
 
       toolkit[name]?.onClick?.(parameters); // 执行当前工具事件
@@ -580,7 +580,7 @@ export function code(options) {
 
   // 获取 code 行结构
   var createCodeRst = createCode(
-    options.encode ? util.escape(finalCode(rawCode)) : rawCode, // 是否编码
+    options.encode ? lay.escape(finalCode(rawCode)) : rawCode, // 是否编码
   );
   var lines = createCodeRst.lines;
 

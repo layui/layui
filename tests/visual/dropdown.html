@@ -55,7 +55,7 @@
     <script>
       layui.use(() => {
         var dropdown = layui.dropdown;
-        var util = layui.util;
+        var utils = layui.utils;
 
         dropdown.render({
           elem: '#demo1',
@@ -326,7 +326,7 @@
           },
         });
 
-        util.on({
+        utils.on({
           // 改变触发右键菜单的目标元素
           contextmenu: (othis) => {
             var ID = 'ID-dropdown-demo-contextmenu';
@@ -355,7 +355,7 @@
           data: [{ id: 'refresh', title: '刷新' }],
         });
 
-        util.on(
+        utils.on(
           {
             open: () => {
               dropdown.open('testopen');

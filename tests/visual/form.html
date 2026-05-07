@@ -629,7 +629,7 @@
         var $ = layui.$;
         var form = layui.form;
         var layer = layui.layer;
-        var util = layui.util;
+        var utils = layui.utils;
         var laydate = layui.laydate;
 
         // 自定义验证规则
@@ -739,7 +739,7 @@
         form.render('checkbox');
 
         // 普通事件
-        util.on('lay-on', {
+        utils.on('lay-on', {
           'get-vercode': (othis) => {
             var isvalid = form.validate('.demo-phone');
 

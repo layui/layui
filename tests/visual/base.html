@@ -13,12 +13,12 @@
     <script type="module">
       import { test } from './assets/modules/test/test.js';
 
-      const { lay, $, util } = layui;
+      const { lay, $, utils, floatbar } = layui;
 
       // 创建测试实例
       const tester = test({
         elem: '#root',
-        vars: { lay, $, util },
+        vars: { lay, $, utils },
         items: [
           {
             name: 'lay',
@@ -450,8 +450,8 @@ console.log(treeData[0].children[0].title === data[1].title);
         });
       });
 
-      // 返回顶部
-      util.fixbar();
+      // 悬浮条
+      floatbar.render();
     </script>
   </body>
 </html>

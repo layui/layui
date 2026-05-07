@@ -9,7 +9,6 @@ import { log } from '../core/logger.js';
 import { $ } from 'jquery';
 import { laytpl } from '../core/laytpl.js';
 import { laypage } from './laypage.js';
-import { util } from './util.js';
 import { layer } from './layer.js';
 import { form } from './form.js';
 
@@ -127,7 +126,7 @@ var parseTempData = function (obj) {
 
   // 是否编码 HTML
   var escaped = 'escape' in item3 ? item3.escape : options.escape;
-  if (escaped) content = util.escape(content);
+  if (escaped) content = lay.escape(content);
 
   // 获取模板
   var templet =
@@ -499,7 +498,7 @@ Class.prototype.render = function (type) {
           table_sort_asc: i18n.$t('table.sort.asc'),
           table_sort_desc: i18n.$t('table.sort.desc'),
         },
-        vars: { lay, i18n, $, util },
+        vars: { lay, i18n, $ },
       }),
     );
 
@@ -768,7 +767,7 @@ Class.prototype.renderToolbar = function () {
                     '" lay-skin="primary" ' +
                     (item.hide ? '' : 'checked') +
                     ' title="' +
-                    util.escape(
+                    lay.escape(
                       $(
                         '<div>' +
                           (item.fieldTitle || item.title || item.field) +
@@ -1555,7 +1554,7 @@ Class.prototype.getTrHtml = function (data, sort, curr, trsObj) {
               typeof item3.edit === 'function' ? item3.edit(item1) : item3.edit,
             );
             if (item3.templet)
-              attr.push('data-content="' + util.escape(content) + '"'); // 自定义模板
+              attr.push('data-content="' + lay.escape(content) + '"'); // 自定义模板
             if (item3.toolbar) attr.push('data-off="true"'); // 行工具列关闭单元格事件
             if (item3.event) attr.push('lay-event="' + item3.event + '"'); //自定义事件
             if (item3.minWidth)

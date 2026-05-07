@@ -88,7 +88,7 @@ var zhCN = {
     cancel: '取消',
     defaultTitle: '信息',
     prompt: {
-      InputLengthPrompt: '最多输入 {length} 个字符',
+      inputLengthPrompt: '最多输入 {length} 个字符',
     },
     photos: {
       noData: '没有图片',
@@ -169,7 +169,7 @@ var zhCN = {
     },
     chooseText: '{length} 个文件',
   },
-  util: {
+  utils: {
     timeAgo: {
       days: '{days} 天前',
       hours: '{hours} 小时前',

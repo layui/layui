@@ -6,7 +6,6 @@ import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { log } from '../core/logger.js';
 import { $ } from 'jquery';
-import { util } from './util.js';
 import { layer } from './layer.js';
 
 var MOD_NAME = 'form';
@@ -1211,7 +1210,7 @@ Form.prototype.render = function (type, filter) {
       checks.each(function (index, check) {
         var othis = $(this);
         var skin = othis.attr('lay-skin') || 'primary';
-        var title = util.escape(
+        var title = lay.escape(
           (
             check.title ||
             (function () {
@@ -1376,7 +1375,7 @@ Form.prototype.render = function (type, filter) {
 
         hasRender[0] && hasRender.remove(); // 如果已经渲染，则Rerender
 
-        var title = util.escape(radio.title || '');
+        var title = lay.escape(radio.title || '');
         var titleTplAttrs = [];
         if (othis.next('[lay-radio]')[0]) {
           var titleTplElem = othis.next();

@@ -32,9 +32,9 @@
         timeout: '100-300',
       });
       layui.use(() => {
-        const { treeTable, lay, util, router } = layui;
+        const { treeTable, lay, utils, router } = layui;
 
-        util.on({
+        utils.on({
           asyncLoad: () => {
             treeTable.reload(
               'demo',
