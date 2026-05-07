@@ -3450,6 +3450,15 @@ layui.define(
       var scrollVelocity = 0;
       var lastTime = 0;
       var lastWheelTime = 0;
+      var SCROLL_CONFIG = {
+        inertiaThreshold: 50, // 惯性检测阈值
+        velocityAccumTime: 100, // 速度累积时间窗口
+        velocityFactor: 0.5, // 快速滚动速度系数
+        velocityInitFactor: 0.2, // 初始速度系数
+        maxVelocity: 120, // 最大速度
+        friction: 0.85, // 摩擦系数
+        stopThreshold: 1 // 停止阈值
+      };
 
       that.layFixed
         .find(ELEM_BODY)
@@ -3472,11 +3481,12 @@ layui.define(
           var clientH = mainEl.clientHeight;
           var atTop = scrollTop <= 0;
           var atBottom = Math.ceil(scrollTop + clientH) >= Math.floor(scrollH);
-          // 判断是否为触摸板惯性滚动，此场景性能优先，使用最简单的方案
-          // 触摸板惯性滚动触发频率和屏幕刷新率一致，所以当两个 wheel 事件
-          // 触发间隔极短时，认为是惯性滚动
+          // 判断是否为触摸板惯性滚动，防止其带动页面滚动。
+          // chrome 中触摸板惯性滚动触发频率和屏幕刷新率一致，firefox 中触发频率单调递减。
+          // 当触发间隔极短时，认为是惯性滚动，这么做不准确，但在此场景可以在性能和功能之间取得平衡
           var wheelTime = e.timeStamp || Date.now();
-          var isInertia = wheelTime - lastWheelTime < 50;
+          var isInertia =
+            wheelTime - lastWheelTime < SCROLL_CONFIG.inertiaThreshold;
           lastWheelTime = wheelTime;
 
           if ((deltaY < 0 && atTop) || (deltaY > 0 && atBottom)) {
@@ -3505,23 +3515,26 @@ layui.define(
           var timeDelta = now - lastTime;
           lastTime = now;
 
-          if (timeDelta < 100) {
-            scrollVelocity += deltaY * 0.5;
+          if (timeDelta < SCROLL_CONFIG.velocityAccumTime) {
+            scrollVelocity += deltaY * SCROLL_CONFIG.velocityFactor;
           } else {
-            scrollVelocity = deltaY * 0.2;
+            scrollVelocity = deltaY * SCROLL_CONFIG.velocityInitFactor;
           }
 
           // 限制最大速度
-          scrollVelocity = Math.max(-120, Math.min(120, scrollVelocity));
+          scrollVelocity = Math.max(
+            -SCROLL_CONFIG.maxVelocity,
+            Math.min(SCROLL_CONFIG.maxVelocity, scrollVelocity)
+          );
 
           // 直接滚动
           that.layMain.scrollTop(scrollTop + scrollVelocity);
 
           // 惯性衰减动画
           var animate = function () {
-            scrollVelocity *= 0.85;
+            scrollVelocity *= SCROLL_CONFIG.friction; // 摩擦衰减
 
-            if (Math.abs(scrollVelocity) > 1) {
+            if (Math.abs(scrollVelocity) > SCROLL_CONFIG.stopThreshold) {
               var curTop = that.layMain.scrollTop();
               var newTop = curTop + scrollVelocity;
               var newAtTop = newTop <= 0;
