@@ -240,7 +240,8 @@ export function timeAgo(time, onlyDate) {
       arr[1][1] = lay.digit(stamp.getMinutes());
       arr[1][2] = lay.digit(stamp.getSeconds());
     }
-    return arr[0].join('-') + ' ' + arr[1].join(':');
+
+    return arr[0].join('-') + (arr[1].length ? ` ${arr[1].join(':')}` : '');
   }
 
   // 30 天以内，返回「多久前」

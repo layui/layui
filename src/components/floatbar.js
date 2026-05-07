@@ -36,11 +36,16 @@ const component = componentBuilder({
 
     // 是否提供默认图标
     if (options.showDefaultBar) {
-      // 默认 top bar
-      options.bars.push({
-        type: 'top',
-        icon: 'layui-icon-top',
-      });
+      // 是否已存在 top bar
+      const hasTopBar = options.bars.some((item) => item.type === 'top');
+
+      // 追加默认 top bar
+      if (!hasTopBar) {
+        options.bars.push({
+          type: 'top',
+          icon: 'layui-icon-top',
+        });
+      }
     }
 
     const elem = $('<div>').attr(CONST.MOD_ID, options.id).addClass(CONST.ELEM);
