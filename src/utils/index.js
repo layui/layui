@@ -3,6 +3,6 @@
  * 工具集
  */
 
-export * from '../utils/events.js';
-export * from '../utils/date.js';
-export * from '../utils/browser.js';
+export * from './events.js';
+export * from './date.js';
+export * from './browser.js';
