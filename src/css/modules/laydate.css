@@ -366,14 +366,10 @@
 .lay-laydate-range.lay-laydate-linkage .laydate-main-list-0 .laydate-next-m,
 .lay-laydate-range.lay-laydate-linkage .laydate-main-list-0 .laydate-next-y,
 .lay-laydate-range.lay-laydate-linkage .laydate-main-list-1 .laydate-prev-m,
-.lay-laydate-range.lay-laydate-linkage
-  .laydate-main-list-1
-  .laydate-prev-y {
+.lay-laydate-range.lay-laydate-linkage .laydate-main-list-1 .laydate-prev-y {
   display: none;
 }
-.lay-laydate-range.lay-laydate-linkage
-  .laydate-main-list-1
-  .lay-laydate-header,
+.lay-laydate-range.lay-laydate-linkage .laydate-main-list-1 .lay-laydate-header,
 .lay-laydate-range.lay-laydate-linkage
   .laydate-main-list-1
   .lay-laydate-content {
@@ -617,4 +613,3 @@
 .laydate-theme-fullpanel .laydate-time-list-hide-2 ol li {
   padding-left: 107px;
 }
-

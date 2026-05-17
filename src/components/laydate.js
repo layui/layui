@@ -3271,4 +3271,3 @@ laydate.getEndDate = function (month, year) {
 };
 
 export { laydate };
-

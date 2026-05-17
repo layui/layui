@@ -902,4 +902,3 @@ Class.prototype.autoUpdatePosition = function () {
 };
 
 export { component as colorpicker };
-

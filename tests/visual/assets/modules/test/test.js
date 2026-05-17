@@ -84,10 +84,7 @@ class Test {
 
           if (hasChildren) {
             const ulElem = lay.elem('ul');
-            $(liElem).attr(
-              'class',
-              'lay-menu-item-group lay-menu-item-down',
-            );
+            $(liElem).attr('class', 'lay-menu-item-group lay-menu-item-down');
             renderMenu(ulElem, item.children, item.name);
             $(liElem).append(ulElem);
           }
@@ -353,4 +350,3 @@ class Test {
 export function test(options) {
   return new Test(options);
 }
-

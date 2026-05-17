@@ -845,4 +845,3 @@ upload.render = function (options) {
 };
 
 export { upload };
-

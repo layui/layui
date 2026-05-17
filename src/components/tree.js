@@ -116,10 +116,7 @@ var component = componentBuilder({
       // 没有下一个节点 上一层父级有延伸线
       if (
         !othis.next()[0] &&
-        othis
-          .parents('.lay-tree-pack')
-          .eq(1)
-          .hasClass('lay-tree-lineExtend')
+        othis.parents('.lay-tree-pack').eq(1).hasClass('lay-tree-lineExtend')
       ) {
         othis.addClass(CONST.ELEM_LINE_SHORT);
       }
@@ -212,9 +209,7 @@ Class.prototype.tree = function (elem, children) {
             if (hasChild) {
               return (
                 '<span class="lay-tree-iconClick lay-tree-icon"><i class="lay-icon ' +
-                (item.spread
-                  ? 'lay-icon-subtraction'
-                  : 'lay-icon-addition') +
+                (item.spread ? 'lay-icon-subtraction' : 'lay-icon-addition') +
                 '"></i></span>'
               );
             } else {
@@ -276,8 +271,7 @@ Class.prototype.tree = function (elem, children) {
 
           var editIcon = {
             add: '<i class="lay-icon lay-icon-add-1"  data-type="add"></i>',
-            update:
-              '<i class="lay-icon lay-icon-edit" data-type="update"></i>',
+            update: '<i class="lay-icon lay-icon-edit" data-type="update"></i>',
             del: '<i class="lay-icon lay-icon-delete" data-type="del"></i>',
           };
           var arr = ['<div class="lay-btn-group lay-tree-btnGroup">'];
@@ -308,10 +302,7 @@ Class.prototype.tree = function (elem, children) {
 
     // 若有前置节点，前置节点加连接线
     if (entryDiv.prev('.' + CONST.ELEM_SET)[0]) {
-      entryDiv
-        .prev()
-        .children('.lay-tree-pack')
-        .addClass('lay-tree-showLine');
+      entryDiv.prev().children('.lay-tree-pack').addClass('lay-tree-showLine');
     }
 
     // 若无子节点，则父节点加延伸线
@@ -541,52 +532,239 @@ Class.prototype.operate = function (elem, item) {
   var entry = elem.children('.' + CONST.ELEM_ENTRY);
   var elemMain = entry.children('.' + CONST.ELEM_MAIN);
 
-  entry
-    .children('.lay-tree-btnGroup')
-    .on('click', '.lay-icon', function (e) {
-      e.stopPropagation(); // 阻止节点操作
+  entry.children('.lay-tree-btnGroup').on('click', '.lay-icon', function (e) {
+    e.stopPropagation(); // 阻止节点操作
 
-      var type = $(this).data('type');
-      var packCont = elem.children('.' + CONST.ELEM_PACK);
-      var returnObj = {
-        data: item,
-        type: type,
-        elem: elem,
-      };
-      // 增加
-      if (type == 'add') {
-        // 若节点本身无子节点
-        if (!packCont[0]) {
-          // 若开启连接线，更改图标样式
-          if (options.showLine) {
-            elemMain.find('.' + CONST.ICON_CLICK).addClass('lay-tree-icon');
-            elemMain
-              .find('.' + CONST.ICON_CLICK)
-              .children('.lay-icon')
-              .addClass(CONST.ICON_ADD)
-              .removeClass('lay-icon-leaf');
-            // 若未开启连接线，显示箭头
-          } else {
-            elemMain
-              .find('.lay-tree-iconArrow')
-              .removeClass(CONST.CLASS_HIDE);
-          }
-          // 节点添加子节点容器
-          elem.append('<div class="lay-tree-pack"></div>');
-        }
-
-        // 新增节点
-        var key = options.operate && options.operate(returnObj);
-        var obj = {};
-
-        obj[customName.title] = options.text.defaultNodeName;
-        obj[customName.id] = key;
-        that.tree(elem.children('.' + CONST.ELEM_PACK), [obj]);
-
-        // 放在新增后面，因为要对元素进行操作
+    var type = $(this).data('type');
+    var packCont = elem.children('.' + CONST.ELEM_PACK);
+    var returnObj = {
+      data: item,
+      type: type,
+      elem: elem,
+    };
+    // 增加
+    if (type == 'add') {
+      // 若节点本身无子节点
+      if (!packCont[0]) {
+        // 若开启连接线，更改图标样式
         if (options.showLine) {
-          // 节点本身无子节点
-          if (!packCont[0]) {
+          elemMain.find('.' + CONST.ICON_CLICK).addClass('lay-tree-icon');
+          elemMain
+            .find('.' + CONST.ICON_CLICK)
+            .children('.lay-icon')
+            .addClass(CONST.ICON_ADD)
+            .removeClass('lay-icon-leaf');
+          // 若未开启连接线，显示箭头
+        } else {
+          elemMain.find('.lay-tree-iconArrow').removeClass(CONST.CLASS_HIDE);
+        }
+        // 节点添加子节点容器
+        elem.append('<div class="lay-tree-pack"></div>');
+      }
+
+      // 新增节点
+      var key = options.operate && options.operate(returnObj);
+      var obj = {};
+
+      obj[customName.title] = options.text.defaultNodeName;
+      obj[customName.id] = key;
+      that.tree(elem.children('.' + CONST.ELEM_PACK), [obj]);
+
+      // 放在新增后面，因为要对元素进行操作
+      if (options.showLine) {
+        // 节点本身无子节点
+        if (!packCont[0]) {
+          // 遍历兄弟节点，判断兄弟节点是否有子节点
+          var siblings = elem.siblings('.' + CONST.ELEM_SET);
+          var num = 1;
+          var parentPack = elem.parent('.' + CONST.ELEM_PACK);
+
+          siblings.each(function (_index, i) {
+            if (!$(i).children('.' + CONST.ELEM_PACK)[0]) {
+              num = 0;
+            }
+          });
+
+          // 若兄弟节点都有子节点
+          if (num == 1) {
+            // 兄弟节点添加连接线
+            siblings.children('.' + CONST.ELEM_PACK).addClass(CONST.ELEM_SHOW);
+            siblings
+              .children('.' + CONST.ELEM_PACK)
+              .children('.' + CONST.ELEM_SET)
+              .removeClass(CONST.ELEM_LINE_SHORT);
+            elem.children('.' + CONST.ELEM_PACK).addClass(CONST.ELEM_SHOW);
+            // 父级移除延伸线
+            parentPack.removeClass(CONST.ELEM_EXTEND);
+            // 同层节点最后一个更改线的状态
+            parentPack
+              .children('.' + CONST.ELEM_SET)
+              .last()
+              .children('.' + CONST.ELEM_PACK)
+              .children('.' + CONST.ELEM_SET)
+              .last()
+              .addClass(CONST.ELEM_LINE_SHORT);
+          } else {
+            elem
+              .children('.' + CONST.ELEM_PACK)
+              .children('.' + CONST.ELEM_SET)
+              .addClass(CONST.ELEM_LINE_SHORT);
+          }
+        } else {
+          // 添加延伸线
+          if (!packCont.hasClass(CONST.ELEM_EXTEND)) {
+            packCont.addClass(CONST.ELEM_EXTEND);
+          }
+          // 子节点添加延伸线
+          elem.find('.' + CONST.ELEM_PACK).each(function () {
+            $(this)
+              .children('.' + CONST.ELEM_SET)
+              .last()
+              .addClass(CONST.ELEM_LINE_SHORT);
+          });
+          // 如果前一个节点有延伸线
+          if (
+            packCont
+              .children('.' + CONST.ELEM_SET)
+              .last()
+              .prev()
+              .hasClass(CONST.ELEM_LINE_SHORT)
+          ) {
+            packCont
+              .children('.' + CONST.ELEM_SET)
+              .last()
+              .prev()
+              .removeClass(CONST.ELEM_LINE_SHORT);
+          } else {
+            // 若之前的没有，说明处于连接状态
+            packCont
+              .children('.' + CONST.ELEM_SET)
+              .last()
+              .removeClass(CONST.ELEM_LINE_SHORT);
+          }
+          // 若是最外层，要始终保持相连的状态
+          if (!elem.parent('.' + CONST.ELEM_PACK)[0] && elem.next()[0]) {
+            packCont
+              .children('.' + CONST.ELEM_SET)
+              .last()
+              .removeClass(CONST.ELEM_LINE_SHORT);
+          }
+        }
+      }
+      if (!options.showCheckbox) return;
+      // 若开启复选框，同步新增节点状态
+      if (elemMain.find('input[same="layuiTreeCheck"]')[0].checked) {
+        var packLast = elem
+          .children('.' + CONST.ELEM_PACK)
+          .children('.' + CONST.ELEM_SET)
+          .last();
+        packLast.find('input[same="layuiTreeCheck"]')[0].checked = true;
+      }
+      that.renderForm('checkbox');
+
+      // 修改
+    } else if (type == 'update') {
+      var text = elemMain.children('.' + CONST.ELEM_TEXT).html();
+      elemMain.children('.' + CONST.ELEM_TEXT).html('');
+      // 添加输入框，覆盖在文字上方
+      elemMain.append('<input type="text" class="lay-tree-editInput">');
+      // 获取焦点
+      elemMain.children('.lay-tree-editInput').val(lay.unescape(text)).focus();
+      // 嵌入文字移除输入框
+      var getVal = function (input) {
+        var textNew = lay.escape(input.val().trim());
+        textNew = textNew ? textNew : options.text.defaultNodeName;
+        input.remove();
+        elemMain.children('.' + CONST.ELEM_TEXT).html(textNew);
+
+        // 同步数据
+        returnObj.data[customName.title] = textNew;
+
+        // 节点修改的回调
+        options.operate && options.operate(returnObj);
+      };
+      // 失去焦点
+      elemMain.children('.lay-tree-editInput').blur(function () {
+        getVal($(this));
+      });
+      // 回车
+      elemMain.children('.lay-tree-editInput').on('keydown', function (e) {
+        if (e.keyCode === 13) {
+          e.preventDefault();
+          getVal($(this));
+        }
+      });
+
+      // 删除
+    } else {
+      var i18nText = i18n.$t('tree.deleteNodePrompt', {
+        name: item[customName.title] || '',
+      });
+      layer.confirm(i18nText, function (index) {
+        options.operate && options.operate(returnObj); // 节点删除的回调
+        returnObj.status = 'remove'; // 标注节点删除
+
+        layer.close(index);
+
+        // 若删除最后一个，显示空数据提示
+        if (
+          !elem.prev('.' + CONST.ELEM_SET)[0] &&
+          !elem.next('.' + CONST.ELEM_SET)[0] &&
+          !elem.parent('.' + CONST.ELEM_PACK)[0]
+        ) {
+          elem.remove();
+          that.elem.append(that.elemNone);
+          return;
+        }
+        // 若有兄弟节点
+        if (
+          elem
+            .siblings('.' + CONST.ELEM_SET)
+            .children('.' + CONST.ELEM_ENTRY)[0]
+        ) {
+          // 若开启复选框
+          if (options.showCheckbox) {
+            // 若开启复选框，进行下步操作
+            var elemDel = function (elem) {
+              // 若无父结点，则不执行
+              if (!elem.parents('.' + CONST.ELEM_SET)[0]) return;
+              var siblingTree = elem
+                .siblings('.' + CONST.ELEM_SET)
+                .children('.' + CONST.ELEM_ENTRY);
+              var parentTree = elem.parent('.' + CONST.ELEM_PACK).prev();
+              var checkState = parentTree.find(
+                'input[same="layuiTreeCheck"]',
+              )[0];
+              var state = 1;
+              var num = 0;
+
+              // 若父节点未勾选
+              if (checkState.checked == false) {
+                // 遍历兄弟节点
+                siblingTree.each(function (i, item1) {
+                  var input = $(item1).find('input[same="layuiTreeCheck"]')[0];
+                  if (input.checked == false && !input.disabled) {
+                    state = 0;
+                  }
+                  // 判断是否全为不可勾选框
+                  if (!input.disabled) {
+                    num = 1;
+                  }
+                });
+                // 若有可勾选选择框并且已勾选
+                if (state == 1 && num == 1) {
+                  // 勾选父节点
+                  checkState.checked = true;
+                  that.renderForm('checkbox');
+                  // 向上遍历祖先节点
+                  elemDel(parentTree.parent('.' + CONST.ELEM_SET));
+                }
+              }
+            };
+            elemDel(elem);
+          }
+          // 若开启连接线
+          if (options.showLine) {
             // 遍历兄弟节点，判断兄弟节点是否有子节点
             var siblings = elem.siblings('.' + CONST.ELEM_SET);
             var num = 1;
@@ -597,297 +775,95 @@ Class.prototype.operate = function (elem, item) {
                 num = 0;
               }
             });
-
             // 若兄弟节点都有子节点
             if (num == 1) {
-              // 兄弟节点添加连接线
-              siblings
-                .children('.' + CONST.ELEM_PACK)
-                .addClass(CONST.ELEM_SHOW);
-              siblings
-                .children('.' + CONST.ELEM_PACK)
-                .children('.' + CONST.ELEM_SET)
-                .removeClass(CONST.ELEM_LINE_SHORT);
-              elem.children('.' + CONST.ELEM_PACK).addClass(CONST.ELEM_SHOW);
-              // 父级移除延伸线
-              parentPack.removeClass(CONST.ELEM_EXTEND);
-              // 同层节点最后一个更改线的状态
-              parentPack
-                .children('.' + CONST.ELEM_SET)
-                .last()
-                .children('.' + CONST.ELEM_PACK)
-                .children('.' + CONST.ELEM_SET)
-                .last()
-                .addClass(CONST.ELEM_LINE_SHORT);
-            } else {
-              elem
-                .children('.' + CONST.ELEM_PACK)
-                .children('.' + CONST.ELEM_SET)
-                .addClass(CONST.ELEM_LINE_SHORT);
-            }
-          } else {
-            // 添加延伸线
-            if (!packCont.hasClass(CONST.ELEM_EXTEND)) {
-              packCont.addClass(CONST.ELEM_EXTEND);
-            }
-            // 子节点添加延伸线
-            elem.find('.' + CONST.ELEM_PACK).each(function () {
-              $(this)
-                .children('.' + CONST.ELEM_SET)
-                .last()
-                .addClass(CONST.ELEM_LINE_SHORT);
-            });
-            // 如果前一个节点有延伸线
-            if (
-              packCont
-                .children('.' + CONST.ELEM_SET)
-                .last()
-                .prev()
-                .hasClass(CONST.ELEM_LINE_SHORT)
-            ) {
-              packCont
-                .children('.' + CONST.ELEM_SET)
-                .last()
-                .prev()
-                .removeClass(CONST.ELEM_LINE_SHORT);
-            } else {
-              // 若之前的没有，说明处于连接状态
-              packCont
-                .children('.' + CONST.ELEM_SET)
-                .last()
-                .removeClass(CONST.ELEM_LINE_SHORT);
-            }
-            // 若是最外层，要始终保持相连的状态
-            if (!elem.parent('.' + CONST.ELEM_PACK)[0] && elem.next()[0]) {
-              packCont
-                .children('.' + CONST.ELEM_SET)
-                .last()
-                .removeClass(CONST.ELEM_LINE_SHORT);
-            }
-          }
-        }
-        if (!options.showCheckbox) return;
-        // 若开启复选框，同步新增节点状态
-        if (elemMain.find('input[same="layuiTreeCheck"]')[0].checked) {
-          var packLast = elem
-            .children('.' + CONST.ELEM_PACK)
-            .children('.' + CONST.ELEM_SET)
-            .last();
-          packLast.find('input[same="layuiTreeCheck"]')[0].checked = true;
-        }
-        that.renderForm('checkbox');
-
-        // 修改
-      } else if (type == 'update') {
-        var text = elemMain.children('.' + CONST.ELEM_TEXT).html();
-        elemMain.children('.' + CONST.ELEM_TEXT).html('');
-        // 添加输入框，覆盖在文字上方
-        elemMain.append('<input type="text" class="lay-tree-editInput">');
-        // 获取焦点
-        elemMain
-          .children('.lay-tree-editInput')
-          .val(lay.unescape(text))
-          .focus();
-        // 嵌入文字移除输入框
-        var getVal = function (input) {
-          var textNew = lay.escape(input.val().trim());
-          textNew = textNew ? textNew : options.text.defaultNodeName;
-          input.remove();
-          elemMain.children('.' + CONST.ELEM_TEXT).html(textNew);
-
-          // 同步数据
-          returnObj.data[customName.title] = textNew;
-
-          // 节点修改的回调
-          options.operate && options.operate(returnObj);
-        };
-        // 失去焦点
-        elemMain.children('.lay-tree-editInput').blur(function () {
-          getVal($(this));
-        });
-        // 回车
-        elemMain.children('.lay-tree-editInput').on('keydown', function (e) {
-          if (e.keyCode === 13) {
-            e.preventDefault();
-            getVal($(this));
-          }
-        });
-
-        // 删除
-      } else {
-        var i18nText = i18n.$t('tree.deleteNodePrompt', {
-          name: item[customName.title] || '',
-        });
-        layer.confirm(i18nText, function (index) {
-          options.operate && options.operate(returnObj); // 节点删除的回调
-          returnObj.status = 'remove'; // 标注节点删除
-
-          layer.close(index);
-
-          // 若删除最后一个，显示空数据提示
-          if (
-            !elem.prev('.' + CONST.ELEM_SET)[0] &&
-            !elem.next('.' + CONST.ELEM_SET)[0] &&
-            !elem.parent('.' + CONST.ELEM_PACK)[0]
-          ) {
-            elem.remove();
-            that.elem.append(that.elemNone);
-            return;
-          }
-          // 若有兄弟节点
-          if (
-            elem
-              .siblings('.' + CONST.ELEM_SET)
-              .children('.' + CONST.ELEM_ENTRY)[0]
-          ) {
-            // 若开启复选框
-            if (options.showCheckbox) {
-              // 若开启复选框，进行下步操作
-              var elemDel = function (elem) {
-                // 若无父结点，则不执行
-                if (!elem.parents('.' + CONST.ELEM_SET)[0]) return;
-                var siblingTree = elem
-                  .siblings('.' + CONST.ELEM_SET)
-                  .children('.' + CONST.ELEM_ENTRY);
-                var parentTree = elem.parent('.' + CONST.ELEM_PACK).prev();
-                var checkState = parentTree.find(
-                  'input[same="layuiTreeCheck"]',
-                )[0];
-                var state = 1;
-                var num = 0;
-
-                // 若父节点未勾选
-                if (checkState.checked == false) {
-                  // 遍历兄弟节点
-                  siblingTree.each(function (i, item1) {
-                    var input = $(item1).find(
-                      'input[same="layuiTreeCheck"]',
-                    )[0];
-                    if (input.checked == false && !input.disabled) {
-                      state = 0;
-                    }
-                    // 判断是否全为不可勾选框
-                    if (!input.disabled) {
-                      num = 1;
-                    }
-                  });
-                  // 若有可勾选选择框并且已勾选
-                  if (state == 1 && num == 1) {
-                    // 勾选父节点
-                    checkState.checked = true;
-                    that.renderForm('checkbox');
-                    // 向上遍历祖先节点
-                    elemDel(parentTree.parent('.' + CONST.ELEM_SET));
-                  }
-                }
-              };
-              elemDel(elem);
-            }
-            // 若开启连接线
-            if (options.showLine) {
-              // 遍历兄弟节点，判断兄弟节点是否有子节点
-              var siblings = elem.siblings('.' + CONST.ELEM_SET);
-              var num = 1;
-              var parentPack = elem.parent('.' + CONST.ELEM_PACK);
-
-              siblings.each(function (_index, i) {
-                if (!$(i).children('.' + CONST.ELEM_PACK)[0]) {
-                  num = 0;
-                }
-              });
-              // 若兄弟节点都有子节点
-              if (num == 1) {
-                // 若节点本身无子节点
-                if (!packCont[0]) {
-                  // 父级去除延伸线，因为此时子节点里没有空节点
-                  parentPack.removeClass(CONST.ELEM_EXTEND);
-                  siblings
-                    .children('.' + CONST.ELEM_PACK)
-                    .addClass(CONST.ELEM_SHOW);
-                  siblings
-                    .children('.' + CONST.ELEM_PACK)
-                    .children('.' + CONST.ELEM_SET)
-                    .removeClass(CONST.ELEM_LINE_SHORT);
-                }
-                // 若为最后一个节点
-                if (!elem.next()[0]) {
-                  elem
-                    .prev()
-                    .children('.' + CONST.ELEM_PACK)
-                    .children('.' + CONST.ELEM_SET)
-                    .last()
-                    .addClass(CONST.ELEM_LINE_SHORT);
-                } else {
-                  parentPack
-                    .children('.' + CONST.ELEM_SET)
-                    .last()
-                    .children('.' + CONST.ELEM_PACK)
-                    .children('.' + CONST.ELEM_SET)
-                    .last()
-                    .addClass(CONST.ELEM_LINE_SHORT);
-                }
-                // 若为最外层最后一个节点，去除前一个结点的连接线
-                if (
-                  !elem.next()[0] &&
-                  !elem.parents('.' + CONST.ELEM_SET)[1] &&
-                  !elem
-                    .parents('.' + CONST.ELEM_SET)
-                    .eq(0)
-                    .next()[0]
-                ) {
-                  elem
-                    .prev('.' + CONST.ELEM_SET)
-                    .addClass(CONST.ELEM_LINE_SHORT);
-                }
-              } else {
-                // 若为最后一个节点且有延伸线
-                if (!elem.next()[0] && elem.hasClass(CONST.ELEM_LINE_SHORT)) {
-                  elem.prev().addClass(CONST.ELEM_LINE_SHORT);
-                }
+              // 若节点本身无子节点
+              if (!packCont[0]) {
+                // 父级去除延伸线，因为此时子节点里没有空节点
+                parentPack.removeClass(CONST.ELEM_EXTEND);
+                siblings
+                  .children('.' + CONST.ELEM_PACK)
+                  .addClass(CONST.ELEM_SHOW);
+                siblings
+                  .children('.' + CONST.ELEM_PACK)
+                  .children('.' + CONST.ELEM_SET)
+                  .removeClass(CONST.ELEM_LINE_SHORT);
               }
-            }
-          } else {
-            // 若无兄弟节点
-            var prevDiv = elem.parent('.' + CONST.ELEM_PACK).prev();
-            // 若开启了连接线
-            if (options.showLine) {
-              prevDiv
-                .find('.' + CONST.ICON_CLICK)
-                .removeClass('lay-tree-icon');
-              prevDiv
-                .find('.' + CONST.ICON_CLICK)
-                .children('.lay-icon')
-                .removeClass(CONST.ICON_SUB)
-                .addClass('lay-icon-leaf');
-              // 父节点所在层添加延伸线
-              var pare = prevDiv.parents('.' + CONST.ELEM_PACK).eq(0);
-              pare.addClass(CONST.ELEM_EXTEND);
-
-              // 兄弟节点最后子节点添加延伸线
-              pare.children('.' + CONST.ELEM_SET).each(function () {
-                $(this)
+              // 若为最后一个节点
+              if (!elem.next()[0]) {
+                elem
+                  .prev()
                   .children('.' + CONST.ELEM_PACK)
                   .children('.' + CONST.ELEM_SET)
                   .last()
                   .addClass(CONST.ELEM_LINE_SHORT);
-              });
+              } else {
+                parentPack
+                  .children('.' + CONST.ELEM_SET)
+                  .last()
+                  .children('.' + CONST.ELEM_PACK)
+                  .children('.' + CONST.ELEM_SET)
+                  .last()
+                  .addClass(CONST.ELEM_LINE_SHORT);
+              }
+              // 若为最外层最后一个节点，去除前一个结点的连接线
+              if (
+                !elem.next()[0] &&
+                !elem.parents('.' + CONST.ELEM_SET)[1] &&
+                !elem
+                  .parents('.' + CONST.ELEM_SET)
+                  .eq(0)
+                  .next()[0]
+              ) {
+                elem.prev('.' + CONST.ELEM_SET).addClass(CONST.ELEM_LINE_SHORT);
+              }
             } else {
-              // 父节点隐藏箭头
-              prevDiv.find('.lay-tree-iconArrow').addClass(CONST.CLASS_HIDE);
+              // 若为最后一个节点且有延伸线
+              if (!elem.next()[0] && elem.hasClass(CONST.ELEM_LINE_SHORT)) {
+                elem.prev().addClass(CONST.ELEM_LINE_SHORT);
+              }
             }
-            // 移除展开属性
-            elem
-              .parents('.' + CONST.ELEM_SET)
-              .eq(0)
-              .removeClass(CONST.ELEM_SPREAD);
-            // 移除节点容器
-            elem.parent('.' + CONST.ELEM_PACK).remove();
           }
+        } else {
+          // 若无兄弟节点
+          var prevDiv = elem.parent('.' + CONST.ELEM_PACK).prev();
+          // 若开启了连接线
+          if (options.showLine) {
+            prevDiv.find('.' + CONST.ICON_CLICK).removeClass('lay-tree-icon');
+            prevDiv
+              .find('.' + CONST.ICON_CLICK)
+              .children('.lay-icon')
+              .removeClass(CONST.ICON_SUB)
+              .addClass('lay-icon-leaf');
+            // 父节点所在层添加延伸线
+            var pare = prevDiv.parents('.' + CONST.ELEM_PACK).eq(0);
+            pare.addClass(CONST.ELEM_EXTEND);
 
-          elem.remove();
-        });
-      }
-    });
+            // 兄弟节点最后子节点添加延伸线
+            pare.children('.' + CONST.ELEM_SET).each(function () {
+              $(this)
+                .children('.' + CONST.ELEM_PACK)
+                .children('.' + CONST.ELEM_SET)
+                .last()
+                .addClass(CONST.ELEM_LINE_SHORT);
+            });
+          } else {
+            // 父节点隐藏箭头
+            prevDiv.find('.lay-tree-iconArrow').addClass(CONST.CLASS_HIDE);
+          }
+          // 移除展开属性
+          elem
+            .parents('.' + CONST.ELEM_SET)
+            .eq(0)
+            .removeClass(CONST.ELEM_SPREAD);
+          // 移除节点容器
+          elem.parent('.' + CONST.ELEM_PACK).remove();
+        }
+
+        elem.remove();
+      });
+    }
+  });
 };
 
 // 部分事件
@@ -1047,4 +1023,3 @@ $.extend(component, {
 });
 
 export { component as tree };
-

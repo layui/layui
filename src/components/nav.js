@@ -265,4 +265,3 @@ var CONST = component.CONST;
 
 // export
 export { component as nav };
-

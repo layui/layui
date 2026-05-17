@@ -70,4 +70,3 @@ $.extend(component, {
 
 // export
 export { component as progress };
-

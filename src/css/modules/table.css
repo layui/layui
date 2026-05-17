@@ -611,14 +611,8 @@ select.lay-table-edit {
   height: 95px;
 }
 .lay-table-expanded .lay-table-cell,
-.lay-table-view
-  .lay-table[lay-size='sm']
-  .lay-table-expanded
-  .lay-table-cell,
-.lay-table-view
-  .lay-table[lay-size='lg']
-  .lay-table-expanded
-  .lay-table-cell {
+.lay-table-view .lay-table[lay-size='sm'] .lay-table-expanded .lay-table-cell,
+.lay-table-view .lay-table[lay-size='lg'] .lay-table-expanded .lay-table-cell {
   height: auto;
   max-height: 94px;
   white-space: normal;
@@ -647,12 +641,7 @@ select.lay-table-edit {
 .lay-table-expanded td:hover .lay-table-cell {
   overflow: auto;
 }
-.lay-table-main
-  > .lay-table
-  > tbody
-  > tr:last-child
-  > td
-  > .lay-table-cell-c {
+.lay-table-main > .lay-table > tbody > tr:last-child > td > .lay-table-cell-c {
   bottom: 0;
 }
 
@@ -705,4 +694,3 @@ body .lay-table-tips .lay-layer-content {
 .lay-table-tree-flexIcon {
   cursor: pointer;
 }
-

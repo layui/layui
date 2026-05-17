@@ -243,12 +243,9 @@
   > .lay-carousel-next.lay-carousel-left {
   opacity: 1;
 }
-.lay-carousel[lay-anim='fade']
-  > *[carousel-item]
-  > .lay-this.lay-carousel-left,
+.lay-carousel[lay-anim='fade'] > *[carousel-item] > .lay-this.lay-carousel-left,
 .lay-carousel[lay-anim='fade']
   > *[carousel-item]
   > .lay-this.lay-carousel-right {
   opacity: 0;
 }
-

@@ -319,9 +319,7 @@ Class.prototype.render = function (type) {
 
       //子级区
       if (isChild) {
-        var elemPanel = $(
-          '<div class="lay-panel lay-menu-body-panel"></div>',
-        );
+        var elemPanel = $('<div class="lay-panel lay-menu-body-panel"></div>');
         var elemUl = $('<ul></ul>');
 
         if (type === 'parent') {
@@ -817,4 +815,3 @@ dropdown.render = function (options) {
 };
 
 export { dropdown };
-

@@ -516,4 +516,3 @@ $.extend(component, {
 });
 
 export { component as transfer };
-

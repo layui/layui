@@ -1754,4 +1754,3 @@ $dom.on('reset', ELEM, function () {
 $dom.on('submit', ELEM, submit).on('click', '*[lay-submit]', submit);
 
 export { form };
-

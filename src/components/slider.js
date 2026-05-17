@@ -408,9 +408,7 @@ Class.prototype.slide = function (setValue, value, i) {
 
   //拖拽元素
   var elemMove = $(
-    ['<div class="lay-auxiliar-moving" id="LAY-slider-moving"></div'].join(
-      '',
-    ),
+    ['<div class="lay-auxiliar-moving" id="LAY-slider-moving"></div'].join(''),
   );
   var createMoveElem = function (sliderBtnElem, move, up) {
     var upCall = function () {
@@ -598,4 +596,3 @@ Class.prototype.slide = function (setValue, value, i) {
 };
 
 export { component as slider };
-

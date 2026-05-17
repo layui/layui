@@ -645,8 +645,7 @@
 .lay-checkbox-disabled:hover > i {
   color: #fff !important;
 }
-.lay-form-checkbox[lay-skin='tag'].lay-form-checked.lay-checkbox-disabled
-  > i {
+.lay-form-checkbox[lay-skin='tag'].lay-form-checked.lay-checkbox-disabled > i {
   color: #c2c2c2;
 }
 .lay-form-checkbox[lay-skin='tag'].lay-form-checked.lay-checkbox-disabled:hover
@@ -798,4 +797,3 @@
     margin-bottom: 5px;
   }
 }
-

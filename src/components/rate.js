@@ -261,4 +261,3 @@ Class.prototype.action = function () {
 };
 
 export { component as rate };
-

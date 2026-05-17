@@ -860,9 +860,7 @@ var expandNode = function (
               trData[LAY_ASYNC_STATUS] = 'error';
               trData[LAY_EXPAND] = false;
               // 异常处理 todo
-              flexIconElem.html(
-                '<i class="lay-icon lay-icon-refresh"></i>',
-              );
+              flexIconElem.html('<i class="lay-icon lay-icon-refresh"></i>');
               // 事件
             } else {
               // 正常返回
@@ -1320,9 +1318,7 @@ Class.prototype.renderTreeTable = function (tableView, level, sonSign) {
       }
       var layDataIndex = dataItem[LAY_DATA_INDEX];
       tableViewElem
-        .find(
-          '.lay-table-main tbody tr[data-level="0"]:eq(' + dataIndex + ')',
-        )
+        .find('.lay-table-main tbody tr[data-level="0"]:eq(' + dataIndex + ')')
         .attr('lay-data-index', layDataIndex);
       tableViewElem
         .find(
@@ -1661,9 +1657,7 @@ treeTable.updateNode = function (id, index, newNode) {
   // 重新渲染tr
   ['main', 'fixed-l', 'fixed-r'].forEach(function (item, i) {
     tableView
-      .find(
-        '.lay-table-' + item + ' tbody tr[lay-data-index="' + index + '"]',
-      )
+      .find('.lay-table-' + item + ' tbody tr[lay-data-index="' + index + '"]')
       .replaceWith(
         $(trNew[['trs', 'trs_fixed', 'trs_fixed_r'][i]].join(''))
           .attr({
@@ -2612,4 +2606,3 @@ treeTable.render = function (options) {
 };
 
 export { treeTable };
-

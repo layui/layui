@@ -74,4 +74,3 @@ lay.use(() => {
 });
 
 export { component as element };
-

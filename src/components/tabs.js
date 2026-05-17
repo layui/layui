@@ -610,9 +610,7 @@ Class.prototype.roll = function (mode, index) {
   // 滚动结构
   var rollElem = {
     elem: $(
-      '<div class="' +
-        CLASS_SCROLL +
-        ' lay-border-box lay-unselect"></div>',
+      '<div class="' + CLASS_SCROLL + ' lay-border-box lay-unselect"></div>',
     ),
     bar: $(
       [
@@ -880,4 +878,3 @@ lay.use(function () {
 });
 
 export { component as tabs };
-

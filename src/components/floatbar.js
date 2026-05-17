@@ -146,4 +146,3 @@ const component = componentBuilder({
 const CONST = component.CONST;
 
 export { component as floatbar };
-

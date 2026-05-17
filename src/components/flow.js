@@ -248,4 +248,3 @@ $.extend(component, {
 });
 
 export { component as flow };
-

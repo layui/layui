@@ -379,4 +379,3 @@ Class.prototype.events = function () {
 };
 
 export { component as carousel };
-

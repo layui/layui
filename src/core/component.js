@@ -266,4 +266,3 @@ export function component(settings) {
 }
 
 export { component as componentBuilder };
-

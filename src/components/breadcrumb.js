@@ -36,4 +36,3 @@ var component = componentBuilder({
 
 // export
 export { component as breadcrumb };
-
