@@ -1,8 +1,8 @@
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-load-1">风格1</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-load-2">风格2</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-load-3">风格3</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-load-4">风格4</button>
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-load-1">风格1</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-load-2">风格2</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-load-3">风格3</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-load-4">风格4</button>
 </div>
 
 <!-- import layui --> 

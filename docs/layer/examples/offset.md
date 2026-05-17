@@ -1,14 +1,14 @@
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset" data-offset="t">上</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset" data-offset="r">右</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset" data-offset="b">下</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset" data-offset="l">左</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset" data-offset="rt">右上</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset" data-offset="rb">右下</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset" data-offset="lb">左下</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset" data-offset="lt">左上</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset" data-offset="auto">正中</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset" data-offset="">任意</button>
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset" data-offset="t">上</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset" data-offset="r">右</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset" data-offset="b">下</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset" data-offset="l">左</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset" data-offset="rt">右上</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset" data-offset="rb">右下</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset" data-offset="lb">左下</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset" data-offset="lt">左上</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset" data-offset="auto">正中</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset" data-offset="">任意</button>
 </div>
 
 <!-- import layui --> 

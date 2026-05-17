@@ -1,11 +1,11 @@
-<form class="layui-form">
-  <input type="text" name="username" lay-verify="required|username" placeholder="用户名" class="layui-input">
+<form class="lay-form">
+  <input type="text" name="username" lay-verify="required|username" placeholder="用户名" class="lay-input">
   <hr>
-  <input type="password" name="password" lay-verify="password" placeholder="密码" class="layui-input">
+  <input type="password" name="password" lay-verify="password" placeholder="密码" class="lay-input">
   <hr>
-  <input type="text" name="motto" lay-verify="motto" placeholder="座右铭" class="layui-input">
+  <input type="text" name="motto" lay-verify="motto" placeholder="座右铭" class="lay-input">
   <hr>
-  <button class="layui-btn" lay-submit lay-filter="demo-verify">提交</button>
+  <button class="lay-btn" lay-submit lay-filter="demo-verify">提交</button>
 </form>
 
 <!-- import layui --> 
@@ -60,3 +60,4 @@ layui.use(function(){
   });
 }) 
 </script> 
+

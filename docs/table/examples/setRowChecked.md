@@ -1,7 +1,7 @@
-<table class="layui-hide" id="ID-table-demo-setRowChecked"></table>
+<table class="lay-hide" id="ID-table-demo-setRowChecked"></table>
 <script type="text/html" id="demo-toolbar-setRowChecked">
-  <div class="layui-btn-container">
-    <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+  <div class="lay-btn-container">
+    <button class="lay-btn lay-btn-sm" lay-event="getCheckData">获取选中行数据</button>
   </div>
 </script>
 
@@ -59,3 +59,4 @@ layui.use('table', function(){
   });
 });
 </script>
+

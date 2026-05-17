@@ -34,11 +34,11 @@ toc: true
   <br>注 <sup>2.8+</sup> : 除 `elem` 属性外，其他基础属性也可以直接写在元素的 `lay-options="{}"` 属性中。
 
 ```
-<button class="layui-btn" id="ID-test-dropdown">下拉菜单</button>
-<button class="layui-btn class-test-dropdown" lay-options="{
+<button class="lay-btn" id="ID-test-dropdown">下拉菜单</button>
+<button class="lay-btn class-test-dropdown" lay-options="{
   data: [{title: 'item 1', id: 1}, {title: 'item 2', id: 2}]
 }">下拉菜单</button>
-<button class="layui-btn class-test-dropdown" lay-options="{
+<button class="lay-btn class-test-dropdown" lay-options="{
   data: [{title: 'item A', id: 'a'}, {title: 'item B', id: 'b'}]
 }">下拉菜单</button>
   
@@ -115,7 +115,7 @@ dropdown.render({
 
 该方法用于对下拉菜单进行完整重载，所有属性均可参与到重载中。
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 {{- d.include("/dropdown/examples/reload.md") }}
   </textarea>
@@ -129,7 +129,7 @@ dropdown.render({
 
 使用该方法时，与数据无关的属性不会参与到重载中。因此若只是更新数据或内容，该方法可大幅提升体验。
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 {{- d.include("/dropdown/examples/reloadData.md") }}
   </textarea>
@@ -178,3 +178,4 @@ dropdown.render({
 // 打开对应的组件面板
 dropdown.open('test');
 ```
+

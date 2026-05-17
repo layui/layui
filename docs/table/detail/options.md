@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -116,7 +116,7 @@ defaultToolbar: [
 **重写内置工具** <sup>2.9.12+</sup>，以自定义导出为例：
 
 <div id="options-defaultToolbar-rewrite">
-  <style>#options-defaultToolbar-rewrite .layui-code-wrap{max-height: 280px;}</style>
+  <style>#options-defaultToolbar-rewrite .lay-code-wrap{max-height: 280px;}</style>
 
 ```js
 defaultToolbar: [
@@ -166,7 +166,7 @@ defaultToolbar: [
     title: '提示', // 标题
     name: 'tips', // name
     layEvent: 'LAYTABLE_TIPS', // 事件标识
-    icon: 'layui-icon-tips', // 图标 className
+    icon: 'lay-icon-tips', // 图标 className
     onClick: function(obj) { // 点击事件 - 2.9.12+
       console.log(obj); // 查看返回的对象成员
     }
@@ -277,7 +277,7 @@ height: function(){
 <td>css <sup>2.7+</sup></td>
 <td>
 
-用于给当前表格主容器直接设定 css 样式，样式值只会对所在容器有效，不会影响其他表格实例。如：`css: '.layui-table-page{text-align: right;}'`
+用于给当前表格主容器直接设定 css 样式，样式值只会对所在容器有效，不会影响其他表格实例。如：`css: '.lay-table-page{text-align: right;}'`
 
 </td>
 <td>string</td>
@@ -393,7 +393,7 @@ loading: false // 禁用加载条
 
 - 若值为 `string` 类型 <sup>2.9.10+</sup>，表示自定义加载模板，此时可添加任意动画元素，如：
 ```
-loading: '<i class="layui-icon layui-icon-loading-1 layui-anim layui-anim-rotate layui-anim-loop"></i>'
+loading: '<i class="lay-icon lay-icon-loading-1 lay-anim lay-anim-rotate lay-anim-loop"></i>'
 ```
 
 </td>
@@ -442,7 +442,7 @@ loading: '<i class="layui-icon layui-icon-loading-1 layui-anim layui-anim-rotate
 <td>自定义文本，如空数据时的异常提示等。</td>
 <td>object</td>
 <td>
-  <button class="layui-btn layui-btn-sm layui-btn-primary" lay-layer="{title: 'text 属性默认值'}">
+  <button class="lay-btn lay-btn-sm lay-btn-primary" lay-layer="{title: 'text 属性默认值'}">
     查看默认值
   </button>
   <div style="display: none;">`text: {none: '无数据'}`</div>
@@ -603,3 +603,4 @@ complete: function(xhr, ts) {
     </tr>
   </tbody>
 </table>
+

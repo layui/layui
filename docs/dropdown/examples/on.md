@@ -1,15 +1,15 @@
-<div class="layui-btn-container">
-  <button class="layui-btn layui-btn-primary demo-dropdown-on" lay-options="{trigger: 'hover'}">
+<div class="lay-btn-container">
+  <button class="lay-btn lay-btn-primary demo-dropdown-on" lay-options="{trigger: 'hover'}">
     hover
-    <i class="layui-icon layui-icon-more-vertical layui-font-12"></i>
+    <i class="lay-icon lay-icon-more-vertical lay-font-12"></i>
   </button>
-  <button class="layui-btn layui-btn-primary demo-dropdown-on" lay-options="{trigger: 'mousedown'}">
+  <button class="lay-btn lay-btn-primary demo-dropdown-on" lay-options="{trigger: 'mousedown'}">
     mousedown
-    <i class="layui-icon layui-icon-down layui-font-12"></i>
+    <i class="lay-icon lay-icon-down lay-font-12"></i>
   </button>
-  <button class="layui-btn layui-btn-primary demo-dropdown-on" lay-options="{trigger: 'dblclick'}">
+  <button class="lay-btn lay-btn-primary demo-dropdown-on" lay-options="{trigger: 'dblclick'}">
     dblclick - 双击
-    <i class="layui-icon layui-icon-circle layui-font-12"></i>
+    <i class="lay-icon lay-icon-circle lay-font-12"></i>
   </button>
 </div>
 

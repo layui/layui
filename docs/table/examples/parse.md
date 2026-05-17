@@ -1,7 +1,7 @@
 > 假设这是一段数据源：<a href="/static/json/2/table/demo3.json" target="_blank">/static/json/2/table/demo3.json</a><br>
   尽管它并不符合 table 组件默认规定的数据格式（[#详见](#options-async-data)），但可以通过 parseData 回调将其进行转换。
 
-<table class="layui-hide" id="ID-table-demo-parse"></table>
+<table class="lay-hide" id="ID-table-demo-parse"></table>
 
 <!-- import layui -->
 <script>
@@ -38,3 +38,4 @@ layui.use('table', function(){
   });
 });
 </script>
+

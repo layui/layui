@@ -281,7 +281,7 @@ layer.photos({
 
 **用法二：绑定页面图片元素**。点击图片时，弹出对应的图片层。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['code', 'preview'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['code', 'preview'], tools: ['full']}">
   <textarea>
 <style>
 .class-photos-demo img{width: 160px; height: 100px; cursor: pointer;}
@@ -612,3 +612,4 @@ layer.min(index);
 ## 贴士
 
 > layer 曾经可作为单独组件使用，鉴于维护成本的考量，目前 layer 组件已完全集成到 Layui 中，而单独版本已不做同步维护。 因此，建议直接使用 layui 中 layer 即可。
+

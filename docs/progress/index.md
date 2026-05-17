@@ -9,19 +9,19 @@ toc: true
 
 <h2 id="examples" lay-toc="{hot: true}" style="margin-bottom: 0;">示例</h2>
 
-<pre class="layui-code" lay-options="{preview: true, text: {preview: '常规用法'}, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, text: {preview: '常规用法'}, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-progress">
-  <div class="layui-progress-bar" lay-percent="30%"></div>
+<div class="lay-progress">
+  <div class="lay-progress-bar" lay-percent="30%"></div>
 </div>
  
 <hr class="ws-space-16">
  
 <div style="width:300px">
-  <div class="layui-progress">
-    <div class="layui-progress-bar" lay-percent="50%"></div>
+  <div class="lay-progress">
+    <div class="lay-progress-bar" lay-percent="50%"></div>
   </div>
 </div>
 
@@ -34,36 +34,36 @@ toc: true
 
 <h3 id="color" lay-toc="{level: 2}">进度条主题</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-progress">
-  <div class="layui-progress-bar layui-bg-red" lay-percent="10%"></div>
+<div class="lay-progress">
+  <div class="lay-progress-bar lay-bg-red" lay-percent="10%"></div>
 </div>
  
 <hr class="ws-space-16">
  
-<div class="layui-progress">
-  <div class="layui-progress-bar layui-bg-orange" lay-percent="30%"></div>
+<div class="lay-progress">
+  <div class="lay-progress-bar lay-bg-orange" lay-percent="30%"></div>
 </div>
  
 <hr class="ws-space-16">
  
-<div class="layui-progress">
-  <div class="layui-progress-bar layui-bg-primary" lay-percent="50%"></div>
+<div class="lay-progress">
+  <div class="lay-progress-bar lay-bg-primary" lay-percent="50%"></div>
 </div>
  
 <hr class="ws-space-16">
  
-<div class="layui-progress">
-  <div class="layui-progress-bar layui-bg-blue" lay-percent="60%"></div>
+<div class="lay-progress">
+  <div class="lay-progress-bar lay-bg-blue" lay-percent="60%"></div>
 </div>
  
 <hr class="ws-space-16">
  
-<div class="layui-progress">
-  <div class="layui-progress-bar" lay-percent="70%"></div>
+<div class="lay-progress">
+  <div class="lay-progress-bar" lay-percent="70%"></div>
 </div>
 
 <!-- import layui -->
@@ -73,26 +73,26 @@ toc: true
 
 <h3 id="size" lay-toc="{level: 2}">大号进度条</h3>
 
-通过对进度条容器追加 `className` 为 `layui-progress-big` 可设置大尺寸风格的进度条。
+通过对进度条容器追加 `className` 为 `lay-progress-big` 可设置大尺寸风格的进度条。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-progress layui-progress-big">
-  <div class="layui-progress-bar" lay-percent="15%"></div>
+<div class="lay-progress lay-progress-big">
+  <div class="lay-progress-bar" lay-percent="15%"></div>
 </div>
  
 <hr class="ws-space-16">
  
-<div class="layui-progress layui-progress-big">
-  <div class="layui-progress-bar layui-bg-orange" lay-percent="35%"></div>
+<div class="lay-progress lay-progress-big">
+  <div class="lay-progress-bar lay-bg-orange" lay-percent="35%"></div>
 </div>
  
 <hr class="ws-space-16">
  
-<div class="layui-progress layui-progress-big">
-  <div class="layui-progress-bar layui-bg-blue" lay-percent="75%"></div>
+<div class="lay-progress lay-progress-big">
+  <div class="lay-progress-bar lay-bg-blue" lay-percent="75%"></div>
 </div>
 
 <!-- import layui -->
@@ -102,24 +102,24 @@ toc: true
 
 <h3 id="percent" lay-toc="{level: 2}">显示进度值</h3>
 
-<pre class="layui-code" lay-options="{preview: true, previewStyle: 'padding-top: 24px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, previewStyle: 'padding-top: 24px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-progress" lay-showpercent="true">
-  <div class="layui-progress-bar" lay-percent="30%"></div>
+<div class="lay-progress" lay-showpercent="true">
+  <div class="lay-progress-bar" lay-percent="30%"></div>
 </div>
  
 <hr class="ws-space-16">
  
-<div class="layui-progress" lay-showpercent="true">
-  <div class="layui-progress-bar" lay-percent="5 / 10"></div>
+<div class="lay-progress" lay-showpercent="true">
+  <div class="lay-progress-bar" lay-percent="5 / 10"></div>
 </div>
  
 <hr class="ws-space-16">
  
-<div class="layui-progress layui-progress-big" lay-showpercent="true">
-  <div class="layui-progress-bar" lay-percent="70%"></div>
+<div class="lay-progress lay-progress-big" lay-showpercent="true">
+  <div class="lay-progress-bar" lay-percent="70%"></div>
 </div>
 
 <!-- import layui -->
@@ -154,8 +154,8 @@ layui.use(function(){
   var $ = layui.$;
   // 动态插入进度条元素
   $('#test').html(`
-    <div class="layui-progress" lay-filter="demo-filter-progress">
-      <div class="layui-progress-bar" lay-percent="30%"></div>
+    <div class="lay-progress" lay-filter="demo-filter-progress">
+      <div class="lay-progress-bar" lay-percent="30%"></div>
     </div>
   `);
   // 渲染进度条组件
@@ -182,19 +182,19 @@ layui.use(function(){
 
 该方法用于动态改变进度条的值。示例：
 
-<pre class="layui-code" lay-options="{preview: true, previewStyle: 'padding-top: 24px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, previewStyle: 'padding-top: 24px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-progress layui-progress-big" lay-showPercent="true" lay-filter="demo-filter-progress">
-  <div class="layui-progress-bar" lay-percent="0%"></div>
+<div class="lay-progress lay-progress-big" lay-showPercent="true" lay-filter="demo-filter-progress">
+  <div class="lay-progress-bar" lay-percent="0%"></div>
 </div>
  
 <hr class="ws-space-16">
  
-<div class="layui-btn-container">
-  <button class="layui-btn" lay-on="setPercent">设置 50%</button>
-  <button class="layui-btn" lay-on="loading">模拟 loading</button>
+<div class="lay-btn-container">
+  <button class="lay-btn" lay-on="setPercent">设置 50%</button>
+  <button class="lay-btn" lay-on="loading">模拟 loading</button>
 </div>
 
 <!-- import layui -->
@@ -211,7 +211,7 @@ layui.use(function(){
     },
     // 模拟 loading
     loading: function(othis){
-      var DISABLED = 'layui-btn-disabled';
+      var DISABLED = 'lay-btn-disabled';
       if(othis.hasClass(DISABLED)) return;
 
       var n = 0;
@@ -232,4 +232,5 @@ layui.use(function(){
 </script>
   </textarea>
 </pre>
+
 

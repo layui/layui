@@ -1,62 +1,62 @@
-<div class="layui-form">
+<div class="lay-form">
   <h5 style="margin-bottom: 16px;">
-    左右面板<strong class="layui-font-red">独立</strong>选择模式（默认） :
+    左右面板<strong class="lay-font-red">独立</strong>选择模式（默认） :
   </h5>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">日期范围</label>
-      <div class="layui-inline" id="ID-laydate-range">
-        <div class="layui-input-inline">
-          <input type="text" autocomplete="off" id="ID-laydate-start-date" class="layui-input" placeholder="开始日期">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">日期范围</label>
+      <div class="lay-inline" id="ID-laydate-range">
+        <div class="lay-input-inline">
+          <input type="text" autocomplete="off" id="ID-laydate-start-date" class="lay-input" placeholder="开始日期">
         </div>
-        <div class="layui-form-mid">-</div>
-        <div class="layui-input-inline">
-          <input type="text" autocomplete="off" id="ID-laydate-end-date" class="layui-input" placeholder="结束日期">
+        <div class="lay-form-mid">-</div>
+        <div class="lay-input-inline">
+          <input type="text" autocomplete="off" id="ID-laydate-end-date" class="lay-input" placeholder="结束日期">
         </div>
       </div>
     </div>
   </div>
   <h5 style="margin-bottom: 16px;">
-    左右面板<strong class="layui-font-red">联动</strong>选择模式 <sup>2.8+</sup> :
+    左右面板<strong class="lay-font-red">联动</strong>选择模式 <sup>2.8+</sup> :
   </h5>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">日期范围</label>
-      <div class="layui-inline" id="ID-laydate-rangeLinked">
-        <div class="layui-input-inline">
-          <input type="text" autocomplete="off" id="ID-laydate-start-date-1" class="layui-input" placeholder="开始日期">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">日期范围</label>
+      <div class="lay-inline" id="ID-laydate-rangeLinked">
+        <div class="lay-input-inline">
+          <input type="text" autocomplete="off" id="ID-laydate-start-date-1" class="lay-input" placeholder="开始日期">
         </div>
-        <div class="layui-form-mid">-</div>
-        <div class="layui-input-inline">
-          <input type="text" autocomplete="off" id="ID-laydate-end-date-1" class="layui-input" placeholder="结束日期">
+        <div class="lay-form-mid">-</div>
+        <div class="lay-input-inline">
+          <input type="text" autocomplete="off" id="ID-laydate-end-date-1" class="lay-input" placeholder="结束日期">
         </div>
       </div>
     </div>
   </div>
   <h5 style="margin-bottom: 16px;">其他类型的范围选择 :</h5>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">年范围</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-range-year" placeholder=" - ">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">年范围</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-range-year" placeholder=" - ">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">年月范围</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-range-month" placeholder=" - ">
+    <div class="lay-inline">
+      <label class="lay-form-label">年月范围</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-range-month" placeholder=" - ">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">时间范围</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-range-time" placeholder=" - ">
+    <div class="lay-inline">
+      <label class="lay-form-label">时间范围</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-range-time" placeholder=" - ">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">日期时间范围</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-range-datetime" placeholder=" - ">
+    <div class="lay-inline">
+      <label class="lay-form-label">日期时间范围</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-range-datetime" placeholder=" - ">
       </div>
     </div>
   </div>

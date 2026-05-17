@@ -1,28 +1,28 @@
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-more-max">
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-more-max">
     最大化弹出
   </button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-more-scrollbar">
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-more-scrollbar">
     弹出时屏蔽浏览器滚动条
   </button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-more-lockscreen">
-    页面锁屏 <span class="layui-badge-dot"></span>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-more-lockscreen">
+    页面锁屏 <span class="lay-badge-dot"></span>
   </button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-more-shade">
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-more-shade">
     自定义遮罩颜色和透明度
   </button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-more-stack">
-    <span class="layui-badge-dot"></span> 多窗口模式 + 层叠置顶 + Esc 关闭
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-more-stack">
+    <span class="lay-badge-dot"></span> 多窗口模式 + 层叠置顶 + Esc 关闭
   </button>
 </div>
 
 <style>
 .class-demo-layer-lockscreen{background: url(https://unpkg.com/outeres@0.0.12/img/wallpaper/001.jpg) #16b777; background-size: cover; color: rgba(255,255,255,1);}
-.class-demo-layer-lockscreen .layui-form{position: absolute; top: 50%; left: 50%; width: 300px; transform: translate(-50%, -50%);}
-.class-demo-layer-lockscreen .layui-form > div{margin-bottom: 8px;}
+.class-demo-layer-lockscreen .lay-form{position: absolute; top: 50%; left: 50%; width: 300px; transform: translate(-50%, -50%);}
+.class-demo-layer-lockscreen .lay-form > div{margin-bottom: 8px;}
 .class-demo-layer-pin{width: 100%; height: 38px; padding: 0 8px; background-color: rgba(255,255,255,.8); border: none; border-radius: 3px; box-sizing: border-box;}
-.class-demo-layer-lockscreen .layui-input-suffix{pointer-events: auto; background-color: rgba(0,0,0,.5); border-radius: 0 3px 3px 0;}
-.class-demo-layer-lockscreen .layui-input-suffix .layui-icon-right{cursor: pointer; color: #fff;}
+.class-demo-layer-lockscreen .lay-input-suffix{pointer-events: auto; background-color: rgba(0,0,0,.5); border-radius: 0 3px 3px 0;}
+.class-demo-layer-lockscreen .lay-input-suffix .lay-icon-right{cursor: pointer; color: #fff;}
 </style>
 
 <!-- import layui --> 
@@ -64,11 +64,11 @@ layui.use(function(){
         resize: false,  // 禁用右下角拉伸尺寸
         id: 'ID-layer-demo-inst',
         skin: 'class-demo-layer-lockscreen', // className
-        content: ['<div class="layui-form">',
-          '<div class="layui-input-wrap">',
+        content: ['<div class="lay-form">',
+          '<div class="lay-input-wrap">',
             '<input type="password" class="class-demo-layer-pin" lay-affix="eye">',
-            '<div class="layui-input-suffix">',
-              '<i class="layui-icon layui-icon-right" id="ID-layer-demo-unlock"></i>',
+            '<div class="lay-input-suffix">',
+              '<i class="lay-icon lay-icon-right" id="ID-layer-demo-unlock"></i>',
             '</div>',
           '</div>',
           '<div>输入 111111 后回车，即可退出锁屏示例</div>',
@@ -169,3 +169,4 @@ layui.use(function(){
 
 });
 </script>
+

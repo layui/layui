@@ -1,12 +1,12 @@
 /** 文件上传 **/
-.layui-upload-file {
+.lay-upload-file {
   display: none !important;
   opacity: 0.01;
 }
-.layui-upload-list {
+.lay-upload-list {
   margin: 11px 0;
 }
-.layui-upload-choose {
+.lay-upload-choose {
   max-width: 200px;
   padding: 0 10px;
   color: #999;
@@ -15,7 +15,7 @@
   overflow: hidden;
   white-space: nowrap;
 }
-.layui-upload-drag {
+.lay-upload-drag {
   position: relative;
   display: inline-block;
   padding: 30px;
@@ -25,13 +25,14 @@
   cursor: pointer;
   color: #999;
 }
-.layui-upload-drag .layui-icon {
+.lay-upload-drag .lay-icon {
   font-size: 50px;
   color: var(--lay-color-primary);
 }
-.layui-upload-drag[lay-over] {
+.lay-upload-drag[lay-over] {
   border-color: var(--lay-color-primary);
 }
-.layui-btn-container .layui-upload-choose {
+.lay-btn-container .lay-upload-choose {
   padding-left: 0;
 }
+

@@ -1,4 +1,4 @@
-<pre class="layui-code" lay-options="{preview: 'iframe', style: 'height: 315px;', layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: 'iframe', style: 'height: 315px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <!DOCTYPE html>
 <html>
@@ -24,13 +24,13 @@ layui.use(function(){
   util.fixbar({
     bars: [{ // 定义可显示的 bar 列表信息 -- v2.8.0 新增
       type: 'share',
-      icon: 'layui-icon-share'
+      icon: 'lay-icon-share'
     }, {
       type: 'help',
-      icon: 'layui-icon-help'
+      icon: 'lay-icon-help'
     }, { 
       type: 'cart',
-      icon: 'layui-icon-cart',
+      icon: 'lay-icon-cart',
       style: 'background-color: #FF5722;'
     }, {
       type: 'groups',
@@ -67,3 +67,4 @@ layui.use(function(){
 </html>
   </textarea>
 </pre>
+

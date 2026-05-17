@@ -1,66 +1,66 @@
-<form class="layui-form" action="">
-  <div class="layui-form-item">
-    <label class="layui-form-label">验证必填项</label>
-    <div class="layui-input-block">
-      <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+<form class="lay-form" action="">
+  <div class="lay-form-item">
+    <label class="lay-form-label">验证必填项</label>
+    <div class="lay-input-block">
+      <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="lay-input">
     </div>
   </div>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">验证手机号</label>
-      <div class="layui-input-inline layui-input-wrap">
-        <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" lay-reqtext="请填写手机号" lay-affix="clear" class="layui-input demo-phone">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">验证手机号</label>
+      <div class="lay-input-inline lay-input-wrap">
+        <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" lay-reqtext="请填写手机号" lay-affix="clear" class="lay-input demo-phone">
       </div>
-      <div class="layui-form-mid" style="padding: 0!important;"> 
-        <button type="button" class="layui-btn layui-btn-primary" lay-on="get-vercode">获取验证码</button>
+      <div class="lay-form-mid" style="padding: 0!important;"> 
+        <button type="button" class="lay-btn lay-btn-primary" lay-on="get-vercode">获取验证码</button>
       </div>
     </div>
   </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">验证码</label>
-    <div class="layui-input-inline layui-input-wrap">
-      <input type="text" name="vercode" lay-verify="required" autocomplete="off" lay-affix="clear" class="layui-input">
+  <div class="lay-form-item">
+    <label class="lay-form-label">验证码</label>
+    <div class="lay-input-inline lay-input-wrap">
+      <input type="text" name="vercode" lay-verify="required" autocomplete="off" lay-affix="clear" class="lay-input">
     </div>
   </div>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">验证邮箱</label>
-      <div class="layui-input-inline">
-        <input type="text" name="email" lay-verify="email" placeholder="有值时才校验" autocomplete="off" class="layui-input">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">验证邮箱</label>
+      <div class="lay-input-inline">
+        <input type="text" name="email" lay-verify="email" placeholder="有值时才校验" autocomplete="off" class="lay-input">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">验证日期</label>
-      <div class="layui-input-inline layui-input-wrap">
-        <div class="layui-input-prefix">
-          <i class="layui-icon layui-icon-date"></i>
+    <div class="lay-inline">
+      <label class="lay-form-label">验证日期</label>
+      <div class="lay-input-inline lay-input-wrap">
+        <div class="lay-input-prefix">
+          <i class="lay-icon lay-icon-date"></i>
         </div>
-        <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+        <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="lay-input">
       </div>
     </div>
   </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">自定义验证</label>
-    <div class="layui-input-inline layui-input-wrap">
-      <input type="password" name="password" lay-verify="required|pass" placeholder="请输入" autocomplete="off" lay-affix="eye" class="layui-input">
+  <div class="lay-form-item">
+    <label class="lay-form-label">自定义验证</label>
+    <div class="lay-input-inline lay-input-wrap">
+      <input type="password" name="password" lay-verify="required|pass" placeholder="请输入" autocomplete="off" lay-affix="eye" class="lay-input">
     </div>
-    <div class="layui-form-mid layui-text-em">6 到 12 位字符</div>
+    <div class="lay-form-mid lay-text-em">6 到 12 位字符</div>
   </div>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">数字输入框</label>
-      <div class="layui-input-inline" style="width: 100px;">
-        <input type="number" name="price_min" placeholder="" autocomplete="off" class="layui-input" min="0" step="1" lay-affix="number">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">数字输入框</label>
+      <div class="lay-input-inline" style="width: 100px;">
+        <input type="number" name="price_min" placeholder="" autocomplete="off" class="lay-input" min="0" step="1" lay-affix="number">
       </div>
-      <div class="layui-form-mid">-</div>
-      <div class="layui-input-inline" style="width: 100px;">
-        <input type="number" name="price_max" placeholder="" autocomplete="off" class="layui-input" min="0" step="1" lay-affix="number">
+      <div class="lay-form-mid">-</div>
+      <div class="lay-input-inline" style="width: 100px;">
+        <input type="number" name="price_max" placeholder="" autocomplete="off" class="lay-input" min="0" step="1" lay-affix="number">
       </div>
     </div>
   </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">单行选择框</label>
-    <div class="layui-input-block">
+  <div class="lay-form-item">
+    <label class="lay-form-label">单行选择框</label>
+    <div class="lay-input-block">
       <select name="interest" lay-filter="aihao">
         <option value=""></option>
         <option value="0">写作</option>
@@ -71,10 +71,10 @@
       </select>
     </div>
   </div>  
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">分组选择框</label>
-      <div class="layui-input-inline">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">分组选择框</label>
+      <div class="lay-input-inline">
         <select name="quiz">
           <option value="">请选择问题</option>
           <optgroup label="城市记忆">
@@ -87,9 +87,9 @@
         </select>
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">搜索选择框</label>
-      <div class="layui-input-inline">
+    <div class="lay-inline">
+      <label class="lay-form-label">搜索选择框</label>
+      <div class="lay-input-inline">
         <select name="modules" lay-verify="required" lay-search>
           <option value="">直接选择或搜索选择</option>
           <option value="1">layer</option>
@@ -116,9 +116,9 @@
       </div>
     </div>
   </div> 
-  <div class="layui-form-item">
-    <label class="layui-form-label">联动选择框</label>
-    <div class="layui-input-inline">
+  <div class="lay-form-item">
+    <label class="lay-form-label">联动选择框</label>
+    <div class="lay-input-inline">
       <select name="quiz1">
         <option value="">请选择省</option>
         <option value="浙江" selected>浙江省</option>
@@ -126,7 +126,7 @@
         <option value="你最喜欢的老师">福建省</option>
       </select>
     </div>
-    <div class="layui-input-inline">
+    <div class="lay-input-inline">
       <select name="quiz2">
         <option value="">请选择市</option>
         <option value="杭州">杭州</option>
@@ -136,7 +136,7 @@
         <option value="温州">绍兴</option>
       </select>
     </div>
-    <div class="layui-input-inline">
+    <div class="lay-input-inline">
       <select name="quiz3">
         <option value="">请选择县/区</option>
         <option value="西湖区">西湖区</option>
@@ -144,53 +144,53 @@
         <option value="拱墅区">临安市</option>
       </select>
     </div>
-    <div class="layui-form-mid layui-text-em">
-      <i class="layui-icon layui-icon-tips" lay-tips="{
+    <div class="lay-form-mid lay-text-em">
+      <i class="lay-icon lay-icon-tips" lay-tips="{
         content: '此处只是演示联动排版，并未做联动交互',
         margin: '0 0 0 -10px'
       }"></i>
     </div>
   </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">复选框</label>
-    <div class="layui-input-block">
+  <div class="lay-form-item">
+    <label class="lay-form-label">复选框</label>
+    <div class="lay-input-block">
       <input type="checkbox" name="arr[0]" title="选项1">
       <input type="checkbox" name="arr[1]" title="选项2" checked>
       <input type="checkbox" name="arr[2]" title="选项3">
     </div>
   </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">标签框</label>
-    <div class="layui-input-block">
+  <div class="lay-form-item">
+    <label class="lay-form-label">标签框</label>
+    <div class="lay-input-block">
       <input type="checkbox" name="arr1[0]" lay-skin="tag" title="选项1" checked>
       <input type="checkbox" name="arr1[1]" lay-skin="tag" title="选项2">
       <input type="checkbox" name="arr1[2]" lay-skin="tag" title="选项3">
     </div>
   </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">开关</label>
-    <div class="layui-input-block">
+  <div class="lay-form-item">
+    <label class="lay-form-label">开关</label>
+    <div class="lay-input-block">
       <input type="checkbox" name="open" lay-skin="switch" lay-filter="switchTest" title="ON|OFF">
     </div>
   </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">单选框</label>
-    <div class="layui-input-block">
+  <div class="lay-form-item">
+    <label class="lay-form-label">单选框</label>
+    <div class="lay-input-block">
       <input type="radio" name="sex" value="男" title="男" checked>
       <input type="radio" name="sex" value="女" title="女">
       <input type="radio" name="sex" value="禁" title="禁用" disabled>
     </div>
   </div>
-  <div class="layui-form-item layui-form-text">
-    <label class="layui-form-label">普通文本域</label>
-    <div class="layui-input-block">
-      &lt;textarea placeholder="请输入内容" class="layui-textarea"&gt;&lt;/textarea&gt;
+  <div class="lay-form-item lay-form-text">
+    <label class="lay-form-label">普通文本域</label>
+    <div class="lay-input-block">
+      &lt;textarea placeholder="请输入内容" class="lay-textarea"&gt;&lt;/textarea&gt;
     </div>
   </div>
-  <div class="layui-form-item">
-    <div class="layui-input-block">
-      <button type="submit" class="layui-btn" lay-submit lay-filter="demo1">立即提交</button>
-      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+  <div class="lay-form-item">
+    <div class="lay-input-block">
+      <button type="submit" class="lay-btn" lay-submit lay-filter="demo1">立即提交</button>
+      <button type="reset" class="lay-btn lay-btn-primary">重置</button>
     </div>
   </div>
 </form>
@@ -256,3 +256,4 @@ layui.use(['form', 'laydate', 'util'], function(){
   });
 });
 </script>
+

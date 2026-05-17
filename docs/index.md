@@ -11,7 +11,7 @@ toc: true
   Layui
 </p>
 
-<table class="layui-table">
+<table class="lay-table">
   <tbody>
     <tr>
       <td>谐音：类 UI</td>
@@ -47,9 +47,9 @@ layui/
   <iframe src="//ghbtns.com/github-btn.html?user=layui&amp;repo=layui&amp;type=watch&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="156px" height="30px"></iframe>
   <iframe src="//ghbtns.com/github-btn.html?user=layui&amp;repo=layui&amp;type=fork&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="156px" height="30px"></iframe>
 </p>
-<div class="layui-btn-container">
-  <a class="layui-btn layui-btn-normal" href="https://github.com/layui/layui/" target="_blank" rel="nofollow" style="background-color: #24292E; color: #fff;">GitHub</a>
-  <a class="layui-btn layui-btn-normal" href="https://gitee.com/layui/layui/" target="_blank" rel="nofollow" style="background-color: #C71D23; color: #fff;">Gitee</a>
+<div class="lay-btn-container">
+  <a class="lay-btn lay-btn-normal" href="https://github.com/layui/layui/" target="_blank" rel="nofollow" style="background-color: #24292E; color: #fff;">GitHub</a>
+  <a class="lay-btn lay-btn-normal" href="https://gitee.com/layui/layui/" target="_blank" rel="nofollow" style="background-color: #C71D23; color: #fff;">Gitee</a>
 </div>
 
 ### 🌕 npm 下载
@@ -62,10 +62,10 @@ npm i layui
 
 > 以下均为知名第三方免费开放的公共资源 CDN，每期版本通过 NPM / GitHub 自动同步。
 
-<div class="layui-btn-container">
-  <a class="layui-btn layui-btn-primary layui-border-black" href="https://unpkg.com/browse/layui/dist/" target="_blank" rel="nofollow">UNPKG</a>
-  <a class="layui-btn layui-btn-primary" style="border-color: #FF6934; color: #FF6934;" href="https://cdnjs.com/libraries/layui" target="_blank" rel="nofollow">CDNJS</a>
-  <a class="layui-btn layui-btn-primary" style="border-color: #E64E3D; color: #E64E3D;" href="https://www.jsdelivr.com/package/npm/layui" target="_blank" rel="nofollow">JSDELIVR</a>
+<div class="lay-btn-container">
+  <a class="lay-btn lay-btn-primary lay-border-black" href="https://unpkg.com/browse/layui/dist/" target="_blank" rel="nofollow">UNPKG</a>
+  <a class="lay-btn lay-btn-primary" style="border-color: #FF6934; color: #FF6934;" href="https://cdnjs.com/libraries/layui" target="_blank" rel="nofollow">CDNJS</a>
+  <a class="lay-btn lay-btn-primary" style="border-color: #E64E3D; color: #E64E3D;" href="https://www.jsdelivr.com/package/npm/layui" target="_blank" rel="nofollow">JSDELIVR</a>
 </div>
 
 
@@ -82,7 +82,7 @@ npm i layui
 
 现在，让我们以一个最简单的示例开始入门：
 
-<pre class="layui-code" lay-options="{preview: 'iframe', previewStyle: 'height: 210px;', copy: true, tools: []}">
+<pre class="lay-code" lay-options="{preview: 'iframe', previewStyle: 'height: 210px;', copy: true, tools: []}">
   <textarea>
 <!DOCTYPE html>
 <html>
@@ -119,3 +119,4 @@ npm i layui
 ## 初识寄语
 
 > 愿 Layui 从此成为您得心应手的 Web 界面解决方案，化作您方寸屏幕前的亿万字节！
+

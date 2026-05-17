@@ -1,6 +1,6 @@
-<div class="layui-tabs layui-hide-v" id="demoTabs-hash">
-  <ul class="layui-tabs-header">
-    <li lay-id="A1" class="layui-this"><a href="#A1">标题题题题题题1</a></li>
+<div class="lay-tabs lay-hide-v" id="demoTabs-hash">
+  <ul class="lay-tabs-header">
+    <li lay-id="A1" class="lay-this"><a href="#A1">标题题题题题题1</a></li>
     <li lay-id="A2"><a href="#A2">标题题题2</a></li>
     <li lay-id="A3"><a href="#A3">标题3</a></li>
     <li lay-id="A4"><a href="#A4">标题题题题题题题4</a></li>
@@ -21,3 +21,4 @@ layui.use(function(){
   tabs.change('demoTabs-hash', hash.href);
 });
 </script>
+

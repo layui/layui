@@ -1,6 +1,6 @@
-<div class="layui-form">
-  <div class="layui-form-item">
-    &lt;textarea class="layui-textarea ws-demo-editor" id="ID-demo-editor" &gt;
+<div class="lay-form">
+  <div class="lay-form-item">
+    &lt;textarea class="lay-textarea ws-demo-editor" id="ID-demo-editor" &gt;
 // 在此处输入 layer 的任意代码
 layer.open({
   type: 1, // page 层类型
@@ -14,7 +14,7 @@ layer.open({
 });&lt;/textarea&gt;
   </div>
   <div>
-    <button type="button" class="layui-btn" id="ID-demo-run">运行效果</button>
+    <button type="button" class="lay-btn" id="ID-demo-run">运行效果</button>
   </div>
 </div>
 

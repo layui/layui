@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -167,7 +167,7 @@
 <td>array</td>
 <td>
 
-<button class="layui-btn layui-btn-sm layui-btn-primary" lay-layer="{
+<button class="lay-btn lay-btn-sm lay-btn-primary" lay-layer="{
   title: 'layout 属性默认值',
   content: '<div>layout: [\'prev\',\'page\',\'next\']</div>'
 }">查看默认值</button>
@@ -225,7 +225,7 @@ countText: ['Total ','']
 自定义主题。支持传入：颜色值或任意普通字符。如：
 
 - `theme: '#c00'` 直接设置当前页按钮背景色
-- `theme: 'xxx'` 会生成 `class="layui-laypage-xxx"` 的 CSS 类，以便自定义主题
+- `theme: 'xxx'` 会生成 `class="lay-laypage-xxx"` 的 CSS 类，以便自定义主题
 
 </td>
 <td>string</td>
@@ -286,4 +286,5 @@ laypage.render({
     </tr>
   </tbody>
 </table>
+
 

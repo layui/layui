@@ -1,27 +1,27 @@
-<div class="layui-form">
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">年选择器</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-type-year" placeholder="yyyy">
+<div class="lay-form">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">年选择器</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-type-year" placeholder="yyyy">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">年月选择器</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-type-month" placeholder="yyyy-MM">
+    <div class="lay-inline">
+      <label class="lay-form-label">年月选择器</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-type-month" placeholder="yyyy-MM">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">时间选择器</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-type-time" placeholder="HH:mm:ss">
+    <div class="lay-inline">
+      <label class="lay-form-label">时间选择器</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-type-time" placeholder="HH:mm:ss">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">日期时间选择器</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-type-datetime" placeholder="yyyy-MM-dd HH:mm:ss">
+    <div class="lay-inline">
+      <label class="lay-form-label">日期时间选择器</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-type-datetime" placeholder="yyyy-MM-dd HH:mm:ss">
       </div>
     </div>
   </div>
@@ -29,11 +29,11 @@
   <h5 style="margin-bottom: 16px;">
     同时显示日期和时间选择器（全面板） <sup>2.8+</sup> :
   </h5>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">日期时间选择器</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-type-datetime-1" placeholder="yyyy-MM-dd HH:mm:ss">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">日期时间选择器</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-type-datetime-1" placeholder="yyyy-MM-dd HH:mm:ss">
       </div>
     </div>
   </div>

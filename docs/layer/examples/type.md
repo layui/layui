@@ -1,13 +1,13 @@
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="alert">Alert</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="confirm">Confirm</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="msg">Msg</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="page">Page</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="iframe">Iframe</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="load">Load</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="tips">Tips</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="prompt">Prompt</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="photots">Photots</button>
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="alert">Alert</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="confirm">Confirm</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="msg">Msg</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="page">Page</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="iframe">Iframe</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="load">Load</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="tips">Tips</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="prompt">Prompt</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="photots">Photots</button>
 </div>
 
 <!-- import layui --> 
@@ -103,3 +103,4 @@ layui.use(function(){
   });
 });
 </script>
+

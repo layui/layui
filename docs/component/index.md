@@ -192,15 +192,15 @@ tabs.removeInst('id');
 // 基础常量如下
 component.CONST.MOD_NAME; // 组件名称
 component.CONST.MOD_INDEX; // 组件自增索引
-component.CONST.CLASS_THIS; // layui-this
-component.CONST.CLASS_SHOW; // layui-show
-component.CONST.CLASS_HIDE; // layui-hide
-component.CONST.CLASS_HIDEV; // layui-hide-v
-component.CONST.CLASS_DISABLED; // layui-disabled
-component.CONST.CLASS_NONE; // layui-none
+component.CONST.CLASS_THIS; // lay-this
+component.CONST.CLASS_SHOW; // lay-show
+component.CONST.CLASS_HIDE; // lay-hide
+component.CONST.CLASS_HIDEV; // lay-hide-v
+component.CONST.CLASS_DISABLED; // lay-disabled
+component.CONST.CLASS_NONE; // lay-none
 
 // 更多常量一般在各组件内部单独定义，以 tabs 组件为例
-tabs.CONST.ELEM; // layui-tabs
+tabs.CONST.ELEM; // lay-tabs
 ```
 
 <h3 id="extend" lay-toc="{level: 2}">扩展接口</h3>
@@ -300,4 +300,5 @@ Class.prototype.xxx = function() {
 ## 💖 心语
 
 一直以来，Layui 的很多组件自成一体，使得无法对组件进行较好的统一管理。尽管我们也曾努力尝试改善这个问题，但很多时候为了向下兼容而又不得不保留许多旧有的特性，随着组件的增加，该问题也显得越加明显。而 component 模块的出现，将在一定程度上填补这一缺憾，它的初衷正是为了确保 Layui 组件的一致性，如核心逻辑和 API 设计等，主要意义在于：**给 Layui 2 系列版本提供一个构建通用组件的方式**，增强其「生命力」。
+
 

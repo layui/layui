@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -47,7 +47,7 @@
 当开启该属性时，`elem` 指定的元素需要设置成以下结构：
 
 ```
-<pre class="layui-code" lay-options="{}">
+<pre class="lay-code" lay-options="{}">
   <textarea>
 code content
   </textarea>
@@ -175,7 +175,7 @@ extendToolkit: {
 选项解释：
 
 - `title` 值为数组形式，以支持不同状态时的默认标题
-- `iconName` 值对应[图标](../icon/) `className` 的 `layui-icon-` 后的名称。如图标：`layui-icon-theme`，那么 `iconName` 设置值为 `theme` 即可。
+- `iconName` 值对应[图标](../icon/) `className` 的 `lay-icon-` 后的名称。如图标：`lay-icon-theme`，那么 `iconName` 设置值为 `theme` 即可。
 
 扩展后，即可在 `tools` 选项中设置，如：`tools: ['theme']`
 
@@ -458,3 +458,4 @@ highlightLine 选项的详细用法可参考：<a href="https://github.com/layui
     </tr>
   </tbody>
 </table>
+

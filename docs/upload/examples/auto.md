@@ -1,6 +1,6 @@
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn layui-btn-normal" id="ID-upload-demo-choose">选择文件</button>
-  <button type="button" class="layui-btn" id="ID-upload-demo-action">开始上传</button>
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn lay-btn-normal" id="ID-upload-demo-choose">选择文件</button>
+  <button type="button" class="lay-btn" id="ID-upload-demo-action">开始上传</button>
 </div>
 
 <!-- import layui -->

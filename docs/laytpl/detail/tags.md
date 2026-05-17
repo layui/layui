@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -64,3 +64,4 @@ Scriptlet 标签。一般用于流程控制，如：
     </tr>
   </tbody>
 </table>
+

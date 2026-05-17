@@ -22,23 +22,23 @@
     </style>
   </head>
   <body>
-    <div class="layui-btn-container">
-      <button class="layui-btn layui-btn-primary" lay-on="test">Alert</button>
-      <button class="layui-btn" lay-on="test2">Confirm</button>
-      <button class="layui-btn" lay-on="test3">Msg</button>
-      <button class="layui-btn" lay-on="test5">Page</button>
-      <button class="layui-btn" lay-on="test6">Iframe</button>
-      <button class="layui-btn" lay-on="testLoading">Loading</button>
-      <button class="layui-btn" lay-on="test4">Tips</button>
-      <button class="layui-btn" lay-on="test7">Prompt</button>
-      <button class="layui-btn" lay-on="test8">Tab</button>
-      <button class="layui-btn" lay-on="test9">Photo</button>
-      <button class="layui-btn" lay-on="test10">Drawer</button>
-      <button class="layui-btn" lay-on="testTime">自动关闭</button>
+    <div class="lay-btn-container">
+      <button class="lay-btn lay-btn-primary" lay-on="test">Alert</button>
+      <button class="lay-btn" lay-on="test2">Confirm</button>
+      <button class="lay-btn" lay-on="test3">Msg</button>
+      <button class="lay-btn" lay-on="test5">Page</button>
+      <button class="lay-btn" lay-on="test6">Iframe</button>
+      <button class="lay-btn" lay-on="testLoading">Loading</button>
+      <button class="lay-btn" lay-on="test4">Tips</button>
+      <button class="lay-btn" lay-on="test7">Prompt</button>
+      <button class="lay-btn" lay-on="test8">Tab</button>
+      <button class="lay-btn" lay-on="test9">Photo</button>
+      <button class="lay-btn" lay-on="test10">Drawer</button>
+      <button class="lay-btn" lay-on="testTime">自动关闭</button>
       <a
         href="https://layui.dev/docs/2/layer/"
         target="_blank"
-        class="layui-btn"
+        class="lay-btn"
         >更多例子</a
       >
     </div>
@@ -50,8 +50,8 @@
     <hr />
     <br />
 
-    <div class="layui-list">
-      <ul class="layui-row" id="photos">
+    <div class="lay-list">
+      <ul class="lay-row" id="photos">
         <li class="list">
           <img src="https://unpkg.com/outeres/demo/1.jpg" alt="123" />
         </li>
@@ -95,7 +95,7 @@
             return;
             layer.closeAll('loading', () => {
               setTimeout(() => {
-                if ($('.layui-layer-loading').length) {
+                if ($('.lay-layer-loading').length) {
                   console.error('layer close 异常');
                   clearInterval(timer);
                 }
@@ -166,7 +166,7 @@
             layer.open({
               title: '自定义页面层',
               type: 1,
-              skin: 'layui-layer-border',
+              skin: 'lay-layer-border',
               area: ['1000px', '580px'],
               content: $('#test11111'),
               maxmin: true,
@@ -297,3 +297,4 @@
     </script>
   </body>
 </html>
+

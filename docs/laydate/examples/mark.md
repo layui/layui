@@ -1,21 +1,21 @@
-<div class="layui-form">
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">开启公历节日</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-calendar" placeholder="yyyy-MM-dd">
+<div class="lay-form">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">开启公历节日</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-calendar" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">自定义日子</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-mark" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">自定义日子</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-mark" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">节假日标注</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-holidays" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">节假日标注</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-holidays" placeholder="yyyy-MM-dd">
       </div>
     </div>
   </div>

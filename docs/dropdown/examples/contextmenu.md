@@ -1,8 +1,8 @@
-<div class="layui-bg-gray" style="height: 260px; text-align: center;" id="ID-dropdown-demo-contextmenu">
-  <span class="layui-font-gray" style="position: relative; top:50%;">在此区域单击鼠标右键</span>
+<div class="lay-bg-gray" style="height: 260px; text-align: center;" id="ID-dropdown-demo-contextmenu">
+  <span class="lay-font-gray" style="position: relative; top:50%;">在此区域单击鼠标右键</span>
 </div>
 
-<button class="layui-btn" style="margin-top: 15px;" lay-on="contextmenu">
+<button class="lay-btn" style="margin-top: 15px;" lay-on="contextmenu">
   开启全局右键菜单
 </button>
 
@@ -89,3 +89,4 @@ layui.use(function(){
   });
 });
 </script>
+

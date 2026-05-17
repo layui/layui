@@ -1,22 +1,22 @@
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-skin-alert">
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-skin-alert">
     墨绿与深蓝主题
   </button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-skin-win10">
-    Windows 10 风格信息框 <span class="layui-badge-dot"></span>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-skin-win10">
+    Windows 10 风格信息框 <span class="lay-badge-dot"></span>
   </button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-skin-win10-page">
-    Win10 风格页面层 <span class="layui-badge-dot"></span>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-skin-win10-page">
+    Win10 风格页面层 <span class="lay-badge-dot"></span>
   </button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-skin-custom">自定义任意主题</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-skin-custom">自定义任意主题</button>
 </div>
 
 <style>
 /* 自定义其他任意主题  */
-.class-layer-demo-custom .layui-layer-title{background-color: #EDEFF2;}
-.class-layer-demo-custom .layui-layer-btn{padding: 5px 10px 10px;}
-.class-layer-demo-custom .layui-layer-btn a{background: #fff; border-color: #E9E7E7; color: #333;}
-.class-layer-demo-custom .layui-layer-btn .layui-layer-btn0{border-color: #FA584D; background-color: #FA584D; color: #fff;}
+.class-layer-demo-custom .lay-layer-title{background-color: #EDEFF2;}
+.class-layer-demo-custom .lay-layer-btn{padding: 5px 10px 10px;}
+.class-layer-demo-custom .lay-layer-btn a{background: #fff; border-color: #E9E7E7; color: #333;}
+.class-layer-demo-custom .lay-layer-btn .lay-layer-btn0{border-color: #FA584D; background-color: #FA584D; color: #fff;}
 </style>
 
 <!-- import layui --> 
@@ -29,16 +29,16 @@ layui.use(function(){
   util.on('lay-on', {
     'test-skin-alert': function(){
       layer.alert('墨绿风格，点击继续确认看深蓝', {
-        skin: 'layui-layer-molv' // 样式类名
+        skin: 'lay-layer-molv' // 样式类名
       }, function(){
         layer.alert('深蓝', {
-          skin: 'layui-layer-lan'
+          skin: 'lay-layer-lan'
         });
       });
     },
     'test-skin-win10': function(){
       layer.alert('Windows 10 风格主题', {
-        skin: 'layui-layer-win10', // 2.8+
+        skin: 'lay-layer-win10', // 2.8+
         shade: 0.01,
         btn: ['确定', '取消']
       })
@@ -47,7 +47,7 @@ layui.use(function(){
       // 此处以一个简单的 Win10 风格记事本为例
       layer.open({
         type: 1, // 页面层类型
-        skin: 'layui-layer-win10', // 2.8+
+        skin: 'lay-layer-win10', // 2.8+
         shade: 0.01,
         area: ['50%', '60%'],
         maxmin: true,

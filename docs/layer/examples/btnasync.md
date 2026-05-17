@@ -1,8 +1,8 @@
-<button type="button" class="layui-btn layui-btn-primary" lay-on="bs_alert">alert</button>
-<button type="button" class="layui-btn layui-btn-primary" lay-on="bs_confirm">confirm</button>
-<button type="button" class="layui-btn layui-btn-primary" lay-on="bs_msg">msg</button>
-<button type="button" class="layui-btn layui-btn-primary" lay-on="bs_open">open</button>
-<button type="button" class="layui-btn layui-btn-primary" lay-on="bs_prompt">prompt(不支持)</button>
+<button type="button" class="lay-btn lay-btn-primary" lay-on="bs_alert">alert</button>
+<button type="button" class="lay-btn lay-btn-primary" lay-on="bs_confirm">confirm</button>
+<button type="button" class="lay-btn lay-btn-primary" lay-on="bs_msg">msg</button>
+<button type="button" class="lay-btn lay-btn-primary" lay-on="bs_open">open</button>
+<button type="button" class="lay-btn lay-btn-primary" lay-on="bs_prompt">prompt(不支持)</button>
 
 <!-- import layui -->
 <script>

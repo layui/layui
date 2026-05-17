@@ -1,4 +1,4 @@
-<table class="layui-hide" id="ID-table-demo-filter"></table>
+<table class="lay-hide" id="ID-table-demo-filter"></table>
 
 <!-- import layui -->
 <script>
@@ -46,3 +46,4 @@ layui.use(function(){
   });
 });
 </script>
+

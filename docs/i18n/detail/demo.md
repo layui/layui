@@ -6,15 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="{{= d.layui[2].cdn.css }}" rel="stylesheet">
 </head>
-<body class="layui-padding-3">
+<body class="lay-padding-3">
   <div id="root"></div>{{!
   <template id="template">
     {{ const i18n = layui.i18n; }}
-    <div class="layui-form">
-      <div class="layui-inline">
+    <div class="lay-form">
+      <div class="lay-inline">
         <strong>{{= i18n.$t('custom.switchLanguage') }}: </strong>
       </div>
-      <div class="layui-inline">
+      <div class="lay-inline">
         <select id="change-locale" lay-filter="change-locale">
           <option value="zh-CN">简体中文</option>
           <option value="en">English</option>
@@ -23,9 +23,9 @@
       </div>
     </div>
     <br>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>README</legend>
-      <div class="layui-field-box layui-text" id="tpl-test">
+      <div class="lay-field-box lay-text" id="tpl-test">
         <p>{{= i18n.$t('custom.readme.description') }}</p>
         <ul>
           <li><strong>locale</strong>: <span style="color:red">{{= i18n.config.locale }}</span></li>
@@ -34,76 +34,76 @@
         </ul>
       </div>
     </fieldset>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>code</legend>
-      <div class="layui-field-box">
-        <pre id="demo-code" class="layui-code" lay-options="{}">
+      <div class="lay-field-box">
+        <pre id="demo-code" class="lay-code" lay-options="{}">
           code content
         </pre>
       </div>
     </fieldset>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>colorpicker</legend>
-      <div class="layui-field-box">
+      <div class="lay-field-box">
         <div id="demo-colorpicker"></div>
       </div>
     </fieldset>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>dropdown</legend>
-      <div class="layui-field-box">
-        <button id="demo-dropdown" class="layui-btn demo-dropdown-base">
+      <div class="lay-field-box">
+        <button id="demo-dropdown" class="lay-btn demo-dropdown-base">
           <span>Dropdown</span>
-          <i class="layui-icon layui-icon-down layui-font-12"></i>
+          <i class="lay-icon lay-icon-down lay-font-12"></i>
         </button>
       </div>
     </fieldset>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>flow</legend>
-      <div class="layui-field-box">
+      <div class="lay-field-box">
         <div class="flow-demo" id="demo-flow"></div>
       </div>
     </fieldset>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>form</legend>
-      <div class="layui-field-box">
-        <form class="layui-form" action="">
-          <div class="layui-form-item">
-            <label class="layui-form-label">{{= i18n.$t('custom.form.required') }}</label>
-            <div class="layui-input-block">
-              <input type="text" name="username" lay-verify="required" lay-vertype="alert" placeholder="{{= i18n.$t('custom.form.placeholder') }}" autocomplete="off" class="layui-input">
+      <div class="lay-field-box">
+        <form class="lay-form" action="">
+          <div class="lay-form-item">
+            <label class="lay-form-label">{{= i18n.$t('custom.form.required') }}</label>
+            <div class="lay-input-block">
+              <input type="text" name="username" lay-verify="required" lay-vertype="alert" placeholder="{{= i18n.$t('custom.form.placeholder') }}" autocomplete="off" class="lay-input">
             </div>
           </div>
-          <div class="layui-form-item">
-            <div class="layui-inline">
-              <label class="layui-form-label">{{= i18n.$t('custom.form.phone') }}</label>
-              <div class="layui-input-inline layui-input-wrap">
+          <div class="lay-form-item">
+            <div class="lay-inline">
+              <label class="lay-form-label">{{= i18n.$t('custom.form.phone') }}</label>
+              <div class="lay-input-inline lay-input-wrap">
                 <input type="tel" name="phone" lay-verify="phone" autocomplete="off" value="123456" lay-affix="clear"
-                  class="layui-input demo-phone">
+                  class="lay-input demo-phone">
               </div>
             </div>
           </div>
-          <div class="layui-form-item">
-            <div class="layui-inline">
-              <label class="layui-form-label">{{= i18n.$t('custom.form.email') }}</label>
-              <div class="layui-input-inline">
+          <div class="lay-form-item">
+            <div class="lay-inline">
+              <label class="lay-form-label">{{= i18n.$t('custom.form.email') }}</label>
+              <div class="lay-input-inline">
                 <input type="text" name="email" value="123.com" lay-verify="email" autocomplete="off"
-                  class="layui-input">
+                  class="lay-input">
               </div>
             </div>
-            <div class="layui-inline">
-              <label class="layui-form-label">{{= i18n.$t('custom.form.date') }}</label>
-              <div class="layui-input-inline layui-input-wrap">
-                <div class="layui-input-prefix">
-                  <i class="layui-icon layui-icon-date"></i>
+            <div class="lay-inline">
+              <label class="lay-form-label">{{= i18n.$t('custom.form.date') }}</label>
+              <div class="lay-input-inline lay-input-wrap">
+                <div class="lay-input-prefix">
+                  <i class="lay-icon lay-icon-date"></i>
                 </div>
                 <input type="text" name="date" value="2077" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
-                  autocomplete="off" class="layui-input">
+                  autocomplete="off" class="lay-input">
               </div>
             </div>
           </div>
-          <div class="layui-form-item">
-            <label class="layui-form-label">{{= i18n.$t('custom.form.select') }}</label>
-            <div class="layui-input-block">
+          <div class="lay-form-item">
+            <label class="lay-form-label">{{= i18n.$t('custom.form.select') }}</label>
+            <div class="lay-input-block">
               <select name="interest" lay-filter="aihao" lay-search>
                 <option value=""></option>
                 <option value="0">AAA</option>
@@ -114,12 +114,12 @@
               </select>
             </div>
           </div>
-          <div class="layui-form-item">
-            <div class="layui-input-block">
-              <button type="submit" class="layui-btn" lay-submit lay-filter="demo1">
+          <div class="lay-form-item">
+            <div class="lay-input-block">
+              <button type="submit" class="lay-btn" lay-submit lay-filter="demo1">
                 {{= i18n.$t('custom.form.submit') }}
               </button>
-              <button type="reset" class="layui-btn layui-btn-primary">
+              <button type="reset" class="lay-btn lay-btn-primary">
                 {{= i18n.$t('custom.form.reset') }}
               </button>
             </div>
@@ -127,57 +127,57 @@
         </form>
       </div>
     </fieldset>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>laydate</legend>
-      <div class="layui-field-box">
-        <div class="layui-inline">
-          <input class="layui-input" id="demo-laydate" />
+      <div class="lay-field-box">
+        <div class="lay-inline">
+          <input class="lay-input" id="demo-laydate" />
         </div>
       </div>
     </fieldset>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>layer</legend>
-      <div class="layui-field-box">
-        <button type="button" class="layui-btn layui-btn-primary" lay-on="alert">Alert</button>
-        <button type="button" class="layui-btn layui-btn-primary" lay-on="prompt">Prompt</button>
-        <button type="button" class="layui-btn layui-btn-primary" lay-on="photos">Photos</button>
+      <div class="lay-field-box">
+        <button type="button" class="lay-btn lay-btn-primary" lay-on="alert">Alert</button>
+        <button type="button" class="lay-btn lay-btn-primary" lay-on="prompt">Prompt</button>
+        <button type="button" class="lay-btn lay-btn-primary" lay-on="photos">Photos</button>
       </div>
     </fieldset>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>laypage</legend>
-      <div class="layui-field-box">
+      <div class="lay-field-box">
         <div id="demo-laypage-all"></div>
       </div>
     </fieldset>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>table</legend>
-      <div class="layui-field-box">
-        <table class="layui-hide" id="demo-table" lay-filter="test"></table>
+      <div class="lay-field-box">
+        <table class="lay-hide" id="demo-table" lay-filter="test"></table>
         </div>
     </fieldset>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>transfer</legend>
-      <div class="layui-field-box">
+      <div class="lay-field-box">
         <div id="demo-transfer"></div>
       </div>
     </fieldset>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>tree</legend>
-      <div class="layui-field-box">
+      <div class="lay-field-box">
         <div id="demo-tree"></div>
       </div>
     </fieldset>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>upload</legend>
-      <div class="layui-field-box">
-        <button type="button" class="layui-btn" id="demo-upload">
-          <i class="layui-icon layui-icon-upload"></i> Upload
+      <div class="lay-field-box">
+        <button type="button" class="lay-btn" id="demo-upload">
+          <i class="lay-icon lay-icon-upload"></i> Upload
         </button>
       </div>
     </fieldset>
-    <fieldset class="layui-elem-field">
+    <fieldset class="lay-elem-field">
       <legend>utils</legend>
-      <div class="layui-field-box">
+      <div class="lay-field-box">
         <label>
           timeAgo: <input id="demo-time-ago-picker" type="datetime-local" /> <span id="demo-time-ago-display"></span>
         </label>
@@ -193,7 +193,7 @@
   // 配置 Layui 组件语言包
   window.LAYUI_GLOBAL = {
     i18n: {
-      locale: localStorage.getItem('layui-i18n-local-test') || 'zh-CN', // 当前语言环境
+      locale: localStorage.getItem('lay-i18n-local-test') || 'zh-CN', // 当前语言环境
       messages: { // 扩展其他语言包
         // English
         'en': {
@@ -772,7 +772,7 @@
     $("#change-locale").val(i18n.config.locale);
     form.render('select').on("select(change-locale)", function (elem) {
       // 记录语言，并重载页面（推荐）
-      localStorage.setItem('layui-i18n-local-test', elem.value);
+      localStorage.setItem('lay-i18n-local-test', elem.value);
       window.location.reload();
     });
 
@@ -782,3 +782,4 @@
   </script>
 </body>
 </html>
+

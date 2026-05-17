@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -38,9 +38,9 @@ bars: [
 <td>array</td>
 <td>
 
-<button class="layui-btn layui-btn-sm layui-btn-primary" lay-layer="{
+<button class="lay-btn lay-btn-sm lay-btn-primary" lay-layer="{
   title: 'bars 属性默认值',
-  content: '<div>bars: {type: \'top\', icon: \'layui-icon-top\'}</div>'
+  content: '<div>bars: {type: \'top\', icon: \'lay-icon-top\'}</div>'
 }">查看默认值</button>
 
 </td>

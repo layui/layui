@@ -1,6 +1,6 @@
-<button class="layui-btn" id="ID-dropdown-demo-reload">
+<button class="lay-btn" id="ID-dropdown-demo-reload">
   <span>下拉菜单</span>
-  <i class="layui-icon layui-icon-down layui-font-12"></i>
+  <i class="lay-icon lay-icon-down lay-font-12"></i>
 </button>
 
 <!-- import layui --> 

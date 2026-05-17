@@ -1,10 +1,10 @@
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-top">显示在上</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-right">显示在右</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-bottom">显示在下</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-left">显示在左</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-color">自定义背景色</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-more">允许多个 tips</button>
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-tips-top">显示在上</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-tips-right">显示在右</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-tips-bottom">显示在下</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-tips-left">显示在左</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-tips-color">自定义背景色</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-tips-more">允许多个 tips</button>
 </div>
 
 <!-- import layui --> 

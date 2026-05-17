@@ -14,22 +14,22 @@
       }
     </style>
   </head>
-  <body class="layui-padding-3">
-    <div class="layui-text">
+  <body class="lay-padding-3">
+    <div class="lay-text">
       <h2>代码高亮</h2>
     </div>
-    <pre id="test" class="layui-test">
-  <textarea class="layui-hide">
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn">默认按钮</button>
+    <pre id="test" class="lay-test">
+  <textarea class="lay-hide">
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn">默认按钮</button>
 </div>
 
-<p class="layui-padding-3">
+<p class="lay-padding-3">
 AaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaA
 </p>
 
-<div class="layui-btn-container">
-  <button class="layui-btn layui-btn-primary layui-border-green">主色按钮</button>
+<div class="lay-btn-container">
+  <button class="lay-btn lay-btn-primary lay-border-green">主色按钮</button>
 </div>
 
 <template>
@@ -59,11 +59,11 @@ Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   </textarea>
 </pre>
 
-    <div class="layui-text">
+    <div class="lay-text">
       <h2>行高亮和聚焦</h2>
     </div>
     <pre
-      class="layui-code"
+      class="lay-code"
       lay-options="{
     highlightLine: {
       hl: {
@@ -73,7 +73,7 @@ Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     }
   }"
     >
-<textarea class="layui-hide">
+<textarea class="lay-hide">
 <!doctype html>
 <html>
   <head>
@@ -96,11 +96,11 @@ Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 </textarea>
 </pre>
 
-    <div class="layui-text">
+    <div class="lay-text">
       <h2>diff</h2>
     </div>
     <pre
-      class="layui-code"
+      class="lay-code"
       lay-options="{
     highlightLine: {
       hl:{range: '38-40'},
@@ -109,7 +109,7 @@ Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     }
   }"
     >
-<textarea class="layui-hide">
+<textarea class="lay-hide">
 <template id="test">
   <p>转义输出：{{= d.desc }}</p>
   <p>原文输出：{{- d.desc }}</p>
@@ -155,14 +155,14 @@ Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
     <h2>普通示例</h2>
 
-    <pre><code class="layui-code" lay-options="{header: true}">
+    <pre><code class="lay-code" lay-options="{header: true}">
 code line
 code line
 code line
 </code></pre>
 
     <pre
-      class="layui-code"
+      class="lay-code"
       lay-options="{style: 'height: 300px'}"
       id="ID-multi-line"
     ></pre>
@@ -177,7 +177,7 @@ code line
         .join('\n');
     </script>
 
-    <pre class="layui-code" lay-options="{title: '不显示行号', ln: false}">
+    <pre class="lay-code" lay-options="{title: '不显示行号', ln: false}">
 code line
 code line
 code line
@@ -187,7 +187,7 @@ code line
 </pre
     >
 
-    <pre class="layui-code" lay-options="{title: '深色风格', skin: 'dark'}">
+    <pre class="lay-code" lay-options="{title: '深色风格', skin: 'dark'}">
 code line
 code line
 code line
@@ -197,16 +197,16 @@ code line
 </pre
     >
 
-    <pre class="layui-code" lay-options="{title: '嵌套', encode: false}">
+    <pre class="lay-code" lay-options="{title: '嵌套', encode: false}">
 code line
 code line
 code line
 code line
-<pre class="layui-code" lay-options="{ln: false, encode: false}">
+<pre class="lay-code" lay-options="{ln: false, encode: false}">
 code line
 code line
 code line
-<pre class="layui-code">
+<pre class="lay-code">
 code line
 code line
 code line
@@ -214,21 +214,21 @@ code line
 </pre>
 </pre>
 
-    <pre class="layui-code" lay-options="{skin: 'dark', encode: false}">
+    <pre class="lay-code" lay-options="{skin: 'dark', encode: false}">
 code line
 code line
 code line
 code line
 code line
 code line
-<pre class="layui-code" lay-options="{skin: 'dark', encode: false}">
+<pre class="lay-code" lay-options="{skin: 'dark', encode: false}">
 code line
 code line
 code line
 code line
 code line
 code line
-<pre class="layui-code" lay-options="{skin: 'dark', ln: false, encode: false}">
+<pre class="lay-code" lay-options="{skin: 'dark', ln: false, encode: false}">
 code line
 code line
 code line
@@ -239,13 +239,13 @@ code line
 </pre>
 </pre>
 
-    <pre class="layui-code" lay-options="{encode: true}">
+    <pre class="lay-code" lay-options="{encode: true}">
 <div>
   123
 </div>
 </pre>
 
-    <pre class="layui-code" lay-options="{about: 'AboutInfo'}">
+    <pre class="lay-code" lay-options="{about: 'AboutInfo'}">
   About
 </pre
     >
@@ -334,7 +334,7 @@ code line
         // theme: 'dark',
         // header: true,
         // wordWrap: false, // 是否自动换行
-        // code: '<div class="layui-btn">初始按钮</div>',
+        // code: '<div class="lay-btn">初始按钮</div>',
         lang: 'html',
         highlighter: 'hljs',
         tools: ['full', 'wordWrap', 'theme', 'edit'], // 显示的工具列表
@@ -405,7 +405,7 @@ code line
 
       // 通用实例，根据元素属性定制化参数
       layui.code({
-        elem: '.layui-code',
+        elem: '.lay-code',
         tools: ['tips'],
         langMarker: true,
         lang: 'html',
@@ -414,3 +414,4 @@ code line
     </script>
   </body>
 </html>
+

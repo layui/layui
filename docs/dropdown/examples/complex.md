@@ -1,4 +1,4 @@
-<button class="layui-btn" id="ID-dropdown-demo-complex">
+<button class="lay-btn" id="ID-dropdown-demo-complex">
   无限层级 + 跳转 + 事件 + 自定义模板
 </button>
 
@@ -13,7 +13,7 @@ layui.use(function(){
     elem: '#ID-dropdown-demo-complex',
     data: [{
       title: 'menu item 1',
-      templet: '{{!<i class="layui-icon layui-icon-picture"></i> {{= d.title }} <span class="layui-badge-dot"></span>!}}',
+      templet: '{{!<i class="lay-icon lay-icon-picture"></i> {{= d.title }} <span class="lay-badge-dot"></span>!}}',
       id: 100,
       href: '#'
     },{

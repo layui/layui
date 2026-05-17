@@ -10,29 +10,29 @@
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
   </head>
   <body>
-    <div class="layui-text layui-padding-5">
+    <div class="lay-text lay-padding-5">
       <h3>默认 body 委托元素</h3>
-      <div class="layui-btn-container">
-        <button class="layui-btn" lay-on="e1">事件 e1</button>
-        <button class="layui-btn" lay-on="e2">事件 e2</button>
-        <button class="layui-btn" lay-on="e3">事件 e3</button>
-        <button class="layui-btn" lay-bind="e1">
+      <div class="lay-btn-container">
+        <button class="lay-btn" lay-on="e1">事件 e1</button>
+        <button class="lay-btn" lay-on="e2">事件 e2</button>
+        <button class="lay-btn" lay-on="e3">事件 e3</button>
+        <button class="lay-btn" lay-bind="e1">
           hover: lay-bind - 事件 e1
         </button>
-        <button class="layui-btn" lay-active="e1">
+        <button class="lay-btn" lay-active="e1">
           hover: lay-active - 事件 e1
         </button>
-        <button class="layui-btn layui-btn-primary" lay-on="getBodyEvents">
+        <button class="lay-btn lay-btn-primary" lay-on="getBodyEvents">
           查看 body 的事件集合
         </button>
       </div>
 
       <h3>自定义委托元素</h3>
-      <div class="layui-btn-container" id="ID-utils-on-test">
-        <button class="layui-btn" lay-on="e1">事件 e1 - 测试阻止冒泡</button>
-        <button class="layui-btn" lay-on="e5">事件 e5</button>
-        <button class="layui-btn" lay-on="e6">hover: 事件 e6</button>
-        <button class="layui-btn layui-btn-primary" lay-on="getElemEvents">
+      <div class="lay-btn-container" id="ID-utils-on-test">
+        <button class="lay-btn" lay-on="e1">事件 e1 - 测试阻止冒泡</button>
+        <button class="lay-btn" lay-on="e5">事件 e5</button>
+        <button class="lay-btn" lay-on="e6">hover: 事件 e6</button>
+        <button class="lay-btn lay-btn-primary" lay-on="getElemEvents">
           查看该委托元素的事件集合
         </button>
       </div>
@@ -40,16 +40,16 @@
       <h3>转换日期格式</h3>
 
       编辑格式：
-      <div class="layui-inline" style="width: 210px">
+      <div class="lay-inline" style="width: 210px">
         <input
           type="text"
           value="yyyy-MM-dd HH:mm:ss"
-          class="layui-input"
+          class="lay-input"
           id="ID-utils-toDateString-test"
         />
       </div>
       <span
-        class="layui-word-aux"
+        class="lay-word-aux"
         id="ID-utils-toDateString-result-test"
       ></span>
 
@@ -225,3 +225,4 @@
     </script>
   </body>
 </html>
+

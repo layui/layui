@@ -6,31 +6,31 @@
     <title>router 前端路由管理器 - layui</title>
     <link href="./assets/dist/css/layui.css" rel="stylesheet" />
   </head>
-  <body class="layui-padding-3">
-    <div class="layui-container layui-text">
-      <div class="layui-tabs" id="routerModeTabs">
-        <ul class="layui-tabs-header">
-          <li class="layui-this" lay-id="hash">hash 模式</li>
+  <body class="lay-padding-3">
+    <div class="lay-container lay-text">
+      <div class="lay-tabs" id="routerModeTabs">
+        <ul class="lay-tabs-header">
+          <li class="lay-this" lay-id="hash">hash 模式</li>
           <li lay-id="history">history 模式</li>
         </ul>
 
-        <div class="layui-tabs-body">
-          <div class="layui-tabs-item layui-show">
-            <div class="layui-panel layui-padding-3">
+        <div class="lay-tabs-body">
+          <div class="lay-tabs-item lay-show">
+            <div class="lay-panel lay-padding-3">
               <h2>URL 解析</h2>
               <p>用于验证 router.hash() 的返回结果。</p>
 
-              <div class="layui-form-item">
+              <div class="lay-form-item">
                 <input
                   type="text"
                   id="hashInput"
-                  class="layui-input"
+                  class="lay-input"
                   value="#/base?tab=api#section-1"
                 />
               </div>
 
-              <div class="layui-btn-container">
-                <button class="layui-btn" lay-on="parseHash">解析 hash</button>
+              <div class="lay-btn-container">
+                <button class="lay-btn" lay-on="parseHash">解析 hash</button>
               </div>
 
               <pre id="hashParseOutput"></pre>
@@ -38,21 +38,21 @@
 
             <br />
 
-            <div class="layui-panel layui-padding-3">
+            <div class="lay-panel lay-padding-3">
               <h2>URL 标准化</h2>
               <p>用于验证 hash 模式下的 normalizeUrl()。</p>
 
-              <div class="layui-form-item">
+              <div class="lay-form-item">
                 <input
                   type="text"
                   id="hashNormalizeSample"
-                  class="layui-input"
+                  class="lay-input"
                   value="button///demo?from=router#toolbar"
                 />
               </div>
 
-              <div class="layui-btn-container">
-                <button class="layui-btn" lay-on="hashNormalize">
+              <div class="lay-btn-container">
+                <button class="lay-btn" lay-on="hashNormalize">
                   标准化示例 URL
                 </button>
               </div>
@@ -62,15 +62,15 @@
 
             <br />
 
-            <div class="layui-panel layui-padding-3">
+            <div class="lay-panel lay-padding-3">
               <h2>路由跳转</h2>
               <p>用于验证 hash 模式下 navigate()、done 回调与 windowName。</p>
 
-              <div class="layui-btn-container">
-                <button class="layui-btn" lay-on="hashNavigateBase">
+              <div class="lay-btn-container">
+                <button class="lay-btn" lay-on="hashNavigateBase">
                   跳转到 #/base
                 </button>
-                <button class="layui-btn" lay-on="hashNavigateButton">
+                <button class="lay-btn" lay-on="hashNavigateButton">
                   跳转到复杂 hash 地址
                 </button>
               </div>
@@ -78,7 +78,7 @@
               <iframe
                 id="routerDemoFrame"
                 name="routerDemoFrame"
-                class="layui-border"
+                class="lay-border"
                 width="100%"
                 height="60"
                 srcdoc="这是一个用于测试的 iframe 容器"
@@ -89,22 +89,22 @@
             </div>
           </div>
 
-          <div class="layui-tabs-item">
-            <div class="layui-panel layui-padding-3">
+          <div class="lay-tabs-item">
+            <div class="lay-panel lay-padding-3">
               <h2>URL 解析</h2>
               <p>用于验证 router.hash() 的返回结果。</p>
 
-              <div class="layui-form-item">
+              <div class="lay-form-item">
                 <input
                   type="text"
                   id="urlInput"
-                  class="layui-input"
+                  class="lay-input"
                   value="https://www.example.com/user/profile/?tab=info#section-1"
                 />
               </div>
 
-              <div class="layui-btn-container">
-                <button class="layui-btn" lay-on="parseUrl">解析 url</button>
+              <div class="lay-btn-container">
+                <button class="lay-btn" lay-on="parseUrl">解析 url</button>
               </div>
 
               <pre id="urlParseOutput"></pre>
@@ -112,21 +112,21 @@
 
             <br />
 
-            <div class="layui-panel layui-padding-3">
+            <div class="lay-panel lay-padding-3">
               <h2>URL 标准化</h2>
               <p>用于验证 history 模式下 normalizeUrl()。</p>
 
-              <div class="layui-form-item">
+              <div class="lay-form-item">
                 <input
                   type="text"
                   id="historyNormalizeSample"
-                  class="layui-input"
+                  class="lay-input"
                   value="https://www.example.com//router///demo?from=layui#hash-case"
                 />
               </div>
 
-              <div class="layui-btn-container">
-                <button class="layui-btn" lay-on="historyAbsoluteNormalize">
+              <div class="lay-btn-container">
+                <button class="lay-btn" lay-on="historyAbsoluteNormalize">
                   标准化示例 URL
                 </button>
               </div>
@@ -136,22 +136,22 @@
 
             <br />
 
-            <div class="layui-panel layui-padding-3">
+            <div class="lay-panel lay-padding-3">
               <h2>路由跳转</h2>
               <p>
                 使用 /base、/button、/router 作为 history
                 路径，便于直接刷新验证路径表现。
               </p>
 
-              <div class="layui-btn-container">
-                <button class="layui-btn" lay-on="historyPush">
+              <div class="lay-btn-container">
+                <button class="lay-btn" lay-on="historyPush">
                   pushState 到 /base
                 </button>
-                <button class="layui-btn" lay-on="historyPushButton">
+                <button class="lay-btn" lay-on="historyPushButton">
                   pushState 到 /button
                 </button>
                 <button
-                  class="layui-btn layui-btn-primary"
+                  class="lay-btn lay-btn-primary"
                   lay-on="historyReplaceRouter"
                 >
                   replaceState 到 /router
@@ -354,3 +354,4 @@
     </script>
   </body>
 </html>
+

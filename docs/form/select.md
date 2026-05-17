@@ -10,12 +10,12 @@ toc: true
 
 <h2 id="normal" lay-toc="{}">普通选择框</h2>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form layui-row layui-col-space16">
-  <div class="layui-col-md6">
+<div class="lay-form lay-row lay-col-space16">
+  <div class="lay-col-md6">
     <select>
       <option value="">请选择</option>
       <option value="AAA">选项 A</option>
@@ -23,7 +23,7 @@ toc: true
       <option value="CCC">选项 C</option>
     </select>
   </div>
-  <div class="layui-col-md6">
+  <div class="lay-col-md6">
     <select>
       <option value="">请选择</option>
       <option value="AAA">选项 A</option>
@@ -31,7 +31,7 @@ toc: true
       <option value="CCC" selected>选项 C</option>
     </select>
   </div>
-  <div class="layui-col-md6">
+  <div class="lay-col-md6">
     <select disabled>
       <option value="">禁用选择框</option>
       <option value="AAA">选项 A</option>
@@ -39,7 +39,7 @@ toc: true
       <option value="CCC">选项 C</option>
     </select>
   </div>
-  <div class="layui-col-md6">
+  <div class="lay-col-md6">
     <select>
       <option value="">请选择</option>
       <option value="AAA">选项 A</option>
@@ -63,11 +63,11 @@ toc: true
 
 通过 `<optgroup>` 标签给选择框分组
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
+<div class="lay-form">
   <select>
     <option value="">请选择</option>
     <optgroup label="分组 A">
@@ -96,12 +96,12 @@ toc: true
 
 在 `<select>` 元素上设置 `lay-creatable=""` 可允许创建新的 option，需开启 `lay-search` 后生效。
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form layui-row layui-col-space16">
-  <div class="layui-col-md6">
+<div class="lay-form lay-row lay-col-space16">
+  <div class="lay-col-md6">
     <select lay-search="">
       <option value="">请选择或搜索（默认不区分大小写）</option>
       <option value="1">AAA</option>
@@ -113,7 +113,7 @@ toc: true
       <option value="7">AbC</option>
     </select>
   </div>
-  <div class="layui-col-md6">
+  <div class="lay-col-md6">
     <select lay-search="{caseSensitive:true}">
       <option value="">请选择或搜索（设置区分大小写）</option>
       <option value="1">AAA</option>
@@ -126,7 +126,7 @@ toc: true
       <option value="8">ACb</option>
     </select>
   </div>
-  <div class="layui-col-md6">
+  <div class="lay-col-md6">
     <select lay-search="">
       <option value="">请搜索</option>
       <optgroup label="分组a">
@@ -167,7 +167,7 @@ toc: true
       </optgroup>
     </select>
   </div>
-  <div class="layui-col-md6">
+  <div class="lay-col-md6">
     <select lay-search="" lay-creatable="">
       <option value="">可创建新的 option</option>
       <option value="1">AAA</option>
@@ -195,11 +195,11 @@ toc: true
 
 ### 2. 在 layer 中使用 select
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<button class="layui-btn" lay-on="layer-select">弹出 layer+select</button>
+<button class="lay-btn" lay-on="layer-select">弹出 layer+select</button>
 
 <!-- import layui -->
 <script>
@@ -220,17 +220,17 @@ layui.use(function(){
         shadeClose: true, // 点击遮罩区域，关闭弹层
         maxmin: true, // 允许全屏最小化
         // 注: 这里特别对 select 设置了 lay-append-position 属性，以便与 layer 的定位方式保持一致
-        content: '<form class="layui-form layui-padding-3" lay-filter="test"><select lay-append-to="body" lay-append-position="fixed"><option value="">请选择</option><option value="AAA1">选项 A1</option><option value="AAA2">选项 A2</option><option value="AAA3">选项 A3</option><option value="AAA4">选项 A4</option><option value="AAA5">选项 A5</option><option value="AAA6">选项 A6</option><option value="AAA7">选项 A7</option><option value="AAA8">选项 A8</option><option value="AAA9">选项 A9</option><option value="AAA10">选项 A10</option><option value="AAA11">选项 A11</option><option value="AAA12">选项 A12</option><option value="BBB">选项 B</option><option value="CCC">选项 C</option></select></form>',
+        content: '<form class="lay-form lay-padding-3" lay-filter="test"><select lay-append-to="body" lay-append-position="fixed"><option value="">请选择</option><option value="AAA1">选项 A1</option><option value="AAA2">选项 A2</option><option value="AAA3">选项 A3</option><option value="AAA4">选项 A4</option><option value="AAA5">选项 A5</option><option value="AAA6">选项 A6</option><option value="AAA7">选项 A7</option><option value="AAA8">选项 A8</option><option value="AAA9">选项 A9</option><option value="AAA10">选项 A10</option><option value="AAA11">选项 A11</option><option value="AAA12">选项 A12</option><option value="BBB">选项 B</option><option value="CCC">选项 C</option></select></form>',
         success: function (layero) {
           // 定向渲染 select
-          form.render(layero.find('.layui-form select'));
+          form.render(layero.find('.lay-form select'));
 
           // 鼠标滑动 layer 内部滚动条时移除下拉框，以规避错位
           // 若 layer 内部不存在滚动条，以下代码可删除
-          var selectElem = layero.find('.layui-form-select');
-          layero.find('.layui-layer-content').on('scroll', function() {
-            selectElem.removeClass('layui-form-selected');
-            layui.$('.layui-select-panel-wrap').detach();
+          var selectElem = layero.find('.lay-form-select');
+          layero.find('.lay-layer-content').on('scroll', function() {
+            selectElem.removeClass('lay-form-selected');
+            layui.$('.lay-select-panel-wrap').detach();
           });
         },
       });
@@ -251,11 +251,11 @@ layui.use(function(){
 
 该事件在选择框选项选中后触发。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['code', 'preview'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['code', 'preview'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
+<div class="lay-form">
   <select lay-filter="demo-select-filter">
     <option value="">请选择</option>
     <option value="AAA">选项 A</option>
@@ -282,3 +282,4 @@ layui.use(function(){
 </script>
   </textarea>
 </pre>
+

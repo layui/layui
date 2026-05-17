@@ -1,21 +1,21 @@
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn demo-class-accept" lay-options="{accept: 'file'}">
-    <i class="layui-icon layui-icon-upload"></i> 
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn demo-class-accept" lay-options="{accept: 'file'}">
+    <i class="lay-icon lay-icon-upload"></i> 
     上传文件
   </button>
-  <button type="button" class="layui-btn demo-class-accept" lay-options="{
+  <button type="button" class="lay-btn demo-class-accept" lay-options="{
     accept: 'file',
     exts: 'zip|rar|7z'
   }">
-    <i class="layui-icon layui-icon-upload"></i> 
+    <i class="lay-icon lay-icon-upload"></i> 
     只允许压缩文件
   </button>
-  <button type="button" class="layui-btn demo-class-accept" lay-options="{accept: 'video'}">
-    <i class="layui-icon layui-icon-upload"></i> 
+  <button type="button" class="lay-btn demo-class-accept" lay-options="{accept: 'video'}">
+    <i class="lay-icon lay-icon-upload"></i> 
     上传视频
   </button>
-  <button type="button" class="layui-btn demo-class-accept" lay-options="{accept: 'audio'}">
-    <i class="layui-icon layui-icon-upload"></i>
+  <button type="button" class="lay-btn demo-class-accept" lay-options="{accept: 'audio'}">
+    <i class="lay-icon lay-icon-upload"></i>
     上传音频
   </button>
 </div>

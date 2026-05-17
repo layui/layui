@@ -1,7 +1,7 @@
-<button type="button" class="layui-btn layui-btn-danger" id="ID-upload-demo-size">
-  <i class="layui-icon layui-icon-upload"></i> 上传图片
+<button type="button" class="lay-btn lay-btn-danger" id="ID-upload-demo-size">
+  <i class="lay-icon lay-icon-upload"></i> 上传图片
 </button>
-<div class="layui-inline layui-word-aux">
+<div class="lay-inline lay-word-aux">
   这里以限制 60KB 为例
 </div>
 

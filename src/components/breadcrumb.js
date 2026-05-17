@@ -12,7 +12,7 @@ var component = componentBuilder({
 
   // 默认配置
   config: {
-    elem: '.layui-breadcrumb',
+    elem: '.lay-breadcrumb',
   },
 
   render: function () {
@@ -36,3 +36,4 @@ var component = componentBuilder({
 
 // export
 export { component as breadcrumb };
+

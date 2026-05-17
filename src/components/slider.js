@@ -24,15 +24,15 @@ var component = componentBuilder({
     theme: '#16baaa', // 主题颜色
   },
   CONST: {
-    ELEM_VIEW: 'layui-slider',
-    SLIDER_BAR: 'layui-slider-bar',
-    SLIDER_WRAP: 'layui-slider-wrap',
-    SLIDER_WRAP_BTN: 'layui-slider-wrap-btn',
-    SLIDER_TIPS: 'layui-slider-tips',
-    SLIDER_INPUT: 'layui-slider-input',
-    SLIDER_INPUT_TXT: 'layui-slider-input-txt',
-    SLIDER_INPUT_BTN: 'layui-slider-input-btn',
-    ELEM_HOVER: 'layui-slider-hover',
+    ELEM_VIEW: 'lay-slider',
+    SLIDER_BAR: 'lay-slider-bar',
+    SLIDER_WRAP: 'lay-slider-wrap',
+    SLIDER_WRAP_BTN: 'lay-slider-wrap-btn',
+    SLIDER_TIPS: 'lay-slider-tips',
+    SLIDER_INPUT: 'lay-slider-input',
+    SLIDER_INPUT_TXT: 'lay-slider-input-txt',
+    SLIDER_INPUT_BTN: 'lay-slider-input-btn',
+    ELEM_HOVER: 'lay-slider-hover',
   },
   render: function () {
     var that = this;
@@ -85,8 +85,8 @@ var component = componentBuilder({
 
     //滑块
     var temp =
-      '<div class="layui-slider ' +
-      (options.type === 'vertical' ? 'layui-slider-vertical' : '') +
+      '<div class="lay-slider ' +
+      (options.type === 'vertical' ? 'lay-slider-vertical' : '') +
       '">' +
       (options.tips
         ? '<div class="' +
@@ -95,7 +95,7 @@ var component = componentBuilder({
           (options.tipsAlways ? '' : 'style="display:none;"') +
           '></div>'
         : '') +
-      '<div class="layui-slider-bar" style="background:' +
+      '<div class="lay-slider-bar" style="background:' +
       theme +
       '; ' +
       (options.type === 'vertical' ? 'height' : 'width') +
@@ -105,20 +105,20 @@ var component = componentBuilder({
       (options.type === 'vertical' ? 'bottom' : 'left') +
       ':' +
       (scaleFir || 0) +
-      ';"></div><div class="layui-slider-wrap" style="' +
+      ';"></div><div class="lay-slider-wrap" style="' +
       (options.type === 'vertical' ? 'bottom' : 'left') +
       ':' +
       (scaleFir || scale) +
       ';">' +
-      '<div class="layui-slider-wrap-btn" style="border: 2px solid ' +
+      '<div class="lay-slider-wrap-btn" style="border: 2px solid ' +
       theme +
       ';"></div></div>' +
       (options.range
-        ? '<div class="layui-slider-wrap" style="' +
+        ? '<div class="lay-slider-wrap" style="' +
           (options.type === 'vertical' ? 'bottom' : 'left') +
           ':' +
           scaleSec +
-          ';"><div class="layui-slider-wrap-btn" style="border: 2px solid ' +
+          ';"><div class="lay-slider-wrap-btn" style="border: 2px solid ' +
           theme +
           ';"></div></div>'
         : '') +
@@ -160,7 +160,7 @@ var component = componentBuilder({
         var step = (i * 100) / number;
         if (step < 100) {
           item +=
-            '<div class="layui-slider-step" style="' +
+            '<div class="lay-slider-step" style="' +
             (options.type === 'vertical' ? 'bottom' : 'left') +
             ':' +
             step +
@@ -173,7 +173,7 @@ var component = componentBuilder({
     //插入输入框
     if (options.input && !options.range) {
       var elemInput = $(
-        '<div class="layui-slider-input"><div class="layui-slider-input-txt"><input type="text" class="layui-input"></div><div class="layui-slider-input-btn"><i class="layui-icon layui-icon-up"></i><i class="layui-icon layui-icon-down"></i></div></div>',
+        '<div class="lay-slider-input"><div class="lay-slider-input-txt"><input type="text" class="lay-input"></div><div class="lay-slider-input-btn"><i class="lay-icon lay-icon-up"></i><i class="lay-icon lay-icon-down"></i></div></div>',
       );
       othis.css('position', 'relative');
       othis.append(elemInput);
@@ -408,7 +408,7 @@ Class.prototype.slide = function (setValue, value, i) {
 
   //拖拽元素
   var elemMove = $(
-    ['<div class="layui-auxiliar-moving" id="LAY-slider-moving"></div'].join(
+    ['<div class="lay-auxiliar-moving" id="LAY-slider-moving"></div'].join(
       '',
     ),
   );
@@ -598,3 +598,4 @@ Class.prototype.slide = function (setValue, value, i) {
 };
 
 export { component as slider };
+

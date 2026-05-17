@@ -1,4 +1,4 @@
-<pre class="layui-code" lay-options="{preview: true, text: {preview: '普通用法'}, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, text: {preview: '普通用法'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-normal-1"></div>
 <div id="demo-laypage-normal-2"></div>
@@ -24,7 +24,7 @@ layui.use(function(){
 
 <h3 id="demo-theme" class="ws-anchor ws-bold">自定义主题</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-theme-1"></div>
 <div id="demo-laypage-theme-2"></div>
@@ -58,7 +58,7 @@ layui.use(function(){
 
 <h3 id="demo-text" class="ws-anchor ws-bold">自定义文本</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-text"></div>
 
@@ -83,7 +83,7 @@ layui.use(function(){
 
 <h3 id="demo-pn-hide" class="ws-anchor ws-bold">不显示上一页、下一页</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-pn-hide"></div>
 
@@ -106,7 +106,7 @@ layui.use(function(){
 
 <h3 id="demo-pn-show" class="ws-anchor ws-bold">只显示上一页、下一页、当前页</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-pn-show"></div>
 
@@ -138,7 +138,7 @@ layui.use(function(){
 
 <h3 id="demo-layout" class="ws-anchor ws-bold">自定义排版</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-layout-1"></div>
 <div id="demo-laypage-layout-2"></div>
@@ -172,7 +172,7 @@ layui.use(function(){
 
 <h3 id="demo-limits" class="ws-anchor ws-bold">自定义每页条数的选择项</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-limits"></div>
 
@@ -196,7 +196,7 @@ layui.use(function(){
 
 <h3 id="demo-all" class="ws-anchor ws-bold">完整显示</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-all"></div>
 
@@ -221,7 +221,7 @@ layui.use(function(){
 
 <h3 id="demo-hash" class="ws-anchor ws-bold">高级 - 开启 HASH</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-hash"></div>
 
@@ -244,7 +244,7 @@ layui.use(function(){
 
 <h3 id="demo-data" class="ws-anchor ws-bold">高级 - 将一段已知数组分页展示</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="demo-laypage-data"></div>
 <div id="demo-laypage-data-view"></div>
@@ -276,3 +276,4 @@ layui.use(function(){
 </script>
   </textarea>
 </pre>
+

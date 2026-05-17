@@ -55,7 +55,7 @@ toc: true
 | elem | 绑定容器中需进行懒加载的图片元素选择器 |
 | scrollElem | 滚动条所在元素选择器，默认 `document` 。 |
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div class="flow-demo-lazyimg" id="ID-flow-demo-lazyimg">
   <!-- <img src="占位图地址" lay-src="图片实际地址"> -->
@@ -90,4 +90,5 @@ layui.use('flow', function(){
 </pre>
 
 无论滚动条上滑还是下滑，都会始终加载当前屏的图片。
+
 

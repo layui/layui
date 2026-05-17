@@ -1,4 +1,4 @@
-<pre class="layui-code" lay-options="{style: 'height: 525px;', layout: ['code'], tools: []}">
+<pre class="lay-code" lay-options="{style: 'height: 525px;', layout: ['code'], tools: []}">
   <textarea>
 // 简体中文语言包（内置）
 var zhCN = {
@@ -182,3 +182,4 @@ i18n.set({
 });
   </textarea>
 </pre>
+

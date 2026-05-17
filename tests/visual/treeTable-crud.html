@@ -15,60 +15,60 @@
 
   <body>
     <table
-      class="layui-table"
+      class="lay-table"
       id="MianTable"
       lay-filter="MianTable"
       lay-data="{id: 'MianTable'}"
     ></table>
     <script type="text/html" id="toolbar">
-      <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="AddRowButton">
+      <div class="lay-btn-container">
+        <button class="lay-btn lay-btn-sm" lay-event="AddRowButton">
           新增主件
         </button>
-        <button class="layui-btn layui-btn-sm" lay-event="InitTableButton">
+        <button class="lay-btn lay-btn-sm" lay-event="InitTableButton">
           初始化数据
         </button>
-        <button class="layui-btn layui-btn-sm" lay-event="SubmitButton">
+        <button class="lay-btn lay-btn-sm" lay-event="SubmitButton">
           保存
         </button>
-        <button class="layui-btn layui-btn-sm" lay-event="expandAll-true">
+        <button class="lay-btn lay-btn-sm" lay-event="expandAll-true">
           expandAll-true
         </button>
-        <button class="layui-btn layui-btn-sm" lay-event="expandAll-false">
+        <button class="lay-btn lay-btn-sm" lay-event="expandAll-false">
           expandAll-false
         </button>
       </div>
     </script>
     <script type="text/html" id="TableItemTools">
-      <div class="layui-btn-container">
-        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="addChild"
+      <div class="lay-btn-container">
+        <a class="lay-btn lay-btn-warm lay-btn-xs" lay-event="addChild"
           >新增子件</a
         >
-        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="delChild"
+        <a class="lay-btn lay-btn-warm lay-btn-xs" lay-event="delChild"
           >删除</a
         >
       </div>
     </script>
     <script type="text/html" id="TableItemTools">
-      <div class="layui-btn-container">
-        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="addChild"
+      <div class="lay-btn-container">
+        <a class="lay-btn lay-btn-warm lay-btn-xs" lay-event="addChild"
           >新增子件</a
         >
-        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="delChild"
+        <a class="lay-btn lay-btn-warm lay-btn-xs" lay-event="delChild"
           >删除</a
         >
       </div>
     </script>
 
     <script type="text/html" id="sexTpl">
-      <select name="select-sex" class="layui-border select-sex" lay-ignore lay-filter="sex_{{d.rowid}}" id="sex_{{d.rowid}}">
+      <select name="select-sex" class="lay-border select-sex" lay-ignore lay-filter="sex_{{d.rowid}}" id="sex_{{d.rowid}}">
         <option value="">请选择</option>
         <option value="男" {{d.sex=="男"?"selected":""}}>男</option>
         <option value="女" {{d.sex=="女"?"selected":""}}>女</option>
       </select>
     </script>
     <script type="text/html" id="provinceTpl">
-      <select name="select-province" class="layui-border select-province" lay-ignore lay-filter="province_{{d.rowid}}" id="province_{{d.rowid}}">
+      <select name="select-province" class="lay-border select-province" lay-ignore lay-filter="province_{{d.rowid}}" id="province_{{d.rowid}}">
         <option value="">请选择</option>
         {{ d.provinceList?.forEach(function(v, i) { }}
           <option value="{{= v.id }}" {{= d.province==v.id?"selected":"" }}>{{= v.name }}</option>
@@ -76,7 +76,7 @@
       </select>
     </script>
     <script type="text/html" id="cityTpl">
-      <select name="select-city" class="layui-border select-city" lay-ignore lay-filter="city_{{d.rowid}}" id="city_{{d.rowid}}">
+      <select name="select-city" class="lay-border select-city" lay-ignore lay-filter="city_{{d.rowid}}" id="city_{{d.rowid}}">
         <option value="">请选择</option>
         {{ d.cityList?.forEach(function(v, i) { }}
           <option value="{{= v.id }}" {{= d.city==v.id?"selected":"" }}>{{= v.name }}</option>
@@ -84,7 +84,7 @@
       </select>
     </script>
     <script type="text/html" id="districtTpl">
-      <select name="select-district" class="layui-border select-district" lay-ignore lay-filter="district_{{d.rowid}}" id="district_{{d.rowid}}">
+      <select name="select-district" class="lay-border select-district" lay-ignore lay-filter="district_{{d.rowid}}" id="district_{{d.rowid}}">
         <option value="">请选择</option>
         {{ d.districtList?.forEach(function(v, i) { }}
           <option value="{{= v.id }}" {{= d.district==v.id?"selected":"" }}>{{= v.name }}</option>
@@ -136,15 +136,15 @@
         var isHtmlIcon = false;
         var genIcon = (str, isHtml) => (isHtml ? normalizedIcon(str) : str);
         var icons = {
-          flexIconClose: genIcon('layui-icon layui-icon-addition', isHtmlIcon),
+          flexIconClose: genIcon('lay-icon lay-icon-addition', isHtmlIcon),
           flexIconOpen: genIcon(
-            'layui-icon layui-icon-subtraction',
+            'lay-icon lay-icon-subtraction',
             isHtmlIcon,
           ),
-          iconClose: genIcon('layui-icon layui-icon-add-circle', isHtmlIcon),
-          iconOpen: genIcon('layui-icon layui-icon-reduce-circle', isHtmlIcon),
-          iconLeaf: genIcon('layui-icon layui-icon-snowflake', isHtmlIcon),
-          icon: genIcon('layui-icon layui-icon-addition', isHtmlIcon),
+          iconClose: genIcon('lay-icon lay-icon-add-circle', isHtmlIcon),
+          iconOpen: genIcon('lay-icon lay-icon-reduce-circle', isHtmlIcon),
+          iconLeaf: genIcon('lay-icon lay-icon-snowflake', isHtmlIcon),
+          icon: genIcon('lay-icon lay-icon-addition', isHtmlIcon),
         };
 
         treeTable.render({
@@ -222,7 +222,7 @@
                 data: {
                   id: Date.now(),
                   provinceList: $.extend(true, [], provinceList),
-                  //  icon: 'layui-icon layui-icon-github'
+                  //  icon: 'lay-icon lay-icon-github'
                 },
               });
               console.log('add', table.cache['MianTable']);
@@ -297,3 +297,4 @@
     </script>
   </body>
 </html>
+

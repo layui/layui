@@ -1,16 +1,16 @@
-<table class="layui-hide" id="ID-treeTable-demo"></table>
+<table class="lay-hide" id="ID-treeTable-demo"></table>
 
 <script type="text/html" id="TPL-treeTable-demo">
-  <div class="layui-btn-container">
-    <button class="layui-btn layui-btn-sm" lay-event="getChecked">获取选中数据</button>
+  <div class="lay-btn-container">
+    <button class="lay-btn lay-btn-sm" lay-event="getChecked">获取选中数据</button>
   </div>
 </script>
 
 <script type="text/html" id="TPL-treeTable-demo-tools">
-  <div class="layui-btn-container">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="addChild">新增</a>
-    <a class="layui-btn layui-btn-xs" lay-event="more">更多 <i class="layui-icon layui-icon-down"></i></a>
+  <div class="lay-btn-container">
+    <a class="lay-btn lay-btn-primary lay-btn-xs" lay-event="detail">查看</a>
+    <a class="lay-btn lay-btn-warm lay-btn-xs" lay-event="addChild">新增</a>
+    <a class="lay-btn lay-btn-xs" lay-event="more">更多 <i class="lay-icon lay-icon-down"></i></a>
   </div>
 </script>
 
@@ -118,3 +118,4 @@ layui.use(function(){
   });
 });
 </script>
+

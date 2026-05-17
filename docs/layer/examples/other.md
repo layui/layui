@@ -1,10 +1,10 @@
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-tab">tab 层</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-prompt-0">prompt - 单行文本框层</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-prompt-1">prompt - 密令输入框层</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-prompt-2">prompt - 多行文本框层</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-photos-one">photos - 单张图片层</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-tips-photos">photos - 多张相册层</button>
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-tips-tab">tab 层</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-tips-prompt-0">prompt - 单行文本框层</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-tips-prompt-1">prompt - 密令输入框层</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-tips-prompt-2">prompt - 多行文本框层</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-tips-photos-one">photos - 单张图片层</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-tips-photos">photos - 多张相册层</button>
 </div>
 
 <!-- import layui --> 
@@ -99,3 +99,4 @@ layui.use(function(){
   })
 });
 </script>
+

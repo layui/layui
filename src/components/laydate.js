@@ -102,29 +102,29 @@ var thisModule = function () {
 };
 
 // 字符常量
-var ELEM = '.layui-laydate';
-var THIS = 'layui-this';
-// var SHOW = 'layui-show';
-// var HIDE = 'layui-hide';
+var ELEM = '.lay-laydate';
+var THIS = 'lay-this';
+// var SHOW = 'lay-show';
+// var HIDE = 'lay-hide';
 var DISABLED = 'laydate-disabled';
 var LIMIT_YEAR = [100, 200000];
 
-var ELEM_STATIC = 'layui-laydate-static';
-var ELEM_LIST = 'layui-laydate-list';
+var ELEM_STATIC = 'lay-laydate-static';
+var ELEM_LIST = 'lay-laydate-list';
 var ELEM_SELECTED = 'laydate-selected';
-var ELEM_HINT = 'layui-laydate-hint';
+var ELEM_HINT = 'lay-laydate-hint';
 var ELEM_DAY_NOW = 'laydate-day-now';
 var ELEM_PREV = 'laydate-day-prev';
 var ELEM_NEXT = 'laydate-day-next';
-var ELEM_FOOTER = 'layui-laydate-footer';
-var ELEM_SHORTCUT = 'layui-laydate-shortcut';
+var ELEM_FOOTER = 'lay-laydate-footer';
+var ELEM_SHORTCUT = 'lay-laydate-shortcut';
 var ELEM_NOW = '.laydate-btns-now';
 var ELEM_CONFIRM = '.laydate-btns-confirm';
 var ELEM_TIME_TEXT = 'laydate-time-text';
 var ELEM_TIME_BTN = 'laydate-btns-time';
-var ELEM_PREVIEW = 'layui-laydate-preview';
-var ELEM_MAIN = 'layui-laydate-main';
-var ELEM_SHADE = 'layui-laydate-shade';
+var ELEM_PREVIEW = 'lay-laydate-preview';
+var ELEM_MAIN = 'lay-laydate-main';
+var ELEM_SHADE = 'lay-laydate-shade';
 
 // 组件构造器
 var Class = function (options) {
@@ -432,7 +432,7 @@ Class.prototype.init = function () {
           that.startDate.year === that.endDate.year &&
           that.startDate.month === that.endDate.month));
     $(that.elem)[that.rangeLinked ? 'addClass' : 'removeClass'](
-      'layui-laydate-linkage',
+      'lay-laydate-linkage',
     );
     return that.rangeLinked != state; // 返回发生了变化
   };
@@ -569,7 +569,7 @@ Class.prototype.init = function () {
     };
   });
 
-  that.elemID = 'layui-laydate' + options.elem.attr('lay-key');
+  that.elemID = 'lay-laydate' + options.elem.attr('lay-key');
 
   if (options.show || isStatic) that.render();
   isStatic || that.events();
@@ -607,9 +607,9 @@ Class.prototype.render = function () {
     elem = (that.elem = lay.elem('div', {
       id: that.elemID,
       class: [
-        'layui-laydate',
-        options.range ? ' layui-laydate-range' : '',
-        that.rangeLinked ? ' layui-laydate-linkage' : '',
+        'lay-laydate',
+        options.range ? ' lay-laydate-range' : '',
+        that.rangeLinked ? ' lay-laydate-linkage' : '',
         isStatic ? ' ' + ELEM_STATIC : '',
         options.fullPanel ? ' laydate-theme-fullpanel' : '', // 全面版
         // ,options.theme && options.theme !== 'default' && !/^#/.test(options.theme) ? (' laydate-theme-' + options.theme) : ''
@@ -648,14 +648,14 @@ Class.prototype.render = function () {
 
     //头部区域
     var divHeader = lay.elem('div', {
-        class: 'layui-laydate-header',
+        class: 'lay-laydate-header',
       }),
       //左右切换
       headerChild = [
         (function () {
           //上一年
           var elem = lay.elem('i', {
-            class: 'layui-icon laydate-icon laydate-prev-y',
+            class: 'lay-icon laydate-icon laydate-prev-y',
           });
           elem.innerHTML = '&#xe65a;';
           return elem;
@@ -663,7 +663,7 @@ Class.prototype.render = function () {
         (function () {
           //上一月
           var elem = lay.elem('i', {
-            class: 'layui-icon laydate-icon laydate-prev-m',
+            class: 'lay-icon laydate-icon laydate-prev-m',
           });
           elem.innerHTML = '&#xe603;';
           return elem;
@@ -680,7 +680,7 @@ Class.prototype.render = function () {
         (function () {
           //下一月
           var elem = lay.elem('i', {
-            class: 'layui-icon laydate-icon laydate-next-m',
+            class: 'lay-icon laydate-icon laydate-next-m',
           });
           elem.innerHTML = '&#xe602;';
           return elem;
@@ -688,7 +688,7 @@ Class.prototype.render = function () {
         (function () {
           //下一年
           var elem = lay.elem('i', {
-            class: 'layui-icon laydate-icon laydate-next-y',
+            class: 'lay-icon laydate-icon laydate-next-y',
           });
           elem.innerHTML = '&#xe65b;';
           return elem;
@@ -696,7 +696,7 @@ Class.prototype.render = function () {
       ],
       //日历内容区域
       divContent = lay.elem('div', {
-        class: 'layui-laydate-content',
+        class: 'lay-laydate-content',
       }),
       table = lay.elem('table'),
       thead = lay.elem('thead'),
@@ -866,7 +866,7 @@ Class.prototype.render = function () {
         /*
       if (options.position !== 'static' && !options.range && options.autoConfirm) {
         if (type === 'date') {
-          that.choose($(elem).find('td.layui-this'))
+          that.choose($(elem).find('td.lay-this'))
         } else if (type === 'year' || type === 'month') {
           if($(elemMain[0]).find('.' + ELEM_MAIN + ' li.' + THIS + ':not(.laydate-disabled)')[0]) {
             that.setValue(that.parse()).done().remove();
@@ -895,11 +895,11 @@ Class.prototype.render = function () {
       isPrimaryColor = false;
       styleText.push(
         [
-          '#{{id}} .layui-laydate-header{background-color:{{theme}};}',
-          '#{{id}} li.layui-this,#{{id}} td.layui-this>div{background-color:{{theme}} !important;}',
+          '#{{id}} .lay-laydate-header{background-color:{{theme}};}',
+          '#{{id}} li.lay-this,#{{id}} td.lay-this>div{background-color:{{theme}} !important;}',
           options.theme.indexOf('circle') !== -1
             ? ''
-            : '#{{id}} .layui-this{background-color:{{theme}} !important;}',
+            : '#{{id}} .lay-this{background-color:{{theme}} !important;}',
           '#{{id}} .laydate-day-now{color:{{theme}} !important;}',
           '#{{id}} .laydate-day-now:after{border-color:{{theme}} !important;}',
         ]
@@ -925,7 +925,7 @@ Class.prototype.render = function () {
   //快捷栏样式
   if (options.shortcuts && options.range) {
     styleText.push(
-      '#{{id}}.layui-laydate-range{width: 628px;}'.replace(
+      '#{{id}}.lay-laydate-range{width: 628px;}'.replace(
         /{{id}}/g,
         that.elemID,
       ),
@@ -2112,7 +2112,7 @@ Class.prototype.list = function (type, index) {
 
       [showHour, showMinute, showSecond].forEach(function (isShow, i) {
         if (!isShow) {
-          liElem[i].className += ' layui-hide';
+          liElem[i].className += ' lay-hide';
           hideCount++;
         }
       });
@@ -2217,7 +2217,7 @@ Class.prototype.list = function (type, index) {
         }
 
         that.autoCalendarModel.auto && !that.rangeLinked
-          ? that.choose($(elemCont).find('td.layui-this'), index)
+          ? that.choose($(elemCont).find('td.lay-this'), index)
           : that.endState && that.done(null, 'change');
         $(that.footer)
           .find('.' + ELEM_TIME_BTN)
@@ -2933,7 +2933,7 @@ Class.prototype.change = function (index) {
         that.checkDate('limit').calendar(null, index);
         // 面板自动切换的模式下重新判定是否发生模式转换等细节处理
         that.autoCalendarModel.auto
-          ? that.choose($(elemCont).find('td.layui-this'), index)
+          ? that.choose($(elemCont).find('td.lay-this'), index)
           : that.done(null, 'change');
       }
     },
@@ -2958,7 +2958,7 @@ Class.prototype.change = function (index) {
 
         that.checkDate('limit').calendar(null, null, 'init');
         that.autoCalendarModel.auto
-          ? that.choose($(elemCont).find('td.layui-this'), index)
+          ? that.choose($(elemCont).find('td.lay-this'), index)
           : that.done(null, 'change');
       }
     },
@@ -2983,7 +2983,7 @@ Class.prototype.change = function (index) {
 
         that.checkDate('limit').calendar(null, null, 'init');
         that.autoCalendarModel.auto
-          ? that.choose($(elemCont).find('td.layui-this'), index)
+          ? that.choose($(elemCont).find('td.lay-this'), index)
           : that.done(null, 'change');
       }
     },
@@ -2996,7 +2996,7 @@ Class.prototype.change = function (index) {
         dateTime.year++;
         that.checkDate('limit').calendar(null, index);
         that.autoCalendarModel.auto
-          ? that.choose($(elemCont).find('td.layui-this'), index)
+          ? that.choose($(elemCont).find('td.lay-this'), index)
           : that.done(null, 'change');
       }
     },
@@ -3271,3 +3271,4 @@ laydate.getEndDate = function (month, year) {
 };
 
 export { laydate };
+

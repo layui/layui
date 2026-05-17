@@ -1,36 +1,36 @@
-<div class="layui-form">
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">限定可选日期</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-limit-1" placeholder="yyyy-MM-dd">
+<div class="lay-form">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">限定可选日期</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-limit-1" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">前后若干天可选</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-limit-2" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">前后若干天可选</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-limit-2" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">限定可选时间</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-limit-3" placeholder="HH:mm:ss">
+    <div class="lay-inline">
+      <label class="lay-form-label">限定可选时间</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-limit-3" placeholder="HH:mm:ss">
       </div>
-      <div class="layui-form-mid layui-word-aux">
+      <div class="lay-form-mid lay-word-aux">
         这里以控制在 9:30-17:30 为例
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">禁用日期</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-limit-4" placeholder="仅过去的时间可选">
+    <div class="lay-inline">
+      <label class="lay-form-label">禁用日期</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-limit-4" placeholder="仅过去的时间可选">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">禁用指定时间</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-limit-5" placeholder="时间范围禁用">
+    <div class="lay-inline">
+      <label class="lay-form-label">禁用指定时间</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-limit-5" placeholder="时间范围禁用">
       </div>
     </div>
   </div>

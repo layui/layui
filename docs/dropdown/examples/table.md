@@ -1,8 +1,8 @@
-<table class="layui-hide" id="ID-dropdown-demo-table"></table>
+<table class="lay-hide" id="ID-dropdown-demo-table"></table>
 
 <script type="text/html" id="ID-dropdown-demo-table-tool">
-  <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="edit">编辑</a>
-  <a class="layui-btn layui-btn-xs" lay-event="more">更多 <i class="layui-icon layui-icon-down"></i></a>
+  <a class="lay-btn lay-btn-xs lay-btn-primary" lay-event="edit">编辑</a>
+  <a class="lay-btn lay-btn-xs" lay-event="more">更多 <i class="lay-icon lay-icon-down"></i></a>
 </script>
 
 <!-- import layui --> 
@@ -75,3 +75,4 @@ layui.use(function(){
   });
 });
 </script>
+

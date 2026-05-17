@@ -154,37 +154,37 @@ var parseTempData = function (obj) {
 // 字符
 var MOD_NAME = 'table';
 var MOD_ID = 'lay-' + MOD_NAME + '-id';
-var ELEM = '.layui-table';
-// var THIS = 'layui-this';
-// var SHOW = 'layui-show';
-var HIDE = 'layui-hide';
-var HIDE_V = 'layui-hide-v';
-// var DISABLED = 'layui-disabled';
-var NONE = 'layui-none';
+var ELEM = '.lay-table';
+// var THIS = 'lay-this';
+// var SHOW = 'lay-show';
+var HIDE = 'lay-hide';
+var HIDE_V = 'lay-hide-v';
+// var DISABLED = 'lay-disabled';
+var NONE = 'lay-none';
 
-var ELEM_VIEW = 'layui-table-view';
-var ELEM_TOOL = '.layui-table-tool';
-var ELEM_BOX = '.layui-table-box';
-var ELEM_INIT = '.layui-table-init';
-var ELEM_HEADER = '.layui-table-header';
-var ELEM_BODY = '.layui-table-body';
-var ELEM_MAIN = '.layui-table-main';
-var ELEM_FIXED = '.layui-table-fixed';
-var ELEM_FIXL = '.layui-table-fixed-l';
-var ELEM_FIXR = '.layui-table-fixed-r';
-var ELEM_TOTAL = '.layui-table-total';
-var ELEM_PAGE = '.layui-table-page';
-var ELEM_PAGE_VIEW = '.layui-table-pageview';
-var ELEM_SORT = '.layui-table-sort';
-var ELEM_CHECKED = 'layui-table-checked';
-var ELEM_EDIT = 'layui-table-edit';
-var ELEM_HOVER = 'layui-table-hover';
+var ELEM_VIEW = 'lay-table-view';
+var ELEM_TOOL = '.lay-table-tool';
+var ELEM_BOX = '.lay-table-box';
+var ELEM_INIT = '.lay-table-init';
+var ELEM_HEADER = '.lay-table-header';
+var ELEM_BODY = '.lay-table-body';
+var ELEM_MAIN = '.lay-table-main';
+var ELEM_FIXED = '.lay-table-fixed';
+var ELEM_FIXL = '.lay-table-fixed-l';
+var ELEM_FIXR = '.lay-table-fixed-r';
+var ELEM_TOTAL = '.lay-table-total';
+var ELEM_PAGE = '.lay-table-page';
+var ELEM_PAGE_VIEW = '.lay-table-pageview';
+var ELEM_SORT = '.lay-table-sort';
+var ELEM_CHECKED = 'lay-table-checked';
+var ELEM_EDIT = 'lay-table-edit';
+var ELEM_HOVER = 'lay-table-hover';
 var ELEM_GROUP = 'laytable-cell-group';
-var ELEM_COL_SPECIAL = 'layui-table-col-special';
-var ELEM_TOOL_PANEL = 'layui-table-tool-panel';
-var ELEM_EXPAND = 'layui-table-expanded';
-var DISABLED_TRANSITION = 'layui-table-disabled-transition';
-var FIXED_HEIGHT_PATCH = 'layui-table-fixed-height-patch';
+var ELEM_COL_SPECIAL = 'lay-table-col-special';
+var ELEM_TOOL_PANEL = 'lay-table-tool-panel';
+var ELEM_EXPAND = 'lay-table-expanded';
+var DISABLED_TRANSITION = 'lay-table-disabled-transition';
+var FIXED_HEIGHT_PATCH = 'lay-table-fixed-height-patch';
 
 var DATA_MOVE_NAME = 'LAY_TABLE_MOVE_DICT';
 
@@ -197,7 +197,7 @@ var TPL_HEADER = function (options) {
 
   options = options || {};
   return `
-    <table cellspacing="0" cellpadding="0" border="0" class="layui-table"
+    <table cellspacing="0" cellpadding="0" border="0" class="lay-table"
       {{ if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{ } }}
       {{ if(d.data.size){ }}lay-size="{{=d.data.size}}"{{ } }}
       {{ if(d.data.even){ }}lay-even{{ } }}>
@@ -226,21 +226,21 @@ var TPL_HEADER = function (options) {
                 {{ if(item2.style){ }}style="{{=item2.style}}"{{ } }}
                 ${rowCols}
                 {{ if(item2.unresize || item2.colGroup){ }}data-unresize="true"{{ } }}
-                class="{{ if(item2.hide){ }}layui-hide{{ } }}{{ if(isSort){ }} layui-unselect{{ } }}{{ if(!item2.field){ }} layui-table-col-special{{ } }}"
+                class="{{ if(item2.hide){ }}lay-hide{{ } }}{{ if(isSort){ }} lay-unselect{{ } }}{{ if(!item2.field){ }} lay-table-col-special{{ } }}"
                 {{ if (item2.title) {
                   const tempDiv = document.createElement('div');
                   tempDiv.innerHTML = item2.title;
                   const title = tempDiv.textContent || tempDiv.innerText || '';
                 }}title="{{= title }}"{{ } }}>
                 <div
-                  class="layui-table-cell laytable-cell-{{ if(item2.colGroup){ }}group{{ } else { }}{{=d.index}}-{{=i1}}-{{=i2}}{{ if(item2.type !== "normal"){ }} laytable-cell-{{= item2.type }}{{ } }}{{ } }}"
+                  class="lay-table-cell laytable-cell-{{ if(item2.colGroup){ }}group{{ } else { }}{{=d.index}}-{{=i1}}-{{=i2}}{{ if(item2.type !== "normal"){ }} laytable-cell-{{= item2.type }}{{ } }}{{ } }}"
                   {{ if(item2.align){ }}align="{{=item2.align}}"{{ } }}>
                   {{ if(item2.type === "checkbox"){ }}
                     <input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose" {{ if(item2[d.data.checkName]){ }}checked{{ }; }}>
                   {{ } else { }}
                     <span>{{-item2.title||""}}</span>
                     {{ if(isSort){ }}
-                      <span class="layui-table-sort layui-inline"><i class="layui-edge layui-table-sort-asc" title="{{= d.i18nMessages.table_sort_asc }}"></i><i class="layui-edge layui-table-sort-desc" title="{{= d.i18nMessages.table_sort_desc }}"></i></span>
+                      <span class="lay-table-sort lay-inline"><i class="lay-edge lay-table-sort-asc" title="{{= d.i18nMessages.table_sort_asc }}"></i><i class="lay-edge lay-table-sort-desc" title="{{= d.i18nMessages.table_sort_desc }}"></i></span>
                     {{ } }}
                   {{ } }}
                 </div>
@@ -256,7 +256,7 @@ var TPL_HEADER = function (options) {
 
 // tbody 区域模板
 var TPL_BODY = `
-  <table cellspacing="0" cellpadding="0" border="0" class="layui-table"
+  <table cellspacing="0" cellpadding="0" border="0" class="lay-table"
     {{ if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{ } }}
     {{ if(d.data.size){ }}lay-size="{{=d.data.size}}"{{ } }}
     {{ if(d.data.even){ }}lay-even{{ } }}>
@@ -268,63 +268,63 @@ var TPL_BODY = `
 var TPL_MAIN = `
   {{ var left, right, vars = d.vars, lay = vars.lay; }}
   {{ if(d.data.toolbar){ }}
-    <div class="layui-table-tool">
-      <div class="layui-table-tool-temp"></div>
-      <div class="layui-table-tool-self"></div>
+    <div class="lay-table-tool">
+      <div class="lay-table-tool-temp"></div>
+      <div class="lay-table-tool-self"></div>
     </div>
   {{ } }}
-  <div class="layui-table-box">
+  <div class="lay-table-box">
     {{ if(d.data.loading){ }}
-      <div class="layui-table-init">
-        <div class="layui-table-loading-icon">
+      <div class="lay-table-init">
+        <div class="lay-table-loading-icon">
           {{ if(typeof d.data.loading === "string"){ }}
             {{- d.data.loading}}
           {{ } else{ }}
-            <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>
+            <i class="lay-icon lay-icon-loading lay-anim lay-anim-rotate lay-anim-loop"></i>
           {{ } }}
         </div>
       </div>
     {{ } }}
-    <div class="layui-table-header">
+    <div class="lay-table-header">
       ${TPL_HEADER()}
     </div>
-    <div class="layui-table-body layui-table-main">
+    <div class="lay-table-body lay-table-main">
       ${TPL_BODY}
     </div>
     {{ if(left){ }}
-      <div class="layui-table-fixed layui-table-fixed-l">
-        <div class="layui-table-header">
+      <div class="lay-table-fixed lay-table-fixed-l">
+        <div class="lay-table-header">
           ${TPL_HEADER({ fixed: true })}
         </div>
-        <div class="layui-table-body">
+        <div class="lay-table-body">
           ${TPL_BODY}
         </div>
       </div>
     {{ }; }}
     {{ if(right){ }}
-      <div class="layui-table-fixed layui-table-fixed-r layui-hide">
-        <div class="layui-table-header">
+      <div class="lay-table-fixed lay-table-fixed-r lay-hide">
+        <div class="lay-table-header">
           ${TPL_HEADER({ fixed: 'right' })}
-          <div class="layui-table-mend"></div>
+          <div class="lay-table-mend"></div>
         </div>
-        <div class="layui-table-body">
+        <div class="lay-table-body">
           ${TPL_BODY}
         </div>
       </div>
     {{ }; }}
   </div>
   {{ if(d.data.totalRow){ }}
-    <div class="layui-table-total">
-      <table cellspacing="0" cellpadding="0" border="0" class="layui-table"
+    <div class="lay-table-total">
+      <table cellspacing="0" cellpadding="0" border="0" class="lay-table"
         {{ if(d.data.skin){ }}lay-skin="{{=d.data.skin}}"{{ } }}
         {{ if(d.data.size){ }}lay-size="{{=d.data.size}}"{{ } }}
         {{ if(d.data.even){ }}lay-even{{ } }}>
-        <tbody><tr><td><div class="layui-table-cell" style="visibility: hidden;">Total</div></td></tr></tbody>
+        <tbody><tr><td><div class="lay-table-cell" style="visibility: hidden;">Total</div></td></tr></tbody>
       </table>
     </div>
   {{ } }}
-  <div class="layui-table-column layui-table-page layui-hide">
-    <div class="layui-inline layui-table-pageview" id="layui-table-page{{=d.index}}"></div>
+  <div class="lay-table-column lay-table-page lay-hide">
+    <div class="lay-inline lay-table-pageview" id="lay-table-page{{=d.index}}"></div>
   </div>
 `;
 
@@ -465,8 +465,8 @@ Class.prototype.render = function (type) {
         var arr = [
           ELEM_VIEW,
           ELEM_VIEW + '-' + that.index,
-          'layui-form',
-          'layui-border-box',
+          'lay-form',
+          'lay-border-box',
         ];
         if (options.className) arr.push(options.className);
         return arr.join(' ');
@@ -683,7 +683,7 @@ Class.prototype.renderStyle = function () {
   (function (lineStyle) {
     if (!lineStyle) return;
     var trClassName =
-      '.layui-table-view-' + index + ' .layui-table-body .layui-table tr';
+      '.lay-table-view-' + index + ' .lay-table-body .lay-table tr';
     var rules = lineStyle.split(';');
     var cellMaxHeight = 'none';
 
@@ -700,10 +700,10 @@ Class.prototype.renderStyle = function () {
     // 多行相关样式
     [
       '{' + lineStyle + '}',
-      '.layui-table-cell{height: auto; max-height: ' +
+      '.lay-table-cell{height: auto; max-height: ' +
         cellMaxHeight +
         '; white-space: normal; text-overflow: clip;}',
-      '> td:hover > .layui-table-cell{overflow: auto;}',
+      '> td:hover > .lay-table-cell{overflow: auto;}',
     ].forEach(function (val) {
       val && text.push(trClassName + ' ' + val);
     });
@@ -729,11 +729,11 @@ Class.prototype.renderToolbar = function () {
 
   // 添加工具栏左侧模板
   var leftDefaultTemp = [
-    '<div class="layui-inline" lay-event="add"><i class="layui-icon layui-icon-add-1"></i></div>',
-    '<div class="layui-inline" lay-event="update"><i class="layui-icon layui-icon-edit"></i></div>',
-    '<div class="layui-inline" lay-event="delete"><i class="layui-icon layui-icon-delete"></i></div>',
+    '<div class="lay-inline" lay-event="add"><i class="lay-icon lay-icon-add-1"></i></div>',
+    '<div class="lay-inline" lay-event="update"><i class="lay-icon lay-icon-edit"></i></div>',
+    '<div class="lay-inline" lay-event="delete"><i class="lay-icon lay-icon-delete"></i></div>',
   ].join('');
-  var elemToolTemp = that.layTool.find('.layui-table-tool-temp');
+  var elemToolTemp = that.layTool.find('.lay-table-tool-temp');
 
   if (options.toolbar === 'default') {
     elemToolTemp.html(leftDefaultTemp);
@@ -747,7 +747,7 @@ Class.prototype.renderToolbar = function () {
     filter: {
       title: i18n.$t('table.tools.filter.title'),
       layEvent: 'LAYTABLE_COLS',
-      icon: 'layui-icon-cols',
+      icon: 'lay-icon-cols',
       onClick: function (obj) {
         var options = obj.config;
         var openPanel = obj.openPanel;
@@ -818,7 +818,7 @@ Class.prototype.renderToolbar = function () {
     exports: {
       title: i18n.$t('table.tools.export.title'),
       layEvent: 'LAYTABLE_EXPORT',
-      icon: 'layui-icon-export',
+      icon: 'lay-icon-export',
       onClick: function (obj) {
         // 自带导出
         var data = obj.data;
@@ -850,7 +850,7 @@ Class.prototype.renderToolbar = function () {
     print: {
       title: i18n.$t('table.tools.print.title'),
       layEvent: 'LAYTABLE_PRINT',
-      icon: 'layui-icon-print',
+      icon: 'lay-icon-print',
       onClick: function (obj) {
         var data = obj.data;
         // var options = obj.config;
@@ -868,7 +868,7 @@ Class.prototype.renderToolbar = function () {
           'th,td{line-height: 20px; padding: 9px 15px; border: 1px solid #ccc; text-align: left; font-size: 12px; color: #5F5F5F;}',
           'a{color: #5F5F5F; text-decoration:none;}',
           'img{max-height: 100%;}',
-          '*.layui-hide{display: none}',
+          '*.lay-hide{display: none}',
           '</style>',
         ].join('');
         var html = $(that.layHeader.html()); // 输出表头
@@ -876,7 +876,7 @@ Class.prototype.renderToolbar = function () {
         html.append(that.layMain.find('table').html()); // 输出表体
         html.append(that.layTotal.find('table').html()); // 输出合计行
 
-        html.find('th.layui-table-patch').remove(); // 移除补丁
+        html.find('th.lay-table-patch').remove(); // 移除补丁
         // 移除表头特殊列
         html
           .find('thead>tr>th.' + ELEM_COL_SPECIAL)
@@ -917,12 +917,12 @@ Class.prototype.renderToolbar = function () {
         }
         // 图标列表
         iconElem.push(
-          '<div class="layui-inline" title="' +
+          '<div class="lay-inline" title="' +
             thisItem.title +
             '" lay-event="' +
             thisItem.layEvent +
             '">' +
-            '<i class="layui-icon ' +
+            '<i class="lay-icon ' +
             thisItem.icon +
             '"></i>' +
             '</div>',
@@ -930,7 +930,7 @@ Class.prototype.renderToolbar = function () {
       }
       return thisItem;
     });
-    that.layTool.find('.layui-table-tool-self').html(iconElem.join(''));
+    that.layTool.find('.lay-table-tool-self').html(iconElem.join(''));
   }
 };
 
@@ -940,7 +940,7 @@ Class.prototype.renderPagebar = function () {
   var options = that.config;
 
   var layPagebar = (that.layPagebar = $(
-    '<div class="layui-inline layui-table-pagebar"></div>',
+    '<div class="lay-inline lay-table-pagebar"></div>',
   ));
 
   // 开启分页栏自定义模板
@@ -1573,7 +1573,7 @@ Class.prototype.getTrHtml = function (data, sort, curr, trsObj) {
             return classNames.join(' ');
           })() +
           '">',
-        '<div class="layui-table-cell laytable-cell-' +
+        '<div class="lay-table-cell laytable-cell-' +
           (function () {
             // 返回对应的CSS类标识
             return item3.type === 'normal'
@@ -1789,14 +1789,14 @@ Class.prototype.renderData = function (opts) {
   if (options.page) {
     options.page = $.extend(
       {
-        elem: 'layui-table-page' + options.index,
+        elem: 'lay-table-page' + options.index,
         count: count,
         limit: options.limit,
         limits: options.limits || [10, 20, 30, 40, 50, 60, 70, 80, 90],
         groups: 3,
         layout: ['prev', 'page', 'next', 'skip', 'count', 'limit'],
-        prev: '<i class="layui-icon">&#xe603;</i>',
-        next: '<i class="layui-icon">&#xe602;</i>',
+        prev: '<i class="lay-icon">&#xe603;</i>',
+        next: '<i class="lay-icon">&#xe602;</i>',
         jump: function (obj, first) {
           if (!first) {
             //分页本身并非需要做以下更新，下面参数的同步，主要是因为其它处理统一用到了它们
@@ -1940,7 +1940,7 @@ Class.prototype.renderTotal = function (data, totalRowData) {
           return classNames.join(' ');
         })() +
         '">',
-      '<div class="layui-table-cell laytable-cell-' +
+      '<div class="lay-table-cell laytable-cell-' +
         (function () {
           // 返回对应的CSS类标识
           var key = item3.key;
@@ -1962,7 +1962,7 @@ Class.prototype.renderTotal = function (data, totalRowData) {
     tds.push(td);
   });
 
-  var patchElem = that.layTotal.find('.layui-table-patch'); // 可能存在滚动条补丁
+  var patchElem = that.layTotal.find('.lay-table-patch'); // 可能存在滚动条补丁
   that.layTotal
     .find('tbody')
     .html(
@@ -2025,7 +2025,7 @@ Class.prototype.setRowActive = function (index, className, removeClass) {
   var that = this;
   // var options = that.config;
   var tr = that.layBody.find('tr[data-index="' + index + '"]');
-  className = className || 'layui-table-click';
+  className = className || 'lay-table-click';
 
   if (removeClass) return tr.removeClass(className);
 
@@ -2059,7 +2059,7 @@ Class.prototype.setRowChecked = function (opts) {
   }
 
   // 匹配行元素
-  var tbody = that.layBody.children('.layui-table').children('tbody');
+  var tbody = that.layBody.children('.lay-table').children('tbody');
   var selector = isCheckAllOrMult
     ? 'tr'
     : 'tr[data-index="' + opts.index + '"]';
@@ -2133,7 +2133,7 @@ Class.prototype.setRowChecked = function (opts) {
   }
 
   // 若存在复选框或单选框，则标注选中状态样式
-  var td = tr.children('td').children('.layui-table-cell');
+  var td = tr.children('td').children('.lay-table-cell');
   var checkedElem = td.children(
     'input[lay-type="' +
       ({
@@ -2386,9 +2386,9 @@ Class.prototype.scrollPatch = function () {
   var addPatch = function (elem) {
     if (scrollWidth && scrollHeight) {
       elem = elem.eq(0);
-      if (!elem.find('.layui-table-patch')[0]) {
+      if (!elem.find('.lay-table-patch')[0]) {
         var patchElem = $(
-          '<th class="layui-table-patch"><div class="layui-table-cell"></div></th>',
+          '<th class="lay-table-patch"><div class="lay-table-cell"></div></th>',
         ); // 补丁元素
         patchElem.find('div').css({
           width: scrollWidth,
@@ -2396,7 +2396,7 @@ Class.prototype.scrollPatch = function () {
         elem.find('tr').append(patchElem);
       }
     } else {
-      elem.find('.layui-table-patch').remove();
+      elem.find('.lay-table-patch').remove();
     }
   };
 
@@ -2438,7 +2438,7 @@ Class.prototype.updateRow = function (opts, callback) {
   opts = lay.type(opts) === 'array' ? opts : [opts];
 
   var that = this;
-  var ELEM_CELL = '.layui-table-cell';
+  var ELEM_CELL = '.lay-table-cell';
   var dataCache = table.cache[that.key] || [];
 
   var update = function (opt) {
@@ -2506,7 +2506,7 @@ Class.prototype.events = function () {
 
   var filter = options.elem.attr('lay-filter');
   var th = that.layHeader.find('th');
-  var ELEM_CELL = '.layui-table-cell';
+  var ELEM_CELL = '.lay-table-cell';
 
   var _BODY = $('body');
   var dict = {};
@@ -2750,7 +2750,7 @@ Class.prototype.events = function () {
       fromEvent: true,
     });
   })
-    .find(ELEM_SORT + ' .layui-edge ')
+    .find(ELEM_SORT + ' .lay-edge ')
     .on('click', function (e) {
       var othis = $(this);
       var index = othis.index();
@@ -2945,9 +2945,9 @@ Class.prototype.events = function () {
     // 不触发「行单/双击事件」的子元素
     if (eventType !== 'rowContextmenu') {
       var UNROW = [
-        '.layui-form-checkbox',
-        '.layui-form-switch',
-        '.layui-form-radio',
+        '.lay-form-checkbox',
+        '.lay-form-switch',
+        '.lay-form-radio',
         '[lay-unrow]',
         '[lay-type="layTableCheckbox"]',
         '[lay-type="layTableRadio"]',
@@ -2990,10 +2990,10 @@ Class.prototype.events = function () {
       var input = $(
         (function () {
           var inputElem =
-            '<input class="layui-input ' + ELEM_EDIT + '" lay-unrow>';
+            '<input class="lay-input ' + ELEM_EDIT + '" lay-unrow>';
           if (editType === 'textarea') {
             inputElem =
-              '<textarea class="layui-input ' +
+              '<textarea class="lay-input ' +
               ELEM_EDIT +
               '" lay-unrow></textarea>';
           }
@@ -3078,9 +3078,9 @@ Class.prototype.events = function () {
     });
 
   // 显示单元格展开图标
-  // var ELEM_GRID = 'layui-table-grid';
-  var ELEM_GRID_DOWN = 'layui-table-grid-down';
-  // var ELEM_GRID_PANEL = 'layui-table-grid-panel';
+  // var ELEM_GRID = 'lay-table-grid';
+  var ELEM_GRID_DOWN = 'lay-table-grid-down';
+  // var ELEM_GRID_PANEL = 'lay-table-grid-panel';
   var showGridExpandIcon = function (hide) {
     var othis = $(this);
     var elemCell = othis.children(ELEM_CELL);
@@ -3089,7 +3089,7 @@ Class.prototype.events = function () {
     if (othis.parent().hasClass(ELEM_EXPAND)) return; // 是否已为展开状态
 
     if (hide) {
-      othis.find('.layui-table-grid-down').remove();
+      othis.find('.lay-table-grid-down').remove();
     } else if (
       (elemCell.prop('scrollWidth') > elemCell.prop('clientWidth') ||
         elemCell.find('br').length > 0) &&
@@ -3099,7 +3099,7 @@ Class.prototype.events = function () {
       othis.append(
         '<div class="' +
           ELEM_GRID_DOWN +
-          '"><i class="layui-icon layui-icon-down"></i></div>',
+          '"><i class="lay-icon lay-icon-down"></i></div>',
       );
     }
   };
@@ -3111,9 +3111,9 @@ Class.prototype.events = function () {
     var col = that.col(key);
     var index = td.parent().data('index');
     var elemCell = td.children(ELEM_CELL);
-    var ELEM_CELL_C = 'layui-table-cell-c';
+    var ELEM_CELL_C = 'lay-table-cell-c';
     var elemCellClose = $(
-      '<i class="layui-icon layui-icon-up ' + ELEM_CELL_C + '">',
+      '<i class="lay-icon lay-icon-up ' + ELEM_CELL_C + '">',
     );
 
     expandedMode = expandedMode || col.expandedMode || options.cellExpandedMode;
@@ -3123,7 +3123,7 @@ Class.prototype.events = function () {
       // TIPS 展开风格
       that.tipsIndex = layer.tips(
         [
-          '<div class="layui-table-tips-main" style="margin-top: -' +
+          '<div class="lay-table-tips-main" style="margin-top: -' +
             (elemCell.height() + 23) +
             'px;' +
             (function () {
@@ -3138,7 +3138,7 @@ Class.prototype.events = function () {
             '">',
           elemCell.html(),
           '</div>',
-          '<i class="layui-icon layui-table-tips-c layui-icon-close"></i>',
+          '<i class="lay-icon lay-table-tips-c lay-icon-close"></i>',
         ].join(''),
         elemCell[0],
         {
@@ -3147,9 +3147,9 @@ Class.prototype.events = function () {
           anim: -1,
           maxWidth: device.ios || device.android ? 300 : that.elem.width() / 2,
           isOutAnim: false,
-          skin: 'layui-table-tips',
+          skin: 'lay-table-tips',
           success: function (layero, index) {
-            layero.find('.layui-table-tips-c').on('click', function () {
+            layero.find('.lay-table-tips-c').on('click', function () {
               layer.close(index);
             });
           },
@@ -3374,8 +3374,8 @@ Class.prototype.calcFixedRowHeight = function () {
   var that = this;
 
   var tableElem = that.layMain.children('table');
-  var leftTrs = that.layFixLeft.find('>.layui-table-body>table>tbody>tr');
-  var rightTrs = that.layFixRight.find('>.layui-table-body>table>tbody>tr');
+  var leftTrs = that.layFixLeft.find('>.lay-table-body>table>tbody>tr');
+  var rightTrs = that.layFixRight.find('>.lay-table-body>table>tbody>tr');
   var mainTrs = tableElem.find('>tbody>tr');
 
   // 批量获取主表格行高，设置高度以优化性能
@@ -3993,3 +3993,4 @@ lay.use(function () {
 });
 
 export { table };
+

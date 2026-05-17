@@ -1,10 +1,10 @@
 从页面四个边缘弹出（抽屉效果）：
 
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset-t">从上往下</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset-r">从右往左</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset-b">从下往上</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-offset-l">从左往右</button>
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset-t">从上往下</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset-r">从右往左</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset-b">从下往上</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-offset-l">从左往右</button>
 </div>
 
 <!-- import layui --> 

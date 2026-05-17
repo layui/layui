@@ -15,19 +15,19 @@ var component = componentBuilder({
 
   // 默认配置
   config: {
-    elem: '.layui-nav',
+    elem: '.lay-nav',
   },
 
   CONST: {
-    NAV_ELEM: '.layui-nav',
-    NAV_ITEM: 'layui-nav-item',
-    NAV_BAR: 'layui-nav-bar',
-    NAV_TREE: 'layui-nav-tree',
-    NAV_CHILD: 'layui-nav-child',
-    NAV_CHILD_C: 'layui-nav-child-c',
-    NAV_MORE: 'layui-nav-more',
-    NAV_DOWN: 'layui-icon-down',
-    NAV_ANIM: 'layui-anim layui-anim-upbit',
+    NAV_ELEM: '.lay-nav',
+    NAV_ITEM: 'lay-nav-item',
+    NAV_BAR: 'lay-nav-bar',
+    NAV_TREE: 'lay-nav-tree',
+    NAV_CHILD: 'lay-nav-child',
+    NAV_CHILD_C: 'lay-nav-child-c',
+    NAV_MORE: 'lay-nav-more',
+    NAV_DOWN: 'lay-icon-down',
+    NAV_ANIM: 'lay-anim lay-anim-upbit',
   },
 
   // 渲染
@@ -39,7 +39,7 @@ var component = componentBuilder({
     var timer = {};
     var timerMore = {};
     var timeEnd = {};
-    var NAV_TITLE = 'layui-nav-title';
+    var NAV_TITLE = 'lay-nav-title';
 
     // 滑块跟随
     var follow = function (bar, nav, index) {
@@ -165,7 +165,7 @@ var component = componentBuilder({
         // 输出小箭头
         if (child[0] && !thisA.children('.' + CONST.NAV_MORE)[0]) {
           thisA.append(
-            '<i class="layui-icon ' +
+            '<i class="lay-icon ' +
               CONST.NAV_DOWN +
               ' ' +
               CONST.NAV_MORE +
@@ -265,3 +265,4 @@ var CONST = component.CONST;
 
 // export
 export { component as nav };
+

@@ -1,5 +1,5 @@
 /** floatbar **/
-.layui-floatbar {
+.lay-floatbar {
   position: fixed;
   right: 16px;
   bottom: 16px;
@@ -8,7 +8,7 @@
   flex-direction: column;
   gap: 1px;
 }
-.layui-floatbar-item {
+.lay-floatbar-item {
   width: 48px;
   height: 48px;
   line-height: 48px;
@@ -19,18 +19,19 @@
   border-radius: var(--lay-border-radius);
   opacity: 0.95;
 }
-.layui-floatbar-item > .layui-icon {
+.lay-floatbar-item > .lay-icon {
   font-size: 24px;
 }
-.layui-floatbar-item:hover {
+.lay-floatbar-item:hover {
   opacity: 0.85;
 }
-.layui-floatbar-item:active {
+.lay-floatbar-item:active {
   opacity: 1;
 }
-.layui-floatbar-item[data-type='top'] {
+.lay-floatbar-item[data-type='top'] {
   display: none;
 }
-.layui-floatbar-item[data-type='top'] > .layui-icon {
+.lay-floatbar-item[data-type='top'] > .lay-icon {
   font-size: 32px;
 }
+

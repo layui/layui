@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -532,3 +532,4 @@ error: function(index, upload, res, xhr){
     </tr>
   </tbody>
 </table>
+

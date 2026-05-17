@@ -11,42 +11,42 @@ toc: true
 
 一般用于页面头部菜单。样式规则如下：
 
-- 通过 `class="layui-nav"` 设置导航容器
-- 通过 `class="layui-nav-item"` 设置导航菜单项
-  - 追加 `className` 为 `layui-this` 可设置菜单选中项
-- 通过 `class="layui-nav-child"` 设置导航子菜单项
-  - 追加 `className` 为 `layui-nav-child-c` 和 `layui-nav-child-r` 可设置子菜单居中和向右对齐
+- 通过 `class="lay-nav"` 设置导航容器
+- 通过 `class="lay-nav-item"` 设置导航菜单项
+  - 追加 `className` 为 `lay-this` 可设置菜单选中项
+- 通过 `class="lay-nav-child"` 设置导航子菜单项
+  - 追加 `className` 为 `lay-nav-child-c` 和 `lay-nav-child-r` 可设置子菜单居中和向右对齐
 
 
 <h3 id="align-normal" lay-toc="{level: 2}" class="ws-bold">常规用法</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<ul class="layui-nav">
-  <li class="layui-nav-item layui-this"><a href="">选中</a></li>
-  <li class="layui-nav-item">
+<ul class="lay-nav">
+  <li class="lay-nav-item lay-this"><a href="">选中</a></li>
+  <li class="lay-nav-item">
     <a href="javascript:;">常规</a>
   </li>
-  <li class="layui-nav-item"><a href="">导航</a></li>
-  <li class="layui-nav-item">
+  <li class="lay-nav-item"><a href="">导航</a></li>
+  <li class="lay-nav-item">
     <a href="javascript:;">子级</a>
-    <dl class="layui-nav-child">
+    <dl class="lay-nav-child">
       <dd><a href="">菜单1</a></dd>
       <dd><a href="">菜单2</a></dd>
       <dd><a href="">菜单3</a></dd>
     </dl>
   </li>
-  <li class="layui-nav-item">
+  <li class="lay-nav-item">
     <a href="javascript:;">选项</a>
-    <dl class="layui-nav-child">
+    <dl class="lay-nav-child">
       <dd><a href="">选项1</a></dd>
-      <dd class="layui-this"><a href="">选项2</a></dd>
+      <dd class="lay-this"><a href="">选项2</a></dd>
       <dd><a href="">选项3</a></dd>
     </dl>
   </li>
-  <li class="layui-nav-item"><a href="">演示</a></li>
+  <li class="lay-nav-item"><a href="">演示</a></li>
 </ul>
 
 <!-- import layui -->
@@ -57,22 +57,22 @@ toc: true
 
 <h3 id="align-badge" lay-toc="{level: 2}" class="ws-bold">加入徽章等元素</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<ul class="layui-nav">
-  <li class="layui-nav-item">
-    <a href="">带徽章<span class="layui-badge">9</span></a>
+<ul class="lay-nav">
+  <li class="lay-nav-item">
+    <a href="">带徽章<span class="lay-badge">9</span></a>
   </li>
-  <li class="layui-nav-item">
-    <a href="">小圆点<span class="layui-badge-dot"></span></a>
+  <li class="lay-nav-item">
+    <a href="">小圆点<span class="lay-badge-dot"></span></a>
   </li>
-  <li class="layui-nav-item" lay-unselect>
+  <li class="lay-nav-item" lay-unselect>
     <a href="javascript:;">
-      <img src="https://unpkg.com/outeres@0.0.10/demo/avatar/1.jpg" class="layui-nav-img">
+      <img src="https://unpkg.com/outeres@0.0.10/demo/avatar/1.jpg" class="lay-nav-img">
     </a>
-    <dl class="layui-nav-child">
+    <dl class="lay-nav-child">
       <dd><a href="javascript:;">子级菜单</a></dd>
       <dd><a href="javascript:;">横线隔断</a></dd>
       <hr>
@@ -89,74 +89,74 @@ toc: true
 
 给导航容器追加任意背景色 `class`，内置背景色参考：[#背景色公共类](../class/#bg)
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<ul class="layui-nav layui-bg-gray">
-  <li class="layui-nav-item"><a href="">浅色导航</a></li>
-  <li class="layui-nav-item"><a href="">菜单1</a></li>
-  <li class="layui-nav-item"><a href="">菜单2</a></li>
-  <li class="layui-nav-item">
+<ul class="lay-nav lay-bg-gray">
+  <li class="lay-nav-item"><a href="">浅色导航</a></li>
+  <li class="lay-nav-item"><a href="">菜单1</a></li>
+  <li class="lay-nav-item"><a href="">菜单2</a></li>
+  <li class="lay-nav-item">
     <a href="javascript:;">更多</a>
-    <dl class="layui-nav-child">
+    <dl class="lay-nav-child">
       <dd><a href="">选项1</a></dd>
       <dd><a href="">选项2</a></dd>
       <dd><a href="">选项3</a></dd>
     </dl>
   </li>
-  <li class="layui-nav-item"><a href="">菜单3</a></li>
+  <li class="lay-nav-item"><a href="">菜单3</a></li>
 </ul>
  
 <br>
  
-<ul class="layui-nav layui-bg-cyan">
-  <li class="layui-nav-item"><a href="">藏青导航</a></li>
-  <li class="layui-nav-item"><a href="">菜单1</a></li>
-  <li class="layui-nav-item"><a href="">菜单2</a></li>
-  <li class="layui-nav-item">
+<ul class="lay-nav lay-bg-cyan">
+  <li class="lay-nav-item"><a href="">藏青导航</a></li>
+  <li class="lay-nav-item"><a href="">菜单1</a></li>
+  <li class="lay-nav-item"><a href="">菜单2</a></li>
+  <li class="lay-nav-item">
     <a href="javascript:;">更多</a>
-    <dl class="layui-nav-child">
+    <dl class="lay-nav-child">
       <dd><a href="">选项1</a></dd>
       <dd><a href="">选项2</a></dd>
       <dd><a href="">选项3</a></dd>
     </dl>
   </li>
-  <li class="layui-nav-item"><a href="">菜单3</a></li>
-</ul>
-
-<br>
- 
-<ul class="layui-nav layui-bg-green" lay-bar="disabled">
-  <li class="layui-nav-item"><a href="">墨绿导航</a></li>
-  <li class="layui-nav-item"><a href="">菜单1</a></li>
-  <li class="layui-nav-item"><a href="">菜单2</a></li>
-  <li class="layui-nav-item">
-    <a href="javascript:;">更多</a>
-    <dl class="layui-nav-child">
-      <dd><a href="">选项1</a></dd>
-      <dd><a href="">选项2</a></dd>
-      <dd><a href="">选项3</a></dd>
-    </dl>
-  </li>
-  <li class="layui-nav-item"><a href="">菜单3</a></li>
+  <li class="lay-nav-item"><a href="">菜单3</a></li>
 </ul>
 
 <br>
  
-<ul class="layui-nav layui-bg-blue" lay-bar="disabled">
-  <li class="layui-nav-item"><a href="">蓝色导航</a></li>
-  <li class="layui-nav-item"><a href="">菜单1</a></li>
-  <li class="layui-nav-item"><a href="">菜单2</a></li>
-  <li class="layui-nav-item">
+<ul class="lay-nav lay-bg-green" lay-bar="disabled">
+  <li class="lay-nav-item"><a href="">墨绿导航</a></li>
+  <li class="lay-nav-item"><a href="">菜单1</a></li>
+  <li class="lay-nav-item"><a href="">菜单2</a></li>
+  <li class="lay-nav-item">
     <a href="javascript:;">更多</a>
-    <dl class="layui-nav-child">
+    <dl class="lay-nav-child">
       <dd><a href="">选项1</a></dd>
       <dd><a href="">选项2</a></dd>
       <dd><a href="">选项3</a></dd>
     </dl>
   </li>
-  <li class="layui-nav-item"><a href="">菜单3</a></li>
+  <li class="lay-nav-item"><a href="">菜单3</a></li>
+</ul>
+
+<br>
+ 
+<ul class="lay-nav lay-bg-blue" lay-bar="disabled">
+  <li class="lay-nav-item"><a href="">蓝色导航</a></li>
+  <li class="lay-nav-item"><a href="">菜单1</a></li>
+  <li class="lay-nav-item"><a href="">菜单2</a></li>
+  <li class="lay-nav-item">
+    <a href="javascript:;">更多</a>
+    <dl class="lay-nav-child">
+      <dd><a href="">选项1</a></dd>
+      <dd><a href="">选项2</a></dd>
+      <dd><a href="">选项3</a></dd>
+    </dl>
+  </li>
+  <li class="lay-nav-item"><a href="">菜单3</a></li>
 </ul>
 
 <!-- import layui -->
@@ -168,35 +168,35 @@ toc: true
 
 一般用于左侧侧边菜单。样式规则如下：
 
-- 在水平导航的 `class` 规则上，通过设置 `class="layui-nav layui-nav-tree"` 定义垂直导航容器。
-- 通过 `class="layui-nav-itemed"` 设置父菜单项为展开状态
-- 通过给导航容器追加 `class="layui-nav-side"` 可设置侧边垂直导航
+- 在水平导航的 `class` 规则上，通过设置 `class="lay-nav lay-nav-tree"` 定义垂直导航容器。
+- 通过 `class="lay-nav-itemed"` 设置父菜单项为展开状态
+- 通过给导航容器追加 `class="lay-nav-side"` 可设置侧边垂直导航
 - 其余结构及填充内容与水平导航完全相同
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<ul class="layui-nav layui-nav-tree">
-  <li class="layui-nav-item layui-nav-itemed">
+<ul class="lay-nav lay-nav-tree">
+  <li class="lay-nav-item lay-nav-itemed">
     <a href="javascript:;">默认展开</a>
-    <dl class="layui-nav-child">
+    <dl class="lay-nav-child">
       <dd><a href="javascript:;">选项1</a></dd>
       <dd><a href="javascript:;">选项2</a></dd>
       <dd><a href="javascript:;">选项3</a></dd>
     </dl>
   </li>
-  <li class="layui-nav-item">
+  <li class="lay-nav-item">
     <a href="javascript:;">默认收缩</a>
-    <dl class="layui-nav-child">
+    <dl class="lay-nav-child">
       <dd><a href="javascript:;">选项1</a></dd>
       <dd><a href="javascript:;">选项2</a></dd>
       <dd><a href="javascript:;">选项3</a></dd>
     </dl>
   </li>
-  <li class="layui-nav-item"><a href="javascript:;">菜单1</a></li>
-  <li class="layui-nav-item"><a href="javascript:;">菜单2</a></li>
-  <li class="layui-nav-item"><a href="javascript:;">菜单3</a></li>
+  <li class="lay-nav-item"><a href="javascript:;">菜单1</a></li>
+  <li class="lay-nav-item"><a href="javascript:;">菜单2</a></li>
+  <li class="lay-nav-item"><a href="javascript:;">菜单3</a></li>
 </ul>
 
 <!-- import layui -->
@@ -205,7 +205,7 @@ toc: true
 
 <h3 id="vertical" class="ws-anchor ws-bold">侧边垂直导航</h3>
 
-<pre class="layui-code" lay-options="{preview: 'iframe', style: 'height: 525px;', layout: ['code', 'preview'], tools: ['full', 'window']}">
+<pre class="lay-code" lay-options="{preview: 'iframe', style: 'height: 525px;', layout: ['code', 'preview'], tools: ['full', 'window']}">
   <textarea>
 {{- d.include("/nav/examples/side.md") }}
   </textarea>
@@ -238,9 +238,9 @@ layui.use(function(){
 
   // 动态插入导航元素
   $('#test').html(`
-    <div class="layui-nav" lay-filter="demo-filter-nav">
-      <li class="layui-nav-item layui-this"><a href="">选中</a></li>
-      <li class="layui-nav-item"><a href="">菜单</a></li>
+    <div class="lay-nav" lay-filter="demo-filter-nav">
+      <li class="lay-nav-item lay-this"><a href="">选中</a></li>
+      <li class="lay-nav-item"><a href="">菜单</a></li>
       <!-- … -->
     </div>
   `);
@@ -255,8 +255,8 @@ layui.use(function(){
 
 | 属性 | 描述 |
 | --- | --- |
-| lay-accordion <sup>2.8.18+</sup> | 导航容器属性。用于开启垂直导航菜单展开时的手风琴效果。如：<br>`<div class="layui-nav layui-nav-tree" lay-accordion>…</div>` |
-| lay-bar | 导航容器属性。用于禁用滑块跟随功能。如：<br>`<div class="layui-nav" lay-bar="disabled">…</div>` |
+| lay-accordion <sup>2.8.18+</sup> | 导航容器属性。用于开启垂直导航菜单展开时的手风琴效果。如：<br>`<div class="lay-nav lay-nav-tree" lay-accordion>…</div>` |
+| lay-bar | 导航容器属性。用于禁用滑块跟随功能。如：<br>`<div class="lay-nav" lay-bar="disabled">…</div>` |
 | lay-unselect | 导航菜单项属性。 设置后，点击对应菜单项时，不会出现选中效果。 |
 
 
@@ -271,13 +271,13 @@ layui.use(function(){
 
 当点击导航父级菜单和二级菜单时触发。示例：
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['code', 'preview'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['code', 'preview'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-nav" lay-filter="demo-filter-nav">
-  <li class="layui-nav-item"><a href="javascript:;">菜单1</a></li>
-  <li class="layui-nav-item"><a href="javascript:;">菜单2</a></li>
+<div class="lay-nav" lay-filter="demo-filter-nav">
+  <li class="lay-nav-item"><a href="javascript:;">菜单1</a></li>
+  <li class="lay-nav-item"><a href="javascript:;">菜单2</a></li>
 </div>
 
 <!-- import layui -->
@@ -300,13 +300,13 @@ layui.use(function(){
 
 面包屑导航主要用于指示当前页面所处的位置，并能返回到上级页面。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
 <h3>默认面包屑</h3>
 
-<span class="layui-breadcrumb">
+<span class="lay-breadcrumb">
   <a href="">首页</a>
   <a href="">演示</a>
   <a><cite>导航元素</cite></a>
@@ -314,7 +314,7 @@ layui.use(function(){
 
 <h3>自定义分隔符</h3>
 
-<span class="layui-breadcrumb" lay-separator=">">
+<span class="lay-breadcrumb" lay-separator=">">
   <a href="">首页</a>
   <a href="">国际新闻</a>
   <a href="">亚太地区</a>
@@ -323,7 +323,7 @@ layui.use(function(){
 
 <h3>门户频道</h3>
 
-<span class="layui-breadcrumb" lay-separator="|">
+<span class="lay-breadcrumb" lay-separator="|">
   <a href="">娱乐</a>
   <a href="">八卦</a>
   <a href="">体育</a>
@@ -345,3 +345,4 @@ layui.use(function(){
 - 参数 `filter` : 对应面包屑导航容器 `lay-filter` 的属性值或<sup>2.9.15+</sup>指定元素的 jQuery 对象
 
 该方法主要用于对动态插入的面包屑导航的初始化渲染，用法同上述导航菜单。
+

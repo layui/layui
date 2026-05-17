@@ -22,13 +22,13 @@ var component = componentBuilder({
   },
 
   CONST: {
-    ELEM: 'layui-rate',
-    ICON_RATE: 'layui-icon-rate',
-    ICON_RATE_SOLID: 'layui-icon-rate-solid',
-    ICON_RATE_HALF: 'layui-icon-rate-half',
-    ICON_SOLID_HALF: 'layui-icon-rate-solid layui-icon-rate-half',
-    ICON_SOLID_RATE: 'layui-icon-rate-solid layui-icon-rate',
-    ICON_HALF_RATE: 'layui-icon-rate layui-icon-rate-half',
+    ELEM: 'lay-rate',
+    ICON_RATE: 'lay-icon-rate',
+    ICON_RATE_SOLID: 'lay-icon-rate-solid',
+    ICON_RATE_HALF: 'lay-icon-rate-half',
+    ICON_SOLID_HALF: 'lay-icon-rate-solid lay-icon-rate-half',
+    ICON_SOLID_RATE: 'lay-icon-rate-solid lay-icon-rate',
+    ICON_HALF_RATE: 'lay-icon-rate lay-icon-rate-half',
   },
 
   // 渲染
@@ -56,10 +56,10 @@ var component = componentBuilder({
 
     // 组件模板
     var template =
-      '<ul class="layui-rate" ' + (options.readonly ? 'readonly' : '') + '>';
+      '<ul class="lay-rate" ' + (options.readonly ? 'readonly' : '') + '>';
     for (var i = 1; i <= options.length; i++) {
       var item =
-        '<li class="layui-inline"><i class="layui-icon ' +
+        '<li class="lay-inline"><i class="lay-icon ' +
         (i > Math.floor(options.value)
           ? CONST.ICON_RATE
           : CONST.ICON_RATE_SOLID) +
@@ -73,7 +73,7 @@ var component = componentBuilder({
       ) {
         template =
           template +
-          '<li><i class="layui-icon layui-icon-rate-half" ' +
+          '<li><i class="lay-icon lay-icon-rate-half" ' +
           style +
           '></i></li>';
       } else {
@@ -83,7 +83,7 @@ var component = componentBuilder({
     template += '</ul>';
 
     if (options.text) {
-      template += '<span class="layui-inline">' + options.value + '</span>';
+      template += '<span class="lay-inline">' + options.value + '</span>';
     }
 
     // 开始插入替代元素
@@ -98,7 +98,7 @@ var component = componentBuilder({
     options.setText && options.setText(options.value);
 
     othis.html(that.elemTemplate);
-    othis.addClass('layui-inline');
+    othis.addClass('lay-inline');
 
     // 若非只读，则添加触控事件
     if (!options.readonly) {
@@ -243,7 +243,7 @@ Class.prototype.action = function () {
         }
 
         // 设置缩放样式
-        iconElem.toggleClass('layui-rate-hover', isActiveIcon);
+        iconElem.toggleClass('lay-rate-hover', isActiveIcon);
       });
 
       // 更新最终值
@@ -253,7 +253,7 @@ Class.prototype.action = function () {
     },
     onTouchEnd: function (e, state) {
       if (Date.now() - state.timeStart <= 200) return;
-      _ul.find('i').removeClass('layui-rate-hover');
+      _ul.find('i').removeClass('lay-rate-hover');
       options.choose && options.choose(options.value);
       options.setText && options.setText(options.value);
     },
@@ -261,3 +261,4 @@ Class.prototype.action = function () {
 };
 
 export { component as rate };
+

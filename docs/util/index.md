@@ -219,12 +219,12 @@ util.openWin({
 | elem | 触发事件的委托元素 | string \| HTMLElement \| JQuery | - |
 | trigger | 事件触发的方式 | string | `click` |
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['code', 'preview'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 535px;', layout: ['code', 'preview'], tools: ['full']}">
   <textarea>
-<div class="layui-btn-container">
-  <button class="layui-btn" lay-on="e1">事件 1</button>
-  <button class="layui-btn" lay-on="e2">事件 2</button>
-  <button class="layui-btn" lay-active="e3">事件 3</button>
+<div class="lay-btn-container">
+  <button class="lay-btn" lay-on="e1">事件 1</button>
+  <button class="lay-btn" lay-on="e2">事件 2</button>
+  <button class="lay-btn" lay-active="e3">事件 3</button>
 </div>
 
 <!-- import layui -->
@@ -262,3 +262,4 @@ layui.use('util', function(){
 </script>
   </textarea>
 </pre>
+

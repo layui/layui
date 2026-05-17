@@ -1,8 +1,8 @@
-<h3 lay-toc="{level: 2, id: 'examples'}" class="layui-hide">常规用法</h3>
+<h3 lay-toc="{level: 2, id: 'examples'}" class="lay-hide">常规用法</h3>
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 515px;', text: {preview: '常规用法'}, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 515px;', text: {preview: '常规用法'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-<div class="layui-carousel" id="ID-carousel-demo-1">
+<div class="lay-carousel" id="ID-carousel-demo-1">
   <div carousel-item>
     <div>条目1</div>
     <div>条目2</div>
@@ -14,7 +14,7 @@
  
 <hr class="ws-space-16">
  
-<div class="layui-carousel" id="ID-carousel-demo-2">
+<div class="lay-carousel" id="ID-carousel-demo-2">
   <div carousel-item>
     <div>条目1</div>
     <div>条目2</div>
@@ -45,61 +45,61 @@ layui.use(function(){
   </textarea>
 </pre>
 
-- 在元素外层设置 `class="layui-carousel"` 来定义一个轮播容器
+- 在元素外层设置 `class="lay-carousel"` 来定义一个轮播容器
 - 在元素内层设置属性 `carousel-item` 用来定义条目容器
 
 <h3 id="demo-config" lay-toc="{level: 2, hot: true}">可选项预览</h3>
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 515px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 515px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">宽高</label>
-      <div class="layui-input-inline" style="width: 98px;">
-        <input type="tel" name="width" value="600" autocomplete="off" placeholder="width" class="layui-input carousel-demo-set">
+<div class="lay-form">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">宽高</label>
+      <div class="lay-input-inline" style="width: 98px;">
+        <input type="tel" name="width" value="600" autocomplete="off" placeholder="width" class="lay-input carousel-demo-set">
       </div>
-      <div class="layui-input-inline" style="width: 98px;">
-        <input type="tel" name="height" value="280" autocomplete="off" placeholder="height" class="layui-input carousel-demo-set">
+      <div class="lay-input-inline" style="width: 98px;">
+        <input type="tel" name="height" value="280" autocomplete="off" placeholder="height" class="lay-input carousel-demo-set">
       </div>
     </div>
   </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">动画类型</label>
-    <div class="layui-input-block">
-      <div class="layui-btn-group" style="margin-top: 5px;">
-        <button class="layui-btn layui-btn-sm" style="background-color: #16b777;" lay-on="carousel-set" data-key="anim" data-value="default">左右切换</button>
-        <button class="layui-btn layui-btn-sm" lay-on="carousel-set" data-key="anim" data-value="updown">上下切换</button>
-        <button class="layui-btn layui-btn-sm" lay-on="carousel-set" data-key="anim" data-value="fade">渐隐渐显</button>
+  <div class="lay-form-item">
+    <label class="lay-form-label">动画类型</label>
+    <div class="lay-input-block">
+      <div class="lay-btn-group" style="margin-top: 5px;">
+        <button class="lay-btn lay-btn-sm" style="background-color: #16b777;" lay-on="carousel-set" data-key="anim" data-value="default">左右切换</button>
+        <button class="lay-btn lay-btn-sm" lay-on="carousel-set" data-key="anim" data-value="updown">上下切换</button>
+        <button class="lay-btn lay-btn-sm" lay-on="carousel-set" data-key="anim" data-value="fade">渐隐渐显</button>
       </div> 
     </div>
   </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">箭头状态</label>
-    <div class="layui-input-block">
-      <div class="layui-btn-group" style="margin-top: 5px;">
-        <button class="layui-btn layui-btn-sm" style="background-color: #16b777;" lay-on="carousel-set" data-key="arrow" data-value="hover">悬停显示</button>
-        <button class="layui-btn layui-btn-sm" lay-on="carousel-set" data-key="arrow" data-value="always">始终显示</button>
-        <button class="layui-btn layui-btn-sm" lay-on="carousel-set" data-key="arrow" data-value="none">不显示</button>
+  <div class="lay-form-item">
+    <label class="lay-form-label">箭头状态</label>
+    <div class="lay-input-block">
+      <div class="lay-btn-group" style="margin-top: 5px;">
+        <button class="lay-btn lay-btn-sm" style="background-color: #16b777;" lay-on="carousel-set" data-key="arrow" data-value="hover">悬停显示</button>
+        <button class="lay-btn lay-btn-sm" lay-on="carousel-set" data-key="arrow" data-value="always">始终显示</button>
+        <button class="lay-btn lay-btn-sm" lay-on="carousel-set" data-key="arrow" data-value="none">不显示</button>
       </div> 
     </div>
   </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">指示器位置</label>
-    <div class="layui-input-block">
-      <div class="layui-btn-group" style="margin-top: 5px;">
-        <button class="layui-btn layui-btn-sm" style="background-color: #16b777;" data-key="indicator" lay-on="carousel-set" data-value="inside">容器内部</button>
-        <button class="layui-btn layui-btn-sm" lay-on="carousel-set" data-key="indicator" data-value="outside">容器外部</button>
-        <button class="layui-btn layui-btn-sm" lay-on="carousel-set" data-key="indicator" data-value="none">不显示</button>
+  <div class="lay-form-item">
+    <label class="lay-form-label">指示器位置</label>
+    <div class="lay-input-block">
+      <div class="lay-btn-group" style="margin-top: 5px;">
+        <button class="lay-btn lay-btn-sm" style="background-color: #16b777;" data-key="indicator" lay-on="carousel-set" data-value="inside">容器内部</button>
+        <button class="lay-btn lay-btn-sm" lay-on="carousel-set" data-key="indicator" data-value="outside">容器外部</button>
+        <button class="lay-btn lay-btn-sm" lay-on="carousel-set" data-key="indicator" data-value="none">不显示</button>
       </div> 
     </div>
   </div>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">自动切换</label>
-      <div class="layui-input-block">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">自动切换</label>
+      <div class="lay-input-block">
         <!--<input type="checkbox" name="switch" lay-skin="switch" checked lay-text="ON|OFF" lay-filter="autoplay">-->
         <select lay-filter="autoplay">
           <option value="1">开启</option>
@@ -108,16 +108,16 @@ layui.use(function(){
         </select>
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label" style="width: auto;">时间间隔</label>
-      <div class="layui-input-inline" style="width: 120px;">
-        <input type="tel" name="interval" value="3000" autocomplete="off" placeholder="毫秒" class="layui-input carousel-demo-set">
+    <div class="lay-inline">
+      <label class="lay-form-label" style="width: auto;">时间间隔</label>
+      <div class="lay-input-inline" style="width: 120px;">
+        <input type="tel" name="interval" value="3000" autocomplete="off" placeholder="毫秒" class="lay-input carousel-demo-set">
       </div>
     </div>
   </div>
 </div>
  
-<div class="layui-carousel" id="ID-carousel-demo-set" lay-filter="filter-demo-carousel-set">
+<div class="lay-carousel" id="ID-carousel-demo-set" lay-filter="filter-demo-carousel-set">
   <div carousel-item>
     <div>条目1</div>
     <div>条目2</div>
@@ -172,7 +172,7 @@ layui.use(function(){
   // 普通事件
   util.on('lay-on', {
     "carousel-set": function(othis){
-      var THIS = 'layui-bg-normal';
+      var THIS = 'lay-bg-normal';
       var key = othis.data('key');
       var options = {};
       
@@ -188,9 +188,9 @@ layui.use(function(){
 
 <h3 id="demo-image" lay-toc="{level: 2}">填充图片轮播</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-<div class="layui-carousel" id="ID-carousel-demo-image">
+<div class="lay-carousel" id="ID-carousel-demo-image">
   <div carousel-item>
     <div><img src="https://unpkg.com/outeres/demo/carousel/720x360-1.jpg"></div>
     <div><img src="https://unpkg.com/outeres/demo/carousel/720x360-2.jpg"></div>
@@ -216,3 +216,4 @@ layui.use(function(){
 </script>
   </textarea>
 </pre>
+

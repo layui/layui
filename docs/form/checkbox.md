@@ -10,11 +10,11 @@ toc: true
 
 <h2 id="default" lay-toc="{}">默认风格</h2>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
+<div class="lay-form">
   <input type="checkbox" name="AAA" title="默认">
   <input type="checkbox" name="BBB" lay-text="选中" checked> 
   <input type="checkbox" name="CCC" title="禁用" disabled> 
@@ -47,11 +47,11 @@ layui.use(function(){
 
 <h2 id="tag" lay-toc="{}">标签风格</h2>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
+<div class="lay-form">
   <input type="checkbox" name="AAA" title="默认" lay-skin="tag">
   <input type="checkbox" name="BBB" title="选中" lay-skin="tag" checked> 
   <input type="checkbox" name="CCC" title="禁用" lay-skin="tag" disabled>
@@ -64,11 +64,11 @@ layui.use(function(){
 
 <h2 id="switch" lay-toc="{}">开关风格</h2>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
+<div class="lay-form">
   <input type="checkbox" name="AAA" lay-skin="switch">
   <br>
   <input type="checkbox" name="BBB" title="ON|OFF" lay-skin="switch" checked> 
@@ -89,28 +89,28 @@ layui.use(function(){
 
 在 `checkbox` 元素后的相邻元素设置特定属性 `lay-checkbox`，可以与 `checkbox` 标题进行绑定。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
-  <div class="layui-form-item">
+<div class="lay-form">
+  <div class="lay-form-item">
     <input type="checkbox" name="AAA" value="0">
     <div lay-checkbox>
       自定义<a href="#target-url"><ins>标题模板</ins></a>
     </div>
   </div>
-  <div class="layui-form-item">
+  <div class="lay-form-item">
     <input type="checkbox" name="BBB" value="1" lay-skin="tag">
     <div lay-checkbox>
-      <i class="layui-icon layui-icon-heart" style="position: relative; top: 1px; line-height: normal;"></i> 标题模板
+      <i class="lay-icon lay-icon-heart" style="position: relative; top: 1px; line-height: normal;"></i> 标题模板
     </div>
   </div>
-  <div class="layui-form-item">
+  <div class="lay-form-item">
     <input type="checkbox" name="CCC" value="2" lay-skin="switch">
     <div lay-checkbox>
-      <i class="layui-icon layui-icon-moon"></i> | 
-      <i class="layui-icon layui-icon-light"></i>
+      <i class="lay-icon lay-icon-moon"></i> | 
+      <i class="lay-icon lay-icon-light"></i>
     </div>
   </div>
 </div>
@@ -124,7 +124,7 @@ layui.use(function(){
 通过对 `checkbox` 元素设置 `lay-skin="none"` 属性禁用默认样式，从而实现任意风格的多选组件。<br>
 **注：** 这意味着你需要掌握一定的 `CSS` 技能，以下示例中的样式均为外部自主实现，并非 Layui 内置。
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
@@ -145,16 +145,16 @@ layui.use(function(){
 
 该事件在复选框选中或取消选中时触发。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['code', 'preview'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['code', 'preview'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
-  <div class="layui-form-item">
+<div class="lay-form">
+  <div class="lay-form-item">
     <input type="checkbox" name="agreement" value="1" title="是否同意" lay-filter="demo-checkbox-filter">
   </div>
-  <div class="layui-form-item">
-    <button class="layui-btn" lay-submit lay-filter="demo-checkbox-submit">确认</button>
+  <div class="lay-form-item">
+    <button class="lay-btn" lay-submit lay-filter="demo-checkbox-submit">确认</button>
   </div>
 </div>
 
@@ -189,3 +189,4 @@ layui.use(function(){
 </script>
   </textarea>
 </pre>
+

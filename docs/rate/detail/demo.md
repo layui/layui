@@ -1,4 +1,4 @@
-<pre class="layui-code" lay-options="{preview: true, text: {preview: '基础用法'}, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, text: {preview: '基础用法'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-rate-demo"></div>
 
@@ -18,7 +18,7 @@ layui.use(function(){
 
 <h3 id="demo-text" class="ws-anchor ws-bold">显示文字</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-rate-demo-text"></div>
 
@@ -40,7 +40,7 @@ layui.use(function(){
 
 <h3 id="demo-half" class="ws-anchor ws-bold">半星效果</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-rate-demo-half-1"></div>
 <hr>
@@ -70,7 +70,7 @@ layui.use(function(){
 
 <h3 id="demo-setText" class="ws-anchor ws-bold">自定义文本</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-rate-demo-setText-1"></div>
 <hr>
@@ -113,7 +113,7 @@ layui.use(function(){
 
 <h3 id="demo-length" class="ws-anchor ws-bold">自定义长度</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-rate-demo-length-1"></div>
 <hr>
@@ -141,7 +141,7 @@ layui.use(function(){
 
 <h3 id="demo-readonly" class="ws-anchor ws-bold">只读</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-rate-demo-readonly"></div>
 
@@ -163,7 +163,7 @@ layui.use(function(){
 
 <h3 id="demo-theme" class="ws-anchor ws-bold">自定义主题色</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div class="class-rate-demo-theme" lay-options="{value: 3, theme: '#FF8000'}"></div>
 <hr>

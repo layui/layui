@@ -32,7 +32,7 @@
         border-bottom: 1px solid #eee;
         background-color: #f8f9fa;
       }
-      .laytpl-demo .layui-tabs {
+      .laytpl-demo .lay-tabs {
         top: -1px;
       }
 
@@ -53,14 +53,14 @@
     </style>
   </head>
   <body>
-    <div class="layui-padding-3">
-      <div class="layui-row">
-        <div class="layui-col-xs6 laytpl-demo">
+    <div class="lay-padding-3">
+      <div class="lay-row">
+        <div class="lay-col-xs6 laytpl-demo">
           <div><strong>模板</strong></div>
           <textarea id="ID-tpl-src"></textarea>
         </div>
-        <div class="layui-col-xs6 laytpl-demo">
-          <div class="layui-row">
+        <div class="lay-col-xs6 laytpl-demo">
+          <div class="lay-row">
             <div><strong>数据</strong></div>
           </div>
           <textarea id="ID-tpl-data">
@@ -88,29 +88,29 @@
 }
           </textarea>
         </div>
-        <div class="layui-col-xs12 laytpl-demo" style="border-top: none">
-          <div class="layui-row">
-            <div class="layui-col-xs4 layui-tabs" id="ID-tpl-view-header">
-              <ul class="layui-tabs-header">
+        <div class="lay-col-xs12 laytpl-demo" style="border-top: none">
+          <div class="lay-row">
+            <div class="lay-col-xs4 lay-tabs" id="ID-tpl-view-header">
+              <ul class="lay-tabs-header">
                 <li><strong>渲染结果</strong></li>
                 <li><strong>源码</strong></li>
               </ul>
             </div>
-            <div class="layui-col-xs4" style="text-align: center">
+            <div class="lay-col-xs4" style="text-align: center">
               <button
-                class="layui-btn layui-btn-sm layui-btn-border"
+                class="lay-btn lay-btn-sm lay-btn-border"
                 lay-on="test"
               >
                 性能测试
               </button>
             </div>
-            <div class="layui-col-xs4" style="text-align: right">
-              <span class="layui-badge" id="ID-tpl-view-time"></span>
+            <div class="lay-col-xs4" style="text-align: right">
+              <span class="lay-badge" id="ID-tpl-view-time"></span>
             </div>
           </div>
           <div id="ID-tpl-view-body">
             <div
-              class="layui-show layui-padding-3 layui-text"
+              class="lay-show lay-padding-3 lay-text"
               id="ID-tpl-view"
             ></div>
             <div><pre id="ID-tpl-view-code"></pre></div>
@@ -323,3 +323,4 @@ escape }}、{{- source }}、{{# comments }}、&#123;&#123;! ignore
     </script>
   </body>
 </html>
+

@@ -1,4 +1,4 @@
-<table class="layui-hide" id="ID-table-demo-data"></table>
+<table class="lay-hide" id="ID-table-demo-data"></table>
 
 <!-- import layui -->
 <script>

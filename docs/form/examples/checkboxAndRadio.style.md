@@ -5,8 +5,8 @@
    */
 
   /* 主体 */
-  .layui-form-checkbox>.lay-skin-checkcard,
-  .layui-form-radio>.lay-skin-checkcard {
+  .lay-form-checkbox>.lay-skin-checkcard,
+  .lay-form-radio>.lay-skin-checkcard {
     display: table;
     display: flex;
     padding: 12px;
@@ -17,21 +17,21 @@
     background-color: #fff;
   }
 
-  .layui-form-checkbox>.lay-skin-checkcard>*,
-  .layui-form-radio>.lay-skin-checkcard>* {
+  .lay-form-checkbox>.lay-skin-checkcard>*,
+  .lay-form-radio>.lay-skin-checkcard>* {
     /* display: table-cell; */  /* IE */
     vertical-align: top;
   }
 
   /* 悬停 */
-  .layui-form-checkbox:hover>.lay-skin-checkcard,
-  .layui-form-radio:hover>.lay-skin-checkcard {
+  .lay-form-checkbox:hover>.lay-skin-checkcard,
+  .lay-form-radio:hover>.lay-skin-checkcard {
     border-color: #16b777;
   }
 
   /* 选中 */
-  .layui-form-checked>.lay-skin-checkcard,
-  .layui-form-radioed[lay-skin="none"]>.lay-skin-checkcard {
+  .lay-form-checked>.lay-skin-checkcard,
+  .lay-form-radioed[lay-skin="none"]>.lay-skin-checkcard {
     color: #000;
     border-color: #16b777;
     background-color: rgb(22 183 119 / 10%) !important;
@@ -40,8 +40,8 @@
 
 
   /* 禁用 */
-  .layui-checkbox-disabled>.lay-skin-checkcard,
-  .layui-radio-disabled>.lay-skin-checkcard {
+  .lay-checkbox-disabled>.lay-skin-checkcard,
+  .lay-radio-disabled>.lay-skin-checkcard {
     box-shadow: none;
     border-color: #e5e5e5 !important;
     background-color: #eee !important;
@@ -68,13 +68,13 @@
     font-size: 13px;
     color: #5f5f5f;
   }
-  .layui-disabled  .lay-skin-checkcard-description{
+  .lay-disabled  .lay-skin-checkcard-description{
     color: #c2c2c2! important;
   }
 
   /* 选中 dot */
-  .layui-form-checked>.lay-check-dot:after,
-  .layui-form-radioed>.lay-check-dot:after {
+  .lay-form-checked>.lay-check-dot:after,
+  .lay-form-radioed>.lay-check-dot:after {
     position: absolute;
     content: "";
     top: 2px;
@@ -97,17 +97,17 @@
     overflow: hidden;
   }
 
-  .layui-checkbox-disabled>.lay-check-dot:after,
-  .layui-radio-disabled>.lay-check-dot:after {
+  .lay-checkbox-disabled>.lay-check-dot:after,
+  .lay-radio-disabled>.lay-check-dot:after {
     border-top-color: #d2d2d2;
     border-right-color: #d2d2d2;
   }
 
   /* 选中 dot-2 */
-  .layui-form-checked>.lay-check-dot-2:before,
-  .layui-form-radioed>.lay-check-dot-2:before {
+  .lay-form-checked>.lay-check-dot-2:before,
+  .lay-form-radioed>.lay-check-dot-2:before {
     position: absolute;
-    font-family: "layui-icon";
+    font-family: "lay-icon";
     content: "\e605";
     color: #fff;
     bottom: 4px;
@@ -116,8 +116,8 @@
     z-index: 12;
   }
 
-  .layui-form-checked>.lay-check-dot-2:after,
-  .layui-form-radioed>.lay-check-dot-2:after {
+  .lay-form-checked>.lay-check-dot-2:after,
+  .lay-form-radioed>.lay-check-dot-2:after {
     position: absolute;
     content: "";
     bottom: 2px;
@@ -140,13 +140,13 @@
     overflow: hidden;
   }
 
-  .layui-checkbox-disabled>.lay-check-dot-2:before,
-  .layui-radio-disabled>.lay-check-dot-2:before {
+  .lay-checkbox-disabled>.lay-check-dot-2:before,
+  .lay-radio-disabled>.lay-check-dot-2:before {
     color: #eee !important;
   }
 
-  .layui-checkbox-disabled>.lay-check-dot-2:after,
-  .layui-radio-disabled>.lay-check-dot-2:after {
+  .lay-checkbox-disabled>.lay-check-dot-2:after,
+  .lay-radio-disabled>.lay-check-dot-2:after {
     border-bottom-color: #d2d2d2;
     border-right-color: #d2d2d2;
   }
@@ -161,14 +161,14 @@
 </style>
 <!-- 标签风格 -->
 <style>
-  .layui-form-radio>.lay-skin-tag,
-  .layui-form-checkbox>.lay-skin-tag {
+  .lay-form-radio>.lay-skin-tag,
+  .lay-form-checkbox>.lay-skin-tag {
     font-size: 13px;
     border-radius: 100px;
   }
 
-  .layui-form-checked>.lay-skin-tag,
-  .layui-form-radioed>.lay-skin-tag {
+  .lay-form-checked>.lay-skin-tag,
+  .lay-form-radioed>.lay-skin-tag {
     color: #fff !important;
     background-color: #16b777 !important;
   }
@@ -176,7 +176,7 @@
 <!-- 单选框 Color Picker -->
 <style>
   /* 主体 */
-  .layui-form-radio>.lay-skin-color-picker {
+  .lay-form-radio>.lay-skin-color-picker {
     border-radius: 50%;
     border-width: 1px;
     border-style: solid;
@@ -185,7 +185,8 @@
   }
 
   /* 选中 */
-  .layui-form-radioed>.lay-skin-color-picker {
+  .lay-form-radioed>.lay-skin-color-picker {
     box-shadow: 0 0 0 1px #ffffff, 0 0 0 4px currentColor;
   }
 </style>
+

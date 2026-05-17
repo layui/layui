@@ -47,8 +47,8 @@ var thisModule = function () {
   };
 };
 
-var ELEM_FILE = 'layui-upload-file';
-var ELEM_CHOOSE = 'layui-upload-choose';
+var ELEM_FILE = 'lay-upload-file';
+var ELEM_CHOOSE = 'lay-upload-choose';
 var UPLOADING = 'UPLOADING';
 
 // 构造器
@@ -644,7 +644,7 @@ Class.prototype.events = function () {
     that.upload(null, 'choose');
     if (that.isFile() || options.choose) return;
     elemFile.after(
-      '<span class="layui-inline ' + ELEM_CHOOSE + '">' + value + '</span>',
+      '<span class="lay-inline ' + ELEM_CHOOSE + '">' + value + '</span>',
     );
   };
 
@@ -845,3 +845,4 @@ upload.render = function (options) {
 };
 
 export { upload };
+

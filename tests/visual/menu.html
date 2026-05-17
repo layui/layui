@@ -11,105 +11,105 @@
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
   </head>
   <body>
-    <div class="layui-container" style="padding-top: 30px">
-      <div class="layui-btn-container">
-        <button type="button" class="layui-btn" lay-active="lg">大尺寸</button>
-        <button type="button" class="layui-btn" lay-active="normal">
+    <div class="lay-container" style="padding-top: 30px">
+      <div class="lay-btn-container">
+        <button type="button" class="lay-btn" lay-active="lg">大尺寸</button>
+        <button type="button" class="lay-btn" lay-active="normal">
           常规尺寸
         </button>
       </div>
 
       <div
-        class="layui-row layui-col-space30"
+        class="lay-row lay-col-space30"
         id="demo-box"
         style="padding: 30px 0"
       >
-        <div class="layui-col-xs9 layui-col-md3">
-          <div class="layui-panel">
-            <ul class="layui-menu" id="demo1">
+        <div class="lay-col-xs9 lay-col-md3">
+          <div class="lay-panel">
+            <ul class="lay-menu" id="demo1">
               <li lay-options="{id: 100}">
-                <div class="layui-menu-body-title"><a>menu item 1</a></div>
+                <div class="lay-menu-body-title"><a>menu item 1</a></div>
               </li>
               <li lay-options="{id: 101}">
-                <div class="layui-menu-body-title">
+                <div class="lay-menu-body-title">
                   <a href=""
-                    >menu item 2 <span class="layui-badge-dot"></span
+                    >menu item 2 <span class="lay-badge-dot"></span
                   ></a>
                 </div>
               </li>
-              <li class="layui-menu-item-divider"></li>
+              <li class="lay-menu-item-divider"></li>
               <li
-                class="layui-menu-item-group layui-menu-item-down"
+                class="lay-menu-item-group lay-menu-item-down"
                 lay-options="{type: 'group'}"
               >
-                <div class="layui-menu-body-title">
-                  menu group <i class="layui-icon layui-icon-up"></i>
+                <div class="lay-menu-body-title">
+                  menu group <i class="lay-icon lay-icon-up"></i>
                 </div>
                 <ul>
                   <li lay-options="{id: 103}">
-                    <div class="layui-menu-body-title">menu item 3-1</div>
+                    <div class="lay-menu-body-title">menu item 3-1</div>
                   </li>
                   <li
-                    class="layui-menu-item-group"
+                    class="lay-menu-item-group"
                     lay-options="{type: 'group', isAllowSpread: false}"
                   >
-                    <div class="layui-menu-body-title">menu group 2</div>
+                    <div class="lay-menu-body-title">menu group 2</div>
                     <ul>
-                      <li class="layui-menu-item-checked">
-                        <div class="layui-menu-body-title">menu item 3-2-1</div>
+                      <li class="lay-menu-item-checked">
+                        <div class="lay-menu-body-title">menu item 3-2-1</div>
                       </li>
                       <li>
-                        <div class="layui-menu-body-title">menu item 3-2-2</div>
+                        <div class="lay-menu-body-title">menu item 3-2-2</div>
                       </li>
                     </ul>
                   </li>
                   <li>
-                    <div class="layui-menu-body-title">menu item 3-3</div>
+                    <div class="lay-menu-body-title">menu item 3-3</div>
                   </li>
                 </ul>
               </li>
-              <li class="layui-menu-item-divider"></li>
+              <li class="lay-menu-item-divider"></li>
               <li>
-                <div class="layui-menu-body-title">
-                  menu item 4 <span class="layui-badge">1</span>
+                <div class="lay-menu-body-title">
+                  menu item 4 <span class="lay-badge">1</span>
                 </div>
               </li>
-              <li><div class="layui-menu-body-title">menu item 5</div></li>
-              <li><div class="layui-menu-body-title">menu item 6</div></li>
-              <li class="layui-menu-item-parent" lay-options="{type: 'parent'}">
-                <div class="layui-menu-body-title">
+              <li><div class="lay-menu-body-title">menu item 5</div></li>
+              <li><div class="lay-menu-body-title">menu item 6</div></li>
+              <li class="lay-menu-item-parent" lay-options="{type: 'parent'}">
+                <div class="lay-menu-body-title">
                   menu item 7 Children
-                  <i class="layui-icon layui-icon-right"></i>
+                  <i class="lay-icon lay-icon-right"></i>
                 </div>
-                <div class="layui-panel layui-menu-body-panel">
+                <div class="lay-panel lay-menu-body-panel">
                   <ul>
                     <li
-                      class="layui-menu-item-parent"
+                      class="lay-menu-item-parent"
                       lay-options="{type: 'parent'}"
                     >
-                      <div class="layui-menu-body-title">
+                      <div class="lay-menu-body-title">
                         menu item 7-1
-                        <i class="layui-icon layui-icon-right"></i>
+                        <i class="lay-icon lay-icon-right"></i>
                       </div>
-                      <div class="layui-panel layui-menu-body-panel">
+                      <div class="lay-panel lay-menu-body-panel">
                         <ul>
                           <li>
-                            <div class="layui-menu-body-title">
+                            <div class="lay-menu-body-title">
                               menu item 7-2-1
                             </div>
                           </li>
                           <li>
-                            <div class="layui-menu-body-title">
+                            <div class="lay-menu-body-title">
                               menu item 7-2-2
                             </div>
                           </li>
                           <li>
-                            <div class="layui-menu-body-title">
+                            <div class="lay-menu-body-title">
                               menu item 7-2-3
                             </div>
                           </li>
                           <li>
-                            <div class="layui-menu-body-title">
+                            <div class="lay-menu-body-title">
                               menu item 7-2-4
                             </div>
                           </li>
@@ -117,44 +117,44 @@
                       </div>
                     </li>
                     <li>
-                      <div class="layui-menu-body-title">menu item 7-2</div>
+                      <div class="lay-menu-body-title">menu item 7-2</div>
                     </li>
                     <li>
-                      <div class="layui-menu-body-title">menu item 7-3</div>
+                      <div class="lay-menu-body-title">menu item 7-3</div>
                     </li>
                   </ul>
                 </div>
               </li>
               <li>menu item 8</li>
-              <li class="layui-menu-item-divider"></li>
-              <li class="layui-menu-item-group" lay-options="{type: 'group'}">
-                <div class="layui-menu-body-title">menu group 9</div>
+              <li class="lay-menu-item-divider"></li>
+              <li class="lay-menu-item-group" lay-options="{type: 'group'}">
+                <div class="lay-menu-body-title">menu group 9</div>
                 <ul>
                   <li>
-                    <div class="layui-menu-body-title">menu item 9-1</div>
+                    <div class="lay-menu-body-title">menu item 9-1</div>
                   </li>
                   <li
-                    class="layui-menu-item-parent"
+                    class="lay-menu-item-parent"
                     lay-options="{type: 'parent'}"
                   >
-                    <div class="layui-menu-body-title">
+                    <div class="lay-menu-body-title">
                       menu item 9-2
-                      <i class="layui-icon layui-icon-right"></i>
+                      <i class="lay-icon lay-icon-right"></i>
                     </div>
-                    <div class="layui-panel layui-menu-body-panel">
+                    <div class="lay-panel lay-menu-body-panel">
                       <ul>
                         <li>
-                          <div class="layui-menu-body-title">
+                          <div class="lay-menu-body-title">
                             menu item 9-2-1
                           </div>
                         </li>
                         <li>
-                          <div class="layui-menu-body-title">
+                          <div class="lay-menu-body-title">
                             menu item 9-2-2
                           </div>
                         </li>
                         <li>
-                          <div class="layui-menu-body-title">
+                          <div class="lay-menu-body-title">
                             menu item 9-2-3
                           </div>
                         </li>
@@ -162,78 +162,78 @@
                     </div>
                   </li>
                   <li>
-                    <div class="layui-menu-body-title">menu item 9-31</div>
+                    <div class="lay-menu-body-title">menu item 9-31</div>
                   </li>
                 </ul>
               </li>
-              <li class="layui-menu-item-divider"></li>
-              <li><div class="layui-menu-body-title">menu item 10</div></li>
+              <li class="lay-menu-item-divider"></li>
+              <li><div class="lay-menu-body-title">menu item 10</div></li>
             </ul>
           </div>
         </div>
 
-        <div class="layui-col-xs9 layui-col-md3">
-          <div class="layui-panel">
-            <ul class="layui-menu" id="docDemoMenu1">
+        <div class="lay-col-xs9 lay-col-md3">
+          <div class="lay-panel">
+            <ul class="lay-menu" id="docDemoMenu1">
               <li lay-options="{id: 100}">
-                <div class="layui-menu-body-title">menu item 1</div>
+                <div class="lay-menu-body-title">menu item 1</div>
               </li>
               <li lay-options="{id: 101}">
-                <div class="layui-menu-body-title">
+                <div class="lay-menu-body-title">
                   <a href=""
-                    >menu item 2 <span class="layui-badge-dot"></span
+                    >menu item 2 <span class="lay-badge-dot"></span
                   ></a>
                 </div>
               </li>
-              <li class="layui-menu-item-divider"></li>
+              <li class="lay-menu-item-divider"></li>
               <li
-                class="layui-menu-item-group layui-menu-item-down"
+                class="lay-menu-item-group lay-menu-item-down"
                 lay-options="{type: 'group', isAllowSpread: false}"
               >
-                <div class="layui-menu-body-title">menu group</div>
+                <div class="lay-menu-body-title">menu group</div>
                 <ul>
                   <li lay-options="{id: 1031}">
-                    <div class="layui-menu-body-title">menu item 3-1</div>
+                    <div class="lay-menu-body-title">menu item 3-1</div>
                   </li>
                   <li lay-options="{id: 1032}">
-                    <div class="layui-menu-body-title">menu item 3-2</div>
+                    <div class="lay-menu-body-title">menu item 3-2</div>
                   </li>
                 </ul>
               </li>
-              <li class="layui-menu-item-divider"></li>
+              <li class="lay-menu-item-divider"></li>
               <li
-                class="layui-menu-item-group layui-menu-item-down"
+                class="lay-menu-item-group lay-menu-item-down"
                 lay-options="{type: 'group', isAllowSpread: false}"
               >
-                <div class="layui-menu-body-title">menu group 2</div>
+                <div class="lay-menu-body-title">menu group 2</div>
                 <ul>
                   <li lay-options="{id: 1031}">
-                    <div class="layui-menu-body-title">menu item 4-1</div>
+                    <div class="lay-menu-body-title">menu item 4-1</div>
                   </li>
                   <li lay-options="{id: 1032}">
-                    <div class="layui-menu-body-title">menu item 4-2</div>
+                    <div class="lay-menu-body-title">menu item 4-2</div>
                   </li>
                 </ul>
               </li>
-              <li class="layui-menu-item-divider"></li>
-              <li class="layui-menu-item-parent" lay-options="{type: 'parent'}">
-                <div class="layui-menu-body-title">
+              <li class="lay-menu-item-divider"></li>
+              <li class="lay-menu-item-parent" lay-options="{type: 'parent'}">
+                <div class="lay-menu-body-title">
                   menu item 5
-                  <i class="layui-icon layui-icon-right"></i>
+                  <i class="lay-icon lay-icon-right"></i>
                 </div>
-                <div class="layui-panel layui-menu-body-panel">
+                <div class="lay-panel lay-menu-body-panel">
                   <ul>
                     <li lay-options="{id: 1051}">
-                      <div class="layui-menu-body-title">menu item 5-1</div>
+                      <div class="lay-menu-body-title">menu item 5-1</div>
                     </li>
                     <li lay-options="{id: 1051}">
-                      <div class="layui-menu-body-title">menu item 5-2</div>
+                      <div class="lay-menu-body-title">menu item 5-2</div>
                     </li>
                   </ul>
                 </div>
               </li>
               <li lay-options="{id: 106}">
-                <div class="layui-menu-body-title">menu item 6</div>
+                <div class="lay-menu-body-title">menu item 6</div>
               </li>
             </ul>
           </div>
@@ -254,18 +254,19 @@
         normal: () => {
           $('#demo-box')
             .children()
-            .addClass('layui-col-md3')
-            .removeClass('layui-col-md4');
-          $('#demo-box').find('.layui-menu').removeClass('layui-menu-lg');
+            .addClass('lay-col-md3')
+            .removeClass('lay-col-md4');
+          $('#demo-box').find('.lay-menu').removeClass('lay-menu-lg');
         },
         lg: () => {
           $('#demo-box')
             .children()
-            .addClass('layui-col-md4')
-            .removeClass('layui-col-md3');
-          $('#demo-box').find('.layui-menu').addClass('layui-menu-lg');
+            .addClass('lay-col-md4')
+            .removeClass('lay-col-md3');
+          $('#demo-box').find('.lay-menu').addClass('lay-menu-lg');
         },
       });
     </script>
   </body>
 </html>
+

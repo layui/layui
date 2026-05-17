@@ -14,34 +14,34 @@
 -->
 
 <div style="padding: 16px;">
-  <table class="layui-hide" id="test" lay-filter="test"></table>
+  <table class="lay-hide" id="test" lay-filter="test"></table>
 </div>
 
 <script type="text/html" id="toolbarDemo">{{!
-  <div class="layui-btn-container">
-    <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-    <button class="layui-btn layui-btn-sm" lay-event="getData">获取当前页数据</button>
-    <button class="layui-btn layui-btn-sm" id="dropdownButton">
+  <div class="lay-btn-container">
+    <button class="lay-btn lay-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+    <button class="lay-btn lay-btn-sm" lay-event="getData">获取当前页数据</button>
+    <button class="lay-btn lay-btn-sm" id="dropdownButton">
       下拉按钮
-      <i class="layui-icon layui-icon-down layui-font-12"></i>
+      <i class="lay-icon lay-icon-down lay-font-12"></i>
     </button>
-    <button class="layui-btn layui-btn-sm layui-bg-blue" id="reloadTest">
+    <button class="lay-btn lay-btn-sm lay-bg-blue" id="reloadTest">
       重载测试
-      <i class="layui-icon layui-icon-down layui-font-12"></i>
+      <i class="lay-icon lay-icon-down lay-font-12"></i>
     </button>
-    <button class="layui-btn layui-btn-sm layui-btn-primary" id="rowMode">
+    <button class="lay-btn lay-btn-sm lay-btn-primary" id="rowMode">
       <span>{{= d.lineStyle ? '多行' : '单行' }}模式</span>
-      <i class="layui-icon layui-icon-down layui-font-12"></i>
+      <i class="lay-icon lay-icon-down lay-font-12"></i>
     </button>
   </div>
 !}}</script>
 
 <script type="text/html" id="toolDemo">
-  <div class="layui-clear-space">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-xs" lay-event="more">
+  <div class="lay-clear-space">
+    <a class="lay-btn lay-btn-xs" lay-event="edit">编辑</a>
+    <a class="lay-btn lay-btn-xs" lay-event="more">
       更多
-      <i class="layui-icon layui-icon-down"></i>
+      <i class="lay-icon lay-icon-down"></i>
     </a>
   </div>
 </script>
@@ -60,14 +60,14 @@ layui.use(['table', 'dropdown'], function(){
     defaultToolbar: ['filter', 'exports', 'print', { // 右上角工具图标
       title: '提示',
       layEvent: 'LAYTABLE_TIPS',
-      icon: 'layui-icon-tips',
+      icon: 'lay-icon-tips',
       onClick: function(obj) { // 2.9.12+
         layer.alert('自定义工具栏图标按钮');
       }
     }],
     height: 'full-35', // 最大高度减去其他容器已占有的高度差
     css: [ // 重设当前表格样式
-      '.layui-table-tool-temp{padding-right: 145px;}'
+      '.lay-table-tool-temp{padding-right: 145px;}'
     ].join(''),
     cellMinWidth: 80,
     totalRow: true, // 开启合计行
@@ -76,9 +76,9 @@ layui.use(['table', 'dropdown'], function(){
       {type: 'checkbox', fixed: 'left'},
       {field:'id', fixed: 'left', width:80, title: 'ID', sort: true, totalRow: '合计：'},
       {field:'username', width:80, title: '用户'},
-      {field:'email', title:'邮箱 <i class="layui-icon layui-icon-tips layui-font-14" lay-event="email-tips" title="该字段开启了编辑功能" style="margin-left: 5px;"></i>', fieldTitle: '邮箱', hide: 0, width:150, expandedMode: 'tips', edit: 'text'},
+      {field:'email', title:'邮箱 <i class="lay-icon lay-icon-tips lay-font-14" lay-event="email-tips" title="该字段开启了编辑功能" style="margin-left: 5px;"></i>', fieldTitle: '邮箱', hide: 0, width:150, expandedMode: 'tips', edit: 'text'},
       {field:'sex', width:80, title: '性别', sort: true},
-      {field:'sign', title: '签名', edit: 'textarea', minWidth: 260, expandedWidth: 260, totalRow: '{{!人物：<span class="layui-badge-rim">唐代：{{= d.TOTAL_ROW.era.tang }} </span> <span class="layui-badge-rim">宋代：{{= d.TOTAL_ROW.era.song }}</span> <span class="layui-badge-rim">现代：{{= d.TOTAL_ROW.era.xian }}</span>!}}'},
+      {field:'sign', title: '签名', edit: 'textarea', minWidth: 260, expandedWidth: 260, totalRow: '{{!人物：<span class="lay-badge-rim">唐代：{{= d.TOTAL_ROW.era.tang }} </span> <span class="lay-badge-rim">宋代：{{= d.TOTAL_ROW.era.song }}</span> <span class="lay-badge-rim">现代：{{= d.TOTAL_ROW.era.xian }}</span>!}}'},
       {field:'experience', width: 100, title: '积分', sort: true, totalRow: '{{!{{= d.TOTAL_NUMS }} 😊!}}'},
       {field:'checkin', title:'打卡', width: 100, sort: true, totalRow: '{{!{{= parseInt(d.TOTAL_NUMS) }} 次!}}'},
       {field:'ip', title:'IP', width: 120},
@@ -324,7 +324,7 @@ layui.use(['table', 'dropdown'], function(){
 
   // table 滚动时移除内部弹出的元素
   var tableInst = table.getOptions('test');
-  tableInst.elem.next().find('.layui-table-main').on('scroll', function() {
+  tableInst.elem.next().find('.lay-table-main').on('scroll', function() {
     dropdown.close('dropdown-table-tool');
   });
 
@@ -376,3 +376,4 @@ layui.use(['table', 'dropdown'], function(){
 </script>
 </body>
 </html>
+

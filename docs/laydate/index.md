@@ -10,13 +10,13 @@ toc: true
 <h2 id="examples" lay-toc="{hot: true, anchor: null}" style="margin-bottom: 0;">示例</h2>
 
 <style>
-.ws-demo-laydate .layui-form-label{width: 100px;}
-.ws-demo-laydate .layui-form-item{margin-bottom: 0;}
-.ws-demo-laydate .layui-form-item .layui-inline{margin-bottom: 11px;}
-.ws-demo-laydate .layui-input-block{margin-left: 130px;}
-.ws-demo-static .layui-inline{margin: 0 16px 16px 0;}
+.ws-demo-laydate .lay-form-label{width: 100px;}
+.ws-demo-laydate .lay-form-item{margin-bottom: 0;}
+.ws-demo-laydate .lay-form-item .lay-inline{margin-bottom: 11px;}
+.ws-demo-laydate .lay-input-block{margin-left: 130px;}
+.ws-demo-static .lay-inline{margin: 0 16px 16px 0;}
 @media screen and (max-width: 450px){
-  .layui-form-item .layui-input-inline{margin-left: 130px;}
+  .lay-form-item .lay-input-inline{margin-left: 130px;}
 }
 </style>
 
@@ -181,5 +181,6 @@ var days2 = laydate.getEndDate(2, 2080); // 获得 2080 年 2 月的最后一天
 
 > laydate 曾经可作为单独组件使用，鉴于维护成本的考量，目前 laydate 组件已完全集成到 Layui 中，而单独版本已不做同步维护。
 因此，建议直接使用 layui 中 laydate 即可。
+
 
 

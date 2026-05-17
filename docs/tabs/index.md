@@ -41,10 +41,10 @@ toc: true
 
 #### 1. 自动渲染
 
-tabs 组件会在元素加载完毕后，自动对 `class="layui-tabs"` 目标元素完成一次渲染，若无法找到默认的目标元素（如：动态插入的标签元素的场景），则可通过该方法完成对标签页的初始化渲染。
+tabs 组件会在元素加载完毕后，自动对 `class="lay-tabs"` 目标元素完成一次渲染，若无法找到默认的目标元素（如：动态插入的标签元素的场景），则可通过该方法完成对标签页的初始化渲染。
 
 ```js
-// 对 class="layui-tabs" 所在标签进行初始化渲染
+// 对 class="lay-tabs" 所在标签进行初始化渲染
 tabs.render();
 ```
 
@@ -309,7 +309,7 @@ tabs.on(`beforeChange(testID)`, function(data) {
 
 示例演示：
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'max-height: 520px;', tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'max-height: 520px;', tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
@@ -336,7 +336,7 @@ tabs.on('afterChange(testID)', function(data) {
 
 标签在切换前触发，通过在事件中 `return false` 可阻止默认标签切换行为。通常和 `tabs.close()` 方法搭配使用。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'max-height: 520px;', tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'max-height: 520px;', tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
@@ -360,4 +360,5 @@ tabs.on('afterClose(testID)', function(data) {
 ## 💖 心语
 
 tabs 是通过 component 重构的首个组件，它来自于最早试图发布的 Layui 3.0（后因为 3.0 技术路线的变化，而整理放至 2.10+ 版本中），目的是将 element 模块中的 tab 组件进行解耦，增强其可扩展性。为了给开发者必要的时间缓冲，我们会将旧 tab 组件仍然保留在后续的若干版本中，但会在合适的时机对旧 tab 组件进行剔除，建议开发者尽量提前过渡到当前新的 tabs 组件。
+
 

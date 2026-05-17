@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -170,7 +170,7 @@
 {{!
 ```
 <script type="text/html" id="TPL-demo-title">
-  <a href="/detail/{{= d.id }}" class="layui-table-link">
+  <a href="/detail/{{= d.id }}" class="lay-table-link">
     {{= d.title }}
   </a>
 </script>
@@ -198,7 +198,7 @@ table.render({
 ```
 table.render({
   cols: [[
-    {field: 'title', templet: '<div><a href="/detail/{{= d.id }}" class="layui-table-link">{{= d.title }}</a></div>'}
+    {field: 'title', templet: '<div><a href="/detail/{{= d.id }}" class="lay-table-link">{{= d.title }}</a></div>'}
     // …
   ]],
   // …
@@ -218,7 +218,7 @@ table.render({
       console.log(d.LAY_NUM); // 得到序号。或其他特定字段
 
       // 返回模板内容
-      return '<a href="/detail/'+ d.id +'" class="layui-table-link">'+ d.title +'</a>'
+      return '<a href="/detail/'+ d.id +'" class="lay-table-link">'+ d.title +'</a>'
     }}
     // …
   ]],
@@ -479,3 +479,4 @@ edit: function(d){
     </tr>
   </tbody>
 </table>
+

@@ -1,5 +1,5 @@
-<div class="layui-tabs layui-hide-v" id="demoTabs1" lay-options="{closable: true, headerMode:'scroll'}">
-  <ul class="layui-tabs-header">
+<div class="lay-tabs lay-hide-v" id="demoTabs1" lay-options="{closable: true, headerMode:'scroll'}">
+  <ul class="lay-tabs-header">
     <li lay-id="aaa" lay-closable="false">Tab1</li>
     <li lay-id="bbb">Tab2</li>
     <li lay-id="ccc">Tab3</li>
@@ -7,24 +7,24 @@
     <li lay-id="eee">Tab5</li>
     <li lay-id="fff">Tab6</li>
   </ul>
-  <div class="layui-tabs-body">
-    <div class="layui-tabs-item">Tab Content-1</div>
-    <div class="layui-tabs-item">Tab Content-2</div>
-    <div class="layui-tabs-item">Tab Content-3</div>
-    <div class="layui-tabs-item">Tab Content-4</div>
-    <div class="layui-tabs-item">Tab Content-5</div>
-    <div class="layui-tabs-item">Tab Content-6</div>
+  <div class="lay-tabs-body">
+    <div class="lay-tabs-item">Tab Content-1</div>
+    <div class="lay-tabs-item">Tab Content-2</div>
+    <div class="lay-tabs-item">Tab Content-3</div>
+    <div class="lay-tabs-item">Tab Content-4</div>
+    <div class="lay-tabs-item">Tab Content-5</div>
+    <div class="lay-tabs-item">Tab Content-6</div>
   </div>
 </div>
 
 🔔 操作提示：在「标签头部」点击鼠标右键，可开启标签操作的更多实用演示
 
-<div class="layui-btn-container">
-  <button class="layui-btn" onclick="layui.tabs.change('demoTabs1', 'ccc')">切换到：Tab3</button>
-  <button class="layui-btn" onclick="layui.tabs.change('demoTabs1', 1)">切换到：第 2 项</button>
-  <button class="layui-btn" onclick="layui.tabs.close('demoTabs1', 'ddd')">关闭：Tab4</button>
-  <button class="layui-btn" onclick="layui.tabs.close('demoTabs1', 1)">关闭：第 2 项</button>
-  <button class="layui-btn" lay-on="add">添加 Tab</button>
+<div class="lay-btn-container">
+  <button class="lay-btn" onclick="layui.tabs.change('demoTabs1', 'ccc')">切换到：Tab3</button>
+  <button class="lay-btn" onclick="layui.tabs.change('demoTabs1', 1)">切换到：第 2 项</button>
+  <button class="lay-btn" onclick="layui.tabs.close('demoTabs1', 'ddd')">关闭：Tab4</button>
+  <button class="lay-btn" onclick="layui.tabs.close('demoTabs1', 1)">关闭：第 2 项</button>
+  <button class="lay-btn" lay-on="add">添加 Tab</button>
 </div>
 
 <!-- import layui -->
@@ -37,7 +37,7 @@ layui.use(function() {
 
   // 为标签头添加上下文菜单
   var dropdownInst = dropdown.render({
-    elem: '#demoTabs1 .layui-tabs-header>li',
+    elem: '#demoTabs1 .lay-tabs-header>li',
     trigger: 'contextmenu',
     data: [{
       title: '在右侧新增标签页',
@@ -111,3 +111,4 @@ layui.use(function() {
   });
 });
 </script>
+

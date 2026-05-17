@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -857,3 +857,4 @@ done: function(value, date, endDate){
     </tr>
   </tbody>
 </table>
+

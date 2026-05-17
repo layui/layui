@@ -32,12 +32,12 @@ export function component(settings) {
         MOD_NAME: MOD_NAME,
         MOD_ID: MOD_ID,
 
-        CLASS_THIS: 'layui-this',
-        CLASS_SHOW: 'layui-show',
-        CLASS_HIDE: 'layui-hide',
-        CLASS_HIDEV: 'layui-hide-v',
-        CLASS_DISABLED: 'layui-disabled',
-        CLASS_NONE: 'layui-none',
+        CLASS_THIS: 'lay-this',
+        CLASS_SHOW: 'lay-show',
+        CLASS_HIDE: 'lay-hide',
+        CLASS_HIDEV: 'lay-hide-v',
+        CLASS_DISABLED: 'lay-disabled',
+        CLASS_NONE: 'lay-none',
       },
       settings.CONST,
     ),
@@ -266,3 +266,4 @@ export function component(settings) {
 }
 
 export { component as componentBuilder };
+

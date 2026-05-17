@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -157,3 +157,4 @@ body: ['#tabsBody', '>div'],
     </tr>
   </tbody>
 </table>
+

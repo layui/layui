@@ -1,25 +1,25 @@
 /** 动画 **/
-.layui-anim {
+.lay-anim {
   -webkit-animation-duration: 0.3s;
   -webkit-animation-fill-mode: both;
   animation-duration: 0.3s;
   animation-fill-mode: both;
 }
-.layui-anim.layui-icon {
+.lay-anim.lay-icon {
   display: inline-block;
 }
-.layui-anim-loop {
+.lay-anim-loop {
   -webkit-animation-iteration-count: infinite;
   animation-iteration-count: infinite;
 }
-.layui-trans,
-.layui-trans a {
+.lay-trans,
+.lay-trans a {
   -webkit-transition: all 0.2s;
   transition: all 0.2s;
 } /* 过渡变换 */
 
 /* 循环旋转 */
-@-webkit-keyframes layui-rotate {
+@-webkit-keyframes lay-rotate {
   from {
     -webkit-transform: rotate(0deg);
   }
@@ -27,7 +27,7 @@
     -webkit-transform: rotate(360deg);
   }
 }
-@keyframes layui-rotate {
+@keyframes lay-rotate {
   from {
     transform: rotate(0deg);
   }
@@ -35,9 +35,9 @@
     transform: rotate(360deg);
   }
 }
-.layui-anim-rotate {
-  -webkit-animation-name: layui-rotate;
-  animation-name: layui-rotate;
+.lay-anim-rotate {
+  -webkit-animation-name: lay-rotate;
+  animation-name: lay-rotate;
   -webkit-animation-duration: 1s;
   animation-duration: 1s;
   -webkit-animation-timing-function: linear;
@@ -45,7 +45,7 @@
 }
 
 /* 从最底部往上滑入 */
-@-webkit-keyframes layui-up {
+@-webkit-keyframes lay-up {
   from {
     -webkit-transform: translate3d(0, 100%, 0);
     opacity: 0.3;
@@ -55,7 +55,7 @@
     opacity: 1;
   }
 }
-@keyframes layui-up {
+@keyframes lay-up {
   from {
     transform: translate3d(0, 100%, 0);
     opacity: 0.3;
@@ -65,13 +65,13 @@
     opacity: 1;
   }
 }
-.layui-anim-up {
-  -webkit-animation-name: layui-up;
-  animation-name: layui-up;
+.lay-anim-up {
+  -webkit-animation-name: lay-up;
+  animation-name: lay-up;
 }
 
 /* 微微往上滑入 */
-@-webkit-keyframes layui-upbit {
+@-webkit-keyframes lay-upbit {
   from {
     -webkit-transform: translate3d(0, 15px, 0);
     opacity: 0.3;
@@ -81,7 +81,7 @@
     opacity: 1;
   }
 }
-@keyframes layui-upbit {
+@keyframes lay-upbit {
   from {
     transform: translate3d(0, 15px, 0);
     opacity: 0.3;
@@ -91,13 +91,13 @@
     opacity: 1;
   }
 }
-.layui-anim-upbit {
-  -webkit-animation-name: layui-upbit;
-  animation-name: layui-upbit;
+.lay-anim-upbit {
+  -webkit-animation-name: lay-upbit;
+  animation-name: lay-upbit;
 }
 
 /* 从最顶部往下滑入 */
-@keyframes layui-down {
+@keyframes lay-down {
   0% {
     opacity: 0.3;
     transform: translate3d(0, -100%, 0);
@@ -107,12 +107,12 @@
     transform: translate3d(0, 0, 0);
   }
 }
-.layui-anim-down {
-  animation-name: layui-down;
+.lay-anim-down {
+  animation-name: lay-down;
 }
 
 /* 微微往下滑入 */
-@keyframes layui-downbit {
+@keyframes lay-downbit {
   0% {
     opacity: 0.3;
     transform: translate3d(0, -5px, 0);
@@ -122,12 +122,12 @@
     transform: translate3d(0, 0, 0);
   }
 }
-.layui-anim-downbit {
-  animation-name: layui-downbit;
+.lay-anim-downbit {
+  animation-name: lay-downbit;
 }
 
 /* 放大 */
-@-webkit-keyframes layui-scale {
+@-webkit-keyframes lay-scale {
   0% {
     opacity: 0.3;
     -webkit-transform: scale(0.5);
@@ -137,7 +137,7 @@
     -webkit-transform: scale(1);
   }
 }
-@keyframes layui-scale {
+@keyframes lay-scale {
   0% {
     opacity: 0.3;
     transform: scale(0.5);
@@ -147,13 +147,13 @@
     transform: scale(1);
   }
 }
-.layui-anim-scale {
-  -webkit-animation-name: layui-scale;
-  animation-name: layui-scale;
+.lay-anim-scale {
+  -webkit-animation-name: lay-scale;
+  animation-name: lay-scale;
 }
 
 /* 弹簧式放大 */
-@-webkit-keyframes layui-scale-spring {
+@-webkit-keyframes lay-scale-spring {
   0% {
     opacity: 0.5;
     -webkit-transform: scale(0.5);
@@ -167,7 +167,7 @@
     -webkit-transform: scale(1);
   }
 }
-@keyframes layui-scale-spring {
+@keyframes lay-scale-spring {
   0% {
     opacity: 0.5;
     transform: scale(0.5);
@@ -181,13 +181,13 @@
     transform: scale(1);
   }
 }
-.layui-anim-scaleSpring {
-  -webkit-animation-name: layui-scale-spring;
-  animation-name: layui-scale-spring;
+.lay-anim-scaleSpring {
+  -webkit-animation-name: lay-scale-spring;
+  animation-name: lay-scale-spring;
 }
 
 /* 放小 */
-@keyframes layui-scalesmall {
+@keyframes lay-scalesmall {
   0% {
     opacity: 0.3;
     transform: scale(1.5);
@@ -197,12 +197,12 @@
     transform: scale(1);
   }
 }
-.layui-anim-scalesmall {
-  animation-name: layui-scalesmall;
+.lay-anim-scalesmall {
+  animation-name: lay-scalesmall;
 }
 
 /* 弹簧式放小 */
-@keyframes layui-scalesmall-spring {
+@keyframes lay-scalesmall-spring {
   0% {
     opacity: 0.3;
     transform: scale(1.5);
@@ -216,12 +216,12 @@
     transform: scale(1);
   }
 }
-.layui-anim-scalesmall-spring {
-  animation-name: layui-scalesmall-spring;
+.lay-anim-scalesmall-spring {
+  animation-name: lay-scalesmall-spring;
 }
 
 /* 渐显 */
-@-webkit-keyframes layui-fadein {
+@-webkit-keyframes lay-fadein {
   0% {
     opacity: 0;
   }
@@ -229,7 +229,7 @@
     opacity: 1;
   }
 }
-@keyframes layui-fadein {
+@keyframes lay-fadein {
   0% {
     opacity: 0;
   }
@@ -237,13 +237,13 @@
     opacity: 1;
   }
 }
-.layui-anim-fadein {
-  -webkit-animation-name: layui-fadein;
-  animation-name: layui-fadein;
+.lay-anim-fadein {
+  -webkit-animation-name: lay-fadein;
+  animation-name: lay-fadein;
 }
 
 /* 渐隐 */
-@-webkit-keyframes layui-fadeout {
+@-webkit-keyframes lay-fadeout {
   0% {
     opacity: 1;
   }
@@ -251,7 +251,7 @@
     opacity: 0;
   }
 }
-@keyframes layui-fadeout {
+@keyframes lay-fadeout {
   0% {
     opacity: 1;
   }
@@ -259,7 +259,8 @@
     opacity: 0;
   }
 }
-.layui-anim-fadeout {
-  -webkit-animation-name: layui-fadeout;
-  animation-name: layui-fadeout;
+.lay-anim-fadeout {
+  -webkit-animation-name: lay-fadeout;
+  animation-name: lay-fadeout;
 }
+
