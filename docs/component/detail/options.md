@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -42,7 +42,7 @@
 
 ```
 CONST: {
-  ELEM: 'layui-tabs',
+  ELEM: 'lay-tabs',
 }
 ```
 
@@ -167,3 +167,4 @@ events: function() {
     </tr>
   </tbody>
 </table>
+

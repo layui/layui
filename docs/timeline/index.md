@@ -9,24 +9,24 @@ toc: true
 
 <h2 id="examples" lay-toc="{}" style="margin-bottom: 0;">常规时间线</h2>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-<div class="layui-timeline">
-  <div class="layui-timeline-item">
-    <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
-    <div class="layui-timeline-content layui-text">
-      <h3 class="layui-timeline-title">8月18日</h3>
+<div class="lay-timeline">
+  <div class="lay-timeline-item">
+    <i class="lay-icon lay-timeline-axis">&#xe63f;</i>
+    <div class="lay-timeline-content lay-text">
+      <h3 class="lay-timeline-title">8月18日</h3>
       <p>
         多年前，Layui 2.0 的发布前夜，记录着这样的一段心理活动。
         <br>这是一个怎样的版本？它将受众如何？
-        <br>又是谁在指引着我去创作，是基于成就感的驱动，还是试图建立我与客观世界的某种沟通 <i class="layui-icon">&#xe650;</i>
+        <br>又是谁在指引着我去创作，是基于成就感的驱动，还是试图建立我与客观世界的某种沟通 <i class="lay-icon">&#xe650;</i>
       </p>
     </div>
   </div>
-  <div class="layui-timeline-item">
-    <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
-    <div class="layui-timeline-content layui-text">
-      <h3 class="layui-timeline-title">8月16日</h3>
+  <div class="lay-timeline-item">
+    <i class="lay-icon lay-timeline-axis">&#xe63f;</i>
+    <div class="lay-timeline-content lay-text">
+      <h3 class="lay-timeline-title">8月16日</h3>
       <p>Layui 使用率最高的组件有</p>
       <ul>
         <li>layer</li>
@@ -35,20 +35,20 @@ toc: true
       </ul>
     </div>
   </div>
-  <div class="layui-timeline-item">
-    <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
-    <div class="layui-timeline-content layui-text">
-      <h3 class="layui-timeline-title">8月15日</h3>
+  <div class="lay-timeline-item">
+    <i class="lay-icon lay-timeline-axis">&#xe63f;</i>
+    <div class="lay-timeline-content lay-text">
+      <h3 class="lay-timeline-title">8月15日</h3>
       <p>
         这片广袤的土地孕育了璀璨的华夏文化，和我们这个饱受沧桑的民族。
         <br>勤劳、淳朴、善良而又充满智慧的国人，一代又一代人的艰苦奋斗，古老的文明重新焕发出光彩。
       </p>
     </div>
   </div>
-  <div class="layui-timeline-item">
-    <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
-    <div class="layui-timeline-content layui-text">
-      <div class="layui-timeline-title">过去</div>
+  <div class="lay-timeline-item">
+    <i class="lay-icon lay-timeline-axis">&#xe63f;</i>
+    <div class="lay-timeline-content lay-text">
+      <div class="lay-timeline-title">过去</div>
     </div>
   </div>
 </div>
@@ -59,37 +59,37 @@ toc: true
 
 <h2 id="timeline" lay-toc="{}">简约时间线</h2>
 
-<pre class="layui-code" lay-options="{preview: true, previewStyle: 'padding-top: 32px;', layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, previewStyle: 'padding-top: 32px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-<div class="layui-timeline">
-  <div class="layui-timeline-item">
-    <i class="layui-icon layui-timeline-axis layui-icon-face-smile"></i>
-    <div class="layui-timeline-content layui-text">
-      <div class="layui-timeline-title">2023年，Layui 情怀版本 2.8.0 发布，新官网上线，且文档全部重写并开源。</div>
+<div class="lay-timeline">
+  <div class="lay-timeline-item">
+    <i class="lay-icon lay-timeline-axis lay-icon-face-smile"></i>
+    <div class="lay-timeline-content lay-text">
+      <div class="lay-timeline-title">2023年，Layui 情怀版本 2.8.0 发布，新官网上线，且文档全部重写并开源。</div>
     </div>
   </div>
-  <div class="layui-timeline-item">
-    <i class="layui-icon layui-timeline-axis layui-icon-face-cry"></i>
-    <div class="layui-timeline-content layui-text">
-      <div class="layui-timeline-title">2021年，Layui 原官网下线，此后 Layui 进入两年的低谷期。</div>
+  <div class="lay-timeline-item">
+    <i class="lay-icon lay-timeline-axis lay-icon-face-cry"></i>
+    <div class="lay-timeline-content lay-text">
+      <div class="lay-timeline-title">2021年，Layui 原官网下线，此后 Layui 进入两年的低谷期。</div>
     </div>
   </div>
-  <div class="layui-timeline-item">
-    <i class="layui-icon layui-timeline-axis layui-icon-fire"></i>
-    <div class="layui-timeline-content layui-text">
-      <div class="layui-timeline-title">2017年，Layui 里程碑版本 2.0.0 发布，此后 Layui 进入三年的高光期。</div>
+  <div class="lay-timeline-item">
+    <i class="lay-icon lay-timeline-axis lay-icon-fire"></i>
+    <div class="lay-timeline-content lay-text">
+      <div class="lay-timeline-title">2017年，Layui 里程碑版本 2.0.0 发布，此后 Layui 进入三年的高光期。</div>
     </div>
   </div>
-  <div class="layui-timeline-item">
-    <i class="layui-icon layui-timeline-axis layui-icon-circle"></i>
-    <div class="layui-timeline-content layui-text">
-      <div class="layui-timeline-title">2016年，Layui 首个版本发布</div>
+  <div class="lay-timeline-item">
+    <i class="lay-icon lay-timeline-axis lay-icon-circle"></i>
+    <div class="lay-timeline-content lay-text">
+      <div class="lay-timeline-title">2016年，Layui 首个版本发布</div>
     </div>
   </div>
-  <div class="layui-timeline-item">
-    <i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-timeline-axis">&#xe63e;</i>
-    <div class="layui-timeline-content layui-text">
-      <div class="layui-timeline-title">最初，Layui 在爱与期许中孵化。</div>
+  <div class="lay-timeline-item">
+    <i class="lay-icon lay-anim lay-anim-rotate lay-anim-loop lay-timeline-axis">&#xe63e;</i>
+    <div class="lay-timeline-content lay-text">
+      <div class="lay-timeline-title">最初，Layui 在爱与期许中孵化。</div>
     </div>
   </div>
 </div>

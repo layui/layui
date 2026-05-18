@@ -7,7 +7,7 @@
   <title>Document</title>
   <link href="{{= d.layui[2].cdn.css }}" rel="stylesheet">
   <style>
-    .laydate-theme-lunar .layui-laydate-main {
+    .laydate-theme-lunar .lay-laydate-main {
       width: auto;
     }
     .laydate-theme-lunar .date-cell-inner {
@@ -16,7 +16,7 @@
       height: 40px;
       border-radius: 4px !important;
     }
-    .laydate-theme-lunar .layui-this {
+    .laydate-theme-lunar .lay-this {
       border-radius: 4px !important;
     }
     .laydate-theme-lunar .date-cell-inner b {
@@ -49,7 +49,7 @@
     .laydate-theme-lunar .hightlight i {
       color: #1e9fff;
     }
-    .laydate-theme-lunar .layui-this .hightlight i {
+    .laydate-theme-lunar .lay-this .hightlight i {
       color: #fff;
     }
     .laydate-theme-lunar .laydate-month-list > li {
@@ -75,8 +75,8 @@
     }
   </style>
 </head>
-<body class="layui-padding-3">
-  <div class="layui-inline" id="ID-laydate-cell-render"></div>
+<body class="lay-padding-3">
+  <div class="lay-inline" id="ID-laydate-cell-render"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lunar-javascript/1.6.12/lunar.min.js"></script>
   <script src="{{= d.layui[2].cdn.js }}"></script>
   <script>
@@ -96,8 +96,8 @@
       ready: function (date) {
         if (!this._previewEl) {
           var key = this.elem.attr('lay-key');
-          var panelEl = $('#layui-laydate' + key);
-          this._previewEl = panelEl.find('.layui-laydate-preview');
+          var panelEl = $('#lay-laydate' + key);
+          this._previewEl = panelEl.find('.lay-laydate-preview');
           this.cellRender(date);
         }
       },
@@ -185,3 +185,4 @@
 </script>
 </body>
 </html>
+

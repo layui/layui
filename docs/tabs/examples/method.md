@@ -19,8 +19,9 @@ layui.use(function(){
       { content: 'Tab content 3' }
     ],
     // index: 1, // 初始选中项
-    // className: 'layui-tabs-card',
+    // className: 'lay-tabs-card',
     // closable: true
   });
 });
 </script>
+

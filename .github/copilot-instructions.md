@@ -51,13 +51,37 @@ layui/
 
 #### 命名空间
 
-凡是涉及到命名空间的，均以 `lay` 为前缀，如：
+用于 DOM 层面的命名空间，采用 `lay` 为前缀，如：
 
-CSS 类名
+- CSS 类名
 
 ```css
-.lay-table {
+.lay-btn {
 }
+```
+
+- HTML 特定属性名
+
+```html
+<div class="lay-btn" lay-on="click"></div>
+```
+
+- Web Components 标签名
+
+```html
+<lay-table></lay-table>
+```
+
+用于项目产物名称、UMD 全局变量，采用 `layui`，如：
+
+```html
+<link rel="stylesheet" href="dist/css/layui.css" />
+<script src="dist/layui.js"></script>
+<script>
+  layui.use(() => {
+    const { tabs } = layui;
+  });
+</script>
 ```
 
 #### 命名规则

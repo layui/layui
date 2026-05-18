@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -265,3 +265,4 @@ slider.render({
     </tr>
   </tbody>
 </table>
+

@@ -1,22 +1,22 @@
-<div class="layui-btn-container">
-  <button class="layui-btn demo-dropdown-base">
+<div class="lay-btn-container">
+  <button class="lay-btn demo-dropdown-base">
     <span>下拉菜单</span>
-    <i class="layui-icon layui-icon-down layui-font-12"></i>
+    <i class="lay-icon lay-icon-down lay-font-12"></i>
   </button>
-  <button class="layui-btn layui-btn-primary demo-dropdown-base">
+  <button class="lay-btn lay-btn-primary demo-dropdown-base">
     <span>下拉菜单</span>
-    <i class="layui-icon layui-icon-down layui-font-12"></i>
+    <i class="lay-icon lay-icon-down lay-font-12"></i>
   </button>
 </div>
  
-<div class="layui-inline" style="width: 235px;">
-  <input name="" placeholder="在输入框提供一些常用的选项" class="layui-input" id="ID-dropdown-demo-base-input">
+<div class="lay-inline" style="width: 235px;">
+  <input name="" placeholder="在输入框提供一些常用的选项" class="lay-input" id="ID-dropdown-demo-base-input">
 </div>
-<div class="layui-inline layui-word-aux layui-font-gray">
+<div class="lay-inline lay-word-aux lay-font-gray">
   可以绑定任意元素，
-  <a href="javascript:;" class="layui-font-blue" id="ID-dropdown-demo-base-text">
+  <a href="javascript:;" class="lay-font-blue" id="ID-dropdown-demo-base-text">
     比如这段文字 
-    <i class="layui-icon layui-font-12 layui-icon-down"></i>
+    <i class="lay-icon lay-font-12 lay-icon-down"></i>
   </a>
 </div>
 
@@ -120,3 +120,4 @@ layui.use(function(){
 
 });
 </script>
+

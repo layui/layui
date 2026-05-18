@@ -1,5 +1,5 @@
 /** 颜色选择器 **/
-.layui-colorpicker {
+.lay-colorpicker {
   width: 38px;
   height: 38px;
   border: 1px solid var(--lay-border-color);
@@ -12,33 +12,33 @@
   transition: all 0.3s;
   box-sizing: border-box;
 }
-.layui-colorpicker:hover {
+.lay-colorpicker:hover {
   border-color: var(--lay-gray-400);
 }
-.layui-colorpicker.layui-colorpicker-lg {
+.lay-colorpicker.lay-colorpicker-lg {
   width: 44px;
   height: 44px;
   line-height: 30px;
 }
-.layui-colorpicker.layui-colorpicker-sm {
+.lay-colorpicker.lay-colorpicker-sm {
   width: 30px;
   height: 30px;
   line-height: 20px;
   padding: 3px;
 }
-.layui-colorpicker.layui-colorpicker-xs {
+.lay-colorpicker.lay-colorpicker-xs {
   width: 22px;
   height: 22px;
   line-height: 16px;
   padding: 1px;
 }
 
-.layui-colorpicker-trigger-bgcolor {
+.lay-colorpicker-trigger-bgcolor {
   display: block;
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
   border-radius: var(--lay-border-radius);
 }
-.layui-colorpicker-trigger-span {
+.lay-colorpicker-trigger-span {
   display: block;
   height: 100%;
   box-sizing: border-box;
@@ -46,16 +46,16 @@
   border-radius: var(--lay-border-radius);
   text-align: center;
 }
-.layui-colorpicker-trigger-i {
+.lay-colorpicker-trigger-i {
   display: inline-block;
   color: #fff;
   font-size: 12px;
 }
-.layui-colorpicker-trigger-i.layui-icon-close {
+.lay-colorpicker-trigger-i.lay-icon-close {
   color: #999;
 }
 
-.layui-colorpicker-main {
+.lay-colorpicker-main {
   position: absolute;
   left: -999999px;
   top: -999999px;
@@ -68,17 +68,17 @@
   border-radius: var(--lay-border-radius);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
 }
-.layui-colorpicker-main-wrapper {
+.lay-colorpicker-main-wrapper {
   height: 180px;
   position: relative;
 }
-.layui-colorpicker-basis {
+.lay-colorpicker-basis {
   width: 260px;
   height: 100%;
   position: relative;
   overflow: hidden;
 }
-.layui-colorpicker-basis-white {
+.lay-colorpicker-basis-white {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -86,7 +86,7 @@
   left: 0;
   background: linear-gradient(90deg, #fff, hsla(0, 0%, 100%, 0));
 }
-.layui-colorpicker-basis-black {
+.lay-colorpicker-basis-black {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -94,7 +94,7 @@
   left: 0;
   background: linear-gradient(0deg, #000, transparent);
 }
-.layui-colorpicker-basis-cursor {
+.lay-colorpicker-basis-cursor {
   width: 10px;
   height: 10px;
   border: 1px solid #fff;
@@ -105,7 +105,7 @@
   cursor: pointer;
   transform: translate(-50%, -50%);
 }
-.layui-colorpicker-side {
+.lay-colorpicker-side {
   position: absolute;
   top: 0;
   right: 0;
@@ -113,7 +113,7 @@
   height: 100%;
   background: linear-gradient(#f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
 }
-.layui-colorpicker-side-slider {
+.lay-colorpicker-side-slider {
   width: 100%;
   height: 5px;
   box-shadow: 0 0 1px #888888;
@@ -125,17 +125,17 @@
   position: absolute;
   left: 0;
 }
-.layui-colorpicker-main-alpha {
+.lay-colorpicker-main-alpha {
   display: none;
   height: 12px;
   margin-top: 7px;
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
 }
-.layui-colorpicker-alpha-bgcolor {
+.lay-colorpicker-alpha-bgcolor {
   height: 100%;
   position: relative;
 }
-.layui-colorpicker-alpha-slider {
+.lay-colorpicker-alpha-slider {
   width: 5px;
   height: 100%;
   box-shadow: 0 0 1px #888888;
@@ -147,11 +147,11 @@
   position: absolute;
   top: 0;
 }
-.layui-colorpicker-main-pre {
+.lay-colorpicker-main-pre {
   padding-top: 7px;
   font-size: 0;
 }
-.layui-colorpicker-pre {
+.lay-colorpicker-pre {
   width: 20px;
   height: 20px;
   border-radius: var(--lay-border-radius);
@@ -160,31 +160,31 @@
   margin-bottom: 7px;
   cursor: pointer;
 }
-.layui-colorpicker-pre:nth-child(11n + 1) {
+.lay-colorpicker-pre:nth-child(11n + 1) {
   margin-left: 0;
 }
-.layui-colorpicker-pre-isalpha {
+.lay-colorpicker-pre-isalpha {
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
 }
-.layui-colorpicker-pre.layui-this {
+.lay-colorpicker-pre.lay-this {
   box-shadow: 0 0 3px 2px rgba(0, 0, 0, 0.15);
 }
-.layui-colorpicker-pre > div {
+.lay-colorpicker-pre > div {
   height: 100%;
   border-radius: var(--lay-border-radius);
 }
-.layui-colorpicker-main-input {
+.lay-colorpicker-main-input {
   text-align: right;
   padding-top: 7px;
 }
-.layui-colorpicker-main-input .layui-btn-container .layui-btn {
+.lay-colorpicker-main-input .lay-btn-container .lay-btn {
   margin: 0 0 0 10px;
 }
-.layui-colorpicker-main-input div.layui-inline {
+.lay-colorpicker-main-input div.lay-inline {
   float: left;
   font-size: 14px;
 }
-.layui-colorpicker-main-input input.layui-input {
+.lay-colorpicker-main-input input.lay-input {
   width: 168px;
   height: 30px;
   color: #5f5f5f;

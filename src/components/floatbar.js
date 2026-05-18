@@ -20,7 +20,7 @@ const component = componentBuilder({
   },
 
   CONST: {
-    ELEM: 'layui-floatbar',
+    ELEM: 'lay-floatbar',
   },
 
   render() {
@@ -43,7 +43,7 @@ const component = componentBuilder({
       if (!hasTopBar) {
         options.bars.push({
           type: 'top',
-          icon: 'layui-icon-top',
+          icon: 'lay-icon-top',
         });
       }
     }
@@ -62,7 +62,7 @@ const component = componentBuilder({
 
     // 生成 bars 节点
     options.bars.forEach(function (item) {
-      const barElem = $('<div class="layui-floatbar-item">');
+      const barElem = $('<div class="lay-floatbar-item">');
 
       // 设置 bar 相关属性
       barElem
@@ -96,13 +96,13 @@ const component = componentBuilder({
 
       // 获得 top bar 节点
       if (item.type === 'top') {
-        barElem.addClass('layui-floatbar-top');
+        barElem.addClass('lay-floatbar-top');
         topBarElem = barElem;
       }
 
       // 插入 bar 图标节点
       if (item.icon) {
-        const iconElem = $('<i class="layui-icon">').addClass(item.icon);
+        const iconElem = $('<i class="lay-icon">').addClass(item.icon);
         barElem.append(iconElem);
       }
 

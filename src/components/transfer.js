@@ -23,13 +23,13 @@ var component = componentBuilder({
   },
 
   CONST: {
-    ELEM: 'layui-transfer',
-    ELEM_BOX: 'layui-transfer-box',
-    ELEM_HEADER: 'layui-transfer-header',
-    ELEM_SEARCH: 'layui-transfer-search',
-    ELEM_ACTIVE: 'layui-transfer-active',
-    ELEM_DATA: 'layui-transfer-data',
-    BTN_DISABLED: 'layui-btn-disabled',
+    ELEM: 'lay-transfer',
+    ELEM_BOX: 'lay-transfer-box',
+    ELEM_HEADER: 'lay-transfer-header',
+    ELEM_SEARCH: 'lay-transfer-search',
+    ELEM_ACTIVE: 'lay-transfer-active',
+    ELEM_DATA: 'lay-transfer-data',
+    BTN_DISABLED: 'lay-btn-disabled',
   },
 
   beforeRender: function (options) {
@@ -56,8 +56,8 @@ var component = componentBuilder({
     var TPL_BOX = function (obj) {
       obj = obj || {};
       return `
-        <div class="layui-transfer-box" data-index="${obj.index}">
-          <div class="layui-transfer-header">
+        <div class="lay-transfer-box" data-index="${obj.index}">
+          <div class="lay-transfer-header">
             <input
               type="checkbox"
               name="${obj.checkAllName}"
@@ -67,29 +67,29 @@ var component = componentBuilder({
               title="{{= d.data.title[${obj.index}] || 'list${obj.index + 1}' }}">
           </div>
           {{ if(d.data.showSearch){ }}
-            <div class="layui-transfer-search">
-              <i class="layui-icon layui-icon-search"></i>
-              <input type="text" class="layui-input" placeholder="${i18n.$t('transfer.searchPlaceholder')}">
+            <div class="lay-transfer-search">
+              <i class="lay-icon lay-icon-search"></i>
+              <input type="text" class="lay-input" placeholder="${i18n.$t('transfer.searchPlaceholder')}">
             </div>
           {{ } }}
-          <ul class="layui-transfer-data"></ul>
+          <ul class="lay-transfer-data"></ul>
         </div>
       `;
     };
 
     // 主模板
     var TPL_MAIN = `
-      <div class="layui-transfer layui-form layui-border-box" lay-filter="LAY-transfer-{{= d.index }}">
+      <div class="lay-transfer lay-form lay-border-box" lay-filter="LAY-transfer-{{= d.index }}">
         ${TPL_BOX({
           index: 0,
           checkAllName: 'layTransferLeftCheckAll',
         })}
-        <div class="layui-transfer-active">
-          <button type="button" class="layui-btn layui-btn-sm layui-btn-primary layui-btn-disabled" data-index="0">
-            <i class="layui-icon layui-icon-next"></i>
+        <div class="lay-transfer-active">
+          <button type="button" class="lay-btn lay-btn-sm lay-btn-primary lay-btn-disabled" data-index="0">
+            <i class="lay-icon lay-icon-next"></i>
           </button>
-          <button type="button" class="layui-btn layui-btn-sm layui-btn-primary layui-btn-disabled" data-index="1">
-            <i class="layui-icon layui-icon-prev"></i>
+          <button type="button" class="lay-btn lay-btn-sm lay-btn-primary lay-btn-disabled" data-index="1">
+            <i class="lay-icon lay-icon-prev"></i>
           </button>
         </div>
         ${TPL_BOX({
@@ -125,7 +125,7 @@ var component = componentBuilder({
     that.layHeader = that.elem.find('.' + CONST.ELEM_HEADER);
     that.laySearch = that.elem.find('.' + CONST.ELEM_SEARCH);
     that.layData = thisElem.find('.' + CONST.ELEM_DATA);
-    that.layBtn = thisElem.find('.' + CONST.ELEM_ACTIVE + ' .layui-btn');
+    that.layBtn = thisElem.find('.' + CONST.ELEM_ACTIVE + ' .lay-btn');
 
     // 初始化尺寸
     that.layBox.css({
@@ -268,7 +268,7 @@ Class.prototype.renderCheckBtn = function (obj) {
 
 // 无数据视图
 Class.prototype.noneView = function (thisDataElem, text) {
-  var createNoneElem = $('<p class="layui-none">' + (text || '') + '</p>');
+  var createNoneElem = $('<p class="lay-none">' + (text || '') + '</p>');
   if (thisDataElem.find('.' + CONST.CLASS_NONE)[0]) {
     thisDataElem.find('.' + CONST.CLASS_NONE).remove();
   }

@@ -11,58 +11,58 @@ toc: true
 
 | className | 描述 |
 | --- | --- |
-| layui-main | 设置一个固定宽度为 `1160px` 的水平居中块 |
-| layui-border-box | 设置元素及其所有子元素均为 `box-sizing: border-box` 模型的容器 |
-| layui-clear | 清除前面的同级元素产生的浮动 |
-| layui-clear-space <sup>2.8+</sup> | 清除容器内的空白符 |
-| layui-inline | 设置元素为内联块状结构 |
-| layui-ellip | 设置单行文本溢出并显示省略号 |
-| layui-unselect | 屏蔽选中 |
-| layui-disabled | 设置元素为不可点击状态 |
-| layui-circle | 设置元素为圆形。需确保 `width` 和 `height` 相同 |
+| lay-main | 设置一个固定宽度为 `1160px` 的水平居中块 |
+| lay-border-box | 设置元素及其所有子元素均为 `box-sizing: border-box` 模型的容器 |
+| lay-clear | 清除前面的同级元素产生的浮动 |
+| lay-clear-space <sup>2.8+</sup> | 清除容器内的空白符 |
+| lay-inline | 设置元素为内联块状结构 |
+| lay-ellip | 设置单行文本溢出并显示省略号 |
+| lay-unselect | 屏蔽选中 |
+| lay-disabled | 设置元素为不可点击状态 |
+| lay-circle | 设置元素为圆形。需确保 `width` 和 `height` 相同 |
 
 <h2 id="display" lay-toc="{hot: true}">显示隐藏</h2>
 
 | className | 描述 |
 | --- | --- |
-| layui-show | 设置元素为 `display: block` 可见状态 |
-| layui-hide | 设置元素为 `display: none` 隐藏状态，且不占用空间 |
-| layui-show-v | 设置元素为 `visibility: visible` 可见状态 |
-| layui-hide-v | 设置元素为 `visibility: hidden` 不可见状态，且依旧占用空间 |
+| lay-show | 设置元素为 `display: block` 可见状态 |
+| lay-hide | 设置元素为 `display: none` 隐藏状态，且不占用空间 |
+| lay-show-v | 设置元素为 `visibility: visible` 可见状态 |
+| lay-hide-v | 设置元素为 `visibility: hidden` 不可见状态，且依旧占用空间 |
 
 
 <h2 id="triangle" lay-toc="{}">三角实体</h2>
 
 | className | 描述 |
 | --- | --- |
-| layui-edge | 定义一个三角形基础类 |
-| layui-edge-top | 设置向上三角 |
-| layui-edge-right | 设置向右三角 |
-| layui-edge-bottom | 设置向下三角 |
-| layui-edge-left | 设置向左三角 |
+| lay-edge | 定义一个三角形基础类 |
+| lay-edge-top | 设置向上三角 |
+| lay-edge-right | 设置向右三角 |
+| lay-edge-bottom | 设置向下三角 |
+| lay-edge-left | 设置向左三角 |
 
 示例
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 向上三角： 
-<i class="layui-edge layui-edge-top"></i> 
-<i class="layui-edge layui-edge-top" style="border-bottom-color: black;"></i>
+<i class="lay-edge lay-edge-top"></i> 
+<i class="lay-edge lay-edge-top" style="border-bottom-color: black;"></i>
 
 <hr>
 向右三角： 
-<i class="layui-edge layui-edge-right"></i>
-<i class="layui-edge layui-edge-right" style="border-left-color: black;"></i>
+<i class="lay-edge lay-edge-right"></i>
+<i class="lay-edge lay-edge-right" style="border-left-color: black;"></i>
 
 <hr>
 向下三角： 
-<i class="layui-edge layui-edge-bottom"></i>
-<i class="layui-edge layui-edge-bottom" style="border-top-color: black;"></i>
+<i class="lay-edge lay-edge-bottom"></i>
+<i class="lay-edge lay-edge-bottom" style="border-top-color: black;"></i>
 
 <hr>
 向左三角： 
-<i class="layui-edge layui-edge-left"></i>
-<i class="layui-edge layui-edge-left" style="border-right-color: black;"></i>
+<i class="lay-edge lay-edge-left"></i>
+<i class="lay-edge lay-edge-left" style="border-right-color: black;"></i>
   </textarea>
 </pre>
 
@@ -70,64 +70,64 @@ toc: true
 
 | className | 描述 |
 | --- | --- |
-| layui-padding-1 | 4px 内边距 |
-| layui-padding-2 | 8px 内边距 |
-| layui-padding-3 | 16px 内边距 |
-| layui-padding-4 | 32px 内边距 |
-| layui-padding-5 | 48px 内边距 |
-| layui-margin-1 | 4px 外边距 |
-| layui-margin-2 | 8px 外边距 |
-| layui-margin-3 | 16px 外边距 |
-| layui-margin-4 | 32px 外边距 |
-| layui-margin-5 | 48px 外边距 |
+| lay-padding-1 | 4px 内边距 |
+| lay-padding-2 | 8px 内边距 |
+| lay-padding-3 | 16px 内边距 |
+| lay-padding-4 | 32px 内边距 |
+| lay-padding-5 | 48px 内边距 |
+| lay-margin-1 | 4px 外边距 |
+| lay-margin-2 | 8px 外边距 |
+| lay-margin-3 | 16px 外边距 |
+| lay-margin-4 | 32px 外边距 |
+| lay-margin-5 | 48px 外边距 |
 
 
 <h2 id="bg" lay-toc="{hot: true}">背景颜色</h2>
 
 | className | 背景色 | 预览 |
 | --- | --- | --- |
-| layui-bg-red | 红 | <div class="layui-bg-red">&nbsp;</div> |
-| layui-bg-orange | 橙 | <div class="layui-bg-orange">&nbsp;</div> |
-| layui-bg-green |  绿 | <div class="layui-bg-green">&nbsp;</div> |
-| layui-bg-blue |  蓝 | <div class="layui-bg-blue">&nbsp;</div> |
-| layui-bg-purple <sup>2.8+</sup> | 紫 | <div class="layui-bg-purple">&nbsp;</div> |
-| layui-bg-black | 深 | <div class="layui-bg-black">&nbsp;</div> |
-| layui-bg-gray |  浅 | <div class="layui-bg-gray">&nbsp;</div> |
+| lay-bg-red | 红 | <div class="lay-bg-red">&nbsp;</div> |
+| lay-bg-orange | 橙 | <div class="lay-bg-orange">&nbsp;</div> |
+| lay-bg-green |  绿 | <div class="lay-bg-green">&nbsp;</div> |
+| lay-bg-blue |  蓝 | <div class="lay-bg-blue">&nbsp;</div> |
+| lay-bg-purple <sup>2.8+</sup> | 紫 | <div class="lay-bg-purple">&nbsp;</div> |
+| lay-bg-black | 深 | <div class="lay-bg-black">&nbsp;</div> |
+| lay-bg-gray |  浅 | <div class="lay-bg-gray">&nbsp;</div> |
 
 <h2 id="font-size" lay-toc="{}">文字大小</h2>
 
 | className | 文字大小和预览 |
 | --- | --- |
-| layui-font-12 | <span class="layui-font-12">12px</span> |
-| layui-font-13 <sup>2.8+</sup> | <span class="layui-font-13">13px</span> |
-| layui-font-14 | <span class="layui-font-14">14px</span> |
-| layui-font-16 | <span class="layui-font-16">16px</span> |
-| layui-font-18 | <span class="layui-font-18">18px</span> |
-| layui-font-20 | <span class="layui-font-20">20px</span> |
-| layui-font-22 <sup>2.8+</sup> | <span class="layui-font-22">22px</span> |
-| layui-font-24 <sup>2.8+</sup> | <span class="layui-font-24">24px</span> |
-| layui-font-26 <sup>2.8+</sup> | <span class="layui-font-26">26px</span> |
-| layui-font-28 <sup>2.8+</sup> | <span class="layui-font-28">28px</span> |
-| layui-font-30 <sup>2.8+</sup> | <span class="layui-font-30">30px</span> |
-| layui-font-32 <sup>2.8+</sup> | <span class="layui-font-32">32px</span> |
+| lay-font-12 | <span class="lay-font-12">12px</span> |
+| lay-font-13 <sup>2.8+</sup> | <span class="lay-font-13">13px</span> |
+| lay-font-14 | <span class="lay-font-14">14px</span> |
+| lay-font-16 | <span class="lay-font-16">16px</span> |
+| lay-font-18 | <span class="lay-font-18">18px</span> |
+| lay-font-20 | <span class="lay-font-20">20px</span> |
+| lay-font-22 <sup>2.8+</sup> | <span class="lay-font-22">22px</span> |
+| lay-font-24 <sup>2.8+</sup> | <span class="lay-font-24">24px</span> |
+| lay-font-26 <sup>2.8+</sup> | <span class="lay-font-26">26px</span> |
+| lay-font-28 <sup>2.8+</sup> | <span class="lay-font-28">28px</span> |
+| lay-font-30 <sup>2.8+</sup> | <span class="lay-font-30">30px</span> |
+| lay-font-32 <sup>2.8+</sup> | <span class="lay-font-32">32px</span> |
 
 <h2 id="font-color" lay-toc="{}">文字颜色</h2>
 
 | className | 文字颜色和预览 |
 | --- | --- |
-| layui-font-red | <span class="layui-font-red">红</span> |
-| layui-font-orange | <span class="layui-font-orange">橙</span> |
-| layui-font-green | <span class="layui-font-green">绿</span> |
-| layui-font-blue | <span class="layui-font-blue">蓝</span> |
-| layui-font-purple <sup>2.8+</sup> | <span class="layui-font-purple">紫</span> |
-| layui-font-black | <span class="layui-font-black">深</span> |
-| layui-font-gray | <span class="layui-font-gray">浅</span> |
+| lay-font-red | <span class="lay-font-red">红</span> |
+| lay-font-orange | <span class="lay-font-orange">橙</span> |
+| lay-font-green | <span class="lay-font-green">绿</span> |
+| lay-font-blue | <span class="lay-font-blue">蓝</span> |
+| lay-font-purple <sup>2.8+</sup> | <span class="lay-font-purple">紫</span> |
+| lay-font-black | <span class="lay-font-black">深</span> |
+| lay-font-gray | <span class="lay-font-gray">浅</span> |
 
 <h2 id="text" lay-toc="{hot: true}">文本容器</h2>
 
-通过设置 `class="layui-text"` 定义一段包含标题、段落、列表等组合的文本区域，通常用于 Markdown 文档。
+通过设置 `class="lay-text"` 定义一段包含标题、段落、列表等组合的文本区域，通常用于 Markdown 文档。
 
-<pre class="layui-code" lay-options="{preview: 'iframe', style: 'height: 535px;', layout: ['preview', 'code'], tools: ['full','window']}">
+<pre class="lay-code" lay-options="{preview: 'iframe', style: 'height: 535px;', layout: ['preview', 'code'], tools: ['full','window']}">
   <textarea>
 <!DOCTYPE html>
 <html>
@@ -139,8 +139,8 @@ toc: true
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="{{= d.layui[2].cdn.css }}" rel="stylesheet">
 </head>
-<body class="layui-padding-3">
-  <div class="layui-text">
+<body class="lay-padding-3">
+  <div class="lay-text">
     <h1>标题1</h1>
     <p>段落1段落1段落1段落1段落1段落1段落1段落1段落1 <sup class="footnote-ref"><a href="javascript:;">[1]</a></sup></p>
     <h2>标题2</h2>
@@ -228,3 +228,4 @@ toc: true
 </html>
   </textarea>
 </pre>
+

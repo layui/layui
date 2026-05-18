@@ -1,11 +1,11 @@
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-iframe-handle">
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-iframe-handle">
     iframe 的父子操作
     <span id="ID-test-iframe-mark"></span>
   </button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-iframe-video">弹出多媒体</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-iframe-overflow">禁止 iframe 滚动条</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-iframe-curl">弹出任意 URL 页面</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-iframe-video">弹出多媒体</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-iframe-overflow">禁止 iframe 滚动条</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-iframe-curl">弹出任意 URL 页面</button>
 </div>
 
 <!-- import layui -->
@@ -56,7 +56,7 @@ layui.use(function(){
       layer.open({
         type: 2,
         area: ['360px', '500px'],
-        skin: 'layui-layer-rim', // 加上边框
+        skin: 'lay-layer-rim', // 加上边框
         content: ['/layer/test/1.html', 'no'] // 数组第二个成员设为 no 即屏蔽 iframe 滚动条
       });
     },
@@ -73,3 +73,4 @@ layui.use(function(){
   })
 });
 </script>
+

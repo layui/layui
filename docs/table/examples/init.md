@@ -1,5 +1,5 @@
-<div class="layui-btn-container">
-  <button class="layui-btn" lay-on="parseTable">转换为数据表格</button>
+<div class="lay-btn-container">
+  <button class="lay-btn" lay-on="parseTable">转换为数据表格</button>
 </div>
 
 <table lay-filter="parse-table-demo">

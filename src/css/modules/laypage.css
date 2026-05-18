@@ -1,33 +1,33 @@
 /** 分页 **/
-.layui-laypage {
+.lay-laypage {
   display: inline-block;
   vertical-align: middle;
   margin: 10px 0;
   font-size: 0;
 }
-.layui-laypage > a:first-child,
-.layui-laypage > a:first-child em {
+.lay-laypage > a:first-child,
+.lay-laypage > a:first-child em {
   border-radius: var(--lay-border-radius) 0 0 var(--lay-border-radius);
 }
-.layui-laypage > a:last-child,
-.layui-laypage > a:last-child em {
+.lay-laypage > a:last-child,
+.lay-laypage > a:last-child em {
   border-radius: 0 var(--lay-border-radius) var(--lay-border-radius) 0;
 }
-.layui-laypage > *:first-child {
+.lay-laypage > *:first-child {
   margin-left: 0 !important;
 }
-.layui-laypage > *:last-child {
+.lay-laypage > *:last-child {
   margin-right: 0 !important;
 }
-.layui-laypage a,
-.layui-laypage span,
-.layui-laypage input,
-.layui-laypage button,
-.layui-laypage select {
+.lay-laypage a,
+.lay-laypage span,
+.lay-laypage input,
+.lay-laypage button,
+.lay-laypage select {
   border: 1px solid var(--lay-border-color);
 }
-.layui-laypage a,
-.layui-laypage span {
+.lay-laypage a,
+.lay-laypage span {
   display: inline-block;
   vertical-align: middle;
   padding: 0 15px;
@@ -38,31 +38,31 @@
   color: #333;
   font-size: 12px;
 }
-.layui-laypage a[data-page] {
+.lay-laypage a[data-page] {
   color: #333;
 }
-.layui-laypage a {
+.lay-laypage a {
   text-decoration: none !important;
   cursor: pointer;
 }
-.layui-laypage a:hover {
+.lay-laypage a:hover {
   color: var(--lay-color-primary);
 }
-.layui-laypage em {
+.lay-laypage em {
   font-style: normal;
 }
-.layui-laypage .layui-laypage-spr {
+.lay-laypage .lay-laypage-spr {
   color: #999;
   font-weight: 700;
 }
-.layui-laypage .layui-laypage-curr {
+.lay-laypage .lay-laypage-curr {
   position: relative;
 }
-.layui-laypage .layui-laypage-curr em {
+.lay-laypage .lay-laypage-curr em {
   position: relative;
   color: #fff;
 }
-.layui-laypage .layui-laypage-curr .layui-laypage-em {
+.lay-laypage .lay-laypage-curr .lay-laypage-em {
   position: absolute;
   left: -1px;
   top: -1px;
@@ -71,45 +71,45 @@
   height: 100%;
   background-color: var(--lay-color-primary);
 }
-.layui-laypage-em {
+.lay-laypage-em {
   border-radius: var(--lay-border-radius);
 }
-.layui-laypage-prev em,
-.layui-laypage-next em {
+.lay-laypage-prev em,
+.lay-laypage-next em {
   font-family: Sim sun;
   font-size: 16px;
 }
 
-.layui-laypage .layui-laypage-count,
-.layui-laypage .layui-laypage-limits,
-.layui-laypage .layui-laypage-refresh,
-.layui-laypage .layui-laypage-skip {
+.lay-laypage .lay-laypage-count,
+.lay-laypage .lay-laypage-limits,
+.lay-laypage .lay-laypage-refresh,
+.lay-laypage .lay-laypage-skip {
   margin-left: 10px;
   margin-right: 10px;
   padding: 0;
   border: none;
 }
-.layui-laypage .layui-laypage-limits,
-.layui-laypage .layui-laypage-refresh {
+.lay-laypage .lay-laypage-limits,
+.lay-laypage .lay-laypage-refresh {
   vertical-align: top;
 }
-.layui-laypage .layui-laypage-refresh i {
+.lay-laypage .lay-laypage-refresh i {
   font-size: 18px;
   cursor: pointer;
 }
-.layui-laypage select {
+.lay-laypage select {
   height: 22px;
   padding: 3px;
   border-radius: var(--lay-border-radius);
   cursor: pointer;
 }
-.layui-laypage .layui-laypage-skip {
+.lay-laypage .lay-laypage-skip {
   height: 30px;
   line-height: 30px;
   color: #999;
 }
-.layui-laypage input,
-.layui-laypage button {
+.lay-laypage input,
+.lay-laypage button {
   height: 30px;
   line-height: 30px;
   border-radius: var(--lay-border-radius);
@@ -117,7 +117,7 @@
   background-color: #fff;
   box-sizing: border-box;
 }
-.layui-laypage input {
+.lay-laypage input {
   display: inline-block;
   width: 40px;
   margin: 0 10px;
@@ -125,11 +125,11 @@
   text-align: center;
   transition: none;
 }
-.layui-laypage input:focus,
-.layui-laypage select:focus {
+.lay-laypage input:focus,
+.lay-laypage select:focus {
   border-color: var(--lay-color-primary) !important;
 }
-.layui-laypage button {
+.lay-laypage button {
   margin-left: 10px;
   padding: 0 10px;
   cursor: pointer;

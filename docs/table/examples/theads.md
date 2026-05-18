@@ -1,6 +1,6 @@
 常用两级表头：
  
-<table class="layui-table" lay-data="{url:'/static/json/2/table/demo2.json?v=2', page: true, limit: 6, limits:[6]}" id="ID-table-demo-theads-1">
+<table class="lay-table" lay-data="{url:'/static/json/2/table/demo2.json?v=2', page: true, limit: 6, limits:[6]}" id="ID-table-demo-theads-1">
   <thead>
     <tr>
       <th lay-data="{checkbox:true}" rowspan="2"></th>
@@ -19,7 +19,7 @@
 
 更多级表头（支持无限极）：
 
-<table class="layui-table" lay-data="{url:'/static/json/2/table/demo2.json?v=3', cellMinWidth: 80, page: true}" id="ID-table-demo-theads-2">
+<table class="lay-table" lay-data="{url:'/static/json/2/table/demo2.json?v=3', cellMinWidth: 80, page: true}" id="ID-table-demo-theads-2">
   <thead>
     <tr>
       <th lay-data="{field:'username', fixed:'left', width:80}" rowspan="3">联系人</th>
@@ -44,10 +44,11 @@
 </table>
  
 <script type="text/html" id="templet-demo-theads-tool">
-  <div class="layui-clear-space">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">按钮1</a>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">按钮2</a>
+  <div class="lay-clear-space">
+    <a class="lay-btn lay-btn-primary lay-btn-xs" lay-event="detail">按钮1</a>
+    <a class="lay-btn lay-btn-primary lay-btn-xs" lay-event="edit">按钮2</a>
   </div>
 </script>
 
 <!-- import layui -->
+

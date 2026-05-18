@@ -1,71 +1,71 @@
-<div class="layui-form">
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">初始赋值</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-more-value" placeholder="yyyy-MM-dd">
+<div class="lay-form">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">初始赋值</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-more-value" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">选中后的回调</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-more-done" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">选中后的回调</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-more-done" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">日期切换的回调</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-more-change" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">日期切换的回调</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-more-change" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">不出现底部栏</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-more-bottom" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">不出现底部栏</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-more-bottom" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">只出现确定按钮</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-more-btns" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">只出现确定按钮</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-more-btns" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">自定义事件</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-more-trigger" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">自定义事件</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-more-trigger" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label" id="ID-laydate-more-event-1">点我触发</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-more-event" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label" id="ID-laydate-more-event-1">点我触发</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-more-event" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label" id="ID-laydate-more-dblclick">双击我触发</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-more-dblclick-input" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label" id="ID-laydate-more-dblclick">双击我触发</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-more-dblclick-input" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">日期只读</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-more-readonly" readonly placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">日期只读</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-more-readonly" readonly placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">非 input 元素</label>
-      <div class="layui-input-inline">
+    <div class="lay-inline">
+      <label class="lay-form-label">非 input 元素</label>
+      <div class="lay-input-inline">
         <div id="ID-laydate-more-div" style="height: 38px; line-height: 38px; cursor: pointer; border-bottom: 1px solid #e2e2e2;"></div>
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">开启遮罩</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-more-shade" readonly placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">开启遮罩</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-more-shade" readonly placeholder="yyyy-MM-dd">
       </div>
-      <div class="layui-form-mid layui-text-em">
+      <div class="lay-form-mid lay-text-em">
         <sup>2.8+</sup>
       </div>
     </div>
@@ -74,10 +74,10 @@
 <h5 style="margin-bottom: 15px; font-weight: 700;">
   覆盖实例与解除实例 <sup>2.8+</sup> :
 </h5>
-<div class="layui-form">
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <div class="layui-form-label" style="padding: 0; text-align: left;">
+<div class="lay-form">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <div class="lay-form-label" style="padding: 0; text-align: left;">
         <select lay-filter="filter-demo-laydate-reset">
           <option value="year">年份</option>
           <option value="month">月份</option>
@@ -86,8 +86,8 @@
           <option value="other">解除</option>
         </select>
       </div>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-more-reset" autocomplete="off">
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-more-reset" autocomplete="off">
       </div>
     </div>
   </div>
@@ -198,3 +198,4 @@ layui.use(function(){
   });
 });
 </script>
+

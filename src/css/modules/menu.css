@@ -1,20 +1,20 @@
 /* 基础菜单元素 */
-.layui-menu {
+.lay-menu {
   position: relative;
   margin: 5px 0;
   background-color: #fff;
   box-sizing: border-box;
 }
-.layui-menu * {
+.lay-menu * {
   box-sizing: border-box;
 }
-.layui-menu li,
-.layui-menu-body-title,
-.layui-menu-body-title a {
+.lay-menu li,
+.lay-menu-body-title,
+.lay-menu-body-title a {
   padding: 5px 15px;
   color: initial;
 }
-.layui-menu li {
+.lay-menu li {
   position: relative;
   margin: 0 0 1px;
   line-height: 26px;
@@ -24,52 +24,52 @@
   cursor: pointer;
   transition: all 0.3s;
 }
-.layui-menu li:hover {
+.lay-menu li:hover {
   background-color: #f8f8f8;
 }
-.layui-menu li.layui-disabled,
-.layui-menu li.layui-disabled * {
+.lay-menu li.lay-disabled,
+.lay-menu li.lay-disabled * {
   background: none !important;
   color: #d2d2d2 !important;
   cursor: not-allowed !important;
 }
 
-.layui-menu-item-parent:hover > .layui-menu-body-panel {
+.lay-menu-item-parent:hover > .lay-menu-body-panel {
   display: block;
-  animation-name: layui-fadein;
+  animation-name: lay-fadein;
   animation-duration: 0.3s;
   animation-fill-mode: both;
   animation-delay: 0.2s;
 }
-.layui-menu-item-parent > .layui-menu-body-title,
-.layui-menu-item-group > .layui-menu-body-title {
+.lay-menu-item-parent > .lay-menu-body-title,
+.lay-menu-item-group > .lay-menu-body-title {
   padding-right: 38px;
 }
 
-.layui-menu .layui-menu-item-group:hover,
-.layui-menu .layui-menu-item-none:hover,
-.layui-menu .layui-menu-item-divider:hover {
+.lay-menu .lay-menu-item-group:hover,
+.lay-menu .lay-menu-item-none:hover,
+.lay-menu .lay-menu-item-divider:hover {
   background: none;
   cursor: default;
 }
-.layui-menu .layui-menu-item-group > ul {
+.lay-menu .lay-menu-item-group > ul {
   margin: 5px 0 -5px;
 }
-.layui-menu .layui-menu-item-group > .layui-menu-body-title {
+.lay-menu .lay-menu-item-group > .lay-menu-body-title {
   color: rgba(0, 0, 0, 0.35);
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
 }
-.layui-menu .layui-menu-item-none {
+.lay-menu .lay-menu-item-none {
   color: rgba(0, 0, 0, 0.35);
   cursor: default;
 }
 
-.layui-menu .layui-menu-item-none {
+.lay-menu .lay-menu-item-none {
   text-align: center;
 }
-.layui-menu .layui-menu-item-divider {
+.lay-menu .lay-menu-item-divider {
   margin: 5px 0;
   padding: 0;
   height: 0;
@@ -78,43 +78,43 @@
   overflow: hidden;
 }
 
-.layui-menu .layui-menu-item-up:hover,
-.layui-menu .layui-menu-item-down:hover {
+.lay-menu .lay-menu-item-up:hover,
+.lay-menu .lay-menu-item-down:hover {
   cursor: pointer;
 }
-.layui-menu .layui-menu-item-up > .layui-menu-body-title {
+.lay-menu .lay-menu-item-up > .lay-menu-body-title {
   color: rgba(0, 0, 0, 0.8);
 }
-.layui-menu .layui-menu-item-up > ul {
+.lay-menu .lay-menu-item-up > ul {
   visibility: hidden;
   height: 0;
   overflow: hidden;
 }
-.layui-menu .layui-menu-item-down > .layui-menu-body-title > .layui-icon-down {
+.lay-menu .lay-menu-item-down > .lay-menu-body-title > .lay-icon-down {
   transform: rotate(180deg);
 }
-.layui-menu .layui-menu-item-up > .layui-menu-body-title > .layui-icon-up {
+.lay-menu .lay-menu-item-up > .lay-menu-body-title > .lay-icon-up {
   transform: rotate(-180deg);
 }
-.layui-menu .layui-menu-item-up > .layui-menu-body-title:hover > .layui-icon,
-.layui-menu .layui-menu-item-down:hover > .layui-menu-body-title > .layui-icon {
+.lay-menu .lay-menu-item-up > .lay-menu-body-title:hover > .lay-icon,
+.lay-menu .lay-menu-item-down:hover > .lay-menu-body-title > .lay-icon {
   color: rgba(0, 0, 0, 1);
 }
-.layui-menu .layui-menu-item-down > ul {
+.lay-menu .lay-menu-item-down > ul {
   visibility: visible;
   height: auto;
 }
 
-.layui-menu .layui-menu-item-checked,
-.layui-menu .layui-menu-item-checked2 {
+.lay-menu .lay-menu-item-checked,
+.lay-menu .lay-menu-item-checked2 {
   background-color: #f8f8f8 !important;
   color: var(--lay-color-accent);
 }
-.layui-menu .layui-menu-item-checked a,
-.layui-menu .layui-menu-item-checked2 a {
+.lay-menu .lay-menu-item-checked a,
+.lay-menu .lay-menu-item-checked2 a {
   color: var(--lay-color-accent);
 }
-.layui-menu .layui-menu-item-checked:after {
+.lay-menu .lay-menu-item-checked:after {
   position: absolute;
   right: -1px;
   top: 0;
@@ -123,23 +123,23 @@
   content: '';
 }
 
-.layui-menu-body-title {
+.lay-menu-body-title {
   position: relative;
   margin: -5px -15px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.layui-menu-body-title a {
+.lay-menu-body-title a {
   display: block;
   margin: -5px -15px;
   overflow: hidden;
   text-overflow: ellipsis;
   color: rgba(0, 0, 0, 0.8);
 }
-.layui-menu-body-title a:hover {
+.lay-menu-body-title a:hover {
   transition: all 0.3s;
 }
-.layui-menu-body-title > .layui-icon {
+.lay-menu-body-title > .lay-icon {
   position: absolute;
   right: 15px;
   top: 50%;
@@ -149,13 +149,13 @@
   -webkit-transition: all 0.2s;
   transition: all 0.2s;
 }
-.layui-menu-body-title > .layui-icon:hover {
+.lay-menu-body-title > .lay-icon:hover {
   transition: all 0.3s;
 }
-.layui-menu-body-title > .layui-icon-right {
+.lay-menu-body-title > .lay-icon-right {
   right: 14px;
 }
-.layui-menu-body-panel {
+.lay-menu-body-panel {
   display: none;
   position: absolute;
   top: -7px;
@@ -164,7 +164,7 @@
   margin-left: 13px;
   padding: 5px 0;
 }
-.layui-menu-body-panel:before {
+.lay-menu-body-panel:before {
   content: '';
   position: absolute;
   width: 20px;
@@ -172,33 +172,33 @@
   top: 0;
   bottom: 0;
 }
-.layui-menu-body-panel-left {
+.lay-menu-body-panel-left {
   left: auto;
   right: 100%;
   margin: 0 13px 0;
 }
-.layui-menu-body-panel-left:before {
+.lay-menu-body-panel-left:before {
   left: auto;
   right: -16px;
 }
 
-.layui-menu-lg li {
+.lay-menu-lg li {
   line-height: 32px;
 }
-.layui-menu-lg li:hover,
-.layui-menu-lg .layui-menu-body-title a:hover {
+.lay-menu-lg li:hover,
+.lay-menu-lg .lay-menu-body-title a:hover {
   background: none;
   color: var(--lay-color-accent);
 }
-.layui-menu-lg li .layui-menu-body-panel {
+.lay-menu-lg li .lay-menu-body-panel {
   margin-left: 14px;
 }
-.layui-menu-lg li .layui-menu-body-panel-left {
+.lay-menu-lg li .lay-menu-body-panel-left {
   margin: 0 15px 0;
 }
 
 /* 下拉菜单 */
-.layui-dropdown {
+.lay-dropdown {
   position: absolute;
   left: -999999px;
   top: -999999px;
@@ -206,7 +206,7 @@
   margin: 5px 0;
   min-width: 100px;
 }
-.layui-dropdown:before {
+.lay-dropdown:before {
   content: '';
   position: absolute;
   width: 100%;
@@ -214,7 +214,7 @@
   left: 0;
   top: -6px;
 }
-.layui-dropdown-shade {
+.lay-dropdown-shade {
   top: 0;
   left: 0;
   width: 100%;

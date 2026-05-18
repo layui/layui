@@ -14,8 +14,8 @@ var component = componentBuilder({
 
   CONST: {
     ELEM_LOAD:
-      '<i class="layui-anim layui-anim-rotate layui-anim-loop layui-icon layui-icon-loading-1"></i>',
-    ELEM_MORE: 'layui-flow-more',
+      '<i class="lay-anim lay-anim-rotate lay-anim-loop lay-icon lay-icon-loading-1"></i>',
+    ELEM_MORE: 'lay-flow-more',
     FLOW_SCROLL_EVENTS: 'scroll.lay_flow_scroll',
     LAZYIMG_SCROLL_EVENTS: 'scroll.lay_flow_lazyimg_scroll',
   },

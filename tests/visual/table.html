@@ -12,27 +12,23 @@
       body {
         padding: 32px; /*overflow-y: scroll;*/
       }
-      .layui-table-view {
+      .lay-table-view {
         margin: 8px 0;
       }
     </style>
   </head>
   <body>
-    <div class="layui-btn-container">
-      <a
-        href="table.html"
-        class="layui-btn layui-btn-primary layui-border-green"
+    <div class="lay-btn-container">
+      <a href="table.html" class="lay-btn lay-btn-primary lay-border-green"
         >表格综合</a
       >
-      <a href="table-test.html" class="layui-btn">表格操作</a>
-      <a href="table-static.html" class="layui-btn">静态表格</a>
+      <a href="table-test.html" class="lay-btn">表格操作</a>
+      <a href="table-static.html" class="lay-btn">静态表格</a>
     </div>
 
     <script type="text/html" id="barDemo">
-      <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-      <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
-        >删除</a
-      >
+      <a class="lay-btn lay-btn-xs" lay-event="edit">编辑</a>
+      <a class="lay-btn lay-btn-danger lay-btn-xs" lay-event="del">删除</a>
     </script>
 
     <table id="test"></table>
@@ -42,7 +38,7 @@
 
     <div style="display: none1">
       <table
-        class="layui-table"
+        class="lay-table"
         lay-data="{width:800, height: 300, url:'./assets/json/table/demo2.json', page: true, even: true, limit: 6, toolbar: true}"
       >
         <thead>
@@ -69,7 +65,7 @@
       </table>
 
       <table
-        class="layui-table"
+        class="lay-table"
         lay-data="{url:'./assets/json/table/demo2.json', page: true, limit: 6, toolbar: true}"
       >
         <thead>
@@ -104,11 +100,11 @@
         </thead>
       </table>
 
-      <div class="layui-btn-group">
-        <button class="layui-btn" data-type="parseTable">转化为数据表格</button>
+      <div class="lay-btn-group">
+        <button class="lay-btn" data-type="parseTable">转化为数据表格</button>
       </div>
 
-      <table class="layui-table" lay-skin="line" lay-filter="parse-table-demo">
+      <table class="lay-table" lay-skin="line" lay-filter="parse-table-demo">
         <thead>
           <tr>
             <th lay-data="{checkbox:true}"></th>
@@ -139,7 +135,7 @@
         </tbody>
       </table>
 
-      <table class="layui-table" lay-filter="parse-table-demo">
+      <table class="lay-table" lay-filter="parse-table-demo">
         <thead>
           <tr>
             <td rowspan="2" lay-data="{field:'louceng'}">楼层</td>
@@ -388,7 +384,7 @@
           var type = $(this).data('type');
           active[type] ? active[type].call(this) : '';
         });
-        $('.layui-btn').on('click', function () {
+        $('.lay-btn').on('click', function () {
           var type = $(this).data('type');
           active[type] ? active[type].call(this) : '';
         });

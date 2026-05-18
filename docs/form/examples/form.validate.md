@@ -1,22 +1,22 @@
-<div class="layui-form">  
-  <div class="layui-form-item">
-    <label class="layui-form-label">手机</label>
-    <div class="layui-input-block">
-      <input type="tel" name="phone" lay-verify="required|phone" class="layui-input" id="validate-phone">
+<div class="lay-form">  
+  <div class="lay-form-item">
+    <label class="lay-form-label">手机</label>
+    <div class="lay-input-block">
+      <input type="tel" name="phone" lay-verify="required|phone" class="lay-input" id="validate-phone">
     </div>
   </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">验证码</label>
-    <div class="layui-input-inline">
-      <input type="text" name="vercode" lay-verify="required" class="layui-input">
+  <div class="lay-form-item">
+    <label class="lay-form-label">验证码</label>
+    <div class="lay-input-inline">
+      <input type="text" name="vercode" lay-verify="required" class="lay-input">
     </div>
-    <div class="layui-inline"> 
-      <button type="button" class="layui-btn layui-btn-primary" id="validate-get-vercode">获取验证码</button>
+    <div class="lay-inline"> 
+      <button type="button" class="lay-btn lay-btn-primary" id="validate-get-vercode">获取验证码</button>
     </div>
   </div>
-  <div class="layui-form-item">
-    <div class="layui-input-block">
-      <button class="layui-btn" lay-submit lay-filter="demo-validate">提交</button>
+  <div class="lay-form-item">
+    <div class="lay-input-block">
+      <button class="lay-btn" lay-submit lay-filter="demo-validate">提交</button>
     </div>
   </div>
 </div>

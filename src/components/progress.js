@@ -12,11 +12,11 @@ var component = componentBuilder({
 
   // 默认配置
   config: {
-    elem: '.layui-progress',
+    elem: '.lay-progress',
   },
 
   CONST: {
-    ELEM: 'layui-progress',
+    ELEM: 'lay-progress',
   },
 
   render: function () {
@@ -25,7 +25,7 @@ var component = componentBuilder({
 
     options.elem.each(function () {
       var othis = $(this);
-      var elemBar = othis.find('.layui-progress-bar');
+      var elemBar = othis.find('.lay-progress-bar');
       var percent = elemBar.attr('lay-percent');
 
       elemBar.css('width', function () {
@@ -51,7 +51,7 @@ var CONST = component.CONST;
 $.extend(component, {
   // 动态改变进度条
   setValue: function (filter, percent) {
-    var ELEM = 'layui-progress';
+    var ELEM = 'lay-progress';
     var elem = $('.' + ELEM + '[lay-filter=' + filter + ']');
     var elemBar = elem.find('.' + ELEM + '-bar');
     var text = elemBar.find('.' + ELEM + '-text');

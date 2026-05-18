@@ -1,23 +1,23 @@
-<button type="button" class="layui-btn" id="ID-upload-demo-btn">
-  <i class="layui-icon layui-icon-upload"></i> 单图片上传
+<button type="button" class="lay-btn" id="ID-upload-demo-btn">
+  <i class="lay-icon lay-icon-upload"></i> 单图片上传
 </button>
 <div style="width: 132px;">
-  <div class="layui-upload-list">
-    <img class="layui-upload-img" id="ID-upload-demo-img" style="width: 100%; height: 92px;">
+  <div class="lay-upload-list">
+    <img class="lay-upload-img" id="ID-upload-demo-img" style="width: 100%; height: 92px;">
     <div id="ID-upload-demo-text"></div>
   </div>
-  <div class="layui-progress layui-progress-big" lay-showPercent="yes" lay-filter="filter-demo">
-    <div class="layui-progress-bar" lay-percent=""></div>
+  <div class="lay-progress lay-progress-big" lay-showPercent="yes" lay-filter="filter-demo">
+    <div class="lay-progress-bar" lay-percent=""></div>
   </div>
 </div>
 <hr style="margin: 21px 0;">
-<div class="layui-upload">
-  <button type="button" class="layui-btn" id="ID-upload-demo-btn-2">
-    <i class="layui-icon layui-icon-upload"></i> 多图片上传
+<div class="lay-upload">
+  <button type="button" class="lay-btn" id="ID-upload-demo-btn-2">
+    <i class="lay-icon lay-icon-upload"></i> 多图片上传
   </button> 
-  <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 11px;">
+  <blockquote class="lay-elem-quote lay-quote-nm" style="margin-top: 11px;">
     预览图：
-    <div class="layui-upload-list" id="upload-demo-preview"></div>
+    <div class="lay-upload-list" id="upload-demo-preview"></div>
  </blockquote>
 </div>
 
@@ -54,7 +54,7 @@ layui.use(function(){
     error: function(){
       // 演示失败状态，并实现重传
       var demoText = $('#ID-upload-demo-text');
-      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="lay-btn lay-btn-xs demo-reload">重试</a>');
       demoText.find('.demo-reload').on('click', function(){
         uploadInst.upload();
       });
@@ -85,3 +85,4 @@ layui.use(function(){
     }
   });
 });
+

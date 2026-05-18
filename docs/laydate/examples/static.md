@@ -1,8 +1,8 @@
 <div class="ws-demo-static">
-  <div class="layui-inline" id="ID-laydate-static-1"></div>
-  <div class="layui-inline" id="ID-laydate-static-2"></div>
-  <div class="layui-inline" id="ID-laydate-static-3"></div>
-  <div class="layui-inline" id="ID-laydate-static-4"></div>
+  <div class="lay-inline" id="ID-laydate-static-1"></div>
+  <div class="lay-inline" id="ID-laydate-static-2"></div>
+  <div class="lay-inline" id="ID-laydate-static-3"></div>
+  <div class="lay-inline" id="ID-laydate-static-4"></div>
 </div>
 
 <!-- import layui --> 

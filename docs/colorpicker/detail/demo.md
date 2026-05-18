@@ -1,4 +1,4 @@
-<pre class="layui-code" lay-options="{preview: true, text: {preview: '常规使用'}, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, text: {preview: '常规使用'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-colorpicker-demo-1"></div>
 <div id="ID-colorpicker-demo-2" style="margin-left: 16px;"></div>
@@ -32,14 +32,14 @@ layui.use(function(){
 
 <h3 id="demo-form" class="ws-anchor ws-bold">将颜色值赋给表单</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-<form class="layui-form" action="">
-  <div class="layui-form-item">
-    <div class="layui-input-inline" style="width: 120px;">
-      <input type="text" name="color" value="" placeholder="请选择颜色" class="layui-input" id="ID-colorpicker-demo-form-color">
+<form class="lay-form" action="">
+  <div class="lay-form-item">
+    <div class="lay-input-inline" style="width: 120px;">
+      <input type="text" name="color" value="" placeholder="请选择颜色" class="lay-input" id="ID-colorpicker-demo-form-color">
     </div>
-    <div class="layui-inline" style="left: -11px;">
+    <div class="lay-inline" style="left: -11px;">
       <div id="ID-colorpicker-demo-form"></div>
     </div>
   </div>
@@ -66,7 +66,7 @@ layui.use(function(){
 
 <h3 id="demo-rgba" class="ws-anchor ws-bold">设置 RGB / RGBA</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-colorpicker-demo-rgb"></div>
 <div id="ID-colorpicker-demo-rgba" style="margin-left: 16px;"></div>
@@ -95,7 +95,7 @@ layui.use(function(){
 
 <h3 id="demo-alpha" class="ws-anchor ws-bold">开启透明度</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-colorpicker-demo-alpha-1"></div>
 <div id="ID-colorpicker-demo-alpha-2" style="margin-left: 16px;"></div>
@@ -131,7 +131,7 @@ layui.use(function(){
 
 <h3 id="demo-predefine" class="ws-anchor ws-bold">预定义颜色项</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-colorpicker-demo-predefine-1"></div>
 <div id="ID-colorpicker-demo-predefine-2" style="margin-left: 16px;"></div>
@@ -160,9 +160,9 @@ layui.use(function(){
 
 <h3 id="demo-all" class="ws-anchor ws-bold">全功能和回调的使用</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-<button class="layui-btn" id="ID-colorpicker-demo-all-btn">主题按钮</button>
+<button class="lay-btn" id="ID-colorpicker-demo-all-btn">主题按钮</button>
 <hr>
 <div id="ID-colorpicker-demo-all"></div> 
 <span style="padding-left: 6px;">演示：选择颜色并确定，改变上方按钮背景色</span>
@@ -201,7 +201,7 @@ layui.use(function(){
 
 <h3 id="demo-size" class="ws-anchor ws-bold">颜色框尺寸</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-colorpicker-demo-size-lg"></div>
 <div id="ID-colorpicker-demo-size-sm" style="margin-left: 16px;"></div>
@@ -232,7 +232,7 @@ layui.use(function(){
 
 <h3 id="demo-class" class="ws-anchor ws-bold">同时绑定多个元素</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div class="demo-class-colorpicker" lay-options="{color: '#FF0000'}"></div>
 <div class="demo-class-colorpicker" lay-options="{color: '#008000'}"></div>

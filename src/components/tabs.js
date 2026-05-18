@@ -13,18 +13,18 @@ var component = componentBuilder({
 
   // 默认配置
   config: {
-    elem: '.layui-tabs',
+    elem: '.lay-tabs',
     trigger: 'click', // 标签切换的触发事件
     headerMode: 'auto', // 标签头部的显示模式 auto | scroll | normal
   },
 
   CONST: {
-    ELEM: 'layui-tabs',
-    HEADER: 'layui-tabs-header',
-    CLOSE: 'layui-tabs-close',
-    BODY: 'layui-tabs-body',
-    ITEM: 'layui-tabs-item',
-    CARD: 'layui-tabs-card',
+    ELEM: 'lay-tabs',
+    HEADER: 'lay-tabs-header',
+    CLOSE: 'lay-tabs-close',
+    BODY: 'lay-tabs-body',
+    ITEM: 'lay-tabs-item',
+    CARD: 'lay-tabs-card',
   },
 
   // 渲染
@@ -64,11 +64,11 @@ var component = componentBuilder({
         that.documentElem = $(document);
       } else {
         // 方法传值渲染
-        that.elemView = $('<div class="layui-tabs"></div>');
+        that.elemView = $('<div class="lay-tabs"></div>');
         if (options.className) that.elemView.addClass(options.className);
 
-        var headerElem = $('<ul class="layui-tabs-header"></ul>');
-        var bodyElem = $('<div class="layui-tabs-body"></div>');
+        var headerElem = $('<ul class="lay-tabs-header"></ul>');
+        var bodyElem = $('<div class="lay-tabs-body"></div>');
 
         // 生成标签项
         options.header.forEach(function (item) {
@@ -521,7 +521,7 @@ Class.prototype.appendClose = function (headerItem, opts) {
   // 可关闭项追加关闭按钮
   if (!headerItem.find('.' + component.CONST.CLOSE)[0]) {
     var close = $(
-      '<i class="layui-icon layui-icon-close layui-unselect ' +
+      '<i class="lay-icon lay-icon-close lay-unselect ' +
         component.CONST.CLOSE +
         '"></i>',
     );
@@ -603,22 +603,20 @@ Class.prototype.roll = function (mode, index) {
   };
 
   // css 类名
-  var CLASS_SCROLL = 'layui-tabs-scroll';
-  var CLASS_BAR = 'layui-tabs-bar';
-  var CLASS_BAR_ICON = ['layui-icon-prev', 'layui-icon-next'];
+  var CLASS_SCROLL = 'lay-tabs-scroll';
+  var CLASS_BAR = 'lay-tabs-bar';
+  var CLASS_BAR_ICON = ['lay-icon-prev', 'lay-icon-next'];
 
   // 滚动结构
   var rollElem = {
     elem: $(
-      '<div class="' +
-        CLASS_SCROLL +
-        ' layui-border-box layui-unselect"></div>',
+      '<div class="' + CLASS_SCROLL + ' lay-border-box lay-unselect"></div>',
     ),
     bar: $(
       [
         '<div class="' + CLASS_BAR + '">',
-        '<i class="layui-icon ' + CLASS_BAR_ICON[0] + '" lay-mode="prev"></i>',
-        '<i class="layui-icon ' + CLASS_BAR_ICON[1] + '" lay-mode="next"></i>',
+        '<i class="lay-icon ' + CLASS_BAR_ICON[0] + '" lay-mode="prev"></i>',
+        '<i class="lay-icon ' + CLASS_BAR_ICON[1] + '" lay-mode="next"></i>',
         '</div>',
       ].join(''),
     ),

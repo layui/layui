@@ -1,71 +1,71 @@
-<div class="layui-form">
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">日期</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-shortcut-date">
+<div class="lay-form">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">日期</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-shortcut-date">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">年份</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-shortcut-year">
+    <div class="lay-inline">
+      <label class="lay-form-label">年份</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-shortcut-year">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">年月</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-shortcut-month">
+    <div class="lay-inline">
+      <label class="lay-form-label">年月</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-shortcut-month">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">时间</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-shortcut-time">
+    <div class="lay-inline">
+      <label class="lay-form-label">时间</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-shortcut-time">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">日期时间</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-shortcut-datetime">
+    <div class="lay-inline">
+      <label class="lay-form-label">日期时间</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-shortcut-datetime">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">日期时间全面板</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-shortcut-datetime-fullPanel">
+    <div class="lay-inline">
+      <label class="lay-form-label">日期时间全面板</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-shortcut-datetime-fullPanel">
       </div>
     </div>
     <hr>
-    <div class="layui-inline">
-      <label class="layui-form-label">日期范围</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-shortcut-range-date" placeholder=" - ">
+    <div class="lay-inline">
+      <label class="lay-form-label">日期范围</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-shortcut-range-date" placeholder=" - ">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">年份范围</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-shortcut-range-year" placeholder=" - ">
+    <div class="lay-inline">
+      <label class="lay-form-label">年份范围</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-shortcut-range-year" placeholder=" - ">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">年月范围</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-shortcut-range-month" placeholder=" - ">
+    <div class="lay-inline">
+      <label class="lay-form-label">年月范围</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-shortcut-range-month" placeholder=" - ">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">时间范围</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-shortcut-range-time" placeholder=" - ">
+    <div class="lay-inline">
+      <label class="lay-form-label">时间范围</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-shortcut-range-time" placeholder=" - ">
       </div>
     </div>
   </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">日期时间范围</label>
-    <div class="layui-input-block">
-      <input type="text" class="layui-input" id="ID-laydate-shortcut-range-datetime" placeholder=" - ">
+  <div class="lay-form-item">
+    <label class="lay-form-label">日期时间范围</label>
+    <div class="lay-input-block">
+      <input type="text" class="lay-input" id="ID-laydate-shortcut-range-datetime" placeholder=" - ">
     </div>
   </div>
 </div>
@@ -556,3 +556,4 @@ layui.use(function(){
 
 });
 </script>
+

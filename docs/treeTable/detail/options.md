@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -90,7 +90,7 @@ treeTable.render({
 自定义图标支持 HTML 字符串和图标类名。例如：
 
 - `'<i class="i-svg-spinners-blocks-wave"></i>'`
-- `'layui-icon layui-icon-addition'`
+- `'lay-icon lay-icon-addition'`
 
 </td>
     </tr>
@@ -181,3 +181,4 @@ treeTable.render({
     </tr>
   </tbody>
 </table>
+

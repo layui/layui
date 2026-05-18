@@ -1,11 +1,11 @@
 /* Tabs 标签页 */
-.layui-tabs {
+.lay-tabs {
   position: relative;
 }
-.layui-tabs.layui-hide-v {
+.lay-tabs.lay-hide-v {
   overflow: hidden;
 }
-.layui-tabs-header {
+.lay-tabs-header {
   position: relative;
   left: 0;
   height: 40px;
@@ -15,8 +15,8 @@
   -webkit-transition: all 0.16s;
   transition: all 0.16s;
 }
-.layui-tabs-header:after,
-.layui-tabs-scroll:after {
+.lay-tabs-header:after,
+.lay-tabs-scroll:after {
   content: '';
   position: absolute;
   left: 0;
@@ -25,7 +25,7 @@
   width: 100%;
   border-bottom: 1px solid var(--lay-border-color);
 }
-.layui-tabs-header li {
+.lay-tabs-header li {
   position: relative;
   display: inline-block;
   vertical-align: middle;
@@ -38,23 +38,23 @@
   -webkit-transition: all 0.16s;
   transition: all 0.16s;
 }
-.layui-tabs-header li:first-child {
+.lay-tabs-header li:first-child {
   margin-left: 0;
 }
-.layui-tabs-header li a {
+.lay-tabs-header li a {
   display: block;
   padding: 0 var(--lay-spacing);
   margin: 0 calc(-1 * var(--lay-spacing));
   color: inherit;
 }
-.layui-tabs-header li a:hover {
+.lay-tabs-header li a:hover {
   text-decoration: none;
 }
-.layui-tabs-header li:hover,
-.layui-tabs-header .layui-this {
+.lay-tabs-header li:hover,
+.lay-tabs-header .lay-this {
   color: var(--lay-color-primary);
 }
-.layui-tabs-header .layui-this:after {
+.lay-tabs-header .lay-this:after {
   content: '';
   position: absolute;
   left: 0;
@@ -66,23 +66,23 @@
   box-sizing: border-box;
   pointer-events: none;
 }
-.layui-tabs-header .layui-badge,
-.layui-tabs-header .layui-badge-dot {
+.lay-tabs-header .lay-badge,
+.lay-tabs-header .lay-badge-dot {
   left: 5px;
   top: -1px;
 }
 
-.layui-tabs-scroll {
+.lay-tabs-scroll {
   position: relative;
   overflow: hidden;
   padding: 0 40px;
 }
-.layui-tabs-scroll .layui-tabs-header:after {
+.lay-tabs-scroll .lay-tabs-header:after {
   display: none;
   content: none;
   border: 0;
 }
-.layui-tabs-bar .layui-icon {
+.lay-tabs-bar .lay-icon {
   position: absolute;
   left: 0;
   top: 0;
@@ -97,13 +97,13 @@
   background-color: #fff;
   box-shadow: 2px 0 5px 0 rgb(0 0 0 / 6%);
 }
-.layui-tabs-bar .layui-icon-next {
+.lay-tabs-bar .lay-icon-next {
   left: auto;
   right: 0;
   box-shadow: -2px 0 5px 0 rgb(0 0 0 / 6%);
 }
 
-.layui-tabs-header li .layui-tabs-close {
+.lay-tabs-header li .lay-tabs-close {
   position: relative;
   display: inline-block;
   width: 16px;
@@ -119,40 +119,40 @@
   -webkit-transition: all 0.16s;
   transition: all 0.16s;
 }
-.layui-tabs-header li .layui-tabs-close:hover {
+.lay-tabs-header li .lay-tabs-close:hover {
   background-color: var(--lay-color-red);
   color: #fff;
 }
-.layui-tabs-header li[lay-closable='false'] .layui-tabs-close {
+.lay-tabs-header li[lay-closable='false'] .lay-tabs-close {
   display: none;
 }
 
-.layui-tabs-body {
+.lay-tabs-body {
   padding: var(--lay-spacing) 0;
 }
-.layui-tabs-item {
+.lay-tabs-item {
   display: none;
 }
 
 /* tabs 卡片风格 */
-.layui-tabs-card > .layui-tabs-header .layui-this {
+.lay-tabs-card > .lay-tabs-header .lay-this {
   background-color: #fff;
 }
-.layui-tabs-card > .layui-tabs-header .layui-this:after {
+.lay-tabs-card > .lay-tabs-header .lay-this:after {
   border: 1px solid var(--lay-border-color);
   border-bottom-color: #fff;
   border-radius: var(--lay-border-radius) var(--lay-border-radius) 0 0;
 }
-.layui-tabs-card > .layui-tabs-header li:first-child.layui-this:after {
+.lay-tabs-card > .lay-tabs-header li:first-child.lay-this:after {
   margin-left: -1px;
 }
-.layui-tabs-card > .layui-tabs-header li:last-child.layui-this:after {
+.lay-tabs-card > .lay-tabs-header li:last-child.lay-this:after {
   margin-right: -1px;
 }
-.layui-tabs-card.layui-panel > .layui-tabs-header .layui-this:after {
+.lay-tabs-card.lay-panel > .lay-tabs-header .lay-this:after {
   border-top: 0;
   border-radius: 0;
 }
-.layui-tabs-card.layui-panel > .layui-tabs-body {
+.lay-tabs-card.lay-panel > .lay-tabs-body {
   padding: var(--lay-spacing);
 }

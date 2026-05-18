@@ -9,9 +9,9 @@ toc: true
 
 <h2 id="examples" lay-toc="{anchor: null}" style="margin-bottom: 0;">示例</h2>
 
-<h3 lay-toc="{level: 2, id: 'examples', hot: true}" class="layui-hide">综合演示</h3>
+<h3 lay-toc="{level: 2, id: 'examples', hot: true}" class="lay-hide">综合演示</h3>
 
-<pre class="layui-code" lay-options="{preview: true, text: {preview: '综合演示'}, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, text: {preview: '综合演示'}, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render()
 }}">
   <textarea>
@@ -21,7 +21,7 @@ toc: true
 
 <h3 id="pane" lay-toc="{level: 2}">方框风格</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'height: 508px;', tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'height: 508px;', tools: ['full'], done: function(obj){
   obj.render()
 }}">
   <textarea>
@@ -31,7 +31,7 @@ toc: true
 
 <h3 id="login" lay-toc="{level: 2}">登录模板 <sup>2.8+</sup></h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'height: 508px;', tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'height: 508px;', tools: ['full'], done: function(obj){
   obj.render()
 }}">
   <textarea>
@@ -41,7 +41,7 @@ toc: true
 
 <h3 id="reg" lay-toc="{level: 2}">注册模板 <sup>2.8+</sup></h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'height: 508px;', tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'height: 508px;', tools: ['full'], done: function(obj){
   obj.render()
 }}">
   <textarea>
@@ -58,11 +58,11 @@ toc: true
 
 在上文的「[综合演示](#examples)」示例中，我们用的是 form 组件自身的普通布局。其要点为：
 
-- 通过 `class="layui-form"` 定义一个表单域，通常设置在`<form>`标签上， 或普通`<div>` 标签亦可。
-- 通过 `class="layui-form-item"` 定义一个块级元素的表单项容器
-- 通过 `class="layui-form-label"` 定义标签
-- 通过 `class="layui-input-block"` 定义表单项父容器为块级元素
-- 通过 `class="layui-input-inline"` 或 `class="layui-inline"` 定义表单项父容器为行内块元素
+- 通过 `class="lay-form"` 定义一个表单域，通常设置在`<form>`标签上， 或普通`<div>` 标签亦可。
+- 通过 `class="lay-form-item"` 定义一个块级元素的表单项容器
+- 通过 `class="lay-form-label"` 定义标签
+- 通过 `class="lay-input-block"` 定义表单项父容器为块级元素
+- 通过 `class="lay-input-inline"` 或 `class="lay-inline"` 定义表单项父容器为行内块元素
 
 即必须按照规定的层级定义相应的 `class`。
 
@@ -70,7 +70,7 @@ toc: true
 
 form 还可以借助*栅格*实现更灵活的响应式布局。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'height: 500px;', done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'height: 500px;', done: function(obj){
   obj.render()
 }}">
   <textarea>
@@ -97,10 +97,10 @@ form 还可以借助*栅格*实现更灵活的响应式布局。
 在表单域中，有时还需要定义一些特定属性来配合组件的使用，它们一般以 `lay-*` 为命名格式，如：
 
 ```
-<form class="layui-form" lay-filter="form-1">
-  <input type="text" class="layui-input" lay-verify="email">
+<form class="lay-form" lay-filter="form-1">
+  <input type="text" class="lay-input" lay-verify="email">
   <input type="checkbox" lay-skin="switch" lay-filter="agree" title="同意">
-  <button class="layui-btn" lay-submit>提交</button>
+  <button class="lay-btn" lay-submit>提交</button>
 </form>
 
 ```
@@ -129,14 +129,14 @@ form 还可以借助*栅格*实现更灵活的响应式布局。
 `form.render(type, filter);`
 
 - 参数 `type` 可选，对应表单组件类型，支持：`input,select,checkbox,radio`；若不填，则指向所有类型。
-- 参数 `filter` 可选，对应 `class="layui-form"` 所在元素的 `lay-filter` 属性值，用于指定需渲染的表单区域。
+- 参数 `filter` 可选，对应 `class="lay-form"` 所在元素的 `lay-filter` 属性值，用于指定需渲染的表单区域。
 
 ### **常规渲染**
 
 `form` 组件会在元素加载完毕后，自动对所有表单区域完成一次渲染，因此该方法主要用于对*动态插入*的表单元素的渲染。
 
 ```
-<form class="layui-form" lay-filter="test">
+<form class="lay-form" lay-filter="test">
   动态插入的表单域
 </form>
 
@@ -158,13 +158,13 @@ layui.use(function(){
 
 该方法还允许指定表单元素的 jQuery 对象，从而完成定向渲染。且支持两种方式的指向：
 
-- 若 jQuery 对象指向表单域容器（`class="layui-form"`），则渲染该表单域中的所有表单项；<sup>2.8+</sup>
+- 若 jQuery 对象指向表单域容器（`class="lay-form"`），则渲染该表单域中的所有表单项；<sup>2.8+</sup>
 - 若 jQuery 对象指向的不是表单域容器，则只对该对象进行渲染
 
 定向渲染在页面出现大量表单时，可以极大地减少表单组件渲染时的性能开销，建议灵活运用。
 
 ```
-<div class="layui-form" id="form-id">
+<div class="lay-form" id="form-id">
   <select id="select-id">
     <option value="a">A</option>
   </select>
@@ -189,11 +189,11 @@ layui.use('form', function(){
 
 若表单域中的部分表单不需要 Layui 来渲染，那么可通过 `lay-ignore` 属性让其保留系统原始 UI 风格。
 
-<pre class="layui-code" lay-options="{preview: true, done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, done: function(obj){
   obj.render()
 }}">
   <textarea>
-<div class="layui-form">
+<div class="lay-form">
   <select>
     <option value="a">正常渲染的 select</option>
   </select>
@@ -213,11 +213,11 @@ layui.use('form', function(){
 Layui 对表单验证做了巧妙的支持，只需在表单元素上设置 `lay-verify=""` 属性值即可指定验证规则，如：
 
 ```
-<div class="layui-form">
+<div class="lay-form">
   <input type="text" lay-verify="required" placeholder="必填项">
   <input type="text" lay-verify="email" placeholder="非必填项，但若有值则验证邮箱格式">
   <input type="text" lay-verify="required|number" placeholder="必填项，并验证数字格式">
-  <button class="layui-btn" lay-submit>提交</button>
+  <button class="lay-btn" lay-submit>提交</button>
 </div>
 ```
 
@@ -274,7 +274,7 @@ form.verify({
 
 以下是一个自定义验证规则的示例：
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 508px;', done: function(obj){
   obj.render()
 }}">
   <textarea>
@@ -293,7 +293,7 @@ form.verify({
 
 - 参数 `elem` 为元素选择器或 jQuery 对象； 若验证通过，该方法将返回 true，否则返回 false
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 508px;', done: function(obj){
   obj.render()
 }}">
   <textarea>
@@ -306,10 +306,10 @@ form.verify({
 
 `form.val(filter, obj);`
 
-- 参数 `filter` 为表单域容器（`class="layui-form"`）的 `lay-filter` 属性值
+- 参数 `filter` 为表单域容器（`class="lay-form"`）的 `lay-filter` 属性值
 - 参数 `obj` 可选。若参数存在，则对表单域进行赋值；若参数不存在，则为对表单域进行取值。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'height: 508px;', tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], codeStyle: 'height: 508px;', tools: ['full'], done: function(obj){
   obj.render()
 }}">
   <textarea>
@@ -326,15 +326,15 @@ form.verify({
 
 在表单域中，对指定按钮设置 `lay-submit` 属性，即意味着点击该按钮时，将触发提交事件。如：
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 508px;', done: function(obj){
   obj.render()
 }}">
   <textarea>
-<form class="layui-form">
-  <input type="text" name="nickname" lay-verify="required" class="layui-input">
+<form class="lay-form">
+  <input type="text" name="nickname" lay-verify="required" class="lay-input">
   <hr>
-  <button class="layui-btn" lay-submit lay-filter="demo-submit">提交按钮</button>
-  <button class="layui-btn" id="test-btn-other">普通按钮</button>
+  <button class="lay-btn" lay-submit lay-filter="demo-submit">提交按钮</button>
+  <button class="lay-btn" id="test-btn-other">普通按钮</button>
 </form>
 
 <!-- import layui -->
@@ -377,20 +377,20 @@ layui.use(function(){
 
 使用该方法可以实现在任意位置对指定表单的主动提交，相比上述的提交事件更加灵活。
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 508px;', done: function(obj){
   obj.render()
 }}">
   <textarea>
-<fieldset class="layui-elem-field">
+<fieldset class="lay-elem-field">
   <legend>表单内部</legend>
-  <div class="layui-field-box">
-    <form class="layui-form" lay-filter="form-demo-submit">
-      <input type="text" name="nickname" lay-verify="required" class="layui-input">
+  <div class="lay-field-box">
+    <form class="lay-form" lay-filter="form-demo-submit">
+      <input type="text" name="nickname" lay-verify="required" class="lay-input">
     </form>
   </div>
 </fieldset>
 
-<button class="layui-btn" id="test-btn-submit">任意位置按钮</button>
+<button class="lay-btn" id="test-btn-submit">任意位置按钮</button>
 
 <!-- import layui -->
 <script>
@@ -461,3 +461,4 @@ form.set({
   autocomplete: 'off' // 阻止 input 框默认的自动输入完成功能
 });
 ```
+

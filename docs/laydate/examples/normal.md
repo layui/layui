@@ -1,15 +1,15 @@
-<div class="layui-form">
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">中文版</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-demo" placeholder="yyyy-MM-dd">
+<div class="lay-form">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">中文版</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-demo" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">国际版</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-demo-en" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">国际版</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-demo-en" placeholder="yyyy-MM-dd">
       </div>
     </div>
   </div>

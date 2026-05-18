@@ -1,6 +1,6 @@
 默认风格:
 
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col width="150">
@@ -29,7 +29,7 @@
  
 行边框表格:
 
-<table class="layui-table" lay-skin="line">
+<table class="lay-table" lay-skin="line">
   <colgroup>
     <col width="150">
     <col width="150">
@@ -58,7 +58,7 @@
  
 列边框表格:
 
-<table class="layui-table" lay-skin="row">
+<table class="lay-table" lay-skin="row">
   <colgroup>
     <col width="150">
     <col width="150">
@@ -87,7 +87,7 @@
  
 无边框表格:
 
-<table class="layui-table" lay-skin="nob">
+<table class="lay-table" lay-skin="nob">
   <colgroup>
     <col width="150">
     <col width="150">
@@ -116,7 +116,7 @@
  
 小尺寸表格:
 
-<table class="layui-table" lay-size="sm">
+<table class="lay-table" lay-size="sm">
   <colgroup>
     <col width="150">
     <col width="150">
@@ -145,7 +145,7 @@
  
 大尺寸表格:
 
-<table class="layui-table" lay-size="lg">
+<table class="lay-table" lay-size="lg">
   <colgroup>
     <col width="150">
     <col width="150">
@@ -174,7 +174,7 @@
 
 开启偶数行背景色:
 
-<table class="layui-table" lay-even>
+<table class="lay-table" lay-even>
   <colgroup>
     <col width="150">
     <col width="150">

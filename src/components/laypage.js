@@ -11,7 +11,7 @@ var tag = 'getElementsByTagName';
 
 // 字符常量
 // var MOD_NAME = 'laypage';
-var DISABLED = 'layui-disabled';
+var DISABLED = 'lay-disabled';
 
 // 构造器
 var Class = function (options) {
@@ -88,7 +88,7 @@ Class.prototype.view = function () {
     // 上一页
     prev: (function () {
       return config.prev
-        ? '<a class="layui-laypage-prev' +
+        ? '<a class="lay-laypage-prev' +
             (config.curr == 1 ? ' ' + DISABLED : '') +
             '" data-page="' +
             (config.curr - 1) +
@@ -110,7 +110,7 @@ Class.prototype.view = function () {
       // 首页
       if (index > 1 && config.first !== false && groups !== 0) {
         pager.push(
-          '<a class="layui-laypage-first" data-page="1"  title="' +
+          '<a class="lay-laypage-first" data-page="1"  title="' +
             i18n.$t('laypage.first') +
             '">' +
             (config.first || 1) +
@@ -136,7 +136,7 @@ Class.prototype.view = function () {
 
       // 输出左分割符
       if (config.first !== false && start > 2) {
-        pager.push('<span class="layui-laypage-spr">...</span>');
+        pager.push('<span class="lay-laypage-spr">...</span>');
       }
 
       // 输出连续页码
@@ -144,7 +144,7 @@ Class.prototype.view = function () {
         if (start === config.curr) {
           // 当前页
           pager.push(
-            '<span class="layui-laypage-curr"><em class="layui-laypage-em" ' +
+            '<span class="lay-laypage-curr"><em class="lay-laypage-em" ' +
               (/^#/.test(config.theme)
                 ? 'style="background-color:' + config.theme + ';"'
                 : '') +
@@ -164,11 +164,11 @@ Class.prototype.view = function () {
         config.last !== false
       ) {
         if (end + 1 < config.pages) {
-          pager.push('<span class="layui-laypage-spr">...</span>');
+          pager.push('<span class="lay-laypage-spr">...</span>');
         }
         if (groups !== 0) {
           pager.push(
-            '<a class="layui-laypage-last" title="' +
+            '<a class="lay-laypage-last" title="' +
               i18n.$t('laypage.last') +
               '"  data-page="' +
               config.pages +
@@ -185,7 +185,7 @@ Class.prototype.view = function () {
     // 下一页
     next: (function () {
       return config.next
-        ? '<a class="layui-laypage-next' +
+        ? '<a class="lay-laypage-next' +
             (config.curr == config.pages ? ' ' + DISABLED : '') +
             '" data-page="' +
             (config.curr + 1) +
@@ -202,12 +202,12 @@ Class.prototype.view = function () {
           ? config.countText[0] + config.count + config.countText[1]
           : i18n.$t('laypage.total', { total: config.count });
 
-      return '<span class="layui-laypage-count">' + countText + '</span>';
+      return '<span class="lay-laypage-count">' + countText + '</span>';
     })(),
 
     // 每页条数
     limit: (function () {
-      var elemArr = ['<span class="layui-laypage-limits"><select lay-ignore>'];
+      var elemArr = ['<span class="lay-laypage-limits"><select lay-ignore>'];
       var template = function (item) {
         var def = item + ' ' + i18n.$t('laypage.pagesize');
         return typeof config.limitTemplet === 'function'
@@ -233,8 +233,8 @@ Class.prototype.view = function () {
 
     // 刷新当前页
     refresh: [
-      '<a data-page="' + config.curr + '" class="layui-laypage-refresh">',
-      '<i class="layui-icon layui-icon-refresh"></i>',
+      '<a data-page="' + config.curr + '" class="lay-laypage-refresh">',
+      '<i class="lay-icon lay-icon-refresh"></i>',
       '</a>',
     ].join(''),
 
@@ -249,12 +249,12 @@ Class.prototype.view = function () {
               i18n.$t('laypage.confirm'),
             ];
       return [
-        '<span class="layui-laypage-skip">' + skipText[0],
+        '<span class="lay-laypage-skip">' + skipText[0],
         '<input type="text" min="1" value="' +
           config.curr +
-          '" class="layui-input">',
+          '" class="lay-input">',
         skipText[1] +
-          '<button type="button" class="layui-laypage-btn">' +
+          '<button type="button" class="lay-laypage-btn">' +
           skipText[2] +
           '</button>',
         '</span>',
@@ -263,13 +263,13 @@ Class.prototype.view = function () {
   };
 
   return [
-    '<div class="layui-box layui-unselect layui-laypage layui-laypage-' +
+    '<div class="lay-box lay-unselect lay-laypage lay-laypage-' +
       (config.theme
         ? /^#/.test(config.theme)
           ? 'molv'
           : config.theme
         : 'default') +
-      '" id="layui-laypage-' +
+      '" id="lay-laypage-' +
       that.index +
       '">',
     (function () {
@@ -381,7 +381,7 @@ Class.prototype.render = function (load) {
 
   config.jump && config.jump(config, load);
 
-  var elem = doc[id]('layui-laypage-' + that.index);
+  var elem = doc[id]('lay-laypage-' + that.index);
   that.jump(elem);
 
   if (config.hash && !load) {

@@ -1,6 +1,6 @@
-<h3 lay-toc="{id: 'examples', level: 2}" class="layui-hide">滚动加载</h3>
+<h3 lay-toc="{id: 'examples', level: 2}" class="lay-hide">滚动加载</h3>
 
-<pre class="layui-code" lay-options="{preview: true, text: {preview: '滚动加载'}, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, text: {preview: '滚动加载'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div class="flow-demo" id="ID-flow-demo"></div>
 
@@ -34,7 +34,7 @@ layui.use(function(){
 
 <h3 id="demo-manual-load" lay-toc="{level: 2}">手动加载</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div class="flow-demo" id="ID-flow-demo-manual"></div>
 

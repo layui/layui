@@ -9,26 +9,26 @@
   <link href="{{= d.layui[2].cdn.css }}" rel="stylesheet">
 </head>
 <body>
-<ul class="layui-nav layui-nav-tree layui-nav-side">
-  <li class="layui-nav-item layui-nav-itemed">
+<ul class="lay-nav lay-nav-tree lay-nav-side">
+  <li class="lay-nav-item lay-nav-itemed">
     <a href="javascript:;">默认展开</a>
-    <dl class="layui-nav-child">
+    <dl class="lay-nav-child">
       <dd><a href="javascript:;">选项1</a></dd>
       <dd><a href="javascript:;">选项2</a></dd>
       <dd><a href="javascript:;">选项3</a></dd>
     </dl>
   </li>
-  <li class="layui-nav-item">
+  <li class="lay-nav-item">
     <a href="javascript:;">默认收缩</a>
-    <dl class="layui-nav-child">
+    <dl class="lay-nav-child">
       <dd><a href="javascript:;">选项1</a></dd>
       <dd><a href="javascript:;">选项2</a></dd>
       <dd><a href="javascript:;">选项3</a></dd>
     </dl>
   </li>
-  <li class="layui-nav-item"><a href="javascript:;">菜单1</a></li>
-  <li class="layui-nav-item"><a href="javascript:;">菜单2</a></li>
-  <li class="layui-nav-item"><a href="javascript:;">菜单3</a></li>
+  <li class="lay-nav-item"><a href="javascript:;">菜单1</a></li>
+  <li class="lay-nav-item"><a href="javascript:;">菜单2</a></li>
+  <li class="lay-nav-item"><a href="javascript:;">菜单3</a></li>
 </ul>
 
 <script src="{{= d.layui[2].cdn.js }}"></script>
@@ -40,3 +40,4 @@ layui.use(function(){
 </script>
 </body>
 </html>
+

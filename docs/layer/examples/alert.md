@@ -1,10 +1,10 @@
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-alert">对话框带图标</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-confirm">询问框</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-msg-dark">深色提示框</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-msg-light">浅色提示框</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-alert-btn">自定义按钮</button>
-  <button type="button" class="layui-btn layui-btn-primary" lay-on="test-count-down">关闭倒计时</button>
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-alert">对话框带图标</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-confirm">询问框</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-msg-dark">深色提示框</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-msg-light">浅色提示框</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-alert-btn">自定义按钮</button>
+  <button type="button" class="lay-btn lay-btn-primary" lay-on="test-count-down">关闭倒计时</button>
 </div>
 
 <!-- import layui --> 
@@ -63,7 +63,7 @@ layui.use(function(){
         time: 5*1000,
         success: function(layero, index){
           var timeNum = this.time/1000, setText = function(start){
-            layer.title('<span class="layui-font-red">'+ (start ? timeNum : --timeNum) + '</span> 秒后自动关闭', index);
+            layer.title('<span class="lay-font-red">'+ (start ? timeNum : --timeNum) + '</span> 秒后自动关闭', index);
           };
           setText(!0);
           this.timer = setInterval(setText, 1000);

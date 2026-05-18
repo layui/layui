@@ -1,4 +1,4 @@
-<table class="layui-hide" id="ID-table-onrowContextmenu"></table>
+<table class="lay-hide" id="ID-table-onrowContextmenu"></table>
 
 <!-- import layui -->
 <script>
@@ -56,3 +56,4 @@ layui.use(['table', 'dropdown', 'util'], function(){
   });
 });
 </script>
+

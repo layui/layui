@@ -34,10 +34,10 @@ $.extend(component, {
       return '';
     })();
     const components = {
-      nav: '.layui-nav' + elemFilter,
-      breadcrumb: '.layui-breadcrumb' + elemFilter,
-      progress: '.layui-progress' + elemFilter,
-      collapse: '.layui-collapse' + elemFilter,
+      nav: '.lay-nav' + elemFilter,
+      breadcrumb: '.lay-breadcrumb' + elemFilter,
+      progress: '.lay-progress' + elemFilter,
+      collapse: '.lay-collapse' + elemFilter,
     };
 
     // 仅允许渲染指定组件

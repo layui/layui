@@ -37,9 +37,9 @@ toc: true
   <br>注 : 除 `elem` 属性外，其他基础属性也可以直接写在元素的 `lay-options="{}"` 属性中。
 
 ```
-<button type="button" class="layui-btn" id="ID-test-uoload">上传</button>
-<button type="button" class="layui-btn test-class-upload" lay-options="{}">上传</button>
-<button type="button" class="layui-btn test-class-upload" lay-options="{}">上传</button>
+<button type="button" class="lay-btn" id="ID-test-uoload">上传</button>
+<button type="button" class="lay-btn test-class-upload" lay-options="{}">上传</button>
+<button type="button" class="lay-btn test-class-upload" lay-options="{}">上传</button>
   
 <!-- import layui -->
 <script>
@@ -125,3 +125,4 @@ inst.reload({
 - 自建上传服务。在服务端配置 `CORS` 开启跨资源共享。 即对接口所在的服务器设置 `Access-Control-Allow-Origin ` 相关 `header` 信息。
 
 - 第三方上传服务。如：阿里云、腾讯云等，只需按照不同平台对应的上传 SDK 进行操作即可。
+

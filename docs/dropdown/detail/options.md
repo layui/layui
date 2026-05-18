@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -216,7 +216,7 @@
 
 ```
 templet: function(d){
-  return '<i class="layui-icon layui-icon-tips"></> ' + d.title;
+  return '<i class="lay-icon lay-icon-tips"></> ' + d.title;
 }
 ```
 
@@ -351,3 +351,4 @@ onClickOutside: function(event){
     </tr>
   </tbody>
 </table>
+

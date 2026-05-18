@@ -1,8 +1,8 @@
-<div class="layui-form">
-  <div class="layui-form-item">
-    <label class="layui-form-label">输入时重载</label>
-    <div class="layui-input-inline">
-      <input type="text" autocomplete="off" placeholder="输入关键字" class="layui-input" id="ID-dropdown-demo-reloadData">
+<div class="lay-form">
+  <div class="lay-form-item">
+    <label class="lay-form-label">输入时重载</label>
+    <div class="lay-input-inline">
+      <input type="text" autocomplete="off" placeholder="输入关键字" class="lay-input" id="ID-dropdown-demo-reloadData">
     </div>
   </div>
 </div>

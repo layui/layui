@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -34,7 +34,7 @@
 <td>array</td>
 <td>
 
-<button class="layui-btn layui-btn-sm layui-btn-primary" lay-layer="{
+<button class="lay-btn lay-btn-sm lay-btn-primary" lay-layer="{
   title: 'title 属性默认值',
   content: '<div>title: [\'列表一\',\'列表二\']</div>'
 }">查看默认值</button>

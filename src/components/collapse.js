@@ -15,7 +15,7 @@ var component = componentBuilder({
 
   // 默认配置
   config: {
-    elem: '.layui-collapse',
+    elem: '.lay-collapse',
   },
 
   render: function () {
@@ -23,18 +23,18 @@ var component = componentBuilder({
     var options = that.config;
 
     options.elem.each(function () {
-      var elemItem = $(this).find('.layui-colla-item');
+      var elemItem = $(this).find('.lay-collapse-item');
       elemItem.each(function () {
         var othis = $(this);
-        var elemTitle = othis.find('.layui-colla-title');
-        var elemCont = othis.find('.layui-colla-content');
+        var elemTitle = othis.find('.lay-collapse-title');
+        var elemCont = othis.find('.lay-collapse-content');
         var isNone = elemCont.css('display') === 'none';
         var clickEventName = 'click.lay_collapse_click';
 
         // 初始状态
-        elemTitle.find('.layui-colla-icon').remove();
+        elemTitle.find('.lay-collapse-icon').remove();
         elemTitle.append(
-          '<i class="layui-icon layui-icon-right layui-colla-icon"></i>',
+          '<i class="lay-icon lay-icon-right lay-collapse-icon"></i>',
         );
         othis[isNone ? 'removeClass' : 'addClass'](CONST.CLASS_SHOW);
 
@@ -57,12 +57,12 @@ var event = {
   // 点击面板标题项
   titleClick: function () {
     var othis = $(this);
-    var wrapper = othis.closest('.layui-collapse');
+    var wrapper = othis.closest('.lay-collapse');
     var filter = wrapper.attr('lay-filter');
 
     var ANIM_MS = 200; // 动画过渡毫秒数
-    var CLASS_ITEM = '.layui-colla-item';
-    var CLASS_CONTENT = '.layui-colla-content';
+    var CLASS_ITEM = '.lay-collapse-item';
+    var CLASS_CONTENT = '.lay-collapse-content';
 
     var thisItemElem = othis.parent(CLASS_ITEM);
     var thisContentElem = othis.siblings(CLASS_CONTENT);

@@ -1,47 +1,47 @@
-<!-- 给容器追加 class="layui-form-pane"，即可显示为方框风格 -->
-<form class="layui-form layui-form-pane" action="">
-  <div class="layui-form-item">
-    <label class="layui-form-label">长输入框</label>
-    <div class="layui-input-block">
-      <input type="text" name="title" autocomplete="off" placeholder="请输入" lay-verify="required" class="layui-input">
+<!-- 给容器追加 class="lay-form-pane"，即可显示为方框风格 -->
+<form class="lay-form lay-form-pane" action="">
+  <div class="lay-form-item">
+    <label class="lay-form-label">长输入框</label>
+    <div class="lay-input-block">
+      <input type="text" name="title" autocomplete="off" placeholder="请输入" lay-verify="required" class="lay-input">
     </div>
   </div>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">日期选择</label>
-      <div class="layui-input-block">
-        <input type="text" name="date" id="date1" autocomplete="off" class="layui-input">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">日期选择</label>
+      <div class="lay-input-block">
+        <input type="text" name="date" id="date1" autocomplete="off" class="lay-input">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">行内表单</label>
-      <div class="layui-input-inline">
-        <input type="text" name="number" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">密码框</label>
-    <div class="layui-input-inline">
-      <input type="password" name="password" placeholder="请输入" lay-verify="required" autocomplete="off" class="layui-input">
-    </div>
-    <div class="layui-form-mid layui-text-em">请务必填写用户名</div>
-  </div>
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">范围</label>
-      <div class="layui-input-inline" style="width: 100px;">
-        <input type="text" name="price_min" placeholder="￥" autocomplete="off" class="layui-input">
-      </div>
-      <div class="layui-form-mid">-</div>
-      <div class="layui-input-inline" style="width: 100px;">
-        <input type="text" name="price_max" placeholder="￥" autocomplete="off" class="layui-input">
+    <div class="lay-inline">
+      <label class="lay-form-label">行内表单</label>
+      <div class="lay-input-inline">
+        <input type="text" name="number" autocomplete="off" class="lay-input">
       </div>
     </div>
   </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">选择框</label>
-    <div class="layui-input-inline">
+  <div class="lay-form-item">
+    <label class="lay-form-label">密码框</label>
+    <div class="lay-input-inline">
+      <input type="password" name="password" placeholder="请输入" lay-verify="required" autocomplete="off" class="lay-input">
+    </div>
+    <div class="lay-form-mid lay-text-em">请务必填写用户名</div>
+  </div>
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">范围</label>
+      <div class="lay-input-inline" style="width: 100px;">
+        <input type="text" name="price_min" placeholder="￥" autocomplete="off" class="lay-input">
+      </div>
+      <div class="lay-form-mid">-</div>
+      <div class="lay-input-inline" style="width: 100px;">
+        <input type="text" name="price_max" placeholder="￥" autocomplete="off" class="lay-input">
+      </div>
+    </div>
+  </div>
+  <div class="lay-form-item">
+    <label class="lay-form-label">选择框</label>
+    <div class="lay-input-inline">
       <select name="interest" lay-filter="aihao">
         <option value=""></option>
         <option value="0">写作</option>
@@ -52,29 +52,29 @@
       </select>
     </div>
   </div>
-  <div class="layui-form-item" pane>
-    <label class="layui-form-label">开关-默认开</label>
-    <div class="layui-input-block">
+  <div class="lay-form-item" pane>
+    <label class="lay-form-label">开关-默认开</label>
+    <div class="lay-input-block">
       <input type="checkbox" checked name="open" lay-skin="switch" lay-filter="switchTest" title="开关">
     </div>
   </div>
-  <div class="layui-form-item" pane>
-    <label class="layui-form-label">单选框</label>
-    <div class="layui-input-block">
+  <div class="lay-form-item" pane>
+    <label class="lay-form-label">单选框</label>
+    <div class="lay-input-block">
       <input type="radio" name="sex" value="男" title="男" checked>
       <input type="radio" name="sex" value="女" title="女">
       <input type="radio" name="sex" value="禁" title="禁用" disabled>
     </div>
   </div>
-  <div class="layui-form-item layui-form-text">
-    <label class="layui-form-label">文本域</label>
-    <div class="layui-input-block">
-      &lt;textarea placeholder="请输入内容" class="layui-textarea"&gt;&lt;/textarea&gt;
+  <div class="lay-form-item lay-form-text">
+    <label class="lay-form-label">文本域</label>
+    <div class="lay-input-block">
+      &lt;textarea placeholder="请输入内容" class="lay-textarea"&gt;&lt;/textarea&gt;
     </div>
   </div>
-  <div class="layui-form-item">
-    <button class="layui-btn" lay-submit lay-filter="demo2">确认</button>
-    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+  <div class="lay-form-item">
+    <button class="lay-btn" lay-submit lay-filter="demo2">确认</button>
+    <button type="reset" class="lay-btn lay-btn-primary">重置</button>
   </div>
 </form>
 

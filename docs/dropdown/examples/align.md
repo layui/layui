@@ -1,15 +1,15 @@
-<div class="layui-btn-container">
-  <button class="layui-btn layui-btn-primary demo-dropdown-align" lay-options="{}">
+<div class="lay-btn-container">
+  <button class="lay-btn lay-btn-primary demo-dropdown-align" lay-options="{}">
     左对齐
-    <i class="layui-icon layui-icon-down layui-font-12"></i>
+    <i class="lay-icon lay-icon-down lay-font-12"></i>
   </button>
-  <button class="layui-btn layui-btn-primary demo-dropdown-align" lay-options="{align: 'center'}">
+  <button class="lay-btn lay-btn-primary demo-dropdown-align" lay-options="{align: 'center'}">
     居中对齐
-    <i class="layui-icon layui-icon-down layui-font-12"></i>
+    <i class="lay-icon lay-icon-down lay-font-12"></i>
   </button>
-  <button class="layui-btn layui-btn-primary demo-dropdown-align" lay-options="{align: 'right'}">
+  <button class="lay-btn lay-btn-primary demo-dropdown-align" lay-options="{align: 'right'}">
     右对齐
-    <i class="layui-icon layui-icon-down layui-font-12"></i>
+    <i class="lay-icon lay-icon-down lay-font-12"></i>
   </button>
 </div>
 

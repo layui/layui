@@ -1,39 +1,39 @@
-<div class="layui-form">
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">请选择日期</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-format-1" placeholder="yyyy年MM月dd日">
+<div class="lay-form">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">请选择日期</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-format-1" placeholder="yyyy年MM月dd日">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">请选择日期</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-format-2" placeholder="dd/MM/yyyy">
+    <div class="lay-inline">
+      <label class="lay-form-label">请选择日期</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-format-2" placeholder="dd/MM/yyyy">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">请选择月份</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-format-3" placeholder="yyyyMMdd">
+    <div class="lay-inline">
+      <label class="lay-form-label">请选择月份</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-format-3" placeholder="yyyyMMdd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">请选择时间</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-format-4" placeholder="H点m分">
+    <div class="lay-inline">
+      <label class="lay-form-label">请选择时间</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-format-4" placeholder="H点m分">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">请选择范围</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-format-5" placeholder=" ~ ">
+    <div class="lay-inline">
+      <label class="lay-form-label">请选择范围</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-format-5" placeholder=" ~ ">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">请选择范围</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-format-6" placeholder="开始 到 结束">
+    <div class="lay-inline">
+      <label class="lay-form-label">请选择范围</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-format-6" placeholder="开始 到 结束">
       </div>
     </div>
   </div>

@@ -1,33 +1,33 @@
-<div class="layui-form">
-  <div class="layui-form-item">
-    <div class="layui-inline">
-      <label class="layui-form-label">墨绿主题</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-theme-molv" placeholder="yyyy-MM-dd">
+<div class="lay-form">
+  <div class="lay-form-item">
+    <div class="lay-inline">
+      <label class="lay-form-label">墨绿主题</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-theme-molv" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">自定义颜色主题</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-theme-color" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">自定义颜色主题</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-theme-color" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <div class="layui-inline">
-      <label class="layui-form-label">格子主题</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-theme-grid" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">格子主题</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-theme-grid" placeholder="yyyy-MM-dd">
       </div>
     </div>
-    <!--<div class="layui-inline">
-      <label class="layui-form-label">圆圈高亮主题</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-theme-circle" placeholder="yyyy-MM-dd">
+    <!--<div class="lay-inline">
+      <label class="lay-form-label">圆圈高亮主题</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-theme-circle" placeholder="yyyy-MM-dd">
       </div>
     </div>-->
-    <div class="layui-inline">
-      <label class="layui-form-label">混合主题</label>
-      <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="ID-laydate-theme-multi" placeholder="yyyy-MM-dd">
+    <div class="lay-inline">
+      <label class="lay-form-label">混合主题</label>
+      <div class="lay-input-inline">
+        <input type="text" class="lay-input" id="ID-laydate-theme-multi" placeholder="yyyy-MM-dd">
       </div>
     </div>
   </div>

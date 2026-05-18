@@ -39,10 +39,10 @@ class Test {
       class: 'test-wrapper',
     });
     const sideElem = lay.elem('div', {
-      class: 'layui-panel test-side',
+      class: 'lay-panel test-side',
     });
     const menuElem = (this.menuElem = lay.elem('div', {
-      class: 'layui-menu',
+      class: 'lay-menu',
     }));
     const mainElem = (this.mainElem = lay.elem('div', {
       class: 'test-main',
@@ -67,7 +67,7 @@ class Test {
         const title = item.title || item.name;
 
         if (item.type === '-') {
-          $(liElem).attr('class', 'layui-menu-item-divider');
+          $(liElem).attr('class', 'lay-menu-item-divider');
         } else {
           const hasChildren = item.children && item.children.length;
           const anchor = hasChildren
@@ -77,17 +77,14 @@ class Test {
           item.hash = anchor;
 
           $(liElem).addClass('test-menu-item').append(`
-            <div class="layui-menu-body-title">
+            <div class="lay-menu-body-title">
               <a href="${anchor}">${title}</a>
             </div>
           `);
 
           if (hasChildren) {
             const ulElem = lay.elem('ul');
-            $(liElem).attr(
-              'class',
-              'layui-menu-item-group layui-menu-item-down',
-            );
+            $(liElem).attr('class', 'lay-menu-item-group lay-menu-item-down');
             renderMenu(ulElem, item.children, item.name);
             $(liElem).append(ulElem);
           }
@@ -164,7 +161,7 @@ class Test {
     const describer = (this.describer = lay.extend(
       {
         suiteElem: lay.elem('div', {
-          class: 'layui-text test-suite',
+          class: 'lay-text test-suite',
           id: opts.id,
         }),
         itemsElem: lay.elem('div', {
@@ -249,7 +246,7 @@ class Test {
 
     itemElem.innerHTML = `
       <div><strong>${title}：</strong></div>
-      <pre class="layui-code">${code}</pre>
+      <pre class="lay-code">${code}</pre>
       <div class="test-result">
         <ul>
           <li><strong>预期：</strong><code>${output(expected)}</code></li>
@@ -269,7 +266,7 @@ class Test {
     `;
 
     const codeInst = layCode({
-      elem: $(itemElem).find('.layui-code')[0],
+      elem: $(itemElem).find('.lay-code')[0],
       theme: 'dark',
       encode: false,
     });
@@ -306,7 +303,7 @@ class Test {
   // 切换测试套件的显示
   #switchSuite(activeIndex) {
     const CLASS_ACTIVE = 'active';
-    const CLASS_MENU_ITEM_CHECKED = 'layui-menu-item-checked';
+    const CLASS_MENU_ITEM_CHECKED = 'lay-menu-item-checked';
     const menuItem = $(this.menuElem).find('li.test-menu-item');
 
     menuItem.removeClass(CLASS_MENU_ITEM_CHECKED);

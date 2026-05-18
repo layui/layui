@@ -1,4 +1,4 @@
-<table class="layui-hide" id="ID-table-demo-editmodes"></table>
+<table class="lay-hide" id="ID-table-demo-editmodes"></table>
 {{!<!-- select -->
 <!--注: 自 2.9.12 版本开始，select 可与 table 实现友好兼容。若使用旧版本，则推荐采用原生 select（即添加 lay-ignore 属性）-->
 <script type="text/html" id="TPL-select-demo">
@@ -12,14 +12,14 @@
 </script>
 <!-- dropdown -->
 <script type="text/html" id="TPL-dropdown-demo">
-  <button class="layui-btn layui-btn-primary dropdown-demo">
+  <button class="lay-btn lay-btn-primary dropdown-demo">
     <span>{{= d.sex || '无' }}</span>
-    <i class="layui-icon layui-icon-down layui-font-12"></i>
+    <i class="lay-icon lay-icon-down lay-font-12"></i>
   </button>
 </script>
 <!-- laydate -->
 <script type="text/html" id="TPL-laydate-demo">
-  <input class="layui-input laydate-demo" placeholder="选择日期" value="{{= d.fieldname3 || '' }}">
+  <input class="lay-input laydate-demo" placeholder="选择日期" value="{{= d.fieldname3 || '' }}">
 </script>
 <!-- colorpicker -->
 <script type="text/html" id="TPL-colorpicker-demo">
@@ -45,9 +45,9 @@ layui.use(function(){
     page: true,
     css: [ // 设置单元格样式
       // 取消默认的溢出隐藏，并设置适当高度
-      '.layui-table-cell{height: 50px; line-height: 40px;}',
-      '.layui-table-cell .layui-colorpicker{width: 38px; height: 38px;}',
-      '.layui-table-cell select{height: 36px; padding: 0 5px;}'
+      '.lay-table-cell{height: 50px; line-height: 40px;}',
+      '.lay-table-cell .lay-colorpicker{width: 38px; height: 38px;}',
+      '.lay-table-cell select{height: 36px; padding: 0 5px;}'
     ].join(''),
     cols: [[ // 表头
       {field: 'id', title: 'ID', width:80, align: 'center', fixed: 'left'},
@@ -167,3 +167,4 @@ layui.use(function(){
 
 });
 </script>
+

@@ -104,34 +104,34 @@ a cite {
 }
 
 /** 基础通用 **/
-.layui-border-box,
-.layui-border-box * {
+.lay-border-box,
+.lay-border-box * {
   box-sizing: border-box;
 }
 /* 消除第三方 ui 可能造成的冲突 */
-.layui-box,
-.layui-box * {
+.lay-box,
+.lay-box * {
   box-sizing: content-box;
 }
-.layui-clear {
+.lay-clear {
   clear: both;
 }
-.layui-clear:after {
+.lay-clear:after {
   content: '\20';
   clear: both;
   display: block;
   height: 0;
 }
-.layui-clear-space {
+.lay-clear-space {
   word-spacing: -5px;
 }
-.layui-inline {
+.lay-inline {
   position: relative;
   display: inline-block;
   vertical-align: middle;
 }
 /* 三角形 */
-.layui-edge {
+.lay-edge {
   position: relative;
   display: inline-block;
   vertical-align: middle;
@@ -142,57 +142,57 @@ a cite {
   border-color: transparent;
   overflow: hidden;
 }
-.layui-edge-top {
+.lay-edge-top {
   top: -4px;
   border-bottom-color: #999;
   border-bottom-style: solid;
 }
-.layui-edge-right {
+.lay-edge-right {
   border-left-color: #999;
   border-left-style: solid;
 }
-.layui-edge-bottom {
+.lay-edge-bottom {
   top: 2px;
   border-top-color: #999;
   border-top-style: solid;
 }
-.layui-edge-left {
+.lay-edge-left {
   border-right-color: #999;
   border-right-style: solid;
 }
 /* 单行溢出省略 */
-.layui-ellipsis {
+.lay-ellipsis {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 /* 屏蔽选中 */
-.layui-unselect,
-.layui-icon,
-.layui-disabled {
+.lay-unselect,
+.lay-icon,
+.lay-disabled {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
 }
 /* 禁用 */
-.layui-disabled,
-.layui-disabled:hover {
+.lay-disabled,
+.lay-disabled:hover {
   color: var(--lay-gray-400) !important;
   cursor: not-allowed !important;
 }
 /* 纯圆角 */
-.layui-circle {
+.lay-circle {
   border-radius: 100%;
 }
-.layui-show {
+.lay-show {
   display: block !important;
 }
-.layui-hide {
+.lay-hide {
   display: none !important;
 }
-.layui-show-v {
+.lay-show-v {
   visibility: visible !important;
 }
-.layui-hide-v {
+.lay-hide-v {
   visibility: hidden !important;
 }

@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -453,9 +453,9 @@ layer.confirm('一个询问框的示例？', {
 弹层的主题风格。通过赋值对应的 className，实现对主题样式的定制。除了默认主题风格，还支持以下可选主题：
 </div>
 
-- `layui-layer-molv` 墨绿主题
-- `layui-layer-lan` 深蓝主题
-- `layui-layer-win10` Windows 10 主题 <sup>2.8+</sup>
+- `lay-layer-molv` 墨绿主题
+- `lay-layer-lan` 深蓝主题
+- `lay-layer-win10` Windows 10 主题 <sup>2.8+</sup>
 
 还可传入其他任意 className 来自定义主题。 参考：[#示例](#demo-skin)
 
@@ -962,3 +962,4 @@ layer.open({
     </tr>
   </tbody>
 </table>
+

@@ -9,11 +9,11 @@ toc: true
 
 <h2 id="normal" lay-toc="{}">普通单选框</h2>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
+<div class="lay-form">
   <input type="radio" name="AAA" value="1" title="默认">
   <input type="radio" name="AAA" value="2" title="选中" checked> 
   <input type="radio" name="AAA" value="3" title="禁用" disabled> 
@@ -33,11 +33,11 @@ toc: true
 
 在 `radio` 元素后的相邻元素设置特定属性 `lay-radio`，可以与 `radio` 标题进行绑定。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
+<div class="lay-form">
   <input type="radio" name="AAA" value="0" title="默认">
   <div lay-radio>
     <span style="color: blue;">自定义模板 ♂</span>
@@ -57,7 +57,7 @@ toc: true
 通过对 `radio` 元素设置 `lay-skin="none"` 属性禁用默认样式，从而实现任意风格的单选组件。<br>
 **注：** 这意味着你需要掌握一定的 `CSS` 技能，以下示例中的样式均为外部自主实现，并非 Layui 内置。
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
@@ -74,18 +74,18 @@ toc: true
 
 该事件在单选框被点击或选中时触发。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['code', 'preview'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['code', 'preview'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
-  <div class="layui-form-item">
+<div class="lay-form">
+  <div class="lay-form-item">
     <input type="radio" name="AAA" value="1" title="选项1" lay-filter="demo-radio-filter" checked>
     <input type="radio" name="AAA" value="2" lay-filter="demo-radio-filter" title="选项2"> 
     <input type="radio" name="AAA" value="3" lay-filter="demo-radio-filter" title="选项3"> 
   </div>
-  <div class="layui-form-item">
-    <button class="layui-btn" lay-submit lay-filter="demo-radio-submit">确认</button>
+  <div class="lay-form-item">
+    <button class="lay-btn" lay-submit lay-filter="demo-radio-submit">确认</button>
   </div>
 </div>
 
@@ -119,4 +119,5 @@ layui.use(function(){
 });
 </script>
   </textarea>
+
 

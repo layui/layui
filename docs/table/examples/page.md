@@ -1,8 +1,8 @@
-<table class="layui-hide" id="ID-table-demo-page"></table>
+<table class="lay-hide" id="ID-table-demo-page"></table>
 <script type="text/html" id="ID-table-demo-page-pagebar">
-  <div class="layui-btn-container">
-    <button class="layui-btn layui-btn-sm" lay-event="footerDemoBtn1">底部按钮1</button>
-    <button class="layui-btn layui-btn-sm" lay-event="footerDemoBtn2">底部按钮2</button>
+  <div class="lay-btn-container">
+    <button class="lay-btn lay-btn-sm" lay-event="footerDemoBtn1">底部按钮1</button>
+    <button class="lay-btn lay-btn-sm" lay-event="footerDemoBtn2">底部按钮2</button>
   </div>
 </script>
 
@@ -40,3 +40,4 @@ layui.use('table', function(){
   });
 });
 </script>
+

@@ -1,12 +1,12 @@
-<h3 lay-toc="{id: 'examples', level: 2, hot: true}" class="layui-hide">综合演示</h3>
+<h3 lay-toc="{id: 'examples', level: 2, hot: true}" class="lay-hide">综合演示</h3>
 
 
-<pre class="layui-code" lay-options="{preview: true, text: {preview: '综合演示'}, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, text: {preview: '综合演示'}, codeStyle: 'height: 535px;', layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn layui-btn-sm" lay-on="getChecked">获取选中节点数据</button>
-  <button type="button" class="layui-btn layui-btn-sm" lay-on="setChecked">勾选指定节点</button>
-  <button type="button" class="layui-btn layui-btn-sm" lay-on="reload">重载实例</button>
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn lay-btn-sm" lay-on="getChecked">获取选中节点数据</button>
+  <button type="button" class="lay-btn lay-btn-sm" lay-on="setChecked">勾选指定节点</button>
+  <button type="button" class="lay-btn lay-btn-sm" lay-on="reload">重载实例</button>
 </div>
 
 <div id="ID-tree-demo"></div>
@@ -58,7 +58,7 @@ layui.use(function() {
 
 <h3 id="demo-showLine" lay-toc="{level: 2}" class="ws-anchor ws-bold">无连接线风格</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-tree-demo-showLine"></div>
 
@@ -83,7 +83,7 @@ layui.use(function() {
 
 <h3 id="demo-icon-stretch" lay-toc="{level: 2}" class="ws-anchor ws-bold">仅图标控制伸缩</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-tree-demo-onlyIconControl"></div>
 
@@ -112,7 +112,7 @@ layui.use(function() {
 
 <h3 id="demo-accordion" lay-toc="{level: 2}" class="ws-anchor ws-bold">手风琴模式</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-tree-demo-accordion"></div>
 
@@ -153,7 +153,7 @@ layui.use(function() {
 
 <h3 id="demo-checkbox" lay-toc="{level: 2}" class="ws-anchor ws-bold">开启复选框</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-tree-demo-showCheckbox"></div>
 
@@ -176,3 +176,4 @@ layui.use(function() {
 </script>
   </textarea>
 </pre>
+

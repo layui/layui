@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
   </head>
   <body>
-    <div class="layui-container layui-padding-3 layui-text">
+    <div class="lay-container lay-padding-3 lay-text">
       <h2>动态操作</h2>
       <div
-        class="layui-tabs layui-hide-v"
+        class="lay-tabs lay-hide-v"
         id="demoTabs1"
         lay-options="{closable: true, headerMode:'scroll'}"
       >
-        <ul class="layui-tabs-header">
+        <ul class="lay-tabs-header">
           <li lay-id="aaa" lay-closable="false">Tab1</li>
           <li lay-id="bbb">Tab2</li>
           <li lay-id="ccc">Tab3</li>
@@ -22,74 +22,68 @@
           <li lay-id="eee">Tab5</li>
           <li lay-id="fff">Tab6</li>
         </ul>
-        <div class="layui-tabs-body">
-          <div class="layui-tabs-item">Tab Content-1</div>
-          <div class="layui-tabs-item">Tab Content-2</div>
-          <div class="layui-tabs-item">Tab Content-3</div>
-          <div class="layui-tabs-item">Tab Content-4</div>
-          <div class="layui-tabs-item">Tab Content-5</div>
-          <div class="layui-tabs-item">Tab Content-6</div>
+        <div class="lay-tabs-body">
+          <div class="lay-tabs-item">Tab Content-1</div>
+          <div class="lay-tabs-item">Tab Content-2</div>
+          <div class="lay-tabs-item">Tab Content-3</div>
+          <div class="lay-tabs-item">Tab Content-4</div>
+          <div class="lay-tabs-item">Tab Content-5</div>
+          <div class="lay-tabs-item">Tab Content-6</div>
         </div>
       </div>
 
-      <div class="layui-btn-container">
-        <button
-          class="layui-btn"
-          onclick="layui.tabs.change('demoTabs1', 'ccc')"
-        >
+      <div class="lay-btn-container">
+        <button class="lay-btn" onclick="layui.tabs.change('demoTabs1', 'ccc')">
           切换到：Tab3
         </button>
-        <button class="layui-btn" onclick="layui.tabs.change('demoTabs1', 1)">
+        <button class="lay-btn" onclick="layui.tabs.change('demoTabs1', 1)">
           切换到：第 2 项
         </button>
-        <button
-          class="layui-btn"
-          onclick="layui.tabs.close('demoTabs1', 'ddd')"
-        >
+        <button class="lay-btn" onclick="layui.tabs.close('demoTabs1', 'ddd')">
           关闭：Tab4
         </button>
-        <button class="layui-btn" onclick="layui.tabs.close('demoTabs1', 1)">
+        <button class="lay-btn" onclick="layui.tabs.close('demoTabs1', 1)">
           关闭：第 2 项
         </button>
-        <button class="layui-btn" lay-on="add">添加 Tab</button>
+        <button class="lay-btn" lay-on="add">添加 Tab</button>
       </div>
 
       <h2>方法渲染</h2>
       <div id="demoTabs2"></div>
 
       <h2>卡片风格</h2>
-      <div class="layui-tabs layui-tabs-card" lay-options="{index: 1}">
-        <ul class="layui-tabs-header">
+      <div class="lay-tabs lay-tabs-card" lay-options="{index: 1}">
+        <ul class="lay-tabs-header">
           <li>标题1</li>
           <li>标题2</li>
-          <li><a href="" target="_blank" class="layui-font-blue">跳转项</a></li>
-          <li class="layui-disabled" lay-unselect>禁选项</li>
+          <li><a href="" target="_blank" class="lay-font-blue">跳转项</a></li>
+          <li class="lay-disabled" lay-unselect>禁选项</li>
           <li>标题5</li>
           <li>标题6</li>
         </ul>
-        <div class="layui-tabs-body">
-          <div class="layui-tabs-item">内容-1</div>
-          <div class="layui-tabs-item">内容-2</div>
-          <div class="layui-tabs-item">内容-3</div>
-          <div class="layui-tabs-item">内容-4</div>
-          <div class="layui-tabs-item">内容-5</div>
-          <div class="layui-tabs-item">内容-6</div>
+        <div class="lay-tabs-body">
+          <div class="lay-tabs-item">内容-1</div>
+          <div class="lay-tabs-item">内容-2</div>
+          <div class="lay-tabs-item">内容-3</div>
+          <div class="lay-tabs-item">内容-4</div>
+          <div class="lay-tabs-item">内容-5</div>
+          <div class="lay-tabs-item">内容-6</div>
         </div>
       </div>
 
       <h3>卡片 + 边框</h3>
-      <div class="layui-tabs layui-tabs-card layui-panel layui-inline">
-        <ul class="layui-tabs-header layui-bg-tint">
-          <li class="layui-this">标题1</li>
+      <div class="lay-tabs lay-tabs-card lay-panel lay-inline">
+        <ul class="lay-tabs-header lay-bg-tint">
+          <li class="lay-this">标题1</li>
           <li>标题2</li>
           <li>标题3</li>
           <li>标题4</li>
           <li>标题5</li>
           <li>标题6</li>
         </ul>
-        <div class="layui-tabs-body">
-          <div class="layui-tabs-item layui-show">
-            <div class="layui-form">
+        <div class="lay-tabs-body">
+          <div class="lay-tabs-item lay-show">
+            <div class="lay-form">
               <select>
                 <option>1</option>
                 <option>2</option>
@@ -100,17 +94,17 @@
               </select>
             </div>
           </div>
-          <div class="layui-tabs-item">2</div>
-          <div class="layui-tabs-item">3</div>
-          <div class="layui-tabs-item">4</div>
-          <div class="layui-tabs-item">5</div>
-          <div class="layui-tabs-item">6</div>
+          <div class="lay-tabs-item">2</div>
+          <div class="lay-tabs-item">3</div>
+          <div class="lay-tabs-item">4</div>
+          <div class="lay-tabs-item">5</div>
+          <div class="lay-tabs-item">6</div>
         </div>
       </div>
 
       <h2>打乱标签顺序：</h2>
-      <div class="layui-tabs" lay-options="{closable: true}">
-        <ul class="layui-tabs-header">
+      <div class="lay-tabs" lay-options="{closable: true}">
+        <ul class="lay-tabs-header">
           <li lay-id="fff">Tab6</li>
           <li lay-id="eee">Tab5</li>
           <li lay-id="ccc">Tab3</li>
@@ -118,20 +112,20 @@
           <li lay-id="aaa">Tab1</li>
           <li lay-id="ddd">Tab4</li>
         </ul>
-        <div class="layui-tabs-body">
-          <div class="layui-tabs-item" lay-id="aaa">Tab Content-1</div>
-          <div class="layui-tabs-item" lay-id="bbb">Tab Content-2</div>
-          <div class="layui-tabs-item" lay-id="ccc">Tab Content-3</div>
-          <div class="layui-tabs-item" lay-id="ddd">Tab Content-4</div>
-          <div class="layui-tabs-item" lay-id="eee">Tab Content-5</div>
-          <div class="layui-tabs-item" lay-id="fff">Tab Content-6</div>
+        <div class="lay-tabs-body">
+          <div class="lay-tabs-item" lay-id="aaa">Tab Content-1</div>
+          <div class="lay-tabs-item" lay-id="bbb">Tab Content-2</div>
+          <div class="lay-tabs-item" lay-id="ccc">Tab Content-3</div>
+          <div class="lay-tabs-item" lay-id="ddd">Tab Content-4</div>
+          <div class="lay-tabs-item" lay-id="eee">Tab Content-5</div>
+          <div class="lay-tabs-item" lay-id="fff">Tab Content-6</div>
         </div>
       </div>
 
       <h2>标签 HASH 定位</h2>
-      <div class="layui-tabs layui-hide-v" id="demoTabs-hash">
-        <ul class="layui-tabs-header">
-          <li lay-id="A1" class="layui-this">
+      <div class="lay-tabs lay-hide-v" id="demoTabs-hash">
+        <ul class="lay-tabs-header">
+          <li lay-id="A1" class="lay-this">
             <a href="#A1">标题题题题题题1</a>
           </li>
           <li lay-id="A2"><a href="#A2">标题题题2</a></li>
@@ -145,52 +139,49 @@
       </div>
 
       <h2>标签嵌套</h2>
-      <div
-        class="layui-tabs layui-tabs-card"
-        lay-options="{headerMode:'normal'}"
-      >
-        <ul class="layui-tabs-header">
-          <li class="layui-this">标题1</li>
+      <div class="lay-tabs lay-tabs-card" lay-options="{headerMode:'normal'}">
+        <ul class="lay-tabs-header">
+          <li class="lay-this">标题1</li>
           <li>标题2</li>
           <li>标题3</li>
         </ul>
-        <div class="layui-tabs-body" style="padding: 16px">
-          <div class="layui-tabs-item layui-show">
-            <div class="layui-tabs" lay-options="{headerMode:'normal'}">
-              <ul class="layui-tabs-header">
-                <li class="layui-this">标题 1-1</li>
+        <div class="lay-tabs-body" style="padding: 16px">
+          <div class="lay-tabs-item lay-show">
+            <div class="lay-tabs" lay-options="{headerMode:'normal'}">
+              <ul class="lay-tabs-header">
+                <li class="lay-this">标题 1-1</li>
                 <li>标题 1-2</li>
               </ul>
-              <div class="layui-tabs-body">
-                <div class="layui-tabs-item layui-show">1-1</div>
-                <div class="layui-tabs-item">1-2</div>
+              <div class="lay-tabs-body">
+                <div class="lay-tabs-item lay-show">1-1</div>
+                <div class="lay-tabs-item">1-2</div>
               </div>
             </div>
           </div>
-          <div class="layui-tabs-item">
-            <div class="layui-tabs" lay-options="{headerMode:'normal'}">
-              <ul class="layui-tabs-header">
-                <li class="layui-this">标题 2-1</li>
+          <div class="lay-tabs-item">
+            <div class="lay-tabs" lay-options="{headerMode:'normal'}">
+              <ul class="lay-tabs-header">
+                <li class="lay-this">标题 2-1</li>
                 <li>标题 2-2</li>
                 <li>标题 2-3</li>
               </ul>
-              <div class="layui-tabs-body">
-                <div class="layui-tabs-item layui-show">2-1</div>
-                <div class="layui-tabs-item">2-2</div>
-                <div class="layui-tabs-item">2-3</div>
+              <div class="lay-tabs-body">
+                <div class="lay-tabs-item lay-show">2-1</div>
+                <div class="lay-tabs-item">2-2</div>
+                <div class="lay-tabs-item">2-3</div>
               </div>
             </div>
           </div>
-          <div class="layui-tabs-item">3</div>
-          <div class="layui-tabs-item">4</div>
-          <div class="layui-tabs-item">5</div>
+          <div class="lay-tabs-item">3</div>
+          <div class="lay-tabs-item">4</div>
+          <div class="lay-tabs-item">5</div>
         </div>
       </div>
 
       <h2>给任意元素绑定 tabs 切换功能</h2>
       <div id="demoTabs3">
         <style>
-          #demoTabsHeader .layui-btn.layui-this {
+          #demoTabsHeader .lay-btn.lay-this {
             border-color: #eee;
             color: #000;
             background: none;
@@ -199,13 +190,13 @@
             display: none;
           }
         </style>
-        <div class="layui-btn-container" id="demoTabsHeader">
-          <button class="layui-btn layui-this">标题 1</button>
-          <button class="layui-btn">标题 2</button>
-          <button class="layui-btn">标题 3</button>
+        <div class="lay-btn-container" id="demoTabsHeader">
+          <button class="lay-btn lay-this">标题 1</button>
+          <button class="lay-btn">标题 2</button>
+          <button class="lay-btn">标题 3</button>
         </div>
-        <div class="layui-panel layui-padding-3" id="demoTabsBody">
-          <div class="test-item layui-show">内容 111</div>
+        <div class="lay-panel lay-padding-3" id="demoTabsBody">
+          <div class="test-item lay-show">内容 111</div>
           <div class="test-item">内容 222</div>
           <div class="test-item">内容 333</div>
         </div>
@@ -293,7 +284,7 @@
 
         // 为标签头添加上下文菜单
         var dropdownInst = dropdown.render({
-          elem: '#demoTabs1 .layui-tabs-header>li',
+          elem: '#demoTabs1 .lay-tabs-header>li',
           trigger: 'contextmenu',
           data: [
             {
@@ -361,7 +352,7 @@
             { content: 'Tab content 3' },
           ],
           // index: 1, // 初始选中项
-          // className: 'layui-tabs-card',
+          // className: 'lay-tabs-card',
           closable: true,
         });
 

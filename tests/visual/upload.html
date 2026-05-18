@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
 
     <style>
-      .layui-upload-img {
+      .lay-upload-img {
         width: 92px;
         height: 92px;
         margin: 0 10px 10px 0;
@@ -21,41 +21,41 @@
       }
     </style>
   </head>
-  <body class="layui-padding-5">
-    <div class="layui-upload">
-      <button type="button" class="layui-btn" id="test1" name="123">
+  <body class="lay-padding-5">
+    <div class="lay-upload">
+      <button type="button" class="lay-btn" id="test1" name="123">
         上传图片
       </button>
 
-      <div class="layui-upload-list">
-        <img class="layui-upload-img" src="" id="demo1" />
+      <div class="lay-upload-list">
+        <img class="lay-upload-img" src="" id="demo1" />
         <p id="demoText"></p>
       </div>
     </div>
 
     <div
-      class="layui-progress layui-progress-big"
+      class="lay-progress lay-progress-big"
       lay-showPercent="yes"
       lay-filter="demo"
     >
-      <div class="layui-progress-bar" lay-percent=""></div>
+      <div class="lay-progress-bar" lay-percent=""></div>
     </div>
 
     <hr />
 
-    <div class="layui-upload">
-      <button type="button" class="layui-btn" id="test2">多图片上传</button>
-      <div class="layui-upload-list" id="demo2"></div>
+    <div class="lay-upload">
+      <button type="button" class="lay-btn" id="test2">多图片上传</button>
+      <div class="lay-upload-list" id="demo2"></div>
     </div>
 
     <hr />
 
-    <div class="layui-upload">
-      <button type="button" class="layui-btn layui-btn-normal" id="testList">
+    <div class="lay-upload">
+      <button type="button" class="lay-btn lay-btn-normal" id="testList">
         选择多文件
       </button>
-      <div class="layui-upload-list">
-        <table class="layui-table">
+      <div class="lay-upload-list">
+        <table class="lay-table">
           <thead>
             <th>文件名</th>
             <th>大小</th>
@@ -65,47 +65,47 @@
           <tbody id="demoList"></tbody>
         </table>
       </div>
-      <button type="button" class="layui-btn" id="testListAction">
+      <button type="button" class="lay-btn" id="testListAction">
         开始上传
       </button>
     </div>
 
     <hr />
 
-    <div class="layui-btn-container">
+    <div class="lay-btn-container">
       <button
         type="button"
-        class="layui-btn test333"
+        class="lay-btn test333"
         lay-data="{size:10,url:'a'}"
         id="test3"
       >
-        <i class="layui-icon">&#xe67c;</i>上传文件
+        <i class="lay-icon">&#xe67c;</i>上传文件
       </button>
       <button
         type="button"
-        class="layui-btn layui-btn-primary test333"
+        class="lay-btn lay-btn-primary test333"
         lay-data="{size:20,url:'b'}"
         id="test33"
       >
-        <i class="layui-icon">&#xe67c;</i>换个样式
+        <i class="lay-icon">&#xe67c;</i>换个样式
       </button>
 
-      <button type="button" class="layui-btn" id="test4">
-        <i class="layui-icon">&#xe67c;</i>上传视频
+      <button type="button" class="lay-btn" id="test4">
+        <i class="lay-icon">&#xe67c;</i>上传视频
       </button>
-      <button type="button" class="layui-btn" id="test5">
-        <i class="layui-icon">&#xe67c;</i>上传音频
+      <button type="button" class="lay-btn" id="test5">
+        <i class="lay-icon">&#xe67c;</i>上传音频
       </button>
     </div>
 
     <hr />
 
-    <div class="layui-btn-container">
-      <button class="layui-btn testm" lay-data="{url: '/a/'}">
+    <div class="lay-btn-container">
+      <button class="lay-btn testm" lay-data="{url: '/a/'}">
         参数设在元素上
       </button>
       <button
-        class="layui-btn testm"
+        class="lay-btn testm"
         lay-data="{url: '/b/', accept: 'file',size:5}"
       >
         参数设在元素上
@@ -114,18 +114,18 @@
 
     <hr />
 
-    <div class="layui-btn-container">
-      <button type="button" class="layui-btn layui-btn-normal" id="test6">
+    <div class="lay-btn-container">
+      <button type="button" class="lay-btn lay-btn-normal" id="test6">
         选择文件
       </button>
-      <button type="button" class="layui-btn" id="test7">开始上传</button>
+      <button type="button" class="lay-btn" id="test7">开始上传</button>
     </div>
 
     <hr />
     <br />
 
-    <div class="layui-upload-drag" id="test8">
-      <i class="layui-icon">&#xe67c;</i>
+    <div class="lay-upload-drag" id="test8">
+      <i class="lay-icon">&#xe67c;</i>
       <p>点击上传，或将文件拖拽到此处</p>
     </div>
 
@@ -186,7 +186,7 @@
             //演示失败状态，并实现重传
             var demoText = $('#demoText');
             demoText.html(
-              '<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>',
+              '<span style="color: #FF5722;">上传失败</span> <a class="lay-btn lay-btn-mini demo-reload">重试</a>',
             );
             demoText.find('.demo-reload').on('click', () => {
               uploadInst.upload();
@@ -225,7 +225,7 @@
                   result +
                   '" alt="' +
                   file.name +
-                  '" class="layui-upload-img">',
+                  '" class="lay-upload-img">',
               );
             });
 
@@ -260,12 +260,12 @@
                   '<tr id="upload-' + index + '">',
                   '<td>' + file.name + '</td>',
                   '<td>' + (file.size / 1014).toFixed(1) + 'kb</td>',
-                  '<td><div class="layui-progress" lay-filter="progress-' +
+                  '<td><div class="lay-progress" lay-filter="progress-' +
                     index +
-                    '"><div class="layui-progress-bar" lay-percent=""></div></div></td>',
+                    '"><div class="lay-progress-bar" lay-percent=""></div></div></td>',
                   '<td>',
-                  '<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>',
-                  '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>',
+                  '<button class="lay-btn lay-btn-xs demo-reload lay-hide">重传</button>',
+                  '<button class="lay-btn lay-btn-xs lay-btn-danger demo-delete">删除</button>',
                   '</td>',
                   '</tr>',
                 ].join(''),
@@ -303,7 +303,7 @@
           error: (index, upload) => {
             var tr = demoListView.find('tr#upload-' + index),
               tds = tr.children();
-            tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+            tds.eq(3).find('.demo-reload').removeClass('lay-hide'); //显示重传
           },
           progress: (n, elem, e, index) => {
             console.log(n);
@@ -370,7 +370,7 @@
           choose: function (obj) {
             obj.preview((index, file) => {
               this.elem.after(
-                '<span class="layui-inline layui-upload-choose">' +
+                '<span class="lay-inline lay-upload-choose">' +
                   file.name +
                   '</span>',
               );

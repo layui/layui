@@ -1,7 +1,7 @@
-<div class="layui-upload">
-  <button type="button" class="layui-btn layui-btn-normal" id="ID-upload-demo-files">选择多文件</button> 
-  <div class="layui-upload-list">
-    <table class="layui-table">
+<div class="lay-upload">
+  <button type="button" class="lay-btn lay-btn-normal" id="ID-upload-demo-files">选择多文件</button> 
+  <div class="lay-upload-list">
+    <table class="lay-table">
       <colgroup>
         <col style="min-width: 100px;">
         <col width="150">
@@ -17,7 +17,7 @@
       <tbody id="ID-upload-demo-files-list"></tbody>
     </table>
   </div>
-  <button type="button" class="layui-btn" id="ID-upload-demo-files-action">开始上传</button>
+  <button type="button" class="lay-btn" id="ID-upload-demo-files-action">开始上传</button>
 </div>
 
 <!-- import layui -->
@@ -46,10 +46,10 @@ layui.use(function(){
         var tr = $(['<tr id="upload-'+ index +'">',
           '<td>'+ file.name +'</td>',
           '<td>'+ (file.size/1024).toFixed(1) +'kb</td>',
-          '<td><div class="layui-progress" lay-filter="progress-demo-'+ index +'"><div class="layui-progress-bar" lay-percent=""></div></div></td>',
+          '<td><div class="lay-progress" lay-filter="progress-demo-'+ index +'"><div class="lay-progress-bar" lay-percent=""></div></div></td>',
           '<td>',
-            '<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>',
-            '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>',
+            '<button class="lay-btn lay-btn-xs demo-reload lay-hide">重传</button>',
+            '<button class="lay-btn lay-btn-xs lay-btn-danger demo-delete">删除</button>',
           '</td>',
         '</tr>'].join(''));
         
@@ -89,7 +89,7 @@ layui.use(function(){
       var tr = that.elemList.find('tr#upload-'+ index);
       var tds = tr.children();
        // 显示重传
-      tds.eq(3).find('.demo-reload').removeClass('layui-hide');
+      tds.eq(3).find('.demo-reload').removeClass('lay-hide');
     },
     progress: function(n, elem, e, index){ // 注意：index 参数为 layui 2.6.6 新增
       element.progress('progress-demo-'+ index, n + '%'); // 执行进度条。n 即为返回的进度百分比
@@ -97,3 +97,4 @@ layui.use(function(){
   });
 });
 </script>
+

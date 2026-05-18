@@ -1,7 +1,7 @@
-<div class="layui-upload-drag" style="display: block;" id="ID-upload-demo-drag">
-  <i class="layui-icon layui-icon-upload"></i> 
+<div class="lay-upload-drag" style="display: block;" id="ID-upload-demo-drag">
+  <i class="lay-icon lay-icon-upload"></i> 
   <div>点击上传，或将文件拖拽到此处</div>
-  <div class="layui-hide" id="ID-upload-demo-preview">
+  <div class="lay-hide" id="ID-upload-demo-preview">
     <hr> <img src="" alt="上传成功后渲染" style="max-width: 100%">
   </div>
 </div>
@@ -18,10 +18,11 @@ layui.use(function(){
     url: '', // 实际使用时改成您自己的上传接口即可。
     done: function(res){
       layer.msg('上传成功');
-      $('#ID-upload-demo-preview').removeClass('layui-hide')
+      $('#ID-upload-demo-preview').removeClass('lay-hide')
       .find('img').attr('src', res.files.file);
       console.log(res)
     }
   });
 });
 </script>
+

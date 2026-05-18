@@ -109,7 +109,7 @@ layui.use(function(){
 
 ```
 <!-- 此处 `lay-options` 定义基础属性 -->
-<table class="layui-table" lay-options="{url: ''}" id="test">
+<table class="lay-table" lay-options="{url: ''}" id="test">
   <thead>
     <tr>
       <!-- 此处 `lay-options` 定义表头属性 -->
@@ -221,10 +221,10 @@ table 的属性众多，我们大致分为以下几种：
 
 - 参数 `id` : table 渲染时的 `id` 属性值
 - 参数 `options` : 为基础属性选项
-- 参数 `deep` <sup>2.6+</sup> : 是否采用深度重载（即重载时始终携带初始时及上一次重载时的参数），默认 false。<div style="margin-top:5px;"><button type="button" class="layui-btn layui-btn-sm layui-btn-primary" lay-layer="{content: '#DOCS-table-reload-comp'}">2.6 之前版本的 <code>table.reload()</code> 方法兼容性说明</button></div>
+- 参数 `deep` <sup>2.6+</sup> : 是否采用深度重载（即重载时始终携带初始时及上一次重载时的参数），默认 false。<div style="margin-top:5px;"><button type="button" class="lay-btn lay-btn-sm lay-btn-primary" lay-layer="{content: '#DOCS-table-reload-comp'}">2.6 之前版本的 <code>table.reload()</code> 方法兼容性说明</button></div>
 
 <div style="display: none;" id="DOCS-table-reload-comp">
-  <div class="layui-text">
+  <div class="lay-text">
     <p>由于 2.6 之前的版本是采用深度重载，所以如果您之前利用了该机制，那么升级 Layui 时，需通过以下任一方式进行相应的兼容性适配：</p>
     <strong>方法一：</strong>
     <p>追加参数兼容：<pre><code>table.reload(id, options, true);</code></pre></p>
@@ -598,10 +598,10 @@ table.hideCol('test', false); // `true` or `false`
 
 <!-- 工具栏模板 -->
 <script type="text/html" id="toolbarDemo">
-  <div class="layui-btn-container">
-    <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
-    <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
-    <button class="layui-btn layui-btn-sm" lay-event="update">编辑</button>
+  <div class="lay-btn-container">
+    <button class="lay-btn lay-btn-sm" lay-event="add">添加</button>
+    <button class="lay-btn lay-btn-sm" lay-event="delete">删除</button>
+    <button class="lay-btn lay-btn-sm" lay-event="update">编辑</button>
   </div>
 </script>
 
@@ -687,7 +687,7 @@ var table = layui.table;
 table.render({
   elem: '#test',
   cols: [[
-    {field:'username', title:'用户名 <i class="layui-icon layui-icon-username" lay-event="username"></i>'
+    {field:'username', title:'用户名 <i class="lay-icon lay-icon-username" lay-event="username"></i>'
   ]]
   // … // 其他属性
 });
@@ -793,7 +793,7 @@ table.on('rowDouble(test)', function(obj) {
 
 右键单击行时触发。
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['code', 'preview'], tools: ['full'], toolsEvent: function(obj){
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['code', 'preview'], tools: ['full'], toolsEvent: function(obj){
   if(obj.type === 'full'){
     layui.table.resize('ID-table-onrowContextmenu');
   }
@@ -851,13 +851,13 @@ table.on('edit(test)', function(obj){
 ```html
 <!-- 表头某列 templet 属性指向的模板 -->
 <script type="text/html" id="toolEventDemo">
-  <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
-  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  <a class="lay-btn lay-btn-xs" lay-event="detail">查看</a>
+  <a class="lay-btn lay-btn-xs" lay-event="edit">编辑</a>
+  <a class="lay-btn lay-btn-danger lay-btn-xs" lay-event="del">删除</a>
 
   <!-- 支持任意的 laytpl 组件语法，如： -->
   {{ if (d.auth > 2) { }}
-    <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+    <a class="lay-btn lay-btn-xs" lay-event="check">审核</a>
   {{ } }}
 </script>
 
@@ -996,6 +996,7 @@ table.on('pagebar(test)', function(obj){
 ## 小贴士
 
 若表头数量太多及每页呈现的数据量太大，为了性能考虑，建议采用 [静态表格](#demo-static) 渲染，配合 [laypage](../laypage/#options) 组件实现分页。
+
 
 
 

@@ -9,14 +9,14 @@
   <link href="{{= d.layui[2].cdn.css }}" rel="stylesheet">
   <style>
     /* 自定义样式  */
-    .layui-table-testcss .layui-table-header,
-    .layui-table-testcss thead tr{background-color: #F8FCF9; color: #16BAAA}
-    .layui-form-testcss > div{margin-bottom: 6px;}
+    .lay-table-testcss .lay-table-header,
+    .lay-table-testcss thead tr{background-color: #F8FCF9; color: #16BAAA}
+    .lay-form-testcss > div{margin-bottom: 6px;}
   </style>
 </head>
 <body>
   <div style="padding: 16px;"> 
-    <table class="layui-hide" id="ID-table-demo-css"></table>
+    <table class="lay-hide" id="ID-table-demo-css"></table>
   </div>
   <script type="text/html" id="ID-table-demo-css-user">{{!
     <ul>
@@ -27,15 +27,15 @@
     </ul>
   !}}</script>
   <script type="text/html" id="ID-table-demo-css-tool">{{!
-    <div class="layui-form layui-form-testcss">
-      <div class="layui-input-wrap">
-        <input name="AAA" value="{{= d.AAA || '' }}" lay-affix="clear" placeholder="表单 1" class="layui-input" >
+    <div class="lay-form lay-form-testcss">
+      <div class="lay-input-wrap">
+        <input name="AAA" value="{{= d.AAA || '' }}" lay-affix="clear" placeholder="表单 1" class="lay-input" >
       </div>
-      <div class="layui-input-wrap">
-        <input name="BBB" value="{{= d.BBB || '' }}" lay-affix="clear" placeholder="表单 2" class="layui-input" >
+      <div class="lay-input-wrap">
+        <input name="BBB" value="{{= d.BBB || '' }}" lay-affix="clear" placeholder="表单 2" class="lay-input" >
       </div>
       <div>
-        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="demo-css-submit">确认</button>
+        <button class="lay-btn lay-btn-fluid" lay-submit lay-filter="demo-css-submit">确认</button>
       </div>
     </div>
   !}}</script>
@@ -54,9 +54,9 @@
       height: 'full-35',
       lineStyle: 'height: 151px;', // 定义表格的多行样式
       css: [ // 直接给当前表格主容器重置 css 样式
-        '.layui-table-page{text-align: center;}' // 让分页栏居中
+        '.lay-table-page{text-align: center;}' // 让分页栏居中
       ].join(''),
-      className: 'layui-table-testcss', // 用于给表格主容器追加 css 类名
+      className: 'lay-table-testcss', // 用于给表格主容器追加 css 类名
       cols: [[
         {field:'username', width:160, title: '用户', templet: '#ID-table-demo-css-user'},
         // 设置单元格样式
@@ -81,3 +81,4 @@
   </script>
 </body>
 </html>
+

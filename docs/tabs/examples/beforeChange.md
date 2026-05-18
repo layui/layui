@@ -1,5 +1,5 @@
-<div class="layui-tabs layui-hide-v" id="demoTabsBeforeChange">
-  <ul class="layui-tabs-header">
+<div class="lay-tabs lay-hide-v" id="demoTabsBeforeChange">
+  <ul class="lay-tabs-header">
     <li lay-id="aaa">Tab1</li>
     <li lay-id="bbb">Tab2</li>
     <li lay-id="ccc">Tab3</li>
@@ -7,13 +7,13 @@
     <li lay-id="eee">Tab5</li>
     <li lay-id="fff">Tab6</li>
   </ul>
-  <div class="layui-tabs-body">
-    <div class="layui-tabs-item">Tab Content-1</div>
-    <div class="layui-tabs-item">Tab Content-2</div>
-    <div class="layui-tabs-item">Tab Content-3</div>
-    <div class="layui-tabs-item">Tab Content-4</div>
-    <div class="layui-tabs-item">Tab Content-5</div>
-    <div class="layui-tabs-item">Tab Content-6</div>
+  <div class="lay-tabs-body">
+    <div class="lay-tabs-item">Tab Content-1</div>
+    <div class="lay-tabs-item">Tab Content-2</div>
+    <div class="lay-tabs-item">Tab Content-3</div>
+    <div class="lay-tabs-item">Tab Content-4</div>
+    <div class="lay-tabs-item">Tab Content-5</div>
+    <div class="lay-tabs-item">Tab Content-6</div>
   </div>
 </div>
 
@@ -42,3 +42,4 @@ layui.use(function() {
   });
 });
 </script>
+

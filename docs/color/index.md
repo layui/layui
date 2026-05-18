@@ -9,21 +9,21 @@ toc: true
 
 <h2 id="primary" lay-toc="">基色调</h2>
 
-<div class="layui-row layui-col-space15 ws-docs-color">
-  <div class="layui-col-sm4">
-    <div class="layui-bg-green">
+<div class="lay-row lay-col-space15 ws-docs-color">
+  <div class="lay-col-sm4">
+    <div class="lay-bg-green">
       <p>#16baaa</p>
       <p>蓝绿色</p>
     </div>
   </div>
-  <div class="layui-col-sm4">
+  <div class="lay-col-sm4">
     <div style="background-color: #16b777;">
       <p>#16b777</p>
       <p>清新绿</p>
     </div>
   </div>
-  <div class="layui-col-sm4">
-    <div class="layui-bg-blue">
+  <div class="lay-col-sm4">
+    <div class="lay-bg-blue">
       <p>#1e9fff</p>
       <p>经典蓝</p>
     </div>
@@ -35,27 +35,27 @@ Layui 选取以象征清新与包容的「蓝绿色」作为主色调，它介�
 
 <h2 id="secondary" lay-toc="">辅色调</h2>
 
-<div class="layui-row layui-col-space15 ws-docs-color">
-  <div class="layui-col-sm3">
-    <div class="layui-bg-red">
+<div class="lay-row lay-col-space15 ws-docs-color">
+  <div class="lay-col-sm3">
+    <div class="lay-bg-red">
       <p>#ff5722</p>
       <p>错误 - Danger</p>
     </div>
   </div>
-  <div class="layui-col-sm3">
-    <div class="layui-bg-orange">
+  <div class="lay-col-sm3">
+    <div class="lay-bg-orange">
       <p>#ffb800</p>
       <p>警示 - Warning</p>
     </div>
   </div>
   
-  <div class="layui-col-sm3">
+  <div class="lay-col-sm3">
     <div style="background-color: #16b777;">
       <p>#16b777</p>
       <p>成功 - Success</p>
     </div>
   </div>
-  <div class="layui-col-sm3">
+  <div class="lay-col-sm3">
     <div style="background-color: #31bdec;">
       <p>#31bdec</p>
       <p>引导 - Info</p>
@@ -67,37 +67,37 @@ Layui 选取以象征清新与包容的「蓝绿色」作为主色调，它介�
 
 <h2 id="neutral" lay-toc="">中色调</h2>
 
-<div class="layui-row ws-docs-color ws-docs-necolor">
-  <div class="layui-col-md6">
+<div class="lay-row ws-docs-color ws-docs-necolor">
+  <div class="lay-col-md6">
     <div style="background-color: #FAFAFA;">
       <p>#fafafa</p>
     </div>
   </div>
-  <div class="layui-col-md6">
+  <div class="lay-col-md6">
     <div style="background-color: #f6f6f6;"><p>#f7f7f7</p></div>
   </div>
-  <div class="layui-col-md2">
+  <div class="lay-col-md2">
     <div style="background-color: #eeeeee;"><p>#eeeeee</p></div>
   </div>
-  <div class="layui-col-md2">
+  <div class="lay-col-md2">
     <div style="background-color: #e2e2e2;"><p>#e2e2e2</p></div>
   </div>
-  <div class="layui-col-md2">
+  <div class="lay-col-md2">
     <div style="background-color: #dddddd;"><p>#dddddd</p></div>
   </div>
-  <div class="layui-col-md2">
+  <div class="lay-col-md2">
     <div style="background-color: #d2d2d2;"><p>#d2d2d2</p></div>
   </div>
-  <div class="layui-col-md2">
+  <div class="lay-col-md2">
     <div style="background-color: #cccccc;"><p>#cccccc</p></div>
   </div>
-  <div class="layui-col-md2">
+  <div class="lay-col-md2">
     <div style="background-color: #c2c2c2;"><p>#c2c2c2</p></div>
   </div>
-  <div class="layui-col-md6">
-    <div class="layui-bg-black"><p>#2f363c</p></div>
+  <div class="lay-col-md6">
+    <div class="lay-bg-black"><p>#2f363c</p></div>
   </div>
-  <div class="layui-col-md6">
+  <div class="lay-col-md6">
     <div style="background-color: #23292e; color: #fff;"><p>#23292e</p></div>
   </div>
 </div>
@@ -106,26 +106,26 @@ Layui 选取以象征清新与包容的「蓝绿色」作为主色调，它介�
 
 <h2 id="seven" lay-toc="">七色调</h2>
 
-<div class="layui-row ws-docs-color ws-docs-bgcolor">
-  <div class="layui-bg-red">
+<div class="lay-row ws-docs-color ws-docs-bgcolor">
+  <div class="lay-bg-red">
     #ff5722 - 红
   </div>
-  <div class="layui-bg-orange">
+  <div class="lay-bg-orange">
     #ffb800 - 橙
   </div>
-  <div class="layui-bg-green">
+  <div class="lay-bg-green">
     #16baaa - 绿
   </div>
-  <div class="layui-bg-blue">
+  <div class="lay-bg-blue">
     #1e9fff - 蓝
   </div>
-  <div class="layui-bg-purple">
+  <div class="lay-bg-purple">
     #a233c6 - 紫
   </div>
-  <div class="layui-bg-black">
+  <div class="lay-bg-black">
     #2f363c - 深
   </div>
-  <div class="layui-bg-gray">
+  <div class="lay-bg-gray">
     #fafafa - 浅
   </div>
 </div>
@@ -137,3 +137,4 @@ Layui 的色调基础，除了前面提到的主辅中色之外，还建立在�
 ## 标语
 
 > 不热衷于视觉设计的开发者不是一个好作家。 —— 贤心
+

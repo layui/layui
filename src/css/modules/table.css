@@ -1,65 +1,65 @@
 /** 表格 **/
-.layui-table {
+.lay-table {
   width: 100%;
   margin: 10px 0;
   background-color: #fff;
   color: #5f5f5f;
 }
-.layui-table tr {
+.lay-table tr {
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
 }
-.layui-table th {
+.lay-table th {
   text-align: left;
   font-weight: 600;
 }
 
-.layui-table-mend {
+.lay-table-mend {
   background-color: #fff;
 }
-.layui-table-hover,
-.layui-table-click,
-.layui-table[lay-even] tbody tr:nth-child(even) {
+.lay-table-hover,
+.lay-table-click,
+.lay-table[lay-even] tbody tr:nth-child(even) {
   background-color: #f8f8f8;
 }
-.layui-table-checked {
+.lay-table-checked {
   background-color: #dbfbf0;
 }
-.layui-table-checked.layui-table-hover,
-.layui-table-checked.layui-table-click,
-.layui-table[lay-even] tbody tr:nth-child(even).layui-table-checked {
+.lay-table-checked.lay-table-hover,
+.lay-table-checked.lay-table-click,
+.lay-table[lay-even] tbody tr:nth-child(even).lay-table-checked {
   background-color: #abf8dd;
 }
-.layui-table-disabled-transition *,
-.layui-table-disabled-transition *:before,
-.layui-table-disabled-transition *:after {
+.lay-table-disabled-transition *,
+.lay-table-disabled-transition *:before,
+.lay-table-disabled-transition *:after {
   -webkit-transition: none !important;
   -moz-transition: none !important;
   -o-transition: none !important;
   transition: none !important;
 }
 
-.layui-table th,
-.layui-table td,
-.layui-table[lay-skin='line'],
-.layui-table[lay-skin='row'],
-.layui-table-view,
-.layui-table-tool,
-.layui-table-header,
-.layui-table-col-set,
-.layui-table-total,
-.layui-table-page,
-.layui-table-fixed-r,
-.layui-table-mend,
-.layui-table-tips-main,
-.layui-table-grid-down {
+.lay-table th,
+.lay-table td,
+.lay-table[lay-skin='line'],
+.lay-table[lay-skin='row'],
+.lay-table-view,
+.lay-table-tool,
+.lay-table-header,
+.lay-table-col-set,
+.lay-table-total,
+.lay-table-page,
+.lay-table-fixed-r,
+.lay-table-mend,
+.lay-table-tips-main,
+.lay-table-grid-down {
   border-width: 1px;
   border-style: solid;
   border-color: var(--lay-border-color);
 }
 
-.layui-table th,
-.layui-table td {
+.lay-table th,
+.lay-table td {
   position: relative;
   padding: 9px 15px;
   min-height: 20px;
@@ -67,48 +67,48 @@
   font-size: 14px;
 }
 
-.layui-table[lay-skin='line'] th,
-.layui-table[lay-skin='line'] td {
+.lay-table[lay-skin='line'] th,
+.lay-table[lay-skin='line'] td {
   border-width: 0;
   border-bottom-width: 1px;
 }
-.layui-table[lay-skin='row'] th,
-.layui-table[lay-skin='row'] td {
+.lay-table[lay-skin='row'] th,
+.lay-table[lay-skin='row'] td {
   border-width: 0;
   border-right-width: 1px;
 }
-.layui-table[lay-skin='nob'] th,
-.layui-table[lay-skin='nob'] td {
+.lay-table[lay-skin='nob'] th,
+.lay-table[lay-skin='nob'] td {
   border: none;
 }
 
-.layui-table img {
+.lay-table img {
   max-width: 100px;
 }
 
 /* 大表格 */
-.layui-table[lay-size='lg'] th,
-.layui-table[lay-size='lg'] td {
+.lay-table[lay-size='lg'] th,
+.lay-table[lay-size='lg'] td {
   padding-top: 15px;
   padding-right: 30px;
   padding-bottom: 15px;
   padding-left: 30px;
 }
-.layui-table-view .layui-table[lay-size='lg'] .layui-table-cell {
+.lay-table-view .lay-table[lay-size='lg'] .lay-table-cell {
   height: 50px;
   line-height: 40px;
 }
 
 /* 小表格 */
-.layui-table[lay-size='sm'] th,
-.layui-table[lay-size='sm'] td {
+.lay-table[lay-size='sm'] th,
+.lay-table[lay-size='sm'] td {
   padding-top: 5px;
   padding-right: 10px;
   padding-bottom: 5px;
   padding-left: 10px;
   font-size: 12px;
 }
-.layui-table-view .layui-table[lay-size='sm'] .layui-table-cell {
+.lay-table-view .lay-table[lay-size='sm'] .lay-table-cell {
   height: 30px;
   line-height: 20px;
   padding-top: 5px;
@@ -117,20 +117,20 @@
 }
 
 /* 数据表格 */
-.layui-table[lay-data],
-.layui-table[lay-options] {
+.lay-table[lay-data],
+.lay-table[lay-options] {
   display: none;
 }
-.layui-table-box {
+.lay-table-box {
   position: relative;
   overflow: hidden;
 }
-.layui-table-view {
+.lay-table-view {
   clear: both;
   position: relative;
   border-right: none;
 }
-.layui-table-view:after {
+.lay-table-view:after {
   content: '';
   position: absolute;
   top: 0;
@@ -140,39 +140,39 @@
   background-color: var(--lay-gray-300);
   z-index: 101;
 }
-.layui-table-view .layui-table {
+.lay-table-view .lay-table {
   position: relative;
   width: auto;
   margin: 0;
   border: 0;
   border-collapse: separate;
 }
-.layui-table-view .layui-table[lay-skin='line'] {
+.lay-table-view .lay-table[lay-skin='line'] {
   border-width: 0;
   border-right-width: 1px;
 }
-.layui-table-view .layui-table[lay-skin='row'] {
+.lay-table-view .lay-table[lay-skin='row'] {
   border-width: 0;
   border-bottom-width: 1px;
 }
-.layui-table-view .layui-table th,
-.layui-table-view .layui-table td {
+.lay-table-view .lay-table th,
+.lay-table-view .lay-table td {
   padding: 0;
   border-top: none;
   border-left: none;
 }
-.layui-table-view .layui-table th [lay-event],
-.layui-table-view .layui-table th.layui-unselect .layui-table-cell span {
+.lay-table-view .lay-table th [lay-event],
+.lay-table-view .lay-table th.lay-unselect .lay-table-cell span {
   cursor: pointer;
 }
-.layui-table-view .layui-table th span,
-.layui-table-view .layui-table td {
+.lay-table-view .lay-table th span,
+.lay-table-view .lay-table td {
   cursor: default;
 }
-.layui-table-view .layui-table td[data-edit] {
+.lay-table-view .lay-table td[data-edit] {
   cursor: text;
 }
-.layui-table-view .layui-table td[data-edit]:hover:after {
+.lay-table-view .lay-table td[data-edit]:hover:after {
   position: absolute;
   left: 0;
   top: 0;
@@ -184,20 +184,20 @@
   content: '';
 }
 
-.layui-table-view .layui-form-checkbox[lay-skin='primary'] i {
+.lay-table-view .lay-form-checkbox[lay-skin='primary'] i {
   width: 18px;
   height: 18px;
   line-height: 16px;
 }
-.layui-table-view .layui-form-radio {
+.lay-table-view .lay-form-radio {
   line-height: 0;
   padding: 0;
 }
-.layui-table-view .layui-form-radio > i {
+.lay-table-view .lay-form-radio > i {
   margin: 0;
   font-size: 20px;
 }
-.layui-table-init {
+.lay-table-init {
   position: absolute;
   left: 0;
   top: 0;
@@ -210,27 +210,27 @@
   -moz-user-select: none;
   user-select: none;
 }
-.layui-table-loading-icon {
+.lay-table-loading-icon {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
 }
-.layui-table-loading-icon .layui-icon {
+.lay-table-loading-icon .lay-icon {
   font-size: 30px;
   color: #c2c2c2;
 }
-.layui-table-header {
+.lay-table-header {
   border-width: 0;
   border-bottom-width: 1px;
   overflow: hidden;
 }
-.layui-table-header .layui-table {
+.lay-table-header .lay-table {
   margin-bottom: -1px;
 }
 
-.layui-table-column {
+.lay-table-column {
   position: relative;
   width: 100%;
   min-height: 41px;
@@ -238,15 +238,15 @@
   border-width: 0;
   border-bottom-width: 1px;
 }
-.layui-table-column .layui-btn-container {
+.lay-table-column .lay-btn-container {
   margin-bottom: -8px;
 }
-.layui-table-column .layui-btn-container .layui-btn {
+.lay-table-column .lay-btn-container .lay-btn {
   margin-right: 8px;
   margin-bottom: 8px;
 }
 
-.layui-table-tool .layui-inline[lay-event] {
+.lay-table-tool .lay-inline[lay-event] {
   position: relative;
   width: 26px;
   height: 26px;
@@ -260,21 +260,21 @@
   -webkit-transition: 0.5s all;
   transition: 0.5s all;
 }
-.layui-table-tool .layui-inline[lay-event]:hover {
+.lay-table-tool .lay-inline[lay-event]:hover {
   border: 1px solid #999;
 }
-.layui-table-tool-temp {
+.lay-table-tool-temp {
   padding-right: 120px;
 }
-.layui-table-tool-self {
+.lay-table-tool-self {
   position: absolute;
   right: 17px;
   top: 10px;
 }
-.layui-table-tool .layui-table-tool-self .layui-inline[lay-event] {
+.lay-table-tool .lay-table-tool-self .lay-inline[lay-event] {
   margin: 0 0 0 10px;
 }
-.layui-table-tool-panel {
+.lay-table-tool-panel {
   position: absolute;
   top: 29px;
   left: -1px;
@@ -288,7 +288,7 @@
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
 }
-.layui-table-tool-panel li {
+.lay-table-tool-panel li {
   padding: 0 10px;
   margin: 0 !important;
   line-height: 30px;
@@ -299,29 +299,29 @@
   -webkit-transition: 0.5s all;
   transition: 0.5s all;
 }
-.layui-table-tool-panel li .layui-form-checkbox[lay-skin='primary'] {
+.lay-table-tool-panel li .lay-form-checkbox[lay-skin='primary'] {
   width: 100%;
 }
-.layui-table-tool-panel li:hover {
+.lay-table-tool-panel li:hover {
   background-color: #f8f8f8;
 }
-.layui-table-tool-panel li .layui-form-checkbox[lay-skin='primary'] {
+.lay-table-tool-panel li .lay-form-checkbox[lay-skin='primary'] {
   padding-left: 28px;
 }
-.layui-table-tool-panel li .layui-form-checkbox[lay-skin='primary'] i {
+.lay-table-tool-panel li .lay-form-checkbox[lay-skin='primary'] i {
   position: absolute;
   left: 0;
   top: 0;
 }
-.layui-table-tool-panel li .layui-form-checkbox[lay-skin='primary'] span {
+.lay-table-tool-panel li .lay-form-checkbox[lay-skin='primary'] span {
   padding: 0;
 }
-.layui-table-tool .layui-table-tool-self .layui-table-tool-panel {
+.lay-table-tool .lay-table-tool-self .lay-table-tool-panel {
   left: auto;
   right: -1px;
 }
 
-.layui-table-col-set {
+.lay-table-col-set {
   position: absolute;
   right: 0;
   top: 0;
@@ -332,43 +332,43 @@
   background-color: #fff;
 }
 
-.layui-table-sort {
+.lay-table-sort {
   width: 10px;
   height: 20px;
   margin-left: 5px;
   cursor: pointer !important;
 }
-.layui-table-sort .layui-edge {
+.lay-table-sort .lay-edge {
   position: absolute;
   left: 5px;
   border-width: 5px;
 }
-.layui-table-sort .layui-table-sort-asc {
+.lay-table-sort .lay-table-sort-asc {
   top: 3px;
   border-top: none;
   border-bottom-style: solid;
   border-bottom-color: #b2b2b2;
 }
-.layui-table-sort .layui-table-sort-asc:hover {
+.lay-table-sort .lay-table-sort-asc:hover {
   border-bottom-color: #5f5f5f;
 }
-.layui-table-sort .layui-table-sort-desc {
+.lay-table-sort .lay-table-sort-desc {
   bottom: 5px;
   border-bottom: none;
   border-top-style: solid;
   border-top-color: #b2b2b2;
 }
-.layui-table-sort .layui-table-sort-desc:hover {
+.lay-table-sort .lay-table-sort-desc:hover {
   border-top-color: #5f5f5f;
 }
-.layui-table-sort[lay-sort='asc'] .layui-table-sort-asc {
+.lay-table-sort[lay-sort='asc'] .lay-table-sort-asc {
   border-bottom-color: #000;
 }
-.layui-table-sort[lay-sort='desc'] .layui-table-sort-desc {
+.lay-table-sort[lay-sort='desc'] .lay-table-sort-desc {
   border-top-color: #000;
 }
 
-.layui-table-cell {
+.lay-table-cell {
   height: 38px;
   line-height: 28px;
   padding: 6px 15px;
@@ -378,23 +378,23 @@
   white-space: nowrap;
   box-sizing: border-box;
 }
-.layui-table-cell .layui-form-checkbox[lay-skin='primary'] {
+.lay-table-cell .lay-form-checkbox[lay-skin='primary'] {
   top: -1px;
   padding: 0;
 }
-.layui-table-cell .layui-form-checkbox[lay-skin='primary'] > div {
+.lay-table-cell .lay-form-checkbox[lay-skin='primary'] > div {
   padding-left: 24px;
 }
-.layui-table-cell .layui-table-link {
+.lay-table-cell .lay-table-link {
   color: #01aaed;
 }
-.layui-table-cell .layui-btn {
+.lay-table-cell .lay-btn {
   vertical-align: inherit;
 }
-.layui-table-cell[align='center'] {
+.lay-table-cell[align='center'] {
   -webkit-box-pack: center;
 }
-.layui-table-cell[align='right'] {
+.lay-table-cell[align='right'] {
   -webkit-box-pack: end;
 }
 
@@ -406,41 +406,41 @@
   -webkit-box-pack: center;
 }
 
-.layui-table-body {
+.lay-table-body {
   position: relative;
   overflow: auto;
   margin-bottom: -1px;
 }
-.layui-table-body .layui-none {
+.lay-table-body .lay-none {
   line-height: 26px;
   padding: 30px 15px;
   text-align: center;
   color: #999;
 }
-.layui-table-fixed {
+.lay-table-fixed {
   position: absolute;
   left: 0;
   top: 0;
   z-index: 101;
 }
-.layui-table-fixed .layui-table-body {
+.lay-table-fixed .lay-table-body {
   overflow: hidden;
 }
-.layui-table-fixed-l {
+.lay-table-fixed-l {
   box-shadow: 1px 0 8px rgba(0, 0, 0, 0.08);
 }
-.layui-table-fixed-r {
+.lay-table-fixed-r {
   left: auto;
   right: 0px;
   border-width: 0;
   border-left-width: 1px;
   box-shadow: -1px 0 8px rgba(0, 0, 0, 0.08);
 }
-.layui-table-fixed-r .layui-table-header {
+.lay-table-fixed-r .lay-table-header {
   position: relative;
   overflow: visible;
 }
-.layui-table-mend {
+.lay-table-mend {
   position: absolute;
   right: -49px;
   top: 0;
@@ -450,7 +450,7 @@
   border-left-width: 1px;
 }
 
-.layui-table-tool {
+.lay-table-tool {
   position: relative;
   width: 100%;
   min-height: 50px;
@@ -459,88 +459,88 @@
   border-width: 0;
   border-bottom-width: 1px; /*box-shadow: 0 1px 8px 0 rgb(0 0 0 / 8%);*/
 }
-.layui-table-tool .layui-btn-container {
+.lay-table-tool .lay-btn-container {
   margin-bottom: -10px;
 }
 
-.layui-table-total {
+.lay-table-total {
   margin-bottom: -1px;
   border-width: 0;
   border-top-width: 1px;
   overflow: hidden;
 }
 
-.layui-table-page {
+.lay-table-page {
   border-width: 0;
   border-top-width: 1px;
   margin-bottom: -1px;
   white-space: nowrap;
   overflow: hidden;
 }
-.layui-table-page > div {
+.lay-table-page > div {
   height: 26px;
 }
-.layui-table-page .layui-laypage {
+.lay-table-page .lay-laypage {
   margin: 0;
 }
-.layui-table-page .layui-laypage a,
-.layui-table-page .layui-laypage span {
+.lay-table-page .lay-laypage a,
+.lay-table-page .lay-laypage span {
   height: 26px;
   line-height: 26px;
   margin-bottom: 10px;
   border: none;
   background: none;
 }
-.layui-table-page .layui-laypage a,
-.layui-table-page .layui-laypage span.layui-laypage-curr {
+.lay-table-page .lay-laypage a,
+.lay-table-page .lay-laypage span.lay-laypage-curr {
   padding: 0 12px;
 }
-.layui-table-page .layui-laypage span {
+.lay-table-page .lay-laypage span {
   margin-left: 0;
   padding: 0;
 }
-.layui-table-page .layui-laypage .layui-laypage-prev {
+.lay-table-page .lay-laypage .lay-laypage-prev {
   margin-left: -11px !important;
 }
-.layui-table-page .layui-laypage .layui-laypage-curr .layui-laypage-em {
+.lay-table-page .lay-laypage .lay-laypage-curr .lay-laypage-em {
   left: 0;
   top: 0;
   padding: 0;
 }
-.layui-table-page .layui-laypage input,
-.layui-table-page .layui-laypage button {
+.lay-table-page .lay-laypage input,
+.lay-table-page .lay-laypage button {
   height: 26px;
   line-height: 26px;
 }
-.layui-table-page .layui-laypage input {
+.lay-table-page .lay-laypage input {
   width: 40px;
 }
-.layui-table-page .layui-laypage button {
+.lay-table-page .lay-laypage button {
   padding: 0 10px;
 }
-.layui-table-page select {
+.lay-table-page select {
   height: 18px;
 }
-.layui-table-pagebar {
+.lay-table-pagebar {
   float: right;
   line-height: 23px;
 }
-.layui-table-pagebar .layui-btn-sm {
+.lay-table-pagebar .lay-btn-sm {
   margin-top: -1px;
 }
-.layui-table-pagebar .layui-btn-xs {
+.lay-table-pagebar .lay-btn-xs {
   margin-top: 2px;
 }
 
-.layui-table-view select[lay-ignore] {
+.lay-table-view select[lay-ignore] {
   display: inline-block;
 }
-.layui-table-patch .layui-table-cell {
+.lay-table-patch .lay-table-cell {
   padding: 0;
   width: 30px;
 }
 
-.layui-table-edit {
+.lay-table-edit {
   position: absolute;
   left: 0;
   top: 0;
@@ -552,36 +552,36 @@
   box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.15);
   background-color: #fff;
 }
-.layui-table-edit:focus {
+.lay-table-edit:focus {
   border-color: var(--lay-color-accent) !important;
 }
-input.layui-input.layui-table-edit {
+input.lay-input.lay-table-edit {
   height: 100%;
 }
-select.layui-table-edit {
+select.lay-table-edit {
   padding: 0 0 0 10px;
   border-color: var(--lay-border-color-accent);
 }
-.layui-table-view .layui-form-switch,
-.layui-table-view .layui-form-checkbox,
-.layui-table-view .layui-form-radio {
+.lay-table-view .lay-form-switch,
+.lay-table-view .lay-form-checkbox,
+.lay-table-view .lay-form-radio {
   top: 0;
   margin: 0;
 }
-.layui-table-view .layui-form-checkbox {
+.lay-table-view .lay-form-checkbox {
   top: -1px;
   height: 26px;
   line-height: 26px;
 }
-.layui-table-view .layui-form-checkbox i {
+.lay-table-view .lay-form-checkbox i {
   height: 26px;
 }
 
 /* 展开溢出的单元格 */
-.layui-table-grid .layui-table-cell {
+.lay-table-grid .lay-table-cell {
   overflow: visible;
 }
-.layui-table-grid-down {
+.lay-table-grid-down {
   position: absolute;
   top: 0;
   right: 0;
@@ -595,36 +595,30 @@ select.layui-table-edit {
   color: #999;
   cursor: pointer;
 }
-.layui-table-grid-down .layui-icon {
+.lay-table-grid-down .lay-icon {
   position: absolute;
   top: 50%;
   left: 50%;
   margin: -8px 0 0 -8px;
   font-size: 14px;
 }
-.layui-table-grid-down:hover {
+.lay-table-grid-down:hover {
   background-color: #fbfbfb;
 }
 
 /* 单元格多行展开风格  */
-.layui-table-expanded {
+.lay-table-expanded {
   height: 95px;
 }
-.layui-table-expanded .layui-table-cell,
-.layui-table-view
-  .layui-table[lay-size='sm']
-  .layui-table-expanded
-  .layui-table-cell,
-.layui-table-view
-  .layui-table[lay-size='lg']
-  .layui-table-expanded
-  .layui-table-cell {
+.lay-table-expanded .lay-table-cell,
+.lay-table-view .lay-table[lay-size='sm'] .lay-table-expanded .lay-table-cell,
+.lay-table-view .lay-table[lay-size='lg'] .lay-table-expanded .lay-table-cell {
   height: auto;
   max-height: 94px;
   white-space: normal;
   text-overflow: clip;
 }
-.layui-table-cell-c {
+.lay-table-cell-c {
   position: absolute;
   bottom: -10px;
   right: 50%;
@@ -641,28 +635,23 @@ select.layui-table-edit {
   transition: 0.3s all;
   font-size: 14px;
 }
-.layui-table-cell-c:hover {
+.lay-table-cell-c:hover {
   border-color: var(--lay-color-accent);
 }
-.layui-table-expanded td:hover .layui-table-cell {
+.lay-table-expanded td:hover .lay-table-cell {
   overflow: auto;
 }
-.layui-table-main
-  > .layui-table
-  > tbody
-  > tr:last-child
-  > td
-  > .layui-table-cell-c {
+.lay-table-main > .lay-table > tbody > tr:last-child > td > .lay-table-cell-c {
   bottom: 0;
 }
 
 /* 单元格 TIPS 展开风格  */
-body .layui-table-tips .layui-layer-content {
+body .lay-table-tips .lay-layer-content {
   background: none;
   padding: 0;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
 }
-.layui-table-tips-main {
+.lay-table-tips-main {
   margin: -49px 0 0 -1px;
   max-height: 150px;
   padding: 8px 15px;
@@ -671,7 +660,7 @@ body .layui-table-tips .layui-layer-content {
   background-color: #fff;
   color: #5f5f5f;
 }
-.layui-table-tips-c {
+.lay-table-tips-c {
   position: absolute;
   right: -3px;
   top: -13px;
@@ -683,25 +672,25 @@ body .layui-table-tips .layui-layer-content {
   border-radius: 50%;
   color: #fff;
 }
-.layui-table-tips-c:hover {
+.lay-table-tips-c:hover {
   background-color: #777;
 }
-.layui-table-tips-c:before {
+.lay-table-tips-c:before {
   position: relative;
   right: -2px;
 }
 
 /** 树表 **/
-.layui-table-tree-nodeIcon {
+.lay-table-tree-nodeIcon {
   max-width: 20px;
 }
-.layui-table-tree-nodeIcon > * {
+.lay-table-tree-nodeIcon > * {
   width: 100%;
 }
-.layui-table-tree-flexIcon,
-.layui-table-tree-nodeIcon {
+.lay-table-tree-flexIcon,
+.lay-table-tree-nodeIcon {
   margin-right: 2px;
 }
-.layui-table-tree-flexIcon {
+.lay-table-tree-flexIcon {
   cursor: pointer;
 }

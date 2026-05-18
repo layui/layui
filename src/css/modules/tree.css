@@ -1,23 +1,23 @@
 /** 树组件 **/
-.layui-tree {
+.lay-tree {
   line-height: 22px;
 }
-.layui-tree .layui-form-checkbox {
+.lay-tree .lay-form-checkbox {
   margin: 0 !important;
 }
-.layui-tree-set {
+.lay-tree-set {
   width: 100%;
   position: relative;
 }
-.layui-tree-pack {
+.lay-tree-pack {
   display: none;
   padding-left: 20px;
   position: relative;
 }
-.layui-tree-line .layui-tree-pack {
+.lay-tree-line .lay-tree-pack {
   padding-left: 27px;
 }
-.layui-tree-line .layui-tree-set .layui-tree-set:after {
+.lay-tree-line .lay-tree-set .lay-tree-set:after {
   content: '';
   position: absolute;
   top: 14px;
@@ -26,30 +26,30 @@
   height: 0;
   border-top: 1px dotted #c0c4cc;
 }
-.layui-tree-entry {
+.lay-tree-entry {
   position: relative;
   padding: 3px 0;
   height: 26px;
   white-space: nowrap;
 }
-.layui-tree-entry:hover {
+.lay-tree-entry:hover {
   background-color: var(--lay-gray-300);
 }
-.layui-tree-line .layui-tree-entry:hover {
+.lay-tree-line .lay-tree-entry:hover {
   background-color: rgba(0, 0, 0, 0);
 }
-.layui-tree-line .layui-tree-entry:hover .layui-tree-txt {
+.lay-tree-line .lay-tree-entry:hover .lay-tree-txt {
   color: #999;
   text-decoration: underline;
   transition: 0.3s;
 }
-.layui-tree-main {
+.lay-tree-main {
   display: inline-block;
   vertical-align: middle;
   cursor: pointer;
   padding-right: 10px;
 }
-.layui-tree-line .layui-tree-set:before {
+.lay-tree-line .lay-tree-set:before {
   content: '';
   position: absolute;
   top: 0;
@@ -58,13 +58,13 @@
   height: 100%;
   border-left: 1px dotted #c0c4cc;
 }
-.layui-tree-line .layui-tree-set.layui-tree-setLineShort:before {
+.lay-tree-line .lay-tree-set.lay-tree-setLineShort:before {
   height: 13px;
 }
-.layui-tree-line .layui-tree-set.layui-tree-setHide:before {
+.lay-tree-line .lay-tree-set.lay-tree-setHide:before {
   height: 0;
 }
-.layui-tree-iconClick {
+.lay-tree-iconClick {
   display: inline-block;
   vertical-align: middle;
   position: relative;
@@ -73,7 +73,7 @@
   margin: 0 10px;
   color: #c0c4cc;
 }
-.layui-tree-icon {
+.lay-tree-icon {
   height: 14px;
   line-height: 10px;
   width: 14px;
@@ -81,14 +81,14 @@
   text-align: center;
   border: 1px solid #c0c4cc;
 }
-.layui-tree-icon .layui-icon {
+.lay-tree-icon .lay-icon {
   font-size: 12px;
   color: #5f5f5f;
 }
-.layui-tree-iconArrow {
+.lay-tree-iconArrow {
   padding: 0 5px;
 }
-.layui-tree-iconArrow:after {
+.lay-tree-iconArrow:after {
   content: '';
   position: absolute;
   left: 4px;
@@ -101,41 +101,41 @@
   border-color: transparent transparent transparent #c0c4cc;
   transition: 0.5s;
 }
-.layui-tree-spread
-  > .layui-tree-entry
-  .layui-tree-iconClick
-  > .layui-tree-iconArrow:after {
+.lay-tree-spread
+  > .lay-tree-entry
+  .lay-tree-iconClick
+  > .lay-tree-iconArrow:after {
   transform: rotate(90deg) translate(3px, 4px);
 }
-.layui-tree-txt {
+.lay-tree-txt {
   display: inline-block;
   vertical-align: middle;
   color: #555;
 }
-.layui-tree-search {
+.lay-tree-search {
   margin-bottom: 15px;
   color: #5f5f5f;
 }
-.layui-tree-btnGroup {
+.lay-tree-btnGroup {
   visibility: hidden;
   display: inline-block;
   vertical-align: middle;
   position: relative;
 }
-.layui-tree-btnGroup .layui-icon {
+.lay-tree-btnGroup .lay-icon {
   display: inline-block;
   vertical-align: middle;
   padding: 0 2px;
   cursor: pointer;
 }
-.layui-tree-btnGroup .layui-icon:hover {
+.lay-tree-btnGroup .lay-icon:hover {
   color: #999;
   transition: 0.3s;
 }
-.layui-tree-entry:hover .layui-tree-btnGroup {
+.lay-tree-entry:hover .lay-tree-btnGroup {
   visibility: visible;
 }
-.layui-tree-editInput {
+.lay-tree-editInput {
   position: relative;
   display: inline-block;
   vertical-align: middle;
@@ -145,7 +145,7 @@
   border: none;
   background-color: rgba(0, 0, 0, 0.05);
 }
-.layui-tree-emptyText {
+.lay-tree-emptyText {
   text-align: center;
   color: #999;
 }

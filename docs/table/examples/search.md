@@ -1,32 +1,32 @@
-<form class="layui-form layui-row layui-col-space16">
-  <div class="layui-col-md4">
-    <div class="layui-input-wrap">
-      <div class="layui-input-prefix">
-        <i class="layui-icon layui-icon-username"></i>
+<form class="lay-form lay-row lay-col-space16">
+  <div class="lay-col-md4">
+    <div class="lay-input-wrap">
+      <div class="lay-input-prefix">
+        <i class="lay-icon lay-icon-username"></i>
       </div>
-      <input type="text" name="A" value="" placeholder="Field A" class="layui-input" lay-affix="clear">
+      <input type="text" name="A" value="" placeholder="Field A" class="lay-input" lay-affix="clear">
     </div>
   </div>
-  <div class="layui-col-md4">
-    <div class="layui-input-wrap">
-      <input type="text" name="B" placeholder="Field B" lay-affix="clear" class="layui-input">
+  <div class="lay-col-md4">
+    <div class="lay-input-wrap">
+      <input type="text" name="B" placeholder="Field B" lay-affix="clear" class="lay-input">
     </div>
   </div>
-  <div class="layui-col-md4">
-    <div class="layui-input-wrap">
-      <div class="layui-input-prefix">
-        <i class="layui-icon layui-icon-date"></i>
+  <div class="lay-col-md4">
+    <div class="lay-input-wrap">
+      <div class="lay-input-prefix">
+        <i class="lay-icon lay-icon-date"></i>
       </div>
-      <input type="text" name="C" readonly placeholder="Field C" class="layui-input demo-table-search-date">
+      <input type="text" name="C" readonly placeholder="Field C" class="lay-input demo-table-search-date">
     </div>
   </div>  
-  <div class="layui-btn-container layui-col-xs12">
-    <button class="layui-btn" lay-submit lay-filter="demo-table-search">Search</button>
-    <button type="reset" class="layui-btn layui-btn-primary">Clear</button>
+  <div class="lay-btn-container lay-col-xs12">
+    <button class="lay-btn" lay-submit lay-filter="demo-table-search">Search</button>
+    <button type="reset" class="lay-btn lay-btn-primary">Clear</button>
   </div>
 </form>
 
-<table class="layui-hide" id="ID-table-demo-search"></table>
+<table class="lay-hide" id="ID-table-demo-search"></table>
 
 <!-- import layui -->
 <script>
@@ -75,3 +75,4 @@ layui.use(function(){
   });
 });
 </script>
+

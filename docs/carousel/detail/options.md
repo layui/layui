@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -236,3 +236,4 @@ carousel.on('change(filter)', function(obj){ // filter 对应轮播容器的 lay
 ### 贴士
 
 > 若轮播的填充内容为图片，且 `width` 或 `height` 为自适应，那么需动态获取父容器宽高，从而适配父容器。 当浏览器窗口尺寸发生变化时，可在窗口 `resize` 事件中通过轮播重载来重设宽高值。
+

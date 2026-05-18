@@ -1,4 +1,4 @@
-<table class="layui-hide" id="ID-table-demo-templet"></table>
+<table class="lay-hide" id="ID-table-demo-templet"></table>
 
 <script type="text/html" id="ID-table-demo-templet-user">{{!
   <a href="" target="_blank">{{= d.username }}</a>
@@ -10,11 +10,11 @@
 !}}</script>
  
 <script type="text/html" id="ID-table-demo-templet-other">{{!
-  <span class="layui-badge-rim" style="margin-right: 10px;">评分：{{= d.score }}</span>
-  <span class="layui-badge-rim">职业：{{= d.classify }}</span>
+  <span class="lay-badge-rim" style="margin-right: 10px;">评分：{{= d.score }}</span>
+  <span class="lay-badge-rim">职业：{{= d.classify }}</span>
   <!--
-  <span class="layui-badge-rim">下标：{{= d.LAY_INDEX }}</span>
-  <span class="layui-badge-rim">序号：{{= d.LAY_NUM }}</span>
+  <span class="lay-badge-rim">下标：{{= d.LAY_INDEX }}</span>
+  <span class="lay-badge-rim">序号：{{= d.LAY_NUM }}</span>
   -->
 !}}</script>
 
@@ -45,7 +45,7 @@ layui.use(['table'], function(){
         }
       }},
       // 模板 - 普通字符写法
-      {field:'city', width:115, title: '城市', templet: '<div><i class="layui-icon layui-icon-location"></i> {{!{{= d.city }}!}}</div>'},
+      {field:'city', width:115, title: '城市', templet: '<div><i class="lay-icon lay-icon-location"></i> {{!{{= d.city }}!}}</div>'},
       // 模板中可包含任意字段、任意内容（如表单等）
       {title: '状态', width:85, templet: '#ID-table-demo-templet-switch'},
       {title: '其他', minWidth:200, templet: '#ID-table-demo-templet-other'}
@@ -61,3 +61,4 @@ layui.use(['table'], function(){
 
 });
 </script>
+

@@ -13,58 +13,54 @@
     </style>
   </head>
   <body>
-    <div class="layui-btn-container">
-      <a href="table.html" class="layui-btn">表格综合</a>
-      <a
-        href="table-test.html"
-        class="layui-btn layui-btn-primary layui-border-green"
+    <div class="lay-btn-container">
+      <a href="table.html" class="lay-btn">表格综合</a>
+      <a href="table-test.html" class="lay-btn lay-btn-primary lay-border-green"
         >表格操作</a
       >
-      <a href="table-static.html" class="layui-btn">静态表格</a>
+      <a href="table-static.html" class="lay-btn">静态表格</a>
     </div>
 
     <script type="text/html" id="toolbarDemo">
-      <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">
+      <div class="lay-btn-container">
+        <button class="lay-btn lay-btn-sm" lay-event="getCheckData">
           获取选中行数据
         </button>
-        <button class="layui-btn layui-btn-sm" lay-event="getData">
+        <button class="lay-btn lay-btn-sm" lay-event="getData">
           获取当前页数据
         </button>
 
-        <button class="layui-btn layui-btn-sm" id="setRowChecked">
+        <button class="lay-btn lay-btn-sm" id="setRowChecked">
           设置行选中状态
-          <i class="layui-icon layui-icon-down layui-font-12"></i>
+          <i class="lay-icon lay-icon-down lay-font-12"></i>
         </button>
-        <button class="layui-btn layui-btn-sm" id="reloadTest">
+        <button class="lay-btn lay-btn-sm" id="reloadTest">
           重载测试
-          <i class="layui-icon layui-icon-down layui-font-12"></i>
+          <i class="lay-icon lay-icon-down lay-font-12"></i>
         </button>
         <button
-          class="layui-btn layui-btn-sm layui-btn-primary"
+          class="lay-btn lay-btn-sm lay-btn-primary"
           lay-event="multi-row"
         >
           多行
         </button>
         <button
-          class="layui-btn layui-btn-sm layui-btn-primary"
+          class="lay-btn lay-btn-sm lay-btn-primary"
           lay-event="default-row"
         >
           单行
         </button>
-        <button class="layui-btn layui-btn-sm" id="moreTest">
+        <button class="lay-btn lay-btn-sm" id="moreTest">
           更多测试
-          <i class="layui-icon layui-icon-down layui-font-12"></i>
+          <i class="lay-icon lay-icon-down lay-font-12"></i>
         </button>
       </div>
     </script>
 
     <script type="text/html" id="barDemo">
-      <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+      <a class="lay-btn lay-btn-xs" lay-event="edit">编辑</a>
       {{ if((d.email || '').trim()){ }}
-      <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"
-        >删除</a
-      >
+      <a class="lay-btn lay-btn-danger lay-btn-xs" lay-event="del">删除</a>
       {{ } }}
       <input
         type="checkbox"
@@ -77,7 +73,7 @@
     </script>
 
     <script type="text/html" id="usernameTpl">
-      <a href="" class="layui-table-link">{{= d.username }}</a>
+      <a href="" class="lay-table-link">{{= d.username }}</a>
     </script>
 
     <script type="text/html" id="switchTpl">
@@ -97,11 +93,11 @@
     </script>
 
     <script type="text/html" id="pagebarDemo">
-      <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="footerDemoBtn1">
+      <div class="lay-btn-container">
+        <button class="lay-btn lay-btn-sm" lay-event="footerDemoBtn1">
           底部按钮1
         </button>
-        <button class="layui-btn layui-btn-sm" lay-event="footerDemoBtn2">
+        <button class="lay-btn lay-btn-sm" lay-event="footerDemoBtn2">
           底部按钮2
         </button>
       </div>
@@ -132,7 +128,7 @@
             { field: 'username', title: '用户名', width: 120, edit: 'text' },
             {
               field: 'email',
-              title: '邮箱 <i class="layui-icon layui-icon-email"></i>',
+              title: '邮箱 <i class="lay-icon lay-icon-email"></i>',
               hide: 0,
               width: 150,
               edit: 'text',
@@ -181,14 +177,14 @@
           // lineStyle: 'height: 95px;', // 行样式
           css: [
             // 对当前实例自定义样式
-            '.layui-table-page{text-align: right;}',
-            '.layui-table-pagebar{float: left;}',
-            // '.layui-table-init{background-color: rgba(255, 255, 255, 0.6);}'
+            '.lay-table-page{text-align: right;}',
+            '.lay-table-pagebar{float: left;}',
+            // '.lay-table-init{background-color: rgba(255, 255, 255, 0.6);}'
           ].join(''),
           // className: '.demo-table-view',
 
           // 自定义 loading 模板 --- 2.9.10+
-          // loading: '<i class="layui-icon layui-icon-loading-1 layui-anim layui-anim-rotate layui-anim-loop" style="font-size: 38px;"></i>',
+          // loading: '<i class="lay-icon lay-icon-loading-1 lay-anim lay-anim-rotate lay-anim-loop" style="font-size: 38px;"></i>',
 
           // size: 'sm',
           // skin: 'line',
@@ -234,9 +230,9 @@
             {
               title: '帮助',
               layEvent: 'LAYTABLE_TIPS',
-              icon: 'layui-icon-tips',
+              icon: 'lay-icon-tips',
               onClick: (obj) => {
-                layer.alert('Table for layui-v' + layui.version);
+                layer.alert('Table for lay-v' + layui.version);
               },
             },
           ],
@@ -265,7 +261,7 @@
                     ignoreExport: false,
                     expandedStyle: 'tips',
                     title:
-                      '用户名 <i class="layui-icon layui-icon-username" lay-event="username"></i>',
+                      '用户名 <i class="lay-icon lay-icon-username" lay-event="username"></i>',
                     width: 120,
                     edit: (d) => !d.LAY_DISABLED,
                     templet: '#usernameTpl',
@@ -276,7 +272,7 @@
                     minWidth: 160,
                     maxWidth: 320,
                     title:
-                      '邮箱 <i class="layui-icon layui-icon-email" lay-event="email"></i>',
+                      '邮箱 <i class="lay-icon lay-icon-email" lay-event="email"></i>',
                     fieldTitle: '邮箱',
                     hide: 0,
                     edit: 'text',
@@ -286,7 +282,7 @@
                   {
                     field: 'sex',
                     title:
-                      '性别  <i class="layui-icon layui-icon-female" lay-event="gender"></i>',
+                      '性别  <i class="lay-icon lay-icon-female" lay-event="gender"></i>',
                     width: 100,
                     edit: 'text',
                     sort: true,
@@ -319,7 +315,7 @@
                     align: 'center',
                     totalRow: !1 ? true : '{{= d.TOTAL_NUMS }} 分 😊',
                     templet:
-                      '<a href="" class="layui-table-link">{{= d[d.LAY_COL.field] }}</a> 分',
+                      '<a href="" class="lay-table-link">{{= d[d.LAY_COL.field] }}</a> 分',
                   },
                   { field: 'ip', title: 'IP', width: 120, align: 'right' },
                   {

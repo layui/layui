@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -233,7 +233,7 @@ operate: function(obj){
     //返回 key 值
     return 123;
   } else if(type === 'update'){ // 修改节点
-    console.log(elem.find('.layui-tree-txt').html()); // 得到修改后的内容
+    console.log(elem.find('.lay-tree-txt').html()); // 得到修改后的内容
   } else if(type === 'del'){ // 删除节点
     // …
   };

@@ -1,4 +1,4 @@
-<table class="layui-table">
+<table class="lay-table">
   <colgroup>
     <col width="150">
     <col>
@@ -152,3 +152,4 @@ done: function(page, next){
     </tr>
   </tbody>
 </table>
+

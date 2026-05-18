@@ -1,4 +1,4 @@
-<pre class="layui-code" lay-options="{preview: true, text: {preview: '基础用法'}, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, text: {preview: '基础用法'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo"></div>
 
@@ -18,7 +18,7 @@ layui.use(function(){
 
 <h3 id="demo-value" class="ws-anchor ws-bold">定义初始值</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo-value"></div>
 
@@ -39,7 +39,7 @@ layui.use(function(){
 
 <h3 id="demo-maxmin" class="ws-anchor ws-bold">设置最大和最小值</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo-maxmin"></div>
 
@@ -61,7 +61,7 @@ layui.use(function(){
 
 <h3 id="demo-step" class="ws-anchor ws-bold">设置步长</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo-step-1"></div>
 <hr class="ws-space-16">
@@ -90,7 +90,7 @@ layui.use(function(){
 
 <h3 id="demo-setTips" class="ws-anchor ws-bold">设置提示文本</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo-setTips-1"></div>
 <hr class="ws-space-16">
@@ -134,7 +134,7 @@ layui.use(function(){
 
 <h3 id="demo-input" class="ws-anchor ws-bold">开启输入框</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo-input"></div>
 
@@ -155,7 +155,7 @@ layui.use(function(){
 
 <h3 id="demo-range" class="ws-anchor ws-bold">开启范围选择</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo-range-1"></div>
 <hr class="ws-space-16">
@@ -188,13 +188,13 @@ layui.use(function(){
 
 <h3 id="demo-vertical" class="ws-anchor ws-bold">垂直滑块</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <br><br>
-<div class="layui-inline" style="margin-right: 32px;" id="ID-slider-demo-vertical-1"></div>
-<div class="layui-inline" style="margin-right: 32px;" id="ID-slider-demo-vertical-2"></div>
-<div class="layui-inline" style="margin-right: 32px;" id="ID-slider-demo-vertical-3"></div>
-<div class="layui-inline" id="ID-slider-demo-vertical-4"></div>
+<div class="lay-inline" style="margin-right: 32px;" id="ID-slider-demo-vertical-1"></div>
+<div class="lay-inline" style="margin-right: 32px;" id="ID-slider-demo-vertical-2"></div>
+<div class="lay-inline" style="margin-right: 32px;" id="ID-slider-demo-vertical-3"></div>
+<div class="lay-inline" id="ID-slider-demo-vertical-4"></div>
 
 <!-- import layui -->
 <script>
@@ -230,7 +230,7 @@ layui.use(function(){
 
 <h3 id="demo-theme" class="ws-anchor ws-bold">自定义主题色</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo-theme-1"></div>
 <hr class="ws-space-16">
@@ -266,7 +266,7 @@ layui.use(function(){
 
 <h3 id="demo-disabled" class="ws-anchor ws-bold">禁用滑块</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-slider-demo-disabled"></div>
 
@@ -285,3 +285,4 @@ layui.use(function(){
 </script>
   </textarea>
 </pre>
+

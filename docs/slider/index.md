@@ -10,8 +10,8 @@ toc: true
 <h2 id="examples" lay-toc="{hot: true}" style="margin-bottom: 0;">示例</h2>
 
 <style>
-.demo-slider-container .layui-code-item-preview{padding: 32px;}
-.demo-slider-container .layui-code-item-preview > div{margin: 24px 0;}
+.demo-slider-container .lay-code-item-preview{padding: 32px;}
+.demo-slider-container .lay-code-item-preview > div{margin: 24px 0;}
 </style>
 <div class="demo-slider-container">
 {{- d.include("/slider/detail/demo.md") }}
@@ -92,3 +92,4 @@ ins1.setValue(60, 1) // 设置结尾值
 <div>
 {{- d.include("/slider/detail/options.md") }}
 </div>
+

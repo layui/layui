@@ -1,4 +1,4 @@
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview'], codeStyle: 'max-height: 520px;', copy: false, tools: ['full'], addTools: null}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview'], codeStyle: 'max-height: 520px;', copy: false, tools: ['full'], addTools: null}">
   <textarea>
 {{!
 <style>
@@ -6,7 +6,7 @@
   .laytpl-demo:first-child{border-right: none;}
   .laytpl-demo>textarea{position: relative; display: block; width:100%; height: 320px; padding: 11px; border: 0; box-sizing: border-box; resize: none; background-color: #fff; font-family: Courier New; font-size: 13px;}
   .laytpl-demo>div:first-child{height: 32px; line-height: 32px; padding: 6px 11px; border-bottom: 1px solid #eee; background-color: #F8F9FA;}
-  .laytpl-demo .layui-tabs{top: -1px;}
+  .laytpl-demo .lay-tabs{top: -1px;}
 
   #ID-tpl-view-body {
     max-height: 320px; overflow: auto; clear: both;
@@ -18,12 +18,12 @@
     margin: 0; padding: 16px; background-color: #1F1F1F; color: #F8F9FA; font-family: 'Courier New',Consolas, monospace;
   }
 </style>
-<div class="layui-row">
-  <div class="layui-col-xs6 laytpl-demo">
+<div class="lay-row">
+  <div class="lay-col-xs6 laytpl-demo">
     <div><strong>模板</strong></div>
     &lt;textarea id="ID-tpl-src"&gt;&lt;/textarea>
   </div>
-  <div class="layui-col-xs6 laytpl-demo">
+  <div class="lay-col-xs6 laytpl-demo">
     <div><strong>数据</strong></div>
     &lt;textarea id="ID-tpl-data"&gt;
 {
@@ -54,25 +54,25 @@
 }
     &lt;/textarea&gt;
   </div>
-  <div class="layui-col-xs12 laytpl-demo" style="border-top: none;">
-    <div class="layui-row">
-      <div class="layui-col-xs6 layui-tabs" id="ID-tpl-view-header">
-        <ul class="layui-tabs-header">
+  <div class="lay-col-xs12 laytpl-demo" style="border-top: none;">
+    <div class="lay-row">
+      <div class="lay-col-xs6 lay-tabs" id="ID-tpl-view-header">
+        <ul class="lay-tabs-header">
           <li><strong>渲染结果</strong></li>
           <li><strong>源码</strong></li>
         </ul>
       </div>
-      <div class="layui-col-xs6" style="text-align: right">
-        <span class="layui-badge" id="ID-tpl-view-time"></span>
+      <div class="lay-col-xs6" style="text-align: right">
+        <span class="lay-badge" id="ID-tpl-view-time"></span>
       </div>
     </div>
     <div id="ID-tpl-view-body">
-      <div class="layui-show layui-padding-3 layui-text" id="ID-tpl-view"></div>
+      <div class="lay-show lay-padding-3 lay-text" id="ID-tpl-view"></div>
       <div><pre id="ID-tpl-view-code"  ></pre></div>
     </div>
   </div>
 </div>
-<div class="layui-clear"></div>
+<div class="lay-clear"></div>
 
 <!-- 模板 -->
 <script type="text/html" id="ID-tpl-template">
@@ -184,3 +184,4 @@ layui.use(function() {
 });
 </script>!}}</textarea>
 </pre>
+

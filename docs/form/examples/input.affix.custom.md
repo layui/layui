@@ -1,10 +1,10 @@
-<div class="layui-form">
-  <div class="layui-input-wrap">
-    <input type="text" lay-affix="location" lay-filter="location" placeholder="位置" class="layui-input">
+<div class="lay-form">
+  <div class="lay-input-wrap">
+    <input type="text" lay-affix="location" lay-filter="location" placeholder="位置" class="lay-input">
   </div>
   <hr class="ws-space-16">
-  <div class="layui-input-wrap">
-    <input type="text" lay-affix="search" lay-filter="search" lay-options="{split: true}" placeholder="搜索…" class="layui-input">
+  <div class="lay-input-wrap">
+    <input type="text" lay-affix="search" lay-filter="search" lay-options="{split: true}" placeholder="搜索…" class="lay-input">
   </div>
 </div>
 

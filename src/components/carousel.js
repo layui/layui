@@ -26,14 +26,14 @@ var component = componentBuilder({
   },
 
   CONST: {
-    ELEM: 'layui-carousel',
+    ELEM: 'lay-carousel',
     ELEM_ITEM: '>*[carousel-item]>*',
-    ELEM_LEFT: 'layui-carousel-left',
-    ELEM_RIGHT: 'layui-carousel-right',
-    ELEM_PREV: 'layui-carousel-prev',
-    ELEM_NEXT: 'layui-carousel-next',
-    ELEM_ARROW: 'layui-carousel-arrow',
-    ELEM_IND: 'layui-carousel-ind',
+    ELEM_LEFT: 'lay-carousel-left',
+    ELEM_RIGHT: 'lay-carousel-right',
+    ELEM_PREV: 'lay-carousel-prev',
+    ELEM_NEXT: 'lay-carousel-next',
+    ELEM_ARROW: 'lay-carousel-arrow',
+    ELEM_IND: 'lay-carousel-ind',
   },
 
   // 渲染
@@ -182,13 +182,13 @@ Class.prototype.arrow = function () {
   // 模板
   var tplArrow = $(
     [
-      '<button type="button" class="layui-icon ' +
-        (options.anim === 'updown' ? 'layui-icon-up' : 'layui-icon-left') +
+      '<button type="button" class="lay-icon ' +
+        (options.anim === 'updown' ? 'lay-icon-up' : 'lay-icon-left') +
         ' ' +
         CONST.ELEM_ARROW +
         '" lay-type="sub"></button>',
-      '<button type="button" class="layui-icon ' +
-        (options.anim === 'updown' ? 'layui-icon-down' : 'layui-icon-right') +
+      '<button type="button" class="lay-icon ' +
+        (options.anim === 'updown' ? 'lay-icon-down' : 'lay-icon-right') +
         ' ' +
         CONST.ELEM_ARROW +
         '" lay-type="add"></button>',
@@ -239,7 +239,7 @@ Class.prototype.indicator = function () {
         that.elemItem.each(function (index) {
           li.push(
             '<li' +
-              (options.index === index ? ' class="layui-this"' : '') +
+              (options.index === index ? ' class="lay-this"' : '') +
               '></li>',
           );
         });

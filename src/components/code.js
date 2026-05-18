@@ -14,16 +14,16 @@ import { tabs } from './tabs.js';
 
 // 常量
 var CONST = {
-  ELEM_VIEW: 'layui-code-view',
-  ELEM_TABS: 'layui-tabs',
-  ELEM_HEADER: 'layui-code-header',
-  ELEM_FULL: 'layui-code-full',
-  ELEM_PREVIEW: 'layui-code-preview',
-  ELEM_ITEM: 'layui-code-item',
-  ELEM_SHOW: 'layui-show',
-  ELEM_LINE: 'layui-code-line',
-  ELEM_LINE_NUM: 'layui-code-line-number',
-  ELEM_LN_MODE: 'layui-code-ln-mode',
+  ELEM_VIEW: 'lay-code-view',
+  ELEM_TABS: 'lay-tabs',
+  ELEM_HEADER: 'lay-code-header',
+  ELEM_FULL: 'lay-code-full',
+  ELEM_PREVIEW: 'lay-code-preview',
+  ELEM_ITEM: 'lay-code-item',
+  ELEM_SHOW: 'lay-show',
+  ELEM_LINE: 'lay-code-line',
+  ELEM_LINE_NUM: 'lay-code-line-number',
+  ELEM_LN_MODE: 'lay-code-ln-mode',
   CDDE_DATA_CLASS: 'LayuiCodeDataClass',
   LINE_RAW_WIDTH: 45, // 行号初始宽度，需与 css 保持一致
 };
@@ -51,23 +51,23 @@ var config = {
     focus: {
       range: '', // 高亮范围，不可全局设置值 '1,3-5,8'
       comment: false, // 是否解析注释，性能敏感不可全局开启  [!code type:<lines>]
-      classActiveLine: 'layui-code-line-has-focus', // 添加到高亮行上的类
-      classActivePre: 'layui-code-has-focused-lines', // 有高亮行时向根元素添加的类
+      classActiveLine: 'lay-code-line-has-focus', // 添加到高亮行上的类
+      classActivePre: 'lay-code-has-focused-lines', // 有高亮行时向根元素添加的类
     },
     // 高亮
     hl: {
       comment: false,
-      classActiveLine: 'layui-code-line-highlighted',
+      classActiveLine: 'lay-code-line-highlighted',
     },
     // diff++
     '++': {
       comment: false,
-      classActiveLine: 'layui-code-line-diff-add',
+      classActiveLine: 'lay-code-line-diff-add',
     },
     // diff--
     '--': {
       comment: false,
-      classActiveLine: 'layui-code-line-diff-remove',
+      classActiveLine: 'lay-code-line-diff-remove',
     },
   },
 };
@@ -267,7 +267,7 @@ export function code(options) {
               '</div>',
             ].join('')
           : '',
-        '<div class="layui-code-line-content">',
+        '<div class="lay-code-line-content">',
         (highlightLineInfo.needParseComment
           ? line.replace(highlightLineRegex, '')
           : line) || ' ',
@@ -367,16 +367,16 @@ export function code(options) {
 
     // 追加 Tab 组件
     var elemView = $('<div class="' + CONST.ELEM_PREVIEW + '">');
-    var elemTabsView = $('<div class="layui-tabs">');
-    var elemHeaderView = $('<div class="layui-tabs-header">');
+    var elemTabsView = $('<div class="lay-tabs">');
+    var elemHeaderView = $('<div class="lay-tabs-header">');
     var elemPreviewView = $(
       '<div class="' +
-        [CONST.ELEM_ITEM, CONST.ELEM_ITEM + '-preview', 'layui-border'].join(
+        [CONST.ELEM_ITEM, CONST.ELEM_ITEM + '-preview', 'lay-border'].join(
           ' ',
         ) +
         '">',
     );
-    var elemToolbar = $('<div class="layui-code-tools"></div>');
+    var elemToolbar = $('<div class="lay-code-tools"></div>');
 
     if (options.id) elemView.attr('id', options.id);
     elemView.addClass(options.className);
@@ -384,7 +384,7 @@ export function code(options) {
     // 标签头
     layout.forEach(function (v, i) {
       var li = $('<li lay-id="' + v + '">');
-      if (i === 0) li.addClass('layui-this');
+      if (i === 0) li.addClass('lay-this');
       li.html(options.text[v]);
       elemHeaderView.append(li);
     });
@@ -397,11 +397,11 @@ export function code(options) {
         onClick(obj) {
           var el = obj.elem;
           var elemView = el.closest('.' + CONST.ELEM_PREVIEW);
-          var classNameFull = 'layui-icon-' + this.iconName;
-          var classNameRestore = 'layui-icon-screen-restore';
+          var classNameFull = 'lay-icon-' + this.iconName;
+          var classNameRestore = 'lay-icon-screen-restore';
           var title = this.title;
           var htmlElem = $('html,body');
-          var ELEM_SCROLLBAR_HIDE = 'layui-scrollbar-hide';
+          var ELEM_SCROLLBAR_HIDE = 'lay-scrollbar-hide';
 
           if (el.hasClass(classNameFull)) {
             elemView.addClass(CONST.ELEM_FULL);
@@ -472,7 +472,7 @@ export function code(options) {
       if (!tool) return;
 
       elemToolbar.append(
-        `<i class="layui-icon layui-icon-${tool.iconName}" data-name="${name}" title="${tool.title[0]}"></i>`,
+        `<i class="lay-icon lay-icon-${tool.iconName}" data-name="${name}" title="${tool.title[0]}"></i>`,
       );
     });
 
@@ -506,10 +506,10 @@ export function code(options) {
             container: thisItemBody,
             options: options,
             render: function () {
-              form.render(thisItemBody.find('.layui-form'));
+              form.render(thisItemBody.find('.lay-form'));
               element.render();
               tabs.render({
-                elem: ['.' + CONST.ELEM_PREVIEW, '.layui-tabs'].join(' '),
+                elem: ['.' + CONST.ELEM_PREVIEW, '.lay-tabs'].join(' '),
               });
             },
           });
@@ -553,26 +553,26 @@ export function code(options) {
   }
 
   // 创建 code 容器
-  var codeElem = $('<code class="layui-code-wrap"></code>');
+  var codeElem = $('<code class="lay-code-wrap"></code>');
 
   // 添加主容器 className
   othis.addClass(
     (function (arr) {
-      if (!options.wordWrap) arr.push('layui-code-nowrap');
+      if (!options.wordWrap) arr.push('lay-code-nowrap');
       return arr.join(' ');
-    })(['layui-code-view layui-border-box']),
+    })(['lay-code-view lay-border-box']),
   );
 
   // code 主题风格
   var theme = options.theme || options.skin;
   if (theme) {
-    othis.removeClass('layui-code-theme-dark layui-code-theme-light');
-    othis.addClass('layui-code-theme-' + theme);
+    othis.removeClass('lay-code-theme-dark lay-code-theme-light');
+    othis.addClass('lay-code-theme-' + theme);
   }
 
   // 添加高亮必要的 className
   if (options.highlighter) {
-    othis.addClass(`${options.highlighter} layui-code-hl`);
+    othis.addClass(`${options.highlighter} lay-code-hl`);
     if (options.highlighter === 'prism') {
       othis.addClass(`language-${options.lang}`);
     }
@@ -589,7 +589,7 @@ export function code(options) {
 
   // 插入行号边栏
   if (options.ln) {
-    othis.append('<div class="layui-code-ln-side"></div>');
+    othis.append('<div class="lay-code-ln-side"></div>');
   }
 
   // 兼容旧版本 height 属性
@@ -608,19 +608,19 @@ export function code(options) {
   // 动态设置样式
   var cssRules = [
     {
-      selector: '>.layui-code-wrap>.layui-code-line{}',
+      selector: '>.lay-code-wrap>.lay-code-line{}',
       setValue: function (item, value) {
         item.style['padding-left'] = value + 'px';
       },
     },
     {
-      selector: '>.layui-code-wrap>.layui-code-line>.layui-code-line-number{}',
+      selector: '>.lay-code-wrap>.lay-code-line>.lay-code-line-number{}',
       setValue: function (item, value) {
         item.style.width = value + 'px';
       },
     },
     {
-      selector: '>.layui-code-ln-side{}',
+      selector: '>.lay-code-ln-side{}',
       setValue: function (item, value) {
         item.style.width = value + 'px';
       },
@@ -636,7 +636,7 @@ export function code(options) {
         return val.selector;
       }),
       function (val) {
-        return ['.layui-code-view[lay-code-index="' + index + '"]', val].join(
+        return ['.lay-code-view[lay-code-index="' + index + '"]', val].join(
           ' ',
         );
       },
@@ -678,14 +678,14 @@ export function code(options) {
   }
 
   // 创建 code 区域固定条
-  var elemFixbar = $('<div class="layui-code-fixbar"></div>');
+  var elemFixbar = $('<div class="lay-code-fixbar"></div>');
 
   // 若开启复制，且未开启预览，则单独生成复制图标
   if (options.copy && !options.preview) {
     var copyElem = $(
       [
-        '<span class="layui-code-copy">',
-        '<i class="layui-icon layui-icon-file-b" title="' +
+        '<span class="lay-code-copy">',
+        '<i class="lay-icon lay-icon-file-b" title="' +
           i18n.$t('code.copy') +
           '"></i>',
         '</span>',
@@ -703,7 +703,7 @@ export function code(options) {
   // 创建 language marker
   if (options.langMarker) {
     elemFixbar.append(
-      '<span class="layui-code-lang-marker">' + options.lang + '</span>',
+      '<span class="lay-code-lang-marker">' + options.lang + '</span>',
     );
   }
 

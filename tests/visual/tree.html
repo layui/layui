@@ -9,15 +9,15 @@
     <title>树组件 - layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" media="all" />
   </head>
-  <body class="layui-padding-5">
-    <div class="layui-btn-container">
-      <button type="button" class="layui-btn" lay-on="getChecked">
+  <body class="lay-padding-5">
+    <div class="lay-btn-container">
+      <button type="button" class="lay-btn" lay-on="getChecked">
         获取选中数据
       </button>
-      <button type="button" class="layui-btn" lay-on="setChecked">
+      <button type="button" class="lay-btn" lay-on="setChecked">
         设置节点勾选
       </button>
-      <button type="button" class="layui-btn" lay-on="reload">重载实例</button>
+      <button type="button" class="lay-btn" lay-on="reload">重载实例</button>
     </div>
 
     <div id="test1"></div>
@@ -380,7 +380,7 @@
               // ajax 操作，返回 key 值
               return index++;
             } else if (type == 'update') {
-              console.log(obj.elem.find('.layui-tree-txt').html());
+              console.log(obj.elem.find('.lay-tree-txt').html());
             } else if (type == 'del') {
               console.log(obj);
             }

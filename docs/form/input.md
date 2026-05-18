@@ -10,14 +10,14 @@ toc: true
 
 <h2 id="text" lay-toc="">普通输入框</h2>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
-  <input type="text" name="" placeholder="文本框" class="layui-input">
+<div class="lay-form">
+  <input type="text" name="" placeholder="文本框" class="lay-input">
   <hr class="ws-space-16">
-  &lt;textarea name="" placeholder="多行文本框" class="layui-textarea"&gt;&lt;/textarea&gt;
+  &lt;textarea name="" placeholder="多行文本框" class="lay-textarea"&gt;&lt;/textarea&gt;
 </div>
   </textarea>
 </pre>
@@ -28,20 +28,20 @@ toc: true
 输入框点缀是指给普通输入框附加其他元素来进行动静态修饰，其结构包含：*容器、前缀、输入框、后缀*。
 
 ```
-<div class="layui-input-{容器类}">
-  <div class="layui-input-{前缀类}"></div>
-  <input class="layui-input" placeholder="输入框">
-  <div class="layui-input-{后缀类}"></div>
+<div class="lay-input-{容器类}">
+  <div class="lay-input-{前缀类}"></div>
+  <input class="lay-input" placeholder="输入框">
+  <div class="lay-input-{后缀类}"></div>
 </div>
 ```
 
 - 容器类：
-  - 前置和后置结构：`class="layui-input-group"`
-  - 前缀和后缀结构：`class="layui-input-wrap"`
-- 前缀类：`class="layui-input-prefix"`
-- 后缀类：`class="layui-input-suffix"`
-- 前缀显示分隔框：`class="layui-input-prefix layui-input-split"`
-- 后缀显示分隔框：`class="layui-input-suffix layui-input-split"`
+  - 前置和后置结构：`class="lay-input-group"`
+  - 前缀和后缀结构：`class="lay-input-wrap"`
+- 前缀类：`class="lay-input-prefix"`
+- 后缀类：`class="lay-input-suffix"`
+- 前缀显示分隔框：`class="lay-input-prefix lay-input-split"`
+- 后缀显示分隔框：`class="lay-input-suffix lay-input-split"`
 
 通过在不同层级中设置规定的 CSS 类来实现点缀布局，再按照不同需求，在前缀和后缀中放置图标等任意内容。
 
@@ -53,16 +53,16 @@ toc: true
 - 结构：
 
 ```
-<div class="layui-input-group">
-  <div class="layui-input-prefix">前置内容</div>
-  <input type="text" class="layui-input">
-  <div class="layui-input-suffix">后缀内容</div>
+<div class="lay-input-group">
+  <div class="lay-input-prefix">前置内容</div>
+  <input type="text" class="lay-input">
+  <div class="lay-input-suffix">后缀内容</div>
 </div>
 ```
 
 - 示例：
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 508px;', layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
@@ -78,16 +78,16 @@ toc: true
 - 结构：
 
 ```
-<div class="layui-input-wrap">
-  <div class="layui-input-prefix">前缀图标</div>
-  <input type="text" class="layui-input">
-  <div class="layui-input-suffix">后缀图标</div>
+<div class="lay-input-wrap">
+  <div class="lay-input-prefix">前缀图标</div>
+  <input type="text" class="lay-input">
+  <div class="lay-input-suffix">后缀图标</div>
 </div>
 ```
 
 - 示例：
 
-<pre class="layui-code" lay-options="{preview: true, codeStyle: 'height: 508px;',layout: ['preview', 'code'], tools: ['full'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, codeStyle: 'height: 508px;',layout: ['preview', 'code'], tools: ['full'], done: function(obj){
   obj.render();
 }}">
   <textarea>
@@ -128,31 +128,31 @@ toc: true
 
 ### 示例
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
-  <input type="number" lay-affix="number" placeholder="" value="0" class="layui-input">
+<div class="lay-form">
+  <input type="number" lay-affix="number" placeholder="" value="0" class="lay-input">
   <hr class="ws-space-16">
-  <div class="layui-row layui-col-space16">
-    <div class="layui-col-xs6">
-      <input type="text" lay-affix="number" placeholder="设置 step 为 0.01" step="0.01" class="layui-input">
+  <div class="lay-row lay-col-space16">
+    <div class="lay-col-xs6">
+      <input type="text" lay-affix="number" placeholder="设置 step 为 0.01" step="0.01" class="lay-input">
     </div>
-    <div class="layui-col-xs6">
-      <input type="text" lay-affix="number" placeholder="设置 step,min,max" step="10" min="0" max="100" class="layui-input">
+    <div class="lay-col-xs6">
+      <input type="text" lay-affix="number" placeholder="设置 step,min,max" step="10" min="0" max="100" class="lay-input">
     </div>
-    <div class="layui-col-xs6">
-      <input type="text" lay-affix="number" placeholder="步长严格模式" lay-step-strictly step="10" min="0" max="100" class="layui-input">
+    <div class="lay-col-xs6">
+      <input type="text" lay-affix="number" placeholder="步长严格模式" lay-step-strictly step="10" min="0" max="100" class="lay-input">
     </div>
-    <div class="layui-col-xs4">
-      <input type="text" lay-affix="number" placeholder="设置小数位精度为 2" step="0.1" lay-precision="2" class="layui-input">
+    <div class="lay-col-xs4">
+      <input type="text" lay-affix="number" placeholder="设置小数位精度为 2" step="0.1" lay-precision="2" class="lay-input">
     </div>
-    <div class="layui-col-xs4">
-      <input type="text" lay-affix="number" readonly placeholder="不允许输入状态" class="layui-input">
+    <div class="lay-col-xs4">
+      <input type="text" lay-affix="number" readonly placeholder="不允许输入状态" class="lay-input">
     </div>
-    <div class="layui-col-xs4">
-      <input type="text" lay-affix="number" disabled placeholder="禁用状态" class="layui-input">
+    <div class="lay-col-xs4">
+      <input type="text" lay-affix="number" disabled placeholder="禁用状态" class="lay-input">
     </div>
   </div>
 </div> 
@@ -166,13 +166,13 @@ toc: true
 
 一般搭配 `<input type="password">` 使用，用于控制输入框内容的显示和隐藏。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
-  <div class="layui-input-wrap">
-    <input type="password" lay-affix="eye" placeholder="请输入" class="layui-input">
+<div class="lay-form">
+  <div class="lay-input-wrap">
+    <input type="password" lay-affix="eye" placeholder="请输入" class="lay-input">
   </div>
 </div> 
 
@@ -184,25 +184,25 @@ toc: true
 
 一般搭配 `<input type="text">` 使用，用于清除输入框的内容。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
   obj.render();
 }}">
   <textarea>
-<div class="layui-form">
-  <div class="layui-input-wrap">
-    <input type="text" lay-affix="clear" placeholder="请输入" class="layui-input">
+<div class="lay-form">
+  <div class="lay-input-wrap">
+    <input type="text" lay-affix="clear" placeholder="请输入" class="lay-input">
   </div>
   <hr class="ws-space-16">
-  <div class="layui-input-wrap">
-    <input type="text" value="默认有值状态" lay-affix="clear" class="layui-input">
+  <div class="lay-input-wrap">
+    <input type="text" value="默认有值状态" lay-affix="clear" class="lay-input">
   </div>
   <hr class="ws-space-16">
-  <div class="layui-input-wrap">
-    <input type="text" value="禁用状态时" lay-affix="clear" disabled class="layui-input">
+  <div class="lay-input-wrap">
+    <input type="text" value="禁用状态时" lay-affix="clear" disabled class="lay-input">
   </div>
   <hr class="ws-space-16">
-  <div class="layui-input-wrap">
-    <input type="text" value="只读状态时" lay-affix="clear" readonly class="layui-input">
+  <div class="lay-input-wrap">
+    <input type="text" value="只读状态时" lay-affix="clear" readonly class="lay-input">
   </div>
 </div>
 
@@ -212,9 +212,9 @@ toc: true
 
 <h3 id="affix-custom" lay-toc="{level: 2}" class="ws-bold">自定义动态点缀</h3>
 
-我们还可以对 `lay-affix` 属性设置任意图标值，从而实现自定义动态点缀功能。 其中 `lay-affix="customName"` 值对应图标类`layui-icon-`后面的名称（[#详见图标列表](../icon/#list)）。且可通过「[点缀事件](#affix-event)」完成自定义操作。
+我们还可以对 `lay-affix` 属性设置任意图标值，从而实现自定义动态点缀功能。 其中 `lay-affix="customName"` 值对应图标类`lay-icon-`后面的名称（[#详见图标列表](../icon/#list)）。且可通过「[点缀事件](#affix-event)」完成自定义操作。
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], done: function(obj){
   obj.render();
 }}">
   <textarea>
@@ -241,6 +241,7 @@ form.on('input-affix(filter)', function(data){
   console.log(this); // 当前触发点缀事件的图标元素
 });
 ```
+
 
 
 

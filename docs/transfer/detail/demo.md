@@ -1,4 +1,4 @@
-<pre class="layui-code" lay-options="{preview: true, text: {preview: '基础效果'}, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, text: {preview: '基础效果'}, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-transfer-demo"></div>
 
@@ -32,7 +32,7 @@ layui.use(function(){
 
 <h3 id="demo-title" class="ws-anchor ws-bold">定义标题及数据源</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-transfer-demo-title"></div>
 
@@ -69,7 +69,7 @@ layui.use(function(){
 
 <h3 id="demo-value" class="ws-anchor ws-bold">初始右侧数据</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-transfer-demo-value"></div>
 
@@ -110,7 +110,7 @@ layui.use(function(){
 
 <h3 id="demo-showSearch" class="ws-anchor ws-bold">显示搜索框</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-transfer-demo-showSearch"></div>
 
@@ -146,7 +146,7 @@ layui.use(function(){
 
 <h3 id="demo-parseData" class="ws-anchor ws-bold">数据格式解析</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-transfer-demo-parseData"></div>
 
@@ -180,7 +180,7 @@ layui.use(function(){
 
 <h3 id="demo-onchange" class="ws-anchor ws-bold">穿梭时的回调</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
 <div id="ID-transfer-demo-onchange"></div>
 
@@ -220,11 +220,11 @@ layui.use(function(){
 
 <h3 id="demo-inst" class="ws-anchor ws-bold">实例调用</h3>
 
-<pre class="layui-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
+<pre class="lay-code" lay-options="{preview: true, layout: ['preview', 'code'], tools: ['full']}">
   <textarea>
-<div class="layui-btn-container">
-  <button type="button" class="layui-btn" lay-on="getData">获取右侧数据</button>
-  <button type="button" class="layui-btn" lay-on="reload">重载实例</button>
+<div class="lay-btn-container">
+  <button type="button" class="lay-btn" lay-on="getData">获取右侧数据</button>
+  <button type="button" class="lay-btn" lay-on="reload">重载实例</button>
 </div>
 <div id="ID-transfer-demo-inst"></div>
 

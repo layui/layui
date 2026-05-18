@@ -1,12 +1,12 @@
 /* 时间线 */
-.layui-timeline {
+.lay-timeline {
   padding-left: 5px;
 }
-.layui-timeline-item {
+.lay-timeline-item {
   position: relative;
   padding-bottom: 20px;
 }
-.layui-timeline-axis {
+.lay-timeline-axis {
   position: absolute;
   left: -5px;
   top: 0;
@@ -20,10 +20,10 @@
   text-align: center;
   cursor: pointer;
 }
-.layui-timeline-axis:hover {
+.lay-timeline-axis:hover {
   color: var(--lay-color-red);
 }
-.layui-timeline-item:before {
+.lay-timeline-item:before {
   content: '';
   position: absolute;
   left: 5px;
@@ -33,16 +33,16 @@
   height: 100%;
 }
 
-.layui-timeline-item:first-child:before {
+.lay-timeline-item:first-child:before {
   display: block;
 }
-.layui-timeline-item:last-child:before {
+.lay-timeline-item:last-child:before {
   display: none;
 }
-.layui-timeline-content {
+.lay-timeline-content {
   padding-left: 25px;
 }
-.layui-timeline-title {
+.lay-timeline-title {
   position: relative;
   margin-bottom: 10px;
   line-height: 22px;

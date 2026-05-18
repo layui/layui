@@ -1,11 +1,11 @@
 /* 进度条 */
-.layui-progress {
+.lay-progress {
   position: relative;
   height: 6px;
   border-radius: 20px;
   background-color: var(--lay-gray-300);
 }
-.layui-progress-bar {
+.lay-progress-bar {
   position: absolute;
   left: 0;
   top: 0;
@@ -18,19 +18,19 @@
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
 }
-.layui-progress-big,
-.layui-progress-big .layui-progress-bar {
+.lay-progress-big,
+.lay-progress-big .lay-progress-bar {
   height: 18px;
   line-height: 18px;
 }
-.layui-progress-text {
+.lay-progress-text {
   position: relative;
   top: -20px;
   line-height: 18px;
   font-size: 12px;
   color: #5f5f5f;
 }
-.layui-progress-big .layui-progress-text {
+.lay-progress-big .lay-progress-text {
   position: static;
   padding: 0 10px;
   color: #fff;
