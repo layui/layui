@@ -10,19 +10,17 @@
     <link rel="stylesheet" href="./dist/css/layui.css" />
   </head>
   <body>
-    <div class="layui-container">
-      <div class="layui-progress" style="margin: 15px 0 30px">
-        <div class="layui-progress-bar" lay-percent="100%"></div>
+    <div class="lay-container">
+      <div class="lay-progress" style="margin: 15px 0 30px">
+        <div class="lay-progress-bar" lay-percent="100%"></div>
       </div>
-      <div class="layui-btn-container">
-        <button class="layui-btn" lay-on="test-form">一个按钮</button>
-        <button class="layui-btn layui-btn-normal" id="test-date">
-          当前日期
-        </button>
+      <div class="lay-btn-container">
+        <button class="lay-btn" lay-on="test-form">一个按钮</button>
+        <button class="lay-btn lay-btn-normal" id="test-date">当前日期</button>
       </div>
 
-      <blockquote class="layui-elem-quote" style="margin-top: 30px">
-        <div class="layui-text">
+      <blockquote class="lay-elem-quote" style="margin-top: 30px">
+        <div class="lay-text">
           <ul>
             <li>
               您当前预览的是：<span>Layui-v<span id="version"></span></span>
@@ -64,29 +62,29 @@
               area: '350px',
               title: 'layer + form',
               content: `
-<ul class="layui-form layui-form-pane" style="margin: 15px;">
-  <li class="layui-form-item">
-    <label class="layui-form-label">输入框</label>
-    <div class="layui-input-block">
-      <input class="layui-input" lay-verify="required" name="field1">
+<ul class="lay-form lay-form-pane" style="margin: 15px;">
+  <li class="lay-form-item">
+    <label class="lay-form-label">输入框</label>
+    <div class="lay-input-block">
+      <input class="lay-input" lay-verify="required" name="field1">
     </div>
   </li>
-  <li class="layui-form-item">
-    <label class="layui-form-label">选择框</label>
-    <div class="layui-input-block">
+  <li class="lay-form-item">
+    <label class="lay-form-label">选择框</label>
+    <div class="lay-input-block">
       <select name="field2">
         <option value="A">A</option>
         <option value="B">B</option>
       </select>
     </div>
   </li>
-  <li class="layui-form-item" style="text-align:center;">
-    <button type="submit" lay-submit lay-filter="*" class="layui-btn">提交</button>
+  <li class="lay-form-item" style="text-align:center;">
+    <button type="submit" lay-submit lay-filter="*" class="lay-btn">提交</button>
   </li>
 </ul>
               `.trim(),
               success: function (layero, index) {
-                layero.find('.layui-layer-content').css('overflow', 'visible');
+                layero.find('.lay-layer-content').css('overflow', 'visible');
 
                 form.render().on('submit(*)', function (data) {
                   var field = data.field;
