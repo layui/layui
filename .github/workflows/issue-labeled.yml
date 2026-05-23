@@ -20,63 +20,72 @@ jobs:
           contribute="详见：🍀 [Layui Issue 贡献指南](https://github.com/layui/layui/blob/main/CONTRIBUTING.md)"
           echo "CONTRIBUTING=$contribute" >> $GITHUB_OUTPUT
 
-      - name: help wanted
-        if: github.event.label.name == 'help wanted'
-        uses: actions-cool/issues-helper@v3
+      - name: handle labeled issue
+        uses: actions/github-script@v8
         with:
-          actions: 'create-comment'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          body: |
-            @${{ github.event.issue.user.login }} 你好 👋。
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const labelName = context.payload.label?.name;
+            const issue = context.payload.issue;
+            const config = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            };
+
+            const templates = {
+              'help wanted': {
+                close: false,
+                body: `@${issue.user.login} 你好 👋。
             我们赞成为该议题寻求社区帮助，欢迎创建 [Pull Request](https://github.com/layui/layui/pulls) 来协助实现，若变更内容涉及到 API 新增和改动，除了提交核心代码外，还需包含：文档、测试用例等相关文件，以便我们更好地进行 Review。期待您的贡献!
-            > ${{ steps.template.outputs.CONTRIBUTING }}
-
-      - name: invalid
-        if: github.event.label.name == 'invalid'
-        uses: actions-cool/issues-helper@v3
-        with:
-          actions: 'create-comment,close-issue'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          body: |
-            @${{ github.event.issue.user.login }} 你好，为了提升沟通效率，我们对 Issue 制定了严格的要求，你的 Issue 因不符合规定而被自动关闭。
+            > ${{ steps.template.outputs.CONTRIBUTING }}`,
+              },
+              'invalid': {
+                close: true,
+                body: `@${issue.user.login} 你好，为了提升沟通效率，我们对 Issue 制定了严格的要求，你的 Issue 因不符合规定而被自动关闭。
             建议你在下次创建 Issue 时，遵循相应规范和社区行为准则。谢谢。
-            > ${{ steps.template.outputs.CONTRIBUTING }}
-
-      - name: need reproduce
-        if: github.event.label.name == 'need reproduce'
-        uses: actions-cool/issues-helper@v3
-        with:
-          actions: 'create-comment'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          body: |
-            @${{ github.event.issue.user.login }} 你好，请提供一个最小化的重现，以便我们为你协助排查问题。良好的重现应当包括但不仅限于：
+            > ${{ steps.template.outputs.CONTRIBUTING }}`,
+              },
+              'need reproduce': {
+                close: false,
+                body: `@${issue.user.login} 你好，请提供一个最小化的重现，以便我们为你协助排查问题。良好的重现应当包括但不仅限于：
             - 产生问题的详细步骤
             - 与问题相关的完整代码
             - 在线 Demo (推荐通过 [stackblitz](https://stackblitz.com/) 或 [codepen](https://codepen.io/) 创建)
             > ${{ steps.template.outputs.CONTRIBUTING }}
-            > 延伸：👉 [为什么要提供最小化重现？](https://antfu.me/posts/why-reproductions-are-required-zh)
-
-      - name: discussion
-        if: github.event.label.name == 'discussion'
-        uses: actions-cool/issues-helper@v3
-        with:
-          actions: 'create-comment,close-issue'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          body: |
-            @${{ github.event.issue.user.login }} 你好，Issue 只接受「Bug 报告」和「功能请求」，而你的议题涉及到如何使用、功能疑惑或其他业务相关的问题，这并不适合作为 Issue 讨论。建议你通过以下方式寻求解决方案：
+            > 延伸：👉 [为什么要提供最小化重现？](https://antfu.me/posts/why-reproductions-are-required-zh)`,
+              },
+              'discussion': {
+                close: true,
+                body: `@${issue.user.login} 你好，Issue 只接受「Bug 报告」和「功能请求」，而你的议题涉及到如何使用、功能疑惑或其他业务相关的问题，这并不适合作为 Issue 讨论。建议你通过以下方式寻求解决方案：
             - 仔细查阅 Layui 官方文档：https://layui.dev
             - 通过其他技术社区搜索相关资料、或充分利用当前主流的人工智能大模型
             - [Discussions](https://github.com/layui/layui/discussions)
-            > ${{ steps.template.outputs.CONTRIBUTING }}
-
-      - name: unrelated
-        if: github.event.label.name == 'unrelated'
-        uses: actions-cool/issues-helper@v3
-        with:
-          actions: 'create-comment,close-issue'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          body: |
-            @${{ github.event.issue.user.login }} 你提出的问题与 Layui 可能不存在相关联。建议通过以下方式寻求解决方案：
+            > ${{ steps.template.outputs.CONTRIBUTING }}`,
+              },
+              'unrelated': {
+                close: true,
+                body: `@${issue.user.login} 你提出的问题与 Layui 可能不存在相关联。建议通过以下方式寻求解决方案：
             - 通过其他技术社区搜索相关资料、或充分利用当前主流的人工智能大模型
             - [Discussions](https://github.com/layui/layui/discussions)
-            > ${{ steps.template.outputs.CONTRIBUTING }}
+            > ${{ steps.template.outputs.CONTRIBUTING }}`,
+              },
+            };
+
+            const action = templates[labelName];
+            if (!action) {
+              core.info(`Skip unsupported label: ${labelName}`);
+              return;
+            }
+
+            await github.rest.issues.createComment({
+              ...config,
+              body: action.body,
+            });
+
+            if (action.close) {
+              await github.rest.issues.update({
+                ...config,
+                state: 'closed',
+              });
+            }
