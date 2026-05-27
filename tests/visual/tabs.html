@@ -206,22 +206,18 @@
     <script src="./assets/dist/layui.js"></script>
     <script>
       layui.use(() => {
-        var $ = layui.$;
-        var tabs = layui.tabs;
-        var utils = layui.utils;
-        var layer = layui.layer;
-        var dropdown = layui.dropdown;
+        const { $, tabs, utils, layer, dropdown } = layui;
 
         // 新增随机标签
-        var addTabs = (opts) => {
-          var n = (Math.random() * 1000) | 0; // 演示标记
+        const addTabs = (opts) => {
+          const n = (Math.random() * 1000) | 0; // 演示标记
           opts = $.extend(
             {
               title: 'New Tab ' + n, // 此处加 n 仅为演示区分，实际应用不需要
               content: 'New Tab Content ' + n,
               id: 'new-' + n,
               // active: false, // 是否设为活动标签
-              done: (data) => {
+              done(data) {
                 console.log(data); // 查看返回的参数
 
                 // 为新标签头添加任意属性 --- 2.11.2+
@@ -241,9 +237,11 @@
           tabs.add('demoTabs1', opts);
         };
 
+        console.dir(tabs);
+
         // 自定义事件
         utils.on({
-          add: () => {
+          add() {
             addTabs();
           },
         });
@@ -270,11 +268,11 @@
           console.log('beforeChange', data);
 
           // 切换确认提示
-          /*layer.confirm(`确定从「当前标签」切换到标签「${this.innerText}」吗？`, function(i) {
-        tabs.change('demoTabs1', data.to.index, true); // 强制切换
-        layer.close(i); // 关闭确认框
-      });
-      return false; // 阻止标签默认关闭*/
+          /* layer.confirm(`确定从「当前标签」切换到标签「${this.innerText}」吗？`, function(i) {
+            tabs.change('demoTabs1', data.to.index, true); // 强制切换
+            layer.close(i); // 关闭确认框
+          });
+          return false; // 阻止标签默认关闭 */
         });
 
         // tabs 切换后的事件
@@ -283,7 +281,7 @@
         });
 
         // 为标签头添加上下文菜单
-        var dropdownInst = dropdown.render({
+        const dropdownInst = dropdown.render({
           elem: '#demoTabs1 .lay-tabs-header>li',
           trigger: 'contextmenu',
           data: [
@@ -316,9 +314,9 @@
               mode: 'all',
             },
           ],
-          click: function (data, othis, event) {
-            var index = this.elem.index(); // 获取活动标签索引
-            var layid = this.elem.attr('lay-id');
+          click(data, othis, event) {
+            const index = this.elem.index(); // 获取活动标签索引
+            const layid = this.elem.attr('lay-id');
 
             // 新增标签操作
             if (data.action === 'add') {
@@ -339,7 +337,7 @@
         });
 
         // 方法渲染
-        tabs.render({
+        const tabsInst = tabs.render({
           elem: '#demoTabs2',
           header: [
             { title: 'Tab1', closable: false },
@@ -355,9 +353,10 @@
           // className: 'lay-tabs-card',
           closable: true,
         });
+        console.dir(tabsInst);
 
         // HASH 初始定位
-        var hash = location.hash.replace(/^#/, '');
+        const hash = location.hash.replace(/^#/, '');
         tabs.change('demoTabs-hash', hash);
 
         // 给任意元素绑定 Tab 功能

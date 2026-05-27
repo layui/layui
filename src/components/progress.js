@@ -4,69 +4,59 @@
  */
 
 import { $ } from 'jquery';
-import { componentBuilder } from '../core/component.js';
+import { Component } from '../core/component.js';
 
-// 创建组件
-var component = componentBuilder({
-  name: 'progress', // 组件名
-
+export class Progress extends Component {
   // 默认配置
-  config: {
+  static options = {
     elem: '.lay-progress',
-  },
+  };
 
-  CONST: {
-    ELEM: 'lay-progress',
-  },
+  static get CONST() {
+    return {
+      ...super.CONST,
+      ELEM: 'lay-progress',
+    };
+  }
 
-  render: function () {
-    var that = this;
-    var options = that.config;
+  render() {
+    const options = this.options;
+    const $elem = options.$elem;
+    const elemBar = $elem.find('.lay-progress-bar');
+    const percent = elemBar.attr('lay-percent');
 
-    options.elem.each(function () {
-      var othis = $(this);
-      var elemBar = othis.find('.lay-progress-bar');
-      var percent = elemBar.attr('lay-percent');
-
-      elemBar.css('width', function () {
-        return /^.+\/.+$/.test(percent)
-          ? new Function('return ' + percent)() * 100 + '%'
-          : percent;
-      });
-
-      if (othis.attr('lay-showpercent')) {
-        setTimeout(function () {
-          elemBar.html(
-            '<span class="' + CONST.ELEM + '-text">' + percent + '</span>',
-          );
-        }, 350);
-      }
+    elemBar.css('width', function () {
+      return /^.+\/.+$/.test(percent)
+        ? `${new Function(`return ${percent}`)() * 100}%`
+        : percent;
     });
-  },
-});
 
-var CONST = component.CONST;
+    if ($elem.attr('lay-showpercent')) {
+      setTimeout(() => {
+        elemBar.html(`<span class="${CONST.ELEM}-text">${percent}</span>`);
+      }, 350);
+    }
+  }
 
-// 扩展组件接口
-$.extend(component, {
   // 动态改变进度条
-  setValue: function (filter, percent) {
-    var ELEM = 'lay-progress';
-    var elem = $('.' + ELEM + '[lay-filter=' + filter + ']');
-    var elemBar = elem.find('.' + ELEM + '-bar');
-    var text = elemBar.find('.' + ELEM + '-text');
+  static setValue(filter, percent) {
+    const $elem = $(`.${CONST.ELEM}[lay-filter=${filter}]`);
+    const $elemBar = $elem.find(`.${CONST.ELEM}-bar`);
+    const $text = $elemBar.find(`.${CONST.ELEM}-text`);
 
-    elemBar
+    $elemBar
       .css('width', function () {
         return /^.+\/.+$/.test(percent)
-          ? new Function('return ' + percent)() * 100 + '%'
+          ? `${new Function(`return ${percent}`)() * 100}%`
           : percent;
       })
       .attr('lay-percent', percent);
-    text.text(percent);
+    $text.text(percent);
     return this;
-  },
-});
+  }
+}
+
+const CONST = Progress.CONST;
 
 // export
-export { component as progress };
+export { Progress as progress };

@@ -97,10 +97,10 @@
     <script src="./assets/dist/layui.js"></script>
     <script>
       layui.use(() => {
-        var flow = layui.flow;
+        const { flow } = layui;
 
         // 自动加载
-        flow.load({
+        flow.render({
           elem: '#ID-flow-demo', // 流加载容器
           scrollElem: '#ID-flow-demo', // 滚动条所在元素，一般不用填，此处只是演示需要。
           done: (page, next) => {
@@ -120,7 +120,7 @@
         });
 
         // 手动加载
-        var flowInst = flow.load({
+        var flowInst = flow.render({
           elem: '#test1', // 流加载容器
           // scrollElem: '.flow-default', // 滚动条所在元素，默认 document
           // end: '没有更多数据',
@@ -148,7 +148,7 @@
           moreText: '...',
         });
 
-        flow.load({
+        flow.render({
           elem: '#test2', // 流加载容器
           isLazyimg: true,
           done: (page, next) => {

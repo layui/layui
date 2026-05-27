@@ -1737,11 +1737,6 @@ var form = new Form();
 var $dom = $(document);
 var $win = $(window);
 
-// 初始自动完成渲染
-lay.use(function () {
-  form.render();
-});
-
 // 表单 reset 重置渲染
 $dom.on('reset', ELEM, function () {
   var filter = $(this).attr('lay-filter');

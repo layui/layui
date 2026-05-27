@@ -140,7 +140,7 @@
         var $ = layui.$;
         var layer = layui.layer;
         var upload = layui.upload;
-        var element = layui.element;
+        var progress = layui.progress;
 
         // 模拟接口
         var url = ''; // 'https://httpbin.org/post';
@@ -192,11 +192,11 @@
               uploadInst.upload();
             });
 
-            element.progress('demo', '0%');
+            progress.setValue('demo', '0%');
           },
           progress: (n, elem, res, index) => {
             console.log(n + '%', elem, res, index); //获取进度百分比
-            element.progress('demo', n + '%'); //可配合 layui 进度条元素使用
+            progress.setValue('demo', n + '%'); //可配合 layui 进度条元素使用
           },
         });
 
@@ -284,7 +284,7 @@
 
               demoListView.append(tr);
 
-              element.render('progress');
+              progress.render();
             });
           },
           done: function (res, index, upload) {
@@ -308,7 +308,7 @@
           progress: (n, elem, e, index) => {
             console.log(n);
             console.log(index);
-            element.progress('progress-' + index, n + '%'); //进度条
+            progress.setValue('progress-' + index, n + '%'); //进度条
           },
         });
 

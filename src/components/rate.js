@@ -5,39 +5,36 @@
 
 import { lay } from '../core/lay.js';
 import { $ } from 'jquery';
-import { componentBuilder } from '../core/component.js';
+import { Component } from '../core/component.js';
 
-// 创建组件
-var component = componentBuilder({
-  name: 'rate',
-
+export class Rate extends Component {
   // 默认配置
-  config: {
+  static options = {
     length: 5, // 评分的最大长度值
     value: 0, // 评分的初始值
     half: false, // 是否可以选择半星
     text: false, // 是否显示评分对应的文本
     readonly: false, // 是否只读
     theme: '', // 主题颜色
-  },
+  };
 
-  CONST: {
-    ELEM: 'lay-rate',
-    ICON_RATE: 'lay-icon-rate',
-    ICON_RATE_SOLID: 'lay-icon-rate-solid',
-    ICON_RATE_HALF: 'lay-icon-rate-half',
-    ICON_SOLID_HALF: 'lay-icon-rate-solid lay-icon-rate-half',
-    ICON_SOLID_RATE: 'lay-icon-rate-solid lay-icon-rate',
-    ICON_HALF_RATE: 'lay-icon-rate lay-icon-rate-half',
-  },
+  static get CONST() {
+    return {
+      ...super.CONST,
+      ELEM: 'lay-rate',
+      ICON_RATE: 'lay-icon-rate',
+      ICON_RATE_SOLID: 'lay-icon-rate-solid',
+      ICON_RATE_HALF: 'lay-icon-rate-half',
+      ICON_SOLID_HALF: 'lay-icon-rate-solid lay-icon-rate-half',
+      ICON_SOLID_RATE: 'lay-icon-rate-solid lay-icon-rate',
+      ICON_HALF_RATE: 'lay-icon-rate lay-icon-rate-half',
+    };
+  }
 
   // 渲染
-  render: function () {
-    var that = this;
-    var options = that.config;
-
-    // 自定义主题
-    var style = options.theme ? 'style="color: ' + options.theme + ';"' : '';
+  render() {
+    const options = this.options;
+    const style = options.theme ? `style="color: ${options.theme};"` : '';
 
     // 最大值不能大于总长度
     if (options.value > options.length) {
@@ -55,209 +52,187 @@ var component = componentBuilder({
     }
 
     // 组件模板
-    var template =
-      '<ul class="lay-rate" ' + (options.readonly ? 'readonly' : '') + '>';
-    for (var i = 1; i <= options.length; i++) {
-      var item =
-        '<li class="lay-inline"><i class="lay-icon ' +
-        (i > Math.floor(options.value)
-          ? CONST.ICON_RATE
-          : CONST.ICON_RATE_SOLID) +
-        '" ' +
-        style +
-        '></i></li>';
+    let template = `<ul class="lay-rate" ${options.readonly ? 'readonly' : ''}>`;
+    for (let i = 1; i <= options.length; i++) {
+      const item = `<li class="lay-inline"><i class="lay-icon ${
+        i > Math.floor(options.value) ? CONST.ICON_RATE : CONST.ICON_RATE_SOLID
+      }" ${style}></i></li>`;
       if (
         options.half &&
         parseInt(options.value) !== options.value &&
         i == Math.ceil(options.value)
       ) {
-        template =
-          template +
-          '<li><i class="lay-icon lay-icon-rate-half" ' +
-          style +
-          '></i></li>';
+        template += `<li><i class="lay-icon lay-icon-rate-half" ${style}></i></li>`;
       } else {
-        template = template + item;
+        template += item;
       }
     }
     template += '</ul>';
 
-    if (options.text) {
-      template += '<span class="lay-inline">' + options.value + '</span>';
-    }
+    const $textElem = (this.$textElem = $(
+      `<span class="lay-inline">${options.value}</span>`,
+    ));
 
     // 开始插入替代元素
-    var othis = options.elem;
-    var hasRender = othis.next('.' + CONST.ELEM);
+    const $elem = options.$elem;
 
-    // 生成替代元素
-    hasRender[0] && hasRender.remove(); // 如果已经渲染，则 Rerender
-    that.elemTemplate = $(template);
+    this.$rootElem = $(template);
+    $elem.html(this.$rootElem);
+    $elem.addClass('lay-inline');
 
-    options.span = that.elemTemplate.next('span');
-    options.setText && options.setText(options.value);
-
-    othis.html(that.elemTemplate);
-    othis.addClass('lay-inline');
+    if (options.text) {
+      $textElem.text(options.setText?.(options.value));
+      this.$rootElem.after($textElem);
+    }
 
     // 若非只读，则添加触控事件
     if (!options.readonly) {
-      that.action();
+      this.#action();
     }
-  },
+  }
 
-  // 扩展实例方法
-  extendsInstance: function () {
-    var that = this;
-    var options = that.config;
-    return {
-      setvalue: function (value) {
-        options.value = value;
-        that.render();
-      },
-    };
-  },
-});
+  setValue(value) {
+    this.options.value = value;
+    this.render();
+  }
 
-var CONST = component.CONST;
+  // li 相关事件
+  #action() {
+    const options = this.options;
+    const $rootElem = this.$rootElem;
+    const wide = $rootElem.find('i').width();
+    const liElems = $rootElem.children('li');
+    const $textElem = this.$textElem;
 
-/**
- * 扩展组件原型方法
- */
+    liElems.each(function (index) {
+      const ind = index + 1;
+      const $this = $(this);
 
-var Class = component.Class;
-
-// li 相关事件
-Class.prototype.action = function () {
-  var that = this;
-  var options = that.config;
-  var _ul = that.elemTemplate;
-  var wide = _ul.find('i').width();
-  var liElems = _ul.children('li');
-
-  liElems.each(function (index) {
-    var ind = index + 1;
-    var othis = $(this);
-
-    // 点击
-    othis.on('click', function (e) {
-      // 将当前点击li的索引值赋给 value
-      options.value = ind;
-      if (options.half) {
-        // 获取鼠标在 li 上的位置
-        var x = e.pageX - $(this).offset().left;
-        if (x <= wide / 2) {
-          options.value = options.value - 0.5;
+      // 点击
+      $this.on('click', function (e) {
+        // 将当前点击 li 的索引值赋给 value
+        options.value = ind;
+        if (options.half) {
+          // 获取鼠标在 li 上的位置
+          const x = e.pageX - $(this).offset().left;
+          if (x <= wide / 2) {
+            options.value -= 0.5;
+          }
         }
-      }
 
-      if (options.text) {
-        _ul.next('span').text(options.value);
-      }
-
-      options.choose && options.choose(options.value);
-      options.setText && options.setText(options.value);
-    });
-
-    // 移入
-    othis.on('mousemove', function (e) {
-      _ul.find('i').each(function () {
-        $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF);
-      });
-      _ul.find('i:lt(' + ind + ')').each(function () {
-        $(this)
-          .addClass(CONST.ICON_RATE_SOLID)
-          .removeClass(CONST.ICON_HALF_RATE);
-      });
-      // 如果设置可选半星，那么判断鼠标相对 li 的位置
-      if (options.half) {
-        var x = e.pageX - $(this).offset().left;
-        if (x <= wide / 2) {
-          othis
-            .children('i')
-            .addClass(CONST.ICON_RATE_HALF)
-            .removeClass(CONST.ICON_RATE_SOLID);
+        if (options.text) {
+          $textElem.text(options.setText?.(options.value) || options.value);
         }
-      }
-    });
 
-    // 移出
-    othis.on('mouseleave', function () {
-      _ul.find('i').each(function () {
-        $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF);
+        options.choose?.(options.value);
       });
-      _ul.find('i:lt(' + Math.floor(options.value) + ')').each(function () {
-        $(this)
-          .addClass(CONST.ICON_RATE_SOLID)
-          .removeClass(CONST.ICON_HALF_RATE);
-      });
-      // 如果设置可选半星，根据分数判断是否有半星
-      if (options.half) {
-        if (parseInt(options.value) !== options.value) {
-          _ul
-            .children('li:eq(' + Math.floor(options.value) + ')')
-            .children('i')
-            .addClass(CONST.ICON_RATE_HALF)
-            .removeClass(CONST.ICON_SOLID_RATE);
-        }
-      }
-    });
-  });
 
-  lay.touchSwipe(_ul, {
-    onTouchMove: function (e, state) {
-      if (Date.now() - state.timeStart <= 200) return;
-      var pageX = e.touches[0].pageX;
-      var rateElemWidth = _ul.width();
-      var itemElemWidth = rateElemWidth / options.length; // 单颗星的宽度
-      var offsetX = pageX - _ul.offset().left;
-      var num = offsetX / itemElemWidth; // 原始值
-      var remainder = num % 1;
-      var integer = num - remainder;
-
-      // 最终值
-      var score =
-        remainder <= 0.5 && options.half ? integer + 0.5 : Math.ceil(num);
-      if (score > options.length) score = options.length;
-      if (score < 0) score = 0;
-
-      liElems.each(function (index) {
-        var iconElem = $(this).children('i');
-        var isActiveIcon = Math.ceil(score) - index === 1;
-        var needSelect = Math.ceil(score) > index;
-        var shouldHalfIcon = score - index === 0.5;
-
-        if (needSelect) {
-          // 设置选中样式
-          iconElem
+      // 移入
+      $this.on('mousemove', function (e) {
+        $rootElem.find('i').each(function () {
+          $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF);
+        });
+        $rootElem.find(`i:lt(${ind})`).each(function () {
+          $(this)
             .addClass(CONST.ICON_RATE_SOLID)
             .removeClass(CONST.ICON_HALF_RATE);
-          if (options.half && shouldHalfIcon) {
-            iconElem
+        });
+        // 如果设置可选半星，那么判断鼠标相对 li 的位置
+        if (options.half) {
+          const x = e.pageX - $(this).offset().left;
+          if (x <= wide / 2) {
+            $this
+              .children('i')
               .addClass(CONST.ICON_RATE_HALF)
               .removeClass(CONST.ICON_RATE_SOLID);
           }
-        } else {
-          // 恢复初始样式
-          iconElem.addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF);
         }
-
-        // 设置缩放样式
-        iconElem.toggleClass('lay-rate-hover', isActiveIcon);
       });
 
-      // 更新最终值
-      options.value = score;
-      if (options.text) _ul.next('span').text(options.value);
-      options.setText && options.setText(options.value);
-    },
-    onTouchEnd: function (e, state) {
-      if (Date.now() - state.timeStart <= 200) return;
-      _ul.find('i').removeClass('lay-rate-hover');
-      options.choose && options.choose(options.value);
-      options.setText && options.setText(options.value);
-    },
-  });
-};
+      // 移出
+      $this.on('mouseleave', function () {
+        $rootElem.find('i').each(function () {
+          $(this).addClass(CONST.ICON_RATE).removeClass(CONST.ICON_SOLID_HALF);
+        });
+        $rootElem.find(`i:lt(${Math.floor(options.value)})`).each(function () {
+          $(this)
+            .addClass(CONST.ICON_RATE_SOLID)
+            .removeClass(CONST.ICON_HALF_RATE);
+        });
+        // 如果设置可选半星，根据分数判断是否有半星
+        if (options.half) {
+          if (parseInt(options.value) !== options.value) {
+            $rootElem
+              .children(`li:eq(${Math.floor(options.value)})`)
+              .children('i')
+              .addClass(CONST.ICON_RATE_HALF)
+              .removeClass(CONST.ICON_SOLID_RATE);
+          }
+        }
+      });
+    });
 
-export { component as rate };
+    lay.touchSwipe($rootElem, {
+      onTouchMove: function (e, state) {
+        if (Date.now() - state.timeStart <= 200) return;
+        const pageX = e.touches[0].pageX;
+        const rateElemWidth = $rootElem.width();
+        const itemElemWidth = rateElemWidth / options.length; // 单颗星的宽度
+        const offsetX = pageX - $rootElem.offset().left;
+        const num = offsetX / itemElemWidth; // 原始值
+        const remainder = num % 1;
+        const integer = num - remainder;
+
+        // 最终值
+        let score =
+          remainder <= 0.5 && options.half ? integer + 0.5 : Math.ceil(num);
+        if (score > options.length) score = options.length;
+        if (score < 0) score = 0;
+
+        liElems.each(function (index) {
+          const iconElem = $(this).children('i');
+          const isActiveIcon = Math.ceil(score) - index === 1;
+          const needSelect = Math.ceil(score) > index;
+          const shouldHalfIcon = score - index === 0.5;
+
+          if (needSelect) {
+            // 设置选中样式
+            iconElem
+              .addClass(CONST.ICON_RATE_SOLID)
+              .removeClass(CONST.ICON_HALF_RATE);
+            if (options.half && shouldHalfIcon) {
+              iconElem
+                .addClass(CONST.ICON_RATE_HALF)
+                .removeClass(CONST.ICON_RATE_SOLID);
+            }
+          } else {
+            // 恢复初始样式
+            iconElem
+              .addClass(CONST.ICON_RATE)
+              .removeClass(CONST.ICON_SOLID_HALF);
+          }
+
+          // 设置缩放样式
+          iconElem.toggleClass('lay-rate-hover', isActiveIcon);
+        });
+
+        // 更新最终值
+        options.value = score;
+
+        if (options.text) {
+          $textElem.text(options.setText?.(options.value) || options.value);
+        }
+      },
+      onTouchEnd: function (e, state) {
+        if (Date.now() - state.timeStart <= 200) return;
+        $rootElem.find('i').removeClass('lay-rate-hover');
+        options.choose?.(options.value);
+        $textElem.text(options.setText?.(options.value) || options.value);
+      },
+    });
+  }
+}
+
+const CONST = Rate.CONST;
+
+export { Rate as rate };

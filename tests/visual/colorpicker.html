@@ -58,9 +58,9 @@
     <script src="./assets/dist/layui.js"></script>
     <script>
       layui.use(() => {
-        var colorpicker = layui.colorpicker;
+        const { colorpicker } = layui;
 
-        colorpicker.render({
+        const colorpickerInst = colorpicker.render({
           elem: '#test1',
           //,predefine: true //开启预定义颜色
           //,colors: ['#F00','#0F0','#00F','rgb(255, 69, 0)','rgba(255, 69, 0, 0.5)']
@@ -79,6 +79,8 @@
             console.log('close', color);
           },
         });
+
+        console.dir(colorpickerInst);
 
         colorpicker.render({
           elem: '#test2',

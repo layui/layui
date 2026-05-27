@@ -7,9 +7,8 @@ import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
 import { openWindow } from '../utils/index.js';
-import { element } from './element.js';
+import { initializer } from './initializer.js';
 import { layer } from './layer.js';
-import { form } from './form.js';
 import { tabs } from './tabs.js';
 
 // 常量
@@ -506,10 +505,8 @@ export function code(options) {
             container: thisItemBody,
             options: options,
             render: function () {
-              form.render(thisItemBody.find('.lay-form'));
-              element.render();
-              tabs.render({
-                elem: ['.' + CONST.ELEM_PREVIEW, '.lay-tabs'].join(' '),
+              initializer.render({
+                elem: thisItemBody,
               });
             },
           });

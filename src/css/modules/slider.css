@@ -22,6 +22,9 @@
   transform: translateX(-50%);
 }
 .lay-slider-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 36px;
   height: 36px;
   position: absolute;
@@ -29,7 +32,6 @@
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
   z-index: 10;
-  text-align: center;
 }
 .lay-slider-wrap-btn {
   width: 12px;
@@ -40,12 +42,6 @@
   vertical-align: middle;
   cursor: pointer;
   transition: 0.3s;
-}
-.lay-slider-wrap:after {
-  content: '';
-  height: 100%;
-  display: inline-block;
-  vertical-align: middle;
 }
 .lay-slider-wrap-btn:hover,
 .lay-slider-wrap-btn.lay-slider-hover {

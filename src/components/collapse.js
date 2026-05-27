@@ -5,72 +5,59 @@
 
 import { lay } from '../core/lay.js';
 import { $ } from 'jquery';
-import { componentBuilder } from '../core/component.js';
+import { Component } from '../core/component.js';
 
-var SUPER_MOD_NAME = 'element'; // 所属的超级模块名，确保向下兼容
-
-// 创建组件
-var component = componentBuilder({
-  name: 'collapse', // 组件名
-
+export class Collapse extends Component {
   // 默认配置
-  config: {
+  static options = {
     elem: '.lay-collapse',
-  },
+  };
 
-  render: function () {
-    var that = this;
-    var options = that.config;
+  render() {
+    const options = this.options;
+    const elemItem = options.$elem.find('.lay-collapse-item');
 
-    options.elem.each(function () {
-      var elemItem = $(this).find('.lay-collapse-item');
-      elemItem.each(function () {
-        var othis = $(this);
-        var elemTitle = othis.find('.lay-collapse-title');
-        var elemCont = othis.find('.lay-collapse-content');
-        var isNone = elemCont.css('display') === 'none';
-        var clickEventName = 'click.lay_collapse_click';
+    elemItem.each(function () {
+      const $this = $(this);
+      const elemTitle = $this.find('.lay-collapse-title');
+      const elemCont = $this.find('.lay-collapse-content');
+      const isNone = elemCont.css('display') === 'none';
+      const clickEventName = 'click.lay_collapse_click';
 
-        // 初始状态
-        elemTitle.find('.lay-collapse-icon').remove();
-        elemTitle.append(
-          '<i class="lay-icon lay-icon-right lay-collapse-icon"></i>',
-        );
-        othis[isNone ? 'removeClass' : 'addClass'](CONST.CLASS_SHOW);
+      // 初始状态
+      elemTitle.find('.lay-collapse-icon').remove();
+      elemTitle.append(
+        '<i class="lay-icon lay-icon-right lay-collapse-icon"></i>',
+      );
+      $this[isNone ? 'removeClass' : 'addClass'](CONST.CLASS_SHOW);
 
-        // 兼容旧版（ < 2.11.3）
-        if (elemCont.hasClass(CONST.CLASS_SHOW)) {
-          elemCont.removeClass(CONST.CLASS_SHOW);
-        }
-
-        // 点击标题
-        elemTitle
-          .off(clickEventName, event.titleClick)
-          .on(clickEventName, event.titleClick);
-      });
+      // 点击标题
+      elemTitle
+        .off(clickEventName, events.titleClick)
+        .on(clickEventName, events.titleClick);
     });
-  },
-});
+  }
+}
 
 // 基础事件体
-var event = {
+const events = {
   // 点击面板标题项
-  titleClick: function () {
-    var othis = $(this);
-    var wrapper = othis.closest('.lay-collapse');
-    var filter = wrapper.attr('lay-filter');
+  titleClick() {
+    const $this = $(this);
+    const wrapper = $this.closest('.lay-collapse');
+    const filter = wrapper.attr('lay-filter');
 
-    var ANIM_MS = 200; // 动画过渡毫秒数
-    var CLASS_ITEM = '.lay-collapse-item';
-    var CLASS_CONTENT = '.lay-collapse-content';
+    const ANIM_MS = 200; // 动画过渡毫秒数
+    const CLASS_ITEM = '.lay-collapse-item';
+    const CLASS_CONTENT = '.lay-collapse-content';
 
-    var thisItemElem = othis.parent(CLASS_ITEM);
-    var thisContentElem = othis.siblings(CLASS_CONTENT);
-    var isNone = thisContentElem.css('display') === 'none';
-    var isAccordion = typeof wrapper.attr('lay-accordion') === 'string';
+    const thisItemElem = $this.parent(CLASS_ITEM);
+    const thisContentElem = $this.siblings(CLASS_CONTENT);
+    const isNone = thisContentElem.css('display') === 'none';
+    const isAccordion = typeof wrapper.attr('lay-accordion') === 'string';
 
     // 动画执行完成后的操作
-    var complete = function () {
+    const complete = function () {
       $(this).css('display', ''); // 剔除动画生成的 style display，以适配外部样式的状态重置
     };
 
@@ -90,21 +77,21 @@ var event = {
 
     // 是否开启手风琴
     if (isAccordion) {
-      var itemSiblings = thisItemElem.siblings('.' + CONST.CLASS_SHOW);
+      const itemSiblings = thisItemElem.siblings(`.${CONST.CLASS_SHOW}`);
       itemSiblings.removeClass(CONST.CLASS_SHOW);
       itemSiblings.children(CLASS_CONTENT).show().slideUp(ANIM_MS, complete);
     }
 
     // 事件
-    lay.event.call(this, SUPER_MOD_NAME, 'collapse(' + filter + ')', {
-      title: othis,
+    lay.event.call(this, Collapse.componentName, `click(${filter})`, {
+      title: $this,
       content: thisContentElem,
       show: isNone,
     });
   },
 };
 
-var CONST = component.CONST;
+const CONST = Collapse.CONST;
 
 // export
-export { component as collapse };
+export { Collapse as collapse };

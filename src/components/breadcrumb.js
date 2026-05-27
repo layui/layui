@@ -1,38 +1,44 @@
 /**
  * breadcrumb
- * 面包屑导航组件
+ * 面包屑
  */
 
 import { $ } from 'jquery';
-import { componentBuilder } from '../core/component.js';
+import { Component } from '../core/component.js';
 
-// 创建组件
-var component = componentBuilder({
-  name: 'breadcrumb', // 组件名
-
-  // 默认配置
-  config: {
+export class Breadcrumb extends Component {
+  // 默认配置项
+  static options = {
     elem: '.lay-breadcrumb',
-  },
+  };
 
-  render: function () {
-    var that = this;
-    var options = that.config;
+  static get CONST() {
+    return {
+      ...super.CONST,
+      ATTR_SEPARATOR: 'lay-separator',
+    };
+  }
 
-    options.elem.each(function () {
-      var othis = $(this);
-      var ATTE_SPR = 'lay-separator';
-      var separator = othis.attr(ATTE_SPR) || '/';
-      var aNode = othis.find('a');
-      if (aNode.next('span[' + ATTE_SPR + ']')[0]) return;
-      aNode.each(function (index) {
-        if (index === aNode.length - 1) return;
-        $(this).after('<span ' + ATTE_SPR + '>' + separator + '</span>');
-      });
-      othis.css('visibility', 'visible');
+  // 渲染
+  render() {
+    const options = this.options;
+    const $elem = options.$elem;
+
+    const ATTR_SEPARATOR = CONST.ATTR_SEPARATOR;
+    const separator = $elem.attr(ATTR_SEPARATOR) || '/';
+    const $aElem = $elem.children('a');
+
+    if ($aElem.next('span[' + ATTR_SEPARATOR + ']')[0]) return;
+
+    $aElem.each(function (index) {
+      if (index === $aElem.length - 1) return;
+      $(this).after(`<span ${ATTR_SEPARATOR}>${separator}</span>`);
     });
-  },
-});
 
-// export
-export { component as breadcrumb };
+    $elem.css('visibility', 'visible');
+  }
+}
+
+const CONST = Breadcrumb.CONST;
+
+export { Breadcrumb as breadcrumb };

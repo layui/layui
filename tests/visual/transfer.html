@@ -21,10 +21,10 @@
   </head>
   <body>
     <div class="lay-btn-container">
-      <button type="button" class="lay-btn" lay-demo="getData">
+      <button type="button" class="lay-btn" lay-on="getData">
         获取右侧数据
       </button>
-      <button type="button" class="lay-btn" lay-demo="reload">重载实例</button>
+      <button type="button" class="lay-btn" lay-on="reload">重载实例</button>
     </div>
 
     <div id="text1"></div>
@@ -44,7 +44,7 @@
     <script type="module">
       const { $, transfer, utils } = layui;
 
-      var ins1 = transfer.render({
+      const transferInst = transfer.render({
         elem: '#text1',
         title: ['候选文人', '获奖文人'],
         data: [
@@ -69,20 +69,22 @@
         showSearch: true, // 若区分大小写，设置 'cs'
       });
 
-      //按钮事件
-      utils.on('lay-demo', {
-        getData: (othis) => {
-          alert(JSON.stringify(ins1.getData()));
+      console.dir(transferInst);
+
+      // 按钮事件
+      utils.on({
+        getData() {
+          alert(JSON.stringify(transferInst.getData()));
         },
-        reload: () => {
+        reload() {
           transfer.reload('demoId', {
             value: ['6'],
-            //,data: [{"value": "1", "title": "李白"}]
+            // data: [{"value": "1", "title": "李白"}]
           });
         },
       });
 
-      var ins2 = transfer.render({
+      transfer.render({
         elem: '#text2',
         showSearch: true,
         onchange: (obj) => {

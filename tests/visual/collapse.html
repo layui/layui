@@ -10,11 +10,9 @@
     <h2>常规用法：</h2>
     <br />
     <div class="lay-collapse" lay-filter="test">
-      <div class="lay-collapse-item">
+      <div class="lay-collapse-item lay-show">
         <h3 class="lay-collapse-title">item 1</h3>
-        <div class="lay-collapse-content lay-show">
-          旧版，通过给列表的内容添加 lay-show 类开启显示
-        </div>
+        <div class="lay-collapse-content">content 1</div>
       </div>
       <div class="lay-collapse-item">
         <h3 class="lay-collapse-title">item2</h3>
@@ -27,33 +25,12 @@
     </div>
 
     <br />
-
-    <div class="lay-collapse" lay-filter="test">
-      <div class="lay-collapse-item lay-show">
-        <h3 class="lay-collapse-title">item 111</h3>
-        <div class="lay-collapse-content">
-          新版 <sup>2.11.4+</sup>，通过给列表项直接添加 lay-show 类开启显示
-        </div>
-      </div>
-      <div class="lay-collapse-item">
-        <h3 class="lay-collapse-title">item 222</h3>
-        <div class="lay-collapse-content">content 2</div>
-      </div>
-      <div class="lay-collapse-item">
-        <h3 class="lay-collapse-title">item 333</h3>
-        <div class="lay-collapse-content">content 3</div>
-      </div>
-    </div>
-
-    <br />
     <h2>开启手风琴：</h2>
     <br />
     <div class="lay-collapse" lay-accordion>
       <div class="lay-collapse-item lay-show">
         <h3 class="lay-collapse-title">item 1</h3>
-        <div class="lay-collapse-content">
-          旧版，通过给列表的内容添加 lay-show 类开启显示
-        </div>
+        <div class="lay-collapse-content">content 1</div>
       </div>
       <div class="lay-collapse-item">
         <h3 class="lay-collapse-title">item2</h3>
@@ -68,9 +45,9 @@
     <script src="./assets/dist/layui.js"></script>
     <script>
       layui.use(() => {
-        var element = layui.element;
+        const { collapse } = layui;
 
-        element.on('collapse(test)', (data) => {
+        collapse.on('click(test)', (data) => {
           console.log(data);
         });
       });
