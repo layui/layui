@@ -35,7 +35,7 @@
 
     <div
       id="demo"
-      class="lay-progress lay-progress-big"
+      class="lay-progress lay-size-xl"
       lay-percent="0"
       lay-show-percent="true"
     ></div>
@@ -282,8 +282,9 @@
               });
 
               demoListView.append(tr);
-
-              progress.render();
+              progress.render({
+                elem: tr.find('.lay-progress'),
+              });
             });
           },
           done: function (res, index, upload) {
