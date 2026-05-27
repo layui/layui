@@ -81,7 +81,7 @@ export class Rate extends Component {
     $elem.addClass('lay-inline');
 
     if (options.text) {
-      $textElem.text(options.setText?.(options.value));
+      $textElem.text(options.setText?.(options.value) || options.value);
       this.$rootElem.after($textElem);
     }
 

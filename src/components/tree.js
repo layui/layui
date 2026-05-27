@@ -925,7 +925,7 @@ export class Tree extends Component {
           const parent = $(item).parent(`.${CONST.ELEM_SET}`);
           parent.removeClass(`lay-tree-searchShow ${CONST.CLASS_HIDE}`);
         });
-      if ($('.lay-tree-emptyText')[0]) $('.lay-tree-emptyText').remove();
+      this.$emptyElem.remove();
     });
   }
 }

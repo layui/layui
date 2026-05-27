@@ -34,7 +34,7 @@ export class Initializer {
     for (const [componentName, component] of Object.entries(components)) {
       const CLASS_ELEM = `.lay-${componentName}`;
       const elem = $container
-        ? $container.find(CLASS_ELEM)
+        ? $container.find(CLASS_ELEM).addBack(CLASS_ELEM)
         : component?.options?.elem || CLASS_ELEM;
       const $elem = $(elem);
 
