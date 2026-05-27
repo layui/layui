@@ -107,12 +107,12 @@ export class Component {
   /**
    * 组件渲染（创建组件实例唯一入口）
    * @param {Object} options - 配置项
-   * @returns {InstanceType<typeof this>} - 组件实例
+   * @returns {InstanceType<typeof this>|Array<InstanceType<typeof this>>}
+   * 返回组件实例；若 options.elem 对应多个元素，则返回组件实例数组
    */
   static render(options) {
     const inst = new this(options);
-    inst.#init(); // 初始化
-    return inst;
+    return inst.#init();
   }
 
   // 构造函数
@@ -135,8 +135,7 @@ export class Component {
   // 重载实例
   reload(options) {
     $.extend(this.options, options);
-    this.#init(true);
-    return this;
+    return this.#init(true);
   }
 
   /**
@@ -149,19 +148,20 @@ export class Component {
     const $elem = $(options.elem);
     const Constructor = this.constructor;
     const ATTR_ID = Constructor.CONST.ATTR_ID;
+    const existingId = $elem.attr(ATTR_ID);
     const instances = getInstanceBucket(Constructor);
 
-    // 若 elem 非唯一，则拆分为多个实例
+    // 若 elem 非唯一，则进行多实例渲染
     if ($elem.length > 1) {
-      return $elem.each(function () {
-        Constructor.render({
-          ...options,
-          elem: this,
-        });
-      });
+      const batchOptions = { ...options };
+      delete batchOptions.id; // 多实例渲染过滤传入的 id 选项
+
+      return $elem
+        .map((_, elem) => Constructor.render({ ...batchOptions, elem }))
+        .get();
     }
 
-    // 合并 lay-options 属性上的配置信息（鉴于 CSP 策略，后续考虑移除）
+    // 合并 lay-options 属性上的配置信息（鉴于 CSP 策略，后续将移除此功能）
     const layOptions = lay.options($elem[0]);
     if (rerender) {
       // 若重载渲染，则重载传入的 options 配置优先
@@ -170,11 +170,15 @@ export class Component {
       $.extend(options, layOptions); // 若首次渲染，则 lay-options 配置优先
     }
 
-    // 若重复执行 render，则视为 reload 处理
-    if (!rerender && $elem.attr(ATTR_ID)) {
-      const inst = Constructor.getInst($elem.attr(ATTR_ID));
-      if (!inst) return;
-      return inst.reload(options);
+    // 若对目标元素重复渲染，则视为 reload 处理
+    if (!rerender) {
+      if (existingId) {
+        const inst = Constructor.getInst(existingId);
+        if (inst) {
+          return inst.reload(options);
+        }
+        $elem.removeAttr(ATTR_ID); // 若实例不存在，清理失效标记
+      }
     }
 
     // 添加元素的 jQuery 对象至选项，以供组件内部使用
@@ -193,6 +197,8 @@ export class Component {
       $elem.attr(ATTR_ID, options.id); // 目标元素已渲染过的标记
       this.render(rerender); // 渲染核心
     }
+
+    return this;
   }
 
   /**
