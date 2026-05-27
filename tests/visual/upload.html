@@ -34,12 +34,11 @@
     </div>
 
     <div
+      id="demo"
       class="lay-progress lay-progress-big"
-      lay-showPercent="yes"
-      lay-filter="demo"
-    >
-      <div class="lay-progress-bar" lay-percent=""></div>
-    </div>
+      lay-percent="0"
+      lay-show-percent="true"
+    ></div>
 
     <hr />
 
@@ -192,11 +191,11 @@
               uploadInst.upload();
             });
 
-            progress.setValue('demo', '0%');
+            progress.setValue('demo', 0);
           },
           progress: (n, elem, res, index) => {
             console.log(n + '%', elem, res, index); //获取进度百分比
-            progress.setValue('demo', n + '%'); //可配合 layui 进度条元素使用
+            progress.setValue('demo', n); //可配合 layui 进度条元素使用
           },
         });
 
@@ -260,9 +259,9 @@
                   '<tr id="upload-' + index + '">',
                   '<td>' + file.name + '</td>',
                   '<td>' + (file.size / 1014).toFixed(1) + 'kb</td>',
-                  '<td><div class="lay-progress" lay-filter="progress-' +
+                  '<td><div id="progress-' +
                     index +
-                    '"><div class="lay-progress-bar" lay-percent=""></div></div></td>',
+                    '" class="lay-progress" lay-percent="0"></div></td>',
                   '<td>',
                   '<button class="lay-btn lay-btn-xs demo-reload lay-hide">重传</button>',
                   '<button class="lay-btn lay-btn-xs lay-btn-danger demo-delete">删除</button>',
@@ -304,11 +303,12 @@
             var tr = demoListView.find('tr#upload-' + index),
               tds = tr.children();
             tds.eq(3).find('.demo-reload').removeClass('lay-hide'); //显示重传
+            progress.setValue('progress-' + index, 0);
           },
           progress: (n, elem, e, index) => {
             console.log(n);
             console.log(index);
-            progress.setValue('progress-' + index, n + '%'); //进度条
+            progress.setValue('progress-' + index, n); //进度条
           },
         });
 

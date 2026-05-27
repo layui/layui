@@ -6,58 +6,63 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
-    <title>常用元素 - layui</title>
+    <title>进度条 - layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
   </head>
   <body>
     <div class="lay-padding-5">
+      <div class="lay-progress" lay-percent="33" lay-show-percent="true"></div>
+
+      <br />
+
       <div
         class="lay-progress"
-        lay-showPercent="true"
-        lay-filter="demo-progress-1"
-      >
-        <div class="lay-progress-bar" lay-percent="1/3"></div>
-      </div>
+        lay-percent="20"
+        lay-progress-color="var(--lay-color-red)"
+      ></div>
 
       <br />
 
-      <div class="lay-progress">
-        <div class="lay-progress-bar lay-bg-red" lay-percent="20%"></div>
-      </div>
+      <div
+        class="lay-progress"
+        lay-percent="30"
+        lay-progress-color="var(--lay-color-orange)"
+      ></div>
 
       <br />
 
-      <div class="lay-progress">
-        <div class="lay-progress-bar lay-bg-orange" lay-percent="30%"></div>
-      </div>
+      <div
+        class="lay-progress"
+        lay-percent="40"
+        lay-progress-color="var(--lay-color-green)"
+      ></div>
 
       <br />
 
-      <div class="lay-progress">
-        <div class="lay-progress-bar lay-bg-green" lay-percent="40%"></div>
-      </div>
+      <div
+        class="lay-progress"
+        lay-percent="50"
+        lay-progress-color="var(--lay-color-blue)"
+      ></div>
 
       <br />
 
-      <div class="lay-progress">
-        <div class="lay-progress-bar lay-bg-blue" lay-percent="50%"></div>
-      </div>
-
-      <br />
-
-      <div class="lay-progress">
-        <div class="lay-progress-bar lay-bg-cyan" lay-percent="60%"></div>
-      </div>
+      <div
+        class="lay-progress"
+        lay-percent="60"
+        lay-progress-color="var(--lay-color-accent)"
+      ></div>
 
       <br />
 
       <div
         class="lay-progress lay-progress-big"
-        lay-showPercent="true"
-        lay-filter="demo-filter-progress"
-      >
-        <div class="lay-progress-bar" lay-percent="15%"></div>
-      </div>
+        id="LAY-progress-demo-set"
+        lay-percent="15"
+        lay-show-percent="true"
+        lay-progress-color="var(--lay-color-primary)"
+        lay-progress-rail-color="#d9d9d9"
+      ></div>
 
       <br />
 
@@ -72,11 +77,13 @@
       layui.use(() => {
         const { progress, utils } = layui;
 
-        // 普通事件
+        const DEMO_ID = 'LAY-progress-demo-set';
+
+        // 批量事件
         utils.on({
           // 设置进度值
           setPercent() {
-            progress.setValue('demo-filter-progress', '50%'); // 设置 50% 的进度
+            progress.setValue(DEMO_ID, 50); // 设置 50% 的进度
           },
           // 模拟 loading
           loading(othis) {
@@ -92,7 +99,7 @@
                   clearInterval(timer);
                   othis.removeClass(DISABLED);
                 }
-                progress.setValue('demo-filter-progress', n + '%');
+                progress.setValue(DEMO_ID, n);
               },
               300 + Math.random() * 1000,
             );
