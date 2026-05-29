@@ -1168,6 +1168,7 @@
     var map = data.reduce(function (acc, currNode) {
       var id = currNode[options.idKey];
       acc[id] = currNode;
+      // 给当前节点已有的 childrenKey 数组初始化为空数组
       if (Array.isArray(currNode[options.childrenKey])) {
         acc[id][options.childrenKey] = [];
       }
@@ -1187,8 +1188,16 @@
       if (parentId === null || !map[parentId]) {
         acc.push(map[id]);
       } else {
-        // 若为子节点，则添加到父节点的 childrenKey 中
-        var parentNodeChildren = map[parentId][options.childrenKey];
+        // 若为子节点，则添加到对应父节点的 childrenKey 中
+        var parentNode = map[parentId];
+
+        // 若父节点不存在 childrenKey 属性，则初设一个空数组
+        if (!parentNode[options.childrenKey]) {
+          parentNode[options.childrenKey] = [];
+        }
+
+        var parentNodeChildren = parentNode[options.childrenKey];
+
         if (Array.isArray(parentNodeChildren)) {
           parentNodeChildren.push(currNode);
         }
