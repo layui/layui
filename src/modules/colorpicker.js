@@ -773,9 +773,12 @@ layui.define(['i18n', 'component'], function (exports) {
 
       //确认
       confirm: function (othis, change) {
-        var value = $.trim(elemPickerInput.val()),
-          colorValue,
-          hsb;
+        var value = $.trim(elemPickerInput.val());
+        var type = elemColorBoxSpan.attr('lay-type');
+        var colorValue;
+        var hsb;
+        var rgb;
+        var alpha;
 
         if (value.indexOf(',') > -1) {
           hsb = RGBToHSB(RGBSTo(value));
@@ -785,13 +788,14 @@ layui.define(['i18n', 'component'], function (exports) {
 
           if (
             (value.match(/[0-9]{1,3}/g) || []).length > 3 &&
-            elemColorBoxSpan.attr('lay-type') === 'rgba'
+            type === 'rgba'
           ) {
-            var left =
-              value.slice(value.lastIndexOf(',') + 1, value.length - 1) * 280;
+            alpha = parseFloat(
+              value.slice(value.lastIndexOf(',') + 1, value.length - 1)
+            );
             that.elemPicker
               .find('.' + CONST.PICKER_ALPHA_SLIDER)
-              .css('left', left);
+              .css('left', alpha * 280);
             elemColorBoxSpan[0].style.background = value;
             colorValue = value;
           }
@@ -810,9 +814,28 @@ layui.define(['i18n', 'component'], function (exports) {
           options.change && options.change(colorValue);
           return;
         }
-        that.color = value;
 
-        options.done && options.done(value);
+        // 按 format 规范化最终输出颜色值，保证 done 回调与 format 配置一致
+        rgb = HSBToRGB(hsb);
+        if (type === 'rgba') {
+          colorValue =
+            'rgba(' +
+            rgb.r +
+            ', ' +
+            rgb.g +
+            ', ' +
+            rgb.b +
+            ', ' +
+            (alpha === undefined ? 1 : alpha) +
+            ')';
+        } else if (type === 'torgb') {
+          colorValue = 'rgb(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ')';
+        } else {
+          colorValue = '#' + HSBToHEX(hsb);
+        }
+        that.color = colorValue;
+
+        options.done && options.done(colorValue);
         that.removePicker();
       }
     };
