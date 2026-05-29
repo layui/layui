@@ -11,6 +11,21 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.13.7" lay-pid="2.10+" class="ws-anchor">
+  v2.13.7
+  <span class="layui-badge-rim">2026-05-29</span>
+</h2>
+
+- 优化 table 固定列的滚动体验 #3050 @Sight-wcg
+- 优化 table 执行数据重载时对容器内的 form 组件的渲染机制 #3061 @sentsim
+- 优化 laydate 时间选择器列表的滚动定位 #3049 @Sight-wcg
+- 修复 colorpicker 手动输入时 `done` 返回的颜色值未遵循 `format` 格式的问题 #3048 @Sight-wcg
+- 修复 `lay.flatToTree` 对缺少 `children` 的数据项无法转树的问题  #3060 @sentsim
+
+### 下载： [layui-v2.13.7.zip](#download)
+
+---
+
 <h2 id="v2.13.6" lay-pid="2.10+" class="ws-anchor">
   v2.13.6
   <span class="layui-badge-rim">2026-04-30</span>
