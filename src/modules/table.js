@@ -3443,26 +3443,122 @@ layui.define(
         function (fn) {
           return setTimeout(fn, 1000 / 60);
         };
+      var cAF = window.cancelAnimationFrame || clearTimeout;
 
-      // 固定列滚轮事件 - 临时兼容方案
+      // 固定列滚轮事件
+      var scrollRAF = null;
+      var scrollVelocity = 0;
+      var lastTime = 0;
+      var lastWheelTime = 0;
+      var SCROLL_CONFIG = {
+        inertiaThreshold: 50, // 惯性检测阈值
+        velocityAccumTime: 100, // 速度累积时间窗口
+        velocityFactor: 0.5, // 快速滚动速度系数
+        velocityInitFactor: 0.2, // 初始速度系数
+        maxVelocity: 120, // 最大速度
+        friction: 0.85, // 摩擦系数
+        stopThreshold: 1 // 停止阈值
+      };
+
       that.layFixed
         .find(ELEM_BODY)
         .on('mousewheel DOMMouseScroll', function (e) {
-          var delta = e.originalEvent.wheelDelta || -e.originalEvent.detail;
-          var scrollTop = that.layMain.scrollTop();
-          var step = 100;
-          var rAFStep = 10;
+          // 规范化 deltaY
+          var oe = e.originalEvent;
+          var deltaY;
+          if (oe.deltaY !== undefined) {
+            deltaY = oe.deltaY;
+          } else if (oe.wheelDelta !== undefined) {
+            deltaY = -oe.wheelDelta;
+          } else if (oe.detail !== undefined) {
+            deltaY = oe.detail * 40;
+          }
+
+          // 边界检测：到达边界时不阻止默认行为，让页面正常滚动
+          var mainEl = that.layMain[0];
+          var scrollTop = mainEl.scrollTop;
+          var scrollH = mainEl.scrollHeight;
+          var clientH = mainEl.clientHeight;
+          var atTop = scrollTop <= 0;
+          var atBottom = Math.ceil(scrollTop + clientH) >= Math.floor(scrollH);
+          // 判断是否为触摸板惯性滚动，防止其带动页面滚动。
+          // chrome 中触摸板惯性滚动触发频率和屏幕刷新率一致，firefox 中触发频率单调递减。
+          // 当触发间隔极短时，认为是惯性滚动，这么做不准确，但在此场景可以在性能和功能之间取得平衡
+          var wheelTime = e.timeStamp || Date.now();
+          var isInertia =
+            wheelTime - lastWheelTime < SCROLL_CONFIG.inertiaThreshold;
+          lastWheelTime = wheelTime;
+
+          if ((deltaY < 0 && atTop) || (deltaY > 0 && atBottom)) {
+            if (scrollRAF) {
+              cAF(scrollRAF);
+              scrollRAF = null;
+            }
+            scrollVelocity = 0;
+            // 惯性滚动到达边界，阻止默认行为（防止页面滚动）
+            if (isInertia) {
+              e.preventDefault();
+            }
+            return;
+          }
 
           e.preventDefault();
-          var cb = function () {
-            if (step > 0) {
-              step -= rAFStep;
-              scrollTop += delta > 0 ? -rAFStep : rAFStep;
-              that.layMain.scrollTop(scrollTop);
-              rAF(cb);
+
+          // 取消之前的动画
+          if (scrollRAF) {
+            cAF(scrollRAF);
+            scrollRAF = null;
+          }
+
+          // 累积滚动速度
+          var now = Date.now();
+          var timeDelta = now - lastTime;
+          lastTime = now;
+
+          if (timeDelta < SCROLL_CONFIG.velocityAccumTime) {
+            scrollVelocity += deltaY * SCROLL_CONFIG.velocityFactor;
+          } else {
+            scrollVelocity = deltaY * SCROLL_CONFIG.velocityInitFactor;
+          }
+
+          // 限制最大速度
+          scrollVelocity = Math.max(
+            -SCROLL_CONFIG.maxVelocity,
+            Math.min(SCROLL_CONFIG.maxVelocity, scrollVelocity)
+          );
+
+          // 直接滚动
+          that.layMain.scrollTop(scrollTop + scrollVelocity);
+
+          // 惯性衰减动画
+          var animate = function () {
+            scrollVelocity *= SCROLL_CONFIG.friction; // 摩擦衰减
+
+            if (Math.abs(scrollVelocity) > SCROLL_CONFIG.stopThreshold) {
+              var curTop = that.layMain.scrollTop();
+              var newTop = curTop + scrollVelocity;
+              var newAtTop = newTop <= 0;
+              var newAtBottom =
+                Math.ceil(newTop + clientH) >= Math.floor(scrollH);
+
+              if (
+                (scrollVelocity < 0 && newAtTop) ||
+                (scrollVelocity > 0 && newAtBottom)
+              ) {
+                scrollVelocity = 0;
+                scrollRAF = null;
+                return;
+              }
+
+              that.layMain.scrollTop(newTop);
+              scrollRAF = rAF(animate);
+            } else {
+              scrollVelocity = 0;
+              scrollRAF = null;
             }
           };
-          rAF(cb);
+
+          scrollRAF = rAF(animate);
         });
     };
 
