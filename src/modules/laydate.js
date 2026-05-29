@@ -2281,20 +2281,43 @@ layui.define(['lay', 'i18n'], function (exports) {
     } else {
       //时间选择面板 - 选择事件
       var span = lay.elem('span', {
-          class: ELEM_TIME_TEXT
-        }),
-        //滚动条定位
-        scroll = function () {
+        class: ELEM_TIME_TEXT
+      });
+
+      //滚动条定位
+      var scroll = function () {
           lay(ul)
             .find('ol')
             .each(function (i) {
-              var ol = this,
-                li = lay(ol).find('li');
-              ol.scrollTop = 30 * (that[startEnd][hms[i]] - 2);
-              if (ol.scrollTop <= 0) {
+              var ol = this;
+              var li = lay(ol).find('li');
+              var firstItem = li[0];
+              var selectedItem = li[that[startEnd][hms[i]]];
+              var itemHeight = (firstItem && firstItem.offsetHeight) || 30;
+              // 锚点行偏移：scrollTop 始终落在 itemHeight 整数倍上，让选中项
+              // 显示在接近 ol 中央的整行位置，端点项自然贴顶/贴底
+              var anchorOffset =
+                Math.floor((ol.clientHeight - itemHeight) / 2 / itemHeight) *
+                itemHeight;
+              // item.offsetTop 和同级 li[0] 相减，差值即 item 在 ol 中的真实偏移，无需考虑 offsetParent
+              var getScrollTop = function (item) {
+                if (!item || !firstItem) return 0;
+                return Math.max(
+                  0,
+                  item.offsetTop - firstItem.offsetTop - anchorOffset
+                );
+              };
+
+              var isDisabled = lay(selectedItem).hasClass(DISABLED);
+              if (!isDisabled) {
+                ol.scrollTop = getScrollTop(selectedItem);
+              }
+
+              // 选中项缺失或被禁用时，回退到首个可用项
+              if (!selectedItem || isDisabled) {
                 li.each(function (ii, item) {
                   if (!lay(this).hasClass(DISABLED)) {
-                    ol.scrollTop = 30 * (ii - 2);
+                    ol.scrollTop = getScrollTop(item);
                     return true;
                   }
                 });
