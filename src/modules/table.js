@@ -1891,7 +1891,11 @@ layui.define(
 
         // 渲染表单
         that.syncCheckAll();
-        that.renderForm();
+        if (/^(reloadData|renderData)$/.test(opts.type)) {
+          that.renderFormByElem(that.layBox);
+        } else {
+          that.renderForm();
+        }
 
         // 因为 page 参数有可能发生变化 先重新铺满
         that.fullSize();
@@ -2701,7 +2705,7 @@ layui.define(
 
           // 插入元素
           othis.find('.' + ELEM_TOOL_PANEL)[0] || othis.append(panel);
-          that.renderForm();
+          that.renderFormByElem(panel);
 
           panel.on('click', function (e) {
             layui.stope(e);
