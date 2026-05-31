@@ -181,7 +181,7 @@ export class Colorpicker extends Component {
 </div>
     `));
 
-    // this.#removePicker(); // 若已存在则先移除
+    this.#removePicker(); // 若已存在则先移除
     $rootElem.attr(CONST.ATTR_ID, options.id);
     options.target.append($rootElem);
     options.$elem.data(CONST.PICKER_OPENED, true); // 面板已打开的标记
