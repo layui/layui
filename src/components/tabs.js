@@ -123,6 +123,7 @@ export class Tabs extends Component {
   // 渲染
   render() {
     const options = this.options;
+    const Constructor = this.constructor;
 
     // 标签页元素项
     this.headerElem = [`.${CONST.HEADER}:eq(0)`, '>li'];
@@ -212,7 +213,7 @@ export class Tabs extends Component {
     // 渲染成功后的事件
     lay.event.call(
       options.$elem[0],
-      CONST.componentName,
+      Constructor.componentName,
       `afterRender(${options.id})`,
       data,
     );
@@ -255,7 +256,7 @@ export class Tabs extends Component {
         : data.thisHeaderItem;
       const bodyItem = hasOwnIndex
         ? this.getBodyItem(opts.index)
-        : data.thisHeaderItem;
+        : data.thisBodyItem;
       headerItem[opts.mode](newHeaderItem);
       bodyItem[opts.mode](newBodyItem);
     } else {

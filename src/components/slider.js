@@ -451,7 +451,6 @@ export class Slider extends Component {
     sliderAct.find('.' + CONST.SLIDER_WRAP_BTN).each(function (index) {
       const $this = $(this);
       $this.on('mousedown touchstart', function (e) {
-        e = e || window.event;
         if (e.type === 'touchstart') {
           e.clientX = e.originalEvent.touches[0].clientX;
           e.clientY = e.originalEvent.touches[0].clientY;
@@ -466,7 +465,6 @@ export class Slider extends Component {
         }
 
         const move = function (e) {
-          e = e || window.event;
           if (e.type === 'touchmove') {
             e.clientX = e.touches[0].clientX;
             e.clientY = e.touches[0].clientY;
@@ -500,9 +498,10 @@ export class Slider extends Component {
     sliderAct.on('click', function (e) {
       const main = $('.' + CONST.SLIDER_WRAP_BTN);
       const $this = $(this);
+
       if (
-        !main.is(event.target) &&
-        main.has(event.target).length === 0 &&
+        !main.is(e.target) &&
+        main.has(e.target).length === 0 &&
         main.length
       ) {
         let index;

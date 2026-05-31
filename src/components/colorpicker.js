@@ -129,8 +129,8 @@ export class Colorpicker extends Component {
     const options = this.options;
 
     // 颜色选择器对象
-    const elemPicker = (this.$rootElem = $(`
-<div id="lay-colorpicker${this.index}" data-index="${this.index}" class="lay-anim lay-anim-downbit lay-colorpicker-main">
+    const $rootElem = (this.$rootElem = $(`
+<div class="lay-anim lay-anim-downbit lay-colorpicker-main">
   <div class="lay-colorpicker-main-wrapper">
     <div class="lay-colorpicker-basis">
       <div class="lay-colorpicker-basis-white"></div>
@@ -181,8 +181,9 @@ export class Colorpicker extends Component {
 </div>
     `));
 
-    this.#removePicker(options.id); // 若已存在则先移除
-    options.target.append(elemPicker);
+    // this.#removePicker(); // 若已存在则先移除
+    $rootElem.attr(CONST.ATTR_ID, options.id);
+    options.target.append($rootElem);
     options.$elem.data(CONST.PICKER_OPENED, true); // 面板已打开的标记
 
     this.#position();
@@ -192,19 +193,19 @@ export class Colorpicker extends Component {
   }
 
   // 颜色选择器移除
-  #removePicker(index) {
+  #removePicker() {
     const options = this.options;
-    const $picker = $(`#lay-colorpicker${index || this.index}`);
+    const $rootElem = this.$rootElem;
 
     this.stopClickOutsideEvent();
     this.stopResizeEvent();
 
-    if ($picker[0]) {
-      $picker.remove();
+    if ($rootElem[0]) {
+      $rootElem.remove();
       options.$elem.removeData(CONST.PICKER_OPENED);
 
       // 面板关闭后的回调
-      typeof options.close === 'function' && options.close(this.color);
+      options.close?.(this.color);
     }
 
     return this;
@@ -542,7 +543,7 @@ export class Colorpicker extends Component {
     // if(type === 'change') return;
 
     // 选中的颜色
-    // that.elemPicker.find('.' + CONST.PICKER_INPUT).find('input').val('#'+ color);
+    // that.$rootElem.find('.' + CONST.PICKER_INPUT).find('input').val('#'+ color);
   }
 
   #pickerEvents() {
