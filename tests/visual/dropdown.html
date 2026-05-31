@@ -7,12 +7,13 @@
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
     <title>下拉菜单 - layui</title>
-
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
   </head>
   <body>
-    <div class="lay-container">
-      <div class="lay-btn-container" style="padding: 30px 0">
+    <div class="lay-container lay-padding-3">
+      <h2>常规</h2>
+      <hr />
+      <div class="lay-btn-container" style="padding: 16px 0">
         <button class="lay-btn" id="demo1">
           按钮下拉
           <i class="lay-icon lay-icon-down lay-font-12"></i>
@@ -23,23 +24,35 @@
         </button>
       </div>
 
-      <div class="lay-text">
-        <a href="javascript:;" id="demo3"
-          >文字下拉 <i class="lay-icon lay-icon-down"></i
-        ></a>
-      </div>
-
-      <div class="lay-btn-container">
-        <a href="javascript:;" id="testopen"
-          >testopen <i class="lay-icon lay-icon-down"></i
-        ></a>
-        <button class="lay-btn" lay-on="open">open</button>
-        <button class="lay-btn" lay-on="close">close</button>
+      <div
+        style="
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          column-gap: 32px;
+          row-gap: 11px;
+        "
+        ;
+      >
+        <div class="lay-text">
+          <a href="javascript:;" id="demo3"
+            >文字下拉 <i class="lay-icon lay-icon-down"></i
+          ></a>
+        </div>
+        <div
+          style="display: flex; align-items: center; gap: 11px; flex-wrap: wrap"
+        >
+          <span id="testopen"> 目标元素（通过外部打开或关闭面板） </span>
+          <div>
+            <button class="lay-btn" lay-on="open">open</button>
+            <button class="lay-btn" lay-on="close">close</button>
+          </div>
+        </div>
       </div>
 
       <div
         class="lay-bg-gray"
-        style="margin-top: 30px; width: 100%; height: 300px; text-align: center"
+        style="margin-top: 32px; width: 100%; height: 160px; text-align: center"
         id="ID-dropdown-demo-contextmenu"
       >
         <span class="lay-font-gray" style="position: relative; top: 50%"
@@ -49,184 +62,216 @@
       <button class="lay-btn" style="margin-top: 15px" lay-on="contextmenu">
         开启全局右键菜单
       </button>
+
+      <br /><br />
+      <h2>重载</h2>
+      <hr />
+      <div
+        class="lay-form"
+        style="display: flex; flex-wrap: wrap; column-gap: 32px; row-gap: 11px"
+      >
+        <div>
+          <button class="lay-btn" id="ID-dropdown-demo-reload">
+            <span>完整重载</span>
+            <i class="lay-icon lay-icon-down lay-font-12"></i>
+          </button>
+        </div>
+        <div>
+          <label>仅数据或内容重载：</label>
+          <div class="lay-inline">
+            <input
+              type="text"
+              autocomplete="off"
+              placeholder="输入关键字"
+              class="lay-input"
+              id="ID-dropdown-demo-reloadData"
+            />
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="./assets/dist/layui.js"></script>
     <script>
       layui.use(() => {
-        var dropdown = layui.dropdown;
-        var utils = layui.utils;
+        const { dropdown, utils, $ } = layui;
 
-        dropdown.render({
+        // 模拟数据
+        const DEMO_DATA = [
+          {
+            title: 'menu item 1',
+            template() {
+              return `<i class="lay-icon lay-icon-light"></i> ${this.title} <span class="lay-badge-dot"></span>`;
+            },
+            id: '',
+            href: '',
+            type: '', // 菜单类型，支持：normal|group|parent
+          },
+          {
+            title: 'menu item <strong>2</strong>',
+            template() {
+              return `<img src="https://unpkg.com/outeres@0.1.1/demo/avatar/0.png" style="width: 16px;"> ${this.title}`;
+            },
+            id: '',
+            href: 'https://example.com',
+            target: '_blank',
+          },
+          { type: '-' },
+          {},
+          {
+            title: 'menu item 3 <hello>',
+            id: '',
+            type: 'group',
+            children: [
+              {
+                title: 'menu item 3-1',
+                id: '',
+              },
+              {
+                title: 'menu item 3-2',
+                id: '',
+                children: [
+                  {
+                    title: 'menu item 3-2-1',
+                    id: '',
+                  },
+                  {
+                    title: 'menu item 3-2-2',
+                    id: '',
+                    type: 'group',
+                    children: [
+                      {
+                        title: 'menu item 3-2-2-1',
+                        id: '',
+                      },
+                      {
+                        title: 'menu item 3-2-2-2',
+                        id: '',
+                      },
+                    ],
+                  },
+                  {
+                    title: 'menu item 3-2-3',
+                    id: '',
+                  },
+                ],
+              },
+              {
+                title: 'menu item 3-3',
+                id: '',
+                type: 'group',
+                children: [
+                  {
+                    title: 'menu item 3-3-1',
+                    id: '',
+                  },
+                  {
+                    title: 'menu item 3-3-2',
+                    id: '',
+                    children: [
+                      {
+                        title: 'menu item 3-3-2-1',
+                        id: '',
+                      },
+                      {
+                        title: 'menu item 3-3-2-2',
+                        id: '',
+                      },
+                      {
+                        title: 'menu item 3-3-2-3',
+                        id: '',
+                      },
+                    ],
+                  },
+                  {
+                    title: 'menu item 3-3-3',
+                    id: '',
+                  },
+                ],
+              },
+            ],
+          },
+          { type: '-' },
+          {
+            title: 'menu item 4',
+            id: '',
+          },
+          {
+            title: 'menu item 5',
+            id: '',
+            children: [
+              {
+                title: 'menu item 5-1',
+                id: '',
+                children: [
+                  {
+                    title: 'menu item 5-1-1',
+                    id: '',
+                  },
+                  {
+                    title: 'menu item 5-1-2',
+                    id: '',
+                  },
+                  {
+                    title: 'menu item 5-1-3',
+                    id: '',
+                  },
+                ],
+              },
+              {
+                title: 'menu item 5-2',
+                id: '',
+              },
+              {
+                title: 'menu item 5-3',
+                id: '',
+              },
+            ],
+          },
+          { type: '-' },
+          {
+            title: 'menu item 6',
+            id: '',
+            type: 'group',
+            isSpreadItem: false,
+            children: [
+              {
+                title: 'menu item 6-1',
+                id: '',
+              },
+              {
+                title: 'menu item 6-2',
+                id: '',
+              },
+              {
+                title: 'menu item 6-3',
+                id: '',
+              },
+            ],
+          },
+        ];
+
+        const dropdownInst = dropdown.render({
           elem: '#demo1',
           shade: [0.1, '#ddd'],
-          //,align: 'right'
-          data: [
-            {
-              title: 'menu item 1',
-              templet:
-                '<i class="lay-icon lay-icon-light"></i> {{= d.title }} <span class="lay-badge-dot"></span>',
-              id: '',
-              href: '',
-              type: '', //菜单类型，支持：normal/group/parent
-            },
-            {
-              title: 'menu item <strong>2</strong>',
-              templet:
-                '<img src="https://unpkg.com/outeres@0.1.1/demo/avatar/0.png" style="width: 16px;"> {{- d.title }}',
-              id: '',
-              href: 'https://www.layui.com/',
-              target: '_blank',
-            },
-            { type: '-' },
-            {},
-            {
-              title: 'menu item 3 <hello>',
-              id: '',
-              type: 'group',
-              child: [
-                {
-                  title: 'menu item 3-1',
-                  id: '',
-                },
-                {
-                  title: 'menu item 3-2',
-                  id: '',
-                  child: [
-                    {
-                      title: 'menu item 3-2-1',
-                      id: '',
-                    },
-                    {
-                      title: 'menu item 3-2-2',
-                      id: '',
-                      type: 'group',
-                      child: [
-                        {
-                          title: 'menu item 3-2-2-1',
-                          id: '',
-                        },
-                        {
-                          title: 'menu item 3-2-2-2',
-                          id: '',
-                        },
-                      ],
-                    },
-                    {
-                      title: 'menu item 3-2-3',
-                      id: '',
-                    },
-                  ],
-                },
-                {
-                  title: 'menu item 3-3',
-                  id: '',
-                  type: 'group',
-                  child: [
-                    {
-                      title: 'menu item 3-3-1',
-                      id: '',
-                    },
-                    {
-                      title: 'menu item 3-3-2',
-                      id: '',
-                      child: [
-                        {
-                          title: 'menu item 3-3-2-1',
-                          id: '',
-                        },
-                        {
-                          title: 'menu item 3-3-2-2',
-                          id: '',
-                        },
-                        {
-                          title: 'menu item 3-3-2-3',
-                          id: '',
-                        },
-                      ],
-                    },
-                    {
-                      title: 'menu item 3-3-3',
-                      id: '',
-                    },
-                  ],
-                },
-              ],
-            },
-            { type: '-' },
-            {
-              title: 'menu item 4',
-              id: '',
-            },
-            {
-              title: 'menu item 5',
-              id: '',
-              child: [
-                {
-                  title: 'menu item 5-1',
-                  id: '',
-                  child: [
-                    {
-                      title: 'menu item 5-1-1',
-                      id: '',
-                    },
-                    {
-                      title: 'menu item 5-1-2',
-                      id: '',
-                    },
-                    {
-                      title: 'menu item 5-1-3',
-                      id: '',
-                    },
-                  ],
-                },
-                {
-                  title: 'menu item 5-2',
-                  id: '',
-                },
-                {
-                  title: 'menu item 5-3',
-                  id: '',
-                },
-              ],
-            },
-            { type: '-' },
-            {
-              title: 'menu item 6',
-              id: '',
-              type: 'group',
-              isSpreadItem: false,
-              child: [
-                {
-                  title: 'menu item 6-1',
-                  id: '',
-                },
-                {
-                  title: 'menu item 6-2',
-                  id: '',
-                },
-                {
-                  title: 'menu item 6-3',
-                  id: '',
-                },
-              ],
-            },
-          ],
-
-          id: 'demo1',
-
+          data: DEMO_DATA,
           // 触发点击事件的元素范围 --- default: 仅子菜单触发点击事件（默认，可不填）; all: 所有父子菜单均触发点击事件
           clickScope: 'all',
-
           // 菜单被点击的事件
-          click: (obj) => {
-            console.log(obj);
+          click(obj) {
+            console.log('click', obj);
           },
         });
 
-        var inst = dropdown.render({
+        console.log('dropdown: ');
+        console.dir(dropdown);
+        console.log('dropdown.render instance: ', dropdownInst);
+
+        dropdown.render({
           elem: '#demo2',
-          // ,show: true
+          // defaultOpen: true,
+          closeOnClick: false,
+          // align: 'right',
           data: [
             {
               title: 'menu item 1',
@@ -243,17 +288,17 @@
               href: '#3',
             },
           ],
-          click: (data, othis) => {
-            console.log(data);
+          click(data, $this) {
+            console.log(`click ${this.id}:`, data, $this);
             if (data.id === 'bbb') {
               return false;
             }
           },
-          ready: (...args) => {
-            console.log(args);
+          ready(...args) {
+            console.log(`ready ${this.id}`, args);
           },
-          close: function () {
-            console.log('demo2', this.elem);
+          close() {
+            console.log(`close ${this.id}`, this.$elem);
           },
         });
 
@@ -263,8 +308,8 @@
           style: 'background:#666;color:#fff;padding:15px;',
           align: 'center',
           trigger: 'hover',
-          close: function () {
-            console.log('demo3', this.elem);
+          closefunction() {
+            console.log(`close ${this.id}`, this.elem);
           },
         });
 
@@ -367,11 +412,82 @@
           { trigger: 'mouseenter' },
         );
 
-        return;
-
+        // 完整重载
         dropdown.render({
-          elem: document,
-          content: '123',
+          elem: '#ID-dropdown-demo-reload',
+          data: [
+            {
+              title: 'menu item 1',
+              id: 100,
+            },
+            {
+              title: '重载该面板',
+              id: 101,
+            },
+          ],
+          click(data) {
+            // 菜单项对应设置的 id 值
+            if (data.id === 101) {
+              // 重载方法
+              dropdown.reload(this.id, {
+                data: [
+                  {
+                    title: '新选项 1',
+                    id: 111,
+                  },
+                  {
+                    title: '新选项 2',
+                    id: 222,
+                  },
+                ],
+              });
+              return false; // 点击该选项，阻止面板关闭
+            }
+          },
+        });
+
+        // 仅数据或内容重载
+        const reloadDataInst = dropdown.render({
+          elem: '#ID-dropdown-demo-reloadData',
+          data: [
+            { id: 1, title: 'Python' },
+            { id: 2, title: 'JavaScript' },
+            { id: 3, title: 'Java' },
+            { id: 4, title: 'C++' },
+            { id: 5, title: 'PHP' },
+            { id: 6, title: 'Ruby' },
+            { id: 7, title: 'Swift' },
+            { id: 8, title: 'TypeScript' },
+            { id: 9, title: 'Kotlin' },
+            { id: 10, title: 'Go' },
+          ],
+          style: 'min-width: 190px; box-shadow: 1px 1px 11px rgb(0 0 0 / 11%);',
+          click(data) {
+            this.$elem.val(data.title);
+          },
+        });
+        const sourceData = reloadDataInst.options.data;
+
+        // 输入框输入事件
+        reloadDataInst.options.$elem.on('input', function () {
+          const $this = $(this);
+          const value = $this.val().trim();
+          // 匹配到对应内容时，重载数据
+          const dataNew = sourceData.filter(function (item) {
+            const exp = new RegExp(value.split('').join('|'), 'i');
+            return exp.test(item.title);
+          });
+
+          console.log(sourceData);
+          dropdown.reloadData(reloadDataInst.options.id, {
+            data: dataNew, // 匹配到的新数据
+            template(d) {
+              const exp = new RegExp(value.split('').join('|'), 'gi');
+              return d.title.replace(exp, function (str) {
+                return '<span style="color: red;">' + str + '</span>';
+              });
+            },
+          });
         });
       });
     </script>
