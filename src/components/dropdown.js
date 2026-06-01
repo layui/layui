@@ -57,7 +57,10 @@ export class Dropdown extends Component {
     return consts;
   }
 
-  // 关闭面板
+  /**
+   * 关闭面板
+   * @param {string|number} id - 实例 id
+   */
   static close(id) {
     const inst = this.getInst(id);
     if (!inst) return;
@@ -65,7 +68,10 @@ export class Dropdown extends Component {
     inst.remove();
   }
 
-  // 打开面板
+  /**
+   * 打开面板
+   * @param {string|number} id - 实例 id
+   */
   static open(id) {
     const inst = this.getInst(id);
     if (!inst) return;
@@ -73,18 +79,24 @@ export class Dropdown extends Component {
     inst.open();
   }
 
-  // 仅重载数据
+  /**
+   * 仅重载数据
+   * @param {string|number} id - 实例 id
+   * @param {Object} options - 配置项；仅允许重载与数据相关的选项，如:
+   * `data、template、content`，其他选项将被忽略
+   * @returns @see Component.reload
+   */
   static reloadData(...args) {
-    // 重载时，过滤与数据无关的选项
-    const dataParams = new RegExp('^(data|template|content)$');
-    Object.keys(args[1] || {}).forEach((key) => {
-      if (!dataParams.test(key)) {
-        delete args[1][key];
+    const options = { ...args[1] };
+    const allowedReloadKeys = new Set(['data', 'template', 'content']);
+
+    Object.keys(options).forEach((key) => {
+      if (!allowedReloadKeys.has(key)) {
+        delete options[key];
       }
     });
 
-    args[1] = { ...args[1], _renderMode: 'reloadData' };
-
+    args[1] = { ...options, _renderMode: 'reloadData' };
     return this.reload(...args);
   }
 
@@ -120,7 +132,9 @@ export class Dropdown extends Component {
     }
   }
 
-  // 打开下拉菜单
+  /**
+   * 打开下拉菜单
+   */
   open() {
     const options = this.options;
     const customName = options.customName;
@@ -179,7 +193,7 @@ export class Dropdown extends Component {
         )
           return;
 
-        //列表元素
+        // 列表元素
         const className = {
           group: `lay-menu-item-group${
             options.isAllowSpread
@@ -197,10 +211,21 @@ export class Dropdown extends Component {
             : item.disabled
               ? CONST.CLASS_DISABLED
               : '';
-        const viewText =
-          'href' in item
-            ? `<a href="${item.href}" target="${item.target || '_self'}">${title}</a>`
-            : title;
+        const viewText = (() => {
+          if (!('href' in item)) {
+            return title;
+          }
+
+          const target = item.target || '_self';
+          const $link = $('<a></a>')
+            .attr({
+              href: item.href,
+              target,
+            })
+            .html(title);
+
+          return $link.prop('outerHTML');
+        })();
         const suffixIcon = (() => {
           if (type === 'parent') {
             return '<i class="lay-icon lay-icon-right"></i>';
@@ -343,7 +368,9 @@ export class Dropdown extends Component {
     options.ready?.(options, $rootElem);
   }
 
-  // 移除面板
+  /**
+   * 移除面板
+   */
   remove() {
     const options = this.options;
     const $rootElem = this.$rootElem;
@@ -601,7 +628,7 @@ const toggleMenuGroup = ($groupElem, isAccordion) => {
       $parent
         .find(`.${CONST.ELEM_ITEM_CHECKED2}`)
         .removeClass(CONST.ELEM_ITEM_CHECKED2); // 清除父级菜单选中样式
-      $this.addClass(CONST.ELEM_ITEM_CHECKED); //添加选中样式
+      $this.addClass(CONST.ELEM_ITEM_CHECKED); // 添加选中样式
       $this
         .parents(`.${CONST.ELEM_ITEM_PARENT}`)
         .addClass(CONST.ELEM_ITEM_CHECKED2); // 添加父级菜单选中样式

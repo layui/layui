@@ -308,7 +308,7 @@
           style: 'background:#666;color:#fff;padding:15px;',
           align: 'center',
           trigger: 'hover',
-          closefunction() {
+          close() {
             console.log(`close ${this.id}`, this.elem);
           },
         });
@@ -461,17 +461,29 @@
             { id: 9, title: 'Kotlin' },
             { id: 10, title: 'Go' },
           ],
+          trigger: 'focus',
           style: 'min-width: 190px; box-shadow: 1px 1px 11px rgb(0 0 0 / 11%);',
           click(data) {
             this.$elem.val(data.title);
           },
         });
+        const reloadDataInstId = reloadDataInst.options.id;
         const sourceData = reloadDataInst.options.data;
 
         // 输入框输入事件
         reloadDataInst.options.$elem.on('input', function () {
           const $this = $(this);
           const value = $this.val().trim();
+
+          // 输入为空时，恢复初始渲染状态
+          if (!value) {
+            dropdown.reloadData(reloadDataInstId, {
+              data: sourceData,
+              template: null, // 恢复默认模板
+            });
+            return;
+          }
+
           // 匹配到对应内容时，重载数据
           const dataNew = sourceData.filter(function (item) {
             const exp = new RegExp(value.split('').join('|'), 'i');
@@ -479,7 +491,7 @@
           });
 
           console.log(sourceData);
-          dropdown.reloadData(reloadDataInst.options.id, {
+          dropdown.reloadData(reloadDataInstId, {
             data: dataNew, // 匹配到的新数据
             template(d) {
               const exp = new RegExp(value.split('').join('|'), 'gi');
