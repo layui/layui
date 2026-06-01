@@ -292,22 +292,28 @@ export class Dropdown extends Component {
       options.$target.append($rootElem); // 插入新面板
       this.$rootElem = $rootElem;
 
-      // 生成遮罩
-      const shade = options.shade
-        ? `<div class="${CONST.ELEM_ELEM_SHADE}" style="z-index:${
-            $rootElem.css('z-index') - 1
-          }; background-color: ${options.shade[1] || '#000'}; opacity: ${
-            options.shade[0] || options.shade
-          }"></div>`
-        : '';
-      const $shadeElem = $(shade);
-      // 处理移动端点击穿透问题
-      if (clickOrMousedown === 'touchstart') {
-        $shadeElem.on(clickOrMousedown, (e) => {
-          e.preventDefault();
+      // 若开启遮罩
+      if (options.shade) {
+        const shade = Array.isArray(options.shade)
+          ? options.shade
+          : [options.shade, '#000'];
+        const $shadeElem = $(`<div class="${CONST.ELEM_ELEM_SHADE}"></div>`);
+
+        $shadeElem.css({
+          'z-index': $rootElem.css('z-index') - 1,
+          'background-color': shade[1],
+          opacity: shade[0],
         });
+
+        // 处理移动端点击穿透问题
+        if (clickOrMousedown === 'touchstart') {
+          $shadeElem.on(clickOrMousedown, (e) => {
+            e.preventDefault();
+          });
+        }
+
+        $rootElem.before($shadeElem);
       }
-      $rootElem.before($shadeElem);
 
       // 如果是鼠标移入事件，则鼠标移出时自动关闭
       if (options.trigger === 'mouseenter') {
