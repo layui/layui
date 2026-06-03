@@ -161,8 +161,9 @@ export default {
       fileExtensionError:
         'Le {fileType} sélectionné contient un format non supporté',
       filesOverLengthLimit: 'Nombre maximum de fichiers : {length}',
-      currentFilesLength: 'Vous avez sélectionné {length} fichiers',
       fileOverSizeLimit: 'La taille du fichier ne doit pas dépasser {size}',
+      currentFilesLength: 'Vous avez sélectionné {length} fichiers',
+      dataFormatError: 'Veuillez retourner les données au format JSON',
     },
     chooseText: '{length} fichiers',
   },

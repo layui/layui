@@ -159,8 +159,9 @@ export default {
     validateMessages: {
       fileExtensionError: 'Unsupported format in selected {fileType}',
       filesOverLengthLimit: 'Maximum {length} files allowed at once',
-      currentFilesLength: 'You have selected {length} files',
       fileOverSizeLimit: 'File size must not exceed {size}',
+      currentFilesLength: 'You have selected {length} files',
+      dataFormatError: 'Please return data in JSON format',
     },
     chooseText: '{length} files',
   },

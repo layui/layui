@@ -7,10 +7,9 @@
   margin: 11px 0;
 }
 .lay-upload-choose {
-  max-width: 200px;
-  padding: 0 10px;
-  color: #999;
-  font-size: 14px;
+  max-width: 210px;
+  padding: 0 11px;
+  color: var(--lay-gray-700);
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -23,13 +22,13 @@
   background-color: #fff;
   text-align: center;
   cursor: pointer;
-  color: #999;
+  color: var(--lay-gray-700);
 }
 .lay-upload-drag .lay-icon {
   font-size: 50px;
   color: var(--lay-color-primary);
 }
-.lay-upload-drag[lay-over] {
+.lay-upload-drag.lay-upload-dragover {
   border-color: var(--lay-color-primary);
 }
 .lay-btn-container .lay-upload-choose {
