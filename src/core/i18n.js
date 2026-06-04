@@ -155,20 +155,12 @@ var zhCN = {
     deleteNodePrompt: '确认删除"{name}"节点吗？',
   },
   upload: {
-    fileType: {
-      file: '文件',
-      image: '图片',
-      video: '视频',
-      audio: '音频',
-    },
     validateMessages: {
-      fileExtensionError: '选择的 {fileType} 中包含不支持的文件类型',
-      filesOverLengthLimit: '同时最多只能上传 {length} 个文件',
       fileOverSizeLimit: '文件大小不能超过 {size}',
+      filesOverLengthLimit: '同时最多只能上传 {length} 个文件',
       currentFilesLength: '当前已经选择了 {length} 个文件',
       dataFormatError: '请返回 JSON 格式的数据',
     },
-    chooseText: '{length} 个文件',
   },
   utils: {
     timeAgo: {

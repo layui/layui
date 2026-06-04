@@ -151,21 +151,12 @@ export default {
     deleteNodePrompt: 'Confirmer la suppression du nœud "{name}" ?',
   },
   upload: {
-    fileType: {
-      file: 'Fichier',
-      image: 'Image',
-      video: 'Vidéo',
-      audio: 'Audio',
-    },
     validateMessages: {
-      fileExtensionError:
-        'Le {fileType} sélectionné contient un format non supporté',
-      filesOverLengthLimit: 'Nombre maximum de fichiers : {length}',
       fileOverSizeLimit: 'La taille du fichier ne doit pas dépasser {size}',
+      filesOverLengthLimit: 'Nombre maximum de fichiers : {length}',
       currentFilesLength: 'Vous avez sélectionné {length} fichiers',
       dataFormatError: 'Veuillez retourner les données au format JSON',
     },
-    chooseText: '{length} fichiers',
   },
   utils: {
     timeAgo: {

@@ -150,20 +150,12 @@ export default {
     deleteNodePrompt: 'Are you sure you want to delete the node "{name}"?',
   },
   upload: {
-    fileType: {
-      file: 'File',
-      image: 'Image',
-      video: 'Video',
-      audio: 'Audio',
-    },
     validateMessages: {
-      fileExtensionError: 'Unsupported format in selected {fileType}',
-      filesOverLengthLimit: 'Maximum {length} files allowed at once',
       fileOverSizeLimit: 'File size must not exceed {size}',
+      filesOverLengthLimit: 'Maximum {length} files allowed at once',
       currentFilesLength: 'You have selected {length} files',
       dataFormatError: 'Please return data in JSON format',
     },
-    chooseText: '{length} files',
   },
   utils: {
     timeAgo: {

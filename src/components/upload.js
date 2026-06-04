@@ -3,11 +3,13 @@
  * 上传组件
  */
 
+import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { log } from '../core/logger.js';
 import { $ } from 'jquery';
 import { Component } from '../core/component.js';
 import { layer } from './layer.js';
+import { progress } from './progress.js';
 
 export class Upload extends Component {
   // 默认配置
@@ -18,11 +20,10 @@ export class Upload extends Component {
     // forceJsonResponse: false, // 是否强制接口返回 JSON 数据格式
     // mergeRequest: false, // 是否将多文件上传合并为一个请求
     // accept: '', // 筛选出的文件类型，如 `image/*`，默认为所有文件
-    acceptType: 'image', // 允许上传的文件类型：image|file|video|audio
-    // acceptExts: '', // 允许上传的文件后缀名
     autoUpload: true, // 是否选完文件后自动上传
     // submitElem: '', // 用于触发提交上传的元素。`autoUpload: false` 时可用
-    // multiple: false, // 是否允许多文件上传
+    // multiple: false, // 是否支持多选文件上传
+    showUploadList: true, // 是否显示上传文件列表
     enableDrag: true, // 是否开启拖拽上传
     maxSize: 0, // 允许上传的最大文件大小，单位 KB。0 表示不限制
     maxCount: 0, // 允许同时上传的文件数。0 表示不限制
@@ -32,26 +33,18 @@ export class Upload extends Component {
     return {
       ...super.CONST,
       ELEM_FILE: 'lay-upload-file',
-      ELEM_CHOOSE: 'lay-upload-choose',
+      ELEM_LIST: 'lay-upload-list',
       ELEM_DRAGOVER: 'lay-upload-dragover',
-      UPLOADING: 'UPLOADING',
+      UPLOADING: Symbol('uploading'), // 文件上传中的标记
     };
   }
 
   // 渲染
   render() {
     const options = this.options;
-
-    options.$submitElem = $(options.submitElem);
-
-    this.#initFileInput();
-    this.#events();
-  }
-
-  // 初始化 file 元素
-  #initFileInput() {
-    const options = this.options;
     const $elem = options.$elem;
+
+    // 初始化 file 元素
     const $fileElem = (this.$fileElem = $(
       `<input class="${CONST.ELEM_FILE}" type="file">`,
     ));
@@ -66,47 +59,48 @@ export class Upload extends Component {
       this.$fileElem = $elem;
       options.fieldName = $elem[0].name;
     }
-  }
 
-  // 目标元素是否为 file 元素
-  #isElemFile() {
-    const elem = this.options.$elem[0];
-    if (!elem) return;
-    return elem.tagName.toLocaleLowerCase() === 'input' && elem.type === 'file';
+    // 初始化「上传列表」容器
+    if (options.showUploadList) {
+      const $uploadListElem = $(`<div class="${CONST.ELEM_LIST}"></div>`);
+      this.$uploadListElem?.remove();
+      $elem.after($uploadListElem);
+      this.$uploadListElem = $uploadListElem;
+    }
+
+    options.$submitElem = $(options.submitElem);
+
+    this.files = [];
+    this.#events();
   }
 
   // 文件预览
   preview(callback) {
-    Object.entries(this.chooseFiles || {}).forEach(([index, file]) => {
+    this.files.forEach((file, id) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        callback?.(index, file, reader.result);
+        callback?.({ id, file, result: reader.result });
       };
     });
   }
 
   // 执行上传
-  async upload(files, type) {
+  async upload() {
     const options = this.options;
     const fileElem = this.$fileElem[0];
-
-    // 获取文件队列
-    const getFiles = () =>
-      files || this.files || this.chooseFiles || fileElem.files;
+    const files = this.files;
 
     // 提交上传请求
     const submitUpload = () => {
-      const items = getFiles();
       const successful = [];
       const failed = [];
 
       // 发送请求
-      const request = (sets) => {
+      const request = (file) => {
         const formData = new FormData();
         // 上传接口提交成功的回调
-        const onSuccess = (res, index) => {
-          this.$fileElem.next(`.${CONST.ELEM_CHOOSE}`).remove();
+        const onSuccess = (res) => {
           fileElem.value = '';
 
           const parsedResult = parseResponseJson(res);
@@ -119,11 +113,12 @@ export class Upload extends Component {
               return;
           }
 
-          options.onSuccess?.(res, index || 0);
+          setUploadingStatus('success');
+          options.onSuccess?.(res, files, file);
         };
 
         // 上传接口提交失败的回调
-        const onError = (res, index, e) => {
+        const onError = (res, e) => {
           if (options.autoUpload) {
             fileElem.value = '';
           }
@@ -138,7 +133,8 @@ export class Upload extends Component {
               return;
           }
 
-          options.onError?.(res, index || 0, e);
+          setUploadingStatus('error');
+          options.onError?.(res, files, file, e);
         };
 
         // 接口请求完毕的处理
@@ -146,19 +142,21 @@ export class Upload extends Component {
           if (successful.length + failed.length === this.fileLength) {
             options.onComplete?.({
               ...args,
-              files: items,
+              files,
               successful: successful,
               failed: failed,
             });
           }
+        };
 
-          // 恢复文件状态
+        // 设置上传状态
+        const setUploadingStatus = (value) => {
           if (options.mergeRequest) {
-            Object.values(items || {}).forEach((fileItem) => {
-              delete fileItem[CONST.UPLOADING];
+            files.forEach((file) => {
+              file.uploadStatus = value;
             });
           } else {
-            delete sets.file[CONST.UPLOADING];
+            file.uploadStatus = value;
           }
         };
 
@@ -167,8 +165,8 @@ export class Upload extends Component {
           value =
             typeof value === 'function'
               ? options.mergeRequest
-                ? value()
-                : value(sets.index, sets.file)
+                ? value(files)
+                : value(file)
               : value;
           formData.append(key, value);
         });
@@ -179,16 +177,16 @@ export class Upload extends Component {
 
         // 是否合并为一个请求进行上传
         if (options.mergeRequest) {
-          Object.values(items || {}).forEach((file) => {
-            if (file[CONST.UPLOADING]) return;
-            file[CONST.UPLOADING] = true; // 上传中的标记
+          files.forEach((file) => {
+            if (file.uploadStatus === CONST.UPLOADING) return;
+            file.uploadStatus = CONST.UPLOADING; // 上传中的标记
             formData.append(options.fieldName, file);
           });
         } else {
           // 逐一上传
-          if (sets.file[CONST.UPLOADING]) return;
-          formData.append(options.fieldName, sets.file);
-          sets.file[CONST.UPLOADING] = true; // 上传中的标记
+          if (file.uploadStatus === CONST.UPLOADING) return;
+          formData.append(options.fieldName, file);
+          file.uploadStatus = CONST.UPLOADING; // 上传中的标记
         }
 
         // ajax 参数
@@ -202,58 +200,49 @@ export class Upload extends Component {
           headers: options.headers || {},
           success: (res) => {
             if (options.mergeRequest) {
-              successful.push(...Object.values(items || {}));
+              successful.push(...files);
             } else {
-              successful.push(sets.file);
+              successful.push(file);
             }
-            onSuccess(res, sets.index);
+            onSuccess(res);
           },
           error: (e) => {
             if (options.mergeRequest) {
-              failed.push(...Object.values(items || {}));
+              failed.push(...files);
             } else {
-              failed.push(sets.file);
+              failed.push(file);
             }
             showError(
               `Upload failed, please try again.<br>${e.status ? `status: ${e.status} - ${e.statusText}` : 'error'}`,
             );
-            onError(e.responseText, sets.index, e);
+            onError(e.responseText, e);
           },
           complete: onComplete,
-        };
-
-        // 进度条
-        if (typeof options.onProgress === 'function') {
-          opts.xhr = () => {
+          xhr: () => {
             const xhr = $.ajaxSettings.xhr();
             // 上传进度
             xhr.upload.addEventListener('progress', (event) => {
               if (event.lengthComputable) {
                 const percent = Math.floor((event.loaded / event.total) * 100); // 百分比
-                options.onProgress({
-                  percent,
-                  event,
-                  index: sets.index,
-                });
+                const params = { percent, event, file };
+
+                this.#setProgressValue(params);
+                options.onProgress?.(params);
               }
             });
             return xhr;
-          };
-        }
+          },
+        };
+
         $.ajax(opts);
       };
 
       // 多文件是否合并上传
       if (options.mergeRequest) {
-        request({
-          index: 0,
-        });
+        request();
       } else {
-        Object.entries(items || {}).forEach(function ([index, file]) {
-          request({
-            index: index,
-            file: file,
-          });
+        files.forEach((file) => {
+          request(file);
         });
       }
     };
@@ -279,174 +268,13 @@ export class Upload extends Component {
       return { status: '', data: {} };
     };
 
-    let check;
-    const acceptExts = options.acceptExts;
-    let value = (() => {
-      const arr = [];
-      Object.values(files || this.chooseFiles || {}).forEach((item) => {
-        arr.push(item.name);
-      });
-      return arr;
-    })();
-
-    // 回调函数返回的参数
-    const args = {
-      // 预览
-      preview: (previewCallback) => {
-        this.preview(previewCallback);
-      },
-      // 上传
-      upload: (index, file) => {
-        const thisFile = {};
-        thisFile[index] = file;
-        this.upload(thisFile);
-      },
-      // 追加文件到队列
-      pushFile: () => {
-        this.files = this.files || {};
-        Object.entries(this.chooseFiles || {}).forEach(([index, item]) => {
-          this.files[index] = item;
-        });
-        return this.files;
-      },
-      // 重置文件
-      resetFile: (index, file, filename) => {
-        const newFile = new File([file], filename);
-        this.files = this.files || {};
-        this.files[index] = newFile;
-      },
-      // 获取本次选取的文件
-      getChooseFiles: () => {
-        return this.chooseFiles;
-      },
-    };
-
-    // 文件类型名称
-    const typeName =
-      {
-        file: i18n.$t('upload.fileType.file'),
-        image: i18n.$t('upload.fileType.image'),
-        video: i18n.$t('upload.fileType.video'),
-        audio: i18n.$t('upload.fileType.audio'),
-      }[options.acceptType] || i18n.$t('upload.fileType.file');
-
-    // 校验文件格式
-    value =
-      value.length === 0
-        ? fileElem.value.match(/[^/\\]+\..+/g) || [] || ''
-        : value;
-
-    // 若文件域值为空
-    if (value.length === 0) return;
-
-    // 根据文件类型校验
-    switch (options.acceptType) {
-      case 'file': // 一般文件
-        for (const item of value) {
-          if (
-            acceptExts &&
-            !RegExp(`.\\.(${acceptExts})$`, 'i').test(escape(item))
-          ) {
-            check = true;
-            break;
-          }
-        }
-        break;
-      case 'video': // 视频文件
-        for (const item of value) {
-          if (
-            !RegExp(
-              `.\\.(${acceptExts || 'avi|mp4|wma|rmvb|rm|flash|3gp|flv'})$`,
-              'i',
-            ).test(escape(item))
-          ) {
-            check = true;
-            break;
-          }
-        }
-        break;
-      case 'audio': // 音频文件
-        for (const item of value) {
-          if (
-            !RegExp(`.\\.(${acceptExts || 'mp3|wav|mid'})$`, 'i').test(
-              escape(item),
-            )
-          ) {
-            check = true;
-            break;
-          }
-        }
-        break;
-      default: // 图片文件
-        for (const item of value) {
-          if (
-            !RegExp(
-              `.\\.(${acceptExts || 'jpg|png|gif|bmp|jpeg|svg|webp'})$`,
-              'i',
-            ).test(escape(item))
-          ) {
-            check = true;
-            break;
-          }
-        }
-        break;
-    }
-
-    // 校验失败提示
-    if (check) {
-      showError(
-        i18n.$t('upload.validateMessages.fileExtensionError', {
-          fileType: typeName,
-        }),
-      );
-      return (fileElem.value = '');
-    }
-
-    // 选择文件的钩子
-    if (type === 'choose' || options.autoUpload) {
-      options.onChoose?.(args);
-      if (type === 'choose') return;
-    }
-
-    // 检验文件数量
-    this.fileLength = Object.keys(getFiles() || {}).length;
-
-    if (options.maxCount && this.fileLength > options.maxCount) {
-      return showError(
-        `${i18n.$t('upload.validateMessages.filesOverLengthLimit', {
-          length: options.maxCount,
-        })}<br/>${i18n.$t('upload.validateMessages.currentFilesLength', {
-          length: this.fileLength,
-        })}`,
-      );
-    }
-
-    // 检验文件大小
-    if (options.maxSize > 0) {
-      let limitSizeText;
-
-      for (const file of Object.values(getFiles() || {})) {
-        if (file.size > 1024 * options.maxSize) {
-          let sizeMb = options.maxSize / 1024;
-          limitSizeText =
-            sizeMb >= 1 ? `${sizeMb.toFixed(2)}MB` : `${options.maxSize}KB`;
-          fileElem.value = '';
-          break;
-        }
-      }
-
-      if (limitSizeText)
-        return showError(
-          i18n.$t('upload.validateMessages.fileOverSizeLimit', {
-            size: limitSizeText,
-          }),
-        );
-    }
+    const validationResult = this.#validate();
+    if (validationResult) return;
 
     // 上传前的钩子
     // 若回调函数明确返回 false 或 Promise.reject，则阻止上传
     if (typeof options.beforeUpload === 'function') {
-      Promise.resolve(options.beforeUpload(args))
+      Promise.resolve(options.beforeUpload())
         .then((result) => {
           if (result === false) {
             throw undefined;
@@ -464,6 +292,77 @@ export class Upload extends Component {
     }
   }
 
+  // 校验
+  #validate() {
+    const options = this.options;
+    const fileElem = this.$fileElem[0];
+    const files = this.files;
+
+    // 检验文件数量
+    this.fileLength = files.length;
+
+    if (options.maxCount && this.fileLength > options.maxCount) {
+      return showError(
+        `${i18n.$t('upload.validateMessages.filesOverLengthLimit', {
+          length: options.maxCount,
+        })}<br/>${i18n.$t('upload.validateMessages.currentFilesLength', {
+          length: this.fileLength,
+        })}`,
+      );
+    }
+
+    // 检验文件大小
+    if (options.maxSize > 0) {
+      let limitSizeText;
+
+      for (const file of Object.values(files || {})) {
+        if (file.size > 1024 * options.maxSize) {
+          let sizeMb = options.maxSize / 1024;
+          limitSizeText =
+            sizeMb >= 1 ? `${sizeMb.toFixed(2)}MB` : `${options.maxSize}KB`;
+          fileElem.value = '';
+          break;
+        }
+      }
+
+      if (limitSizeText)
+        return showError(
+          i18n.$t('upload.validateMessages.fileOverSizeLimit', {
+            size: limitSizeText,
+          }),
+        );
+    }
+  }
+
+  // 目标元素是否为 file 元素
+  #isElemFile() {
+    const elem = this.options.$elem[0];
+    if (!elem) return;
+    return elem.tagName.toLocaleLowerCase() === 'input' && elem.type === 'file';
+  }
+
+  // 设置上传进度值
+  #setProgressValue({ percent, file }) {
+    const options = this.options;
+    const $uploadListElem = this.$uploadListElem;
+
+    if (!$uploadListElem) return;
+
+    $uploadListElem.find(`.${CONST.ELEM_LIST}-item`).each((_, item) => {
+      const $item = $(item);
+      const $progress = $item.find('.lay-progress');
+      const progressId = $progress.attr('lay-progress-id');
+
+      if (options.mergeRequest) {
+        progress.setValue(progressId, percent);
+      } else {
+        if ($item.data('id') === file.id) {
+          progress.setValue(progressId, percent);
+        }
+      }
+    });
+  }
+
   // 事件处理
   #events() {
     const options = this.options;
@@ -472,105 +371,76 @@ export class Upload extends Component {
 
     // 设置当前选择的文件队列
     const setChooseFile = (files) => {
-      this.chooseFiles = {};
-      Array.from(files || []).forEach((item, i) => {
-        const time = new Date().getTime();
-        this.chooseFiles[`${time}-${i}`] = item;
-      });
-    };
+      const $uploadListElem = this.$uploadListElem;
+      // 插入上传列表项元素
+      const appendUploadListItem = (file) => {
+        const $uploadListItem = $(`
+<div class="${CONST.ELEM_LIST}-item">
+  <span class="${CONST.ELEM_LIST}-item-name lay-ellipsis">${file.name}</span>
+  <div class="lay-progress lay-size-lg" lay-show-percent="true"></div>
+</div>
+        `);
+        const $actions = $(
+          `<div class="${CONST.ELEM_LIST}-item-actions"> </div>`,
+        );
+        const $deleteBtn = $('<i class="lay-icon lay-icon-clear"></i>');
 
-    // 设置选择的文本
-    const setChooseText = (files) => {
-      const $fileElem = this.$fileElem;
-      const value =
-        files.length > 1
-          ? i18n.$t('upload.chooseText', { length: files.length })
-          : (files[0] || {}).name ||
-            $fileElem[0].value.match(/[^/\\]+\..+/g) ||
-            [] ||
-            '';
+        // 删除按钮事件
+        $deleteBtn.on('click', () => {
+          // 从文件队列中移除
+          this.files.splice(
+            this.files.findIndex((item) => item.id === file.id),
+            1,
+          );
+          // 从上传列表中移除
+          $uploadListItem.remove();
+          // 中断上传请求
+          if (file.uploadStatus === CONST.UPLOADING) {
+            // 待实现
+          }
+        });
 
-      if ($fileElem.next().hasClass(CONST.ELEM_CHOOSE)) {
-        $fileElem.next().remove();
-      }
-      this.upload(null, 'choose');
-      if (this.#isElemFile() || options.onChoose) return;
-      $fileElem.after(
-        `<span class="lay-inline ${CONST.ELEM_CHOOSE}">${value}</span>`,
-      );
-    };
+        $actions.append($deleteBtn);
+        $uploadListItem.append($actions);
+        $uploadListItem.data({ id: file.id });
+        $uploadListElem.append($uploadListItem);
 
-    /**
-     * 判断文件是否加入排队
-     * @param {File} file
-     * @return {boolean}
-     */
-    const checkFile = (file) => {
-      return !Object.values(this.files || {}).some((item) => {
-        return item.name === file.name;
-      });
-    };
-
-    /**
-     * 扩展文件信息
-     * @template {File | FileList} T
-     * @param {T} obj
-     * @return {T}
-     */
-    const extendInfo = (obj) => {
-      const extInfo = (file) => {
-        //文件扩展名
-        file.ext = file.name
-          .substr(file.name.lastIndexOf('.') + 1)
-          .toLowerCase();
-        // 文件大小
-        file.sizes = parseSize(file.size);
-        // 可以继续扩展
+        progress.render({
+          elem: $uploadListItem.find('.lay-progress'),
+        });
       };
 
-      //FileList对象
-      if (obj instanceof FileList) {
-        Array.from(obj).forEach((item) => {
-          extInfo(item);
-        });
-      } else {
-        extInfo(obj);
+      this.files = [];
+      $uploadListElem.empty();
+
+      files.forEach((item) => {
+        this.files.push(item);
+      });
+
+      // 插入上传列表项元素
+      if (options.showUploadList) {
+        for (const file of files) {
+          appendUploadListItem(file);
+        }
       }
 
-      return obj;
+      options.onChoose?.();
     };
 
-    /**
-     * 检查获取文件
-     * @param {FileList} files
-     * @return {Array<File>|FileList}
-     */
-    const getFiles = (files) => {
-      files = files || [];
-      if (!files.length) return [];
-      if (!this.files) return extendInfo(files);
-      const result = [];
-      Array.from(files).forEach((item) => {
-        if (checkFile(item)) {
-          result.push(extendInfo(item));
-        }
-      });
-      return result;
-    };
-
+    // 事件命名空间
     const eventNamespace = `.lay_${Constructor.componentName}_events`;
 
-    $elem.off(eventNamespace); // 避免重复绑定事件
+    // 避免重复绑定事件
+    $elem.off(eventNamespace);
 
     // 文件选择
     this.$fileElem.on(`change${eventNamespace}`, (event) => {
-      const files = getFiles(event.currentTarget.files);
+      const files = enhanceFiles(event.currentTarget.files);
 
       if (files.length === 0) return;
 
       setChooseFile(files);
-
-      options.autoUpload ? this.upload() : setChooseText(files);
+      options.autoUpload && this.upload();
     });
 
     // 目标元素 click 事件
@@ -594,13 +464,12 @@ export class Upload extends Component {
         .on(`drop${eventNamespace}`, (e) => {
           e.preventDefault();
           const $this = $(e.currentTarget);
-          const files = getFiles(e.originalEvent.dataTransfer.files);
+          const files = enhanceFiles(e.originalEvent.dataTransfer.files);
 
           $this.removeClass(CONST.ELEM_DRAGOVER);
-          setChooseFile(files);
 
-          // 是否自动触发上传
-          options.autoUpload ? this.upload() : setChooseText(files);
+          setChooseFile(files);
+          options.autoUpload && this.upload();
         });
     }
 
@@ -622,23 +491,63 @@ const showError = (content) => {
 };
 
 /**
- * 文件大小处理
- * @param {number | string} size -文件大小
- * @param {number} [precision] - 数值精度
- * @return {string}
+ * 增强文件列表信息
+ * @param {FileList} files
+ * @return {Array<File>|FileList}
  */
-const parseSize = (size, precision) => {
-  precision = precision || 2;
-  if (null == size || !size) {
-    return '0';
-  }
-  const unitArr = ['Bytes', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
-  let index;
-  const formatSize = typeof size === 'string' ? parseFloat(size) : size;
-  index = Math.floor(Math.log(formatSize) / Math.log(1024));
-  size = formatSize / Math.pow(1024, index);
-  size = size % 1 === 0 ? size : parseFloat(size.toFixed(precision)); // 保留的小数位数
-  return `${size}${unitArr[index]}`;
+const enhanceFiles = (files = []) => {
+  const result = [];
+  // 扩展文件信息
+  const extendFileInfo = (obj) => {
+    // 生成文件 id
+    const generateId = (file) => {
+      return lay.btoa(`${file.name}-${file.size}-${file.lastModified}`, 'url');
+    };
+    /**
+     * 文件大小处理
+     * @param {number | string} size - 文件大小
+     * @param {number} [precision] - 数值精度
+     * @return {string}
+     */
+    const parseSize = (size, precision) => {
+      precision = precision || 2;
+      if (null == size || !size) {
+        return '0';
+      }
+      const unitArr = ['Bytes', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
+      let index;
+      const formatSize = typeof size === 'string' ? parseFloat(size) : size;
+      index = Math.floor(Math.log(formatSize) / Math.log(1024));
+      size = formatSize / Math.pow(1024, index);
+      size = size % 1 === 0 ? size : parseFloat(size.toFixed(precision)); // 保留的小数位数
+      return `${size}${unitArr[index]}`;
+    };
+    const extInfo = (file) => {
+      Object.assign(file, {
+        id: generateId(file), // 文件 id
+        sizeText: parseSize(file.size), // 文件大小
+        // 文件扩展名
+        extname: file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase(),
+      });
+    };
+
+    // FileList 对象
+    if (obj instanceof FileList) {
+      Array.from(obj).forEach((item) => {
+        extInfo(item);
+      });
+    } else {
+      extInfo(obj);
+    }
+
+    return obj;
+  };
+
+  Array.from(files).forEach((item) => {
+    result.push(extendFileInfo(item));
+  });
+
+  return result;
 };
 
 export { Upload as upload };

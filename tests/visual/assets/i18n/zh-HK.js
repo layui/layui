@@ -147,20 +147,12 @@ export default {
     deleteNodePrompt: '確認刪除"{name}"節點嗎？',
   },
   upload: {
-    fileType: {
-      file: '檔案',
-      image: '圖片',
-      video: '影片',
-      audio: '音訊',
-    },
     validateMessages: {
-      fileExtensionError: '選擇的 {fileType} 中包含不支援的格式',
-      filesOverLengthLimit: '同時最多只能上傳 {length} 個檔案',
       fileOverSizeLimit: '檔案大小不能超過 {size}',
+      filesOverLengthLimit: '同時最多只能上傳 {length} 個檔案',
       currentFilesLength: '您當前已經選擇了 {length} 個檔案',
-      dataFormatError: '請返回 JSON 格式的資料',
+      dataFormatError: '請返回 JSON 格式的檔案',
     },
-    chooseText: '{length} 個檔案',
   },
   utils: {
     timeAgo: {
