@@ -60,7 +60,6 @@
     "gulp-zip": "^5.1.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "magic-string": "^0.30.17",
     "minimist": "^1.2.8",
     "prettier": "^3.8.1"
   }
