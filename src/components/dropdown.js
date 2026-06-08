@@ -64,7 +64,7 @@ export class Dropdown extends Component {
    * @param {string|number} id - 实例 id
    */
   static close(id) {
-    const inst = this.getInst(id);
+    const inst = this.getInstance(id);
     if (!inst) return;
 
     inst.remove();
@@ -75,7 +75,7 @@ export class Dropdown extends Component {
    * @param {string|number} id - 实例 id
    */
   static open(id) {
-    const inst = this.getInst(id);
+    const inst = this.getInstance(id);
     if (!inst) return;
 
     inst.open();
