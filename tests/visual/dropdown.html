@@ -233,7 +233,7 @@
             title: 'menu item 6',
             id: '',
             type: 'group',
-            isSpreadItem: false,
+            expanded: false,
             children: [
               {
                 title: 'menu item 6-1',
@@ -317,7 +317,7 @@
         dropdown.render({
           elem: '#ID-dropdown-demo-contextmenu', // 也可绑定到 document，从而重置整个右键
           trigger: 'contextmenu', //contextmenu
-          isAllowSpread: false,
+          allowExpand: false,
           //,style: 'width: 200px'
           customName: {
             children: 'children',

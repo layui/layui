@@ -12,19 +12,21 @@ const device = lay.device();
 const clickOrMousedown = device.mobile ? 'touchstart' : 'mousedown';
 
 export class Dropdown extends Component {
+  static componentName = 'dropdown';
+
   // 默认配置项
   static options = {
     trigger: 'click', // 事件类型
     data: [], // 菜单数据结构
-    isAllowSpread: true, // 是否允许菜单组展开收缩
-    isSpreadItem: true, // 是否初始展开子菜单
+    expanded: true, // 是否初始展开子菜单
+    allowExpand: true, // 是否允许菜单组展开收缩
     closeOnClick: true, // 面板打开后，再次点击目标元素时是否关闭面板。行为取决于所使用的触发事件类型
     delay: [200, 300], // 延时显示或隐藏的毫秒数，若为 number 类型，则表示显示和隐藏的延迟时间相同，trigger 为 hover 时才生效
     // content: '', // 自定义菜单内容
     // className: '', // 自定义样式类名
     // style: '', // 设置面板 style 属性
     // defaultOpen: false, // 是否初始默认打开菜单面板
-    // isAccordion: false, // 是否开启菜单展开收缩的手风琴效果，仅菜单组生效。基础菜单需在容器上追加 `lay-accordion` 属性。
+    // accordion: false, // 是否开启菜单展开收缩的手风琴效果，仅菜单组生效。基础菜单需在容器上追加 `lay-accordion` 属性。
     // shade: 0, // 遮罩
 
     // 自定义 data 字段名
@@ -158,8 +160,7 @@ export class Dropdown extends Component {
         // 是否存在子级
         const isChild =
           item[customName.children] && item[customName.children].length > 0;
-        const isSpreadItem =
-          'isSpreadItem' in item ? item.isSpreadItem : options.isSpreadItem;
+        const expanded = 'expanded' in item ? item.expanded : options.expanded;
         const title = ((titleValue) => {
           const template = item.template || options.template;
           if (typeof template === 'function') {
@@ -196,8 +197,8 @@ export class Dropdown extends Component {
         // 列表元素
         const className = {
           group: `lay-menu-item-group${
-            options.isAllowSpread
-              ? isSpreadItem
+            options.allowExpand
+              ? expanded
                 ? ' lay-menu-item-down'
                 : ' lay-menu-item-up'
               : ''
@@ -231,8 +232,8 @@ export class Dropdown extends Component {
             return '<i class="lay-icon lay-icon-right"></i>';
           }
 
-          if (type === 'group' && options.isAllowSpread) {
-            return `<i class="lay-icon lay-icon-${isSpreadItem ? 'up' : 'down'}"></i>`;
+          if (type === 'group' && options.allowExpand) {
+            return `<i class="lay-icon lay-icon-${expanded ? 'up' : 'down'}"></i>`;
           }
 
           return '';
@@ -362,8 +363,8 @@ export class Dropdown extends Component {
       const $groupElem = $this.parent();
       const data = $groupElem.data('item') || {};
 
-      if (data.type === 'group' && options.isAllowSpread) {
-        toggleMenuGroup($groupElem, options.isAccordion);
+      if (data.type === 'group' && options.allowExpand) {
+        toggleMenuGroup($groupElem, options.accordion);
       }
     });
 
@@ -572,10 +573,10 @@ const resizeObserver = lay.createSharedResizeObserver(Dropdown.componentName);
 /**
  * 设置菜单组展开和收缩状态
  * @param {JQuery} $groupElem - 菜单组标题元素的 jQuery 对象
- * @param {boolean} isAccordion - 是否为手风琴模式
+ * @param {boolean} accordion - 是否为手风琴模式
  * @returns
  */
-const toggleMenuGroup = ($groupElem, isAccordion) => {
+const toggleMenuGroup = ($groupElem, accordion) => {
   const $contentElem = $groupElem.children('ul');
   const needSpread = $groupElem.hasClass(CONST.ELEM_ITEM_UP);
   const ANIM_MS = 200;
@@ -599,7 +600,7 @@ const toggleMenuGroup = ($groupElem, isAccordion) => {
   }
 
   // 手风琴
-  if (needSpread && isAccordion) {
+  if (needSpread && accordion) {
     const $groupSibs = $groupElem.siblings(`.${CONST.ELEM_ITEM_DOWN}`);
     $groupSibs.children('ul').stop().slideUp(ANIM_MS, complete);
     $groupSibs.removeClass(CONST.ELEM_ITEM_DOWN).addClass(CONST.ELEM_ITEM_UP);
@@ -653,12 +654,12 @@ const toggleMenuGroup = ($groupElem, isAccordion) => {
     const $this = $(this);
     const $elemGroup = $this.parents(`.${CONST.ELEM_ITEM_GROUP}:eq(0)`);
     const options = lay.options($elemGroup[0]);
-    const isAccordion =
+    const accordion =
       typeof $this.parents('.lay-menu').eq(0).attr('lay-accordion') ===
       'string';
 
-    if ('isAllowSpread' in options ? options.isAllowSpread : true) {
-      toggleMenuGroup($elemGroup, isAccordion);
+    if ('allowExpand' in options ? options.allowExpand : true) {
+      toggleMenuGroup($elemGroup, accordion);
     }
   });
 
