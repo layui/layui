@@ -8,6 +8,8 @@ import { $ } from 'jquery';
 import { Component } from '../core/component.js';
 
 export class Rate extends Component {
+  static componentName = 'rate';
+
   // 默认配置
   static options = {
     length: 5, // 评分的最大长度值

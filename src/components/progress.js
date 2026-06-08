@@ -19,6 +19,8 @@ const normalizePercent = (value) => {
 };
 
 export class Progress extends Component {
+  static componentName = 'progress';
+
   // 默认配置
   static options = {
     elem: '.lay-progress',

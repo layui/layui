@@ -8,6 +8,8 @@ import { $ } from 'jquery';
 import { Component } from '../core/component.js';
 
 export class Collapse extends Component {
+  static componentName = 'collapse';
+
   // 默认配置
   static options = {
     elem: '.lay-collapse',

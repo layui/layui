@@ -8,6 +8,8 @@ import { $ } from 'jquery';
 import { Component } from '../core/component.js';
 
 export class Nav extends Component {
+  static componentName = 'nav';
+
   // 默认配置
   static options = {
     elem: '.lay-nav',

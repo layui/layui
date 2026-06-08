@@ -37,7 +37,7 @@ export class Component {
     return this;
   }
 
-  // 组件名
+  // 组件名。子类应显式声明，避免 terser 启用 class 混淆后组件名受影响
   static get componentName() {
     return this.name.toLowerCase();
   }

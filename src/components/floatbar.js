@@ -8,6 +8,8 @@ import { $ } from 'jquery';
 import { Component } from '../core/component.js';
 
 export class Floatbar extends Component {
+  static componentName = 'floatbar';
+
   // 默认配置
   static options = {
     target: 'body', // floatbar 的插入目标选择器

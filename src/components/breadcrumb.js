@@ -7,6 +7,8 @@ import { $ } from 'jquery';
 import { Component } from '../core/component.js';
 
 export class Breadcrumb extends Component {
+  static componentName = 'breadcrumb';
+
   // 默认配置项
   static options = {
     elem: '.lay-breadcrumb',

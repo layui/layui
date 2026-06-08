@@ -8,6 +8,8 @@ import { $ } from 'jquery';
 import { Component } from '../core/component.js';
 
 export class Carousel extends Component {
+  static componentName = 'carousel';
+
   // 默认配置项
   static options = {
     width: '600px',

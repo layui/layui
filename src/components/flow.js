@@ -9,6 +9,8 @@ import { $ } from 'jquery';
 import { Component } from '../core/component.js';
 
 export class Flow extends Component {
+  static componentName = 'flow';
+
   static get CONST() {
     return {
       ...super.CONST,

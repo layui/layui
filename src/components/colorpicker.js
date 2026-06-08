@@ -12,6 +12,8 @@ const device = lay.device();
 const clickOrMousedown = device.mobile ? 'click' : 'mousedown';
 
 export class Colorpicker extends Component {
+  static componentName = 'colorpicker';
+
   // 默认配置
   static options = {
     color: '', // 默认颜色，默认没有

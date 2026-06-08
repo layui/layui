@@ -7,6 +7,8 @@ import { $ } from 'jquery';
 import { Component } from '../core/component.js';
 
 export class Slider extends Component {
+  static componentName = 'slider';
+
   static options = {
     type: 'default', // 滑块类型，垂直： vertical
     min: 0, // 最小值

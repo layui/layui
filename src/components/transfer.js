@@ -10,6 +10,8 @@ import { laytpl } from '../core/laytpl.js';
 import { form } from './form.js';
 
 export class Transfer extends Component {
+  static componentName = 'transfer';
+
   // 默认配置
   static options = {
     width: 200,

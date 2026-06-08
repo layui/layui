@@ -11,6 +11,8 @@ import { layer } from './layer.js';
 import { form } from './form.js';
 
 export class Tree extends Component {
+  static componentName = 'tree';
+
   // 默认配置
   static options = {
     data: [], // 数据
