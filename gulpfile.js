@@ -10,6 +10,7 @@ const zip = require('gulp-zip');
 const del = require('del');
 const minimist = require('minimist');
 const pkg = require('./package.json');
+const laytpl = require('./src/modules/laytpl.js');
 
 // 基础配置
 const config = {
@@ -18,8 +19,24 @@ const config = {
 
   // 全部模块
   modules:
-    'layui.all,lay,i18n,laytpl,laypage,laydate,jquery,component,layer,util,dropdown,slider,colorpicker,tab,nav,breadcrumb,progress,collapse,element,upload,form,table,treeTable,tabs,tree,transfer,carousel,rate,flow,code'
+    'layui.all,lay,i18n,laytpl,laypage,laydate,jquery,component,layer,util,dropdown,slider,colorpicker,tab,nav,breadcrumb,progress,collapse,element,upload,form,table,treeTable,tabs,tree,transfer,carousel,rate,flow,code',
+  // CSP 编译期特性标识
+  cspFlagPattern: /__LAYUI_CSP__/g,
+  // 源码 DEBUG 辅助属性，不会进入构建产物
+  debugPattern: /var\s+__LAYUI_CSP__\s*;/g,
+  // JS 压缩参数
+  uglifyOptions: {
+    output: {
+      ascii_only: true // escape Unicode characters in strings and regexps
+    },
+    ie: true
+  }
 };
+
+config.jsEntry = [
+  './src/layui.js',
+  ...config.modules.split(',').map((mod) => `./src/modules/${mod}.js`)
+];
 
 // 获取参数
 const argv = minimist(process.argv.slice(2), {
@@ -42,22 +59,30 @@ const dest = './dist';
 
 // js
 const js = () => {
-  let src = [
-    './src/layui.js',
-    ...config.modules.split(',').map((mod) => `./src/modules/${mod}.js`)
-  ];
+  let src = config.jsEntry;
   return gulp
     .src(src)
     .pipe(sourcemaps.init())
-    .pipe(
-      uglify({
-        output: {
-          ascii_only: true // escape Unicode characters in strings and regexps
-        },
-        ie: true
-      })
-    )
+    .pipe(replace(config.debugPattern, ''))
+    .pipe(replace(config.cspFlagPattern, 'false'))
+    .pipe(uglify(config.uglifyOptions))
     .pipe(concat('layui.js', { newLine: '' }))
+    .pipe(header(config.comment))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(dest));
+};
+
+// csp js
+const csp = () => {
+  let src = config.jsEntry;
+  return gulp
+    .src(src)
+    .pipe(sourcemaps.init())
+    .pipe(replace(config.debugPattern, ''))
+    .pipe(replace(/^[\s\S]*$/g, precompileLaytplBlocks))
+    .pipe(replace(config.cspFlagPattern, 'true'))
+    .pipe(uglify(config.uglifyOptions))
+    .pipe(concat('layui.csp.js', { newLine: '' }))
     .pipe(header(config.comment))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(dest));
@@ -91,7 +116,8 @@ const clean = () => {
 };
 
 // 默认任务
-exports.default = gulp.series(clean, gulp.parallel(js, css, files));
+exports.default = gulp.series(clean, gulp.parallel(js, csp, css, files));
+exports.csp = csp;
 
 // 复制 dist 目录到指定路径
 exports.cp = gulp.series(
@@ -167,3 +193,54 @@ exports.helper = () => {
   );
   return gulp.src('./');
 };
+
+// 预编译 laytpl 模板
+
+// 将标记块内的 laytpl 静态模板预编译为渲染函数，仅用于 CSP 构建。
+// 标记 ID 必须与块内被赋值的模板变量同名，例如：
+//   // laytpl-precompile:start TPL_MAIN modern
+//   var TPL_MAIN = [...].join('\n');
+//   // laytpl-precompile:end TPL_MAIN
+function precompileLaytplBlock(match, indent, name, tagStyle, block) {
+  tagStyle = tagStyle || 'legacy';
+  if (!/^[A-Za-z_$][\w$]*$/.test(name)) {
+    throw new Error(`invalid laytpl precompile name: ${name}`);
+  }
+  if (!/^(legacy|modern)$/.test(tagStyle)) {
+    throw new Error(`invalid laytpl precompile tagStyle: ${tagStyle}`);
+  }
+
+  // 构建期执行标记块，取得同名模板变量的字符串值；不会进入运行时产物。
+  const template = new Function(`${block}\nreturn ${name};`)();
+
+  // 复用 laytpl 内部 builder 生成函数源码
+  const renderer = laytpl
+    .build(template, {
+      open: '{{',
+      close: '}}',
+      tagStyle: tagStyle
+    })
+    .replace(/;\s*$/, '');
+
+  // 预编译函数需要闭包绑定运行时 laytpl，供函数体内的 laytpl.escape 等内部变量使用。
+  return [
+    `${indent}// laytpl-precompile:start ${name}${tagStyle === 'legacy' ? '' : ' ' + tagStyle}`,
+    `${indent}var ${name} = (function (laytpl) {`,
+    `${indent}  return ${renderer};`,
+    `${indent}})(laytpl);`,
+    `${indent}// laytpl-precompile:end ${name}`
+  ].join('\n');
+}
+
+function precompileLaytplBlocks(source) {
+  // 正则分组说明：
+  // 1. `(^[ \t]*)` 捕获起始标记缩进，确保结束标记位于同一缩进层级。
+  // 2. `([A-Za-z_$][\w$]*)` 捕获模板变量名，并要求是合法 JS 标识符。
+  // 3. `(legacy|modern)?` 捕获可选标签风格，未写时默认 legacy。
+  // 4. `([\s\S]*?)` 非贪婪捕获标记块内容，支持跨行模板定义。
+  // 5. `\1` / `\2` 要求结束标记缩进和变量名与起始标记一致，避免误配嵌套块。
+  return source.replace(
+    /(^[ \t]*)\/\/ laytpl-precompile:start ([A-Za-z_$][\w$]*)(?: (legacy|modern))?\n([\s\S]*?)\n\1\/\/ laytpl-precompile:end \2/gm,
+    precompileLaytplBlock
+  );
+}

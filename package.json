@@ -26,6 +26,7 @@
   ],
   "scripts": {
     "build": "gulp",
+    "build:csp": "gulp csp",
     "release": "npm run build && npm run release-zip",
     "release-zip": "gulp release",
     "format": "prettier --write --cache .",

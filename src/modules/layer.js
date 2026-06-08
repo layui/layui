@@ -712,7 +712,7 @@
           doms[4] +
           '' +
           times +
-          '" onload="this.className=\'\';" class="layui-layer-load" frameborder="0" src="' +
+          '" class="layui-layer-load" frameborder="0" lay-src="' +
           config.content[0] +
           '"></iframe>';
         break;
@@ -774,10 +774,6 @@
       transition: config.shade[2] || ''
     });
     that.shadeo.data(SHADE_KEY, config.shade[0] || config.shade);
-
-    config.type == 2 &&
-      layer.ie == 6 &&
-      that.layero.find('iframe').attr('src', content[0]);
 
     // 坐标自适应浏览器窗口尺寸
     config.type == 4
@@ -1156,14 +1152,18 @@
       layero = that.layero,
       config = that.config;
     that.openLayer();
-    if (config.success) {
-      if (config.type == 2) {
-        layero.find('iframe').on('load', function () {
-          config.success(layero, that.index, that);
+    if (config.type == 2) {
+      layero.find('iframe').each(function () {
+        var iframe = $(this);
+        iframe.one('load', function () {
+          iframe.removeClass('layui-layer-load');
+          config.success && config.success(layero, that.index, that);
         });
-      } else {
-        config.success(layero, that.index, that);
-      }
+        iframe.attr('src', iframe.attr('lay-src'));
+        iframe.removeAttr('lay-src');
+      });
+    } else if (config.success) {
+      config.success(layero, that.index, that);
     }
     layer.ie == 6 && that.IE6(layero);
 

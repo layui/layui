@@ -74,6 +74,7 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function (exports) {
        * - {{ if(condition){ }} ... {{ } }} - 条件判断
        */
 
+      // laytpl-precompile:start TPL_MAIN modern
       // 单个穿梭框模板
       var TPL_BOX = function (obj) {
         obj = obj || {};
@@ -103,9 +104,7 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function (exports) {
           '      <i class="layui-icon layui-icon-search"></i>',
           '      <input type="text"',
           '             class="layui-input"',
-          '             placeholder="' +
-            i18n.$t('transfer.searchPlaceholder') +
-            '">',
+          '             placeholder="{{= d.i18nMessages.transfer_search_placeholder }}">',
           '    </div>',
           '  {{ } }}',
           '',
@@ -162,17 +161,53 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function (exports) {
 
         '</div>' // 穿梭框主容器结束
       ].join('\n');
+      // laytpl-precompile:end TPL_MAIN
+
+      var resolveTplStr = function (templet) {
+        try {
+          return lay(templet).html();
+        } catch (err) {
+          return templet;
+        }
+      };
+      /**
+       * 渲染 laytpl 模板，CSP 优化
+       * @param {string|function} tpl 模板字符串或渲染函数
+       * @param {Record<string, any>} data 数据对象
+       * @param {{tplOption?: {open:string, close:string, tagStyle: 'legacy' | 'modern'}, context?: any, extra?: any}} [opts] 选项对象
+       * @returns 染后的字符串
+       */
+      var renderLaytpl = function (tpl, data, opts) {
+        if (!tpl) return '';
+        opts = opts || {};
+        if (typeof tpl === 'function') {
+          return tpl.call(opts.context || this, data, opts.extra);
+        }
+        if (__LAYUI_CSP__) {
+          return tpl;
+        }
+        return laytpl(resolveTplStr(tpl), opts.tplOption).render(data);
+      };
 
       // 解析模板
       var thisElem = (that.elem = $(
-        laytpl(TPL_MAIN, {
-          open: '{{', // 标签符前缀
-          close: '}}', // 标签符后缀
-          tagStyle: 'modern'
-        }).render({
-          data: options,
-          index: that.index // 索引
-        })
+        renderLaytpl(
+          TPL_MAIN,
+          {
+            data: options,
+            index: that.index, // 索引
+            i18nMessages: {
+              transfer_search_placeholder: i18n.$t('transfer.searchPlaceholder')
+            }
+          },
+          {
+            tplOption: {
+              open: '{{',
+              close: '}}',
+              tagStyle: 'modern'
+            }
+          }
+        )
       ));
 
       var othis = options.elem;

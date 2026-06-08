@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'nonce-layui-csp-test'; style-src 'self' 'nonce-layui-csp-test'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-src 'self' about:"
+    />
+    <title>layui CSP 可视化测试</title>
+    <link rel="stylesheet" href="../dist/css/layui.css" />
+    <style nonce="layui-csp-test">
+      body {
+        padding: 24px;
+        background: #f6f7fb;
+      }
+      .test-card {
+        margin-bottom: 18px;
+        border-radius: 10px;
+        background: #fff;
+      }
+      .test-card .layui-card-header {
+        font-weight: 600;
+      }
+      .test-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 16px;
+      }
+      .test-result {
+        margin-top: 10px;
+        color: #16a34a;
+      }
+      .test-note {
+        color: #64748b;
+        font-size: 13px;
+      }
+      .mt-12 {
+        margin-top: 12px;
+      }
+      .mt-16 {
+        margin-top: 16px;
+      }
+      .hidden {
+        display: none;
+      }
+      .flow-demo {
+        height: 260px;
+        overflow: auto;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 12px;
+        background: #fafafa;
+      }
+      .flow-demo li {
+        margin-bottom: 10px;
+        padding: 12px;
+        border-radius: 6px;
+        background: #f1f5f9;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>layui.csp.js 可视化测试</h1>
+    <p class="test-note">
+      本页面使用 CSP：禁止 unsafe-eval，通过 nonce 验证动态
+      script/style；为覆盖组件内 style 属性，本页仅通过 style-src-attr 允许
+      style 属性。
+    </p>
+
+    <div class="layui-card test-card">
+      <div class="layui-card-header">CSP 状态</div>
+      <div class="layui-card-body">
+        <div id="csp-status">等待 layui 初始化...</div>
+        <div class="test-note">
+          如果控制台没有 CSP violation，且下方组件可正常渲染，则基础 CSP
+          验证通过。
+        </div>
+      </div>
+    </div>
+
+    <div class="test-grid">
+      <div class="layui-card test-card">
+        <div class="layui-card-header">Nav / Tab 空 href 防跳转</div>
+        <div class="layui-card-body">
+          <ul class="layui-nav" lay-filter="csp-nav">
+            <li class="layui-nav-item layui-this"><a href="">首页</a></li>
+            <li class="layui-nav-item"><a href="">文档</a></li>
+            <li class="layui-nav-item">
+              <a href="https://layui.dev" target="_blank">外链</a>
+            </li>
+          </ul>
+          <div class="layui-tab mt-16" lay-filter="csp-tab">
+            <ul class="layui-tab-title">
+              <li class="layui-this"><a href="">Tab 1</a></li>
+              <li><a href="">Tab 2</a></li>
+            </ul>
+            <div class="layui-tab-content">
+              <div class="layui-tab-item layui-show">Tab 1 内容</div>
+              <div class="layui-tab-item">Tab 2 内容</div>
+            </div>
+          </div>
+          <div id="nav-tab-result" class="test-result">
+            点击空 href 不应跳转或滚动页面。
+          </div>
+        </div>
+      </div>
+
+      <div class="layui-card test-card">
+        <div class="layui-card-header">Progress 安全分数表达式</div>
+        <div class="layui-card-body">
+          <div
+            class="layui-progress"
+            lay-showpercent="true"
+            lay-filter="progress-demo"
+          >
+            <div class="layui-progress-bar" lay-percent="1/2"></div>
+          </div>
+          <button class="layui-btn layui-btn-sm mt-12" id="progress-btn">
+            设置为 3/4
+          </button>
+        </div>
+      </div>
+
+      <div class="layui-card test-card">
+        <div class="layui-card-header">Laydate 动态样式 nonce</div>
+        <div class="layui-card-body">
+          <input
+            type="text"
+            id="date-demo"
+            class="layui-input"
+            placeholder="选择日期"
+          />
+          <div class="test-note">
+            打开日期控件后，应正常显示主题样式且无 style-src 报错。
+          </div>
+        </div>
+      </div>
+
+      <div class="layui-card test-card">
+        <div class="layui-card-header">Layer iframe 去内联 onload</div>
+        <div class="layui-card-body">
+          <button class="layui-btn layui-btn-primary" id="layer-btn">
+            打开 iframe layer
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="layui-card test-card">
+      <div class="layui-card-header">Table：预编译模板 + 函数配置项</div>
+      <div class="layui-card-body">
+        <div id="table-toolbar" class="hidden"></div>
+        <table id="table-demo" lay-filter="table-demo"></table>
+        <div class="test-note">
+          覆盖 toolbar/pagebar/列 toolbar/totalRow 函数形式，以及 lay-options
+          JSON。
+        </div>
+      </div>
+    </div>
+
+    <div class="layui-card test-card">
+      <div class="layui-card-header">Transfer：内置模板预编译</div>
+      <div class="layui-card-body">
+        <div id="transfer-demo"></div>
+      </div>
+    </div>
+
+    <div class="layui-card test-card">
+      <div class="layui-card-header">Flow 动态加载 + 空 href 防跳转</div>
+      <div class="layui-card-body">
+        <div id="flow-list" class="flow-demo"></div>
+        <div id="flow-status" class="test-note">
+          点击“加载更多”按钮后，会延迟 500ms 模拟异步加载下一页。
+        </div>
+      </div>
+    </div>
+
+    <script nonce="layui-csp-test">
+      // window.LAYUI_GLOBAL = {
+      //   nonce: 'layui-csp-test'
+      // };
+    </script>
+    <script nonce="layui-csp-test" src="../dist/layui.csp.js"></script>
+    <script nonce="layui-csp-test">
+      // layui.config({ nonce: 'layui-csp-test' });
+
+      layui.use(
+        [
+          'element',
+          'table',
+          'transfer',
+          'progress',
+          'laydate',
+          'layer',
+          'flow',
+          'lay'
+        ],
+        function () {
+          var element = layui.element;
+          var table = layui.table;
+          var transfer = layui.transfer;
+          var progress = layui.progress;
+          var laydate = layui.laydate;
+          var layer = layui.layer;
+          var flow = layui.flow;
+          var lay = layui.lay;
+
+          document.getElementById('csp-status').innerHTML =
+            'layui.csp.js 初始化完成；nonce = ' + layui.cache.nonce;
+
+          element.render('nav');
+          element.render('progress');
+
+          document.getElementById('progress-btn').onclick = function () {
+            progress.setValue('progress-demo', '3/4');
+          };
+
+          laydate.render({
+            elem: '#date-demo',
+            theme: ['#16a34a', '#dcfce7'],
+            range: true,
+            shortcuts: [
+              {
+                text: '今天',
+                value: function () {
+                  return new Date();
+                }
+              },
+              {
+                text: '明天',
+                value: function () {
+                  return new Date(Date.now() + 86400000);
+                }
+              }
+            ]
+          });
+
+          document.getElementById('layer-btn').onclick = function () {
+            layer.open({
+              type: 2,
+              title: 'iframe layer CSP 测试',
+              area: ['520px', '320px'],
+              content: ['base.html', 'auto'],
+              success: function () {
+                layer.msg('iframe load success');
+              }
+            });
+          };
+
+          table.render({
+            elem: '#table-demo',
+            id: 'table-demo',
+            data: [
+              { id: 1, name: '张三', score: 12, city: '杭州' },
+              { id: 2, name: '李四', score: 25, city: '上海' },
+              { id: 3, name: '王五', score: 18, city: '深圳' }
+            ],
+            page: true,
+            limit: 2,
+            totalRow: true,
+            toolbar: function (options) {
+              return (
+                '<div class="layui-btn-container"><button class="layui-btn layui-btn-sm" lay-event="customToolbar">函数 toolbar：' +
+                options.id +
+                '</button></div>'
+              );
+            },
+            //pagebar:'<span class="layui-badge layui-bg-green">字符串 pagebar</span>',
+            pagebar: function () {
+              return '<span class="layui-badge layui-bg-green">函数 pagebar</span>';
+            },
+            cols: [
+              [
+                { type: 'numbers', totalRowText: '合计' },
+                {
+                  field: 'name',
+                  title: '姓名',
+                  templet: function (d, o) {
+                    console.log(o);
+                    return '<strong>' + lay.escape(d.name) + '</strong>';
+                  }
+                },
+                { field: 'city', title: '城市' },
+                {
+                  field: 'score',
+                  title: '分数',
+                  totalRow: function (obj) {
+                    return '总分：' + obj.TOTAL_NUMS;
+                  }
+                },
+                {
+                  title: '操作',
+                  toolbar: function (d) {
+                    return (
+                      '<button class="layui-btn layui-btn-xs" lay-event="rowAction">函数行工具：' +
+                      d.id +
+                      '</button>'
+                    );
+                  }
+                }
+              ]
+            ]
+          });
+
+          table.on('toolbar(table-demo)', function (obj) {
+            layer.msg('toolbar event: ' + obj.event);
+          });
+          table.on('tool(table-demo)', function (obj) {
+            layer.msg('row event: ' + obj.event + ', id=' + obj.data.id);
+          });
+
+          transfer.render({
+            elem: '#transfer-demo',
+            id: 'transfer-demo',
+            showSearch: true,
+            title: ['候选项', '已选择'],
+            data: [
+              { value: '1', title: '项目 A' },
+              { value: '2', title: '项目 B' },
+              { value: '3', title: '项目 C' }
+            ],
+            value: ['2']
+          });
+
+          flow.load({
+            elem: '#flow-list',
+            isAuto: false,
+            scrollElem: '#flow-list',
+            done: function (page, next) {
+              var flowStatus = document.getElementById('flow-status');
+              flowStatus.innerHTML = '正在模拟加载第 ' + page + ' 页...';
+              setTimeout(function () {
+                var lis = [];
+                for (var i = 0; i < 6; i++) {
+                  lis.push(
+                    '<li><strong>Flow item ' +
+                      ((page - 1) * 6 + i + 1) +
+                      '</strong><div class="test-note">第 ' +
+                      page +
+                      ' 页动态加载内容</div></li>'
+                  );
+                }
+                next(lis.join(''), page < 4);
+                flowStatus.innerHTML =
+                  page < 4
+                    ? '第 ' + page + ' 页加载完成，可继续点击“加载更多”。'
+                    : '动态加载完成，共 4 页。';
+              }, 500);
+            }
+          });
+        }
+      );
+    </script>
+  </body>
+</html>

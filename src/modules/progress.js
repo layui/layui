@@ -8,6 +8,21 @@ layui.define('component', function (exports) {
 
   var $ = layui.$;
 
+  var getPercentValue = function (percent) {
+    if (!/^.+\/.+$/.test(percent)) return percent;
+
+    if (__LAYUI_CSP__) {
+      // CSP 版禁用动态表达式求值，仅支持安全的数字除法写法，如 1/2。
+      var nums = percent.split('/');
+      var denominator = parseFloat(nums[1]);
+      return denominator
+        ? (parseFloat(nums[0]) / denominator) * 100 + '%'
+        : percent;
+    }
+
+    return new Function('return ' + percent)() * 100 + '%';
+  };
+
   // 创建组件
   var component = layui.component({
     name: 'progress', // 组件名
@@ -31,9 +46,7 @@ layui.define('component', function (exports) {
         var percent = elemBar.attr('lay-percent');
 
         elemBar.css('width', function () {
-          return /^.+\/.+$/.test(percent)
-            ? new Function('return ' + percent)() * 100 + '%'
-            : percent;
+          return getPercentValue(percent);
         });
 
         if (othis.attr('lay-showpercent')) {
@@ -60,9 +73,7 @@ layui.define('component', function (exports) {
 
       elemBar
         .css('width', function () {
-          return /^.+\/.+$/.test(percent)
-            ? new Function('return ' + percent)() * 100 + '%'
-            : percent;
+          return getPercentValue(percent);
         })
         .attr('lay-percent', percent);
       text.text(percent);
