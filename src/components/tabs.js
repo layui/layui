@@ -33,7 +33,7 @@ export class Tabs extends Component {
    * @param {Object} opts - 添加标签的配置项，详见 Class.prototype.add
    */
   static add(id, opts) {
-    const inst = this.getInst(id);
+    const inst = this.getInstance(id);
     if (!inst) return;
     inst.add(opts);
   }
@@ -45,7 +45,7 @@ export class Tabs extends Component {
    * @param {boolean} [force=false] - 是否强制关闭
    */
   static close(id, index, force) {
-    const inst = this.getInst(id);
+    const inst = this.getInstance(id);
     if (!inst) return;
     // index 若不传，则表示关闭当前标签
     if (index === undefined) {
@@ -61,7 +61,7 @@ export class Tabs extends Component {
    * @param {number} index - 活动标签的索引，默认取当前选中标签的索引。一般用于标签右键事件
    */
   static closeMult(id, mode, index) {
-    const inst = this.getInst(id);
+    const inst = this.getInstance(id);
     if (!inst) return;
     inst.closeMult(mode, index);
   }
@@ -72,7 +72,7 @@ export class Tabs extends Component {
    * @param {number} index - 标签索引
    */
   static change(id, index, force) {
-    const inst = this.getInst(id);
+    const inst = this.getInstance(id);
     if (!inst) return;
     inst.change(inst.getHeaderItem(index), force);
   }
@@ -82,7 +82,7 @@ export class Tabs extends Component {
    * @param {string} id - 渲染时的实例 ID
    */
   static data(id) {
-    const inst = this.getInst(id);
+    const inst = this.getInstance(id);
     return inst ? inst.data() : {};
   }
 
@@ -93,7 +93,7 @@ export class Tabs extends Component {
    * @returns
    */
   static getHeaderItem(id, index) {
-    const inst = this.getInst(id);
+    const inst = this.getInstance(id);
     if (!inst) return;
     return inst.getHeaderItem(index);
   }
@@ -105,7 +105,7 @@ export class Tabs extends Component {
    * @returns
    */
   static getBodyItem(id, index) {
-    const inst = this.getInst(id);
+    const inst = this.getInstance(id);
     if (!inst) return;
     return inst.getBodyItem(index);
   }
@@ -115,7 +115,7 @@ export class Tabs extends Component {
    * @param {string} id - 渲染时的实例 ID
    */
   static refresh(id) {
-    const inst = this.getInst(id);
+    const inst = this.getInstance(id);
     if (!inst) return;
     inst.roll('auto');
   }
@@ -843,7 +843,7 @@ const CONST = Tabs.CONST;
   $(window).on('resize', function () {
     clearTimeout(timer);
     timer = setTimeout(() => {
-      const tabsInstances = Tabs.getAllInst();
+      const tabsInstances = Tabs.getInstances();
       for (const inst of Object.values(tabsInstances)) {
         if (inst) {
           inst.roll('init');

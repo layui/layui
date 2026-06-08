@@ -74,7 +74,7 @@ export class Progress extends Component {
    * @returns {typeof Progress}
    */
   static setValue(id, value) {
-    const inst = this.getInst(id);
+    const inst = this.getInstance(id);
     if (!inst) return;
 
     const options = inst.options;

@@ -66,7 +66,7 @@ export class Component {
    * @param {string|number} id - 实例 id
    * @returns {InstanceType<typeof this>|undefined} - 组件实例
    */
-  static getInst(id) {
+  static getInstance(id) {
     if (id === undefined) {
       throw new Error('ID argument required');
     }
@@ -77,17 +77,17 @@ export class Component {
    * 移除实例
    * @param {string|number} id - 实例 id
    */
-  static removeInst(id) {
+  static removeInstance(id) {
     delete getInstanceBucket(this)[id];
   }
 
   // 获取所有实例
-  static getAllInst() {
-    return getInstanceBucket(this);
+  static getInstances() {
+    return { ...getInstanceBucket(this) };
   }
 
   // 移除所有实例（置空）
-  static removeAllInst() {
+  static removeInstances() {
     instanceBuckets.set(this, Object.create(null));
   }
 
@@ -98,7 +98,7 @@ export class Component {
    * @returns {InstanceType<typeof this>|undefined} - 组件实例
    */
   static reload(id, options) {
-    var inst = this.getInst(id);
+    var inst = this.getInstance(id);
     if (!inst) return;
 
     return inst.reload(options);
@@ -173,7 +173,7 @@ export class Component {
     // 若对目标元素重复渲染，则视为 reload 处理
     if (!rerender) {
       if (existingId) {
-        const inst = Constructor.getInst(existingId);
+        const inst = Constructor.getInstance(existingId);
         if (inst) {
           return inst.reload(options);
         }

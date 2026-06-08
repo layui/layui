@@ -49,14 +49,14 @@ export class Tree extends Component {
 
   // 获得选中的节点数据
   static getChecked(id) {
-    const inst = this.getInst(id);
+    const inst = this.getInstance(id);
     if (!inst) return;
     return inst.getChecked();
   }
 
   // 设置选中节点
   static setChecked(id, checkedId) {
-    const inst = this.getInst(id);
+    const inst = this.getInstance(id);
     if (!inst) return;
     return inst.setChecked(checkedId);
   }

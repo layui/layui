@@ -43,7 +43,7 @@ export class Slider extends Component {
     const attrId = this.CONST.ATTR_ID;
 
     if (elem.length === 1 && elem.attr(attrId)) {
-      const inst = this.getInst(elem.attr(attrId));
+      const inst = this.getInstance(elem.attr(attrId));
       if (inst) {
         return inst.reload(options);
       }
