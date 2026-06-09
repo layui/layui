@@ -104,10 +104,10 @@ layui.define(
     };
 
     /**
-     * 渲染 laytpl 模板，CSP 优化
+     * 渲染 laytpl 模板，CSP 兼容
      * @param {string|function} tpl 模板字符串或渲染函数
      * @param {Record<string, any>} data 数据对象
-     * @param {{tplOption?: {open:string, close:string, tagStyle: 'legacy' | 'modern'}, context?: any, extra?: any}} [opts] 选项对象
+     * @param {{tplOptions?: {open:string, close:string, tagStyle: 'legacy' | 'modern'}, context?: any, extra?: any}} [opts] 选项对象
      * @returns 染后的字符串
      */
     var renderLaytpl = function (tpl, data, opts) {
@@ -117,9 +117,9 @@ layui.define(
         return tpl.call(opts.context || this, data, opts.extra);
       }
       if (__LAYUI_CSP__) {
-        return tpl;
+        return resolveTplStr(tpl);
       }
-      return laytpl(resolveTplStr(tpl), opts.tplOption).render(data);
+      return laytpl(resolveTplStr(tpl), opts.tplOptions).render(data);
     };
 
     // 解析自定义模板数据
@@ -636,7 +636,7 @@ layui.define(
               }
             },
             {
-              tplOption: {
+              tplOptions: {
                 open: '{{',
                 close: '}}',
                 tagStyle: 'legacy'
@@ -2091,18 +2091,19 @@ layui.define(
         var tdContent = (function () {
           var totalRow = item3.totalRow || options.totalRow;
 
-          var tplData = $.extend(
-            {
-              TOTAL_NUMS: TOTAL_NUMS || totalNums[field],
-              TOTAL_ROW: totalRowData || {},
-              LAY_COL: item3
-            },
-            item3
-          );
-
           if (typeof totalRow === 'function' || typeof totalRow === 'string') {
+            var tplData = $.extend(
+              {
+                TOTAL_NUMS: TOTAL_NUMS || totalNums[field],
+                TOTAL_ROW: totalRowData || {},
+                LAY_COL: item3
+              },
+              item3
+            );
             return (
-              renderLaytpl(totalRow, tplData, { context: item3 }) || content
+              renderLaytpl(totalRow, tplData, {
+                context: item3.totalRow ? item3 : options
+              }) || content
             );
           }
 
