@@ -22,7 +22,7 @@ const config = {
     'layui.all,lay,i18n,laytpl,laypage,laydate,jquery,component,layer,util,dropdown,slider,colorpicker,tab,nav,breadcrumb,progress,collapse,element,upload,form,table,treeTable,tabs,tree,transfer,carousel,rate,flow,code',
   // CSP 编译期特性标识
   cspFlagPattern: /__LAYUI_CSP__/g,
-  // 源码 DEBUG 辅助属性，不会进入构建产物
+  // 源码 DEBUG 辅助变量，不会进入构建产物
   debugPattern: /var\s+__LAYUI_CSP__\s*;/g,
   // JS 压缩参数
   uglifyOptions: {
@@ -195,7 +195,6 @@ exports.helper = () => {
 };
 
 // 预编译 laytpl 模板
-
 // 将标记块内的 laytpl 静态模板预编译为渲染函数，仅用于 CSP 构建。
 // 标记 ID 必须与块内被赋值的模板变量同名，例如：
 //   // laytpl-precompile:start TPL_MAIN modern
@@ -210,7 +209,7 @@ function precompileLaytplBlock(match, indent, name, tagStyle, block) {
     throw new Error(`invalid laytpl precompile tagStyle: ${tagStyle}`);
   }
 
-  // 构建期执行标记块，取得同名模板变量的字符串值；不会进入运行时产物。
+  // 构建期执行标记块，取得同名模板变量的字符串值；不会进入构建产物。
   const template = new Function(`${block}\nreturn ${name};`)();
 
   // 复用 laytpl 内部 builder 生成函数源码

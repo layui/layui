@@ -1128,5 +1128,5 @@
   // export layui
   window.layui = new Class();
 })(window);
-// 用于源码调试，构建时会裁剪掉，不会进入运行时产物
+// 用于源码调试，构建时会裁剪掉
 var __LAYUI_CSP__;
