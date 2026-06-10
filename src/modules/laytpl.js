@@ -527,6 +527,9 @@
     return thisModule.call(inst);
   };
 
+  /**
+   * @internal
+   */
   laytpl.escape = vars.escape;
 
   /**
@@ -537,6 +540,16 @@
     Object.assign(vars, variables);
   };
 
+  /**
+   * 生成模板渲染函数的源码字符串，用于构建时预编译模板。未文档化的私有方法，仅限内部使用。
+   * @internal
+   * @param {string} template - 模板字符串
+   * @param {Object} [options] - 配置选项
+   * @param {string} [options.open='{{'] - 起始界定符
+   * @param {string} [options.close='}}'] - 结束界定符
+   * @param {string} [options.tagStyle='legacy'] - 标签风格，可选 'modern'
+   * @returns {string} 渲染函数的源码字符串
+   */
   laytpl.build = function (template, options) {
     var inst = Object.create(Class.prototype);
     inst.config = Object.assign(
