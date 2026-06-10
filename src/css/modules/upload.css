@@ -7,10 +7,9 @@
   display: flex;
   align-items: center;
   gap: var(--lay-spacing-sm);
-  height: 32px;
-  margin-top: var(--lay-spacing-sm);
-  /*   padding: 0 var(--lay-spacing-sm);
-  border: 1px solid var(--lay-border-color); */
+  padding: var(--lay-spacing-sm);
+  border: 1px solid var(--lay-border-color);
+  border-radius: var(--lay-border-radius);
   transition: all 0.2s;
   box-sizing: border-box;
 
@@ -18,23 +17,38 @@
     flex: 1;
   }
 }
-.lay-upload-list-item + .lay-upload-list-item {
-  border-top: none;
-}
-.lay-upload-list-item:hover {
-  .lay-upload-list-item-actions {
-    opacity: 1;
+.lay-upload-list-item {
+  margin: var(--lay-spacing-sm) 0;
+
+  .lay-icon {
+    position: relative;
+    color: var(--lay-gray-700);
   }
 }
-.lay-upload-list-item .lay-icon {
-  position: relative;
-  color: var(--lay-gray-700);
+.lay-upload-list-item-status {
+  .lay-icon {
+    position: relative;
+    font-size: 18px;
+  }
+  .lay-icon.lay-icon-success,
+  .lay-icon.lay-icon-error {
+    top: 1px;
+  }
+  .lay-icon.lay-icon-success {
+    color: var(--lay-color-accent);
+  }
+  .lay-icon.lay-icon-error {
+    color: var(--lay-color-red);
+  }
+  .lay-icon.lay-icon-disabled {
+    color: var(--lay-gray-500);
+  }
 }
 .lay-upload-list-item-name {
   max-width: 50%;
 }
 .lay-upload-list-item-actions {
-  opacity: 0;
+  margin-left: auto;
   transition: all 0.2s;
 
   .lay-icon {
@@ -45,23 +59,35 @@
     color: var(--lay-gray-900);
   }
 }
+.lay-upload-list-aborted {
+  .lay-upload-list-item-name {
+    color: var(--lay-gray-500);
+    text-decoration: line-through;
+  }
+}
+.lay-upload-list-error {
+  .lay-upload-list-item-name,
+  .lay-upload-list-item-actions .lay-icon {
+    color: var(--lay-color-red);
+  }
+}
+
+/* 拖拽上传容器 */
 .lay-upload-drag {
-  position: relative;
-  display: inline-block;
-  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--lay-spacing);
   border: 1px dashed #e2e2e2;
-  background-color: #fff;
   text-align: center;
   cursor: pointer;
   color: var(--lay-gray-700);
-}
-.lay-upload-drag .lay-icon {
-  font-size: 50px;
-  color: var(--lay-color-primary);
+
+  .lay-icon {
+    font-size: 50px;
+    color: var(--lay-color-primary);
+  }
 }
 .lay-upload-drag.lay-upload-dragover {
   border-color: var(--lay-color-primary);
-}
-.lay-btn-container .lay-upload-choose {
-  padding-left: 0;
 }

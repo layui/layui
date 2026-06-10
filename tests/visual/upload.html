@@ -7,19 +7,7 @@
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
     <title>上传组件 - layui</title>
-
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
-
-    <style>
-      .lay-upload-img {
-        width: 92px;
-        height: 92px;
-        margin: 0 10px 10px 0;
-      }
-      hr {
-        margin: 32px 0;
-      }
-    </style>
   </head>
   <body class="lay-padding-5">
     <div class="lay-upload">
@@ -29,12 +17,33 @@
     </div>
 
     <hr />
+    <br />
 
     <div class="lay-upload">
       <button type="button" class="lay-btn" id="test2">多选文件上传</button>
-      <div class="lay-upload-list" id="demo2"></div>
+      <br />
+      <div class="lay-btn-container">
+        <button
+          type="button"
+          class="lay-btn lay-btn-primary lay-btn-disabled"
+          id="test2-abort"
+          disabled
+          lay-on="abort"
+        >
+          中止上传
+        </button>
+        <button
+          type="button"
+          class="lay-btn lay-btn-primary"
+          id="test2-clear"
+          lay-on="clear"
+        >
+          清空上传列表
+        </button>
+      </div>
     </div>
 
+    <br />
     <hr />
 
     <div class="lay-upload">
@@ -121,7 +130,7 @@
     <script src="./assets/dist/layui.js"></script>
     <script>
       layui.use(() => {
-        const { upload, layer, progress, $ } = layui;
+        const { upload, layer, utils, progress, $ } = layui;
 
         // 模拟接口
         // 若需模拟上传过程，而不真实上传文件，可使用 httpbin 开源 HTTP 接口
@@ -133,21 +142,28 @@
           method: 'get',
           data: { a: 1, b: () => 2 }, // 追加接口参数
           // maxSize: 2000,
-          onChoose(obj) {
+          maxCount: 1,
+          onSelect(obj) {
             console.log('choose', obj);
           },
-          async beforeUpload(obj) {
-            return new Promise(function (resolve, reject) {
-              const time = 3000;
-              layer.msg('模拟上传中...', { time });
-              setTimeout(function () {
-                // 模拟「继续上传」或「阻止上传」
+          beforeUpload(obj) {
+            const time = 3000;
+            layer.msg('模拟上传中...', { time });
+
+            // return false; // 直接返回 false 阻止上传
+
+            // 返回 Promise，在异步中决定「继续上传」或「阻止上传」
+            return new Promise((resolve, reject) => {
+              setTimeout(() => {
                 if (true) {
                   layer.closeLast();
-                  resolve(true);
+                  resolve(true); // 继续上传
+                  // 或通过 Promise.resolve(false) 来阻止上传
+                  // resolve(false);
                 } else {
                   layer.msg('上传已被取消', { time });
-                  reject();
+                  // 通过 Promise.reject() 来阻止上传，并传递自定义错误信息
+                  reject('Upload blocked.');
                 }
               }, 500);
             });
@@ -155,8 +171,8 @@
           onSuccess(...args) {
             console.log(`${this.id} → onSuccess  → `, args);
           },
-          onError(res, id) {
-            console.log(`${this.id} → onError  → `, res, id);
+          onError(...args) {
+            console.log(`${this.id} → onError  → `, args);
           },
           onProgress(res) {
             console.log(`${this.id} → onProgress  → `, res);
@@ -173,24 +189,56 @@
         console.log(uploadInst);
 
         // 多选文件上传
-        upload.render({
+        const uploadInst2 = upload.render({
           elem: '#test2',
-          url: url, // 实际使用时改成您自己的上传接口即可
+          url: url,
           multiple: true, // 多选文件
           // mergeRequest: true,
-          maxCount: 3,
           // maxSize: 10,
+          maxCount: 3,
           beforeUpload(obj) {
             console.log(`${this.id} → beforeUpload  → `, obj);
+
+            abortBtn.enable();
           },
-          onSuccess(res, files, file) {
-            console.log(`${this.id} → onSuccess  → `, res, files, file);
+          onSuccess(...args) {
+            console.log(`${this.id} → onSuccess  → `, args);
           },
-          onError(res, files, file, e) {
-            console.log(`${this.id} → onError  → `, res, files, file, e);
+          onError(...args) {
+            console.log(`${this.id} → onError  → `, args);
           },
           onComplete(obj) {
             console.log(`${this.id} → onComplete  → `, obj);
+            abortBtn.disabled();
+          },
+        });
+
+        const abortBtn = {
+          elem: $('#test2-abort'),
+          CLASS_BTN_DISABLED: 'lay-btn-disabled',
+          DISABLED: 'disabled',
+          enable() {
+            this.elem
+              .removeClass(this.CLASS_BTN_DISABLED)
+              .removeAttr(this.DISABLED);
+          },
+          disabled() {
+            this.elem
+              .addClass(this.CLASS_BTN_DISABLED)
+              .attr(this.DISABLED, this.DISABLED);
+          },
+        };
+
+        utils.on({
+          abort() {
+            // 演示中止上传
+            uploadInst2.abort();
+            abortBtn.disabled();
+            // uploadInst2.reload();
+          },
+          clear() {
+            // 清空上传列表
+            uploadInst2.clearUploadList();
           },
         });
 
@@ -204,7 +252,7 @@
           autoUpload: false,
           submitElem: '#testListAction',
           // maxSize: 30,
-          onChoose(obj) {
+          onSelect(obj) {
             var files = (this.files = obj.pushFile()); // 将每次选择的文件追加到文件队列
             // 读取本地文件
             obj.preview((index, file, result) => {
@@ -241,17 +289,17 @@
               });
             });
           },
-          onSuccess(res, index) {
-            var tr = demoListView.find('tr#upload-' + index);
+          onSuccess(res, files, file) {
+            /* var tr = demoListView.find('tr#upload-' + index);
             var tds = tr.children();
             tds.eq(3).html(''); // 清空操作
-            delete this.files[index]; // 删除文件队列已经上传成功的文件
+            delete this.files[index]; // 删除文件队列已经上传成功的文件 */
           },
-          onError(res, index) {
-            var tr = demoListView.find('tr#upload-' + index);
+          onError(e, files, file) {
+            /* var tr = demoListView.find('tr#upload-' + index);
             var tds = tr.children();
             tds.eq(3).find('.demo-reload').removeClass('lay-hide'); // 显示重传
-            progress.setValue('progress-' + index, 0);
+            progress.setValue('progress-' + index, 0); */
           },
           onComplete(obj) {
             console.log(obj);
@@ -266,7 +314,7 @@
         upload.render({
           elem: '.test333',
           url: url,
-          onChoose(obj) {
+          onSelect(obj) {
             console.log(this.$elem);
           },
           onSuccess(res) {
@@ -304,7 +352,7 @@
           autoUpload: false,
           submitElem: '#test7',
           // multiple: true,
-          onChoose(obj) {
+          onSelect(obj) {
             obj.preview((index, file) => {
               this.$elem.after(
                 '<span class="lay-inline lay-upload-choose">' +
