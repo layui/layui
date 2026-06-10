@@ -148,10 +148,10 @@ export default {
   },
   upload: {
     validateMessages: {
-      fileOverSizeLimit: '檔案大小不能超過 {size}',
-      filesOverLengthLimit: '同時最多只能上傳 {length} 個檔案',
-      currentFilesLength: '您當前已經選擇了 {length} 個檔案',
-      dataFormatError: '請返回 JSON 格式的檔案',
+      fileSizeLimit: '檔案大小不能超過 {size}',
+      fileCountLimit: '最多只能上傳 {count} 個檔案',
+      existingFileCount:
+        '列表中已存在 {count} 個檔案，最多只能再添加 {remaining} 個檔案',
     },
   },
   utils: {

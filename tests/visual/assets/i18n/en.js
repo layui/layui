@@ -151,10 +151,10 @@ export default {
   },
   upload: {
     validateMessages: {
-      fileOverSizeLimit: 'File size must not exceed {size}',
-      filesOverLengthLimit: 'Maximum {length} files allowed at once',
-      currentFilesLength: 'You have selected {length} files',
-      dataFormatError: 'Please return data in JSON format',
+      fileSizeLimit: 'File size must not exceed {size}',
+      fileCountLimit: 'You can only upload up to {count} files',
+      existingFileCount:
+        'There are already {count} files in the list, you can only add {remaining} more files',
     },
   },
   utils: {

@@ -156,10 +156,10 @@ var zhCN = {
   },
   upload: {
     validateMessages: {
-      fileOverSizeLimit: '文件大小不能超过 {size}',
-      filesOverLengthLimit: '同时最多只能上传 {length} 个文件',
-      currentFilesLength: '当前已经选择了 {length} 个文件',
-      dataFormatError: '请返回 JSON 格式的数据',
+      fileSizeLimit: '文件大小不能超过 {size}',
+      fileCountLimit: '最多只能上传 {count} 个文件',
+      existingFileCount:
+        '列表中已存在 {count} 个文件，最多只能再添加 {remaining} 个文件',
     },
   },
   utils: {

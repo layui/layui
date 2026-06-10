@@ -252,7 +252,7 @@ export class Upload extends Component {
 
     // 文件校验
     const validationResult = this.#validate();
-    if (validationResult) return;
+    if (!validationResult) return;
 
     // 上传前的钩子
     // 若回调函数明确返回 false 或 Promise.reject，则阻止上传
@@ -313,7 +313,13 @@ export class Upload extends Component {
     const $deleteBtn = $('<i class="lay-icon lay-icon-clear"></i>');
 
     // 删除按钮事件
-    $deleteBtn.on('click', () => this.deleteUploadItem(file));
+    $deleteBtn.on('click', () => {
+      this.deleteUploadItem(file); // 删除上传列表项
+      // 中断上传请求
+      if (file.uploadStatus === uploadStatus.UPLOADING) {
+        file.jqXHR?.abort();
+      }
+    });
 
     $actions.append($deleteBtn);
     $uploadListItem.attr({ id: file.id }).append($actions);
@@ -380,10 +386,6 @@ export class Upload extends Component {
       this.files.findIndex((item) => item.id === file.id),
       1,
     );
-    // 中断上传请求
-    if (file.uploadStatus === uploadStatus.UPLOADING) {
-      file.jqXHR?.abort();
-    }
 
     // 从上传列表元素中移除
     const $uploadListElem = this.$uploadListElem;
@@ -404,22 +406,35 @@ export class Upload extends Component {
     [...this.files].forEach(this.deleteUploadItem.bind(this));
   }
 
-  // 校验
-  #validate() {
+  /**
+   * 文件校验
+   * @param {Object} opts
+   * @param {Array<File>} [opts.selectedFiles] - 待校验的文件列表。默认取当前文件队列中 SELECTED 状态的文件列表
+   * @param {number} [opts.fileCount] - 待校验的文件数量。默认取当前文件队列长度
+   * @return {boolean} - 校验是否通过
+   */
+  #validate(opts = {}) {
     const options = this.options;
     const fileElem = this.$fileElem[0];
-    const files = this.files;
-    const selectedFiles = this.getSelectedFiles();
+    const selectedFiles = opts.selectedFiles || this.getSelectedFiles();
+    const filesLength = this.files.length;
+    const fileCount = opts.fileCount || filesLength;
 
     // 检验文件数量
-    if (options.maxCount && files.length > options.maxCount) {
-      return showError(
-        `${i18n.$t('upload.validateMessages.filesOverLengthLimit', {
-          length: options.maxCount,
-        })}<br/>${i18n.$t('upload.validateMessages.currentFilesLength', {
-          length: files.length,
-        })}`,
+    if (options.maxCount && fileCount > options.maxCount) {
+      showError(
+        `${i18n.$t('upload.validateMessages.fileCountLimit', {
+          count: options.maxCount,
+        })}${
+          filesLength
+            ? `<br>${i18n.$t('upload.validateMessages.existingFileCount', {
+                count: filesLength,
+                remaining: options.maxCount - filesLength,
+              })}`
+            : ''
+        }`,
       );
+      return false;
     }
 
     // 检验文件大小
@@ -436,13 +451,17 @@ export class Upload extends Component {
         }
       }
 
-      if (limitSizeText)
-        return showError(
-          i18n.$t('upload.validateMessages.fileOverSizeLimit', {
+      if (limitSizeText) {
+        showError(
+          i18n.$t('upload.validateMessages.fileSizeLimit', {
             size: limitSizeText,
           }),
         );
+        return false;
+      }
     }
+
+    return true;
   }
 
   // 目标元素是否为 file 元素
@@ -452,23 +471,34 @@ export class Upload extends Component {
     return elem.tagName.toLocaleLowerCase() === 'input' && elem.type === 'file';
   }
 
-  // 更新进度条
+  /**
+   * 更新进度条
+   * @param {Object} options - 配置项
+   * @param {number} options.percent - 上传进度百分比
+   * @param {Array<File>} options.files - 文件对象数组
+   */
   #updateProgress({ percent, files }) {
     const $uploadListElem = this.$uploadListElem;
-    if (!$uploadListElem) return;
+    if (!$uploadListElem.find('.lay-progress').length) return;
 
     files.forEach((file) => {
       const $uploadListItem = $uploadListElem.find(`#${file.id}`);
+      if (!$uploadListItem.length) return; // maxCount 为 1 的情况，元素已被替换
+
       const $progress = $uploadListItem.find('.lay-progress');
       const progressId = $progress.attr('lay-progress-id');
       progress.setValue(progressId, percent);
     });
   }
 
-  // 删除进度条
+  /**
+   * 删除进度条
+   * @param {Object} params
+   * @param {Array<File>} params.files - 文件对象数组
+   */
   #removeProgress({ files }) {
     const $uploadListElem = this.$uploadListElem;
-    if (!$uploadListElem) return;
+    if (!$uploadListElem.find('.lay-progress').length) return;
 
     // 删除指定的进度条
     const removeProgressById = (id) => {
@@ -488,7 +518,10 @@ export class Upload extends Component {
     });
   }
 
-  // 处理文件选择
+  /**
+   * 处理文件选择逻辑
+   * @param {FileList|File[]} files - 选择的文件列表
+   */
   #handleFileSelection(files) {
     const options = this.options;
 
@@ -506,15 +539,16 @@ export class Upload extends Component {
       if (options.maxCount == 1) {
         this.clearUploadList();
       }
-      // 若超出文件数量限制
-      if (files.length + this.files.length > options.maxCount) {
-        return;
-      }
+      // 校验
+      const validationResult = this.#validate({
+        fileCount: files.length + this.files.length,
+        selectedFiles: files,
+      });
+      if (!validationResult) return;
     }
 
     // 添加文件到队列
     files.forEach((file) => {
-      // 后续此处要增加文件校验，通过校验的文件才设置为 SELECTED 状态
       file.uploadStatus = uploadStatus.SELECTED;
       this.files.push(file);
     });
@@ -588,7 +622,6 @@ const { CONST, uploadStatus } = Upload;
 // 弹出异常提示
 const showError = (content) => {
   return layer.msg(content, {
-    icon: 2,
     anim: 6,
     offset: '16px',
   });
