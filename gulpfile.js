@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const gulp = require('gulp');
 const uglify = require('gulp-uglify');
@@ -23,7 +24,7 @@ const config = {
   // CSP 编译期特性标识
   cspFlagPattern: /__LAYUI_CSP__/g,
   // 源码 DEBUG 辅助变量，不会进入构建产物
-  debugPattern: /var\s+__LAYUI_CSP__\s*;/g,
+  debugPattern: /\bvar\s+\b__LAYUI_CSP__\b\s*;/g,
   // JS 压缩参数
   uglifyOptions: {
     output: {
@@ -116,7 +117,11 @@ const clean = () => {
 };
 
 // 默认任务
-exports.default = gulp.series(clean, gulp.parallel(js, csp, css, files));
+exports.default = gulp.series(
+  clean,
+  gulp.parallel(js, csp, css, files),
+  generateModuleFacade
+);
 exports.csp = csp;
 
 // 复制 dist 目录到指定路径
@@ -242,4 +247,17 @@ function precompileLaytplBlocks(source) {
     /(^[ \t]*)\/\/ laytpl-precompile:start ([A-Za-z_$][\w$]*)(?: (legacy|modern))?\n([\s\S]*?)\n\1\/\/ laytpl-precompile:end \2/gm,
     precompileLaytplBlock
   );
+}
+
+// 生成 module facade
+function generateModuleFacade(done) {
+  const esm = `${config.comment}
+import './layui.js';
+var layui = window.layui;
+export { layui };
+export default layui;
+`;
+
+  fs.writeFileSync(path.join(dest, 'layui.mjs'), esm);
+  done();
 }
