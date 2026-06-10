@@ -533,7 +533,8 @@
        * 即属性值必须在网页开发者自身的可控范围内，否则请勿在 HTML 标签属性中获取组件选项。
        */
       if (__LAYUI_CSP__) {
-        return attrValue ? JSON.parse(attrValue) : {};
+        // CSP 模式下，暂时返回空对象，支持方案待定。
+        return {};
       }
       return new Function('return ' + (attrValue || '{}'))();
     } catch (ev) {
