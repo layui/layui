@@ -172,10 +172,10 @@ layui.define(['i18n', 'laytpl', 'component', 'form'], function (exports) {
       };
       /**
        * 渲染 laytpl 模板，CSP 兼容
-       * @param {string|function} tpl 模板字符串或渲染函数
+       * @param {string|((data: Record<string, any>, extra?: any) => string)} tpl 模板字符串或渲染函数
        * @param {Record<string, any>} data 数据对象
        * @param {{tplOptions?: {open:string, close:string, tagStyle: 'legacy' | 'modern'}, context?: any, extra?: any}} [opts] 选项对象
-       * @returns 染后的字符串
+       * @returns 渲染后的字符串
        */
       var renderLaytpl = function (tpl, data, opts) {
         if (!tpl) return '';

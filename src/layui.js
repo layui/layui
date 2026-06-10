@@ -1130,4 +1130,5 @@
   window.layui = new Class();
 })(window);
 // 用于源码调试，构建时会裁剪掉
+// eslint-disable-next-line no-redeclare
 var __LAYUI_CSP__;
