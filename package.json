@@ -21,6 +21,16 @@
     "url": "git+ssh://git@github.com/layui/layui.git"
   },
   "main": "dist/layui.js",
+  "module": "dist/layui.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/layui.mjs",
+      "default": "./dist/layui.js"
+    },
+    "./css/*": "./dist/css/*",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],
