@@ -24,7 +24,7 @@ const config = {
   // CSP 编译期特性标识
   cspFlagPattern: /__LAYUI_CSP__/g,
   // 源码 DEBUG 辅助变量，不会进入构建产物
-  debugPattern: /\bvar\s+\b__LAYUI_CSP__\b\s*;/g,
+  debugPattern: /\bvar\s+__LAYUI_CSP__\b\s*;/g,
   // JS 压缩参数
   uglifyOptions: {
     output: {
