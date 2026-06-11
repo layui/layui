@@ -56,6 +56,27 @@ export class Component {
     };
   }
 
+  /**
+   * 将指定的「实例方法」委托为「静态方法」
+   * 委托后暴露的静态方法的第一个参数为实例 id，后续参数同实例方法的参数一致
+   * @param {string[]} methodNames - 方法名数组
+   */
+  static delegateInstanceMethods(methodNames) {
+    methodNames.forEach((name) => {
+      const descriptor = Object.getOwnPropertyDescriptor(this.prototype, name);
+      if (!descriptor || typeof descriptor.value !== 'function') return;
+
+      Object.defineProperty(this, name, {
+        configurable: true,
+        value(id, ...args) {
+          const inst = this.getInstance(id);
+          if (!inst) return;
+          return inst[name](...args);
+        },
+      });
+    });
+  }
+
   // 事件
   static on(events, callback) {
     return lay.onevent.call(this, this.componentName, events, callback);
@@ -91,17 +112,9 @@ export class Component {
     instanceBuckets.set(this, Object.create(null));
   }
 
-  /**
-   * 组件重载
-   * @param {string|number} id - 实例 id
-   * @param {Object} options - 配置项
-   * @returns {InstanceType<typeof this>|undefined} - 组件实例
-   */
-  static reload(id, options) {
-    var inst = this.getInstance(id);
-    if (!inst) return;
-
-    return inst.reload(options);
+  // 实例方法静态委托
+  static {
+    this.delegateInstanceMethods(['reload']);
   }
 
   /**
@@ -132,7 +145,12 @@ export class Component {
     );
   }
 
-  // 重载实例
+  /**
+   * 重载实例
+   * @param {string|number} id - 实例 id
+   * @param {Object} options - 配置项
+   * @returns {InstanceType<typeof this>} 返回组件实例
+   */
   reload(options) {
     $.extend(this.options, options);
     return this.#init(true);
@@ -141,7 +159,8 @@ export class Component {
   /**
    * 初始化处理（若由事件触发渲染，则必经此步）
    * @param {boolean} rerender - 是否为重载渲染
-   * @returns
+   * @returns {InstanceType<typeof this>|Array<InstanceType<typeof this>>}
+   * 返回组件实例；若 options.elem 对应多个元素，则返回组件实例数组
    */
   #init(rerender) {
     let options = this.options;

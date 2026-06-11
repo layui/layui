@@ -34,11 +34,9 @@ export class Transfer extends Component {
     };
   }
 
-  // 获得选中的数据（右侧面板）
-  static getData(id) {
-    const inst = this.getInstance(id);
-    if (!inst) return;
-    return inst.getData();
+  // 实例方法静态委托
+  static {
+    this.delegateInstanceMethods(['getData']);
   }
 
   constructor(options) {

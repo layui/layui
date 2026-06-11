@@ -40,6 +40,12 @@ export class Slider extends Component {
     };
   }
 
+  // 实例方法静态委托
+  static {
+    this.delegateInstanceMethods(['setValue']);
+  }
+
+  // 渲染
   static render(options) {
     const elem = $(options?.elem);
     const attrId = this.CONST.ATTR_ID;

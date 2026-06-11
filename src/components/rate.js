@@ -33,6 +33,11 @@ export class Rate extends Component {
     };
   }
 
+  // 实例方法静态委托
+  static {
+    this.delegateInstanceMethods(['setValue']);
+  }
+
   // 渲染
   render() {
     const options = this.options;

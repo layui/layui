@@ -29,87 +29,26 @@ export class Tabs extends Component {
     };
   }
 
-  /**
-   * 添加标签
-   * @param {string} id - 渲染时的实例 ID
-   * @param {Object} opts - 添加标签的配置项，详见 Class.prototype.add
-   */
-  static add(id, opts) {
-    const inst = this.getInstance(id);
-    if (!inst) return;
-    inst.add(opts);
-  }
-
-  /**
-   * 关闭标签
-   * @param {string} id - 渲染时的实例 ID
-   * @param {number} index - 标签索引
-   * @param {boolean} [force=false] - 是否强制关闭
-   */
-  static close(id, index, force) {
-    const inst = this.getInstance(id);
-    if (!inst) return;
-    // index 若不传，则表示关闭当前标签
-    if (index === undefined) {
-      index = inst.data().index;
-    }
-    inst.close(inst.getHeaderItem(index), force);
-  }
-
-  /**
-   * 关闭多个标签
-   * @param {string} id - 渲染时的实例 ID
-   * @param {('other'|'right'|'all')} [mode="all"] - 关闭方式
-   * @param {number} index - 活动标签的索引，默认取当前选中标签的索引。一般用于标签右键事件
-   */
-  static closeMult(id, mode, index) {
-    const inst = this.getInstance(id);
-    if (!inst) return;
-    inst.closeMult(mode, index);
-  }
-
-  /**
-   * 切换标签
-   * @param {string} id - 渲染时的实例 ID
-   * @param {number} index - 标签索引
-   */
-  static change(id, index, force) {
-    const inst = this.getInstance(id);
-    if (!inst) return;
-    inst.change(inst.getHeaderItem(index), force);
+  // 实例方法静态委托
+  static {
+    this.delegateInstanceMethods([
+      'add',
+      'close',
+      'closeMult',
+      'change',
+      'getHeaderItem',
+      'getBodyItem',
+    ]);
   }
 
   /**
    * 获取标签信息
    * @param {string} id - 渲染时的实例 ID
+   * @return {Object} 标签相关信息
    */
   static data(id) {
     const inst = this.getInstance(id);
     return inst ? inst.data() : {};
-  }
-
-  /**
-   * 获取标签指定头部项
-   * @param {string} id - 渲染时的实例 ID
-   * @param {number} index - 标签索引或 lay-id 值
-   * @returns
-   */
-  static getHeaderItem(id, index) {
-    const inst = this.getInstance(id);
-    if (!inst) return;
-    return inst.getHeaderItem(index);
-  }
-
-  /**
-   * 获取标签指定内容项
-   * @param {string} id - 渲染时的实例 ID
-   * @param {number} index - 标签索引或 lay-id 值
-   * @returns
-   */
-  static getBodyItem(id, index) {
-    const inst = this.getInstance(id);
-    if (!inst) return;
-    return inst.getBodyItem(index);
   }
 
   /**
@@ -193,10 +132,10 @@ export class Tabs extends Component {
     // 初始选中项
     const data = this.data();
     if ('index' in options && data.index != options.index) {
-      this.change(this.getHeaderItem(options.index), true);
+      this.change(options.index, true);
     } else if (data.index === -1) {
       // 初始选中项为空时，默认选中第一个
-      this.change(this.getHeaderItem(0), true);
+      this.change(0, true);
     }
 
     // 初始化滚动结构
@@ -274,7 +213,7 @@ export class Tabs extends Component {
 
     // 是否将新增项设置为活动标签
     if (opts.active) {
-      this.change(newHeaderItem, true);
+      this.change(newHeaderItem.index(), true);
     } else {
       this.roll('auto');
     }
@@ -291,24 +230,29 @@ export class Tabs extends Component {
 
   /**
    * 关闭指定标签
-   * @param {Object} thisHeaderItem - 当前标签头部项元素
+   * @param {number|string} index - 标签索引或 lay-id 值
    * @param {boolean} force - 是否强制删除
    */
-  close(thisHeaderItem, force) {
+  close(index, force) {
+    let data = this.data();
+
+    // index 若不传，则表示关闭当前标签
+    if (index === undefined) {
+      index = data.index;
+    }
+
+    const thisHeaderItem = this.getHeaderItem(index);
     if (!thisHeaderItem || !thisHeaderItem[0]) return;
 
     const options = this.options;
     const layid = thisHeaderItem.attr('lay-id');
-    const index = thisHeaderItem.index();
+    const itemIndex = thisHeaderItem.index();
     const Constructor = this.constructor;
 
     // 标签是否不可关闭
     if (thisHeaderItem.attr('lay-closable') === 'false') {
       return;
     }
-
-    // 当前标签相关数据
-    let data = this.data();
 
     // 标签关闭前的事件。若非强制关闭，可则根据事件的返回结果决定是否关闭
     if (!force) {
@@ -317,7 +261,7 @@ export class Tabs extends Component {
         Constructor.componentName,
         `beforeClose(${options.id})`,
         $.extend(data, {
-          index: index,
+          index: itemIndex,
         }),
       );
 
@@ -330,9 +274,9 @@ export class Tabs extends Component {
     // 如果关闭的是当前标签，则更换当前标签索引
     if (thisHeaderItem.hasClass(CONST.CLASS_THIS)) {
       if (thisHeaderItem.next()[0]) {
-        this.change(thisHeaderItem.next(), true);
+        this.change(itemIndex + 1, true);
       } else if (thisHeaderItem.prev()[0]) {
-        this.change(thisHeaderItem.prev(), true);
+        this.change(itemIndex - 1, true);
       }
     }
 
@@ -340,7 +284,7 @@ export class Tabs extends Component {
     this.getBodyItem(layid || index).remove();
     thisHeaderItem.remove();
 
-    this.roll('auto', index);
+    this.roll('auto', itemIndex);
 
     // 获取当前标签相关数据
     data = this.data();
@@ -356,7 +300,7 @@ export class Tabs extends Component {
 
   /**
    * 批量关闭标签
-   * @see tabs.close
+   * @see Tabs.close()
    */
   closeMult(mode, index) {
     const options = this.options;
@@ -387,13 +331,13 @@ export class Tabs extends Component {
             .reverse(),
         ).eq(0);
         if (nextHeader[0]) {
-          this.change(nextHeader, true);
+          this.change(nextHeader.index(), true);
         } else if (prevHeader[0]) {
-          this.change(prevHeader, true);
+          this.change(prevHeader.index(), true);
         }
       } else if (index !== data.index) {
         // 自动切换到活动标签
-        this.change(headerItem, true);
+        this.change(index, true);
       }
     }
 
@@ -436,17 +380,18 @@ export class Tabs extends Component {
 
   /**
    * 切换标签
-   * @param {Object} thisHeaderItem - 当前标签头部项元素
+   * @param {number|string} index - 标签索引或 lay-id 值
    * @param {boolean} [force=false] - 是否强制切换
    * @returns
    */
-  change(thisHeaderItem, force) {
+  change(index, force) {
+    const thisHeaderItem = this.getHeaderItem(index);
     if (!thisHeaderItem || !thisHeaderItem[0]) return;
 
     const options = this.options;
     const Constructor = this.constructor;
     const layid = thisHeaderItem.attr('lay-id');
-    const index = thisHeaderItem.index();
+    const itemIndex = thisHeaderItem.index();
     const thatA = thisHeaderItem.find('a');
     // 是否存在跳转链接
     const isLink =
@@ -475,7 +420,7 @@ export class Tabs extends Component {
             headerItem: data.thisHeaderItem,
           },
           to: {
-            index: index,
+            index: itemIndex,
             headerItem: thisHeaderItem,
           },
         }),
@@ -499,7 +444,7 @@ export class Tabs extends Component {
       .siblings()
       .removeClass(CONST.CLASS_SHOW);
 
-    this.roll('auto', index);
+    this.roll('auto', itemIndex);
 
     // 重新获取标签相关数据
     data = this.data();
@@ -790,8 +735,8 @@ export class Tabs extends Component {
       const close = $(
         `<i class="lay-icon lay-icon-close lay-unselect ${CONST.CLOSE}"></i>`,
       );
-      close.on('click', (event) => {
-        this.close($(event.currentTarget).parent());
+      close.on('click', () => {
+        this.close(headerItem.index());
         return false;
       });
       headerItem.append(close);
@@ -832,7 +777,7 @@ export class Tabs extends Component {
       : this.headerElem.join('');
 
     delegatedElement.off(trigger).on(trigger, elemHeaderItem, (e) => {
-      this.change($(e.currentTarget));
+      this.change($(e.currentTarget).index());
     });
   }
 }

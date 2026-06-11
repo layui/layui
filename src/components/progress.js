@@ -34,6 +34,11 @@ export class Progress extends Component {
     };
   }
 
+  // 实例方法静态委托
+  static {
+    this.delegateInstanceMethods(['setValue']);
+  }
+
   render() {
     const options = this.options;
     const $elem = options.$elem;
@@ -75,14 +80,11 @@ export class Progress extends Component {
    * @param {string|number} value - 进度值
    * @returns {typeof Progress}
    */
-  static setValue(id, value) {
-    const inst = this.getInstance(id);
-    if (!inst) return;
-
-    const options = inst.options;
+  setValue(value) {
+    const options = this.options;
     const $elem = options.$elem;
-    const $progressBar = inst.$progressBar;
-    const $progressInfo = inst.$progressInfo;
+    const $progressBar = this.$progressBar;
+    const $progressInfo = this.$progressInfo;
     const percent = normalizePercent(value);
 
     $elem.attr(CONST.ATTR_PERCENT, percent);

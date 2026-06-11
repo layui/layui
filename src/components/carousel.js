@@ -38,6 +38,11 @@ export class Carousel extends Component {
     };
   }
 
+  // 实例方法静态委托
+  static {
+    this.delegateInstanceMethods(['goto', 'prevIndex', 'nextIndex']);
+  }
+
   // 渲染
   render() {
     const options = this.options;
@@ -73,7 +78,11 @@ export class Carousel extends Component {
     $elem.attr('lay-anim', options.anim);
 
     // 初始焦点状态
-    this.$itemElem.eq(options.index).addClass(CONST.CLASS_THIS);
+    this.$itemElem
+      .eq(options.index)
+      .addClass(CONST.CLASS_THIS)
+      .siblings()
+      .removeClass(CONST.CLASS_THIS);
 
     // 指示器、箭头等动作
     this.#indicator();
