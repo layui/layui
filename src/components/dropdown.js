@@ -59,26 +59,9 @@ export class Dropdown extends Component {
     return consts;
   }
 
-  /**
-   * 关闭面板
-   * @param {string|number} id - 实例 id
-   */
-  static close(id) {
-    const inst = this.getInstance(id);
-    if (!inst) return;
-
-    inst.remove();
-  }
-
-  /**
-   * 打开面板
-   * @param {string|number} id - 实例 id
-   */
-  static open(id) {
-    const inst = this.getInstance(id);
-    if (!inst) return;
-
-    inst.open();
+  // 实例方法静态委托
+  static {
+    this.delegateInstanceMethods(['close', 'open']);
   }
 
   /**
@@ -86,20 +69,21 @@ export class Dropdown extends Component {
    * @param {string|number} id - 实例 id
    * @param {Object} options - 配置项；仅允许重载与数据相关的选项，如:
    * `data、template、content`，其他选项将被忽略
-   * @returns @see Component.reload
+   * @param  {...any} args - 保留参数，为了同 {@link Component.reload} 的参数一致
+   * @returns {*} 返回值同 {@link Component.reload}
    */
-  static reloadData(...args) {
-    const options = { ...args[1] };
+  static reloadData(id, options, ...args) {
+    const opts = { ...options };
     const allowedReloadKeys = new Set(['data', 'template', 'content']);
 
-    Object.keys(options).forEach((key) => {
+    Object.keys(opts).forEach((key) => {
       if (!allowedReloadKeys.has(key)) {
-        delete options[key];
+        delete opts[key];
       }
     });
 
-    args[1] = { ...options, _renderMode: 'reloadData' };
-    return this.reload(...args);
+    Object.assign(opts, { _renderMode: 'reloadData' });
+    return this.reload(id, opts, ...args);
   }
 
   // 构造函数
@@ -289,7 +273,7 @@ export class Dropdown extends Component {
       $rootElem.addClass(options.className).attr('style', options.style);
 
       // 生成面板
-      this.remove(); // 移除旧面板
+      this.close(); // 关闭旧面板
       options.$target.append($rootElem); // 插入新面板
       this.$rootElem = $rootElem;
 
@@ -323,7 +307,7 @@ export class Dropdown extends Component {
             clearTimeout(this.timer);
           })
           .on('mouseleave', () => {
-            this.#delayRemove();
+            this.#delayClose();
           });
       }
     }
@@ -352,7 +336,7 @@ export class Dropdown extends Component {
             ? options.click(data, $this, e)
             : null;
 
-        ret === false || isChild || this.remove();
+        ret === false || isChild || this.close();
         e.stopPropagation();
       }
     });
@@ -376,9 +360,9 @@ export class Dropdown extends Component {
   }
 
   /**
-   * 移除面板
+   * 关闭面板
    */
-  remove() {
+  close() {
     const options = this.options;
     const $rootElem = this.$rootElem;
 
@@ -428,12 +412,12 @@ export class Dropdown extends Component {
     };
   }
 
-  // 延迟移除面板
-  #delayRemove() {
+  // 延迟关闭面板
+  #delayClose() {
     clearTimeout(this.timer);
 
     this.timer = setTimeout(() => {
-      this.remove();
+      this.close();
     }, this.#normalizedDelay().hide);
   }
 
@@ -470,7 +454,7 @@ export class Dropdown extends Component {
       } else {
         // 若为 click 事件，则根据主面板状态，自动切换打开与关闭
         if (options.closeOnClick && opened && options.trigger === 'click') {
-          this.remove();
+          this.close();
         } else {
           this.open();
         }
@@ -483,7 +467,7 @@ export class Dropdown extends Component {
     if (isMouseEnter) {
       // 执行鼠标移出事件
       $elem.on(`mouseleave${eventNamespace}`, () => {
-        this.#delayRemove();
+        this.#delayClose();
       });
     }
   }
@@ -507,7 +491,7 @@ export class Dropdown extends Component {
           if (shouldClose === false) return;
         }
 
-        this.remove();
+        this.close();
       },
       {
         ignore: isCtxMenu || isTopElem ? null : [options.$elem[0]],
@@ -538,7 +522,7 @@ export class Dropdown extends Component {
       )
         return;
       if (options.trigger === 'contextmenu') {
-        this.remove();
+        this.close();
       } else {
         this.#position();
       }
