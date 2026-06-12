@@ -3192,7 +3192,7 @@ laydate.reload = function (id, options) {
 };
 
 // 获取对应 ID 的实例
-laydate.getInst = function (id) {
+laydate.getInstance = function (id) {
   var that = thisModule.getThis(id);
   if (that) {
     return that.inst;

@@ -8,8 +8,8 @@ import { loader } from './core/loader.js';
 import { laytpl } from './core/laytpl.js';
 import { i18n } from './core/i18n.js';
 import { router } from './core/router.js';
-import { default as jquery, default as $ } from 'jquery';
-import { component, componentBuilder } from './core/component.js';
+import { $ } from 'jquery';
+import { Component } from './core/component.js';
 
 // 导入工具模块
 import * as utils from './utils/index.js';
@@ -23,9 +23,8 @@ import { slider } from './components/slider.js';
 import { colorpicker } from './components/colorpicker.js';
 import { nav } from './components/nav.js';
 import { breadcrumb } from './components/breadcrumb.js';
-import { progress } from './components/progress.js';
 import { collapse } from './components/collapse.js';
-import { element } from './components/element.js';
+import { progress } from './components/progress.js';
 import { upload } from './components/upload.js';
 import { form } from './components/form.js';
 import { table } from './components/table.js';
@@ -37,6 +36,7 @@ import { carousel } from './components/carousel.js';
 import { rate } from './components/rate.js';
 import { flow } from './components/flow.js';
 import { floatbar } from './components/floatbar.js';
+import { initializer } from './components/initializer.js';
 import { code } from './components/code.js';
 
 const layui = {
@@ -48,9 +48,7 @@ const layui = {
   i18n,
   router,
   $,
-  jquery,
-  component,
-  componentBuilder,
+  Component,
   utils,
   layer,
   laydate,
@@ -60,9 +58,8 @@ const layui = {
   colorpicker,
   nav,
   breadcrumb,
-  progress,
   collapse,
-  element,
+  progress,
   upload,
   form,
   table,
@@ -74,6 +71,7 @@ const layui = {
   rate,
   flow,
   floatbar,
+  initializer,
   code,
 };
 

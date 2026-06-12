@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>进度条 - layui</title>
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+  </head>
+  <body>
+    <div class="lay-padding-5">
+      <div class="lay-progress" lay-percent="33" lay-show-percent="true"></div>
+
+      <br />
+
+      <div
+        class="lay-progress"
+        lay-percent="20"
+        lay-progress-color="var(--lay-color-red)"
+      ></div>
+
+      <br />
+
+      <div
+        class="lay-progress"
+        lay-percent="30"
+        lay-progress-color="var(--lay-color-orange)"
+      ></div>
+
+      <br />
+
+      <div
+        class="lay-progress"
+        lay-percent="40"
+        lay-progress-color="var(--lay-color-green)"
+      ></div>
+
+      <br />
+
+      <div
+        class="lay-progress"
+        lay-percent="50"
+        lay-progress-color="var(--lay-color-blue)"
+      ></div>
+
+      <br />
+
+      <div
+        class="lay-progress"
+        lay-percent="60"
+        lay-progress-color="var(--lay-color-accent)"
+      ></div>
+
+      <br />
+
+      <div
+        class="lay-progress lay-size-xl"
+        id="LAY-progress-demo-set"
+        lay-percent="15"
+        lay-show-percent="true"
+        lay-progress-color="var(--lay-color-primary)"
+        lay-progress-rail-color="#d9d9d9"
+      ></div>
+
+      <br />
+
+      <div class="lay-btn-container">
+        <button class="lay-btn" lay-on="setPercent">设置 50%</button>
+        <button class="lay-btn" lay-on="loading">模拟 loading</button>
+      </div>
+    </div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(() => {
+        const { progress, utils } = layui;
+
+        const DEMO_ID = 'LAY-progress-demo-set';
+
+        console.dir(progress);
+
+        // 批量事件
+        utils.on({
+          // 设置进度值
+          setPercent() {
+            progress.setValue(DEMO_ID, 50); // 设置 50% 的进度
+          },
+          // 模拟 loading
+          loading(othis) {
+            const DISABLED = 'layui-btn-disabled';
+            if (othis.hasClass(DISABLED)) return;
+
+            let n = 0;
+            let timer = setInterval(
+              function () {
+                n = (n + Math.random() * 10) | 0;
+                if (n > 100) {
+                  n = 100;
+                  clearInterval(timer);
+                  othis.removeClass(DISABLED);
+                }
+                progress.setValue(DEMO_ID, n);
+              },
+              300 + Math.random() * 1000,
+            );
+
+            othis.addClass(DISABLED);
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

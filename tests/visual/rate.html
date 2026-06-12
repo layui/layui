@@ -35,27 +35,30 @@
     <script src="./assets/dist/layui.js"></script>
     <script>
       layui.use(() => {
-        var rate = layui.rate;
-        var layer = layui.layer;
+        const { rate, layer } = layui;
 
         // 基础用法
-        var inst = rate.render({
+        const rateInst = rate.render({
           elem: '#test1',
           length: 5,
           value: 5,
           text: true,
-          setText: function (value) {
+          setText(value) {
             // 设置自定义文本
-            var obj = {
+            const obj = {
               1: '极差',
               2: '差',
               3: '一般',
               4: '满意',
               5: '极满意',
             };
-            this.span.text(obj[value] || value);
+            return obj[value] || value;
           },
         });
+
+        console.dir(rate);
+        console.log(rateInst);
+        // rateInst.setValue(3);
 
         // 选中半星
         rate.render({
@@ -64,7 +67,7 @@
           value: 2,
           half: true,
           theme: '#5FB878',
-          choose: function (value) {
+          choose(value) {
             if (value > 3) {
               layer.tips('超过 3 星', this.elem);
             }

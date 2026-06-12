@@ -1,9 +1,21 @@
 /* 进度条 */
 .lay-progress {
+  --lay-progress-size-md: 8px;
+  --lay-progress-size-xl: 18px;
+  --lay-progress-border-radius: 160px;
+
+  display: flex;
+  align-items: center;
+  height: var(--lay-progress-size-md);
+  gap: 8px;
+}
+.lay-progress-rail {
   position: relative;
-  height: 6px;
-  border-radius: 20px;
+  flex: 1;
+  height: 100%;
+  border-radius: var(--lay-progress-border-radius);
   background-color: var(--lay-gray-300);
+  overflow: hidden;
 }
 .lay-progress-bar {
   position: absolute;
@@ -11,27 +23,24 @@
   top: 0;
   width: 0;
   max-width: 100%;
-  height: 6px;
-  border-radius: 20px;
+  height: 100%;
+  border-radius: inherit;
   text-align: right;
   background-color: var(--lay-color-accent);
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
 }
-.lay-progress-big,
-.lay-progress-big .lay-progress-bar {
-  height: 18px;
-  line-height: 18px;
+.lay-progress:not(.lay-size-xl) .lay-progress-info {
+  font-size: 0.75rem;
 }
-.lay-progress-text {
-  position: relative;
-  top: -20px;
-  line-height: 18px;
-  font-size: 12px;
-  color: #5f5f5f;
+
+/* 不同尺寸 */
+.lay-progress.lay-size-sm {
+  height: 6px;
 }
-.lay-progress-big .lay-progress-text {
-  position: static;
-  padding: 0 10px;
-  color: #fff;
+.lay-progress.lay-size-lg {
+  height: 11px;
+}
+.lay-progress.lay-size-xl {
+  height: var(--lay-progress-size-xl);
 }

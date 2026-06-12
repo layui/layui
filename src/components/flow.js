@@ -6,62 +6,60 @@
 import { loader } from '../core/loader.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
-import { componentBuilder } from '../core/component.js';
+import { Component } from '../core/component.js';
 
-// 创建组件
-var component = componentBuilder({
-  name: 'flow',
+export class Flow extends Component {
+  static componentName = 'flow';
 
-  CONST: {
-    ELEM_LOAD:
-      '<i class="lay-anim lay-anim-rotate lay-anim-loop lay-icon lay-icon-loading-1"></i>',
-    ELEM_MORE: 'lay-flow-more',
-    FLOW_SCROLL_EVENTS: 'scroll.lay_flow_scroll',
-    LAZYIMG_SCROLL_EVENTS: 'scroll.lay_flow_lazyimg_scroll',
-  },
+  static get CONST() {
+    return {
+      ...super.CONST,
+      ELEM_LOAD:
+        '<i class="lay-anim lay-anim-rotate lay-anim-loop lay-icon lay-icon-loading-1"></i>',
+      ELEM_MORE: 'lay-flow-more',
+      FLOW_SCROLL_EVENTS: 'scroll.lay_flow_scroll',
+      LAZYIMG_SCROLL_EVENTS: 'scroll.lay_flow_lazyimg_scroll',
+    };
+  }
 
   // 渲染
-  render: function () {
-    var that = this;
-    var options = that.config;
+  render() {
+    const options = this.options;
+    const Constructor = this.constructor;
 
-    var page = 0;
-    var locked;
-    var finished;
+    let page = 0;
+    let locked;
+    let finished;
 
-    var elem = options.elem;
-    if (!elem[0]) return;
+    const $elem = options.$elem;
+    if (!$elem[0]) return;
 
-    var scrollElem = $(options.scrollElem || document); // 滚动条所在元素
-    var threshold = 'mb' in options ? options.mb : 50; // 临界距离
-    var isAuto = 'isAuto' in options ? options.isAuto : true; // 否自动滚动加载
-    var moreText = options.moreText || i18n.$t('flow.loadMore'); // 手动加载时，加载更多按钮文案
-    var endText = options.end || i18n.$t('flow.noMore'); // “末页”显示文案
-    var direction = options.direction || 'bottom';
-    var isTop = direction === 'top';
+    const scrollElem = $(options.scrollElem || document); // 滚动条所在元素
+    const threshold = 'mb' in options ? options.mb : 50; // 临界距离
+    const isAuto = 'isAuto' in options ? options.isAuto : true; // 否自动滚动加载
+    const moreText = options.moreText || i18n.$t('flow.loadMore'); // 手动加载时，加载更多按钮文案
+    const endText = options.end || i18n.$t('flow.noMore'); // “末页”显示文案
+    const direction = options.direction || 'bottom';
+    const isTop = direction === 'top';
 
     // 滚动条所在元素是否为 document
-    var notDocument = options.scrollElem && options.scrollElem !== document;
+    const notDocument = options.scrollElem && options.scrollElem !== document;
 
     // 加载更多
-    var ELEM_TEXT = '<cite>' + moreText + '</cite>';
-    var $more = $(
-      '<div class="' +
-        CONST.ELEM_MORE +
-        '"><a href="javascript:;">' +
-        ELEM_TEXT +
-        '</a></div>',
+    const ELEM_TEXT = `<cite>${moreText}</cite>`;
+    const $more = $(
+      `<div class="${CONST.ELEM_MORE}"><a href="javascript:;">${ELEM_TEXT}</a></div>`,
     );
 
-    elem.find('.' + CONST.ELEM_MORE).remove(); // 清除旧的「加载更多」元素
-    elem[isTop ? 'prepend' : 'append']($more);
+    $elem.find('.' + CONST.ELEM_MORE).remove(); // 清除旧的「加载更多」元素
+    $elem[isTop ? 'prepend' : 'append']($more);
 
     // 加载下一个元素
-    var next = function (content, status) {
-      var scrollHeightStart = notDocument
+    const next = function (content, status) {
+      const scrollHeightStart = notDocument
         ? scrollElem.prop('scrollHeight')
         : document.documentElement.scrollHeight;
-      var scrollTopStart = scrollElem.scrollTop();
+      const scrollTopStart = scrollElem.scrollTop();
 
       $more[isTop ? 'after' : 'before'](content);
       status = status == 0 ? true : null;
@@ -71,8 +69,8 @@ var component = componentBuilder({
 
       // 如果允许图片懒加载
       if (options.isLazyimg) {
-        component.lazyimg({
-          elem: options.elem.find('img[lay-src]'),
+        Constructor.lazyimg({
+          elem: $elem.find('img[lay-src]'),
           scrollElem: options.scrollElem,
           direction: options.direction,
           id: options.id,
@@ -80,22 +78,22 @@ var component = componentBuilder({
       }
 
       if (isTop) {
-        var scrollHeightEnd = notDocument
+        const scrollHeightEnd = notDocument
           ? scrollElem.prop('scrollHeight')
           : document.documentElement.scrollHeight;
         if (page === 1) {
           // 首次渲染后滑动到底部
           scrollElem.scrollTop(scrollHeightEnd);
         } else if (page > 1) {
-          var nextElementHeight = scrollHeightEnd - scrollHeightStart;
+          const nextElementHeight = scrollHeightEnd - scrollHeightStart;
           scrollElem.scrollTop(scrollTopStart + nextElementHeight);
         }
       }
     };
-    var $moreBtn = $more.find('a');
+    const $moreBtn = $more.find('a');
 
     // 触发请求
-    var done = (function fn() {
+    const done = (function fn() {
       locked = true;
       $moreBtn.html(CONST.ELEM_LOAD);
       typeof options.done === 'function' && options.done(++page, next);
@@ -108,27 +106,27 @@ var component = componentBuilder({
       locked || done();
     });
 
-    if (!isAuto) return that;
+    if (!isAuto) return this;
 
     // 滚动条滚动事件
-    var timer;
-    var FLOW_SCROLL_EVENTS = CONST.FLOW_SCROLL_EVENTS + '_' + options.id;
+    let timer;
+    const FLOW_SCROLL_EVENTS = `${CONST.FLOW_SCROLL_EVENTS}_${options.id}`;
     scrollElem.off(FLOW_SCROLL_EVENTS).on(FLOW_SCROLL_EVENTS, function () {
-      var othis = $(this),
-        top = othis.scrollTop();
+      const $this = $(this);
+      const top = $this.scrollTop();
 
       if (timer) clearTimeout(timer);
 
       // 如果已经结束，或者元素处于隐藏状态，则不执行滚动加载
-      if (finished || !elem.width()) return;
+      if (finished || !$elem.width()) return;
 
       timer = setTimeout(function () {
         // 计算滚动所在容器的可视高度
-        var height = notDocument ? othis.height() : $(window).height();
+        const height = notDocument ? $this.height() : $(window).height();
 
         // 计算滚动所在容器的实际高度
-        var scrollHeight = notDocument
-          ? othis.prop('scrollHeight')
+        const scrollHeight = notDocument
+          ? $this.prop('scrollHeight')
           : document.documentElement.scrollHeight;
 
         // 临界点
@@ -139,45 +137,32 @@ var component = componentBuilder({
         }
       }, 100);
     });
-  },
-});
-
-var CONST = component.CONST;
-
-/**
- * 扩展组件原型方法
- */
-
-// 保留原接口，确保向下兼容
-$.extend(component, {
-  load: function (options) {
-    return component.render(options);
-  },
+  }
 
   // 图片懒加载
-  lazyimg: function (options) {
+  static lazyimg(options) {
     options = options || {};
 
-    var scrollElem = $(options.scrollElem || document); // 滚动条所在元素
-    var elem = options.elem || 'img';
-    var direction = options.direction || 'bottom';
-    var isTop = direction === 'top';
-    var index = 0;
+    const scrollElem = $(options.scrollElem || document); // 滚动条所在元素
+    const elem = options.elem || 'img';
+    const direction = options.direction || 'bottom';
+    const isTop = direction === 'top';
+    let index = 0;
 
     // 滚动条所在元素是否为 document
-    var notDocument = options.scrollElem && options.scrollElem !== document;
+    const notDocument = options.scrollElem && options.scrollElem !== document;
 
     // 显示图片
-    var render = (function fn(othis) {
-      var $elem = $(elem);
+    const render = (function fn(othis) {
+      const $elem = $(elem);
 
       // 计算滚动所在容器的可视高度
-      var height = notDocument ? scrollElem.height() : $(window).height();
-      var start = scrollElem.scrollTop();
-      var end = start + height;
+      const height = notDocument ? scrollElem.height() : $(window).height();
+      const start = scrollElem.scrollTop();
+      const end = start + height;
 
-      var show = function (item) {
-        var elemTop = notDocument
+      const show = function (item) {
+        const elemTop = notDocument
           ? (function () {
               return item.offset().top - scrollElem.offset().top + start;
             })()
@@ -189,10 +174,10 @@ $.extend(component, {
           elemTop <= end
         ) {
           if (item.attr('lay-src')) {
-            var src = item.attr('lay-src');
+            const src = item.attr('lay-src');
             loader.image(src, {
               success() {
-                var next = $elem.eq(index);
+                const next = $elem.eq(index);
                 item.attr('src', src).removeAttr('lay-src');
 
                 /* 当前图片加载就绪后，检测下一个图片是否在当前屏 */
@@ -211,13 +196,13 @@ $.extend(component, {
         show(othis);
       } else {
         // 计算未加载过的图片
-        for (var i = 0; i < $elem.length; i++) {
-          var item = $elem.eq(i),
-            elemTop = notDocument
-              ? (function () {
-                  return item.offset().top - scrollElem.offset().top + start;
-                })()
-              : item.offset().top;
+        for (let i = 0; i < $elem.length; i++) {
+          const item = $elem.eq(i);
+          const elemTop = notDocument
+            ? (function () {
+                return item.offset().top - scrollElem.offset().top + start;
+              })()
+            : item.offset().top;
 
           show(item);
           index = i;
@@ -231,9 +216,9 @@ $.extend(component, {
     })();
 
     // 滚动事件
-    var timer;
-    var id = options.id || '';
-    var LAZYIMG_SCROLL_EVENTS = CONST.LAZYIMG_SCROLL_EVENTS + '_' + id;
+    let timer;
+    const id = options.id || '';
+    const LAZYIMG_SCROLL_EVENTS = `${CONST.LAZYIMG_SCROLL_EVENTS}_${id}`;
     scrollElem
       .off(LAZYIMG_SCROLL_EVENTS)
       .on(LAZYIMG_SCROLL_EVENTS, function () {
@@ -244,7 +229,9 @@ $.extend(component, {
       });
 
     return render;
-  },
-});
+  }
+}
 
-export { component as flow };
+const CONST = Flow.CONST;
+
+export { Flow as flow };

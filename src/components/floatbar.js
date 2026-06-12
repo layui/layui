@@ -5,26 +5,29 @@
 
 import { lay } from '../core/lay.js';
 import { $ } from 'jquery';
-import { componentBuilder } from '../core/component.js';
+import { Component } from '../core/component.js';
 
-// 创建组件
-const component = componentBuilder({
-  name: 'floatbar', // 组件名
+export class Floatbar extends Component {
+  static componentName = 'floatbar';
 
   // 默认配置
-  config: {
+  static options = {
     target: 'body', // floatbar 的插入目标选择器
     bars: [], // bar 配置项
     showDefaultBar: true, // 是否显示默认 bar
     scrollThreshold: 160, // 出现 top bar 的滚动条位置临界值
-  },
+  };
 
-  CONST: {
-    ELEM: 'lay-floatbar',
-  },
+  static get CONST() {
+    return {
+      ...super.CONST,
+      ELEM: 'lay-floatbar',
+    };
+  }
 
   render() {
-    const options = this.config;
+    const options = this.options;
+    const Constructor = this.constructor;
 
     // 目标元素对象
     const $target = $(options.target);
@@ -48,15 +51,17 @@ const component = componentBuilder({
       }
     }
 
-    const elem = $('<div>').attr(CONST.MOD_ID, options.id).addClass(CONST.ELEM);
+    const elem = $('<div>')
+      .attr(CONST.ATTR_ID, options.id)
+      .addClass(CONST.ELEM);
     let topBarElem;
 
     // 自定义样式
     if (options.css) {
       lay.style({
         target: elem[0],
-        id: `DF-${CONST.MOD_NAME}-${this.index}`,
-        text: `.${CONST.ELEM}[${CONST.MOD_ID}="${options.id}"] { ${options.css} }`,
+        id: `DF-${Constructor.componentName}-${this.index}`,
+        text: `.${CONST.ELEM}[${CONST.ATTR_ID}="${options.id}"] { ${options.css} }`,
       });
     }
 
@@ -140,9 +145,9 @@ const component = componentBuilder({
         setTopBar();
       }, 100);
     });
-  },
-});
+  }
+}
 
-const CONST = component.CONST;
+const CONST = Floatbar.CONST;
 
-export { component as floatbar };
+export { Floatbar as floatbar };

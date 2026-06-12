@@ -98,7 +98,7 @@
           arrow: 'always',
           autoplay: 'always',
           change: (obj) => {
-            console.log(obj);
+            // console.log(obj);
           },
           // interval: 5000,
           // autoplay: false,
@@ -106,14 +106,9 @@
           // trigger: 'hover'
         });
 
-        // console.log(carInst); carInst.goto(1);
-
-        // 事件
-        /*
-  carousel.on('change(test1)', function(obj) {
-    console.log(obj)
-  });
-  */
+        console.dir(carousel);
+        console.log(carInst);
+        // carInst.goto(1);
 
         carousel.render({
           elem: '#test2',

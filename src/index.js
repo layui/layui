@@ -8,8 +8,8 @@ export { loader } from './core/loader.js';
 export { laytpl } from './core/laytpl.js';
 export { i18n } from './core/i18n.js';
 export { router } from './core/router.js';
-export { default as jquery, default as $ } from 'jquery';
-export { component, componentBuilder } from './core/component.js';
+export { $ } from 'jquery';
+export { Component } from './core/component.js';
 
 // 导出工具模块
 export * as utils from './utils/index.js';
@@ -23,9 +23,8 @@ export { slider } from './components/slider.js';
 export { colorpicker } from './components/colorpicker.js';
 export { nav } from './components/nav.js';
 export { breadcrumb } from './components/breadcrumb.js';
-export { progress } from './components/progress.js';
 export { collapse } from './components/collapse.js';
-export { element } from './components/element.js';
+export { progress } from './components/progress.js';
 export { upload } from './components/upload.js';
 export { form } from './components/form.js';
 export { table } from './components/table.js';
@@ -37,4 +36,5 @@ export { carousel } from './components/carousel.js';
 export { rate } from './components/rate.js';
 export { flow } from './components/flow.js';
 export { floatbar } from './components/floatbar.js';
+export { initializer } from './components/initializer.js';
 export { code } from './components/code.js';
