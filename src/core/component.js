@@ -147,9 +147,7 @@ export class Component {
 
   /**
    * 重载实例
-   * @param {string|number} id - 实例 id
-   * @param {Object} options - 配置项
-   * @returns {InstanceType<typeof this>} 返回组件实例
+   * @see render
    */
   reload(options) {
     $.extend(this.options, options);
