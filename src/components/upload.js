@@ -50,24 +50,17 @@ export class Upload extends Component {
     ABORTED: 'aborted', // 已中断
   };
 
-  /**
-   * 执行上传；一般当 `autoUpload: false` 时使用
-   * @param {string} id - 组件实例 id
-   */
-  static upload(id) {
-    const inst = this.getInstance(id);
-    if (!inst) return;
-    inst.upload();
-  }
-
-  /**
-   * 中止上传
-   * @param {string} id - 组件实例 id
-   */
-  static abort(id) {
-    const inst = this.getInstance(id);
-    if (!inst) return;
-    inst.abort();
+  // 实例方法静态委托
+  static {
+    this.delegateInstanceMethods([
+      'upload',
+      'abort',
+      'preview',
+      'getSelectedFiles',
+      'appendUploadItem',
+      'deleteUploadItem',
+      'clearUploadList',
+    ]);
   }
 
   // 渲染
@@ -103,17 +96,6 @@ export class Upload extends Component {
 
     this.files = [];
     this.#events();
-  }
-
-  // 文件预览
-  preview(files = this.files, callback) {
-    files.forEach((file, index) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        callback?.({ file, index, result: reader.result });
-      };
-    });
   }
 
   // 执行上传
@@ -283,6 +265,17 @@ export class Upload extends Component {
           status: uploadStatus.ABORTED,
         });
       }
+    });
+  }
+
+  // 文件预览
+  preview(files = this.files, callback) {
+    files.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        callback?.({ file, index, result: reader.result });
+      };
     });
   }
 
