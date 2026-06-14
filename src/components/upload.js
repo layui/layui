@@ -105,6 +105,7 @@ export class Upload extends Component {
 
     const successful = [];
     const failed = [];
+    const aborted = [];
 
     // 发送请求
     const request = ({ file, formData }) => {
@@ -127,6 +128,7 @@ export class Upload extends Component {
             files,
             status: uploadStatus.ABORTED,
           });
+          aborted.push(...files);
           return;
         }
 
@@ -143,15 +145,20 @@ export class Upload extends Component {
       };
 
       // 接口请求完毕的处理
-      const onComplete = (...args) => {
+      const onComplete = (jqXHR, textStatus) => {
         this.#removeProgress({ files }); // 移除进度条
 
-        if (successful.length + failed.length === selectedFiles.length) {
+        if (
+          successful.length + failed.length + aborted.length ===
+          selectedFiles.length
+        ) {
           options.onComplete?.({
-            ...args,
+            jqXHR,
+            textStatus,
             files: selectedFiles,
             successful: successful,
             failed: failed,
+            aborted: aborted,
           });
         }
       };
@@ -375,10 +382,10 @@ export class Upload extends Component {
    */
   deleteUploadItem(file) {
     // 从文件队列中移除
-    this.files.splice(
-      this.files.findIndex((item) => item.id === file.id),
-      1,
-    );
+    const index = this.files.findIndex((item) => item.id === file.id);
+    if (index !== -1) {
+      this.files.splice(index, 1);
+    }
 
     // 从上传列表元素中移除
     const $uploadListElem = this.$uploadListElem;
@@ -472,6 +479,7 @@ export class Upload extends Component {
    */
   #updateProgress({ percent, files }) {
     const $uploadListElem = this.$uploadListElem;
+    if (!$uploadListElem) return;
     if (!$uploadListElem.find('.lay-progress').length) return;
 
     files.forEach((file) => {
@@ -491,6 +499,7 @@ export class Upload extends Component {
    */
   #removeProgress({ files }) {
     const $uploadListElem = this.$uploadListElem;
+    if (!$uploadListElem) return;
     if (!$uploadListElem.find('.lay-progress').length) return;
 
     // 删除指定的进度条
@@ -568,6 +577,8 @@ export class Upload extends Component {
 
     // 避免重复绑定事件
     $elem.off(eventNamespace);
+    this.$fileElem.off(eventNamespace);
+    options.$submitElem.off(eventNamespace);
 
     // 文件选择
     this.$fileElem.on(`change${eventNamespace}`, (event) => {
