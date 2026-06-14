@@ -46,7 +46,7 @@
     <br />
     <hr />
 
-    <div class="lay-upload">
+    <!-- <div class="lay-upload">
       <button type="button" class="lay-btn lay-btn-normal" id="testList">
         选择多文件
       </button>
@@ -66,13 +66,13 @@
       </button>
     </div>
 
-    <hr />
+    <hr /> -->
 
-    <div class="lay-btn-container">
+    <!-- <div class="lay-btn-container">
       <button
         type="button"
         class="lay-btn test333"
-        lay-data="{maxSize:10,url:'a'}"
+        lay-options="{maxSize:10,url:'a'}"
         id="test3"
       >
         <i class="lay-icon">&#xe67c;</i>上传文件
@@ -80,7 +80,7 @@
       <button
         type="button"
         class="lay-btn lay-btn-primary test333"
-        lay-data="{maxSize:20,url:'b'}"
+        lay-options="{maxSize:20,url:'b'}"
         id="test33"
       >
         <i class="lay-icon">&#xe67c;</i>换个样式
@@ -94,18 +94,7 @@
       </button>
     </div>
 
-    <hr />
-
-    <div class="lay-btn-container">
-      <button class="lay-btn testm" lay-data="{url: '/a/'}">
-        参数设在元素上
-      </button>
-      <button class="lay-btn testm" lay-data="{url: '/b/',maxSize:5}">
-        参数设在元素上
-      </button>
-    </div>
-
-    <hr />
+    <hr /> -->
 
     <div class="lay-btn-container">
       <button type="button" class="lay-btn lay-btn-normal" id="test6">
@@ -122,7 +111,6 @@
       <p>点击上传，或将文件拖拽到此处</p>
     </div>
 
-    <hr />
     <br />
 
     绑定原始文件域：<input type="file" name="file" id="test9" />
@@ -139,7 +127,6 @@
         const uploadInst = upload.render({
           elem: '#test1',
           url: url,
-          method: 'get',
           data: { a: 1, b: () => 2 }, // 追加接口参数
           // maxSize: 2000,
           maxCount: 1,
@@ -243,75 +230,6 @@
           },
         });
 
-        // 演示多文件列表 ---  本示例仅演示未开启 mergeRequest 属性的情况
-        var demoListView = $('#demoList');
-        var uploadListIns = upload.render({
-          elem: '#testList',
-          url: url, // 实际使用时改成您自己的上传接口即可
-          multiple: true,
-          maxCount: 5,
-          autoUpload: false,
-          submitElem: '#testListAction',
-          // maxSize: 30,
-          onSelect(obj) {
-            var files = (this.files = obj.pushFile()); // 将每次选择的文件追加到文件队列
-            // 读取本地文件
-            obj.preview((index, file, result) => {
-              var tr = $(
-                [
-                  '<tr id="upload-' + index + '">',
-                  '<td>' + file.name + '</td>',
-                  '<td>' + (file.size / 1014).toFixed(1) + 'kb</td>',
-                  '<td><div id="progress-' +
-                    index +
-                    '" class="lay-progress" lay-percent="0"></div></td>',
-                  '<td>',
-                  '<button class="lay-btn lay-btn-xs demo-reload lay-hide">重传</button>',
-                  '<button class="lay-btn lay-btn-xs lay-btn-danger demo-delete">删除</button>',
-                  '</td>',
-                  '</tr>',
-                ].join(''),
-              );
-
-              // 单个重传
-              tr.find('.demo-reload').on('click', () => {
-                obj.upload(index, file);
-              });
-              tr.find('.demo-delete').on('click', () => {
-                console.log(files, index);
-                delete files[index]; // 删除对应的文件
-                tr.remove();
-                uploadListIns.options.$elem.next()[0].value = ''; // 清空 input file 值，以免删除后出现同名文件不可选
-              });
-
-              demoListView.append(tr);
-              progress.render({
-                elem: tr.find('.lay-progress'),
-              });
-            });
-          },
-          onSuccess(res, files, file) {
-            /* var tr = demoListView.find('tr#upload-' + index);
-            var tds = tr.children();
-            tds.eq(3).html(''); // 清空操作
-            delete this.files[index]; // 删除文件队列已经上传成功的文件 */
-          },
-          onError(e, files, file) {
-            /* var tr = demoListView.find('tr#upload-' + index);
-            var tds = tr.children();
-            tds.eq(3).find('.demo-reload').removeClass('lay-hide'); // 显示重传
-            progress.setValue('progress-' + index, 0); */
-          },
-          onComplete(obj) {
-            console.log(obj);
-          },
-          onProgress(res) {
-            const { percent, index } = res;
-            console.log(percent + '%', res);
-            progress.setValue('progress-' + index, percent); // 进度条
-          },
-        });
-
         upload.render({
           elem: '.test333',
           url: url,
@@ -324,15 +242,8 @@
         });
 
         upload.render({
-          elem: '.testm',
-          onSuccess(res, index) {
-            console.log(this);
-          },
-        });
-
-        upload.render({
           elem: '#test4',
-          url: url, // 实际使用时改成您自己的上传接口即可
+          url: url,
           onSuccess(res) {
             console.log(res);
           },
@@ -349,21 +260,10 @@
         // 手动上传
         upload.render({
           elem: '#test6',
-          url: url, // 实际使用时改成您自己的上传接口即可
+          url: url,
           autoUpload: false,
           submitElem: '#test7',
           // multiple: true,
-          onSelect(obj) {
-            obj.preview((index, file) => {
-              this.$elem.after(
-                '<span class="lay-inline lay-upload-choose">' +
-                  file.name +
-                  '</span>',
-              );
-              console.log(file.name);
-              // obj.resetFile(index, file, '123.jpg');
-            });
-          },
           beforeUpload(obj) {
             console.log(345);
           },
@@ -374,7 +274,7 @@
 
         upload.render({
           elem: '#test8',
-          url: url, // 实际使用时改成您自己的上传接口即可
+          url: url,
           onSuccess(res) {
             console.log(res);
           },
@@ -382,7 +282,7 @@
 
         upload.render({
           elem: '#test9',
-          url: url, // 实际使用时改成您自己的上传接口即可
+          url: url,
           onSuccess(res) {
             console.log(res);
           },
