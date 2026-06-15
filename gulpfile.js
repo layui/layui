@@ -257,7 +257,14 @@ var layui = window.layui;
 export { layui };
 export default layui;
 `;
+  const csp = `${config.comment}
+import './layui.csp.js';
+var layui = window.layui;
+export { layui };
+export default layui;
+`;
 
   fs.writeFileSync(path.join(dest, 'layui.mjs'), esm);
+  fs.writeFileSync(path.join(dest, 'layui.csp.mjs'), csp);
   done();
 }
