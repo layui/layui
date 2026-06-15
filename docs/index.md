@@ -110,6 +110,27 @@ npm i layui
 
 点击上方 `Preview` 标签可进行效果预览。
 
+<h2 id="csp">CSP 构建<sup>2.13.8+</sup></h2>
+
+某些环境要求执行内容安全策略（CSP），因此 Layui 提供了一个 CSP 兼容的构建版本 `layui.csp.js`。
+
+#### nonce 来源配置
+
+- 在 `window.LAYUI_GLOBAL`中配置 nonce 属性值。
+  ```
+  window.LAYUI_GLOBAL = { nonce: 'your_nonce' };
+  ```
+- 在加载 Layui 的 `<script>` 标签中，指定 nonce 属性值。
+  ```
+  <script nonce="your_nonce" src="dist/layui.csp.js"></script>
+  ```
+
+#### 限制
+
+- 不支持 laytpl 模块。
+- 对于部分支持 laytpl 模板的组件选项，不再支持自定义模板，建议改用函数类型。
+- 不支持通过 lay-options 属性配置组件选项。
+
 <h3 id="help">其他帮助</h3>
 
 - <a href="https://layui.dev/playground/2/">在线测试</a>
