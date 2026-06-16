@@ -10,92 +10,104 @@
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
   </head>
   <body class="lay-padding-5">
-    <div class="lay-upload">
-      <button type="button" class="lay-btn" id="test1" name="123">
-        上传文件
-      </button>
-    </div>
-
+    <h2>常规示例</h2>
     <hr />
+    <button type="button" class="lay-btn" id="test1">选择文件</button>
+
     <br />
 
-    <div class="lay-upload">
-      <button type="button" class="lay-btn" id="test2">多选文件上传</button>
-      <br />
-      <div class="lay-btn-container">
-        <button
-          type="button"
-          class="lay-btn lay-btn-primary lay-btn-disabled"
-          id="test2-abort"
-          disabled
-          lay-on="abort"
-        >
-          中止上传
-        </button>
-        <button
-          type="button"
-          class="lay-btn lay-btn-primary"
-          id="test2-clear"
-          lay-on="clear"
-        >
-          清空上传列表
-        </button>
-      </div>
-    </div>
-
-    <br />
+    <h2>开启多选</h2>
     <hr />
-
-    <!-- <div class="lay-upload">
-      <button type="button" class="lay-btn lay-btn-normal" id="testList">
-        选择多文件
-      </button>
-      <div class="lay-upload-list">
-        <table class="lay-table">
-          <thead>
-            <th>文件名</th>
-            <th>大小</th>
-            <th>上传进度</th>
-            <th>操作</th>
-          </thead>
-          <tbody id="demoList"></tbody>
-        </table>
-      </div>
-      <button type="button" class="lay-btn" id="testListAction">
-        开始上传
-      </button>
-    </div>
-
-    <hr /> -->
-
-    <!-- <div class="lay-btn-container">
+    <button type="button" class="lay-btn" id="test2">多选文件上传</button>
+    <br />
+    <div class="lay-btn-container">
       <button
         type="button"
-        class="lay-btn test333"
-        lay-options="{maxSize:10,url:'a'}"
-        id="test3"
+        class="lay-btn lay-btn-primary lay-btn-disabled"
+        id="test2-abort"
+        disabled
+        lay-on="abort"
       >
-        <i class="lay-icon">&#xe67c;</i>上传文件
+        中止上传
       </button>
       <button
         type="button"
-        class="lay-btn lay-btn-primary test333"
-        lay-options="{maxSize:20,url:'b'}"
-        id="test33"
+        class="lay-btn lay-btn-primary"
+        id="test2-clear"
+        lay-on="clear"
       >
-        <i class="lay-icon">&#xe67c;</i>换个样式
-      </button>
-
-      <button type="button" class="lay-btn" id="test4">
-        <i class="lay-icon">&#xe67c;</i>上传视频
-      </button>
-      <button type="button" class="lay-btn" id="test5">
-        <i class="lay-icon">&#xe67c;</i>上传音频
+        清空上传列表
       </button>
     </div>
 
-    <hr /> -->
+    <br />
 
+    <h2>自定义上传图片列表</h2>
+    <hr />
+    <button type="button" class="lay-btn lay-btn-normal" id="testImageList">
+      选择图片
+    </button>
+    <style>
+      .demo-upload-image-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 11px;
+        margin-top: 11px;
+      }
+      .demo-upload-image-list-item {
+        position: relative;
+        --border-radius: 3px;
+        img {
+          width: 115px;
+          height: 115px;
+          object-fit: cover;
+          border-radius: var(--border-radius);
+        }
+        .lay-icon {
+          color: rgba(255, 255, 255, 0.9);
+        }
+        .lay-icon[class*='lay-icon-loading'] {
+          font-size: 24px;
+        }
+        .lay-icon-close {
+          position: absolute;
+          top: 3px;
+          right: 3px;
+          color: rgba(255, 255, 255, 0.9);
+          cursor: pointer;
+        }
+      }
+      .demo-upload-image-list-loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .demo-upload-image-list-loading:after,
+      .demo-upload-image-progress {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        border-radius: var(--border-radius);
+        background-color: rgba(0, 0, 0, 0.5);
+        transition: all 0.3s;
+      }
+      .demo-upload-image-list-loading:after {
+        content: '';
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+    </style>
+    <div class="demo-upload-image-list" id="testImageListContainer"></div>
+
+    <br /><br />
+
+    <h2>手动上传</h2>
+    <hr />
     <div class="lay-btn-container">
       <button type="button" class="lay-btn lay-btn-normal" id="test6">
         选择文件
@@ -103,9 +115,10 @@
       <button type="button" class="lay-btn" id="test7">开始上传</button>
     </div>
 
-    <hr />
     <br />
 
+    <h2>拖拽上传</h2>
+    <br />
     <div class="lay-upload-drag" id="test8">
       <i class="lay-icon">&#xe67c;</i>
       <p>点击上传，或将文件拖拽到此处</p>
@@ -113,7 +126,9 @@
 
     <br />
 
-    绑定原始文件域：<input type="file" name="file" id="test9" />
+    <h2>绑定原始文件域</h2>
+    <hr />
+    <input type="file" name="file" id="test9" />
 
     <script src="./assets/dist/layui.js"></script>
     <script>
@@ -124,6 +139,7 @@
         // 若需模拟上传过程，而不真实上传文件，可使用 httpbin 开源 HTTP 接口
         const url = 'https://httpbin.org/post';
 
+        // 常规示例
         const uploadInst = upload.render({
           elem: '#test1',
           url: url,
@@ -175,7 +191,7 @@
         console.dir(upload);
         console.log(uploadInst);
 
-        // 多选文件上传
+        // 开启多选
         const uploadInst2 = upload.render({
           elem: '#test2',
           url: url,
@@ -230,30 +246,55 @@
           },
         });
 
+        // 自定义上传图片列表
         upload.render({
-          elem: '.test333',
+          elem: '#testImageList',
           url: url,
-          onSelect(obj) {
-            console.log(this.$elem);
-          },
-          onSuccess(res) {
-            console.log(res);
-          },
-        });
+          multiple: true,
+          showUploadList: false, // 不显示默认的上传列表
+          onSelect({ files }) {
+            this.$uploadListTarget = $('#testImageListContainer');
+            files.forEach((file) => {
+              const $listItem = $(
+                `<div class="demo-upload-image-list-item" id="${file.id}">
+  <img src="${URL.createObjectURL(file)}">
+  <div class="demo-upload-image-list-loading">
+    <div class="demo-upload-image-progress"></div>
+    <i class="lay-icon lay-icon-loading-1 lay-anim lay-anim-rotate lay-anim-loop"></i>
+  </div>
+  <i class="lay-icon lay-icon-close" title="删除"></i>
+</div>
+                      `,
+              );
+              this.$uploadListTarget.append($listItem);
 
-        upload.render({
-          elem: '#test4',
-          url: url,
-          onSuccess(res) {
-            console.log(res);
+              // 删除
+              $listItem.find('.lay-icon-close').on('click', () => {
+                file.jqXHR?.abort(); // 中止上传请求
+                upload.deleteUploadItem(this.id, file); // 删除上传文件列表项
+                $listItem.remove(); // 删除列表元素
+              });
+            });
           },
-        });
-
-        upload.render({
-          elem: '#test5',
-          url: '',
-          onSuccess(res) {
-            console.log(res);
+          onProgress({ percent, event, files }) {
+            files.forEach((file) => {
+              const $uploadListTarget = this.$uploadListTarget
+                .find('.demo-upload-image-list-item')
+                .filter((_, item) => $(item).attr('id') === file.id);
+              $uploadListTarget
+                .find('.demo-upload-image-progress')
+                .css('height', `${100 - percent}%`);
+            });
+          },
+          onSuccess({ files }) {
+            files.forEach((file) => {
+              const $uploadListTarget = this.$uploadListTarget
+                .find('.demo-upload-image-list-item')
+                .filter((_, item) => $(item).attr('id') === file.id);
+              $uploadListTarget
+                .find('.demo-upload-image-list-loading')
+                .remove();
+            });
           },
         });
 
@@ -262,7 +303,6 @@
           elem: '#test6',
           url: url,
           autoUpload: false,
-          submitElem: '#test7',
           // multiple: true,
           beforeUpload(obj) {
             console.log(345);
@@ -272,6 +312,11 @@
           },
         });
 
+        $('#test7').on('click', () => {
+          upload.upload('test6');
+        });
+
+        // 拖拽上传
         upload.render({
           elem: '#test8',
           url: url,
@@ -280,6 +325,7 @@
           },
         });
 
+        // 绑定原始文件域
         upload.render({
           elem: '#test9',
           url: url,

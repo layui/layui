@@ -1,8 +1,4 @@
 /** 文件上传 **/
-.lay-upload-file {
-  display: none !important;
-  opacity: 0.01;
-}
 .lay-upload-list-item {
   display: flex;
   align-items: center;

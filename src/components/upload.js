@@ -22,10 +22,10 @@ export class Upload extends Component {
     fieldName: 'file', // 文件字段名
     // mergeRequest: false, // 是否将多文件上传合并为一个请求
     // accept: '', // 筛选出的文件类型，如 `image/*`，默认为所有文件
-    // submitElem: '', // 用于触发提交上传的元素。`autoUpload: false` 时可用
     // multiple: false, // 是否支持多选文件上传
     autoUpload: true, // 是否选完文件后自动上传
     showUploadList: true, // 是否显示上传文件列表
+    // uploadListTarget: '', // 上传列表的目标容器，为空则表示插入到 elem 元素之后
     enableDrag: true, // 是否开启拖拽上传
     maxSize: 0, // 限制上传的文件大小，单位 KB。0 表示不限制
     maxCount: 0, // 限制上传的文件数量。0 表示不限制
@@ -88,11 +88,16 @@ export class Upload extends Component {
     if (options.showUploadList) {
       const $uploadListElem = $(`<div class="${CONST.ELEM_LIST}"></div>`);
       this.$uploadListElem?.remove();
-      $elem.after($uploadListElem);
+
+      // 是否插入到上传列表目标容器
+      if (options.uploadListTarget) {
+        $(options.uploadListTarget).append($uploadListElem);
+      } else {
+        $elem.after($uploadListElem); // 默认插入到 elem 元素之后
+      }
+
       this.$uploadListElem = $uploadListElem;
     }
-
-    options.$submitElem = $(options.submitElem);
 
     this.files = [];
     this.#events();
@@ -208,7 +213,11 @@ export class Upload extends Component {
       const appendFileToFormData = ({ formData, file }) => {
         if (file.uploadStatus === uploadStatus.UPLOADING) return;
         formData.append(options.fieldName, file);
-        file.uploadStatus = uploadStatus.UPLOADING;
+
+        this.updateUploadItem({
+          files: [file],
+          status: uploadStatus.UPLOADING,
+        });
       };
 
       // 多文件是否合并上传
@@ -304,7 +313,7 @@ export class Upload extends Component {
     const $uploadListElem = this.$uploadListElem;
     const $uploadListItem = $(`
 <div class="${CONST.ELEM_LIST}-item">
-  <div class="${CONST.ELEM_LIST}-item-status"><i class="lay-icon lay-icon-loading lay-anim lay-anim-rotate lay-anim-loop"></i></div>
+  <div class="${CONST.ELEM_LIST}-item-status"></div>
   <div class="${CONST.ELEM_LIST}-item-name lay-ellipsis"></div>
   <div class="lay-progress" lay-show-percent="true"></div>
 </div>
@@ -355,6 +364,10 @@ export class Upload extends Component {
 
       // 设置对应的状态样式
       $uploadListItem.toggleClass(
+        `${CONST.ELEM_LIST}-uploading`,
+        status === uploadStatus.UPLOADING,
+      );
+      $uploadListItem.toggleClass(
         `${CONST.ELEM_LIST}-success`,
         status === uploadStatus.SUCCESS,
       );
@@ -369,6 +382,8 @@ export class Upload extends Component {
 
       // 更新状态图标
       const $icons = {
+        [uploadStatus.UPLOADING]:
+          '<i class="lay-icon lay-icon-loading lay-anim lay-anim-rotate lay-anim-loop"></i>',
         [uploadStatus.SUCCESS]:
           '<i class="lay-icon lay-icon-success" title="upload success"></i>',
         [uploadStatus.ERROR]:
@@ -586,7 +601,6 @@ export class Upload extends Component {
     // 避免重复绑定事件
     $elem.off(eventNamespace);
     this.$fileElem.off(eventNamespace);
-    options.$submitElem.off(eventNamespace);
 
     // 文件选择
     this.$fileElem.on(`change${eventNamespace}`, (event) => {
@@ -621,11 +635,6 @@ export class Upload extends Component {
           this.#handleFileSelection(files);
         });
     }
-
-    // 手动上传时，用于触发提交上传的元素 click 事件
-    options.$submitElem.on(`click${eventNamespace}`, () => {
-      this.upload();
-    });
   }
 }
 
