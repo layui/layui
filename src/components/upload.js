@@ -305,12 +305,16 @@ export class Upload extends Component {
     const $uploadListItem = $(`
 <div class="${CONST.ELEM_LIST}-item">
   <div class="${CONST.ELEM_LIST}-item-status"><i class="lay-icon lay-icon-loading lay-anim lay-anim-rotate lay-anim-loop"></i></div>
-  <div class="${CONST.ELEM_LIST}-item-name lay-ellipsis">${file.name}</div>
+  <div class="${CONST.ELEM_LIST}-item-name lay-ellipsis"></div>
   <div class="lay-progress" lay-show-percent="true"></div>
 </div>
         `);
     const $actions = $(`<div class="${CONST.ELEM_LIST}-item-actions"> </div>`);
     const $deleteBtn = $('<i class="lay-icon lay-icon-clear"></i>');
+
+    if (!$uploadListElem) return;
+
+    $uploadListItem.find(`.${CONST.ELEM_LIST}-item-name`).text(file.name);
 
     // 删除按钮事件
     $deleteBtn.on('click', () => {
@@ -535,19 +539,23 @@ export class Upload extends Component {
     // 选择后清空 file 元素的值
     this.$fileElem[0].value = '';
 
-    // 限制文件数量
-    if (options.maxCount) {
-      // 若限制文件数为 1，则用当前选择的文件替换队列中的文件
-      if (options.maxCount == 1) {
-        this.clearUploadList();
+    // 若限制文件数为 1，则用当前选择的文件替换队列中的文件
+    if (options.maxCount === 1) {
+      if (files.length > 1) {
+        showError(
+          i18n.$t('upload.validateMessages.fileCountLimit', { count: 1 }),
+        );
+        return;
       }
-      // 校验
-      const validationResult = this.#validate({
-        fileCount: files.length + this.files.length,
-        selectedFiles: files,
-      });
-      if (!validationResult) return;
+      this.clearUploadList();
     }
+
+    // 校验
+    const validationResult = this.#validate({
+      fileCount: files.length + this.files.length,
+      selectedFiles: files,
+    });
+    if (!validationResult) return;
 
     // 添加文件到队列
     files.forEach((file) => {
