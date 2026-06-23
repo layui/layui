@@ -46,6 +46,7 @@ export class Component {
   static get CONST() {
     return {
       ATTR_ID: `lay-${this.componentName}-id`, // 用于记录组件实例 id 的属性名
+      EVENT_NAMESPACE: `.lay_${this.componentName}_events`, // 组件事件命名空间
 
       CLASS_THIS: 'lay-this',
       CLASS_SHOW: 'lay-show',
@@ -143,6 +144,18 @@ export class Component {
       Constructor.options,
       options,
     );
+  }
+
+  /**
+   * 将选项中数组类型的值进行覆盖，避免参与选项的深度合并
+   * @param {Object} options - 配置项
+   */
+  overrideArrayOptions(options) {
+    for (const [key, value] of Object.entries(options)) {
+      if (Array.isArray(value)) {
+        this.options[key] = value;
+      }
+    }
   }
 
   /**
