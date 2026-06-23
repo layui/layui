@@ -46,6 +46,7 @@ export class Component {
   static get CONST() {
     return {
       ATTR_ID: `lay-${this.componentName}-id`, // 用于记录组件实例 id 的属性名
+      EVENT_NAMESPACE: `.lay_${this.componentName}_events`, // 组件事件命名空间
 
       CLASS_THIS: 'lay-this',
       CLASS_SHOW: 'lay-show',
@@ -60,6 +61,7 @@ export class Component {
    * 将指定的「实例方法」委托为「静态方法」
    * 委托后暴露的静态方法的第一个参数为实例 id，后续参数同实例方法的参数一致
    * @param {string[]} methodNames - 方法名数组
+   * @returns {void}
    */
   static delegateInstanceMethods(methodNames) {
     methodNames.forEach((name) => {
@@ -77,9 +79,15 @@ export class Component {
     });
   }
 
-  // 事件
-  static on(events, callback) {
-    return lay.onevent.call(this, this.componentName, events, callback);
+  /**
+   * 事件
+   * 后续或考虑重构事件机制
+   * @param {string} eventName - 事件名
+   * @param {Function} callback - 回调函数
+   * @returns {void}
+   */
+  static on(eventName, callback) {
+    lay.onevent.call(this, this.componentName, eventName, callback);
   }
 
   /**
@@ -97,17 +105,24 @@ export class Component {
   /**
    * 移除实例
    * @param {string|number} id - 实例 id
+   * @returns {void}
    */
   static removeInstance(id) {
     delete getInstanceBucket(this)[id];
   }
 
-  // 获取所有实例
+  /**
+   * 获取所有实例
+   * @returns {Object} - 组件实例对象，键为实例 id，值为实例
+   */
   static getInstances() {
     return { ...getInstanceBucket(this) };
   }
 
-  // 移除所有实例（置空）
+  /**
+   * 移除所有实例（置空）
+   * @returns {void}
+   */
   static removeInstances() {
     instanceBuckets.set(this, Object.create(null));
   }
@@ -146,6 +161,20 @@ export class Component {
   }
 
   /**
+   * 覆盖数组选项，避免参与深度合并
+   * 非文档化接口，一般用于组件内部
+   * @param {Object} options - 配置项。仅处理值为数组的选项
+   * @returns {void}
+   */
+  overrideArrayOptions(options = {}) {
+    for (const [key, value] of Object.entries(options)) {
+      if (Array.isArray(value)) {
+        this.options[key] = value;
+      }
+    }
+  }
+
+  /**
    * 重载实例
    * @see render
    */
@@ -178,7 +207,7 @@ export class Component {
         .get();
     }
 
-    // 合并 lay-options 属性上的配置信息（鉴于 CSP 策略，后续将移除此功能）
+    // 合并 lay-options 属性上的配置信息（鉴于 CSP 策略，后续或考虑移除此功能）
     const layOptions = lay.options($elem[0]);
     if (rerender) {
       // 若重载渲染，则重载传入的 options 配置优先
@@ -253,6 +282,7 @@ export class Component {
   /**
    * 清除元素缓存
    * @param {string} key - 缓存键
+   * @returns {void}
    */
   removeCache(key) {
     this.cache(key, null, true);
