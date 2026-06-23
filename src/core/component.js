@@ -147,10 +147,11 @@ export class Component {
   }
 
   /**
-   * 将选项中数组类型的值进行覆盖，避免参与选项的深度合并
+   * 覆盖数组选项，避免参与深度合并
+   * 该方法非文档化接口，一般用于组件内部
    * @param {Object} options - 配置项
    */
-  overrideArrayOptions(options) {
+  overrideArrayOptions(options = {}) {
     for (const [key, value] of Object.entries(options)) {
       if (Array.isArray(value)) {
         this.options[key] = value;
