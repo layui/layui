@@ -7,6 +7,7 @@ import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { log } from '../core/logger.js';
 import { $ } from 'jquery';
+import { openWindow } from '../utils/browser.js';
 import { Component } from '../core/component.js';
 import { layer } from './layer.js';
 import { progress } from './progress.js';
@@ -25,6 +26,7 @@ export class Upload extends Component {
     // multiple: false, // 是否支持多选文件上传
     autoUpload: true, // 是否选完文件后自动上传
     showUploadList: true, // 是否显示上传文件列表
+    listType: 'text', // 上传列表的样式风格。可选值：text|picture|picture-card
     // uploadListTarget: '', // 上传列表的目标容器，为空则表示插入到 elem 元素之后
     enableDrag: true, // 是否开启拖拽上传
     maxSize: 0, // 限制上传的文件大小，单位 KB。0 表示不限制
@@ -89,6 +91,11 @@ export class Upload extends Component {
       const $uploadListElem = $(`<div class="${CONST.ELEM_LIST}"></div>`);
       this.$uploadListElem?.remove();
 
+      // 设置上传列表的样式风格
+      if (['text', 'picture', 'picture-card'].includes(options.listType)) {
+        $uploadListElem.addClass(`${CONST.ELEM_LIST}-${options.listType}`);
+      }
+
       // 是否插入到上传列表目标容器
       if (options.uploadListTarget) {
         $(options.uploadListTarget).append($uploadListElem);
@@ -115,6 +122,7 @@ export class Upload extends Component {
     // 发送请求
     const request = ({ file, formData }) => {
       const files = file ? [file] : [...selectedFiles];
+      const params = { files };
 
       // 上传接口提交成功的回调
       const onSuccess = (res) => {
@@ -123,7 +131,7 @@ export class Upload extends Component {
           status: uploadStatus.SUCCESS,
         });
         successful.push(...files);
-        options.onSuccess?.(res, { files });
+        options.onSuccess?.(res, params);
       };
 
       // 上传接口提交失败的回调
@@ -146,7 +154,7 @@ export class Upload extends Component {
         });
 
         failed.push(...files);
-        options.onError?.(e, { files });
+        options.onError?.(e, params);
       };
 
       // 接口请求完毕的处理
@@ -160,6 +168,7 @@ export class Upload extends Component {
           options.onComplete?.({
             jqXHR,
             textStatus,
+            ...params,
             files: selectedFiles,
             successful: successful,
             failed: failed,
@@ -255,7 +264,7 @@ export class Upload extends Component {
     // 上传前的钩子
     // 若回调函数明确返回 false 或 Promise.reject，则阻止上传
     try {
-      const result = await options.beforeUpload?.({ selectedFiles });
+      const result = await options.beforeUpload?.({ files: selectedFiles });
       if (result === false) return;
     } catch (error) {
       log(`beforeUpload error: ${error}`);
@@ -310,12 +319,15 @@ export class Upload extends Component {
    * @param {File} file - 文件对象
    */
   appendUploadItem(file) {
+    const options = this.options;
     const $uploadListElem = this.$uploadListElem;
     const $uploadListItem = $(`
-<div class="${CONST.ELEM_LIST}-item">
+<div class="${CONST.ELEM_LIST}-item ${CONST.ELEM_LIST}-selected">
   <div class="${CONST.ELEM_LIST}-item-status"></div>
-  <div class="${CONST.ELEM_LIST}-item-name lay-ellipsis"></div>
-  <div class="lay-progress" lay-show-percent="true"></div>
+  <div class="${CONST.ELEM_LIST}-item-content">
+    <div class="${CONST.ELEM_LIST}-item-name lay-ellipsis"></div>
+    <div class="lay-progress lay-size-xs"></div>
+  </div>
 </div>
         `);
     const $actions = $(`<div class="${CONST.ELEM_LIST}-item-actions"> </div>`);
@@ -323,6 +335,39 @@ export class Upload extends Component {
 
     if (!$uploadListElem) return;
 
+    // 插入图片
+    if (['picture', 'picture-card'].includes(options.listType)) {
+      const $preview = $(`<div class="${CONST.ELEM_LIST}-item-preview"></div>`);
+
+      // 判断文件是否为图片类型
+      if (file.type.startsWith('image/')) {
+        // 显示图片
+        const $img = $(`<img src="${URL.createObjectURL(file)}">`);
+        $img.on('click', () => {
+          openWindow({
+            url: $img.attr('src'),
+          });
+        });
+        $preview.append($img);
+
+        // 插入预览图标
+        if (options.listType === 'picture-card') {
+          const $viewIcon = $('<i class="lay-icon lay-icon-eye"></i>');
+          $viewIcon.on('click', () => {
+            openWindow({
+              url: $img.attr('src'),
+            });
+          });
+          $actions.prepend($viewIcon);
+        }
+      } else {
+        $preview.html(`<i class="lay-icon lay-icon-file"></i>`);
+      }
+
+      $uploadListItem.prepend($preview);
+    }
+
+    // 插入文件名
     $uploadListItem.find(`.${CONST.ELEM_LIST}-item-name`).text(file.name);
 
     // 删除按钮事件
@@ -334,10 +379,14 @@ export class Upload extends Component {
       }
     });
 
+    // 插入操作按钮
     $actions.append($deleteBtn);
     $uploadListItem.attr({ id: file.id }).append($actions);
+
+    // 插入上传列表项
     $uploadListElem.append($uploadListItem);
 
+    // 初始化进度条
     progress.render({
       elem: $uploadListItem.find('.lay-progress'),
     });
@@ -364,6 +413,10 @@ export class Upload extends Component {
 
       // 设置对应的状态样式
       $uploadListItem.toggleClass(
+        `${CONST.ELEM_LIST}-selected`,
+        status === uploadStatus.SELECTED,
+      );
+      $uploadListItem.toggleClass(
         `${CONST.ELEM_LIST}-uploading`,
         status === uploadStatus.UPLOADING,
       );
@@ -387,7 +440,7 @@ export class Upload extends Component {
         [uploadStatus.SUCCESS]:
           '<i class="lay-icon lay-icon-success" title="upload success"></i>',
         [uploadStatus.ERROR]:
-          '<i class="lay-icon lay-icon-error" title="upload error"></i>',
+          '<i class="lay-icon lay-icon-tips" title="upload error"></i>',
         [uploadStatus.ABORTED]:
           '<i class="lay-icon lay-icon-disabled" title="upload aborted"></i>',
       };
@@ -593,10 +646,9 @@ export class Upload extends Component {
   #events() {
     const options = this.options;
     const $elem = options.$elem;
-    const Constructor = this.constructor;
 
     // 事件命名空间
-    const eventNamespace = `.lay_${Constructor.componentName}_events`;
+    const eventNamespace = CONST.EVENT_NAMESPACE;
 
     // 避免重复绑定事件
     $elem.off(eventNamespace);

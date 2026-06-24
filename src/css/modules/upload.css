@@ -1,58 +1,112 @@
-/** 文件上传 **/
+/* upload.css */
+
+/* 上传列表 */
 .lay-upload-list-item {
   display: flex;
   align-items: center;
   gap: var(--lay-spacing-sm);
+  position: relative;
+  margin: var(--lay-spacing-sm) 0;
   padding: var(--lay-spacing-sm);
   border: 1px solid var(--lay-border-color);
   border-radius: var(--lay-border-radius);
-  transition: all 0.2s;
+  transition: all 0.3s;
   box-sizing: border-box;
-
-  .lay-progress {
-    flex: 1;
-  }
-}
-.lay-upload-list-item {
-  margin: var(--lay-spacing-sm) 0;
 
   .lay-icon {
     position: relative;
     color: var(--lay-gray-700);
   }
 }
+
+/* 上传列表预览 */
+.lay-upload-list-item-preview {
+  --lay-width: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--lay-width);
+  height: var(--lay-width);
+  border-radius: var(--lay-border-radius);
+  overflow: hidden;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+  }
+  .lay-icon-file {
+    font-size: 38px;
+    line-height: var(--lay-width);
+    text-align: center;
+    color: var(--lay-color-primary);
+  }
+}
+
+/* 上传列表状态图标 */
 .lay-upload-list-item-status {
   .lay-icon {
     position: relative;
     font-size: 18px;
   }
-  .lay-icon.lay-icon-success,
-  .lay-icon.lay-icon-error {
+  .lay-icon-success,
+  .lay-icon-tips {
     top: 1px;
   }
-  .lay-icon.lay-icon-success {
+  .lay-icon-success {
     color: var(--lay-color-accent);
   }
-  .lay-icon.lay-icon-error {
+  .lay-icon-tips {
     color: var(--lay-color-red);
   }
-  .lay-icon.lay-icon-disabled {
+  .lay-icon-disabled {
     color: var(--lay-gray-500);
   }
 }
-.lay-upload-list-item-name {
-  max-width: 50%;
+
+/* 上传列表文件内容 */
+.lay-upload-list-item-content {
+  position: relative;
+  flex: 1;
+
+  .lay-progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -3px;
+  }
 }
+
+/* 上传列表操作按钮 */
 .lay-upload-list-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-left: auto;
-  transition: all 0.2s;
+  transition: inherit;
 
   .lay-icon {
-    font-size: 18px;
+    font-size: 1.125rem;
     cursor: pointer;
+    transition: inherit;
   }
   .lay-icon:hover {
     color: var(--lay-gray-900);
+  }
+  .lay-icon-eye {
+    font-size: 1.25rem;
+  }
+}
+
+/* 上传列表不同状态的样式 */
+.lay-upload-list-selected {
+  .lay-upload-list-item-content {
+    .lay-progress {
+      display: none;
+    }
   }
 }
 .lay-upload-list-aborted {
@@ -62,9 +116,102 @@
   }
 }
 .lay-upload-list-error {
+  border-color: var(--lay-color-red);
+
   .lay-upload-list-item-name,
   .lay-upload-list-item-actions .lay-icon {
     color: var(--lay-color-red);
+  }
+}
+
+/* 图片卡片列表样式 */
+.lay-upload-list-picture-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lay-spacing-sm);
+
+  .lay-upload-list-item {
+    --lay-width: 105px;
+
+    width: var(--lay-width);
+    height: var(--lay-width);
+
+    .lay-upload-list-item-preview {
+      --lay-width: 100%;
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+      }
+      .lay-icon-file {
+        font-size: 38px;
+      }
+    }
+
+    .lay-upload-list-item-status {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--lay-border-radius);
+      transition: inherit;
+
+      .lay-icon-loading {
+        color: #fff;
+      }
+    }
+    .lay-upload-list-item-status:has(.lay-icon-loading) {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    :is(
+      .lay-upload-list-item-status .lay-icon-success,
+      .lay-upload-list-item-name,
+      .lay-upload-list-item-actions
+    ) {
+      display: none;
+    }
+
+    .lay-upload-list-item-content {
+      position: absolute;
+      right: 0;
+      left: 0;
+      bottom: 0;
+
+      .lay-progress {
+        bottom: 0;
+        border-radius: 0;
+      }
+    }
+  }
+
+  .lay-upload-list-item:hover {
+    .lay-upload-list-item-status {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    :is(.lay-upload-list-item-actions) {
+      display: inherit;
+    }
+  }
+
+  .lay-upload-list-item-actions {
+    position: absolute;
+    top: 0;
+    right: var(--lay-spacing-sm);
+    left: var(--lay-spacing-sm);
+    justify-content: center;
+
+    .lay-icon {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    .lay-icon:hover {
+      color: #fff;
+    }
   }
 }
 

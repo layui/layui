@@ -42,69 +42,19 @@
 
     <br />
 
-    <h2>自定义上传图片列表</h2>
+    <h2>图片列表风格</h2>
     <hr />
-    <button type="button" class="lay-btn lay-btn-normal" id="testImageList">
+    <button type="button" class="lay-btn" id="testPictureList">选择图片</button>
+
+    <br />
+
+    <h2>图片卡片列表风格</h2>
+    <hr />
+    <button type="button" class="lay-btn" id="testPictureCardList">
       选择图片
     </button>
-    <style>
-      .demo-upload-image-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 11px;
-        margin-top: 11px;
-      }
-      .demo-upload-image-list-item {
-        position: relative;
-        --border-radius: 3px;
-        img {
-          width: 115px;
-          height: 115px;
-          object-fit: cover;
-          border-radius: var(--border-radius);
-        }
-        .lay-icon {
-          color: rgba(255, 255, 255, 0.9);
-        }
-        .lay-icon[class*='lay-icon-loading'] {
-          font-size: 24px;
-        }
-        .lay-icon-close {
-          position: absolute;
-          top: 3px;
-          right: 3px;
-          color: rgba(255, 255, 255, 0.9);
-          cursor: pointer;
-        }
-      }
-      .demo-upload-image-list-loading {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .demo-upload-image-list-loading:after,
-      .demo-upload-image-progress {
-        position: absolute;
-        top: 0;
-        height: 100%;
-        width: 100%;
-        border-radius: var(--border-radius);
-        background-color: rgba(0, 0, 0, 0.5);
-        transition: all 0.3s;
-      }
-      .demo-upload-image-list-loading:after {
-        content: '';
-        background-color: rgba(0, 0, 0, 0.1);
-      }
-    </style>
-    <div class="demo-upload-image-list" id="testImageListContainer"></div>
 
-    <br /><br />
+    <br />
 
     <h2>手动上传</h2>
     <hr />
@@ -146,10 +96,10 @@
           data: { a: 1, b: () => 2 }, // 追加接口参数
           // maxSize: 2000,
           maxCount: 1,
-          onSelect(obj) {
-            console.log('choose', obj);
+          onSelect({ files }) {
+            console.log(`${this.id} → onSelect  → `, files);
           },
-          beforeUpload(obj) {
+          beforeUpload({ files }) {
             const time = 3000;
             layer.msg('模拟上传中...', { time });
 
@@ -171,14 +121,14 @@
               }, 500);
             });
           },
-          onSuccess(...args) {
-            console.log(`${this.id} → onSuccess  → `, args);
+          onSuccess(res, params) {
+            console.log(`${this.id} → onSuccess  → `, res, params);
           },
-          onError(...args) {
-            console.log(`${this.id} → onError  → `, args);
+          onError(error, params) {
+            console.log(`${this.id} → onError  → `, error, params);
           },
-          onProgress(res) {
-            console.log(`${this.id} → onProgress  → `, res);
+          onProgress(params) {
+            console.log(`${this.id} → onProgress  → `, params);
           },
         });
 
@@ -200,19 +150,19 @@
           // showUploadList: false,
           // maxSize: 10,
           maxCount: 3,
-          beforeUpload(obj) {
-            console.log(`${this.id} → beforeUpload  → `, obj);
+          beforeUpload(params) {
+            console.log(`${this.id} → beforeUpload  → `, params);
 
             abortBtn.enable();
           },
-          onSuccess(...args) {
-            console.log(`${this.id} → onSuccess  → `, args);
+          onSuccess(res, params) {
+            console.log(`${this.id} → onSuccess  → `, res, params);
           },
-          onError(...args) {
-            console.log(`${this.id} → onError  → `, args);
+          onError(error, params) {
+            console.log(`${this.id} → onError  → `, error, params);
           },
-          onComplete(obj) {
-            console.log(`${this.id} → onComplete  → `, obj);
+          onComplete(params) {
+            console.log(`${this.id} → onComplete  → `, params);
             abortBtn.disabled();
           },
         });
@@ -246,55 +196,23 @@
           },
         });
 
-        // 自定义上传图片列表
+        // 图片列表风格
         upload.render({
-          elem: '#testImageList',
+          elem: '#testPictureList',
           url: url,
-          multiple: true,
-          showUploadList: false, // 不显示默认的上传列表
-          onSelect({ files }) {
-            this.$uploadListTarget = $('#testImageListContainer');
-            files.forEach((file) => {
-              const $listItem = $(
-                `<div class="demo-upload-image-list-item" id="${file.id}">
-  <img src="${URL.createObjectURL(file)}">
-  <div class="demo-upload-image-list-loading">
-    <div class="demo-upload-image-progress"></div>
-    <i class="lay-icon lay-icon-loading-1 lay-anim lay-anim-rotate lay-anim-loop"></i>
-  </div>
-  <i class="lay-icon lay-icon-close" title="删除"></i>
-</div>
-                      `,
-              );
-              this.$uploadListTarget.append($listItem);
+          listType: 'picture',
+          onSuccess(res, params) {
+            console.log(`${this.id} → onSuccess  → `, res, params);
+          },
+        });
 
-              // 删除
-              $listItem.find('.lay-icon-close').on('click', () => {
-                file.jqXHR?.abort(); // 中止上传请求
-                upload.deleteUploadItem(this.id, file); // 删除上传文件列表项
-                $listItem.remove(); // 删除列表元素
-              });
-            });
-          },
-          onProgress({ percent, event, files }) {
-            files.forEach((file) => {
-              const $uploadListTarget = this.$uploadListTarget
-                .find('.demo-upload-image-list-item')
-                .filter((_, item) => $(item).attr('id') === file.id);
-              $uploadListTarget
-                .find('.demo-upload-image-progress')
-                .css('height', `${100 - percent}%`);
-            });
-          },
-          onSuccess({ files }) {
-            files.forEach((file) => {
-              const $uploadListTarget = this.$uploadListTarget
-                .find('.demo-upload-image-list-item')
-                .filter((_, item) => $(item).attr('id') === file.id);
-              $uploadListTarget
-                .find('.demo-upload-image-list-loading')
-                .remove();
-            });
+        // 图片卡片列表风格
+        upload.render({
+          elem: '#testPictureCardList',
+          url: url,
+          listType: 'picture-card',
+          onSuccess(res, params) {
+            console.log(`${this.id} → onSuccess  → `, res, params);
           },
         });
 
@@ -304,11 +222,11 @@
           url: url,
           autoUpload: false,
           // multiple: true,
-          beforeUpload(obj) {
-            console.log(345);
+          beforeUpload(params) {
+            console.log(params);
           },
-          onSuccess(res) {
-            console.log(res);
+          onSuccess(res, params) {
+            console.log(res, params);
           },
         });
 
@@ -320,8 +238,8 @@
         upload.render({
           elem: '#test8',
           url: url,
-          onSuccess(res) {
-            console.log(res);
+          onSuccess(res, params) {
+            console.log(res, params);
           },
         });
 
@@ -329,8 +247,8 @@
         upload.render({
           elem: '#test9',
           url: url,
-          onSuccess(res) {
-            console.log(res);
+          onSuccess(res, params) {
+            console.log(res, params);
           },
         });
       });
