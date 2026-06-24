@@ -87,9 +87,11 @@ export class Upload extends Component {
     }
 
     // 初始化「上传列表」容器
+    this.$uploadListElem?.remove();
+    this.$uploadListElem = null;
+
     if (options.showUploadList) {
       const $uploadListElem = $(`<div class="${CONST.ELEM_LIST}"></div>`);
-      this.$uploadListElem?.remove();
 
       // 设置上传列表的样式风格
       if (['text', 'picture', 'picture-card'].includes(options.listType)) {
@@ -145,9 +147,8 @@ export class Upload extends Component {
           return;
         }
 
-        showError(
-          `Upload ${uploadStatus.ERROR}, please try again.${e.status ? `<br>status: ${e.status} - ${e.statusText}` : ''}`,
-        );
+        showError(`Upload ${uploadStatus.ERROR}, please try again.`);
+
         this.updateUploadItem({
           files,
           status: uploadStatus.ERROR,
@@ -220,24 +221,35 @@ export class Upload extends Component {
     const submitUpload = () => {
       // 添加 file 到表单域
       const appendFileToFormData = ({ formData, file }) => {
-        if (file.uploadStatus === uploadStatus.UPLOADING) return;
+        // 若文件正在上传，则阻止重复上传
+        if (file.uploadStatus === uploadStatus.UPLOADING) {
+          return false;
+        }
+
         formData.append(options.fieldName, file);
 
         this.updateUploadItem({
           files: [file],
           status: uploadStatus.UPLOADING,
         });
+
+        return true;
       };
 
       // 多文件是否合并上传
       if (options.mergeRequest) {
         const formData = new FormData();
+        let hasUploadingFile = false; // 是否存在正在上传的文件
 
         // 将所有文件添加到一个 FormData 中
-        selectedFiles.forEach((file) =>
-          appendFileToFormData({ formData, file }),
-        );
+        selectedFiles.forEach((file) => {
+          const result = appendFileToFormData({ formData, file });
+          if (result === false) {
+            hasUploadingFile = true;
+          }
+        });
 
+        if (hasUploadingFile) return;
         const jqXHR = request({ formData });
 
         // 将 jqXHR 对象关联到当前文件队列
@@ -248,7 +260,9 @@ export class Upload extends Component {
         // 逐个上传
         selectedFiles.forEach((file) => {
           const formData = new FormData();
-          appendFileToFormData({ formData, file });
+          const result = appendFileToFormData({ formData, file });
+
+          if (result === false) return;
           file.jqXHR = request({ file, formData });
         });
       }
@@ -493,20 +507,29 @@ export class Upload extends Component {
     const fileCount = opts.fileCount || filesLength;
 
     // 检验文件数量
-    if (options.maxCount && fileCount > options.maxCount) {
-      showError(
-        `${i18n.$t('upload.validateMessages.fileCountLimit', {
-          count: options.maxCount,
-        })}${
-          filesLength
-            ? `<br>${i18n.$t('upload.validateMessages.existingFileCount', {
-                count: filesLength,
-                remaining: options.maxCount - filesLength,
-              })}`
-            : ''
-        }`,
-      );
-      return false;
+    if (options.maxCount) {
+      if (options.maxCount === 1) {
+        if (selectedFiles.length > 1) {
+          showError(
+            i18n.$t('upload.validateMessages.fileCountLimit', { count: 1 }),
+          );
+          return false;
+        }
+      } else if (options.maxCount < fileCount) {
+        showError(
+          `${i18n.$t('upload.validateMessages.fileCountLimit', {
+            count: options.maxCount,
+          })}${
+            filesLength
+              ? `<br>${i18n.$t('upload.validateMessages.existingFileCount', {
+                  count: filesLength,
+                  remaining: options.maxCount - filesLength,
+                })}`
+              : ''
+          }`,
+        );
+        return false;
+      }
     }
 
     // 检验文件大小
@@ -607,23 +630,17 @@ export class Upload extends Component {
     // 选择后清空 file 元素的值
     this.$fileElem[0].value = '';
 
-    // 若限制文件数为 1，则用当前选择的文件替换队列中的文件
-    if (options.maxCount === 1) {
-      if (files.length > 1) {
-        showError(
-          i18n.$t('upload.validateMessages.fileCountLimit', { count: 1 }),
-        );
-        return;
-      }
-      this.clearUploadList();
-    }
-
     // 校验
     const validationResult = this.#validate({
       fileCount: files.length + this.files.length,
       selectedFiles: files,
     });
     if (!validationResult) return;
+
+    // 若限制文件数为 1，则用当前选择的文件替换队列中的文件
+    if (options.maxCount === 1) {
+      this.clearUploadList();
+    }
 
     // 添加文件到队列
     files.forEach((file) => {

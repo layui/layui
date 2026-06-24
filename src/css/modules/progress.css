@@ -38,6 +38,7 @@
 /* 不同尺寸 */
 .lay-progress.lay-size-xs {
   --lay-progress-border-radius: 0;
+
   height: 2px;
 }
 .lay-progress.lay-size-sm {

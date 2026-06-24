@@ -94,7 +94,8 @@
           elem: '#test1',
           url: url,
           data: { a: 1, b: () => 2 }, // 追加接口参数
-          // maxSize: 2000,
+          // multiple: true,
+          // maxSize: 1000,
           maxCount: 1,
           onSelect({ files }) {
             console.log(`${this.id} → onSelect  → `, files);
@@ -222,6 +223,7 @@
           url: url,
           autoUpload: false,
           // multiple: true,
+          // mergeRequest: true,
           beforeUpload(params) {
             console.log(params);
           },
