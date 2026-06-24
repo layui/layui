@@ -101,10 +101,6 @@ export default {
     },
   },
   laypage: {
-    prev: '上一頁',
-    next: '下一頁',
-    first: '首頁',
-    last: '尾頁',
     total: '共 {total} 條',
     pagesize: '條/頁',
     goto: '到第',

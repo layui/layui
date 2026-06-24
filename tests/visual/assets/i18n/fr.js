@@ -105,10 +105,6 @@ export default {
     },
   },
   laypage: {
-    prev: 'Page précédente',
-    next: 'Page suivante',
-    first: 'Première',
-    last: 'Dernière',
     total: 'Total {total} éléments',
     pagesize: 'éléments/page',
     goto: 'Aller à',

@@ -109,10 +109,6 @@ var zhCN = {
     },
   },
   laypage: {
-    prev: '上一页',
-    next: '下一页',
-    first: '首页',
-    last: '尾页',
     total: '共 {total} 条',
     pagesize: '条/页',
     goto: '到第',

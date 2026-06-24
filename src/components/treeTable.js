@@ -1833,7 +1833,7 @@ treeTable.addNodes = function (id, opts) {
         options.data.splice.apply(
           options.data,
           [
-            pageOptions.limit * (pageOptions.curr - 1),
+            pageOptions.limit * (pageOptions.current - 1),
             pageOptions.limit,
           ].concat(table.cache[id]),
         );

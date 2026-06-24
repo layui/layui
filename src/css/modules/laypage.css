@@ -1,136 +1,143 @@
 /** 分页 **/
-.lay-laypage {
-  display: inline-block;
-  vertical-align: middle;
-  margin: 10px 0;
-  font-size: 0;
-}
-.lay-laypage > a:first-child,
-.lay-laypage > a:first-child em {
-  border-radius: var(--lay-border-radius) 0 0 var(--lay-border-radius);
-}
-.lay-laypage > a:last-child,
-.lay-laypage > a:last-child em {
-  border-radius: 0 var(--lay-border-radius) var(--lay-border-radius) 0;
-}
-.lay-laypage > *:first-child {
-  margin-left: 0 !important;
-}
-.lay-laypage > *:last-child {
-  margin-right: 0 !important;
-}
-.lay-laypage a,
-.lay-laypage span,
-.lay-laypage input,
-.lay-laypage button,
-.lay-laypage select {
-  border: 1px solid var(--lay-border-color);
-}
-.lay-laypage a,
-.lay-laypage span {
-  display: inline-block;
-  vertical-align: middle;
-  padding: 0 15px;
-  height: 28px;
-  line-height: 28px;
-  margin: 0 -1px 5px 0;
-  background-color: #fff;
-  color: #333;
-  font-size: 12px;
-}
-.lay-laypage a[data-page] {
-  color: #333;
-}
-.lay-laypage a {
-  text-decoration: none !important;
-  cursor: pointer;
-}
-.lay-laypage a:hover {
-  color: var(--lay-color-primary);
-}
-.lay-laypage em {
-  font-style: normal;
-}
-.lay-laypage .lay-laypage-spr {
-  color: #999;
-  font-weight: 700;
-}
-.lay-laypage .lay-laypage-curr {
-  position: relative;
-}
-.lay-laypage .lay-laypage-curr em {
-  position: relative;
-  color: #fff;
-}
-.lay-laypage .lay-laypage-curr .lay-laypage-em {
-  position: absolute;
-  left: -1px;
-  top: -1px;
-  padding: 1px;
-  width: 100%;
-  height: 100%;
-  background-color: var(--lay-color-primary);
-}
-.lay-laypage-em {
-  border-radius: var(--lay-border-radius);
-}
-.lay-laypage-prev em,
-.lay-laypage-next em {
-  font-family: Sim sun;
-  font-size: 16px;
+.lay-pagination {
+  --lay-height: 32px;
+  --lay-input-width: 45px;
+  --lay-btn-spacing: 11px;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 8px;
+  font-size: 0.875rem;
 }
 
-.lay-laypage .lay-laypage-count,
-.lay-laypage .lay-laypage-limits,
-.lay-laypage .lay-laypage-refresh,
-.lay-laypage .lay-laypage-skip {
-  margin-left: 10px;
-  margin-right: 10px;
-  padding: 0;
-  border: none;
+.lay-pagination {
+  > li {
+    min-width: var(--lay-height);
+    height: var(--lay-height);
+    line-height: var(--lay-height);
+    margin: 0 3px;
+    text-align: center;
+  }
+  > li > a {
+    display: block;
+    padding: 0 var(--lay-spacing-sm);
+    border: 1px solid transparent;
+    border-radius: var(--lay-border-radius);
+    transition: all 0.3s;
+  }
+  .lay-pagination-link {
+    cursor: pointer;
+  }
+  :where(.lay-pagination-link):hover {
+    background-color: var(--lay-gray-200);
+    color: var(--lay-color-primary);
+  }
+  :is(select, input, button) {
+    height: var(--lay-height);
+    line-height: var(--lay-height);
+    border-radius: var(--lay-border-radius);
+    border: 1px solid var(--lay-border-color);
+    background: none;
+  }
+  select {
+    padding: 0 3px;
+    cursor: pointer;
+  }
+  input {
+    width: var(--lay-input-width);
+    padding: 0 3px;
+    text-align: center;
+  }
+  :is(button, .lay-btn) {
+    height: inherit;
+    line-height: inherit;
+    padding: 0 var(--lay-btn-spacing);
+    cursor: pointer;
+  }
+  :where(select, button):hover {
+    border-color: var(--lay-border-color-accent);
+  }
+  :where(select, input):focus {
+    border-color: var(--lay-color-primary);
+  }
 }
-.lay-laypage .lay-laypage-limits,
-.lay-laypage .lay-laypage-refresh {
-  vertical-align: top;
+
+.lay-pagination-item-active > a {
+  background-color: var(--lay-color-primary);
+  color: #fff;
+  font-weight: 700;
 }
-.lay-laypage .lay-laypage-refresh i {
-  font-size: 18px;
-  cursor: pointer;
+.lay-pagination-simple-page {
+  padding: 0 var(--lay-spacing-sm);
 }
-.lay-laypage select {
-  height: 22px;
-  padding: 3px;
-  border-radius: var(--lay-border-radius);
-  cursor: pointer;
+.lay-pagination-ellipsis {
+  color: var(--lay-gray-500);
 }
-.lay-laypage .lay-laypage-skip {
-  height: 30px;
-  line-height: 30px;
-  color: #999;
-}
-.lay-laypage input,
-.lay-laypage button {
-  height: 30px;
-  line-height: 30px;
-  border-radius: var(--lay-border-radius);
-  vertical-align: top;
-  background-color: #fff;
-  box-sizing: border-box;
-}
-.lay-laypage input {
-  display: inline-block;
-  width: 40px;
-  margin: 0 10px;
+.lay-pagination-jump {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   padding: 0 3px;
-  text-align: center;
-  transition: none;
 }
-.lay-laypage input:focus,
-.lay-laypage select:focus {
-  border-color: var(--lay-color-primary) !important;
+
+/* 对齐方式 */
+.lay-pagination-align-start {
+  justify-content: start;
 }
-.lay-laypage button {
-  margin-left: 10px;
-  padding: 0 10px;
-  cursor: pointer;
+.lay-pagination-align-center {
+  justify-content: center;
+}
+.lay-pagination-align-end {
+  justify-content: end;
+}
+
+/* 组件尺寸 */
+.lay-pagination.lay-size-sm {
+  --lay-height: 24px;
+  --lay-input-width: 38px;
+  --lay-btn-spacing: 8px;
+
+  font-size: 0.75rem;
+}
+.lay-pagination.lay-size-lg {
+  --lay-height: 38px;
+  --lay-input-width: 55px;
+
+  font-size: 1rem;
+}
+
+/* 禁用状态 */
+.lay-pagination.lay-disabled {
+  opacity: 0.55;
+  cursor: not-allowed !important;
+  color: inherit !important;
+
+  * {
+    pointer-events: none;
+  }
+  :is(select, input, button) {
+    border-color: var(--lay-border-color-accent);
+    background-color: var(--lay-gray-300);
+  }
+}
+
+/* 主题风格 */
+.lay-pagination-theme-border {
+  --lay-color-primary: var(--lay-color-accent);
+
+  > li:not(.lay-pagination-item-active) > a {
+    border-color: var(--lay-border-color);
+  }
+  .lay-pagination-item-active > a {
+    border-color: var(--lay-color-primary);
+    background-color: transparent;
+    color: var(--lay-color-primary);
+  }
+}
+.lay-pagination-theme-background {
+  > li:not(.lay-pagination-item-active) > a {
+    background-color: var(--lay-gray-300);
+  }
 }
