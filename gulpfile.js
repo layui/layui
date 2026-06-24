@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const gulp = require('gulp');
 const uglify = require('gulp-uglify');
@@ -116,7 +117,11 @@ const clean = () => {
 };
 
 // 默认任务
-exports.default = gulp.series(clean, gulp.parallel(js, csp, css, files));
+exports.default = gulp.series(
+  clean,
+  gulp.parallel(js, csp, css, files),
+  generateModuleFacade
+);
 exports.csp = csp;
 
 // 复制 dist 目录到指定路径
@@ -242,4 +247,24 @@ function precompileLaytplBlocks(source) {
     /(^[ \t]*)\/\/ laytpl-precompile:start ([A-Za-z_$][\w$]*)(?: (legacy|modern))?\n([\s\S]*?)\n\1\/\/ laytpl-precompile:end \2/gm,
     precompileLaytplBlock
   );
+}
+
+// 生成 module facade
+function generateModuleFacade(done) {
+  const esm = `${config.comment}
+import './layui.js';
+var layui = window.layui;
+export { layui };
+export default layui;
+`;
+  const csp = `${config.comment}
+import './layui.csp.js';
+var layui = window.layui;
+export { layui };
+export default layui;
+`;
+
+  fs.writeFileSync(path.join(dest, 'layui.mjs'), esm);
+  fs.writeFileSync(path.join(dest, 'layui.csp.mjs'), csp);
+  done();
 }
