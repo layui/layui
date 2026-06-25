@@ -265,6 +265,7 @@ export class Dropdown extends Component {
     if (options._renderMode === 'reloadData' && this.#isRootElemMounted()) {
       $rootElem = this.$rootElem;
       this.$rootElem.html(content);
+      delete options._renderMode;
     } else {
       // 常规渲染
       $rootElem.append(content); // 填充内容
