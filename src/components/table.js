@@ -1788,7 +1788,7 @@ Class.prototype.renderData = function (opts) {
   // 同步分页状态
   if (options.page) {
     const pageId = `lay-table-page${options.index}`;
-    const laypageInstance = laypage.getInstance(pageId);
+    // console.log(options.page);
 
     // 渲染分页组件
     options.page = $.extend(
@@ -1801,17 +1801,17 @@ Class.prototype.renderData = function (opts) {
         size: 'sm',
         layout: ['prev', 'page', 'next', 'limits', 'jump', 'count'],
         onChange: function (opts) {
-          // 分页本身并非需要做以下更新，下面参数的同步，主要是因为其它处理统一用到了它们
-          // 而并非用的是 options.page 中的参数（以确保分页未开启的情况仍能正常使用）
-          that.page = opts.current; // 更新页码
-          that.config.limit = opts.limit; // 更新每页条数
+          // Tip: 此处用 `that.config`（而不是 `options`）对选项进行赋值，是因为 table 的 `reload` 方法中对 `this.config` 进行了重置。
+          // 后续 table 基于 Component 基类重构，则不存在该问题
+          that.page = that.config.page.current = opts.current; // 更新页码
+          that.config.limit = that.config.page.limit = opts.limit; // 更新每页条数
 
           that.pullData(opts.current);
         },
       },
       options.page,
-      laypageInstance?.options,
     );
+    that.config.page.count = count; // 更新总条数
     laypage.render(options.page);
   }
 };

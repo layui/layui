@@ -9,7 +9,7 @@ import { $ } from 'jquery';
 import { Component } from '../core/component.js';
 
 export class Laypage extends Component {
-  componentName = 'pagination';
+  static componentName = 'laypage';
 
   // 默认配置项
   static options = {
@@ -388,6 +388,9 @@ export class Laypage extends Component {
 
     // 避免重复绑定事件
     $elem.off(eventNamespace);
+
+    // 分页是否禁用
+    if (options.disabled) return;
 
     // 点击页码
     $elem.on(`click${eventNamespace}`, `.${CONST.CLASS_LINK}`, (e) => {
