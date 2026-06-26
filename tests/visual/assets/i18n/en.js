@@ -150,19 +150,12 @@ export default {
     deleteNodePrompt: 'Are you sure you want to delete the node "{name}"?',
   },
   upload: {
-    fileType: {
-      file: 'File',
-      image: 'Image',
-      video: 'Video',
-      audio: 'Audio',
-    },
     validateMessages: {
-      fileExtensionError: 'Unsupported format in selected {fileType}',
-      filesOverLengthLimit: 'Maximum {length} files allowed at once',
-      currentFilesLength: 'You have selected {length} files',
-      fileOverSizeLimit: 'File size must not exceed {size}',
+      fileSizeLimit: 'File size must not exceed {size}',
+      fileCountLimit: 'You can only upload up to {count} files',
+      existingFileCount:
+        'There are already {count} files in the list, you can only add {remaining} more files',
     },
-    chooseText: '{length} files',
   },
   utils: {
     timeAgo: {

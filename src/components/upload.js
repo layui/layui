@@ -7,676 +7,762 @@ import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { log } from '../core/logger.js';
 import { $ } from 'jquery';
+import { openWindow } from '../utils/browser.js';
+import { Component } from '../core/component.js';
 import { layer } from './layer.js';
+import { progress } from './progress.js';
 
-// 模块名
-var MOD_NAME = 'upload';
-var MOD_INDEX = 'layui_' + MOD_NAME + '_index'; // 模块索引名
+export class Upload extends Component {
+  static componentName = 'upload';
 
-// 外部接口
-var upload = {
-  config: {}, // 全局配置项
-  // 设置全局项
-  set: function (options) {
-    var that = this;
-    that.config = $.extend({}, that.config, options);
-    return that;
-  },
-  // 事件
-  on: function (events, callback) {
-    return lay.onevent.call(this, MOD_NAME, events, callback);
-  },
-};
-
-// 操作当前实例
-var thisModule = function () {
-  var that = this;
-  var options = that.config;
-  var id = options.id;
-
-  thisModule.that[id] = that; // 记录当前实例对象
-
-  return {
-    upload: function (files) {
-      that.upload.call(that, files);
-    },
-    reload: function (options) {
-      that.reload.call(that, options);
-    },
-    config: that.config,
-  };
-};
-
-var ELEM_FILE = 'lay-upload-file';
-var ELEM_CHOOSE = 'lay-upload-choose';
-var UPLOADING = 'UPLOADING';
-
-// 构造器
-var Class = function (options) {
-  var that = this;
-  that.index = upload.index = lay.autoIncrementer('upload');
-  that.config = $.extend({}, that.config, upload.config, options);
-  that.render();
-};
-
-// 默认配置
-Class.prototype.config = {
-  accept: 'images', // 允许上传的文件类型：images/file/video/audio
-  exts: '', // 允许上传的文件后缀名
-  auto: true, // 是否选完文件后自动上传
-  bindAction: '', // 手动上传触发的元素
-  url: '', // 上传地址
-  force: '', // 强制规定返回的数据格式，目前只支持是否强制 json
-  field: 'file', // 文件字段名
-  acceptMime: '', // 筛选出的文件类型，默认为所有文件
-  method: 'post', // 请求上传的 http 类型
-  data: {}, // 请求上传的额外参数
-  drag: true, // 是否允许拖拽上传
-  size: 0, // 文件限制大小，默认不限制
-  number: 0, // 允许同时上传的文件数，默认不限制
-  multiple: false, // 是否允许多文件上传
-  text: {
-    // 自定义提示文本
-    'cross-domain': 'Cross-domain requests are not supported', // 跨域
-    'data-format-error': 'Please return JSON data format', // 数据格式错误
-    'check-error': '', // 文件格式校验失败
-    error: '', // 上传失败
-    'limit-number': null, // 限制 number 属性的提示 --- function
-    'limit-size': null, // 限制 size 属性的提示 --- function
-  },
-};
-
-// 重载实例
-Class.prototype.reload = function (options) {
-  var that = this;
-  that.config = $.extend({}, that.config, options);
-  that.render(true);
-};
-
-// 初始渲染
-Class.prototype.render = function (rerender) {
-  var that = this;
-  var options = that.config;
-
-  // 若 elem 非唯一
-  var elem = $(options.elem);
-  if (elem.length > 1) {
-    elem.each(function () {
-      upload.render(
-        $.extend({}, options, {
-          elem: this,
-        }),
-      );
-    });
-    return that;
-  }
-
-  // 合并 lay-options 属性上的配置信息
-  $.extend(
-    options,
-    lay.options(elem[0], {
-      attr: elem.attr('lay-data') ? 'lay-data' : null, // 兼容旧版的 lay-data 属性
-    }),
-  );
-
-  // 若重复执行 render，则视为 reload 处理
-  if (!rerender && elem[0] && elem.data(MOD_INDEX)) {
-    var newThat = thisModule.getThis(elem.data(MOD_INDEX));
-    if (!newThat) return;
-
-    return newThat.reload(options);
-  }
-
-  options.elem = $(options.elem);
-  options.bindAction = $(options.bindAction);
-
-  // 初始化 id 属性 - 优先取 options > 元素 id > 自增索引
-  options.id = 'id' in options ? options.id : elem.attr('id') || that.index;
-
-  that.file();
-  that.events();
-};
-
-//追加文件域
-Class.prototype.file = function () {
-  var that = this;
-  var options = that.config;
-  var elemFile = (that.elemFile = $(
-    [
-      '<input class="' +
-        ELEM_FILE +
-        '" type="file" accept="' +
-        options.acceptMime +
-        '" name="' +
-        options.field +
-        '"',
-      options.multiple ? ' multiple' : '',
-      '>',
-    ].join(''),
-  ));
-  var next = options.elem.next();
-
-  if (next.hasClass(ELEM_FILE)) {
-    next.remove();
-  }
-
-  that.isFile()
-    ? ((that.elemFile = options.elem), (options.field = options.elem[0].name))
-    : options.elem.after(elemFile);
-};
-
-//异常提示
-Class.prototype.msg = function (content) {
-  return layer.msg(content, {
-    icon: 2,
-    shift: 6,
-  });
-};
-
-//判断绑定元素是否为文件域本身
-Class.prototype.isFile = function () {
-  var elem = this.config.elem[0];
-  if (!elem) return;
-  return elem.tagName.toLocaleLowerCase() === 'input' && elem.type === 'file';
-};
-
-//预读图片信息
-Class.prototype.preview = function (callback) {
-  var that = this;
-  if (window.FileReader) {
-    Object.entries(that.chooseFiles || {}).forEach(function ([index, file]) {
-      var reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = function () {
-        callback && callback(index, file, this.result);
-      };
-    });
-  }
-};
-
-// 执行上传
-Class.prototype.upload = function (files, type) {
-  var that = this;
-  var options = that.config;
-  var text = options.text || {};
-  var elemFile = that.elemFile[0];
-
-  // 获取文件队列
-  var getFiles = function () {
-    return files || that.files || that.chooseFiles || elemFile.files;
+  // 默认配置
+  static options = {
+    url: '', // 上传地址
+    data: {}, // 请求上传的额外参数
+    dataType: 'json', // 预期服务端返回的数据类型
+    fieldName: 'file', // 文件字段名
+    // mergeRequest: false, // 是否将多文件上传合并为一个请求
+    // accept: '', // 筛选出的文件类型，如 `image/*`，默认为所有文件
+    // multiple: false, // 是否支持多选文件上传
+    autoUpload: true, // 是否选完文件后自动上传
+    showUploadList: true, // 是否显示上传文件列表
+    listType: 'text', // 上传列表的样式风格。可选值：text|picture|picture-card
+    // uploadListTarget: '', // 上传列表的目标容器，为空则表示插入到 elem 元素之后
+    enableDrag: true, // 是否开启拖拽上传
+    maxSize: 0, // 限制上传的文件大小，单位 KB。0 表示不限制
+    maxCount: 0, // 限制上传的文件数量。0 表示不限制
   };
 
-  // 高级浏览器处理方式，支持跨域
-  var ajaxSend = function () {
-    var successful = 0;
-    var failed = 0;
-    var items = getFiles();
-
-    // 多文件全部上传完毕的回调
-    var allDone = function () {
-      if (options.multiple && successful + failed === that.fileLength) {
-        typeof options.allDone === 'function' &&
-          options.allDone({
-            total: that.fileLength,
-            successful: successful,
-            failed: failed,
-          });
-      }
+  static get CONST() {
+    return {
+      ...super.CONST,
+      ELEM_FILE: 'lay-upload-file',
+      ELEM_LIST: 'lay-upload-list',
+      ELEM_DRAGOVER: 'lay-upload-dragover',
     };
+  }
+
+  // 文件上传状态
+  static uploadStatus = {
+    IDLE: 'idle', // 空闲
+    SELECTED: 'selected', // 已选择
+    UPLOADING: 'uploading', // 上传中
+    SUCCESS: 'success', // 上传成功
+    ERROR: 'error', // 上传失败
+    ABORTED: 'aborted', // 已中断
+  };
+
+  // 实例方法静态委托
+  static {
+    this.delegateInstanceMethods([
+      'upload',
+      'abort',
+      'preview',
+      'getSelectedFiles',
+      'appendUploadItem',
+      'deleteUploadItem',
+      'clearUploadList',
+    ]);
+  }
+
+  // 渲染
+  render() {
+    const options = this.options;
+    const $elem = options.$elem;
+
+    // 初始化 file 元素
+    const $fileElem = (this.$fileElem = $(
+      `<input class="${CONST.ELEM_FILE}" type="file">`,
+    ));
+
+    $fileElem.attr({
+      name: options.fieldName,
+      accept: options.accept,
+      multiple: options.multiple,
+    });
+
+    if (this.#isElemFile()) {
+      this.$fileElem = $elem;
+      options.fieldName = $elem[0].name;
+    }
+
+    // 初始化「上传列表」容器
+    this.$uploadListElem?.remove();
+    this.$uploadListElem = null;
+
+    if (options.showUploadList) {
+      const $uploadListElem = $(`<div class="${CONST.ELEM_LIST}"></div>`);
+
+      // 设置上传列表的样式风格
+      if (['text', 'picture', 'picture-card'].includes(options.listType)) {
+        $uploadListElem.addClass(`${CONST.ELEM_LIST}-${options.listType}`);
+      }
+
+      // 是否插入到上传列表目标容器
+      if (options.uploadListTarget) {
+        $(options.uploadListTarget).append($uploadListElem);
+      } else {
+        $elem.after($uploadListElem); // 默认插入到 elem 元素之后
+      }
+
+      this.$uploadListElem = $uploadListElem;
+    }
+
+    this.files = [];
+    this.#events();
+  }
+
+  // 执行上传
+  async upload() {
+    const options = this.options;
+    const selectedFiles = this.getSelectedFiles();
+
+    const successful = [];
+    const failed = [];
+    const aborted = [];
 
     // 发送请求
-    var request = function (sets) {
-      var formData = new FormData();
+    const request = ({ file, formData }) => {
+      const files = file ? [file] : [...selectedFiles];
+      const params = { files };
 
-      // 恢复文件状态
-      var resetFileState = function (file) {
-        if (sets.unified) {
-          Object.values(items || {}).forEach(function (file) {
-            delete file[UPLOADING];
+      // 上传接口提交成功的回调
+      const onSuccess = (res) => {
+        this.updateUploadItem({
+          files,
+          status: uploadStatus.SUCCESS,
+        });
+        successful.push(...files);
+        options.onSuccess?.(res, params);
+      };
+
+      // 上传接口提交失败的回调
+      const onError = (e, textStatus) => {
+        if (textStatus === 'abort') {
+          this.updateUploadItem({
+            files,
+            status: uploadStatus.ABORTED,
           });
-        } else {
-          delete file[UPLOADING];
+          aborted.push(...files);
+          return;
+        }
+
+        showError(`Upload ${uploadStatus.ERROR}, please try again.`);
+
+        this.updateUploadItem({
+          files,
+          status: uploadStatus.ERROR,
+        });
+
+        failed.push(...files);
+        options.onError?.(e, params);
+      };
+
+      // 接口请求完毕的处理
+      const onComplete = (jqXHR, textStatus) => {
+        this.#removeProgress({ files }); // 移除进度条
+
+        if (
+          successful.length + failed.length + aborted.length ===
+          selectedFiles.length
+        ) {
+          options.onComplete?.({
+            jqXHR,
+            textStatus,
+            ...params,
+            files: selectedFiles,
+            successful: successful,
+            failed: failed,
+            aborted: aborted,
+          });
         }
       };
 
       // 追加额外的参数
-      Object.entries(options.data || {}).forEach(function ([key, value]) {
-        value =
-          typeof value === 'function'
-            ? sets.unified
-              ? value()
-              : value(sets.index, sets.file)
-            : value;
+      Object.entries(options.data || {}).forEach(([key, value]) => {
+        value = typeof value === 'function' ? value({ files }) : value;
         formData.append(key, value);
       });
 
-      /*
-       * 添加 file 到表单域
-       */
-
-      // 是否统一上传
-      if (sets.unified) {
-        Object.values(items || {}).forEach(function (file) {
-          if (file[UPLOADING]) return;
-          file[UPLOADING] = true; // 上传中的标记
-          formData.append(options.field, file);
-        });
-      } else {
-        // 逐一上传
-        if (sets.file[UPLOADING]) return;
-        formData.append(options.field, sets.file);
-        sets.file[UPLOADING] = true; // 上传中的标记
-      }
+      // console.log(options.fieldName, formData.getAll(options.fieldName));
 
       // ajax 参数
-      var opts = {
+      const opts = {
         url: options.url,
-        type: 'post', // 统一采用 post 上传
+        type: 'post',
         data: formData,
-        dataType: options.dataType || 'json',
+        dataType: options.dataType,
         contentType: false,
         processData: false,
-        headers: options.headers || {},
-        success: function (res) {
-          // 成功回调
-          options.unified ? (successful += that.fileLength) : successful++;
-          done(sets.index, res);
-          allDone(sets.index);
-          resetFileState(sets.file);
-        },
-        error: function (e) {
-          // 异常回调
-          options.unified ? (failed += that.fileLength) : failed++;
-          that.msg(
-            text['error'] ||
-              [
-                'Upload failed, please try again.',
-                'status: ' +
-                  (e.status || '') +
-                  ' - ' +
-                  (e.statusText || 'error'),
-              ].join('<br>'),
-          );
-          error(sets.index, e.responseText, e);
-          allDone(sets.index);
-          resetFileState(sets.file);
-        },
-      };
-
-      // 进度条
-      if (typeof options.progress === 'function') {
-        opts.xhr = function () {
-          var xhr = $.ajaxSettings.xhr();
+        headers: options.headers,
+        success: onSuccess,
+        error: onError,
+        complete: onComplete,
+        xhr: () => {
+          const xhr = $.ajaxSettings.xhr();
           // 上传进度
-          xhr.upload.addEventListener('progress', function (obj) {
-            if (obj.lengthComputable) {
-              var percent = Math.floor((obj.loaded / obj.total) * 100); // 百分比
-              options.progress(
-                percent,
-                options.item ? options.item[0] : options.elem[0],
-                obj,
-                sets.index,
-              );
+          xhr.upload.addEventListener('progress', (event) => {
+            if (event.lengthComputable) {
+              const percent = Math.floor((event.loaded / event.total) * 100);
+              const params = { percent, event, files };
+
+              this.#updateProgress(params);
+              options.onProgress?.(params);
             }
           });
           return xhr;
-        };
-      }
-      $.ajax(opts);
+        },
+      };
+
+      return $.ajax(opts);
     };
 
-    // 多文件是否一起上传
-    if (options.unified) {
-      request({
-        unified: true,
-        index: 0,
-      });
-    } else {
-      Object.entries(items || {}).forEach(function ([index, file]) {
-        request({
-          index: index,
-          file: file,
+    // 提交上传请求
+    const submitUpload = () => {
+      // 添加 file 到表单域
+      const appendFileToFormData = ({ formData, file }) => {
+        // 若文件正在上传，则阻止重复上传
+        if (file.uploadStatus === uploadStatus.UPLOADING) {
+          return false;
+        }
+
+        formData.append(options.fieldName, file);
+
+        this.updateUploadItem({
+          files: [file],
+          status: uploadStatus.UPLOADING,
         });
-      });
-    }
-  };
 
-  // 强制返回的数据格式
-  var forceConvert = function (src) {
-    if (options.force === 'json') {
-      if (typeof src !== 'object') {
-        try {
-          return {
-            status: 'CONVERTED',
-            data: JSON.parse(src),
-          };
-        } catch {
-          that.msg(text['data-format-error']);
-          return {
-            status: 'FORMAT_ERROR',
-            data: {},
-          };
-        }
+        return true;
+      };
+
+      // 多文件是否合并上传
+      if (options.mergeRequest) {
+        const formData = new FormData();
+        let hasUploadingFile = false; // 是否存在正在上传的文件
+
+        // 将所有文件添加到一个 FormData 中
+        selectedFiles.forEach((file) => {
+          const result = appendFileToFormData({ formData, file });
+          if (result === false) {
+            hasUploadingFile = true;
+          }
+        });
+
+        if (hasUploadingFile) return;
+        const jqXHR = request({ formData });
+
+        // 将 jqXHR 对象关联到当前文件队列
+        selectedFiles.forEach((file) => {
+          file.jqXHR = jqXHR;
+        });
+      } else {
+        // 逐个上传
+        selectedFiles.forEach((file) => {
+          const formData = new FormData();
+          const result = appendFileToFormData({ formData, file });
+
+          if (result === false) return;
+          file.jqXHR = request({ file, formData });
+        });
       }
-    }
-    return { status: 'DO_NOTHING', data: {} };
-  };
-
-  // 统一回调
-  var done = function (index, res) {
-    that.elemFile.next('.' + ELEM_CHOOSE).remove();
-    elemFile.value = '';
-
-    var convert = forceConvert(res);
-
-    switch (convert.status) {
-      case 'CONVERTED':
-        res = convert.data;
-        break;
-      case 'FORMAT_ERROR':
-        return;
-    }
-
-    typeof options.done === 'function' &&
-      options.done(res, index || 0, function (files) {
-        that.upload(files);
-      });
-  };
-
-  // 统一网络异常回调
-  var error = function (index, res, xhr) {
-    if (options.auto) {
-      elemFile.value = '';
-    }
-
-    var convert = forceConvert(res);
-
-    switch (convert.status) {
-      case 'CONVERTED':
-        res = convert.data;
-        break;
-      case 'FORMAT_ERROR':
-        return;
-    }
-
-    typeof options.error === 'function' &&
-      options.error(
-        index || 0,
-        function (files) {
-          that.upload(files);
-        },
-        res,
-        xhr,
-      );
-  };
-
-  var check;
-  var exts = options.exts;
-  var value = (function () {
-    var arr = [];
-    Object.values(files || that.chooseFiles || {}).forEach(function (item) {
-      arr.push(item.name);
-    });
-    return arr;
-  })();
-
-  // 回调函数返回的参数
-  var args = {
-    // 预览
-    preview: function (callback) {
-      that.preview(callback);
-    },
-    // 上传
-    upload: function (index, file) {
-      var thisFile = {};
-      thisFile[index] = file;
-      that.upload(thisFile);
-    },
-    // 追加文件到队列
-    pushFile: function () {
-      that.files = that.files || {};
-      Object.entries(that.chooseFiles || {}).forEach(function ([index, item]) {
-        that.files[index] = item;
-      });
-      return that.files;
-    },
-    // 重置文件
-    resetFile: function (index, file, filename) {
-      var newFile = new File([file], filename);
-      that.files = that.files || {};
-      that.files[index] = newFile;
-    },
-    // 获取本次选取的文件
-    getChooseFiles: function () {
-      return that.chooseFiles;
-    },
-  };
-
-  // 提交上传
-  var send = function () {
-    var ready = function () {
-      ajaxSend();
     };
-    // 上传前的回调 - 如果回调函数明确返回 false 或 Promise.reject，则停止上传
-    if (typeof options.before === 'function') {
-      upload.util.promiseLikeResolve(options.before(args)).then(
-        function (result) {
-          if (result !== false) {
-            ready();
-          } else {
-            if (options.auto) {
-              elemFile.value = '';
-            }
-          }
-        },
-        function (error) {
-          if (options.auto) {
-            elemFile.value = '';
-          }
-          error !== undefined && log(error);
-        },
-      );
-    } else {
-      ready();
-    }
-  };
 
-  // 文件类型名称
-  var typeName =
-    {
-      file: i18n.$t('upload.fileType.file'),
-      images: i18n.$t('upload.fileType.image'),
-      video: i18n.$t('upload.fileType.video'),
-      audio: i18n.$t('upload.fileType.audio'),
-    }[options.accept] || i18n.$t('upload.fileType.file');
+    // 未选择文件
+    if (!selectedFiles.length) return;
 
-  // 校验文件格式
-  value =
-    value.length === 0
-      ? elemFile.value.match(/[^/\\]+\..+/g) || [] || ''
-      : value;
+    // 文件校验
+    const validationResult = this.#validate();
+    if (!validationResult) return;
 
-  // 若文件域值为空
-  if (value.length === 0) return;
-
-  // 根据文件类型校验
-  switch (options.accept) {
-    case 'file': // 一般文件
-      for (const item of value) {
-        if (exts && !RegExp('.\\.(' + exts + ')$', 'i').test(escape(item))) {
-          check = true;
-          break;
-        }
-      }
-      break;
-    case 'video': // 视频文件
-      for (const item of value) {
-        if (
-          !RegExp(
-            '.\\.(' + (exts || 'avi|mp4|wma|rmvb|rm|flash|3gp|flv') + ')$',
-            'i',
-          ).test(escape(item))
-        ) {
-          check = true;
-          break;
-        }
-      }
-      break;
-    case 'audio': // 音频文件
-      for (const item of value) {
-        if (
-          !RegExp('.\\.(' + (exts || 'mp3|wav|mid') + ')$', 'i').test(
-            escape(item),
-          )
-        ) {
-          check = true;
-          break;
-        }
-      }
-      break;
-    default: // 图片文件
-      for (const item of value) {
-        if (
-          !RegExp(
-            '.\\.(' + (exts || 'jpg|png|gif|bmp|jpeg|svg|webp') + ')$',
-            'i',
-          ).test(escape(item))
-        ) {
-          check = true;
-          break;
-        }
-      }
-      break;
-  }
-
-  // 校验失败提示
-  if (check) {
-    that.msg(
-      text['check-error'] ||
-        i18n.$t('upload.validateMessages.fileExtensionError', {
-          fileType: typeName,
-        }),
-    );
-    return (elemFile.value = '');
-  }
-
-  // 选择文件的回调
-  if (type === 'choose' || options.auto) {
-    options.choose && options.choose(args);
-    if (type === 'choose') {
+    // 上传前的钩子
+    // 若回调函数明确返回 false 或 Promise.reject，则阻止上传
+    try {
+      const result = await options.beforeUpload?.({ files: selectedFiles });
+      if (result === false) return;
+    } catch (error) {
+      log(`beforeUpload error: ${error}`);
       return;
     }
+
+    submitUpload();
   }
 
-  // 检验文件数量
-  that.fileLength = (function () {
-    return Object.keys(getFiles() || {}).length;
-  })();
+  /**
+   * 中止上传
+   * @returns
+   */
+  abort() {
+    const files = this.files;
 
-  if (options.number && that.fileLength > options.number) {
-    return that.msg(
-      typeof text['limit-number'] === 'function'
-        ? text['limit-number'](options, that.fileLength)
-        : i18n.$t('upload.validateMessages.filesOverLengthLimit', {
-            length: options.number,
-          }) +
-            '<br/>' +
-            i18n.$t('upload.validateMessages.currentFilesLength', {
-              length: that.fileLength,
-            }),
-    );
-  }
-
-  // 检验文件大小
-  if (options.size > 0) {
-    var limitSize;
-
-    Object.values(getFiles() || {}).forEach(function (file) {
-      if (file.size > 1024 * options.size) {
-        var size = options.size / 1024;
-        size = size >= 1 ? size.toFixed(2) + 'MB' : options.size + 'KB';
-        elemFile.value = '';
-        limitSize = size;
+    // 中止「UPLOADING 状态」的文件上传
+    files.forEach((file) => {
+      if (file.uploadStatus === uploadStatus.UPLOADING) {
+        file.jqXHR?.abort(); // 中止上传请求
+        this.updateUploadItem({
+          files: [file],
+          status: uploadStatus.ABORTED,
+        });
       }
     });
-    if (limitSize)
-      return that.msg(
-        typeof text['limit-size'] === 'function'
-          ? text['limit-size'](options, limitSize)
-          : i18n.$t('upload.validateMessages.fileOverSizeLimit', {
-              size: limitSize,
-            }),
-      );
   }
 
-  send();
-};
-
-//事件处理
-Class.prototype.events = function () {
-  var that = this;
-  var options = that.config;
-
-  // 设置当前选择的文件队列
-  var setChooseFile = function (files) {
-    that.chooseFiles = {};
-    Array.from(files || []).forEach(function (item, i) {
-      var time = new Date().getTime();
-      that.chooseFiles[time + '-' + i] = item;
+  // 文件预览
+  preview(files = this.files, callback) {
+    files.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        callback?.({ file, index, result: reader.result });
+      };
     });
-  };
+  }
 
-  // 设置选择的文本
-  var setChooseText = function (files) {
-    var elemFile = that.elemFile;
-    // var item = options.item ? options.item : options.elem;
-    var value =
-      files.length > 1
-        ? i18n.$t('upload.chooseText', { length: files.length })
-        : (files[0] || {}).name ||
-          elemFile[0].value.match(/[^/\\]+\..+/g) ||
-          [] ||
-          '';
-
-    if (elemFile.next().hasClass(ELEM_CHOOSE)) {
-      elemFile.next().remove();
-    }
-    that.upload(null, 'choose');
-    if (that.isFile() || options.choose) return;
-    elemFile.after(
-      '<span class="lay-inline ' + ELEM_CHOOSE + '">' + value + '</span>',
+  /**
+   * 获取 SELECTED 状态的文件列表
+   * @returns {Array<File>}
+   */
+  getSelectedFiles() {
+    return this.files.filter(
+      (file) => file.uploadStatus === uploadStatus.SELECTED,
     );
-  };
+  }
 
   /**
-   * 判断文件是否加入排队
-   * @param {File} file
-   * @return {boolean}
+   * 添加上传列表项
+   * @param {File} file - 文件对象
    */
-  var checkFile = function (file) {
-    return !Object.values(that.files || {}).some(function (item) {
-      return item.name === file.name;
+  appendUploadItem(file) {
+    const options = this.options;
+    const $uploadListElem = this.$uploadListElem;
+    const $uploadListItem = $(`
+<div class="${CONST.ELEM_LIST}-item ${CONST.ELEM_LIST}-selected">
+  <div class="${CONST.ELEM_LIST}-item-status"></div>
+  <div class="${CONST.ELEM_LIST}-item-content">
+    <div class="${CONST.ELEM_LIST}-item-name lay-ellipsis"></div>
+    <div class="lay-progress lay-size-xs"></div>
+  </div>
+</div>
+        `);
+    const $actions = $(`<div class="${CONST.ELEM_LIST}-item-actions"> </div>`);
+    const $deleteBtn = $('<i class="lay-icon lay-icon-clear"></i>');
+
+    if (!$uploadListElem) return;
+
+    // 插入图片
+    if (['picture', 'picture-card'].includes(options.listType)) {
+      const $preview = $(`<div class="${CONST.ELEM_LIST}-item-preview"></div>`);
+
+      // 判断文件是否为图片类型
+      if (file.type.startsWith('image/')) {
+        // 显示图片
+        const $img = $(`<img src="${URL.createObjectURL(file)}">`);
+        $img.on('click', () => {
+          openWindow({
+            url: $img.attr('src'),
+          });
+        });
+        $preview.append($img);
+
+        // 插入预览图标
+        if (options.listType === 'picture-card') {
+          const $viewIcon = $('<i class="lay-icon lay-icon-eye"></i>');
+          $viewIcon.on('click', () => {
+            openWindow({
+              url: $img.attr('src'),
+            });
+          });
+          $actions.prepend($viewIcon);
+        }
+      } else {
+        $preview.html(`<i class="lay-icon lay-icon-file"></i>`);
+      }
+
+      $uploadListItem.prepend($preview);
+    }
+
+    // 插入文件名
+    $uploadListItem.find(`.${CONST.ELEM_LIST}-item-name`).text(file.name);
+
+    // 删除按钮事件
+    $deleteBtn.on('click', () => {
+      this.deleteUploadItem(file); // 删除上传列表项
+      // 中断上传请求
+      if (file.uploadStatus === uploadStatus.UPLOADING) {
+        file.jqXHR?.abort();
+      }
     });
-  };
+
+    // 插入操作按钮
+    $actions.append($deleteBtn);
+    $uploadListItem.attr({ id: file.id }).append($actions);
+
+    // 插入上传列表项
+    $uploadListElem.append($uploadListItem);
+
+    // 初始化进度条
+    progress.render({
+      elem: $uploadListItem.find('.lay-progress'),
+    });
+  }
 
   /**
-   * 扩展文件信息
-   * @template {File | FileList} T
-   * @param {T} obj
-   * @return {T}
+   * 更新上传列表项的状态
+   * @param {Object} param0
+   * @param {Array<File>} param0.files - 文件对象数组
+   * @param {string} param0.status - 上传状态
    */
-  var extendInfo = function (obj) {
-    var extInfo = function (file) {
-      //文件扩展名
-      file.ext = file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase();
-      // 文件大小
-      file.sizes = upload.util.parseSize(file.size);
-      // 可以继续扩展
+  updateUploadItem({ files, status }) {
+    const $uploadListElem = this.$uploadListElem;
+
+    files.forEach((file) => {
+      file.uploadStatus = status; // 更新文件上传状态
+
+      // 更新上传列表元素的状态
+      if (!$uploadListElem) return;
+      const $uploadListItem = $uploadListElem.find(`#${file.id}`);
+      const $uploadListItemStatus = $uploadListItem.find(
+        `.${CONST.ELEM_LIST}-item-status`,
+      );
+
+      // 设置对应的状态样式
+      $uploadListItem.toggleClass(
+        `${CONST.ELEM_LIST}-selected`,
+        status === uploadStatus.SELECTED,
+      );
+      $uploadListItem.toggleClass(
+        `${CONST.ELEM_LIST}-uploading`,
+        status === uploadStatus.UPLOADING,
+      );
+      $uploadListItem.toggleClass(
+        `${CONST.ELEM_LIST}-success`,
+        status === uploadStatus.SUCCESS,
+      );
+      $uploadListItem.toggleClass(
+        `${CONST.ELEM_LIST}-error`,
+        status === uploadStatus.ERROR,
+      );
+      $uploadListItem.toggleClass(
+        `${CONST.ELEM_LIST}-aborted`,
+        status === uploadStatus.ABORTED,
+      );
+
+      // 更新状态图标
+      const $icons = {
+        [uploadStatus.UPLOADING]:
+          '<i class="lay-icon lay-icon-loading lay-anim lay-anim-rotate lay-anim-loop"></i>',
+        [uploadStatus.SUCCESS]:
+          '<i class="lay-icon lay-icon-success" title="upload success"></i>',
+        [uploadStatus.ERROR]:
+          '<i class="lay-icon lay-icon-tips" title="upload error"></i>',
+        [uploadStatus.ABORTED]:
+          '<i class="lay-icon lay-icon-disabled" title="upload aborted"></i>',
+      };
+      $uploadListItemStatus.html($icons[status] || '');
+    });
+  }
+
+  /**
+   * 删除上传列表项
+   * @param {File} file - 文件对象
+   */
+  deleteUploadItem(file) {
+    // 从文件队列中移除
+    const index = this.files.findIndex((item) => item.id === file.id);
+    if (index !== -1) {
+      this.files.splice(index, 1);
+    }
+
+    // 从上传列表元素中移除
+    const $uploadListElem = this.$uploadListElem;
+    if (!$uploadListElem) return;
+
+    const $uploadListItem = $uploadListElem.find(`#${file.id}`);
+    const $progress = $uploadListItem.find('.lay-progress');
+    const progressId = $progress.attr('lay-progress-id');
+
+    $uploadListItem.remove(); // 移除元素
+    progress.removeInstance(progressId); // 删除进度条实例
+  }
+
+  /**
+   * 清空上传列表
+   */
+  clearUploadList() {
+    [...this.files].forEach(this.deleteUploadItem.bind(this));
+  }
+
+  /**
+   * 文件校验
+   * @param {Object} opts
+   * @param {Array<File>} [opts.selectedFiles] - 待校验的文件列表。默认取当前文件队列中 SELECTED 状态的文件列表
+   * @param {number} [opts.fileCount] - 待校验的文件数量。默认取当前文件队列长度
+   * @return {boolean} - 校验是否通过
+   */
+  #validate(opts = {}) {
+    const options = this.options;
+    const fileElem = this.$fileElem[0];
+    const selectedFiles = opts.selectedFiles || this.getSelectedFiles();
+    const filesLength = this.files.length;
+    const fileCount = opts.fileCount || filesLength;
+
+    // 检验文件数量
+    if (options.maxCount) {
+      if (options.maxCount === 1) {
+        if (selectedFiles.length > 1) {
+          showError(
+            i18n.$t('upload.validateMessages.fileCountLimit', { count: 1 }),
+          );
+          return false;
+        }
+      } else if (options.maxCount < fileCount) {
+        showError(
+          `${i18n.$t('upload.validateMessages.fileCountLimit', {
+            count: options.maxCount,
+          })}${
+            filesLength
+              ? `<br>${i18n.$t('upload.validateMessages.existingFileCount', {
+                  count: filesLength,
+                  remaining: options.maxCount - filesLength,
+                })}`
+              : ''
+          }`,
+        );
+        return false;
+      }
+    }
+
+    // 检验文件大小
+    if (options.maxSize > 0) {
+      let limitSizeText;
+
+      for (const file of Object.values(selectedFiles || {})) {
+        if (file.size > 1024 * options.maxSize) {
+          let sizeMb = options.maxSize / 1024;
+          limitSizeText =
+            sizeMb >= 1 ? `${sizeMb.toFixed(2)}MB` : `${options.maxSize}KB`;
+          fileElem.value = '';
+          break;
+        }
+      }
+
+      if (limitSizeText) {
+        showError(
+          i18n.$t('upload.validateMessages.fileSizeLimit', {
+            size: limitSizeText,
+          }),
+        );
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  // 目标元素是否为 file 元素
+  #isElemFile() {
+    const elem = this.options.$elem[0];
+    if (!elem) return;
+    return elem.tagName.toLocaleLowerCase() === 'input' && elem.type === 'file';
+  }
+
+  /**
+   * 更新进度条
+   * @param {Object} options - 配置项
+   * @param {number} options.percent - 上传进度百分比
+   * @param {Array<File>} options.files - 文件对象数组
+   */
+  #updateProgress({ percent, files }) {
+    const $uploadListElem = this.$uploadListElem;
+    if (!$uploadListElem) return;
+    if (!$uploadListElem.find('.lay-progress').length) return;
+
+    files.forEach((file) => {
+      const $uploadListItem = $uploadListElem.find(`#${file.id}`);
+      if (!$uploadListItem.length) return; // maxCount 为 1 的情况，元素已被替换
+
+      const $progress = $uploadListItem.find('.lay-progress');
+      const progressId = $progress.attr('lay-progress-id');
+      progress.setValue(progressId, percent);
+    });
+  }
+
+  /**
+   * 删除进度条
+   * @param {Object} params
+   * @param {Array<File>} params.files - 文件对象数组
+   */
+  #removeProgress({ files }) {
+    const $uploadListElem = this.$uploadListElem;
+    if (!$uploadListElem) return;
+    if (!$uploadListElem.find('.lay-progress').length) return;
+
+    // 删除指定的进度条
+    const removeProgressById = (id) => {
+      const $uploadListItem = $uploadListElem.find(`#${id}`);
+      const $progress = $uploadListItem.find('.lay-progress');
+      const progressId = $progress.attr('lay-progress-id');
+
+      $progress.remove(); // 移除元素
+      progress.removeInstance(progressId); // 移除实例
     };
 
-    //FileList对象
+    // 删除「非 UPLOADING 状态」的进度条
+    files.forEach((item) => {
+      if (item.uploadStatus !== uploadStatus.UPLOADING) {
+        removeProgressById(item.id);
+      }
+    });
+  }
+
+  /**
+   * 处理文件选择逻辑
+   * @param {FileList|File[]} files - 选择的文件列表
+   */
+  #handleFileSelection(files) {
+    const options = this.options;
+
+    if (!files.length) return;
+
+    // 文件选择时的回调
+    options.onSelect?.({ files });
+
+    // 选择后清空 file 元素的值
+    this.$fileElem[0].value = '';
+
+    // 校验
+    const validationResult = this.#validate({
+      fileCount: files.length + this.files.length,
+      selectedFiles: files,
+    });
+    if (!validationResult) return;
+
+    // 若限制文件数为 1，则用当前选择的文件替换队列中的文件
+    if (options.maxCount === 1) {
+      this.clearUploadList();
+    }
+
+    // 添加文件到队列
+    files.forEach((file) => {
+      file.uploadStatus = uploadStatus.SELECTED;
+      this.files.push(file);
+    });
+
+    // 插入上传列表项元素
+    if (options.showUploadList) {
+      for (const file of files) {
+        this.appendUploadItem(file);
+      }
+    }
+
+    // 是否自动上传
+    options.autoUpload && this.upload();
+  }
+
+  // 事件处理
+  #events() {
+    const options = this.options;
+    const $elem = options.$elem;
+
+    // 事件命名空间
+    const eventNamespace = CONST.EVENT_NAMESPACE;
+
+    // 避免重复绑定事件
+    $elem.off(eventNamespace);
+    this.$fileElem.off(eventNamespace);
+
+    // 文件选择
+    this.$fileElem.on(`change${eventNamespace}`, (event) => {
+      const files = enhanceFiles(event.currentTarget.files);
+      this.#handleFileSelection(files);
+    });
+
+    // 目标元素 click 事件
+    $elem.on(`click${eventNamespace}`, () => {
+      if (this.#isElemFile()) return;
+      this.$fileElem[0]?.click();
+    });
+
+    // 拖拽上传
+    if (options.enableDrag) {
+      $elem
+        .on(`dragover${eventNamespace}`, (e) => {
+          const $this = $(e.currentTarget);
+          e.preventDefault();
+          $this.addClass(CONST.ELEM_DRAGOVER);
+        })
+        .on(`dragleave${eventNamespace}`, (e) => {
+          const $this = $(e.currentTarget);
+          $this.removeClass(CONST.ELEM_DRAGOVER);
+        })
+        .on(`drop${eventNamespace}`, (e) => {
+          e.preventDefault();
+          const $this = $(e.currentTarget);
+          const files = enhanceFiles(e.originalEvent.dataTransfer.files);
+
+          $this.removeClass(CONST.ELEM_DRAGOVER);
+          this.#handleFileSelection(files);
+        });
+    }
+  }
+}
+
+const { CONST, uploadStatus } = Upload;
+
+// 弹出异常提示
+const showError = (content) => {
+  return layer.msg(content, {
+    anim: 6,
+    offset: '16px',
+  });
+};
+
+/**
+ * 增强文件列表信息
+ * @param {FileList} files
+ * @return {Array<File>|FileList}
+ */
+const enhanceFiles = (files = []) => {
+  const result = [];
+  // 扩展文件信息
+  const extendFileInfo = (obj) => {
+    // 生成文件 id
+    const generateId = (file) => {
+      return lay.btoa([file.name, Date.now(), Math.random()].join('-'), 'url');
+    };
+    /**
+     * 文件大小处理
+     * @param {number | string} size - 文件大小
+     * @param {number} [precision] - 数值精度
+     * @return {string}
+     */
+    const parseSize = (size, precision) => {
+      precision = precision || 2;
+      if (null == size || !size) {
+        return '0';
+      }
+      const unitArr = ['Bytes', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
+      let index;
+      const formatSize = typeof size === 'string' ? parseFloat(size) : size;
+      index = Math.floor(Math.log(formatSize) / Math.log(1024));
+      size = formatSize / Math.pow(1024, index);
+      size = size % 1 === 0 ? size : parseFloat(size.toFixed(precision)); // 保留的小数位数
+      return `${size}${unitArr[index]}`;
+    };
+    const extInfo = (file) => {
+      Object.assign(file, {
+        id: generateId(file), // 文件 id
+        sizeText: parseSize(file.size), // 文件大小
+        // 文件扩展名
+        extname: file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase(),
+        // 上传状态
+        uploadStatus: uploadStatus.IDLE,
+      });
+    };
+
+    // FileList 对象
     if (obj instanceof FileList) {
-      Array.from(obj).forEach(function (item) {
+      Array.from(obj).forEach((item) => {
         extInfo(item);
       });
     } else {
@@ -686,162 +772,11 @@ Class.prototype.events = function () {
     return obj;
   };
 
-  /**
-   * 检查获取文件
-   * @param {FileList} files
-   * @return {Array<File>|FileList}
-   */
-  var getFiles = function (files) {
-    files = files || [];
-    if (!files.length) return [];
-    if (!that.files) return extendInfo(files);
-    var result = [];
-    Array.from(files).forEach(function (item) {
-      if (checkFile(item)) {
-        result.push(extendInfo(item));
-      }
-    });
-    return result;
-  };
-
-  // 点击上传容器
-  options.elem.off('upload.start').on('upload.start', function () {
-    var othis = $(this);
-
-    that.config.item = othis;
-    that.elemFile[0].click();
+  Array.from(files).forEach((item) => {
+    result.push(extendFileInfo(item));
   });
 
-  // 拖拽上传
-  options.elem
-    .off('upload.over')
-    .on('upload.over', function () {
-      var othis = $(this);
-      othis.attr('lay-over', '');
-    })
-    .off('upload.leave')
-    .on('upload.leave', function () {
-      var othis = $(this);
-      othis.removeAttr('lay-over');
-    })
-    .off('upload.drop')
-    .on('upload.drop', function (e, param) {
-      var othis = $(this);
-      var files = getFiles(param.originalEvent.dataTransfer.files);
-
-      othis.removeAttr('lay-over');
-      setChooseFile(files);
-
-      options.auto ? that.upload() : setChooseText(files); // 是否自动触发上传
-    });
-
-  // 文件选择
-  that.elemFile.on('change', function () {
-    var files = getFiles(this.files);
-
-    if (files.length === 0) return;
-
-    setChooseFile(files);
-
-    options.auto ? that.upload() : setChooseText(files); // 是否自动触发上传
-  });
-
-  // 手动触发上传
-  options.bindAction.off('upload.action').on('upload.action', function () {
-    that.upload();
-  });
-
-  // 防止事件重复绑定
-  if (options.elem.data(MOD_INDEX)) return;
-
-  // 目标元素 click 事件
-  options.elem.on('click', function () {
-    if (that.isFile()) return;
-    $(this).trigger('upload.start');
-  });
-
-  // 目标元素 drop 事件
-  if (options.drag) {
-    options.elem
-      .on('dragover', function (e) {
-        e.preventDefault();
-        $(this).trigger('upload.over');
-      })
-      .on('dragleave', function () {
-        $(this).trigger('upload.leave');
-      })
-      .on('drop', function (e) {
-        e.preventDefault();
-        $(this).trigger('upload.drop', e);
-      });
-  }
-
-  // 手动上传时触发上传的元素 click 事件
-  options.bindAction.on('click', function () {
-    $(this).trigger('upload.action');
-  });
-
-  // 绑定元素索引
-  options.elem.data(MOD_INDEX, options.id);
+  return result;
 };
 
-/**
- * 上传组件辅助方法
- */
-upload.util = {
-  /**
-   * 文件大小处理
-   * @param {number | string} size -文件大小
-   * @param {number} [precision] - 数值精度
-   * @return {string}
-   */
-  parseSize: function (size, precision) {
-    precision = precision || 2;
-    if (null == size || !size) {
-      return '0';
-    }
-    var unitArr = ['Bytes', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
-    var index;
-    var formatSize = typeof size === 'string' ? parseFloat(size) : size;
-    index = Math.floor(Math.log(formatSize) / Math.log(1024));
-    size = formatSize / Math.pow(1024, index);
-    size = size % 1 === 0 ? size : parseFloat(size.toFixed(precision)); //保留的小数位数
-    return size + unitArr[index];
-  },
-  /**
-   * 将给定的值转换为一个 JQueryDeferred 对象
-   */
-  promiseLikeResolve: function (value) {
-    var deferred = $.Deferred();
-
-    if (value && typeof value.then === 'function') {
-      value.then(deferred.resolve, deferred.reject);
-    } else {
-      deferred.resolve(value);
-    }
-    return deferred.promise();
-  },
-};
-
-// 记录所有实例
-thisModule.that = {}; // 记录所有实例对象
-
-// 获取当前实例对象
-thisModule.getThis = function (id) {
-  var that = thisModule.that[id];
-  if (!that)
-    log(
-      id
-        ? MOD_NAME + " instance with ID '" + id + "' not found"
-        : 'ID argument required',
-    );
-  return that;
-};
-
-// 核心入口
-upload.render = function (options) {
-  var inst = new Class(options);
-  return thisModule.call(inst);
-};
-
-export { upload };
+export { Upload as upload };

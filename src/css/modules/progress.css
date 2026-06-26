@@ -1,4 +1,5 @@
-/* 进度条 */
+/* progress.css */
+
 .lay-progress {
   --lay-progress-size-md: 8px;
   --lay-progress-size-xl: 18px;
@@ -35,8 +36,13 @@
 }
 
 /* 不同尺寸 */
+.lay-progress.lay-size-xs {
+  --lay-progress-border-radius: 0;
+
+  height: 2px;
+}
 .lay-progress.lay-size-sm {
-  height: 6px;
+  height: 5px;
 }
 .lay-progress.lay-size-lg {
   height: 11px;
