@@ -190,10 +190,9 @@ export class Laypage extends Component {
         // 显示「左侧省略号」的条件
         const showLeftEllipsis = options.first !== false && startPage > 2;
         // 显示「右侧省略号」的条件
-        const showRightEllipsis =
-          options.first !== false && endPage < totalPages - 1;
+        const showRightEllipsis = options.last !== false && endPage < totalPages - 1;
         // 显示「末页」的条件
-        const showLastPage = options.first !== false && endPage < totalPages;
+        const showLastPage = options.last !== false && endPage < totalPages;
 
         // 生成首页
         if (showFirstPage) {
