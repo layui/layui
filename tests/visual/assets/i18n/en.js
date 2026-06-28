@@ -104,10 +104,6 @@ export default {
     },
   },
   laypage: {
-    prev: 'Prev',
-    next: 'Next',
-    first: 'First',
-    last: 'Last',
     total: 'Total {total} items',
     pagesize: 'items/page',
     goto: 'Go to',

@@ -480,47 +480,7 @@
 .lay-table-page > div {
   height: 26px;
 }
-.lay-table-page .lay-laypage {
-  margin: 0;
-}
-.lay-table-page .lay-laypage a,
-.lay-table-page .lay-laypage span {
-  height: 26px;
-  line-height: 26px;
-  margin-bottom: 10px;
-  border: none;
-  background: none;
-}
-.lay-table-page .lay-laypage a,
-.lay-table-page .lay-laypage span.lay-laypage-curr {
-  padding: 0 12px;
-}
-.lay-table-page .lay-laypage span {
-  margin-left: 0;
-  padding: 0;
-}
-.lay-table-page .lay-laypage .lay-laypage-prev {
-  margin-left: -11px !important;
-}
-.lay-table-page .lay-laypage .lay-laypage-curr .lay-laypage-em {
-  left: 0;
-  top: 0;
-  padding: 0;
-}
-.lay-table-page .lay-laypage input,
-.lay-table-page .lay-laypage button {
-  height: 26px;
-  line-height: 26px;
-}
-.lay-table-page .lay-laypage input {
-  width: 40px;
-}
-.lay-table-page .lay-laypage button {
-  padding: 0 10px;
-}
-.lay-table-page select {
-  height: 18px;
-}
+
 .lay-table-pagebar {
   float: right;
   line-height: 23px;

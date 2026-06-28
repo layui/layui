@@ -400,9 +400,9 @@ Class.prototype.render = function (type) {
   if (options.page !== null && typeof options.page === 'object') {
     options.limit = options.page.limit || options.limit;
     options.limits = options.page.limits || options.limits;
-    that.page = options.page.curr = options.page.curr || 1;
+    that.page = options.page.current = options.page.current || 1;
     delete options.page.elem;
-    delete options.page.jump;
+    delete options.page.onChange;
   }
 
   // 加载 i18n 自定义文本
@@ -1306,7 +1306,7 @@ Class.prototype.errorView = function (html) {
 Class.prototype.page = 1;
 
 // 获得数据
-Class.prototype.pullData = function (curr, opts) {
+Class.prototype.pullData = function (current, opts) {
   var that = this;
   var options = that.config;
   // 同步表头父列的相关值
@@ -1328,7 +1328,7 @@ Class.prototype.pullData = function (curr, opts) {
     that.setColsWidth();
     that.loading(false);
     typeof options.done === 'function' &&
-      options.done(res, curr, res[response.countName], origin);
+      options.done(res, current, res[response.countName], origin);
     typeof opts.done === 'function' && opts.done();
   };
 
@@ -1355,7 +1355,7 @@ Class.prototype.pullData = function (curr, opts) {
 
     (that.renderData({
       res: res,
-      curr: curr,
+      current: current,
       count: res[response.countName],
       type: opts.type,
       sort: true,
@@ -1366,7 +1366,7 @@ Class.prototype.pullData = function (curr, opts) {
     var params = {};
     // 当 page 开启，默认自动传递 page、limit 参数
     if (options.page) {
-      params[request.pageName] = curr;
+      params[request.pageName] = current;
       params[request.limitName] = options.limit;
     }
 
@@ -1410,13 +1410,13 @@ Class.prototype.pullData = function (curr, opts) {
           // 当前页不能超过总页数
           var count = res[response.countName];
           var pages = Math.ceil(count / options.limit) || 1;
-          if (curr > pages) {
-            curr = pages;
+          if (current > pages) {
+            current = pages;
           }
           that.totalRow = res[response.totalRowName];
           (that.renderData({
             res: res,
-            curr: curr,
+            current: current,
             count: count,
             type: opts.type,
           }),
@@ -1450,7 +1450,7 @@ Class.prototype.pullData = function (curr, opts) {
   } else if (lay.type(options.data) === 'array') {
     //已知数据
     res = {};
-    var startLimit = curr * options.limit - options.limit;
+    var startLimit = current * options.limit - options.limit;
     var newData = options.data.concat();
 
     res[response.dataName] = options.page
@@ -1466,7 +1466,7 @@ Class.prototype.pullData = function (curr, opts) {
 
     (that.renderData({
       res: res,
-      curr: curr,
+      current: current,
       count: res[response.countName],
       type: opts.type,
     }),
@@ -1494,19 +1494,19 @@ Class.prototype.col = function (key) {
   }
 };
 
-Class.prototype.getTrHtml = function (data, sort, curr, trsObj) {
+Class.prototype.getTrHtml = function (data, sort, current, trsObj) {
   var that = this;
   var options = that.config;
   var trs = (trsObj && trsObj.trs) || [];
   var trs_fixed = (trsObj && trsObj.trs_fixed) || [];
   var trs_fixed_r = (trsObj && trsObj.trs_fixed_r) || [];
-  curr = curr || 1;
+  current = current || 1;
 
   data.forEach(function (item1, i1) {
     var tds = [];
     var tds_fixed = [];
     var tds_fixed_r = [];
-    var numbers = i1 + options.limit * (curr - 1) + 1; // 序号
+    var numbers = i1 + options.limit * (current - 1) + 1; // 序号
 
     // 数组值是否为 object，如果不是，则自动转为 object
     if (typeof item1 !== 'object') {
@@ -1687,7 +1687,7 @@ Class.prototype.renderData = function (opts) {
   var options = that.config;
 
   var res = opts.res;
-  var curr = opts.curr;
+  var current = opts.current;
   var count = (that.count = opts.count);
   var sort = opts.sort;
 
@@ -1709,7 +1709,7 @@ Class.prototype.renderData = function (opts) {
       });
     }
 
-    that.getTrHtml(data, sort, curr, {
+    that.getTrHtml(data, sort, current, {
       trs: trs,
       trs_fixed: trs_fixed,
       trs_fixed_r: trs_fixed_r,
@@ -1763,7 +1763,7 @@ Class.prototype.renderData = function (opts) {
   that.layPage
     .find(ELEM_PAGE_VIEW)
     [
-      !options.page || count == 0 || (data.length === 0 && curr == 1)
+      !options.page || count == 0 || (data.length === 0 && current == 1)
         ? 'addClass'
         : 'removeClass'
     ](HIDE_V);
@@ -1785,32 +1785,33 @@ Class.prototype.renderData = function (opts) {
   that.renderTotal(data, totalRowData); //数据合计
   that.layTotal && that.layTotal.removeClass(HIDE);
 
-  //同步分页状态
+  // 同步分页状态
   if (options.page) {
+    const pageId = `lay-table-page${options.index}`;
+    // console.log(options.page);
+
+    // 渲染分页组件
     options.page = $.extend(
       {
-        elem: 'lay-table-page' + options.index,
+        elem: `#${pageId}`,
         count: count,
         limit: options.limit,
         limits: options.limits || [10, 20, 30, 40, 50, 60, 70, 80, 90],
-        groups: 3,
-        layout: ['prev', 'page', 'next', 'skip', 'count', 'limit'],
-        prev: '<i class="lay-icon">&#xe603;</i>',
-        next: '<i class="lay-icon">&#xe602;</i>',
-        jump: function (obj, first) {
-          if (!first) {
-            //分页本身并非需要做以下更新，下面参数的同步，主要是因为其它处理统一用到了它们
-            //而并非用的是 options.page 中的参数（以确保分页未开启的情况仍能正常使用）
-            that.page = obj.curr; //更新页码
-            options.limit = obj.limit; //更新每页条数
+        pageCount: 3,
+        size: 'sm',
+        layout: ['prev', 'page', 'next', 'limits', 'jump', 'count'],
+        onChange: function (opts) {
+          // Tip: 此处用 `that.config`（而不是 `options`）对选项进行赋值，是因为 table 的 `reload` 方法中对 `this.config` 进行了重置。
+          // 后续 table 基于 Component 基类重构，则不存在该问题
+          that.page = that.config.page.current = opts.current; // 更新页码
+          that.config.limit = that.config.page.limit = opts.limit; // 更新每页条数
 
-            that.pullData(obj.curr);
-          }
+          that.pullData(opts.current);
         },
       },
       options.page,
     );
-    options.page.count = count; //更新总条数
+    that.config.page.count = count; // 更新总条数
     laypage.render(options.page);
   }
 };
@@ -2234,7 +2235,7 @@ Class.prototype.sort = function (opts) {
   // 重载数据
   that.renderData({
     res: res,
-    curr: that.page,
+    current: that.page,
     count: that.count,
     sort: true,
     type: opts.reloadType,

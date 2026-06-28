@@ -353,7 +353,7 @@
             options.where.AAAAA = 123;
             // console.log(options)
           },
-          done: function (res, curr, count) {
+          done: function (res, current, count) {
             var id = this.id;
 
             // 设置选中行状态
@@ -475,7 +475,7 @@
                           test: '新的 test1',
                         },
                         //,defaultToolbar: ['print'] // 重载头部工具栏右侧图标
-                        page: { curr: 5, limit: 20 },
+                        page: { current: 5, limit: 20 },
                         //,cols: ins1.config.cols
                       },
                       true,
@@ -492,7 +492,7 @@
                       height: 2000, // 测试无效参数
                       // url: '404',
                       // elem: null,
-                      // page: {curr: 5, limit: 20},
+                      // page: {current: 5, limit: 20},
                       scrollPos: 'fixed', // 保持滚动条位置不变
                     });
                     break;
@@ -568,7 +568,7 @@
 
           /*
     request: { // 自定义请求参数名称
-      pageName: 'curr', // 页码的参数名称，默认：page
+      pageName: 'current', // 页码的参数名称，默认：page
       limitName: 'nums' // 每页数据量的参数名，默认：limit
     },
     parseData: function(res){ // 任意数据格式的解析
@@ -596,7 +596,7 @@
           // 服务端排序
           table.reloadData('test', {
             // initSort: obj,
-            // page: {curr: 1}, // 重新从第一页开始
+            // page: { current: 1 }, // 重新从第一页开始
             where: {
               // 向服务端传入排序参数
               key: obj.field, // 排序字段

@@ -6,137 +6,229 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
-    <title>分页 - layui</title>
-
+    <title>laypage 分页 - layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
-
     <style>
-      body {
-        padding: 10px;
+      div + h2 {
+        margin-top: 32px;
+      }
+      .demo-contriner {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
       }
     </style>
   </head>
   <body>
-    总页数低于页码总数：
-    <div id="demo0"></div>
-    总页数大于页码总数：
-    <div id="demo1"></div>
-    自定义主题：
-    <div id="demo2"></div>
-    自定义首页、尾页、上一页、下一页文本：
-    <div id="demo3"></div>
-    不显示首页尾页：
-    <div id="demo4"></div>
-    开启HASH：
-    <div id="demo5"></div>
-    只显示上一页、下一页：
-    <div id="demo6"></div>
-    显示完整功能：
-    <div id="demo7"></div>
-    自定义排版：
-    <div id="demo8"></div>
+    <div class="lay-padding-5">
+      <h2>常规示例</h2>
+      <hr />
+      <div id="demo-normal"></div>
 
-    <fieldset class="lay-elem-field lay-field-title" style="margin-top: 50px">
-      <legend>将一段已知数组分页展示</legend>
-    </fieldset>
+      <h2>显示完整功能</h2>
+      <hr />
+      <div id="demo-show-all"></div>
 
-    <div id="demo9"></div>
+      <h2>组件尺寸</h2>
+      <hr />
+      <div class="demo-contriner">
+        <div id="demo-size-sm"></div>
+        <div id="demo-size-md"></div>
+        <div id="demo-size-lg"></div>
+      </div>
 
-    <ul id="biuuu_city_list"></ul>
+      <h2>设置主题</h2>
+      <hr />
+      <div class="demo-contriner">
+        <h3>• 内置主题</h3>
+        <div id="demo-theme-border"></div>
+        <div id="demo-theme-background"></div>
+        <h3>• 自定义主题</h3>
+        <div id="demo-theme-custom-1"></div>
+        <div id="demo-theme-custom-2"></div>
+      </div>
+
+      <h2>自定义组件布局</h2>
+      <hr />
+      <div class="demo-contriner">
+        <h3>• 简约布局</h3>
+        <div id="demo-layout-simple"></div>
+        <h3>• 自定义组件模板</h3>
+        <div id="demo-layout-custom"></div>
+      </div>
+
+      <h2>记录分页锚点</h2>
+      <hr />
+      <div id="demo-anchor"></div>
+
+      <h2>将一段数组分页展示</h2>
+      <hr />
+      <div class="lay-text" style="padding: 0 16px 16px">
+        <ul id="demo-data-page-show"></ul>
+      </div>
+      <div id="demo9"></div>
+    </div>
 
     <script src="./assets/dist/layui.js"></script>
     <script>
       layui.use(() => {
-        var laypage = layui.laypage,
-          layer = layui.layer;
+        const { laypage, layer } = layui;
 
-        //总页数低于页码总数
-        laypage.render({
-          elem: 'demo0',
-          count: 50, //数据总数
-        });
-
-        //总页数大于页码总数
-        laypage.render({
-          elem: 'demo1',
-          count: 70, //数据总数
-          jump: (obj) => {
-            console.log(obj);
+        // 常规示例
+        const laypageInst = laypage.render({
+          elem: '#demo-normal',
+          count: 100,
+          // pageCount: 3,
+          // align: 'center',
+          // size: 'sm',
+          // hideOnSinglePage: true,
+          onChange(options) {
+            console.log(`${this.id} → onChange  → `, options);
+          },
+          afterRender(options) {
+            console.log(`${this.id} → afterRender → `, options);
           },
         });
 
-        //自定义样式
-        laypage.render({
-          elem: 'demo2',
-          count: 100,
-          theme: '#1E9FFF',
-        });
+        console.dir(laypage);
+        console.log('laypage.render() → ', laypageInst);
 
-        //自定义首页、尾页、上一页、下一页文本
+        // 显示完整功能
         laypage.render({
-          elem: 'demo3',
-          count: 100,
-          first: '首页',
-          last: '尾页',
-          prev: '<em>←</em>',
-          next: '<em>→</em>',
-        });
-
-        //不显示首页尾页
-        laypage.render({
-          elem: 'demo4',
-          count: 100,
-          first: false,
-          last: false,
-        });
-
-        //开启HASH
-        laypage.render({
-          elem: 'demo5',
-          count: 500,
-          curr: location.hash.replace('#!fenye=', ''), //获取hash值为fenye的当前页
-          hash: 'fenye', //自定义hash值
-        });
-
-        //只显示上一页、下一页
-        laypage.render({
-          elem: 'demo6',
-          count: 50,
-          layout: ['prev', 'next'],
-          jump: (obj, first) => {
-            if (!first) {
-              layer.msg('第 ' + obj.curr + ' 页');
-            }
-          },
-        });
-
-        //完整功能
-        laypage.render({
-          elem: 'demo7',
-          count: 100,
-          //,groups: 0
-          layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip'],
-          /*,limitTemplet: function(item) {
-      return item + ' / page';
-    }*/
-          // ,skipText: ['Go to', '', 'Confirm']
-          jump: (obj) => {
-            console.log(obj);
-          },
-        });
-
-        //自定义排版
-        laypage.render({
-          elem: 'demo8',
+          elem: '#demo-show-all',
           count: 1000,
-          layout: ['limit', 'prev', 'page', 'next'],
-          //,limits: [100, 200, 300]
-          limit: 200,
+          // size: 'sm',
+          // disabled: true,
+          layout: [
+            'count',
+            'prev',
+            'page',
+            'next',
+            'limits',
+            'refresh',
+            'jump',
+          ],
+          onChange(options) {
+            console.log(options);
+          },
         });
 
-        //将一段数组分页展示
+        // 组件尺寸
+        ['sm', 'md', 'lg'].forEach((size) => {
+          laypage.render({
+            elem: `#demo-size-${size}`,
+            count: 1000,
+            size,
+          });
+        });
 
-        //测试数据
+        // 内置主题
+        laypage.render({
+          elem: '#demo-theme-border',
+          count: 1000,
+          theme: 'border',
+        });
+        laypage.render({
+          elem: '#demo-theme-background',
+          count: 1000,
+          theme: 'background',
+        });
+
+        // 自定义主题
+        laypage.render({
+          elem: '#demo-theme-custom-1',
+          count: 1000,
+          css: `
+--lay-color-primary: #1e9fff;
+
+.lay-pagination-item-active > a {
+  border: 1px solid var(--lay-color-primary);
+  background: none;
+  color: var(--lay-color-primary);
+}
+          `,
+        });
+        laypage.render({
+          elem: '#demo-theme-custom-2',
+          count: 1000,
+          css: `
+--lay-color-primary: #1e9fff;
+
+li:not(.lay-pagination-item-active) > a {
+  background-color: #f1f2f5;
+}
+.lay-pagination-item-active > a {
+  background: var(--lay-color-primary);
+  color: #fff;
+}
+          `,
+        });
+
+        // 自定义组件布局：简约布局
+        laypage.render({
+          elem: '#demo-layout-simple',
+          count: 100,
+          pageCount: 1,
+          layout: ['prev', 'simplePage', 'next'],
+          // theme: 'border',
+          onChange(options) {
+            layer.msg(`第 ${options.current} 页`);
+          },
+        });
+
+        // 自定义组件布局：自定义组件模板
+        laypage.render({
+          elem: '#demo-layout-custom',
+          count: 1688,
+          layout: ['randomPage', 'prev', 'page', 'next', 'customTotal'],
+          templates: {
+            // 自定义随机页码组件
+            randomPage(options) {
+              const li = document.createElement('li');
+              const btn = document.createElement('a');
+
+              btn.classList.add(
+                'lay-btn',
+                'lay-btn-primary',
+                'lay-border-green',
+              );
+              btn.textContent = '随机页';
+              btn.onclick = () => {
+                const randomPage =
+                  Math.floor(Math.random() * options.totalPages) + 1;
+                laypage.jump(options.id, randomPage); // 跳转到随机页
+              };
+              li.appendChild(btn);
+              return li;
+            },
+
+            // 自定义统计文本
+            customTotal(options) {
+              const li = document.createElement('li');
+              li.style = 'color: var(--lay-gray-700);';
+              li.textContent = `（共 ${options.count} 条）`;
+              return li;
+            },
+          },
+        });
+
+        // 记录分页锚点
+        laypage.render({
+          elem: '#demo-anchor',
+          count: 500,
+          current: location.hash.replace('#!current=', ''), // 获取分页锚点
+          onChange(options) {
+            // 记录分页锚点
+            location.hash = `!current=${options.current}`;
+
+            layer.msg(
+              '观察浏览器地址栏变化。刷新页面时，会保持分页切换状态。',
+              { offset: '16px' },
+            );
+          },
+        });
+
+        // 将一段数组分页展示
         var data = [
           '北京',
           '上海',
@@ -177,20 +269,21 @@
           '台北',
         ];
 
-        //调用分页
+        // 调用分页
         laypage.render({
-          elem: 'demo9',
+          elem: '#demo9',
           count: data.length,
-          layout: ['prev', 'page', 'next', 'refresh', 'skip'],
-          jump: (obj) => {
-            //模拟渲染
-            document.getElementById('biuuu_city_list').innerHTML = (() => {
-              var arr = [],
-                thisData = data
-                  .concat()
-                  .splice(obj.curr * obj.limit - obj.limit, obj.limit);
-              thisData.forEach((item) => {
-                arr.push('<li>' + item + '</li>');
+          theme: 'border',
+          afterRender(options) {
+            // 模拟渲染
+            const ul = document.getElementById('demo-data-page-show');
+            ul.innerHTML = (() => {
+              const arr = [];
+              const currentData = data
+                .concat()
+                .splice(options.limit * (options.current - 1), options.limit);
+              currentData.forEach((item) => {
+                arr.push(`<li>${item}</li>`);
               });
               return arr.join('');
             })();
