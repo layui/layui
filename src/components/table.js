@@ -402,7 +402,7 @@ Class.prototype.render = function (type) {
     options.limits = options.page.limits || options.limits;
     that.page = options.page.current = options.page.current || 1;
     delete options.page.elem;
-    delete options.page.jump;
+    delete options.page.onChange;
   }
 
   // 加载 i18n 自定义文本

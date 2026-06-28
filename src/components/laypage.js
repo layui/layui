@@ -61,7 +61,7 @@ export class Laypage extends Component {
     if (!$elem.length) return;
 
     $elem.html(this.#buildPaginationHtml());
-    this.events();
+    this.#events();
     options.afterRender?.(options); // 渲染完成后的回调
   }
 
@@ -368,7 +368,7 @@ export class Laypage extends Component {
   }
 
   // 事件
-  events() {
+  #events() {
     const options = this.options;
     const $elem = options.$elem;
 

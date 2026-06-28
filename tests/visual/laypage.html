@@ -75,7 +75,7 @@
         const { laypage, layer } = layui;
 
         // 常规示例
-        laypage.render({
+        const laypageInst = laypage.render({
           elem: '#demo-normal',
           count: 100,
           // pageCount: 3,
@@ -89,6 +89,9 @@
             console.log(`${this.id} → afterRender → `, options);
           },
         });
+
+        console.dir(laypage);
+        console.log('laypage.render() → ', laypageInst);
 
         // 显示完整功能
         laypage.render({
