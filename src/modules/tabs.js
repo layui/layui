@@ -704,9 +704,9 @@ layui.define('component', function (exports) {
     // 左
     elemScroll
       .find('.' + CLASS_BAR_ICON[0])
-      [
-        tabsLeft < 0 ? 'removeClass' : 'addClass'
-      ](component.CONST.CLASS_DISABLED);
+      [tabsLeft < 0 ? 'removeClass' : 'addClass'](
+        component.CONST.CLASS_DISABLED
+      );
     // 右
     elemScroll
       .find('.' + CLASS_BAR_ICON[1])
