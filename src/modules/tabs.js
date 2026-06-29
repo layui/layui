@@ -211,7 +211,7 @@ layui.define('component', function (exports) {
         : data.thisHeaderItem;
       var bodyItem = hasOwnIndex
         ? that.findBodyItem(opts.index)
-        : data.thisHeaderItem;
+        : data.thisBodyItem;
       headerItem[opts.mode](newHeaderItem);
       bodyItem[opts.mode](newBodyItem);
     } else {
