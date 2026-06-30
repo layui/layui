@@ -1428,12 +1428,14 @@ layui.define(
     };
 
     // 异常提示
-    Class.prototype.errorView = function (html) {
-      var that = this,
-        elemNone = that.layMain.find('.' + NONE),
-        layNone = $(
-          '<div class="' + NONE + '">' + (html || 'Error') + '</div>'
-        );
+    Class.prototype.errorView = function (html, opts) {
+      var that = this;
+      var elemNone = that.layMain.find('.' + NONE);
+      var layNone = $(
+        '<div class="' + NONE + '">' + (html || 'Error') + '</div>'
+      );
+
+      opts = opts || {};
 
       if (elemNone[0]) {
         that.layNone.remove();
@@ -1449,10 +1451,10 @@ layui.define(
       that.layTotal.addClass(HIDE_V);
       that.layPage.find(ELEM_PAGE_VIEW).addClass(HIDE_V);
 
-      table.cache[that.key] = []; //格式化缓存数据
+      table.cache[that.key] = []; // 格式化缓存数据
 
       that.syncCheckAll();
-      that.renderForm();
+      that.renderForm({ reloadType: opts.reloadType });
       that.setColsWidth();
       that.loading(false);
     };
@@ -1561,7 +1563,8 @@ layui.define(
                   i18n.$t('table.dataFormatError', {
                     statusName: response.statusName,
                     statusCode: response.statusCode
-                  })
+                  }),
+                { reloadType: opts.type }
               );
             } else {
               // 当前页不能超过总页数
@@ -1589,7 +1592,9 @@ layui.define(
               that._xhrAbort = false;
               return;
             }
-            that.errorView(i18n.$t('table.xhrError', { msg: msg }));
+            that.errorView(i18n.$t('table.xhrError', { msg: msg }), {
+              reloadType: opts.type
+            });
             typeof options.error === 'function' && options.error(e, msg);
           }
         };
@@ -1891,11 +1896,7 @@ layui.define(
 
         // 渲染表单
         that.syncCheckAll();
-        if (/^(reloadData|renderData)$/.test(opts.type)) {
-          that.renderFormByElem(that.layBox);
-        } else {
-          that.renderForm();
-        }
+        that.renderForm({ reloadType: opts.type });
 
         // 因为 page 参数有可能发生变化 先重新铺满
         that.fullSize();
@@ -1935,7 +1936,7 @@ layui.define(
 
       //如果无数据
       if (data.length === 0) {
-        return that.errorView(options.text.none);
+        return that.errorView(options.text.none, { reloadType: opts.type });
       } else {
         that.layFixLeft.removeClass(HIDE);
       }
@@ -2147,18 +2148,27 @@ layui.define(
     };
 
     // 渲染表单
-    Class.prototype.renderForm = function (type) {
+    Class.prototype.renderForm = function (opts) {
       var that = this;
-      // var options = that.config;
-      var filter = that.elem.attr('lay-filter');
-      form.render(type, filter);
-    };
+      opts = opts || {};
 
-    // 定向渲染表单
-    Class.prototype.renderFormByElem = function (elem) {
-      layui.each(['input', 'select'], function (i, formType) {
-        form.render(elem.find(formType));
-      });
+      // 如果来自数据重载
+      if (/^(reloadData|renderData)$/.test(opts.reloadType)) {
+        if (!opts.elem) {
+          opts.elem = that.layBox;
+        }
+      }
+
+      // 定向渲染
+      if (opts.elem) {
+        layui.each(['input', 'select'], function (i, tagName) {
+          form.render(opts.elem.find(tagName));
+        });
+      } else {
+        // 常规渲染
+        var filter = that.elem.attr('lay-filter');
+        form.render(opts.type, filter);
+      }
     };
 
     // 同步全选按钮状态
@@ -2650,7 +2660,7 @@ layui.define(
               })
             );
             td.data('content', content);
-            that.renderFormByElem(cell);
+            that.renderForm({ elem: cell });
           }
         });
       };
@@ -2705,7 +2715,7 @@ layui.define(
 
           // 插入元素
           othis.find('.' + ELEM_TOOL_PANEL)[0] || othis.append(panel);
-          that.renderFormByElem(panel);
+          that.renderForm({ elem: panel });
 
           panel.on('click', function (e) {
             layui.stope(e);
