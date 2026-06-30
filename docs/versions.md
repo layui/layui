@@ -11,6 +11,22 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.13.8" lay-pid="2.10+" class="ws-anchor">
+  v2.13.8
+  <span class="layui-badge-rim">2026-06-30</span>
+</h2>
+
+- 修复 `layui.extend` 方法在特定路径下模块路径拼接错误的问题 #3079 @Sight-wcg
+- 修复 table 表头补丁宽度更新异常的问题 #3081 @Sight-wcg
+- 优化 table 的表单渲染机制，支持根据选项动态渲染 #3082 @sentsim
+- 修复 `tabs.add()` 的 `mode` 选项值为 `before|after` 时未正确生成内容项的问题 #3082 @sentsim
+- 优化 form 的 `getValue` 方法以正确支持同名 `name` 的数组值处理 #3083 @sentsim
+
+### 下载： [layui-v2.13.8.zip](#download)
+
+
+---
+
 <h2 id="v2.13.7" lay-pid="2.10+" class="ws-anchor">
   v2.13.7
   <span class="layui-badge-rim">2026-05-29</span>
