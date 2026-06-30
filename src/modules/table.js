@@ -2547,25 +2547,25 @@ layui.define(
     Class.prototype.scrollPatch = function () {
       var that = this;
       var layMainTable = that.layMain.children('table');
-      var scrollWidth = that.layMain.width() - that.layMain.prop('clientWidth'); // 纵向滚动条宽度
+      var scrollWidth = that.getScrollWidth(that.layMain[0]); // 纵向滚动条宽度
       var scrollHeight =
-        that.layMain.height() - that.layMain.prop('clientHeight'); // 横向滚动条高度
-      // var getScrollWidth = that.getScrollWidth(that.layMain[0]); // 获取主容器滚动条宽度，如果有的话
+        that.layMain.prop('offsetHeight') - that.layMain.prop('clientHeight'); // 横向滚动条高度
       var outWidth = layMainTable.outerWidth() - that.layMain.width(); // 表格内容器的超出宽度
 
       // 添加补丁
       var addPatch = function (elem) {
         if (scrollWidth && scrollHeight) {
           elem = elem.eq(0);
-          if (!elem.find('.layui-table-patch')[0]) {
-            var patchElem = $(
+          var patchElem = elem.find('.layui-table-patch');
+          if (!patchElem[0]) {
+            patchElem = $(
               '<th class="layui-table-patch"><div class="layui-table-cell"></div></th>'
             ); // 补丁元素
-            patchElem.find('div').css({
-              width: scrollWidth
-            });
             elem.find('tr').append(patchElem);
           }
+          patchElem.find('div').css({
+            width: scrollWidth
+          });
         } else {
           elem.find('.layui-table-patch').remove();
         }
