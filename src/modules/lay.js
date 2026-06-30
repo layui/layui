@@ -328,15 +328,17 @@
     var style = lay.elem('style');
     var styleText = options.text || '';
     var target = options.target;
+    var nonce = options.nonce || layui.cache.nonce;
 
     if (!styleText) return;
+    if (nonce) style.setAttribute('nonce', nonce);
 
     // 添加样式
     if ('styleSheet' in style) {
       style.setAttribute('type', 'text/css');
       style.styleSheet.cssText = styleText;
     } else {
-      style.innerHTML = styleText;
+      style.textContent = styleText;
     }
 
     // ID
@@ -530,6 +532,10 @@
        * 请注意: 开发者在使用 lay-options="{}" 配置组件选项时，需确保属性值不来自于网页用户,
        * 即属性值必须在网页开发者自身的可控范围内，否则请勿在 HTML 标签属性中获取组件选项。
        */
+      if (__LAYUI_CSP__) {
+        // CSP 模式下，暂时返回空对象，支持方案待定。
+        return {};
+      }
       return new Function('return ' + (attrValue || '{}'))();
     } catch (ev) {
       layui

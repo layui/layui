@@ -36,22 +36,28 @@
 
   // 获取 layui 所在目录
   var getPath = (function () {
+    var currentScript;
     var jsPath =
       document.currentScript &&
       document.currentScript.tagName.toUpperCase() === 'SCRIPT'
-        ? document.currentScript.src
+        ? ((currentScript = document.currentScript), document.currentScript.src)
         : (function () {
             var js = document.getElementsByTagName('script');
             var last = js.length - 1;
             var src;
             for (var i = last; i > 0; i--) {
               if (js[i].readyState === 'interactive') {
+                currentScript = js[i];
                 src = js[i].src;
                 break;
               }
             }
+            currentScript = currentScript || js[last];
             return src || js[last].src;
           })();
+
+    config.nonce = GLOBAL.nonce || (currentScript && currentScript.nonce);
+    cache.nonce = config.nonce;
 
     return (config.dir =
       GLOBAL.dir || jsPath.substring(0, jsPath.lastIndexOf('/') + 1));
@@ -373,6 +379,7 @@
 
       node.async = true;
       node.charset = 'utf-8'; // 避免 IE9 的编码问题
+      if (config.nonce) node.setAttribute('nonce', config.nonce);
       node.src =
         url +
         (function () {
@@ -1122,3 +1129,6 @@
   // export layui
   window.layui = new Class();
 })(window);
+// 用于源码调试，构建时会裁剪掉
+// eslint-disable-next-line no-redeclare
+var __LAYUI_CSP__;

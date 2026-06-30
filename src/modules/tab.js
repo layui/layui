@@ -54,9 +54,13 @@ layui.define('component', function (exports) {
         ? $(options.bodyElem)
         : parents.children('.layui-tab-content').children('.layui-tab-item');
       var elemA = othis.find('a');
+      var href = elemA.attr('href');
+      var placeholderHref = __LAYUI_CSP__ ? '' : 'javascript:;';
+      if (obj.e && href === placeholderHref) {
+        obj.e.preventDefault();
+      }
       var isJump =
-        elemA.attr('href') !== 'javascript:;' &&
-        elemA.attr('target') === '_blank'; // 是否存在跳转
+        href !== placeholderHref && elemA.attr('target') === '_blank'; // 是否存在跳转
       var unselect = typeof othis.attr('lay-unselect') === 'string'; // 是否禁用选中
       var filter = parents.attr('lay-filter');
       var hasId = othis.attr('lay-id');
@@ -339,6 +343,7 @@ layui.define('component', function (exports) {
       $doc.on('click', options.headerElem, function (e) {
         var index = $(options.headerElem).index($(this));
         events.tabClick.call(this, {
+          e: e,
           index: index,
           options: options
         });
@@ -346,7 +351,11 @@ layui.define('component', function (exports) {
     }
   });
 
-  $doc.on('click', '.' + CONST.HEADER + ' li', events.tabClick); // tab 头部项点击
+  $doc.on('click', '.' + CONST.HEADER + ' li', function (e) {
+    events.tabClick.call(this, {
+      e: e
+    });
+  }); // tab 头部项点击
   $win.on('resize.lay_tab_auto_resize', events.tabAuto); // 自适应尺寸
 
   // export

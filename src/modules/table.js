@@ -103,6 +103,25 @@ layui.define(
       }
     };
 
+    /**
+     * 渲染 laytpl 模板，CSP 兼容
+     * @param {string|((data: Record<string, any>, extra?: any) => string)} tpl 模板字符串或渲染函数对象
+     * @param {Record<string, any>} data 数据对象
+     * @param {{tplOptions?: {open:string, close:string, tagStyle: 'legacy' | 'modern'}, context?: any, extra?: any}} [opts] 选项对象
+     * @returns {string} 渲染后的字符串
+     */
+    var renderLaytpl = function (tpl, data, opts) {
+      if (!tpl) return '';
+      opts = opts || {};
+      if (typeof tpl === 'function') {
+        return tpl.call(opts.context || this, data, opts.extra);
+      }
+      if (__LAYUI_CSP__) {
+        return resolveTplStr(tpl);
+      }
+      return laytpl(resolveTplStr(tpl), opts.tplOptions).render(data);
+    };
+
     // 解析自定义模板数据
     var parseTempData = function (obj) {
       obj = obj || {};
@@ -124,16 +143,10 @@ layui.define(
       // 获取模板内容
       if (templet) {
         content =
-          typeof templet === 'function'
-            ? templet.call(item3, obj.tplData, obj.obj)
-            : laytpl(resolveTplStr(templet) || String(content)).render(
-                $.extend(
-                  {
-                    LAY_COL: item3
-                  },
-                  obj.tplData
-                )
-              );
+          renderLaytpl(templet, $.extend({ LAY_COL: item3 }, obj.tplData), {
+            context: item3,
+            extra: obj.obj
+          }) || String(content);
       }
 
       // 是否只返回文本
@@ -206,6 +219,7 @@ layui.define(
      * - {{# layui.each(array, function(index, item){ }} ... {{# }); }} - 循环遍历
      */
 
+    // laytpl-precompile:start TPL_MAIN
     // thead 区域模板
     var TPL_HEADER = function (options) {
       // 合并单元格属性模板片段
@@ -449,6 +463,7 @@ layui.define(
       '  <div class="layui-inline layui-table-pageview" id="layui-table-page{{=d.index}}"></div>',
       '</div>'
     ].join('\n');
+    // laytpl-precompile:end TPL_MAIN
 
     var _WIN = $(window);
     var _DOC = $(document);
@@ -610,18 +625,24 @@ layui.define(
           })()
         )
         .html(
-          laytpl(TPL_MAIN, {
-            open: '{{', // 标签符前缀
-            close: '}}', // 标签符后缀
-            tagStyle: 'legacy'
-          }).render({
-            data: options,
-            index: that.index, //索引
-            i18nMessages: {
-              table_sort_asc: i18n.$t('table.sort.asc'),
-              table_sort_desc: i18n.$t('table.sort.desc')
+          renderLaytpl(
+            TPL_MAIN,
+            {
+              data: options,
+              index: that.index, //索引
+              i18nMessages: {
+                table_sort_asc: i18n.$t('table.sort.asc'),
+                table_sort_desc: i18n.$t('table.sort.desc')
+              }
+            },
+            {
+              tplOptions: {
+                open: '{{',
+                close: '}}',
+                tagStyle: 'legacy'
+              }
             }
-          })
+          )
         );
 
       // 初始化样式
@@ -870,9 +891,13 @@ layui.define(
 
       if (options.toolbar === 'default') {
         elemToolTemp.html(leftDefaultTemp);
-      } else if (typeof options.toolbar === 'string') {
-        var toolbarHtml = $(options.toolbar).html() || '';
-        toolbarHtml && elemToolTemp.html(laytpl(toolbarHtml).render(options));
+      } else if (
+        typeof options.toolbar === 'function' ||
+        typeof options.toolbar === 'string'
+      ) {
+        elemToolTemp.html(
+          renderLaytpl(options.toolbar, options, { context: options })
+        );
       }
 
       // 头部工具栏右上角默认工具
@@ -1096,8 +1121,10 @@ layui.define(
 
       // 开启分页栏自定义模板
       if (options.pagebar) {
-        var pagebarHtml = $(options.pagebar).html() || '';
-        pagebarHtml && layPagebar.append(laytpl(pagebarHtml).render(options));
+        var pagebarHtml = renderLaytpl(options.pagebar, options, {
+          context: options
+        });
+        pagebarHtml && layPagebar.append(pagebarHtml);
         that.layPage.append(layPagebar);
       }
     };
@@ -1798,7 +1825,14 @@ layui.define(
 
                 //解析工具列模板
                 if (item3.toolbar) {
-                  return laytpl($(item3.toolbar).html() || '').render(tplData);
+                  return renderLaytpl(item3.toolbar, tplData, {
+                    context: item3,
+                    extra: {
+                      config: options,
+                      data: item1,
+                      index: i1
+                    }
+                  });
                 }
                 return parseTempData.call(that, {
                   item3: item3,
@@ -2057,17 +2091,19 @@ layui.define(
         var tdContent = (function () {
           var totalRow = item3.totalRow || options.totalRow;
 
-          // 如果 totalRow 参数为字符类型，则解析为自定义模版
-          if (typeof totalRow === 'string') {
-            return laytpl(totalRow).render(
-              $.extend(
-                {
-                  TOTAL_NUMS: TOTAL_NUMS || totalNums[field],
-                  TOTAL_ROW: totalRowData || {},
-                  LAY_COL: item3
-                },
-                item3
-              )
+          if (typeof totalRow === 'function' || typeof totalRow === 'string') {
+            var tplData = $.extend(
+              {
+                TOTAL_NUMS: TOTAL_NUMS || totalNums[field],
+                TOTAL_ROW: totalRowData || {},
+                LAY_COL: item3
+              },
+              item3
+            );
+            return (
+              renderLaytpl(totalRow, tplData, {
+                context: item3.totalRow ? item3 : options
+              }) || content
             );
           }
 

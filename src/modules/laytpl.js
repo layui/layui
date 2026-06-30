@@ -383,6 +383,11 @@
      */
     var createCompiler = (that.createCompiler = function (template, builder) {
       builder = builder || createBuilder(template);
+      if (__LAYUI_CSP__) {
+        throw new Error(
+          'CSP build does not support laytpl JavaScript template compilation'
+        );
+      }
       return new Function('laytpl', 'return ' + builder)(that.vars);
     });
     var createBuilder = (that.createBuilder = function (template, builder) {
@@ -483,7 +488,8 @@
         sourceURL.replace(/\./g, '\\.') + ':(\\d+)',
         'i'
       );
-      var stackLineNum = (e.stack.match(stackLineNumRegxp) || [])[1] || 0;
+      var stackLineNum =
+        ((e.stack || '').match(stackLineNumRegxp) || [])[1] || 0;
 
       // 提取模板实际行号
       var extractErrLineNum = function (stackLineNum, isRecursion) {
@@ -522,11 +528,47 @@
   };
 
   /**
+   * @internal
+   */
+  laytpl.escape = vars.escape;
+
+  /**
    * 扩展模板内部变量
    * @param {Object} variables - 扩展内部变量，变量值通常为函数
    */
   laytpl.extendVars = function (variables) {
     Object.assign(vars, variables);
+  };
+
+  /**
+   * 生成模板渲染函数的源码字符串，用于构建时预编译模板。未文档化的私有方法，仅限内部使用。
+   * @internal
+   * @param {string} template - 模板字符串
+   * @param {Object} [options] - 配置选项
+   * @param {string} [options.open='{{'] - 起始界定符
+   * @param {string} [options.close='}}'] - 结束界定符
+   * @param {string} [options.tagStyle='legacy'] - 标签风格，可选 'modern'
+   * @returns {string} 渲染函数的源码字符串
+   */
+  laytpl.build = function (template, options) {
+    var inst = Object.create(Class.prototype);
+    inst.config = Object.assign(
+      {
+        template: template
+      },
+      config,
+      options
+    );
+    inst.vars = Object.assign(
+      {
+        include: function () {
+          return '';
+        }
+      },
+      vars
+    );
+    inst.compile(template);
+    return inst.createBuilder(template);
   };
 
   /**

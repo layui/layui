@@ -82,6 +82,7 @@
 - `toolbar: '<div>xxx</div>'` 直接传入模板字符
 - `toolbar: true` 仅开启工具栏右侧，不显示左侧模板
 - `toolbar: 'default'` 开启工具栏并显示默认模板
+- `toolbar: function(){return ''}` 通过函数自定义工具栏模板（2.13.8+）
 
 </td>
 <td>string<br>boolean</td>
@@ -323,7 +324,7 @@ height: function(){
     <tr>
 <td>totalRow</td>
 <td>是否开启合计行区域</td>
-<td>string</td>
+<td>string/function(2.13.8+)</td>
 <td>
 
 `false`

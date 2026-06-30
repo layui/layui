@@ -188,20 +188,23 @@ layui.define('component', function (exports) {
 
   var events = {
     // 点击当前菜单 - a 标签触发
-    clickThis: function () {
+    clickThis: function (e) {
       var othis = $(this);
       var parents = othis.closest(CONST.NAV_ELEM);
       var filter = parents.attr('lay-filter');
       var parent = othis.parent();
       var child = othis.siblings('.' + CONST.NAV_CHILD);
+      var href = othis.attr('href');
+      var placeholderHref = __LAYUI_CSP__ ? '' : 'javascript:;';
       var unselect = typeof parent.attr('lay-unselect') === 'string'; // 是否禁用选中
+
+      if (e && href === placeholderHref) {
+        e.preventDefault();
+      }
 
       // 满足点击选中的条件
       if (
-        !(
-          othis.attr('href') !== 'javascript:;' &&
-          othis.attr('target') === '_blank'
-        ) &&
+        !(href !== placeholderHref && othis.attr('target') === '_blank') &&
         !unselect
       ) {
         if (!child[0]) {
