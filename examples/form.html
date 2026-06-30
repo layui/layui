@@ -28,7 +28,7 @@
             <div class="layui-input-split layui-input-prefix">前置信息</div>
             <input
               type="text"
-              name="arr[]"
+              name="colors"
               required
               lay-verify="required"
               placeholder="请输入"
@@ -43,7 +43,7 @@
           <div class="layui-input-wrap">
             <input
               type="text"
-              name="arr[]"
+              name="colors"
               required
               placeholder="请输入"
               autocomplete="off"
@@ -187,7 +187,7 @@
             <div class="layui-input-prefix">
               <i class="layui-icon layui-icon-username"></i>
             </div>
-            <select name="selectdemo">
+            <select name="select-city">
               <option value="">在 select 中使用</option>
               <option value="北京">北京</option>
               <option value="上海">上海</option>
@@ -269,7 +269,11 @@
         </div>
         <div class="layui-col-md12">
           <div class="layui-input-wrap">
-            <textarea class="layui-textarea" lay-affix="clear"></textarea>
+            <textarea
+              class="layui-textarea"
+              name="textarea"
+              lay-affix="clear"
+            ></textarea>
           </div>
         </div>
         <div class="layui-col-md12">
@@ -660,7 +664,7 @@
     });
     */
 
-        //方法提交
+        // 方法提交
         $('#testSubmit').on('click', function () {
           form.submit('top', function (data) {
             layer.confirm('确定提交么？', function (index) {
@@ -670,6 +674,12 @@
               setTimeout(function () {
                 alert(JSON.stringify(data.field));
               });
+
+              /* $.ajax({
+                url: '',
+                data: data.field,
+                type: 'post'
+              }); */
             });
           });
           return false;
