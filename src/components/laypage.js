@@ -20,7 +20,9 @@ export class Laypage extends Component {
     pageCount: 5, // 连续页码数
     prev: '<i class="lay-icon lay-icon-left"></i>', // 上一页文本
     next: '<i class="lay-icon lay-icon-right"></i>', // 下一页文本
-    layout: ['prev', 'page', 'next'], // 组件布局；内置组件：count|prev|page|simplePage|next|limits|refresh|jump ；亦可通过 templates 配置项自定义组件模板
+    // 组件布局。可选值：count|prev|page|simplePage|next|limits|refresh|jump
+    // 亦可通过 templates 配置项自定义组件模板
+    layout: ['prev', 'page', 'next'],
     // align: 'start', // 对齐方式；可选值：start|end|center
     // className: '', // 根容器的额外类名
     // css: '', // 自定义 CSS 样式
@@ -134,7 +136,8 @@ export class Laypage extends Component {
 
     // 组件模板
     const templates = {
-      ...options.templates, // 自定义模板
+      // 自定义模板。放在最前，避免覆盖内置模板
+      ...options.templates,
 
       // 总数
       count() {
