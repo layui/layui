@@ -1121,7 +1121,9 @@ lay.touchSwipe = function (elem, opts) {
     dispose: function () {
       unbindEvents();
       targetElem.removeEventListener('touchstart', onStart);
-      touchSwipeHandles.delete(targetElem);
+      if (touchSwipeHandles.get(targetElem) === handle) {
+        touchSwipeHandles.delete(targetElem);
+      }
     },
   };
   touchSwipeHandles.set(targetElem, handle);
