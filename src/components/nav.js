@@ -102,26 +102,33 @@ export class Nav extends Component {
       }
     };
 
-    const bar = $(`<span class="${CONST.NAV_BAR}"></span>`);
+    const isTree = $elem.hasClass(CONST.NAV_TREE);
     const itemElem = $elem.find(`.${CONST.NAV_ITEM}`);
+    const itemSelector = isTree
+      ? `.${CONST.NAV_ITEM} dd, .${CONST.NAV_ITEM} >.${NAV_TITLE}`
+      : `.${CONST.NAV_ITEM}`;
 
-    // hover 滑动效果
+    // 事件命名空间
+    const eventNamespace = CONST.EVENT_NAMESPACE;
+
+    // 解绑事件，避免重复绑定
+    $elem.off(eventNamespace);
+
+    // 生成滑动条
+    const bar = $(`<span class="${CONST.NAV_BAR}"></span>`);
     const hasBarElem = $elem.find(`.${CONST.NAV_BAR}`);
-    if (hasBarElem[0]) hasBarElem.remove();
+    if (hasBarElem[0]) {
+      hasBarElem.remove();
+    }
     $elem.append(bar);
-    ($elem.hasClass(CONST.NAV_TREE)
-      ? itemElem.find(`dd,>.${CONST.NAV_TITLE}`)
-      : itemElem
-    )
-      .off('mouseenter.lay_nav')
-      .on('mouseenter.lay_nav', function () {
+
+    // 鼠标移入移出滑动效果
+    $elem
+      .on(`mouseenter${eventNamespace}`, itemSelector, function () {
         follow.call(this, bar, $elem, 0);
       })
-      .off('mouseleave.lay_nav')
-      .on('mouseleave.lay_nav', function () {
-        // 鼠标移出
-        // 是否为垂直导航
-        if ($elem.hasClass(CONST.NAV_TREE)) {
+      .on(`mouseleave${eventNamespace}`, itemSelector, function () {
+        if (isTree) {
           bar.css({
             height: 0,
             opacity: 0,
@@ -137,10 +144,10 @@ export class Nav extends Component {
       });
 
     // 鼠标离开当前菜单时
-    $elem.off('mouseleave.lay_nav').on('mouseleave.lay_nav', function () {
+    $elem.on(`mouseleave${eventNamespace}`, function () {
       clearTimeout(timer[0]);
       timeEnd[0] = setTimeout(function () {
-        if (!$elem.hasClass(CONST.NAV_TREE)) {
+        if (!isTree) {
           bar.css({
             width: 0,
             left: bar.position().left + bar.width() / 2,
@@ -150,24 +157,25 @@ export class Nav extends Component {
       }, TIME);
     });
 
-    // 展开子菜单
+    // 初始化父级菜单图标
     itemElem.find('a').each(function () {
-      const thisA = $(this);
-      const child = thisA.siblings(`.${CONST.NAV_CHILD}`);
-      const clickEventName = 'click.lay_nav_click';
+      const $thisA = $(this);
+      const child = $thisA.siblings(`.${CONST.NAV_CHILD}`);
 
       // 输出小箭头
-      if (child[0] && !thisA.children(`.${CONST.NAV_MORE}`)[0]) {
-        thisA.append(
+      if (child[0] && !$thisA.children(`.${CONST.NAV_MORE}`)[0]) {
+        $thisA.append(
           `<i class="lay-icon ${CONST.NAV_DOWN} ${CONST.NAV_MORE}"></i>`,
         );
       }
-
-      // 点击菜单
-      thisA
-        .off(clickEventName, events.clickThis)
-        .on(clickEventName, events.clickThis);
     });
+
+    // 点击菜单
+    $elem.on(
+      `click${eventNamespace}`,
+      `.${CONST.NAV_ITEM} a`,
+      events.clickThis,
+    );
   }
 }
 

@@ -25,6 +25,7 @@ export class Floatbar extends Component {
     };
   }
 
+  // 渲染
   render() {
     const options = this.options;
     const Constructor = this.constructor;
@@ -137,8 +138,8 @@ export class Floatbar extends Component {
 
     // 根据 scrollbar 设置 floatbar 相关状态
     let timer;
-    const scrollEventName = 'scroll.lay_floatbar_scroll';
-    $scroll.off(scrollEventName).on(scrollEventName, function () {
+    const scrollEventName = `scroll${CONST.EVENT_NAMESPACE}`;
+    $scroll.off(scrollEventName).on(scrollEventName, () => {
       if (!setTopBar) return;
       clearTimeout(timer);
       timer = setTimeout(() => {

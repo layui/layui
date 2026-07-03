@@ -17,8 +17,6 @@ export class Flow extends Component {
       ELEM_LOAD:
         '<i class="lay-anim lay-anim-rotate lay-anim-loop lay-icon lay-icon-loading-1"></i>',
       ELEM_MORE: 'lay-flow-more',
-      FLOW_SCROLL_EVENTS: 'scroll.lay_flow_scroll',
-      LAZYIMG_SCROLL_EVENTS: 'scroll.lay_flow_lazyimg_scroll',
     };
   }
 
@@ -108,10 +106,13 @@ export class Flow extends Component {
 
     if (!isAuto) return this;
 
+    // 实例级事件命名空间
+    const scopedNamespace = `${CONST.EVENT_NAMESPACE}_${options.id}`;
+
     // 滚动条滚动事件
     let timer;
-    const FLOW_SCROLL_EVENTS = `${CONST.FLOW_SCROLL_EVENTS}_${options.id}`;
-    scrollElem.off(FLOW_SCROLL_EVENTS).on(FLOW_SCROLL_EVENTS, function () {
+    const scrollEventName = `scroll${scopedNamespace}`;
+    scrollElem.off(scrollEventName).on(scrollEventName, function () {
       const $this = $(this);
       const top = $this.scrollTop();
 
@@ -218,15 +219,15 @@ export class Flow extends Component {
     // 滚动事件
     let timer;
     const id = options.id || '';
-    const LAZYIMG_SCROLL_EVENTS = `${CONST.LAZYIMG_SCROLL_EVENTS}_${id}`;
-    scrollElem
-      .off(LAZYIMG_SCROLL_EVENTS)
-      .on(LAZYIMG_SCROLL_EVENTS, function () {
-        if (timer) clearTimeout(timer);
-        timer = setTimeout(function () {
-          render();
-        }, 50);
-      });
+    const scopedNamespace = `${CONST.EVENT_NAMESPACE}_lazyimg_${id}`;
+    const scrollEventName = `scroll${scopedNamespace}`;
+
+    scrollElem.off(scrollEventName).on(scrollEventName, function () {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(function () {
+        render();
+      }, 50);
+    });
 
     return render;
   }

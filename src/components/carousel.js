@@ -315,15 +315,19 @@ export class Carousel extends Component {
     const options = this.options;
     const $elem = options.$elem;
 
-    if ($elem.data('haveEvents')) return;
+    // 事件命名空间
+    const eventNamespace = CONST.EVENT_NAMESPACE;
+
+    // 解绑事件，避免重复绑定
+    $elem.off(eventNamespace);
 
     // 移入移出容器
     $elem
-      .on('mouseenter touchstart', () => {
+      .on(`mouseenter${eventNamespace} touchstart${eventNamespace}`, () => {
         if (this.options.autoplay === 'always') return;
         clearInterval(this.timer);
       })
-      .on('mouseleave touchend', () => {
+      .on(`mouseleave${eventNamespace} touchend${eventNamespace}`, () => {
         if (this.options.autoplay === 'always') return;
         this.#autoplay();
       });
@@ -344,8 +348,6 @@ export class Carousel extends Component {
         }
       }.bind(this),
     });
-
-    $elem.data('haveEvents', true);
   }
 }
 

@@ -765,18 +765,23 @@ export class Tabs extends Component {
   #events() {
     const options = this.options;
     const container = this.getContainer();
-    const Constructor = this.constructor;
     const delegatedElement = this.documentElem
       ? container.header.elem
       : options.$elem;
 
+    // 事件命名空间
+    const eventNamespace = CONST.EVENT_NAMESPACE;
+
+    // 避免重复绑定事件
+    delegatedElement.off(eventNamespace);
+
     // 标签头部事件
-    const trigger = `${options.trigger}.lay_${Constructor.componentName}_trigger`;
+    const trigger = `${options.trigger}${eventNamespace}`;
     const elemHeaderItem = this.documentElem
       ? this.headerElem[1]
       : this.headerElem.join('');
 
-    delegatedElement.off(trigger).on(trigger, elemHeaderItem, (e) => {
+    delegatedElement.on(trigger, elemHeaderItem, (e) => {
       this.change($(e.currentTarget).index());
     });
   }

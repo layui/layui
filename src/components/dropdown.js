@@ -429,7 +429,7 @@ export class Dropdown extends Component {
 
     // 是否鼠标移入时触发
     const isMouseEnter = options.trigger === 'mouseenter';
-    const eventNamespace = '.lay_dropdown_render';
+    const eventNamespace = CONST.EVENT_NAMESPACE;
     const trigger = `${options.trigger}${eventNamespace}`;
 
     // 始终先解除上一个触发元素的事件（如重载时改变 elem 的情况）
@@ -513,6 +513,7 @@ export class Dropdown extends Component {
    */
   #autoUpdatePosition() {
     const options = this.options;
+    const eventNamespace = CONST.EVENT_NAMESPACE;
 
     this.stopResizeEvent();
 
@@ -528,7 +529,7 @@ export class Dropdown extends Component {
         this.#position();
       }
     };
-    $(window).on('resize.lay_dropdown_resize', windowResizeHandler);
+    $(window).on(`resize${eventNamespace}`, windowResizeHandler);
 
     const shouldObserveResize =
       resizeObserver && options.trigger !== 'contextmenu';
@@ -541,7 +542,7 @@ export class Dropdown extends Component {
     }
 
     this.stopResizeEvent = () => {
-      $(window).off('resize.lay_dropdown_resize', windowResizeHandler);
+      $(window).off(`resize${eventNamespace}`, windowResizeHandler);
       if (shouldObserveResize) {
         resizeObserver.unobserve(triggerEl);
         resizeObserver.unobserve(contentEl);

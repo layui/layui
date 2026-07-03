@@ -15,28 +15,28 @@ export class Collapse extends Component {
     elem: '.lay-collapse',
   };
 
+  // 渲染
   render() {
     const options = this.options;
-    const elemItem = options.$elem.find('.lay-collapse-item');
+    const $items = options.$elem.find('.lay-collapse-item');
+    const eventNamespace = CONST.EVENT_NAMESPACE;
 
-    elemItem.each(function () {
+    $items.each(function () {
       const $this = $(this);
-      const elemTitle = $this.find('.lay-collapse-title');
-      const elemCont = $this.find('.lay-collapse-content');
-      const isNone = elemCont.css('display') === 'none';
-      const clickEventName = 'click.lay_collapse_click';
+      const $title = $this.find('.lay-collapse-title');
+      const $content = $this.find('.lay-collapse-content');
+      const isNone = $content.css('display') === 'none';
+      const clickEventName = `click${eventNamespace}`;
 
       // 初始状态
-      elemTitle.find('.lay-collapse-icon').remove();
-      elemTitle.append(
+      $title.find('.lay-collapse-icon').remove();
+      $title.append(
         '<i class="lay-icon lay-icon-right lay-collapse-icon"></i>',
       );
       $this[isNone ? 'removeClass' : 'addClass'](CONST.CLASS_SHOW);
 
       // 点击标题
-      elemTitle
-        .off(clickEventName, events.titleClick)
-        .on(clickEventName, events.titleClick);
+      $title.off(clickEventName).on(clickEventName, events.titleClick);
     });
   }
 }

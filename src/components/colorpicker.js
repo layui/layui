@@ -704,8 +704,7 @@ export class Colorpicker extends Component {
    * 窗口大小变化时自动更新位置
    */
   #autoUpdatePosition() {
-    const RESIZE_EVENT_NAME = 'resize.lay_colorpicker_resize';
-    // var options = that.config;
+    const eventNamespace = CONST.EVENT_NAMESPACE;
 
     this.stopResizeEvent();
 
@@ -713,10 +712,10 @@ export class Colorpicker extends Component {
       this.#position();
     };
 
-    $win.on(RESIZE_EVENT_NAME, windowResizeHandler);
+    $win.on(`resize${eventNamespace}`, windowResizeHandler);
 
     this.stopResizeEvent = () => {
-      $win.off(RESIZE_EVENT_NAME, windowResizeHandler);
+      $win.off(`resize${eventNamespace}`, windowResizeHandler);
       this.stopResizeEvent = $.noop;
     };
   }
