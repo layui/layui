@@ -39,7 +39,6 @@ $RECYCLE.BIN/
 .settings
 
 # Package manager lock files
-package-lock.json
 yarn.lock
 pnpm-lock.yaml
 

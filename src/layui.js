@@ -28,7 +28,7 @@
 
   // constructor
   var Class = function () {
-    this.v = '2.13.7'; // 版本号
+    this.v = '2.13.8'; // 版本号
   };
 
   // 识别预先可能定义的指定全局对象
@@ -440,8 +440,8 @@
           // 判断传入的模块路径是否特定首字符
           // 若存在特定首字符，则模块 URL 即为该首字符后面紧跟的字符
           // 否则，则按照 config.base 路径进行拼接
-          if (firstSymbolEXP.test(modInfo)) base = '';
-          modInfo = (base + modInfo).replace(firstSymbolEXP, '');
+          var actualBase = firstSymbolEXP.test(modInfo) ? '' : base;
+          modInfo = (actualBase + modInfo).replace(firstSymbolEXP, '');
         }
         that.modules[modName] = modInfo;
       }

@@ -159,39 +159,61 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function (exports) {
   Form.prototype.getValue = function (filter, itemForm) {
     itemForm = itemForm || this.getFormElem(filter);
 
-    var nameIndex = {}, // 数组 name 索引
-      field = {},
-      fieldElem = itemForm.find('input,select,textarea'); // 获取所有表单域
+    // 获取所有表单域
+    var fieldElem = itemForm.find('input,select,textarea');
+    var result = {};
 
-    layui.each(fieldElem, function (_, item) {
-      var othis = $(this),
-        init_name; // 初始 name
-
-      item.name = (item.name || '').replace(/^\s*|\s*&/, '');
-      if (!item.name) return;
-
-      // 用于支持数组 name
-      if (/^.*\[\]$/.test(item.name)) {
-        var key = item.name.match(/^(.*)\[\]$/g)[0];
-        nameIndex[key] = nameIndex[key] | 0;
-        init_name = item.name.replace(
-          /^(.*)\[\]$/,
-          '$1[' + nameIndex[key]++ + ']'
-        );
+    // 将表单值添加到结果对象中
+    var appendResultValue = function (name, value) {
+      // 若字段未在结果对象中，直接添加原始值
+      if (!lay.hasOwn(result, name)) {
+        result[name] = value;
+        return;
       }
 
-      if (/^(checkbox|radio)$/.test(item.type) && !item.checked) return; // 复选框和单选框未选中，不记录字段
+      // 若字段已在结果对象中，且值不是数组，则初始化为数组
+      if (!layui.isArray(result[name])) {
+        result[name] = [result[name]];
+      }
+
+      // 若新值本身为数组，则合并到结果数组中
+      if (layui.isArray(value)) {
+        result[name] = result[name].concat(value);
+      } else {
+        // 若新值非数组，则直接追加到结果数组中
+        result[name].push(value);
+      }
+    };
+
+    // 遍历表单域元素
+    fieldElem.each(function (_, item) {
+      var othis = $(this);
+      var name = (item.name || '').replace(/^\s*|\s*$/g, '');
+      var value;
+
+      if (!name) return;
+      // 复选框和单选框未选中，不记录字段
+      if (/^(checkbox|radio)$/.test(item.type) && !item.checked) return;
+
+      // 排除 disabled 表单域
+      if (item.disabled) return;
+
       // select 多选用 jQuery 方式取值，未选中 option 时，
       // jQuery v2.2.4 及以下版本返回 null，以上(3.x) 返回 []。
       // 统一规范化为 []，参考 https://github.com/jquery/jquery/issues/2562
-      field[init_name || item.name] =
+      if (
         this.tagName === 'SELECT' &&
         typeof this.getAttribute('multiple') === 'string'
-          ? othis.val() || []
-          : this.value;
+      ) {
+        value = othis.val() || [];
+      } else {
+        value = this.value;
+      }
+
+      appendResultValue(name, value);
     });
 
-    return field;
+    return result;
   };
 
   // 表单控件渲染
