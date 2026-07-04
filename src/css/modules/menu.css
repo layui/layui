@@ -1,4 +1,11 @@
-/* 基础菜单元素 */
+/* menu.css */
+
+.lay-dropdown {
+  .lay-popup-content {
+    padding: 0;
+  }
+}
+
 .lay-menu {
   position: relative;
   margin: 5px 0;
@@ -195,30 +202,4 @@
 }
 .lay-menu-lg li .lay-menu-body-panel-left {
   margin: 0 15px 0;
-}
-
-/* 下拉菜单 */
-.lay-dropdown {
-  position: absolute;
-  left: -999999px;
-  top: -999999px;
-  z-index: 77777777;
-  margin: 5px 0;
-  min-width: 100px;
-}
-.lay-dropdown:before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 6px;
-  left: 0;
-  top: -6px;
-}
-.lay-dropdown-shade {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  pointer-events: auto;
 }

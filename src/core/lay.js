@@ -744,7 +744,7 @@ lay.style = function (options) {
  * @param {'left' | 'right'} [opts.clickType="left"] - 点击类型，默认为 'left'，如果 {@link target} 是 document 或 body 元素，则为 'right'
  * @param {'left' | 'right' | 'center'} [opts.align="left"] - 对齐方式
  * @param {boolean} [opts.allowBottomOut=false] - 顶部没有足够区域显示时，是否允许底部溢出
- * @param {string | number} [opts.margin=5] - 边距
+ * @param {string | number} [opts.gap=5] - 与目标元素的间距（px）
  * @param {Event} [opts.e] - 事件对象，仅右键生效
  * @param {boolean} [opts.SYSTEM_RELOAD] - 是否重载，用于出现滚动条时重新计算位置
  * @param {[offsetX:number, offsetY:number]} [opts.offset] - 相对于触发元素的额外偏移量[x,y]
@@ -802,7 +802,7 @@ lay.position = function (target, elem, opts) {
   var winArea = function (type) {
     return document.documentElement[type ? 'clientWidth' : 'clientHeight'];
   };
-  var margin = 'margin' in opts ? opts.margin : 5;
+  var gap = 'gap' in opts ? opts.gap : 5;
   var left = rect.left;
   var top = rect.bottom;
 
@@ -814,40 +814,39 @@ lay.position = function (target, elem, opts) {
   }
 
   // 判断右侧是否超出边界
-  if (left + elemWidth + margin > winArea('width')) {
-    left = winArea('width') - elemWidth - margin; // 如果超出右侧，则将面板向右靠齐
+  if (left + elemWidth + gap > winArea('width')) {
+    left = winArea('width') - elemWidth - gap; // 如果超出右侧，则将面板向右靠齐
   }
   // 左侧是否超出边界
-  if (left < margin) left = margin;
+  if (left < gap) left = gap;
 
   // 判断底部和顶部是否超出边界
-  if (rect.bottom + elemHeight + margin > winArea()) {
+  if (rect.bottom + elemHeight + gap > winArea()) {
     // 底部超出边界
     // 优先判断顶部是否有足够区域显示完全，且底部不能超出边界
-    if (rect.top > elemHeight + margin && rect.top <= winArea()) {
-      top = rect.top - elemHeight - margin * 2; // 顶部有足够的区域显示
+    if (rect.top > elemHeight + gap && rect.top <= winArea()) {
+      top = rect.top - elemHeight - gap * 2; // 顶部有足够的区域显示
     } else if (!opts.allowBottomOut) {
       // 顶部没有足够区域显示时，是否允许底部溢出
-      top = winArea() - elemHeight - margin * 2; // 面板向底部靠齐
+      top = winArea() - elemHeight - gap * 2; // 面板向底部靠齐
       if (top < 0) top = 0; // 如果面板底部靠齐时，又溢出窗口顶部，则只能将顶部靠齐
     }
   }
   /*
-  if(top + elemHeight + margin > winArea()){
+  if (top + elemHeight + gap > winArea()) {
     // 优先顶部是否有足够区域显示完全
-    if(rect.top > elemHeight + margin){
-      top = rect.top - elemHeight - margin*2; // 顶部有足够的区域显示
+    if (rect.top > elemHeight + gap) {
+      top = rect.top - elemHeight - gap * 2; // 顶部有足够的区域显示
     } else {
       // 如果面板是鼠标右键弹出，且顶部没有足够区域显示，则将面板向底部靠齐
-      if(obj.clickType === 'right'){
-        top = winArea() - elemHeight - margin*2;
-        if(top < 0) top = 0; // 不能溢出窗口顶部
+      if (obj.clickType === 'right') {
+        top = winArea() - elemHeight - gap * 2;
+        if (top < 0) top = 0; // 不能溢出窗口顶部
       } else {
-        top = margin; // 位置计算逻辑完备性处理
+        top = gap; // 位置计算逻辑完备性处理
       }
     }
-  }
-  */
+  } */
 
   // 定位类型
   var position = opts.position;
@@ -865,7 +864,7 @@ lay.position = function (target, elem, opts) {
   if (!lay.hasScrollbar()) {
     var rect1 = elem.getBoundingClientRect();
     // 如果弹出面板的溢出窗口底部，则表示将出现滚动条，此时需要重新计算坐标
-    if (!opts.SYSTEM_RELOAD && rect1.bottom + margin > winArea()) {
+    if (!opts.SYSTEM_RELOAD && rect1.bottom + gap > winArea()) {
       opts.SYSTEM_RELOAD = true;
       setTimeout(function () {
         lay.position(target, elem, opts);

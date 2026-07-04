@@ -5,6 +5,7 @@
 
 @import url('./var.css');
 @import url('./base.css');
+
 @import url('./modules/icon.css');
 @import url('./modules/layout.css');
 @import url('./modules/auxiliary.css');
@@ -13,6 +14,7 @@
 @import url('./modules/theme.css');
 @import url('./modules/text.css');
 @import url('./modules/button.css');
+@import url('./modules/popup.css');
 @import url('./modules/form.css');
 @import url('./modules/laypage.css');
 @import url('./modules/flow.css');

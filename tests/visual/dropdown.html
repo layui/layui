@@ -13,46 +13,33 @@
     <div class="lay-container lay-padding-3">
       <h2>常规</h2>
       <hr />
-      <div class="lay-btn-container" style="padding: 16px 0">
-        <button class="lay-btn" id="demo1">
-          按钮下拉
-          <i class="lay-icon lay-icon-down lay-font-12"></i>
-        </button>
-        <button class="lay-btn lay-btn-primary" id="demo2">
-          按钮下拉
-          <i class="lay-icon lay-icon-down lay-font-12"></i>
-        </button>
+      <div
+        style="display: flex; align-items: center; gap: 32px; flex-wrap: wrap"
+      >
+        <div>
+          <button class="lay-btn" id="demo1">
+            按钮下拉
+            <i class="lay-icon lay-icon-down lay-font-12"></i>
+          </button>
+          <button class="lay-btn lay-btn-primary" id="demo2">
+            按钮下拉
+            <i class="lay-icon lay-icon-down lay-font-12"></i>
+          </button>
+        </div>
+        <div class="lay-text">
+          <a href="javascript:;" id="demo3">
+            文字下拉 <i class="lay-icon lay-icon-down"></i>
+          </a>
+        </div>
       </div>
 
-      <div
-        style="
-          display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-          column-gap: 32px;
-          row-gap: 11px;
-        "
-        ;
-      >
-        <div class="lay-text">
-          <a href="javascript:;" id="demo3"
-            >文字下拉 <i class="lay-icon lay-icon-down"></i
-          ></a>
-        </div>
-        <div
-          style="display: flex; align-items: center; gap: 11px; flex-wrap: wrap"
-        >
-          <span id="testopen"> 目标元素（通过外部打开或关闭面板） </span>
-          <div>
-            <button class="lay-btn" lay-on="open">open</button>
-            <button class="lay-btn" lay-on="close">close</button>
-          </div>
-        </div>
-      </div>
+      <br />
+      <h2>右击</h2>
+      <hr />
 
       <div
         class="lay-bg-gray"
-        style="margin-top: 32px; width: 100%; height: 160px; text-align: center"
+        style="width: 100%; height: 160px; text-align: center"
         id="ID-dropdown-demo-contextmenu"
       >
         <span class="lay-font-gray" style="position: relative; top: 50%"
@@ -263,9 +250,8 @@
           },
         });
 
-        console.log('dropdown: ');
         console.dir(dropdown);
-        console.log('dropdown.render instance: ', dropdownInst);
+        console.log('dropdown.render() → ', dropdownInst);
 
         dropdown.render({
           elem: '#demo2',
@@ -304,8 +290,17 @@
 
         dropdown.render({
           elem: '#demo3',
-          content: '自定义内容  123 ',
-          style: 'background:#666;color:#fff;padding:15px;',
+          data: [
+            {
+              title: 'menu item 1',
+            },
+            {
+              title: 'menu item 2',
+            },
+            {
+              title: 'menu item 3',
+            },
+          ],
           align: 'center',
           trigger: 'hover',
           close() {
@@ -464,6 +459,7 @@
           trigger: 'focus',
           style: 'min-width: 190px; box-shadow: 1px 1px 11px rgb(0 0 0 / 11%);',
           click(data) {
+            console.log(data.title);
             this.$elem.val(data.title);
           },
         });

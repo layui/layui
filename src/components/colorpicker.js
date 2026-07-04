@@ -1,28 +1,29 @@
 /**
  * colorpicker
- * 颜色选择组件
+ * 颜色选择器
  */
 
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
-import { Component } from '../core/component.js';
+import { Popup, popupHooks } from './popup.js';
 
-const device = lay.device();
-const clickOrMousedown = device.mobile ? 'click' : 'mousedown';
-
-export class Colorpicker extends Component {
+export class Colorpicker extends Popup {
   static componentName = 'colorpicker';
 
   // 默认配置
   static options = {
+    ...super.options, // 继承 popup 默认配置项
+
     color: '', // 默认颜色，默认没有
     size: null, // 选择器大小
+    align: 'center', // 选择器对齐方式，可选值见 Popup
     alpha: false, // 是否开启透明度
     format: 'hex', // 颜色显示/输入格式，可选 rgb,hex
     predefine: false, // 预定义颜色是否开启
+
+    // 默认预定义颜色列表
     colors: [
-      // 默认预定义颜色列表
       '#16baaa',
       '#16b777',
       '#1E9FFF',
@@ -52,7 +53,7 @@ export class Colorpicker extends Component {
     return {
       ...super.CONST,
       ELEM: 'lay-colorpicker',
-      ELEM_MAIN: '.lay-colorpicker-main',
+      ELEM_MAIN: 'lay-colorpicker-main',
       ICON_PICKER_DOWN: 'lay-icon-down',
       ICON_PICKER_CLOSE: 'lay-icon-close',
       PICKER_TRIG_SPAN: 'lay-colorpicker-trigger-span',
@@ -67,24 +68,14 @@ export class Colorpicker extends Component {
     };
   }
 
-  constructor(options) {
-    super({
-      target: $('body'), // 目标对象。非文档化选项
-      ...options,
-    });
-
-    this.stopClickOutsideEvent = $.noop;
-    this.stopResizeEvent = $.noop;
-    CONST.PICKER_OPENED = `${CONST.ATTR_ID}-opened`;
-  }
-
-  // 渲染
-  render() {
+  // 组件渲染前内部钩子
+  [popupHooks.kBeforeRender]() {
     const options = this.options;
+    const $elem = options.$elem;
 
     // 颜色选择框对象
-    const elemColorBox = $(`
-<div class="lay-unselect lay-colorpicker">
+    const elemColorBox = (this.$colorBoxElem = $(`
+<div class="lay-colorpicker-box lay-unselect">
   <span ${options.format == 'rgb' && options.alpha ? 'class="lay-colorpicker-trigger-bgcolor"' : ''}>
     <span
       class="lay-colorpicker-trigger-span"
@@ -110,29 +101,27 @@ export class Colorpicker extends Component {
     </span>
   </span>
 </div>
-    `);
+    `));
 
     // 初始化颜色选择框尺寸
-    const $elem = options.$elem;
     options.size && elemColorBox.addClass(`lay-colorpicker-${options.size}`);
 
     // 插入颜色选择框
-    $elem.addClass('lay-inline').html((this.$colorBoxElem = elemColorBox));
+    $elem.addClass('lay-inline').html(elemColorBox);
 
     // 获取背景色值
     this.color = this.$colorBoxElem.find(
       `.${CONST.PICKER_TRIG_SPAN}`,
     )[0].style.background;
-    this.#events();
   }
 
-  // 渲染颜色选择器
-  #renderPicker() {
+  // 层打开前的内部钩子
+  [popupHooks.kBeforeOpen]({ $rootElem }) {
     const options = this.options;
 
     // 颜色选择器对象
-    const $rootElem = (this.$rootElem = $(`
-<div class="lay-anim lay-anim-downbit lay-colorpicker-main">
+    const $mainElem = $(`
+<div class="${CONST.ELEM_MAIN}">
   <div class="lay-colorpicker-main-wrapper">
     <div class="lay-colorpicker-basis">
       <div class="lay-colorpicker-basis-white"></div>
@@ -181,46 +170,39 @@ export class Colorpicker extends Component {
     </div>
   </div>
 </div>
-    `));
+    `);
 
-    this.#removePicker(); // 若已存在则先移除
-    $rootElem.attr(CONST.ATTR_ID, options.id);
-    options.target.append($rootElem);
-    options.$elem.data(CONST.PICKER_OPENED, true); // 面板已打开的标记
+    // 面板内容
+    options.content = $mainElem;
 
-    this.#position();
-    this.#pickerEvents();
-    this.#onClickOutside();
-    this.#autoUpdatePosition();
+    // 添加组件专属 className
+    $rootElem.addClass(CONST.ELEM);
   }
 
-  // 颜色选择器移除
-  #removePicker() {
-    const options = this.options;
-    const $rootElem = this.$rootElem;
+  // 层打开后的内部钩子
+  [popupHooks.kAfterOpen]() {
+    this.#val();
+    this.#side();
+    this.#pickerEvents();
+  }
 
-    this.stopClickOutsideEvent();
-    this.stopResizeEvent();
+  // 层关闭后的内部钩子
+  [popupHooks.kAfterClose]() {
+    const elemColorBoxSpan = this.$colorBoxElem.find(
+      `.${CONST.PICKER_TRIG_SPAN}`,
+    );
 
-    if ($rootElem[0]) {
-      $rootElem.remove();
-      options.$elem.removeData(CONST.PICKER_OPENED);
-
-      // 面板关闭后的回调
-      options.close?.(this.color);
+    if (this.color) {
+      const hsb = RGBToHSB(RGBSTo(this.color));
+      this.#select(hsb.h, hsb.s, hsb.b);
+    } else {
+      this.$colorBoxElem
+        .find(`.${CONST.PICKER_TRIG_I}`)
+        .removeClass(CONST.ICON_PICKER_DOWN)
+        .addClass(CONST.ICON_PICKER_CLOSE);
     }
 
-    return this;
-  }
-
-  // 面板定位
-  #position() {
-    const options = this.options;
-    lay.position(this.bindElem || this.$colorBoxElem[0], this.$rootElem[0], {
-      position: options.position,
-      align: 'center',
-    });
-    return this;
+    elemColorBoxSpan[0].style.background = this.color || '';
   }
 
   // 颜色选择器赋值
@@ -548,14 +530,19 @@ export class Colorpicker extends Component {
     // that.$rootElem.find('.' + CONST.PICKER_INPUT).find('input').val('#'+ color);
   }
 
+  // 选择器内部事件
   #pickerEvents() {
     const options = this.options;
+    const $rootElem = this.$rootElem;
 
+    // 颜色盒子
     const elemColorBoxSpan = this.$colorBoxElem.find(
       `.${CONST.PICKER_TRIG_SPAN}`,
-    ); // 颜色盒子
-    const elemPickerInput = this.$rootElem.find(`.${CONST.PICKER_INPUT} input`); // 颜色选择器表单
+    );
+    // 颜色选择器表单
+    const elemPickerInput = $rootElem.find(`.${CONST.PICKER_INPUT} input`);
 
+    // 事件
     const pickerEvents = {
       // 清空
       clear: () => {
@@ -567,7 +554,7 @@ export class Colorpicker extends Component {
         this.color = '';
 
         options.done && options.done('');
-        this.#removePicker();
+        this.close();
       },
 
       // 确认
@@ -588,9 +575,7 @@ export class Colorpicker extends Component {
           ) {
             const left =
               value.slice(value.lastIndexOf(',') + 1, value.length - 1) * 280;
-            this.$rootElem
-              .find(`.${CONST.PICKER_ALPHA_SLIDER}`)
-              .css('left', left);
+            $rootElem.find(`.${CONST.PICKER_ALPHA_SLIDER}`).css('left', left);
             elemColorBoxSpan[0].style.background = value;
             colorValue = value;
           }
@@ -612,12 +597,12 @@ export class Colorpicker extends Component {
         this.color = value;
 
         options.done && options.done(value);
-        this.#removePicker();
+        this.close();
       },
     };
 
     // 选择器面板点击事件
-    this.$rootElem.on('click', '*[colorpicker-events]', function () {
+    $rootElem.on('click', '*[colorpicker-events]', function () {
       const othis = $(this);
       const attrEvent = othis.attr('colorpicker-events');
       pickerEvents[attrEvent] && pickerEvents[attrEvent].call(this, othis);
@@ -632,92 +617,6 @@ export class Colorpicker extends Component {
         e.keyCode === 13 ? null : 'change',
       );
     });
-  }
-
-  // 事件
-  #events() {
-    const options = this.options;
-
-    // 弹出颜色选择器
-    this.$colorBoxElem.on('click', () => {
-      // 主面板是否已打开
-      const opened = options.$elem.data(CONST.PICKER_OPENED);
-
-      // 根据主面板状态，自动切换打开与关闭
-      if (opened) {
-        this.#removePicker();
-      } else {
-        this.#renderPicker();
-        this.#val();
-        this.#side();
-      }
-    });
-  }
-
-  /**
-   * 点击面板外部时的事件
-   */
-  #onClickOutside() {
-    const options = this.options;
-
-    this.stopClickOutsideEvent();
-
-    const stop = lay.onClickOutside(
-      this.$rootElem[0],
-      () => {
-        const elemColorBoxSpan = this.$colorBoxElem.find(
-          `.${CONST.PICKER_TRIG_SPAN}`,
-        );
-
-        if (this.color) {
-          const hsb = RGBToHSB(RGBSTo(this.color));
-          this.#select(hsb.h, hsb.s, hsb.b);
-        } else {
-          this.$colorBoxElem
-            .find(`.${CONST.PICKER_TRIG_I}`)
-            .removeClass(CONST.ICON_PICKER_DOWN)
-            .addClass(CONST.ICON_PICKER_CLOSE);
-        }
-
-        elemColorBoxSpan[0].style.background = this.color || '';
-
-        // 取消选择的回调
-        typeof options.cancel === 'function' && options.cancel(this.color);
-
-        // 移除面板
-        this.#removePicker();
-      },
-      {
-        ignore: [options.$elem[0]],
-        event: clickOrMousedown,
-        capture: false,
-      },
-    );
-
-    this.stopClickOutsideEvent = () => {
-      stop();
-      this.stopClickOutsideEvent = $.noop;
-    };
-  }
-
-  /**
-   * 窗口大小变化时自动更新位置
-   */
-  #autoUpdatePosition() {
-    const eventNamespace = CONST.EVENT_NAMESPACE;
-
-    this.stopResizeEvent();
-
-    const windowResizeHandler = () => {
-      this.#position();
-    };
-
-    $win.on(`resize${eventNamespace}`, windowResizeHandler);
-
-    this.stopResizeEvent = () => {
-      $win.off(`resize${eventNamespace}`, windowResizeHandler);
-      this.stopResizeEvent = $.noop;
-    };
   }
 }
 
