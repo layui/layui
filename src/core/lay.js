@@ -744,7 +744,7 @@ lay.style = function (options) {
  * @param {'left' | 'right'} [opts.clickType="left"] - 点击类型，默认为 'left'，如果 {@link target} 是 document 或 body 元素，则为 'right'
  * @param {'left' | 'right' | 'center'} [opts.align="left"] - 对齐方式
  * @param {boolean} [opts.allowBottomOut=false] - 顶部没有足够区域显示时，是否允许底部溢出
- * @param {string | number} [opts.gap=5] - 与目标元素的间距（px）
+ * @param {number} [opts.gap=5] - 与目标元素的间距（px）
  * @param {Event} [opts.e] - 事件对象，仅右键生效
  * @param {boolean} [opts.SYSTEM_RELOAD] - 是否重载，用于出现滚动条时重新计算位置
  * @param {[offsetX:number, offsetY:number]} [opts.offset] - 相对于触发元素的额外偏移量[x,y]

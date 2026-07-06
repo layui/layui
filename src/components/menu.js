@@ -17,6 +17,9 @@ const CONST = {
   ELEM_ITEM_CHECKED2: 'lay-menu-item-checked2',
   ELEM_MENU_PANEL: 'lay-menu-body-panel',
   ELEM_MENU_PANEL_L: 'lay-menu-body-panel-left',
+  get ELEM_GROUP_TITLE() {
+    return `.${this.ELEM_ITEM_GROUP}>.${this.ELEM_MENU_TITLE}`;
+  },
 };
 
 export { CONST as menuConst };

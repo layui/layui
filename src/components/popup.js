@@ -250,7 +250,7 @@ export class Popup extends Component {
 
     // 是否鼠标移入时触发
     const isMouseEnter = options.trigger === 'mouseenter';
-    const eventNamespace = CONST.EVENT_NAMESPACE;
+    const eventNamespace = this.constructor.CONST.EVENT_NAMESPACE;
     const trigger = `${options.trigger}${eventNamespace}`;
 
     // 始终先解除上一个触发元素的事件（如重载时改变 elem 的情况）
@@ -334,7 +334,7 @@ export class Popup extends Component {
    */
   #autoUpdatePosition() {
     const options = this.options;
-    const eventNamespace = CONST.EVENT_NAMESPACE;
+    const eventNamespace = this.constructor.CONST.EVENT_NAMESPACE;
 
     this.stopResizeEvent();
 

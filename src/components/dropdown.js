@@ -33,14 +33,11 @@ export class Dropdown extends Popup {
   };
 
   static get CONST() {
-    const consts = {
+    return {
       ...super.CONST,
       ELEM: 'lay-dropdown',
       ...menuConst,
     };
-
-    consts.ELEM_GROUP_TITLE = `.${consts.ELEM_ITEM_GROUP}>.${consts.ELEM_MENU_TITLE}`;
-    return consts;
   }
 
   /**
