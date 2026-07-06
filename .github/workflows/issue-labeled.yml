@@ -21,7 +21,7 @@ jobs:
           echo "CONTRIBUTING=$contribute" >> $GITHUB_OUTPUT
 
       - name: handle labeled issue
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
