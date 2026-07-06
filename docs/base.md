@@ -129,6 +129,43 @@ if(device.MYAPP){
 }
 ```
 
+<h2 id="hint" lay-toc="">控制台提示</h2>
+
+`layui.hint()` 用于向浏览器控制台输出异常或警告信息，返回一个包含 `error` 和 `errorOnce` 方法的对象。
+
+```
+var hint = layui.hint();
+```
+
+### error(msg, type)
+
+- **msg** <sup> string</sup> — 要输出的提示文本
+- **type** <sup> string</sup> — 提示类型，可选值：`warn`（默认）、`error`，分别对应 `console.warn()` 和 `console.error()` 输出
+
+```
+var hint = layui.hint();
+hint.error('配置项异常');            // console.warn() 输出（默认 type）：[Layui warn]: 配置项异常
+hint.error('操作失败', 'error');     // console.error() 输出：[Layui error]: 操作失败
+```
+
+> 输出到控制台的格式为 `[Layui type]: 消息内容`，其中 `type` 即传入的提示类型。
+
+### errorOnce(msg, type) <sup>2.9+</sup>
+
+参数与 `error` 方法完全一致，但增加了**消息去重**机制：在同一 `hint()` 实例的作用域内，相同的 `msg` 文本只会向控制台输出一次，再次调用将被静默忽略，避免短时间内的重复干扰。
+
+```
+var hint = layui.hint();
+hint.errorOnce('配置项缺失，将采用默认值');
+// 再次调用相同的消息将被忽略
+hint.errorOnce('配置项缺失，将采用默认值'); // 不再输出
+```
+
+> `errorOnce` 内部维护了一个缓存，在累计达到 100 条去重消息后会自动清空，以释放内存。
+
+<!-- 注：errorOnce 的去重缓存是 hint() 实例级别的，不同 hint() 实例互不影响。 -->
+
+
 <h2 id="api" lay-toc="{hot: true}">API 列表</span></h2>
 
 前面我们特别介绍了几个相对特殊的基础方法，而以下是 Layui 提供的全部基础 API：
@@ -152,7 +189,7 @@ if(device.MYAPP){
 | layui.data(table, settings) | 持久化存储。[#用法](#data) |
 | layui.sessionData(table, settings) | 会话性存储。[#用法](#data) |
 | layui.device(key) | 获取浏览器信息。[#用法](#device) |
-| layui.hint() | 向控制台打印一些异常信息，目前只返回了 error 方法，如： <br>`var hint = layui.hint();` <br> `hint.error('出错啦');` |
+| layui.hint() | 获取控制台提示对象，包含 error 和 errorOnce 两个方法。[#用法](#hint) |
 | layui.stope(e) | 阻止事件冒泡 |
 | layui.onevent(modName, events, callback) | 增加自定义模块事件，一般在内置组件中使用。 |
 | layui.event(modName, events, params) | 执行自定义模块事件，搭配 onevent 使用。注<sup>2.8+</sup>：当 events 参数中未设定 filter 时则可重复执行该事件，否则只会执行一次最新添加的事件。 |
