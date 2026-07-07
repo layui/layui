@@ -240,7 +240,7 @@
 
         const dropdownInst = dropdown.render({
           elem: '#demo1',
-          shade: [0.1, '#ddd'],
+          backdrop: 0.03,
           data: DEMO_DATA,
           // 触发点击事件的元素范围 --- default: 仅子菜单触发点击事件（默认，可不填）; all: 所有父子菜单均触发点击事件
           clickScope: 'all',
@@ -257,7 +257,6 @@
           elem: '#demo2',
           // defaultOpen: true,
           closeOnClick: false,
-          // align: 'right',
           data: [
             {
               title: 'menu item 1',
@@ -280,11 +279,11 @@
               return false;
             }
           },
-          ready(...args) {
-            console.log(`ready ${this.id}`, args);
+          afterOpen(...args) {
+            console.log(`afterOpen ${this.id}`, args);
           },
-          close() {
-            console.log(`close ${this.id}`, this.$elem);
+          afterClose() {
+            console.log(`afterClose ${this.id}`, this.$elem);
           },
         });
 
@@ -303,8 +302,8 @@
           ],
           align: 'center',
           trigger: 'hover',
-          close() {
-            console.log(`close ${this.id}`, this.elem);
+          afterClose() {
+            console.log(`afterClose ${this.id}`, this.elem);
           },
         });
 

@@ -122,7 +122,7 @@ export const toggleMenuGroup = ($groupElem, accordion) => {
   $doc
     .on('mouseenter', ELEM_LI_PAR, function () {
       const $this = $(this);
-      const $elemPanel = $this.find(`.${CONST.ELEM_MENU_PANEL}`);
+      const $elemPanel = $this.children(`.${CONST.ELEM_MENU_PANEL}`);
 
       if (!$elemPanel[0]) return;
       let rect = $elemPanel[0].getBoundingClientRect();
