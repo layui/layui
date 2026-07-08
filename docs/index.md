@@ -110,7 +110,7 @@ npm i layui
 
 点击上方 `Preview` 标签可进行效果预览。
 
-<h2 id="csp">CSP 构建<sup>2.13.8+</sup></h2>
+<h2 id="csp">CSP 构建<sup>2.14+</sup></h2>
 
 某些环境要求执行内容安全策略（CSP），因此 Layui 提供了一个 CSP 兼容的构建版本 `layui.csp.js`。
 
