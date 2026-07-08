@@ -67,8 +67,12 @@ Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
       lay-options="{
     highlightLine: {
       hl: {
-        range: '1,3-5,8', // 指定行高亮范围 '1,3,4,5,8'
+        range: '7,11', // 指定行高亮范围 '7,11'
         comment: true, // 是否解析行中的高亮注释
+      },
+      focus: {
+        range: '9-18',
+        comment: true
       }
     }
   }"
@@ -85,14 +89,34 @@ Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   <body>
     <!-- HTML Content -->
     <script src="//unpkg.com/layui/dist/layui.js"></script>
-    &lt;script type="module"&gt;
+    <script type="module">
       const { layer } = layui;
 
       // Welcome
       layer.msg('Hello World', { icon: 6 });
-    &lt;/script&gt;
+    </script>
   </body>
 </html>
+</textarea>
+</pre>
+
+    <pre
+      class="lay-code"
+      lay-options="{
+    highlightLine: {
+      focus: {
+        comment: true
+      }
+    }
+  }"
+    >
+<textarea class="lay-hide">
+const user = {
+  name: 'layui',
+  version: layui.version // [!code focus:3]
+};
+
+layui.layer.msg(user.name);
 </textarea>
 </pre>
 
@@ -250,7 +274,7 @@ code line
     <!-- layui -->
     <script src="./assets/dist/layui.js"></script>
     <script type="module">
-      const { loader, $, layer, dropdown } = layui;
+      const { loader, $, layer, dropdown, code } = layui;
 
       // 配置「第三方语法高亮库」路径
       loader.config({
@@ -323,7 +347,7 @@ code line
       };
 
       // 创建「代码高亮」初始实例
-      const codeInst = layui.code({
+      const codeInst = code.render({
         elem: '#test',
         preview: true,
         codeStyle: 'height: 510px;',
@@ -401,7 +425,7 @@ code line
       renderHighlighter();
 
       // 通用实例，根据元素属性定制化参数
-      layui.code({
+      code.render({
         elem: '.lay-code',
         tools: ['tips'],
         langMarker: true,
