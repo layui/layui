@@ -1,4 +1,5 @@
 const path = require('path');
+const { Transform } = require('stream');
 const gulp = require('gulp');
 const uglify = require('gulp-uglify');
 const cleanCSS = require('gulp-clean-css');
@@ -68,6 +69,7 @@ const js = () => {
     .pipe(uglify(config.uglifyOptions))
     .pipe(concat('layui.js', { newLine: '' }))
     .pipe(header(config.comment))
+    .pipe(validateBundle('js'))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(dest));
 };
@@ -84,6 +86,7 @@ const csp = () => {
     .pipe(uglify(config.uglifyOptions))
     .pipe(concat('layui.csp.js', { newLine: '' }))
     .pipe(header(config.comment))
+    .pipe(validateBundle('csp'))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(dest));
 };
@@ -242,4 +245,131 @@ function precompileLaytplBlocks(source) {
     /(^[ \t]*)\/\/ laytpl-precompile:start ([A-Za-z_$][\w$]*)(?: (legacy|modern))?\n([\s\S]*?)\n\1\/\/ laytpl-precompile:end \2/gm,
     precompileLaytplBlock
   );
+}
+
+const bundleValidationRules = {
+  js: [
+    {
+      name: 'compile flag removed',
+      pattern: /__LAYUI_CSP__/,
+      expect: 'absent'
+    }
+  ],
+  csp: [
+    {
+      name: 'compile flag removed',
+      pattern: /__LAYUI_CSP__/,
+      expect: 'absent'
+    },
+    {
+      name: 'dynamic Function constructor removed',
+      pattern: /(^|[^\w$.])(?:new\s+)?Function\s*\(/,
+      expect: 'absent'
+    },
+    {
+      name: 'javascript URI removed',
+      pattern: /javascript\s*:/i,
+      expect: 'absent'
+    }
+  ]
+};
+
+/**
+ * 创建构建产物校验流
+ * 该流应放在 concat/header 之后、sourcemaps.write 之前，确保校验的是最终 JS 产物内容
+ * @param {'js' | 'csp'} type 构建产物类型
+ * @returns {Transform}
+ */
+function validateBundle(type) {
+  const rules = bundleValidationRules[type];
+  if (!rules) {
+    throw new Error(`unknown bundle validation type: ${type}`);
+  }
+
+  return new Transform({
+    objectMode: true,
+    transform(file, encoding, callback) {
+      try {
+        if (file.isNull()) {
+          callback(null, file);
+          return;
+        }
+        if (file.isStream()) {
+          throw new Error('bundle validation does not support streams');
+        }
+
+        validateBundleContent(type, file.relative, file.contents.toString());
+        callback(null, file);
+      } catch (err) {
+        this.emit('error', err);
+        callback();
+      }
+    }
+  });
+}
+
+/**
+ * 按产物类型执行规则校验，任一规则失败都会中断 gulp 构建
+ * @param {'js' | 'csp'} type 构建产物类型
+ * @param {string} filename 当前校验的产物文件名
+ * @param {string} source 产物源码内容
+ */
+function validateBundleContent(type, filename, source) {
+  const errors = [];
+  const rules = bundleValidationRules[type];
+
+  rules.forEach((rule) => {
+    const matched = rule.pattern.test(source);
+    const isValid =
+      rule.expect === 'present'
+        ? matched
+        : rule.expect === 'absent' && !matched;
+
+    if (!isValid) {
+      errors.push(formatBundleValidationError(rule, source));
+    }
+  });
+
+  if (errors.length) {
+    throw new Error(
+      [`${filename} failed ${type} bundle validation:`]
+        .concat(errors.map((error) => `- ${error}`))
+        .join('\n')
+    );
+  }
+}
+
+/**
+ * 生成单条规则失败信息，禁用模式命中时附带片段，方便定位残留代码
+ * @param {{name: string, pattern: RegExp, expect: 'present' | 'absent'}} rule 校验规则
+ * @param {string} source 产物源码内容
+ * @returns {string}
+ */
+function formatBundleValidationError(rule, source) {
+  const prefix =
+    rule.expect === 'present'
+      ? 'missing required pattern'
+      : 'forbidden pattern';
+  const snippet =
+    rule.expect === 'absent'
+      ? `; snippet: ${getPatternSnippet(rule, source)}`
+      : '';
+  return `${rule.name}: ${prefix} ${rule.pattern}${snippet}`;
+}
+
+/**
+ * 截取规则命中位置附近的单行片段，避免 gulp 错误输出整份压缩产物
+ * @param {{pattern: RegExp}} rule 校验规则
+ * @param {string} source 产物源码内容
+ * @returns {string}
+ */
+function getPatternSnippet(rule, source) {
+  const flags = rule.pattern.flags.replace('g', '');
+  const pattern = new RegExp(rule.pattern.source, flags);
+  const match = pattern.exec(source);
+  if (!match) return '';
+
+  const start = Math.max(match.index - 60, 0);
+  const end = Math.min(match.index + match[0].length + 60, source.length);
+  return source.slice(start, end).replace(/\s+/g, ' ');
 }
