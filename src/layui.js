@@ -59,14 +59,14 @@
 
   // 异常提示
   var error = function (msg, type) {
-    type = type || 'warn';
-    msg = '[Layui ' + type + ']: ' + msg;
+    type = String(type || 'warn').replace(/^\s+|\s+$/g, '');
 
     // 仅允许 error 或 warn 两种类型的提示
-    if (!/^(?:warn|error)$/.test(String(type).trim())) {
+    if (!/^(?:warn|error)$/.test(type)) {
       type = 'warn';
     }
 
+    msg = '[Layui ' + type + ']: ' + msg;
     window.console[type](msg);
   };
 
