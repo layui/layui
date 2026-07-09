@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs');
 const { Transform } = require('stream');
 const gulp = require('gulp');
 const uglify = require('gulp-uglify');
@@ -8,7 +7,6 @@ const concat = require('gulp-concat');
 const replace = require('gulp-replace');
 const header = require('gulp-header');
 const sourcemaps = require('gulp-sourcemaps');
-const { SourceMapConsumer } = require('source-map');
 const zip = require('gulp-zip');
 const del = require('del');
 const minimist = require('minimist');
@@ -29,7 +27,6 @@ const config = {
   debugPattern: /\bvar\s+__LAYUI_CSP__\b\s*;/g,
   // JS 压缩参数
   uglifyOptions: {
-    compress: false,
     output: {
       ascii_only: true // escape Unicode characters in strings and regexps
     },
@@ -278,7 +275,7 @@ const bundleValidationRules = {
 };
 
 /**
- * 创建构建产物校验流
+ * 简易版构建产物校验流
  * 该流应放在 concat/header 之后、sourcemaps.write 之前，确保校验的是最终 JS 产物内容
  * @param {'js' | 'csp'} type 构建产物类型
  * @returns {Transform}
@@ -301,12 +298,26 @@ function validateBundle(type) {
           throw new Error('bundle validation does not support streams');
         }
 
-        validateBundleContent(
-          type,
-          file.relative,
-          file.contents.toString(),
-          file.sourceMap
-        );
+        const filename = file.relative;
+        const source = file.contents.toString();
+        const errors = rules
+          .filter((rule) => {
+            const matched = rule.pattern.test(source);
+            return rule.expect === 'present' ? !matched : matched;
+          })
+          .map((rule) =>
+            rule.expect === 'present'
+              ? `${rule.name}: required pattern missing`
+              : `${rule.name}: forbidden pattern found`
+          );
+
+        if (errors.length) {
+          throw new Error(
+            [`${filename} failed ${type} bundle validation:`]
+              .concat(errors.map((error) => `- ${error}`))
+              .join('\n')
+          );
+        }
         callback(null, file);
       } catch (err) {
         this.emit('error', err);
@@ -314,194 +325,4 @@ function validateBundle(type) {
       }
     }
   });
-}
-
-/**
- * 按产物类型执行规则校验，任一规则失败都会中断 gulp 构建
- * @param {'js' | 'csp'} type 构建产物类型
- * @param {string} filename 当前校验的产物文件名
- * @param {string} source 产物源码内容
- * @param {object|null} sourceMap 产物对应的 v3 sourcemap（来自 gulp-sourcemaps），可能为 null
- */
-function validateBundleContent(type, filename, source, sourceMap) {
-  const errors = [];
-  const rules = bundleValidationRules[type];
-
-  // 0.6.1 的 SourceMapConsumer 构造是同步的；无 sourcemap 时降级为纯产物片段定位
-  let consumer = null;
-  try {
-    consumer = sourceMap ? new SourceMapConsumer(sourceMap) : null;
-  } catch {
-    consumer = null;
-  }
-
-  rules.forEach((rule) => {
-    const matched = rule.pattern.test(source);
-    const isValid =
-      rule.expect === 'present'
-        ? matched
-        : rule.expect === 'absent' && !matched;
-
-    if (!isValid) {
-      errors.push(formatBundleValidationError(rule, source, consumer));
-    }
-  });
-
-  if (consumer && consumer.destroy) {
-    consumer.destroy();
-  }
-
-  if (errors.length) {
-    throw new Error(
-      [`${filename} failed ${type} bundle validation:`]
-        .concat(errors.map((error) => `- ${error}`))
-        .join('\n')
-    );
-  }
-}
-
-/**
- * 生成单条规则失败信息
- * - present 期望：仅提示缺失
- * - absent 期望：逐处列出命中点在原始源码中的位置（依赖 sourcemap），无 sourcemap 时回退到产物片段
- * @param {{name: string, pattern: RegExp, expect: 'present' | 'absent'}} rule 校验规则
- * @param {string} source 产物源码内容
- * @param {object|null} consumer 已构造的 SourceMapConsumer（可能为 null）
- * @returns {string}
- */
-function formatBundleValidationError(rule, source, consumer) {
-  if (rule.expect === 'present') {
-    return `${rule.name}: missing required pattern ${rule.pattern}`;
-  }
-
-  const locations = locatePattern(rule, source, consumer);
-  const detail = locations.length
-    ? `; hit ${locations.length} unique source location(s):\n    ` +
-      locations.map((loc) => `at ${loc}`).join('\n    ')
-    : `; snippet: ${getPatternSnippet(rule, source)}`;
-  return `${rule.name}: forbidden pattern ${rule.pattern}${detail}`;
-}
-
-/**
- * 在产物中找出规则的全部命中点，借助 sourcemap 把命中偏移映射回原始源码位置
- * @param {{pattern: RegExp}} rule 校验规则
- * @param {string} source 产物源码内容
- * @param {object|null} consumer 已构造的 SourceMapConsumer（可能为 null）
- * @returns {string[]} 形如 `源文件:行号:列号  源码行摘要` 的定位串；映射不到则返回空数组
- */
-function locatePattern(rule, source, consumer) {
-  if (!consumer) return [];
-
-  // 必须用全局 flag，exec 才会随 lastIndex 前进，逐处覆盖全部命中点；
-  // 否则非全局 exec 每次从 0 搜索，只会重复命中同一处而漏掉其余位置。
-  const flags = rule.pattern.flags.includes('g')
-    ? rule.pattern.flags
-    : rule.pattern.flags + 'g';
-  const pattern = new RegExp(rule.pattern.source, flags);
-  const targets = [];
-  let match;
-  let guard = 0;
-  while ((match = pattern.exec(source)) !== null) {
-    if (guard++ > 5000) break; // 防御性上限，避免极端产物里无限循环
-    targets.push(match.index);
-    // 空匹配兜底：强制前进一位，避免 lastIndex 卡住导致死循环
-    if (match.index === pattern.lastIndex) pattern.lastIndex++;
-  }
-
-  const sourcesContent = consumer.sourcesContent || [];
-
-  const seen = new Set();
-  const results = [];
-  for (const offset of targets) {
-    const { line, column } = offsetToLineCol(source, offset);
-    const orig = consumer.originalPositionFor({ line, column });
-    if (!orig || !orig.source) continue;
-
-    const sources = consumer.sources || [];
-    const idx = sources.indexOf(orig.source);
-    const content = idx >= 0 ? sourcesContent[idx] : null;
-    const codeLine = pickLine(content, orig.line);
-
-    // sourcemap 的 source 多为 bare 名（如 lay.js），无法被 IDE 终端从工作区根解析；
-    // 解析成仓库相对路径（如 src/modules/lay.js），拼成 `path:line:col`，
-    // VS Code 等终端会识别为可点击链接，Ctrl/Cmd+点击直接跳转到对应行列。
-    const sourcePath = resolveSourcePath(orig.source);
-    const label = `${sourcePath}:${orig.line}:${(orig.column || 0) + 1}`;
-    // 链接放最前，摘要置于链接之后并以空格分隔，避免摘要中的字符污染链接识别
-    const entry = codeLine ? `${label}  ${codeLine.trim()}` : label;
-    // 压缩产物里同一源码位置常对应多个 generated 列，按定位串去重，避免刷屏
-    if (seen.has(entry)) continue;
-    seen.add(entry);
-    results.push(entry);
-  }
-  return results;
-}
-
-/**
- * 将字符偏移转换为 sourcemap v3 所需的 1-based 行号、0-based 列号
- * @param {string} text 产物全文
- * @param {number} offset 字符偏移
- * @returns {{line: number, column: number}}
- */
-function offsetToLineCol(text, offset) {
-  let line = 1;
-  let column = 0;
-  const end = Math.min(offset, text.length);
-  for (let i = 0; i < end; i++) {
-    if (text.charCodeAt(i) === 10) {
-      // '\n'
-      line++;
-      column = 0;
-    } else {
-      column++;
-    }
-  }
-  return { line, column };
-}
-
-/**
- * 从源码原文中取指定行（1-based）的内容，压缩为单行摘要，便于在错误信息中辨识
- * @param {string|null} content 源码原文（可能为 null）
- * @param {number} lineNo 1-based 行号
- * @returns {string}
- */
-function pickLine(content, lineNo) {
-  if (!content) return '';
-  const line = content.split(/\r?\n/)[lineNo - 1];
-  return line ? line.trim() : '';
-}
-
-/**
- * 将 sourcemap 中的 bare 源文件名（如 `lay.js`）解析为仓库相对路径（如 `src/modules/lay.js`）。
- * 优先匹配 `src/<name>`（入口文件），再匹配 `src/modules/<name>`（各模块）；
- * 两者均不存在时回退为原始名称，绝不抛错——只是失去 IDE 终端的可点击性。
- * @param {string} name sourcemap 的 source 字段
- * @returns {string}
- */
-function resolveSourcePath(name) {
-  if (!name) return name;
-  const candidates = [`src/${name}`, `src/modules/${name}`];
-  for (const candidate of candidates) {
-    if (fs.existsSync(candidate)) return candidate;
-  }
-  return name;
-}
-
-/**
- * 无 sourcemap 时的回退：截取产物中首个命中位置附近的单行片段，避免输出整份压缩产物
- * @param {{pattern: RegExp}} rule 校验规则
- * @param {string} source 产物源码内容
- * @returns {string}
- */
-function getPatternSnippet(rule, source) {
-  const pattern = new RegExp(
-    rule.pattern.source,
-    rule.pattern.flags.replace('g', '')
-  );
-  const match = pattern.exec(source);
-  if (!match) return '';
-
-  const start = Math.max(match.index - 60, 0);
-  const end = Math.min(match.index + match[0].length + 60, source.length);
-  return source.slice(start, end).replace(/\s+/g, ' ');
 }
