@@ -149,9 +149,7 @@
 .lay-btn-group .lay-btn + .lay-btn {
   margin-left: 0;
 }
-.lay-btn-group + .lay-btn-group {
-  margin-left: 10px;
-}
+
 /* 流体 */
 .lay-btn-fluid {
   width: 100%;

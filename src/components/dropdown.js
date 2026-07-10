@@ -3,11 +3,10 @@
  * 下拉菜单
  */
 
-import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
-import { Popup, popupHooks, clickOrMousedown } from './popup.js';
-import { menuConst, toggleMenuGroup } from './menu.js';
+import { Popup, popupHooks, clickOrMousedown, floating } from './popup.js';
+import { menu } from './menu.js';
 
 export class Dropdown extends Popup {
   static componentName = 'dropdown';
@@ -16,17 +15,21 @@ export class Dropdown extends Popup {
   static options = {
     ...super.options, // 继承 popup 默认配置项
 
+    // 弹出方位。可选值见 Popup.options.placement
+    placement: 'bottom-start',
+
+    // 是否自适应高度。开启后，将限制下拉菜单高度不超出可视区域，并自动出现纵向滚动条
+    autoFitHeight: false,
+
     data: [], // 菜单数据结构
-    expanded: true, // 是否初始展开子菜单
-    allowExpand: true, // 是否允许菜单组展开收缩
+    expanded: false, // 是否初始展开所有子菜单
 
-    // 是否开启菜单展开收缩的手风琴效果，仅菜单组生效
-    // 基础菜单需在容器上追加 `lay-accordion` 属性
-    // accordion: false,
+    // menu 组件相关选项
+    submenuMode: 'inline', // 子菜单的展示方式。可选值见 Menu.options.submenuMode
+    size: 'md', // 菜单尺寸。可选值见 Menu.options.size
 
-    // 自定义 data 字段名
-    customName: {
-      id: 'id',
+    // data 必选字段名映射
+    fieldNames: {
       title: 'title',
       children: 'children',
     },
@@ -36,7 +39,6 @@ export class Dropdown extends Popup {
     return {
       ...super.CONST,
       ELEM: 'lay-dropdown',
-      ...menuConst,
     };
   }
 
@@ -65,179 +67,95 @@ export class Dropdown extends Popup {
   // 打开前的内部钩子
   [popupHooks.kBeforeOpen]({ $rootElem }) {
     const options = this.options;
-    const customName = options.customName;
 
-    // 默认菜单内容
-    const getDefaultView = () => {
-      const $elemUl = $('<ul class="lay-menu lay-dropdown-menu"></ul>');
-      if (options.data?.length > 0) {
-        eachItemView($elemUl, options.data);
-      } else {
-        $elemUl.html(
-          `<li class="lay-menu-item-none">${i18n.$t('dropdown.noData')}</li>`,
-        );
-      }
-      return $elemUl;
-    };
+    // 获取菜单结构
+    let $menu = menu.generateMenu({
+      ...options,
+      mode: 'vertical', // 固定为垂直菜单
+    });
 
-    // 遍历菜单项
-    const eachItemView = ($views, data) => {
-      data.forEach((item) => {
-        // 是否存在子级
-        const isChild =
-          item[customName.children] && item[customName.children].length > 0;
-        const expanded = 'expanded' in item ? item.expanded : options.expanded;
-        const title = ((titleValue) => {
-          const template = item.template || options.template;
-          if (typeof template === 'function') {
-            titleValue = template.call(item, item);
-          }
-          return titleValue;
-        })(lay.escape(item[customName.title]));
-
-        // 初始类型
-        const type = (() => {
-          if (isChild) {
-            item.type = item.type || 'parent';
-          }
-          if (item.type) {
-            return (
-              {
-                group: 'group',
-                parent: 'parent',
-                '-': '-',
-              }[item.type] || 'parent'
-            );
-          }
-          return '';
-        })();
-
-        if (
-          type !== '-' &&
-          !item[customName.title] &&
-          !item[customName.id] &&
-          !isChild
-        )
-          return;
-
-        // 列表元素
-        const className = {
-          group: `lay-menu-item-group${
-            options.allowExpand
-              ? expanded
-                ? ' lay-menu-item-down'
-                : ' lay-menu-item-up'
-              : ''
-          }`,
-          parent: CONST.ELEM_ITEM_PARENT,
-          '-': 'lay-menu-item-divider',
-        };
-        const liClass =
-          isChild || type
-            ? className[type]
-            : item.disabled
-              ? CONST.CLASS_DISABLED
-              : '';
-        const viewText = (() => {
-          if (!('href' in item)) {
-            return title;
-          }
-
-          const target = item.target || '_self';
-          const $link = $('<a></a>')
-            .attr({
-              href: item.href,
-              target,
-            })
-            .html(title);
-
-          return $link.prop('outerHTML');
-        })();
-        const suffixIcon = (() => {
-          if (type === 'parent') {
-            return '<i class="lay-icon lay-icon-right"></i>';
-          }
-
-          if (type === 'group' && options.allowExpand) {
-            return `<i class="lay-icon lay-icon-${expanded ? 'up' : 'down'}"></i>`;
-          }
-
-          return '';
-        })();
-        const titleHtml = `<div class="${CONST.ELEM_MENU_TITLE}">${viewText}${
-          isChild ? suffixIcon : ''
-        }</div>`;
-        const $viewLi = $(`
-          <li${liClass ? ` class="${liClass}"` : ''}>
-            ${titleHtml}
-          </li>
-        `);
-
-        $viewLi.data('item', item);
-
-        // 子级区
-        if (isChild) {
-          const $elemPanel = $(
-            '<div class="lay-panel lay-menu-body-panel"></div>',
-          );
-          const $elemUl = $('<ul></ul>');
-
-          if (type === 'parent') {
-            $elemPanel.append(eachItemView($elemUl, item[customName.children]));
-            $viewLi.append($elemPanel);
-          } else {
-            $viewLi.append(eachItemView($elemUl, item[customName.children]));
-          }
-        }
-
-        $views.append($viewLi);
-      });
-      return $views;
-    };
+    if (!$menu) {
+      $menu = $('<div>');
+      $menu.addClass(CONST.CLASS_IS_EMPTY).text(i18n.$t('dropdown.empty'));
+    }
 
     // 面板内容
-    options.content = getDefaultView();
+    options.content = $menu;
 
     // 添加组件专属 className
     $rootElem.addClass(CONST.ELEM);
 
     // 阻止全局事件
-    $rootElem.on(clickOrMousedown, '.lay-menu', (e) => {
+    $rootElem.on(clickOrMousedown, `.${menu.CONST.ELEM}`, (e) => {
       e.stopPropagation();
     });
 
-    // 触发菜单列表事件
-    $rootElem.on('click', '.lay-menu li', (e) => {
+    // 点击菜单项
+    $rootElem.on('click', `.${menu.CONST.ELEM_ITEM}`, (e) => {
       const $this = $(e.currentTarget);
       const data = $this.data('item') || {};
-      const isChild =
-        data[customName.children] && data[customName.children].length > 0;
-      const isClickAllScope = options.clickScope === 'all'; // 是否所有父子菜单均触发点击事件
 
-      if (data.disabled) return; // 菜单项禁用状态
+      if (data.disabled) return;
 
-      // 普通菜单项点击后的回调及关闭面板
-      if ((!isChild || isClickAllScope) && data.type !== '-') {
-        const ret =
-          typeof options.click === 'function'
-            ? options.click(data, $this, e)
-            : null;
+      // 触发 onClick 回调
+      const clickResult = options.onClick?.({ data, e });
 
-        ret === false || isChild || this.close();
-        e.stopPropagation();
-      }
+      // 若返回 false 则阻止后续操作
+      if (clickResult === false) return;
+
+      // 关闭下拉菜单
+      this.close();
     });
+  }
 
-    // 触发菜单组展开收缩
-    $rootElem.on('click', CONST.ELEM_GROUP_TITLE, (e) => {
-      const $this = $(e.currentTarget);
-      const $groupElem = $this.parent();
-      const data = $groupElem.data('item') || {};
+  // 打开后的内部钩子
+  [popupHooks.kAfterOpen]() {
+    const options = this.options;
 
-      if (data.type === 'group' && options.allowExpand) {
-        toggleMenuGroup($groupElem, options.accordion);
-      }
+    // 渲染 menu 组件
+    menu.render({
+      ...options,
+      elem: this.$rootElem.find(`.${menu.CONST.ELEM}`),
+      mode: 'vertical',
+      submenuMode: options.submenuMode,
+      size: options.size,
+      accordion: options.accordion,
     });
+  }
+
+  // Floating 中间件钩子
+  [popupHooks.kMiddlewares]({ defaultMiddleware, padding }) {
+    const options = this.options;
+
+    // 若开启自适应高度，则启用 size 中间件
+    if (options.autoFitHeight) {
+      defaultMiddleware.push(
+        floating.size({
+          padding,
+          apply({ availableHeight, elements }) {
+            const { floating: floatingEl } = elements;
+
+            // 当下拉菜单高度超出可视区域时，将高度限制在可视区域内，并出现纵向滚动条
+            Object.assign(floatingEl.style, {
+              maxHeight:
+                availableHeight >= floatingEl.scrollHeight
+                  ? ''
+                  : `${Math.max(0, availableHeight)}px`,
+              overflowY: 'auto',
+            });
+          },
+        }),
+      );
+    } else {
+      // 未开启 autoFitHeight，清除相关状态
+      const floatingEl = this.$rootElem?.[0];
+      if (floatingEl) {
+        Object.assign(floatingEl.style, {
+          maxHeight: '',
+          overflowY: '',
+        });
+      }
+    }
   }
 }
 

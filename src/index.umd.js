@@ -17,6 +17,7 @@ import * as utils from './utils/index.js';
 // 导入组件模块
 import { layer } from './components/layer.js';
 import { popup } from './components/popup.js';
+import { menu } from './components/menu.js';
 import { laypage } from './components/laypage.js';
 import { laydate } from './components/laydate.js';
 import { dropdown } from './components/dropdown.js';
@@ -53,6 +54,7 @@ const layui = {
   utils,
   layer,
   popup,
+  menu,
   laypage,
   laydate,
   dropdown,

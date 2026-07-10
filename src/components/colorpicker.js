@@ -15,9 +15,11 @@ export class Colorpicker extends Popup {
   static options = {
     ...super.options, // 继承 popup 默认配置项
 
+    // 弹出方位。可选值见 Popup.options.placement
+    placement: 'bottom-start',
+
     color: '', // 默认颜色，默认没有
     size: null, // 选择器大小
-    align: 'center', // 选择器对齐方式，可选值见 Popup
     alpha: false, // 是否开启透明度
     format: 'hex', // 颜色显示/输入格式，可选 rgb,hex
     predefine: false, // 预定义颜色是否开启

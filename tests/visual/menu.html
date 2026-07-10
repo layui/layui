@@ -2,258 +2,314 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
-    <title>菜单元素 - layui</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>基础菜单 - layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <style>
+      body {
+        --demo-sidebar-width: 240px;
+        margin-left: calc(var(--demo-sidebar-width) + 16px);
+      }
+      .lay-btn.lay-is-active {
+        opacity: 0.8;
+      }
+      .demo-sidebar .lay-panel {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        bottom: 16px;
+        width: var(--demo-sidebar-width);
+        overflow: hidden auto;
+      }
+    </style>
   </head>
   <body>
-    <div class="lay-container" style="padding-top: 30px">
-      <div class="lay-btn-container">
-        <button type="button" class="lay-btn" lay-active="lg">大尺寸</button>
-        <button type="button" class="lay-btn" lay-active="normal">
-          常规尺寸
-        </button>
-      </div>
-
-      <div
-        class="lay-row lay-col-space30"
-        id="demo-box"
-        style="padding: 30px 0"
-      >
-        <div class="lay-col-xs9 lay-col-md3">
-          <div class="lay-panel">
-            <ul class="lay-menu" id="demo1">
-              <li lay-options="{id: 100}">
-                <div class="lay-menu-body-title"><a>menu item 1</a></div>
-              </li>
-              <li lay-options="{id: 101}">
-                <div class="lay-menu-body-title">
-                  <a href="">menu item 2 <span class="lay-badge-dot"></span></a>
+    <div class="demo-sidebar">
+      <div class="lay-panel">
+        <ul class="lay-menu" id="demo">
+          <li class="lay-menu-item">
+            <div class="lay-menu-title">
+              <i class="lay-icon lay-icon-github"></i>
+              <span class="lay-menu-title-text">Level 1 Menu 1</span>
+            </div>
+          </li>
+          <li class="lay-menu-hr"></li>
+          <li class="lay-menu-group">
+            <div class="lay-menu-title">Group 1</div>
+            <ul class="lay-menu-sub">
+              <li class="lay-menu-item">
+                <div class="lay-menu-title">
+                  <span class="lay-menu-title-text">Level 1 Menu 2</span>
                 </div>
               </li>
-              <li class="lay-menu-item-divider"></li>
-              <li
-                class="lay-menu-item-group lay-menu-item-down"
-                lay-options="{type: 'group'}"
-              >
-                <div class="lay-menu-body-title">
-                  menu group <i class="lay-icon lay-icon-up"></i>
+              <li class="lay-menu-submenu">
+                <div class="lay-menu-title">
+                  <span class="lay-menu-title-text">Level 1 Menu 3</span>
                 </div>
-                <ul>
-                  <li lay-options="{id: 103}">
-                    <div class="lay-menu-body-title">menu item 3-1</div>
+                <ul class="lay-menu-sub">
+                  <li class="lay-menu-item">
+                    <div class="lay-menu-title">
+                      <span class="lay-menu-title-text">
+                        Level 2 Menu 3-1
+                      </span>
+                    </div>
                   </li>
-                  <li
-                    class="lay-menu-item-group"
-                    lay-options="{type: 'group', allowExpand: false}"
-                  >
-                    <div class="lay-menu-body-title">menu group 2</div>
-                    <ul>
-                      <li class="lay-menu-item-checked">
-                        <div class="lay-menu-body-title">menu item 3-2-1</div>
+                  <li class="lay-menu-item">
+                    <a href="#" class="lay-menu-title">
+                      <span class="lay-menu-title-text">
+                        Level 2 Menu 3-2
+                      </span>
+                    </a>
+                  </li>
+                  <li class="lay-menu-item">
+                    <div class="lay-menu-title">
+                      <span class="lay-menu-title-text">
+                        Level 2 Menu 3-3
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+              <li class="lay-menu-item">
+                <div class="lay-menu-title">
+                  <span class="lay-menu-title-text">Level 1 Menu 4</span>
+                </div>
+              </li>
+            </ul>
+          </li>
+          <li class="lay-menu-item">
+            <div class="lay-menu-title">
+              <span class="lay-menu-title-text">Level 1 Menu 5</span>
+            </div>
+          </li>
+          <li class="lay-menu-submenu lay-is-expanded">
+            <div class="lay-menu-title">
+              <span class="lay-menu-title-text">Level 1 Menu 6</span>
+            </div>
+            <ul class="lay-menu-sub">
+              <li class="lay-menu-item">
+                <div class="lay-menu-title">
+                  <span class="lay-menu-title-text">Level 2 Menu 6-1</span>
+                </div>
+              </li>
+              <li class="lay-menu-submenu">
+                <div class="lay-menu-title">
+                  <span class="lay-menu-title-text">Level 2 Menu 6-2</span>
+                </div>
+                <ul class="lay-menu-sub">
+                  <li class="lay-menu-item">
+                    <div class="lay-menu-title">
+                      <span class="lay-menu-title-text">
+                        Level 3 Menu 6-2-1
+                      </span>
+                    </div>
+                  </li>
+                  <li class="lay-menu-submenu">
+                    <div class="lay-menu-title">
+                      <span class="lay-menu-title-text">
+                        Level 3 Menu 6-2-2
+                      </span>
+                    </div>
+                    <ul class="lay-menu-sub">
+                      <li class="lay-menu-item">
+                        <div class="lay-menu-title">
+                          <span class="lay-menu-title-text">
+                            Level 4 Menu 6-2-2-1
+                          </span>
+                        </div>
                       </li>
-                      <li>
-                        <div class="lay-menu-body-title">menu item 3-2-2</div>
+                      <li class="lay-menu-item">
+                        <div class="lay-menu-title">
+                          <span class="lay-menu-title-text">
+                            Level 4 Menu 6-2-2-2
+                          </span>
+                        </div>
                       </li>
                     </ul>
                   </li>
-                  <li>
-                    <div class="lay-menu-body-title">menu item 3-3</div>
-                  </li>
                 </ul>
               </li>
-              <li class="lay-menu-item-divider"></li>
-              <li>
-                <div class="lay-menu-body-title">
-                  menu item 4 <span class="lay-badge">1</span>
+              <li class="lay-menu-item">
+                <div class="lay-menu-title">
+                  <span class="lay-menu-title-text">Level 2 Menu 6-3</span>
                 </div>
               </li>
-              <li><div class="lay-menu-body-title">menu item 5</div></li>
-              <li><div class="lay-menu-body-title">menu item 6</div></li>
-              <li class="lay-menu-item-parent" lay-options="{type: 'parent'}">
-                <div class="lay-menu-body-title">
-                  menu item 7 Children
-                  <i class="lay-icon lay-icon-right"></i>
-                </div>
-                <div class="lay-panel lay-menu-body-panel">
-                  <ul>
-                    <li
-                      class="lay-menu-item-parent"
-                      lay-options="{type: 'parent'}"
-                    >
-                      <div class="lay-menu-body-title">
-                        menu item 7-1
-                        <i class="lay-icon lay-icon-right"></i>
-                      </div>
-                      <div class="lay-panel lay-menu-body-panel">
-                        <ul>
-                          <li>
-                            <div class="lay-menu-body-title">
-                              menu item 7-2-1
-                            </div>
-                          </li>
-                          <li>
-                            <div class="lay-menu-body-title">
-                              menu item 7-2-2
-                            </div>
-                          </li>
-                          <li>
-                            <div class="lay-menu-body-title">
-                              menu item 7-2-3
-                            </div>
-                          </li>
-                          <li>
-                            <div class="lay-menu-body-title">
-                              menu item 7-2-4
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="lay-menu-body-title">menu item 7-2</div>
-                    </li>
-                    <li>
-                      <div class="lay-menu-body-title">menu item 7-3</div>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li>menu item 8</li>
-              <li class="lay-menu-item-divider"></li>
-              <li class="lay-menu-item-group" lay-options="{type: 'group'}">
-                <div class="lay-menu-body-title">menu group 9</div>
-                <ul>
-                  <li>
-                    <div class="lay-menu-body-title">menu item 9-1</div>
-                  </li>
-                  <li
-                    class="lay-menu-item-parent"
-                    lay-options="{type: 'parent'}"
-                  >
-                    <div class="lay-menu-body-title">
-                      menu item 9-2
-                      <i class="lay-icon lay-icon-right"></i>
-                    </div>
-                    <div class="lay-panel lay-menu-body-panel">
-                      <ul>
-                        <li>
-                          <div class="lay-menu-body-title">menu item 9-2-1</div>
-                        </li>
-                        <li>
-                          <div class="lay-menu-body-title">menu item 9-2-2</div>
-                        </li>
-                        <li>
-                          <div class="lay-menu-body-title">menu item 9-2-3</div>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="lay-menu-body-title">menu item 9-31</div>
-                  </li>
-                </ul>
-              </li>
-              <li class="lay-menu-item-divider"></li>
-              <li><div class="lay-menu-body-title">menu item 10</div></li>
             </ul>
-          </div>
+          </li>
+          <li class="lay-menu-submenu">
+            <div class="lay-menu-title">
+              <span class="lay-menu-title-text">Level 1 Menu 7</span>
+            </div>
+            <ul class="lay-menu-sub">
+              <li class="lay-menu-item">
+                <div class="lay-menu-title">
+                  <span class="lay-menu-title-text">Level 2 Menu 7-1</span>
+                </div>
+              </li>
+              <li class="lay-menu-submenu lay-is-expanded">
+                <div class="lay-menu-title">
+                  <span class="lay-menu-title-text">Level 2 Menu 7-2</span>
+                </div>
+                <ul class="lay-menu-sub">
+                  <li class="lay-menu-item">
+                    <div class="lay-menu-title">
+                      <span class="lay-menu-title-text">
+                        Level 3 Menu 7-2-1
+                      </span>
+                    </div>
+                  </li>
+                  <li class="lay-menu-item">
+                    <div class="lay-menu-title">
+                      <span class="lay-menu-title-text">
+                        Level 3 Menu 7-2-2
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+              <li class="lay-menu-item">
+                <div class="lay-menu-title">
+                  <span class="lay-menu-title-text">Level 2 Menu 7-3</span>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div style="padding: 16px">
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <div class="lay-btn-group">
+          <button
+            type="button"
+            class="lay-btn lay-is-active"
+            lay-on="mode"
+            lay-mode="vertical"
+          >
+            垂直菜单（默认）
+          </button>
+          <button
+            type="button"
+            class="lay-btn"
+            lay-on="mode"
+            lay-mode="horizontal"
+          >
+            水平菜单（待实现）
+          </button>
         </div>
-
-        <div class="lay-col-xs9 lay-col-md3">
-          <div class="lay-panel">
-            <ul class="lay-menu" id="docDemoMenu1">
-              <li lay-options="{id: 100}">
-                <div class="lay-menu-body-title">menu item 1</div>
-              </li>
-              <li lay-options="{id: 101}">
-                <div class="lay-menu-body-title">
-                  <a href="">menu item 2 <span class="lay-badge-dot"></span></a>
-                </div>
-              </li>
-              <li class="lay-menu-item-divider"></li>
-              <li
-                class="lay-menu-item-group lay-menu-item-down"
-                lay-options="{type: 'group', allowExpand: false}"
-              >
-                <div class="lay-menu-body-title">menu group</div>
-                <ul>
-                  <li lay-options="{id: 1031}">
-                    <div class="lay-menu-body-title">menu item 3-1</div>
-                  </li>
-                  <li lay-options="{id: 1032}">
-                    <div class="lay-menu-body-title">menu item 3-2</div>
-                  </li>
-                </ul>
-              </li>
-              <li class="lay-menu-item-divider"></li>
-              <li
-                class="lay-menu-item-group lay-menu-item-down"
-                lay-options="{type: 'group', allowExpand: false}"
-              >
-                <div class="lay-menu-body-title">menu group 2</div>
-                <ul>
-                  <li lay-options="{id: 1031}">
-                    <div class="lay-menu-body-title">menu item 4-1</div>
-                  </li>
-                  <li lay-options="{id: 1032}">
-                    <div class="lay-menu-body-title">menu item 4-2</div>
-                  </li>
-                </ul>
-              </li>
-              <li class="lay-menu-item-divider"></li>
-              <li class="lay-menu-item-parent" lay-options="{type: 'parent'}">
-                <div class="lay-menu-body-title">
-                  menu item 5
-                  <i class="lay-icon lay-icon-right"></i>
-                </div>
-                <div class="lay-panel lay-menu-body-panel">
-                  <ul>
-                    <li lay-options="{id: 1051}">
-                      <div class="lay-menu-body-title">menu item 5-1</div>
-                    </li>
-                    <li lay-options="{id: 1051}">
-                      <div class="lay-menu-body-title">menu item 5-2</div>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li lay-options="{id: 106}">
-                <div class="lay-menu-body-title">menu item 6</div>
-              </li>
-            </ul>
-          </div>
+        <div class="lay-btn-group">
+          <button
+            type="button"
+            class="lay-btn lay-is-active"
+            lay-on="submenuMode"
+            lay-mode="inline"
+          >
+            子菜单内联模式（默认）
+          </button>
+          <button
+            type="button"
+            class="lay-btn"
+            lay-on="submenuMode"
+            lay-mode="popup"
+          >
+            子菜单弹出模式（待实现）
+          </button>
+        </div>
+        <div class="lay-btn-group">
+          <button type="button" class="lay-btn" lay-on="size" lay-size="sm">
+            小尺寸
+          </button>
+          <button
+            type="button"
+            class="lay-btn lay-is-active"
+            lay-on="size"
+            lay-size="md"
+          >
+            中尺寸（默认）
+          </button>
+          <button type="button" class="lay-btn" lay-on="size" lay-size="lg">
+            大尺寸
+          </button>
+        </div>
+        <div class="lay-btn-group" id="expand-collapse-btns">
+          <button
+            type="button"
+            class="lay-btn"
+            lay-on="method"
+            lay-method="expandAll"
+          >
+            全部展开
+          </button>
+          <button
+            type="button"
+            class="lay-btn"
+            lay-on="method"
+            lay-method="collapseAll"
+          >
+            全部折叠
+          </button>
         </div>
       </div>
     </div>
 
     <script src="./assets/dist/layui.js"></script>
     <script type="module">
-      const { $, dropdown, utils } = layui;
+      const { menu, $, utils } = layui;
 
-      dropdown.on('click(demo1)', function (options) {
-        var thisElem = $(this);
-        console.log(thisElem, options);
+      // 点击时添加按钮选中状态
+      $('.lay-btn-group').on('click', '.lay-btn', function () {
+        $(this)
+          .addClass('lay-is-active')
+          .siblings()
+          .removeClass('lay-is-active');
       });
 
-      utils.on('lay-active', {
-        normal: () => {
-          $('#demo-box')
-            .children()
-            .addClass('lay-col-md3')
-            .removeClass('lay-col-md4');
-          $('#demo-box').find('.lay-menu').removeClass('lay-menu-lg');
+      // 显示/隐藏「展开/折叠」按钮
+      const toggleExpandCollapseBtns = (visible) => {
+        const $expandCollapseBtns = $('#expand-collapse-btns');
+        if (visible) {
+          $expandCollapseBtns.show();
+        } else {
+          $expandCollapseBtns.hide();
+        }
+      };
+
+      const $menuElem = $('.lay-menu');
+
+      // 事件
+
+      utils.on({
+        mode() {
+          const mode = $(this).attr('lay-mode');
+
+          menu.reload('demo', {
+            mode,
+          });
+
+          toggleExpandCollapseBtns(
+            mode === 'vertical' &&
+              $menuElem.attr('lay-submenu-mode') === 'inline',
+          );
         },
-        lg: () => {
-          $('#demo-box')
-            .children()
-            .addClass('lay-col-md4')
-            .removeClass('lay-col-md3');
-          $('#demo-box').find('.lay-menu').addClass('lay-menu-lg');
+        submenuMode() {
+          const submenuMode = $(this).attr('lay-mode');
+
+          menu.reload('demo', {
+            submenuMode,
+          });
+
+          toggleExpandCollapseBtns(
+            $menuElem.attr('lay-mode') === 'vertical' &&
+              submenuMode === 'inline',
+          );
+        },
+        size() {
+          const size = $(this).attr('lay-size');
+          $menuElem.attr('lay-size', size);
+        },
+        method() {
+          const method = $(this).attr('lay-method');
+          menu[method]('demo');
         },
       });
     </script>

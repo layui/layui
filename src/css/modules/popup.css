@@ -1,31 +1,53 @@
 /* popup.css */
 
 .lay-popup {
-  --lay-popup-gap: 5px;
-
   position: absolute;
   left: -999999px;
   top: -999999px;
   z-index: 77777777;
-  margin: var(--lay-popup-gap) 0;
   box-sizing: border-box;
 
   * {
     box-sizing: border-box;
   }
 }
-.lay-popup::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: var(--lay-popup-gap);
-  left: 0;
-  top: calc(-1 * var(--lay-popup-gap));
-}
 .lay-popup-content {
   position: relative;
   padding: var(--lay-spacing-sm);
+  background-color: inherit;
 }
+
+/* 箭头 */
+.lay-popup-arrow {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  z-index: -1;
+  background-color: inherit;
+  transform: rotate(45deg);
+  border: inherit;
+  box-shadow: inherit;
+}
+
+/* 不同位置的箭头 */
+.lay-popup[data-placement^='top'] .lay-popup-arrow {
+  bottom: -5px;
+  top: auto;
+}
+.lay-popup[data-placement^='right'] .lay-popup-arrow {
+  left: -5px;
+  right: auto;
+}
+.lay-popup[data-placement^='bottom'] .lay-popup-arrow {
+  top: -5px;
+  bottom: auto;
+}
+.lay-popup[data-placement^='left'] .lay-popup-arrow {
+  right: -5px;
+  left: auto;
+}
+
+/* 遮罩 */
 .lay-popup-backdrop {
   top: 0;
   left: 0;

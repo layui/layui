@@ -32,6 +32,70 @@
       </div>
 
       <br /><br />
+      <h2>弹出方位</h2>
+      <hr />
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          gap: 11px;
+          max-width: 520px;
+          margin: 0 auto;
+        "
+      >
+        <div style="display: flex; justify-content: center; gap: 6px">
+          <button class="lay-btn" id="demo-top-start">top-start</button>
+          <button class="lay-btn" id="demo-top">top</button>
+          <button class="lay-btn" id="demo-top-end">top-end</button>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            flex-wrap: wrap;
+          "
+        >
+          <button class="lay-btn" id="demo-left-start">left-start</button>
+          <button class="lay-btn" id="demo-right-start">right-start</button>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            flex-wrap: wrap;
+          "
+        >
+          <button class="lay-btn" id="demo-left">left</button>
+          <button class="lay-btn" id="demo-right">right</button>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            flex-wrap: wrap;
+          "
+        >
+          <button class="lay-btn" id="demo-left-end">left-end</button>
+          <button class="lay-btn" id="demo-right-end">right-end</button>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+          "
+        >
+          <button class="lay-btn" id="demo-bottom-start">bottom-start</button>
+          <button class="lay-btn" id="demo-bottom">bottom</button>
+          <button class="lay-btn" id="demo-bottom-end">bottom-end</button>
+        </div>
+      </div>
+
+      <br /><br />
       <h2>打开动画</h2>
       <hr />
       <div
@@ -64,8 +128,8 @@
       <div
         style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
       >
-        <div id="demo-external">
-          <strong>目标元素</strong>
+        <div>
+          <strong id="demo-external">目标元素</strong>
           （通过右侧按钮打开或关闭面板）
         </div>
         <div>
@@ -99,7 +163,7 @@
         // 常规
         popup.render({
           elem: '#demo-normal',
-          content: '一个普通的附着式弹出层',
+          content: '一个普通的附着弹出层',
         });
 
         // 开启遮罩
@@ -109,6 +173,7 @@
             'Popup 是附着弹出、选择器等类型组件（如：dropdown、laydate、colorPicker）的基础组件。',
           style: 'width: 350px;',
           backdrop: 0.5,
+          placement: 'bottom-start',
         });
 
         // 触发方式
@@ -117,6 +182,30 @@
             elem: `#demo-${trigger}`,
             trigger,
             content: `通过 ${trigger} 事件打开`,
+          });
+        });
+
+        // 弹出方位
+        [
+          'top-start',
+          'top',
+          'top-end',
+          'left-start',
+          'right-start',
+          'left',
+          'right',
+          'left-end',
+          'right-end',
+          'bottom-start',
+          'bottom',
+          'bottom-end',
+        ].forEach((placement) => {
+          popup.render({
+            elem: `#demo-${placement}`,
+            // trigger: 'hover',
+            content: `从目标元素 ${placement} 弹出<br>Content<br>Content`,
+            placement,
+            showArrow: true,
           });
         });
 
@@ -140,14 +229,17 @@
         popup.render({
           elem: '#demo-width',
           content: '通过 style 选项设置最小最大宽度',
+          placement: 'bottom-start',
           style: 'min-width: 300px; max-width: 600px;',
         });
         // 自定义任意样式
         popup.render({
           elem: '#demo-style',
           content: '通过 style 选项设置任意样式',
+          placement: 'bottom-start',
+          showArrow: true,
           style:
-            'min-width: 300px; max-width: 600px; background-color: #16b777; color: #fff; border-radius: 11px; padding: 11px;',
+            'min-width: 300px; max-width: 600px; border: none; border-radius: 5px; box-shadow: none; background-color: #16b777; color: #fff; padding: 11px;',
         });
         // 自定义样式与内容
         popup.render({
@@ -166,6 +258,7 @@
   </div>
 </div>
           `,
+          placement: 'bottom-start',
           className: 'demo-dropdown-tabs',
           style: 'width: 390px; box-shadow: 1px 1px 30px rgb(0 0 0 / 12%);',
           afterOpen(options, $rootElem) {
@@ -180,6 +273,8 @@
           elem: '#demo-external',
           trigger: 'manual',
           content: '弹出层内容',
+          placement: 'bottom-start',
+          showArrow: true,
         });
 
         utils.on(
@@ -199,6 +294,7 @@
           elem: '#updateContent',
           trigger: 'focus',
           content: '初始内容',
+          placement: 'bottom-start',
           style: 'min-width: 168px;',
         });
         const autocompletInstId = autocompletInst.options.id;

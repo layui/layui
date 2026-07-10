@@ -5,10 +5,12 @@
 
 import { lay } from '../core/lay.js';
 import { $ } from 'jquery';
+import * as floating from '@floating-ui/dom';
 import { Component } from '../core/component.js';
 
 const device = lay.device();
 export const clickOrMousedown = device.mobile ? 'touchstart' : 'mousedown';
+export { floating };
 
 // 组件钩子符号集
 export const popupHooks = Object.freeze({
@@ -16,6 +18,7 @@ export const popupHooks = Object.freeze({
   kBeforeOpen: Symbol('Popup.beforeOpen'), // 层打开前
   kAfterOpen: Symbol('Popup.afterOpen'), // 层打开后
   kAfterClose: Symbol('Popup.afterClose'), // 层关闭后
+  kMiddlewares: Symbol('Popup.middlewares'), // Floating 中间件配置
 });
 
 export class Popup extends Component {
@@ -25,23 +28,25 @@ export class Popup extends Component {
   static options = {
     content: '', // 层内容
     trigger: 'click', // 事件类型
-    anim: 'downbit', // 打开动画。支持 anim.css 中的所有动画类
+
+    // 弹出方位。可选值：top|right|bottom|left|top-start|top-end|right-start|right-end|bottom-start|bottom-end|left-start|left-end
+    placement: 'top',
+
+    // 是否显示箭头
+    showArrow: false,
 
     // 打开层后，再次点击目标元素时是否关闭层。
     // 行为取决于所使用的触发事件类型
     closeOnClick: true,
 
+    // 层打开时的动画。支持 anim.css 中的所有动画类
+    anim: 'downbit',
+
     // 延时显示或隐藏的毫秒数，若为 number 类型，则表示显示和隐藏的延迟时间相同。
-    // trigger 为 hover/mouseenter 时生效
+    // 仅当 `trigger` 为 `hover / mouseenter` 时生效
     delay: [200, 300],
 
     // defaultOpen: false, // 是否初始默认打开层
-
-    // 定位方式。同 CSS position 属性。
-    // 一般无需设置，除非当目标元素处于 fixed 容器，可设置 fixed 值
-    // position: 'absolute',
-
-    // align: 'left', // 层对齐方式，可选值：left|center|right
     // className: '', // 自定义样式类名
     // style: '', // 设置最外层 style 属性
     // backdrop: 0, // 遮罩
@@ -51,8 +56,12 @@ export class Popup extends Component {
     return {
       ...super.CONST,
       ELEM_ROOT: 'lay-popup',
+      ELEM_ARROW: 'lay-popup-arrow',
       ELEM_CONTENT: 'lay-popup-content',
       ELEM_BACKDROP: 'lay-popup-backdrop',
+
+      // 弹出层的安全间距，同时用于层偏移、翻转和位移时的边界间距
+      POSITION_SPACING: 5,
     };
   }
 
@@ -72,8 +81,9 @@ export class Popup extends Component {
       $target: $(this.options.target),
     });
 
+    this.overrideArrayOptions(options);
     this.stopClickOutsideEvent = $.noop;
-    this.stopResizeEvent = $.noop;
+    this.stopAutoUpdatePosition = $.noop;
   }
 
   // 渲染
@@ -122,10 +132,18 @@ export class Popup extends Component {
       // 初始化自定义样式
       $rootElem.addClass(options.className).attr('style', options.style);
 
+      // 生成内容
+      $contentElem.html(options.content);
+      $rootElem.append($contentElem);
+
+      // 生成箭头
+      if (options.showArrow) {
+        const $arrowElem = $(`<div class="${CONST.ELEM_ARROW}"></div>`);
+        $rootElem.append($arrowElem);
+      }
+
       // 生成层
       this.close(); // 关闭旧层
-      $contentElem.html(options.content); // 填充内容
-      $rootElem.append($contentElem); // 插入内容元素
       options.$target.append($rootElem); // 插入新层
       this.$rootElem = $rootElem;
 
@@ -160,9 +178,8 @@ export class Popup extends Component {
       }
     }
 
-    this.#position(); // 定位坐标
     this.#onClickOutside();
-    this.#autoUpdatePosition();
+    this.#startAutoUpdatePosition();
 
     options.afterOpen?.(options, $rootElem); // 层打开后的回调
     this[popupHooks.kAfterOpen]?.(); // 层打开后的内部钩子
@@ -176,7 +193,7 @@ export class Popup extends Component {
     const $rootElem = this.$rootElem;
 
     this.stopClickOutsideEvent();
-    this.stopResizeEvent();
+    this.stopAutoUpdatePosition();
 
     // 若存在已打开的层元素，则移除
     if (this.isRootElemMounted()) {
@@ -211,16 +228,142 @@ export class Popup extends Component {
     return $rootElem && this.options.$target[0]?.contains($rootElem[0]);
   }
 
-  // 位置定位
-  #position() {
+  /**
+   * 获取参考元素
+   * @returns {Element|Object} - 返回参考元素或自定义对象
+   */
+  #getReference() {
     const options = this.options;
 
-    lay.position(options.$elem[0], this.$rootElem[0], {
-      position: options.position,
-      e: this.e,
-      clickType: options.trigger === 'contextmenu' ? 'right' : null,
-      align: options.align || null,
+    // 如果是右键菜单，则返回虚拟元素，模拟鼠标位置
+    if (options.trigger === 'contextmenu' && this.e) {
+      const { clientX, clientY } = this.e;
+      return {
+        getBoundingClientRect() {
+          return {
+            width: 0,
+            height: 0,
+            x: clientX,
+            y: clientY,
+            top: clientY,
+            left: clientX,
+            right: clientX,
+            bottom: clientY,
+          };
+        },
+        contextElement:
+          options.$elem[0] instanceof Element ? options.$elem[0] : undefined,
+      };
+    }
+
+    return options.$elem[0];
+  }
+
+  // 获取中间件配置
+  #getMiddleware() {
+    const options = this.options;
+    const floatingEl = this.$rootElem[0];
+    const arrowEl = floatingEl.querySelector(`.${CONST.ELEM_ARROW}`);
+    const showArrow = options.showArrow && arrowEl;
+    let padding = CONST.POSITION_SPACING;
+
+    // 若开启箭头，则增加箭头的偏移量
+    if (showArrow) {
+      padding += arrowEl.offsetWidth / 2;
+    }
+
+    // 默认中间件配置
+    const defaultMiddleware = [
+      floating.offset(padding),
+      floating.flip({ padding }),
+      floating.shift({ padding }),
+    ];
+
+    // 执行中间件配置钩子
+    const middlewareFromHook = this[popupHooks.kMiddlewares]?.({
+      defaultMiddleware,
+      padding,
     });
+
+    let middleware = [...defaultMiddleware];
+
+    // 若 middleware 选项值为数组，则替换默认中间件配置
+    if (Array.isArray(middlewareFromHook)) {
+      middleware = middlewareFromHook;
+    }
+
+    // 若开启箭头，且未包含 arrow 中间件，则自动追加
+    if (options.showArrow && arrowEl) {
+      if (!middleware.some((m) => m?.name === 'arrow')) {
+        middleware.push(floating.arrow({ element: arrowEl }));
+      }
+    }
+
+    return middleware;
+  }
+
+  /**
+   * 更新层位置
+   * 采用 Floating UI 计算位置
+   * @需求背景 https://github.com/layui/layui/pull/3088#issuecomment-4884766973
+   * @returns {Promise<void>}
+   */
+  #updatePosition() {
+    const options = this.options;
+    const referenceEl = this.#getReference();
+    const floatingEl = this.$rootElem[0];
+    const arrowEl = floatingEl.querySelector(`.${CONST.ELEM_ARROW}`);
+
+    // 计算位置
+    return floating
+      .computePosition(referenceEl, floatingEl, {
+        placement: options.placement,
+        middleware: this.middleware,
+      })
+      .then(({ x, y, placement, middlewareData }) => {
+        // 更新层位置
+        Object.assign(floatingEl.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+
+        floatingEl.dataset.placement = placement;
+
+        // 更新箭头位置
+        if (arrowEl && middlewareData.arrow) {
+          const { x: arrowX, y: arrowY } = middlewareData.arrow;
+          Object.assign(arrowEl.style, {
+            left: arrowX != null ? `${arrowX}px` : '',
+            top: arrowY != null ? `${arrowY}px` : '',
+            right: '',
+            bottom: '',
+          });
+        }
+      });
+  }
+
+  /**
+   * 开启自动更新位置
+   */
+  #startAutoUpdatePosition() {
+    const referenceEl = this.#getReference();
+    const floatingEl = this.$rootElem[0];
+
+    this.stopAutoUpdatePosition(); // 停止上一次的自动更新位置
+    this.middleware = this.#getMiddleware(); // 获取中间件配置
+
+    // 执行自动更新位置
+    const cleanup = floating.autoUpdate(
+      referenceEl,
+      floatingEl,
+      this.#updatePosition.bind(this),
+    );
+
+    // 停止自动更新位置
+    this.stopAutoUpdatePosition = () => {
+      cleanup();
+      this.stopAutoUpdatePosition = $.noop;
+    };
   }
 
   // 规范化延迟时间
@@ -328,54 +471,8 @@ export class Popup extends Component {
       this.stopClickOutsideEvent = $.noop;
     };
   }
-
-  /**
-   * 窗口大小变化时自动更新位置
-   */
-  #autoUpdatePosition() {
-    const options = this.options;
-    const eventNamespace = this.constructor.CONST.EVENT_NAMESPACE;
-
-    this.stopResizeEvent();
-
-    const windowResizeHandler = () => {
-      if (
-        this.$rootElem &&
-        (!this.$rootElem[0] || !this.$rootElem.is(':visible'))
-      )
-        return;
-      if (options.trigger === 'contextmenu') {
-        this.close();
-      } else {
-        this.#position();
-      }
-    };
-    $(window).on(`resize${eventNamespace}`, windowResizeHandler);
-
-    const shouldObserveResize =
-      resizeObserver && options.trigger !== 'contextmenu';
-    const triggerEl = options.$elem[0];
-    const contentEl = this.$rootElem[0];
-    const positionHandler = () => this.#position();
-
-    if (shouldObserveResize) {
-      resizeObserver.observe(triggerEl, positionHandler);
-      resizeObserver.observe(contentEl, positionHandler);
-    }
-
-    this.stopResizeEvent = () => {
-      $(window).off(`resize${eventNamespace}`, windowResizeHandler);
-      if (shouldObserveResize) {
-        resizeObserver.unobserve(triggerEl);
-        resizeObserver.unobserve(contentEl);
-      }
-
-      this.stopResizeEvent = $.noop;
-    };
-  }
 }
 
 const CONST = Popup.CONST;
-const resizeObserver = lay.createSharedResizeObserver(Popup.componentName);
 
 export { Popup as popup };

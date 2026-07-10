@@ -17,6 +17,7 @@ export * as utils from './utils/index.js';
 // 导出组件模块
 export { layer } from './components/layer.js';
 export { popup } from './components/popup.js';
+export { menu } from './components/menu.js';
 export { laypage } from './components/laypage.js';
 export { laydate } from './components/laydate.js';
 export { dropdown } from './components/dropdown.js';

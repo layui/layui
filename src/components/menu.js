@@ -5,148 +5,306 @@
 
 import { lay } from '../core/lay.js';
 import { $ } from 'jquery';
+import { Component } from '../core/component.js';
+// import { popup, popupHooks } from './popup.js';
 
-const CONST = {
-  ELEM_ITEM_UP: 'lay-menu-item-up',
-  ELEM_ITEM_DOWN: 'lay-menu-item-down',
-  ELEM_MENU_TITLE: 'lay-menu-body-title',
-  ELEM_ITEM_GROUP: 'lay-menu-item-group',
-  ELEM_ITEM_PARENT: 'lay-menu-item-parent',
-  ELEM_ITEM_DIV: 'lay-menu-item-divider',
-  ELEM_ITEM_CHECKED: 'lay-menu-item-checked',
-  ELEM_ITEM_CHECKED2: 'lay-menu-item-checked2',
-  ELEM_MENU_PANEL: 'lay-menu-body-panel',
-  ELEM_MENU_PANEL_L: 'lay-menu-body-panel-left',
-  get ELEM_GROUP_TITLE() {
-    return `.${this.ELEM_ITEM_GROUP}>.${this.ELEM_MENU_TITLE}`;
-  },
-};
+class Menu extends Component {
+  static componentName = 'menu';
 
-export { CONST as menuConst };
-
-/**
- * 设置菜单组展开和收缩状态
- * @param {JQuery} $groupElem - 菜单组标题元素的 jQuery 对象
- * @param {boolean} accordion - 是否为手风琴模式
- * @returns {void}
- */
-export const toggleMenuGroup = ($groupElem, accordion) => {
-  const $contentElem = $groupElem.children('ul');
-  const needSpread = $groupElem.hasClass(CONST.ELEM_ITEM_UP);
-  const ANIM_MS = 200;
-
-  // 动画执行完成后的操作
-  const complete = function () {
-    $(this).css({ display: '' }); // 剔除临时 style，以适配外部样式的状态重置;
+  // 默认配置项
+  static options = {
+    elem: '.lay-menu',
+    size: 'md', // 菜单尺寸。可选值：sm|md|lg
+    mode: 'vertical', // 菜单模式。可选值：vertical|horizontal(待补充，以平替 nav)
+    submenuMode: 'inline', // 子菜单的展示方式。可选值：inline|popup
+    accordion: false, // 是否采用「手风琴模式」展开子菜单
   };
 
-  // 动画是否正在执行
-  if ($contentElem.is(':animated')) return;
-
-  // 展开
-  if (needSpread) {
-    $groupElem.removeClass(CONST.ELEM_ITEM_UP).addClass(CONST.ELEM_ITEM_DOWN);
-    $contentElem.hide().stop().slideDown(ANIM_MS, complete);
-  } else {
-    // 收缩
-    $contentElem.stop().slideUp(ANIM_MS, complete);
-    $groupElem.removeClass(CONST.ELEM_ITEM_DOWN).addClass(CONST.ELEM_ITEM_UP);
+  static get CONST() {
+    return {
+      ...super.CONST,
+      ELEM: 'lay-menu',
+      ELEM_GROUP: 'lay-menu-group',
+      ELEM_SUBMENU: 'lay-menu-submenu',
+      ELEM_TITLE: 'lay-menu-title',
+      ELEM_TITLE_TEXT: 'lay-menu-title-text',
+      ELEM_TITLE_ARROW: 'lay-menu-title-arrow',
+      ELEM_SUB: 'lay-menu-sub',
+      ELEM_ITEM: 'lay-menu-item',
+    };
   }
 
-  // 手风琴
-  if (needSpread && accordion) {
-    const $groupSibs = $groupElem.siblings(`.${CONST.ELEM_ITEM_DOWN}`);
-    $groupSibs.children('ul').stop().slideUp(ANIM_MS, complete);
-    $groupSibs.removeClass(CONST.ELEM_ITEM_DOWN).addClass(CONST.ELEM_ITEM_UP);
+  // 实例方法静态委托
+  static {
+    this.delegateInstanceMethods(['expandAll', 'collapseAll']);
   }
-};
 
-// 全局事件
-(() => {
-  const $win = $(window);
-  const $doc = $(document);
+  /**
+   * 动态生成菜单
+   * @param {Object} options - 组件配置项
+   * @param {Array} options.data - 菜单数据结构
+   * @param {Object} options.fieldNames - 字段名映射
+   * @param {Function} [options.template] - 菜单标题模板函数
+   * @param {boolean} [options.expanded] - 是否默认展开子菜单
+   * @param {string} [options.size] - 菜单尺寸。可选值：sm|md|lg
+   * @returns {jQuery|undefined} 返回菜单 jQuery 对象 或 undefined
+   */
+  static generateMenu(options) {
+    const $menu = $('<ul class="lay-menu"></ul>');
 
-  // 基础菜单的静态元素事件
-  const ELEM_LI = '.lay-menu:not(.lay-dropdown-menu) li';
-  $doc.on('click', ELEM_LI, function () {
-    const $this = $(this);
-    const $parent = $this.parents('.lay-menu').eq(0);
-    const isChild =
-      $this.hasClass(CONST.ELEM_ITEM_GROUP) ||
-      $this.hasClass(CONST.ELEM_ITEM_PARENT);
-    const filter = $parent.attr('lay-filter') || $parent.attr('id');
-    const options = lay.options(this);
+    // 字段名映射
+    const fieldNames = options.fieldNames || {
+      id: 'id',
+      title: 'title',
+      children: 'children',
+    };
 
-    // 非触发元素
-    if ($this.hasClass(CONST.ELEM_ITEM_DIV)) return;
+    // 根据 data 递归生成菜单结构
+    const buildMenuItems = ($menu, data) => {
+      data.forEach((item) => {
+        const hasChildren = item[fieldNames.children]?.length;
+        const template = item.template || options.template;
 
-    // 非菜单组
-    if (!isChild) {
-      // 选中
-      $parent
-        .find(`.${CONST.ELEM_ITEM_CHECKED}`)
-        .removeClass(CONST.ELEM_ITEM_CHECKED); // 清除选中样式
-      $parent
-        .find(`.${CONST.ELEM_ITEM_CHECKED2}`)
-        .removeClass(CONST.ELEM_ITEM_CHECKED2); // 清除父级菜单选中样式
-      $this.addClass(CONST.ELEM_ITEM_CHECKED); // 添加选中样式
-      $this
-        .parents(`.${CONST.ELEM_ITEM_PARENT}`)
-        .addClass(CONST.ELEM_ITEM_CHECKED2); // 添加父级菜单选中样式
+        // 是否展开
+        const expanded = lay.hasOwn(item, 'expanded')
+          ? item.expanded
+          : options.expanded;
 
-      options.title =
-        options.title ||
-        $this.children(`.${CONST.ELEM_MENU_TITLE}`).text().trim();
+        // 菜单标题
+        const title =
+          typeof template === 'function'
+            ? template.call(item, item)
+            : lay.escape(item[fieldNames.title]);
 
-      // 触发事件
-      lay.event.call(this, 'menu', `click(${filter})`, options);
-    }
-  });
+        // 若无标题且无子级，则跳过该项
+        if (!item.type && !title && !hasChildren) return;
 
-  // 基础菜单的展开收缩事件
-  $doc.on('click', `${ELEM_LI}${CONST.ELEM_GROUP_TITLE}`, function () {
-    const $this = $(this);
-    const $elemGroup = $this.parents(`.${CONST.ELEM_ITEM_GROUP}:eq(0)`);
-    const options = lay.options($elemGroup[0]);
-    const accordion =
-      typeof $this.parents('.lay-menu').eq(0).attr('lay-accordion') ===
-      'string';
+        // 列表元素
+        const $li = $('<li></li>');
 
-    if ('allowExpand' in options ? options.allowExpand : true) {
-      toggleMenuGroup($elemGroup, accordion);
-    }
-  });
+        // 特殊类型项
+        if (['-'].includes(item.type)) {
+          // 横线
+          if (item.type === '-') {
+            $li.addClass('lay-menu-hr');
+          }
+        } else {
+          // 普通菜单项
+          let $title = $(`<div></div>`);
 
-  // 判断子级菜单是否超出屏幕
-  const ELEM_LI_PAR = `.lay-menu .${CONST.ELEM_ITEM_PARENT}`;
-  $doc
-    .on('mouseenter', ELEM_LI_PAR, function () {
-      const $this = $(this);
-      const $elemPanel = $this.children(`.${CONST.ELEM_MENU_PANEL}`);
+          // 若为链接项
+          if (lay.hasOwn(item, 'href')) {
+            $title = $('<a></a>');
+            $title.attr({
+              href: item.href,
+              target: item.target || '_self',
+            });
+          }
 
-      if (!$elemPanel[0]) return;
-      let rect = $elemPanel[0].getBoundingClientRect();
+          // 菜单标题文本元素
+          const $titleText = $(`<div class="${CONST.ELEM_TITLE_TEXT}"></div>`);
 
-      // 是否超出右侧屏幕
-      if (rect.right > $win.width()) {
-        $elemPanel.addClass(CONST.ELEM_MENU_PANEL_L);
-        // 不允许超出左侧屏幕
-        rect = $elemPanel[0].getBoundingClientRect();
-        if (rect.left < 0) {
-          $elemPanel.removeClass(CONST.ELEM_MENU_PANEL_L);
+          // 禁用项
+          if (item.disabled) {
+            $li.addClass(CONST.CLASS_IS_DISABLED);
+          }
+
+          // 生成菜单标题元素
+          $titleText.html(title);
+          $title.addClass(CONST.ELEM_TITLE).append($titleText);
+          $li.data('item', item).append($title);
+
+          // 子菜单
+          if (hasChildren) {
+            const $sub = $(`<ul class="${CONST.ELEM_SUB}"></ul>`);
+
+            $li.addClass(CONST.ELEM_SUBMENU);
+
+            // 展开状态
+            if (expanded) {
+              $li.addClass(CONST.CLASS_IS_EXPANDED);
+            }
+
+            // 生成子菜单
+            $li.append(buildMenuItems($sub, item[fieldNames.children]));
+          } else {
+            // 菜单项
+            $li.addClass(CONST.ELEM_ITEM);
+          }
         }
-      }
 
-      // 是否超出底部屏幕
-      if (rect.bottom > $win.height()) {
-        $elemPanel.eq(0).css('margin-top', -(rect.bottom - $win.height() + 5));
-      }
-    })
-    .on('mouseleave', ELEM_LI_PAR, function () {
-      const $this = $(this);
-      const $elemPanel = $this.children(`.${CONST.ELEM_MENU_PANEL}`);
+        // 插入列表
+        $menu.append($li);
+      });
 
-      $elemPanel.removeClass(CONST.ELEM_MENU_PANEL_L);
-      $elemPanel.css('margin-top', 0);
+      // 返回当前菜单列表容器
+      return $menu;
+    };
+
+    // 添加尺寸属性
+    if (['sm', 'md', 'lg'].includes(options.size)) {
+      $menu.attr(`lay-size`, options.size);
+    }
+
+    // data 存在时，生成菜单结构
+    if (options.data?.length) {
+      return buildMenuItems($menu, options.data);
+    } else {
+      return;
+    }
+  }
+
+  // 渲染
+  render() {
+    const options = this.options;
+    const $elem = options.$elem;
+
+    // 添加「菜单模式」属性
+    if (['vertical', 'horizontal'].includes(options.mode)) {
+      $elem.attr(`lay-mode`, options.mode);
+    }
+
+    // 添加「子菜单展示方式」属性
+    if (['inline', 'popup'].includes(options.submenuMode)) {
+      $elem.attr(`lay-submenu-mode`, options.submenuMode);
+    }
+
+    // 添加尺寸属性
+    if (['sm', 'md', 'lg'].includes(options.size)) {
+      $elem.attr(`lay-size`, options.size);
+    }
+
+    // 初始化状态
+    $elem.find(`.${CONST.ELEM_SUBMENU}`).each((_, submenu) => {
+      const $submenu = $(submenu);
+      const $title = $submenu.children(`.${CONST.ELEM_TITLE}`);
+      const $children = $submenu.children(`.${CONST.ELEM_SUB}`);
+
+      // 清空旧状态
+      $title.children(`.${CONST.ELEM_TITLE_ARROW}`).remove();
+
+      // 添加箭头
+      if ($children.length) {
+        const $arrow = $(`<div class="${CONST.ELEM_TITLE_ARROW}"></div>`);
+        $arrow.append(`<i class="lay-icon lay-icon-down"></i>`);
+        $title.append($arrow);
+      }
     });
-})();
+
+    this.#events();
+  }
+
+  /**
+   * 全部展开
+   * @returns {void}
+   */
+  expandAll() {
+    const options = this.options;
+    const $elem = options.$elem;
+    $elem.find(`.${CONST.ELEM_SUBMENU}`).addClass(CONST.CLASS_IS_EXPANDED);
+  }
+
+  /**
+   * 全部折叠
+   * @returns {void}
+   */
+  collapseAll() {
+    const options = this.options;
+    const $elem = options.$elem;
+    $elem.find(`.${CONST.ELEM_SUBMENU}`).removeClass(CONST.CLASS_IS_EXPANDED);
+  }
+
+  /**
+   * 展开或折叠内联子菜单
+   * @param {Element} currentTarget - 当前点击的菜单标题元素
+   * @returns {void}
+   */
+  #toggleInlineSubmenu(currentTarget) {
+    const options = this.options;
+    const accordion = options.accordion;
+    const $title = $(currentTarget);
+    const $this = $title.parent(`.${CONST.ELEM_SUBMENU}`);
+    const $children = $this.children(`.${CONST.ELEM_SUB}`);
+    const ANIM_MS = 200;
+
+    if (!$children.length) return;
+    if (options.submenuMode !== 'inline') return;
+
+    // 动画执行完成后的操作
+    const animComplete = () => {
+      // 清空临时 style，以适配外部样式的状态重置
+      $children.css({ display: '' });
+    };
+
+    // 动画是否正在执行
+    if ($children.is(':animated')) return;
+
+    // 是否已展开
+    const isExpanded = $this.hasClass(CONST.CLASS_IS_EXPANDED);
+
+    // 切换展开状态类
+    $this.toggleClass(CONST.CLASS_IS_EXPANDED, !isExpanded);
+
+    // 折叠
+    if (isExpanded) {
+      $children.show().stop().slideUp(ANIM_MS, animComplete);
+    } else {
+      // 展开
+      $children.hide().stop().slideDown(ANIM_MS, animComplete);
+    }
+
+    // 手风琴模式 --- 折叠兄弟展开项
+    if (accordion && !isExpanded) {
+      const $siblings = $this.siblings(`.${CONST.CLASS_IS_EXPANDED}`);
+      $siblings.removeClass(CONST.CLASS_IS_EXPANDED);
+      $siblings
+        .children(`.${CONST.ELEM_SUB}`)
+        .show()
+        .stop()
+        .slideUp(ANIM_MS, animComplete);
+    }
+  }
+
+  // 事件
+  #events() {
+    const options = this.options;
+    const $elem = options.$elem;
+
+    // 事件命名空间
+    const eventNamespace = CONST.EVENT_NAMESPACE;
+
+    // 避免重复绑定事件
+    $elem.off(eventNamespace);
+
+    // 点击子菜单
+    if (options.submenuMode === 'inline') {
+      $elem.on(
+        `click${eventNamespace}`,
+        `.${CONST.ELEM_SUBMENU} > .${CONST.ELEM_TITLE}`,
+        (e) => {
+          this.#toggleInlineSubmenu(e.currentTarget);
+        },
+      );
+    }
+
+    // 点击菜单项
+    $elem.on(
+      `click${eventNamespace}`,
+      `.${CONST.ELEM_ITEM} > .${CONST.ELEM_TITLE}`,
+      (e) => {
+        const $currentTarget = $(e.currentTarget);
+        const $item = $currentTarget.parent(`.${CONST.ELEM_ITEM}`);
+
+        // 标注选中状态
+        $elem
+          .find(`.${CONST.CLASS_IS_ACTIVE}`)
+          .removeClass(CONST.CLASS_IS_ACTIVE);
+        $item.addClass(CONST.CLASS_IS_ACTIVE);
+      },
+    );
+  }
+}
+
+const CONST = Menu.CONST;
+
+export { Menu as menu };

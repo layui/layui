@@ -86,18 +86,28 @@
         // 模拟数据
         const DEMO_DATA = [
           {
-            title: 'menu item 1',
+            title: 'link menu item 1',
             template() {
-              return `<i class="lay-icon lay-icon-light"></i> ${this.title} <span class="lay-badge-dot"></span>`;
+              return `
+<div style="display: flex; align-items: center; gap: 8px;">
+  <i class="lay-icon lay-icon-bot"></i>
+  <span>${this.title}</span>
+  <span class="lay-badge-dot"></span>
+</div>
+              `;
             },
             id: '',
             href: '',
-            type: '', // 菜单类型，支持：normal|group|parent
           },
           {
-            title: 'menu item <strong>2</strong>',
+            title: 'link menu item 2',
             template() {
-              return `<img src="https://unpkg.com/outeres@0.1.1/demo/avatar/0.png" style="width: 16px;"> ${this.title}`;
+              return `
+<div style="display: flex; align-items: center; gap: 8px;">
+  <img src="https://unpkg.com/outeres@0.1.1/demo/avatar/0.png" style="width: 20px;">
+  <span>${this.title}</span>
+</div>
+              `;
             },
             id: '',
             href: 'https://example.com',
@@ -108,7 +118,6 @@
           {
             title: 'menu item 3 <hello>',
             id: '',
-            type: 'group',
             children: [
               {
                 title: 'menu item 3-1',
@@ -125,7 +134,6 @@
                   {
                     title: 'menu item 3-2-2',
                     id: '',
-                    type: 'group',
                     children: [
                       {
                         title: 'menu item 3-2-2-1',
@@ -146,7 +154,6 @@
               {
                 title: 'menu item 3-3',
                 id: '',
-                type: 'group',
                 children: [
                   {
                     title: 'menu item 3-3-1',
@@ -219,7 +226,6 @@
           {
             title: 'menu item 6',
             id: '',
-            type: 'group',
             expanded: false,
             children: [
               {
@@ -242,11 +248,10 @@
           elem: '#demo1',
           backdrop: 0.03,
           data: DEMO_DATA,
-          // 触发点击事件的元素范围 --- default: 仅子菜单触发点击事件（默认，可不填）; all: 所有父子菜单均触发点击事件
-          clickScope: 'all',
-          // 菜单被点击的事件
-          click(obj) {
-            console.log('click', obj);
+          autoFitHeight: true,
+          // style: 'max-height: 300px; overflow-y: auto; min-width: 200px;',
+          onClick({ data, e }) {
+            console.log('click', data, e);
           },
         });
 
@@ -273,8 +278,8 @@
               href: '#3',
             },
           ],
-          click(data, $this) {
-            console.log(`click ${this.id}:`, data, $this);
+          onClick({ data, e }) {
+            console.log(`click ${this.id}:`, data, e);
             if (data.id === 'bbb') {
               return false;
             }
@@ -300,7 +305,7 @@
               title: 'menu item 3',
             },
           ],
-          align: 'center',
+          placement: 'bottom',
           trigger: 'hover',
           afterClose() {
             console.log(`afterClose ${this.id}`, this.elem);
@@ -312,10 +317,7 @@
           elem: '#ID-dropdown-demo-contextmenu', // 也可绑定到 document，从而重置整个右键
           trigger: 'contextmenu', //contextmenu
           allowExpand: false,
-          //,style: 'width: 200px'
-          customName: {
-            children: 'children',
-          },
+          // style: 'width: 200px',
           data: [
             {
               title: 'menu item 1',
@@ -358,8 +360,8 @@
               id: '#1',
             },
           ],
-          click: (obj, othis) => {
-            if (obj.id === 'reload') {
+          onClick({ data, e }) {
+            if (data.id === 'reload') {
               location.reload();
             }
           },
@@ -419,7 +421,7 @@
               id: 101,
             },
           ],
-          click(data) {
+          onClick({ data, e }) {
             // 菜单项对应设置的 id 值
             if (data.id === 101) {
               // 重载方法
@@ -456,8 +458,8 @@
             { id: 10, title: 'Go' },
           ],
           trigger: 'focus',
-          style: 'min-width: 190px; box-shadow: 1px 1px 11px rgb(0 0 0 / 11%);',
-          click(data) {
+          style: 'min-width: 170px; box-shadow: 1px 1px 11px rgb(0 0 0 / 11%);',
+          onClick({ data, e }) {
             console.log(data.title);
             this.$elem.val(data.title);
           },
