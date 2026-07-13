@@ -143,7 +143,7 @@
 }
 
 /* 子菜单内联模式 */
-.lay-menu:not([lay-submenu-mode='popup']) {
+.lay-menu:not([data-submenu-mode='popup']) {
   .lay-menu-submenu.lay-is-expanded {
     > .lay-menu-title {
       color: rgba(0, 0, 0, 0.95);
@@ -161,22 +161,22 @@
 }
 
 /* 子菜单弹出模式 */
-.lay-menu[lay-submenu-mode='popup'] {
+.lay-menu[data-submenu-mode='popup'] {
   .lay-menu-title-arrow .lay-icon {
     transform: rotate(-90deg) !important;
   }
 }
-.lay-popup-content:has(.lay-menu[lay-submenu-mode='popup']) {
+.lay-popup-content:has(.lay-menu[data-submenu-mode='popup']) {
   padding: 0;
 }
 
 /* 尺寸 */
-.lay-menu[lay-size='sm'] {
+.lay-menu[data-size='sm'] {
   li {
     line-height: 24px;
   }
 }
-.lay-menu[lay-size='lg'] {
+.lay-menu[data-size='lg'] {
   li {
     line-height: 40px;
   }

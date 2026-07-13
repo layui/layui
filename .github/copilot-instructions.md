@@ -89,8 +89,8 @@ layui/
 | 类型            | 命名规则                                   | 示例                        |
 | --------------- | ------------------------------------------ | --------------------------- |
 | CSS 类名        | `lay-` + `kebab-case` （小写字母加连字符） | `.lay-tabs-header`          |
-| JavaScript 类名 | PascalCase （大驼峰）                      | `Button, TreeTable`         |
-| 组件名、文件名  | camelCase （小驼峰）或全小写               | `button, treeTable`         |
+| JavaScript 类名 | PascalCase （大驼峰）                      | `Button, IconPicker`        |
+| 组件名、文件名  | camelCase （小驼峰）或全小写               | `button, iconPicker`        |
 | 回调函数        | camelCase + 生命周期                       | `beforeRender, afterRender` |
 | 事件处理器属性  | `on` + 事件名                              | `onClick`                   |
 
@@ -101,8 +101,9 @@ Layui 3 内置蓝绿双主题（可切换）， 使用 CSS 自定义属性管理
 ```css
 :root {
   /* 蓝绿双主题色 */
-  --lay-color-primary-green: #16b777;
   --lay-color-primary-blue: #1e9fff;
+  --lay-color-primary-green: #16b777;
+
   /* 默认主题色 */
   --lay-color-primary: var(--lay-color-primary-green);
 }

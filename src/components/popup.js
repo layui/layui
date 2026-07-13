@@ -293,7 +293,7 @@ export class Popup extends Component {
     }
 
     // 若开启箭头，且未包含 arrow 中间件，则自动追加
-    if (options.showArrow && arrowEl) {
+    if (showArrow) {
       if (!middleware.some((m) => m?.name === 'arrow')) {
         middleware.push(floating.arrow({ element: arrowEl }));
       }

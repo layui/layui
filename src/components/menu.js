@@ -143,7 +143,7 @@ class Menu extends Component {
 
     // 添加尺寸属性
     if (['sm', 'md', 'lg'].includes(options.size)) {
-      $menu.attr(`lay-size`, options.size);
+      $menu.attr('data-size', options.size);
     }
 
     // data 存在时，生成菜单结构
@@ -161,17 +161,17 @@ class Menu extends Component {
 
     // 添加「菜单模式」属性
     if (['vertical', 'horizontal'].includes(options.mode)) {
-      $elem.attr(`lay-mode`, options.mode);
+      $elem.attr('data-mode', options.mode);
     }
 
     // 添加「子菜单展示方式」属性
     if (['inline', 'popup'].includes(options.submenuMode)) {
-      $elem.attr(`lay-submenu-mode`, options.submenuMode);
+      $elem.attr('data-submenu-mode', options.submenuMode);
     }
 
     // 添加尺寸属性
     if (['sm', 'md', 'lg'].includes(options.size)) {
-      $elem.attr(`lay-size`, options.size);
+      $elem.attr('data-size', options.size);
     }
 
     // 初始化状态

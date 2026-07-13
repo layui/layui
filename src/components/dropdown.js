@@ -74,6 +74,7 @@ export class Dropdown extends Popup {
       mode: 'vertical', // 固定为垂直菜单
     });
 
+    // 空数据处理
     if (!$menu) {
       $menu = $('<div>');
       $menu.addClass(CONST.CLASS_IS_EMPTY).text(i18n.$t('dropdown.empty'));

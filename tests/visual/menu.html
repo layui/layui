@@ -184,7 +184,7 @@
             type="button"
             class="lay-btn lay-is-active"
             lay-on="mode"
-            lay-mode="vertical"
+            data-mode="vertical"
           >
             垂直菜单（默认）
           </button>
@@ -192,7 +192,7 @@
             type="button"
             class="lay-btn"
             lay-on="mode"
-            lay-mode="horizontal"
+            data-mode="horizontal"
           >
             水平菜单（待实现）
           </button>
@@ -202,7 +202,7 @@
             type="button"
             class="lay-btn lay-is-active"
             lay-on="submenuMode"
-            lay-mode="inline"
+            data-submenu-mode="inline"
           >
             子菜单内联模式（默认）
           </button>
@@ -210,24 +210,24 @@
             type="button"
             class="lay-btn"
             lay-on="submenuMode"
-            lay-mode="popup"
+            data-submenu-mode="popup"
           >
             子菜单弹出模式（待实现）
           </button>
         </div>
         <div class="lay-btn-group">
-          <button type="button" class="lay-btn" lay-on="size" lay-size="sm">
+          <button type="button" class="lay-btn" lay-on="size" data-size="sm">
             小尺寸
           </button>
           <button
             type="button"
             class="lay-btn lay-is-active"
             lay-on="size"
-            lay-size="md"
+            data-size="md"
           >
             中尺寸（默认）
           </button>
-          <button type="button" class="lay-btn" lay-on="size" lay-size="lg">
+          <button type="button" class="lay-btn" lay-on="size" data-size="lg">
             大尺寸
           </button>
         </div>
@@ -236,7 +236,7 @@
             type="button"
             class="lay-btn"
             lay-on="method"
-            lay-method="expandAll"
+            data-method="expandAll"
           >
             全部展开
           </button>
@@ -244,7 +244,7 @@
             type="button"
             class="lay-btn"
             lay-on="method"
-            lay-method="collapseAll"
+            data-method="collapseAll"
           >
             全部折叠
           </button>
@@ -279,8 +279,9 @@
       // 事件
 
       utils.on({
+        // 切换菜单模式
         mode() {
-          const mode = $(this).attr('lay-mode');
+          const mode = $(this).attr('data-mode');
 
           menu.reload('demo', {
             mode,
@@ -288,27 +289,30 @@
 
           toggleExpandCollapseBtns(
             mode === 'vertical' &&
-              $menuElem.attr('lay-submenu-mode') === 'inline',
+              $menuElem.attr('data-submenu-mode') === 'inline',
           );
         },
+        // 切换子菜单展示方式
         submenuMode() {
-          const submenuMode = $(this).attr('lay-mode');
+          const submenuMode = $(this).attr('data-submenu-mode');
 
           menu.reload('demo', {
             submenuMode,
           });
 
           toggleExpandCollapseBtns(
-            $menuElem.attr('lay-mode') === 'vertical' &&
+            $menuElem.attr('data-mode') === 'vertical' &&
               submenuMode === 'inline',
           );
         },
+        // 切换菜单尺寸
         size() {
-          const size = $(this).attr('lay-size');
-          $menuElem.attr('lay-size', size);
+          const size = $(this).attr('data-size');
+          $menuElem.attr('data-size', size);
         },
+        // 执行菜单方法
         method() {
-          const method = $(this).attr('lay-method');
+          const method = $(this).attr('data-method');
           menu[method]('demo');
         },
       });
