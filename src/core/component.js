@@ -1,5 +1,5 @@
 /**
- * component
+ * Component
  * 组件构建器
  */
 
@@ -48,6 +48,21 @@ export class Component {
       ATTR_ID: `lay-${this.componentName}-id`, // 用于记录组件实例 id 的属性名
       EVENT_NAMESPACE: `.lay_${this.componentName}_events`, // 组件事件命名空间
 
+      // 状态类名
+      CLASS_IS_ACTIVE: 'lay-is-active', // 激活
+      CLASS_IS_SELECTED: 'lay-is-selected', // 选中
+      CLASS_IS_CHECKED: 'lay-is-checked', // 勾选
+      CLASS_IS_DISABLED: 'lay-is-disabled', // 禁用
+      CLASS_IS_OPEN: 'lay-is-open', // 打开
+      CLASS_IS_EXPANDED: 'lay-is-expanded', // 展开
+      CLASS_IS_LOADING: 'lay-is-loading', // 加载中
+      CLASS_IS_EMPTY: 'lay-is-empty', // 空的
+      CLASS_IS_VISIBLE: 'lay-is-visible', // 可见
+      CLASS_IS_HIDDEN: 'lay-is-hidden', // 隐藏
+      CLASS_IS_INVISIBLE: 'lay-is-invisible', // 隐形
+      CLASS_IS_TRANSPARENT: 'lay-is-transparent', // 透明
+
+      // legacy (后续移除)
       CLASS_THIS: 'lay-this',
       CLASS_SHOW: 'lay-show',
       CLASS_HIDE: 'lay-hide',
@@ -129,7 +144,7 @@ export class Component {
 
   // 实例方法静态委托
   static {
-    this.delegateInstanceMethods(['reload']);
+    this.delegateInstanceMethods(['reload', 'destroy']);
   }
 
   /**
@@ -184,12 +199,26 @@ export class Component {
   }
 
   /**
-   * 初始化处理（若由事件触发渲染，则必经此步）
-   * @param {boolean} rerender - 是否为重载渲染
+   * 销毁实例
+   * @returns {void}
+   */
+  destroy() {
+    const Constructor = this.constructor;
+    const ATTR_ID = Constructor.CONST.ATTR_ID;
+    const options = this.options;
+
+    Constructor.removeInstance(options.id); // 移除实例记录
+    options.$elem?.removeAttr(ATTR_ID); // 清理元素标记
+    options.$elem?.off(Constructor.CONST.EVENT_NAMESPACE); // 移除事件绑定
+  }
+
+  /**
+   * 初始化处理
+   * @param {boolean} isReload - 是否来自 reload 调用
    * @returns {InstanceType<typeof this>|Array<InstanceType<typeof this>>}
    * 返回组件实例；若 options.elem 对应多个元素，则返回组件实例数组
    */
-  #init(rerender) {
+  #init(isReload = false) {
     let options = this.options;
     const $elem = $(options.elem);
     const Constructor = this.constructor;
@@ -202,22 +231,27 @@ export class Component {
       const batchOptions = { ...options };
       delete batchOptions.id; // 多实例渲染过滤传入的 id 选项
 
-      return $elem
+      // 返回实例数组
+      const batchInstances = $elem
         .map((_, elem) => Constructor.render({ ...batchOptions, elem }))
         .get();
+      batchInstances.options = batchOptions; // 附加原始配置项
+      return batchInstances;
     }
 
-    // 合并 lay-options 属性上的配置信息（鉴于 CSP 策略，后续或考虑移除此功能）
-    const layOptions = lay.options($elem[0]);
-    if (rerender) {
-      // 若重载渲染，则重载传入的 options 配置优先
-      options = this.options = $.extend(layOptions, options);
-    } else {
-      $.extend(options, layOptions); // 若首次渲染，则 lay-options 配置优先
-    }
+    // 仅来自 render 的调用
+    if (!isReload) {
+      // 合并 lay-options 属性上的配置信息
+      // Tip: 鉴于 CSP 策略，后续将移除 `lay.options` 方法，改用 dataset 方案
+      const layOptions = lay.options($elem[0]);
+      $.extend(this.options, layOptions);
 
-    // 若对目标元素重复渲染，则视为 reload 处理
-    if (!rerender) {
+      // 合并 dataset 上的配置信息
+      // Tip: 临时实现，后续将支持嵌套等功能
+      const dataset = { ...$elem[0]?.dataset };
+      $.extend(this.options, dataset);
+
+      // 若对目标元素重复渲染，则视为 reload 处理
       if (existingId) {
         const inst = Constructor.getInstance(existingId);
         if (inst) {
@@ -241,50 +275,9 @@ export class Component {
     // 渲染
     if (typeof this.render === 'function') {
       $elem.attr(ATTR_ID, options.id); // 目标元素已渲染过的标记
-      this.render(rerender); // 渲染核心
+      this.render(isReload); // 渲染核心
     }
 
     return this;
-  }
-
-  /**
-   * 元素缓存操作。非文档化接口,一般用于组件内部
-   * @param {string} key - 缓存键
-   * @param {*} value - 缓存值
-   * @param {boolean} remove - 是否删除缓存
-   * @returns {*} - 若 value 未传，则返回缓存值
-   */
-  cache(key, value, remove) {
-    const options = this.options;
-    const $elem = options.$elem;
-    const Constructor = this.constructor;
-    const ATTR_ID = Constructor.CONST.ATTR_ID;
-    const ATTR_ID_CACHE = `${ATTR_ID}-cache`;
-
-    if (!$elem) return;
-
-    const data = $elem.data(ATTR_ID_CACHE) || {};
-
-    // 若 value 未传，则视为取值
-    if (value === undefined) {
-      return data[key];
-    }
-
-    if (remove) {
-      delete data[key]; // 删除缓存
-    } else {
-      data[key] = value; // 设置缓存
-    }
-
-    $elem.data(ATTR_ID_CACHE, data);
-  }
-
-  /**
-   * 清除元素缓存
-   * @param {string} key - 缓存键
-   * @returns {void}
-   */
-  removeCache(key) {
-    this.cache(key, null, true);
   }
 }
