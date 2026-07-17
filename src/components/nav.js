@@ -1,6 +1,7 @@
 /**
  * nav
- * 导航菜单组件
+ * 导航菜单
+ * 弃用说明 📣：当前 nav 仅为过渡保留，后续将被 menu 组件平替
  */
 
 import { lay } from '../core/lay.js';
