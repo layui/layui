@@ -40,7 +40,7 @@ export class Popup extends Component {
     closeOnClick: true,
 
     // 层打开时的动画。支持 anim.css 中的所有动画类
-    anim: 'downbit',
+    anim: 'fadein',
 
     // 延时显示或隐藏的毫秒数，若为 number 类型，则表示显示和隐藏的延迟时间相同。
     // 仅当 `trigger` 为 `hover / mouseenter` 时生效
@@ -67,7 +67,14 @@ export class Popup extends Component {
 
   // 实例方法静态委托
   static {
-    this.delegateInstanceMethods(['open', 'close', 'updateContent']);
+    this.delegateInstanceMethods([
+      'open',
+      'close',
+      'updateContent',
+      'isRootElemMounted',
+      'normalizedDelay',
+      'delayClose',
+    ]);
   }
 
   // 构造函数
@@ -86,7 +93,10 @@ export class Popup extends Component {
     this.stopAutoUpdatePosition = $.noop;
   }
 
-  // 渲染
+  /**
+   * 渲染
+   * @returns {void}
+   */
   render() {
     const options = this.options;
 
@@ -107,6 +117,7 @@ export class Popup extends Component {
 
   /**
    * 打开层
+   * @returns {void}
    */
   open() {
     const options = this.options;
@@ -173,7 +184,7 @@ export class Popup extends Component {
             clearTimeout(this.timer);
           })
           .on('mouseleave', () => {
-            this.#delayClose();
+            this.delayClose();
           });
       }
     }
@@ -187,6 +198,7 @@ export class Popup extends Component {
 
   /**
    * 关闭层
+   * @returns {void}
    */
   close() {
     const options = this.options;
@@ -229,6 +241,32 @@ export class Popup extends Component {
   }
 
   /**
+   * 规范化延迟时间
+   * @returns {Object} - 返回 { show, hide } 对象
+   */
+  normalizedDelay() {
+    const options = this.options;
+    const delay = [].concat(options.delay);
+
+    return {
+      show: delay[0],
+      hide: delay[1] !== undefined ? delay[1] : delay[0],
+    };
+  }
+
+  /**
+   * 延迟关闭层
+   * @returns {void}
+   */
+  delayClose() {
+    clearTimeout(this.timer);
+
+    this.timer = setTimeout(() => {
+      this.close();
+    }, this.normalizedDelay().hide);
+  }
+
+  /**
    * 获取参考元素
    * @returns {Element|Object} - 返回参考元素或自定义对象
    */
@@ -259,7 +297,10 @@ export class Popup extends Component {
     return options.$elem[0];
   }
 
-  // 获取中间件配置
+  /**
+   * 获取中间件配置
+   * @returns {Array} - 返回中间件配置数组
+   */
   #getMiddleware() {
     const options = this.options;
     const floatingEl = this.$rootElem[0];
@@ -366,27 +407,9 @@ export class Popup extends Component {
     };
   }
 
-  // 规范化延迟时间
-  #normalizedDelay() {
-    const options = this.options;
-    const delay = [].concat(options.delay);
-
-    return {
-      show: delay[0],
-      hide: delay[1] !== undefined ? delay[1] : delay[0],
-    };
-  }
-
-  // 延迟关闭层
-  #delayClose() {
-    clearTimeout(this.timer);
-
-    this.timer = setTimeout(() => {
-      this.close();
-    }, this.#normalizedDelay().hide);
-  }
-
-  // 事件
+  /**
+   * 事件处理
+   */
   #events() {
     const options = this.options;
     const $elem = options.$elem;
@@ -414,7 +437,7 @@ export class Popup extends Component {
         if (!opened) {
           this.timer = setTimeout(() => {
             this.open();
-          }, this.#normalizedDelay().show);
+          }, this.normalizedDelay().show);
         }
       } else {
         // 若为 click 事件，则根据层状态，自动切换打开与关闭
@@ -432,7 +455,7 @@ export class Popup extends Component {
     if (isMouseEnter) {
       // 执行鼠标移出事件
       $elem.on(`mouseleave${eventNamespace}`, () => {
-        this.#delayClose();
+        this.delayClose();
       });
     }
   }

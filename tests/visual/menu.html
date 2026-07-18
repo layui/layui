@@ -3,12 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>基础菜单 - layui</title>
+    <title>menu 导航菜单 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
     <style>
       body {
-        --demo-sidebar-width: 240px;
-        margin-left: calc(var(--demo-sidebar-width) + 16px);
+        --demo-sidebar-width: 232px;
       }
       .lay-btn.lay-is-active {
         opacity: 0.8;
@@ -21,300 +20,521 @@
         width: var(--demo-sidebar-width);
         overflow: hidden auto;
       }
+      .demo-content {
+        margin-left: calc(var(--demo-sidebar-width) + 16px);
+        padding: 16px 32px;
+      }
     </style>
   </head>
   <body>
+    <!-- 导航菜单 HTML 模板（仅为了方便演示） -->
+    <template id="demo-menu-template">
+      <ul class="lay-menu" id="${id}" data-mode="${mode}" data-theme="${theme}">
+        <!--prepend-->
+        <li class="lay-menu-item">
+          <div class="lay-menu-title">
+            <span class="lay-menu-title-text">Menu Item 1</span>
+          </div>
+        </li>
+        <li class="lay-menu-item">
+          <div class="lay-menu-title">
+            <span class="lay-menu-title-text">Menu Item 2</span>
+          </div>
+        </li>
+        <li class="lay-menu-divider"></li>
+        <li class="lay-menu-submenu lay-is-expanded">
+          <div class="lay-menu-title">
+            <span class="lay-menu-title-text">Menu Item 3</span>
+          </div>
+          <ul class="lay-menu-sub">
+            <li class="lay-menu-item">
+              <div class="lay-menu-title">
+                <span class="lay-menu-title-text">Menu Item 3-1</span>
+              </div>
+            </li>
+            <li class="lay-menu-item">
+              <div class="lay-menu-title">
+                <span class="lay-menu-title-text">Menu Item 3-2</span>
+              </div>
+            </li>
+            <li class="lay-menu-item">
+              <div class="lay-menu-title">
+                <span class="lay-menu-title-text">Menu Item 3-3</span>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li class="lay-menu-item">
+          <div class="lay-menu-title">
+            <span class="lay-menu-title-text">Menu Item 4</span>
+          </div>
+        </li>
+        <li class="lay-menu-submenu">
+          <div class="lay-menu-title">
+            <span class="lay-menu-title-text">Menu Item 5</span>
+          </div>
+          <ul class="lay-menu-sub">
+            <li class="lay-menu-item">
+              <div class="lay-menu-title">
+                <span class="lay-menu-title-text">Menu Item 5-1</span>
+              </div>
+            </li>
+            <li class="lay-menu-submenu">
+              <div class="lay-menu-title">
+                <span class="lay-menu-title-text">Menu Item 5-2</span>
+              </div>
+              <ul class="lay-menu-sub">
+                <li class="lay-menu-item">
+                  <div class="lay-menu-title">
+                    <span class="lay-menu-title-text"> Menu Item 5-2-1 </span>
+                  </div>
+                </li>
+                <li class="lay-menu-submenu">
+                  <div class="lay-menu-title">
+                    <span class="lay-menu-title-text"> Menu Item 5-2-2 </span>
+                  </div>
+                  <ul class="lay-menu-sub">
+                    <li class="lay-menu-item">
+                      <div class="lay-menu-title">
+                        <span class="lay-menu-title-text">
+                          Menu Item 5-2-2-1
+                        </span>
+                      </div>
+                    </li>
+                    <li class="lay-menu-item">
+                      <div class="lay-menu-title">
+                        <span class="lay-menu-title-text">
+                          Menu Item 5-2-2-2
+                        </span>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li class="lay-menu-submenu">
+              <div class="lay-menu-title">
+                <span class="lay-menu-title-text">Menu Item 5-3</span>
+              </div>
+              <ul class="lay-menu-sub">
+                <li class="lay-menu-item">
+                  <div class="lay-menu-title">
+                    <span class="lay-menu-title-text">Menu Item 5-3-1</span>
+                  </div>
+                </li>
+                <li class="lay-menu-item">
+                  <div class="lay-menu-title">
+                    <span class="lay-menu-title-text">Menu Item 5-3-2</span>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li class="lay-menu-submenu">
+          <div class="lay-menu-title">
+            <span class="lay-menu-title-text">Menu Item 6</span>
+          </div>
+          <ul class="lay-menu-sub">
+            <li class="lay-menu-item">
+              <div class="lay-menu-title">
+                <span class="lay-menu-title-text">Menu Item 6-1</span>
+              </div>
+            </li>
+            <li class="lay-menu-submenu lay-is-expanded">
+              <div class="lay-menu-title">
+                <span class="lay-menu-title-text">Menu Item 6-2</span>
+              </div>
+              <ul class="lay-menu-sub">
+                <li class="lay-menu-item">
+                  <div class="lay-menu-title">
+                    <span class="lay-menu-title-text">Menu Item 6-2-1 </span>
+                  </div>
+                </li>
+                <li class="lay-menu-item">
+                  <div class="lay-menu-title">
+                    <span class="lay-menu-title-text">Menu Item 6-2-2 </span>
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li class="lay-menu-item">
+              <div class="lay-menu-title">
+                <span class="lay-menu-title-text">Menu Item 6-3</span>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <!--append-->
+      </ul>
+    </template>
+
+    <script>
+      // 获取导航菜单 HTML 演示模板
+      const getMenuTemplate = ({
+        id,
+        mode,
+        theme = 'light',
+        prepend = '',
+        append = '',
+        defaultActiveIndex,
+      }) => {
+        const menuTemplateElem = document.getElementById('demo-menu-template');
+        if (typeof defaultActiveIndex === 'number') {
+          const CLASS_IS_ACTIVE = 'lay-is-active';
+          menuTemplateElem.content
+            .querySelector(`.${CLASS_IS_ACTIVE}`)
+            ?.classList.remove(CLASS_IS_ACTIVE);
+          menuTemplateElem.content
+            .querySelectorAll('.lay-menu-item')
+            [defaultActiveIndex].classList.add(CLASS_IS_ACTIVE);
+        }
+        let template = menuTemplateElem.innerHTML;
+        template = template.replace('${id}', id);
+        template = template.replace('${mode}', mode);
+        template = template.replace('${theme}', theme);
+        template = template.replace('<!--prepend-->', prepend);
+        template = template.replace('<!--append-->', append);
+        return template;
+      };
+    </script>
+
     <div class="demo-sidebar">
-      <div class="lay-panel">
-        <ul class="lay-menu" id="demo">
-          <li class="lay-menu-item">
-            <div class="lay-menu-title">
-              <i class="lay-icon lay-icon-github"></i>
-              <span class="lay-menu-title-text">Level 1 Menu 1</span>
-            </div>
-          </li>
-          <li class="lay-menu-hr"></li>
-          <li class="lay-menu-group">
-            <div class="lay-menu-title">Group 1</div>
-            <ul class="lay-menu-sub">
-              <li class="lay-menu-item">
-                <div class="lay-menu-title">
-                  <span class="lay-menu-title-text">Level 1 Menu 2</span>
-                </div>
-              </li>
-              <li class="lay-menu-submenu">
-                <div class="lay-menu-title">
-                  <span class="lay-menu-title-text">Level 1 Menu 3</span>
-                </div>
-                <ul class="lay-menu-sub">
-                  <li class="lay-menu-item">
-                    <div class="lay-menu-title">
-                      <span class="lay-menu-title-text">
-                        Level 2 Menu 3-1
-                      </span>
-                    </div>
-                  </li>
-                  <li class="lay-menu-item">
-                    <a href="#" class="lay-menu-title">
-                      <span class="lay-menu-title-text">
-                        Level 2 Menu 3-2
-                      </span>
-                    </a>
-                  </li>
-                  <li class="lay-menu-item">
-                    <div class="lay-menu-title">
-                      <span class="lay-menu-title-text">
-                        Level 2 Menu 3-3
-                      </span>
-                    </div>
-                  </li>
-                </ul>
-              </li>
-              <li class="lay-menu-item">
-                <div class="lay-menu-title">
-                  <span class="lay-menu-title-text">Level 1 Menu 4</span>
-                </div>
-              </li>
-            </ul>
-          </li>
-          <li class="lay-menu-item">
-            <div class="lay-menu-title">
-              <span class="lay-menu-title-text">Level 1 Menu 5</span>
-            </div>
-          </li>
-          <li class="lay-menu-submenu lay-is-expanded">
-            <div class="lay-menu-title">
-              <span class="lay-menu-title-text">Level 1 Menu 6</span>
-            </div>
-            <ul class="lay-menu-sub">
-              <li class="lay-menu-item">
-                <div class="lay-menu-title">
-                  <span class="lay-menu-title-text">Level 2 Menu 6-1</span>
-                </div>
-              </li>
-              <li class="lay-menu-submenu">
-                <div class="lay-menu-title">
-                  <span class="lay-menu-title-text">Level 2 Menu 6-2</span>
-                </div>
-                <ul class="lay-menu-sub">
-                  <li class="lay-menu-item">
-                    <div class="lay-menu-title">
-                      <span class="lay-menu-title-text">
-                        Level 3 Menu 6-2-1
-                      </span>
-                    </div>
-                  </li>
-                  <li class="lay-menu-submenu">
-                    <div class="lay-menu-title">
-                      <span class="lay-menu-title-text">
-                        Level 3 Menu 6-2-2
-                      </span>
-                    </div>
-                    <ul class="lay-menu-sub">
-                      <li class="lay-menu-item">
-                        <div class="lay-menu-title">
-                          <span class="lay-menu-title-text">
-                            Level 4 Menu 6-2-2-1
-                          </span>
-                        </div>
-                      </li>
-                      <li class="lay-menu-item">
-                        <div class="lay-menu-title">
-                          <span class="lay-menu-title-text">
-                            Level 4 Menu 6-2-2-2
-                          </span>
-                        </div>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li class="lay-menu-item">
-                <div class="lay-menu-title">
-                  <span class="lay-menu-title-text">Level 2 Menu 6-3</span>
-                </div>
-              </li>
-            </ul>
-          </li>
-          <li class="lay-menu-submenu">
-            <div class="lay-menu-title">
-              <span class="lay-menu-title-text">Level 1 Menu 7</span>
-            </div>
-            <ul class="lay-menu-sub">
-              <li class="lay-menu-item">
-                <div class="lay-menu-title">
-                  <span class="lay-menu-title-text">Level 2 Menu 7-1</span>
-                </div>
-              </li>
-              <li class="lay-menu-submenu lay-is-expanded">
-                <div class="lay-menu-title">
-                  <span class="lay-menu-title-text">Level 2 Menu 7-2</span>
-                </div>
-                <ul class="lay-menu-sub">
-                  <li class="lay-menu-item">
-                    <div class="lay-menu-title">
-                      <span class="lay-menu-title-text">
-                        Level 3 Menu 7-2-1
-                      </span>
-                    </div>
-                  </li>
-                  <li class="lay-menu-item">
-                    <div class="lay-menu-title">
-                      <span class="lay-menu-title-text">
-                        Level 3 Menu 7-2-2
-                      </span>
-                    </div>
-                  </li>
-                </ul>
-              </li>
-              <li class="lay-menu-item">
-                <div class="lay-menu-title">
-                  <span class="lay-menu-title-text">Level 2 Menu 7-3</span>
-                </div>
-              </li>
-            </ul>
-          </li>
-        </ul>
+      <div class="lay-menu-vertical lay-panel">
+        <!-- 静态「导航菜单」容器 -->
+        <script>
+          document.write(
+            getMenuTemplate({
+              id: 'demo-vertical-menu',
+              mode: 'vertical',
+              append: `
+<li class="lay-menu-divider"></li>
+<li class="lay-menu-group">
+  <div class="lay-menu-title">
+    <span class="lay-menu-title-text">Group title</span>
+  </div>
+  <ul class="lay-menu-group-list">
+    <li class="lay-menu-item">
+      <div class="lay-menu-title">
+        <span class="lay-menu-title-text">Menu Item 7</span>
+      </div>
+    </li>
+    <li class="lay-menu-submenu lay-is-expanded">
+      <div class="lay-menu-title">
+        <span class="lay-menu-title-text">Menu Item 8</span>
+      </div>
+      <ul class="lay-menu-sub">
+        <li class="lay-menu-item">
+          <div class="lay-menu-title">
+            <span class="lay-menu-title-text">Menu Item 8-1</span>
+          </div>
+        </li>
+        <li class="lay-menu-item">
+          <div class="lay-menu-title">
+            <span class="lay-menu-title-text">Menu Item 8-2</span>
+          </div>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</li>
+<li class="lay-menu-divider"></li>
+<li class="lay-menu-item">
+  <div class="lay-menu-title">
+    <span class="lay-menu-title-text">Menu Item 9</span>
+  </div>
+</li>
+              `,
+            }),
+          );
+        </script>
       </div>
     </div>
-    <div style="padding: 16px">
-      <div style="display: flex; flex-direction: column; gap: 16px">
+    <div class="demo-content">
+      <h2>风格变换</h2>
+      <hr />
+
+      <div style="display: flex; flex-wrap: wrap; gap: 16px">
+        <div style="flex-basis: 100%">点击按钮，变换左侧「垂直菜单」</div>
         <div class="lay-btn-group">
           <button
             type="button"
             class="lay-btn lay-is-active"
-            lay-on="mode"
-            data-mode="vertical"
-          >
-            垂直菜单（默认）
-          </button>
-          <button
-            type="button"
-            class="lay-btn"
-            lay-on="mode"
-            data-mode="horizontal"
-          >
-            水平菜单（待实现）
-          </button>
-        </div>
-        <div class="lay-btn-group">
-          <button
-            type="button"
-            class="lay-btn lay-is-active"
-            lay-on="submenuMode"
-            data-submenu-mode="inline"
+            lay-on="reload"
+            data-name="submenuMode"
+            data-value="inline"
           >
             子菜单内联模式（默认）
           </button>
           <button
             type="button"
             class="lay-btn"
-            lay-on="submenuMode"
-            data-submenu-mode="popup"
+            lay-on="reload"
+            data-name="submenuMode"
+            data-value="popup"
           >
-            子菜单弹出模式（待实现）
+            子菜单弹出模式
           </button>
         </div>
         <div class="lay-btn-group">
-          <button type="button" class="lay-btn" lay-on="size" data-size="sm">
+          <button
+            type="button"
+            class="lay-btn"
+            lay-on="reload"
+            data-name="size"
+            data-value="sm"
+          >
             小尺寸
           </button>
           <button
             type="button"
             class="lay-btn lay-is-active"
-            lay-on="size"
-            data-size="md"
+            lay-on="reload"
+            data-name="size"
+            data-value="md"
           >
             中尺寸（默认）
           </button>
-          <button type="button" class="lay-btn" lay-on="size" data-size="lg">
+          <button
+            type="button"
+            class="lay-btn"
+            lay-on="reload"
+            data-name="size"
+            data-value="lg"
+          >
             大尺寸
           </button>
         </div>
-        <div class="lay-btn-group" id="expand-collapse-btns">
+        <div class="lay-btn-group">
           <button
             type="button"
-            class="lay-btn"
-            lay-on="method"
-            data-method="expandAll"
+            class="lay-btn lay-is-active"
+            lay-on="reload"
+            data-name="theme"
+            data-value="light"
           >
-            全部展开
+            浅色模式（默认）
           </button>
           <button
             type="button"
             class="lay-btn"
-            lay-on="method"
-            data-method="collapseAll"
+            lay-on="reload"
+            data-name="theme"
+            data-value="dark"
           >
-            全部折叠
+            深色模式
           </button>
         </div>
+        <div
+          class="lay-btn-group"
+          id="expand-collapse-btns"
+          style="flex-basis: 100%"
+        >
+          <button
+            type="button"
+            class="lay-btn"
+            lay-on="method"
+            data-method="expandSubmenus"
+          >
+            展开全部子菜单
+          </button>
+          <button
+            type="button"
+            class="lay-btn"
+            lay-on="method"
+            data-method="collapseSubmenus"
+          >
+            折叠全部子菜单
+          </button>
+        </div>
+      </div>
+
+      <br /><br />
+      <h2>水平菜单</h2>
+      <hr />
+
+      <!-- 水平菜单·浅色 -->
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <div class="lay-menu-horizontal">
+          <script>
+            document.write(
+              getMenuTemplate({
+                id: 'demo-horizontal-menu-1',
+                mode: 'horizontal',
+                defaultActiveIndex: 0,
+              }),
+            );
+          </script>
+        </div>
+
+        <!-- 水平菜单·深色 -->
+        <div class="lay-menu-horizontal">
+          <script>
+            document.write(
+              getMenuTemplate({
+                id: 'demo-horizontal-menu-2',
+                mode: 'horizontal',
+                theme: 'dark',
+                defaultActiveIndex: 0,
+              }),
+            );
+          </script>
+        </div>
+
+        <!-- 水平菜单·浅色·下划线风格 -->
+        <div class="lay-menu-horizontal lay-menu-underline">
+          <script>
+            document.write(
+              getMenuTemplate({
+                id: 'demo-horizontal-menu-3',
+                mode: 'horizontal',
+                defaultActiveIndex: 0,
+              }),
+            );
+          </script>
+        </div>
+
+        <!-- 水平菜单·深色·自定义背景色·下划线风格 -->
+        <div
+          class="lay-menu-horizontal lay-menu-underline"
+          style="background-color: #7331f8"
+        >
+          <script>
+            document.write(
+              getMenuTemplate({
+                id: 'demo-horizontal-menu-4',
+                mode: 'horizontal',
+                theme: 'dark',
+                defaultActiveIndex: 0,
+              }),
+            );
+          </script>
+        </div>
+      </div>
+
+      <br /><br />
+      <h2>数据渲染</h2>
+      <hr />
+
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <!-- 水平菜单 -->
+        <div
+          class="lay-menu-horizontal lay-menu-underline"
+          id="demo-data-render-h"
+        ></div>
+
+        <!-- 垂直菜单 -->
+        <div
+          class="lay-menu-vertical lay-panel"
+          style="width: 180px"
+          id="demo-data-render"
+        ></div>
       </div>
     </div>
 
     <script src="./assets/dist/layui.js"></script>
-    <script type="module">
-      const { menu, $, utils } = layui;
+    <script>
+      layui.use(() => {
+        const { menu, $, utils } = layui;
 
-      // 点击时添加按钮选中状态
-      $('.lay-btn-group').on('click', '.lay-btn', function () {
-        $(this)
-          .addClass('lay-is-active')
-          .siblings()
-          .removeClass('lay-is-active');
-      });
+        // 点击时添加按钮选中状态
+        $('.lay-btn-group').on('click', '.lay-btn', function () {
+          $(this)
+            .addClass('lay-is-active')
+            .siblings()
+            .removeClass('lay-is-active');
+        });
 
-      // 显示/隐藏「展开/折叠」按钮
-      const toggleExpandCollapseBtns = (visible) => {
-        const $expandCollapseBtns = $('#expand-collapse-btns');
-        if (visible) {
-          $expandCollapseBtns.show();
-        } else {
-          $expandCollapseBtns.hide();
-        }
-      };
+        // 显示/隐藏「展开/折叠」按钮
+        const toggleExpandCollapseBtns = (visible) => {
+          const $expandCollapseBtns = $('#expand-collapse-btns');
+          if (visible) {
+            $expandCollapseBtns.show();
+          } else {
+            $expandCollapseBtns.hide();
+          }
+        };
 
-      const $menuElem = $('.lay-menu');
+        // 事件
+        utils.on({
+          // 重载菜单风格
+          reload() {
+            const name = $(this).data('name');
+            const value = $(this).data('value');
 
-      // 事件
+            menu.reload('demo-vertical-menu', {
+              [name]: value,
+            });
 
-      utils.on({
-        // 切换菜单模式
-        mode() {
-          const mode = $(this).attr('data-mode');
+            if (name === 'submenuMode') {
+              toggleExpandCollapseBtns(value === 'inline');
+            } else if (name === 'theme') {
+              const $panel = $('.demo-sidebar > .lay-panel');
+              if (value === 'dark') {
+                $panel.css({
+                  border: '0px',
+                });
+              } else {
+                $panel.css({
+                  border: '',
+                });
+              }
+            }
+          },
+          // 执行菜单方法
+          method() {
+            const method = $(this).attr('data-method');
+            menu[method]('demo-vertical-menu');
+          },
+        });
 
-          menu.reload('demo', {
-            mode,
-          });
+        // 菜单测试数据
+        const data = [
+          { title: 'Menu Item 1' },
+          {
+            title: 'Menu Item 2',
+            children: [
+              { title: 'Menu Item 1-1' },
+              {
+                title: 'Menu Item 1-2',
+                children: [
+                  { title: 'Menu Item 1-2-1' },
+                  { title: 'Menu Item 1-2-2' },
+                ],
+              },
+              {
+                title: 'Menu Item 1-3',
+              },
+            ],
+          },
 
-          toggleExpandCollapseBtns(
-            mode === 'vertical' &&
-              $menuElem.attr('data-submenu-mode') === 'inline',
-          );
-        },
-        // 切换子菜单展示方式
-        submenuMode() {
-          const submenuMode = $(this).attr('data-submenu-mode');
+          {
+            title: 'Menu Item 3',
+            children: [{ title: 'Menu Item 3-1' }, { title: 'Menu Item 3-2' }],
+          },
+        ];
 
-          menu.reload('demo', {
-            submenuMode,
-          });
+        // 数据渲染·水平菜单
+        const menuInstance = menu.render({
+          target: '#demo-data-render-h', // 插入的目标容器
+          mode: 'horizontal',
+          data,
+          onClick(params) {
+            console.log(`${this.id} → onClick → `, params, this);
+          },
+        });
 
-          toggleExpandCollapseBtns(
-            $menuElem.attr('data-mode') === 'vertical' &&
-              submenuMode === 'inline',
-          );
-        },
-        // 切换菜单尺寸
-        size() {
-          const size = $(this).attr('data-size');
-          $menuElem.attr('data-size', size);
-        },
-        // 执行菜单方法
-        method() {
-          const method = $(this).attr('data-method');
-          menu[method]('demo');
-        },
+        console.dir(menu);
+        console.log('menu.render() → ', menuInstance);
+
+        // 数据渲染·垂直菜单
+        menu.render({
+          target: '#demo-data-render',
+          data,
+          onClick(params) {
+            console.log(`${this.id} → onClick → `, params);
+          },
+        });
       });
     </script>
   </body>

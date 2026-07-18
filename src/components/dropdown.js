@@ -5,34 +5,32 @@
 
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
-import { Popup, popupHooks, clickOrMousedown, floating } from './popup.js';
+import { Popup, popupHooks, floating } from './popup.js';
 import { menu } from './menu.js';
 
 export class Dropdown extends Popup {
   static componentName = 'dropdown';
 
-  // 默认配置项
+  /**
+   * 默认配置项
+   * 可继承 {@link Popup.options} / {@link menu.options}
+   */
   static options = {
-    ...super.options, // 继承 popup 默认配置项
+    ...super.options,
 
-    // 弹出方位。可选值见 Popup.options.placement
-    placement: 'bottom-start',
+    // popup 组件相关选项
+    placement: 'bottom-start', // 弹出方位
+    anim: 'downbit', // 弹出动画
+
+    // menu 组件相关选项
+    submenuMode: 'inline', // 子菜单的展示方式
+    size: 'md', // 菜单尺寸
 
     // 是否自适应高度。开启后，将限制下拉菜单高度不超出可视区域，并自动出现纵向滚动条
     autoFitHeight: false,
 
     data: [], // 菜单数据结构
     expanded: false, // 是否初始展开所有子菜单
-
-    // menu 组件相关选项
-    submenuMode: 'inline', // 子菜单的展示方式。可选值见 Menu.options.submenuMode
-    size: 'md', // 菜单尺寸。可选值见 Menu.options.size
-
-    // data 必选字段名映射
-    fieldNames: {
-      title: 'title',
-      children: 'children',
-    },
   };
 
   static get CONST() {
@@ -86,11 +84,6 @@ export class Dropdown extends Popup {
     // 添加组件专属 className
     $rootElem.addClass(CONST.ELEM);
 
-    // 阻止全局事件
-    $rootElem.on(clickOrMousedown, `.${menu.CONST.ELEM}`, (e) => {
-      e.stopPropagation();
-    });
-
     // 点击菜单项
     $rootElem.on('click', `.${menu.CONST.ELEM_ITEM}`, (e) => {
       const $this = $(e.currentTarget);
@@ -113,15 +106,21 @@ export class Dropdown extends Popup {
   [popupHooks.kAfterOpen]() {
     const options = this.options;
 
-    // 渲染 menu 组件
-    menu.render({
-      ...options,
+    // 静态渲染 menu 组件
+    this.menuInstance = menu.render({
       elem: this.$rootElem.find(`.${menu.CONST.ELEM}`),
-      mode: 'vertical',
+      mode: 'vertical', // 固定为垂直菜单
       submenuMode: options.submenuMode,
       size: options.size,
       accordion: options.accordion,
     });
+  }
+
+  // 关闭后的内部钩子
+  [popupHooks.kAfterClose]() {
+    // 销毁 menu 组件实例
+    this.menuInstance?.destroy();
+    this.menuInstance = null;
   }
 
   // Floating 中间件钩子
