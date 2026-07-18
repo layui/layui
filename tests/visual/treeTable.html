@@ -181,9 +181,9 @@
           } else if (layEvent === 'more') {
             // 下拉菜单
             dropdown.render({
-              elem: this, // 触发事件的 DOM 对象
-              show: true, // 外部事件触发即显示
-              align: 'right', // 右对齐弹出
+              elem: this,
+              defaultOpen: true, // 默认打开
+              placement: 'bottom-end',
               data: [
                 {
                   title: '修改积分',
@@ -194,15 +194,15 @@
                   id: 'del',
                 },
               ],
-              click: (menudata) => {
-                if (menudata.id === 'del') {
+              onClick: ({ data }) => {
+                if (data.id === 'del') {
                   console.log(trData);
                   layer.confirm('真的删除行么', (index) => {
                     obj.del(); // 等效如下
                     // treeTable.removeNode(tableId, trElem.attr('data-index'))
                     layer.close(index);
                   });
-                } else if (menudata.id === 'edit') {
+                } else if (data.id === 'edit') {
                   layer.prompt(
                     {
                       value: trData.experience,

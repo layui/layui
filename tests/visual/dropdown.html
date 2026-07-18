@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
-    <title>下拉菜单 - layui</title>
+    <title>dropdown 下拉菜单 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
   </head>
   <body>
@@ -316,7 +316,6 @@
         dropdown.render({
           elem: '#ID-dropdown-demo-contextmenu', // 也可绑定到 document，从而重置整个右键
           trigger: 'contextmenu', //contextmenu
-          allowExpand: false,
           // style: 'width: 200px',
           data: [
             {
@@ -388,25 +387,6 @@
             }
           },
         });
-
-        dropdown.render({
-          elem: '#testopen',
-          id: 'testopen',
-          trigger: 'manual',
-          data: [{ id: 'refresh', title: '刷新' }],
-        });
-
-        utils.on(
-          {
-            open: () => {
-              dropdown.open('testopen');
-            },
-            close: () => {
-              dropdown.close('testopen');
-            },
-          },
-          { trigger: 'mouseenter' },
-        );
 
         // 完整重载
         dropdown.render({

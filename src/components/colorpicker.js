@@ -11,12 +11,15 @@ import { Popup, popupHooks } from './popup.js';
 export class Colorpicker extends Popup {
   static componentName = 'colorpicker';
 
-  // 默认配置
+  /**
+   * 默认配置项
+   * 可继承 {@link Popup.options}
+   */
   static options = {
-    ...super.options, // 继承 popup 默认配置项
+    ...super.options,
 
-    // 弹出方位。可选值见 Popup.options.placement
-    placement: 'bottom-start',
+    // popup 组件相关选项
+    placement: 'bottom-start', // 弹出方位
 
     color: '', // 默认颜色，默认没有
     size: null, // 选择器大小

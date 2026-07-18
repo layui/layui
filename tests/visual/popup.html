@@ -101,12 +101,12 @@
       <div
         style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
       >
-        <button class="lay-btn" id="demo-downbit">downbit （默认）</button>
+        <button class="lay-btn" id="demo-downbit">downbit</button>
         <button class="lay-btn" id="demo-upbit">upbit</button>
         <button class="lay-btn" id="demo-scale">scale</button>
         <button class="lay-btn" id="demo-scaleSpring">scaleSpring</button>
         <button class="lay-btn" id="demo-scalesmall">scalesmall</button>
-        <button class="lay-btn" id="demo-fadein">fadein</button>
+        <button class="lay-btn" id="demo-fadein">fadein（默认）</button>
       </div>
 
       <br /><br />
@@ -161,10 +161,13 @@
         const { popup, tabs, lay, $, utils } = layui;
 
         // 常规
-        popup.render({
+        const popupInstance = popup.render({
           elem: '#demo-normal',
           content: '一个普通的附着弹出层',
         });
+
+        console.dir(popup);
+        console.log('popup.render() → ', popupInstance);
 
         // 开启遮罩
         popup.render({

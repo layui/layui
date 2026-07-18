@@ -378,14 +378,14 @@
                 },
               ],
               // 菜单被点击的事件
-              click: (obj) => {
-                if (obj.id === 'mult-checked') {
+              onClick: ({ data }) => {
+                if (data.id === 'mult-checked') {
                   // 同时选中多个
                   table.setRowChecked(id, {
                     index: [3, 4, 5], // 2.9.1+
                     checked: true,
                   });
-                } else if (obj.id === 'reset-checked') {
+                } else if (data.id === 'reset-checked') {
                   // 给选中行取消选中状态
                   table.setRowChecked(id, {
                     index: 'all',
@@ -399,7 +399,7 @@
                       shade: false,
                     },
                     (value, i) => {
-                      switch (obj.id) {
+                      switch (data.id) {
                         case 'checked':
                           table.setRowChecked(id, {
                             index: value,
@@ -442,8 +442,8 @@
                 },
               ],
               // 菜单被点击的事件
-              click: (obj) => {
-                switch (obj.id) {
+              onClick: ({ data }) => {
+                switch (data.id) {
                   case 'reload':
                     // 重载 - 默认（参数重置）
                     table.reload('test', {
@@ -532,7 +532,7 @@
                 },
               ],
               // 菜单被点击的事件
-              click: (obj) => {
+              onClick: ({ data: obj }) => {
                 var checkStatus = table.checkStatus(id);
                 var data = checkStatus.data; // 获取选中的数据
 
