@@ -502,7 +502,7 @@ export class Menu extends Component {
       options.mode === 'horizontal' ? 'bottom-start' : 'right-start';
 
     // 克隆子菜单元素
-    const $subClone = $sub.clone().attr('class', CONST.ELEM);
+    const $subClone = $sub.clone(true).attr('class', CONST.ELEM);
 
     // 非默认尺寸，预设 data-size 属性
     if (options.size !== 'md') {
@@ -545,11 +545,8 @@ export class Menu extends Component {
             controller.onPopupEnter({ depth });
           })
           .on('mouseleave', () => {
-            // 清除 Popup 默认的定时器
-            clearTimeout(popupInstance.timer);
-
             controller.onPopupLeave({
-              depth,
+              depth: 0, // 所有 Popup 都进入待关闭状态
               closeDelay: options.submenuCloseDelay,
             });
           });
@@ -652,15 +649,18 @@ export class Menu extends Component {
           const { $submenu, $sub } = this.#getSubmenu($title);
           const currentPopupInstance = controller.getInstance(depth);
 
-          // 取消可能存在的延时关闭
           controller.onPopupEnter({ depth });
 
-          // 当前标题对应的 Popup 已打开，无需创建
-          if (currentPopupInstance?.options.$elem?.[0] === $title[0]) {
+          // 阻止事件向 Popup 根元素冒泡
+          e.stopPropagation();
+
+          // 若「当前子菜单已打开」或「不存在子菜单」，则无需创建
+          if (
+            currentPopupInstance?.options.$elem?.[0] === $title[0] ||
+            !($sub.length && $sub.children().length)
+          ) {
             return;
           }
-
-          if (!$sub.length || !$sub.children().length) return;
 
           // 延时创建 Popup 子菜单，避免频繁触发
           this.#clearOpenPopupTimer();
@@ -673,9 +673,6 @@ export class Menu extends Component {
               });
             }
 
-            // 切换同级子菜单：关闭当前 depth 及其后代
-            controller.closeFromDepth(depth);
-
             // 创建 Popup 子菜单
             this.#createPopupSubmenu({ $submenu, $title, $sub });
           }, options.submenuOpenDelay);
@@ -684,7 +681,7 @@ export class Menu extends Component {
           this.#clearOpenPopupTimer();
 
           controller.onPopupLeave({
-            depth,
+            depth, // 当前深度及其后代 Popup 进入待关闭状态
             closeDelay: options.submenuCloseDelay,
           });
         });
@@ -699,7 +696,11 @@ export class Menu extends Component {
       Constructor.setActiveItem($elem, $item);
 
       // 触发 onClick 回调
-      options.onClick?.({ $item, e, options: rootMenuInstance.options });
+      options.onClick?.({
+        $item,
+        e,
+        options: rootMenuInstance ? rootMenuInstance.options : options,
+      });
 
       // 若为深层 Popup 菜单
       if (depth > 0) {
@@ -735,19 +736,29 @@ const CONST = Menu.CONST;
  */
 const createPopupChainController = () => {
   const instances = [];
-  let closeAllTimer = null;
-  let closeDepthTimer = null;
-  let pendingCloseDepth = null; // 待关闭的深度索引
-
-  // 清理「从指定深度关闭」的定时任务
-  const clearCloseFromDepth = () => {
-    clearTimeout(closeDepthTimer);
-    closeDepthTimer = null;
-    pendingCloseDepth = null;
-  };
+  let closePopupTimer = null;
 
   // 控制器
   const controller = {
+    /**
+     * 清除 Popup 内置的定时器
+     * @returns {void}
+     */
+    clearDefaultPopupTimers() {
+      instances.forEach((popupInstance) => {
+        clearTimeout(popupInstance.timer);
+      });
+    },
+
+    /**
+     * 清除 Popup 实例链的延时关闭
+     * @returns {void}
+     */
+    clearClosePopupTimer() {
+      clearTimeout(closePopupTimer);
+      closePopupTimer = null;
+    },
+
     /**
      * 注册 Popup 实例
      * @param {number} depth - Popup 深度
@@ -755,17 +766,19 @@ const createPopupChainController = () => {
      * @returns {void}
      */
     register(depth, popupInstance) {
-      controller.cancelCloseAll();
+      controller.clearDefaultPopupTimers();
+      controller.clearClosePopupTimer();
 
-      // depth 对应的新实例注册后，关闭其可能存在的旧实例的后代 Popup
-      controller.closeFromDepth(depth + 1);
+      const currentPopupInstance = instances[depth];
 
-      // 若已存在该深度的不同实例，则关闭它
-      const current = instances[depth];
-      if (current && current !== popupInstance) {
-        current.close();
+      // 重复注册同一深度的 Popup 实例时，关闭其可能存在的后代
+      if (currentPopupInstance === popupInstance) {
+        controller.closeFromDepth(depth + 1);
+        return;
       }
 
+      // 添加新实例前，关闭可能存在的旧实例及其后代
+      controller.closeFromDepth(depth);
       instances[depth] = popupInstance;
     },
 
@@ -793,8 +806,11 @@ const createPopupChainController = () => {
      * @returns {void}
      */
     onPopupEnter({ depth }) {
-      controller.cancelCloseAll();
-      controller.cancelCloseFromDepth(depth);
+      controller.clearDefaultPopupTimers();
+      controller.clearClosePopupTimer();
+
+      // 关闭当前 depth 可能存在的后代
+      controller.closeFromDepth(depth + 1);
     },
 
     /**
@@ -805,7 +821,7 @@ const createPopupChainController = () => {
      * @returns {void}
      */
     onPopupLeave({ depth, closeDelay }) {
-      controller.delayCloseAll(closeDelay);
+      controller.clearDefaultPopupTimers();
       controller.delayCloseFromDepth(depth, closeDelay);
     },
 
@@ -821,17 +837,6 @@ const createPopupChainController = () => {
     },
 
     /**
-     * 获取目标元素所在的 Popup 深度
-     * @param {Node|null} target - 目标元素
-     * @returns {number} -  返回 Popup 深度；未命中则返回 -1
-     */
-    getPopupDepth(target) {
-      return instances.findIndex((popupInstance) => {
-        return popupInstance?.$rootElem?.[0]?.contains(target);
-      });
-    },
-
-    /**
      * 获取指定深度的 Popup 实例
      * @param {number} depth - Popup 深度
      * @returns {Object|undefined}
@@ -841,41 +846,11 @@ const createPopupChainController = () => {
     },
 
     /**
-     * 延时关闭所有 Popup 链
-     * @param {number} closeDelay - 延时关闭毫秒数
-     * @returns {void}
-     */
-    delayCloseAll(closeDelay) {
-      controller.cancelCloseAll();
-
-      closeAllTimer = setTimeout(() => {
-        controller.closeFromDepth(0);
-      }, closeDelay);
-    },
-
-    /**
-     *  从指定深度开始延时关闭 Popup
-     * @param {number} depth - 起始 Popup 深度
-     * @param {number} closeDelay - 延时关闭毫秒数
-     * @returns {void}
-     */
-    delayCloseFromDepth(depth, closeDelay) {
-      clearTimeout(closeDepthTimer);
-      pendingCloseDepth = depth;
-
-      closeDepthTimer = setTimeout(() => {
-        controller.closeFromDepth(depth);
-      }, closeDelay);
-    },
-
-    /**
      * 从指定深度开始关闭 Popup
      * @param {number} depth - 起始 Popup 深度
      * @returns {void}
      */
     closeFromDepth(depth = 0) {
-      clearCloseFromDepth();
-
       // 获取对应深度及更深的实例
       const closingInstances = instances.slice(depth).filter(Boolean).reverse();
 
@@ -883,25 +858,9 @@ const createPopupChainController = () => {
       instances.length = depth;
 
       // 从最深层开始逐个关闭
-      closingInstances.forEach((instance) => {
-        instance.close();
+      closingInstances.forEach((popupInstance) => {
+        popupInstance.close();
       });
-    },
-
-    /**
-     * 取消指定深度的 Popup 的延时关闭
-     * @param {number} depth - Popup 深度
-     * @returns {void}
-     */
-    cancelCloseFromDepth(depth) {
-      // 只有在「当前深度」大于等于「待关闭的深度索引」时，才取消延时关闭
-      // 如: 待关闭深度 `1+`，移入深度为 `1` 或更深的 Popup，应取消关闭
-      const shouldCancel =
-        pendingCloseDepth !== null && depth >= pendingCloseDepth;
-
-      if (shouldCancel) {
-        clearCloseFromDepth();
-      }
     },
 
     /**
@@ -909,17 +868,22 @@ const createPopupChainController = () => {
      * @returns {void}
      */
     closeAll() {
-      controller.cancelCloseAll();
+      controller.clearClosePopupTimer();
       controller.closeFromDepth(0);
     },
 
     /**
-     * 取消所有 Popup 链的延时关闭
+     * 从指定深度开始延时关闭 Popup
+     * @param {number} depth - Popup 深度
+     * @param {number} closeDelay - 延迟关闭毫秒数
      * @returns {void}
      */
-    cancelCloseAll() {
-      clearTimeout(closeAllTimer);
-      closeAllTimer = null;
+    delayCloseFromDepth(depth, closeDelay) {
+      controller.clearClosePopupTimer();
+
+      closePopupTimer = setTimeout(() => {
+        controller.closeFromDepth(depth);
+      }, closeDelay);
     },
   };
 
