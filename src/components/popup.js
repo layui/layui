@@ -42,9 +42,9 @@ export class Popup extends Component {
     // 层打开时的动画。支持 anim.css 中的所有动画类
     anim: 'fadein',
 
-    // 延时显示或隐藏的毫秒数，若为 number 类型，则表示显示和隐藏的延迟时间相同。
-    // 仅当 `trigger` 为 `hover / mouseenter` 时生效
-    delay: [200, 300],
+    // 延时打开和关闭层毫秒数，仅当 `trigger` 为 `hover/mouseenter` 时生效
+    openDelay: 200,
+    closeDelay: 300,
 
     // defaultOpen: false, // 是否初始默认打开层
     // className: '', // 自定义样式类名
@@ -72,7 +72,6 @@ export class Popup extends Component {
       'close',
       'updateContent',
       'isRootElemMounted',
-      'normalizedDelay',
       'delayClose',
     ]);
   }
@@ -241,29 +240,16 @@ export class Popup extends Component {
   }
 
   /**
-   * 规范化延迟时间
-   * @returns {Object} - 返回 { show, hide } 对象
-   */
-  normalizedDelay() {
-    const options = this.options;
-    const delay = [].concat(options.delay);
-
-    return {
-      show: delay[0],
-      hide: delay[1] !== undefined ? delay[1] : delay[0],
-    };
-  }
-
-  /**
    * 延迟关闭层
    * @returns {void}
    */
   delayClose() {
-    clearTimeout(this.timer);
+    const options = this.options;
 
+    clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       this.close();
-    }, this.normalizedDelay().hide);
+    }, options.closeDelay);
   }
 
   /**
@@ -437,7 +423,7 @@ export class Popup extends Component {
         if (!opened) {
           this.timer = setTimeout(() => {
             this.open();
-          }, this.normalizedDelay().show);
+          }, options.openDelay);
         }
       } else {
         // 若为 click 事件，则根据层状态，自动切换打开与关闭
