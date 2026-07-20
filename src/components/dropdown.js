@@ -23,7 +23,7 @@ export class Dropdown extends Popup {
     anim: 'downbit', // 弹出动画
 
     // menu 组件相关选项
-    submenuMode: 'inline', // 子菜单的展示方式
+    submenuMode: 'popup', // 子菜单的展示方式
     size: 'md', // 菜单尺寸
 
     // 是否自适应高度。开启后，将限制下拉菜单高度不超出可视区域，并自动出现纵向滚动条
@@ -36,6 +36,7 @@ export class Dropdown extends Popup {
   static get CONST() {
     return {
       ...super.CONST,
+      DATA_DROPDOWN_ID: 'data-dropdown-id',
       ELEM: 'lay-dropdown',
     };
   }
@@ -81,25 +82,16 @@ export class Dropdown extends Popup {
     // 面板内容
     options.content = $menu;
 
+    // 点击 Popup 子菜单时，阻止其父级 Popup 触发「外部点击」引起的关闭
+    options.onClickOutside = (e) => {
+      const MENU_POPUP_SELECTOR = `.lay-menu-popup[${CONST.DATA_DROPDOWN_ID}="${options.id}"]`;
+      return $(e.target).closest(MENU_POPUP_SELECTOR).length
+        ? false
+        : undefined;
+    };
+
     // 添加组件专属 className
     $rootElem.addClass(CONST.ELEM);
-
-    // 点击菜单项
-    $rootElem.on('click', `.${menu.CONST.ELEM_ITEM}`, (e) => {
-      const $this = $(e.currentTarget);
-      const data = $this.data('item') || {};
-
-      if (data.disabled) return;
-
-      // 触发 onClick 回调
-      const clickResult = options.onClick?.({ data, e });
-
-      // 若返回 false 则阻止后续操作
-      if (clickResult === false) return;
-
-      // 关闭下拉菜单
-      this.close();
-    });
   }
 
   // 打开后的内部钩子
@@ -113,6 +105,23 @@ export class Dropdown extends Popup {
       submenuMode: options.submenuMode,
       size: options.size,
       accordion: options.accordion,
+      afterSubmenuOpen({ popupInstance }) {
+        popupInstance.$rootElem.attr(CONST.DATA_DROPDOWN_ID, options.id);
+      },
+      onClick: ({ $item, e }) => {
+        const data = $item.data('item') || {};
+
+        if (data.disabled) return;
+
+        // 触发 onClick 回调
+        const clickResult = options.onClick?.({ data, e, $item, options });
+
+        // 若返回 false 则阻止后续操作
+        if (clickResult === false) return;
+
+        // 关闭下拉菜单
+        this.close();
+      },
     });
   }
 

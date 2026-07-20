@@ -244,12 +244,17 @@
           },
         ];
 
+        // 设置默认选项值 (仅用于测试)
+        dropdown.config({
+          // submenuMode: 'inline',
+        });
+
+        // 常规
         const dropdownInst = dropdown.render({
           elem: '#demo1',
           backdrop: 0.03,
           data: DEMO_DATA,
           autoFitHeight: true,
-          // style: 'max-height: 300px; overflow-y: auto; min-width: 200px;',
           onClick({ data, e }) {
             console.log('click', data, e);
           },
@@ -316,7 +321,7 @@
         dropdown.render({
           elem: '#ID-dropdown-demo-contextmenu', // 也可绑定到 document，从而重置整个右键
           trigger: 'contextmenu', //contextmenu
-          // style: 'width: 200px',
+          style: 'width: 160px',
           data: [
             {
               title: 'menu item 1',
@@ -363,6 +368,7 @@
             if (data.id === 'reload') {
               location.reload();
             }
+            console.log(`${this.id} → onClick → `, data);
           },
         });
 
