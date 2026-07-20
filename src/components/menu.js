@@ -16,9 +16,6 @@ export class Menu extends Component {
    * 同时支持 {@link Menu.generateMenu} 的 options
    */
   static options = {
-    elem: '.lay-menu',
-    size: 'md', // 菜单尺寸。可选值：sm|md|lg
-
     // 菜单模式。可选值: vertical|horizontal
     mode: 'vertical',
 
@@ -27,11 +24,21 @@ export class Menu extends Component {
     // mode 为 horizontal 时固定为 popup 值
     submenuMode: 'inline',
 
-    // 是否采用「手风琴模式」展开内联(inline)子菜单
+    // 是否采用「手风琴模式」展开内嵌(inline)子菜单
     accordion: false,
 
-    // 主题。可选值: light|dark
+    // popup 子菜单延时打开和关闭的毫秒数
+    submenuOpenDelay: 200,
+    submenuCloseDelay: 300,
+
+    // 菜单尺寸。可选值：sm|md|lg
+    size: 'md',
+
+    // 菜单主题。可选值: light|dark
     theme: 'light',
+
+    // 子菜单主题。可选值: auto(自动跟随父菜单)|light|dark|
+    submenuTheme: 'auto',
 
     // 数据渲染的核心选项
     // target: null, // 插入的目标容器
@@ -41,6 +48,8 @@ export class Menu extends Component {
   static get CONST() {
     return {
       ...super.CONST,
+      ATTR_ITEM_INDEX: '__menu-popup-item-index',
+
       ELEM: 'lay-menu',
       ELEM_GROUP: 'lay-menu-group',
       ELEM_SUBMENU: 'lay-menu-submenu',
@@ -49,6 +58,8 @@ export class Menu extends Component {
       ELEM_TITLE_ARROW: 'lay-menu-title-arrow',
       ELEM_SUB: 'lay-menu-sub',
       ELEM_ITEM: 'lay-menu-item',
+
+      ELEM_VERTICAL: 'lay-menu-vertical',
     };
   }
 
@@ -67,7 +78,7 @@ export class Menu extends Component {
    * @param {Object} options - 组件配置项
    * @param {Array} options.data - 菜单数据结构
    * @param {Object} options.fieldNames - 字段名映射
-   * @param {boolean} [options.expanded] - 是否默认展开内联子菜单 (仅垂直菜单有效)
+   * @param {boolean} [options.expanded] - 是否默认展开内嵌子菜单 (仅垂直菜单有效)
    * @param {string} [options.size] - 菜单尺寸。可选值：sm|md|lg
    * @param {Function} [options.template] - 菜单标题模板函数
    * @param {Function} [options.beforeTitleRender] - 标题元素渲染前的钩子函数
@@ -188,6 +199,18 @@ export class Menu extends Component {
   }
 
   /**
+   * 设置菜单项活动状态
+   * @param {JQuery} $elem - 菜单元素
+   * @param {JQuery} $item - 活动菜单项元素
+   * @returns {void}
+   */
+  static setActiveItem($elem, $activeItem) {
+    const { CLASS_IS_ACTIVE } = CONST;
+    $elem.find(`.${CLASS_IS_ACTIVE}`).removeClass(CLASS_IS_ACTIVE);
+    $activeItem.addClass(CLASS_IS_ACTIVE);
+  }
+
+  /**
    * 应用菜单 data-* 属性
    * @param {JQuery} $elem - 菜单元素
    * @param {Object} options - 菜单配置项
@@ -253,6 +276,7 @@ export class Menu extends Component {
         ? options._popupContext || {
             controller: createPopupChainController(),
             depth: 0,
+            rootMenuInstance: this,
           }
         : null;
 
@@ -282,7 +306,7 @@ export class Menu extends Component {
   collapse() {}
 
   /**
-   * 展开所有内联子菜单
+   * 展开所有内嵌子菜单
    * @returns {void}
    */
   expandSubmenus() {
@@ -292,7 +316,7 @@ export class Menu extends Component {
   }
 
   /**
-   * 折叠所有内联子菜单
+   * 折叠所有内嵌子菜单
    * @returns {void}
    */
   collapseSubmenus() {
@@ -342,28 +366,23 @@ export class Menu extends Component {
         const $arrow = $(`<div class="${CONST.ELEM_TITLE_ARROW}"></div>`);
         $arrow.append(`<i class="lay-icon lay-icon-down"></i>`);
         $title.append($arrow);
-
-        // 若子菜单展示方式为 popup
-        if (options.submenuMode === 'popup' && this.#popupContext.depth === 0) {
-          // 仅对「根级子菜单」预创建 Popup 子菜单
-          const isRootSubmenu =
-            $title.closest(`.${CONST.ELEM_SUB}`).length === 0;
-
-          if (isRootSubmenu) {
-            this.#createPopupSubmenu({
-              $submenu,
-              $title,
-              $sub,
-              isRootPopup: true,
-            });
-          }
-        }
       }
     });
   }
 
   /**
-   * 展开或折叠内联子菜单
+   * 获取子菜单元素
+   * @param {jQuery} $title - 子菜单标题元素
+   * @returns {Object} - 返回包含子菜单元素的对象
+   */
+  #getSubmenu($title) {
+    const $submenu = $title.parent(`.${CONST.ELEM_SUBMENU}`);
+    const $sub = $submenu.children(`.${CONST.ELEM_SUB}`);
+    return { $submenu, $sub };
+  }
+
+  /**
+   * 展开或折叠内嵌子菜单
    * @param {Element} currentTarget - 当前点击的菜单标题元素
    * @returns {void}
    */
@@ -371,39 +390,38 @@ export class Menu extends Component {
     const options = this.options;
     const accordion = options.accordion;
     const $title = $(currentTarget);
-    const $this = $title.parent(`.${CONST.ELEM_SUBMENU}`);
-    const $children = $this.children(`.${CONST.ELEM_SUB}`);
+    const { $submenu, $sub } = this.#getSubmenu($title);
     const ANIM_MS = 200;
 
-    if (!$children.length) return;
+    if (!$sub.length) return;
     if (options.submenuMode !== 'inline') return;
 
     // 动画执行完成后的操作
     const animComplete = () => {
       // 清空临时 style，以适配外部样式的状态重置
-      $children.css({ display: '' });
+      $sub.css({ display: '' });
     };
 
     // 动画是否正在执行
-    if ($children.is(':animated')) return;
+    if ($sub.is(':animated')) return;
 
     // 是否已展开
-    const isExpanded = $this.hasClass(CONST.CLASS_IS_EXPANDED);
+    const isExpanded = $submenu.hasClass(CONST.CLASS_IS_EXPANDED);
 
     // 切换展开状态类
-    $this.toggleClass(CONST.CLASS_IS_EXPANDED, !isExpanded);
+    $submenu.toggleClass(CONST.CLASS_IS_EXPANDED, !isExpanded);
 
     // 折叠
     if (isExpanded) {
-      $children.show().stop().slideUp(ANIM_MS, animComplete);
+      $sub.show().stop().slideUp(ANIM_MS, animComplete);
     } else {
       // 展开
-      $children.hide().stop().slideDown(ANIM_MS, animComplete);
+      $sub.hide().stop().slideDown(ANIM_MS, animComplete);
     }
 
     // 手风琴模式 --- 折叠兄弟展开项
     if (accordion && !isExpanded) {
-      const $siblings = $this.siblings(`.${CONST.CLASS_IS_EXPANDED}`);
+      const $siblings = $submenu.siblings(`.${CONST.CLASS_IS_EXPANDED}`);
       $siblings.removeClass(CONST.CLASS_IS_EXPANDED);
       $siblings
         .children(`.${CONST.ELEM_SUB}`)
@@ -415,9 +433,6 @@ export class Menu extends Component {
 
   // Popup 子菜单上下文
   #popupContext = null;
-
-  // 根级 Popup 子菜单实例集合
-  #rootPopupInstances = new Set();
 
   // 当前 Menu 实例是否拥有 Popup 实例链的所有权
   #ownsPopupChain = false;
@@ -435,21 +450,29 @@ export class Menu extends Component {
     const childOptions = {
       data: null,
       mode: 'vertical', // Popup 子菜单固定为垂直模式
+      theme: options.submenuTheme,
       _popupContext: {
-        // 复用 Popup 子菜单控制器
-        controller: this.#popupContext.controller,
+        ...this.#popupContext, // 继承父级 Popup 上下文
         depth: depth + 1, // 子菜单深度 +1
       },
     };
 
+    // 若子菜单主题为 auto 模式
+    if (options.submenuTheme === 'auto') {
+      childOptions.theme = options.theme; // 继承父级菜单主题
+    }
+
     // Popup 子菜单可从父菜单继承的配置项名称
     const POPUP_MENU_OPTION_KEYS = [
-      'size',
       'submenuMode',
+      'submenuTheme',
+      'size',
       'fieldNames',
       'template',
-      'onClick',
       'beforeTitleRender',
+      'onClick',
+      'beforeSubmenuOpen',
+      'afterSubmenuOpen',
     ];
 
     // 仅继承父级菜单显式声明的配置项
@@ -468,31 +491,34 @@ export class Menu extends Component {
    * @param {JQuery} params.$submenu - 子菜单容器元素
    * @param {JQuery} params.$title - 子菜单标题元素
    * @param {JQuery} params.$sub - 子菜单列表容器元素
-   * @param {boolean} [params.isRootPopup=false] - 是否为根级 Popup
-   * @param {boolean} [params.defaultOpen=false] - 是否默认打开
    * @returns {Object} - 返回 Popup 实例
    */
-  #createPopupSubmenu({
-    $submenu,
-    $title,
-    $sub,
-    isRootPopup = false,
-    defaultOpen = false,
-  }) {
+  #createPopupSubmenu({ $submenu, $title, $sub }) {
     const options = this.options;
-    const { controller, depth } = this.#popupContext;
+    const { controller, depth, rootMenuInstance } = this.#popupContext;
 
     // 根据菜单模式设定弹出方位
     const placement =
       options.mode === 'horizontal' ? 'bottom-start' : 'right-start';
 
     // 克隆子菜单元素
-    const $content = $sub.clone().attr('class', CONST.ELEM);
+    const $subClone = $sub.clone().attr('class', CONST.ELEM);
+
+    // 非默认尺寸，预设 data-size 属性
+    if (options.size !== 'md') {
+      $subClone.attr('data-size', options.size);
+    }
+
+    // 垂直菜单容器
+    const $verticalMenuContainer = $(
+      `<div class="${CONST.ELEM_VERTICAL}"></div>`,
+    );
+    $verticalMenuContainer.append($subClone);
 
     // 创建子菜单 Popup 实例
     const popupInstance = popup.render({
       elem: $title,
-      content: $content.prop('outerHTML'),
+      content: $verticalMenuContainer,
       trigger: 'mouseenter',
       placement,
       className: 'lay-menu-popup',
@@ -524,13 +550,21 @@ export class Menu extends Component {
 
             controller.onPopupLeave({
               depth,
-              delay: popupInstance.normalizedDelay().hide,
+              closeDelay: options.submenuCloseDelay,
             });
           });
+
+        // 子菜单打开后的钩子
+        options.afterSubmenuOpen?.(params);
       },
       afterClose: () => {
         // 给「子菜单容器」移除打开状态类
         $submenu.removeClass(CONST.CLASS_IS_OPEN);
+
+        // 移除根级菜单项临时索引
+        if (depth === 0) {
+          $sub.find(`.${CONST.ELEM_ITEM}`).removeAttr(CONST.ATTR_ITEM_INDEX);
+        }
 
         // 销毁弹出的子级菜单实例
         popupInstance.menuInstance?.destroy();
@@ -539,100 +573,121 @@ export class Menu extends Component {
         // 从控制器中注销当前深度的实例
         controller.unregister(depth, popupInstance);
 
-        // 关闭非「根级 Popup」后，即销毁实例
-        if (!isRootPopup) {
-          popupInstance.destroy();
-        }
+        // 关闭销毁 Popup 实例
+        popupInstance.destroy();
       },
     });
 
-    // 添加「根级 Popup」的实例集合
-    if (isRootPopup) {
-      this.#rootPopupInstances.add(popupInstance);
-    }
+    // 钩子函数返回的参数
+    const params = {
+      $submenu,
+      $title,
+      $sub,
+      popupInstance,
+      options: rootMenuInstance.options,
+    };
 
-    // 若 Popup 默认打开，则通过其 open 方法打开
-    // 确保 `afterOpen` 中能正确读取 popupInstance
-    if (defaultOpen) {
-      popupInstance.open();
-    }
+    // 子菜单打开前的钩子
+    options.beforeSubmenuOpen?.(params);
+
+    // 通过方法打开，确保 `afterOpen` 中能正确读取 popupInstance
+    popupInstance.open();
 
     return popupInstance;
   }
 
   /**
-   * 销毁根级 Menu 实例对应的 Popup 实例链
+   * 销毁 Popup 实例链
    * @returns {void}
    */
   #destroyPopupChain() {
     if (!this.#ownsPopupChain) return;
 
-    const { controller } = this.#popupContext || {};
-    const rootPopupInstances = this.#rootPopupInstances;
-
-    controller.closeAll();
-
-    rootPopupInstances.forEach((popupInstance) => {
-      popupInstance.destroy();
-    });
-
-    rootPopupInstances.clear();
+    this.#popupContext?.controller?.closeAll();
     this.#popupContext = null;
     this.#ownsPopupChain = false;
   }
 
   /**
+   * 清除延时打开 Popup 的定时器
+   * @returns {void}
+   */
+  #clearOpenPopupTimer() {
+    clearTimeout(this.openPopupTimer);
+    this.openPopupTimer = null;
+  }
+
+  /**·
    * 事件处理
    * @returns {void}
    */
   #events() {
     const options = this.options;
     const $elem = options.$elem;
+    const Constructor = this.constructor;
 
     // 事件命名空间
     const eventNamespace = CONST.EVENT_NAMESPACE;
-    const { controller, depth } = this.#popupContext || {};
     const SUBMENU_TITLE_SELECTOR = `.${CONST.ELEM_SUBMENU} > .${CONST.ELEM_TITLE}`;
     const ITEM_TITLE_SELECTOR = `.${CONST.ELEM_ITEM} > .${CONST.ELEM_TITLE}`;
+    const { controller, depth, rootMenuInstance } = this.#popupContext || {};
 
     // 避免重复绑定事件
     $elem.off(eventNamespace);
 
-    // 子菜单 inline 模式，点击标题切换展开状态
+    // 子菜单 inline 模式
     if (options.submenuMode === 'inline') {
+      // 点击标题切换展开状态
       $elem.on(`click${eventNamespace}`, SUBMENU_TITLE_SELECTOR, (e) => {
         this.#toggleInlineSubmenu(e.currentTarget);
       });
     }
 
-    // 子菜单 popup 模式: 深层子菜单通过事件委托按需创建 Popup 实例
-    if (options.submenuMode === 'popup' && depth > 0) {
-      $elem.on(`mouseenter${eventNamespace}`, SUBMENU_TITLE_SELECTOR, (e) => {
-        const $title = $(e.currentTarget);
-        const $submenu = $title.parent(`.${CONST.ELEM_SUBMENU}`);
-        const $sub = $submenu.children(`.${CONST.ELEM_SUB}`);
-        const currentPopupInstance = controller.getInstance(depth);
+    // 子菜单 popup 模式
+    if (options.submenuMode === 'popup') {
+      // 子菜单通过 mouseenter 事件委托按需创建 Popup 实例
+      $elem
+        .on(`mouseenter${eventNamespace}`, SUBMENU_TITLE_SELECTOR, (e) => {
+          const $title = $(e.currentTarget);
+          const { $submenu, $sub } = this.#getSubmenu($title);
+          const currentPopupInstance = controller.getInstance(depth);
 
-        // 重新进入当前 Popup 分支，取消可能存在的延时关闭
-        controller.onPopupEnter({ depth });
+          // 取消可能存在的延时关闭
+          controller.onPopupEnter({ depth });
 
-        // 当前标题对应的 Popup 已打开，无需创建
-        if (currentPopupInstance?.options.$elem?.[0] === $title[0]) {
-          return;
-        }
+          // 当前标题对应的 Popup 已打开，无需创建
+          if (currentPopupInstance?.options.$elem?.[0] === $title[0]) {
+            return;
+          }
 
-        // 切换同级子菜单：关闭当前 depth 及其后代
-        controller.closeFromDepth(depth);
+          if (!$sub.length || !$sub.children().length) return;
 
-        if (!$sub.length || !$sub.children().length) return;
+          // 延时创建 Popup 子菜单，避免频繁触发
+          this.#clearOpenPopupTimer();
+          this.openPopupTimer = setTimeout(() => {
+            // 根级子菜单，创建菜单项临时索引，便于匹配
+            if (depth === 0) {
+              $sub.find(`.${CONST.ELEM_ITEM}`).each((index, item) => {
+                const $item = $(item);
+                $item.attr(CONST.ATTR_ITEM_INDEX, index);
+              });
+            }
 
-        this.#createPopupSubmenu({
-          $submenu,
-          $title,
-          $sub,
-          defaultOpen: true,
+            // 切换同级子菜单：关闭当前 depth 及其后代
+            controller.closeFromDepth(depth);
+
+            // 创建 Popup 子菜单
+            this.#createPopupSubmenu({ $submenu, $title, $sub });
+          }, options.submenuOpenDelay);
+        })
+        .on(`mouseleave${eventNamespace}`, SUBMENU_TITLE_SELECTOR, () => {
+          this.#clearOpenPopupTimer();
+
+          controller.onPopupLeave({
+            depth,
+            closeDelay: options.submenuCloseDelay,
+          });
         });
-      });
     }
 
     // 菜单项点击选中
@@ -641,13 +696,32 @@ export class Menu extends Component {
       const $item = $currentTarget.parent(`.${CONST.ELEM_ITEM}`);
 
       // 标注选中状态
-      $elem
-        .find(`.${CONST.CLASS_IS_ACTIVE}`)
-        .removeClass(CONST.CLASS_IS_ACTIVE);
-      $item.addClass(CONST.CLASS_IS_ACTIVE);
+      Constructor.setActiveItem($elem, $item);
 
       // 触发 onClick 回调
-      options.onClick?.({ $item, e });
+      options.onClick?.({ $item, e, options: rootMenuInstance.options });
+
+      // 若为深层 Popup 菜单
+      if (depth > 0) {
+        const rootPopupInstance = controller.getInstance(0);
+        const itemIndex = $item.attr(CONST.ATTR_ITEM_INDEX);
+
+        if (rootPopupInstance) {
+          const $rootTitle = rootPopupInstance.options.$elem;
+          const { $sub: $rootSub } = this.#getSubmenu($rootTitle);
+
+          // 同步根级菜单的选中状态
+          Constructor.setActiveItem(
+            rootMenuInstance.options.$elem,
+            $rootSub.find(
+              `.${CONST.ELEM_ITEM}[${CONST.ATTR_ITEM_INDEX}='${itemIndex}']`,
+            ),
+          );
+        }
+
+        // 点击后关闭所有 Popup
+        controller.closeAll();
+      }
     });
   }
 }
@@ -727,12 +801,12 @@ const createPopupChainController = () => {
      * 处理 Popup 根元素的鼠标移出事件
      * @param {Object} params - 参数对象
      * @param {number} params.depth - Popup 深度
-     * @param {number} params.delay - 延迟关闭毫秒数
+     * @param {number} params.closeDelay - 延迟关闭毫秒数
      * @returns {void}
      */
-    onPopupLeave({ depth, delay }) {
-      controller.delayCloseAll(delay);
-      controller.delayCloseFromDepth(depth, delay);
+    onPopupLeave({ depth, closeDelay }) {
+      controller.delayCloseAll(closeDelay);
+      controller.delayCloseFromDepth(depth, closeDelay);
     },
 
     /**
@@ -768,30 +842,30 @@ const createPopupChainController = () => {
 
     /**
      * 延时关闭所有 Popup 链
-     * @param {number} delay - 延时毫秒数
+     * @param {number} closeDelay - 延时关闭毫秒数
      * @returns {void}
      */
-    delayCloseAll(delay) {
+    delayCloseAll(closeDelay) {
       controller.cancelCloseAll();
 
       closeAllTimer = setTimeout(() => {
         controller.closeFromDepth(0);
-      }, delay);
+      }, closeDelay);
     },
 
     /**
      *  从指定深度开始延时关闭 Popup
      * @param {number} depth - 起始 Popup 深度
-     * @param {number} delay - 延时毫秒数
+     * @param {number} closeDelay - 延时关闭毫秒数
      * @returns {void}
      */
-    delayCloseFromDepth(depth, delay) {
+    delayCloseFromDepth(depth, closeDelay) {
       clearTimeout(closeDepthTimer);
       pendingCloseDepth = depth;
 
       closeDepthTimer = setTimeout(() => {
         controller.closeFromDepth(depth);
-      }, delay);
+      }, closeDelay);
     },
 
     /**
