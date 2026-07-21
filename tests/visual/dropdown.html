@@ -13,22 +13,32 @@
     <div class="lay-container lay-padding-3">
       <h2>常规</h2>
       <hr />
-      <div
-        style="display: flex; align-items: center; gap: 32px; flex-wrap: wrap"
-      >
+
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <div>子菜单的展示方式：</div>
         <div>
-          <button class="lay-btn" id="demo1">
-            按钮下拉
+          <button class="lay-btn" id="demo-submenu-popup">
+            popup 模式 (默认)
             <i class="lay-icon lay-icon-down lay-font-12"></i>
           </button>
-          <button class="lay-btn lay-btn-primary" id="demo2">
-            按钮下拉
+          <button class="lay-btn" id="demo-submenu-inline">
+            inline 模式
             <i class="lay-icon lay-icon-down lay-font-12"></i>
           </button>
         </div>
+
+        <div>禁用项和阻止关闭项：</div>
+        <div>
+          <button class="lay-btn lay-btn-primary" id="demo-item-disabled">
+            下拉菜单
+            <i class="lay-icon lay-icon-down lay-font-12"></i>
+          </button>
+        </div>
+
+        <div>绑定任意目标元素：</div>
         <div class="lay-text">
           <a href="javascript:;" id="demo3">
-            文字下拉 <i class="lay-icon lay-icon-down"></i>
+            下拉菜单 <i class="lay-icon lay-icon-down"></i>
           </a>
         </div>
       </div>
@@ -118,6 +128,7 @@
           {
             title: 'menu item 3 <hello>',
             id: '',
+            expanded: true,
             children: [
               {
                 title: 'menu item 3-1',
@@ -222,11 +233,9 @@
               },
             ],
           },
-          { type: '-' },
           {
             title: 'menu item 6',
             id: '',
-            expanded: false,
             children: [
               {
                 title: 'menu item 6-1',
@@ -244,27 +253,39 @@
           },
         ];
 
-        // 设置默认选项值 (仅用于测试)
-        dropdown.config({
-          // submenuMode: 'inline',
-        });
+        /**
+         * 常规
+         **/
 
-        // 常规
-        const dropdownInst = dropdown.render({
-          elem: '#demo1',
-          backdrop: 0.03,
+        // 子菜单的展示方式通用 options
+        const options = {
+          elem: '#demo-submenu-popup',
           data: DEMO_DATA,
           autoFitHeight: true,
           onClick({ data, e }) {
             console.log('click', data, e);
           },
+        };
+
+        // popup 模式
+        const dropdownInst = dropdown.render({
+          ...options,
+          elem: '#demo-submenu-popup',
+        });
+        // inline 模式
+        dropdown.render({
+          ...options,
+          elem: '#demo-submenu-inline',
+          submenuMode: 'inline',
         });
 
         console.dir(dropdown);
         console.log('dropdown.render() → ', dropdownInst);
 
+        // 禁用项和阻止关闭项
         dropdown.render({
-          elem: '#demo2',
+          elem: '#demo-item-disabled',
+          backdrop: 0.03,
           // defaultOpen: true,
           closeOnClick: false,
           data: [
@@ -274,7 +295,7 @@
               disabled: true,
             },
             {
-              title: 'menu item 2(点击不关闭)',
+              title: 'menu item 2（点击不关闭）',
               href: '#2',
               id: 'bbb',
             },
@@ -297,6 +318,7 @@
           },
         });
 
+        // 绑定任意目标元素
         dropdown.render({
           elem: '#demo3',
           data: [

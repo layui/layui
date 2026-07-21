@@ -101,8 +101,6 @@ class Test {
     wrapperElem.append(sideElem);
     wrapperElem.append(mainElem);
     el.empty().append(wrapperElem);
-
-    console.log($(sideElem).find('.lay-menu'));
   }
 
   static tools = {

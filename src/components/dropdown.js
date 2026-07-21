@@ -73,7 +73,7 @@ export class Dropdown extends Popup {
       mode: 'vertical', // 固定为垂直菜单
     });
 
-    // 空数据处理
+    // 空状态
     if (!$menu) {
       $menu = $('<div>');
       $menu.addClass(CONST.CLASS_IS_EMPTY).text(i18n.$t('dropdown.empty'));
@@ -91,7 +91,7 @@ export class Dropdown extends Popup {
     };
 
     // 添加组件专属 className
-    $rootElem.addClass(CONST.ELEM);
+    $rootElem.addClass(`${menu.CONST.ELEM_VERTICAL} ${CONST.ELEM}`);
   }
 
   // 打开后的内部钩子

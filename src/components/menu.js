@@ -510,15 +510,13 @@ export class Menu extends Component {
     }
 
     // 垂直菜单容器
-    const $verticalMenuContainer = $(
-      `<div class="${CONST.ELEM_VERTICAL}"></div>`,
-    );
-    $verticalMenuContainer.append($subClone);
+    const $content = $(`<div class="${CONST.ELEM_VERTICAL}"></div>`);
+    $content.append($subClone);
 
     // 创建子菜单 Popup 实例
     const popupInstance = popup.render({
       elem: $title,
-      content: $verticalMenuContainer,
+      content: $content,
       trigger: 'mouseenter',
       placement,
       className: 'lay-menu-popup',
