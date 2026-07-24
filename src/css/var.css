@@ -49,4 +49,9 @@
   --lay-spacing-sm: 8px;
   --lay-spacing-lg: 24px;
   --lay-spacing-xl: 32px;
+
+  /* 动画 */
+  --lay-anim-duration: 300ms;
+  --lay-anim-duration-fast: 200ms;
+  --lay-anim-duration-slow: 500ms;
 }

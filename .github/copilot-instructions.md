@@ -57,13 +57,14 @@ layui/
 
 ```css
 .lay-btn {
+  /* ... */
 }
 ```
 
 - HTML 特定属性名
 
 ```html
-<div class="lay-btn" lay-on="click"></div>
+<button class="lay-btn" lay-on="click"></button>
 ```
 
 - Web Components 标签名
@@ -93,6 +94,18 @@ layui/
 | 组件名、文件名  | camelCase （小驼峰）或全小写               | `button, iconPicker`        |
 | 回调函数        | camelCase + 生命周期                       | `beforeRender, afterRender` |
 | 事件处理器属性  | `on` + 事件名                              | `onClick`                   |
+
+#### CSS 类名命名规范
+
+Layui 3 的 CSS 类名采用扁平化结构，使用 `-` 连接。常用结构参考：
+
+| 结构                       | 用途                               | 示例                                   |
+| -------------------------- | ---------------------------------- | -------------------------------------- |
+| lay-[组件]                 | 组件根类                           | `.lay-btn`                             |
+| lay-[组件]-[变体/元素]     | 组件的变体或内部结构元素           | `.lay-btn-success`、`.lay-tabs-header` |
+| lay-[组件]-[元素]-[子元素] | 组件的内部结构元素；建议不超过四层 | `.lay-menu-title-text`                 |
+| lay-[组件]-is-[模式]       | 组件的模式；一般声明在组件父级     | `.lay-menu-is-line`                    |
+| lay-is-[状态]              | 公共状态；可与任意组件搭配使用     | `.lay-is-active`                       |
 
 #### 样式主题
 

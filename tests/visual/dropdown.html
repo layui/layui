@@ -91,7 +91,7 @@
     <script src="./assets/dist/layui.js"></script>
     <script>
       layui.use(() => {
-        const { dropdown, utils, $ } = layui;
+        const { dropdown, layer, utils, $ } = layui;
 
         // 模拟数据
         const DEMO_DATA = [
@@ -258,23 +258,23 @@
          **/
 
         // 子菜单的展示方式通用 options
-        const options = {
-          elem: '#demo-submenu-popup',
+        const commonOptions = {
           data: DEMO_DATA,
           autoFitHeight: true,
-          onClick({ data, e }) {
-            console.log('click', data, e);
+          onClick({ data, ...$rest }) {
+            console.log('click', data, $rest);
+            layer.msg(`选择了 ${data.title}`);
           },
         };
 
         // popup 模式
         const dropdownInst = dropdown.render({
-          ...options,
+          ...commonOptions,
           elem: '#demo-submenu-popup',
         });
         // inline 模式
         dropdown.render({
-          ...options,
+          ...commonOptions,
           elem: '#demo-submenu-inline',
           submenuMode: 'inline',
         });

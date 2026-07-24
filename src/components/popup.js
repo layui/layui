@@ -47,6 +47,7 @@ export class Popup extends Component {
     closeDelay: 300,
 
     // defaultOpen: false, // 是否初始默认打开层
+    // theme: 'light', // 主题。可选值: light|dark
     // className: '', // 自定义样式类名
     // style: '', // 设置最外层 style 属性
     // backdrop: 0, // 遮罩
@@ -74,6 +75,36 @@ export class Popup extends Component {
       'isRootElemMounted',
       'delayClose',
     ]);
+  }
+
+  /**
+   * Tooltip 定制弹出
+   * @param {Object} options - 配置项；同 {@link Popup.options}，
+   * 其中 `trigger, showArrow` 不可重置
+   * @returns {Popup} 返回 Popup 实例
+   */
+  static tooltip(options) {
+    const popupInstance = this.render({
+      closeDelay: 150,
+      ...options,
+
+      // 不可修改的默认配置
+      trigger: 'mouseenter',
+      showArrow: true,
+      afterOpen: (...args) => {
+        options.afterOpen?.(...args);
+
+        // 添加专属 className
+        popupInstance.$rootElem.addClass(`${CONST.ELEM_ROOT}-tooltip`);
+      },
+      afterClose: (...args) => {
+        options.afterClose?.(...args);
+        popupInstance.destroy(); // 关闭即销毁 Popup 实例
+      },
+    });
+
+    popupInstance.open();
+    return popupInstance;
   }
 
   // 构造函数
@@ -141,6 +172,7 @@ export class Popup extends Component {
 
       // 初始化自定义样式
       $rootElem.addClass(options.className).attr('style', options.style);
+      $rootElem.attr('data-theme', options.theme);
 
       // 生成内容
       $contentElem.html(options.content);

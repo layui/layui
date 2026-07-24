@@ -31,6 +31,12 @@ export class Menu extends Component {
     submenuOpenDelay: 200,
     submenuCloseDelay: 300,
 
+    // 是否收起状态
+    collapsed: false,
+
+    // 默认图标元素。当收起模式时，若菜单项未指定图标，则使用该默认图标
+    defaultIcon: '<i class="lay-icon lay-icon-file"></i>',
+
     // 菜单尺寸。可选值：sm|md|lg
     size: 'md',
 
@@ -54,18 +60,20 @@ export class Menu extends Component {
       ELEM_GROUP: 'lay-menu-group',
       ELEM_SUBMENU: 'lay-menu-submenu',
       ELEM_TITLE: 'lay-menu-title',
+      ELEM_TITLE_ICON: 'lay-menu-title-icon',
       ELEM_TITLE_TEXT: 'lay-menu-title-text',
       ELEM_TITLE_ARROW: 'lay-menu-title-arrow',
       ELEM_SUB: 'lay-menu-sub',
       ELEM_ITEM: 'lay-menu-item',
 
-      ELEM_VERTICAL: 'lay-menu-vertical',
+      ELEM_CONTAINER: 'lay-menu-container',
     };
   }
 
   // 实例方法静态委托
   static {
     this.delegateInstanceMethods([
+      'refresh',
       'expand',
       'collapse',
       'expandSubmenus',
@@ -78,7 +86,7 @@ export class Menu extends Component {
    * @param {Object} options - 组件配置项
    * @param {Array} options.data - 菜单数据结构
    * @param {Object} options.fieldNames - 字段名映射
-   * @param {boolean} [options.expanded] - 是否默认展开内嵌子菜单 (仅垂直菜单有效)
+   * @param {boolean} [options.submenuExpanded] - 是否默认展开内嵌子菜单 (仅垂直菜单有效)
    * @param {string} [options.size] - 菜单尺寸。可选值：sm|md|lg
    * @param {Function} [options.template] - 菜单标题模板函数
    * @param {Function} [options.beforeTitleRender] - 标题元素渲染前的钩子函数
@@ -99,10 +107,10 @@ export class Menu extends Component {
         const hasChildren = item[fieldNames.children]?.length;
         const template = item.template || options.template;
 
-        // 是否展开
+        // 子菜单是否默认展开
         const expanded = lay.hasOwn(item, 'expanded')
           ? item.expanded
-          : options.expanded;
+          : options.submenuExpanded;
 
         // 菜单标题
         const title =
@@ -217,6 +225,15 @@ export class Menu extends Component {
    * @returns {void}
    */
   static #applyDataAttrs($elem, options) {
+    // 根据条件设置或移除属性
+    const toggleDataAttr = (name, condition) => {
+      if (condition) {
+        $elem.attr(name, true);
+      } else {
+        $elem.removeAttr(name);
+      }
+    };
+
     // 设置「菜单模式」属性
     if (['vertical', 'horizontal'].includes(options.mode)) {
       $elem.attr('data-mode', options.mode);
@@ -226,6 +243,9 @@ export class Menu extends Component {
     if (['inline', 'popup'].includes(options.submenuMode)) {
       $elem.attr('data-submenu-mode', options.submenuMode);
     }
+
+    // 设置「收起状态」属性
+    toggleDataAttr('data-collapsed', options.collapsed);
 
     // 设置尺寸属性
     if (['sm', 'md', 'lg'].includes(options.size)) {
@@ -242,7 +262,7 @@ export class Menu extends Component {
   constructor(options) {
     super(options);
 
-    // 若指定了 target，则视为数据渲染，需置空 elem 默认配置
+    // 若指定了 target，则视为「数据渲染」意图，需先置空 elem
     if (this.options.target) {
       Object.assign(this.options, {
         $target: $(this.options.target),
@@ -253,32 +273,12 @@ export class Menu extends Component {
 
   /**
    * 渲染
+   * @returns {void}
    */
   render() {
     const options = this.options;
 
-    // 规范化选项
-    if (options.mode === 'horizontal') {
-      // 水平菜单模式，子菜单展示方式固定为 popup 模式
-      options.submenuMode = 'popup';
-    }
-
-    // 销毁旧的 Popup 实例链
-    this.#destroyPopupChain();
-
-    // 初始化 Popup 实例链所有权
-    this.#ownsPopupChain =
-      options.submenuMode === 'popup' && !options._popupContext;
-
-    // 初始化 Popup 子菜单上下文
-    this.#popupContext =
-      options.submenuMode === 'popup'
-        ? options._popupContext || {
-            controller: createPopupChainController(),
-            depth: 0,
-            rootMenuInstance: this,
-          }
-        : null;
+    this.#normalizeOptions();
 
     // 是否为数据渲染（WIP）
     if (options.data?.length) {
@@ -290,20 +290,42 @@ export class Menu extends Component {
     }
 
     this.#initView();
-    this.#events();
   }
 
   /**
-   * 展开菜单（待实现）
+   * 刷新菜单视图
    * @returns {void}
    */
-  expand() {}
+  refresh() {
+    this.#normalizeOptions();
+    this.#initView();
+  }
 
   /**
-   * 收起菜单（待实现）
+   * 展开菜单
    * @returns {void}
    */
-  collapse() {}
+  expand() {
+    const options = this.options;
+    if (!options.collapsed) return;
+
+    options.collapsed = false;
+    this.#normalizeOptions();
+    this.#initView({ initSubmenus: false });
+  }
+
+  /**
+   * 收起菜单
+   * @returns {void}
+   */
+  collapse() {
+    const options = this.options;
+    if (options.collapsed) return;
+
+    options.collapsed = true;
+    this.#normalizeOptions();
+    this.#initView({ initSubmenus: false });
+  }
 
   /**
    * 展开所有内嵌子菜单
@@ -335,17 +357,119 @@ export class Menu extends Component {
   }
 
   /**
-   * 初始化菜单视图
+   * 规范化选项
    * @returns {void}
    */
-  #initView() {
+  #normalizeOptions() {
     const options = this.options;
-    this.constructor.#applyDataAttrs(options.$elem, options);
-    this.#initSubmenus();
+    const originalOptions = this.#originalOptions;
+
+    // 水平菜单模式，子菜单展示方式固定为 popup 模式
+    if (options.mode === 'horizontal') {
+      options.submenuMode = 'popup';
+    } else {
+      // 垂直菜单模式
+      if (options.collapsed) {
+        // 菜单收起，首次记录原始的 submenuMode 选项值，以便收起时恢复
+        if (!lay.hasOwn(originalOptions, 'submenuMode')) {
+          originalOptions.submenuMode = options.submenuMode;
+        }
+        // 再将 submenuMode 固定为 popup
+        options.submenuMode = 'popup';
+      } else {
+        // 菜单展开，若 submenuMode 原始值存在，则恢复其原始值
+        if (originalOptions.submenuMode) {
+          options.submenuMode = originalOptions.submenuMode;
+          delete originalOptions.submenuMode;
+        }
+      }
+    }
+  }
+
+  // 用于记录部分原始选项，便于某些场景中恢复
+  #originalOptions = {};
+
+  /**
+   * 初始化 Popup 实例链
+   * @returns {void}
+   */
+  #initPopupChain() {
+    const options = this.options;
+
+    // 销毁旧的 Popup 实例链
+    this.#destroyPopupChain();
+
+    // 初始化 Popup 实例链所有权
+    this.#ownsPopupChain =
+      options.submenuMode === 'popup' && !options._popupContext;
+
+    // 初始化 Popup 子菜单上下文
+    this.#popupContext =
+      options.submenuMode === 'popup'
+        ? options._popupContext || {
+            controller: createPopupChainController(),
+            depth: 0,
+            rootMenuInstance: this,
+          }
+        : null;
   }
 
   /**
-   * 初始化子菜单
+   * 初始化菜单视图
+   * @returns {void}
+   */
+  #initView({ initSubmenus = true } = {}) {
+    const options = this.options;
+    const $elem = options.$elem;
+
+    this.#initPopupChain();
+
+    this.constructor.#applyDataAttrs($elem, options);
+    this.#initTitles();
+    if (initSubmenus) {
+      this.#initSubmenus();
+    }
+
+    this.#events();
+  }
+
+  /**
+   * 初始化菜单标题装饰型元素
+   * @returns {void}
+   */
+  #initTitles() {
+    const options = this.options;
+    const $elem = options.$elem;
+
+    // 初始化默认标题图标
+    const initDefaultTitleIcons = ($title) => {
+      // 若图标不存在，则初始化默认图标
+      const $titleIcon = $title.children(`.${CONST.ELEM_TITLE_ICON}`);
+      if (!$titleIcon.length) {
+        const $defaultTitleIcon = $(
+          `<div class="${CONST.ELEM_TITLE_ICON}" data-default></div>`,
+        );
+        const $defaultIcon = $(options.defaultIcon);
+        $defaultTitleIcon.append($defaultIcon);
+        $title.prepend($defaultTitleIcon);
+      }
+    };
+
+    // 收起模式
+    if (options.collapsed) {
+      $elem.find(`.${CONST.ELEM_TITLE}`).each((_, title) => {
+        const $title = $(title);
+        initDefaultTitleIcons($title);
+      });
+    } else {
+      // 展开模式
+      // 清除收起模式下的默认图标
+      $elem.find(`.${CONST.ELEM_TITLE_ICON}[data-default]`).remove();
+    }
+  }
+
+  /**
+   * 初始化子菜单装饰型元素
    * @returns {void}
    */
   #initSubmenus() {
@@ -437,6 +561,9 @@ export class Menu extends Component {
   // 当前 Menu 实例是否拥有 Popup 实例链的所有权
   #ownsPopupChain = false;
 
+  // 当前由 Menu 根级菜单触发的 Popup 实例
+  #currentRootPopupInstance = null;
+
   /**
    * 获取 Popup 子菜单的配置项
    * @param {jQuery} $content - Popup 子菜单的内容元素
@@ -509,8 +636,8 @@ export class Menu extends Component {
       $subClone.attr('data-size', options.size);
     }
 
-    // 垂直菜单容器
-    const $content = $(`<div class="${CONST.ELEM_VERTICAL}"></div>`);
+    // 菜单容器
+    const $content = $(`<div class="${CONST.ELEM_CONTAINER}"></div>`);
     $content.append($subClone);
 
     // 创建子菜单 Popup 实例
@@ -559,6 +686,7 @@ export class Menu extends Component {
         // 移除根级菜单项临时索引
         if (depth === 0) {
           $sub.find(`.${CONST.ELEM_ITEM}`).removeAttr(CONST.ATTR_ITEM_INDEX);
+          this.#currentRootPopupInstance = null;
         }
 
         // 销毁弹出的子级菜单实例
@@ -568,10 +696,16 @@ export class Menu extends Component {
         // 从控制器中注销当前深度的实例
         controller.unregister(depth, popupInstance);
 
-        // 关闭销毁 Popup 实例
+        // 销毁 Popup 实例
         popupInstance.destroy();
       },
     });
+
+    // 根级子菜单
+    if (depth === 0) {
+      this.#currentRootPopupInstance?.close();
+      this.#currentRootPopupInstance = popupInstance;
+    }
 
     // 钩子函数返回的参数
     const params = {
@@ -612,7 +746,7 @@ export class Menu extends Component {
     this.openPopupTimer = null;
   }
 
-  /**·
+  /**
    * 事件处理
    * @returns {void}
    */
@@ -663,8 +797,9 @@ export class Menu extends Component {
           // 延时创建 Popup 子菜单，避免频繁触发
           this.#clearOpenPopupTimer();
           this.openPopupTimer = setTimeout(() => {
-            // 根级子菜单，创建菜单项临时索引，便于匹配
+            // 根级子菜单
             if (depth === 0) {
+              // 创建菜单项临时索引，便于匹配
               $sub.find(`.${CONST.ELEM_ITEM}`).each((index, item) => {
                 const $item = $(item);
                 $item.attr(CONST.ATTR_ITEM_INDEX, index);
@@ -683,12 +818,35 @@ export class Menu extends Component {
             closeDelay: options.submenuCloseDelay,
           });
         });
+
+      // 收起模式，鼠标移入菜单标题，显示 Tooltip
+      if (options.collapsed) {
+        $elem.on(
+          `mouseenter${eventNamespace}`,
+          `${ITEM_TITLE_SELECTOR}, .${CONST.ELEM_GROUP} > .${CONST.ELEM_TITLE}`,
+          (e) => {
+            const $title = $(e.currentTarget);
+            const $titleText = $title.children(`.${CONST.ELEM_TITLE_TEXT}`);
+
+            this.#currentRootPopupInstance?.close();
+            this.#currentRootPopupInstance = popup.tooltip({
+              elem: $title,
+              content: $titleText.text(),
+              placement: 'right',
+              theme: options.theme,
+              afterClose: () => {
+                this.#currentRootPopupInstance = null;
+              },
+            });
+          },
+        );
+      }
     }
 
     // 菜单项点击选中
     $elem.on(`click${eventNamespace}`, ITEM_TITLE_SELECTOR, (e) => {
-      const $currentTarget = $(e.currentTarget);
-      const $item = $currentTarget.parent(`.${CONST.ELEM_ITEM}`);
+      const $title = $(e.currentTarget);
+      const $item = $title.parent(`.${CONST.ELEM_ITEM}`);
 
       // 标注选中状态
       Constructor.setActiveItem($elem, $item);

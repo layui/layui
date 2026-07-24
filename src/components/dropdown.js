@@ -30,7 +30,7 @@ export class Dropdown extends Popup {
     autoFitHeight: false,
 
     data: [], // 菜单数据结构
-    expanded: false, // 是否初始展开所有子菜单
+    submenuExpanded: false, // 是否初始展开所有子菜单
   };
 
   static get CONST() {
@@ -64,7 +64,7 @@ export class Dropdown extends Popup {
   }
 
   // 打开前的内部钩子
-  [popupHooks.kBeforeOpen]({ $rootElem }) {
+  [popupHooks.kBeforeOpen]({ $rootElem, $contentElem }) {
     const options = this.options;
 
     // 获取菜单结构
@@ -91,7 +91,8 @@ export class Dropdown extends Popup {
     };
 
     // 添加组件专属 className
-    $rootElem.addClass(`${menu.CONST.ELEM_VERTICAL} ${CONST.ELEM}`);
+    $rootElem.addClass(CONST.ELEM);
+    $contentElem.addClass(menu.CONST.ELEM_CONTAINER);
   }
 
   // 打开后的内部钩子

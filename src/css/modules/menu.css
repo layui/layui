@@ -7,8 +7,8 @@
   --lay-menu-hover-bg: var(--lay-menu-active-bg);
   --lay-menu-open-color: rgba(0, 0, 0, 0.9);
   --lay-menu-border-color: rgba(200, 200, 200, 0.3);
-  --lay-menu-underline-size: 1px;
-  --lay-menu-underline-opacity: 1;
+  --lay-menu-line-height: 32px;
+  --lay-menu-title-padding-y: 3px;
 
   position: relative;
   margin: 5px 0;
@@ -22,7 +22,7 @@
 
   li {
     position: relative;
-    line-height: 32px;
+    line-height: var(--lay-menu-line-height);
     white-space: nowrap;
   }
 
@@ -58,19 +58,22 @@
   gap: var(--lay-spacing-sm);
   position: relative;
   margin-bottom: 1px;
-  padding: 3px var(--lay-spacing);
+  padding: var(--lay-menu-title-padding-y) var(--lay-spacing);
   border-radius: var(--lay-border-radius);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--lay-anim-duration-fast);
 
   :where(.lay-icon) {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     line-height: normal;
     transition: inherit;
   }
 }
 .lay-menu-title:hover {
   background-color: var(--lay-menu-hover-bg);
+}
+.lay-menu-title-icon {
+  line-height: normal;
 }
 .lay-menu-title-text {
   overflow: hidden;
@@ -128,7 +131,7 @@
   }
 }
 
-/* 子菜单展开状态 / 水平菜单子菜单打开状态 */
+/* 子菜单展开状态 / 子菜单打开状态@水平菜单 */
 .lay-menu:not([data-submenu-mode='popup']) .lay-menu-submenu.lay-is-expanded,
 .lay-menu[data-mode='horizontal'] .lay-menu-submenu.lay-is-open {
   > .lay-menu-title {
@@ -139,6 +142,7 @@
     }
   }
 }
+
 /* 子菜单打开状态  */
 .lay-menu .lay-menu-submenu.lay-is-open {
   > .lay-menu-title {
@@ -146,7 +150,7 @@
   }
 }
 
-/* 子菜单展开状态·垂直菜单模式 */
+/* 子菜单展开状态 @垂直菜单 */
 .lay-menu:not([data-mode='horizontal']):not([data-submenu-mode='popup']) {
   .lay-menu-submenu.lay-is-expanded {
     > .lay-menu-sub {
@@ -206,6 +210,7 @@
 
   li {
     display: flex;
+    flex-direction: row;
     align-items: center;
   }
 
@@ -227,49 +232,33 @@
     border-right-width: 1px;
   }
 }
-/* 水平菜单·下划线风格 */
-.lay-menu-underline:has(.lay-menu[data-mode='horizontal']) {
-  --lay-menu-border-color: rgba(200, 200, 200, 0.3);
-  --lay-menu-border-height: 1px;
 
-  border-bottom: var(--lay-menu-border-height) solid
-    var(--lay-menu-border-color);
-
-  .lay-menu[data-mode='horizontal'] li {
-    align-items: normal;
+/* 收起模式 @垂直菜单 */
+.lay-menu[data-collapsed]:not([data-mode='horizontal']) {
+  .lay-menu-title {
+    height: calc(
+      var(--lay-menu-line-height) + 2 * var(--lay-menu-title-padding-y)
+    );
+    padding-inline: var(--lay-spacing);
+    justify-content: center;
   }
 
-  .lay-menu-item.lay-is-active > .lay-menu-title,
-  .lay-menu-submenu:has(.lay-menu-item.lay-is-active) > .lay-menu-title,
-  .lay-menu-submenu.lay-is-open > .lay-menu-title,
-  .lay-menu-title:hover {
-    background-color: transparent !important;
+  .lay-menu-title-text,
+  .lay-menu-title-arrow {
+    display: none;
   }
-
-  li:has(.lay-menu-title):hover::after,
-  .lay-menu-item.lay-is-active::after,
-  .lay-menu-submenu:has(.lay-menu-item.lay-is-active)::after {
-    content: '';
-    position: absolute;
-    bottom: calc(-1 * var(--lay-menu-border-height));
-    left: 0;
-    width: 100%;
-    border-bottom: var(--lay-menu-underline-size) solid
-      var(--lay-menu-active-color);
-    opacity: var(--lay-menu-underline-opacity);
-  }
+}
+/* 收起模式 @水平菜单 */
+.lay-menu[data-collapsed][data-mode='horizontal'] {
+  display: none;
 }
 
 /* 尺寸 */
 .lay-menu[data-size='sm'] {
-  li {
-    line-height: 26px;
-  }
+  --lay-menu-line-height: 26px;
 }
 .lay-menu[data-size='lg'] {
-  li {
-    line-height: 38px;
-  }
+  --lay-menu-line-height: 38px;
 }
 
 /* 主题·深色模式 */
@@ -281,33 +270,122 @@
   --lay-menu-open-color: rgba(255, 255, 255, 0.9);
   --lay-menu-border-color: rgba(200, 200, 200, 0.08);
 
-  --lay-menu-underline-size: 3px;
-  --lay-menu-underline-opacity: 0.5;
+  --lay-active-border-width: 3px;
+  --lay-active-border-opacity: 0.5;
 }
 
-/* 垂直菜单·辅助容器 */
-.lay-menu-vertical {
+/* 外层容器 */
+.lay-menu-container {
   display: flex;
   flex-direction: column;
+  position: relative;
   border-radius: var(--lay-border-radius);
-}
-
-/* 水平菜单·辅助容器 */
-.lay-menu-horizontal {
-  display: flex;
-  height: 60px;
-  padding-inline: 16px;
-  border-radius: var(--lay-border-radius);
-}
-
-/* 辅助容器·主题背景色 */
-:where(.lay-menu-vertical, .lay-menu-horizontal) {
   background-color: var(--lay-color-light, #fff);
+  transition: all var(--lay-anim-duration);
 }
-:where(.lay-menu-vertical, .lay-menu-horizontal):has(
-  .lay-menu[data-theme='dark']
-) {
+.lay-menu-container:has(.lay-menu[data-theme='dark']) {
   background-color: var(--lay-color-dark, #2f363c);
+}
+/* 外层容器 @垂直菜单 */
+.lay-menu-container:has(
+  .lay-menu:not([data-mode='horizontal'])[data-collapsed]
+) {
+  --lay-menu-collapsed-width: 65px;
+
+  width: var(--lay-menu-collapsed-width);
+}
+/* 外层容器 @水平菜单 */
+.lay-menu-container:has(.lay-menu[data-mode='horizontal']) {
+  flex-direction: row;
+  height: 60px;
+  padding-inline: var(--lay-spacing);
+  overflow: hidden;
+}
+
+/* 线条风格 */
+.lay-menu-is-line {
+  --lay-menu-border-color: rgba(200, 200, 200, 0.3);
+  --lay-menu-border-width: 1px;
+  --lay-active-border-width: 1px;
+  --lay-active-border-opacity: 1;
+
+  position: relative;
+
+  /* 清除背景色 */
+  .lay-menu-item.lay-is-active > .lay-menu-title,
+  .lay-menu-submenu:has(.lay-menu-item.lay-is-active) > .lay-menu-title,
+  .lay-menu-submenu.lay-is-open > .lay-menu-title,
+  .lay-menu-title:hover {
+    background-color: transparent !important;
+  }
+
+  /* active 状态 */
+  .lay-menu-title::after,
+  .lay-menu-item.lay-is-active > .lay-menu-title::after,
+  .lay-menu-submenu:has(.lay-menu-item.lay-is-active) > .lay-menu-title::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-width: 0;
+    border-style: solid;
+    border-color: var(--lay-menu-active-color);
+    border-left-width: var(--lay-active-border-width);
+    opacity: var(--lay-active-border-opacity);
+    transition: opacity var(--lay-anim-duration);
+  }
+  /* hover 状态 */
+  .lay-menu-title::after {
+    opacity: 0;
+  }
+  .lay-menu-title:hover::after {
+    opacity: var(--lay-active-border-opacity);
+  }
+}
+.lay-menu-is-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-width: 0;
+  border-style: solid;
+  border-color: var(--lay-menu-border-color);
+  border-left-width: var(--lay-menu-border-width);
+}
+/* 线条风格 @垂直菜单（常用于右侧目录） */
+.lay-menu-is-line:has(.lay-menu:not([data-mode='horizontal'])) {
+  .lay-menu-submenu:has(.lay-menu-item.lay-is-active).lay-is-expanded
+    > .lay-menu-title::after {
+    display: none;
+  }
+}
+/* 线条风格 @水平菜单 */
+.lay-menu-is-line:has(.lay-menu[data-mode='horizontal']) {
+  .lay-menu[data-mode='horizontal'] li {
+    align-items: normal;
+  }
+
+  /* active 状态 */
+  .lay-menu-title::after,
+  .lay-menu-item.lay-is-active > .lay-menu-title::after,
+  .lay-menu-submenu:has(.lay-menu-item.lay-is-active) > .lay-menu-title::after {
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    border-width: 0;
+    border-bottom-width: var(--lay-active-border-width);
+  }
+}
+.lay-menu-is-line:has(.lay-menu[data-mode='horizontal'])::after {
+  top: auto;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  border-width: 0;
+  border-bottom-width: var(--lay-menu-border-width);
 }
 
 /* 子菜单 popup 模式 · Popup 面板容器 */
@@ -321,7 +399,7 @@
   border-color: var(--lay-menu-border-color, rgba(200, 200, 200, 0.08));
 }
 
-/* dropdown.css */
+/* dropdown.css (TODO: 后续若内容增多，将单独存放) */
 .lay-dropdown {
   min-width: 6rem;
 

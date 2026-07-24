@@ -60,7 +60,7 @@ class Test {
     // 生成测试菜单
     const $menu = (this.$menu = menu.generateMenu({
       data: options.items,
-      expanded: true,
+      submenuExpanded: true,
       beforeTitleRender: ({ $title, item, parentItem, hasChildren }) => {
         if (!hasChildren) {
           const $a = $('<a></a>');

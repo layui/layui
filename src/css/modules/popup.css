@@ -5,6 +5,7 @@
   left: -999999px;
   top: -999999px;
   z-index: 77777777;
+  transition: none !important;
   box-sizing: border-box;
 
   * {
@@ -14,6 +15,7 @@
 .lay-popup-content {
   position: relative;
   padding: var(--lay-spacing-sm);
+  border-radius: inherit;
   background-color: inherit;
 }
 
@@ -47,6 +49,13 @@
   left: auto;
 }
 
+/* 主题 */
+.lay-popup[data-theme='dark'] {
+  background-color: var(--lay-color-dark, #2f363c);
+  color: rgba(255, 255, 255, 0.9);
+  border: none;
+}
+
 /* 遮罩 */
 .lay-popup-backdrop {
   top: 0;
@@ -57,4 +66,9 @@
   pointer-events: auto;
   background-color: rgb(0, 0, 0);
   opacity: 0.03;
+}
+
+/* tooltip */
+.lay-popup-tooltip {
+  box-shadow: 1px 5px 32px rgb(0 0 0 / 16%);
 }
