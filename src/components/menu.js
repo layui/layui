@@ -83,11 +83,10 @@ export class Menu extends Component {
 
   /**
    * 动态生成菜单
-   * @param {Object} options - 组件配置项
+   * @param {Object} options - 组件配置项; 详见：{@link Menu.options}
    * @param {Array} options.data - 菜单数据结构
    * @param {Object} options.fieldNames - 字段名映射
    * @param {boolean} [options.submenuExpanded] - 是否默认展开内嵌子菜单 (仅垂直菜单有效)
-   * @param {string} [options.size] - 菜单尺寸。可选值：sm|md|lg
    * @param {Function} [options.template] - 菜单标题模板函数
    * @param {Function} [options.beforeTitleRender] - 标题元素渲染前的钩子函数
    * @returns {jQuery|undefined} 返回菜单 jQuery 对象 或 undefined
@@ -209,7 +208,7 @@ export class Menu extends Component {
   /**
    * 设置菜单项活动状态
    * @param {JQuery} $elem - 菜单元素
-   * @param {JQuery} $item - 活动菜单项元素
+   * @param {JQuery} $activeItem - 活动菜单项元素
    * @returns {void}
    */
   static setActiveItem($elem, $activeItem) {
@@ -521,9 +520,9 @@ export class Menu extends Component {
     if (options.submenuMode !== 'inline') return;
 
     // 动画执行完成后的操作
-    const animComplete = () => {
+    const animComplete = function () {
       // 清空临时 style，以适配外部样式的状态重置
-      $sub.css({ display: '' });
+      $(this).css({ display: '' });
     };
 
     // 动画是否正在执行
@@ -566,9 +565,8 @@ export class Menu extends Component {
 
   /**
    * 获取 Popup 子菜单的配置项
-   * @param {jQuery} $content - Popup 子菜单的内容元素
    * @param {number} depth - 当前子菜单的深度
-   * @returns {Object} - 返回子菜单的 options 对象
+   * @returns {Object} 返回子菜单的 options 对象
    */
   #getPopupChildMenuOptions(depth) {
     const options = this.options;
@@ -593,6 +591,8 @@ export class Menu extends Component {
     const POPUP_MENU_OPTION_KEYS = [
       'submenuMode',
       'submenuTheme',
+      'submenuOpenDelay',
+      'submenuCloseDelay',
       'size',
       'fieldNames',
       'template',
@@ -730,6 +730,11 @@ export class Menu extends Component {
    * @returns {void}
    */
   #destroyPopupChain() {
+    this.#clearOpenPopupTimer();
+    this.#currentRootPopupInstance?.close();
+    this.#currentRootPopupInstance = null;
+
+    // 当前实例是否具有销毁 Popup 实例链权限
     if (!this.#ownsPopupChain) return;
 
     this.#popupContext?.controller?.closeAll();
@@ -902,7 +907,7 @@ const createPopupChainController = () => {
      */
     clearDefaultPopupTimers() {
       instances.forEach((popupInstance) => {
-        clearTimeout(popupInstance.timer);
+        clearTimeout(popupInstance?.timer);
       });
     },
 

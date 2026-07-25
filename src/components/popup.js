@@ -79,6 +79,8 @@ export class Popup extends Component {
 
   /**
    * Tooltip 定制弹出
+   * 该方法与 `popup.render()` 的区别在于：
+   * 它并不与 `elem` 进行持久事件绑定，而是直接在目标元素中打开一个临时的 Tooltip 弹出层
    * @param {Object} options - 配置项；同 {@link Popup.options}，
    * 其中 `trigger, showArrow` 不可重置
    * @returns {Popup} 返回 Popup 实例

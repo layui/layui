@@ -45,13 +45,13 @@ export class Dropdown extends Popup {
    * 仅重载数据
    * @param {string|number} id - 实例 id
    * @param {Object} options - 配置项；仅允许重载与数据相关的选项，如:
-   * `data、template、content`，其他选项将被忽略
+   * `data、template`，其他选项将被忽略
    * @param  {...any} args - 保留参数，为了同 {@link Component.reload} 的参数一致
    * @returns {*} 返回值同 {@link Component.reload}
    */
   static reloadData(id, options, ...args) {
     const opts = { ...options };
-    const allowedReloadKeys = new Set(['data', 'template', 'content']);
+    const allowedReloadKeys = new Set(['data', 'template']);
 
     Object.keys(opts).forEach((key) => {
       if (!allowedReloadKeys.has(key)) {
@@ -63,7 +63,13 @@ export class Dropdown extends Popup {
     return this.reload(id, opts, ...args);
   }
 
-  // 打开前的内部钩子
+  /**
+   * 打开前的内部钩子
+   * @param {Object} param0 - 参数对象
+   * @param {jQuery} param0.$rootElem - 根元素 jQuery 对象
+   * @param {jQuery} param0.$contentElem - 内容元素 jQuery 对象
+   * @returns {void}
+   */
   [popupHooks.kBeforeOpen]({ $rootElem, $contentElem }) {
     const options = this.options;
 
@@ -95,7 +101,10 @@ export class Dropdown extends Popup {
     $contentElem.addClass(menu.CONST.ELEM_CONTAINER);
   }
 
-  // 打开后的内部钩子
+  /**
+   * 打开后的内部钩子
+   * @returns {void}
+   */
   [popupHooks.kAfterOpen]() {
     const options = this.options;
 
@@ -126,14 +135,23 @@ export class Dropdown extends Popup {
     });
   }
 
-  // 关闭后的内部钩子
+  /**
+   * 关闭后的内部钩子
+   * @returns {void}
+   */
   [popupHooks.kAfterClose]() {
     // 销毁 menu 组件实例
     this.menuInstance?.destroy();
     this.menuInstance = null;
   }
 
-  // Floating 中间件钩子
+  /**
+   * Floating 中间件钩子
+   * @param {Object} param0 - 参数对象
+   * @param {Array} param0.defaultMiddleware - 默认中间件数组
+   * @param {Object} param0.padding - 浮动元素与边界的间距
+   * @returns {void}
+   */
   [popupHooks.kMiddlewares]({ defaultMiddleware, padding }) {
     const options = this.options;
 

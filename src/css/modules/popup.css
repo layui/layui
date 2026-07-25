@@ -18,6 +18,9 @@
   border-radius: inherit;
   background-color: inherit;
 }
+.lay-popup-content:has(.lay-menu) {
+  padding: 0;
+}
 
 /* 箭头 */
 .lay-popup-arrow {

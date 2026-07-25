@@ -165,9 +165,6 @@
     transform: rotate(-90deg);
   }
 }
-.lay-popup-content:has(.lay-menu) {
-  padding: 0;
-}
 
 /* 选中的菜单项 */
 .lay-menu-item.lay-is-active,
@@ -248,7 +245,7 @@
     display: none;
   }
 }
-/* 收起模式 @水平菜单 */
+/* 收起模式 @水平菜单 (WIP) */
 .lay-menu[data-collapsed][data-mode='horizontal'] {
   display: none;
 }
