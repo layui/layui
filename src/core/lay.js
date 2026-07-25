@@ -1022,6 +1022,7 @@ lay.touchEventsSupported = function () {
   return 'ontouchstart' in window;
 };
 
+var touchSwipeHandles = new WeakMap();
 /**
  * @typedef touchSwipeState
  * @prop {{x: number,y: number}} pointerStart - 初始坐标
@@ -1040,6 +1041,7 @@ lay.touchEventsSupported = function () {
  * 基于 touch 事件的触摸滑动
  * @param {string | HTMLElement | JQuery} elem - HTML 元素
  * @param {{onTouchStart?: touchSwipeCallback; onTouchMove?: touchSwipeCallback; onTouchEnd?: touchSwipeCallback; preventDefault?: boolean}} opts - 配置项
+ * @returns {{dispose: () => void} | undefined}
  */
 lay.touchSwipe = function (elem, opts) {
   var options = opts;
@@ -1103,24 +1105,29 @@ lay.touchSwipe = function (elem, opts) {
   };
 
   var unbindEvents = function () {
+    // 移除事件时只对 capture 选项敏感
     targetElem.removeEventListener('touchmove', onMove);
-    targetElem.removeEventListener(
-      'touchend',
-      onEnd,
-      lay.passiveSupported ? { passive: false } : false,
-    );
+    targetElem.removeEventListener('touchend', onEnd);
     targetElem.removeEventListener('touchcancel', onEnd);
   };
 
-  // 防止事件重复绑定
-  if (targetElem.__lay_touchswipe_cb_) {
-    targetElem.removeEventListener(
-      'touchstart',
-      targetElem.__lay_touchswipe_cb_,
-    );
+  if (touchSwipeHandles.has(targetElem)) {
+    touchSwipeHandles.get(targetElem).dispose();
   }
-  targetElem.__lay_touchswipe_cb_ = onStart;
+
   targetElem.addEventListener('touchstart', onStart);
+
+  var handle = {
+    dispose: function () {
+      unbindEvents();
+      targetElem.removeEventListener('touchstart', onStart);
+      if (touchSwipeHandles.get(targetElem) === handle) {
+        touchSwipeHandles.delete(targetElem);
+      }
+    },
+  };
+  touchSwipeHandles.set(targetElem, handle);
+  return handle;
 };
 
 /** @type {(elem: Element|Document|Window,eventName: string,fn:EventListenerOrEventListenerObject,options: boolean | AddEventListenerOptions) => any}*/
