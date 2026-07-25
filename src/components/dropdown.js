@@ -31,6 +31,8 @@ export class Dropdown extends Popup {
 
     data: [], // 菜单数据结构
     submenuExpanded: false, // 是否初始展开所有子菜单
+
+    // onClick: null, // 点击菜单项时的回调函数
   };
 
   static get CONST() {

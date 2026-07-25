@@ -261,8 +261,8 @@
         const commonOptions = {
           data: DEMO_DATA,
           autoFitHeight: true,
-          onClick({ data, ...$rest }) {
-            console.log('click', data, $rest);
+          onClick({ data, ...rest }) {
+            console.log('click', data, rest);
             layer.msg(`选择了 ${data.title}`);
           },
         };
@@ -335,7 +335,7 @@
           placement: 'bottom',
           trigger: 'hover',
           afterClose() {
-            console.log(`afterClose ${this.id}`, this.elem);
+            console.log(`${this.id} → afterClose → `, this.$elem);
           },
         });
 

@@ -89,7 +89,7 @@ export class Menu extends Component {
    * @param {boolean} [options.submenuExpanded] - 是否默认展开内嵌子菜单 (仅垂直菜单有效)
    * @param {Function} [options.template] - 菜单标题模板函数
    * @param {Function} [options.beforeTitleRender] - 标题元素渲染前的钩子函数
-   * @returns {jQuery|undefined} 返回菜单 jQuery 对象 或 undefined
+   * @returns {jQuery|string} 返回菜单 jQuery 对象或空字符串
    */
   static generateMenu(options) {
     const $menu = $('<ul class="lay-menu"></ul>');
@@ -423,7 +423,7 @@ export class Menu extends Component {
 
     this.#initPopupChain();
 
-    this.constructor.#applyDataAttrs($elem, options);
+    Menu.#applyDataAttrs($elem, options);
     this.#initTitles();
     if (initSubmenus) {
       this.#initSubmenus();
@@ -442,8 +442,9 @@ export class Menu extends Component {
 
     // 初始化默认标题图标
     const initDefaultTitleIcons = ($title) => {
-      // 若图标不存在，则初始化默认图标
       const $titleIcon = $title.children(`.${CONST.ELEM_TITLE_ICON}`);
+
+      // 若图标不存在，则初始化默认图标
       if (!$titleIcon.length) {
         const $defaultTitleIcon = $(
           `<div class="${CONST.ELEM_TITLE_ICON}" data-default></div>`,

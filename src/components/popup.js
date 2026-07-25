@@ -51,6 +51,10 @@ export class Popup extends Component {
     // className: '', // 自定义样式类名
     // style: '', // 设置最外层 style 属性
     // backdrop: 0, // 遮罩
+
+    // afterOpen: null, // 层打开后的回调函数
+    // afterClose: null, // 层关闭后的回调函数
+    // onClickOutside: null, // 点击层外部时的事件处理
   };
 
   static get CONST() {

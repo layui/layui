@@ -9,6 +9,7 @@
   --lay-menu-border-color: rgba(200, 200, 200, 0.3);
   --lay-menu-line-height: 32px;
   --lay-menu-title-padding-y: 3px;
+  --lay-menu-arrow-size: 0.875rem;
 
   position: relative;
   margin: 5px 0;
@@ -88,14 +89,16 @@
   transition: inherit;
 
   .lay-icon {
-    font-size: 0.875rem;
+    font-size: var(--lay-menu-arrow-size);
   }
 }
 
 /* 子菜单·容器 */
 .lay-menu-submenu {
   > .lay-menu-title {
-    padding-right: calc(var(--lay-spacing) + var(--lay-spacing-sm) + 0.875rem);
+    padding-right: calc(
+      var(--lay-spacing) + var(--lay-spacing-sm) + var(--lay-menu-arrow-size)
+    );
   }
 }
 
@@ -267,8 +270,8 @@
   --lay-menu-open-color: rgba(255, 255, 255, 0.9);
   --lay-menu-border-color: rgba(200, 200, 200, 0.08);
 
-  --lay-active-border-width: 3px;
-  --lay-active-border-opacity: 0.5;
+  --lay-menu-active-border-width: 3px;
+  --lay-menu-active-border-opacity: 0.5;
 }
 
 /* 外层容器 */
@@ -303,8 +306,8 @@
 .lay-menu-is-line {
   --lay-menu-border-color: rgba(200, 200, 200, 0.3);
   --lay-menu-border-width: 1px;
-  --lay-active-border-width: 1px;
-  --lay-active-border-opacity: 1;
+  --lay-menu-active-border-width: 1px;
+  --lay-menu-active-border-opacity: 1;
 
   position: relative;
 
@@ -316,10 +319,7 @@
     background-color: transparent !important;
   }
 
-  /* active 状态 */
-  .lay-menu-title::after,
-  .lay-menu-item.lay-is-active > .lay-menu-title::after,
-  .lay-menu-submenu:has(.lay-menu-item.lay-is-active) > .lay-menu-title::after {
+  .lay-menu-title::after {
     content: '';
     position: absolute;
     top: 0;
@@ -328,16 +328,16 @@
     border-width: 0;
     border-style: solid;
     border-color: var(--lay-menu-active-color);
-    border-left-width: var(--lay-active-border-width);
-    opacity: var(--lay-active-border-opacity);
+    border-left-width: var(--lay-menu-active-border-width);
+    opacity: 0;
     transition: opacity var(--lay-anim-duration);
   }
-  /* hover 状态 */
-  .lay-menu-title::after {
-    opacity: 0;
-  }
-  .lay-menu-title:hover::after {
-    opacity: var(--lay-active-border-opacity);
+
+  /* hover/active 状态 */
+  .lay-menu-title:hover::after,
+  .lay-menu-item.lay-is-active > .lay-menu-title::after,
+  .lay-menu-submenu:has(.lay-menu-item.lay-is-active) > .lay-menu-title::after {
+    opacity: var(--lay-menu-active-border-opacity);
   }
 }
 .lay-menu-is-line::after {
@@ -364,16 +364,13 @@
     align-items: normal;
   }
 
-  /* active 状态 */
-  .lay-menu-title::after,
-  .lay-menu-item.lay-is-active > .lay-menu-title::after,
-  .lay-menu-submenu:has(.lay-menu-item.lay-is-active) > .lay-menu-title::after {
+  .lay-menu-title::after {
     top: auto;
     bottom: 0;
     width: 100%;
     height: auto;
     border-width: 0;
-    border-bottom-width: var(--lay-active-border-width);
+    border-bottom-width: var(--lay-menu-active-border-width);
   }
 }
 .lay-menu-is-line:has(.lay-menu[data-mode='horizontal'])::after {
