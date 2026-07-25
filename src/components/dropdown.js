@@ -5,39 +5,38 @@
 
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
-import { Popup, popupHooks, clickOrMousedown, floating } from './popup.js';
+import { Popup, popupHooks, floating } from './popup.js';
 import { menu } from './menu.js';
 
 export class Dropdown extends Popup {
   static componentName = 'dropdown';
 
-  // 默认配置项
+  /**
+   * 默认配置项
+   * 可继承 {@link Popup.options} / {@link menu.options}
+   */
   static options = {
-    ...super.options, // 继承 popup 默认配置项
+    ...super.options,
 
-    // 弹出方位。可选值见 Popup.options.placement
-    placement: 'bottom-start',
+    // popup 组件相关选项
+    placement: 'bottom-start', // 弹出方位
+    anim: 'downbit', // 弹出动画
+
+    // menu 组件相关选项
+    submenuMode: 'popup', // 子菜单的展示方式
+    size: 'md', // 菜单尺寸
 
     // 是否自适应高度。开启后，将限制下拉菜单高度不超出可视区域，并自动出现纵向滚动条
     autoFitHeight: false,
 
     data: [], // 菜单数据结构
-    expanded: false, // 是否初始展开所有子菜单
-
-    // menu 组件相关选项
-    submenuMode: 'inline', // 子菜单的展示方式。可选值见 Menu.options.submenuMode
-    size: 'md', // 菜单尺寸。可选值见 Menu.options.size
-
-    // data 必选字段名映射
-    fieldNames: {
-      title: 'title',
-      children: 'children',
-    },
+    submenuExpanded: false, // 是否初始展开所有子菜单
   };
 
   static get CONST() {
     return {
       ...super.CONST,
+      DATA_DROPDOWN_ID: 'data-dropdown-id',
       ELEM: 'lay-dropdown',
     };
   }
@@ -65,7 +64,7 @@ export class Dropdown extends Popup {
   }
 
   // 打开前的内部钩子
-  [popupHooks.kBeforeOpen]({ $rootElem }) {
+  [popupHooks.kBeforeOpen]({ $rootElem, $contentElem }) {
     const options = this.options;
 
     // 获取菜单结构
@@ -74,7 +73,7 @@ export class Dropdown extends Popup {
       mode: 'vertical', // 固定为垂直菜单
     });
 
-    // 空数据处理
+    // 空状态
     if (!$menu) {
       $menu = $('<div>');
       $menu.addClass(CONST.CLASS_IS_EMPTY).text(i18n.$t('dropdown.empty'));
@@ -83,45 +82,55 @@ export class Dropdown extends Popup {
     // 面板内容
     options.content = $menu;
 
+    // 点击 Popup 子菜单时，阻止其父级 Popup 触发「外部点击」引起的关闭
+    options.onClickOutside = (e) => {
+      const MENU_POPUP_SELECTOR = `.lay-menu-popup[${CONST.DATA_DROPDOWN_ID}="${options.id}"]`;
+      return $(e.target).closest(MENU_POPUP_SELECTOR).length
+        ? false
+        : undefined;
+    };
+
     // 添加组件专属 className
     $rootElem.addClass(CONST.ELEM);
-
-    // 阻止全局事件
-    $rootElem.on(clickOrMousedown, `.${menu.CONST.ELEM}`, (e) => {
-      e.stopPropagation();
-    });
-
-    // 点击菜单项
-    $rootElem.on('click', `.${menu.CONST.ELEM_ITEM}`, (e) => {
-      const $this = $(e.currentTarget);
-      const data = $this.data('item') || {};
-
-      if (data.disabled) return;
-
-      // 触发 onClick 回调
-      const clickResult = options.onClick?.({ data, e });
-
-      // 若返回 false 则阻止后续操作
-      if (clickResult === false) return;
-
-      // 关闭下拉菜单
-      this.close();
-    });
+    $contentElem.addClass(menu.CONST.ELEM_CONTAINER);
   }
 
   // 打开后的内部钩子
   [popupHooks.kAfterOpen]() {
     const options = this.options;
 
-    // 渲染 menu 组件
-    menu.render({
-      ...options,
+    // 静态渲染 menu 组件
+    this.menuInstance = menu.render({
       elem: this.$rootElem.find(`.${menu.CONST.ELEM}`),
-      mode: 'vertical',
+      mode: 'vertical', // 固定为垂直菜单
       submenuMode: options.submenuMode,
       size: options.size,
       accordion: options.accordion,
+      afterSubmenuOpen({ popupInstance }) {
+        popupInstance.$rootElem.attr(CONST.DATA_DROPDOWN_ID, options.id);
+      },
+      onClick: ({ $item, e }) => {
+        const data = $item.data('item') || {};
+
+        if (data.disabled) return;
+
+        // 触发 onClick 回调
+        const clickResult = options.onClick?.({ data, e, $item, options });
+
+        // 若返回 false 则阻止后续操作
+        if (clickResult === false) return;
+
+        // 关闭下拉菜单
+        this.close();
+      },
     });
+  }
+
+  // 关闭后的内部钩子
+  [popupHooks.kAfterClose]() {
+    // 销毁 menu 组件实例
+    this.menuInstance?.destroy();
+    this.menuInstance = null;
   }
 
   // Floating 中间件钩子

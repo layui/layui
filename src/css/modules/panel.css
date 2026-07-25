@@ -83,7 +83,7 @@
   border-width: 1px;
   border-style: solid;
   border-radius: var(--lay-border-radius);
-  box-shadow: 1px 1px 4px rgb(0 0 0 / 8%);
+  box-shadow: 1px 1px 5px rgb(0 0 0 / 8%);
   background-color: #fff;
   color: #5f5f5f;
 }

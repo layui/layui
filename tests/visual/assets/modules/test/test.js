@@ -4,7 +4,7 @@
  * 该模块依赖 Layui umd 版本
  */
 
-const { lay, code: layCode, loader, $ } = layui;
+const { lay, menu, code: layCode, loader, $ } = layui;
 
 class Test {
   constructor(options) {
@@ -38,11 +38,8 @@ class Test {
     const wrapperElem = lay.elem('div', {
       class: 'test-wrapper',
     });
-    const sideElem = lay.elem('div', {
+    const sideElem = (this.sideElem = lay.elem('div', {
       class: 'lay-panel test-side',
-    });
-    const menuElem = (this.menuElem = lay.elem('div', {
-      class: 'lay-menu',
     }));
     const mainElem = (this.mainElem = lay.elem('div', {
       class: 'test-main',
@@ -60,44 +57,31 @@ class Test {
       `,
     });
 
-    // 初始化 menu
-    (function renderMenu(target, items, parentName) {
-      items.forEach((item) => {
-        const liElem = lay.elem('li');
-        const title = item.title || item.name;
+    // 生成测试菜单
+    const $menu = (this.$menu = menu.generateMenu({
+      data: options.items,
+      submenuExpanded: true,
+      beforeTitleRender: ({ $title, item, parentItem, hasChildren }) => {
+        if (!hasChildren) {
+          const $a = $('<a></a>');
+          const parentName = parentItem?.name || parentItem?.title;
+          const name = item.name || item.title;
 
-        if (item.type === '-') {
-          $(liElem).attr('class', 'lay-menu-item-divider');
-        } else {
-          const hasChildren = item.children && item.children.length;
-          const anchor = hasChildren
-            ? 'javascript:;'
-            : `#${parentName ? parentName + '.' : ''}${item.name}`;
+          item.hash = `#${parentName ? parentName + '.' : ''}${name}`;
 
-          item.hash = anchor;
+          $a.attr({
+            href: item.hash,
+          });
 
-          $(liElem).addClass('test-menu-item').append(`
-            <div class="lay-menu-body-title">
-              <a href="${anchor}">${title}</a>
-            </div>
-          `);
-
-          if (hasChildren) {
-            const ulElem = lay.elem('ul');
-            $(liElem).attr('class', 'lay-menu-item-group lay-menu-item-down');
-            renderMenu(ulElem, item.children, item.name);
-            $(liElem).append(ulElem);
-          }
+          return $a;
         }
+      },
+    }));
 
-        $(target).append(liElem);
-      });
-    })(menuElem, options.items || []);
-
+    // 数据扁平化
     const flatItems = lay.treeToFlat(options.items).filter((item) => {
       return item.type !== '-' && !item.children;
     });
-    // console.log(flatItems);
 
     // 根据 hash，初始化默认显示的测试套件
     this.initSwitchSuite = () => {
@@ -111,11 +95,12 @@ class Test {
     // hash 切换事件
     window.addEventListener('hashchange', this.initSwitchSuite);
 
-    sideElem.append(menuElem);
+    sideElem.append($menu?.[0]);
     mainElem.append(suitesElem);
+
     wrapperElem.append(sideElem);
     wrapperElem.append(mainElem);
-    el.html('').append(wrapperElem);
+    el.empty().append(wrapperElem);
   }
 
   static tools = {
@@ -245,24 +230,22 @@ class Test {
     }
 
     itemElem.innerHTML = `
-      <div><strong>${title}：</strong></div>
-      <pre class="lay-code">${code}</pre>
-      <div class="test-result">
-        <ul>
-          <li><strong>预期：</strong><code>${output(expected)}</code></li>
-          ${
-            !passed || opts.showActual
-              ? '<li><strong>实际：</strong><code>' +
-                output(actual) +
-                '</code></li>'
-              : ''
-          }
-          <li>
-            <span><strong>结果：</strong>${output(result)}</span>
-            <!-- <span><strong>耗时：</strong>${duration.toFixed(2)} s</span> -->
-          </li>
-        </ul>
-      </div>
+<div><strong>${title}：</strong></div>
+<pre class="lay-code">${code}</pre>
+<div class="test-result">
+  <ul>
+    <li><strong>预期：</strong><code>${output(expected)}</code></li>
+    ${
+      !passed || opts.showActual
+        ? '<li><strong>实际：</strong><code>' + output(actual) + '</code></li>'
+        : ''
+    }
+    <li>
+      <span><strong>结果：</strong>${output(result)}</span>
+      <!-- <span><strong>耗时：</strong>${duration.toFixed(2)} s</span> -->
+    </li>
+  </ul>
+</div>
     `;
 
     const codeInst = layCode({
@@ -303,11 +286,12 @@ class Test {
   // 切换测试套件的显示
   #switchSuite(activeIndex) {
     const CLASS_ACTIVE = 'active';
-    const CLASS_MENU_ITEM_CHECKED = 'lay-menu-item-checked';
-    const menuItem = $(this.menuElem).find('li.test-menu-item');
+    const CLASS_IS_ACTIVE = 'lay-is-active';
+    const $menuItems = $(this.sideElem).find('li.lay-menu-item');
 
-    menuItem.removeClass(CLASS_MENU_ITEM_CHECKED);
-    menuItem.eq(activeIndex).addClass(CLASS_MENU_ITEM_CHECKED);
+    $menuItems.removeClass(CLASS_IS_ACTIVE);
+    $menuItems.eq(activeIndex).addClass(CLASS_IS_ACTIVE);
+
     $(this.suitesElem)
       .children('.test-suite')
       .eq(activeIndex)
@@ -342,7 +326,7 @@ class Test {
  * 创建测试实例
  * @param {Object} options - 配置项
  * @param {(string|HTMLElement|JQuery)} options.elem - 容器元素选择器或对象
- * @param {Array} options.items - 测试项列表
+ * @param {Array} options.items - 测试项
  * @param {Object} options.vars - 传递给测试沙箱中的变量
  * @param {string} options.sideWidth - 侧边栏宽度
  * @returns {Test} 测试实例
