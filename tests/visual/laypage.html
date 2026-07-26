@@ -85,8 +85,8 @@
           onChange(options) {
             console.log(`${this.id} → onChange  → `, options);
           },
-          afterRender(options) {
-            console.log(`${this.id} → afterRender → `, options);
+          afterRender(params) {
+            console.log(`${this.id} → afterRender → `, params);
           },
         });
 
@@ -274,7 +274,7 @@ li:not(.lay-pagination-item-active) > a {
           elem: '#demo9',
           count: data.length,
           theme: 'border',
-          afterRender(options) {
+          onChange(options) {
             // 模拟渲染
             const ul = document.getElementById('demo-data-page-show');
             ul.innerHTML = (() => {
@@ -287,6 +287,10 @@ li:not(.lay-pagination-item-active) > a {
               });
               return arr.join('');
             })();
+          },
+          afterRender({ options }) {
+            // 初始化时，触发一次 onChange 事件，渲染第一页数据
+            options.onChange(options);
           },
         });
       });

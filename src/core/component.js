@@ -274,8 +274,19 @@ export class Component {
 
     // 渲染
     if (typeof this.render === 'function') {
+      const params = { instance: this, options, isReload };
+
+      // 渲染前的回调
+      const beforeResult = options.beforeRender?.(params);
+
+      // 若返回 false 则中止渲染
+      if (beforeResult === false) {
+        return this;
+      }
+
       $elem.attr(ATTR_ID, options.id); // 目标元素已渲染过的标记
-      this.render(isReload); // 渲染核心
+      this.render(isReload); // 执行渲染
+      options.afterRender?.(params); // 渲染后的回调
     }
 
     return this;
