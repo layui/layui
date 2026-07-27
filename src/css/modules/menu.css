@@ -276,6 +276,8 @@
 
 /* 外层容器 */
 .lay-menu-container {
+  --lay-menu-horizontal-height: 60px;
+
   display: flex;
   flex-direction: column;
   position: relative;
@@ -297,9 +299,10 @@
 /* 外层容器 @水平菜单 */
 .lay-menu-container:has(.lay-menu[data-mode='horizontal']) {
   flex-direction: row;
-  height: 60px;
+  height: var(--lay-menu-horizontal-height);
   padding-inline: var(--lay-spacing);
   overflow: hidden;
+  transition: none;
 }
 
 /* 线条风格 */

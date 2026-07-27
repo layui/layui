@@ -129,7 +129,9 @@ export class Dropdown extends Popup {
         const clickResult = options.onClick?.({ data, e, $item, options });
 
         // 若返回 false 则阻止后续操作
-        if (clickResult === false) return;
+        if (clickResult === false) {
+          return false;
+        }
 
         // 关闭下拉菜单
         this.close();

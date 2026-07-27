@@ -1,6 +1,6 @@
 /**
  * menu
- * 基础菜单
+ * 导航菜单
  */
 
 import { lay } from '../core/lay.js';
@@ -78,6 +78,7 @@ export class Menu extends Component {
       'collapse',
       'expandSubmenus',
       'collapseSubmenus',
+      'select',
     ]);
   }
 
@@ -134,7 +135,7 @@ export class Menu extends Component {
           let $title = $(`<div></div>`);
 
           // 若为链接项
-          if (lay.hasOwn(item, 'href')) {
+          if (lay.hasOwn(item, 'href') && !item.disabled) {
             $title = $('<a></a>');
             $title.attr({
               href: item.href,
@@ -170,8 +171,8 @@ export class Menu extends Component {
 
             $li.addClass(CONST.ELEM_SUBMENU);
 
-            // 展开状态
-            if (expanded) {
+            // 添加展开状态类
+            if (expanded && !item.disabled) {
               $li.addClass(CONST.CLASS_IS_EXPANDED);
             }
 
@@ -203,18 +204,6 @@ export class Menu extends Component {
     } else {
       return '';
     }
-  }
-
-  /**
-   * 设置菜单项活动状态
-   * @param {JQuery} $elem - 菜单元素
-   * @param {JQuery} $activeItem - 活动菜单项元素
-   * @returns {void}
-   */
-  static setActiveItem($elem, $activeItem) {
-    const { CLASS_IS_ACTIVE } = CONST;
-    $elem.find(`.${CLASS_IS_ACTIVE}`).removeClass(CLASS_IS_ACTIVE);
-    $activeItem.addClass(CLASS_IS_ACTIVE);
   }
 
   /**
@@ -347,6 +336,33 @@ export class Menu extends Component {
   }
 
   /**
+   * 根据条件选中首个匹配的菜单项
+   * @param {Function} filter - 过滤函数，返回 true 的菜单项将被选中
+   * @returns {boolean} 返回是否选中成功
+   */
+  select(filter) {
+    let selected = false;
+
+    if (typeof filter !== 'function') {
+      return selected;
+    }
+
+    this.$menuItems.each((index, item) => {
+      const $item = $(item);
+      if (filter($item, index)) {
+        const disabled = $item.hasClass(CONST.CLASS_IS_DISABLED);
+        if (!disabled) {
+          activateMenuItem(this.options.$elem, $item);
+          selected = true;
+          return false; // 终止遍历
+        }
+      }
+    });
+
+    return selected;
+  }
+
+  /**
    * 重写 destroy 方法
    * @returns {void}
    */
@@ -429,6 +445,7 @@ export class Menu extends Component {
       this.#initSubmenus();
     }
 
+    this.$menuItems = $elem.find(`.${CONST.ELEM_ITEM}`);
     this.#events();
   }
 
@@ -517,8 +534,12 @@ export class Menu extends Component {
     const { $submenu, $sub } = this.#getSubmenu($title);
     const ANIM_MS = 200;
 
-    if (!$sub.length) return;
-    if (options.submenuMode !== 'inline') return;
+    if (
+      !$sub.length ||
+      options.submenuMode !== 'inline' ||
+      $submenu.hasClass(CONST.CLASS_IS_DISABLED)
+    )
+      return;
 
     // 动画执行完成后的操作
     const animComplete = function () {
@@ -759,7 +780,6 @@ export class Menu extends Component {
   #events() {
     const options = this.options;
     const $elem = options.$elem;
-    const Constructor = this.constructor;
 
     // 事件命名空间
     const eventNamespace = CONST.EVENT_NAMESPACE;
@@ -785,12 +805,17 @@ export class Menu extends Component {
         .on(`mouseenter${eventNamespace}`, SUBMENU_TITLE_SELECTOR, (e) => {
           const $title = $(e.currentTarget);
           const { $submenu, $sub } = this.#getSubmenu($title);
+
+          // 若子菜单被禁用，则不进行任何操作
+          if ($submenu.hasClass(CONST.CLASS_IS_DISABLED)) {
+            return;
+          }
+
+          // 获取当前深度的 Popup 实例
           const currentPopupInstance = controller.getInstance(depth);
 
           controller.onPopupEnter({ depth });
-
-          // 阻止事件向 Popup 根元素冒泡
-          e.stopPropagation();
+          e.stopPropagation(); // 阻止事件向 Popup 根元素冒泡
 
           // 若「当前子菜单已打开」或「不存在子菜单」，则无需创建
           if (
@@ -854,11 +879,13 @@ export class Menu extends Component {
       const $title = $(e.currentTarget);
       const $item = $title.parent(`.${CONST.ELEM_ITEM}`);
 
+      if ($item.hasClass(CONST.CLASS_IS_DISABLED)) return;
+
       // 标注选中状态
-      Constructor.setActiveItem($elem, $item);
+      activateMenuItem($elem, $item);
 
       // 触发 onClick 回调
-      options.onClick?.({
+      const clickResult = options.onClick?.({
         $item,
         e,
         options: rootMenuInstance ? rootMenuInstance.options : options,
@@ -874,7 +901,7 @@ export class Menu extends Component {
           const { $sub: $rootSub } = this.#getSubmenu($rootTitle);
 
           // 同步根级菜单的选中状态
-          Constructor.setActiveItem(
+          activateMenuItem(
             rootMenuInstance.options.$elem,
             $rootSub.find(
               `.${CONST.ELEM_ITEM}[${CONST.ATTR_ITEM_INDEX}='${itemIndex}']`,
@@ -883,13 +910,27 @@ export class Menu extends Component {
         }
 
         // 点击后关闭所有 Popup
-        controller.closeAll();
+        if (clickResult !== false) {
+          controller.closeAll();
+        }
       }
     });
   }
 }
 
 const CONST = Menu.CONST;
+
+/**
+ * 给指定菜单项添加激活（选中）状态类
+ * @param {JQuery} $elem - 目标菜单元素
+ * @param {JQuery} $item - 待激活的菜单项元素
+ * @returns {void}
+ */
+const activateMenuItem = ($elem, $item) => {
+  const { CLASS_IS_ACTIVE } = CONST;
+  $elem.find(`.${CLASS_IS_ACTIVE}`).removeClass(CLASS_IS_ACTIVE);
+  $item.addClass(CLASS_IS_ACTIVE);
+};
 
 /**
  * 创建 Popup 实例链控制器

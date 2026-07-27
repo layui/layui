@@ -176,21 +176,8 @@
 
     <script>
       // 获取导航菜单 HTML 演示模板
-      const getMenuTemplate = ({
-        prepend = '',
-        append = '',
-        defaultActiveIndex,
-      }) => {
+      const getMenuTemplate = ({ prepend = '', append = '' } = {}) => {
         const menuTemplateElem = document.getElementById('demo-menu-template');
-        if (typeof defaultActiveIndex === 'number') {
-          const CLASS_IS_ACTIVE = 'lay-is-active';
-          menuTemplateElem.content
-            .querySelector(`.${CLASS_IS_ACTIVE}`)
-            ?.classList.remove(CLASS_IS_ACTIVE);
-          menuTemplateElem.content
-            .querySelectorAll('.lay-menu-item')
-            [defaultActiveIndex].classList.add(CLASS_IS_ACTIVE);
-        }
         let template = menuTemplateElem.innerHTML;
         template = template.replace('<!--prepend-->', prepend);
         template = template.replace('<!--append-->', append);
@@ -433,11 +420,7 @@
             data-mode="horizontal"
           >
             <script>
-              document.write(
-                getMenuTemplate({
-                  defaultActiveIndex: 0,
-                }),
-              );
+              document.write(getMenuTemplate());
             </script>
           </ul>
         </div>
@@ -451,11 +434,7 @@
             data-theme="dark"
           >
             <script>
-              document.write(
-                getMenuTemplate({
-                  defaultActiveIndex: 0,
-                }),
-              );
+              document.write(getMenuTemplate());
             </script>
           </ul>
         </div>
@@ -468,11 +447,7 @@
             data-mode="horizontal"
           >
             <script>
-              document.write(
-                getMenuTemplate({
-                  defaultActiveIndex: 0,
-                }),
-              );
+              document.write(getMenuTemplate());
             </script>
           </ul>
         </div>
@@ -490,11 +465,7 @@
             data-submenu-theme="light"
           >
             <script>
-              document.write(
-                getMenuTemplate({
-                  defaultActiveIndex: 0,
-                }),
-              );
+              document.write(getMenuTemplate());
             </script>
           </ul>
         </div>
@@ -508,6 +479,7 @@
         <!-- 水平菜单 -->
         <div
           class="lay-menu-container lay-menu-is-line"
+          style="height: var(--lay-menu-horizontal-height)"
           id="demo-data-render-h"
         ></div>
 
@@ -618,22 +590,32 @@
         handleSidebarMqlChange(sidebarMql);
         sidebarMql.addEventListener('change', handleSidebarMqlChange);
 
-        // 菜单测试数据
+        // 初始化「水平菜单」选中状态（仅用于显示选中效果）
+        [...Array(4)].forEach((_, index) => {
+          menu.select(
+            `demo-horizontal-menu-${index + 1}`,
+            ($item, itemIndex) => {
+              return itemIndex === 0; // 选中第一个菜单项
+            },
+          );
+        });
+
+        // 菜单「数据渲染」演示数据
         const data = [
-          { title: 'Menu Item 1' },
+          { title: 'Menu Item 1', href: '#item1' },
           {
             title: 'Menu Item 2',
             children: [
-              { title: 'Menu Item 1-1' },
+              { title: 'Menu Item 2-1', href: '#item2-1' },
               {
-                title: 'Menu Item 1-2',
+                title: 'Menu Item 2-2',
                 children: [
-                  { title: 'Menu Item 1-2-1' },
-                  { title: 'Menu Item 1-2-2' },
+                  { title: 'Menu Item 2-2-1' },
+                  { title: 'Menu Item 2-2-2' },
                 ],
               },
               {
-                title: 'Menu Item 1-3',
+                title: 'Menu Item 2-3',
               },
             ],
           },
@@ -649,6 +631,13 @@
           target: '#demo-data-render-h', // 插入的目标容器
           mode: 'horizontal',
           data,
+          afterRender({ instance, options }) {
+            // 根据条件初始选中菜单项
+            instance.select(($item, itemIndex) => {
+              const menuItem = $item.data('item');
+              return menuItem.href === '#item1';
+            });
+          },
           onClick(params) {
             console.log(`${params.options.id} → onClick → `, {
               params,
@@ -668,6 +657,14 @@
           target: '#demo-data-render',
           data,
           submenuExpanded: true,
+          // submenuMode: 'popup',
+          afterRender({ instance, options }) {
+            // 根据条件初始选中菜单项
+            instance.select(($item, itemIndex) => {
+              const menuItem = $item.data('item');
+              return menuItem.href === '#item1';
+            });
+          },
           onClick(params) {
             console.log(`${this.id} → onClick → `, params);
           },
@@ -678,6 +675,13 @@
           target: '#demo-data-render-line',
           data,
           submenuExpanded: true,
+          afterRender({ instance, options }) {
+            // 根据条件初始选中菜单项
+            instance.select(($item, itemIndex) => {
+              const menuItem = $item.data('item');
+              return menuItem.href === '#item1';
+            });
+          },
           onClick(params) {
             console.log(`${this.id} → onClick → `, params);
           },
