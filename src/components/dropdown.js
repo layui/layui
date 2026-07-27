@@ -76,7 +76,7 @@ export class Dropdown extends Popup {
     const options = this.options;
 
     // 获取菜单结构
-    let $menu = menu.generateMenu({
+    let $menu = menu.generate({
       ...options,
       mode: 'vertical', // 固定为垂直菜单
     });

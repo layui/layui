@@ -58,7 +58,7 @@ class Test {
     });
 
     // 生成测试菜单
-    const $menu = (this.$menu = menu.generateMenu({
+    const $menu = (this.$menu = menu.generate({
       data: options.items,
       submenuExpanded: true,
       beforeTitleRender: ({ $title, item, parentItem, hasChildren }) => {

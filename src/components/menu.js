@@ -13,7 +13,7 @@ export class Menu extends Component {
 
   /**
    * 默认配置项
-   * 同时支持 {@link Menu.generateMenu} 的 options
+   * 同时支持 {@link Menu.generate} 的 options
    */
   static options = {
     // 菜单模式。可选值: vertical|horizontal
@@ -92,7 +92,7 @@ export class Menu extends Component {
    * @param {Function} [options.beforeTitleRender] - 标题元素渲染前的钩子函数
    * @returns {jQuery|string} 返回菜单 jQuery 对象或空字符串
    */
-  static generateMenu(options) {
+  static generate(options) {
     const $menu = $('<ul class="lay-menu"></ul>');
 
     // 字段名映射
@@ -270,7 +270,7 @@ export class Menu extends Component {
 
     // 是否为数据渲染（WIP）
     if (options.data?.length) {
-      const $menu = Menu.generateMenu(options);
+      const $menu = Menu.generate(options);
 
       $menu.attr(CONST.ATTR_ID, options.id); // 添加已渲染的标记
       options.elem = options.$elem = $menu;
