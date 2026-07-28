@@ -55,7 +55,7 @@ export class Popup extends Component {
 
     // afterOpen: null, // 层打开后的回调函数
     // afterClose: null, // 层关闭后的回调函数
-    // onClickOutside: null, // 点击层外部时的事件处理
+    // onClickOutside: null, // 点击层外部时的事件处理；返回 false 时阻止关闭层
   };
 
   static get CONST() {
@@ -65,6 +65,9 @@ export class Popup extends Component {
       ELEM_ARROW: 'lay-popup-arrow',
       ELEM_CONTENT: 'lay-popup-content',
       ELEM_BACKDROP: 'lay-popup-backdrop',
+
+      // 根元素基础类名（须与 ELEM_ROOT 保持一致）
+      ROOT_BASE_CLASS: `lay-popup lay-panel`,
 
       // 弹出层的安全间距，同时用于层偏移、翻转和位移时的边界间距
       POSITION_SPACING: 5,
@@ -308,7 +311,7 @@ export class Popup extends Component {
 
     // 创建根元素
     const $rootElem = (this.$rootElem = $(
-      `<div class="${CONST.ELEM_ROOT} lay-panel"></div>`,
+      `<div class="${CONST.ROOT_BASE_CLASS}"></div>`,
     ));
     const $contentElem = (this.$contentElem = $(
       `<div class="${CONST.ELEM_CONTENT}"></div>`,
@@ -326,21 +329,42 @@ export class Popup extends Component {
     return { $rootElem, $contentElem };
   }
 
+  // 记录已应用的根元素属性
+  #appliedRootAttrs = {};
+
   /**
    * 应用根元素属性
    * @returns {void}
    */
   #applyRootElemAttrs() {
-    const options = this.options;
-    const $rootElem = this.$rootElem;
+    const { options, $rootElem } = this;
+    const applied = this.#appliedRootAttrs;
 
-    // 弹出动画
+    // 排除根元素基础类名
+    const className = options.className
+      ?.split(/\s+/)
+      .filter((cls) => cls && !ROOT_BASE_CLASS_SET.has(cls))
+      .join(' ');
+
+    // 清理旧的属性
+    $rootElem.removeClass(applied.anim).removeClass(applied.className);
+
+    // 添加弹出动画
     if (options.anim) {
-      $rootElem.addClass(`lay-anim lay-anim-${options.anim}`);
+      $rootElem.addClass((applied.anim = `lay-anim lay-anim-${options.anim}`));
+    } else {
+      applied.anim = null;
     }
 
-    // 自定义样式
-    $rootElem.addClass(options.className).attr('style', options.style);
+    // 添加自定义类名
+    if (className) {
+      $rootElem.addClass((applied.className = className));
+    } else {
+      applied.className = null;
+    }
+
+    // 设置 style 属性
+    $rootElem.attr('style', options.style);
 
     // 设置主题
     $rootElem.attr('data-theme', options.theme);
@@ -577,5 +601,8 @@ export class Popup extends Component {
 }
 
 const CONST = Popup.CONST;
+
+// 根元素基础类名集合
+const ROOT_BASE_CLASS_SET = new Set(CONST.ROOT_BASE_CLASS.split(/\s+/));
 
 export { Popup as popup };
