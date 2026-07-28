@@ -66,13 +66,37 @@ export class Dropdown extends Popup {
   }
 
   /**
-   * 打开前的内部钩子
-   * @param {Object} param0 - 参数对象
-   * @param {jQuery} param0.$rootElem - 根元素 jQuery 对象
-   * @param {jQuery} param0.$contentElem - 内容元素 jQuery 对象
+   * 根元素首次创建后的内部钩子
    * @returns {void}
    */
-  [popupHooks.kBeforeOpen]({ $rootElem, $contentElem }) {
+  [popupHooks.kAfterCreate]() {
+    const { options, $rootElem, $contentElem } = this;
+
+    // 传入的 onClickOutside
+    const originalOnClickOutside = options.onClickOutside;
+
+    // 点击面板外部时的事件
+    options.onClickOutside = (e) => {
+      const MENU_POPUP_SELECTOR = `.${menu.CONST.ELEM_POPUP}[${CONST.DATA_DROPDOWN_ID}="${options.id}"]`;
+
+      // 点击 Popup 子菜单时，阻止下拉菜单面板关闭
+      if ($(e.target).closest(MENU_POPUP_SELECTOR).length) {
+        return false;
+      }
+
+      return originalOnClickOutside?.(e);
+    };
+
+    // 添加组件专属 className
+    $rootElem.addClass(CONST.ELEM);
+    $contentElem.addClass(menu.CONST.ELEM_CONTAINER);
+  }
+
+  /**
+   * 层打开前的内部钩子
+   * @returns {void}
+   */
+  [popupHooks.kBeforeOpen]() {
     const options = this.options;
 
     // 获取菜单结构
@@ -87,34 +111,26 @@ export class Dropdown extends Popup {
       $menu.addClass(CONST.CLASS_IS_EMPTY).text(i18n.$t('dropdown.empty'));
     }
 
-    // 面板内容
+    // 设置 Popup 层内容
     options.content = $menu;
-
-    // 点击 Popup 子菜单时，阻止其父级 Popup 触发「外部点击」引起的关闭
-    options.onClickOutside = (e) => {
-      const MENU_POPUP_SELECTOR = `.lay-menu-popup[${CONST.DATA_DROPDOWN_ID}="${options.id}"]`;
-      return $(e.target).closest(MENU_POPUP_SELECTOR).length
-        ? false
-        : undefined;
-    };
-
-    // 添加组件专属 className
-    $rootElem.addClass(CONST.ELEM);
-    $contentElem.addClass(menu.CONST.ELEM_CONTAINER);
   }
 
   /**
-   * 打开后的内部钩子
+   * 层打开后的内部钩子
    * @returns {void}
    */
   [popupHooks.kAfterOpen]() {
     const options = this.options;
 
-    // 静态渲染 menu 组件
+    // 销毁旧的 menu 实例
+    this.menuInstance?.destroy();
+
+    // 创建静态 menu 实例
     this.menuInstance = menu.render({
       elem: this.$rootElem.find(`.${menu.CONST.ELEM}`),
       mode: 'vertical', // 固定为垂直菜单
       submenuMode: options.submenuMode,
+      submenuTheme: options.submenuTheme,
       size: options.size,
       accordion: options.accordion,
       afterSubmenuOpen({ popupInstance }) {
