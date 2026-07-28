@@ -101,15 +101,15 @@ export class Popup extends Component {
       // 不可修改的默认配置
       trigger: 'mouseenter',
       showArrow: true,
-      afterOpen: (...args) => {
-        options.afterOpen?.(...args);
-
+      afterOpen: ({ instance, ...rest }) => {
         // 添加专属 className
-        popupInstance.$rootElem.addClass(`${CONST.ELEM_ROOT}-tooltip`);
+        instance.$rootElem.addClass(`${CONST.ELEM_ROOT}-tooltip`);
+        options.afterOpen?.({ instance, ...rest });
       },
-      afterClose: (...args) => {
-        options.afterClose?.(...args);
-        popupInstance.destroy(); // 关闭即销毁 Popup 实例
+      afterClose: ({ instance, ...rest }) => {
+        // 关闭即销毁 Popup 实例
+        instance.destroy();
+        options.afterClose?.({ instance, ...rest });
       },
     });
 
@@ -217,8 +217,11 @@ export class Popup extends Component {
     this.#onClickOutside();
     this.#startAutoUpdatePosition();
 
-    options.afterOpen?.(options, $rootElem); // 层打开后的回调
-    this[popupHooks.kAfterOpen]?.(); // 层打开后的内部钩子
+    // 层打开后的回调
+    options.afterOpen?.({ instance: this, options });
+
+    // 层打开后的内部钩子
+    this[popupHooks.kAfterOpen]?.();
   }
 
   /**
@@ -237,8 +240,11 @@ export class Popup extends Component {
       $rootElem.prev(`.${CONST.ELEM_BACKDROP}`).remove(); // 先移除遮罩
       $rootElem.remove(); // 再移除层
 
-      options.afterClose?.(options); // 层关闭后的回调
-      this[popupHooks.kAfterClose]?.(); // 层关闭后的内部钩子
+      // 层关闭后的回调
+      options.afterClose?.({ instance: this, options });
+
+      // 层关闭后的内部钩子
+      this[popupHooks.kAfterClose]?.();
     }
 
     delete options._renderMode; // 移除私有选项
@@ -579,7 +585,11 @@ export class Popup extends Component {
       (e) => {
         // 点击层外部时的事件
         if (typeof options.onClickOutside === 'function') {
-          const shouldClose = options.onClickOutside(e);
+          const shouldClose = options.onClickOutside({
+            instance: this,
+            options,
+            e,
+          });
           if (shouldClose === false) return;
         }
 

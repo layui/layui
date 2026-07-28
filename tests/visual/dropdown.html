@@ -267,7 +267,7 @@
             console.log('click', data, rest);
             layer.msg(`选择了 ${data.title}`);
           },
-          onClickOutside(e) {
+          onClickOutside({ e }) {
             // 点击某个区域不关闭面板（仅用于演示）
             if ($(e.target).closest('#ID-dropdown-demo-contextmenu').length) {
               layer.msg('点击此处不关闭面板');
@@ -320,8 +320,8 @@
               return false;
             }
           },
-          afterOpen(...args) {
-            console.log(`afterOpen ${this.id}`, args);
+          afterOpen(params) {
+            console.log(`afterOpen ${this.id}`, params);
           },
           afterClose() {
             console.log(`afterClose ${this.id}`, this.$elem);

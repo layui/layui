@@ -76,7 +76,7 @@ export class Dropdown extends Popup {
     const originalOnClickOutside = options.onClickOutside;
 
     // 点击面板外部时的事件
-    options.onClickOutside = (e) => {
+    options.onClickOutside = ({ e, ...rest }) => {
       const MENU_POPUP_SELECTOR = `.${menu.CONST.ELEM_POPUP}[${CONST.DATA_DROPDOWN_ID}="${options.id}"]`;
 
       // 点击 Popup 子菜单时，阻止下拉菜单面板关闭
@@ -84,7 +84,7 @@ export class Dropdown extends Popup {
         return false;
       }
 
-      return originalOnClickOutside?.(e);
+      return originalOnClickOutside?.({ e, ...rest });
     };
 
     // 添加组件专属 className
@@ -142,7 +142,13 @@ export class Dropdown extends Popup {
         if (data.disabled) return;
 
         // 触发 onClick 回调
-        const clickResult = options.onClick?.({ data, e, $item, options });
+        const clickResult = options.onClick?.({
+          instance: this,
+          options,
+          data,
+          $item,
+          e,
+        });
 
         // 若返回 false 则阻止后续操作
         if (clickResult === false) {
