@@ -288,7 +288,7 @@
 .lay-menu-container:has(.lay-menu[data-theme='dark']) {
   background-color: var(--lay-color-dark, #2f363c);
 }
-/* 外层容器 @垂直菜单 */
+/* 外层容器 @垂直菜单 收起模式 */
 .lay-menu-container:has(
   .lay-menu:not([data-mode='horizontal'])[data-collapsed]
 ) {
@@ -394,6 +394,9 @@
 }
 .lay-menu-popup:has(.lay-menu[data-theme='dark']) {
   border-color: var(--lay-menu-border-color, rgba(200, 200, 200, 0.08));
+}
+.lay-menu-popup .lay-menu-container {
+  transition: none;
 }
 
 /* dropdown.css (TODO: 后续若内容增多，将单独存放) */

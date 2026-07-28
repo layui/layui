@@ -67,6 +67,7 @@ export class Menu extends Component {
       ELEM_ITEM: 'lay-menu-item',
 
       ELEM_CONTAINER: 'lay-menu-container',
+      ELEM_POPUP: 'lay-menu-popup',
     };
   }
 
@@ -668,7 +669,7 @@ export class Menu extends Component {
       content: $content,
       trigger: 'mouseenter',
       placement,
-      className: 'lay-menu-popup',
+      className: CONST.ELEM_POPUP,
       onClickOutside: (e) => {
         // 点击 Popup 内部时，阻止其父级 Popup 触发「外部点击」引起的关闭
         return controller.containsPopup(e.target) ? false : undefined;
