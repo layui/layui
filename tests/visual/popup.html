@@ -96,7 +96,7 @@
       </div>
 
       <br /><br />
-      <h2>打开动画</h2>
+      <h2>弹出动画</h2>
       <hr />
       <div
         style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
@@ -242,7 +242,7 @@
           placement: 'bottom-start',
           showArrow: true,
           style:
-            'min-width: 300px; max-width: 600px; border: none; border-radius: 5px; box-shadow: none; background-color: #16b777; color: #fff; padding: 11px;',
+            'min-width: 300px; max-width: 600px; border: 0; border-radius: 5px; box-shadow: none; background-color: #16b777; color: #fff; padding: 11px;',
         });
         // 自定义样式与内容
         popup.render({
@@ -301,7 +301,7 @@
           style: 'min-width: 168px;',
         });
         const autocompletInstId = autocompletInst.options.id;
-        const sourceContent = autocompletInst.options.content;
+        const initialContent = autocompletInst.options.content;
 
         // 输入框输入事件
         autocompletInst.options.$elem.on('input', function () {
@@ -310,7 +310,7 @@
 
           // 输入为空时，恢复初始渲染状态
           if (!value) {
-            popup.updateContent(autocompletInstId, sourceContent);
+            popup.updateContent(autocompletInstId, initialContent);
             return;
           }
 

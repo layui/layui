@@ -14,7 +14,8 @@ export { floating };
 
 // 组件钩子符号集
 export const popupHooks = Object.freeze({
-  kBeforeRender: Symbol('Popup.beforeRender'), // 组件渲染前
+  kAfterCreate: Symbol('Popup.afterCreate'), // 根元素首次创建后
+  kOnRender: Symbol('Popup.onRender'), // 组件渲染时
   kBeforeOpen: Symbol('Popup.beforeOpen'), // 层打开前
   kAfterOpen: Symbol('Popup.afterOpen'), // 层打开后
   kAfterClose: Symbol('Popup.afterClose'), // 层关闭后
@@ -39,7 +40,7 @@ export class Popup extends Component {
     // 行为取决于所使用的触发事件类型
     closeOnClick: true,
 
-    // 层打开时的动画。支持 anim.css 中的所有动画类
+    // 层弹出时的动画。支持 anim.css 中的所有动画类
     anim: 'fadein',
 
     // 延时打开和关闭层毫秒数，仅当 `trigger` 为 `hover/mouseenter` 时生效
@@ -136,14 +137,21 @@ export class Popup extends Component {
   render() {
     const options = this.options;
 
-    // 若传入 hover，则规范化为 mouseenter
-    if (options.trigger === 'hover') {
-      options.trigger = 'mouseenter';
+    this.#normalizeOptions();
+
+    // 首次渲染时，创建根元素
+    if (!this.$rootElem) {
+      this.#createRootElem();
+
+      // 根元素首次创建后的内部钩子
+      this[popupHooks.kAfterCreate]?.();
     }
 
-    // 渲染前的内部钩子
-    this[popupHooks.kBeforeRender]?.();
-    this.#events(); // 事件
+    // 组件渲染时的内部钩子
+    this[popupHooks.kOnRender]?.();
+
+    this.#applyRootElemAttrs();
+    this.#events();
 
     // 初始打开层的条件
     if (options.defaultOpen || this.isRootElemMounted()) {
@@ -156,44 +164,32 @@ export class Popup extends Component {
    * @returns {void}
    */
   open() {
-    const options = this.options;
-
-    // 根元素
-    let $rootElem = $(`<div class="${CONST.ELEM_ROOT} lay-panel"></div>`);
-    const $contentElem = $(`<div class="${CONST.ELEM_CONTENT}"></div>`);
+    const { options, $rootElem, $contentElem } = this;
 
     // 层打开前的内部钩子
-    this[popupHooks.kBeforeOpen]?.({ $rootElem, $contentElem });
+    this[popupHooks.kBeforeOpen]?.();
 
     // 是否仅更新内容
     if (options._renderMode === 'updateContent' && this.isRootElemMounted()) {
-      $rootElem = this.$rootElem;
       this.updateContent(options.content);
       delete options._renderMode;
     } else {
-      // 打开动画
-      if (options.anim) {
-        $rootElem.addClass(`lay-anim lay-anim-${options.anim}`);
-      }
-
-      // 初始化自定义样式
-      $rootElem.addClass(options.className).attr('style', options.style);
-      $rootElem.attr('data-theme', options.theme);
-
-      // 生成内容
+      // 填充内容
       $contentElem.html(options.content);
-      $rootElem.append($contentElem);
 
-      // 生成箭头
-      if (options.showArrow) {
-        const $arrowElem = $(`<div class="${CONST.ELEM_ARROW}"></div>`);
-        $rootElem.append($arrowElem);
-      }
-
-      // 生成层
       this.close(); // 关闭旧层
-      options.$target.append($rootElem); // 插入新层
-      this.$rootElem = $rootElem;
+      options.$target.append($rootElem); // 添加新层
+
+      // 如果是鼠标移入事件，则鼠标移出时自动关闭
+      if (options.trigger === 'mouseenter') {
+        $rootElem
+          .on('mouseenter', () => {
+            clearTimeout(this.timer);
+          })
+          .on('mouseleave', () => {
+            this.delayClose();
+          });
+      }
 
       // 若开启遮罩
       if (options.backdrop) {
@@ -212,17 +208,6 @@ export class Popup extends Component {
         }
 
         $rootElem.before($backdropElem);
-      }
-
-      // 如果是鼠标移入事件，则鼠标移出时自动关闭
-      if (options.trigger === 'mouseenter') {
-        $rootElem
-          .on('mouseenter', () => {
-            clearTimeout(this.timer);
-          })
-          .on('mouseleave', () => {
-            this.delayClose();
-          });
       }
     }
 
@@ -253,7 +238,6 @@ export class Popup extends Component {
       this[popupHooks.kAfterClose]?.(); // 层关闭后的内部钩子
     }
 
-    delete this.$rootElem; // 移除层根节点的引用
     delete options._renderMode; // 移除私有选项
   }
 
@@ -288,6 +272,78 @@ export class Popup extends Component {
     this.timer = setTimeout(() => {
       this.close();
     }, options.closeDelay);
+  }
+
+  /**
+   * 重写 destroy 方法
+   * @returns {void}
+   */
+  destroy() {
+    clearTimeout(this.timer);
+    this.timer = null;
+    this.close();
+
+    super.destroy();
+  }
+
+  /**
+   * 规范化选项
+   * @returns {void}
+   */
+  #normalizeOptions() {
+    const options = this.options;
+
+    // 若传入 hover，则规范化为 mouseenter
+    if (options.trigger === 'hover') {
+      options.trigger = 'mouseenter';
+    }
+  }
+
+  /**
+   * 创建根元素
+   * @returns {Object} 返回根元素和内容元素的 jQuery 对象
+   */
+  #createRootElem() {
+    const options = this.options;
+
+    // 创建根元素
+    const $rootElem = (this.$rootElem = $(
+      `<div class="${CONST.ELEM_ROOT} lay-panel"></div>`,
+    ));
+    const $contentElem = (this.$contentElem = $(
+      `<div class="${CONST.ELEM_CONTENT}"></div>`,
+    ));
+
+    // 添加内容元素
+    $rootElem.append($contentElem);
+
+    // 添加箭头元素
+    if (options.showArrow) {
+      const $arrowElem = $(`<div class="${CONST.ELEM_ARROW}"></div>`);
+      $rootElem.append($arrowElem);
+    }
+
+    return { $rootElem, $contentElem };
+  }
+
+  /**
+   * 应用根元素属性
+   * @returns {void}
+   */
+  #applyRootElemAttrs() {
+    const options = this.options;
+    const $rootElem = this.$rootElem;
+
+    // 弹出动画
+    if (options.anim) {
+      $rootElem.addClass(`lay-anim lay-anim-${options.anim}`);
+    }
+
+    // 自定义样式
+    $rootElem.addClass(options.className).attr('style', options.style);
+
+    // 设置主题
+    $rootElem.attr('data-theme', options.theme);
   }
 
   /**
