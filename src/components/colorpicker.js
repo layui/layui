@@ -73,8 +73,50 @@ export class Colorpicker extends Popup {
     };
   }
 
-  // 组件渲染前内部钩子
-  [popupHooks.kBeforeRender]() {
+  // 组件渲染时的内部钩子
+  [popupHooks.kOnRender]() {
+    const options = this.options;
+    const $rootElem = this.$rootElem;
+
+    this.#renderColorBox();
+
+    // 设置 Popup 层内容
+    options.content = this.#buildMainPanel();
+
+    // 添加组件专属 className
+    $rootElem.addClass(CONST.ELEM);
+  }
+
+  // 层打开后的内部钩子
+  [popupHooks.kAfterOpen]() {
+    this.#val();
+    this.#side();
+    this.#pickerEvents();
+  }
+
+  // 层关闭后的内部钩子
+  [popupHooks.kAfterClose]() {
+    const elemColorBoxSpan = this.$colorBoxElem.find(
+      `.${CONST.PICKER_TRIG_SPAN}`,
+    );
+
+    if (this.color) {
+      const hsb = RGBToHSB(RGBSTo(this.color));
+      this.#select(hsb.h, hsb.s, hsb.b);
+    } else {
+      this.$colorBoxElem
+        .find(`.${CONST.PICKER_TRIG_I}`)
+        .removeClass(CONST.ICON_PICKER_DOWN)
+        .addClass(CONST.ICON_PICKER_CLOSE);
+    }
+
+    elemColorBoxSpan[0].style.background = this.color || '';
+  }
+
+  /**
+   * 渲染颜色选择框
+   */
+  #renderColorBox() {
     const options = this.options;
     const $elem = options.$elem;
 
@@ -120,8 +162,11 @@ export class Colorpicker extends Popup {
     )[0].style.background;
   }
 
-  // 层打开前的内部钩子
-  [popupHooks.kBeforeOpen]({ $rootElem }) {
+  /**
+   * 构建颜色选择器主面板
+   * @returns {JQuery} 颜色选择器面板的 jQuery 对象
+   */
+  #buildMainPanel() {
     const options = this.options;
 
     // 颜色选择器对象
@@ -177,37 +222,7 @@ export class Colorpicker extends Popup {
 </div>
     `);
 
-    // 面板内容
-    options.content = $mainElem;
-
-    // 添加组件专属 className
-    $rootElem.addClass(CONST.ELEM);
-  }
-
-  // 层打开后的内部钩子
-  [popupHooks.kAfterOpen]() {
-    this.#val();
-    this.#side();
-    this.#pickerEvents();
-  }
-
-  // 层关闭后的内部钩子
-  [popupHooks.kAfterClose]() {
-    const elemColorBoxSpan = this.$colorBoxElem.find(
-      `.${CONST.PICKER_TRIG_SPAN}`,
-    );
-
-    if (this.color) {
-      const hsb = RGBToHSB(RGBSTo(this.color));
-      this.#select(hsb.h, hsb.s, hsb.b);
-    } else {
-      this.$colorBoxElem
-        .find(`.${CONST.PICKER_TRIG_I}`)
-        .removeClass(CONST.ICON_PICKER_DOWN)
-        .addClass(CONST.ICON_PICKER_CLOSE);
-    }
-
-    elemColorBoxSpan[0].style.background = this.color || '';
+    return $mainElem;
   }
 
   // 颜色选择器赋值
