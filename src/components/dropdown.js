@@ -70,22 +70,7 @@ export class Dropdown extends Popup {
    * @returns {void}
    */
   [popupHooks.kAfterCreate]() {
-    const { options, $rootElem, $contentElem } = this;
-
-    // 传入的 onClickOutside
-    const originalOnClickOutside = options.onClickOutside;
-
-    // 点击面板外部时的事件
-    options.onClickOutside = ({ e, ...rest }) => {
-      const MENU_POPUP_SELECTOR = `.${menu.CONST.ELEM_POPUP}[${CONST.DATA_DROPDOWN_ID}="${options.id}"]`;
-
-      // 点击 Popup 子菜单时，阻止下拉菜单面板关闭
-      if ($(e.target).closest(MENU_POPUP_SELECTOR).length) {
-        return false;
-      }
-
-      return originalOnClickOutside?.({ e, ...rest });
-    };
+    const { $rootElem, $contentElem } = this;
 
     // 添加组件专属 className
     $rootElem.addClass(CONST.ELEM);
@@ -162,7 +147,7 @@ export class Dropdown extends Popup {
   }
 
   /**
-   * 关闭后的内部钩子
+   * 层关闭后的内部钩子
    * @returns {void}
    */
   [popupHooks.kAfterClose]() {
@@ -209,6 +194,22 @@ export class Dropdown extends Popup {
           overflowY: '',
         });
       }
+    }
+  }
+
+  /**
+   * 层外点击时的内部钩子
+   * @param {Object} params - 参数对象
+   * @param {Event} params.e - 事件对象
+   * @returns {void}
+   */
+  [popupHooks.kOnClickOutside]({ e }) {
+    const { options } = this;
+    const SELECTOR = `.${menu.CONST.ELEM_POPUP}[${CONST.DATA_DROPDOWN_ID}="${options.id}"]`;
+
+    // 点击 Popup 子菜单时，阻止下拉菜单面板关闭
+    if ($(e.target).closest(SELECTOR).length) {
+      return false;
     }
   }
 }

@@ -20,6 +20,7 @@ export const popupHooks = Object.freeze({
   kAfterOpen: Symbol('Popup.afterOpen'), // 层打开后
   kAfterClose: Symbol('Popup.afterClose'), // 层关闭后
   kMiddlewares: Symbol('Popup.middlewares'), // Floating 中间件配置
+  kOnClickOutside: Symbol('Popup.onClickOutside'), // 点击层外部时
 });
 
 export class Popup extends Component {
@@ -572,6 +573,7 @@ export class Popup extends Component {
 
   /**
    * 点击层外部时的事件
+   * @returns {void}
    */
   #onClickOutside() {
     const options = this.options;
@@ -583,15 +585,21 @@ export class Popup extends Component {
     const stop = lay.onClickOutside(
       this.$rootElem[0],
       (e) => {
-        // 点击层外部时的事件
-        if (typeof options.onClickOutside === 'function') {
-          const shouldClose = options.onClickOutside({
-            instance: this,
-            options,
-            e,
-          });
-          if (shouldClose === false) return;
-        }
+        const params = { e };
+
+        // 执行内部 onClickOutside 钩子；返回 false 则阻止关闭
+        const hookResult = this[popupHooks.kOnClickOutside]?.(params);
+
+        if (hookResult === false) return;
+
+        // 执行传入的 onClickOutside 回调；返回 false 阻止关闭
+        const callbackResult = options.onClickOutside?.({
+          ...params,
+          instance: this,
+          options,
+        });
+
+        if (callbackResult === false) return;
 
         this.close();
       },
