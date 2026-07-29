@@ -147,14 +147,14 @@ export class Popup extends Component {
     if (!this.$rootElem) {
       this.#createRootElem();
 
-      // 根元素首次创建后的内部钩子
+      // 执行根元素首次创建后的内部钩子
       this[popupHooks.kAfterCreate]?.();
     }
 
-    // 组件渲染时的内部钩子
+    // 执行组件渲染时的内部钩子
     this[popupHooks.kOnRender]?.();
 
-    this.#applyRootElemAttrs();
+    this.#renderRootElem();
     this.#events();
 
     // 初始打开层的条件
@@ -170,7 +170,7 @@ export class Popup extends Component {
   open() {
     const { options, $rootElem, $contentElem } = this;
 
-    // 层打开前的内部钩子
+    // 执行层打开前的内部钩子
     this[popupHooks.kBeforeOpen]?.();
 
     // 是否仅更新内容
@@ -221,7 +221,7 @@ export class Popup extends Component {
     // 层打开后的回调
     options.afterOpen?.({ instance: this, options });
 
-    // 层打开后的内部钩子
+    // 执行层打开后的内部钩子
     this[popupHooks.kAfterOpen]?.();
   }
 
@@ -311,12 +311,9 @@ export class Popup extends Component {
 
   /**
    * 创建根元素
-   * @returns {Object} 返回根元素和内容元素的 jQuery 对象
+   * @returns {void}
    */
   #createRootElem() {
-    const options = this.options;
-
-    // 创建根元素
     const $rootElem = (this.$rootElem = $(
       `<div class="${CONST.ROOT_BASE_CLASS}"></div>`,
     ));
@@ -326,14 +323,24 @@ export class Popup extends Component {
 
     // 添加内容元素
     $rootElem.append($contentElem);
+  }
 
-    // 添加箭头元素
+  /**
+   * 渲染根元素
+   * @returns {void}
+   */
+  #renderRootElem() {
+    const { options, $rootElem } = this;
+
+    this.#applyRootElemAttrs();
+
+    // 添加或移除箭头元素
     if (options.showArrow) {
       const $arrowElem = $(`<div class="${CONST.ELEM_ARROW}"></div>`);
       $rootElem.append($arrowElem);
+    } else {
+      $rootElem.children(`.${CONST.ELEM_ARROW}`).remove();
     }
-
-    return { $rootElem, $contentElem };
   }
 
   // 记录已应用的根元素属性
@@ -592,7 +599,7 @@ export class Popup extends Component {
 
         if (hookResult === false) return;
 
-        // 执行传入的 onClickOutside 回调；返回 false 阻止关闭
+        // 执行传入的 onClickOutside 回调；返回 false 则阻止关闭
         const callbackResult = options.onClickOutside?.({
           ...params,
           instance: this,
