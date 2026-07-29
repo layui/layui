@@ -670,7 +670,7 @@ export class Menu extends Component {
       trigger: 'mouseenter',
       placement,
       className: CONST.ELEM_POPUP,
-      onClickOutside: (e) => {
+      onClickOutside: ({ e }) => {
         // 点击 Popup 内部时，阻止其父级 Popup 触发「外部点击」引起的关闭
         return controller.containsPopup(e.target) ? false : undefined;
       },
@@ -887,9 +887,10 @@ export class Menu extends Component {
 
       // 触发 onClick 回调
       const clickResult = options.onClick?.({
+        instance: this,
+        options: rootMenuInstance ? rootMenuInstance.options : options,
         $item,
         e,
-        options: rootMenuInstance ? rootMenuInstance.options : options,
       });
 
       // 若为深层 Popup 菜单

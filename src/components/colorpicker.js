@@ -319,15 +319,13 @@ export class Colorpicker extends Popup {
           elemInput.val(`#${color}`);
         }
 
-        //回调更改的颜色
-        options.change &&
-          options.change(
-            this.$rootElem
-              .find(`.${CONST.PICKER_INPUT}`)
-              .find('input')
-              .val()
-              .trim(),
-          );
+        // 颜色更改的回调
+        options.onChange?.({
+          color: this.$rootElem
+            .find(`.${CONST.PICKER_INPUT} input`)
+            .val()
+            .trim(),
+        });
       },
       //拖拽元素
       elemMove = $(
@@ -573,7 +571,7 @@ export class Colorpicker extends Popup {
           .addClass(CONST.ICON_PICKER_CLOSE);
         this.color = '';
 
-        options.done && options.done('');
+        options.done?.({ color: '' });
         this.close();
       },
 
@@ -611,12 +609,12 @@ export class Colorpicker extends Popup {
 
         if (change === 'change') {
           this.#select(hsb.h, hsb.s, hsb.b, change);
-          options.change && options.change(colorValue);
+          options.onChange?.({ color: colorValue });
           return;
         }
         this.color = value;
 
-        options.done && options.done(value);
+        options.done?.({ color: value });
         this.close();
       },
     };

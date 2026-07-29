@@ -264,9 +264,9 @@
           placement: 'bottom-start',
           className: 'demo-dropdown-tabs',
           style: 'width: 390px; box-shadow: 1px 1px 30px rgb(0 0 0 / 12%);',
-          afterOpen(options, $rootElem) {
+          afterOpen({ instance }) {
             tabs.render({
-              elem: $rootElem.find('.lay-tabs'),
+              elem: instance.$rootElem.find('.lay-tabs'),
             });
           },
         });
