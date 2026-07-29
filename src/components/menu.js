@@ -31,6 +31,9 @@ export class Menu extends Component {
     submenuOpenDelay: 200,
     submenuCloseDelay: 300,
 
+    // 根级 popup 子菜单的偏移量，单位 px
+    popupOffset: 5,
+
     // 是否收起状态
     collapsed: false,
 
@@ -669,6 +672,7 @@ export class Menu extends Component {
       content: $content,
       trigger: 'mouseenter',
       placement,
+      offset: options.popupOffset,
       className: CONST.ELEM_POPUP,
       onClickOutside: ({ e }) => {
         // 点击 Popup 内部时，阻止其父级 Popup 触发「外部点击」引起的关闭

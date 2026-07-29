@@ -37,6 +37,10 @@ export class Popup extends Component {
     // 是否显示箭头
     showArrow: false,
 
+    // 弹出层与目标元素的偏移量，单位 px
+    // 同时作用于翻转和位移时的边界间距
+    offset: 5,
+
     // 打开层后，再次点击目标元素时是否关闭层。
     // 行为取决于所使用的触发事件类型
     closeOnClick: true,
@@ -69,9 +73,6 @@ export class Popup extends Component {
 
       // 根元素基础类名（须与 ELEM_ROOT 保持一致）
       ROOT_BASE_CLASS: `lay-popup lay-panel`,
-
-      // 弹出层的安全间距，同时用于层偏移、翻转和位移时的边界间距
-      POSITION_SPACING: 5,
     };
   }
 
@@ -307,6 +308,12 @@ export class Popup extends Component {
     if (options.trigger === 'hover') {
       options.trigger = 'mouseenter';
     }
+
+    // 确保 offset 为有效数字
+    options.offset = Number(options.offset);
+    if (Number.isNaN(options.offset)) {
+      options.offset = Popup.options.offset;
+    }
   }
 
   /**
@@ -424,24 +431,24 @@ export class Popup extends Component {
     const floatingEl = this.$rootElem[0];
     const arrowEl = floatingEl.querySelector(`.${CONST.ELEM_ARROW}`);
     const showArrow = options.showArrow && arrowEl;
-    let padding = CONST.POSITION_SPACING;
+    let offset = options.offset;
 
     // 若开启箭头，则增加箭头的偏移量
     if (showArrow) {
-      padding += arrowEl.offsetWidth / 2;
+      offset += arrowEl.offsetWidth / 2;
     }
 
     // 默认中间件配置
     const defaultMiddleware = [
-      floating.offset(padding),
-      floating.flip({ padding }),
-      floating.shift({ padding }),
+      floating.offset(offset),
+      floating.flip({ padding: offset }),
+      floating.shift({ padding: offset }),
     ];
 
     // 执行中间件配置钩子
     const middlewareFromHook = this[popupHooks.kMiddlewares]?.({
       defaultMiddleware,
-      padding,
+      offset,
     });
 
     let middleware = [...defaultMiddleware];

@@ -160,17 +160,17 @@ export class Dropdown extends Popup {
    * Floating 中间件钩子
    * @param {Object} param0 - 参数对象
    * @param {Array} param0.defaultMiddleware - 默认中间件数组
-   * @param {Object} param0.padding - 浮动元素与边界的间距
+   * @param {number} param0.offset - 弹出层与目标元素的偏移量，单位 px
    * @returns {void}
    */
-  [popupHooks.kMiddlewares]({ defaultMiddleware, padding }) {
+  [popupHooks.kMiddlewares]({ defaultMiddleware, offset }) {
     const options = this.options;
 
     // 若开启自适应高度，则启用 size 中间件
     if (options.autoFitHeight) {
       defaultMiddleware.push(
         floating.size({
-          padding,
+          padding: offset,
           apply({ availableHeight, elements }) {
             const { floating: floatingEl } = elements;
 
