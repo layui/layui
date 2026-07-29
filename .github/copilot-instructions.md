@@ -135,7 +135,7 @@ Layui 3 内置蓝绿双主题（可切换）， 使用 CSS 自定义属性管理
 
 ### 配置项注释（强制）
 
-每个 `config` 选项必须在定义处写**行尾注释**，包含：
+每个配置选项必须写注释，包含：
 
 - 用途
 - 可选值范围或默认行为
@@ -145,9 +145,12 @@ Layui 3 内置蓝绿双主题（可切换）， 使用 CSS 自定义属性管理
 示例：
 
 ```js
-config: {
-  trigger: 'click',     // 标签切换的触发事件（click | hover）
-  headerMode: 'auto'    // 标签头部显示模式：auto | scroll | normal
+options: {
+  // 标签切换的触发事件
+  trigger: 'click',
+
+  // 标签头部显示模式；可选值：auto|scroll|normal
+  headerMode: 'auto'
 }
 ```
 

@@ -870,7 +870,10 @@ export class Menu extends Component {
               content: $titleText.text(),
               placement: 'right',
               theme: options.theme,
-              afterClose: () => {
+              defaultOpen: true,
+              afterClose: ({ instance }) => {
+                // 关闭后销毁 Tooltip 层实例
+                instance.destroy();
                 this.#currentRootPopupInstance = null;
               },
             });

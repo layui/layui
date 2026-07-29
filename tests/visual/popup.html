@@ -153,6 +153,19 @@
       </div>
 
       <br /><br />
+
+      <h2>定制弹出</h2>
+      <hr />
+      <div>即 popup 组件内部定制的一些常见类型的弹出层</div>
+      <br />
+      <div
+        style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
+      >
+        <button class="lay-btn" id="demo-tooltip">Tooltip</button>
+        <button class="lay-btn" id="demo-tooltip-dark">Tooltip（深色）</button>
+      </div>
+
+      <br /><br />
     </div>
 
     <script src="./assets/dist/layui.js"></script>
@@ -325,6 +338,23 @@
 
           // 更新弹出层内容
           popup.updateContent(autocompletInstId, randomContent);
+        });
+
+        /**
+         * 定制弹出
+         */
+
+        // Tooltip - 浅色
+        popup.tooltip({
+          elem: '#demo-tooltip',
+          content: '一个提示层',
+        });
+
+        // Tooltip - 深色
+        popup.tooltip({
+          elem: '#demo-tooltip-dark',
+          content: '一个深色提示层',
+          theme: 'dark',
         });
       });
     </script>

@@ -48,7 +48,8 @@ export class Popup extends Component {
     // 层弹出时的动画。支持 anim.css 中的所有动画类
     anim: 'fadein',
 
-    // 延时打开和关闭层毫秒数，仅当 `trigger` 为 `hover/mouseenter` 时生效
+    // 延时打开和关闭层毫秒数
+    // 仅当 `trigger` 为 `hover / mouseenter` 时生效
     openDelay: 200,
     closeDelay: 300,
 
@@ -88,35 +89,25 @@ export class Popup extends Component {
   }
 
   /**
-   * Tooltip 定制弹出
-   * 该方法与 `popup.render()` 的区别在于：
-   * 它并不与 `elem` 进行持久事件绑定，而是直接在目标元素中打开一个临时的 Tooltip 弹出层
+   * 定制弹出 Tooltip 提示层
    * @param {Object} options - 配置项；同 {@link Popup.options}，
-   * 其中 `trigger, showArrow` 不可重置
+   * 其中 `showArrow` 不可重置
    * @returns {Popup} 返回 Popup 实例
    */
   static tooltip(options) {
-    const popupInstance = this.render({
+    return this.render({
+      trigger: 'mouseenter',
       closeDelay: 150,
       ...options,
 
       // 不可修改的默认配置
-      trigger: 'mouseenter',
       showArrow: true,
       afterOpen: ({ instance, ...rest }) => {
         // 添加专属 className
         instance.$rootElem.addClass(`${CONST.ELEM_ROOT}-tooltip`);
         options.afterOpen?.({ instance, ...rest });
       },
-      afterClose: ({ instance, ...rest }) => {
-        // 关闭即销毁 Popup 实例
-        instance.destroy();
-        options.afterClose?.({ instance, ...rest });
-      },
     });
-
-    popupInstance.open();
-    return popupInstance;
   }
 
   // 构造函数
@@ -311,8 +302,8 @@ export class Popup extends Component {
 
     // 确保 offset 为有效数字
     options.offset = Number(options.offset);
-    if (Number.isNaN(options.offset)) {
-      options.offset = Popup.options.offset;
+    if (!Number.isFinite(options.offset)) {
+      options.offset = this.constructor.options.offset;
     }
   }
 
@@ -341,12 +332,13 @@ export class Popup extends Component {
 
     this.#applyRootElemAttrs();
 
-    // 添加或移除箭头元素
+    // 移除可能存在的旧的箭头元素
+    $rootElem.children(`.${CONST.ELEM_ARROW}`).remove();
+
+    // 添加箭头元素
     if (options.showArrow) {
       const $arrowElem = $(`<div class="${CONST.ELEM_ARROW}"></div>`);
       $rootElem.append($arrowElem);
-    } else {
-      $rootElem.children(`.${CONST.ELEM_ARROW}`).remove();
     }
   }
 
