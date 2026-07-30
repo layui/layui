@@ -294,7 +294,7 @@
 ) {
   --lay-menu-collapsed-width: 65px;
 
-  width: var(--lay-menu-collapsed-width);
+  width: var(--lay-menu-collapsed-width) !important;
 }
 /* 外层容器 @水平菜单 */
 .lay-menu-container:has(.lay-menu[data-mode='horizontal']) {

@@ -9,6 +9,10 @@
       body {
         --demo-sidebar-width: 232px;
       }
+      body:has(.demo-sidebar .lay-menu[data-mode='vertical'][data-collapsed]) {
+        --demo-sidebar-width: var(--lay-menu-collapsed-width, 65px);
+      }
+
       /* 侧边菜单 */
       .demo-sidebar .lay-menu-container {
         position: fixed;
@@ -514,23 +518,6 @@
           $(
             'input[name="submenuMode"], input[name="submenus-expand-collapse"]',
           ).prop('disabled', method === 'collapse');
-
-          // 处理收起/展开菜单时，适配侧边栏宽度
-          if (method === 'collapse') {
-            const $menuV = $(`#${sidebarId}`).parent('.lay-menu-container');
-            const collapsedWidth = lay.getStyle(
-              $menuV[0],
-              '--lay-menu-collapsed-width',
-            );
-
-            $('body').css({
-              '--demo-sidebar-width': collapsedWidth,
-            });
-          } else if (method === 'expand') {
-            $('body').css({
-              '--demo-sidebar-width': '',
-            });
-          }
         };
 
         // 事件
@@ -654,11 +641,12 @@
         console.log('menu.render() → ', menuInstance);
 
         // 数据渲染·垂直菜单·面板
-        menu.render({
+        const menuInstDataV = menu.render({
           target: '#demo-data-render',
           data,
           submenuExpanded: true,
           // submenuMode: 'popup',
+          // collapsed: true,
           afterRender({ instance, options }) {
             // 根据条件初始选中菜单项
             instance.select(($item, itemIndex) => {
@@ -670,6 +658,15 @@
             console.log(`${this.id} → onClick → `, params);
           },
         });
+
+        /* setTimeout(() => {
+          // menuInstDataV.expand();
+          menuInstDataV.reload({
+            collapsed: false,
+            submenuMode: 'popup',
+          });
+          console.log(menuInstDataV.options.submenuMode);
+        }, 1000); */
 
         // 数据渲染·垂直菜单·线条风格
         menu.render({

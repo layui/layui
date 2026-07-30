@@ -285,6 +285,19 @@ export class Menu extends Component {
   }
 
   /**
+   * 重写 reload
+   * @see {@link Component.reload}
+   */
+  reload(options) {
+    // 若重载传入 `submenuMode`，则清除其在 #originalOptions 中的记录
+    if (lay.hasOwn(options, 'submenuMode')) {
+      delete this.#originalOptions.submenuMode;
+    }
+
+    return super.reload(options);
+  }
+
+  /**
    * 刷新菜单视图
    * @returns {void}
    */
@@ -388,16 +401,19 @@ export class Menu extends Component {
       options.submenuMode = 'popup';
     } else {
       // 垂直菜单模式
+      const hasOriginalSubmenuMode = lay.hasOwn(originalOptions, 'submenuMode');
+
+      // 菜单收起
       if (options.collapsed) {
-        // 菜单收起，首次记录原始的 submenuMode 选项值，以便收起时恢复
-        if (!lay.hasOwn(originalOptions, 'submenuMode')) {
+        // 首次记录原始的 submenuMode 选项值，以便重新展开时恢复
+        if (!hasOriginalSubmenuMode) {
           originalOptions.submenuMode = options.submenuMode;
         }
-        // 再将 submenuMode 固定为 popup
+        // 将 submenuMode 固定为 popup
         options.submenuMode = 'popup';
       } else {
-        // 菜单展开，若 submenuMode 原始值存在，则恢复其原始值
-        if (originalOptions.submenuMode) {
+        // 菜单展开；若 submenuMode 原始值存在，则恢复其原始值
+        if (hasOriginalSubmenuMode) {
           options.submenuMode = originalOptions.submenuMode;
           delete originalOptions.submenuMode;
         }
