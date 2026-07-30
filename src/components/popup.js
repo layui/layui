@@ -19,6 +19,7 @@ export const popupHooks = Object.freeze({
   kBeforeOpen: Symbol('Popup.beforeOpen'), // 层打开前
   kAfterOpen: Symbol('Popup.afterOpen'), // 层打开后
   kAfterClose: Symbol('Popup.afterClose'), // 层关闭后
+  kAfterOpenAnimation: Symbol('Popup.afterOpenAnimation'), // 层打开动画完成后
   kMiddlewares: Symbol('Popup.middlewares'), // Floating 中间件配置
   kOnClickOutside: Symbol('Popup.onClickOutside'), // 点击层外部时
 });
@@ -161,6 +162,7 @@ export class Popup extends Component {
    */
   open() {
     const { options, $rootElem, $contentElem } = this;
+    const params = { instance: this, options };
 
     // 执行层打开前的内部钩子
     this[popupHooks.kBeforeOpen]?.();
@@ -187,6 +189,15 @@ export class Popup extends Component {
           });
       }
 
+      // 动画完成的事件
+      $rootElem.on('animationend', (e) => {
+        if (e.target !== $rootElem[0]) return;
+
+        // 执行层打开动画完成后的钩子
+        this[popupHooks.kAfterOpenAnimation]?.();
+        options.afterOpenAnimation?.(params);
+      });
+
       // 若开启遮罩
       if (options.backdrop) {
         const $backdropElem = $(`<div class="${CONST.ELEM_BACKDROP}"></div>`);
@@ -210,11 +221,9 @@ export class Popup extends Component {
     this.#onClickOutside();
     this.#startAutoUpdatePosition();
 
-    // 层打开后的回调
-    options.afterOpen?.({ instance: this, options });
-
-    // 执行层打开后的内部钩子
+    // 执行层打开后的钩子
     this[popupHooks.kAfterOpen]?.();
+    options.afterOpen?.(params);
   }
 
   /**
@@ -233,11 +242,9 @@ export class Popup extends Component {
       $rootElem.prev(`.${CONST.ELEM_BACKDROP}`).remove(); // 先移除遮罩
       $rootElem.remove(); // 再移除层
 
-      // 层关闭后的回调
-      options.afterClose?.({ instance: this, options });
-
-      // 层关闭后的内部钩子
+      // 执行层关闭后的钩子
       this[popupHooks.kAfterClose]?.();
+      options.afterClose?.({ instance: this, options });
     }
 
     delete options._renderMode; // 移除私有选项
@@ -579,7 +586,7 @@ export class Popup extends Component {
 
     // 如果是鼠标移入事件
     if (isMouseEnter) {
-      // 执行鼠标移出事件
+      // 绑定目标元素鼠标移出事件
       $elem.on(`mouseleave${eventNamespace}`, () => {
         this.delayClose();
       });
