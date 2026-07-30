@@ -29,7 +29,7 @@ export class Popup extends Component {
   // 默认配置项
   static options = {
     content: '', // 层内容
-    trigger: 'click', // 事件类型
+    trigger: 'click', // 触发的事件类型
 
     // 弹出方位。可选值：top|right|bottom|left|top-start|top-end|right-start|right-end|bottom-start|bottom-end|left-start|left-end
     placement: 'top',
@@ -41,9 +41,9 @@ export class Popup extends Component {
     // 同时作用于翻转和位移时的边界间距
     offset: 5,
 
-    // 打开层后，再次点击目标元素时是否关闭层。
-    // 行为取决于所使用的触发事件类型
-    closeOnClick: true,
+    // 层处于打开状态时，再次点击目标元素的行为。可选值: close|reopen|keep
+    // 该选项仅当 trigger 为 click/mousedown/touchstart 时生效
+    repeatClick: 'close',
 
     // 层弹出时的动画。支持 anim.css 中的所有动画类
     anim: 'fadein',
@@ -557,9 +557,18 @@ export class Popup extends Component {
           }, options.openDelay);
         }
       } else {
-        // 若为 click 事件，则根据层状态，自动切换打开与关闭
-        if (options.closeOnClick && opened && options.trigger === 'click') {
-          this.close();
+        // 若层已处于打开状态，则根据 repeatClick 值，决定层的行为
+        if (opened) {
+          const CLICK_TRIGGERS = ['click', 'mousedown', 'touchstart'];
+
+          // 仅当 trigger 为「点击类」事件时处理 repeatClick
+          if (CLICK_TRIGGERS.includes(options.trigger)) {
+            if (options.repeatClick === 'close') {
+              this.close();
+            } else if (options.repeatClick === 'reopen') {
+              this.open();
+            }
+          }
         } else {
           this.open();
         }
