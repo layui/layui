@@ -6,411 +6,485 @@
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
+import { Component } from '../core/component.js';
 import { openWindow } from '../utils/index.js';
 import { initializer } from './initializer.js';
 import { layer } from './layer.js';
 import { tabs } from './tabs.js';
 
-// 常量
-var CONST = {
-  ELEM_VIEW: 'lay-code-view',
-  ELEM_TABS: 'lay-tabs',
-  ELEM_HEADER: 'lay-code-header',
-  ELEM_FULL: 'lay-code-full',
-  ELEM_PREVIEW: 'lay-code-preview',
-  ELEM_ITEM: 'lay-code-item',
-  ELEM_SHOW: 'lay-show',
-  ELEM_LINE: 'lay-code-line',
-  ELEM_LINE_NUM: 'lay-code-line-number',
-  ELEM_LN_MODE: 'lay-code-ln-mode',
-  CDDE_DATA_CLASS: 'LayuiCodeDataClass',
-  LINE_RAW_WIDTH: 45, // 行号初始宽度，需与 css 保持一致
-};
-
-// 默认参数项
-var config = {
-  elem: '', // 元素选择器
-  about: '', // 代码栏右上角信息
-  ln: true, // 代码区域是否显示行号
-  header: false, // 是否显示代码栏头部区域
-  encode: true, // 是否对 code 进行编码（若开启预览，则强制开启）
-  copy: true, // 是否开启代码区域复制功能图标
-  // 默认文本
-  text: {
-    code: lay.escape('</>'),
-    preview: 'Preview',
-  },
-  wordWrap: true, // 是否自动换行
-  lang: 'text', // 指定语言类型
-  highlighter: false, // 是否开启语法高亮，可选值: hljs | prism | shiki
-  langMarker: false, // 代码区域是否显示语言类型标记
-  // 行高亮
-  highlightLine: {
-    // 聚焦
-    focus: {
-      range: '', // 高亮范围，不可全局设置值 '1,3-5,8'
-      comment: false, // 是否解析注释，性能敏感不可全局开启  [!code type:<lines>]
-      classActiveLine: 'lay-code-line-has-focus', // 添加到高亮行上的类
-      classActivePre: 'lay-code-has-focused-lines', // 有高亮行时向根元素添加的类
-    },
-    // 高亮
-    hl: {
-      comment: false,
-      classActiveLine: 'lay-code-line-highlighted',
-    },
-    // diff++
-    '++': {
-      comment: false,
-      classActiveLine: 'lay-code-line-diff-add',
-    },
-    // diff--
-    '--': {
-      comment: false,
-      classActiveLine: 'lay-code-line-diff-remove',
-    },
-  },
-};
-
 // 去除尾部空格
-var trimEnd = function (str) {
+const trimEnd = function (str) {
   return String(str).replace(/\s+$/, '');
 };
+
 // 保留首行缩进
-var trim = function (str) {
+const trim = function (str) {
   return trimEnd(str).replace(/^\n|\n$/, '');
 };
 
 // '1,3-5,8' -> [1,3,4,5,8]
-var parseHighlightedLines = function (rangeStr) {
+const parseHighlightedLines = function (rangeStr) {
   if (typeof rangeStr !== 'string') return [];
-  var lines = $.map(rangeStr.split(','), function (v) {
-    var range = v.split('-');
-    var start = parseInt(range[0], 10);
-    var end = parseInt(range[1], 10);
-    return start && end
-      ? $.map(new Array(end - start + 1), function (_, index) {
-          return start + index;
-        })
-      : start
-        ? start
-        : undefined;
+
+  return rangeStr.split(',').flatMap((item) => {
+    const range = item.split('-');
+    const start = parseInt(range[0], 10);
+    const end = parseInt(range[1], 10);
+
+    if (!start || start < 1) return [];
+    if (!end) return [start];
+
+    const length = end - start + 1;
+    if (length <= 0) return [];
+
+    return Array.from({ length }, (_, index) => start + index);
   });
-  return lines;
 };
 
 // 引用自 https://github.com/innocenzi/shiki-processor/blob/efa20624be415c866cc8e350d1ada886b6b5cd52/src/utils/create-range-processor.ts#L7
 // 添加了 HTML 注释支持，用来处理预览场景
-var highlightLineRegex =
+const highlightLineRegex =
   /(?:\/\/|\/\*{1,2}|<!--|&lt;!--) *\[!code ([\w+-]+)(?::(\d+))?] *(?:\*{1,2}\/|-->|--&gt;)?/;
-var preprocessHighlightLine = function (highlightLineOptions, codeLines) {
-  var hasHighlightLine = false;
-  var needParseComment = false;
-  var lineClassMap = Object.create(null);
-  var preClassMap = Object.create(null);
 
-  var updateLineClassMap = function (lineNumber, className) {
+const preprocessHighlightLine = function (highlightLineOptions, codeLines) {
+  highlightLineOptions = highlightLineOptions || {};
+
+  const lineClassMap = Object.create(null);
+  const preClassMap = Object.create(null);
+  let hasHighlightLine = false;
+  let needParseComment = false;
+
+  const updateLineClassMap = function (lineNumber, className) {
     if (!lineClassMap[lineNumber]) {
       lineClassMap[lineNumber] = [CONST.ELEM_LINE];
     }
-    lineClassMap[lineNumber].push(className);
+    if (className && lineClassMap[lineNumber].indexOf(className) === -1) {
+      lineClassMap[lineNumber].push(className);
+    }
   };
 
-  // 收集高亮行 className
-  $.each(highlightLineOptions, function (type, opts) {
+  const appendPreClass = function (opts) {
+    if (opts.classActivePre) {
+      preClassMap[opts.classActivePre] = true;
+    }
+  };
+
+  Object.entries(highlightLineOptions).forEach(([, opts]) => {
+    opts = opts || {};
+
     if (opts.range) {
-      var highlightLines = parseHighlightedLines(opts.range);
+      const highlightLines = parseHighlightedLines(opts.range);
       if (highlightLines.length > 0) {
         hasHighlightLine = true;
-        if (opts.classActivePre) {
-          preClassMap[opts.classActivePre] = true;
-        }
-        $.each(highlightLines, function (i, lineNumber) {
+        appendPreClass(opts);
+        highlightLines.forEach((lineNumber) => {
           updateLineClassMap(lineNumber, opts.classActiveLine);
         });
       }
     }
+
     if (opts.comment) {
       needParseComment = true;
     }
   });
 
-  // 解析行高亮注释并收集 className
   if (needParseComment) {
-    $.each(codeLines, function (i, line) {
-      var match = line.match(highlightLineRegex);
-      if (match && match[1] && lay.hasOwn(highlightLineOptions, match[1])) {
-        var opts = highlightLineOptions[match[1]];
-        hasHighlightLine = true;
-        if (opts.classActivePre) {
-          preClassMap[opts.classActivePre] = true;
-        }
-        // 高亮的行数
-        var lines = parseInt(match[2], 10);
-        if (match[2] && lines && lines > 1) {
-          var startLine = i + 1;
-          var endLine = startLine + lines - 1;
-          var highlightLines = parseHighlightedLines(startLine + '-' + endLine);
-          if (highlightLines.length > 0) {
-            $.each(highlightLines, function (i, lineNumber) {
-              updateLineClassMap(lineNumber, opts.classActiveLine);
-            });
-          }
-        } else {
-          updateLineClassMap(i + 1, opts.classActiveLine);
-        }
+    codeLines.forEach((line, i) => {
+      const match = line.match(highlightLineRegex);
+      if (!match || !match[1] || !lay.hasOwn(highlightLineOptions, match[1])) {
+        return;
       }
+
+      const opts = highlightLineOptions[match[1]];
+      if (!opts.comment) return;
+
+      hasHighlightLine = true;
+      appendPreClass(opts);
+
+      const lines = parseInt(match[2], 10);
+      const range =
+        match[2] && lines && lines > 1
+          ? `${i + 1}-${i + lines}`
+          : String(i + 1);
+
+      parseHighlightedLines(range).forEach((lineNumber) => {
+        updateLineClassMap(lineNumber, opts.classActiveLine);
+      });
     });
   }
 
   return {
-    needParseComment: needParseComment,
-    hasHighlightLine: hasHighlightLine,
+    needParseComment,
+    hasHighlightLine,
     preClass: Object.keys(preClassMap).join(' '),
-    lineClassMap: lineClassMap,
+    lineClassMap,
   };
 };
 
-// export api
-export function code(options) {
-  options = $.extend(true, {}, config, options);
+export class Code extends Component {
+  static componentName = 'code';
 
-  // 返回对象
-  var ret = {
-    config: options,
-    reload: function (opts) {
-      // 重载
-      code(this.updateOptions(opts));
+  // 默认参数项
+  static options = {
+    elem: '.lay-code', // 元素选择器
+    about: '', // 代码栏右上角信息
+    ln: true, // 代码区域是否显示行号
+    header: false, // 是否显示代码栏头部区域
+    encode: true, // 是否对 code 进行编码（若开启预览，则强制开启）
+    copy: true, // 是否开启代码区域复制功能图标
+    text: {
+      code: lay.escape('</>'),
+      preview: 'Preview',
     },
-    updateOptions: function (opts) {
-      // 更新属性（选项）
-      opts = opts || {};
-      delete opts.elem;
-      return $.extend(true, options, opts);
-    },
-  };
-
-  // 若 elem 非唯一
-  var elem = $(options.elem);
-  if (elem.length > 1) {
-    // 是否正向渲染
-    (options.obverse ? elem : $(elem.get().reverse())).each(function () {
-      code(
-        $.extend({}, options, {
-          elem: this,
-        }),
-      );
-    });
-    return ret;
-  }
-
-  // 目标元素是否存在
-  var othis = (options.elem = $(options.elem));
-  if (!othis[0]) return ret;
-
-  // 合并属性上的参数
-  $.extend(true, options, lay.options(othis[0]));
-
-  // codeRender 需要关闭编码
-  // 未使用 codeRender 时若开启了预览，则强制开启编码
-  options.encode = (options.encode || options.preview) && !options.codeRender;
-
-  // 获得初始 code
-  options.code =
-    options.code ||
-    (function () {
-      var arr = [];
-      var textarea = othis.children('textarea');
-
-      // 若内容放置在 textarea 中
-      textarea.each(function () {
-        arr.push(trim(this.value));
-      });
-
-      // 内容直接放置在元素外层
-      if (arr.length === 0) {
-        arr.push(trim(othis.html()));
-      }
-
-      return arr.join('');
-    })();
-
-  // 创建 code 行结构
-  var createCode = function (html) {
-    // codeRender
-    if (typeof options.codeRender === 'function') {
-      html = options.codeRender(String(html), options);
-    }
-
-    // code 行
-    var lines = String(html).split(/\r?\n/g);
-
-    // 预处理行高亮
-    var highlightLineInfo = preprocessHighlightLine(
-      options.highlightLine,
-      lines,
-    );
-
-    // 包裹 code 行结构
-    html = $.map(lines, function (line, num) {
-      var lineClass =
-        highlightLineInfo.hasHighlightLine &&
-        highlightLineInfo.lineClassMap[num + 1]
-          ? highlightLineInfo.lineClassMap[num + 1].join(' ')
-          : CONST.ELEM_LINE;
-      return [
-        '<div class="' + lineClass + '">',
-        options.ln
-          ? [
-              '<div class="' + CONST.ELEM_LINE_NUM + '">',
-              lay.digit(num + 1) + '.',
-              '</div>',
-            ].join('')
-          : '',
-        '<div class="lay-code-line-content">',
-        (highlightLineInfo.needParseComment
-          ? line.replace(highlightLineRegex, '')
-          : line) || ' ',
-        '</div>',
-        '</div>',
-      ].join('');
-    });
-
-    if (highlightLineInfo.preClass) {
-      othis.addClass(highlightLineInfo.preClass);
-    }
-
-    return {
-      lines: lines,
-      html: html,
-    };
-  };
-
-  // 原始 code
-  var rawCode = options.code;
-
-  // 最终 code
-  var finalCode = function (code) {
-    return typeof options.codeParse === 'function'
-      ? options.codeParse(code, options)
-      : code;
-  };
-
-  // 自增索引
-  var index = lay.autoIncrementer('code');
-  othis.attr('lay-code-index', index);
-
-  // 初始化 className
-  var hasDataClass = CONST.CDDE_DATA_CLASS in othis.data();
-  if (hasDataClass) {
-    othis.attr('class', othis.data(CONST.CDDE_DATA_CLASS) || '');
-  }
-
-  // 记录初始 className
-  if (!hasDataClass) {
-    othis.data(CONST.CDDE_DATA_CLASS, othis.attr('class'));
-  }
-
-  // 内置工具包
-  var toolkit = {
-    copy: {
-      title: [i18n.$t('code.copy')],
-      iconName: 'file-b',
-      onClick() {
-        var code = lay.unescape(finalCode(options.code));
-        var hasOnCopy = typeof options.onCopy === 'function';
-
-        // 写入剪切板
-        lay.clipboard.writeText({
-          text: code,
-          done: function () {
-            if (hasOnCopy) {
-              var ret = options.onCopy(code, true);
-              if (ret === false) return;
-            }
-
-            layer.msg(i18n.$t('code.copied'), { icon: 1 });
-          },
-          error: function () {
-            if (hasOnCopy) {
-              var ret = options.onCopy(code, false);
-              if (ret === false) return;
-            }
-            layer.msg(i18n.$t('code.copyError'), { icon: 2 });
-          },
-        });
+    wordWrap: true, // 是否自动换行
+    lang: 'text', // 指定语言类型
+    highlighter: false, // 是否开启语法高亮，可选值: hljs | prism | shiki
+    langMarker: false, // 代码区域是否显示语言类型标记
+    highlightLine: {
+      focus: {
+        range: '',
+        comment: false,
+        classActiveLine: 'lay-code-line-has-focus',
+        classActivePre: 'lay-code-has-focused-lines',
+      },
+      hl: {
+        comment: false,
+        classActiveLine: 'lay-code-line-highlighted',
+      },
+      '++': {
+        comment: false,
+        classActiveLine: 'lay-code-line-diff-add',
+      },
+      '--': {
+        comment: false,
+        classActiveLine: 'lay-code-line-diff-remove',
       },
     },
   };
 
-  // 移除包裹结构
-  (function fn() {
-    var elemViewHas = othis.parent('.' + CONST.ELEM_PREVIEW);
-    var elemTabsHas = elemViewHas.children('.' + CONST.ELEM_TABS);
-    var elemPreviewViewHas = elemViewHas.children(
-      '.' + CONST.ELEM_ITEM + '-preview',
+  static get CONST() {
+    return {
+      ...super.CONST,
+      ELEM_VIEW: 'lay-code-view',
+      ELEM_TABS: 'lay-tabs',
+      ELEM_HEADER: 'lay-code-header',
+      ELEM_FULL: 'lay-code-full',
+      ELEM_PREVIEW: 'lay-code-preview',
+      ELEM_ITEM: 'lay-code-item',
+      ELEM_SHOW: 'lay-show',
+      ELEM_LINE: 'lay-code-line',
+      ELEM_LINE_NUM: 'lay-code-line-number',
+      ELEM_LN_MODE: 'lay-code-ln-mode',
+      CODE_DATA_CLASS: 'LayuiCodeDataClass',
+      LINE_RAW_WIDTH: 45, // 行号初始宽度，需与 css 保持一致
+    };
+  }
+
+  // 实例方法静态委托
+  static {
+    this.delegateInstanceMethods([
+      'copy',
+      'focusLine',
+      'getCode',
+      'getFinalCode',
+      'highlightLines',
+    ]);
+  }
+
+  /**
+   * 组件渲染
+   * @param {Object} options - 配置项
+   * @returns {Code|Code[]}
+   */
+  static render(options = {}) {
+    const elem = options.elem || this.options.elem;
+    const $elem = $(elem);
+
+    if ($elem.length > 1) {
+      const batchOptions = { ...options };
+      const elems = options.obverse ? $elem.get() : $elem.get().reverse();
+      delete batchOptions.id;
+
+      const result = elems.map((elem) =>
+        super.render({
+          ...batchOptions,
+          elem,
+        }),
+      );
+
+      options.allDone?.(result);
+      return result;
+    }
+
+    const result = super.render(options);
+    if (Array.isArray(result)) {
+      options.allDone?.(result);
+    }
+    return result;
+  }
+
+  constructor(options) {
+    super(options);
+    this.overrideArrayOptions(options);
+  }
+
+  // 渲染
+  render() {
+    const options = this.options;
+    const $elem = options.$elem;
+
+    if (!$elem?.[0]) return;
+
+    this.#normalizeOptions();
+    this.#setCode();
+    this.#resetView();
+    this.#initToolkit();
+
+    if (options.preview) {
+      this.#renderPreview();
+    }
+
+    this.#renderCodeView();
+    this.#renderHeader();
+    this.#renderFixbar();
+    this.#events();
+
+    setTimeout(() => {
+      if (options.preview) return;
+      options.done?.({});
+    }, 3);
+
+    lay.event.call(
+      $elem[0],
+      this.constructor.componentName,
+      `afterRender(${options.id})`,
+      this,
+    );
+  }
+
+  /**
+   * 获取原始 code
+   * @returns {string}
+   */
+  getCode() {
+    return this.rawCode || '';
+  }
+
+  /**
+   * 获取经过 codeParse 处理后的 code
+   * @returns {string}
+   */
+  getFinalCode() {
+    return String(this.#parseCode(this.getCode()));
+  }
+
+  /**
+   * 复制当前 code
+   * @returns {void}
+   */
+  copy() {
+    const options = this.options;
+    const code = lay.unescape(this.getFinalCode());
+    const hasOnCopy = typeof options.onCopy === 'function';
+
+    lay.clipboard.writeText({
+      text: code,
+      done: () => {
+        if (hasOnCopy) {
+          const ret = options.onCopy(code, true);
+          if (ret === false) return;
+        }
+
+        layer.msg(i18n.$t('code.copied'), { icon: 1 });
+      },
+      error: () => {
+        if (hasOnCopy) {
+          const ret = options.onCopy(code, false);
+          if (ret === false) return;
+        }
+        layer.msg(i18n.$t('code.copyError'), { icon: 2 });
+      },
+    });
+  }
+
+  /**
+   * 聚焦指定行
+   * @param {string} range - 行范围，如 '1,3-5,8'
+   * @returns {Code}
+   */
+  focusLine(range) {
+    return this.highlightLines('focus', range);
+  }
+
+  /**
+   * 设置指定类型的行高亮
+   * @param {string} type - highlightLine 类型
+   * @param {string} range - 行范围
+   * @returns {Code}
+   */
+  highlightLines(type, range) {
+    const options = this.options;
+    const highlightLine = (options.highlightLine = options.highlightLine || {});
+    highlightLine[type] = highlightLine[type] || {};
+    highlightLine[type].range = range;
+    this.render();
+    return this;
+  }
+
+  #normalizeOptions() {
+    const options = this.options;
+    const defaultOptions = this.constructor.options;
+
+    // codeRender 需要关闭编码；未使用 codeRender 时若开启预览，则强制开启编码
+    options.encode = (options.encode || options.preview) && !options.codeRender;
+
+    options.text = $.extend(
+      true,
+      {},
+      defaultOptions.text,
+      lay.isPlainObject(options.text) ? options.text : {},
     );
 
-    // 移除旧结构
-    elemTabsHas.remove(); // 移除 tab
-    elemPreviewViewHas.remove(); // 移除预览区域
-    if (elemViewHas[0]) othis.unwrap(); // 移除外层容器
+    if (lay.isPlainObject(options.highlightLine)) {
+      options.highlightLine = $.extend(
+        true,
+        {},
+        defaultOptions.highlightLine,
+        options.highlightLine,
+      );
+    }
 
-    return fn;
-  })();
+    if (!Array.isArray(options.layout)) {
+      options.layout = ['code', 'preview'];
+    }
 
-  // 是否开启预览
-  if (options.preview) {
-    var TABS_ID = 'LAY-CODE-TABS-' + index;
-    var layout = options.layout || ['code', 'preview'];
-    var isIframePreview = options.preview === 'iframe';
+    options.tools = Array.isArray(options.tools) ? options.tools.concat() : [];
 
-    // 追加 Tab 组件
-    var elemView = $('<div class="' + CONST.ELEM_PREVIEW + '">');
-    var elemTabsView = $('<div class="lay-tabs">');
-    var elemHeaderView = $('<div class="lay-tabs-header">');
-    var elemPreviewView = $(
-      '<div class="' +
-        [CONST.ELEM_ITEM, CONST.ELEM_ITEM + '-preview', 'lay-border'].join(
-          ' ',
-        ) +
-        '">',
-    );
-    var elemToolbar = $('<div class="lay-code-tools"></div>');
+    if (
+      options.copy &&
+      options.preview &&
+      options.tools.indexOf('copy') === -1
+    ) {
+      options.tools.unshift('copy');
+    }
 
-    if (options.id) elemView.attr('id', options.id);
-    elemView.addClass(options.className);
+    if (options.appendTools) {
+      options.tools = options.tools.concat(options.appendTools);
+    }
 
-    // 标签头
-    layout.forEach(function (v, i) {
-      var li = $('<li lay-id="' + v + '">');
-      if (i === 0) li.addClass('lay-this');
-      li.html(options.text[v]);
-      elemHeaderView.append(li);
+    options.tools = Array.from(new Set(options.tools));
+  }
+
+  #setCode() {
+    const options = this.options;
+    const $elem = options.$elem;
+
+    if (lay.hasOwn(options, 'code')) {
+      options.code = String(options.code);
+      this.rawCode = options.code;
+      return;
+    }
+
+    const textarea = $elem.children('textarea');
+    const code = [];
+
+    textarea.each(function () {
+      code.push(trim(this.value));
     });
 
-    // 扩展内置工具包
-    $.extend(toolkit, {
+    if (code.length === 0) {
+      code.push(trim($elem.html()));
+    }
+
+    options.code = code.join('');
+    this.rawCode = options.code;
+  }
+
+  #resetView() {
+    const options = this.options;
+    const $elem = options.$elem;
+    const dataClassKey = CONST.CODE_DATA_CLASS;
+    const hasDataClass = dataClassKey in $elem.data();
+
+    if (hasDataClass) {
+      $elem.attr('class', $elem.data(dataClassKey) || '');
+    } else {
+      $elem.data(dataClassKey, $elem.attr('class'));
+    }
+
+    $elem
+      .removeClass(
+        [
+          CONST.ELEM_VIEW,
+          CONST.ELEM_LN_MODE,
+          'lay-border-box',
+          'lay-code-nowrap',
+          'lay-code-theme-dark',
+          'lay-code-theme-light',
+          'lay-code-hl',
+          'hljs',
+          'prism',
+          'shiki',
+          `language-${options.lang}`,
+          'lay-code-has-focused-lines',
+        ].join(' '),
+      )
+      .removeAttr('lay-code-index')
+      .css('--lay-code-side-width', '');
+
+    const $preview = $elem.parent(`.${CONST.ELEM_PREVIEW}`);
+    const $tabsElem = $preview.children(`.${CONST.ELEM_TABS}`);
+    const $previewItem = $preview.children(`.${CONST.ELEM_ITEM}-preview`);
+
+    $tabsElem.remove();
+    $previewItem.remove();
+
+    if ($preview[0]) {
+      $elem.unwrap();
+    }
+
+    if (this.tabsId) {
+      tabs.removeInstance(this.tabsId);
+    }
+
+    $('html,body').removeClass('lay-scrollbar-hide');
+  }
+
+  #initToolkit() {
+    this.toolkit = {
+      copy: {
+        title: [i18n.$t('code.copy')],
+        iconName: 'file-b',
+        onClick: () => {
+          this.copy();
+        },
+      },
+    };
+  }
+
+  #extendPreviewToolkit() {
+    $.extend(this.toolkit, {
       full: {
         title: [i18n.$t('code.maximize'), i18n.$t('code.restore')],
         iconName: 'screen-full',
         onClick(obj) {
-          var el = obj.elem;
-          var elemView = el.closest('.' + CONST.ELEM_PREVIEW);
-          var classNameFull = 'lay-icon-' + this.iconName;
-          var classNameRestore = 'lay-icon-screen-restore';
-          var title = this.title;
-          var htmlElem = $('html,body');
-          var ELEM_SCROLLBAR_HIDE = 'lay-scrollbar-hide';
+          const elem = obj.elem;
+          const elemView = elem.closest(`.${CONST.ELEM_PREVIEW}`);
+          const classNameFull = `lay-icon-${this.iconName}`;
+          const classNameRestore = 'lay-icon-screen-restore';
+          const title = this.title;
+          const htmlElem = $('html,body');
+          const ELEM_SCROLLBAR_HIDE = 'lay-scrollbar-hide';
 
-          if (el.hasClass(classNameFull)) {
+          if (elem.hasClass(classNameFull)) {
             elemView.addClass(CONST.ELEM_FULL);
-            el.removeClass(classNameFull).addClass(classNameRestore);
-            el.attr('title', title[1]);
+            elem.removeClass(classNameFull).addClass(classNameRestore);
+            elem.attr('title', title[1]);
             htmlElem.addClass(ELEM_SCROLLBAR_HIDE);
           } else {
             elemView.removeClass(CONST.ELEM_FULL);
-            el.removeClass(classNameRestore).addClass(classNameFull);
-            el.attr('title', title[0]);
+            elem.removeClass(classNameRestore).addClass(classNameFull);
+            elem.attr('title', title[0]);
             htmlElem.removeClass(ELEM_SCROLLBAR_HIDE);
           }
         },
@@ -418,56 +492,53 @@ export function code(options) {
       window: {
         title: [i18n.$t('code.preview')],
         iconName: 'release',
-        onClick() {
+        onClick: () => {
           openWindow({
-            content: finalCode(options.code),
+            content: this.getFinalCode(),
           });
         },
       },
     });
 
-    // 初始化 copy tool
-    if (options.copy) {
-      if (lay.type(options.tools) === 'array') {
-        // 若 copy 未存在于 tools 中，则追加到最前
-        if (options.tools.indexOf('copy') === -1) {
-          options.tools.unshift('copy');
-        }
-      } else {
-        options.tools = ['copy'];
-      }
-    }
+    $.extend(this.toolkit, this.options.extendToolkit);
+  }
 
-    // 工具栏事件
-    elemToolbar.on('click', '>i', function () {
-      var elem = $(this);
-      var name = elem.data('name');
-      var parameters = {
-        elem,
-        name,
-        options, // 当前属性选项
-        rawCode: options.code, // 原始 code
-        finalCode: lay.unescape(finalCode(options.code)), // 最终 code
-      };
+  #renderPreview() {
+    const options = this.options;
+    const $elem = options.$elem;
+    const isIframePreview = options.preview === 'iframe';
+    const elemView = $(`<div class="${CONST.ELEM_PREVIEW}">`);
+    const elemTabsView = $(`<div class="${CONST.ELEM_TABS}">`);
+    const elemHeaderView = $('<div class="lay-tabs-header">');
+    const elemPreviewView = $(
+      `<div class="${CONST.ELEM_ITEM} ${CONST.ELEM_ITEM}-preview lay-border">`,
+    );
+    const elemToolbar = $('<div class="lay-code-tools"></div>');
 
-      toolkit[name]?.onClick?.(parameters); // 执行当前工具事件
-      options.onToolClick?.(parameters); // 执行全局工具事件
+    this.tabsId = `LAY-CODE-TABS-${options.id}`;
+    this.#extendPreviewToolkit();
+
+    if (options.id) elemView.attr('id', options.id);
+    elemView.addClass(options.className);
+
+    options.layout.forEach(function (value, i) {
+      const li = $(`<li lay-id="${value}">`);
+      if (i === 0) li.addClass(CONST.CLASS_THIS);
+      li.html(options.text[value]);
+      elemHeaderView.append(li);
     });
 
-    // 外部扩展工具包
-    $.extend(toolkit, options.extendToolkit);
+    elemToolbar.on('click', '>i', (event) => {
+      const elem = $(event.currentTarget);
+      const name = elem.data('name');
+      const parameters = this.#getToolParameters(elem, name);
 
-    // 追加 tools
-    if (options.appendTools && options.tools) {
-      options.tools = [].concat(options.tools, options.appendTools);
-    }
+      this.toolkit[name]?.onClick?.(parameters);
+      options.onToolClick?.(parameters);
+    });
 
-    // tools 去重
-    options.tools = Array.from(new Set(options.tools));
-
-    // 渲染工具栏
     options.tools.forEach((name) => {
-      const tool = toolkit[name];
+      const tool = this.toolkit[name];
       if (!tool) return;
 
       elemToolbar.append(
@@ -475,254 +546,271 @@ export function code(options) {
       );
     });
 
-    othis.addClass(CONST.ELEM_ITEM).wrap(elemView); // 包裹外层容器
-    elemTabsView.append(elemHeaderView); // 追加标签头
-    options.tools && elemTabsView.append(elemToolbar); // 追加工具栏
-    othis.before(elemTabsView); // 追加标签结构
+    $elem.addClass(CONST.ELEM_ITEM).wrap(elemView);
+    elemTabsView.append(elemHeaderView);
+    options.tools.length && elemTabsView.append(elemToolbar);
+    $elem.before(elemTabsView);
 
-    // 追加预览
     if (isIframePreview) {
       elemPreviewView.html(
         '<iframe allowtransparency="true" frameborder="0"></iframe>',
       );
     }
 
-    // 执行预览
-    var runPreview = function (thisItemBody) {
-      var iframe = thisItemBody.children('iframe')[0];
-
-      // 是否 iframe 方式预览
-      if (isIframePreview && iframe) {
-        iframe.srcdoc = finalCode(options.code);
-      } else {
-        thisItemBody.html(options.code);
-      }
-
-      // 当前实例预览完毕后的回调
-      setTimeout(function () {
-        typeof options.done === 'function' &&
-          options.done({
-            container: thisItemBody,
-            options: options,
-            render: function () {
-              initializer.render({
-                elem: thisItemBody,
-              });
-            },
-          });
-      }, 3);
-    };
-
-    if (layout[0] === 'preview') {
+    if (options.layout[0] === 'preview') {
       elemPreviewView.addClass(CONST.ELEM_SHOW);
-      othis.before(elemPreviewView);
-      runPreview(elemPreviewView);
+      $elem.before(elemPreviewView);
+      this.#runPreview(elemPreviewView);
     } else {
-      othis.addClass(CONST.ELEM_SHOW).after(elemPreviewView);
+      $elem.addClass(CONST.ELEM_SHOW).after(elemPreviewView);
     }
 
-    // 内容项初始化样式
     options.previewStyle = [options.style, options.previewStyle].join('');
     elemPreviewView.attr('style', options.previewStyle);
 
-    // 初始化 tabs
     tabs.render({
       elem: elemTabsView,
-      id: TABS_ID,
+      id: this.tabsId,
     });
 
-    // 标签切换后的事件
-    tabs.on(`afterChange(${TABS_ID})`, function (data) {
-      var { thisHeaderItem } = data;
-      var thisElem = thisHeaderItem.closest('.' + CONST.ELEM_PREVIEW);
-      var elemItemBody = thisElem.find('.' + CONST.ELEM_ITEM);
-      var thisItemBody = elemItemBody.eq(data.index);
+    tabs.on(`afterChange(${this.tabsId})`, (data) => {
+      const { thisHeaderItem } = data;
+      const thisElem = thisHeaderItem.closest(`.${CONST.ELEM_PREVIEW}`);
+      const elemItemBody = thisElem.find(`.${CONST.ELEM_ITEM}`);
+      const thisItemBody = elemItemBody.eq(data.index);
 
       elemItemBody.removeClass(CONST.ELEM_SHOW);
       thisItemBody.addClass(CONST.ELEM_SHOW);
 
       if (thisHeaderItem.attr('lay-id') === 'preview') {
-        runPreview(thisItemBody);
+        this.#runPreview(thisItemBody);
       }
 
-      setCodeLayout();
+      this.#setCodeLayout();
     });
   }
 
-  // 创建 code 容器
-  var codeElem = $('<code class="lay-code-wrap"></code>');
+  #renderCodeView() {
+    const options = this.options;
+    const $elem = options.$elem;
+    const codeElem = (this.$codeElem = $(
+      '<code class="lay-code-wrap"></code>',
+    ));
+    const classNames = [CONST.ELEM_VIEW, 'lay-border-box'];
+    const theme = options.theme || options.skin;
 
-  // 添加主容器 className
-  othis.addClass(
-    (function (arr) {
-      if (!options.wordWrap) arr.push('lay-code-nowrap');
-      return arr.join(' ');
-    })(['lay-code-view lay-border-box']),
-  );
-
-  // code 主题风格
-  var theme = options.theme || options.skin;
-  if (theme) {
-    othis.removeClass('lay-code-theme-dark lay-code-theme-light');
-    othis.addClass('lay-code-theme-' + theme);
-  }
-
-  // 添加高亮必要的 className
-  if (options.highlighter) {
-    othis.addClass(`${options.highlighter} lay-code-hl`);
-    if (options.highlighter === 'prism') {
-      othis.addClass(`language-${options.lang}`);
+    if (!options.wordWrap) {
+      classNames.push('lay-code-nowrap');
     }
-  }
 
-  // 获取 code 行结构
-  var createCodeRst = createCode(
-    options.encode ? lay.escape(finalCode(rawCode)) : rawCode, // 是否编码
-  );
-  var lines = createCodeRst.lines;
+    $elem.addClass(classNames.join(' ')).attr('lay-code-index', this.index);
 
-  // 插入 code
-  othis.html(codeElem.html(createCodeRst.html));
+    if (theme) {
+      $elem.removeClass('lay-code-theme-dark lay-code-theme-light');
+      $elem.addClass(`lay-code-theme-${theme}`);
+    }
 
-  // 插入行号边栏
-  if (options.ln) {
-    othis.append('<div class="lay-code-ln-side"></div>');
-  }
+    if (options.highlighter) {
+      $elem.addClass(`${options.highlighter} lay-code-hl`);
+      if (options.highlighter === 'prism') {
+        $elem.addClass(`language-${options.lang}`);
+      }
+    }
 
-  // 兼容旧版本 height 属性
-  if (options.height) {
-    codeElem.css('max-height', options.height);
-  }
+    const createCodeResult = this.#createCode(
+      options.encode ? lay.escape(this.getFinalCode()) : this.getCode(),
+    );
 
-  // code 区域样式
-  options.codeStyle = [options.style, options.codeStyle].join('');
-  if (options.codeStyle) {
-    codeElem.attr('style', function (i, val) {
-      return (val || '') + options.codeStyle;
-    });
-  }
+    this.lines = createCodeResult.lines;
+    $elem.html(codeElem.html(createCodeResult.html));
 
-  // 动态设置样式
-  var cssRules = [
-    {
-      selector: '>.lay-code-wrap>.lay-code-line{}',
-      setValue: function (item, value) {
-        item.style['padding-left'] = value + 'px';
-      },
-    },
-    {
-      selector: '>.lay-code-wrap>.lay-code-line>.lay-code-line-number{}',
-      setValue: function (item, value) {
-        item.style.width = value + 'px';
-      },
-    },
-    {
-      selector: '>.lay-code-ln-side{}',
-      setValue: function (item, value) {
-        item.style.width = value + 'px';
-      },
-    },
-  ];
+    if (createCodeResult.preClass) {
+      $elem.addClass(createCodeResult.preClass);
+    }
 
-  // 生成初始 style 元素
-  var styleElem = lay.style({
-    target: othis[0],
-    id: 'DF-code-' + index,
-    text: $.map(
-      $.map(cssRules, function (val) {
-        return val.selector;
-      }),
-      function (val) {
-        return ['.lay-code-view[lay-code-index="' + index + '"]', val].join(
-          ' ',
-        );
-      },
-    ).join(''),
-  });
-
-  // 动态设置 code 布局
-  var setCodeLayout = (function fn() {
     if (options.ln) {
-      var multiLine = Math.floor(lines.length / 100);
-      var lineElem = codeElem.children('.' + CONST.ELEM_LINE);
-      var width = lineElem
-        .last()
-        .children('.' + CONST.ELEM_LINE_NUM)
-        .outerWidth();
-
-      othis.addClass(CONST.ELEM_LN_MODE);
-
-      // 若超出 100 行
-      if (multiLine && width > CONST.LINE_RAW_WIDTH) {
-        lay.getStyleRules(styleElem, function (item, i) {
-          try {
-            cssRules[i].setValue(item, width);
-          } catch {
-            // ignore
-          }
-        });
-      }
+      $elem.append('<div class="lay-code-ln-side"></div>');
     }
 
-    return fn;
-  })();
+    if (options.height) {
+      codeElem.css('max-height', options.height);
+    }
 
-  // 创建 code header
-  if (options.header) {
-    var headerElem = $('<div class="' + CONST.ELEM_HEADER + '"></div>');
+    options.codeStyle = [options.style, options.codeStyle].join('');
+    if (options.codeStyle) {
+      codeElem.attr('style', function (i, val) {
+        return (val || '') + options.codeStyle;
+      });
+    }
+
+    this.#setCodeLayout();
+  }
+
+  #renderHeader() {
+    const options = this.options;
+
+    if (!options.header) return;
+
+    const headerElem = $(`<div class="${CONST.ELEM_HEADER}"></div>`);
     headerElem.html(options.title || options.text.code);
-    othis.prepend(headerElem);
+    options.$elem.prepend(headerElem);
   }
 
-  // 创建 code 区域固定条
-  var elemFixbar = $('<div class="lay-code-fixbar"></div>');
+  #renderFixbar() {
+    const options = this.options;
+    const elemFixbar = $('<div class="lay-code-fixbar"></div>');
 
-  // 若开启复制，且未开启预览，则单独生成复制图标
-  if (options.copy && !options.preview) {
-    var copyElem = $(
-      [
-        '<span class="lay-code-copy">',
-        '<i class="lay-icon lay-icon-file-b" title="' +
-          i18n.$t('code.copy') +
-          '"></i>',
-        '</span>',
-      ].join(''),
+    if (options.copy && !options.preview) {
+      const copyElem = $(
+        [
+          '<span class="lay-code-copy">',
+          `<i class="lay-icon lay-icon-file-b" title="${i18n.$t(
+            'code.copy',
+          )}"></i>`,
+          '</span>',
+        ].join(''),
+      );
+
+      copyElem.on('click', () => {
+        this.copy();
+      });
+
+      elemFixbar.append(copyElem);
+    }
+
+    if (options.langMarker) {
+      elemFixbar.append(
+        `<span class="lay-code-lang-marker">${options.lang}</span>`,
+      );
+    }
+
+    if (options.about) {
+      elemFixbar.append(options.about);
+    }
+
+    options.$elem.append(elemFixbar);
+  }
+
+  #events() {
+    const options = this.options;
+    const eventNamespace = CONST.EVENT_NAMESPACE;
+
+    options.$elem.off(eventNamespace);
+  }
+
+  #createCode(code) {
+    const options = this.options;
+    const sourceLines = String(code).split(/\r?\n/g);
+    const highlightLineInfo = preprocessHighlightLine(
+      options.highlightLine,
+      sourceLines,
     );
+    const strippedLines = highlightLineInfo.needParseComment
+      ? sourceLines.map((line) => line.replace(highlightLineRegex, ''))
+      : sourceLines;
+    let html = strippedLines.join('\n');
 
-    // 点击复制
-    copyElem.on('click', function () {
-      toolkit.copy.onClick();
-    });
+    if (typeof options.codeRender === 'function') {
+      html = options.codeRender(String(html), options);
+    }
 
-    elemFixbar.append(copyElem);
+    const renderedLines = String(html).split(/\r?\n/g);
+    const lineHtml = renderedLines
+      .map((line, num) => {
+        const lineClass =
+          highlightLineInfo.hasHighlightLine &&
+          highlightLineInfo.lineClassMap[num + 1]
+            ? highlightLineInfo.lineClassMap[num + 1].join(' ')
+            : CONST.ELEM_LINE;
+
+        return [
+          `<div class="${lineClass}">`,
+          options.ln
+            ? [
+                `<div class="${CONST.ELEM_LINE_NUM}">`,
+                `${lay.digit(num + 1)}.`,
+                '</div>',
+              ].join('')
+            : '',
+          '<div class="lay-code-line-content">',
+          line || ' ',
+          '</div>',
+          '</div>',
+        ].join('');
+      })
+      .join('');
+
+    return {
+      lines: renderedLines,
+      html: lineHtml,
+      preClass: highlightLineInfo.preClass,
+    };
   }
 
-  // 创建 language marker
-  if (options.langMarker) {
-    elemFixbar.append(
-      '<span class="lay-code-lang-marker">' + options.lang + '</span>',
-    );
+  #setCodeLayout() {
+    const options = this.options;
+    const $elem = options.$elem;
+    const lineElem = this.$codeElem?.children(`.${CONST.ELEM_LINE}`);
+
+    if (!options.ln || !lineElem?.length) return;
+
+    const width = lineElem
+      .last()
+      .children(`.${CONST.ELEM_LINE_NUM}`)
+      .outerWidth();
+
+    $elem.addClass(CONST.ELEM_LN_MODE);
+
+    if (this.lines.length >= 100 && width > CONST.LINE_RAW_WIDTH) {
+      $elem.css('--lay-code-side-width', `${width}px`);
+    }
   }
 
-  // 创建 about 自定义内容
-  if (options.about) {
-    elemFixbar.append(options.about);
-  }
+  #runPreview(thisItemBody) {
+    const options = this.options;
+    const iframe = thisItemBody.children('iframe')[0];
 
-  // 生成 code fixbar
-  othis.append(elemFixbar);
+    if (options.preview === 'iframe' && iframe) {
+      iframe.srcdoc = this.getFinalCode();
+    } else {
+      thisItemBody.html(this.getFinalCode());
+    }
 
-  // code 渲染完毕后的回调
-  if (!options.preview) {
-    setTimeout(function () {
-      typeof options.done === 'function' && options.done({});
+    setTimeout(() => {
+      options.done?.({
+        container: thisItemBody,
+        options,
+        instance: this,
+        render() {
+          initializer.render({
+            elem: thisItemBody,
+          });
+        },
+      });
     }, 3);
   }
 
-  // 所有实例渲染完毕后的回调
-  if (options.elem.length === index + 1) {
-    typeof options.allDone === 'function' && options.allDone();
+  #parseCode(code) {
+    const options = this.options;
+    return typeof options.codeParse === 'function'
+      ? options.codeParse(code, options)
+      : code;
   }
 
-  return ret;
+  #getToolParameters(elem, name) {
+    const options = this.options;
+
+    return {
+      elem,
+      name,
+      options,
+      instance: this,
+      rawCode: this.getCode(),
+      finalCode: lay.unescape(this.getFinalCode()),
+    };
+  }
 }
+
+const CONST = Code.CONST;
+
+export { Code as code };
