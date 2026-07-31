@@ -5,6 +5,7 @@
 
 import { lay } from '../core/lay.js';
 import { $ } from 'jquery';
+import { menu } from './menu.js';
 import { nav } from './nav.js';
 import { breadcrumb } from './breadcrumb.js';
 import { collapse } from './collapse.js';
@@ -13,6 +14,7 @@ import { form } from './form.js';
 import { tabs } from './tabs.js';
 
 const components = {
+  menu,
   nav,
   breadcrumb,
   collapse,

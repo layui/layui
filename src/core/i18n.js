@@ -24,7 +24,7 @@ var zhCN = {
     confirm: '确定',
   },
   dropdown: {
-    noData: '暂无数据',
+    empty: '暂无数据',
   },
   flow: {
     loadMore: '加载更多',

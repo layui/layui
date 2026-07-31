@@ -92,6 +92,7 @@
     "shelljs": "^0.10.0"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.7.6",
     "jquery": "^4.0.0"
   }
 }

@@ -244,9 +244,9 @@
       hashInputElem.addEventListener('click', () => {
         dropdown.render({
           elem: hashInputElem,
-          show: true,
+          defaultOpen: true,
           data: hashExampleData,
-          click: (data) => {
+          onClick: ({ data }) => {
             hashInputElem.value = data.title;
           },
         });

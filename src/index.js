@@ -16,11 +16,13 @@ export * as utils from './utils/index.js';
 
 // 导出组件模块
 export { layer } from './components/layer.js';
-export { laydate } from './components/laydate.js';
+export { popup } from './components/popup.js';
+export { menu } from './components/menu.js';
 export { laypage } from './components/laypage.js';
+export { laydate } from './components/laydate.js';
 export { dropdown } from './components/dropdown.js';
-export { slider } from './components/slider.js';
 export { colorpicker } from './components/colorpicker.js';
+export { slider } from './components/slider.js';
 export { nav } from './components/nav.js';
 export { breadcrumb } from './components/breadcrumb.js';
 export { collapse } from './components/collapse.js';

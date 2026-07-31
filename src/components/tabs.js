@@ -146,9 +146,6 @@ export class Tabs extends Component {
       options.$elem.removeClass(CONST.CLASS_HIDEV);
     }
 
-    // 渲染成功后的回调
-    options.afterRender?.(data);
-
     this.#events();
 
     // 渲染成功后的事件

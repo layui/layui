@@ -73,7 +73,7 @@
 /* 微微往上滑入 */
 @-webkit-keyframes lay-upbit {
   from {
-    -webkit-transform: translate3d(0, 15px, 0);
+    -webkit-transform: translate3d(0, 5px, 0);
     opacity: 0.3;
   }
   to {
@@ -83,7 +83,7 @@
 }
 @keyframes lay-upbit {
   from {
-    transform: translate3d(0, 15px, 0);
+    transform: translate3d(0, 5px, 0);
     opacity: 0.3;
   }
   to {

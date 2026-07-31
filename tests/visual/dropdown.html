@@ -6,53 +6,50 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
-    <title>下拉菜单 - layui</title>
+    <title>dropdown 下拉菜单 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
   </head>
   <body>
     <div class="lay-container lay-padding-3">
       <h2>常规</h2>
       <hr />
-      <div class="lay-btn-container" style="padding: 16px 0">
-        <button class="lay-btn" id="demo1">
-          按钮下拉
-          <i class="lay-icon lay-icon-down lay-font-12"></i>
-        </button>
-        <button class="lay-btn lay-btn-primary" id="demo2">
-          按钮下拉
-          <i class="lay-icon lay-icon-down lay-font-12"></i>
-        </button>
+
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <div>子菜单的展示方式：</div>
+        <div>
+          <button class="lay-btn" id="demo-submenu-popup">
+            popup 模式 (默认)
+            <i class="lay-icon lay-icon-down lay-font-12"></i>
+          </button>
+          <button class="lay-btn" id="demo-submenu-inline">
+            inline 模式
+            <i class="lay-icon lay-icon-down lay-font-12"></i>
+          </button>
+        </div>
+
+        <div>禁用项和阻止关闭项：</div>
+        <div>
+          <button class="lay-btn lay-btn-primary" id="demo-item-disabled">
+            下拉菜单
+            <i class="lay-icon lay-icon-down lay-font-12"></i>
+          </button>
+        </div>
+
+        <div>绑定任意目标元素：</div>
+        <div class="lay-text">
+          <a href="javascript:;" id="demo3">
+            下拉菜单 <i class="lay-icon lay-icon-down"></i>
+          </a>
+        </div>
       </div>
 
-      <div
-        style="
-          display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-          column-gap: 32px;
-          row-gap: 11px;
-        "
-        ;
-      >
-        <div class="lay-text">
-          <a href="javascript:;" id="demo3"
-            >文字下拉 <i class="lay-icon lay-icon-down"></i
-          ></a>
-        </div>
-        <div
-          style="display: flex; align-items: center; gap: 11px; flex-wrap: wrap"
-        >
-          <span id="testopen"> 目标元素（通过外部打开或关闭面板） </span>
-          <div>
-            <button class="lay-btn" lay-on="open">open</button>
-            <button class="lay-btn" lay-on="close">close</button>
-          </div>
-        </div>
-      </div>
+      <br />
+      <h2>右击</h2>
+      <hr />
 
       <div
         class="lay-bg-gray"
-        style="margin-top: 32px; width: 100%; height: 160px; text-align: center"
+        style="width: 100%; height: 160px; text-align: center"
         id="ID-dropdown-demo-contextmenu"
       >
         <span class="lay-font-gray" style="position: relative; top: 50%"
@@ -94,23 +91,33 @@
     <script src="./assets/dist/layui.js"></script>
     <script>
       layui.use(() => {
-        const { dropdown, utils, $ } = layui;
+        const { dropdown, layer, utils, $ } = layui;
 
         // 模拟数据
         const DEMO_DATA = [
           {
-            title: 'menu item 1',
+            title: 'link menu item 1',
             template() {
-              return `<i class="lay-icon lay-icon-light"></i> ${this.title} <span class="lay-badge-dot"></span>`;
+              return `
+<div style="display: flex; align-items: center; gap: 8px;">
+  <i class="lay-icon lay-icon-bot"></i>
+  <span>${this.title}</span>
+  <span class="lay-badge-dot"></span>
+</div>
+              `;
             },
             id: '',
             href: '',
-            type: '', // 菜单类型，支持：normal|group|parent
           },
           {
-            title: 'menu item <strong>2</strong>',
+            title: 'link menu item 2',
             template() {
-              return `<img src="https://unpkg.com/outeres@0.1.1/demo/avatar/0.png" style="width: 16px;"> ${this.title}`;
+              return `
+<div style="display: flex; align-items: center; gap: 8px;">
+  <img src="https://unpkg.com/outeres@0.1.1/demo/avatar/0.png" style="width: 20px;">
+  <span>${this.title}</span>
+</div>
+              `;
             },
             id: '',
             href: 'https://example.com',
@@ -121,7 +128,8 @@
           {
             title: 'menu item 3 <hello>',
             id: '',
-            type: 'group',
+            expanded: true,
+            // disabled: true,
             children: [
               {
                 title: 'menu item 3-1',
@@ -138,7 +146,6 @@
                   {
                     title: 'menu item 3-2-2',
                     id: '',
-                    type: 'group',
                     children: [
                       {
                         title: 'menu item 3-2-2-1',
@@ -159,7 +166,6 @@
               {
                 title: 'menu item 3-3',
                 id: '',
-                type: 'group',
                 children: [
                   {
                     title: 'menu item 3-3-1',
@@ -228,12 +234,9 @@
               },
             ],
           },
-          { type: '-' },
           {
             title: 'menu item 6',
             id: '',
-            type: 'group',
-            expanded: false,
             children: [
               {
                 title: 'menu item 6-1',
@@ -251,27 +254,49 @@
           },
         ];
 
-        const dropdownInst = dropdown.render({
-          elem: '#demo1',
-          shade: [0.1, '#ddd'],
+        /**
+         * 常规
+         **/
+
+        // 子菜单的展示方式通用 options
+        const commonOptions = {
           data: DEMO_DATA,
-          // 触发点击事件的元素范围 --- default: 仅子菜单触发点击事件（默认，可不填）; all: 所有父子菜单均触发点击事件
-          clickScope: 'all',
-          // 菜单被点击的事件
-          click(obj) {
-            console.log('click', obj);
+          autoFitHeight: true,
+          // theme: 'dark',
+          onClick({ data, ...rest }) {
+            console.log('click', data, rest);
+            layer.msg(`选择了 ${data.title}`);
           },
+          onClickOutside({ e }) {
+            // 点击某个区域不关闭面板（仅用于演示）
+            if ($(e.target).closest('#ID-dropdown-demo-contextmenu').length) {
+              layer.msg('点击此处不关闭面板');
+              return false;
+            }
+          },
+        };
+
+        // popup 模式
+        const dropdownInst = dropdown.render({
+          ...commonOptions,
+          // submenuTheme: 'dark',
+          elem: '#demo-submenu-popup',
+        });
+        // inline 模式
+        dropdown.render({
+          ...commonOptions,
+          elem: '#demo-submenu-inline',
+          submenuMode: 'inline',
         });
 
-        console.log('dropdown: ');
         console.dir(dropdown);
-        console.log('dropdown.render instance: ', dropdownInst);
+        console.log('dropdown.render() → ', dropdownInst);
 
+        // 禁用项和阻止关闭项
         dropdown.render({
-          elem: '#demo2',
+          elem: '#demo-item-disabled',
+          backdrop: 0.03,
           // defaultOpen: true,
-          closeOnClick: false,
-          // align: 'right',
           data: [
             {
               title: 'menu item 1',
@@ -279,7 +304,7 @@
               disabled: true,
             },
             {
-              title: 'menu item 2(点击不关闭)',
+              title: 'menu item 2（点击不关闭）',
               href: '#2',
               id: 'bbb',
             },
@@ -288,28 +313,38 @@
               href: '#3',
             },
           ],
-          click(data, $this) {
-            console.log(`click ${this.id}:`, data, $this);
+          onClick({ data, e }) {
+            console.log(`click ${this.id}:`, data, e);
             if (data.id === 'bbb') {
               return false;
             }
           },
-          ready(...args) {
-            console.log(`ready ${this.id}`, args);
+          afterOpen(params) {
+            console.log(`afterOpen ${this.id}`, params);
           },
-          close() {
-            console.log(`close ${this.id}`, this.$elem);
+          afterClose() {
+            console.log(`afterClose ${this.id}`, this.$elem);
           },
         });
 
+        // 绑定任意目标元素
         dropdown.render({
           elem: '#demo3',
-          content: '自定义内容  123 ',
-          style: 'background:#666;color:#fff;padding:15px;',
-          align: 'center',
+          data: [
+            {
+              title: 'menu item 1',
+            },
+            {
+              title: 'menu item 2',
+            },
+            {
+              title: 'menu item 3',
+            },
+          ],
+          placement: 'bottom',
           trigger: 'hover',
-          close() {
-            console.log(`close ${this.id}`, this.elem);
+          afterClose() {
+            console.log(`${this.id} → afterClose → `, this.$elem);
           },
         });
 
@@ -317,11 +352,7 @@
         dropdown.render({
           elem: '#ID-dropdown-demo-contextmenu', // 也可绑定到 document，从而重置整个右键
           trigger: 'contextmenu', //contextmenu
-          allowExpand: false,
-          //,style: 'width: 200px'
-          customName: {
-            children: 'children',
-          },
+          style: 'width: 160px',
           data: [
             {
               title: 'menu item 1',
@@ -364,10 +395,11 @@
               id: '#1',
             },
           ],
-          click: (obj, othis) => {
-            if (obj.id === 'reload') {
+          onClick({ data, e }) {
+            if (data.id === 'reload') {
               location.reload();
             }
+            console.log(`${this.id} → onClick → `, data);
           },
         });
 
@@ -393,25 +425,6 @@
           },
         });
 
-        dropdown.render({
-          elem: '#testopen',
-          id: 'testopen',
-          trigger: 'manual',
-          data: [{ id: 'refresh', title: '刷新' }],
-        });
-
-        utils.on(
-          {
-            open: () => {
-              dropdown.open('testopen');
-            },
-            close: () => {
-              dropdown.close('testopen');
-            },
-          },
-          { trigger: 'mouseenter' },
-        );
-
         // 完整重载
         dropdown.render({
           elem: '#ID-dropdown-demo-reload',
@@ -425,7 +438,7 @@
               id: 101,
             },
           ],
-          click(data) {
+          onClick({ data, e }) {
             // 菜单项对应设置的 id 值
             if (data.id === 101) {
               // 重载方法
@@ -462,8 +475,9 @@
             { id: 10, title: 'Go' },
           ],
           trigger: 'focus',
-          style: 'min-width: 190px; box-shadow: 1px 1px 11px rgb(0 0 0 / 11%);',
-          click(data) {
+          style: 'min-width: 170px; box-shadow: 1px 1px 11px rgb(0 0 0 / 11%);',
+          onClick({ data, e }) {
+            console.log(data.title);
             this.$elem.val(data.title);
           },
         });

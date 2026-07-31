@@ -17,7 +17,7 @@ export default {
     confirm: 'OK',
   },
   dropdown: {
-    noData: 'No Data',
+    empty: 'No Data',
   },
   flow: {
     loadMore: 'Load More',

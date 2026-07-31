@@ -16,7 +16,7 @@ export default {
     confirm: '確定',
   },
   dropdown: {
-    noData: '暫無資料',
+    empty: '暫無資料',
   },
   flow: {
     loadMore: '載入更多',

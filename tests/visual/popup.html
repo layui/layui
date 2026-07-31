@@ -1,0 +1,380 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>popup 附着弹出层 - Layui</title>
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+  </head>
+  <body>
+    <div class="lay-container lay-padding-3">
+      <h2>常规</h2>
+      <hr />
+      <div
+        style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
+      >
+        <button class="lay-btn" id="demo-normal">普通示例</button>
+        <button class="lay-btn" id="demo-backdrop">开启遮罩</button>
+      </div>
+
+      <br /><br />
+      <h2>触发方式</h2>
+      <hr />
+      <div
+        style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
+      >
+        <button class="lay-btn" id="demo-hover">hover</button>
+        <button class="lay-btn" id="demo-mousedown">mousedown</button>
+        <button class="lay-btn" id="demo-dblclick">dblclick</button>
+      </div>
+
+      <br /><br />
+      <h2>弹出方位</h2>
+      <hr />
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          gap: 11px;
+          max-width: 520px;
+          margin: 0 auto;
+        "
+      >
+        <div style="display: flex; justify-content: center; gap: 6px">
+          <button class="lay-btn" id="demo-top-start">top-start</button>
+          <button class="lay-btn" id="demo-top">top</button>
+          <button class="lay-btn" id="demo-top-end">top-end</button>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            flex-wrap: wrap;
+          "
+        >
+          <button class="lay-btn" id="demo-left-start">left-start</button>
+          <button class="lay-btn" id="demo-right-start">right-start</button>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            flex-wrap: wrap;
+          "
+        >
+          <button class="lay-btn" id="demo-left">left</button>
+          <button class="lay-btn" id="demo-right">right</button>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            flex-wrap: wrap;
+          "
+        >
+          <button class="lay-btn" id="demo-left-end">left-end</button>
+          <button class="lay-btn" id="demo-right-end">right-end</button>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+          "
+        >
+          <button class="lay-btn" id="demo-bottom-start">bottom-start</button>
+          <button class="lay-btn" id="demo-bottom">bottom</button>
+          <button class="lay-btn" id="demo-bottom-end">bottom-end</button>
+        </div>
+      </div>
+
+      <br /><br />
+      <h2>弹出动画</h2>
+      <hr />
+      <div
+        style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
+      >
+        <button class="lay-btn" id="demo-downbit">downbit</button>
+        <button class="lay-btn" id="demo-upbit">upbit</button>
+        <button class="lay-btn" id="demo-scale">scale</button>
+        <button class="lay-btn" id="demo-scaleSpring">scaleSpring</button>
+        <button class="lay-btn" id="demo-scalesmall">scalesmall</button>
+        <button class="lay-btn" id="demo-fadein">fadein（默认）</button>
+      </div>
+
+      <br /><br />
+
+      <h2>设置样式</h2>
+      <hr />
+      <div
+        style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
+      >
+        <button class="lay-btn" id="demo-width">控制最小最大宽度</button>
+        <button class="lay-btn" id="demo-style">自定义任意样式</button>
+        <button class="lay-btn" id="demo-content">自定义样式与内容</button>
+      </div>
+
+      <br /><br />
+
+      <h2>外部操作</h2>
+      <hr />
+      <div
+        style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
+      >
+        <div>
+          <strong id="demo-external">目标元素</strong>
+          （通过右侧按钮打开或关闭面板）
+        </div>
+        <div>
+          <button class="lay-btn" lay-on="open">open</button>
+          <button class="lay-btn" lay-on="close">close</button>
+        </div>
+      </div>
+      <br />
+      <div
+        style="display: flex; align-items: center; gap: 11px; flex-wrap: wrap"
+      >
+        <label for="updateContent">模拟 autocomplete 效果</label>
+        <div>
+          <input
+            type="text"
+            id="updateContent"
+            placeholder="请输入"
+            class="lay-input"
+          />
+        </div>
+      </div>
+
+      <br /><br />
+
+      <h2>定制弹出</h2>
+      <hr />
+      <div>即 popup 组件内部定制的一些常见类型的弹出层</div>
+      <br />
+      <div
+        style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
+      >
+        <button class="lay-btn" id="demo-tooltip">Tooltip</button>
+        <button class="lay-btn" id="demo-tooltip-dark">Tooltip（深色）</button>
+      </div>
+
+      <br /><br />
+    </div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(() => {
+        const { popup, tabs, lay, $, utils } = layui;
+
+        // 常规
+        const popupInstance = popup.render({
+          elem: '#demo-normal',
+          content: '一个普通的附着弹出层',
+          // defaultOpen: true,
+          afterRender({ instance }) {
+            console.log(`${instance.options.id} → afterRender → `, instance);
+          },
+          afterOpen({ instance }) {
+            console.log(
+              `${instance.options.id} → afterOpen → `,
+              instance,
+              Date.now(),
+            );
+          },
+          afterOpenAnimation({ instance }) {
+            console.log(
+              `${instance.options.id} → afterOpenAnimation → `,
+              instance,
+              Date.now(),
+            );
+          },
+        });
+
+        console.dir(popup);
+        console.log('popup.render() → ', popupInstance);
+
+        // 开启遮罩
+        popup.render({
+          elem: '#demo-backdrop',
+          content:
+            'Popup 是附着弹出、选择器等类型组件（如：dropdown、laydate、colorPicker）的基础组件。',
+          style: 'width: 350px;',
+          backdrop: 0.5,
+          placement: 'bottom-start',
+        });
+
+        // 触发方式
+        ['hover', 'mousedown', 'dblclick'].forEach((trigger) => {
+          popup.render({
+            elem: `#demo-${trigger}`,
+            trigger,
+            content: `通过 ${trigger} 事件打开`,
+          });
+        });
+
+        // 弹出方位
+        [
+          'top-start',
+          'top',
+          'top-end',
+          'left-start',
+          'right-start',
+          'left',
+          'right',
+          'left-end',
+          'right-end',
+          'bottom-start',
+          'bottom',
+          'bottom-end',
+        ].forEach((placement) => {
+          popup.render({
+            elem: `#demo-${placement}`,
+            // trigger: 'hover',
+            content: `从目标元素 ${placement} 弹出<br>Content<br>Content`,
+            placement,
+            showArrow: true,
+          });
+        });
+
+        // 打开动画
+        [
+          'downbit',
+          'upbit',
+          'scale',
+          'scaleSpring',
+          'scalesmall',
+          'fadein',
+        ].forEach((anim) => {
+          popup.render({
+            elem: `#demo-${anim}`,
+            content: `${anim} 动画方式弹出`,
+            anim,
+          });
+        });
+
+        // 控制最小最大宽度
+        popup.render({
+          elem: '#demo-width',
+          content: '通过 style 选项设置最小最大宽度',
+          placement: 'bottom-start',
+          style: 'min-width: 300px; max-width: 600px;',
+        });
+        // 自定义任意样式
+        popup.render({
+          elem: '#demo-style',
+          content: '通过 style 选项设置任意样式',
+          placement: 'bottom-start',
+          showArrow: true,
+          style:
+            'min-width: 300px; max-width: 600px; border: 0; border-radius: 5px; box-shadow: none; background-color: #16b777; color: #fff; padding: 11px;',
+        });
+        // 自定义样式与内容
+        popup.render({
+          elem: '#demo-content',
+          content: `
+<div class="lay-tabs">
+  <ul class="lay-tabs-header">
+    <li>Tab Header1</li>
+    <li>Tab Header2</li>
+    <li>Tab Header3</li>
+  </ul>
+  <div class="lay-tabs-body">
+    <div class="lay-tabs-item lay-text"><p>在 content 选项中传入任意的 HTML ，从而实现更多有趣的弹出内容。你会发现，popup 可被赋予许多的想象可能。</p></div>
+    <div class="lay-tabs-item">Tab Content2</div>
+    <div class="lay-tabs-item">Tab Content3</div>
+  </div>
+</div>
+          `,
+          placement: 'bottom-start',
+          className: 'demo-dropdown-tabs',
+          style: 'width: 390px; box-shadow: 1px 1px 30px rgb(0 0 0 / 12%);',
+          afterOpen({ instance }) {
+            tabs.render({
+              elem: instance.$rootElem.find('.lay-tabs'),
+            });
+          },
+        });
+
+        // 外部打开或关闭面板
+        popup.render({
+          elem: '#demo-external',
+          trigger: 'manual',
+          content: '弹出层内容',
+          placement: 'bottom-start',
+          showArrow: true,
+        });
+
+        utils.on(
+          {
+            open: () => {
+              popup.open('demo-external');
+            },
+            close: () => {
+              popup.close('demo-external');
+            },
+          },
+          { trigger: 'mouseenter' },
+        );
+
+        // 模拟 autocomplete
+        const autocompletInst = popup.render({
+          elem: '#updateContent',
+          trigger: 'focus',
+          content: '初始内容',
+          placement: 'bottom-start',
+          style: 'min-width: 168px;',
+        });
+        const autocompletInstId = autocompletInst.options.id;
+        const initialContent = autocompletInst.options.content;
+
+        // 输入框输入事件
+        autocompletInst.options.$elem.on('input', function () {
+          const $this = $(this);
+          const value = $this.val().trim();
+
+          // 输入为空时，恢复初始渲染状态
+          if (!value) {
+            popup.updateContent(autocompletInstId, initialContent);
+            return;
+          }
+
+          // 模拟生成随机行内容
+          const randomContent = Array(Math.floor(Math.random() * 5) + 1)
+            .fill(0)
+            .map(
+              (_, i) =>
+                `${i + 1}. <strong>${lay.escape(value)}</strong>${Math.random().toString(32).substring(2)}`,
+            )
+            .join('<br />');
+
+          // 更新弹出层内容
+          popup.updateContent(autocompletInstId, randomContent);
+        });
+
+        /**
+         * 定制弹出
+         */
+
+        // Tooltip - 浅色
+        popup.tooltip({
+          elem: '#demo-tooltip',
+          content: '一个提示层',
+        });
+
+        // Tooltip - 深色
+        popup.tooltip({
+          elem: '#demo-tooltip-dark',
+          content: '一个深色提示层',
+          theme: 'dark',
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>标签页组件 - Layui</title>
+    <title>tabs 标签页 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
   </head>
   <body>
@@ -225,7 +225,7 @@
 
                 // 给新标签头添加上下文菜单
                 dropdown.render(
-                  $.extend({}, dropdownInst.config, {
+                  $.extend({}, dropdownInst.options, {
                     elem: data.headerItem, // 新标签头元素
                   }),
                 );
@@ -314,9 +314,9 @@
               mode: 'all',
             },
           ],
-          click(data, othis, event) {
-            const index = this.elem.index(); // 获取活动标签索引
-            const layid = this.elem.attr('lay-id');
+          onClick({ data, e }) {
+            const index = this.$elem.index(); // 获取活动标签索引
+            const layid = this.$elem.attr('lay-id');
 
             // 新增标签操作
             if (data.action === 'add') {
@@ -335,6 +335,7 @@
             }
           },
         });
+        console.log(dropdownInst);
 
         // 方法渲染
         const tabsInst = tabs.render({

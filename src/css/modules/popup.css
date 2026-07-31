@@ -1,0 +1,80 @@
+/* popup.css */
+
+.lay-popup {
+  position: absolute;
+  left: -999999px;
+  top: -999999px;
+  z-index: 77777777;
+  transition: none !important;
+  box-sizing: border-box;
+
+  * {
+    box-sizing: border-box;
+  }
+}
+.lay-popup-content {
+  position: relative;
+  padding: var(--lay-spacing-sm);
+  border-radius: inherit;
+  background-color: inherit;
+}
+.lay-popup-content:has(.lay-menu) {
+  padding: 0;
+}
+
+/* 箭头 */
+.lay-popup-arrow {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  z-index: -1;
+  background-color: inherit;
+  transform: rotate(45deg);
+  border: inherit;
+  box-shadow: inherit;
+}
+
+/* 不同位置的箭头 */
+.lay-popup[data-placement^='top'] .lay-popup-arrow {
+  bottom: -5px;
+  top: auto;
+}
+.lay-popup[data-placement^='right'] .lay-popup-arrow {
+  left: -5px;
+  right: auto;
+}
+.lay-popup[data-placement^='bottom'] .lay-popup-arrow {
+  top: -5px;
+  bottom: auto;
+}
+.lay-popup[data-placement^='left'] .lay-popup-arrow {
+  right: -5px;
+  left: auto;
+}
+
+/* 主题 */
+.lay-popup[data-theme='dark'] {
+  background-color: var(--lay-color-dark, #2f363c);
+  color: rgba(255, 255, 255, 0.9);
+  border: none;
+}
+
+/* 遮罩 */
+.lay-popup-backdrop {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  pointer-events: auto;
+  background-color: rgb(0, 0, 0);
+  opacity: 0.03;
+}
+
+/* tooltip */
+.lay-popup-tooltip {
+  box-shadow: 1px 5px 32px rgb(0 0 0 / 16%);
+}
+.lay-popup-tooltip[data-theme='dark'] {
+  box-shadow: 1px 5px 32px rgb(0 0 0 / 32%);
+}
