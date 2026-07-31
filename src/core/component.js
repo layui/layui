@@ -26,6 +26,13 @@ const getInstanceBucket = (ctor) => {
   return bucket;
 };
 
+// 组件钩子符号集
+export const ComponentHooks = Object.freeze({
+  kBeforeRender: Symbol('Component.beforeRender'), // 渲染前
+  kAfterRender: Symbol('Component.afterRender'), // 渲染后
+  kOnAfterRender: Symbol('Component.onAfterRender'), // afterRender 执行后
+});
+
 // 组件基类
 export class Component {
   // 默认配置项
@@ -275,18 +282,27 @@ export class Component {
     // 渲染
     if (typeof this.render === 'function') {
       const params = { instance: this, options, isReload };
+      const internalParams = { isReload };
 
-      // 渲染前的回调
-      const beforeResult = options.beforeRender?.(params);
+      // 执行渲染前的钩子；返回 false 则中止渲染
+      const beforeHookResult =
+        this[ComponentHooks.kBeforeRender]?.(internalParams);
+      const beforeCallbackResult = options.beforeRender?.(params);
 
-      // 若返回 false 则中止渲染
-      if (beforeResult === false) {
+      if (beforeHookResult === false || beforeCallbackResult === false) {
         return this;
       }
 
-      $elem.attr(ATTR_ID, options.id); // 目标元素已渲染过的标记
-      this.render(isReload); // 执行渲染
-      options.afterRender?.(params); // 渲染后的回调
+      // 目标元素已渲染过的标记
+      $elem.attr(ATTR_ID, options.id);
+
+      // 执行渲染
+      this.render(internalParams);
+
+      // 执行渲染后的钩子
+      this[ComponentHooks.kAfterRender]?.(internalParams);
+      options.afterRender?.(params);
+      this[ComponentHooks.kOnAfterRender]?.(internalParams);
     }
 
     return this;

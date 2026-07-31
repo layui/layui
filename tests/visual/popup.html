@@ -177,6 +177,13 @@
         const popupInstance = popup.render({
           elem: '#demo-normal',
           content: '一个普通的附着弹出层',
+          // defaultOpen: true,
+          afterRender({ instance }) {
+            console.log(`${instance.options.id} → afterRender → `, instance);
+          },
+          afterOpen({ instance }) {
+            console.log(`${instance.options.id} → afterOpen → `, instance);
+          },
         });
 
         console.dir(popup);

@@ -75,3 +75,6 @@
 .lay-popup-tooltip {
   box-shadow: 1px 5px 32px rgb(0 0 0 / 16%);
 }
+.lay-popup-tooltip[data-theme='dark'] {
+  box-shadow: 1px 5px 32px rgb(0 0 0 / 32%);
+}

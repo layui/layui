@@ -6,7 +6,7 @@
 import { lay } from '../core/lay.js';
 import { $ } from 'jquery';
 import * as floating from '@floating-ui/dom';
-import { Component } from '../core/component.js';
+import { Component, ComponentHooks } from '../core/component.js';
 
 const device = lay.device();
 export const clickOrMousedown = device.mobile ? 'touchstart' : 'mousedown';
@@ -132,8 +132,6 @@ export class Popup extends Component {
    * @returns {void}
    */
   render() {
-    const options = this.options;
-
     this.#normalizeOptions();
 
     // 首次渲染时，创建根元素
@@ -149,6 +147,14 @@ export class Popup extends Component {
 
     this.#renderRootElem();
     this.#events();
+  }
+
+  /**
+   * 渲染后且 `afterRender` 回调执行后的内部钩子
+   * @returns {void}
+   */
+  [ComponentHooks.kOnAfterRender]() {
+    const options = this.options;
 
     // 初始打开层的条件
     if (options.defaultOpen || this.isRootElemMounted()) {
