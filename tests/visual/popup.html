@@ -182,7 +182,18 @@
             console.log(`${instance.options.id} → afterRender → `, instance);
           },
           afterOpen({ instance }) {
-            console.log(`${instance.options.id} → afterOpen → `, instance);
+            console.log(
+              `${instance.options.id} → afterOpen → `,
+              instance,
+              Date.now(),
+            );
+          },
+          afterOpenAnimation({ instance }) {
+            console.log(
+              `${instance.options.id} → afterOpenAnimation → `,
+              instance,
+              Date.now(),
+            );
           },
         });
 

@@ -167,7 +167,7 @@ export class Popup extends Component {
    * @returns {void}
    */
   open() {
-    const { options, $rootElem, $contentElem } = this;
+    const { options, $rootElem, $contentElem, constructor } = this;
     const params = { instance: this, options };
 
     // 执行层打开前的内部钩子
@@ -196,8 +196,12 @@ export class Popup extends Component {
       }
 
       // 动画完成的事件
-      $rootElem.on('animationend', (e) => {
+      const animationendEventName = `animationend${constructor.CONST.EVENT_NAMESPACE}`;
+      $rootElem.on(animationendEventName, (e) => {
         if (e.target !== $rootElem[0]) return;
+
+        // 根元素执行一次动画后，即解绑
+        $rootElem.off(animationendEventName);
 
         // 执行层打开动画完成后的钩子
         this[popupHooks.kAfterOpenAnimation]?.();
