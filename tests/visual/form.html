@@ -458,7 +458,7 @@
               <option value="旅行">旅行</option>
               <option value="读书">读书</option>
               <option value="1">layer</option>
-              <option value="2" disabled>laydate</option>
+              <option value="2" disabled>datePicker</option>
               <option value="3">3</option>
               <option value="4">layim</option>
               <option value="5">laypage</option>
@@ -630,7 +630,7 @@
         var form = layui.form;
         var layer = layui.layer;
         var utils = layui.utils;
-        var laydate = layui.laydate;
+        var datePicker = layui.datePicker;
 
         // 自定义验证规则
         form.verify({
@@ -676,7 +676,7 @@
         });
 
         //日期
-        laydate.render({
+        datePicker.render({
           elem: '#date',
         });
 

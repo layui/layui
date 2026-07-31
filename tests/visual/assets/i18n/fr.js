@@ -39,7 +39,7 @@ export default {
     },
     verifyErrorPromptTitle: 'Avertissement',
   },
-  laydate: {
+  datePicker: {
     months: [
       'Janv',
       'Févr',

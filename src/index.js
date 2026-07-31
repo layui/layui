@@ -19,7 +19,7 @@ export { layer } from './components/layer.js';
 export { popup } from './components/popup.js';
 export { menu } from './components/menu.js';
 export { laypage } from './components/laypage.js';
-export { laydate } from './components/laydate.js';
+export { datePicker } from './components/datePicker.js';
 export { dropdown } from './components/dropdown.js';
 export { colorpicker } from './components/colorpicker.js';
 export { slider } from './components/slider.js';

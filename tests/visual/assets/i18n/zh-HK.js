@@ -39,7 +39,7 @@ export default {
     },
     verifyErrorPromptTitle: '提示',
   },
-  laydate: {
+  datePicker: {
     months: [
       '1月',
       '2月',

@@ -39,7 +39,7 @@
     <script src="./dist/layui.js"></script>
     <script type="module">
       layui.use(() => {
-        const { lay, layer, form, laydate, utils } = layui;
+        const { lay, layer, form, datePicker, utils } = layui;
 
         // 欢迎信息
         layer.msg('Hello World', { icon: 6 });
@@ -48,10 +48,10 @@
         document.querySelector('#version').textContent = layui.version;
 
         // 日期
-        laydate.render({
+        datePicker.render({
           elem: '#test-date',
           value: new Date(),
-          isInitValue: true,
+          autoFillValue: true,
         });
 
         // 触发事件

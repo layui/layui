@@ -1,0 +1,20 @@
+/* demo.css */
+
+.demo-flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lay-spacing);
+}
+
+.demo-flex-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 32px;
+}
+.demo-flex-row > div {
+  display: flex;
+  align-items: center;
+  gap: var(--lay-spacing-sm);
+}

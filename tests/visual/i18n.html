@@ -189,10 +189,10 @@
         </div>
       </fieldset>
       <fieldset class="lay-elem-field">
-        <legend>laydate</legend>
+        <legend>datePicker</legend>
         <div class="lay-field-box">
           <div class="lay-inline">
-            <input class="lay-input" id="demo-laydate" />
+            <input class="lay-input" id="demo-datePicker" />
           </div>
         </div>
       </fieldset>
@@ -269,7 +269,7 @@
           flow,
           form,
           i18n,
-          laydate,
+          datePicker,
           laypage,
           laytpl,
           layer,
@@ -434,11 +434,11 @@
           return false;
         });
 
-        //laydate
-        laydate.render({
-          elem: '#demo-laydate',
+        //datePicker
+        datePicker.render({
+          elem: '#demo-datePicker',
           type: 'datetime',
-          calendar: true,
+          showFestival: true,
         });
 
         // layer
