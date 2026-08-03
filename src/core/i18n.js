@@ -19,7 +19,7 @@ var zhCN = {
     restore: '还原显示',
     preview: '在新窗口预览',
   },
-  colorpicker: {
+  colorPicker: {
     clear: '清除',
     confirm: '确定',
   },

@@ -12,7 +12,7 @@ export default {
     restore: 'Restore',
     preview: 'Preview in New Window',
   },
-  colorpicker: {
+  colorPicker: {
     clear: 'Clear',
     confirm: 'OK',
   },

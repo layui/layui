@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
-    <title>colorpicker 颜色选择器 - Layui</title>
+    <title>colorPicker 颜色选择器 - Layui</title>
 
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
 
@@ -58,28 +58,28 @@
     <script src="./assets/dist/layui.js"></script>
     <script>
       layui.use(() => {
-        const { colorpicker } = layui;
+        const { colorPicker } = layui;
 
-        const colorpickerInst = colorpicker.render({
+        const colorPickerInst = colorPicker.render({
           elem: '#test1',
           // predefine: true, // 开启预定义颜色
           // colors: ['#F00','#0F0','#00F','rgb(255, 69, 0)','rgba(255, 69, 0, 0.5)'],
-          onChange: function ({ color }) {
+          onChange({ color }) {
             this.done({ color });
           },
-          done: ({ color }) => {
+          done({ color }) {
             layui.$('#LAY-test1').val(color);
             document.body.style.backgroundColor = color;
           },
-          afterClose: (param) => {
-            console.log('close', param);
+          afterClose(params) {
+            console.log(`${params.options.id} → afterClose → `, params);
           },
         });
 
-        console.dir(colorpicker);
-        console.log(colorpickerInst);
+        console.dir(colorPicker);
+        console.log(colorPickerInst);
 
-        colorpicker.render({
+        colorPicker.render({
           elem: '#test2',
           color: 'rgba(218, 121, 157, 1)',
           predefine: true,
@@ -90,28 +90,28 @@
           },
         });
 
-        colorpicker.render({
+        colorPicker.render({
           elem: '#test3',
           color: '#000',
           // alpha: true,
           // format: 'rgb',
         });
 
-        colorpicker.render({
+        colorPicker.render({
           elem: '#test4',
           color: '#06eeb8',
           predefine: true,
           format: 'rgb',
         });
 
-        colorpicker.render({
+        colorPicker.render({
           elem: '#test5',
           color: '#ffd900',
           predefine: true,
           size: 'lg',
         });
 
-        colorpicker.render({
+        colorPicker.render({
           elem: '#test6',
           color: '#F00',
           predefine: true,
@@ -126,7 +126,7 @@
         });
 
         // 同时绑定多个
-        colorpicker.render({
+        colorPicker.render({
           elem: '.test-more',
           done: function ({ color }) {
             console.log(this.elem, color);

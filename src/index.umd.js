@@ -21,7 +21,7 @@ import { menu } from './components/menu.js';
 import { laypage } from './components/laypage.js';
 import { laydate } from './components/laydate.js';
 import { dropdown } from './components/dropdown.js';
-import { colorpicker } from './components/colorpicker.js';
+import { colorPicker } from './components/colorPicker.js';
 import { slider } from './components/slider.js';
 import { nav } from './components/nav.js';
 import { breadcrumb } from './components/breadcrumb.js';
@@ -58,7 +58,7 @@ const layui = {
   laypage,
   laydate,
   dropdown,
-  colorpicker,
+  colorPicker,
   slider,
   nav,
   breadcrumb,
