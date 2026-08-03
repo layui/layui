@@ -8,7 +8,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
-    <title>datePicker 日期时间选择器 - layui</title>
+    <title>datePicker 日期和时间选择器 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
     <link rel="stylesheet" href="./assets/demo.css" />
   </head>
@@ -243,7 +243,8 @@
 
       // 全局配置
       datePicker.config({
-        // trigger: 'focus'
+        // trigger: 'focus',
+        // showArrow: true,
       });
 
       /**
@@ -253,20 +254,20 @@
       // 常规测试
       const datePickerInst = datePicker.render({
         elem: '#demo-normal',
-        done(...args) {
-          console.log(`${this.id} → done → `, args);
+        done(params) {
+          console.log(`${this.id} → done → `, params);
         },
-        onChange(...args) {
-          console.log(`${this.id} → onChange → `, args);
+        onChange(params) {
+          console.log(`${this.id} → onChange → `, params);
         },
-        onConfirm(...args) {
-          console.log(`${this.id} → onConfirm → `, args);
+        onConfirm(params) {
+          console.log(`${this.id} → onConfirm → `, params);
         },
-        onNow(...args) {
-          console.log(`${this.id} → onNow → `, args);
+        onNow(params) {
+          console.log(`${this.id} → onNow → `, params);
         },
-        onClear(...args) {
-          console.log(`${this.id} → onClear → `, args);
+        onClear(params) {
+          console.log(`${this.id} → onClear → `, params);
         },
       });
 
@@ -284,19 +285,19 @@
         elem: '#demo-range', // 指定元素
         type: 'datetime',
         trigger: 'click',
+        range: true, // 开启日期范围，默认使用“-”分割
         // lang: 'en',
         // variant: 'grid',
-        range: true, // 开启日期范围，默认使用“-”分割
         // rangeLinked: true,
         // min: '1970-1-1',
         // max: '2021-5-9',
         // value: '2021-05-09 12:06:09',
         // value: '2021-05-08 - 2021-03-27',
-        done: (value, date, endDate) => {
-          console.log(value, date, endDate);
+        done: (params) => {
+          console.log(params);
         },
-        onChange: (value, date, endDate) => {
-          console.log(value, date, endDate);
+        onChange: (params) => {
+          console.log(params);
         },
       });
 
@@ -310,10 +311,8 @@
         rangeLinked: true, // 是否开启日期范围选择时的区间联动标注模式
         // value: ['2022-05-01', '2022-10-01'],
         // value: '2022-05-01 - 2022-06-01',
-        done: (value, date, endDate) => {
-          console.log(value);
-          console.log(date);
-          console.log(endDate);
+        done: (params) => {
+          console.log(params);
         },
       });
 
@@ -331,11 +330,11 @@
         ready: (date) => {
           console.log(date);
         },
-        done: (value, date, endDate) => {
-          console.log(value, date, endDate);
+        done: (params) => {
+          console.log(params);
         },
-        onChange: (value) => {
-          console.log(value);
+        onChange: (params) => {
+          console.log(params);
         },
       });
 
@@ -393,10 +392,10 @@
         // trigger: 'click',
         // min:'2021-01-01',
         // max:'2022-12-31',
-        done: (value, date, endDate) => {
-          console.log(value, date, endDate);
+        done: (params) => {
+          console.log(params);
         },
-        onChange: (value, date, endDate) => {},
+        onChange: (params) => {},
       });
 
       // 年月选择器
@@ -407,11 +406,11 @@
         trigger: 'click',
         min: '2022-03-01',
         max: '2022-05-31',
-        done: (value, date, endDate) => {
-          console.log(value, date, endDate);
+        done: (params) => {
+          console.log(params);
         },
-        onChange: function (value, date, endDate) {
-          this.$elem.val(value);
+        onChange: ({ options, value }) => {
+          console.log(value);
         },
       });
 
@@ -423,10 +422,12 @@
         // trigger: 'click',
         min: '09:30:00',
         max: '17:30:00',
-        done: (value, date, endDate) => {
-          console.log(value, date, endDate);
+        done: (params) => {
+          console.log(params);
         },
-        onChange: (value, date, endDate) => {},
+        onChange: (params) => {
+          console.log(params);
+        },
       });
 
       // 时间范围选择器
@@ -434,8 +435,8 @@
         elem: '#demo-time-range',
         type: 'time',
         range: true,
-        done: (value, date, endDate) => {
-          console.log(value, date, endDate);
+        done: (params) => {
+          console.log(params);
         },
       });
 
@@ -456,13 +457,17 @@
           '2017-8-20': 'v2',
           '2017-8-31': '月底',
         },
-        done: (value, date, endDate) => {
-          if (date.year == 2016 && date.month == 10 && date.date == 14) {
+        done: ({ dateTime }) => {
+          if (
+            dateTime.date.year == 2016 &&
+            dateTime.date.month == 10 &&
+            dateTime.date.date == 14
+          ) {
             // console.log('Layui 诞生日');
           }
         },
-        onChange: (value, date, endDate) => {
-          console.log(value);
+        onChange: (params) => {
+          console.log(params.value);
         },
       });
 
@@ -504,7 +509,6 @@
             '2022-10-6',
             '2022-10-7',
           ],
-
           [
             '2022-1-29',
             '2022-1-30',
@@ -542,11 +546,11 @@
       const datePickerInst8 = datePicker.render({
         elem: '#demo-external',
         type: 'datetime',
-        onChange: (value, date) => {
-          console.log(value, date);
+        onChange: (params) => {
+          console.log(params);
         },
-        done: (value, date) => {
-          console.log(value, date);
+        done: (params) => {
+          console.log(params);
         },
       });
       $('#demo-btn-external').on('click', (e) => {
@@ -554,7 +558,7 @@
       });
 
       // 内嵌显示在目标容器中
-      var ins10 = datePicker.render({
+      datePicker.render({
         elem: '#demo-inline',
         inline: true,
         showFestival: true, // 是否开启公历重要节日
@@ -563,13 +567,14 @@
           '2021-8-20': '',
           '2021-8-21': '',
         },
-        done: (value, date, endDate) => {
-          if (date.year == 2021 && date.month == 8 && date.date == 20) {
-            ins10.hint(value + '，活动日');
+        done: (params) => {
+          const { instance, dateTime } = params;
+          if (dateTime.date == 1) {
+            instance.showMessage({ content: '当月第一天' });
           }
         },
-        onChange: (value, date, endDate) => {
-          console.log(value, date);
+        onChange: (params) => {
+          console.log(params);
         },
       });
 
@@ -579,11 +584,11 @@
         lang: 'en',
         type: 'datetime',
         showFestival: true, // 是否开启公历重要节日
-        done: (value, date, endDate) => {
-          // console.log(value, date, endDate);
+        done: (params) => {
+          console.log(params);
         },
-        onChange: (value, date, endDate) => {
-          console.log(value);
+        onChange: (params) => {
+          console.log(params.value);
         },
       });
     </script>

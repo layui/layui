@@ -170,8 +170,10 @@ export class Popup extends Component {
     const { options, $rootElem, $contentElem, constructor } = this;
     const params = { instance: this, options };
 
-    // 执行层打开前的内部钩子
-    this[popupHooks.kBeforeOpen]?.();
+    // 执行层打开前的内部钩子；返回 false 则阻止打开
+    const beforeOpenResult = this[popupHooks.kBeforeOpen]?.();
+
+    if (beforeOpenResult === false) return;
 
     // 是否仅更新内容
     if (options._renderMode === 'updateContent' && this.isRootElemMounted()) {

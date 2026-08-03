@@ -1,4 +1,4 @@
-/** datepicker.css */
+/** datePicker.css */
 
 /* 主体结构 */
 .lay-datepicker {
@@ -166,9 +166,9 @@
   display: inline-block;
   vertical-align: top;
   height: 26px;
-  line-height: 24px;
+  line-height: 26px;
   padding: 0 10px;
-  border: 1px solid #c9c9c9;
+  border: 1px solid var(--lay-border-color);
   border-radius: var(--lay-border-radius);
   background-color: #fff;
   font-size: 12px;
@@ -217,7 +217,7 @@
 }
 .lay-datepicker-shortcut + .lay-datepicker-main {
   display: inline-block;
-  border-left: 1px solid #e2e2e2;
+  border-left: 1px solid var(--lay-border-color);
 }
 .lay-datepicker-shortcut > li {
   padding: 5px 8px;
@@ -290,17 +290,17 @@
   padding-left: 117px;
 }
 
-/* 提示 */
-.lay-datepicker-hint {
+/* 提示层 */
+.lay-datepicker-message {
   position: absolute;
   top: 115px;
   left: 50%;
   width: 250px;
   margin-left: -125px;
   line-height: 20px;
-  padding: 15px;
+  padding: 16px;
   text-align: center;
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #ff5722;
   white-space: pre-line;
 }
@@ -316,7 +316,7 @@
 }
 .lay-datepicker-range .lay-datepicker-main-list-1 .lay-datepicker-header,
 .lay-datepicker-range .lay-datepicker-main-list-1 .lay-datepicker-content {
-  border-left: 1px solid #e2e2e2;
+  border-left: 1px solid var(--lay-border-color);
 }
 .lay-datepicker-range.lay-datepicker-linkage
   .lay-datepicker-main-list-0
@@ -342,14 +342,8 @@
 }
 
 /* 默认样式 */
-.lay-datepicker-hint {
-  border: 1px solid var(--lay-border-color-accent);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
-  background-color: #fff;
-  color: #777;
-}
 .lay-datepicker-header {
-  border-bottom: 1px solid #e2e2e2;
+  border-bottom: 1px solid var(--lay-border-color);
 }
 .lay-datepicker-header i:hover,
 .lay-datepicker-header span:hover {
@@ -402,7 +396,7 @@
 .lay-datepicker-time-list li ol {
   margin: 0;
   padding: 0;
-  border: 1px solid #e2e2e2;
+  border: 1px solid var(--lay-border-color);
   border-left-width: 0;
 }
 .lay-datepicker-time-list li:first-child ol {
@@ -420,10 +414,7 @@
   background: none !important;
 }
 .lay-datepicker-footer {
-  border-top: 1px solid #e2e2e2;
-}
-.lay-datepicker-hint {
-  color: #ff5722;
+  border-top: 1px solid var(--lay-border-color);
 }
 .lay-datepicker-day-mark::after {
   background-color: var(--lay-color-accent);
@@ -483,7 +474,7 @@
   color: #fff;
 }
 .lay-datepicker-variant-solid .lay-datepicker-content {
-  border: 1px solid #e2e2e2;
+  border: 1px solid var(--lay-border-color);
   border-top: none;
   border-bottom: none;
 }
@@ -497,7 +488,7 @@
   background-color: var(--lay-color-primary) !important;
 }
 .lay-datepicker-variant-solid .lay-datepicker-footer {
-  border: 1px solid #e2e2e2;
+  border: 1px solid var(--lay-border-color);
 }
 
 /* 网格样式 */
@@ -505,7 +496,7 @@
 .lay-datepicker-variant-grid .lay-datepicker-content thead,
 .lay-datepicker-variant-grid .lay-datepicker-year-list > li,
 .lay-datepicker-variant-grid .lay-datepicker-month-list > li {
-  border: 1px solid #e2e2e2;
+  border: 1px solid var(--lay-border-color);
 }
 .lay-datepicker-linkage.lay-datepicker-variant-grid .lay-datepicker-selected,
 .lay-datepicker-linkage.lay-datepicker-variant-grid

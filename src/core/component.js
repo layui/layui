@@ -207,6 +207,9 @@ export class Component {
 
   /**
    * 销毁实例
+   * 注: 未提供 before/after 钩子，以避免「多层继承」下的钩子覆盖问题。
+   * 不同组件往往存在不同的销毁清理，因此更推荐子类组件中直接按需重写 `destroy` 方法，
+   * 并在其中调用 `super.destroy()` 来执行上层销毁逻辑，从而确保正确的执行链路。
    * @returns {void}
    */
   destroy() {
@@ -222,7 +225,7 @@ export class Component {
   /**
    * 初始化处理
    * @param {boolean} isReload - 是否来自 reload 调用
-   * @returns {InstanceType<typeof this>|Array<InstanceType<typeof this>>}
+   * @returns {this | Array<this>}
    * 返回组件实例；若 options.elem 对应多个元素，则返回组件实例数组
    */
   #init(isReload = false) {
@@ -249,12 +252,12 @@ export class Component {
     // 仅来自 render 的调用
     if (!isReload) {
       // 合并 lay-options 属性上的配置信息
-      // Tip: 鉴于 CSP 策略，后续将移除 `lay.options` 方法，改用 dataset 方案
+      // WIP: 鉴于 CSP 策略，后续将移除 `lay.options` 方法，改用 dataset 方案
       const layOptions = lay.options($elem[0]);
       $.extend(this.options, layOptions);
 
       // 合并 dataset 上的配置信息
-      // Tip: 临时实现，后续将支持嵌套等功能
+      // WIP: 临时实现，后续将支持嵌套等功能
       const dataset = { ...$elem[0]?.dataset };
       $.extend(this.options, dataset);
 
