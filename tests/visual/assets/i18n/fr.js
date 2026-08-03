@@ -11,7 +11,7 @@ export default {
     restore: 'Restaurer l’affichage',
     preview: 'Aperçu dans une nouvelle fenêtre',
   },
-  colorpicker: {
+  colorPicker: {
     clear: 'Effacer',
     confirm: 'OK',
   },

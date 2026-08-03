@@ -11,7 +11,7 @@ export default {
     restore: '還原顯示',
     preview: '在新視窗預覽',
   },
-  colorpicker: {
+  colorPicker: {
     clear: '清除',
     confirm: '確定',
   },

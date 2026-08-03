@@ -1,5 +1,5 @@
 /**
- * colorpicker
+ * colorPicker
  * 颜色选择器
  */
 
@@ -8,8 +8,8 @@ import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
 import { Popup, popupHooks } from './popup.js';
 
-export class Colorpicker extends Popup {
-  static componentName = 'colorpicker';
+export class ColorPicker extends Popup {
+  static componentName = 'colorPicker';
 
   /**
    * 默认配置项
@@ -215,8 +215,8 @@ export class Colorpicker extends Popup {
       <input type="text" class="lay-input">
     </div>
     <div class="lay-btn-group">
-      <button style="border-radius: 0" class="lay-btn lay-btn-primary lay-btn-sm" colorpicker-events="clear">${i18n.$t('colorpicker.clear')}</button>
-      <button style="border-radius: 0; border-left: 0" class="lay-btn lay-btn-primary lay-btn-sm" colorpicker-events="confirm">${i18n.$t('colorpicker.confirm')}</button>
+      <button style="border-radius: 0" class="lay-btn lay-btn-primary lay-btn-sm" colorpicker-events="clear">${i18n.$t('colorPicker.clear')}</button>
+      <button style="border-radius: 0; border-left: 0" class="lay-btn lay-btn-primary lay-btn-sm" colorpicker-events="confirm">${i18n.$t('colorPicker.confirm')}</button>
     </div>
   </div>
 </div>
@@ -749,6 +749,6 @@ const RGBSTo = function (rgbs) {
 };
 
 const $win = $(window);
-const CONST = Colorpicker.CONST;
+const CONST = ColorPicker.CONST;
 
-export { Colorpicker as colorpicker };
+export { ColorPicker as colorPicker };

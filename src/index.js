@@ -21,7 +21,7 @@ export { menu } from './components/menu.js';
 export { laypage } from './components/laypage.js';
 export { laydate } from './components/laydate.js';
 export { dropdown } from './components/dropdown.js';
-export { colorpicker } from './components/colorpicker.js';
+export { colorPicker } from './components/colorPicker.js';
 export { slider } from './components/slider.js';
 export { nav } from './components/nav.js';
 export { breadcrumb } from './components/breadcrumb.js';
