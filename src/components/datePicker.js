@@ -25,13 +25,13 @@ export class DatePicker extends Popup {
     // 控件类型；可选值: year|month|date|time|datetime
     type: 'date',
 
-    // 是否开启范围选择，即双控件
+    // 是否开启范围选择
     range: false,
 
     // 默认日期格式
     format: 'yyyy-MM-dd',
 
-    // 默认日期。支持传入 `new Date()` 或符合 `format` 设定的日期格式字符
+    // 默认日期值。支持传入 `new Date()` 或符合 `format` 设定的日期格式字符
     value: null,
 
     // 是否自动给目标元素填充初始值；需设置 `value` 后有效
@@ -47,9 +47,9 @@ export class DatePicker extends Popup {
     // 有效最大日期，同上
     max: '2099-12-31',
 
-    // 是否开启完整面板；开启后，将同时显示快捷栏、日期栏、时间栏
-    // 仅当 `type: 'datetime'` 且未开启 `range` 属性时生效
-    fullPanel: false,
+    // 时间面板的展示模式；可选值: toggle|inline
+    // 仅当 `type: 'datetime'` 且未开启 `range` 选择时生效
+    timePanelMode: 'toggle',
 
     // 是否显示底部栏
     showBottom: true,
@@ -93,7 +93,7 @@ export class DatePicker extends Popup {
     return {
       ...super.CONST,
       ELEM: 'lay-datepicker',
-      ELEM_STATIC: 'lay-datepicker-static',
+      ELEM_MAIN: 'lay-datepicker-main',
       ELEM_LIST: 'lay-datepicker-list',
       ELEM_SELECTED: 'lay-datepicker-selected',
       ELEM_MESSAGE: 'lay-datepicker-message',
@@ -107,7 +107,7 @@ export class DatePicker extends Popup {
       ELEM_TIME_TEXT: 'lay-datepicker-time-text',
       ELEM_TIME_BTN: 'lay-datepicker-btns-time',
       ELEM_PREVIEW: 'lay-datepicker-preview',
-      ELEM_MAIN: 'lay-datepicker-main',
+      ELEM_INLINE: 'lay-datepicker-inline',
       LIMIT_YEAR: [100, 200000],
     };
   }
@@ -191,26 +191,19 @@ export class DatePicker extends Popup {
     this.#i18nMessages = this.#getI18nMessages();
 
     // 处理日期面板顶部年月顺序
-    // 这是一个变通的方法，因为 i18nMessages.monthBeforeYear 不存在
     if (typeof this.#i18nMessages.monthBeforeYear !== 'boolean') {
-      if (!window.Intl) {
-        this.#i18nMessages.monthBeforeYear = !(
-          YearBeforeMonthLocale.indexOf(options.lang) > -1
-        );
-      } else {
-        const formatter = new Intl.DateTimeFormat(options.lang, {
-          year: 'numeric',
-          month: 'short',
-        });
-        const parts = formatter.formatToParts(new Date(1970, 0));
-        const order = [];
-        parts.map((part) => {
-          if (part.type === 'year' || part.type === 'month') {
-            order.push(part.type);
-          }
-        });
-        this.#i18nMessages.monthBeforeYear = order[0] === 'month';
-      }
+      const formatter = new Intl.DateTimeFormat(this.options.lang, {
+        year: 'numeric',
+        month: 'short',
+      });
+      const parts = formatter.formatToParts(new Date(1970, 0));
+      const order = [];
+      parts.map((part) => {
+        if (part.type === 'year' || part.type === 'month') {
+          order.push(part.type);
+        }
+      });
+      this.#i18nMessages.monthBeforeYear = order[0] === 'month';
     }
   }
 
@@ -229,6 +222,7 @@ export class DatePicker extends Popup {
       this.$mainElem.addClass('lay-panel lay-border-box');
       options.$elem.html(mainElem);
       this.#renderCalendar({ type: 'init' });
+      this.#renderAdditional();
     }
 
     // 默认赋值
@@ -271,6 +265,7 @@ export class DatePicker extends Popup {
     const eventNamespace = constructor.CONST.EVENT_NAMESPACE;
 
     this.#renderCalendar({ type: 'init' });
+    this.#renderAdditional();
 
     // 回车触发确认
     $document
@@ -293,7 +288,7 @@ export class DatePicker extends Popup {
     const { $mainElem, constructor } = this;
     const eventNamespace = constructor.CONST.EVENT_NAMESPACE;
 
-    if (!$mainElem.hasClass(CONST.ELEM_STATIC)) {
+    if (!$mainElem.hasClass(CONST.ELEM_INLINE)) {
       this.#checkDate();
       delete this.startDate;
       delete this.endDate;
@@ -357,12 +352,13 @@ export class DatePicker extends Popup {
    */
   #normalizeOptions() {
     const options = this.options;
+    const { options: defaultOptions } = this.constructor;
 
-    // 若开启完整面板
-    if (options.fullPanel) {
+    // 若开启时间面板的内联模式
+    if (options.timePanelMode === 'inline') {
+      // 非有效的支持模式，恢复默认值
       if (options.type !== 'datetime' || options.range) {
-        // 目前只支持 datetime 的全面版
-        options.fullPanel = false;
+        options.timePanelMode = defaultOptions.timePanelMode;
       }
     }
 
@@ -716,9 +712,10 @@ export class DatePicker extends Popup {
         const classLists = [CONST.ELEM];
         if (options.range) classLists.push('lay-datepicker-range');
         if (this.#rangeLinked) classLists.push('lay-datepicker-linkage');
-        if (options.inline) classLists.push(CONST.ELEM_STATIC);
-        if (options.fullPanel)
-          classLists.push('lay-datepicker-variant-fullpanel');
+        if (options.inline) classLists.push(CONST.ELEM_INLINE);
+        if (options.timePanelMode === 'inline') {
+          classLists.push('lay-datepicker-time-inline');
+        }
         if (options.variant) {
           classLists.push(`lay-datepicker-variant-${options.variant}`);
         }
@@ -733,14 +730,15 @@ export class DatePicker extends Popup {
     const tableElems = (this.tableElems = []);
 
     // 底部区域
-    const divFooter = (this.footer = lay.elem('div', {
+    const footerElem = (this.footer = lay.elem('div', {
       class: CONST.ELEM_FOOTER,
     }));
 
     // 快捷栏区域
-    const divShortcut = (this.shortcut = lay.elem('ul', {
+    const shortcutElem = (this.shortcutElem = lay.elem('ul', {
       class: CONST.ELEM_SHORTCUT,
     }));
+
     this.$mainElem = $(mainElem);
 
     // 单双日历区域
@@ -750,64 +748,66 @@ export class DatePicker extends Popup {
       }
 
       // 头部区域
-      const divHeader = lay.elem('div', {
-          class: 'lay-datepicker-header',
-        }),
-        // 左右切换
-        headerChild = [
-          (() => {
-            // 上一年
-            const elem = lay.elem('i', {
-              class: 'lay-icon lay-datepicker-icon lay-datepicker-prev-y',
-            });
-            elem.innerHTML = '&#xe65a;';
-            return elem;
-          })(),
-          (() => {
-            // 上一月
-            const elem = lay.elem('i', {
-              class: 'lay-icon lay-datepicker-icon lay-datepicker-prev-m',
-            });
-            elem.innerHTML = '&#xe603;';
-            return elem;
-          })(),
-          (() => {
-            // 年月选择
-            const elem = lay.elem('div', {
-              class: 'lay-datepicker-set-ym',
-            });
-            elem.appendChild(lay.elem('span'));
-            elem.appendChild(lay.elem('span'));
-            return elem;
-          })(),
-          (() => {
-            // 下一月
-            const elem = lay.elem('i', {
-              class: 'lay-icon lay-datepicker-icon lay-datepicker-next-m',
-            });
-            elem.innerHTML = '&#xe602;';
-            return elem;
-          })(),
-          (() => {
-            // 下一年
-            const elem = lay.elem('i', {
-              class: 'lay-icon lay-datepicker-icon lay-datepicker-next-y',
-            });
-            elem.innerHTML = '&#xe65b;';
-            return elem;
-          })(),
-        ],
-        // 日历内容区域
-        divContent = lay.elem('div', {
-          class: 'lay-datepicker-content',
-        }),
-        table = lay.elem('table'),
-        thead = lay.elem('thead'),
-        theadTr = lay.elem('tr');
+      const headerElem = lay.elem('div', {
+        class: 'lay-datepicker-header',
+      });
+
+      // 头部子元素
+      const headerChildren = {
+        // 上一年 / 上一月
+        prevYM: (() => {
+          const elem = lay.elem('div', {
+            class: 'lay-datepicker-prev-ym',
+          });
+          const yearElem = lay.elem('i', {
+            class: 'lay-icon lay-icon-prev lay-datepicker-prev-y',
+          });
+          const monthElem = lay.elem('i', {
+            class: 'lay-icon lay-icon-left lay-datepicker-prev-m',
+          });
+          elem.appendChild(yearElem);
+          elem.appendChild(monthElem);
+          return { elem, yearElem, monthElem };
+        })(),
+
+        // 选择年月
+        selectYM: (() => {
+          const elem = lay.elem('div', {
+            class: 'lay-datepicker-select-ym',
+          });
+          elem.appendChild(lay.elem('span'));
+          elem.appendChild(lay.elem('span'));
+          return { elem };
+        })(),
+
+        // 下一年 / 下一月
+        nextYM: (() => {
+          const elem = lay.elem('div', {
+            class: 'lay-datepicker-next-ym',
+          });
+          const monthElem = lay.elem('i', {
+            class: 'lay-icon lay-icon-right lay-datepicker-next-m',
+          });
+          const yearElem = lay.elem('i', {
+            class: 'lay-icon lay-icon-next lay-datepicker-next-y',
+          });
+          elem.appendChild(monthElem);
+          elem.appendChild(yearElem);
+          return { elem, yearElem, monthElem };
+        })(),
+      };
+
+      // 日历内容区域
+      const contentElem = lay.elem('div', {
+        class: 'lay-datepicker-content',
+      });
+      const table = lay.elem('table');
+      const thead = lay.elem('thead');
+      const theadTr = lay.elem('tr');
 
       // 生成年月选择
-      headerChild.forEach((item) => {
-        divHeader.appendChild(item);
+      Object.values(headerChildren).forEach((item) => {
+        headerElem.appendChild(item.elem);
       });
 
       // 生成表格
@@ -825,22 +825,22 @@ export class DatePicker extends Popup {
         }
       }
       table.insertBefore(thead, table.children[0]); // 表头
-      divContent.appendChild(table);
+      contentElem.appendChild(table);
       mainListElems[i] = lay.elem('div', {
         class: `${CONST.ELEM_MAIN} lay-datepicker-main-list-${i}`,
       });
-      mainListElems[i].appendChild(divHeader);
-      mainListElems[i].appendChild(divContent);
-      headerElems.push(headerChild);
-      contentElems.push(divContent);
+      mainListElems[i].appendChild(headerElem);
+      mainListElems[i].appendChild(contentElem);
+      headerElems.push(headerChildren);
+      contentElems.push(contentElem);
       tableElems.push(table);
     }
 
     // 生成底部栏
-    $(divFooter).html(
+    $(footerElem).html(
       (() => {
-        const html = [],
-          btns = [];
+        const html = [];
+        const btns = [];
         if (options.type === 'datetime') {
           html.push(
             `<span lay-type="datetime" class="${CONST.ELEM_TIME_BTN}">${lang.selectTime}</span>`,
@@ -848,7 +848,7 @@ export class DatePicker extends Popup {
         }
         if (
           !(!options.range && options.type === 'datetime') ||
-          options.fullPanel
+          options.timePanelMode === 'inline'
         ) {
           html.push(
             `<span class="${CONST.ELEM_PREVIEW}" title="${lang.preview}"></span>`,
@@ -873,8 +873,8 @@ export class DatePicker extends Popup {
 
     // 生成快捷键栏
     if (options.shortcuts) {
-      mainElem.appendChild(divShortcut);
-      $(divShortcut)
+      mainElem.appendChild(shortcutElem);
+      $(shortcutElem)
         .html(
           (() => {
             const shortcutBtns = [];
@@ -957,11 +957,13 @@ export class DatePicker extends Popup {
     mainListElems.forEach((main) => {
       mainElem.appendChild(main);
     });
-    options.showBottom && mainElem.appendChild(divFooter);
+
+    if (options.showBottom) {
+      mainElem.appendChild(footerElem);
+    }
 
     this.#checkDate();
     this.#events();
-    this.#renderAdditional();
     this.#preview();
 
     options.ready?.({
@@ -1034,6 +1036,7 @@ export class DatePicker extends Popup {
           ? ''
           : $(elem).attr('lay-datepicker');
     })();
+
     // 校验日期有效数字
     const checkValid = (dateTime) => {
       if (!dateTime) {
@@ -1056,6 +1059,7 @@ export class DatePicker extends Popup {
       if (dateTime.date > thisMaxDate)
         ((dateTime.date = thisMaxDate), (error = true));
     };
+
     // 获得初始化日期值
     const initDate = (dateTime, value, index) => {
       const startEnd = ['startTime', 'endTime'];
@@ -1102,6 +1106,7 @@ export class DatePicker extends Popup {
       });
       checkValid(dateTime);
     };
+
     if (type === 'limit') {
       if (options.range) {
         checkValid(this.#rangeLinked ? this.startDate : dateTime); // 校验开始时间
@@ -1111,7 +1116,9 @@ export class DatePicker extends Popup {
       }
       return this;
     }
+
     value = value || options.value;
+
     if (typeof value === 'string') {
       value = value.replace(/\s+/g, ' ').replace(/^\s|\s$/g, '');
     }
@@ -1147,7 +1154,9 @@ export class DatePicker extends Popup {
           );
       }
     };
+
     getEndDate();
+
     if (typeof value === 'string' && value) {
       if (this.#EXP_IF.test(value)) {
         // 校验日期格式
@@ -1242,6 +1251,7 @@ export class DatePicker extends Popup {
         minutes: this.endDate.minutes,
         seconds: this.endDate.seconds,
       };
+
       // 如果是年月范围，将对应的日期统一成当月的 1 日进行比较，避免出现同一个月但是开始日期大于结束日期的情况
       if (options.type === 'month') {
         this.dateTime.date = 1;
@@ -1258,7 +1268,7 @@ export class DatePicker extends Popup {
     }
 
     // 初始赋值 startDate, endState
-    this.startDate = this.startDate || (value && lay.extend({}, this.dateTime)); // 有默认值才初始化 startDate
+    this.startDate = this.startDate || (value && lay.extend({}, this.dateTime));
     this.#autoCalendarModel.auto && this.#autoCalendarModel();
     this.endState =
       !options.range ||
@@ -1702,7 +1712,9 @@ export class DatePicker extends Popup {
     const lang = this.#i18nMessages;
     const isAlone = options.type !== 'date' && options.type !== 'datetime';
     const $tds = $(this.tableElems[index]).find('td');
-    const $elemYM = $(this.headerElems[index][2]).find('span');
+    const $selectYMSpans = $(this.headerElems[index].selectYM.elem).children(
+      'span',
+    );
 
     // 年份是否在有效范围内
     if (dateTime.year < CONST.LIMIT_YEAR[0]) {
@@ -1726,14 +1738,18 @@ export class DatePicker extends Popup {
     // 计算当前月第一天的星期
     thisDate.setFullYear(dateTime.year, dateTime.month, 1);
     const startWeek = (thisDate.getDay() + (7 - options.weekStart)) % 7;
+
+    // 计算上个月的最后一天
     const prevMaxDate = Constructor.getDaysInMonth(
       dateTime.month || 12,
       dateTime.year,
-    ); // 计算上个月的最后一天
+    );
+
+    // 计算当前月的最后一天
     const thisMaxDate = Constructor.getDaysInMonth(
       dateTime.month + 1,
       dateTime.year,
-    ); // 计算当前月的最后一天
+    );
 
     // 赋值日
     $tds.each((_index, item) => {
@@ -1783,8 +1799,9 @@ export class DatePicker extends Popup {
     });
 
     // 同步头部年月
-    $elemYM[0].setAttribute('lay-ym', `${dateTime.year}-${dateTime.month + 1}`);
-    $elemYM[1].setAttribute('lay-ym', `${dateTime.year}-${dateTime.month + 1}`);
+    const layYM = `${dateTime.year}-${dateTime.month + 1}`;
+    $selectYMSpans[0].setAttribute('lay-ym', layYM);
+    $selectYMSpans[1].setAttribute('lay-ym', layYM);
 
     if (!this.panelYM) {
       this.panelYM = {};
@@ -1803,11 +1820,11 @@ export class DatePicker extends Popup {
     );
 
     if (!lang.monthBeforeYear) {
-      $($elemYM[0]).attr('lay-type', 'year').html(normalizedYearStr);
-      $($elemYM[1]).attr('lay-type', 'month').html(normalizedMonthStr);
+      $($selectYMSpans[0]).attr('lay-type', 'year').html(normalizedYearStr);
+      $($selectYMSpans[1]).attr('lay-type', 'month').html(normalizedMonthStr);
     } else {
-      $($elemYM[0]).attr('lay-type', 'month').html(normalizedMonthStr);
-      $($elemYM[1]).attr('lay-type', 'year').html(normalizedYearStr);
+      $($selectYMSpans[0]).attr('lay-type', 'month').html(normalizedMonthStr);
+      $($selectYMSpans[1]).attr('lay-type', 'year').html(normalizedYearStr);
     }
 
     // 初始默认选择器
@@ -1888,7 +1905,7 @@ export class DatePicker extends Popup {
     this.#setBtnStatus();
 
     // 重置快捷栏选中状态
-    $(this.shortcut)
+    $(this.shortcutElem)
       .find(`li.${CONST.CLASS_IS_SELECTED}`)
       .removeClass(CONST.CLASS_IS_SELECTED);
 
@@ -1905,34 +1922,37 @@ export class DatePicker extends Popup {
    * @returns {this}
    */
   #renderlist(type, index) {
-    const options = this.options,
-      dateTime = this.#rangeLinked
-        ? this.dateTime
-        : [this.dateTime, this.endDate][index],
-      lang = this.#i18nMessages,
-      isAlone =
-        options.range && options.type !== 'date' && options.type !== 'datetime',
-      // 独立范围选择器
-      ul = lay.elem('ul', {
-        class: `${CONST.ELEM_LIST} ${
-          {
-            year: 'lay-datepicker-year-list',
-            month: 'lay-datepicker-month-list',
-            time: 'lay-datepicker-time-list',
-          }[type]
-        }`,
-      }),
-      headerElem = this.headerElems[index],
-      $elemYM = $(headerElem[2]).find('span'),
-      contentElem = this.contentElems[index || 0],
-      haveList = $(contentElem).find(`.${CONST.ELEM_LIST}`)[0],
-      isMonthBeforeYear = lang.monthBeforeYear,
-      text = lang.literal.year,
-      listYM = this.#listYM[index] || {},
-      hms = ['hours', 'minutes', 'seconds'],
-      startEnd = ['startTime', 'endTime'][index];
+    const options = this.options;
+    const dateTime = this.#rangeLinked
+      ? this.dateTime
+      : [this.dateTime, this.endDate][index];
+    const lang = this.#i18nMessages;
+    const isAlone =
+      options.range && options.type !== 'date' && options.type !== 'datetime';
+    // 独立范围选择器
+    const ul = lay.elem('ul', {
+      class: `${CONST.ELEM_LIST} ${
+        {
+          year: 'lay-datepicker-year-list',
+          month: 'lay-datepicker-month-list',
+          time: 'lay-datepicker-time-list',
+        }[type]
+      }`,
+    });
+    const headerElem = this.headerElems[index];
+    const $elemYM = $(headerElem.selectYM.elem).children('span');
+    const contentElem = this.contentElems[index || 0];
+    const haveList = $(contentElem).find(`.${CONST.ELEM_LIST}`)[0];
+    const isMonthBeforeYear = lang.monthBeforeYear;
+    const text = lang.literal.year;
+    const listYM = this.#listYM[index] || {};
+    const hms = ['hours', 'minutes', 'seconds'];
+    const startEnd = ['startTime', 'endTime'][index];
     let setTimeStatus;
-    if (listYM[0] < 1) listYM[0] = 1;
+
+    if (listYM[0] < 1) {
+      listYM[0] = 1;
+    }
 
     // 生成年列表
     if (type === 'year') {
@@ -1999,6 +2019,7 @@ export class DatePicker extends Popup {
           rangeType: index,
           disabledType: 'date', // 月面板，检测当前月份中的所有日期是否禁用
         });
+
         this.#renderCell(
           li,
           {
@@ -2233,7 +2254,9 @@ export class DatePicker extends Popup {
             }
           });
       };
-      const $haveSpan = $(headerElem[2]).find(`.${CONST.ELEM_TIME_TEXT}`);
+      const $existingSpan = $(headerElem.selectYM.elem).find(
+        `.${CONST.ELEM_TIME_TEXT}`,
+      );
 
       scroll();
 
@@ -2242,10 +2265,10 @@ export class DatePicker extends Popup {
         : lang.selectTime;
 
       $(this.mainListElems[index]).addClass('lay-datepicker-time-show');
-      if ($haveSpan[0]) {
-        $haveSpan.remove();
+      if ($existingSpan[0]) {
+        $existingSpan.remove();
       }
-      headerElem[2].appendChild(span);
+      headerElem.selectYM.elem.appendChild(span);
 
       const $olElem = $(ul).find('ol');
 
@@ -2485,12 +2508,12 @@ export class DatePicker extends Popup {
     }
   }
 
-  // 附加的渲染处理，在 ready 和 onChange 的时候调用
+  // 附加的渲染处理
   #renderAdditional() {
     const options = this.options;
 
-    // 处理全面板
-    if (options.fullPanel) {
+    // 若开启时间面板的内联模式
+    if (options.timePanelMode === 'inline') {
       this.#renderlist('time', 0);
     }
   }
@@ -3024,46 +3047,42 @@ export class DatePicker extends Popup {
    * @returns {void}
    */
   #events() {
-    // 阻止日期面板内的点击/按下事件冒泡
-    this.$mainElem.on('click mousedown', (e) => {
-      e.stopPropagation();
-    });
-
     // 年月切换
     this.headerElems.forEach((header, i) => {
       // 上一年
-      $(header[0]).on('click', () => {
+      $(header.prevYM.yearElem).on('click', () => {
         this.#change(i).prevYear();
       });
 
       // 上一月
-      $(header[1]).on('click', () => {
+      $(header.prevYM.monthElem).on('click', () => {
         this.#change(i).prevMonth();
       });
 
       // 选择年月
-      $(header[2])
-        .find('span')
-        .on('click', (event) => {
-          const $this = $(event.currentTarget);
-          let layYM = $this.attr('lay-ym');
-          const layType = $this.attr('lay-type');
-          if (!layYM) return;
-          layYM = layYM.split('-');
-          this.#listYM[i] = [layYM[0] | 0, layYM[1] | 0];
-          this.#renderlist(layType, i);
-          $(this.footer)
-            .find(`.${CONST.ELEM_TIME_BTN}`)
-            .addClass(CONST.CLASS_IS_DISABLED);
-        });
+      const $selectYMSpans = $(header.selectYM.elem).children('span');
+      $selectYMSpans.on('click', (e) => {
+        const $this = $(e.currentTarget);
+        const layType = $this.attr('lay-type');
+        let layYM = $this.attr('lay-ym');
+
+        if (!layYM) return;
+
+        layYM = layYM.split('-');
+        this.#listYM[i] = [layYM[0] | 0, layYM[1] | 0];
+        this.#renderlist(layType, i);
+        $(this.footer)
+          .find(`.${CONST.ELEM_TIME_BTN}`)
+          .addClass(CONST.CLASS_IS_DISABLED);
+      });
 
       // 下一月
-      $(header[3]).on('click', () => {
+      $(header.nextYM.monthElem).on('click', () => {
         this.#change(i).nextMonth();
       });
 
       // 下一年
-      $(header[4]).on('click', () => {
+      $(header.nextYM.yearElem).on('click', () => {
         this.#change(i).nextYear();
       });
     });
@@ -3092,20 +3111,22 @@ const CONST = DatePicker.CONST;
 // 简体中文语言码
 const zhCN = 'zh-CN';
 
-// 年份在前的语言
-const YearBeforeMonthLocale = [
-  'eu-ES',
-  'ja-JP',
-  'km-KH',
-  'ko-KR',
-  'pt-BR',
-  'si-LK',
-  'ms-MY',
-  'ug-CN',
-  'zh-CN',
-  'zh-HK',
-  'zh-TW',
-];
+// 默认日期时间格式
+const defaultFormat = {
+  year: 'yyyy',
+  month: 'yyyy-MM',
+  date: 'yyyy-MM-dd',
+  time: 'HH:mm:ss',
+  datetime: 'yyyy-MM-dd HH:mm:ss',
+};
+
+// 日期格式占位符正则模式
+const DATE_FORMAT_REGEX = 'yyyy|y|MM|M|dd|d|HH|H|mm|m|ss|s';
+
+// 将日期格式字符拆分为数组
+const splitDateFormat = (format) => {
+  return (format || '').match(new RegExp(`${DATE_FORMAT_REGEX}|.`, 'g')) || [];
+};
 
 /**
  * 在字符之间添加空格
@@ -3141,23 +3162,6 @@ const addSpaceBetweenChars = (str) => {
   }
   result = `${result}${str[str.length - 1]}`; // 添加最后一个字符
   return result;
-};
-
-// 默认日期时间格式
-const defaultFormat = {
-  year: 'yyyy',
-  month: 'yyyy-MM',
-  date: 'yyyy-MM-dd',
-  time: 'HH:mm:ss',
-  datetime: 'yyyy-MM-dd HH:mm:ss',
-};
-
-// 日期格式占位符正则模式
-const DATE_FORMAT_REGEX = 'yyyy|y|MM|M|dd|d|HH|H|mm|m|ss|s';
-
-// 将日期格式字符拆分为数组
-const splitDateFormat = (format) => {
-  return (format || '').match(new RegExp(`${DATE_FORMAT_REGEX}|.`, 'g')) || [];
 };
 
 export { DatePicker as datePicker };
