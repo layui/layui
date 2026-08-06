@@ -387,11 +387,11 @@
   .lay-datepicker-content
   td.lay-datepicker-selected
   > div {
-  background-color: #cffae9;
+  background-color: var(--lay-color-accent-100, #cffae9);
   transition: all 0.3s;
 }
 .lay-datepicker-linkage .lay-datepicker-selected:hover > div {
-  background-color: #cffae9 !important;
+  background-color: var(--lay-color-accent-100, #cffae9) !important;
 }
 .lay-datepicker-linkage .lay-datepicker-selected.lay-datepicker-day-prev > div,
 .lay-datepicker-linkage .lay-datepicker-selected.lay-datepicker-day-next > div {

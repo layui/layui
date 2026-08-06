@@ -28,6 +28,13 @@ export class DatePicker extends Popup {
     // 是否开启范围选择
     range: false,
 
+    // 范围选择的分隔符；仅在 range 为 true 时生效
+    rangeSeparator: ' ~ ',
+
+    // 是否开启范围选择的联动模式；
+    // 仅在 range 为 true 且 type 为 date|datetime 时生效
+    rangeLinked: false,
+
     // 默认日期格式
     format: 'yyyy-MM-dd',
 
@@ -38,7 +45,7 @@ export class DatePicker extends Popup {
     autoFillValue: true,
 
     // 一周的开始是周几。0 表示周日，1 表示周一，以此类推
-    weekStart: 0,
+    weekStart: 1,
 
     // 有效最小日期，年月日必须用「-」分割，时分秒必须用「:」分割
     // 注：它并不遵循 format 设定的格式
@@ -76,11 +83,26 @@ export class DatePicker extends Popup {
     // 是否显示公历重要节日，仅支持中文版
     showFestival: false,
 
-    // 日期备注，如重要事件或活动标记
-    mark: {},
+    // 开启并配置快捷选择栏；传入 Array
+    // shortcuts: null,
 
-    // 标注法定节假日或补假上班
+    // 日期备注，如重要事件或活动标记；传入 Object 或 Function
+    // mark: null,
+
+    // 法定节假日或补班日；传入 Array 或 Function
     // holidays: null,
+
+    // 自定义渲染日期单元格的内容；传入 Function
+    // renderCell: null,
+
+    // 格式化日期显示，不影响日期值；传入 Function
+    // formatToDisplay: null,
+
+    // 自定义禁用日期的回调，返回值为 true 的日期会被禁用
+    // disabledDate: null,
+
+    // 自定义禁用时间的回调；返回数组中指定的时间会被禁用
+    // disabledTime: null,
 
     // 控件选择完毕后的回调，点击清空/现在/确定也均会触发
     // done: null,
@@ -380,7 +402,9 @@ export class DatePicker extends Popup {
       if (!/^[0-6]$/.test(options.weekStart)) {
         const lang = this.#i18nMessages;
         options.weekStart = lang.weeks.indexOf(options.weekStart);
-        if (options.weekStart === -1) options.weekStart = 0;
+        if (options.weekStart === -1) {
+          options.weekStart = 0;
+        }
       }
     }
 
@@ -450,7 +474,6 @@ export class DatePicker extends Popup {
   }
 
   #format = [];
-  #rangeStr = '';
   #rangeLinked = false;
   #autoCalendarModel = null;
   #EXP_IF = '';
@@ -465,13 +488,6 @@ export class DatePicker extends Popup {
     const options = this.options;
 
     this.#normalizeOptions();
-
-    // 日期范围分隔符
-    this.#rangeStr = options.range
-      ? typeof options.range === 'string'
-        ? options.range
-        : '-'
-      : '';
 
     // 日期范围的日历面板是否联动
     this.#rangeLinked = !!(
@@ -543,7 +559,7 @@ export class DatePicker extends Popup {
     this.#EXP_IF = new RegExp(
       `^${
         options.range
-          ? `${this.#EXP_IF}\\s\\${this.#rangeStr}\\s${this.#EXP_IF}`
+          ? `${this.#EXP_IF}${options.rangeSeparator}${this.#EXP_IF}`
           : this.#EXP_IF
       }$`,
     );
@@ -966,14 +982,6 @@ export class DatePicker extends Popup {
     this.#events();
     this.#preview();
 
-    options.ready?.({
-      instance: this,
-      options,
-      dateTime: lay.extend({}, this.dateTime, {
-        month: this.dateTime.month + 1,
-      }),
-    });
-
     return mainElem;
   }
 
@@ -1027,7 +1035,7 @@ export class DatePicker extends Popup {
       if (this.$rangeElem) {
         const vals = [this.$rangeElem[0].val(), this.$rangeElem[1].val()];
         if (vals[0] && vals[1]) {
-          return vals.join(` ${this.#rangeStr} `);
+          return vals.join(options.rangeSeparator);
         }
       }
       return this.#isInput(elem)
@@ -1161,7 +1169,7 @@ export class DatePicker extends Popup {
       if (this.#EXP_IF.test(value)) {
         // 校验日期格式
         if (options.range) {
-          value = value.split(` ${this.#rangeStr} `);
+          value = value.split(options.rangeSeparator);
           [this.dateTime, this.endDate].forEach((item, i) => {
             initDate(item, value[i], i);
           });
@@ -1173,7 +1181,7 @@ export class DatePicker extends Popup {
         this.showMessage({
           content: `${lang.formatErrorPrompt(
             options.range
-              ? `${options.format} ${this.#rangeStr} ${options.format}`
+              ? `${options.format}${options.rangeSeparator}${options.format}`
               : options.format,
           )}${lang.autoResetPrompt}`,
         });
@@ -1418,7 +1426,7 @@ export class DatePicker extends Popup {
   }
 
   /**
-   * 自定义单元格
+   * 自定义单元格的内容
    * @param {HTMLElement|Array<HTMLElement>} el - 单元格元素
    * @param {{year:number, month:number, date:number}} dateObj - 当前单元格对应的日期信息
    * @param {'year' | 'month' | 'date'} panelMode - 面板模式
@@ -1844,12 +1852,12 @@ export class DatePicker extends Popup {
 
           // 同步按钮可点状态
           options.type === 'time'
-            ? this.#setBtnStatus(
+            ? this.#updateConfirmButtonStatus(
                 true,
                 lay.extend({}, this.#systemDate(), this.startTime),
                 lay.extend({}, this.#systemDate(), this.endTime),
               )
-            : this.#setBtnStatus(true);
+            : this.#updateConfirmButtonStatus(true);
         }
       } else {
         this.#listYM = [[dateTime.year, dateTime.month + 1]];
@@ -1892,6 +1900,7 @@ export class DatePicker extends Popup {
         time: timeParams,
         disabledType: 'datetime', // 按钮，检测日期和时间
       });
+
       // 确认按钮
       this.#limit({
         elem: $(this.footer).find(`.${CONST.ELEM_CONFIRM}`),
@@ -1899,10 +1908,9 @@ export class DatePicker extends Popup {
         time: timeParams,
         disabledType: 'datetime', // 按钮，检测日期和时间
       });
+    } else {
+      this.#updateConfirmButtonStatus();
     }
-
-    // 同步按钮可点状态
-    this.#setBtnStatus();
 
     // 重置快捷栏选中状态
     $(this.shortcutElem)
@@ -2184,8 +2192,9 @@ export class DatePicker extends Popup {
               date: dateTime,
               disabledType: 'datetime', // 按钮，检测日期和时间
             });
+          } else {
+            this.#updateConfirmButtonStatus();
           }
-          this.#setBtnStatus(); // 同步按钮可点状态
 
           // 若为月选择器，只有当选择月份时才自动关闭；
           // 若为年选择器，选择年份即自动关闭
@@ -2200,7 +2209,10 @@ export class DatePicker extends Popup {
             }
           }
           this.#autoCalendarModel.auto && !this.#rangeLinked
-            ? this.#choose($(contentElem).find('td.lay-this'), index)
+            ? this.#choose(
+                $(contentElem).find(`td.${CONST.CLASS_IS_SELECTED}`),
+                index,
+              )
             : this.endState && this.#done('onChange');
           $(this.footer)
             .find(`.${CONST.ELEM_TIME_BTN}`)
@@ -2248,7 +2260,7 @@ export class DatePicker extends Popup {
               $li.each(function (ii, item) {
                 if (!$(this).hasClass(CONST.CLASS_IS_DISABLED)) {
                   ol.scrollTop = getScrollTop(item);
-                  return true;
+                  return false;
                 }
               });
             }
@@ -2296,8 +2308,7 @@ export class DatePicker extends Popup {
               options.type === 'datetime') &&
               this.#done('onChange');
 
-            // 同步按钮可点状态
-            this.#setBtnStatus();
+            this.#updateConfirmButtonStatus();
           });
       });
       if (lay.device().mobile) {
@@ -2314,7 +2325,10 @@ export class DatePicker extends Popup {
   // 记录列表切换后的年月
   #listYM = [];
 
-  // 关闭列表
+  /**
+   * 关闭列表
+   * @returns {void}
+   */
   #closeList() {
     this.contentElems.forEach((item, index) => {
       $(item).find(`.${CONST.ELEM_LIST}`).remove();
@@ -2325,8 +2339,14 @@ export class DatePicker extends Popup {
     this.$mainElem.find(`.${CONST.ELEM_TIME_TEXT}`).remove();
   }
 
-  // 检测结束日期是否超出开始日期
-  #setBtnStatus(tips, start, end) {
+  /**
+   * 同步范围选择的确定按钮状态
+   * @param {boolean} [tips] - 是否提示范围顺序异常
+   * @param {Object} [start] - 用于校验的开始日期对象
+   * @param {Object} [end] - 用于校验的结束日期对象
+   * @returns {void}
+   */
+  #updateConfirmButtonStatus(tips, start, end) {
     const options = this.options;
     const lang = this.#i18nMessages;
     const $elemBtn = $(this.footer).find(`.${CONST.ELEM_CONFIRM}`);
@@ -2335,6 +2355,7 @@ export class DatePicker extends Popup {
         ? ['hours', 'minutes', 'seconds']
         : undefined;
     let isOut;
+
     if (options.range) {
       start = start || (this.#rangeLinked ? this.startDate : this.dateTime);
       end = end || this.endDate;
@@ -2390,7 +2411,7 @@ export class DatePicker extends Popup {
 
     // 返回日期范围字符
     if (options.range && state === undefined && format) {
-      return `${format} ${this.#rangeStr} ${this.#parse('end')}`;
+      return `${format}${options.rangeSeparator}${this.#parse('end')}`;
     }
 
     return format;
@@ -2457,7 +2478,7 @@ export class DatePicker extends Popup {
       const $rangeElem = this.$rangeElem;
       if ($rangeElem) {
         if (lay.type(value) !== 'array') {
-          value = value.split(` ${this.#rangeStr} `);
+          value = value.split(options.rangeSeparator);
         }
         $rangeElem[0].val(value[0] || '');
         $rangeElem[1].val(value[1] || '');
@@ -2667,8 +2688,8 @@ export class DatePicker extends Popup {
    */
   #choose($td, index) {
     if ($td.hasClass(CONST.CLASS_IS_DISABLED)) return;
-    const options = this.options,
-      panelIndex = index; // 记录点击的是哪一个面板的
+    const options = this.options;
+    const panelIndex = index;
     let isChange;
 
     if (this.#rangeLinked) {
@@ -2681,8 +2702,10 @@ export class DatePicker extends Popup {
         this.endState = true;
       }
     }
+
     const dateTime = this.thisDateTime(index);
     let YMD = $td.attr('lay-ymd').split('-');
+
     YMD = {
       year: YMD[0] | 0,
       month: (YMD[1] | 0) - 1,
@@ -2942,7 +2965,7 @@ export class DatePicker extends Popup {
             disabledType: 'datetime', // 按钮，检测日期和时间
           });
       }
-      this.#setBtnStatus();
+      this.#updateConfirmButtonStatus();
 
       return isYear || isMonth;
     };
@@ -2958,7 +2981,10 @@ export class DatePicker extends Popup {
           this.#checkDate('limit').#renderCalendar({ index });
           // 面板自动切换的模式下重新判定是否发生模式转换等细节处理
           this.#autoCalendarModel.auto
-            ? this.#choose($(contentElem).find('td.lay-this'), index)
+            ? this.#choose(
+                $(contentElem).find(`td.${CONST.CLASS_IS_SELECTED}`),
+                index,
+              )
             : this.#done('onChange');
         }
       },
@@ -2984,7 +3010,10 @@ export class DatePicker extends Popup {
           });
           this.#checkDate('limit').#renderCalendar({ type: 'init' });
           this.#autoCalendarModel.auto
-            ? this.#choose($(contentElem).find('td.lay-this'), index)
+            ? this.#choose(
+                $(contentElem).find(`td.${CONST.CLASS_IS_SELECTED}`),
+                index,
+              )
             : this.#done('onChange');
         }
       },
@@ -3009,7 +3038,10 @@ export class DatePicker extends Popup {
           });
           this.#checkDate('limit').#renderCalendar({ type: 'init' });
           this.#autoCalendarModel.auto
-            ? this.#choose($(contentElem).find('td.lay-this'), index)
+            ? this.#choose(
+                $(contentElem).find(`td.${CONST.CLASS_IS_SELECTED}`),
+                index,
+              )
             : this.#done('onChange');
         }
       },
@@ -3022,7 +3054,10 @@ export class DatePicker extends Popup {
           dateTime.year++;
           this.#checkDate('limit').#renderCalendar({ index });
           this.#autoCalendarModel.auto
-            ? this.#choose($(contentElem).find('td.lay-this'), index)
+            ? this.#choose(
+                $(contentElem).find(`td.${CONST.CLASS_IS_SELECTED}`),
+                index,
+              )
             : this.#done('onChange');
         }
       },
@@ -3137,11 +3172,14 @@ const addSpaceBetweenChars = (str) => {
   if (typeof str !== 'string' || str.length <= 1) {
     return str;
   }
+
   const isDigit = (char) => {
     const code = char.charCodeAt(0);
-    return code >= 48 && code <= 57; // '0' 到 '9' 的 ASCII 码范围
+    // '0' 到 '9' 的 ASCII 码范围
+    return code >= 48 && code <= 57;
   };
   let result = '';
+
   for (let i = 0; i < str.length - 1; i++) {
     const char = str[i];
     const nextChar = str[i + 1];
@@ -3160,7 +3198,10 @@ const addSpaceBetweenChars = (str) => {
       result = `${result} `;
     }
   }
-  result = `${result}${str[str.length - 1]}`; // 添加最后一个字符
+
+  // 添加最后一个字符
+  result = `${result}${str[str.length - 1]}`;
+
   return result;
 };
 
