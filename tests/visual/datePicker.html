@@ -1,0 +1,631 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>datePicker 日期和时间选择器 - Layui</title>
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <link rel="stylesheet" href="./assets/demo.css" />
+  </head>
+  <body>
+    <div class="lay-padding-5">
+      <h2>常规示例</h2>
+      <hr />
+
+      <div class="demo-flex-row">
+        <div>
+          <label>常规测试</label>
+          <div class="lay-inline">
+            <input
+              type="text"
+              class="lay-input"
+              id="demo-normal"
+              placeholder=""
+            />
+          </div>
+        </div>
+        <div>
+          <label>带遮罩</label>
+          <div class="lay-inline">
+            <input
+              type="text"
+              class="lay-input"
+              id="demo-backdrop"
+              placeholder=""
+            />
+          </div>
+        </div>
+      </div>
+
+      <br />
+
+      <h2>范围选择</h2>
+      <hr />
+
+      <div class="demo-flex-row">
+        <div>
+          <label>左右独立模式</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-range" />
+          </div>
+        </div>
+        <div>
+          <label>左右联动模式</label>
+          <div class="lay-inline" id="demo-range-linked">
+            <div class="lay-inline">
+              <input
+                type="text"
+                autocomplete="off"
+                id="demo-range-linked-start"
+                class="lay-input"
+                placeholder="开始日期"
+              />
+            </div>
+            <div class="lay-inline">-</div>
+            <div class="lay-inline">
+              <input
+                type="text"
+                autocomplete="off"
+                id="demo-range-linked-end"
+                class="lay-input"
+                placeholder="结束日期"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br />
+
+      <h2>日期选择器</h2>
+      <hr />
+
+      <div class="demo-flex-row">
+        <div>
+          <label>日期选择器</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-date" />
+          </div>
+        </div>
+        <div>
+          <label>开启快捷面板</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-shortcuts" />
+          </div>
+        </div>
+      </div>
+
+      <br />
+
+      <h2>日期和时间选择器</h2>
+      <hr />
+
+      <div class="demo-flex-row">
+        <div>
+          <label>时间面板 toggle 模式</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-time-panel-toggle" />
+          </div>
+        </div>
+        <div>
+          <label>时间面板 inline 模式</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-time-panel-inline" />
+          </div>
+        </div>
+      </div>
+
+      <br />
+
+      <h2>年/月/时间选择器</h2>
+      <hr />
+
+      <div class="demo-flex-row">
+        <div>
+          <label>年选择器</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-year" />
+          </div>
+        </div>
+        <div>
+          <label>年月选择器</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-month" />
+          </div>
+        </div>
+        <div>
+          <label>时间选择器</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-time" />
+          </div>
+        </div>
+      </div>
+
+      <br />
+
+      <h2>时间范围与重要日</h2>
+      <hr />
+
+      <div class="demo-flex-row">
+        <div>
+          <label>时间范围选择</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-time-range" />
+          </div>
+        </div>
+        <div>
+          <label>自定义重要日</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-mark" />
+          </div>
+        </div>
+        <div>
+          <label>标注法定节假日及补班</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-holidays" />
+          </div>
+        </div>
+      </div>
+
+      <br />
+
+      <h2>同时绑定多个</h2>
+      <hr />
+
+      <div class="demo-flex-row">
+        <div>
+          <label>同时绑定多个</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input demo-item" />
+          </div>
+        </div>
+        <div>
+          <label>同时绑定多个</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input demo-item" />
+          </div>
+        </div>
+        <div>
+          <label>同时绑定多个</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input demo-item" />
+          </div>
+        </div>
+      </div>
+
+      <br />
+
+      <h2>样式变体</h2>
+      <hr />
+
+      <div class="demo-flex-row">
+        <div>
+          <label>头部背景填充</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-solid" />
+          </div>
+        </div>
+        <div>
+          <label>网格样式</label>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-grid" />
+          </div>
+        </div>
+      </div>
+
+      <br />
+
+      <h2>外部事件触发</h2>
+      <hr />
+
+      <div class="demo-flex-row">
+        <div>
+          <div class="lay-inline">
+            <button class="lay-btn" id="demo-btn-manual">
+              仅点击该按钮打开
+            </button>
+          </div>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-manual" />
+          </div>
+        </div>
+        <div>
+          <div class="lay-inline">
+            <button class="lay-btn" id="demo-btn-external">
+              点击该按钮与目标元素均可打开
+            </button>
+          </div>
+          <div class="lay-inline">
+            <input type="text" class="lay-input" id="demo-external" />
+          </div>
+        </div>
+      </div>
+
+      <br />
+
+      <h2>内嵌显示</h2>
+      <hr />
+
+      <div class="demo-flex-row">
+        <div class="lay-inline" id="demo-inline"></div>
+        <div class="lay-inline" id="demo-inline-en"></div>
+      </div>
+    </div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script type="module">
+      const { datePicker, lay, $ } = layui;
+
+      // 全局配置
+      datePicker.config({
+        // trigger: 'focus',
+        // showArrow: true,
+      });
+
+      /**
+       * 常规示例
+       */
+
+      // 常规测试
+      const datePickerInst = datePicker.render({
+        elem: '#demo-normal',
+        // type: 'datetime',
+        // timePanelMode: 'inline',
+        done(params) {
+          console.log(`${this.id} → done → `, params);
+        },
+        onChange(params) {
+          console.log(`${this.id} → onChange → `, params);
+        },
+        onConfirm(params) {
+          console.log(`${this.id} → onConfirm → `, params);
+        },
+        onNow(params) {
+          console.log(`${this.id} → onNow → `, params);
+        },
+        onClear(params) {
+          console.log(`${this.id} → onClear → `, params);
+        },
+      });
+
+      console.dir(datePicker);
+      console.log(`datePicker.render() → `, datePickerInst);
+
+      // 带遮罩
+      datePicker.render({
+        elem: '#demo-backdrop',
+        backdrop: 0.03,
+      });
+
+      // 范围选择 左右独立模式
+      datePicker.render({
+        elem: '#demo-range', // 指定元素
+        type: 'datetime',
+        trigger: 'click',
+        range: true,
+        // lang: 'en',
+        // variant: 'grid',
+        // rangeLinked: true,
+        // min: '1970-1-1',
+        // max: '2021-5-9',
+        // value: '2021-05-09 12:06:09',
+        // value: '2021-05-08 - 2021-03-27',
+        done: (params) => {
+          console.log(params);
+        },
+        onChange: (params) => {
+          console.log(params);
+        },
+      });
+
+      // return;
+
+      // 范围选择 左右联动模式
+      datePicker.render({
+        elem: '#demo-range-linked',
+        type: 'datetime',
+        range: ['#demo-range-linked-start', '#demo-range-linked-end'],
+        rangeLinked: true,
+        // variant: 'solid',
+        // value: ['2022-05-01', '2022-10-01'],
+        // value: '2022-05-01 - 2022-06-01',
+        done: (params) => {
+          console.log(params);
+        },
+      });
+
+      // 日期选择器（单面板）
+      datePicker.render({
+        elem: '#demo-date',
+        // format: 'yyyy年MM月dd日',
+        value: new Date(1535673600000),
+        // autoFillValue: false,
+        format: 'yyyy/MM/dd',
+        min: 7,
+        // max: 0,
+        // min: '2016-10-14',
+        // max: -1,
+        ready: (date) => {
+          console.log(date);
+        },
+        done: (params) => {
+          console.log(params);
+        },
+        onChange: (params) => {
+          console.log(params);
+        },
+      });
+
+      // 开启快捷面板
+      datePicker.render({
+        elem: '#demo-shortcuts',
+        shortcuts: [
+          {
+            text: '昨天',
+            value: (() => {
+              var now = new Date();
+              now.setDate(now.getDate() - 1);
+              return now;
+            })(),
+          },
+          { text: '今天', value: Date.now() },
+          {
+            text: '明天',
+            value: (() => {
+              var now = new Date();
+              now.setDate(now.getDate() + 1);
+              return now;
+            })(),
+          },
+          {
+            text: '上个月',
+            value: (() => {
+              var now = new Date();
+              // now.setDate(now.getDate() - 1);
+              now.setMonth(now.getMonth() - 1);
+              return [now];
+            })(),
+          },
+          {
+            text: '上个月的前一天',
+            value: (() => {
+              var now = new Date();
+              now.setMonth(now.getMonth() - 1);
+              now.setDate(now.getDate() - 1);
+              return [now];
+            })(),
+          },
+          {
+            text: '某一天',
+            value: '2020-12-12',
+          },
+        ],
+      });
+
+      // 时间面板 toggle 模式
+      datePicker.render({
+        elem: '#demo-time-panel-toggle',
+        type: 'datetime',
+        // timePanelMode: 'toggle', // 默认
+      });
+
+      // 时间面板 inline 模式
+      datePicker.render({
+        elem: '#demo-time-panel-inline',
+        type: 'datetime',
+        timePanelMode: 'inline',
+      });
+
+      // 年选择器
+      datePicker.render({
+        elem: '#demo-year',
+        type: 'year',
+        // range: true,
+        // trigger: 'click',
+        // min:'2021-01-01',
+        // max:'2022-12-31',
+        done: (params) => {
+          console.log(params);
+        },
+        onChange: (params) => {},
+      });
+
+      // 年月选择器
+      datePicker.render({
+        elem: '#demo-month',
+        type: 'month',
+        // range: true,
+        // min: '2022-03-01',
+        // max: '2022-05-31',
+        done: (params) => {
+          console.log(params);
+        },
+        onChange: ({ options, value }) => {
+          console.log(value);
+        },
+      });
+
+      // 时间选择器
+      datePicker.render({
+        elem: '#demo-time',
+        type: 'time',
+        // range: true,
+        // trigger: 'click',
+        min: '09:30:00',
+        max: '17:30:00',
+        done: (params) => {
+          console.log(params);
+        },
+        onChange: (params) => {
+          console.log(params);
+        },
+      });
+
+      // 时间范围选择器
+      datePicker.render({
+        elem: '#demo-time-range',
+        type: 'time',
+        range: true,
+        done: (params) => {
+          console.log(params);
+        },
+      });
+
+      // 同时绑定多个
+      datePicker.render({
+        elem: '.demo-item',
+        trigger: 'click',
+      });
+
+      // 自定义重要日
+      var ins555 = datePicker.render({
+        elem: '#demo-mark',
+        // showFestival: true,
+        mark: {
+          '0-10-14': '生日', // 0 代表：每年
+          '0-0-15': '中旬',
+          '2017-8-20': 'v2',
+          '2017-8-31': '月底',
+        },
+        done: ({ dateTime }) => {
+          if (
+            dateTime.date.year == 2016 &&
+            dateTime.date.month == 10 &&
+            dateTime.date.date == 14
+          ) {
+            // console.log('Layui 诞生日');
+          }
+        },
+        onChange: (params) => {
+          console.log(params.value);
+        },
+      });
+
+      // 标注法定节假日及补班
+      datePicker.render({
+        elem: '#demo-holidays',
+        value: '2022-5-21',
+        holidays: [
+          [
+            '2022-1-1',
+            '2022-1-2',
+            '2022-1-3',
+            '2022-1-31',
+            '2022-2-1',
+            '2022-2-2',
+            '2022-2-3',
+            '2022-2-4',
+            '2022-2-5',
+            '2022-2-6',
+            '2022-4-3',
+            '2022-4-4',
+            '2022-4-5',
+            '2022-4-30',
+            '2022-5-1',
+            '2022-5-2',
+            '2022-5-3',
+            '2022-5-4',
+            '2022-6-3',
+            '2022-6-4',
+            '2022-6-5',
+            '2022-9-10',
+            '2022-9-11',
+            '2022-9-12',
+            '2022-10-1',
+            '2022-10-2',
+            '2022-10-3',
+            '2022-10-4',
+            '2022-10-5',
+            '2022-10-6',
+            '2022-10-7',
+          ],
+          [
+            '2022-1-29',
+            '2022-1-30',
+            '2022-4-2',
+            '2022-4-24',
+            '2022-5-7',
+            '2022-10-8',
+            '2022-10-9',
+          ],
+        ],
+      });
+
+      // 头部背景填充
+      datePicker.render({
+        elem: '#demo-solid',
+        variant: 'solid',
+      });
+
+      // 网格样式
+      datePicker.render({
+        elem: '#demo-grid',
+        variant: 'grid',
+      });
+
+      // 仅外部事件打开
+      $('#demo-btn-manual').on('click', () => {
+        datePicker.render({
+          elem: '#demo-manual',
+          trigger: 'manual',
+          defaultOpen: true,
+        });
+      });
+
+      // 外部事件与目标元素均可打开
+      const datePickerInst8 = datePicker.render({
+        elem: '#demo-external',
+        type: 'datetime',
+        onChange: (params) => {
+          console.log(params);
+        },
+        done: (params) => {
+          console.log(params);
+        },
+      });
+      $('#demo-btn-external').on('click', (e) => {
+        datePickerInst8.open();
+      });
+
+      // 内嵌显示在目标容器中
+      datePicker.render({
+        elem: '#demo-inline',
+        inline: true,
+        showFestival: true,
+        mark: {
+          // 标记重要日子
+          '2021-8-20': '',
+          '2021-8-21': '',
+        },
+        done: (params) => {
+          const { instance, dateTime } = params;
+          if (dateTime.date == 1) {
+            instance.showMessage({ content: '当月第一天' });
+          }
+        },
+        onChange: (params) => {
+          console.log(params);
+        },
+      });
+
+      datePicker.render({
+        elem: '#demo-inline-en',
+        inline: true,
+        lang: 'en',
+        type: 'datetime',
+        showFestival: true,
+        done: (params) => {
+          console.log(params);
+        },
+        onChange: (params) => {
+          console.log(params.value);
+        },
+      });
+    </script>
+  </body>
+</html>

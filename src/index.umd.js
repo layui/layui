@@ -19,7 +19,7 @@ import { layer } from './components/layer.js';
 import { popup } from './components/popup.js';
 import { menu } from './components/menu.js';
 import { laypage } from './components/laypage.js';
-import { laydate } from './components/laydate.js';
+import { datePicker } from './components/datePicker.js';
 import { dropdown } from './components/dropdown.js';
 import { colorPicker } from './components/colorPicker.js';
 import { slider } from './components/slider.js';
@@ -56,7 +56,7 @@ const layui = {
   popup,
   menu,
   laypage,
-  laydate,
+  datePicker,
   dropdown,
   colorPicker,
   slider,

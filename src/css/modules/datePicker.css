@@ -1,0 +1,521 @@
+/** datePicker.css */
+
+.lay-datepicker {
+  --lay-datepicker-min-width: 268px;
+  --lay-datepicker-line-height: 24px;
+  --lay-datepicker-spacing: 11px;
+
+  font-size: 0.875rem;
+  line-height: normal;
+
+  .lay-popup-content {
+    padding: 0;
+  }
+}
+
+.lay-datepicker-main {
+  min-width: var(--lay-datepicker-min-width);
+}
+
+/* 头部结构 */
+.lay-datepicker-header {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  line-height: var(--lay-datepicker-line-height);
+  padding: var(--lay-datepicker-spacing);
+
+  .lay-icon {
+    display: inline-block;
+    padding: 0 5px;
+    color: var(--lay-gray-700);
+    font-size: 1rem;
+    cursor: pointer;
+  }
+}
+
+.lay-datepicker-select-ym {
+  flex: 1;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.lay-datepicker-select-ym span {
+  padding-inline: var(--lay-datepicker-spacing);
+  cursor: pointer;
+}
+.lay-datepicker-time-text {
+  cursor: default !important;
+}
+
+/* 展开年月列表时 */
+.lay-datepicker-ym-show
+  :is(
+    .lay-datepicker-prev-m,
+    .lay-datepicker-next-m,
+    .lay-datepicker-select-ym span[lay-type='month']
+  ) {
+  display: none !important;
+}
+
+/* 展开时间列表时 */
+.lay-datepicker-time-show
+  :is(
+    .lay-datepicker-prev-ym,
+    .lay-datepicker-next-ym,
+    .lay-datepicker-select-ym span[lay-type='year'],
+    .lay-datepicker-select-ym span[lay-type='month']
+  ) {
+  display: none !important;
+}
+
+/* 主体结构 */
+.lay-datepicker-content {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  position: relative;
+  padding: var(--lay-datepicker-spacing);
+  user-select: none;
+}
+.lay-datepicker-content table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.lay-datepicker-content th,
+.lay-datepicker-content td {
+  width: 35px;
+  padding: 0;
+  text-align: center;
+}
+.lay-datepicker-content th {
+  height: calc(var(--lay-datepicker-line-height) + 6px);
+  font-weight: 400;
+}
+.lay-datepicker-content td {
+  position: relative;
+  cursor: pointer;
+}
+.lay-datepicker-day-mark {
+  font-size: 0.75rem;
+  overflow: hidden;
+}
+.lay-datepicker-day-mark::after {
+  position: absolute;
+  content: '';
+  right: 3px;
+  top: 3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+.lay-datepicker-day-holidays:before {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 12px;
+  transform: scale(0.7);
+}
+.lay-datepicker-day-holidays:before {
+  content: '\4F11';
+  color: #ff5722;
+}
+.lay-datepicker-day-holidays[type='workdays']:before {
+  content: '\73ED';
+  color: inherit;
+}
+.lay-datepicker .lay-is-selected .lay-datepicker-day-holidays:before {
+  color: #fff;
+}
+
+/* 底部结构 */
+.lay-datepicker-footer {
+  display: flex;
+  position: relative;
+  line-height: var(--lay-datepicker-line-height);
+  padding: var(--lay-datepicker-spacing);
+}
+.lay-datepicker-footer span {
+  display: inline-block;
+  vertical-align: top;
+  padding-inline: 8px;
+  border: 1px solid var(--lay-border-color);
+  border-radius: var(--lay-border-radius);
+  font-size: 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s;
+}
+.lay-datepicker-footer span:hover {
+  color: var(--lay-color-accent);
+}
+.lay-datepicker-footer span.lay-datepicker-preview {
+  cursor: default;
+  border-color: transparent !important;
+}
+.lay-datepicker-footer span.lay-datepicker-preview:hover {
+  color: #777;
+}
+.lay-datepicker-footer span:first-child.lay-datepicker-preview {
+  padding-left: 0;
+}
+.lay-datepicker-footer-btns {
+  margin-left: auto;
+}
+.lay-datepicker-footer-btns span {
+  margin: 0 0 0 -1px;
+  border-radius: 0px;
+}
+.lay-datepicker-footer-btns span:first-child {
+  border-radius: var(--lay-border-radius) 0px 0px var(--lay-border-radius);
+}
+.lay-datepicker-footer-btns span:last-child {
+  border-radius: 0px var(--lay-border-radius) var(--lay-border-radius) 0px;
+}
+
+/* 快捷栏 */
+.lay-datepicker-shortcut {
+  width: 80px;
+  padding: 6px 0;
+  display: inline-block;
+  vertical-align: top;
+  overflow: auto;
+  max-height: 276px;
+  text-align: center;
+}
+.lay-datepicker-shortcut + .lay-datepicker-main {
+  display: inline-block;
+  border-left: 1px solid var(--lay-border-color);
+}
+.lay-datepicker-shortcut > li {
+  padding: 5px 8px;
+  cursor: pointer;
+  line-height: 18px;
+}
+
+/* 年月列表 */
+.lay-datepicker .lay-datepicker-list {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: var(--lay-datepicker-spacing);
+  box-sizing: border-box;
+  background-color: #fff;
+}
+.lay-datepicker .lay-datepicker-list > li {
+  position: relative;
+  display: inline-block;
+  width: 33.3%;
+  height: 36px;
+  line-height: 36px;
+  margin: 3px 0;
+  vertical-align: middle;
+  text-align: center;
+  cursor: pointer;
+  list-style: none;
+}
+.lay-datepicker .lay-datepicker-month-list > li {
+  width: 25%;
+  margin: 17px 0;
+}
+.lay-datepicker-time-list {
+  display: table;
+}
+.lay-datepicker .lay-datepicker-time-list > li {
+  display: table-cell;
+  height: 100%;
+  margin: 0;
+  line-height: normal;
+  cursor: default;
+}
+.lay-datepicker .lay-datepicker-time-list p {
+  position: relative;
+  margin: 0;
+  line-height: 30px;
+}
+.lay-datepicker .lay-datepicker-time-list ol {
+  height: 181px;
+  overflow: hidden;
+}
+.lay-datepicker .lay-datepicker-time-list > li:hover ol {
+  overflow-y: auto;
+}
+.lay-datepicker .lay-datepicker-time-list ol li {
+  width: 130%;
+  padding-block: 3px;
+  padding-left: 33px;
+  line-height: var(--lay-datepicker-line-height);
+  text-align: left;
+  cursor: pointer;
+}
+.lay-datepicker .lay-datepicker-time-list-hide-1 ol li {
+  padding-left: 53px;
+}
+.lay-datepicker .lay-datepicker-time-list-hide-2 ol li {
+  padding-left: 117px;
+}
+
+/* 提示层 */
+.lay-datepicker-message {
+  position: absolute;
+  top: 115px;
+  left: 50%;
+  width: 232px;
+  margin-left: -116px;
+  line-height: 20px;
+  padding: 16px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #ff5722;
+  white-space: pre-line;
+}
+
+/* 日期范围面板 */
+.lay-datepicker-range .lay-datepicker-main {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 50%;
+}
+.lay-datepicker-range .lay-datepicker-main + .lay-datepicker-main {
+  .lay-datepicker-header,
+  .lay-datepicker-content {
+    border-left: 1px solid var(--lay-border-color);
+  }
+}
+.lay-datepicker-range.lay-datepicker-linkage {
+  .lay-datepicker-main-list-0 .lay-datepicker-next-ym,
+  .lay-datepicker-main-list-1 .lay-datepicker-prev-ym {
+    visibility: hidden;
+  }
+}
+.lay-datepicker-range.lay-datepicker-linkage
+  .lay-datepicker-main
+  + .lay-datepicker-main {
+  .lay-datepicker-header {
+    border-left: 0;
+  }
+  .lay-datepicker-content {
+    border-left-style: dotted;
+  }
+}
+
+/* 内嵌模式 */
+.lay-datepicker-inline {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  margin: 0;
+  -webkit-animation: none;
+  animation: none;
+}
+
+/* 默认样式 */
+.lay-datepicker-header {
+  border-bottom: 1px solid var(--lay-border-color);
+}
+.lay-datepicker-header .lay-icon:hover,
+.lay-datepicker-header span:hover {
+  color: var(--lay-color-accent);
+}
+.lay-datepicker-content {
+  border-top: none 0;
+  border-bottom: none 0;
+}
+.lay-datepicker-content th {
+  color: #333;
+}
+.lay-datepicker-content td {
+  color: #777;
+}
+.lay-datepicker-content td > div {
+  padding: 6px 0;
+  height: 100%;
+}
+.lay-datepicker-content td.lay-datepicker-day-now {
+  color: var(--lay-color-accent);
+}
+.lay-datepicker-content td.lay-datepicker-day-now:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  border: 1px solid var(--lay-color-accent);
+  border-radius: var(--lay-border-radius);
+  box-sizing: border-box;
+}
+.lay-datepicker-content .lay-datepicker-day-prev,
+.lay-datepicker-content .lay-datepicker-day-next {
+  color: var(--lay-gray-400);
+}
+.lay-datepicker-content td.lay-is-selected .lay-datepicker-day-mark::after {
+  display: none;
+}
+.lay-datepicker-content td:hover:after,
+.lay-datepicker-content td.lay-datepicker-selected:after {
+  content: none;
+}
+.lay-datepicker-content td > div:hover,
+.lay-datepicker-list li:hover,
+.lay-datepicker-shortcut > li:hover {
+  background-color: var(--lay-gray-300);
+  color: #333;
+  border-radius: var(--lay-border-radius);
+  transition: all 0.3s;
+}
+.lay-datepicker-time-list li ol {
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--lay-border-color);
+  border-left-width: 0;
+}
+.lay-datepicker-time-list li:first-child ol {
+  border-left-width: 1px;
+}
+.lay-datepicker-time-list > li:hover {
+  background: none;
+}
+.lay-datepicker-day-mark::after {
+  background-color: var(--lay-color-accent);
+}
+
+.lay-datepicker-linkage
+  .lay-datepicker-content
+  td.lay-datepicker-selected
+  > div {
+  background-color: var(--lay-color-accent-100, #cffae9);
+  transition: all 0.3s;
+}
+.lay-datepicker-linkage .lay-datepicker-selected:hover > div {
+  background-color: var(--lay-color-accent-100, #cffae9) !important;
+}
+.lay-datepicker-linkage .lay-datepicker-selected.lay-datepicker-day-prev > div,
+.lay-datepicker-linkage .lay-datepicker-selected.lay-datepicker-day-next > div {
+  background: none !important;
+}
+
+.lay-datepicker-footer {
+  border-top: 1px solid var(--lay-border-color);
+}
+.lay-datepicker-footer span[lay-type='date'] {
+  color: var(--lay-color-accent);
+}
+
+/* selected 状态 */
+.lay-datepicker .lay-is-selected,
+.lay-datepicker .lay-is-selected > div {
+  background-color: var(--lay-color-accent) !important;
+  color: #fff !important;
+  border-radius: var(--lay-border-radius);
+}
+
+/* disabled 状态 */
+.lay-datepicker .lay-is-disabled,
+.lay-datepicker .lay-is-disabled:hover {
+  background: none !important;
+  color: var(--lay-gray-400) !important;
+  cursor: not-allowed !important;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.lay-datepicker .lay-is-selected.lay-is-disabled,
+.lay-datepicker .lay-is-selected.lay-is-disabled > div {
+  background-color: var(--lay-gray-300) !important;
+}
+
+/* 时间面板内联模式 */
+.lay-datepicker-time-inline {
+  .lay-datepicker-main {
+    width: auto;
+  }
+
+  .lay-datepicker-list {
+    position: relative;
+    width: 252px;
+    padding: 0;
+  }
+
+  .lay-datepicker-select-ym span {
+    display: none;
+  }
+  .lay-datepicker-time-show {
+    .lay-datepicker-header .lay-icon,
+    .lay-datepicker-select-ym
+      :is(span[lay-type='year'], span[lay-type='month']) {
+      display: inline-block !important;
+    }
+  }
+  .lay-datepicker-btns-time {
+    display: none;
+  }
+  .lay-datepicker-time-list-hide-1 ol li {
+    padding-left: 49px;
+  }
+  .lay-datepicker-time-list-hide-2 ol li {
+    padding-left: 107px;
+  }
+}
+
+/* variant 样式: 头部背景填充 */
+.lay-datepicker-variant-solid {
+  border: none;
+
+  .lay-datepicker-header {
+    border: none;
+    background-color: var(--lay-color-primary);
+  }
+  .lay-datepicker-header :is(i, span) {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .lay-datepicker-header :is(i, span):hover {
+    color: #fff;
+  }
+
+  .lay-datepicker-main + .lay-datepicker-main {
+    .lay-datepicker-header {
+      border-left: 0;
+    }
+    .lay-datepicker-content {
+      border-left-style: dotted;
+    }
+  }
+
+  .lay-is-selected,
+  .lay-is-selected > div {
+    background-color: var(--lay-color-primary) !important;
+  }
+}
+
+/* variant 样式: 网格 */
+.lay-datepicker-variant-grid {
+  .lay-datepicker-content :is(td, thead),
+  :is(.lay-datepicker-year-list, .lay-datepicker-month-list) > li {
+    border: 1px solid var(--lay-border-color);
+  }
+
+  .lay-datepicker-content td > div {
+    height: 29px;
+    margin-top: -1px;
+  }
+
+  :is(.lay-datepicker-year-list, .lay-datepicker-month-list) {
+    margin: 1px 0 0 1px;
+
+    > li {
+      margin: 0 -1px -1px 0;
+    }
+  }
+  .lay-datepicker-year-list > li {
+    height: 41px;
+    line-height: 41px;
+  }
+  .lay-datepicker-month-list > li {
+    height: 69px;
+    line-height: 69px;
+  }
+}
