@@ -219,13 +219,10 @@ export class DatePicker extends Popup {
         month: 'short',
       });
       const parts = formatter.formatToParts(new Date(1970, 0));
-      const order = [];
-      parts.map((part) => {
-        if (part.type === 'year' || part.type === 'month') {
-          order.push(part.type);
-        }
-      });
-      this.#i18nMessages.monthBeforeYear = order[0] === 'month';
+      const firstDatePart = parts.find(
+        ({ type }) => type === 'year' || type === 'month',
+      );
+      this.#i18nMessages.monthBeforeYear = firstDatePart?.type === 'month';
     }
   }
 
@@ -282,18 +279,19 @@ export class DatePicker extends Popup {
    * @returns {void}
    */
   [popupHooks.kAfterOpen]() {
-    const { constructor } = this;
+    const { constructor, options } = this;
     const $document = $(document);
-    const eventNamespace = constructor.CONST.EVENT_NAMESPACE;
+    let eventNamespace = constructor.CONST.EVENT_NAMESPACE;
 
     this.#renderCalendar({ type: 'init' });
     this.#renderAdditional();
 
     // 回车触发确认
+    eventNamespace += `_${options.id}`;
     $document
       .off(`keydown${eventNamespace}`)
       .on(`keydown${eventNamespace}`, (e) => {
-        if (e.keyCode !== 13 || !this.isRootElemMounted()) return;
+        if (e.key !== 'Enter' || !this.isRootElemMounted()) return;
         e.preventDefault();
         const confirmBtn = $(this.footer).find(`.${CONST.ELEM_CONFIRM}`)[0];
         if (confirmBtn) {
@@ -307,8 +305,8 @@ export class DatePicker extends Popup {
    * @returns {void}
    */
   [popupHooks.kAfterClose]() {
-    const { $mainElem, constructor } = this;
-    const eventNamespace = constructor.CONST.EVENT_NAMESPACE;
+    const { constructor, options, $mainElem } = this;
+    let eventNamespace = constructor.CONST.EVENT_NAMESPACE;
 
     if (!$mainElem.hasClass(CONST.ELEM_INLINE)) {
       this.#checkDate();
@@ -319,6 +317,7 @@ export class DatePicker extends Popup {
       delete this.endTime;
     }
 
+    eventNamespace += `_${options.id}`;
     $(document).off(`keydown${eventNamespace}`);
   }
 
@@ -389,7 +388,7 @@ export class DatePicker extends Popup {
       console.error(
         `datePicker type error: '${options.type}' is not supported`,
       );
-      options.type = this.constructor.options.type;
+      options.type = defaultOptions.type;
     }
 
     // 根据不同 type，初始化默认 format
@@ -2512,19 +2511,12 @@ export class DatePicker extends Popup {
     $elemPreview.html(value);
 
     // 预览颜色渐变
-    const oldValue = $elemPreview.html();
-    if (oldValue) {
-      const color =
-        lay.type(options.variant) === 'array'
-          ? options.variant[0]
-          : options.variant;
+    if (value) {
       $elemPreview.css({
-        color: /^#/.test(String(color)) ? color : '#16b777',
+        color: 'var(--lay-color-accent)',
       });
       setTimeout(() => {
-        $elemPreview.css({
-          color: '#777',
-        });
+        $elemPreview.css({ color: '' });
       }, 300);
     }
   }
