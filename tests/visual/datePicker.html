@@ -307,7 +307,7 @@
         elem: '#demo-range', // 指定元素
         type: 'datetime',
         trigger: 'click',
-        range: true, // 开启日期范围，默认使用“-”分割
+        range: true,
         // lang: 'en',
         // variant: 'grid',
         // rangeLinked: true,
@@ -330,7 +330,7 @@
         elem: '#demo-range-linked',
         type: 'datetime',
         range: ['#demo-range-linked-start', '#demo-range-linked-end'],
-        rangeLinked: true, // 是否开启日期范围选择时的区间联动标注模式
+        rangeLinked: true,
         // variant: 'solid',
         // value: ['2022-05-01', '2022-10-01'],
         // value: '2022-05-01 - 2022-06-01',
@@ -485,9 +485,8 @@
       // 自定义重要日
       var ins555 = datePicker.render({
         elem: '#demo-mark',
-        // showFestival: true, // 是否开启公历重要节日
+        // showFestival: true,
         mark: {
-          //标记重要日子
           '0-10-14': '生日', // 0 代表：每年
           '0-0-15': '中旬',
           '2017-8-20': 'v2',
@@ -597,7 +596,7 @@
       datePicker.render({
         elem: '#demo-inline',
         inline: true,
-        showFestival: true, // 是否开启公历重要节日
+        showFestival: true,
         mark: {
           // 标记重要日子
           '2021-8-20': '',
@@ -619,7 +618,7 @@
         inline: true,
         lang: 'en',
         type: 'datetime',
-        showFestival: true, // 是否开启公历重要节日
+        showFestival: true,
         done: (params) => {
           console.log(params);
         },

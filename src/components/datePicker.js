@@ -2687,7 +2687,8 @@ export class DatePicker extends Popup {
    * @returns {void}
    */
   #choose($td, index) {
-    if ($td.hasClass(CONST.CLASS_IS_DISABLED)) return;
+    if (!$td.length || $td.hasClass(CONST.CLASS_IS_DISABLED)) return;
+
     const options = this.options;
     const panelIndex = index;
     let isChange;
