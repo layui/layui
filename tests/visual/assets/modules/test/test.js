@@ -35,16 +35,16 @@ class Test {
     const options = this.options;
     const { el } = options;
 
-    const wrapperElem = lay.elem('div', {
+    const wrapperElem = lay.createElement('div', {
       class: 'test-wrapper',
     });
-    const sideElem = (this.sideElem = lay.elem('div', {
+    const sideElem = (this.sideElem = lay.createElement('div', {
       class: 'lay-panel test-side',
     }));
-    const mainElem = (this.mainElem = lay.elem('div', {
+    const mainElem = (this.mainElem = lay.createElement('div', {
       class: 'test-main',
     }));
-    const suitesElem = (this.suitesElem = lay.elem('div', {
+    const suitesElem = (this.suitesElem = lay.createElement('div', {
       class: 'test-suites',
     }));
 
@@ -145,11 +145,11 @@ class Test {
 
     const describer = (this.describer = lay.extend(
       {
-        suiteElem: lay.elem('div', {
+        suiteElem: lay.createElement('div', {
           class: 'lay-text test-suite',
           id: opts.id,
         }),
-        itemsElem: lay.elem('div', {
+        itemsElem: lay.createElement('div', {
           class: 'test-items',
         }),
       },
@@ -215,7 +215,7 @@ class Test {
     )(actual, expected);
     const result = passed ? '✅' : '❌';
     const output = Test.tools.output;
-    const itemElem = lay.elem('div', { class: 'test-item' });
+    const itemElem = lay.createElement('div', { class: 'test-item' });
 
     stats.total++;
     title = title || `任务 ${stats.total}`;
@@ -305,7 +305,7 @@ class Test {
     const options = this.options;
     const { el } = options;
     const stats = Test.stats;
-    const statsElem = lay.elem('div', { class: 'test-stats' });
+    const statsElem = lay.createElement('div', { class: 'test-stats' });
     const existingStatsElem = this.mainElem.querySelector('.test-stats');
 
     $(statsElem).html(`

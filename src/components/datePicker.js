@@ -721,7 +721,7 @@ export class DatePicker extends Popup {
   #buildMainPanel() {
     const options = this.options;
     const lang = this.#i18nMessages;
-    const mainElem = lay.elem('div', {
+    const mainElem = lay.createElement('div', {
       [CONST.ATTR_ID]: options.id,
       class: (() => {
         const classLists = [CONST.ELEM];
@@ -745,12 +745,12 @@ export class DatePicker extends Popup {
     const tableElems = (this.tableElems = []);
 
     // 底部区域
-    const footerElem = (this.footer = lay.elem('div', {
+    const footerElem = (this.footer = lay.createElement('div', {
       class: CONST.ELEM_FOOTER,
     }));
 
     // 快捷栏区域
-    const shortcutElem = (this.shortcutElem = lay.elem('ul', {
+    const shortcutElem = (this.shortcutElem = lay.createElement('ul', {
       class: CONST.ELEM_SHORTCUT,
     }));
 
@@ -763,7 +763,7 @@ export class DatePicker extends Popup {
       }
 
       // 头部区域
-      const headerElem = lay.elem('div', {
+      const headerElem = lay.createElement('div', {
         class: 'lay-datepicker-header',
       });
 
@@ -771,13 +771,13 @@ export class DatePicker extends Popup {
       const headerChildren = {
         // 上一年 / 上一月
         prevYM: (() => {
-          const elem = lay.elem('div', {
+          const elem = lay.createElement('div', {
             class: 'lay-datepicker-prev-ym',
           });
-          const yearElem = lay.elem('i', {
+          const yearElem = lay.createElement('i', {
             class: 'lay-icon lay-icon-prev lay-datepicker-prev-y',
           });
-          const monthElem = lay.elem('i', {
+          const monthElem = lay.createElement('i', {
             class: 'lay-icon lay-icon-left lay-datepicker-prev-m',
           });
           elem.appendChild(yearElem);
@@ -787,23 +787,23 @@ export class DatePicker extends Popup {
 
         // 选择年月
         selectYM: (() => {
-          const elem = lay.elem('div', {
+          const elem = lay.createElement('div', {
             class: 'lay-datepicker-select-ym',
           });
-          elem.appendChild(lay.elem('span'));
-          elem.appendChild(lay.elem('span'));
+          elem.appendChild(lay.createElement('span'));
+          elem.appendChild(lay.createElement('span'));
           return { elem };
         })(),
 
         // 下一年 / 下一月
         nextYM: (() => {
-          const elem = lay.elem('div', {
+          const elem = lay.createElement('div', {
             class: 'lay-datepicker-next-ym',
           });
-          const monthElem = lay.elem('i', {
+          const monthElem = lay.createElement('i', {
             class: 'lay-icon lay-icon-right lay-datepicker-next-m',
           });
-          const yearElem = lay.elem('i', {
+          const yearElem = lay.createElement('i', {
             class: 'lay-icon lay-icon-next lay-datepicker-next-y',
           });
           elem.appendChild(monthElem);
@@ -813,12 +813,12 @@ export class DatePicker extends Popup {
       };
 
       // 日历内容区域
-      const contentElem = lay.elem('div', {
+      const contentElem = lay.createElement('div', {
         class: 'lay-datepicker-content',
       });
-      const table = lay.elem('table');
-      const thead = lay.elem('thead');
-      const theadTr = lay.elem('tr');
+      const table = lay.createElement('table');
+      const thead = lay.createElement('thead');
+      const theadTr = lay.createElement('tr');
 
       // 生成年月选择
       Object.values(headerChildren).forEach((item) => {
@@ -832,7 +832,7 @@ export class DatePicker extends Popup {
         const tr = table.insertRow(0);
         for (let j = 0; j < 7; j++) {
           if (rowIndex === 0) {
-            const th = lay.elem('th');
+            const th = lay.createElement('th');
             th.innerHTML = lang.weeks[(j + options.weekStart) % 7];
             theadTr.appendChild(th);
           }
@@ -841,7 +841,7 @@ export class DatePicker extends Popup {
       }
       table.insertBefore(thead, table.children[0]); // 表头
       contentElem.appendChild(table);
-      mainListElems[i] = lay.elem('div', {
+      mainListElems[i] = lay.createElement('div', {
         class: `${CONST.ELEM_MAIN} lay-datepicker-main-list-${i}`,
       });
       mainListElems[i].appendChild(headerElem);
@@ -1937,7 +1937,7 @@ export class DatePicker extends Popup {
     const isAlone =
       options.range && options.type !== 'date' && options.type !== 'datetime';
     // 独立范围选择器
-    const ul = lay.elem('ul', {
+    const ul = lay.createElement('ul', {
       class: `${CONST.ELEM_LIST} ${
         {
           year: 'lay-datepicker-year-list',
@@ -1967,7 +1967,7 @@ export class DatePicker extends Popup {
         startY = (yearNum = listYM[0] - 7);
       if (startY < 1) startY = yearNum = 1;
       for (let yearIndex = 0; yearIndex < 15; yearIndex++) {
-        const li = lay.elem('li', {
+        const li = lay.createElement('li', {
             'lay-ym': yearNum,
           }),
           ymd = {
@@ -2006,7 +2006,7 @@ export class DatePicker extends Popup {
     // 生成月列表
     else if (type === 'month') {
       for (let i = 0; i < 12; i++) {
-        const li = lay.elem('li', {
+        const li = lay.createElement('li', {
           'lay-ym': i,
         });
         const ymd = {
@@ -2116,7 +2116,7 @@ export class DatePicker extends Popup {
 
       // 生成时分秒
       [24, 60, 60].forEach((item, i) => {
-        const li = lay.elem('li'),
+        const li = lay.createElement('li'),
           childUL = [`<p>${lang.time[i]}</p><ol>`];
         for (let ii = 0; ii < item; ii++) {
           childUL.push(
@@ -2219,7 +2219,7 @@ export class DatePicker extends Popup {
         });
     } else {
       // 时间选择面板 - 选择事件
-      const span = lay.elem('span', {
+      const span = lay.createElement('span', {
         class: CONST.ELEM_TIME_TEXT,
       });
       // 滚动条定位
