@@ -2,7 +2,7 @@
 title: 底层方法
 toc: true
 ---
- 
+
 # 底层方法
 
 > Layui 提供了一系列基础 API，以更好地辅助组件的使用。
@@ -29,7 +29,7 @@ layui.config({
 特别地，若你对 `layui.js` 本身进行了动态加载或是其他特殊场景中使用，那么上述 `layui.config()` 所设定的 `dir` 属性会因此失效，此时你可以在动态加载 <code>layui.js</code> 之前预先定义一个我们约定好的全局对象，如：
 
 ```
-<script>  
+<script>
 var LAYUI_GLOBAL = {
   dir: '/res/layui/' // layui.js 所在目录
 };
@@ -50,7 +50,7 @@ var LAYUI_GLOBAL = {
 ```
 // 假设当前页面 url 为： https://domain.com/docs/base.html?a=1&c=3#/user/set/id=123/
 var url = layui.url();
- 
+
 // url 返回结果为：
 {
   "pathname": ["docs","base.html"], // 路径
@@ -82,16 +82,16 @@ layui.data('test', {
   key: 'nickname',
   value: '张三'
 });
- 
+
 // 【删】：删除 test 表的 nickname 字段
 layui.data('test', {
   key: 'nickname',
   remove: true
 });
 layui.data('test', null); // 删除 test 表
-  
+
 // 【改】：同【增】，会覆盖已经存储的数据
-  
+
 // 【查】：向 test 表读取全部的数据
 var localTest = layui.data('test');
 console.log(localTest.nickname); // 获得“张三”
@@ -131,39 +131,38 @@ if(device.MYAPP){
 
 <h2 id="hint" lay-toc="">控制台提示</h2>
 
-`layui.hint()` 用于向浏览器控制台输出异常或警告信息，返回一个包含 `error` 和 `errorOnce` 方法的对象。
+`var hint = layui.hint();`
 
-```
-var hint = layui.hint();
-```
+用于向浏览器控制台输出异常或警告信息，返回一个包含 `error` 和 `errorOnce` 方法的对象。
 
 ### error(msg, type)
 
-- **msg** <sup> string</sup> — 要输出的提示文本
-- **type** <sup> string</sup> — 提示类型，可选值：`warn`（默认）、`error`，分别对应 `console.warn()` 和 `console.error()` 输出
+- 参数 **msg** <sup> string</sup> — 要输出的提示文本
+- 参数 **type** <sup> string</sup> — 提示类型，可选值：`warn`（默认）、`error`，分别对应 `console.warn()` 和 `console.error()` 输出
 
-```
+```js
 var hint = layui.hint();
-hint.error('配置项异常');            // console.warn() 输出（默认 type）：[Layui warn]: 配置项异常
-hint.error('操作失败', 'error');     // console.error() 输出：[Layui error]: 操作失败
+// 输出：[Layui warn]: Invalid configuration
+hint.error('Invalid configuration');
+// 输出：[Layui error]: Operation failed
+hint.error('Operation failed', 'error');
 ```
-
-> 输出到控制台的格式为 `[Layui type]: 消息内容`，其中 `type` 即传入的提示类型。
 
 ### errorOnce(msg, type) <sup>2.9+</sup>
 
-参数与 `error` 方法完全一致，但增加了**消息去重**机制：在同一 `hint()` 实例的作用域内，相同的 `msg` 文本只会向控制台输出一次，再次调用将被静默忽略，避免短时间内的重复干扰。
+参数与 `error` 方法完全一致，但增加了「消息去重」机制，即：在同一 `hint()` 实例的作用域内，相同的 `msg` 文本只会向控制台输出一次，再次调用将被忽略。不同 `hint()` 实例互不影响
 
 ```
 var hint = layui.hint();
-hint.errorOnce('配置项缺失，将采用默认值');
-// 再次调用相同的消息将被忽略
-hint.errorOnce('配置项缺失，将采用默认值'); // 不再输出
+
+// 首次输出
+hint.errorOnce('Missing configuration, using defaults');
+
+// 再次调用相同的消息将被忽略，不再输出
+hint.errorOnce('Missing configuration, using defaults');
 ```
 
-> `errorOnce` 内部维护了一个缓存，在累计达到 100 条去重消息后会自动清空，以释放内存。
-
-<!-- 注：errorOnce 的去重缓存是 hint() 实例级别的，不同 hint() 实例互不影响。 -->
+`errorOnce` 内部维护了一个缓存，在累计达到 100 条去重消息后会自动清空，以释放内存。
 
 
 <h2 id="api" lay-toc="{hot: true}">API 列表</span></h2>
