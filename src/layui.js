@@ -59,28 +59,15 @@
 
   // 异常提示
   var error = function (msg, type) {
-    type = type || 'warn';
-    msg = '[Layui warn]: ' + msg;
+    type = String(type || 'warn').replace(/^\s+|\s+$/g, '');
 
     // 仅允许 error 或 warn 两种类型的提示
-    if (/warn|error/.test(String(type).replace(/^\s+|\s+$/g, ''))) {
+    if (!/^(?:warn|error)$/.test(type)) {
       type = 'warn';
     }
 
+    msg = '[Layui ' + type + ']: ' + msg;
     window.console[type](msg);
-  };
-  var warned = Object.create(null);
-
-  var errorOnce = function (msg, type) {
-    if (warned._size && warned._size > 100) {
-      warned = Object.create(null);
-      warned._size = 0;
-    }
-    if (!warned[msg]) {
-      warned[msg] = true;
-      warned._size = (warned._size || 0) + 1;
-      error(msg, type);
-    }
   };
 
   // 内置模块
@@ -789,9 +776,21 @@
 
   // 提示
   Class.prototype.hint = function () {
+    var warned = Object.create(null);
+    var warnedCount = 0;
     return {
       error: error,
-      errorOnce: errorOnce
+      errorOnce: function (msg, type) {
+        if (warnedCount > 100) {
+          warned = Object.create(null);
+          warnedCount = 0;
+        }
+        if (!warned[msg]) {
+          warned[msg] = true;
+          warnedCount++;
+          error(msg, type);
+        }
+      }
     };
   };
 
