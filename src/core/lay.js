@@ -588,10 +588,13 @@ var getElement = function (elem) {
  * @returns {HTMLElement} 返回创建的 HTML 元素
  * @example
  * ```js
- * lay.elem('div', {id: 'test'}) // <div id="test"></div>
+ * // <div id="test"></div>
+ * lay.createElement('div', {
+ *  id: 'test'
+ * })
  * ```
  */
-lay.elem = function (elemName, attr) {
+lay.createElement = function (elemName, attr) {
   var elem = document.createElement(elemName);
 
   for (const [key, value] of Object.entries(attr || {})) {
@@ -704,7 +707,7 @@ lay.getStyleRules = function (style, callback) {
 lay.style = function (options) {
   options = options || {};
 
-  var style = lay.elem('style');
+  var style = lay.createElement('style');
   var styleText = options.text || '';
   var target = options.target;
 
