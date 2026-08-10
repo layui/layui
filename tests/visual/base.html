@@ -27,6 +27,7 @@
               { title: 'sort' },
               { title: 'type' },
               { title: 'isArray' },
+              { title: 'parseDataset' },
               { title: 'treeToFlat' },
               { title: 'flatToTree' },
             ],
@@ -317,6 +318,99 @@ console.log(arr);
           title: '{}',
           code: `console.log(lay.isArray({}))`,
           expected: false,
+        });
+      });
+
+      tester.describe('lay.parseDataset', (it) => {
+        it({
+          title: '普通扁平 dataset',
+          code: `
+const $elem = $('<div data-lay-string="abc123" data-lay-number="123" data-lay-boolean="true" data-lay-null="null" data-lay-array="[1,2,3]" data-lay-camel-case="camelCaseValue"></div>');
+
+const dataset = lay.parseDataset($elem[0]);
+console.log(dataset);
+          `,
+          expected: JSON.stringify({
+            string: 'abc123',
+            number: 123,
+            boolean: true,
+            null: null,
+            array: [1, 2, 3],
+            camelCase: 'camelCaseValue',
+          }),
+        });
+
+        it({
+          title: '复杂嵌套 dataset',
+          code: `
+const $elem = $('<div data-lay-flat="string" data-lay-tree.boolean="true" data-lay-tree.array="[1,2,3]" data-lay-tree.user.name="username" data-lay-number="123" data-lay-color-picker.color="#16b777"  data-lay-color-picker.user-id="111" data-lay-flat.test="invalid" data-lay-flat.test.a="invalid" data-lay-number.test="invalid"></div>');
+
+const dataset = lay.parseDataset($elem[0]);
+console.log(dataset);
+          `,
+          expected: JSON.stringify({
+            flat: 'string',
+            tree: {
+              boolean: true,
+              array: [1, 2, 3],
+              user: {
+                name: 'username',
+              },
+            },
+            number: 123,
+            colorPicker: {
+              color: '#16b777',
+              userId: 111,
+            },
+          }),
+        });
+
+        it({
+          title: '忽略无约定前缀的 dataset',
+          code: `
+const $elem = $('<div data-lay-theme="light" data-lay="ignore" data-layer="ignore" data-theme="ignore"></div>');
+
+// 只读取 data-lay-* 前缀的 dataset
+const dataset = lay.parseDataset($elem[0]);
+console.log(dataset);
+          `,
+          expected: JSON.stringify({ theme: 'light' }),
+        });
+
+        it({
+          title: '获取自定义前缀的 dataset',
+          code: `
+const $elem = $('<div data-theme="light" data-size="xl"></div>');
+
+const dataset = lay.parseDataset($elem[0], {
+  prefix: '' // 读取 data-*
+});
+console.log(dataset);
+          `,
+          expected: JSON.stringify({
+            theme: 'light',
+            size: 'xl',
+          }),
+        });
+
+        it({
+          title: '阻止值类型转换',
+          code: `
+const $elem = $('<div data-lay-uid="1111111111111111111" data-lay-online="true"></div>');
+
+const dataset = lay.parseDataset($elem[0], {
+  beforeParseValue({ rawKey, rawValue }) {
+    if (rawKey === 'uid') {
+      return false; // 返回 false 阻止值类型转换
+    }
+  }
+});
+console.log(dataset);
+          `,
+          expected: JSON.stringify({
+            uid: '1111111111111111111',
+            online: true,
+          }),
         });
       });
 

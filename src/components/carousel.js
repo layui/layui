@@ -75,7 +75,7 @@ export class Carousel extends Component {
       });
     }
 
-    $elem.attr('lay-anim', options.anim);
+    $elem.attr('data-lay-anim', options.anim);
 
     // 初始焦点状态
     this.$itemElem
@@ -190,7 +190,7 @@ export class Carousel extends Component {
     );
 
     // 预设基础属性
-    $elem.attr('lay-arrow', options.arrow);
+    $elem.attr('data-lay-arrow', options.arrow);
 
     // 避免重复插入
     if ($elem.find(`.${CONST.ELEM_ARROW}`)[0]) {
@@ -230,7 +230,7 @@ export class Carousel extends Component {
     ));
 
     // 预设基础属性
-    $elem.attr('lay-indicator', options.indicator);
+    $elem.attr('data-lay-indicator', options.indicator);
 
     // 避免重复插入
     if ($elem.find(`.${CONST.ELEM_IND}`)[0]) {

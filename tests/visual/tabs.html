@@ -12,7 +12,8 @@
       <div
         class="lay-tabs lay-hide-v"
         id="demoTabs1"
-        lay-options="{closable: true, headerMode:'scroll'}"
+        data-lay-closable="true"
+        data-lay-header-mode="scroll"
       >
         <ul class="lay-tabs-header">
           <li lay-id="aaa" lay-closable="false">Tab1</li>
@@ -52,7 +53,7 @@
       <div id="demoTabs2"></div>
 
       <h2>卡片风格</h2>
-      <div class="lay-tabs lay-tabs-card" lay-options="{index: 1}">
+      <div class="lay-tabs lay-tabs-card" data-lay-index="1">
         <ul class="lay-tabs-header">
           <li>标题1</li>
           <li>标题2</li>
@@ -103,7 +104,7 @@
       </div>
 
       <h2>打乱标签顺序：</h2>
-      <div class="lay-tabs" lay-options="{closable: true}">
+      <div class="lay-tabs" data-lay-closable="true">
         <ul class="lay-tabs-header">
           <li lay-id="fff">Tab6</li>
           <li lay-id="eee">Tab5</li>
@@ -139,7 +140,7 @@
       </div>
 
       <h2>标签嵌套</h2>
-      <div class="lay-tabs lay-tabs-card" lay-options="{headerMode:'normal'}">
+      <div class="lay-tabs lay-tabs-card" data-lay-header-mode="normal">
         <ul class="lay-tabs-header">
           <li class="lay-this">标题1</li>
           <li>标题2</li>
@@ -147,7 +148,7 @@
         </ul>
         <div class="lay-tabs-body" style="padding: 16px">
           <div class="lay-tabs-item lay-show">
-            <div class="lay-tabs" lay-options="{headerMode:'normal'}">
+            <div class="lay-tabs" data-lay-header-mode="normal">
               <ul class="lay-tabs-header">
                 <li class="lay-this">标题 1-1</li>
                 <li>标题 1-2</li>
@@ -159,7 +160,7 @@
             </div>
           </div>
           <div class="lay-tabs-item">
-            <div class="lay-tabs" lay-options="{headerMode:'normal'}">
+            <div class="lay-tabs" data-lay-header-mode="normal">
               <ul class="lay-tabs-header">
                 <li class="lay-this">标题 2-1</li>
                 <li>标题 2-2</li>

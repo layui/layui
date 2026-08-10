@@ -399,7 +399,7 @@ export class Popup extends Component {
     $rootElem.attr('style', options.style);
 
     // 设置主题
-    $rootElem.attr('data-theme', options.theme);
+    $rootElem.attr('data-lay-theme', options.theme);
   }
 
   /**

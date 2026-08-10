@@ -340,7 +340,7 @@ export class Upload extends Component {
   <div class="${CONST.ELEM_LIST}-item-status"></div>
   <div class="${CONST.ELEM_LIST}-item-content">
     <div class="${CONST.ELEM_LIST}-item-name lay-ellipsis"></div>
-    <div class="lay-progress lay-size-xs"></div>
+    <div class="lay-progress" data-lay-size="xs"></div>
   </div>
 </div>
         `);

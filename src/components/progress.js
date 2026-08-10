@@ -1,6 +1,6 @@
 /**
  * progress
- * 进度条组件
+ * 进度条
  */
 
 import { $ } from 'jquery';
@@ -24,13 +24,27 @@ export class Progress extends Component {
   // 默认配置
   static options = {
     elem: '.lay-progress',
+
+    // 进度值
+    percent: 0,
+
+    // 是否显示进度值
+    showPercent: false,
+
+    // 进度条颜色
+    // color: '',
+
+    // 轨道颜色
+    // railColor: '',
+
+    // 尺寸；可选值: xs|sm|md(默认)|lg|xl
+    // size: ''
   };
 
   static get CONST() {
     return {
       ...super.CONST,
       ELEM: 'lay-progress',
-      ATTR_PERCENT: 'lay-percent',
     };
   }
 
@@ -39,13 +53,14 @@ export class Progress extends Component {
     this.delegateInstanceMethods(['setValue']);
   }
 
+  /**
+   * 渲染
+   * @returns {void}
+   */
   render() {
     const options = this.options;
     const $elem = options.$elem;
-    const value = $elem.attr(CONST.ATTR_PERCENT);
-    const percent = normalizePercent(value);
-    const progressColor = $elem.attr(`${CONST.ELEM}-color`);
-    const progressRailColor = $elem.attr(`${CONST.ELEM}-rail-color`);
+    const percent = normalizePercent(options.percent);
     const $progressRail = (this.$progressRail = $('<div>').addClass(
       `${CONST.ELEM}-rail`,
     ));
@@ -53,20 +68,25 @@ export class Progress extends Component {
       `${CONST.ELEM}-bar`,
     ));
 
+    // 设置 size 属性
+    if (['xs', 'sm', 'md', 'lg', 'xl'].includes(options.size)) {
+      $elem.attr('data-lay-size', options.size);
+    }
+
     // 设置轨道和进度条样式
     $progressRail.css({
-      'background-color': progressRailColor || '',
+      'background-color': options.railColor || '',
     });
     $progressBar.css({
       width: `${percent}%`,
-      'background-color': progressColor || '',
+      'background-color': options.color || '',
     });
 
     // 插入进度条结构
     $elem.empty().append($progressRail.append($progressBar));
 
     // 是否显示进度值
-    if ($elem.is('[lay-show-percent]')) {
+    if (options.showPercent) {
       const $progressInfo = (this.$progressInfo = $('<div>')
         .addClass(`${CONST.ELEM}-info`)
         .text(`${percent}%`));
@@ -76,19 +96,18 @@ export class Progress extends Component {
 
   /**
    * 动态改变进度条
-   * @param {string} id - 组件实例 id
    * @param {string|number} value - 进度值
-   * @returns {typeof Progress}
+   * @returns {void}
    */
   setValue(value) {
     const options = this.options;
-    const $elem = options.$elem;
     const $progressBar = this.$progressBar;
     const $progressInfo = this.$progressInfo;
     const percent = normalizePercent(value);
 
-    $elem.attr(CONST.ATTR_PERCENT, percent);
-    $progressBar.css('width', `${percent}%`);
+    options.percent = percent;
+    options.$elem.attr('data-lay-percent', percent);
+    $progressBar?.css('width', `${percent}%`);
     $progressInfo?.text(`${percent}%`);
   }
 }

@@ -211,7 +211,7 @@ export class Menu extends Component {
   }
 
   /**
-   * 应用菜单 data-* 属性
+   * 应用菜单 dataset 属性
    * @param {JQuery} $elem - 菜单元素
    * @param {Object} options - 菜单配置项
    * @returns {void}
@@ -228,25 +228,25 @@ export class Menu extends Component {
 
     // 设置「菜单模式」属性
     if (['vertical', 'horizontal'].includes(options.mode)) {
-      $elem.attr('data-mode', options.mode);
+      $elem.attr('data-lay-mode', options.mode);
     }
 
     // 设置「子菜单展示方式」属性
     if (['inline', 'popup'].includes(options.submenuMode)) {
-      $elem.attr('data-submenu-mode', options.submenuMode);
+      $elem.attr('data-lay-submenu-mode', options.submenuMode);
     }
 
     // 设置「收起状态」属性
-    toggleDataAttr('data-collapsed', options.collapsed);
+    toggleDataAttr('data-lay-collapsed', options.collapsed);
 
     // 设置尺寸属性
     if (['sm', 'md', 'lg'].includes(options.size)) {
-      $elem.attr('data-size', options.size);
+      $elem.attr('data-lay-size', options.size);
     }
 
     // 设置主题属性
     if (['light', 'dark'].includes(options.theme)) {
-      $elem.attr('data-theme', options.theme);
+      $elem.attr('data-lay-theme', options.theme);
     }
   }
 
@@ -673,9 +673,9 @@ export class Menu extends Component {
     // 克隆子菜单元素
     const $subClone = $sub.clone(true).attr('class', CONST.ELEM);
 
-    // 非默认尺寸，预设 data-size 属性
+    // 非默认尺寸，预设 size 属性
     if (options.size !== 'md') {
-      $subClone.attr('data-size', options.size);
+      $subClone.attr('data-lay-size', options.size);
     }
 
     // 菜单容器

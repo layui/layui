@@ -1,6 +1,6 @@
 /**
  * laypage
- * 分页组件
+ * 分页
  */
 
 import { lay } from '../core/lay.js';
@@ -332,7 +332,10 @@ export class Laypage extends Component {
     return $rootElem;
   }
 
-  // 为根容器应用额外的类名和样式
+  /**
+   * 为根容器应用额外的类名和样式
+   * @return {void}
+   */
   #applyRootElemStyles() {
     const options = this.options;
     const $rootElem = this.$rootElem;
@@ -344,7 +347,7 @@ export class Laypage extends Component {
 
     // 组件尺寸
     if (['sm', 'md', 'lg'].includes(options.size)) {
-      $rootElem.addClass(`lay-size-${options.size}`);
+      $rootElem.attr('data-lay-size', options.size);
     }
 
     // 内置主题风格

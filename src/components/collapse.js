@@ -1,6 +1,6 @@
 /**
  * collapse
- * 折叠面板组件
+ * 折叠面板
  */
 
 import { lay } from '../core/lay.js';
@@ -13,16 +13,22 @@ export class Collapse extends Component {
   // 默认配置
   static options = {
     elem: '.lay-collapse',
+
+    // 是否开启手风琴模式
+    accordion: false,
   };
 
-  // 渲染
+  /**
+   * 渲染
+   * @returns {void}
+   */
   render() {
     const options = this.options;
     const $items = options.$elem.find('.lay-collapse-item');
     const eventNamespace = CONST.EVENT_NAMESPACE;
 
-    $items.each(function () {
-      const $this = $(this);
+    $items.each((index, itemElem) => {
+      const $this = $(itemElem);
       const $title = $this.find('.lay-collapse-title');
       const $content = $this.find('.lay-collapse-content');
       const isNone = $content.css('display') === 'none';
@@ -36,18 +42,21 @@ export class Collapse extends Component {
       $this[isNone ? 'removeClass' : 'addClass'](CONST.CLASS_SHOW);
 
       // 点击标题
-      $title.off(clickEventName).on(clickEventName, events.titleClick);
+      $title.off(clickEventName).on(clickEventName, (e) => {
+        this.#titleClick($(e.currentTarget));
+      });
     });
   }
-}
 
-// 基础事件体
-const events = {
-  // 点击面板标题项
-  titleClick() {
-    const $this = $(this);
-    const wrapper = $this.closest('.lay-collapse');
-    const filter = wrapper.attr('lay-filter');
+  /**
+   * 点击面板标题项的事件处理函数
+   * @param {JQuery<HTMLElement>} $this - 当前点击的标题元素
+   * @return {void}
+   */
+  #titleClick($this) {
+    const options = this.options;
+    const $elem = options.$elem;
+    const filter = $elem.attr('lay-filter');
 
     const ANIM_MS = 200; // 动画过渡毫秒数
     const CLASS_ITEM = '.lay-collapse-item';
@@ -56,11 +65,11 @@ const events = {
     const thisItemElem = $this.parent(CLASS_ITEM);
     const thisContentElem = $this.siblings(CLASS_CONTENT);
     const isNone = thisContentElem.css('display') === 'none';
-    const isAccordion = typeof wrapper.attr('lay-accordion') === 'string';
 
     // 动画执行完成后的操作
     const complete = function () {
-      $(this).css('display', ''); // 剔除动画生成的 style display，以适配外部样式的状态重置
+      // 剔除动画生成的 style display，以适配外部样式的状态重置
+      $(this).css('display', '');
     };
 
     // 是否正处于动画中的状态
@@ -78,7 +87,7 @@ const events = {
     }
 
     // 是否开启手风琴
-    if (isAccordion) {
+    if (options.accordion) {
       const itemSiblings = thisItemElem.siblings(`.${CONST.CLASS_SHOW}`);
       itemSiblings.removeClass(CONST.CLASS_SHOW);
       itemSiblings.children(CLASS_CONTENT).show().slideUp(ANIM_MS, complete);
@@ -90,8 +99,8 @@ const events = {
       content: thisContentElem,
       show: isNone,
     });
-  },
-};
+  }
+}
 
 const CONST = Collapse.CONST;
 

@@ -39,7 +39,7 @@ class Test {
       class: 'test-wrapper',
     });
     const sideElem = (this.sideElem = lay.createElement('div', {
-      class: 'lay-panel test-side',
+      class: 'lay-menu-container lay-panel test-side',
     }));
     const mainElem = (this.mainElem = lay.createElement('div', {
       class: 'test-main',
@@ -251,7 +251,7 @@ class Test {
     const codeInst = layCode({
       elem: $(itemElem).find('.lay-code')[0],
       theme: 'dark',
-      encode: false,
+      // encode: false,
     });
 
     // 代码高亮
