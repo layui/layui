@@ -878,6 +878,11 @@ lay.position = function (target, elem, opts) {
 
 /**
  * 获取元素上的属性配置项
+ *
+ * @deprecated 鉴于 CSP 策略，该方法已弃用。
+ * 将统一使用 dataset 方案获取元素上的 `data-*` 配置信息。
+ * 因当前 table 组件仍有依赖，该方法暂不移除，待 table 重写完成后将正式移除。
+ *
  * @param {string | HTMLElement | JQuery} elem - HTML 元素
  * @param {{attr: string} | string} [opts="lay-options"] - 可配置的选项，string 类型指定属性名
  * @returns {Object.<string, any>} 返回元素上的属性配置项
@@ -918,6 +923,145 @@ lay.options = function (elem, opts) {
     );
     return {};
   }
+};
+
+/**
+ * 解析元素 dataset 上的配置信息
+ * @param {string | HTMLElement | JQuery} elem - 目标元素
+ * @param {Object} [opts] - 配置对象
+ * @param {string} [opts.prefix='lay'] - 约定读取的 dataset 前缀；
+ *  默认只解析 `data-lay-*` 属性；若要解析所有 `data-*` 属性，可将 prefix 设置为 `''`
+ * @param {string} [opts.connector='.'] - 嵌套属性的连接符
+ * @param {Function} [opts.beforeParseValue] - 值类型转换前的回调；
+ *  接收 {rawKey: string, rawValue: string} 参数；返回 false 则不转换
+ * @returns {Object} 返回 options 对象
+ * @example
+ * ```html
+ * <div id="testEl"
+ *   data-lay-size="xl"
+ *   data-lay-index="0"
+ *   data-lay-default-open="true"
+ *   data-lay-colors='["red", "green", "blue"]'
+ *   data-lay-tree.flag="null"
+ * ></div>
+ * ```
+ * ```js
+ * const datasetOptions = lay.parseDataset('#testEl');
+ * console.log(datasetOptions);
+ * // {
+ * //   size: 'xl',
+ * //   index: 0,
+ * //   defaultOpen: true,
+ * //   colors: ['red', 'green', 'blue'],
+ * //   tree: {
+ * //     flag: null
+ * //   }
+ * // }
+ * ```
+ */
+lay.parseDataset = function (elem, opts) {
+  const targetElem = getElement(elem);
+  const dataset = targetElem?.dataset;
+
+  if (!dataset) return {};
+
+  opts = {
+    prefix: 'lay',
+    connector: '.',
+    // beforeParseValue: null,
+    ...opts,
+  };
+
+  // 根据 JSON 规范进行值类型转换
+  // 如：`"true"` -> `true`, `"123"` -> `123`, `"[1,2,3]"` -> `[1,2,3]`
+  const parseValue = ({ rawKey, rawValue }) => {
+    // 值类型转换前的回调；返回 false 则不转换
+    const beforeParseResult = opts.beforeParseValue?.({
+      rawKey,
+      rawValue,
+    });
+
+    if (beforeParseResult === false || !rawValue.trim()) {
+      return rawValue;
+    }
+
+    try {
+      return JSON.parse(rawValue);
+    } catch {
+      return rawValue;
+    }
+  };
+
+  // 嵌套解析
+  const parseNested = (target, rawKey, rawValue) => {
+    const keys = rawKey.split(opts.connector).filter(Boolean);
+    if (!keys.length) return;
+
+    let current = target;
+    const value = parseValue({ rawKey, rawValue });
+
+    // 逐级创建选项
+    for (const [index, key] of keys.entries()) {
+      // 最后一级直接赋值
+      if (index === keys.length - 1) {
+        // 若目标位置已存在对象值（如先由嵌套属性创建），覆盖前打印提示
+        if (lay.isPlainObject(current[key])) {
+          log(
+            `parseDataset: Property "data-${rawKey}" overwrites the existing object at "data-${keys
+              .slice(0, index + 1)
+              .join(opts.connector)}"`,
+          );
+        }
+        current[key] = value;
+        continue;
+      }
+
+      // 初始化父级对象
+      if (!lay.hasOwn(current, key)) {
+        current[key] = {};
+      } else if (!lay.isPlainObject(current[key])) {
+        // 若父级已存在非对象值，则视为无效嵌套
+        log(
+          `parseDataset: Cannot set nested property "data-${rawKey}" on non-object value at "data-${keys
+            .slice(0, index + 1)
+            .join(opts.connector)}"`,
+        );
+        return;
+      }
+
+      current = current[key];
+    }
+  };
+
+  // 获取特定前缀后的属性 Key
+  const getKey = (rawKey) => {
+    // 无任何前缀，即表示读取 `data-*` 配置信息
+    if (!opts.prefix) {
+      return rawKey;
+    }
+
+    const key = rawKey.slice(opts.prefix.length);
+
+    // 若移除前缀后的属性名不以大写字母开头，则视为无效属性
+    // 该逻辑为避免匹配到 data-lay* ，有效的属性名应为 data-lay-*
+    if (!rawKey.startsWith(opts.prefix) || !/^[A-Z]/.test(key)) {
+      return '';
+    }
+
+    return key.charAt(0).toLowerCase() + key.slice(1);
+  };
+
+  const dataOptions = {};
+
+  Object.entries(dataset).forEach(([rawKey, rawValue]) => {
+    const key = getKey(rawKey);
+
+    if (key) {
+      parseNested(dataOptions, key, rawValue);
+    }
+  });
+
+  return dataOptions;
 };
 
 /**

@@ -135,8 +135,9 @@
 }
 
 /* 子菜单展开状态 / 子菜单打开状态@水平菜单 */
-.lay-menu:not([data-submenu-mode='popup']) .lay-menu-submenu.lay-is-expanded,
-.lay-menu[data-mode='horizontal'] .lay-menu-submenu.lay-is-open {
+.lay-menu:not([data-lay-submenu-mode='popup'])
+  .lay-menu-submenu.lay-is-expanded,
+.lay-menu[data-lay-mode='horizontal'] .lay-menu-submenu.lay-is-open {
   > .lay-menu-title {
     color: var(--lay-menu-open-color);
 
@@ -154,7 +155,9 @@
 }
 
 /* 子菜单展开状态 @垂直菜单 */
-.lay-menu:not([data-mode='horizontal']):not([data-submenu-mode='popup']) {
+.lay-menu:not([data-lay-mode='horizontal']):not(
+    [data-lay-submenu-mode='popup']
+  ) {
   .lay-menu-submenu.lay-is-expanded {
     > .lay-menu-sub {
       display: block;
@@ -163,7 +166,7 @@
 }
 
 /* 子菜单 popup 模式 */
-.lay-menu:not([data-mode='horizontal'])[data-submenu-mode='popup'] {
+.lay-menu:not([data-lay-mode='horizontal'])[data-lay-submenu-mode='popup'] {
   .lay-menu-title-arrow .lay-icon {
     transform: rotate(-90deg);
   }
@@ -171,7 +174,7 @@
 
 /* 选中的菜单项 */
 .lay-menu-item.lay-is-active,
-.lay-menu[data-submenu-mode='popup']
+.lay-menu[data-lay-submenu-mode='popup']
   .lay-menu-submenu:has(.lay-menu-item.lay-is-active) {
   > .lay-menu-title {
     color: var(--lay-menu-active-color);
@@ -203,7 +206,7 @@
 }
 
 /* 水平菜单 */
-.lay-menu[data-mode='horizontal'] {
+.lay-menu[data-lay-mode='horizontal'] {
   display: flex;
   gap: var(--lay-spacing-sm);
   margin: 0;
@@ -234,7 +237,7 @@
 }
 
 /* 收起模式 @垂直菜单 */
-.lay-menu[data-collapsed]:not([data-mode='horizontal']) {
+.lay-menu[data-lay-collapsed]:not([data-lay-mode='horizontal']) {
   .lay-menu-title {
     height: calc(
       var(--lay-menu-line-height) + 2 * var(--lay-menu-title-padding-y)
@@ -249,20 +252,20 @@
   }
 }
 /* 收起模式 @水平菜单 (WIP) */
-.lay-menu[data-collapsed][data-mode='horizontal'] {
+.lay-menu[data-lay-collapsed][data-lay-mode='horizontal'] {
   display: none;
 }
 
 /* 尺寸 */
-.lay-menu[data-size='sm'] {
+.lay-menu[data-lay-size='sm'] {
   --lay-menu-line-height: 26px;
 }
-.lay-menu[data-size='lg'] {
+.lay-menu[data-lay-size='lg'] {
   --lay-menu-line-height: 38px;
 }
 
 /* 主题·深色模式 */
-.lay-menu[data-theme='dark'] {
+.lay-menu[data-lay-theme='dark'] {
   --lay-menu-color: rgba(255, 255, 255, 0.8);
   --lay-menu-active-color: rgba(255, 255, 255, 1);
   --lay-menu-active-bg: var(--lay-color-primary);
@@ -285,19 +288,19 @@
   background-color: var(--lay-color-light, #fff);
   transition: all var(--lay-anim-duration);
 }
-.lay-menu-container:has(.lay-menu[data-theme='dark']) {
+.lay-menu-container:has(.lay-menu[data-lay-theme='dark']) {
   background-color: var(--lay-color-dark, #2f363c);
 }
 /* 外层容器 @垂直菜单 收起模式 */
 .lay-menu-container:has(
-  .lay-menu:not([data-mode='horizontal'])[data-collapsed]
+  .lay-menu:not([data-lay-mode='horizontal'])[data-lay-collapsed]
 ) {
   --lay-menu-collapsed-width: 65px;
 
   width: var(--lay-menu-collapsed-width) !important;
 }
 /* 外层容器 @水平菜单 */
-.lay-menu-container:has(.lay-menu[data-mode='horizontal']) {
+.lay-menu-container:has(.lay-menu[data-lay-mode='horizontal']) {
   flex-direction: row;
   height: var(--lay-menu-horizontal-height);
   padding-inline: var(--lay-spacing);
@@ -355,15 +358,15 @@
   border-left-width: var(--lay-menu-border-width);
 }
 /* 线条风格 @垂直菜单（常用于右侧目录） */
-.lay-menu-is-line:has(.lay-menu:not([data-mode='horizontal'])) {
+.lay-menu-is-line:has(.lay-menu:not([data-lay-mode='horizontal'])) {
   .lay-menu-submenu:has(.lay-menu-item.lay-is-active).lay-is-expanded
     > .lay-menu-title::after {
     display: none;
   }
 }
 /* 线条风格 @水平菜单 */
-.lay-menu-is-line:has(.lay-menu[data-mode='horizontal']) {
-  .lay-menu[data-mode='horizontal'] li {
+.lay-menu-is-line:has(.lay-menu[data-lay-mode='horizontal']) {
+  .lay-menu[data-lay-mode='horizontal'] li {
     align-items: normal;
   }
 
@@ -376,7 +379,7 @@
     border-bottom-width: var(--lay-menu-active-border-width);
   }
 }
-.lay-menu-is-line:has(.lay-menu[data-mode='horizontal'])::after {
+.lay-menu-is-line:has(.lay-menu[data-lay-mode='horizontal'])::after {
   top: auto;
   bottom: 0;
   width: 100%;
@@ -392,7 +395,7 @@
 .lay-menu-popup + .lay-menu-popup {
   box-shadow: 1px 5px 32px rgb(0 0 0 / 16%);
 }
-.lay-menu-popup:has(.lay-menu[data-theme='dark']) {
+.lay-menu-popup:has(.lay-menu[data-lay-theme='dark']) {
   border-color: var(--lay-menu-border-color, rgba(200, 200, 200, 0.08));
 }
 .lay-menu-popup .lay-menu-container {

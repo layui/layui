@@ -12,12 +12,15 @@ export class Breadcrumb extends Component {
   // 默认配置项
   static options = {
     elem: '.lay-breadcrumb',
+
+    // 分隔符
+    separator: '/',
   };
 
   static get CONST() {
     return {
       ...super.CONST,
-      ATTR_SEPARATOR: 'lay-separator',
+      ELEM_SEPARATOR: 'lay-breadcrumb-separator',
     };
   }
 
@@ -25,16 +28,16 @@ export class Breadcrumb extends Component {
   render() {
     const options = this.options;
     const $elem = options.$elem;
-
-    const ATTR_SEPARATOR = CONST.ATTR_SEPARATOR;
-    const separator = $elem.attr(ATTR_SEPARATOR) || '/';
     const $aElem = $elem.children('a');
 
-    if ($aElem.next('span[' + ATTR_SEPARATOR + ']')[0]) return;
-
-    $aElem.each(function (index) {
+    $aElem.each((index, elem) => {
       if (index === $aElem.length - 1) return;
-      $(this).after(`<span ${ATTR_SEPARATOR}>${separator}</span>`);
+      const $this = $(elem);
+      const $separator = $(`<span class="${CONST.ELEM_SEPARATOR}"></span>`);
+
+      $separator[0].innerHTML = options.separator;
+      $this.next(`span.${CONST.ELEM_SEPARATOR}`).remove();
+      $this.after($separator);
     });
 
     $elem.css('visibility', 'visible');

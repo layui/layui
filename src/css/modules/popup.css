@@ -53,7 +53,7 @@
 }
 
 /* 主题 */
-.lay-popup[data-theme='dark'] {
+.lay-popup[data-lay-theme='dark'] {
   background-color: var(--lay-color-dark, #2f363c);
   color: rgba(255, 255, 255, 0.9);
   border: none;
@@ -75,6 +75,6 @@
 .lay-popup-tooltip {
   box-shadow: 1px 5px 32px rgb(0 0 0 / 16%);
 }
-.lay-popup-tooltip[data-theme='dark'] {
+.lay-popup-tooltip[data-lay-theme='dark'] {
   box-shadow: 1px 5px 32px rgb(0 0 0 / 32%);
 }

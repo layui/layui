@@ -31,22 +31,22 @@
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
 }
-.lay-progress:not(.lay-size-xl) .lay-progress-info {
+.lay-progress:not([data-lay-size='xl']) .lay-progress-info {
   font-size: 0.75rem;
 }
 
 /* 不同尺寸 */
-.lay-progress.lay-size-xs {
+.lay-progress[data-lay-size='xs'] {
   --lay-progress-border-radius: 0;
 
   height: 2px;
 }
-.lay-progress.lay-size-sm {
+.lay-progress[data-lay-size='sm'] {
   height: 5px;
 }
-.lay-progress.lay-size-lg {
+.lay-progress[data-lay-size='lg'] {
   height: 11px;
 }
-.lay-progress.lay-size-xl {
+.lay-progress[data-lay-size='xl'] {
   height: var(--lay-progress-size-xl);
 }

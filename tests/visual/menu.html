@@ -9,7 +9,9 @@
       body {
         --demo-sidebar-width: 232px;
       }
-      body:has(.demo-sidebar .lay-menu[data-mode='vertical'][data-collapsed]) {
+      body:has(
+        .demo-sidebar .lay-menu[data-lay-mode='vertical'][data-lay-collapsed]
+      ) {
         --demo-sidebar-width: var(--lay-menu-collapsed-width, 65px);
       }
 
@@ -421,7 +423,7 @@
           <ul
             class="lay-menu"
             id="demo-horizontal-menu-1"
-            data-mode="horizontal"
+            data-lay-mode="horizontal"
           >
             <script>
               document.write(getMenuTemplate());
@@ -434,9 +436,9 @@
           <ul
             class="lay-menu"
             id="demo-horizontal-menu-2"
-            data-mode="horizontal"
-            data-theme="dark"
-            data-popup-offset="18"
+            data-lay-mode="horizontal"
+            data-lay-theme="dark"
+            data-lay-popup-offset="18"
           >
             <script>
               document.write(getMenuTemplate());
@@ -449,7 +451,7 @@
           <ul
             class="lay-menu"
             id="demo-horizontal-menu-3"
-            data-mode="horizontal"
+            data-lay-mode="horizontal"
           >
             <script>
               document.write(getMenuTemplate());
@@ -465,9 +467,9 @@
           <ul
             class="lay-menu"
             id="demo-horizontal-menu-4"
-            data-mode="horizontal"
-            data-theme="dark"
-            data-submenu-theme="light"
+            data-lay-mode="horizontal"
+            data-lay-theme="dark"
+            data-lay-submenu-theme="light"
           >
             <script>
               document.write(getMenuTemplate());

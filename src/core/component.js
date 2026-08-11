@@ -251,14 +251,8 @@ export class Component {
 
     // 仅来自 render 的调用
     if (!isReload) {
-      // 合并 lay-options 属性上的配置信息
-      // WIP: 鉴于 CSP 策略，后续将移除 `lay.options` 方法，改用 dataset 方案
-      const layOptions = lay.options($elem[0]);
-      $.extend(this.options, layOptions);
-
       // 合并 dataset 上的配置信息
-      // WIP: 临时实现，后续将支持嵌套等功能
-      const dataset = { ...$elem[0]?.dataset };
+      const dataset = lay.parseDataset($elem[0]);
       $.extend(this.options, dataset);
 
       // 若对目标元素重复渲染，则视为 reload 处理

@@ -260,7 +260,7 @@
   color: #5f5f5f;
   font-style: normal;
 }
-.lay-breadcrumb span[lay-separator] {
-  margin: 0 10px;
+.lay-breadcrumb-separator {
+  padding: 0 10px;
   color: #999;
 }

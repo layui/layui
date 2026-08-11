@@ -94,14 +94,14 @@
 }
 
 /* 组件尺寸 */
-.lay-pagination.lay-size-sm {
+.lay-pagination[data-lay-size='sm'] {
   --lay-height: 24px;
   --lay-input-width: 38px;
   --lay-btn-spacing: 8px;
 
   font-size: 0.75rem;
 }
-.lay-pagination.lay-size-lg {
+.lay-pagination[data-lay-size='lg'] {
   --lay-height: 38px;
   --lay-input-width: 55px;
 
