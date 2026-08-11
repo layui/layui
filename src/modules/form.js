@@ -80,7 +80,13 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function (exports) {
           }
         }
       },
-      autocomplete: null // 全局 autocomplete 状态。 null 表示不干预
+
+      // 全局 autocomplete 状态。 null 表示不干预
+      autocomplete: null,
+
+      // 表单取值和提交时，是否过滤 disabled 状态的表单域
+      // 默认 false 以兼容旧版本；getValue 的 opts.filterDisabled 优先于此全局配置
+      filterDisabled: false
     };
   };
 
@@ -156,8 +162,15 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function (exports) {
   };
 
   // 取值
-  Form.prototype.getValue = function (filter, itemForm) {
+  Form.prototype.getValue = function (filter, itemForm, opts) {
     itemForm = itemForm || this.getFormElem(filter);
+
+    opts = $.extend(
+      {
+        filterDisabled: this.config.filterDisabled
+      },
+      opts
+    );
 
     // 获取所有表单域
     var fieldElem = itemForm.find('input,select,textarea');
@@ -195,8 +208,8 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function (exports) {
       // 复选框和单选框未选中，不记录字段
       if (/^(checkbox|radio)$/.test(item.type) && !item.checked) return;
 
-      // 排除 disabled 表单域
-      if (item.disabled) return;
+      // 排除 disabled 状态的表单项
+      if (opts.filterDisabled && othis.is(':disabled')) return;
 
       // select 多选用 jQuery 方式取值，未选中 option 时，
       // jQuery v2.2.4 及以下版本返回 null，以上(3.x) 返回 []。
