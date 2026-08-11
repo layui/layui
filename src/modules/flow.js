@@ -49,7 +49,9 @@ layui.define(['i18n', 'component'], function (exports) {
       var $more = $(
         '<div class="' +
           CONST.ELEM_MORE +
-          '"><a href="javascript:;">' +
+          '"><a href="' +
+          (__LAYUI_CSP__ ? '' : 'javascript:;') +
+          '">' +
           ELEM_TEXT +
           '</a></div>'
       );
@@ -104,7 +106,8 @@ layui.define(['i18n', 'component'], function (exports) {
       })();
 
       // 不自动滚动加载
-      $moreBtn.on('click', function () {
+      $moreBtn.on('click', function (e) {
+        e.preventDefault();
         if (finished) return;
         locked || done();
       });

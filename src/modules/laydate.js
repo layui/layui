@@ -920,7 +920,6 @@ layui.define(['lay', 'i18n'], function (exports) {
     options.showBottom && elem.appendChild(divFooter);
 
     // 生成自定义主题
-    var style = lay.elem('style');
     var styleText = [];
     var colorTheme;
     var isPrimaryColor = true;
@@ -970,15 +969,12 @@ layui.define(['lay', 'i18n'], function (exports) {
     }
     if (styleText.length) {
       styleText = styleText.join('');
-      if ('styleSheet' in style) {
-        style.setAttribute('type', 'text/css');
-        style.styleSheet.cssText = styleText;
-      } else {
-        style.innerHTML = styleText;
-      }
-
       colorTheme && lay(elem).addClass('laydate-theme-molv');
-      elem.appendChild(style);
+      lay.style({
+        target: elem,
+        id: 'DF-laydate-' + that.elemID,
+        text: styleText
+      });
     }
 
     //移除上一个控件
