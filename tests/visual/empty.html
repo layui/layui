@@ -71,5 +71,40 @@
         </div>
       </div>
     </div>
+    <br />
+    <h2>JS 渲染（empty.render）</h2>
+    <br />
+    <!-- 通过 render() 将空状态渲染到指定容器 -->
+    <div id="demo-render"></div>
+
+    <br />
+    <h2>JS 构建（empty.build）</h2>
+    <br />
+    <!-- 通过 build() 获取空状态结构后手动插入，供组件内部复用 -->
+    <div id="demo-build"></div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(() => {
+        const { empty, $ } = layui;
+
+        // 渲染到目标元素
+        empty.render({
+          elem: '#demo-render',
+          icon: '<i class="lay-icon lay-icon-search"></i>',
+          text: '未找到相关数据',
+          description: '可以尝试调整筛选条件后重试',
+          action: '<button class="lay-btn lay-btn-primary">清除筛选</button>',
+        });
+
+        // 构建结构后手动插入（组件内部复用同款方式）
+        $('#demo-build').append(
+          empty.build({
+            text: '暂无记录',
+            action: '<button class="lay-btn lay-btn-primary">去创建</button>',
+          }),
+        );
+      });
+    </script>
   </body>
 </html>
