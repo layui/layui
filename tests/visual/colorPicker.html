@@ -88,6 +88,9 @@
           onChange: ({ color }) => {
             console.log(color);
           },
+          done({ options, color }) {
+            console.log(`${options.id} → done → `, color);
+          },
         });
 
         colorPicker.render({

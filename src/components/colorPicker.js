@@ -321,6 +321,8 @@ export class ColorPicker extends Popup {
 
         // 颜色更改的回调
         options.onChange?.({
+          instance: this,
+          options,
           color: this.$rootElem
             .find(`.${CONST.PICKER_INPUT} input`)
             .val()
@@ -560,6 +562,12 @@ export class ColorPicker extends Popup {
     // 颜色选择器表单
     const elemPickerInput = $rootElem.find(`.${CONST.PICKER_INPUT} input`);
 
+    // 传递给回调函数的基础参数对象
+    const baseParams = {
+      instance: this,
+      options,
+    };
+
     // 事件
     const pickerEvents = {
       // 清空
@@ -571,15 +579,18 @@ export class ColorPicker extends Popup {
           .addClass(CONST.ICON_PICKER_CLOSE);
         this.color = '';
 
-        options.done?.({ color: '' });
+        options.done?.({ ...baseParams, color: '' });
         this.close();
       },
 
       // 确认
       confirm: (othis, change) => {
-        let value = elemPickerInput.val().trim(),
-          colorValue,
-          hsb;
+        let value = elemPickerInput.val().trim();
+        let type = elemColorBoxSpan.attr('lay-type');
+        let colorValue;
+        let hsb;
+        let rgb;
+        let alpha;
 
         if (value.indexOf(',') > -1) {
           hsb = RGBToHSB(RGBSTo(value));
@@ -589,11 +600,14 @@ export class ColorPicker extends Popup {
 
           if (
             (value.match(/[0-9]{1,3}/g) || []).length > 3 &&
-            elemColorBoxSpan.attr('lay-type') === 'rgba'
+            type === 'rgba'
           ) {
-            const left =
-              value.slice(value.lastIndexOf(',') + 1, value.length - 1) * 280;
-            $rootElem.find(`.${CONST.PICKER_ALPHA_SLIDER}`).css('left', left);
+            alpha = parseFloat(
+              value.slice(value.lastIndexOf(',') + 1, value.length - 1),
+            );
+            $rootElem
+              .find(`.${CONST.PICKER_ALPHA_SLIDER}`)
+              .css('left', alpha * 280);
             elemColorBoxSpan[0].style.background = value;
             colorValue = value;
           }
@@ -607,14 +621,38 @@ export class ColorPicker extends Popup {
             .addClass(CONST.ICON_PICKER_DOWN);
         }
 
+        // 按 format 规范化输出颜色值
+        if (value) {
+          rgb = HSBToRGB(hsb);
+          if (type === 'rgba') {
+            colorValue = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${
+              alpha === undefined ? 1 : alpha
+            })`;
+          } else if (type === 'torgb') {
+            colorValue = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+          } else {
+            colorValue = `#${HSBToHEX(hsb)}`;
+          }
+        } else {
+          // 空输入时保持返回空字符串
+          colorValue = '';
+        }
+
+        const params = {
+          ...baseParams,
+          color: colorValue,
+          rawColor: value,
+        };
+
         if (change === 'change') {
           this.#select(hsb.h, hsb.s, hsb.b, change);
-          options.onChange?.({ color: colorValue });
+          options.onChange?.(params);
           return;
         }
-        this.color = value;
 
-        options.done?.({ color: value });
+        this.color = colorValue;
+
+        options.done?.(params);
         this.close();
       },
     };

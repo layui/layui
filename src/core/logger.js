@@ -3,6 +3,7 @@
  */
 
 let warned = Object.create(null);
+let warnedCount = 0;
 
 /**
  * 控制台日志消息提示
@@ -25,13 +26,13 @@ export function log(message, level = 'warn') {
 export function logOnce(...args) {
   const [message] = args;
 
-  if (warned._size > 100) {
+  if (warnedCount > 100) {
     warned = Object.create(null);
-    warned._size = 0;
+    warnedCount = 0;
   }
   if (!warned[message]) {
     warned[message] = true;
-    warned._size = (warned._size || 0) + 1;
+    warnedCount++;
     log(...args);
   }
 }
