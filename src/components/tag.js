@@ -17,14 +17,14 @@ export class Tag extends Component {
     // 渲染目标：支持 CSS 选择器、DOM 元素或 jQuery 集合
     // 默认匹配页面全部 .lay-tag
     elem: '.lay-tag',
-    text: '', // 标签文案
+    text: '', // 标签文案，默认空
     type: '', // 状态色：normal / success / warning / danger / info，为空时使用默认主题色
     size: '', // 尺寸：xs / sm / lg，为空时为默认尺寸（md）
-    effect: 'solid', // 主题：solid 实心 / light 浅色 / plain 朴素
-    closable: false, // 是否可关闭（渲染关闭按钮）
-    layFilter: '', // lay-filter 属性，用于区分 close 事件
-    round: false, // 是否胶囊圆角
-    disabled: false, // 是否禁用（禁用时不可关闭）
+    effect: 'solid', // 主题：solid 实心 / light 浅色 / plain 朴素，默认 solid
+    closable: false, // 是否可关闭（渲染关闭按钮），默认 false
+    layFilter: '', // lay-filter 属性，用于区分 close 事件，为空时不设置
+    round: false, // 是否胶囊圆角，默认 false
+    disabled: false, // 是否禁用（禁用时不可关闭），默认 false
   };
 
   static get CONST() {
