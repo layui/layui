@@ -14,7 +14,8 @@ export class Tag extends Component {
 
   // 默认配置项
   static options = {
-    // 渲染目标：支持 CSS 选择器、DOM 元素或 jQuery 集合，默认匹配页面全部 .lay-tag
+    // 渲染目标：支持 CSS 选择器、DOM 元素或 jQuery 集合
+    // 默认匹配页面全部 .lay-tag
     elem: '.lay-tag',
     text: '', // 标签文案
     type: '', // 状态色：normal / success / warning / danger / info，为空时使用默认主题色
@@ -73,7 +74,8 @@ export class Tag extends Component {
       $tag.attr('data-lay-round', true);
     }
 
-    // 禁用。复用基类状态类；禁用时不可关闭，不声明 data-lay-closable
+    // 禁用。复用基类状态类
+    // 禁用时不可关闭，不声明 data-lay-closable
     if (options.disabled) {
       $tag.addClass(CONST.CLASS_IS_DISABLED);
     } else if (options.closable) {
@@ -147,7 +149,8 @@ export class Tag extends Component {
       return this;
     }
 
-    // 静态 HTML 声明 data-lay-closable 属性时自动注入关闭按钮（禁用标签不注入，免去手动编写关闭节点）
+    // 静态 HTML 声明 data-lay-closable 属性时自动注入关闭按钮
+    // 禁用标签不注入，免去手动编写关闭节点
     if (
       $elem.is('[data-lay-closable]') &&
       !$elem.hasClass(CONST.CLASS_IS_DISABLED) &&
