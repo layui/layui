@@ -43,7 +43,7 @@ export class Empty extends Component {
     const $empty = $('<div>').addClass(CONST.ELEM);
 
     // 图标。options.icon 为 false 时不渲染图标容器（纯文字空态）；
-    // 否则渲染图标容器，为空时由 CSS 的 :empty::before 自动显示默认图标
+    // 否则渲染图标容器，为空字符时由 CSS 的 :empty::before 自动显示默认图标
     if (options.icon !== false) {
       const $icon = $('<div>').addClass(CONST.ELEM_ICON);
       if (options.icon) {
