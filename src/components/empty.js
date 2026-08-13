@@ -12,7 +12,10 @@ export class Empty extends Component {
   // 默认配置项
   static options = {
     elem: '',
-    icon: '', // 自定义图标内容（HTML 字符串）；传 false 则不渲染图标容器（纯文字空态），为空字符串时由 CSS 显示默认内置图标
+
+    // 自定义图标内容（HTML 字符串）；
+    // 值为 false 则不渲染图标容器（纯文字空态），为空字符串时将显示默认内置图标
+    icon: '',
     text: '', // 主文案
     description: '', // 描述文案
     action: '', // 操作区内容（HTML 字符串）
