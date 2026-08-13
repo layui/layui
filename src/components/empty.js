@@ -5,6 +5,7 @@
 
 import { $ } from 'jquery';
 import { Component } from '../core/component.js';
+import { log } from '../core/logger.js';
 
 export class Empty extends Component {
   static componentName = 'empty';
@@ -18,7 +19,7 @@ export class Empty extends Component {
     icon: '',
     text: '', // 主文案
     description: '', // 描述文案
-    action: '', // 操作区内容（HTML 字符串）
+    action: '', // 操作区内容（HTML 字符串）；或函数回调，返回 jQuery 对象/HTML 内容
   };
 
   static get CONST() {
@@ -64,11 +65,15 @@ export class Empty extends Component {
       );
     }
 
-    // 操作区
+    // 操作区。支持 HTML 字符串或函数回调，便于创建事件等交互
     if (options.action) {
-      $empty.append(
-        $('<div>').addClass(CONST.ELEM_ACTION).html(options.action),
+      const $action = $('<div>').addClass(CONST.ELEM_ACTION);
+      $action.append(
+        typeof options.action === 'function'
+          ? options.action()
+          : options.action,
       );
+      $empty.append($action);
     }
 
     return $empty;
@@ -81,7 +86,7 @@ export class Empty extends Component {
 
     // 目标元素不存在时提示并直接返回
     if (!$elem[0]) {
-      console.warn(`[empty] 未找到目标元素：${options.elem}`);
+      log(`[empty] target element not found: ${options.elem}`);
       return this;
     }
 
