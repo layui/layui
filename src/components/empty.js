@@ -12,7 +12,7 @@ export class Empty extends Component {
   // 默认配置项
   static options = {
     elem: '',
-    icon: '', // 自定义图标内容（HTML 字符串），为空时由 CSS 显示默认内置图标
+    icon: '', // 自定义图标内容（HTML 字符串）；传 false 则不渲染图标容器（纯文字空态），为空字符串时由 CSS 显示默认内置图标
     text: '', // 主文案
     description: '', // 描述文案
     action: '', // 操作区内容（HTML 字符串）
@@ -36,16 +36,19 @@ export class Empty extends Component {
    * @returns {jQuery} 空状态 jQuery 对象
    */
   static build(options) {
-    options = { ...Empty.options, ...options };
+    options = { ...this.options, ...options };
 
     const $empty = $('<div>').addClass(CONST.ELEM);
 
-    // 图标。容器为空时由 CSS 的 :empty::before 自动显示默认图标
-    const $icon = $('<div>').addClass(CONST.ELEM_ICON);
-    if (options.icon) {
-      $icon.html(options.icon);
+    // 图标。options.icon 为 false 时不渲染图标容器（纯文字空态）；
+    // 否则渲染图标容器，为空时由 CSS 的 :empty::before 自动显示默认图标
+    if (options.icon !== false) {
+      const $icon = $('<div>').addClass(CONST.ELEM_ICON);
+      if (options.icon) {
+        $icon.html(options.icon);
+      }
+      $empty.append($icon);
     }
-    $empty.append($icon);
 
     // 主文案
     if (options.text) {
@@ -74,10 +77,13 @@ export class Empty extends Component {
     const options = this.options;
     const $elem = options.$elem;
 
-    // 无目标元素时直接返回
-    if (!$elem[0]) return this;
+    // 目标元素不存在时提示并直接返回
+    if (!$elem[0]) {
+      console.warn(`[empty] 未找到目标元素：${options.elem}`);
+      return this;
+    }
 
-    $elem.empty().append(Empty.build(options));
+    $elem.empty().append(this.constructor.build(options));
 
     return this;
   }
