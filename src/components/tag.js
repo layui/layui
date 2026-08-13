@@ -13,6 +13,7 @@ export class Tag extends Component {
 
   // 默认配置项
   static options = {
+    // 渲染目标：支持 CSS 选择器、DOM 元素或 jQuery 集合，默认匹配页面全部 .lay-tag
     elem: '.lay-tag',
     text: '', // 标签文案
     type: '', // 状态色：normal / success / warning / danger / info，为空时使用默认主题色

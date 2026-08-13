@@ -139,7 +139,7 @@
 
         // 订阅关闭事件
         tag.on('close(demo)', ({ elem }) => {
-          console.log('标签已关闭：', elem);
+          console.warn('标签已关闭：', elem);
         });
 
         // 返回 false 可阻断关闭
