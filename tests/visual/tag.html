@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>标签 - layui</title>
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <style>
+      /* 演示区块排版 */
+      .demo-section {
+        margin-bottom: var(--lay-spacing-xl);
+      }
+      .demo-section h2 {
+        margin: 0 0 var(--lay-spacing);
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--lay-gray-900);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="lay-padding-5">
+      <section class="demo-section">
+        <h2>基础用法</h2>
+        <span class="lay-tag">默认</span>
+        <span class="lay-tag" data-lay-type="normal">中性</span>
+        <span class="lay-tag" data-lay-type="success">成功</span>
+        <span class="lay-tag" data-lay-type="warning">警告</span>
+        <span class="lay-tag" data-lay-type="danger">危险</span>
+        <span class="lay-tag" data-lay-type="info">信息</span>
+      </section>
+
+      <section class="demo-section">
+        <h2>主题（effect）</h2>
+        <span class="lay-tag" data-lay-type="success">实心</span>
+        <span class="lay-tag" data-lay-type="success" data-lay-effect="light">
+          浅色
+        </span>
+        <span class="lay-tag" data-lay-type="success" data-lay-effect="plain">
+          朴素
+        </span>
+      </section>
+
+      <section class="demo-section">
+        <h2>不同尺寸</h2>
+        <span class="lay-tag" data-lay-type="info" data-lay-size="xs">小</span>
+        <span class="lay-tag" data-lay-type="info">默认</span>
+        <span class="lay-tag" data-lay-type="info" data-lay-size="lg">大</span>
+      </section>
+
+      <section class="demo-section">
+        <h2>胶囊圆角</h2>
+        <span class="lay-tag" data-lay-type="info" data-lay-round>胶囊</span>
+        <span
+          class="lay-tag"
+          data-lay-type="success"
+          data-lay-effect="light"
+          data-lay-round
+        >
+          胶囊浅色
+        </span>
+      </section>
+
+      <section class="demo-section">
+        <h2>禁用</h2>
+        <span class="lay-tag lay-is-disabled">禁用</span>
+        <span
+          class="lay-tag lay-is-disabled"
+          data-lay-type="success"
+          data-lay-effect="light"
+        >
+          禁用浅色
+        </span>
+        <span
+          class="lay-tag lay-is-disabled"
+          data-lay-type="danger"
+          data-lay-round
+        >
+          禁用胶囊
+        </span>
+      </section>
+
+      <section class="demo-section">
+        <h2>可关闭（data-lay-closable 属性）</h2>
+        <span class="lay-tag" data-lay-closable lay-filter="demo">
+          可关闭的标签
+        </span>
+        <span
+          class="lay-tag"
+          data-lay-type="danger"
+          data-lay-closable
+          lay-filter="demo"
+        >
+          危险标签
+        </span>
+        <span
+          class="lay-tag"
+          data-lay-type="info"
+          data-lay-closable
+          lay-filter="demo"
+        >
+          信息标签
+        </span>
+        <span
+          class="lay-tag"
+          data-lay-type="warning"
+          data-lay-closable
+          lay-filter="keep"
+        >
+          阻断关闭
+        </span>
+      </section>
+
+      <section class="demo-section">
+        <h2>动态添加（build + render）</h2>
+        <div id="dynamicContainer"></div>
+        <button
+          class="lay-btn lay-btn-sm"
+          id="addTagBtn"
+          style="margin-top: var(--lay-spacing)"
+        >
+          添加标签
+        </button>
+      </section>
+
+      <section class="demo-section">
+        <h2>标签组（generate）</h2>
+        <div id="tagGroupContainer"></div>
+      </section>
+    </div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(() => {
+        const { tag, $ } = layui;
+
+        // 订阅关闭事件
+        tag.on('close(demo)', ({ elem }) => {
+          console.log('标签已关闭：', elem);
+        });
+
+        // 返回 false 可阻断关闭
+        tag.on('close(keep)', () => false);
+
+        const $container = $('#dynamicContainer');
+
+        // 初始：用 build 生成一组不同样式的标签
+        $container.append(
+          tag.build({ text: '动态实心', type: 'danger' }),
+          tag.build({ text: '动态浅色', type: 'success', effect: 'light' }),
+          tag.build({ text: '动态朴素', type: 'info', effect: 'plain' }),
+          tag.build({
+            text: '动态胶囊',
+            type: 'warning',
+            effect: 'light',
+            size: 'sm',
+            round: true,
+          }),
+          tag.build({ text: '动态可关闭', closable: true, layFilter: 'demo' }),
+          tag.build({ text: '动态禁用', disabled: true, closable: true }),
+        );
+        // build 生成的标签需手动渲染以绑定关闭交互
+        tag.render({ elem: $container.find('.lay-tag') });
+
+        // 点击按钮动态添加一个标签
+        let count = 1;
+        $('#addTagBtn').on('click', () => {
+          const $tag = tag.build({
+            text: `新标签 ${count++}`,
+            type: 'success',
+            effect: 'light',
+            closable: true,
+            layFilter: 'demo',
+          });
+          $container.append($tag);
+          tag.render({ elem: $tag });
+        });
+
+        // 标签组：数据数组 + 共用一套属性
+        const $group = $('#tagGroupContainer');
+        $group.append(
+          tag.generate({
+            data: ['技术', '前端', '框架', 'JavaScript', '开源'],
+            type: 'success',
+            effect: 'light',
+          }),
+        );
+        // 标签组：个性属性覆盖公共属性
+        $group.append(
+          tag.generate({
+            data: [
+              '技术',
+              { text: '热门', type: 'danger' },
+              { text: '推荐', round: true, closable: true, layFilter: 'demo' },
+            ],
+            type: 'info',
+          }),
+        );
+        // 一次性渲染绑定全部标签交互
+        tag.render({ elem: $group.find('.lay-tag') });
+      });
+    </script>
+  </body>
+</html>
