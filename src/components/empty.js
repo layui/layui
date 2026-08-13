@@ -34,7 +34,6 @@ export class Empty extends Component {
 
   /**
    * 构建并返回空状态的 DOM 结构，不插入到目标容器
-   * 可供其他组件（如 table、tree、form）内部复用统一的空态结构
    * @param {Object} options - 组件配置项，详见 {@link Empty.options}
    * @returns {jQuery} 空状态 jQuery 对象
    */
