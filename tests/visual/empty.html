@@ -80,7 +80,7 @@
     <br />
     <h2>JS 构建（empty.build）</h2>
     <br />
-    <!-- 通过 build() 获取空状态结构后手动插入，供组件内部复用 -->
+    <!-- 通过 build() 获取空状态结构后手动插入 -->
     <div id="demo-build"></div>
 
     <script src="./assets/dist/layui.js"></script>
@@ -97,7 +97,7 @@
           action: '<button class="lay-btn lay-btn-primary">清除筛选</button>',
         });
 
-        // 构建结构后手动插入（组件内部复用同款方式）
+        // 构建结构后手动插入
         $('#demo-build').append(
           empty.build({
             text: '暂无记录',

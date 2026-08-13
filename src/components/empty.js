@@ -65,7 +65,7 @@ export class Empty extends Component {
       );
     }
 
-    // 操作区。支持 HTML 字符串或函数回调，便于创建事件等交互
+    // 操作区。支持 HTML 字符串或函数回调
     if (options.action) {
       const $action = $('<div>').addClass(CONST.ELEM_ACTION);
       $action.append(
