@@ -7,6 +7,7 @@ import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
 import { Component } from '../core/component.js';
+import { log } from '../core/logger.js';
 
 export class Tag extends Component {
   static componentName = 'tag';
@@ -142,7 +143,7 @@ export class Tag extends Component {
 
     // 目标元素不存在时提示并直接返回
     if (!$elem[0]) {
-      console.warn(`[tag] 未找到目标元素：${options.elem}`);
+      log(`[tag] target element not found: ${options.elem}`);
       return this;
     }
 
