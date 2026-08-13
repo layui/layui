@@ -1647,6 +1647,8 @@ lay.treeToFlat = function (data, options) {
  * @param {string} [options.childrenKey='children'] - 子节点字段名
  * @param {string} [options.idKey='id'] - 节点 id 字段名
  * @param {string} [options.parentKey='parentId'] - 父节点 id 字段名
+ * @param {boolean} [options.keepParentId=true] - 是否保留父节点 id 字段
+ * @returns {Array} 返回树状数据
  */
 lay.flatToTree = function (data, options) {
   options = Object.assign(
@@ -1654,6 +1656,7 @@ lay.flatToTree = function (data, options) {
       childrenKey: 'children',
       idKey: 'id',
       parentKey: 'parentId',
+      keepParentId: true,
     },
     options,
   );
@@ -1664,7 +1667,10 @@ lay.flatToTree = function (data, options) {
   var map = data.reduce(function (acc, currNode) {
     var id = currNode[options.idKey];
     acc[id] = currNode;
-    acc[id][options.childrenKey] = [];
+    // 给当前节点已有的 childrenKey 初始化为空数组
+    if (options.childrenKey in currNode) {
+      acc[id][options.childrenKey] = [];
+    }
     return acc;
   }, {});
 
@@ -1673,12 +1679,23 @@ lay.flatToTree = function (data, options) {
     var id = currNode[options.idKey];
     var parentId = currNode[options.parentKey];
 
-    // 根节点
+    if (!options.keepParentId) {
+      delete currNode[options.parentKey];
+    }
+
+    // 若为根节点，则直接添加到结果数组；
     if (parentId === null || !map[parentId]) {
       acc.push(map[id]);
     } else {
-      // 子节点
-      map[parentId][options.childrenKey].push(currNode);
+      // 若为子节点，则添加到对应父节点的 childrenKey 中
+      var parentNode = map[parentId];
+
+      // 若父节点的 childrenKey 不是数组，则初设一个空数组
+      if (!Array.isArray(parentNode[options.childrenKey])) {
+        parentNode[options.childrenKey] = [];
+      }
+
+      parentNode[options.childrenKey].push(currNode);
     }
 
     return acc;
