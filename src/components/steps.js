@@ -188,10 +188,19 @@ export class Steps extends Component {
         .on(clickEventName, `.${CONST.ELEM_ITEM}`, events.click)
         .on(keydownEventName, `.${CONST.ELEM_ITEM}`, events.clickByKey);
 
-      // 无障碍：可点击步骤声明交互角色（可访问名称取自步骤内容）
-      $elem.children(`.${CONST.ELEM_ITEM}`).attr({
-        role: 'button',
-        tabindex: '0',
+      // 无障碍：可点击步骤声明交互角色（禁用项不参与键盘导航并标记 aria-disabled）
+      $elem.children(`.${CONST.ELEM_ITEM}`).each(function () {
+        const $item = $(this);
+        const disabled = $item.hasClass(CONST.CLASS_IS_DISABLED);
+        $item.attr({
+          role: 'button',
+          tabindex: disabled ? '-1' : '0',
+        });
+        if (disabled) {
+          $item.attr('aria-disabled', 'true');
+        } else {
+          $item.removeAttr('aria-disabled');
+        }
       });
     }
 
