@@ -4,7 +4,6 @@
  */
 
 import { lay } from '../core/lay.js';
-import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
 import { Component } from '../core/component.js';
 import { log } from '../core/logger.js';
@@ -110,7 +109,18 @@ export class Steps extends Component {
     options = { ...this.options, ...options };
 
     const { data = [], ...common } = options;
-    const current = normalizeCurrent(common.current);
+
+    // 过滤空数据项
+    const items = data.filter((item) => {
+      if (typeof item === 'string') return item !== '';
+      return item && (item.title || item.description || item.icon);
+    });
+
+    // 当前步骤钳制在有效步骤范围内
+    const current = clampCurrent(
+      normalizeCurrent(common.current),
+      items.length,
+    );
 
     const $steps = $('<div>').addClass(CONST.ELEM);
     $steps.attr('data-lay-current', current);
@@ -133,23 +143,18 @@ export class Steps extends Component {
       $steps.attr('data-lay-status', common.status);
     }
 
-    data
-      .filter((item) => {
-        if (typeof item === 'string') return item !== '';
-        return item && (item.title || item.description || item.icon);
-      })
-      .forEach((item, index) => {
-        const itemOptions =
-          typeof item === 'string'
-            ? { ...common, title: item }
-            : { ...common, ...item };
-        const $item = this.build({
-          ...itemOptions,
-          text: index + 1,
-          state: getStepStatus(index + 1, current),
-        });
-        $steps.append($item);
+    items.forEach((item, index) => {
+      const itemOptions =
+        typeof item === 'string'
+          ? { ...common, title: item }
+          : { ...common, ...item };
+      const $item = this.build({
+        ...itemOptions,
+        text: index + 1,
+        state: getStepStatus(index + 1, current),
       });
+      $steps.append($item);
+    });
 
     return $steps;
   }
@@ -183,11 +188,10 @@ export class Steps extends Component {
         .on(clickEventName, `.${CONST.ELEM_ITEM}`, events.click)
         .on(keydownEventName, `.${CONST.ELEM_ITEM}`, events.clickByKey);
 
-      // 无障碍：可点击步骤声明交互角色
+      // 无障碍：可点击步骤声明交互角色（可访问名称取自步骤内容）
       $elem.children(`.${CONST.ELEM_ITEM}`).attr({
         role: 'button',
         tabindex: '0',
-        'aria-label': i18n.$t('steps.click'),
       });
     }
 
@@ -209,7 +213,8 @@ export class Steps extends Component {
     }
 
     const from = readCurrent($elem);
-    const to = normalizeCurrent(parseInt(index, 10));
+    const total = $elem.children(`.${CONST.ELEM_ITEM}`).length;
+    const to = clampCurrent(normalizeCurrent(parseInt(index, 10)), total);
 
     // 目标步骤无变化时不触发 change
     if (from === to) return this;
@@ -283,6 +288,10 @@ const getStepStatus = (step, current) =>
 // 规范化当前步：非正整数视作第 1 步
 const normalizeCurrent = (current) =>
   Number.isInteger(current) && current >= 1 ? current : 1;
+
+// 钳制当前步在有效范围 [1, total] 内
+const clampCurrent = (current, total) =>
+  Math.min(Math.max(current, 1), Math.max(total, 1));
 
 // 依据 data-lay-current 重算各步骤状态（render 与点击切换共用）
 const applyStatus = ($elem) => {

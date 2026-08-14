@@ -60,6 +60,7 @@
 
       <section class="demo-section">
         <h2>不同尺寸</h2>
+        <!-- 尺寸变体：data-lay-size 声明 xs / 默认 / lg -->
         <div class="lay-steps" data-lay-current="2" data-lay-size="xs">
           <div class="lay-steps-item">
             <div class="lay-steps-icon">1</div>
@@ -133,6 +134,7 @@
 
       <section class="demo-section">
         <h2>垂直布局</h2>
+        <!-- 垂直布局：data-lay-layout="vertical" 纵向排列 -->
         <div class="lay-steps" data-lay-current="2" data-lay-layout="vertical">
           <div class="lay-steps-item">
             <div class="lay-steps-icon">1</div>
@@ -160,6 +162,7 @@
 
       <section class="demo-section">
         <h2>禁用步骤</h2>
+        <!-- 禁用步骤：lay-is-disabled 状态类置灰不可点 -->
         <div class="lay-steps" data-lay-current="2">
           <div class="lay-steps-item">
             <div class="lay-steps-icon">1</div>
@@ -199,6 +202,7 @@
 
       <section class="demo-section">
         <h2>状态色变体（data-lay-status）</h2>
+        <!-- 状态色变体：data-lay-status="error" 当前步骤显示红色 -->
         <div class="lay-steps" data-lay-current="2" data-lay-status="error">
           <div class="lay-steps-item">
             <div class="lay-steps-icon">1</div>
@@ -305,7 +309,7 @@
         // 动态渲染的步骤条需手动 render 绑定交互
         steps.render({ elem: $('#dynamicDemo').find('.lay-steps') });
 
-        // 可点击切换：点击已完成/当前步骤可跳转
+        // 可点击切换：点击任意未禁用步骤可切换；点击当前步骤不触发切换
         $('#clickDemo').append(
           steps.generate({
             current: 1,

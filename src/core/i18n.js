@@ -26,9 +26,6 @@ var zhCN = {
   dropdown: {
     empty: '暂无数据',
   },
-  steps: {
-    click: '点击切换至该步骤',
-  },
   flow: {
     loadMore: '加载更多',
     noMore: '没有更多了',
