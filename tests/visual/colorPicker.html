@@ -2,56 +2,56 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>colorPicker 颜色选择器 - Layui</title>
-
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
-
-    <style>
-      body {
-        padding: 20px;
-      }
-      .test-box {
-        margin-bottom: 50px;
-      }
-    </style>
+    <link rel="stylesheet" href="./assets/demo.css" />
   </head>
   <body>
-    <div class="lay-container">
-      <div class="test-box">
-        <div class="lay-inline">
-          <input class="lay-input" id="LAY-test1" />
+    <div class="lay-padding-5">
+      <h2>常规</h2>
+      <div class="lay-flex-row">
+        <div style="gap: 3px">
+          <div class="lay-inline">
+            <input class="lay-input" id="demo-normal-input" />
+          </div>
+          <div id="demo-normal"></div>
         </div>
-        <div id="test1"></div>
       </div>
 
-      <div class="test-box">
-        <div id="test2"></div>
+      <h2>初始值</h2>
+      <div class="lay-flex-col">
+        <div class="lay-flex-row">
+          <div>
+            <label>HEX：</label>
+            <div id="demo-value-hex"></div>
+          </div>
+        </div>
+        <div class="lay-flex-row">
+          <div>
+            <label>RGB：</label>
+            <div id="demo-value-rgb"></div>
+          </div>
+          <div>
+            <label>RGBA：</label>
+            <div id="demo-value-rgba"></div>
+          </div>
+        </div>
       </div>
 
-      <div class="test-box">
-        <div id="test3"></div>
+      <h2>尺寸</h2>
+      <div class="lay-flex-row">
+        <div id="demo-size-xs" data-lay-size="xs"></div>
+        <div id="demo-size-sm" data-lay-size="sm"></div>
+        <div id="demo-size-md" data-lay-size="md"></div>
+        <div id="demo-size-lg" data-lay-size="lg"></div>
       </div>
 
-      <div class="test-box">
-        <div id="test4"></div>
-      </div>
-
-      <div class="test-box">
-        <div id="test5"></div>
-      </div>
-
-      <div class="test-box">
-        <div id="test6"></div>
-      </div>
-
-      <div class="test-box">
-        <div class="test-more" data-lay-color="#ff0000"></div>
-        <div class="test-more" data-lay-color="#008000"></div>
-        <div class="test-more" data-lay-color="#0000ff"></div>
+      <h2>绑定多个</h2>
+      <div class="lay-flex-row">
+        <div class="demo-test-item" data-lay-color="#ff0000"></div>
+        <div class="demo-test-item" data-lay-color="#008000"></div>
+        <div class="demo-test-item" data-lay-color="#0000ff"></div>
       </div>
     </div>
 
@@ -60,15 +60,16 @@
       layui.use(() => {
         const { colorPicker } = layui;
 
+        // 常规示例
         const colorPickerInst = colorPicker.render({
-          elem: '#test1',
-          // predefine: true, // 开启预定义颜色
+          elem: '#demo-normal',
+          predefine: true,
           // colors: ['#F00','#0F0','#00F','rgb(255, 69, 0)','rgba(255, 69, 0, 0.5)'],
           onChange({ color }) {
             this.done({ color });
           },
           done({ color }) {
-            layui.$('#LAY-test1').val(color);
+            document.querySelector('#demo-normal-input').value = color;
             document.body.style.backgroundColor = color;
           },
           afterClose(params) {
@@ -79,12 +80,28 @@
         console.dir(colorPicker);
         console.log(colorPickerInst);
 
+        // 初始值 HEX
         colorPicker.render({
-          elem: '#test2',
-          color: 'rgba(218, 121, 157, 1)',
+          elem: '#demo-value-hex',
+          color: '#16b777',
           predefine: true,
-          alpha: true,
           format: 'rgb',
+        });
+
+        // 初始值 RGB
+        colorPicker.render({
+          elem: '#demo-value-rgb',
+          color: 'rgb(22, 183, 119)',
+          format: 'rgb',
+        });
+
+        // 初始值 RGBA
+        colorPicker.render({
+          elem: '#demo-value-rgba',
+          color: 'rgba(22, 183, 119, 0.5)',
+          format: 'rgb',
+          alpha: true,
+          predefine: true,
           onChange: ({ color }) => {
             console.log(color);
           },
@@ -93,44 +110,18 @@
           },
         });
 
-        colorPicker.render({
-          elem: '#test3',
-          color: '#000',
-          // alpha: true,
-          // format: 'rgb',
+        // 尺寸
+        ['xs', 'sm', 'md', 'lg'].forEach((size) => {
+          colorPicker.render({
+            elem: `#demo-size-${size}`,
+            color: '#16baaa',
+            size,
+          });
         });
 
+        // 绑定多个
         colorPicker.render({
-          elem: '#test4',
-          color: '#06eeb8',
-          predefine: true,
-          format: 'rgb',
-        });
-
-        colorPicker.render({
-          elem: '#test5',
-          color: '#ffd900',
-          predefine: true,
-          size: 'lg',
-        });
-
-        colorPicker.render({
-          elem: '#test6',
-          color: '#F00',
-          predefine: true,
-          colors: [
-            '#F00',
-            '#0F0',
-            '#00F',
-            'rgb(255, 69, 0)',
-            'rgba(255, 69, 0, 0.5)',
-          ],
-          size: 'xs',
-        });
-
-        // 同时绑定多个
-        colorPicker.render({
-          elem: '.test-more',
+          elem: '.demo-test-item',
           done: function ({ color }) {
             console.log(this.elem, color);
           },

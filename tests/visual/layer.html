@@ -2,45 +2,43 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
-    <title>layer 弹层 - layui</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>layer 全局弹出层 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <link rel="stylesheet" href="./assets/demo.css" />
     <style>
       body {
         padding: 100px;
       }
-      #photos li {
+      #demo-photos li {
         float: left;
         margin: 0 1px 1px;
       }
-      #photos img {
+      #demo-photos img {
         max-height: 38px;
       }
     </style>
   </head>
   <body>
     <div class="lay-btn-container">
-      <button class="lay-btn lay-btn-primary" lay-on="test">Alert</button>
-      <button class="lay-btn" lay-on="test2">Confirm</button>
-      <button class="lay-btn" lay-on="test3">Msg</button>
-      <button class="lay-btn" lay-on="test5">Page</button>
-      <button class="lay-btn" lay-on="test6">Iframe</button>
-      <button class="lay-btn" lay-on="testLoading">Loading</button>
-      <button class="lay-btn" lay-on="test4">Tips</button>
-      <button class="lay-btn" lay-on="test7">Prompt</button>
-      <button class="lay-btn" lay-on="test8">Tab</button>
-      <button class="lay-btn" lay-on="test9">Photo</button>
-      <button class="lay-btn" lay-on="test10">Drawer</button>
-      <button class="lay-btn" lay-on="testTime">自动关闭</button>
+      <button class="lay-btn lay-btn-primary" lay-on="alert">Alert</button>
+      <button class="lay-btn" lay-on="confirm">Confirm</button>
+      <button class="lay-btn" lay-on="msg">Msg</button>
+      <button class="lay-btn" lay-on="page">Page</button>
+      <button class="lay-btn" lay-on="iframe">Iframe</button>
+      <button class="lay-btn" lay-on="loading">Loading</button>
+      <button class="lay-btn" lay-on="tips">Tips</button>
+      <button class="lay-btn" lay-on="prompt">Prompt</button>
+      <button class="lay-btn" lay-on="tab">Tab</button>
+      <button class="lay-btn" lay-on="photos">Photo</button>
+      <button class="lay-btn" lay-on="drawer">Drawer</button>
+      <button class="lay-btn" lay-on="autoClose">自动关闭</button>
       <a href="https://layui.dev/docs/2/layer/" target="_blank" class="lay-btn"
         >更多例子</a
       >
     </div>
 
-    <div id="test11111" style="display: none; padding: 16px">
+    <div id="demo-content" style="display: none; padding: 16px">
       content 指向放置在页面的一段隐藏元素
     </div>
 
@@ -48,7 +46,7 @@
     <br />
 
     <div class="lay-list">
-      <ul class="lay-row" id="photos">
+      <ul class="lay-row" id="demo-photos">
         <li class="list">
           <img src="https://unpkg.com/outeres/demo/1.jpg" alt="123" />
         </li>
@@ -116,7 +114,7 @@
 
         // 触发事件
         utils.on('lay-on', {
-          test: () => {
+          alert: () => {
             var icon = -1;
             (function changeIcon() {
               var index = layer.alert(
@@ -134,7 +132,7 @@
               }
             })();
           },
-          test2: () => {
+          confirm: () => {
             layer.confirm(
               '一个询问层的测试示例？',
               {
@@ -151,21 +149,21 @@
               },
             );
           },
-          test3: () => {
+          msg: () => {
             !0
               ? layer.msg('一个常用消息框')
               : layer.msg('一个常用消息框', { closeBtn: 0, time: 0, icon: 16 });
           },
-          test4: function () {
+          tips: function () {
             layer.tips('Hi，我是一个小提示', this, { tips: 1 });
           },
-          test5: () => {
+          page: () => {
             layer.open({
               title: '自定义页面层',
               type: 1,
               skin: 'lay-layer-border',
               area: ['1000px', '580px'],
-              content: $('#test11111'),
+              content: $('#demo-content'),
               maxmin: true,
               shade: false,
               minStack: false, // 最小化不堆叠在左下角
@@ -177,7 +175,7 @@
               },
             });
           },
-          test6: () => {
+          iframe: () => {
             layer.open({
               type: 2,
               content: 'https://www.aliyun.com/activity?userCode=ap0255is',
@@ -187,13 +185,13 @@
               maxmin: true,
             });
           },
-          testLoading: () => {
+          loading: () => {
             layer.load(0, {
               time: 5 * 1000,
               //content: '123'
             });
           },
-          test7: () => {
+          prompt: () => {
             layer.prompt(
               { title: '输入任何口令，并确认', formType: 1 },
               (pass, index) => {
@@ -213,7 +211,7 @@
               },
             );
           },
-          test8: () => {
+          tab: () => {
             layer.tab({
               area: ['600px', '300px'],
               tab: [
@@ -232,7 +230,7 @@
               ],
             });
           },
-          test9: () => {
+          photos: () => {
             layer.photos({
               photos: {
                 data: [
@@ -244,7 +242,7 @@
               hideFooter: true, // 是否隐藏图片底部栏（v2.8.0 新增）
             });
           },
-          testTime: () => {
+          autoClose: () => {
             layer.alert('你好么，体验者。<br>在标题栏显示自动关闭倒计秒数', {
               time: 5 * 1000,
               success: function (layero, index) {
@@ -264,7 +262,7 @@
               },
             });
           },
-          test10: () => {
+          drawer: () => {
             layer.open({
               title: 'drawer',
               type: 1,
@@ -273,7 +271,7 @@
               area: ['100%', '160px'],
               shade: 0.1,
               shadeClose: true,
-              content: $('#test11111'),
+              content: $('#demo-content'),
               maxmin: true,
             });
           },
@@ -281,13 +279,13 @@
 
         // 相册层
         layer.photos({
-          photos: '#photos', // $('#photos')
+          photos: '#demo-photos', // $('#demo-photos')
           // toolbar: false,
           // footer: false
         });
 
         //动态追加
-        $('#photos').append(
+        $('#demo-photos').append(
           '<li class="list"><img src="https://unpkg.com/outeres/demo/3.jpg"></li>',
         );
       });

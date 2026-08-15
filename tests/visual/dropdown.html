@@ -2,19 +2,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>dropdown 下拉菜单 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <link rel="stylesheet" href="./assets/demo.css" />
   </head>
   <body>
     <div class="lay-container lay-padding-3">
       <h2>常规</h2>
-      <hr />
-
-      <div style="display: flex; flex-direction: column; gap: 16px">
+      <div class="lay-flex-col">
         <div>子菜单的展示方式：</div>
         <div>
           <button class="lay-btn" id="demo-submenu-popup">
@@ -43,30 +39,24 @@
         </div>
       </div>
 
-      <br />
       <h2>右击</h2>
-      <hr />
-
-      <div
-        class="lay-bg-gray"
-        style="width: 100%; height: 160px; text-align: center"
-        id="ID-dropdown-demo-contextmenu"
-      >
-        <span class="lay-font-gray" style="position: relative; top: 50%"
-          >鼠标右键菜单</span
+      <div class="lay-flex-col">
+        <div
+          class="lay-bg-gray"
+          style="width: 100%; height: 160px; text-align: center"
+          id="ID-dropdown-demo-contextmenu"
         >
+          <span class="lay-font-gray" style="position: relative; top: 50%"
+            >鼠标右键菜单</span
+          >
+        </div>
+        <div>
+          <button class="lay-btn" lay-on="contextmenu">开启全局右键菜单</button>
+        </div>
       </div>
-      <button class="lay-btn" style="margin-top: 15px" lay-on="contextmenu">
-        开启全局右键菜单
-      </button>
 
-      <br /><br />
       <h2>重载</h2>
-      <hr />
-      <div
-        class="lay-form"
-        style="display: flex; flex-wrap: wrap; column-gap: 32px; row-gap: 11px"
-      >
+      <div class="lay-form lay-flex-row">
         <div>
           <button class="lay-btn" id="ID-dropdown-demo-reload">
             <span>完整重载</span>

@@ -80,7 +80,9 @@ export class Laypage extends Component {
     }
 
     this.render();
-    options?.onChange?.(options); // 页码或 limit 改变时的回调
+
+    // 页码或 limit 改变时的回调
+    options.onChange?.({ instance: this, options });
   }
 
   // 规范化配置项
@@ -320,7 +322,10 @@ export class Laypage extends Component {
     // 根据 layout 数组顺序生成分页器结构
     options.layout.forEach((item) => {
       if (templates[item]) {
-        const templateResult = templates[item]({ ...options, totalPages });
+        const templateResult = templates[item]({
+          instance: this,
+          options: { ...options, totalPages },
+        });
         if (Array.isArray(templateResult)) {
           templateResult.forEach(($elem) => $rootElem.append($elem));
         } else {
@@ -411,7 +416,9 @@ export class Laypage extends Component {
       (e) => {
         options.limit = Number(e.currentTarget.value);
         this.jump();
-        options?.onLimitChange?.(options); // 条数改变时的回调
+
+        // 条数改变时的回调
+        options.onLimitChange?.({ instance: this, options });
       },
     );
 

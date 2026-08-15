@@ -2,97 +2,92 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
-    <title>进度条 - layui</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>progress 进度条 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <link rel="stylesheet" href="./assets/demo.css" />
   </head>
   <body>
     <div class="lay-padding-5">
       <h2>常规用法</h2>
-      <br />
-      <div
-        class="lay-progress"
-        data-lay-percent="33"
-        data-lay-show-percent="true"
-      ></div>
-
-      <br />
+      <div class="lay-flex-col">
+        <div
+          class="lay-progress"
+          data-lay-percent="33"
+          data-lay-show-percent="true"
+        ></div>
+      </div>
 
       <h2>不同尺寸</h2>
-      <br />
-      <div class="lay-progress" data-lay-size="xs" data-lay-percent="33"></div>
-      <br />
-      <div class="lay-progress" data-lay-size="sm" data-lay-percent="33"></div>
-      <br />
-      <div class="lay-progress" data-lay-percent="33"></div>
-      <br />
-      <div class="lay-progress" data-lay-size="lg" data-lay-percent="33"></div>
-      <br />
-      <div class="lay-progress" data-lay-size="xl" data-lay-percent="33"></div>
-      <br />
+      <div class="lay-flex-col">
+        <div
+          class="lay-progress"
+          data-lay-size="xs"
+          data-lay-percent="33"
+        ></div>
+        <div
+          class="lay-progress"
+          data-lay-size="sm"
+          data-lay-percent="33"
+        ></div>
+        <div class="lay-progress" data-lay-percent="33"></div>
+        <div
+          class="lay-progress"
+          data-lay-size="lg"
+          data-lay-percent="33"
+        ></div>
+        <div
+          class="lay-progress"
+          data-lay-size="xl"
+          data-lay-percent="33"
+        ></div>
+      </div>
 
       <h2>不同颜色</h2>
-      <br />
-      <div
-        class="lay-progress"
-        data-lay-percent="20"
-        data-lay-color="var(--lay-color-red)"
-      ></div>
-
-      <br />
-
-      <div
-        class="lay-progress"
-        data-lay-percent="30"
-        data-lay-color="var(--lay-color-orange)"
-      ></div>
-
-      <br />
-
-      <div
-        class="lay-progress"
-        data-lay-percent="40"
-        data-lay-color="var(--lay-color-green)"
-      ></div>
-
-      <br />
-
-      <div
-        class="lay-progress"
-        data-lay-percent="50"
-        data-lay-color="var(--lay-color-blue)"
-      ></div>
-
-      <br />
-
-      <div
-        class="lay-progress"
-        data-lay-percent="60"
-        data-lay-color="var(--lay-color-accent)"
-      ></div>
-
-      <br />
+      <div class="lay-flex-col">
+        <div
+          class="lay-progress"
+          data-lay-percent="20"
+          data-lay-color="var(--lay-color-red)"
+        ></div>
+        <div
+          class="lay-progress"
+          data-lay-percent="30"
+          data-lay-color="var(--lay-color-orange)"
+        ></div>
+        <div
+          class="lay-progress"
+          data-lay-percent="40"
+          data-lay-color="var(--lay-color-green)"
+        ></div>
+        <div
+          class="lay-progress"
+          data-lay-percent="50"
+          data-lay-color="var(--lay-color-blue)"
+        ></div>
+        <div
+          class="lay-progress"
+          data-lay-percent="60"
+          data-lay-color="var(--lay-color-accent)"
+        ></div>
+      </div>
 
       <h2>动态操作</h2>
-      <br />
-      <div
-        class="lay-progress"
-        id="LAY-progress-demo-set"
-        data-lay-size="xl"
-        data-lay-percent="15"
-        data-lay-show-percent="true"
-        data-lay-color="var(--lay-color-primary)"
-        data-lay-rail-color="#d9d9d9"
-      ></div>
+      <div class="lay-flex-col">
+        <div
+          class="lay-progress"
+          id="LAY-progress-demo-set"
+          data-lay-size="xl"
+          data-lay-percent="15"
+          data-lay-show-percent="true"
+          data-lay-color="var(--lay-color-primary)"
+          data-lay-rail-color="#d9d9d9"
+        ></div>
 
-      <br />
-
-      <div class="lay-btn-container">
-        <button class="lay-btn" lay-on="setPercent">设置 50%</button>
-        <button class="lay-btn" lay-on="loading">模拟 loading</button>
+        <div class="lay-btn-container">
+          <button class="lay-btn" lay-on="setPercent">设置 50%</button>
+          <button class="lay-btn" lay-on="loading">模拟 loading</button>
+        </div>
       </div>
     </div>
 

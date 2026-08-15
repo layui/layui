@@ -3,42 +3,46 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>折叠面板 - Layui</title>
+    <title>collapse 折叠面板 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <link rel="stylesheet" href="./assets/demo.css" />
   </head>
-  <body class="lay-padding-3">
-    <h2>常规用法：</h2>
-    <br />
-    <div class="lay-collapse" lay-filter="test">
-      <div class="lay-collapse-item lay-show">
-        <h3 class="lay-collapse-title">item 1</h3>
-        <div class="lay-collapse-content">content 1</div>
+  <body>
+    <div class="lay-padding-5">
+      <h2>常规用法</h2>
+      <div class="lay-flex-col">
+        <div class="lay-collapse" lay-filter="demo-normal">
+          <div class="lay-collapse-item lay-show">
+            <h3 class="lay-collapse-title">item 1</h3>
+            <div class="lay-collapse-content">content 1</div>
+          </div>
+          <div class="lay-collapse-item">
+            <h3 class="lay-collapse-title">item2</h3>
+            <div class="lay-collapse-content">content 2</div>
+          </div>
+          <div class="lay-collapse-item">
+            <h3 class="lay-collapse-title">item 3</h3>
+            <div class="lay-collapse-content">content 3</div>
+          </div>
+        </div>
       </div>
-      <div class="lay-collapse-item">
-        <h3 class="lay-collapse-title">item2</h3>
-        <div class="lay-collapse-content">content 2</div>
-      </div>
-      <div class="lay-collapse-item">
-        <h3 class="lay-collapse-title">item 3</h3>
-        <div class="lay-collapse-content">content 3</div>
-      </div>
-    </div>
 
-    <br />
-    <h2>开启手风琴：</h2>
-    <br />
-    <div class="lay-collapse" data-lay-accordion="true">
-      <div class="lay-collapse-item lay-show">
-        <h3 class="lay-collapse-title">item 1</h3>
-        <div class="lay-collapse-content">content 1</div>
-      </div>
-      <div class="lay-collapse-item">
-        <h3 class="lay-collapse-title">item2</h3>
-        <div class="lay-collapse-content">content 2</div>
-      </div>
-      <div class="lay-collapse-item">
-        <h3 class="lay-collapse-title">item 3</h3>
-        <div class="lay-collapse-content">content 3</div>
+      <h2>开启手风琴</h2>
+      <div class="lay-flex-col">
+        <div class="lay-collapse" data-lay-accordion="true">
+          <div class="lay-collapse-item lay-show">
+            <h3 class="lay-collapse-title">item 1</h3>
+            <div class="lay-collapse-content">content 1</div>
+          </div>
+          <div class="lay-collapse-item">
+            <h3 class="lay-collapse-title">item2</h3>
+            <div class="lay-collapse-content">content 2</div>
+          </div>
+          <div class="lay-collapse-item">
+            <h3 class="lay-collapse-title">item 3</h3>
+            <div class="lay-collapse-content">content 3</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -47,7 +51,7 @@
       layui.use(() => {
         const { collapse } = layui;
 
-        collapse.on('click(test)', (data) => {
+        collapse.on('click(demo-normal)', (data) => {
           console.log(data);
         });
       });

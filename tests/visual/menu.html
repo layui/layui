@@ -5,29 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>menu 导航菜单 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <link rel="stylesheet" href="./assets/demo.css" />
     <style>
       body {
         --demo-sidebar-width: 232px;
-      }
-      body:has(
-        .demo-sidebar .lay-menu[data-lay-mode='vertical'][data-lay-collapsed]
-      ) {
-        --demo-sidebar-width: var(--lay-menu-collapsed-width, 65px);
-      }
-
-      /* 侧边菜单 */
-      .demo-sidebar .lay-menu-container {
-        position: fixed;
-        top: 16px;
-        left: 16px;
-        bottom: 16px;
-        width: var(--demo-sidebar-width);
-        overflow: hidden auto;
-      }
-      .demo-content {
-        padding-block: 16px;
-        padding-inline: calc(var(--demo-sidebar-width) + 48px) 32px;
-        transition: all var(--lay-anim-duration);
+        --demo-sidebar-offset: 16px;
       }
 
       /* 按钮组 */
@@ -191,14 +173,13 @@
       };
     </script>
 
-    <div class="demo-sidebar">
-      <!-- 静态「垂直菜单」容器 -->
-      <div class="lay-menu-container lay-panel">
-        <ul class="lay-menu" id="demo-vertical-menu">
-          <script>
-            document.write(
-              getMenuTemplate({
-                append: `
+    <!-- 静态「垂直菜单」容器 -->
+    <div class="lay-menu-container lay-panel demo-sidebar">
+      <ul class="lay-menu" id="demo-vertical-menu">
+        <script>
+          document.write(
+            getMenuTemplate({
+              append: `
 <li class="lay-menu-divider"></li>
 <li class="lay-menu-group">
   <div class="lay-menu-title">
@@ -254,106 +235,105 @@
   </div>
 </li>
               `,
-              }),
-            );
-          </script>
-        </ul>
-      </div>
+            }),
+          );
+        </script>
+      </ul>
     </div>
 
-    <div class="demo-content">
+    <div class="demo-main">
       <h2>风格变换</h2>
-      <hr />
-
-      <div style="display: flex; flex-wrap: wrap; gap: 16px">
-        <div style="flex-basis: 100%">点击按钮，变换左侧「垂直菜单」</div>
-        <div class="lay-btn-group">
-          <input
-            type="radio"
-            name="menu-expand-collapse"
-            id="menu-expand"
-            checked
-            hidden
-          />
-          <label
-            for="menu-expand"
-            class="lay-btn"
-            lay-on="method"
-            data-method="expand"
-            >展开菜单（默认）</label
-          >
-          <input
-            type="radio"
-            name="menu-expand-collapse"
-            id="menu-collapse"
-            hidden
-          />
-          <label
-            for="menu-collapse"
-            class="lay-btn"
-            lay-on="method"
-            data-method="collapse"
-            >收起菜单</label
-          >
-        </div>
-        <div class="lay-btn-group">
-          <input
-            type="radio"
-            name="submenus-expand-collapse"
-            id="submenus-expand"
-            hidden
-          />
-          <label
-            for="submenus-expand"
-            class="lay-btn"
-            lay-on="method"
-            data-method="expandSubmenus"
-            >展开全部子菜单</label
-          >
-          <input
-            type="radio"
-            name="submenus-expand-collapse"
-            id="submenus-collapse"
-            hidden
-          />
-          <label
-            for="submenus-collapse"
-            class="lay-btn"
-            lay-on="method"
-            data-method="collapseSubmenus"
-            >折叠全部子菜单</label
-          >
-        </div>
-        <div class="lay-btn-group">
-          <input
-            type="radio"
-            name="submenuMode"
-            id="submenuMode-inline"
-            checked
-            hidden
-          />
-          <label
-            for="submenuMode-inline"
-            class="lay-btn"
-            lay-on="reload"
-            data-name="submenuMode"
-            data-value="inline"
-            >子菜单内嵌模式（默认）</label
-          >
-          <input
-            type="radio"
-            name="submenuMode"
-            id="submenuMode-popup"
-            hidden
-          />
-          <label
-            for="submenuMode-popup"
-            class="lay-btn"
-            lay-on="reload"
-            data-name="submenuMode"
-            data-value="popup"
-            >子菜单弹出模式</label
-          >
+      <div class="lay-flex-col">
+        <div>点击按钮，变换左侧「垂直菜单」</div>
+        <div class="lay-flex-row">
+          <div class="lay-btn-group">
+            <input
+              type="radio"
+              name="menu-expand-collapse"
+              id="menu-expand"
+              checked
+              hidden
+            />
+            <label
+              for="menu-expand"
+              class="lay-btn"
+              lay-on="method"
+              data-method="expand"
+              >展开菜单（默认）</label
+            >
+            <input
+              type="radio"
+              name="menu-expand-collapse"
+              id="menu-collapse"
+              hidden
+            />
+            <label
+              for="menu-collapse"
+              class="lay-btn"
+              lay-on="method"
+              data-method="collapse"
+              >收起菜单</label
+            >
+          </div>
+          <div class="lay-btn-group">
+            <input
+              type="radio"
+              name="submenus-expand-collapse"
+              id="submenus-expand"
+              hidden
+            />
+            <label
+              for="submenus-expand"
+              class="lay-btn"
+              lay-on="method"
+              data-method="expandSubmenus"
+              >展开全部子菜单</label
+            >
+            <input
+              type="radio"
+              name="submenus-expand-collapse"
+              id="submenus-collapse"
+              hidden
+            />
+            <label
+              for="submenus-collapse"
+              class="lay-btn"
+              lay-on="method"
+              data-method="collapseSubmenus"
+              >折叠全部子菜单</label
+            >
+          </div>
+          <div class="lay-btn-group">
+            <input
+              type="radio"
+              name="submenuMode"
+              id="submenuMode-inline"
+              checked
+              hidden
+            />
+            <label
+              for="submenuMode-inline"
+              class="lay-btn"
+              lay-on="reload"
+              data-name="submenuMode"
+              data-value="inline"
+              >子菜单内嵌模式（默认）</label
+            >
+            <input
+              type="radio"
+              name="submenuMode"
+              id="submenuMode-popup"
+              hidden
+            />
+            <label
+              for="submenuMode-popup"
+              class="lay-btn"
+              lay-on="reload"
+              data-name="submenuMode"
+              data-value="popup"
+              >子菜单弹出模式</label
+            >
+          </div>
         </div>
 
         <div
@@ -413,12 +393,9 @@
         </div>
       </div>
 
-      <br /><br />
       <h2>水平菜单</h2>
-      <hr />
-
-      <!-- 水平菜单·浅色 -->
-      <div style="display: flex; flex-direction: column; gap: 16px">
+      <div class="lay-flex-col">
+        <!-- 水平菜单·浅色 -->
         <div class="lay-menu-container">
           <ul
             class="lay-menu"
@@ -478,11 +455,8 @@
         </div>
       </div>
 
-      <br /><br />
       <h2>数据渲染</h2>
-      <hr />
-
-      <div style="display: flex; flex-direction: column; gap: 16px">
+      <div class="lay-flex-col">
         <!-- 水平菜单 -->
         <div
           class="lay-menu-container lay-menu-is-line"
@@ -490,7 +464,7 @@
           id="demo-data-render-h"
         ></div>
 
-        <div style="display: flex; justify-content: space-between; gap: 16px">
+        <div class="lay-flex-row" style="justify-content: space-between">
           <!-- 垂直菜单·面板 -->
           <div
             class="lay-menu-container lay-panel"

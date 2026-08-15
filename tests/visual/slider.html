@@ -2,27 +2,22 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
-    <title>滑块 - layui</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>slider 滑块 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
-    <style>
-      body {
-        padding: 100px 0;
-      }
-    </style>
+    <link rel="stylesheet" href="./assets/demo.css" />
   </head>
   <body>
-    <div class="lay-container">
-      <div id="slideTest1"></div>
-      <br />
-      <div
-        id="slideTest2"
-        style="margin: 45px 30px; display: inline-block"
-      ></div>
+    <div class="lay-container lay-padding-5">
+      <h2>水平滑块</h2>
+      <div class="lay-flex-col" style="padding-block: 32px">
+        <div id="demo-normal"></div>
+      </div>
+
+      <h2>垂直滑块</h2>
+      <div class="lay-flex-col" style="padding-block: 32px">
+        <div id="demo-vertical"></div>
+      </div>
     </div>
 
     <script src="./assets/dist/layui.js"></script>
@@ -30,26 +25,28 @@
       layui.use(() => {
         const { slider } = layui;
 
+        // 水平滑块
         const sliderInst = slider.render({
-          elem: '#slideTest1',
+          elem: '#demo-normal',
           tips: true,
           tipsAlways: true,
           input: true,
-          change(value) {
-            console.log('change', value);
+          onChange({ options, value }) {
+            console.log(`${options.id} → onChange →`, value);
           },
-          done(value) {
-            console.log('done', value);
+          done({ options, value }) {
+            console.log(`${options.id} → done →`, value);
           },
-          setTips: (value) => `${value}%`,
+          setTips: ({ value }) => `${value}%`,
         });
 
         console.dir(slider);
         console.log(sliderInst);
         // sliderInst.setValue(30);
 
+        // 垂直滑块
         slider.render({
-          elem: '#slideTest2',
+          elem: '#demo-vertical',
           type: 'vertical',
         });
       });
