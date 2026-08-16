@@ -2,44 +2,32 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
-    <title>laypage 分页 - layui</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>laypage 分页 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
-    <style>
-      div + h2 {
-        margin-top: 32px;
-      }
-      .demo-contriner {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-    </style>
+    <link rel="stylesheet" href="./assets/demo.css" />
   </head>
   <body>
     <div class="lay-padding-5">
       <h2>常规示例</h2>
-      <hr />
-      <div id="demo-normal"></div>
+      <div class="lay-flex-col">
+        <div id="demo-normal"></div>
+      </div>
 
       <h2>显示完整功能</h2>
-      <hr />
-      <div id="demo-show-all"></div>
+      <div class="lay-flex-col">
+        <div id="demo-show-all"></div>
+      </div>
 
       <h2>组件尺寸</h2>
-      <hr />
-      <div class="demo-contriner">
+      <div class="lay-flex-col">
         <div id="demo-size-sm"></div>
         <div id="demo-size-md"></div>
         <div id="demo-size-lg"></div>
       </div>
 
       <h2>设置主题</h2>
-      <hr />
-      <div class="demo-contriner">
+      <div class="lay-flex-col">
         <h3>• 内置主题</h3>
         <div id="demo-theme-border"></div>
         <div id="demo-theme-background"></div>
@@ -49,8 +37,7 @@
       </div>
 
       <h2>自定义组件布局</h2>
-      <hr />
-      <div class="demo-contriner">
+      <div class="lay-flex-col">
         <h3>• 简约布局</h3>
         <div id="demo-layout-simple"></div>
         <h3>• 自定义组件模板</h3>
@@ -58,15 +45,17 @@
       </div>
 
       <h2>记录分页锚点</h2>
-      <hr />
-      <div id="demo-anchor"></div>
+      <div class="lay-flex-col">
+        <div id="demo-anchor"></div>
+      </div>
 
       <h2>将一段数组分页展示</h2>
-      <hr />
-      <div class="lay-text" style="padding: 0 16px 16px">
-        <ul id="demo-data-page-show"></ul>
+      <div class="lay-flex-col">
+        <div class="lay-text" style="padding-inline: 16px">
+          <ul id="demo-data-page-show"></ul>
+        </div>
+        <div id="demo9"></div>
       </div>
-      <div id="demo9"></div>
     </div>
 
     <script src="./assets/dist/layui.js"></script>
@@ -82,8 +71,8 @@
           // align: 'center',
           // size: 'sm',
           // hideOnSinglePage: true,
-          onChange(options) {
-            console.log(`${this.id} → onChange  → `, options);
+          onChange(params) {
+            console.log(`${this.id} → onChange  → `, params);
           },
           afterRender(params) {
             console.log(`${this.id} → afterRender → `, params);
@@ -108,8 +97,8 @@
             'refresh',
             'jump',
           ],
-          onChange(options) {
-            console.log(options);
+          onChange(params) {
+            console.log(`${this.id} → onChange  → `, params);
           },
         });
 
@@ -171,7 +160,7 @@ li:not(.lay-pagination-item-active) > a {
           pageCount: 1,
           layout: ['prev', 'simplePage', 'next'],
           // theme: 'border',
-          onChange(options) {
+          onChange({ options }) {
             layer.msg(`第 ${options.current} 页`);
           },
         });
@@ -183,7 +172,7 @@ li:not(.lay-pagination-item-active) > a {
           layout: ['randomPage', 'prev', 'page', 'next', 'customTotal'],
           templates: {
             // 自定义随机页码组件
-            randomPage(options) {
+            randomPage({ options }) {
               const li = document.createElement('li');
               const btn = document.createElement('a');
 
@@ -203,7 +192,7 @@ li:not(.lay-pagination-item-active) > a {
             },
 
             // 自定义统计文本
-            customTotal(options) {
+            customTotal({ options }) {
               const li = document.createElement('li');
               li.style = 'color: var(--lay-gray-700);';
               li.textContent = `（共 ${options.count} 条）`;
@@ -217,7 +206,7 @@ li:not(.lay-pagination-item-active) > a {
           elem: '#demo-anchor',
           count: 500,
           current: location.hash.replace('#!current=', ''), // 获取分页锚点
-          onChange(options) {
+          onChange({ options }) {
             // 记录分页锚点
             location.hash = `!current=${options.current}`;
 
@@ -274,7 +263,7 @@ li:not(.lay-pagination-item-active) > a {
           elem: '#demo9',
           count: data.length,
           theme: 'border',
-          onChange(options) {
+          onChange({ options }) {
             // 模拟渲染
             const ul = document.getElementById('demo-data-page-show');
             ul.innerHTML = (() => {
@@ -290,7 +279,7 @@ li:not(.lay-pagination-item-active) > a {
           },
           afterRender({ options }) {
             // 初始化时，触发一次 onChange 事件，渲染第一页数据
-            options.onChange(options);
+            options.onChange({ options });
           },
         });
       });

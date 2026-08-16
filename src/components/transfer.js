@@ -379,7 +379,12 @@ export class Transfer extends Component {
     siblingInput.val() === '' || siblingInput.trigger('keyup');
 
     // 穿梭时的回调
-    options.onchange && options.onchange(this.getData(arr), _index);
+    options.onChange?.({
+      instance: this,
+      options,
+      data: this.getData(arr),
+      index: _index,
+    });
   }
 
   // 事件

@@ -2,83 +2,93 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
-    <title>上传组件 - layui</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>upload 上传 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <link rel="stylesheet" href="./assets/demo.css" />
   </head>
   <body class="lay-padding-5">
     <h2>常规示例</h2>
-    <hr />
-    <button type="button" class="lay-btn" id="test1">选择文件</button>
-
-    <br />
+    <div class="lay-flex-col">
+      <div>
+        <button type="button" class="lay-btn" id="demo-normal">选择文件</button>
+      </div>
+    </div>
 
     <h2>开启多选</h2>
-    <hr />
-    <button type="button" class="lay-btn" id="test2">多选文件上传</button>
-    <br />
-    <div class="lay-btn-container">
-      <button
-        type="button"
-        class="lay-btn lay-btn-primary lay-btn-disabled"
-        id="test2-abort"
-        disabled
-        lay-on="abort"
-      >
-        中止上传
-      </button>
-      <button
-        type="button"
-        class="lay-btn lay-btn-primary"
-        id="test2-clear"
-        lay-on="clear"
-      >
-        清空上传列表
-      </button>
+    <div class="lay-flex-col">
+      <div>
+        <button type="button" class="lay-btn" id="demo-multiple">
+          多选文件上传
+        </button>
+      </div>
+      <div class="lay-btn-container">
+        <button
+          type="button"
+          class="lay-btn lay-btn-primary lay-btn-disabled"
+          id="demo-multiple-abort"
+          disabled
+          lay-on="abort"
+        >
+          中止上传
+        </button>
+        <button
+          type="button"
+          class="lay-btn lay-btn-primary"
+          id="demo-multiple-clear"
+          lay-on="clear"
+        >
+          清空上传列表
+        </button>
+      </div>
     </div>
-
-    <br />
 
     <h2>图片列表风格</h2>
-    <hr />
-    <button type="button" class="lay-btn" id="testPictureList">选择图片</button>
-
-    <br />
+    <div class="lay-flex-col">
+      <div>
+        <button type="button" class="lay-btn" id="demo-picture">
+          选择图片
+        </button>
+      </div>
+    </div>
 
     <h2>图片卡片列表风格</h2>
-    <hr />
-    <button type="button" class="lay-btn" id="testPictureCardList">
-      选择图片
-    </button>
-
-    <br />
+    <div class="lay-flex-col">
+      <div>
+        <button type="button" class="lay-btn" id="demo-picture-card">
+          选择图片
+        </button>
+      </div>
+    </div>
 
     <h2>手动上传</h2>
-    <hr />
-    <div class="lay-btn-container">
-      <button type="button" class="lay-btn lay-btn-normal" id="test6">
-        选择文件
-      </button>
-      <button type="button" class="lay-btn" id="test7">开始上传</button>
+    <div class="lay-flex-col">
+      <div>
+        <button type="button" class="lay-btn lay-btn-normal" id="demo-manual">
+          选择文件
+        </button>
+      </div>
+      <div>
+        <button type="button" class="lay-btn" id="demo-manual-start">
+          开始上传
+        </button>
+      </div>
     </div>
-
-    <br />
 
     <h2>拖拽上传</h2>
-    <br />
-    <div class="lay-upload-drag" id="test8">
-      <i class="lay-icon">&#xe67c;</i>
-      <p>点击上传，或将文件拖拽到此处</p>
+    <div class="lay-flex-col" style="gap: 0">
+      <div class="lay-upload-drag" id="demo-drag">
+        <i class="lay-icon">&#xe67c;</i>
+        <p>点击上传，或将文件拖拽到此处</p>
+      </div>
     </div>
 
-    <br />
-
     <h2>绑定原始文件域</h2>
-    <hr />
-    <input type="file" name="file" id="test9" />
+    <div class="lay-flex-col">
+      <div>
+        <input type="file" name="file" id="demo-native" />
+      </div>
+    </div>
 
     <script src="./assets/dist/layui.js"></script>
     <script>
@@ -91,7 +101,7 @@
 
         // 常规示例
         const uploadInst = upload.render({
-          elem: '#test1',
+          elem: '#demo-normal',
           url: url,
           data: { a: 1, b: () => 2 }, // 追加接口参数
           // multiple: true,
@@ -144,7 +154,7 @@
 
         // 开启多选
         const uploadInst2 = upload.render({
-          elem: '#test2',
+          elem: '#demo-multiple',
           url: url,
           multiple: true, // 多选文件
           // mergeRequest: true,
@@ -169,7 +179,7 @@
         });
 
         const abortBtn = {
-          elem: $('#test2-abort'),
+          elem: $('#demo-multiple-abort'),
           CLASS_BTN_DISABLED: 'lay-btn-disabled',
           DISABLED: 'disabled',
           enable() {
@@ -199,7 +209,7 @@
 
         // 图片列表风格
         upload.render({
-          elem: '#testPictureList',
+          elem: '#demo-picture',
           url: url,
           listType: 'picture',
           onSuccess(res, params) {
@@ -209,7 +219,7 @@
 
         // 图片卡片列表风格
         upload.render({
-          elem: '#testPictureCardList',
+          elem: '#demo-picture-card',
           url: url,
           listType: 'picture-card',
           onSuccess(res, params) {
@@ -219,7 +229,7 @@
 
         // 手动上传
         upload.render({
-          elem: '#test6',
+          elem: '#demo-manual',
           url: url,
           autoUpload: false,
           // multiple: true,
@@ -232,13 +242,13 @@
           },
         });
 
-        $('#test7').on('click', () => {
-          upload.upload('test6');
+        $('#demo-manual-start').on('click', () => {
+          upload.upload('demo-manual');
         });
 
         // 拖拽上传
         upload.render({
-          elem: '#test8',
+          elem: '#demo-drag',
           url: url,
           onSuccess(res, params) {
             console.log(res, params);
@@ -247,7 +257,7 @@
 
         // 绑定原始文件域
         upload.render({
-          elem: '#test9',
+          elem: '#demo-native',
           url: url,
           onSuccess(res, params) {
             console.log(res, params);

@@ -2,50 +2,41 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
-    <title>穿梭框</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>transfer 穿梭框 - Layui</title>
 
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
-    <style>
-      body {
-        padding: 100px;
-      }
-      #text1,
-      #text2 {
-        padding-bottom: 60px;
-      }
-    </style>
+    <link rel="stylesheet" href="./assets/demo.css" />
   </head>
   <body>
-    <div class="lay-btn-container">
-      <button type="button" class="lay-btn" lay-on="getData">
-        获取右侧数据
-      </button>
-      <button type="button" class="lay-btn" lay-on="reload">重载实例</button>
-    </div>
-
-    <div id="text1"></div>
-
-    <div class="lay-form">
-      <div class="lay-form-item">
-        <label class="lay-form-label">职位</label>
-        <div class="lay-input-block">
-          <div id="text2"></div>
+    <div class="lay-container lay-padding-3">
+      <h2>常规示例</h2>
+      <div class="lay-flex-col">
+        <div class="lay-btn-container">
+          <button type="button" class="lay-btn" lay-on="getData">
+            获取右侧数据
+          </button>
+          <button type="button" class="lay-btn" lay-on="reload">
+            重载实例
+          </button>
         </div>
+
+        <div id="demo-normal"></div>
+      </div>
+
+      <h2>解析数据</h2>
+      <div class="lay-flex-col">
+        <div id="demo-parse-data"></div>
       </div>
     </div>
-
-    <div id="text3"></div>
 
     <script src="./assets/dist/layui.js"></script>
     <script type="module">
       const { $, transfer, utils } = layui;
 
+      // 常规示例
       const transferInst = transfer.render({
-        elem: '#text1',
+        elem: '#demo-normal',
         title: ['候选文人', '获奖文人'],
         data: [
           { value: '1', title: '李白' },
@@ -85,11 +76,12 @@
         },
       });
 
+      // 解析数据
       transfer.render({
-        elem: '#text2',
+        elem: '#demo-parse-data',
         showSearch: true,
-        onchange: (obj) => {
-          console.log(obj);
+        onChange: (params) => {
+          console.log(params);
         },
         parseData: (res) => ({
           value: res.id,

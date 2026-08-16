@@ -17,22 +17,24 @@
 .lay-colorpicker-box:hover {
   border-color: var(--lay-gray-400);
 }
-.lay-colorpicker-box.lay-colorpicker-lg {
+
+/* 尺寸 */
+.lay-colorpicker-box[data-lay-size='xs'] {
+  width: 24px;
+  height: 24px;
+  line-height: 18px;
+  padding: 1px;
+}
+.lay-colorpicker-box[data-lay-size='sm'] {
+  width: 32px;
+  height: 32px;
+  line-height: 22px;
+  padding: 3px;
+}
+.lay-colorpicker-box[data-lay-size='lg'] {
   width: 44px;
   height: 44px;
   line-height: 30px;
-}
-.lay-colorpicker-box.lay-colorpicker-sm {
-  width: 30px;
-  height: 30px;
-  line-height: 20px;
-  padding: 3px;
-}
-.lay-colorpicker-box.lay-colorpicker-xs {
-  width: 22px;
-  height: 22px;
-  line-height: 16px;
-  padding: 1px;
 }
 
 .lay-colorpicker-trigger-bgcolor {

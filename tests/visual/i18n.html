@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>i18n - Layui</title>
+    <title>i18n 国际化 - Layui</title>
     <link href="./assets/dist/css/layui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/demo.css" />
     <style>
       body {
         transition: opacity 0.8s ease-in-out;
@@ -12,8 +13,10 @@
       }
     </style>
   </head>
-  <body class="lay-padding-3">
-    <div id="root"></div>
+  <body>
+    <div class="lay-padding-3">
+      <div id="root"></div>
+    </div>
     <template id="template">
       {{ const i18n = layui.i18n; }}
       <div class="lay-form">
@@ -414,7 +417,7 @@
         flow.render({
           elem: '#demo-flow',
           scrollElem: '#demo-flow',
-          done: (page, next) => {
+          done: ({ page, next }) => {
             // 模拟数据插入
             setTimeout(() => {
               var lis = [];

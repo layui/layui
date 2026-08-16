@@ -2,164 +2,174 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
-    <title>按钮 - layui</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>button 按钮 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <link rel="stylesheet" href="./assets/demo.css" />
   </head>
-  <body class="lay-padding-3">
-    <div class="lay-container">
-      <span>按钮色系：</span>
-      <hr />
-
-      <div class="lay-btn-container">
-        <a href="" class="lay-btn lay-btn-primary">原始按钮</a>
-        <div class="lay-btn">默认按钮</div>
-        <button class="lay-btn lay-btn-normal">百搭按钮</button>
-        <button class="lay-btn lay-btn-warm">暖色按钮</button>
-        <button class="lay-btn lay-btn-danger">警告按钮</button>
-        <button class="lay-btn lay-btn-disabled">禁用按钮</button>
+  <body>
+    <div class="lay-padding-5">
+      <h2>色系</h2>
+      <div class="lay-flex-col">
+        <div>
+          <div class="lay-btn-container">
+            <a href="" class="lay-btn lay-btn-primary">原始按钮</a>
+            <div class="lay-btn">默认按钮</div>
+            <button class="lay-btn lay-btn-normal">百搭按钮</button>
+            <button class="lay-btn lay-btn-warm">暖色按钮</button>
+            <button class="lay-btn lay-btn-danger">警告按钮</button>
+            <button class="lay-btn lay-btn-disabled">禁用按钮</button>
+          </div>
+          <div class="lay-btn-container">
+            <a href="" class="lay-btn lay-btn-primary lay-border">原始按钮</a>
+            <a href="" class="lay-btn lay-btn-primary lay-border-green"
+              >主色按钮</a
+            >
+            <button class="lay-btn lay-btn-primary lay-border-blue">
+              百搭按钮
+            </button>
+            <button class="lay-btn lay-btn-primary lay-border-orange">
+              暖色按钮
+            </button>
+            <button class="lay-btn lay-btn-primary lay-border-red">
+              警告按钮
+            </button>
+            <button class="lay-btn lay-btn-primary lay-border-black">
+              深色按钮
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="lay-btn-container">
-        <a href="" class="lay-btn lay-btn-primary lay-border">原始按钮</a>
-        <a href="" class="lay-btn lay-btn-primary lay-border-green">主色按钮</a>
-        <button class="lay-btn lay-btn-primary lay-border-blue">
-          百搭按钮
-        </button>
-        <button class="lay-btn lay-btn-primary lay-border-orange">
-          暖色按钮
-        </button>
-        <button class="lay-btn lay-btn-primary lay-border-red">警告按钮</button>
-        <button class="lay-btn lay-btn-primary lay-border-black">
-          深色按钮
-        </button>
+
+      <h2>图标</h2>
+      <div class="lay-flex-col">
+        <div class="lay-btn-container">
+          <button class="lay-btn lay-btn-sm">
+            <i class="lay-icon">&#xe603;</i>
+          </button>
+          <button class="lay-btn lay-btn-sm">
+            <i class="lay-icon">&#xe602;</i>
+          </button>
+          <button class="lay-btn lay-btn-sm">
+            <i class="lay-icon">&#xe654;</i>
+          </button>
+          <button class="lay-btn lay-btn-sm">
+            <i class="lay-icon">&#xe642;</i>
+          </button>
+          <button class="lay-btn lay-btn-sm">
+            <i class="lay-icon">&#xe640;</i>
+          </button>
+          <button class="lay-btn lay-btn-sm">
+            <i class="lay-icon">&#xe641;</i>
+          </button>
+        </div>
+      </div>
+
+      <h2>尺寸</h2>
+      <div class="lay-flex-col">
+        <div>
+          <div class="lay-btn-container">
+            <button class="lay-btn lay-btn-lg">大型按钮</button>
+            <button class="lay-btn">默认按钮</button>
+            <button class="lay-btn lay-btn-sm">小型按钮</button>
+            <button class="lay-btn lay-btn-xs">迷你按钮</button>
+          </div>
+          <div class="lay-btn-container">
+            <button class="lay-btn lay-btn-primary lay-btn-lg">大型按钮</button>
+            <button class="lay-btn lay-btn-primary">默认按钮</button>
+            <button class="lay-btn lay-btn-primary lay-btn-sm">小型按钮</button>
+            <button class="lay-btn lay-btn-primary lay-btn-xs">迷你按钮</button>
+          </div>
+        </div>
+      </div>
+
+      <h2>圆角</h2>
+      <div class="lay-flex-col">
+        <div>
+          <div class="lay-btn-container">
+            <button class="lay-btn lay-btn-primary lay-btn-radius">
+              原始按钮
+            </button>
+            <button class="lay-btn lay-btn-radius">默认按钮</button>
+            <button class="lay-btn lay-btn-normal lay-btn-radius">
+              百搭按钮
+            </button>
+            <button class="lay-btn lay-btn-warm lay-btn-radius">
+              暖色按钮
+            </button>
+            <button class="lay-btn lay-btn-danger lay-btn-radius">
+              警告按钮
+            </button>
+            <button class="lay-btn lay-btn-disabled lay-btn-radius">
+              禁用按钮
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <h2>图文</h2>
+      <div class="lay-flex-col">
+        <div>
+          <div class="lay-btn-container">
+            <button class="lay-btn lay-btn-big lay-btn-primary lay-btn-radius">
+              大型加圆角
+            </button>
+            <button class="lay-btn lay-btn-sm lay-btn-normal">
+              <i class="lay-icon lay-icon-delete"></i> 删除
+            </button>
+            <button class="lay-btn lay-btn-xs lay-btn-disabled">
+              <i class="lay-icon lay-icon-share"></i> 禁分享
+            </button>
+          </div>
+        </div>
       </div>
 
       <br /><br />
 
-      <span>按钮图标：</span>
-      <hr />
-
-      <div class="lay-btn-container">
-        <button class="lay-btn lay-btn-sm">
-          <i class="lay-icon">&#xe603;</i>
-        </button>
-        <button class="lay-btn lay-btn-sm">
-          <i class="lay-icon">&#xe602;</i>
-        </button>
-        <button class="lay-btn lay-btn-sm">
-          <i class="lay-icon">&#xe654;</i>
-        </button>
-        <button class="lay-btn lay-btn-sm">
-          <i class="lay-icon">&#xe642;</i>
-        </button>
-        <button class="lay-btn lay-btn-sm">
-          <i class="lay-icon">&#xe640;</i>
-        </button>
-        <button class="lay-btn lay-btn-sm">
-          <i class="lay-icon">&#xe641;</i>
-        </button>
+      <h2>按钮组</h2>
+      <div class="lay-flex-row">
+        <div>
+          <div class="lay-btn-group">
+            <button class="lay-btn">增加</button>
+            <button class="lay-btn">编辑</button>
+            <button class="lay-btn">删除</button>
+          </div>
+        </div>
+        <div>
+          <div class="lay-btn-group">
+            <button class="lay-btn lay-btn-sm">
+              <i class="lay-icon">&#xe654;</i>
+            </button>
+            <button class="lay-btn lay-btn-sm">
+              <i class="lay-icon">&#xe642;</i>
+            </button>
+            <button class="lay-btn lay-btn-sm">
+              <i class="lay-icon">&#xe640;</i>
+            </button>
+            <button class="lay-btn lay-btn-sm">
+              <i class="lay-icon">&#xe602;</i>
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="lay-btn-group">
+            <button class="lay-btn lay-btn-primary lay-btn-sm">
+              <i class="lay-icon">&#xe654;</i>
+            </button>
+            <button class="lay-btn lay-btn-primary lay-btn-sm">
+              <i class="lay-icon">&#xe642;</i>
+            </button>
+            <button class="lay-btn lay-btn-primary lay-btn-sm">
+              <i class="lay-icon">&#xe640;</i>
+            </button>
+            <button class="lay-btn lay-btn-primary lay-btn-sm">
+              <i class="lay-icon">&#xe602;</i>
+            </button>
+          </div>
+        </div>
       </div>
-
-      <br /><br />
-
-      <span>按钮尺寸：</span>
-      <hr />
-
-      <div class="lay-btn-container">
-        <button class="lay-btn lay-btn-lg">大型按钮</button>
-        <button class="lay-btn">默认按钮</button>
-        <button class="lay-btn lay-btn-sm">小型按钮</button>
-        <button class="lay-btn lay-btn-xs">迷你按钮</button>
-      </div>
-      <div class="lay-btn-container">
-        <button class="lay-btn lay-btn-primary lay-btn-lg">大型按钮</button>
-        <button class="lay-btn lay-btn-primary">默认按钮</button>
-        <button class="lay-btn lay-btn-primary lay-btn-sm">小型按钮</button>
-        <button class="lay-btn lay-btn-primary lay-btn-xs">迷你按钮</button>
-      </div>
-
-      <br /><br />
-
-      <span>按钮圆角：</span>
-      <hr />
-
-      <div class="lay-btn-container">
-        <button class="lay-btn lay-btn-primary lay-btn-radius">原始按钮</button>
-        <button class="lay-btn lay-btn-radius">默认按钮</button>
-        <button class="lay-btn lay-btn-normal lay-btn-radius">百搭按钮</button>
-        <button class="lay-btn lay-btn-warm lay-btn-radius">暖色按钮</button>
-        <button class="lay-btn lay-btn-danger lay-btn-radius">警告按钮</button>
-        <button class="lay-btn lay-btn-disabled lay-btn-radius">
-          禁用按钮
-        </button>
-      </div>
-
-      <br /><br />
-
-      <span>按钮图文：</span>
-      <hr />
-
-      <div class="lay-btn-container">
-        <button class="lay-btn lay-btn-big lay-btn-primary lay-btn-radius">
-          大型加圆角
-        </button>
-        <button class="lay-btn lay-btn-sm lay-btn-normal">
-          <i class="lay-icon lay-icon-delete"></i> 删除
-        </button>
-        <button class="lay-btn lay-btn-xs lay-btn-disabled">
-          <i class="lay-icon lay-icon-share"></i> 禁分享
-        </button>
-      </div>
-
-      <br /><br />
-
-      <span>按钮组：</span>
-      <hr />
-
-      <div class="lay-btn-group">
-        <button class="lay-btn">增加</button>
-        <button class="lay-btn">编辑</button>
-        <button class="lay-btn">删除</button>
-      </div>
-
-      <div class="lay-btn-group">
-        <button class="lay-btn lay-btn-sm">
-          <i class="lay-icon">&#xe654;</i>
-        </button>
-        <button class="lay-btn lay-btn-sm">
-          <i class="lay-icon">&#xe642;</i>
-        </button>
-        <button class="lay-btn lay-btn-sm">
-          <i class="lay-icon">&#xe640;</i>
-        </button>
-        <button class="lay-btn lay-btn-sm">
-          <i class="lay-icon">&#xe602;</i>
-        </button>
-      </div>
-
-      <div class="lay-btn-group">
-        <button class="lay-btn lay-btn-primary lay-btn-sm">
-          <i class="lay-icon">&#xe654;</i>
-        </button>
-        <button class="lay-btn lay-btn-primary lay-btn-sm">
-          <i class="lay-icon">&#xe642;</i>
-        </button>
-        <button class="lay-btn lay-btn-primary lay-btn-sm">
-          <i class="lay-icon">&#xe640;</i>
-        </button>
-        <button class="lay-btn lay-btn-primary lay-btn-sm">
-          <i class="lay-icon">&#xe602;</i>
-        </button>
-      </div>
-
-      <br /><br /><br />
     </div>
 
     <script src="./assets/dist/layui.js"></script>
-
-    <script></script>
   </body>
 </html>

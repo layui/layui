@@ -5,7 +5,7 @@
   vertical-align: middle;
 }
 .lay-rate {
-  padding: 11px 6px 11px 0;
+  padding-inline-end: 6px;
   font-size: 0;
 }
 .lay-rate li {

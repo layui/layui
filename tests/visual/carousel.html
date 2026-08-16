@@ -2,20 +2,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
-    <title>轮播组件 - layui</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>carousel 轮播 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
-
+    <link rel="stylesheet" href="./assets/demo.css" />
     <style>
-      body {
-        padding: 20px;
-      }
-
-      /* 为了区分效果 */
+      /* 仅为了区分演示效果 */
       div[carousel-item] > * {
         text-align: center;
         line-height: 280px;
@@ -28,59 +20,77 @@
         background-color: #5fb878;
       }
 
-      #test2 div[carousel-item] > * {
+      #demo-fade div[carousel-item] > * {
         line-height: 120px;
       }
     </style>
   </head>
   <body>
-    <div class="lay-carousel" id="test1" lay-filter="test1">
-      <div carousel-item>
-        <div>条目1</div>
-        <div>条目2</div>
-        <div>条目3</div>
-        <div>条目4</div>
+    <div class="lay-padding-3">
+      <h2>常规示例</h2>
+      <div class="lay-flex-col">
+        <div class="lay-carousel" id="demo-normal" lay-filter="demo-normal">
+          <div carousel-item>
+            <div>条目1</div>
+            <div>条目2</div>
+            <div>条目3</div>
+            <div>条目4</div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <br />
-
-    <div class="lay-carousel" id="test2">
-      <div carousel-item>
-        <div>条目1</div>
-        <div>条目2</div>
+      <h2>fade 动画</h2>
+      <div class="lay-flex-col">
+        <div class="lay-carousel" id="demo-fade">
+          <div carousel-item>
+            <div>条目1</div>
+            <div>条目2</div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <br />
-
-    <div class="lay-carousel" id="test3">
-      <div carousel-item>
-        <div>条目1</div>
-        <div>条目2</div>
-        <div>条目3</div>
-        <div>条目4</div>
+      <h2>updown 动画</h2>
+      <div class="lay-flex-col">
+        <div class="lay-carousel" id="demo-updown">
+          <div carousel-item>
+            <div>条目1</div>
+            <div>条目2</div>
+            <div>条目3</div>
+            <div>条目4</div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <br />
-
-    <div class="lay-carousel" id="test4">
-      <div carousel-item>
-        <div>
-          <img src="https://unpkg.com/outeres/demo/carousel/720x360-1.jpg" />
-        </div>
-        <div>
-          <img src="https://unpkg.com/outeres/demo/carousel/720x360-2.jpg" />
-        </div>
-        <div>
-          <img src="https://unpkg.com/outeres/demo/carousel/720x360-3.jpg" />
-        </div>
-        <div>
-          <img src="https://unpkg.com/outeres/demo/carousel/720x360-4.jpg" />
-        </div>
-        <div>
-          <img src="https://unpkg.com/outeres/demo/carousel/720x360-5.jpg" />
+      <h2>图片轮播</h2>
+      <div class="lay-flex-col">
+        <div class="lay-carousel" id="demo-picture">
+          <div carousel-item>
+            <div>
+              <img
+                src="https://unpkg.com/outeres/demo/carousel/720x360-1.jpg"
+              />
+            </div>
+            <div>
+              <img
+                src="https://unpkg.com/outeres/demo/carousel/720x360-2.jpg"
+              />
+            </div>
+            <div>
+              <img
+                src="https://unpkg.com/outeres/demo/carousel/720x360-3.jpg"
+              />
+            </div>
+            <div>
+              <img
+                src="https://unpkg.com/outeres/demo/carousel/720x360-4.jpg"
+              />
+            </div>
+            <div>
+              <img
+                src="https://unpkg.com/outeres/demo/carousel/720x360-5.jpg"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -90,9 +100,9 @@
       layui.use(() => {
         var carousel = layui.carousel;
 
-        // 实例
+        // 常规示例
         var carInst = carousel.render({
-          elem: '#test1',
+          elem: '#demo-normal',
           index: 2,
           // full: true,
           arrow: 'always',
@@ -110,16 +120,18 @@
         console.log(carInst);
         // carInst.goto(1);
 
+        // fade 动画
         carousel.render({
-          elem: '#test2',
+          elem: '#demo-fade',
           interval: 1800,
           // full: true,
           anim: 'fade',
           height: '120px',
         });
 
+        // updown 动画
         carousel.render({
-          elem: '#test3',
+          elem: '#demo-updown',
           // full: true,
           arrow: 'always',
           // autoplay: false,
@@ -131,7 +143,7 @@
 
         // 图片轮播
         carousel.render({
-          elem: '#test4',
+          elem: '#demo-picture',
           width: '720px',
           height: '360px',
           interval: 5000,

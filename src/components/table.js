@@ -1800,8 +1800,8 @@ Class.prototype.renderData = function (opts) {
         pageCount: 3,
         size: 'sm',
         layout: ['prev', 'page', 'next', 'limits', 'jump', 'count'],
-        onChange: function (opts) {
-          // Tip: 此处用 `that.config`（而不是 `options`）对选项进行赋值，是因为 table 的 `reload` 方法中对 `this.config` 进行了重置。
+        onChange: function ({ options: opts }) {
+          // 注: 此处用 `that.config`（而不是 `options`）对选项进行赋值，是因为 table 的 `reload` 方法中对 `this.config` 进行了重置。
           // 后续 table 基于 Component 基类重构，则不存在该问题
           that.page = that.config.page.current = opts.current; // 更新页码
           that.config.limit = that.config.page.limit = opts.limit; // 更新每页条数

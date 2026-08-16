@@ -91,12 +91,12 @@ export class Flow extends Component {
     const $moreBtn = $more.find('a');
 
     // 触发请求
-    const done = (function fn() {
+    const done = function fn() {
       locked = true;
       $moreBtn.html(CONST.ELEM_LOAD);
-      typeof options.done === 'function' && options.done(++page, next);
-      return fn;
-    })();
+      options.done?.({ instance: this, options, page: ++page, next });
+      return fn.bind(this);
+    }.apply(this);
 
     // 不自动滚动加载
     $moreBtn.on('click', function () {

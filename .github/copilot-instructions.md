@@ -47,7 +47,9 @@ layui/
 
 #### Code linting
 
-采用 ESLint 作为代码静态分析工具，禁止随意使用 `console.log`，仅允许：`console.warn` 和 `console.error`。
+采用 ESLint 作为代码静态分析工具， `src` 目录源代码仅允许使用 `console.warn` 和 `console.error` 输出日志。
+
+注：本项目暂未启用 Stylelint。Review CSS 时，无需根据 Stylelint 规则进行 CSS 代码分析。
 
 #### 命名空间
 

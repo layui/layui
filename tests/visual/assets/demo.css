@@ -1,20 +1,41 @@
 /* demo.css */
 
-.demo-flex-col {
-  display: flex;
-  flex-direction: column;
-  gap: var(--lay-spacing);
+/* 侧边栏 */
+.demo-sidebar {
+  position: fixed;
+  top: var(--demo-sidebar-offset, 0px);
+  left: var(--demo-sidebar-offset, 0px);
+  bottom: var(--demo-sidebar-offset, 0px);
+  width: var(--demo-sidebar-width, 185px);
+  overflow: hidden auto;
+}
+body:has(
+  .demo-sidebar .lay-menu[data-lay-mode='vertical'][data-lay-collapsed]
+) {
+  --demo-sidebar-width: var(--lay-menu-collapsed-width, 65px);
+}
+body:has(.demo-sidebar) .demo-main {
+  padding-block: 16px;
+  padding-inline: calc(
+      var(--demo-sidebar-width) + 32px + var(--demo-sidebar-offset, 0px)
+    )
+    32px;
+  transition: all var(--lay-anim-duration);
 }
 
-.demo-flex-row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 32px;
-}
-.demo-flex-row > div {
+/* Flexbox 无 class 属性的 div 子元素 */
+.lay-flex-row > div:not([class]) {
   display: flex;
   align-items: center;
   gap: var(--lay-spacing-sm);
+}
+
+/* Flexbox 前面的标题 */
+h2:has(+ :is(.lay-flex-row, .lay-flex-col)) {
+  padding-bottom: var(--lay-spacing-sm);
+  border-bottom: 1px solid var(--lay-border-color);
+}
+/* Flexbox 后面的标题 */
+:is(.lay-flex-row, .lay-flex-col) + h2 {
+  padding-top: var(--lay-spacing);
 }

@@ -838,9 +838,7 @@
   padding: 16px;
 }
 
-/*
- * 内边距
- */
+/* 内边距 */
 .lay-padding-1 {
   padding: var(--lay-spacing-xs) !important;
 }
@@ -857,9 +855,7 @@
   padding: var(--lay-spacing-xl) !important;
 }
 
-/*
- * 外边距
- */
+/* 外边距 */
 .lay-margin-1 {
   margin: var(--lay-spacing-xs) !important;
 }
@@ -874,4 +870,26 @@
 }
 .lay-margin-5 {
   margin: var(--lay-spacing-xl) !important;
+}
+
+/* 横向 Flexbox */
+.lay-flex-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lay-spacing);
+  margin: var(--lay-spacing) 0;
+}
+
+/* 纵向 Flexbox */
+.lay-flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lay-spacing);
+  margin: var(--lay-spacing) 0;
+
+  > .lay-flex-row {
+    margin: 0;
+  }
 }

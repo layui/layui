@@ -131,6 +131,7 @@ export class Slider extends Component {
     `;
 
     const $elem = options.$elem;
+    const baseParams = { instance: this, options };
 
     // 生成组件元素
     this.$rootElem = $(template);
@@ -207,7 +208,9 @@ export class Slider extends Component {
      */
     const setSliderTipsTxt = (sliderWrapBtnElem) => {
       const value = sliderWrapBtnElem.parent().data('value');
-      const tipsTxt = options.setTips ? options.setTips(value) : value;
+      const tipsTxt = options.setTips
+        ? options.setTips({ ...baseParams, value })
+        : value;
       this.$rootElem.find('.' + CONST.SLIDER_TIPS).html(tipsTxt);
     };
 
@@ -326,6 +329,8 @@ export class Slider extends Component {
       .val();
     const step = 100 / ((options.max - options.min) / options.step);
     const precision = this.#precision();
+    const baseParams = { instance: this, options };
+
     const change = function (offsetValue, index, from) {
       if (Math.ceil(offsetValue) * step > 100) {
         offsetValue = Math.ceil(offsetValue) * step;
@@ -381,7 +386,11 @@ export class Slider extends Component {
       sliderWrap.eq(index).data('value', selfValue);
       sliderAct
         .find('.' + CONST.SLIDER_TIPS)
-        .html(options.setTips ? options.setTips(selfValue) : selfValue);
+        .html(
+          options.setTips
+            ? options.setTips({ ...baseParams, value: selfValue })
+            : selfValue,
+        );
 
       // 如果开启范围选择，则返回数组值
       let arrValue;
@@ -393,11 +402,16 @@ export class Slider extends Component {
         if (arrValue[0] > arrValue[1]) arrValue.reverse(); // 如果前面的圆点超过了后面的圆点值，则调换顺序
       }
 
-      this.value = options.range ? arrValue : selfValue; // 最新值
-      options.change && options.change(this.value); // change 回调
+      // 最新值
+      this.value = options.range ? arrValue : selfValue;
+
+      // onChange 回调
+      options.onChange?.({ ...baseParams, value: this.value });
 
       // 值完成选中的事件
-      if (from === 'done') options.done && options.done(this.value);
+      if (from === 'done') {
+        options.done?.({ ...baseParams, value: this.value });
+      }
     }.bind(this);
     const valueTo = function (value) {
       const oldLeft = ((value / sliderWidth()) * 100) / step;
@@ -415,11 +429,11 @@ export class Slider extends Component {
       ),
     );
     const createMoveElem = function (sliderBtnElem, move, up) {
-      const upCall = function () {
+      const upCall = () => {
         // 移动端延时一秒关闭
         up && up(lay.touchEventsSupported() ? 1000 : 0);
         elemMove.remove();
-        options.done && options.done(this.value);
+        options.done?.({ ...baseParams, value: this.value });
         // 移动端
         if (lay.touchEventsSupported()) {
           sliderBtnElem[0].removeEventListener(

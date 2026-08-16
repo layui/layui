@@ -151,7 +151,9 @@ export class ColorPicker extends Popup {
     `));
 
     // 初始化颜色选择框尺寸
-    options.size && elemColorBox.addClass(`lay-colorpicker-${options.size}`);
+    if (['xs', 'sm', 'md', 'lg'].includes(options.size)) {
+      elemColorBox.attr('data-lay-size', options.size);
+    }
 
     // 插入颜色选择框
     $elem.addClass('lay-inline').html(elemColorBox);

@@ -2,47 +2,28 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>popup 附着弹出层 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <link rel="stylesheet" href="./assets/demo.css" />
   </head>
   <body>
     <div class="lay-container lay-padding-3">
       <h2>常规</h2>
-      <hr />
-      <div
-        style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
-      >
+      <div class="lay-flex-row">
         <button class="lay-btn" id="demo-normal">普通示例</button>
         <button class="lay-btn" id="demo-backdrop">开启遮罩</button>
       </div>
 
-      <br /><br />
       <h2>触发方式</h2>
-      <hr />
-      <div
-        style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
-      >
+      <div class="lay-flex-row">
         <button class="lay-btn" id="demo-hover">hover</button>
         <button class="lay-btn" id="demo-mousedown">mousedown</button>
         <button class="lay-btn" id="demo-dblclick">dblclick</button>
       </div>
 
-      <br /><br />
       <h2>弹出方位</h2>
-      <hr />
-      <div
-        style="
-          display: flex;
-          flex-direction: column;
-          gap: 11px;
-          max-width: 520px;
-          margin: 0 auto;
-        "
-      >
+      <div class="lay-flex-col" style="max-width: 520px; margin-inline: auto">
         <div style="display: flex; justify-content: center; gap: 6px">
           <button class="lay-btn" id="demo-top-start">top-start</button>
           <button class="lay-btn" id="demo-top">top</button>
@@ -95,12 +76,8 @@
         </div>
       </div>
 
-      <br /><br />
       <h2>弹出动画</h2>
-      <hr />
-      <div
-        style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
-      >
+      <div class="lay-flex-row">
         <button class="lay-btn" id="demo-downbit">downbit</button>
         <button class="lay-btn" id="demo-upbit">upbit</button>
         <button class="lay-btn" id="demo-scale">scale</button>
@@ -109,63 +86,48 @@
         <button class="lay-btn" id="demo-fadein">fadein（默认）</button>
       </div>
 
-      <br /><br />
-
       <h2>设置样式</h2>
-      <hr />
-      <div
-        style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
-      >
+      <div class="lay-flex-row">
         <button class="lay-btn" id="demo-width">控制最小最大宽度</button>
         <button class="lay-btn" id="demo-style">自定义任意样式</button>
         <button class="lay-btn" id="demo-content">自定义样式与内容</button>
       </div>
 
-      <br /><br />
-
       <h2>外部操作</h2>
-      <hr />
-      <div
-        style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
-      >
-        <div>
-          <strong id="demo-external">目标元素</strong>
-          （通过右侧按钮打开或关闭面板）
+      <div class="lay-flex-col">
+        <div class="lay-flex-row">
+          <div>
+            <strong id="demo-external">目标元素</strong>
+            （通过右侧按钮打开或关闭面板）
+          </div>
+          <div>
+            <button class="lay-btn" lay-on="open">open</button>
+            <button class="lay-btn" lay-on="close">close</button>
+          </div>
         </div>
-        <div>
-          <button class="lay-btn" lay-on="open">open</button>
-          <button class="lay-btn" lay-on="close">close</button>
-        </div>
-      </div>
-      <br />
-      <div
-        style="display: flex; align-items: center; gap: 11px; flex-wrap: wrap"
-      >
-        <label for="updateContent">模拟 autocomplete 效果</label>
-        <div>
-          <input
-            type="text"
-            id="updateContent"
-            placeholder="请输入"
-            class="lay-input"
-          />
+        <div class="lay-flex-row">
+          <label for="updateContent">模拟 autocomplete 效果</label>
+          <div>
+            <input
+              type="text"
+              id="updateContent"
+              placeholder="请输入"
+              class="lay-input"
+            />
+          </div>
         </div>
       </div>
-
-      <br /><br />
 
       <h2>定制弹出</h2>
-      <hr />
-      <div>即 popup 组件内部定制的一些常见类型的弹出层</div>
-      <br />
-      <div
-        style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap"
-      >
-        <button class="lay-btn" id="demo-tooltip">Tooltip</button>
-        <button class="lay-btn" id="demo-tooltip-dark">Tooltip（深色）</button>
+      <div class="lay-flex-col">
+        <div>即 popup 组件内部定制的一些常见类型的弹出层</div>
+        <div class="lay-flex-row">
+          <button class="lay-btn" id="demo-tooltip">Tooltip</button>
+          <button class="lay-btn" id="demo-tooltip-dark">
+            Tooltip（深色）
+          </button>
+        </div>
       </div>
-
-      <br /><br />
     </div>
 
     <script src="./assets/dist/layui.js"></script>
