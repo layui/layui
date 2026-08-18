@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>empty 空状态 - Layui</title>
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <style>
+      /* 演示卡片：模拟数据区域的空状态容器 */
+      .demo-empty-card {
+        border: 1px dashed var(--lay-border-color);
+        border-radius: var(--lay-border-radius);
+        padding: var(--lay-spacing-lg);
+        min-height: 200px;
+        box-sizing: border-box;
+      }
+      .demo-empty-flex {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--lay-spacing-lg);
+      }
+      .demo-empty-flex > .demo-empty-card {
+        flex: 1;
+        min-width: 280px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="lay-container lay-padding-3">
+      <h2>基础用法</h2>
+      <hr />
+      <div class="demo-empty-flex">
+        <div class="demo-empty-card">
+          <div class="lay-empty">
+            <div class="lay-empty-icon"></div>
+            <p class="lay-empty-text">暂无数据</p>
+          </div>
+        </div>
+        <div class="demo-empty-card">
+          <div class="lay-empty">
+            <div class="lay-empty-icon">
+              <i class="lay-icon lay-icon-folder-open"></i>
+            </div>
+            <p class="lay-empty-text">暂无文件夹</p>
+            <p class="lay-empty-description">当前分类下还没有任何内容</p>
+          </div>
+        </div>
+      </div>
+
+      <br />
+      <h2>带操作区</h2>
+      <hr />
+      <div class="demo-empty-card">
+        <div class="lay-empty">
+          <div class="lay-empty-icon">
+            <i class="lay-icon lay-icon-search"></i>
+          </div>
+          <p class="lay-empty-text">未找到相关内容</p>
+          <p class="lay-empty-description">可以尝试调整关键词或筛选条件</p>
+          <div class="lay-empty-action">
+            <button class="lay-btn lay-btn-primary">清除筛选</button>
+            <button class="lay-btn">新建数据</button>
+          </div>
+        </div>
+      </div>
+
+      <br />
+      <h2>纯文字（无图标）</h2>
+      <hr />
+      <div class="demo-empty-card">
+        <div class="lay-empty">
+          <p class="lay-empty-text">没有更多了</p>
+        </div>
+      </div>
+
+      <br />
+      <h2>容器内居中</h2>
+      <hr />
+      <div class="demo-empty-card" style="height: 280px">
+        <div class="lay-empty" style="height: 100%">
+          <div class="lay-empty-icon"></div>
+          <p class="lay-empty-text">暂无数据</p>
+          <div class="lay-empty-action">
+            <button class="lay-btn lay-btn-primary">去创建</button>
+          </div>
+        </div>
+      </div>
+
+      <br />
+      <h2>JS 渲染（empty.render）</h2>
+      <hr />
+      <div class="demo-empty-card" id="demo-render"></div>
+
+      <br />
+      <h2>JS 构建（empty.build）</h2>
+      <hr />
+      <div class="demo-empty-card" id="demo-build"></div>
+    </div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(() => {
+        const { empty, $ } = layui;
+
+        // 渲染到目标元素
+        empty.render({
+          elem: '#demo-render',
+          icon: '<i class="lay-icon lay-icon-search"></i>',
+          text: '未找到相关数据',
+          description: '可以尝试调整筛选条件后重试',
+          action: '<button class="lay-btn lay-btn-primary">清除筛选</button>',
+        });
+
+        // 构建结构后手动插入
+        $('#demo-build').append(
+          empty.build({
+            text: '暂无记录',
+            action: '<button class="lay-btn lay-btn-primary">去创建</button>',
+          }),
+        );
+      });
+    </script>
+  </body>
+</html>
