@@ -950,7 +950,8 @@ export class DatePicker extends Popup {
               this.#autoCalendarModel.auto && this.#autoCalendarModel();
             }
           });
-          this.#checkDate('limit').#renderCalendar({ type: 'init' });
+          this.#checkDate('limit');
+          this.#renderCalendar({ type: 'init' });
           const $timeBtn = $(this.footer)
             .find(`.${CONST.ELEM_TIME_BTN}`)
             .removeClass(CONST.CLASS_IS_DISABLED);
@@ -2177,7 +2178,8 @@ export class DatePicker extends Popup {
             }
           } else {
             // 重新渲染一下两个面板
-            this.#checkDate('limit').#renderCalendar({
+            this.#checkDate('limit');
+            this.#renderCalendar({
               dateTime,
               index,
               type: 'init',
@@ -2968,10 +2970,12 @@ export class DatePicker extends Popup {
         if (addSubYear('sub')) return;
         if (this.#rangeLinked) {
           this.dateTime.year--;
-          this.#checkDate('limit').#renderCalendar({ type: 'init' });
+          this.#checkDate('limit');
+          this.#renderCalendar({ type: 'init' });
         } else {
           dateTime.year--;
-          this.#checkDate('limit').#renderCalendar({ index });
+          this.#checkDate('limit');
+          this.#renderCalendar({ index });
           // 面板自动切换的模式下重新判定是否发生模式转换等细节处理
           this.#autoCalendarModel.auto
             ? this.#choose(
@@ -2991,7 +2995,8 @@ export class DatePicker extends Popup {
             year: YM[0],
             month: YM[1],
           });
-          this.#checkDate('limit').#renderCalendar({
+          this.#checkDate('limit');
+          this.#renderCalendar({
             dateTime: dateTimeTemp,
             type: 'init',
           });
@@ -3001,7 +3006,8 @@ export class DatePicker extends Popup {
             year: YM[0],
             month: YM[1],
           });
-          this.#checkDate('limit').#renderCalendar({ type: 'init' });
+          this.#checkDate('limit');
+          this.#renderCalendar({ type: 'init' });
           this.#autoCalendarModel.auto
             ? this.#choose(
                 $(contentElem).find(`td.${CONST.CLASS_IS_SELECTED}`),
@@ -3019,7 +3025,8 @@ export class DatePicker extends Popup {
             year: YM[0],
             month: YM[1],
           });
-          this.#checkDate('limit').#renderCalendar({
+          this.#checkDate('limit');
+          this.#renderCalendar({
             dateTime: dateTimeTemp,
             type: 'init',
           });
@@ -3029,7 +3036,8 @@ export class DatePicker extends Popup {
             year: YM[0],
             month: YM[1],
           });
-          this.#checkDate('limit').#renderCalendar({ type: 'init' });
+          this.#checkDate('limit');
+          this.#renderCalendar({ type: 'init' });
           this.#autoCalendarModel.auto
             ? this.#choose(
                 $(contentElem).find(`td.${CONST.CLASS_IS_SELECTED}`),
@@ -3042,10 +3050,12 @@ export class DatePicker extends Popup {
         if (addSubYear()) return;
         if (this.#rangeLinked) {
           this.dateTime.year++;
-          this.#checkDate('limit').#renderCalendar({ index: 0, type: 'init' });
+          this.#checkDate('limit');
+          this.#renderCalendar({ index: 0, type: 'init' });
         } else {
           dateTime.year++;
-          this.#checkDate('limit').#renderCalendar({ index });
+          this.#checkDate('limit');
+          this.#renderCalendar({ index });
           this.#autoCalendarModel.auto
             ? this.#choose(
                 $(contentElem).find(`td.${CONST.CLASS_IS_SELECTED}`),
