@@ -1,0 +1,113 @@
+/* tag.css */
+
+.lay-tag {
+  /* 尺寸 */
+  --lay-tag-size-xs: 22px;
+  --lay-tag-size-sm: 24px;
+  --lay-tag-size-md: 28px;
+  --lay-tag-size-lg: 32px;
+
+  /* 语义色 */
+  --lay-tag-color: var(--lay-color-primary);
+  --lay-tag-text-color: #fff;
+
+  display: inline-flex;
+  align-items: center;
+  height: var(--lay-tag-size-md);
+  padding: 0 var(--lay-spacing-sm);
+  font-size: 13px;
+  white-space: nowrap;
+  vertical-align: middle;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: var(--lay-border-radius);
+  background-color: var(--lay-tag-color);
+  color: var(--lay-tag-text-color);
+
+  /* 水平右间距 + 垂直间距。换行时行尾 margin 被浏览器忽略，行首不缩进 */
+  margin: 4px var(--lay-spacing-sm) 4px 0;
+}
+
+/* 状态色：data-lay-type 属性驱动 */
+.lay-tag[data-lay-type='normal'] {
+  --lay-tag-color: var(--lay-gray-800);
+}
+.lay-tag[data-lay-type='success'] {
+  --lay-tag-color: var(--lay-color-green);
+}
+.lay-tag[data-lay-type='warning'] {
+  --lay-tag-color: var(--lay-color-orange);
+}
+.lay-tag[data-lay-type='danger'] {
+  --lay-tag-color: var(--lay-color-red);
+}
+.lay-tag[data-lay-type='info'] {
+  --lay-tag-color: var(--lay-color-blue);
+}
+
+/* 尺寸：data-lay-size 属性驱动 */
+.lay-tag[data-lay-size='xs'] {
+  height: var(--lay-tag-size-xs);
+  padding: 0 6px;
+  font-size: 12px;
+}
+.lay-tag[data-lay-size='sm'] {
+  height: var(--lay-tag-size-sm);
+  padding: 0 6px;
+  font-size: 12px;
+}
+.lay-tag[data-lay-size='lg'] {
+  height: var(--lay-tag-size-lg);
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+/* 主题：data-lay-effect 属性驱动 */
+.lay-tag[data-lay-effect='light'] {
+  --lay-tag-text-color: var(--lay-tag-color);
+
+  background-color: color-mix(in srgb, var(--lay-tag-color) 12%, #fff);
+  border-color: color-mix(in srgb, var(--lay-tag-color) 25%, #fff);
+}
+.lay-tag[data-lay-effect='plain'] {
+  --lay-tag-text-color: var(--lay-tag-color);
+
+  background-color: #fff;
+  border-color: var(--lay-tag-color);
+}
+
+/* 胶囊圆角：data-lay-round 属性驱动 */
+.lay-tag[data-lay-round] {
+  border-radius: 999px;
+}
+
+/* 禁用（状态类，复用基类 CLASS_IS_DISABLED） */
+.lay-tag.lay-is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 关闭按钮 */
+.lay-tag-close {
+  display: inline-block;
+  margin-left: var(--lay-spacing-xs);
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  font-size: 12px;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0.7;
+  transition:
+    opacity var(--lay-anim-duration-fast),
+    background-color var(--lay-anim-duration-fast);
+}
+.lay-tag-close:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+.lay-tag-close:focus-visible {
+  outline: 1px solid currentColor;
+}
