@@ -1,0 +1,428 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>步骤条 - layui</title>
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <style>
+      /* 演示区块排版 */
+      .demo-section {
+        margin-bottom: var(--lay-spacing-xl);
+      }
+      .demo-section h2 {
+        margin: 0 0 var(--lay-spacing);
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--lay-gray-900);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="lay-padding-5">
+      <section class="demo-section">
+        <h2>基础用法</h2>
+        <!-- 静态标记：data-lay-current 声明当前步骤，render 自动计算状态 -->
+        <div class="lay-steps" data-lay-current="2">
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">1</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">步骤一</div>
+              <div class="lay-steps-desc">填写基本信息</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">2</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">步骤二</div>
+              <div class="lay-steps-desc">完善个人资料</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">3</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">步骤三</div>
+              <div class="lay-steps-desc">确认提交</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">4</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">步骤四</div>
+              <div class="lay-steps-desc">完成</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section">
+        <h2>不同尺寸</h2>
+        <!-- 尺寸变体：data-lay-size 声明 xs / 默认 / lg -->
+        <div class="lay-steps" data-lay-current="2" data-lay-size="xs">
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">1</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">小</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">2</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">小</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">3</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">小</div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="lay-steps"
+          data-lay-current="2"
+          style="margin-top: var(--lay-spacing)"
+        >
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">1</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">默认</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">2</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">默认</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">3</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">默认</div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="lay-steps"
+          data-lay-current="2"
+          data-lay-size="lg"
+          style="margin-top: var(--lay-spacing)"
+        >
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">1</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">大</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">2</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">大</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">3</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">大</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section">
+        <h2>垂直布局</h2>
+        <!-- 垂直布局：data-lay-layout="vertical" 纵向排列 -->
+        <div class="lay-steps" data-lay-current="2" data-lay-layout="vertical">
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">1</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">步骤一</div>
+              <div class="lay-steps-desc">填写基本信息</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">2</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">步骤二</div>
+              <div class="lay-steps-desc">完善个人资料</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">3</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">步骤三</div>
+              <div class="lay-steps-desc">确认提交</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section">
+        <h2>禁用步骤</h2>
+        <!-- 禁用步骤：lay-is-disabled 状态类置灰不可点 -->
+        <div class="lay-steps" data-lay-current="2">
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">1</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">已完成</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">2</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">当前</div>
+            </div>
+          </div>
+          <div class="lay-steps-item lay-is-disabled">
+            <div class="lay-steps-icon">3</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">未开放</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section">
+        <h2>动态渲染（generate）</h2>
+        <div id="dynamicDemo"></div>
+      </section>
+
+      <section class="demo-section">
+        <h2>可点击切换</h2>
+        <div id="clickDemo"></div>
+      </section>
+
+      <section class="demo-section">
+        <h2>自定义步骤图标</h2>
+        <div id="iconDemo"></div>
+      </section>
+
+      <section class="demo-section">
+        <h2>状态色变体（data-lay-status）</h2>
+        <!-- 状态色变体：data-lay-status="error" 当前步骤显示红色 -->
+        <div class="lay-steps" data-lay-current="2" data-lay-status="error">
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">1</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">填写信息</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">2</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">校验失败</div>
+            </div>
+          </div>
+          <div class="lay-steps-item">
+            <div class="lay-steps-icon">3</div>
+            <div class="lay-steps-content">
+              <div class="lay-steps-title">确认提交</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-section">
+        <h2>分步表单（业务流程示例）</h2>
+        <p
+          style="
+            margin: 0 0 var(--lay-spacing);
+            font-size: 12px;
+            color: var(--lay-gray-700);
+          "
+        >
+          按顺序填写并点击「下一步」逐步推进；已到达的步骤可点击回退或跳转，
+          未到达的后续步骤会被业务阻断（看控制台）
+        </p>
+        <div id="formSteps"></div>
+        <div
+          id="formContent"
+          style="
+            margin: var(--lay-spacing) 0;
+            padding: var(--lay-spacing);
+            border: 1px solid var(--lay-border-color);
+            border-radius: var(--lay-border-radius);
+          "
+        >
+          <div class="form-step" data-step="1">
+            <label>姓名：</label>
+            <input
+              id="nameInput"
+              class="lay-input"
+              placeholder="请输入姓名"
+              style="width: 200px"
+            />
+          </div>
+          <div class="form-step" data-step="2">
+            <label>邮箱：</label>
+            <input
+              id="emailInput"
+              class="lay-input"
+              placeholder="请输入邮箱"
+              style="width: 200px"
+            />
+          </div>
+          <div class="form-step" data-step="3">
+            <label>
+              <input type="checkbox" id="agreeCheck" />
+              我已阅读并同意《用户声明》
+            </label>
+          </div>
+          <div class="form-step" data-step="4">
+            <span>提交成功，感谢您的参与！</span>
+          </div>
+        </div>
+        <div>
+          <button id="prevBtn" class="lay-btn lay-btn-sm">上一步</button>
+          <button id="nextBtn" class="lay-btn lay-btn-sm lay-btn-primary">
+            下一步
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(() => {
+        const { steps, $ } = layui;
+
+        // 订阅点击切换事件（切换前触发，回调返回 false 可阻断切换）
+        steps.on('click', ({ elem, from, to, item }) => {
+          console.warn('步骤切换：', from, '→', to, elem, item);
+        });
+
+        // 动态渲染：数据数组 + 公共属性
+        $('#dynamicDemo').append(
+          steps.generate({
+            current: 2,
+            data: [
+              '步骤一',
+              '步骤二',
+              { title: '步骤三', description: '带描述文字' },
+              '步骤四',
+            ],
+          }),
+        );
+        // 动态渲染的步骤条需手动 render 绑定交互
+        steps.render({ elem: $('#dynamicDemo').find('.lay-steps') });
+
+        // 可点击切换：点击任意未禁用步骤可切换；点击当前步骤不触发切换
+        $('#clickDemo').append(
+          steps.generate({
+            current: 1,
+            clickable: true,
+            data: ['第一步', '第二步', '第三步', '第四步'],
+          }),
+        );
+        steps.render({ elem: $('#clickDemo').find('.lay-steps') });
+
+        // 自定义步骤图标：对象项传 icon HTML
+        $('#iconDemo').append(
+          steps.generate({
+            current: 2,
+            data: [
+              {
+                title: '注册',
+                icon: '<i class="lay-icon lay-icon-email"></i>',
+              },
+              {
+                title: '完善',
+                icon: '<i class="lay-icon lay-icon-diamond"></i>',
+              },
+              '完成',
+            ],
+          }),
+        );
+        steps.render({ elem: $('#iconDemo').find('.lay-steps') });
+
+        // 订阅 change 事件（切换成功后触发）
+        steps.on('change', ({ elem, from, to }) => {
+          console.warn('步骤已切换：', from, '→', to, elem);
+        });
+
+        // 分步表单：模拟正常业务流程
+        // - 当前步骤表单校验通过后，点击「下一步」进入下一项
+        // - 不能跳到未到达的后续步骤（步骤条点击被业务阻断）
+        // - 已到达的步骤可随时回退或跳转
+        const formSteps = $('#formSteps');
+        formSteps.append(
+          steps.generate({
+            current: 1,
+            clickable: true,
+            layFilter: 'form',
+            data: ['填写信息', '验证邮箱', '签署声明', '完成'],
+          }),
+        );
+        const $formSteps = formSteps.find('.lay-steps');
+        steps.render({ elem: $formSteps });
+        const formId = $formSteps.attr('lay-steps-id');
+
+        let formCurrent = 1; // 当前步骤
+        let formMax = 1; // 已到达的最大步骤（可回跳上限）
+
+        const showFormStep = (step) => {
+          $('#formContent .form-step').each(function () {
+            $(this).toggle($(this).data('step') === step);
+          });
+        };
+        const updateFormBtn = () => {
+          $('#prevBtn').prop('disabled', formCurrent <= 1);
+          $('#nextBtn').prop('disabled', formCurrent >= 4);
+        };
+        showFormStep(1);
+        updateFormBtn();
+
+        // 步骤条点击：只能回跳到已到达的步骤（lay-filter 隔离，不影响其它步骤条）
+        steps.on('click(form)', ({ from, to }) => {
+          if (to > formMax) {
+            console.warn(
+              `业务阻断：不能跳到第 ${to} 步（当前第 ${from} 步，未到达）`,
+            );
+            return false;
+          }
+          formCurrent = to;
+          showFormStep(to);
+          updateFormBtn();
+        });
+
+        // 订阅 change 事件（切换成功后触发，仅 form 实例）
+        steps.on('change(form)', ({ from, to }) => {
+          console.warn('步骤已切换：', from, '→', to);
+        });
+
+        // 上一步
+        $('#prevBtn').on('click', () => {
+          if (formCurrent <= 1) return;
+          formCurrent--;
+          steps.setCurrent(formId, formCurrent);
+          showFormStep(formCurrent);
+          updateFormBtn();
+        });
+
+        // 下一步：校验当前步骤表单后推进
+        $('#nextBtn').on('click', () => {
+          if (formCurrent === 1 && !$('#nameInput').val().trim()) {
+            console.warn('请先填写姓名');
+            return;
+          }
+          if (formCurrent === 2 && !$('#emailInput').val().trim()) {
+            console.warn('请先填写邮箱');
+            return;
+          }
+          if (formCurrent === 3 && !$('#agreeCheck').prop('checked')) {
+            console.warn('请先勾选同意《用户声明》');
+            return;
+          }
+          formCurrent++;
+          formMax = Math.max(formMax, formCurrent);
+          steps.setCurrent(formId, formCurrent);
+          showFormStep(formCurrent);
+          updateFormBtn();
+        });
+      });
+    </script>
+  </body>
+</html>
