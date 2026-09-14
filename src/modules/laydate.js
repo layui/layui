@@ -573,7 +573,8 @@ layui.define(['lay', 'i18n'], function (exports) {
           thisDate = new Date(
             day
               ? day < STAMP
-                ? time + day * STAMP
+                ? // 按“天”偏移时改用日期运算，避免夏令时切换日少算 1 小时
+                  that.addDays(new Date(time), day).getTime()
                 : day //如果数字小于一天的毫秒数，则数字为天数，否则为毫秒数
               : time
           );
@@ -1611,9 +1612,10 @@ layui.define(['lay', 'i18n'], function (exports) {
     var startDay =
       type === 'year' ? that.startOfYear(date) : that.startOfMonth(date);
     var endDay = type === 'year' ? that.endOfYear(date) : that.endOfMonth(date);
-    var numOfDays =
-      Math.floor((endDay.getTime() - startDay.getTime()) / millisecondsInDay) +
-      1;
+    // 用四舍五入而非 floor + 1：跨夏令时切换日时差值会带 ±1 小时偏差
+    var numOfDays = Math.round(
+      (endDay.getTime() - startDay.getTime()) / millisecondsInDay
+    );
     var disabledCount = 0;
 
     for (var i = 0; i < numOfDays; i++) {
@@ -3348,14 +3350,14 @@ layui.define(['lay', 'i18n'], function (exports) {
   // 得到某月的最后一天
   laydate.getEndDate = function (month, year) {
     var thisDate = new Date();
-    //设置日期为下个月的第一天
+    //将日期设为下个月的第 0 天，即当前月的最后一天
+    //注：不采用「时间戳 - 86400000」的写法 —— 夏令时切换日会少减 1 小时，导致未跨月
     thisDate.setFullYear(
       year || thisDate.getFullYear(),
       month || thisDate.getMonth() + 1,
-      1
+      0
     );
-    //减去一天，得到当前月最后一天
-    return new Date(thisDate.getTime() - 1000 * 60 * 60 * 24).getDate();
+    return thisDate.getDate();
   };
 
   exports(MOD_NAME, laydate);
