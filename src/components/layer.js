@@ -6,6 +6,7 @@
 import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
+import { applyAxisOffsets } from '../utils/layer-position.js';
 
 var win;
 var ready = {
@@ -1126,8 +1127,7 @@ ready.updatePosition = function (layero, config) {
   };
 
   if (typeof config.offset === 'object') {
-    coords.offsetTop = config.offset[0];
-    coords.offsetLeft = config.offset[1] || coords.offsetLeft;
+    applyAxisOffsets(coords, config.offset);
   } else if (config.offset !== 'auto') {
     if (config.offset === 't') {
       // 上
