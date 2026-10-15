@@ -11,4 +11,10 @@ describe('layer position offsets', () => {
       applyAxisOffsets({ offsetTop: 20, offsetLeft: 30 }, [0, 'auto']),
     ).toEqual({ offsetTop: 0, offsetLeft: 30 });
   });
+
+  test('keeps the centered second axis when its offset is empty', () => {
+    expect(
+      applyAxisOffsets({ offsetTop: 20, offsetLeft: 30 }, ['auto', '']),
+    ).toEqual({ offsetTop: 20, offsetLeft: 30 });
+  });
 });
