@@ -15,5 +15,6 @@ describe('issue edited workflow guard', () => {
 
     expect(shouldSkip({ changes: { title: { from: 'old' } } })).toBe(true);
     expect(shouldSkip({ changes: { body: { from: 'old' } } })).toBe(false);
+    expect(shouldSkip({ changes: { body: { from: '' } } })).toBe(false);
   });
 });
