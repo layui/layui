@@ -4,7 +4,7 @@
   --lay-empty-icon-size: 64px; /* 图标尺寸 */
   --lay-empty-icon-gap: var(--lay-spacing-lg); /* 图标与文案间距 */
   --lay-empty-text-gap: var(--lay-spacing-xs); /* 主文案与描述间距 */
-  --lay-empty-action-gap: var(--lay-spacing-lg); /* 操作区间距 */
+  --lay-empty-action-gap: var(--lay-spacing-lg); /* 操作区与上方内容的间距 */
 
   display: flex;
   flex-direction: column;
@@ -20,7 +20,7 @@
   line-height: 1;
   color: var(--lay-gray-500);
 }
-/* 内置默认图标：文件图标。容器为空时自动显示，放入内容后自动隐藏 */
+/* 内置默认图标（对应 .lay-icon-file，码点 \e621）。容器为空时自动显示，放入内容后自动隐藏 */
 .lay-empty-icon:empty::before {
   font-family: 'lay-icon' !important;
   content: '\e621';
@@ -30,6 +30,12 @@
 /* 自定义图标继承字号（覆盖 lay-icon 默认 16px） */
 .lay-empty-icon .lay-icon {
   font-size: inherit;
+}
+/* 非字体图标（img/svg）按图标字号约束 */
+.lay-empty-icon img,
+.lay-empty-icon svg {
+  width: 1em;
+  height: 1em;
 }
 .lay-empty-text {
   margin: 0;
@@ -42,5 +48,9 @@
   color: var(--lay-gray-600);
 }
 .lay-empty-action {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--lay-spacing-sm);
   margin-top: var(--lay-empty-action-gap);
 }

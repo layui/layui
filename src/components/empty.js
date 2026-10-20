@@ -19,9 +19,11 @@ export class Empty extends Component {
     // 自定义图标内容（HTML 字符串）；
     // 值为 false 则不渲染图标容器（纯文字空态），为空字符串时将显示默认内置图标
     icon: '',
-    text: '', // 主文案
-    description: '', // 描述文案
-    action: '', // 操作区内容（HTML 字符串）；或函数回调，返回 jQuery 对象/HTML 内容
+    text: '', // 主文案，为空不渲染
+    description: '', // 描述文案，为空不渲染
+    // 操作区内容（HTML 字符串）；
+    // 或函数回调，接收合并后的配置项，返回 jQuery 对象/HTML 内容
+    action: '',
   };
 
   static get CONST() {
@@ -69,19 +71,28 @@ export class Empty extends Component {
 
     // 操作区。支持 HTML 字符串或函数回调
     if (options.action) {
-      const $action = $('<div>').addClass(CONST.ELEM_ACTION);
-      $action.append(
+      const action =
         typeof options.action === 'function'
-          ? options.action()
-          : options.action,
-      );
-      $empty.append($action);
+          ? options.action(options)
+          : options.action;
+
+      // 回调可能返回空内容，此时不渲染操作区容器
+      if (action) {
+        const $action = $('<div>').addClass(CONST.ELEM_ACTION);
+        $action.append(action);
+        $empty.append($action);
+      }
     }
 
     return $empty;
   }
 
-  // 渲染空状态到目标元素
+  /**
+   * 渲染空状态到目标元素
+   * 会先清空目标元素的原有内容，再插入空状态结构
+   * 目标元素不存在时输出警告并跳过渲染
+   * @returns {this}
+   */
   render() {
     const options = this.options;
     const $elem = options.$elem;

@@ -8,31 +8,28 @@
     />
     <title>empty 空状态 - Layui</title>
     <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <link rel="stylesheet" href="./assets/demo.css" />
     <style>
       /* 演示卡片：模拟数据区域的空状态容器 */
       .demo-empty-card {
+        min-height: 200px;
+        padding: var(--lay-spacing-lg);
         border: 1px dashed var(--lay-border-color);
         border-radius: var(--lay-border-radius);
-        padding: var(--lay-spacing-lg);
-        min-height: 200px;
         box-sizing: border-box;
       }
-      .demo-empty-flex {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--lay-spacing-lg);
-      }
-      .demo-empty-flex > .demo-empty-card {
+      /* 横向排列时等宽拉伸 */
+      .lay-flex-row > .demo-empty-card {
         flex: 1;
         min-width: 280px;
+        align-self: stretch;
       }
     </style>
   </head>
   <body>
     <div class="lay-container lay-padding-3">
       <h2>基础用法</h2>
-      <hr />
-      <div class="demo-empty-flex">
+      <div class="lay-flex-row">
         <!-- 默认图标：图标容器为空时由 CSS :empty::before 自动显示内置图标 -->
         <div class="demo-empty-card">
           <div class="lay-empty">
@@ -52,65 +49,82 @@
         </div>
       </div>
 
-      <br />
       <h2>带操作区</h2>
-      <hr />
-      <!-- 操作区：lay-empty-action 内自由填充按钮等操作元素 -->
-      <div class="demo-empty-card">
-        <div class="lay-empty">
-          <div class="lay-empty-icon">
-            <i class="lay-icon lay-icon-search"></i>
-          </div>
-          <p class="lay-empty-text">未找到相关内容</p>
-          <p class="lay-empty-description">可以尝试调整关键词或筛选条件</p>
-          <div class="lay-empty-action">
-            <button class="lay-btn lay-btn-primary">清除筛选</button>
-            <button class="lay-btn">新建数据</button>
+      <div class="lay-flex-col">
+        <!-- 操作区：lay-empty-action 内自由填充按钮等操作元素 -->
+        <div class="demo-empty-card">
+          <div class="lay-empty">
+            <div class="lay-empty-icon">
+              <i class="lay-icon lay-icon-search"></i>
+            </div>
+            <p class="lay-empty-text">未找到相关内容</p>
+            <p class="lay-empty-description">可以尝试调整关键词或筛选条件</p>
+            <div class="lay-empty-action">
+              <button class="lay-btn lay-btn-primary">清除筛选</button>
+              <button class="lay-btn">新建数据</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <br />
       <h2>纯文字（无图标）</h2>
-      <hr />
-      <!-- 纯文字：不写 lay-empty-icon 容器即为无图标空态 -->
-      <div class="demo-empty-card">
-        <div class="lay-empty">
-          <p class="lay-empty-text">没有更多了</p>
-        </div>
-      </div>
-
-      <br />
-      <h2>容器内居中</h2>
-      <hr />
-      <!-- 容器内居中：empty 撑满父容器（height: 100%）后 flex 自动居中 -->
-      <div class="demo-empty-card" style="height: 280px">
-        <div class="lay-empty" style="height: 100%">
-          <div class="lay-empty-icon"></div>
-          <p class="lay-empty-text">暂无数据</p>
-          <div class="lay-empty-action">
-            <button class="lay-btn lay-btn-primary">去创建</button>
+      <div class="lay-flex-col">
+        <!-- 纯文字：不写 lay-empty-icon 容器即为无图标空态 -->
+        <div class="demo-empty-card">
+          <div class="lay-empty">
+            <p class="lay-empty-text">没有更多了</p>
           </div>
         </div>
       </div>
 
-      <br />
-      <h2>JS 渲染（empty.render）</h2>
-      <hr />
-      <!-- JS 渲染：empty.render(options) 构建并渲染到目标元素 -->
-      <div class="demo-empty-card" id="demo-render"></div>
+      <h2>容器内居中</h2>
+      <div class="lay-flex-col">
+        <!-- 容器内居中：empty 撑满父容器（height: 100%）后 flex 自动居中 -->
+        <div class="demo-empty-card" style="height: 280px">
+          <div class="lay-empty" style="height: 100%">
+            <div class="lay-empty-icon"></div>
+            <p class="lay-empty-text">暂无数据</p>
+            <div class="lay-empty-action">
+              <button class="lay-btn lay-btn-primary">去创建</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <br />
+      <h2>JS 渲染（empty.render）</h2>
+      <div class="lay-flex-col">
+        <!-- JS 渲染：empty.render(options) 构建并渲染到目标元素 -->
+        <div class="demo-empty-card" id="demo-render"></div>
+      </div>
+
+      <h2>JS 渲染：函数回调操作区</h2>
+      <div class="lay-flex-col">
+        <!-- 函数回调：action 接收合并后的配置项，可返回 jQuery 对象并自行绑定事件 -->
+        <div class="demo-empty-card" id="demo-render-action"></div>
+      </div>
+
       <h2>JS 构建（empty.build）</h2>
-      <hr />
-      <!-- JS 构建：empty.build(options) 仅返回结构，由调用方决定插入位置 -->
-      <div class="demo-empty-card" id="demo-build"></div>
+      <div class="lay-flex-col">
+        <!-- JS 构建：empty.build(options) 仅返回结构，由调用方决定插入位置 -->
+        <div class="demo-empty-card" id="demo-build"></div>
+      </div>
+
+      <h2>dataset 配置</h2>
+      <div class="lay-flex-col">
+        <!-- dataset：目标元素上的 data-lay-* 属性会自动合并到配置项 -->
+        <div
+          class="demo-empty-card"
+          id="demo-dataset"
+          data-lay-icon="false"
+          data-lay-text="来自 dataset 的纯文字空态"
+        ></div>
+      </div>
     </div>
 
     <script src="./assets/dist/layui.js"></script>
     <script>
       layui.use(() => {
-        const { empty, $ } = layui;
+        const { empty, $, layer } = layui;
 
         // 渲染到目标元素
         empty.render({
@@ -121,6 +135,21 @@
           action: '<button class="lay-btn lay-btn-primary">清除筛选</button>',
         });
 
+        // 函数回调操作区：可访问当前配置项，并自行绑定事件
+        empty.render({
+          elem: '#demo-render-action',
+          icon: false,
+          text: '暂无消息',
+          action: (options) => {
+            return $('<button class="lay-btn lay-btn-primary">')
+              .text('创建消息')
+              .on('click', () => {
+                layer.msg('操作区事件已触发');
+                empty.reload(options.id, { text: '已创建消息' });
+              });
+          },
+        });
+
         // 构建结构后手动插入
         $('#demo-build').append(
           empty.build({
@@ -128,6 +157,11 @@
             action: '<button class="lay-btn lay-btn-primary">去创建</button>',
           }),
         );
+
+        // 读取目标元素 dataset 上的配置并渲染
+        empty.render({
+          elem: '#demo-dataset',
+        });
       });
     </script>
   </body>
