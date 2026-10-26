@@ -883,7 +883,7 @@ var expandNode = function (
 
         return retValue;
       }
-      trExpanded = trData[LAY_HAS_EXPANDED] = true;
+      trData[LAY_HAS_EXPANDED] = true;
       if (childNodes.length) {
         // 判断是否需要排序
         if (options.initSort && (!options.url || options.autoSort)) {
@@ -2261,7 +2261,6 @@ Class.prototype.updateParentCheckStatus = function (dataP, checked) {
     }
   } else {
     // 状态不确定的情况下根据子节点的信息
-    checked = false;
     var checkedNum = 0;
     dataP[childrenKey].forEach(function (item) {
       if (item[checkName]) {
