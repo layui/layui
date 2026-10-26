@@ -7,6 +7,11 @@ import { lay } from '../core/lay.js';
 import { i18n } from '../core/i18n.js';
 import { $ } from 'jquery';
 import { Popup, popupHooks } from './popup.js';
+import {
+  addCalendarDays,
+  countCalendarDays,
+  getDaysInMonth,
+} from '../utils/calendar.js';
 
 export class DatePicker extends Popup {
   static componentName = 'datePicker';
@@ -190,17 +195,7 @@ export class DatePicker extends Popup {
    * @returns {number} - 指定月份的天数
    */
   static getDaysInMonth(month, year) {
-    const date = new Date();
-
-    // 设置日期为下个月的第一天
-    date.setFullYear(
-      year || date.getFullYear(),
-      month || date.getMonth() + 1,
-      1,
-    );
-
-    // 减去一天，得到当前月最后一天
-    return new Date(date.getTime() - 1000 * 60 * 60 * 24).getDate();
+    return getDaysInMonth(month || new Date().getMonth() + 1, year);
   }
 
   // 构造函数
@@ -434,16 +429,12 @@ export class DatePicker extends Popup {
           seconds: i ? 59 : 0,
         }).getTime();
 
-        const STAMP = 86400000;
-
-        // 代表一天的毫秒数
-        const thisDate = new Date(
-          day
-            ? day < STAMP
-              ? time + day * STAMP
-              : day // 如果数字小于一天的毫秒数，则数字为天数，否则为毫秒数
-            : time,
-        );
+        const thisDate = new Date(time);
+        if (day && day < 86400000) {
+          thisDate.setDate(thisDate.getDate() + day);
+        } else if (day) {
+          thisDate.setTime(day); // 大于一天的数字按毫秒时间戳处理
+        }
 
         ymd = [
           thisDate.getFullYear(),
@@ -1508,10 +1499,7 @@ export class DatePicker extends Popup {
    * @returns {Date}
    */
   #addDays(date, amount) {
-    const newDate = new Date(date);
-    if (!amount) return newDate;
-    newDate.setDate(newDate.getDate() + amount);
-    return newDate;
+    return addCalendarDays(date, amount);
   }
 
   /**
@@ -1523,14 +1511,11 @@ export class DatePicker extends Popup {
    */
   #isDisabledYearOrMonth(date, type, position) {
     const options = this.options;
-    const millisecondsInDay = 24 * 60 * 60 * 1000;
     const startDay =
       type === 'year' ? this.#startOfYear(date) : this.#startOfMonth(date);
     const endDay =
       type === 'year' ? this.#endOfYear(date) : this.#endOfMonth(date);
-    const numOfDays =
-      Math.floor((endDay.getTime() - startDay.getTime()) / millisecondsInDay) +
-      1;
+    const numOfDays = countCalendarDays(startDay, endDay);
     let disabledCount = 0;
     for (let i = 0; i < numOfDays; i++) {
       const day = this.#addDays(startDay, i);
