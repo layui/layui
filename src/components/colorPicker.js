@@ -597,8 +597,7 @@ export class ColorPicker extends Popup {
         if (value.indexOf(',') > -1) {
           hsb = RGBToHSB(RGBSTo(value));
           this.#select(hsb.h, hsb.s, hsb.b);
-          elemColorBoxSpan[0].style.background =
-            colorValue = `#${HSBToHEX(hsb)}`;
+          elemColorBoxSpan[0].style.background = `#${HSBToHEX(hsb)}`;
 
           if (
             (value.match(/[0-9]{1,3}/g) || []).length > 3 &&
@@ -611,12 +610,10 @@ export class ColorPicker extends Popup {
               .find(`.${CONST.PICKER_ALPHA_SLIDER}`)
               .css('left', alpha * 280);
             elemColorBoxSpan[0].style.background = value;
-            colorValue = value;
           }
         } else {
           hsb = HEXToHSB(value);
-          elemColorBoxSpan[0].style.background =
-            colorValue = `#${HSBToHEX(hsb)}`;
+          elemColorBoxSpan[0].style.background = `#${HSBToHEX(hsb)}`;
           this.$colorBoxElem
             .find(`.${CONST.PICKER_TRIG_I}`)
             .removeClass(CONST.ICON_PICKER_CLOSE)

@@ -1231,11 +1231,11 @@ export class DatePicker extends Popup {
     let minMaxError;
     if (this.#getDateTime(dateTime) > this.#getDateTime(options.max)) {
       // 若超出最大日期
-      dateTime = this.dateTime = lay.extend({}, options.max);
+      this.dateTime = lay.extend({}, options.max);
       minMaxError = true;
     } else if (this.#getDateTime(dateTime) < this.#getDateTime(options.min)) {
       // 若少于最小日期
-      dateTime = this.dateTime = lay.extend({}, options.min);
+      this.dateTime = lay.extend({}, options.min);
       minMaxError = true;
     }
 

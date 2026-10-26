@@ -1617,7 +1617,7 @@ Form.prototype.validate = function (elem) {
 
 // 提交表单并校验
 var submit = (Form.prototype.submit = function (filter, callback) {
-  var field = {}; // 字段集合
+  var field; // 字段集合
   var button = $(this); // 当前触发的按钮
 
   // 表单域 lay-filter 属性值

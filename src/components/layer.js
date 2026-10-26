@@ -1556,7 +1556,6 @@ layer.closeAll = function (type, callback) {
         othis.attr('times'),
         _index === domsElem.length - 1 ? callback : null,
       );
-    is = null;
   });
   if (domsElem.length === 0) typeof callback === 'function' && callback();
 };
