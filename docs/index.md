@@ -78,6 +78,27 @@ npm i layui
 <script src="//unpkg.com/layui@{{= d.layui[2].v }}/dist/layui.js"></script>
 ```
 
+### CSP 兼容版本 <sup>2.14+</sup>
+
+Layui 在 `2.14.0` 版本中新增了兼容 CSP 的构建版本 `layui.csp.js`，以便在严格 Content Security Policy 页面中使用。
+
+#### nonce 来源配置
+
+- 在 `window.LAYUI_GLOBAL`中配置 nonce 属性值。
+  ```
+  window.LAYUI_GLOBAL = { nonce: 'your_nonce' };
+  ```
+- 在加载 Layui 的 `<script>` 标签中，指定 nonce 属性值。
+  ```
+  <script nonce="your_nonce" src="dist/layui.csp.js"></script>
+  ```
+
+#### CSP 版本限制
+
+- 不支持通过 `lay-options` 属性配置组件选项。
+- 不支持 laytpl。对于部分组件中支持 laytpl 模板的选项，CSP 版不会对模板进行解析，请采用文档注明的函数形式替代。
+- 由于部分组件采用了 `style` 属性设置内联样式，因此需在 CSP 中允许 `style-src-attr 'unsafe-inline'`，若未设置该策略，相关组件的样式可能无法完整显示。
+
 <h2 id="quickstart" lay-toc="{}">快速上手</h2>
 
 现在，让我们以一个最简单的示例开始入门：
@@ -109,27 +130,6 @@ npm i layui
 </pre>
 
 点击上方 `Preview` 标签可进行效果预览。
-
-<h2 id="csp">CSP 构建<sup>2.14+</sup></h2>
-
-某些环境要求执行内容安全策略（CSP），因此 Layui 提供了一个 CSP 兼容的构建版本 `layui.csp.js`。
-
-#### nonce 来源配置
-
-- 在 `window.LAYUI_GLOBAL`中配置 nonce 属性值。
-  ```
-  window.LAYUI_GLOBAL = { nonce: 'your_nonce' };
-  ```
-- 在加载 Layui 的 `<script>` 标签中，指定 nonce 属性值。
-  ```
-  <script nonce="your_nonce" src="dist/layui.csp.js"></script>
-  ```
-
-#### 限制
-
-- 不支持 laytpl 模块。
-- 对于部分支持 laytpl 模板的组件选项，不再支持自定义模板，建议改用函数类型。
-- 不支持通过 lay-options 属性配置组件选项。
 
 <h3 id="help">其他帮助</h3>
 
