@@ -183,6 +183,15 @@
   };
 
   /**
+   * 判断值是否为 null、undefined 或空字符串
+   * @param {*} value
+   * @returns {boolean}
+   */
+  lay.isNilOrEmpty = function (value) {
+    return value === null || value === undefined || value === '';
+  };
+
+  /**
    * IE 版本
    * @type {string | boolean} - 如果是 IE 返回版本字符串，否则返回 false
    */

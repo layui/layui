@@ -15,8 +15,8 @@
         background: #f6f7fb;
       }
       .test-card {
-        margin-bottom: 18px;
-        border-radius: 10px;
+        margin-bottom: 18px !important;
+        border-radius: 2px;
         background: #fff;
       }
       .test-card .layui-card-header {
@@ -32,14 +32,15 @@
         color: #16a34a;
       }
       .test-note {
+        padding: 11px 0;
         color: #64748b;
         font-size: 13px;
       }
       .mt-12 {
-        margin-top: 12px;
+        margin-top: 12px !important;
       }
       .mt-16 {
-        margin-top: 16px;
+        margin-top: 16px !important;
       }
       .hidden {
         display: none;
@@ -152,10 +153,6 @@
       <div class="layui-card-body">
         <div id="table-toolbar" class="hidden"></div>
         <table id="table-demo" lay-filter="table-demo"></table>
-        <div class="test-note">
-          覆盖 toolbar/pagebar/列 toolbar/totalRow 函数形式，以及 lay-options
-          JSON。
-        </div>
       </div>
     </div>
 
@@ -210,6 +207,7 @@
             'layui.csp.js 初始化完成；nonce = ' + layui.cache.nonce;
 
           element.render('nav');
+          element.render('tab');
           element.render('progress');
 
           document.getElementById('progress-btn').onclick = function () {

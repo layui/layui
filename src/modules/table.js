@@ -107,19 +107,29 @@ layui.define(
      * 渲染 laytpl 模板，CSP 兼容
      * @param {string|((data: Record<string, any>, extra?: any) => string)} tpl 模板字符串或渲染函数对象
      * @param {Record<string, any>} data 数据对象
-     * @param {{tplOptions?: {open:string, close:string, tagStyle: 'legacy' | 'modern'}, context?: any, extra?: any}} [opts] 选项对象
+     * @param {{tplOptions?: {open:string, close:string, tagStyle: 'legacy' | 'modern'}, context?: any, extra?: any, fallback?: string}} [opts] 选项对象
      * @returns {string} 渲染后的字符串
      */
     var renderLaytpl = function (tpl, data, opts) {
       if (!tpl) return '';
       opts = opts || {};
+
       if (typeof tpl === 'function') {
-        return tpl.call(opts.context || this, data, opts.extra);
+        var ret = tpl.call(opts.context || this, data, opts.extra);
+        return lay.isNilOrEmpty(ret) ? '' : ret;
       }
+
+      var template = resolveTplStr(tpl);
+
+      // 若模板为空且提供了 fallback，则使用 fallback 作为模板内容
+      if (lay.hasOwn(opts, 'fallback') && lay.isNilOrEmpty(template)) {
+        template = opts.fallback;
+      }
+
       if (__LAYUI_CSP__) {
-        return resolveTplStr(tpl);
+        return template;
       }
-      return laytpl(resolveTplStr(tpl), opts.tplOptions).render(data);
+      return laytpl(template, opts.tplOptions).render(data);
     };
 
     // 解析自定义模板数据
@@ -142,11 +152,12 @@ layui.define(
 
       // 获取模板内容
       if (templet) {
-        content =
-          renderLaytpl(templet, $.extend({ LAY_COL: item3 }, obj.tplData), {
-            context: item3,
-            extra: obj.obj
-          }) || String(content);
+        var tplData = $.extend({ LAY_COL: item3 }, obj.tplData);
+        content = renderLaytpl(templet, tplData, {
+          context: item3,
+          extra: obj.obj,
+          fallback: String(content)
+        });
       }
 
       // 是否只返回文本
@@ -2101,11 +2112,9 @@ layui.define(
               },
               item3
             );
-            return (
-              renderLaytpl(totalRow, tplData, {
-                context: item3.totalRow ? item3 : options
-              }) || content
-            );
+            return renderLaytpl(totalRow, tplData, {
+              context: item3.totalRow ? item3 : options
+            });
           }
 
           return content;
