@@ -336,13 +336,13 @@ function validateBundle(type) {
 function generateModuleFacade(done) {
   const esm = `${config.comment}
 import './layui.js';
-var layui = window.layui;
+const layui = window.layui;
 export { layui };
 export default layui;
 `;
   const csp = `${config.comment}
 import './layui.csp.js';
-var layui = window.layui;
+const layui = window.layui;
 export { layui };
 export default layui;
 `;
