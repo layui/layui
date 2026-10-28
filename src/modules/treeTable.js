@@ -1892,6 +1892,10 @@ layui.define(['table'], function (exports) {
       }
 
       var newNodesHtml = table.getTrHtml(id, newNodes);
+      // 确保根节点的 LAY_INDEX 与数组实际位置一致
+      layui.each(table.cache[id], function (idx, item) {
+        item[table.config.indexName] = idx;
+      });
       var newNodesHtmlObj = {
         trs: $(newNodesHtml.trs.join('')),
         trs_fixed: $(newNodesHtml.trs_fixed.join('')),

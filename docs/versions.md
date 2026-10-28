@@ -11,6 +11,19 @@ toc: true
 
 <h2 id="2.10+" lay-toc="{title: '2.10+'}"></h2>
 
+<h2 id="v2.13.9" lay-pid="2.10+" class="ws-anchor">
+  v2.13.9
+  <span class="layui-badge-rim">2026-08-11</span>
+</h2>
+
+- 新增 form 的 `filterDisabled` 配置，并恢复提交取值时 `disabled` 表单项的旧行为 #3125 @sentsim
+- 修复 treeTable 的 `addNodes` 根节点 `LAY_INDEX` 重复的问题 #3099 @sunxiaobin89
+- 优化 `layui.hint()` 的 error 参数及 errorOnce 逻辑 #3097 @sunxiaobin89 @Sight-wcg
+
+### 下载： [layui-v2.13.9.zip](#download)
+
+---
+
 <h2 id="v2.13.8" lay-pid="2.10+" class="ws-anchor">
   v2.13.8
   <span class="layui-badge-rim">2026-06-30</span>

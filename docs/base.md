@@ -2,7 +2,7 @@
 title: 底层方法
 toc: true
 ---
- 
+
 # 底层方法
 
 > Layui 提供了一系列基础 API，以更好地辅助组件的使用。
@@ -29,7 +29,7 @@ layui.config({
 特别地，若你对 `layui.js` 本身进行了动态加载或是其他特殊场景中使用，那么上述 `layui.config()` 所设定的 `dir` 属性会因此失效，此时你可以在动态加载 <code>layui.js</code> 之前预先定义一个我们约定好的全局对象，如：
 
 ```
-<script>  
+<script>
 var LAYUI_GLOBAL = {
   dir: '/res/layui/' // layui.js 所在目录
 };
@@ -50,7 +50,7 @@ var LAYUI_GLOBAL = {
 ```
 // 假设当前页面 url 为： https://domain.com/docs/base.html?a=1&c=3#/user/set/id=123/
 var url = layui.url();
- 
+
 // url 返回结果为：
 {
   "pathname": ["docs","base.html"], // 路径
@@ -82,16 +82,16 @@ layui.data('test', {
   key: 'nickname',
   value: '张三'
 });
- 
+
 // 【删】：删除 test 表的 nickname 字段
 layui.data('test', {
   key: 'nickname',
   remove: true
 });
 layui.data('test', null); // 删除 test 表
-  
+
 // 【改】：同【增】，会覆盖已经存储的数据
-  
+
 // 【查】：向 test 表读取全部的数据
 var localTest = layui.data('test');
 console.log(localTest.nickname); // 获得“张三”
@@ -129,6 +129,42 @@ if(device.MYAPP){
 }
 ```
 
+<h2 id="hint" lay-toc="">控制台提示</h2>
+
+`var hint = layui.hint();`
+
+用于向浏览器控制台输出异常或警告信息，返回一个包含 `error` 和 `errorOnce` 方法的对象。
+
+### error(msg, type)
+
+- 参数 **msg** <sup> string</sup> — 要输出的提示文本
+- 参数 **type** <sup> string</sup> — 提示类型，可选值：`warn`（默认）、`error`，分别对应 `console.warn()` 和 `console.error()` 输出
+
+```js
+var hint = layui.hint();
+// 输出：[Layui warn]: Invalid configuration
+hint.error('Invalid configuration');
+// 输出：[Layui error]: Operation failed
+hint.error('Operation failed', 'error');
+```
+
+### errorOnce(msg, type) <sup>2.9+</sup>
+
+参数与 `error` 方法完全一致，但增加了「消息去重」机制，即：在同一 `hint()` 实例的作用域内，相同的 `msg` 文本只会向控制台输出一次，再次调用将被忽略。不同 `hint()` 实例互不影响
+
+```
+var hint = layui.hint();
+
+// 首次输出
+hint.errorOnce('Missing configuration, using defaults');
+
+// 再次调用相同的消息将被忽略，不再输出
+hint.errorOnce('Missing configuration, using defaults');
+```
+
+`errorOnce` 内部维护了一个缓存，在累计达到 100 条去重消息后会自动清空，以释放内存。
+
+
 <h2 id="api" lay-toc="{hot: true}">API 列表</span></h2>
 
 前面我们特别介绍了几个相对特殊的基础方法，而以下是 Layui 提供的全部基础 API：
@@ -152,7 +188,7 @@ if(device.MYAPP){
 | layui.data(table, settings) | 持久化存储。[#用法](#data) |
 | layui.sessionData(table, settings) | 会话性存储。[#用法](#data) |
 | layui.device(key) | 获取浏览器信息。[#用法](#device) |
-| layui.hint() | 向控制台打印一些异常信息，目前只返回了 error 方法，如： <br>`var hint = layui.hint();` <br> `hint.error('出错啦');` |
+| layui.hint() | 获取控制台提示对象，包含 error 和 errorOnce 两个方法。[#用法](#hint) |
 | layui.stope(e) | 阻止事件冒泡 |
 | layui.onevent(modName, events, callback) | 增加自定义模块事件，一般在内置组件中使用。 |
 | layui.event(modName, events, params) | 执行自定义模块事件，搭配 onevent 使用。注<sup>2.8+</sup>：当 events 参数中未设定 filter 时则可重复执行该事件，否则只会执行一次最新添加的事件。 |
