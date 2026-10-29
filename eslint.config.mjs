@@ -16,7 +16,8 @@ globals.layui = {
   exports: false, // CommonJS 导出对象
   module: false, // CommonJS 模块对象
   require: false, // CommonJS 导入函数
-  define: false // AMD/RequireJS 模块定义函数
+  define: false, // AMD/RequireJS 模块定义函数
+  __LAYUI_CSP__: false // CSP 编译期特性标识
 };
 
 export default defineConfig([
