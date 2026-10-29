@@ -11,13 +11,13 @@
       <th>描述</th>
       <th>类型</th>
       <th>默认值</th>
-    </tr> 
+    </tr>
   </thead>
   <tbody>
     <tr>
 <td>elem</td>
 <td>
-  
+
 绑定元素选择器或 DOM 对象
 
 </td>
@@ -27,7 +27,7 @@
     <tr>
 <td>title</td>
 <td>
-  
+
 穿梭框左右面板头部标题
 
 </td>
@@ -44,7 +44,7 @@
     <tr>
 <td>data</td>
 <td>
-  
+
 穿梭框的数据源。格式详见：[#data 格式](#options.data)
 
 </td>
@@ -54,7 +54,7 @@
     <tr>
 <td>value</td>
 <td>
-  
+
 初始选中的数据（右侧列表）
 
 </td>
@@ -64,7 +64,7 @@
     <tr>
 <td>id</td>
 <td>
-  
+
 设置实例唯一索引，用于其他方法传参使用。
 
 </td>
@@ -74,7 +74,7 @@
     <tr>
 <td>showSearch</td>
 <td>
-  
+
 是否开启搜索。支持以下可选值：
 
 - `false` 不开启搜索（默认）
@@ -92,7 +92,7 @@
     <tr>
 <td>width</td>
 <td>
-  
+
 定义左右穿梭框宽度
 
 </td>
@@ -106,7 +106,7 @@
     <tr>
 <td>height</td>
 <td>
-  
+
 定义左右穿梭框高度
 
 </td>
@@ -120,20 +120,22 @@
     <tr>
 <td>text</td>
 <td colspan="3">
-  
+
 自定义默认文本， `object` 类型。支持以下属性：
 
 ```
 text: {
   none: '无数据', // 没有数据时的文案
   searchNone: '无匹配数据' // 搜索无匹配数据时的文案
-} 
+}
 ```
+
+注：*自 `2.14.0+`，渲染时会对上述文本会进行 HTML 编码（转义），以规避 XSS 问题。*
 
 </td>
     </tr>
     <tr>
-<td colspan="4" style="text-align: center"> 
+<td colspan="4" style="text-align: center">
 
 
 <div id="options.callback" lay-pid="options" class="ws-anchor">
@@ -147,7 +149,7 @@ text: {
     <tr>
 <td>onchange</td>
 <td>
-  
+
 左右穿梭时的回调函数。返回的参数如下：
 
 ```
@@ -168,7 +170,7 @@ onchange: function(data, index){
     <tr>
 <td>dblclick <sup>2.9.3+</sup></td>
 <td>
-  
+
 双击时的回调函数。返回的参数如下：
 
 ```
@@ -191,12 +193,12 @@ dblclick: function(obj){
     </tr>
     <tr>
 <td>
-  
+
 [parseData](#options.parseData)
 
 </td>
 <td colspan="3">
-  
+
 <div id="options.parseData" lay-pid="options" class="ws-anchor">
 数据格式解析的回调函数，用于将返回的任意数据格式解析成 transfer 组件规定的 <a href="#options.data">data 格式</a>
 </div>

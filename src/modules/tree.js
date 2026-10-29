@@ -2,7 +2,7 @@
  * tree 树组件
  */
 
-layui.define(['i18n', 'component', 'form'], function (exports) {
+layui.define(['i18n', 'component', 'form', 'util'], function (exports) {
   'use strict';
 
   var lay = layui.lay;
@@ -10,6 +10,7 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
   var $ = layui.$;
   var form = layui.form;
   var layer = layui.layer;
+  var util = layui.util;
 
   // 创建组件
   var component = layui.component({
@@ -54,8 +55,8 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
       that.config = $.extend(
         {
           text: {
-            defaultNodeName: i18n.$t('tree.defaultNodeName'), // 节点默认名称
-            none: i18n.$t('tree.noData') // 数据为空时的文本提示
+            defaultNodeName: util.unescape(i18n.$t('tree.defaultNodeName')), // 节点默认名称
+            none: util.unescape(i18n.$t('tree.noData')) // 数据为空时的文本提示
           }
         },
         that.config,
@@ -86,7 +87,9 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
       // 插入组件结构
       that.elem = wrapper;
       that.elemNone = $(
-        '<div class="layui-tree-emptyText">' + options.text.none + '</div>'
+        '<div class="layui-tree-emptyText">' +
+          util.escape(options.text.none) +
+          '</div>'
       );
       othis.html(that.elem);
 
@@ -148,6 +151,29 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
   });
 
   var CONST = component.CONST;
+
+  /**
+   * 判断链接是否为可安全跳转的地址
+   * 仅放行 `http:` / `https:` 协议及无协议的相对地址，用于拦截 `javascript:`、
+   * `data:`、`vbscript:` 等可被注入脚本的协议
+   * @param {string} href - 链接地址
+   * @returns {boolean} - 是否为可安全跳转的地址
+   */
+  var isSafeUrl = function (href) {
+    var value = String(href);
+    var normalizedHref = '';
+
+    // 剔除空白与控制字符，避免 `java\tscript:`、` javascript:` 等变形绕过校验
+    for (var i = 0; i < value.length; i++) {
+      if (value.charCodeAt(i) > 0x20) normalizedHref += value.charAt(i);
+    }
+
+    // 无协议视为相对地址；有协议时仅允许 http / https
+    return (
+      !/^[a-z][a-z0-9+.-]*:/i.test(normalizedHref) ||
+      /^https?:/i.test(normalizedHref)
+    );
+  };
 
   /**
    * 扩展组件原型方法
@@ -220,7 +246,7 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
       var entryDiv = $(
         [
           '<div data-id="' +
-            item[customName.id] +
+            util.escape(item[customName.id]) +
             '" class="' +
             [CONST.ELEM_SET, item.spread ? 'layui-tree-spread' : ''].join(' ') +
             '">',
@@ -252,26 +278,30 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
           (function () {
             return options.showCheckbox
               ? '<input type="checkbox" name="' +
-                  (item.field || 'layuiTreeCheck_' + item[customName.id]) +
+                  util.escape(
+                    item.field || 'layuiTreeCheck_' + item[customName.id]
+                  ) +
                   '" same="layuiTreeCheck" lay-skin="primary" ' +
                   (item.disabled ? 'disabled' : '') +
                   ' value="' +
-                  item[customName.id] +
+                  util.escape(item[customName.id]) +
                   '">'
               : '';
           })(),
           // 节点
           (function () {
-            if (options.isJump && item.href) {
+            if (options.isJump && item.href && isSafeUrl(item.href)) {
               return (
                 '<a href="' +
-                item.href +
+                util.escape(item.href) +
                 '" target="_blank" class="' +
                 CONST.ELEM_TEXT +
                 '">' +
-                (item[customName.title] ||
-                  item.label ||
-                  options.text.defaultNodeName) +
+                util.escape(
+                  item[customName.title] ||
+                    item.label ||
+                    options.text.defaultNodeName
+                ) +
                 '</a>'
               );
             } else {
@@ -280,9 +310,11 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
                 CONST.ELEM_TEXT +
                 (item.disabled ? ' ' + CONST.CLASS_DISABLED : '') +
                 '">' +
-                (item[customName.title] ||
-                  item.label ||
-                  options.text.defaultNodeName) +
+                util.escape(
+                  item[customName.title] ||
+                    item.label ||
+                    options.text.defaultNodeName
+                ) +
                 '</span>'
               );
             }
@@ -714,12 +746,14 @@ layui.define(['i18n', 'component', 'form'], function (exports) {
           // 嵌入文字移除输入框
           var getVal = function (input) {
             var textNew = lay.escape(input.val().trim());
-            textNew = textNew ? textNew : options.text.defaultNodeName;
+            textNew = textNew
+              ? textNew
+              : lay.escape(options.text.defaultNodeName);
             input.remove();
             elemMain.children('.' + CONST.ELEM_TEXT).html(textNew);
 
             // 同步数据
-            returnObj.data[customName.title] = textNew;
+            returnObj.data[customName.title] = lay.unescape(textNew);
 
             // 节点修改的回调
             options.operate && options.operate(returnObj);

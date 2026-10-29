@@ -4,7 +4,7 @@
  */
 
 layui.define(
-  ['i18n', 'laytpl', 'component', 'form', 'lay'],
+  ['i18n', 'laytpl', 'component', 'form', 'lay', 'util'],
   function (exports) {
     'use strict';
 
@@ -13,6 +13,7 @@ layui.define(
     var $ = layui.$;
     var form = layui.form;
     var lay = layui.lay;
+    var util = layui.util;
 
     var component = layui.component({
       name: 'transfer',
@@ -43,8 +44,8 @@ layui.define(
           {
             title: i18n.$t('transfer.title'),
             text: {
-              none: i18n.$t('transfer.noData'),
-              searchNone: i18n.$t('transfer.noMatch')
+              none: util.unescape(i18n.$t('transfer.noData')),
+              searchNone: util.unescape(i18n.$t('transfer.noMatch'))
             }
           },
           that.config,
@@ -200,8 +201,8 @@ layui.define(
               data: options,
               index: that.index, // 索引
               i18nMessages: {
-                transfer_search_placeholder: i18n.$t(
-                  'transfer.searchPlaceholder'
+                transfer_search_placeholder: util.unescape(
+                  i18n.$t('transfer.searchPlaceholder')
                 )
               }
             },
@@ -298,12 +299,12 @@ layui.define(
           '<input type="checkbox" name="' +
             arr[_index].checkName +
             '" lay-skin="primary" lay-filter="layTransferCheckbox" title="' +
-            item.title +
+            util.escape(item.title) +
             '"' +
             (item.disabled ? ' disabled' : '') +
             (item.checked ? ' checked' : '') +
             ' value="' +
-            item.value +
+            util.escape(item.value) +
             '">',
           '</li>'
         ].join('');
@@ -382,11 +383,13 @@ layui.define(
 
     // 无数据视图
     Class.prototype.noneView = function (thisDataElem, text) {
-      var createNoneElem = $('<p class="layui-none">' + (text || '') + '</p>');
+      var createNoneElem = $(
+        '<p class="layui-none">' + util.escape(text || '') + '</p>'
+      );
       if (thisDataElem.find('.' + CONST.CLASS_NONE)[0]) {
         thisDataElem.find('.' + CONST.CLASS_NONE).remove();
       }
-      text.replace(/\s/g, '') && thisDataElem.append(createNoneElem);
+      (text || '').replace(/\s/g, '') && thisDataElem.append(createNoneElem);
     };
 
     // 同步 value 属性值
