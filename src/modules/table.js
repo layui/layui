@@ -557,7 +557,7 @@ layui.define(
       options.text = $.extend(
         true,
         {
-          none: i18n.$t('table.noData')
+          none: util.unescape(i18n.$t('table.noData'))
         },
         options.text
       );
@@ -1470,7 +1470,7 @@ layui.define(
       var that = this;
       var elemNone = that.layMain.find('.' + NONE);
       var layNone = $(
-        '<div class="' + NONE + '">' + (html || 'Error') + '</div>'
+        '<div class="' + NONE + '">' + util.escape(html || 'Error') + '</div>'
       );
 
       opts = opts || {};
@@ -1598,10 +1598,12 @@ layui.define(
             if (res[response.statusName] != response.statusCode) {
               that.errorView(
                 res[response.msgName] ||
-                  i18n.$t('table.dataFormatError', {
-                    statusName: response.statusName,
-                    statusCode: response.statusCode
-                  }),
+                  util.unescape(
+                    i18n.$t('table.dataFormatError', {
+                      statusName: response.statusName,
+                      statusCode: response.statusCode
+                    })
+                  ),
                 { reloadType: opts.type }
               );
             } else {
@@ -1630,9 +1632,12 @@ layui.define(
               that._xhrAbort = false;
               return;
             }
-            that.errorView(i18n.$t('table.xhrError', { msg: msg }), {
-              reloadType: opts.type
-            });
+            that.errorView(
+              util.unescape(i18n.$t('table.xhrError', { msg: msg })),
+              {
+                reloadType: opts.type
+              }
+            );
             typeof options.error === 'function' && options.error(e, msg);
           }
         };
