@@ -573,8 +573,10 @@ layui.define(['lay', 'i18n'], function (exports) {
           thisDate = new Date(
             day
               ? day < STAMP
-                ? // 按“天”偏移时改用日期运算，避免夏令时切换日少算 1 小时
-                  that.addDays(new Date(time), day).getTime()
+                ? // 整数天用日历运算（跨夏令时正确）；小数天（如 -0.5）必须保留毫秒运算，否则会被截断成整天
+                  day % 1 === 0
+                  ? that.addDays(new Date(time), day).getTime()
+                  : time + day * STAMP
                 : day //如果数字小于一天的毫秒数，则数字为天数，否则为毫秒数
               : time
           );
