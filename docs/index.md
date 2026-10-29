@@ -28,7 +28,10 @@ toc: true
 
 您可以通过以下任意一种方式获得 Layui :
 
-### 🌕 官网下载
+<h3 id="official-download" lay-toc="{level: 2}">
+  通过官网下载
+</h3>
+
 
 您可以在 [官网首页](/) 或 [更新日志](./versions.html) 页面下载到 Layui，它经过了自动化构建，更适合用于生产环境。目录结构如下：
 
@@ -39,9 +42,11 @@ layui/
   └─layui.js       # 核心模块库
 ```
 
-### 🌕 Git 下载
+<h3 id="github-download" lay-toc="{level: 2}">
+  通过 GitHub 下载
+</h3>
 
-> 您也可以通过 [GitHub](https://github.com/layui/layui/releases) 或 [Gitee](https://gitee.com/layui/layui/releases) 的 releases 列表下载，或直接下载整个仓库。
+> 您也可以通过 [GitHub](https://github.com/layui/layui/releases) 或 [Gitee](https://gitee.com/layui/layui/releases) 的 releases 列表下载。
 
 <p>
   <iframe src="//ghbtns.com/github-btn.html?user=layui&amp;repo=layui&amp;type=watch&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="156px" height="30px"></iframe>
@@ -52,15 +57,30 @@ layui/
   <a class="layui-btn layui-btn-normal" href="https://gitee.com/layui/layui/" target="_blank" rel="nofollow" style="background-color: #C71D23; color: #fff;">Gitee</a>
 </div>
 
-### 🌕 npm 下载
+<h3 id="npm-download" lay-toc="{level: 2}">
+  通过 NPM 下载
+</h3>
+
+- 安装 Layui
 
 ```
 npm i layui
 ```
 
-### 🌕 第三方 CDN 方式引入：
+- ESM 导入 <sup>2.14+</sup>
 
-> 以下均为知名第三方免费开放的公共资源 CDN，每期版本通过 NPM / GitHub 自动同步。
+Layui 提供了 ESM Facade（详见 [#3071](https://github.com/layui/layui/pull/3071)），以便在构建工具中导入 Layui。
+
+```js
+import layui from 'layui';
+import 'layui/css/layui.css';
+```
+
+<h3 id="cdn-sources" lay-toc="{level: 2, title: '第三方 CDN 引入'}">
+  通过第三方 CDN 引入
+</h3>
+
+> 以下均为知名第三方免费开放的公共资源 CDN，版本通过 NPM 自动同步。
 
 <div class="layui-btn-container">
   <a class="layui-btn layui-btn-primary layui-border-black" href="https://unpkg.com/browse/layui/dist/" target="_blank" rel="nofollow">UNPKG</a>
@@ -69,29 +89,63 @@ npm i layui
 </div>
 
 
-```
+```html
 <!-- 引入 layui.css -->
 <link href="//unpkg.com/layui@{{= d.layui[2].v }}/dist/css/layui.css" rel="stylesheet">
 ```
-```
+
+```html
 <!-- 引入 layui.js -->
 <script src="//unpkg.com/layui@{{= d.layui[2].v }}/dist/layui.js"></script>
 ```
 
-### CSP 兼容版本 <sup>2.14+</sup>
+<h3 id="csp-compatible" lay-toc="{level: 2, title: 'CSP 兼容版本'}">
+  CSP 兼容版本 <sup>2.14+</sup>
+</h3>
 
-Layui 在 `2.14.0` 版本中新增了兼容 CSP 的构建版本 `layui.csp.js`，以便在严格 Content Security Policy 页面中使用。
+对于要求执行内容安全策略（Content Security Policy）的页面，Layui 也提供了一个兼容 CSP 的构建版本。
 
 #### nonce 来源配置
 
-- 在 `window.LAYUI_GLOBAL`中配置 nonce 属性值。
-  ```
+- 方式一：在 `<script>` 标签中指定 `nonce`
+
+```html
+<script nonce="your_nonce" src="dist/layui.csp.js"></script>
+```
+
+- 方式二：在加载 Layui 之前配置 `window.LAYUI_GLOBAL.nonce`：
+
+```html
+<script nonce="your_nonce">
   window.LAYUI_GLOBAL = { nonce: 'your_nonce' };
-  ```
-- 在加载 Layui 的 `<script>` 标签中，指定 nonce 属性值。
-  ```
-  <script nonce="your_nonce" src="dist/layui.csp.js"></script>
-  ```
+</script>
+<script src="dist/layui.csp.js"></script>
+```
+
+🍈 注：上述 `your_nonce` 只是占位符，实际值应与 CSP 配置中的 `nonce` 值保持一致，例如：
+
+```
+script-src 'self' 'nonce-your_nonce'; style-src 'self' 'nonce-your_nonce';
+```
+
+#### 通过 ESM 导入 CSP 版本
+
+在构建工具中，您也可以通过 ESM 导入 CSP 版本：
+
+```js
+/* src/main.js */
+import layui from 'layui/csp';
+import 'layui/css/layui.css';
+```
+
+若 CSP 要求动态生成的样式使用 `nonce`，应在 ESM 入口执行之前配置 `window.LAYUI_GLOBAL.nonce`，如：
+
+```html
+<script nonce="your_nonce">
+  window.LAYUI_GLOBAL = { nonce: 'your_nonce' };
+</script>
+<script type="module" nonce="your_nonce" src="/src/main.js"></script>
+```
 
 #### CSP 版本限制
 
