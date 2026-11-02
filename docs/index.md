@@ -67,15 +67,6 @@ layui/
 npm i layui
 ```
 
-- ESM 导入 <sup>2.14+</sup>
-
-Layui 提供了 ESM Facade（详见 [#3071](https://github.com/layui/layui/pull/3071)），以便在构建工具中导入 Layui。
-
-```js
-import layui from 'layui';
-import 'layui/css/layui.css';
-```
-
 <h3 id="cdn-sources" lay-toc="{level: 2, title: '第三方 CDN 引入'}">
   通过第三方 CDN 引入
 </h3>
@@ -126,25 +117,6 @@ import 'layui/css/layui.css';
 
 ```
 script-src 'self' 'nonce-your_nonce'; style-src 'self' 'nonce-your_nonce';
-```
-
-#### 通过 ESM 导入 CSP 版本
-
-在构建工具中，您也可以通过 ESM 导入 CSP 版本：
-
-```js
-/* src/main.js */
-import layui from 'layui/csp';
-import 'layui/css/layui.css';
-```
-
-若 CSP 要求动态生成的样式使用 `nonce`，应在 ESM 入口执行之前配置 `window.LAYUI_GLOBAL.nonce`，如：
-
-```html
-<script nonce="your_nonce">
-  window.LAYUI_GLOBAL = { nonce: 'your_nonce' };
-</script>
-<script type="module" nonce="your_nonce" src="/src/main.js"></script>
 ```
 
 #### CSP 版本限制
