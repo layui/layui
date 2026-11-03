@@ -153,31 +153,6 @@ layui.define(['i18n', 'component', 'form', 'util'], function (exports) {
   var CONST = component.CONST;
 
   /**
-   * 判断链接是否为可安全跳转的地址
-   * 用于拦截 `javascript:`、`data:`、`vbscript:` 等可被注入脚本的协议
-   * @param {string} href - 链接地址
-   * @returns {boolean} - 是否为可安全跳转的地址
-   */
-  var isSafeUrl = function (href) {
-    var value = String(href);
-    var normalizedHref = '';
-
-    // 允许跳转的协议白名单
-    var SAFE_URL_PROTOCOLS = ['http:', 'https:', 'mailto:', 'tel:'];
-
-    // 剔除空白与控制字符，避免 `java\tscript:`、` javascript:` 等变形绕过校验
-    for (var i = 0; i < value.length; i++) {
-      if (value.charCodeAt(i) > 0x20) normalizedHref += value.charAt(i);
-    }
-
-    // 无协议视为相对地址
-    var protocol = /^[a-z][a-z0-9+.-]*:/i.exec(normalizedHref);
-    if (!protocol) return true;
-
-    return SAFE_URL_PROTOCOLS.indexOf(protocol[0].toLowerCase()) !== -1;
-  };
-
-  /**
    * 扩展组件原型方法
    */
 
@@ -292,7 +267,7 @@ layui.define(['i18n', 'component', 'form', 'util'], function (exports) {
           })(),
           // 节点
           (function () {
-            if (options.isJump && item.href && isSafeUrl(item.href)) {
+            if (options.isJump && item.href && lay.isSafeUrl(item.href)) {
               return (
                 '<a href="' +
                 util.escape(item.href) +
