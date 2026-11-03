@@ -42,7 +42,7 @@ const use = (lay.use = (callback) => {
  * @param {*} target - 目标对象
  * @param {...*} objectN - 一个或多个包含要应用的属性的源对象
  * @param {Function} customizer - 可选的自定义合并函数
- * @returns {*} 返回合并后的对象
+ * @returns {*} 返回合并后的目标对象
  * @example
  *```js
  * console.log(lay.extend({}, {a:1})); // expected: {a:1}
@@ -79,29 +79,36 @@ const use = (lay.use = (callback) => {
  * console.log(obj2); // expected: {a:[5,3],b:{ba:1},c:3}
  * ```
  */
-lay.extend = function () {
-  var args = [].slice.call(arguments);
-
+lay.extend = function (...sources) {
   // 最后一个参数是否为 customizer
-  var customizer =
-    typeof args[args.length - 1] === 'function' ? args.pop() : false;
+  const customizer =
+    typeof sources[sources.length - 1] === 'function' ? sources.pop() : false;
+
+  // 无源对象时返回空对象
+  if (!sources.length) {
+    return {};
+  }
 
   // 深拷贝合并
-  return args.reduce(function (target, source) {
+  return sources.reduce((target, source) => {
     // 确保 target 始终是一个对象
     if (typeof target !== 'object' || target === null) {
       target = {};
     }
 
-    for (var key in source) {
-      if (!hasOwnProperty.call(source, key)) continue; // 仅处理自有属性
+    for (const key in source) {
+      // 仅处理自有属性
+      if (!hasOwnProperty.call(source, key)) continue;
 
-      var targetValue = target[key];
-      var sourceValue = source[key];
+      // 防止通过 `__proto__` 修改目标对象的原型
+      if (key === '__proto__') continue;
+
+      let targetValue = target[key];
+      const sourceValue = source[key];
 
       // 自定义合并逻辑（如数组覆盖、特定字段跳过等）
       if (customizer) {
-        var customResult = customizer(
+        const customResult = customizer(
           targetValue,
           sourceValue,
           key,

@@ -31,6 +31,8 @@ Classic Web UI Component Library
 - [**Layui 3**](https://github.com/layui/layui/issues/2889) (under development)
 - [**Layui 2**](https://layui.dev/docs/2/)
 
+> Layui 3 on `main` and its pre-releases are still under development. They are not recommended for production use and are not currently covered by regular security advisories or security updates. See our [security policy](./SECURITY.md) for the reporting scope.
+
 ## Contributors
 
 [Project contributors](https://github.com/layui/layui/graphs/contributors)
