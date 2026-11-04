@@ -69,7 +69,6 @@ jspm_packages/
 bower_components/
 
 # Build output directories
-dist/
 build/
 out/
 _site/
