@@ -440,7 +440,7 @@ loading: '<i class="layui-icon layui-icon-loading-1 layui-anim layui-anim-rotate
     </tr>
     <tr>
 <td>text</td>
-<td>自定义文本，如空数据时的异常提示等。</td>
+<td>自定义文本，如空数据时的异常提示等。注：*自 `2.14.0+`，渲染时会对自定义文本进行 HTML 编码（转义），以规避 XSS 问题*。</td>
 <td>object</td>
 <td>
   <button class="layui-btn layui-btn-sm layui-btn-primary" lay-layer="{title: 'text 属性默认值'}">

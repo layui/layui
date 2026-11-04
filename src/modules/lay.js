@@ -995,6 +995,29 @@
   };
 
   /**
+   * 判断链接是否为可安全跳转的地址
+   * 用于拦截 `javascript:`、`data:` 等非安全协议
+   * @param {string} href - 链接地址
+   * @returns {boolean} - 是否为可安全跳转的地址
+   */
+  lay.isSafeUrl = function (href) {
+    var value = String(href);
+    var normalized = '';
+    var SAFE_URL_PROTOCOL_EXP = /^(https?|mailto|tel):$/i;
+
+    for (var i = 0; i < value.length; i++) {
+      var code = value.charCodeAt(i);
+      if (code < 0x20 || code === 0x7f || (!normalized && code === 0x20)) {
+        continue;
+      }
+      normalized += value.charAt(i);
+    }
+
+    var protocol = /^[a-z][a-z0-9+.-]*:/i.exec(normalized);
+    return !protocol || SAFE_URL_PROTOCOL_EXP.test(protocol[0]);
+  };
+
+  /**
    * 生成唯一的 ID 字符串
    * @param {string} prefix ID 前缀，默认为'id'
    * @returns {string} 唯一 ID 字符串

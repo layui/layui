@@ -11,14 +11,14 @@
       <th>描述</th>
       <th>类型</th>
       <th>默认值</th>
-    </tr> 
+    </tr>
   </thead>
   <tbody>
     <tr>
 <td>title</td>
 <td>
-  
-数据标题
+
+数据标题。注：*自 `2.14.0+`，渲染时会对该字段进行 HTML 编码（转义），以规避 XSS 问题*
 
 </td>
 <td>string</td>
@@ -27,8 +27,8 @@
     <tr>
 <td>value</td>
 <td>
-  
-数据值
+
+数据值。注：*自 `2.14.0+`，渲染时会对该字段进行 HTML 编码（转义），以规避 XSS 问题*
 
 </td>
 <td>string</td>
@@ -37,7 +37,7 @@
     <tr>
 <td>checked</td>
 <td>
-  
+
 是否选中状态
 
 </td>
@@ -51,7 +51,7 @@
     <tr>
 <td>disabled</td>
 <td>
-  
+
 是否禁用状态
 
 </td>
@@ -64,3 +64,5 @@
     </tr>
   </tbody>
 </table>
+
+
