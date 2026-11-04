@@ -6,7 +6,7 @@ import { createRequire } from 'node:module';
 import shell from 'shelljs';
 import fs from 'node:fs';
 import path from 'node:path';
-import archiver from 'archiver';
+import { ZipArchive } from 'archiver';
 
 const require = createRequire(import.meta.url);
 const pkg = require('../package.json');
@@ -44,7 +44,7 @@ if (!env.V) {
 
   // 创建压缩包
   const output = fs.createWriteStream(`${folder}.zip`);
-  const archive = archiver('zip', {
+  const archive = new ZipArchive({
     zlib: { level: 9 }, // 压缩级别
   });
 

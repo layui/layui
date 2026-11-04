@@ -31,15 +31,16 @@ node_modules/
 .windsurf/
 .trae/
 .qoder/
-.lingma/
+.zcode/
 .ai/
 .agents/
 
 # ESLint cache
 .eslintcache
 
-# Development build artifacts
-/tests/visual/assets/dist/
+# Build artifacts
+dist/
+build/
 
 # Published folders
 /release/
