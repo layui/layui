@@ -1135,6 +1135,28 @@ layui.define(['lay', 'i18n'], function (exports) {
         : lay(elem).attr('lay-date');
   };
 
+  // 面板选择前，先同步手动输入的值，使面板仅覆盖所选部分
+  Class.prototype.syncInputBeforePick = function () {
+    var that = this;
+    var options = that.config;
+    var value = that.getInputValue();
+
+    // 范围选择涉及开始与结束状态的联动，维持原有的面板优先行为
+    if (options.range) return that;
+
+    // 输入框为空、未改动或格式不合法时，维持面板状态
+    if (
+      !value ||
+      value === that.inputCache ||
+      !that.EXP_IF.test(value.replace(/\s+/g, ' ').replace(/^\s|\s$/g, ''))
+    ) {
+      return that;
+    }
+
+    that.checkDate();
+    return that;
+  };
+
   //日期校验
   Class.prototype.checkDate = function (fn) {
     var that = this,
@@ -2218,6 +2240,11 @@ layui.define(['lay', 'i18n'], function (exports) {
         .on('click', function () {
           var ym = lay(this).attr('lay-ym') | 0;
           if (lay(this).hasClass(DISABLED)) return;
+          // 先同步手动输入，避免面板选择覆盖未参与选择的字段
+          that.syncInputBeforePick();
+          dateTime = that.rangeLinked
+            ? options.dateTime
+            : [options.dateTime, that.endDate][index];
           that.inputCache = that.getInputValue(); // 面板选择后，以面板的值为准
           if (that.rangeLinked) {
             lay.extend(dateTime, {
@@ -2349,6 +2376,12 @@ layui.define(['lay', 'i18n'], function (exports) {
           .on('click', function () {
             var value = this.innerHTML | 0;
             if (lay(this).hasClass(DISABLED)) return;
+
+            // 先同步手动输入，避免面板选择覆盖未参与选择的字段
+            that.syncInputBeforePick();
+            dateTime = that.rangeLinked
+              ? options.dateTime
+              : [options.dateTime, that.endDate][index];
 
             if (options.range) {
               that[startEnd][hms[i]] = value;
@@ -2776,6 +2809,10 @@ layui.define(['lay', 'i18n'], function (exports) {
       date: YMD[2] | 0
     };
 
+    // 先同步手动输入，避免面板选择覆盖未参与选择的字段
+    that.syncInputBeforePick();
+    dateTime = that.thisDateTime(index);
+
     lay.extend(dateTime, YMD); //同步 dateTime
     that.inputCache = that.getInputValue(); // 面板选择后，以面板的值为准
 
@@ -2967,6 +3004,7 @@ layui.define(['lay', 'i18n'], function (exports) {
               that.setBtnStatus();
             } else {
               that.limit({
+                type: options.type,
                 elem: lay(that.footer).find(ELEM_CONFIRM),
                 index: 0,
                 time: ['hours', 'minutes', 'seconds'],
