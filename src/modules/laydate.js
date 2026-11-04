@@ -1115,6 +1115,26 @@ layui.define(['lay', 'i18n'], function (exports) {
     };
   };
 
+  // 获取绑定元素当前的输入值
+  Class.prototype.getInputValue = function () {
+    var that = this;
+    var options = that.config;
+    var elem = options.elem[0];
+    // 如果传入了开始和结束日期的 input 对象，则将其拼接为日期范围字符
+    var vals = that.rangeElem
+      ? [that.rangeElem[0].val(), that.rangeElem[1].val()]
+      : [];
+
+    if (vals[0] && vals[1]) {
+      return vals.join(' ' + that.rangeStr + ' ');
+    }
+    return that.isInput(elem)
+      ? elem.value
+      : options.position === 'static'
+        ? ''
+        : lay(elem).attr('lay-date');
+  };
+
   //日期校验
   Class.prototype.checkDate = function (fn) {
     var that = this,
@@ -1124,23 +1144,6 @@ layui.define(['lay', 'i18n'], function (exports) {
       dateTime = (options.dateTime = options.dateTime || that.systemDate()),
       thisMaxDate,
       error,
-      elem = options.elem[0],
-      // , valType = that.isInput(elem) ? 'val' : 'html'
-      value = (function () {
-        //如果传入了开始和结束日期的 input 对象，则将其拼接为日期范围字符
-        if (that.rangeElem) {
-          var vals = [that.rangeElem[0].val(), that.rangeElem[1].val()];
-
-          if (vals[0] && vals[1]) {
-            return vals.join(' ' + that.rangeStr + ' ');
-          }
-        }
-        return that.isInput(elem)
-          ? elem.value
-          : options.position === 'static'
-            ? ''
-            : lay(elem).attr('lay-date');
-      })(),
       //校验日期有效数字
       checkValid = function (dateTime) {
         if (!dateTime) {
@@ -1208,6 +1211,8 @@ layui.define(['lay', 'i18n'], function (exports) {
         checkValid(dateTime);
       };
 
+    var value = that.getInputValue();
+
     if (fn === 'limit') {
       if (options.range) {
         checkValid(that.rangeLinked ? that.startDate : dateTime); // 校验开始时间
@@ -1217,6 +1222,9 @@ layui.define(['lay', 'i18n'], function (exports) {
       }
       return that;
     }
+
+    // 记录输入框当前值，供确认时检测是否被手动修改
+    that.inputCache = value || '';
 
     value = value || options.value;
     if (typeof value === 'string') {
@@ -2210,6 +2218,7 @@ layui.define(['lay', 'i18n'], function (exports) {
         .on('click', function () {
           var ym = lay(this).attr('lay-ym') | 0;
           if (lay(this).hasClass(DISABLED)) return;
+          that.inputCache = that.getInputValue(); // 面板选择后，以面板的值为准
           if (that.rangeLinked) {
             lay.extend(dateTime, {
               year: type === 'year' ? ym : listYM[0],
@@ -2346,6 +2355,7 @@ layui.define(['lay', 'i18n'], function (exports) {
             } else {
               dateTime[hms[i]] = value;
             }
+            that.inputCache = that.getInputValue(); // 面板选择后，以面板的值为准
             lay(ol)
               .find('.' + THIS)
               .removeClass(THIS);
@@ -2767,6 +2777,7 @@ layui.define(['lay', 'i18n'], function (exports) {
     };
 
     lay.extend(dateTime, YMD); //同步 dateTime
+    that.inputCache = that.getInputValue(); // 面板选择后，以面板的值为准
 
     //范围选择
     if (options.range) {
@@ -2927,6 +2938,43 @@ layui.define(['lay', 'i18n'], function (exports) {
 
         //确定
         confirm: function () {
+          // 输入框被手动修改时，重新解析输入值（与面板打开时的解析逻辑一致）
+          var inputValue = that.getInputValue();
+          if (inputValue && inputValue !== that.inputCache) {
+            // 输入格式不合法时阻断确认，由用户修正后再确认
+            if (
+              !that.EXP_IF.test(
+                inputValue.replace(/\s+/g, ' ').replace(/^\s|\s$/g, '')
+              )
+            ) {
+              return that.hint(
+                lang.formatErrorPrompt(
+                  options.range
+                    ? options.format +
+                        ' ' +
+                        that.rangeStr +
+                        ' ' +
+                        options.format
+                    : options.format
+                ) + lang.autoResetPrompt
+              );
+            }
+            that.checkDate();
+            // min/max 纠正会替换 dateTime 对象，同步 startDate 与 startTime 的引用
+            that.startDate = lay.extend({}, options.dateTime);
+            if (!options.range) that.startTime = options.dateTime;
+            if (options.range) {
+              that.setBtnStatus();
+            } else {
+              that.limit({
+                elem: lay(that.footer).find(ELEM_CONFIRM),
+                index: 0,
+                time: ['hours', 'minutes', 'seconds'],
+                disabledType: 'datetime' // 按钮，检测日期和时间
+              });
+            }
+          }
+
           if (options.range) {
             if (lay(btn).hasClass(DISABLED)) {
               var isTimeout =
