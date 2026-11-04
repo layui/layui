@@ -95,13 +95,13 @@ pushRollupConfig({ format: 'es' }); // 浏览器 esm 版本
 // Node 构建环境 esm 版本
 if (!isDevMode) {
   pushRollupConfig({ format: 'es', minify: false }, (config) => {
-    config.external = ['jquery']; // v2 外部依赖（v3 正式版将考虑移除 jQuery 依赖）
+    config.external = ['jquery', '@floating-ui/dom'];
     config.output = {
       ...config.output,
       sourcemap: false,
       dir: outputDir,
       preserveModules: true, // 保留独立模块，以支持 tree-shaking
-      preserveModulesRoot: path.resolve(__dirname, '../src'),
+      preserveModulesRoot: path.resolve(__dirname, './src'),
     };
     delete config.output.file;
     delete config.output.banner;
