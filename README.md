@@ -31,6 +31,8 @@
 - [**Layui 3**](https://github.com/layui/layui/issues/2889) （正在开发中）
 - [**Layui 2**](https://layui.dev/docs/2/)
 
+> Layui 3 所在的 `main` 分支和预发布版本仍处于开发阶段，不建议用于生产环境，也暂不纳入常规安全公告及安全更新范围。安全报告范围请参阅[安全政策](./SECURITY.md)。
+
 ## 项目参与
 
 [项目参与者](https://github.com/layui/layui/graphs/contributors)

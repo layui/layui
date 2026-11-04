@@ -46,7 +46,7 @@
     "format:check": "prettier --check --cache .",
     "lint": "eslint . --cache",
     "prepare": "node .husky/install.mjs",
-    "test": "jest --no-cache",
+    "test": "node --disable-warning=ExperimentalWarning --experimental-vm-modules node_modules/jest/bin/jest.js --no-cache",
     "clean:dist": "del-cli dist/*",
     "release": "node scripts/release.mjs"
   },

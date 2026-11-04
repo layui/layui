@@ -35,4 +35,4 @@ jobs:
 
         # 串行运行测试
       - name: Run tests with Jest
-        run: npx jest --ci --runInBand
+        run: npm test -- --ci --runInBand
