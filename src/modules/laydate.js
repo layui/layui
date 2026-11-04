@@ -3353,7 +3353,7 @@ layui.define(['lay', 'i18n'], function (exports) {
   laydate.getEndDate = function (month, year) {
     var thisDate = new Date();
     // 将日期设为下个月的第 0 天，即当前月的最后一天
-    //注：不采用「时间戳 - 86400000」的写法 —— 夏令时切换日会少减 1 小时，导致未跨月
+    // 注：原「时间戳 - 86400000」的写法会导致夏令时切换日少减 1 小时，进而导致未跨月
     thisDate.setFullYear(
       year || thisDate.getFullYear(),
       month || thisDate.getMonth() + 1,
