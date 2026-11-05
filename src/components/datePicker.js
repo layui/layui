@@ -185,8 +185,8 @@ export class DatePicker extends Popup {
 
   /**
    * 获取指定月份的天数
-   * @param {number} month - 月份
-   * @param {number} year - 年份
+   * @param {number} month - 月份，取值 1-12；未传入时使用当前月份
+   * @param {number} year - 年份；未传入时使用当前年份
    * @returns {number} - 指定月份的天数
    */
   static getDaysInMonth(month, year) {

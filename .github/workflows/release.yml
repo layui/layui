@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'
 
+# 串行发布
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   build:
     name: Create Release
@@ -85,7 +90,7 @@ jobs:
           fi
 
           # 预发布版本发布到同名 dist-tag（alpha/beta/rc），避免抢占 latest
-          NPM_DIST_TAG=$(node -p "require('./package.json').version.match(/-([^.]+)/)?.[1] ?? 'latest'")
+          NPM_DIST_TAG=$(node -p "const v = require('./package.json').version; v.includes('-') ? (v.match(/-([a-z][a-z0-9]*)/i)?.[1] ?? 'next') : 'latest'")
           echo "NPM_DIST_TAG=$NPM_DIST_TAG" >> $GITHUB_ENV
 
       - name: Create Zip File
