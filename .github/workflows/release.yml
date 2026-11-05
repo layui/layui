@@ -5,10 +5,14 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 # 串行发布
 concurrency:
   group: release
   cancel-in-progress: false
+  queue: max
 
 jobs:
   build:
@@ -78,6 +82,7 @@ jobs:
           USERNAME_LIST=$(echo $USERNAME_LIST | tr ' ' '\n' | sort -u | tr '\n' ' ')
           echo "usernames=$USERNAME_LIST" >> $GITHUB_OUTPUT
 
+      # 判断是否为预览版
       - name: Determine Prerelease
         id: prerelease
         run: |
@@ -89,7 +94,7 @@ jobs:
             echo "prerelease=false" >> $GITHUB_OUTPUT
           fi
 
-          # 预发布版本发布到同名 dist-tag（alpha/beta/rc），避免抢占 latest
+          # 预览版发布到同名 tag（alpha/beta/rc）
           NPM_DIST_TAG=$(node -p "const v = require('./package.json').version; v.includes('-') ? (v.match(/-([a-z][a-z0-9]*)/i)?.[1] ?? 'next') : 'latest'")
           echo "NPM_DIST_TAG=$NPM_DIST_TAG" >> $GITHUB_ENV
 
