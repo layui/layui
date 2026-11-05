@@ -48,6 +48,7 @@
     "prepare": "node .husky/install.mjs",
     "test": "node --disable-warning=ExperimentalWarning --experimental-vm-modules node_modules/jest/bin/jest.js --no-cache",
     "clean:dist": "del-cli dist/*",
+    "prepublishOnly": "npm run build",
     "release": "node scripts/release.mjs"
   },
   "lint-staged": {

@@ -1,9 +1,18 @@
-name: Create Release
+name: Release
 
 on:
   push:
     tags:
       - 'v*'
+
+permissions:
+  contents: write
+
+# 串行发布
+concurrency:
+  group: release
+  cancel-in-progress: false
+  queue: max
 
 jobs:
   build:
@@ -18,6 +27,7 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: npm
+          registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
         run: npm ci
@@ -27,6 +37,20 @@ jobs:
       - name: Get the version
         id: get_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      # 校验 tag 与 package.json 版本一致，避免产物目录与上传路径不匹配
+      - name: Verify Version Consistency
+        run: |
+          TAG_VERSION=${GITHUB_REF#refs/tags/}
+          PKG_VERSION="v$(node -p "require('./package.json').version")"
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "::error::Tag $TAG_VERSION 与 package.json 版本 $PKG_VERSION 不一致"
+            exit 1
+          fi
+
+      # 构建产物
+      - name: Build
+        run: npm run build
 
       # 获取当前版本贡献者
       - name: Fetch Contributors
@@ -58,6 +82,7 @@ jobs:
           USERNAME_LIST=$(echo $USERNAME_LIST | tr ' ' '\n' | sort -u | tr '\n' ' ')
           echo "usernames=$USERNAME_LIST" >> $GITHUB_OUTPUT
 
+      # 判断是否为预览版
       - name: Determine Prerelease
         id: prerelease
         run: |
@@ -69,6 +94,10 @@ jobs:
             echo "prerelease=false" >> $GITHUB_OUTPUT
           fi
 
+          # 预览版发布到同名 tag（alpha/beta/rc）
+          NPM_DIST_TAG=$(node -p "const v = require('./package.json').version; v.includes('-') ? (v.match(/-([a-z][a-z0-9]*)/i)?.[1] ?? 'next') : 'latest'")
+          echo "NPM_DIST_TAG=$NPM_DIST_TAG" >> $GITHUB_ENV
+
       - name: Create Zip File
         id: asset
         run: |
@@ -76,7 +105,8 @@ jobs:
           DIR_NAME="release/assets/layui-${{ env.VERSION }}"
           echo "filename=$DIR_NAME" >> $GITHUB_OUTPUT
 
-      - name: GH Release
+      # 创建 GitHub Release
+      - name: Create GitHub Release
         id: create_release
         uses: softprops/action-gh-release@v3
         env:
@@ -87,3 +117,9 @@ jobs:
             - **本次贡献**: ${{ steps.contributors.outputs.usernames }} 🎉
           prerelease: ${{ steps.prerelease.outputs.prerelease }}
           files: ${{ steps.asset.outputs.filename }}.zip
+
+      # 发布到 NPM
+      - name: Publish to NPM
+        run: npm publish --ignore-scripts --tag ${{ env.NPM_DIST_TAG }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

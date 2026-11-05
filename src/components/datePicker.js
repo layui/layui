@@ -185,22 +185,19 @@ export class DatePicker extends Popup {
 
   /**
    * 获取指定月份的天数
-   * @param {number} month - 月份（0-11）
-   * @param {number} year - 年份
+   * @param {number} month - 月份，取值 1-12；未传入时使用当前月份
+   * @param {number} year - 年份；未传入时使用当前年份
    * @returns {number} - 指定月份的天数
    */
   static getDaysInMonth(month, year) {
     const date = new Date();
-
-    // 设置日期为下个月的第一天
+    // 将日期设为下个月的第 0 天，即当前月的最后一天
     date.setFullYear(
       year || date.getFullYear(),
       month || date.getMonth() + 1,
-      1,
+      0,
     );
-
-    // 减去一天，得到当前月最后一天
-    return new Date(date.getTime() - 1000 * 60 * 60 * 24).getDate();
+    return date.getDate();
   }
 
   // 构造函数
