@@ -40,6 +40,7 @@ import { flow } from './components/flow.js';
 import { floatbar } from './components/floatbar.js';
 import { initializer } from './components/initializer.js';
 import { code } from './components/code.js';
+import { tag } from './components/tag.js';
 
 const layui = {
   lay,
@@ -77,6 +78,7 @@ const layui = {
   floatbar,
   initializer,
   code,
+  tag,
 };
 
 export default layui;
