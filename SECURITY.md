@@ -24,3 +24,14 @@ in your report.
 To report a vulnerability privately, use
 [GitHub private vulnerability reporting](https://github.com/layui/layui/security/advisories/new).
 Please do not disclose the details in a public issue.
+
+### Scope
+
+Security issues are in scope when an attacker can trigger them through a
+component's normal behavior.
+
+We do not consider XSS or injection vulnerabilities in scope when they can only
+occur because an application intentionally supplies untrusted content to an
+option documented to interpret that content as HTML, a template, or executable
+code. Applications are responsible for escaping or sanitizing such content.
+Reports in this category will be closed as out of scope.
