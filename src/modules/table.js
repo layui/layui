@@ -302,7 +302,7 @@ layui.define(
         '                     {{# if(!item2.field){ }} layui-table-col-special{{# } }}"',
 
         // 标题属性
-        "              {{# if(item2.title){ }} title=\"{{ layui.$('<div>' + item2.title + '</div>').text() }}\"{{# } }}>",
+        '              {{# if(item2.title){ }} title="{{= item2.title }}"{{# } }}>',
 
         // 单元格内容容器
         '            <div class="layui-table-cell',
@@ -326,7 +326,7 @@ layui.define(
 
         // 单元格内容 - 普通内容
         '              {{# } else { }}',
-        '                <span>{{- item2.title || "" }}</span>',
+        '                <span>{{= item2.title || "" }}</span>',
 
         // 排序图标
         '                {{# if(isSort){ }}',
@@ -2101,7 +2101,12 @@ layui.define(
             : text;
 
           // 如果直接传入了合计行数据，则不输出自动计算的结果
-          return TOTAL_NUMS || getContent;
+          // 后端合计根据 escape 选项决定是否转义输出
+          if (TOTAL_NUMS) {
+            var escaped = 'escape' in item3 ? item3.escape : options.escape;
+            return escaped ? util.escape(TOTAL_NUMS) : TOTAL_NUMS;
+          }
+          return getContent;
         })();
 
         // td 显示内容

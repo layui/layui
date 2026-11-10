@@ -9,6 +9,7 @@ layui.define(['table'], function (exports) {
   var $ = layui.$;
   var form = layui.form;
   var table = layui.table;
+  var util = layui.util;
   var hint = layui.hint();
 
   // api
@@ -1417,7 +1418,8 @@ layui.define(['table'], function (exports) {
                     : '') +
                   (trData[isParentKey] ? '' : ' layui-table-tree-iconLeaf') +
                   '">' +
-                  (that.normalizedIcon(trData[customName.icon]) ||
+                  // 图标内容
+                  (that.normalizedIcon(util.escape(trData[customName.icon])) ||
                     treeOptionsView.icon ||
                     (trData[isParentKey]
                       ? trData[LAY_EXPAND]

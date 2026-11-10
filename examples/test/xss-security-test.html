@@ -1004,1743 +1004,2283 @@
 
     <script src="../../src/layui.js"></script>
     <script>
-      layui.use(['table', 'transfer', 'tree', 'i18n', 'util'], function () {
-        'use strict';
+      layui.use(
+        [
+          'table',
+          'transfer',
+          'tree',
+          'treeTable',
+          'progress',
+          'layer',
+          'i18n',
+          'util'
+        ],
+        function () {
+          'use strict';
 
-        var $ = layui.$;
-        var table = layui.table;
-        var transfer = layui.transfer;
-        var tree = layui.tree;
-        var lay = layui.lay;
-        var i18n = layui.i18n;
-        var util = layui.util;
+          var $ = layui.$;
+          var table = layui.table;
+          var transfer = layui.transfer;
+          var tree = layui.tree;
+          var treeTable = layui.treeTable;
+          var progress = layui.progress;
+          var layer = layui.layer;
+          var lay = layui.lay;
+          var i18n = layui.i18n;
+          var util = layui.util;
 
-        util.fixbar({
-          on: {
-            click: function (type) {
-              if (type === 'top') {
-                location.hash = '';
+          util.fixbar({
+            on: {
+              click: function (type) {
+                if (type === 'top') {
+                  location.hash = '';
+                }
               }
             }
-          }
-        });
-
-        /**
-         * 1. 载荷与断言
-         */
-
-        // 载荷执行标记：任何标记被写入，说明转义失效
-        var MARK = (window.__layuiXssFired = []);
-
-        var PAYLOAD = {
-          // 文本节点注入
-          text: '<img src=x onerror="window.__layuiXssFired.push(\'text\')">',
-          // 双引号属性逃逸注入
-          attr: '"><img src=x onerror="window.__layuiXssFired.push(\'attr\')">',
-          // 单引号属性逃逸注入（部分属性使用单引号拼接）
-          attrSingle:
-            "'><img src=x onerror=\"window.__layuiXssFired.push('attr-s')\">",
-          // URL scheme 注入
-          jsHref: 'javascript:window.__layuiXssFired.push("href-js")',
-          mixedCaseHref: 'JaVaScRiPt:window.__layuiXssFired.push("href-case")',
-          newlineHref: 'java\nscript:window.__layuiXssFired.push("href-nl")',
-          tabHref: '\tjavascript:window.__layuiXssFired.push("href-tab")',
-          dataHref: 'data:text/html,<b>data</b>',
-          vbscriptHref: 'vbscript:msgbox("x")'
-        };
-
-        /**
-         * URL scheme 白名单向量
-         * allowed 同时约定渲染结果：true 生成 <a href>，false 降级为 <span>
-         */
-        var HREF_VECTORS = [
-          { title: '绝对 HTTPS', href: 'https://example.com', allowed: true },
-          {
-            title: '绝对 HTTPS 大写协议',
-            href: 'HTTPS://example.com/docs',
-            allowed: true
-          },
-          {
-            title: '近似协议 httpx',
-            href: 'httpx://example.com',
-            allowed: false
-          },
-          {
-            title: '绝对 HTTP',
-            href: 'http://example.com/docs',
-            allowed: true
-          },
-          { title: '相对目录', href: '../documents/report.pdf', allowed: true },
-          { title: '无 scheme 的路径', href: 'example.com', allowed: true },
-          {
-            title: '内部含空格的相对地址',
-            href: 'Meeting notes: 2026.pdf',
-            allowed: true
-          },
-          {
-            title: '内部含空格的绝对地址',
-            href: 'https://example.com/Meeting notes.pdf',
-            allowed: true
-          },
-          {
-            title: '路径中含制表符的 HTTPS',
-            href: 'https://example.com/a\tb',
-            allowed: true
-          },
-          {
-            title: '路径中含协议字样的 HTTPS',
-            href: 'https://example.com/javascript:guide',
-            allowed: true
-          },
-          {
-            title: 'mailto',
-            href: 'mailto:hello@example.com?subject=Hi',
-            allowed: true
-          },
-          { title: 'tel', href: 'tel:+8613800000000', allowed: true },
-          {
-            title: 'mailto 大小写混淆',
-            href: 'MAILTO:hello@example.com',
-            allowed: true
-          },
-          { title: 'javascript', href: PAYLOAD.jsHref, allowed: false },
-          { title: '大小写混淆', href: PAYLOAD.mixedCaseHref, allowed: false },
-          { title: '换行混淆', href: PAYLOAD.newlineHref, allowed: false },
-          { title: 'tab 前缀', href: PAYLOAD.tabHref, allowed: false },
-          {
-            title: '内部 tab 混淆',
-            href: 'java\tscript:alert(1)',
-            allowed: false
-          },
-          {
-            title: '内部回车混淆',
-            href: 'java\rscript:alert(1)',
-            allowed: false
-          },
-          {
-            title: '内部控制字符混淆',
-            href: 'java\x0bscript:alert(1)',
-            allowed: false
-          },
-          {
-            title: '内部 DEL 混淆',
-            href: 'java\x7fscript:alert(1)',
-            allowed: false
-          },
-          {
-            title: '空格 + tab 混合混淆',
-            href: ' java\tscript:alert(1)',
-            allowed: false
-          },
-          {
-            title: '未授权的 FTP 协议',
-            href: 'ftp://example.com/file',
-            allowed: false
-          },
-          { title: 'data', href: PAYLOAD.dataHref, allowed: false },
-          {
-            title: 'data 无标签',
-            href: 'data:text/html,test',
-            allowed: false
-          },
-          { title: 'vbscript', href: PAYLOAD.vbscriptHref, allowed: false }
-        ];
-
-        function show(value) {
-          return JSON.stringify(value);
-        }
-
-        /**
-         * 断言集合：全部基于 DOM 只读查询，返回 { passed, detail }
-         */
-        var assert = {
-          text: function (root, selector, expected) {
-            var elem = root.querySelector(selector);
-            var actual = elem ? elem.textContent.trim() : null;
-            return {
-              passed: actual === expected,
-              detail:
-                selector +
-                ' 文本：期望 ' +
-                show(expected) +
-                '，实际 ' +
-                show(actual)
-            };
-          },
-          attr: function (root, selector, name, expected) {
-            var elem = root.querySelector(selector);
-            var actual = elem ? elem.getAttribute(name) : null;
-            return {
-              passed: actual === expected,
-              detail:
-                selector +
-                ' 的 ' +
-                name +
-                '：期望 ' +
-                show(expected) +
-                '，实际 ' +
-                show(actual)
-            };
-          },
-          count: function (root, selector, expected) {
-            var actual = root.querySelectorAll(selector).length;
-            return {
-              passed: actual === expected,
-              detail: selector + ' 数量：期望 ' + expected + '，实际 ' + actual
-            };
-          },
-          none: function (root, selector) {
-            var actual = root.querySelectorAll(selector).length;
-            return {
-              passed: actual === 0,
-              detail: selector + ' 数量：期望 0，实际 ' + actual
-            };
-          },
-          truthy: function (condition, message) {
-            return { passed: !!condition, detail: message };
-          }
-        };
-
-        /**
-         * 聚合断言：任一失败则用例失败
-         * 保留逐条明细，供卡片展开为可逐项核对的断言列表
-         */
-        function judge(results) {
-          var passed = true;
-          var items = [];
-
-          layui.each(results, function (index, result) {
-            if (!result.passed) passed = false;
-            items.push({
-              passed: !!result.passed,
-              detail: result.detail || ''
-            });
           });
 
-          var details = [];
-          layui.each(items, function (index, item) {
-            if (item.detail) details.push(item.detail);
-          });
+          /**
+           * 1. 载荷与断言
+           */
 
-          return {
-            passed: passed,
-            detail: details.join('；'),
-            items: items
+          // 载荷执行标记：任何标记被写入，说明转义失效
+          var MARK = (window.__layuiXssFired = []);
+
+          var PAYLOAD = {
+            // 文本节点注入
+            text: '<img src=x onerror="window.__layuiXssFired.push(\'text\')">',
+            // 双引号属性逃逸注入
+            attr: '"><img src=x onerror="window.__layuiXssFired.push(\'attr\')">',
+            // 单引号属性逃逸注入（部分属性使用单引号拼接）
+            attrSingle:
+              "'><img src=x onerror=\"window.__layuiXssFired.push('attr-s')\">",
+            // URL scheme 注入
+            jsHref: 'javascript:window.__layuiXssFired.push("href-js")',
+            mixedCaseHref:
+              'JaVaScRiPt:window.__layuiXssFired.push("href-case")',
+            newlineHref: 'java\nscript:window.__layuiXssFired.push("href-nl")',
+            tabHref: '\tjavascript:window.__layuiXssFired.push("href-tab")',
+            dataHref: 'data:text/html,<b>data</b>',
+            vbscriptHref: 'vbscript:msgbox("x")',
+            // 分数形态的表达式注入（以 // 注释结尾以满足分数正则）
+            evalExpr: "window.__layuiXssFired.push('eval')//"
           };
-        }
 
-        /**
-         * 2. 用例注册表
-         * ============================================================
-         * 新增同类测试只需追加 module / case：
-         * - module.id / title / icon / desc
-         * - case.id / title / anchors / fixture（初始 HTML）
-         * - case.setup(fixture, ctx)：fixture 已挂载到文档后再渲染组件
-         * - case.run(fixture, ctx)：返回 judge([...]) 断言结果
-         * - case.action：可选，{ title, handler } 手动触发交互用例
-         */
-        var registry = [
-          {
-            id: 'table',
-            title: 'table 表格',
-            icon: 'layui-icon-table',
-            desc:
-              '空数据与请求异常文案经由 <code>errorView</code> 渲染，' +
-              'i18n 默认文案不应被二次编码。',
-            cases: [
-              {
-                id: 'error-view-text',
-                title: '空数据文案中的 HTML 按纯文本渲染',
-                anchors: ['table.js#errorView', 'options.text.none'],
-                fixture: '<table></table>',
-                setup: function (fx) {
-                  table.render({
-                    elem: fx.find('table')[0],
-                    cols: [[{ field: 'username', title: '用户名' }]],
-                    data: [],
-                    text: { none: PAYLOAD.text }
-                  });
-                },
-                run: function (fx) {
-                  var root = fx[0];
-                  return judge([
-                    assert.text(root, '.layui-none', PAYLOAD.text),
-                    assert.none(root, '.layui-none img')
-                  ]);
-                }
-              },
-              {
-                id: 'error-view-entity',
-                title: '文案中的实体与标签保持字面显示',
-                anchors: ['table.js#errorView'],
-                fixture: '<table></table>',
-                setup: function (fx) {
-                  table.render({
-                    elem: fx.find('table')[0],
-                    cols: [[{ field: 'username', title: '用户名' }]],
-                    data: [],
-                    text: { none: '空态 A &amp; B <b>加粗</b>' }
-                  });
-                },
-                run: function (fx) {
-                  var root = fx[0];
-                  return judge([
-                    assert.text(
-                      root,
-                      '.layui-none',
-                      '空态 A &amp; B <b>加粗</b>'
-                    ),
-                    assert.none(root, '.layui-none b')
-                  ]);
-                }
-              },
-              {
-                id: 'error-view-i18n',
-                title: 'i18n 空态文案不重复编码',
-                anchors: ['table.js#options.text', 'i18n.js#translate'],
-                fixture: '<table></table>',
-                setup: function (fx, ctx) {
-                  fx.attr('data-ready', '1');
-                  ctx.caseState = {};
-                },
-                run: function (fx, ctx) {
-                  var messages = i18n.config.messages['zh-CN'];
-                  var original = messages.table.noData;
-                  messages.table.noData = '表格空态 & <table>';
-                  i18n.set({ locale: 'zh-CN' });
-                  var host = ctx.fixtureOnce();
-                  try {
+          /**
+           * URL scheme 白名单向量
+           * allowed 同时约定渲染结果：true 生成 <a href>，false 降级为 <span>
+           */
+          var HREF_VECTORS = [
+            { title: '绝对 HTTPS', href: 'https://example.com', allowed: true },
+            {
+              title: '绝对 HTTPS 大写协议',
+              href: 'HTTPS://example.com/docs',
+              allowed: true
+            },
+            {
+              title: '近似协议 httpx',
+              href: 'httpx://example.com',
+              allowed: false
+            },
+            {
+              title: '绝对 HTTP',
+              href: 'http://example.com/docs',
+              allowed: true
+            },
+            {
+              title: '相对目录',
+              href: '../documents/report.pdf',
+              allowed: true
+            },
+            { title: '无 scheme 的路径', href: 'example.com', allowed: true },
+            {
+              title: '内部含空格的相对地址',
+              href: 'Meeting notes: 2026.pdf',
+              allowed: true
+            },
+            {
+              title: '内部含空格的绝对地址',
+              href: 'https://example.com/Meeting notes.pdf',
+              allowed: true
+            },
+            {
+              title: '路径中含制表符的 HTTPS',
+              href: 'https://example.com/a\tb',
+              allowed: true
+            },
+            {
+              title: '路径中含协议字样的 HTTPS',
+              href: 'https://example.com/javascript:guide',
+              allowed: true
+            },
+            {
+              title: 'mailto',
+              href: 'mailto:hello@example.com?subject=Hi',
+              allowed: true
+            },
+            { title: 'tel', href: 'tel:+8613800000000', allowed: true },
+            {
+              title: 'mailto 大小写混淆',
+              href: 'MAILTO:hello@example.com',
+              allowed: true
+            },
+            { title: 'javascript', href: PAYLOAD.jsHref, allowed: false },
+            {
+              title: '大小写混淆',
+              href: PAYLOAD.mixedCaseHref,
+              allowed: false
+            },
+            { title: '换行混淆', href: PAYLOAD.newlineHref, allowed: false },
+            { title: 'tab 前缀', href: PAYLOAD.tabHref, allowed: false },
+            {
+              title: '内部 tab 混淆',
+              href: 'java\tscript:alert(1)',
+              allowed: false
+            },
+            {
+              title: '内部回车混淆',
+              href: 'java\rscript:alert(1)',
+              allowed: false
+            },
+            {
+              title: '内部控制字符混淆',
+              href: 'java\x0bscript:alert(1)',
+              allowed: false
+            },
+            {
+              title: '内部 DEL 混淆',
+              href: 'java\x7fscript:alert(1)',
+              allowed: false
+            },
+            {
+              title: '空格 + tab 混合混淆',
+              href: ' java\tscript:alert(1)',
+              allowed: false
+            },
+            {
+              title: '未授权的 FTP 协议',
+              href: 'ftp://example.com/file',
+              allowed: false
+            },
+            { title: 'data', href: PAYLOAD.dataHref, allowed: false },
+            {
+              title: 'data 无标签',
+              href: 'data:text/html,test',
+              allowed: false
+            },
+            { title: 'vbscript', href: PAYLOAD.vbscriptHref, allowed: false }
+          ];
+
+          function show(value) {
+            return JSON.stringify(value);
+          }
+
+          /**
+           * 断言集合：全部基于 DOM 只读查询，返回 { passed, detail }
+           */
+          var assert = {
+            text: function (root, selector, expected) {
+              var elem = root.querySelector(selector);
+              var actual = elem ? elem.textContent.trim() : null;
+              return {
+                passed: actual === expected,
+                detail:
+                  selector +
+                  ' 文本：期望 ' +
+                  show(expected) +
+                  '，实际 ' +
+                  show(actual)
+              };
+            },
+            attr: function (root, selector, name, expected) {
+              var elem = root.querySelector(selector);
+              var actual = elem ? elem.getAttribute(name) : null;
+              return {
+                passed: actual === expected,
+                detail:
+                  selector +
+                  ' 的 ' +
+                  name +
+                  '：期望 ' +
+                  show(expected) +
+                  '，实际 ' +
+                  show(actual)
+              };
+            },
+            count: function (root, selector, expected) {
+              var actual = root.querySelectorAll(selector).length;
+              return {
+                passed: actual === expected,
+                detail:
+                  selector + ' 数量：期望 ' + expected + '，实际 ' + actual
+              };
+            },
+            none: function (root, selector) {
+              var actual = root.querySelectorAll(selector).length;
+              return {
+                passed: actual === 0,
+                detail: selector + ' 数量：期望 0，实际 ' + actual
+              };
+            },
+            truthy: function (condition, message) {
+              return { passed: !!condition, detail: message };
+            }
+          };
+
+          /**
+           * 聚合断言：任一失败则用例失败
+           * 保留逐条明细，供卡片展开为可逐项核对的断言列表
+           */
+          function judge(results) {
+            var passed = true;
+            var items = [];
+
+            layui.each(results, function (index, result) {
+              if (!result.passed) passed = false;
+              items.push({
+                passed: !!result.passed,
+                detail: result.detail || ''
+              });
+            });
+
+            var details = [];
+            layui.each(items, function (index, item) {
+              if (item.detail) details.push(item.detail);
+            });
+
+            return {
+              passed: passed,
+              detail: details.join('；'),
+              items: items
+            };
+          }
+
+          /**
+           * layer.photos 用例的公共资源与收尾助手
+           * 相册浮层挂载在 body 下（id 固定为 layui-layer-photos），断言以浮层为根节点；
+           * 浮层需在 run() 内打开、finally 内关闭，避免挂载期叠加多个同名浮层
+           */
+
+          // 合法 data URI 图片：可正常加载，用于让浮层进入渲染成功分支
+          var SECURE_SVG =
+            'data:image/svg+xml;base64,' +
+            btoa(
+              '<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"></svg>'
+            );
+
+          // 相对地址图片：无协议地址应被视为安全链接，用于验证查看原图链接保留。
+          // 复用仓库既有的合法 SVG 文档（img 可正常加载），避免为测试新增资源文件
+          var RELATIVE_SVG = '../../src/font/iconfont.svg';
+
+          // 含引号与 & 的相对地址图片：静态服务对查询串返回同一图片，
+          // 作为 src 属性转义的关键验证向量
+          var QUOTED_URL =
+            '../../src/font/iconfont.svg?a=1&b=" onmouseover="alert(1)';
+
+          // 预热网络图片：挂载期先行预载进入内存缓存，使 run() 内
+          // layer.photos 的 loadImage 可同步完成（缓存资源的 img.complete 为真）
+          $.each([RELATIVE_SVG, QUOTED_URL], function () {
+            new Image().src = this;
+          });
+
+          // 关闭当前相册浮层（含异常场景遗留的实例），避免用例间的浮层叠加影响后续断言。
+          // layer.close 的容器移除受关闭动画影响存在延迟，需同步移除容器与遮罩，
+          // 否则下个用例的同 id 弹层会复用"正在关闭中"的旧实例；
+          // times 属性位于外层 .layui-layer 包装元素上，id 所在的内层节点本身不携带该属性
+          function closePhotosViewer() {
+            document
+              .querySelectorAll('#layui-layer-photos')
+              .forEach(function (el) {
+                var wrapper = el.closest('.layui-layer');
+                if (!wrapper) return;
+                var times = Number(wrapper.getAttribute('times'));
+                if (!times) return;
+                layer.close(times);
+                wrapper.remove();
+                var shade = document.getElementById(
+                  'layui-layer-shade' + times
+                );
+                if (shade) shade.remove();
+              });
+          }
+
+          /**
+           * 2. 用例注册表
+           * ============================================================
+           * 新增同类测试只需追加 module / case：
+           * - module.id / title / icon / desc
+           * - case.id / title / anchors / fixture（初始 HTML）
+           * - case.setup(fixture, ctx)：fixture 已挂载到文档后再渲染组件
+           * - case.run(fixture, ctx)：返回 judge([...]) 断言结果
+           * - case.action：可选，{ title, handler } 手动触发交互用例
+           */
+          var registry = [
+            {
+              id: 'table',
+              title: 'table 表格',
+              icon: 'layui-icon-table',
+              desc:
+                '空数据与请求异常文案经由 <code>errorView</code> 渲染，' +
+                'i18n 默认文案不应被二次编码。',
+              cases: [
+                {
+                  id: 'error-view-text',
+                  title: '空数据文案中的 HTML 按纯文本渲染',
+                  anchors: ['table.js#errorView', 'options.text.none'],
+                  fixture: '<table></table>',
+                  setup: function (fx) {
                     table.render({
-                      elem: host.find('table')[0],
+                      elem: fx.find('table')[0],
                       cols: [[{ field: 'username', title: '用户名' }]],
-                      data: []
+                      data: [],
+                      text: { none: PAYLOAD.text }
                     });
-                  } finally {
-                    messages.table.noData = original;
-                    i18n.set({ locale: 'zh-CN' });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    return judge([
+                      assert.text(root, '.layui-none', PAYLOAD.text),
+                      assert.none(root, '.layui-none img')
+                    ]);
                   }
-                  return judge([
-                    assert.text(host[0], '.layui-none', '表格空态 & <table>')
-                  ]);
-                }
-              },
-              {
-                id: 'ajax-status-msg',
-                title: '接口错误 msg 按纯文本渲染',
-                anchors: ['table.js#errorView', 'response.msgName'],
-                fixture: '<table></table>',
-                setup: function (fx) {
-                  table.render({
-                    elem: fx.find('table')[0],
-                    cols: [[{ field: 'username', title: '用户名' }]],
-                    ajax: function (options) {
-                      // 模拟状态码不符：应走 errorView(res[msgName])
-                      options.success({
-                        code: 1,
-                        msg: PAYLOAD.text,
-                        count: 0,
+                },
+                {
+                  id: 'error-view-entity',
+                  title: '文案中的实体与标签保持字面显示',
+                  anchors: ['table.js#errorView'],
+                  fixture: '<table></table>',
+                  setup: function (fx) {
+                    table.render({
+                      elem: fx.find('table')[0],
+                      cols: [[{ field: 'username', title: '用户名' }]],
+                      data: [],
+                      text: { none: '空态 A &amp; B <b>加粗</b>' }
+                    });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    return judge([
+                      assert.text(
+                        root,
+                        '.layui-none',
+                        '空态 A &amp; B <b>加粗</b>'
+                      ),
+                      assert.none(root, '.layui-none b')
+                    ]);
+                  }
+                },
+                {
+                  id: 'error-view-i18n',
+                  title: 'i18n 空态文案不重复编码',
+                  anchors: ['table.js#options.text', 'i18n.js#translate'],
+                  fixture: '<table></table>',
+                  setup: function (fx, ctx) {
+                    fx.attr('data-ready', '1');
+                    ctx.caseState = {};
+                  },
+                  run: function (fx, ctx) {
+                    var messages = i18n.config.messages['zh-CN'];
+                    var original = messages.table.noData;
+                    messages.table.noData = '表格空态 & <table>';
+                    i18n.set({ locale: 'zh-CN' });
+                    var host = ctx.fixtureOnce();
+                    try {
+                      table.render({
+                        elem: host.find('table')[0],
+                        cols: [[{ field: 'username', title: '用户名' }]],
                         data: []
                       });
-                    },
-                    url: '/__stub'
-                  });
+                    } finally {
+                      messages.table.noData = original;
+                      i18n.set({ locale: 'zh-CN' });
+                    }
+                    return judge([
+                      assert.text(host[0], '.layui-none', '表格空态 & <table>')
+                    ]);
+                  }
                 },
-                run: function (fx) {
-                  var root = fx[0];
-                  return judge([
-                    assert.text(root, '.layui-none', PAYLOAD.text),
-                    assert.none(root, '.layui-none img')
-                  ]);
-                }
-              },
-              {
-                id: 'xhr-error-i18n',
-                title: '请求异常文案中的 msg 不重复编码',
-                anchors: ['table.js#errorView', 'i18n.js#translate'],
-                fixture: '<table></table>',
-                setup: function (fx) {
-                  table.render({
-                    elem: fx.find('table')[0],
-                    cols: [[{ field: 'username', title: '用户名' }]],
-                    ajax: function (options) {
-                      // 模拟请求失败：应走 errorView(i18n.$t('table.xhrError'))
-                      options.error({ status: 500 }, '<b>timeout</b> & retry');
-                    },
-                    url: '/__stub'
-                  });
+                {
+                  id: 'ajax-status-msg',
+                  title: '接口错误 msg 按纯文本渲染',
+                  anchors: ['table.js#errorView', 'response.msgName'],
+                  fixture: '<table></table>',
+                  setup: function (fx) {
+                    table.render({
+                      elem: fx.find('table')[0],
+                      cols: [[{ field: 'username', title: '用户名' }]],
+                      ajax: function (options) {
+                        // 模拟状态码不符：应走 errorView(res[msgName])
+                        options.success({
+                          code: 1,
+                          msg: PAYLOAD.text,
+                          count: 0,
+                          data: []
+                        });
+                      },
+                      url: '/__stub'
+                    });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    return judge([
+                      assert.text(root, '.layui-none', PAYLOAD.text),
+                      assert.none(root, '.layui-none img')
+                    ]);
+                  }
                 },
-                run: function (fx) {
-                  var root = fx[0];
-                  return judge([
-                    assert.text(
-                      root,
-                      '.layui-none',
-                      '请求异常，错误提示：<b>timeout</b> & retry'
-                    ),
-                    assert.none(root, '.layui-none b')
-                  ]);
-                }
-              }
-            ]
-          },
-          {
-            id: 'transfer',
-            title: 'transfer 穿梭框',
-            icon: 'layui-icon-component',
-            layout: 'roomy',
-            desc:
-              '数据项 <code>title</code> / <code>value</code> 会写入 checkbox 属性；' +
-              '空数据与搜索无匹配文案经由 <code>noneView</code> 渲染。',
-            cases: [
-              {
-                id: 'attribute-breakout',
-                title: 'title/value 无法逃逸引号注入元素',
-                anchors: ['transfer.js#renderData'],
-                fixture: '<div></div>',
-                setup: function (fx) {
-                  transfer.render({
-                    elem: fx[0],
-                    width: 200,
-                    height: 190,
-                    data: [
-                      { title: PAYLOAD.attr, value: PAYLOAD.attr },
-                      { title: PAYLOAD.attrSingle, value: 'single' }
-                    ]
-                  });
+                {
+                  id: 'xhr-error-i18n',
+                  title: '请求异常文案中的 msg 不重复编码',
+                  anchors: ['table.js#errorView', 'i18n.js#translate'],
+                  fixture: '<table></table>',
+                  setup: function (fx) {
+                    table.render({
+                      elem: fx.find('table')[0],
+                      cols: [[{ field: 'username', title: '用户名' }]],
+                      ajax: function (options) {
+                        // 模拟请求失败：应走 errorView(i18n.$t('table.xhrError'))
+                        options.error(
+                          { status: 500 },
+                          '<b>timeout</b> & retry'
+                        );
+                      },
+                      url: '/__stub'
+                    });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    return judge([
+                      assert.text(
+                        root,
+                        '.layui-none',
+                        '请求异常，错误提示：<b>timeout</b> & retry'
+                      ),
+                      assert.none(root, '.layui-none b')
+                    ]);
+                  }
                 },
-                run: function (fx) {
-                  var root = fx[0];
-                  var checkboxes = root.querySelectorAll(
-                    '.layui-transfer-data input[type="checkbox"]'
-                  );
-                  var labels = root.querySelectorAll(
-                    '.layui-transfer-data .layui-form-checkbox div'
-                  );
-                  return judge([
-                    assert.truthy(
-                      checkboxes.length === 2,
-                      '数据项 checkbox 数量：期望 2，实际 ' + checkboxes.length
-                    ),
-                    assert.truthy(
-                      checkboxes[0] &&
-                        checkboxes[0].title === PAYLOAD.attr &&
-                        checkboxes[0].value === PAYLOAD.attr,
-                      'title/value 应保留载荷原文'
-                    ),
-                    assert.truthy(
-                      labels[0] && labels[0].textContent === PAYLOAD.attr,
-                      '标签文本应显示载荷原文：' +
-                        show(labels[0] && labels[0].textContent)
-                    ),
-                    assert.truthy(
-                      labels[1] && labels[1].textContent === PAYLOAD.attrSingle,
-                      '单引号载荷标签文本应显示原文'
-                    ),
-                    assert.none(root, 'img'),
-                    assert.none(root, '[data-xss]')
-                  ]);
-                }
-              },
-              {
-                id: 'entity-not-double-encoded',
-                title: '正常标题中的 & 与尖括号不重复编码',
-                anchors: ['transfer.js#renderData'],
-                fixture: '<div></div>',
-                setup: function (fx) {
-                  transfer.render({
-                    elem: fx[0],
-                    width: 200,
-                    height: 190,
-                    data: [{ title: '李白 & <杜甫>', value: 'poet' }]
-                  });
+                {
+                  id: 'total-row-injection',
+                  title: '服务端合计值（totalRow）中的 HTML 按纯文本渲染',
+                  anchors: ['table.js#renderTotal', 'response.totalRowName'],
+                  fixture: '<table></table>',
+                  setup: function (fx) {
+                    table.render({
+                      elem: fx.find('table')[0],
+                      cols: [
+                        [{ field: 'score', title: '分数', totalRow: true }]
+                      ],
+                      totalRow: true,
+                      ajax: function (options) {
+                        // 模拟服务端返回预计算合计值（文档化用法）
+                        options.success({
+                          code: 0,
+                          msg: '',
+                          count: 1,
+                          data: [{ score: 88 }],
+                          totalRow: { score: PAYLOAD.text }
+                        });
+                      },
+                      url: '/__stub'
+                    });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    return judge([
+                      assert.text(
+                        root,
+                        '.layui-table-total tbody td .layui-table-cell',
+                        PAYLOAD.text
+                      ),
+                      assert.none(root, '.layui-table-total img')
+                    ]);
+                  }
                 },
-                run: function (fx) {
-                  var root = fx[0];
-                  var input = root.querySelector(
-                    '.layui-transfer-data input[type="checkbox"]'
-                  );
-                  return judge([
-                    assert.truthy(
-                      input && input.title === '李白 & <杜甫>',
-                      'title 属性应保留原文：' + show(input && input.title)
-                    ),
-                    assert.text(
-                      root,
-                      '.layui-transfer-data .layui-form-checkbox div',
-                      '李白 & <杜甫>'
-                    ),
-                    assert.none(root, '.layui-transfer-data b')
-                  ]);
+                {
+                  id: 'header-title-escape',
+                  title: '列标题（cols.title）中的 HTML 按纯文本渲染',
+                  anchors: ['table.js#theads', 'cols.title'],
+                  fixture: '<table></table>',
+                  setup: function (fx) {
+                    table.render({
+                      elem: fx.find('table')[0],
+                      cols: [[{ field: 'username', title: PAYLOAD.text }]],
+                      data: [{ username: 'A' }]
+                    });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    return judge([
+                      assert.text(
+                        root,
+                        '.layui-table-header th .layui-table-cell span',
+                        PAYLOAD.text
+                      ),
+                      assert.attr(
+                        root,
+                        '.layui-table-header th',
+                        'title',
+                        PAYLOAD.text
+                      ),
+                      assert.none(root, '.layui-table-header img')
+                    ]);
+                  }
                 }
-              },
-              {
-                id: 'none-view-text',
-                title: '空数据文案按纯文本渲染',
-                anchors: ['transfer.js#noneView', 'options.text.none'],
-                fixture: '<div></div>',
-                setup: function (fx) {
-                  transfer.render({
-                    elem: fx[0],
-                    width: 200,
-                    height: 150,
-                    data: [],
-                    text: { none: PAYLOAD.text }
-                  });
-                },
-                run: function (fx) {
-                  var root = fx[0];
-                  return judge([
-                    assert.text(root, '.layui-none', PAYLOAD.text),
-                    assert.none(root, '.layui-none img')
-                  ]);
-                }
-              },
-              {
-                id: 'none-view-i18n',
-                title: 'i18n 空数据文案不重复编码',
-                anchors: ['transfer.js#beforeRender', 'i18n.js#translate'],
-                fixture: '<div></div>',
-                run: function (fx, ctx) {
-                  var messages = i18n.config.messages['zh-CN'];
-                  var original = messages.transfer.noData;
-                  messages.transfer.noData = '穿梭框空态 & <transfer>';
-                  i18n.set({ locale: 'zh-CN' });
-                  var host = ctx.fixtureOnce();
-                  try {
+              ]
+            },
+            {
+              id: 'transfer',
+              title: 'transfer 穿梭框',
+              icon: 'layui-icon-component',
+              layout: 'roomy',
+              desc:
+                '数据项 <code>title</code> / <code>value</code> 会写入 checkbox 属性；' +
+                '空数据与搜索无匹配文案经由 <code>noneView</code> 渲染。',
+              cases: [
+                {
+                  id: 'attribute-breakout',
+                  title: 'title/value 无法逃逸引号注入元素',
+                  anchors: ['transfer.js#renderData'],
+                  fixture: '<div></div>',
+                  setup: function (fx) {
                     transfer.render({
-                      elem: host[0],
+                      elem: fx[0],
+                      width: 200,
+                      height: 190,
+                      data: [
+                        { title: PAYLOAD.attr, value: PAYLOAD.attr },
+                        { title: PAYLOAD.attrSingle, value: 'single' }
+                      ]
+                    });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    var checkboxes = root.querySelectorAll(
+                      '.layui-transfer-data input[type="checkbox"]'
+                    );
+                    var labels = root.querySelectorAll(
+                      '.layui-transfer-data .layui-form-checkbox div'
+                    );
+                    return judge([
+                      assert.truthy(
+                        checkboxes.length === 2,
+                        '数据项 checkbox 数量：期望 2，实际 ' +
+                          checkboxes.length
+                      ),
+                      assert.truthy(
+                        checkboxes[0] &&
+                          checkboxes[0].title === PAYLOAD.attr &&
+                          checkboxes[0].value === PAYLOAD.attr,
+                        'title/value 应保留载荷原文'
+                      ),
+                      assert.truthy(
+                        labels[0] && labels[0].textContent === PAYLOAD.attr,
+                        '标签文本应显示载荷原文：' +
+                          show(labels[0] && labels[0].textContent)
+                      ),
+                      assert.truthy(
+                        labels[1] &&
+                          labels[1].textContent === PAYLOAD.attrSingle,
+                        '单引号载荷标签文本应显示原文'
+                      ),
+                      assert.none(root, 'img'),
+                      assert.none(root, '[data-xss]')
+                    ]);
+                  }
+                },
+                {
+                  id: 'entity-not-double-encoded',
+                  title: '正常标题中的 & 与尖括号不重复编码',
+                  anchors: ['transfer.js#renderData'],
+                  fixture: '<div></div>',
+                  setup: function (fx) {
+                    transfer.render({
+                      elem: fx[0],
+                      width: 200,
+                      height: 190,
+                      data: [{ title: '李白 & <杜甫>', value: 'poet' }]
+                    });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    var input = root.querySelector(
+                      '.layui-transfer-data input[type="checkbox"]'
+                    );
+                    return judge([
+                      assert.truthy(
+                        input && input.title === '李白 & <杜甫>',
+                        'title 属性应保留原文：' + show(input && input.title)
+                      ),
+                      assert.text(
+                        root,
+                        '.layui-transfer-data .layui-form-checkbox div',
+                        '李白 & <杜甫>'
+                      ),
+                      assert.none(root, '.layui-transfer-data b')
+                    ]);
+                  }
+                },
+                {
+                  id: 'none-view-text',
+                  title: '空数据文案按纯文本渲染',
+                  anchors: ['transfer.js#noneView', 'options.text.none'],
+                  fixture: '<div></div>',
+                  setup: function (fx) {
+                    transfer.render({
+                      elem: fx[0],
                       width: 200,
                       height: 150,
-                      data: []
+                      data: [],
+                      text: { none: PAYLOAD.text }
                     });
-                  } finally {
-                    messages.transfer.noData = original;
-                    i18n.set({ locale: 'zh-CN' });
-                  }
-                  return judge([
-                    assert.text(
-                      host[0],
-                      '.layui-none',
-                      '穿梭框空态 & <transfer>'
-                    )
-                  ]);
-                }
-              },
-              {
-                id: 'search-none-text',
-                title: '搜索无匹配文案按纯文本渲染',
-                anchors: ['transfer.js#noneView', 'options.text.searchNone'],
-                fixture: '<div></div>',
-                setup: function (fx) {
-                  transfer.render({
-                    elem: fx[0],
-                    width: 200,
-                    height: 190,
-                    showSearch: true,
-                    data: [{ title: '正常数据', value: 'normal' }],
-                    text: { searchNone: PAYLOAD.text }
-                  });
-                },
-                action: {
-                  title: '输入不匹配关键词',
-                  handler: function (fx) {
-                    var input = fx.find('.layui-transfer-search input')[0];
-                    input.value = '__no_match__';
-                    input.dispatchEvent(
-                      new KeyboardEvent('keyup', {
-                        bubbles: true,
-                        key: 'Enter'
-                      })
-                    );
-                  }
-                },
-                run: function (fx) {
-                  var root = fx[0];
-                  return judge([
-                    assert.text(root, '.layui-none', PAYLOAD.text),
-                    assert.none(root, '.layui-none img')
-                  ]);
-                }
-              }
-            ]
-          },
-          {
-            id: 'tree',
-            title: 'tree 树组件',
-            icon: 'layui-icon-share',
-            desc:
-              '节点 <code>title</code> / <code>id</code> / <code>field</code> 写入文本与属性，' +
-              '<code>href</code> 经 scheme 白名单校验；空态、编辑回调与删除确认同样做编码处理。',
-            cases: [
-              {
-                id: 'attribute-breakout',
-                title: 'id/field/title 无法逃逸属性与文本',
-                anchors: ['tree.js#tree'],
-                wide: true,
-                fixture: '<div></div>',
-                setup: function (fx) {
-                  tree.render({
-                    elem: fx[0],
-                    showCheckbox: true,
-                    data: [
-                      {
-                        id: 'node" data-xss="1',
-                        field: 'name" data-xss="2',
-                        title: PAYLOAD.attr
-                      },
-                      // 未显式提供 field 时，name 回退为 layuiTreeCheck_ + id
-                      { id: 'fallback" data-xss="3', title: '回退字段名节点' }
-                    ]
-                  });
-                },
-                run: function (fx) {
-                  var root = fx[0];
-                  var sets = root.querySelectorAll('.layui-tree-set');
-                  var checks = root.querySelectorAll(
-                    'input[same="layuiTreeCheck"]'
-                  );
-                  return judge([
-                    assert.truthy(
-                      sets[0] &&
-                        sets[0].getAttribute('data-id') === 'node" data-xss="1',
-                      'data-id 应保留载荷原文：' +
-                        show(sets[0] && sets[0].getAttribute('data-id'))
-                    ),
-                    assert.truthy(
-                      checks[0] &&
-                        checks[0].name === 'name" data-xss="2' &&
-                        checks[0].value === 'node" data-xss="1',
-                      'checkbox name/value 应保留载荷原文'
-                    ),
-                    assert.truthy(
-                      checks[1] &&
-                        checks[1].name ===
-                          'layuiTreeCheck_fallback" data-xss="3',
-                      'field 缺省时的回退 name 应被编码：' +
-                        show(checks[1] && checks[1].name)
-                    ),
-                    assert.text(
-                      root,
-                      '.layui-tree-set:first-child .layui-tree-txt',
-                      PAYLOAD.attr
-                    ),
-                    assert.none(root, 'img'),
-                    assert.none(root, '[data-xss]')
-                  ]);
-                }
-              },
-              {
-                id: 'href-scheme-whitelist',
-                title: '危险 scheme 降级为文本，安全链接保留',
-                anchors: ['lay.js#isSafeUrl', 'tree.js#tree'],
-                wide: true,
-                fixture: '<div></div>',
-                setup: function (fx) {
-                  tree.render({
-                    elem: fx[0],
-                    isJump: true,
-                    data: (function () {
-                      var data = [];
-                      layui.each(HREF_VECTORS, function (index, vector) {
-                        data.push({
-                          id: index + 1,
-                          title: vector.title,
-                          href: vector.href
-                        });
-                      });
-                      return data;
-                    })()
-                  });
-                },
-                run: function (fx) {
-                  var root = fx[0];
-                  var allowedCount = 0;
-                  var blockedCount = 0;
-                  var results = [
-                    assert.truthy(
-                      root.querySelectorAll('.layui-tree-set').length ===
-                        HREF_VECTORS.length,
-                      '节点数量：期望 ' +
-                        HREF_VECTORS.length +
-                        '，实际 ' +
-                        root.querySelectorAll('.layui-tree-set').length
-                    )
-                  ];
-
-                  layui.each(HREF_VECTORS, function (index, vector) {
-                    var set = root.querySelector(
-                      '.layui-tree-set[data-id="' + (index + 1) + '"]'
-                    );
-                    var node = set
-                      ? set.querySelector('.layui-tree-txt')
-                      : null;
-                    var expectTag = vector.allowed ? 'A' : 'SPAN';
-                    var expectHref = vector.allowed ? vector.href : null;
-                    var actualTag = node ? node.tagName : null;
-                    var actualHref = node ? node.getAttribute('href') : null;
-                    var actualAllowed = lay.isSafeUrl(vector.href);
-
-                    if (vector.allowed) allowedCount += 1;
-                    else blockedCount += 1;
-
-                    results.push(
-                      assert.truthy(
-                        actualAllowed === vector.allowed,
-                        vector.title +
-                          '：lay.isSafeUrl 期望 ' +
-                          vector.allowed +
-                          '，实际 ' +
-                          actualAllowed
-                      )
-                    );
-                    results.push(
-                      assert.truthy(
-                        actualTag === expectTag,
-                        vector.title +
-                          '：元素应为 <' +
-                          expectTag.toLowerCase() +
-                          '>，实际 ' +
-                          (actualTag
-                            ? '<' + actualTag.toLowerCase() + '>'
-                            : '未渲染')
-                      )
-                    );
-                    results.push(
-                      assert.truthy(
-                        actualHref === expectHref,
-                        vector.title +
-                          '：href 期望 ' +
-                          show(expectHref) +
-                          '，实际 ' +
-                          show(actualHref)
-                      )
-                    );
-                  });
-
-                  var dangerousLinks = [];
-                  Array.prototype.forEach.call(
-                    root.querySelectorAll('a[href]'),
-                    function (link) {
-                      if (
-                        /^(javascript|data|vbscript):$/i.test(link.protocol)
-                      ) {
-                        dangerousLinks.push(link.getAttribute('href'));
-                      }
-                    }
-                  );
-
-                  results.push(
-                    assert.count(root, 'a.layui-tree-txt', allowedCount),
-                    assert.count(root, '.layui-tree-txt:not(a)', blockedCount),
-                    assert.count(root, 'a[href^="javascript:"]', 0),
-                    assert.count(root, 'a[href^="data:"]', 0),
-                    assert.count(root, 'a[href^="vbscript:"]', 0),
-                    assert.truthy(
-                      dangerousLinks.length === 0,
-                      '不应生成危险协议链接，实际 ' + show(dangerousLinks)
-                    )
-                  );
-
-                  return judge(results);
-                }
-              },
-              {
-                id: 'none-view-text',
-                title: '空态文案按纯文本渲染',
-                anchors: ['tree.js#render', 'options.text.none'],
-                fixture: '<div></div>',
-                setup: function (fx) {
-                  tree.render({
-                    elem: fx[0],
-                    data: [],
-                    text: { none: PAYLOAD.text }
-                  });
-                },
-                run: function (fx) {
-                  var root = fx[0];
-                  return judge([
-                    assert.text(root, '.layui-tree-emptyText', PAYLOAD.text),
-                    assert.none(root, '.layui-tree-emptyText img')
-                  ]);
-                }
-              },
-              {
-                id: 'none-view-i18n',
-                title: 'i18n 空态与默认节点名不重复编码',
-                anchors: ['tree.js#beforeRender', 'i18n.js#translate'],
-                fixture: '<div></div>',
-                run: function (fx, ctx) {
-                  var messages = i18n.config.messages['zh-CN'];
-                  var originalNone = messages.tree.noData;
-                  var originalName = messages.tree.defaultNodeName;
-                  messages.tree.noData = '树空态 & <tree>';
-                  messages.tree.defaultNodeName = '未命名 & <name>';
-                  i18n.set({ locale: 'zh-CN' });
-                  var emptyHost = ctx.fixtureOnce('empty');
-                  var defaultHost = ctx.fixtureOnce('default');
-                  try {
-                    tree.render({ elem: emptyHost[0], data: [] });
-                    tree.render({ elem: defaultHost[0], data: [{ id: 1 }] });
-                  } finally {
-                    messages.tree.noData = originalNone;
-                    messages.tree.defaultNodeName = originalName;
-                    i18n.set({ locale: 'zh-CN' });
-                  }
-                  return judge([
-                    assert.text(
-                      emptyHost[0],
-                      '.layui-tree-emptyText',
-                      '树空态 & <tree>'
-                    ),
-                    assert.text(
-                      defaultHost[0],
-                      '.layui-tree-txt',
-                      '未命名 & <name>'
-                    ),
-                    assert.none(defaultHost[0], 'name')
-                  ]);
-                }
-              },
-              {
-                id: 'edit-roundtrip',
-                title: '节点重命名往返不产生双重编码',
-                anchors: ['tree.js#operate', 'lay.unescape'],
-                fixture: '<div></div>',
-                setup: function (fx, ctx) {
-                  ctx.lastOperate = null;
-                  tree.render({
-                    elem: fx[0],
-                    edit: ['update'],
-                    data: [{ id: 'edit', title: '原始节点' }],
-                    operate: function (obj) {
-                      ctx.lastOperate = obj;
-                    }
-                  });
-                },
-                action: {
-                  title: '模拟重命名为 A & B <c>',
-                  handler: function (fx) {
-                    fx.find('[data-type="update"]').trigger('click');
-                    var input = fx.find('.layui-tree-editInput');
-                    input.val('A & B <c>');
-                    input.trigger('blur');
-                  }
-                },
-                run: function (fx, ctx) {
-                  var root = fx[0];
-                  return judge([
-                    assert.text(root, '.layui-tree-txt', 'A & B <c>'),
-                    assert.none(root, '.layui-tree-txt c'),
-                    assert.truthy(
-                      ctx.lastOperate &&
-                        ctx.lastOperate.data &&
-                        ctx.lastOperate.data.title === 'A & B <c>',
-                      'operate 回调应返回原始文本而非实体：' +
-                        show(
-                          ctx.lastOperate &&
-                            ctx.lastOperate.data &&
-                            ctx.lastOperate.data.title
-                        )
-                    )
-                  ]);
-                }
-              },
-              {
-                id: 'delete-confirm-entity',
-                title: '删除确认保留字面实体文本',
-                anchors: ['tree.js#operate', 'i18n.js#translate'],
-                fixture: '<div></div>',
-                setup: function (fx) {
-                  tree.render({
-                    elem: fx[0],
-                    edit: ['del'],
-                    data: [{ id: 'del', title: 'A &lt; B' }]
-                  });
-                },
-                action: {
-                  title: '打开删除确认弹窗',
-                  handler: function (fx) {
-                    fx.find('[data-type="del"]').trigger('click');
-                  }
-                },
-                run: function () {
-                  var dialog = document.querySelector(
-                    '.layui-layer-dialog .layui-layer-content'
-                  );
-                  var text = dialog ? dialog.textContent : '';
-                  return judge([
-                    assert.truthy(
-                      text.indexOf('A &lt; B') !== -1,
-                      '确认文案应包含字面实体 "A &lt; B"，实际：' + show(text)
-                    ),
-                    assert.truthy(
-                      text.indexOf('A < B') === -1,
-                      '确认文案不应出现被解码后的 "A < B"'
-                    )
-                  ]);
-                }
-              }
-            ]
-          }
-        ];
-
-        /**
-         * 3. 运行器
-         */
-
-        var runner = (function () {
-          var modules = [];
-          var navList = $('#sec-nav-list');
-          var moduleMount = $('#sec-modules');
-          // 「待运行用例」列表的内容签名，避免每次断言都重建 DOM
-          var pendingSignature = null;
-
-          function countByState(module) {
-            var result = { total: module.cases.length, pass: 0, fail: 0 };
-            layui.each(module.cases, function (index, useCase) {
-              if (useCase.state === 'pass') result.pass += 1;
-              if (useCase.state === 'fail') result.fail += 1;
-            });
-            return result;
-          }
-
-          // 每个模块在文档中的锚点 id，用于地址栏 hash 与刷新后定位
-          function anchorId(module) {
-            return 'module-' + module.id;
-          }
-
-          function findModuleByKey(key) {
-            var found = null;
-            layui.each(modules, function (index, module) {
-              if (module.id === key || anchorId(module) === key) found = module;
-            });
-            return found;
-          }
-
-          // 解析地址栏锚点：同时支持模块锚点与用例锚点
-          function findHashTarget(hash) {
-            var key = String(hash || '').replace(/^#/, '');
-            if (!key) return null;
-
-            var found = null;
-            layui.each(modules, function (index, module) {
-              if (module.id === key || anchorId(module) === key) {
-                found = { module: module };
-                return true;
-              }
-              layui.each(module.cases, function (caseIndex, useCase) {
-                if (key !== 'case-' + module.id + '-' + useCase.id) return;
-                found = { module: module, useCase: useCase };
-                return true;
-              });
-              if (found) return true;
-            });
-            return found;
-          }
-
-          function scrollToModule(module) {
-            var target = document.getElementById(anchorId(module));
-            if (!target) return;
-            window.scrollTo(
-              0,
-              target.getBoundingClientRect().top + window.pageYOffset - 12
-            );
-          }
-
-          function setActiveNav(module) {
-            navList.find('.sec-nav-item').each(function () {
-              var item = $(this);
-              item.toggleClass(
-                'is-active',
-                item.attr('data-target') === module.id
-              );
-            });
-          }
-
-          // 激活模块：同步侧栏高亮 + 滚动定位 + 写入地址栏锚点
-          function activateModule(module, options) {
-            options = options || {};
-            setActiveNav(module);
-            scrollToModule(module);
-            if (options.hash === false) return;
-            var nextHash = '#' + anchorId(module);
-            if (window.location.hash === nextHash) return;
-            // 使用 replaceState：不产生额外历史记录，也不会触发浏览器的二次跳转
-            try {
-              window.history.replaceState(null, '', nextHash);
-            } catch (err) {
-              window.location.hash = anchorId(module);
-            }
-          }
-
-          function renderNav() {
-            var html = [];
-            layui.each(modules, function (index, module) {
-              html.push(
-                '<div class="sec-nav-item' +
-                  (index === 0 ? ' is-active' : '') +
-                  '" data-target="' +
-                  module.id +
-                  '" data-anchor="' +
-                  anchorId(module) +
-                  '">' +
-                  '<i class="layui-icon ' +
-                  module.icon +
-                  '"></i>' +
-                  '<span class="sec-nav-text">' +
-                  module.title +
-                  '</span>' +
-                  '<span class="sec-nav-count" data-nav-count="' +
-                  module.id +
-                  '">0/' +
-                  module.cases.length +
-                  '</span>' +
-                  '</div>'
-              );
-            });
-            navList.html(html.join(''));
-            navList.find('.sec-nav-item').on('click', function () {
-              var module = findModuleByKey($(this).attr('data-target'));
-              if (module) activateModule(module);
-            });
-            // 支持浏览器前进/后退或手动修改 hash
-            $(window).on('hashchange', function () {
-              var target = findHashTarget(window.location.hash);
-              if (!target) return;
-              if (target.useCase) {
-                focusCase(target.module, target.useCase);
-                return;
-              }
-              setActiveNav(target.module);
-              scrollToModule(target.module);
-            });
-          }
-
-          function renderModules() {
-            layui.each(modules, function (index, module) {
-              var section = $(
-                '<section class="sec-module" id="' +
-                  anchorId(module) +
-                  '">' +
-                  '<div class="sec-module-head">' +
-                  '<h2 class="sec-module-title">' +
-                  '<i class="layui-icon ' +
-                  module.icon +
-                  '"></i>' +
-                  module.title +
-                  '</h2>' +
-                  '<button type="button" class="layui-btn layui-btn-primary layui-btn-sm" data-run-module="' +
-                  module.id +
-                  '">运行本组自动用例</button>' +
-                  '</div>' +
-                  '<p class="sec-module-body">' +
-                  module.desc +
-                  '</p>' +
-                  '<div class="sec-cases"></div>' +
-                  '</section>'
-              );
-              var grid = section.find('.sec-cases');
-              if (module.layout) grid.addClass('is-' + module.layout);
-
-              layui.each(module.cases, function (caseIndex, useCase) {
-                useCase.manual = !!useCase.action;
-                var card = $(
-                  '<article class="sec-case" id="case-' +
-                    module.id +
-                    '-' +
-                    useCase.id +
-                    '" data-case="' +
-                    useCase.id +
-                    '" data-state="pending">' +
-                    '<div class="sec-case-head">' +
-                    '<h3 class="sec-case-title">' +
-                    '<span class="sec-case-idx">' +
-                    (caseIndex + 1) +
-                    '.</span>' +
-                    '</h3>' +
-                    (useCase.manual
-                      ? '<span class="sec-case-tag">手工</span>'
-                      : '') +
-                    '<span class="sec-case-state">' +
-                    stateText(useCase, 'pending') +
-                    '</span>' +
-                    '</div>' +
-                    '<p class="sec-case-anchors">' +
-                    useCase.anchors
-                      .map(function (anchor) {
-                        return '<code>' + anchor + '</code>';
-                      })
-                      .join('') +
-                    '</p>' +
-                    '<div class="sec-case-body"></div>' +
-                    '<div class="sec-case-actions"></div>' +
-                    '<div class="sec-case-detail" hidden></div>' +
-                    '</article>'
-                );
-                // 用例标题按文本写入，避免自身引入注入
-                card
-                  .find('.sec-case-title')
-                  .append(document.createTextNode(useCase.title));
-                if (useCase.wide) card.addClass('is-wide');
-                if (useCase.manual) card.addClass('is-manual');
-                grid.append(card);
-                useCase.elem = card;
-                useCase.state = 'pending';
-                useCase.body = card.find('.sec-case-body');
-              });
-
-              module.elem = section;
-              moduleMount.append(section);
-            });
-          }
-
-          function createFixture(useCase, options) {
-            options = options || {};
-            var fixture = $(
-              '<div class="sec-fixture">' + (options.html || '') + '</div>'
-            );
-            useCase.body.append(fixture);
-            return fixture;
-          }
-
-          function mountFixtures() {
-            layui.each(modules, function (index, module) {
-              layui.each(module.cases, function (caseIndex, useCase) {
-                useCase.ctx = {
-                  // 首次调用时创建并缓存额外 fixture，避免重复运行叠加节点
-                  fixtureOnce: function (key) {
-                    useCase.extra = useCase.extra || {};
-                    if (!useCase.extra[key]) {
-                      useCase.extra[key] = createFixture(useCase, {
-                        html: useCase.fixture || '<div></div>'
-                      });
-                    }
-                    return useCase.extra[key];
                   },
-                  caseState: {}
-                };
-                useCase.fixtureElem = createFixture(useCase, {
-                  html: useCase.fixture || '<div></div>'
-                });
-
-                if (useCase.setup) {
-                  useCase.setup(useCase.fixtureElem, useCase.ctx);
-                }
-
-                if (useCase.action) {
-                  var actions = useCase.elem.find('.sec-case-actions');
-                  var actionButton = $(
-                    '<button type="button" class="layui-btn layui-btn-primary layui-btn-sm"></button>'
-                  );
-                  actionButton
-                    .text(useCase.action.title)
-                    .on('click', function () {
-                      var button = $(this);
-                      try {
-                        useCase.action.handler(
-                          useCase.fixtureElem,
-                          useCase.ctx
-                        );
-                      } catch (err) {
-                        setResult(useCase, {
-                          passed: false,
-                          detail: '交互触发异常：' + err.message
-                        });
-                        button.prop('disabled', true);
-                        return;
-                      }
-                      setResult(useCase, execute(useCase));
-                      button.prop('disabled', true);
+                  run: function (fx) {
+                    var root = fx[0];
+                    return judge([
+                      assert.text(root, '.layui-none', PAYLOAD.text),
+                      assert.none(root, '.layui-none img')
+                    ]);
+                  }
+                },
+                {
+                  id: 'none-view-i18n',
+                  title: 'i18n 空数据文案不重复编码',
+                  anchors: ['transfer.js#beforeRender', 'i18n.js#translate'],
+                  fixture: '<div></div>',
+                  run: function (fx, ctx) {
+                    var messages = i18n.config.messages['zh-CN'];
+                    var original = messages.transfer.noData;
+                    messages.transfer.noData = '穿梭框空态 & <transfer>';
+                    i18n.set({ locale: 'zh-CN' });
+                    var host = ctx.fixtureOnce();
+                    try {
+                      transfer.render({
+                        elem: host[0],
+                        width: 200,
+                        height: 150,
+                        data: []
+                      });
+                    } finally {
+                      messages.transfer.noData = original;
+                      i18n.set({ locale: 'zh-CN' });
+                    }
+                    return judge([
+                      assert.text(
+                        host[0],
+                        '.layui-none',
+                        '穿梭框空态 & <transfer>'
+                      )
+                    ]);
+                  }
+                },
+                {
+                  id: 'search-none-text',
+                  title: '搜索无匹配文案按纯文本渲染',
+                  anchors: ['transfer.js#noneView', 'options.text.searchNone'],
+                  fixture: '<div></div>',
+                  setup: function (fx) {
+                    transfer.render({
+                      elem: fx[0],
+                      width: 200,
+                      height: 190,
+                      showSearch: true,
+                      data: [{ title: '正常数据', value: 'normal' }],
+                      text: { searchNone: PAYLOAD.text }
                     });
-                  actions.append(actionButton);
+                  },
+                  action: {
+                    title: '输入不匹配关键词',
+                    handler: function (fx) {
+                      var input = fx.find('.layui-transfer-search input')[0];
+                      input.value = '__no_match__';
+                      input.dispatchEvent(
+                        new KeyboardEvent('keyup', {
+                          bubbles: true,
+                          key: 'Enter'
+                        })
+                      );
+                    }
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    return judge([
+                      assert.text(root, '.layui-none', PAYLOAD.text),
+                      assert.none(root, '.layui-none img')
+                    ]);
+                  }
                 }
-              });
-            });
-          }
+              ]
+            },
+            {
+              id: 'tree',
+              title: 'tree 树组件',
+              icon: 'layui-icon-share',
+              desc:
+                '节点 <code>title</code> / <code>id</code> / <code>field</code> 写入文本与属性，' +
+                '<code>href</code> 经 scheme 白名单校验；空态、编辑回调与删除确认同样做编码处理。',
+              cases: [
+                {
+                  id: 'attribute-breakout',
+                  title: 'id/field/title 无法逃逸属性与文本',
+                  anchors: ['tree.js#tree'],
+                  wide: true,
+                  fixture: '<div></div>',
+                  setup: function (fx) {
+                    tree.render({
+                      elem: fx[0],
+                      showCheckbox: true,
+                      data: [
+                        {
+                          id: 'node" data-xss="1',
+                          field: 'name" data-xss="2',
+                          title: PAYLOAD.attr
+                        },
+                        // 未显式提供 field 时，name 回退为 layuiTreeCheck_ + id
+                        { id: 'fallback" data-xss="3', title: '回退字段名节点' }
+                      ]
+                    });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    var sets = root.querySelectorAll('.layui-tree-set');
+                    var checks = root.querySelectorAll(
+                      'input[same="layuiTreeCheck"]'
+                    );
+                    return judge([
+                      assert.truthy(
+                        sets[0] &&
+                          sets[0].getAttribute('data-id') ===
+                            'node" data-xss="1',
+                        'data-id 应保留载荷原文：' +
+                          show(sets[0] && sets[0].getAttribute('data-id'))
+                      ),
+                      assert.truthy(
+                        checks[0] &&
+                          checks[0].name === 'name" data-xss="2' &&
+                          checks[0].value === 'node" data-xss="1',
+                        'checkbox name/value 应保留载荷原文'
+                      ),
+                      assert.truthy(
+                        checks[1] &&
+                          checks[1].name ===
+                            'layuiTreeCheck_fallback" data-xss="3',
+                        'field 缺省时的回退 name 应被编码：' +
+                          show(checks[1] && checks[1].name)
+                      ),
+                      assert.text(
+                        root,
+                        '.layui-tree-set:first-child .layui-tree-txt',
+                        PAYLOAD.attr
+                      ),
+                      assert.none(root, 'img'),
+                      assert.none(root, '[data-xss]')
+                    ]);
+                  }
+                },
+                {
+                  id: 'href-scheme-whitelist',
+                  title: '危险 scheme 降级为文本，安全链接保留',
+                  anchors: ['lay.js#isSafeUrl', 'tree.js#tree'],
+                  wide: true,
+                  fixture: '<div></div>',
+                  setup: function (fx) {
+                    tree.render({
+                      elem: fx[0],
+                      isJump: true,
+                      data: (function () {
+                        var data = [];
+                        layui.each(HREF_VECTORS, function (index, vector) {
+                          data.push({
+                            id: index + 1,
+                            title: vector.title,
+                            href: vector.href
+                          });
+                        });
+                        return data;
+                      })()
+                    });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    var allowedCount = 0;
+                    var blockedCount = 0;
+                    var results = [
+                      assert.truthy(
+                        root.querySelectorAll('.layui-tree-set').length ===
+                          HREF_VECTORS.length,
+                        '节点数量：期望 ' +
+                          HREF_VECTORS.length +
+                          '，实际 ' +
+                          root.querySelectorAll('.layui-tree-set').length
+                      )
+                    ];
 
-          function execute(useCase) {
-            var result;
-            try {
-              result = useCase.run(useCase.fixtureElem, useCase.ctx);
-            } catch (err) {
-              result = {
-                passed: false,
-                detail: '断言执行异常：' + (err && err.message)
-              };
-            }
-            if (!result || typeof result.passed !== 'boolean') {
-              result = {
-                passed: false,
-                detail: '用例未返回有效断言结果'
-              };
-            }
-            return result;
-          }
+                    layui.each(HREF_VECTORS, function (index, vector) {
+                      var set = root.querySelector(
+                        '.layui-tree-set[data-id="' + (index + 1) + '"]'
+                      );
+                      var node = set
+                        ? set.querySelector('.layui-tree-txt')
+                        : null;
+                      var expectTag = vector.allowed ? 'A' : 'SPAN';
+                      var expectHref = vector.allowed ? vector.href : null;
+                      var actualTag = node ? node.tagName : null;
+                      var actualHref = node ? node.getAttribute('href') : null;
+                      var actualAllowed = lay.isSafeUrl(vector.href);
 
-          function stateText(useCase, state) {
-            if (state === 'pass') return '通过';
-            if (state === 'fail') return '失败';
-            return useCase.manual ? '待手工' : '待运行';
-          }
+                      if (vector.allowed) allowedCount += 1;
+                      else blockedCount += 1;
+
+                      results.push(
+                        assert.truthy(
+                          actualAllowed === vector.allowed,
+                          vector.title +
+                            '：lay.isSafeUrl 期望 ' +
+                            vector.allowed +
+                            '，实际 ' +
+                            actualAllowed
+                        )
+                      );
+                      results.push(
+                        assert.truthy(
+                          actualTag === expectTag,
+                          vector.title +
+                            '：元素应为 <' +
+                            expectTag.toLowerCase() +
+                            '>，实际 ' +
+                            (actualTag
+                              ? '<' + actualTag.toLowerCase() + '>'
+                              : '未渲染')
+                        )
+                      );
+                      results.push(
+                        assert.truthy(
+                          actualHref === expectHref,
+                          vector.title +
+                            '：href 期望 ' +
+                            show(expectHref) +
+                            '，实际 ' +
+                            show(actualHref)
+                        )
+                      );
+                    });
+
+                    var dangerousLinks = [];
+                    Array.prototype.forEach.call(
+                      root.querySelectorAll('a[href]'),
+                      function (link) {
+                        if (
+                          /^(javascript|data|vbscript):$/i.test(link.protocol)
+                        ) {
+                          dangerousLinks.push(link.getAttribute('href'));
+                        }
+                      }
+                    );
+
+                    results.push(
+                      assert.count(root, 'a.layui-tree-txt', allowedCount),
+                      assert.count(
+                        root,
+                        '.layui-tree-txt:not(a)',
+                        blockedCount
+                      ),
+                      assert.count(root, 'a[href^="javascript:"]', 0),
+                      assert.count(root, 'a[href^="data:"]', 0),
+                      assert.count(root, 'a[href^="vbscript:"]', 0),
+                      assert.truthy(
+                        dangerousLinks.length === 0,
+                        '不应生成危险协议链接，实际 ' + show(dangerousLinks)
+                      )
+                    );
+
+                    return judge(results);
+                  }
+                },
+                {
+                  id: 'none-view-text',
+                  title: '空态文案按纯文本渲染',
+                  anchors: ['tree.js#render', 'options.text.none'],
+                  fixture: '<div></div>',
+                  setup: function (fx) {
+                    tree.render({
+                      elem: fx[0],
+                      data: [],
+                      text: { none: PAYLOAD.text }
+                    });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    return judge([
+                      assert.text(root, '.layui-tree-emptyText', PAYLOAD.text),
+                      assert.none(root, '.layui-tree-emptyText img')
+                    ]);
+                  }
+                },
+                {
+                  id: 'none-view-i18n',
+                  title: 'i18n 空态与默认节点名不重复编码',
+                  anchors: ['tree.js#beforeRender', 'i18n.js#translate'],
+                  fixture: '<div></div>',
+                  run: function (fx, ctx) {
+                    var messages = i18n.config.messages['zh-CN'];
+                    var originalNone = messages.tree.noData;
+                    var originalName = messages.tree.defaultNodeName;
+                    messages.tree.noData = '树空态 & <tree>';
+                    messages.tree.defaultNodeName = '未命名 & <name>';
+                    i18n.set({ locale: 'zh-CN' });
+                    var emptyHost = ctx.fixtureOnce('empty');
+                    var defaultHost = ctx.fixtureOnce('default');
+                    try {
+                      tree.render({ elem: emptyHost[0], data: [] });
+                      tree.render({ elem: defaultHost[0], data: [{ id: 1 }] });
+                    } finally {
+                      messages.tree.noData = originalNone;
+                      messages.tree.defaultNodeName = originalName;
+                      i18n.set({ locale: 'zh-CN' });
+                    }
+                    return judge([
+                      assert.text(
+                        emptyHost[0],
+                        '.layui-tree-emptyText',
+                        '树空态 & <tree>'
+                      ),
+                      assert.text(
+                        defaultHost[0],
+                        '.layui-tree-txt',
+                        '未命名 & <name>'
+                      ),
+                      assert.none(defaultHost[0], 'name')
+                    ]);
+                  }
+                },
+                {
+                  id: 'edit-roundtrip',
+                  title: '节点重命名往返不产生双重编码',
+                  anchors: ['tree.js#operate', 'lay.unescape'],
+                  fixture: '<div></div>',
+                  setup: function (fx, ctx) {
+                    ctx.lastOperate = null;
+                    tree.render({
+                      elem: fx[0],
+                      edit: ['update'],
+                      data: [{ id: 'edit', title: '原始节点' }],
+                      operate: function (obj) {
+                        ctx.lastOperate = obj;
+                      }
+                    });
+                  },
+                  action: {
+                    title: '模拟重命名为 A & B <c>',
+                    handler: function (fx) {
+                      fx.find('[data-type="update"]').trigger('click');
+                      var input = fx.find('.layui-tree-editInput');
+                      input.val('A & B <c>');
+                      input.trigger('blur');
+                    }
+                  },
+                  run: function (fx, ctx) {
+                    var root = fx[0];
+                    return judge([
+                      assert.text(root, '.layui-tree-txt', 'A & B <c>'),
+                      assert.none(root, '.layui-tree-txt c'),
+                      assert.truthy(
+                        ctx.lastOperate &&
+                          ctx.lastOperate.data &&
+                          ctx.lastOperate.data.title === 'A & B <c>',
+                        'operate 回调应返回原始文本而非实体：' +
+                          show(
+                            ctx.lastOperate &&
+                              ctx.lastOperate.data &&
+                              ctx.lastOperate.data.title
+                          )
+                      )
+                    ]);
+                  }
+                },
+                {
+                  id: 'delete-confirm-entity',
+                  title: '删除确认保留字面实体文本',
+                  anchors: ['tree.js#operate', 'i18n.js#translate'],
+                  fixture: '<div></div>',
+                  setup: function (fx) {
+                    tree.render({
+                      elem: fx[0],
+                      edit: ['del'],
+                      data: [{ id: 'del', title: 'A &lt; B' }]
+                    });
+                  },
+                  action: {
+                    title: '打开删除确认弹窗',
+                    handler: function (fx) {
+                      fx.find('[data-type="del"]').trigger('click');
+                    }
+                  },
+                  run: function () {
+                    var dialog = document.querySelector(
+                      '.layui-layer-dialog .layui-layer-content'
+                    );
+                    var text = dialog ? dialog.textContent : '';
+                    return judge([
+                      assert.truthy(
+                        text.indexOf('A &lt; B') !== -1,
+                        '确认文案应包含字面实体 "A &lt; B"，实际：' + show(text)
+                      ),
+                      assert.truthy(
+                        text.indexOf('A < B') === -1,
+                        '确认文案不应出现被解码后的 "A < B"'
+                      )
+                    ]);
+                  }
+                }
+              ]
+            },
+            {
+              id: 'treeTable',
+              title: 'treeTable 树表',
+              icon: 'layui-icon-table',
+              desc:
+                '行数据中的节点图标（<code>customName.icon</code>）经 ' +
+                '<code>normalizedIcon</code> 渲染：与单元格数据同源，含 HTML 的值需转义；' +
+                '<code>tree.view</code> 中的自定义图标为开发者配置，不受影响。',
+              cases: [
+                {
+                  id: 'treetable-icon-html',
+                  title: '行数据节点图标中的 HTML 不注入元素',
+                  anchors: ['treeTable.js#normalizedIcon', 'customName.icon'],
+                  fixture: '<table></table>',
+                  setup: function (fx) {
+                    treeTable.render({
+                      elem: fx.find('table')[0],
+                      data: [
+                        {
+                          id: 1,
+                          name: 'node',
+                          icon: PAYLOAD.text,
+                          children: []
+                        }
+                      ],
+                      cols: [[{ field: 'name', title: 'name' }]]
+                    });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    return judge([
+                      assert.none(root, '.layui-table-tree-nodeIcon img'),
+                      assert.none(root, '.layui-table-tree-nodeIcon [onerror]')
+                    ]);
+                  }
+                },
+                {
+                  id: 'treetable-icon-attr-breakout',
+                  title: '行数据节点图标无法逃逸 class 属性注入元素',
+                  anchors: ['treeTable.js#normalizedIcon', 'customName.icon'],
+                  fixture: '<table></table>',
+                  setup: function (fx) {
+                    treeTable.render({
+                      elem: fx.find('table')[0],
+                      data: [
+                        {
+                          id: 1,
+                          name: 'node',
+                          icon: PAYLOAD.attr,
+                          children: []
+                        }
+                      ],
+                      cols: [[{ field: 'name', title: 'name' }]]
+                    });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    return judge([
+                      assert.none(root, '.layui-table-tree-nodeIcon img'),
+                      assert.none(root, '.layui-table-tree-nodeIcon [onerror]')
+                    ]);
+                  }
+                }
+              ]
+            },
+            {
+              id: 'progress',
+              title: 'progress 进度条',
+              icon: 'layui-icon-loading',
+              desc:
+                '<code>lay-percent</code> 的分数写法仅按数字除法解析，不做动态表达式求值；' +
+                '进度值文本（<code>lay-showpercent</code>）按纯文本写入。' +
+                '注：showpercent 的文本注入发生在渲染后 350ms 的延时器内，' +
+                '该向量由 PoC 异步用例覆盖。',
+              cases: [
+                {
+                  id: 'progress-eval-blocked',
+                  title: 'lay-percent 的分数形态表达式不被求值',
+                  anchors: ['progress.js#getPercentValue', 'lay-percent'],
+                  fixture: '<div></div>',
+                  setup: function (fx) {
+                    var wrap = $(
+                      '<div class="layui-progress" lay-filter="sec-progress-eval"></div>'
+                    );
+                    wrap
+                      .append(
+                        $('<div class="layui-progress-bar"></div>').attr(
+                          'lay-percent',
+                          PAYLOAD.evalExpr
+                        )
+                      )
+                      .appendTo(fx);
+                    progress.render({ elem: wrap[0] });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    var width = root.querySelector('.layui-progress-bar').style
+                      .width;
+                    return judge([
+                      assert.truthy(
+                        window.__layuiXssFired.indexOf('eval') === -1,
+                        'lay-percent 不应被当作表达式执行'
+                      ),
+                      assert.truthy(
+                        width !== '100%',
+                        '宽度不应为表达式求值结果，实际：' + show(width)
+                      )
+                    ]);
+                  }
+                },
+                {
+                  id: 'progress-setvalue-safe',
+                  title: 'setValue 传入分数形态表达式不被求值且原样写回',
+                  anchors: ['progress.js#setValue', 'lay-percent'],
+                  fixture: '<div></div>',
+                  setup: function (fx) {
+                    var wrap = $(
+                      '<div class="layui-progress" lay-filter="sec-progress-sv"></div>'
+                    );
+                    wrap
+                      .append(
+                        $('<div class="layui-progress-bar"></div>').attr(
+                          'lay-percent',
+                          '0%'
+                        )
+                      )
+                      .appendTo(fx);
+                    progress.render({ elem: wrap[0] });
+                    progress.setValue('sec-progress-sv', PAYLOAD.evalExpr);
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    var width = root.querySelector('.layui-progress-bar').style
+                      .width;
+                    return judge([
+                      assert.truthy(
+                        window.__layuiXssFired.indexOf('eval') === -1,
+                        'setValue 的 percent 不应被当作表达式执行'
+                      ),
+                      assert.attr(
+                        root,
+                        '.layui-progress-bar',
+                        'lay-percent',
+                        PAYLOAD.evalExpr
+                      ),
+                      assert.truthy(
+                        width !== '100%',
+                        '宽度不应为表达式求值结果，实际：' + show(width)
+                      )
+                    ]);
+                  }
+                }
+              ]
+            },
+            {
+              id: 'layer',
+              title: 'layer 弹层',
+              icon: 'layui-icon-picture',
+              desc:
+                'photos 数据来自接口 JSON 或页面图片属性，' +
+                '<code>alt</code> / <code>pid</code> / <code>src</code> 写入元素属性与底部栏时需转义；' +
+                '"查看原图" 链接仅允许安全协议（data: 相册不再渲染该链接）。',
+              cases: [
+                {
+                  id: 'alt-text-injection',
+                  title: 'alt 注入无法逃逸 img 属性与底部栏文本',
+                  anchors: ['layer.js#photos', 'lay.escape'],
+                  fixture: '<div></div>',
+                  run: function () {
+                    layer.photos({
+                      photos: {
+                        title: '',
+                        id: 1,
+                        start: 0,
+                        data: [
+                          { src: SECURE_SVG, alt: PAYLOAD.text, pid: 'clean' }
+                        ]
+                      }
+                    });
+                    var root = document.getElementById('layui-layer-photos');
+                    var results;
+                    try {
+                      results = judge([
+                        assert.attr(
+                          root,
+                          '.layer-layer-photos-main img',
+                          'alt',
+                          PAYLOAD.text
+                        ),
+                        assert.text(
+                          root,
+                          '.layui-layer-photos-footer h3',
+                          PAYLOAD.text
+                        ),
+                        assert.none(root, '.layui-layer-photos-footer h3 img')
+                      ]);
+                    } finally {
+                      closePhotosViewer();
+                    }
+                    return results;
+                  }
+                },
+                {
+                  id: 'pid-attribute-breakout',
+                  title: 'pid 无法逃逸 layer-pid 属性注入元素',
+                  anchors: ['layer.js#photos', 'lay.escape'],
+                  fixture: '<div></div>',
+                  run: function () {
+                    layer.photos({
+                      photos: {
+                        title: '',
+                        id: 1,
+                        start: 0,
+                        data: [
+                          {
+                            src: SECURE_SVG,
+                            alt: 'clean-alt',
+                            pid: PAYLOAD.attr
+                          }
+                        ]
+                      }
+                    });
+                    var root = document.getElementById('layui-layer-photos');
+                    var results;
+                    try {
+                      results = judge([
+                        assert.attr(
+                          root,
+                          '.layer-layer-photos-main img',
+                          'layer-pid',
+                          PAYLOAD.attr
+                        ),
+                        assert.count(root, '.layer-layer-photos-main img', 1),
+                        assert.none(root, '.layer-layer-photos-main [onerror]')
+                      ]);
+                    } finally {
+                      closePhotosViewer();
+                    }
+                    return results;
+                  }
+                },
+                {
+                  id: 'src-attribute-breakout',
+                  title: '含引号与 & 的 src 无法逃逸 img 属性注入元素',
+                  anchors: ['layer.js#photos', 'lay.escape'],
+                  fixture: '<div></div>',
+                  run: function () {
+                    layer.photos({
+                      photos: {
+                        title: '',
+                        id: 1,
+                        start: 0,
+                        data: [
+                          { src: QUOTED_URL, alt: 'clean-alt', pid: 'clean' }
+                        ]
+                      }
+                    });
+                    var root = document.getElementById('layui-layer-photos');
+                    var results;
+                    try {
+                      results = judge([
+                        assert.attr(
+                          root,
+                          '.layer-layer-photos-main img',
+                          'src',
+                          QUOTED_URL
+                        ),
+                        assert.count(root, '.layer-layer-photos-main img', 1),
+                        assert.none(
+                          root,
+                          '.layer-layer-photos-main [onmouseover]'
+                        )
+                      ]);
+                    } finally {
+                      closePhotosViewer();
+                    }
+                    return results;
+                  }
+                },
+                {
+                  id: 'view-link-blocks-unsafe-protocol',
+                  title: 'data: 地址不渲染查看原图链接，图片本身正常展示',
+                  anchors: ['layer.js#photos', 'lay.js#isSafeUrl'],
+                  fixture: '<div></div>',
+                  run: function () {
+                    layer.photos({
+                      photos: {
+                        title: '',
+                        id: 1,
+                        start: 0,
+                        data: [
+                          { src: SECURE_SVG, alt: 'clean-alt', pid: 'clean' }
+                        ]
+                      }
+                    });
+                    var root = document.getElementById('layui-layer-photos');
+                    var results;
+                    try {
+                      results = judge([
+                        assert.count(root, '.layer-layer-photos-main img', 1),
+                        assert.none(root, '.layui-layer-photos-footer a')
+                      ]);
+                    } finally {
+                      closePhotosViewer();
+                    }
+                    return results;
+                  }
+                },
+                {
+                  id: 'view-link-preserves-safe-url',
+                  title: '相对地址保留查看原图链接且 href 不被注入',
+                  anchors: ['layer.js#photos', 'lay.js#isSafeUrl'],
+                  fixture: '<div></div>',
+                  run: function () {
+                    layer.photos({
+                      photos: {
+                        title: '',
+                        id: 1,
+                        start: 0,
+                        data: [
+                          { src: RELATIVE_SVG, alt: 'clean-alt', pid: 'clean' }
+                        ]
+                      }
+                    });
+                    var root = document.getElementById('layui-layer-photos');
+                    var results;
+                    try {
+                      results = judge([
+                        assert.count(root, '.layui-layer-photos-footer a', 1),
+                        assert.attr(
+                          root,
+                          '.layui-layer-photos-footer a',
+                          'href',
+                          RELATIVE_SVG
+                        )
+                      ]);
+                    } finally {
+                      closePhotosViewer();
+                    }
+                    return results;
+                  }
+                },
+                {
+                  id: 'dom-mode-alt-escape',
+                  title: 'DOM 模式下页面图片的 alt 同样按纯文本渲染',
+                  anchors: ['layer.js#photos', 'layer.js#pushData'],
+                  fixture: '<div id="sec-album"></div>',
+                  setup: function (fx) {
+                    var album = fx.find('#sec-album');
+                    // 属性以 attr 方式写入，保证 fixture 自身不引入注入
+                    $('<img>')
+                      .attr('src', SECURE_SVG)
+                      .attr('alt', PAYLOAD.text)
+                      .attr('layer-pid', 'clean')
+                      .appendTo(album);
+                    layer.photos({ photos: '#sec-album' });
+                  },
+                  run: function (fx) {
+                    fx.find('#sec-album img').trigger('click');
+                    var root = document.getElementById('layui-layer-photos');
+                    var results;
+                    try {
+                      results = judge([
+                        assert.attr(
+                          root,
+                          '.layer-layer-photos-main img',
+                          'alt',
+                          PAYLOAD.text
+                        ),
+                        assert.text(
+                          root,
+                          '.layui-layer-photos-footer h3',
+                          PAYLOAD.text
+                        ),
+                        assert.none(root, '.layui-layer-photos-footer h3 img')
+                      ]);
+                    } finally {
+                      closePhotosViewer();
+                    }
+                    return results;
+                  }
+                }
+              ]
+            }
+          ];
 
           /**
-           * 渲染断言明细：逐条列出通过与失败的断言，失败项高亮
+           * 3. 运行器
            */
-          function renderDetail(useCase, result) {
-            var detail = useCase.elem.find('.sec-case-detail');
 
-            if (!result) {
-              detail.prop('hidden', true).empty();
-              return;
+          var runner = (function () {
+            var modules = [];
+            var navList = $('#sec-nav-list');
+            var moduleMount = $('#sec-modules');
+            // 「待运行用例」列表的内容签名，避免每次断言都重建 DOM
+            var pendingSignature = null;
+
+            function countByState(module) {
+              var result = { total: module.cases.length, pass: 0, fail: 0 };
+              layui.each(module.cases, function (index, useCase) {
+                if (useCase.state === 'pass') result.pass += 1;
+                if (useCase.state === 'fail') result.fail += 1;
+              });
+              return result;
             }
 
-            var items =
-              result.items && result.items.length
-                ? result.items
-                : [{ passed: !!result.passed, detail: result.detail || '' }];
-            var failedCount = 0;
-
-            layui.each(items, function (index, item) {
-              if (!item.passed) failedCount += 1;
-            });
-
-            var html = [
-              '<div class="sec-detail-head">',
-              '<i class="layui-icon ' +
-                (failedCount
-                  ? 'layui-icon-close-fill'
-                  : 'layui-icon-ok-circle') +
-                '"></i>',
-              '<span class="sec-detail-title">断言明细</span>',
-              '<em class="sec-detail-badge' +
-                (failedCount ? ' is-fail' : '') +
-                '">通过 ' +
-                (items.length - failedCount) +
-                '</em>',
-              failedCount
-                ? '<em class="sec-detail-badge is-fail">失败 ' +
-                  failedCount +
-                  '</em>'
-                : '',
-              '</div>',
-              '<ul class="sec-asserts">'
-            ];
-
-            layui.each(items, function (index, item) {
-              html.push(
-                '<li class="' +
-                  (item.passed ? 'is-pass' : 'is-fail') +
-                  '">' +
-                  '<i class="layui-icon ' +
-                  (item.passed ? 'layui-icon-ok' : 'layui-icon-close') +
-                  '"></i>' +
-                  '<span></span>' +
-                  '</li>'
-              );
-            });
-
-            html.push('</ul>');
-
-            detail.html(html.join('')).prop('hidden', false);
-
-            // 断言文案包含载荷原文，按文本写入，避免明细自身引入注入
-            var textNodes = detail.find('.sec-asserts li span');
-            layui.each(items, function (index, item) {
-              $(textNodes[index]).text(item.detail || '');
-            });
-          }
-
-          function setResult(useCase, result) {
-            useCase.state = result
-              ? result.passed
-                ? 'pass'
-                : 'fail'
-              : 'pending';
-            useCase.lastDetail = result ? result.detail : '';
-            useCase.elem.attr('data-state', useCase.state);
-            useCase.elem
-              .find('.sec-case-state')
-              .text(stateText(useCase, useCase.state));
-            renderDetail(useCase, result);
-            updateSummary();
-          }
-
-          function updateSummary() {
-            var total = 0;
-            var pass = 0;
-            var fail = 0;
-
-            layui.each(modules, function (index, module) {
-              var stat = countByState(module);
-              total += stat.total;
-              pass += stat.pass;
-              fail += stat.fail;
-
-              var navCount = $('[data-nav-count="' + module.id + '"]');
-              navCount.text(stat.pass + '/' + stat.total);
-              navCount
-                .toggleClass('is-pass', stat.pass === stat.total)
-                .toggleClass('is-fail', stat.fail > 0);
-            });
-
-            $('#sec-total').text(total);
-            $('#sec-pass').text(pass);
-            $('#sec-fail').text(fail);
-            $('#sec-pending').text(total - pass - fail);
-
-            var percent = total ? Math.round((pass / total) * 100) : 0;
-            var bar = $('#sec-progress');
-            bar.toggleClass('is-fail', fail > 0);
-            bar.find('i').css('width', percent + '%');
-
-            renderPending();
-          }
-
-          // 全部未执行的用例（含手工用例），用于「待运行用例」面板
-          function pendingCases() {
-            var result = [];
-            layui.each(modules, function (index, module) {
-              layui.each(module.cases, function (caseIndex, useCase) {
-                if (useCase.state !== 'pending') return;
-                result.push({ module: module, useCase: useCase });
-              });
-            });
-            return result;
-          }
-
-          // 自动用例数量：「运行自动用例」按钮文案
-          function countAutoCases() {
-            var count = 0;
-            layui.each(modules, function (index, module) {
-              layui.each(module.cases, function (caseIndex, useCase) {
-                if (!useCase.manual) count += 1;
-              });
-            });
-            return count;
-          }
-
-          function renderPending() {
-            var list = pendingCases();
-            var manual = 0;
-            var auto = 0;
-            var signature = [];
-
-            layui.each(list, function (index, entry) {
-              if (entry.useCase.manual) manual += 1;
-              else auto += 1;
-              signature.push(entry.module.id + '/' + entry.useCase.id);
-            });
-
-            $('#sec-pending-count').text(list.length);
-            $('#sec-auto-count').text(countAutoCases());
-            $('#sec-manual-hint').text(manual ? '其中手工 ' + manual : '');
-            $('#sec-pending-summary').text(
-              list.length
-                ? '共 ' +
-                    list.length +
-                    ' 项未执行（手工 ' +
-                    manual +
-                    '、自动 ' +
-                    auto +
-                    '），点击可定位并高亮对应卡片'
-                : '全部用例均已执行'
-            );
-            $('#sec-pending-jump')
-              .toggleClass('layui-btn-warm', list.length > 0)
-              .toggleClass('layui-btn-primary', list.length === 0);
-
-            var nextSignature = signature.join('|');
-            if (nextSignature === pendingSignature) return;
-            pendingSignature = nextSignature;
-
-            var panelList = $('#sec-pending-list');
-            panelList.empty();
-
-            layui.each(list, function (index, entry) {
-              var item = $(
-                '<li><button type="button" class="sec-pending-item">' +
-                  '<span class="sec-pending-item-module"></span>' +
-                  '<span class="sec-pending-item-case"></span>' +
-                  '<em class="sec-pending-flag ' +
-                  (entry.useCase.manual ? 'is-manual' : 'is-auto') +
-                  '">' +
-                  (entry.useCase.manual ? '手工' : '自动') +
-                  '</em>' +
-                  '</button></li>'
-              );
-              item.find('.sec-pending-item-module').text(entry.module.title);
-              item.find('.sec-pending-item-case').text(entry.useCase.title);
-              item.find('.sec-pending-item').on('click', function () {
-                focusCase(entry.module, entry.useCase);
-                // 浮层会遮挡目标卡片，跳转后统一收起（浮层仅作导航入口）
-                setPendingVisible(false);
-              });
-              panelList.append(item);
-            });
-
-            $('#sec-pending-empty').prop('hidden', list.length > 0);
-          }
-
-          /**
-           * 展开/收起待运行浮层
-           * 浮层为 fixed 定位、不参与文档流，因此这里不滚动页面：
-           * 任何滚动都只应由用户点击具体用例（focusCase）触发
-           */
-          /**
-           * 浮层定位：右缘对齐侧栏右边界，底边对齐「待运行用例」按钮
-           * 与侧栏 nav 列表完全错开（侧栏宽度之外），窄屏则由 CSS 接管为底部面板
-           */
-          function positionPending() {
-            var panel = $('#sec-pending-panel');
-            if (panel.prop('hidden')) return;
-
-            var isNarrow = window.matchMedia('(max-width: 720px)').matches;
-            var elem = panel[0];
-
-            // 窄屏由 CSS 的 left/right 控制，清掉内联样式即可
-            elem.style.left = '';
-            elem.style.bottom = '';
-
-            if (isNarrow) return;
-
-            var side = document
-              .querySelector('.sec-side')
-              .getBoundingClientRect();
-            var jump = document
-              .getElementById('sec-pending-jump')
-              .getBoundingClientRect();
-
-            elem.style.left = Math.round(side.right) + 'px';
-            elem.style.bottom =
-              Math.max(8, Math.round(window.innerHeight - jump.bottom)) + 'px';
-
-            // 右边界兜底：避免超宽时溢出视口
-            var rect = elem.getBoundingClientRect();
-            var overflow = rect.right - (window.innerWidth - 8);
-            if (overflow > 0) {
-              elem.style.left =
-                Math.max(8, Math.round(rect.left - overflow)) + 'px';
-            }
-          }
-
-          /**
-           * 展开/收起待运行浮层
-           * 浮层为 fixed 定位、不参与文档流，因此不改变页面高度、也不滚动页面：
-           * 任何滚动都只应由用户点击具体用例（focusCase）触发
-           */
-          function setPendingVisible(visible) {
-            var panel = $('#sec-pending-panel');
-            panel.prop('hidden', !visible);
-            $('#sec-pending-jump').attr(
-              'aria-expanded',
-              visible ? 'true' : 'false'
-            );
-            if (!visible) return;
-
-            renderPending();
-            positionPending();
-
-            // 展开后把焦点交给第一个条目，便于纯键盘操作；
-            // preventScroll 避免聚焦动作触发视口滚动
-            var first = panel.find('.sec-pending-item')[0];
-            if (first && first.focus) first.focus({ preventScroll: true });
-          }
-
-          // 定位用例卡片：滚动到可视区并高亮，同时同步地址栏锚点
-          function focusCase(module, useCase, options) {
-            options = options || {};
-            setActiveNav(module);
-
-            var target = document.getElementById(
-              'case-' + module.id + '-' + useCase.id
-            );
-            if (!target) return;
-
-            window.scrollTo(
-              0,
-              target.getBoundingClientRect().top + window.pageYOffset - 16
-            );
-
-            // 移除后强制重排，保证连续定位同一用例时动画可重放
-            target.classList.remove('is-flash');
-            void target.offsetWidth;
-            target.classList.add('is-flash');
-            window.clearTimeout(useCase.flashTimer);
-            useCase.flashTimer = window.setTimeout(function () {
-              target.classList.remove('is-flash');
-            }, 1600);
-
-            if (options.hash === false) return;
-            try {
-              window.history.replaceState(
-                null,
-                '',
-                '#case-' + module.id + '-' + useCase.id
-              );
-            } catch (err) {
-              /* 忽略：部分环境不允许改写地址栏 */
-            }
-          }
-
-          // 按地址栏锚点定位：用例锚点高亮卡片，模块锚点仅滚动到分组
-          function restoreFromHash(options) {
-            var target = findHashTarget(window.location.hash);
-            if (!target) return false;
-
-            if (target.useCase) {
-              focusCase(target.module, target.useCase, options);
-              return true;
+            // 每个模块在文档中的锚点 id，用于地址栏 hash 与刷新后定位
+            function anchorId(module) {
+              return 'module-' + module.id;
             }
 
-            setActiveNav(target.module);
-            scrollToModule(target.module);
-            return true;
-          }
-
-          /**
-           * 首次进入时组件渲染会改变页面高度（表格、穿梭框异步布局），
-           * 单次滚动可能落点偏移，因此在 load 完成后补一次定位
-           */
-          function restoreFromHashAfterLoad() {
-            restoreFromHash({ hash: false });
-            $(window).one('load', function () {
-              restoreFromHash({ hash: false });
-            });
-            // load 可能已经触发，兜底再校准一次
-            window.setTimeout(function () {
-              restoreFromHash({ hash: false });
-            }, 0);
-          }
-
-          function notify(text, hasFail) {
-            var status = $('#sec-run-status');
-            status.text(text).toggleClass('is-fail', !!hasFail);
-          }
-
-          /**
-           * 批量执行时保持阅读位置
-           * 断言明细会就地撑高卡片，浏览器滚动锚定只能近似补偿，
-           * 仍会造成视口内容跳动。这里在批处理前后对齐「视口顶部最近的用例卡片」
-           * 的屏幕位置，使滚动条与当前阅读内容都保持不动。
-           */
-          function captureViewportAnchor() {
-            var top = null;
-
-            layui.each(modules, function (index, module) {
-              if (top) return true;
-              layui.each(module.cases, function (caseIndex, useCase) {
-                var rect = useCase.elem[0].getBoundingClientRect();
-                if (rect.bottom <= 0) return;
-                top = { elem: useCase.elem[0], offset: rect.top };
-                return true;
-              });
-              if (top) return true;
-            });
-
-            return top;
-          }
-
-          function restoreViewportAnchor(anchor) {
-            if (!anchor || !anchor.elem) return;
-            var delta = anchor.elem.getBoundingClientRect().top - anchor.offset;
-            if (Math.abs(delta) < 1) return;
-            window.scrollBy(0, delta);
-          }
-
-          function runCase(useCase) {
-            setResult(useCase, execute(useCase));
-            return useCase.state;
-          }
-
-          // 自动用例指不依赖真实交互、可一次性断言的用例；
-          // 手工用例需点击卡片按钮触发交互，未触发前保持待手工
-          function runAutoCases(filter, options) {
-            options = options || {};
-            var scopeTotal = 0;
-            var scopePass = 0;
-            var scopeFail = 0;
-            var anchor = captureViewportAnchor();
-
-            layui.each(modules, function (index, module) {
-              if (filter && filter(module) === false) return;
-              layui.each(module.cases, function (caseIndex, useCase) {
-                if (useCase.manual) return;
-                scopeTotal += 1;
-                var state = runCase(useCase);
-                if (state === 'pass') scopePass += 1;
-                else scopeFail += 1;
-              });
-            });
-
-            var manualPending = 0;
-            layui.each(pendingCases(), function (index, entry) {
-              if (entry.useCase.manual) manualPending += 1;
-            });
-
-            // 全局运行时展开待办面板；单组运行不打断当前定位
-            if (manualPending && options.openPending) setPendingVisible(true);
-
-            notify(
-              '自动用例执行完成：共 ' +
-                scopeTotal +
-                ' 项，通过 ' +
-                scopePass +
-                '、失败 ' +
-                scopeFail +
-                (manualPending
-                  ? '；另有 ' + manualPending + ' 项待手工触发'
-                  : ''),
-              scopeFail > 0
-            );
-
-            // 最后一并校正视口：上面的状态条、浮层文案也会改变布局
-            restoreViewportAnchor(anchor);
-
-            return summary();
-          }
-
-          function runAll() {
-            return runAutoCases(null, { openPending: true });
-          }
-
-          function runModule(moduleId) {
-            return runAutoCases(function (module) {
-              return module.id === moduleId;
-            });
-          }
-
-          function reset() {
-            MARK.length = 0;
-            layui.each(modules, function (index, module) {
-              layui.each(module.cases, function (caseIndex, useCase) {
-                setResult(useCase, null);
-                useCase.elem
-                  .find('.sec-case-actions button')
-                  .prop('disabled', false);
-              });
-            });
-            notify('');
-            return summary();
-          }
-
-          function summary() {
-            var models = [];
-            var total = 0;
-            var pass = 0;
-            var fail = 0;
-            layui.each(modules, function (index, module) {
-              layui.each(module.cases, function (caseIndex, useCase) {
-                total += 1;
-                if (useCase.state === 'pass') pass += 1;
-                if (useCase.state === 'fail') fail += 1;
-                models.push({
-                  id: module.id + '/' + useCase.id,
-                  title: useCase.title,
-                  state: useCase.state,
-                  manual: !!useCase.manual,
-                  detail: useCase.lastDetail || ''
-                });
-              });
-            });
-            return {
-              total: total,
-              pass: pass,
-              fail: fail,
-              pending: total - pass - fail,
-              markFired: MARK.slice(),
-              cases: models
-            };
-          }
-
-          function init() {
-            layui.each(registry, function (index, definition) {
-              modules.push({
-                id: definition.id,
-                title: definition.title,
-                icon: definition.icon,
-                layout: definition.layout,
-                desc: definition.desc,
-                cases: definition.cases.slice()
-              });
-            });
-
-            renderNav();
-            moduleMount.empty();
-            renderModules();
-            mountFixtures();
-            updateSummary();
-
-            $('#sec-run-all').prop('disabled', false).on('click', runAll);
-            $('#sec-reset').prop('disabled', false).on('click', reset);
-            $('#sec-pending-jump')
-              .prop('disabled', false)
-              .on('click', function () {
-                setPendingVisible($('#sec-pending-panel').prop('hidden'));
-              });
-            $('#sec-pending-close').on('click', function () {
-              setPendingVisible(false);
-            });
-            // ESC 关闭浮层：浮层是辅助导航，不应打断主流程
-            $(document).on('keydown', function (event) {
-              if (event.key !== 'Escape' && event.keyCode !== 27) return;
-              if ($('#sec-pending-panel').prop('hidden')) return;
-              setPendingVisible(false);
-            });
-            // 点击浮层外部关闭，避免浮层长期遮挡内容
-            $(document).on('mousedown', function (event) {
-              if ($('#sec-pending-panel').prop('hidden')) return;
-              var target = $(event.target);
-              if (target.closest('#sec-pending-panel').length) return;
-              if (target.closest('#sec-pending-jump').length) return;
-              setPendingVisible(false);
-            });
-            moduleMount.find('[data-run-module]').on('click', function () {
-              runModule($(this).attr('data-run-module'));
-            });
-
-            // 视口尺寸变化后重新对齐浮层（fixed 定位不受滚动影响，无需监听 scroll）
-            $(window).on('resize', positionPending);
-
-            // 刷新/直达带锚点的地址时，定位到对应模块或用例
-            restoreFromHashAfterLoad();
-          }
-
-          return {
-            init: init,
-            runAll: runAll,
-            runModule: runModule,
-            reset: reset,
-            summary: summary,
-            pending: pendingCases,
-            focus: function (id) {
-              var parts = String(id || '').split('/');
-              var target = null;
-
-              if (!parts[0] || !parts[1]) return false;
-
+            function findModuleByKey(key) {
+              var found = null;
               layui.each(modules, function (index, module) {
-                if (module.id !== parts[0]) return;
+                if (module.id === key || anchorId(module) === key)
+                  found = module;
+              });
+              return found;
+            }
+
+            // 解析地址栏锚点：同时支持模块锚点与用例锚点
+            function findHashTarget(hash) {
+              var key = String(hash || '').replace(/^#/, '');
+              if (!key) return null;
+
+              var found = null;
+              layui.each(modules, function (index, module) {
+                if (module.id === key || anchorId(module) === key) {
+                  found = { module: module };
+                  return true;
+                }
                 layui.each(module.cases, function (caseIndex, useCase) {
-                  if (useCase.id !== parts[1]) return;
-                  target = { module: module, useCase: useCase };
+                  if (key !== 'case-' + module.id + '-' + useCase.id) return;
+                  found = { module: module, useCase: useCase };
                   return true;
                 });
-                return true;
+                if (found) return true;
+              });
+              return found;
+            }
+
+            function scrollToModule(module) {
+              var target = document.getElementById(anchorId(module));
+              if (!target) return;
+              window.scrollTo(
+                0,
+                target.getBoundingClientRect().top + window.pageYOffset - 12
+              );
+            }
+
+            function setActiveNav(module) {
+              navList.find('.sec-nav-item').each(function () {
+                var item = $(this);
+                item.toggleClass(
+                  'is-active',
+                  item.attr('data-target') === module.id
+                );
+              });
+            }
+
+            // 激活模块：同步侧栏高亮 + 滚动定位 + 写入地址栏锚点
+            function activateModule(module, options) {
+              options = options || {};
+              setActiveNav(module);
+              scrollToModule(module);
+              if (options.hash === false) return;
+              var nextHash = '#' + anchorId(module);
+              if (window.location.hash === nextHash) return;
+              // 使用 replaceState：不产生额外历史记录，也不会触发浏览器的二次跳转
+              try {
+                window.history.replaceState(null, '', nextHash);
+              } catch (err) {
+                window.location.hash = anchorId(module);
+              }
+            }
+
+            function renderNav() {
+              var html = [];
+              layui.each(modules, function (index, module) {
+                html.push(
+                  '<div class="sec-nav-item' +
+                    (index === 0 ? ' is-active' : '') +
+                    '" data-target="' +
+                    module.id +
+                    '" data-anchor="' +
+                    anchorId(module) +
+                    '">' +
+                    '<i class="layui-icon ' +
+                    module.icon +
+                    '"></i>' +
+                    '<span class="sec-nav-text">' +
+                    module.title +
+                    '</span>' +
+                    '<span class="sec-nav-count" data-nav-count="' +
+                    module.id +
+                    '">0/' +
+                    module.cases.length +
+                    '</span>' +
+                    '</div>'
+                );
+              });
+              navList.html(html.join(''));
+              navList.find('.sec-nav-item').on('click', function () {
+                var module = findModuleByKey($(this).attr('data-target'));
+                if (module) activateModule(module);
+              });
+              // 支持浏览器前进/后退或手动修改 hash
+              $(window).on('hashchange', function () {
+                var target = findHashTarget(window.location.hash);
+                if (!target) return;
+                if (target.useCase) {
+                  focusCase(target.module, target.useCase);
+                  return;
+                }
+                setActiveNav(target.module);
+                scrollToModule(target.module);
+              });
+            }
+
+            function renderModules() {
+              layui.each(modules, function (index, module) {
+                var section = $(
+                  '<section class="sec-module" id="' +
+                    anchorId(module) +
+                    '">' +
+                    '<div class="sec-module-head">' +
+                    '<h2 class="sec-module-title">' +
+                    '<i class="layui-icon ' +
+                    module.icon +
+                    '"></i>' +
+                    module.title +
+                    '</h2>' +
+                    '<button type="button" class="layui-btn layui-btn-primary layui-btn-sm" data-run-module="' +
+                    module.id +
+                    '">运行本组自动用例</button>' +
+                    '</div>' +
+                    '<p class="sec-module-body">' +
+                    module.desc +
+                    '</p>' +
+                    '<div class="sec-cases"></div>' +
+                    '</section>'
+                );
+                var grid = section.find('.sec-cases');
+                if (module.layout) grid.addClass('is-' + module.layout);
+
+                layui.each(module.cases, function (caseIndex, useCase) {
+                  useCase.manual = !!useCase.action;
+                  var card = $(
+                    '<article class="sec-case" id="case-' +
+                      module.id +
+                      '-' +
+                      useCase.id +
+                      '" data-case="' +
+                      useCase.id +
+                      '" data-state="pending">' +
+                      '<div class="sec-case-head">' +
+                      '<h3 class="sec-case-title">' +
+                      '<span class="sec-case-idx">' +
+                      (caseIndex + 1) +
+                      '.</span>' +
+                      '</h3>' +
+                      (useCase.manual
+                        ? '<span class="sec-case-tag">手工</span>'
+                        : '') +
+                      '<span class="sec-case-state">' +
+                      stateText(useCase, 'pending') +
+                      '</span>' +
+                      '</div>' +
+                      '<p class="sec-case-anchors">' +
+                      useCase.anchors
+                        .map(function (anchor) {
+                          return '<code>' + anchor + '</code>';
+                        })
+                        .join('') +
+                      '</p>' +
+                      '<div class="sec-case-body"></div>' +
+                      '<div class="sec-case-actions"></div>' +
+                      '<div class="sec-case-detail" hidden></div>' +
+                      '</article>'
+                  );
+                  // 用例标题按文本写入，避免自身引入注入
+                  card
+                    .find('.sec-case-title')
+                    .append(document.createTextNode(useCase.title));
+                  if (useCase.wide) card.addClass('is-wide');
+                  if (useCase.manual) card.addClass('is-manual');
+                  grid.append(card);
+                  useCase.elem = card;
+                  useCase.state = 'pending';
+                  useCase.body = card.find('.sec-case-body');
+                });
+
+                module.elem = section;
+                moduleMount.append(section);
+              });
+            }
+
+            function createFixture(useCase, options) {
+              options = options || {};
+              var fixture = $(
+                '<div class="sec-fixture">' + (options.html || '') + '</div>'
+              );
+              useCase.body.append(fixture);
+              return fixture;
+            }
+
+            function mountFixtures() {
+              layui.each(modules, function (index, module) {
+                layui.each(module.cases, function (caseIndex, useCase) {
+                  useCase.ctx = {
+                    // 首次调用时创建并缓存额外 fixture，避免重复运行叠加节点
+                    fixtureOnce: function (key) {
+                      useCase.extra = useCase.extra || {};
+                      if (!useCase.extra[key]) {
+                        useCase.extra[key] = createFixture(useCase, {
+                          html: useCase.fixture || '<div></div>'
+                        });
+                      }
+                      return useCase.extra[key];
+                    },
+                    caseState: {}
+                  };
+                  useCase.fixtureElem = createFixture(useCase, {
+                    html: useCase.fixture || '<div></div>'
+                  });
+
+                  if (useCase.setup) {
+                    useCase.setup(useCase.fixtureElem, useCase.ctx);
+                  }
+
+                  if (useCase.action) {
+                    var actions = useCase.elem.find('.sec-case-actions');
+                    var actionButton = $(
+                      '<button type="button" class="layui-btn layui-btn-primary layui-btn-sm"></button>'
+                    );
+                    actionButton
+                      .text(useCase.action.title)
+                      .on('click', function () {
+                        var button = $(this);
+                        try {
+                          useCase.action.handler(
+                            useCase.fixtureElem,
+                            useCase.ctx
+                          );
+                        } catch (err) {
+                          setResult(useCase, {
+                            passed: false,
+                            detail: '交互触发异常：' + err.message
+                          });
+                          button.prop('disabled', true);
+                          return;
+                        }
+                        setResult(useCase, execute(useCase));
+                        button.prop('disabled', true);
+                      });
+                    actions.append(actionButton);
+                  }
+                });
+              });
+            }
+
+            function execute(useCase) {
+              var result;
+              try {
+                result = useCase.run(useCase.fixtureElem, useCase.ctx);
+              } catch (err) {
+                result = {
+                  passed: false,
+                  detail: '断言执行异常：' + (err && err.message)
+                };
+              }
+              if (!result || typeof result.passed !== 'boolean') {
+                result = {
+                  passed: false,
+                  detail: '用例未返回有效断言结果'
+                };
+              }
+              return result;
+            }
+
+            function stateText(useCase, state) {
+              if (state === 'pass') return '通过';
+              if (state === 'fail') return '失败';
+              return useCase.manual ? '待手工' : '待运行';
+            }
+
+            /**
+             * 渲染断言明细：逐条列出通过与失败的断言，失败项高亮
+             */
+            function renderDetail(useCase, result) {
+              var detail = useCase.elem.find('.sec-case-detail');
+
+              if (!result) {
+                detail.prop('hidden', true).empty();
+                return;
+              }
+
+              var items =
+                result.items && result.items.length
+                  ? result.items
+                  : [{ passed: !!result.passed, detail: result.detail || '' }];
+              var failedCount = 0;
+
+              layui.each(items, function (index, item) {
+                if (!item.passed) failedCount += 1;
               });
 
-              if (!target) return false;
-              focusCase(target.module, target.useCase);
-              return true;
-            },
-            showPending: setPendingVisible,
-            modules: modules,
-            mark: MARK
-          };
-        })();
+              var html = [
+                '<div class="sec-detail-head">',
+                '<i class="layui-icon ' +
+                  (failedCount
+                    ? 'layui-icon-close-fill'
+                    : 'layui-icon-ok-circle') +
+                  '"></i>',
+                '<span class="sec-detail-title">断言明细</span>',
+                '<em class="sec-detail-badge' +
+                  (failedCount ? ' is-fail' : '') +
+                  '">通过 ' +
+                  (items.length - failedCount) +
+                  '</em>',
+                failedCount
+                  ? '<em class="sec-detail-badge is-fail">失败 ' +
+                    failedCount +
+                    '</em>'
+                  : '',
+                '</div>',
+                '<ul class="sec-asserts">'
+              ];
 
-        runner.init();
-        window.__layuiSecurityRunner = runner;
-      });
+              layui.each(items, function (index, item) {
+                html.push(
+                  '<li class="' +
+                    (item.passed ? 'is-pass' : 'is-fail') +
+                    '">' +
+                    '<i class="layui-icon ' +
+                    (item.passed ? 'layui-icon-ok' : 'layui-icon-close') +
+                    '"></i>' +
+                    '<span></span>' +
+                    '</li>'
+                );
+              });
+
+              html.push('</ul>');
+
+              detail.html(html.join('')).prop('hidden', false);
+
+              // 断言文案包含载荷原文，按文本写入，避免明细自身引入注入
+              var textNodes = detail.find('.sec-asserts li span');
+              layui.each(items, function (index, item) {
+                $(textNodes[index]).text(item.detail || '');
+              });
+            }
+
+            function setResult(useCase, result) {
+              useCase.state = result
+                ? result.passed
+                  ? 'pass'
+                  : 'fail'
+                : 'pending';
+              useCase.lastDetail = result ? result.detail : '';
+              useCase.elem.attr('data-state', useCase.state);
+              useCase.elem
+                .find('.sec-case-state')
+                .text(stateText(useCase, useCase.state));
+              renderDetail(useCase, result);
+              updateSummary();
+            }
+
+            function updateSummary() {
+              var total = 0;
+              var pass = 0;
+              var fail = 0;
+
+              layui.each(modules, function (index, module) {
+                var stat = countByState(module);
+                total += stat.total;
+                pass += stat.pass;
+                fail += stat.fail;
+
+                var navCount = $('[data-nav-count="' + module.id + '"]');
+                navCount.text(stat.pass + '/' + stat.total);
+                navCount
+                  .toggleClass('is-pass', stat.pass === stat.total)
+                  .toggleClass('is-fail', stat.fail > 0);
+              });
+
+              $('#sec-total').text(total);
+              $('#sec-pass').text(pass);
+              $('#sec-fail').text(fail);
+              $('#sec-pending').text(total - pass - fail);
+
+              var percent = total ? Math.round((pass / total) * 100) : 0;
+              var bar = $('#sec-progress');
+              bar.toggleClass('is-fail', fail > 0);
+              bar.find('i').css('width', percent + '%');
+
+              renderPending();
+            }
+
+            // 全部未执行的用例（含手工用例），用于「待运行用例」面板
+            function pendingCases() {
+              var result = [];
+              layui.each(modules, function (index, module) {
+                layui.each(module.cases, function (caseIndex, useCase) {
+                  if (useCase.state !== 'pending') return;
+                  result.push({ module: module, useCase: useCase });
+                });
+              });
+              return result;
+            }
+
+            // 自动用例数量：「运行自动用例」按钮文案
+            function countAutoCases() {
+              var count = 0;
+              layui.each(modules, function (index, module) {
+                layui.each(module.cases, function (caseIndex, useCase) {
+                  if (!useCase.manual) count += 1;
+                });
+              });
+              return count;
+            }
+
+            function renderPending() {
+              var list = pendingCases();
+              var manual = 0;
+              var auto = 0;
+              var signature = [];
+
+              layui.each(list, function (index, entry) {
+                if (entry.useCase.manual) manual += 1;
+                else auto += 1;
+                signature.push(entry.module.id + '/' + entry.useCase.id);
+              });
+
+              $('#sec-pending-count').text(list.length);
+              $('#sec-auto-count').text(countAutoCases());
+              $('#sec-manual-hint').text(manual ? '其中手工 ' + manual : '');
+              $('#sec-pending-summary').text(
+                list.length
+                  ? '共 ' +
+                      list.length +
+                      ' 项未执行（手工 ' +
+                      manual +
+                      '、自动 ' +
+                      auto +
+                      '），点击可定位并高亮对应卡片'
+                  : '全部用例均已执行'
+              );
+              $('#sec-pending-jump')
+                .toggleClass('layui-btn-warm', list.length > 0)
+                .toggleClass('layui-btn-primary', list.length === 0);
+
+              var nextSignature = signature.join('|');
+              if (nextSignature === pendingSignature) return;
+              pendingSignature = nextSignature;
+
+              var panelList = $('#sec-pending-list');
+              panelList.empty();
+
+              layui.each(list, function (index, entry) {
+                var item = $(
+                  '<li><button type="button" class="sec-pending-item">' +
+                    '<span class="sec-pending-item-module"></span>' +
+                    '<span class="sec-pending-item-case"></span>' +
+                    '<em class="sec-pending-flag ' +
+                    (entry.useCase.manual ? 'is-manual' : 'is-auto') +
+                    '">' +
+                    (entry.useCase.manual ? '手工' : '自动') +
+                    '</em>' +
+                    '</button></li>'
+                );
+                item.find('.sec-pending-item-module').text(entry.module.title);
+                item.find('.sec-pending-item-case').text(entry.useCase.title);
+                item.find('.sec-pending-item').on('click', function () {
+                  focusCase(entry.module, entry.useCase);
+                  // 浮层会遮挡目标卡片，跳转后统一收起（浮层仅作导航入口）
+                  setPendingVisible(false);
+                });
+                panelList.append(item);
+              });
+
+              $('#sec-pending-empty').prop('hidden', list.length > 0);
+            }
+
+            /**
+             * 展开/收起待运行浮层
+             * 浮层为 fixed 定位、不参与文档流，因此这里不滚动页面：
+             * 任何滚动都只应由用户点击具体用例（focusCase）触发
+             */
+            /**
+             * 浮层定位：右缘对齐侧栏右边界，底边对齐「待运行用例」按钮
+             * 与侧栏 nav 列表完全错开（侧栏宽度之外），窄屏则由 CSS 接管为底部面板
+             */
+            function positionPending() {
+              var panel = $('#sec-pending-panel');
+              if (panel.prop('hidden')) return;
+
+              var isNarrow = window.matchMedia('(max-width: 720px)').matches;
+              var elem = panel[0];
+
+              // 窄屏由 CSS 的 left/right 控制，清掉内联样式即可
+              elem.style.left = '';
+              elem.style.bottom = '';
+
+              if (isNarrow) return;
+
+              var side = document
+                .querySelector('.sec-side')
+                .getBoundingClientRect();
+              var jump = document
+                .getElementById('sec-pending-jump')
+                .getBoundingClientRect();
+
+              elem.style.left = Math.round(side.right) + 'px';
+              elem.style.bottom =
+                Math.max(8, Math.round(window.innerHeight - jump.bottom)) +
+                'px';
+
+              // 右边界兜底：避免超宽时溢出视口
+              var rect = elem.getBoundingClientRect();
+              var overflow = rect.right - (window.innerWidth - 8);
+              if (overflow > 0) {
+                elem.style.left =
+                  Math.max(8, Math.round(rect.left - overflow)) + 'px';
+              }
+            }
+
+            /**
+             * 展开/收起待运行浮层
+             * 浮层为 fixed 定位、不参与文档流，因此不改变页面高度、也不滚动页面：
+             * 任何滚动都只应由用户点击具体用例（focusCase）触发
+             */
+            function setPendingVisible(visible) {
+              var panel = $('#sec-pending-panel');
+              panel.prop('hidden', !visible);
+              $('#sec-pending-jump').attr(
+                'aria-expanded',
+                visible ? 'true' : 'false'
+              );
+              if (!visible) return;
+
+              renderPending();
+              positionPending();
+
+              // 展开后把焦点交给第一个条目，便于纯键盘操作；
+              // preventScroll 避免聚焦动作触发视口滚动
+              var first = panel.find('.sec-pending-item')[0];
+              if (first && first.focus) first.focus({ preventScroll: true });
+            }
+
+            // 定位用例卡片：滚动到可视区并高亮，同时同步地址栏锚点
+            function focusCase(module, useCase, options) {
+              options = options || {};
+              setActiveNav(module);
+
+              var target = document.getElementById(
+                'case-' + module.id + '-' + useCase.id
+              );
+              if (!target) return;
+
+              window.scrollTo(
+                0,
+                target.getBoundingClientRect().top + window.pageYOffset - 16
+              );
+
+              // 移除后强制重排，保证连续定位同一用例时动画可重放
+              target.classList.remove('is-flash');
+              void target.offsetWidth;
+              target.classList.add('is-flash');
+              window.clearTimeout(useCase.flashTimer);
+              useCase.flashTimer = window.setTimeout(function () {
+                target.classList.remove('is-flash');
+              }, 1600);
+
+              if (options.hash === false) return;
+              try {
+                window.history.replaceState(
+                  null,
+                  '',
+                  '#case-' + module.id + '-' + useCase.id
+                );
+              } catch (err) {
+                /* 忽略：部分环境不允许改写地址栏 */
+              }
+            }
+
+            // 按地址栏锚点定位：用例锚点高亮卡片，模块锚点仅滚动到分组
+            function restoreFromHash(options) {
+              var target = findHashTarget(window.location.hash);
+              if (!target) return false;
+
+              if (target.useCase) {
+                focusCase(target.module, target.useCase, options);
+                return true;
+              }
+
+              setActiveNav(target.module);
+              scrollToModule(target.module);
+              return true;
+            }
+
+            /**
+             * 首次进入时组件渲染会改变页面高度（表格、穿梭框异步布局），
+             * 单次滚动可能落点偏移，因此在 load 完成后补一次定位
+             */
+            function restoreFromHashAfterLoad() {
+              restoreFromHash({ hash: false });
+              $(window).one('load', function () {
+                restoreFromHash({ hash: false });
+              });
+              // load 可能已经触发，兜底再校准一次
+              window.setTimeout(function () {
+                restoreFromHash({ hash: false });
+              }, 0);
+            }
+
+            function notify(text, hasFail) {
+              var status = $('#sec-run-status');
+              status.text(text).toggleClass('is-fail', !!hasFail);
+            }
+
+            /**
+             * 批量执行时保持阅读位置
+             * 断言明细会就地撑高卡片，浏览器滚动锚定只能近似补偿，
+             * 仍会造成视口内容跳动。这里在批处理前后对齐「视口顶部最近的用例卡片」
+             * 的屏幕位置，使滚动条与当前阅读内容都保持不动。
+             */
+            function captureViewportAnchor() {
+              var top = null;
+
+              layui.each(modules, function (index, module) {
+                if (top) return true;
+                layui.each(module.cases, function (caseIndex, useCase) {
+                  var rect = useCase.elem[0].getBoundingClientRect();
+                  if (rect.bottom <= 0) return;
+                  top = { elem: useCase.elem[0], offset: rect.top };
+                  return true;
+                });
+                if (top) return true;
+              });
+
+              return top;
+            }
+
+            function restoreViewportAnchor(anchor) {
+              if (!anchor || !anchor.elem) return;
+              var delta =
+                anchor.elem.getBoundingClientRect().top - anchor.offset;
+              if (Math.abs(delta) < 1) return;
+              window.scrollBy(0, delta);
+            }
+
+            function runCase(useCase) {
+              setResult(useCase, execute(useCase));
+              return useCase.state;
+            }
+
+            // 自动用例指不依赖真实交互、可一次性断言的用例；
+            // 手工用例需点击卡片按钮触发交互，未触发前保持待手工
+            function runAutoCases(filter, options) {
+              options = options || {};
+              var scopeTotal = 0;
+              var scopePass = 0;
+              var scopeFail = 0;
+              var anchor = captureViewportAnchor();
+
+              layui.each(modules, function (index, module) {
+                if (filter && filter(module) === false) return;
+                layui.each(module.cases, function (caseIndex, useCase) {
+                  if (useCase.manual) return;
+                  scopeTotal += 1;
+                  var state = runCase(useCase);
+                  if (state === 'pass') scopePass += 1;
+                  else scopeFail += 1;
+                });
+              });
+
+              var manualPending = 0;
+              layui.each(pendingCases(), function (index, entry) {
+                if (entry.useCase.manual) manualPending += 1;
+              });
+
+              // 全局运行时展开待办面板；单组运行不打断当前定位
+              if (manualPending && options.openPending) setPendingVisible(true);
+
+              notify(
+                '自动用例执行完成：共 ' +
+                  scopeTotal +
+                  ' 项，通过 ' +
+                  scopePass +
+                  '、失败 ' +
+                  scopeFail +
+                  (manualPending
+                    ? '；另有 ' + manualPending + ' 项待手工触发'
+                    : ''),
+                scopeFail > 0
+              );
+
+              // 最后一并校正视口：上面的状态条、浮层文案也会改变布局
+              restoreViewportAnchor(anchor);
+
+              return summary();
+            }
+
+            function runAll() {
+              return runAutoCases(null, { openPending: true });
+            }
+
+            function runModule(moduleId) {
+              return runAutoCases(function (module) {
+                return module.id === moduleId;
+              });
+            }
+
+            function reset() {
+              MARK.length = 0;
+              layui.each(modules, function (index, module) {
+                layui.each(module.cases, function (caseIndex, useCase) {
+                  setResult(useCase, null);
+                  useCase.elem
+                    .find('.sec-case-actions button')
+                    .prop('disabled', false);
+                });
+              });
+              notify('');
+              return summary();
+            }
+
+            function summary() {
+              var models = [];
+              var total = 0;
+              var pass = 0;
+              var fail = 0;
+              layui.each(modules, function (index, module) {
+                layui.each(module.cases, function (caseIndex, useCase) {
+                  total += 1;
+                  if (useCase.state === 'pass') pass += 1;
+                  if (useCase.state === 'fail') fail += 1;
+                  models.push({
+                    id: module.id + '/' + useCase.id,
+                    title: useCase.title,
+                    state: useCase.state,
+                    manual: !!useCase.manual,
+                    detail: useCase.lastDetail || ''
+                  });
+                });
+              });
+              return {
+                total: total,
+                pass: pass,
+                fail: fail,
+                pending: total - pass - fail,
+                markFired: MARK.slice(),
+                cases: models
+              };
+            }
+
+            function init() {
+              layui.each(registry, function (index, definition) {
+                modules.push({
+                  id: definition.id,
+                  title: definition.title,
+                  icon: definition.icon,
+                  layout: definition.layout,
+                  desc: definition.desc,
+                  cases: definition.cases.slice()
+                });
+              });
+
+              renderNav();
+              moduleMount.empty();
+              renderModules();
+              mountFixtures();
+              updateSummary();
+
+              $('#sec-run-all').prop('disabled', false).on('click', runAll);
+              $('#sec-reset').prop('disabled', false).on('click', reset);
+              $('#sec-pending-jump')
+                .prop('disabled', false)
+                .on('click', function () {
+                  setPendingVisible($('#sec-pending-panel').prop('hidden'));
+                });
+              $('#sec-pending-close').on('click', function () {
+                setPendingVisible(false);
+              });
+              // ESC 关闭浮层：浮层是辅助导航，不应打断主流程
+              $(document).on('keydown', function (event) {
+                if (event.key !== 'Escape' && event.keyCode !== 27) return;
+                if ($('#sec-pending-panel').prop('hidden')) return;
+                setPendingVisible(false);
+              });
+              // 点击浮层外部关闭，避免浮层长期遮挡内容
+              $(document).on('mousedown', function (event) {
+                if ($('#sec-pending-panel').prop('hidden')) return;
+                var target = $(event.target);
+                if (target.closest('#sec-pending-panel').length) return;
+                if (target.closest('#sec-pending-jump').length) return;
+                setPendingVisible(false);
+              });
+              moduleMount.find('[data-run-module]').on('click', function () {
+                runModule($(this).attr('data-run-module'));
+              });
+
+              // 视口尺寸变化后重新对齐浮层（fixed 定位不受滚动影响，无需监听 scroll）
+              $(window).on('resize', positionPending);
+
+              // 刷新/直达带锚点的地址时，定位到对应模块或用例
+              restoreFromHashAfterLoad();
+            }
+
+            return {
+              init: init,
+              runAll: runAll,
+              runModule: runModule,
+              reset: reset,
+              summary: summary,
+              pending: pendingCases,
+              focus: function (id) {
+                var parts = String(id || '').split('/');
+                var target = null;
+
+                if (!parts[0] || !parts[1]) return false;
+
+                layui.each(modules, function (index, module) {
+                  if (module.id !== parts[0]) return;
+                  layui.each(module.cases, function (caseIndex, useCase) {
+                    if (useCase.id !== parts[1]) return;
+                    target = { module: module, useCase: useCase };
+                    return true;
+                  });
+                  return true;
+                });
+
+                if (!target) return false;
+                focusCase(target.module, target.useCase);
+                return true;
+              },
+              showPending: setPendingVisible,
+              modules: modules,
+              mark: MARK
+            };
+          })();
+
+          runner.init();
+          window.__layuiSecurityRunner = runner;
+        }
+      );
     </script>
   </body>
 </html>

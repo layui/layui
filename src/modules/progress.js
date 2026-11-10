@@ -11,16 +11,12 @@ layui.define('component', function (exports) {
   var getPercentValue = function (percent) {
     if (!/^.+\/.+$/.test(percent)) return percent;
 
-    if (__LAYUI_CSP__) {
-      // CSP 版禁用动态表达式求值，仅支持安全的数字除法写法，如 1/2。
-      var nums = percent.split('/');
-      var denominator = parseFloat(nums[1]);
-      return denominator
-        ? (parseFloat(nums[0]) / denominator) * 100 + '%'
-        : percent;
-    }
-
-    return new Function('return ' + percent)() * 100 + '%';
+    // 仅支持安全的数字除法（如 1/2）
+    var nums = percent.split('/');
+    var denominator = parseFloat(nums[1]);
+    return denominator
+      ? (parseFloat(nums[0]) / denominator) * 100 + '%'
+      : percent;
   };
 
   // 创建组件
@@ -52,7 +48,7 @@ layui.define('component', function (exports) {
         if (othis.attr('lay-showpercent')) {
           setTimeout(function () {
             elemBar.html(
-              '<span class="' + CONST.ELEM + '-text">' + percent + '</span>'
+              $('<span class="' + CONST.ELEM + '-text"></span>').text(percent)
             );
           }, 350);
         }

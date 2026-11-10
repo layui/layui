@@ -2032,6 +2032,8 @@
     var start = photos.start || 0;
     var success = options.success;
 
+    var lay = layui.lay;
+
     dict.imgIndex = (start | 0) + 1;
     options.img = options.img || 'img';
     delete options.success;
@@ -2280,7 +2282,8 @@
       function (img) {
         layer.close(dict.loadi);
 
-        var alt = data[start].alt || '';
+        // alt 同时用于 img 属性与底部栏标题，此处统一转义
+        var alt = lay.escape(data[start].alt || '');
 
         // 切换图片时不出现动画
         if (key) options.anim = -1;
@@ -2330,11 +2333,11 @@
               content:
                 '<div class="layer-layer-photos-main">' +
                 '<img src="' +
-                data[start].src +
+                lay.escape(data[start].src) +
                 '" alt="' +
                 alt +
                 '" layer-pid="' +
-                (data[start].pid || '') +
+                lay.escape(data[start].pid || '') +
                 '">' +
                 (function () {
                   var arr = ['<div class="layui-layer-photos-pointer">'];
@@ -2386,11 +2389,13 @@
                         '<div class="layui-layer-photos-toolbar layui-layer-photos-footer">',
                         '<h3>' + alt + '</h3>',
                         '<em>' + dict.imgIndex + ' / ' + data.length + '</em>',
-                        '<a href="' +
-                          data[start].src +
-                          '" target="_blank">' +
-                          i18n.$t('layer.photos.viewPicture') +
-                          '</a>',
+                        lay.isSafeUrl(data[start].src)
+                          ? '<a href="' +
+                            lay.escape(data[start].src) +
+                            '" target="_blank">' +
+                            i18n.$t('layer.photos.viewPicture') +
+                            '</a>'
+                          : '',
                         '</div>'
                       ].join('')
                     );
