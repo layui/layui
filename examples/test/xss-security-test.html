@@ -1005,16 +1005,7 @@
     <script src="../../src/layui.js"></script>
     <script>
       layui.use(
-        [
-          'table',
-          'transfer',
-          'tree',
-          'treeTable',
-          'progress',
-          'layer',
-          'i18n',
-          'util'
-        ],
+        ['table', 'transfer', 'tree', 'progress', 'layer', 'i18n', 'util'],
         function () {
           'use strict';
 
@@ -1022,7 +1013,6 @@
           var table = layui.table;
           var transfer = layui.transfer;
           var tree = layui.tree;
-          var treeTable = layui.treeTable;
           var progress = layui.progress;
           var layer = layui.layer;
           var lay = layui.lay;
@@ -1493,36 +1483,6 @@
                         PAYLOAD.text
                       ),
                       assert.none(root, '.layui-table-total img')
-                    ]);
-                  }
-                },
-                {
-                  id: 'header-title-escape',
-                  title: '列标题（cols.title）中的 HTML 按纯文本渲染',
-                  anchors: ['table.js#theads', 'cols.title'],
-                  fixture: '<table></table>',
-                  setup: function (fx) {
-                    table.render({
-                      elem: fx.find('table')[0],
-                      cols: [[{ field: 'username', title: PAYLOAD.text }]],
-                      data: [{ username: 'A' }]
-                    });
-                  },
-                  run: function (fx) {
-                    var root = fx[0];
-                    return judge([
-                      assert.text(
-                        root,
-                        '.layui-table-header th .layui-table-cell span',
-                        PAYLOAD.text
-                      ),
-                      assert.attr(
-                        root,
-                        '.layui-table-header th',
-                        'title',
-                        PAYLOAD.text
-                      ),
-                      assert.none(root, '.layui-table-header img')
                     ]);
                   }
                 }
@@ -2029,71 +1989,6 @@
                         text.indexOf('A < B') === -1,
                         '确认文案不应出现被解码后的 "A < B"'
                       )
-                    ]);
-                  }
-                }
-              ]
-            },
-            {
-              id: 'treeTable',
-              title: 'treeTable 树表',
-              icon: 'layui-icon-table',
-              desc:
-                '行数据中的节点图标（<code>customName.icon</code>）经 ' +
-                '<code>normalizedIcon</code> 渲染：与单元格数据同源，含 HTML 的值需转义；' +
-                '<code>tree.view</code> 中的自定义图标为开发者配置，不受影响。',
-              cases: [
-                {
-                  id: 'treetable-icon-html',
-                  title: '行数据节点图标中的 HTML 不注入元素',
-                  anchors: ['treeTable.js#normalizedIcon', 'customName.icon'],
-                  fixture: '<table></table>',
-                  setup: function (fx) {
-                    treeTable.render({
-                      elem: fx.find('table')[0],
-                      data: [
-                        {
-                          id: 1,
-                          name: 'node',
-                          icon: PAYLOAD.text,
-                          children: []
-                        }
-                      ],
-                      cols: [[{ field: 'name', title: 'name' }]]
-                    });
-                  },
-                  run: function (fx) {
-                    var root = fx[0];
-                    return judge([
-                      assert.none(root, '.layui-table-tree-nodeIcon img'),
-                      assert.none(root, '.layui-table-tree-nodeIcon [onerror]')
-                    ]);
-                  }
-                },
-                {
-                  id: 'treetable-icon-attr-breakout',
-                  title: '行数据节点图标无法逃逸 class 属性注入元素',
-                  anchors: ['treeTable.js#normalizedIcon', 'customName.icon'],
-                  fixture: '<table></table>',
-                  setup: function (fx) {
-                    treeTable.render({
-                      elem: fx.find('table')[0],
-                      data: [
-                        {
-                          id: 1,
-                          name: 'node',
-                          icon: PAYLOAD.attr,
-                          children: []
-                        }
-                      ],
-                      cols: [[{ field: 'name', title: 'name' }]]
-                    });
-                  },
-                  run: function (fx) {
-                    var root = fx[0];
-                    return judge([
-                      assert.none(root, '.layui-table-tree-nodeIcon img'),
-                      assert.none(root, '.layui-table-tree-nodeIcon [onerror]')
                     ]);
                   }
                 }

@@ -302,7 +302,7 @@ layui.define(
         '                     {{# if(!item2.field){ }} layui-table-col-special{{# } }}"',
 
         // 标题属性
-        '              {{# if(item2.title){ }} title="{{= item2.title }}"{{# } }}>',
+        "              {{# if(item2.title){ }} title=\"{{ layui.$('<div>' + item2.title + '</div>').text() }}\"{{# } }}>",
 
         // 单元格内容容器
         '            <div class="layui-table-cell',
@@ -326,7 +326,7 @@ layui.define(
 
         // 单元格内容 - 普通内容
         '              {{# } else { }}',
-        '                <span>{{= item2.title || "" }}</span>',
+        '                <span>{{- item2.title || "" }}</span>',
 
         // 排序图标
         '                {{# if(isSort){ }}',
