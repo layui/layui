@@ -47,9 +47,11 @@ layui.define('component', function (exports) {
 
         if (othis.attr('lay-showpercent')) {
           setTimeout(function () {
-            elemBar.html(
-              $('<span class="' + CONST.ELEM + '-text"></span>').text(percent)
-            );
+            elemBar
+              .empty()
+              .append(
+                $('<span class="' + CONST.ELEM + '-text"></span>').text(percent)
+              );
           }, 350);
         }
       });

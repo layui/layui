@@ -132,6 +132,11 @@ layui.define(
       return laytpl(template, opts.tplOptions).render(data);
     };
 
+    // 获取列的转义配置
+    var getColEscape = function (item3, options) {
+      return 'escape' in item3 ? item3.escape : options.escape;
+    };
+
     // 解析自定义模板数据
     var parseTempData = function (obj) {
       obj = obj || {};
@@ -143,7 +148,7 @@ layui.define(
         content = obj.tplData[table.config.numbersName];
 
       // 是否编码 HTML
-      var escaped = 'escape' in item3 ? item3.escape : options.escape;
+      var escaped = getColEscape(item3, options);
       if (escaped) content = util.escape(content);
 
       // 获取模板
@@ -2102,9 +2107,10 @@ layui.define(
 
           // 如果直接传入了合计行数据，则不输出自动计算的结果
           // 后端合计根据 escape 选项决定是否转义输出
-          if (TOTAL_NUMS) {
-            var escaped = 'escape' in item3 ? item3.escape : options.escape;
-            return escaped ? util.escape(TOTAL_NUMS) : TOTAL_NUMS;
+          if (TOTAL_NUMS != null) {
+            return getColEscape(item3, options)
+              ? util.escape(TOTAL_NUMS)
+              : TOTAL_NUMS;
           }
           return getContent;
         })();

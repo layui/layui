@@ -9,6 +9,7 @@
   var isLayui = window.layui && layui.define;
   var $;
   var win;
+  var lay;
   var i18n = {};
   var OBJECT_REPLACE_REGEX = /\{(\w+)\}/g;
 
@@ -2032,8 +2033,6 @@
     var start = photos.start || 0;
     var success = options.success;
 
-    var lay = layui.lay;
-
     dict.imgIndex = (start | 0) + 1;
     options.img = options.img || 'img';
     delete options.success;
@@ -2478,6 +2477,7 @@
       layui.define(['jquery', 'lay', 'i18n'], function (exports) {
         // layui
         i18n.$t = layui.i18n.$t;
+        lay = layui.lay;
         layer.path = layui.cache.dir;
         ready.run(layui.$);
 

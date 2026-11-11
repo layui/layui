@@ -279,6 +279,8 @@ layer.photos({
 });
 ```
 
+注：*自 `2.14.0+`，`data` 中的 `alt`、`pid`、`src` 写入图片属性及底部栏时将进行 HTML 转义（按纯文本渲染），以规避 XSS 问题；同时底部栏的「查看原图」链接仅对安全协议地址（`http/https/mailto/tel` 或无协议的相对地址）渲染。*
+
 **用法二：绑定页面图片元素**。点击图片时，弹出对应的图片层。
 
 <pre class="layui-code" lay-options="{preview: true, layout: ['code', 'preview'], tools: ['full']}">
