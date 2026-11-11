@@ -1595,6 +1595,48 @@
                       )
                     ]);
                   }
+                },
+                {
+                  id: 'total-row-template-zero',
+                  title: '合计模板中后端返回的 0 不回退前端合计',
+                  anchors: ['table.js#renderTotal', 'cols.totalRow'],
+                  fixture: '<table></table>',
+                  setup: function (fx) {
+                    table.render({
+                      elem: fx.find('table')[0],
+                      cols: [
+                        [
+                          {
+                            field: 'score',
+                            title: '分数',
+                            totalRow: '{{= d.TOTAL_NUMS }} 分'
+                          }
+                        ]
+                      ],
+                      totalRow: true,
+                      ajax: function (options) {
+                        // totalRow 模板路径与直接渲染路径的 null 检查保持一致
+                        options.success({
+                          code: 0,
+                          msg: '',
+                          count: 2,
+                          data: [{ score: 3 }, { score: 5 }],
+                          totalRow: { score: 0 }
+                        });
+                      },
+                      url: '/__stub'
+                    });
+                  },
+                  run: function (fx) {
+                    var root = fx[0];
+                    return judge([
+                      assert.text(
+                        root,
+                        '.layui-table-total tbody td .layui-table-cell',
+                        '0 分'
+                      )
+                    ]);
+                  }
                 }
               ]
             },
@@ -3193,10 +3235,14 @@
 
             // 自动用例指不依赖真实交互、可一次性断言的用例；
             // 手工用例需点击卡片按钮触发交互，未触发前保持待手工
+            // 批次代次：reset 后旧批次的完成回调失效
+            var batchGen = 0;
+
             function runAutoCases(filter, options) {
               options = options || {};
               var anchor = captureViewportAnchor();
               var jobs = []; // 异步用例的 Promise 集合，全部完成后统一统计
+              var runId = ++batchGen;
 
               layui.each(modules, function (index, module) {
                 if (filter && filter(module) === false) return;
@@ -3257,7 +3303,8 @@
               }
 
               return Promise.all(jobs).then(function () {
-                finish();
+                // 批次已被 reset 取代时，不再写入完成提示、不校正视口
+                if (batchGen === runId) finish();
                 return summary();
               });
             }
@@ -3273,6 +3320,7 @@
             }
 
             function reset() {
+              batchGen++; // 使旧批次的完成回调失效
               MARK.length = 0;
               layui.each(modules, function (index, module) {
                 layui.each(module.cases, function (caseIndex, useCase) {

@@ -2122,7 +2122,7 @@ layui.define(
           if (typeof totalRow === 'function' || typeof totalRow === 'string') {
             var tplData = $.extend(
               {
-                TOTAL_NUMS: TOTAL_NUMS || totalNums[field],
+                TOTAL_NUMS: TOTAL_NUMS != null ? TOTAL_NUMS : totalNums[field],
                 TOTAL_ROW: totalRowData || {},
                 LAY_COL: item3
               },
