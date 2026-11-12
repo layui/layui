@@ -12,6 +12,7 @@ import { collapse } from './collapse.js';
 import { progress } from './progress.js';
 import { form } from './form.js';
 import { tabs } from './tabs.js';
+import { tag } from './tag.js';
 
 const components = {
   menu,
@@ -21,6 +22,7 @@ const components = {
   progress,
   form,
   tabs,
+  tag,
 };
 
 export class Initializer {
