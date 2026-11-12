@@ -313,6 +313,8 @@ totalRow: '分数：{{= d.TOTAL_ROW.score }}'
 如上，在 `totalRow` 中返回所需统计的列字段名和值即可。
 `totalRow` 字段同样可以通过 `parseData` 回调来解析成为 table 组件所规定的数据格式。
 
+- 注：*自 `2.14.0+`，后端返回的合计行数据在直接渲染（未定义 `totalRow` 模板）时遵循 `escape` 转义规则（列级 `escape` 优先于全局 `escape`），默认对 HTML 原文转义输出，以规避 XSS 问题。*
+- 注：若定义了 `totalRow` 模板，后端合计将以原始值传入模板，此时不受 `escape` 选项约束，开发者需自行处理 XSS 问题，建议尽量使用 `{{= }}` 转义输出，而非 `{{- }}` 原文输出。
 
 </td>
     </tr>
@@ -383,7 +385,7 @@ edit: function(d){
 <td>escape</td>
 <td>
 
-是否对当前列进行内容编码（转义 html），优先级大于基础属性中的 `escape`。
+是否对当前列进行内容编码（转义 html），优先级大于基础属性中的 `escape`。自 `2.14.0+`，该选项对合计行中的后端返回数据同样生效。
 
 </td>
 <td>boolean</td>

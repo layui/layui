@@ -9,6 +9,7 @@
   var isLayui = window.layui && layui.define;
   var $;
   var win;
+  var lay;
   var i18n = {};
   var OBJECT_REPLACE_REGEX = /\{(\w+)\}/g;
 
@@ -2280,7 +2281,8 @@
       function (img) {
         layer.close(dict.loadi);
 
-        var alt = data[start].alt || '';
+        // alt 同时用于 img 属性与底部栏标题，此处统一转义
+        var alt = lay.escape(data[start].alt || '');
 
         // 切换图片时不出现动画
         if (key) options.anim = -1;
@@ -2330,11 +2332,11 @@
               content:
                 '<div class="layer-layer-photos-main">' +
                 '<img src="' +
-                data[start].src +
+                lay.escape(data[start].src) +
                 '" alt="' +
                 alt +
                 '" layer-pid="' +
-                (data[start].pid || '') +
+                lay.escape(data[start].pid || '') +
                 '">' +
                 (function () {
                   var arr = ['<div class="layui-layer-photos-pointer">'];
@@ -2386,11 +2388,13 @@
                         '<div class="layui-layer-photos-toolbar layui-layer-photos-footer">',
                         '<h3>' + alt + '</h3>',
                         '<em>' + dict.imgIndex + ' / ' + data.length + '</em>',
-                        '<a href="' +
-                          data[start].src +
-                          '" target="_blank">' +
-                          i18n.$t('layer.photos.viewPicture') +
-                          '</a>',
+                        lay.isSafeUrl(data[start].src)
+                          ? '<a href="' +
+                            lay.escape(data[start].src) +
+                            '" target="_blank">' +
+                            i18n.$t('layer.photos.viewPicture') +
+                            '</a>'
+                          : '',
                         '</div>'
                       ].join('')
                     );
@@ -2473,6 +2477,7 @@
       layui.define(['jquery', 'lay', 'i18n'], function (exports) {
         // layui
         i18n.$t = layui.i18n.$t;
+        lay = layui.lay;
         layer.path = layui.cache.dir;
         ready.run(layui.$);
 
