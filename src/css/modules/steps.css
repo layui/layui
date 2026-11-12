@@ -1,0 +1,168 @@
+/* 步骤条 */
+.lay-steps {
+  --lay-steps-active-color: var(--lay-color-primary); /* 当前步骤色 */
+  --lay-steps-done-color: var(--lay-color-green); /* 已完成步骤色 */
+  --lay-steps-wait-color: var(--lay-gray-400); /* 待处理步骤色 */
+  --lay-steps-line-color: var(--lay-gray-300); /* 连接线颜色 */
+  --lay-steps-status-success: var(
+    --lay-color-green
+  ); /* 当前步骤状态色：success */
+  --lay-steps-status-error: var(--lay-color-red); /* 当前步骤状态色：error */
+  --lay-steps-status-warning: var(
+    --lay-color-orange
+  ); /* 当前步骤状态色：warning */
+  --lay-steps-icon-size: 28px; /* 图标尺寸 */
+  --lay-steps-font-size: 14px; /* 图标内文字大小 */
+  display: flex;
+  align-items: flex-start;
+}
+.lay-steps-item {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.lay-steps-icon {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1; /* 收紧行高，避免字体默认行高引起的垂直偏移 */
+  width: var(--lay-steps-icon-size);
+  height: var(--lay-steps-icon-size);
+  border-radius: 50%;
+  background-color: var(--lay-steps-wait-color);
+  color: #fff;
+  font-size: var(--lay-steps-font-size);
+  font-style: normal;
+}
+/* 数字序号：部分系统字体（苹方/雅黑）字形偏上，轻微下移补偿；图标字体（i 元素）不受影响 */
+.lay-steps-icon:not(:has(> i)) {
+  padding-top: 1px;
+}
+.lay-steps-item.lay-is-done .lay-steps-icon {
+  background-color: var(--lay-steps-done-color);
+}
+.lay-steps-item.lay-is-active .lay-steps-icon {
+  background-color: var(--lay-steps-active-color);
+}
+.lay-steps[data-lay-status='success']
+  .lay-steps-item.lay-is-active
+  .lay-steps-icon {
+  background-color: var(--lay-steps-status-success);
+}
+.lay-steps[data-lay-status='error']
+  .lay-steps-item.lay-is-active
+  .lay-steps-icon {
+  background-color: var(--lay-steps-status-error);
+}
+.lay-steps[data-lay-status='warning']
+  .lay-steps-item.lay-is-active
+  .lay-steps-icon {
+  background-color: var(--lay-steps-status-warning);
+}
+.lay-steps-content {
+  margin-top: var(--lay-spacing-xs);
+}
+.lay-steps-title {
+  font-size: 14px;
+  color: var(--lay-gray-900);
+}
+.lay-steps-desc {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--lay-gray-700);
+}
+/* 可点击步骤显示手型光标 */
+.lay-steps[data-lay-clickable] .lay-steps-item {
+  cursor: pointer;
+}
+.lay-steps[data-lay-clickable] .lay-steps-item.lay-is-disabled {
+  cursor: not-allowed;
+}
+.lay-steps-item.lay-is-disabled {
+  cursor: not-allowed;
+}
+.lay-steps-item.lay-is-disabled .lay-steps-icon {
+  background-color: var(--lay-gray-200);
+  color: var(--lay-gray-500);
+}
+.lay-steps-item.lay-is-disabled .lay-steps-title {
+  color: var(--lay-gray-400);
+}
+
+/* 水平布局连接线 */
+.lay-steps-item:after {
+  content: '';
+  position: absolute;
+  top: calc(var(--lay-steps-icon-size) / 2 - 0.5px);
+  left: 50%;
+  z-index: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--lay-steps-line-color);
+}
+.lay-steps-item:last-child:after {
+  display: none;
+}
+.lay-steps-item.lay-is-done:after,
+.lay-steps-item.lay-is-active:after {
+  background-color: var(--lay-steps-done-color);
+}
+
+/* 垂直布局 */
+.lay-steps[data-lay-layout='vertical'] {
+  flex-direction: column;
+  align-items: stretch;
+}
+.lay-steps[data-lay-layout='vertical'] .lay-steps-item {
+  flex: none;
+  flex-direction: row;
+  align-items: flex-start;
+  text-align: left;
+  padding-bottom: var(--lay-spacing-lg);
+}
+.lay-steps[data-lay-layout='vertical'] .lay-steps-item:after {
+  display: none;
+}
+.lay-steps[data-lay-layout='vertical'] .lay-steps-item:before {
+  content: '';
+  position: absolute;
+  left: calc(var(--lay-steps-icon-size) / 2 - 0.5px);
+  top: var(--lay-steps-icon-size);
+  bottom: 0;
+  z-index: 0;
+  width: 1px;
+  background-color: var(--lay-steps-line-color);
+}
+.lay-steps[data-lay-layout='vertical'] .lay-steps-item.lay-is-done:before,
+.lay-steps[data-lay-layout='vertical'] .lay-steps-item.lay-is-active:before {
+  background-color: var(--lay-steps-done-color);
+}
+.lay-steps[data-lay-layout='vertical'] .lay-steps-item:last-child:before {
+  display: none;
+}
+.lay-steps[data-lay-layout='vertical'] .lay-steps-item:last-child {
+  padding-bottom: 0;
+}
+.lay-steps[data-lay-layout='vertical'] .lay-steps-content {
+  margin-top: 0;
+  margin-left: var(--lay-spacing-sm);
+}
+
+/* 尺寸变体 */
+.lay-steps[data-lay-size='xs'] {
+  --lay-steps-icon-size: 22px;
+  --lay-steps-font-size: 12px;
+}
+.lay-steps[data-lay-size='sm'] {
+  --lay-steps-icon-size: 24px;
+}
+.lay-steps[data-lay-size='lg'] {
+  --lay-steps-icon-size: 32px;
+  --lay-steps-font-size: 16px;
+}
