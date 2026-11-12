@@ -49,7 +49,7 @@ jobs:
 
             // 若修改的不是内容，则不必校验
             if (payload.action === 'edited') {
-              if (payload.changes && !payload.changes.body.from) {
+              if (payload.changes && !Object.hasOwn(payload.changes, 'body')) {
                 return console.log('Edited fields exclude "body".');
               }
             }
