@@ -155,7 +155,10 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function (exports) {
       }
     });
 
-    form.render(null, filter);
+    // 仅赋值时重新渲染表单控件
+    if (object) {
+      form.render(null, filter);
+    }
 
     // 返回值
     return that.getValue(filter);
