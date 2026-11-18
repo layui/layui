@@ -121,41 +121,43 @@ layui.define(['lay', 'i18n', 'layer', 'util'], function (exports) {
 
   // 赋值/取值
   Form.prototype.val = function (filter, object) {
-    var that = this,
-      formElem = that.getFormElem(filter);
+    var that = this;
+    var formElem = that.getFormElem(filter);
 
-    // 遍历
-    formElem.each(function (index, item) {
-      var itemForm = $(this);
+    // 赋值
+    if (object) {
+      formElem.each(function (index, item) {
+        var itemForm = $(this);
 
-      // 赋值
-      for (var key in object) {
-        if (!lay.hasOwn(object, key)) continue;
+        for (var key in object) {
+          if (!lay.hasOwn(object, key)) continue;
 
-        var type;
-        var value = object[key];
-        var itemElem = itemForm.find('[name="' + key + '"]');
+          var type;
+          var value = object[key];
+          var itemElem = itemForm.find('[name="' + key + '"]');
 
-        // 如果对应的表单不存在，则不执行
-        if (!itemElem[0]) continue;
-        type = itemElem[0].type;
+          // 如果对应的表单不存在，则不执行
+          if (!itemElem[0]) continue;
+          type = itemElem[0].type;
 
-        // 如果为复选框
-        if (type === 'checkbox') {
-          itemElem[0].checked = value;
-        } else if (type === 'radio') {
-          // 如果为单选框
-          itemElem.each(function () {
-            this.checked = this.value == value + '';
-          });
-        } else {
-          // 其它类型的表单
-          itemElem.val(value);
+          // 如果为复选框
+          if (type === 'checkbox') {
+            itemElem[0].checked = value;
+          } else if (type === 'radio') {
+            // 如果为单选框
+            itemElem.each(function () {
+              this.checked = this.value == value + '';
+            });
+          } else {
+            // 其它类型的表单
+            itemElem.val(value);
+          }
         }
-      }
-    });
+      });
 
-    form.render(null, filter);
+      // 重新渲染表单
+      form.render(null, filter);
+    }
 
     // 返回值
     return that.getValue(filter);
