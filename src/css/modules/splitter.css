@@ -1,0 +1,216 @@
+/* splitter.css */
+
+.lay-splitter {
+  --lay-splitter-bar-size: 2px;
+  --lay-splitter-bar-hit-size: 10px;
+  --lay-splitter-bar-bg: var(--lay-border-color);
+  --lay-splitter-bar-active-bg: var(--lay-color-primary);
+  --lay-splitter-handle-color: var(--lay-gray-600);
+  --lay-splitter-btn-bg: #fff;
+  --lay-splitter-btn-color: var(--lay-gray-800);
+  --lay-splitter-btn-border: var(--lay-border-color-accent);
+
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  > .lay-splitter-panel {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    box-sizing: border-box;
+
+    /* 嵌套 Splitter 默认铺满父面板 */
+    > .lay-splitter {
+      width: 100%;
+      height: 100%;
+    }
+
+    &.lay-is-collapsed {
+      flex: 0 0 0px !important;
+      width: 0 !important;
+      min-width: 0 !important;
+      padding: 0 !important;
+      border-width: 0 !important;
+      overflow: hidden !important;
+    }
+  }
+
+  /* 垂直分割模式（上下排列） */
+  &[data-lay-orientation='vertical'] {
+    flex-direction: column;
+
+    > .lay-splitter-panel.lay-is-collapsed {
+      width: auto !important;
+      height: 0 !important;
+      min-height: 0 !important;
+    }
+  }
+
+  /* 拖拽进行中屏蔽子面板内 iframe 捕获指针 */
+  &.lay-is-dragging > .lay-splitter-panel iframe {
+    pointer-events: none;
+  }
+
+  /* 深色主题适配 */
+  &[data-lay-theme='dark'] {
+    --lay-splitter-bar-bg: rgba(255, 255, 255, 0.14);
+    --lay-splitter-handle-color: rgba(255, 255, 255, 0.5);
+    --lay-splitter-btn-bg: var(--lay-color-black);
+    --lay-splitter-btn-color: rgba(255, 255, 255, 0.85);
+    --lay-splitter-btn-border: rgba(255, 255, 255, 0.24);
+  }
+}
+
+/* 分隔条轨道 */
+.lay-splitter-bar {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 var(--lay-splitter-bar-size);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background-color: var(--lay-splitter-bar-bg);
+  cursor: col-resize;
+  touch-action: none;
+  outline: none;
+  transition: background-color var(--lay-anim-duration-fast);
+
+  /* 透明扩展抓取热区 */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: max(10px, var(--lay-splitter-bar-hit-size));
+    transform: translateX(-50%);
+  }
+
+  &:is(:hover, :focus-visible, .lay-is-active) {
+    background-color: var(--lay-splitter-bar-active-bg);
+
+    .lay-splitter-bar-handle {
+      background-color: #fff;
+      opacity: 1;
+    }
+  }
+
+  &.lay-is-disabled {
+    cursor: default;
+    background-color: var(--lay-splitter-bar-bg);
+
+    &::before {
+      display: none;
+    }
+  }
+}
+
+/* 垂直模式下的分隔条覆盖 */
+.lay-splitter[data-lay-orientation='vertical'] > .lay-splitter-bar {
+  flex-direction: row;
+  cursor: row-resize;
+
+  &::before {
+    left: 0;
+    right: 0;
+    top: 50%;
+    bottom: auto;
+    width: 100%;
+    height: var(--lay-splitter-bar-hit-size);
+    transform: translateY(-50%);
+  }
+
+  &.lay-is-disabled {
+    cursor: default;
+  }
+}
+
+/* 分隔条中心把手视觉指示线 */
+.lay-splitter-bar-handle {
+  width: 2px;
+  height: 20px;
+  border-radius: 1px;
+  background-color: var(--lay-splitter-handle-color);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--lay-anim-duration-fast);
+}
+
+.lay-splitter[data-lay-orientation='vertical']
+  > .lay-splitter-bar
+  > .lay-splitter-bar-handle {
+  width: 20px;
+  height: 2px;
+}
+
+/* 当分隔条包含折叠按钮时，隐藏重叠的中心短线把手 */
+.lay-splitter-bar:has(.lay-splitter-collapse-btn) > .lay-splitter-bar-handle {
+  display: none;
+}
+
+/* 快捷折叠/展开按钮 */
+.lay-splitter-collapse-btn {
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--lay-splitter-btn-border);
+  border-radius: var(--lay-border-radius);
+  background-color: var(--lay-splitter-btn-bg);
+  color: var(--lay-splitter-btn-color);
+  box-shadow: var(--lay-box-shadow-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    color var(--lay-anim-duration-fast),
+    border-color var(--lay-anim-duration-fast),
+    background-color var(--lay-anim-duration-fast);
+
+  .lay-icon {
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  &:hover {
+    color: var(--lay-color-primary);
+    border-color: var(--lay-color-primary);
+  }
+}
+
+.lay-splitter[data-lay-orientation='vertical']
+  > .lay-splitter-bar
+  > .lay-splitter-collapse-btn {
+  width: 28px;
+  height: 14px;
+}
+
+/* Lazy 延迟拖拽预览指示条 */
+.lay-splitter-ghost-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  background-color: var(--lay-splitter-bar-active-bg);
+  opacity: 0.75;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.lay-splitter[data-lay-orientation='vertical'] > .lay-splitter-ghost-bar {
+  top: auto;
+  bottom: auto;
+  left: 0;
+  right: 0;
+}

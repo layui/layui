@@ -23,6 +23,7 @@ export { datePicker } from './components/datePicker.js';
 export { dropdown } from './components/dropdown.js';
 export { colorPicker } from './components/colorPicker.js';
 export { slider } from './components/slider.js';
+export { splitter } from './components/splitter.js';
 export { nav } from './components/nav.js';
 export { breadcrumb } from './components/breadcrumb.js';
 export { collapse } from './components/collapse.js';

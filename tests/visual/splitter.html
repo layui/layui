@@ -1,0 +1,263 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>splitter 分隔面板 - Layui</title>
+    <link rel="stylesheet" href="./assets/dist/css/layui.css" />
+    <link rel="stylesheet" href="./assets/demo.css" />
+    <style>
+      .demo-splitter-box {
+        height: 240px;
+        border: 1px solid var(--lay-border-color);
+        border-radius: var(--lay-border-radius);
+        background-color: #fff;
+      }
+      .demo-splitter-tall {
+        height: 360px;
+      }
+      .demo-pane-center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 12px;
+        color: var(--lay-gray-800);
+        box-sizing: border-box;
+      }
+      .demo-pane-tint {
+        background-color: var(--lay-gray-100);
+      }
+      .demo-log {
+        padding: 8px 12px;
+        font-family: var(--lay-font-monospace);
+        font-size: 12px;
+        background: var(--lay-gray-200);
+        border-radius: var(--lay-border-radius);
+        color: var(--lay-gray-900);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="lay-container lay-padding-3">
+      <h2>基础水平分割（DOM 渲染）</h2>
+      <div class="lay-flex-col">
+        <div class="lay-splitter demo-splitter-box">
+          <div
+            class="lay-splitter-panel"
+            data-lay-size="30%"
+            data-lay-min="120"
+          >
+            <div class="demo-pane-center demo-pane-tint">
+              <strong>Left Panel</strong>
+              <span>初始 30%，最小 120px</span>
+            </div>
+          </div>
+          <div class="lay-splitter-panel" data-lay-min="160">
+            <div class="demo-pane-center">
+              <strong>Right Panel</strong>
+              <span>自适应剩余空间，最小 160px</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2>垂直分割</h2>
+      <div class="lay-flex-col">
+        <div
+          class="lay-splitter demo-splitter-box"
+          data-lay-orientation="vertical"
+        >
+          <div class="lay-splitter-panel" data-lay-size="40%" data-lay-min="50">
+            <div class="demo-pane-center demo-pane-tint">Top Panel (40%)</div>
+          </div>
+          <div class="lay-splitter-panel" data-lay-min="60">
+            <div class="demo-pane-center">Bottom Panel (Auto)</div>
+          </div>
+        </div>
+      </div>
+
+      <h2>嵌套组合与一键折叠（IDE 工作台布局）</h2>
+      <div class="lay-flex-col">
+        <div class="lay-splitter demo-splitter-box demo-splitter-tall">
+          <div
+            class="lay-splitter-panel"
+            data-lay-size="220"
+            data-lay-min="140"
+            data-lay-max="360"
+            data-lay-collapsible="true"
+          >
+            <div class="demo-pane-center demo-pane-tint">
+              <strong>侧边资源树</strong>
+              <span>可折叠 / 双击分隔条收起</span>
+            </div>
+          </div>
+          <div class="lay-splitter-panel">
+            <div class="lay-splitter" data-lay-orientation="vertical">
+              <div class="lay-splitter-panel" data-lay-min="100">
+                <div class="demo-pane-center">
+                  <strong>主编辑工作区</strong>
+                  <span>支持水平 + 垂直无限层级嵌套</span>
+                </div>
+              </div>
+              <div
+                class="lay-splitter-panel"
+                data-lay-size="110"
+                data-lay-min="60"
+                data-lay-collapsible="true"
+              >
+                <div class="demo-pane-center demo-pane-tint">
+                  <strong>底部终端面板</strong>
+                  <span>支持向下折叠与恢复</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="lay-splitter-panel"
+            data-lay-size="200"
+            data-lay-min="120"
+            data-lay-collapsible="true"
+          >
+            <div class="demo-pane-center demo-pane-tint">
+              <strong>右侧属性栏</strong>
+              <span>支持向右折叠</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2>延迟渲染模式（Lazy 预览线）</h2>
+      <div class="lay-flex-col">
+        <div
+          class="lay-splitter demo-splitter-box"
+          data-lay-lazy="true"
+          data-lay-bar-size="4"
+        >
+          <div
+            class="lay-splitter-panel"
+            data-lay-size="35%"
+            data-lay-min="100"
+          >
+            <div class="demo-pane-center demo-pane-tint">
+              拖拽时仅移动预览条，松开鼠标后更新布局
+            </div>
+          </div>
+          <div class="lay-splitter-panel" data-lay-min="100">
+            <div class="demo-pane-center">适合内嵌重型图表或 iframe 场景</div>
+          </div>
+        </div>
+      </div>
+
+      <h2>方法渲染与动态 API 操作</h2>
+      <div class="lay-flex-col">
+        <div id="demoSplitterApi" class="demo-splitter-box"></div>
+        <div class="lay-btn-container">
+          <button type="button" class="lay-btn lay-btn-sm" lay-on="toggleLeft">
+            切换左侧折叠
+          </button>
+          <button type="button" class="lay-btn lay-btn-sm" lay-on="resetEqual">
+            均分三栏
+          </button>
+          <button type="button" class="lay-btn lay-btn-sm" lay-on="presetRatio">
+            设为 20% / 50% / 30%
+          </button>
+          <button type="button" class="lay-btn lay-btn-sm" lay-on="switchDir">
+            切换水平/垂直方向
+          </button>
+          <button type="button" class="lay-btn lay-btn-sm" lay-on="printSizes">
+            获取当前尺寸
+          </button>
+        </div>
+        <div id="demoSplitterLog" class="demo-log">等待交互...</div>
+      </div>
+    </div>
+
+    <script src="./assets/dist/layui.js"></script>
+    <script>
+      layui.use(() => {
+        const { splitter, utils, $ } = layui;
+        const $log = $('#demoSplitterLog');
+        let currentOrientation = 'horizontal';
+
+        const logMsg = (msg) => {
+          $log.text(msg);
+        };
+
+        // 批量渲染页面中所有静态声明的 .lay-splitter
+        splitter.render();
+
+        splitter.render({
+          elem: '#demoSplitterApi',
+          id: 'apiDemo',
+          orientation: currentOrientation,
+          panels: [
+            {
+              size: 200,
+              min: 100,
+              max: 360,
+              collapsible: true,
+              content:
+                '<div class="demo-pane-center demo-pane-tint"><strong>面板 0</strong><span>min: 100px, collapsible</span></div>',
+            },
+            {
+              min: 120,
+              content:
+                '<div class="demo-pane-center"><strong>面板 1</strong><span>自适应主栏</span></div>',
+            },
+            {
+              size: '25%',
+              min: 100,
+              collapsible: true,
+              content:
+                '<div class="demo-pane-center demo-pane-tint"><strong>面板 2</strong><span>初始 25%, collapsible</span></div>',
+            },
+          ],
+          onResize({ index, sizes }) {
+            logMsg(`拖拽中 [bar ${index}] -> [${sizes.join('px, ')}px]`);
+          },
+          onResizeEnd({ index, sizes }) {
+            logMsg(`拖拽完成 [bar ${index}] -> [${sizes.join('px, ')}px]`);
+          },
+          onCollapse({ index, collapsed, sizes }) {
+            logMsg(
+              `面板 ${index} ${collapsed ? '已折叠' : '已展开'} -> [${sizes.join('px, ')}px]`,
+            );
+          },
+        });
+
+        utils.on('lay-on', {
+          toggleLeft() {
+            splitter.toggle('apiDemo', 0);
+          },
+          resetEqual() {
+            splitter.setSizes('apiDemo', ['33.33%', '33.33%', '33.34%']);
+            logMsg(
+              `已均分 -> [${splitter.getSizes('apiDemo').join('px, ')}px]`,
+            );
+          },
+          presetRatio() {
+            splitter.setSizes('apiDemo', ['20%', '50%', '30%']);
+            logMsg(
+              `已按比例设置 -> [${splitter.getSizes('apiDemo', '%').join('%, ')}%]`,
+            );
+          },
+          switchDir() {
+            currentOrientation =
+              currentOrientation === 'horizontal' ? 'vertical' : 'horizontal';
+            splitter.reload('apiDemo', { orientation: currentOrientation });
+            logMsg(`已重载方向为: ${currentOrientation}`);
+          },
+          printSizes() {
+            const pxSizes = splitter.getSizes('apiDemo');
+            const pctSizes = splitter.getSizes('apiDemo', '%');
+            logMsg(
+              `当前像素: [${pxSizes.join('px, ')}px] | 百分比: [${pctSizes.join('%, ')}%]`,
+            );
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

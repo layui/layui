@@ -23,6 +23,7 @@ import { datePicker } from './components/datePicker.js';
 import { dropdown } from './components/dropdown.js';
 import { colorPicker } from './components/colorPicker.js';
 import { slider } from './components/slider.js';
+import { splitter } from './components/splitter.js';
 import { nav } from './components/nav.js';
 import { breadcrumb } from './components/breadcrumb.js';
 import { collapse } from './components/collapse.js';
@@ -60,6 +61,7 @@ const layui = {
   dropdown,
   colorPicker,
   slider,
+  splitter,
   nav,
   breadcrumb,
   collapse,
