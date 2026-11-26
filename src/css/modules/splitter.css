@@ -170,7 +170,7 @@
   height: 2px;
 }
 
-/* 悬浮折叠按钮容器（脱离文档流居中附着，贴边折叠时向内对齐防止容器裁切） */
+/* 悬浮折叠按钮容器（脱离文档流居中附着，贴边或中间面板折叠紧邻时错开避免裁切与重叠） */
 .lay-splitter-bar-btns {
   position: absolute;
   left: 50%;
@@ -195,6 +195,18 @@
   transform: translate(0, -50%);
 }
 
+.lay-splitter-bar.lay-is-touching-next > .lay-splitter-bar-btns {
+  left: auto;
+  right: 100%;
+  transform: translate(0, -50%);
+}
+
+.lay-splitter-bar.lay-is-touching-prev > .lay-splitter-bar-btns {
+  left: 100%;
+  right: auto;
+  transform: translate(0, -50%);
+}
+
 :is(
     .lay-splitter.lay-splitter-is-vertical,
     .lay-splitter:not(
@@ -209,6 +221,8 @@
   &.lay-is-at-start > .lay-splitter-bar-btns {
     left: 50%;
     top: 0;
+    bottom: auto;
+    right: auto;
     transform: translate(-50%, 0);
   }
 
@@ -216,6 +230,23 @@
     left: 50%;
     top: auto;
     bottom: 0;
+    right: auto;
+    transform: translate(-50%, 0);
+  }
+
+  &.lay-is-touching-next > .lay-splitter-bar-btns {
+    left: 50%;
+    right: auto;
+    top: auto;
+    bottom: 100%;
+    transform: translate(-50%, 0);
+  }
+
+  &.lay-is-touching-prev > .lay-splitter-bar-btns {
+    left: 50%;
+    right: auto;
+    top: 100%;
+    bottom: auto;
     transform: translate(-50%, 0);
   }
 }
@@ -239,6 +270,10 @@
     color var(--lay-anim-duration-fast),
     border-color var(--lay-anim-duration-fast),
     background-color var(--lay-anim-duration-fast);
+
+  &.lay-is-hidden {
+    display: none;
+  }
 
   .lay-icon {
     font-size: 12px;

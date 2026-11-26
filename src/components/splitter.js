@@ -236,6 +236,78 @@ export const computeInitialSizes = (panelsMeta, availableSize) => {
 };
 
 /**
+ * 计算调用 `setSizes(nextSizes)` 后的各面板像素尺寸
+ * 显式传入的值严格优先满足，省略或设为 `'auto'` 的未折叠面板按其当前相对比例承接剩余空间
+ * @param {Object} params
+ * @param {number[]} params.prevSizes - 调用前各面板像素尺寸
+ * @param {Array<Object>} params.panelsMeta - 面板元数据列表（已更新最新 collapsed 标记）
+ * @param {Array<number|string|undefined|null>} params.nextSizes - 调用方传入的目标尺寸数组
+ * @param {number} params.availableSize - 可用主轴总尺寸（px）
+ * @returns {{ sizes: number[], bounds: Array<{min: number, max: number}> }}
+ */
+export const computeSetSizes = ({
+  prevSizes,
+  panelsMeta,
+  nextSizes,
+  availableSize,
+}) => {
+  const safeAvailable = Math.max(0, availableSize);
+  const count = panelsMeta.length;
+  if (!count) return { sizes: [], bounds: [] };
+
+  const bounds = panelsMeta.map((p) => resolvePanelBounds(p, safeAvailable));
+  const sizes = new Array(count).fill(0);
+  const explicitIndices = [];
+  const implicitIndices = [];
+  const activeIndices = [];
+
+  panelsMeta.forEach((panel, idx) => {
+    if (panel.collapsed) {
+      sizes[idx] = 0;
+      return;
+    }
+
+    activeIndices.push(idx);
+    const rawVal = idx < nextSizes.length ? nextSizes[idx] : undefined;
+    const parsed = parseSizeValue(rawVal, safeAvailable, null);
+
+    if (parsed !== null) {
+      sizes[idx] = clampNumber(parsed, bounds[idx].min, bounds[idx].max);
+      explicitIndices.push(idx);
+    } else {
+      implicitIndices.push(idx);
+    }
+  });
+
+  const explicitSum = explicitIndices.reduce((sum, idx) => sum + sizes[idx], 0);
+  const remaining = Math.max(0, safeAvailable - explicitSum);
+
+  if (implicitIndices.length > 0) {
+    const prevImplicitSum = implicitIndices.reduce(
+      (sum, idx) => sum + (prevSizes?.[idx] > 0 ? prevSizes[idx] : 0),
+      0,
+    );
+
+    implicitIndices.forEach((idx) => {
+      const prevWeight = prevSizes?.[idx] > 0 ? prevSizes[idx] : 0;
+      const rawShare =
+        prevImplicitSum > EPSILON
+          ? remaining * (prevWeight / prevImplicitSum)
+          : remaining / implicitIndices.length;
+      sizes[idx] = clampNumber(rawShare, bounds[idx].min, bounds[idx].max);
+    });
+
+    // 优先在省略的未传面板之间消化差额，避免篡改显式传入的尺寸
+    distributeDiffAmong(sizes, bounds, implicitIndices, safeAvailable);
+  }
+
+  // 仅当省略面板均触及边界无法消化全部差额时，在所有活动面板间做最终平衡
+  distributeDiffAmong(sizes, bounds, activeIndices, safeAvailable);
+
+  return { sizes, bounds };
+};
+
+/**
  * 容器尺寸变化时，按原有面板比例重新缩放尺寸
  * @param {number[]} prevSizes - 缩放前各面板像素尺寸
  * @param {Array<Object>} panelsMeta - 面板元数据列表
@@ -337,11 +409,12 @@ export const computeDragStep = ({
   const desiredPrev = s0 + rawDelta;
   const desiredNext = s1 - rawDelta;
 
-  // 向左/上拖过阈值触发吸附折叠 prev 面板
+  // 向左/上拖过阈值触发吸附折叠 prev 面板（必须同时满足接收侧 b1 的 min 与 max 边界）
   const prevSnapThreshold = b0.min > 0 ? b0.min * 0.4 : 0;
   if (
     canCollapsePrev &&
     desiredPrev <= prevSnapThreshold &&
+    pairTotal >= b1.min &&
     pairTotal <= b1.max &&
     pairTotal > 0
   ) {
@@ -355,11 +428,12 @@ export const computeDragStep = ({
     };
   }
 
-  // 向右/下拖过阈值触发吸附折叠 next 面板
+  // 向右/下拖过阈值触发吸附折叠 next 面板（必须同时满足接收侧 b0 的 min 与 max 边界）
   const nextSnapThreshold = b1.min > 0 ? b1.min * 0.4 : 0;
   if (
     canCollapseNext &&
     desiredNext <= nextSnapThreshold &&
+    pairTotal >= b0.min &&
     pairTotal <= b0.max &&
     pairTotal > 0
   ) {
@@ -442,7 +516,8 @@ const pickPrimaryNeighbor = (
 };
 
 /**
- * 计算单面板折叠或展开后的尺寸更新（支持多面板空间协同借用，严格保护 min/max 与其他折叠面板状态）
+ * 计算单面板折叠或展开后的尺寸更新
+ * 展开时优先消耗容器尚未分配的空白空间，不足部分再向其他未折叠面板借用，严格保护 min/max 与其他折叠面板状态
  * @param {Object} params
  * @param {number[]} params.sizes - 当前尺寸数组
  * @param {Array<{min: number, max: number}>} params.bounds - 边界数组
@@ -532,25 +607,25 @@ export const computeCollapseTransition = ({
     return { changed: true, sizes: nextSizes, neighborIndex: primary };
   }
 
-  // 展开分支：若此前所有面板均处于折叠态，直接占用容器可用空间
+  const currentUsed = nextSizes.reduce((sum, s) => sum + s, 0);
+  const freeSpace =
+    availableSize > 0 ? Math.max(0, availableSize - currentUsed) : 0;
+
+  // 展开分支：若此前所有面板均处于折叠态，直接使用容器可用空间
   if (!otherExpanded.length) {
-    if (availableSize <= EPSILON || availableSize < bounds[panelIndex].min) {
+    if (freeSpace <= EPSILON || freeSpace + EPSILON < bounds[panelIndex].min) {
       return { changed: false, sizes: nextSizes, neighborIndex: -1 };
     }
-    const rawSaved = parseSizeValue(
-      savedSizes[panelIndex],
-      availableSize,
-      null,
-    );
+    const rawSaved = parseSizeValue(savedSizes[panelIndex], freeSpace, null);
     const initConfigured = parseSizeValue(
       targetMeta.initialSize ?? targetMeta.size,
-      availableSize,
+      freeSpace,
       null,
     );
     const restored = clampNumber(
-      rawSaved ?? initConfigured ?? availableSize,
+      rawSaved ?? initConfigured ?? freeSpace,
       bounds[panelIndex].min,
-      Math.min(bounds[panelIndex].max, availableSize),
+      Math.min(bounds[panelIndex].max, freeSpace),
     );
     if (restored <= EPSILON) {
       return { changed: false, sizes: nextSizes, neighborIndex: -1 };
@@ -559,15 +634,19 @@ export const computeCollapseTransition = ({
     return { changed: true, sizes: nextSizes, neighborIndex: -1 };
   }
 
-  // 计算所有其他未折叠面板可让出的总空间
+  // 计算容器尚未分配的自由空白空间 + 所有其他未折叠面板可让出的总空间
   const totalShrinkRoom = otherExpanded.reduce(
     (sum, idx) => sum + Math.max(0, nextSizes[idx] - bounds[idx].min),
     0,
   );
+  const totalAvailableRoom = freeSpace + totalShrinkRoom;
   const minRequired = bounds[panelIndex].min;
 
-  // 若可让出总空间不足以满足目标面板的 min（或无可让出空间），严格保持折叠态并返回 false
-  if (totalShrinkRoom <= EPSILON || totalShrinkRoom + EPSILON < minRequired) {
+  // 若总可用空间不足以满足目标面板的 min（或无可分配空间），严格保持折叠态并返回 false
+  if (
+    totalAvailableRoom <= EPSILON ||
+    totalAvailableRoom + EPSILON < minRequired
+  ) {
     return { changed: false, sizes: nextSizes, neighborIndex: -1 };
   }
 
@@ -577,10 +656,7 @@ export const computeCollapseTransition = ({
     count,
     neighborIndex,
   );
-  const effectiveTotal =
-    availableSize > 0
-      ? availableSize
-      : nextSizes.reduce((sum, s) => sum + s, 0);
+  const effectiveTotal = availableSize > 0 ? availableSize : currentUsed;
 
   const savedPx = parseSizeValue(savedSizes[panelIndex], effectiveTotal, null);
   const configuredPx = parseSizeValue(
@@ -591,30 +667,46 @@ export const computeCollapseTransition = ({
   const fallbackSize =
     configuredPx && configuredPx > 0
       ? configuredPx
-      : Math.max(minRequired, (nextSizes[primary] || totalShrinkRoom) / 2);
+      : Math.max(
+          minRequired,
+          freeSpace > EPSILON
+            ? freeSpace
+            : (nextSizes[primary] || totalShrinkRoom) / 2,
+        );
   const desired = clampNumber(
     savedPx && savedPx > 0 ? savedPx : fallbackSize,
     minRequired,
     bounds[panelIndex].max,
   );
-  const restoredSize = Math.min(desired, totalShrinkRoom);
+  const restoredSize = Math.min(desired, totalAvailableRoom);
 
   if (restoredSize <= EPSILON || restoredSize + EPSILON < minRequired) {
     return { changed: false, sizes: nextSizes, neighborIndex: primary };
   }
 
-  const currentTotal = nextSizes.reduce((sum, s) => sum + s, 0);
-  const takeFromPrimary = Math.min(
-    restoredSize,
-    Math.max(0, nextSizes[primary] - bounds[primary].min),
-  );
-  nextSizes[primary] -= takeFromPrimary;
+  // 优先消耗尚未分配的自由空白空间，不足部分再向其他未折叠面板借用
+  const fromFree = Math.min(restoredSize, freeSpace);
+  const needBorrow = Math.max(0, restoredSize - fromFree);
   nextSizes[panelIndex] = restoredSize;
 
-  // 若直接邻居达到 min 后仍差部分空间，继续从其余富余的未折叠面板中按余量分摊扣减
-  if (restoredSize - takeFromPrimary > EPSILON) {
-    const remainingDonors = otherExpanded.filter((idx) => idx !== primary);
-    distributeDiffAmong(nextSizes, bounds, remainingDonors, currentTotal);
+  if (needBorrow > EPSILON) {
+    const targetTotalAfterExpand = currentUsed + fromFree;
+    const takeFromPrimary = Math.min(
+      needBorrow,
+      Math.max(0, nextSizes[primary] - bounds[primary].min),
+    );
+    nextSizes[primary] -= takeFromPrimary;
+
+    // 若直接邻居达到 min 后仍差部分空间，继续从其余富余的未折叠面板中按余量分摊扣减
+    if (needBorrow - takeFromPrimary > EPSILON) {
+      const remainingDonors = otherExpanded.filter((idx) => idx !== primary);
+      distributeDiffAmong(
+        nextSizes,
+        bounds,
+        remainingDonors,
+        targetTotalAfterExpand,
+      );
+    }
   }
 
   return { changed: true, sizes: nextSizes, neighborIndex: primary };
@@ -687,6 +779,8 @@ export class Splitter extends Component {
       CLASS_IS_DRAGGING: 'lay-is-dragging',
       CLASS_AT_START: 'lay-is-at-start',
       CLASS_AT_END: 'lay-is-at-end',
+      CLASS_TOUCHING_NEXT: 'lay-is-touching-next',
+      CLASS_TOUCHING_PREV: 'lay-is-touching-prev',
     };
   }
 
@@ -704,13 +798,13 @@ export class Splitter extends Component {
 
   /**
    * 渲染入口
-   * 当无参调用 `splitter.render()` 时，仅批量初始化页面中尚未渲染过的 `.lay-splitter` 容器，
-   * 避免将通过 JS 自定义配置渲染的已有实例误重置为默认选项。
+   * - 无配置项调用 `splitter.render()` 时，仅扫描并初始化尚未渲染过的 `.lay-splitter` 容器，避免重置已通过 JS 自定义配置的实例；
+   * - 传入配置项（如 `splitter.render({ disabled: true })` 或指定 `elem`）时，走基类标准渲染/重载流程。
    * @param {Object} [options] - 组件配置项
-   * @returns {Splitter|Splitter[]}
+   * @returns {Splitter|Splitter[]|undefined}
    */
   static render(options) {
-    if (!options || !lay.hasOwn(options, 'elem')) {
+    if (!options || Object.keys(options).length === 0) {
       const selector = this.options.elem;
       const attrId = this.CONST.ATTR_ID;
       const $unrendered = $(selector).filter(
@@ -719,7 +813,7 @@ export class Splitter extends Component {
       if (!$unrendered.length) {
         return [];
       }
-      return super.render({ ...options, elem: $unrendered });
+      return super.render({ elem: $unrendered });
     }
     return super.render(options);
   }
@@ -733,7 +827,9 @@ export class Splitter extends Component {
   #savedSizes = Object.create(null);
   #lastAvailableSize = 0;
   #currentOrientation = null;
-  #pendingLayout = true;
+  #hasMeasured = false;
+  #pendingInitialLayout = true;
+  #pendingSetSizes = null;
   #isGeneratedPanels = false;
   #rawInitOptions = null;
   #reloadRawOptions = null;
@@ -750,7 +846,7 @@ export class Splitter extends Component {
   }
 
   /**
-   * 重载组件实例，支持原地复用面板 DOM 并仅按需更新变更项
+   * 重载组件实例，原地复用面板 DOM 并仅按需更新变更项
    * @param {Object} [options={}] - 重载配置项
    * @returns {Splitter}
    */
@@ -773,19 +869,30 @@ export class Splitter extends Component {
 
     if (!$elem?.length) return;
 
-    const wasPendingLayout = this.#pendingLayout;
+    const prevHasMeasured = this.#hasMeasured;
     const prevOrientation = this.#currentOrientation;
 
     this.#stopActiveDrag();
     this.#normalizeOptions();
 
-    if (isReload) {
-      this.#pendingLayout = true;
+    const explicitReloadPanels =
+      isReload && Array.isArray(this.#reloadRawOptions?.panels);
+    const orientationChanged =
+      isReload &&
+      prevOrientation !== null &&
+      prevOrientation !== options.orientation;
+
+    if (!isReload || explicitReloadPanels || orientationChanged) {
+      this.#pendingInitialLayout = true;
+      this.#pendingSetSizes = null;
+      if (orientationChanged || explicitReloadPanels) {
+        this.#hasMeasured = false;
+      }
     }
 
-    this.#prepareDom({ isReload, wasPendingLayout, prevOrientation });
+    this.#prepareDom({ isReload, prevHasMeasured, prevOrientation });
     this.#currentOrientation = options.orientation;
-    this.#layoutPanels(true);
+    this.#layoutPanels(this.#pendingInitialLayout ? 'initial' : 'rescale');
     this.#bindEvents();
     this.#observeContainer();
   }
@@ -796,13 +903,17 @@ export class Splitter extends Component {
    * @returns {number[]} 各面板尺寸数组
    */
   getSizes(unit = 'px') {
-    // 若此前在隐藏态修改了状态且当前容器已具备有效尺寸，立即同步一次布局
-    if (this.#pendingLayout && this.#getAvailableSize() > 0) {
-      this.#layoutPanels(true);
+    if (
+      (this.#pendingInitialLayout || this.#pendingSetSizes !== null) &&
+      this.#getAvailableSize() > 0
+    ) {
+      this.#layoutPanels(
+        this.#pendingSetSizes !== null ? 'setSizes' : 'initial',
+      );
     }
 
     if (unit === '%') {
-      const total = this.#getAvailableSize();
+      const total = this.#getAvailableSize() || this.#lastAvailableSize;
       if (total <= 0) return this.#sizes.map(() => 0);
       return this.#sizes.map((size) =>
         Number(((size / total) * 100).toFixed(2)),
@@ -812,7 +923,8 @@ export class Splitter extends Component {
   }
 
   /**
-   * 动态设置各面板尺寸（未传入的索引保持当前尺寸，设为 0 时保存原尺寸以支持后续展开）
+   * 动态设置各面板尺寸
+   * 显式传入项严格优先满足，省略项按当前比例承接剩余空间；写入 0 前自动保存原尺寸以支持后续展开
    * @param {Array<number|string|undefined>} nextSizes - 新尺寸数组（支持 px 数字、'200px'、'30%'）
    * @returns {void}
    */
@@ -823,30 +935,21 @@ export class Splitter extends Component {
     const collapseChanges = [];
 
     this.#panelsMeta.forEach((meta, idx) => {
-      const hasInput = idx < nextSizes.length && nextSizes[idx] !== undefined;
-
-      if (!hasInput) {
-        // 未传入该项时：若已完成过布局且未折叠，保留其当前实际像素尺寸而非回退初始配置
-        if (
-          !this.#pendingLayout &&
-          !meta.collapsed &&
-          this.#sizes[idx] !== undefined
-        ) {
-          meta.size = this.#sizes[idx];
-        }
+      if (
+        idx >= nextSizes.length ||
+        nextSizes[idx] === undefined ||
+        nextSizes[idx] === null
+      ) {
         return;
       }
 
       const sizeVal = nextSizes[idx];
-      if (sizeVal === null) return;
-
       const isZeroInput =
         sizeVal === 0 ||
         (typeof sizeVal === 'string' && /^(0|0px|0%)$/i.test(sizeVal.trim()));
 
       if (isZeroInput) {
-        // 写入零值前记录当前非零尺寸，确保后续调用 expand() 可正常恢复
-        if (!this.#pendingLayout && this.#sizes[idx] > 0) {
+        if (this.#hasMeasured && this.#sizes[idx] > 0) {
           this.#savedSizes[idx] = this.#sizes[idx];
         } else if (meta.size && meta.size !== 'auto' && meta.size !== 0) {
           this.#savedSizes[idx] = meta.size;
@@ -869,8 +972,8 @@ export class Splitter extends Component {
       }
     });
 
-    this.#pendingLayout = true;
-    this.#layoutPanels(true);
+    this.#pendingSetSizes = nextSizes.slice();
+    this.#layoutPanels('setSizes');
 
     if (collapseChanges.length && this.options.onCollapse) {
       const currentSizes = this.getSizes();
@@ -924,7 +1027,13 @@ export class Splitter extends Component {
    * @returns {void}
    */
   refresh() {
-    this.#layoutPanels(this.#pendingLayout);
+    const mode =
+      this.#pendingSetSizes !== null
+        ? 'setSizes'
+        : this.#pendingInitialLayout
+          ? 'initial'
+          : 'rescale';
+    this.#layoutPanels(mode);
   }
 
   /**
@@ -951,15 +1060,22 @@ export class Splitter extends Component {
       });
 
       if (this.#isGeneratedPanels) {
+        this.#destroyDescendantSplitters($elem);
         $elem.empty();
       } else if (this.#$panels) {
         this.#$panels.each((_, panelElem) => {
           const $panel = $(panelElem);
           const restoreInfo = this.#panelRestoreMap.get(panelElem);
+          const keepInert = Boolean(restoreInfo?.hadInert);
 
-          $panel.removeClass(CONST.CLASS_IS_COLLAPSED).removeAttr('inert');
+          $panel.removeClass(CONST.CLASS_IS_COLLAPSED);
+          if (keepInert) {
+            $panel.attr('inert', '');
+          } else {
+            $panel.removeAttr('inert');
+          }
           if ('inert' in panelElem) {
-            panelElem.inert = false;
+            panelElem.inert = keepInert;
           }
 
           if (restoreInfo) {
@@ -983,9 +1099,55 @@ export class Splitter extends Component {
     this.#savedSizes = Object.create(null);
     this.#addedRootClasses.clear();
     this.#rootTrackingInitialized = false;
-    this.#pendingLayout = true;
+    this.#hasMeasured = false;
+    this.#pendingInitialLayout = true;
+    this.#pendingSetSizes = null;
+    this.#currentOrientation = null;
 
     super.destroy();
+  }
+
+  /**
+   * 销毁指定作用域内挂载的后代 Splitter 实例，防止移除节点后残留孤儿实例
+   * @param {JQuery} $scope - 待移除或清空的容器
+   */
+  #destroyDescendantSplitters($scope) {
+    if (!$scope?.length) return;
+    const attrId = CONST.ATTR_ID;
+    $scope.find(`[${attrId}]`).each((_, el) => {
+      const childId = el.getAttribute(attrId);
+      if (childId !== null && childId !== '') {
+        Splitter.getInstance(childId)?.destroy();
+      }
+    });
+  }
+
+  /**
+   * 安全更新面板内容：若目标单节点已在面板内则跳过重建以保留其绑定的事件与数据
+   * @param {Element} panelElem - 面板 DOM 节点
+   * @param {string|Node|JQuery} content - 面板内容
+   */
+  #applyPanelContent(panelElem, content) {
+    const singleNode =
+      content && typeof content === 'object' && content.jquery
+        ? content.length === 1
+          ? content[0]
+          : null
+        : content && typeof content === 'object' && content.nodeType
+          ? content
+          : null;
+
+    if (
+      singleNode &&
+      panelElem.childNodes?.length === 1 &&
+      panelElem.firstChild === singleNode
+    ) {
+      return;
+    }
+
+    const $panel = $(panelElem);
+    this.#destroyDescendantSplitters($panel);
+    $panel.empty().append(content);
   }
 
   /**
@@ -1016,7 +1178,6 @@ export class Splitter extends Component {
       this.#rootTrackingInitialized = true;
     }
 
-    // 先移除上一轮由 options.className 添加的自定义类（保留 CONST.ELEM）
     for (const cls of Array.from(this.#addedRootClasses)) {
       if (cls !== CONST.ELEM) {
         $elem.removeClass(cls);
@@ -1038,7 +1199,7 @@ export class Splitter extends Component {
   }
 
   /**
-   * 记录并同步单个面板的恢复信息、自定义类名与无障碍 ID
+   * 记录并同步单个面板的恢复信息、作者初始 inert 状态、自定义类名与无障碍 ID
    * @param {Element} panelElem - 面板 DOM 节点
    * @param {string} [customClassName] - 面板 className
    * @param {number} idx - 面板索引
@@ -1050,12 +1211,14 @@ export class Splitter extends Component {
     if (!restoreInfo) {
       restoreInfo = {
         prevFlex: panelElem.style?.flex || '',
+        hadInert:
+          Boolean(panelElem.hasAttribute?.('inert')) ||
+          Boolean(panelElem.inert),
         addedClasses: new Set(),
         autoAssignedId: false,
       };
       this.#panelRestoreMap.set(panelElem, restoreInfo);
     } else {
-      // 清理上一轮动态附加的面板类名
       restoreInfo.addedClasses.forEach((cls) => $panel.removeClass(cls));
       restoreInfo.addedClasses.clear();
     }
@@ -1072,7 +1235,7 @@ export class Splitter extends Component {
         });
     }
 
-    if (!$panel.attr('id')) {
+    if (!$panel.attr('id') || restoreInfo.autoAssignedId) {
       $panel.attr('id', `lay-splitter-panel-${this.options.id}-${idx}`);
       restoreInfo.autoAssignedId = true;
     }
@@ -1080,11 +1243,11 @@ export class Splitter extends Component {
 
   /**
    * 构建或增量复用面板与分隔条 DOM 结构
-   * @param {{ isReload?: boolean, wasPendingLayout?: boolean, prevOrientation?: string|null }} params
+   * @param {{ isReload?: boolean, prevHasMeasured?: boolean, prevOrientation?: string|null }} params
    */
   #prepareDom({
     isReload = false,
-    wasPendingLayout = true,
+    prevHasMeasured = false,
     prevOrientation = null,
   } = {}) {
     const options = this.options;
@@ -1093,17 +1256,19 @@ export class Splitter extends Component {
 
     this.#syncRootClasses($elem, options.className);
 
-    // 采用内部模式类控制样式，绝不修改或删除用户原始的 data-lay-orientation 属性
     $elem
       .toggleClass(CONST.MOD_VERTICAL, isVertical)
       .toggleClass(CONST.MOD_HORIZONTAL, !isVertical)
       .css('--lay-splitter-bar-size', `${options.barSize}px`);
 
-    // 清理上次渲染生成的分隔条或预览条
     $elem.children(`.${CONST.BAR}, .${CONST.GHOST_BAR}`).remove();
 
     let $existingPanels = $elem.children(`.${CONST.PANEL}`);
     const hasPanelsArray = Array.isArray(options.panels);
+    const rawReloadPanels =
+      isReload && Array.isArray(this.#reloadRawOptions?.panels)
+        ? this.#reloadRawOptions.panels
+        : null;
 
     // 数据生成模式（首次容器无静态面板且提供了 panels 数组，或此前已处于数据生成模式）
     if (
@@ -1113,48 +1278,55 @@ export class Splitter extends Component {
       this.#isGeneratedPanels = true;
       const targetPanels = hasPanelsArray ? options.panels : [];
 
-      // 若重载传入空数组 panels: []，则清空全部面板
+      // 若重载传入空数组 panels: []，销毁嵌套实例并彻底清空面板与历史尺寸缓存
       if (!targetPanels.length) {
+        this.#destroyDescendantSplitters($existingPanels);
         $existingPanels.remove();
         this.#$panels = $();
         this.#panelsMeta = [];
         this.#sizes = [];
         this.#bounds = [];
+        this.#savedSizes = Object.create(null);
         this.#$bars = $();
         return;
       }
 
-      const rawReloadPanels =
-        isReload && Array.isArray(this.#reloadRawOptions?.panels)
-          ? this.#reloadRawOptions.panels
-          : null;
-
-      // 按索引原地复用已有面板节点，保护内部挂载的子组件与事件
       targetPanels.forEach((panelOpt, idx) => {
         const cfg = panelOpt || {};
+        if (
+          rawReloadPanels?.[idx] &&
+          (lay.hasOwn(rawReloadPanels[idx], 'size') ||
+            lay.hasOwn(rawReloadPanels[idx], 'collapsed'))
+        ) {
+          delete this.#savedSizes[idx];
+        }
+
         if (idx < $existingPanels.length) {
           const panelElem = $existingPanels[idx];
           this.#syncPanelElementAttributes(panelElem, cfg.className, idx);
-          // 仅当本次 reload 显式传入了该面板的新 content 时才更新内容
           if (
             rawReloadPanels?.[idx] &&
             lay.hasOwn(rawReloadPanels[idx], 'content')
           ) {
-            $(panelElem).empty().append(rawReloadPanels[idx].content);
+            this.#applyPanelContent(panelElem, rawReloadPanels[idx].content);
           }
         } else {
+          delete this.#savedSizes[idx];
           const $newPanel = $(`<div class="${CONST.PANEL}"></div>`);
           this.#syncPanelElementAttributes($newPanel[0], cfg.className, idx);
           if (cfg.content !== undefined) {
-            $newPanel.append(cfg.content);
+            this.#applyPanelContent($newPanel[0], cfg.content);
           }
           $elem.append($newPanel);
         }
       });
 
-      // 移除超出新数组长度的尾部旧面板
+      // 移除超出新数组长度的尾部旧面板，并清理其后代实例与历史尺寸记录
       for (let k = targetPanels.length; k < $existingPanels.length; k++) {
-        $existingPanels.eq(k).remove();
+        const $removed = $existingPanels.eq(k);
+        this.#destroyDescendantSplitters($removed);
+        $removed.remove();
+        delete this.#savedSizes[k];
       }
 
       $existingPanels = $elem.children(`.${CONST.PANEL}`);
@@ -1162,16 +1334,12 @@ export class Splitter extends Component {
 
     this.#$panels = $existingPanels;
 
-    // 判定本次调用中哪些面板显式携带了新的 content
     const rawExplicitPanels = isReload
-      ? Array.isArray(this.#reloadRawOptions?.panels)
-        ? this.#reloadRawOptions.panels
-        : null
+      ? rawReloadPanels
       : Array.isArray(this.#rawInitOptions?.panels)
         ? this.#rawInitOptions.panels
         : null;
 
-    // 合并每个面板的 dataset 配置与 options.panels[i] 配置
     this.#panelsMeta = $existingPanels
       .map((idx, panelElem) => {
         const datasetOpts = lay.parseDataset(panelElem);
@@ -1187,14 +1355,21 @@ export class Splitter extends Component {
           ...jsPanelOpts,
         };
 
-        // 保留初始配置尺寸，供初始折叠面板在无历史记录时展开回退使用
         merged.initialSize = merged.size;
 
-        // 若仅为修改非面板配置的重载，保留用户此前已交互的折叠状态，同方向下保留已拖拽尺寸
+        if (
+          rawReloadPanels?.[idx] &&
+          (lay.hasOwn(rawReloadPanels[idx], 'size') ||
+            lay.hasOwn(rawReloadPanels[idx], 'collapsed'))
+        ) {
+          delete this.#savedSizes[idx];
+        }
+
+        // 若仅为修改非面板配置的重载，保留此前已交互的折叠状态，同方向下保留已调整尺寸
         if (isReload && prevMeta && !rawExplicitPanels) {
           merged.collapsed = prevMeta.collapsed;
           if (
-            !wasPendingLayout &&
+            prevHasMeasured &&
             prevOrientation === options.orientation &&
             this.#sizes[idx] !== undefined &&
             !prevMeta.collapsed
@@ -1213,7 +1388,7 @@ export class Splitter extends Component {
             rawExplicitPanels?.[idx] &&
             lay.hasOwn(rawExplicitPanels[idx], 'content')
           ) {
-            $(panelElem).empty().append(rawExplicitPanels[idx].content);
+            this.#applyPanelContent(panelElem, rawExplicitPanels[idx].content);
           }
         }
 
@@ -1221,7 +1396,7 @@ export class Splitter extends Component {
       })
       .get();
 
-    // 在相邻面板之间插入分隔条
+    // 在相邻面板之间插入分隔条（动态属性统一通过 .attr() 设置，避免特殊字符截断 HTML）
     const barAriaOrientation = isVertical ? 'horizontal' : 'vertical';
     const panelCount = this.#panelsMeta.length;
     const barElems = [];
@@ -1229,16 +1404,21 @@ export class Splitter extends Component {
     for (let i = 0; i < panelCount - 1; i++) {
       const prevMeta = this.#panelsMeta[i];
       const nextMeta = this.#panelsMeta[i + 1];
-      const prevId = $existingPanels.eq(i).attr('id');
-      const nextId = $existingPanels.eq(i + 1).attr('id');
+      const prevId = $existingPanels.eq(i).attr('id') || '';
+      const nextId = $existingPanels.eq(i + 1).attr('id') || '';
       const barDisabled =
         options.disabled ||
         prevMeta.resizable === false ||
         nextMeta.resizable === false;
 
       const $bar = $(
-        `<div class="${CONST.BAR} lay-unselect" role="separator" aria-orientation="${barAriaOrientation}" aria-label="Resize panels" aria-controls="${prevId} ${nextId}" data-bar-index="${i}"></div>`,
-      );
+        `<div class="${CONST.BAR} lay-unselect" role="separator"></div>`,
+      ).attr({
+        'aria-orientation': barAriaOrientation,
+        'aria-label': 'Resize panels',
+        'aria-controls': `${prevId} ${nextId}`.trim(),
+        'data-bar-index': String(i),
+      });
 
       if (barDisabled) {
         $bar.addClass(CONST.CLASS_IS_DISABLED);
@@ -1287,8 +1467,13 @@ export class Splitter extends Component {
    */
   #createCollapseBtn(panelIndex, neighborIndex, side, panelId) {
     return $(
-      `<button type="button" class="${CONST.COLLAPSE_BTN}" aria-controls="${panelId}" data-panel-index="${panelIndex}" data-neighbor-index="${neighborIndex}" data-side="${side}"><i class="lay-icon"></i></button>`,
-    );
+      `<button type="button" class="${CONST.COLLAPSE_BTN}"><i class="lay-icon"></i></button>`,
+    ).attr({
+      'aria-controls': panelId,
+      'data-panel-index': String(panelIndex),
+      'data-neighbor-index': String(neighborIndex),
+      'data-side': side,
+    });
   }
 
   /**
@@ -1315,54 +1500,71 @@ export class Splitter extends Component {
 
   /**
    * 计算并应用面板尺寸
-   * @param {boolean} isInitial - 是否按配置重新分配（false 时按已有比例缩放）
+   * @param {'initial'|'setSizes'|'rescale'} [mode='rescale'] - 布局计算模式
    */
-  #layoutPanels(isInitial = false) {
+  #layoutPanels(mode = 'rescale') {
     const count = this.#panelsMeta.length;
     if (!count) return;
 
     const availableSize = this.#getAvailableSize();
 
-    // 若容器当前不可见（宽/高为 0），保持 #pendingLayout = true 并设置 CSS 占位回退，待恢复可见后重算
+    // 若容器当前不可见（宽/高为 0）：保留已测量过的 #sizes（不无条件重置 #pendingInitialLayout）
     if (availableSize <= 0) {
-      this.#pendingLayout = true;
       this.#applyFallbackUnmeasuredStyles();
       return;
     }
 
-    const result =
-      isInitial || this.#pendingLayout
-        ? computeInitialSizes(this.#panelsMeta, availableSize)
-        : rescaleSizes(this.#sizes, this.#panelsMeta, availableSize);
+    let result;
+    if (mode === 'setSizes' && this.#pendingSetSizes !== null) {
+      result = computeSetSizes({
+        prevSizes: this.#sizes,
+        panelsMeta: this.#panelsMeta,
+        nextSizes: this.#pendingSetSizes,
+        availableSize,
+      });
+      this.#pendingSetSizes = null;
+    } else if (
+      mode === 'initial' ||
+      this.#pendingInitialLayout ||
+      !this.#hasMeasured
+    ) {
+      result = computeInitialSizes(this.#panelsMeta, availableSize);
+    } else {
+      result = rescaleSizes(this.#sizes, this.#panelsMeta, availableSize);
+    }
 
     this.#sizes = result.sizes;
     this.#bounds = result.bounds;
     this.#lastAvailableSize = availableSize;
-    this.#pendingLayout = false;
+    this.#hasMeasured = true;
+    this.#pendingInitialLayout = false;
 
     this.#applySizesToDom();
   }
 
   /**
-   * 同步单个面板的折叠无障碍状态（inert 属性，防止 Tab 键聚焦折叠隐藏内容）
+   * 同步单个面板的折叠无障碍状态（尊重作者初始设置的 inert 属性）
    * @param {JQuery} $panel - 面板 jQuery 对象
    * @param {boolean} isCollapsed - 是否折叠
    */
   #syncPanelCollapsedA11y($panel, isCollapsed) {
     const panelElem = $panel[0];
+    const restoreInfo = panelElem ? this.#panelRestoreMap.get(panelElem) : null;
+    const effectiveInert = isCollapsed || Boolean(restoreInfo?.hadInert);
+
     $panel.toggleClass(CONST.CLASS_IS_COLLAPSED, isCollapsed);
-    if (isCollapsed) {
+    if (effectiveInert) {
       $panel.attr('inert', '');
     } else {
       $panel.removeAttr('inert');
     }
     if (panelElem && 'inert' in panelElem) {
-      panelElem.inert = isCollapsed;
+      panelElem.inert = effectiveInert;
     }
   }
 
   /**
-   * 当容器隐藏（宽/高为 0）时应用 CSS 初始比例占位样式
+   * 当容器隐藏（宽/高为 0）时应用 CSS 比例或已知像素占位样式
    */
   #applyFallbackUnmeasuredStyles() {
     this.#panelsMeta.forEach((meta, idx) => {
@@ -1372,7 +1574,33 @@ export class Splitter extends Component {
 
       if (isCollapsed) {
         $panel.css('flex', '0 0 0px');
+        return;
+      }
+
+      const pendingVal =
+        this.#pendingSetSizes && idx < this.#pendingSetSizes.length
+          ? this.#pendingSetSizes[idx]
+          : undefined;
+
+      if (
+        pendingVal !== undefined &&
+        pendingVal !== null &&
+        pendingVal !== 'auto'
+      ) {
+        const basis =
+          typeof pendingVal === 'number'
+            ? `${pendingVal}px`
+            : String(pendingVal);
+        $panel.css('flex', `0 0 ${basis}`);
       } else if (
+        this.#hasMeasured &&
+        !this.#pendingInitialLayout &&
+        this.#pendingSetSizes === null &&
+        this.#sizes[idx] > 0
+      ) {
+        $panel.css('flex', `0 0 ${this.#sizes[idx]}px`);
+      } else if (
+        !this.#pendingSetSizes &&
         meta.size !== undefined &&
         meta.size !== null &&
         meta.size !== 'auto'
@@ -1388,7 +1616,7 @@ export class Splitter extends Component {
   }
 
   /**
-   * 将当前 #sizes 像素值、边缘对齐状态与无障碍属性同步至 DOM
+   * 将当前 #sizes 像素值、边缘对齐状态、紧邻防重叠状态与无障碍属性同步至 DOM
    */
   #applySizesToDom() {
     const availableSize = this.#lastAvailableSize || this.#getAvailableSize();
@@ -1403,7 +1631,6 @@ export class Splitter extends Component {
       $panel.css('flex', `0 0 ${isCollapsed ? 0 : size}px`);
     });
 
-    // 更新分隔条无障碍数值与贴边标记（防止折叠到 0 时悬浮按钮被容器边缘裁切）
     this.#$bars?.each((barIdx, barElem) => {
       const prevSize = this.#sizes[barIdx] ?? 0;
       const nextSize = this.#sizes[barIdx + 1] ?? 0;
@@ -1451,19 +1678,29 @@ export class Splitter extends Component {
   }
 
   /**
-   * 同步分隔条上折叠按钮的箭头图标与无障碍属性
+   * 同步分隔条上折叠按钮的箭头图标、双侧折叠去重隐藏、紧邻防重叠位移与无障碍属性
    */
   #syncCollapseButtons() {
     if (!this.#$bars) return;
     const isVertical = this.options.orientation === 'vertical';
+    const panelCount = this.#panelsMeta.length;
 
     this.#$bars.find(`.${CONST.COLLAPSE_BTN}`).each((_, btnElem) => {
       const $btn = $(btnElem);
       const panelIdx = Number($btn.attr('data-panel-index'));
       const side = $btn.attr('data-side');
-      const isCollapsed = Boolean(this.#panelsMeta[panelIdx]?.collapsed);
+      const meta = this.#panelsMeta[panelIdx];
+      const isCollapsed = Boolean(meta?.collapsed);
+      const colFlags = resolvePanelCollapsible(
+        meta?.collapsible,
+        panelIdx,
+        panelCount,
+      );
 
-      // prev 面板未折叠时向左/上收起，已折叠时向右/下展开；next 面板相反
+      // 当中间面板同时具有两侧折叠按钮且已折叠为 0px 时，隐藏后侧分隔条上的重复展开按钮
+      const hideDuplicateExpandBtn =
+        isCollapsed && colFlags.start && colFlags.end && side === 'prev';
+
       let iconClass;
       if (side === 'prev') {
         iconClass = isVertical
@@ -1485,15 +1722,47 @@ export class Splitter extends Component {
 
       $btn
         .toggleClass(CONST.CLASS_IS_ACTIVE, isCollapsed)
+        .toggleClass(CONST.CLASS_IS_HIDDEN, hideDuplicateExpandBtn)
         .attr('aria-expanded', String(!isCollapsed))
         .attr('aria-label', isCollapsed ? 'Expand panel' : 'Collapse panel')
         .children('.lay-icon')
         .attr('class', `lay-icon ${iconClass}`);
     });
+
+    // 仅当中间面板折叠导致相邻两条分隔条紧贴、且两条分隔条上均存在可见按钮时，向外侧错开按钮组防止重叠
+    const hasVisibleBtn = (barElem) =>
+      $(barElem)
+        .find(`.${CONST.COLLAPSE_BTN}`)
+        .filter((_, el) => !$(el).hasClass(CONST.CLASS_IS_HIDDEN)).length > 0;
+
+    this.#$bars.each((barIdx, barElem) => {
+      const $bar = $(barElem);
+      const ownHasVisible = hasVisibleBtn(barElem);
+      const isAtStart = $bar.hasClass(CONST.CLASS_AT_START);
+      const isAtEnd = $bar.hasClass(CONST.CLASS_AT_END);
+
+      const touchingNext =
+        !isAtStart &&
+        ownHasVisible &&
+        barIdx + 1 < panelCount - 1 &&
+        Boolean(this.#panelsMeta[barIdx + 1]?.collapsed) &&
+        hasVisibleBtn(this.#$bars[barIdx + 1]);
+
+      const touchingPrev =
+        !isAtEnd &&
+        ownHasVisible &&
+        barIdx > 0 &&
+        Boolean(this.#panelsMeta[barIdx]?.collapsed) &&
+        hasVisibleBtn(this.#$bars[barIdx - 1]);
+
+      $bar
+        .toggleClass(CONST.CLASS_TOUCHING_NEXT, touchingNext)
+        .toggleClass(CONST.CLASS_TOUCHING_PREV, touchingPrev);
+    });
   }
 
   /**
-   * 执行单个面板的折叠/展开切换（兼容隐藏容器安全延迟更新）
+   * 执行单个面板的折叠/展开切换（支持隐藏态下保留已测量尺寸直接计算）
    * @param {number} panelIndex - 目标面板索引
    * @param {boolean} targetCollapsed - 目标折叠态
    * @param {number} [neighborIndex] - 优先交换空间的邻居面板索引
@@ -1508,32 +1777,37 @@ export class Splitter extends Component {
       return false;
     }
 
-    const availableSize = this.#getAvailableSize();
+    const liveAvailableSize = this.#getAvailableSize();
 
-    // 当容器处于隐藏态（宽高为 0）尚未可测量时，安全更新面板元数据并推迟像素计算至首次可见
-    if (availableSize <= 0) {
+    // 若容器当前隐藏但此前已完成过有效测量（且无待执行的配置级重置），直接基于 #lastAvailableSize 更新 #sizes，保留拖拽/键盘调整结果
+    if (liveAvailableSize <= 0 && !this.#hasMeasured) {
       if (targetCollapsed) {
         const hasOtherExpanded = this.#panelsMeta.some(
           (m, idx) => idx !== panelIndex && !m.collapsed,
         );
         if (!hasOtherExpanded) return false;
 
-        if (!this.#pendingLayout && this.#sizes[panelIndex] > 0) {
-          this.#savedSizes[panelIndex] = this.#sizes[panelIndex];
-        } else if (
-          targetMeta.size &&
-          targetMeta.size !== 'auto' &&
-          targetMeta.size !== 0
-        ) {
-          this.#savedSizes[panelIndex] = targetMeta.size;
+        const pendingVal =
+          this.#pendingSetSizes?.[panelIndex] ?? targetMeta.size;
+        if (pendingVal && pendingVal !== 'auto' && pendingVal !== 0) {
+          this.#savedSizes[panelIndex] = pendingVal;
         }
-      } else if (targetMeta.size === 0) {
-        targetMeta.size =
-          this.#savedSizes[panelIndex] ?? targetMeta.initialSize;
+        if (this.#pendingSetSizes) {
+          this.#pendingSetSizes[panelIndex] = 0;
+        }
+      } else {
+        const restoredCfg =
+          this.#savedSizes[panelIndex] ??
+          targetMeta.initialSize ??
+          targetMeta.size;
+        targetMeta.size = restoredCfg;
+        if (this.#pendingSetSizes) {
+          this.#pendingSetSizes[panelIndex] = restoredCfg;
+        }
       }
 
       targetMeta.collapsed = targetCollapsed;
-      this.#pendingLayout = true;
+      this.#pendingInitialLayout = true;
       this.#applyFallbackUnmeasuredStyles();
 
       this.options.onCollapse?.({
@@ -1546,9 +1820,17 @@ export class Splitter extends Component {
       return true;
     }
 
-    if (this.#pendingLayout) {
-      this.#layoutPanels(true);
+    if (
+      liveAvailableSize > 0 &&
+      (this.#pendingInitialLayout || this.#pendingSetSizes !== null)
+    ) {
+      this.#layoutPanels(
+        this.#pendingSetSizes !== null ? 'setSizes' : 'initial',
+      );
     }
+
+    const effectiveAvailableSize =
+      liveAvailableSize > 0 ? liveAvailableSize : this.#lastAvailableSize;
 
     const transition = computeCollapseTransition({
       sizes: this.#sizes,
@@ -1558,7 +1840,7 @@ export class Splitter extends Component {
       panelIndex,
       collapsed: targetCollapsed,
       neighborIndex,
-      availableSize,
+      availableSize: effectiveAvailableSize,
     });
 
     if (!transition.changed) return false;
@@ -1592,17 +1874,14 @@ export class Splitter extends Component {
 
     $elem.off(ns);
 
-    // 仅处理归属于当前 Splitter 实例的直接分隔条（防止嵌套 Splitter 冒泡串扰）
     const isOwnBar = (barNode) => barNode?.parentElement === elemNode;
 
-    // 阻止折叠按钮的 pointerdown 冒泡触发分隔条拖拽
     $elem.on(`pointerdown${ns}`, `.${CONST.COLLAPSE_BTN}`, (e) => {
       const barNode = e.currentTarget.closest(`.${CONST.BAR}`);
       if (!isOwnBar(barNode)) return;
       e.stopPropagation();
     });
 
-    // 点击折叠/展开按钮
     $elem.on(`click${ns}`, `.${CONST.COLLAPSE_BTN}`, (e) => {
       const barNode = e.currentTarget.closest(`.${CONST.BAR}`);
       if (!isOwnBar(barNode)) return;
@@ -1614,7 +1893,6 @@ export class Splitter extends Component {
       this.toggle(panelIdx, neighborIdx);
     });
 
-    // 双击分隔条快捷切换相邻可折叠面板
     if (options.dblClickCollapse) {
       $elem.on(`dblclick${ns}`, `.${CONST.BAR}`, (e) => {
         if (!isOwnBar(e.currentTarget)) return;
@@ -1626,7 +1904,6 @@ export class Splitter extends Component {
 
     // 键盘方向键 / Home / End 微调 & Enter 快捷折叠
     $elem.on(`keydown${ns}`, `.${CONST.BAR}`, (e) => {
-      // 仅响应焦点位于分隔条自身时的按键，避免拦截内部折叠按钮上的 Enter/Space
       if (e.target !== e.currentTarget) return;
       if (!isOwnBar(e.currentTarget)) return;
 
@@ -1644,8 +1921,10 @@ export class Splitter extends Component {
       }
 
       if (this.#getAvailableSize() <= 0) return;
-      if (this.#pendingLayout) {
-        this.#layoutPanels(true);
+      if (this.#pendingInitialLayout || this.#pendingSetSizes !== null) {
+        this.#layoutPanels(
+          this.#pendingSetSizes !== null ? 'setSizes' : 'initial',
+        );
       }
 
       let rawDelta = 0;
@@ -1664,6 +1943,17 @@ export class Splitter extends Component {
       if (!rawDelta) return;
       e.preventDefault();
 
+      // 先预计算步进结果：若已处于极限位置无法移动，不空触发 onResizeStart
+      const stepResult = computeDragStep({
+        startSizes: this.#sizes,
+        bounds: this.#bounds,
+        panelsMeta: this.#panelsMeta,
+        barIndex,
+        rawDelta,
+      });
+
+      if (stepResult.delta === 0) return;
+
       const canStart = options.onResizeStart?.({
         instance: this,
         options,
@@ -1678,23 +1968,12 @@ export class Splitter extends Component {
         this.#panelsMeta[barIndex + 1]?.collapsed,
       );
 
-      // 预先记录未折叠尺寸，以便键盘步进触发吸附折叠后仍可还原
       if (!startPrevCollapsed && this.#sizes[barIndex] > 0) {
         this.#savedSizes[barIndex] = this.#sizes[barIndex];
       }
       if (!startNextCollapsed && this.#sizes[barIndex + 1] > 0) {
         this.#savedSizes[barIndex + 1] = this.#sizes[barIndex + 1];
       }
-
-      const stepResult = computeDragStep({
-        startSizes: this.#sizes,
-        bounds: this.#bounds,
-        panelsMeta: this.#panelsMeta,
-        barIndex,
-        rawDelta,
-      });
-
-      if (stepResult.delta === 0) return;
 
       options.onResize?.({
         instance: this,
@@ -1729,7 +2008,7 @@ export class Splitter extends Component {
   }
 
   /**
-   * 双击或按 Enter 时切换分隔条关联的可折叠面板（仅处理允许在当前侧折叠的面板）
+   * 双击或按 Enter 时切换分隔条关联的可折叠面板
    * @param {number} barIndex - 分隔条索引
    * @returns {boolean}
    */
@@ -1749,7 +2028,6 @@ export class Splitter extends Component {
       count,
     ).start;
 
-    // 优先展开已处于折叠态的相邻可折叠面板
     if (canPrev && prevMeta?.collapsed) {
       return this.expand(barIndex, barIndex + 1);
     }
@@ -1757,7 +2035,6 @@ export class Splitter extends Component {
       return this.expand(barIndex + 1, barIndex);
     }
 
-    // 否则折叠允许在当前侧收起的相邻面板
     if (canPrev) {
       return this.collapse(barIndex, barIndex + 1);
     }
@@ -1778,8 +2055,10 @@ export class Splitter extends Component {
     this.#stopActiveDrag();
 
     if (this.#getAvailableSize() <= 0) return;
-    if (this.#pendingLayout) {
-      this.#layoutPanels(true);
+    if (this.#pendingInitialLayout || this.#pendingSetSizes !== null) {
+      this.#layoutPanels(
+        this.#pendingSetSizes !== null ? 'setSizes' : 'initial',
+      );
     }
 
     const options = this.options;
@@ -1791,7 +2070,6 @@ export class Splitter extends Component {
       index: barIndex,
     };
 
-    // 执行 onResizeStart 回调，返回 false 时中止拖拽
     const canStart = options.onResizeStart?.({
       ...basePayload,
       sizes: this.getSizes(),
@@ -1816,7 +2094,6 @@ export class Splitter extends Component {
       this.#panelsMeta[barIndex + 1]?.collapsed,
     );
 
-    // 若起始未折叠，预先记录尺寸以备拖拽吸附折叠后可还原
     if (!startPrevCollapsed && startSizes[barIndex] > 0) {
       this.#savedSizes[barIndex] = startSizes[barIndex];
     }
@@ -1824,7 +2101,6 @@ export class Splitter extends Component {
       this.#savedSizes[barIndex + 1] = startSizes[barIndex + 1];
     }
 
-    // 挂载全屏防穿透遮罩，锁定全局拖拽光标并屏蔽 iframe/文本选中干扰
     const cursor = isVertical ? 'row-resize' : 'col-resize';
     const $mask = $(`<div class="${CONST.MOVING_MASK}"></div>`).css(
       'cursor',
@@ -1835,7 +2111,6 @@ export class Splitter extends Component {
     $elem.addClass(CONST.CLASS_IS_DRAGGING);
     $bar.addClass(CONST.CLASS_IS_ACTIVE);
 
-    // Lazy 模式创建预览指示条
     let $ghostBar = null;
     if (options.lazy) {
       const barRect = barNode.getBoundingClientRect();
@@ -1908,16 +2183,24 @@ export class Splitter extends Component {
       const finalStep = latestStep;
       this.#stopActiveDrag();
 
-      // 单纯点击或双击分隔条未发生指针移动时，不提交拖拽也不触发 onResizeEnd
-      if (!didMove) return;
+      if (didMove) {
+        this.#commitStepResult(
+          barIndex,
+          finalStep,
+          startPrevCollapsed,
+          startNextCollapsed,
+          endEvent,
+        );
+      }
 
-      this.#commitStepResult(
-        barIndex,
-        finalStep,
-        startPrevCollapsed,
-        startNextCollapsed,
-        endEvent,
-      );
+      // 若拖拽期间容器尺寸发生过变化，释放后立即补做一次比例重算消除留白或溢出
+      const currentAvail = this.#getAvailableSize();
+      if (
+        currentAvail > 0 &&
+        Math.abs(currentAvail - this.#lastAvailableSize) > 0.5
+      ) {
+        this.#layoutPanels('rescale');
+      }
     };
 
     document.addEventListener('pointermove', onPointerMove);
@@ -2008,17 +2291,17 @@ export class Splitter extends Component {
     if (!elem) return;
 
     getSharedResizeObserver()?.observe(elem, () => {
-      // 拖拽进行中忽略容器尺寸抖动回调，避免覆盖拖拽状态
       if (this.#cleanupDrag) return;
 
       const availableSize = this.#getAvailableSize();
       if (availableSize <= 0) return;
 
-      // 从隐藏态恢复可见或存在待应用的尺寸修改时执行初始分配；否则若尺寸变化则按比例缩放
-      if (this.#pendingLayout) {
-        this.#layoutPanels(true);
+      if (this.#pendingSetSizes !== null) {
+        this.#layoutPanels('setSizes');
+      } else if (this.#pendingInitialLayout || !this.#hasMeasured) {
+        this.#layoutPanels('initial');
       } else if (Math.abs(availableSize - this.#lastAvailableSize) > 0.5) {
-        this.#layoutPanels(false);
+        this.#layoutPanels('rescale');
       }
     });
   }

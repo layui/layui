@@ -213,6 +213,9 @@
           <button type="button" class="lay-btn lay-btn-sm" lay-on="toggleLeft">
             切换左侧折叠
           </button>
+          <button type="button" class="lay-btn lay-btn-sm" lay-on="toggleMid">
+            切换中栏折叠
+          </button>
           <button
             type="button"
             class="lay-btn lay-btn-sm"
@@ -267,8 +270,9 @@
             },
             {
               min: 120,
+              collapsible: true,
               content:
-                '<div class="demo-pane-center"><strong>面板 1</strong><span>自适应主栏</span></div>',
+                '<div class="demo-pane-center"><strong>面板 1</strong><span>自适应中栏（支持双侧折叠）</span></div>',
             },
             {
               size: '25%',
@@ -301,6 +305,9 @@
           },
           toggleLeft() {
             splitter.toggle('apiDemo', 0);
+          },
+          toggleMid() {
+            splitter.toggle('apiDemo', 1);
           },
           collapseViaZero() {
             splitter.setSizes('apiDemo', [0, '60%', '40%']);
