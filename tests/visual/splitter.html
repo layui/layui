@@ -41,7 +41,7 @@
   </head>
   <body>
     <div class="lay-container lay-padding-3">
-      <h2>基础水平分割（DOM 渲染）</h2>
+      <h2>基础水平分割</h2>
       <div class="lay-flex-col">
         <div class="lay-splitter demo-splitter-box">
           <div
@@ -78,9 +78,12 @@
         </div>
       </div>
 
-      <h2>嵌套组合与一键折叠（IDE 工作台布局）</h2>
+      <h2>嵌套组合与一键折叠</h2>
       <div class="lay-flex-col">
-        <div class="lay-splitter demo-splitter-box demo-splitter-tall">
+        <div
+          class="lay-splitter demo-splitter-box demo-splitter-tall"
+          id="demoNestedSplitter"
+        >
           <div
             class="lay-splitter-panel"
             data-lay-size="220"
@@ -128,7 +131,7 @@
         </div>
       </div>
 
-      <h2>延迟渲染模式（Lazy 预览线）</h2>
+      <h2>延迟渲染模式</h2>
       <div class="lay-flex-col">
         <div
           class="lay-splitter demo-splitter-box"
@@ -150,12 +153,72 @@
         </div>
       </div>
 
+      <h2>隐藏容器（Tabs 页签内）自适应</h2>
+      <div class="lay-flex-col">
+        <div class="lay-tabs lay-tabs-card lay-panel">
+          <ul class="lay-tabs-header">
+            <li class="lay-this">常规页签</li>
+            <li>含 Splitter 的隐藏页签</li>
+          </ul>
+          <div class="lay-tabs-body">
+            <div class="lay-tabs-item lay-show">
+              <div class="lay-btn-container">
+                <button
+                  type="button"
+                  class="lay-btn lay-btn-sm"
+                  lay-on="collapseHidden"
+                >
+                  隐藏状态下折叠左栏
+                </button>
+                <button
+                  type="button"
+                  class="lay-btn lay-btn-sm"
+                  lay-on="resizeHidden"
+                >
+                  隐藏状态下设为 160px / 自适应
+                </button>
+              </div>
+              <p class="lay-margin-1">
+                可在未切换到第二个页签前点击上方按钮，再切换至第二个页签观察布局同步效果。
+              </p>
+            </div>
+            <div class="lay-tabs-item">
+              <div
+                class="lay-splitter demo-splitter-box"
+                id="demoHiddenSplitter"
+              >
+                <div
+                  class="lay-splitter-panel"
+                  data-lay-size="240"
+                  data-lay-min="100"
+                  data-lay-collapsible="true"
+                >
+                  <div class="demo-pane-center demo-pane-tint">
+                    隐藏页签左栏（初始 240px）
+                  </div>
+                </div>
+                <div class="lay-splitter-panel" data-lay-min="120">
+                  <div class="demo-pane-center">隐藏页签右栏（自适应）</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <h2>方法渲染与动态 API 操作</h2>
       <div class="lay-flex-col">
         <div id="demoSplitterApi" class="demo-splitter-box"></div>
         <div class="lay-btn-container">
           <button type="button" class="lay-btn lay-btn-sm" lay-on="toggleLeft">
             切换左侧折叠
+          </button>
+          <button
+            type="button"
+            class="lay-btn lay-btn-sm"
+            lay-on="collapseViaZero"
+          >
+            setSizes(0) 折叠左栏
           </button>
           <button type="button" class="lay-btn lay-btn-sm" lay-on="resetEqual">
             均分三栏
@@ -185,9 +248,10 @@
           $log.text(msg);
         };
 
-        // 批量渲染页面中所有静态声明的 .lay-splitter
+        // 基础水平分割 / 垂直分割 / 嵌套组合与一键折叠 / 延迟渲染模式 / 隐藏容器（Tabs 页签内）自适应
         splitter.render();
 
+        // 方法渲染与动态 API 操作
         splitter.render({
           elem: '#demoSplitterApi',
           id: 'apiDemo',
@@ -227,9 +291,19 @@
           },
         });
 
+        // 演示操作事件绑定
         utils.on('lay-on', {
+          collapseHidden() {
+            splitter.toggle('demoHiddenSplitter', 0);
+          },
+          resizeHidden() {
+            splitter.setSizes('demoHiddenSplitter', [160]);
+          },
           toggleLeft() {
             splitter.toggle('apiDemo', 0);
+          },
+          collapseViaZero() {
+            splitter.setSizes('apiDemo', [0, '60%', '40%']);
           },
           resetEqual() {
             splitter.setSizes('apiDemo', ['33.33%', '33.33%', '33.34%']);

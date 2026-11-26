@@ -6,7 +6,8 @@
   --lay-splitter-bar-bg: var(--lay-border-color);
   --lay-splitter-bar-active-bg: var(--lay-color-primary);
   --lay-splitter-handle-color: var(--lay-gray-600);
-  --lay-splitter-btn-bg: #fff;
+  --lay-splitter-handle-active-color: #ffffff;
+  --lay-splitter-btn-bg: #ffffff;
   --lay-splitter-btn-color: var(--lay-gray-800);
   --lay-splitter-btn-border: var(--lay-border-color-accent);
 
@@ -38,11 +39,13 @@
       padding: 0 !important;
       border-width: 0 !important;
       overflow: hidden !important;
+      visibility: hidden;
     }
   }
 
-  /* 垂直分割模式（上下排列） */
-  &[data-lay-orientation='vertical'] {
+  /* 垂直分割模式（支持内部修饰类及渲染前 HTML 属性零闪烁占位） */
+  &.lay-splitter-is-vertical,
+  &:not(.lay-splitter-is-horizontal)[data-lay-orientation='vertical'] {
     flex-direction: column;
 
     > .lay-splitter-panel.lay-is-collapsed {
@@ -61,22 +64,22 @@
   &[data-lay-theme='dark'] {
     --lay-splitter-bar-bg: rgba(255, 255, 255, 0.14);
     --lay-splitter-handle-color: rgba(255, 255, 255, 0.5);
+    --lay-splitter-handle-active-color: rgba(255, 255, 255, 0.95);
     --lay-splitter-btn-bg: var(--lay-color-black);
     --lay-splitter-btn-color: rgba(255, 255, 255, 0.85);
     --lay-splitter-btn-border: rgba(255, 255, 255, 0.24);
   }
 }
 
-/* 分隔条轨道 */
+/* 分隔条轨道（严格锁定主轴尺寸等于 barSize，内部按钮脱离文档流避免撑宽轨道） */
 .lay-splitter-bar {
   position: relative;
   z-index: 2;
   flex: 0 0 var(--lay-splitter-bar-size);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
+  width: var(--lay-splitter-bar-size);
+  min-width: 0;
+  min-height: 0;
+  overflow: visible;
   background-color: var(--lay-splitter-bar-bg);
   cursor: col-resize;
   touch-action: none;
@@ -98,7 +101,7 @@
     background-color: var(--lay-splitter-bar-active-bg);
 
     .lay-splitter-bar-handle {
-      background-color: #fff;
+      background-color: var(--lay-splitter-handle-active-color);
       opacity: 1;
     }
   }
@@ -114,8 +117,15 @@
 }
 
 /* 垂直模式下的分隔条覆盖 */
-.lay-splitter[data-lay-orientation='vertical'] > .lay-splitter-bar {
-  flex-direction: row;
+:is(
+    .lay-splitter.lay-splitter-is-vertical,
+    .lay-splitter:not(
+        .lay-splitter-is-horizontal
+      )[data-lay-orientation='vertical']
+  )
+  > .lay-splitter-bar {
+  width: 100%;
+  height: var(--lay-splitter-bar-size);
   cursor: row-resize;
 
   &::before {
@@ -124,7 +134,7 @@
     top: 50%;
     bottom: auto;
     width: 100%;
-    height: var(--lay-splitter-bar-hit-size);
+    height: max(10px, var(--lay-splitter-bar-hit-size));
     transform: translateY(-50%);
   }
 
@@ -135,31 +145,83 @@
 
 /* 分隔条中心把手视觉指示线 */
 .lay-splitter-bar-handle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
   width: 2px;
   height: 20px;
   border-radius: 1px;
   background-color: var(--lay-splitter-handle-color);
   opacity: 0;
   pointer-events: none;
+  transform: translate(-50%, -50%);
   transition: opacity var(--lay-anim-duration-fast);
 }
 
-.lay-splitter[data-lay-orientation='vertical']
+:is(
+    .lay-splitter.lay-splitter-is-vertical,
+    .lay-splitter:not(
+        .lay-splitter-is-horizontal
+      )[data-lay-orientation='vertical']
+  )
   > .lay-splitter-bar
   > .lay-splitter-bar-handle {
   width: 20px;
   height: 2px;
 }
 
-/* 当分隔条包含折叠按钮时，隐藏重叠的中心短线把手 */
-.lay-splitter-bar:has(.lay-splitter-collapse-btn) > .lay-splitter-bar-handle {
-  display: none;
+/* 悬浮折叠按钮容器（脱离文档流居中附着，贴边折叠时向内对齐防止容器裁切） */
+.lay-splitter-bar-btns {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transform: translate(-50%, -50%);
+}
+
+.lay-splitter-bar.lay-is-at-start > .lay-splitter-bar-btns {
+  left: 0;
+  transform: translate(0, -50%);
+}
+
+.lay-splitter-bar.lay-is-at-end > .lay-splitter-bar-btns {
+  left: auto;
+  right: 0;
+  transform: translate(0, -50%);
+}
+
+:is(
+    .lay-splitter.lay-splitter-is-vertical,
+    .lay-splitter:not(
+        .lay-splitter-is-horizontal
+      )[data-lay-orientation='vertical']
+  )
+  > .lay-splitter-bar {
+  > .lay-splitter-bar-btns {
+    flex-direction: row;
+  }
+
+  &.lay-is-at-start > .lay-splitter-bar-btns {
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, 0);
+  }
+
+  &.lay-is-at-end > .lay-splitter-bar-btns {
+    left: 50%;
+    top: auto;
+    bottom: 0;
+    transform: translate(-50%, 0);
+  }
 }
 
 /* 快捷折叠/展开按钮 */
 .lay-splitter-collapse-btn {
-  position: relative;
-  z-index: 3;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -183,15 +245,20 @@
     line-height: 1;
   }
 
-  &:hover {
+  &:is(:hover, :focus-visible) {
     color: var(--lay-color-primary);
     border-color: var(--lay-color-primary);
   }
 }
 
-.lay-splitter[data-lay-orientation='vertical']
+:is(
+    .lay-splitter.lay-splitter-is-vertical,
+    .lay-splitter:not(
+        .lay-splitter-is-horizontal
+      )[data-lay-orientation='vertical']
+  )
   > .lay-splitter-bar
-  > .lay-splitter-collapse-btn {
+  .lay-splitter-collapse-btn {
   width: 28px;
   height: 14px;
 }
@@ -208,7 +275,13 @@
   will-change: transform;
 }
 
-.lay-splitter[data-lay-orientation='vertical'] > .lay-splitter-ghost-bar {
+:is(
+    .lay-splitter.lay-splitter-is-vertical,
+    .lay-splitter:not(
+        .lay-splitter-is-horizontal
+      )[data-lay-orientation='vertical']
+  )
+  > .lay-splitter-ghost-bar {
   top: auto;
   bottom: auto;
   left: 0;

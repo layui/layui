@@ -3,6 +3,7 @@ import { jest } from '@jest/globals';
 describe('splitter 分隔面板布局算法与基础接口', () => {
   let clampNumber;
   let parseSizeValue;
+  let resolvePanelCollapsible;
   let resolvePanelBounds;
   let computeInitialSizes;
   let rescaleSizes;
@@ -29,6 +30,7 @@ describe('splitter 分隔面板布局算法与基础接口', () => {
     ({
       clampNumber,
       parseSizeValue,
+      resolvePanelCollapsible,
       resolvePanelBounds,
       computeInitialSizes,
       rescaleSizes,
@@ -58,7 +60,7 @@ describe('splitter 分隔面板布局算法与基础接口', () => {
     expect(typeof Splitter.refresh).toBe('function');
   });
 
-  describe('尺寸解析与边界规范化', () => {
+  describe('尺寸解析、折叠方位与边界规范化', () => {
     test('clampNumber 应限制数值区间并在 max 小于 min 时安全回退到 min', () => {
       expect(clampNumber(50, 0, 100)).toBe(50);
       expect(clampNumber(-10, 0, 100)).toBe(0);
@@ -84,18 +86,56 @@ describe('splitter 分隔面板布局算法与基础接口', () => {
       expect(parseSizeValue({}, 800, 15)).toBe(15);
     });
 
+    test('resolvePanelCollapsible 应按面板所处位置规范化两侧可折叠标记', () => {
+      // 首面板仅允许向后侧分隔条（end）折叠，声明 start 无相邻分隔条应为 false
+      expect(resolvePanelCollapsible(true, 0, 3)).toEqual({
+        start: false,
+        end: true,
+      });
+      expect(resolvePanelCollapsible('start', 0, 3)).toEqual({
+        start: false,
+        end: false,
+      });
+
+      // 中间面板设为 true 时两侧分隔条均允许折叠，也支持对象精细控制
+      expect(resolvePanelCollapsible(true, 1, 3)).toEqual({
+        start: true,
+        end: true,
+      });
+      expect(
+        resolvePanelCollapsible({ start: true, end: false }, 1, 3),
+      ).toEqual({
+        start: true,
+        end: false,
+      });
+
+      // 末面板仅允许向前侧分隔条（start）折叠，声明 end 无相邻分隔条应为 false
+      expect(resolvePanelCollapsible(true, 2, 3)).toEqual({
+        start: true,
+        end: false,
+      });
+      expect(resolvePanelCollapsible('end', 2, 3)).toEqual({
+        start: false,
+        end: false,
+      });
+
+      // 单面板无分隔条，始终不可折叠
+      expect(resolvePanelCollapsible(true, 0, 1)).toEqual({
+        start: false,
+        end: false,
+      });
+    });
+
     test('resolvePanelBounds 应规范化 min 与 max 像素边界并修正冲突值', () => {
       expect(resolvePanelBounds({}, 1000)).toEqual({ min: 0, max: Infinity });
       expect(resolvePanelBounds({ min: '10%', max: '50%' }, 1000)).toEqual({
         min: 100,
         max: 500,
       });
-      // min 超出可用总长时应钳制到可用总长
       expect(resolvePanelBounds({ min: 1200 }, 1000)).toEqual({
         min: 1000,
         max: Infinity,
       });
-      // max 小于 min 时应回退修正为 min
       expect(resolvePanelBounds({ min: 300, max: 200 }, 1000)).toEqual({
         min: 300,
         max: 300,
@@ -120,19 +160,16 @@ describe('splitter 分隔面板布局算法与基础接口', () => {
         1000,
       );
 
-      // 面板 0 固定 200；剩余 800 在面板 1（受限于 max 300）与面板 2（承接剩余 500）之间分配
       expect(sizes[0]).toBeCloseTo(200, 2);
       expect(sizes[1]).toBeCloseTo(300, 2);
       expect(sizes[2]).toBeCloseTo(500, 2);
     });
 
     test('当所有面板均显式指定尺寸但总和与容器不等时应按比例二次平衡', () => {
-      // 显式总和 300 < 600 -> 按权重比例放大至 [200, 400]
       const growRes = computeInitialSizes([{ size: 100 }, { size: 200 }], 600);
       expect(growRes.sizes[0]).toBeCloseTo(200, 2);
       expect(growRes.sizes[1]).toBeCloseTo(400, 2);
 
-      // 显式总和 1200 > 800 -> 按可收缩余量缩小至 [400, 400]
       const shrinkRes = computeInitialSizes(
         [
           { size: 600, min: 200 },
@@ -188,7 +225,6 @@ describe('splitter 分隔面板布局算法与基础接口', () => {
       ];
       const { sizes } = rescaleSizes([0, 250, 750], panels, 500);
 
-      // 500 的 25% 为 125 < min 180 -> 钳制为 180，面板 2 吸收差额变为 320
       expect(sizes[0]).toBe(0);
       expect(sizes[1]).toBeCloseTo(180, 2);
       expect(sizes[2]).toBeCloseTo(320, 2);
@@ -214,7 +250,7 @@ describe('splitter 分隔面板布局算法与基础接口', () => {
   });
 
   describe('拖拽步进与吸附计算 (computeDragStep)', () => {
-    test('应钳制常规拖拽边界并支持前置面板与后置面板的双向吸附折叠', () => {
+    test('应钳制常规拖拽边界并严格按分隔条对应侧配置触发吸附折叠', () => {
       const panelsMeta = [
         {
           min: 150,
@@ -242,50 +278,55 @@ describe('splitter 分隔面板布局算法与基础接口', () => {
         rawDelta: 100,
       });
       expect(step1.sizes).toEqual([400, 400]);
-      expect(step1.prevCollapsed).toBe(false);
-      expect(step1.nextCollapsed).toBe(false);
 
-      // 未达到前置吸附阈值（150 * 0.4 = 60）前停留在 min (150)
+      // 向左拖过前置吸附阈值（150 * 0.4 = 60）自动折叠前置面板至 0
       const step2 = computeDragStep({
-        startSizes: [300, 500],
-        bounds,
-        panelsMeta,
-        barIndex: 0,
-        rawDelta: -200,
-      });
-      expect(step2.sizes).toEqual([150, 650]);
-      expect(step2.prevCollapsed).toBe(false);
-
-      // 向左拖过前置吸附阈值（期望 40 <= 60）自动折叠前置面板至 0
-      const step3 = computeDragStep({
         startSizes: [300, 500],
         bounds,
         panelsMeta,
         barIndex: 0,
         rawDelta: -260,
       });
-      expect(step3.sizes).toEqual([0, 800]);
-      expect(step3.prevCollapsed).toBe(true);
+      expect(step2.sizes).toEqual([0, 800]);
+      expect(step2.prevCollapsed).toBe(true);
 
-      // 向右拖过后置吸附阈值（200 * 0.4 = 80），但因总和 800 > 面板 0 的 max(500) 被阻止吸附，停在 max 500
-      const blockedSnapNext = computeDragStep({
+      // 首面板若配置为 collapsible: 'start'（在 bar[0] 侧无折叠权），向右或向左均不得吸附折叠首面板
+      const mismatchMeta = [
+        {
+          min: 150,
+          max: Infinity,
+          resizable: true,
+          collapsible: 'start',
+          collapsed: false,
+        },
+        {
+          min: 200,
+          max: Infinity,
+          resizable: true,
+          collapsible: false,
+          collapsed: false,
+        },
+      ];
+      const noSnap = computeDragStep({
         startSizes: [300, 500],
-        bounds,
-        panelsMeta,
+        bounds: [
+          { min: 150, max: Infinity },
+          { min: 200, max: Infinity },
+        ],
+        panelsMeta: mismatchMeta,
         barIndex: 0,
-        rawDelta: 450,
+        rawDelta: -280,
       });
-      expect(blockedSnapNext.sizes).toEqual([500, 300]);
-      expect(blockedSnapNext.nextCollapsed).toBe(false);
+      expect(noSnap.sizes).toEqual([150, 650]);
+      expect(noSnap.prevCollapsed).toBe(false);
 
       // 放宽面板 0 的 max 限制后，向右拖过阈值成功吸附折叠后置面板
-      const looseBounds = [
-        { min: 150, max: Infinity },
-        { min: 200, max: Infinity },
-      ];
       const snapNext = computeDragStep({
         startSizes: [300, 500],
-        bounds: looseBounds,
+        bounds: [
+          { min: 150, max: Infinity },
+          { min: 200, max: Infinity },
+        ],
         panelsMeta,
         barIndex: 0,
         rawDelta: 450,
@@ -294,31 +335,31 @@ describe('splitter 分隔面板布局算法与基础接口', () => {
       expect(snapNext.nextCollapsed).toBe(true);
     });
 
-    test('当任一相邻面板禁止伸缩或分隔条索引越界时应锁定不可拖拽', () => {
+    test('当任一相邻面板禁止伸缩、bounds 未初始化或分隔条索引越界时应锁定不可拖拽', () => {
       const bounds = [
         { min: 0, max: Infinity },
         { min: 0, max: Infinity },
       ];
 
-      const locked = computeDragStep({
-        startSizes: [300, 500],
-        bounds,
-        panelsMeta: [{ resizable: false }, { resizable: true }],
-        barIndex: 0,
-        rawDelta: 100,
-      });
-      expect(locked.delta).toBe(0);
-      expect(locked.sizes).toEqual([300, 500]);
+      expect(
+        computeDragStep({
+          startSizes: [300, 500],
+          bounds,
+          panelsMeta: [{ resizable: false }, { resizable: true }],
+          barIndex: 0,
+          rawDelta: 100,
+        }).delta,
+      ).toBe(0);
 
-      const outOfRange = computeDragStep({
-        startSizes: [300, 500],
-        bounds,
-        panelsMeta: [{ resizable: true }, { resizable: true }],
-        barIndex: 3,
-        rawDelta: 100,
-      });
-      expect(outOfRange.delta).toBe(0);
-      expect(outOfRange.sizes).toEqual([300, 500]);
+      expect(
+        computeDragStep({
+          startSizes: [],
+          bounds: [],
+          panelsMeta: [{ resizable: true }, { resizable: true }],
+          barIndex: 0,
+          rawDelta: 100,
+        }).delta,
+      ).toBe(0);
     });
 
     test('已处于折叠状态的面板反向拖拽时应在未越过 min 前维持折叠、越过 min 后展开', () => {
@@ -392,129 +433,133 @@ describe('splitter 分隔面板布局算法与基础接口', () => {
       expect(expandedRes.sizes).toEqual([260, 540]);
     });
 
-    test('越界索引、单面板或目标状态未改变时应返回 changed 为 false', () => {
-      const bounds = [
-        { min: 0, max: Infinity },
-        { min: 0, max: Infinity },
+    test('展开时若所有未折叠面板可让出总空间小于目标面板 min，应拒绝展开且不突破 min', () => {
+      // 三栏 [0, 200, 300]：面板 0 要求 min: 120，但面板 1(min: 150) 仅能让 50、面板 2(min: 300) 能让 0，总可让 50 < 120
+      const panelsMeta = [
+        { min: 120, collapsed: true, collapsible: true },
+        { min: 150, collapsed: false },
+        { min: 300, collapsed: false },
       ];
-      const panelsMeta = [{ collapsed: false }, { collapsed: false }];
+      const bounds = [
+        { min: 120, max: Infinity },
+        { min: 150, max: Infinity },
+        { min: 300, max: Infinity },
+      ];
 
-      expect(
-        computeCollapseTransition({
-          sizes: [400, 400],
-          bounds,
-          panelsMeta,
-          savedSizes: {},
-          panelIndex: -1,
-          collapsed: true,
-        }).changed,
-      ).toBe(false);
-
-      expect(
-        computeCollapseTransition({
-          sizes: [400],
-          bounds: [{ min: 0, max: Infinity }],
-          panelsMeta: [{ collapsed: false }],
-          savedSizes: {},
-          panelIndex: 0,
-          collapsed: true,
-        }).changed,
-      ).toBe(false);
-
-      expect(
-        computeCollapseTransition({
-          sizes: [400, 400],
-          bounds,
-          panelsMeta,
-          savedSizes: {},
-          panelIndex: 0,
-          collapsed: false,
-        }).changed,
-      ).toBe(false);
-    });
-
-    test('当相邻面板受 max 限制无法承接释放空间时应阻止折叠', () => {
       const res = computeCollapseTransition({
-        sizes: [300, 500],
-        bounds: [
-          { min: 0, max: Infinity },
-          { min: 0, max: 600 },
-        ],
-        panelsMeta: [{ collapsed: false }, { collapsed: false }],
-        savedSizes: {},
+        sizes: [0, 200, 300],
+        bounds,
+        panelsMeta,
+        savedSizes: { 0: 150 },
         panelIndex: 0,
-        collapsed: true,
+        collapsed: false,
+        availableSize: 500,
       });
 
       expect(res.changed).toBe(false);
-      expect(res.sizes).toEqual([300, 500]);
+      expect(res.sizes).toEqual([0, 200, 300]);
     });
 
-    test('多栏场景应正确选择末面板与中间面板的空间交换邻居', () => {
-      const threeBounds = [
+    test('展开时若直接邻居已处于 min，应自动向其余有富余空间的未折叠面板借用空间', () => {
+      // 三栏 [0(collapsed), 100(at min), 700(min: 100)]：直接邻居面板 1 无空间可让，应从面板 2 借出 200
+      const panelsMeta = [
+        { min: 100, collapsed: true, collapsible: true },
+        { min: 100, collapsed: false },
+        { min: 100, collapsed: false },
+      ];
+      const bounds = [
         { min: 100, max: Infinity },
         { min: 100, max: Infinity },
         { min: 100, max: Infinity },
       ];
 
-      // 折叠末面板（索引 2）应自动向内侧邻居（索引 1）释放空间
-      const endMeta = [
-        { collapsed: false },
-        { collapsed: false },
-        { collapsed: false },
-      ];
-      const endCollapse = computeCollapseTransition({
-        sizes: [200, 350, 250],
-        bounds: threeBounds,
-        panelsMeta: endMeta,
-        savedSizes: {},
-        panelIndex: 2,
-        collapsed: true,
-      });
-      expect(endCollapse.changed).toBe(true);
-      expect(endCollapse.neighborIndex).toBe(1);
-      expect(endCollapse.sizes).toEqual([200, 600, 0]);
-
-      // 折叠中间面板（索引 1）：当后侧邻居已折叠时，自动回退选择前侧邻居（索引 0）吸收空间
-      const midMeta = [
-        { collapsed: false },
-        { collapsed: false },
-        { collapsed: true },
-      ];
-      const midCollapse = computeCollapseTransition({
-        sizes: [300, 500, 0],
-        bounds: threeBounds,
-        panelsMeta: midMeta,
-        savedSizes: {},
-        panelIndex: 1,
-        collapsed: true,
-      });
-      expect(midCollapse.changed).toBe(true);
-      expect(midCollapse.neighborIndex).toBe(0);
-      expect(midCollapse.sizes).toEqual([800, 0, 0]);
-    });
-
-    test('无历史保存尺寸时展开面板应回退读取配置 size 且不挤破邻居 min', () => {
-      const initCollapsedMeta = [
-        { size: '80%', min: 100, collapsed: true },
-        { min: 300, collapsed: false },
-      ];
-      const expandNoHistory = computeCollapseTransition({
-        sizes: [0, 800],
-        bounds: [
-          { min: 100, max: Infinity },
-          { min: 300, max: Infinity },
-        ],
-        panelsMeta: initCollapsedMeta,
-        savedSizes: {},
+      const res = computeCollapseTransition({
+        sizes: [0, 100, 700],
+        bounds,
+        panelsMeta,
+        savedSizes: { 0: 200 },
         panelIndex: 0,
         collapsed: false,
         availableSize: 800,
       });
 
-      // 配置期望 640，但邻居要求至少保留 min 300，因此最多还原 500
-      expect(expandNoHistory.changed).toBe(true);
-      expect(expandNoHistory.sizes).toEqual([500, 300]);
+      expect(res.changed).toBe(true);
+      expect(res.sizes[0]).toBeCloseTo(200, 2);
+      expect(res.sizes[1]).toBeCloseTo(100, 2);
+      expect(res.sizes[2]).toBeCloseTo(500, 2);
+    });
+
+    test('折叠时若直接邻居受 max 限制应将多余空间溢出分摊给其他未折叠面板，且绝不静默展开已折叠邻居', () => {
+      // 直接邻居面板 1 的 max 为 400（仅能再收 100），剩余 100 应自动分摊给未折叠的面板 2
+      const spillMeta = [
+        { collapsed: false, collapsible: true },
+        { max: 400, collapsed: false },
+        { collapsed: false },
+      ];
+      const spillBounds = [
+        { min: 0, max: Infinity },
+        { min: 0, max: 400 },
+        { min: 0, max: Infinity },
+      ];
+      const spillRes = computeCollapseTransition({
+        sizes: [200, 300, 300],
+        bounds: spillBounds,
+        panelsMeta: spillMeta,
+        savedSizes: {},
+        panelIndex: 0,
+        collapsed: true,
+        availableSize: 800,
+      });
+      expect(spillRes.changed).toBe(true);
+      expect(spillRes.sizes).toEqual([0, 400, 400]);
+
+      // 若其余面板均已折叠（不存在其他未折叠面板），禁止折叠最后一个可见面板，也不静默展开其他面板
+      const lastOpenMeta = [
+        { collapsed: false, collapsible: true },
+        { collapsed: true, collapsible: true },
+      ];
+      const lastOpenRes = computeCollapseTransition({
+        sizes: [800, 0],
+        bounds: [
+          { min: 0, max: Infinity },
+          { min: 0, max: Infinity },
+        ],
+        panelsMeta: lastOpenMeta,
+        savedSizes: {},
+        panelIndex: 0,
+        collapsed: true,
+        availableSize: 800,
+      });
+      expect(lastOpenRes.changed).toBe(false);
+      expect(lastOpenRes.sizes).toEqual([800, 0]);
+    });
+
+    test('bounds 未初始化（隐藏容器）、越界索引、零可用空间全部折叠时应安全返回 changed 为 false', () => {
+      expect(
+        computeCollapseTransition({
+          sizes: [],
+          bounds: [],
+          panelsMeta: [{ collapsed: false }, { collapsed: false }],
+          savedSizes: {},
+          panelIndex: 0,
+          collapsed: true,
+        }).changed,
+      ).toBe(false);
+
+      expect(
+        computeCollapseTransition({
+          sizes: [0, 0],
+          bounds: [
+            { min: 0, max: Infinity },
+            { min: 0, max: Infinity },
+          ],
+          panelsMeta: [{ collapsed: true }, { collapsed: true }],
+          savedSizes: {},
+          panelIndex: 0,
+          collapsed: false,
+          availableSize: 0,
+        }).changed,
+      ).toBe(false);
     });
   });
 });
