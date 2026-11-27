@@ -1679,7 +1679,7 @@ lay.flatToTree = function (data, options) {
       acc[id][options.childrenKey] = [];
     }
     return acc;
-  }, {});
+  }, Object.create(null));
 
   // 组装树
   return data.reduce(function (acc, currNode) {
